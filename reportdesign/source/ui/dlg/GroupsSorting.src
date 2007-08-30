@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GroupsSorting.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:29 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 12:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ FloatingWindow RID_GROUPS_SORTING
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( PAGE_WIDTH , PAGE_HEIGHT ) ;
-    Text [ de ] = "Sortierung und Gruppierung" ;
     Text [ en-US ] = "Sorting and Grouping" ;
     HelpId = HID_GROUPSSORTING_DLG;
     Moveable = TRUE ;
@@ -59,7 +58,6 @@ FloatingWindow RID_GROUPS_SORTING
     {
         Pos = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( PAGE_WIDTH - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Gruppen";
         Text [ en-US ] = "Groups";
     };
 
@@ -76,7 +74,6 @@ FloatingWindow RID_GROUPS_SORTING
     {
         Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 3*UNRELATED_CONTROLS + BROWSER_HEIGHT ) ;
         Size = MAP_APPFONT ( FIXEDTEXT_WIDTH , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Gruppe bewegen" ;
         Text [ en-US ] = "Move group" ;
     };
 
@@ -100,7 +97,6 @@ FloatingWindow RID_GROUPS_SORTING
     {
         Pos = MAP_APPFONT ( RELATED_CONTROLS , 3*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT) ;
         Size = MAP_APPFONT ( PAGE_WIDTH - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Eigenschaften";
         Text [ en-US ] = "Properties";
     };
 
@@ -109,7 +105,6 @@ FloatingWindow RID_GROUPS_SORTING
         Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 4*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + FIXEDTEXT_HEIGHT ) ;
         Size = MAP_APPFONT ( FIXEDTEXT_WIDTH , FIXEDTEXT_HEIGHT ) ;
         Hide = TRUE;
-        Text [ de ] = "Sortierung" ;
         Text [ en-US ] = "Sorting" ;
 
     };
@@ -122,11 +117,6 @@ FloatingWindow RID_GROUPS_SORTING
         TabStop = TRUE;
         Hide = TRUE;
         CurPos = 0 ;
-        StringList [ de ] =
-        {
-            < "Aufsteigend" ; 0 ; > ;
-            < "Absteigend" ; 1 ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Ascending" ; 0 ; > ;
@@ -151,11 +141,6 @@ FloatingWindow RID_GROUPS_SORTING
         DropDown = TRUE;
         TabStop = TRUE;
         CurPos = 1 ;
-        StringList [ de ] =
-        {
-            < "Vorhanden" ; Default ; > ;
-            < "Nicht vorhanden" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Present" ; Default ; > ;
@@ -179,11 +164,6 @@ FloatingWindow RID_GROUPS_SORTING
         DropDown = TRUE;
         TabStop = TRUE;
         CurPos = 1 ;
-        StringList [ de ] =
-        {
-            < "Vorhanden" ; Default ; > ;
-            < "Nicht vorhanden" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Present" ; Default ; > ;
@@ -207,10 +187,6 @@ FloatingWindow RID_GROUPS_SORTING
         DropDown = TRUE;
         TabStop = TRUE;
         CurPos = 0 ;
-        StringList [ de ] =
-        {
-            < "Jeder Wert" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Each Value" ; Default ; > ;
@@ -221,7 +197,6 @@ FloatingWindow RID_GROUPS_SORTING
         Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 8*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 5*FIXEDTEXT_HEIGHT) ;
         Size = MAP_APPFONT ( FIXEDTEXT_WIDTH , FIXEDTEXT_HEIGHT ) ;
         Hide = TRUE;
-        Text [ de ] = "Group Interval" ;
         Text [ en-US ] = "Group Interval" ;
 
     };
@@ -250,12 +225,6 @@ FloatingWindow RID_GROUPS_SORTING
         DropDown = TRUE;
         TabStop = TRUE;
         CurPos = 0 ;
-        StringList [ de ] =
-        {
-            < "Nein" ; 0 ; > ;
-            < "Ganze Gruppe" ; 1 ; > ;
-            < "Mit erstem Detailbereich" ; 2 ; > ;
-        };
         StringList [ en-US ] =
         {
             < "No" ; 0 ; > ;
@@ -268,7 +237,6 @@ FloatingWindow RID_GROUPS_SORTING
     {
         Pos = MAP_APPFONT ( RELATED_CONTROLS , 10*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 7*FIXEDTEXT_HEIGHT) ;
         Size = MAP_APPFONT ( PAGE_WIDTH - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Hilfe";
         Text [ en-US ] = "Help";
     };
 
@@ -291,12 +259,10 @@ FloatingWindow RID_GROUPS_SORTING
 
 String STR_RPT_EXPRESSION
 {
-    Text [ de ] = "Feld/Ausdruck" ;
     Text [ en-US ] = "Field/Expression" ;
 };
 String STR_RPT_SORTING
 {
-    Text [ de ] = "Reihenfolge" ;
     Text [ en-US ] = "Sort Order" ;
 };
 String STR_RPT_PREFIXCHARS
@@ -305,42 +271,34 @@ String STR_RPT_PREFIXCHARS
 };
 String STR_RPT_YEAR
 {
-    Text [ de ] = "Jahr" ;
     Text [ en-US ] = "Year" ;
 };
 String STR_RPT_QUARTER
 {
-    Text [ de ] = "Quartal" ;
     Text [ en-US ] = "Quarter" ;
 };
 String STR_RPT_MONTH
 {
-    Text [ de ] = "Monat" ;
     Text [ en-US ] = "Month" ;
 };
 String STR_RPT_WEEK
 {
-    Text [ de ] = "Woche" ;
     Text [ en-US ] = "Week" ;
 };
 String STR_RPT_DAY
 {
-    Text [ de ] = "Tag" ;
     Text [ en-US ] = "Day" ;
 };
 String STR_RPT_HOUR
 {
-    Text [ de ] = "Stunde" ;
     Text [ en-US ] = "Hour" ;
 };
 String STR_RPT_MINUTE
 {
-    Text [ de ] = "Minute" ;
     Text [ en-US ] = "Minute" ;
 };
 String STR_RPT_INTERVAL
 {
-    Text [ de ] = "Interval" ;
     Text [ en-US ] = "Interval" ;
 };
 

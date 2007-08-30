@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgpage.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:29 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 12:13:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ TabDialog RID_PAGEDIALOG_PAGE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Seite einrichten" ;
     Text [ en-US ] = "Page Setup" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -53,7 +52,6 @@ TabDialog RID_PAGEDIALOG_PAGE
             PageItem
             {
                 Identifier = RID_SVXPAGE_PAGE ;
-                Text [ de ]= "Seite" ;
                 Text [ en-US ] = "Page" ;
                 PageResID = RID_SVXPAGE_PAGE ;
                 Text [ x-comment ] = " ";
@@ -61,7 +59,6 @@ TabDialog RID_PAGEDIALOG_PAGE
             PageItem
             {
                 Identifier = RID_SVXPAGE_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
                 PageResID = RID_SVXPAGE_BACKGROUND ;
                 Text [ x-comment ] = " ";
@@ -91,7 +88,6 @@ TabDialog RID_PAGEDIALOG_PAGE
         Pos = MAP_APPFONT ( 169 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
-        Text [ de ] = "Zurück" ;
         Text [ en-US ] = "Return" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -100,12 +96,10 @@ TabDialog RID_PAGEDIALOG_PAGE
 
     String 1
     {
-        Text [ de ] = "Seite" ;
         Text [ en-US ] = "Page" ;
     };
     String 2
     {
-        Text [ de ] = "Hintergrund" ;
         Text [ en-US ] = "Background" ;
     };
 };
@@ -115,7 +109,6 @@ TabDialog RID_PAGEDIALOG_BACKGROUND
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Bereich einrichten" ;
     Text [ en-US ] = "Section Setup" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -146,7 +139,6 @@ TabDialog RID_PAGEDIALOG_BACKGROUND
         Pos = MAP_APPFONT ( 169 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
-        Text [ de ] = "Zurück" ;
         Text [ en-US ] = "Return" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -155,7 +147,6 @@ TabDialog RID_PAGEDIALOG_BACKGROUND
 
     String 1
     {
-        Text [ de ] = "Hintergrund" ;
         Text [ en-US ] = "Background" ;
     };
 };
@@ -164,7 +155,6 @@ TabDialog RID_PAGEDIALOG_CHAR
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Zeicheneinstellungen" ;
     Text [ en-US ] = "Character Settings" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -176,7 +166,6 @@ TabDialog RID_PAGEDIALOG_CHAR
             PageItem
             {
                 Identifier = RID_PAGE_CHAR ;
-                Text [ de ] = "Schrift" ;
                 Text [ en-US ] = "Font" ;
                 PageResID = RID_PAGE_CHAR ;
                 Text [ x-comment ] = " ";
@@ -184,7 +173,6 @@ TabDialog RID_PAGEDIALOG_CHAR
             PageItem
             {
                 Identifier = RID_PAGE_EFFECTS ;
-                Text [ de ] = "Schrifteffekt" ;
                 Text [ en-US ] = "Font Effects" ;
                 PageResID = RID_PAGE_EFFECTS ;
                 Text [ x-comment ] = " ";
@@ -193,20 +181,17 @@ TabDialog RID_PAGEDIALOG_CHAR
             {
                 Identifier = RID_PAGE_POSITION ;
                 PageResID = RID_PAGE_POSITION ;
-                Text [ de ] = "Position" ;
                 Text [ en-US ] = "Position";
             };
             PageItem
             {
                 Identifier = RID_PAGE_TWOLN ;
                 PageResID = RID_PAGE_TWOLN;
-                Text [ de ] = "Asiatisches Layout" ;
                 Text [ en-US ] = "Asian Layout";
             };
             PageItem
             {
                 Identifier = RID_PAGE_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
                 PageResID = RID_PAGE_BACKGROUND ;
                 Text [ x-comment ] = " ";
@@ -214,7 +199,6 @@ TabDialog RID_PAGEDIALOG_CHAR
             PageItem
             {
                 Identifier = RID_PAGE_ALIGNMENT ;
-                Text [ de ] = "Ausrichtung" ;
                 Text [ en-US ] = "Alignment" ;
                 PageResID = RID_PAGE_ALIGNMENT ;
                 Text [ x-comment ] = " ";
@@ -244,7 +228,6 @@ TabDialog RID_PAGEDIALOG_CHAR
         Pos = MAP_APPFONT ( 169 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
-        Text [ de ] = "Zurück" ;
         Text [ en-US ] = "Return" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -253,7 +236,6 @@ TabDialog RID_PAGEDIALOG_CHAR
 
     String 1
     {
-        Text [ de ] = "Zeichen" ;
         Text [ en-US ] = "Character" ;
     };
 };
@@ -262,7 +244,6 @@ TabDialog RID_PAGEDIALOG_LINE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Linie" ;
     Text [ en-US ] = "Line" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -276,7 +257,6 @@ TabDialog RID_PAGEDIALOG_LINE
             PageItem
             {
                 Identifier = RID_SVXPAGE_LINE ;
-                Text [ de ] = "Linie" ;
                 Text [ en-US ] = "Line" ;
                 PageResID = RID_SVXPAGE_LINE ;
                 Text [ x-comment ] = " ";
@@ -284,7 +264,6 @@ TabDialog RID_PAGEDIALOG_LINE
             PageItem
             {
                 Identifier = RID_SVXPAGE_LINE_DEF ;
-                Text [ de ] = "Linienstile" ;
                 Text [ en-US ] = "Line Styles" ;
                 PageResID = RID_SVXPAGE_LINE_DEF ;
                 Text [ x-comment ] = " ";
@@ -292,7 +271,6 @@ TabDialog RID_PAGEDIALOG_LINE
             PageItem
             {
                 Identifier = RID_SVXPAGE_LINEEND_DEF ;
-                Text [ de ] = "Linienenden" ;
                 Text [ en-US ] = "Arrow Styles" ;
                 PageResID = RID_SVXPAGE_LINEEND_DEF ;
                 Text [ x-comment ] = " ";
@@ -322,7 +300,6 @@ TabDialog RID_PAGEDIALOG_LINE
         Pos = MAP_APPFONT ( 169 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
-        Text [ de ] = "Zurück" ;
         Text [ en-US ] = "Return" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -331,7 +308,6 @@ TabDialog RID_PAGEDIALOG_LINE
 
     String 1
     {
-        Text [ de ] = "Linie" ;
         Text [ en-US ] = "Line" ;
     };
 };

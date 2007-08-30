@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CondFormat.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:29 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 12:12:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,6 @@ Control WIN_CONDITION
         DropDown = TRUE;
         TabStop = TRUE;
         Sort = FALSE;
-        StringList [ de ] =
-        {
-            < "Field Value Is" ; Default ; > ;
-            < "Expression Is" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Field Value Is" ; Default ; > ;
@@ -83,17 +78,6 @@ Control WIN_CONDITION
         DropDown = TRUE;
         TabStop = TRUE;
         Sort = FALSE;
-        StringList [ de ] =
-        {
-            < "between" ; 0; > ;
-            < "not between" ; 1; > ;
-            < "equal to" ; 2; > ;
-            < "not equal to" ; 3; > ;
-            < "greater than" ; 4; > ;
-            < "less than" ; 5; > ;
-            < "greater than or equal to" ; 6; > ;
-            < "less than or equal to" ; 7; > ;
-        };
         StringList [ en-US ] =
         {
             < "between" ; 0; > ;
@@ -120,7 +104,6 @@ Control WIN_CONDITION
         Pos = MAP_APPFONT ( 4*UNRELATED_CONTROLS + COND_TYPE_WIDTH + COND_OP_WIDTH + EDIT_WIDTH,
             ROW_1_POS + ( FIXEDTEXT_HEIGHT - EDIT_HEIGHT ) / 2 );
         Size = MAP_APPFONT( OPERATOR_SEP_WIDTH , FIXEDTEXT_HEIGHT );
-        Text [ de ] = "und";
         Text [ en-US ] = "and";
     };
 
@@ -201,7 +184,6 @@ Control WIN_CONDITION
         Size = MAP_APPFONT ( CONDITION_WIDTH - UNRELATED_CONTROLS, ROW_2_HEIGHT ) ;
         Border = TRUE ;
         HelpId = HID_CRTL_FORMAT_PREVIEW;
-        Text [ de ] = "Beispiel";
         Text [ en-US ] = "Example";
     };
 
@@ -235,7 +217,6 @@ ModalDialog RID_CONDFORMAT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( COND_DLG_WIDTH, COND_DLG_HEIGHT ) ;
-    Text [ de ] = "Bedingungsabhängige Formatierung" ;
     Text [ en-US ] = "Conditional Formatting" ;
     HelpId = HID_CONDFORMAT_DLG;
     Moveable = TRUE ;
@@ -275,7 +256,6 @@ ModalDialog RID_CONDFORMAT
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( CONDITION_WIDTH - BUTTON_WIDTH - UNRELATED_CONTROLS, CONDITION_HEIGHT + 2*RELATED_CONTROLS + 1) ;
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        Text [ de ] = "~Hilfe" ;
         Text [ en-US ] = "~Help";
     };
 
@@ -288,31 +268,24 @@ ModalDialog RID_CONDFORMAT
 
 String STR_NUMBERED_CONDITION
 {
-    Text [ de ] = "Bedingung $number$";
     Text [ en-US ] = "Condition $number$";
 };
 
 String STR_COLOR_WHITE
 {
-    Text [ de ] = "Weiß" ;
     Text [ en-US ] = "White" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CHARCOLOR
 {
-    Text [ de ] = "Zeichenfarbe" ;
     Text [ en-US ] = "Font color" ;
 };
 String STR_CHARBACKGROUND
 {
-    Text [ de ] = "Hintergrund" ;
     Text [ en-US ] = "Background";
 };
 String STR_TRANSPARENT
 {
-    Text [ de ] = "Keine Füllung" ;
     Text [ en-US ] = "No Fill" ;
-    Text [ x-comment ] = " ";
 };
 
 #define MASKCOLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
