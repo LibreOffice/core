@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:17:23 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 09:58:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -686,7 +686,7 @@ void BasicLibInfo::CalcRelStorageName( const String& rMgrStorageName )
     else
         SetRelStorageName( String() );
 }
-BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBASIC* pParentFromStdLib, String* pLibPath )
+BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBASIC* pParentFromStdLib, String* pLibPath, BOOL bDocMgr ) : mbDocMgr( bDocMgr )
 {
     DBG_CTOR( BasicManager, 0 );
 
@@ -715,7 +715,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBA
         if ( !pStdLib )
         {
             // Sollte eigentlich nie passieren, aber dann wenigstens nicht abstuerzen...
-            pStdLib = new StarBASIC;
+            pStdLib = new StarBASIC( NULL, mbDocMgr );
             BasicLibInfo* pStdLibInfo = pLibs->GetObject( 0 );
             if ( !pStdLibInfo )
                 pStdLibInfo = CreateLibInfo();
@@ -896,7 +896,7 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
     InsertGlobalUNOConstant( "DialogLibraries", makeAny( mpImpl->maContainerInfo.mxDialogCont ) );
 }
 
-BasicManager::BasicManager( StarBASIC* pSLib, String* pLibPath )
+BasicManager::BasicManager( StarBASIC* pSLib, String* pLibPath, BOOL bDocMgr ) : mbDocMgr( bDocMgr )
 {
     DBG_CTOR( BasicManager, 0 );
     Init();
@@ -937,7 +937,7 @@ void BasicManager::ImpMgrNotLoaded( const String& rStorageName )
 
     // Eine STD-Lib erzeugen, sonst macht es Peng!
     BasicLibInfo* pStdLibInfo = CreateLibInfo();
-    pStdLibInfo->SetLib( new StarBASIC );
+    pStdLibInfo->SetLib( new StarBASIC( NULL, mbDocMgr ) );
     StarBASICRef xStdLib = pStdLibInfo->GetLib();
     xStdLib->SetName( String::CreateFromAscii(szStdLibName) );
     pStdLibInfo->SetLibName( String::CreateFromAscii(szStdLibName) );
@@ -949,7 +949,7 @@ void BasicManager::ImpMgrNotLoaded( const String& rStorageName )
 void BasicManager::ImpCreateStdLib( StarBASIC* pParentFromStdLib )
 {
     BasicLibInfo* pStdLibInfo = CreateLibInfo();
-    StarBASIC* pStdLib = new StarBASIC( pParentFromStdLib );
+    StarBASIC* pStdLib = new StarBASIC( pParentFromStdLib, mbDocMgr );
     pStdLibInfo->SetLib( pStdLib );
     pStdLib->SetName( String::CreateFromAscii(szStdLibName) );
     pStdLibInfo->SetLibName( String::CreateFromAscii(szStdLibName) );
@@ -1238,7 +1238,7 @@ BOOL BasicManager::ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorag
                 if ( !bInfosOnly )
                 {
                     if ( !pLibInfo->GetLib().Is() )
-                        pLibInfo->SetLib( new StarBASIC( GetStdLib() ) );
+                        pLibInfo->SetLib( new StarBASIC( GetStdLib(), mbDocMgr ) );
                     xBasicStream->SetBufferSize( 1024 );
                     xBasicStream->Seek( STREAM_SEEK_TO_BEGIN );
                     bLoaded = ImplLoadBasic( *xBasicStream, pLibInfo->GetLibRef() );
@@ -1661,7 +1661,7 @@ StarBASIC* BasicManager::CreateLib( const String& rLibName )
         return 0;
 
     BasicLibInfo* pLibInfo = CreateLibInfo();
-    StarBASIC* pNew = new StarBASIC( GetStdLib() );
+    StarBASIC* pNew = new StarBASIC( GetStdLib(), mbDocMgr );
     GetStdLib()->Insert( pNew );
     pNew->SetFlag( SBX_EXTSEARCH | SBX_DONTSTORE );
     pLibInfo->SetLib( pNew );
@@ -1719,7 +1719,7 @@ StarBASIC* BasicManager::CreateLibForLibContainer( const String& rLibName,
         return 0;
 
     BasicLibInfo* pLibInfo = CreateLibInfo();
-    StarBASIC* pNew = new StarBASIC( GetStdLib() );
+    StarBASIC* pNew = new StarBASIC( GetStdLib(), mbDocMgr );
     GetStdLib()->Insert( pNew );
     pNew->SetFlag( SBX_EXTSEARCH | SBX_DONTSTORE );
     pLibInfo->SetLib( pNew );
