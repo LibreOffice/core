@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbafont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:06:21 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:04:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ ScVbaFont::getColorIndex() throw ( uno::RuntimeException )
     sal_Int32 nIndex = -1;
     for ( sal_Int32 count=0; count<nElems; ++count )
            {
-        sal_Int32 nPaletteColor;
+        sal_Int32 nPaletteColor = 0;
         xIndex->getByIndex( count ) >>= nPaletteColor;
         if ( nPaletteColor == nColor )
         {
@@ -257,7 +257,7 @@ ScVbaFont::getBold() throw ( uno::RuntimeException )
         if (  mpDataSet->GetItemState( ATTR_FONT_WEIGHT, TRUE, NULL) == SFX_ITEM_DONTCARE )
             return aNULL();
 
-    double fValue;
+    double fValue = 0.0;
      mxFont->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" ) ) ) >>= fValue;
     return uno::makeAny( fValue == awt::FontWeight::BOLD );
 }

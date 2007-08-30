@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbadialogs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:05:43 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:04:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ ScVbaDialogs::getCount() throw (uno::RuntimeException)
 uno::Any
 ScVbaDialogs::Item( const uno::Any &aItem ) throw (uno::RuntimeException)
 {
-    sal_Int32 nIndex;
+    sal_Int32 nIndex = 0;
     aItem >>= nIndex;
     uno::Reference< excel::XDialog > aDialog( new ScVbaDialog( nIndex, m_xContext ) );
     return uno::Any( aDialog );

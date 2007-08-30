@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbainterior.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:07:44 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:04:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ ScVbaInterior::getColorIndex() throw ( css::uno::RuntimeException )
     sal_Int32 nIndex = -1;
     for ( sal_Int32 count=0; count<nElems; ++count )
            {
-        sal_Int32 nPaletteColor;
+        sal_Int32 nPaletteColor = 0;
         xIndex->getByIndex( count ) >>= nPaletteColor;
         if ( nPaletteColor == nColor )
         {
