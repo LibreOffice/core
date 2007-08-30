@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 15:00:46 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 13:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,6 +199,7 @@ class GtkSalFrame : public SalFrame
     bool                            m_bDefaultPos;
     bool                            m_bDefaultSize;
     bool                            m_bSendModChangeOnRelease;
+    bool                            m_bWindowIsGtkPlug;
     String                          m_aTitle;
 
     IMHandler*                      m_pIMHandler;
@@ -261,7 +262,8 @@ class GtkSalFrame : public SalFrame
     Size calcDefaultSize();
 
     void setMinMaxSize();
-    void createNewWindow( XLIB_Window aParent, int nScreen );
+    void createNewWindow( XLIB_Window aParent, bool bXEmbed, int nScreen );
+    void askForXEmbedFocus( sal_Int32 nTimecode );
 public:
     GtkSalFrame( SalFrame* pParent, ULONG nStyle );
     GtkSalFrame( SystemParentData* pSysData );
