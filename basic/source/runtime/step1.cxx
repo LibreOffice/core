@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-03 15:10:48 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:01:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #include "iosys.hxx"
 #include "image.hxx"
 #include "sbunoobj.hxx"
+
+bool checkUnoObjectType( SbUnoObject* refVal,
+    const String& aClass );
 
 // Laden einer numerischen Konstanten (+ID)
 
@@ -476,9 +479,18 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
         {
             if( !implIsClass( pObj, aClass ) )
             {
-                if( bRaiseErrors )
-                    Error( SbERR_INVALID_USAGE_OBJECT );
-                bOk = false;
+                if ( bVBAEnabled && pObj->IsA( TYPE(SbUnoObject) ) )
+                {
+                    SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pObj);
+                    bOk = checkUnoObjectType( pUnoObj, aClass );
+                }
+                else
+                    bOk = false;
+                if ( !bOk )
+                {
+                    if( bRaiseErrors )
+                        Error( SbERR_INVALID_USAGE_OBJECT );
+                }
             }
             else
             {
@@ -490,14 +502,17 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
     }
     else
     {
-        if( bRaiseErrors )
-            Error( SbERR_NEEDS_OBJECT );
-        bOk = false;
+        if ( !bVBAEnabled )
+        {
+            if( bRaiseErrors )
+                Error( SbERR_NEEDS_OBJECT );
+            bOk = false;
+        }
     }
     return bOk;
 }
 
-void SbiRuntime::StepSETCLASS( UINT32 nOp1 )
+void SbiRuntime::StepSETCLASS_impl( UINT32 nOp1, bool bHandleDflt )
 {
     SbxVariableRef refVal = PopVar();
     SbxVariableRef refVar = PopVar();
@@ -505,7 +520,17 @@ void SbiRuntime::StepSETCLASS( UINT32 nOp1 )
 
     bool bOk = checkClass_Impl( refVal, aClass, true );
     if( bOk )
-        StepSET_Impl( refVal, refVar );
+        StepSET_Impl( refVal, refVar, bHandleDflt ); // don't do handle dflt prop for a "proper" set
+}
+
+void SbiRuntime::StepVBASETCLASS( UINT32 nOp1 )
+{
+    StepSETCLASS_impl( nOp1, false );
+}
+
+void SbiRuntime::StepSETCLASS( UINT32 nOp1 )
+{
+    StepSETCLASS_impl( nOp1, true );
 }
 
 void SbiRuntime::StepTESTCLASS( UINT32 nOp1 )
