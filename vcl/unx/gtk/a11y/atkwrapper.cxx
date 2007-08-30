@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkwrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:28:56 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 15:28:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,9 +507,7 @@ wrapper_ref_state_set( AtkObject *pObject )
     catch(const uno::Exception &e)
     {
         g_warning( "Exception in wrapper_ref_state_set" );
-
-        g_object_unref( G_OBJECT( pSet ) );
-        pSet = NULL;
+        atk_state_set_add_state( pSet, ATK_STATE_DEFUNCT );
     }
 
     return pSet;
