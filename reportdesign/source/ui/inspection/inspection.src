@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inspection.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2007-07-12 09:46:50 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 12:13:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,204 +43,164 @@
 
 String RID_STR_PROPPAGE_DEFAULT
 {
-    Text [ de ] = "Allgemein" ;
     Text [ en-US ] = "General" ;
     Text [ x-comment ] = " ";
 };
 String RID_STR_PROPPAGE_DATA
 {
-    Text [ de ] = "Daten" ;
     Text [ en-US ] = "Data" ;
     Text [ x-comment ] = " ";
 };
 String RID_STR_BOOL
 {
-    Text [ de ] = "Nein;Ja" ;
     Text [ en-US ] = "No;Yes" ;
     Text [ x-comment ] = " ";
 };
 String RID_STR_FORCENEWPAGE
 {
-    Text [ de ] = "Neue Seite erzwingen" ;
     Text [ en-US ] = "Force New Page" ;
 };
 String RID_STR_FORCENEWPAGE_CONST
 {
-    Text [ de ] = "Nein;Bevor Sektion;Nach Sektion;Bevor und Nach Sektion" ;
     Text [ en-US ] = "None;Before Section;After Section;Before & After Section" ;
 };
 String RID_STR_NEWROWORCOL
 {
-    Text [ de ] = "Neue Zeile oder Spalte" ;
     Text [ en-US ] = "New Row Or Column" ;
 };
 String RID_STR_KEEPTOGETHER
 {
-    Text [ de ] = "Keep Together" ;
     Text [ en-US ] = "Keep Together" ;
 };
 String RID_STR_KEEPTOGETHER_CONST
 {
-    Text [ de ] = "Nein;Ganze Gruppe;Mit erstem Detailbereich" ;
     Text [ en-US ] = "No;Whole Group;With First Detail" ;
 };
 String RID_STR_CANGROW
 {
-    Text [ de ] = "Kann wachsen" ;
     Text [ en-US ] = "Can Grow" ;
 };
 String RID_STR_CANSHRINK
 {
-    Text [ de ] = "Kann schrumpfen" ;
     Text [ en-US ] = "Can Shrink" ;
 };
 String RID_STR_REPEATSECTION
 {
-    Text [ de ] = "Bereich wiederholen" ;
     Text [ en-US ] = "Repeat Section" ;
 };
 String RID_STR_PRINTREPEATEDVALUES
 {
-    Text [ de ] = "Print repeated values" ;
     Text [ en-US ] = "Print repeated values" ;
 };
 String RID_STR_CONDITIONALPRINTEXPRESSION
 {
-    Text [ de ] = "Conditional Print Expression" ;
     Text [ en-US ] = "Conditional Print Expression" ;
 };
 String RID_STR_STARTNEWCOLUMN
 {
-    Text [ de ] = "Auf neuer Spalte beginnen" ;
     Text [ en-US ] = "Start new column" ;
 };
 String RID_STR_STARTNEWPAGE
 {
-    Text [ de ] = "Auf neuer Seite beginnen" ;
     Text [ en-US ] = "Start new page" ;
 };
 String RID_STR_RESETPAGENUMBER
 {
-    Text [ de ] = "Seitenzahl zurücksetzen" ;
     Text [ en-US ] = "Reset page number" ;
 };
 String RID_STR_PRINTWHENGROUPCHANGE
 {
-    Text [ de ] = "Drucke bei Gruppenänderung" ;
     Text [ en-US ] = "Print When Group Change" ;
 };
 String RID_STR_VISIBLE
 {
-    Text [ de ] = "Sichtbar" ;
     Text [ en-US ] = "Visible" ;
 };
 String RID_STR_GROUPKEEPTOGETHER
 {
-    Text [ de ] = "Gruppe zusammen halten" ;
     Text [ en-US ] = "Group keep together" ;
 };
 String RID_STR_GROUPKEEPTOGETHER_CONST
 {
-    Text [ de ] = "Pro Seite;Pro Spalte" ;
     Text [ en-US ] = "Per Page;Per Column" ;
 };
 String RID_STR_SECTIONPAGEBREAK_CONST
 {
-    Text [ de ] = "Keine;Bereich;Automatisch" ;
     Text [ en-US ] = "None;Section;Automatic" ;
 };
 String RID_STR_PAGEHEADEROPTION
 {
-    Text [ de ] = "Seitenkopf" ;
     Text [ en-US ] = "Page header" ;
 };
 String RID_STR_PAGEFOOTEROPTION
 {
-    Text [ de ] = "Seitenfuß" ;
     Text [ en-US ] = "Page footer" ;
 };
 String RID_STR_REPORTPRINTOPTION_CONST
 {
-    Text [ de ] = "Alle Seiten;Nicht mit Berichtskopf;Nicht mit Berichtsfuß;Weder mit Berichtskopf noch Fuß" ;
     Text [ en-US ] = "All Pages;Not With Report Header;Not With Report Footer;Not With Report Header/Footer" ;
 };
 String RID_STR_DEEPTRAVERSING
 {
-    Text [ de ] = "Unterberichte einbinden" ;
     Text [ en-US ] = "Deep traversing" ;
 };
 String RID_STR_PREEVALUATED
 {
-    Text [ de ] = "Vorraus Berechnung" ;
     Text [ en-US ] = "Pre evaluation" ;
 };
 String RID_STR_POSITIONX
 {
-    Text [ de ] = "Position X";
     Text [ en-US ] = "Position X";
 };
 String RID_STR_POSITIONY
 {
-    Text [ de ] = "Position Y";
     Text [ en-US ] = "Position Y";
 };
 String RID_STR_WIDTH
 {
-    Text [ de ] = "Breite";
     Text [ en-US ] = "Width";
 };
 String RID_STR_HEIGHT
 {
-    Text [ de ] = "Höhe";
     Text [ en-US ] = "Height";
 };
 String RID_STR_INITIALFORMULA
 {
-    Text [ de ] = "Anfangswert" ;
     Text [ en-US ] = "Initial value" ;
 };
 String RID_STR_PRESERVEIRI
 {
-    Text [ de ] = "Verknüpfung beibehalten" ;
     Text [ en-US ] = "Preserve as Link" ;
 };
 String RID_STR_FORMULA
 {
-    Text [ de ] = "Formel" ;
     Text [ en-US ] = "Formula" ;
 };
 String RID_STR_DATAFIELD
 {
-    Text [ de ] = "Datenfeld" ;
     Text [ en-US ] = "Data field" ;
 };
 String RID_STR_FONT
 {
-    Text [ de ] = "Schrift" ;
     Text [ en-US ] = "Font" ;
 };
 String RID_STR_BACKCOLOR
 {
-    Text [ de ] = "Hintergrundfarbe" ;
     Text [ en-US ] = "Background color";
 };
 String RID_STR_BACKTRANSPARENT
 {
-    Text [ de ] = "Hintergrund Transparent" ;
     Text [ en-US ] = "Background Transparent";
 };
 String RID_STR_CONTROLBACKGROUNDTRANSPARENT
 {
-    Text [ de ] = "Hintergrund Transparent" ;
     Text [ en-US ] = "Background Transparent";
 };
 String RID_STR_OVERLAP_OTHER_CONTROL
 {
-    Text [ de ] = "Änderung ist nicht möglich. Das Kontrollelement überschneidet sich mit einem anderen Kontrollelement.";
     Text [ en-US ] = "This operation is not allowed. The control overlaps with another one.";
 };
 String RID_STR_ILLEGAL_POSITION
 {
-    Text [ de ] = "Diese Position ist ungültig.";
     Text [ en-US ] = "This position can not be set. It is invalid.";
 };
