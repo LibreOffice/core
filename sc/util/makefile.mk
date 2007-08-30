@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 20:15:40 $
+#   last change: $Author: vg $ $Date: 2007-08-30 10:05:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -266,6 +266,7 @@ DEF9NAME=$(SHL9TARGET)
 
 SHL9STDLIBS= \
         $(CPPUHELPERLIB) \
+        $(VCLLIB) \
         $(CPPULIB) \
         $(COMPHELPERLIB) \
         $(SVLIB) \
@@ -281,6 +282,12 @@ SHL9STDLIBS= \
 
 SHL9DEPN=$(SHL1TARGETN) $(SHL8TARGETN)
 SHL9LIBS=$(SLB)$/$(TARGET_VBA).lib
+
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+    LIBCOMPNAME=$(LOCAL_COMMON_OUT)$/lib/lib$(SHL9TARGET)$(DLLPOST)
+.ELSE
+    LIBCOMPNAME=$(COMMONBIN)$/$(SHL9TARGET)$(DLLPOST)
+.ENDIF
 
 .ENDIF
  
