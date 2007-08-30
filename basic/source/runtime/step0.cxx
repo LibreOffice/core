@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:33:37 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:01:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,11 @@
 #include <sb.hrc>
 #include <basrid.hxx>
 #include "sbunoobj.hxx"
+#include "image.hxx"
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/util/SearchOptions.hdl>
+#include <vcl/svapp.hxx>
+#include <unotools/textsearch.hxx>
 
 #include <algorithm>
 
@@ -64,7 +68,6 @@ void SbiRuntime::StepArith( SbxOperator eOp )
     TOSMakeTemp();
     SbxVariable* p2 = GetTOS();
 
-    bool bVBAInterop =  SbiRuntime::isVBAEnabled();
 
     // This could & should be moved to the MakeTempTOS() method in runtime.cxx
     // In the code which this is cut'npaste from there is a check for a ref
@@ -74,7 +77,7 @@ void SbiRuntime::StepArith( SbxOperator eOp )
     // here we alway seem to have a refcount of 1. Also it seems that
     // MakeTempTOS is called for other operation, so I hold off for now
     // until I have a better idea
-    if ( bVBAInterop
+    if ( bVBAEnabled
         && ( p2->GetType() == SbxOBJECT || p2->GetType() == SbxVARIANT )
     )
     {
@@ -110,6 +113,40 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
 {
     SbxVariableRef p1 = PopVar();
     SbxVariableRef p2 = PopVar();
+
+    // Make sure objects with default params have
+    // values ( and type ) set as appropriate
+    SbxDataType p1Type = p1->GetType();
+    SbxDataType p2Type = p2->GetType();
+    if ( p1Type == p2Type )
+    {
+        if ( p1Type == SbxEMPTY )
+        {
+            p1->Broadcast( SBX_HINT_DATAWANTED );
+            p2->Broadcast( SBX_HINT_DATAWANTED );
+        }
+        // if both sides are an object and have default props
+        // then we need to use the default props
+        // we don't need to worry if only one side ( lhs, rhs ) is an
+        // object ( object side will get coerced to correct type in
+        // Compare )
+        else if ( p1Type ==  SbxOBJECT )
+        {
+            SbxVariable* pDflt = getDefaultProp( p1 );
+            if ( pDflt )
+            {
+                p1 = pDflt;
+                p1->Broadcast( SBX_HINT_DATAWANTED );
+            }
+            pDflt = getDefaultProp( p2 );
+            if ( pDflt )
+            {
+                p2 = pDflt;
+                p2->Broadcast( SBX_HINT_DATAWANTED );
+            }
+        }
+
+    }
 #ifndef WIN
     static SbxVariable* pTRUE = NULL;
     static SbxVariable* pFALSE = NULL;
@@ -166,9 +203,116 @@ void SbiRuntime::StepGT()       { StepCompare( SbxGT );     }
 void SbiRuntime::StepLE()       { StepCompare( SbxLE );     }
 void SbiRuntime::StepGE()       { StepCompare( SbxGE );     }
 
+namespace
+{
+    bool NeedEsc(sal_Unicode cCode)
+    {
+        String sEsc(RTL_CONSTASCII_USTRINGPARAM(".^$+\\|{}()"));
+        return (STRING_NOTFOUND != sEsc.Search(cCode));
+    }
+
+    String VBALikeToRegexp(const String &rIn)
+    {
+        String sResult;
+        const sal_Unicode *start = rIn.GetBuffer();
+        const sal_Unicode *end = start + rIn.Len();
+
+        int seenright = 0;
+
+        sResult.Append('^');
+
+        while (start < end)
+        {
+            switch (*start)
+            {
+                case '?':
+                    sResult.Append('.');
+                    start++;
+                    break;
+                case '*':
+                    sResult.Append(String(RTL_CONSTASCII_USTRINGPARAM(".*")));
+                    start++;
+                    break;
+                case '#':
+                    sResult.Append(String(RTL_CONSTASCII_USTRINGPARAM("[0-9]")));
+                    start++;
+                    break;
+                case ']':
+                    sResult.Append('\\');
+                    sResult.Append(*start++);
+                    break;
+                case '[':
+                    sResult.Append(*start++);
+                    seenright = 0;
+                    while (start < end && !seenright)
+                    {
+                        switch (*start)
+                        {
+                            case '[':
+                            case '?':
+                            case '*':
+                            sResult.Append('\\');
+                            sResult.Append(*start);
+                                break;
+                            case ']':
+                            sResult.Append(*start);
+                                seenright = 1;
+                                break;
+                            case '!':
+                                sResult.Append('^');
+                                break;
+                            default:
+                            if (NeedEsc(*start))
+                                    sResult.Append('\\');
+                            sResult.Append(*start);
+                                break;
+                        }
+                        start++;
+                    }
+                    break;
+                default:
+                    if (NeedEsc(*start))
+                        sResult.Append('\\');
+                    sResult.Append(*start++);
+            }
+        }
+
+        sResult.Append('$');
+
+        return sResult;
+    }
+}
+
 void SbiRuntime::StepLIKE()
 {
-    StarBASIC::FatalError( SbERR_NOT_IMPLEMENTED );
+    SbxVariableRef refVar1 = PopVar();
+    SbxVariableRef refVar2 = PopVar();
+
+    String pattern = VBALikeToRegexp(refVar1->GetString());
+    String value = refVar2->GetString();
+
+    com::sun::star::util::SearchOptions aSearchOpt;
+
+    aSearchOpt.algorithmType = com::sun::star::util::SearchAlgorithms_REGEXP;
+
+    aSearchOpt.Locale = Application::GetSettings().GetLocale();
+    aSearchOpt.searchString = pattern;
+
+    int bTextMode(1);
+    bool bCompatibility = ( pINST && pINST->IsCompatibility() );
+    if( bCompatibility )
+        bTextMode = GetImageFlag( SBIMG_COMPARETEXT );
+
+    if( bTextMode )
+        aSearchOpt.transliterateFlags |= com::sun::star::i18n::TransliterationModules_IGNORE_CASE;
+
+    SbxVariable* pRes = new SbxVariable;
+    utl::TextSearch aSearch(aSearchOpt);
+    xub_StrLen nStart=0, nEnd=value.Len();
+    int bRes = aSearch.SearchFrwrd(value, &nStart, &nEnd);
+    pRes->PutBool( bRes != 0 );
+
+    PushVar( pRes );
 }
 
 // TOS und TOS-1 sind beides Objektvariable und enthalten den selben Pointer
@@ -244,14 +388,13 @@ void SbiRuntime::StepPUT()
         n = refVar->GetFlags();
         refVar->SetFlag( SBX_WRITE );
     }
-    bool bVBAInterop =  SbiRuntime::isVBAEnabled();
 
     // if left side arg is an object or variant and right handside isn't
     // either an object or a variant then try and see if a default
     // property exists.
     // to use e.g. Range{"A1") = 34
     // could equate to Range("A1").Value = 34
-    if ( bVBAInterop )
+    if ( bVBAEnabled )
     {
         if ( refVar->GetType() == SbxOBJECT  )
         {
@@ -269,7 +412,7 @@ void SbiRuntime::StepPUT()
 
     *refVar = *refVal;
     // lhs is a property who's value is currently null
-    if ( !bVBAInterop || ( bVBAInterop && refVar->GetType() != SbxEMPTY ) )
+    if ( !bVBAEnabled || ( bVBAEnabled && refVar->GetType() != SbxEMPTY ) )
     // #67607 Uno-Structs kopieren
         checkUnoStructCopy( refVal, refVar );
     if( bFlagsChanged )
@@ -402,7 +545,7 @@ void SbiRuntime::StepSET()
 {
     SbxVariableRef refVal = PopVar();
     SbxVariableRef refVar = PopVar();
-    StepSET_Impl( refVal, refVar, SbiRuntime::isVBAEnabled() ); // this is really assigment
+    StepSET_Impl( refVal, refVar, bVBAEnabled ); // this is really assigment
 }
 
 void SbiRuntime::StepVBASET()
@@ -525,6 +668,8 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
                 if( ub < lb )
                     Error( SbERR_OUT_OF_RANGE ), ub = lb;
                 pArray->AddDim32( lb, ub );
+                if ( lb != ub )
+                    pArray->setHasFixedSize( true );
             }
         }
         else
@@ -693,6 +838,58 @@ void SbiRuntime::StepREDIMP_ERASE()
         refVar->SetType( SbxEMPTY );
 }
 
+void lcl_clearImpl( SbxVariableRef& refVar, SbxDataType& eType )
+{
+    USHORT nSavFlags = refVar->GetFlags();
+    refVar->ResetFlag( SBX_FIXED );
+    refVar->SetType( SbxDataType(eType & 0x0FFF) );
+    refVar->SetFlags( nSavFlags );
+    refVar->Clear();
+}
+
+void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled )
+{
+    SbxDataType eType = refVar->GetType();
+    if( eType & SbxARRAY )
+    {
+        if ( bVBAEnabled )
+        {
+            SbxBase* pElemObj = refVar->GetObject();
+            SbxDimArray* pDimArray = PTR_CAST(SbxDimArray,pElemObj);
+            bool bClearValues = true;
+            if( pDimArray )
+            {
+                if ( pDimArray->hasFixedSize() )
+                {
+                    // Clear all Value(s)
+                    pDimArray->SbxArray::Clear();
+                    bClearValues = false;
+                }
+                else
+                    pDimArray->Clear(); // clear Dims
+            }
+            if ( bClearValues )
+            {
+                SbxArray* pArray = PTR_CAST(SbxArray,pElemObj);
+                if ( pArray )
+                    pArray->Clear();
+            }
+        }
+        else
+        // AB 2.4.1996
+        // Arrays haben bei Erase nach VB ein recht komplexes Verhalten. Hier
+        // werden zunaechst nur die Typ-Probleme bei REDIM (#26295) beseitigt:
+        // Typ hart auf den Array-Typ setzen, da eine Variable mit Array
+        // SbxOBJECT ist. Bei REDIM entsteht dann ein SbxOBJECT-Array und
+        // der ursruengliche Typ geht verloren -> Laufzeitfehler
+            lcl_clearImpl( refVar, eType );
+    }
+    else
+    if( refVar->IsFixed() )
+        refVar->Clear();
+    else
+        refVar->SetType( SbxEMPTY );
+}
 
 // Variable loeschen
 // TOS = Variable
@@ -700,26 +897,15 @@ void SbiRuntime::StepREDIMP_ERASE()
 void SbiRuntime::StepERASE()
 {
     SbxVariableRef refVar = PopVar();
+    lcl_eraseImpl( refVar, bVBAEnabled );
+}
+
+void SbiRuntime::StepERASE_CLEAR()
+{
+    SbxVariableRef refVar = PopVar();
+    lcl_eraseImpl( refVar, bVBAEnabled );
     SbxDataType eType = refVar->GetType();
-    if( eType & SbxARRAY )
-    {
-        // AB 2.4.1996
-        // Arrays haben bei Erase nach VB ein recht komplexes Verhalten. Hier
-        // werden zunaechst nur die Typ-Probleme bei REDIM (#26295) beseitigt:
-        // Typ hart auf den Array-Typ setzen, da eine Variable mit Array
-        // SbxOBJECT ist. Bei REDIM entsteht dann ein SbxOBJECT-Array und
-        // der ursruengliche Typ geht verloren -> Laufzeitfehler
-        USHORT nSavFlags = refVar->GetFlags();
-        refVar->ResetFlag( SBX_FIXED );
-        refVar->SetType( SbxDataType(eType & 0x0FFF) );
-        refVar->SetFlags( nSavFlags );
-        refVar->Clear();
-    }
-    else
-    if( refVar->IsFixed() )
-        refVar->Clear();
-    else
-        refVar->SetType( SbxEMPTY );
+    lcl_clearImpl( refVar, eType );
 }
 
 // Einrichten eines Argvs
