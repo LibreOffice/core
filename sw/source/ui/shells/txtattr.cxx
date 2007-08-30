@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:24:47 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 16:24:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,7 +207,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                 eEscape = SVX_ESCAPEMENT_OFF;
                 break;
             }
-            SvxEscapementItem aEscape( eEscape );
+            SvxEscapementItem aEscape( eEscape, RES_CHRATR_ESCAPEMENT );
             if(eEscape == SVX_ESCAPEMENT_SUPERSCRIPT)
                 aEscape.GetEsc() = DFLT_ESC_AUTO_SUPER;
             else if(eEscape == SVX_ESCAPEMENT_SUBSCRIPT)
