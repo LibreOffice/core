@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 07:55:41 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 16:00:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,32 +364,6 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
 }
 
 // -------------------------------------------------------------------
-extern "C" void NeonSession_ProgressNotify( void *,
-                                            off_t,
-                                            off_t )
-{
-    // progress: bytes read so far
-    // total:    total bytes to read, -1 -> total count not known
-}
-
-// -------------------------------------------------------------------
-extern "C" void NeonSession_StatusNotify( void *,
-                                          ne_conn_status,
-                                          const char * )
-{
-#if 0
-    typedef enum {
-        ne_conn_namelookup, /* lookup up hostname (info = hostname) */
-        ne_conn_connecting, /* connecting to host (info = hostname) */
-        ne_conn_connected, /* connected to host (info = hostname) */
-        ne_conn_secure /* connection now secure (info = crypto level) */
-    } ne_conn_status;
-#endif
-
-    // info: hostname
-}
-
-// -------------------------------------------------------------------
 extern "C" void NeonSession_PreSendRequest( ne_request * req,
                                             void * userdata,
                                             ne_buffer * headers )
@@ -577,13 +551,6 @@ void NeonSession::Init()
             throw DAVException( DAVException::DAV_SESSION_CREATE,
                                 NeonUri::makeConnectionEndPointString(
                                     m_aHostName, m_nPort ) );
-
-        // Set a progress callback for the session.
-        ne_set_progress( m_pHttpSession, NeonSession_ProgressNotify, this );
-
-        // Set a status notification callback for the session, to report
-        // connection status.
-        ne_set_status( m_pHttpSession, NeonSession_StatusNotify, this );
 
         // Add hooks (i.e. for adding additional headers to the request)
 
