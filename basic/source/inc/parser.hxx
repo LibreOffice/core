@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:15:58 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:00:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,6 @@ public:
     BOOL          bText;            // OPTION COMPARE TEXT
     BOOL          bExplicit;        // TRUE: OPTION EXPLICIT
     BOOL          bClassModule;     // TRUE: OPTION ClassModule
-    BOOL          bVBASupportOn;        // TRUE: OPTION VBASupport 1 otherwise default False
     IfaceVector   aIfaceVector;     // Holds all interfaces implemented by a class module
     SbxDataType   eDefTypes[26];    // DEFxxx-Datentypen
 
