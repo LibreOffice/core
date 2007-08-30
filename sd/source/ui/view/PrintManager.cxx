@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:02:25 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 16:36:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -556,6 +556,19 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* p
                 {
                     PrintStdOrNotes(aInfo, nPage, PK_NOTES, FALSE);
                     aInfo.mnProgressOffset += (nSelectCount * ( nCollateCopies > 1 ? 1 : nCopies));
+                }
+
+                // When in duplex mode then add an empty page after printing
+                // an odd number of pages.  This is to avoid the first page
+                // of the next run being printed on the backside of the
+                // current page.
+                if (nCollateCopies > 1
+                    && n<nCollateCopies
+                    && (pPrinter->GetCurPage()%2)==0
+                    && (pPrinter->GetDuplexMode()==DUPLEX_ON))
+                {
+                    pPrinter->StartPage();
+                    pPrinter->EndPage();
                 }
             }
         }
