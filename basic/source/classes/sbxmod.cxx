@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2007-08-17 08:15:47 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 09:59:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,8 @@ static const char* strListBasicKeyWords[] = {
     "integer",
     "is",
     "let",
-    "lib"
+    "lib",
+    "like",
     "line",
     "line input",
     "local",
@@ -544,7 +545,8 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
                 if( eCurTok == OPTION )
                 {
                     eCurTok = aTok.Next();
-                    if( eCurTok == COMPATIBLE )
+                    if( eCurTok == COMPATIBLE
+                    || ( ( eCurTok == VBASUPPORT ) && ( aTok.Next() == NUMBER ) && ( aTok.GetDbl()== 1 ) ) )
                         aTok.SetCompatible( true );
                 }
             }
@@ -781,7 +783,10 @@ USHORT SbModule::Run( SbMethod* pMeth )
                 pRt->pNext->block();
             pINST->pRun = pRt;
             if ( SbiRuntime ::isVBAEnabled() )
+                        {
                 pINST->EnableCompatibility( TRUE );
+                pRt->SetVBAEnabled( true );
+                        }
             while( pRt->Step() ) {}
             if( pRt->pNext )
                 pRt->pNext->unblock();
