@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Search.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:20:00 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 15:42:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -477,9 +477,12 @@ void Search::searchDocument()
     }
     while( nextDocGenHeap_.isNonEmpty() );
 
+    // #i80952
+#if 0
     for( sal_uInt32 i = 0; i < start.size(); ++i )
         if( start[i] != RoleFiller::STOP() )
             delete start[i];
+#endif
 }
 
 
