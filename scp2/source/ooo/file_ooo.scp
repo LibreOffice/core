@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.217 $
+ *  $Revision: 1.218 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 15:35:03 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:09:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2366,6 +2366,13 @@ File gid_File_Rdb_TypesVba
     Dir = gid_Dir_Program;
     Styles = (PACKED, OVERWRITE, PATCH);
     Name = "oovbaapi.rdb";
+End
+#else
+File gid_File_ExtnVba
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, OVERWRITE, PATCH);
+    Name = "vbaapi.oxt";
 End
 #endif
 #endif
