@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opcodes.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 16:32:24 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:00:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ enum SbiOpcode {
     _REDIMP_ERASE,      // Copies array to be later used by REDIM PRESERVE before erasing it
     _INITFOREACH,
     _VBASET,            // VBA-like Set
+    _ERASE_CLEAR,       // Erase array and clear variable
     SbOP0_END,
 
     // Alle Opcodes mit einem Operanden
@@ -132,6 +133,7 @@ enum SbiOpcode {
     _BASED,             // TOS wird um BASE erhoeht, BASE davor gepusht (+base)
     // Typanpassung im Argv
     _ARGTYP,            // Letzten Parameter in Argv konvertieren (+Typ)
+    _VBASETCLASS,       // VBA-like Set
     SbOP1_END,
 
     // Alle Opcodes mit zwei Operanden
@@ -164,6 +166,7 @@ enum SbiOpcode {
     _FIND_G,            // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
     _DCREATE_REDIMP,    // Objekt-Array redimensionieren (+StringId+StringID)
     _FIND_CM,           // Search inside a class module (CM) to enable global search in time
+    _PUBLIC_P,          //  Module global Variable (persisted between calls)(+StringID+Typ)
     SbOP2_END
 
 };
