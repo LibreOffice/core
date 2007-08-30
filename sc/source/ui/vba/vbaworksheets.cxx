@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaworksheets.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:14:08 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:05:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ ScVbaWorksheets::getVisible() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaWorksheets::setVisible( const uno::Any& _visible ) throw (uno::RuntimeException)
 {
-    sal_Bool bState;
+    sal_Bool bState = sal_False;
     if ( _visible >>= bState )
     {
         uno::Reference< container::XEnumeration > xEnum( createEnumeration(), uno::UNO_QUERY_THROW );
