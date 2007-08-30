@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:48:15 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 13:57:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,7 +200,9 @@ static const WMAdaptorProtocol aAtomTab[] =
     { "SAL_EXTTEXTEVENT", WMAdaptor::SAL_EXTTEXTEVENT },
     { "VCL_SYSTEM_SETTINGS", WMAdaptor::VCL_SYSTEM_SETTINGS },
     { "DTWM_IS_RUNNING", WMAdaptor::DTWM_IS_RUNNING },
-    { "_XSETTINGS_SETTINGS", WMAdaptor::XSETTINGS }
+    { "_XSETTINGS_SETTINGS", WMAdaptor::XSETTINGS },
+    { "_XEMBED", WMAdaptor::XEMBED },
+    { "_XEMBED_INFO", WMAdaptor::XEMBED_INFO }
 };
 
 extern "C" {
