@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-03 12:58:02 $
+#   last change: $Author: vg $ $Date: 2007-08-30 13:16:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN)
     @$(PERL) brand.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -u $(UNIXWRAPPERNAME) --iconprefix '$${{WITHOUTDOTUNIXPRODUCTNAME}}${ICONVERSION}-' $< $(@:db).$(INPATH)
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH) --ext "desktop" --key "Name" $(ULFDIR)$/launcher_name.ulf
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH) --ext "desktop" --key "Comment" $(ULFDIR)$/launcher_comment.ulf
-    @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH) --ext "desktop" --key "GenericName" $(ULFDIR)$/launcher_comment.ulf
+    @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH) --ext "desktop" --key "GenericName" $(ULFDIR)$/launcher_genericname.ulf
 
 .IF "$(WITH_LIBSN)"=="YES"
     @noop x$(foreach,i,$(LAUNCHERLIST) $(shell echo "StartupNotify=true" >> $(@:db).$(INPATH)/$i.desktop))x
