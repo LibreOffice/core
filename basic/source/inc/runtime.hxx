@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:21:59 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:01:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,6 +360,7 @@ class SbiRuntime
     BOOL          bError;           // TRUE: Fehler behandeln
     BOOL          bInError;         // TRUE: in einem Fehler-Handler
     BOOL          bBlocked;         // TRUE: blocked by next call level, #i48868
+    BOOL          bVBAEnabled;
     USHORT        nFlags;           // Debugging-Flags
     SbError       nError;           // letzter Fehler
     USHORT        nOps;             // Opcode-Zaehler
@@ -429,6 +430,8 @@ class SbiRuntime
     // #115829
     bool implIsClass( SbxObject* pObj, const String& aClass );
 
+    void StepSETCLASS_impl( UINT32 nOp1, bool bHandleDflt = false );
+
     // Die nachfolgenden Routinen werden vom Single Stepper
     // gerufen und implementieren die einzelnen Opcodes
     void StepNOP(),     StepEXP(),      StepMUL(),      StepDIV();
@@ -447,7 +450,7 @@ class SbiRuntime
     void StepNOERROR(), StepCHANNEL(),  StepCHANNEL0(), StepPRINT();
     void StepPRINTF(),  StepWRITE(),    StepRENAME(),   StepPROMPT();
     void StepRESTART(), StepEMPTY(),    StepLEAVE();
-    void StepLSET(),    StepRSET(),     StepREDIMP_ERASE();
+    void StepLSET(),    StepRSET(),     StepREDIMP_ERASE(),     StepERASE_CLEAR();
     // Alle Opcodes mit einem Operanden
     void StepLOADNC( UINT32 ),  StepLOADSC( UINT32 ),   StepLOADI( UINT32 );
     void StepARGN( UINT32 ),    StepBASED( UINT32 ),    StepPAD( UINT32 );
@@ -455,11 +458,11 @@ class SbiRuntime
     void StepJUMPF( UINT32 ),   StepONJUMP( UINT32 );
     void StepGOSUB( UINT32 ),   StepRETURN( UINT32 );
     void StepTESTFOR( UINT32 ), StepCASETO( UINT32 ),   StepERRHDL( UINT32 );
-    void StepRESUME( UINT32 ),  StepSETCLASS( UINT32 ), StepTESTCLASS( UINT32 ), StepLIB( UINT32 );
+    void StepRESUME( UINT32 ),  StepSETCLASS( UINT32 ), StepVBASETCLASS( UINT32 ),  StepTESTCLASS( UINT32 ), StepLIB( UINT32 );
     bool checkClass_Impl( const SbxVariableRef& refVal, const String& aClass, bool bRaiseErrors );
     void StepCLOSE( UINT32 ),   StepPRCHAR( UINT32 ),   StepARGTYP( UINT32 );
     // Alle Opcodes mit zwei Operanden
-    void StepRTL( UINT32, UINT32 ),     StepPUBLIC( UINT32, UINT32 );
+    void StepRTL( UINT32, UINT32 ),     StepPUBLIC( UINT32, UINT32 ),   StepPUBLIC_P( UINT32, UINT32 );
     void StepPUBLIC_Impl( UINT32, UINT32, bool bUsedForClassModule );
     void StepFIND( UINT32, UINT32 ),    StepELEM( UINT32, UINT32 );
     void StepGLOBAL( UINT32, UINT32 ),  StepLOCAL( UINT32, UINT32 );
@@ -472,6 +475,7 @@ class SbiRuntime
     void StepDCREATE_REDIMP(UINT32,UINT32), StepDCREATE_IMPL(UINT32,UINT32);
     void StepFIND_CM( UINT32, UINT32 );
 public:
+    void          SetVBAEnabled( bool bEnabled ) { bVBAEnabled = bEnabled; };
     USHORT      GetImageFlag( USHORT n ) const;
     USHORT      GetBase();
     xub_StrLen  nLine,nCol1,nCol2;  // aktuelle Zeile, Spaltenbereich
