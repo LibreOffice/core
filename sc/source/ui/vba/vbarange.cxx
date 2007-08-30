@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbarange.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:10:29 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:05:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,7 +330,7 @@ public:
     }
     uno::Reference< beans::XPropertySet > getNumberProps()
     {
-        long nIndexKey;
+        long nIndexKey = 0;
         uno::Any aValue = mxRangeProps->getPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NumberFormat")));
         aValue >>= nIndexKey;
 
@@ -487,7 +487,7 @@ CellValueSetter::processValue( const uno::Any& aValue, const uno::Reference< tab
     {
         case  uno::TypeClass_BOOLEAN:
         {
-            sal_Bool bState;
+            sal_Bool bState = sal_False;
             if ( aValue >>= bState   )
             {
                 uno::Reference< table::XCellRange > xRange( xCell, uno::UNO_QUERY_THROW );
@@ -514,7 +514,7 @@ CellValueSetter::processValue( const uno::Any& aValue, const uno::Reference< tab
         }
         default:
         {
-            double nDouble;
+            double nDouble = 0.0;
             if ( aValue >>= nDouble )
                 xCell->setValue( nDouble );
             else
@@ -1506,7 +1506,7 @@ ScVbaRange::Characters(const uno::Any& Start, const uno::Any& Length) throw (uno
         return xRange->Characters( Start, Length );
     }
 
-    long nIndex, nCount;
+    long nIndex = 0, nCount = 0;
     ::rtl::OUString rString;
     uno::Reference< text::XTextRange > xTextRange(mxRange, ::uno::UNO_QUERY_THROW );
     rString = xTextRange->getString();
@@ -1741,7 +1741,7 @@ ScVbaRange::Rows(const uno::Any& aIndex ) throw (uno::RuntimeException)
         return xRange->Rows( aIndex );
     }
 
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     rtl::OUString sAddress;
     if( aIndex.hasValue() )
     {
@@ -1789,7 +1789,7 @@ ScVbaRange::Columns( const uno::Any& aIndex ) throw (uno::RuntimeException)
     if ( aIndex.hasValue() )
     {
         uno::Reference< excel::XRange > xRange;
-        sal_Int32 nValue;
+        sal_Int32 nValue = 0;
         rtl::OUString sAddress;
         RangeHelper thisRange( mxRange );
         uno::Reference< sheet::XCellRangeAddressable > xThisRangeAddress = thisRange.getCellRangeAddressable();
@@ -1940,7 +1940,7 @@ ScVbaRange::getNumberFormat() throw (uno::RuntimeException)
 uno::Reference< excel::XRange >
 ScVbaRange::Resize( const uno::Any &RowSize, const uno::Any &ColumnSize ) throw (uno::RuntimeException)
 {
-    long nRowSize, nColumnSize;
+    long nRowSize = 0, nColumnSize = 0;
     sal_Bool bIsRowChanged = ( RowSize >>= nRowSize ), bIsColumnChanged = ( ColumnSize >>= nColumnSize );
     uno::Reference< table::XColumnRowRange > xColumnRowRange(mxRange, ::uno::UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetCellRange > xSheetRange(mxRange, ::uno::UNO_QUERY_THROW);
@@ -2318,7 +2318,7 @@ ScVbaRange::setHidden( const uno::Any& _hidden ) throw (uno::RuntimeException)
         return;
     }
 
-    sal_Bool bHidden;
+    sal_Bool bHidden = sal_False;
     if ( !(_hidden >>= bHidden) )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Failed to extract param for Hidden property" ) ), uno::Reference< uno::XInterface >() );
 
@@ -2818,7 +2818,7 @@ ScVbaRange::Delete( const uno::Any& Shift ) throw (uno::RuntimeException)
     sheet::CellDeleteMode mode = sheet::CellDeleteMode_NONE ;
     if ( Shift.hasValue() )
     {
-        sal_Int32 nShift;
+        sal_Int32 nShift = 0;
         Shift >>= nShift;
         switch ( nShift )
         {
@@ -3074,7 +3074,7 @@ ScVbaRange::getRowHeight() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaRange::setRowHeight( const uno::Any& _rowheight) throw (uno::RuntimeException)
 {
-     double nHeight; // Incomming height is in points
+     double nHeight = 0; // Incomming height is in points
         _rowheight >>= nHeight;
     nHeight = lcl_Round2DecPlaces( nHeight );
     RangeHelper thisRange( mxRange );
@@ -3129,7 +3129,7 @@ ScVbaRange::getPageBreak() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaRange::setPageBreak( const uno::Any& _pagebreak) throw (uno::RuntimeException)
 {
-    sal_Int32 nPageBreak;
+    sal_Int32 nPageBreak = 0;
     _pagebreak >>= nPageBreak;
 
     ScDocShell* pShell = getDocShellFromRange( mxRange );
@@ -3427,7 +3427,7 @@ ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& /*CopyOrigin*/ ) thro
     sheet::CellInsertMode mode = sheet::CellInsertMode_NONE;
     if ( Shift.hasValue() )
     {
-        sal_Int32 nShift;
+        sal_Int32 nShift = 0;
         Shift >>= nShift;
         switch ( nShift )
         {
