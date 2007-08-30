@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprnode.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:34:58 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 09:59:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,7 +244,7 @@ void SbiExprNode::CollectBits()
 
 void SbiExprNode::FoldConstants()
 {
-    if( IsOperand() ) return;
+    if( IsOperand() || eTok == LIKE ) return;
     pLeft->FoldConstants();
     if( pRight )
     {
