@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkinst.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:29:23 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 13:55:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,8 @@
 #endif
 
 #include <dlfcn.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 GtkHookedYieldMutex::GtkHookedYieldMutex()
 {
@@ -138,6 +140,11 @@ extern "C"
 
     VCL_DLLPUBLIC SalInstance* create_SalInstance( oslModule pModule )
     {
+        #if OSL_DEBUG_LEVEL > 1
+        int nFd = open( "/home/pl93762/log.txt", O_CREAT | O_TRUNC | O_WRONLY, 0755 );
+        dup2( nFd, STDERR_FILENO );
+        #endif
+
         const gchar* pVersion = gtk_check_version( 2, 2, 0 );
         if( pVersion )
         {
