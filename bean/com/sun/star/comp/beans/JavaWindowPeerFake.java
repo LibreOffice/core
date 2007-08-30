@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JavaWindowPeerFake.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:00:04 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 13:57:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,18 +51,17 @@ import com.sun.star.container.*;
 /* package */ class JavaWindowPeerFake
     implements XSystemDependentWindowPeer, XWindowPeer
 {
-
-    protected long hWindow;
-    protected int localSystemType;
+     protected int localSystemType;
+    protected Any wrappedHandle;
 
     /** Create the faked window peer.
      * @param _hWindow the system handle to the window.
      * @param _systemType specifies the system type.
      */
-    public JavaWindowPeerFake(long _hWindow, int _systemType)
+    public JavaWindowPeerFake(Any _hWindow, int _systemType)
     {
-        hWindow = _hWindow;
         localSystemType = _systemType;
+        wrappedHandle = _hWindow;
     }
 
     /** <p>Implementation of XSystemDependentWindowPeer (that's all we really need)</p>
@@ -71,9 +70,8 @@ import com.sun.star.container.*;
     public Object getWindowHandle(/*IN*/byte[] ProcessId, /*IN*/short SystemType)
         throws com.sun.star.uno.RuntimeException
     {
-
         if (SystemType == localSystemType) {
-            return new Integer((int)hWindow);
+            return wrappedHandle;
         }
         else return null;
     }
