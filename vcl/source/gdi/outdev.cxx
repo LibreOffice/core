@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:11:55 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 15:56:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,9 +249,11 @@ BOOL OutputDevice::ImplSelectClipRegion( SalGraphics* pGraphics, const Region& r
         // values is completely off the device.
         const long nOffX( pOutDev->mnOutOffX );
         const long nOffY( pOutDev->mnOutOffY );
-        Rectangle aDeviceBounds(nOffX, nOffY,
-                                nOffX+pOutDev->GetOutputWidthPixel()-1,
-                                nOffY+pOutDev->GetOutputHeightPixel()-1);
+        const long nDeviceWidth( pOutDev->GetOutputWidthPixel() );
+        const long nDeviceHeight( pOutDev->GetOutputHeightPixel() );
+        Rectangle aDeviceBounds( nOffX, nOffY,
+                                 nOffX+nDeviceWidth-1,
+                                 nOffY+nDeviceHeight-1 );
         while ( bRegionRect )
         {
             // #i59315# Limit coordinates passed to sal layer to actual
@@ -267,6 +269,17 @@ BOOL OutputDevice::ImplSelectClipRegion( SalGraphics* pGraphics, const Region& r
                                                   aTmpRect.Top(),
                                                   aTmpRect.GetWidth(),
                                                   aTmpRect.GetHeight(),
+                                                  pOutDev ) )
+                {
+                    bClipRegion = FALSE;
+                }
+            }
+            else
+            {
+                // #i79850# Fake off-screen clip
+                if ( !pGraphics->UnionClipRegion( nDeviceWidth+1,
+                                                  nDeviceHeight+1,
+                                                  1, 1,
                                                   pOutDev ) )
                 {
                     bClipRegion = FALSE;
