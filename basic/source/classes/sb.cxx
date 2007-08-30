@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:18:35 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 09:58:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -660,8 +660,8 @@ SbModule* SbClassFactory::FindClass( const String& rClassName )
 
 ////////////////////////////////////////////////////////////////////////////
 
-StarBASIC::StarBASIC( StarBASIC* p )
-    : SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("StarBASIC") ) )
+StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
+    : SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("StarBASIC") ) ), bDocBasic( bIsDocBasic )
 {
     SetParent( p );
     pLibInfo = NULL;
