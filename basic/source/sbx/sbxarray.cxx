@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxarray.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:56:36 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:11:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,8 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-#include <basic/sbx.hxx>
+#include "sbx.hxx"
+#include "runtime.hxx"
 #include <vector>
 using namespace std;
 
@@ -592,7 +593,7 @@ void SbxArray::PutDirect( SbxVariable* pVar, UINT32 nIdx )
 //
 //////////////////////////////////////////////////////////////////////////
 
-SbxDimArray::SbxDimArray( SbxDataType t ) : SbxArray( t )
+SbxDimArray::SbxDimArray( SbxDataType t ) : SbxArray( t ), mbHasFixedSize( false )
 {
     pFirst = pLast = NULL;
     nDim = 0;
@@ -617,6 +618,7 @@ SbxDimArray& SbxDimArray::operator=( const SbxDimArray& rArray )
             AddDim32( p->nLbound, p->nUbound );
             p = p->pNext;
         }
+        this->mbHasFixedSize = rArray.mbHasFixedSize;
     }
     return *this;
 }
@@ -792,7 +794,7 @@ void SbxDimArray::Put32( SbxVariable* p, const INT32* pIdx  )
 
 UINT32 SbxDimArray::Offset32( SbxArray* pPar )
 {
-    if( nDim == 0 || !pPar )
+    if( nDim == 0 || !pPar || ( ( nDim != ( pPar->Count() - 1 ) ) && SbiRuntime::isVBAEnabled() ) )
     {
         SetError( SbxERR_BOUNDS ); return 0;
     }
