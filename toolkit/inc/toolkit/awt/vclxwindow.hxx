@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:04:43 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 13:54:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ protected:
 
     void            SetSynthesizingVCLEvent( sal_Bool b )   { mbSynthesizingVCLEvent = b; }
     BOOL            IsSynthesizingVCLEvent() const          { return mbSynthesizingVCLEvent; }
-    void        SetSystemParent_Impl( sal_Int64 nHandle );
+    void        SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle );
 
     ::toolkit::IAccessibleFactory&  getAccessibleFactory();
 
