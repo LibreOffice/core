@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbstar.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 12:52:47 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 09:58:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,7 @@ class StarBASIC : public SbxObject
     Link            aBreakHdl;          // Breakpoint-Handler
     BOOL            bNoRtl;             // TRUE: RTL nicht durchsuchen
     BOOL            bBreak;             // TRUE: Break, sonst Step
+    BOOL            bDocBasic;
     BasicLibInfo*   pLibInfo;           // Infoblock fuer Basic-Manager
     SbLanguageMode  eLanguageMode;      // LanguageMode des Basic-Objekts
 protected:
@@ -104,7 +105,7 @@ public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASIC,1);
     TYPEINFO();
 
-    StarBASIC( StarBASIC* pParent = NULL );
+    StarBASIC( StarBASIC* pParent = NULL, BOOL bIsDocBasic = FALSE );
 
     // #51727 SetModified ueberladen, damit der Modified-
     // Zustand nicht an den Parent weitergegeben wird.
@@ -203,6 +204,7 @@ public:
     static void StaticEnableReschedule( BOOL bReschedule );
 
     SbxObjectRef getRTL( void ) { return pRtl; }
+    BOOL IsDocBasic() { return bDocBasic; }
 };
 
 #ifndef __SB_SBSTARBASICREF_HXX

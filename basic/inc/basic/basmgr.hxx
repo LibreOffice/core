@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 12:50:02 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 09:58:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,7 @@ private:
     String              aName;
     String              maStorageName;
     BOOL                bBasMgrModified;
+    BOOL                mbDocMgr;
 
     BasicManagerImpl*   mpImpl;
 
@@ -190,8 +191,8 @@ protected:
 
 public:
                     TYPEINFO();
-                    BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBASIC* pParentFromStdLib = NULL, String* pLibPath = NULL );
-                    BasicManager( StarBASIC* pStdLib, String* pLibPath = NULL );
+                    BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBASIC* pParentFromStdLib = NULL, String* pLibPath = NULL, BOOL bDocMgr = FALSE );
+                    BasicManager( StarBASIC* pStdLib, String* pLibPath = NULL, BOOL bDocMgr = FALSE );
 
     /** deletes the given BasicManager instance
 
