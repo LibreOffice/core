@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.218 $
+ *  $Revision: 1.219 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:10:18 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 13:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,6 +214,48 @@ bool X11SalFrame::IsFloatGrabWindow() const
           );
 }
 
+void X11SalFrame::setXEmbedInfo()
+{
+    if( m_bXEmbed )
+    {
+        long aInfo[2];
+        aInfo[0] = 1; // XEMBED protocol version
+        aInfo[1] = (bMapped_ ? 1 : 0); // XEMBED_MAPPED
+        XChangeProperty( pDisplay_->GetDisplay(),
+                         mhWindow,
+                         pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::XEMBED_INFO ),
+                         pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::XEMBED_INFO ),
+                         32,
+                         PropModeReplace,
+                         reinterpret_cast<unsigned char*>(aInfo),
+                         sizeof(aInfo)/sizeof(aInfo[0]) );
+    }
+}
+
+void X11SalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
+{
+    XEvent aEvent;
+
+    rtl_zeroMemory( &aEvent, sizeof(aEvent) );
+    aEvent.xclient.window = mhForeignParent;
+    aEvent.xclient.type = ClientMessage;
+    aEvent.xclient.message_type = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::XEMBED );
+    aEvent.xclient.format = 32;
+    aEvent.xclient.data.l[0] = i_nTimeCode ? i_nTimeCode : CurrentTime;
+    aEvent.xclient.data.l[1] = 3; // XEMBED_REQUEST_FOCUS
+    aEvent.xclient.data.l[2] = 0;
+    aEvent.xclient.data.l[3] = 0;
+    aEvent.xclient.data.l[4] = 0;
+
+    GetDisplay()->GetXLib()->PushXErrorLevel( true );
+    XSendEvent( pDisplay_->GetDisplay(),
+                mhForeignParent,
+                False, NoEventMask, &aEvent );
+    XSync( pDisplay_->GetDisplay(), False );
+    GetDisplay()->GetXLib()->PopXErrorLevel();
+}
+
+
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pParentData, bool bUseGeometry )
@@ -276,6 +318,8 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
 
         nStyle_ |= SAL_FRAME_STYLE_CHILD;
         Attributes.override_redirect = True;
+        if( pParentData->nSize >= sizeof(SystemParentData) )
+            m_bXEmbed = pParentData->bXEmbedSupport;
 
         int x_ret, y_ret;
         unsigned int bw, d;
@@ -488,6 +532,7 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
     maGeometry.nHeight  = h;
 
     XSync( GetXDisplay(), False );
+    setXEmbedInfo();
 
     if( ! pParentData &&
         ! (nSalFrameStyle & SAL_FRAME_STYLE_CHILD) &&
@@ -641,6 +686,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     nStyle_                     = 0;
     mnExtStyle                  = 0;
     bAlwaysOnTop_               = FALSE;
+
     // set bViewable_ to TRUE: hack GetClientSize to report something
     // different to 0/0 before first map
     bViewable_                  = TRUE;
@@ -649,6 +695,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     nVisibility_                = VisibilityFullyObscured;
     m_nWorkArea                 = 0;
     mbInShow                    = FALSE;
+    m_bXEmbed                   = false;
 
     nScreenSaversTimeout_       = 0;
 
@@ -1101,6 +1148,7 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
 
     bMapped_   = bVisible;
     bViewable_ = bVisible;
+    setXEmbedInfo();
     if( bVisible )
     {
         SessionManagerClient::open(); // will simply return after the first time
@@ -1174,16 +1222,21 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
         }
 
         // actually map the window
-        if( GetWindow() != GetShellWindow() )
-        {
-            if( !(nStyle_ & SAL_FRAME_STYLE_CHILD) )
-                XMapWindow( GetXDisplay(), GetShellWindow() );
-            XSelectInput( GetXDisplay(), GetShellWindow(), CLIENT_EVENTS );
-        }
-        if( nStyle_ & SAL_FRAME_STYLE_FLOAT )
-            XMapRaised( GetXDisplay(), GetWindow() );
+        if( m_bXEmbed )
+            askForXEmbedFocus( 0 );
         else
-            XMapWindow( GetXDisplay(), GetWindow() );
+        {
+            if( GetWindow() != GetShellWindow() )
+            {
+                if( !(nStyle_ & SAL_FRAME_STYLE_CHILD) )
+                    XMapWindow( GetXDisplay(), GetShellWindow() );
+                XSelectInput( GetXDisplay(), GetShellWindow(), CLIENT_EVENTS );
+            }
+            if( nStyle_ & SAL_FRAME_STYLE_FLOAT )
+                XMapRaised( GetXDisplay(), GetWindow() );
+            else
+                XMapWindow( GetXDisplay(), GetWindow() );
+        }
         XSelectInput( GetXDisplay(), GetWindow(), CLIENT_EVENTS );
 
         if( maGeometry.nWidth > 0
@@ -1256,7 +1309,7 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
          *  and have the focus. So try to set the focus
          *  to the child on Show(TRUE)
          */
-        if( nStyle_ & SAL_FRAME_STYLE_CHILD )
+        if( (nStyle_ & SAL_FRAME_STYLE_CHILD) && ! m_bXEmbed )
             XSetInputFocus( GetXDisplay(),
                             GetWindow(),
                             RevertToParent,
@@ -1289,7 +1342,7 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
                 XDeleteProperty( GetXDisplay(), GetShellWindow(), GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::WM_TRANSIENT_FOR ) );
             XWithdrawWindow( GetXDisplay(), GetShellWindow(), m_nScreen );
         }
-        else
+        else if( ! m_bXEmbed )
             XUnmapWindow( GetXDisplay(), GetWindow() );
 
         nShowState_ = SHOWSTATE_HIDDEN;
@@ -1329,7 +1382,12 @@ void X11SalFrame::ToTop( USHORT nFlags )
 
     if( ( ( nFlags & SAL_FRAME_TOTOP_GRABFOCUS ) || ( nFlags & SAL_FRAME_TOTOP_GRABFOCUS_ONLY ) )
         && bMapped_ )
-        XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToParent, CurrentTime );
+    {
+        if( m_bXEmbed )
+            askForXEmbedFocus( 0 );
+        else
+            XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToParent, CurrentTime );
+    }
 }
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalFrame::GetWorkArea( Rectangle& rWorkArea )
@@ -2491,10 +2549,12 @@ void X11SalFrame::createNewWindow( XLIB_Window aNewParent, int nScreen )
 
     SystemParentData aParentData;
     aParentData.aWindow = aNewParent;
+    aParentData.bXEmbedSupport = (aNewParent != None && m_bXEmbed); // caution: this is guesswork
     if( aNewParent == None )
     {
         aNewParent = GetDisplay()->GetRootWindow(nScreen);
         aParentData.aWindow = None;
+        m_bXEmbed = false;
     }
     else
     {
@@ -2507,6 +2567,7 @@ void X11SalFrame::createNewWindow( XLIB_Window aNewParent, int nScreen )
             {
                 nScreen = i;
                 aParentData.aWindow = None;
+                m_bXEmbed = false;
                 break;
             }
         }
@@ -2560,6 +2621,8 @@ void X11SalFrame::createNewWindow( XLIB_Window aNewParent, int nScreen )
 
 bool X11SalFrame::SetPluginParent( SystemParentData* pNewParent )
 {
+    if( pNewParent->nSize >= sizeof(SystemParentData) )
+        m_bXEmbed = pNewParent->aWindow != None && pNewParent->bXEmbedSupport;
     createNewWindow( pNewParent ? pNewParent->aWindow : None );
 
     return true;
@@ -2804,6 +2867,9 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
                 }
             }
         }
+
+        if( m_bXEmbed && pEvent->xbutton.button == Button1 )
+            askForXEmbedFocus( pEvent->xbutton.time );
 
         if( pEvent->xbutton.button == Button1 ||
             pEvent->xbutton.button == Button2 ||
@@ -3797,6 +3863,23 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
                 // SM protocol; on Dtwm SaveYourself really means Shutdown, too.
                 IceSalSession::handleOldX11SaveYourself( this );
             }
+        }
+    }
+    else if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::XEMBED ) &&
+             pEvent->window == GetWindow() )
+    {
+        if( pEvent->data.l[1] == 1 || // XEMBED_WINDOW_ACTIVATE
+            pEvent->data.l[1] == 2 )  // XEMBED_WINDOW_DEACTIVATE
+        {
+            XFocusChangeEvent aEvent;
+            aEvent.type         = (pEvent->data.l[1] == 1 ? FocusIn : FocusOut);
+            aEvent.serial       = pEvent->serial;
+            aEvent.send_event   = True;
+            aEvent.display      = pEvent->display;
+            aEvent.window       = pEvent->window;
+            aEvent.mode         = NotifyNormal;
+            aEvent.detail       = NotifyDetailNone;
+            HandleFocusEvent( &aEvent );
         }
     }
     return 0;
