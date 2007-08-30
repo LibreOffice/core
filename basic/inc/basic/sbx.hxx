@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbx.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 12:53:21 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 09:58:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,6 +263,7 @@ class SbxDimArray : public SbxArray
     SbxDim* pFirst, *pLast;         // Links fuer Dimension-Tabelle
     short   nDim;                   // Anzahl Dimensionen
     void   AddDimImpl32( INT32, INT32, BOOL bAllowSize0 );
+    bool mbHasFixedSize;
 protected:
     USHORT  Offset( const short* );
     UINT32  Offset32( const INT32* );
@@ -302,6 +303,8 @@ public:
     void   AddDim32( INT32, INT32 );
     void   unoAddDim32( INT32, INT32 );
     BOOL   GetDim32( INT32, INT32&, INT32& ) const;
+        bool hasFixedSize() { return mbHasFixedSize; };
+        void setHasFixedSize( bool bHasFixedSize ) {mbHasFixedSize = bHasFixedSize; };
 };
 
 #endif
