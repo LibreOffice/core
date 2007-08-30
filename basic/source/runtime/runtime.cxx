@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:05:41 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:01:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,7 @@ SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // Alle Opcodes ohne Operanden
     &SbiRuntime::StepREDIMP_ERASE,// Copy array object for REDIMP
     &SbiRuntime::StepINITFOREACH,// Init for each loop
     &SbiRuntime::StepVBASET,// vba-like set statement
+    &SbiRuntime::StepERASE_CLEAR,// vba-like set statement
 };
 
 SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // Alle Opcodes mit einem Operanden
@@ -181,6 +182,7 @@ SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // Alle Opcodes mit einem Operanden
     &SbiRuntime::StepLIB,       // Lib fuer Declare-Call (+StringId)
     &SbiRuntime::StepBASED,     // TOS wird um BASE erhoeht, BASE davor gepusht
     &SbiRuntime::StepARGTYP,        // Letzten Parameter in Argv konvertieren (+Typ)
+    &SbiRuntime::StepVBASETCLASS,// vba-like set statement
 };
 
 SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// Alle Opcodes mit zwei Operanden
@@ -209,6 +211,7 @@ SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// Alle Opcodes mit zwei Operanden
     &SbiRuntime::StepFIND_G,        // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
     &SbiRuntime::StepDCREATE_REDIMP, // Objekt-Array redimensionieren (+StringID+StringID)
     &SbiRuntime::StepFIND_CM,    // Search inside a class module (CM) to enable global search in time
+    &SbiRuntime::StepPUBLIC_P,    // Search inside a class module (CM) to enable global search in time
 };
 
 
@@ -538,6 +541,7 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, UINT32 nStart )
 #endif
     pRefSaveList = NULL;
     pItemStoreList = NULL;
+    bVBAEnabled = isVBAEnabled();
 }
 
 SbiRuntime::~SbiRuntime()
