@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleoptions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:28:34 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 16:43:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,9 @@ class SVL_DLLPUBLIC SvtModuleOptions: public svt::detail::Options
             E_SCHART        = 5,
             E_SSTARTMODULE  = 6,
             E_SBASIC        = 7,
-            E_SDATABASE     = 8
+            E_SDATABASE     = 8,
+            E_SWEB          = 9,
+            E_SGLOBAL       = 10
         };
 
         /*ATTENTION:
