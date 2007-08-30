@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:09:39 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 13:55:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,6 +403,7 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, ULONG nStyle )
     getDisplay()->registerFrame( this );
     m_bDefaultPos       = true;
     m_bDefaultSize      = ( (nStyle & SAL_FRAME_STYLE_SIZEABLE) && ! pParent );
+    m_bWindowIsGtkPlug  = false;
     Init( pParent, nStyle );
 }
 
@@ -525,15 +526,22 @@ void GtkSalFrame::InitCommon()
     gtk_widget_set_app_paintable( GTK_WIDGET(m_pWindow), TRUE );
     gtk_widget_set_double_buffered( GTK_WIDGET(m_pWindow), FALSE );
     gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_pWindow), FALSE );
-
-    // realize the window, we need an XWindow id
-    gtk_widget_realize( GTK_WIDGET(m_pWindow) );
+    gtk_widget_add_events( GTK_WIDGET(m_pWindow),
+                           GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+                           GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
+                           GDK_VISIBILITY_NOTIFY_MASK
+                           );
 
     // add the fixed container child,
     // fixed is needed since we have to position plugin windows
     m_pFixedContainer = GTK_FIXED(g_object_new( ooo_fixed_get_type(), NULL ));
     gtk_container_add( GTK_CONTAINER(m_pWindow), GTK_WIDGET(m_pFixedContainer) );
+
+    // show the widgets
     gtk_widget_show( GTK_WIDGET(m_pFixedContainer) );
+
+    // realize the window, we need an XWindow id
+    gtk_widget_realize( GTK_WIDGET(m_pWindow) );
 
     //system data
     SalDisplay* pDisp = GetX11SalData()->GetDisplay();
@@ -548,11 +556,6 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.aShellWindow  = m_aSystemData.aWindow;
     m_aSystemData.pShellWidget  = m_aSystemData.pWidget;
 
-    gtk_widget_add_events( GTK_WIDGET(m_pWindow),
-                           GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-                           GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
-                           GDK_VISIBILITY_NOTIFY_MASK
-                           );
 
     // fake an initial geometry, gets updated via configure event or SetPosSize
     if( m_bDefaultPos || m_bDefaultSize )
@@ -857,6 +860,9 @@ GdkNativeWindow GtkSalFrame::findTopLevelSystemWindow( GdkNativeWindow aWindow )
     bool bBreak = false;
     do
     {
+        pChildren = NULL;
+        nChildren = 0;
+        aParent = aRoot = None;
         XQueryTree( getDisplay()->GetDisplay(), aWindow,
                     &aRoot, &aParent, &pChildren, &nChildren );
         XFree( pChildren );
@@ -879,15 +885,28 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
 {
     m_pParent = NULL;
     m_aForeignParentWindow = (GdkNativeWindow)pSysData->aWindow;
-    m_pForeignParent = gdk_window_foreign_new_for_display( getGdkDisplay(), m_aForeignParentWindow );
-    gdk_window_set_events( m_pForeignParent, GDK_STRUCTURE_MASK );
+    m_pForeignParent = NULL;
     m_aForeignTopLevelWindow = findTopLevelSystemWindow( (GdkNativeWindow)pSysData->aWindow );
     m_pForeignTopLevel = gdk_window_foreign_new_for_display( getGdkDisplay(), m_aForeignTopLevelWindow );
     gdk_window_set_events( m_pForeignTopLevel, GDK_STRUCTURE_MASK );
 
-    m_pWindow = GTK_WINDOW(gtk_window_new( GTK_WINDOW_POPUP ));
+    if( pSysData->nSize > sizeof(pSysData->nSize)+sizeof(pSysData->aWindow) && pSysData->bXEmbedSupport )
+    {
+        m_pWindow = GTK_WINDOW(gtk_plug_new( pSysData->aWindow ));
+        m_bWindowIsGtkPlug  = true;
+        GTK_WIDGET_SET_FLAGS( GTK_WIDGET(m_pWindow), GTK_CAN_FOCUS | GTK_SENSITIVE | GTK_CAN_DEFAULT );
+        gtk_widget_set_sensitive( GTK_WIDGET(m_pWindow), true );
+    }
+    else
+    {
+        m_pWindow = GTK_WINDOW(gtk_window_new( GTK_WINDOW_POPUP ));
+        m_bWindowIsGtkPlug  = false;
+    }
     m_nStyle = SAL_FRAME_STYLE_CHILD;
     InitCommon();
+
+    m_pForeignParent = gdk_window_foreign_new_for_display( getGdkDisplay(), m_aForeignParentWindow );
+    gdk_window_set_events( m_pForeignParent, GDK_STRUCTURE_MASK );
     int x_ret, y_ret;
     unsigned int w, h, bw, d;
     XLIB_Window aRoot;
@@ -896,10 +915,37 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     maGeometry.nWidth   = w;
     maGeometry.nHeight  = h;
     gtk_window_resize( m_pWindow, w, h );
-    XReparentWindow( getDisplay()->GetDisplay(),
-                     GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window),
-                     (XLIB_Window)pSysData->aWindow,
-                     0, 0 );
+    gtk_window_move( m_pWindow, 0, 0 );
+    if( ! m_bWindowIsGtkPlug )
+    {
+        XReparentWindow( getDisplay()->GetDisplay(),
+                         GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window),
+                         (XLIB_Window)pSysData->aWindow,
+                         0, 0 );
+    }
+}
+
+void GtkSalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
+{
+    XEvent aEvent;
+
+    rtl_zeroMemory( &aEvent, sizeof(aEvent) );
+    aEvent.xclient.window = m_aForeignParentWindow;
+    aEvent.xclient.type = ClientMessage;
+    aEvent.xclient.message_type = getDisplay()->getWMAdaptor()->getAtom( vcl_sal::WMAdaptor::XEMBED );
+    aEvent.xclient.format = 32;
+    aEvent.xclient.data.l[0] = i_nTimeCode ? i_nTimeCode : CurrentTime;
+    aEvent.xclient.data.l[1] = 3; // XEMBED_REQUEST_FOCUS
+    aEvent.xclient.data.l[2] = 0;
+    aEvent.xclient.data.l[3] = 0;
+    aEvent.xclient.data.l[4] = 0;
+
+    getDisplay()->GetXLib()->PushXErrorLevel( true );
+    XSendEvent( getDisplay()->GetDisplay(),
+                m_aForeignParentWindow,
+                False, NoEventMask, &aEvent );
+    XSync( getDisplay()->GetDisplay(), False );
+    getDisplay()->GetXLib()->PopXErrorLevel();
 }
 
 void GtkSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
@@ -1231,6 +1277,8 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
                 if( m_pParent )
                     m_pParent->EndExtTextInput(0);
             }
+            if( m_bWindowIsGtkPlug )
+                askForXEmbedFocus( 0 );
         }
         else
         {
@@ -1602,7 +1650,7 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
                 if( bVisible )
                     Show( FALSE );
                 m_nStyle |= SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
-                createNewWindow( None, m_nScreen );
+                createNewWindow( None, false, m_nScreen );
                 Rectangle aNewPosSize;
                 if( nScreen < 0 || nScreen >= static_cast<int>(pDisp->GetXineramaScreens().size()) )
                     aNewPosSize = Rectangle( Point( 0, 0 ), pDisp->GetScreenSize(m_nScreen) );
@@ -1623,7 +1671,7 @@ void GtkSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nScreen )
                 if( bVisible )
                     Show( FALSE );
                 m_nStyle &= ~SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
-                createNewWindow( None, m_nScreen );
+                createNewWindow( None, false, m_nScreen );
                 if( ! m_aRestorePosSize.IsEmpty() )
                 {
                     gtk_window_resize( m_pWindow,
@@ -1882,14 +1930,51 @@ void GtkSalFrame::grabPointer( BOOL bGrab, BOOL bOwnerEvents )
 {
     if( m_pWindow )
     {
-        int nMask = ( GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK );
-        GdkGrabStatus nStatus;
-
         if( bGrab )
-            nStatus = gdk_pointer_grab
-                ( GTK_WIDGET(m_pWindow)->window, bOwnerEvents,
-                  (GdkEventMask) nMask, NULL, m_pCurrentCursor,
-                  GDK_CURRENT_TIME );
+        {
+            bool bUseGdkGrab = true;
+            if( getDisplay()->getHaveSystemChildFrame() )
+            {
+                const std::list< SalFrame* >& rFrames = getDisplay()->getFrames();
+                for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
+                {
+                    const GtkSalFrame* pFrame = static_cast< const GtkSalFrame* >(*it);
+                    if( pFrame->m_bWindowIsGtkPlug )
+                    {
+                        bUseGdkGrab = false;
+                        break;
+                    }
+                }
+            }
+            if( bUseGdkGrab )
+            {
+                const int nMask = ( GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK );
+
+                gdk_pointer_grab( GTK_WIDGET(m_pWindow)->window, bOwnerEvents,
+                                  (GdkEventMask) nMask, NULL, m_pCurrentCursor,
+                                  GDK_CURRENT_TIME );
+            }
+            else
+            {
+                // FIXME: for some unknown reason gdk_pointer_grab does not
+                // really produce owner events for GtkPlug windows
+                // the cause is yet unknown
+                //
+                // this is of course a bad hack, especially as we cannot
+                // set the right cursor this way
+                XGrabPointer( getDisplay()->GetDisplay(),
+                              GDK_WINDOW_XWINDOW( GTK_WIDGET(m_pWindow)->window),
+                              bOwnerEvents,
+                              PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
+                              GrabModeAsync,
+                              GrabModeAsync,
+                              None,
+                              None,
+                              CurrentTime
+                              );
+
+            }
+        }
         else
         {
             // Two GdkDisplays may be open
@@ -2058,7 +2143,7 @@ void GtkSalFrame::SetParent( SalFrame* pNewParent )
                                      );
 }
 
-void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, int nScreen )
+void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nScreen )
 {
     bool bWasVisible = GTK_WIDGET_MAPPED(m_pWindow);
     if( bWasVisible )
@@ -2069,10 +2154,12 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, int nScreen )
 
     SystemParentData aParentData;
     aParentData.aWindow = aNewParent;
+    aParentData.bXEmbedSupport = bXEmbed;
     if( aNewParent == None )
     {
         aNewParent = getDisplay()->GetRootWindow(nScreen);
         aParentData.aWindow = None;
+        aParentData.bXEmbedSupport = false;
     }
     else
     {
@@ -2085,6 +2172,7 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, int nScreen )
             {
                 nScreen = i;
                 aParentData.aWindow = None;
+                aParentData.bXEmbedSupport = false;
                 break;
             }
         }
@@ -2139,14 +2227,16 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, int nScreen )
     std::list< GtkSalFrame* > aChildren = m_aChildren;
     m_aChildren.clear();
     for( std::list< GtkSalFrame* >::iterator it = aChildren.begin(); it != aChildren.end(); ++it )
-        (*it)->createNewWindow( None, m_nScreen );
+        (*it)->createNewWindow( None, false, m_nScreen );
 
     // FIXME: SalObjects
 }
 
 bool GtkSalFrame::SetPluginParent( SystemParentData* pSysParent )
 {
-    createNewWindow( pSysParent->aWindow, m_nScreen );
+    if( pSysParent ) // this may be the first system child frame now
+        getDisplay()->setHaveSystemChildFrame();
+    createNewWindow( pSysParent->aWindow, (pSysParent->nSize > sizeof(long)) ? pSysParent->bXEmbedSupport : false, m_nScreen );
     return true;
 }
 
@@ -2199,7 +2289,6 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
     }
     else if( pEvent->type == ConfigureNotify )
     {
-
         if( m_pForeignParent && pEvent->xconfigure.window == m_aForeignParentWindow )
         {
             bContinueDispatch = false;
@@ -2235,6 +2324,27 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
             }
         }
     }
+    else if( pEvent->type == ClientMessage &&
+             pEvent->xclient.message_type == getDisplay()->getWMAdaptor()->getAtom( vcl_sal::WMAdaptor::XEMBED ) &&
+             pEvent->xclient.window == GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window) &&
+             m_bWindowIsGtkPlug
+             )
+    {
+        // FIXME: this should not be necessary, GtkPlug should do this
+        // transparently for us
+        if( pEvent->xclient.data.l[1] == 1 || // XEMBED_WINDOW_ACTIVATE
+            pEvent->xclient.data.l[1] == 2    // XEMBED_WINDOW_DEACTIVATE
+        )
+        {
+            GdkEventFocus aEvent;
+            aEvent.type = GDK_FOCUS_CHANGE;
+            aEvent.window = GTK_WIDGET(m_pWindow)->window;
+            aEvent.send_event = TRUE;
+            aEvent.in = (pEvent->xclient.data.l[1] == 1);
+            signalFocus( GTK_WIDGET(m_pWindow), &aEvent, this );
+        }
+    }
+
     return bContinueDispatch;
 }
 
@@ -2326,6 +2436,13 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     }
 
     GTK_YIELD_GRAB();
+
+    if( pThis->m_bWindowIsGtkPlug &&
+        pEvent->type == GDK_BUTTON_PRESS &&
+        pEvent->button == 1 )
+    {
+        pThis->askForXEmbedFocus( pEvent->time );
+    }
 
     // --- RTL --- (mirror mouse pos)
     if( Application::GetSettings().GetLayoutRTL() )
