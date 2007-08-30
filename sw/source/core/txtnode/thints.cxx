@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:22:54 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 16:15:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2186,9 +2186,12 @@ void SwpHints::Insert( SwTxtAttr* pHint, SwTxtNode &rNode, USHORT nMode )
         // There may be more than one character style at the current position.
         // Take care of the sort number.
         // Special case ruby portion: During import, the ruby attribute is set
-        // multiple times (don't know if this has to be like that).
+        // multiple times
+        // Special case hyperlink: During import, the ruby attribute is set
+        // multiple times
         if ( RES_TXTATR_CHARFMT == nWhich ||
-             RES_TXTATR_CJK_RUBY == nWhich )
+             RES_TXTATR_CJK_RUBY == nWhich ||
+             RES_TXTATR_INETFMT == nWhich )
             BuildPortions( rNode, *pHint, nMode );
         else
         {
