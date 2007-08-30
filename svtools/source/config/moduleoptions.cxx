@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:14:55 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 16:43:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -652,14 +652,11 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
     sal_Bool bInstalled = sal_False;
     switch( eModule )
     {
-
-        case SvtModuleOptions::E_SWRITER    :   {
-            // Module writer knows more then one factory!
-            if (( m_lFactories[SvtModuleOptions::E_WRITER].getInstalled() == sal_True ) ||
-                ( m_lFactories[SvtModuleOptions::E_WRITERWEB].getInstalled() == sal_True ) ||
-                ( m_lFactories[SvtModuleOptions::E_WRITERGLOBAL].getInstalled() == sal_True ) )
-                bInstalled = sal_True;
-                                                }
+        case SvtModuleOptions::E_SWRITER    :   bInstalled = m_lFactories[SvtModuleOptions::E_WRITER].getInstalled();
+                                                break;
+        case SvtModuleOptions::E_SWEB       :   bInstalled = m_lFactories[SvtModuleOptions::E_WRITERWEB].getInstalled();
+                                                break;
+        case SvtModuleOptions::E_SGLOBAL    :   bInstalled = m_lFactories[SvtModuleOptions::E_WRITERGLOBAL].getInstalled();
                                                 break;
         case SvtModuleOptions::E_SCALC      :   bInstalled = m_lFactories[SvtModuleOptions::E_CALC].getInstalled();
                                                 break;
@@ -1416,6 +1413,8 @@ sal_uInt32 SvtModuleOptions::GetFeatures() const
     switch( eModule )
     {
         case SvtModuleOptions::E_SWRITER    :   { return ::rtl::OUString::createFromAscii("Writer"); }
+        case SvtModuleOptions::E_SWEB       :   { return ::rtl::OUString::createFromAscii("Web"); }
+        case SvtModuleOptions::E_SGLOBAL    :   { return ::rtl::OUString::createFromAscii("Global"); }
         case SvtModuleOptions::E_SCALC      :   { return ::rtl::OUString::createFromAscii("Calc"); }
         case SvtModuleOptions::E_SDRAW      :   { return ::rtl::OUString::createFromAscii("Draw"); }
         case SvtModuleOptions::E_SIMPRESS   :   { return ::rtl::OUString::createFromAscii("Impress"); }
@@ -1626,19 +1625,23 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const css::u
     if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SCALC))
         aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_CALC);
     else
-    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SDRAW))
-        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_DRAW);
-    else
     if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SIMPRESS))
         aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_IMPRESS);
     else
-    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SMATH))
-        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_MATH);
+    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SDATABASE))
+        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_DATABASE);
     else
-    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SWRITER))
+    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SDRAW))
+        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_DRAW);
+    else
+    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SWEB))
+        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_WRITERWEB);
+    else
+    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SGLOBAL))
         aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_WRITERGLOBAL);
     else
-    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SWRITER))
-        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_WRITERWEB);
+    if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SMATH))
+        aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_MATH);
     return aModule;
 }
+
