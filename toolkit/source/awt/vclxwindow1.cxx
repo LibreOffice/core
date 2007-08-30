@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:05:14 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 13:54:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 #ifndef _SV_WORKWIN
 #include <vcl/wrkwin.hxx>
 #endif
@@ -52,7 +55,7 @@
 #endif
 
 /// helper method to set a window handle into a SystemParentData struct
-void VCLXWindow::SetSystemParent_Impl( sal_Int64 nHandle )
+void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
 {
     // does only work for WorkWindows
     Window *pWindow = GetWindow();
@@ -64,19 +67,46 @@ void VCLXWindow::SetSystemParent_Impl( sal_Int64 nHandle )
         throw pException;
     }
 
+    // use sal_Int64 here to accomodate all int types
+    // uno::Any shift operator whill upcast if necessary
+    sal_Int64 nHandle = 0;
+    sal_Bool  bXEmbed = sal_False;
+    bool bThrow = false;
+    if( ! (rHandle >>= nHandle) )
+    {
+        com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > aProps;
+        if( rHandle >>= aProps )
+        {
+            const int nProps = aProps.getLength();
+            const com::sun::star::beans::NamedValue* pProps = aProps.getConstArray();
+            for( int i = 0; i < nProps; i++ )
+            {
+                if( pProps[i].Name.equalsAscii( "WINDOW" ) )
+                    pProps[i].Value >>= nHandle;
+                else if( pProps[i].Name.equalsAscii( "XEMBED" ) )
+                    pProps[i].Value >>= bXEmbed;
+            }
+        }
+        else
+            bThrow = true;
+    }
+    if( bThrow )
+    {
+        ::com::sun::star::uno::Exception *pException =
+            new ::com::sun::star::uno::RuntimeException;
+        pException->Message = ::rtl::OUString::createFromAscii( "incorrect window handle type" );
+        throw pException;
+    }
     // create system parent data
     SystemParentData aSysParentData;
     aSysParentData.nSize = sizeof ( SystemParentData );
-#ifndef SYSDATA_ONLY_BASETYPE
-#if defined( WIN ) || defined( WNT )
-    aSysParentData.hWnd = (HWND) nHandle;
-#elif defined( OS2 )
+#if defined( WIN ) || defined( WNT ) || defined ( OS2 )
     aSysParentData.hWnd = (HWND) nHandle;
 #elif defined( QUARTZ )
     aSysParentData.rWindow = (WindowRef) nHandle;
 #elif defined( UNX )
     aSysParentData.aWindow = (long)nHandle;
-#endif
+    aSysParentData.bXEmbedSupport = bXEmbed;
 #endif
 
     // set system parent
