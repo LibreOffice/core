@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:56:23 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:09:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,8 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::script;
 
 using com::sun::star::uno::Reference;
+
+SbxVariable* getVBAConstant( const String& rName );
 
 const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
 const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
@@ -136,6 +138,23 @@ SbxVariable* SbiRuntime::FindElement
         BOOL bFatalError = FALSE;
         SbxDataType t = (SbxDataType) nOp2;
         String aName( pImg->GetString( static_cast<short>( nOp1 & 0x7FFF ) ) );
+        // Hacky capture of Evaluate [] syntax
+        // this should be tackled I feel at the pcode level
+        if ( bIsVBAInterOp && aName.Search('[') == 0 )
+        {
+            // emulate pcode here
+            StepARGC();
+            // psuedo StepLOADSC
+            String sArg = aName.Copy( 1, aName.Len() - 2 );
+            SbxVariable* p = new SbxVariable;
+            p->PutString( sArg );
+            PushVar( p );
+            //
+            StepARGV();
+            nOp1 = nOp1 | 0x8000; // indicate params are present
+            aName = String::CreateFromAscii("Evaluate");
+        }
+
         if( bLocal )
             pElem = refLocals->Find( aName, SbxCLASS_DONTCARE );
         if( !pElem )
@@ -166,25 +185,24 @@ SbxVariable* SbiRuntime::FindElement
 
                 // i#i68894# if VBAInterOp favour searching vba globals
                 // over searching for uno classess
-                if ( bIsVBAInterOp )
+                if ( bVBAEnabled )
                 {
                     // Try Find in VBA symbols space
                     pElem = VBAFind( aName, SbxCLASS_DONTCARE );
                     if ( pElem )
                         bSetName = false; // don't overwrite uno name
+                    else
+                        pElem = getVBAConstant( aName );
                 }
-                else
+                // #72382 VORSICHT! Liefert jetzt wegen unbekannten
+                // Modulen IMMER ein Ergebnis!
+                SbxVariable* pUnoClass = findUnoClass( aName );
+                if( pUnoClass )
                 {
-                    // #72382 VORSICHT! Liefert jetzt wegen unbekannten
-                    // Modulen IMMER ein Ergebnis!
-                    SbxVariable* pUnoClass = findUnoClass( aName );
-                    if( pUnoClass )
-                    {
-                        pElem = new SbxVariable( t );
-                        SbxValues aRes( SbxOBJECT );
-                        aRes.pObj = pUnoClass;
-                        pElem->SbxVariable::Put( aRes );
-                    }
+                    pElem = new SbxVariable( t );
+                    SbxValues aRes( SbxOBJECT );
+                    aRes.pObj = pUnoClass;
+                    pElem->SbxVariable::Put( aRes );
                 }
 
                 // #62939 Wenn eine Uno-Klasse gefunden wurde, muss
@@ -533,7 +551,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                     {
                         Reference< XInterface > x = *(Reference< XInterface >*)aAny.getValue();
                         Reference< XIndexAccess > xIndexAccess( x, UNO_QUERY );
-                        if ( !SbiRuntime::isVBAEnabled() )
+                        if ( !bVBAEnabled )
                         {
                             // Haben wir Index-Access?
                             if( xIndexAccess.is() )
@@ -1129,6 +1147,14 @@ void SbiRuntime::StepPUBLIC_Impl( UINT32 nOp1, UINT32 nOp2, bool bUsedForClassMo
 void SbiRuntime::StepPUBLIC( UINT32 nOp1, UINT32 nOp2 )
 {
     StepPUBLIC_Impl( nOp1, nOp2, false );
+}
+
+void SbiRuntime::StepPUBLIC_P( UINT32 nOp1, UINT32 nOp2 )
+{
+    // Creates module variable that isn't reinitialised when
+    // between invocations ( for VBASupport & document basic only )
+    if( pMod->pImage->bFirstInit )
+    StepPUBLIC( nOp1, nOp2 );
 }
 
 // Einrichten einer globalen Variablen (+StringID+Typ)
