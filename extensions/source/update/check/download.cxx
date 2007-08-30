@@ -4,9 +4,9 @@
  *
  *  $RCSfile: download.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 15:55:50 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 15:46:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,12 +96,15 @@ getStringValue(const uno::Reference< container::XNameAccess >& xNameAccess, cons
 //------------------------------------------------------------------------------
 
 static inline sal_Int32
-getInt32Value(const uno::Reference< container::XNameAccess >& xNameAccess, const rtl::OUString& aName)
+getInt32Value(const uno::Reference< container::XNameAccess >& xNameAccess,
+                    const rtl::OUString& aName, sal_Int32 nDefault=-1)
 {
     OSL_ASSERT(xNameAccess->hasByName(aName));
     uno::Any aValue = xNameAccess->getByName(aName);
 
-    return aValue.get<sal_Int32>();
+    sal_Int32 n=nDefault;
+    aValue >>= n;
+    return n;
 }
 
 //------------------------------------------------------------------------------
