@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:35:58 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:08:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,8 +368,14 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                         break;
                 }
                 static ::rtl::OUString sVBAOption( RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n" ) );
+                static ::rtl::OUString sClassOption( RTL_CONSTASCII_USTRINGPARAM( "Option ClassModule\n" ) );
                 if ( !bAsComment )
+                {
                     modeTypeComment = modeTypeComment + sVBAOption;
+                    if ( mType == Class )
+                        modeTypeComment = modeTypeComment + sClassOption;
+
+                }
 
                 String sModule(sBasicModule); //#i52606# no need to split Macros in 64KB blocks any more!
                 String sTemp;
