@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:43:44 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 13:56:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,8 @@ public:
         DTWM_IS_RUNNING,
         VCL_SYSTEM_SETTINGS,
         XSETTINGS,
+        XEMBED,
+        XEMBED_INFO,
         NetAtomMax
     };
 
