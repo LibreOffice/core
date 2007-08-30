@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 15:18:55 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 16:04:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ static BOOL bProtectDocShellVisArea = FALSE;
 
 static USHORT nPgNum = 0;
 
-inline BOOL SwView::IsDocumentBorder()
+BOOL SwView::IsDocumentBorder()
 {
     return GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
            pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
