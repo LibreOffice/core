@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:20:05 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 09:59:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,6 +203,10 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         if( eCurTok == GLOBAL )
             bPersistantGlobal = TRUE;
     }
+    // behavior in VBA is that a module scope variable's lifetime is
+    // tied to the document. e.g. a module scope variable is global
+       if(  GetBasic()->IsDocBasic() && bVBASupportOn && !pProc )
+        bPersistantGlobal = TRUE;
     // PRIVATE ist Synonym fuer DIM
     // _CONST_?
     BOOL bConst = FALSE;
@@ -334,7 +338,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
             {
                 case SbGLOBAL:  eOp2 = bPersistantGlobal ? _GLOBAL_P : _GLOBAL;
                                 goto global;
-                case SbPUBLIC:  eOp2 = _PUBLIC;
+                case SbPUBLIC:  eOp2 = bPersistantGlobal ? _PUBLIC_P : _PUBLIC;
                                 // AB 9.7.97, #40689, kein eigener Opcode mehr
                                 /*
                                 if( bStatic )
@@ -439,7 +443,14 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
                 {
                     SbiExpression aExpr( this, *pDef, NULL );
                     aExpr.Gen();
-                    aGen.Gen( _ERASE );
+                    if ( bVBASupportOn )
+                        // delete the array but
+                        // clear the variable ( this
+                        // allows the processing of
+                        // the param to happen as normal without errors ( ordinary ERASE just clears the array )
+                        aGen.Gen( _ERASE_CLEAR );
+                    else
+                        aGen.Gen( _ERASE );
                 }
                 else if( eOp == _REDIMP )
                 {
