@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_TitleRotation.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:50:03 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 13:41:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,7 @@ TabPage TP_ALIGNMENT
         Pos = MAP_APPFONT ( 139 , 14  ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         TabStop = TRUE ;
-// DR: TODO - after OOo 2.0 - enable localized strings
-        Text = "Ve~rtically stacked";
-//        Text [ de ] = "~Senkrecht gestapelt";
-//        Text [ en-US ] = "Ve~rtically stacked";
+        Text [ en-US ] = "Ve~rtically stacked";
     };
     FixedText FT_DEGREES
     {
