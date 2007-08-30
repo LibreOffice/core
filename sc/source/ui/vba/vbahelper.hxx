@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbahelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:07:33 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:04:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <docsh.hxx>
 
-#define css com::sun::star
-#define oo org::openoffice
+namespace css = ::com::sun::star;
+
 namespace org
 {
     namespace openoffice
@@ -68,6 +68,8 @@ namespace org
         void PrintOutHelper( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, css::uno::Reference< css::frame::XModel >& xModel, sal_Bool bSelection  );
     }
 }
+
+namespace oo = org::openoffice;
 
 #ifdef DEBUG
 #  define SC_VBA_FIXME(a) OSL_TRACE( a )
