@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbacomment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:04:24 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:04:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,7 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
 
     if ( aStart.hasValue() )
     {
-        sal_Int16 nStart;
+        sal_Int16 nStart = 0;
         sal_Bool bOverwrite = sal_True;
         Overwrite >>= bOverwrite;
 
