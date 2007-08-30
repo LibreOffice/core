@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:28:11 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:00:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { IS,       "Is" },
     { LET,      "Let" },
     { LIB,      "Lib" },
+    { LIKE,     "Like" },
     { LINE,     "Line" },
     { LINEINPUT,"Line Input" },
     { LOCAL,    "Local" },
