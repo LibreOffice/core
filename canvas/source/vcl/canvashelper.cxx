@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvashelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 11:49:55 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 15:21:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1369,7 +1369,16 @@ namespace vclcanvas
         if( !mpOutDev )
             return false; // disposed
         else
-            return rGrf->Draw( &mpOutDev->getOutDev(), rPt, rSz, &rAttr );
+        {
+            if( !rGrf->Draw( &mpOutDev->getOutDev(), rPt, rSz, &rAttr ) )
+                return false;
+
+            // #i80779# Redraw also into mask outdev
+            if( mp2ndOutDev )
+                return rGrf->Draw( &mp2ndOutDev->getOutDev(), rPt, rSz, &rAttr );
+
+            return true;
+        }
     }
 
     void CanvasHelper::flush() const
