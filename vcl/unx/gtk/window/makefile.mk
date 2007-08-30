@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2007-08-02 15:00:33 $
+#   last change: $Author: vg $ $Date: 2007-08-30 13:56:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,10 @@ CDEFS+=-DENABLE_DBUS
 PKGCONFIG_MODULES+= dbus-glib-1
 .ENDIF
 .INCLUDE : pkg_config.mk
+
+.IF "$(COM)" == "C52"
+NOOPTFILES=$(SLO)$/gtkframe.obj
+.ENDIF
 
 SLOFILES=\
             $(SLO)$/gtkframe.obj				\
