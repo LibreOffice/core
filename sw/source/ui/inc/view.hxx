@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:11:32 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 16:04:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,7 +313,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE ULONG         FUNC_Search( const SwSearchOptions& rOptions );
     SW_DLLPRIVATE void          Replace();
 
-    inline BOOL     IsDocumentBorder();
+    BOOL                                IsDocumentBorder();
 
     SW_DLLPRIVATE BOOL          IsTextTool() const;
 
