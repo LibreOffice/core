@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 11:02:47 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:00:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@
 #include <unotools/charclass.hxx>
 #endif
 
+#include <runtime.hxx>
 
 SbiScanner::SbiScanner( const ::rtl::OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
 {
@@ -76,6 +77,7 @@ SbiScanner::SbiScanner( const ::rtl::OUString& rBuf, StarBASIC* p ) : aBuf( rBuf
     bSymbol  =
     bUsedForHilite =
     bCompatible =
+    bVBASupportOn =
     bPrevLineExtentsComment = FALSE;
     bHash    =
     bErrors  = TRUE;
@@ -424,7 +426,11 @@ BOOL SbiScanner::NextSym()
                 if( *pLine != cSep || cSep == ']' ) break;
             } else aError = cSep, GenError( SbERR_EXPECTED );
         }
-        aSym = aLine.copy( n, nCol - n - 1 );
+        // If VBA Interop then doen't eat the [] chars
+        if ( cSep == ']' && bVBASupportOn )
+            aSym = aLine.copy( n - 1, nCol - n  + 1);
+        else
+            aSym = aLine.copy( n, nCol - n - 1 );
         // Doppelte Stringbegrenzer raus
         String s( cSep );
         s += cSep;
