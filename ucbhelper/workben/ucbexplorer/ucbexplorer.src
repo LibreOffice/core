@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbexplorer.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:47:34 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 16:01:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 //
 // (C) 2000 StarOffice Entwicklungs GmbH, Hamburg, Germany
 //
-// $Author: rt $ $Date: 2005-09-09 16:47:34 $Revision$
+// $Author: vg $ $Date: 2007-08-30 16:01:11 $Revision$
 //
 //=========================================================================
 
@@ -52,7 +52,7 @@ Menu MENU_MAIN
         MenuItem
         {
             Identifier = MENU_FILE ;
-            Text = "~File" ;
+            Text [ en-US ] = "~File" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -61,8 +61,7 @@ Menu MENU_MAIN
                     MenuItem
                     {
                         Identifier = MENU_EXIT ;
-                        Text = "~Exit" ;
-                        Text [ English ] = "~Exit" ;
+                        Text [ en-US ] = "~Exit" ;
                         AccelKey = KeyCode
                         {
                             Function = KEYFUNC_QUIT ;
@@ -82,17 +81,17 @@ Menu MENU_POPUP
         MenuItem
         {
             Identifier = MENU_NEW ;
-            Text = "~New" ;
+            Text [ en-US ] = "~New" ;
         };
         MenuItem
         {
             Identifier = MENU_RENAME ;
-            Text = "~Rename" ;
+            Text [ en-US ] = "~Rename" ;
         };
         MenuItem
         {
             Identifier = MENU_DELETE ;
-            Text = "~Delete" ;
+            Text [ en-US ] = "~Delete" ;
         };
     };
 };
@@ -116,18 +115,16 @@ Bitmap BMP_LINK
 
 ModalDialog DLG_STRINGINPUT
 {
-//! HelpId = ;
     Border = TRUE ;
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-//  Text = "" ;
     Size = MAP_APPFONT ( 218 , 44 ) ;
     FixedText FT_STRINGINPUT_DLG_NAME
     {
         Pos = MAP_APPFONT ( 12 , 18 ) ;
         Size = MAP_APPFONT ( 28 , 10 ) ;
-        Text = "~Value" ;
+        Text [ en-US ] = "~Value" ;
     };
     Edit ED_STRINGINPUT_DLG_NAME
     {
@@ -141,7 +138,6 @@ ModalDialog DLG_STRINGINPUT
         Group = TRUE ;
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 150 , 36 ) ;
-//      Text = "" ;
     };
     OKButton BT_STRINGINPUT_DLG_OK
     {
@@ -157,13 +153,12 @@ ModalDialog DLG_STRINGINPUT
     HelpButton BT_STRINGINPUT_DLG_HELP
     {
         Pos = MAP_APPFONT ( 162 , 200 ) ;
-        /*sic!*/
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 };
 
 String TEXT_TITLEBAR
 {
-    Text = "UCB Explorer" ;
+    Text [ en-US ] = "UCB Explorer" ;
 };
 
