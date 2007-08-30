@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:40:43 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 13:56:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,6 +279,8 @@ public:
 
     void            setHaveSystemChildFrame()
     { m_bHaveSystemChildFrames = true; }
+    bool            getHaveSystemChildFrame() const
+    { return m_bHaveSystemChildFrames; }
 };
 
 // -=-= SalDisplay -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -434,6 +436,8 @@ public:
     virtual void            deregisterFrame( SalFrame* pFrame );
     void                    setHaveSystemChildFrame() const
     { pXLib_->setHaveSystemChildFrame(); }
+    bool                    getHaveSystemChildFrame() const
+    { return pXLib_->getHaveSystemChildFrame(); }
 
     void            Init( bool bHandleStartupNotification = true );
 
