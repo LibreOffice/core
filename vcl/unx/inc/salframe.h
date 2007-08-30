@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:29:33 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 13:56:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,7 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     BOOL            bMapped_;
     BOOL            mbInShow;
     BOOL            bDefaultPosition_;  // client is centered initially
+    bool            m_bXEmbed;
     int             nVisibility_;
     int             m_nWorkArea;
 
@@ -190,6 +191,9 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     void            passOnSaveYourSelf();
 
     void            createNewWindow( XLIB_Window aParent, int nScreen = -1 );
+
+    void            setXEmbedInfo();
+    void            askForXEmbedFocus( sal_Int32 i_nTimeCode );
 public:
     X11SalFrame( SalFrame* pParent, ULONG nSalFrameStyle, SystemParentData* pSystemParent = NULL );
     virtual ~X11SalFrame();
