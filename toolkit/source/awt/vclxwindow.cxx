@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 09:50:40 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 13:54:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1607,18 +1607,8 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 
              case BASEPROPERTY_PLUGINPARENT:
              {
-                // correct data type?
-                 sal_Int64 nHandle = 0;
-                 if ( ! (Value >>= nHandle) )
-                {
-                    ::com::sun::star::uno::Exception *pException =
-                        new ::com::sun::star::uno::RuntimeException;
-                    pException->Message = ::rtl::OUString::createFromAscii( "incorrect window handle type" );
-                    throw pException;
-                }
-
                 // set parent handle
-                SetSystemParent_Impl( nHandle);
+                SetSystemParent_Impl( Value );
              }
              break;
 
