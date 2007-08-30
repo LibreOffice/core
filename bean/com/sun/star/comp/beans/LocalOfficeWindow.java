@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocalOfficeWindow.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:00:31 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 13:58:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@ import com.sun.star.awt.WindowClass;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.Exception;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.Type;
+import com.sun.star.beans.NamedValue;
 
 /**
  * This class represents a local office window.
@@ -147,10 +150,10 @@ public class LocalOfficeWindow
             // set real parent
             XVclWindowPeer xVclWindowPeer = (XVclWindowPeer)UnoRuntime.queryInterface(
                                XVclWindowPeer.class, mWindow);
-            xVclWindowPeer.setProperty( "PluginParent", new Long(getNativeWindow()) );
-            bPeer = true;
 
-                   // show document window
+            xVclWindowPeer.setProperty( "PluginParent", getWrappedWindowHandle());
+            bPeer = true;
+            // show document window
             XWindow aWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, mWindow);
             aWindow.setVisible( true );
         }
@@ -203,7 +206,7 @@ public class LocalOfficeWindow
             {
                 // create direct parent relationship
                 //setVisible( true );
-                parentPeer = new JavaWindowPeerFake( getNativeWindow(), type);
+                parentPeer = new JavaWindowPeerFake(getWrappedWindowHandle(), type);
                 bPeer = true;
                         }
                         else
@@ -262,5 +265,35 @@ public class LocalOfficeWindow
      * @return The system window type.
      */
     private native int getNativeWindowSystemType();
+
+    /**
+    Returns an Any containing a sequences of com.sun.star.beans.NamedValue. One NamedValue
+    contains the name "WINDOW" and the value is a Long representing the window handle.
+    The second NamedValue  has the name "XEMBED" and the value is true, when the XEmbed
+    protocol shall be used fore embedding the native Window.
+    */
+    protected Any getWrappedWindowHandle()
+    {
+
+        NamedValue window = new NamedValue(
+            "WINDOW", new Any(new Type(Long.class), new Long(getNativeWindow())));
+        NamedValue xembed = new NamedValue(
+            "XEMBED", new Any(new Type(Boolean.class), new Boolean(false)));
+
+        if (getNativeWindowSystemType() == SystemDependent.SYSTEM_XWINDOW )
+        {
+            String vendor = System.getProperty("java.vendor");
+            if (vendor.equals("Sun Microsystems Inc.")
+                && Boolean.valueOf(System.getProperty("sun.awt.xembedserver")).booleanValue())
+            {
+                xembed = new NamedValue(
+                    "XEMBED",
+                    new Any(new Type(Boolean.class), new Boolean(true)));
+            }
+        }
+        return new Any(
+            new Type("[]com.sun.star.beans.NamedValue"),
+            new NamedValue[] {window, xembed});
+    }
 
 }
