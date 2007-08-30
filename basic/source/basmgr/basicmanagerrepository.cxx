@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicmanagerrepository.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:17:08 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 09:58:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -491,7 +491,7 @@ namespace basic
             SotStorageRef xDummyStor = new SotStorage( ::rtl::OUString() );
             pBasicManager = new BasicManager( *xDummyStor, String() /* TODO/LATER: xStorage */,
                                                                 pAppBasic,
-                                                                &aAppBasicDir );
+                                                                &aAppBasicDir, TRUE );
             if ( pBasicManager->HasErrors() )
             {
                 // handle errors
@@ -517,7 +517,7 @@ namespace basic
             // create new BASIC-manager
             StarBASIC* pBasic = new StarBASIC( pAppBasic );
             pBasic->SetFlag( SBX_EXTSEARCH );
-            pBasicManager = new BasicManager( pBasic );
+            pBasicManager = new BasicManager( pBasic, NULL, TRUE );
         }
 
         // knit the containers with the BasicManager
