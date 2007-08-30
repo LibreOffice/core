@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:19:21 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 09:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,9 @@ using namespace rtl;
 #include<runtime.hxx>
 
 #include<math.h>
+#include <hash_map>
+#include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
+#include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
 
 TYPEINIT1(SbUnoMethod,SbxMethod)
 TYPEINIT1(SbUnoProperty,SbxProperty)
@@ -131,6 +134,7 @@ static String ID_DBG_METHODS( RTL_CONSTASCII_USTRINGPARAM("Dbg_Methods") );
 static String aIllegalArgumentExceptionName
     ( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.IllegalArgumentException" ) );
 static OUString aSeqLevelStr( RTL_CONSTASCII_USTRINGPARAM("[]") );
+static OUString defaultNameSpace( RTL_CONSTASCII_USTRINGPARAM("org.openoffice") );
 
 // Gets the default property for an uno object. Note: There is some
 // redirection built in. The property name specifies the name
@@ -1511,6 +1515,50 @@ String getBasicObjectTypeName( SbxObject* pObj )
     return aName;
 }
 
+bool checkUnoObjectType( SbUnoObject* pUnoObj,
+    const String& aClass )
+{
+    bool result = false;
+    Any aToInspectObj = pUnoObj->getUnoAny();
+    TypeClass eType = aToInspectObj.getValueType().getTypeClass();
+    if( eType != TypeClass_INTERFACE )
+        return false;
+    const Reference< XInterface > x = *(Reference< XInterface >*)aToInspectObj.getValue();
+    Reference< XTypeProvider > xTypeProvider( x, UNO_QUERY );
+    if( xTypeProvider.is() )
+    {
+        Sequence< Type > aTypeSeq = xTypeProvider->getTypes();
+        const Type* pTypeArray = aTypeSeq.getConstArray();
+        UINT32 nIfaceCount = aTypeSeq.getLength();
+        for( UINT32 j = 0 ; j < nIfaceCount ; j++ )
+        {
+            const Type& rType = pTypeArray[j];
+
+            Reference<XIdlClass> xClass = TypeToIdlClass( rType );
+            if( !xClass.is() )
+            {
+                DBG_ERROR("failed to get XIdlClass for type");
+                break;
+            }
+            OUString sClassName = xClass->getName();
+            OSL_TRACE("Checking if object implements %s",
+                OUStringToOString( defaultNameSpace + aClass,
+                    RTL_TEXTENCODING_UTF8 ).getStr() );
+            // although interfaces in the org.openoffice.vba namespace
+            // obey the idl rules and have a leading X, in basic we
+            // want to be able to do something like
+            // 'dim wrkbooks as WorkBooks'
+            // so test assumes the 'X' has been dropped
+            sal_Int32 indexLastDot = sClassName.lastIndexOf('.');
+            if ( indexLastDot > -1 && sClassName.copy( indexLastDot + 1).equalsIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM("X") ) + aClass ) )
+            {
+                result = true;
+                break;
+            }
+        }
+    }
+    return result;
+}
 
 // Dbg-Hilfsmethode zum Auslesen der in einem Object implementierten Interfaces
 String Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
@@ -3065,6 +3113,83 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 
     if( x1 == x2 )
         refVar->PutBool( TRUE );
+}
+
+typedef std::hash_map< OUString, std::vector< OUString >, OUStringHash, ::std::equal_to< OUString > > ModuleHash;
+
+
+// helper wrapper function to interact with TypeProvider and
+// XTypeDescriptionEnumerationAccess.
+// if it fails for whatever reason
+// returned Reference<> be null e.g. .is() will be false
+
+Reference< XTypeDescriptionEnumeration >
+getTypeDescriptorEnumeration( const OUString& sSearchRoot,
+    const Sequence< TypeClass >& types, TypeDescriptionSearchDepth depth )
+{
+    Reference< XTypeDescriptionEnumeration > xEnum;
+    Reference< XTypeDescriptionEnumerationAccess> xTypeEnumAccess( getTypeProvider_Impl(), UNO_QUERY );
+    if ( xTypeEnumAccess.is() )
+    {
+        try
+        {
+            xEnum = xTypeEnumAccess->createTypeDescriptionEnumeration(
+                sSearchRoot, types, depth );
+        }
+        catch( NoSuchTypeNameException& /*nstne*/ ) {}
+        catch( InvalidTypeNameException& /*nstne*/ ) {}
+    }
+    return xEnum;
+}
+
+typedef std::hash_map< OUString, Any, OUStringHash, ::std::equal_to< OUString > > VBAConstantsHash;
+
+SbxVariable* getVBAConstant( const String& rName )
+{
+    SbxVariable* pConst = NULL;
+    static VBAConstantsHash aConstCache;
+    static bool isInited = false;
+    if ( !isInited )
+    {
+        Sequence< TypeClass > types(1);
+        types[ 0 ] = TypeClass_CONSTANTS;
+        Reference< XTypeDescriptionEnumeration > xEnum = getTypeDescriptorEnumeration( defaultNameSpace, types, TypeDescriptionSearchDepth_INFINITE  );
+
+        if ( !xEnum.is() )
+            return NULL;
+
+        while ( xEnum->hasMoreElements() )
+        {
+            Reference< XConstantsTypeDescription > xConstants( xEnum->nextElement(), UNO_QUERY );
+            if ( xConstants.is() )
+            {
+                Sequence< Reference< XConstantTypeDescription > > aConsts = xConstants->getConstants();
+                Reference< XConstantTypeDescription >* pSrc = aConsts.getArray();
+                sal_Int32 nLen = aConsts.getLength();
+                for ( sal_Int32 index =0;  index<nLen; ++pSrc, ++index )
+                {
+                    Reference< XConstantTypeDescription >& rXConst =
+                        *pSrc;
+                    OUString sFullName = rXConst->getName();
+                    sal_Int32 indexLastDot = sFullName.lastIndexOf('.');
+                    OUString sLeafName;
+                    if ( indexLastDot > -1 )
+                        sLeafName = sFullName.copy( indexLastDot + 1);
+                    aConstCache[ sLeafName.toAsciiLowerCase() ] = rXConst->getConstantValue();
+                }
+            }
+        }
+        isInited = true;
+    }
+    OUString sKey( rName );
+    VBAConstantsHash::const_iterator it = aConstCache.find( sKey.toAsciiLowerCase() );
+    if ( it != aConstCache.end() )
+    {
+        pConst = new SbxVariable( SbxVARIANT );
+        pConst->SetName( rName );
+        unoToSbxValue( pConst, it->second );
+    }
+    return pConst;
 }
 
 // Funktion, um einen globalen Bezeichner im
