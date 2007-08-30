@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxvalue.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:33:27 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:02:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 #include <math.h>
-
+#include "runtime.hxx"
 // AB 29.10.99 Unicode
 #ifndef _USE_NO_NAMESPACE
 using namespace rtl;
@@ -1125,6 +1125,8 @@ BOOL SbxValue::Convert( SbxDataType eTo )
 
 BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
 {
+    bool bVBAInterop =  SbiRuntime::isVBAEnabled();
+
     SbxDataType eThisType = GetType();
     SbxDataType eOpType = rOp.GetType();
     SbxError eOld = GetError();
@@ -1138,14 +1140,16 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
     else if( eThisType == SbxNULL || eOpType == SbxNULL )
         SetType( SbxNULL );
     // Sonderregel 2: Ist ein Operand Empty, ist das Ergebnis der 2. Operand
-    else if( eThisType == SbxEMPTY )
+    else if( eThisType == SbxEMPTY
+    && !bVBAInterop
+    )
         *this = rOp;
     // 13.2.96: Nicht schon vor Get auf SbxEMPTY pruefen
     else
     {
         SbxValues aL, aR;
         bool bDecimal = false;
-        if( eThisType == SbxSTRING || eOp == SbxCAT )
+        if( eThisType == SbxSTRING || eOp == SbxCAT || ( bVBAInterop && ( eOpType == SbxSTRING ) && (  eOp == SbxPLUS ) ) )
         {
             if( eOp == SbxCAT || eOp == SbxPLUS )
             {
@@ -1203,7 +1207,10 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
             if( rOp.Get( aR ) )
             {
                 if( rOp.GetType() == SbxEMPTY )
-                    goto Lbl_OpIsEmpty;
+                {
+                    if ( !bVBAInterop || ( bVBAInterop && ( eOp != SbxNOT  ) ) )
+                        goto Lbl_OpIsEmpty;
+                }
                 if( Get( aL ) ) switch( eOp )
                 {
                     case SbxIDIV:
@@ -1392,7 +1399,10 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
             if( rOp.Get( aR ) )
             {
                 if( rOp.GetType() == SbxEMPTY )
-                    goto Lbl_OpIsEmpty;
+                {
+                    if ( !bVBAInterop || ( bVBAInterop && ( eOp != SbxNEG ) ) )
+                        goto Lbl_OpIsEmpty;
+                }
                 if( Get( aL ) )
                 {
                     switch( eOp )
@@ -1442,6 +1452,8 @@ Lbl_OpIsEmpty:
 
 BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
 {
+    bool bVBAInterop =  SbiRuntime::isVBAEnabled();
+
     BOOL bRes = FALSE;
     SbxError eOld = GetError();
     if( eOld != SbxERR_OK )
@@ -1458,10 +1470,13 @@ BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
     // Sonderregel 2: Wenn beide Variant sind und einer ist numerisch,
     // und der andere ein String, ist num < str
     else if( !IsFixed() && !rOp.IsFixed()
-     && ( rOp.GetType() == SbxSTRING && GetType() != SbxSTRING && IsNumeric() ) )
+     && ( rOp.GetType() == SbxSTRING && GetType() != SbxSTRING && IsNumeric() ) && !bVBAInterop
+    )
         bRes = BOOL( eOp == SbxLT || eOp == SbxLE || eOp == SbxNE );
     else if( !IsFixed() && !rOp.IsFixed()
-     && ( GetType() == SbxSTRING && rOp.GetType() != SbxSTRING && rOp.IsNumeric() ) )
+     && ( GetType() == SbxSTRING && rOp.GetType() != SbxSTRING && rOp.IsNumeric() )
+&& !bVBAInterop
+    )
         bRes = BOOL( eOp == SbxGT || eOp == SbxGE || eOp == SbxNE );
     else
     {
