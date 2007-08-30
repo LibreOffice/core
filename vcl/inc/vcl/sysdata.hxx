@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sysdata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 07:43:29 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 14:35:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,13 +77,15 @@ struct SystemEnvData
 
 struct SystemParentData
 {
-    unsigned long   nSize;          // size in bytes of this structure
+    unsigned long   nSize;            // size in bytes of this structure
 #if defined( WNT )
-    HWND            hWnd;           // the window hwnd
+    HWND            hWnd;             // the window hwnd
 #elif defined( QUARTZ )
     WindowRef       rWindow;        // Window reference
 #elif defined( UNX )
-    long            aWindow;        // the window of the object
+    long            aWindow;          // the window of the object
+    bool            bXEmbedSupport:1; // decides whether the object in question
+                                      // should support the XEmbed protocol
 #endif
 };
 
