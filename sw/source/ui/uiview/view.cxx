@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:12:12 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 16:04:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1555,10 +1555,18 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
                     if ( bBrowse && bGotVisibleLeft && bGotVisibleTop )
                     {
                         Point aTopLeft(aVis.TopLeft());
-                        //check if the values are possible
-                        long nXMax = pHScrollbar->GetRangeMax() - pHScrollbar->GetVisibleSize();
-                        if( aTopLeft.X() > nXMax )
-                            aTopLeft.X() = nXMax < 0 ? 0 : nXMax;
+                        //#i76699# make sure the document is still centered
+                        const SwTwips lBorder = IsDocumentBorder() ? DOCUMENTBORDER : 2 * DOCUMENTBORDER;
+                        SwTwips nEditWidth = GetEditWin().GetOutputSize().Width();
+                        if(nEditWidth > (aDocSz.Width() + lBorder ))
+                            aTopLeft.X() = ( aDocSz.Width() + lBorder - nEditWidth  ) / 2;
+                        else
+                        {
+                            //check if the values are possible
+                            long nXMax = pHScrollbar->GetRangeMax() - pHScrollbar->GetVisibleSize();
+                            if( aTopLeft.X() > nXMax )
+                                aTopLeft.X() = nXMax < 0 ? 0 : nXMax;
+                        }
                         SetVisArea( aTopLeft );
                     }
                     else if (bGotVisibleLeft && bGotVisibleTop && bGotVisibleRight && bGotVisibleBottom )
