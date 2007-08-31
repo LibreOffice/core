@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:21:33 $
+ *  last change: $Author: vg $ $Date: 2007-08-31 09:15:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,12 @@
 #endif
 #ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XTABCONTROLLER_HPP_
 #include <com/sun/star/awt/XTabController.hpp>
@@ -1103,6 +1109,12 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
             {
                 m_xFrame = Reference < XFrame > ( getBorderWin().getView()->getORB()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame")) ), UNO_QUERY );
                 m_xFrame->initialize( m_xWindow );
+
+                // work-around for #150518#: no layout manager (and thus no toolbars) in the preview
+                // Must be called after initialize ... but before any other call to this frame.
+                // Otherwhise frame throws "life time exceptions" as e.g. NON_INITIALIZED
+                Reference< XPropertySet > xFrameProps( m_xFrame, UNO_QUERY_THROW );
+                xFrameProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ), makeAny(Reference< XLayoutManager >()) );
 
                 Reference<XFramesSupplier> xSup(getBorderWin().getView()->getController()->getFrame(),UNO_QUERY);
                 if ( xSup.is() )
