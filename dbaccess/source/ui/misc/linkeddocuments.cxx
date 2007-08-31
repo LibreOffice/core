@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:23:25 $
+ *  last change: $Author: vg $ $Date: 2007-08-31 09:15:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <osl/diagnose.h>
 #endif
 #include <tools/diagnose_ex.h>
-
+#include <unotools/confignode.hxx>
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
@@ -431,11 +431,26 @@ namespace dbaui
             }
             return xRet;
         }
-        //catch (com::sun::star::io::WrongFormatException e)
-        //{
+        catch (com::sun::star::io::WrongFormatException e)
+        {
+            com::sun::star::sdbc::SQLException aSQLException;
+            aSQLException.Message = e.Message;
+            aSQLException.Context = e.Context;
+            aInfo = dbtools::SQLExceptionInfo(aSQLException);
+
+            // more like a hack, insert an empty message
+            OExtensionNotPresentDialog aDlg(m_pDialogParent, m_xORB);
+
+            String sText = aDlg.getText();
+            sText = sText.GetToken(0,'\n');
+            aInfo.prepend(sText);
+
+            String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
+            sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
+            aInfo.prepend(sMessage);
         //  OExtensionNotPresentDialog aDlg(m_pDialogParent, m_xORB);
   //          aDlg.Execute();
-        //}
+        }
         catch(Exception& e)
         {
             com::sun::star::sdbc::SQLException aSQLException;
