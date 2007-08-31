@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-08-30 16:06:31 $
+#   last change: $Author: vg $ $Date: 2007-08-31 09:17:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,7 @@ DEF3NAME=$(SHL3TARGET)
 
 # create Extension -----------------------------
 
-.IF "$(SOLAR_JAVA)"!="
+.IF "$(SOLAR_JAVA)"!=""
 
 ZIP1TARGET=sun-report-builder
 ZIP1FLAGS=-r
@@ -285,7 +285,7 @@ $(ZIP1DIR)$/THIRDPARTYREADMELICENSE.html : $(PRJ)$/license$/THIRDPARTYREADMELICE
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-.ELSE			# "$(SOLAR_JAVA)"!="
+.ELSE			# "$(SOLAR_JAVA)"!=""
 .INCLUDE : target.mk
-.ENDIF			# "$(SOLAR_JAVA)"!="
+.ENDIF			# "$(SOLAR_JAVA)"!=""
 #
