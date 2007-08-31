@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxarray.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 10:11:01 $
+ *  last change: $Author: vg $ $Date: 2007-08-31 13:30:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-#include "sbx.hxx"
+#include <basic/sbx.hxx>
 #include "runtime.hxx"
 #include <vector>
 using namespace std;
