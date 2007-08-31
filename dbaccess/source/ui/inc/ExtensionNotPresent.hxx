@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ExtensionNotPresent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:22:13 $
+ *  last change: $Author: vg $ $Date: 2007-08-31 09:15:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,8 @@ public:
     OExtensionNotPresentDialog( Window* pParent, com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > );
     virtual ~OExtensionNotPresentDialog();
     virtual short   Execute();
+
+    inline String getText() const { return m_aFT_TEXT.GetText(); }
 };
 // =============================================================================
 } // namespace rptui
