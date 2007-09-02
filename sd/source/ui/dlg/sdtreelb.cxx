@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:37:35 $
+ *  last change: $Author: vg $ $Date: 2007-09-02 09:27:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,6 @@ sal_Bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const ::com::sun::star:
         case SOT_FORMATSTR_ID_TREELISTBOX:
             SetAny(maTreeListBoxData, rFlavor);
             return sal_True;
-            break;
 
         default:
             return sal_False;
