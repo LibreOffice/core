@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:37:10 $
+ *  last change: $Author: vg $ $Date: 2007-09-02 09:21:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@
 namespace {
 static const sal_uInt16 nShowNamedShapesFilter=1;
 static const sal_uInt16 nShowAllShapesFilter=2;
-};
+}
 
 /*************************************************************************
 |*  SdNavigatorWin - FloatingWindow
