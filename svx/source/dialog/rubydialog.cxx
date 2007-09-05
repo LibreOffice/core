@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:36:45 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:44:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ using namespace com::sun::star::text;
 using namespace com::sun::star::view;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
-using namespace rtl;
+using rtl::OUString;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
