@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphen.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:54:49 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:42:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
-#define S2U(s)                      StringToOUString(s, CHARSET_SYSTEM)
-#define U2S(s)                      OUStringToString(s, CHARSET_SYSTEM)
+#undef S2U
+#undef U2S
+//#define S2U(s)                        StringToOUString(s, CHARSET_SYSTEM)
+//#define U2S(s)                        OUStringToString(s, CHARSET_SYSTEM)
 
 // define ----------------------------------------------------------------
 
