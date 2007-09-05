@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbarcontroller.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:02:21 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:39:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,6 @@
 #include <toolkit/unohlp.hxx>
 #endif
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -94,7 +93,7 @@ namespace svt
 StatusbarController::StatusbarController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >& xFrame,
-    const OUString& aCommandURL,
+    const ::rtl::OUString& aCommandURL,
     unsigned short nID ) :
     OWeakObject()
     ,   m_bInitialized( sal_False )
@@ -142,7 +141,7 @@ Reference< XLayoutManager > StatusbarController::getLayoutManager() const
         try
         {
             Any a;
-            a = xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+            a = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
             a >>= xLayoutManager;
         }
         catch ( Exception& )
