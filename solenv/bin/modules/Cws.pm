@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2007-02-12 15:09:38 $
+#   last change: $Author: kz $ $Date: 2007-09-05 17:37:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -301,6 +301,18 @@ sub get_master_tag {
     return uc($master) . '_' . lc($milestone);
 };
 
+sub get_master_branch_tag {
+    my ($self, $master) = @_;
+    $master = $self->master() if (!defined $master);
+    # check in environment if master is on the the HEAD branch
+    my $cvs_head = get_cvs_head();
+    if ( $master eq $cvs_head ) {
+        return undef;
+    }
+    else {
+        return 'mws_' . lc($master);
+    }
+};
 
 sub get_mws {
     my $self = shift;
