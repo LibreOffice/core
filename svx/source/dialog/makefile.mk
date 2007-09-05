@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: obo $ $Date: 2007-08-14 13:47:44 $
+#   last change: $Author: kz $ $Date: 2007-09-05 17:43:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,13 +43,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-.IF "$(ENABLE_GTK)" != ""
-CFLAGS+=-DENABLE_GTK
-.ENDIF
-
-CFLAGS+=-DDG_DLL
-RSCDEFS += -Dause_hack
 
 # --- Files --------------------------------------------------------
 
@@ -140,23 +133,29 @@ SRC2FILES =  \
         transfrm.src
 
 .IF "$(GUI)"=="UNX"
-EXCEPTIONSFILES +=	$(SLO)$/sendreportunx.obj
+SLOFILES +=	$(SLO)$/sendreportunx.obj
 .ELSE
 .IF "$(GUI)"=="WNT"
-EXCEPTIONSFILES +=	$(SLO)$/sendreportw32.obj
+SLOFILES +=	$(SLO)$/sendreportw32.obj
+NOOPTFILES +=	$(SLO)$/sendreportw32.obj
 .ELSE
-EXCEPTIONSFILES +=	$(SLO)$/sendreportgen.obj
+SLOFILES +=	$(SLO)$/sendreportgen.obj
 .ENDIF
 .ENDIF
 
-SLOFILES=\
+SLOFILES+=\
         $(SLO)$/SpellDialogChildWindow.obj \
-    $(EXCEPTIONSFILES)	\
+    $(SLO)$/thesdlg.obj     \
+    $(SLO)$/rubydialog.obj  \
+    $(SLO)$/hyphen.obj      \
+    $(SLO)$/opengrf.obj     \
     $(SLO)$/internationaloptions.obj	\
     $(SLO)$/optHeaderTabListbox.obj		\
+    $(SLO)$/charmap.obj     \
     $(SLO)$/connpooloptions.obj			\
     $(SLO)$/dbregistersettings.obj		\
     $(SLO)$/fontsubs.obj				\
+    $(SLO)$/_bmpmask.obj    \
     $(SLO)$/optmemory.obj				\
     $(SLO)$/opthtml.obj					\
     $(SLO)$/optfltr.obj					\
