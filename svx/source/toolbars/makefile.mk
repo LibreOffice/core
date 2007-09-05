@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-12 13:23:22 $
+#   last change: $Author: kz $ $Date: 2007-09-05 17:47:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,6 @@ ENABLE_EXCEPTIONS=TRUE;
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-CFLAGS+=-DDG_DLL
 
 # --- Files --------------------------------------------------------
 
