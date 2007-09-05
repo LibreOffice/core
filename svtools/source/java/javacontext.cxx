@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javacontext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:47:11 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:38:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,6 @@
 #include <svtools/javainteractionhandler.hxx>
 #endif
 
-
-
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::task;
 namespace svt
@@ -101,7 +98,7 @@ void SAL_CALL JavaContext::release(  ) throw ()
         delete this;
 }
 
-Any SAL_CALL JavaContext::getValueByName( const OUString& Name) throw (RuntimeException)
+Any SAL_CALL JavaContext::getValueByName( const ::rtl::OUString& Name) throw (RuntimeException)
 {
     Any retVal;
 
