@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unochart.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 13:59:52 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:40:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -301,19 +301,19 @@ static String GetCellRangeName( SwFrmFmt &rTblFmt, SwUnoCrsr &rTblCrsr )
     const SwTableBox*   pEndBox     = 0;
 
     pStart = pUnoTblCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
-    const SwTable* pTable = SwTable::FindTable( &rTblFmt );
-    pEndBox = pTable->GetTblBox( pStart->GetIndex());
-    aRes = pEndBox->GetName();
-
-    if(pUnoTblCrsr->HasMark())
-    {
-        pStart = pUnoTblCrsr->GetMark()->nNode.GetNode().FindTableBoxStartNode();
-        pStartBox = pTable->GetTblBox( pStart->GetIndex());
-    }
-    DBG_ASSERT( pStartBox, "start box not found" );
-    DBG_ASSERT( pEndBox, "end box not found" );
     if (pStart)
     {
+        const SwTable* pTable = SwTable::FindTable( &rTblFmt );
+        pEndBox = pTable->GetTblBox( pStart->GetIndex());
+        aRes = pEndBox->GetName();
+
+        if(pUnoTblCrsr->HasMark())
+        {
+            pStart = pUnoTblCrsr->GetMark()->nNode.GetNode().FindTableBoxStartNode();
+            pStartBox = pTable->GetTblBox( pStart->GetIndex());
+        }
+        DBG_ASSERT( pStartBox, "start box not found" );
+        DBG_ASSERT( pEndBox, "end box not found" );
         // need to switch start and end?
         if (*pUnoTblCrsr->GetPoint() < *pUnoTblCrsr->GetMark())
         {
