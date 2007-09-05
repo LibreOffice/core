@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 15:19:37 $
+#   last change: $Author: kz $ $Date: 2007-09-05 17:45:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,6 @@ TARGET=options
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-CFLAGS+=-DDG_DLL
 
 # --- Files --------------------------------------------------------
 
