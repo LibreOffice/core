@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framestatuslistener.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:29:03 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:39:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@
 #include <vcl/svapp.hxx>
 #endif
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
