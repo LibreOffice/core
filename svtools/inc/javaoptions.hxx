@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaoptions.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:51:21 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:37:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef _SVTOOLS_JAVAPTIONS_HXX
+#ifndef _SVTOOLS_JAVAOPTIONS_HXX
 #define _SVTOOLS_JAVAOPTIONS_HXX
 
 #ifndef INCLUDED_SVLDLLAPI_H
