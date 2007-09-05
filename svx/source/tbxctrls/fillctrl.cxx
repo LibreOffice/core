@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:16:12 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:46:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                 if ( pColorItem )
                 {
                     String aString( pColorItem->GetName() );
-                    Color aColor = pColorItem->GetColorValue();
+                    ::Color aColor = pColorItem->GetColorValue();
 
                     pFillAttrLB->SelectEntry( aString );
 
@@ -475,7 +475,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
         if( pState->ISA( SvxColorTableItem ) &&
             eXFS == XFILL_SOLID )
         {
-            Color aTmpColor( pFillAttrLB->GetSelectEntryColor() );
+            ::Color aTmpColor( pFillAttrLB->GetSelectEntryColor() );
             pFillAttrLB->Clear();
             pFillAttrLB->Fill( ( (SvxColorTableItem*)pState )->GetColorTable() );
             pFillAttrLB->SelectEntry( aTmpColor );
