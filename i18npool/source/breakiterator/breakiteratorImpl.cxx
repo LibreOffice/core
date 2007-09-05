@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 12:46:34 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:37:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,33 +84,30 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, 
 
 static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, sal_Int16 rWordType, sal_Bool bDirection)
 {
-        if (bDirection ? nPos >= len : nPos <= 0) {
-            return nPos;
-        }
         sal_uInt32 ch=0;
+        sal_Int32 pos=nPos;
         switch (rWordType) {
             case WordType::ANYWORD_IGNOREWHITESPACES:
                 if (bDirection)
-                    while (nPos < len && u_isWhitespace(Text.iterateCodePoints(&nPos, 1)));
+                    while (nPos < len && u_isWhitespace(Text.iterateCodePoints(&pos, 1))) nPos=pos;
                 else
-                    while (nPos > 0 && u_isWhitespace(Text.iterateCodePoints(&nPos, -1)));
+                    while (nPos > 0 && u_isWhitespace(Text.iterateCodePoints(&pos, -1))) nPos=pos;
             break;
             case WordType::DICTIONARY_WORD:
                 if (bDirection)
-                    while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&nPos, 1)) ||
-                            ! (ch == 0x002E || u_isalnum(ch))));
+                    while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, 1)) ||
+                            ! (ch == 0x002E || u_isalnum(ch)))) nPos=pos;
                 else
-                    while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&nPos, -1)) ||
-                            ! (ch == 0x002E || u_isalnum(ch))));
+                    while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) ||
+                            ! (ch == 0x002E || u_isalnum(ch)))) nPos=pos;
             break;
             case WordType::WORD_COUNT:
                 if (bDirection)
-                    while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&nPos, 1)) || ! u_isalnum(ch)));
+                    while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, 1)) || ! u_isalnum(ch))) nPos=pos;
                 else
-                    while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&nPos, -1)) || ! u_isalnum(ch)));
+                    while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&pos, -1)) || ! u_isalnum(ch))) nPos=pos;
             break;
         }
-        Text.iterateCodePoints(&nPos, bDirection ? -1 : 1);
         return nPos;
 }
 
