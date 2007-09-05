@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxbmpnumvalueset.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 10:13:19 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:44:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,8 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::text;
 using namespace com::sun::star::container;
 using namespace com::sun::star::style;
-using namespace rtl;
+using rtl::OUString;
+
 #define C2U(cChar) OUString::createFromAscii(cChar)
 #define NUM_PAGETYPE_BULLET         0
 #define NUM_PAGETYPE_SINGLENUM      1
