@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generictoolboxcontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:02:10 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:39:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,6 @@
 #include <vcl/svapp.hxx>
 #endif
 
-using namespace ::rtl;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -101,7 +100,7 @@ GenericToolboxController::GenericToolboxController( const Reference< XMultiServi
                                                     const Reference< XFrame >&               rFrame,
                                                     ToolBox*                                 pToolbox,
                                                     USHORT                                   nID,
-                                                    const OUString&                          aCommand ) :
+                                                    const ::rtl::OUString&                          aCommand ) :
     svt::ToolboxController( rServiceManager, rFrame, aCommand )
     ,   m_pToolbox( pToolbox )
     ,   m_nID( nID )
@@ -134,7 +133,7 @@ throw ( RuntimeException )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
-    OUString                     aCommandURL;
+    ::rtl::OUString                     aCommandURL;
 
     {
         vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
