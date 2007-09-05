@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:23:00 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:47:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,7 +412,7 @@ private:
 
 #if _SOLAR__PRIVATE
     void            MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& rSize, String& rStr,
-                                    const Color& rLine, const Color& rBack );
+                                    const ::Color& rLine, const ::Color& rBack );
     DECL_LINK( SelectHdl, void * );
 #endif
 
@@ -1169,7 +1169,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         short i = 0;
         long nCount = pColorTable->Count();
         XColorEntry* pEntry = NULL;
-        Color aColWhite( COL_WHITE );
+        ::Color aColWhite( COL_WHITE );
         String aStrWhite( SVX_RES(RID_SVXITEMS_COLOR_WHITE) );
 
         if ( nCount > PALETTE_SIZE )
@@ -1313,7 +1313,7 @@ void SvxColorWindow_Impl::StateChanged( USHORT nSID, SfxItemState eState, const 
                 short i = 0;
                 long nCount = pColorTable->Count();
                 XColorEntry* pEntry = NULL;
-                Color aColWhite( COL_WHITE );
+                ::Color aColWhite( COL_WHITE );
                 String aStrWhite( SVX_RES( RID_SVXITEMS_COLOR_WHITE ) );
 
                 // ScrollBar an oder aus
@@ -1442,7 +1442,7 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 //
 IMPL_LINK( SvxFrameWindow_Impl, SelectHdl, void *, EMPTYARG )
 {
-    Color               aColBlack( COL_BLACK );
+    ::Color             aColBlack( COL_BLACK );
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
     SvxBorderLine       theDefLine;
@@ -1652,7 +1652,7 @@ SfxPopupWindow* SvxLineWindow_Impl::Clone() const
 // -----------------------------------------------------------------------
 
 void SvxLineWindow_Impl::MakeLineBitmap( USHORT nNo, Bitmap& rBmp, const Size& rSize, String& rStr,
-                                            const Color& rLineCol, const Color& rBackCol )
+                                            const ::Color& rLineCol, const ::Color& rBackCol )
 {
     VirtualDevice   aVirDev( *this );
     Rectangle       aRect( Point(2,0), Size(rSize.Width()-4,0) );
@@ -1962,8 +1962,8 @@ void SvxLineWindow_Impl::CreateBitmaps( void )
 
     const StyleSettings&    rStyleSettings = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
-    Color                   aLineCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-    Color                   aBackCol( rStyleSettings.GetWindowColor() );
+    ::Color                 aLineCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+    ::Color                 aBackCol( rStyleSettings.GetWindowColor() );
     aLineSet.Clear();
 
     for( USHORT i = 1 ; i < 17 ; ++i )
