@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:05:06 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:41:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::i18n;
+using ::com::sun::star::i18n::XBreakIterator;
 
 // -----------------------------------------------------------------------
 // small helper functions to set fonts
@@ -258,13 +258,13 @@ void FontPrevWin_Impl::_CheckScript()
     {
         USHORT nScript = xBreak->getScriptType( aText, 0 );
         USHORT nChg = 0;
-        if( ScriptType::WEAK == nScript )
+        if( com::sun::star::i18n::ScriptType::WEAK == nScript )
         {
             nChg = (xub_StrLen)xBreak->endOfScript( aText, nChg, nScript );
             if( nChg < aText.Len() )
                 nScript = xBreak->getScriptType( aText, nChg );
             else
-                nScript = ScriptType::LATIN;
+                nScript = com::sun::star::i18n::ScriptType::LATIN;
         }
 
         do
@@ -308,7 +308,7 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter
     else
     {
         nEnd = aText.Len();
-        nScript = ScriptType::LATIN;
+        nScript = com::sun::star::i18n::ScriptType::LATIN;
     }
     long nTxtWidth = 0;
     long nCJKHeight = 0;
@@ -319,17 +319,17 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter
     long nCTLAscent = 0;
     do
     {
-        SvxFont& rFnt = (nScript==ScriptType::ASIAN) ? aCJKFont : ((nScript==ScriptType::COMPLEX) ? aCTLFont : rFont);
+        SvxFont& rFnt = (nScript==com::sun::star::i18n::ScriptType::ASIAN) ? aCJKFont : ((nScript==com::sun::star::i18n::ScriptType::COMPLEX) ? aCTLFont : rFont);
         ULONG nWidth = rFnt.GetTxtSize( _pPrinter, aText, nStart, nEnd-nStart ).
                        Width();
         aTextWidth[ nIdx++ ] = nWidth;
         nTxtWidth += nWidth;
         switch(nScript)
         {
-            case ScriptType::ASIAN:
+            case com::sun::star::i18n::ScriptType::ASIAN:
                 calcFontHeightAnyAscent(pWin,aCJKFont,nCJKHeight,nCJKAscent);
                 break;
-            case ScriptType::COMPLEX:
+            case com::sun::star::i18n::ScriptType::COMPLEX:
                 calcFontHeightAnyAscent(pWin,aCTLFont,nCTLHeight,nCTLAscent);
                 break;
             default:
@@ -387,11 +387,11 @@ void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* _pPrinter,
     else
     {
         nEnd = aText.Len();
-        nScript = ScriptType::LATIN;
+        nScript = com::sun::star::i18n::ScriptType::LATIN;
     }
     do
     {
-        SvxFont& rFnt = (nScript==ScriptType::ASIAN) ? aCJKFont : ((nScript==ScriptType::COMPLEX) ? aCTLFont : rFont);
+        SvxFont& rFnt = (nScript==com::sun::star::i18n::ScriptType::ASIAN) ? aCJKFont : ((nScript==com::sun::star::i18n::ScriptType::COMPLEX) ? aCTLFont : rFont);
         _pPrinter->SetFont( rFnt );
 
         rFnt.DrawPrev( pWin, _pPrinter, rPt, aText, nStart, nEnd - nStart );
