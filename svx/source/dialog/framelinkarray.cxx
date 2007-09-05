@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framelinkarray.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:07:12 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:42:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,34 +53,6 @@ namespace frame {
 
 // ============================================================================
 
-namespace {
-
-// ----------------------------------------------------------------------------
-
-struct Cell
-{
-    Style               maLeft;
-    Style               maRight;
-    Style               maTop;
-    Style               maBottom;
-    Style               maTLBR;
-    Style               maBLTR;
-    long                mnAddLeft;
-    long                mnAddRight;
-    long                mnAddTop;
-    long                mnAddBottom;
-    bool                mbMergeOrig;
-    bool                mbOverlapX;
-    bool                mbOverlapY;
-
-    explicit            Cell();
-
-    inline bool         IsMerged() const { return mbMergeOrig || mbOverlapX || mbOverlapY; }
-    inline bool         IsOverlapped() const { return mbOverlapX || mbOverlapY; }
-
-    void                MirrorSelfX( bool bMirrorStyles, bool bSwapDiag );
-    void                MirrorSelfY( bool bMirrorStyles, bool bSwapDiag );
-};
 
 Cell::Cell() :
     mnAddLeft( 0 ),
@@ -130,10 +102,6 @@ void Cell::MirrorSelfY( bool bMirrorStyles, bool bSwapDiag )
 
 // ----------------------------------------------------------------------------
 
-typedef std::vector< long >     LongVec;
-typedef std::vector< Cell >     CellVec;
-
-// ----------------------------------------------------------------------------
 
 void lclRecalcCoordVec( LongVec& rCoords, const LongVec& rSizes )
 {
@@ -166,68 +134,7 @@ static const Cell OBJ_CELL_NONE;
 
 const bool DIAG_DBL_CLIP_DEFAULT = false;
 
-} // namespace
-
 // ============================================================================
-
-struct ArrayImpl
-{
-    CellVec             maCells;
-    LongVec             maWidths;
-    LongVec             maHeights;
-    mutable LongVec     maXCoords;
-    mutable LongVec     maYCoords;
-    size_t              mnWidth;
-    size_t              mnHeight;
-    size_t              mnFirstClipCol;
-    size_t              mnFirstClipRow;
-    size_t              mnLastClipCol;
-    size_t              mnLastClipRow;
-    mutable bool        mbXCoordsDirty;
-    mutable bool        mbYCoordsDirty;
-    bool                mbDiagDblClip;
-
-    explicit            ArrayImpl( size_t nWidth, size_t nHeight, bool bDiagDblClip );
-
-    inline bool         IsValidPos( size_t nCol, size_t nRow ) const
-                            { return (nCol < mnWidth) && (nRow < mnHeight); }
-    inline size_t       GetIndex( size_t nCol, size_t nRow ) const
-                            { return nRow * mnWidth + nCol; }
-
-    const Cell&         GetCell( size_t nCol, size_t nRow ) const;
-    Cell&               GetCellAcc( size_t nCol, size_t nRow );
-
-    size_t              GetMergedFirstCol( size_t nCol, size_t nRow ) const;
-    size_t              GetMergedFirstRow( size_t nCol, size_t nRow ) const;
-    size_t              GetMergedLastCol( size_t nCol, size_t nRow ) const;
-    size_t              GetMergedLastRow( size_t nCol, size_t nRow ) const;
-
-    const Cell&         GetMergedOriginCell( size_t nCol, size_t nRow ) const;
-    Cell&               GetMergedOriginCellAcc( size_t nCol, size_t nRow );
-
-    bool                IsMergedOverlappedLeft( size_t nCol, size_t nRow ) const;
-    bool                IsMergedOverlappedRight( size_t nCol, size_t nRow ) const;
-    bool                IsMergedOverlappedTop( size_t nCol, size_t nRow ) const;
-    bool                IsMergedOverlappedBottom( size_t nCol, size_t nRow ) const;
-
-    bool                IsInClipRange( size_t nCol, size_t nRow ) const;
-    bool                IsColInClipRange( size_t nCol ) const;
-    bool                IsRowInClipRange( size_t nRow ) const;
-
-    inline size_t       GetMirrorCol( size_t nCol ) const { return mnWidth - nCol - 1; }
-    inline size_t       GetMirrorRow( size_t nRow ) const { return mnHeight - nRow - 1; }
-
-    long                GetColPosition( size_t nCol ) const;
-    long                GetRowPosition( size_t nRow ) const;
-
-    long                GetColWidth( size_t nFirstCol, size_t nLastCol ) const;
-    long                GetRowHeight( size_t nFirstRow, size_t nLastRow ) const;
-
-    double              GetHorDiagAngle( size_t nCol, size_t nRow, bool bSimple = false ) const;
-    double              GetVerDiagAngle( size_t nCol, size_t nRow, bool bSimple = false ) const;
-};
-
-// ----------------------------------------------------------------------------
 
 ArrayImpl::ArrayImpl( size_t nWidth, size_t nHeight, bool bDiagDblClip ) :
     mnWidth( nWidth ),
