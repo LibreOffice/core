@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splwrap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:39:28 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:44:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,13 +56,6 @@
 #include <tools/debug.hxx>
 #endif
 
-
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTSSORT
-#ifndef _SVARRAY_HXX
-#include <svtools/svstdarr.hxx>
-#endif
-
 #ifndef __RSC
 #include <tools/errinf.hxx>
 #endif
@@ -88,7 +81,7 @@
 #include <com/sun/star/linguistic2/XDictionary1.hpp>
 #endif
 
-
+#include <map>
 
 #include <svx/svxenum.hxx>
 #include "hyphen.hxx"       // Der HyphenDialog
@@ -98,8 +91,6 @@
 
 #include <svx/dialogs.hrc>
 
-//#define WAIT_ON() pWin->EnterWait()
-//#define WAIT_OFF()    pWin->LeaveWait()
 
 #define WAIT_ON() if(pWin != NULL) { pWin->EnterWait(); }
 
@@ -145,82 +136,33 @@ void SvxPrepareAutoCorrect( String &rOldText, String &rNewText )
 
 #define SVX_FLAGS_NEW
 
-class LangCheckState
+
+struct lt_LanguageType
 {
-    SvUShortsSort   aLang;
-    SvUShorts       aState;     // lowerbyte spell values,
-                                // higherbyte hyph values
-
-public:
-    LangCheckState();
-
-    USHORT             GetCount()   { return aLang.Count(); }
-    inline USHORT      GetLanguagePos( USHORT nLang );
-    inline USHORT      GetLanguage( USHORT nPos );
-    inline USHORT      GetState( USHORT nPos );
-    inline void        SetState( USHORT nPos, USHORT nState );
-    inline USHORT      InsertLangState( USHORT nLang, USHORT nState );
+    bool operator()( LanguageType n1, LanguageType n2 ) const
+    {
+        return n1 < n2;
+    }
 };
 
-LangCheckState::LangCheckState() :
-    aLang   (16, 16),
-    aState  (16, 16)
+typedef std::map< LanguageType, USHORT, lt_LanguageType >   LangCheckState_map_t;
+
+static LangCheckState_map_t & GetLangCheckState()
 {
+    static LangCheckState_map_t aLangCheckState;
+    return aLangCheckState;
 }
-
-
-inline USHORT LangCheckState::GetLanguagePos( USHORT nLang )
-{
-    USHORT nPos;
-    BOOL bFound = aLang.Seek_Entry( nLang, &nPos );
-    return bFound ? nPos : 0xFFFF;
-}
-
-inline USHORT LangCheckState::GetLanguage( USHORT nPos )
-{
-    DBG_ASSERT( nPos < aLang.Count(), "index out of range" );
-    return aLang.GetObject( nPos );
-}
-
-inline USHORT LangCheckState::GetState( USHORT nPos )
-{
-    DBG_ASSERT( nPos < aState.Count(), "index out of range" );
-    return aState.GetObject( nPos );
-}
-
-inline void LangCheckState::SetState( USHORT nPos, USHORT nState )
-{
-    DBG_ASSERT( nPos < aState.Count(), "index out of range" );
-    aState.Replace( nState , nPos );
-}
-
-inline USHORT LangCheckState::InsertLangState( USHORT nLang, USHORT nState )
-{
-    DBG_ASSERT( aLang.Count() == aState.Count(), "array length mismatch" );
-    USHORT nPos = aLang.Count();
-    aLang .Insert( nLang,   nPos );
-    aState.Insert( nState , nPos );
-    return nPos;
-}
-
-
-static LangCheckState & GetLangCheckState()
-{
-    static LangCheckState aState;
-    return aState;
-}
-
 
 void SvxSpellWrapper::ShowLanguageErrors()
 {
     // display message boxes for languages not available for
     // spellchecking or hyphenation
-    LangCheckState &rLCS = GetLangCheckState();
-    sal_uInt16 nCount = rLCS.GetCount();
-    for (sal_uInt16 i = 0;  i < nCount;  ++i)
+    LangCheckState_map_t &rLCS = GetLangCheckState();
+    LangCheckState_map_t::iterator aIt( rLCS.begin() );
+    while (aIt != rLCS.end())
     {
-        sal_Int16 nLang = (sal_Int16) rLCS.GetLanguage( i );
-        sal_uInt16 nVal = rLCS.GetState( i );
+        LanguageType nLang = aIt->first;
+        sal_uInt16   nVal  = aIt->second;
         sal_uInt16 nTmpSpell = nVal & 0x00FF;
         sal_uInt16 nTmpHyph  = (nVal >> 8) & 0x00FF;
 
@@ -239,7 +181,7 @@ void SvxSpellWrapper::ShowLanguageErrors()
             nTmpHyph = SVX_LANG_MISSING;
         }
 
-        rLCS.SetState( i, (nTmpHyph << 8) | nTmpSpell );
+        rLCS[ nLang ] = (nTmpHyph << 8) | nTmpSpell;
     }
 
 }
@@ -307,13 +249,13 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
 sal_Int16 SvxSpellWrapper::CheckSpellLang(
         Reference< XSpellChecker1 > xSpell, sal_Int16 nLang)
 {
-    LangCheckState &rLCS = GetLangCheckState();
+    LangCheckState_map_t &rLCS = GetLangCheckState();
 
-    USHORT nPos = rLCS.GetLanguagePos( nLang );
-    sal_uInt16 nVal = 0xFFFF != nPos ? rLCS.GetState( nPos ) : 0;
+    LangCheckState_map_t::iterator aIt( rLCS.find( nLang ) );
+    sal_uInt16 nVal = aIt == rLCS.end() ? SVX_LANG_NEED_CHECK : aIt->second;
 
-    if (0xFFFF == nPos)
-        nPos = rLCS.InsertLangState( (sal_uInt16) nLang, nVal );
+    if (aIt == rLCS.end())
+        rLCS[ nLang ] = nVal;
 
     if (SVX_LANG_NEED_CHECK == (nVal & 0x00FF))
     {
@@ -323,7 +265,7 @@ sal_Int16 SvxSpellWrapper::CheckSpellLang(
         nVal &= 0xFF00;
         nVal |= nTmpVal;
 
-        rLCS.SetState( nPos, nVal );
+        rLCS[ nLang ] = nVal;
     }
 
     return (sal_Int16) nVal;
@@ -332,13 +274,13 @@ sal_Int16 SvxSpellWrapper::CheckSpellLang(
 sal_Int16 SvxSpellWrapper::CheckHyphLang(
         Reference< XHyphenator >  xHyph, sal_Int16 nLang)
 {
-    LangCheckState &rLCS = GetLangCheckState();
+    LangCheckState_map_t &rLCS = GetLangCheckState();
 
-    USHORT nPos = rLCS.GetLanguagePos( nLang );
-    sal_uInt16 nVal = 0xFFFF != nPos ? rLCS.GetState( nPos ) : 0;
+    LangCheckState_map_t::iterator aIt( rLCS.find( nLang ) );
+    sal_uInt16 nVal = aIt == rLCS.end() ? 0 : aIt->second;
 
-    if (0xFFFF == nPos)
-        nPos = rLCS.InsertLangState( (sal_uInt16) nLang, nVal );
+    if (aIt == rLCS.end())
+        rLCS[ nLang ] = nVal;
 
     if (SVX_LANG_NEED_CHECK == ((nVal >> 8) & 0x00FF))
     {
@@ -348,7 +290,7 @@ sal_Int16 SvxSpellWrapper::CheckHyphLang(
         nVal &= 0x00FF;
         nVal |= nTmpVal << 8;
 
-        rLCS.SetState( nPos, nVal );
+        rLCS[ nLang ] = nVal;
     }
 
     return (sal_Int16) nVal;
