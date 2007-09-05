@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 07:43:44 $
+#   last change: $Author: kz $ $Date: 2007-09-05 17:46:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,21 +35,14 @@
 
 PRJ=..$/..
 
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=svxpch
-PROJECTPCHSOURCE=$(PRJ)$/util$/svxpch
-
 PRJNAME=svx
 TARGET=tbxctrls
-AUTOSEG=true
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-CFLAGS+=-DDG_DLL
 
 # --- Files --------------------------------------------------------
 
