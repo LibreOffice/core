@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javainteractionhandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:47:35 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:39:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,6 @@
 #include <svtools/javainteractionhandler.hxx>
 #include <svtools/javacontext.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::task;
 
@@ -156,7 +155,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     // Try to recover the Exception type in the any and
     // react accordingly.
     USHORT      nResult = RET_CANCEL;
-    OUString    aParameter;
+    ::rtl::OUString    aParameter;
 
     if ( anyExc >>= e1 )
     {
