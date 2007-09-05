@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:46:04 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:40:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,18 @@
 
 #ifndef _SDR_ANIMATION_AINFOSCROLLTEXT_HXX
 #include <svx/sdr/animation/ainfoscrolltext.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_OBJECTCONTACTOFPAGEVIEW_HXX
+#include <svx/sdr/contact/objectcontactofpageview.hxx>
+#endif
+
+#ifndef _SDRPAGEWINDOW_HXX
+#include <svx/sdrpagewindow.hxx>
+#endif
+
+#ifndef _SDRPAINTWINDOW_HXX
+#include <svx/sdrpaintwindow.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -204,7 +216,7 @@ namespace sdr
 
         // When ShouldPaintObject() returns sal_True, the object itself is painted and
         // PaintObject() is called.
-        sal_Bool ViewContactOfSdrObj::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& /*rAssociatedVOC*/)
+        sal_Bool ViewContactOfSdrObj::ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
         {
             // Test layer visibility
             if(!rDisplayInfo.GetProcessLayers().IsSet(GetSdrObject().GetLayer()))
@@ -214,8 +226,30 @@ namespace sdr
 
             // Test area visibility
             const Region& rRedrawArea = rDisplayInfo.GetRedrawArea();
-
-            if(!rRedrawArea.IsEmpty() && !rRedrawArea.IsOver(GetPaintRectangle()))
+            // Before we can test whether the paint rectangle has an
+            // intersection with the redraw area we enlarge the paint
+            // rectangle by the equivalent in logical coordinates of one
+            // pixel.  This takes care of rounding errors in VCL of the
+            // redraw area (#i81212#). (The redraw area is the one which
+            // should be enlarged but it may consist of more than one
+            // rectangle and enlarging the paint rectangle leads to the same
+            // result).  This can be considered a hack.  Not because its
+            // there but because it is here.  It belongs to VCL where
+            // internally the redraw rectangles are transformed into pixels
+            // and back again.
+            Rectangle aPaintRectangle (GetPaintRectangle());
+            ObjectContactOfPageView* pObjectContact
+                = dynamic_cast<ObjectContactOfPageView*>(&rAssociatedVOC.GetObjectContact());
+            if (pObjectContact != NULL)
+            {
+                OutputDevice& rDevice = pObjectContact->GetPageWindow().GetPaintWindow().GetOutputDevice();
+                Size aOnePixel (rDevice.PixelToLogic(Size(1,1)));
+                aPaintRectangle.Left() -= aOnePixel.Width();
+                aPaintRectangle.Right() += aOnePixel.Width();
+                aPaintRectangle.Top() -= aOnePixel.Height();
+                aPaintRectangle.Bottom() += aOnePixel.Height();
+            }
+            if(!rRedrawArea.IsEmpty() && !rRedrawArea.IsOver(aPaintRectangle))
             {
                 return sal_False;
             }
