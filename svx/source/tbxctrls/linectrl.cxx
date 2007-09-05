@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linectrl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:18:29 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:46:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,7 +371,7 @@ void SvxLineColorToolBoxControl::Update( const SfxPoolItem* pState )
         DBG_ASSERT( pBox, "Window not found" );
 
         // Die Liste der Farben (ColorTable) hat sich geaendert:
-        Color aTmpColor( pBox->GetSelectEntryColor() );
+        ::Color aTmpColor( pBox->GetSelectEntryColor() );
         pBox->Clear();
         pBox->Fill( ( (SvxColorTableItem*)pState )->GetColorTable() );
         pBox->SelectEntry( aTmpColor );
