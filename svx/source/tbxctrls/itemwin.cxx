@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:57:34 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:46:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,11 +304,11 @@ void SvxLineBox::FillControl()
 
     Bitmap aBitmap ( SVX_RES ( RID_SVXCTRL_LINECTRL ) );
 
-    Color aSourceColors[2];
-    Color aDestColors[2];
+    ::Color aSourceColors[2];
+    ::Color aDestColors[2];
 
-    aSourceColors[0] = Color( COL_WHITE );
-    aSourceColors[1] = Color( COL_BLACK );
+    aSourceColors[0] = ::Color( COL_WHITE );
+    aSourceColors[1] = ::Color( COL_BLACK );
 
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     aDestColors[0] = rStyles.GetFieldColor();
