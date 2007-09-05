@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:17:46 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:46:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,10 +82,10 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxColumnsToolBoxControl,SfxUInt16Item);
 class TableWindow : public SfxPopupWindow
 {
 private:
-    Color               aLineColor;
-    Color               aHighlightLineColor;
-    Color               aFillColor;
-    Color               aHighlightFillColor;
+    ::Color             aLineColor;
+    ::Color             aHighlightLineColor;
+    ::Color             aFillColor;
+    ::Color             aHighlightFillColor;
     long                nCol;
     long                nLine;
     long                nWidth;
@@ -132,7 +132,7 @@ TableWindow::TableWindow( USHORT nSlotId, const rtl::OUString& rCmd, ToolBox& rP
 {
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
-    aLineColor = Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+    aLineColor = ::Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
     aHighlightLineColor = rStyles.GetHighlightTextColor();
     aFillColor = rStyles.GetWindowColor();
     aHighlightFillColor = rStyles.GetHighlightColor();
@@ -489,10 +489,10 @@ void TableWindow::PopupModeEnd()
 class ColumnsWindow : public SfxPopupWindow
 {
 private:
-    Color               aLineColor;
-    Color               aHighlightLineColor;
-    Color               aFillColor;
-    Color               aHighlightFillColor;
+    ::Color             aLineColor;
+    ::Color             aHighlightLineColor;
+    ::Color             aFillColor;
+    ::Color             aHighlightFillColor;
     long                nCol;
     long                nWidth;
     long                nMX;
@@ -530,7 +530,7 @@ ColumnsWindow::ColumnsWindow( USHORT nId, const OUString& rCmd, ToolBox& rParent
 {
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
-    aLineColor = Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+    aLineColor = ::Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
     aHighlightLineColor = rStyles.GetHighlightTextColor();
     aFillColor = rStyles.GetWindowColor();
     aHighlightFillColor = rStyles.GetHighlightColor();
