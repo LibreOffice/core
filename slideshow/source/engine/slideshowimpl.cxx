@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:43:00 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,8 +291,11 @@ private:
     }
 
     /// Resets the current slide transition sound object with a new one:
-    SoundPlayerSharedPtr const& resetSlideTransitionSound(
-        rtl::OUString const& url = rtl::OUString() );
+    SoundPlayerSharedPtr resetSlideTransitionSound(
+        uno::Any const& url = uno::Any(), bool bLoopSound = false );
+
+    /// stops the current slide transition sound
+    void stopSlideTransitionSound();
 
     /** Prepare a slide transition
 
@@ -476,6 +479,9 @@ void SlideShowImpl::disposing()
 {
     osl::MutexGuard const guard( m_aMutex );
 
+    // stop slide transition sound, if any:
+    stopSlideTransitionSound();
+
     mxComponentContext.clear();
 
     if( mpCurrentSlideTransitionSound )
@@ -522,8 +528,8 @@ void SlideShowImpl::disposing()
     mpPreviousSlide.reset();
 }
 
-SoundPlayerSharedPtr const& SlideShowImpl::resetSlideTransitionSound(
-    rtl::OUString const& url )
+/// stops the current slide transition sound
+void SlideShowImpl::stopSlideTransitionSound()
 {
     if (mpCurrentSlideTransitionSound)
     {
@@ -531,6 +537,21 @@ SoundPlayerSharedPtr const& SlideShowImpl::resetSlideTransitionSound(
         mpCurrentSlideTransitionSound->dispose();
         mpCurrentSlideTransitionSound.reset();
     }
+ }
+
+SoundPlayerSharedPtr SlideShowImpl::resetSlideTransitionSound( const uno::Any& rSound, bool bLoopSound )
+{
+    sal_Bool bStopSound = sal_False;
+    rtl::OUString url;
+
+    if( !(rSound >>= bStopSound) )
+        bStopSound = sal_False;
+    rSound >>= url;
+
+    if( !bStopSound && (url.getLength() == 0) )
+        return SoundPlayerSharedPtr();
+
+    stopSlideTransitionSound();
 
     if (url.getLength() > 0)
     {
@@ -538,6 +559,7 @@ SoundPlayerSharedPtr const& SlideShowImpl::resetSlideTransitionSound(
         {
             mpCurrentSlideTransitionSound = SoundPlayer::create(
                 maEventMultiplexer, url, mxComponentContext );
+            mpCurrentSlideTransitionSound->setPlaybackLoop( bLoopSound );
         }
         catch (lang::NoSupportException const&)
         {
@@ -617,14 +639,14 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
 
     const RGBColor aTransitionFadeColor( unoColor2RGBColor( aUnoColor ));
 
-    rtl::OUString aSoundURL;
-    if( !getPropertyValue( aSoundURL,
-                           xPropSet,
-                           OUSTR("Sound")) )
-    {
-        OSL_TRACE( "createSlideTransition(): "
-                   "Could not determine transition sound effect URL from XDrawPage - using no sound\n" );
-    }
+    uno::Any aSound;
+    sal_Bool bLoopSound = sal_False;
+
+    if( !getPropertyValue( aSound, xPropSet, OUSTR("Sound")) )
+        OSL_TRACE( "createSlideTransition(): Could not determine transition sound effect URL from XDrawPage - using no sound\n" );
+
+    if( !getPropertyValue( bLoopSound, xPropSet, OUSTR("LoopSound") ) )
+        OSL_TRACE( "createSlideTransition(): Could not get slide property 'LoopSound' - using no sound\n" );
 
     NumberAnimationSharedPtr pTransition(
         TransitionFactory::createSlideTransition(
@@ -637,7 +659,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
             nTransitionSubType,
             bTransitionDirection,
             aTransitionFadeColor,
-            resetSlideTransitionSound( aSoundURL ) ));
+            resetSlideTransitionSound( aSound, bLoopSound ) ));
 
     if( !pTransition )
         return ActivitySharedPtr(); // no transition effect has been
@@ -779,9 +801,6 @@ void SlideShowImpl::stopShow()
         maEventMultiplexer.setAutomaticMode( false );
         maEventMultiplexer.setAutomaticMode( true );
     }
-
-    // stop slide transition sound, if any:
-    resetSlideTransitionSound();
 }
 
 struct SlideShowImpl::PrefetchPropertiesFunc
