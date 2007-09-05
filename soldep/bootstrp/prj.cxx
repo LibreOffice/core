@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 07:32:32 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:39:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,16 +130,19 @@ ByteString  SimpleConfig::GetNextLine()
 /*****************************************************************************/
 {
     ByteString aSecStr;
+    sal_Bool bStreamOk;
     USHORT iret = 0;
     nLine++;
 
-    aFileStream.ReadLine ( aTmpStr );
-    if ( aTmpStr.Search( "#" ) == 0 )
+    bStreamOk = aFileStream.ReadLine ( aTmpStr );
+    if ( (aTmpStr.Search( "#" ) == 0) )
         return "\t";
     aTmpStr = aTmpStr.EraseLeadingChars();
     aTmpStr = aTmpStr.EraseTrailingChars();
     while ( aTmpStr.SearchAndReplace(ByteString(' '),ByteString('\t') ) != STRING_NOTFOUND );
     int nLength = aTmpStr.Len();
+    if ( bStreamOk && (nLength == 0) )
+        return "\t";
     USHORT nPos = 0;
     BOOL bFound = FALSE;
     ByteString aEraseString;
