@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:55:15 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:44:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,8 +228,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
 using namespace ::sfx2;
+using ::rtl::OUString;
 
 //CHINA001 copy from multipat.hxx begin
 // define ----------------------------------------------------------------
