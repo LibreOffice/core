@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: vg $ $Date: 2007-08-27 13:31:52 $
+#   last change: $Author: kz $ $Date: 2007-09-05 17:37:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,13 +77,14 @@ use Cvs;
 use GenInfoParser;
 use CwsConfig;
 use CwsCvsOps;
+use CvsModule; # to be removed ASAP
 
 #### script id #####
 
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.31 $ ';
+my $id_str = ' $Revision: 1.32 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -103,17 +104,16 @@ my %resync_silent_ignore_files = ( 'wntmsci3' => 1,
 my %resync_always_move_tags = ( 'wntmsci10' => 1 );
 
 # modules to be obligatory copied to each cws
-my %obligatory_modules = ();
-$obligatory_modules{'solenv'}++;
-$obligatory_modules{'default_images'}++;
-$obligatory_modules{'custom_images'}++;
-$obligatory_modules{'ooo_custom_images'}++;
-$obligatory_modules{'external_images'}++;
-$obligatory_modules{'postprocess'}++;
-$obligatory_modules{'instset_native'}++;
-$obligatory_modules{'instsetoo_native'}++;
-$obligatory_modules{'smoketest_native'}++;
-$obligatory_modules{'smoketestoo_native'}++;
+my %obligatory_modules = (  'solenv' => 1,
+                            'default_images' => 1,
+                            'custom_images' => 1,
+                            'ooo_custom_images' => 1,
+                            'external_images' => 1,
+                            'postprocess' => 1,
+                            'instset_native' => 1,
+                            'instsetoo_native' => 1,
+                            'smoketest_native' => 1,
+                            'smoketestoo_native' => 1);
 
 #### global #####
 
@@ -1583,7 +1583,13 @@ sub commit_files
     my ($master_branch_tag, $cws_branch_tag, $cws_anchor_tag) = $cws->get_tags();
 
     if ( !defined($master_head) ) {
-        $master_head = $master_branch_tag ? $master_branch_tag : 'HEAD';
+        # Determine new master from milestone_tag. We can't use $master_branch_tag
+        # here because after resyncing we might have a new master due to
+        # a cross master resync and the CWS itself is not yet updated
+        # to the new master.
+        my ($master) = split(/_/, $milestone_tag);
+        my $new_master_branch_tag = $cws->get_master_branch_tag($master);
+        $master_head = $new_master_branch_tag ? $new_master_branch_tag : 'HEAD';
     }
 
     if ( $n_ci_files ) {
