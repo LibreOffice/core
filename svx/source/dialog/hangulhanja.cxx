@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanja.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 13:57:14 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:42:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -721,9 +721,9 @@ namespace svx
                 }
                 else
                 {
-                    sal_Int32 nNextAsianScript = xBreakIter->beginOfScript( m_sCurrentPortion, m_nCurrentStartIndex, ScriptType::ASIAN );
+                    sal_Int32 nNextAsianScript = xBreakIter->beginOfScript( m_sCurrentPortion, m_nCurrentStartIndex, com::sun::star::i18n::ScriptType::ASIAN );
                     if ( -1 == nNextAsianScript )
-                        nNextAsianScript = xBreakIter->nextScript( m_sCurrentPortion, m_nCurrentStartIndex, ScriptType::ASIAN );
+                        nNextAsianScript = xBreakIter->nextScript( m_sCurrentPortion, m_nCurrentStartIndex, com::sun::star::i18n::ScriptType::ASIAN );
                     if ( ( nNextAsianScript >= m_nCurrentStartIndex ) && ( nNextAsianScript < m_sCurrentPortion.getLength() ) )
                     {   // found asian text
 
