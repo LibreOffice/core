@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 07:46:03 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:44:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,8 +128,8 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
-using namespace rtl;
 using namespace comphelper;
+using rtl::OUString;
 
 #define C2U(cChar)                  OUString::createFromAscii(cChar)
 #define C2S(cChar)                  String( RTL_CONSTASCII_STRINGPARAM(cChar) )
