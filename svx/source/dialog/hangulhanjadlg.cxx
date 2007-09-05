@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanjadlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:09:51 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:42:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ namespace svx
     using namespace ::com::sun::star::linguistic2;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
-    using namespace ::rtl;
+    using ::rtl::OUString;
 
     //-------------------------------------------------------------------------
     namespace
