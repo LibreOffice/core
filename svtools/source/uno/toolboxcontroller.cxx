@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:02:33 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:40:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,6 @@
 #include <vcl/toolbox.hxx>
 #endif
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -104,7 +103,7 @@ struct ToolboxController_Impl
 ToolboxController::ToolboxController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >& xFrame,
-    const OUString& aCommandURL ) :
+    const ::rtl::OUString& aCommandURL ) :
     OWeakObject()
     ,   m_bInitialized( sal_False )
     ,   m_bDisposed( sal_False )
@@ -165,7 +164,7 @@ Reference< XLayoutManager > ToolboxController::getLayoutManager() const
     {
         try
         {
-            xLayoutManager.set(xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))),UNO_QUERY);
+            xLayoutManager.set(xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))),UNO_QUERY);
         }
         catch ( Exception& )
         {
@@ -365,7 +364,7 @@ void SAL_CALL ToolboxController::execute( sal_Int16 KeyModifier )
 throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XDispatch >       xDispatch;
-    OUString                     aCommandURL;
+    ::rtl::OUString                     aCommandURL;
 
     {
         vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
