@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optasian.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:24:17 $
+ *  last change: $Author: kz $ $Date: 2007-09-05 17:43:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
-using namespace rtl;
+using rtl::OUString;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
