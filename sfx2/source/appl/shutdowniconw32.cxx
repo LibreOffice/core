@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-01 11:04:12 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:25:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,9 @@
 #ifdef WNT
 
 // necessary to include system headers without warnings
+#ifdef _MSC_VER
 #pragma warning(disable:4668 4917)
+#endif
 
 // Support Windows 95 too
 #undef WINVER
