@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_python.scp,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 10:57:24 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 10:09:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,10 @@
 #include "macros.inc"
 
 Module gid_Module_Optional_Pyuno
+    PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_OPTIONAL_PYTHON );
     ParentID = gid_Module_Optional;
+    Sortkey = "750";
     Files = (gid_File_Pyuno,gid_File_Lib_Pyuno,gid_File_Lib_Pythonloader,gid_File_Py_Unohelper,gid_File_Py_Officehelper,gid_File_Py_Uno,gid_File_Py_Pythonloader,gid_File_Py_Python_Core,gid_File_Py_Python_Bin,gid_File_Python_Sh,gid_File_Lib_Python_So, gid_File_Py_Scriptprovider,gid_File_Py_Pythonscript,gid_File_Scripts_Python,gid_File_Registry_Spool_Oo_Scripting_Python_Xcu,gid_File_Pythonmsi_Dll);
     Minimal = NO;
     Default = YES;
