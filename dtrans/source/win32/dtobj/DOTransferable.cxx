@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 15:06:30 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:26:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -476,7 +476,9 @@ void CDOTransferable::clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, 
         break;
 
     case TYMED_ISTREAM:
+        #ifdef _MSC_VER
         #pragma PRAGMA_MSG( Has to be implemented )
+        #endif
         break;
 
     default:
