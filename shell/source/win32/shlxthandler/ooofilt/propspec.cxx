@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propspec.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:50:50 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:23:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,9 @@
 #pragma warning(push, 1)
 #endif
 #include <windows.h>
+#ifdef _MSC_VER
 #pragma warning(disable: 4512)
+#endif
 #include <filter.h>
 #if defined _MSC_VER
 #pragma warning(pop)
@@ -162,9 +164,13 @@ CFullPropSpec & CFullPropSpec::operator=( CFullPropSpec const & Property )
     // Clean up.
     this->CFullPropSpec::~CFullPropSpec();
 
+#ifdef _MSC_VER
 #pragma warning( disable : 4291 )           // unmatched operator new
+#endif
     new (this) CFullPropSpec( Property );
+#ifdef _MSC_VER
 #pragma warning( default : 4291 )
+#endif
     return *this;
 }
 CFullPropSpec::~CFullPropSpec()
