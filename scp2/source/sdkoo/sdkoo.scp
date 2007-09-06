@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdkoo.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-09 09:40:01 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 10:10:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ End
 Module gid_Module_Root
     Name = "sdkoo";
     Description = "sdkoo";
+    PackageInfo = "packinfo_sdkoo.txt";
 End
 
 File gid_File_Txt_License
