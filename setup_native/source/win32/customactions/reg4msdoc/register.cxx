@@ -4,9 +4,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:06:05 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:29:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,14 +61,20 @@
 #include "msihelper.hxx"
 #endif
 
+#ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
 #pragma warning(disable: 4917)
+#endif
 #include <shlobj.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 
 #include <assert.h>
+#ifdef _MSC_VER
 #pragma warning(disable: 4350)
+#endif
 
 typedef std::auto_ptr<Registrar> RegistrarPtr;
 
