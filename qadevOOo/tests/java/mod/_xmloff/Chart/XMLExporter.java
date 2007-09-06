@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLExporter.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:55:59 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+import util.DesktopTools;
 import util.SOfficeFactory;
 import util.XMLTools;
 
@@ -102,8 +103,8 @@ public class XMLExporter extends TestCase {
      * Document disposed here.
      */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xChartDoc " );
-        xChartDoc.dispose();
+        log.println( "    close xChartDoc " );
+        DesktopTools.closeDoc(xChartDoc);
     }
 
     /**
