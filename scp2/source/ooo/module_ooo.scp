@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_ooo.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:07:46 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 10:09:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 
 Module gid_Module_Root
     Sortkey = "10";
+    PackageInfo = "packinfo_office.txt";
+    TabPackageInfo = "packinfo_office_tab.txt";
     MOD_NAME_DESC(MODULE_ROOT_OSL);
 End
 
