@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:07:18 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:18:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize("",off)
 #pragma optimize("q",off) // p-code off
 #endif
