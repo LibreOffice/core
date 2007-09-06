@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:07:52 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:01:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -884,7 +884,9 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
 }
 
 //Bug 3985, optimierungsproblem, vergleiche auch trvlfrm.cxx lcl_FindCntnt()
+#ifdef _MSC_VER
 #pragma optimize("e",off)
+#endif
 
 ULONG MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
                           const SwCntntFrm *& rpCnt,
@@ -950,7 +952,9 @@ ULONG MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
     return nDistance;
 }
 
+#ifdef _MSC_VER
 #pragma optimize("e",on)
+#endif
 
 const SwCntntFrm * MA_FASTCALL lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
                                   const BOOL bBody, const BOOL bFtn )
