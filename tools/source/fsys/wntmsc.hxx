@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wntmsc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:12:39 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:15:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,13 @@
 #include <direct.h>
 
 #include <tools/svwin.h>
+#ifdef _MSC_VER
 #pragma warning (push,1)
+#endif
 #include <winbase.h>
+#ifdef _MSC_VER
 #pragma warning (pop)
+#endif
 #include <tools/solar.h>
 
 #include <tools/string.hxx>
