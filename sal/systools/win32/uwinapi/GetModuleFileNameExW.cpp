@@ -1,7 +1,11 @@
 #include "macros.h"
+#ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers
+#endif
 #include <psapi.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 IMPLEMENT_THUNK( psapi, WINDOWS, DWORD, WINAPI, GetModuleFileNameExW, (HANDLE hProcess, HMODULE hModule, LPWSTR lpFileNameW, DWORD nSize ) )
 {
