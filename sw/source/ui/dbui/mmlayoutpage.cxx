@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmlayoutpage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:03:55 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:06:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,9 @@ using namespace ::com::sun::star::view;
   -----------------------------------------------------------------------*/
 SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_LAYOUT_PAGE)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aHeaderFI( this, SW_RES(         FI_HEADER             )),
     m_aAlignToBodyCB( this, SW_RES(      CB_ALIGN              )),
     m_aPositionFL( this, SW_RES(       FL_POSITION           )),
@@ -176,7 +178,9 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_aExampleWIN( this, 0 ),
     m_aZoomFT( this, SW_RES(           FT_ZOOM               )),
     m_aZoomLB( this, SW_RES(           LB_ZOOM               )),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
     m_pWizard(_pParent),
     m_pAddressBlockFormat(0),
     m_pExampleFrame(0),
