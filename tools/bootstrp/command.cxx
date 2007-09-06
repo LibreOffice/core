@@ -4,9 +4,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:30:11 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:13:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #include <tools/debug.hxx>
 #include "bootstrp/appdef.hxx"
 
-#if defined WNT
+#ifdef _MSC_VER
 #pragma warning (push,1)
 #endif
 
@@ -61,16 +61,20 @@
 #include <ctype.h>
 #include <errno.h>
 
-#if defined WNT
+#ifdef _MSC_VER
 #pragma warning (pop)
 #endif
 
 //#define MH_TEST2  1           // fuers direkte Testen
 
 #if defined WNT
+#ifdef _MSC_VER
 #pragma warning (push,1)
+#endif
 #include <process.h>    // for _SPAWN
+#ifdef _MSC_VER
 #pragma warning (pop)
+#endif
 #endif
 #ifdef UNX
 #include <sys/types.h>
