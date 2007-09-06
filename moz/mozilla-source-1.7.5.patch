@@ -9188,6 +9188,20 @@
       {
           T_I8                = TD_INT8             ,
           T_I16               = TD_INT16            ,
+*** misc/mozilla/xpfe/appshell/src/nsXULWindow.cpp	2004-08-21 19:17:14.000000000 +0200
+--- misc/build/mozilla/xpfe/appshell/src/nsXULWindow.cpp	2007-03-24 11:19:03.000000000 +0200
+***************
+*** 73,79 ****
+--- 73,81 ----
+  #include "nsStyleConsts.h"
+  
+  // XXX Get rid of this
++ #ifdef _MSC_VER
+  #pragma message("WARNING: XXX bad include, remove it.")
++ #endif
+  #include "nsIWebShellWindow.h"
+  #include "nsWebShellWindow.h" // get rid of this one, too...
+  
 *** misc/mozilla/xpfe/bootstrap/Makefile.in	Thu Jun 24 14:58:48 2004
 --- misc/build/mozilla/xpfe/bootstrap/Makefile.in	Thu Mar 29 14:27:09 2007
 ***************
