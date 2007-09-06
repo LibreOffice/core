@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menuids2_tmpl.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 12:19:37 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 08:47:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -540,16 +540,6 @@
         Text [ en-US ] = "From ~File..." ; \
     };
 
-#ifdef STARIMAGE_AVAILABLE
-#define MN_INSERT_IMAGE \
-    MenuItem\
-    {\
-        Identifier = SID_INSERT_IMAGE ; \
-        HelpID = SID_INSERT_IMAGE ; \
-        Text [ en-US ] = "From ~Image Editor..." ; \
-    };
-#endif
-
 #define MN_INSERT_INSERT_DIAGRAM \
     MenuItem\
     {\
@@ -600,30 +590,11 @@
 #define MNSUB_SCAN \
     ITEM_INSERT_TWAIN_MENU
 
-#ifdef STARIMAGE_AVAILABLE
-#define MNSUB_GRAPHIC \
-    MenuItem\
-    {\
-        Identifier = MN_SUB_GRAPHIC ; \
-        HelpID = MN_SUB_GRAPHIC ; \
-        Command = ".uno:GraphicMenu" ; \
-        Text [ en-US ] = "~Graphics" ; \
-        SubMenu = Menu\
-        {\
-            ItemList = \
-            {\
-                MN_INSERT_INSERT_GRAPHIC\
-                MN_INSERT_IMAGE\
-            };\
-        };\
-    };
-#else // STARIMAGE_AVAILABLE
 #define MNSUB_GRAPHIC \
     MenuItem\
     {\
         ITEM_INSERT_INSERT_GRAPHIC \
     };
-#endif // STARIMAGE_AVAILABLE
 
 
  //
