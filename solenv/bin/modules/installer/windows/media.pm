@@ -4,9 +4,9 @@
 #
 #   $RCSfile: media.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:45:16 $
+#   last change: $Author: kz $ $Date: 2007-09-06 09:55:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,20 @@ sub generate_cab_filename_for_some_cabs
 }
 
 #################################################
+# Creating the cab file name for cab files
+# defined in packages.
+#################################################
+
+sub get_cabfilename
+{
+    my ($name) = @_;
+
+    if ( $installer::globals::include_cab_in_msi ) { $name = "\#" . $name; }
+
+    return $name;
+}
+
+#################################################
 # Creating the cab file name dynamically
 #################################################
 
@@ -217,10 +231,30 @@ sub create_media_table
 
     installer::windows::idtglobal::write_idt_header(\@mediatable, "media");
 
-    if ( $installer::globals::product =~ /ada/i ) { $installer::globals::include_cab_in_msi = 1; }
-    if ( $installer::globals::product =~ /4ms/i ) { $installer::globals::include_cab_in_msi = 1; }
+    if ( $allvariables->{'INCLUDE_CAB_IN_MSI'} ) { $installer::globals::include_cab_in_msi = 1; }
 
-    if ( $installer::globals::cab_file_per_component )
+    if ( $installer::globals::use_packages_for_cabs )
+    {
+        my $cabfile;
+        foreach $cabfile ( sort keys %installer::globals::lastsequence )
+        {
+            my %media = ();
+            $diskid++;
+
+            $media{'DiskId'} = get_media_diskid($diskid);
+            $media{'LastSequence'} = $installer::globals::lastsequence{$cabfile};
+            $media{'DiskPrompt'} = get_media_diskprompt();
+            $media{'Cabinet'} = get_cabfilename($cabfile);
+            $media{'VolumeLabel'} = get_media_volumelabel();
+            $media{'Source'} = get_media_source();
+
+            my $oneline = $media{'DiskId'} . "\t" . $media{'LastSequence'} . "\t" . $media{'DiskPrompt'} . "\t"
+                        . $media{'Cabinet'} . "\t" . $media{'VolumeLabel'} . "\t" . $media{'Source'} . "\n";
+
+            push(@mediatable, $oneline);
+        }
+    }
+    elsif ( $installer::globals::cab_file_per_component )
     {
         for ( my $i = 0; $i <= $#{$filesref}; $i++ )
         {
