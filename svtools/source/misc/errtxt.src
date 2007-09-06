@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:49:29 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 08:46:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -484,7 +484,6 @@ Resource RID_ERRHDL
         Text [ en-US ] = "The digitally signed document content and/or macros do not match the current document signature.\n\nThis could be the result of document manipulation or of structural document damage due to data transmission.\n\nWe recommend that you do not trust the content of the current document.\nExecution of macros is disabled for this document.\n " ;
     };
 
-#ifdef ERRCODE_IO_INVALIDLENGTH
     String ERRCODE_IO_INVALIDLENGTH
     {
         Text [ en-US ] = "Invalid data length." ;
@@ -509,7 +508,6 @@ Resource RID_ERRHDL
     {
         Text [ en-US ] = "Function not possible: write protected." ;
     };
-#endif
 };
 
 // eof ------------------------------------------------------------------------
