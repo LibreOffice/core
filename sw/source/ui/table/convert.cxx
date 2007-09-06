@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:19:15 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:08:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,9 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
 
     : SfxModalDialog( &rView.GetViewFrame()->GetWindow(), SW_RES(DLG_CONV_TEXT_TABLE)),
 
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     aTabBtn         (this, SW_RES(CB_TAB)),
     aSemiBtn        (this, SW_RES(CB_SEMI)),
     aParaBtn        (this, SW_RES(CB_PARA)),
@@ -165,7 +167,9 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     aCancelBtn(this,SW_RES(BT_CANCEL)),
     aHelpBtn(this, SW_RES(BT_HELP)),
     aAutoFmtBtn(this,SW_RES(BT_AUTOFORMAT)),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
 
     pTAutoFmt( 0 ),
     pShell( &rView.GetWrtShell() ),
