@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xception.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:06:05 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:45:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <vos/object.hxx>
 #endif
 
-#ifdef SAL_W32
+#ifdef _MSC_VER
 #pragma warning( disable : 4290 )
 #endif
 
