@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:37:59 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:07:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3356,7 +3356,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         Window::MouseButtonDown(rMEvt);
 }
 
+#ifdef _MSC_VER
 #pragma optimize("",off)
+#endif
 
 /*--------------------------------------------------------------------
     Beschreibung:   MouseMove
