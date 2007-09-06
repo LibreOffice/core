@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:21:53 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:47:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,13 @@
 
 #define UNICODE
 #include "system.h"
+#ifdef _MSC_VER
 #pragma warning(push,1) /* disable warnings within system headers */
+#endif
 #include <shellapi.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #include <osl/diagnose.h>
 #include <osl/security.h>
@@ -264,8 +268,10 @@ static struct CommandArgs_Impl g_command_args =
     0
 };
 
+#ifdef _MSC_VER
 #pragma warning( push )
 #pragma warning( disable: 4100 )
+#endif
 static rtl_uString ** osl_createCommandArgs_Impl (int argc, char ** argv)
 {
     rtl_uString ** ppArgs =
@@ -311,7 +317,9 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char ** argv)
     return (ppArgs);
 
 }
+#ifdef _MSC_VER
 #pragma warning( pop )
+#endif
 
 /***************************************************************************/
 
