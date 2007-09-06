@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresslistdialog.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:52:12 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:04:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,7 +223,9 @@ struct AddressUserData_Impl
   -----------------------------------------------------------------------*/
 SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_ADDRESSLISTDIALOG)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aDescriptionFI( this, SW_RES(  FI_DESCRIPTION    )),
     m_aListFT( this, SW_RES(         FT_LIST           )),
     m_aLoadListPB( this, SW_RES(     PB_LOADLIST       )),
@@ -237,7 +239,9 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     m_aOK( this, SW_RES(             PB_OK             )),
     m_aCancel( this, SW_RES(         PB_CANCEL         )),
     m_aHelp( this, SW_RES(           PB_HELP           )),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
     m_sName(        SW_RES( ST_NAME )),
     m_sTable(       SW_RES( ST_TABLE )),
     m_sConnecting(  SW_RES( ST_CONNECTING )),
