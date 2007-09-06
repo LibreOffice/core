@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:28:02 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:01:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3041,7 +3041,9 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
 TYPEINIT1( SwDrawFrmFmt, SwFrmFmt );
 IMPL_FIXEDMEMPOOL_NEWDEL( SwDrawFrmFmt, 10, 10 )
 
+#ifdef _MSC_VER
 #pragma optimize( "e", off )
+#endif
 
 SwDrawFrmFmt::~SwDrawFrmFmt()
 {
@@ -3049,7 +3051,9 @@ SwDrawFrmFmt::~SwDrawFrmFmt()
     delete pContact;
 }
 
+#ifdef _MSC_VER
 #pragma optimize( "e", on )
+#endif
 
 void SwDrawFrmFmt::MakeFrms()
 {
