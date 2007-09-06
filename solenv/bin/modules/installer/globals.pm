@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 15:25:39 $
+#   last change: $Author: kz $ $Date: 2007-09-06 09:51:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,6 @@ BEGIN
     $dounzip = 1;
     $languages_defined_in_productlist = 0;
     $setupscript_defined_in_productlist = 0;
-    $use_default_ziplist = 0;
     $services_rdb_created = 0;
     $servicesrdb_can_be_created = 0;
     $islinux = 0;
@@ -134,7 +133,6 @@ BEGIN
     $packageformat = "";
     $packagename = "";
     $packagelist = "";
-    $absolutepackagelistpath = "";
     $addpackagelist = "";
     $is_unix_multi = 0;
     $unixmultipath = "";
@@ -192,7 +190,6 @@ BEGIN
     $infodirectory = "";
     $currentcontent = "";
 
-    $addjavainstaller = 0;
     $createdxpddefaultlang = 0;
     $xpddir = "";
     $productxpdfile = "setup.xpd";
@@ -206,10 +203,11 @@ BEGIN
     $javasettozero = 0;
     $addlicensefile = 1;
     $addsystemintegration = 0;
+    $addjavainstaller = 0;
     $added_directories = 0;
     $makedownload = 1;
     $makejds = 1;
-    $jdsexcludefilename ="";
+    $jdsexcludefilename = "";
     $jds_language_controlled = 0;
     $correct_jds_language = 0;
     $islanguagepackinunixmulti = 0;
@@ -241,11 +239,12 @@ BEGIN
     $javamaxservices = 15;
 
     $one_cab_file = 0;
-    $fix_number_of_cab_files = 1;
+    $fix_number_of_cab_files = 0;
     $cab_file_per_component = 0;
     $cabfilecompressionlevel = 2;
     $number_of_cabfiles = 4;    # only for $fix_number_of_cab_files = 1
     $include_cab_in_msi = 0;
+    $use_packages_for_cabs = 1;
     $msidatabasename = "";
     $prepare_winpatch = 0;
     $previous_idt_dir = "";
@@ -287,6 +286,11 @@ BEGIN
     @languagenames = ();
     @requiredpackages = ();
     %componentconditions = ();
+
+    %allcabinets = ();
+    %allcabinetassigns = ();
+    %cabfilecounter = ();
+    %lastsequence = ();
 
     @removedirs = ();
     @jdsremovedirs = ();
