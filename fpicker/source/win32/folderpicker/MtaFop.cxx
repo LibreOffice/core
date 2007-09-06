@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MtaFop.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:20:32 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:53:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -534,9 +534,11 @@ void SAL_CALL CMtaFolderPicker::setSelection( const rtl::OUString& aDirectory )
 {
     OSL_ASSERT( IsWindow( m_hwnd ) );
 
+#ifdef _MSC_VER
 #pragma message( "#######################################" )
 #pragma message( "SendMessageW wrapper has to be extended" )
 #pragma message( "#######################################" )
+#endif
 
     SendMessageW(
         m_hwnd,
