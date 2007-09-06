@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:42:55 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:19:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ BOOL ScChartArray::operator==(const ScChartArray& rCmp) const
         && aName == rCmp.aName;
 }
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize("",off)
 #endif
 
@@ -583,7 +583,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
     return pMemChart;
 }
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize("",on)
 #endif
 
