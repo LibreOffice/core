@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document_statistic.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:45:15 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:23:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
 
+#ifdef _MSC_VER
 #pragma warning (disable : 4786 4503)
+#endif
 
 #ifndef DOCUMENT_STATISTIC_HXX_INCLUDED
 #include "document_statistic.hxx"
