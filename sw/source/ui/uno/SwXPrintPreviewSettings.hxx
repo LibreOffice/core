@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXPrintPreviewSettings.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:59:17 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:08:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,9 @@
 #ifdef PRECOMPILED
 #include "ui_pch.hxx"
 #endif
+#ifdef _MSC_VER
 #pragma hdrstop
+#endif
 
 #ifndef _COMPHELPER_CHAINABLEPROPERTYSET_HXX_
 #include <comphelper/ChainablePropertySet.hxx>
