@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_javafilter.scp,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 15:34:00 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 10:06:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,9 @@
 #include "macros.inc"
 
 Module gid_Module_Optional_Javafilter
+    PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_JAVAFILTER);
+    Sortkey = "900";
     ParentID = gid_Module_Optional;
     Files = ( gid_File_Lib_Jfregca );
     Minimal = NO;
@@ -52,6 +54,7 @@ End
 Module gid_Module_Optional_Javafilter_Palm
     MOD_NAME_DESC(MODULE_OPTIONAL_JAVAFILTER_PALM);
     ParentID = gid_Module_Optional_Javafilter;
+    Sortkey = "100";
     Minimal = NO;
     Default = NO;
     Styles (en-US) = ();
@@ -66,6 +69,7 @@ Module gid_Module_Optional_Javafilter_Palm_Aportisdoc
     MOD_NAME_DESC(MODULE_OPTIONAL_JAVAFILTER_PALM_APORTISDOC);
     ParentID = gid_Module_Optional_Javafilter_Palm;
     Files = ( gid_File_Jar_Aportisdoc, gid_File_Registry_Spool_Oo_TypeDetection_Palm_Filters_Xcu, gid_File_Registry_Spool_Oo_TypeDetection_Palm_Types_Xcu );
+    Sortkey = "100";
     Minimal = NO;
     Default = NO;
     Styles (en-US) = ();
@@ -84,6 +88,7 @@ Module gid_Module_Optional_Javafilter_Pocketpc
     ALL_LANG(Description,STR_DESC_MODULE_OPTIONAL_JAVAFILTER_POCKETPC_UNIX);
   #endif
     ParentID = gid_Module_Optional_Javafilter;
+    Sortkey = "200";
     Files = ( gid_File_Lib_Xmergesync );
     Minimal = NO;
     Default = NO;
@@ -98,6 +103,7 @@ End
 Module gid_Module_Optional_Javafilter_Pocketpc_Pocket_Word
     MOD_NAME_DESC(MODULE_OPTIONAL_JAVAFILTER_POCKETPC_POCKET_WORD);
     ParentID = gid_Module_Optional_Javafilter_Pocketpc;
+    Sortkey = "100";
     Files = ( gid_File_Lib_Xmergesync,gid_File_Jar_Pocketword,gid_File_Registry_Spool_Oo_TypeDetection_PocketWord_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_PocketWord_Filters_Xcu, gid_File_Tmp_Userinstall_Pocketpcword_Inf );
     Minimal = NO;
     Default = NO;
@@ -112,6 +118,7 @@ End
 Module gid_Module_Optional_Javafilter_Pocketpc_Pocket_Excel
     MOD_NAME_DESC(MODULE_OPTIONAL_JAVAFILTER_POCKETPC_POCKET_EXCEL);
     ParentID = gid_Module_Optional_Javafilter_Pocketpc;
+    Sortkey = "200";
     Files = ( gid_File_Lib_Xmergesync,gid_File_Jar_Pexcel,gid_File_Registry_Spool_Oo_TypeDetection_PocketExcel_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_PocketExcel_Filters_Xcu, gid_File_Tmp_Userinstall_Pocketpcexcel_Inf );
     Minimal = NO;
     Default = NO;
