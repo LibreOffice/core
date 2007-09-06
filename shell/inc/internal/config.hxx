@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:12:56 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:23:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,9 @@
 #ifndef CONFIG_HXX_INCLUDED
 #define CONFIG_HXX_INCLUDED
 
+#ifdef _MSC_VER
 #pragma warning (disable : 4786 4503 4917)
+#endif
 
 #include <tchar.h>
 
