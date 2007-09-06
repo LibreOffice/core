@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChXDiagram.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:13:43 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:57:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,10 +174,8 @@ public class ChXDiagram extends TestCase {
     * Disposes Spreadsheet document.
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xSheetDoc " );
-        XComponent oComp = (XComponent)
-            UnoRuntime.queryInterface(XComponent.class, xSheetDoc);
-        oComp.dispose();
+        log.println( "    closing xSheetDoc " );
+        util.DesktopTools.closeDoc(xSheetDoc);
     }
 
     /**
