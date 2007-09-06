@@ -4,9 +4,9 @@
  *
  *  $RCSfile: so_main.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:03:24 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:37:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,9 @@
 #endif //end of UNIX
 
 #ifdef WNT
+#ifdef _MSC_VER
 #pragma once
+#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <winsock2.h>
