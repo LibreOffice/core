@@ -1,0 +1,208 @@
+%system linux
+
+# As remove does not need the oxt file, this could potentially 
+# be done in the postinstall script as well.
+%preinstall << END
+# if this is an update, remove the old package instance first
+test "$$1" = "2" || exit 0
+
+#Find the temp dir
+if [ -n "$$TMPDIR" ]; then
+  UNOPKGTMP="$$TMPDIR"
+elif [ -n "$$TMP" ]; then
+  UNOPKGTMP="$$TMP"
+elif [ -d "/tmp" ]; then
+  UNOPKGTMP="/tmp"
+else
+  echo "No tmp directory found!"
+  exit 1
+fi
+
+#Create the command which creates a temporary directory
+if [ -x "/bin/mktemp" ]
+then
+  INSTDIR=`/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
+else
+  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
+  mkdir "$$INSTDIR"
+fi
+
+if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
+  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" remove --shared "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$ORIGIN/../share/config/javasettingsunopkginstall.xml'
+fi
+
+if [ -n "$$INSTDIR" ]; then
+  rm -rf "$$INSTDIR"
+fi
+
+exit 0
+END
+
+%postinstall << END
+#Find the temp dir
+if [ -n "$$TMPDIR" ]; then
+  UNOPKGTMP="$$TMPDIR"
+elif [ -n "$$TMP" ]; then
+  UNOPKGTMP="$$TMP"
+elif [ -d "/tmp" ]; then
+  UNOPKGTMP="/tmp"
+else
+  echo "No tmp directory found!"
+  exit 1
+fi
+
+#Create the command which creates a temporary directory
+if [ -x "/bin/mktemp" ]
+then
+  INSTDIR=`/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
+else
+  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
+  mkdir "$$INSTDIR"
+fi
+
+if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
+  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" add --shared "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}" "-env:UserInstallation=file://////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$ORIGIN/../share/config/javasettingsunopkginstall.xml'
+fi
+
+if [ -n "$$INSTDIR" ]; then
+  rm -rf "$$INSTDIR"
+fi
+
+exit 0
+
+
+END
+
+%preremove << END
+# if this is an update, just do nothing
+test "$$1" = "0" || exit 0
+
+#Find the temp dir
+if [ -n "$$TMPDIR" ]; then
+  UNOPKGTMP="$$TMPDIR"
+elif [ -n "$$TMP" ]; then
+  UNOPKGTMP="$$TMP"
+elif [ -d "/tmp" ]; then
+  UNOPKGTMP="/tmp"
+else
+  echo "No tmp directory found!"
+  exit 1
+fi
+
+#Create the command which creates a temporary directory
+if [ -x "/bin/mktemp" ]
+then
+  INSTDIR=`/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
+else
+  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
+  mkdir "$$INSTDIR"
+fi
+
+if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
+  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" remove --shared "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$ORIGIN/../share/config/javasettingsunopkginstall.xml'
+fi
+
+if [ -n "$$INSTDIR" ]; then
+  rm -rf "$$INSTDIR"
+fi
+
+exit 0
+END
+
+%system solaris
+
+%postinstall << END
+
+if [ -n "$$TMPDIR" ]; then
+  UNOPKGTMP="$$TMPDIR"
+elif [ -n "$$TMP" ]; then
+  UNOPKGTMP="$$TMP"
+elif [ -d "/tmp" ]; then
+  UNOPKGTMP="/tmp"
+else
+  echo "No tmp directory found!"
+  exit 1
+fi
+
+#Create the command which creates a temporary directory
+if [ -x "/usr/bin/mktemp" ]
+then
+  INSTDIR=`/usr/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
+else
+  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
+  mkdir "$$INSTDIR"
+fi
+
+# Use postrun command on Solaris where available (OpenSolaris)
+if [ -x $$PKG_INSTALL_ROOT/usr/lib/postrun ]; then
+( echo "test -x \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" || exit 0"
+  echo "umask 022"
+  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" add --shared \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$ORIGIN/../share/config/javasettingsunopkginstall.xml'"
+) | $$PKG_INSTALL_ROOT/usr/lib/postrun -b -c UNOPKG
+else
+  # No postrun available, try running unopkg directly
+  "$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg" add --shared "$$BASEDIR/PRODUCTDIRECTORYNAME/share/extension/install/${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$ORIGIN/../share/config/javasettingsunopkginstall.xml'
+  if [ "$$?" != "0" ]; then
+    echo "\nERROR: Installation of UNO extension ${OXTFILENAME} failed."
+    test "$$BASEDIR" = "$$CLIENT_BASEDIR" || echo "ERROR: alternate root install requires SUNWpostrun package to be installed"
+    echo 'ERROR: Make sure the runtime requirements (operating system, patch level, architecture) are met.'
+    exit 1
+  fi
+fi
+
+if [ -n "$$INSTDIR" ]; then
+  rm -rf "$$INSTDIR"
+fi
+
+exit 0  
+END
+
+%preremove << END
+if [ -n "$$TMPDIR" ]; then
+  UNOPKGTMP="$$TMPDIR"
+elif [ -n "$$TMP" ]; then
+  UNOPKGTMP="$$TMP"
+elif [ -d "/tmp" ]; then
+  UNOPKGTMP="/tmp"
+else
+  echo "No tmp directory found!"
+  exit 1
+fi
+
+#Create the command which creates a temporary directory
+if [ -x "/usr/bin/mktemp" ]
+then
+  INSTDIR=`/usr/bin/mktemp -d "$${UNOPKGTMP}/userinstall.XXXXXX"`
+else
+  INSTDIR="$${UNOPKGTMP}/userinstall.$$$$"
+  mkdir "$$INSTDIR"
+fi
+
+# Use postrun command on Solaris where available (OpenSolaris)
+if [ -x $$PKG_INSTALL_ROOT/usr/lib/postrun ]; then
+( echo "test -x \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" || exit 0"
+  echo "cd \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program\""
+  echo "umask 022"
+  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" remove --shared \"${OXTFILENAME}\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$ORIGIN/../share/config/javasettingsunopkginstall.xml'"
+  echo "rm -rf \"$$INSTDIR\""
+) | $$PKG_INSTALL_ROOT/usr/lib/postrun -b -c UNOPKG
+else
+  # No postrun available, try running unopkg directly
+  test -x $$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg || exit 0  
+  "$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg" remove --shared "${OXTFILENAME}" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$ORIGIN/../share/config/javasettingsunopkginstall.xml'
+  if [ "$$?" != "0" ]; then
+    echo "\nERROR: Removal of UNO extension ${OXTFILENAME} failed."
+    test "$$BASEDIR" = "$$CLIENT_BASEDIR" || echo "ERROR: alternate root uninstall requires SUNWpostrun package to be installed"
+    echo 'ERROR: Make sure the runtime requirements (operating system, patch level, architecture) are met.'
+    exit 1
+  fi
+fi
+
+if [ -n "$$INSTDIR" ]; then
+  rm -rf "$$INSTDIR"
+fi
+
+exit 0  
+END
+
+%system all
