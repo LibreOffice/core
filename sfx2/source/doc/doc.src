@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:19:01 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 08:48:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,14 +211,6 @@ String STR_ERROR_NOSTORAGE
     /* ### ACHTUNG: Neuer Text in Resource? Die ausgew�hlte Datei besitzt ein falsches Format. : Die ausgew�hlte Datei besitzt ein falsches Format. */
     Text [ en-US ] = "The selected file has an incorrect format." ;
 };
-/*
-String STR_QUERY_SAVEOWNFORMAT
-{
-//    Text [ de ] = "$(FILENAME) enth�lt m�glicherweise Elemente, die mit $(FORMAT)-Format nicht kompatibel sind. M�chten Sie das Dokument in diesem Format speichern?\n\n- Klicken Sie auf 'Ja', um im $(FORMAT)-Format zuspeichern.\n- Klicken Sie auf 'Nein', um die Elemente zu erhalten. Speichern Sie dann das Dokument im aktuellen %PRODUCTNAME-Format.";
-    Text [ en-US ] = "This document may contain formatting or content that cannot be saved in the present %FORMATNAME file format./n/nDo you want to save the document in this format anyway?/n/n- Click 'Yes' to keep the present file format./n- Click 'No' to use the latest %PRODUCTNAME file format and be sure all formatting and content is saved correctly.";
-//    Text [ en-US ] = "$(FILENAME) may contain formattings that are not compatible with $(FORMAT) Format. Do you want to save the document in this format?\n\n- To save in $(FORMAT) Format, click 'Yes'\n- To preserve formatting, click No. Next save the document in the latest %PRODUCTNAME format.";
-};
-*/
 String STR_QUERY_MUSTOWNFORMAT
 {
     Text [ en-US ] = "Documents cannot be saved in $(FORMAT) format. Do you\nwant to save your changes using the $(OWNFORMAT) format?" ;
