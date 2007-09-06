@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:11:10 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#pragma once
 #ifndef __cplusplus
 #error Need C++ to compile
 #endif
@@ -45,14 +44,18 @@
 #define _UNICODE
 #include <tchar.h>
 
+#ifdef _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable:4005)
+#endif
 
 #include <windows.h>
 #include <shellapi.h>
 #include <sqlext.h>
 
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 // the name of the library which contains the SQLManageDataSources function
 #define ODBC_UI_LIB_NAME    L"ODBCCP32.DLL"
@@ -130,7 +133,11 @@ HWND initInstance( HINSTANCE _hAppInstance )
 }
 
 // main window function
+#ifdef __MINGW32__
+extern "C" int APIENTRY WinMain( HINSTANCE _hAppInstance, HINSTANCE, LPSTR, int )
+#else
 extern "C" int APIENTRY _tWinMain( HINSTANCE _hAppInstance, HINSTANCE, LPTSTR, int )
+#endif
 {
     if ( !registerWindowClass( _hAppInstance ) )
         return FALSE;
