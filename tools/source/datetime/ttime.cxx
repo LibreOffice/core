@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ttime.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 08:57:39 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:14:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,13 @@
 #define _TOOLS_TIME_CXX
 
 #if defined WNT
+#ifdef _MSC_VER
 #pragma warning (push,1)
+#endif
 #include <tools/svwin.h>
+#ifdef _MSC_VER
 #pragma warning (pop)
+#endif
 #elif defined UNX
 #include <unistd.h>
 #include <limits.h>
