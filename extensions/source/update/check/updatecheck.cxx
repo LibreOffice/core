@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 15:56:29 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:38:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,10 +86,14 @@
 #include <osl/file.hxx>
 
 #ifdef WNT
+#ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers
 //#pragma warning(disable: 4917)
+#endif
 #include <objbase.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 #endif
 
 #include "updateprotocol.hxx"
