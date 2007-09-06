@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:47:19 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@
 #include <sfx2/request.hxx>
 #include <boost/bind.hpp>
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ( "", off )
 #endif
 
@@ -1459,7 +1459,7 @@ sal_Int8 DrawViewShell::ExecuteDrop (
 
 } // end of namespace sd
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ( "", on )
 #endif
 
