@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pivot.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:07:43 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 
 // -----------------------------------------------------------------------
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize("",off)
 #pragma optimize("q",off) // p-code off
 #endif
