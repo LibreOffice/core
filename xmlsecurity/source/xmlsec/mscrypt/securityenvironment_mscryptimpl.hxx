@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:24:34 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:41:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,14 @@
 #ifndef _XSECURITYENVIRONMENT_MSCRYPTIMPL_HXX_
 #define _XSECURITYENVIRONMENT_MSCRYPTIMPL_HXX_
 
+#ifdef _MSC_VER
 #pragma warning(push,1)
+#endif
 #include <windows.h>
 #include <wincrypt.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #ifndef _SAL_CONFIG_H_
 #include <sal/config.h>
