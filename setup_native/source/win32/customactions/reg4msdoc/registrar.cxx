@@ -19,7 +19,9 @@
 #endif
 
 #include <assert.h>
+#ifdef _MSC_VER
 #pragma warning(disable: 4350 4482)
+#endif
 
 const int MSWORD                     = 0x1;
 const int MSEXCEL                    = 0x2;
