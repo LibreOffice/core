@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtablepreviewdialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:41:06 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:04:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,11 +77,15 @@ using namespace rtl;
   -----------------------------------------------------------------------*/
 SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< beans::PropertyValue>& rValues ) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_DBTABLEPREVIEWDIALOG)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aDescriptionFI( this, SW_RES(        FI_DESCRIPTION)),
     m_pBeamerWIN( new Window(this, SW_RES( WIN_BEAMER ))),
     m_aOK( this, SW_RES(                   PB_OK  ))
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
 {
     FreeResource();
     const beans::PropertyValue* pValues = rValues.getConstArray();
