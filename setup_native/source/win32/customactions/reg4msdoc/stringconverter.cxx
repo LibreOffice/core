@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconverter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:40:14 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:32:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,13 @@
 #include "stringconverter.hxx"
 #endif
 
+#ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
+#endif
 #include <windows.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #include <malloc.h>
 
