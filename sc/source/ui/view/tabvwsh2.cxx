@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:14:19 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ("", off)
 #endif
 
