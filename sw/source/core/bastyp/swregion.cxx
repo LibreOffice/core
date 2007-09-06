@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swregion.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:43:34 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:59:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,9 @@ inline SwTwips CalcArea( const SwRect &rRect )
 }
 
 
+#ifdef _MSC_VER
 #pragma optimize("e",off)
+#endif
 void SwRegionRects::Compress( BOOL bFuzzy )
 {
     for ( int i = 0; i < Count(); ++i )
@@ -261,6 +263,8 @@ void SwRegionRects::Compress( BOOL bFuzzy )
         }
     }
 }
+#ifdef _MSC_VER
 #pragma optimize("",on)
+#endif
 
 
