@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prewin.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:15:14 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:14:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,13 @@ extern "C" {
 #endif
 
 #define STRICT
+#ifdef _MSC_VER
 #pragma warning(push, 1)
+#endif
 #include <windows.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 #include <shellapi.h>
 #include <commdlg.h>
 #include <dlgs.h>
@@ -73,8 +77,12 @@ extern "C" {
 #ifdef INCLUDE_MMSYSTEM
 #include <mmsystem.h>
 #endif
+#ifdef _MSC_VER
 #pragma warning(push, 1)
+#endif
 #include <commctrl.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #endif
