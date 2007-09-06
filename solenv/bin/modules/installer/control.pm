@@ -4,9 +4,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-03 11:45:26 $
+#   last change: $Author: kz $ $Date: 2007-09-06 09:51:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -286,101 +286,6 @@ sub check_system_environment
     }
 
     return \%variables;
-}
-
-#############################################################
-# Reading the packagelist
-#############################################################
-
-sub read_packagelist
-{
-    my ($packagelistname) = @_;
-
-    my @packages = ();
-
-    my $packagelist = installer::files::read_file($packagelistname);
-
-    for ( my $i = 0; $i <= $#{$packagelist}; $i++ )
-    {
-        my $line = ${$packagelist}[$i];
-
-        if ( $line =~ /^\s*\#/ ) { next; }  # this is a comment line
-
-        if ( $line =~ /^\s*Start\s*$/i )    # a new package definition
-        {
-            my %onepackage = ();
-
-            my $counter = $i + 1;
-
-            while (!( ${$packagelist}[$counter] =~ /^\s*End\s*$/i ))
-            {
-                if ( ${$packagelist}[$counter] =~ /^\s*(\S+)\s*\=\s*\"(.*)\"/ )
-                {
-                    my $key = $1;
-                    my $value = $2;
-                    $onepackage{$key} = $value;
-                }
-
-                $counter++;
-            }
-
-            push(@packages, \%onepackage);
-        }
-    }
-
-    return \@packages;
-}
-
-##################################################################
-# Controlling the content of the packagelist
-# 1. Items in @installer::globals::packagelistitems must exist
-# 2. If a shellscript file is defined, it must exist
-##################################################################
-
-sub check_packagelist
-{
-    my ($packages) = @_;
-
-    my $packagepath = $installer::globals::packagelist;
-    installer::pathanalyzer::get_path_from_fullqualifiedname(\$packagepath);
-
-    for ( my $i = 0; $i <= $#{$packages}; $i++ )
-    {
-        my $onepackage = ${$packages}[$i];
-
-        my $element;
-
-        # checking all items that must be defined
-
-        foreach $element (@installer::globals::packagelistitems)
-        {
-            my $value = "";
-
-            if ( $onepackage->{$element} )
-            {
-                $value = $onepackage->{$element};
-            }
-
-            # Checking the value. All values must not be empty.
-
-            if ( $value eq "" )
-            {
-                installer::logger::print_error( "ERROR in package list: No value for $element !" );
-                usage();
-                exit(-1);
-            }
-        }
-
-        # checking the existence of the script file, if defined
-
-        if ( $onepackage->{'script'} )
-        {
-            # adding the path to the script name and checking existence
-            my $script = $packagepath . $onepackage->{'script'};
-            installer::files::check_file($script);
-            $onepackage->{'script'} = $script;
-        }
-    }
 }
 
 #############################################################
@@ -724,6 +629,64 @@ sub check_java_for_xpd
     my ( $allvariables ) = @_;
 
     if ( ! $installer::globals::solarjavaset ) { $allvariables->{'XPDINSTALLER'} = 0; }
+}
+
+####################################################################
+# Setting global variable "$installer::globals::addchildprojects"
+####################################################################
+
+sub set_addchildprojects
+{
+    ($allvariables) = @_;
+
+    if (( $allvariables->{'JAVAPRODUCT'} ) ||
+        ( $allvariables->{'ADAPRODUCT'} ) ||
+        ( $allvariables->{'UREPRODUCT'} ) ||
+        ( $allvariables->{'ADDREQUIREDPACKAGES'} )) { $installer::globals::addchildprojects = 1; }
+
+    if ( $installer::globals::patch )
+    {
+        $installer::globals::addchildprojects = 0;  # no child projects for patches
+    }
+
+    my $infoline = "Value of \$installer::globals::addchildprojects: $installer::globals::addchildprojects\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+}
+
+####################################################################
+# Setting global variable "$installer::globals::addjavainstaller"
+####################################################################
+
+sub set_addjavainstaller
+{
+    ($allvariables) = @_;
+
+    if ( $allvariables->{'JAVAINSTALLER'} ) { $installer::globals::addjavainstaller = 1; }
+
+    if ( $installer::globals::patch ) { $installer::globals::addjavainstaller = 0; }
+    if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) ) { $installer::globals::addjavainstaller = 0; }
+    if ( $allvariableshashref->{'XPDINSTALLER'} ) { $installer::globals::addjavainstaller = 0; }
+
+    my $infoline = "Value of \$installer::globals::addjavainstaller: $installer::globals::addjavainstaller\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+}
+
+#######################################################################
+# Setting global variable "$installer::globals::addsystemintegration"
+#######################################################################
+
+sub set_addsystemintegration
+{
+    ($allvariables) = @_;
+
+    if ( $allvariables->{'ADDSYSTEMINTEGRATION'} ) { $installer::globals::addsystemintegration = 1; }
+
+    if ( $installer::globals::patch ) { $installer::globals::addsystemintegration = 0; }
+    if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) ) { $installer::globals::addsystemintegration = 0; }
+
+    my $infoline = "Value of \$installer::globals::addsystemintegration: $installer::globals::addsystemintegration\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
 }
 
 1;
