@@ -19,6 +19,21 @@ DEF1DEPN+=$(foreach,i,$(DEFLIB1NAME) $(SLB)$/$(i).lib)
 DEF1EXPORTFILE=$(MISC)$/$(SHL1VERSIONMAP:b)_$(SHL1TARGET).dxp
 $(DEF1EXPORTFILE) : $(SHL1VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+.IF "$(COM)"=="GCC"
+    -grep -v "\*\|?" $@ > $@.exported-symbols
+    -grep "\*\|?" $@ > $@.symbols-regexp
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL1OBJS)"!=""
+    -echo $(foreach,i,$(SHL1OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL1LIBS)"!=""
+    -$(TYPE) $(foreach,j,$(SHL1LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated
+# exported symbols list
+    cp $@.exported-symbols $@
+.ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF1EXPORTFILE)"==""
@@ -232,6 +247,21 @@ DEF2DEPN+=$(foreach,i,$(DEFLIB2NAME) $(SLB)$/$(i).lib)
 DEF2EXPORTFILE=$(MISC)$/$(SHL2VERSIONMAP:b)_$(SHL2TARGET).dxp
 $(DEF2EXPORTFILE) : $(SHL2VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+.IF "$(COM)"=="GCC"
+    -grep -v "\*\|?" $@ > $@.exported-symbols
+    -grep "\*\|?" $@ > $@.symbols-regexp
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL2OBJS)"!=""
+    -echo $(foreach,i,$(SHL2OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL2LIBS)"!=""
+    -$(TYPE) $(foreach,j,$(SHL2LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated
+# exported symbols list
+    cp $@.exported-symbols $@
+.ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF2EXPORTFILE)"==""
@@ -445,6 +475,21 @@ DEF3DEPN+=$(foreach,i,$(DEFLIB3NAME) $(SLB)$/$(i).lib)
 DEF3EXPORTFILE=$(MISC)$/$(SHL3VERSIONMAP:b)_$(SHL3TARGET).dxp
 $(DEF3EXPORTFILE) : $(SHL3VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+.IF "$(COM)"=="GCC"
+    -grep -v "\*\|?" $@ > $@.exported-symbols
+    -grep "\*\|?" $@ > $@.symbols-regexp
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL3OBJS)"!=""
+    -echo $(foreach,i,$(SHL3OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL3LIBS)"!=""
+    -$(TYPE) $(foreach,j,$(SHL3LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated
+# exported symbols list
+    cp $@.exported-symbols $@
+.ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF3EXPORTFILE)"==""
@@ -658,6 +703,21 @@ DEF4DEPN+=$(foreach,i,$(DEFLIB4NAME) $(SLB)$/$(i).lib)
 DEF4EXPORTFILE=$(MISC)$/$(SHL4VERSIONMAP:b)_$(SHL4TARGET).dxp
 $(DEF4EXPORTFILE) : $(SHL4VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+.IF "$(COM)"=="GCC"
+    -grep -v "\*\|?" $@ > $@.exported-symbols
+    -grep "\*\|?" $@ > $@.symbols-regexp
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL4OBJS)"!=""
+    -echo $(foreach,i,$(SHL4OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL4LIBS)"!=""
+    -$(TYPE) $(foreach,j,$(SHL4LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated
+# exported symbols list
+    cp $@.exported-symbols $@
+.ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF4EXPORTFILE)"==""
@@ -871,6 +931,21 @@ DEF5DEPN+=$(foreach,i,$(DEFLIB5NAME) $(SLB)$/$(i).lib)
 DEF5EXPORTFILE=$(MISC)$/$(SHL5VERSIONMAP:b)_$(SHL5TARGET).dxp
 $(DEF5EXPORTFILE) : $(SHL5VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+.IF "$(COM)"=="GCC"
+    -grep -v "\*\|?" $@ > $@.exported-symbols
+    -grep "\*\|?" $@ > $@.symbols-regexp
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL5OBJS)"!=""
+    -echo $(foreach,i,$(SHL5OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL5LIBS)"!=""
+    -$(TYPE) $(foreach,j,$(SHL5LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated
+# exported symbols list
+    cp $@.exported-symbols $@
+.ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF5EXPORTFILE)"==""
@@ -1084,6 +1159,21 @@ DEF6DEPN+=$(foreach,i,$(DEFLIB6NAME) $(SLB)$/$(i).lib)
 DEF6EXPORTFILE=$(MISC)$/$(SHL6VERSIONMAP:b)_$(SHL6TARGET).dxp
 $(DEF6EXPORTFILE) : $(SHL6VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+.IF "$(COM)"=="GCC"
+    -grep -v "\*\|?" $@ > $@.exported-symbols
+    -grep "\*\|?" $@ > $@.symbols-regexp
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL6OBJS)"!=""
+    -echo $(foreach,i,$(SHL6OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL6LIBS)"!=""
+    -$(TYPE) $(foreach,j,$(SHL6LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated
+# exported symbols list
+    cp $@.exported-symbols $@
+.ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF6EXPORTFILE)"==""
@@ -1297,6 +1387,21 @@ DEF7DEPN+=$(foreach,i,$(DEFLIB7NAME) $(SLB)$/$(i).lib)
 DEF7EXPORTFILE=$(MISC)$/$(SHL7VERSIONMAP:b)_$(SHL7TARGET).dxp
 $(DEF7EXPORTFILE) : $(SHL7VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+.IF "$(COM)"=="GCC"
+    -grep -v "\*\|?" $@ > $@.exported-symbols
+    -grep "\*\|?" $@ > $@.symbols-regexp
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL7OBJS)"!=""
+    -echo $(foreach,i,$(SHL7OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL7LIBS)"!=""
+    -$(TYPE) $(foreach,j,$(SHL7LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated
+# exported symbols list
+    cp $@.exported-symbols $@
+.ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF7EXPORTFILE)"==""
@@ -1510,6 +1615,21 @@ DEF8DEPN+=$(foreach,i,$(DEFLIB8NAME) $(SLB)$/$(i).lib)
 DEF8EXPORTFILE=$(MISC)$/$(SHL8VERSIONMAP:b)_$(SHL8TARGET).dxp
 $(DEF8EXPORTFILE) : $(SHL8VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+.IF "$(COM)"=="GCC"
+    -grep -v "\*\|?" $@ > $@.exported-symbols
+    -grep "\*\|?" $@ > $@.symbols-regexp
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL8OBJS)"!=""
+    -echo $(foreach,i,$(SHL8OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL8LIBS)"!=""
+    -$(TYPE) $(foreach,j,$(SHL8LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated
+# exported symbols list
+    cp $@.exported-symbols $@
+.ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF8EXPORTFILE)"==""
@@ -1723,6 +1843,21 @@ DEF9DEPN+=$(foreach,i,$(DEFLIB9NAME) $(SLB)$/$(i).lib)
 DEF9EXPORTFILE=$(MISC)$/$(SHL9VERSIONMAP:b)_$(SHL9TARGET).dxp
 $(DEF9EXPORTFILE) : $(SHL9VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+.IF "$(COM)"=="GCC"
+    -grep -v "\*\|?" $@ > $@.exported-symbols
+    -grep "\*\|?" $@ > $@.symbols-regexp
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL9OBJS)"!=""
+    -echo $(foreach,i,$(SHL9OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL9LIBS)"!=""
+    -$(TYPE) $(foreach,j,$(SHL9LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated
+# exported symbols list
+    cp $@.exported-symbols $@
+.ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF9EXPORTFILE)"==""
@@ -1936,6 +2071,21 @@ DEF10DEPN+=$(foreach,i,$(DEFLIB10NAME) $(SLB)$/$(i).lib)
 DEF10EXPORTFILE=$(MISC)$/$(SHL10VERSIONMAP:b)_$(SHL10TARGET).dxp
 $(DEF10EXPORTFILE) : $(SHL10VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+.IF "$(COM)"=="GCC"
+    -grep -v "\*\|?" $@ > $@.exported-symbols
+    -grep "\*\|?" $@ > $@.symbols-regexp
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL10OBJS)"!=""
+    -echo $(foreach,i,$(SHL10OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL10LIBS)"!=""
+    -$(TYPE) $(foreach,j,$(SHL10LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated
+# exported symbols list
+    cp $@.exported-symbols $@
+.ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF10EXPORTFILE)"==""
