@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-17 11:48:53 $
+#   last change: $Author: kz $ $Date: 2007-09-06 13:34:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,6 @@ STDSHL+=	\
 
 SHL1OBJS = $(SLOFILES) \
     $(SLO)$/seterror.obj
-
-SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
 SHL1TARGET = $(TARGET)
 SHL1IMPLIB = i$(TARGET)
