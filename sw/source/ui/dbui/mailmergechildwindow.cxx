@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergechildwindow.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:02:41 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:05:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,7 +364,9 @@ SwSendWarningBox_Impl::~SwSendWarningBox_Impl()
 
 SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConfigItem) :
     ModelessDialog /*SfxModalDialog*/(pParent, SW_RES(DLG_MM_SENDMAILS)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aStatusFL( this, SW_RES(             FL_STATUS             )),
     m_aStatusFT( this, SW_RES(             FT_STATUS1            )),
     m_PausedFI(this, SW_RES(               FI_PAUSED             )),
@@ -378,7 +380,9 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_aSeparatorFL( this, SW_RES(          FL_SEPARATOR          )),
     m_aStopPB( this, SW_RES(               PB_STOP               )),
     m_aClosePB( this, SW_RES(              PB_CLOSE              )),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
     m_sMore(m_aDetailsPB.GetText()),
     m_sLess(SW_RES(ST_LESS)),
     m_sContinue(SW_RES( ST_CONTINUE )),
