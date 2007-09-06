@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uwinapi.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:22:02 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:46:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,13 @@
 #endif
 
 #ifndef _WINDOWS_
+#ifdef _MSC_VER
 #   pragma warning(push,1) /* disable warnings within system headers */
+#endif
 #   include <windows.h>
+#ifdef _MSC_VER
 #   pragma warning(pop)
+#endif
 #endif
 
 #ifdef __MINGW32__
