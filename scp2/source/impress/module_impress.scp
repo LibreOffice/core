@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_impress.scp,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:28:58 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 10:05:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,16 @@
 #include "macros.inc"
 
 Module gid_Module_Prg_Impress
+    PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_PRG_IMPRESS );
     ParentID = gid_Module_Prg;
-    Sortkey = "300";
+    Sortkey = "400";
 End
 
 Module gid_Module_Prg_Impress_Bin
     MOD_NAME_DESC ( MODULE_PRG_IMPRESS_BIN );
     ParentID = gid_Module_Prg_Impress;
+    Sortkey = "100";
     Minimal = YES;
     Default = YES;
     Files = (gid_File_Exe_Simpress,gid_File_Extra_Urldesktop_Impress,gid_File_Extra_Urlnew_Impress,gid_File_Extra_Urlstart_Impress,gid_File_Extra_Urltasks_Impress,gid_File_Lib_Placeware,
@@ -57,6 +59,7 @@ End
 Module gid_Module_Prg_Impress_Help
     MOD_NAME_DESC ( MODULE_PRG_IMPRESS_HELP );
     ParentID = gid_Module_Prg_Impress;
+    Sortkey = "200";
     Default = YES;
     Files = (gid_File_Help_Simpress_Zip);
 End
