@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:24:19 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:41:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmlsecurity.hxx"
 
+#ifdef _MSC_VER
 #pragma warning(push,1)
+#endif
 #include "Windows.h"
 #include "WinCrypt.h"
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #ifndef _SAL_CONFIG_H_
 #include <sal/config.h>
