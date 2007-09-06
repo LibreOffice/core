@@ -4,9 +4,9 @@
 #
 #   $RCSfile: ziplist.pm,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-11 15:03:46 $
+#   last change: $Author: kz $ $Date: 2007-09-06 09:54:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -453,22 +453,6 @@ sub getinfofromziplist
     }
 
     return \$searchstring;
-}
-
-#######################################################
-# Set zip list file name, if not defined as parameter
-#######################################################
-
-sub set_ziplist_name
-{
-    my ( $pathvariableshashref ) = @_;
-
-    my $solarenvpath = $pathvariableshashref->{'solarenvpath'};
-
-    $solarenvpath =~ s/solenv\Q$installer::globals::separator\Einst//;
-
-    $installer::globals::ziplistname = $solarenvpath . "b_server" . $installer::globals::separator . "zip" . $installer::globals::separator . "zip.lst";
-
 }
 
 ####################################################
