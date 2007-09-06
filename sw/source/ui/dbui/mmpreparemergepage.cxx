@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmpreparemergepage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:04:47 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:07:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,9 @@ using namespace ::rtl;
   -----------------------------------------------------------------------*/
 SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_PREPAREMERGE_PAGE)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aHeaderFI(this,  SW_RES(     FI_HEADER ) ),
     m_aPreviewFI(this, SW_RES(     FI_PREVIEW ) ),
     m_aRecipientFT(this, SW_RES(   FT_RECIPIENT ) ),
@@ -102,7 +104,9 @@ SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pP
     m_aNoteHeaderFL(this, SW_RES(  FL_NOTEHEADER ) ),
     m_aEditFI(this, SW_RES(        FI_EDIT       ) ),
     m_aEditPB(this, SW_RES(        PB_EDIT       ) ),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_pWizard(_pParent)
 {
     FreeResource();

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selectdbtabledialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:05:12 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:07:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,9 @@ using namespace com::sun::star::beans;
 SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& rConnection) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_SELECTDBTABLEDDIALOG)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aSelectFI( this, SW_RES(       FI_SELECT     )),
     m_aTableHB( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
     m_aTableLB( this, SW_RES(        LB_TABLE      )),
@@ -98,7 +100,9 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
     m_aOK( this, SW_RES(             PB_OK         )),
     m_aCancel( this, SW_RES(         PB_CANCEL     )),
     m_aHelp( this, SW_RES(           PB_HELP       )),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
     m_sName( SW_RES( ST_NAME )),
     m_sType( SW_RES( ST_TYPE )),
     m_sTable( SW_RES( ST_TABLE )),
