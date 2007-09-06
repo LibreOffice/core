@@ -335,7 +335,7 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
             for ( i = 0; i < nInfoPrn4; i++ )
             {
                 SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
-                pInfo->maPrinterName = UniString( pWinInfo4[i].pPrinterName );
+                pInfo->maPrinterName = UniString( reinterpret_cast< const sal_Unicode* >(pWinInfo4[i].pPrinterName) );
                 pInfo->mnStatus      = 0;
                 pInfo->mnJobs        = 0;
                 pInfo->mpSysData     = NULL;
@@ -402,7 +402,7 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
     }
 
     HANDLE hPrinter = 0;
-    LPWSTR pPrnName = const_cast<sal_Unicode*>(pInfo->maPrinterName.GetBuffer());
+    LPWSTR pPrnName = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pInfo->maPrinterName.GetBuffer()));
     if( OpenPrinterW( pPrnName, &hPrinter, NULL ) )
     {
         DWORD               nBytes = 0;
@@ -413,18 +413,18 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
             if( GetPrinterW( hPrinter, 2, (LPBYTE)pWinInfo2, nBytes, &nBytes ) )
             {
                 if( pWinInfo2->pDriverName )
-                    pInfo->maDriver = String( pWinInfo2->pDriverName );
+                    pInfo->maDriver = String( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pDriverName) );
                 XubString aPortName;
                 if ( pWinInfo2->pPortName )
-                    aPortName = String( pWinInfo2->pPortName );
+                    aPortName = String( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pPortName) );
                 // pLocation can be 0 (the Windows docu doesn't describe this)
                 if ( pWinInfo2->pLocation && *pWinInfo2->pLocation )
-                    pInfo->maLocation = String( pWinInfo2->pLocation );
+                    pInfo->maLocation = String( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pLocation) );
                 else
                     pInfo->maLocation = aPortName;
                 // pComment can be 0 (the Windows docu doesn't describe this)
                 if ( pWinInfo2->pComment )
-                    pInfo->maComment = String( pWinInfo2->pComment );
+                    pInfo->maComment = String( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pComment) );
                 pInfo->mnStatus      = ImplWinQueueStatusToSal( pWinInfo2->Status );
                 pInfo->mnJobs        = pWinInfo2->cJobs;
                 if( ! pInfo->mpSysData )
@@ -458,7 +458,7 @@ XubString WinSalInstance::GetDefaultPrinter()
         {
             OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "winspool.drv" ) );
             oslModule pLib = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
-            void *pFunc = NULL;
+            oslGenericFunction pFunc = NULL;
             if( pLib )
             {
                 OUString queryFuncName( RTL_CONSTASCII_USTRINGPARAM( "GetDefaultPrinterW" ) );
@@ -478,7 +478,7 @@ XubString WinSalInstance::GetDefaultPrinter()
             XubString aDefPrt;
             if( pGetDefaultPrinter( pStr, &nChars ) )
             {
-                aDefPrt = pStr;
+                aDefPrt = reinterpret_cast<sal_Unicode* >(pStr);
             }
             rtl_freeMemory( pStr );
             if( aDefPrt.Len() )
@@ -515,8 +515,8 @@ static DWORD ImplDeviceCaps( WinSalInfoPrinter* pPrinter, WORD nCaps,
         else
             pDevMode = SAL_DEVMODE_W( pSetupData );
 
-        return DeviceCapabilitiesW( pPrinter->maDeviceName.GetBuffer(),
-                                    pPrinter->maPortName.GetBuffer(),
+        return DeviceCapabilitiesW( reinterpret_cast<LPCWSTR>(pPrinter->maDeviceName.GetBuffer()),
+                                    reinterpret_cast<LPCWSTR>(pPrinter->maPortName.GetBuffer()),
                                     nCaps, (LPWSTR)pOutput, pDevMode );
     }
     else
@@ -571,7 +571,7 @@ static BOOL ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
             // #110800#, #111151#, #112381#, #i16580#, #i14173# and perhaps #112375#
             ByteString aPrinterNameA= ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE );
             HANDLE hPrn;
-            LPWSTR pPrinterNameW = const_cast<sal_Unicode*>(pPrinter->maDeviceName.GetBuffer());
+            LPWSTR pPrinterNameW = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pPrinter->maDeviceName.GetBuffer()));
             if ( ! aSalShlData.mbWPrinter )
             {
                 if ( !OpenPrinterA( (LPSTR)aPrinterNameA.GetBuffer(), &hPrn, NULL ) )
@@ -665,7 +665,7 @@ static BOOL ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
 {
     ByteString aPrinterNameA = ImplSalGetWinAnsiString( pPrinter->maDeviceName, TRUE );
     HANDLE hPrn;
-    LPWSTR pPrinterNameW = const_cast<sal_Unicode*>(pPrinter->maDeviceName.GetBuffer());
+    LPWSTR pPrinterNameW = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pPrinter->maDeviceName.GetBuffer()));
     if( aSalShlData.mbWPrinter )
     {
         if ( !OpenPrinterW( pPrinterNameW, &hPrn, NULL ) )
@@ -1098,8 +1098,8 @@ static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetup
         memset( pDriverName+pPrinter->maDriverName.Len(), 0, 32 );
         rtl_copyMemory( pDeviceName, pPrinter->maDeviceName.GetBuffer(), pPrinter->maDeviceName.Len()*sizeof(sal_Unicode));
         memset( pDeviceName+pPrinter->maDeviceName.Len(), 0, 32 );
-        hDC = CreateICW( pDriverName,
-                         pDeviceName,
+        hDC = CreateICW( reinterpret_cast<LPWSTR>(pDriverName),
+                         reinterpret_cast<LPCWSTR>(pDeviceName),
                          0,
                          pDevMode );
     }
@@ -1697,8 +1697,8 @@ BOOL WinSalPrinter::StartJob( const XubString* pFileName,
         sal_Unicode aDevBuf[4096];
         rtl_copyMemory( aDrvBuf, mpInfoPrinter->maDriverName.GetBuffer(), (mpInfoPrinter->maDriverName.Len()+1)*sizeof(sal_Unicode));
         rtl_copyMemory( aDevBuf, mpInfoPrinter->maDeviceName.GetBuffer(), (mpInfoPrinter->maDeviceName.Len()+1)*sizeof(sal_Unicode));
-        hDC = CreateDCW( aDrvBuf,
-                         aDevBuf,
+        hDC = CreateDCW( reinterpret_cast<LPCWSTR>(aDrvBuf),
+                         reinterpret_cast<LPCWSTR>(aDevBuf),
                          NULL,
                          pDevModeW );
 
@@ -1856,7 +1856,7 @@ BOOL WinSalPrinter::StartJob( const XubString* pFileName,
         {
             if ( pFileName->Len() || aOutFileName.getLength() )
             {
-                aFileName = ImplSalGetWinAnsiString( pFileName ? *pFileName : aOutFileName, TRUE );
+                aFileName = ImplSalGetWinAnsiString( pFileName ? *pFileName : static_cast<const XubString>(aOutFileName), TRUE );
                 aInfo.lpszOutput = (LPCSTR)aFileName.GetBuffer();
             }
             else
