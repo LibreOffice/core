@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailconfigpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:51:13 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:03:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,9 @@ public:
   -----------------------------------------------------------------------*/
 SwMailConfigPage::SwMailConfigPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES(TP_MAILCONFIG), rSet),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aIdentityFL( this, SW_RES(       FL_IDENTITY)),
     m_aDisplayNameFT( this, SW_RES(    FT_DISPLAYNAME)),
     m_aDisplayNameED( this, SW_RES(    ED_DISPLAYNAME)),
@@ -205,7 +207,9 @@ SwMailConfigPage::SwMailConfigPage( Window* pParent, const SfxItemSet& rSet ) :
     m_aServerAuthenticationPB( this, SW_RES( PB_AUTHENTICATION )),
     m_aSeparatorFL( this,            SW_RES( FL_SEPARATOR      )),
     m_aTestPB( this, SW_RES(           PB_TEST)),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
     m_pConfigItem( new SwMailMergeConfigItem )
 {
     FreeResource();
@@ -309,7 +313,9 @@ IMPL_LINK(SwMailConfigPage, TestHdl, PushButton*, pButton)
   -----------------------------------------------------------------------*/
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_TESTACCOUNTSETTINGS)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aInfoFI( this, SW_RES(         FI_INFO )),
     m_aStatusHB( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
     m_aStatusLB( this, SW_RES(       LB_STATUS )),
@@ -319,7 +325,9 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
     m_aStopPB( this, SW_RES(         PB_STOP   )),
     m_aCancelPB( this, SW_RES(       PB_CANCEL )),
     m_aHelpPB( this, SW_RES(         PB_HELP   )),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
     m_aImageList( SW_RES( GetSettings().GetStyleSettings().GetWindowColor().IsDark() ? ILIST_HC : ILIST) ),
     m_sTask( SW_RES(        ST_TASK          )),
     m_sStatus( SW_RES(      ST_STATUS        )),
@@ -524,7 +532,9 @@ SwMailConfigDlg::~SwMailConfigDlg()
 SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
         SwMailConfigPage* pParent, SwMailMergeConfigItem& rItem) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_SERVERAUTHENTICATION)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
         m_aAuthenticationCB( this,          SW_RES( CB_AUTHENTICATION        )),
         m_aSeparateAuthenticationRB( this,  SW_RES( RB_SEP_AUTHENTICATION   )),
         m_aSMTPAfterPOPRB( this,            SW_RES( RB_SMPTAFTERPOP         )),
@@ -549,7 +559,9 @@ SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
         m_aOKPB( this,                      SW_RES( PB_OK                   )),
         m_aCancelPB( this,                  SW_RES( PB_CANCEL               )),
         m_aHelpPB( this,                    SW_RES( PB_HELP                 )),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
         rConfigItem( rItem )
 {
     FreeResource();
