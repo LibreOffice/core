@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kill.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:07:03 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:49:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,16 @@
 
 #include <tchar.h>
 
+#ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers
+#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tlhelp32.h>
 #include <psapi.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #include <signal.h>
 #include <stdarg.h>
