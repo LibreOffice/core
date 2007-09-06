@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registrywnt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:10:21 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:32:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,13 @@
 //
 //---------------------------------------
 
+#ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
+#endif
 #include <windows.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #include <malloc.h>
 
@@ -57,7 +61,9 @@
 
 #include <assert.h>
 
+#ifdef _MSC_VER
 #pragma warning(disable : 4786 4350)
+#endif
 
 //---------------------------------------
 //
