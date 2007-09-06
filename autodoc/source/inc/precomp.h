@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precomp.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:09:56 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:44:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #define CSV_NO_ASSERTIONS
 #endif
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma warning( disable : 4786 )
 #endif
 
