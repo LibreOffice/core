@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtypes.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:43:48 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:00:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,9 @@ namespace css = com::sun::star;
 
 #ifndef PROFILE
 // Code zum Initialisieren von Statics im eigenen Code-Segment
+#ifdef _MSC_VER
 #pragma code_seg( "SWSTATICS" )
+#endif
 #endif
 
 ByteString aEmptyByteStr;       // Konstante Strings
@@ -154,7 +156,9 @@ IMPL_FIXEDMEMPOOL_NEWDEL( _SwCursor_SavePos, 20, 20 )
 
 
 #ifndef PROFILE
+#ifdef _MSC_VER
 #pragma code_seg()
+#endif
 #endif
 
 Size GetGraphicSizeTwip( const Graphic& rGraphic, OutputDevice* pOutDev )
