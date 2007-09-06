@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wordcountdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:07:02 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:07:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,9 @@
   -----------------------------------------------------------------------*/
 SwWordCountDialog::SwWordCountDialog(Window* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_WORDCOUNT)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     aCurrentFL( this, SW_RES(              FL_CURRENT            )),
     aCurrentWordFT( this, SW_RES(          FT_CURRENTWORD        )),
     aCurrentWordFI( this, SW_RES(          FI_CURRENTWORD        )),
@@ -72,7 +74,9 @@ SwWordCountDialog::SwWordCountDialog(Window* pParent) :
     aBottomFL(this, SW_RES(                FL_BOTTOM             )),
     aOK( this, SW_RES(                     PB_OK                 )),
     aHelp( this, SW_RES(                   PB_HELP               ))
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
 {
     FreeResource();
 }
