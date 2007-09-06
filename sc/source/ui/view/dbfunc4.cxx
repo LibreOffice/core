@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfunc4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:12:59 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:20:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 
 // -----------------------------------------------------------------------
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ( "", off )
 #endif
 
