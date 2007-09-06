@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChXDataRow.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:13:29 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,8 +115,8 @@ public class ChXDataRow extends TestCase {
     * Disposes Chart document.
     */
     protected synchronized void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xChartDoc " );
-        xChartDoc.dispose();
+        log.println( "    closing xChartDoc " );
+        util.DesktopTools.closeDoc(xChartDoc);
     }
 
 
