@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:39:16 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:02:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,9 @@ BOOL SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 |*  Letzte Aenderung    MA 18. Jul. 96
 |*
 |*************************************************************************/
+#ifdef _MSC_VER
 #pragma optimize("e",off)
+#endif
 
 BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                              SwCrsrMoveState* pCMS ) const
@@ -331,7 +333,9 @@ BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     return bRet;
 }
 
+#ifdef _MSC_VER
 #pragma optimize("",on)
+#endif
 
 /*************************************************************************
 |*
@@ -1159,7 +1163,9 @@ const SwLayoutFrm* lcl_Inside( const SwCntntFrm *pCnt, Point& rPt )
 
 //Fuer MSC keine Optimierung mit e (enable register...) hier, sonst gibts
 //einen Bug (ID: 2857)
+#ifdef _MSC_VER
 #pragma optimize("e",off)
+#endif
 
 const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
                                             const BOOL bDontLeave,
@@ -1367,7 +1373,9 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
     return pActual;
 }
 
+#ifdef _MSC_VER
 #pragma optimize("",on)
+#endif
 
 /*************************************************************************
 |*
