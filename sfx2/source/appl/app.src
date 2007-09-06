@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:54:30 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 08:48:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -997,13 +997,10 @@ String STR_KEY_AUTOCORRECT_DIR
 {
     Text [ en-US ] = "AutoCorrect" ;
 };
-#if defined STR_KEY_LINGUISTIC_DIR
 String STR_KEY_LINGUISTIC_DIR
 {
     Text [ en-US ] = "Writing aids" ;
 };
-#endif // STR_KEY_LINGUISTIC_DIR
-
 String STR_QUICKSTART_EXIT
 {
     Text [ en-US ] = "Exit Quickstarter" ;
