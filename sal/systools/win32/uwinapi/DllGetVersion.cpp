@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DllGetVersion.cpp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:15:48 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:49:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,10 +34,14 @@
  ************************************************************************/
 
 #define WIN32_LEAN_AND_MEAN
+#ifdef _MSC_VER
 #pragma warning(push,1)
+#endif
 #include <windows.h>
 #include <shlwapi.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 #include <malloc.h>
 
 extern HMODULE      UWINAPI_BaseAddress;
