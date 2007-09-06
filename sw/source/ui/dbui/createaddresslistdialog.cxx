@@ -4,9 +4,9 @@
  *
  *  $RCSfile: createaddresslistdialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 15:24:53 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:04:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,10 +143,14 @@ public:
   -----------------------------------------------------------------------*/
 SwAddressControl_Impl::SwAddressControl_Impl(Window* pParent, const ResId& rResId ) :
     Control(pParent, rResId),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aScrollBar(this, ResId(SCR_1,*rResId.GetResMgr())),
     m_aWindow(this, ResId(WIN_DATA,*rResId.GetResMgr())),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
     m_pData(0),
     m_nLineHeight(0),
     m_nCurrentDataSet(0),
@@ -415,7 +419,9 @@ long SwAddressControl_Impl::PreNotify( NotifyEvent& rNEvt )
 SwCreateAddressListDialog::SwCreateAddressListDialog(
         Window* pParent, const String& rURL, SwMailMergeConfigItem& rConfig) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_CREATEADDRESSLIST)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aAddressInformation( this, SW_RES(  FI_ADDRESSINFORMATION)),
     m_pAddressControl(new SwAddressControl_Impl(this, SW_RES(CT_ADDRESS))),
     m_aNewPB( this, SW_RES(               PB_NEW)),
@@ -435,7 +441,9 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
     m_aOK( this, SW_RES(                  PB_OK)),
     m_aCancel( this, SW_RES(              PB_CANCEL)),
     m_aHelp( this, SW_RES(                PB_HELP)),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
     m_sAddressListFilterName( SW_RES(    ST_FILTERNAME)),
     m_sURL(rURL),
     m_pCSVData( new SwCSVData ),
@@ -806,7 +814,9 @@ void SwCreateAddressListDialog::Find(const String& rSearch, sal_Int32 nColumn)
   -----------------------------------------------------------------------*/
 SwFindEntryDialog::SwFindEntryDialog(SwCreateAddressListDialog* pParent) :
     ModelessDialog(pParent, SW_RES(DLG_MM_FIND_ENTRY)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aFindFT( this, SW_RES(      FT_FIND      )),
     m_aFindED( this, SW_RES(      ED_FIND      )),
     m_aFindOnlyCB( this, SW_RES(  CB_FINDONLY )),
@@ -814,7 +824,9 @@ SwFindEntryDialog::SwFindEntryDialog(SwCreateAddressListDialog* pParent) :
     m_aFindPB( this, SW_RES(      PB_FIND)),
     m_aCancel( this, SW_RES(      PB_CANCEL)),
     m_aHelp( this, SW_RES(        PB_HELP)),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
     m_pParent(pParent)
 {
     FreeResource();
