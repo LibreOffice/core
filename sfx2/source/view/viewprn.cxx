@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:46:22 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -335,7 +335,7 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
 // wird, wenn SID_PRINTDOCDIRECT auflaueft; bisher bekannte,
 // einzige Abhilfe ist in diesem Fall das Abschalten der Optimierungen
 // (KA 17.12.95)
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ( "", off )
 #endif
 
@@ -776,7 +776,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 }
 
 // Optimierungen wieder einschalten
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ( "", on )
 #endif
 
