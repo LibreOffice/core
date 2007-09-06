@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-17 07:24:25 $
+#   last change: $Author: kz $ $Date: 2007-09-06 13:40:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,21 @@ DEF$(TNR)DEPN+=$(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)$/$(i).lib)
 DEF$(TNR)EXPORTFILE=$(MISC)$/$(SHL$(TNR)VERSIONMAP:b)_$(SHL$(TNR)TARGET).dxp
 $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+.IF "$(COM)"=="GCC"
+    -grep -v "\*\|?" $@ > $@.exported-symbols
+    -grep "\*\|?" $@ > $@.symbols-regexp
+# Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
+# Extract RTTI symbols from all the objects that will be used to build a shared library
+.IF "$(SHL$(TNR)OBJS)"!=""
+    -echo $(foreach,i,$(SHL$(TNR)OBJS) $i) | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+.IF "$(SHL$(TNR)LIBS)"!=""
+    -$(TYPE) $(foreach,j,$(SHL$(TNR)LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gP | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+.ENDIF
+# overwrite the map file generate into the local output tree with the generated
+# exported symbols list
+    cp $@.exported-symbols $@
+.ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(DEF$(TNR)EXPORTFILE)"==""
