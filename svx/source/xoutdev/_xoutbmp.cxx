@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _xoutbmp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:55:57 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:25:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -497,7 +497,7 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 
 // ------------------------------------------------------------------------
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ( "", off )
 #endif
 
@@ -527,7 +527,7 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
     return nRet;
 }
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ( "", on )
 #endif
 
