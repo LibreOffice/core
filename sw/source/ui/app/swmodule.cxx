@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:23:25 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:03:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,13 +328,17 @@ sal_Bool    bNoInterrupt    = sal_False;
 
 #ifndef PROFILE
 // Code zum Initialisieren von Statics im eigenen Code-Segment
+#ifdef _MSC_VER
 #pragma code_seg( "SWSTATICS" )
+#endif
 #endif
 
 #include <sfx2/app.hxx>
 
 #ifndef PROFILE
+#ifdef _MSC_VER
 #pragma code_seg()
+#endif
 #endif
 
 #include <svx/svxerr.hxx>
