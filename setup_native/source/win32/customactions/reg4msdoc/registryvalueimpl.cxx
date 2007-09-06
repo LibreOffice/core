@@ -6,9 +6,13 @@
 #include "registryvalueimpl.hxx"
 #endif
 
+#ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
+#endif
 #include <windows.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #include <malloc.h>
 #include <assert.h>

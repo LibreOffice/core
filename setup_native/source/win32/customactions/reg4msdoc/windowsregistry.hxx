@@ -5,9 +5,13 @@
 #ifndef _WINDOWSREGISTRY_HXX_
 #define _WINDOWSREGISTRY_HXX_
 
+#ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
+#endif
 #include <windows.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #include "Registry.hxx"
 
