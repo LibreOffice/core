@@ -1,5 +1,7 @@
+"UnoControlListBoxModel";"com::sun::star::awt::UnoControlListBoxModel";"Align#optional"
 "UnoControlListBoxModel";"com::sun::star::awt::UnoControlListBoxModel";"BackgroundColor"
 "UnoControlListBoxModel";"com::sun::star::awt::UnoControlListBoxModel";"Border"
+"UnoControlListBoxModel";"com::sun::star::awt::UnoControlListBoxModel";"BorderColor#optional"
 "UnoControlListBoxModel";"com::sun::star::awt::UnoControlListBoxModel";"Dropdown"
 "UnoControlListBoxModel";"com::sun::star::awt::UnoControlListBoxModel";"Enabled"
 "UnoControlListBoxModel";"com::sun::star::awt::UnoControlListBoxModel";"FontDescriptor"

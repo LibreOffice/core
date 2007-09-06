@@ -10,6 +10,7 @@
 "UnoControlProgressBarModel";"com::sun::star::awt::UnoControlDialogElement#optional";"Width"
 "UnoControlProgressBarModel";"com::sun::star::awt::UnoControlProgressBarModel";"BackgroundColor"
 "UnoControlProgressBarModel";"com::sun::star::awt::UnoControlProgressBarModel";"Border"
+"UnoControlProgressBarModel";"com::sun::star::awt::UnoControlProgressBarModel";"BorderColor#optional"
 "UnoControlProgressBarModel";"com::sun::star::awt::UnoControlProgressBarModel";"Enabled"
 "UnoControlProgressBarModel";"com::sun::star::awt::UnoControlProgressBarModel";"FillColor"
 "UnoControlProgressBarModel";"com::sun::star::awt::UnoControlProgressBarModel";"HelpText"

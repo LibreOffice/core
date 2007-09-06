@@ -30,6 +30,7 @@
 "UnoControlContainerModel";"com::sun::star::awt::UnoControlContainerModel";"BackgroundColor"
 "UnoControlContainerModel";"com::sun::star::awt::UnoControlContainerModel";"Enabled"
 "UnoControlContainerModel";"com::sun::star::awt::UnoControlContainerModel";"Border"
+"UnoControlContainerModel";"com::sun::star::awt::UnoControlContainerModel";"BorderColor#optional"
 "UnoControlContainerModel";"com::sun::star::awt::UnoControlContainerModel";"Printable"
 "UnoControlContainerModel";"com::sun::star::awt::UnoControlContainerModel";"Text"
 "UnoControlContainerModel";"com::sun::star::awt::UnoControlContainerModel";"HelpText"

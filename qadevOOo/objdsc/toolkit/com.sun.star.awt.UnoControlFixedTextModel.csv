@@ -30,6 +30,7 @@
 "UnoControlFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"Align"
 "UnoControlFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"BackgroundColor"
 "UnoControlFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"Border"
+"UnoControlFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"BorderColor#optional"
 "UnoControlFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"Enabled"
 "UnoControlFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"FontDescriptor"
 "UnoControlFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"FontEmphasisMark"
@@ -41,3 +42,4 @@
 "UnoControlFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"Printable"
 "UnoControlFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"TextColor"
 "UnoControlFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"TextLineColor"
+"UnoControlFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"VerticalAlign#optional"
