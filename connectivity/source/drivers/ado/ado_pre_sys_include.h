@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ado_pre_sys_include.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:17:22 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 10:25:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,9 @@
     #error "ado_pre_sys_include.h included twice!"
 #endif
 
+#ifdef _MSC_VER
 #pragma warning(push,1)
 #pragma warning(disable:4917)
+#endif
 
 #define ADO_REDUCED_WARN_LEVEL
