@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DllMain.cpp,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:26:11 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,9 +34,13 @@
  ************************************************************************/
 
 #define WIN32_LEAN_AND_MEAN
+#ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers
+#endif
 #include <windows.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 #include <malloc.h>
 #define _MBCS
 #include <tchar.h>
