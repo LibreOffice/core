@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:27:47 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:25:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3469,7 +3469,7 @@ void SvxLineItem::SetLine( const SvxBorderLine* pNew )
     pLine = pNew ? new SvxBorderLine( *pNew ) : 0;
 }
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ( "", off )
 #endif
 
@@ -4440,7 +4440,7 @@ CntWallpaperItem* SvxBrushItem::CreateCntWallpaperItem() const
     return pItem;
 }
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ( "", on )
 #endif
 /* -----------------------------16.08.2002 09:18------------------------------
