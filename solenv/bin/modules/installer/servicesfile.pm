@@ -4,9 +4,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2007-08-27 06:01:13 $
+#   last change: $Author: kz $ $Date: 2007-09-06 09:53:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1036,7 +1036,6 @@ sub create_services_rdb
     # Setting the global variable $installer::globals::services_rdb_created
 
     $installer::globals::services_rdb_created = 1;
-
 }
 
 1;
