@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:51:31 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:03:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -582,7 +582,7 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
  *************************************************************************/
 
 // JP 22.8.2001 - global optimization off - Bug 91245 / 91223
-#if defined( WNT ) && defined( MSC )
+#ifdef _MSC_VER
 #pragma optimize("g",off)
 #endif
 
@@ -870,7 +870,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 }
 
 // JP 22.8.2001 - global optimization off - Bug 91245 / 91223
-#if defined( WNT ) && defined( MSC )
+#ifdef _MSC_VER
 #pragma optimize("g",on)
 #endif
 
