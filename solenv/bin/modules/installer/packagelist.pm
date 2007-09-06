@@ -4,9 +4,9 @@
 #
 #   $RCSfile: packagelist.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 15:26:05 $
+#   last change: $Author: kz $ $Date: 2007-09-06 09:52:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,10 @@
 package installer::packagelist;
 
 use installer::converter;
+use installer::exiter;
+use installer::globals;
 use installer::remover;
+use installer::scriptitems;
 
 ########################################
 # Check existence of module
@@ -488,6 +491,328 @@ sub resolve_packagevariables
         if ( $make_lowercase ) { $value = lc($value); }
         $$packagenameref =~ s/\%$key/$value/g;
     }
+}
+
+#####################################################################
+# New packages system.
+#####################################################################
+
+##################################################################
+# Controlling the content of the packagelist
+# 1. Items in @installer::globals::packagelistitems must exist
+# 2. If a shellscript file is defined, it must exist
+##################################################################
+
+sub check_packagelist
+{
+    my ($packages) = @_;
+
+    if ( ! ( $#{$packages} > -1 )) { installer::exiter::exit_program("ERROR: No packages defined!", "check_packagelist"); }
+
+    for ( my $i = 0; $i <= $#{$packages}; $i++ )
+    {
+        my $onepackage = ${$packages}[$i];
+
+        my $element;
+
+        # checking all items that must be defined
+
+        foreach $element (@installer::globals::packagelistitems)
+        {
+            if ( ! exists($onepackage->{$element}) )
+            {
+                installer::exiter::exit_program("ERROR in package list: No value for $element !", "check_packagelist");
+            }
+        }
+
+        # checking the existence of the script file, if defined
+
+        if ( $onepackage->{'script'} )
+        {
+            my $scriptfile = $onepackage->{'script'};
+            my $gid =  $onepackage->{'module'};
+            my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$scriptfile, "" , 0);
+
+            if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find script file $scriptfile for module $gid!", "check_packagelist"); }
+
+            my $infoline = "$gid: Using script file: \"$$fileref\"!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+
+            $onepackage->{'script'} = $$fileref;
+        }
+    }
+}
+
+#####################################################################
+# Reading pack info for one module from packinfo file.
+#####################################################################
+
+sub get_packinfo
+{
+    my ($gid, $filename, $packages, $onelanguage) = @_;
+
+    my $packagelist = installer::files::read_file($filename);
+
+    my @allpackages = ();
+
+    for ( my $i = 0; $i <= $#{$packagelist}; $i++ )
+    {
+        my $line = ${$packagelist}[$i];
+
+        if ( $line =~ /^\s*\#/ ) { next; }  # this is a comment line
+
+        if ( $line =~ /^\s*Start\s*$/i )    # a new package definition
+        {
+            my %onepackage = ();
+
+            my $counter = $i + 1;
+
+            while (!( ${$packagelist}[$counter] =~ /^\s*End\s*$/i ))
+            {
+                if ( ${$packagelist}[$counter] =~ /^\s*(\S+)\s*\=\s*\"(.*)\"/ )
+                {
+                    my $key = $1;
+                    my $value = $2;
+                    $onepackage{$key} = $value;
+                }
+
+                $counter++;
+            }
+
+            push(@allpackages, \%onepackage);
+        }
+    }
+
+    # looking for the packinfo with the correct gid
+
+    my $foundgid = 0;
+    my $onepackage;
+    foreach $onepackage (@allpackages)
+    {
+        # Adding the language to the module gid for LanguagePacks !
+        # Making the module gid language specific: gid_Module_Root -> gir_Module_Root_pt_BR (as defined in scp2)
+        if ( $installer::globals::languagepack ) { $onepackage->{'module'} = $onepackage->{'module'} . "_$onelanguage"; }
+
+        # Resolving the language identifier
+        $onepackage->{'packagename'} =~ s/\%LANGUAGESTRING/$onelanguage/;
+
+        if ( $onepackage->{'module'} eq $gid )
+        {
+            push(@{$packages}, $onepackage);
+            $foundgid = 1;
+            last;
+        }
+    }
+
+    if ( ! $foundgid )
+    {
+        installer::exiter::exit_program("ERROR: Could not find package info for module $gid in file \"$filename\"!", "get_packinfo");
+    }
+}
+
+#####################################################################
+# Collecting all packages from scp project.
+#####################################################################
+
+sub do_collect_packages
+{
+    my ( $allmodules, $onelanguage, $packagesref ) = @_;
+
+    my %gid_analyzed = ();
+
+    $onelanguage =~ s/-/_/g; # pt-BR -> pt_BR in scp
+
+    my $onemodule;
+    foreach $onemodule ( @{$allmodules} )
+    {
+        my $packageinfo = "PackageInfo";
+        if ( $installer::globals::languagepack ) { $packageinfo = "LanguagePackageInfo" }
+        if (( $installer::globals::tab ) && ( $onemodule->{"TabPackageInfo"} )) { $packageinfo = "TabPackageInfo" }
+
+        if ( $onemodule->{$packageinfo} )   # this is a package module!
+        {
+            my $modulegid = $onemodule->{'gid'};
+
+            # Only collecting modules with correct language for language packs
+            if ( $installer::globals::languagepack ) {
+                if ( ! ( $modulegid =~ /_$onelanguage\s*$/ )) { next; }
+            }
+
+            # Ignoring packages, if they are marked to be ignored. Otherwise OOo 2.x update will break.
+            # Style OOOIGNORE has to be removed for OOo 3.x
+            my $styles = "";
+            if ( $onemodule->{'Styles'} ) { $styles = $onemodule->{'Styles'}; }
+            if (( $styles =~ /\bOOOIGNORE\b/ ) && ( $installer::globals::isopensourceproduct )) { next; }
+
+            # Modules in different languages are listed more than once in multilingual installation sets
+            if ( exists($gid_analyzed{$modulegid}) ) { next; }
+            $gid_analyzed{$modulegid} = 1;
+
+            my $packinfofile = $onemodule->{$packageinfo};
+
+            # The file with package information has to be found in path list
+            my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$packinfofile, "" , 0);
+
+            if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $packinfofile for module $modulegid!", "do_collect_packages"); }
+
+            my $infoline = "$modulegid: Using packinfo: \"$$fileref\"!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+
+            get_packinfo($modulegid, $$fileref, $packagesref, $onelanguage);
+        }
+    }
+
+}
+
+#####################################################################
+# Collecting all packages from scp project.
+#####################################################################
+
+sub collectpackages
+{
+    my ( $allmodules, $languagesarrayref ) = @_;
+
+    installer::logger::include_header_into_logfile("Collecting packages:");
+
+    # Attention: Special handling for Windows LanguagePacks with more than one language
+
+    my @packages = ();
+
+    if ( $installer::globals::languagepack )
+    {
+        my $onelang;
+        foreach $onelang ( @{$languagesarrayref} )
+        {
+            do_collect_packages($allmodules, $onelang, \@packages);
+        }
+    }
+    else
+    {
+        do_collect_packages($allmodules, "", \@packages);
+    }
+
+    return \@packages;
+}
+
+#####################################################################
+# Printing packages content for debugging purposes
+#####################################################################
+
+sub log_packages_content
+{
+    my ($packages) = @_;
+
+    if ( ! ( $#{$packages} > -1 )) { installer::exiter::exit_program("ERROR: No packages defined!", "print_content"); }
+
+    installer::logger::include_header_into_logfile("Logging packages content:");
+
+    my $infoline = "";
+
+    for ( my $i = 0; $i <= $#{$packages}; $i++ )
+    {
+        my $onepackage = ${$packages}[$i];
+
+        # checking all items that must be defined
+
+        $infoline = "Package $onepackage->{'module'}\n";
+        push(@installer::globals::logfileinfo, $infoline);
+
+        my $key;
+        foreach $key (sort keys %{$onepackage})
+        {
+            if ( $key =~ /^\s*\;/ ) { next; }
+
+            if ( $key eq "allmodules" )
+            {
+                $infoline = "\t$key:\n";
+                push(@installer::globals::logfileinfo, $infoline);
+                my $onemodule;
+                foreach $onemodule ( @{$onepackage->{$key}} )
+                {
+                    $infoline = "\t\t$onemodule\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+                }
+            }
+            else
+            {
+                $infoline = "\t$key: $onepackage->{$key}\n";
+                push(@installer::globals::logfileinfo, $infoline);
+            }
+        }
+
+        $infoline = "\n";
+        push(@installer::globals::logfileinfo, $infoline);
+
+    }
+}
+
+#####################################################################
+# Creating list of cabinet files from packages
+#####################################################################
+
+sub prepare_cabinet_files
+{
+    my ($packages, $allvariables) = @_;
+
+    if ( ! ( $#{$packages} > -1 )) { installer::exiter::exit_program("ERROR: No packages defined!", "print_content"); }
+
+    installer::logger::include_header_into_logfile("Preparing cabinet files:");
+
+    my $infoline = "";
+
+    for ( my $i = 0; $i <= $#{$packages}; $i++ )
+    {
+        my $onepackage = ${$packages}[$i];
+
+        my $cabinetfile = "$onepackage->{'packagename'}\.cab";
+
+        resolve_packagevariables(\$cabinetfile, $allvariables, 0);
+
+        $installer::globals::allcabinets{$cabinetfile} = 1;
+
+        # checking all items that must be defined
+
+        $infoline = "Package $onepackage->{'module'}\n";
+        push(@installer::globals::logfileinfo, $infoline);
+
+        # Assigning the cab file to the module and also to all corresponding sub modules
+
+        my $onemodule;
+        foreach $onemodule ( @{$onepackage->{'allmodules'}} )
+        {
+            if ( ! exists($installer::globals::allcabinetassigns{$onemodule}) )
+            {
+                $installer::globals::allcabinetassigns{$onemodule} = $cabinetfile;
+            }
+            else
+            {
+                my $infoline = "Warning: Already existing assignment: $onemodule : $installer::globals::allcabinetassigns{$onemodule}\n";
+                push(@installer::globals::logfileinfo, $infoline);
+                $infoline = "Ignoring further assignment: $onemodule : $cabinetfile\n";
+                push(@installer::globals::logfileinfo, $infoline);
+            }
+        }
+    }
+}
+
+#####################################################################
+# Logging assignments of cabinet files
+#####################################################################
+
+sub log_cabinet_assignments
+{
+    installer::logger::include_header_into_logfile("Logging cabinet files:");
+
+    my $infoline = "List of cabinet files:\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    my $key;
+    foreach $key ( sort keys %installer::globals::allcabinets ) { push(@installer::globals::logfileinfo, "\t$key\n"); }
+
+    $infoline = "\nList of assignments from modules to cabinet files:\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    foreach $key ( sort keys %installer::globals::allcabinetassigns ) { push(@installer::globals::logfileinfo, "\t$key : $installer::globals::allcabinetassigns{$key}\n"); }
 }
 
 1;
