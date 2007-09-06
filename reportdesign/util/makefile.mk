@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2007-08-31 09:17:57 $
+#   last change: $Author: kz $ $Date: 2007-09-06 13:38:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,12 +75,12 @@ SHL1STDLIBS= \
         $(TKLIB)				\
         $(VOSLIB)				\
         $(SALLIB)
-.IF "$(GUI)"=="WNT"
-SHL1STDLIBS+= \
-        idbu.lib
-.ELSE
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
 SHL1STDLIBS+= \
         -ldbu$(UPD)$(DLLPOSTFIX)
+.ELSE
+SHL1STDLIBS+= \
+        idbu.lib
 .ENDIF
 
 SHL1IMPLIB=i$(TARGET)
@@ -129,14 +129,14 @@ SHL2STDLIBS= \
         $(SO2LIB)				\
         $(I18NISOLANGLIB)		\
         $(SALLIB)
-.IF "$(GUI)"=="WNT"
-SHL2STDLIBS+= \
-        idbu.lib				\
-        i$(TARGET).lib
-.ELSE
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
 SHL2STDLIBS+= \
         -ldbu$(UPD)$(DLLPOSTFIX) \
         -l$(TARGET)$(UPD)$(DLLPOSTFIX)
+.ELSE
+SHL2STDLIBS+= \
+        idbu.lib				\
+        i$(TARGET).lib
 .ENDIF
 
 SHL2DEPN=$(SHL1TARGETN)
@@ -183,12 +183,12 @@ SHL3STDLIBS=\
     $(SOTLIB)			\
     $(SO2LIB)			\
     $(SALLIB)
-.IF "$(GUI)"=="WNT"
-SHL3STDLIBS+= \
-    irpt.lib
-.ELSE
+.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
 SHL3STDLIBS+= \
         -l$(TARGET)$(UPD)$(DLLPOSTFIX)
+.ELSE
+SHL3STDLIBS+= \
+    irpt.lib
 .ENDIF
 
 
