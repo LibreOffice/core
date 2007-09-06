@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OFunctiondefs.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 11:51:18 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 10:26:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,10 @@
 
 #if defined(WIN) || defined(WNT)
 
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4005)
+#endif
 
 // just to go with calling convention of windows
 #define SQL_API __stdcall
@@ -50,7 +52,9 @@
 #undef SQL_API
 #define SQL_API __stdcall
 
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #ifndef SQL_C_BOOKMARK
 #define SQL_C_BOOKMARK   SQL_C_ULONG                     /* BOOKMARK         */
