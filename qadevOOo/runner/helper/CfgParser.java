@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CfgParser.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:17:55 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:49:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ public class CfgParser {
         //check for platform dependend parameters
         //this would have a $OperatingSystem as prefix
         String os = (String) param.get("OperatingSystem");
-        if (os != null) {
+        if (os != null && os.length()>1) {
             //found something that could be a prefex
             //check all parameters for this
             Enumeration keys = param.keys();
