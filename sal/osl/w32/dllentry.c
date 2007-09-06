@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:22:23 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:46:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,13 @@
  *
  ************************************************************************/
 
+#ifdef _MSC_VER
 #pragma warning(push,1) /* disable warnings within system headers */
+#endif
 #include <windows.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 #include <tlhelp32.h>
 #include <systools/win32/uwinapi.h>
 #include <winsock.h>
