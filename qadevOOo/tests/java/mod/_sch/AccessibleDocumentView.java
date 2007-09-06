@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDocumentView.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:11:39 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:55:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,8 @@ public class AccessibleDocumentView extends TestCase {
     * @param log writer to log information while testing
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
-        log.println("dispose text document");
-        xChartDoc.dispose();
+        log.println( "    closing xChartDoc " );
+        util.DesktopTools.closeDoc(xChartDoc);
     }
 
     /**

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChXChartDocument.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:12:43 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:56:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,9 +85,10 @@ public class ChXChartDocument extends TestCase {
     * Disposes Chart documents.
     */
     protected void cleanup(TestParameters Param, PrintWriter log) {
-        log.println("    disposing xChartDoc ");
-        xChartDoc.dispose();
-        doc2.dispose();
+        log.println( "    closing xChartDoc " );
+        util.DesktopTools.closeDoc(xChartDoc);
+        log.println( "    closing xChartDoc2 " );
+        util.DesktopTools.closeDoc(doc2);
     }
 
     /**

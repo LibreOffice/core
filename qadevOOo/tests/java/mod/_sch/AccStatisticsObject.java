@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccStatisticsObject.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:10:51 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:54:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ public class AccStatisticsObject extends TestCase {
     protected TestEnvironment createTestEnvironment(
         TestParameters Param, PrintWriter log) {
 
-        if (xChartDoc != null) xChartDoc.dispose();
+        if (xChartDoc != null) cleanup(Param, log);
         log.println( "creating a chart document" );
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
         try {
@@ -122,8 +122,9 @@ public class AccStatisticsObject extends TestCase {
     * @param log writer to log information while testing
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
-        log.println("dispose chart document");
-        xChartDoc.dispose();
+        log.println( "    closing xChartDoc " );
+        util.DesktopTools.closeDoc(xChartDoc);
+
     }
 
 }
