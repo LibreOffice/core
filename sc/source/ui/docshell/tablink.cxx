@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:42:13 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:19:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize("",off)
 #endif
 

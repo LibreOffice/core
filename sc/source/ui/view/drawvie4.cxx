@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:29:45 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:21:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ Point aDragStartDiff;
 
 //! welche Funktionen aus drawview/drawvie4 muessen wirklich ohne Optimierung sein?
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ( "", off )
 #endif
 
@@ -396,7 +396,7 @@ void ScDrawView::SetMarkedOriginalSize()
 }
 
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ( "", on )
 #endif
 
