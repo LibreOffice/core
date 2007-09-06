@@ -4,9 +4,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-11 14:41:02 $
+#   last change: $Author: kz $ $Date: 2007-09-06 09:55:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1570,7 +1570,7 @@ sub add_childprojects
 
     if (( $installer::globals::javafile eq "" ) && ( $allvariables->{'JAVAPRODUCT'} )) { installer::exiter::exit_program("ERROR: No JAVAFILE found in files collector!", "add_childprojects"); }
     if (( $installer::globals::adafile eq "" ) && ( $allvariables->{'ADAPRODUCT'} )) { installer::exiter::exit_program("ERROR: No ADAFILE found in files collector!", "add_childprojects"); }
-    if (( $installer::globals::urefile eq "" ) && ( $allvariables->{'UREPRODUCT'} )) { installer::exiter::exit_program("ERROR: No ADAFILE found in files collector!", "add_childprojects"); }
+    if (( $installer::globals::urefile eq "" ) && ( $allvariables->{'UREPRODUCT'} )) { installer::exiter::exit_program("ERROR: No UREFILE found in files collector!", "add_childprojects"); }
 
     # Content for Directory table
     # SystemFolder TARGETDIR .
@@ -1633,7 +1633,7 @@ sub add_childprojects
 
     if ( $allvariables->{'JAVAPRODUCT'} ) { include_subdir_into_componenttable($subjavadir, $installer::globals::javafile, $componenttable); }
     if ( $allvariables->{'ADAPRODUCT'} ) { include_subdir_into_componenttable($subadadir, $installer::globals::adafile, $componenttable); }
-    if ( $allvariables->{'UERPRODUCT'} ) { include_subdir_into_componenttable($suburedir, $installer::globals::urefile, $componenttable); }
+    if ( $allvariables->{'UREPRODUCT'} ) { include_subdir_into_componenttable($suburedir, $installer::globals::urefile, $componenttable); }
 
     # Content for CustomAction table
 
