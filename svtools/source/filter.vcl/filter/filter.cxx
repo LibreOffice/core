@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:18:50 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:12:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@
 #endif
 
 // Compilerfehler, wenn Optimierung bei WNT & MSC
-#if defined WNT && defined MSC
+#ifdef _MSC_VER
 #pragma optimize( "", off )
 #endif
 
