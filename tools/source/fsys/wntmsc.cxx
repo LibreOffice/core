@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wntmsc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:12:26 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:15:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
+#ifdef _MSC_VER
 #pragma warning (push,1)
+#endif
 #include <stdio.h>
 #include <ctype.h>
 #include <limits.h>
+#ifdef _MSC_VER
 #pragma warning (pop)
+#endif
 
 #include "wntmsc.hxx"
 #include <tools/errinf.hxx>
@@ -612,10 +616,14 @@ FileStat::FileStat( const void *pInfo,      // struct dirent
 |*
 *************************************************************************/
 
+#ifdef _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
+#endif
 #include <shlobj.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #ifdef UNICODE
 #define lstrchr     wcschr
