@@ -49,7 +49,9 @@
 #define fWasOemNowAnsi          0x00000200
 #define fOKToSetThreadOem       0x00000400
 
+#ifdef _MSC_VER
 #pragma warning(disable:4103)
+#endif
 #pragma pack(1)
 
 
