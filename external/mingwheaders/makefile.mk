@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 11:05:21 $
+#   last change: $Author: kz $ $Date: 2007-09-06 14:10:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,7 @@ FILES_TO_COPY_FROM_PSDK=adoctint.h \
             shobjidl.h \
             shtypes.h \
             specstrings.h \
+            sspi.h \
             strmif.h \
             strsafe.h \
             urlmon.h \
