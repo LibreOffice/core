@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmdocselectpage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:03:19 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:05:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,9 @@ using namespace svt;
   -----------------------------------------------------------------------*/
 SwMailMergeDocSelectPage::SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent ) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_DOCSELECT_PAGE)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aHeaderFI(this,          SW_RES(  FI_HEADER           ) ),
     m_aHowToFT          (this, SW_RES( FT_HOWTO )),
     m_aCurrentDocRB     (this, SW_RES( RB_CURRENTDOC )),
@@ -115,7 +117,9 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent 
     m_aBrowseTemplatePB (this, SW_RES( PB_BROWSETEMPLATE )),
     m_aRecentDocRB      (this, SW_RES( RB_RECENTDOC )),
     m_aRecentDocLB      (this, SW_RES( LB_RECENTDOC )),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
     m_pWizard(_pParent)
 {
     FreeResource();
