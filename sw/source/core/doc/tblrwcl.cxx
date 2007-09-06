@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 13:12:10 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:00:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2557,7 +2557,9 @@ BOOL lcl_LineSetHeadCondColl( const SwTableLine*& rpLine, void* pPara )
 
 /*  */
 
+#ifdef _MSC_VER
 #pragma optimize( "", off )
+#endif
 
 SwTwips lcl_GetDistance( SwTableBox* pBox, BOOL bLeft )
 {
@@ -4115,7 +4117,9 @@ BOOL SwTable::SetColWidth( SwTableBox& rAktBox, USHORT eType,
 
     return bRet;
 }
+#ifdef _MSC_VER
 #pragma optimize( "", on )
+#endif
 
 /*  */
 
