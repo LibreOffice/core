@@ -4,9 +4,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-26 08:48:33 $
+#   last change: $Author: kz $ $Date: 2007-09-06 09:55:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,137 @@ use installer::pathanalyzer;
 use installer::worker;
 use installer::windows::idtglobal;
 use installer::windows::language;
+
+##########################################################################
+# Assigning one cabinet file to each file. This is requrired,
+# if cabinet files shall be equivalent to packages.
+##########################################################################
+
+sub assign_cab_to_files
+{
+    my ( $filesref ) = @_;
+
+    my $infoline = "";
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        if ( ! exists(${$filesref}[$i]->{'modules'}) ) { installer::exiter::exit_program("ERROR: No module assignment found for ${$filesref}[$i]->{'gid'} !", "assign_cab_to_files"); }
+        my $module = ${$filesref}[$i]->{'modules'};
+        # If modules contains a list of modules, only taking the first one.
+        if ( $module =~ /^\s*(.*?)\,/ ) { $module = $1; }
+
+        if ( ! exists($installer::globals::allcabinetassigns{$module}) ) { installer::exiter::exit_program("ERROR: No cabinet file assigned to module \"$module\" !", "assign_cab_to_files"); }
+        ${$filesref}[$i]->{'assignedcabinetfile'} = $installer::globals::allcabinetassigns{$module};
+
+        # Counting the files in each cabinet file
+        if ( ! exists($installer::globals::cabfilecounter{${$filesref}[$i]->{'assignedcabinetfile'}}) )
+        {
+            $installer::globals::cabfilecounter{${$filesref}[$i]->{'assignedcabinetfile'}} = 1;
+        }
+        else
+        {
+            $installer::globals::cabfilecounter{${$filesref}[$i]->{'assignedcabinetfile'}}++;
+        }
+    }
+
+    # logging the number of files in each cabinet file
+
+    $infoline = "\nCabinet file content:\n";
+    push(@installer::globals::logfileinfo, $infoline);
+    my $cabfile;
+    foreach $cabfile ( sort keys %installer::globals::cabfilecounter )
+    {
+        $infoline = "$cabfile : $installer::globals::cabfilecounter{$cabfile} files\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
+
+    # assigning startsequencenumbers for each cab file
+
+    my $offset = 1;
+    foreach $cabfile ( sort keys %installer::globals::cabfilecounter )
+    {
+        my $filecount = $installer::globals::cabfilecounter{$cabfile};
+        $installer::globals::cabfilecounter{$cabfile} = $offset;
+        $offset = $offset + $filecount;
+
+        $installer::globals::lastsequence{$cabfile} = $offset - 1;
+    }
+
+    # logging the start sequence numbers
+
+    $infoline = "\nCabinet file start sequences:\n";
+    push(@installer::globals::logfileinfo, $infoline);
+    foreach $cabfile ( sort keys %installer::globals::cabfilecounter )
+    {
+        $infoline = "$cabfile : $installer::globals::cabfilecounter{$cabfile}\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
+
+    # logging the last sequence numbers
+
+    $infoline = "\nCabinet file last sequences:\n";
+    push(@installer::globals::logfileinfo, $infoline);
+    foreach $cabfile ( sort keys %installer::globals::lastsequence )
+    {
+        $infoline = "$cabfile : $installer::globals::lastsequence{$cabfile}\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
+}
+
+##########################################################################
+# Assigning sequencenumbers to files. This is requrired,
+# if cabinet files shall be equivalent to packages.
+##########################################################################
+
+sub assign_sequencenumbers_to_files
+{
+    my ( $filesref ) = @_;
+
+    my %directaccess = ();
+    my %allassigns = ();
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        my $onefile = ${$filesref}[$i];
+
+        # Keeping order in cabinet files
+        # -> collecting all files in one cabinet file
+        # -> sorting files and assigning numbers
+
+        # Saving counter $i for direct access into files array
+        # "destination" of the file is a unique identifier ('Name' is not unique!)
+        if ( exists($directaccess{$onefile->{'destination'}}) ) { installer::exiter::exit_program("ERROR: 'destination' at file not unique: $onefile->{'destination'}", "assign_sequencenumbers_to_files"); }
+        $directaccess{$onefile->{'destination'}} = $i;
+
+        my $cabfilename = $onefile->{'assignedcabinetfile'};
+        # collecting files in cabinet files
+        if ( ! exists($allassigns{$cabfilename}) )
+        {
+            my %onecabfile = ();
+            $onecabfile{$onefile->{'destination'}} = 1;
+            $allassigns{$cabfilename} = \%onecabfile;
+        }
+        else
+        {
+            $allassigns{$cabfilename}->{$onefile->{'destination'}} = 1;
+        }
+    }
+
+    # Sorting each hash and assigning numbers
+    # The destination of the file determines the sort order, not the filename!
+    my $cabfile;
+    foreach $cabfile ( sort keys %allassigns )
+    {
+        my $counter = $installer::globals::cabfilecounter{$cabfile};
+        my $dest;
+        foreach $dest ( sort keys %{$allassigns{$cabfile}} ) # <- sorting the destination!
+        {
+            my $directaccessnumber = $directaccess{$dest};
+            ${$filesref}[$directaccessnumber]->{'assignedsequencenumber'} = $counter;
+            $counter++;
+        }
+    }
+}
 
 ###############################################
 # Generating the component name from a file
@@ -279,7 +410,7 @@ sub get_filesize
 
     if ( -f $file ) # test of existence. For instance services.rdb does not always exist
     {
-        $filesize = (stat($file))[7];   # file size can be "0"
+        $filesize = ( -s $file );   # file size can be "0"
     }
     else
     {
@@ -317,19 +448,28 @@ sub get_fileversion
 
 sub get_sequence_for_file
 {
-    my ($number) = @_;
+    my ($number, $onefile) = @_;
 
-    my $sequence = $number;
-    # my $sequence = $number + 1;
+    my $sequence = "";
 
-    # Idea: Each component is packed into a cab file.
-    # This requires that all files in one cab file have sequences directly follwing each other,
-    # for instance from 1456 to 1466. Then in the media table the LastSequence for this cab file
-    # is 1466.
-    # Because all files belonging to one component are directly behind each other in the file
-    # collector, it is possible to use simply an increasing number as sequence value.
-    # If files belonging to one component are not directly behind each other in the files collector
-    # this mechanism will no longer work.
+    if (( $onefile->{'assignedsequencenumber'} ) && ( $installer::globals::use_packages_for_cabs ))
+    {
+        $sequence = $onefile->{'assignedsequencenumber'};
+    }
+    else
+    {
+        $sequence = $number;
+        # my $sequence = $number + 1;
+
+        # Idea: Each component is packed into a cab file.
+        # This requires that all files in one cab file have sequences directly follwing each other,
+        # for instance from 1456 to 1466. Then in the media table the LastSequence for this cab file
+        # is 1466.
+        # Because all files belonging to one component are directly behind each other in the file
+        # collector, it is possible to use simply an increasing number as sequence value.
+        # If files belonging to one component are not directly behind each other in the files collector
+        # this mechanism will no longer work.
+    }
 
     return $sequence;
 }
@@ -441,7 +581,7 @@ sub create_files_table
         # $file{'Attributes'} = "8192";     # Sourcefile is unpacked
 
         $counter++;
-        $file{'Sequence'} = get_sequence_for_file($counter);
+        $file{'Sequence'} = get_sequence_for_file($counter, $onefile);
 
         $onefile->{'sequencenumber'} = $file{'Sequence'};
 
