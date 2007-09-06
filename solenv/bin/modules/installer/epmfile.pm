@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 15:25:19 $
+#   last change: $Author: kz $ $Date: 2007-09-06 09:51:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -238,6 +238,7 @@ sub create_epm_header
     my $foundreadmefile = 0;
 
     my $line = "";
+    my $infoline = "";
 
     # %product OpenOffice.org Software
     # %version 2.0
@@ -351,17 +352,16 @@ sub create_epm_header
 
     if ( $license_in_package_defined )
     {
-        # Copyright file has to be located next to the package list
-        my $path = $installer::globals::absolutepackagelistpath;
-        installer::pathanalyzer::get_path_from_fullqualifiedname(\$path);
-        $licensefilename = $path . $licensefilename;
+        my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, "" , 0);
 
-        if ( -f $licensefilename )
-        {
-            $foundlicensefile = 1;
-            $line = "%license" . " " . $licensefilename . "\n";
-            push(@epmheader, $line);
-        }
+        if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find license file $licensefilename!", "create_epm_header"); }
+
+        $infoline = "Using license file: \"$$fileref\"!\n";
+        push(@installer::globals::logfileinfo, $infoline);
+
+        $foundlicensefile = 1;
+        $line = "%license" . " " . $$fileref . "\n";
+        push(@epmheader, $line);
     }
     else
     {
@@ -2436,7 +2436,7 @@ sub copy_childproject_files
         my $onemodule = ${$allmodules}[$i];
         my $packagename = $onemodule->{'PackageName'};
         $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . $subdir . $installer::globals::separator . $packagename;
-        if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: File not found: $sourcefile !", "put_childprojects_into_installset"); }
+        if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: File not found: $sourcefile !", "copy_childproject_files"); }
         installer::systemactions::copy_one_file($sourcefile, $destdir);
         # Solaris: unpacking tar.gz files and setting new packagename
         if ( $installer::globals::issolarispkgbuild ) { $packagename = unpack_tar_gz_file($packagename, $destdir); }
@@ -2474,7 +2474,7 @@ sub put_childprojects_into_installset
 
     my $sopackpath = "";
     if ( $ENV{'SO_PACK'} ) { $sopackpath  = $ENV{'SO_PACK'}; }
-    else { installer::exiter::exit_program("ERROR: Environment variable SO_PACK not set!", "add_childprojects"); }
+    else { installer::exiter::exit_program("ERROR: Environment variable SO_PACK not set!", "put_childprojects_into_installset"); }
 
     my $destdir = "$newdir";
 
@@ -2609,7 +2609,6 @@ sub put_systemintegration_into_installset
         {
             installer::xpdinstaller::create_xpd_file_for_systemintegration($onemodule, $newcontent, $modulesarrayref, $subdir);
         }
-
     }
 }
 
