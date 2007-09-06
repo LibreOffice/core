@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 16:59:39 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:01:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -613,7 +613,9 @@ void SwEditShell::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
     GetDoc()->SetTableName( rTblFmt, rNewName );
 }
 
+#ifdef _MSC_VER
 #pragma optimize("",on)
+#endif
 
 // erfragen des akt. Wortes
 
