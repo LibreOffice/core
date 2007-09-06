@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 11:51:02 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 10:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,11 @@
 #include "macros.inc"
 
 Module gid_Module_Root_Files_2
+    PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_2";
 	Description = "gid_Module_Root_Files_2";
-	Sortkey = "200";
+	Sortkey = "1200";
 	Default = YES;
 	Styles = (HIDDEN_ROOT,ISUPDATEPACKAGE);
 	Files = (gid_File_Bin_Cde_Open_Url,
@@ -111,10 +112,11 @@ Module gid_Module_Root_Files_2
 End
 
 Module gid_Module_Root_Files_3
+    PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_3";
 	Description = "gid_Module_Root_Files_3";
-	Sortkey = "300";
+	Sortkey = "1300";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Dat_Root3,
@@ -164,10 +166,11 @@ Module gid_Module_Root_Files_3
 End
 
 Module gid_Module_Root_Files_4
+    PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_4";
 	Description = "gid_Module_Root_Files_4";
-	Sortkey = "400";
+	Sortkey = "1400";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Dat_Root4,
@@ -283,10 +286,12 @@ Module gid_Module_Root_Files_4
 End
 
 Module gid_Module_Root_Files_5
+    PackageInfo = "packinfo_office.txt";
+    TabPackageInfo = "packinfo_office_tab.txt";
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_5";
 	Description = "gid_Module_Root_Files_5";
-	Sortkey = "500";
+	Sortkey = "1500";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Dat_Root5,
@@ -518,10 +523,11 @@ Module gid_Module_Root_Files_5
 End
 
 Module gid_Module_Root_Files_6
+    PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_6";
 	Description = "gid_Module_Root_Files_6";
-	Sortkey = "600";
+	Sortkey = "1600";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Basic_User,
@@ -621,7 +627,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Extra_Glas_Green_Zip,
 	gid_File_Extra_Glas_Blue_Zip,	
 	gid_File_Zip_Writingaids,
-        gid_File_Zip_Writingaids_So,
+	gid_File_Zip_Writingaids_So,
 	gid_File_Share_Config_Sofficecfg_uiconfig_Zip,
 	gid_File_Share_Config_Sofficecfg_Basicide_Menubar_Xml,
 	gid_File_Share_Config_Sofficecfg_Bibliography_Menubar_Xml,
@@ -935,10 +941,11 @@ Module gid_Module_Root_Files_6
 End
 
 Module gid_Module_Root_Files_7
+    PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_7";
 	Description = "gid_Module_Root_Files_7";
-	Sortkey = "700";
+	Sortkey = "1700";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Help_Common_Zip,
@@ -948,10 +955,11 @@ Module gid_Module_Root_Files_7
 End
 
 Module gid_Module_Root_Files_8
+    PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_8";
 	Description = "gid_Module_Root_Files_8";
-	Sortkey = "800";
+	Sortkey = "1800";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (
@@ -1020,10 +1028,11 @@ Module gid_Module_Root_Files_8
 End
 
 Module gid_Module_Root_Files_9
+    PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_9";
 	Description = "gid_Module_Root_Files_9";
-	Sortkey = "900";
+	Sortkey = "1900";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Mozilla_Runtime);
@@ -1033,10 +1042,11 @@ End
 #if ! (defined(MACOSX) || defined (SYSTEM_FREETYPE))
 
 Module gid_Module_Root_Files_10
+    PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_10";
 	Description = "gid_Module_Root_Files_10";
-	Sortkey = "1000";
+	Sortkey = "2000";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Lib_Freetype);
@@ -1047,11 +1057,13 @@ End
 
 #ifndef WITHOUT_FONTS
 Module gid_Module_Root_Fonts_OOo_Hidden
+    PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Fonts_OOo_Hidden";
 	Description = "gid_Module_Root_Fonts_OOo_Hidden";
+	Sortkey = "2100";
 	Default = YES;
-	Styles = (HIDDEN_ROOT);
+	Styles = (HIDDEN_ROOT, OOOIGNORE);
 	Files = (gid_File_Fnt_Opensymb,
 	gid_File_Fnt_Vera,
 	gid_File_Fnt_Verabd,
