@@ -4,9 +4,9 @@
  *
  *  $RCSfile: download.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 15:46:28 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:37:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,13 @@
 #include "precompiled_extensions.hxx"
 
 #if defined WNT
+#ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
+#endif
 #include <curl/curl.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 #else
 #include <curl/curl.h>
 #endif
