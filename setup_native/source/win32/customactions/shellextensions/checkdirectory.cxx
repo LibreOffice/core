@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checkdirectory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-08-13 10:56:36 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:34:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,11 +35,15 @@
 
 #define _WIN32_WINNT 0x0401
 
+#ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
+#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <msiquery.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #include <malloc.h>
 #include <assert.h>
