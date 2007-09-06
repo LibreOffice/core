@@ -1,0 +1,77 @@
+# Format:
+
+# Start
+# scpModule
+# shellscript file (optional)
+# solarispackagename
+# solarisrequires (optional)
+# solarisprovides (optional)
+# packagename
+# linuxreplaces (optional)
+# requires (optional)
+# provides (optional)
+# copyright
+# vendor
+# description
+# destpath
+# End
+
+Start
+module = "gid_Module_Root"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING"
+# solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME-core01"
+packagename = "%UNIXPRODUCTNAME-%LANGUAGESTRING"
+linuxreplaces = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING"
+provides = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING"
+# requires = "%UNIXPRODUCTNAME-core01"
+copyright = "1999-2007 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt/%UNIXPRODUCTNAME%PRODUCTVERSION"
+End
+
+Start
+module = "gid_Module_Langpack_Fonts"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-fonts"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING"
+packagename = "%UNIXPRODUCTNAME-%LANGUAGESTRING-fonts"
+linuxreplaces = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-fonts"
+provides = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-fonts"
+requires = "%UNIXPRODUCTNAME-%LANGUAGESTRING"
+copyright = "1999-2007 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Language fonts module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt/%UNIXPRODUCTNAME%PRODUCTVERSION"
+End
+
+Start
+module = "gid_Module_Langpack_Resource"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-res"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING"
+packagename = "%UNIXPRODUCTNAME-%LANGUAGESTRING-res"
+linuxreplaces = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-res"
+provides = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-res"
+requires = "%UNIXPRODUCTNAME-%LANGUAGESTRING"
+copyright = "1999-2007 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Language resource module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt/%UNIXPRODUCTNAME%PRODUCTVERSION"
+End
+
+Start
+module = "gid_Module_Langpack_Help"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-help"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING"
+packagename = "%UNIXPRODUCTNAME-%LANGUAGESTRING-help"
+linuxreplaces = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-help"
+provides = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-help"
+requires = "%UNIXPRODUCTNAME-%LANGUAGESTRING"
+copyright = "1999-2007 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Language help module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt/%UNIXPRODUCTNAME%PRODUCTVERSION"
+End
