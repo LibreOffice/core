@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _FillProperties.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:33:02 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:51:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package ifc.drawing;
 
+import com.sun.star.beans.XPropertySetInfo;
 import lib.MultiPropertyTest;
 
 import com.sun.star.awt.XBitmap;
@@ -169,35 +170,57 @@ public class _FillProperties extends MultiPropertyTest {
      * The method first gets two different bitmaps and then tests the property.
      */
     public void _FillBitmap() {
-        try {
-            oObj.setPropertyValue("FillBitmapURL",
-                util.utils.getFullTestURL("crazy-blue.jpg"));
-            the_bitmap = (XBitmap) AnyConverter.toObject(
-                new Type(XBitmap.class),oObj.getPropertyValue("FillBitmap"));
-            oObj.setPropertyValue("FillBitmapURL",
-                util.utils.getFullTestURL("space-metal.jpg"));
-            the_secondBitmap = (XBitmap) AnyConverter.toObject(
-                new Type(XBitmap.class),oObj.getPropertyValue("FillBitmap"));
-            testProperty("FillBitmap", BitmapTester) ;
-        } catch (com.sun.star.beans.PropertyVetoException e) {
-            log.println("Couldn't change Bitmap");
-            e.printStackTrace(log);
-            tRes.tested("FillBitmap",false);
-        } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Couldn't change Bitmap");
-            e.printStackTrace(log);
-            tRes.tested("FillBitmap",false);
-        } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Couldn't change Bitmap");
-            e.printStackTrace(log);
-            tRes.tested("FillBitmap",false);
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Couldn't change Bitmap");
-            e.printStackTrace(log);
-            tRes.tested("FillBitmap",false);
+
+        String propName = "FillBitmap";
+
+        XPropertySetInfo info = oObj.getPropertySetInfo();
+
+        if (!info.hasPropertyByName(propName)) {
+            if (isOptional(propName)) {
+                // skipping optional property test
+                log.println("Property '" + propName
+                        + "' is optional and not supported");
+                tRes.tested(propName,true);
+                return;
+            } else {
+
+                try {
+
+                    oObj.setPropertyValue("FillBitmapURL", util.utils.getFullTestURL("crazy-blue.jpg"));
+
+                    the_bitmap = (XBitmap) AnyConverter.toObject(
+                                        new Type(XBitmap.class), oObj.getPropertyValue("FillBitmap"));
+
+                    oObj.setPropertyValue("FillBitmapURL", util.utils.getFullTestURL("space-metal.jpg"));
+
+                    the_secondBitmap = (XBitmap) AnyConverter.toObject(
+                                        new Type(XBitmap.class),oObj.getPropertyValue("FillBitmap"));
+
+                    testProperty("FillBitmap", BitmapTester) ;
+
+                } catch (com.sun.star.beans.PropertyVetoException e) {
+                    log.println("Couldn't change Bitmap");
+                    e.printStackTrace(log);
+                    tRes.tested("FillBitmap",false);
+
+                } catch (com.sun.star.beans.UnknownPropertyException e) {
+                    log.println("Couldn't change Bitmap");
+                    e.printStackTrace(log);
+                    tRes.tested("FillBitmap",false);
+
+                } catch (com.sun.star.lang.WrappedTargetException e) {
+                    log.println("Couldn't change Bitmap");
+                    e.printStackTrace(log);
+                    tRes.tested("FillBitmap",false);
+
+                } catch (com.sun.star.lang.IllegalArgumentException e) {
+                    log.println("Couldn't change Bitmap");
+                    e.printStackTrace(log);
+                    tRes.tested("FillBitmap",false);
+                }
+            }
+
         }
     }
-
-
 }
 
