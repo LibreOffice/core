@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macros.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:26:43 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:50:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,9 @@
 
 // Globally disable "warning C4100: unreferenced formal parameter" caused by
 // IMPLEMENT_THUNK:
+#ifdef _MSC_VER
 #pragma warning(disable:4100)
+#endif
 
 /* Version macros */
 
