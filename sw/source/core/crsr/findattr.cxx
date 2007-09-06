@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findattr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:22:13 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:00:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,7 +296,9 @@ SwAttrCheckArr::~SwAttrCheckArr()
 
 
 
+#ifdef _MSC_VER
 #pragma optimize( "e", off )
+#endif
 
 void SwAttrCheckArr::SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam )
 {
@@ -371,7 +373,9 @@ void SwAttrCheckArr::SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam )
         pItem = aIter.NextItem();
     }
 }
+#ifdef _MSC_VER
 #pragma optimize( "", on )
+#endif
 
 
 int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
