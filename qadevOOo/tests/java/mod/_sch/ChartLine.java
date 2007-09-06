@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartLine.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:14:37 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:58:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,8 +87,8 @@ public class ChartLine extends TestCase {
     * Disposes Chart document.
     */
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xChartDoc " );
-        xChartDoc.dispose();
+        log.println( "    closing xChartDoc " );
+        util.DesktopTools.closeDoc(xChartDoc);
     }
 
     /**
@@ -107,7 +107,7 @@ public class ChartLine extends TestCase {
 
         //get LineDiagram
         SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
-        oDiagram = SOF.createDiagram(xChartDoc, "BarDiagram");
+        oDiagram = SOF.createDiagram(xChartDoc, "LineDiagram");
 
         log.println( "getting Line-Diagram" );
         xChartDoc.setDiagram(oDiagram);
@@ -116,6 +116,7 @@ public class ChartLine extends TestCase {
         try {
             log.println( "getting Line" );
             XPropertySet RowProps = oDiagram.getDataRowProperties(1);
+            RowProps.setPropertyValue("MeanValue", new Boolean( true ));
             oObj = (XPropertySet) AnyConverter.toObject(
                 new Type(XPropertySet.class),
                     RowProps.getPropertyValue("DataMeanValueProperties"));
@@ -136,6 +137,11 @@ public class ChartLine extends TestCase {
             e.printStackTrace( log );
             throw new StatusException( "Couldn't get Line", e );
         }
+        catch(com.sun.star.beans.PropertyVetoException e) {
+             // Some exception occures.FAILED
+             e.printStackTrace( log );
+             throw new StatusException( "Couldn't get Line", e );
+         }
 
         log.println( "creating a new environment for chartdocument object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
