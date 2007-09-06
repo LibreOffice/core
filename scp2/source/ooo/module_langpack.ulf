@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_langpack.ulf,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 14:42:11 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 10:08:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -626,3 +626,45 @@ en-US = "Esperanto"
 
 [STR_DESC_MODULE_LANGPACK_EO]
 en-US = "Installs Esperanto support in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_GU]
+en-US = "Gujarati"
+
+[STR_DESC_MODULE_LANGPACK_GU]
+en-US = "Installs Gujarati support in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_EN_ZA]
+en-US = "English (South Africa)"
+
+[STR_DESC_MODULE_LANGPACK_EN_ZA]
+en-US = "Installs English (South Africa) support in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_EN_GB]
+en-US = "English (United Kingdom)"
+
+[STR_DESC_MODULE_LANGPACK_EN_GB]
+en-US = "Installs English (United Kingdom) support in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_UR_IN]
+en-US = "Urdu"
+
+[STR_DESC_MODULE_LANGPACK_UR_IN]
+en-US = "Installs Urdu support in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_ML_IN]
+en-US = "Malayalam"
+
+[STR_DESC_MODULE_LANGPACK_ML_IN]
+en-US = "Installs Malayalam support in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_TE_IN]
+en-US = "Telugu"
+
+[STR_DESC_MODULE_LANGPACK_TE_IN]
+en-US = "Installs Telugu support in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_TI_ER]
+en-US = "Tigrinya"
+
+[STR_DESC_MODULE_LANGPACK_TI_ER]
+en-US = "Installs Tigrinya support in %PRODUCTNAME %PRODUCTVERSION"
