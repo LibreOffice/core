@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:04:21 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:06:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,7 +359,9 @@ public:
   -----------------------------------------------------------------------*/
 SwCopyToDialog::SwCopyToDialog(Window* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_COPYTO)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aDescriptionFI( this, SW_RES(       FI_DESCRIPTION )),
     m_aCCFT( this, SW_RES(                FT_CC          )),
     m_aCCED( this, SW_RES(                ED_CC          )),
@@ -370,7 +372,9 @@ SwCopyToDialog::SwCopyToDialog(Window* pParent) :
     m_aOK( this, SW_RES(                  PB_OK          )),
     m_aCancel( this, SW_RES(              PB_CANCEL      )),
     m_aHelp( this, SW_RES(                PB_HELP        ))
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
 {
     FreeResource();
 }
@@ -386,7 +390,9 @@ SwCopyToDialog::~SwCopyToDialog()
   -----------------------------------------------------------------------*/
 SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_OUTPUT_PAGE)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aHeaderFI(this,           SW_RES(  FI_HEADER           ) ),
     m_aOptionsFI(this,          SW_RES(  FI_OPTIONS          ) ),
     m_aSaveStartDocRB(this,     SW_RES(  RB_SAVESTARTDOC     ) ),
@@ -430,7 +436,9 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     m_sNoAttachmentNameST(SW_RES(    ST_NOATTACHMENTNAME )),
     m_sSendMailST(SW_RES(            ST_SENDMAIL   ) ),
     m_sConfigureMail(SW_RES(         ST_CONFIGUREMAIL)),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
     m_pWizard(_pParent),
     m_pDocumentPrinterCopy(0),
     m_pTempPrinter( 0 )
