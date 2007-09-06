@@ -4,9 +4,9 @@
  *
  *  $RCSfile: esdll.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:48:16 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:15:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,14 @@
 #include "stdafx.h"
 
 #include <atlbase.h>
+#ifdef _MSC_VER
 #pragma warning( push )
 #pragma warning( disable: 4710 )
+#endif
 CComModule _Module;
+#ifdef _MSC_VER
 #pragma warning( pop )
+#endif
 #include <atlcom.h>
 
 BEGIN_OBJECT_MAP(ObjectMap)
