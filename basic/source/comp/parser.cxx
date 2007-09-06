@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 10:00:07 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:54:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ static SbiStatement StmntTable [] = {
 };
 
 
-#ifdef MSC
+#ifdef _MSC_VER
 // 'this' : used in base member initializer list
 #pragma warning( disable: 4355 )
 #endif
