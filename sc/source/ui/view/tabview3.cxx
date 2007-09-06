@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 16:52:49 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:21:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -363,7 +363,7 @@ void ScTabView::InvalidateAttribs()
 //                  oder Referenz verschicken
 //      ohne Optimierung wegen BugId 29307
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ( "", off )
 #endif
 
@@ -391,7 +391,7 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, BOOL bNew )
     }
 }
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ( "", on )
 #endif
 
