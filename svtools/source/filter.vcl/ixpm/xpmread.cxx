@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xpmread.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:41:13 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:13:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ XPMReader::~XPMReader()
 
 // ------------------------------------------------------------------------
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ("",off)
 #endif
 
@@ -233,7 +233,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
     return eReadState;
 }
 
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma optimize ("",on)
 #endif
 
