@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellextensions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:42:06 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:35:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,11 +79,15 @@
     prviliges have no negative effect because the shell extensions will work anyhow.
 */
 
+#ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
+#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <msiquery.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #include <malloc.h>
 
