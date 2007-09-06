@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:09:38 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:30:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,9 @@
 #include <assert.h>
 #include <algorithm>
 
+#ifdef _MSC_VER
 #pragma warning(disable : 4786 4350)
+#endif
 
 //-----------------------------------------------------
 /** Create instance and open the specified Registry key
