@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-04 13:31:55 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:50:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@ package util;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XWindow;
+import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.beans.PropertyValue;
@@ -77,6 +78,13 @@ public class UITools {
     public UITools(XMultiServiceFactory msf, XModel xModel)
     {
         mMSF = msf;
+        mXRoot = makeRoot(mMSF, xModel);
+    }
+
+    public UITools(XMultiServiceFactory msf, XTextDocument xTextDoc)
+    {
+        mMSF = msf;
+        XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xTextDoc);
         mXRoot = makeRoot(mMSF, xModel);
     }
 
