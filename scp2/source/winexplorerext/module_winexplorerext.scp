@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_winexplorerext.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:48:00 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 10:10:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 
 Module gid_Module_Optional_Winexplorerext
     MOD_NAME_DESC ( MODULE_OPTIONAL_WINDOWS_EXPLORER_EXTENSIONS );
+    Sortkey = "1200";
     Default = YES;
     Minimal = YES;
     ParentID = gid_Module_Optional;
