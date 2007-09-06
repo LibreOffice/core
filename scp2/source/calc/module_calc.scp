@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_calc.scp,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:27:54 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 10:04:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,29 @@
 #include "macros.inc"
 
 Module gid_Module_Prg_Calc
+    PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_PRG_CALC );
     ParentID = gid_Module_Prg;
     Sortkey = "200";
+	Script = "shellscripts_module.txt"
+	Solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME-calc"
+	Solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME-core01,%WITHOUTDOTUNIXPRODUCTNAME-core02,%WITHOUTDOTUNIXPRODUCTNAME-core03,%WITHOUTDOTUNIXPRODUCTNAME-core04,%WITHOUTDOTUNIXPRODUCTNAME-core05,%WITHOUTDOTUNIXPRODUCTNAME-core06,%WITHOUTDOTUNIXPRODUCTNAME-core07,%WITHOUTDOTUNIXPRODUCTNAME-core08,%WITHOUTDOTUNIXPRODUCTNAME-core09,%WITHOUTDOTUNIXPRODUCTNAME-core10"
+	Packagename = "%UNIXPRODUCTNAME-calc"
+	Linuxreplaces = "%WITHOUTDOTUNIXPRODUCTNAME-calc"
+	Freebsdrequires = "%UNIXPRODUCTNAME-core01"
+	Requires = "%UNIXPRODUCTNAME-core01"
+	Copyright = "1999-2007 by %PRODUCTNAME"
+	Solariscopyright = "solariscopyrightfile"
+	Vendor = "%PRODUCTNAME"
+	Description = "Calc module for %PRODUCTNAME %PRODUCTVERSION"
+	Destpath = "/opt/%UNIXPRODUCTNAME%PRODUCTVERSION"
 End
 
 // #110743# Added gid_File_Lib_Bf_Sc and gid_File_Res_Bf_Sc for binfilter
 Module gid_Module_Prg_Calc_Bin
     MOD_NAME_DESC ( MODULE_PRG_CALC_BIN );
     ParentID = gid_Module_Prg_Calc;
+    Sortkey = "100";
     Minimal = YES;
     Default = YES;
     Files = (gid_File_Lib_Calc,gid_File_Exe_Scalc,gid_File_Lib_Sc,gid_File_Lib_Scui,gid_File_Lib_Scd,gid_File_Res_Sc,gid_File_Extra_Urldesktop_Calc,gid_File_Extra_Urlnew_Calc,gid_File_Extra_Urlstart_Calc,gid_File_Extra_Urltasks_Calc,gid_File_Oo_Office_Filter_Calc_Pkg,gid_File_Share_Config_Sofficecfg_Calc_Menubar_Xml,
@@ -56,6 +70,7 @@ End
 Module gid_Module_Prg_Calc_Help
     MOD_NAME_DESC ( MODULE_PRG_CALC_HELP );
     ParentID = gid_Module_Prg_Calc;
+    Sortkey = "200";
     Default = YES;
     Files = (gid_File_Help_Scalc_Zip);
 End
@@ -63,6 +78,7 @@ End
 Module gid_Module_Prg_Calc_Addins
     MOD_NAME_DESC ( MODULE_OPTIONAL_ADDINS );
     ParentID = gid_Module_Prg_Calc;
+    Sortkey = "700";
     Default = YES;
     Files = (gid_File_Lib_Date,gid_File_Res_Date,gid_File_Zip_Addin,gid_File_Lib_Rot,gid_File_Lib_Dfa,gid_File_Lib_Analysis,gid_File_Res_Analysis);
 End
