@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_draw.scp,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:28:05 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 10:05:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,16 @@
 #include "macros.inc"
 
 Module gid_Module_Prg_Draw
+    PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_PRG_DRAW );
     ParentID = gid_Module_Prg;
-    Sortkey = "400";
+    Sortkey = "300";
 End
 
 Module gid_Module_Prg_Draw_Bin
     MOD_NAME_DESC ( MODULE_PRG_DRAW_BIN );
     ParentID = gid_Module_Prg_Draw;
+    Sortkey = "100";
     Minimal = YES;
     Default = YES;
     Files = (gid_File_Exe_Sdraw,gid_File_Extra_Urldesktop_Draw,gid_File_Extra_Urlnew_Draw,gid_File_Extra_Urlstart_Draw,gid_File_Extra_Urltasks_Draw,gid_File_Share_Config_Sofficecfg_Draw_Menubar_Xml,
@@ -56,6 +58,7 @@ End
 Module gid_Module_Prg_Draw_Help
     MOD_NAME_DESC ( MODULE_PRG_DRAW_HELP );
     ParentID = gid_Module_Prg_Draw;
+    Sortkey = "200";
     Default = YES;
     Files = (gid_File_Help_Sdraw_Zip);
 End
