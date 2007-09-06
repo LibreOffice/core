@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regactivex.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:07:48 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:33:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,14 @@
 
 #define UNICODE
 
+#ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
+#endif
 #include <windows.h>
 #include <msiquery.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #include <string.h>
 #include <malloc.h>
