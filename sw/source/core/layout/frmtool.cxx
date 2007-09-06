@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:42:03 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:02:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3125,7 +3125,9 @@ void lcl_CheckFlowBack( SwFrm* pFrm, const SwRect &rRect )
 }
 
 
+#ifdef _MSC_VER
 #pragma optimize("",off)
+#endif
 
 void MA_FASTCALL lcl_NotifyCntnt( const SdrObject *pThis, SwCntntFrm *pCnt,
     const SwRect &rRect, const PrepareHint eHint )
@@ -3342,7 +3344,9 @@ void Notify_Background( const SdrObject* pObj,
         pSh->InvalidateWindows( rRect );
 }
 
+#ifdef _MSC_VER
 #pragma optimize("",on)
+#endif
 
 /*************************************************************************
 |*
