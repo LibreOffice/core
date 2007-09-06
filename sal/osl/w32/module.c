@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:17:20 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:46:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,10 +120,14 @@ void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *strSymbolName)
        be in this case unavoidable because the API has to stay
        compitable we need to keep this function which returns a
        void* by definition */
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4054)
+#endif
     return (void*)(osl_getFunctionSymbol(Module, strSymbolName));
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 }
 
 /*****************************************************************************/
@@ -256,9 +260,13 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_Windows( void *pv, rtl_uString
 /* Implementation for Windows NT, 2K and XP (2K and XP could use the above method too) */
 /***************************************************************************************/
 
+#ifdef _MSC_VER
 #pragma warning(push,1) /* disable warnings within system headers */
+#endif
 #include <imagehlp.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 typedef BOOL (WINAPI *SymInitialize_PROC)(
     HANDLE   hProcess,
@@ -462,10 +470,14 @@ sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress( oslGenericFunction addr, 
        not allowed according to the C/C++ standards. In this case
        it is unavoidable because we have to stay compatible we
        cannot remove any function. */
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable:4054)
+#endif
     return osl_getModuleURLFromAddress((void*)addr, ppLibraryUrl);
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 }
 
 
