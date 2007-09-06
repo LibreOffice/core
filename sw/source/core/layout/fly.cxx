@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:07:41 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:01:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,7 +436,9 @@ void SwFlyFrm::DeleteCnt()
 |*  Letzte Aenderung    MA 30. Nov. 95
 |*
 |*************************************************************************/
+#ifdef _MSC_VER
 #pragma optimize("",off)
+#endif
 
 void SwFlyFrm::InitDrawObj( BOOL bNotify )
 {
@@ -470,7 +472,9 @@ void SwFlyFrm::InitDrawObj( BOOL bNotify )
         NotifyDrawObj();
 }
 
+#ifdef _MSC_VER
 #pragma optimize("",on)
+#endif
 
 /*************************************************************************
 |*
