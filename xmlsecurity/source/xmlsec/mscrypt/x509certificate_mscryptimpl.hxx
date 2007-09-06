@@ -4,9 +4,9 @@
  *
  *  $RCSfile: x509certificate_mscryptimpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:25:28 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:41:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,14 @@
 #ifndef _X509CERTIFICATE_MSCRYPTIMPL_HXX_
 #define _X509CERTIFICATE_MSCRYPTIMPL_HXX_
 
+#ifdef _MSC_VER
 #pragma warning(push,1)
+#endif
 #include "Windows.h"
 #include "WinCrypt.h"
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #ifndef _SAL_CONFIG_H_
 #include <sal/config.h>
