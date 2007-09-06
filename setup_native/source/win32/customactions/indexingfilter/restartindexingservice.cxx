@@ -4,9 +4,9 @@
  *
  *  $RCSfile: restartindexingservice.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:35:46 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:27:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,11 +42,15 @@
     the service we do nothing.
 */
 
+#ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
+#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <msiquery.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 /*
     Advapi.dll needs to be loaded dynamically because the service
