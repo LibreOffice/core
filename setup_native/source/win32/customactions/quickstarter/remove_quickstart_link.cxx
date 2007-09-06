@@ -4,9 +4,9 @@
  *
  *  $RCSfile: remove_quickstart_link.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:37:28 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:28:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,17 @@
  *
  ************************************************************************/
 
+#ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
 #pragma warning(disable: 4917)
+#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <shlobj.h>
 #include <msiquery.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 #include <string>
 #include "quickstarter.hxx"

@@ -1,7 +1,11 @@
 #include "quickstarter.hxx"
+#ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
+#endif
 #include <psapi.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 #include <tlhelp32.h>
 #include <malloc.h>
 
