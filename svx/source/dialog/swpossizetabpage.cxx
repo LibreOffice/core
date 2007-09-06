@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swpossizetabpage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:43:27 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:25:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -565,7 +565,7 @@ ULONG lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
   -----------------------------------------------------------------------*/
 SvxSwPosSizeTabPage::SvxSwPosSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_SWPOSSIZE ), rInAttrs ),
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
 #endif
     m_aSizeFL(    this, SVX_RES( FL_SIZE   ) ),
@@ -606,7 +606,7 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage( Window* pParent, const SfxItemSet& rIn
 
     m_aFollowCB(      this, SVX_RES( CB_FOLLOW      ) ),
     m_aExampleWN( this,   SVX_RES( WN_EXAMPLE ) ),
-#ifdef WNT
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
 #endif
     m_pVMap( 0 ),
