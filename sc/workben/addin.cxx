@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:15:53 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,9 @@
  *
  ************************************************************************/
 
+#ifdef _MSC_VER
 #pragma hdrstop
+#endif
 
 #include <usr/factoryhlp.hxx>
 #include <usr/macros.hxx>
