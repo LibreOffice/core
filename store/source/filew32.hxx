@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filew32.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:32:12 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:15:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,14 @@
 #ifndef INCLUDED_STORE_FILEW32_HXX
 #define INCLUDED_STORE_FILEW32_HXX
 
+#ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers
+#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 typedef HANDLE HSTORE;
 
