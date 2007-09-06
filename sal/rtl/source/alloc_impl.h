@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alloc_impl.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:28:50 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:48:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,9 +222,13 @@ typedef pthread_mutex_t rtl_memory_lock_type;
 #elif defined(SAL_W32)
 
 #define WIN32_LEAN_AND_MEAN
+#ifdef _MSC_VER
 #pragma warning(push,1) /* disable warnings within system headers */
+#endif
 #include <windows.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 typedef CRITICAL_SECTION rtl_memory_lock_type;
 
