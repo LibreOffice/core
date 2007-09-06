@@ -6,7 +6,9 @@
 #include "registrywnt.hxx"
 #include "registryw9x.hxx"
 
+#ifdef _MSC_VER
 #pragma warning(disable : 4350)
+#endif
 
 //------------------------------
 //

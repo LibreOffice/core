@@ -18,7 +18,9 @@
 #include "registryexception.hxx"
 #endif
 
+#ifdef _MSC_VER
 #pragma warning(disable : 4350)
+#endif
 
 //--------------------------------------
 /**
