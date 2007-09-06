@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:43:50 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:02:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -886,7 +886,7 @@ static sal_Bool lcl_IsMonoSpaceFont( const OutputDevice& rOut )
 // mit -Ox Optimierung stuerzt's unter win95 ab
 // JP 12.07.95: unter WNT auch (i386);       Alpha ??
 // global optimization off
-#if defined( WNT ) && defined( MSC ) //&& defined( W40 )
+#ifdef _MSC_VER
 #pragma optimize("g",off)
 #endif
 
@@ -1868,7 +1868,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
 
 // Optimierung war fuer DrawText() ausgeschaltet
-#if defined( WNT ) && defined( MSC )    // && defined( W40 )
+#ifdef _MSC_VER
 #pragma optimize("",on)
 #endif
 
