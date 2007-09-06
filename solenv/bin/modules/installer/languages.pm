@@ -4,9 +4,9 @@
 #
 #   $RCSfile: languages.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 12:25:24 $
+#   last change: $Author: kz $ $Date: 2007-09-06 09:52:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,19 @@ sub analyze_languagelist
     my $first = $installer::globals::languagelist;
 
     $first =~ s/\_/\,/g;    # substituting "_" by ",", in case of dmake definition 01_49
+
+    # Checking if this is a multilingual installation set on Unix (languagelist contains ",")
+    # Products are separated by a "#", if defined in zip-list by a "|". But "get_info_about_languages"
+    # substitutes already "|" to "#". This procedure only knows "#" as product separator.
+    # Different languages for one product are separated by ",". But on the command line the "_" is used.
+    # Therefore "_" is replaced by "," at the beginning of this procedure.
+
+    if (( $installer::globals::compiler =~ /unx/ ) && ( $first =~ /\,/ ))
+    {
+        $installer::globals::is_unix_multi = 1;
+        my $infoline = "This is a multilingual unix product (\$installer::globals::is_unix_multi set true)\n";
+        push(@installer::globals::globallogfileinfo, $infoline);
+    }
 
     if ( $installer::globals::is_unix_multi )
     {
