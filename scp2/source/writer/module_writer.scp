@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_writer.scp,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:31:51 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 10:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include "macros.inc"
 
 Module gid_Module_Prg_Wrt
+    PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_PRG_WRT);
     ParentID = gid_Module_Prg;
     Sortkey = "100";
@@ -44,6 +45,7 @@ End
 Module gid_Module_Prg_Wrt_Bin
     MOD_NAME_DESC ( MODULE_PRG_WRT_BIN );
     ParentID = gid_Module_Prg_Wrt;
+    Sortkey = "100";
     Minimal = YES;
     Default = YES;
     Files = (gid_File_Bin_Cde_Sagenda,gid_File_Bin_Cde_Sfax,gid_File_Bin_Cde_Slabel,
@@ -81,6 +83,7 @@ End
 Module gid_Module_Prg_Wrt_Help
     MOD_NAME_DESC ( MODULE_PRG_WRT_HELP );
     ParentID = gid_Module_Prg_Wrt;
+    Sortkey = "200";
     Default = YES;
     Minimal = YES;
     Files = (gid_File_Help_Swriter_Zip);
