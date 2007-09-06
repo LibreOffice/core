@@ -4,9 +4,9 @@
 #
 #   $RCSfile: sorter.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:11:55 $
+#   last change: $Author: kz $ $Date: 2007-09-06 09:53:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,36 @@ sub sorting_array_of_hashes
             my $sortvalueover = $onehashover->{$sortkey};
 
             if ( $sortvalueunder gt $sortvalueover)
+            {
+                ${$arrayref}[$i] = $onehashover;
+                ${$arrayref}[$j] = $onehashunder;
+
+                $onehashunder = $onehashover;
+                $sortvalueunder = $sortvalueover;
+            }
+        }
+    }
+}
+
+######################################################
+# Sorting an array of hashes with a numerical value
+######################################################
+
+sub sort_array_of_hashes_numerically
+{
+    my ($arrayref, $sortkey) = @_;
+
+    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
+    {
+        my $onehashunder = ${$arrayref}[$i];
+        my $sortvalueunder = $onehashunder->{$sortkey};
+
+        for ( my $j = $i + 1; $j <= $#{$arrayref}; $j++ )
+        {
+            my $onehashover = ${$arrayref}[$j];
+            my $sortvalueover = $onehashover->{$sortkey};
+
+            if ( $sortvalueunder > $sortvalueover)
             {
                 ${$arrayref}[$i] = $onehashover;
                 ${$arrayref}[$j] = $onehashunder;
