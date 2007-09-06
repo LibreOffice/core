@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckconfig.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 15:57:08 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 13:38:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,14 @@
 #include <osl/file.hxx>
 
 #ifdef WNT
+#ifdef _MSC_VER
 #pragma warning(push,1) // disable warnings within system headers
 #pragma warning(disable: 4917)
+#endif
 #include <shlobj.h>
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 #endif
 
 namespace container = com::sun::star::container ;
@@ -222,7 +226,7 @@ rtl::OUString UpdateCheckConfig::getDesktopDirectory()
 
     if( ! FAILED( SHGetSpecialFolderPathW( NULL, szPath, CSIDL_DESKTOPDIRECTORY, true ) ) )
     {
-        aRet = rtl::OUString( szPath );
+        aRet = rtl::OUString( reinterpret_cast< sal_Unicode * >(szPath) );
         osl::FileBase::getFileURLFromSystemPath( aRet, aRet );
     }
 #else
@@ -245,7 +249,7 @@ rtl::OUString UpdateCheckConfig::getAllUsersDirectory()
 
     if( ! FAILED( SHGetSpecialFolderPathW( NULL, szPath, CSIDL_COMMON_DOCUMENTS, true ) ) )
     {
-        aRet = rtl::OUString( szPath );
+        aRet = rtl::OUString( reinterpret_cast< sal_Unicode * >(szPath) );
         osl::FileBase::RC rc;
         rc = osl::FileBase::getFileURLFromSystemPath( aRet, aRet );
     }
