@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.53 $
+#   $Revision: 1.54 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 15:27:11 $
+#   last change: $Author: kz $ $Date: 2007-09-06 09:54:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1668,7 +1668,7 @@ sub prepare_windows_patchfiles
     # and finally checking the file size
     if ( -f $patchfilename )    # test of existence
     {
-        my $filesize = (stat($patchfilename))[7];   # file size can be "0"
+        my $filesize = ( -s $patchfilename );
         $infoline = "Size of patch file list: $filesize\n\n";
         push( @installer::globals::logfileinfo, $infoline);
         installer::logger::print_message( "... size of patch list file: $filesize Byte ... \n" );
@@ -2044,22 +2044,18 @@ sub create_jds_sets
     # find and read jds files list
     my $filelistname = $installer::globals::jdsexcludefilename;
 
-    # File has to be located next to the package list
-    my $path = $installer::globals::packagelist;
-    installer::pathanalyzer::get_path_from_fullqualifiedname(\$path);
-    $filelistname = $path . $filelistname;
+    my $filelistnameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filelistname, "", 0);
+    if ($$filelistnameref eq "") { installer::exiter::exit_program("ERROR: Could not find jds list file $filelistname!", "create_jds_sets"); }
 
-    if ( ! -f $filelistname ) { installer::exiter::exit_program("ERROR: Could not find jds list file $filelistname!", "create_jds_sets"); }
-    my $listfile = installer::files::read_file($filelistname);
+    my $listfile = installer::files::read_file($$filelistnameref);
 
-    my $infoline = "Found jds list file: $filelistname \n";
+    my $infoline = "Found jds list file: $$filelistnameref\n";
     push( @installer::globals::logfileinfo, $infoline);
 
     # substituting the variables
     substitute_dollar_variables($listfile, $allvariableshashref);
 
     # determining the packages/RPMs to copy
-    # my $allexcludepackages = get_all_files_from_filelist($listfile, "excludefiles");
     my $allexcludepackages = get_section_from_file($listfile, "excludefiles");
     my $allcopypackages = get_section_from_file($listfile, "copyfiles");
 
