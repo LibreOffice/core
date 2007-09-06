@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_testtool.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:12:35 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 10:10:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,9 @@
 #include "macros.inc"
 
 Module gid_Module_Optional_Testtool
+    PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC ( MODULE_OPTIONAL_TESTTOOL );
+    Sortkey = "650";
     ParentID = gid_Module_Optional;
     Default = NO;
     Files = (gid_File_Bin_Testtool, gid_File_Lib_Communi, gid_File_Lib_Simplecm, gid_File_Hid_Testtool, gid_File_Config_Testtool);
