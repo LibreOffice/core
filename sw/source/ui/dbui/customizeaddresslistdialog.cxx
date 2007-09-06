@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customizeaddresslistdialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:52:52 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:04:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,9 @@
 SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
         Window* pParent, const SwCSVData& rOldData) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_CUSTOMIZE_ADDRESS_LIST)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aFieldsFT( this, SW_RES(    FT_FIELDS)),
     m_aFieldsLB( this, SW_RES(    LB_FIELDS)),
     m_aAddPB( this, SW_RES(       PB_ADD)),
@@ -80,7 +82,9 @@ SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
     m_aOK( this, SW_RES(          PB_OK)),
     m_aCancel( this, SW_RES(      PB_CANCEL)),
     m_aHelp( this, SW_RES(        PB_HELP)),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
     m_pNewData( new SwCSVData(rOldData))
 {
     FreeResource();
@@ -238,13 +242,17 @@ SwCSVData*    SwCustomizeAddressListDialog::GetNewData()
 SwAddRenameEntryDialog::SwAddRenameEntryDialog(
         Window* pParent, bool bRename, const ::std::vector< ::rtl::OUString >& rCSVHeader) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_ADD_RENAME_ENTRY)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aFieldNameFT( this, SW_RES( FT_FIELDNAME)),
     m_aFieldNameED( this, SW_RES( ED_FIELDNAME)),
     m_aOK( this, SW_RES(          PB_OK)),
     m_aCancel( this, SW_RES(      PB_CANCEL)),
     m_aHelp( this, SW_RES(        PB_HELP)),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
     m_rCSVHeader(rCSVHeader)
 {
     if(bRename)

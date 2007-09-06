@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputtypepage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:04:34 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:06:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,9 @@
   -----------------------------------------------------------------------*/
 SwMailMergeOutputTypePage::SwMailMergeOutputTypePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_OUTPUTTYPE_PAGE)),
+#ifdef _MSC_VER
 #pragma warning (disable : 4355)
+#endif
     m_aHeaderFI(    this, SW_RES( FI_HEADER    )),
     m_aTypeFT(      this, SW_RES( FT_TYPE    )),
     m_aLetterRB(    this, SW_RES( RB_LETTER  )),
@@ -75,7 +77,9 @@ SwMailMergeOutputTypePage::SwMailMergeOutputTypePage( SwMailMergeWizard* _pParen
     m_aHintHeaderFI(this, SW_RES( FI_HINTHEADER)),
     m_aHintFI(      this, SW_RES( FI_HINT)),
     m_aNoMailHintFI(this, SW_RES( FT_NOMAILHINT)),
+#ifdef _MSC_VER
 #pragma warning (default : 4355)
+#endif
     m_pWizard(_pParent),
     m_sLetterHintHeader(  SW_RES( ST_LETTERHINTHEADER)),
     m_sMailHintHeader(      SW_RES( ST_MAILHINTHEADER)),
