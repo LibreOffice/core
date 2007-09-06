@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2007-06-19 16:01:34 $
+#   last change: $Author: kz $ $Date: 2007-09-06 13:43:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC" || "$(GUI)$(COM)"=="WNTGCC"
 LIBTEXTCATLIB=-ltextcat
 .ELSE               # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 LIBTEXTCATLIB=ilibtextcat.lib
