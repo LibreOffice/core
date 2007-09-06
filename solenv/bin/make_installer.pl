@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.92 $
+#   $Revision: 1.93 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-26 08:47:55 $
+#   last change: $Author: kz $ $Date: 2007-09-06 09:50:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -158,18 +158,6 @@ my $shipinstalldir = "";
 my $current_install_number = "";
 
 ######################################
-# Checking the package list
-######################################
-
-my $packages;
-
-if ((!($installer::globals::iswindowsbuild)) && (!($installer::globals::is_copy_only_project)))
-{
-    $packages = installer::control::read_packagelist($installer::globals::packagelist);
-    installer::control::check_packagelist($packages);
-}
-
-######################################
 # Checking the system requirements
 ######################################
 
@@ -187,10 +175,6 @@ if (( $installer::globals::iswindowsbuild ) &&  ( $installer::globals::prepare_w
 ###################################################
 # Analyzing the settings and variables in zip.lst
 ###################################################
-
-# if the ziplistname is not defined on the command line, it is defaulted
-
-if ($installer::globals::use_default_ziplist) { installer::ziplist::set_ziplist_name($pathvariableshashref); }
 
 installer::logger::globallog("zip list file: $installer::globals::ziplistname");
 
@@ -258,6 +242,14 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 
 installer::simplepackage::check_simple_packager_project($allvariableshashref);
 
+####################################################################
+# setting global variables
+####################################################################
+
+installer::control::set_addchildprojects($allvariableshashref);
+installer::control::set_addjavainstaller($allvariableshashref);
+installer::control::set_addsystemintegration($allvariableshashref);
+
 ########################################################
 # Re-define logging dir, after all variables are set
 ########################################################
@@ -315,9 +307,8 @@ installer::worker::collect_all_files_from_includepathes($includepatharrayref);
 
 ##############################################
 # Analyzing languages in zip.lst if required
+# Probably no longer used.
 ##############################################
-
-# Now get info about the languages and the setup script (defined on command line or in product list)
 
 if ($installer::globals::languages_defined_in_productlist) { installer::languages::get_info_about_languages($allsettingsarrayref); }
 
@@ -532,7 +523,7 @@ if ( $installer::globals::debug ) { installer::logger::savedebug($installer::glo
 #################################################
 
 # Now starts the language dependent part, if more than one product is defined on the command line
-# Example -l 01,33,49#81,82,86,88 defines two multilingual products
+# Example -l en-US,de#es,fr,it defines two multilingual products
 
 ###############################################################################
 # Beginning of language dependent part
@@ -577,9 +568,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             installer::logger::include_header_into_logfile("$infoline");
             installer::logger::print_message( "$infoline" );
 
-            $packages = installer::control::read_packagelist($installer::globals::addpackagelist); # reading the addon packagelist (which should be the languagepack package list)
-            installer::control::check_packagelist($packages);
-
             if ( $n == 1 )  # packing the language packs, after the office is created
             {
                 $installer::globals::languagepack = 1;      # !!! Setting languagepack variable after finishing the first language
@@ -595,7 +583,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if ( $installer::globals::patch )
     {
-        $installer::globals::addchildprojects = 0;  # no child projects for patches
         $installer::globals::addlicensefile = 0;    # no license files for patches
         $installer::globals::makedownload = 0;
         $installer::globals::makejds = 0;
@@ -1159,6 +1146,29 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         next; # ! leaving the current loop, because no further packaging required.
     }
 
+    ###########################################################
+    # Analyzing the package structure
+    ###########################################################
+
+    installer::logger::print_message( "... analyzing package list ...\n" );
+
+    my $packages = installer::packagelist::collectpackages($modulesinproductlanguageresolvedarrayref, $languagesarrayref);
+    installer::packagelist::check_packagelist($packages);
+
+    if ( ! $installer::globals::languagepack )
+    {
+        $packages = installer::packagelist::analyze_list($packages, $modulesinproductlanguageresolvedarrayref);
+        installer::packagelist::remove_multiple_modules_packages($packages);
+    }
+
+    if ( $installer::globals::languagepack )    # language pack has its own module structure
+    {
+        $packages = installer::packagelist::analyze_list_languagepack($packages);
+    }
+
+    # printing packages content:
+    installer::packagelist::log_packages_content($packages);
+
     if ( $installer::globals::debug ) { installer::logger::debuginfo("\nEnd of part 1b: The language dependent part\n"); }
 
     # saving debug info, before starting part 2
@@ -1202,26 +1212,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         my $listfiledir = installer::systemactions::create_directories("listfile", $languagestringref);
         my $installlogdir = installer::systemactions::create_directory_next_to_directory($installdir, "log");
         # my $installchecksumdir = installer::systemactions::create_directory_next_to_directory($installdir, "checksum");
-
-        ############################################################################
-        # Investigating the different RPMs, Packages, ... that shall be created.
-        # The module GIDs are defined in the input file
-        # Only for non-Windows platforms
-        ############################################################################
-
-        installer::logger::print_message( "... analyzing package list ...\n" );
-
-        if ( ! $installer::globals::languagepack )  # language pack has its own module structure
-        {
-            $packages = installer::packagelist::analyze_list($packages, $modulesinproductlanguageresolvedarrayref);
-
-            installer::packagelist::remove_multiple_modules_packages($packages);
-        }
-
-        if ( $installer::globals::languagepack )    # language pack has its own module structure
-        {
-            $packages = installer::packagelist::analyze_list_languagepack($packages);
-        }
 
         my $epmexecutable = "";
         my $found_epm = 0;
@@ -1760,6 +1750,15 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # my $installchecksumdir = installer::systemactions::create_directory_next_to_directory($installdir, "checksum");
 
         #################################################################################
+        # Preparing cabinet files from package definitions
+        #################################################################################
+
+        # installer::packagelist::prepare_cabinet_files($packages, $allvariableshashref, $$languagestringref);
+        installer::packagelist::prepare_cabinet_files($packages, $allvariableshashref);
+        # printing packages content:
+        installer::packagelist::log_cabinet_assignments();
+
+        #################################################################################
         # Begin of functions that are used for the creation of idt files (Windows only)
         #################################################################################
 
@@ -1785,12 +1784,17 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         my $inifiletableentries = installer::worker::collect_all_items_with_special_flag($profileitemsinproductlanguageresolvedarrayref ,"INIFILETABLE");
 
         # Creating the important dynamic idt files
-
         installer::windows::msiglobal::set_msiproductversion($allvariableshashref);
         installer::windows::msiglobal::put_msiproductversion_into_bootstrapfile($filesinproductlanguageresolvedarrayref);
 
-        $filesinproductlanguageresolvedarrayref = installer::windows::file::create_files_table($filesinproductlanguageresolvedarrayref, \@allfilecomponents, $newidtdir, $allvariableshashref);
+        # Add cabinet assignments to files
+        installer::windows::file::assign_cab_to_files($filesinproductlanguageresolvedarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles17a.log", $filesinproductlanguageresolvedarrayref); }
+        installer::windows::file::assign_sequencenumbers_to_files($filesinproductlanguageresolvedarrayref);
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles17b.log", $filesinproductlanguageresolvedarrayref); }
+
+        $filesinproductlanguageresolvedarrayref = installer::windows::file::create_files_table($filesinproductlanguageresolvedarrayref, \@allfilecomponents, $newidtdir, $allvariableshashref);
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles17c.log", $filesinproductlanguageresolvedarrayref); }
 
         installer::windows::directory::create_directory_table($directoriesforepmarrayref, $newidtdir, $allvariableshashref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles18.log", $filesinproductlanguageresolvedarrayref); }
@@ -1809,6 +1813,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles19b.log", $filesinproductlanguageresolvedarrayref); }
 
         # Attention: The table "Feature.idt" contains language specific strings -> parameter: $languagesarrayref !
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "modules4.log", $modulesinproductlanguageresolvedarrayref); }
+        installer::windows::feature::add_uniquekey($modulesinproductlanguageresolvedarrayref);
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "modules4a.log", $modulesinproductlanguageresolvedarrayref); }
+        $modulesinproductlanguageresolvedarrayref = installer::windows::feature::sort_feature($modulesinproductlanguageresolvedarrayref);
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "modules4b.log", $modulesinproductlanguageresolvedarrayref); }
         installer::windows::feature::create_feature_table($modulesinproductlanguageresolvedarrayref, $newidtdir, $languagesarrayref, $allvariableshashref);
 
         installer::windows::featurecomponent::create_featurecomponent_table($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $newidtdir);
@@ -2037,7 +2046,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         $installer::globals::packjobref = installer::windows::msiglobal::generate_cab_file_list($filesinproductlanguageresolvedarrayref, $installdir, $ddfdir, $allvariableshashref);
 
         # Update and patch reasons the pack order needs to be saved
-        installer::windows::msiglobal::save_packorder($filesinproductlanguageresolvedarrayref);
+        installer::windows::msiglobal::save_packorder();
 
         $infoline = "\n";
         push(@installer::globals::logfileinfo, $infoline);
