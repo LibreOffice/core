@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-12 11:16:03 $
+#   last change: $Author: kz $ $Date: 2007-09-06 09:52:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ sub usage
 --------------------------------------------------------------------------------
 $installer::globals::prog V1.0 (c) Ingo Schmidt 2003
 The following parameter are needed:
--f: Path to the product list (zip.lst) (optional, defaulted to zip.lst)
+-f: Path to the product list (required)
 -s: Path to the setup script (optional, if defined in product list)
 -i: Install path of the product (/opt/openofficeorg20) (optional)
 -p: Product from product list to be created (required)
@@ -67,8 +67,6 @@ The following parameter are needed:
 -u: Path, in which zipfiles are unpacked (optional)
 -msitemplate: Source of the msi file templates (Windows compiler only)
 -msilanguage: Source of the msi file templates (Windows compiler only)
--msichild: Source of the child products (Windows only)
--javafiles: Source of the Java installer files  (opt., non-Windows only)
 -javalanguage: Source of the Java language files (opt., non-Windows only)
 -buildid: Current BuildID (optional)
 -pro: Product version
@@ -77,9 +75,6 @@ The following parameter are needed:
 -dontunzip: do not unzip all files with flag ARCHIVE
 -dontcallepm : do not call epm to create install sets (opt., non-Windows only)
 -ispatchedepm : Usage of a patched (non-standard) epm (opt., non-Windows only)
--packagelist : file, containing a list of module gids (opt., non-Windows only)
--addpackagelist : additional packlist, only multilingual unix
--addsystemintegration : adding system integration packages (opt., Unix only)
 -copyproject : is set for projects that are only used for copying (optional)
 -languagepack : do create a languagepack, no product pack (optional)
 -patch : do create a patch (optional)
@@ -90,16 +85,15 @@ The following parameter are needed:
 
 Examples for Windows:
 
-perl make_epmlist.pl -f zip.lst -s setup.inf -p OfficeFAT -l 01
+perl make_epmlist.pl -f zip.lst -p OfficeFAT -l en-US
                      -u /export/unpack -buildid 8712
                      -msitemplate /export/msi_files
                      -msilanguage /export/msi_languages
 
 Examples for Non-Windows:
 
-perl make_epmlist.pl -f zip.lst -s setup.inf -p OfficeFAT -l 01 -format rpm
-                     -u /export/unpack -buildid 8712 -i /opt/openofficeorg20
-                     -packagelist packagelist.txt -ispatchedepm
+perl make_epmlist.pl -f zip.lst -p OfficeFAT -l en-US -format rpm
+                     -u /export/unpack -buildid 8712 -ispatchedepm
 --------------------------------------------------------------------------------
 Ende
     exit(-1);
@@ -162,17 +156,12 @@ sub getparameter
         elsif ($param eq "-msitemplate") { $installer::globals::idttemplatepath = shift(@ARGV); }
         elsif ($param eq "-msilanguage") { $installer::globals::idtlanguagepath = shift(@ARGV); }
         elsif ($param eq "-patchinc") { $installer::globals::patchincludepath = shift(@ARGV); }
-        elsif ($param eq "-addjavainstaller") { $installer::globals::addjavainstaller = 1; }
         elsif ($param eq "-javalanguage") { $installer::globals::javalanguagepath = shift(@ARGV); }
         elsif ($param eq "-buildid") { $installer::globals::buildid = shift(@ARGV); }
-        elsif ($param eq "-packagelist") { $installer::globals::packagelist = shift(@ARGV); }
-        elsif ($param eq "-addpackagelist") { $installer::globals::addpackagelist = shift(@ARGV); }
         elsif ($param eq "-copyproject") { $installer::globals::is_copy_only_project = 1; }
         elsif ($param eq "-languagepack") { $installer::globals::languagepack = 1; }
         elsif ($param eq "-patch") { $installer::globals::patch = 1; }
         elsif ($param eq "-debian") { $installer::globals::debian = 1; }
-        elsif ($param eq "-addchildprojects") { $installer::globals::addchildprojects = 1; }
-        elsif ($param eq "-addsystemintegration") { $installer::globals::addsystemintegration = 1; }
         elsif ($param eq "-dontstrip") { $installer::globals::strip = 0; }
         elsif ($param eq "-destdir")    # new parameter for simple installer
         {
@@ -201,7 +190,6 @@ sub getparameter
     # Usage of simple installer (not for Windows):
     # $PERL -w $SOLARENV/bin/make_installer.pl \
     # -f openoffice.lst -l en-US -p OpenOffice \
-    # -packagelist ../inc_openoffice/unix/packagelist.txt \
     # -buildid $BUILD -rpm \
     # -destdir /tmp/nurk -simple $INSTALL_PATH
 }
@@ -319,8 +307,6 @@ sub setglobalvariables
     if ( $installer::globals::compiler =~ /unxso[lg]s/ ) { $installer::globals::issolarissparcbuild = 1; }
 
     if ( $installer::globals::compiler =~ /unxso[lg]i/ ) { $installer::globals::issolarisx86build = 1; }
-
-    if (( $installer::globals::compiler =~ /unx/ ) && ( $installer::globals::addpackagelist )) { $installer::globals::is_unix_multi = 1; }
 
     if ( $installer::globals::compiler =~ /unxlngi/ || $installer::globals::compiler =~ /unxlngx/ || $installer::globals::compiler =~ /unxlngs/ || $installer::globals::compiler =~ /unxlngppc/ )
     {
@@ -464,36 +450,6 @@ sub control_required_parameter
 
     if (!($installer::globals::is_copy_only_project))
     {
-
-        ############################################################################
-        # Non Windows: Checking $installer::globals::packagelist
-        ############################################################################
-
-        if (($installer::globals::packagelist eq "") && (!($installer::globals::iswindowsbuild)))
-        {
-            installer::logger::print_error( "Package list file not set (-packagelist)!\n;
-                                             This package list is required for non-Windows builds!" );
-            usage();
-            exit(-1);
-        }
-
-        # Testing existence of packagelist file. Only needed for non-Windows compilers.
-
-        if (!($installer::globals::iswindowsbuild))
-        {
-            installer::files::check_file($installer::globals::packagelist);
-
-            $installer::globals::absolutepackagelistpath = $installer::globals::packagelist;
-            make_path_absolute(\$installer::globals::absolutepackagelistpath);
-
-            # If an additional packagelist is defined (Unix, multilingual installation set), it has to exist.
-
-            if ( $installer::globals::addpackagelist )
-            {
-                installer::files::check_file($installer::globals::packagelist);
-            }
-        }
-
         ##############################################################################################
         # idt template path. Only required for Windows build ($installer::globals::compiler =~ /wntmsci/)
         # for the creation of the msi database.
@@ -580,8 +536,16 @@ sub control_required_parameter
     # also for copy-only projects
     #######################################
 
-    if ($installer::globals::ziplistname eq "") { $installer::globals::use_default_ziplist = 1; }
-    else { installer::files::check_file($installer::globals::ziplistname); }  # if the ziplist file is defined, it has to exist
+    if ($installer::globals::ziplistname eq "")
+    {
+        installer::logger::print_error( "ERROR: Zip list file has to be defined (Parameter -f) !" );
+        usage();
+        exit(-1);
+    }
+    else
+    {
+        installer::files::check_file($installer::globals::ziplistname);
+    }
 
     if ($installer::globals::setupscriptname eq "") { $installer::globals::setupscript_defined_in_productlist = 1; }
     else { installer::files::check_file($installer::globals::setupscriptname); } # if the setupscript file is defined, it has to exist
@@ -602,14 +566,7 @@ sub outputparameter
 
     push(@output, "\n########################################################\n");
     push(@output, "$installer::globals::prog, version 1.0\n");
-    if (!($installer::globals::use_default_ziplist))
-    {
-        push(@output, "Product list file: $installer::globals::ziplistname\n");
-    }
-    else
-    {
-        push(@output, "Product list file: Defaulted\n");        # to b_server/zip/zip.lst
-    }
+    push(@output, "Product list file: $installer::globals::ziplistname\n");
     if (!($installer::globals::setupscript_defined_in_productlist))
     {
         push(@output, "Setup script: $installer::globals::setupscriptname\n");
@@ -630,23 +587,16 @@ sub outputparameter
     if ( $installer::globals::rootpath eq "" ) { push(@output, "Using default installpath\n"); }
     else { push(@output, "Installpath: $installer::globals::rootpath\n"); }
     push(@output, "Package format: $installer::globals::packageformat\n");
-    if (!($installer::globals::packagelist eq ""))  { push(@output, "Package list file: $installer::globals::packagelist\n"); }
-    if ((!($installer::globals::packagelist eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Package list file will be ignored for Windows!\n"); }
-    if (!($installer::globals::addpackagelist eq ""))   { push(@output, "Addon-Package list file: $installer::globals::addpackagelist\n"); }
-    if ((!($installer::globals::addpackagelist eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Addon-Package list file will be ignored for Windows!\n"); }
     if (!($installer::globals::idttemplatepath eq ""))  { push(@output, "msi templatepath: $installer::globals::idttemplatepath\n"); }
     if ((!($installer::globals::idttemplatepath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi template path will be ignored for non Windows builds!\n"); }
     if (!($installer::globals::idtlanguagepath eq ""))  { push(@output, "msi languagepath: $installer::globals::idtlanguagepath\n"); }
     if ((!($installer::globals::idtlanguagepath eq "")) && (!($installer::globals::iswindowsbuild))) { push(@output, "msi language path will be ignored for non Windows builds!\n"); }
     if ((!($installer::globals::iswindowsbuild)) && ( $installer::globals::call_epm )) { push(@output, "Calling epm\n"); }
     if ((!($installer::globals::iswindowsbuild)) && (!($installer::globals::call_epm))) { push(@output, "Not calling epm\n"); }
-    if ( $installer::globals::addjavainstaller ) { push(@output, "Adding Java installer\n"); }
     if (!($installer::globals::javalanguagepath eq "")) { push(@output, "Java language path: $installer::globals::javalanguagepath\n"); }
     if ((!($installer::globals::javalanguagepath eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Java language path will be ignored for Windows builds!\n"); }
     if ( $installer::globals::patchincludepath ) { push(@output, "Patch include path: $installer::globals::patchincludepath\n"); }
-    if (($installer::globals::iswindowsbuild) && ($installer::globals::addchildprojects )) { push(@output, "Adding child projects into installation set\n"); }
     if ( $installer::globals::globallogging ) { push(@output, "Complete logging activated\n"); }
-    if ( $installer::globals::addsystemintegration ) { push(@output, "Adding system integration packages\n"); }
     if ( $installer::globals::debug ) { push(@output, "Debug is activated\n"); }
     if ( $installer::globals::tab ) { push(@output, "TAB version\n"); }
     if ( $installer::globals::strip ) { push(@output, "Stripping files\n"); }
