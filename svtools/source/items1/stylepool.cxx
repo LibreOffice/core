@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stylepool.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:46:10 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 14:13:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#ifndef GCC
+#ifdef _MSC_VER
 #pragma hdrstop
 #endif
 
