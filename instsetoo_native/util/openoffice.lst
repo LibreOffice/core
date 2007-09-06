@@ -25,6 +25,7 @@ OpenOffice
 			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
 			UPDATEURL http://update23.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk
+			ADDSYSTEMINTEGRATION 1
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
@@ -75,6 +76,7 @@ OpenOffice_wJRE
 			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
 			UPDATEURL http://update23.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
+			ADDSYSTEMINTEGRATION 1
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
@@ -236,6 +238,7 @@ BrOffice
 			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
 			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk
+			ADDSYSTEMINTEGRATION 1
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
@@ -286,6 +289,7 @@ BrOffice_wJRE
 			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
 			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
+			ADDSYSTEMINTEGRATION 1
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
