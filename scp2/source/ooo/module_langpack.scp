@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_langpack.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 14:41:57 $
+ *  last change: $Author: kz $ $Date: 2007-09-06 10:08:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ End
 // English
 
 Module gid_Module_Root_en_US
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "100";
     MOD_NAME_DESC(MODULE_LANGPACK_EN_US);
@@ -58,6 +59,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_en_US
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_en_US;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_en_US";
@@ -68,6 +70,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_en_US
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_en_US;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_en_US";
@@ -78,6 +81,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_en_US
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_en_US;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_en_US";
@@ -89,6 +93,7 @@ End
 // German
 
 Module gid_Module_Root_de
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "200";
     MOD_NAME_DESC(MODULE_LANGPACK_DE);
@@ -99,6 +104,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_de
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_de;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_de";
@@ -109,6 +115,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_de
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_de;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_de";
@@ -119,6 +126,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_de
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_de;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_de";
@@ -130,6 +138,7 @@ End
 // French
 
 Module gid_Module_Root_fr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "300";
     MOD_NAME_DESC(MODULE_LANGPACK_FR);
@@ -140,6 +149,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_fr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_fr;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_fr";
@@ -150,6 +160,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_fr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_fr;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_fr";
@@ -160,6 +171,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_fr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_fr;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_fr";
@@ -171,6 +183,7 @@ End
 // Italian
 
 Module gid_Module_Root_it
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "400";
     MOD_NAME_DESC(MODULE_LANGPACK_IT);
@@ -181,6 +194,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_it
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_it;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_it";
@@ -191,6 +205,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_it
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_it;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_it";
@@ -201,6 +216,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_it
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_it;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_it";
@@ -212,6 +228,7 @@ End
 // Spanish
 
 Module gid_Module_Root_es
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "500";
     MOD_NAME_DESC(MODULE_LANGPACK_ES);
@@ -222,6 +239,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_es
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_es;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_es";
@@ -232,6 +250,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_es
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_es;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_es";
@@ -242,6 +261,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_es
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_es;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_es";
@@ -253,6 +273,7 @@ End
 // Swedish
 
 Module gid_Module_Root_sv
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "600";
     MOD_NAME_DESC(MODULE_LANGPACK_SV);
@@ -263,6 +284,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_sv
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sv;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_sv";
@@ -273,6 +295,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_sv
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sv;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_sv";
@@ -283,6 +306,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_sv
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sv;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_sv";
@@ -294,6 +318,7 @@ End
 // Portuguese
 
 Module gid_Module_Root_pt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "700";
     MOD_NAME_DESC(MODULE_LANGPACK_PT);
@@ -304,6 +329,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_pt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_pt;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_pt";
@@ -314,6 +340,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_pt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_pt;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_pt";
@@ -324,6 +351,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_pt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_pt;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_pt";
@@ -335,6 +363,7 @@ End
 // Portuguese (Brazilian)
 
 Module gid_Module_Root_pt_BR
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "700";
     MOD_NAME_DESC(MODULE_LANGPACK_PT_BR);
@@ -345,6 +374,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_pt_BR
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_pt_BR;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_pt_BR";
@@ -355,6 +385,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_pt_BR
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_pt_BR;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_pt_BR";
@@ -365,6 +396,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_pt_BR
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_pt_BR;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_pt_BR";
@@ -376,6 +408,7 @@ End
 // Japanese
 
 Module gid_Module_Root_ja
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "800";
     MOD_NAME_DESC(MODULE_LANGPACK_JA);
@@ -386,6 +419,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ja
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ja;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ja";
@@ -396,6 +430,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ja
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ja;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ja";
@@ -406,6 +441,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ja
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ja;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ja";
@@ -417,6 +453,7 @@ End
 // Korean
 
 Module gid_Module_Root_ko
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "900";
     MOD_NAME_DESC(MODULE_LANGPACK_KO);
@@ -427,6 +464,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ko
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ko;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ko";
@@ -437,6 +475,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ko
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ko;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ko";
@@ -447,6 +486,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ko
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ko;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ko";
@@ -458,6 +498,7 @@ End
 // Chinese (simplified)
 
 Module gid_Module_Root_zh_CN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "1000";
     MOD_NAME_DESC(MODULE_LANGPACK_ZH_CN);
@@ -468,6 +509,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_zh_CN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_zh_CN;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_zh_CN";
@@ -478,6 +520,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_zh_CN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_zh_CN;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_zh_CN";
@@ -488,6 +531,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_zh_CN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_zh_CN;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_zh_CN";
@@ -499,6 +543,7 @@ End
 // Chinese (traditional)
 
 Module gid_Module_Root_zh_TW
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "1100";
     MOD_NAME_DESC(MODULE_LANGPACK_ZH_TW);
@@ -509,6 +554,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_zh_TW
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_zh_TW;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_zh_TW";
@@ -519,6 +565,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_zh_TW
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_zh_TW;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_zh_TW";
@@ -529,6 +576,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_zh_TW
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_zh_TW;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_zh_TW";
@@ -540,6 +588,7 @@ End
 // Dutch
 
 Module gid_Module_Root_nl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "1200";
     MOD_NAME_DESC(MODULE_LANGPACK_NL);
@@ -550,6 +599,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_nl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_nl;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_nl";
@@ -560,6 +610,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_nl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_nl;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_nl";
@@ -570,6 +621,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_nl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_nl;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_nl";
@@ -581,6 +633,7 @@ End
 // Hungarian
 
 Module gid_Module_Root_hu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "1300";
     MOD_NAME_DESC(MODULE_LANGPACK_HU);
@@ -591,6 +644,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_hu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_hu;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_hu";
@@ -601,6 +655,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_hu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_hu;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_hu";
@@ -611,6 +666,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_hu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_hu;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_hu";
@@ -622,6 +678,7 @@ End
 // Polish
 
 Module gid_Module_Root_pl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "1400";
     MOD_NAME_DESC(MODULE_LANGPACK_PL);
@@ -632,6 +689,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_pl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_pl;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_pl";
@@ -642,6 +700,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_pl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_pl;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_pl";
@@ -652,6 +711,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_pl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_pl;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_pl";
@@ -663,6 +723,7 @@ End
 // Russian
 
 Module gid_Module_Root_ru
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "1500";
     MOD_NAME_DESC(MODULE_LANGPACK_RU);
@@ -673,6 +734,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ru
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ru;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ru";
@@ -683,6 +745,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ru
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ru;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ru";
@@ -693,6 +756,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ru
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ru;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ru";
@@ -704,6 +768,7 @@ End
 // Turkish
 
 Module gid_Module_Root_tr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "1600";
     MOD_NAME_DESC(MODULE_LANGPACK_TR);
@@ -714,6 +779,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_tr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_tr;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_tr";
@@ -724,6 +790,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_tr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_tr;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_tr";
@@ -734,6 +801,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_tr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_tr;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_tr";
@@ -745,6 +813,7 @@ End
 // Greek
 
 Module gid_Module_Root_el
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "1700";
     MOD_NAME_DESC(MODULE_LANGPACK_EL);
@@ -755,6 +824,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_el
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_el;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_el";
@@ -765,6 +835,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_el
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_el;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_el";
@@ -775,6 +846,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_el
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_el;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_el";
@@ -786,6 +858,7 @@ End
 // Thai
 
 Module gid_Module_Root_th
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "1800";
     MOD_NAME_DESC(MODULE_LANGPACK_TH);
@@ -796,6 +869,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_th
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_th;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_th";
@@ -806,6 +880,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_th
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_th;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_th";
@@ -816,6 +891,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_th
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_th;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_th";
@@ -827,6 +903,7 @@ End
 // Czech
 
 Module gid_Module_Root_cs
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "1900";
     MOD_NAME_DESC(MODULE_LANGPACK_CS);
@@ -837,6 +914,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_cs
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_cs;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_cs";
@@ -847,6 +925,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_cs
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_cs;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_cs";
@@ -857,6 +936,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_cs
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_cs;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_cs";
@@ -868,6 +948,7 @@ End
 // Slovak
 
 Module gid_Module_Root_sk
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "2000";
     MOD_NAME_DESC(MODULE_LANGPACK_SK);
@@ -878,6 +959,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_sk
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sk;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_sk";
@@ -888,6 +970,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_sk
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sk;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_sk";
@@ -898,6 +981,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_sk
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sk;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_sk";
@@ -909,6 +993,7 @@ End
 // Croatian
 
 Module gid_Module_Root_hr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "2100";
     MOD_NAME_DESC(MODULE_LANGPACK_HR);
@@ -919,6 +1004,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_hr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_hr;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_hr";
@@ -929,6 +1015,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_hr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_hr;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_hr";
@@ -939,6 +1026,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_hr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_hr;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_hr";
@@ -950,6 +1038,7 @@ End
 // Estonian
 
 Module gid_Module_Root_et
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "2200";
     MOD_NAME_DESC(MODULE_LANGPACK_ET);
@@ -960,6 +1049,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_et
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_et;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_et";
@@ -970,6 +1060,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_et
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_et;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_et";
@@ -980,6 +1071,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_et
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_et;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_et";
@@ -991,6 +1083,7 @@ End
 // Vietnamese
 
 Module gid_Module_Root_vi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "2300";
     MOD_NAME_DESC(MODULE_LANGPACK_VI);
@@ -1001,6 +1094,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_vi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_vi;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_vi";
@@ -1011,6 +1105,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_vi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_vi;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_vi";
@@ -1021,6 +1116,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_vi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_vi;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_vi";
@@ -1032,6 +1128,7 @@ End
 // Bulgarian
 
 Module gid_Module_Root_bg
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "2400";
     MOD_NAME_DESC(MODULE_LANGPACK_BG);
@@ -1042,6 +1139,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_bg
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_bg;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_bg";
@@ -1052,6 +1150,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_bg
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_bg;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_bg";
@@ -1062,6 +1161,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_bg
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_bg;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_bg";
@@ -1073,6 +1173,7 @@ End
 // Khmer
 
 Module gid_Module_Root_km
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "2500";
     MOD_NAME_DESC(MODULE_LANGPACK_KM);
@@ -1083,6 +1184,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_km
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_km;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_km";
@@ -1093,6 +1195,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_km
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_km;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_km";
@@ -1103,6 +1206,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_km
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_km;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_km";
@@ -1114,6 +1218,7 @@ End
 // Punjabi
 
 Module gid_Module_Root_pa_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "2600";
     MOD_NAME_DESC(MODULE_LANGPACK_PA_IN);
@@ -1124,6 +1229,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_pa_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_pa_IN;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_pa_IN";
@@ -1134,6 +1240,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_pa_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_pa_IN;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_pa_IN";
@@ -1144,6 +1251,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_pa_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_pa_IN;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_pa_IN";
@@ -1155,6 +1263,7 @@ End
 // Gujarati
 
 Module gid_Module_Root_gu_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "2700";
     MOD_NAME_DESC(MODULE_LANGPACK_GU_IN);
@@ -1165,6 +1274,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_gu_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_gu_IN;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_gu_IN";
@@ -1175,6 +1285,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_gu_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_gu_IN;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_gu_IN";
@@ -1185,6 +1296,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_gu_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_gu_IN;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_gu_IN";
@@ -1196,6 +1308,7 @@ End
 // Tamil (ta)
 
 Module gid_Module_Root_ta
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "2800";
     MOD_NAME_DESC(MODULE_LANGPACK_TA);
@@ -1206,6 +1319,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ta
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ta;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ta";
@@ -1216,6 +1330,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ta
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ta;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ta";
@@ -1226,6 +1341,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ta
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ta;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ta";
@@ -1237,6 +1353,7 @@ End
 // Tamil (ta-IN)
 
 Module gid_Module_Root_ta_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "2900";
     MOD_NAME_DESC(MODULE_LANGPACK_TA_IN);
@@ -1247,6 +1364,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ta_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ta_IN;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ta_IN";
@@ -1257,6 +1375,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ta_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ta_IN;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ta_IN";
@@ -1267,6 +1386,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ta_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ta_IN;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ta_IN";
@@ -1278,6 +1398,7 @@ End
 // Hindi (hi)
 
 Module gid_Module_Root_hi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "3000";
     MOD_NAME_DESC(MODULE_LANGPACK_HI);
@@ -1288,6 +1409,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_hi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_hi;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_hi";
@@ -1298,6 +1420,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_hi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_hi;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_hi";
@@ -1308,6 +1431,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_hi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_hi;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_hi";
@@ -1319,6 +1443,7 @@ End
 // Hindi (hi-IN)
 
 Module gid_Module_Root_hi_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "3100";
     MOD_NAME_DESC(MODULE_LANGPACK_HI_IN);
@@ -1329,6 +1454,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_hi_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_hi_IN;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_hi_IN";
@@ -1339,6 +1465,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_hi_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_hi_IN;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_hi_IN";
@@ -1349,6 +1476,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_hi_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_hi_IN;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_hi_IN";
@@ -1360,6 +1488,7 @@ End
 // Southern Sotho (st)
 
 Module gid_Module_Root_st
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "3200";
     MOD_NAME_DESC(MODULE_LANGPACK_ST);
@@ -1370,6 +1499,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_st
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_st;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_st";
@@ -1380,6 +1510,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_st
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_st;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_st";
@@ -1390,6 +1521,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_st
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_st;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_st";
@@ -1401,6 +1533,7 @@ End
 // Tswana (tn)
 
 Module gid_Module_Root_tn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "3300";
     MOD_NAME_DESC(MODULE_LANGPACK_TN);
@@ -1411,6 +1544,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_tn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_tn;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_tn";
@@ -1421,6 +1555,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_tn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_tn;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_tn";
@@ -1431,6 +1566,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_tn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_tn;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_tn";
@@ -1442,6 +1578,7 @@ End
 // Xhosa (xh)
 
 Module gid_Module_Root_xh
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "3400";
     MOD_NAME_DESC(MODULE_LANGPACK_XH);
@@ -1452,6 +1589,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_xh
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_xh;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_xh";
@@ -1462,6 +1600,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_xh
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_xh;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_xh";
@@ -1472,6 +1611,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_xh
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_xh;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_xh";
@@ -1483,6 +1623,7 @@ End
 // Zulu (zu)
 
 Module gid_Module_Root_zu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "3500";
     MOD_NAME_DESC(MODULE_LANGPACK_ZU);
@@ -1493,6 +1634,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_zu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_zu;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_zu";
@@ -1503,6 +1645,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_zu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_zu;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_zu";
@@ -1513,6 +1656,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_zu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_zu;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_zu";
@@ -1524,6 +1668,7 @@ End
 // Afrikaans (af)
 
 Module gid_Module_Root_af
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "3600";
     MOD_NAME_DESC(MODULE_LANGPACK_AF);
@@ -1534,6 +1679,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_af
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_af;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_af";
@@ -1544,6 +1690,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_af
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_af;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_af";
@@ -1554,6 +1701,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_af
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_af;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_af";
@@ -1565,6 +1713,7 @@ End
 // Swahili (sw)
 
 Module gid_Module_Root_sw
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "3700";
     MOD_NAME_DESC(MODULE_LANGPACK_SW);
@@ -1575,6 +1724,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_sw
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sw;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_sw";
@@ -1585,6 +1735,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_sw
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sw;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_sw";
@@ -1595,6 +1746,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_sw
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sw;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_sw";
@@ -1606,6 +1758,7 @@ End
 // Swahili (sw-TZ)
 
 Module gid_Module_Root_sw_TZ
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "3800";
     MOD_NAME_DESC(MODULE_LANGPACK_SW_TZ);
@@ -1616,6 +1769,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_sw_TZ
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sw_TZ;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_sw_TZ";
@@ -1626,6 +1780,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_sw_TZ
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sw_TZ;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_sw_TZ";
@@ -1636,6 +1791,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_sw_TZ
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sw_TZ;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_sw_TZ";
@@ -1647,6 +1803,7 @@ End
 // Lao (lo)
 
 Module gid_Module_Root_lo
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "3900";
     MOD_NAME_DESC(MODULE_LANGPACK_LO);
@@ -1657,6 +1814,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_lo
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_lo;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_lo";
@@ -1667,6 +1825,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_lo
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_lo;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_lo";
@@ -1677,6 +1836,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_lo
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_lo;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_lo";
@@ -1688,6 +1848,7 @@ End
 // Northern Sotho (ns)
 
 Module gid_Module_Root_ns
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "4000";
     MOD_NAME_DESC(MODULE_LANGPACK_NS);
@@ -1698,6 +1859,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ns
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ns;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ns";
@@ -1708,6 +1870,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ns
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ns;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ns";
@@ -1718,6 +1881,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ns
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ns;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ns";
@@ -1729,6 +1893,7 @@ End
 // Bengali (bn)
 
 Module gid_Module_Root_bn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "4100";
     MOD_NAME_DESC(MODULE_LANGPACK_BN);
@@ -1739,6 +1904,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_bn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_bn;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_bn";
@@ -1749,6 +1915,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_bn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_bn;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_bn";
@@ -1759,6 +1926,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_bn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_bn;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_bn";
@@ -1770,6 +1938,7 @@ End
 // Bengali (Bangladesh) (bn-BD)
 
 Module gid_Module_Root_bn_BD
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "4200";
     MOD_NAME_DESC(MODULE_LANGPACK_BN_BD);
@@ -1780,6 +1949,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_bn_BD
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_bn_BD;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_bn_BD";
@@ -1790,6 +1960,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_bn_BD
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_bn_BD;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_bn_BD";
@@ -1800,6 +1971,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_bn_BD
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_bn_BD;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_bn_BD";
@@ -1811,6 +1983,7 @@ End
 // Bengali (India) (bn-IN)
 
 Module gid_Module_Root_bn_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "4300";
     MOD_NAME_DESC(MODULE_LANGPACK_BN_IN);
@@ -1821,6 +1994,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_bn_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_bn_IN;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_bn_IN";
@@ -1831,6 +2005,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_bn_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_bn_IN;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_bn_IN";
@@ -1841,6 +2016,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_bn_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_bn_IN;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_bn_IN";
@@ -1852,6 +2028,7 @@ End
 // Oriya (or)
 
 Module gid_Module_Root_or
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "4400";
     MOD_NAME_DESC(MODULE_LANGPACK_OR);
@@ -1862,6 +2039,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_or
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_or;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_or";
@@ -1872,6 +2050,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_or
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_or;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_or";
@@ -1882,6 +2061,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_or
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_or;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_or";
@@ -1893,6 +2073,7 @@ End
 // Oriya (or-IN)
 
 Module gid_Module_Root_or_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "4500";
     MOD_NAME_DESC(MODULE_LANGPACK_OR_IN);
@@ -1903,6 +2084,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_or_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_or_IN;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_or_IN";
@@ -1913,6 +2095,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_or_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_or_IN;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_or_IN";
@@ -1923,6 +2106,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_or_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_or_IN;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_or_IN";
@@ -1934,6 +2118,7 @@ End
 // Marathi (mr)
 
 Module gid_Module_Root_mr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "4600";
     MOD_NAME_DESC(MODULE_LANGPACK_MR);
@@ -1944,6 +2129,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_mr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_mr;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_mr";
@@ -1954,6 +2140,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_mr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_mr;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_mr";
@@ -1964,6 +2151,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_mr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_mr;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_mr";
@@ -1975,6 +2163,7 @@ End
 // Marathi (mr-IN)
 
 Module gid_Module_Root_mr_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "4700";
     MOD_NAME_DESC(MODULE_LANGPACK_MR_IN);
@@ -1985,6 +2174,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_mr_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_mr_IN;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_mr_IN";
@@ -1995,6 +2185,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_mr_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_mr_IN;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_mr_IN";
@@ -2005,6 +2196,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_mr_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_mr_IN;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_mr_IN";
@@ -2016,6 +2208,7 @@ End
 // Nepali (ne)
 
 Module gid_Module_Root_ne
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "4800";
     MOD_NAME_DESC(MODULE_LANGPACK_NE);
@@ -2026,6 +2219,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ne
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ne;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ne";
@@ -2036,6 +2230,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ne
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ne;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ne";
@@ -2046,6 +2241,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ne
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ne;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ne";
@@ -2057,6 +2253,7 @@ End
 // Arabic (ar)
 
 Module gid_Module_Root_ar
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "4900";
     MOD_NAME_DESC(MODULE_LANGPACK_AR);
@@ -2067,6 +2264,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ar
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ar;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ar";
@@ -2077,6 +2275,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ar
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ar;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ar";
@@ -2087,6 +2286,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ar
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ar;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ar";
@@ -2098,6 +2298,7 @@ End
 // Arabic (ar-SA)
 
 Module gid_Module_Root_ar_SA
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "5000";
     MOD_NAME_DESC(MODULE_LANGPACK_AR_SA);
@@ -2108,6 +2309,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ar_SA
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ar_SA;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ar_SA";
@@ -2118,6 +2320,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ar_SA
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ar_SA;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ar_SA";
@@ -2128,6 +2331,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ar_SA
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ar_SA;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ar_SA";
@@ -2139,6 +2343,7 @@ End
 // Catalan (ca)
 
 Module gid_Module_Root_ca
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "5100";
     MOD_NAME_DESC(MODULE_LANGPACK_CA);
@@ -2149,6 +2354,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ca
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ca;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ca";
@@ -2159,6 +2365,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ca
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ca;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ca";
@@ -2169,6 +2376,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ca
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ca;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ca";
@@ -2180,6 +2388,7 @@ End
 // Danish (da)
 
 Module gid_Module_Root_da
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "5200";
     MOD_NAME_DESC(MODULE_LANGPACK_DA);
@@ -2190,6 +2399,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_da
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_da;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_da";
@@ -2200,6 +2410,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_da
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_da;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_da";
@@ -2210,6 +2421,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_da
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_da;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_da";
@@ -2221,6 +2433,7 @@ End
 // Finnish (fi)
 
 Module gid_Module_Root_fi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "5300";
     MOD_NAME_DESC(MODULE_LANGPACK_FI);
@@ -2231,6 +2444,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_fi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_fi;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_fi";
@@ -2241,6 +2455,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_fi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_fi;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_fi";
@@ -2251,6 +2466,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_fi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_fi;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_fi";
@@ -2262,6 +2478,7 @@ End
 // Hebrew (he)
 
 Module gid_Module_Root_he
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "5400";
     MOD_NAME_DESC(MODULE_LANGPACK_HE);
@@ -2272,6 +2489,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_he
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_he;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_he";
@@ -2282,6 +2500,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_he
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_he;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_he";
@@ -2292,6 +2511,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_he
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_he;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_he";
@@ -2303,6 +2523,7 @@ End
 // Icelandic (is)
 
 Module gid_Module_Root_is
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "5500";
     MOD_NAME_DESC(MODULE_LANGPACK_IS);
@@ -2313,6 +2534,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_is
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_is;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_is";
@@ -2323,6 +2545,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_is
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_is;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_is";
@@ -2333,6 +2556,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_is
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_is;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_is";
@@ -2344,6 +2568,7 @@ End
 // Norwegian (Bokmal)
 
 Module gid_Module_Root_nb
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "5600";
     MOD_NAME_DESC(MODULE_LANGPACK_NB);
@@ -2354,6 +2579,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_nb
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_nb;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_nb";
@@ -2364,6 +2590,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_nb
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_nb;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_nb";
@@ -2374,6 +2601,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_nb
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_nb;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_nb";
@@ -2385,6 +2613,7 @@ End
 // Norwegian (Nynorsk)
 
 Module gid_Module_Root_nn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "5700";
     MOD_NAME_DESC(MODULE_LANGPACK_NN);
@@ -2395,6 +2624,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_nn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_nn;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_nn";
@@ -2405,6 +2635,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_nn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_nn;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_nn";
@@ -2415,6 +2646,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_nn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_nn;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_nn";
@@ -2426,6 +2658,7 @@ End
 // Raeto-Romance (rm)
 
 Module gid_Module_Root_rm
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "5800";
     MOD_NAME_DESC(MODULE_LANGPACK_RM);
@@ -2436,6 +2669,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_rm
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_rm;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_rm";
@@ -2446,6 +2680,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_rm
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_rm;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_rm";
@@ -2456,6 +2691,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_rm
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_rm;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_rm";
@@ -2467,6 +2703,7 @@ End
 // Romanian
 
 Module gid_Module_Root_ro
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "5900";
     MOD_NAME_DESC(MODULE_LANGPACK_RO);
@@ -2477,6 +2714,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ro
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ro;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ro";
@@ -2487,6 +2725,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ro
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ro;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ro";
@@ -2497,6 +2736,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ro
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ro;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ro";
@@ -2508,6 +2748,7 @@ End
 // Albanian (sq)
 
 Module gid_Module_Root_sq
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "6000";
     MOD_NAME_DESC(MODULE_LANGPACK_SQ);
@@ -2518,6 +2759,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_sq
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sq;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_sq";
@@ -2528,6 +2770,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_sq
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sq;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_sq";
@@ -2538,6 +2781,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_sq
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sq;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_sq";
@@ -2549,6 +2793,7 @@ End
 // Urdu (ur)
 
 Module gid_Module_Root_ur
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "6100";
     MOD_NAME_DESC(MODULE_LANGPACK_UR);
@@ -2559,6 +2804,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ur
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ur;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ur";
@@ -2569,6 +2815,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ur
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ur;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ur";
@@ -2579,6 +2826,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ur
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ur;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ur";
@@ -2590,6 +2838,7 @@ End
 // Indonesian (id)
 
 Module gid_Module_Root_id
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "6200";
     MOD_NAME_DESC(MODULE_LANGPACK_ID);
@@ -2600,6 +2849,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_id
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_id;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_id";
@@ -2610,6 +2860,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_id
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_id;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_id";
@@ -2620,6 +2871,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_id
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_id;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_id";
@@ -2631,6 +2883,7 @@ End
 // Ukrainian (uk)
 
 Module gid_Module_Root_uk
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "6300";
     MOD_NAME_DESC(MODULE_LANGPACK_UK);
@@ -2641,6 +2894,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_uk
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_uk;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_uk";
@@ -2651,6 +2905,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_uk
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_uk;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_uk";
@@ -2661,6 +2916,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_uk
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_uk;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_uk";
@@ -2672,6 +2928,7 @@ End
 // Belarusian (be-BY)
 
 Module gid_Module_Root_be_BY
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "6400";
     MOD_NAME_DESC(MODULE_LANGPACK_BE_BY);
@@ -2682,6 +2939,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_be_BY
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_be_BY;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_be_BY";
@@ -2692,6 +2950,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_be_BY
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_be_BY;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_be_BY";
@@ -2702,6 +2961,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_be_BY
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_be_BY;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_be_BY";
@@ -2713,6 +2973,7 @@ End
 // Slovenian (sl)
 
 Module gid_Module_Root_sl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "6500";
     MOD_NAME_DESC(MODULE_LANGPACK_SL);
@@ -2723,6 +2984,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_sl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sl;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_sl";
@@ -2733,6 +2995,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_sl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sl;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_sl";
@@ -2743,6 +3006,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_sl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sl;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_sl";
@@ -2754,6 +3018,7 @@ End
 // Latvian (lv)
 
 Module gid_Module_Root_lv
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "6600";
     MOD_NAME_DESC(MODULE_LANGPACK_LV);
@@ -2764,6 +3029,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_lv
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_lv;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_lv";
@@ -2774,6 +3040,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_lv
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_lv;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_lv";
@@ -2784,6 +3051,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_lv
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_lv;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_lv";
@@ -2795,6 +3063,7 @@ End
 // Lithuanian (lt)
 
 Module gid_Module_Root_lt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "6700";
     MOD_NAME_DESC(MODULE_LANGPACK_LT);
@@ -2805,6 +3074,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_lt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_lt;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_lt";
@@ -2815,6 +3085,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_lt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_lt;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_lt";
@@ -2825,6 +3096,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_lt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_lt;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_lt";
@@ -2836,6 +3108,7 @@ End
 // Armenian (hy)
 
 Module gid_Module_Root_hy
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "6800";
     MOD_NAME_DESC(MODULE_LANGPACK_HY);
@@ -2846,6 +3119,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_hy
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_hy;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_hy";
@@ -2856,6 +3130,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_hy
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_hy;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_hy";
@@ -2866,6 +3141,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_hy
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_hy;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_hy";
@@ -2877,6 +3153,7 @@ End
 // Basque (eu)
 
 Module gid_Module_Root_eu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "6900";
     MOD_NAME_DESC(MODULE_LANGPACK_EU);
@@ -2887,6 +3164,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_eu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_eu;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_eu";
@@ -2897,6 +3175,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_eu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_eu;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_eu";
@@ -2907,6 +3186,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_eu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_eu;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_eu";
@@ -2918,6 +3198,7 @@ End
 // Macedonian (mk)
 
 Module gid_Module_Root_mk
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "7000";
     MOD_NAME_DESC(MODULE_LANGPACK_MK);
@@ -2928,6 +3209,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_mk
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_mk;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_mk";
@@ -2938,6 +3220,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_mk
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_mk;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_mk";
@@ -2948,6 +3231,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_mk
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_mk;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_mk";
@@ -2959,6 +3243,7 @@ End
 // Maltese (mt)
 
 Module gid_Module_Root_mt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "7100";
     MOD_NAME_DESC(MODULE_LANGPACK_MT);
@@ -2969,6 +3254,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_mt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_mt;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_mt";
@@ -2979,6 +3265,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_mt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_mt;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_mt";
@@ -2989,6 +3276,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_mt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_mt;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_mt";
@@ -3000,6 +3288,7 @@ End
 // Welsh (cy)
 
 Module gid_Module_Root_cy
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "7200";
     MOD_NAME_DESC(MODULE_LANGPACK_CY);
@@ -3010,6 +3299,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_cy
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_cy;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_cy";
@@ -3020,6 +3310,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_cy
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_cy;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_cy";
@@ -3030,6 +3321,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_cy
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_cy;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_cy";
@@ -3041,6 +3333,7 @@ End
 // Galician (gl)
 
 Module gid_Module_Root_gl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "7300";
     MOD_NAME_DESC(MODULE_LANGPACK_GL);
@@ -3051,6 +3344,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_gl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_gl;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_gl";
@@ -3061,6 +3355,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_gl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_gl;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_gl";
@@ -3071,6 +3366,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_gl
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_gl;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_gl";
@@ -3082,6 +3378,7 @@ End
 // Serbian (Latin) (sh-YU)
 
 Module gid_Module_Root_sh_YU
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "7400";
     MOD_NAME_DESC(MODULE_LANGPACK_SH_YU);
@@ -3092,6 +3389,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_sh_YU
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sh_YU;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_sh_YU";
@@ -3102,6 +3400,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_sh_YU
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sh_YU;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_sh_YU";
@@ -3112,6 +3411,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_sh_YU
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sh_YU;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_sh_YU";
@@ -3123,6 +3423,7 @@ End
 // Irish (ga)
 
 Module gid_Module_Root_ga
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "7500";
     MOD_NAME_DESC(MODULE_LANGPACK_GA);
@@ -3133,6 +3434,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ga
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ga;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ga";
@@ -3143,6 +3445,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ga
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ga;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ga";
@@ -3153,6 +3456,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ga
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ga;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ga";
@@ -3164,6 +3468,7 @@ End
 // Serbian (Cyrillic) (sr-CS)
 
 Module gid_Module_Root_sr_CS
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "7600";
     MOD_NAME_DESC(MODULE_LANGPACK_SR_CS);
@@ -3174,6 +3479,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_sr_CS
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sr_CS;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_sr_CS";
@@ -3184,6 +3490,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_sr_CS
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sr_CS;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_sr_CS";
@@ -3194,6 +3501,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_sr_CS
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sr_CS;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_sr_CS";
@@ -3205,6 +3513,7 @@ End
 // Bosnian (bs)
 
 Module gid_Module_Root_bs
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "7700";
     MOD_NAME_DESC(MODULE_LANGPACK_BS);
@@ -3215,6 +3524,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_bs
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_bs;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_bs";
@@ -3225,6 +3535,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_bs
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_bs;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_bs";
@@ -3235,6 +3546,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_bs
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_bs;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_bs";
@@ -3246,6 +3558,7 @@ End
 // Assamese (as-IN)
 
 Module gid_Module_Root_as_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "7800";
     MOD_NAME_DESC(MODULE_LANGPACK_AS_IN);
@@ -3256,6 +3569,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_as_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_as_IN;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_as_IN";
@@ -3266,6 +3580,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_as_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_as_IN;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_as_IN";
@@ -3276,6 +3591,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_as_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_as_IN;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_as_IN";
@@ -3287,6 +3603,7 @@ End
 // Kinyarwanda (rw)
 
 Module gid_Module_Root_rw
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "7900";
     MOD_NAME_DESC(MODULE_LANGPACK_RW);
@@ -3297,6 +3614,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_rw
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_rw;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_rw";
@@ -3307,6 +3625,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_rw
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_rw;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_rw";
@@ -3317,6 +3636,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_rw
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_rw;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_rw";
@@ -3328,6 +3648,7 @@ End
 // Sanskrit (sa)
 
 Module gid_Module_Root_sa
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "8000";
     MOD_NAME_DESC(MODULE_LANGPACK_SA);
@@ -3338,6 +3659,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_sa
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sa;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_sa";
@@ -3348,6 +3670,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_sa
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sa;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_sa";
@@ -3358,6 +3681,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_sa
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sa;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_sa";
@@ -3369,6 +3693,7 @@ End
 // Farsi (fa)
 
 Module gid_Module_Root_fa
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "8100";
     MOD_NAME_DESC(MODULE_LANGPACK_FA);
@@ -3379,6 +3704,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_fa
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_fa;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_fa";
@@ -3389,6 +3715,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_fa
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_fa;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_fa";
@@ -3399,6 +3726,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_fa
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_fa;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_fa";
@@ -3410,6 +3738,7 @@ End
 // Faroese (fo)
 
 Module gid_Module_Root_fo
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "8200";
     MOD_NAME_DESC(MODULE_LANGPACK_FO);
@@ -3420,6 +3749,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_fo
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_fo;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_fo";
@@ -3430,6 +3760,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_fo
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_fo;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_fo";
@@ -3440,6 +3771,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_fo
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_fo;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_fo";
@@ -3451,6 +3783,7 @@ End
 // Sorbian (sb)
 
 Module gid_Module_Root_sb
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "8300";
     MOD_NAME_DESC(MODULE_LANGPACK_SB);
@@ -3461,6 +3794,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_sb
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sb;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_sb";
@@ -3471,6 +3805,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_sb
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sb;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_sb";
@@ -3481,6 +3816,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_sb
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_sb;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_sb";
@@ -3492,6 +3828,7 @@ End
 // Tatar (tt)
 
 Module gid_Module_Root_tt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "8400";
     MOD_NAME_DESC(MODULE_LANGPACK_TT);
@@ -3502,6 +3839,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_tt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_tt;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_tt";
@@ -3512,6 +3850,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_tt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_tt;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_tt";
@@ -3522,6 +3861,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_tt
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_tt;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_tt";
@@ -3533,6 +3873,7 @@ End
 // Tsonga (ts)
 
 Module gid_Module_Root_ts
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "8500";
     MOD_NAME_DESC(MODULE_LANGPACK_TS);
@@ -3543,6 +3884,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ts
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ts;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ts";
@@ -3553,6 +3895,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ts
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ts;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ts";
@@ -3563,6 +3906,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ts
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ts;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ts";
@@ -3574,6 +3918,7 @@ End
 // Yiddish (yi)
 
 Module gid_Module_Root_yi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "8600";
     MOD_NAME_DESC(MODULE_LANGPACK_YI);
@@ -3584,6 +3929,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_yi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_yi;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_yi";
@@ -3594,6 +3940,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_yi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_yi;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_yi";
@@ -3604,6 +3951,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_yi
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_yi;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_yi";
@@ -3615,6 +3963,7 @@ End
 // Breton (br)
 
 Module gid_Module_Root_br
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "8700";
     MOD_NAME_DESC(MODULE_LANGPACK_BR);
@@ -3625,6 +3974,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_br
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_br;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_br";
@@ -3635,6 +3985,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_br
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_br;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_br";
@@ -3645,6 +3996,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_br
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_br;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_br";
@@ -3656,6 +4008,7 @@ End
 // Ndebele South (nr)
 
 Module gid_Module_Root_nr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "8800";
     MOD_NAME_DESC(MODULE_LANGPACK_NR);
@@ -3666,6 +4019,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_nr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_nr;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_nr";
@@ -3676,6 +4030,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_nr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_nr;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_nr";
@@ -3686,6 +4041,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_nr
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_nr;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_nr";
@@ -3697,6 +4053,7 @@ End
 // Swazi (ss)
 
 Module gid_Module_Root_ss
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "8900";
     MOD_NAME_DESC(MODULE_LANGPACK_SS);
@@ -3707,6 +4064,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ss
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ss;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ss";
@@ -3717,6 +4075,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ss
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ss;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ss";
@@ -3727,6 +4086,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ss
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ss;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ss";
@@ -3738,6 +4098,7 @@ End
 // Venda (ve)
 
 Module gid_Module_Root_ve
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "9000";
     MOD_NAME_DESC(MODULE_LANGPACK_VE);
@@ -3748,6 +4109,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ve
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ve;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ve";
@@ -3758,6 +4120,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ve
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ve;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ve";
@@ -3768,6 +4131,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ve
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ve;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ve";
@@ -3779,6 +4143,7 @@ End
 // Kannada (kn)
 
 Module gid_Module_Root_kn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "9100";
     MOD_NAME_DESC(MODULE_LANGPACK_KN);
@@ -3789,6 +4154,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_kn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_kn;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_kn";
@@ -3799,6 +4165,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_kn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_kn;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_kn";
@@ -3809,6 +4176,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_kn
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_kn;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_kn";
@@ -3820,6 +4188,7 @@ End
 // Malay (Malaysian) (ms)
 
 Module gid_Module_Root_ms
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "9200";
     MOD_NAME_DESC(MODULE_LANGPACK_MS);
@@ -3830,6 +4199,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ms
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ms;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ms";
@@ -3840,6 +4210,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ms
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ms;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ms";
@@ -3850,6 +4221,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ms
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ms;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ms";
@@ -3861,6 +4233,7 @@ End
 // Tajik (tg)
 
 Module gid_Module_Root_tg
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "9300";
     MOD_NAME_DESC(MODULE_LANGPACK_TG);
@@ -3871,6 +4244,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_tg
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_tg;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_tg";
@@ -3881,6 +4255,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_tg
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_tg;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_tg";
@@ -3891,6 +4266,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_tg
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_tg;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_tg";
@@ -3902,6 +4278,7 @@ End
 // Kurdish (ku)
 
 Module gid_Module_Root_ku
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "9400";
     MOD_NAME_DESC(MODULE_LANGPACK_KU);
@@ -3912,6 +4289,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ku
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ku;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ku";
@@ -3922,6 +4300,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ku
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ku;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ku";
@@ -3932,6 +4311,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ku
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ku;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ku";
@@ -3943,6 +4323,7 @@ End
 // Dzongkha (dz)
 
 Module gid_Module_Root_dz
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "9500";
     MOD_NAME_DESC(MODULE_LANGPACK_DZ);
@@ -3953,6 +4334,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_dz
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_dz;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_dz";
@@ -3963,6 +4345,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_dz
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_dz;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_dz";
@@ -3973,6 +4356,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_dz
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_dz;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_dz";
@@ -3984,6 +4368,7 @@ End
 // Georgian (ka)
 
 Module gid_Module_Root_ka
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "9600";
     MOD_NAME_DESC(MODULE_LANGPACK_KA);
@@ -3994,6 +4379,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_ka
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ka;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_ka";
@@ -4004,6 +4390,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_ka
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ka;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_ka";
@@ -4014,6 +4401,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_ka
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_ka;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ka";
@@ -4025,6 +4413,7 @@ End
 // Esperanto (eo)
 
 Module gid_Module_Root_eo
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Langpack_Base;
     Sortkey = "9700";
     MOD_NAME_DESC(MODULE_LANGPACK_EO);
@@ -4035,6 +4424,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Resource_eo
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_eo;
     Sortkey = "100";
     Name = "gid_Module_Langpack_Resource_eo";
@@ -4045,6 +4435,7 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Help_eo
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_eo;
     Sortkey = "200";
     Name = "gid_Module_Langpack_Help_eo";
@@ -4055,10 +4446,326 @@ End
 
 #ifndef WNT
 Module gid_Module_Langpack_Fonts_eo
+	LanguagePackageInfo = "packinfo_office_lang.txt";
     ParentID = gid_Module_Root_eo;
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_eo";
     Description = "gid_Module_Langpack_Fonts_eo";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Gujarati (gu)
+
+Module gid_Module_Root_gu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "9800";
+    MOD_NAME_DESC(MODULE_LANGPACK_GU);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_gu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_gu;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_gu";
+    Description = "gid_Module_Langpack_Resource_gu";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_gu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_gu;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_gu";
+    Description = "gid_Module_Langpack_Help_gu";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_gu
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_gu;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_gu";
+    Description = "gid_Module_Langpack_Fonts_gu";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// English South Africa (en-ZA)
+
+Module gid_Module_Root_en_ZA
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "9900";
+    MOD_NAME_DESC(MODULE_LANGPACK_EN_ZA);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_en_ZA
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_en_ZA;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_en_ZA";
+    Description = "gid_Module_Langpack_Resource_en_ZA";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_en_ZA
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_en_ZA;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_en_ZA";
+    Description = "gid_Module_Langpack_Help_en_ZA";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_en_ZA
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_en_ZA;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_en_ZA";
+    Description = "gid_Module_Langpack_Fonts_en_ZA";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// English United Kingdom (en-GB)
+
+Module gid_Module_Root_en_GB
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "10000";
+    MOD_NAME_DESC(MODULE_LANGPACK_EN_GB);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_en_GB
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_en_GB;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_en_GB";
+    Description = "gid_Module_Langpack_Resource_en_GB";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_en_GB
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_en_GB;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_en_GB";
+    Description = "gid_Module_Langpack_Help_en_GB";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_en_GB
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_en_GB;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_en_GB";
+    Description = "gid_Module_Langpack_Fonts_en_GB";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Urdu (ur-IN)
+
+Module gid_Module_Root_ur_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "10100";
+    MOD_NAME_DESC(MODULE_LANGPACK_UR_IN);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_ur_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_ur_IN;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_ur_IN";
+    Description = "gid_Module_Langpack_Resource_ur_IN";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_ur_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_ur_IN;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_ur_IN";
+    Description = "gid_Module_Langpack_Help_ur_IN";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_ur_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_ur_IN;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_ur_IN";
+    Description = "gid_Module_Langpack_Fonts_ur_IN";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Malayalam (ml-IN)
+
+Module gid_Module_Root_ml_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "10200";
+    MOD_NAME_DESC(MODULE_LANGPACK_ML_IN);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_ml_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_ml_IN;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_ml_IN";
+    Description = "gid_Module_Langpack_Resource_ml_IN";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_ml_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_ml_IN;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_ml_IN";
+    Description = "gid_Module_Langpack_Help_ml_IN";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_ml_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_ml_IN;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_ml_IN";
+    Description = "gid_Module_Langpack_Fonts_ml_IN";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Telugu (te-IN)
+
+Module gid_Module_Root_te_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "10300";
+    MOD_NAME_DESC(MODULE_LANGPACK_TE_IN);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_te_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_te_IN;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_te_IN";
+    Description = "gid_Module_Langpack_Resource_te_IN";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_te_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_te_IN;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_te_IN";
+    Description = "gid_Module_Langpack_Help_te_IN";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_te_IN
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_te_IN;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_te_IN";
+    Description = "gid_Module_Langpack_Fonts_te_IN";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Tigrinya (ti-ER)
+
+Module gid_Module_Root_ti_ER
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "10400";
+    MOD_NAME_DESC(MODULE_LANGPACK_TI_ER);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_ti_ER
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_ti_ER;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_ti_ER";
+    Description = "gid_Module_Langpack_Resource_ti_ER";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_ti_ER
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_ti_ER;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_ti_ER";
+    Description = "gid_Module_Langpack_Help_ti_ER";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_ti_ER
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_ti_ER;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_ti_ER";
+    Description = "gid_Module_Langpack_Fonts_ti_ER";
     Styles = (HIDDEN_ROOT);
 End
 #endif
