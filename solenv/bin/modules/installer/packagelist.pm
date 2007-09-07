@@ -4,9 +4,9 @@
 #
 #   $RCSfile: packagelist.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 09:52:34 $
+#   last change: $Author: vg $ $Date: 2007-09-07 10:56:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -549,7 +549,7 @@ sub check_packagelist
 
 sub get_packinfo
 {
-    my ($gid, $filename, $packages, $onelanguage) = @_;
+    my ($gid, $filename, $packages, $onelanguage, $scplanguage) = @_;
 
     my $packagelist = installer::files::read_file($filename);
 
@@ -591,7 +591,7 @@ sub get_packinfo
     {
         # Adding the language to the module gid for LanguagePacks !
         # Making the module gid language specific: gid_Module_Root -> gir_Module_Root_pt_BR (as defined in scp2)
-        if ( $installer::globals::languagepack ) { $onepackage->{'module'} = $onepackage->{'module'} . "_$onelanguage"; }
+        if ( $installer::globals::languagepack ) { $onepackage->{'module'} = $onepackage->{'module'} . "_$scplanguage"; }
 
         # Resolving the language identifier
         $onepackage->{'packagename'} =~ s/\%LANGUAGESTRING/$onelanguage/;
@@ -620,7 +620,8 @@ sub do_collect_packages
 
     my %gid_analyzed = ();
 
-    $onelanguage =~ s/-/_/g; # pt-BR -> pt_BR in scp
+    my $scplanguage = $onelanguage;
+    $scplanguage =~ s/-/_/g; # pt-BR -> pt_BR in scp
 
     my $onemodule;
     foreach $onemodule ( @{$allmodules} )
@@ -635,7 +636,7 @@ sub do_collect_packages
 
             # Only collecting modules with correct language for language packs
             if ( $installer::globals::languagepack ) {
-                if ( ! ( $modulegid =~ /_$onelanguage\s*$/ )) { next; }
+                if ( ! ( $modulegid =~ /_$scplanguage\s*$/ )) { next; }
             }
 
             # Ignoring packages, if they are marked to be ignored. Otherwise OOo 2.x update will break.
@@ -658,7 +659,7 @@ sub do_collect_packages
             my $infoline = "$modulegid: Using packinfo: \"$$fileref\"!\n";
             push( @installer::globals::logfileinfo, $infoline);
 
-            get_packinfo($modulegid, $$fileref, $packagesref, $onelanguage);
+            get_packinfo($modulegid, $$fileref, $packagesref, $onelanguage, $scplanguage);
         }
     }
 
