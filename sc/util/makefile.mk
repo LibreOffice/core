@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: vg $ $Date: 2007-08-30 10:05:29 $
+#   last change: $Author: hjs $ $Date: 2007-09-07 10:34:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -302,5 +302,5 @@ SHL9LIBS=$(SLB)$/$(TARGET_VBA).lib
 
 ALLTAR:	$(MISC)$/linkinc.ls  $(COMP)
 
-build_extn : $(SLB)$/$(TARGET_VBA).lib
+build_extn : $(SHL9TARGETN)
     $(PERL) createExtPackage.pl $(COMMONBIN)$/vbaapi.oxt  $(SOLARBINDIR)$/oovbaapi.rdb $(LIBCOMPNAME)
