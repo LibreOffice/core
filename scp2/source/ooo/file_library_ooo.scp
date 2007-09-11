@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.256 $
+ *  $Revision: 1.257 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 15:34:43 $
+ *  last change: $Author: ihi $ $Date: 2007-09-11 10:29:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,7 +218,7 @@ File gid_File_Lib_Policy_Cli_Cppuhelper_Assembly
     Culture = "neutral";
     Attributes = "0";
 #ifndef M1310
-    ProcessorArchitecture = "MSIL";
+    ProcessorArchitecture = "x86";
 #endif
 End
 
