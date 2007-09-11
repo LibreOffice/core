@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:47:47 $
+ *  last change: $Author: ihi $ $Date: 2007-09-11 10:33:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,9 +224,8 @@
 #ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
 #endif
-#ifndef _PASTEDLG_HXX
-#include <so3/pastedlg.hxx>
-#endif
+#include <svx/svxdlg.hxx>
+#include <svtools/insdlg.hxx>
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
 #endif
@@ -1012,17 +1011,17 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 {
                     if ( !aArgs.getLength() )
                     {
-                        SvPasteObjectDialog aDlg;
+                        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                        ::std::auto_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( getView() ));
                         ::std::vector<SotFormatStringId> aFormatIds;
                         getSupportedFormats(getContainer()->getElementType(),aFormatIds);
-                        ::std::vector<SotFormatStringId>::iterator aEnd = aFormatIds.end();
+                        const ::std::vector<SotFormatStringId>::iterator aEnd = aFormatIds.end();
+                        ::rtl::OUString sEmpty;
                         for (::std::vector<SotFormatStringId>::iterator aIter = aFormatIds.begin();aIter != aEnd; ++aIter)
-                        {
-                            aDlg.Insert(*aIter,SvPasteObjectDialog::GetSotFormatUIName(*aIter));
-                        }
+                            pDlg->Insert(*aIter,sEmpty);
 
                         const TransferableDataHelper& rClipboard = getViewClipboard();
-                        pasteFormat(aDlg.Execute(getView(),rClipboard.GetTransferable()));
+                        pasteFormat(pDlg->GetFormat(rClipboard.GetTransferable()));
                     }
                     else
                     {
