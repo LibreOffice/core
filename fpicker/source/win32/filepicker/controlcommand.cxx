@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlcommand.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:50:49 $
+ *  last change: $Author: ihi $ $Date: 2007-09-11 10:31:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,9 +78,28 @@ CControlCommand::~CControlCommand( )
 //
 //---------------------------------------------
 
-CControlCommandResult* SAL_CALL CControlCommand::handleRequest( CControlCommandRequest* )
+CControlCommandResult* SAL_CALL CControlCommand::handleRequest( CControlCommandRequest* pRequest )
 {
-    return new CControlCommandResult( );
+    // if the command does not support handleRequest, it should at least
+    // redirect the request to the next element
+    // so the base class implementation has to do it
+
+    OSL_ENSURE( pRequest, "inavlid parameter" );
+
+    CControlCommandResult* result;
+    CControlCommand* nextCommand;
+
+    nextCommand = getNextCommand( );
+    if ( nextCommand )
+    {
+        result = nextCommand->handleRequest( pRequest );
+    }
+    else
+    {
+        result = new CControlCommandResult();
+    }
+
+    return result;
 }
 
 //---------------------------------------------
