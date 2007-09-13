@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:07:02 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:32:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1940,7 +1940,7 @@ void Edit::GetFocus()
             IsNativeWidgetEnabled() &&
             IsNativeControlSupported( CTRL_EDITBOX, PART_ENTIRE_CONTROL ) )
         {
-            ImplInvalidateOutermostBorder( this );
+            ImplInvalidateOutermostBorder( mbIsSubEdit ? GetParent() : this );
         }
         else if ( maSelection.Len() )
         {
@@ -1979,7 +1979,7 @@ void Edit::LoseFocus()
             IsNativeWidgetEnabled() &&
             IsNativeControlSupported( CTRL_EDITBOX, PART_ENTIRE_CONTROL ) )
         {
-            ImplInvalidateOutermostBorder( this );
+            ImplInvalidateOutermostBorder( mbIsSubEdit ? GetParent() : this );
         }
 
         if ( !mbActivePopup && !( GetStyle() & WB_NOHIDESELECTION ) && maSelection.Len() )
