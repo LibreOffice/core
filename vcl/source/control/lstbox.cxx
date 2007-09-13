@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:06:54 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:33:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,6 +155,25 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
         sal_Int32 nLeft, nTop, nRight, nBottom;
         GetBorder( nLeft, nTop, nRight, nBottom );
         mnDDHeight = (USHORT)(GetTextHeight() + nTop + nBottom + 4);
+
+        // FIXME: this is currently only on mac/aqua
+        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
+            IsNativeWidgetEnabled() &&
+            IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
+        {
+                ImplControlValue aControlValue;
+                Region aCtrlRegion( Rectangle( Point(), Size( 20, mnDDHeight ) ) );
+                Region aBoundingRgn( aCtrlRegion );
+                Region aContentRgn( aCtrlRegion );
+                if( GetNativeControlRegion( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                            CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
+                                            aBoundingRgn, aContentRgn ) )
+                {
+                    sal_Int32 nHeight = aBoundingRgn.GetBoundRect().GetHeight();
+                    if( nHeight > mnDDHeight )
+                        mnDDHeight = static_cast<USHORT>(nHeight);
+                }
+        }
 
         mpFloatWin = new ImplListBoxFloatingWindow( this );
         mpFloatWin->SetAutoWidth( TRUE );
