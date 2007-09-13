@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-11 10:33:21 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 17:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -805,7 +805,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 if ( aReturn.bEnabled )
                 {
                     DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    aReturn.bEnabled = DST_EMBEDDED != eType && DST_MOZILLA != eType && DST_EVOLUTION != eType && DST_KAB != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
+                    aReturn.bEnabled = DST_EMBEDDED != eType && DST_MOZILLA != eType && DST_EVOLUTION != eType && DST_KAB != eType && DST_MACAB != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
                 }
                 break;
             case SID_DB_APP_DSCONNECTION_TYPE:
@@ -821,7 +821,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 if ( aReturn.bEnabled )
                 {
                     DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    aReturn.bEnabled = DST_EMBEDDED != eType && DST_LDAP != eType && DST_CALC != eType && DST_MOZILLA != eType && DST_THUNDERBIRD != eType && DST_EVOLUTION != eType && DST_KAB != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
+                    aReturn.bEnabled = DST_EMBEDDED != eType && DST_LDAP != eType && DST_CALC != eType && DST_MOZILLA != eType && DST_THUNDERBIRD != eType && DST_EVOLUTION != eType && DST_KAB != eType && DST_MACAB != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
                 }
                 break;
             case SID_DB_APP_CONVERTTOVIEW:
