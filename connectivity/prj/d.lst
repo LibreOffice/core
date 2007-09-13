@@ -8,6 +8,7 @@
 ..\source\drivers\adabas\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\ado\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\kab\*.xml %_DEST%\xml%_EXT%\*.xml
+..\source\drivers\macab\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\file\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\flat\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\source\drivers\dbase\*.xml %_DEST%\xml%_EXT%\*.xml
