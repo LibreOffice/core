@@ -4,9 +4,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 13:53:10 $
+#   last change: $Author: ihi $ $Date: 2007-09-13 17:49:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,18 @@ KAB_MAJOR=1
 KAB_MINOR=0
 # the micro 
 KAB_MICRO=0
+
+
+# ----------------------------Macab settings-------------------------------------#
+# target
+MACAB_TARGET=macab
+
+# the major 
+MACAB_MAJOR=1
+# the minor 
+MACAB_MINOR=0
+# the micro 
+MACAB_MICRO=0
 
 
 # ----------------------------HSQLDB settings-----------------------------------#
