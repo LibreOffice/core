@@ -9,3 +9,4 @@ lc	lingucomponent\source\spellcheck\spell					nmake	-	all	lc_libspell lc_hunspel
 lc	lingucomponent\source\hyphenator\altlinuxhyph\libhnj			nmake	-	all	lc_libhnj lc_util lc_inc NULL
 lc	lingucomponent\source\hyphenator\altlinuxhyph\hyphen			nmake	-	all	lc_libhyphen lc_libhnj lc_inc NULL
 lc      lingucomponent\source\languageguessing                                  nmake   -       all     lc_languageguessing lc_inc NULL
+lc	lingucomponent\source\spellcheck\macosxspell				nmake	-	all	lc_libmacosxspell lc_inc NULL
