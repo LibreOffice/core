@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeselectionpage.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:39:34 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 18:02:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@ namespace abp
         RadioButton     m_aEvolutionLdap;
         RadioButton     m_aEvolution;
         RadioButton     m_aKab;
+        RadioButton     m_aMacab;
         RadioButton     m_aLDAP;
         RadioButton     m_aOutlook;
         RadioButton     m_aOE;
