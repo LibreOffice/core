@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:10:08 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 17:58:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -301,6 +301,7 @@ namespace dbaui
             case DST_OUTLOOKEXP:
             case DST_EVOLUTION:
             case DST_KAB:
+            case DST_MACAB:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_NO_ADDITIONAL_SETTINGS)));
                 {
                     String sText = m_aFT_Connection.GetText();
