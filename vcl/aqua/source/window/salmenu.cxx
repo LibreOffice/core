@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmenu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 07:43:00 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:32:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,11 @@ SalMenu* AquaSalInstance::CreateMenu( BOOL bMenuBar )
             MenuItemIndex outIndex[1];
             GetIndMenuItemWithCommandID(NULL, kHICommandPreferences, 1, &rApplicationMenu, outIndex);
             CFStringRef rStr = CreateCFString( aAbout );
-            InsertMenuItemTextWithCFString(rApplicationMenu, rStr, (short) 0, 0, kHICommandAbout);
-            CFRelease( rStr );
+            if ( rStr )
+            {
+                InsertMenuItemTextWithCFString(rApplicationMenu, rStr, (short) 0, 0, kHICommandAbout);
+                CFRelease( rStr );
+            }
         }
     }
     return pAquaSalMenu;
@@ -167,9 +170,11 @@ void AquaSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
     else
     {
         CFStringRef menuText = CreateCFString(pAquaSalMenuItem->mText);
-
-        AppendMenuItemTextWithCFString( mrMenuRef, menuText, pAquaSalMenuItem->maMenuAttributes, 0, &pAquaSalMenuItem->mnMenuItemIndex);
-        CFRelease(menuText);
+        if ( menuText )
+        {
+            AppendMenuItemTextWithCFString( mrMenuRef, menuText, pAquaSalMenuItem->maMenuAttributes, 0, &pAquaSalMenuItem->mnMenuItemIndex);
+            CFRelease(menuText);
+        }
     }
 
     /* Associate the pointer to this SalMenuItem with the menu item */
@@ -194,10 +199,12 @@ void AquaSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsi
     if (subAquaSalMenu)
     {
         CFStringRef menuText = CreateCFString(pAquaSalMenuItem->mText);
-
-        pAquaSalMenuItem->mpSubMenu = pSubMenu;
-        SetMenuTitleWithCFString(subAquaSalMenu->mrMenuRef, menuText);
-        CFRelease(menuText);
+        if ( menuText )
+        {
+            pAquaSalMenuItem->mpSubMenu = pSubMenu;
+            SetMenuTitleWithCFString(subAquaSalMenu->mrMenuRef, menuText);
+            CFRelease(menuText);
+        }
         SetMenuItemHierarchicalMenu (mrMenuRef, pAquaSalMenuItem->mnMenuItemIndex, subAquaSalMenu->mrMenuRef);
     }
 }
@@ -269,16 +276,18 @@ void AquaSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const X
     pAquaSalMenuItem->mText.EraseAllChars( '~' );
 
     CFStringRef menuText = CreateCFString(pAquaSalMenuItem->mText);
-
-    SetMenuItemTextWithCFString( mrMenuRef, pAquaSalMenuItem->mnMenuItemIndex, menuText);
-
-    // if the menu item has a submenu, change its title as well
-    if (pAquaSalMenuItem->mpSubMenu)
+    if ( menuText )
     {
-        AquaSalMenu *subMenu = (AquaSalMenu *) pAquaSalMenuItem->mpSubMenu;
-        SetMenuTitleWithCFString(subMenu->mrMenuRef, menuText);
+        SetMenuItemTextWithCFString( mrMenuRef, pAquaSalMenuItem->mnMenuItemIndex, menuText);
+
+        // if the menu item has a submenu, change its title as well
+        if (pAquaSalMenuItem->mpSubMenu)
+        {
+            AquaSalMenu *subMenu = (AquaSalMenu *) pAquaSalMenuItem->mpSubMenu;
+            SetMenuTitleWithCFString(subMenu->mrMenuRef, menuText);
+        }
+        CFRelease(menuText);
     }
-    CFRelease(menuText);
 }
 
 void AquaSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName )
