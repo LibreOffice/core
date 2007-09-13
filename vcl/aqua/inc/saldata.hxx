@@ -5,9 +5,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:58:06 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,8 @@ struct SalData
     EventLoopTimerRef mrTimerRef;
     EventLoopTimerUPP mrTimerUPP;
     static FILE                                  *s_pLog;
+
+    bool              mbIsScrollbarDoubleMax;   // TODO: support DoubleMin and DoubleBoth too
 
     SalData() :
         mpTimerProc( NULL ),
