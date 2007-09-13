@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:11:29 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:29:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,11 @@ static const char * const components[] =
     , "bridgefac.uno" SAL_DLLEXTENSION
     , "remotebridge.uno" SAL_DLLEXTENSION
 #ifdef SAL_UNX
+#ifdef QUARTZ
+    , SVLIBRARY( "dtransaqua" )  // Mac OS X Aqua uses a dedicated libdtransaqua
+#else
     , SVLIBRARY( "dtransX11" )        // OBR
+#endif
 #endif
 #ifdef SAL_W32
     , SAL_MODULENAME( "sysdtrans" )
