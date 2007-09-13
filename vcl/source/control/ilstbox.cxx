@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:06:42 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:33:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2807,7 +2807,17 @@ void ImplWin::Resize()
 void ImplWin::GetFocus()
 {
     ShowFocus( maFocusRect );
-    Invalidate();
+    if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
+        IsNativeWidgetEnabled() &&
+        IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
+    {
+        Window* pWin = GetParent()->GetWindow( WINDOW_BORDER );
+        if( ! pWin )
+            pWin = GetParent();
+        pWin->Invalidate();
+    }
+    else
+        Invalidate();
     Control::GetFocus();
 }
 
@@ -2816,7 +2826,17 @@ void ImplWin::GetFocus()
 void ImplWin::LoseFocus()
 {
     HideFocus();
-    Invalidate();
+    if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
+        IsNativeWidgetEnabled() &&
+        IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
+    {
+        Window* pWin = GetParent()->GetWindow( WINDOW_BORDER );
+        if( ! pWin )
+            pWin = GetParent();
+        pWin->Invalidate();
+    }
+    else
+        Invalidate();
     Control::LoseFocus();
 }
 
@@ -3007,6 +3027,17 @@ void ImplListBoxFloatingWindow::StartFloat( BOOL bStartTracking )
         Size aSz = GetParent()->GetSizePixel();
         Point aPos = GetParent()->GetPosPixel();
         aPos = GetParent()->GetParent()->OutputToScreenPixel( aPos );
+        // FIXME: this ugly hack is for Mac/Aqua
+        // should be replaced by a real mechanism to place the float rectangle
+        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
+            GetParent()->IsNativeWidgetEnabled() )
+        {
+            sal_Int32 nLeft = 4, nTop = 4, nRight = 4, nBottom = 4;
+            aPos.X() += nLeft;
+            aPos.Y() += nTop;
+            aSz.Width() -= nLeft + nRight;
+            aSz.Height() -= nTop + nBottom;
+        }
         Rectangle aRect( aPos, aSz );
 
         // check if the control's parent is un-mirrored which is the case for form controls in a mirrored UI
