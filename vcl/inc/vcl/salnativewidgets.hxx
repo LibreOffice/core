@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:04:48 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:32:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,12 @@ typedef sal_uInt32      ControlType;
 // The statusbar
 #define CTRL_STATUSBAR          130
 #define CTRL_PROGRESS           131
+// Progress bar for the intro window
+// (aka splash screen), in case some
+// wants native progress bar in the
+// application but not for the splash
+// screen (used in desktop/)
+#define CTRL_INTROPROGRESS      132
 
 // tool tips
 #define CTRL_TOOLTIP            140
@@ -165,6 +171,8 @@ typedef sal_uInt32      ControlPart;
 #define PART_TRACK_VERT_UPPER       201
 #define PART_TRACK_HORZ_RIGHT       202
 #define PART_TRACK_VERT_LOWER       203
+#define PART_TRACK_HORZ_AREA        204
+#define PART_TRACK_VERT_AREA        205
 #define PART_THUMB_HORZ         210 // Also used as toolbar grip
 #define PART_THUMB_VERT         211 // Also used as toolbar grip
 #define PART_MENU_ITEM              250
