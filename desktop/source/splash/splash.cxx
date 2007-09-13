@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 09:25:34 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:34:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_NATIVEWIDGETS_HXX
+#include <vcl/salnativewidgets.hxx>
 #endif
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -625,6 +628,36 @@ void SplashScreen::Paint( const Rectangle&)
         long length = (_iProgress * _barwidth / _iMax) - (2 * _barspace);
         if (length < 0) length = 0;
 
+        //native drawing
+        BOOL bNativeOK = FALSE;
+
+        if( IsNativeControlSupported( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL ) )
+        {
+            //TO DO: add support for mbProgressNeedsErase
+            //bool bNeedErase = ImplGetSVData()->maNWFData.mbProgressNeedsErase;
+
+            ImplControlValue aValue( _iProgress * _barwidth / _iMax);
+            Rectangle aDrawRect( Point(_tlx, _tly), Size( _barwidth, _barheight ) );
+            Region aControlRegion( aDrawRect );
+            Region aNativeControlRegion, aNativeContentRegion;
+
+            if( GetNativeControlRegion( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+                                                 CTRL_STATE_ENABLED, aValue, rtl::OUString(),
+                                                 aNativeControlRegion, aNativeContentRegion ) )
+            {
+                  long nProgressHeight = aNativeControlRegion.GetBoundRect().GetHeight();
+                  aDrawRect.Top() -= (nProgressHeight - _barheight)/2;
+                  aDrawRect.Bottom() += (nProgressHeight - _barheight)/2;
+                  aControlRegion = Region( aDrawRect );
+            }
+
+            if( (bNativeOK = DrawNativeControl( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+                                                         CTRL_STATE_ENABLED, aValue, rtl::OUString() )) != FALSE )
+            {
+                return;
+            }
+        }
+        //non native drawing
         // border
         _vdev.SetFillColor();
         _vdev.SetLineColor( _cProgressFrameColor );
@@ -634,6 +667,7 @@ void SplashScreen::Paint( const Rectangle&)
         Rectangle aRect(_tlx+_barspace, _tly+_barspace, _tlx+_barspace+length, _tly+_barheight-_barspace);
         _vdev.DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace,
             _tlx+_barspace+length, _tly+_barheight-_barspace));
+
     }
     Size aSize =  GetOutputSizePixel();
     Size bSize =  _vdev.GetOutputSizePixel();
