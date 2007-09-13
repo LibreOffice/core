@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourcehandling.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:52:39 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 18:01:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,6 +352,12 @@ namespace abp
     ODataSource ODataSourceContext::createNewKab( const ::rtl::OUString& _rName) SAL_THROW (( ))
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:kab" );
+    }
+
+    //---------------------------------------------------------------------
+    ODataSource ODataSourceContext::createNewMacab( const ::rtl::OUString& _rName) SAL_THROW (( ))
+    {
+        return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:macab" );
     }
 
     //---------------------------------------------------------------------
