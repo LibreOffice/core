@@ -4,9 +4,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:06:48 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,23 +169,25 @@ void ComboBox::ImplCalcEditHeight()
     sal_Int32 nLeft, nTop, nRight, nBottom;
     GetBorder( nLeft, nTop, nRight, nBottom );
     mnDDHeight = (USHORT)(mpSubEdit->GetTextHeight() + nTop + nBottom + 4);
-
     if ( !IsDropDownBox() )
         mnDDHeight += 4;
 
     // FIXME: currently only on aqua; see if we can use this on other platforms
-    if( ImplGetSVData()->maNWFData.mbNoFocusRects && ! IsDropDownBox() )
+    if( ImplGetSVData()->maNWFData.mbNoFocusRects )
     {
         Region aCtrlRegion( Rectangle( Point(), Size( 10, 10 ) ) );
         Region aBoundRegion, aContentRegion;
         ImplControlValue aControlValue;
-        if( GetNativeControlRegion( CTRL_EDITBOX, PART_ENTIRE_CONTROL,
+        ControlType aType = IsDropDownBox() ? CTRL_COMBOBOX : CTRL_EDITBOX;
+        if( GetNativeControlRegion( aType, PART_ENTIRE_CONTROL,
                                     aCtrlRegion,
                                     CTRL_STATE_ENABLED,
                                     aControlValue, rtl::OUString(),
                                     aBoundRegion, aContentRegion ) )
         {
-            mnDDHeight = sal::static_int_cast<USHORT>(aBoundRegion.GetBoundRect().GetHeight());
+            const long nNCHeight = aBoundRegion.GetBoundRect().GetHeight();
+            if( mnDDHeight < nNCHeight )
+                mnDDHeight = sal::static_int_cast<USHORT>( nNCHeight );
         }
     }
 }
