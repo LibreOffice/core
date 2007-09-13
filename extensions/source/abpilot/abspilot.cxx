@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abspilot.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:51:57 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 18:00:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -423,6 +423,10 @@ namespace abp
 
             case AST_KAB:
                 m_aNewDataSource = aContext.createNewKab( m_aSettings.sDataSourceName );
+                break;
+
+            case AST_MACAB:
+                m_aNewDataSource = aContext.createNewMacab( m_aSettings.sDataSourceName );
                 break;
 
             case AST_LDAP:
