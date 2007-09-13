@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeselectionpage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:04:57 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 18:02:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@ namespace abp
         ,m_aEvolutionGroupwise (this,   ModuleRes(RB_EVOLUTION_GROUPWISE))
         ,m_aEvolutionLdap      (this,   ModuleRes(RB_EVOLUTION_LDAP))
         ,m_aKab             (this,  ModuleRes(RB_KAB))
+        ,m_aMacab           (this,  ModuleRes(RB_MACAB))
         ,m_aLDAP            (this,  ModuleRes(RB_LDAP))
         ,m_aOutlook         (this,  ModuleRes(RB_OUTLOOK))
         ,m_aOE              (this,  ModuleRes(RB_OUTLOOKEXPRESS))
@@ -89,6 +90,7 @@ namespace abp
 
         bool bWithMozilla = true, bUnx = true;
         bool bHaveEvolution = true, bHaveKab = true;
+        bool bHaveMacab = true;
 
 #ifndef WITH_MOZILLA
         bWithMozilla = false;
@@ -97,6 +99,7 @@ namespace abp
         bUnx = false;
         bHaveEvolution = false;
         bHaveKab = false;
+        bHaveMacab = false;
 #else
         Reference< XDriverAccess> xManager(_pParent->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager"))), UNO_QUERY);
 
@@ -109,6 +112,11 @@ namespace abp
         xDriver = xManager->getDriverByURL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:kab")));
         if ( !xDriver.is() )
             bHaveKab = false;
+
+        // check whether Mac OS X address book is available
+        xDriver = xManager->getDriverByURL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:macab")));
+        if ( !xDriver.is() )
+            bHaveMacab = false;
 #endif
 
         // Items are displayed in list order
@@ -118,6 +126,7 @@ namespace abp
         m_aAllTypes.push_back( ButtonItem( &m_aMORK, AST_MORK, bWithMozilla ) );
         m_aAllTypes.push_back( ButtonItem( &m_aThunderbird, AST_THUNDERBIRD, bWithMozilla ) );
         m_aAllTypes.push_back( ButtonItem( &m_aKab, AST_KAB, bHaveKab ) );
+        m_aAllTypes.push_back( ButtonItem( &m_aMacab, AST_MACAB, bHaveMacab ) );
         m_aAllTypes.push_back( ButtonItem( &m_aLDAP, AST_LDAP, bWithMozilla ) );
         m_aAllTypes.push_back( ButtonItem( &m_aOutlook, AST_OUTLOOK, bWithMozilla && !bUnx ) );
         m_aAllTypes.push_back( ButtonItem( &m_aOE, AST_OE, bWithMozilla && !bUnx ) );
