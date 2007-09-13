@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourcehandling.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:38:57 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 18:01:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,9 @@ namespace abp
 
         /// creates a new KDE address book data source
         ODataSource createNewKab( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+
+        /// creates a new Mac OS X address book data source
+        ODataSource createNewMacab( const ::rtl::OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new LDAP data source
         ODataSource createNewLDAP( const ::rtl::OUString& _rName ) SAL_THROW (( ));
