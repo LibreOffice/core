@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.258 $
+ *  $Revision: 1.259 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 17:59:54 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 18:07:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -925,7 +925,8 @@ End
 #endif
 #endif
 
-#if (defined(MACOSX) && defined(QUARTZ))
+#ifdef MACOSX
+#ifdef QUARTZ
 File gid_File_Lib_Fps_Aqua
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH);
@@ -934,6 +935,15 @@ File gid_File_Lib_Fps_Aqua
     Name = SPECIAL_COMPONENT_LIB_NAME(fps_aqua.uno);
     Regmergefile = "fps-aqua-ucd.txt";
 End
+
+File gid_File_Lib_MacOSXSpell
+	TXT_FILE_BODY;
+	Styles = (PACKED,PATCH,UNO_COMPONENT);
+	RegistryID = gid_Starregistry_Services_Rdb;
+	Name = LIBNAME(MacOSXSpell);
+	Dir = gid_Dir_Program;
+End
+#endif
 #endif
 
 SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Fps_Office, fps_office.uno )
