@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:36:39 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 17:59:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,10 @@ Resource RSC_DATASOURCE_TYPES
     {
         Text  ="sdbc:address:kab";
     };
+    String STR_MACAB
+    {
+        Text  ="sdbc:address:macab";
+    };
     String STR_EMBEDDED
     {
         Text = "sdbc:embedded:";
@@ -207,6 +211,10 @@ Resource RSC_DATASOURCE_TYPE_UINAMES
     String STR_KAB
     {
         Text[ en-US ] = "KDE Address Book";
+    };
+    String STR_MACAB
+    {
+        Text[ en-US ] = "Mac OS X Address Book";
     };
     String STR_EMBEDDED
     {
