@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:03:49 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:31:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -799,44 +799,51 @@ XubString AquaSalFrame::GetSymbolKeyName( const XubString&, USHORT nKeyCode )
 // we have to get Quartz color in preferences, and convert them into sal colors
 static short getHighlightColorFromPrefs( Color* pColor )
 {
+    // default value, when never modified, is light blue ( 0.7098 , 0.8353 , 1.00 )
+    BYTE aRed = static_cast<BYTE>( 0.7098*255);
+    BYTE aGreen = static_cast<BYTE>( 0.8353*255);
+    BYTE aBlue = static_cast<BYTE>( 1.0000*255);
+
     // get the key in ~/Library/Preferences/.GlobalPreferences.plist
-    CFStringRef aHighLightColor = ( (CFStringRef)CFPreferencesCopyAppValue( CFSTR("AppleHighlightColor" ), kCFPreferencesCurrentApplication ) );
-
-    if (aHighLightColor == NULL)  // default, when never modified
+    CFStringRef aPreferedHighlightColor = CFSTR("AppleHighlightColor");
+    if (aPreferedHighlightColor)
     {
-        // default value is light blue ( 0.7098 , 0.8353 , 1.00 )
-        pColor->SetRed( static_cast<UINT8>( 0.7098*255) );
-        pColor->SetGreen( static_cast<UINT8>( 0.8353*255) );
-        pColor->SetBlue( static_cast<UINT8>( 1.0000*255) );
-
-    }
-    else
-    {
-        // create a CFArray containing all the values, as CFString
-        CFArrayRef aCFArray = CFStringCreateArrayBySeparatingStrings ( kCFAllocatorDefault, aHighLightColor, CFSTR(" ") );
-
-        // we no longer need aHighlightColor
-        CFRelease(aHighLightColor);
-
-        // create an array of double, containing Quartz values
-        double aColorArray[3];
-
-        short i;
-        for (i=0; i<3 ; i++)
+        CFStringRef aHighLightColor = ( (CFStringRef)CFPreferencesCopyAppValue( aPreferedHighlightColor, kCFPreferencesCurrentApplication ) );
+        if (aHighLightColor)
         {
-            aColorArray[i] = CFStringGetDoubleValue ( (CFStringRef)CFArrayGetValueAtIndex(aCFArray, i) );
+            // create a CFArray containing all the values, as CFString
+            CFStringRef aSeparator = CFSTR(" ");
+            if (aSeparator)
+            {
+                CFArrayRef aCFArray = CFStringCreateArrayBySeparatingStrings ( kCFAllocatorDefault, aHighLightColor, aSeparator);
+                if (aCFArray)
+                {
+                    // create an array of double, containing Quartz values
+                    double aColorArray[3];
+                    short i;
+                    for (i=0; i<3 ; i++)
+                    {
+                        aColorArray[i] = CFStringGetDoubleValue ( (CFStringRef)CFArrayGetValueAtIndex(aCFArray, i) );
+                    }
+
+                    // we no longer need The CFArray
+                    CFRelease(aCFArray);
+                    AquaLog( ">*>_> %s R %f V %f B %f \n",__func__, aColorArray[0],aColorArray[1],aColorArray[2]);
+
+                    // the colors (uff)
+                    aRed = static_cast<BYTE>( aColorArray[0]*255);
+                    aGreen = static_cast<BYTE>( aColorArray[1]*255);
+                    aBlue = static_cast<BYTE>( aColorArray[2]*255);
+                }
+                CFRelease (aSeparator);
+            }
+            CFRelease(aHighLightColor);
         }
-
-        AquaLog( ">*>_> %s R %f V %f B %f \n",__func__, aColorArray[0],aColorArray[1],aColorArray[2]);
-
-        // we no longer need The CFArray
-        CFRelease(aCFArray);
-
-        // the colors (uff)
-        pColor->SetRed( static_cast<UINT8>( aColorArray[0]*255) );
-        pColor->SetGreen( static_cast<UINT8>( aColorArray[1]*255) );
-        pColor->SetBlue( static_cast<UINT8>( aColorArray[2]*255) );
+        CFRelease(aPreferedHighlightColor);
     }
+    pColor->SetRed( aRed );
+    pColor->SetGreen( aGreen );
+    pColor->SetBlue( aBlue );
     return 0;
 }
 
@@ -1029,6 +1036,34 @@ static bool GetSystemFontSetting( ThemeFontID eThemeFontID, Font* pFont )
     return true;
 }
 
+static void getAppleScrollBarVariant(void)
+{
+    bool bIsScrollbarDoubleMax = true; // default is DoubleMax
+
+    CFStringRef AppleScrollBarType = CFSTR("AppleScrollBarVariant");
+    if (AppleScrollBarType)
+    {
+        CFStringRef ScrollBarVariant = ((CFStringRef)CFPreferencesCopyAppValue( AppleScrollBarType, kCFPreferencesCurrentApplication ));
+        if (ScrollBarVariant)
+        {
+            // TODO: check for the less important variants "DoubleMin" and "DoubleBoth" too
+            CFStringRef DoubleMax = CFSTR("DoubleMax");
+            if (DoubleMax)
+            {
+                if ( !CFStringCompare(ScrollBarVariant, DoubleMax, kCFCompareCaseInsensitive) )
+                    bIsScrollbarDoubleMax = true;
+                else
+                    bIsScrollbarDoubleMax = false;
+                CFRelease(DoubleMax);
+            }
+            CFRelease( ScrollBarVariant );
+        }
+        CFRelease(AppleScrollBarType);
+    }
+
+    GetSalData()->mbIsScrollbarDoubleMax = bIsScrollbarDoubleMax;
+}
+
 static bool GetSystemFontColor( ThemeTextColor eThemeTextColor, Color* pColor )
 {
     RGBColor aRGBColor;
@@ -1109,6 +1144,8 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
 
     // no mnemonics on aqua
     aStyleSettings.SetOptions( aStyleSettings.GetOptions() | STYLE_OPTION_NOMNEMONICS );
+
+    getAppleScrollBarVariant();
 
     rSettings.SetStyleSettings( aStyleSettings );
 }
@@ -1603,6 +1640,7 @@ OSStatus HandleWindowFocusEvent(EventHandlerCallRef inHandlerCallRef, EventRef i
     return noErr;
 }
 
+
 OSStatus HandleWindowCloseEvent(EventHandlerCallRef inHandlerCallRef, EventRef inEvent, void * inUserData)
 {
     BOOST_ASSERT(GetEventClass(inEvent) == kEventClassWindow && GetEventKind(inEvent) == kEventWindowClose && "Only WindowClose event expected");
@@ -1611,6 +1649,15 @@ OSStatus HandleWindowCloseEvent(EventHandlerCallRef inHandlerCallRef, EventRef i
     AquaSalFrame* pSalFrame = reinterpret_cast<AquaSalFrame*>(inUserData);
 
     pSalFrame->CallCallback(SALEVENT_CLOSE, 0);
+    return noErr;
+}
+
+OSStatus HandleAppearanceScrollbarVariantChanged(EventHandlerCallRef inHandlerCallRef, EventRef inEvent, void * inUserData)
+{
+    BOOST_ASSERT(GetEventClass(inEvent) == kEventClassAppearance && GetEventKind(inEvent) == kEventAppearanceScrollBarVariantChanged && "Only AppearanceScrollBarVariantChanged event expected");
+
+    YIELD_GUARD;
+    getAppleScrollBarVariant();
     return noErr;
 }
 
@@ -2764,7 +2811,9 @@ void AquaSalFrame::CreateNewSystemWindow(CarbonWindowRef pParent,  ULONG nSalFra
     // TSM!
     InstallAndRegisterEventHandler(NewEventHandlerUPP(HandleTSMEvent), GetEventTypeCount(cTextInputEvents), cTextInputEvents);
 #endif
-
+    /* Events for scrollbar */
+    EventHandlerRef aEventHandlerRef;
+    InstallEventHandler( GetApplicationEventTarget(), NewEventHandlerUPP(HandleAppearanceScrollbarVariantChanged), 1, &cAppearanceScrollbarVariantChangedEvent, NULL, &aEventHandlerRef);
 }
 
 OSStatus AquaSalFrame::InstallAndRegisterEventHandler(EventHandlerUPP upp, size_t nEvents, const EventTypeSpec* eventSpec)
