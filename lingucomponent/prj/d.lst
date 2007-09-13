@@ -36,3 +36,4 @@
 ..\%__SRC%\lib\libguesslang*.dylib %_DEST%\lib%_EXT%\libguesslang*.dylib
 ..\%__SRC%\lib\libguesslang*.so %_DEST%\lib%_EXT%\libguesslang*.so
 
+..\%__SRC%\lib\libMacOSXSpell*.dylib %_DEST%\lib%_EXT%\libMacOSXSpell*.dylib
