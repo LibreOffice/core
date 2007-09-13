@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DriverSettings.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:48:37 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 17:58:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,9 @@ void ODriversSettings::fillDetailIds(DATASOURCE_TYPE _eType,::std::vector< sal_I
             _rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
         case DST_KAB:
+            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+            break;
+        case DST_MACAB:
             _rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
         case DST_OUTLOOK:
