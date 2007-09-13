@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 10:08:07 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 18:00:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,6 +328,8 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Evoab_1,
 	gid_File_Lib_Kab_1,
     gid_File_Lib_Kab_Drv_1,
+	gid_File_Lib_Macab_1,
+    gid_File_Lib_Macab_Drv_1,
 	gid_File_Lib_Evtatt,
 	gid_File_Lib_Fileacc,
 	gid_File_Lib_Filterconfig1,
