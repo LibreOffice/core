@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:14:46 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 17:58:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,10 +261,11 @@ using namespace ::cppu;
 #define EVOLUTION_PATH_GROUPWISE 17
 #define EVOLUTION_PATH_LDAP      18
 #define KAB_PATH                 19
-#define THUNDERBIRD_PATH         20
-#define CREATENEW_PATH           21
-#define USERDEFINED_PATH         22
-#define OPEN_DOC_PATH            23
+#define MACAB_PATH               20
+#define THUNDERBIRD_PATH         21
+#define CREATENEW_PATH           22
+#define USERDEFINED_PATH         23
+#define OPEN_DOC_PATH            24
 
 OFinalDBPageSetup*          pFinalPage;
 
@@ -432,6 +433,11 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     else
         declarePath( KAB_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
 
+    if ( m_pCollection->hasAuthentication(DST_MACAB))
+        declarePath( MACAB_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
+    else
+        declarePath( MACAB_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
+
     if ( m_pCollection->hasAuthentication(m_pCollection->getEmbeddedDatabaseType(getORB())))
         declarePath( CREATENEW_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
     else
@@ -576,6 +582,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
             { DST_EVOLUTION_GROUPWISE, EVOLUTION_PATH_GROUPWISE },
             { DST_EVOLUTION_LDAP, EVOLUTION_PATH_LDAP },
             { DST_KAB,          KAB_PATH            },
+            { DST_MACAB,        MACAB_PATH          },
             { DST_USERDEFINE1,  USERDEFINED_PATH    },
             { DST_USERDEFINE2,  USERDEFINED_PATH    },
             { DST_USERDEFINE3,  USERDEFINED_PATH    },
@@ -646,6 +653,7 @@ sal_Bool ODbTypeWizDialogSetup::IsConnectionUrlRequired()
     switch ( m_eType )
     {
         case DST_KAB:
+        case DST_MACAB:
         case DST_EVOLUTION:
         case DST_EVOLUTION_GROUPWISE:
         case DST_EVOLUTION_LDAP:
