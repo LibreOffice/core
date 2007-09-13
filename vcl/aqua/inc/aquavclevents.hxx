@@ -63,4 +63,8 @@ const EventTypeSpec cTextInputEvents[] = { { kEventClassTextInput, kEventTextInp
                                            { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent},
                                            { kEventClassTextInput, kEventTextInputOffsetToPos} };
 
+/* Events for scrollbar */
+
+const EventTypeSpec cAppearanceScrollbarVariantChangedEvent = { kEventClassAppearance, kEventAppearanceScrollBarVariantChanged };
+
 #endif // INCLUDED_AQUAVCLEVENTS_HXX
