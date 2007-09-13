@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salatsuifontutils.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:25:11 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:31:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
             continue;
 
         // heuristic to find the most common font name
-        int nNameValue = (eFontNameLanguage==0x403) ? 0 : -1; // prefer English
+        int nNameValue = (eFontNameLanguage==0x409) ? 0 : -1; // prefer English
         const int nPlatformEncoding = ((int)eFontNamePlatform << 8) + (int)eFontNameScript;
         switch( nPlatformEncoding )
         {
