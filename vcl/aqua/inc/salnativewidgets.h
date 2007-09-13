@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:59:04 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,10 +63,15 @@
 #define SPIN_LOWER_BUTTON_HEIGHT    10
 #define SPIN_TWO_BUTTONS_HEIGHT     21
 
+// progress bar
+#define INTRO_PROGRESS_HEIGHT 9
 
 // for some controls, like spinbuttons + spinboxes, or listboxes
 // we need it to adjust text position beside radio and check buttons
 
 #define TEXT_SEPARATOR 3
+
+// extra border for focus ring
+#define FOCUS_RING_WIDTH 4
 
 #endif  // _SV_NATIVEWIDGETS_H
