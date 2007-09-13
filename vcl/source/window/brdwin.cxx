@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:08:02 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:33:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1152,6 +1152,20 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
             {
                 switch( pCtrl->GetType() )
                 {
+                    case WINDOW_LISTBOX:
+                        if( pCtrl->GetStyle() & WB_DROPDOWN )
+                        {
+                            aCtrlType = CTRL_LISTBOX;
+                            mbNWFBorder = true;
+                        }
+                        break;
+                    case WINDOW_COMBOBOX:
+                        if( pCtrl->GetStyle() & WB_DROPDOWN )
+                        {
+                            aCtrlType = CTRL_COMBOBOX;
+                            mbNWFBorder = true;
+                        }
+                        break;
                     case WINDOW_MULTILINEEDIT:
                         aCtrlType = CTRL_MULTILINE_EDITBOX;
                         mbNWFBorder = true;
@@ -1363,17 +1377,8 @@ void ImplSmallBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, co
 
             // FIXME: for aqua focus rings all controls need to support GetNativeControlRegion
             // for the dropdown style
-            if( (pCtrl->GetStyle() & WB_DROPDOWN) == 0 )
-            {
-                if( pCtrl->HasFocus() )
-                    nState |= CTRL_STATE_FOCUSED;
-                else
-                {
-                    Edit* pEdit = dynamic_cast<Edit*>(pCtrl);
-                    if( pEdit && pEdit->GetSubEdit() && pEdit->GetSubEdit()->HasFocus() )
-                        nState |= CTRL_STATE_FOCUSED;
-                }
-            }
+            if( pCtrl->HasFocus() || pCtrl->HasChildPathFocus() )
+                nState |= CTRL_STATE_FOCUSED;
         }
 
         BOOL bMouseOver = FALSE;
