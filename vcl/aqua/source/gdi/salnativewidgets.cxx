@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:02:52 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:31:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,15 +57,11 @@
 
 #include "saldata.hxx"
 
-using ::rtl::OUString;
-
-/*
- *  AquaGet*  are helpers for native controls
- */
+//using ::rtl::OUString;
 
 // Helper returns an HIRect
 
-HIRect ImplGetHIRectFromRectangle(Rectangle aRect)
+static HIRect ImplGetHIRectFromRectangle(Rectangle aRect)
 {
     HIRect aHIRect;
     aHIRect.origin.x = static_cast<float>(aRect.Left());
@@ -77,7 +73,7 @@ HIRect ImplGetHIRectFromRectangle(Rectangle aRect)
 
 // Helper returns a Rectangle
 
-Rectangle ImplGetRectangleFromHIRect( HIRect aHIRect )
+static Rectangle ImplGetRectangleFromHIRect( HIRect aHIRect )
 {
     Rectangle aRect;
     aRect.Top() = static_cast<int>(aHIRect.origin.y);
@@ -89,7 +85,7 @@ Rectangle ImplGetRectangleFromHIRect( HIRect aHIRect )
 
 // Helper returns a QD Rect
 
-Rect ImplGetRectFromHIRect(HIRect aHIRect)
+static Rect ImplGetRectFromHIRect(HIRect aHIRect)
 {
     Rect aRect;
     aRect.top = static_cast<short>(aHIRect.origin.y);
@@ -97,25 +93,6 @@ Rect ImplGetRectFromHIRect(HIRect aHIRect)
     aRect.right= static_cast<short>(aHIRect.origin.x) + static_cast<short>(aHIRect.size.width);
     aRect.bottom = static_cast<short>(aHIRect.size.height) + static_cast<short>(aHIRect.origin.y);
     return aRect;
-}
-
-
-static bool isAppleScrollBarVariantDoubleMax(void)
-{
-    bool isDoubleMax = true;  // default is DoubleMax
-    CFStringRef ScrollBarVariant;
-
-    ScrollBarVariant = ( (CFStringRef)CFPreferencesCopyAppValue(CFSTR("AppleScrollBarVariant"), kCFPreferencesCurrentApplication) );
-    if ( ScrollBarVariant )
-    {
-        if ( !CFStringCompare(ScrollBarVariant, CFSTR("DoubleMax"), kCFCompareCaseInsensitive) )
-            isDoubleMax = true;
-        else
-            isDoubleMax = false;
-        CFRelease( ScrollBarVariant );
-    }
-
-    return isDoubleMax;
 }
 
 static ThemeButtonValue ImplGetButtonValue( ButtonValue aButtonValue )
@@ -138,36 +115,55 @@ static ThemeButtonValue ImplGetButtonValue( ButtonValue aButtonValue )
     }
 }
 
-static Rectangle AquaGetScrollButtonRect(   /*implement me : int nScreen, */  ControlPart nPart, Rectangle aAreaRect )
+static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
+    const Rectangle& rControlRect, Rectangle& rResultRect )
 {
-    Rectangle  buttonRect;
+    bool bRetVal = true;
+    rResultRect = rControlRect;
 
-    switch (nPart)
+    switch( nPart )
     {
         case PART_BUTTON_UP:
-            buttonRect.setX( aAreaRect.Left() );
-            buttonRect.setY( aAreaRect.Top() );
-            break;
-
-        case PART_BUTTON_LEFT:
-            buttonRect.setX( aAreaRect.Left() );
-            buttonRect.setY( aAreaRect.Top() );
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+                rResultRect.Top() = rControlRect.Bottom() - 2*BUTTON_HEIGHT;
+            rResultRect.Bottom() = rResultRect.Top() + BUTTON_HEIGHT;
             break;
 
         case PART_BUTTON_DOWN:
-            buttonRect.setX( aAreaRect.Left() );
-            buttonRect.setY( aAreaRect.Top() + aAreaRect.GetHeight() - BUTTON_HEIGHT );
+            rResultRect.Top() = rControlRect.Bottom() - BUTTON_HEIGHT;
+            break;
+
+        case PART_BUTTON_LEFT:
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+                rResultRect.Left() = rControlRect.Right() - 2*BUTTON_WIDTH;
+            rResultRect.Right() = rResultRect.Left() + BUTTON_WIDTH;
             break;
 
         case PART_BUTTON_RIGHT:
-            buttonRect.setX( aAreaRect.Left() + aAreaRect.GetWidth() - BUTTON_WIDTH );
-            buttonRect.setY( aAreaRect.Top() );
+            rResultRect.Left() = rControlRect.Right() - BUTTON_WIDTH;
             break;
+
+        case PART_TRACK_HORZ_AREA:
+            rResultRect.Right() -= BUTTON_WIDTH + 1;
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+                rResultRect.Right() -= BUTTON_WIDTH;
+            else
+                rResultRect.Left() += BUTTON_WIDTH + 1;
+            break;
+
+        case PART_TRACK_VERT_AREA:
+            rResultRect.Bottom() -= BUTTON_HEIGHT + 1;
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+                rResultRect.Bottom() -= BUTTON_HEIGHT;
+            else
+                rResultRect.Top() += BUTTON_HEIGHT + 1;
+            break;
+
+        default:
+            bRetVal = false;
     }
 
-    buttonRect.SetSize( Size( BUTTON_WIDTH, BUTTON_HEIGHT ) );
-
-    return( buttonRect );
+    return bRetVal;
 }
 
 char *ImplDbgGetStringControlType(ControlType nType)
@@ -220,6 +216,8 @@ char *ImplDbgGetStringControlPart(ControlPart nPart)
         case PART_TRACK_VERT_UPPER: return "TRACK_VERT_UPPER";
         case PART_TRACK_HORZ_RIGHT: return "TRACK_HORZ_RIGHT";
         case PART_TRACK_VERT_LOWER: return "TRACK_VERT_LOWER";
+        case PART_TRACK_HORZ_AREA: return "TRACK_HORZ_AREA";
+        case PART_TRACK_VERT_AREA: return "TRACK_VERT_AREA";
         case PART_THUMB_HORZ: return "THUMB_HORZ";
         case PART_THUMB_VERT: return "THUMB_VERT";
         case PART_MENU_ITEM: return "MENU_ITEM";
@@ -264,7 +262,7 @@ BOOL AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
         case CTRL_RADIOBUTTON:
         case CTRL_CHECKBOX:
             if( nPart == PART_ENTIRE_CONTROL )
-            return true;
+                return true;
             break;
 
         case CTRL_SCROLLBAR:
@@ -360,6 +358,7 @@ BOOL AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
                 return true;
             break;
         case CTRL_PROGRESS:
+        case CTRL_INTROPROGRESS:
             if( nPart == PART_ENTIRE_CONTROL )
                 return true;
             break;
@@ -386,102 +385,11 @@ BOOL AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
 
     if ( nType == CTRL_SCROLLBAR )
     {
-        // outside by default
-        rIsInside = FALSE;
-
-        ControlPart nCounterPart = 0;
-        switch (nPart)
-        {
-            case PART_BUTTON_UP:
-                nCounterPart = PART_BUTTON_DOWN;
-                break;
-            case PART_BUTTON_DOWN:
-                nCounterPart = PART_BUTTON_UP;
-                break;
-            case PART_BUTTON_LEFT:
-                nCounterPart = PART_BUTTON_RIGHT;
-                break;
-            case PART_BUTTON_RIGHT:
-                nCounterPart = PART_BUTTON_LEFT;
-                break;
-        }
-        // make position relative to rControlRegion
-
-        // [ericb] rControlRegion.GetBoundRect() returns the rectangle where vcl control is located
-        // when a control is hit on the scrollbar (native control), the coordinates of the click
-        // are translated to vcl control coordinates
-        // rPos : the structure containing the cursor position
-        // aPos = relative position of current cursor
-
-        Point aPos = rPos - rControlRegion.GetBoundRect().TopLeft();
-
-        // controlRect contains the scrollbar
-        Rectangle controlRect = rControlRegion.GetBoundRect();
-
-        // button_leftRect contains the left/top button hit in the scrollbar
-        // button_rightRect contains the right/bottom button hit in the scrollbar
-        Rectangle button_leftRect = AquaGetScrollButtonRect( /* m_nScreen, implement me */ nPart, rControlRegion.GetBoundRect() );
-        Rectangle button_rightRect = AquaGetScrollButtonRect( /* m_nScreen, implement me */ nCounterPart, rControlRegion.GetBoundRect() );
-
-        short offset_button_left  = 0; //  from left of scrollbar area to the left side of left button
-        short offset_button_top  = 0; // from top of scrollbar area to top of top button
-
-        // right / bottom butons have always the same position
-        short offset_button_right = controlRect.GetWidth() - button_rightRect.GetWidth(); // from left of scrollbar area to left side of right button
-        short offset_button_bottom = controlRect.GetHeight() - button_rightRect.GetHeight();   // from top of scrollbar area to top of bottom button
-
-        if ( isAppleScrollBarVariantDoubleMax() == true )
-        {
-            offset_button_left = controlRect.GetWidth() - (button_leftRect.GetWidth() + button_rightRect.GetWidth());
-            offset_button_top  = controlRect.GetHeight() - (button_leftRect.GetHeight() + button_rightRect.GetHeight());
-        }
-
-        // depending on nPart, we have to test different regions
-        switch ( nPart )
-        {
-            case PART_BUTTON_LEFT:
-                if ( (aPos.getY() > 0 ) && (aPos.getY() < controlRect.GetHeight() )
-                     && (aPos.getX() > offset_button_left) && (aPos.getX() < (offset_button_left + button_leftRect.GetWidth()) ) )
-                {
-                    AquaLog( "button left \n");
-                    rIsInside = TRUE;
-                }
-                break;
-
-            case PART_BUTTON_RIGHT:
-                if ( (aPos.getY() > 0 ) && (aPos.getY() < controlRect.GetHeight() )
-                     && (aPos.getX() > offset_button_right ) && (aPos.getX() < controlRect.GetWidth() + 1))  // + 1 because of the borders
-                {
-                    AquaLog( "button right \n");
-                    rIsInside = TRUE;
-                }
-                break;
-
-            case PART_BUTTON_UP:
-                if ( (aPos.getX() > 0 ) && (aPos.getX() < controlRect.GetWidth() )
-                     && (aPos.getY() > offset_button_top) && (aPos.getY() < (offset_button_top + button_leftRect.GetHeight() )) )
-                {
-                    AquaLog( "button up \n");
-                    rIsInside = TRUE;
-                }
-                break;
-
-            case PART_BUTTON_DOWN:
-                if ((aPos.getX() > 0 )  && (aPos.getX() < controlRect.GetWidth() )
-                    && ( aPos.getY() > (offset_button_bottom)) && (aPos.getY() < (controlRect.GetHeight() + 1) ) )
-                {
-                    AquaLog( "button down \n");
-                    rIsInside = TRUE;
-                }
-                break;
-
-            default:
-                rIsInside = FALSE;
-                break;
-        }
+        Rectangle aRect;
+        bool bValid = AquaGetScrollRect( /* TODO: m_nScreen */ nPart, rControlRegion.GetBoundRect(), aRect );
+        rIsInside = bValid ? aRect.IsInside( rPos ) : FALSE;
 
         return TRUE;
-
     }  //  CTRL_SCROLLBAR
 
     return FALSE;
@@ -577,8 +485,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
             aComboInfo.version = 0;
             aComboInfo.kind = kThemeComboBox;
             aComboInfo.state = getState( nState );
-            ButtonValue aComboButtonValue = aValue.getTristateVal();
-            aComboInfo.value = ImplGetButtonValue( aComboButtonValue );
+            aComboInfo.value = kThemeButtonOn;
             aComboInfo.adornment = kThemeAdornmentNone;
 
             if( (nState & CTRL_STATE_FOCUSED) != 0 )
@@ -669,8 +576,8 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                     UniChar mark=( nPart == PART_MENU_ITEM_CHECK_MARK ) ? kCheckUnicode: kBulletUnicode;//0x2713;
                     CFStringRef cfString = CFStringCreateWithCharactersNoCopy(kCFAllocatorDefault, &mark, 1, kCFAllocatorNull);
                     HIThemeDrawTextBox(cfString, &rc, &aTextInfo, mrContext, kHIThemeOrientationNormal);
-
-                    CFRelease(cfString);
+                    if (cfString)
+                        CFRelease(cfString);
 
                     bOK = true;
                 }
@@ -773,6 +680,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
     case CTRL_PROGRESS:
+    case CTRL_INTROPROGRESS:
         {
             long nProgressWidth = aValue.getNumericVal();
             HIThemeTrackDrawInfo aTrackInfo;
@@ -805,8 +713,13 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                 nPart == PART_DRAW_BACKGROUND_HORZ )
             {
                 HIThemeTrackDrawInfo aTrackDraw;
-                aTrackDraw.version = 0;
                 aTrackDraw.kind = kThemeMediumScrollBar;
+                // FIXME: the scrollbar length must be adjusted
+                if (nPart == PART_DRAW_BACKGROUND_VERT)
+                    rc.size.height += 2;
+                else
+                    rc.size.width += 2;
+
                 aTrackDraw.bounds = rc;
                 aTrackDraw.min = pScrollbarVal->mnMin;
                 aTrackDraw.max = pScrollbarVal->mnMax - pScrollbarVal->mnVisibleSize;
@@ -979,13 +892,11 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                 aListInfo.version = 0;
                 aListInfo.kind = kThemePopupButton;
                 aListInfo.state = getState( nState );//kThemeStateInactive -> greyed
-
-                ButtonValue aListButtonValue = aValue.getTristateVal();
-                aListInfo.value = ImplGetButtonValue( aListButtonValue );
+                aListInfo.value = kThemeButtonOn;
 
                 aListInfo.adornment = kThemeAdornmentDefault;
-
-                rc.size.height=COMBOBOX_HEIGHT_NORMAL;
+                if( (nState & CTRL_STATE_FOCUSED) != 0 )
+                    aListInfo.adornment |= kThemeAdornmentFocus;
 
                 HIThemeDrawButton(&rc, &aListInfo, mrContext, kHIThemeOrientationNormal,&rc);
                 bOK = true;
@@ -1189,6 +1100,18 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
 
     switch (nType)
     {
+        case CTRL_SCROLLBAR:
+            {
+                Rectangle aRect;
+                if( AquaGetScrollRect( /* m_nScreen */ nPart, rControlRegion.GetBoundRect(), aRect ) )
+                {
+                    toReturn = TRUE;
+                    rNativeBoundingRegion = aRect;
+                    rNativeContentRegion = aRect;
+                }
+            }
+            break;
+
         case CTRL_PUSHBUTTON:
         case CTRL_RADIOBUTTON:
         case CTRL_CHECKBOX:
@@ -1228,6 +1151,16 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
             }
             break;
 
+        case CTRL_INTROPROGRESS:
+            {
+                Rectangle aRect( rControlRegion.GetBoundRect() );
+                aRect.Bottom() = aRect.Top() + INTRO_PROGRESS_HEIGHT; // values taken from HIG for medium progress
+                rNativeBoundingRegion = aRect;
+                rNativeContentRegion = aRect;
+                toReturn = TRUE;
+            }
+            break;
+
          case CTRL_TAB_ITEM:
 
             w = rControlRegion.GetBoundRect().GetWidth() + 2*TAB_TEXT_OFFSET - 2*VCL_TAB_TEXT_OFFSET;
@@ -1247,39 +1180,42 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
         case CTRL_EDITBOX:
             {
                 w = rControlRegion.GetBoundRect().GetWidth();
-                if( w < 11 )
-                    w = 11;
+                if( w < 3+2*FOCUS_RING_WIDTH )
+                    w = 3+2*FOCUS_RING_WIDTH;
                 h = TEXT_EDIT_HEIGHT_NORMAL;
 
-                rNativeContentRegion = Rectangle( Point( x+4, y+4 ), Size( w-10, h-2 ) );
-                rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h+8 ) );
+                rNativeContentRegion = Rectangle( Point( x+FOCUS_RING_WIDTH, y+FOCUS_RING_WIDTH ), Size( w-2*FOCUS_RING_WIDTH-2, h-2 ) );
+                rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h+2*FOCUS_RING_WIDTH ) );
 
                 toReturn = TRUE;
             }
             break;
-        case CTRL_COMBOBOX:
         case CTRL_LISTBOX:
+        case CTRL_COMBOBOX:
             {
                 if( nPart == PART_ENTIRE_CONTROL )
                 {
                     w = rControlRegion.GetBoundRect().GetWidth();
                     h = COMBOBOX_HEIGHT_NORMAL;//listboxes and comboxes have the same height
 
-                    rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
-                    rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
+                    rNativeContentRegion = Rectangle( Point( x+FOCUS_RING_WIDTH, y+FOCUS_RING_WIDTH ), Size( w-2*FOCUS_RING_WIDTH, h ) );
+                    rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h+2*FOCUS_RING_WIDTH ) );
 
                     toReturn = TRUE;
                 }
                 else if( nPart == PART_BUTTON_DOWN )
                 {
                     w = rControlRegion.GetBoundRect().GetWidth();
+                if( w < 3+2*FOCUS_RING_WIDTH )
+                    w = 3+2*FOCUS_RING_WIDTH;
                     h = COMBOBOX_HEIGHT_NORMAL;//listboxes and comboxes have the same height
 
-                    x += w-DROPDOWN_BUTTON_WIDTH;
+                    x += w-DROPDOWN_BUTTON_WIDTH - FOCUS_RING_WIDTH;
+                    y += FOCUS_RING_WIDTH;
                     w = DROPDOWN_BUTTON_WIDTH;
 
                     rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
-                    rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
+                    rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w+FOCUS_RING_WIDTH, h+2*FOCUS_RING_WIDTH ) );
 
                     toReturn = true;
                 }
@@ -1288,16 +1224,17 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     w = rControlRegion.GetBoundRect().GetWidth();
                     h = COMBOBOX_HEIGHT_NORMAL;//listboxes and comboxes have the same height
 
-
+                    x += FOCUS_RING_WIDTH;
                     x += 3; // add an offset for rounded borders
                     y += 2; // don't draw into upper border
-                    w -= 3 + DROPDOWN_BUTTON_WIDTH;
+                    y += FOCUS_RING_WIDTH;
+                    w -= 3 + DROPDOWN_BUTTON_WIDTH + 2*FOCUS_RING_WIDTH;
                     if( nType == CTRL_LISTBOX )
                         w -= 9; // HIG specifies 9 units distance between dropdown button area and content
                     h -= 4; // don't draw into lower border
 
                     rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
-                    rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h ) );
+                    rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w+FOCUS_RING_WIDTH, h+2*FOCUS_RING_WIDTH ) );
 
                     toReturn = true;
                 }
