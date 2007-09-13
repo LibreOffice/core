@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sreg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:11:55 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 18:06:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
+using namespace rtl;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
@@ -58,7 +59,6 @@ extern void * SAL_CALL SpellChecker_getFactory(
     const sal_Char * pImplName,
     XMultiServiceFactory * pServiceManager,
     void * /*pRegistryKey*/ );
-
 ////////////////////////////////////////
 // definition of the two functions that are used to provide the services
 //
@@ -81,10 +81,11 @@ void SAL_CALL component_getImplementationEnvironment(
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
-    void * pRet = SpellChecker_getFactory(
-            pImplName,
-            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-            pRegistryKey );
+    void * pRet = NULL;
+    pRet = SpellChecker_getFactory(
+        pImplName,
+        reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+        pRegistryKey );
 
     return pRet;
 }
