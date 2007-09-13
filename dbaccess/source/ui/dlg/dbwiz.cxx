@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwiz.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:14:22 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 17:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,7 @@ IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
         case DST_OUTLOOKEXP:
         case DST_EVOLUTION:
         case DST_KAB:
+        case DST_MACAB:
             enableButtons(WZB_NEXT,sal_False);
             enableButtons(WZB_FINISH,sal_True);
             break;
@@ -204,6 +205,7 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState(WizardState _nCurr
                 case DST_OUTLOOKEXP:
                 case DST_EVOLUTION:
                 case DST_KAB:
+                case DST_MACAB:
                     nNextState = WZS_INVALID_STATE;
                     break;
                 default:
@@ -220,6 +222,7 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState(WizardState _nCurr
                 case DST_OUTLOOKEXP:
                 case DST_EVOLUTION:
                 case DST_KAB:
+                case DST_MACAB:
                 case DST_MSACCESS:
                 case DST_JDBC:
                 case DST_CALC:
