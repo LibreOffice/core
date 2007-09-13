@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFilePicker.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:50:59 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:28:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1154,10 +1154,9 @@ Sequence< rtl::OUString > SAL_CALL SvtFilePicker::getSupportedServiceNames() thr
 /* Helper for XServiceInfo */
 Sequence< rtl::OUString > SvtFilePicker::impl_getStaticSupportedServiceNames()
 {
-    Sequence< rtl::OUString > seqServiceNames( 2 );
+    Sequence< rtl::OUString > seqServiceNames( 1 );
     rtl::OUString* pArray = seqServiceNames.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilePicker" );
-    pArray[1] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.OfficeFilePicker" );
+    pArray[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.OfficeFilePicker" );
     return seqServiceNames ;
 }
 
