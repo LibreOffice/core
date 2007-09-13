@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 10:20:17 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 16:31:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,8 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
         // in an actual print job; is this by design ?
         CFStringRef rFile = CreateCFString( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/dev/null" ) ) );
         CFURLRef rURL = CFURLCreateWithFileSystemPath( NULL, rFile, kCFURLPOSIXPathStyle, false );
-        CFRelease( rFile );
+        if ( rFile )
+            CFRelease( rFile );
 
         OSStatus err =
         PMSessionSetDestination( mrSession,
@@ -505,7 +506,8 @@ BOOL AquaSalInfoPrinter::StartJob( const XubString* i_pFileName,
         {
             CFStringRef rFile = CreateCFString( *i_pFileName );
             rURL = CFURLCreateWithFileSystemPath( NULL, rFile, kCFURLPOSIXPathStyle, false );
-            CFRelease( rFile );
+            if ( rFile )
+                CFRelease( rFile );
         }
 
         err =
@@ -532,7 +534,8 @@ BOOL AquaSalInfoPrinter::StartJob( const XubString* i_pFileName,
         {
             CFStringRef rName = CreateCFString( i_rJobName );
             err = PMPrintSettingsSetJobName( mrSettings, rName );
-            CFRelease( rName );
+            if ( rName )
+                CFRelease( rName );
         }
 
         if( err == noErr )
