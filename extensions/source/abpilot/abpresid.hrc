@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abpresid.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:34:26 $
+ *  last change: $Author: ihi $ $Date: 2007-09-13 18:00:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,12 +170,13 @@
 #define RB_THUNDERBIRD          2
 #define RB_EVOLUTION            3
 #define RB_KAB                  4
-#define RB_LDAP                 5
-#define RB_OUTLOOK              6
-#define RB_OUTLOOKEXPRESS       7
-#define RB_OTHER                8
-#define RB_EVOLUTION_GROUPWISE  9
-#define RB_EVOLUTION_LDAP       10
+#define RB_MACAB                5
+#define RB_LDAP                 6
+#define RB_OUTLOOK              7
+#define RB_OUTLOOKEXPRESS       8
+#define RB_OTHER                9
+#define RB_EVOLUTION_GROUPWISE  10
+#define RB_EVOLUTION_LDAP       11
 
 //........................................................................
 #define ET_DATASOURCENAME       1
