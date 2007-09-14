@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CheckTokenMembership.cpp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 13:35:59 $
+ *  last change: $Author: obo $ $Date: 2007-09-14 12:02:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,9 @@
  *
  ************************************************************************/
 
+#if defined(_MSC_VER) && (_MSC_VER>=1400)
+#pragma warning(disable : 4273)
+#endif
 #include "macros.h"
 
 
