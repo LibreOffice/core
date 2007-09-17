@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 16:31:28 $
+ *  last change: $Author: ihi $ $Date: 2007-09-17 10:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ static HIRect ImplGetHIRectFromRectangle(Rectangle aRect)
 }
 
 // Helper returns a Rectangle
-
+#if 0
 static Rectangle ImplGetRectangleFromHIRect( HIRect aHIRect )
 {
     Rectangle aRect;
@@ -82,6 +82,7 @@ static Rectangle ImplGetRectangleFromHIRect( HIRect aHIRect )
     aRect.Right() = static_cast<int>(aHIRect.origin.x) + static_cast<short>(aHIRect.size.width);
     return aRect;
 }
+#endif
 
 // Helper returns a QD Rect
 
