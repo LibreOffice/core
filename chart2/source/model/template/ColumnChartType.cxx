@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnChartType.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:46:59 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:05:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,15 +83,11 @@ void lcl_AddDefaultsToMap(
 {
     Sequence< sal_Int32 > aSeq(2);
 
-    aSeq[0]=aSeq[1]=0;
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_BARCHARTTYPE_OVERLAP_SEQUENCE ));
-    rOutMap[ PROP_BARCHARTTYPE_OVERLAP_SEQUENCE ] =
-        uno::makeAny( aSeq );
+    aSeq[0] = aSeq[1] = 0;
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_BARCHARTTYPE_OVERLAP_SEQUENCE, aSeq );
 
-    aSeq[0]=aSeq[1]=100;
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_BARCHARTTYPE_GAPWIDTH_SEQUENCE ));
-    rOutMap[ PROP_BARCHARTTYPE_GAPWIDTH_SEQUENCE ] =
-        uno::makeAny( aSeq );
+    aSeq[0] = aSeq[1] = 100;
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_BARCHARTTYPE_GAPWIDTH_SEQUENCE, aSeq );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
