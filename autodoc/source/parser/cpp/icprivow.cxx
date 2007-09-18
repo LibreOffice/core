@@ -4,9 +4,9 @@
  *
  *  $RCSfile: icprivow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:00:23 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:11:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,10 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_autodoc.hxx"
-
 
 #include <precomp.h>
 #include <icprivow.hxx>
