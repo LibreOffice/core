@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Legend.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:51:04 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:02:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,24 +132,14 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_ANCHOR_POSITION ));
-    rOutMap[ PROP_LEGEND_ANCHOR_POSITION ] =
-        uno::makeAny( chart2::LegendPosition_LINE_END );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_PREFERRED_EXPANSION ));
-    rOutMap[ PROP_LEGEND_PREFERRED_EXPANSION ] =
-        uno::makeAny( chart2::LegendExpansion_HIGH );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_SHOW ));
-    rOutMap[ PROP_LEGEND_SHOW ] =
-        uno::makeAny( sal_True );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_ANCHOR_POSITION, chart2::LegendPosition_LINE_END );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_PREFERRED_EXPANSION, chart2::LegendExpansion_HIGH );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_SHOW, true );
 
     float fDefaultCharHeight = 8.0;
-    rOutMap[ ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT ] =
-        uno::makeAny( fDefaultCharHeight );
-    rOutMap[ ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT ] =
-        uno::makeAny( fDefaultCharHeight );
-    rOutMap[ ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT ] =
-        uno::makeAny( fDefaultCharHeight );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
