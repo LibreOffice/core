@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointProperties.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:42:30 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:00:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,7 +271,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "FillBitmapLogicalSize" ),
                   FillProperties::PROP_FILL_BITMAP_LOGICALSIZE,
-                  ::getCppuType( reinterpret_cast< const sal_Bool * >(0)),
+                  ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -369,98 +369,42 @@ void DataPointProperties::AddPropertiesToVector(
 void DataPointProperties::AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_COLOR ));
-    rOutMap[ PROP_DATAPOINT_COLOR ] =
-        uno::makeAny( sal_Int32( 0x0099ccff ));  // blue 8
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_TRANSPARENCY ));
-    rOutMap[ PROP_DATAPOINT_TRANSPARENCY ] =
-        uno::makeAny( sal_Int16( 0 ) );
+    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATAPOINT_COLOR, 0x0099ccff ); // blue 8
+    PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_DATAPOINT_TRANSPARENCY, 0 );
 
     //fill
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_FILL_STYLE ));
-    rOutMap[ PROP_DATAPOINT_FILL_STYLE ] =
-        uno::makeAny( drawing::FillStyle_SOLID );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME ));
-    rOutMap[ PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME ] =
-        uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_GRADIENT_NAME ));
-    rOutMap[ PROP_DATAPOINT_GRADIENT_NAME ] =
-        uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_GRADIENT_STEPCOUNT ));
-    rOutMap[ PROP_DATAPOINT_GRADIENT_STEPCOUNT ] =
-        uno::makeAny(sal_Int16(0));
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_HATCH_NAME ));
-    rOutMap[ PROP_DATAPOINT_HATCH_NAME ] =
-        uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_FILL_BITMAP_NAME ));
-    rOutMap[ PROP_DATAPOINT_FILL_BITMAP_NAME ] =
-        uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_FILL_BACKGROUND ));
-    rOutMap[ PROP_DATAPOINT_FILL_BACKGROUND ] =
-        uno::makeAny( false );
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_FILL_STYLE, drawing::FillStyle_SOLID );
+    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME );
+    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_DATAPOINT_GRADIENT_NAME );
+    PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_DATAPOINT_GRADIENT_STEPCOUNT, 0 );
+    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_DATAPOINT_HATCH_NAME );
+    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_DATAPOINT_FILL_BITMAP_NAME );
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_FILL_BACKGROUND, false );
 
     //border
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_BORDER_COLOR ));
-    rOutMap[ PROP_DATAPOINT_BORDER_COLOR ] =
-        uno::makeAny( sal_Int32( 0x00000000 ));  // black
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_BORDER_STYLE ));
-    rOutMap[ PROP_DATAPOINT_BORDER_STYLE ] =
-        uno::makeAny( drawing::LineStyle_SOLID );
-//         uno::makeAny( drawing::LineStyle_NONE );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_BORDER_WIDTH ));
-    rOutMap[ PROP_DATAPOINT_BORDER_WIDTH ] =
-        uno::makeAny( sal_Int32( 0 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_BORDER_DASH_NAME ));
-    rOutMap[ PROP_DATAPOINT_BORDER_DASH_NAME ] =
-        uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_BORDER_TRANSPARENCY ));
-    rOutMap[ PROP_DATAPOINT_BORDER_TRANSPARENCY ] =
-        uno::makeAny( sal_Int16( 0 ) );
+    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATAPOINT_BORDER_COLOR, 0x000000 ); // black
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_BORDER_STYLE, drawing::LineStyle_SOLID ); // drawing::LineStyle_NONE
+    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATAPOINT_BORDER_WIDTH, 0 );
+    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_DATAPOINT_BORDER_DASH_NAME );
+    PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_DATAPOINT_BORDER_TRANSPARENCY, 0 );
 
     //line
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( LineProperties::PROP_LINE_STYLE ));
-    rOutMap[ LineProperties::PROP_LINE_STYLE ] =
-        uno::makeAny( drawing::LineStyle_SOLID );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( LineProperties::PROP_LINE_WIDTH ));
-    rOutMap[ LineProperties::PROP_LINE_WIDTH ] =
-        uno::makeAny( sal_Int32( 0 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( LineProperties::PROP_LINE_DASH ));
-    rOutMap[ LineProperties::PROP_LINE_DASH ] =
-        uno::Any( drawing::LineDash() );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( LineProperties::PROP_LINE_DASH_NAME ));
-    rOutMap[ LineProperties::PROP_LINE_DASH_NAME ] =
-        uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
+    PropertyHelper::setPropertyValueDefault( rOutMap, LineProperties::PROP_LINE_STYLE, drawing::LineStyle_SOLID );
+    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, LineProperties::PROP_LINE_WIDTH, 0 );
+    PropertyHelper::setPropertyValueDefault( rOutMap, LineProperties::PROP_LINE_DASH, drawing::LineDash());
+    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, LineProperties::PROP_LINE_DASH_NAME );
 
-    //fill
-    //bitmap
-    uno::Any aSalInt16Zero = uno::makeAny( sal_Int16( 0 ));
-    uno::Any aSalInt32SizeDefault = uno::makeAny( sal_Int32( 0 ));
+    //fill bitmap
+    PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_OFFSETX, 0 );
+    PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_OFFSETY, 0 );
+    PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX, 0 );
+    PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY, 0 );
+    PropertyHelper::setPropertyValueDefault( rOutMap, FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT, drawing::RectanglePoint_MIDDLE_MIDDLE );
+    PropertyHelper::setPropertyValueDefault( rOutMap, FillProperties::PROP_FILL_BITMAP_LOGICALSIZE, true );
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_OFFSETX ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_OFFSETX ] = aSalInt16Zero;
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_OFFSETY ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_OFFSETY ] = aSalInt16Zero;
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX ] = aSalInt16Zero;
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY ] = aSalInt16Zero;
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT ] =
-        uno::makeAny( drawing::RectanglePoint_MIDDLE_MIDDLE );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_LOGICALSIZE ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_LOGICALSIZE ] =
-        uno::makeAny( true );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_SIZEX ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_SIZEX ] = aSalInt32SizeDefault;
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_SIZEY ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_SIZEY ] = aSalInt32SizeDefault;
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_MODE ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_MODE ] =
-        uno::makeAny( drawing::BitmapMode_REPEAT );
+    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, FillProperties::PROP_FILL_BITMAP_SIZEX, 0 );
+    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, FillProperties::PROP_FILL_BITMAP_SIZEY, 0 );
+    PropertyHelper::setPropertyValueDefault( rOutMap, FillProperties::PROP_FILL_BITMAP_MODE, drawing::BitmapMode_REPEAT );
 
     //others
     chart2::Symbol aSymbProp;
@@ -469,42 +413,25 @@ void DataPointProperties::AddDefaultsToMap(
     aSymbProp.Size = awt::Size( 250, 250 ); // ca. 7pt x 7pt (7pt=246.94)
     aSymbProp.BorderColor = 0x000000;       // Black
     aSymbProp.FillColor = 0xee4000;         // OrangeRed2
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_SYMBOL_PROP ));
-    rOutMap[ PROP_DATAPOINT_SYMBOL_PROP ] =
-        uno::makeAny( aSymbProp );
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_SYMBOL_PROP, aSymbProp );
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_OFFSET ));
-    rOutMap[ PROP_DATAPOINT_OFFSET ] =
-        uno::makeAny( double( 0.0 ) );
+    PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_DATAPOINT_OFFSET, 0.0 );
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_GEOMETRY3D, chart2::DataPointGeometry3D::CUBOID );
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_GEOMETRY3D ));
-    rOutMap[ PROP_DATAPOINT_GEOMETRY3D ] =
-        uno::makeAny( chart2::DataPointGeometry3D::CUBOID );
+    PropertyHelper::setPropertyValueDefault(
+        rOutMap, PROP_DATAPOINT_LABEL,
+        chart2::DataPointLabel(
+            sal_False, // ShowNumber
+            sal_False, // ShowNumberInPercent
+            sal_False, // ShowCategoryName
+            sal_False  // ShowLegendSymbol
+            ));
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_LABEL ));
-    rOutMap[ PROP_DATAPOINT_LABEL ] =
-        uno::makeAny( chart2::DataPointLabel(
-                          sal_False, // ShowNumber
-                          sal_False, // ShowNumberInPercent
-                          sal_False, // ShowCategoryName
-                          sal_False // ShowLegendSymbol
-                          ));
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_NUMBER_FORMAT ));
-    rOutMap[ PROP_DATAPOINT_NUMBER_FORMAT ] =
-        uno::makeAny( sal_Int32(0) ); //todo maybe choose a different one here -> should be dynamically that of the attached axis
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_ERROR_BAR_X ));
-    rOutMap[ PROP_DATAPOINT_ERROR_BAR_X ] =
-        uno::makeAny( uno::Reference< beans::XPropertySet >(0) );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_ERROR_BAR_Y ));
-    rOutMap[ PROP_DATAPOINT_ERROR_BAR_Y ] =
-        uno::makeAny( uno::Reference< beans::XPropertySet >(0) );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_PERCENT_DIAGONAL ));
-    rOutMap[ PROP_DATAPOINT_PERCENT_DIAGONAL ] =
-        uno::makeAny( static_cast< sal_Int16 >(0) );
+    //@todo maybe choose a different one here -> should be dynamically that of the attached axis
+    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATAPOINT_NUMBER_FORMAT, 0 );
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_ERROR_BAR_X, uno::Reference< beans::XPropertySet >());
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_ERROR_BAR_Y, uno::Reference< beans::XPropertySet >());
+    PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_DATAPOINT_PERCENT_DIAGONAL, 0 );
 }
 
 } //  namespace chart
