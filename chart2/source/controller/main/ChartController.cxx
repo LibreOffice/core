@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:42:25 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:56:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -693,8 +693,8 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
         //aGuard.reset();
 
         m_bSuspended = bSuspend;
-        return sal_True;
     }
+    return sal_True;
 
 
     /*
@@ -703,7 +703,6 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     else
         getFrame()->addFrameActionListener( pImp );
         */
-    return sal_True;
 }
 
 
@@ -1250,7 +1249,7 @@ void SAL_CALL ChartController::executeDispatch_MoveSeries( sal_Bool bForward )
     uno::Reference< XDataSeries > xGivenDataSeries( ObjectIdentifier::getDataSeriesForCID( //yyy todo also legendentries and labels?
             aObjectCID, m_aModel->getModel() ) );
 
-    UndoGuard aUndoGuard(
+    UndoGuardWithSelection aUndoGuard(
         ActionDescriptionProvider::createDescription(
             (bForward ? ActionDescriptionProvider::MOVE_TOTOP : ActionDescriptionProvider::MOVE_TOBOTTOM),
             ::rtl::OUString( String( SchResId( STR_OBJECT_DATASERIES )))),
@@ -1258,7 +1257,10 @@ void SAL_CALL ChartController::executeDispatch_MoveSeries( sal_Bool bForward )
 
     bool bChanged = DiagramHelper::moveSeries( ChartModelHelper::findDiagram( m_aModel->getModel() ), xGivenDataSeries, bForward );
     if( bChanged )
+    {
+        m_aSelection.setSelection( ObjectIdentifier::getMovedSeriesCID( aObjectCID, bForward ) );
         aUndoGuard.commitAction();
+    }
 }
 
 // ____ XMultiServiceFactory ____
