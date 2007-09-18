@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectIdentifier.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:59:27 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:09:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -492,6 +492,14 @@ OUString ObjectIdentifier::createParticleForGrid(
     aRet.append( C2U(":Grid=") );
 
     return aRet.makeStringAndClear();
+}
+
+OUString ObjectIdentifier::createClassifiedIdentifierForAxis(
+          const Reference< XAxis >& xAxis
+        , const Reference< frame::XModel >& xChartModel )
+{
+    rtl::OUString  aAxisCID( createClassifiedIdentifierForObject( xAxis,xChartModel ) );
+    return aAxisCID;
 }
 
 //static
@@ -1336,6 +1344,23 @@ TitleHelper::eTitleType ObjectIdentifier::getTitleTypeForCID( const OUString& rC
     return eRet;
 }
 
+//static
+OUString ObjectIdentifier::getMovedSeriesCID( const ::rtl::OUString& rObjectCID, sal_Bool bForward )
+{
+    sal_Int32 nDiagramIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, C2U("CID/D=") ) );
+    sal_Int32 nCooSysIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, C2U("CS=") ) );
+    sal_Int32 nChartTypeIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, C2U("CT=") ) );
+    sal_Int32 nSeriesIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, C2U("Series=") ) );
+
+    if( bForward )
+        nSeriesIndex--;
+    else
+        nSeriesIndex++;
+
+    OUString aRet = ObjectIdentifier::createParticleForSeries( nDiagramIndex, nCooSysIndex, nChartTypeIndex, nSeriesIndex );
+    return ObjectIdentifier::createClassifiedIdentifierForParticle( aRet );
+}
+//static
 //.............................................................................
 } //namespace chart
 //.............................................................................
