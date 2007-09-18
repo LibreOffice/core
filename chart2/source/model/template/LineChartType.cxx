@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LineChartType.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:49:07 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:05:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,19 +94,12 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_CURVE_STYLE ));
-    rOutMap[ PROP_LINECHARTTYPE_CURVE_STYLE ] =
-        uno::makeAny( chart2::CurveStyle_LINES );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_CURVE_RESOLUTION ));
-    rOutMap[ PROP_LINECHARTTYPE_CURVE_RESOLUTION ] =
-        uno::makeAny( sal_Int32( 20 ) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINECHARTTYPE_CURVE_STYLE, ::chart2::CurveStyle_LINES );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_CURVE_RESOLUTION, 20 );
 
     // todo: check whether order 3 means polygons of order 3 or 2. (see
     // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINECHARTTYPE_SPLINE_ORDER ));
-    rOutMap[ PROP_LINECHARTTYPE_SPLINE_ORDER ] =
-        uno::makeAny( sal_Int32( 3 ) );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_SPLINE_ORDER, 3 );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
