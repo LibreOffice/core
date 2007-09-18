@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartElementFactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:15:15 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:52:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,6 @@ AccessibleBase* ChartElementFactory::CreateChartElement( const AccessibleElement
             return new AccArea( pParent );
     }
     */
-    return NULL;
 }
 
 } // namespace chart

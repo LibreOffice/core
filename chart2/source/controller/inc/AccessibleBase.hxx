@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleBase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:51:41 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:55:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,6 +333,9 @@ protected:
     virtual void SAL_CALL disposing(
         const ::com::sun::star::lang::EventObject& Source )
         throw (::com::sun::star::uno::RuntimeException);
+
+    using ::cppu::WeakComponentImplHelperBase::addEventListener;
+    using ::cppu::WeakComponentImplHelperBase::removeEventListener;
 
     // ________ XAccessibleEventBroadcaster ________
     virtual void SAL_CALL addEventListener(
