@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cx_dsapi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:14:19 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:25:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,10 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_autodoc.hxx"
-
 
 #include <precomp.h>
 #include <s2_dsapi/cx_dsapi.hxx>
@@ -75,6 +71,7 @@ const uintt nF_goto_EoXmlFormat_BeginTag = 11;
 const uintt nF_goto_EoXmlFormat_EndTag = 12;
 const uintt nF_goto_CheckStar = 13;
 const uintt nF_fin_Comma = 14;
+const uintt nF_fin_White = 15;
 
 const UINT16 nTok_at_author = 100 + Tok_AtTag::author;
 const UINT16 nTok_at_see = 100 + Tok_AtTag::see;
@@ -198,6 +195,10 @@ Context_Docu::PerformStatusFunction( uintt              i_nStatusSignal,
 {
     switch (i_nStatusSignal)
     {
+        case nF_fin_White:
+            io_rText.CutToken();
+            pNewToken = new Tok_White;
+            break;
         case nF_fin_Error:
             throw X_AutodocParser(X_AutodocParser::x_InvalidChar);
             // no break because of throw
@@ -222,6 +223,7 @@ Context_Docu::PerformStatusFunction( uintt              i_nStatusSignal,
         case nF_fin_Comma:
             io_rText.CutToken();
             pNewToken = new Tok_Comma;
+            break;
         case nF_fin_EndSign:
             io_rText.CutToken();
             switch (i_nTokenId)
@@ -300,12 +302,13 @@ Context_Docu::SetupStateMachine()
 
     // Tokenfinish-Stati:
     const INT16 finError = 10;
-    const INT16 finIgnore = 11;
+//  const INT16 finIgnore = 11;
     const INT16 finEof = 12;
     const INT16 finAnyWord = 13;
     const INT16 finAtTag = 14;
     const INT16 finEndSign = 15;
 //  const INT16 finComma = 16;
+    const INT16 finWhite = 17;
 
     // Konstanten zur Benutzung in der Tabelle:
     const INT16 ght = goto_EoHtml;
@@ -318,10 +321,11 @@ Context_Docu::SetupStateMachine()
 */
     const INT16 err = finError;
     const INT16 faw = finAnyWord;
-    const INT16 fig = finIgnore;
+//  const INT16 fig = finIgnore;
 //  const INT16 fes = finEndSign;
     const INT16 fof = finEof;
 //  const INT16 fat = finAtTag;
+    const INT16 fwh = finWhite;
 
     /// The '0's  will be replaced by calls of AddToken().
 
@@ -338,15 +342,15 @@ Context_Docu::SetupStateMachine()
     };
 
     const INT16 A_nWhitespaceStatus[C_nStatusSize] =
-    //  0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
-    {fof,err,err,err,err,err,err,err,err,wht,fig,wht,wht,fig,err,err,
+  //   0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+    {fof,err,err,err,err,err,err,err,err,wht,fwh,wht,wht,fwh,err,err,
      err,err,err,err,err,err,err,err,err,err,fof,err,err,err,err,err, // ... 31
-     wht,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,
-     fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig, // ... 63
-     fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,
-     fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig, // ... 95
-     fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,
-     fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig,fig  // ... 127
+     wht,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,
+     fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh, // ... 63
+     fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,
+     fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh, // ... 95
+     fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,
+     fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh,fwh  // ... 127
     };
 
     const INT16 A_nWordStatus[C_nStatusSize] =
@@ -434,6 +438,8 @@ Context_Docu::SetupStateMachine()
             = new StmBoundsStatu2( *this, *pParentContext, nF_fin_EndSign, false);
     DYN StmBoundsStatu2 *   dpBst_fin_Comma
             = new StmBoundsStatu2( *this, *this, nF_fin_Comma, false );
+    DYN StmBoundsStatu2 *   dpBst_finWhite
+            = new StmBoundsStatu2( *this, *this, nF_fin_White, false);
 
 
     // dpMain aufbauen:
@@ -456,6 +462,7 @@ Context_Docu::SetupStateMachine()
     aStateMachine.AddStatus(dpBst_finAtTag);
     aStateMachine.AddStatus(dpBst_finEndSign);
     aStateMachine.AddStatus(dpBst_fin_Comma);
+    aStateMachine.AddStatus(dpBst_finWhite);
 
 
     aStateMachine.AddToken( "@author",  nTok_at_author,      A_nAtTagDefStatus, finAtTag );
