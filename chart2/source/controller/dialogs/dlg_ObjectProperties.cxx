@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:33:41 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:53:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,19 +160,24 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
     uno::Reference< XChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
 
-    m_bHasGeometryProperties = ChartTypeHelper::isSupportingGeometryProperties( xChartType, nDimensionCount );
-    m_bHasAreaProperties     = ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount );
-    m_bHasSymbolProperties   = ChartTypeHelper::isSupportingSymbolProperties( xChartType, nDimensionCount );
-    m_bHasLineProperties     = true; //@todo ask object
+    bool bHasSeriesProperties = (OBJECTTYPE_DATA_SERIES==m_eObjectType || OBJECTTYPE_DATA_LABELS==m_eObjectType);
+    bool bHasDataPointproperties = (OBJECTTYPE_DATA_POINT==m_eObjectType);
 
-    if(    OBJECTTYPE_DATA_SERIES==m_eObjectType
-        || OBJECTTYPE_DATA_LABELS==m_eObjectType )
+    if( bHasSeriesProperties || bHasDataPointproperties )
     {
-        m_bHasStatisticProperties =  ChartTypeHelper::isSupportingStatisticProperties( xChartType, nDimensionCount );
-        m_bHasRegressionProperties = ChartTypeHelper::isSupportingRegressionProperties( xChartType, nDimensionCount );
-        m_bProvidesSecondaryYAxis =  ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount, 1 );
-        m_bProvidesOverlapAndGapWidth =  ChartTypeHelper::isSupportingOverlapAndGapWidthProperties( xChartType, nDimensionCount );
+        m_bHasGeometryProperties = ChartTypeHelper::isSupportingGeometryProperties( xChartType, nDimensionCount );
+        m_bHasAreaProperties     = ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount );
+        m_bHasSymbolProperties   = ChartTypeHelper::isSupportingSymbolProperties( xChartType, nDimensionCount );
+
+        if( bHasSeriesProperties )
+        {
+            m_bHasStatisticProperties =  ChartTypeHelper::isSupportingStatisticProperties( xChartType, nDimensionCount );
+            m_bHasRegressionProperties = ChartTypeHelper::isSupportingRegressionProperties( xChartType, nDimensionCount );
+            m_bProvidesSecondaryYAxis =  ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimensionCount, 1 );
+            m_bProvidesOverlapAndGapWidth =  ChartTypeHelper::isSupportingOverlapAndGapWidthProperties( xChartType, nDimensionCount );
+        }
     }
+    m_bHasLineProperties     = true; //@todo ask object
 
     if( OBJECTTYPE_AXIS == m_eObjectType )
     {
@@ -493,10 +498,11 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
             {
                 SchScaleYAxisTabPage & rAxisTabPage = static_cast< SchScaleYAxisTabPage & >( rPage );
 
-                static SvNumberFormatter aNumberFormatter = SvNumberFormatter( LANGUAGE_SYSTEM );
-
-                // #101318# use own number formatter with higher precision for rendering the values in the dialog.
-                rAxisTabPage.SetNumFormatter( &aNumberFormatter );
+                // #i81259# fix for #101318# undone.  The numberformatter passed
+                // here must contain the actually used number format.  Showing
+                // numbers with more digits is now solved in FormattedField
+                // (using the input format also for output).
+                rAxisTabPage.SetNumFormatter( m_pNumberFormatter );
             }
             break;
 //DLNF         case TP_DATA_DESCR:
