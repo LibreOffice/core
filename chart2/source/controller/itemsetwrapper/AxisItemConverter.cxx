@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AxisItemConverter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:34:42 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:55:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,6 @@
 #include "AxisHelper.hxx"
 #include "CommonConverters.hxx"
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
-#include <com/sun/star/lang/XServiceName.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
 #include <com/sun/star/chart2/XAxis.hpp>
 #endif
@@ -241,14 +238,7 @@ void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemS
 
         case SCHATTR_AXIS_LOGARITHM:
         {
-            Reference< lang::XServiceName > xServiceName( aScale.Scaling, uno::UNO_QUERY );
-            BOOL bValue =
-                // if the following is true, we have logarithmic scaling,
-                // otherwise not (per definition)
-                ( xServiceName.is() &&
-                  (xServiceName->getServiceName()).equals(
-                      C2U( "com.sun.star.chart2.LogarithmicScaling" )) );
-
+            BOOL bValue = AxisHelper::isLogarithmic( aScale.Scaling );
             rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
         }
         break;
@@ -437,13 +427,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
 
         case SCHATTR_AXIS_LOGARITHM:
         {
-            Reference< lang::XServiceName > xServiceName( aScale.Scaling, uno::UNO_QUERY );
-            bool bWasLogarithm =
-                // if the following is true, we have logarithmic scaling,
-                // otherwise not (per definition)
-                ( xServiceName.is() &&
-                  (xServiceName->getServiceName()).equals(
-                      C2U( "com.sun.star.chart2.LogarithmicScaling" )));
+            bool bWasLogarithm = AxisHelper::isLogarithmic( aScale.Scaling );
 
             if( (static_cast< const SfxBoolItem & >(
                      rItemSet.Get( nWhichId )).GetValue() ))
