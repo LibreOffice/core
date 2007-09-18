@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtfield.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:19:05 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:50:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,8 @@ protected:
     // die bei der letzten Ausgabe-Operation vom Formatter gelieferte Farbe (nicht dass wir sie beachten wuerden, aber
     // man kann sie von aussen abfragen)
     Color*              m_pLastOutputColor;
+
+    bool                m_bUseInputStringForFormatting;
 
 public:
     FormattedField(Window* pParent, WinBits nStyle = 0, SvNumberFormatter* pInitialFormatter = NULL, INT32 nFormatKey = 0);
@@ -259,6 +261,13 @@ public:
     */
     void    EnableNotANumber( BOOL _bEnable );
     BOOL    IsNotANumberEnabled( ) const { return m_bEnableNaN; }
+
+    /** When being set to true, the strings in the field are formatted using the
+        InputLine format.  That's also what you get in Calc when you edit a cell
+        using F2
+     */
+    void    UseInputStringForFormatting( bool bUseInputStr = true );
+    bool    IsUsingInputStringForFormatting() const;
 
 protected:
     virtual long Notify(NotifyEvent& rNEvt);
