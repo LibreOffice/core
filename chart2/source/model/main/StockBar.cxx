@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StockBar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:51:31 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:03:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,8 +103,7 @@ void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
     // override other defaults
-    rOutMap[ ::chart::FillProperties::PROP_FILL_COLOR ] =
-        uno::makeAny( sal_Int32( 0xffffff) ); // white
+    ::chart::PropertyHelper::setPropertyValue< sal_Int32 >( rOutMap, ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff ); // white
 }
 
 ::cppu::IPropertyArrayHelper & lcl_getInfoHelper()

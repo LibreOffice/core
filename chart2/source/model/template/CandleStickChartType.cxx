@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CandleStickChartType.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:53:01 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:04:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,16 +112,9 @@ void lcl_AddDefaultsToMap(
 {
     ::osl::MutexGuard aGuard( rMutex );
     // must match default in CTOR!
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CANDLESTICKCHARTTYPE_JAPANESE ));
-    rOutMap[ PROP_CANDLESTICKCHARTTYPE_JAPANESE ] =
-        uno::makeAny( false );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CANDLESTICKCHARTTYPE_SHOW_FIRST ));
-    rOutMap[ PROP_CANDLESTICKCHARTTYPE_SHOW_FIRST ] =
-        uno::makeAny( false );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CANDLESTICKCHARTTYPE_SHOW_HIGH_LOW ));
-    rOutMap[ PROP_CANDLESTICKCHARTTYPE_SHOW_HIGH_LOW ] =
-        uno::makeAny( true );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CANDLESTICKCHARTTYPE_JAPANESE, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CANDLESTICKCHARTTYPE_SHOW_FIRST, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CANDLESTICKCHARTTYPE_SHOW_HIGH_LOW, true );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
