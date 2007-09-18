@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectHierarchy.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:13:35 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:56:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #include "chartview/ExplicitValueProvider.hxx"
 #include "macros.hxx"
 #include "LineProperties.hxx"
+#include "ChartTypeHelper.hxx"
 
 #include <map>
 #include <algorithm>
@@ -201,7 +202,7 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument > & xChart
         }
 
         // Axis Titles. Note: These are interpreted of being top level
-        Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxisOfDiagram( xDiagram ) );
+        Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
         for( sal_Int32 i=0; i<aAxes.getLength(); ++i )
         {
             Reference< XTitled > xAxisTitled( aAxes[i], uno::UNO_QUERY );
@@ -274,47 +275,60 @@ void ImplObjectHierarchy::createDiagramTree(
     createDataSeriesTree( rContainer, xCooSysCnt );
 
     // Axes
-    Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxisOfDiagram( xDiagram ) );
-    ::std::transform( aAxes.getConstArray(), aAxes.getConstArray() + aAxes.getLength(),
-                        ::std::back_inserter( rContainer ),
-                        lcl_ObjectToCID( xChartDoc ));
-
-    // Grids
-    Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
-    for( sal_Int32 nA=0; nA<aAxes.getLength(); ++nA )
+    sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
+    uno::Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    bool bSupportsAxesGrids = ChartTypeHelper::isSupportingMainAxis( xChartType, nDimensionCount, 0 );
+    bool bIsThreeD = ( nDimensionCount == 3 );
+    bool bHasWall = DiagramHelper::isSupportingFloorAndWall( xDiagram );
+    if( bSupportsAxesGrids )
     {
-        Reference< XAxis > xAxis( aAxes[nA] );
-        if(!xAxis.is())
-            continue;
+        Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram, /* bOnlyVisible = */ true ) );
+        ::std::transform( aAxes.getConstArray(), aAxes.getConstArray() + aAxes.getLength(),
+                          ::std::back_inserter( rContainer ),
+                          lcl_ObjectToCID( xChartDoc ));
 
-        Reference< beans::XPropertySet > xGridProperties( xAxis->getGridProperties() );
-        if( AxisHelper::isGridVisible( xGridProperties ) )
+        // get all axes, also invisible ones
+        aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram, /* bOnlyVisible = */ false );
+        // Grids
+        Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
+        for( sal_Int32 nA=0; nA<aAxes.getLength(); ++nA )
         {
-            //main grid
-            rContainer.push_back(
-                ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel ) );
-        }
+            Reference< XAxis > xAxis( aAxes[nA] );
+            if(!xAxis.is())
+                continue;
 
-        Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );;
-        sal_Int32 nSubGrid = 0;
-        for( nSubGrid = 0; nSubGrid < aSubGrids.getLength(); ++nSubGrid )
-        {
-            Reference< beans::XPropertySet > xSubGridProperties( aSubGrids[nSubGrid] );
-            if( AxisHelper::isGridVisible( xSubGridProperties ) )
+            Reference< beans::XPropertySet > xGridProperties( xAxis->getGridProperties() );
+            if( AxisHelper::isGridVisible( xGridProperties ) )
             {
-                //sub grid
+                //main grid
                 rContainer.push_back(
-                    ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel, nSubGrid ) );
+                    ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel ) );
+            }
+
+            Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );;
+            sal_Int32 nSubGrid = 0;
+            for( nSubGrid = 0; nSubGrid < aSubGrids.getLength(); ++nSubGrid )
+            {
+                Reference< beans::XPropertySet > xSubGridProperties( aSubGrids[nSubGrid] );
+                if( AxisHelper::isGridVisible( xSubGridProperties ) )
+                {
+                    //sub grid
+                    rContainer.push_back(
+                        ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel, nSubGrid ) );
+                }
             }
         }
     }
 
     // Wall
-    rContainer.push_back(
-        ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, rtl::OUString()));
+    if( bHasWall )
+    {
+        rContainer.push_back(
+            ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, rtl::OUString()));
+    }
 
     // Floor
-    if( DiagramHelper::getDimension( xDiagram ) == 3 )
+    if( bHasWall && bIsThreeD )
     {
         Reference< beans::XPropertySet > xFloor( xDiagram->getFloor());
         if( xFloor.is())
@@ -340,7 +354,10 @@ void ImplObjectHierarchy::createDataSeriesTree(
             {
                 Reference< XDataSeriesContainer > xDSCnt( aChartTypeSeq[nCTIdx], uno::UNO_QUERY_THROW );
                 Sequence< Reference< XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries() );
-                for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
+                const sal_Int32 nNumberOfSeries =
+                    ChartTypeHelper::getNumberOfDisplayedSeries( aChartTypeSeq[nCTIdx], aSeriesSeq.getLength());
+
+                for( sal_Int32 nSeriesIdx=0; nSeriesIdx<nNumberOfSeries; ++nSeriesIdx )
                 {
                     OUString aSeriesParticle(
                         ObjectIdentifier::createParticleForSeries(
