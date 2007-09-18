@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReferenceSizeProvider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:15:39 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:09:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,7 +308,7 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
         return eResult;
 
     // Axes (incl. Axis Titles)
-    Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxisOfDiagram( xDiagram ) );
+    Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
     for( sal_Int32 i=0; i<aAxes.getLength(); ++i )
     {
         Reference< beans::XPropertySet > xProp( aAxes[i], uno::UNO_QUERY );
@@ -393,7 +393,7 @@ void ReferenceSizeProvider::setAutoResizeState( ReferenceSizeProvider::AutoResiz
         setValuesAtPropertySet( xLegendProp, REF_PAGE );
 
     // Axes (incl. Axis Titles)
-    Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxisOfDiagram( xDiagram ) );
+    Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
     for( sal_Int32 i=0; i<aAxes.getLength(); ++i )
     {
         Reference< beans::XPropertySet > xProp( aAxes[i], uno::UNO_QUERY );
