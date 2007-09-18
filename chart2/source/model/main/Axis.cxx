@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Axis.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:14:07 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:59:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,50 +215,24 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_SHOW ));
-    rOutMap[ PROP_AXIS_SHOW ] =
-        uno::makeAny( sal_True );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_POSITION ));
-    rOutMap[ PROP_AXIS_POSITION ] =
-        uno::makeAny( chart2::AxisPosition::MAIN );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_DISPLAY_LABELS ));
-    rOutMap[ PROP_AXIS_DISPLAY_LABELS ] =
-        uno::makeAny( sal_Bool( sal_True ) );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_TEXT_ROTATION ));
-    rOutMap[ PROP_AXIS_TEXT_ROTATION ] =
-        uno::makeAny( double( 0.0 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_TEXT_BREAK ));
-    rOutMap[ PROP_AXIS_TEXT_BREAK ] =
-        uno::makeAny( sal_Bool( sal_False ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_TEXT_OVERLAP ));
-    rOutMap[ PROP_AXIS_TEXT_OVERLAP ] =
-        uno::makeAny( sal_Bool( sal_False ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_TEXT_STACKED ));
-    rOutMap[ PROP_AXIS_TEXT_STACKED ] =
-        uno::makeAny( sal_Bool( sal_False ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_TEXT_ARRANGE_ORDER ));
-    rOutMap[ PROP_AXIS_TEXT_ARRANGE_ORDER ] =
-        uno::makeAny( ::com::sun::star::chart::ChartAxisArrangeOrderType_AUTO );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_SHOW, true );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_POSITION, chart2::AxisPosition::MAIN );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_DISPLAY_LABELS, true );
+    ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_AXIS_TEXT_ROTATION, 0.0 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_BREAK, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_OVERLAP, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_STACKED, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_ARRANGE_ORDER, ::com::sun::star::chart::ChartAxisArrangeOrderType_AUTO );
 
     float fDefaultCharHeight = 8.0;
-    rOutMap[ ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT ] =
-        uno::makeAny( fDefaultCharHeight );
-    rOutMap[ ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT ] =
-        uno::makeAny( fDefaultCharHeight );
-    rOutMap[ ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT ] =
-        uno::makeAny( fDefaultCharHeight );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
 
     // for Testing only!
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_MAJOR_TICKMARKS ));
-    rOutMap[ PROP_AXIS_MAJOR_TICKMARKS ] =
-        uno::makeAny( sal_Int32( 2 /* CHAXIS_MARK_OUTER */ ) );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AXIS_MAJOR_TICKMARKS, 2 /* CHAXIS_MARK_OUTER */ );
     // for Testing only!
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AXIS_MINOR_TICKMARKS ));
-    rOutMap[ PROP_AXIS_MINOR_TICKMARKS ] =
-        uno::makeAny( sal_Int32( 0 /* CHAXIS_MARK_NONE */ ) );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AXIS_MINOR_TICKMARKS, 0 /* CHAXIS_MARK_NONE */ );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
