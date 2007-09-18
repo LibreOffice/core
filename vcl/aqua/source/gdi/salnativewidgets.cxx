@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-17 10:51:21 $
+ *  last change: $Author: ihi $ $Date: 2007-09-18 11:15:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,6 @@ static Rectangle ImplGetRectangleFromHIRect( HIRect aHIRect )
     aRect.Right() = static_cast<int>(aHIRect.origin.x) + static_cast<short>(aHIRect.size.width);
     return aRect;
 }
-#endif
 
 // Helper returns a QD Rect
 
@@ -95,7 +94,7 @@ static Rect ImplGetRectFromHIRect(HIRect aHIRect)
     aRect.bottom = static_cast<short>(aHIRect.size.height) + static_cast<short>(aHIRect.origin.y);
     return aRect;
 }
-
+#endif
 static ThemeButtonValue ImplGetButtonValue( ButtonValue aButtonValue )
 {
     switch( aButtonValue )
