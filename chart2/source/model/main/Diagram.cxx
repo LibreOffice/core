@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Diagram.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:15:00 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:01:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,17 +134,9 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DIAGRAM_SORT_BY_X_VALUES ));
-    rOutMap[ PROP_DIAGRAM_SORT_BY_X_VALUES ] =
-        uno::makeAny( sal_False );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DIAGRAM_CONNECT_BARS ));
-    rOutMap[ PROP_DIAGRAM_CONNECT_BARS ] =
-        uno::makeAny( false );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DIAGRMA_RIGHT_ANGLED_AXES ));
-    rOutMap[ PROP_DIAGRMA_RIGHT_ANGLED_AXES ] =
-        uno::makeAny( false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_SORT_BY_X_VALUES, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_CONNECT_BARS, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRMA_RIGHT_ANGLED_AXES, false );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
