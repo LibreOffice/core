@@ -4,9 +4,9 @@
  *
  *  $RCSfile: disdocum.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:25:26 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 13:23:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ class DocumentationDisplay
     virtual void        Display_TextToken(
                             const csi::dsapi::DT_TextToken &
                                                 i_rToken ) = 0;
+    virtual void        Display_White() = 0;
     virtual void        Display_MupType(
                             const csi::dsapi::DT_MupType &  i_rToken ) = 0;
     virtual void        Display_MupMember(
@@ -111,6 +112,7 @@ class DocuTag_Display : public DocumentationDisplay
     virtual void        Display_TextToken(
                             const csi::dsapi::DT_TextToken &
                                                 i_rToken );
+    virtual void        Display_White();
     virtual void        Display_MupType(
                             const csi::dsapi::DT_MupType &  i_rToken );
     virtual void        Display_MupMember(
