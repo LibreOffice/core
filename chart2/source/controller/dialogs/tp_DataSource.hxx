@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_DataSource.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:45:11 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:54:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@
 
 #include "RangeSelectionListener.hxx"
 #include "RangeSelectionButton.hxx"
+#include "RangeEdit.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace chart2 {
@@ -181,12 +182,12 @@ private:
     FixedText               m_aFT_ROLE;
     SvTabListBox            m_aLB_ROLE;
     FixedText               m_aFT_RANGE;
-    Edit                    m_aEDT_RANGE;
+    RangeEdit               m_aEDT_RANGE;
     RangeSelectionButton    m_aIMB_RANGE_MAIN;
 
     FixedText               m_aFT_CATEGORIES;
     FixedText               m_aFT_DATALABELS;//used for xy charts
-    Edit                    m_aEDT_CATEGORIES;
+    RangeEdit               m_aEDT_CATEGORIES;
     RangeSelectionButton    m_aIMB_RANGE_CAT;
 
     ::rtl::OUString         m_aFixedTextRange;
