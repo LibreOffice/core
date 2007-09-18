@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-17 15:06:42 $
+#   last change: $Author: vg $ $Date: 2007-09-18 14:54:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,8 @@ SLOFILES=   	\
                 $(SLO)$/dlg_ChartType.obj \
                 $(SLO)$/RangeSelectionButton.obj \
                 $(SLO)$/RangeSelectionHelper.obj \
-                $(SLO)$/RangeSelectionListener.obj
+                $(SLO)$/RangeSelectionListener.obj \
+                $(SLO)$/RangeEdit.obj
 
 # --- Resources ---------------------------------------------------------------
 
