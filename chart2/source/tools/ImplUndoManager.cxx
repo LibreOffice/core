@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImplUndoManager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:15:27 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:08:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <boost/bind.hpp>
 #include <algorithm>
@@ -266,7 +267,7 @@ void UndoElementWithData::initializeData()
                 m_xData.set( xCloneable->createClone(), uno::UNO_QUERY );
         }
     }
-    catch( const uno::Exception & )
+    catch( uno::Exception & )
     {
     }
 }
@@ -287,6 +288,73 @@ UndoElement * UndoElementWithData::createFromModel(
     const Reference< frame::XModel > & xModel )
 {
     return new UndoElementWithData( getActionString(), xModel );
+}
+
+// ========================================
+
+// ----------------------------------------
+
+UndoElementWithSelection::UndoElementWithSelection(
+    const OUString & rActionString,
+    const Reference< frame::XModel > & xModel ) :
+        UndoElement( rActionString, xModel )
+{
+    initialize( xModel );
+}
+
+UndoElementWithSelection::UndoElementWithSelection(
+    const Reference< frame::XModel > & xModel ) :
+        UndoElement( xModel )
+{
+    initialize( xModel );
+}
+
+UndoElementWithSelection::UndoElementWithSelection(
+    const UndoElementWithSelection & rOther ) :
+        UndoElement( rOther )
+{
+    initialize( rOther.m_xModel );
+}
+
+UndoElementWithSelection::~UndoElementWithSelection()
+{}
+
+void UndoElementWithSelection::initialize( const Reference< frame::XModel > & xModel )
+{
+    try
+    {
+        uno::Reference< view::XSelectionSupplier > xSelSupp( xModel->getCurrentController(), uno::UNO_QUERY );
+        OSL_ASSERT( xSelSupp.is() );
+
+        if( xSelSupp.is() )
+            m_aSelection = xSelSupp->getSelection();
+    }
+    catch( const uno::Exception & )
+    {
+    }
+}
+
+void UndoElementWithSelection::dispose()
+{
+    UndoElement::dispose();
+    m_aSelection.clear();
+}
+
+void UndoElementWithSelection::applyToModel(
+    Reference< frame::XModel > & xInOutModelToChange )
+{
+    UndoElement::applyModelContentToModel( xInOutModelToChange, m_xModel );
+    Reference< view::XSelectionSupplier > xCurrentSelectionSuppl( xInOutModelToChange->getCurrentController(), uno::UNO_QUERY );
+    OSL_ASSERT( xCurrentSelectionSuppl.is() );
+
+    if( xCurrentSelectionSuppl.is())
+        xCurrentSelectionSuppl->select( m_aSelection );
+}
+
+UndoElement * UndoElementWithSelection::createFromModel(
+        const Reference< frame::XModel > & xModel )
+{
+    return new UndoElementWithSelection( getActionString(), xModel );
 }
 
 // ========================================
