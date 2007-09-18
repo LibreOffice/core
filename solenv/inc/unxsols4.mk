@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-18 07:27:22 $
+#   last change: $Author: vg $ $Date: 2007-09-18 14:51:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,6 @@ CFLAGSWERRCXX=-xwe
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
-    chart2 \
     extensions \
     soldep \
     sw
