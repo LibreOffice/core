@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:03:24 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:09:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,9 +198,10 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
 
 namespace chart
 {
+namespace PropertyHelper
+{
 
-// static
-void PropertyHelper::copyProperties(
+void copyProperties(
     const Reference< XPropertySet > & xSource,
     const Reference< XPropertySet > & xDestination )
 {
@@ -231,8 +232,7 @@ void PropertyHelper::copyProperties(
     }
 }
 
-// static
-OUString PropertyHelper::addLineDashUniqueNameToTable(
+OUString addLineDashUniqueNameToTable(
     const Any & rValue,
     const Reference< lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName )
@@ -249,8 +249,7 @@ OUString PropertyHelper::addLineDashUniqueNameToTable(
     return OUString();
 }
 
-// static
-OUString PropertyHelper::addGradientUniqueNameToTable(
+OUString addGradientUniqueNameToTable(
     const Any & rValue,
     const Reference< lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName )
@@ -268,8 +267,7 @@ OUString PropertyHelper::addGradientUniqueNameToTable(
 }
 
 
-// static
-OUString PropertyHelper::addTransparencyGradientUniqueNameToTable(
+OUString addTransparencyGradientUniqueNameToTable(
     const Any & rValue,
     const Reference< lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName )
@@ -286,8 +284,7 @@ OUString PropertyHelper::addTransparencyGradientUniqueNameToTable(
     return OUString();
 }
 
-// static
-OUString PropertyHelper::addHatchUniqueNameToTable(
+OUString addHatchUniqueNameToTable(
     const Any & rValue,
     const Reference< lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName )
@@ -304,8 +301,7 @@ OUString PropertyHelper::addHatchUniqueNameToTable(
     return OUString();
 }
 
-// static
-OUString PropertyHelper::addBitmapUniqueNameToTable(
+OUString addBitmapUniqueNameToTable(
     const Any & rValue,
     const Reference< lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName )
@@ -321,5 +317,42 @@ OUString PropertyHelper::addBitmapUniqueNameToTable(
     }
     return OUString();
 }
+
+// ----------------------------------------
+
+void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const uno::Any & rAny )
+{
+    tPropertyValueMap::iterator aIt( rOutMap.find( key ));
+    if( aIt == rOutMap.end())
+        rOutMap.insert( tPropertyValueMap::value_type( key, rAny ));
+    else
+        (*aIt).second = rAny;
+}
+
+template<>
+    void setPropertyValue< ::com::sun::star::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const ::com::sun::star::uno::Any & rAny )
+{
+    setPropertyValueAny( rOutMap, key, rAny );
+}
+
+void setPropertyValueDefaultAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const uno::Any & rAny )
+{
+    OSL_ENSURE( rOutMap.end() == rOutMap.find( key ), "Default already exists for property" );
+    setPropertyValue( rOutMap, key, rAny );
+}
+
+template<>
+    void setPropertyValueDefault< ::com::sun::star::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const ::com::sun::star::uno::Any & rAny )
+{
+    setPropertyValueDefaultAny( rOutMap, key, rAny );
+}
+
+
+void setEmptyPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key )
+{
+    setPropertyValueDefault( rOutMap, key, uno::Any());
+}
+
+} // namespace PropertyHelper
 
 } //  namespace chart
