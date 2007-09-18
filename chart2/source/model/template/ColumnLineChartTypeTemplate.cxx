@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnLineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:47:35 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:05:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,9 +95,7 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_COL_LINE_NUMBER_OF_LINES ));
-    rOutMap[ PROP_COL_LINE_NUMBER_OF_LINES ] =
-        uno::makeAny( sal_Int32( 1 ) );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_COL_LINE_NUMBER_OF_LINES, 1 );
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()
