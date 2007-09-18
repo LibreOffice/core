@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BaseCoordinateSystem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:28:00 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:58:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,6 +192,7 @@ protected:
 
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent();
+    using OPropertySet::disposing;
 
     void fireModifyEvent();
 
