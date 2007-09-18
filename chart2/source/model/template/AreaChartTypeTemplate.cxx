@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AreaChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:52:24 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:04:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,9 +87,7 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_AREA_TEMPLATE_DIMENSION ));
-    rOutMap[ PROP_AREA_TEMPLATE_DIMENSION ] =
-        uno::makeAny( sal_Int32( 2 ) );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_AREA_TEMPLATE_DIMENSION, 2 );
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageBackground.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:51:18 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:02:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,12 +72,9 @@ static const ::rtl::OUString lcl_aServiceName(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    rOutMap[ ::chart::FillProperties::PROP_FILL_COLOR ] =
-        uno::makeAny( sal_Int32( 0xffffff ));
-
     // override other defaults
-    rOutMap[ ::chart::LineProperties::PROP_LINE_STYLE ] =
-        uno::makeAny( drawing::LineStyle_NONE );
+    ::chart::PropertyHelper::setPropertyValue< sal_Int32 >( rOutMap, ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LineProperties::PROP_LINE_STYLE, drawing::LineStyle_NONE );
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()
