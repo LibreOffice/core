@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GridWrapper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:18:22 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:52:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ public:
         Z_MAIN_GRID,
         X_SUB_GRID,
         Y_SUB_GRID,
-        Z_SUB_GRID,
+        Z_SUB_GRID
     };
 
     GridWrapper( tGridType eType, ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
