@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartModel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:14:34 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:59:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1249,19 +1249,14 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
         {
             case SERVICE_DASH_TABLE:
                 return m_pImplChartModel->GetDashTable();
-                break;
             case SERVICE_GARDIENT_TABLE:
                 return m_pImplChartModel->GetGradientTable();
-                break;
             case SERVICE_HATCH_TABLE:
                 return m_pImplChartModel->GetHatchTable();
-                break;
             case SERVICE_BITMAP_TABLE:
                 return m_pImplChartModel->GetBitmapTable();
-                break;
             case SERVICE_TRANSP_GRADIENT_TABLE:
                 return m_pImplChartModel->GetTransparencyGradientTable();
-                break;
             case SERVICE_MARKER_TABLE:
                 // not supported
                 return 0;
