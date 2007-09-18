@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:33:57 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:29:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,12 +86,6 @@ Image::Image( const String &   i_sSrc,
           << new AnAttribute(String("height"),i_sHeight)
           << new AnAttribute(String("align"),i_sAlign)
           << new AnAttribute(String("border"),i_sBorder);
-}
-
-bool
-Label::LineBreakAfterEndTag() const
-{
-     return true;
 }
 
 bool

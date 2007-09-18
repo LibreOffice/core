@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlitem.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:33:24 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:29:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,6 @@ class Label : public csi::xml::AnElement
                             const ::csv::String & i_sLabel )
                                 :   csi::xml::AnElement("a")
                                 { *this << new csi::xml::AnAttribute(String("name"), i_sLabel); }
-  private:
-    virtual bool        LineBreakAfterEndTag() const;
 };
 
 /** <p>
