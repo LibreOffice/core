@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PieChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:35:50 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:06:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,18 +126,10 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_PIE_TEMPLATE_OFFSET_MODE ));
-    rOutMap[ PROP_PIE_TEMPLATE_OFFSET_MODE ] =
-        uno::makeAny( chart2::PieChartOffsetMode_NONE );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_PIE_TEMPLATE_DEFAULT_OFFSET ));
-    rOutMap[ PROP_PIE_TEMPLATE_DEFAULT_OFFSET ] =
-        uno::makeAny( double( 0.5 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_PIE_TEMPLATE_DIMENSION ));
-    rOutMap[ PROP_PIE_TEMPLATE_DIMENSION ] =
-        uno::makeAny( sal_Int32( 2 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_PIE_TEMPLATE_USE_RINGS ));
-    rOutMap[ PROP_PIE_TEMPLATE_USE_RINGS ] =
-        uno::makeAny( sal_False );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIE_TEMPLATE_OFFSET_MODE, chart2::PieChartOffsetMode_NONE );
+    ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_PIE_TEMPLATE_DEFAULT_OFFSET, 0.5 );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_PIE_TEMPLATE_DIMENSION, 2 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIE_TEMPLATE_USE_RINGS, false );
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()
