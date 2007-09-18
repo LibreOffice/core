@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AxisHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:55:06 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:07:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,10 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
+#include <com/sun/star/lang/XServiceName.hpp>
+#endif
+
 #include <map>
 
 //.............................................................................
@@ -95,6 +99,16 @@ void AxisHelper::removeExplicitScaling( ScaleData& rScaleData )
     uno::Any aEmpty;
     rScaleData.Minimum = rScaleData.Maximum = rScaleData.Origin = aEmpty;
     rScaleData.Scaling = 0;
+}
+
+//static
+bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
+{
+    bool bReturn = false;
+    Reference< lang::XServiceName > xServiceName( xScaling, uno::UNO_QUERY );
+    bReturn =( xServiceName.is() && (xServiceName->getServiceName()).equals(
+              C2U( "com.sun.star.chart2.LogarithmicScaling" )));
+    return bReturn;
 }
 
 //static
@@ -508,7 +522,9 @@ bool AxisHelper::getIndicesForAxis( const Reference< XAxis >& xAxis, const Refer
 }
 
 //static
-std::vector< Reference< XAxis > > AxisHelper::getAllAxisOfCoordinateSystem( const Reference< XCoordinateSystem >& xCooSys )
+std::vector< Reference< XAxis > > AxisHelper::getAllAxesOfCoordinateSystem(
+      const Reference< XCoordinateSystem >& xCooSys
+    , bool bOnlyVisible /* = false */ )
 {
     std::vector< Reference< XAxis > > aAxisVector;
 
@@ -526,8 +542,19 @@ std::vector< Reference< XAxis > > AxisHelper::getAllAxisOfCoordinateSystem( cons
                     try
                     {
                         Reference< XAxis > xAxis( xCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex ) );
+                        bool bAddAxis = true;
                         if( xAxis.is() )
-                            aAxisVector.push_back( xAxis );
+                        {
+                            if( bOnlyVisible )
+                            {
+                                Reference< beans::XPropertySet > xAxisProp( xAxis, uno::UNO_QUERY );
+                                if( !xAxisProp.is() ||
+                                    !(xAxisProp->getPropertyValue( C2U("Show")) >>= bAddAxis) )
+                                    bAddAxis = false;
+                            }
+                            if( bAddAxis )
+                                aAxisVector.push_back( xAxis );
+                        }
                     }
                     catch( const uno::Exception & ex )
                     {
@@ -542,7 +569,9 @@ std::vector< Reference< XAxis > > AxisHelper::getAllAxisOfCoordinateSystem( cons
 }
 
 //static
-Sequence< Reference< XAxis > > AxisHelper::getAllAxisOfDiagram( const Reference< XDiagram >& xDiagram )
+Sequence< Reference< XAxis > > AxisHelper::getAllAxesOfDiagram(
+      const Reference< XDiagram >& xDiagram
+    , bool bOnlyVisible )
 {
     std::vector< Reference< XAxis > > aAxisVector;
 
@@ -553,7 +582,7 @@ Sequence< Reference< XAxis > > AxisHelper::getAllAxisOfDiagram( const Reference<
         sal_Int32 nC = 0;
         for( nC=0; nC<aCooSysList.getLength(); ++nC )
         {
-            std::vector< Reference< XAxis > > aAxesPerCooSys( AxisHelper::getAllAxisOfCoordinateSystem( aCooSysList[nC] ) );
+            std::vector< Reference< XAxis > > aAxesPerCooSys( AxisHelper::getAllAxesOfCoordinateSystem( aCooSysList[nC], bOnlyVisible ) );
             aAxisVector.insert( aAxisVector.end(), aAxesPerCooSys.begin(), aAxesPerCooSys.end() );
         }
     }
@@ -564,7 +593,7 @@ Sequence< Reference< XAxis > > AxisHelper::getAllAxisOfDiagram( const Reference<
 //static
 Sequence< Reference< beans::XPropertySet > > AxisHelper::getAllGrids( const Reference< XDiagram >& xDiagram )
 {
-    Sequence< Reference< XAxis > > aAllAxes( AxisHelper::getAllAxisOfDiagram( xDiagram ) );
+    Sequence< Reference< XAxis > > aAllAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
     std::vector< Reference< beans::XPropertySet > > aGridVector;
 
     sal_Int32 nA = 0;
@@ -751,7 +780,7 @@ Reference< XCoordinateSystem > AxisHelper::getCoordinateSystemOfAxis(
         for( sal_Int32 nCooSysIndex = 0; nCooSysIndex < aCooSysList.getLength(); ++nCooSysIndex )
         {
             xCooSys = aCooSysList[nCooSysIndex];
-            std::vector< Reference< XAxis > > aAllAxis( AxisHelper::getAllAxisOfCoordinateSystem( xCooSys ) );
+            std::vector< Reference< XAxis > > aAllAxis( AxisHelper::getAllAxesOfCoordinateSystem( xCooSys ) );
 
             ::std::vector< Reference< XAxis > >::iterator aFound =
                   ::std::find( aAllAxis.begin(), aAllAxis.end(), xAxis );
