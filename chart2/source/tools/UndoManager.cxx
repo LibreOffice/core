@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UndoManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:01:26 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,9 +235,15 @@ void SAL_CALL UndoManager::preActionWithArguments(
     OSL_ENSURE( ! m_pLastRemeberedUndoElement, "Looks like postAction or cancelAction call was missing" );
     if( aArguments.getLength() > 0 )
     {
+        OSL_ENSURE( aArguments.getLength() == 1, "More than one argument is not supported yet" );
         if( aArguments[0].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("WithData")))
         {
             m_pLastRemeberedUndoElement = new impl::UndoElementWithData( xModelBeforeChange );
+            bActionHandled = true;
+        }
+        else if( aArguments[0].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("WithSelection")))
+        {
+            m_pLastRemeberedUndoElement = new impl::UndoElementWithSelection( xModelBeforeChange );
             bActionHandled = true;
         }
     }

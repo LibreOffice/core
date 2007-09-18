@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UndoGuard.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:01:14 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:10:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,26 @@ UndoLiveUpdateGuardWithData::~UndoLiveUpdateGuardWithData()
 {
     if( !m_bActionPosted )
         m_xUndoManager->cancelActionWithUndo( m_xModel );
+}
+
+//-----------------------------------------------------------------------------
+
+UndoGuardWithSelection::UndoGuardWithSelection( const rtl::OUString& rUndoString
+        , const uno::Reference< chart2::XUndoManager > & xUndoManager
+        , const uno::Reference< frame::XModel > & xModel )
+        : UndoGuard_Base( rUndoString, xUndoManager, xModel )
+{
+    Sequence< beans::PropertyValue > aArgs(1);
+    aArgs[0] = beans::PropertyValue(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("WithSelection")), -1, uno::Any(),
+        beans::PropertyState_DIRECT_VALUE );
+    m_xUndoManager->preActionWithArguments( m_xModel, aArgs );
+}
+
+UndoGuardWithSelection::~UndoGuardWithSelection()
+{
+    if( !m_bActionPosted )
+        m_xUndoManager->cancelAction();
 }
 
 } //  namespace chart

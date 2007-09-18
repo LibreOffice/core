@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImplUndoManager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:57:35 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:08:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,33 @@ private:
 
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XInternalDataProvider > m_xData;
+};
+
+class UndoElementWithSelection : public UndoElement
+{
+public:
+    UndoElementWithSelection( const ::rtl::OUString & rActionString,
+                              const ::com::sun::star::uno::Reference<
+                                  ::com::sun::star::frame::XModel > & xModel );
+    UndoElementWithSelection( const ::com::sun::star::uno::Reference<
+                                  ::com::sun::star::frame::XModel > & xModel );
+    UndoElementWithSelection( const UndoElementWithSelection & rOther );
+    virtual ~UndoElementWithSelection();
+
+    virtual void dispose();
+    virtual UndoElement * createFromModel(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel > & xModel );
+
+    virtual void applyToModel(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel > & xInOutModelToChange );
+
+private:
+    void initialize( const ::com::sun::star::uno::Reference<
+                         ::com::sun::star::frame::XModel > & xModel );
+
+    ::com::sun::star::uno::Any m_aSelection;
 };
 
 /** Note that all models that are put into this container are at some point
