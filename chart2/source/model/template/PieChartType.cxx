@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PieChartType.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:50:48 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:06:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,9 +84,7 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_PIECHARTTYPE_USE_RINGS ));
-    rOutMap[ PROP_PIECHARTTYPE_USE_RINGS ] =
-        uno::makeAny( sal_False );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIECHARTTYPE_USE_RINGS, false );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
