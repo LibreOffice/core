@@ -4,9 +4,9 @@
  *
  *  $RCSfile: d_token.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-15 11:10:54 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 13:23:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,12 +71,14 @@ class DT_Dsapi : public ary::info::DocuToken
 class DT_TextToken : public DT_Dsapi
 {
   public:
-                        DT_TextToken(
+    explicit            DT_TextToken(
                             const char *        i_sText )
                                                 :   sText(i_sText) {}
-                        DT_TextToken(
+    explicit            DT_TextToken(
                             const String &      i_sText )
                                                 :   sText(i_sText) {}
+    virtual             ~DT_TextToken();
+
     virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
@@ -90,6 +92,19 @@ class DT_TextToken : public DT_Dsapi
   private:
     String              sText;
 };
+
+class DT_White : public DT_Dsapi
+{
+  public:
+                        DT_White() {}
+    virtual             ~DT_White();
+
+    virtual void        DisplayAt(
+                            DocumentationDisplay &
+                                                o_rDisplay ) const;
+    virtual bool        IsWhiteOnly() const;
+};
+
 
 class DT_MLTag : public DT_Dsapi
 {
@@ -109,9 +124,11 @@ class DT_MupType : public DT_MLTag
     explicit            DT_MupType(             /// Constructor for End-Tag
                             bool                )   /// Must be there, but is not evaluated.
                                                 :   bIsBegin(false) {}
-                        DT_MupType(             /// Constructor for Begin-Tag
+    explicit            DT_MupType(             /// Constructor for Begin-Tag
                             const String &      i_sScope )
                                                 :   sScope(i_sScope), bIsBegin(true) {}
+    virtual             ~DT_MupType();
+
     virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
@@ -132,6 +149,8 @@ class DT_MupMember : public DT_MLTag
                         DT_MupMember(           /// Constructor for Begin-Tag
                             const String &      i_sScope )
                                                 :   sScope(i_sScope), bIsBegin(true) {}
+    virtual             ~DT_MupMember();
+
     virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
@@ -149,6 +168,8 @@ class DT_MupConst : public DT_Dsapi
                         DT_MupConst(
                             const char *        i_sConstText )
                                                 :   sConstText(i_sConstText) {}
+    virtual             ~DT_MupConst();
+
     virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
@@ -166,6 +187,7 @@ class DT_Style : public DT_MLTag
                             const char *        i_sPlainHtmlTag,
                             bool                i_bNewLine )
                                                 : sText(i_sPlainHtmlTag), bNewLine(i_bNewLine) {}
+    virtual             ~DT_Style();
 
     virtual void        DisplayAt(
                             DocumentationDisplay &
@@ -182,14 +204,13 @@ class DT_Style : public DT_MLTag
 class DT_EOL : public DT_Dsapi
 {
   public:
+                        DT_EOL() {}
+    virtual             ~DT_EOL();
 
     virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
     virtual bool        IsWhiteOnly() const;
-
-  private:
-    udmstri             sText;
 };
 
 
@@ -213,9 +234,11 @@ class DT_AtTag : public ary::info::AtTag2
 class DT_StdAtTag : public DT_AtTag
 {
   public:
-                        DT_StdAtTag(
+    explicit            DT_StdAtTag(
                             const char *        i_sTitle )
                                                 :   DT_AtTag(i_sTitle) {}
+    virtual             ~DT_StdAtTag();
+
     virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
@@ -225,6 +248,7 @@ class DT_SeeAlsoAtTag : public DT_AtTag
 {
   public:
                         DT_SeeAlsoAtTag()       :   DT_AtTag("") {}
+    virtual             ~DT_SeeAlsoAtTag();
 
 //  void                SetLinkText(
 //                          const char *        i_sLinkText )
@@ -243,6 +267,7 @@ class DT_ParameterAtTag : public DT_AtTag
 {
   public:
                         DT_ParameterAtTag()     :   DT_AtTag("") {}
+    virtual             ~DT_ParameterAtTag();
 
     void                SetTitle(
                             const char *        i_sTitle );
@@ -255,6 +280,7 @@ class DT_SinceAtTag : public DT_AtTag
 {
   public:
                         DT_SinceAtTag()     :   DT_AtTag("Since version") {}
+    virtual             ~DT_SinceAtTag();
 
     virtual void        DisplayAt(
                             DocumentationDisplay &
