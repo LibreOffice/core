@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesProperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:34:51 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:00:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,17 +100,9 @@ void DataSeriesProperties::AddPropertiesToVector(
 void DataSeriesProperties::AddDefaultsToMap(
     tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATASERIES_STACKING_DIRECTION ));
-    rOutMap[ PROP_DATASERIES_STACKING_DIRECTION ] =
-        uno::makeAny( chart2::StackingDirection_NO_STACKING );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATASERIES_VARY_COLORS_BY_POINT ));
-    rOutMap[ PROP_DATASERIES_VARY_COLORS_BY_POINT ] =
-        uno::makeAny( false );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATASERIES_ATTACHED_AXIS_INDEX ));
-    rOutMap[ PROP_DATASERIES_ATTACHED_AXIS_INDEX ] =
-        uno::makeAny( sal_Int32(0) );
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATASERIES_STACKING_DIRECTION, chart2::StackingDirection_NO_STACKING );
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATASERIES_VARY_COLORS_BY_POINT, false );
+    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATASERIES_ATTACHED_AXIS_INDEX, 0 );
 
     // PROP_DATASERIES_ATTRIBUTED_DATA_POINTS has no default
 
