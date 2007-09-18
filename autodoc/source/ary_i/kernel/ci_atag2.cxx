@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ci_atag2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:38:25 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 13:48:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_autodoc.hxx"
-
-
 #include <precomp.h>
 #include <ary_i/ci_atag2.hxx>
 
@@ -52,6 +48,7 @@ namespace info
 
 void    DocuTag_Display::Display_TextToken(
                             const csi::dsapi::DT_TextToken & ) {}
+void    DocuTag_Display::Display_White() {}
 void    DocuTag_Display::Display_MupType(
                             const csi::dsapi::DT_MupType & ) {}
 void    DocuTag_Display::Display_MupMember(
