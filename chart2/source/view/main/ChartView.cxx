@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:05:56 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:12:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,9 @@
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
 #include <com/sun/star/util/XRefreshable.hpp>
 #endif
@@ -216,6 +219,7 @@ ChartView::ChartView(
     , m_nScaleXDenominator(1)
     , m_nScaleYNumerator(1)
     , m_nScaleYDenominator(1)
+    , m_bSdrViewIsInEditMode(sal_False)
 {
 }
 
@@ -249,12 +253,15 @@ void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& aArguments
         m_pDrawModelWrapper = ::boost::shared_ptr< DrawModelWrapper >( new DrawModelWrapper( m_xCC ) );
         m_xShapeFactory = m_pDrawModelWrapper->getShapeFactory();
         m_xDrawPage = m_pDrawModelWrapper->getMainDrawPage();
+        StartListening( m_pDrawModelWrapper->getSdrModel(), FALSE /*bPreventDups*/ );
         // \--
     }
 }
 
 ChartView::~ChartView()
 {
+    if( m_pDrawModelWrapper.get() )
+        EndListening( m_pDrawModelWrapper->getSdrModel(), FALSE /*bAllDups*/ );
     m_xDrawPage = NULL;
     impl_deleteCoordinateSystems();
 }
@@ -2240,6 +2247,46 @@ void SAL_CALL ChartView::modified( const lang::EventObject& /* aEvent */ )
     impl_notifyModeChangeListener(C2U("dirty"));
 }
 
+//SfxListener
+void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
+{
+    //#i77362 change notification for changes on additional shapes are missing
+    if( m_bInViewUpdate )
+        return;
+    if( m_bSdrViewIsInEditMode )
+        return;
+
+    const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >(&rHint);
+    if( !pSdrHint )
+        return;
+
+    bool bShapeChanged = false;
+    switch( pSdrHint->GetKind() )
+    {
+         case HINT_OBJCHG:
+            bShapeChanged = true;
+            break;
+        case HINT_OBJINSERTED:
+            bShapeChanged = true;
+            break;
+        case HINT_OBJREMOVED:
+            bShapeChanged = true;
+            break;
+        case HINT_MODELCLEARED:
+            bShapeChanged = true;
+            break;
+        default:
+            break;
+    }
+
+    if(!bShapeChanged)
+        return;
+
+    Reference< util::XModifiable > xModifiable( m_xChartModel, uno::UNO_QUERY );
+    if( xModifiable.is() )
+        xModifiable->setModified( sal_True );
+}
+
 void ChartView::impl_notifyModeChangeListener( const rtl::OUString& rNewMode )
 {
     try
@@ -2343,6 +2390,12 @@ void SAL_CALL ChartView::setPropertyValue( const ::rtl::OUString& rPropertyName
 
             pDataValues++;
         }
+    }
+    else if( rPropertyName.equals(C2U("SdrViewIsInEditMode")) )
+    {
+        //#i77362 change notification for changes on additional shapes are missing
+        if( ! (rValue >>= m_bSdrViewIsInEditMode) )
+            throw lang::IllegalArgumentException( C2U("Property 'SdrViewIsInEditMode' requires value of type sal_Bool"), 0, 0 );
     }
     else
         throw beans::UnknownPropertyException( C2U("unknown property was tried to set to chart wizard"), 0 );
