@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cx_a_std.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:56:31 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:07:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,10 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_autodoc.hxx"
-
 
 #include <precomp.h>
 #include <adoc/cx_a_std.hxx>
