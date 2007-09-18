@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ErrorBar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:57:00 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:08:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,24 +126,12 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_ERROR_BAR_STYLE ));
-    rOutMap[ PROP_ERROR_BAR_STYLE ] =
-        uno::makeAny( chart2::ErrorBarStyle_NONE );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_ERROR_BAR_POS_ERROR ));
-    rOutMap[ PROP_ERROR_BAR_POS_ERROR ] =
-        uno::makeAny( 0.0 );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_ERROR_BAR_NEG_ERROR ));
-    rOutMap[ PROP_ERROR_BAR_NEG_ERROR ] =
-        uno::makeAny( 0.0 );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_ERROR_BAR_WEIGHT ));
-    rOutMap[ PROP_ERROR_BAR_WEIGHT ] =
-        uno::makeAny( 1.0 );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_ERROR_BAR_SHOW_POS_ERROR ));
-    rOutMap[ PROP_ERROR_BAR_SHOW_POS_ERROR ] =
-        uno::makeAny( sal_True );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_ERROR_BAR_SHOW_NEG_ERROR ));
-    rOutMap[ PROP_ERROR_BAR_SHOW_NEG_ERROR ] =
-        uno::makeAny( sal_True );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_ERROR_BAR_STYLE, chart2::ErrorBarStyle_NONE );
+    ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_ERROR_BAR_POS_ERROR, 0.0 );
+    ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_ERROR_BAR_NEG_ERROR, 0.0 );
+    ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_ERROR_BAR_WEIGHT, 1.0 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_ERROR_BAR_SHOW_POS_ERROR, true );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_ERROR_BAR_SHOW_NEG_ERROR, true );
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()
