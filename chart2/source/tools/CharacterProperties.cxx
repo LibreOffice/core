@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CharacterProperties.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:36:13 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:07:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -455,170 +455,73 @@ void CharacterProperties::AddDefaultsToMap(
 {
     const float fDefaultFontHeight = 13.0;
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_FONT_NAME ));
-    rOutMap[ PROP_CHAR_FONT_NAME ] =
-        uno::makeAny( C2U( "Albany" ));
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_NAME, C2U( "Albany" ));
     //todo correct font default:
     //see static Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang, ULONG nFlags, const OutputDevice* pOutDev = NULL );
     //or  SvxFontItem ... (old chart source/core/chtmodel.cxx :Font aCJKFont )
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_FONT_FAMILY ));
-    rOutMap[ PROP_CHAR_FONT_FAMILY ] =
-        uno::makeAny( awt::FontFamily::SWISS );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_FONT_CHAR_SET ));
-    rOutMap[ PROP_CHAR_FONT_CHAR_SET ] =
-        uno::makeAny( awt::CharSet::DONTKNOW );//use DONTKNOW instead of SYSTEM to avoid assertion issue 50249
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_FONT_PITCH ));
-    rOutMap[ PROP_CHAR_FONT_PITCH ] =
-        uno::makeAny( awt::FontPitch::VARIABLE );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_FAMILY, awt::FontFamily::SWISS );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_CHAR_SET, awt::CharSet::DONTKNOW );//use DONTKNOW instead of SYSTEM to avoid assertion issue 50249
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FONT_PITCH, awt::FontPitch::VARIABLE );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_CHAR_COLOR, -1 ); //automatic color (COL_AUTO)
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_ESCAPEMENT, 0 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_CHAR_HEIGHT, fDefaultFontHeight );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_UNDERLINE, awt::FontUnderline::NONE );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_CHAR_UNDERLINE_COLOR, -1 ); //automatic color (COL_AUTO)
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_UNDERLINE_HAS_COLOR, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_WEIGHT, awt::FontWeight::NORMAL );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_POSTURE, awt::FontSlant_NONE );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_AUTO_KERNING, true );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_KERNING, 0 );
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COLOR ));
-    rOutMap[ PROP_CHAR_COLOR ] =
-        uno::makeAny( sal_Int32(-1) );//automatic color (COL_AUTO)
+//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_CASE_MAPPING, style::CaseMap::NONE );
+//     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_ROTATION, 0 );
+//     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_SCALE_WIDTH, 71 );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int8 >( rOutMap, PROP_CHAR_ESCAPEMENT_HEIGHT, 0 );
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ESCAPEMENT ));
-    rOutMap[ PROP_CHAR_ESCAPEMENT ] =
-        uno::makeAny( sal_Int16(0) );
+//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_CROSSED_OUT, false );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_STRIKE_OUT, awt::FontStrikeout::NONE );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_WORD_MODE, false );
+//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FLASH, false );
 
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_LOCALE, lang::Locale( C2U( "US" ), C2U( "en" ), OUString())); // todo correct default
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_SHADOWED, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_CONTOURED, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_RELIEF, text::FontRelief::NONE );
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_CHAR_HEIGHT ));
-    rOutMap[ PROP_CHAR_CHAR_HEIGHT ] =
-        uno::makeAny( fDefaultFontHeight );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_UNDERLINE ));
-    rOutMap[ PROP_CHAR_UNDERLINE ] =
-        uno::makeAny( awt::FontUnderline::NONE );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_EMPHASIS, text::FontEmphasis::NONE );
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_UNDERLINE_COLOR ));
-    rOutMap[ PROP_CHAR_UNDERLINE_COLOR ] =
-        uno::makeAny( sal_Int32(-1) );//automatic color (COL_AUTO)
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_UNDERLINE_HAS_COLOR ));
-    rOutMap[ PROP_CHAR_UNDERLINE_HAS_COLOR ] =
-        uno::makeAny( sal_Bool( sal_False ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_WEIGHT ));
-    rOutMap[ PROP_CHAR_WEIGHT ] =
-        uno::makeAny( awt::FontWeight::NORMAL );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_POSTURE ));
-    rOutMap[ PROP_CHAR_POSTURE ] =
-        uno::makeAny( awt::FontSlant_NONE );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_AUTO_KERNING ));
-    rOutMap[ PROP_CHAR_AUTO_KERNING ] =
-        uno::makeAny( sal_True );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_KERNING ));
-    rOutMap[ PROP_CHAR_KERNING ] =
-        uno::makeAny( sal_Int16(0) );//todo correct default
-
-
-//     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_CASE_MAPPING ));
-//     rOutMap[ PROP_CHAR_CASE_MAPPING ] =
-//         uno::makeAny( style::CaseMap::NONE );
-//     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ROTATION ));
-//     rOutMap[ PROP_CHAR_ROTATION ] =
-//         uno::makeAny( sal_Int16( 0 ) );
-//     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_SCALE_WIDTH ));
-//     rOutMap[ PROP_CHAR_SCALE_WIDTH ] =
-//         uno::makeAny( sal_Int16( 71 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ESCAPEMENT_HEIGHT ));
-    rOutMap[ PROP_CHAR_ESCAPEMENT_HEIGHT ] =
-        uno::makeAny( sal_Int8( 0 ) );
-
-//     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_CROSSED_OUT ));
-//     rOutMap[ PROP_CHAR_CROSSED_OUT ] =
-//         uno::makeAny( sal_Bool( sal_False ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_STRIKE_OUT ));
-    rOutMap[ PROP_CHAR_STRIKE_OUT ] =
-        uno::makeAny( sal_Int16( awt::FontStrikeout::NONE ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_WORD_MODE ));
-    rOutMap[ PROP_CHAR_WORD_MODE ] =
-        uno::makeAny( sal_Bool( sal_False ) );
-//     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_FLASH ));
-//     rOutMap[ PROP_CHAR_FLASH ] =
-//         uno::makeAny( sal_Bool( sal_False ) );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_LOCALE ));
-    rOutMap[ PROP_CHAR_LOCALE ] =
-        uno::makeAny( lang::Locale( C2U( "US" ), C2U( "en" ), OUString()) );//todo correct default
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_SHADOWED ));
-    rOutMap[ PROP_CHAR_SHADOWED ] =
-        uno::makeAny( sal_Bool( sal_False ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_CONTOURED ));
-    rOutMap[ PROP_CHAR_CONTOURED ] =
-        uno::makeAny( sal_Bool( sal_False ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_RELIEF ));
-    rOutMap[ PROP_CHAR_RELIEF ] =
-        uno::makeAny( text::FontRelief::NONE );
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_EMPHASIS ));
-    rOutMap[ PROP_CHAR_EMPHASIS ] =
-        uno::makeAny( text::FontEmphasis::NONE );
-//     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_RUBY_ADJUST ));
-//     rOutMap[ PROP_CHAR_RUBY_ADJUST ] =
-//         uno::makeAny( text::RubyAdjust_INDENT_BLOCK );
-//     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_RUBY_STYLE_NAME ));
-//     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_RUBY_IS_ABOVE ));
-//     rOutMap[ PROP_CHAR_RUBY_IS_ABOVE ] =
-//         uno::makeAny( sal_Bool( sal_True ) );
-//     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_INHIBIT_HYPHENATION ));
-//     rOutMap[ PROP_CHAR_INHIBIT_HYPHENATION ] =
-//         uno::makeAny( sal_Bool( sal_False ) );
+//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_RUBY_ADJUST, text::RubyAdjust_INDENT_BLOCK );
+//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_RUBY_STYLE_NAME, ?? );
+//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_RUBY_IS_ABOVE, true );
+//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_INHIBIT_HYPHENATION, false );
 
     // Asian (com.sun.star.style.CharacterPropertiesAsian)
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_CHAR_HEIGHT ));
-    rOutMap[ PROP_CHAR_ASIAN_CHAR_HEIGHT ] =
-        uno::makeAny( fDefaultFontHeight );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_WEIGHT ));
-    rOutMap[ PROP_CHAR_ASIAN_WEIGHT ] =
-        uno::makeAny( awt::FontWeight::NORMAL );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_POSTURE ));
-    rOutMap[ PROP_CHAR_ASIAN_POSTURE ] =
-        uno::makeAny( awt::FontSlant_NONE );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_LOCALE ));
-    rOutMap[ PROP_CHAR_ASIAN_LOCALE ] =
-        uno::makeAny( lang::Locale( C2U( "US" ), C2U( "en" ), OUString()) );//todo correct default
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_FONT_NAME ));
-    rOutMap[ PROP_CHAR_ASIAN_FONT_NAME ] =
-        uno::makeAny( C2U( "Andale Sans UI" ));
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultFontHeight );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_WEIGHT, awt::FontWeight::NORMAL );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_POSTURE, awt::FontSlant_NONE );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_LOCALE, lang::Locale( C2U( "US" ), C2U( "en" ), OUString())); //todo correct default
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_NAME, C2U( "Andale Sans UI" ));
+
     //todo correct font default:
     //see static Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang, ULONG nFlags, const OutputDevice* pOutDev = NULL );
     //or  SvxFontItem ... (old chart source/core/chtmodel.cxx :Font aCJKFont )
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_FONT_FAMILY ));
-    rOutMap[ PROP_CHAR_ASIAN_FONT_FAMILY ] =
-        uno::makeAny( awt::FontFamily::SWISS );//todo correct default
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_CHAR_SET ));
-    rOutMap[ PROP_CHAR_ASIAN_CHAR_SET ] =
-        uno::makeAny( awt::CharSet::DONTKNOW );//use DONTKNOW instead of SYSTEM to avoid assertion issue 50249
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_FONT_PITCH ));
-    rOutMap[ PROP_CHAR_ASIAN_FONT_PITCH ] =
-        uno::makeAny( awt::FontPitch::VARIABLE );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_FAMILY, awt::FontFamily::SWISS ); //todo correct default
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_CHAR_SET, awt::CharSet::DONTKNOW );    //use DONTKNOW instead of SYSTEM to avoid assertion issue 50249
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_FONT_PITCH, awt::FontPitch::VARIABLE );
 
     // Complex Text Layout (com.sun.star.style.CharacterPropertiesComplex)
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_CHAR_HEIGHT ));
-    rOutMap[ PROP_CHAR_COMPLEX_CHAR_HEIGHT ] =
-        uno::makeAny( fDefaultFontHeight );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_WEIGHT ));
-    rOutMap[ PROP_CHAR_COMPLEX_WEIGHT ] =
-        uno::makeAny( awt::FontWeight::NORMAL );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_POSTURE ));
-    rOutMap[ PROP_CHAR_COMPLEX_POSTURE ] =
-        uno::makeAny( awt::FontSlant_NONE );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_LOCALE ));
-    rOutMap[ PROP_CHAR_COMPLEX_LOCALE ] =
-        uno::makeAny( lang::Locale( C2U( "US" ), C2U( "en" ), OUString()) );//todo correct default
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_FONT_NAME ));
-    rOutMap[ PROP_CHAR_COMPLEX_FONT_NAME ] =
-        uno::makeAny( C2U( "Tahoma" ));//todo correct default
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultFontHeight );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_WEIGHT, awt::FontWeight::NORMAL );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_POSTURE, awt::FontSlant_NONE );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_LOCALE, lang::Locale( C2U( "US" ), C2U( "en" ), OUString())); //todo correct default
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_NAME, C2U( "Tahoma" )); //todo correct default
+
     //todo correct font default:
     //see static Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang, ULONG nFlags, const OutputDevice* pOutDev = NULL );
     //or  SvxFontItem ... (old chart source/core/chtmodel.cxx :Font aCJKFont )
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_FONT_FAMILY ));
-    rOutMap[ PROP_CHAR_COMPLEX_FONT_FAMILY ] =
-        uno::makeAny( awt::FontFamily::SWISS );//todo correct default
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_CHAR_SET ));
-    rOutMap[ PROP_CHAR_COMPLEX_CHAR_SET ] =
-        uno::makeAny( awt::CharSet::DONTKNOW );//use DONTKNOW instead of SYSTEM to avoid assertion issue 50249
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_FONT_PITCH ));
-    rOutMap[ PROP_CHAR_COMPLEX_FONT_PITCH ] =
-        uno::makeAny( awt::FontPitch::VARIABLE );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_FAMILY, awt::FontFamily::SWISS );//todo correct default
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_CHAR_SET, awt::CharSet::DONTKNOW );//use DONTKNOW instead of SYSTEM to avoid assertion issue 50249
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_COMPLEX_FONT_PITCH, awt::FontPitch::VARIABLE );
 }
 
 bool CharacterProperties::IsCharacterPropertyHandle( sal_Int32 nHandle )
