@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GridProperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:50:24 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:01:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,12 +93,11 @@ void lcl_addDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
 {
     ::chart::LineProperties::AddDefaultsToMap( rOutMap );
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_GRID_SHOW ));
-    rOutMap[ PROP_GRID_SHOW ] = uno::makeAny( sal_False );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_GRID_SHOW, false );
 
     // override other defaults
-    rOutMap[ ::chart::LineProperties::PROP_LINE_COLOR ] =
-        uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) );  // gray30
+    ::chart::PropertyHelper::setPropertyValue< sal_Int32 >(
+        rOutMap, ::chart::LineProperties::PROP_LINE_COLOR, 0xb3b3b3 );  // gray30
 }
 
 const Sequence< Property > & lcl_getPropertySequence()
@@ -207,11 +206,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL
 
     return xInfo;
     // \--
-}
-
-::osl::Mutex & GridProperties::GetMutex()
-{
-    return m_aMutex;
 }
 
 // ____ XCloneable ____
