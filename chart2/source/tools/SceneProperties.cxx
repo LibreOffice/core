@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SceneProperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:44:41 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:10:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,9 +340,6 @@ void SceneProperties::AddPropertiesToVector(
 void SceneProperties::AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    uno::Any aTrue( sal_True );
-    uno::Any aFalse( sal_False );
-
     // Identity Matrix
     drawing::HomogenMatrix aMtx;
     aMtx.Line1.Column1 = aMtx.Line2.Column2 =
@@ -352,62 +349,57 @@ void SceneProperties::AddDefaultsToMap(
         aMtx.Line3.Column1 = aMtx.Line3.Column2 = aMtx.Line3.Column4 =
         aMtx.Line4.Column1 = aMtx.Line4.Column2 = aMtx.Line4.Column3 = 0.0;
 
-    rOutMap[ PROP_SCENE_TRANSF_MATRIX ] = uno::makeAny( aMtx );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_TRANSF_MATRIX, aMtx );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_SCENE_DISTANCE, 4200 );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_SCENE_FOCAL_LENGTH, 8000 );
 
-    sal_Int32 nDefaultDistance = 4200;
-    rOutMap[ PROP_SCENE_DISTANCE ] = uno::makeAny( nDefaultDistance );
+//     PROP_SCENE_SHADOW_SLANT;
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_SHADE_MODE, drawing::ShadeMode_SMOOTH );
 
-    sal_Int32 nDefaultFocalLength = 8000;
-    rOutMap[ PROP_SCENE_FOCAL_LENGTH ] = uno::makeAny( nDefaultFocalLength );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >(
+        rOutMap, PROP_SCENE_AMBIENT_COLOR, ChartTypeHelper::getDefaultAmbientLightColor(ThreeDLookScheme_Simple,0));
 
-//     rOutMap[ PROP_SCENE_SHADOW_SLANT ];
-
-    rOutMap[ PROP_SCENE_SHADE_MODE ] = uno::makeAny( drawing::ShadeMode_SMOOTH );
-
-    sal_Int32 nDefaultAmbientColor = ChartTypeHelper::getDefaultAmbientLightColor(ThreeDLookScheme_Simple,0);
-    rOutMap[ PROP_SCENE_AMBIENT_COLOR ] = uno::makeAny( nDefaultAmbientColor );
-
-    rOutMap[ PROP_SCENE_TWO_SIDED_LIGHTING ] = aTrue;
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_TWO_SIDED_LIGHTING, true );
 
     drawing::Position3D vrp( 0.0, 0.0, 1.0 );
     drawing::Direction3D vpn( 0.0, 0.0, 1.0 );
     drawing::Direction3D vup( 0.0, 1.0, 0.0 );
     drawing::CameraGeometry aDefaultCameraGeometry( vrp, vpn, vup );
-    rOutMap[ PROP_SCENE_CAMERA_GEOMETRY ] = uno::makeAny( aDefaultCameraGeometry );
 
-    rOutMap[ PROP_SCENE_PERSPECTIVE ] = uno::makeAny( drawing::ProjectionMode_PERSPECTIVE );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_CAMERA_GEOMETRY, aDefaultCameraGeometry );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_PERSPECTIVE, drawing::ProjectionMode_PERSPECTIVE );
 
     // Light Sources
     // -------------
-    rOutMap[ PROP_SCENE_LIGHT_ON_1 ] = aFalse;
-    rOutMap[ PROP_SCENE_LIGHT_ON_2 ] = aTrue;
-    rOutMap[ PROP_SCENE_LIGHT_ON_3 ] = aFalse;
-    rOutMap[ PROP_SCENE_LIGHT_ON_4 ] = aFalse;
-    rOutMap[ PROP_SCENE_LIGHT_ON_5 ] = aFalse;
-    rOutMap[ PROP_SCENE_LIGHT_ON_6 ] = aFalse;
-    rOutMap[ PROP_SCENE_LIGHT_ON_7 ] = aFalse;
-    rOutMap[ PROP_SCENE_LIGHT_ON_8 ] = aFalse;
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_1, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_2, true );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_3, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_4, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_5, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_6, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_7, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_8, false );
 
     uno::Any aDefaultLightDirection( uno::makeAny( drawing::Direction3D( 0.0, 0.0, 1.0 ) ) );
-    rOutMap[ PROP_SCENE_LIGHT_DIRECTION_1 ] = aDefaultLightDirection;
-    rOutMap[ PROP_SCENE_LIGHT_DIRECTION_2 ] = uno::makeAny( ChartTypeHelper::getDefaultSimpleLightDirection(0) );
-    rOutMap[ PROP_SCENE_LIGHT_DIRECTION_3 ] = aDefaultLightDirection;
-    rOutMap[ PROP_SCENE_LIGHT_DIRECTION_4 ] = aDefaultLightDirection;
-    rOutMap[ PROP_SCENE_LIGHT_DIRECTION_5 ] = aDefaultLightDirection;
-    rOutMap[ PROP_SCENE_LIGHT_DIRECTION_6 ] = aDefaultLightDirection;
-    rOutMap[ PROP_SCENE_LIGHT_DIRECTION_7 ] = aDefaultLightDirection;
-    rOutMap[ PROP_SCENE_LIGHT_DIRECTION_8 ] = aDefaultLightDirection;
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_DIRECTION_1, aDefaultLightDirection );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_DIRECTION_2, ChartTypeHelper::getDefaultSimpleLightDirection(0));
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_DIRECTION_3, aDefaultLightDirection );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_DIRECTION_4, aDefaultLightDirection );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_DIRECTION_5, aDefaultLightDirection );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_DIRECTION_6, aDefaultLightDirection );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_DIRECTION_7, aDefaultLightDirection );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_DIRECTION_8, aDefaultLightDirection );
 
     uno::Any aDefaultLightColor;
     aDefaultLightColor <<= ChartTypeHelper::getDefaultDirectLightColor(ThreeDLookScheme_Simple,0);
-    rOutMap[ PROP_SCENE_LIGHT_COLOR_1 ] = aDefaultLightColor;
-    rOutMap[ PROP_SCENE_LIGHT_COLOR_2 ] = aDefaultLightColor;
-    rOutMap[ PROP_SCENE_LIGHT_COLOR_3 ] = aDefaultLightColor;
-    rOutMap[ PROP_SCENE_LIGHT_COLOR_4 ] = aDefaultLightColor;
-    rOutMap[ PROP_SCENE_LIGHT_COLOR_5 ] = aDefaultLightColor;
-    rOutMap[ PROP_SCENE_LIGHT_COLOR_6 ] = aDefaultLightColor;
-    rOutMap[ PROP_SCENE_LIGHT_COLOR_7 ] = aDefaultLightColor;
-    rOutMap[ PROP_SCENE_LIGHT_COLOR_8 ] = aDefaultLightColor;
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_COLOR_1, aDefaultLightColor );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_COLOR_2, aDefaultLightColor );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_COLOR_3, aDefaultLightColor );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_COLOR_4, aDefaultLightColor );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_COLOR_5, aDefaultLightColor );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_COLOR_6, aDefaultLightColor );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_COLOR_7, aDefaultLightColor );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_COLOR_8, aDefaultLightColor );
 }
 
 } //  namespace chart
