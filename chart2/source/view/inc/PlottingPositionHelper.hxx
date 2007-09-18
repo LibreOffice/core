@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:19:45 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:11:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,6 +222,8 @@ public:
             transformAngleRadiusToScene( double fLogicValueOnAngleAxis, double fLogicValueOnRadiusAxis, double fLogicZ, bool bDoScaling=true ) const;
     ::com::sun::star::drawing::Position3D
             transformUnitCircleToScene( double fUnitAngleDegree, double fUnitRadius, double fLogicZ, bool bDoScaling=true ) const;
+
+    using PlottingPositionHelper::transformScaledLogicToScene;
 
     double  getInnerLogicRadius() const;
     double  getOuterLogicRadius() const;
