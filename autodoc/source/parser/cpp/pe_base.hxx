@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_base.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:22:30 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,8 @@
 #include <ary/cpp/c_idlist.hxx>
 
 
-namespace cpp {
+namespace cpp
+{
 
 class PE_Type;
 
@@ -127,11 +128,8 @@ PE_Base::CurObject()
     { return aBaseIds.back(); }
 
 
+
+
+
 }   // namespace cpp
-
-
-
-
 #endif
-
-
