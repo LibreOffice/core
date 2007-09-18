@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StockChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:36:02 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:07:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,18 +134,10 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME ));
-    rOutMap[ PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME ] =
-        uno::makeAny( false );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_STOCKCHARTTYPE_TEMPLATE_OPEN ));
-    rOutMap[ PROP_STOCKCHARTTYPE_TEMPLATE_OPEN ] =
-        uno::makeAny( false );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH ));
-    rOutMap[ PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH ] =
-        uno::makeAny( true );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE ));
-    rOutMap[ PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE ] =
-        uno::makeAny( false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_OPEN, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_LOW_HIGH, true );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE, false );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
