@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Legend.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:39:39 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:02:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,6 +165,7 @@ protected:
 
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent();
+    using OPropertySet::disposing;
 
     void fireModifyEvent();
 
