@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FillProperties.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:57:12 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:08:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,21 +249,11 @@ void lcl_AddPropertiesToVector_only_BitmapProperties( ::std::vector< ::com::sun:
 void lcl_AddDefaultsToMap_without_BitmapProperties(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_STYLE ));
-    rOutMap[ FillProperties::PROP_FILL_STYLE ] =
-        uno::makeAny( drawing::FillStyle_SOLID );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_COLOR ));
-    rOutMap[ FillProperties::PROP_FILL_COLOR ] =
-        uno::makeAny( sal_Int32( 0xd9d9d9 ) ); // gray85
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_TRANSPARENCE ));
-    rOutMap[ FillProperties::PROP_FILL_TRANSPARENCE ] =
-        uno::makeAny( sal_Int16( 0 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_GRADIENT_STEPCOUNT ));
-    rOutMap[ FillProperties::PROP_FILL_GRADIENT_STEPCOUNT ] =
-        uno::makeAny( sal_Int16( 0 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BACKGROUND ));
-    rOutMap[ FillProperties::PROP_FILL_BACKGROUND ] =
-        uno::makeAny( sal_Bool( sal_False ) );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, FillProperties::PROP_FILL_STYLE, drawing::FillStyle_SOLID );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, FillProperties::PROP_FILL_COLOR, 0xd9d9d9 ); // gray85
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_TRANSPARENCE, 0 );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_GRADIENT_STEPCOUNT, 0 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, FillProperties::PROP_FILL_BACKGROUND, false );
 }
 
 void lcl_AddDefaultsToMap_only_BitmapProperties(
@@ -272,27 +262,16 @@ void lcl_AddDefaultsToMap_only_BitmapProperties(
     uno::Any aSalInt16Zero = uno::makeAny( sal_Int16( 0 ));
     uno::Any aSalInt32SizeDefault = uno::makeAny( sal_Int32( 0 ));
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_OFFSETX ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_OFFSETX ] = aSalInt16Zero;
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_OFFSETY ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_OFFSETY ] = aSalInt16Zero;
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX ] = aSalInt16Zero;
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY ] = aSalInt16Zero;
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT ] =
-        uno::makeAny( drawing::RectanglePoint_MIDDLE_MIDDLE );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_LOGICALSIZE ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_LOGICALSIZE ] =
-        uno::makeAny( true );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_SIZEX ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_SIZEX ] = aSalInt32SizeDefault;
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_SIZEY ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_SIZEY ] = aSalInt32SizeDefault;
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( FillProperties::PROP_FILL_BITMAP_MODE ));
-    rOutMap[ FillProperties::PROP_FILL_BITMAP_MODE ] =
-        uno::makeAny( drawing::BitmapMode_REPEAT );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_OFFSETX, 0 );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_OFFSETY, 0 );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETX, 0 );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_BITMAP_POSITION_OFFSETY, 0 );
+
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, FillProperties::PROP_FILL_BITMAP_RECTANGLEPOINT, drawing::RectanglePoint_MIDDLE_MIDDLE );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, FillProperties::PROP_FILL_BITMAP_LOGICALSIZE, true );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, FillProperties::PROP_FILL_BITMAP_SIZEX, 0 );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, FillProperties::PROP_FILL_BITMAP_SIZEY, 0 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, FillProperties::PROP_FILL_BITMAP_MODE, drawing::BitmapMode_REPEAT );
 }
 
 }//end anonymous namespace
