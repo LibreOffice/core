@@ -4,9 +4,9 @@
 #
 #   $RCSfile: fullcpp.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:10:59 $
+#   last change: $Author: vg $ $Date: 2007-09-18 14:06:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,27 +39,24 @@
 # Has to be included AFTER settings.mk !
 
 
-
-.IF "$(GUI)"=="WNT"
-
 # RTTI
+.IF "$(GUI)"=="WNT"
 CFLAGS+= -GR
-
-.IF "$(NP_LOCALBUILD)"!=""
-
-# Precompiled Headers
-PCH_NAME=  autodoc
-.IF "$(debug)"==""
-CFLAGS+= -YX"precomp.h" -Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pch
-.ELSE
-CFLAGS+= -YX"precomp.h" -Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pcd -DNP_LOCALBUILD
 .ENDIF
-
-.ENDIF
-
-.ENDIF
-
-.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD"
+.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || $(COM) == "GCC"
 CFLAGSCXX+= -frtti
 .ENDIF
 
+
+
+# Precompiled Headers
+.IF "$(NP_LOCALBUILD)"!="" && "$(GUI)"=="WNT"
+
+PCH_NAME=autodoc
+.IF "$(debug)"==""
+CFLAGS+= -YX"precomp.h" -Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pch
+.ELSE
+CFLAGS+= -YX"precomp.h" -Fp$(PRJ)$/$(INPATH)$/misc$/$(PCH_NAME).pcd
+.ENDIF
+
+.ENDIF  # "$(NP_LOCALBUILD)"!="" && "$(GUI)"=="WNT"
