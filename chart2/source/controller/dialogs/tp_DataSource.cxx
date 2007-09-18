@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_DataSource.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:36:56 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:54:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,6 +340,9 @@ DataSourceTabPage::DataSourceTabPage(
     m_aLB_ROLE.SetWindowBits( WB_HSCROLL | WB_CLIPCHILDREN );
     m_aLB_ROLE.SetSelectionMode( SINGLE_SELECTION );
     m_aLB_ROLE.SetSelectHdl( LINK( this, DataSourceTabPage, RoleSelectionChangedHdl ));
+
+    m_aEDT_RANGE.SetKeyInputHdl( LINK( this, DataSourceTabPage, MainRangeButtonClickedHdl ));
+    m_aEDT_CATEGORIES.SetKeyInputHdl( LINK( this, DataSourceTabPage, CategoriesRangeButtonClickedHdl ));
 
     m_aIMB_RANGE_MAIN.SetClickHdl( LINK( this, DataSourceTabPage, MainRangeButtonClickedHdl ));
     m_aIMB_RANGE_CAT.SetClickHdl( LINK( this, DataSourceTabPage, CategoriesRangeButtonClickedHdl ));
@@ -880,10 +883,13 @@ void DataSourceTabPage::listeningFinished(
     m_rDialogModel.getRangeSelectionHelper()->stopRangeListening();
 
     // change edit field
-    if( m_pCurrentRangeChoosingField != 0 )
-        m_pCurrentRangeChoosingField->SetText( String( aRange ));
     ToTop();
     GrabFocus();
+    if( m_pCurrentRangeChoosingField )
+    {
+        m_pCurrentRangeChoosingField->SetText( String( aRange ));
+        m_pCurrentRangeChoosingField->GrabFocus();
+    }
 
     if( m_pCurrentRangeChoosingField == & m_aEDT_RANGE )
     {
