@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:35:37 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:04:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,12 +97,8 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_BAR_TEMPLATE_DIMENSION ));
-    rOutMap[ PROP_BAR_TEMPLATE_DIMENSION ] =
-        uno::makeAny( sal_Int32( 2 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_BAR_TEMPLATE_GEOMETRY3D ));
-    rOutMap[ PROP_BAR_TEMPLATE_GEOMETRY3D ] =
-        uno::makeAny( chart2::DataPointGeometry3D::CUBOID );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_BAR_TEMPLATE_DIMENSION, 2 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_BAR_TEMPLATE_GEOMETRY3D, ::chart2::DataPointGeometry3D::CUBOID );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
