@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:21:03 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:57:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,75 +56,126 @@
 namespace chart
 {
 
-class PropertyHelper
+typedef int tPropertyValueMapKey;
+
+typedef ::std::map< tPropertyValueMapKey, ::com::sun::star::uno::Any >
+    tPropertyValueMap;
+
+namespace PropertyHelper
 {
-public:
-    static void copyProperties(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & xSource,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet > & xDestination
-        );
 
-    /** adds a line dash with a unique name to the gradient obtained by the given
-        factory.
+void copyProperties(
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet > & xSource,
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet > & xDestination
+    );
 
-        @return The name used for storing this element in the table
-     */
-    static ::rtl::OUString addLineDashUniqueNameToTable(
-        const ::com::sun::star::uno::Any & rValue,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & xFact,
-        const ::rtl::OUString & rPreferredName );
+/** adds a line dash with a unique name to the gradient obtained by the given
+    factory.
 
-    /** adds a gradient with a unique name to the gradient obtained by the given
-        factory.
+    @return The name used for storing this element in the table
+*/
+::rtl::OUString addLineDashUniqueNameToTable(
+    const ::com::sun::star::uno::Any & rValue,
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::lang::XMultiServiceFactory > & xFact,
+    const ::rtl::OUString & rPreferredName );
 
-        @return The name used for storing this element in the table
-     */
-    static ::rtl::OUString addGradientUniqueNameToTable(
-        const ::com::sun::star::uno::Any & rValue,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & xFact,
-        const ::rtl::OUString & rPreferredName );
+/** adds a gradient with a unique name to the gradient obtained by the given
+    factory.
 
-    /** adds a transparency gradient with a unique name to the gradient obtained
-        by the given factory.
+    @return The name used for storing this element in the table
+*/
+::rtl::OUString addGradientUniqueNameToTable(
+    const ::com::sun::star::uno::Any & rValue,
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::lang::XMultiServiceFactory > & xFact,
+    const ::rtl::OUString & rPreferredName );
 
-        @return The name used for storing this element in the table
-     */
-    static ::rtl::OUString addTransparencyGradientUniqueNameToTable(
-        const ::com::sun::star::uno::Any & rValue,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & xFact,
-        const ::rtl::OUString & rPreferredName );
+/** adds a transparency gradient with a unique name to the gradient obtained
+    by the given factory.
 
-    /** adds a hatch with a unique name to the gradient obtained by the given
-        factory.
+    @return The name used for storing this element in the table
+*/
+::rtl::OUString addTransparencyGradientUniqueNameToTable(
+    const ::com::sun::star::uno::Any & rValue,
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::lang::XMultiServiceFactory > & xFact,
+    const ::rtl::OUString & rPreferredName );
 
-        @return The name used for storing this element in the table
-     */
-    static ::rtl::OUString addHatchUniqueNameToTable(
-        const ::com::sun::star::uno::Any & rValue,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & xFact,
-        const ::rtl::OUString & rPreferredName );
+/** adds a hatch with a unique name to the gradient obtained by the given
+    factory.
 
-    /** adds a bitmap with a unique name to the gradient obtained by the given
-        factory.
+    @return The name used for storing this element in the table
+*/
+::rtl::OUString addHatchUniqueNameToTable(
+    const ::com::sun::star::uno::Any & rValue,
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::lang::XMultiServiceFactory > & xFact,
+    const ::rtl::OUString & rPreferredName );
 
-        @return The name used for storing this element in the table
-     */
-    static ::rtl::OUString addBitmapUniqueNameToTable(
-        const ::com::sun::star::uno::Any & rValue,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > & xFact,
-        const ::rtl::OUString & rPreferredName );
+/** adds a bitmap with a unique name to the gradient obtained by the given
+    factory.
 
-private:
-    // not implemented
-    PropertyHelper();
-};
+    @return The name used for storing this element in the table
+*/
+::rtl::OUString addBitmapUniqueNameToTable(
+    const ::com::sun::star::uno::Any & rValue,
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::lang::XMultiServiceFactory > & xFact,
+    const ::rtl::OUString & rPreferredName );
+
+// --------------------------------------------------------------------------------
+
+/** Set a property to a certain value in the given map.  This works for
+    properties that are already set, and those which are not yet in the map.
+
+    @param any is the value encapsulated in the variant type Any
+ */
+void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key,
+                          const ::com::sun::star::uno::Any & rAny );
+
+/** Set a property to a certain value in the given map.  This works for
+    properties that are already set, and those which are not yet in the map.
+
+    @param value is the value of type Value that will be put into a variant type
+        Any before set in the property map.
+ */
+template< typename Value >
+    void setPropertyValue( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const Value & value )
+{
+    setPropertyValueAny( rOutMap, key, ::com::sun::star::uno::makeAny( value ));
+}
+
+template<>
+    void setPropertyValue< ::com::sun::star::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const ::com::sun::star::uno::Any & rAny );
+
+void setPropertyValueDefaultAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const ::com::sun::star::uno::Any & rAny );
+
+/** Calls setPropertyValue() but asserts that the given property hasn't been set
+    before.
+ */
+template< typename Value >
+    void setPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const Value & value )
+{
+    setPropertyValueDefaultAny( rOutMap, key, ::com::sun::star::uno::makeAny( value ));
+}
+
+/** Calls setPropertyValue() but asserts that the given property hasn't been set
+    before.
+ */
+template<>
+    void setPropertyValueDefault< ::com::sun::star::uno::Any >( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const ::com::sun::star::uno::Any & rAny );
+
+/** Calls setPropertyValueDefault() with an empty Any as value
+ */
+void setEmptyPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key );
+
+
+} // namespace PropertyHelper
+
+// ================================================================================
 
 struct PropertyNameLess
 {
@@ -161,9 +212,6 @@ struct PropertyValueNameEquals : public ::std::unary_function< ::com::sun::star:
 private:
     ::rtl::OUString m_aName;
 };
-
-typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any >
-    tPropertyValueMap;
 
 } //  namespace chart
 
