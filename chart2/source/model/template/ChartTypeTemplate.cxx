@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:53:40 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:05:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -454,7 +454,7 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
     sal_Bool bPercent = (getStackMode(0) == StackMode_Y_STACKED_PERCENT);
     if( bPercent )
     {
-        Sequence< Reference< chart2::XAxis > > aAxisSeq( AxisHelper::getAllAxisOfDiagram( xDiagram ) );
+        Sequence< Reference< chart2::XAxis > > aAxisSeq( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
         for( sal_Int32 i=0; i<aAxisSeq.getLength(); ++i )
         {
             if( 1== AxisHelper::getDimensionIndexOfAxis( aAxisSeq[i], xDiagram ) )
