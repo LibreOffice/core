@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MultipleChartConverters.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:41:26 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:56:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ AllAxisItemConverter::AllAxisItemConverter(
         : MultipleItemConverter( rItemPool )
 {
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
-    Sequence< Reference< XAxis > > aElementList( AxisHelper::getAllAxisOfDiagram( xDiagram ) );
+    Sequence< Reference< XAxis > > aElementList( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
     for( sal_Int32 nA = 0; nA < aElementList.getLength(); nA++ )
     {
         uno::Reference< beans::XPropertySet > xObjectProperties(aElementList[nA], uno::UNO_QUERY);
