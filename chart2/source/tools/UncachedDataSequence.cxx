@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UncachedDataSequence.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:01:02 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:10:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,8 +296,7 @@ void SAL_CALL UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const uno
 ::sal_Int32 SAL_CALL UncachedDataSequence::getCount()
     throw (uno::RuntimeException)
 {
-    // IMPLEMENT !!!
-    throw uno::RuntimeException();
+    OSL_ENSURE( false, "Implement!" );
     return 0;
 }
 
@@ -306,8 +305,7 @@ uno::Any SAL_CALL UncachedDataSequence::getByIndex( ::sal_Int32 )
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    // IMPLEMENT !!!
-    throw uno::RuntimeException();
+    OSL_ENSURE( false, "Implement!" );
     return uno::Any();
 }
 
