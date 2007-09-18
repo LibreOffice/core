@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeHelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:55:51 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:07:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,6 +343,33 @@ sal_Int32 ChartTypeHelper::getAxisType( const uno::Reference<
     return AxisType::CATEGORY;
 }
 
+sal_Int32 ChartTypeHelper::getNumberOfDisplayedSeries(
+    const uno::Reference< XChartType >& xChartType,
+    sal_Int32 nNumberOfSeries )
+{
+    if( xChartType.is() )
+    {
+        try
+        {
+            rtl::OUString aChartTypeName = xChartType->getChartType();
+            if( aChartTypeName.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE))
+            {
+                uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY_THROW );
+                bool bDonut = false;
+                if( (xChartTypeProp->getPropertyValue( C2U("UseRings")) >>= bDonut)
+                    && !bDonut )
+                {
+                    return 1;
+                }
+            }
+        }
+        catch( const uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+    }
+    return nNumberOfSeries;
+}
 //.............................................................................
 } //namespace chart
 //.............................................................................
