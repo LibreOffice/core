@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Scale.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:37:32 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:55:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,6 +275,14 @@ int SchScaleYAxisTabPage::DeactivatePage(SfxItemSet* pItemSet)
     }
 
     sal_uInt32 nIndex = pNumFormatter->GetStandardIndex(LANGUAGE_SYSTEM);
+    const SfxPoolItem *pPoolItem = NULL;
+    if( GetItemSet().GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, TRUE, &pPoolItem ) == SFX_ITEM_SET )
+        nIndex = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
+    else
+    {
+        OSL_ENSURE( false, "Using Standard Language" );
+    }
+
     Edit* pEdit = NULL;
     USHORT nErrStrId = 0;
     double fDummy;
@@ -370,6 +378,16 @@ void SchScaleYAxisTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
     aFmtFldMin.SetFormatter( pNumFormatter );
     aFmtFldStepMain.SetFormatter( pNumFormatter );
     aFmtFldOrigin.SetFormatter( pNumFormatter );
+
+    // #101318#, #i6278# allow more decimal places than the output format.  As
+    // the numbers shown in the edit fields are used for input, it makes more
+    // sense to display the values in the input format rather than the output
+    // format.
+    aFmtFldMax.UseInputStringForFormatting();
+    aFmtFldMin.UseInputStringForFormatting();
+    aFmtFldStepMain.UseInputStringForFormatting();
+    aFmtFldOrigin.UseInputStringForFormatting();
+
     SetNumFormat();
 }
 
@@ -380,35 +398,23 @@ void SchScaleYAxisTabPage::SetNumFormat()
     if( GetItemSet().GetItemState( SID_ATTR_NUMBERFORMAT_VALUE, TRUE, &pPoolItem ) == SFX_ITEM_SET )
     {
         ULONG nFmt = (ULONG)((const SfxInt32Item*)pPoolItem)->GetValue();
-        short eType = pNumFormatter->GetType( nFmt );
-
-        // change nFmt to an editable format (without loss of information)
-        if( eType == NUMBERFORMAT_CURRENCY )    // for currencies just display decimals
-        {
-            nFmt = pNumFormatter->GetStandardIndex();
-        }
-        else
-        {
-            const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
-            if( pFormat )
-            {
-                LanguageType eLanguage = pFormat->GetLanguage();
-                nFmt = pNumFormatter->GetStandardFormat( nFmt, eType, eLanguage );
-            }
-            // else: format is 'standard'
-        }
 
         aFmtFldMax.SetFormatKey( nFmt );
         aFmtFldMin.SetFormatKey( nFmt );
         aFmtFldOrigin.SetFormatKey( nFmt );
 
         // for steps use standard format if date or time format is chosen
+        short eType = pNumFormatter->GetType( nFmt );
         if( pNumFormatter &&
             ( eType == NUMBERFORMAT_DATE ||
               eType == NUMBERFORMAT_TIME ||
               eType == NUMBERFORMAT_DATETIME ) )
         {
-            nFmt = pNumFormatter->GetStandardIndex();
+            const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
+            if( pFormat )
+                nFmt = pNumFormatter->GetStandardFormat( pFormat->GetLanguage());
+            else
+                nFmt = pNumFormatter->GetStandardIndex();
         }
 
         aFmtFldStepMain.SetFormatKey( nFmt );
