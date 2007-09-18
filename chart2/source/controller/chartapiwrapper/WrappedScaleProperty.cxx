@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedScaleProperty.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:33:01 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:53:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include "macros.hxx"
 #include "Scaling.hxx"
 #include "CommonConverters.hxx"
+#include "AxisHelper.hxx"
 
 #ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
 #include <com/sun/star/chart2/XAxis.hpp>
@@ -49,10 +50,6 @@
 #endif
 #ifndef _COM_SUN_STAR_CHART2_EXPLICITSCALEDATA_HPP_
 #include <com/sun/star/chart2/ExplicitScaleData.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
-#include <com/sun/star/lang/XServiceName.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -266,11 +263,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
         {
             if( rOuterValue >>= bBool )
             {
-                Reference< lang::XServiceName > xServiceName( aScaleData.Scaling, uno::UNO_QUERY );
-                bool bWasLogarithm =
-                    ( xServiceName.is() &&
-                      (xServiceName->getServiceName()).equals(
-                          C2U( "com.sun.star.chart2.LogarithmicScaling" )));
+                bool bWasLogarithm = AxisHelper::isLogarithmic( aScaleData.Scaling );
 
                 // safe comparison between sal_Bool and bool
                 if( (!bBool) != (!bWasLogarithm) )
@@ -429,10 +422,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
         }
         case SCALE_PROP_LOGARITHMIC:
         {
-            Reference< lang::XServiceName > xServiceName( aScaleData.Scaling, uno::UNO_QUERY );
-            aRet <<= static_cast< sal_Bool >( xServiceName.is() &&
-                  (xServiceName->getServiceName()).equals(
-                      C2U( "com.sun.star.chart2.LogarithmicScaling" )));
+            aRet <<= static_cast< sal_Bool >( AxisHelper::isLogarithmic(aScaleData.Scaling) );
             break;
         }
         default:
