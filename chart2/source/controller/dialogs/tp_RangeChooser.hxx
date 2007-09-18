@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_RangeChooser.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:37:20 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include "RangeSelectionListener.hxx"
 #include "RangeSelectionButton.hxx"
 #include "TabPageNotifiable.hxx"
+#include "RangeEdit.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
@@ -107,7 +108,7 @@ protected: //member
 
     FixedText       m_aFT_Caption;
     FixedText       m_aFT_Range;
-    Edit            m_aED_Range;
+    RangeEdit       m_aED_Range;
     RangeSelectionButton     m_aIB_Range;
 
     RadioButton     m_aRB_Rows;
