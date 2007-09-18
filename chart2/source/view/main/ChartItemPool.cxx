@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartItemPool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:05:43 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:12:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,7 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_AXIS_DUMMY2          - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_DUMMY2,0);
     ppPoolDefaults[SCHATTR_AXIS_DUMMY3          - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_DUMMY3,0);
 
-    ppPoolDefaults[SCHATTR_SYMBOL_BRUSH         - SCHATTR_START] = new SvxBrushItem(SCHATTR_SYMBOL_BRUSH, SCHATTR_SYMBOL_BRUSH);
+    ppPoolDefaults[SCHATTR_SYMBOL_BRUSH         - SCHATTR_START] = new SvxBrushItem(SCHATTR_SYMBOL_BRUSH);
 
     ppPoolDefaults[SCHATTR_STOCK_VOLUME         - SCHATTR_START] = new SfxBoolItem(SCHATTR_STOCK_VOLUME,0);
     ppPoolDefaults[SCHATTR_STOCK_UPDOWN         - SCHATTR_START] = new SfxBoolItem(SCHATTR_STOCK_UPDOWN,0);
