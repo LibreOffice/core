@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeries.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:49:44 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:00:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,12 +254,9 @@ uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
         CharacterProperties::AddDefaultsToMap( aStaticDefaults );
 
         float fDefaultCharHeight = 6.0;
-        aStaticDefaults[ ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT ] =
-            uno::makeAny( fDefaultCharHeight );
-        aStaticDefaults[ ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT ] =
-            uno::makeAny( fDefaultCharHeight );
-        aStaticDefaults[ ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT ] =
-            uno::makeAny( fDefaultCharHeight );
+        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_CHAR_HEIGHT, fDefaultCharHeight );
+        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultCharHeight );
+        ::chart::PropertyHelper::setPropertyValue( aStaticDefaults, ::chart::CharacterProperties::PROP_CHAR_COMPLEX_CHAR_HEIGHT, fDefaultCharHeight );
     }
 
     tPropertyValueMap::const_iterator aFound(
