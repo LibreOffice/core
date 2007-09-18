@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_tag.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:48:57 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 13:59:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,10 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_autodoc.hxx"
-
 
 #include <precomp.h>
 #include "hfi_tag.hxx"
@@ -273,7 +269,14 @@ HF_IdlDocuTextDisplay::Display_TextToken( const csi::dsapi::DT_TextToken & i_rTo
         }
     }   // endif (bGatherLink)
 
-    CurOut() << new Xml::XmlCode( i_rToken.GetText() ) << " ";
+//DBG    CurOut() << new Xml::XmlCode( i_rToken.GetText() ) << " ";
+    CurOut() << new Xml::XmlCode( i_rToken.GetText() );
+}
+
+void
+HF_IdlDocuTextDisplay::Display_White()
+{
+    CurOut() << " ";
 }
 
 void
@@ -288,8 +291,7 @@ HF_IdlDocuTextDisplay::Display_MupType( const csi::dsapi::DT_MupType & i_rToken 
         if (bGatherLink)
         {
             CreateTypeLink();
-            CurOut()
-                << " ";
+// DBG      CurOut() << " ";
             StopLinkGathering();
         }
     }
@@ -307,8 +309,7 @@ HF_IdlDocuTextDisplay::Display_MupMember( const csi::dsapi::DT_MupMember & i_rTo
         if (bGatherLink)
         {
             CreateMemberLink();
-            CurOut()
-                << " ";
+// DBG      CurOut() << " ";
             StopLinkGathering();
         }
     }
@@ -320,8 +321,7 @@ HF_IdlDocuTextDisplay::Display_MupConst( const csi::dsapi::DT_MupConst & i_rToke
     CurOut()
         >> *new Html::Bold
            << i_rToken.GetText();
-    CurOut()
-        << " ";
+// DBG      CurOut() << " ";
 }
 
 void
