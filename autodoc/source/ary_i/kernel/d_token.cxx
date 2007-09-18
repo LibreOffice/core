@@ -4,9 +4,9 @@
  *
  *  $RCSfile: d_token.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:39:08 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 13:49:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_autodoc.hxx"
-
-
 #include <precomp.h>
 #include <ary_i/d_token.hxx>
 
@@ -58,6 +54,9 @@ DT_Dsapi::IsWhiteOnly() const
     return false;
 }
 
+DT_TextToken::~DT_TextToken()
+{
+}
 
 void
 DT_TextToken::DisplayAt( DocumentationDisplay & o_rDisplay ) const
@@ -77,10 +76,34 @@ DT_TextToken::IsWhiteOnly() const
     return true;
 }
 
+DT_White::~DT_White()
+{
+}
+
+void
+DT_White::DisplayAt( DocumentationDisplay & o_rDisplay ) const
+{
+    o_rDisplay.Display_White();
+}
+
+bool
+DT_White::IsWhiteOnly() const
+{
+    return true;
+}
+
+DT_MupType::~DT_MupType()
+{
+}
+
 void
 DT_MupType::DisplayAt( DocumentationDisplay & o_rDisplay ) const
 {
     o_rDisplay.Display_MupType( *this );
+}
+
+DT_MupMember::~DT_MupMember()
+{
 }
 
 void
@@ -89,16 +112,28 @@ DT_MupMember::DisplayAt( DocumentationDisplay & o_rDisplay ) const
     o_rDisplay.Display_MupMember( *this );
 }
 
+DT_MupConst::~DT_MupConst()
+{
+}
+
 void
 DT_MupConst::DisplayAt( DocumentationDisplay & o_rDisplay ) const
 {
     o_rDisplay.Display_MupConst( *this );
 }
 
+DT_Style::~DT_Style()
+{
+}
+
 void
 DT_Style::DisplayAt( DocumentationDisplay & o_rDisplay ) const
 {
     o_rDisplay.Display_Style( *this );
+}
+
+DT_EOL::~DT_EOL()
+{
 }
 
 void
@@ -113,10 +148,18 @@ DT_EOL::IsWhiteOnly() const
     return true;
 }
 
+DT_StdAtTag::~DT_StdAtTag()
+{
+}
+
 void
 DT_StdAtTag::DisplayAt( DocumentationDisplay & o_rDisplay ) const
 {
     o_rDisplay.Display_StdAtTag( *this );
+}
+
+DT_SeeAlsoAtTag::~DT_SeeAlsoAtTag()
+{
 }
 
 void
@@ -125,10 +168,18 @@ DT_SeeAlsoAtTag::DisplayAt( DocumentationDisplay & o_rDisplay ) const
     o_rDisplay.Display_SeeAlsoAtTag( *this );
 }
 
+DT_ParameterAtTag::~DT_ParameterAtTag()
+{
+}
+
 void
 DT_ParameterAtTag::DisplayAt( DocumentationDisplay & o_rDisplay ) const
 {
     o_rDisplay.Display_ParameterAtTag( *this );
+}
+
+DT_SinceAtTag::~DT_SinceAtTag()
+{
 }
 
 void
@@ -139,7 +190,6 @@ DT_SinceAtTag::DisplayAt( DocumentationDisplay & o_rDisplay ) const
 
 
 
+
 }   // namespace dsapi
 }   // namespace csi
-
-
