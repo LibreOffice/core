@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tk_docw2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:57:24 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:26:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,17 @@ class Tok_EOF : public Token
     // INQUIRY
     virtual const char* Text() const;
 };
+
+class Tok_White : public Token
+{
+  public:
+    // OPERATIONS
+    virtual void        Trigger(
+                            TokenInterpreter &  io_rInterpreter ) const;
+    // INQUIRY
+    virtual const char* Text() const;
+};
+
 
 
 }   // namespace dsapi
