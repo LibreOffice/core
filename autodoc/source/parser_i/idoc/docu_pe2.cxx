@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docu_pe2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:09:31 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:25:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,10 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_autodoc.hxx"
-
 
 #include <precomp.h>
 #include <s2_dsapi/docu_pe2.hxx>
@@ -331,6 +327,11 @@ SapiDocu_PE::Process_EOL()
     (this->*fCurTokenAddFunction)(*new DT_EOL);
 }
 
+void
+SapiDocu_PE::Process_White()
+{
+    (this->*fCurTokenAddFunction)(*new DT_White);
+}
 
 DYN ary::info::CodeInformation *
 SapiDocu_PE::ReleaseJustParsedDocu()
@@ -387,6 +388,12 @@ SapiDocu_PE::AddDocuToken2CurAtTag( DYN ary::info::DocuToken & let_drNewToken )
 void
 SapiDocu_PE::SetCurParameterAtTagName( DYN ary::info::DocuToken & let_drNewToken )
 {
+    if (let_drNewToken.IsWhiteOnly())
+    {
+        delete &let_drNewToken;
+        return;
+    }
+
     csv_assert(pCurAtTag);
     DT_TextToken * dpText = dynamic_cast< DT_TextToken* >(&let_drNewToken);
     if (dpText != 0)
@@ -401,6 +408,13 @@ void
 SapiDocu_PE::SetCurSeeAlsoAtTagLinkText( DYN ary::info::DocuToken & let_drNewToken )
 {
     csv_assert(pCurAtTag);
+
+    if (let_drNewToken.IsWhiteOnly())
+    {
+        delete &let_drNewToken;
+        return;
+    }
+
     DT_TextToken * pText = dynamic_cast< DT_TextToken* >(&let_drNewToken);
     if (pText != 0)
         pCurAtTag->SetName(pText->GetText());
@@ -441,6 +455,13 @@ void
 SapiDocu_PE::SetCurSeeAlsoAtTagLinkText_2( DYN ary::info::DocuToken & let_drNewToken )
 {
     csv_assert(pCurAtTag);
+
+    if (let_drNewToken.IsWhiteOnly())
+    {
+        delete &let_drNewToken;
+        return;
+    }
+
     DT_TextToken *
         pText = dynamic_cast< DT_TextToken* >(&let_drNewToken);
     if (pText != 0)
@@ -463,6 +484,11 @@ SapiDocu_PE::SetCurSeeAlsoAtTagLinkText_3( DYN ary::info::DocuToken & let_drNewT
 {
     csv_assert(pCurAtTag);
 
+    if (let_drNewToken.IsWhiteOnly())
+    {
+        delete &let_drNewToken;
+        return;
+    }
 
     /// Could emit warning, but don't because this parser is obsolete.
 //  Tok_XmlLink_BeginTag *
@@ -512,8 +538,14 @@ SapiDocu_PE::AddDocuToken2SinceAtTag( DYN ary::info::DocuToken & let_drNewToken 
     if (pToken != 0)
     {
         String & sValue = pCurAtTag->Access_Text().Access_TextOfFirstToken();
-        StreamLock sHelp(100);
-        sValue = sHelp() << sValue << " " << pToken->GetText() << c_str;
+        StreamLock sHelp(1000);
+        sValue = sHelp() << sValue << pToken->GetText() << c_str;
+    }
+    else if (dynamic_cast< DT_White* >(&let_drNewToken) != 0)
+    {
+        String & sValue = pCurAtTag->Access_Text().Access_TextOfFirstToken();
+        StreamLock sHelp(1000);
+        sValue = sHelp() << sValue << " " << c_str;
     }
 
       delete &let_drNewToken;
