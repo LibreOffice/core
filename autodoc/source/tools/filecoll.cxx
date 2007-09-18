@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filecoll.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:17:41 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_autodoc.hxx"
 
 #include <precomp.h>
 #include <tools/filecoll.hxx>
