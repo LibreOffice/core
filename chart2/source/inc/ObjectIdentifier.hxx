@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectIdentifier.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:20:51 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:57:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,6 +151,12 @@ public:
                     ::com::sun::star::frame::XModel >& xChartModel
         , sal_Int32 nSubIndex = -1 );//-1: main grid, 0: first subgrid etc
 
+    static rtl::OUString createClassifiedIdentifierForAxis(
+          const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::chart2::XAxis >& xAxis
+        , const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::frame::XModel >& xChartModel );
+
     static rtl::OUString createParticleForDiagram(
           const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XDiagram >& xDiagram
@@ -268,6 +274,8 @@ public:
         , ::com::sun::star::awt::Point& rMaximumPosition );
 
     static TitleHelper::eTitleType getTitleTypeForCID( const ::rtl::OUString& rCID );
+
+    static ::rtl::OUString getMovedSeriesCID( const ::rtl::OUString& rObjectCID, sal_Bool bForward );
 };
 
 //.............................................................................
