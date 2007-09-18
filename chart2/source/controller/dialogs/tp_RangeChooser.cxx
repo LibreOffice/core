@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_RangeChooser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:37:07 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:54:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,7 @@ RangeChooserTabPage::RangeChooserTabPage( Window* pParent
     // button here, and in the worst case nothing happens when it is pressed.
     // Not nice, but I see no better solution for the moment.
     m_aIB_Range.SetClickHdl( LINK( this, RangeChooserTabPage, ChooseRangeHdl ));
+    m_aED_Range.SetKeyInputHdl( LINK( this, RangeChooserTabPage, ChooseRangeHdl ));
 
     // #i75179# enable setting the background to a different color
     m_aED_Range.SetStyle( m_aED_Range.GetStyle() | WB_FORCECTRLBACKGROUND );
@@ -377,9 +378,10 @@ void RangeChooserTabPage::listeningFinished( const ::rtl::OUString & rNewRange )
     m_rDialogModel.getRangeSelectionHelper()->stopRangeListening();
 
     //update dialog state
-    m_aED_Range.SetText( String( aRange ) );
     ToTop();
     GrabFocus();
+    m_aED_Range.SetText( String( aRange ) );
+    m_aED_Range.GrabFocus();
 
     setDirty();
     if( isValid())
