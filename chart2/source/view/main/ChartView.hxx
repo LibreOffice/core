@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:06:07 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:12:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,11 @@
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
+#endif
+
+// header for class SfxListener
+#ifndef _SFXLSTNER_HXX
+#include <svtools/lstner.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
@@ -119,6 +124,7 @@ class ChartView : public ::cppu::WeakImplHelper8<
         ,::com::sun::star::beans::XPropertySet
         >
         , public ExplicitValueProvider
+        , private SfxListener
 {
 public:
     ChartView(::com::sun::star::uno::Reference<
@@ -168,6 +174,9 @@ public:
     virtual void SAL_CALL modified(
         const ::com::sun::star::lang::EventObject& aEvent )
         throw (::com::sun::star::uno::RuntimeException);
+
+    //SfxListener
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     //-----------------------------------------------------------------
     // ::com::sun::star::util::XModeChangeBroadcaster
@@ -257,6 +266,8 @@ private: //member
     sal_Int32 m_nScaleXDenominator;
     sal_Int32 m_nScaleYNumerator;
     sal_Int32 m_nScaleYDenominator;
+
+    sal_Bool m_bSdrViewIsInEditMode;
 };
 
 //.............................................................................
