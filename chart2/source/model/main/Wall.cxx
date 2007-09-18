@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Wall.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:51:58 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:03:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,7 @@ void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
     // override other defaults
-    rOutMap[ ::chart::LineProperties::PROP_LINE_STYLE ] =
-        uno::makeAny( drawing::LineStyle_NONE );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LineProperties::PROP_LINE_STYLE, drawing::LineStyle_NONE );
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()
