@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BaseCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:48:55 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:59:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "SwapXAndYAxis" ),
                   PROP_COORDINATESYSTEM_SWAPXANDYAXIS,
-                  ::getCppuType( reinterpret_cast< const sal_Bool * >(0)),
+                  ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 }
@@ -86,8 +86,7 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_COORDINATESYSTEM_SWAPXANDYAXIS ));
-    rOutMap[ PROP_COORDINATESYSTEM_SWAPXANDYAXIS ] = uno::makeAny( false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_COORDINATESYSTEM_SWAPXANDYAXIS, false );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
