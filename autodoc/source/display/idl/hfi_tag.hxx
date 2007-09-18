@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_tag.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:56:03 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 13:59:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,8 @@ class HF_IdlDocuTextDisplay : public HtmlFactory_Idl,
     virtual void        Display_TextToken(
                             const csi::dsapi::DT_TextToken &
                                                 i_rToken );
+    virtual void        Display_White();
+
     virtual void        Display_MupType(
                             const csi::dsapi::DT_MupType &
                                                 i_rToken );
