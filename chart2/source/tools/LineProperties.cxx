@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LineProperties.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:00:52 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:08:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,21 +118,11 @@ void LineProperties::AddPropertiesToVector(
 void LineProperties::AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINE_STYLE ));
-    rOutMap[ PROP_LINE_STYLE ] =
-        uno::makeAny( drawing::LineStyle_SOLID );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINE_WIDTH ));
-    rOutMap[ PROP_LINE_WIDTH ] =
-        uno::makeAny( sal_Int32( 0 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINE_COLOR ));
-    rOutMap[ PROP_LINE_COLOR ] =
-        uno::makeAny( sal_Int32( 0x000000 ) );  // black
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINE_TRANSPARENCE ));
-    rOutMap[ PROP_LINE_TRANSPARENCE ] =
-        uno::makeAny( sal_Int16( 0 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LINE_JOINT ));
-    rOutMap[ PROP_LINE_JOINT ] =
-        uno::makeAny( drawing::LineJoint_NONE );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_STYLE, drawing::LineStyle_SOLID );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINE_WIDTH, 0 );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINE_COLOR, 0x000000 );  // black
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_LINE_TRANSPARENCE, 0 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_JOINT, drawing::LineJoint_NONE );
 }
 
 //static
