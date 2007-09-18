@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Title.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:51:45 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:03:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,41 +189,23 @@ void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
     // ParagraphProperties
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TITLE_PARA_ADJUST ));
-    rOutMap[ PROP_TITLE_PARA_ADJUST ] =
-        uno::makeAny( ::com::sun::star::style::ParagraphAdjust_CENTER );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_PARA_ADJUST,
+                                                      ::com::sun::star::style::ParagraphAdjust_CENTER );
     // PROP_TITLE_PARA_LAST_LINE_ADJUST
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TITLE_PARA_LEFT_MARGIN ));
-    rOutMap[ PROP_TITLE_PARA_LEFT_MARGIN ] =
-        uno::makeAny( sal_Int32( 0 ));
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TITLE_PARA_RIGHT_MARGIN ));
-    rOutMap[ PROP_TITLE_PARA_RIGHT_MARGIN ] =
-        uno::makeAny( sal_Int32( 0 ));
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TITLE_PARA_TOP_MARGIN ));
-    rOutMap[ PROP_TITLE_PARA_TOP_MARGIN ] =
-        uno::makeAny( sal_Int32( 0 ));
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TITLE_PARA_BOTTOM_MARGIN ));
-    rOutMap[ PROP_TITLE_PARA_BOTTOM_MARGIN ] =
-        uno::makeAny( sal_Int32( 0 ));
-
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TITLE_PARA_IS_HYPHENATION ));
-    rOutMap[ PROP_TITLE_PARA_IS_HYPHENATION ] =
-        uno::makeAny( sal_True );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_LEFT_MARGIN, 0 );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_RIGHT_MARGIN, 0 );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_TOP_MARGIN, 0 );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_TITLE_PARA_BOTTOM_MARGIN, 0 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_PARA_IS_HYPHENATION, true );
 
     // own properties
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TITLE_TEXT_ROTATION ));
-    rOutMap[ PROP_TITLE_TEXT_ROTATION ] =
-        uno::makeAny( double( 0.0 ) );
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_TITLE_TEXT_STACKED ));
-    rOutMap[ PROP_TITLE_TEXT_STACKED ] =
-        uno::makeAny( sal_Bool( sal_False ) );
+    ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_TITLE_TEXT_ROTATION, 0.0 );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_TITLE_TEXT_STACKED, false );
 
     // override other defaults
-    rOutMap[ ::chart::FillProperties::PROP_FILL_STYLE ] =
-        uno::makeAny( drawing::FillStyle_NONE );
-    rOutMap[ ::chart::LineProperties::PROP_LINE_STYLE ] =
-        uno::makeAny( drawing::LineStyle_NONE );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE );
+    ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LineProperties::PROP_LINE_STYLE, drawing::LineStyle_NONE );
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()
