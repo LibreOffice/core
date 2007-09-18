@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:22:04 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 15:12:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 
 #include "PlotterBase.hxx"
 #include "VDataSeries.hxx"
-#include "PropertyMapper.hxx"
 #include "LabelAlignment.hxx"
 #include "MinimumAndMaximumSupplier.hxx"
 #include "LegendEntryProvider.hxx"
