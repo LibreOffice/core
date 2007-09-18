@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AxisHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:11:49 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:57:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,9 @@ public:
     static ::com::sun::star::chart2::ScaleData createDefaultScale();
 
     static void removeExplicitScaling( ::com::sun::star::chart2::ScaleData& rScaleData );
+
+    static bool isLogarithmic( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XScaling >& xScaling );
 
     static ::com::sun::star::uno::Reference<
            ::com::sun::star::chart2::XAxis >
@@ -170,16 +173,25 @@ public:
                     ::com::sun::star::chart2::XDiagram >& xDiagram
             , sal_Int32& rOutCooSysIndex, sal_Int32& rOutDimensionIndex, sal_Int32& rOutAxisIndex );
 
+    /** @param bOnlyVisible if </TRUE>, only axes with property "Show" set to
+               </TRUE> are returned
+     */
     static ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XAxis > >
-            getAllAxisOfDiagram( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XDiagram >& xDiagram );
+            getAllAxesOfDiagram( const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::chart2::XDiagram >& xDiagram
+            , bool bOnlyVisible = false );
+
+    /** @param bOnlyVisible if </TRUE>, only axes with property "Show" set to
+               </TRUE> are returned
+     */
     static std::vector<
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XAxis > >
-            getAllAxisOfCoordinateSystem( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::chart2::XCoordinateSystem >& xCooSys );
+            getAllAxesOfCoordinateSystem( const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::chart2::XCoordinateSystem >& xCooSys
+            , bool bOnlyVisible = false );
 
     static ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Reference<
