@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tk_docw2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:15:08 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:25:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_autodoc.hxx"
 
 #include <precomp.h>
 #include <s2_dsapi/tk_docw2.hxx>
@@ -109,6 +106,19 @@ Tok_EOF::Text() const
 {
     return "";
 }
+
+void
+Tok_White::Trigger( TokenInterpreter &  io_rInterpreter ) const
+{
+    io_rInterpreter.Process_White();
+}
+
+const char *
+Tok_White::Text() const
+{
+    return " ";
+}
+
 
 
 
