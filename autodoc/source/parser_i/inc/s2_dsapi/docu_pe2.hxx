@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docu_pe2.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:09:44 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@ class SapiDocu_PE : public TokenInterpreter
     virtual void        Process_Comma();
     virtual void        Process_DocuEnd();
     virtual void        Process_EOL();
+    virtual void        Process_White();
 
 
     DYN ary::info::CodeInformation *
