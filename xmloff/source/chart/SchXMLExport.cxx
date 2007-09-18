@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:06:32 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:51:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1784,27 +1784,30 @@ void SchXMLExportHelper::exportAxes(
 
     // write axis element also if the axis itself is not visible, but a grid or
     // title
-    if( bHasXAxis ||
-        bHasXAxisTitle || bHasXAxisMajorGrid || bHasXAxisMinorGrid ||
-        mbHasCategoryLabels )
+    Reference< chart::XAxisXSupplier > xAxisXSupp( xDiagram, uno::UNO_QUERY );
+    if( xAxisXSupp.is())
     {
-        Reference< chart::XAxisXSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
-        if( xAxisSupp.is())
+        bool bHasAxisProperties = false;
+        // get property states for autostyles
+        if( mxExpPropMapper.is())
         {
-            // get property states for autostyles
-            if( mxExpPropMapper.is())
+            xPropSet = xAxisXSupp->getXAxis();
+            if( xPropSet.is())
             {
-                xPropSet = xAxisSupp->getXAxis();
-                if( xPropSet.is())
-                {
-                    Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
-                    aNumAny >>= nNumberFormat;
-                    if( nNumberFormat != -1 )
-                        mrExport.addDataStyle( nNumberFormat );
+                bHasAxisProperties = true;
+                Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
+                aNumAny >>= nNumberFormat;
+                if( nNumberFormat != -1 )
+                    mrExport.addDataStyle( nNumberFormat );
 
-                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-                }
+                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
             }
+        }
+
+        if( bHasXAxis ||
+            bHasXAxisTitle || bHasXAxisMajorGrid || bHasXAxisMinorGrid ||
+            mbHasCategoryLabels || bHasAxisProperties )
+        {
             if( bExportContent )
             {
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_X );
@@ -1825,7 +1828,7 @@ void SchXMLExportHelper::exportAxes(
             // axis-title
             if( bHasXAxisTitle )
             {
-                Reference< beans::XPropertySet > xTitleProp( xAxisSupp->getXAxisTitle(), uno::UNO_QUERY );
+                Reference< beans::XPropertySet > xTitleProp( xAxisXSupp->getXAxisTitle(), uno::UNO_QUERY );
                 if( xTitleProp.is())
                 {
                     aPropertyStates = mxExpPropMapper->Filter( xTitleProp );
@@ -1882,7 +1885,7 @@ void SchXMLExportHelper::exportAxes(
             }
 
             // grid
-            Reference< beans::XPropertySet > xMajorGrid( xAxisSupp->getXMainGrid(), uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xMajorGrid( xAxisXSupp->getXMainGrid(), uno::UNO_QUERY );
             if( bHasXAxisMajorGrid && xMajorGrid.is())
             {
                 aPropertyStates = mxExpPropMapper->Filter( xMajorGrid );
@@ -1898,7 +1901,7 @@ void SchXMLExportHelper::exportAxes(
                 }
                 aPropertyStates.clear();
             }
-            Reference< beans::XPropertySet > xMinorGrid( xAxisSupp->getXHelpGrid(), uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xMinorGrid( xAxisXSupp->getXHelpGrid(), uno::UNO_QUERY );
             if( bHasXAxisMinorGrid && xMinorGrid.is())
             {
                 aPropertyStates = mxExpPropMapper->Filter( xMinorGrid );
@@ -1925,13 +1928,13 @@ void SchXMLExportHelper::exportAxes(
     // secondary x axis
     if( bHasSecondaryXAxis )
     {
-        Reference< chart::XTwoAxisXSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
-        if( xAxisSupp.is())
+        Reference< chart::XTwoAxisXSupplier > xAxisTwoXSupp( xDiagram, uno::UNO_QUERY );
+        if( xAxisTwoXSupp.is())
         {
             // get property states for autostyles
             if( mxExpPropMapper.is())
             {
-                xPropSet = xAxisSupp->getSecondaryXAxis();
+                xPropSet = xAxisTwoXSupp->getSecondaryXAxis();
                 if( xPropSet.is())
                 {
                     Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
@@ -1968,26 +1971,29 @@ void SchXMLExportHelper::exportAxes(
 
     // write axis element also if the axis itself is not visible, but a grid or
     // title
-    if( bHasYAxis ||
-        bHasYAxisTitle || bHasYAxisMajorGrid || bHasYAxisMinorGrid )
+    Reference< chart::XAxisYSupplier > xAxisYSupp( xDiagram, uno::UNO_QUERY );
+    if( xAxisYSupp.is())
     {
-        Reference< chart::XAxisYSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
-        if( xAxisSupp.is())
+        bool bHasAxisProperties = false;
+        // get property states for autostyles
+        if( mxExpPropMapper.is())
         {
-            // get property states for autostyles
-            if( mxExpPropMapper.is())
+            xPropSet = xAxisYSupp->getYAxis();
+            if( xPropSet.is())
             {
-                xPropSet = xAxisSupp->getYAxis();
-                if( xPropSet.is())
-                {
-                    Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
-                    aNumAny >>= nNumberFormat;
-                    if( nNumberFormat != -1 )
-                        mrExport.addDataStyle( nNumberFormat );
+                bHasAxisProperties = true;
+                Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
+                aNumAny >>= nNumberFormat;
+                if( nNumberFormat != -1 )
+                    mrExport.addDataStyle( nNumberFormat );
 
-                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-                }
+                aPropertyStates = mxExpPropMapper->Filter( xPropSet );
             }
+        }
+
+        if( bHasYAxis ||
+            bHasYAxisTitle || bHasYAxisMajorGrid || bHasYAxisMinorGrid || bHasAxisProperties )
+        {
             if( bExportContent )
             {
                 mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DIMENSION, XML_Y );
@@ -2004,7 +2010,7 @@ void SchXMLExportHelper::exportAxes(
             // axis-title
             if( bHasYAxisTitle )
             {
-                Reference< beans::XPropertySet > xTitleProp( xAxisSupp->getYAxisTitle(), uno::UNO_QUERY );
+                Reference< beans::XPropertySet > xTitleProp( xAxisYSupp->getYAxisTitle(), uno::UNO_QUERY );
                 if( xTitleProp.is())
                 {
                     aPropertyStates = mxExpPropMapper->Filter( xTitleProp );
@@ -2034,7 +2040,7 @@ void SchXMLExportHelper::exportAxes(
             }
 
             // grid
-            Reference< beans::XPropertySet > xMajorGrid( xAxisSupp->getYMainGrid(), uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xMajorGrid( xAxisYSupp->getYMainGrid(), uno::UNO_QUERY );
             if( bHasYAxisMajorGrid && xMajorGrid.is())
             {
                 aPropertyStates = mxExpPropMapper->Filter( xMajorGrid );
@@ -2052,7 +2058,7 @@ void SchXMLExportHelper::exportAxes(
                 aPropertyStates.clear();
             }
             // minor grid
-            Reference< beans::XPropertySet > xMinorGrid( xAxisSupp->getYHelpGrid(), uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xMinorGrid( xAxisYSupp->getYHelpGrid(), uno::UNO_QUERY );
             if( bHasYAxisMinorGrid && xMinorGrid.is())
             {
                 aPropertyStates = mxExpPropMapper->Filter( xMinorGrid );
@@ -2076,15 +2082,16 @@ void SchXMLExportHelper::exportAxes(
             }
         }
     }
+
     if( bHasSecondaryYAxis )
     {
-        Reference< chart::XTwoAxisYSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
-        if( xAxisSupp.is())
+        Reference< chart::XTwoAxisYSupplier > xAxisTwoYSupp( xDiagram, uno::UNO_QUERY );
+        if( xAxisTwoYSupp.is())
         {
             // get property states for autostyles
             if( mxExpPropMapper.is())
             {
-                xPropSet = xAxisSupp->getSecondaryYAxis();
+                xPropSet = xAxisTwoYSupp->getSecondaryYAxis();
                 if( xPropSet.is())
                 {
                     Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
@@ -2121,13 +2128,13 @@ void SchXMLExportHelper::exportAxes(
     if( bHasZAxis &&
         bIs3DChart )
     {
-        Reference< chart::XAxisZSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
-        if( xAxisSupp.is())
+        Reference< chart::XAxisZSupplier > xAxisZSupp( xDiagram, uno::UNO_QUERY );
+        if( xAxisZSupp.is())
         {
             // get property states for autostyles
             if( mxExpPropMapper.is())
             {
-                xPropSet = xAxisSupp->getZAxis();
+                xPropSet = xAxisZSupp->getZAxis();
                 if( xPropSet.is())
                 {
                     Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
@@ -2155,7 +2162,7 @@ void SchXMLExportHelper::exportAxes(
             // axis-title
             if( bHasZAxisTitle )
             {
-                Reference< beans::XPropertySet > xTitleProp( xAxisSupp->getZAxisTitle(), uno::UNO_QUERY );
+                Reference< beans::XPropertySet > xTitleProp( xAxisZSupp->getZAxisTitle(), uno::UNO_QUERY );
                 if( xTitleProp.is())
                 {
                     aPropertyStates = mxExpPropMapper->Filter( xTitleProp );
@@ -2185,7 +2192,7 @@ void SchXMLExportHelper::exportAxes(
             }
 
             // grid
-            Reference< beans::XPropertySet > xMajorGrid( xAxisSupp->getZMainGrid(), uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xMajorGrid( xAxisZSupp->getZMainGrid(), uno::UNO_QUERY );
             if( bHasZAxisMajorGrid && xMajorGrid.is())
             {
                 aPropertyStates = mxExpPropMapper->Filter( xMajorGrid );
@@ -2203,7 +2210,7 @@ void SchXMLExportHelper::exportAxes(
                 aPropertyStates.clear();
             }
             // minor grid
-            Reference< beans::XPropertySet > xMinorGrid( xAxisSupp->getZHelpGrid(), uno::UNO_QUERY );
+            Reference< beans::XPropertySet > xMinorGrid( xAxisZSupp->getZHelpGrid(), uno::UNO_QUERY );
             if( bHasZAxisMinorGrid && xMinorGrid.is())
             {
                 aPropertyStates = mxExpPropMapper->Filter( xMinorGrid );
