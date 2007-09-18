@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:24:43 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:50:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,7 +398,8 @@ DBG_NAME(FormattedField);
     ,m_dSpinFirst(-1000000)         \
     ,m_dSpinLast(1000000)           \
     ,m_bTreatAsNumber(TRUE)         \
-    ,m_pLastOutputColor(NULL)
+    ,m_pLastOutputColor(NULL)       \
+    ,m_bUseInputStringForFormatting(false)
 
 //------------------------------------------------------------------------------
 FormattedField::FormattedField(Window* pParent, WinBits nStyle, SvNumberFormatter* pInitialFormatter, INT32 nFormatKey)
@@ -479,7 +480,14 @@ void FormattedField::SetTextFormatted(const XubString& rStr)
     m_sCurrentTextValue = rStr;
 
     String sFormatted;
-    ImplGetFormatter()->GetOutputString(m_sCurrentTextValue, m_nFormatKey, sFormatted, &m_pLastOutputColor);
+    double dNumber = 0.0;
+    // IsNumberFormat changes the format key parameter
+    sal_uInt32 nTempFormatKey = static_cast< sal_uInt32 >( m_nFormatKey );
+    if( IsUsingInputStringForFormatting() &&
+        ImplGetFormatter()->IsNumberFormat(m_sCurrentTextValue, nTempFormatKey, dNumber) )
+        ImplGetFormatter()->GetInputLineString(dNumber, m_nFormatKey, sFormatted);
+    else
+        ImplGetFormatter()->GetOutputString(m_sCurrentTextValue, m_nFormatKey, sFormatted, &m_pLastOutputColor);
 
     // calculate the new selection
     Selection aSel(GetSelection());
@@ -1024,7 +1032,10 @@ void FormattedField::ImplSetValue(double dVal, BOOL bForce)
     }
     else
     {
-        ImplGetFormatter()->GetOutputString(dVal, m_nFormatKey, sNewText, &m_pLastOutputColor);
+        if( IsUsingInputStringForFormatting())
+            ImplGetFormatter()->GetInputLineString(dVal, m_nFormatKey, sNewText);
+        else
+            ImplGetFormatter()->GetOutputString(dVal, m_nFormatKey, sNewText, &m_pLastOutputColor);
     }
 
     ImplSetTextImpl(sNewText, NULL);
@@ -1156,6 +1167,19 @@ void FormattedField::Last()
 
     SpinField::Last();
 }
+
+//------------------------------------------------------------------------------
+void FormattedField::UseInputStringForFormatting( bool bUseInputStr /* = true */ )
+{
+    m_bUseInputStringForFormatting = bUseInputStr;
+}
+
+//------------------------------------------------------------------------------
+bool FormattedField::IsUsingInputStringForFormatting() const
+{
+    return m_bUseInputStringForFormatting;
+}
+
 
 //==============================================================================
 //------------------------------------------------------------------------------
