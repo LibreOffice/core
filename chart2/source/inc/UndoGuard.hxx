@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UndoGuard.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:47:36 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:58:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,17 @@ public:
         , const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xModel );
     virtual ~UndoLiveUpdateGuardWithData();
+};
+
+class UndoGuardWithSelection : public UndoGuard_Base
+{
+public:
+    explicit UndoGuardWithSelection( const rtl::OUString& rUndoMessage
+        , const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XUndoManager > & xUndoManager
+        , const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel > & xModel );
+    virtual ~UndoGuardWithSelection();
 };
 
 }
