@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_TextEdit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:43:49 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:56:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,12 @@ void ChartController::StartTextEdit()
     //pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pStyleSheetPool);
     //pOutliner->SetDefaultLanguage( eLang );
     //pOutliner->SetHyphenator( xHyphenator );
+
+    //#i77362 change notification for changes on additional shapes are missing
+    uno::Reference< beans::XPropertySet > xChartViewProps( m_xChartView, uno::UNO_QUERY );
+    if( xChartViewProps.is() )
+        xChartViewProps->setPropertyValue( C2U("SdrViewIsInEditMode"), uno::makeAny(sal_True) );
+
     sal_Bool bEdit = m_pDrawViewWrapper->SdrBeginTextEdit( pTextObj
                     , m_pDrawViewWrapper->GetPageView()
                     , m_pChartWindow
@@ -138,6 +144,12 @@ void ChartController::StartTextEdit()
 bool ChartController::EndTextEdit()
 {
     m_pDrawViewWrapper->SdrEndTextEdit();
+
+    //#i77362 change notification for changes on additional shapes are missing
+    uno::Reference< beans::XPropertySet > xChartViewProps( m_xChartView, uno::UNO_QUERY );
+    if( xChartViewProps.is() )
+        xChartViewProps->setPropertyValue( C2U("SdrViewIsInEditMode"), uno::makeAny(sal_False) );
+
     SdrObject* pTextObject = m_pDrawViewWrapper->getTextEditObject();
     if(!pTextObject)
         return false;
