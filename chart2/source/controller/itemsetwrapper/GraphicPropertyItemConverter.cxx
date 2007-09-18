@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicPropertyItemConverter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:35:04 $
+ *  last change: $Author: vg $ $Date: 2007-09-18 14:55:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -682,7 +682,6 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     bChanged = true;
                 }
             }
-            break;
         }
         break;
 
