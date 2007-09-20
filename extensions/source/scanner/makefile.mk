@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 20:36:35 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:27:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ SLOFILES+=\
                 $(SLO)$/scanwin.obj		
 .ENDIF
 
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(GUI)" =="OS2"
 SLOFILES+=\
                 $(SLO)$/sane.obj		\
                 $(SLO)$/sanedlg.obj		\
