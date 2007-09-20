@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alloca.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:46:27 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef INCLUDED_SAL_ALLOCA_H
 #define INCLUDED_SAL_ALLOCA_H
 
-#if defined (SOLARIS) || defined (LINUX) || defined (IRIX)
+#if defined (SOLARIS) || defined (LINUX) || defined (IRIX) || defined(__EMX__)
 
 #ifndef INCLUDED_ALLOCA_H
 #include <alloca.h>
