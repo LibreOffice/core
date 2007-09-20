@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 13:58:25 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:36:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@ ENABLE_EXCEPTIONS = TRUE
 NO_BSYMBOLIC = TRUE
 USE_PCH :=
 ENABLE_PCH :=
+
+.IF "$(GUI)"=="OS2"
+TARGET = deplgui
+.ENDIF
 
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
