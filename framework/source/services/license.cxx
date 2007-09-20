@@ -4,9 +4,9 @@
  *
  *  $RCSfile: license.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:16:26 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:29:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ static const char *szLicensePath = "/share/readme";
 #ifdef UNX
 static const char *szUNXLicenseName = "/LICENSE";
 static const char *szUNXLicenseExt = "";
-#elif defined WNT
+#elif defined(WNT) || defined(OS2)
 static const char *szWNTLicenseName = "/license";
 static const char *szWNTLicenseExt = ".txt";
 #endif
@@ -319,7 +319,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
                 aLangString += aLocale.Variant;
             }
         }
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
         OUString aLicensePath =
             aBaseInstallPath + OUString::createFromAscii(szLicensePath)
             + OUString::createFromAscii(szWNTLicenseName)
