@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg_test.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:18:49 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:26:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,7 +280,7 @@ SAL_IMPLEMENT_MAIN()
         OSL_VERIFY( xContext->getValueByName( OUSTR("/singletons/com.sun.star.bootstrap.theTestComponent0") ) >>= x );
 
         ::fprintf( stderr, "> registering service...\n", n );
-#if defined(SAL_W32)
+#if defined(SAL_W32) || defined(SAL_OS2)
         OUString libName( OUSTR("cfg_test.dll") );
 #elif defined(SAL_UNX)
         OUString libName( OUSTR("libcfg_test.so") );
