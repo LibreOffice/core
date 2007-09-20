@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:32:40 $
+#   last change: $Author: vg $ $Date: 2007-09-20 16:34:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,10 +53,11 @@ APP1TARGET= rsc
 APP1STDLIBS=$(TOOLSLIB) $(I18NISOLANGLIB) $(VOSLIB) $(SALLIB) # $(RTLLIB)
 APP1LIBS=   $(LB)$/rsctoo.lib
 APP1OBJS=   $(OBJ)$/start.obj
-
+.IF "$(GUI)" != "OS2"
 # why not this way?
 APP1STACK=64000
 #APP1STACK=32768
+.ENDIF
 
 APP2TARGET= rsc2
 .IF "$(OS)"=="SCO"
@@ -72,10 +73,11 @@ APP2LIBS=   $(LB)$/rsctoo.lib \
             $(LB)$/rscrsc.lib \
             $(LB)$/rscmis.lib
 APP2OBJS=   $(OBJ)$/gui.obj
-
+.IF "$(GUI)" != "OS2"
 # why not this way?
 APP2STACK=64000
 #APP2STACK=32768
+.ENDIF
 
 # --- Targets ------------------------------------------------------------
 
