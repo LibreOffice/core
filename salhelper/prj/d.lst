@@ -10,7 +10,7 @@ mkdir: %_DEST%\inc%_EXT%\salhelper
 ..\inc\salhelper\simplereferenceobject.hxx %_DEST%\inc%_EXT%\salhelper\simplereferenceobject.hxx
 ..\inc\salhelper\singletonref.hxx %_DEST%\inc%_EXT%\salhelper\singletonref.hxx
 
-..\%__SRC%\bin\salhelper*.dll %_DEST%\bin%_EXT%\salhelper*.dll
+..\%__SRC%\bin\salhelp*.dll %_DEST%\bin%_EXT%\salhelp*.dll
 ..\%__SRC%\lib\*salhelper*.lib %_DEST%\lib%_EXT%\*
 
 ..\%__SRC%\lib\libuno_salhelper*.*.* %_DEST%\lib%_EXT%\*
