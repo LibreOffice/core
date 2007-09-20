@@ -1,6 +1,6 @@
 /* $RCSfile: make.c,v $
--- $Revision: 1.9 $
--- last change: $Author: obo $ $Date: 2007-06-12 06:06:24 $
+-- $Revision: 1.10 $
+-- last change: $Author: vg $ $Date: 2007-09-20 14:33:30 $
 --
 -- SYNOPSIS
 --      Perform the update of all outdated targets.
@@ -1615,7 +1615,39 @@ int  map;
 
    if( Trace ) return;
 
+#ifdef __EMX__
+   // YD libc06 response files requires one argument per line
+   // write each argument on a new line
+   {
+      char* quote;
+      int   quote_flag = 0;
+      char* tok = strtok( cmnd, " \t\n\r");
+      while( tok) {
+         if (strlen(tok)>0) {
+            fputs(tok, tmpfile);
+            // check for a single quote ": if found, do not write newline until next quote
+            // but add a white space.
+            // double quotes in token doesn't need special handling.
+            quote = strchr( tok, '\"');
+            if (quote) {
+                // check if single
+                if (!strchr( quote+1, '\"'))
+                    quote_flag = 1 - quote_flag;
+            }
+            if (quote_flag == 0)
+                fputc('\n', tmpfile);
+            else
+                fputc(' ', tmpfile);
+         }
+         tok = strtok( NULL, " \t\n\r");
+      }
+      // remove newline, otherwise we get two of them!
+      newline = 0;
+   }
+#else
    fputs(cmnd, tmpfile);
+#endif
+
    if( newline ) fputc('\n', tmpfile);
    fflush(tmpfile);
 
