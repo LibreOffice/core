@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 11:13:02 $
+#   last change: $Author: vg $ $Date: 2007-09-20 16:33:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,18 @@ $(MISC)$/$(SHL1TARGET).def: makefile.mk
 .ENDIF
     @echo EXPORTS                                   >>$@
     @echo     StartInvader    @22                    >>$@
+
+.ENDIF
+.IF "$(GUI)"=="OS2"
+
+$(MISC)$/$(SHL1TARGET).def: makefile.mk $(MISC)$/$(SHL1TARGET).flt
+    @+echo -------------------------------------------
+    @+echo DEF-File erstellen $@
+        @+echo LIBRARY     $(DLLNAME) INITINSTANCE TERMINSTANCE   >$@
+        @+echo DESCRIPTION 'Star Cube DLL'               >>$@
+        @+echo DATA                MULTIPLE  >>$@
+        @+echo EXPORTS                                   >>$@
+        @+echo     _StartInvader    @22                    >>$@
 
 .ENDIF
 
