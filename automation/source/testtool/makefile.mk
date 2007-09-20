@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-11 08:55:39 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:45:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ $(MISC)$/xfilter.pl : filter.pl
 
 .IF "$(GUI)"=="UNX"
 INIFILE=$(BIN)$/testtoolrc
-.ELIF "$(GUI)"=="WNT"
+.ELIF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 INIFILE=$(BIN)$/testtool.ini
 .END
 
