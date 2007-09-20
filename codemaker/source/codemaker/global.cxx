@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:39:13 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:50:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ OString createFileNameFromType( const OString& destination,
             continue;
         }
 
-#ifdef SAL_UNX
+#if defined(SAL_UNX) || defined(SAL_OS2)
         if (mkdir((char*)nameBuffer.getStr(), 0777) == -1)
 #else
         if (mkdir((char*)nameBuffer.getStr()) == -1)
