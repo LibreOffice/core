@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:01:40 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 11:48:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1574,6 +1574,11 @@ void CalcCntnt( SwLayoutFrm *pLay,
         SwAnchoredObject* pAgainObj1 = 0;
         SwAnchoredObject* pAgainObj2 = 0;
 
+        // FME 2007-08-30 #i81146# new loop control
+        USHORT nLoopControlRuns = 0;
+        const USHORT nLoopControlMax = 20;
+        const SwFrm* pLoopControlCond = 0;
+
         SwFrm* pLast;
         do
         {
@@ -1623,13 +1628,14 @@ void CalcCntnt( SwLayoutFrm *pLay,
             SwFlowFrm* pTmpPrevFlowFrm = pTmpPrev && pTmpPrev->IsFlowFrm() ? SwFlowFrm::CastFlowFrm(pTmpPrev) : 0;
             SwFlowFrm* pTmpFlowFrm     = pFrm->IsFlowFrm() ? SwFlowFrm::CastFlowFrm(pFrm) : 0;
 
-            const bool bPrevInvalid = pTmpPrevFlowFrm && pTmpFlowFrm &&
-                                     !pTmpFlowFrm->IsFollow() &&
-                                     !pTmpFlowFrm->IsJoinLocked() &&
-                                     !pTmpPrev->GetValidPosFlag() &&
-                                      pLay->IsAnLower( pTmpPrev ) &&
-                                      pTmpPrevFlowFrm->IsKeep( *pTmpPrev->GetAttrSet() ) &&
-                                      pTmpPrevFlowFrm->IsKeepFwdMoveAllowed();
+            bool bPrevInvalid = pTmpPrevFlowFrm && pTmpFlowFrm &&
+                               !pTmpFlowFrm->IsFollow() &&
+                               !StackHack::IsLocked() && // #i76382#
+                               !pTmpFlowFrm->IsJoinLocked() &&
+                               !pTmpPrev->GetValidPosFlag() &&
+                                pLay->IsAnLower( pTmpPrev ) &&
+                                pTmpPrevFlowFrm->IsKeep( *pTmpPrev->GetAttrSet() ) &&
+                                pTmpPrevFlowFrm->IsKeepFwdMoveAllowed();
             // <--
 
             // format floating screen objects anchored to the frame.
@@ -1743,7 +1749,21 @@ void CalcCntnt( SwLayoutFrm *pLay,
                         if( pTmp != pLay && pLay->IsAnLower( pTmp ) )
                             pFrm = pTmp;
                     }
-                    continue;
+
+                    if ( pFrm == pLoopControlCond )
+                        ++nLoopControlRuns;
+                    else
+                    {
+                        nLoopControlRuns = 0;
+                        pLoopControlCond = pFrm;
+                    }
+
+                    if ( nLoopControlRuns < nLoopControlMax )
+                        continue;
+
+#if OSL_DEBUG_LEVEL > 1
+                    ASSERT( false, "LoopControl in CalcCntnt" )
+#endif
                 }
             }
             if ( pFrm->IsTabFrm() )
