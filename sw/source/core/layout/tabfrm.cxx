@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:42:21 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 11:50:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1587,6 +1587,12 @@ bool MA_FASTCALL lcl_CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeav
     bool bRet = FALSE;
     SwCntntFrm *pCnt = pLay->ContainsCntnt();
     SWRECTFN( pLay )
+
+    // FME 2007-08-30 #i81146# new loop control
+    USHORT nLoopControlRuns = 0;
+    const USHORT nLoopControlMax = 10;
+    const SwModify* pLoopControlCond = 0;
+
     while ( pCnt && pDontLeave->IsAnLower( pCnt ) )
     {
         // --> OD 2004-11-23 #115759# - check, if a format of content frame is
@@ -1632,9 +1638,24 @@ bool MA_FASTCALL lcl_CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeav
                                                           *(pCnt->FindPageFrm()) ) )
                 // <--
                 {
-                    // restart format with first content
-                    pCnt = pLay->ContainsCntnt();
-                    continue;
+                    if ( pCnt->GetRegisteredIn() == pLoopControlCond )
+                        ++nLoopControlRuns;
+                    else
+                    {
+                        nLoopControlRuns = 0;
+                        pLoopControlCond = pCnt->GetRegisteredIn();
+                    }
+
+                    if ( nLoopControlRuns < nLoopControlMax )
+                    {
+                        // restart format with first content
+                        pCnt = pLay->ContainsCntnt();
+                        continue;
+                    }
+
+#if OSL_DEBUG_LEVEL > 1
+                    ASSERT( false, "LoopControl in lcl_CalcLowers" )
+#endif
                 }
             }
             pCnt->GetUpper()->Calc();
@@ -1653,11 +1674,6 @@ BOOL MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm,
                                       long nBottom,
                                       bool _bOnlyRowsAndCells )
 {
-    // --> OD 2005-03-30 #i43913#
-    ASSERT( !pFrm->IsTabFrm(),
-            "<lcl_InnerCalcLayout(..)> - called for table frame" );
-    // <--
-
     // LONG_MAX == nBottom means we have to calculate all
     BOOL bAll = LONG_MAX == nBottom;
     BOOL bRet = FALSE;
@@ -1767,11 +1783,36 @@ void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
         pPageFrm = 0L;
     // <--
 
+    // FME 2007-08-30 #i81146# new loop control
+    USHORT nLoopControlRuns_1 = 0;
+    USHORT nLoopControlStage_1 = 0;
+    const USHORT nLoopControlMax = 10;
+
     bool bCheck = true;
     do
     {
+        // FME 2007-08-30 #i81146# new loop control
+        USHORT nLoopControlRuns_2 = 0;
+        USHORT nLoopControlStage_2 = 0;
+
         while( lcl_InnerCalcLayout( &rRow, nBottom ) )
+        {
+            if ( ++nLoopControlRuns_2 > nLoopControlMax )
+            {
+#if OSL_DEBUG_LEVEL > 1
+                ASSERT( 0 != nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 1!" );
+                ASSERT( 1 != nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 2!!" );
+                ASSERT( 2 >  nLoopControlStage_2, "LoopControl_2 in lcl_RecalcRow: Stage 3!!!" );
+#endif
+                rRow.ValidateThisAndAllLowers( nLoopControlStage_2++ );
+                nLoopControlRuns_2 = 0;
+                if( nLoopControlStage_2 > 2 )
+                    break;
+            }
+
             bCheck = true;
+        }
+
         if( bCheck )
         {
             // --> OD 2004-11-23 #115759# - force another format of the
@@ -1804,7 +1845,22 @@ void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
             }
 
             if ( bCheck )
+            {
+                if ( ++nLoopControlRuns_1 > nLoopControlMax )
+                {
+#if OSL_DEBUG_LEVEL > 1
+                    ASSERT( 0 != nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 1!" );
+                    ASSERT( 1 != nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 2!!" );
+                    ASSERT( 2 >  nLoopControlStage_1, "LoopControl_1 in lcl_RecalcRow: Stage 3!!!" );
+#endif
+                    rRow.ValidateThisAndAllLowers( nLoopControlStage_1++ );
+                    nLoopControlRuns_1 = 0;
+                    if( nLoopControlStage_1 > 2 )
+                        break;
+                }
+
                 continue;
+            }
         }
         break;
     } while( true );
@@ -2633,9 +2689,6 @@ void SwTabFrm::MakeAll()
                     const bool bSplitError = !Split( nDeadLine, bTryToSplit, bTableRowKeep );
                     if( !bTryToSplit && !bSplitError && nUnSplitted > 0 )
                         --nUnSplitted;
-                    ASSERT( bTryToSplit || !bSplitError,
-                            "We did not try to split, why do we get a split error?" )
-                    bTryToSplit = !bSplitError;
 
                     // --> FME 2004-06-09 #i29771# Two tries to split the table:
                     // If an error occured during splitting. We start a second
@@ -2653,17 +2706,21 @@ void SwTabFrm::MakeAll()
                         Join();
                     // <--
 
+
                     // We want to restore the situation before the failed
                     // split operation as good as possible. Therefore we
                     // do some more calculations. Note: Restricting this
                     // to nDeadLine may not be enough.
-                    if ( bSplitError )
+                    if ( bSplitError && bTryToSplit ) // no restart if we did not try to split: i72847, i79426
                     {
                         lcl_RecalcRow( static_cast<SwRowFrm&>(*Lower()), LONG_MAX );
                         bValidPos = FALSE;
+                        bTryToSplit = false;
                         continue;
                     }
                     // <--
+
+                      bTryToSplit = !bSplitError;
 
                     //Damit es nicht zu Oszillationen kommt, muss der
                     //Follow gleich gueltig gemacht werden.
