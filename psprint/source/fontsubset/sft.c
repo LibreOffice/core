@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:01:46 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1648,7 +1648,7 @@ static void allocTrueTypeFont( TrueTypeFont** ttf )
 /* forward declariotn for the two entry points to use*/
 static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t );
 
-#if ! defined WIN32
+#if !defined(WIN32) && !defined(OS2)
 int OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont** ttf )
 {
     int ret, fd = -1;
@@ -1912,7 +1912,7 @@ void CloseTTFont(TrueTypeFont *ttf) /*FOLD01*/
 {
     if (ttf->tag != TTFontClassTag) return;
 
-#ifndef WIN32
+#if !defined(WIN32) && !defined(OS2)
     if( ttf->fname )
         munmap((char *) ttf->ptr, ttf->fsize);
 #endif
