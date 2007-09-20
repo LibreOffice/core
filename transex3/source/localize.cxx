@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:42:21 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:02:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,7 +305,7 @@ void SourceTreeLocalizer::WorkOnFile(
             ByteString sTempFile( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
             ByteString sExecutable( rExecutable );
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
             sExecutable += ".exe";
             String sPath( Export::GetEnv( "PATH" ), RTL_TEXTENCODING_ASCII_US );
 #else
