@@ -4,9 +4,9 @@
 #
 #   $RCSfile: codemaker.pmk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:03:03 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:50:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,11 @@
 #
 #*************************************************************************
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)" == "OS2"
+STL_OS2_BUILDING=1
+.ENDIF
+
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 CODEMAKERLIBDEPN=codemaker.lib
 COMMONCPPLIBDEPN=commoncpp.lib
 COMMONJAVALIBDEPN=commonjava.lib
