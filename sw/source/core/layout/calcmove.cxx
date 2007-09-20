@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:42:04 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 11:48:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1125,7 +1125,6 @@ inline void ValidateSz( SwFrm *pFrm )
     }
 }
 
-
 void SwCntntFrm::MakeAll()
 {
     ASSERT( GetUpper(), "keinen Upper?" );
@@ -1748,10 +1747,18 @@ void SwCntntFrm::MakeAll()
         bFormatted = FALSE;
         if ( bMoveOrFit && GetUpper() == pOldUp )
         {
-            Prepare( PREP_MUST_FIT, 0, FALSE );
-            bValidSize = FALSE;
-            bMustFit = TRUE;
-            continue;
+            // FME 2007-08-30 #i81146# new loop control
+            if ( nConsequetiveFormatsWithoutChange <= cnStopFormat )
+            {
+                Prepare( PREP_MUST_FIT, 0, FALSE );
+                bValidSize = FALSE;
+                bMustFit = TRUE;
+                continue;
+            }
+
+#if OSL_DEBUG_LEVEL > 1
+            ASSERT( false, "LoopControl in SwCntntFrm::MakeAll" )
+#endif
         }
         if ( bMovedBwd && GetUpper() )
         {   //Unuetz gewordene Invalidierungen zuruecknehmen.
