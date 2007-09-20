@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 12:54:30 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,7 +461,7 @@ namespace
     void    convertStringListToUrls( const String& _rColonSeparatedList, ::std::vector< String >& _rTokens, bool _bFinalSlash )
     {
         const sal_Unicode s_cSeparator =
-#if defined(WNT)
+#if defined(WNT) || defined(OS2)
             ';'
 #else
             ':'
@@ -501,7 +501,7 @@ namespace
         void operator()( String& _rURL )
         {
             INetURLObject aURL( _rURL );
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
             if ( aURL.getSegmentCount() > 1 )
 #endif
                 aURL.removeFinalSlash( );
@@ -2748,7 +2748,7 @@ BOOL SvtFileDialog::IsolateFilterFromPath_Impl( String& rPath, String& rFilter )
         if ( nPathTokenPos == STRING_NOTFOUND )
         {
             String aDelim(
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
                     '\\'
 #else
                     '/'
@@ -2756,6 +2756,12 @@ BOOL SvtFileDialog::IsolateFilterFromPath_Impl( String& rPath, String& rFilter )
             );
 
             nPathTokenPos = aReversePath.Search( aDelim );
+#if defined(OS2)
+            if ( nPathTokenPos == STRING_NOTFOUND )
+            {
+                nPathTokenPos = aReversePath.Search( '/' );
+            }
+#endif
 #if !defined( UNX )
             if ( nPathTokenPos == STRING_NOTFOUND )
             {
