@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:21:51 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 /* Grab __SIZEOFxxx constants from typesconfig tool on Unix */
 #if defined UNX
   #include <sal/typesizes.h>
-#elif defined WNT
+#elif defined(WNT) || defined(OS2)
   /* FIXME: autogeneration of type sizes on Win32/Win64? */
   #define SAL_TYPES_ALIGNMENT2      1
   #define SAL_TYPES_ALIGNMENT4      1
@@ -122,7 +122,7 @@ typedef char                     sal_Char;
 typedef signed char              sal_sChar;
 typedef unsigned char            sal_uChar;
 
-#if defined(SAL_W32) && !defined(__MINGW32__)
+#if ( defined(SAL_W32) && !defined(__MINGW32__) ) || defined(SAL_OS2__YD)
     typedef wchar_t             sal_Unicode;
 #else
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
@@ -215,9 +215,9 @@ typedef void *                   sal_Handle;
 #   define SAL_CALL
 #   define SAL_CALL_ELLIPSE
 #endif
-#elif defined SAL_OS2
-#   define SAL_DLLPUBLIC_EXPORT
-#   define SAL_DLLPUBLIC_IMPORT
+#elif defined SAL_OS2 // YD
+#   define SAL_DLLPUBLIC_EXPORT    __declspec(dllexport)
+#   define SAL_DLLPUBLIC_IMPORT    __declspec(dllimport)
 #   define SAL_DLLPRIVATE
 #   define SAL_CALL
 #   define SAL_CALL_ELLIPSE
@@ -258,7 +258,7 @@ typedef void *                   sal_Handle;
 #ifdef SAL_W32
 #   pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#   pragma pack(8)
+#   pragma pack(push, 4)
 #endif
 
 /** This is the binary specification of a SAL sequence.
@@ -279,10 +279,8 @@ typedef struct _sal_Sequence
 
 #define SAL_SEQUENCE_HEADER_SIZE ((sal_Size)&((sal_Sequence *)0)->elements)
 
-#ifdef SAL_W32
+#if defined( SAL_W32) ||  defined(SAL_OS2)
 #pragma pack(pop)
-#elif defined(SAL_OS2)
-#pragma pack()
 #endif
 
 
@@ -291,7 +289,7 @@ typedef struct _sal_Sequence
     lack RTTI support, dynamic_cast is not included here).
  */
 #ifdef __cplusplus
-#if defined SAL_W32 || defined SOLARIS || defined LINUX || defined MACOSX || defined FREEBSD || defined NETBSD || defined AIX
+#if defined SAL_W32 || defined SOLARIS || defined LINUX || defined MACOSX || defined FREEBSD || defined NETBSD || defined AIX || defined OS2
 #define SAL_CONST_CAST(type, expr) (const_cast< type >(expr))
 #define SAL_REINTERPRET_CAST(type, expr) (reinterpret_cast< type >(expr))
 #define SAL_STATIC_CAST(type, expr) (static_cast< type >(expr))
