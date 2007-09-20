@@ -3,7 +3,7 @@ PRJ=..
 
 .INCLUDE : settings.mk
 
-.IF "$(SYSTEM_PYTHON)" == "YES"
+.IF "$(SYSTEM_PYTHON)" == "YES" || "$(GUI)" == "OS2"
 systempython:
         @echo "Not building python-core because system python is being used"
 .ELSE
