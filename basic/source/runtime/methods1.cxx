@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:55:57 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:55:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,12 @@
 #endif
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
+
+#ifdef OS2
+#define INCL_DOS
+#define INCL_DOSPROCESS
+#include <svpm.h>
+#endif
 
 #if defined(WIN)
 #ifndef _SVWIN_H
@@ -416,9 +422,11 @@ RTLFUNC(GetGUIType)
         // 17.7.2000 Make simple solution for testtool / fat office
 #if defined (WNT)
         rPar.Get(0)->PutInteger( 1 );
+#elif defined OS2
+        rPar.Get(0)->PutInteger( 2 );
 #elif defined UNX
         rPar.Get(0)->PutInteger( 4 );
-#elif
+#else
         rPar.Get(0)->PutInteger( -1 );
 #endif
     }
