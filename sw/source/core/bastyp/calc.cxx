@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:41:04 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:39:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1385,10 +1385,6 @@ SwSbxValue SwCalc::Prim()
     double (
 #ifdef WNT
             __cdecl
-#endif
-
-#ifdef OS2
-            _Optlink
 #endif
             *pFnc)( double ) = 0;
 
