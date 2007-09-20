@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ldump.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:46:28 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:59:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -526,9 +526,17 @@ bool LibDump::CheckDataBase()
         char *pTmp = "defs\\";
 
         FILE *fp;
+#ifdef OS2
+        _mkdir ("defs", 0777);
+#else
         _mkdir ("defs");
+#endif
         strcpy(cBName,pTmp);
+#ifdef OS2
+        strcat(cBName,"gcc");
+#else
         strcat(cBName,getenv ("COMP_ENV"));
+#endif
 
         fp = fopen (cBName,"r");
         if (fp)
@@ -620,8 +628,9 @@ void usage()
 #define STATE_FILTER    0x0002
 #define STATE_CEXPORT   0x0003
 
+int
 #ifdef WNT
-int __cdecl
+__cdecl
 #endif
 main( int argc, char **argv )
 {
