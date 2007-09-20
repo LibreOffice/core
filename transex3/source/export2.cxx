@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:18:36 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:02:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,7 +344,7 @@ void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename ){
     sFile.Append("/");
     sFile.Append( rPrj );
     sFile.Append("/prj/l10n");
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     sFile.SearchAndReplaceAll('/','\\');
 #endif
     DirEntry aFlagfile( sFile );
@@ -633,7 +633,7 @@ void Export::getRandomName( ByteString& sRandStr )
 DirEntry Export::GetTempFile()
 /*****************************************************************************/
 {
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     String sTempDir( Export::GetEnv( "TEMP" ), RTL_TEXTENCODING_ASCII_US );
 #else
     String sTempDir( String::CreateFromAscii( "/tmp" ));
@@ -650,7 +650,7 @@ DirEntry Export::GetTempFile()
     String sDecodedStr = INetURLObject::decode( strTmp , '%' , eMechanism );
     ByteString sTmp( sDecodedStr , RTL_TEXTENCODING_UTF8 );
 
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     sTmp.SearchAndReplace("file:///","");
     sTmp.SearchAndReplaceAll('/','\\');
 #else
