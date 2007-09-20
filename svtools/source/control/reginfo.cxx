@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reginfo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 08:53:24 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:29:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,7 @@ void RegInfo::DeleteKey( const String& rKey )
 #elif defined(OS2)
 
 #define INCL_WINSHELLDATA
-#include <tools/svpm.h>
+#include <svpm.h>
 
 struct RegInfo_Impl
 {
@@ -212,6 +212,7 @@ struct RegInfo_Impl
 
 void RegInfo_Impl::BuildKeyList( const String &rGroup )
 {
+    ByteString aBStr( rGroup, osl_getThreadTextEncoding() );
     USHORT nLen = 0;
     do
     {
@@ -221,7 +222,7 @@ void RegInfo_Impl::BuildKeyList( const String &rGroup )
         *(int *)pKeyList = 0;
     }
     while( PrfQueryProfileString(
-        HINI_USERPROFILE, rGroup,
+        HINI_USERPROFILE, (PCSZ)aBStr.GetBuffer(),
         0, 0, pKeyList, nLen) == nLen);
 }
 
@@ -240,7 +241,7 @@ RegInfo::~RegInfo()
 
 inline String MakeAppGroupString_Impl( const String &rGroup )
 {
-    String aGroup("SvAppGroups:");
+    String aGroup(UniString::CreateFromAscii("SvAppGroups:"));
     aGroup+=rGroup;
     return aGroup;
 }
@@ -254,7 +255,7 @@ String RegInfo::GetKeyName( USHORT nKey ) const
     for( USHORT n=0; n<nKey; n++ )
         while(*pc++);
 
-    return String(pc);
+    return String(UniString::CreateFromAscii(pc));
 }
 
 USHORT RegInfo::GetKeyCount() const
@@ -282,18 +283,22 @@ void RegInfo::SetAppGroup( const String& rGroup )
 
 void RegInfo::DeleteAppGroup( const String &rGroup )
 {
+    ByteString aBStr( MakeAppGroupString_Impl( rGroup ), osl_getThreadTextEncoding() );
     PrfWriteProfileString(
-        HINI_USERPROFILE, MakeAppGroupString_Impl( rGroup ), 0, 0);
+        HINI_USERPROFILE, (PCSZ)aBStr.GetBuffer(), 0, 0);
 }
 
 
 String  RegInfo::ReadKey( const String& rKey ) const
 {
+    ULONG    ulBufferMax = MAXREGVALUE;
     char *pBuffer= new char[MAXREGVALUE];
+    ByteString aBStr( pImp->aCurrentApp, osl_getThreadTextEncoding() );
+    ByteString aBStr1( rKey, osl_getThreadTextEncoding() );
     *pBuffer=0;
-    PrfQueryProfileString(
-        HINI_USERPROFILE, pImp->aCurrentApp, rKey, 0, pBuffer, MAXREGVALUE);
-    String aRet(pBuffer);
+    PrfQueryProfileData(
+        HINI_USERPROFILE, (PCSZ)aBStr.GetBuffer(), (PCSZ)aBStr1.GetBuffer(), pBuffer, &ulBufferMax);
+    String aRet(UniString::CreateFromAscii(pBuffer));
     delete[] pBuffer;
     return aRet;
 }
@@ -301,26 +306,28 @@ String  RegInfo::ReadKey( const String& rKey ) const
 
 String  RegInfo::ReadKey( const String& rKey, const String &rDefault ) const
 {
-    char *pBuffer= new char[MAXREGVALUE];
-    *pBuffer=0;
-    PrfQueryProfileString(
-        HINI_USERPROFILE, pImp->aCurrentApp, rKey,  rDefault, pBuffer, MAXREGVALUE);
-    String aRet(pBuffer);
-    delete[] pBuffer;
-    return aRet;
+    String aResult = ReadKey(rKey);
+    if (!aResult.Len())
+        return rDefault;
+    else
+        return aResult;
 }
 
 
 void RegInfo::WriteKey( const String& rKey, const String& rValue )
 {
-    PrfWriteProfileString(
-        HINI_USERPROFILE, pImp->aCurrentApp, rKey, rValue);
+    ByteString aBStr( pImp->aCurrentApp, osl_getThreadTextEncoding() );
+    ByteString aBStr1( rKey, osl_getThreadTextEncoding() );
+    PrfWriteProfileData(
+        HINI_USERPROFILE, (PCSZ)aBStr.GetBuffer(), (PCSZ)aBStr1.GetBuffer(), (PVOID)rValue.GetBuffer(), rValue.Len()*2);
 }
 
 void RegInfo::DeleteKey( const String& rKey )
 {
+    ByteString aBStr( pImp->aCurrentApp, osl_getThreadTextEncoding() );
+    ByteString aBStr1( rKey, osl_getThreadTextEncoding() );
     PrfWriteProfileString(
-        HINI_USERPROFILE, pImp->aCurrentApp, rKey, 0);
+        HINI_USERPROFILE, (PCSZ)aBStr.GetBuffer(), (PCSZ)rKey.GetBuffer(), 0);
 }
 
 // *****************************************************************************
