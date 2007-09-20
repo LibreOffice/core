@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:56:04 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:48:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ LIBTARGET=NO
 CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
 
 RGTLIB = rgt.lib
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="OS2"
 RGTLIB = -lrgt$(UPD)$(DLLPOSTFIX)
 .ENDIF
 
