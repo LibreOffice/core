@@ -4,9 +4,9 @@
  *
  *  $RCSfile: any2.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:38:13 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:43:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,10 @@ extern "C"
 {
 #endif
 
-#ifdef SAL_W32
+#if defined( SAL_W32)
 #pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#pragma pack(8)
+#pragma pack(push, 8)
 #endif
 
 struct _typelib_TypeDescriptionReference;
@@ -74,10 +74,8 @@ typedef struct _uno_Any
     void * pReserved;
 } uno_Any;
 
-#ifdef SAL_W32
+#if defined( SAL_W32) ||  defined(SAL_OS2)
 #pragma pack(pop)
-#elif defined(SAL_OS2)
-#pragma pack()
 #endif
 
 /** Assign an any with a given value. Interfaces are acquired or released by the given callback
