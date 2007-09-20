@@ -15,6 +15,7 @@ st	svtools\source\numbers				nmake	-	all	st_num st_inc NULL
 st	svtools\source\notify				nmake	-	all	st_not st_inc NULL
 st	svtools\source\config				nmake	-	all	st_conf st_inc NULL
 st	svtools\unx\source\svdde			nmake	-	u	st_usdde st_inc NULL
+st	svtools\unx\source\svdde			nmake	-	p	st_psdde st_inc NULL
 st	svtools\mac\source\svdde			nmake	-	m	st_msdde st_inc NULL
 st	svtools\mac\source\misc				nmake	-	m	st_msc st_inc NULL
 st	svtools\source\control				nmake	-	all	st_ctl st_inc NULL
@@ -43,7 +44,7 @@ st	svtools\source\svsql				nmake	-	all	st_sql st_inc NULL
 st	svtools\source\svhtml				nmake	-	all	st_html st_inc NULL
 st  svtools\source\syslocale                nmake   -   all st_sysloc st_inc NULL
 st	svtools\source\filepicker               nmake	-	all	st_filepick st_inc NULL
-st  svtools\util                            nmake   -   all st_util st__brw st__ctr st__dde st__item st__item1 st__misc st__misc1 st__url  st_ctl st_dial st_edit st_file st_html st_papp st_rtf st_sql st_usdde.u st_msdde.m st_msc.m st_undo st_uno st_vfilt st_vigif st_vixbm st_vixpm st_vjpeg st_vwmf st_sysloc st_filepick st_not st_conf st_mem st_num st_svtjava NULL
+st  svtools\util                            nmake   -   all st_util st__brw st__ctr st__dde st__item st__item1 st__misc st__misc1 st__url  st_ctl st_dial st_edit st_file st_html st_papp st_rtf st_sql st_usdde.u st_psdde.p st_msdde.m st_msc.m st_undo st_uno st_vfilt st_vigif st_vixbm st_vixpm st_vjpeg st_vwmf st_sysloc st_filepick st_not st_conf st_mem st_num st_svtjava NULL
 st	svtools\source\fsstor				nmake	-	all	st_fsstor st_inc NULL
 st	svtools\source\hatchwindow			nmake	-	all	st_hatchwin st_inc NULL
 st	svtools\source\passwordcontainer	nmake	-	all	st_passcont st_inc NULL
