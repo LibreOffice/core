@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 07:09:52 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:33:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,10 +65,17 @@ typedef sal_Unicode***  (SAL_CALL * MyFunc_Type2)( sal_Int16&, sal_Int16& );
 typedef sal_Unicode**** (SAL_CALL * MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
 typedef sal_Unicode const * const * (SAL_CALL * MyFunc_FormatCode)( sal_Int16&, sal_Unicode const *&, sal_Unicode const *& );
 
+#ifdef OS2 // YD 8.3!!
+static const char *lcl_DATA_EN = "ld_en";
+static const char *lcl_DATA_ES = "ld_es";
+static const char *lcl_DATA_EURO = "ld_eur";
+static const char *lcl_DATA_OTHERS = "ld_oth";
+#else
 static const char *lcl_DATA_EN = "localedata_en";
 static const char *lcl_DATA_ES = "localedata_es";
 static const char *lcl_DATA_EURO = "localedata_euro";
 static const char *lcl_DATA_OTHERS = "localedata_others";
+#endif
 
 static const struct {
     const char* pLocale;
