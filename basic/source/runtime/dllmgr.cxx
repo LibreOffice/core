@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllmgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:25:27 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:54:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,10 @@
 #include "precompiled_basic.hxx"
 
 #include <stdlib.h>
+#ifdef OS2
+#define INCL_DOSMODULEMGR
+#include <svpm.h>
+#endif
 
 #if defined( WIN ) || defined( WNT )
 #ifndef _SVWIN_H
@@ -67,6 +71,9 @@ typedef FARPROC SbiDllProc;
 #elif defined(WNT)
 typedef HMODULE SbiDllHandle;
 typedef int(*SbiDllProc)();
+#elif defined(OS2)
+typedef HMODULE SbiDllHandle;
+typedef PFN SbiDllProc;
 #else
 typedef void* SbiDllHandle;
 typedef void* SbiDllProc;
@@ -284,7 +291,7 @@ SbError SbiDllMgr::Call( const char* pProcName, const char* pDllName,
 
 void SbiDllMgr::CheckDllName( ByteString& rDllName )
 {
-#if defined(WIN) || defined(WNT)
+#if defined(WIN) || defined(WNT) || defined(OS2)
     if( rDllName.Search('.') == STRING_NOTFOUND )
         rDllName += ".DLL";
 #else
@@ -319,6 +326,10 @@ SbiDllHandle SbiDllMgr::CreateDllHandle( const ByteString& rDllName )
         hLib = 0;
     }
 
+#elif defined(OS2)
+    char cErr[ 100 ];
+    if( DosLoadModule( (PSZ) cErr, 100, (const char*)rDllName.GetBuffer(), &hLib ) )
+        hLib = 0;
 #endif
     return hLib;
 }
@@ -328,6 +339,9 @@ void SbiDllMgr::FreeDllHandle( SbiDllHandle hLib )
 #if defined(WIN) || defined(WNT)
     if( hLib )
         FreeLibrary ((HINSTANCE) hLib);
+#elif defined(OS2)
+       if( hLib )
+               DosFreeModule( (HMODULE) hLib );
 #else
     (void)hLib;
 #endif
@@ -373,6 +387,26 @@ SbiDllProc SbiDllMgr::GetProcAddr(SbiDllHandle hLib, const ByteString& rProcName
             pProc = (SbiDllProc)GetProcAddress( hLib, buf2 );
     }
 
+#elif defined(OS2)
+    PSZ pp;
+    APIRET rc;
+    // 1. Ordinal oder mit Parametern:
+    rc = DosQueryProcAddr( hLib, nOrd, pp = (char*)rProcName.GetBuffer(), &pProc );
+    // 2. nur der Name:
+    if( rc )
+        rc = DosQueryProcAddr( hLib, 0, pp = (PSZ)buf1, &pProc );
+    // 3. der Name mit Underline vorweg:
+    if( rc )
+        rc = DosQueryProcAddr( hLib, 0, pp = (PSZ)buf2, &pProc );
+    if( rc )
+        pProc = NULL;
+    else
+    {
+        // 16-bit oder 32-bit?
+        ULONG nInfo = 0;
+        if( DosQueryProcType( hLib, nOrd, pp, &nInfo ) )
+            nInfo = 0;;
+    }
 #else
     (void)hLib;
 #endif
