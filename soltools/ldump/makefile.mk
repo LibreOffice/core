@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 07:29:03 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:59:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,11 +50,13 @@ LIBSALCPPRT=$(0)
 # --- Files --------------------------------------------------------
 
 # ldump only supports windows environment
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 
 #ldump4 reimplements feature set of ldump2 and ldump3
 APP1TARGET=	ldump4
+.IF "$(GUI)"=="WNT"
 APP1STACK=	16000
+.ENDIF
 APP1OBJS=   $(OBJ)$/ldump.obj $(OBJ)$/hashtbl.obj
 
 .ENDIF #"$(GUI)"=="WNT"
