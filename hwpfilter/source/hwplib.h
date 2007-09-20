@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hwplib.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:41:29 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:47:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* $Id: hwplib.h,v 1.3 2005-09-07 16:41:29 rt Exp $ */
+/* $Id: hwplib.h,v 1.4 2007-09-20 14:47:41 vg Exp $ */
 
 #ifndef _HWPLIB_H_
 #define _HWPLIB_H_
@@ -51,7 +51,7 @@ typedef unsigned char       echar;
 #endif                                            // _HCHAR_
 
 #if !defined(WIN32)
-#ifndef _BOOL_T_
+#if !defined(_BOOL_T_) && !defined(OS2)
 typedef unsigned short  BOOL;
 #endif                                            /* _BOOL_T_ */
 typedef unsigned short  WORD;
