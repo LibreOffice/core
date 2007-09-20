@@ -10,7 +10,8 @@ sa	sal\systools\win32\guistdio				nmake	-	n	sa_guistdio sa_uwinapi.n sa_inc NULL
 sa	sal\systools\win32\kill					nmake	-	n	sa_kill sa_uwinapi.n sa_inc NULL
 sa	sal\systools\win32\onlineupdate			nmake	-	n	sa_onlineupdate sa_uwinapi.n sa_inc NULL
 sa	sal\osl\w32								nmake	-	n	sa_osln sa_inc NULL
+sa	sal\osl\os2								nmake	-	p	sa_oslp sa_inc NULL
 sa  sal\qa                                  nmake   -   all sa_qa sa_util NULL
 sa	sal\osl\unx								nmake	-	u	sa_oslu sa_tc.u sa_inc NULL
 sa	sal\osl\all								nmake	-	all	sa_oslall sa_tc.u sa_inc NULL
-sa	sal\util								nmake	-	all	sa_util sa_tc.u sa_oslall sa_uwinapi.n sa_guistdio.n sa_kill.n sa_onlineupdate.n sa_osln.n sa_oslu.u sa_rtl sa_textenc NULL
+sa	sal\util								nmake	-	all	sa_util sa_tc.u sa_oslall sa_uwinapi.n sa_guistdio.n sa_kill.n sa_onlineupdate.n sa_osln.n sa_oslp.p sa_oslu.u sa_rtl sa_textenc NULL
