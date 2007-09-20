@@ -4,9 +4,9 @@
  *
  *  $RCSfile: endian.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 14:27:49 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:05:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ extern "C" {
 #endif
 
 #ifdef OS2
-#   define  _LITTLE_ENDIAN
+#   include <machine/endian.h>
 #endif
 
 #ifdef SOLARIS
