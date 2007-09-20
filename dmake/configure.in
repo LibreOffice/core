@@ -84,6 +84,9 @@ case "$_os" in
 	  BUILDINFO="Windows / MS Visual C++"
 	  CASE_INSENSITIVE_FS=true
 	  ;;
+	"OS/2")
+	  OS_VERSION=linux
+	  ;;
 	"Darwin")
 	  OS_VERSION=macosx
 # MacOSX is not garuanteed to be case insensitive, assume it's case
