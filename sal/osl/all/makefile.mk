@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 15:54:48 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:08:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,10 @@ PROJECTPCH=cont_pch
 PROJECTPCHSOURCE=cont_pch
 
 MULTITHREAD_OBJ=TRUE
+
+.IF "$(GUI)" == "OS2"
+STL_OS2_BUILDING=1
+.ENDIF
 
 # --- Settings -----------------------------------------------------
 
