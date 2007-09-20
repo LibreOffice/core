@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reflwrit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:53:18 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:48:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ inline rtl::OString toByteString(rtl_uString const * str) {
 
 static sal_Unicode NULL_WSTRING[1] = { 0 };
 
-#if defined ( GCC ) && ( defined ( SCO ) || defined ( OS2 ) )
+#if defined ( GCC ) && ( defined ( SCO ) )
 ORealDynamicLoader* ODynamicLoader<RegistryTypeWriter_Api>::m_pLoader = NULL;
 #endif
 
