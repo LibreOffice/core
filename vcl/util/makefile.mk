@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.98 $
+#   $Revision: 1.99 $
 #
-#   last change: $Author: hr $ $Date: 2007-08-02 15:00:59 $
+#   last change: $Author: vg $ $Date: 2007-09-20 16:25:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -241,6 +241,11 @@ LINKFLAGSSHL += /ENTRY:LibMain@12
 .ENDIF
 .ENDIF
 
+# --- OS2 ----------------------------------------------------------------
+
+.IF "$(GUI)" == "OS2"
+SHL1STDLIBS += ft2lib.lib
+.ENDIF
 
 # --- UNX ----------------------------------------------------------------
 
