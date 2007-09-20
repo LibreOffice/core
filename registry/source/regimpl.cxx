@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 14:03:01 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:48:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include    <string.h>
 #include    <stdio.h>
 
-#ifdef UNX
+#if defined(UNX) || defined(OS2)
 #include    <unistd.h>
 #endif
 #ifdef __MINGW32__
@@ -102,7 +102,7 @@
 #endif
 
 
-#if defined ( GCC ) && ( defined ( SCO ) || defined ( OS2 ) )
+#if defined ( GCC ) && ( defined ( SCO ) )
 sal_helper::ORealDynamicLoader* sal_helper::ODynamicLoader<RegistryTypeReader_Api>::m_pLoader = NULL;
 #endif
 
