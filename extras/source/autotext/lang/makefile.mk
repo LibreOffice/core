@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 21:12:40 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:57:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ ZIP2FORCEALLLANG = TRUE
 
 ZIP2TARGET      = $(AUTOCORR_TARGET)
 
-ZIP2LIST        = *$/acor*.dat
+ZIP2LIST        = .$/*$/acor*.dat
 
 
 .INCLUDE : target.mk
