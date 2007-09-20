@@ -4,9 +4,9 @@
  *
  *  $RCSfile: string.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 14:03:40 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:07:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -754,9 +754,9 @@ double SAL_CALL rtl_str_toDouble( const sal_Char * str ) SAL_THROW_EXTERN_C();
 /* ======================================================================= */
 
 #ifdef SAL_W32
-#pragma pack(push, 8)
+#   pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#pragma pack(1)
+#   pragma pack(push, 4)
 #endif
 
 /** The implementation of a byte string.
@@ -770,10 +770,8 @@ typedef struct _rtl_String
     sal_Char            buffer[1];
 } rtl_String;
 
-#ifdef SAL_W32
+#if defined( SAL_W32) ||  defined(SAL_OS2)
 #pragma pack(pop)
-#elif defined(SAL_OS2)
-#pragma pack()
 #endif
 
 /* ----------------------------------------------------------------------- */
