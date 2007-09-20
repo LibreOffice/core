@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-04 07:59:31 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:24:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,10 @@ USE_LDUMP2=TRUE
 PROJECTPCH4DLL=TRUE
 PROJECTPCH=cont_pch
 PROJECTPCHSOURCE=cont_pch
+
+.IF "$(GUI)" == "OS2"
+STL_OS2_BUILDING=1
+.ENDIF
 
 TARGETTYPE=CUI
 
@@ -135,7 +139,7 @@ APP1LIBSALCPPRT=
 
 # --- Extra objs ----------------------------------------------------
 
-.IF "$(OS)"=="LINUX"
+.IF "$(OS)"=="LINUX" || "$(OS)"=="OS2"
 
 #
 # This part builds a second version of alloc.c, with 
