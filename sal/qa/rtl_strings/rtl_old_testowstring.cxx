@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_old_testowstring.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:03:17 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #ifdef UNX
 #include <wchar.h>
 #endif
-#ifdef OS2
+#ifdef OS2__00
 #include <wcstr.h>
 #endif
 
@@ -281,11 +281,13 @@ void oldtests::test_OUString()
         TEST_ENSURE( uStr.compareTo( OUString::createFromAscii("Hallp"), 5 ) < 0, "test_OWString error 54.2.7" );
     }
 
+#if OSL_DEBUG_LEVEL == 0
+//YD will fail copy assert on indexes, because ':' returns -1
     s7 = OUString::createFromAscii("Hallo jetzt komm ich");
     s8 = s7.copy(0, s7.indexOf((sal_Unicode)':'));
     TEST_ENSURE( s8.getLength() == 0, "test_OWString error 55");
     TEST_ENSURE( s8.compareTo(OUString()) == 0, "test_OWString error 56");
-
+#endif
 
     // ASCII-Schnittstellen, AB 15.10.1999
 
@@ -345,7 +347,7 @@ void oldtests::test_OUString()
     // toInt64
     OUString s9( OUString::createFromAscii(" -3223372036854775807") );
     sal_Int64 ln1 = s9.toInt64();
-#ifdef UNX
+#if (defined UNX) || (defined OS2)
     TEST_ENSURE( ln1 == -3223372036854775807LL, "test_OWString error 67" );
 #else
     TEST_ENSURE( ln1 == -3223372036854775807, "test_OWString error 67" );
@@ -355,7 +357,7 @@ void oldtests::test_OUString()
     TEST_ENSURE( ln2 == 13243, "test_OWString error 68" );
 
     sal_Int64 ln3 = s10.toInt64( 16 );
-#ifdef UNX
+#if (defined UNX) || (defined OS2)
     TEST_ENSURE( ln3 == 0x13243A65F1LL, "test_OWString error 69" );
 #else
     TEST_ENSURE( ln3 == 0x13243A65F1, "test_OWString error 69" );
