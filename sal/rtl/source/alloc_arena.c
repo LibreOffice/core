@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alloc_arena.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:09:36 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:23:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,13 @@
 
 #ifndef INCLUDED_STDIO_H
 #include <stdio.h>
+#endif
+
+#include "sal/types.h"
+
+#ifdef OS2
+#undef OSL_TRACE
+#define OSL_TRACE                  1 ? ((void)0) : _OSL_GLOBAL osl_trace
 #endif
 
 /* ================================================================= *
@@ -1185,7 +1192,7 @@ SAL_CALL rtl_arena_free (
 
 #if defined(SAL_UNX)
 #include <sys/mman.h>
-#elif defined(SAL_W32)
+#elif defined(SAL_W32) || defined(SAL_OS2)
 #define MAP_FAILED 0
 #endif /* SAL_UNX || SAL_W32 */
 
@@ -1221,7 +1228,18 @@ SAL_CALL rtl_machdep_alloc (
     addr = mmap (NULL, (size_t)(size), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
 #elif defined(SAL_W32)
     addr = VirtualAlloc (NULL, (SIZE_T)(size), MEM_COMMIT, PAGE_READWRITE);
-#endif /* (SAL_UNX || SAL_W32) */
+#elif defined(SAL_OS2)
+    {
+    APIRET rc;
+    addr = 0;
+    // Use DosAlloc* to get a 4KB page aligned address.
+    rc = DosAllocMem( &addr, size, PAG_COMMIT | PAG_READ | PAG_WRITE | OBJ_ANY);
+    if (rc) {
+        fprintf( stderr, "sal3::DosAllocMem failed rc=%d\n", rc);
+        addr = 0;
+    }
+    }
+#endif /* (SAL_UNX || SAL_W32 || SAL_OS2) */
 
     if (addr != MAP_FAILED)
     {
@@ -1254,6 +1272,8 @@ SAL_CALL rtl_machdep_free (
     (void) munmap(pAddr, nSize);
 #elif defined(SAL_W32)
     (void) VirtualFree ((LPVOID)(pAddr), (SIZE_T)(0), MEM_RELEASE);
+#elif defined(SAL_OS2)
+    (void) DosFreeMem( pAddr);
 #endif /* (SAL_UNX || SAL_W32) */
 }
 
@@ -1272,6 +1292,10 @@ rtl_machdep_pagesize (void)
     SYSTEM_INFO info;
     GetSystemInfo (&info);
     return ((sal_Size)(info.dwPageSize));
+#elif defined(SAL_OS2)
+    ULONG ulPageSize;
+    DosQuerySysInfo(QSV_PAGE_SIZE, QSV_PAGE_SIZE, &ulPageSize, sizeof(ULONG));
+    return ((sal_Size)ulPageSize);
 #endif /* (SAL_UNX || SAL_W32) */
 }
 
