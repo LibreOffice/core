@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javadep.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:08:14 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:59:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <ctype.h>
 #include <limits.h>
 
-#if defined(UNX)
+#if defined(UNX) || defined(OS2)
 #include <unistd.h>
 #include <netinet/in.h>     /* ntohl(), ntohs() */
 #elif defined(WNT)
@@ -60,6 +60,10 @@
                         (((x) & 0x0000ff00) <<  8) | (((x) & 0x000000ff) << 24))
 
 #define ntohs(x)    ((((x) >> 8) & 0xff) | (((x) & 0xff) << 8))
+#endif
+
+#if defined(OS2)
+#define CDECL
 #endif
 
 /* max. length of line in response file */
@@ -111,7 +115,7 @@ static char     csep        = ';';
 #if defined (UNX)
 #define CDECL
 static char     cpathsep    = '/';
-#elif defined (WNT)
+#elif defined (WNT) || defined(OS2)
 static char     cpathsep    = '\\';
 #endif
 static int      bnl         = 0;
