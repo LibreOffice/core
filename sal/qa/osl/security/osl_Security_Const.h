@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_Security_Const.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:36:17 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:21:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifdef UNX
+#if ( defined UNX ) || ( defined OS2 )
 #include <unistd.h>
 #include <pwd.h>
 #else
