@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:04:29 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:35:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,7 +353,7 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-quickstart" )) == sal_True )
     {
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
         SetBoolParam_Impl( CMD_BOOLPARAM_QUICKSTART, sal_True );
 #endif
         return sal_True;
