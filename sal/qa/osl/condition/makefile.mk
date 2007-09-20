@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 15:56:03 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:19:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ SHL1OBJS=  \
 SHL1TARGET= osl_Condition
 SHL1STDLIBS=\
    $(SALLIB) 
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
 .ENDIF
 .IF "$(GUI)" == "UNX"
