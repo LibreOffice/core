@@ -12,6 +12,9 @@ PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).dylib
 PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).so.1.0
 .ENDIF
 PYTHONLIB=-lpython$(PYMAJOR).$(PYMINOR)
+.ELIF "$(GUI)" == "OS2"
+PY_FULL_DLL_NAME=python24.dll
+PYTHONLIB=python24.lib
 .ELSE
 .IF "$(COM)" == "GCC"
 PY_FULL_DLL_NAME=libpython$(PYMAJOR).$(PYMINOR).dll
