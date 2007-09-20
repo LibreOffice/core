@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pipetest.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:45:38 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:41:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,7 +342,7 @@ void OPipeTest::testSimple( const Reference < XInterface > &r )
 
 void OPipeTest::testBufferResizing( const Reference < XInterface > &r )
 {
-
+    int i;
     int iMax = 20000;
     Reference< XInputStream > input( r , UNO_QUERY );
     Reference < XOutputStream > output( r , UNO_QUERY );
@@ -358,7 +358,7 @@ void OPipeTest::testBufferResizing( const Reference < XInterface > &r )
     Sequence< sal_Int8 > dummy;
     input->readBytes( dummy , 100);
 
-    for( int i = 0 ; i < iMax ; i ++ ) {
+    for( i = 0 ; i < iMax ; i ++ ) {
         output->writeBytes( createIntSeq( i ) );
     }
 
@@ -379,7 +379,7 @@ void OPipeTest::testBufferResizing( const Reference < XInterface > &r )
 void OPipeTest::testMultithreading( const Reference < XInterface > &r )
 {
 
-
+    int i;
     int iMax = 30000;
 
     Reference< XInputStream > input( r , UNO_QUERY );
@@ -397,7 +397,7 @@ void OPipeTest::testMultithreading( const Reference < XInterface > &r )
 
     p->create();
 
-    for(int  i = 0 ; sal_True ; i ++ ) {
+    for(  i = 0 ; sal_True ; i ++ ) {
         if( 0 == input->readBytes( seqRead, createIntSeq(i).getLength() ) ) {
             // eof reached !
             break;
