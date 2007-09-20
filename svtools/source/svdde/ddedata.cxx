@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddedata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:59:12 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:30:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,6 +231,7 @@ ULONG DdeData::GetInternalFormat( ULONG nFmt )
             nFmt = SotExchange::RegisterFormatName( String( szName ) );
         }
 #endif
+        break;
     }
     return nFmt;
 }
