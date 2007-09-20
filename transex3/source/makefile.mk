@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:59:50 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:03:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ APP7STDLIBS+= \
 
 # encoding converter for text files
 APP8TARGET= txtconv
-APP8STACK=  16000
+#APP8STACK=  16000
 APP8OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/txtconv.obj $(OBJ)$/hw2fw.obj
 APP8STDLIBS=$(TOOLSLIB) $(SALLIB)
 
