@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 13:21:34 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:25:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ USE_DEFFILE=TRUE
 # without "-L" (light) switch
 BOOTSTRAP_SERVICE=TRUE
 
-.IF "$(OS)" != "WNT"
+.IF "$(OS)" != "WNT" && "$(GUI)"!="OS2"
 UNIXVERSIONNAMES=UDK
 .ENDIF # WNT
 
@@ -154,6 +154,9 @@ SLOFILES= \
 
 .IF "$(GUI)" == "WNT"
 SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COMID)
+.ELIF "$(GUI)" == "OS2"
+SHL1TARGET=cppuh
+SHL1TARGET=cppuh$(UDK_MAJOR)
 .ELSE
 SHL1TARGET=uno_$(TARGET)$(COMID)
 .ENDIF
