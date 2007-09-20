@@ -19,6 +19,7 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\bin\smath.exe %_DEST%\bin%_EXT%\smath.exe
 ..\%__SRC%\bin\swriter.exe %_DEST%\bin%_EXT%\swriter.exe
 ..\%__SRC%\bin\sbase.exe %_DEST%\bin%_EXT%\sbase.exe
+..\%__SRC%\bin\quickstart.exe %_DEST%\bin%_EXT%\quickstart.exe
 
 ..\%__SRC%\misc\soffice.exe.manifest %_DEST%\bin%_EXT%\soffice.exe.manifest
 ..\%__SRC%\misc\soffice.bin.manifest %_DEST%\bin%_EXT%\so\soffice.bin.manifest
@@ -36,7 +37,7 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\bin\offacc*.dll %_DEST%\bin%_EXT%\offacc*.dll
 ..\%__SRC%\lib\liboffacc*.so %_DEST%\lib%_EXT%\liboffacc*.so
 ..\%__SRC%\lib\liboffacc*.dylib %_DEST%\lib%_EXT%\liboffacc*.dylib
-..\%__SRC%\bin\migrationoo2.uno.dll %_DEST%\bin%_EXT%\migrationoo2.uno.dll
+..\%__SRC%\bin\migratio*.dll %_DEST%\bin%_EXT%\migratio*.dll
 ..\%__SRC%\lib\migrationoo2.uno.so %_DEST%\lib%_EXT%\migrationoo2.uno.so
 ..\%__SRC%\lib\migrationoo2.uno.dylib %_DEST%\lib%_EXT%\migrationoo2.uno.dylib
 
@@ -44,7 +45,7 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 
 ..\%__SRC%\bin\loader2.ex? %_DEST%\bin%_EXT%\loader2.ex?
 
-..\%__SRC%\bin\deployment*.uno.dll %_DEST%\bin%_EXT%\deployment*.uno.dll
+..\%__SRC%\bin\depl*.dll %_DEST%\bin%_EXT%\depl*.dll
 ..\%__SRC%\lib\deployment*.uno.so %_DEST%\lib%_EXT%\deployment*.uno.so
 ..\%__SRC%\lib\deployment*.uno.dylib %_DEST%\lib%_EXT%\deployment*.uno.dylib
 ..\%__SRC%\bin\deploymentmisc*.dll %_DEST%\bin%_EXT%\deploymentmisc*.dll
