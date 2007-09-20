@@ -1,4 +1,4 @@
-..\%__SRC%\bin\cppcanvas*.dll %_DEST%\bin%_EXT%\cppcanvas*.dll
+..\%__SRC%\bin\cppcanv*.dll %_DEST%\bin%_EXT%\cppcanv*.dll
 ..\%__SRC%\lib\icppcanvas.lib %_DEST%\lib%_EXT%\icppcanvas.lib
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 
