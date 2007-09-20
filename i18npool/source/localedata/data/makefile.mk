@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-03 14:10:44 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:34:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@ PRJ=..$/..$/..
 
 PRJNAME=i18npool
 TARGET=localedata
+.IF "$(GUI)" == "OS2"
+TARGET=ld
+.ENDIF
 LIBTARGET=NO
 
 # Disable debugging on MSC compilers, due linker bug
@@ -49,7 +52,7 @@ debug!=
 .INCLUDE :  settings.mk
 
 # macro to link with localedata_en library
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 .IF "$(COM)"=="GCC"
 LINK_LOCALEDATA_EN_LIB=-l$(SHL1TARGET)
 LINK_LOCALEDATA_ES_LIB=-l$(SHL2TARGET)
@@ -229,9 +232,12 @@ MY_MISC_CXXFILES = \
 
 # English Locales
 SHL1TARGET=localedata_en
+.IF "$(GUI)" == "OS2"
+SHL1TARGET=ld_en
+.ENDIF
 SHL1IMPLIB=i$(SHL1TARGET)
 
-SHL1VERSIONMAP=$(SHL1TARGET).map
+SHL1VERSIONMAP=localedata_en.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
@@ -256,9 +262,12 @@ LIB1OBJFILES=$(SHL1OBJS)
 
 # Spanish Locales
 SHL2TARGET=localedata_es
+.IF "$(GUI)" == "OS2"
+SHL2TARGET=ld_es
+.ENDIF
 SHL2IMPLIB=i$(SHL2TARGET)
 
-SHL2VERSIONMAP=$(SHL2TARGET).map
+SHL2VERSIONMAP=localedata_es.map
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=$(SHL2TARGET)
 
@@ -290,9 +299,12 @@ LIB2OBJFILES=$(SHL2OBJS)
 
 # European Locales
 SHL3TARGET=localedata_euro
+.IF "$(GUI)" == "OS2"
+SHL3TARGET=ld_eur
+.ENDIF
 SHL3IMPLIB=i$(SHL3TARGET)
 
-SHL3VERSIONMAP=$(SHL3TARGET).map
+SHL3VERSIONMAP=localedata_euro.map
 SHL3DEF=$(MISC)$/$(SHL3TARGET).def
 DEF3NAME=$(SHL3TARGET)
 
@@ -366,9 +378,12 @@ LIB3OBJFILES=$(SHL3OBJS)
 
 # Other Locales
 SHL4TARGET=localedata_others
+.IF "$(GUI)" == "OS2"
+SHL4TARGET=ld_oth
+.ENDIF
 SHL4IMPLIB=i$(SHL4TARGET)
 
-SHL4VERSIONMAP=$(SHL4TARGET).map
+SHL4VERSIONMAP=localedata_others.map
 SHL4DEF=$(MISC)$/$(SHL4TARGET).def
 DEF4NAME=$(SHL4TARGET)
 
