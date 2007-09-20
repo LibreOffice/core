@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 09:05:28 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:07:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1077,10 +1077,8 @@ double SAL_CALL rtl_ustr_toDouble( const sal_Unicode * str ) SAL_THROW_EXTERN_C(
 
 /* ======================================================================= */
 
-#ifdef SAL_W32
+#if defined( SAL_W32) ||  defined(SAL_OS2)
 #pragma pack(push, 4)
-#elif defined(SAL_OS2)
-#pragma pack(1)
 #endif
 
 /** The implementation of a Unicode string.
@@ -1094,10 +1092,8 @@ typedef struct _rtl_uString
     sal_Unicode         buffer[1];
 } rtl_uString;
 
-#ifdef SAL_W32
+#if defined( SAL_W32) ||  defined(SAL_OS2)
 #pragma pack(pop)
-#elif defined(SAL_OS2)
-#pragma pack()
 #endif
 
 /* ----------------------------------------------------------------------- */
