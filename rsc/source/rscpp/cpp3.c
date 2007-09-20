@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp3.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:35:06 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:34:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,7 @@ void setincdirs()
  * verwendete knallte es in strcpy() !
  */
 
-#if !defined( ZTC ) && !defined( WNT ) && !defined(BLC) && ! defined UNX
+#if !defined( ZTC ) && !defined( WNT ) && !defined(BLC) && ! defined UNX && ! defined OS2
         extern   char     *getenv( char *pStr ); /* BP */
 #endif
                  char     *pIncGetEnv = NULL;    /* Pointer auf INCLUDE   */
