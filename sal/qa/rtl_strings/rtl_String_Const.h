@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_String_Const.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:56:18 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:22:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -440,7 +440,7 @@ static const sal_Int16 kSInt16Max = SHRT_MAX;
 static const sal_Int32 kUInt16Max = USHRT_MAX;
 static const sal_Int32 kSInt32Max = INT_MAX;
 static const sal_Int64 kUInt32Max = UINT_MAX;
-#ifdef UNX
+#if (defined UNX) || (defined OS2)
 static const sal_Int64 kSInt64Max = 9223372036854775807LL;
 #else
 static const sal_Int64 kSInt64Max = 9223372036854775807;
