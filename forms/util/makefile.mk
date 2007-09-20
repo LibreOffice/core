@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:53:52 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:42:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,10 @@ SHL1STDLIBS +=\
     -lX11
 .ENDIF # OS == MACOSX
 
+.ENDIF
+
+.IF "$(GUI)"=="OS2"
+SHL1STDLIBS += pthread.lib libz.lib
 .ENDIF
 
 # --- Targets ----------------------------------
