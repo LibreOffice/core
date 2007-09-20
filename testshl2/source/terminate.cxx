@@ -4,9 +4,9 @@
  *
  *  $RCSfile: terminate.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:42:19 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 
 #include "getopt.hxx"
 
-#ifdef UNX
+#if (defined UNX) || (defined OS2)
 #include <unistd.h> /* usleep */
 #include <sys/types.h>
 #include <signal.h>
@@ -266,7 +266,7 @@ int _cdecl main( int, char* argv[] )
 
     if ( opt.hasOpt("-version") )
     {
-        fprintf(stderr, "testshl2_timeout $Revision: 1.6 $\n");
+        fprintf(stderr, "testshl2_timeout $Revision: 1.7 $\n");
         exit(0);
     }
 
