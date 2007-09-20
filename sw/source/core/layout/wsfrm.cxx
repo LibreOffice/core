@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:14:46 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 11:50:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1906,6 +1906,55 @@ void SwFrm::ReinitializeFrmSizeAttrFlags()
             ChgSize( Size( rFmtSize.GetWidth(), Frm().Height()));
         else
             ChgSize( Size( Frm().Width(), rFmtSize.GetHeight()));
+    }
+}
+
+/*************************************************************************
+|*  SwFrm::ValidateThisAndAllLowers()
+ *
+ * FME 2007-08-30 #i81146# new loop control
+|*************************************************************************/
+void SwFrm::ValidateThisAndAllLowers( const USHORT nStage )
+{
+    // Stage 0: Only validate frames. Do not process any objects.
+    // Stage 1: Only validate fly frames and all of their contents.
+    // Stage 2: Validate all.
+
+    const bool bOnlyObject = 1 == nStage;
+    const bool bIncludeObjects = 1 <= nStage;
+
+    if ( !bOnlyObject || ISA(SwFlyFrm) )
+    {
+        bValidSize = TRUE;
+        bValidPrtArea = TRUE;
+        bValidPos = TRUE;
+    }
+
+    if ( bIncludeObjects )
+    {
+        const SwSortedObjs* pObjs = GetDrawObjs();
+        if ( pObjs )
+        {
+            const sal_uInt32 nCnt = pObjs->Count();
+            for ( sal_uInt32 i = 0; i < nCnt; ++i )
+            {
+                SwAnchoredObject* pAnchObj = (*pObjs)[i];
+                if ( pAnchObj->ISA(SwFlyFrm) )
+                    static_cast<SwFlyFrm*>(pAnchObj)->ValidateThisAndAllLowers( 2 );
+                else if ( pAnchObj->ISA(SwAnchoredDrawObject) )
+                    static_cast<SwAnchoredDrawObject*>(pAnchObj)->ValidateThis();
+            }
+        }
+    }
+
+    if ( IsLayoutFrm() )
+    {
+        SwFrm* pLower = static_cast<SwLayoutFrm*>(this)->Lower();
+        while ( pLower )
+        {
+            pLower->ValidateThisAndAllLowers( nStage );
+            pLower = pLower->GetNext();
+        }
     }
 }
 
