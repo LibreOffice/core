@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_Bootstrap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:55:06 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:21:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include <stdlib.h>
 #include <algorithm> // STL
 
-#include "stringhelper.hxx"
+#include "cppunit/stringhelper.hxx"
 
 #include <cppunit/simpleheader.hxx>
 //#include "stringhelper.hxx"
@@ -149,7 +149,7 @@ inline rtl::OUString t_getSourcePath(rtl::OString const& _sFilename)
      rtl::OUString aDirURL(getExecutableDirectory());
      aDirURL += OUString::createFromAscii( "/");
      aDirURL += OUString::createFromAscii( _sFilename.getStr() );
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     aDirURL += rtl::OUString::createFromAscii(".ini");
 #else
     aDirURL += rtl::OUString::createFromAscii("rc");
@@ -353,7 +353,7 @@ namespace rtl_Bootstrap
             oslProcess hProcess = NULL;
            rtl::OUString suFileURL = suCWD;
             suFileURL += rtl::OUString::createFromAscii("/") +  rtl::OUString::createFromAscii(process_name) ;
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
         suFileURL += rtl::OUString::createFromAscii(".exe");
 #endif
             const int nParameterCount = 3;
@@ -649,7 +649,7 @@ namespace rtl_Bootstrap
      rtl::OUString aDirURL = OUString::createFromAscii( "$ORIGIN");
      aDirURL += OUString::createFromAscii( "/");
      aDirURL += OUString::createFromAscii( "rtl" );
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     aDirURL += rtl::OUString::createFromAscii(".ini");
 #else
     aDirURL += rtl::OUString::createFromAscii("rc");
@@ -882,7 +882,7 @@ static void removeAndCreateFile(rtl::OUString const& _suFileURL, rtl::OString co
 static void create_rtlrc()
 {
     rtl::OUString aFileURL(getExecutableDirectory());
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     aFileURL += rtl::OUString::createFromAscii("/rtl.ini");
 #else
     aFileURL += rtl::OUString::createFromAscii("/rtlrc");
@@ -903,7 +903,7 @@ static void create_rtlrc()
 static void create_testshl2rc()
 {
     rtl::OUString aFileURL(getExecutableDirectory());
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     aFileURL += rtl::OUString::createFromAscii("/testshl2.ini");
 #else
     aFileURL += rtl::OUString::createFromAscii("/testshl2rc");
@@ -937,7 +937,7 @@ static void create_testshl2rc()
 static void create_pseudorc()
 {
     rtl::OUString aFileURL(getExecutableDirectory());
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     aFileURL += rtl::OUString::createFromAscii("/pseudo.ini");
 #else
     aFileURL += rtl::OUString::createFromAscii("/pseudorc");
@@ -954,7 +954,7 @@ static void create_pseudorc()
 void create_bootstrap_processrc()
 {
     rtl::OUString aDirURL(getModulePath());
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     aDirURL += rtl::OUString::createFromAscii("/bootstrap_process.ini");
 #else
     aDirURL += rtl::OUString::createFromAscii("/bootstrap_processrc");
