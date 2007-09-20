@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:53:45 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:48:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #endif
 #include "regkey.hxx"
 
-#if defined(WIN32) || defined(WNT) || defined(__OS2__)
+#if defined(WIN32) || defined(WNT) || defined(OS2)
 #include <io.h>
 #endif
 
@@ -102,14 +102,14 @@ OString getTempName()
         strncpy(tmpPattern, aOStr.getStr(), sizeof(tmpPattern)-1);
     }
 
-#if defined(WIN32) || defined(WNT)
+#if defined(WIN32) || defined(WNT) || defined(OS2)
     OSL_ASSERT( sizeof(tmpPattern) > ( strlen(tmpPattern)
                                        + RTL_CONSTASCII_LENGTH("\\reg_XXXXXX") ) );
     strncat(tmpPattern, "\\reg_XXXXXX", sizeof(tmpPattern)-1-strlen(tmpPattern));
     pTmpName = mktemp(tmpPattern);
 #endif
 
-#ifdef __OS2__
+#ifdef OS2__YD
     char* tmpname = tempnam(NULL, "reg_");
     OSL_ASSERT( sizeof(tmpPattern) > strlen(tmpname) );
     strncpy(tmpPattern, tmpname, sizeof(tmpPattern)-1);
