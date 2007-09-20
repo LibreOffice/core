@@ -4,9 +4,9 @@
  *
  *  $RCSfile: getopt.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:51:00 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:02:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#ifndef OS2 // YD use libc getopt
+
 #include    <stdio.h>
 #include    <string.h>
 
@@ -99,3 +102,5 @@ int
     }
     return c;
 }
+
+#endif // OS2 // YD use libc getopt
