@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 18:02:00 $
+#   last change: $Author: vg $ $Date: 2007-09-20 16:27:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,10 @@ SHL1STDLIBS=\
     $(SALLIB)  \
     $(UCBHELPERLIB) \
     $(CURLLIB)
+
+.IF "$(GUI)" == "OS2"
+SHL1STDLIBS+=ssl.lib crypto.lib libz.lib
+.ENDIF
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS= \
