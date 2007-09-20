@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:24:39 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:20:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(GUI)" != "OS2"
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
@@ -61,7 +63,7 @@ SHL1OBJS=  \
 SHL1TARGET= osl_Thread
 SHL1STDLIBS=\
    $(SALLIB) 
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
 .ENDIF
 .IF "$(GUI)" == "UNX"
@@ -80,6 +82,8 @@ DEF1NAME    =$(SHL1TARGET)
 # DEF1EXPORTFILE= export.exp
 SHL1VERSIONMAP = export.map
 
+.ENDIF # "$(GUI)" != "OS2"
+
 # END ------------------------------------------------------------------
 
 #.IF "$(GUI)" == "WNT"
@@ -88,7 +92,7 @@ SHL2OBJS=$(SLO)$/osl_process.obj
 SHL2TARGET=osl_process
 SHL2STDLIBS=$(SALLIB) 
 
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 SHL2STDLIBS+=$(SOLARLIBDIR)$/cppunit.lib
 .ENDIF
 .IF "$(GUI)" == "UNX"
@@ -119,7 +123,15 @@ APP3STDLIBS=$(SALLIB)
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
 
+.IF "$(GUI)" == "OS2"
+
+SLOFILES=$(SHL2OBJS)
+
+.ELSE
+
 SLOFILES=$(SHL1OBJS) $(SHL2OBJS)
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
