@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-27 17:10:56 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:51:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,9 @@ SLOFILES = \
     $(SLO)$/codemaker.obj
 
 LIB1TARGET=$(LB)$/$(TARGET).lib
+.IF "$(GUI)" != "OS2"
 LIB1ARCHIV=$(LB)$/lib$(TARGET).a
+.ENDIF
 LIB1OBJFILES=$(SLOFILES)
 
 .INCLUDE: target.mk
