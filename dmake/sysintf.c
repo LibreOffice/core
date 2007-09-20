@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.c,v 1.10 2007-06-12 06:07:03 obo Exp $
+/* RCS  $Id: sysintf.c,v 1.11 2007-09-20 14:34:06 vg Exp $
 --
 -- SYNOPSIS
 --      System independent interface
@@ -596,11 +596,20 @@ char **path;
 #if defined(HAVE_MKSTEMP)
    mode_t       mask;
 
+#ifdef __EMX__
+   // YD use \ since temporary names with / can be interpreted as options
+   // e.g. 4os2 'del /y e:\tmp/mkW4mmkS._.zip' will fail
+   *path = DmStrJoin( tmpdir, "\\", -1, FALSE);
+#else
    *path = DmStrJoin( tmpdir, "/", -1, FALSE);
+#endif
    *path = DmStrJoin( *path, "mkXXXXXX", -1, TRUE );
 
    mask = umask(0066);
    fd = mkstemp( *path );
+#ifdef __EMX__
+   _setmode( fd, O_TEXT);
+#endif
    umask(mask);
 
 #elif defined(HAVE_TEMPNAM)
@@ -663,6 +672,9 @@ char *mode;
       Def_macro( "TMPFILE", *path, M_MULTI|M_EXPANDED );
       /* associate stream with file descriptor */
       fp = fdopen(fd, mode);
+#ifdef __EMX__
+      _setmode( fd, O_TEXT);
+#endif
    }
    else
       fp = NIL(FILE);
