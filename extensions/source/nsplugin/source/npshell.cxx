@@ -4,9 +4,9 @@
  *
  *  $RCSfile: npshell.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:02:09 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:27:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
+
+#ifdef OS2
+#define UNIX
+#endif
 
 #ifdef UNIX
 
