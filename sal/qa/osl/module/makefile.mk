@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 15:56:31 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:20:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,9 @@ SHL2STDLIBS=   $(SALLIB)
 .IF "$(GUI)" == "WNT"
 SHL2STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib 
 SHL2STDLIBS+=i$(SHL2TARGET).lib
+.ENDIF
+.IF "$(GUI)" == "OS2"
+SHL2STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib 
 .ENDIF
 .IF "$(GUI)" == "UNX"
 SHL2STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
