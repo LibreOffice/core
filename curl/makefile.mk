@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 15:00:23 $
+#   last change: $Author: vg $ $Date: 2007-09-20 16:33:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@ TARFILE_NAME=curl-7.12.2
 PATCH_FILE_NAME=curl-7.12.2.patch
 CONVERTFILES= \
     lib$/Makefile.vc6
+
+ADDITIONAL_FILES= lib$/config-os2.h lib$/Makefile.os2
 
 .IF "$(GUI)"=="UNX"
 
@@ -115,6 +117,21 @@ OUT2LIB=$(BUILD_DIR)$/libcurl.lib
 .ENDIF
 .ENDIF			# "$(GUI)"=="WNT"
 
+.IF "$(GUI)"=="OS2"
+# make use of stlport headerfiles
+EXT_USE_STLPORT=TRUE
+
+BUILD_DIR=.$/lib
+.IF "$(debug)"==""
+BUILD_ACTION=make -f Makefile.os2
+.ELSE
+BUILD_ACTION=make -f Makefile.os2
+.ENDIF
+
+OUT2BIN=$(BUILD_DIR)$/libcurl.dll
+OUT2LIB=$(BUILD_DIR)$/libcurl.lib
+
+.ENDIF			# "$(GUI)"=="OS2"
 
 OUT2INC= \
     include$/curl$/easy.h  			\
