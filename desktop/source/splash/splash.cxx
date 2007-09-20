@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 16:34:18 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:37:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     , _cProgressBarColor(sal::static_int_cast< ColorData >(NOT_LOADED))
     , _iMax(100)
     , _iProgress(0)
-    , _eBitmapMode(BM_DEFAULT)
+    , _eBitmapMode(BM_DEFAULTMODE)
     , _bPaintBitmap(sal_True)
     , _bPaintProgress(sal_False)
     , _bFullScreenSplash(sal_False)
