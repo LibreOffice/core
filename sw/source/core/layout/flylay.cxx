@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:48:59 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 11:49:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,6 +221,10 @@ void SwFlyFreeFrm::MakeAll()
         // <--
     }
 
+    // FME 2007-08-30 #i81146# new loop control
+    USHORT nLoopControlRuns = 0;
+    const USHORT nLoopControlMax = 10;
+
     while ( !bValidPos || !bValidSize || !bValidPrtArea || bFormatHeightOnly )
     {
         SWRECTFN( this )
@@ -283,10 +287,20 @@ void SwFlyFreeFrm::MakeAll()
                     bValidSize = FALSE;
             }
         }
+
         if ( bValidPos && bValidSize )
         {
-            CheckClip( *pSz );
+            ++nLoopControlRuns;
+
+#if OSL_DEBUG_LEVEL > 1
+            ASSERT( nLoopControlRuns < nLoopControlMax, "LoopControl in SwFlyFreeFrm::MakeAll" )
+#endif
+
+            if ( nLoopControlRuns < nLoopControlMax )
+                CheckClip( *pSz );
         }
+        else
+            nLoopControlRuns = 0;
     }
     Unlock();
 
