@@ -8,6 +8,7 @@ br	bridges\source\remote\context			nmake	-	all	br_rcon br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\mingw_intel	nmake	-	w	br_gcc3i br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\msvc_win32_intel	nmake	-	w	br_msci br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_linux_intel	nmake	-	u	br_gcc3li br_cppuno_shared br_unotypes br_inc NULL
+br	bridges\source\cpp_uno\gcc3_os2_intel	nmake	-	p	br_gcc3os br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_freebsd_intel	nmake	-	u	br_gcc3fi br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_linux_x86-64	nmake	-	u	br_gcc3lx br_cppuno_shared br_unotypes br_inc NULL
 br	bridges\source\cpp_uno\gcc3_freebsd_x86-64	nmake	-	u	br_gcc3fx br_cppuno_shared br_unotypes br_inc NULL
