@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OFunctiondefs.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 10:26:20 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:49:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,12 @@
 //--------------------------------------------------------------------------
 
 #ifdef OS2
+#include <svpm.h>
+#include <odbc/sqlext.h>
+#define SDB_ODBC_CHAR UCHAR
+#endif // OS2
+
+#ifdef OS2__00
 
 #ifdef ODBCIMP
 
