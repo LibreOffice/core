@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.263 $
+ *  $Revision: 1.264 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:09:04 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:25:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -9468,6 +9468,10 @@ Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSi
     // take HWND for Windows
     if( pSysData )
         aArg[ 1 ] = makeAny( reinterpret_cast<sal_Int32>(pSysData->hWnd) );
+#elif defined( OS2 )
+    // take HWND for OS/2
+    if( pSysData )
+        aArg[ 1 ] = makeAny( static_cast<sal_Int32>(pSysData->hWnd) );
 #elif defined( QUARTZ )
     // take WindowRef for Mac OS X / Quartz
     if( pSysData )
