@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddeml2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:24:59 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:30:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ PSZ ImpDdeMgr::AllocAtomName( ATOM hString, ULONG& rBufLen )
     ULONG nLen = WinQueryAtomLength( hAtomTable, hString );
     nLen++;
     PSZ pBuf = 0;
-    if ( !MyDosAllocMem( (PPVOID)&pBuf, nLen, PAG_READ|PAG_WRITE|PAG_COMMIT,"Atom" ) )
+    if ( !MyDosAllocMem( (PPVOID)&pBuf, nLen, PAG_READ|PAG_WRITE|PAG_COMMIT | OBJ_ANY,"Atom" ) )
     {
         WinQueryAtomName( hAtomTable, hString, pBuf, nLen );
         rBufLen = nLen;
@@ -95,7 +95,7 @@ PDDESTRUCT ImpDdeMgr::MakeDDEObject( HWND hwnd, ATOM hItemName,
 
     if( !(MyDosAllocSharedMem((PPVOID)&pulSharedObj, NULL,
             nTotalSize,
-            PAG_COMMIT | PAG_READ | PAG_WRITE | OBJ_GETTABLE | OBJ_GIVEABLE,
+            PAG_COMMIT | PAG_READ | PAG_WRITE | OBJ_GETTABLE | OBJ_GIVEABLE | OBJ_ANY,
             "MakeDDEObject")))
     {
         pddes = (PDDESTRUCT) pulSharedObj;
@@ -137,7 +137,7 @@ APIRET ImpDdeMgr::AllocNamedSharedMem( PPVOID ppBaseAddress, PSZ pName,
 
     *ppBaseAddress = 0;
     APIRET nRet = MyDosAllocSharedMem( ppBaseAddress, pName, nObjSize,
-                    PAG_READ | PAG_WRITE | PAG_COMMIT,
+                    PAG_READ | PAG_WRITE | PAG_COMMIT | OBJ_ANY,
                     "AllocNamedSharedMem" );
     if ( !nRet )
     {
