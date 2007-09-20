@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:18:51 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 11:49:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -904,9 +904,23 @@ void SwLayAction::InternalAction()
                     {
                         PROTOCOL( pPage, PROT_FILE_INIT, 0, 0)
                         XCHECKPAGE;
+
+                        // FME 2007-08-30 #i81146# new loop control
+                        USHORT nLoopControlRuns_1 = 0;
+                        const USHORT nLoopControlMax = 20;
+
                         while ( !IsNextCycle() && pPage->IsInvalidLayout() )
                         {
                             pPage->ValidateLayout();
+
+                            if ( ++nLoopControlRuns_1 > nLoopControlMax )
+                            {
+#if OSL_DEBUG_LEVEL > 1
+                                ASSERT( false, "LoopControl_1 in SwLayAction::InternalAction" )
+#endif
+                                break;
+                            }
+
                             FormatLayout( pPage );
                             XCHECKPAGE;
                         }
@@ -972,7 +986,6 @@ void SwLayAction::InternalAction()
                     nPreInvaPage = USHRT_MAX;
                 }
 
-                //Ist eine Vorseite invalid?
                 while ( pPage->GetPrev() &&
                         ( ((SwPageFrm*)pPage->GetPrev())->IsInvalid() ||
                           ( ((SwPageFrm*)pPage->GetPrev())->GetSortedObjs() &&
@@ -982,9 +995,10 @@ void SwLayAction::InternalAction()
                 {
                     pPage = (SwPageFrm*)pPage->GetPrev();
                 }
+
                 //Weiter bis zur naechsten invaliden Seite.
                 while ( pPage && !pPage->IsInvalid() &&
-                        (!IS_FLYS || (IS_FLYS && !IS_INVAFLY)) )
+                        (!IS_FLYS || !IS_INVAFLY) )
                 {
                     pPage = (SwPageFrm*)pPage->GetNext();
                 }
@@ -1058,6 +1072,11 @@ void SwLayAction::InternalAction()
             NotifyLayoutOfPageInProgress aLayoutOfPageInProgress( *pPg );
 
             XCHECKPAGE;
+
+            // FME 2007-08-30 #i81146# new loop control
+            USHORT nLoopControlRuns_2 = 0;
+            const USHORT nLoopControlMax = 20;
+
             // OD 14.04.2003 #106346# - special case: interrupt content formatting
             // --> OD 2004-07-08 #i28701# - conditions, introduced by #106346#,
             // are incorrect (marcos IS_FLYS and IS_INVAFLY only works for <pPage>)
@@ -1080,12 +1099,26 @@ void SwLayAction::InternalAction()
                     pPg->ValidateFlyCntnt();
                 }
                 // <--
+
+                // FME 2007-08-30 #i81146# new loop control
+                USHORT nLoopControlRuns_3 = 0;
+
                 while ( pPg->IsInvalidLayout() )
                 {
                     pPg->ValidateLayout();
+
+                    if ( ++nLoopControlRuns_3 > nLoopControlMax )
+                    {
+#if OSL_DEBUG_LEVEL > 1
+                        ASSERT( false, "LoopControl_3 in Interrupt formatting in SwLayAction::InternalAction" )
+#endif
+                        break;
+                    }
+
                     FormatLayout( pPg );
                     XCHECKPAGE;
                 }
+
                 // --> OD 2005-06-09 #i50432#
                 if ( mbFormatCntntOnInterrupt &&
                      ( pPg->IsInvalidCntnt() ||
@@ -1098,6 +1131,15 @@ void SwLayAction::InternalAction()
                     pPg->ValidateFlyLayout();
                     pPg->ValidateFlyCntnt();
                     // <--
+
+                    if ( ++nLoopControlRuns_2 > nLoopControlMax )
+                    {
+#if OSL_DEBUG_LEVEL > 1
+                        ASSERT( false, "LoopControl_2 in Interrupt formatting in SwLayAction::InternalAction" )
+#endif
+                        break;
+                    }
+
                     if ( !FormatCntnt( pPg ) )
                     {
                         XCHECKPAGE;
