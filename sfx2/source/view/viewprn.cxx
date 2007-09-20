@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:26:21 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:37:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-
-#ifdef OS2
-#include <vcl/sysdep.hxx>
-#endif
 
 #ifndef _COM_SUN_STAR_VIEW_PRINTABLESTATE_HPP_
 #include <com/sun/star/view/PrintableState.hpp>
