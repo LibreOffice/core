@@ -1,4 +1,4 @@
-/* RCS  $Id: ruletab.c,v 1.2 2006-04-20 12:08:38 hr Exp $
+/* RCS  $Id: ruletab.c,v 1.3 2007-09-20 14:34:28 vg Exp $
 --
 -- SYNOPSIS
 --      Default initial configuration of dmake.
@@ -33,9 +33,12 @@
  * We dont need the two different cases of Makefile, so only keep the
  * pretty one.
  */
+//  ".IMPORT .IGNORE: DMAKEROOT SOLARVER UPD INPATH OS UPDMINOREXT",
+
 static char *_rules[] = {
-    "MAXLINELENGTH := 2046",
+    "MAXLINELENGTH := 8190",
     "MAXPROCESSLIMIT := 16",
+#include "dmakeroot.h"
     ".IMPORT .IGNORE: DMAKEROOT"
     ".MAKEFILES : makefile.mk Makefile",
     ".SOURCE    : .NULL",

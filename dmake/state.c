@@ -1,4 +1,4 @@
-/* RCS  $Id: state.c,v 1.2 2006-04-20 12:02:17 hr Exp $
+/* RCS  $Id: state.c,v 1.3 2007-09-20 14:33:53 vg Exp $
 --
 -- SYNOPSIS
 --      .KEEP_STATE state file management
@@ -226,5 +226,6 @@ FILE *fp;
    if( fgets(buf, size, fp) == NULL ) return(0);
 
    if( (p=strrchr(buf,'\n')) != NIL(char) ) *p='\0';
+   if( (p=strrchr(buf,'\r')) != NIL(char) ) *p='\0';
    return(1);
 }
