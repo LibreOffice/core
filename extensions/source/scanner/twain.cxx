@@ -4,9 +4,9 @@
  *
  *  $RCSfile: twain.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:28:46 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:27:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <tools/svwin.h>
 #endif
 #ifdef OS2
-#include <tools/svpm.h>
+#include <svpm.h>
 #endif // OS2
 #include <vos/module.hxx>
 #include <tools/stream.hxx>
