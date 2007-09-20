@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alloc.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:48:20 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:23:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,6 +204,102 @@ static sal_Size __rtl_memory_vmpagesize (void)
 (void)(VirtualFree ((LPVOID)(p), (SIZE_T)(0), MEM_RELEASE))
 
 #endif /* SAL_W32 */
+
+/*===========================================================================
+ *
+ * rtl_memory (OS2) internals.
+ *
+ *=========================================================================*/
+#ifdef SAL_OS2
+
+#define INCL_DOS
+#include <os2.h>
+
+typedef HMTX mutex_type;
+
+/* Static initializer */
+#define RTL_MUTEX_INITIALIZER -1
+
+/*
+ * __rtl_mutex_init (dynamic initialization).
+ *
+ * Static initialization (with DebugInfo == NULL)
+ * leads to Access Violation upon first contention.
+ */
+static void __rtl_mutex_init (mutex_type* mutex)
+{
+    APIRET      rc = 0;
+
+    rc = DosCreateMutexSem(NULL,mutex,0,0);
+
+}
+
+static int __rtl_mutex_destroy (mutex_type* mutex)
+{
+    APIRET      rc = 0;
+
+
+    do {
+        rc = DosCloseMutexSem(*mutex);
+        if (rc == 301) DosReleaseMutexSem(*mutex);
+    } while (rc == 301);
+
+    *mutex = 0;
+
+    /* Return the completion status: */
+    return (0);
+}
+
+
+static int __rtl_mutex_acquire(mutex_type* mutex)
+{
+    int     ret = 0;
+    int     status = 0;
+    APIRET      rc = 0;
+
+    // initialize static semaphores created with PTHREAD_MUTEX_INITIALIZER state.
+    if (*mutex == -1)
+        __rtl_mutex_init( mutex);
+
+    rc = DosRequestMutexSem(*mutex,SEM_INDEFINITE_WAIT);
+    if (rc)
+        return(1);
+
+    /* Return the completion status: */
+    return (0);
+}
+
+static int __rtl_mutex_release(mutex_type* mutex)
+{
+    int     ret = 0;
+    APIRET      rc = 0;
+    int     status;
+
+
+    // initialize static semaphores created with PTHREAD_MUTEX_INITIALIZER state.
+    if (*mutex == -1)
+       __rtl_mutex_init( mutex);
+
+    rc = DosReleaseMutexSem(*mutex);
+
+    /* Return the completion status: */
+    return (0);
+}
+
+#define RTL_MUTEX_INIT(a)  __rtl_mutex_init((mutex_type*)(a))
+#define RTL_MUTEX_ACQUIRE(a)  __rtl_mutex_acquire((mutex_type*)(a))
+#define RTL_MUTEX_RELEASE(a)  __rtl_mutex_release((mutex_type*)(a))
+
+static sal_Size __rtl_memory_vmpagesize (void)
+{
+    return (sal_Size)(getpagesize());
+}
+
+#define RTL_MEMORY_ALLOC(n) (void*)(malloc(n))
+
+#define RTL_MEMORY_FREE(p, n) (void)(free(p))
+
+#endif /* SAL_OS2 */
 
 /*===========================================================================
  *
