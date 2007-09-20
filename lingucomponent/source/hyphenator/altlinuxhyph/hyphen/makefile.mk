@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:07:55 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:31:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@ USE_DEFFILE=TRUE
 
 .IF "$(GUI)"=="UNX"
 HNJLIB=-lhnj
+.ELIF  "$(GUI)"=="OS2"
+HNJLIB=$(SLB)\libhnj.lib
 .ELSE
 HNJLIB=libhnj.lib
 .ENDIF
@@ -49,6 +51,9 @@ HNJLIB=libhnj.lib
 .IF "$(ULINGULIB)"==""
 .IF "$(GUI)"=="UNX"
 ULINGULIB=-lulingu
+.ENDIF # unx
+.IF "$(GUI)"=="OS2"
+ULINGULIB=$(SLB)\libulingu.lib
 .ENDIF # unx
 .IF "$(GUI)"=="WNT"
 ULINGULIB=libulingu.lib
