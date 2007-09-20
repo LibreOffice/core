@@ -4,9 +4,9 @@
  *
  *  $RCSfile: once.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 12:08:47 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:05:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
  *  (platform dependent)
  */
 
-#if defined(SAL_UNX)
+#if defined(SAL_UNX) || defined(SAL_OS2)
 
 #include <pthread.h>
 
