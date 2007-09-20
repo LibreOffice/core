@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_OStringBuffer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:48:41 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -14794,7 +14794,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
             OString                expVal( kTestStr116 );
-#ifdef UNX
+#if defined(UNX) || defined(OS2)
             sal_Int64              input = 9223372036854775807LL;
 #else
             sal_Int64              input = 9223372036854775807;
@@ -14878,7 +14878,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
             OString                expVal( kTestStr118 );
-#ifdef UNX
+#if defined(UNX) || defined(OS2)
             sal_Int64              input = 9223372036854775807LL;
 #else
             sal_Int64              input = 9223372036854775807;
@@ -14961,7 +14961,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
             OString                expVal( kTestStr118 );
-#ifdef UNX
+#if defined(UNX) || defined(OS2)
             sal_Int64              input = 9223372036854775807LL;
 #else
             sal_Int64              input = 9223372036854775807;
@@ -15044,7 +15044,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
             OString                expVal( kTestStr118 );
-#ifdef UNX
+#if defined(UNX) || defined(OS2)
             sal_Int64              input = 9223372036854775807LL;
 #else
             sal_Int64              input = 9223372036854775807;
@@ -15127,7 +15127,7 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
             OString                expVal( kTestStr120 );
-#ifdef UNX
+#if defined(UNX) || defined(OS2)
             sal_Int64              input = 9223372036854775807LL;
 #else
             sal_Int64              input = 9223372036854775807;
