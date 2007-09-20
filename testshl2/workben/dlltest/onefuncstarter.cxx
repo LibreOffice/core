@@ -4,9 +4,9 @@
  *
  *  $RCSfile: onefuncstarter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:17:13 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:52:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ void test_link_at_runtime()
     pModule = new ::osl::Module();
     // create and load the module (shared library)
     // pModule = new ::osl::Module();
-#ifdef WNT
+#if (defined WNT) || (defined OS2)
     pModule->load( convertPath( rtl::OString( "onefunc_DLL.dll" ) ) );
 #endif
 #ifdef UNX
