@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layouter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:20:25 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 11:49:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,10 +65,11 @@ class SwLooping
     USHORT nMinPage;
     USHORT nMaxPage;
     USHORT nCount;
+    USHORT mnLoopControlStage;
 public:
     SwLooping( SwPageFrm* pPage );
     void Control( SwPageFrm* pPage );
-    static void Drastic( SwFrm* pFrm );
+    void Drastic( SwFrm* pFrm );
     bool IsLoopingLouieLight() const { return nCount > LOOP_DETECT - 30; };
 };
 
@@ -174,17 +175,14 @@ SwLooping::SwLooping( SwPageFrm* pPage )
     nMinPage = pPage->GetPhyPageNum();
     nMaxPage = nMinPage;
     nCount = 0;
+    mnLoopControlStage = 0;
 }
 
 void SwLooping::Drastic( SwFrm* pFrm )
 {
     while( pFrm )
     {
-        if( pFrm->IsLayoutFrm() )
-            Drastic( ((SwLayoutFrm*)pFrm)->Lower() );
-        pFrm->bValidPos = TRUE;
-        pFrm->bValidSize = TRUE;
-        pFrm->bValidPrtArea = TRUE;
+        pFrm->ValidateThisAndAllLowers( mnLoopControlStage );
         pFrm = pFrm->GetNext();
     }
 }
@@ -201,12 +199,14 @@ void SwLooping::Control( SwPageFrm* pPage )
         nMinPage = nNew;
         nMaxPage = nNew;
         nCount = 0;
+        mnLoopControlStage = 0;
     }
     else if( nNew > nMinPage + 2 )
     {
         nMinPage = nNew - 2;
         nMaxPage = nNew;
         nCount = 0;
+        mnLoopControlStage = 0;
     }
     else if( ++nCount > LOOP_DETECT )
     {
@@ -217,13 +217,22 @@ void SwLooping::Control( SwPageFrm* pPage )
             return;
 #endif
 #endif
-        ASSERT( FALSE, "Looping Louie" );
-        nCount = 0;
+
+        // FME 2007-08-30 #i81146# new loop control
+#if OSL_DEBUG_LEVEL > 1
+        ASSERT( 0 != mnLoopControlStage, "Looping Louie: Stage 1!" );
+        ASSERT( 1 != mnLoopControlStage, "Looping Louie: Stage 2!!" );
+        ASSERT( 2 >  mnLoopControlStage, "Looping Louie: Stage 3!!!" );
+#endif
+
         Drastic( pPage->Lower() );
         if( nNew > nMinPage && pPage->GetPrev() )
             Drastic( ((SwPageFrm*)pPage->GetPrev())->Lower() );
         if( nNew < nMaxPage && pPage->GetNext() )
             Drastic( ((SwPageFrm*)pPage->GetNext())->Lower() );
+
+        ++mnLoopControlStage;
+        nCount = 0;
     }
 }
 
