@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 17:40:56 $
+#   last change: $Author: vg $ $Date: 2007-09-20 16:25:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,11 @@ SLOFILES= \
     $(SLO)$/oneToOneMapping.obj
 
 # Unicode utilities 
+.IF "$(GUI)" == "OS2"
+SHL1TARGET=		$(TARGET)
+.ELSE
 SHL1TARGET=		$(TARGET)$(COMID)
+.ENDIF
 SHL1IMPLIB=		i$(TARGET)
 
 DEF1DEPN=		$(MISC)$/$(SHL1TARGET).flt
