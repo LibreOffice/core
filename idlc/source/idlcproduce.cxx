@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlcproduce.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:14:57 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:01:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ static sal_Bool checkOutputPath(const OString& completeName)
 
         if ( buffer.getLength() > 0 && nIndex != -1 )
         {
-#ifdef SAL_UNX
+#if defined(SAL_UNX) || defined(SAL_OS2)
             if (mkdir((char*)buffer.getStr(), 0777) == -1)
 #else
             if (mkdir((char*)buffer.getStr()) == -1)
