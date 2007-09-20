@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xconnection.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:16:21 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:24:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SVSYS_HXX
+#ifndef _SV_SVSYS_H
 #include <svsys.h>
 #endif
 #include <vcl/xconnection.hxx>
