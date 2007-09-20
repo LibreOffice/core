@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 15:56:17 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:19:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ SHL1VERSIONMAP = export.map
 SHL2OBJS=$(SLO)$/test_cpy_wrt_file.obj
 SHL2TARGET=tcwf
 SHL2STDLIBS=$(SALLIB)
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
 SHL2STDLIBS+=$(SOLARLIBDIR)$/cppunit.lib
 .ENDIF
 .IF "$(GUI)" == "UNX"
