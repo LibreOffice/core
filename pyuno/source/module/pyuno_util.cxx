@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_util.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:42:39 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:57:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,8 @@ PyRef ustring2PyUnicode( const OUString & str )
 {
     PyRef ret;
 #if Py_UNICODE_SIZE == 2
-    ret = PyRef( PyUnicode_FromUnicode( str.getStr(), str.getLength() ), SAL_NO_ACQUIRE );
+    // YD force conversion since python/2 uses wchar_t
+    ret = PyRef( PyUnicode_FromUnicode( (const Py_UNICODE*)str.getStr(), str.getLength() ), SAL_NO_ACQUIRE );
 #else
     OString sUtf8(OUStringToOString(str, RTL_TEXTENCODING_UTF8));
     ret = PyRef( PyUnicode_DecodeUTF8( sUtf8.getStr(), sUtf8.getLength(), NULL) , SAL_NO_ACQUIRE );
