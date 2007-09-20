@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-18 08:03:40 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:38:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,9 @@ TARGETOBJS=	\
 .IF "$(GUI)" == "WNT"
 RCFILES=verinfo.rc
 .ENDIF
+.IF "$(GUI)" == "OS2"
+RCFILES=ooverinfo2.rc
+.ENDIF
 
 # --- Linking of static libs ---------------------------------------
 
@@ -113,6 +116,7 @@ RESLIB1IMAGES=		$(PRJ)$/res
 RESLIB1SRSFILES=	$(SRS)$/desktop.srs \
                     $(SRS)$/wizard.srs
 
+.IF "$(GUI)" != "OS2"
 APP1TARGET=so$/$(TARGET)
 APP1NOSAL=TRUE
 APP1STDLIBS=			\
@@ -156,6 +160,8 @@ APP1STACK=10000000
 
 .ENDIF # WNT
 
+.ENDIF # "$(GUI)" != "OS2"
+
 APP5TARGET=soffice
 APP5NOSAL=TRUE
 APP5STDLIBS=			\
@@ -190,6 +196,14 @@ APP5VERINFO=ooverinfo.rc
 APP5LINKRES=$(MISC)$/ooffice5.res
 APP5STACK=10000000
 .ENDIF # WNT
+
+.IF "$(GUI)" == "OS2"
+APP5DEF= # automatic
+APP5RES=    $(RES)$/oodesktop.res
+APP5ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
+APP5VERINFO=ooverinfo2.rc
+APP5LINKRES=$(MISC)$/ooffice.res
+.ENDIF # OS2
 
 .IF "$(GUI)" == "WNT"
 APP6TARGET=so$/officeloader
@@ -238,13 +252,20 @@ ALLTAR: $(BIN)$/$(TARGET).bin
 ALLTAR: $(BIN)$/so$/$(TARGET).bin
 .ENDIF # WNT
 
+.IF "$(GUI)" == "OS2"
+ALLTAR: $(BIN)$/$(TARGET).bin
+.ENDIF # OS2
+
 $(BIN)$/soffice_oo$(EXECPOST) : $(APP5TARGETN)
     $(COPY) $< $@
 
+.IF "$(GUI)" != "OS2"
 $(BIN)$/so$/soffice_so$(EXECPOST) : $(APP1TARGETN)
     $(COPY) $< $@
 
 ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST) $(BIN)$/soffice_oo$(EXECPOST)
+
+.ENDIF
 
 
 .IF "$(GUI)" == "WNT"
@@ -282,6 +303,11 @@ $(BIN)$/so$/$(TARGET).bin: $(BIN)$/so$/$(TARGET)$(EXECPOST)
    $(COPY) $< $@
 
 .ENDIF # WNT
+
+.IF "$(GUI)" == "OS2"
+$(BIN)$/$(TARGET).bin: $(BIN)$/$(TARGET)$(EXECPOST)
+   $(COPY) $< $@
+.ENDIF # OS2
 
 $(MISC)$/binso_created.flg :
     @@-$(MKDIRHIER) $(BIN)$/so && $(TOUCH) $@
