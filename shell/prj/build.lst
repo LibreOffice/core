@@ -3,10 +3,13 @@ sl    shell\inc			                           nmake   -   all sl_inc NULL
 sl    shell\source\win32                           nmake   -   w   sl_win32 sl_inc NULL
 sl    shell\source\win32\simplemail                nmake   -   w   sl_win32_simplemail sl_inc NULL
 sl    shell\source\unix\exec                       nmake   -   u   sl_unix sl_inc NULL
+sl    shell\source\unix\exec                       nmake   -   p   sl_unix sl_inc NULL
 sl    shell\source\unix\misc                       nmake   -   u   sl_unix_misc sl_inc NULL
 sl    shell\source\cmdmail                         nmake   -   u   sl_cmdmail sl_inc NULL
+sl    shell\source\cmdmail                         nmake   -   p   sl_cmdmail sl_inc NULL
 sl    shell\source\all                             nmake   -   all sl_all sl_inc NULL
 sl    shell\source\unix\sysshell                   nmake   -   u   sl_unix_sysshell sl_all sl_inc NULL
+sl    shell\source\os2\sysshell                    nmake   -   p   sl_os2_sysshell sl_all sl_inc NULL
 sl    shell\source\win32\sysshell                  nmake   -   w   sl_win32_sysshell sl_inc NULL
 sl    shell\source\tools\lngconvex                 nmake   -   w   sl_win32_lngconv sl_inc NULL
 sl    shell\source\tools\regsvrex                  nmake   -   w   sl_win32_regsvrex  sl_inc NULL
