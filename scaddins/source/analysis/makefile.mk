@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:22:02 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:28:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ SLOFILES=\
     $(SLO)$/bessel.obj
 
 # SCO: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC"
+.IF "$(OS)"=="SCO"
 SLOFILES+=$(SLO)$/staticmb.obj
 .ENDIF
 
