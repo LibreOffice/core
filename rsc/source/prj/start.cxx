@@ -4,9 +4,9 @@
  *
  *  $RCSfile: start.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:02:23 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:34:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #if defined ( OS2 ) && !defined ( GCC )
 #include <direct.h>
 #endif
-#ifndef CSET
+#if !defined ( CSET ) && !defined ( OS2 )
 #include <dos.h>
 #endif
 
@@ -150,7 +150,11 @@ static BOOL CallPrePro( const ByteString& rPrePro,
         pCmdL = &aRespCmdL;
         for( i = 0; i < (int)(aNewCmdL.GetCount() -1); i++ )
         {
+#ifdef OS2
+            fprintf( fRspFile, "%s\n", (const char *)aNewCmdL.GetEntry( i ) );
+#else
             fprintf( fRspFile, "%s ", (const char *)aNewCmdL.GetEntry( i ) );
+#endif
         }
         fclose( fRspFile );
 
@@ -163,7 +167,7 @@ static BOOL CallPrePro( const ByteString& rPrePro,
         printf( "\n" );
     }
 
-#if ((defined PM2 || defined WNT) && (defined TCPP || defined tcpp)) || defined UNX
+#if ((defined PM2 || defined WNT) && (defined TCPP || defined tcpp)) || defined UNX || defined OS2
     nExit = spawnvp( P_WAIT, rPrePro.GetBuffer(), (char* const*)pCmdL->GetBlock() );
 #elif defined CSET
     nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), char **) (const char**)pCmdL->GetBlock() );
@@ -237,23 +241,35 @@ static BOOL CallRsc2( ByteString aRsc2Name,
             {
             }
             else
+#ifdef OS2
+                fprintf( fRspFile, "%s\n",
+#else
                 fprintf( fRspFile, "%s ",
+#endif
                          (const char *)pCmdLine->GetEntry( i ) );
         };
 
+#ifdef OS2
+        fprintf( fRspFile, "%s\n", aSrsName.GetBuffer() );
+#else
         fprintf( fRspFile, aSrsName.GetBuffer() );
+#endif
 
         pString = pInputList->First();
         while( pString )
         {
+#ifdef OS2
+            fprintf( fRspFile, "%s\n", pString->GetBuffer() );
+#else
             fprintf( fRspFile, " %s", pString->GetBuffer() );
+#endif
             pString = pInputList->Next();
         };
 
         fclose( fRspFile );
     };
 
-#if ((defined PM2 || defined WNT) && (defined TCPP || defined tcpp)) || defined UNX
+#if ((defined PM2 || defined WNT) && (defined TCPP || defined tcpp)) || defined UNX || defined OS2
     nExit = spawnvp( P_WAIT, aRsc2Name.GetBuffer(), (char* const*)aNewCmdL.GetBlock() );
 #elif defined CSET
     nExit = spawnvp( P_WAIT, (char*)aRsc2Name.GetBuffer(), (char **)(const char**)aNewCmdL.GetBlock() );
