@@ -4,9 +4,9 @@
  *
  *  $RCSfile: locale.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:38:05 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:06:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,9 @@ extern "C" {
 #endif
 
 #ifdef SAL_W32
-#pragma pack(push, 8)
+#   pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#pragma pack(1)
+#   pragma pack(push, 4)
 #endif
 
 /**
@@ -76,10 +76,8 @@ typedef struct _rtl_Locale
     sal_Int32       HashCode;
 } rtl_Locale;
 
-#ifdef SAL_W32
+#if defined( SAL_W32) ||  defined(SAL_OS2)
 #pragma pack(pop)
-#elif defined(SAL_OS2)
-#pragma pack()
 #endif
 
 /**
