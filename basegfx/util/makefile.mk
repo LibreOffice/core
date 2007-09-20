@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:51:56 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:00:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@ LIB1FILES=\
     $(SLB)$/vector.lib
 
 SHL1TARGET= basegfx$(UPD)$(DLLPOSTFIX)
+.IF "$(GUI)" == "OS2"
+SHL1TARGET= bgfx$(UPD)
+.ENDIF
 SHL1IMPLIB= ibasegfx
 
 SHL1STDLIBS=\
