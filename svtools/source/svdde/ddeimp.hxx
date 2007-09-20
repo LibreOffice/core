@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddeimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:43:35 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:30:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,15 +39,13 @@
 #ifdef OS2
 
 #include "ddemlos2.h"
-#ifndef _SYSDEP_HXX
-#include <vcl/sysdep.hxx>
-#endif
 
 #define WORD USHORT
 #define DWORD ULONG
 #define LPBYTE BYTE*
 #define LPWORD USHORT*
 #define LPDWORD ULONG*
+#define LPCTSTR PCSZ
 
 #else
 
