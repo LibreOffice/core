@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alloc_cache.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:28:39 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:24:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,11 @@
 #include <stdio.h>
 #endif
 
+#ifdef OS2
+#undef OSL_TRACE
+#define OSL_TRACE                  1 ? ((void)0) : _OSL_GLOBAL osl_trace
+#endif
+
 /* ================================================================= *
  *
  * cache internals.
@@ -77,7 +82,7 @@ struct rtl_cache_list_st
     rtl_memory_lock_type m_lock;
     rtl_cache_type       m_cache_head;
 
-#if defined(SAL_UNX)
+#if defined(SAL_UNX) || defined(SAL_OS2)
     pthread_t            m_update_thread;
     pthread_cond_t       m_update_cond;
 #elif defined(SAL_W32)
@@ -1366,7 +1371,7 @@ rtl_cache_wsupdate_fini (void);
 
 /* ================================================================= */
 
-#if defined(SAL_UNX)
+#if defined(SAL_UNX) || defined(SAL_OS2)
 
 #include <sys/time.h>
 
@@ -1532,7 +1537,7 @@ rtl_cache_wsupdate (
 /** rtl_cache_wsupdate_all()
  *
  */
-#if defined(SAL_UNX)
+#if defined(SAL_UNX) || defined(SAL_OS2)
 static void *
 #elif defined(SAL_W32)
 static DWORD WINAPI
