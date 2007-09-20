@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 13:51:57 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:25:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,9 @@ TARGET=psp
 
 .INCLUDE :	settings.mk
 
-# --- Windows and Mac OS X Aqua Targets ----------------------------------
+# --- Windows, OS/2 and Mac OS X Aqua Targets ----------------------------
 
-.IF "$(OS)"=="WNT" || "$(GUIBASE)"=="aqua"
+.IF "$(OS)"=="WNT" || "$(OS)"=="OS2" || "$(GUIBASE)"=="aqua"
 LIB1ARCHIV=$(LB)$/lib$(TARGET).a
 LIB1TARGET= $(SLB)$/a$(TARGET).lib
 LIB1FILES=	$(SLB)$/fontsubset.lib
