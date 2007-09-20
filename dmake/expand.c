@@ -1,6 +1,6 @@
 /* $RCSfile: expand.c,v $
--- $Revision: 1.6 $
--- last change: $Author: vg $ $Date: 2006-09-25 09:39:30 $
+-- $Revision: 1.7 $
+-- last change: $Author: vg $ $Date: 2007-09-20 14:33:17 $
 --
 -- SYNOPSIS
 --      Macro expansion code.
@@ -365,7 +365,7 @@ char *src;
 
    /* delete the extra white space, it looks ugly */
    for( s = src, e = NIL(char); *s; s++ )
-      if( *s == ' ' || *s == '\t' || *s == '\n' ) {
+      if( *s == ' ' || *s == '\t' || *s == '\n' || *s == '\r' ) {
      if( e == NIL(char) )
         e = s;
       }
@@ -511,6 +511,7 @@ int  doexpand;
          case ' ':
          case '\t':
      case '\n':
+     case '\r':
          case '\0':
      {
         char *tmp;
