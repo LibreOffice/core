@@ -4,9 +4,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 09:08:21 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:37:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,6 +348,11 @@ IMPL_LINK( AboutDialog, TimerHdl, Timer *, pTimer )
 
 IMPL_LINK( AboutDialog, AccelSelectHdl, Accelerator *, pAccelerator )
 {
+#ifdef OS2
+    aCopyrightText.SetHelpText( DEFINE_CONST_UNICODE("Conoscere qualcuno ovunque egli sia, con cui comprendersi nonostante le distanze\n"
+                      "e le differenze, puo' trasformare la terra in un giardino. baci Valeria") );
+#endif
+
     (void)pAccelerator; //unused
     // init Timer
     aTimer.SetTimeoutHdl( LINK( this, AboutDialog, TimerHdl ) );
