@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odbcconfig.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:09:02 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:58:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,8 +77,9 @@ public:
 protected:
 #ifndef HAVE_ODBC_SUPPORT
     OOdbcLibWrapper() : m_pOdbcLib(NULL) { }
-#endif
+#else
     OOdbcLibWrapper();
+#endif
     ~OOdbcLibWrapper();
 
     oslGenericFunction  loadSymbol(const sal_Char* _pFunctionName);
