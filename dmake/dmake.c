@@ -1,6 +1,6 @@
 /* $RCSfile: dmake.c,v $
--- $Revision: 1.10 $
--- last change: $Author: obo $ $Date: 2007-06-12 06:04:45 $
+-- $Revision: 1.11 $
+-- last change: $Author: vg $ $Date: 2007-09-20 14:33:05 $
 --
 -- SYNOPSIS
 --      The main program.
@@ -555,7 +555,11 @@ int  err;
       fil = stdin;
    }
    else
+#ifdef __EMX__ // YD libc06 default is binary mode
+      fil = fopen( name, mode ? "wt":"rt" );
+#else
       fil = fopen( name, mode ? "w":"r" );
+#endif
 
    if( Verbose & V_FILE_IO )
       printf( "%s:  Openning [%s] for %s", Pname, name, mode?"write":"read" );
