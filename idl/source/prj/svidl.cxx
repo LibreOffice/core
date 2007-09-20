@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svidl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 13:04:58 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:26:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ BOOL FileMove_Impl( const String & rFile1, const String & rFile2, BOOL bImmerVer
 |*
 |*    Beschreibung
 *************************************************************************/
-#if defined( UNX ) || (defined( PM2 ) && defined( CSET )) || defined (WTC) || defined (MTW) || defined (__MINGW32__)
+#if defined( UNX ) || (defined( PM2 ) && defined( CSET )) || defined (WTC) || defined (MTW) || defined (__MINGW32__) || defined( OS2 )
 int main ( int argc, char ** argv)
 {
 #else
