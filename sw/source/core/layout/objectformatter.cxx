@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformatter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:08:17 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 11:49:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,6 +393,11 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
             static_cast<SwFlyLayFrm&>(rFlyFrm).SetNoMakePos( false );
         }
         // <--
+
+        // FME 2007-08-30 #i81146# new loop control
+        USHORT nLoopControlRuns = 0;
+        const USHORT nLoopControlMax = 15;
+
         do {
             if ( mpLayAction )
             {
@@ -437,6 +442,16 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
             {
                 _FormatObjCntnt( rFlyFrm );
             }
+
+            if ( ++nLoopControlRuns >= nLoopControlMax )
+            {
+#if OSL_DEBUG_LEVEL > 1
+                ASSERT( false, "LoopControl in SwObjectFormatter::_FormatObj: Stage 3!!!" );
+#endif
+                rFlyFrm.ValidateThisAndAllLowers( 2 );
+                nLoopControlRuns = 0;
+            }
+
         // --> OD 2006-02-02 #i57917#
         // stop formatting of anchored object, if restart of layout process is requested.
         } while ( !rFlyFrm.IsValid() &&
