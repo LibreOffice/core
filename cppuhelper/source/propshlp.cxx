@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propshlp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-15 12:18:23 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:25:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -983,9 +983,11 @@ void OPropertyArrayHelper::init( sal_Bool bSorted ) SAL_THROW( () )
     {
         if(  pProperties[i-1].Name >= pProperties[i].Name )
         {
+#ifndef OS2 // YD disabled, too many troubles with debug builds!
             if (bSorted) {
                 OSL_ENSURE( false, "Property array is not sorted" );
             }
+#endif
             // not sorted
             qsort( aInfos.getArray(), nElements, sizeof( Property ),
                     compare_Property_Impl );
