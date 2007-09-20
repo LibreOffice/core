@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:20:54 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:24:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4272,6 +4272,10 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
 
     if ( rMEvt.IsLeaveWindow() )
     {
+#ifdef OS2
+        if ( rMEvt.GetButtons() == MOUSE_LEFT )
+        {
+#endif
         // #102461# do not remove highlight if a popup menu is open at this position
         MenuItemData* pData = pMenu ? pMenu->pItemList->GetDataFromPos( nHighlightedItem ) : NULL;
         // close popup with some delayed if we leave somewhere else
@@ -4280,11 +4284,17 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
 
         if( !pActivePopup || (pData && pData->pSubMenu != pActivePopup ) )
             ChangeHighlightItem( ITEMPOS_INVALID, FALSE );
+#ifdef OS2
+        }
+#endif
 
         if ( IsScrollMenu() )
             ImplScroll( rMEvt.GetPosPixel() );
     }
     else
+#ifdef OS2
+        if ( rMEvt.GetButtons() == MOUSE_LEFT )
+#endif
     {
         aSubmenuCloseTimer.Stop();
         if( bIgnoreFirstMove )
@@ -5223,7 +5233,11 @@ void MenuBarWindow::MouseMove( const MouseEvent& rMEvt )
     }
 
     USHORT nEntry = ImplFindEntry( rMEvt.GetPosPixel() );
-    if ( ( nEntry != ITEMPOS_INVALID ) && ( nEntry != nHighlightedItem ) )
+    if ( ( nEntry != ITEMPOS_INVALID )
+#ifdef OS2
+       && ( rMEvt.GetButtons() == MOUSE_LEFT )
+#endif
+       && ( nEntry != nHighlightedItem ) )
         ChangeHighlightItem( nEntry, FALSE );
 }
 
