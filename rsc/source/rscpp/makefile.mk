@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:32:53 $
+#   last change: $Author: vg $ $Date: 2007-09-20 16:34:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,9 @@ OBJFILES=   \
 LIBSALCPPRT=$(0)
 APP1TARGET= $(TARGET)
 APP1LIBS=$(LB)$/$(TARGET).lib
-APP1STACK=  32768
+.IF "$(GUI)" != "OS2"
+APP1STACK=32768
+.ENDIF
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
