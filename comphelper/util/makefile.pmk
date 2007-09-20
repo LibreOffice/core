@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 03:01:50 $
+#   last change: $Author: vg $ $Date: 2007-09-20 16:40:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,10 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
+
+.IF "$(GUI)" == "OS2"
+STL_OS2_BUILDING=1
+.ENDIF
 
 # define COMPHELPER_DLLIMPLEMENTATION (see @ comphelperdllapi.h)
 CDEFS += -DCOMPHELPER_DLLIMPLEMENTATION
