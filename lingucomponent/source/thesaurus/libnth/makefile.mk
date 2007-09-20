@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:08:34 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:31:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@ USE_DEFFILE=TRUE
 .IF "$(GUI)"=="UNX"
 MYTHESLIB=-lmythes
 .ENDIF # unx
+.IF "$(GUI)"=="OS2"
+MYTHESLIB=$(SLB)\libmythes.lib
+.ENDIF # os2
 .IF "$(GUI)"=="WNT"
 MYTHESLIB=libmythes.lib
 .ENDIF # wnt
@@ -54,6 +57,9 @@ MYTHESLIB=libmythes.lib
 .IF "$(GUI)"=="UNX"
 ULINGULIB=-lulingu
 .ENDIF # unx
+.IF "$(GUI)"=="OS2"
+ULINGULIB=$(SLB)\libulingu.lib
+.ENDIF # os2
 .IF "$(GUI)"=="WNT"
 ULINGULIB=libulingu.lib
 .ENDIF # wnt
