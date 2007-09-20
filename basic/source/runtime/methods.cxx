@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:25:56 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:55:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ using namespace com::sun::star::io;
 #include <stdlib.h>
 #include <ctype.h>
 
-#if defined (WIN) || defined (WNT)
+#if defined (WIN) || defined (WNT) || defined (OS2)
 #include <direct.h>   // _getdcwd get current work directory, _chdrive
 #endif
 
@@ -428,7 +428,7 @@ RTLFUNC(CurDir)
     // zu ermitteln, dass eine virtuelle URL geliefert werden koennte.
 
 //  rPar.Get(0)->PutEmpty();
-#if defined (WIN) || defined (WNT)
+#if defined (WIN) || defined (WNT) || defined (OS2)
     int nCurDir = 0;  // Current dir // JSM
     if ( rPar.Count() == 2 )
     {
@@ -451,6 +451,10 @@ RTLFUNC(CurDir)
         }
     }
     char* pBuffer = new char[ _MAX_PATH ];
+#ifdef OS2
+    if( !nCurDir )
+        nCurDir = _getdrive();
+#endif
     if ( _getdcwd( nCurDir, pBuffer, _MAX_PATH ) != 0 )
         rPar.Get(0)->PutString( String::CreateFromAscii( pBuffer ) );
     else
@@ -531,7 +535,7 @@ RTLFUNC(ChDrive) // JSM
 #ifndef UNX
         String aPar1 = rPar.Get(1)->GetString();
 
-#if defined (WIN) || defined (WNT)
+#if defined (WIN) || defined (WNT) || defined (OS2)
         if (aPar1.Len() > 0)
         {
             int nCurDrive = (int)aPar1.GetBuffer()[0]; ;
@@ -2890,6 +2894,14 @@ RTLFUNC(GetAttr)
             }
             else
                 StarBASIC::Error( SbERR_FILE_NOT_FOUND );
+    #elif defined( OS2 )
+            FILESTATUS3 aFileStatus;
+            APIRET rc = DosQueryPathInfo(aByteStrFullPath.GetBuffer(),1,
+                                         &aFileStatus,sizeof(FILESTATUS3));
+            if (!rc)
+                nFlags = (INT16) aFileStatus.attrFile;
+            else
+                StarBASIC::Error( SbERR_FILE_NOT_FOUND );
     #else
             bUseFileStat = TRUE;
     #endif
@@ -4143,6 +4155,24 @@ RTLFUNC(SetAttr) // JSM
     #ifdef WNT
             if (!SetFileAttributes (aByteFile.GetBuffer(),(DWORD)nFlags))
                 StarBASIC::Error(SbERR_FILE_NOT_FOUND);
+    #endif
+    #ifdef OS2
+            FILESTATUS3 aFileStatus;
+            APIRET rc = DosQueryPathInfo(aByteFile.GetBuffer(),1,
+                                         &aFileStatus,sizeof(FILESTATUS3));
+            if (!rc)
+            {
+                if (aFileStatus.attrFile != nFlags)
+                {
+                    aFileStatus.attrFile = nFlags;
+                    rc = DosSetPathInfo(aFile.GetStr(),1,
+                                        &aFileStatus,sizeof(FILESTATUS3),0);
+                    if (rc)
+                        StarBASIC::Error( SbERR_FILE_NOT_FOUND );
+                }
+            }
+            else
+                StarBASIC::Error( SbERR_FILE_NOT_FOUND );
     #endif
 #else
             // Not implemented
