@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datatest.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:45:12 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:41:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -301,8 +301,8 @@ void ODataStreamTest::testSimple(   const Reference < XDataInputStream > &rInput
     rOutput->writeDouble( (double) 42.42 );
     ERROR_ASSERT( rInput->readDouble() == 42.42 , "double read/write mismatch" );
 
-    rOutput->writeHyper( 0x123456789abcdef );
-    ERROR_ASSERT( rInput->readHyper() == 0x123456789abcdef , "int64 read/write mismatch" );
+    rOutput->writeHyper( 0x123456789abcdefLL );
+    ERROR_ASSERT( rInput->readHyper() == 0x123456789abcdefLL , "int64 read/write mismatch" );
 
     rOutput->writeUTF( OUString::createFromAscii("Live long and prosper !") );
     ERROR_ASSERT( rInput->readUTF() == OUString::createFromAscii("Live long and prosper !") ,
