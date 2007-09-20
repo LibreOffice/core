@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rdbmaker.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:10:17 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:03:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,7 +240,7 @@ OString createFileName(const OString& path)
             continue;
         }
 
-#ifdef SAL_UNX
+#if defined(SAL_UNX) || defined(SAL_OS2)
         if (mkdir((char*)nameBuffer.getStr(), 0777) == -1)
 #else
            if (mkdir((char*)nameBuffer.getStr()) == -1)
