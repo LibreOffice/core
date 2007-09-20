@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:21:37 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:06:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ typedef sal_Int32 oslDescriptorFlag;
 #ifdef SAL_W32
 #   pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#   pragma pack(1)
+#   pragma pack(push, 4)
 #endif
 
 typedef struct {
@@ -130,10 +130,8 @@ typedef struct {
     sal_uInt32              HeapUsage;
 } oslProcessInfo;
 
-#ifdef SAL_W32
+#if defined( SAL_W32) ||  defined(SAL_OS2)
 #   pragma pack(pop)
-#elif defined(SAL_OS2)
-#   pragma pack()
 #endif
 
 /** Process handle
