@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:23:33 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:36:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,7 +340,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     {
         aIniName    = aIniName.copy( 0, lastIndex+1 );
         aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( "perftune" ));
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
         aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( ".ini" ));
 #else
         aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( "rc" ));
@@ -752,6 +752,8 @@ void SAL_CALL OfficeIPCThread::run()
                     aHelpURLBuffer.appendAscii("&System=WIN");
 #elif defined MAC
                     aHelpURLBuffer.appendAscii("&System=MAC");
+#elif defined OS2
+                    aHelpURLBuffer.appendAscii("&System=OS2");
 #endif
                     ApplicationEvent* pAppEvent =
                         new ApplicationEvent( aEmpty, aEmpty,
