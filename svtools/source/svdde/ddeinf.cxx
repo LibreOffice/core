@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddeinf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:59:25 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:30:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,8 @@ DdeServiceList::DdeServiceList( const String* pTopic )
     UINT        nStatus = DMLERR_NO_ERROR;
     HSZ         hTopic = NULL;
 
+#ifndef OS2 // YD FIXME
+
     nStatus = DdeInitialize( &hDdeInst, (PFNCALLBACK) DdeInternal::InfCallback,
                              APPCLASS_STANDARD | APPCMD_CLIENTONLY |
                              CBF_FAIL_ALLSVRXACTIONS |
@@ -127,6 +129,9 @@ DdeServiceList::DdeServiceList( const String* pTopic )
         DdeFreeStringHandle( hDdeInst, hTopic );
     if ( hDdeInst )
         DdeUninitialize( hDdeInst );
+
+#endif
+
 }
 
 // --- DdeServiceList::~DdeServiceList() ---------------------------
