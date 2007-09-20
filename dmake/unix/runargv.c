@@ -1,6 +1,6 @@
 /* $RCSfile: runargv.c,v $
--- $Revision: 1.11 $
--- last change: $Author: vg $ $Date: 2007-01-18 09:44:15 $
+-- $Revision: 1.12 $
+-- last change: $Author: vg $ $Date: 2007-09-20 14:35:30 $
 --
 -- SYNOPSIS
 --      Invoke a sub process.
@@ -126,6 +126,11 @@ _finished_child(pid, ?) [unix/runargv] handles the finished child. If there
 
 #if __CYGWIN__ && ENABLE_SPAWN
 #  include <process.h>
+#endif
+
+#ifdef __EMX__
+#  include <process.h>
+#define _P_NOWAIT P_NOWAIT
 #endif
 
 #include "sysintf.h"
@@ -308,7 +313,7 @@ char    *cmd;
    argv = Pack_argv( group, shell, cmd );
 
    /* Really spawn or fork a child. */
-#if ENABLE_SPAWN && ( HAVE_SPAWN_H || __CYGWIN__ )
+#if ENABLE_SPAWN && ( HAVE_SPAWN_H || __CYGWIN__ || __EMX__)
    /* As no other childs are started while the output is redirected this
     * is save. */
    if( Is_exec_shell ) {
@@ -325,7 +330,7 @@ char    *cmd;
      dup2( zerofd, 1 );
       }
    }
-#if __CYGWIN__
+#if defined( __CYGWIN__) || defined( __EMX__)
    pid = spawnvp(_P_NOWAIT, argv[0], (const char**) argv);
 #else   /* __CYGWIN__ */
    if (posix_spawnp (&pid, argv[0], NULL, NULL, argv, (char *)NULL))
