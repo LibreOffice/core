@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-23 12:27:38 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:47:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,11 @@ SLOFILES=$(SLO)$/shellexec.obj\
 SHL1OBJS=$(SLOFILES) 
     
 SHL1TARGET=syssh.uno
+.IF "$(GUI)" == "OS2"
+SHL1IMPLIB=i$(TARGET)
+.ELSE
 SHL1IMPLIB=
+.ENDIF
 
 SHL1VERSIONMAP=exports.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
