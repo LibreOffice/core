@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splash.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:03:47 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ private:
         double _fRelWidth;
         double _fRelHeight;
     };
-    enum BitmapMode { BM_FULLSCREEN, BM_DEFAULT };
+    enum BitmapMode { BM_FULLSCREEN, BM_DEFAULTMODE };
 
     // don't allow anybody but ourselves to create instances of this class
     SplashScreen(const SplashScreen&);
