@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: kz $ $Date: 2007-06-19 16:13:14 $
+#   last change: $Author: vg $ $Date: 2007-09-20 16:28:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,9 @@ SHL1STDLIBS+= ws2_32.lib
 .ENDIF
 .IF "$(OS)"=="SOLARIS"
 SHL1STDLIBS+= -lnsl -lsocket
+.ENDIF # SOLARIS
+.IF "$(OS)"=="OS2"
+SHL1STDLIBS+= pthread.lib libz.lib
 .ENDIF # SOLARIS
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
