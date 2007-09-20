@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 16:49:42 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:49:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,10 @@ PACKAGE = connectivity$/tools
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
 
+.IF "$(SOLAR_JAVA)" == ""
+all:
+    @echo "Java not available. Build skipped"
+.ELSE
 
 #----- compile .java files -----------------------------------------
 
@@ -65,5 +69,7 @@ ALL :   ALLTAR
 .ELSE
 ALL: 	ALLDEP
 .ENDIF
+
+.ENDIF # "$(SOLAR_JAVA)" == ""
 
 .INCLUDE :  target.mk
