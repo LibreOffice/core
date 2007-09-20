@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:17:50 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:32:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@ FRAMEWORKLIB=jvmfwk
 TARGET = $(FRAMEWORKLIB)
 ENABLE_EXCEPTIONS = TRUE
 
-.IF "$(OS)" != "WNT"
+.IF "$(OS)" != "WNT" && "$(GUI)"!="OS2"
 UNIXVERSIONNAMES = UDK
 .ENDIF # WNT
 
@@ -83,7 +83,7 @@ DEF1NAME = $(SHL1TARGET)
 
 .IF "$(GUI)"=="UNX"
 RCFILE=$(BIN)$/jvmfwk3rc
-.ELIF "$(GUI)"=="WNT"
+.ELIF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 RCFILE=$(BIN)$/jvmfwk3.ini
 .END
 
