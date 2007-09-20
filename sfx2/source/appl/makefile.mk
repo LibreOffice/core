@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-11 13:10:17 $
+#   last change: $Author: vg $ $Date: 2007-09-20 16:36:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,10 @@ SFX_OBJECTS = \
         $(SLO)$/xpackcreator.obj \
     $(SLO)$/fwkhelper.obj \
     $(SLO)$/updatedlg.obj
+
+.IF "$(GUI)"=="OS2"
+SFX_OBJECTS +=  $(SLO)$/shutdowniconOs2.obj
+.ENDIF
 
 SLOFILES = $(SFX_OBJECTS)
 LIB1TARGET= $(SLB)$/$(TARGET).lib
