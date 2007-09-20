@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 15:09:40 $
+#   last change: $Author: vg $ $Date: 2007-09-20 16:40:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,26 @@ DEF4EXPORTFILE=	exports.dxp
 
 .ENDIF			# "$(GUI)"=="WNT"
 
+.IF "$(GUI)"=="OS2"
+
+# --- sysdtrans dll ---
+
+SHL3TARGET=$(TARGET3)
+
+SHL3LIBS=$(SLB)$/sysdtrans.lib
+
+SHL3STDLIBS= \
+        $(SALLIB)	\
+        $(CPPULIB) 	\
+        $(CPPUHELPERLIB)
+        
+SHL3IMPLIB=i$(SHL3TARGET) 
+
+SHL3DEF=		$(MISC)$/$(SHL3TARGET).def
+DEF3NAME=		$(SHL3TARGET)
+DEF3EXPORTFILE=	exports.dxp
+
+.ENDIF			# "$(GUI)"=="OS2"
 
 .INCLUDE :  target.mk
 
