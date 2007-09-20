@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:53:34 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:01:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@ LIBTARGET=NO
 
 ENABLE_EXCEPTIONS=TRUE
 INCPRE=$(MISC)
+
+.IF "$(GUI)" == "OS2"
+STL_OS2_BUILDING=1
+.ENDIF
 
 # --- Settings -----------------------------------------------------
 
