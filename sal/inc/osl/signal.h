@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:13:16 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:06:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ typedef enum
 #ifdef SAL_W32
 #   pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#   pragma pack(1)
+#   pragma pack(push, 4)
 #endif
 
 typedef struct
@@ -87,10 +87,8 @@ typedef struct
     void*       UserData;
 } oslSignalInfo;
 
-#ifdef SAL_W32
+#if defined( SAL_W32) ||  defined(SAL_OS2)
 #   pragma pack(pop)
-#elif defined(SAL_OS2)
-#   pragma pack()
 #endif
 
 /** the function-ptr. representing the signal handler-function.
