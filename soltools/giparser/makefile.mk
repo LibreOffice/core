@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-26 17:45:23 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:59:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@ PRJNAME=soltools
 TARGET=soltools_giparser
 TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
+
+.IF "$(GUI)" == "OS2"
+STL_OS2_BUILDING=1
+.ENDIF
 
 # --- Settings -----------------------------------------------------
 
