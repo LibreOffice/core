@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:50:37 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:01:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ int ifdepth;
 int ifsatisfied[NIF];
 int skipping;
 
-char rcsid[] = "$Version 1.2 $ $Revision: 1.6 $ $Date: 2006-06-20 03:50:37 $";
+char rcsid[] = "$Version 1.2 $ $Revision: 1.7 $ $Date: 2007-09-20 15:01:57 $";
 
 int realargc;
 char* realargv[512];
@@ -140,8 +140,6 @@ void cleanCommandArgs()
 
 #ifdef WNT
 int __cdecl main(int argc, char **argv)
-#elif defined(OS2)
-int _Optlink main(int argc, char **argv)
 #else
 int main(int argc, char **argv)
 #endif
