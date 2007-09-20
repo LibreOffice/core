@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testHelperFunctions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:03:55 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ namespace testOfHelperFunctions
         sal_Int64 n2 = 2147483648 * 2;
         CPPUNIT_ASSERT_MESSAGE("2147483648 * 2 is != 0", n2 != 0 );
 
-        sal_Int64 n3 = 4294967296;
+        sal_Int64 n3 = 4294967296LL;
         CPPUNIT_ASSERT_MESSAGE("4294967296 is != 0", n3 != 0 );
 
         CPPUNIT_ASSERT_MESSAGE("n=2^31 << 1, n2 = 2^31 * 2, n3 = 2^32, all should equal!", n == n2 && n == n3 );
@@ -196,7 +196,7 @@ namespace testOfHelperFunctions
         t_print64(n);
         CPPUNIT_ASSERT_MESSAGE("n=-2^31", t_abs64(n) > 0 );
 
-        n = -8589934592;
+        n = -8589934592LL;
         t_print("Value of n is -2^33 : ");
         t_print64(n);
         CPPUNIT_ASSERT_MESSAGE("n=-2^33", t_abs64(n) > 0 );
