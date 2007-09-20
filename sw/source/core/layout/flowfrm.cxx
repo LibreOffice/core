@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:47:32 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 11:48:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1264,7 +1264,7 @@ BOOL SwFlowFrm::IsPrevObjMove() const
 BOOL SwFlowFrm::IsPageBreak( BOOL bAct ) const
 {
     if ( !IsFollow() && rThis.IsInDocBody() &&
-         ( !rThis.IsInTab() || rThis.IsTabFrm() ) &&
+         ( !rThis.IsInTab() || ( rThis.IsTabFrm() && !rThis.GetUpper()->IsInTab() ) ) && // i66968
          !rThis.GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
     {
         const SwAttrSet *pSet = rThis.GetAttrSet();
