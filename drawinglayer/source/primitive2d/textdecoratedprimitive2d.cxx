@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdecoratedprimitive2d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-13 15:30:25 $
+ *  last change: $Author: aw $ $Date: 2007-09-20 09:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,86 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+/*      Primitive2DSequence TextDecoratedPortionPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        {
+            const sal_uInt16 nTextLength(getText().Len());
+            Primitive2DSequence aRetval;
+
+            if(nTextLength)
+            {
+                if(getWordLineMode())
+                {
+                    // support for single word mode
+                    if(!mxBreakIterator.is())
+                    {
+                        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
+                        mxBreakIterator.set(xMSF->createInstance(rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator")), ::com::sun::star::uno::UNO_QUERY);
+                    }
+
+                    if(mxBreakIterator.is())
+                    {
+                        for(sal_Int32 nPos(0); nPos < nTextLength;)
+                        {
+                            ::com::sun::star::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(
+                                getText(), nPos, getLocale(), ::com::sun::star::i18n::WordType::ANY_WORD, sal_True));
+                            const String aNewText(getText(), nPos, nNextWordBoundary - nPos);
+                            ::std::vector< double > aNewDXArray(getDXArray().begin() + nPos, getDXArray().end() + nNextWordBoundary);
+
+                            TextDecoratedPortionPrimitive2D aNewPrimitive(
+                                getTextTransform(),
+                                aNewText,
+                                aNewDXArray,
+                                getFontAttributes(),
+                                getLocale(),
+                                getFontColor(),
+                                getTextlineColor(),
+                                getFontUnderline(),
+                                getUnderlineAbove(),
+                                getFontStrikeout(),
+                                false,                  // no WordLineMode
+                                getFontEmphasisMark(),
+                                getEmphasisMarkAbove(),
+                                getEmphasisMarkBelow(),
+                                RELIEF_NONE,            // no relief
+                                false);                 // no shadow
+
+                            appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, aNewPrimitive.get2DDecomposition(rViewInformation));
+
+                            nPos = nNextWordBoundary;
+                        }
+                    }
+                }
+                else
+                {
+                    // no single words needed, decompose
+                    std::vector< BasePrimitive2D* > aNewPrimitives;
+
+
+
+                    // prepare return sequence
+                    for(sal_uInt32 a(0); a < aNewPrimitives.size(); a++)
+                    {
+                        aRetval[a] = Primitive2DReference(aNewPrimitives[a]);
+                    }
+                }
+
+                if(aRetval.hasElements())
+                {
+                    Primitive2DSequence aContent(aRetval);
+
+                    if(getShadow())
+                    {
+                    }
+
+                    if(RELIEF_NONE != getFontRelief())
+                    {
+                    }
+                }
+            }
+
+            return aRetval;
+        } */
+
         Primitive2DSequence TextDecoratedPortionPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             std::vector< BasePrimitive2D* > aNewPrimitives;
@@ -73,13 +153,11 @@ namespace drawinglayer
             const bool bNeedFontStrikeout(getFontStrikeout() != FONT_STRIKEOUT_NONE);
             const bool bNeedEmphasisMarkAbove(getEmphasisMarkAbove() != FONT_EMPHASISMARK_NONE);
             const bool bNeedEmphasisMarkBelow(getEmphasisMarkBelow() != FONT_EMPHASISMARK_NONE);
-            const sal_uInt32 nSpellVectorSize(maWrongSpellVector.size());
 
             if(bNeedFontUnderline
                 || bNeedFontStrikeout
                 || bNeedEmphasisMarkAbove
-                || bNeedEmphasisMarkBelow
-                || 0 != nSpellVectorSize)
+                || bNeedEmphasisMarkBelow)
             {
                 // prepare transformations
                 basegfx::B2DVector aScale, aTranslate;
@@ -376,46 +454,7 @@ namespace drawinglayer
                 // if( getWordLineMode() )
                 // if( getUnderlineAbove() )
 
-                if(nSpellVectorSize && !getDXArray().empty())
-                {
-                    // TODO: take care of WrongSpellVector; create redlining (red wavelines) accordingly.
-                    // For test purposes, create single lines as long as no waveline primitive is created
-                    const ::std::vector< double >& rDXArray = getDXArray();
-                    const sal_uInt32 nDXCount(rDXArray.size());
-                    const basegfx::BColor aSpellColor(1.0, 0.0, 0.0); // red
 
-                    for(sal_uInt32 a(0); a < nSpellVectorSize; a++)
-                    {
-                        const WrongSpellEntry& rCandidate = maWrongSpellVector[a];
-
-                        if(rCandidate.getStart() < rCandidate.getEnd())
-                        {
-                            ::basegfx::B2DPoint aStart;
-                            ::basegfx::B2DPoint aEnd;
-
-                            if(rCandidate.getStart() > 0 && rCandidate.getStart() - 1 < nDXCount)
-                            {
-                                aStart.setX(rDXArray[rCandidate.getStart() - 1] * aScale.getX());
-                            }
-
-                            if(rCandidate.getEnd() > 0 && rCandidate.getEnd() - 1 < nDXCount)
-                            {
-                                aEnd.setX(rDXArray[rCandidate.getEnd() - 1] * aScale.getX());
-                            }
-
-                            if(aStart != aEnd)
-                            {
-                                   basegfx::B2DPolygon aPolygon;
-
-                                aPolygon.append(aStart);
-                                aPolygon.append(aEnd);
-                                aPolygon.transform(aUnscaledTransform);
-
-                                aNewPrimitives.push_back(new PolygonHairlinePrimitive2D(aPolygon, aSpellColor));
-                            }
-                        }
-                    }
-                }
             }
 
             // prepare return sequence
@@ -449,15 +488,13 @@ namespace drawinglayer
             bool bEmphasisMarkAbove,
             bool bEmphasisMarkBelow,
             FontRelief eFontRelief,
-            bool bShadow,
-            const WrongSpellVector& rWrongSpellVector)
+            bool bShadow)
         :   TextSimplePortionPrimitive2D(rNewTransform, rText, rDXArray, rFontAttributes, rLocale, rFontColor),
             maTextlineColor(rTextlineColor),
             meFontUnderline(eFontUnderline),
             meFontStrikeout(eFontStrikeout),
             meFontEmphasisMark(eFontEmphasisMark),
             meFontRelief(eFontRelief),
-            maWrongSpellVector(rWrongSpellVector),
             mbUnderlineAbove(bUnderlineAbove),
             mbWordLineMode(bWordLineMode),
             mbEmphasisMarkAbove(bEmphasisMarkAbove),
@@ -477,7 +514,6 @@ namespace drawinglayer
                     && getFontStrikeout() == rCompare.getFontStrikeout()
                     && getFontEmphasisMark() == rCompare.getFontEmphasisMark()
                     && getFontRelief() == rCompare.getFontRelief()
-                    && getWrongSpellVector() == rCompare.getWrongSpellVector()
                     && getUnderlineAbove() == rCompare.getUnderlineAbove()
                     && getWordLineMode() == rCompare.getWordLineMode()
                     && getEmphasisMarkAbove() == rCompare.getEmphasisMarkAbove()

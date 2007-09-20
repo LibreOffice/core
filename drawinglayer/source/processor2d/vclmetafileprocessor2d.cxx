@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-07 15:48:40 $
+ *  last change: $Author: aw $ $Date: 2007-09-20 09:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -633,6 +633,12 @@ namespace drawinglayer
         {
             switch(rCandidate.getPrimitiveID())
             {
+                case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D :
+                {
+                    // directdraw of wrong spell primitive
+                    // Ignore for VclMetafileProcessor2D, this is for printing and MetaFile recording only
+                    break;
+                }
                 case PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D :
                 {
                     const primitive2d::GraphicPrimitive2D& rGraphicPrimitive = static_cast< const primitive2d::GraphicPrimitive2D& >(rCandidate);

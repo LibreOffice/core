@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:30 $
+ *  last change: $Author: aw $ $Date: 2007-09-20 09:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,6 +309,96 @@ namespace drawinglayer
 
         // provide unique ID
         ImplPrimitrive2DIDBlock(PolygonStrokePrimitive2D, PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D)
+
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        Primitive2DSequence PolygonWavePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            Primitive2DSequence aRetval;
+
+            if(getB2DPolygon().count())
+            {
+                const bool bHasWidth(!basegfx::fTools::equalZero(getWaveWidth()));
+                const bool bHasHeight(!basegfx::fTools::equalZero(getWaveHeight()));
+
+                if(bHasWidth && bHasHeight)
+                {
+                    // create waveline curve
+                    const basegfx::B2DPolygon aWaveline(basegfx::tools::createWaveline(getB2DPolygon(), getWaveWidth(), getWaveHeight()));
+                    const Primitive2DReference xRef(new PolygonHairlinePrimitive2D(aWaveline, getBColor()));
+                    aRetval = Primitive2DSequence(&xRef, 1);
+                }
+                else
+                {
+                    // flat waveline, decompose to PolygonHairlinePrimitive2D
+                    const Primitive2DReference xRef(new PolygonHairlinePrimitive2D(getB2DPolygon(), getBColor()));
+                    aRetval = Primitive2DSequence(&xRef, 1);
+                }
+            }
+
+            return aRetval;
+        }
+
+        PolygonWavePrimitive2D::PolygonWavePrimitive2D(
+            const basegfx::B2DPolygon& rPolygon,
+            const basegfx::BColor& rBColor,
+            double fWaveWidth,
+            double fWaveHeight)
+        :   BasePrimitive2D(),
+            maPolygon(rPolygon),
+            maBColor(rBColor),
+            mfWaveWidth(fWaveWidth),
+            mfWaveHeight(fWaveHeight)
+        {
+            if(mfWaveWidth < 0.0)
+            {
+                mfWaveWidth = 0.0;
+            }
+
+            if(mfWaveHeight < 0.0)
+            {
+                mfWaveHeight = 0.0;
+            }
+        }
+
+        bool PolygonWavePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        {
+            if(BasePrimitive2D::operator==(rPrimitive))
+            {
+                const PolygonWavePrimitive2D& rCompare = (PolygonWavePrimitive2D&)rPrimitive;
+
+                return (getB2DPolygon() == rCompare.getB2DPolygon()
+                    && getBColor() == rCompare.getBColor()
+                    && getWaveWidth() == rCompare.getWaveWidth()
+                    && getWaveHeight() == rCompare.getWaveHeight());
+            }
+
+            return false;
+        }
+
+        basegfx::B2DRange PolygonWavePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            // get range of it (subdivided)
+            basegfx::B2DRange aRetval(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolygon())));
+
+            // if WaveHeight, grow by it
+            if(!basegfx::fTools::equalZero(getWaveHeight()))
+            {
+                aRetval.grow(getWaveHeight());
+            }
+
+            return aRetval;
+        }
+
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(PolygonWavePrimitive2D, PRIMITIVE2D_ID_POLYGONWAVEPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

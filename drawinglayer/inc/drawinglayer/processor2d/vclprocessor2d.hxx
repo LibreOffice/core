@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2007-07-27 09:03:17 $
+ *  last change: $Author: aw $ $Date: 2007-09-20 09:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@ namespace drawinglayer { namespace primitive2d {
     class MarkerArrayPrimitive2D;
     class PointArrayPrimitive2D;
     class ModifiedColorPrimitive2D;
+    class WrongSpellPrimitive2D;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -106,6 +107,7 @@ namespace drawinglayer
             void RenderTransformPrimitive2D(const primitive2d::TransformPrimitive2D& rTransformCandidate);
             void RenderMarkerArrayPrimitive2D(const primitive2d::MarkerArrayPrimitive2D& rMarkerArrayCandidate);
             void RenderPointArrayPrimitive2D(const primitive2d::PointArrayPrimitive2D& rPointArrayCandidate);
+            void RenderWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWrongSpellCandidate);
 
             // as tooling, the process() implementation takes over API handling and calls this
             // virtual render method when the primitive implementation is BasePrimitive2D-based.

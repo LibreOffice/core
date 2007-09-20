@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-08 15:27:54 $
+ *  last change: $Author: aw $ $Date: 2007-09-20 09:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,10 @@
 
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_WRONGSPELLPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -304,65 +308,6 @@ namespace drawinglayer
                     mpOutputDevice->DrawTextArray(aStartPoint, rTextCandidate.getText(),
                         aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL);
                     bPrimitiveAccepted = true;
-
-                    if(pTCPP && aTransformedDXArray.size())
-                    {
-                        // basic redlining support
-                        const primitive2d::WrongSpellVector& rWrongSpellVector = pTCPP->getWrongSpellVector();
-                        const sal_uInt32 nSpellVectorSize(rWrongSpellVector.size());
-                        const sal_uInt32 nDXCount(aTransformedDXArray.size());
-
-                        if(nSpellVectorSize && nDXCount)
-                        {
-                            const sal_uInt32 nFontPixelHeight(mpOutputDevice->LogicToPixel(Size(0, static_cast< sal_Int32 >(aScale.getY()))).Height());
-                            static const sal_uInt32 nMinimumFontHeight(5); // #define WRONG_SHOW_MIN         5
-                            static const sal_uInt32 nSmallFontHeight(11);  // #define WRONG_SHOW_SMALL      11
-                            static const sal_uInt32 nMediumFontHeight(15); // #define WRONG_SHOW_MEDIUM     15
-
-                            if(nFontPixelHeight > nMinimumFontHeight)
-                            {
-                                sal_uInt16 nWaveStyle(WAVE_FLAT);
-
-                                if(nFontPixelHeight > nMediumFontHeight)
-                                {
-                                    nWaveStyle = WAVE_NORMAL;
-                                }
-                                else if(nFontPixelHeight > nSmallFontHeight)
-                                {
-                                    nWaveStyle = WAVE_SMALL;
-                                }
-
-                                mpOutputDevice->SetLineColor(COL_LIGHTRED);
-                                mpOutputDevice->SetFillColor();
-
-                                for(sal_uInt32 a(0); a < nSpellVectorSize; a++)
-                                {
-                                    const primitive2d::WrongSpellEntry& rCandidate = rWrongSpellVector[a];
-
-                                    if(rCandidate.getStart() < rCandidate.getEnd())
-                                    {
-                                        Point aStart(aStartPoint);
-                                        Point aEnd(aStartPoint);
-
-                                        if(rCandidate.getStart() > 0 && rCandidate.getStart() - 1 < nDXCount)
-                                        {
-                                            aStart += Point(aTransformedDXArray[rCandidate.getStart() - 1], 0);
-                                        }
-
-                                        if(rCandidate.getEnd() > 0 && rCandidate.getEnd() - 1 < nDXCount)
-                                        {
-                                            aEnd += Point(aTransformedDXArray[rCandidate.getEnd() - 1], 0);
-                                        }
-
-                                        if(aStart != aEnd)
-                                        {
-                                            mpOutputDevice->DrawWaveLine(aStart, aEnd, nWaveStyle);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
             }
 
@@ -759,17 +704,24 @@ namespace drawinglayer
         // transform group.
         void VclProcessor2D::RenderTransformPrimitive2D(const primitive2d::TransformPrimitive2D& rTransformCandidate)
         {
-            // remember current transformation
-            basegfx::B2DHomMatrix aLastCurrentTransformation(maCurrentTransformation);
+            // remember current transformation and ViewInformation
+            const basegfx::B2DHomMatrix aLastCurrentTransformation(maCurrentTransformation);
+            const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
 
-            // create new transformations
+            // create new transformations for CurrentTransformation
+            // and for local ViewInformation2D
             maCurrentTransformation = maCurrentTransformation * rTransformCandidate.getTransformation();
+            maViewInformation2D = geometry::ViewInformation2D(
+                getViewInformation2D().getViewTransformation() * rTransformCandidate.getTransformation(),
+                getViewInformation2D().getViewport(),
+                getViewInformation2D().getViewTime());
 
-            // let break down
+            // proccess content
             process(rTransformCandidate.getChildren());
 
             // restore transformations
             maCurrentTransformation = aLastCurrentTransformation;
+            maViewInformation2D = aLastViewInformation2D;
         }
 
         // marker
@@ -866,6 +818,41 @@ namespace drawinglayer
                 const Point aPos(basegfx::fround(aViewPosition.getX()), basegfx::fround(aViewPosition.getY()));
 
                 mpOutputDevice->DrawPixel(aPos, aVCLColor);
+            }
+        }
+
+        // wrong spell primitive
+        void VclProcessor2D::RenderWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWrongSpellCandidate)
+        {
+            const basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rWrongSpellCandidate.getTransformation());
+            const basegfx::B2DVector aFontVectorPixel(aLocalTransform * basegfx::B2DVector(0.0, 1.0));
+            const sal_uInt32 nFontPixelHeight(basegfx::fround(aFontVectorPixel.getLength()));
+
+            static const sal_uInt32 nMinimumFontHeight(5); // #define WRONG_SHOW_MIN         5
+            static const sal_uInt32 nSmallFontHeight(11);  // #define WRONG_SHOW_SMALL      11
+            static const sal_uInt32 nMediumFontHeight(15); // #define WRONG_SHOW_MEDIUM     15
+
+            if(nFontPixelHeight > nMinimumFontHeight)
+            {
+                const basegfx::B2DPoint aStart(aLocalTransform * basegfx::B2DPoint(rWrongSpellCandidate.getStart(), 0.0));
+                const basegfx::B2DPoint aStop(aLocalTransform * basegfx::B2DPoint(rWrongSpellCandidate.getStop(), 0.0));
+                const Point aVclStart(basegfx::fround(aStart.getX()), basegfx::fround(aStart.getY()));
+                const Point aVclStop(basegfx::fround(aStop.getX()), basegfx::fround(aStop.getY()));
+                sal_uInt16 nWaveStyle(WAVE_FLAT);
+
+                if(nFontPixelHeight > nMediumFontHeight)
+                {
+                    nWaveStyle = WAVE_NORMAL;
+                }
+                else if(nFontPixelHeight > nSmallFontHeight)
+                {
+                    nWaveStyle = WAVE_SMALL;
+                }
+
+                const basegfx::BColor aProcessedColor(maBColorModifierStack.getModifiedColor(rWrongSpellCandidate.getColor()));
+                mpOutputDevice->SetLineColor(Color(aProcessedColor));
+                mpOutputDevice->SetFillColor();
+                mpOutputDevice->DrawWaveLine(aVclStart, aVclStop, nWaveStyle);
             }
         }
 

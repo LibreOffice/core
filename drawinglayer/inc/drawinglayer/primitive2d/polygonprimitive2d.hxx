@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:05 $
+ *  last change: $Author: aw $ $Date: 2007-09-20 09:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,8 +134,8 @@ namespace drawinglayer
         class PolygonStrokePrimitive2D : public BasePrimitive2D
         {
         private:
-            basegfx::B2DPolygon                         maPolygon;
-            attribute::StrokeAttribute                  maStrokeAttribute;
+            basegfx::B2DPolygon                     maPolygon;
+            attribute::StrokeAttribute              maStrokeAttribute;
 
         protected:
             // local decomposition.
@@ -149,6 +149,50 @@ namespace drawinglayer
             // get data
             basegfx::B2DPolygon getB2DPolygon() const { return maPolygon; }
             const attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
+
+            // compare operator
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+
+            // get range
+            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
+
+            // provide unique ID
+            DeclPrimitrive2DIDBlock()
+        };
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+// PolygonStrokePrimitive2D class
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        class PolygonWavePrimitive2D : public BasePrimitive2D
+        {
+        private:
+            basegfx::B2DPolygon                     maPolygon;
+            basegfx::BColor                         maBColor;
+            double                                  mfWaveWidth;
+            double                                  mfWaveHeight;
+
+        protected:
+            // local decomposition.
+            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+
+        public:
+            PolygonWavePrimitive2D(
+                const basegfx::B2DPolygon& rPolygon,
+                const basegfx::BColor& rBColor,
+                double fWaveWidth,
+                double fWaveHeight);
+
+            // get data
+            basegfx::B2DPolygon getB2DPolygon() const { return maPolygon; }
+            const basegfx::BColor& getBColor() const { return maBColor; }
+            double getWaveWidth() const { return mfWaveWidth; }
+            double getWaveHeight() const { return mfWaveHeight; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

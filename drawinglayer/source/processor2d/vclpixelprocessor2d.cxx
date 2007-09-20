@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclpixelprocessor2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-08 15:27:54 $
+ *  last change: $Author: aw $ $Date: 2007-09-20 09:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,10 @@
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_WRONGSPELLPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
@@ -120,11 +124,26 @@ namespace drawinglayer
         {
             switch(rCandidate.getPrimitiveID())
             {
+                case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D :
+                {
+                    // directdraw of wrong spell primitive; added test possibility to check wrong spell decompose
+                    static bool bHandleWrongSpellDirectly(true);
+
+                    if(bHandleWrongSpellDirectly)
+                    {
+                        RenderWrongSpellPrimitive2D(static_cast< const primitive2d::WrongSpellPrimitive2D& >(rCandidate));
+                    }
+                    else
+                    {
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
+                    break;
+                }
                 case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
                 case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
                 {
                     // directdraw of text simple portion; added test possibility to check text decompose
-                    static bool bHandleTextDirectly(true);
+                    static bool bHandleTextDirectly(false);
 
                     if(bHandleTextDirectly)
                     {

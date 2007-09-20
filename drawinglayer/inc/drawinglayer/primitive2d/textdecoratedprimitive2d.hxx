@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdecoratedprimitive2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-03 10:43:04 $
+ *  last change: $Author: aw $ $Date: 2007-09-20 09:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,10 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE_TEXTPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -94,29 +98,6 @@ namespace drawinglayer
             FONT_RELIEF_ENGRAVED
         };
 
-        class WrongSpellEntry
-        {
-            sal_uInt32              mnStart;
-            sal_uInt32              mnEnd;
-
-        public:
-            WrongSpellEntry(sal_uInt32 nS, sal_uInt32 nE)
-            :   mnStart(nS),
-                mnEnd(nE)
-            {}
-
-            // compare operator
-            bool operator==(const WrongSpellEntry& rEntry) const
-            {
-                return (mnStart == rEntry.mnStart && mnEnd == rEntry.mnEnd);
-            }
-
-            sal_uInt32 getStart() const { return mnStart; }
-            sal_uInt32 getEnd() const { return mnEnd; }
-        };
-
-        typedef std::vector< WrongSpellEntry > WrongSpellVector;
-
         class TextDecoratedPortionPrimitive2D : public TextSimplePortionPrimitive2D
         {
         private:
@@ -125,7 +106,6 @@ namespace drawinglayer
             FontStrikeout                               meFontStrikeout;
             FontEmphasisMark                            meFontEmphasisMark;
             FontRelief                                  meFontRelief;
-            WrongSpellVector                            maWrongSpellVector;
 
             // bitfield
             unsigned                                    mbUnderlineAbove : 1;
@@ -133,6 +113,12 @@ namespace drawinglayer
             unsigned                                    mbEmphasisMarkAbove : 1;
             unsigned                                    mbEmphasisMarkBelow : 1;
             unsigned                                    mbShadow : 1;
+
+            // break iterator support
+            // made static so it only needs to be fetched once, even with many single
+            // constructed VclMetafileProcessor2D. It's still incarnated on demand,
+            // but exists for OOo runtime now by purpose.
+            static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >   mxBreakIterator;
 
         protected:
             // local decomposition.
@@ -159,8 +145,7 @@ namespace drawinglayer
                 bool bEmphasisMarkAbove = true,
                 bool bEmphasisMarkBelow = false,
                 FontRelief eFontRelief = FONT_RELIEF_NONE,
-                bool bShadow = false,
-                const WrongSpellVector& rWrongSpellVector = WrongSpellVector());
+                bool bShadow = false);
 
             // get data
             FontUnderline getFontUnderline() const { return meFontUnderline; }
@@ -168,7 +153,6 @@ namespace drawinglayer
             FontEmphasisMark getFontEmphasisMark() const { return meFontEmphasisMark; }
             FontRelief getFontRelief() const { return meFontRelief; }
             basegfx::BColor getTextlineColor() const { return maTextlineColor; }
-            const WrongSpellVector& getWrongSpellVector() const { return maWrongSpellVector; }
 
             bool getUnderlineAbove() const { return mbUnderlineAbove; }
             bool getWordLineMode() const { return mbWordLineMode; }

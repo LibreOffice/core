@@ -39,6 +39,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\texthierarchyprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\texthierarchyprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\transformprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\transformprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\unifiedalphaprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\unifiedalphaprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\wrongspellprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\wrongspellprimitive2d.hxx
 
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive3d
 ..\inc\drawinglayer\primitive3d\drawinglayer_primitivetypes3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\drawinglayer_primitivetypes3d.hxx

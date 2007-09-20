@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: aw $ $Date: 2007-08-03 10:43:04 $
+#   last change: $Author: aw $ $Date: 2007-09-20 09:51:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,8 @@ SLOFILES= \
         $(SLO)$/textdecoratedprimitive2d.obj	\
         $(SLO)$/texthierarchyprimitive2d.obj	\
         $(SLO)$/transformprimitive2d.obj		\
-        $(SLO)$/unifiedalphaprimitive2d.obj
+        $(SLO)$/unifiedalphaprimitive2d.obj		\
+        $(SLO)$/wrongspellprimitive2d.obj
 
 # --- Targets ----------------------------------
 
