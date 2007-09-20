@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:14:30 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:01:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,7 @@ OString makeTempName(const OString& prefix)
     if ( uTmpPath.getLength() )
         tmpPath = OUStringToOString(uTmpPath, RTL_TEXTENCODING_UTF8);
 
-#if defined(SAL_W32) || defined(SAL_UNX)
+#if defined(SAL_W32) || defined(SAL_UNX) || defined(SAL_OS2)
 
     OSL_ASSERT( sizeof(tmpFilePattern) > ( strlen(tmpPath)
                                            + RTL_CONSTASCII_LENGTH(
@@ -195,10 +195,6 @@ OString makeTempName(const OString& prefix)
 #else
     (void) mktemp(tmpFilePattern);
 #endif
-#endif
-
-#ifdef __OS2__
-    strncpy(tmpFilePattern, tempnam(NULL, prefix.getStr()), sizeof(tmpFilePattern)-1);
 #endif
 
     return OString(tmpFilePattern);
@@ -322,7 +318,22 @@ sal_Int32 compileFile(const OString * pathname)
             idlc()->getOptions()->getProgramName().getStr(), cmdFileName.getStr());
           exit(99);
     }
+#ifdef SAL_OS2
+      char* tok = strtok( (char*)cppArgs.getStr(), " \t\n\r");
+      while( tok) {
+         if (tok[strlen(tok)-1] == '\"')
+            tok[strlen(tok)-1] = '\0';
+         if (*tok == '\"')
+            memcpy( tok, tok+1, strlen(tok));
+         if (strlen(tok)>0) {
+            fputs(tok, pCmdFile);
+            fputc('\n', pCmdFile);
+         }
+         tok = strtok( NULL, " \t\n\r");
+      }
+#else
     fprintf(pCmdFile, "%s", cppArgs.getStr());
+#endif
     fclose(pCmdFile);
 
     OUString cmdArg(RTL_CONSTASCII_USTRINGPARAM("@"));
