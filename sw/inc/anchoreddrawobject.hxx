@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoreddrawobject.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:08:52 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 11:47:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,6 +228,9 @@ class SwAnchoredDrawObject : public SwAnchoredObject
         // --> OD 2006-03-17 #i62875#
         const bool IsOutsidePage() const;
         // <--
+
+        // new Loop control
+        void ValidateThis() { mbValidPos = true; }
 };
 
 #endif
