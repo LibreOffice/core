@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:16:25 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:05:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ extern "C" {
 #define SAL_MODULENAME(name) name SAL_DLLEXTENSION
 #endif
 
-#ifdef SAL_W32
+#if defined(SAL_W32) || defined(SAL_OS2)
 #define SAL_MODULENAME_WITH_VERSION(name, version) name version SAL_DLLEXTENSION
 
 #elif defined(SAL_UNX)
