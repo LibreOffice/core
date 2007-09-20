@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:57:23 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:27:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -601,7 +601,7 @@ void SAL_CALL FileProvider::initProperties( void )
 
 #if defined ( UNX )
         m_FileSystemNotation = FileSystemNotation::UNIX_NOTATION;
-#elif defined( WNT )
+#elif defined( WNT ) || defined( OS2 )
         m_FileSystemNotation = FileSystemNotation::DOS_NOTATION;
 #else
         m_FileSystemNotation = FileSystemNotation::UNKNOWN_NOTATION;
