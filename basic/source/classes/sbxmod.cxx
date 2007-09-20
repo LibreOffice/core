@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 09:59:22 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@
 #ifdef WNT
 #define CDECL _cdecl
 #endif
-#if defined(UNX)
+#if defined(UNX) || defined(OS2)
 #define CDECL
 #endif
 #ifdef UNX
