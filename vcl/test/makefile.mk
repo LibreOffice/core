@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:22:00 $
+#   last change: $Author: vg $ $Date: 2007-09-20 16:25:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,10 @@ PRJ=..
 PRJNAME=vcl
 TARGET=dndtest
 LIBTARGET=NO
+
+.IF "$(GUI)" == "OS2"
+TARGETTYPE=GUI
+.ENDIF
 
 # --- Settings -----------------------------------------------------
 
