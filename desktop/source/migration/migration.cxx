@@ -4,9 +4,9 @@
  *
  *  $RCSfile: migration.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:12:56 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:36:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,6 +420,11 @@ strings_vr MigrationImpl::compileFileList()
     strings_vr vrInclude;
     strings_vr vrExclude;
     strings_vr vrTemp;
+
+#ifdef SAL_OS2
+    if (m_aInfo.userdata.getLength() == 0)
+        return vrResult;
+#endif
 
     // get a list of all files:
     strings_vr vrFiles = getAllFiles(m_aInfo.userdata);
