@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 10:58:32 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:45:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,14 @@ SHL1STDLIBS+=\
     $(OLEAUT32LIB)
 
 DEF1EXPORTFILE=	exports.dxp
+.ELIF "$(GUI)"=="OS2"
+
+SHL1STDLIBS+=\
+    $(VCLLIB)\
+    iembobj.lib
+
+DEF1EXPORTFILE=	exports.dxp
+
 .ELSE
 SHL1STDLIBS+=\
     -lembobj
