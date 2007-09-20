@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlg2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:12:33 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:29:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,7 @@ ImpPathDialog::~ImpPathDialog()
     delete pOkBtn;
     delete pCancelBtn;
     delete pNewDirBtn;
-#   ifdef UNX
+#   if defined(UNX) || defined(OS2)
     delete pHomeBtn;
 #   endif
 }
@@ -242,7 +242,7 @@ void ImpPathDialog::InitControls()
     nTextWidth = pDlg->GetTextWidth( aNewDirStr )+nExtraWidth;
     if( nTextWidth > aBtnSiz.Width() )
         aBtnSiz.Width() = nTextWidth;
-#ifdef UNX
+#if defined(UNX) || defined(OS2)
     String aHomeDirStr( SvtResId( STR_FILEDLG_HOME ) );
     nTextWidth = pDlg->GetTextWidth( aHomeDirStr )+nExtraWidth;
     if( nTextWidth > aBtnSiz.Width() )
@@ -259,7 +259,7 @@ void ImpPathDialog::InitControls()
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pNewDirBtn, PushButton, WB_DEFBUTTON,
                  aPnt, aBtnSiz, aNewDirStr, HID_FILEDLG_NEWDIR );
-#ifdef UNX
+#if defined(UNX) || defined(OS2)
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pHomeBtn, PushButton, WB_DEFBUTTON,
                  aPnt, aBtnSiz, aHomeDirStr, HID_FILEDLG_HOME );
