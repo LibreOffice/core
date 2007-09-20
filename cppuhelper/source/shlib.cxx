@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:18:14 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:26:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,15 +246,18 @@ static OUString makeComponentPath(
         if (rPath[ rPath.getLength() -1 ] != '/')
             buf.append( (sal_Unicode) '/' );
     }
-
     sal_Int32 nEnd = endsWith( rLibName, OUSTR(SAL_DLLEXTENSION) );
     if (nEnd < 0) // !endsWith
     {
+#ifndef OS2
+//this is always triggered with .uno components
 #if (OSL_DEBUG_LEVEL >= 2)
         OSL_ENSURE(
             !"### library name has no proper extension!",
             OUStringToOString( rLibName, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
+#endif // OS2
+
 #if defined SAL_DLLPREFIX
         nEnd = endsWith( rLibName, OUSTR(".uno") );
         if (nEnd < 0) // !endsWith
