@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:13:37 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 11:48:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,7 +254,7 @@ class SwFrm: public SwClient
     friend class SwLayoutFrm;       // Sw3FrameIo: fuer pNext, pPrev
     friend class SwLooping;         // LoopControlling  (layouter.cxx)
 
-        //Hebt die Lower waehrend eines Spaltenumbaus auf.
+    //Hebt die Lower waehrend eines Spaltenumbaus auf.
     friend SwFrm *SaveCntnt( SwLayoutFrm *, SwFrm* pStart = NULL );
     friend void   RestoreCntnt( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
 
@@ -915,6 +915,9 @@ public:
     bool IsLeaveUpperAllowed() const;
     bool IsCoveredCell() const;
     bool IsInCoveredCell() const;
+
+    // FME 2007-08-30 #i81146# new loop control
+    void ValidateThisAndAllLowers( const USHORT nStage );
 };
 
 inline BOOL SwFrm::IsInDocBody() const
