@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-23 12:10:32 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:42:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ TARGET=wpd
 TARFILE_NAME=libwpd-0.8.8
 PATCH_FILE_NAME=$(TARFILE_NAME).diff
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
-BUILD_DIR=src/lib
+BUILD_DIR=src$/lib
 
 # --- Targets ------------------------------------------------------
 
