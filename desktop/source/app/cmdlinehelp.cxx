@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdlinehelp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:30:41 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:35:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ namespace desktop
         "keep startup bitmap minimized.\n"\
         "no startup screen, no default document and no UI.\n"\
         "suppress restart/restore after fatal errors.\n"\
-        "starts the quickstart service (only available on windows platform)\n"\
+        "starts the quickstart service (only available on windows and OS/2 platform)\n"\
         "don't show startup screen.\n"\
         "don't check for remote instances using the installation\n"\
         "don't start with an empty document\n"\
