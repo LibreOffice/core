@@ -1,5 +1,5 @@
-echo off
-cls
+@echo off
+rem cls
 rem  *** This is the make command file that is used under OS/2 to make the
 rem  *** first version of dmake.  It isn't pretty but it does work, assuming
 rem  *** the compilers have been correctly setup.
@@ -7,6 +7,7 @@ rem
 
 if %0%1 == %0 goto error
 
+if %1 == os2-gcc     goto mkgcc
 if %1 == os2-ibm     goto mkibm
 if %1 == os2-ibm3     goto mkibm3
 if %1 == winnt-bcc40 goto mkwntb40
@@ -19,12 +20,18 @@ rem label the possible DOS variations for dmake here.
 :error
 echo OS/2 INDEX:  You must specify one of:
 echo ------------------
+echo    os2-gcc      - GCC (innotek/emx) compile.
 echo    os2-ibm      - IBM OS/2 ICC compile.
 echo    os2-ibm3      - IBM OS/2 ICC3 compile.
 echo    winnt-bcc40  - Windows-NT Borland C++ 4.0 Compile
 echo    winnt-bcc45  - Windows-NT Borland C++ 4.5 Compile
 echo    winnt-bcc50  - Windows-NT Borland C++ 5.0 Compile
 echo    winnt-vpp40  - Windows-NT Microsoft VC++ 4.0 Compile
+goto end
+
+rem This is the script that bilds OS/2 dmake using GCC (innotek/emx)
+:mkgcc
+call os2\gcc\emx\mk.cmd
 goto end
 
 rem This is the script that bilds OS/2 dmake using IBM ICC Compiler
@@ -98,5 +105,6 @@ goto end
 winnt\microsft\vpp40\mk.bat
 goto end
 
-rem All done!
 :end
+REM dllrname libc06r1=libc06y1 dmake.exe
+echo All done!
