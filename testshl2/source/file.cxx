@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:41:38 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:51:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ std::string getTempPath()
     }
     else
     {
-#ifdef UNX
+#if (defined UNX) || (defined OS2)
         int nLen;
         pTmp = P_tmpdir;
         nLen = strlen(pTmp);
