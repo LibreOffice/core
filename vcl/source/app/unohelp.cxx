@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:03:25 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:24:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ static VCLRegServiceInfo aVCLComponentsArray[] =
     {"dtransX11", sal_True},
 #endif
 #endif
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     {"sysdtrans", sal_False},
 #endif
     {"dtrans", sal_False},
@@ -227,7 +227,7 @@ uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
 
     OUString aLibName;
 
-#ifdef WNT
+#if defined( WNT) || defined(OS2)
     aLibName = OUString::createFromAscii( pModName );
     if ( bSUPD )
     {
