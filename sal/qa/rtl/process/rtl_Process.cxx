@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_Process.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:59:18 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:22:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ public:
 
     void getAppCommandArg_001()
     {
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     const rtl::OUString EXECUTABLE_NAME = rtl::OUString::createFromAscii("child_process.exe");
 #else
     const rtl::OUString EXECUTABLE_NAME = rtl::OUString::createFromAscii("child_process");
@@ -251,7 +251,7 @@ public:
     //different processes different pids
     void getGlobalProcessId_002()
     {
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     const rtl::OUString EXEC_NAME = rtl::OUString::createFromAscii("child_process_id.exe");
 #else
     const rtl::OUString EXEC_NAME = rtl::OUString::createFromAscii("child_process_id");
