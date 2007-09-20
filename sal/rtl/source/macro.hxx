@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macro.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 11:40:14 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:24:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,8 @@
 
 #if defined WIN32
 #define THIS_OS "Windows"
+#elif defined OS2
+#define THIS_OS "OS/2"
 #elif defined SOLARIS
 #define THIS_OS "Solaris"
 #elif defined LINUX
