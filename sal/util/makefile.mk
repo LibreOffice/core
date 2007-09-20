@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 13:36:35 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:25:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ LIB3FILES=	\
 #LIB3FILES+=$(LB)$/systoolsunx.lib
 #.ENDIF # UNX
 
-.IF "$(GUI)" == "WNT"
+.IF "$(GUI)" == "WNT" || "$(GUI)"=="OS2"
 SHL1TARGET= $(TARGET)
 .ELSE
 SHL1TARGET= uno_$(TARGET)
@@ -135,6 +135,10 @@ SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
 SHL1STDLIBS= -lexc
 .ENDIF
 .ENDIF # UNX
+
+.IF "$(GUI)"=="OS2"
+SHL1STDLIBS=pthread.lib lvm.lib
+.ENDIF # OS2
 
 # If we compile sal with STLport checking iterators
 # we need to link against the STLport
