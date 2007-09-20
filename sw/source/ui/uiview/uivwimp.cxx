@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:28:06 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:41:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,8 +340,10 @@ SwScannerEventListener::~SwScannerEventListener()
 void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject) throw(::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+#if defined WIN || defined WNT || defined UNX
     if( pView )
         pView->ScannerEventHdl( rEventObject );
+#endif
 }
 
 // ------------------------- SwClipboardChangeListener ---------------------
