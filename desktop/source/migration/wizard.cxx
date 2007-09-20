@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:37:06 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:37:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,7 +366,9 @@ sal_Bool FirstStartWizard::onFinish(sal_Int32 _nResult)
     // return sal_True;
     if (svt::RoadmapWizard::onFinish(_nResult))
     {
+#ifndef OS2 // cannot enable quickstart on first startup, see shutdownicon.cxx comments.
         enableQuickstart();
+#endif
         disableWizard();
         return sal_True;
     }
@@ -748,7 +750,7 @@ OUString FirstStartWizard::getLicensePath()
             aLangString += aLocale.Variant;
         }
     }
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     aLicensePath =
         aBaseInstallPath + OUString::createFromAscii(szLicensePath)
         + OUString::createFromAscii(szWNTLicenseName)
