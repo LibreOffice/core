@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 11:12:17 $
+#   last change: $Author: vg $ $Date: 2007-09-20 16:32:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,29 @@ $(MISC)$/$(SHL1TARGET).def: makefile.mk
     @echo     ScDate_DaysInMonth>>$@
     @echo     ScDate_DaysInYear>>$@
     @echo     ScDate_WeeksInYear>>$@
+
+.ENDIF
+
+.IF "$(GUI)"=="OS2"
+
+$(MISC)$/$(SHL1TARGET).def: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo LIBRARY     $(SHL1TARGET) INITINSTANCE TERMINSTANCE >$@
+    @echo DESCRIPTION 'DateF StarCalc Addin DLL'>>$@
+    @echo DATA        MULTIPLE>>$@
+    @echo EXPORTS>>$@
+    @echo     _GetFunctionCount>>$@
+    @echo     _GetFunctionData>>$@
+    @echo     _GetParameterDescription>>$@
+    @echo     _SetLanguage >>$@
+    @echo     _ScDate_GetDiffWeeks>>$@
+    @echo     _ScDate_GetDiffMonths>>$@
+    @echo     _ScDate_GetDiffYears>>$@
+    @echo     _ScDate_IsLeapYear>>$@
+    @echo     _ScDate_DaysInMonth>>$@
+    @echo     _ScDate_DaysInYear>>$@
+    @echo     _ScDate_WeeksInYear>>$@
 
 .ENDIF
 
