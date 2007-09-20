@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:21:27 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:07:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,8 @@ extern "C" {
 #define SAL_OS2
 #define SAL_DLLEXTENSION ".dll"
 #define SAL_PRGEXTENSION ".exe"
+#define SAL_PATHSEPARATOR ';'
+#define SAL_PATHDELIMITER '\\'
 #define SAL_CONFIGFILE( name ) name ".ini"
 #define SAL_SYSCONFIGFILE( name ) name ".ini"
 #endif
