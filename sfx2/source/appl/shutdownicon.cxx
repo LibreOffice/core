@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:31:36 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:36:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -704,6 +704,19 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
                 /* Create a sub-classed instance - foo */
                 ShutdownIcon::pShutdownIcon = this;
                 initSystray();
+#ifdef OS2
+                // above win32 starts the quickstart thread, but we have
+                // quickstart running only when -quickstart is specified
+                // on command line (next boot).
+                // so if -quickstart was not specified, we cannot issue
+                // quickstart veto on shutdown.
+                if (bQuickstart)
+                {
+                    // disable shutdown
+                    ShutdownIcon::getInstance()->SetVeto( true );
+                    ShutdownIcon::getInstance()->addTerminateListener();
+                }
+#endif
             }
             catch(const ::com::sun::star::lang::IllegalArgumentException&)
             {
@@ -808,6 +821,9 @@ rtl::OUString ShutdownIcon::getShortcutName()
 
 bool ShutdownIcon::GetAutostart( )
 {
+#if defined(OS2)
+    return GetAutostartOs2( );
+#else
     bool bRet = false;
 #ifdef ENABLE_QUICKSTART_APPLET
     OUString aShortcut( getShortcutName() );
@@ -822,6 +838,7 @@ bool ShutdownIcon::GetAutostart( )
     }
 #endif // ENABLE_QUICKSTART_APPLET
     return bRet;
+#endif
 }
 
 void ShutdownIcon::SetAutostart( bool bActivate )
@@ -865,6 +882,8 @@ void ShutdownIcon::SetAutostart( bool bActivate )
             pIcon->deInitSystray();
 #endif
     }
+#elif defined OS2
+    SetAutostartOs2( bActivate );
 #else
     (void)bActivate; // unused variable
 #endif // ENABLE_QUICKSTART_APPLET
