@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-13 11:41:48 $
+#   last change: $Author: vg $ $Date: 2007-09-20 16:40:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,9 @@ LIB1FILES=	$(SLB)$/container.lib		\
             $(SLB)$/xml.lib
 
 SHL1TARGET=$(COMPHLP_TARGET)$(COMPHLP_MAJOR)$(COMID)
+.IF "$(GUI)" == "OS2"
+SHL1TARGET=comph$(COMPHLP_MAJOR)
+.ENDIF
 SHL1STDLIBS= \
     $(SALLIB) \
     $(SALHELPERLIB) \
