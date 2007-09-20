@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:16:16 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:29:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1915,6 +1915,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl( const FolderDescriptor& 
             m_pContentEnumerator = NULL;
             return eSuccess;
         }
+        m_pContentEnumerator = NULL;
         return eFailure;
     }
 
