@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uuid.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 16:32:05 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:07:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,6 +194,8 @@ void SAL_CALL rtl_createNamedUuid(
  */
 #ifdef SAL_W32
 #define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 1000
+#elif defined SAL_OS2 // YD we use posix functions for time
+#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
 #elif LINUX
 #define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
 #elif NETBSD
