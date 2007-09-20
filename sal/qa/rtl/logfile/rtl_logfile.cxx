@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_logfile.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:56:35 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:22:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef UNX
+#if defined(UNX) || defined(OS2)
 #       include <unistd.h>
 #endif
 
