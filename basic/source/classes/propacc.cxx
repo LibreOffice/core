@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propacc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:18:20 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:54:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
 #ifdef WNT
 #define CDECL _cdecl
 #endif
-#if defined(UNX)
+#if defined(UNX) || defined(OS2)
 #define CDECL
 #endif
 
