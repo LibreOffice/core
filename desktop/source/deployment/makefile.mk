@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2007-06-12 06:19:01 $
+#   last change: $Author: vg $ $Date: 2007-09-20 15:36:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,10 @@ ENABLE_EXCEPTIONS = TRUE
 #USE_DEFFILE = TRUE
 NO_BSYMBOLIC = TRUE
 
+.IF "$(GUI)"=="OS2"
+TARGET = deploy
+.ENDIF
+
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
 
@@ -53,7 +57,7 @@ INCPRE += inc
 DLLPRE =
 
 SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX).uno
-SHL1VERSIONMAP = $(TARGET).map
+SHL1VERSIONMAP = deployment.map
 
 SHL1LIBS = \
     $(SLB)$/deployment_manager.lib \
