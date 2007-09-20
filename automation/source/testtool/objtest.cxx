@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 14:37:13 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:45:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,13 @@
 #include <com/sun/star/devtools/XInformationClient.hpp>
 using namespace com::sun::star::devtools;
 */
+#ifdef OS2
+#define INCL_DOS
+//#include <vcl/sysdep.hxx>
+#ifndef _SVPM_H
+#include <svpm.h>
+#endif
+#endif
 
 #include "sysdir_win.hxx"
 #include "registry_win.hxx"
@@ -94,13 +101,6 @@ using namespace rtl;
 
 
 #include <svtools/svmedit.hxx>
-#ifdef OS2
-#define INCL_DOSPROCESS
-//#include <vcl/sysdep.hxx>
-#ifndef _SVPM_H
-#include <tools/svpm.h>
-#endif
-#endif
 
 #ifdef UNX
 #include <unistd.h> // readlink
@@ -2490,6 +2490,14 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             osl::FileBase::getSystemPathFromFileURL( aUrl, aPath );
                             pVar->PutString( String( aPath ) );
                         }
+#elif defined OS2
+                        {
+                            char* etc = getenv("ETC");
+                            if (etc)
+                               pVar->PutString( CUniString( etc ) );
+                            else
+                               pVar->PutString( CUniString( "/etc" ) );
+                        }
 #else
 #if UNX
                         pVar->PutString( CUniString( "/etc" ) );
@@ -2930,7 +2938,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.33 $
+    // search $Revision: 1.34 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
