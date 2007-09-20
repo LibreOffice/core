@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:10:50 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:27:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,7 +372,7 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
             beans::PropertyState_DEFAULT_VALUE,
             beans::PropertyAttribute::MAYBEVOID
             | beans::PropertyAttribute::BOUND
-#ifdef WNT
+#if defined( WNT ) || defined( OS2 )
         ));
 #else
     | beans::PropertyAttribute::READONLY)); // under unix/linux only readable
