@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:19:56 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:29:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1371,18 +1371,6 @@ BOOL SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
             else
                 bKeyUsed = FALSE;
             break;
-
-#ifdef OS2
-        case KEY_F9:
-            if( rKEvt.GetKeyCode().IsShift() )
-            {
-                if( pCursor && bEntryEditingEnabled )
-                    pView->EditEntry( pCursor );
-            }
-            else
-                bKeyUsed = FALSE;
-            break;
-#endif
 
         case KEY_SPACE:
             if( pCursor && eSelectionMode != SINGLE_SELECTION )
