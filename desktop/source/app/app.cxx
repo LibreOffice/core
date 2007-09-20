@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.209 $
+ *  $Revision: 1.210 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:12:15 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:35:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2378,6 +2378,8 @@ void Desktop::OpenClients()
             aHelpURLBuffer.appendAscii("&System=WIN");
 #elif defined MAC
             aHelpURLBuffer.appendAscii("&System=MAC");
+#elif defined OS2
+            aHelpURLBuffer.appendAscii("&System=OS2");
 #endif
             pHelp->Start(aHelpURLBuffer.makeStringAndClear(), NULL);
             return;
@@ -2394,7 +2396,7 @@ void Desktop::OpenClients()
         {
             aIniName    = aIniName.copy( 0, lastIndex+1 );
             aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( "perftune" ));
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
             aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( ".ini" ));
 #else
             aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( "rc" ));
