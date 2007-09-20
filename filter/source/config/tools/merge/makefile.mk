@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:47:16 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:59:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ JARCOMPRESS     =   TRUE
 
 .INCLUDE :  target.mk
 
-.IF "$(SOLAR_JAVA)" != ""
+.IF "$(SOLAR_JAVA)" != "" || "$(GUI)"=="OS2"
 ALLTAR : $(OWNCOPY)
 
 .IF "$(JARTARGETN)" != ""
