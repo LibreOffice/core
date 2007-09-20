@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uik.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:37:54 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:43:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,10 @@
 #include <sal/types.h>
 #endif
 
-#ifdef SAL_W32
-#   pragma pack(push, 8)
+#if defined( SAL_W32)
+#pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#   pragma pack(8)
+#pragma pack(push, 8)
 #endif
 
 /** Binary typelib uik struct.  Internally not used anymore.
@@ -56,10 +56,8 @@ typedef struct _typelib_Uik
     sal_uInt32  m_Data5;
 } typelib_Uik;
 
-#ifdef SAL_W32
+#if defined( SAL_W32) ||  defined(SAL_OS2)
 #   pragma pack(pop)
-#elif defined(SAL_OS2)
-#   pragma pack()
 #endif
 
 #endif

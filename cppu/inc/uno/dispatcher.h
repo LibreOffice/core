@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatcher.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:39:44 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:43:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,10 +76,10 @@ typedef void (SAL_CALL * uno_DispatchMethod)(
     void * pArgs[],
     uno_Any ** ppException );
 
-#ifdef SAL_W32
+#if defined( SAL_W32)
 #pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#pragma pack(8)
+#pragma pack(push, 8)
 #endif
 
 /** The binary C uno interface description.
@@ -101,10 +101,8 @@ typedef struct _uno_Interface
     uno_DispatchMethod pDispatcher;
 } uno_Interface;
 
-#ifdef SAL_W32
+#if defined( SAL_W32) ||  defined(SAL_OS2)
 #pragma pack(pop)
-#elif defined(SAL_OS2)
-#pragma pack()
 #endif
 
 #ifdef __cplusplus
