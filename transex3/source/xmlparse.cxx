@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlparse.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:43:48 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:03:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -896,7 +896,8 @@ OUString XMLElement::ToOUString(){
 /*****************************************************************************/
 void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement ){
 /*****************************************************************************/
-    static const String COMMENT = String::CreateFromAscii("comment");
+    //YD FIXME somewhere COMMENT is defined as 4!
+    static const String _COMMENT = String::CreateFromAscii("comment");
     static const OUString XML_LANG ( OUString::createFromAscii("xml-lang") );
 
     if(pCur!=NULL){
@@ -918,7 +919,7 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
 
-                if(  !pElement->GetName().EqualsIgnoreCaseAscii( COMMENT ) ){
+                if(  !pElement->GetName().EqualsIgnoreCaseAscii( _COMMENT ) ){
                     buffer.append( OUString::createFromAscii("\\<") );
                     buffer.append( pElement->GetName() );
                     if ( pElement->GetAttributeList()){
