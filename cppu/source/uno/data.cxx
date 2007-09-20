@@ -4,9 +4,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:21:05 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:44:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -356,18 +356,18 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 //##################################################################################################
 
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 10
 
 #include <stdio.h>
 
-#ifdef SAL_W32
-#   pragma pack(push, 8)
+#if defined( SAL_W32)
+#pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#   pragma pack(8)
+#pragma pack(push, 4)
 #endif
 
 #if defined(INTEL) \
-    && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD)) || defined(MACOSX) \
+    && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) || defined(OS2)) || defined(MACOSX) \
         || defined(__SUNPRO_CC) && defined(SOLARIS))
 #define MAX_ALIGNMENT_4
 #endif
