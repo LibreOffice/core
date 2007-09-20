@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localebackend.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:39:02 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:46:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 
 #include <stdio.h>
 
-#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD)
+#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD) || defined(OS2)
 
 #include <rtl/ustrbuf.hxx>
 #include <locale.h>
@@ -270,7 +270,7 @@ LocaleBackend* LocaleBackend::createInstance(
 
 rtl::OUString LocaleBackend::getLocale(void)
 {
-#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD)
+#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD) || defined(OS2)
     return ImplGetLocale(LC_CTYPE);
 #elif defined (MACOSX)
     return ImplGetLocale("AppleLocale");
@@ -283,7 +283,7 @@ rtl::OUString LocaleBackend::getLocale(void)
 
 rtl::OUString LocaleBackend::getUILocale(void)
 {
-#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD)
+#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD) || defined(OS2)
     return ImplGetLocale(LC_MESSAGES);
 #elif defined(MACOSX)
     return ImplGetLocale("AppleLanguages");
