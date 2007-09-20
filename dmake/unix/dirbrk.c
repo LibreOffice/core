@@ -1,4 +1,4 @@
-/* RCS  $Id: dirbrk.c,v 1.2 2007-01-18 09:44:04 vg Exp $
+/* RCS  $Id: dirbrk.c,v 1.3 2007-09-20 14:35:04 vg Exp $
 --
 -- SYNOPSIS
 --      Define the directory separator string.
@@ -27,8 +27,13 @@
 
 #include "extern.h"
 
+#ifdef __EMX__
+/* os2 uses /, \, and : */
+char*   DirBrkStr = "/\\:";
+#else
 /* Unix only uses / */
 char*   DirBrkStr = "/";
+#endif
 
 /*
 ** Return TRUE if the name is the full specification of a path name to a file
