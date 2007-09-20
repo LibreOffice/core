@@ -4,9 +4,9 @@
  *
  *  $RCSfile: main.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:24:31 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 15:08:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,28 @@ int WINAPI WinMain( HINSTANCE _hinst, HINSTANCE _dummy, char* _cmdline, int _nsh
 }
 
 #else   /* ! SAL_W32 */
+
+#ifdef SAL_OS2
+
+int SAL_CALL osl_ProcessHook( int (*sal_main)( int, char**), int argc, char ** argv);
+
+#define SAL_DEFINE_CRT_ENTRY() \
+int main(int argc, char ** argv) \
+{ \
+   return osl_ProcessHook(sal_main, argc, argv); \
+} \
+
+#else   /* ! SAL_OS2 */
+
+#define SAL_DEFINE_CRT_ENTRY() \
+int main(int argc, char ** argv) \
+{ \
+    osl_setCommandArgs(argc, argv); \
+    return sal_main(argc, argv); \
+} \
+
+#endif  /* ! SAL_OS2 */
+
 # define SAL_WIN_WinMain
 
 #endif /* ! SAL_W32 */
