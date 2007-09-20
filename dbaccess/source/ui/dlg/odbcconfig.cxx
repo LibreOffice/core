@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:08:47 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:58:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,12 +148,14 @@ typedef SQLRETURN (SQL_API* TSQLDataSources) (SQLHENV EnvironmentHandle, SQLUSMA
 //=========================================================================
 DBG_NAME(OOdbcLibWrapper)
 //-------------------------------------------------------------------------
+#ifdef HAVE_ODBC_SUPPORT
 OOdbcLibWrapper::OOdbcLibWrapper()
     :m_pOdbcLib(NULL)
 {
     DBG_CTOR(OOdbcLibWrapper,NULL);
 
 }
+#endif
 
 //-------------------------------------------------------------------------
 sal_Bool OOdbcLibWrapper::load(const sal_Char* _pLibPath)
