@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:08:22 $
+#   last change: $Author: vg $ $Date: 2007-09-20 14:31:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@ HUNSPELLLIB=$(HUNSPELL_LIBS)
 .IF "$(GUI)"=="UNX"
 ULINGULIB=-lulingu
 .ENDIF # unx
+.IF  "$(GUI)"=="OS2"
+ULINGULIB=$(SLB)\libulingu.lib
+.ENDIF
 .IF "$(GUI)"=="WNT"
 ULINGULIB=libulingu.lib
 .ENDIF # wnt
