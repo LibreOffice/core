@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.h,v 1.2 2007-01-18 09:44:29 vg Exp $
+/* RCS  $Id: sysintf.h,v 1.3 2007-09-20 14:35:41 vg Exp $
 --
 -- SYNOPSIS
 --      Interfaces for sysintf.c
@@ -27,6 +27,9 @@
 #define VOID_LCACHE(l,m) (void) void_lcache(l,m)
 #define Hook_std_writes(A)
 #define GETPID getpid()
+#ifdef __EMX__
+#define CacheStat(A,B) really_dostat(A,&buf)
+#endif
 
 #ifndef S_IFDIR
 #define S_IFDIR 0040000
