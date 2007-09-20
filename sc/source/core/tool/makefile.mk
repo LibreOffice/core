@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2007-08-03 13:07:55 $
+#   last change: $Author: vg $ $Date: 2007-09-20 16:32:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,11 @@ AUTOSEG=true
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # Settings for the INFO() function
+.IF "$(GUI)"=="OS2"
+CDEFS += -DSC_INFO_OSVERSION="$(OS)"
+.ELSE
 CDEFS += -DSC_INFO_OSVERSION=\"$(OS)\"
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
