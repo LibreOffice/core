@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddeml1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:24:37 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 16:30:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -474,7 +474,7 @@ DDEINIT* ImpDdeMgr::CreateDDEInitData( HWND hWndDestination, HSZ hszService,
 
     ULONG nLen = sizeof(DDEINIT) + nLen1+ nLen2 + sizeof(CONVCONTEXT);
     if( !(MyDosAllocSharedMem((PPVOID)&pBuf, NULL, nLen,
-            PAG_COMMIT | PAG_READ | PAG_WRITE | OBJ_GIVEABLE,
+            PAG_COMMIT | PAG_READ | PAG_WRITE | OBJ_GIVEABLE | OBJ_ANY,
             "CreateDDEInitData")))
     {
         memset( pBuf, 0, nLen );
@@ -1352,7 +1352,7 @@ HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, ULONG cbData,
             HDDEDATA pNew;
             HDDEDATA pData = (HDDEDATA)pDdeData;
             if( !(MyDosAllocSharedMem((PPVOID)&pNew, NULL, pData->cbData,
-                PAG_COMMIT | PAG_READ | PAG_WRITE | OBJ_GIVEABLE,
+                PAG_COMMIT | PAG_READ | PAG_WRITE | OBJ_GIVEABLE | OBJ_ANY,
                 "MakeDDEObject")))
             {
                 memcpy( pNew, pData, pData->cbData );
