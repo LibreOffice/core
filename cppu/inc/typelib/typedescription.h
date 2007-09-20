@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typedescription.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:37:08 $
+ *  last change: $Author: vg $ $Date: 2007-09-20 14:43:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,10 +55,10 @@ extern "C"
 
 struct _typelib_TypeDescription;
 
-#ifdef SAL_W32
+#if defined( SAL_W32)
 #pragma pack(push, 8)
 #elif defined(SAL_OS2)
-#pragma pack(8)
+#pragma pack(push, 8)
 #endif
 
 /** Holds a weak reference to a type description.
@@ -575,10 +575,8 @@ typedef struct _typelib_Union_Init
     typelib_TypeDescriptionReference* pTypeRef;
 } typelib_Union_Init;
 
-#ifdef SAL_W32
+#if defined( SAL_W32) ||  defined(SAL_OS2)
 #pragma pack(pop)
-#elif defined(SAL_OS2)
-#pragma pack()
 #endif
 
 
