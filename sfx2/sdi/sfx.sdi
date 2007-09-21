@@ -8402,26 +8402,3 @@ SfxStringItem InsertAVMedia SID_INSERT_AVMEDIA
     GroupId = GID_APPLICATION;
 ]
 
-SfxVoidItem OnlineUpdate SID_ONLINEUPDATE
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_APPLICATION;
-]
