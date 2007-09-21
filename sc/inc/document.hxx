@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:06:37 $
+ *  last change: $Author: vg $ $Date: 2007-09-21 09:22:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1356,7 +1356,7 @@ SC_DLLPUBLIC    SvNumberFormatter*  GetFormatTable() const;
     void            GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, String& rStr);
 
     BOOL            GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                TypedStrCollection& rStrings );
+                                TypedStrCollection& rStrings, bool bFilter = false );
     SC_DLLPUBLIC BOOL           GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
                                 SCTAB nTab, TypedStrCollection& rStrings );
     BOOL            GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
