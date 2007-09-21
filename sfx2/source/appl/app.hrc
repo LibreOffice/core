@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:57:25 $
+ *  last change: $Author: vg $ $Date: 2007-09-21 09:27:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,14 +271,6 @@
 #define RID_SECURITY_WARNING_NO_HYPERLINKS      (RID_SFX_APP_START + 194)
 
 #define MD_DDE_LINKEDIT                         (RID_SFX_APP_START + 1)
-
-#define DLG_CHECKFORONLINEUPDATE                (RID_SFX_APP_START + 200)
-#define RID_CHECKFORONLINEUPDATE_FT_MSG         1
-#define RID_CHECKFORONLINEUPDATE_PB_HELP        2
-#define RID_CHECKFORONLINEUPDATE_PB_CANCEL      3
-
-#define INFOBOX_NO_NEW_UPDATE_AVAILABLE         (RID_SFX_APP_START + 201)
-#define INFOBOX_NEW_UPDATE_AVAILABLE            (RID_SFX_APP_START + 202)
 
 #endif // #ifndef _SFX_APP_HRC
 
