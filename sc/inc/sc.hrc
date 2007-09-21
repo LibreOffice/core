@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:30:48 $
+ *  last change: $Author: vg $ $Date: 2007-09-21 09:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1287,6 +1287,7 @@
 
 #define SCSTR_DPFUNCLISTBOX         (STR_START + 92)
 #define STR_PRINT_NOTHING           (STR_START + 93)
+#define SCSTR_ALLFILTER             (STR_START + 94)
 
 // Items
 
