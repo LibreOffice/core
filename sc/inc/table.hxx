@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:03:58 $
+ *  last change: $Author: vg $ $Date: 2007-09-21 09:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -609,6 +609,7 @@ public:
     BOOL        CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
 
     void        GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedStrCollection& rStrings);
+    void        GetFilteredFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, TypedStrCollection& rStrings );
     BOOL        GetDataEntries(SCCOL nCol, SCROW nRow, TypedStrCollection& rStrings, BOOL bLimit);
 
     BOOL        HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
