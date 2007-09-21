@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.89 $
+#   $Revision: 1.90 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-05 09:04:04 $
+#   last change: $Author: vg $ $Date: 2007-09-21 09:17:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -436,7 +436,7 @@ $(MISC)$/%.dpslo :
     @$(foreach,i,$(all_local_slo) $(shell $(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
     @$(foreach,i,$(all_misc_slo) $(shell $(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
 # for both
-    $(TYPE) $(mktmp $(foreach,i,$(all_local_slo:b:+".obj") $@ : $(SLO)$/$(i:+"\n")) $(foreach,i,$(all_misc_slo:b:+".obj") $@ : $(SLO)$/$(i:+"\n"))) >> $@
+    $(TYPE) $(mktmp $(foreach,i,$(all_local_slo:b:+".obj") $(@:^"\n") : $(SLO)$/$i) $(foreach,i,$(all_misc_slo:b:+".obj") $(@:^"\n") : $(SLO)$/$i)) >> $@
 
 $(MISC)$/%.dpobj :
 # faster but unusable with current source (e.g. external include guards)
@@ -447,7 +447,7 @@ $(MISC)$/%.dpobj :
     @$(foreach,i,$(all_local_obj) $(shell $(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
     @$(foreach,i,$(all_misc_obj) $(shell $(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
 # for both
-    $(TYPE) $(mktmp $(foreach,i,$(all_local_obj:b:+".obj") $@ : $(OBJ)$/$(i:+"\n")) $(foreach,i,$(all_misc_obj:b:+".obj") $@ : $(OBJ)$/$(i:+"\n"))) >> $@
+    $(TYPE) $(mktmp $(foreach,i,$(all_local_obj:b:+".obj") $(@:^"\n") : $(OBJ)$/$i) $(foreach,i,$(all_misc_obj:b:+".obj") $(@:^"\n") : $(OBJ)$/$i)) >> $@
 
 # see also %.dpslo 
 not_existing$/s_%.dpcc : %.cxx;@noop $(assign all_local_slo+:=$<)
