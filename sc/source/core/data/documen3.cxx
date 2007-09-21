@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:07:05 $
+ *  last change: $Author: vg $ $Date: 2007-09-21 09:22:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1337,7 +1337,7 @@ BOOL ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
 //  GetFilterEntries - Eintraege fuer AutoFilter-Listbox
 //
 
-BOOL ScDocument::GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedStrCollection& rStrings )
+BOOL ScDocument::GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedStrCollection& rStrings, bool bFilter )
 {
     if ( ValidTab(nTab) && pTab[nTab] && pDBCollection )
     {
@@ -1357,7 +1357,30 @@ BOOL ScDocument::GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedStrC
             pDBData->GetQueryParam( aParam );
             rStrings.SetCaseSensitive( aParam.bCaseSens );
 
-            pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings );
+            // return all filter entries, if a filter condition is connected with a boolean OR
+            if ( bFilter )
+            {
+                SCSIZE nEntryCount = aParam.GetEntryCount();
+                for ( SCSIZE i = 0; i < nEntryCount && aParam.GetEntry(i).bDoQuery; ++i )
+                {
+                    ScQueryEntry& rEntry = aParam.GetEntry(i);
+                    if ( rEntry.eConnect != SC_AND )
+                    {
+                        bFilter = false;
+                        break;
+                    }
+                }
+            }
+
+            if ( bFilter )
+            {
+                pTab[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rStrings );
+            }
+            else
+            {
+                pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings );
+            }
+
             return TRUE;
         }
     }
