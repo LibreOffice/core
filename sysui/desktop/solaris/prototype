@@ -31,7 +31,6 @@ s none usr/share/applications/%PREFIX-draw.desktop=/etc/%PREFIX/share/xdg/draw.d
 s none usr/share/applications/%PREFIX-impress.desktop=/etc/%PREFIX/share/xdg/impress.desktop
 s none usr/share/applications/%PREFIX-math.desktop=/etc/%PREFIX/share/xdg/math.desktop
 s none usr/share/applications/%PREFIX-base.desktop=/etc/%PREFIX/share/xdg/base.desktop
-s none usr/share/applications/%PREFIX-extension.desktop=/etc/%PREFIX/share/xdg/extension.desktop
 s none usr/share/applications/%PREFIX-printeradmin.desktop=/etc/%PREFIX/share/xdg/printeradmin.desktop
 f none usr/share/gnome/mime-info/%PREFIX.keys=%SOURCE/openoffice.keys
 f none usr/share/gnome/mime-info/%PREFIX.mime=%SOURCE/openoffice.mime
