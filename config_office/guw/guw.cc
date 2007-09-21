@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guw.cc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:35:01 $
+ *  last change: $Author: vg $ $Date: 2007-09-21 09:17:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,10 +84,10 @@ const string ignorepara[] = { "echo /TEST",
                               "cl -clr: -Z",
                               "climaker StarOffice/OpenOffice",
                               "csc -target:",
-                              "ccache -DUDATA_SO_SUFFIX -DSTATIC_O"
-                                " -DLOCAL_RULE_LANGS",
+                              "g++ -DLOCAL_RULE_LANGS -DUPD -DMINOR"
+                                " -DBUILD_ID -DSC_INFO_OSVERSION",
                               "gcc -DUDATA_SO_SUFFIX -DSTATIC_O"
-                                " -DLOCAL_RULE_LANGS",
+                                " -DPACKAGE -DU_MAKE",
                               "lib /OUT: -out: -def: -machine:",
                               "link /BASE: /COMMENT: /DEBUG: /DLL /ENTRY:"
                                 " /MACHINE: /MAP /NODEFAULTLIB /OPT: /RELEASE"
@@ -278,7 +278,7 @@ void init_ignorepara(string fullcommand) {
     fullcommand.erase(slen-4);
 
   // get the program name - Only one subexpression
-  if (!match2s(fullcommand, "([[:alnum:]_~\\. \\-]+)$",
+  if (!match2s(fullcommand, "([[:alnum:]_~. +-]+)$",
                shortcommand, sub2)) {
     Fatal("No basename found in: " + fullcommand);
   }
