@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 16:36:37 $
+#   last change: $Author: vg $ $Date: 2007-09-21 09:28:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,7 @@ SFX_OBJECTS = \
     $(SLO)$/shutdowniconw32.obj \
     $(SLO)$/workwin.obj \
         $(SLO)$/xpackcreator.obj \
-    $(SLO)$/fwkhelper.obj \
-    $(SLO)$/updatedlg.obj
+    $(SLO)$/fwkhelper.obj
 
 .IF "$(GUI)"=="OS2"
 SFX_OBJECTS +=  $(SLO)$/shutdowniconOs2.obj
@@ -143,8 +142,7 @@ EXCEPTIONSFILES=\
     $(SLO)$/shutdowniconw32.obj \
     $(SLO)$/sfxpicklist.obj		\
     $(SLO)$/helpdispatch.obj	\
-    $(SLO)$/xpackcreator.obj    \
-    $(SLO)$/updatedlg.obj
+    $(SLO)$/xpackcreator.obj
 
 
 # --- Targets -------------------------------------------------------
