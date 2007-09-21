@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 08:48:34 $
+ *  last change: $Author: vg $ $Date: 2007-09-21 09:28:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1104,42 +1104,3 @@ String RID_XMLSEC_DOCUMENTSIGNED
     Text [ en-US ] = "(Signed)" ;
 };
 
-ModalDialog DLG_CHECKFORONLINEUPDATE
-{
-    HelpID = HID_DLG_CHECKFORONLINEUPDATE ;
-    OutputSize = TRUE ;
-    Moveable = TRUE ;
-    Closeable = FALSE ;
-    Sizeable = FALSE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT( 200, 125 );
-    Text [ en-US ] = "Check for Updates" ;
-
-    FixedText RID_CHECKFORONLINEUPDATE_FT_MSG
-    {
-        Pos = MAP_APPFONT( 10, 25 );
-        Size = MAP_APPFONT( 180, 50 );
-        Wordbreak = TRUE;
-        Text [ en-US ] = "The program checks for a new version update based on information about your installed %PRODUCTNAME version and currently available updates.";
-    };
-
-    CancelButton RID_CHECKFORONLINEUPDATE_PB_CANCEL
-    {
-        Pos = MAP_APPFONT( 140, 100 );
-        Size = MAP_APPFONT( 50, 14 );
-        TabStop = TRUE;
-    };
-};
-
-InfoBox INFOBOX_NO_NEW_UPDATE_AVAILABLE
-{
-    Message [ en-US ] = "No new update is available.\n %PRODUCTNAME is up to date." ;
-};
-
-InfoBox INFOBOX_NEW_UPDATE_AVAILABLE
-{
-    Message [ en-US ] = "A new update is available.\nClick OK to open the website, where you can start the download." ;
-    Buttons = WB_OK_CANCEL ;
-    DefButton = WB_DEF_OK ;
-};
