@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-21 12:27:08 $
+ *  last change: $Author: vg $ $Date: 2007-09-21 09:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,6 @@
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
-
-#undef AUTOFILTER_POPUP
 
 #ifndef SC_VIEWUTIL_HXX
 #include "viewutil.hxx"
@@ -161,9 +159,6 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
 {
     //  ScFilterListBox wird immer fuer Auswahlliste benutzt
     friend class ScFilterListBox;
-#ifdef AUTOFILTER_POPUP
-    friend class AutoFilterPopup;
-#endif
 
 private:
     // #114409#
@@ -330,10 +325,6 @@ private:
 
     USHORT          HitPageBreak( const Point& rMouse, ScRange* pSource = NULL,
                                     SCCOLROW* pBreak = NULL, SCCOLROW* pPrev = NULL );
-
-#ifdef AUTOFILTER_POPUP
-    void            DoAutoFilterPopup( SCCOL nCol, SCROW nRow, BOOL bDataSelect );
-#endif
 
     void            PasteSelection( const Point& rPosPixel );
 
