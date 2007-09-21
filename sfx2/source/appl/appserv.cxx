@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:57:17 $
+ *  last change: $Author: vg $ $Date: 2007-09-21 09:28:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,6 @@
 #include <sfx2/dialogs.hrc>
 #include "sorgitm.hxx"
 #include "sfxhelp.hxx"
-#include "updatedlg.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -873,13 +872,6 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
         }
         break;
-
-        case SID_ONLINEUPDATE:
-        {
-            SfxUpdateDialog aUpdateDlg( GetTopWindow() );
-            aUpdateDlg.Execute();
-            break;
-        }
 
         case SID_BASICIDE_APPEAR:
         {
