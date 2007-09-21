@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:40:30 $
+ *  last change: $Author: vg $ $Date: 2007-09-21 09:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1293,8 +1293,60 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
         DestroySortCollator();
 }
 
+static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rParam, BOOL* pSpecial )
+{
+    bool bTopTen = false;
+    SCSIZE nEntryCount = rParam.GetEntryCount();
+
+    for ( SCSIZE i = 0; i < nEntryCount; ++i )
+    {
+        pSpecial[i] = FALSE;
+        ScQueryEntry& rEntry = rParam.GetEntry(i);
+        if ( rEntry.bDoQuery )
+        {
+            if ( rEntry.bQueryByString )
+            {
+                sal_uInt32 nIndex = 0;
+                rEntry.bQueryByString = !( pDoc->GetFormatTable()->
+                    IsNumberFormat( *rEntry.pStr, nIndex, rEntry.nVal ) );
+            }
+            else
+            {
+                // #58736# call from UNO or second call from autofilter
+                if ( rEntry.nVal == SC_EMPTYFIELDS || rEntry.nVal == SC_NONEMPTYFIELDS )
+                {
+                    pSpecial[i] = TRUE;
+                }
+            }
+            if ( !bTopTen )
+            {
+                switch ( rEntry.eOp )
+                {
+                    case SC_TOPVAL:
+                    case SC_BOTVAL:
+                    case SC_TOPPERC:
+                    case SC_BOTPERC:
+                    {
+                        bTopTen = true;
+                    }
+                    break;
+                    default:
+                    {
+                    }
+                }
+            }
+        }
+    }
+
+    if ( bTopTen )
+    {
+        pTab->TopTenQuery( rParam );
+    }
+}
+
 SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
 {
+    ScQueryParam    aParam( rParamOrg );
     StrCollection   aStrCollection;
     StrData*        pStrData = NULL;
 
@@ -1305,82 +1357,27 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
 
     SCSIZE nCount   = 0;
     SCROW nOutRow   = 0;
-    SCROW nHeader   = rParamOrg.bHasHeader ? 1 : 0;
-    SCSIZE i        = 0;
+    SCROW nHeader   = aParam.bHasHeader ? 1 : 0;
 
-    SCSIZE nEntryCount = rParamOrg.GetEntryCount();
-
+    SCSIZE nEntryCount = aParam.GetEntryCount();
     BOOL* pSpecial = new BOOL[nEntryCount];
-    for (i=0; i<nEntryCount; i++)
-        pSpecial[i] = FALSE;
+    lcl_PrepareQuery( pDocument, this, aParam, pSpecial );
 
-    /*
-     * Dialog liefert die ausgezeichneten Feldwerte "leer"/"nicht leer"
-     * als Konstanten in nVal in Verbindung mit dem Schalter
-     * bQueryByString auf FALSE.
-     */
-
-    BOOL bTopTen = FALSE;
-    for ( i=0; (i<nEntryCount) && (rParamOrg.GetEntry(i).bDoQuery); i++ )
+    if (!aParam.bInplace)
     {
-        ScQueryEntry& rEntry = rParamOrg.GetEntry(i);
-
-        if ( rEntry.bQueryByString )
-        {
-            sal_uInt32 nIndex = 0;
-            rEntry.bQueryByString = !(pDocument->GetFormatTable()->
-                IsNumberFormat( *rEntry.pStr, nIndex, rEntry.nVal ));
-        }
-        else
-        {
-            double nTemp = rEntry.nVal;
-            if (nTemp == SC_EMPTYFIELDS || nTemp == SC_NONEMPTYFIELDS)
-                pSpecial[i] = TRUE;
-            // #58736# QueryParam mit !bQueryByString kann per Uno oder zweitem
-            // Aufruf per AutoFilter kommen - hier keine Assertion mehr
-        }
-        if ( !bTopTen )
-        {
-            switch ( rEntry.eOp )
-            {
-                case SC_TOPVAL:
-                case SC_BOTVAL:
-                case SC_TOPPERC:
-                case SC_BOTPERC:
-                    bTopTen = TRUE;
-                    break;
-                default:
-                {
-                    // added to avoid warnings
-                }
-            }
-        }
-    }
-    ScQueryParam* pTopTenParam;
-    if ( bTopTen )
-    {   // original Param erhalten und Kopie anpassen
-        pTopTenParam = new ScQueryParam( rParamOrg );
-        TopTenQuery( *pTopTenParam );
-    }
-    else
-        pTopTenParam = NULL;
-    ScQueryParam& rParam = (bTopTen ? *pTopTenParam : rParamOrg);
-
-    if (!rParam.bInplace)
-    {
-        nOutRow = rParam.nDestRow + nHeader;
+        nOutRow = aParam.nDestRow + nHeader;
         if (nHeader > 0)
-            CopyData( rParam.nCol1, rParam.nRow1, rParam.nCol2, rParam.nRow1,
-                            rParam.nDestCol, rParam.nDestRow, rParam.nDestTab );
+            CopyData( aParam.nCol1, aParam.nRow1, aParam.nCol2, aParam.nRow1,
+                            aParam.nDestCol, aParam.nDestRow, aParam.nDestTab );
     }
 
-    for (SCROW j=rParam.nRow1 + nHeader; j<=rParam.nRow2; j++)
+    for (SCROW j=aParam.nRow1 + nHeader; j<=aParam.nRow2; j++)
     {
         BOOL bResult;                                   // Filterergebnis
-        BOOL bValid = ValidQuery(j, rParam, pSpecial);
+        BOOL bValid = ValidQuery(j, aParam, pSpecial);
         if (!bValid && bKeepSub)                        // Subtotals stehenlassen
         {
-            for (SCCOL nCol=rParam.nCol1; nCol<=rParam.nCol2 && !bValid; nCol++)
+            for (SCCOL nCol=aParam.nCol1; nCol<=aParam.nCol2 && !bValid; nCol++)
             {
                 ScBaseCell* pCell;
                 pCell = GetCell( nCol, j );
@@ -1393,12 +1390,12 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
         }
         if (bValid)
         {
-            if (rParam.bDuplicate)
+            if (aParam.bDuplicate)
                 bResult = TRUE;
             else
             {
                 String aStr;
-                for (SCCOL k=rParam.nCol1; k <= rParam.nCol2; k++)
+                for (SCCOL k=aParam.nCol1; k <= aParam.nCol2; k++)
                 {
                     String aCellStr;
                     GetString(k, j, aCellStr);
@@ -1422,7 +1419,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
         else
             bResult = FALSE;
 
-        if (rParam.bInplace)
+        if (aParam.bInplace)
         {
             if (bResult == bOldResult && bStarted)
                 nOldEnd = j;
@@ -1439,7 +1436,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
         {
             if (bResult)
             {
-                CopyData( rParam.nCol1,j, rParam.nCol2,j, rParam.nDestCol,nOutRow,rParam.nDestTab );
+                CopyData( aParam.nCol1,j, aParam.nCol2,j, aParam.nDestCol,nOutRow,aParam.nDestTab );
                 ++nOutRow;
             }
         }
@@ -1447,12 +1444,10 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
             ++nCount;
     }
 
-    if (rParam.bInplace && bStarted)
+    if (aParam.bInplace && bStarted)
         DBShowRows(nOldStart,nOldEnd, bOldResult);
 
     delete[] pSpecial;
-    if ( pTopTenParam )
-        delete pTopTenParam;
 
     return nCount;
 }
@@ -1700,6 +1695,36 @@ BOOL ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL /* nEndCol *
 void ScTable::GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedStrCollection& rStrings)
 {
     aCol[nCol].GetFilterEntries( nRow1, nRow2, rStrings );
+}
+
+void ScTable::GetFilteredFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, TypedStrCollection& rStrings )
+{
+    // remove the entry for this column from the query parameter
+    ScQueryParam aParam( rParam );
+    SCSIZE nEntryCount = aParam.GetEntryCount();
+    for ( SCSIZE i = 0; i < nEntryCount && aParam.GetEntry(i).bDoQuery; ++i )
+    {
+        ScQueryEntry& rEntry = aParam.GetEntry(i);
+        if ( rEntry.nField == nCol )
+        {
+            aParam.DeleteQuery(i);
+            break;
+        }
+    }
+    nEntryCount = aParam.GetEntryCount();
+
+    BOOL* pSpecial = new BOOL[nEntryCount];
+    lcl_PrepareQuery( pDocument, this, aParam, pSpecial );
+
+    for ( SCROW j = nRow1; j <= nRow2; ++j )
+    {
+        if ( ValidQuery( j, aParam, pSpecial ) )
+        {
+            aCol[nCol].GetFilterEntries( j, j, rStrings );
+        }
+    }
+
+    delete[] pSpecial;
 }
 
 BOOL ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, TypedStrCollection& rStrings, BOOL bLimit)
