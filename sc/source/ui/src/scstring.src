@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:45:26 $
+ *  last change: $Author: vg $ $Date: 2007-09-21 09:23:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,11 +212,11 @@ String SCSTR_ALL
 };
 String SCSTR_STDFILTER
 {
-    Text [ en-US ] = "- Standard -" ;
+    Text [ en-US ] = "Standard Filter..." ;
 };
 String SCSTR_TOP10FILTER
 {
-    Text [ en-US ] = "- Top 10 -" ;
+    Text [ en-US ] = "Top 10" ;
 };
 String SCSTR_NONAME
 {
@@ -556,6 +556,11 @@ String STR_REPLCELLSWARN
 String STR_PRINT_NOTHING
 {
     Text [ en-US ] = "There is nothing to print. The selected print range or sheet is empty.";
+};
+
+String SCSTR_ALLFILTER
+{
+    Text [ en-US ] = "All";
 };
 
 String STR_ACC_CSVRULER_NAME
