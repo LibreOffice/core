@@ -4,9 +4,9 @@
 #
 #   $RCSfile: postset.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: gm $ $Date: 2007-05-29 08:53:01 $
+#   last change: $Author: vg $ $Date: 2007-09-21 09:10:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,6 @@
 defaultlangiso=en-US
 
 # Complete list of all supported ISO codes
-completelangiso=af ar as-IN be-BY bg br bn bn-BD bn-IN bs ca cs cy da de dz el en-GB en-US en-ZA eo es et eu fa fi fr ga gl gu-IN he hi-IN hr hu it ja ka km kn-IN ko ku lo lt lv mk ms ml-IN mr-IN ne nb nl nn nr ns or-IN pa-IN pl pt pt-BR ru rw sk sl sh-YU sr-CS ss st sv sw sw-TZ sx te-IN ti-ER ta-IN th tn tr ts tg ur-IN uk ve vi xh zh-CN zh-TW zu
+completelangiso=af ar as-IN be-BY bg br bn bn-BD bn-IN bs ca cs cy da de dz el en-GB en-US en-ZA eo es et eu fa fi fr ga gl gu-IN he hi-IN hr hu it ja ka km kn ko ku lo lt lv mk ms ml-IN mr-IN ne nb nl nn nr ns or-IN pa-IN pl pt pt-BR ru rw sk sl sh-YU sr-CS ss st sv sw sw-TZ sx te-IN ti-ER ta-IN th tn tr ts tg ur-IN uk ve vi xh zh-CN zh-TW zu
 
 alllangiso=$(strip $(defaultlangiso) $(subst,$(defaultlangiso), $(uniq $(subst,ALL,$(completelangiso) $(WITH_LANG)))))
