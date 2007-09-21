@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-21 12:27:31 $
+ *  last change: $Author: vg $ $Date: 2007-09-21 09:23:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,9 +125,6 @@
 #include "output.hxx"
 #include "docfunc.hxx"
 #include "dbdocfun.hxx"
-#ifdef AUTOFILTER_POPUP
-#include <vcl/menu.hxx>
-#endif
 #include "dpobject.hxx"
 #include "dpoutput.hxx"
 #include "transobj.hxx"
@@ -168,8 +165,8 @@ const BYTE SC_NESTEDBUTTON_DOWN = 1;
 const BYTE SC_NESTEDBUTTON_UP   = 2;
 
 #define SC_AUTOFILTER_ALL       0
-#define SC_AUTOFILTER_CUSTOM    1
-#define SC_AUTOFILTER_TOP10     2
+#define SC_AUTOFILTER_TOP10     1
+#define SC_AUTOFILTER_CUSTOM    2
 
 //  Modi fuer die FilterListBox
 enum ScFilterBoxMode
@@ -188,12 +185,6 @@ extern USHORT nScFillModeMouseModifier;             // global.cxx
 
 //==================================================================
 
-/*
- * Der Autofilter wird auf dem Mac per AutoFilterPopup realisiert.
- * Die AutoFilterListBox wird trotzdem fuer die Auswahlliste gebraucht.
- */
-
-//==================================================================
 class ScFilterListBox : public ListBox
 {
 private:
@@ -343,66 +334,6 @@ Window* ScFilterFloatingWindow::GetPreferredKeyInputWindow()
 }
 
 // ============================================================================
-
-#ifdef AUTOFILTER_POPUP
-
-class AutoFilterPopup : public PopupMenu
-{
-public:
-        AutoFilterPopup( ScGridWindow* _pWin, SCCOL _nCol, SCROW _nRow, BOOL bDatSel )
-            :   pWin( _pWin ),
-                nCol( _nCol ),
-                nRow( _nRow ),
-                bIsDataSelect( bDatSel ),
-                bSelected( FALSE )          {}
-        ~AutoFilterPopup();
-
-protected:
-    virtual void    Select();
-
-private:
-    ScGridWindow* pWin;
-    SCCOL         nCol;
-    SCROW         nRow;
-    BOOL          bIsDataSelect;
-    BOOL          bSelected;
-};
-
-//-------------------------------------------------------------------
-
-void __EXPORT AutoFilterPopup::Select()
-{
-    //  Button vor dem ausfuehren wieder zeichnen
-    if ( !bIsDataSelect )
-    {
-        pWin->HideCursor();
-        pWin->aComboButton.Draw( FALSE );
-        pWin->ShowCursor();
-    }
-    bSelected = TRUE;
-
-    USHORT nCurId = GetCurItemId();
-    pWin->ReleaseMouse();
-    String aStr = GetItemText( nCurId );
-    if ( bIsDataSelect )
-        pWin->ExecDataSelect( nCol, nRow, aStr );
-    else
-        pWin->ExecFilter( nCurId-1, nCol, nRow, aStr );
-}
-
-AutoFilterPopup::~AutoFilterPopup()
-{
-    if ( !bIsDataSelect && !bSelected )
-    {
-        pWin->HideCursor();
-        pWin->aComboButton.Draw( FALSE );
-        pWin->ShowCursor();
-    }
-}
-
-#endif // #ifdef AUTOFILTER_POPUP
-
-//==================================================================
 
 BOOL lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
 {
@@ -728,6 +659,8 @@ void ScGridWindow::DoPageFieldMenue( SCCOL nCol, SCROW nRow )
     for (i=0; i<nCount; i++)
         pFilterBox->InsertEntry( aStrings[i]->GetString() );
 
+    pFilterBox->SetSeparatorPos( 0 );
+
     if (bWait)
         LeaveWait();
 
@@ -892,19 +825,6 @@ void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
 
 void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect )
 {
-    //  bei AUTOFILTER_POPUP-define fuer AutoFilter das Popup nehmen
-#ifdef AUTOFILTER_POPUP
-    if ( !bDataSelect )
-    {
-        DoAutoFilterPopup( nCol, nRow, bDataSelect );
-        return;
-    }
-#endif
-
-    /*
-     * Standard-Variante mit TreeListBox
-     */
-
     delete pFilterBox;
     delete pFilterFloat;
 
@@ -973,7 +893,7 @@ void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect )
         long nMaxText = 0;
 
         //  default entries
-        static const USHORT nDefIDs[] = { SCSTR_ALL, SCSTR_STDFILTER, SCSTR_TOP10FILTER };
+        static const USHORT nDefIDs[] = { SCSTR_ALLFILTER, SCSTR_TOP10FILTER, SCSTR_STDFILTER };
         const USHORT nDefCount = sizeof(nDefIDs) / sizeof(USHORT);
         for (i=0; i<nDefCount; i++)
         {
@@ -983,9 +903,10 @@ void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect )
             if ( nTextWidth > nMaxText )
                 nMaxText = nTextWidth;
         }
+        pFilterBox->SetSeparatorPos( nDefCount - 1 );
 
         //  get list entries
-        pDoc->GetFilterEntries( nCol, nRow, nTab, aStrings );
+        pDoc->GetFilterEntries( nCol, nRow, nTab, aStrings, true );
 
         //  check widths of numerical entries (string entries are not included)
         //  so all numbers are completely visible
@@ -1127,114 +1048,6 @@ void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect )
     }
 }
 
-#ifdef AUTOFILTER_POPUP
-
-    /*
-     * Macintosh-Variante mit Popup-Menue
-     */
-
-void ScGridWindow::DoAutoFilterPopup( SCCOL nCol, SCROW nRow, BOOL bDataSelect )
-{
-    AutoFilterPopup*    pPopupMenu = new AutoFilterPopup( this, nCol, nRow, bDataSelect );
-    ScDocument*         pDoc = pViewData->GetDocument();
-    SCTAB               nTab = pViewData->GetTabNo();
-    Point               aPos = pViewData->GetScrPos( nCol, nRow, eWhich );
-    BOOL                bValid = TRUE;
-    String              aStrSelect;
-    USHORT              nSelPos = 0;
-
-    TypedStrCollection aStrings( 128, 128 );
-    USHORT nFirst = 1;
-    if ( bDataSelect )                              // Auswahl-Liste
-    {
-        //  Liste fuellen
-        aStrings.SetCaseSensitive( TRUE );
-        pDoc->GetDataEntries( nCol, nRow, nTab, aStrings );
-
-        //  nichts selektieren
-        bValid = FALSE;
-    }
-    else                                            // AutoFilter
-    {
-        //  Standard-Eintraege
-        pPopupMenu->InsertItem( 1, String( ScResId(SCSTR_ALL) ) );
-        pPopupMenu->InsertItem( 2, String( ScResId(SCSTR_STDFILTER) ) );
-        pPopupMenu->InsertItem( 3, String( ScResId(SCSTR_TOP10FILTER) ) );
-        nFirst = 4;
-
-        //  Liste fuellen
-        pDoc->GetFilterEntries( nCol, nRow, nTab, aStrings );
-
-        //  aktiven Eintrag suchen
-        ScDBData* pDBData = pDoc->GetDBAtCursor( nCol, nRow, nTab );
-        if (pDBData)
-        {
-            ScQueryParam aParam;
-            pDBData->GetQueryParam( aParam );
-
-            for (USHORT i=0; i<MAXQUERY && bValid; i++)         // bisherige Filter-Einstellungen
-            {
-                ScQueryEntry& rEntry = aParam.GetEntry(i);
-                if (rEntry.bDoQuery)
-                {
-                    if (i>0)
-                        if (rEntry.eConnect != SC_AND)
-                            bValid = FALSE;
-                    if (rEntry.nField == nCol)
-                    {
-                        if (rEntry.eOp == SC_EQUAL)
-                        {
-                            String* pStr = rEntry.pStr;
-                            if (pStr)
-                                aStrSelect = *pStr;
-                        }
-                        else if (rEntry.eOp == SC_TOPVAL && rEntry.pStr &&
-                                    *rEntry.pStr == "10")
-                            nSelPos = SC_AUTOFILTER_TOP10;
-                        else
-                            nSelPos = SC_AUTOFILTER_CUSTOM;
-                    }
-                }
-            }
-            if (!bValid)
-            {
-                aStrSelect.Erase();
-                nSelPos = 0;
-            }
-        }
-    }
-
-    //  Menue fuellen
-
-    USHORT nCount = aStrings.GetCount();
-    for ( USHORT i=0; i<nCount; i++ )
-    {
-        const String& rStr = aStrings[i]->GetString();
-
-        if ( bValid && nSelPos == 0 )
-            if ( aStrSelect == rStr )
-                nSelPos = i+nFirst;
-
-        pPopupMenu->InsertItem( i+nFirst, rStr );
-    }
-
-    if ( bValid )
-    {
-        pPopupMenu->SetDefaultItem( nSelPos );
-        pPopupMenu->CheckItem( nSelPos );
-    }
-
-    //  ausfuehren nur, wenn ueberhaupt was drin ist (bei Auswahl-Liste)
-    if ( nCount+nFirst > 1 )
-        pPopupMenu->Execute( OutputToScreenPixel( aPos ) );
-    else
-        Sound::Beep();
-
-    delete pPopupMenu;
-}
-
-#endif // #ifdef AUTOFILTER_POPUP
-
 void ScGridWindow::FilterSelect( ULONG nSel )
 {
     String aString;
@@ -1340,7 +1153,7 @@ void ScGridWindow::ExecFilter( ULONG nSel,
             {
                 SCSIZE nEC = aParam.GetEntryCount();
                 for (SCSIZE i=0; i<nEC; i++)
-                    aParam.GetEntry(i).bDoQuery = FALSE;
+                    aParam.GetEntry(i).Clear();
                 nQueryPos = 0;
                 aParam.bInplace = TRUE;
                 aParam.bRegExp = FALSE;
