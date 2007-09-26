@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:21:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:28:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,7 +219,7 @@ void ODbaseTable::fillColumns()
     m_aScales.clear();
 
     // Anzahl Felder:
-    sal_Int32 nFieldCount = (m_aHeader.db_kopf - 1) / 32 - 1;
+    const sal_Int32 nFieldCount = (m_aHeader.db_kopf - 1) / 32 - 1;
     OSL_ENSURE(nFieldCount,"No columns in table!");
 
     m_aColumns->reserve(nFieldCount);
@@ -230,15 +230,15 @@ void ODbaseTable::fillColumns()
     String aStrFieldName;
     aStrFieldName.AssignAscii("Column");
     ::rtl::OUString aTypeName;
-    static const ::rtl::OUString sVARCHAR   = ::rtl::OUString::createFromAscii("VARCHAR");
-    sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+    static const ::rtl::OUString sVARCHAR(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
+    const sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
 
     for (sal_Int32 i = 0; i < nFieldCount; i++)
     {
         DBFColumn aDBFColumn;
         m_pFileStream->Read((char*)&aDBFColumn, sizeof(aDBFColumn));
 
-        String aColumnName((const char *)aDBFColumn.db_fnm,getConnection()->getTextEncoding());
+        const String aColumnName((const char *)aDBFColumn.db_fnm,getConnection()->getTextEncoding());
 
         sal_Int32 nPrecision = aDBFColumn.db_flng;
         sal_Int32 eType;
@@ -348,6 +348,7 @@ void ODbaseTable::construct()
     m_aHeader.db_anz    = 0;
     m_aHeader.db_kopf   = 0;
     m_aHeader.db_slng   = 0;
+    m_aMemoHeader.db_size = 0;
 
     String sFileName(getEntry(m_pConnection,m_Name));
 
@@ -1499,6 +1500,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
             }
         }
 
+        const sal_Int32 nRealPrecision = nLen;
         switch (nType)
         {
             case DataType::DATE:        nLen = 8; break;
@@ -1601,8 +1603,14 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                     // sein koennte und muesste
 
                     ByteString aDefaultValue = ::rtl::math::doubleToString( n, rtl_math_StringFormat_F, nScale, '.', NULL, 0);
+                    sal_Int32 nRealLen = aDefaultValue.Len() - nScale;
+                    if ( nScale ) // for '.'
+                        --nRealLen;
+                    if ( n < 0.0 ) // for the sign '-'
+                        --nRealLen;
+
                     BOOL bValidLength   = sal_False;
-                    if (aDefaultValue.Len() <= nLen)
+                    if ( nRealLen <= (nRealPrecision - nScale) )
                     {
                         strncpy(pData,aDefaultValue.GetBuffer(),nLen);
                         // write the resulting double back
@@ -1616,10 +1624,10 @@ BOOL ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const
                         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
 
                         String sError;
-                        sError.AppendAscii("The ");
+                        sError.AppendAscii("The \"");
                         sError += aColName.getStr();
-                        sError.AppendAscii(" column has been defined as a \"Decimal\" type, the max. length is ");
-                        sError += String::CreateFromInt32(nLen);
+                        sError.AppendAscii("\" column has been defined as a \"Decimal\" type, the max. length is ");
+                        sError += String::CreateFromInt32(nRealPrecision);
                         sError.AppendAscii(" characters (with ");
                         sError += String::CreateFromInt32(nScale);
                         sError.AppendAscii(" decimal places).\n\nThe specified value is longer than the number of digits allowed.");
