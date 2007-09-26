@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionLineData.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:19:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:52:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,5 +108,13 @@ bool OConnectionLineData::Reset()
     return true;
 }
 // -----------------------------------------------------------------------------
-
+namespace dbaui
+{
+//-------------------------------------------------------------------------
+bool operator==(const OConnectionLineData& lhs, const OConnectionLineData& rhs)
+{
+    return (lhs.m_aSourceFieldName == rhs.m_aSourceFieldName)
+        && (lhs.m_aDestFieldName == rhs.m_aDestFieldName);
+}
+}
 
