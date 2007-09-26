@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:07:18 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 15:04:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -737,6 +737,8 @@ public:
     false else
      */
     bool matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale );
+
+    int FreeTypeCharIndex( void *pFace, sal_uInt32 aChar );
 };
 
 } // namespace
