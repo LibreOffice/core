@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.57 2007-07-31 13:38:53 hr Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.58 2007-09-26 14:31:27 hr Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: hr $ $Date: 2007-07-31 13:38:53 $ $Revision: 1.57 $
+//	$Author: hr $ $Date: 2007-09-26 14:31:27 $ $Revision: 1.58 $
 //
 // Description:
 //
@@ -188,13 +188,13 @@ using namespace connectivity;
 /* time and date functions */
 %token <pParseNode> SQL_TOKEN_CURRENT_DATE SQL_TOKEN_CURRENT_TIME SQL_TOKEN_CURRENT_TIMESTAMP SQL_TOKEN_CURDATE SQL_TOKEN_CURTIME          
 %token <pParseNode> SQL_TOKEN_DAYNAME  SQL_TOKEN_DAYOFMONTH  SQL_TOKEN_DAYOFWEEK  SQL_TOKEN_DAYOFYEAR SQL_TOKEN_EXTRACT          
-%token <pParseNode> SQL_TOKEN_HOUR SQL_TOKEN_MINUTE  SQL_TOKEN_MONTH  SQL_TOKEN_MONTHNAME SQL_TOKEN_NOW SQL_TOKEN_QUARTER          
+%token <pParseNode> SQL_TOKEN_HOUR SQL_TOKEN_MINUTE  SQL_TOKEN_MONTH  SQL_TOKEN_MONTHNAME SQL_TOKEN_NOW SQL_TOKEN_QUARTER SQL_TOKEN_DATEDIFF
 %token <pParseNode> SQL_TOKEN_SECOND SQL_TOKEN_TIMESTAMPADD SQL_TOKEN_TIMESTAMPDIFF SQL_TOKEN_TIMEVALUE SQL_TOKEN_WEEK SQL_TOKEN_YEAR 
 
 /* numeric functions */
 %token <pParseNode> SQL_TOKEN_ABS SQL_TOKEN_ACOS SQL_TOKEN_ASIN SQL_TOKEN_ATAN SQL_TOKEN_ATAN2 SQL_TOKEN_CEILING 
-%token <pParseNode> SQL_TOKEN_COS SQL_TOKEN_COT SQL_TOKEN_DEGREES SQL_TOKEN_EXP SQL_TOKEN_DIV SQL_TOKEN_FLOOR SQL_TOKEN_LOGF  SQL_TOKEN_LN
-%token <pParseNode> SQL_TOKEN_LOG10 SQL_TOKEN_MOD SQL_TOKEN_PI SQL_TOKEN_POWER SQL_TOKEN_RADIANS SQL_TOKEN_RAND    
+%token <pParseNode> SQL_TOKEN_COS SQL_TOKEN_COT SQL_TOKEN_DEGREES SQL_TOKEN_EXP SQL_TOKEN_DIV SQL_TOKEN_FLOOR SQL_TOKEN_LOGF  SQL_TOKEN_LOG SQL_TOKEN_LN
+%token <pParseNode> SQL_TOKEN_LOG10 SQL_TOKEN_MOD SQL_TOKEN_PI SQL_TOKEN_POWER SQL_TOKEN_RADIANS SQL_TOKEN_RAND SQL_TOKEN_ROUNDMAGIC
 %token <pParseNode> SQL_TOKEN_ROUND   SQL_TOKEN_SIGN    SQL_TOKEN_SIN     SQL_TOKEN_SQRT    SQL_TOKEN_TAN SQL_TOKEN_TRUNCATE
 
 
@@ -252,7 +252,7 @@ using namespace connectivity;
 %type <pParseNode> form_conversion char_translation trim_fct trim_operands trim_spec bit_value_fct bit_substring_fct op_column_commalist
 %type <pParseNode> /*bit_concatenation*/ bit_value_exp bit_factor bit_primary collate_clause char_value_fct unique_spec value_exp_commalist in_predicate_value unique_test update_source 
 %type <pParseNode> function_arg_commalist3 string_function_3Argument function_arg_commalist4 string_function_4Argument function_arg_commalist2 string_function_1Argument string_function_2Argument
-%type <pParseNode> date_function_0Argument date_function_1Argument function_name12 function_name23 function_name1 function_name2 function_name3 function_name0 numeric_function_0Argument numeric_function_1Argument numeric_function_2Argument
+%type <pParseNode> date_function_0Argument date_function_1Argument function_name12 function_name23 function_name1 function_name2 function_name3 function_name0 numeric_function_0Argument numeric_function_1Argument numeric_function_2Argument date_function_3Argument
 %type <pParseNode> all query_primary as sql_not for_length upper_lower comparison column_val  cross_union /*opt_schema_element_list*/
 %type <pParseNode> /*op_authorization op_schema*/ nil_fkt schema_element base_table_def base_table_element base_table_element_commalist
 %type <pParseNode> column_def odbc_fct_spec	odbc_call_spec odbc_fct_type op_parameter union_statement
@@ -1688,6 +1688,7 @@ datetime_field:
 	;
 extract_field:
 	   time_zone_field
+	  | datetime_field
 	  |	value_exp
 	;
 time_zone_field:
@@ -1844,12 +1845,14 @@ function_name12:
 		SQL_TOKEN_ROUND
 	|	SQL_TOKEN_WEEK
 	|	SQL_TOKEN_LOGF
+	|	SQL_TOKEN_LOG
 	;
 function_name23:
 		SQL_TOKEN_LOCATE
 	;
 function_name3:
 		string_function_3Argument
+	|	date_function_3Argument
 	;
 function_name:
 		string_function
@@ -1907,6 +1910,8 @@ date_function_1Argument:
 	|	SQL_TOKEN_TIMEVALUE
 	|	SQL_TOKEN_DATEVALUE
 	;
+date_function_3Argument:
+	SQL_TOKEN_DATEDIFF
 	
 date_function:
 		SQL_TOKEN_TIMESTAMPADD        
@@ -1932,7 +1937,8 @@ numeric_function_1Argument:
 	|	SQL_TOKEN_EXP             
 	|	SQL_TOKEN_LOG10           
 	|	SQL_TOKEN_LN
-	|	SQL_TOKEN_RADIANS         
+	|	SQL_TOKEN_RADIANS
+	|	SQL_TOKEN_ROUNDMAGIC
 	;
 numeric_function_2Argument:
 		SQL_TOKEN_ATAN2           
@@ -1941,7 +1947,7 @@ numeric_function_2Argument:
 	;
 numeric_function:
 		SQL_TOKEN_RAND            
-	|	SQL_TOKEN_TRUNCATE        
+	|	SQL_TOKEN_TRUNCATE
 	;
 op_parameter:
 		{$$ = SQL_NEW_RULE;}
@@ -2802,6 +2808,16 @@ form_conversion:
 			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
 			$$->append($3);
 			$$->append($4);
+			$$->append($5);
+			$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));
+		}
+	|	SQL_TOKEN_CONVERT '(' cast_operand ',' cast_target ')'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+			$$->append($2 = newNode(",", SQL_NODE_PUNCTUATION));
 			$$->append($5);
 			$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
