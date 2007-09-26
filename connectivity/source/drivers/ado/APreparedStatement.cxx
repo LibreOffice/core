@@ -4,9 +4,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:57:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:28:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,6 +342,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
     OResultSet* pSet = new OResultSet(m_RecordSet,this);
     Reference< XResultSet > xRs = pSet;
     pSet->construct();
+    pSet->setMetaData(getMetaData());
     m_xResultSet = WeakReference<XResultSet>(xRs);
 
     return xRs;
