@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:22:46 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:29:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -571,8 +571,8 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
                         nType = 0;
             if(bIsTable)
             {
-                nLen    = m_aPrecisions[i];
-                nType   = m_aTypes[i];
+                nLen    = m_aPrecisions[i-1];
+                nType   = m_aTypes[i-1];
             }
             else
             {
