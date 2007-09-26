@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:26:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:47:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -900,6 +900,12 @@ void OApplicationDetailView::getSelectionElementNames( ::std::vector< ::rtl::OUS
 {
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     m_pControlHelper->getSelectionElementNames( _rNames );
+}
+// -----------------------------------------------------------------------------
+void OApplicationDetailView::selectElements(const Sequence< ::rtl::OUString>& _aNames)
+{
+    DBG_CHKTHIS(OApplicationDetailView,NULL);
+    m_pControlHelper->selectElements( _aNames );
 }
 // -----------------------------------------------------------------------------
 SvLBoxEntry* OApplicationDetailView::getEntry( const Point& _aPoint ) const
