@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impoptimizer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-17 10:33:17 $
+ *  last change: $Author: sj $ $Date: 2007-09-26 13:00:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ void ImpExtractCustomShow( const Reference< XModel >& rxModel, const OUString& r
         Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
         vector< Reference< XDrawPage > >::iterator aIter( vNonUsedPageList.begin() );
         while( aIter != vNonUsedPageList.end() )
-            xDrawPages->remove( *aIter );
+            xDrawPages->remove( *aIter++ );
     }
     catch( Exception& )
     {

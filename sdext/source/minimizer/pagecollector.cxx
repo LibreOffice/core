@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagecollector.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-11 13:59:09 $
+ *  last change: $Author: sj $ $Date: 2007-09-26 13:00:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,10 +133,7 @@ void PageCollector::CollectNonCustomShowPages( const com::sun::star::uno::Refere
                     aIter++;
                 }
                 if ( aIter == aEnd )
-                {
                     rNonUsedPageList.push_back( xDrawPage );
-                    j--;
-                }
             }
         }
     }
