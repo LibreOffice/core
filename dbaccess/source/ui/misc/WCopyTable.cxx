@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:35:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:51:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,19 +186,21 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
                 m_sSourceName = ::dbtools::composeTableName( m_xConnection->getMetaData(), m_xSourceObject, ::dbtools::eInDataManipulation, false, false, false );
             else
                 _xSourceObject->getPropertyValue(PROPERTY_NAME) >>= m_sSourceName;
-            if ( m_xSourceConnection == m_xConnection )
-            {
-                Reference<XTablesSupplier> xSup(m_xConnection,UNO_QUERY_THROW);
-                m_sName = ::dbtools::createUniqueName(xSup->getTables(),m_sSourceName,sal_False);
-            }
-            else
-                m_sName = m_sSourceName;
         }
+
+        if ( m_xSourceConnection == m_xConnection )
+        {
+            Reference<XTablesSupplier> xSup(m_xConnection,UNO_QUERY_THROW);
+            m_sName = ::dbtools::createUniqueName(xSup->getTables(),m_sSourceName,sal_False);
+        }
+        else
+            m_sName = m_sSourceName;
     }
     catch(const Exception&)
     {
         m_sName = m_sSourceName;
     }
+
 }
 // -----------------------------------------------------------------------------
 OCopyTableWizard::OCopyTableWizard(Window * pParent,
@@ -654,13 +656,13 @@ void OCopyTableWizard::loadData(const Reference<XPropertySet>& _xTable,
             // Bei Add duerfen nur die leeren Zeilen editierbar sein.
             // Bei Add und Drop koennen alle Zeilen editiert werden.
             Sequence< ::rtl::OUString> aColumns = xColumns->getElementNames();
-            const ::rtl::OUString* pBegin   = aColumns.getConstArray();
-            const ::rtl::OUString* pEnd     = pBegin + aColumns.getLength();
+            const ::rtl::OUString* pIter    = aColumns.getConstArray();
+            const ::rtl::OUString* pEnd     = pIter + aColumns.getLength();
 
-            for(;pBegin != pEnd;++pBegin)
+            for(;pIter != pEnd;++pIter)
             {
                 Reference<XPropertySet> xColumn;
-                xColumns->getByName(*pBegin) >>= xColumn;
+                xColumns->getByName(*pIter) >>= xColumn;
 
                 sal_Int32 nType         = 0;
                 sal_Int32 nScale        = 0;
@@ -914,19 +916,20 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
         }
         if(m_xDestObject.is())
         {
+            xSuppDestinationColumns.set( m_xDestObject, UNO_QUERY_THROW );
             // insert new table name into table filter
             ::dbaui::appendToFilter(m_xConnection,m_sName,GetFactory(),this);
             // set column mappings
             Reference<XNameAccess> xNameAccess = xSuppDestinationColumns->getColumns();
             Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
-            const ::rtl::OUString* pBegin = aSeq.getConstArray();
-            const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
+            const ::rtl::OUString* pIter = aSeq.getConstArray();
+            const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
 
             ::std::vector<int> aAlreadyFound(m_vColumnPos.size(),0);
 
-            for(sal_Int32 nNewPos=1;pBegin != pEnd;++pBegin,++nNewPos)
+            for(sal_Int32 nNewPos=1;pIter != pEnd;++pIter,++nNewPos)
             {
-                ODatabaseExport::TColumns::iterator aDestIter = m_vDestColumns.find(*pBegin);
+                ODatabaseExport::TColumns::iterator aDestIter = m_vDestColumns.find(*pIter);
 
                 if ( aDestIter != m_vDestColumns.end() )
                 {
@@ -1203,4 +1206,12 @@ void OCopyTableWizard::showColumnTypeNotSupported(const ::rtl::OUString& _rColum
     aMsg.Execute();
 }
 // -----------------------------------------------------------------------------
+//------dyf add
+void OCopyTableWizard::ResetsName(const ::rtl::OUString & _sName)
+{
+    if ( _sName.getLength() != 0 )
+        m_sName = _sName;
 
+}
+//------dyf add end
+//-------------------------------------------------------------------------------
