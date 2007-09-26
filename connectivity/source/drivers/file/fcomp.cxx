@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:36:18 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:29:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -892,6 +892,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
         case SQL_TOKEN_MOD:
         case SQL_TOKEN_ROUND:
         case SQL_TOKEN_LOGF:
+        case SQL_TOKEN_LOG:
         case SQL_TOKEN_POWER:
         case SQL_TOKEN_ATAN2:
         case SQL_TOKEN_PI:
@@ -939,6 +940,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
                         pOperator = new OOp_Round();
                         break;
                     case SQL_TOKEN_LOGF:
+                    case SQL_TOKEN_LOG:
                         pOperator = new OOp_Log();
                         break;
                     case SQL_TOKEN_POWER:
