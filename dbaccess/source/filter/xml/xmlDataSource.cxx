@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSource.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:05:57 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:42:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,13 +80,12 @@
 
 namespace dbaxml
 {
-    using namespace ::rtl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
 DBG_NAME(OXMLDataSource)
 
 OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& _sLocalName,
+                sal_uInt16 nPrfx, const ::rtl::OUString& _sLocalName,
                 const Reference< XAttributeList > & _xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
@@ -104,7 +103,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
     static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        OUString sLocalName;
+        ::rtl::OUString sLocalName;
         rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         rtl::OUString sValue = _xAttrList->getValueByIndex( i );
@@ -213,7 +212,7 @@ OXMLDataSource::~OXMLDataSource()
 
 SvXMLImportContext* OXMLDataSource::CreateChildContext(
         sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        const ::rtl::OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
