@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBaseNumericFunctions.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:06:57 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:27:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ import java.io.*;
 
 public class DBaseNumericFunctions {
 
-        private String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR02b'";
+        private String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR04'";
         private XMultiServiceFactory m_xORB;
         private DBaseDriverTest testcase;
         public DBaseNumericFunctions(XMultiServiceFactory _xORB,DBaseDriverTest _testcase){
