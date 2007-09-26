@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlCell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:56:01 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:20:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,6 @@
 namespace rptxml
 {
     using namespace ::comphelper;
-    using namespace ::rtl;
     using namespace ::com::sun::star;
     using namespace uno;
     using namespace beans;
@@ -111,7 +110,7 @@ DBG_NAME( rpt_OXMLCell )
 
 OXMLCell::OXMLCell( ORptFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
+                ,const ::rtl::OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,OXMLTable* _pContainer
                 ,OXMLCell* _pCell) :
@@ -132,7 +131,7 @@ OXMLCell::OXMLCell( ORptFilter& rImport
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        OUString sLocalName;
+        ::rtl::OUString sLocalName;
         const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         rtl::OUString sValue = _xAttrList->getValueByIndex( i );
@@ -161,7 +160,7 @@ OXMLCell::~OXMLCell()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLCell::CreateChildContext(
         sal_uInt16 _nPrefix,
-        const OUString& _rLocalName,
+        const ::rtl::OUString& _rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
