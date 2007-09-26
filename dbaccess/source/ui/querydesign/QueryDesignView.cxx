@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:38:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:52:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2902,7 +2902,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
         String sFunction;
         if ( pEntry->isNumericOrAggreateFunction() )
             sFunction = pEntry->GetFunction();
-        else
+        if ( !sFunction.Len() )
             sFunction = pEntry->GetField();
 
         if(sFunction.GetTokenCount('(') > 1)
