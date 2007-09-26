@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlTable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:40:45 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:44:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,6 @@
 
 namespace dbaxml
 {
-    using namespace ::rtl;
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbcx;
@@ -89,7 +88,7 @@ DBG_NAME(OXMLTable)
 
 OXMLTable::OXMLTable( ODBFilter& _rImport
                 ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
+                ,const ::rtl::OUString& _sLocalName
                 ,const uno::Reference< XAttributeList > & _xAttrList
                 ,const uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
                 ,const ::rtl::OUString& _sServiceName
@@ -109,7 +108,7 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        OUString sLocalName;
+        ::rtl::OUString sLocalName;
         rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         rtl::OUString sValue = _xAttrList->getValueByIndex( i );
@@ -158,7 +157,7 @@ OXMLTable::~OXMLTable()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLTable::CreateChildContext(
         sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        const ::rtl::OUString& rLocalName,
         const uno::Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
@@ -277,7 +276,7 @@ void OXMLTable::fillAttributes(sal_uInt16 /*nPrfx*/
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        OUString sLocalName;
+        ::rtl::OUString sLocalName;
         rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         rtl::OUString sValue = _xAttrList->getValueByIndex( i );
