@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:14:25 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 15:08:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ STD_RES_FILE( gid_File_Res_Tpl, tpl )
 
 STD_RES_FILE_PATCH( gid_File_Res_Uui, uui )
 
-STD_RES_FILE( gid_File_Res_Vcl, vcl )
+STD_RES_FILE_PATCH( gid_File_Res_Vcl, vcl )
 
 STD_RES_FILE( gid_File_Res_Wzi, wzi )
 
