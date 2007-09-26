@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:01:04 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:47:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -515,6 +515,12 @@ void OApplicationView::getSelectionElementNames( ::std::vector< ::rtl::OUString>
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     getDetailView()->getSelectionElementNames( _rNames );
+}
+// -----------------------------------------------------------------------------
+void OApplicationView::selectElements(const Sequence< ::rtl::OUString>& _aNames)
+{
+    OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
+    getDetailView()->selectElements( _aNames );
 }
 // -----------------------------------------------------------------------------
 SvLBoxEntry* OApplicationView::elementAdded(ElementType eType,const ::rtl::OUString& _rName, const Any& _rObject )
