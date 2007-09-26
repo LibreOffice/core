@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbregisterednamesconfig.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:00:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:36:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,16 @@ namespace svx
                     bNeedCommit = sal_True;
                 }
                 else
-                    xNamingService->registerObject(sName,Reference< ::com::sun::star::uno::XInterface >(xDatabaseContext->getByName(aLoop->second),UNO_QUERY));
+                {
+                    try
+                    {
+                        xNamingService->registerObject(sName,Reference< ::com::sun::star::uno::XInterface >(xDatabaseContext->getByName(aLoop->second),UNO_QUERY));
+                    }
+                    catch(Exception&)
+                    {
+                        OSL_ENSURE(0,"Could not register new database!");
+                    }
+                    }
             }
             if (bNeedCommit)
                 aDbRegisteredNamesRoot.commit();
@@ -203,5 +212,3 @@ namespace svx
 //........................................................................
 }   // namespace svx
 //........................................................................
-
-
