@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:10:12 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:51:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
         for(xub_StrLen i=SBA_FORMAT_SELECTION_COUNT;i<nCount;++i)
             m_pRowMarker[i-SBA_FORMAT_SELECTION_COUNT] = rExchange.GetToken(i,char(11)).ToInt32();
     }
+    osl_decrementInterlockedCount( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 // import data
@@ -223,10 +224,11 @@ void ODatabaseImportExport::disposing()
 
     ::comphelper::disposeComponent(m_xRow);
 
-    m_xObject               = NULL;
-    m_xResultSetMetaData    = NULL;
-    m_xResultSet            = NULL;
-    m_xRow                  = NULL;
+    m_xObject.clear();
+    m_xResultSetMetaData.clear();
+    m_xResultSet.clear();
+    m_xRow.clear();
+    m_xFormatter.clear();
 
     m_aKeepModelAlive.clear();
 }
@@ -730,6 +732,9 @@ BOOL OHTMLImportExport::Read()
         ((OHTMLReader*)m_pReader)->AddRef();
         if ( isCheckEnabled() )
             m_pReader->enableCheckOnly();
+        //dyf add 20070601
+        m_pReader->SetTableName(m_sDefaultTableName);
+        //dyf add end
         eState = ((OHTMLReader*)m_pReader)->CallParser();
         m_pReader->release();
         m_pReader = NULL;
