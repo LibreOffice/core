@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:06:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:48:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,7 +369,11 @@ namespace dbaui
             fillListBox(xDef,nRow,nColumnId);
             String sName = GetCellText( nRow, nColumnId );
             m_pListCell->SelectEntry( sName );
-            OSL_ENSURE(m_pListCell->GetSelectEntry() == sName,"Name was not selected!");
+            if ( m_pListCell->GetSelectEntry() != sName )
+            {
+                m_pListCell->InsertEntry( sName );
+                m_pListCell->SelectEntry( sName );
+            }
 
             m_pListCell->SetHelpId(nHelpId);
         }
@@ -409,14 +413,14 @@ namespace dbaui
             rDev.SetClipRegion();
     }
     // -----------------------------------------------------------------------------
-    void ORelationControl::fillListBox(const Reference< XPropertySet>& _xDest,long _nRow,USHORT nColumnId)
+    void ORelationControl::fillListBox(const Reference< XPropertySet>& _xDest,long /*_nRow*/,USHORT /*nColumnId*/)
     {
         m_pListCell->Clear();
         try
         {
             if ( _xDest.is() )
             {
-                sal_Int32 nRows = GetRowCount();
+                //sal_Int32 nRows = GetRowCount();
                 Reference<XColumnsSupplier> xSup(_xDest,UNO_QUERY);
                 Reference<XNameAccess> xColumns = xSup->getColumns();
                 Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
@@ -425,12 +429,7 @@ namespace dbaui
                 for(;pBegin != pEnd;++pBegin)
                 {
                     String sName = *pBegin;
-                    sal_Int32 i = 0;
-                    for (; i < nRows; ++i)
-                        if(i != _nRow && GetCellText(i,nColumnId) == sName)
-                            break;
-                    if ( i == nRows )
-                        m_pListCell->InsertEntry( *pBegin );
+                    m_pListCell->InsertEntry( *pBegin );
                 }
                 m_pListCell->InsertEntry(String(), 0);
             }
