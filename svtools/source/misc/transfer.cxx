@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 11:53:43 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:33:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -647,6 +647,7 @@ sal_Bool TransferableHelper::HasFormat( SotFormatStringId nFormat )
 void TransferableHelper::ClearFormats()
 {
     mpFormats->clear();
+    maAny.clear();
 }
 
 // -----------------------------------------------------------------------------
