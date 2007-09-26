@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:21:43 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 15:06:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -491,6 +491,9 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
 
 BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
 {
+    if( mnChunkLen < 13 )
+        return FALSE;
+
     maOrigSize.Width()  = ImplReadsal_uInt32();
     maOrigSize.Height() = ImplReadsal_uInt32();
 
@@ -821,6 +824,9 @@ BOOL PNGReaderImpl::ImplReadTransparent()
 
 void PNGReaderImpl::ImplGetGamma()
 {
+    if( mnChunkLen < 4 )
+        return;
+
     sal_uInt32  nGammaValue = ImplReadsal_uInt32();
     double      fGamma = ( ( VIEWING_GAMMA / DISPLAY_GAMMA ) * ( (double)nGammaValue / 100000 ) );
     double      fInvGamma = ( fGamma <= 0.0 || fGamma > 10.0 ) ? 1.0 : ( 1.0 / fGamma );
