@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:59:25 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:47:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,6 +299,12 @@ namespace dbaui
                 The list will be filled.
         */
         void getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames ) const;
+
+        /** select all names on the currently selected container. Non existence names where ignored.
+        *
+        * \param _aNames the element names
+        */
+        void selectElements(const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _aNames);
 
         /** adds a new object to the detail page.
             @param  _eType
