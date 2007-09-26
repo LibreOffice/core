@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WNameMatch.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:35:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,6 +207,7 @@ sal_Bool OWizNameMatching::LeavePage()
             for(;aDestIter != pDestColumns->end() && (*aDestIter)->second != pDestField;++aDestIter)
                 ;
 
+            OSL_ENSURE((nPos) < static_cast<sal_Int32>(m_pParent->m_vColumnPos.size()),"m_pParent->m_vColumnPos: Illegal index for vector");
             m_pParent->m_vColumnPos[nPos].first = ++nParamPos;
             m_pParent->m_vColumnPos[nPos].second = ::std::distance(pDestColumns->begin(),aDestIter) + 1;
             sal_Bool bNotConvert = sal_True;
