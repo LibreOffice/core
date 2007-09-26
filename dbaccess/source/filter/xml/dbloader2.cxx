@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 13:34:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:41:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -625,11 +625,30 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             xModelCollection->insert(css::uno::makeAny(xModel));
 
             Reference< css::document::XEventListener > xDocEventBroadcaster(xModel,UNO_QUERY_THROW);
-            const sal_Char* pEventName = bCreateNew && !bDidLoadExisting ? "OnNew" : "OnLoad";
-            css::document::EventObject aEvent( xModel, ::rtl::OUString::createFromAscii( pEventName ) );
-            xDocEventBroadcaster->notifyEvent(aEvent);
-            Reference< css::document::XEventListener > xGlobalDocEventBroadcaster(xModelCollection,UNO_QUERY_THROW);
+            css::document::EventObject aEvent;
+            aEvent.Source = xModel;
+            ::std::vector< ::rtl::OUString > aEvents;
+            if ( bCreateNew && !bDidLoadExisting )
+            {
+                aEvents.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnCreate")));
+                aEvents.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnNew"))); // UI event
+            }
+            else
+            {
+                aEvents.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnLoadFinished")));
+                aEvents.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnLoad"))); // UI event
+            }
+
+            std::vector< rtl::OUString >::iterator aIter = aEvents.begin();
+            const std::vector< rtl::OUString >::iterator aEnd = aEvents.end();
+            for (; aIter != aEnd; ++aIter)
+            {
+                aEvent.EventName = *aIter;
+                xDocEventBroadcaster->notifyEvent(aEvent);
+            }
+
             aEvent.EventName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnViewCreated"));
+            Reference< css::document::XEventListener > xGlobalDocEventBroadcaster(xModelCollection,UNO_QUERY_THROW);
             xGlobalDocEventBroadcaster->notifyEvent(aEvent);
         }
         catch(Exception)
