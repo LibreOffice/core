@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texthierarchyprimitive2d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-03 10:43:04 $
+ *  last change: $Author: aw $ $Date: 2007-09-26 11:36:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,17 +127,17 @@ namespace drawinglayer
         {
         private:
             FieldType                               meType;
-            String                                  maString;
+            rtl::OUString                           maString;
 
         public:
             TextHierarchyFieldPrimitive2D(
                 const Primitive2DSequence& rChildren,
                 const FieldType& rFieldType,
-                const String& rString);
+                const rtl::OUString& rString);
 
             // get data
             FieldType getType() const { return meType; }
-            const String& getString() const { return maString; }
+            const rtl::OUString& getString() const { return maString; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

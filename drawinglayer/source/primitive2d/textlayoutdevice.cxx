@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textlayoutdevice.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2007-02-14 14:53:01 $
+ *  last change: $Author: aw $ $Date: 2007-09-26 11:36:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,23 +210,34 @@ namespace drawinglayer
             return mrDevice.GetTextHeight();
         }
 
-        double TextLayouterDevice::getTextWidth(const String& rText, xub_StrLen nIndex, xub_StrLen nLength) const
+        double TextLayouterDevice::getTextWidth(const rtl::OUString& rText, sal_Int32 nIndex, sal_Int32 nLength) const
         {
-            return mrDevice.GetTextWidth(rText, nIndex, nLength);
+            return mrDevice.GetTextWidth(rText, static_cast< sal_uInt16 >(nIndex), static_cast< sal_uInt16 >(nLength));
         }
 
-        bool TextLayouterDevice::getTextOutlines( basegfx::B2DPolyPolygonVector& rB2DPolyPolyVector, const String& rText, xub_StrLen nIndex, xub_StrLen nLength, const ::std::vector< sal_Int32 >& rDXArray)
+        bool TextLayouterDevice::getTextOutlines( basegfx::B2DPolyPolygonVector& rB2DPolyPolyVector, const rtl::OUString& rText, sal_Int32 nIndex, sal_Int32 nLength, const ::std::vector< sal_Int32 >& rDXArray)
         {
             const sal_Int32* pDXArray = rDXArray.size() ? &rDXArray[0] : NULL;
-            return mrDevice.GetTextOutlines( rB2DPolyPolyVector, rText, nIndex, nIndex, nLength, true, 0, pDXArray);
+            return mrDevice.GetTextOutlines(
+                rB2DPolyPolyVector,
+                rText,
+                static_cast< sal_uInt16 >(nIndex),
+                static_cast< sal_uInt16 >(nIndex),
+                static_cast< sal_uInt16 >(nLength),
+                true, 0, pDXArray);
         }
 
-        basegfx::B2DRange TextLayouterDevice::getTextBoundRect(const String& rText, xub_StrLen nIndex, xub_StrLen nLength) const
+        basegfx::B2DRange TextLayouterDevice::getTextBoundRect(const rtl::OUString& rText, sal_Int32 nIndex, sal_Int32 nLength) const
         {
-            if(rText.Len() && nLength)
+            if(rText.getLength() && nLength)
             {
                 Rectangle aRect;
-                mrDevice.GetTextBoundRect(aRect, rText, nIndex, nIndex, nLength);
+                mrDevice.GetTextBoundRect(
+                    aRect,
+                    rText,
+                    static_cast< sal_uInt16 >(nIndex),
+                    static_cast< sal_uInt16 >(nIndex),
+                    static_cast< sal_uInt16 >(nLength));
 
                 return basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom());
             }

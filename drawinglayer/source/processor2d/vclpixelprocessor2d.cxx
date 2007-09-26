@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclpixelprocessor2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-20 09:51:38 $
+ *  last change: $Author: aw $ $Date: 2007-09-26 11:36:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,12 +140,26 @@ namespace drawinglayer
                     break;
                 }
                 case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
+                {
+                    // directdraw of text simple portion; added test possibility to check text decompose
+                    static bool bHandleSimpleTextDirectly(true);
+
+                    if(bHandleSimpleTextDirectly)
+                    {
+                        RenderTextSimpleOrDecoratedPortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate));
+                    }
+                    else
+                    {
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
+                    break;
+                }
                 case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
                 {
                     // directdraw of text simple portion; added test possibility to check text decompose
-                    static bool bHandleTextDirectly(false);
+                    static bool bHandleComplexTextDirectly(false);
 
-                    if(bHandleTextDirectly)
+                    if(bHandleComplexTextDirectly)
                     {
                         RenderTextSimpleOrDecoratedPortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate));
                     }

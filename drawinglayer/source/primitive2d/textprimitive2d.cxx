@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-02 11:43:44 $
+ *  last change: $Author: aw $ $Date: 2007-09-26 11:36:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,29 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE_TEXTEFFECTPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/texteffectprimitive2d.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        bool FontAttributes::operator==(const FontAttributes& rCompare) const
+        {
+            return (getFamilyName() == rCompare.getFamilyName()
+                && getStyleName() == rCompare.getStyleName()
+                && getWeight() == rCompare.getWeight()
+                && getSymbol() == rCompare.getSymbol()
+                && getVertical() == rCompare.getVertical()
+                && getItalic() == rCompare.getItalic()
+                && getOutline() == rCompare.getOutline());
+        }
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
@@ -79,8 +102,8 @@ namespace drawinglayer
             }
 
             Font aRetval(
-                rFontAttributes.maFamilyName,
-                rFontAttributes.maStyleName,
+                rFontAttributes.getFamilyName(),
+                rFontAttributes.getStyleName(),
                 Size(nWidth, nHeight));
 
             if(!basegfx::fTools::equalZero(fFontRotation))
@@ -90,30 +113,30 @@ namespace drawinglayer
             }
 
             aRetval.SetAlign(ALIGN_BASELINE);
-            aRetval.SetCharSet(rFontAttributes.mbSymbol ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE);
-            aRetval.SetVertical(rFontAttributes.mbVertical ? TRUE : FALSE);
-            aRetval.SetWeight(static_cast<FontWeight>(rFontAttributes.mnWeight));
-            aRetval.SetItalic(rFontAttributes.mbItalic ? ITALIC_NORMAL : ITALIC_NONE);
-            aRetval.SetOutline(rFontAttributes.mbOutline);
+            aRetval.SetCharSet(rFontAttributes.getSymbol() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE);
+            aRetval.SetVertical(rFontAttributes.getVertical() ? TRUE : FALSE);
+            aRetval.SetWeight(static_cast<FontWeight>(rFontAttributes.getWeight()));
+            aRetval.SetItalic(rFontAttributes.getItalic() ? ITALIC_NORMAL : ITALIC_NONE);
+            aRetval.SetOutline(rFontAttributes.getOutline());
 
             return aRetval;
         }
 
         FontAttributes getFontAttributesFromVclFont(basegfx::B2DVector& rSize, const Font& rFont)
         {
-            FontAttributes aRetval;
-
-            aRetval.maFamilyName = rFont.GetName();
-            aRetval.maStyleName = rFont.GetStyleName();
-            aRetval.mbSymbol = (RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet());
-            aRetval.mbVertical = rFont.IsVertical();
-            aRetval.mnWeight = static_cast<sal_uInt16>(rFont.GetWeight());
-            aRetval.mbItalic = (rFont.GetItalic() != ITALIC_NONE);
-            aRetval.mbOutline = rFont.IsOutline();
+            FontAttributes aRetval(
+                rFont.GetName(),
+                rFont.GetStyleName(),
+                static_cast<sal_uInt16>(rFont.GetWeight()),
+                RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet(),
+                rFont.IsVertical(),
+                ITALIC_NONE != rFont.GetItalic(),
+                rFont.IsOutline());
             // TODO: eKerning
 
             const sal_Int32 nWidth(rFont.GetSize().getWidth());
             const sal_Int32 nHeight(rFont.GetSize().getHeight());
+
             rSize.setX(nWidth ? nWidth : nHeight);
             rSize.setY(nHeight);
 
@@ -134,39 +157,47 @@ namespace drawinglayer
     {
         Primitive2DSequence TextSimplePortionPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // get integer DXArray for getTextOutlines call (ATM uses vcl)
-            ::std::vector< sal_Int32 > aNewIntegerDXArray;
-            getIntegerDXArray(aNewIntegerDXArray);
+            Primitive2DSequence aRetval;
 
-            // prepare transformation matrices
-            basegfx::B2DVector aScale, aTranslate;
-            double fRotate, fShearX;
-            getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX);
-            basegfx::B2DHomMatrix aUnscaledTransform;
-            aUnscaledTransform.rotate( fRotate );
-            aUnscaledTransform.shearX( fShearX );
-            aUnscaledTransform.translate( aTranslate.getX(), aTranslate.getY() );
-            basegfx::B2DHomMatrix aUnrotatedTransform = getTextTransform();
-            aUnrotatedTransform.rotate( -fRotate );
-
-            // prepare textlayoutdevice
-            TextLayouterDevice aTextLayouter;
-            aTextLayouter.setFontAttributes(getFontAttributes(), aUnrotatedTransform );
-
-            // get the text outlines
-            basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
-            aTextLayouter.getTextOutlines( aB2DPolyPolyVector,
-                getText(), 0L, getText().Len(), aNewIntegerDXArray);
-
-            // create primitives for the outlines
-            const sal_uInt32 nCount = aB2DPolyPolyVector.size();
-            Primitive2DSequence aRetval( nCount );
-
-            if(nCount)
+            if(getText().getLength())
             {
-                if( !getFontAttributes().mbOutline )
+                // get integer DXArray for getTextOutlines call (ATM uses vcl)
+                ::std::vector< sal_Int32 > aNewIntegerDXArray;
+                getIntegerDXArray(aNewIntegerDXArray);
+
+                // prepare transformation matrices
+                basegfx::B2DVector aScale, aTranslate;
+                double fRotate, fShearX;
+                getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX);
+
+                // unscaled transform is needed for transformations since the scale is the font height/width already
+                basegfx::B2DHomMatrix aUnscaledTransform;
+                aUnscaledTransform.rotate( fRotate );
+                aUnscaledTransform.shearX( fShearX );
+                aUnscaledTransform.translate( aTranslate.getX(), aTranslate.getY() );
+
+                // unrotated transform is needed for text layouter. He works always with
+                // X-Axis aligned text
+                basegfx::B2DHomMatrix aUnrotatedTransform(getTextTransform());
+                aUnrotatedTransform.rotate( -fRotate );
+
+                // prepare textlayoutdevice
+                TextLayouterDevice aTextLayouter;
+                aTextLayouter.setFontAttributes(getFontAttributes(), aUnrotatedTransform );
+
+                // get the text outlines
+                basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
+                aTextLayouter.getTextOutlines( aB2DPolyPolyVector, getText(), 0L, getText().getLength(), aNewIntegerDXArray);
+
+                // create primitives for the outlines
+                const sal_uInt32 nCount(aB2DPolyPolyVector.size());
+
+                if(nCount)
                 {
-                    // for the glyph shapes as color-filled polypolygons
+                    // alloc space for the primitives
+                    aRetval.realloc(nCount);
+
+                    // color-filled polypolygons
                     for(sal_uInt32 a(0L); a < nCount; a++)
                     {
                         // prepare polypolygon
@@ -174,23 +205,16 @@ namespace drawinglayer
                         rPolyPolygon.transform(aUnscaledTransform);
                         aRetval[a] = new PolyPolygonColorPrimitive2D(rPolyPolygon, getFontColor());
                     }
-                }
-                else
-                {
-                    // for the glyph shapes as outline-only polypolygons
-                    double fStrokeWidth = 1.0 + aScale.getY() * 0.02;
-                    if( getFontAttributes().mnWeight > WEIGHT_SEMIBOLD )
-                        fStrokeWidth *= 1.4;
-                    else if( getFontAttributes().mnWeight < WEIGHT_SEMILIGHT )
-                        fStrokeWidth *= 0.7;
-                    const drawinglayer::attribute::StrokeAttribute aStrokeAttr( getFontColor(),
-                        fStrokeWidth, basegfx::tools::B2DLINEJOIN_NONE );
 
-                    for(sal_uInt32 a(0L); a < nCount; a++)
+                    if(getFontAttributes().getOutline())
                     {
-                        basegfx::B2DPolyPolygon& rPolyPolygon = aB2DPolyPolyVector[a];
-                        rPolyPolygon.transform(aUnscaledTransform);
-                        aRetval[a] = new PolyPolygonStrokePrimitive2D(rPolyPolygon, aStrokeAttr);
+                        // create outline text effect with current content and replace
+                        Primitive2DReference aNewTextEffect(new TextEffectPrimitive2D(
+                            aRetval,
+                            aTranslate,
+                            fRotate,
+                            TEXTEFFECTSTYLE2D_OUTLINE));
+                        aRetval = Primitive2DSequence(&aNewTextEffect, 1);
                     }
                 }
             }
@@ -200,7 +224,7 @@ namespace drawinglayer
 
         TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
             const basegfx::B2DHomMatrix& rNewTransform,
-            const String& rText,
+            const rtl::OUString& rText,
             const ::std::vector< double >& rDXArray,
             const FontAttributes& rFontAttributes,
             const ::com::sun::star::lang::Locale& rLocale,
@@ -258,7 +282,7 @@ namespace drawinglayer
 
         basegfx::B2DRange TextSimplePortionPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            const xub_StrLen aStrLen(getText().Len());
+            const sal_Int32 aStrLen(getText().getLength());
             basegfx::B2DRange aRetval;
 
             if(aStrLen)

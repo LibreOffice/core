@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texthierarchyprimitive2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-03 10:43:05 $
+ *  last change: $Author: aw $ $Date: 2007-09-26 11:36:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ namespace drawinglayer
         TextHierarchyFieldPrimitive2D::TextHierarchyFieldPrimitive2D(
             const Primitive2DSequence& rChildren,
             const FieldType& rFieldType,
-            const String& rString)
+            const rtl::OUString& rString)
         :   GroupPrimitive2D(rChildren),
             meType(rFieldType),
             maString(rString)

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdecoratedprimitive2d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-20 09:51:38 $
+ *  last change: $Author: aw $ $Date: 2007-09-26 11:36:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,34 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #endif
 
+#ifndef _BGFX_MATRIX_B2DHOMMATRIXTOOLS_HXX
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
+#include <com/sun/star/i18n/WordType.hpp>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE_TEXTEFFECTPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/texteffectprimitive2d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_SHADOWPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TRANSFORMPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#endif
+
 #include <numeric>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -61,408 +89,581 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-/*      Primitive2DSequence TextDecoratedPortionPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        void TextDecoratedPortionPrimitive2D::impCreateGeometryContent(
+            std::vector< Primitive2DReference >& rTarget,
+            basegfx::DecomposedB2DHomMatrixContainer& rDecTrans,
+            const rtl::OUString& rText,
+            const ::std::vector< double >& rDXArray,
+            const FontAttributes& rFontAttributes) const
         {
-            const sal_uInt16 nTextLength(getText().Len());
-            Primitive2DSequence aRetval;
+            // create the SimpleTextPrimitive needed in any case
+            rTarget.push_back(Primitive2DReference(new TextSimplePortionPrimitive2D(
+                rDecTrans.getB2DHomMatrix(),
+                rText,
+                rDXArray,
+                rFontAttributes,
+                getLocale(),
+                getFontColor())));
 
-            if(nTextLength)
+            // see if something else needs to be done
+            const bool bUnderlineUsed(FONT_UNDERLINE_NONE != getFontUnderline());
+            const bool bStrikeoutUsed(FONT_STRIKEOUT_NONE != getFontStrikeout());
+
+            if(bUnderlineUsed || bStrikeoutUsed)
             {
-                if(getWordLineMode())
-                {
-                    // support for single word mode
-                    if(!mxBreakIterator.is())
-                    {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
-                        mxBreakIterator.set(xMSF->createInstance(rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator")), ::com::sun::star::uno::UNO_QUERY);
-                    }
-
-                    if(mxBreakIterator.is())
-                    {
-                        for(sal_Int32 nPos(0); nPos < nTextLength;)
-                        {
-                            ::com::sun::star::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(
-                                getText(), nPos, getLocale(), ::com::sun::star::i18n::WordType::ANY_WORD, sal_True));
-                            const String aNewText(getText(), nPos, nNextWordBoundary - nPos);
-                            ::std::vector< double > aNewDXArray(getDXArray().begin() + nPos, getDXArray().end() + nNextWordBoundary);
-
-                            TextDecoratedPortionPrimitive2D aNewPrimitive(
-                                getTextTransform(),
-                                aNewText,
-                                aNewDXArray,
-                                getFontAttributes(),
-                                getLocale(),
-                                getFontColor(),
-                                getTextlineColor(),
-                                getFontUnderline(),
-                                getUnderlineAbove(),
-                                getFontStrikeout(),
-                                false,                  // no WordLineMode
-                                getFontEmphasisMark(),
-                                getEmphasisMarkAbove(),
-                                getEmphasisMarkBelow(),
-                                RELIEF_NONE,            // no relief
-                                false);                 // no shadow
-
-                            appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, aNewPrimitive.get2DDecomposition(rViewInformation));
-
-                            nPos = nNextWordBoundary;
-                        }
-                    }
-                }
-                else
-                {
-                    // no single words needed, decompose
-                    std::vector< BasePrimitive2D* > aNewPrimitives;
-
-
-
-                    // prepare return sequence
-                    for(sal_uInt32 a(0); a < aNewPrimitives.size(); a++)
-                    {
-                        aRetval[a] = Primitive2DReference(aNewPrimitives[a]);
-                    }
-                }
-
-                if(aRetval.hasElements())
-                {
-                    Primitive2DSequence aContent(aRetval);
-
-                    if(getShadow())
-                    {
-                    }
-
-                    if(RELIEF_NONE != getFontRelief())
-                    {
-                    }
-                }
-            }
-
-            return aRetval;
-        } */
-
-        Primitive2DSequence TextDecoratedPortionPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
-        {
-            std::vector< BasePrimitive2D* > aNewPrimitives;
-
-            // First create a simple text primitive and ignore other attributes
-            aNewPrimitives.push_back(new TextSimplePortionPrimitive2D(getTextTransform(), getText(), getDXArray(), getFontAttributes(), getLocale(), getFontColor()));
-
-            // more to be done?
-            const bool bNeedFontUnderline(getFontUnderline() != FONT_UNDERLINE_NONE);
-            const bool bNeedFontStrikeout(getFontStrikeout() != FONT_STRIKEOUT_NONE);
-            const bool bNeedEmphasisMarkAbove(getEmphasisMarkAbove() != FONT_EMPHASISMARK_NONE);
-            const bool bNeedEmphasisMarkBelow(getEmphasisMarkBelow() != FONT_EMPHASISMARK_NONE);
-
-            if(bNeedFontUnderline
-                || bNeedFontStrikeout
-                || bNeedEmphasisMarkAbove
-                || bNeedEmphasisMarkBelow)
-            {
-                // prepare transformations
-                basegfx::B2DVector aScale, aTranslate;
-                double fRotate, fShearX;
-                getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX);
-
-                // unscaled transform is needed since the scale in the text transform describes the font size
+                // common preparations
                 basegfx::B2DHomMatrix aUnscaledTransform;
-                aUnscaledTransform.rotate( fRotate );
-                aUnscaledTransform.shearX( fShearX );
-                aUnscaledTransform.translate( aTranslate.getX(), aTranslate.getY() );
-
-                // prepare TextLayouterDevice to get metrics for text decorations like
-                // underline/strikeout/emphasis marks from it
                 TextLayouterDevice aTextLayouter;
 
-                {
-                    // unrotated transform is needed for TextLayouterDevice setup
-                    basegfx::B2DHomMatrix aUnrotatedTransform = getTextTransform();
-                    aUnrotatedTransform.rotate( -fRotate );
-                    aTextLayouter.setFontAttributes(getFontAttributes(), aUnrotatedTransform );
-                }
+                // unscaled is needed since scale contains already the font size
+                aUnscaledTransform.rotate(rDecTrans.getRotate());
+                aUnscaledTransform.shearX(rDecTrans.getShearX());
+                aUnscaledTransform.translate(rDecTrans.getTranslate().getX(), rDecTrans.getTranslate().getY());
 
-                // init metrics to defaults
-//              const double fLineHeight(aTextLayouter.getTextHeight());
-                double fUnderlineOffset(aTextLayouter.getUnderlineOffset());
-                double fUnderlineHeight(aTextLayouter.getUnderlineHeight());
-                basegfx::tools::B2DLineJoin eLineJoin(basegfx::tools::B2DLINEJOIN_NONE);
-                bool bDoubleLine(false);
-                bool bWaveLine(false);
+                // TextLayouterDevice is needed to get metrics for text decorations like
+                // underline/strikeout/emphasis marks from it. For setup, the unrotated transform
+                // is needed
+                basegfx::B2DHomMatrix aUnrotatedTransform(rDecTrans.getB2DHomMatrix());
+                aUnrotatedTransform.rotate(-rDecTrans.getRotate());
+                aTextLayouter.setFontAttributes(getFontAttributes(), aUnrotatedTransform );
+
+                // get text width
                 double fTextWidth(0.0);
 
-                if(getDXArray().empty())
+                if(rDXArray.empty())
                 {
-                    fTextWidth = aTextLayouter.getTextWidth( getText(), 0/*TODO*/, getText().Len()/*TODO*/ );
+                    fTextWidth = aTextLayouter.getTextWidth(rText, 0/*TODO*/, rText.getLength()/*TODO*/ );
                 }
                 else
                 {
-                    fTextWidth = getDXArray().back() * aScale.getX();
+                    fTextWidth = rDXArray.back() * rDecTrans.getScale().getX();
                 }
 
-                // prepare line styles for text decoration lines
-                const int* pDashDotArray(0);
-
-                static const int aDottedArray[]     = { 1, 1, 0};               // DOTTED LINE
-                static const int aDashDotArray[]    = { 1, 1, 4, 1, 0};         // DASHDOT
-                static const int aDashDotDotArray[] = { 1, 1, 1, 1, 4, 1, 0};   // DASHDOTDOT
-                static const int aDashedArray[]     = { 5, 2, 0};               // DASHED LINE
-                static const int aLongDashArray[]   = { 7, 2, 0};               // LONGDASH
-
-                // set Underline attribute
-                switch( getFontUnderline() )
+                if(bUnderlineUsed)
                 {
-                    default:
-                        DBG_WARNING1( "DrawingLayer: Unknown underline attribute (%d)!", getFontUnderline() );
-                        // fall through
-                    case primitive2d::FONT_UNDERLINE_NONE:
-                        fUnderlineHeight = 0;
-                        break;
-                    case primitive2d::FONT_UNDERLINE_BOLD:
-                        fUnderlineHeight *= 2;
-                        // fall through
-                    case primitive2d::FONT_UNDERLINE_SINGLE:
-                        break;
-                    case primitive2d::FONT_UNDERLINE_DOUBLE:
-                        bDoubleLine = true;
-                        break;
-                    case primitive2d::FONT_UNDERLINE_BOLDDOTTED:
-                        fUnderlineHeight *= 2;
-                        // fall through
-                    case primitive2d::FONT_UNDERLINE_DOTTED:
-                        eLineJoin = basegfx::tools::B2DLINEJOIN_ROUND;
-                        pDashDotArray = aDottedArray;
-                        break;
-                    case primitive2d::FONT_UNDERLINE_BOLDDASH:
-                        fUnderlineHeight *= 2;
-                        // fall through
-                    case primitive2d::FONT_UNDERLINE_DASH:
-                        pDashDotArray = aDashedArray;
-                        break;
-                    case primitive2d::FONT_UNDERLINE_BOLDLONGDASH:
-                        fUnderlineHeight *= 2;
-                        // fall through
-                    case primitive2d::FONT_UNDERLINE_LONGDASH:
-                        pDashDotArray = aLongDashArray;
-                        break;
-                    case primitive2d::FONT_UNDERLINE_BOLDDASHDOT:
-                        fUnderlineHeight *= 2;
-                        // fall through
-                    case primitive2d::FONT_UNDERLINE_DASHDOT:
-                        pDashDotArray = aDashDotArray;
-                        break;
-                    case primitive2d::FONT_UNDERLINE_BOLDDASHDOTDOT:
-                        fUnderlineHeight *= 2;
-                        // fall through
-                    case primitive2d::FONT_UNDERLINE_DASHDOTDOT:
-                        eLineJoin = basegfx::tools::B2DLINEJOIN_ROUND;
-                        pDashDotArray = aDashDotDotArray;
-                        break;
-                    case primitive2d::FONT_UNDERLINE_SMALLWAVE:
-                        // TODO
-                        bWaveLine = true;
-                        break;
-                    case primitive2d::FONT_UNDERLINE_BOLDWAVE:
-                        fUnderlineHeight *= 2;
-                        // fall through
-                    case primitive2d::FONT_UNDERLINE_WAVE:
-                        // TODO
-                        bWaveLine = true;
-                        break;
-                    case primitive2d::FONT_UNDERLINE_DOUBLEWAVE:
-                        bWaveLine = true;
-                        bDoubleLine = true;
-                        break;
-                }
+                    // create primitive geometry for underline
+                    bool bDoubleLine(false);
+                    bool bWaveLine(false);
+                    bool bBoldLine(false);
+                    const int* pDashDotArray(0);
+                    basegfx::tools::B2DLineJoin eLineJoin(basegfx::tools::B2DLINEJOIN_NONE);
+                    double fUnderlineOffset(aTextLayouter.getUnderlineOffset());
+                    double fUnderlineHeight(aTextLayouter.getUnderlineHeight());
 
-                if(fUnderlineHeight > 0.0)
-                {
+                    static const int aDottedArray[]     = { 1, 1, 0};               // DOTTED LINE
+                    static const int aDashDotArray[]    = { 1, 1, 4, 1, 0};         // DASHDOT
+                    static const int aDashDotDotArray[] = { 1, 1, 1, 1, 4, 1, 0};   // DASHDOTDOT
+                    static const int aDashedArray[]     = { 5, 2, 0};               // DASHED LINE
+                    static const int aLongDashArray[]   = { 7, 2, 0};               // LONGDASH
+
+                    switch(getFontUnderline())
+                    {
+                        default: // case FONT_UNDERLINE_SINGLE:
+                        {
+                            break;
+                        }
+                        case FONT_UNDERLINE_DOUBLE:
+                        {
+                            bDoubleLine = true;
+                            break;
+                        }
+                        case FONT_UNDERLINE_DOTTED:
+                        {
+                            pDashDotArray = aDottedArray;
+                            break;
+                        }
+                        case FONT_UNDERLINE_DASH:
+                        {
+                            pDashDotArray = aDashedArray;
+                            break;
+                        }
+                        case FONT_UNDERLINE_LONGDASH:
+                        {
+                            pDashDotArray = aLongDashArray;
+                            break;
+                        }
+                        case FONT_UNDERLINE_DASHDOT:
+                        {
+                            pDashDotArray = aDashDotArray;
+                            break;
+                        }
+                        case FONT_UNDERLINE_DASHDOTDOT:
+                        {
+                            pDashDotArray = aDashDotDotArray;
+                            break;
+                        }
+                        case FONT_UNDERLINE_SMALLWAVE:
+                        {
+                            bWaveLine = true;
+                            break;
+                        }
+                        case FONT_UNDERLINE_WAVE:
+                        {
+                            bWaveLine = true;
+                            break;
+                        }
+                        case FONT_UNDERLINE_DOUBLEWAVE:
+                        {
+                            bDoubleLine = true;
+                            bWaveLine = true;
+                            break;
+                        }
+                        case FONT_UNDERLINE_BOLD:
+                        {
+                            bBoldLine = true;
+                            break;
+                        }
+                        case FONT_UNDERLINE_BOLDDOTTED:
+                        {
+                            bBoldLine = true;
+                            pDashDotArray = aDottedArray;
+                            break;
+                        }
+                        case FONT_UNDERLINE_BOLDDASH:
+                        {
+                            bBoldLine = true;
+                            pDashDotArray = aDashedArray;
+                            break;
+                        }
+                        case FONT_UNDERLINE_BOLDLONGDASH:
+                        {
+                            bBoldLine = true;
+                            pDashDotArray = aLongDashArray;
+                            break;
+                        }
+                        case FONT_UNDERLINE_BOLDDASHDOT:
+                        {
+                            bBoldLine = true;
+                            pDashDotArray = aDashDotArray;
+                            break;
+                        }
+                        case FONT_UNDERLINE_BOLDDASHDOTDOT:
+                        {
+                            bBoldLine = true;
+                            pDashDotArray = aDashDotDotArray;
+                            break;
+                        }
+                        case FONT_UNDERLINE_BOLDWAVE:
+                        {
+                            bWaveLine = true;
+                            bBoldLine = true;
+                            break;
+                        }
+                    }
+
+                    if(bBoldLine)
+                    {
+                        fUnderlineHeight *= 2.0;
+                    }
+
                     if(bDoubleLine)
                     {
                         fUnderlineOffset -= 0.50 * fUnderlineHeight;
                         fUnderlineHeight *= 0.64;
                     }
 
-                    basegfx::B2DPolygon aUnderline;
-                    ::basegfx::B2DPoint aPoint( 0.0, fUnderlineOffset );
-                    aUnderline.append( aPoint );
-
-                    if(!bWaveLine)
+                    if(bWaveLine)
                     {
-                        // straight underline
-                        aUnderline.append( aPoint + ::basegfx::B2DPoint( fTextWidth, 0.0 ) );
+                        eLineJoin = basegfx::tools::B2DLINEJOIN_ROUND;
+                        fUnderlineHeight *= 0.5;
                     }
-                    else
+
+                    // prepare StrokeAttributes
+                    attribute::StrokeAttribute aStrokeAttribute(getTextlineColor(), fUnderlineHeight, eLineJoin);
+
+                    if(pDashDotArray)
                     {
-                        // wavy underline
-                        basegfx::B2DPolygon& aWavePoly = aUnderline;
+                        ::std::vector< double > aDoubleArray;
+
+                        for(const int* p = pDashDotArray; *p; ++p)
+                        {
+                            aDoubleArray.push_back((double)(*p) * fUnderlineHeight);
+                        }
+
+                        const double fFullDashDotLen(::std::accumulate(aDoubleArray.begin(), aDoubleArray.end(), 0.0));
+
+                        aStrokeAttribute = attribute::StrokeAttribute(
+                            aStrokeAttribute.getColor(),
+                            aStrokeAttribute.getWidth(),
+                            aStrokeAttribute.getLineJoin(),
+                            aDoubleArray,
+                            fFullDashDotLen);
+                    }
+
+                    // create base polygon and new primitive
+                    basegfx::B2DPolygon aUnderline;
+                    Primitive2DReference aNewPrimitive;
+
+                    aUnderline.append(basegfx::B2DPoint(0.0, fUnderlineOffset));
+                    aUnderline.append(basegfx::B2DPoint(fTextWidth, fUnderlineOffset));
+                    aUnderline.transform(aUnscaledTransform);
+
+                    if(bWaveLine)
+                    {
                         double fWaveWidth(4.0 * fUnderlineHeight);
 
                         if(primitive2d::FONT_UNDERLINE_SMALLWAVE == getFontUnderline())
                         {
                             fWaveWidth *= 0.7;
                         }
-
-                        const double fWaveHeight(0.5 * fWaveWidth);
-                        const ::basegfx::B2DPoint aCtrlOffset( fWaveWidth * 0.467308, fWaveHeight );
-
-                        for(double fPos = fWaveWidth; fPos < fTextWidth; fPos += fWaveWidth)
+                        else if(primitive2d::FONT_UNDERLINE_WAVE == getFontUnderline())
                         {
-                            // create a symmetrical wave using one cubic bezier curve
-                            // with y==0 for {x==0, x==0.5*fW or x==1.0*fW}
-                            // and ymin/ymax at {x=0.25*fW or 0.75*fW}
-                            const int n = aWavePoly.count();
-
-                            aWavePoly.setNextControlPoint(  n-1, aPoint + aCtrlOffset );
-                            aWavePoly.append(aPoint += ::basegfx::B2DPoint( fWaveWidth, 0.0 ) );
-                            aWavePoly.setPrevControlPoint(  n-1, aPoint - aCtrlOffset );
+                            // extra multiply to get the same WaveWidth as with the bold version
+                            fWaveWidth *= 2.0;
                         }
 
-                        // adjust stroke style
-                        eLineJoin = basegfx::tools::B2DLINEJOIN_ROUND;
-                        fUnderlineHeight *= 0.5;
+                        aNewPrimitive = Primitive2DReference(new PolygonWavePrimitive2D(aUnderline, aStrokeAttribute, fWaveWidth, 0.5 * fWaveWidth));
+                    }
+                    else
+                    {
+                        aNewPrimitive = Primitive2DReference(new PolygonStrokePrimitive2D(aUnderline, aStrokeAttribute));
                     }
 
-                    const basegfx::BColor& rLineColor = getTextlineColor();
-                    attribute::StrokeAttribute aStrokeAttr(rLineColor, fUnderlineHeight, eLineJoin);
+                    // add primitive
+                    rTarget.push_back(aNewPrimitive);
 
-                    if(pDashDotArray)
+                    if(bDoubleLine)
                     {
-                        ::std::vector< double > aDoubleArray;
-
-                        for( const int* p = pDashDotArray; *p; ++p )
-                        {
-                            aDoubleArray.push_back( *p * fUnderlineHeight);
-                        }
-
-                        const double fFullDashDotLen(::std::accumulate(aDoubleArray.begin(), aDoubleArray.end(), 0.0));
-                        aStrokeAttr = attribute::StrokeAttribute(rLineColor, fUnderlineHeight, eLineJoin, aDoubleArray, fFullDashDotLen);
-                    }
-
-                    aUnderline.transform( aUnscaledTransform );
-                    aNewPrimitives.push_back(new PolygonStrokePrimitive2D( aUnderline, aStrokeAttr ));
-
-                    if( bDoubleLine )
-                    {
-                        // add another underline below the first underline
+                        // double line, create 2nd primitive with offset using TransformPrimitive based on
+                        // already created NewPrimitive
                         const double fLineDist((bWaveLine ? 3.0 : 2.0) * fUnderlineHeight);
-                        ::basegfx::B2DVector aOffsetVector( 0.0, fLineDist );
-                        basegfx::B2DHomMatrix aOffsetTransform;
+                        basegfx::B2DHomMatrix aTransform;
 
-                        aOffsetVector = aUnscaledTransform * aOffsetVector;
-                        aOffsetTransform.translate( aOffsetVector.getX(), aOffsetVector.getY() );
-                        aUnderline.transform( aOffsetTransform );
-                        aNewPrimitives.push_back(new PolygonStrokePrimitive2D( aUnderline, aStrokeAttr ));
+                        // move base point of text to 0.0 and de-rotate
+                        aTransform.translate(-rDecTrans.getTranslate().getX(), -rDecTrans.getTranslate().getY());
+                        aTransform.rotate(-rDecTrans.getRotate());
+
+                        // translate in Y by offset
+                        aTransform.translate(0.0, fLineDist);
+
+                        // move back and rotate
+                        aTransform.rotate(rDecTrans.getRotate());
+                        aTransform.translate(rDecTrans.getTranslate().getX(), rDecTrans.getTranslate().getY());
+
+                        // add transform primitive
+                        const Primitive2DSequence aContent(&aNewPrimitive, 1);
+                        rTarget.push_back(Primitive2DReference(new TransformPrimitive2D(aTransform, aContent)));
                     }
                 }
 
-                double fStrikeoutHeight(aTextLayouter.getUnderlineHeight());
-                double fStrikeoutOffset(aTextLayouter.getStrikeoutOffset());
-                eLineJoin = basegfx::tools::B2DLINEJOIN_NONE;
-                bDoubleLine = false;
-                sal_Unicode aStrikeoutChar('\0');
-
-                // set Underline attribute
-                switch( getFontStrikeout() )
+                if(bStrikeoutUsed)
                 {
-                    default:
-                        DBG_WARNING1( "DrawingLayer: Unknown underline attribute (%d)!", getFontUnderline() );
-                        // fall through
-                    case primitive2d::FONT_STRIKEOUT_NONE:
-                        fStrikeoutHeight = 0;
-                        break;
-                    case primitive2d::FONT_STRIKEOUT_SINGLE:
-                        break;
-                    case primitive2d::FONT_STRIKEOUT_DOUBLE:
-                        bDoubleLine = true;
-                        break;
-                    case primitive2d::FONT_STRIKEOUT_BOLD:
-                        fStrikeoutHeight *= 2;
-                        break;
-                    case primitive2d::FONT_STRIKEOUT_SLASH:
-                        aStrikeoutChar = '/';
-                        fStrikeoutHeight = 0;
-                        break;
-                    case primitive2d::FONT_STRIKEOUT_X:
-                        aStrikeoutChar = 'X';
-                        fStrikeoutHeight = 0;
-                        break;
+                    // create primitive geometry for strikeout
+                    if(FONT_STRIKEOUT_SLASH == getFontStrikeout() || FONT_STRIKEOUT_X == getFontStrikeout())
+                    {
+                        // strikeout with character
+                        const sal_Unicode aStrikeoutChar(FONT_STRIKEOUT_SLASH == getFontStrikeout() ? '/' : 'X');
+                        const rtl::OUString aSingleCharString(aStrikeoutChar);
+                        const double fStrikeCharWidth(aTextLayouter.getTextWidth(aSingleCharString, 0, 1));
+                        const double fStrikeCharCount(fabs(fTextWidth/fStrikeCharWidth));
+                        const sal_uInt32 nStrikeCharCount(static_cast< sal_uInt32 >(fStrikeCharCount + 0.9));
+                        const double fScaleX(rDecTrans.getScale().getX());
+                        const double fStrikeCharWidthUnscaled(basegfx::fTools::equalZero(fScaleX) ? fStrikeCharWidth : fStrikeCharWidth/fScaleX);
+
+                        std::vector<double> aDXArray(nStrikeCharCount);
+                        rtl::OUString aStrikeoutString;
+
+                        for(sal_uInt32 a(0); a < nStrikeCharCount; a++)
+                        {
+                            aStrikeoutString += aSingleCharString;
+                            aDXArray[a] = (a + 1) * fStrikeCharWidthUnscaled;
+                        }
+
+                        rTarget.push_back(Primitive2DReference(new TextSimplePortionPrimitive2D(
+                            rDecTrans.getB2DHomMatrix(),
+                            aStrikeoutString,
+                            aDXArray,
+                            rFontAttributes,
+                            getLocale(),
+                            getFontColor())));
+                    }
+                    else
+                    {
+                        // strikeout with geometry
+                        double fStrikeoutHeight(aTextLayouter.getUnderlineHeight());
+                        double fStrikeoutOffset(aTextLayouter.getStrikeoutOffset());
+                        bool bDoubleLine(false);
+
+                        // set Underline attribute
+                        switch(getFontStrikeout())
+                        {
+                            default : // case primitive2d::FONT_STRIKEOUT_SINGLE:
+                            {
+                                break;
+                            }
+                            case primitive2d::FONT_STRIKEOUT_DOUBLE:
+                            {
+                                bDoubleLine = true;
+                                break;
+                            }
+                            case primitive2d::FONT_STRIKEOUT_BOLD:
+                            {
+                                fStrikeoutHeight *= 2.0;
+                                break;
+                            }
+                        }
+
+                        if(bDoubleLine)
+                        {
+                            fStrikeoutOffset -= 0.50 * fStrikeoutHeight;
+                            fStrikeoutHeight *= 0.64;
+                        }
+
+                        // create base polygon and new primitive
+                        basegfx::B2DPolygon aStrikeoutLine;
+
+                        aStrikeoutLine.append(basegfx::B2DPoint(0.0, -fStrikeoutOffset));
+                        aStrikeoutLine.append(basegfx::B2DPoint(fTextWidth, -fStrikeoutOffset));
+                        aStrikeoutLine.transform(aUnscaledTransform);
+
+                        const attribute::StrokeAttribute aStrokeAttribute(getFontColor(), fStrikeoutHeight, basegfx::tools::B2DLINEJOIN_NONE);
+                        Primitive2DReference aNewPrimitive(new PolygonStrokePrimitive2D(aStrikeoutLine, aStrokeAttribute));
+
+                        // add primitive
+                        rTarget.push_back(aNewPrimitive);
+
+                        if(bDoubleLine)
+                        {
+                            // double line, create 2nd primitive with offset using TransformPrimitive based on
+                            // already created NewPrimitive
+                            const double fLineDist(2.0 * fStrikeoutHeight);
+                            basegfx::B2DHomMatrix aTransform;
+
+                            // move base point of text to 0.0 and de-rotate
+                            aTransform.translate(-rDecTrans.getTranslate().getX(), -rDecTrans.getTranslate().getY());
+                            aTransform.rotate(-rDecTrans.getRotate());
+
+                            // translate in Y by offset
+                            aTransform.translate(0.0, -fLineDist);
+
+                            // move back and rotate
+                            aTransform.rotate(rDecTrans.getRotate());
+                            aTransform.translate(rDecTrans.getTranslate().getX(), rDecTrans.getTranslate().getY());
+
+                            // add transform primitive
+                            const Primitive2DSequence aContent(&aNewPrimitive, 1);
+                            rTarget.push_back(Primitive2DReference(new TransformPrimitive2D(aTransform, aContent)));
+                        }
+                    }
                 }
-
-                if(fStrikeoutHeight > 0.0)
-                {
-                    if( bDoubleLine )
-                    {
-                        fStrikeoutOffset -= 0.50 * fStrikeoutHeight;
-                        fStrikeoutHeight *= 0.64;
-                    }
-
-                    basegfx::B2DPolygon aStrikeoutLine;
-                    basegfx::B2DPoint aPoint( 0.0, -fStrikeoutOffset );
-                    aStrikeoutLine.append( aPoint );
-
-                    if( 1/*####*/ )
-                    {
-                        // straight underline
-                        aStrikeoutLine.append( aPoint + ::basegfx::B2DPoint( fTextWidth, 0.0 ) );
-                    }
-
-                    const basegfx::BColor& rStrikeoutColor = getTextlineColor();
-                    attribute::StrokeAttribute aStrokeAttr( rStrikeoutColor, fStrikeoutHeight, eLineJoin );
-
-                    aStrikeoutLine.transform( aUnscaledTransform );
-                    aNewPrimitives.push_back(new PolygonStrokePrimitive2D( aStrikeoutLine, aStrokeAttr ));
-
-                    if( bDoubleLine )
-                    {
-                        // add another strikeout below the first strikeout
-                        const double fLineDist(2.0 * fStrikeoutHeight);
-                        ::basegfx::B2DVector aOffsetVector( 0.0, -fLineDist );
-                        basegfx::B2DHomMatrix aOffsetTransform;
-
-                        aOffsetVector = aUnscaledTransform * aOffsetVector;
-                        aOffsetTransform.translate( aOffsetVector.getX(), aOffsetVector.getY() );
-                        aStrikeoutLine.transform( aOffsetTransform );
-                        aNewPrimitives.push_back(new PolygonStrokePrimitive2D( aStrikeoutLine, aStrokeAttr ));
-                    }
-                }
-
-                if( aStrikeoutChar != '\0' )
-                {
-                    const String aSingleCharString( &aStrikeoutChar, 1 );
-                    const double fStrikeCharWidth(aTextLayouter.getTextWidth( aSingleCharString, 0, 1 ));
-                    const double fStrikeCharCount(fabs(fTextWidth / fStrikeCharWidth));
-                    const sal_uInt32 nStrikeCharCount(static_cast< sal_uInt32 >(fStrikeCharCount + 0.9));
-                    const double fStrikeCharWidthUnscaled(aScale.getX() == 0.0 ? fStrikeCharWidth : fStrikeCharWidth / aScale.getX());
-                    const basegfx::BColor& rStrikeoutColor = getFontColor();
-
-                    std::vector<double> aDXArray(nStrikeCharCount);
-                    String aStrikeoutString;
-
-                    for(sal_uInt32 a(0); a < nStrikeCharCount; a++)
-                    {
-                        aStrikeoutString += aStrikeoutChar;
-                        aDXArray[a] = (a + 1) * fStrikeCharWidthUnscaled;
-                    }
-
-                    aNewPrimitives.push_back(new TextSimplePortionPrimitive2D(getTextTransform(), aStrikeoutString, aDXArray, getFontAttributes(), getLocale(), rStrikeoutColor ));
-                }
-
-                // TODO: need to take care of
-                // -emphasis mark
-                // -relief (embosses/engraved)
-                // -shadow
-                // if( getWordLineMode() )
-                // if( getUnderlineAbove() )
-
-
             }
 
-            // prepare return sequence
-            Primitive2DSequence aRetval(aNewPrimitives.size());
+            // TODO: Handle Font Emphasis Above/Below
+        }
 
-            for(sal_uInt32 a(0); a < aNewPrimitives.size(); a++)
+        void TextDecoratedPortionPrimitive2D::impSplitSingleWords(
+            std::vector< Primitive2DReference >& rTarget,
+            basegfx::DecomposedB2DHomMatrixContainer& rDecTrans) const
+        {
+            // break iterator support
+            // made static so it only needs to be fetched once, even with many single
+            // constructed VclMetafileProcessor2D. It's still incarnated on demand,
+            // but exists for OOo runtime now by purpose.
+            static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xLocalBreakIterator;
+
+            if(!xLocalBreakIterator.is())
             {
-                aRetval[a] = Primitive2DReference(aNewPrimitives[a]);
+                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
+                xLocalBreakIterator.set(xMSF->createInstance(rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator")), ::com::sun::star::uno::UNO_QUERY);
+            }
+
+            if(xLocalBreakIterator.is())
+            {
+                // init word iterator, get first word
+                ::com::sun::star::i18n::Boundary aNextWordBoundary(xLocalBreakIterator->getWordBoundary(
+                    getText(), 0, getLocale(), ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True));
+
+                // prepare new font attributes WITHOUT outline
+                const FontAttributes aNewFontAttributes(
+                    getFontAttributes().getFamilyName(),
+                    getFontAttributes().getStyleName(),
+                    getFontAttributes().getWeight(),
+                    getFontAttributes().getSymbol(),
+                    getFontAttributes().getVertical(),
+                    getFontAttributes().getItalic(),
+                    false);             // no outline anymore, handled locally
+
+                while(aNextWordBoundary.startPos != aNextWordBoundary.endPos)
+                {
+                    const sal_uInt32 nLength(aNextWordBoundary.endPos - aNextWordBoundary.startPos);
+
+                    // prepare data for the single word
+                    const rtl::OUString aNewText(getText().copy(aNextWordBoundary.startPos, nLength));
+
+                    // prepare transform for the single word
+                    basegfx::B2DHomMatrix aNewTransform;
+
+                    if(aNextWordBoundary.startPos)
+                    {
+                        // needs to be moved to a new start position (get from DXArray)
+                        const double fDistance(getDXArray()[aNextWordBoundary.startPos - 1]);
+                        aNewTransform.translate(fDistance, 0.0);
+                    }
+
+                    aNewTransform *= rDecTrans.getB2DHomMatrix();
+
+                    // prepare new DXArray for the single word
+                    ::std::vector< double > aNewDXArray(
+                        getDXArray().begin() + aNextWordBoundary.startPos,
+                        getDXArray().begin() + aNextWordBoundary.endPos);
+
+                    if(aNextWordBoundary.startPos)
+                    {
+                        // DXArray values need to be corrected
+                        const double fDistance(getDXArray()[aNextWordBoundary.startPos - 1]);
+
+                        for(sal_uInt32 a(0); a < nLength; a++)
+                        {
+                            aNewDXArray[a] -= fDistance;
+                        }
+                    }
+
+                    // create geometry content for the single word
+                    basegfx::DecomposedB2DHomMatrixContainer aDecTrans(aNewTransform);
+                    impCreateGeometryContent(rTarget, aDecTrans, aNewText, aNewDXArray, aNewFontAttributes);
+
+                    // prepare next word
+                    aNextWordBoundary = xLocalBreakIterator->nextWord(
+                        getText(), aNextWordBoundary.endPos, getLocale(),
+                        ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
+                }
+            }
+        }
+
+        Primitive2DSequence TextDecoratedPortionPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            std::vector< Primitive2DReference > aNewPrimitives;
+            basegfx::DecomposedB2DHomMatrixContainer aDecTrans(getTextTransform());
+            Primitive2DSequence aRetval;
+
+            // create basic geometry such as SimpleTextPrimitive, Underline,
+            // Strikeuot, etc...
+            if(getWordLineMode())
+            {
+                // support for single word mode
+                impSplitSingleWords(aNewPrimitives, aDecTrans);
+            }
+            else
+            {
+                // prepare new font attributes WITHOUT outline
+                const FontAttributes aNewFontAttributes(
+                    getFontAttributes().getFamilyName(),
+                    getFontAttributes().getStyleName(),
+                    getFontAttributes().getWeight(),
+                    getFontAttributes().getSymbol(),
+                    getFontAttributes().getVertical(),
+                    getFontAttributes().getItalic(),
+                    false);             // no outline anymore, handled locally
+
+                // handle as one word
+                impCreateGeometryContent(aNewPrimitives, aDecTrans, getText(), getDXArray(), aNewFontAttributes);
+            }
+
+            // convert to Primitive2DSequence
+            const sal_uInt32 nMemberCount(aNewPrimitives.size());
+
+            if(nMemberCount)
+            {
+                aRetval.realloc(nMemberCount);
+
+                for(sal_uInt32 a(0); a < nMemberCount; a++)
+                {
+                    aRetval[a] = aNewPrimitives[a];
+                }
+            }
+
+            // Handle Shadow, Outline and FontRelief
+            if(aRetval.hasElements())
+            {
+                // outline AND shadow depend on NO FontRelief (see dialog)
+                const bool bHasFontRelief(FONT_RELIEF_NONE != getFontRelief());
+                const bool bHasShadow(!bHasFontRelief && getShadow());
+                const bool bHasOutline(!bHasFontRelief && getFontAttributes().getOutline());
+
+                if(bHasShadow || bHasFontRelief || bHasOutline)
+                {
+                    Primitive2DReference aShadow;
+
+                    if(bHasShadow)
+                    {
+                        // create shadow with current content (in aRetval). Text shadow
+                        // is constant, relative to font size, rotated with the text and has a
+                        // constant color.
+                        // shadow parameter values
+                        static double fFactor(1.0 / 24.0);
+                        const double fTextShadowOffset(aDecTrans.getScale().getY() * fFactor);
+                        static basegfx::BColor aShadowColor(0.3, 0.3, 0.3);
+
+                        // preapare shadow transform matrix
+                        basegfx::B2DHomMatrix aShadowTransform;
+                        aShadowTransform.translate(fTextShadowOffset, fTextShadowOffset);
+
+                        // create shadow primitive
+                        aShadow = Primitive2DReference(new ShadowPrimitive2D(
+                            aShadowTransform,
+                            aShadowColor,
+                            aRetval));
+                    }
+
+                    if(bHasFontRelief)
+                    {
+                        // create emboss using an own helper primitive since this will
+                        // be view-dependent
+                        const basegfx::BColor aBBlack(0.0, 0.0, 0.0);
+                        const bool bDefaultTextColor(aBBlack == getFontColor());
+                        TextEffectStyle2D aTextEffectStyle2D(TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED);
+
+                        if(bDefaultTextColor)
+                        {
+                            if(FONT_RELIEF_ENGRAVED == getFontRelief())
+                            {
+                                aTextEffectStyle2D = TEXTEFFECTSTYLE2D_RELIEF_ENGRAVED_DEFAULT;
+                            }
+                            else
+                            {
+                                aTextEffectStyle2D = TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED_DEFAULT;
+                            }
+                        }
+                        else
+                        {
+                            if(FONT_RELIEF_ENGRAVED == getFontRelief())
+                            {
+                                aTextEffectStyle2D = TEXTEFFECTSTYLE2D_RELIEF_ENGRAVED;
+                            }
+                            else
+                            {
+                                aTextEffectStyle2D = TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED;
+                            }
+                        }
+
+                        Primitive2DReference aNewTextEffect(new TextEffectPrimitive2D(
+                            aRetval,
+                            aDecTrans.getTranslate(),
+                            aDecTrans.getRotate(),
+                            aTextEffectStyle2D));
+                        aRetval = Primitive2DSequence(&aNewTextEffect, 1);
+                    }
+                    else if(bHasOutline)
+                    {
+                        // create outline using an own helper primitive since this will
+                        // be view-dependent
+                        Primitive2DReference aNewTextEffect(new TextEffectPrimitive2D(
+                            aRetval,
+                            aDecTrans.getTranslate(),
+                            aDecTrans.getRotate(),
+                            TEXTEFFECTSTYLE2D_OUTLINE));
+                        aRetval = Primitive2DSequence(&aNewTextEffect, 1);
+                    }
+
+                    if(aShadow.is())
+                    {
+                        // put shadow in front if there is one to paint timely before
+                        // but placed behind content
+                        const Primitive2DSequence aContent(aRetval);
+                        aRetval = Primitive2DSequence(&aShadow, 1);
+                        appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, aContent);
+                    }
+                }
             }
 
             return aRetval;
@@ -472,7 +673,7 @@ namespace drawinglayer
 
             // TextSimplePortionPrimitive2D parameters
             const basegfx::B2DHomMatrix& rNewTransform,
-            const String& rText,
+            const rtl::OUString& rText,
             const ::std::vector< double >& rDXArray,
             const FontAttributes& rFontAttributes,
             const ::com::sun::star::lang::Locale& rLocale,

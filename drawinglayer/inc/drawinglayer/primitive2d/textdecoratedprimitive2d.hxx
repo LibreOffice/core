@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdecoratedprimitive2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-20 09:51:21 $
+ *  last change: $Author: aw $ $Date: 2007-09-26 11:36:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,12 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-#endif
+//////////////////////////////////////////////////////////////////////////////
+// predeclarations
+
+namespace basegfx {
+    class DecomposedB2DHomMatrixContainer;
+} // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -114,11 +117,16 @@ namespace drawinglayer
             unsigned                                    mbEmphasisMarkBelow : 1;
             unsigned                                    mbShadow : 1;
 
-            // break iterator support
-            // made static so it only needs to be fetched once, even with many single
-            // constructed VclMetafileProcessor2D. It's still incarnated on demand,
-            // but exists for OOo runtime now by purpose.
-            static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >   mxBreakIterator;
+            // helper methods
+            void impCreateGeometryContent(
+                std::vector< Primitive2DReference >& rTarget,
+                basegfx::DecomposedB2DHomMatrixContainer& rDecTrans,
+                const rtl::OUString& rText,
+                const ::std::vector< double >& rDXArray,
+                const FontAttributes& rFontAttributes) const;
+            void impSplitSingleWords(
+                std::vector< Primitive2DReference >& rTarget,
+                basegfx::DecomposedB2DHomMatrixContainer& rDecTrans) const;
 
         protected:
             // local decomposition.
@@ -129,7 +137,7 @@ namespace drawinglayer
 
                 // TextSimplePortionPrimitive2D parameters
                 const basegfx::B2DHomMatrix& rNewTransform,
-                const String& rText,
+                const rtl::OUString& rText,
                 const ::std::vector< double >& rDXArray,
                 const FontAttributes& rFontAttributes,
                 const ::com::sun::star::lang::Locale& rLocale,

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: aw $ $Date: 2007-09-20 09:51:38 $
+#   last change: $Author: aw $ $Date: 2007-09-26 11:36:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@ SLOFILES= \
         $(SLO)$/polygonprimitive2d.obj			\
         $(SLO)$/sceneprimitive2d.obj			\
         $(SLO)$/shadowprimitive2d.obj			\
+        $(SLO)$/texteffectprimitive2d.obj		\
         $(SLO)$/textlayoutdevice.obj			\
         $(SLO)$/textprimitive2d.obj				\
         $(SLO)$/textdecoratedprimitive2d.obj	\

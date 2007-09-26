@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-02 11:43:43 $
+ *  last change: $Author: aw $ $Date: 2007-09-26 11:36:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,10 +68,12 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        struct FontAttributes
+        class FontAttributes
         {
-            String                                      maFamilyName;
-            String                                      maStyleName;
+        private:
+            // core data
+            rtl::OUString                               maFamilyName;
+            rtl::OUString                               maStyleName;
             sal_uInt16                                  mnWeight;
 
             // bitfield
@@ -81,17 +83,36 @@ namespace drawinglayer
             unsigned                                    mbOutline : 1;
             // TODO: pair kerning and CJK kerning
 
-            // compare operator
-            bool operator==(const FontAttributes& rCompare) const
+        public:
+            FontAttributes(
+                const rtl::OUString& rFamilyName,
+                const rtl::OUString& rStyleName,
+                sal_uInt16 nWeight,
+                bool bSymbol = false,
+                bool bVertical = false,
+                bool bItalic = false,
+                bool bOutline = false)
+            :   maFamilyName(rFamilyName),
+                maStyleName(rStyleName),
+                mnWeight(nWeight),
+                mbSymbol(bSymbol),
+                mbVertical(bVertical),
+                mbItalic(bItalic),
+                mbOutline(bOutline)
             {
-                return (maFamilyName == rCompare.maFamilyName
-                    && maStyleName == rCompare.maStyleName
-                    && mnWeight == rCompare.mnWeight
-                    && mbSymbol == rCompare.mbSymbol
-                    && mbVertical == rCompare.mbVertical
-                    && mbItalic == rCompare.mbItalic
-                    && mbOutline == rCompare.mbOutline);
             }
+
+            // compare operator
+            bool operator==(const FontAttributes& rCompare) const;
+
+            // data access
+            const rtl::OUString& getFamilyName() const { return maFamilyName; }
+            const rtl::OUString& getStyleName() const { return maStyleName; }
+            sal_uInt16 getWeight() const { return mnWeight; }
+            bool getSymbol() const { return mbSymbol; }
+            bool getVertical() const { return mbVertical; }
+            bool getItalic() const { return mbItalic; }
+            bool getOutline() const { return mbOutline; }
         };
 
         // helper methods for vcl font
@@ -112,7 +133,7 @@ namespace drawinglayer
         {
         private:
             basegfx::B2DHomMatrix                   maTextTransform;    // text range transformation from unit range ([0.0 .. 1.0]) to text range
-            String                                  maText;             // the text
+            rtl::OUString                           maText;             // the text
             ::std::vector< double >                 maDXArray;          // the DX array scale-independent in unit coordinates
             FontAttributes                          maFontAttributes;   // the font to use
             ::com::sun::star::lang::Locale          maLocale;           // the Locale for the text
@@ -125,7 +146,7 @@ namespace drawinglayer
         public:
             TextSimplePortionPrimitive2D(
                 const basegfx::B2DHomMatrix& rNewTransform,
-                const String& rText,
+                const rtl::OUString& rText,
                 const ::std::vector< double >& rDXArray,
                 const FontAttributes& rFontAttributes,
                 const ::com::sun::star::lang::Locale& rLocale,
@@ -133,7 +154,7 @@ namespace drawinglayer
 
             // get data
             const basegfx::B2DHomMatrix& getTextTransform() const { return maTextTransform; }
-            const String& getText() const { return maText; }
+            const rtl::OUString& getText() const { return maText; }
             const ::std::vector< double >& getDXArray() const { return maDXArray; }
             const FontAttributes& getFontAttributes() const { return maFontAttributes; }
             const ::com::sun::star::lang::Locale& getLocale() const { return  maLocale; }

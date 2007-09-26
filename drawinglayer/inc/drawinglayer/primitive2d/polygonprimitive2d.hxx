@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-20 09:51:21 $
+ *  last change: $Author: aw $ $Date: 2007-09-26 11:36:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-// PolygonStrokePrimitive2D class
+// PolygonWavePrimitive2D class
 
 namespace drawinglayer
 {
@@ -173,7 +173,7 @@ namespace drawinglayer
         {
         private:
             basegfx::B2DPolygon                     maPolygon;
-            basegfx::BColor                         maBColor;
+            attribute::StrokeAttribute              maStrokeAttribute;
             double                                  mfWaveWidth;
             double                                  mfWaveHeight;
 
@@ -184,13 +184,13 @@ namespace drawinglayer
         public:
             PolygonWavePrimitive2D(
                 const basegfx::B2DPolygon& rPolygon,
-                const basegfx::BColor& rBColor,
+                const attribute::StrokeAttribute& rStrokeAttribute,
                 double fWaveWidth,
                 double fWaveHeight);
 
             // get data
             basegfx::B2DPolygon getB2DPolygon() const { return maPolygon; }
-            const basegfx::BColor& getBColor() const { return maBColor; }
+            const attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
             double getWaveWidth() const { return mfWaveWidth; }
             double getWaveHeight() const { return mfWaveHeight; }
 

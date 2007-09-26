@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-20 09:51:38 $
+ *  last change: $Author: aw $ $Date: 2007-09-26 11:36:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,7 +446,8 @@ namespace drawinglayer
             // MapMode was not changed, no restore necessary
         }
 
-        /*
+        /***********************************************************************************************
+
             Support of MetaCommentActions in the VclMetafileProcessor2D
             Found MetaCommentActions and how they are supported:
 
@@ -568,16 +569,7 @@ namespace drawinglayer
             bitmap sizes.
             Nothing to do here for the primitive renderer.
 
-
-
-
-            To be done:
-
-
-
-
-            Evtl. support for vcl::PDFExtOutDevData ?!?!
-
+            Support for vcl::PDFExtOutDevData:
             PL knows that SJ did that stuff, it's used to hold a pointer to PDFExtOutDevData at
             the OutDev. When set, some extra data is written there. Trying simple PDF export and
             watching if i get those infos.
@@ -590,19 +582,20 @@ namespace drawinglayer
             i need to discuss which ones.
             In the future, all those infos would be taken from the primitive sequence anyways,
             thus these extensions would potentially be temporary, too.
+            Discussed with SJ, added the necessary support and tested it. Details follow.
 
             - In ImpEditEngine::Paint, paragraph infos and URL stuff is added.
-              May be added in primitive MetaFile renderer.
+              Added in primitive MetaFile renderer.
               Checking URL: Indeed, current version exports it, but it is missing in primitive
               CWS version. Adding support.
-              Okay, URLs work. Done.
+              Okay, URLs work. Checked, Done.
 
             - UnoControlPDFExportContact is only created when PDFExtOutDevData is used at the
               target and uno control data is created in UnoControlPDFExportContact::doPaintObject.
               This may be added in primitive MetaFile renderer.
               Adding support...
               OOps, the necessary helper stuff is in svx/source/form/formpdxexport.cxx in namespace
-              svxform. Have to talk to FS if thhis has to be like that. Especially since
+              svxform. Have to talk to FS if this has to be like that. Especially since
               ::vcl::PDFWriter::AnyWidget is filled out, which is already part of vcl.
               Wrote an eMail to FS, he is on vacation currently. I see no reason why not to move
               that stuff to somewhere else, maybe tools or svtools ?!? We will see...
@@ -612,22 +605,24 @@ namespace drawinglayer
               the lowest move,ment plave is toolkit.
               Checked form control export, it works well. Done.
 
-
-
-
             - In goodies, in GraphicObject::Draw, when the used Graphic is linked, infos are
               generated. I will need to check what happens here with primitives.
               To support, use of GraphicPrimitive2D (PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D) may be needed.
               Added support, but feature is broken in main version, so i cannot test at all.
-              Writing a bug to CL (or SJ) and seeing what happens (#i80380#) ...
-              TODO!
-
-            - Maybe there are more places to take care of!
-              TODO!
+              Writing a bug to CL (or SJ) and seeing what happens (#i80380#).
+              SJ took a look and we got it working. Tested VCL MetaFile Renderer based export,
+              as intended, the original file is exported. Works, Done.
 
 
 
-        */
+
+            To be done:
+
+            - Maybe there are more places to take care of for vcl::PDFExtOutDevData!
+
+
+
+        ****************************************************************************************************/
 
         void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
@@ -799,8 +794,9 @@ namespace drawinglayer
                         }
                         case drawinglayer::primitive2d::FIELD_TYPE_URL :
                         {
-                            const String& rURL = rFieldPrimitive.getString();
-                            mrMetaFile.AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const BYTE* >(rURL.GetBuffer()), 2 * rURL.Len()));
+                            const rtl::OUString& rURL = rFieldPrimitive.getString();
+                            const String aOldString(rURL);
+                            mrMetaFile.AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const BYTE* >(aOldString.GetBuffer()), 2 * aOldString.Len()));
                             break;
                         }
                     }
@@ -896,10 +892,10 @@ namespace drawinglayer
 
                         if(mxBreakIterator.is())
                         {
-                            const String& rTxt = rTextCandidate.getText();
-                            const sal_uInt16 nLen(rTxt.Len());
+                            const rtl::OUString& rTxt = rTextCandidate.getText();
+                            const sal_Int32 nTextLength(rTxt.getLength());
 
-                            if(nLen)
+                            if(nTextLength)
                             {
                                 const ::com::sun::star::lang::Locale& rLocale = rTextCandidate.getLocale();
 
@@ -911,7 +907,7 @@ namespace drawinglayer
                                 static const ByteString aCommentStringB("XTEXT_EOW");
                                 static const ByteString aCommentStringC("XTEXT_EOS");
 
-                                for(sal_Int32 i(0); i < nLen; i++)
+                                for(sal_Int32 i(0); i < nTextLength; i++)
                                 {
                                     // create the entries for the respective break positions
                                     if(i == nNextCellBreak)

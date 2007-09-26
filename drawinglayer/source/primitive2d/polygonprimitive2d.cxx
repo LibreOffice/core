@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive2d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-20 09:51:38 $
+ *  last change: $Author: aw $ $Date: 2007-09-26 11:36:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,13 +332,13 @@ namespace drawinglayer
                 {
                     // create waveline curve
                     const basegfx::B2DPolygon aWaveline(basegfx::tools::createWaveline(getB2DPolygon(), getWaveWidth(), getWaveHeight()));
-                    const Primitive2DReference xRef(new PolygonHairlinePrimitive2D(aWaveline, getBColor()));
+                    const Primitive2DReference xRef(new PolygonStrokePrimitive2D(aWaveline, getStrokeAttribute()));
                     aRetval = Primitive2DSequence(&xRef, 1);
                 }
                 else
                 {
-                    // flat waveline, decompose to PolygonHairlinePrimitive2D
-                    const Primitive2DReference xRef(new PolygonHairlinePrimitive2D(getB2DPolygon(), getBColor()));
+                    // flat waveline, decompose to simple line primitive
+                    const Primitive2DReference xRef(new PolygonStrokePrimitive2D(getB2DPolygon(), getStrokeAttribute()));
                     aRetval = Primitive2DSequence(&xRef, 1);
                 }
             }
@@ -348,12 +348,12 @@ namespace drawinglayer
 
         PolygonWavePrimitive2D::PolygonWavePrimitive2D(
             const basegfx::B2DPolygon& rPolygon,
-            const basegfx::BColor& rBColor,
+            const attribute::StrokeAttribute& rStrokeAttribute,
             double fWaveWidth,
             double fWaveHeight)
         :   BasePrimitive2D(),
             maPolygon(rPolygon),
-            maBColor(rBColor),
+            maStrokeAttribute(rStrokeAttribute),
             mfWaveWidth(fWaveWidth),
             mfWaveHeight(fWaveHeight)
         {
@@ -375,7 +375,7 @@ namespace drawinglayer
                 const PolygonWavePrimitive2D& rCompare = (PolygonWavePrimitive2D&)rPrimitive;
 
                 return (getB2DPolygon() == rCompare.getB2DPolygon()
-                    && getBColor() == rCompare.getBColor()
+                    && getStrokeAttribute() == rCompare.getStrokeAttribute()
                     && getWaveWidth() == rCompare.getWaveWidth()
                     && getWaveHeight() == rCompare.getWaveHeight());
             }
@@ -392,6 +392,12 @@ namespace drawinglayer
             if(!basegfx::fTools::equalZero(getWaveHeight()))
             {
                 aRetval.grow(getWaveHeight());
+            }
+
+            // if line width, grow by it
+            if(!basegfx::fTools::equalZero(getStrokeAttribute().getWidth()))
+            {
+                aRetval.grow(getStrokeAttribute().getWidth());
             }
 
             return aRetval;
