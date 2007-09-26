@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewsWindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:46:04 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:25:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -866,7 +866,7 @@ void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles,  bool _bBo
                 const SdrMark* pM = pView->GetSdrMarkByIndex(i);
                 SdrObject* pObj = pM->GetMarkedSdrObj();
                 Rectangle aObjRect(_bBoundRects ? pObj->GetCurrentBoundRect() : pObj->GetSnapRect());
-                _rSortRectangles.insert(TRectangleMap::value_type(aObjRect,TRectangleMap::data_type(pObj,pView)));
+                _rSortRectangles.insert(TRectangleMap::value_type(aObjRect,TRectangleMap::mapped_type(pObj,pView)));
             }
         }
     }
