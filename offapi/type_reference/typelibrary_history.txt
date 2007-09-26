@@ -116,3 +116,7 @@
 06/13/07 (MBA): TaskID=i26672
   removed deprecated and unsupported properties; added long supported but
   never documented properties.
+
+09/26/07 (JSC): TaskID=i80473
+  update reference type library with the rleased version of OO.org 2.3. The new
+  reference type library is taken from the release source tree OOG680 m5.
