@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-31 09:15:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:47:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,7 +307,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow& _r
     m_aTBPreview.SetHelpId(HID_APP_VIEW_PREVIEW_CB);
     m_aTBPreview.SetDropdownClickHdl( LINK( this, OAppDetailPageHelper, OnDropdownClickHdl ) );
     m_aTBPreview.EnableMenuStrings();
-    m_aTBPreview.Enable(!m_rBorderWin.getView()->getCommandController()->isDataSourceReadOnly());
+    m_aTBPreview.Enable(TRUE);
 
     m_aBorder.SetUniqueId(UID_APP_VIEW_PREVIEW_1);
 
@@ -442,6 +442,24 @@ void OAppDetailPageHelper::getSelectionElementNames( ::std::vector< ::rtl::OUStr
                 _rNames.push_back(sName);
             }
             pEntry = rTree.NextSelected(pEntry);
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void OAppDetailPageHelper::selectElements(const Sequence< ::rtl::OUString>& _aNames)
+{
+    int nPos = getVisibleControlIndex();
+    if ( nPos < CONTROL_COUNT )
+    {
+        DBTreeListBox& rTree = *m_pLists[nPos];
+        rTree.SelectAll(FALSE);
+        const ::rtl::OUString* pIter = _aNames.getConstArray();
+        const ::rtl::OUString* pEnd  = pIter + _aNames.getLength();
+        for(;pIter != pEnd;++pIter)
+        {
+            SvLBoxEntry* pEntry = rTree.GetEntryPosByName(*pIter);
+            if ( pEntry )
+                rTree.Select(pEntry);
         }
     }
 }
