@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:12:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:49:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
     // try to create the relation
     try
     {
-        if (m_pConnData->Update())
+        if (*m_pConnData != *m_pOrigConnData || m_pConnData->Update())
         {
             m_pOrigConnData->CopyFrom( *m_pConnData );
             EndDialog( RET_OK );
