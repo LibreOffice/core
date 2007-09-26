@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:33:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:28:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,6 +428,7 @@ Reference<XResultSet> OPreparedStatement::initResultSet()
                             ,Any());
 
     m_pResultSet->OpenImpl();
+    m_pResultSet->setMetaData(getMetaData());
 
     return xRs;
 }
@@ -584,7 +585,7 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
             sal_Int32 i = m_aParameterRow->size();
             sal_Int32 nParamColumns = m_xParamColumns->size()+1;
             m_aParameterRow->resize(nParamColumns);
-            for ( ;i <= nParamColumns; ++i )
+            for ( ;i < nParamColumns; ++i )
             {
                 if ( !(*m_aParameterRow)[i].isValid() )
                     (*m_aParameterRow)[i] = new ORowSetValueDecorator;
