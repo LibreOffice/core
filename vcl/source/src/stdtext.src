@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:17:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 15:07:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,3 +113,9 @@ String SV_STDTEXT_ABOUT
 {
     Text [ en-US ] = "About %PRODUCTNAME";
 };
+
+WarningBox  SV_EDIT_WARNING_BOX
+{
+    Message [en-US] = "The inserted text exceeded the maximum length of this text field. The text was truncated.";
+};
+
