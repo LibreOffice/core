@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContainerMediator.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:28:07 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,8 +87,8 @@ namespace dbaccess
         typedef ::rtl::Reference< OPropertyForward >                TPropertyForward;
         typedef ::std::map< ::rtl::OUString, TPropertyForward >     PropertyForwardList;
         PropertyForwardList                                                             m_aForwardList;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xSettings;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >     m_xContainer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xSettings;    // can not be weak
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >     m_xContainer;   // can not be weak
         ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection >     m_aConnection;
         ContainerType                                                                   m_eType;
 
