@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmetadata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:13:43 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:28:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,7 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    bool SAL_CALL DatabaseMetaData::supportsSubqueriesInFrom() const
+    bool DatabaseMetaData::supportsSubqueriesInFrom() const
     {
         lcl_checkConnected( *m_pImpl );
 
@@ -240,19 +240,19 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    const ::rtl::OUString&  SAL_CALL DatabaseMetaData::getIdentifierQuoteString() const
+    const ::rtl::OUString&  DatabaseMetaData::getIdentifierQuoteString() const
     {
         return lcl_getConnectionStringSetting( *m_pImpl, m_pImpl->sCachedIdentifierQuoteString, &XDatabaseMetaData::getIdentifierQuoteString );
     }
 
     //--------------------------------------------------------------------
-    const ::rtl::OUString&  SAL_CALL DatabaseMetaData::getCatalogSeparator() const
+    const ::rtl::OUString&  DatabaseMetaData::getCatalogSeparator() const
     {
         return lcl_getConnectionStringSetting( *m_pImpl, m_pImpl->sCachedCatalogSeparator, &XDatabaseMetaData::getCatalogSeparator );
     }
 
     //--------------------------------------------------------------------
-    bool SAL_CALL DatabaseMetaData::restrictIdentifiersToSQL92() const
+    bool DatabaseMetaData::restrictIdentifiersToSQL92() const
     {
         lcl_checkConnected( *m_pImpl );
 
@@ -264,13 +264,35 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    bool SAL_CALL DatabaseMetaData::generateASBeforeCorrelationName() const
+    bool DatabaseMetaData::generateASBeforeCorrelationName() const
     {
         bool doGenerate( true );
         Any setting;
         if ( lcl_getConnectionSettings( "GenerateASBeforeCorrelationName", *m_pImpl, setting ) )
             OSL_VERIFY( setting >>= doGenerate );
         return doGenerate;
+    }
+
+    //--------------------------------------------------------------------
+    bool DatabaseMetaData::supportsRelations() const
+    {
+        lcl_checkConnected( *m_pImpl );
+        bool bSupport = false;
+        try
+        {
+            bSupport = m_pImpl->xConnectionMetaData->supportsIntegrityEnhancementFacility();
+            if ( !bSupport )
+            {
+                const ::rtl::OUString url = m_pImpl->xConnectionMetaData->getURL();
+                char pMySQL[] = "sdbc:mysql:";
+                bSupport = url.matchAsciiL(pMySQL,(sizeof(pMySQL)/sizeof(pMySQL[0]))-1);
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return bSupport;
     }
 
 //........................................................................
