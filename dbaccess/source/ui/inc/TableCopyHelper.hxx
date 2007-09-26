@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableCopyHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:13:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:50:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,11 +95,18 @@ namespace dbaui
     class OTableCopyHelper
     {
         OGenericUnoController* m_pController;
+    private:
+        ::rtl::OUString     m_sDefaultTableName;
+        sal_Bool            m_bSelectCopyTable;
     public:
         // is needed to describe the drop target
         struct DropDescriptor
         {
             ::svx::ODataAccessDescriptor    aDroppedData;
+            //dyf add 20070601
+            //for transfor the tablename
+            ::rtl::OUString                 sDefaultTableName;
+            //dyf add end
             String                          aUrl;
             SotStorageStreamRef             aHtmlRtfStorage;
             ElementType                     nType;
@@ -212,6 +219,14 @@ namespace dbaui
 
         /// returns <TRUE/> if the clipboard supports a table format, otherwise <FALSE/>.
         sal_Bool isTableFormat(const TransferableDataHelper& _rClipboard) const;
+
+        //dyf add 20070601
+        inline void           SetDefaultTableName(const ::rtl::OUString &_sDefaultTableName){ m_sDefaultTableName = _sDefaultTableName ; }
+        inline ::rtl::OUString  GetDefaultTableName() const { return m_sDefaultTableName ;}
+
+        inline void         SetIsSelectCopytable(sal_Bool isSelect){ m_bSelectCopyTable = isSelect;}
+        sal_Bool            GetIsSelectCopytable(){ return m_bSelectCopyTable; }
+        //dyf add end
 
     };
 //........................................................................
