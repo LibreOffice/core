@@ -3,3 +3,4 @@
 -o complex.dbaccess.PropertyBag
 -o complex.dbaccess.Query
 -o complex.dbaccess.QueryInQuery
+-o complex.dbaccess.Storable
