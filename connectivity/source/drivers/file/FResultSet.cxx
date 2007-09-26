@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:33:50 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:29:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -629,7 +629,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     // we know that we append new rows at the end
     // so we have to know where the end is
     m_aSkipDeletedSet.skipDeleted(IResultSetHelper::LAST,1,sal_False);
-    m_bRowInserted = m_pTable->InsertRow(m_aInsertRow.getBody(), TRUE,Reference<XIndexAccess>(m_xColNames,UNO_QUERY));
+    m_bRowInserted = m_pTable->InsertRow(m_aInsertRow.getBody(), TRUE,m_xColsIdx);
     if(m_bRowInserted && m_pFileSet.isValid())
     {
         sal_Int32 nPos = (*m_aInsertRow)[0]->getValue();
@@ -648,7 +648,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
 
     if(!m_pTable || m_pTable->isReadOnly())
         ::dbtools::throwGenericSQLException( ::rtl::OUString::createFromAscii( "Table is readonly."), *this );
-    m_bRowUpdated = m_pTable->UpdateRow(m_aInsertRow.getBody(), m_aRow,Reference<XIndexAccess>(m_xColNames,UNO_QUERY));
+    m_bRowUpdated = m_pTable->UpdateRow(m_aInsertRow.getBody(), m_aRow,m_xColsIdx);
     *(*m_aInsertRow)[0] = (sal_Int32)(*m_aRow)[0]->getValue();
 
     clearInsertRow();
@@ -738,14 +738,8 @@ void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw
 
 void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    checkIndex(columnIndex );
-    columnIndex = mapColumn(columnIndex);
-
-    (*m_aInsertRow)[columnIndex]->setBound(sal_True);
-    (*m_aInsertRow)[columnIndex]->setNull();
+    ORowSetValue aEmpty;
+    updateValue(columnIndex,aEmpty);
 }
 // -------------------------------------------------------------------------
 
@@ -875,6 +869,8 @@ BOOL OResultSet::ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
     IResultSetHelper::Movement eCursorPosition = eFirstCursorPosition;
     INT32  nOffset = nFirstOffset;
 
+    const OSQLColumns & rTableCols = m_pTable->getTableColumns().getBody();
+    BOOL bHasRestriction = m_pSQLAnalyzer->hasRestriction();
 again:
 
     // protect from reading over the end when someboby is inserting while we are reading
@@ -891,15 +887,15 @@ again:
 
     if (!bEvaluate) // Laeuft keine Auswertung, dann nur Ergebniszeile fuellen
     {
-        m_pTable->fetchRow(m_aRow,m_pTable->getTableColumns().getBody(), sal_True,bRetrieveData);
+        m_pTable->fetchRow(m_aRow,rTableCols, sal_True,bRetrieveData);
     }
     else
     {
-        m_pTable->fetchRow(m_aEvaluateRow, m_pTable->getTableColumns().getBody(), sal_True,bRetrieveData || m_pSQLAnalyzer->hasRestriction());
+        m_pTable->fetchRow(m_aEvaluateRow, rTableCols, sal_True,bRetrieveData || bHasRestriction);
 
-        if ((!m_bShowDeleted && m_aEvaluateRow->isDeleted()) ||
-            (m_pSQLAnalyzer->hasRestriction() && //!bShowDeleted && m_aEvaluateRow->isDeleted() ||// keine Anzeige von geloeschten Saetzen
-                !m_pSQLAnalyzer->evaluateRestriction()))         // Auswerten der Bedingungen
+        if (    (!m_bShowDeleted && m_aEvaluateRow->isDeleted())
+            ||  (bHasRestriction && //!bShowDeleted && m_aEvaluateRow->isDeleted() ||// keine Anzeige von geloeschten Saetzen
+                   !m_pSQLAnalyzer->evaluateRestriction()))      // Auswerten der Bedingungen
         {                                                // naechsten Satz auswerten
             // aktuelle Zeile loeschen im Keyset
             if (m_pEvaluationKeySet)
@@ -946,10 +942,6 @@ again:
         }
     }
 
-    if ( (bRetrieveData || m_pSQLAnalyzer->hasRestriction()) && m_pSQLAnalyzer->hasFunctions() )
-    {
-        m_pSQLAnalyzer->setSelectionEvaluationResult(m_aSelectRow,m_aColMapping);
-    }
     // Evaluate darf nur gesetzt sein,
     // wenn der Keyset weiter aufgebaut werden soll
     if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT && !isCount() &&
@@ -979,7 +971,7 @@ again:
         if (bOK)
         {
             // Nur die zu aendernden Werte uebergeben:
-            if(!m_pTable->UpdateRow(m_aAssignValues.getBody(),m_aEvaluateRow,Reference<XIndexAccess>(m_xColNames,UNO_QUERY)))
+            if(!m_pTable->UpdateRow(m_aAssignValues.getBody(),m_aEvaluateRow,m_xColsIdx))
                 return sal_False;
         }
     }
@@ -1043,6 +1035,8 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
                     break;
                 case IResultSetHelper::ABSOLUTE:
                 case IResultSetHelper::BOOKMARK:
+                    if ( m_nRowPos == (nOffset -1) )
+                        return sal_True;
                     m_nRowPos = nOffset -1;
                     break;
             }
@@ -1065,6 +1059,10 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
 
                     // now set the bookmark for outside
                     *(*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
+                    if ( (bRetrieveData || m_pSQLAnalyzer->hasRestriction()) && m_pSQLAnalyzer->hasFunctions() )
+                    {
+                        m_pSQLAnalyzer->setSelectionEvaluationResult(m_aSelectRow,m_aColMapping);
+                    }
                 }
                 else // Index muss weiter aufgebaut werden
                 {
@@ -1106,6 +1104,11 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
 
                         // now set the bookmark for outside
                         *(*m_aRow->begin()) = sal_Int32(m_nRowPos + 1);
+
+                        if ( (bRetrieveData || m_pSQLAnalyzer->hasRestriction()) && m_pSQLAnalyzer->hasFunctions() )
+                        {
+                            m_pSQLAnalyzer->setSelectionEvaluationResult(m_aSelectRow,m_aColMapping);
+                        }
                     }
                     else if (!m_pFileSet->isFrozen())                   // keinen gueltigen Satz gefunden
                     {
@@ -1224,7 +1227,7 @@ BOOL OResultSet::OpenImpl()
         m_xColumns = m_aSQLIterator.getSelectColumns();
 
         m_xColNames = xTable->getColumns();
-        m_xColsIdx = Reference<XIndexAccess>(m_xColNames,UNO_QUERY);
+        m_xColsIdx.set(m_xColNames,UNO_QUERY);
         doTableSpecials(xTable);
         Reference<XComponent> xComp(xTable,UNO_QUERY);
         if(xComp.is())
@@ -1366,16 +1369,16 @@ BOOL OResultSet::OpenImpl()
                         Reference<XIndexAccess> xIndexes;
                         if(xIndexSup.is())
                         {
-                            xIndexes = Reference<XIndexAccess>(xIndexSup->getIndexes(),UNO_QUERY);
+                            xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
                             Reference<XPropertySet> xColProp;
                             if(m_aOrderbyColumnNumber[0] < xIndexes->getCount())
                             {
-                                ::cppu::extractInterface(xColProp,xIndexes->getByIndex(m_aOrderbyColumnNumber[0]));
+                                xColProp.set(xIndexes->getByIndex(m_aOrderbyColumnNumber[0]),UNO_QUERY);
                                 // iterate through the indexes to find the matching column
-                                for(sal_Int32 i=0;i<xIndexes->getCount();++i)
+                                const sal_Int32 nCount = xIndexes->getCount();
+                                for(sal_Int32 i=0; i < nCount;++i)
                                 {
-                                    Reference<XColumnsSupplier> xIndex;
-                                    ::cppu::extractInterface(xIndex,xIndexes->getByIndex(i));
+                                    Reference<XColumnsSupplier> xIndex(xIndexes->getByIndex(i),UNO_QUERY);
                                     Reference<XNameAccess> xIndexCols = xIndex->getColumns();
                                     if(xIndexCols->hasByName(comphelper::getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))))
                                     {
@@ -1764,15 +1767,17 @@ void OResultSet::clearInsertRow()
 {
     m_aRow->setDeleted(sal_False); // set to false here because this is the new row
     OValueRefVector::iterator aIter = m_aInsertRow->begin();
-    for(sal_Int32 nPos = 0;aIter != m_aInsertRow->end();++aIter,++nPos)
+    const OValueRefVector::iterator aEnd = m_aInsertRow->end();
+    for(sal_Int32 nPos = 0;aIter != aEnd;++aIter,++nPos)
     {
-        if ( (*aIter)->isBound() )
+        ORowSetValueDecoratorRef& rValue = (*aIter);
+        if ( rValue->isBound() )
         {
             (*m_aRow)[nPos]->setValue( (*aIter)->getValue() );
         }
-        (*aIter)->setBound(nPos == 0);
-        (*aIter)->setModified(sal_False);
-        (*aIter)->setNull();
+        rValue->setBound(nPos == 0);
+        rValue->setModified(sal_False);
+        rValue->setNull();
     }
 }
 // -----------------------------------------------------------------------------
