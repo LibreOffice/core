@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComponentDefinition.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:31:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:39:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
 #ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #include "definitioncolumn.hxx"
 #endif
-
+#include <cppuhelper/implbase1.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
@@ -85,6 +85,28 @@ extern "C" void SAL_CALL createRegistryInfo_OComponentDefinition()
 namespace dbaccess
 {
 //........................................................................
+/// helper class for column property change events which holds the OComponentDefinition weak
+typedef ::cppu::WeakImplHelper1 < XPropertyChangeListener > TColumnPropertyListener_BASE;
+class OColumnPropertyListener : public TColumnPropertyListener_BASE
+{
+    OComponentDefinition* m_pComponent;
+
+    OColumnPropertyListener(const OColumnPropertyListener&);
+    void operator =(const OColumnPropertyListener&);
+protected:
+    virtual ~OColumnPropertyListener(){}
+public:
+    OColumnPropertyListener(OComponentDefinition* _pComponent) : m_pComponent(_pComponent){}
+    // XPropertyChangeListener
+    virtual void SAL_CALL propertyChange( const PropertyChangeEvent& /*_rEvent*/ ) throw (RuntimeException)
+    {
+        m_pComponent->notifyDataSourceModified();
+    }
+    // XEventListener
+    virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) throw (RuntimeException)
+    {
+    }
+};
 DBG_NAME(OComponentDefinition_Impl)
 OComponentDefinition_Impl::OComponentDefinition_Impl()
 {
@@ -103,6 +125,7 @@ DBG_NAME(OComponentDefinition)
 //--------------------------------------------------------------------------
 void OComponentDefinition::registerProperties()
 {
+    m_xColumnPropertyListener = new OColumnPropertyListener(this);
     OComponentDefinition_Impl& rDefinition( getDefinition() );
     ODataSettings::registerPropertiesFor( &rDefinition );
 
@@ -194,6 +217,7 @@ Reference< XInterface > OComponentDefinition::Create(const Reference< XMultiServ
 void SAL_CALL OComponentDefinition::disposing()
 {
     OContentHelper::disposing();
+    m_xColumnPropertyListener.clear();
     if ( m_pColumns.get() )
         m_pColumns->disposing();
 }
@@ -244,11 +268,14 @@ OColumn* OComponentDefinition::createColumn(const ::rtl::OUString& _rName) const
     const OComponentDefinition_Impl& rDefinition( getDefinition() );
     OComponentDefinition_Impl::const_iterator aFind = rDefinition.find( _rName );
     if ( aFind != rDefinition.end() )
+    {
+        aFind->second->addPropertyChangeListener(::rtl::OUString(),m_xColumnPropertyListener);
         return new OTableColumnWrapper( aFind->second, aFind->second, sal_True );
+    }
     return new OTableColumn( _rName );
 }
 // -----------------------------------------------------------------------------
-Reference< ::com::sun::star::beans::XPropertySet > OComponentDefinition::createColumnDescriptor()
+Reference< XPropertySet > OComponentDefinition::createColumnDescriptor()
 {
     return new OTableColumnDescriptor();
 }
