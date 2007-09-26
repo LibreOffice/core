@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:17:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:47:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,6 +265,12 @@ namespace dbaui
                 The list will be filled.
         */
         void getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const;
+
+        /** select all names on the currently selected container. Non existence names where ignored.
+        *
+        * \param _aNames the element names
+        */
+        void selectElements(const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _aNames);
 
         /** return the qualified name.
             @param  _pEntry
