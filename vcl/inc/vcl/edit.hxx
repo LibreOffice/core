@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:34:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 15:05:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,7 @@ private:
 //#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK(      ImplUpdateDataHdl, Timer* );
 
+    SAL_DLLPRIVATE void        ImplTruncateToMaxLen( rtl::OUString&, sal_uInt32 nSelectionLen ) const;
     SAL_DLLPRIVATE void        ImplInitEditData();
     SAL_DLLPRIVATE void        ImplModified();
     SAL_DLLPRIVATE XubString   ImplGetText() const;
@@ -259,6 +260,9 @@ public:
     virtual xub_StrLen  GetMaxVisChars() const;
 
     xub_StrLen          GetCharPos( const Point& rWindowPos ) const;
+
+    // shows a warning box saying "text too long, truncated"
+    static void         ShowTruncationWarning( Window* pParent );
 
     static void                 SetGetSpecialCharsFunction( FncGetSpecialChars fn );
     static FncGetSpecialChars   GetGetSpecialCharsFunction();
