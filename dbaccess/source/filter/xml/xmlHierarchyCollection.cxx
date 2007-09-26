@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlHierarchyCollection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:47:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:44:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,6 @@
 
 namespace dbaxml
 {
-    using namespace ::rtl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
@@ -87,7 +86,7 @@ DBG_NAME(OXMLHierarchyCollection)
 
 OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
+                ,const ::rtl::OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XNameAccess >& _xParentContainer
                 ,const ::rtl::OUString& _sCollectionServiceName
@@ -105,7 +104,7 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        OUString sLocalName;
+        ::rtl::OUString sLocalName;
         rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         rtl::OUString sValue = _xAttrList->getValueByIndex( i );
@@ -150,7 +149,7 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
 // -----------------------------------------------------------------------------
 OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
+                ,const ::rtl::OUString& _sLocalName
                 ,const Reference< XNameAccess >& _xContainer
             ) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
@@ -168,7 +167,7 @@ OXMLHierarchyCollection::~OXMLHierarchyCollection()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLHierarchyCollection::CreateChildContext(
         sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        const ::rtl::OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
