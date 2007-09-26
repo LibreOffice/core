@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:57:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 15:05:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@
             m_pNotifier->removeDel( this );
     }
     void deleted() { m_pNotifier = NULL; }
-    bool isDeleted() { return m_pNotifier == NULL; }
+    bool isDeleted() const { return (m_pNotifier == NULL); }
  };
 
  inline void DeletionNotifier::notifyDelete()
