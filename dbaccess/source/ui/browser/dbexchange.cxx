@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:56:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:48:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,19 +202,20 @@ namespace dbaui
     sal_Bool ODataClipboard::GetData( const DataFlavor& rFlavor )
     {
         ULONG nFormat = SotExchange::GetFormat(rFlavor);
+        sal_uInt32 nHtml = SOT_FORMATSTR_ID_HTML_SIMPLE;
         switch (nFormat)
         {
             case SOT_FORMAT_RTF:
-                m_pRtf->initialize(getDescriptor());
-                return SetObject(m_pRtf, SOT_FORMAT_RTF, rFlavor);
-
+                if ( m_pRtf )
+                    m_pRtf->initialize(getDescriptor());
+                return m_pRtf && SetObject(m_pRtf, SOT_FORMAT_RTF, rFlavor);
             case SOT_FORMATSTR_ID_HTML:
-                m_pHtml->initialize(getDescriptor());
-                return SetObject(m_pHtml, SOT_FORMATSTR_ID_HTML, rFlavor);
-
+                nHtml = SOT_FORMATSTR_ID_HTML;
+                // run through
             case SOT_FORMATSTR_ID_HTML_SIMPLE:
-                m_pHtml->initialize(getDescriptor());
-                return SetObject(m_pHtml, SOT_FORMATSTR_ID_HTML_SIMPLE, rFlavor);
+                if ( m_pHtml )
+                    m_pHtml->initialize(getDescriptor());
+                return m_pHtml && SetObject(m_pHtml, nHtml, rFlavor);
         }
 
         return ODataAccessObjectTransferable::GetData( rFlavor );
@@ -236,16 +237,21 @@ namespace dbaui
         ODataAccessObjectTransferable::ObjectReleased( );
     }
     // -----------------------------------------------------------------------------
-    void SAL_CALL ODataClipboard::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL ODataClipboard::disposing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
     {
-        if ( getDescriptor().has(daConnection) && getDescriptor()[daConnection] == Source.Source )
-        {
-            getDescriptor().erase(daConnection);
-        }
-        else if ( getDescriptor().has(daCursor) && getDescriptor()[daCursor] == Source.Source )
-            getDescriptor().erase(daCursor);
+        Reference<XConnection> xConnection;
+        Reference<XResultSet> xProp;
+        if ( getDescriptor().has(daConnection) && (getDescriptor()[daConnection] >>= xConnection) )
+            lcl_removeListener(xConnection,this);
+        if ( getDescriptor().has(daCursor) && (getDescriptor()[daCursor] >>= xProp) )
+            lcl_removeListener(xProp,this);
 
-        lcl_removeListener(Source.Source,this);
+        ClearFormats();
+        getDescriptor().clear();
+
+        m_pHtml = NULL;
+        m_pRtf = NULL;
+        m_aEventListeners.clear();
     }
     // -----------------------------------------------------------------------------
     IMPLEMENT_FORWARD_XINTERFACE2( ODataClipboard, ODataAccessObjectTransferable, TDataClipboard_BASE )
