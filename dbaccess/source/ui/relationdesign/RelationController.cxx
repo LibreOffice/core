@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:41:42 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,7 +309,7 @@ void ORelationController::impl_initialize()
         connectionLostMessage();
         throw SQLException();
     }
-    else if(getMetaData().is() && !getMetaData()->supportsIntegrityEnhancementFacility())
+    else if( !getSdbMetaData().supportsRelations() )
     {// check if this database supports relations
 
         setEditable(sal_False);
@@ -495,8 +495,11 @@ void ORelationController::loadTableData(const Any& _aTable)
                         Reference<XPropertySet> xPropSet;
                         xColumns->getByName(*pIter) >>= xPropSet;
                         OSL_ENSURE(xPropSet.is(),"Invalid column found in KeyColumns!");
-                        xPropSet->getPropertyValue(PROPERTY_NAME)           >>= sColumnName;
-                        xPropSet->getPropertyValue(PROPERTY_RELATEDCOLUMN)  >>= sRelatedName;
+                        if ( xPropSet.is() )
+                        {
+                            xPropSet->getPropertyValue(PROPERTY_NAME)           >>= sColumnName;
+                            xPropSet->getPropertyValue(PROPERTY_RELATEDCOLUMN)  >>= sRelatedName;
+                        }
                         pTabConnData->SetConnLine( j, sColumnName, sRelatedName );
                     }
                     //////////////////////////////////////////////////////////////////////
