@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionLineData.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:16:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:49:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,8 @@ namespace dbaui
         ::rtl::OUString m_aSourceFieldName;
         ::rtl::OUString m_aDestFieldName;
 
+        friend bool operator==(const OConnectionLineData& lhs, const OConnectionLineData& rhs);
+        friend bool operator!=(const OConnectionLineData& lhs, const OConnectionLineData& rhs) { return !(lhs == rhs); }
     protected:
         virtual ~OConnectionLineData();
     public:
@@ -109,6 +111,7 @@ namespace dbaui
         OConnectionLineData& operator=( const OConnectionLineData& rConnLineData );
     };
 
+    //-------------------------------------------------------------------------
     //------------------------------------------------------------------
     typedef ::vos::ORef< OConnectionLineData >      OConnectionLineDataRef;
     typedef ::std::vector< OConnectionLineDataRef > OConnectionLineDataVec;

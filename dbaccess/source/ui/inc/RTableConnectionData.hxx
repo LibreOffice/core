@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RTableConnectionData.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:31:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:49:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,9 @@ namespace dbaui
     class ORelationTableConnectionData :    public OTableConnectionData,
                                             public ::utl::OEventListenerAdapter
     {
+        friend bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs);
+        friend bool operator!=(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs) { return !(lhs == rhs); }
+
         ::osl::Mutex    m_aMutex;
         ::rtl::OUString m_sDatabaseName;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xTables;
