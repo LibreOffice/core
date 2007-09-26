@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:40:57 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:45:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ sal_Int32 ReadThroughComponent(
     // get parser
     uno::Reference< XParser > xParser(
         rFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+        ::rtl::OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
         UNO_QUERY );
     DBG_ASSERT( xParser.is(), "Can't create parser" );
     if( !xParser.is() )
@@ -253,7 +253,7 @@ sal_Int32 ReadThroughComponent(
         try
         {
             // open stream (and set parser input)
-            OUString sStreamName = OUString::createFromAscii(pStreamName);
+        ::rtl::OUString sStreamName = ::rtl::OUString::createFromAscii(pStreamName);
             if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
             {
                 // stream name not found! Then try the compatibility name.
@@ -264,7 +264,7 @@ sal_Int32 ReadThroughComponent(
                     return 0;
 
                 // if so, does the stream exist?
-                sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
+                sStreamName = ::rtl::OUString::createFromAscii(pCompatibilityStreamName);
                 if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
                     return 0;
             }
@@ -273,7 +273,7 @@ sal_Int32 ReadThroughComponent(
             xDocStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
 
             uno::Reference< beans::XPropertySet > xProps( xDocStream, uno::UNO_QUERY_THROW );
-            uno::Any aAny = xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
+            uno::Any aAny = xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
             aAny >>= bEncrypted;
         }
         catch( packages::WrongPasswordException& )
@@ -309,11 +309,11 @@ ODBFilter::ODBFilter( const uno::Reference< XMultiServiceFactory >& _rxMSF )
 
     GetMM100UnitConverter().setCoreMeasureUnit(MAP_10TH_MM);
     GetMM100UnitConverter().setXMLMeasureUnit(MAP_CM);
-    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__db) ),
+    GetNamespaceMap().Add( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__db) ),
                         GetXMLToken(XML_N_DB),
                         XML_NAMESPACE_DB );
 
-    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np___db) ),
+    GetNamespaceMap().Add( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np___db) ),
                         GetXMLToken(XML_N_DB_OASIS),
                         XML_NAMESPACE_DB );
 }
@@ -359,7 +359,7 @@ sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescripto
 sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
-    OUString                            sFileName;
+::rtl::OUString                         sFileName;
 
     const PropertyValue* pIter = rDescriptor.getConstArray();
     const PropertyValue* pEnd   = pIter + rDescriptor.getLength();
