@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:34:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:51:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,9 @@ using namespace ::com::sun::star::sdbcx;
 //========================================================================
 DBG_NAME(OCopyTable)
 //------------------------------------------------------------------------
-OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView, OCopyTableWizard::Wizard_Create_Style nLastAction )
+//--------dyf modify 2007/7/10
+OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView )//, OCopyTableWizard::Wizard_Create_Style nLastAction )
+//--------modify end
     : OWizardPage( pParent, ModuleRes(TAB_WIZ_COPYTABLE) ),
     m_ftTableName(          this, ModuleRes( FT_TABLENAME       ) ),
     m_edTableName(          this, ModuleRes( ET_TABLENAME       ) ),
@@ -170,28 +172,6 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView, 
 
         m_aCB_PrimaryColumn.Enable(m_bPKeyAllowed);
 
-        // reselect the last action before
-        switch(nLastAction)
-        {
-            case OCopyTableWizard::WIZARD_DEF_DATA:
-                m_aRB_DefData.Check(sal_True);
-                break;
-            case OCopyTableWizard::WIZARD_DEF:
-                m_aRB_Def.Check(sal_True);
-                break;
-            case OCopyTableWizard::WIZARD_APPEND_DATA:
-                m_aRB_AppendData.Check(sal_True);
-                m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_False);
-                break;
-            case OCopyTableWizard::WIZARD_DEF_VIEW:
-                if(m_bIsViewAllowed)
-                {
-                    m_aRB_View.Check(sal_True);
-                    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_False);
-                }
-                else
-                    m_aRB_DefData.Check(sal_True);
-        }
         m_aRB_AppendData.SetClickHdl(   LINK( this, OCopyTable, AppendDataClickHdl  ) );
 
         m_aRB_DefData.SetClickHdl(      LINK( this, OCopyTable, RadioChangeHdl      ) );
@@ -232,14 +212,21 @@ OCopyTable::~OCopyTable()
 IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, /*pButton*/ )
 {
     DBG_CHKTHIS(OCopyTable,NULL);
+
+    SetAppendDataRadio();
+    return 0;
+}
+//--------dyf ADD
+void OCopyTable::SetAppendDataRadio()
+{
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_True);
     m_aFT_KeyName.Enable(sal_False);
     m_aCB_PrimaryColumn.Enable(sal_False);
     m_edKeyName.Enable(sal_False);
     m_pParent->setCreateStyle(OCopyTableWizard::WIZARD_APPEND_DATA);
-
-    return 0;
 }
+
+//--------add end
 //------------------------------------------------------------------------
 IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
 {
@@ -386,19 +373,24 @@ sal_Bool OCopyTable::checkAppendData()
         xTables = xSup->getTables();
     if(xTables.is() && xTables->hasByName(m_edTableName.GetText()))
     {
+        const ODatabaseExport::TColumnVector* pSrcColumns = m_pParent->getSrcVector();
+        const sal_uInt32 nSrcSize = pSrcColumns->size();
+        m_pParent->m_vColumnPos.resize( nSrcSize ,ODatabaseExport::TPositions::value_type( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND ) );
+        m_pParent->m_vColumnTypes.resize( nSrcSize , COLUMN_POSITION_NOT_FOUND );
+
         // set new destination
         xTables->getByName(m_edTableName.GetText()) >>= m_pParent->m_xDestObject;
         m_pParent->loadData(m_pParent->m_xDestObject,m_pParent->m_vDestColumns,m_pParent->m_aDestVec);
         // #90027#
         const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
         ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
-        m_pParent->m_vColumnPos.reserve(pDestColumns->size()+1);
-        m_pParent->m_vColumnTypes.reserve(pDestColumns->size()+1);
+        const sal_uInt32 nDestSize = pDestColumns->size();
         sal_Bool bNotConvert;
-        for(sal_Int32 nPos = 1;aDestIter != pDestColumns->end();++aDestIter,++nPos)
+        sal_uInt32 i = 0;
+        for(sal_Int32 nPos = 1;aDestIter != pDestColumns->end() && i < nDestSize && i < nSrcSize;++aDestIter,++nPos,++i)
         {
             bNotConvert = sal_True;
-            m_pParent->m_vColumnPos.push_back( ODatabaseExport::TPositions::value_type(nPos,nPos) );
+            m_pParent->m_vColumnPos[i] = ODatabaseExport::TPositions::value_type(nPos,nPos);
             TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo(),bNotConvert);
             if ( !bNotConvert )
             {
@@ -407,10 +399,11 @@ sal_Bool OCopyTable::checkAppendData()
             }
 
             if ( pTypeInfo.get() )
-                m_pParent->m_vColumnTypes.push_back(pTypeInfo->nType);
+                m_pParent->m_vColumnTypes[i] = pTypeInfo->nType;
             else
-                m_pParent->m_vColumnTypes.push_back(DataType::VARCHAR);
+                m_pParent->m_vColumnTypes[i] = DataType::VARCHAR;
         }
+
     }
     if ( !m_pParent->m_xDestObject.is() )
     {
@@ -420,3 +413,35 @@ sal_Bool OCopyTable::checkAppendData()
     return sal_True;
 }
 // -----------------------------------------------------------------------------
+//---dyf add 2006/7/10
+void OCopyTable::setCreateStyleAction()
+{
+    // reselect the last action before
+    switch(m_pParent->getCreateStyle())
+    {
+        case OCopyTableWizard::WIZARD_DEF_DATA:
+            m_aRB_DefData.Check(sal_True);
+            RadioChangeHdl(&m_aRB_DefData);
+            break;
+        case OCopyTableWizard::WIZARD_DEF:
+            m_aRB_Def.Check(sal_True);
+            RadioChangeHdl(&m_aRB_Def);
+            break;
+        case OCopyTableWizard::WIZARD_APPEND_DATA:
+            m_aRB_AppendData.Check(sal_True);
+            SetAppendDataRadio();
+            break;
+        case OCopyTableWizard::WIZARD_DEF_VIEW:
+            if(m_bIsViewAllowed)
+            {
+                m_aRB_View.Check(sal_True);
+                RadioChangeHdl(&m_aRB_View);
+            }
+            else
+            {
+                m_aRB_DefData.Check(sal_True);
+                RadioChangeHdl(&m_aRB_DefData);
+            }
+    }
+}
+//---add end
