@@ -4,9 +4,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:34:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:39:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
         DECL_PROP0(SCALE,               sal_Int32           );
         DECL_PROP0(TYPE,                sal_Int32           );
         DECL_PROP0(TYPENAME,            ::rtl::OUString     );
-        DECL_PROP1(WIDTH,               sal_Int32,          MAYBEVOID);
+        DECL_PROP2(WIDTH,               sal_Int32,          BOUND, MAYBEVOID);
     END_PROPERTY_HELPER();
 }
 
