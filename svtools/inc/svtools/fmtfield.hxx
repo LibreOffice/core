@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtfield.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:50:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:32:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,6 +313,7 @@ public:
         ,m_pNumberValidator( NULL )
 #endif
     {
+        ResetConformanceTester();
     }
 
     DoubleNumericField(Window* pParent, const ResId& rResId)
@@ -323,6 +324,7 @@ public:
         ,m_pNumberValidator( NULL )
 #endif
     {
+        ResetConformanceTester();
     }
     virtual ~DoubleNumericField();
 
