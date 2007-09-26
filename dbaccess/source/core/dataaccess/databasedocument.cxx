@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:04:32 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:39:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,7 +456,7 @@ void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     if ( m_pImpl->m_sFileURL == m_pImpl->m_sRealFileURL )
-        store( m_pImpl->m_sFileURL, m_pImpl->m_aArgs );
+        store( m_pImpl->m_sFileURL, m_pImpl->m_aArgs ,aGuard);
     else
         storeAsURL( m_pImpl->m_sRealFileURL, m_pImpl->m_aArgs );
 
@@ -464,7 +464,8 @@ void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
 }
 // -----------------------------------------------------------------------------
 void ODatabaseDocument::store(const ::rtl::OUString& _rURL
-                             ,const Sequence< PropertyValue >& _rArguments)
+                             ,const Sequence< PropertyValue >& _rArguments
+                             ,ModelMethodGuard& _rGuard)
 {
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
     if ( m_pImpl->m_bDocumentReadOnly )
@@ -485,7 +486,7 @@ void ODatabaseDocument::store(const ::rtl::OUString& _rURL
 
     m_pImpl->commitRootStorage();
 
-    setModified(sal_False);
+    setModified( sal_False,_rGuard );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::storeAsURL( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (IOException, RuntimeException)
@@ -578,7 +579,7 @@ void SAL_CALL ODatabaseDocument::storeAsURL( const ::rtl::OUString& _rURL, const
         m_pImpl->m_sRealFileURL = m_pImpl->m_sFileURL = _rURL;
     }
     lcl_stripLoadArguments( aDescriptor, m_pImpl->m_aArgs );
-    store(m_pImpl->m_sFileURL,_rArguments);
+    store(m_pImpl->m_sFileURL,_rArguments,aGuard);
 
     impl_notifyEvent( "OnSaveAsDone", aGuard );
 }
@@ -656,19 +657,24 @@ sal_Bool SAL_CALL ODatabaseDocument::isModified(  ) throw (RuntimeException)
 void SAL_CALL ODatabaseDocument::setModified( sal_Bool _bModified ) throw (PropertyVetoException, RuntimeException)
 {
     ModelMethodGuard aGuard( *this );
-
+    setModified( _bModified,aGuard );
+}
+// -----------------------------------------------------------------------------
+void ODatabaseDocument::setModified( sal_Bool _bModified,ModelMethodGuard& _rGuard )
+{
     if ( m_pImpl->m_bModified == _bModified )
         return;
 
     m_pImpl->m_bModified = _bModified;
     lang::EventObject aEvt( *this );
 
-    aGuard.clear();
+    _rGuard.clear();
     m_aModifyListeners.notifyEach( &XModifyListener::modified, aEvt );
 
-    aGuard.reset();
-    impl_notifyEvent( "OnModifyChanged", aGuard );
+    _rGuard.reset();
+    impl_notifyEvent( "OnModifyChanged", _rGuard );
 }
+// -----------------------------------------------------------------------------
 
 // ::com::sun::star::document::XEventBroadcaster
 void SAL_CALL ODatabaseDocument::addEventListener(const css::uno::Reference< css::document::XEventListener >& _xListener ) throw (css::uno::RuntimeException)
