@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:10:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 15:07:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,9 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _VCL_IMPDEL_HXX
+#include <impdel.hxx>
 #endif
 #define COMPILE_MULTIMON_STUBS
 #include <multimon.h>
@@ -1299,10 +1302,13 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible, BOOL bNoActivate )
         RECT aRectPreMatrox, aRectPostMatrox;
         GetWindowRect( hWnd, &aRectPreMatrox );
 
+        vcl::DeletionListener aDogTag( pFrame );
         if( bNoActivate )
             ShowWindow( hWnd, SW_SHOWNOACTIVATE );
         else
             ShowWindow( hWnd, pFrame->mnShowState );
+        if( aDogTag.isDeleted() )
+            return;
 
         if ( aSalShlData.mbWXP && pFrame->mbFloatWin && !(pFrame->mnStyle & SAL_FRAME_STYLE_NOSHADOW))
         {
@@ -1324,6 +1330,8 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible, BOOL bNoActivate )
             (aRectPreMatrox.left != aRectPostMatrox.left || aRectPreMatrox.top != aRectPostMatrox.top) )
             SetWindowPos( hWnd, 0, aRectPreMatrox.left, aRectPreMatrox.top, 0, 0, SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOSIZE  );
 
+        if( aDogTag.isDeleted() )
+            return;
         Window *pClientWin = ((Window*)pFrame->GetInstance())->ImplGetClientWindow();
         if ( pFrame->mbFloatWin || ( pClientWin && (pClientWin->GetStyle() & WB_SYSTEMFLOATWIN) ) )
             pFrame->mnShowState = SW_SHOWNOACTIVATE;
@@ -1339,7 +1347,6 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible, BOOL bNoActivate )
         }
 
         pFrame->mbInShow = FALSE;
-
 
         // Direct Paint only, if we get the SolarMutx
         if ( ImplSalYieldMutexTryToAcquire() )
