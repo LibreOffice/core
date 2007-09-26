@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppElementType.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:34:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:49:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 #ifndef DBAUI_APPELEMENTTYPE_HXX
 #define DBAUI_APPELEMENTTYPE_HXX
+#include <com/sun/star/sdb/application/DatabaseObject.hpp>
 //........................................................................
 namespace dbaui
 {
@@ -41,10 +42,10 @@ namespace dbaui
 
     enum ElementType
     {
-        E_FORM      = 0,
-        E_REPORT    = 1,
-        E_QUERY     = 2,
-        E_TABLE     = 3,
+        E_TABLE     = ::com::sun::star::sdb::application::DatabaseObject::TABLE,
+        E_QUERY     = ::com::sun::star::sdb::application::DatabaseObject::QUERY,
+        E_FORM      = ::com::sun::star::sdb::application::DatabaseObject::FORM,
+        E_REPORT    = ::com::sun::star::sdb::application::DatabaseObject::REPORT,
 
         E_NONE      = 4,
         E_ELEMENT_TYPE_COUNT = E_NONE
