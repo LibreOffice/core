@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:09:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:50:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,10 @@ namespace dbaui
         SharedModel                                                                     m_aKeepModelAlive;
 
         ::rtl::OUString m_sName;
+        //dyf add 20070601
+        //for transfor the tablename
+        ::rtl::OUString m_sDefaultTableName;
+        //dyf add end
         ::rtl::OUString m_sDataSourceName;
         sal_Int32       m_nCommandType;
 
@@ -149,6 +153,11 @@ namespace dbaui
         virtual void initialize();
     public:
         void setStream(SvStream* _pStream){  m_pStream = _pStream; }
+
+        //dyf add 20070601
+        //for set the tablename
+        void setSTableName(const ::rtl::OUString &_sTableName){ m_sDefaultTableName = _sTableName; }
+        //dyf add end
 
         virtual BOOL Write()    = 0; // Export
         virtual BOOL Read()     = 0; // Import
