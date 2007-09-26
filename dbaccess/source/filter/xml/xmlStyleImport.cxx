@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlStyleImport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:48:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:44:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,6 @@
 namespace dbaxml
 {
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -114,7 +113,7 @@ TYPEINIT1( OTableStylesContext, SvXMLStylesContext );
 DBG_NAME(OTableStyleContext)
 
 OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
+        sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle )
     :XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle )
@@ -194,8 +193,8 @@ void OTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any&
 }
 // -----------------------------------------------------------------------------
 void OTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                        const OUString& rLocalName,
-                                        const OUString& rValue )
+                                        const ::rtl::OUString& rLocalName,
+                                        const ::rtl::OUString& rValue )
 {
     // TODO: use a map here
     if( IsXMLToken(rLocalName, XML_DATA_STYLE_NAME ) )
@@ -215,7 +214,7 @@ DBG_NAME(OTableStylesContext)
 
 OTableStylesContext::OTableStylesContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx ,
-        const OUString& rLName ,
+        const ::rtl::OUString& rLName ,
         const Reference< XAttributeList > & xAttrList,
         const sal_Bool bTempAutoStyles ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
@@ -277,7 +276,7 @@ UniReference < SvXMLImportPropertyMapper >
 }
 // ----------------------------------------------------------------------------
 SvXMLStyleContext *OTableStylesContext::CreateStyleStyleChildContext(
-        sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
+        sal_uInt16 nFamily, sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nPrefix,
@@ -306,7 +305,7 @@ Reference < XNameContainer >
 }
 // -----------------------------------------------------------------------------
 
-OUString OTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
+::rtl::OUString OTableStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 {
     rtl::OUString sServiceName = SvXMLStylesContext::GetServiceName(nFamily);
     if (!sServiceName.getLength())

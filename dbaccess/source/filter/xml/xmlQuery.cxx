@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlQuery.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:47:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:44:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,6 @@
 
 namespace dbaxml
 {
-    using namespace ::rtl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
@@ -81,7 +80,7 @@ DBG_NAME(OXMLQuery)
 
 OXMLQuery::OXMLQuery( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
+                ,const ::rtl::OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
                 ) :
@@ -97,7 +96,7 @@ OXMLQuery::OXMLQuery( ODBFilter& rImport
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        OUString sLocalName;
+        ::rtl::OUString sLocalName;
         rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         rtl::OUString sValue = _xAttrList->getValueByIndex( i );
@@ -123,7 +122,7 @@ OXMLQuery::~OXMLQuery()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLQuery::CreateChildContext(
         sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        const ::rtl::OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext* pContext = OXMLTable::CreateChildContext(nPrefix, rLocalName,xAttrList );
