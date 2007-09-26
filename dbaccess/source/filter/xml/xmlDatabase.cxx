@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDatabase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:46:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:43:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,6 @@
 
 namespace dbaxml
 {
-    using namespace ::rtl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbcx;
@@ -85,7 +84,7 @@ namespace dbaxml
 DBG_NAME(OXMLDatabase)
 
 OXMLDatabase::OXMLDatabase( ODBFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName ) :
+                sal_uInt16 nPrfx, const ::rtl::OUString& rLName ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     DBG_CTOR(OXMLDatabase,NULL);
@@ -102,7 +101,7 @@ OXMLDatabase::~OXMLDatabase()
 
 SvXMLImportContext* OXMLDatabase::CreateChildContext(
         sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        const ::rtl::OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

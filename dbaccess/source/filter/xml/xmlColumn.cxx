@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlColumn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:45:11 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,6 @@
 
 namespace dbaxml
 {
-    using namespace ::rtl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdbcx;
@@ -90,7 +89,7 @@ DBG_NAME(OXMLColumn)
 
 OXMLColumn::OXMLColumn( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
+                ,const ::rtl::OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XNameAccess >& _xParentContainer
                 ) :
@@ -108,7 +107,7 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
     ::rtl::OUString sType;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        OUString sLocalName;
+        ::rtl::OUString sLocalName;
         rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         rtl::OUString sValue = _xAttrList->getValueByIndex( i );

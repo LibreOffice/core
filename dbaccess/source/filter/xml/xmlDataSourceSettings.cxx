@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSourceSettings.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:46:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:43:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,14 +70,13 @@
 
 namespace dbaxml
 {
-    using namespace ::rtl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
 DBG_NAME(OXMLDataSourceSettings)
 
 OXMLDataSourceSettings::OXMLDataSourceSettings( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
+                ,const ::rtl::OUString& _sLocalName
                 ,OXMLDataSource& _rParent) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_rParent(_rParent)
@@ -95,7 +94,7 @@ OXMLDataSourceSettings::~OXMLDataSourceSettings()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLDataSourceSettings::CreateChildContext(
         sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        const ::rtl::OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
