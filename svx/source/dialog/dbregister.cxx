@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbregister.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:59:59 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:36:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,7 +266,7 @@ BOOL DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
         String* pPath = static_cast<String*>(pEntry->GetUserData());
         if ( pPath && pPath->Len() )
         {
-            OFileNotation aTransformer(*pPath, OFileNotation::N_SYSTEM);
+            OFileNotation aTransformer(*pPath);
             aMap.insert(TNameLocationMap::value_type(::rtl::OUString(pPathBox->GetEntryText(pEntry,0)),aTransformer.get(OFileNotation::N_URL)));
         }
     }
@@ -297,7 +297,7 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
         TNameLocationMap::const_iterator aEnd = rMap.end();
         for (; aIter != aEnd; ++aIter)
         {
-            OFileNotation aTransformer(aIter->second, OFileNotation::N_URL);
+            OFileNotation aTransformer(aIter->second);
             insertNewEntry(aIter->first,aTransformer.get(OFileNotation::N_SYSTEM));
         }
 
