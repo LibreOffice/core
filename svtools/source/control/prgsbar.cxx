@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prgsbar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:54:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 15:02:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,6 @@ static WinBits clearProgressBarBorder( Window* pParent, WinBits nOrgStyle )
 ProgressBar::ProgressBar( Window* pParent, WinBits nWinStyle ) :
     Window( pParent, clearProgressBarBorder( pParent, nWinStyle ) )
 {
-    DBG_ERROR( "no ResId constructor\n" );
     SetOutputSizePixel( Size( 150, 20 ) );
     ImplInit();
 }
@@ -89,7 +88,6 @@ ProgressBar::ProgressBar( Window* pParent, WinBits nWinStyle ) :
 ProgressBar::ProgressBar( Window* pParent, const ResId& rResId ) :
     Window( pParent, rResId )
 {
-    DBG_ERROR( "ResId constructor\n" );
     ImplInit();
 }
 
