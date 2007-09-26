@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:27:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:39:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,8 +197,6 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
     ,m_bInDrop(sal_False)
 {
     DBG_CTOR(OTableContainer, NULL);
-    m_pTableMediator = new OContainerMediator(
-        this, Reference< XNameAccess >( _xTableDefinitions, UNO_QUERY ), m_xConnection, OContainerMediator::eTables );
 }
 
 //------------------------------------------------------------------------------
@@ -344,6 +342,9 @@ connectivity::sdbcx::ObjectType OTableContainer::createObject(const ::rtl::OUStr
         if ( xTableDefinition.is() )
             ::comphelper::copyProperties(xTableDefinition,xDest);
 
+        if ( !m_pTableMediator.is() )
+            m_pTableMediator = new OContainerMediator(
+                    this, m_xTableDefinitions.get(), m_xConnection, OContainerMediator::eTables );
         if ( m_pTableMediator.is() )
             m_pTableMediator->notifyElementCreated(_rName,xDest);
     }
