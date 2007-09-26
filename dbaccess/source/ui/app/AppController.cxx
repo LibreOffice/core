@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 17:57:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:46:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,8 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #endif
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include "com/sun/star/beans/NamedValue.hpp"
+
 /** === end UNO includes === **/
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -253,7 +255,9 @@
 #ifndef _DBACCESS_SLOTID_HRC_
 #include "dbaccess_slotid.hrc"
 #endif
-
+#include <boost/mem_fn.hpp>
+#include <boost/bind.hpp>
+#include <boost/utility.hpp>
 #include <algorithm>
 #include <functional>
 
@@ -273,6 +277,7 @@ using namespace ::dbtools;
 using namespace ::svx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -722,7 +727,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = !isDataSourceReadOnly() && getContainer()->getSelectionCount() <= 1;
                 if ( aReturn.bEnabled )
                 {
-                    ElementType eType = getContainer()->getElementType();
+                    const ElementType eType = getContainer()->getElementType();
                     aReturn.bEnabled = eType == E_REPORT || eType == E_FORM;
                 }
                 break;
@@ -838,18 +843,18 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 }
                 break;
             case SID_DB_APP_DISABLE_PREVIEW:
-                aReturn.bEnabled = !isDataSourceReadOnly();
+                aReturn.bEnabled = sal_True;
                 aReturn.bChecked = getContainer()->getPreviewMode() == E_PREVIEWNONE;
                 break;
             case SID_DB_APP_VIEW_DOCINFO_PREVIEW:
                 {
                     ElementType eType = getContainer()->getElementType();
-                    aReturn.bEnabled = !isDataSourceReadOnly() && (E_REPORT == eType || E_FORM == eType);
+                    aReturn.bEnabled = (E_REPORT == eType || E_FORM == eType);
                     aReturn.bChecked = getContainer()->getPreviewMode() == E_DOCUMENTINFO;
                 }
                 break;
             case SID_DB_APP_VIEW_DOC_PREVIEW:
-                aReturn.bEnabled = !isDataSourceReadOnly();
+                aReturn.bEnabled = sal_True;
                 aReturn.bChecked = getContainer()->getPreviewMode() == E_DOCUMENT;
                 break;
             case ID_BROWSER_UNDO:
@@ -977,11 +982,32 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 {
                     TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
                     ElementType eType = getContainer()->getElementType();
+
                     switch( eType )
                     {
                         case E_TABLE:
-                            m_aTableCopyHelper.pasteTable( aTransferData , getDatabaseName(), ensureConnection() );
+                            {
+                                //dyf add
+                                //for get the selected tablename
+                                ::std::vector< ::rtl::OUString> aList;
+                                getSelectionElementNames(aList);
+                                ::rtl::OUString sTableNameToInsertInto;
+
+                                if ( !aList.empty() )
+                                {
+                                    sTableNameToInsertInto = *aList.begin();
+                                    m_aTableCopyHelper.SetDefaultTableName(sTableNameToInsertInto);
+                                    m_aTableCopyHelper.SetIsSelectCopytable(true);
+                                }
+                                else
+                                {
+                                    m_aTableCopyHelper.SetIsSelectCopytable(false);
+                                }
+                                //dyf add end
+                                m_aTableCopyHelper.pasteTable( aTransferData , getDatabaseName(), ensureConnection());
+                            }
                             break;
+
                         case E_QUERY:
                             if ( getViewClipboard().HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY) )
                                 paste( E_QUERY,ODataAccessObjectTransferable::extractObjectDescriptor(aTransferData) );
@@ -1595,7 +1621,7 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
     OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
     Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager(getFrame());
 
-    if ( xLayoutManager.is() )
+    if ( xLayoutManager.is() && m_eOldType != _eType)
     {
         sal_Bool bAdd = _eType != E_TABLE;
         if ( !bAdd )
@@ -2042,6 +2068,9 @@ void OApplicationController::renameEntry()
 void OApplicationController::onEntryDeSelect(SvTreeListBox* /*_pTree*/)
 {
     InvalidateAll();
+    EventObject aEvent(*this);
+    m_aSelectionListeners.forEach<XSelectionChangeListener>(
+        ::boost::bind(&XSelectionChangeListener::selectionChanged,_1,boost::cref(aEvent)));
 }
 // -----------------------------------------------------------------------------
 void OApplicationController::onEntrySelect(SvLBoxEntry* _pEntry)
@@ -2051,63 +2080,68 @@ void OApplicationController::onEntrySelect(SvLBoxEntry* _pEntry)
     OApplicationView* pView = getContainer();
     if ( pView )
     {
-        ElementType eType = pView->getElementType();
-        Reference< XContent> xContent;
-        if ( _pEntry && pView->isALeafSelected() )
+        const ElementType eType = pView->getElementType();
+          if ( _pEntry && pView->isALeafSelected() )
         {
-            try
-            {
-                switch( eType )
-                {
-                    case E_FORM:
-                    case E_REPORT:
-                        {
-                            ::rtl::OUString sName = pView->getQualifiedName( _pEntry );
-                            if ( sName.getLength() )
-                            {
-                                Reference< XHierarchicalNameAccess > xContainer(getElements(eType),UNO_QUERY);
-                                if ( xContainer.is() && xContainer->hasByHierarchicalName(sName) )
-                                    xContent.set(xContainer->getByHierarchicalName(sName),UNO_QUERY);
-                            }
-                        }
-                        break;
-                    case E_QUERY:
-                        {
-                            ::rtl::OUString sName = pView->getQualifiedName( _pEntry );
-                            if ( pView->isPreviewEnabled() )
-                            {
-                                SharedConnection xConnection( ensureConnection() );
-                                if ( xConnection.is() )
-                                    pView->showPreview(getDatabaseName(),xConnection,sName,sal_False);
-                            }
-                        }
-                        return;
-                    case E_TABLE:
-                        {
-                            SharedConnection xConnection( ensureConnection() );
-                            if ( xConnection.is() )
-                            {
-                                ::rtl::OUString sName = pView->getQualifiedName( _pEntry );
-                                pView->showPreview(getDatabaseName(),xConnection,sName,eType == E_TABLE);
-                                return;
-                            }
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch(SQLException e)
-            {
-                showError(e);
-            }
-            catch(Exception)
-            {
-                OSL_ENSURE(0,"Exception catched while previewing!");
-            }
+            const ::rtl::OUString sName = pView->getQualifiedName( _pEntry );
+            selectEntry(eType,sName);
         }
-        pView->showPreview(xContent);
+
+        EventObject aEvent(*this);
+        m_aSelectionListeners.forEach<XSelectionChangeListener>(
+            ::boost::bind(&XSelectionChangeListener::selectionChanged,_1,boost::cref(aEvent)));
     }
+}
+// -----------------------------------------------------------------------------
+void OApplicationController::selectEntry(const ElementType _eType,const ::rtl::OUString& _sName)
+{
+    OApplicationView* pView = getContainer();
+    Reference< XContent> xContent;
+    try
+    {
+        switch( _eType )
+        {
+            case E_FORM:
+            case E_REPORT:
+                if ( _sName.getLength() )
+                {
+                    Reference< XHierarchicalNameAccess > xContainer(getElements(_eType),UNO_QUERY);
+                    if ( xContainer.is() && xContainer->hasByHierarchicalName(_sName) )
+                        xContent.set(xContainer->getByHierarchicalName(_sName),UNO_QUERY);
+                }
+                break;
+            case E_QUERY:
+                if ( pView->isPreviewEnabled() )
+                {
+                    SharedConnection xConnection( ensureConnection() );
+                    if ( xConnection.is() )
+                        pView->showPreview(getDatabaseName(),xConnection,_sName,sal_False);
+                }
+                return;
+            case E_TABLE:
+                {
+                    SharedConnection xConnection( ensureConnection() );
+                    if ( xConnection.is() )
+                    {
+                        pView->showPreview(getDatabaseName(),xConnection,_sName,_eType == E_TABLE);
+                        return;
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    catch(SQLException e)
+    {
+        showError(e);
+    }
+    catch(Exception)
+    {
+        OSL_ENSURE(0,"Exception catched while previewing!");
+    }
+
+    pView->showPreview(xContent);
 }
 //------------------------------------------------------------------------------
 void OApplicationController::frameAction(const FrameActionEvent& aEvent) throw( RuntimeException )
@@ -2455,6 +2489,69 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
         OSL_ENSURE(0,"Could not listener on the container!");
     }
 }
+// -----------------------------------------------------------------------------
+::sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw (IllegalArgumentException, RuntimeException)
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
+    Sequence< ::rtl::OUString> aSelection;
+    if ( !_aSelection.hasValue() || !getView() )
+    {
+        getContainer()->selectElements(aSelection);
+        return sal_True;
+    }
+    Sequence< NamedValue > aCurrentSelection;
+    if ( (_aSelection >>= aCurrentSelection) && aCurrentSelection.getLength() )
+    {
+        ElementType eType = E_NONE;
+        const NamedValue* pIter = aCurrentSelection.getConstArray();
+        const NamedValue* pEnd  = pIter + aCurrentSelection.getLength();
+        for(;pIter != pEnd;++pIter)
+        {
+            if ( pIter->Name.equalsAscii("Type") )
+            {
+                sal_Int32 nType = 0;
+                pIter->Value >>= nType;
+                if ( nType < 0 || nType > 4)
+                    throw IllegalArgumentException();
+                eType = static_cast<ElementType>(nType);
+            }
+            else if ( pIter->Name.equalsAscii("Selection") )
+                pIter->Value >>= aSelection;
+        }
+
+        getContainer()->changeContainer(eType);
+        getContainer()->selectElements(aSelection);
+        return sal_True;
+    }
+    throw IllegalArgumentException();
+}
+// -----------------------------------------------------------------------------
+Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException)
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
+    Sequence< NamedValue > aCurrentSelection;
+    if ( getContainer() )
+    {
+        ::std::vector< ::rtl::OUString> aList;
+        getSelectionElementNames(aList);
+        NamedValue aType;
+        aType.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type"));
+        aType.Value <<= static_cast<sal_Int32>(getContainer()->getElementType());
+        NamedValue aNames;
+        aNames.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Selection"));
+        if ( !aList.empty() )
+            aNames.Value <<= Sequence< ::rtl::OUString>(&aList[0],aList.size());
+
+        aCurrentSelection.realloc(2);
+        aCurrentSelection[0] = aType;
+        aCurrentSelection[1] = aNames;
+    }
+
+    return makeAny(aCurrentSelection);
+}
+
 //........................................................................
 }   // namespace dbaui
 //........................................................................
