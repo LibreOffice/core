@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 13:55:50 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 15:07:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1112,8 +1112,42 @@ void GtkSalFrame::SetIcon( USHORT nIcon )
         ResId aResId( nOffsets[nIndex] + nIcon, *ImplGetResMgr() );
         BitmapEx aIcon( aResId );
 
+        // #i81083# convert to 24bit/8bit alpha bitmap
+        Bitmap aBmp = aIcon.GetBitmap();
+        if( aBmp.GetBitCount() != 24 || ! aIcon.IsAlpha() )
+        {
+            if( aBmp.GetBitCount() != 24 )
+                aBmp.Convert( BMP_CONVERSION_24BIT );
+            AlphaMask aMask;
+            if( ! aIcon.IsAlpha() )
+            {
+                switch( aIcon.GetTransparentType() )
+                {
+                    case TRANSPARENT_NONE:
+                    {
+                        BYTE nTrans = 0;
+                        aMask = AlphaMask( aBmp.GetSizePixel(), &nTrans );
+                    }
+                    break;
+                    case TRANSPARENT_COLOR:
+                        aMask = AlphaMask( aBmp.CreateMask( aIcon.GetTransparentColor() ) );
+                    break;
+                    case TRANSPARENT_BITMAP:
+                        aMask = AlphaMask( aIcon.GetMask() );
+                    break;
+                    default:
+                        DBG_ERROR( "unhandled transparent type" );
+                    break;
+                }
+            }
+            else
+                aMask = aIcon.GetAlpha();
+            aIcon = BitmapEx( aBmp, aMask );
+        }
+
         ImpBitmap *pIconImpBitmap = aIcon.ImplGetBitmapImpBitmap();
         ImpBitmap *pIconImpMask   = aIcon.ImplGetMaskImpBitmap();
+
 
         if( pIconImpBitmap && pIconImpMask )
         {
