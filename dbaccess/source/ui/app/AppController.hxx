@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:58:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:46:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,6 +443,10 @@ namespace dbaui
                 Defines the mode of opening. @see OLinkedDocumentsAccess::EOpenMode
         */
         void doAction(sal_uInt16 _nId ,OLinkedDocumentsAccess::EOpenMode _eOpenMode);
+
+        /** select the give entry
+        */
+        void selectEntry(const ElementType _eType,const ::rtl::OUString& _sName);
     protected:
         // ----------------------------------------------------------------
         // initalizing members
@@ -507,6 +511,10 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getActiveConnection() throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL isConnected(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL connect(  ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XSelectionSupplier
+        virtual ::sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& xSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw (::com::sun::star::uno::RuntimeException);
 
         /** retrieves the current connection, creates it if necessary
         */
