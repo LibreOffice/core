@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JConnection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:35:59 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:29:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
+#include <com/sun/star/sdbc/SQLWarning.hpp>
 #endif
 #ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include "connectivity/sqlparse.hxx"
@@ -797,9 +800,17 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
     if( out )
     {
         java_sql_SQLWarning_BASE        warn_base(t.pEnv, out);
-        return makeAny(
-            static_cast< starsdbc::SQLException >(
-                java_sql_SQLWarning(warn_base,*this)));
+        SQLException aAsException( static_cast< starsdbc::SQLException >( java_sql_SQLWarning( warn_base, *this ) ) );
+
+        // translate to warning
+        SQLWarning aWarning;
+        aWarning.Context = aAsException.Context;
+        aWarning.Message = aAsException.Message;
+        aWarning.SQLState = aAsException.SQLState;
+        aWarning.ErrorCode = aAsException.ErrorCode;
+        aWarning.NextException = aAsException.NextException;
+
+        return makeAny( aWarning );
     }
 
     return Any();
