@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:38:56 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1027,11 +1027,12 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                             static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
 
                         USHORT nPos = m_pFieldCell->GetEntryPos(aFieldName);
-                        if ( nPos != COMBOBOX_ENTRY_NOTFOUND && aFieldName.GetTokenCount('.') > 1 )
+                        String aAliasName = pEntry->GetAlias();
+                        if ( nPos != COMBOBOX_ENTRY_NOTFOUND && !aAliasName.Len() && aFieldName.GetTokenCount('.') > 1 )
                         { // special case, we have a table field so we must cut the table name
                             String sTableAlias = aFieldName.GetToken(0,'.');
                             pEntry->SetAlias(sTableAlias);
-                            String sColumnName = aFieldName.GetToken(1,'.');
+                            String sColumnName = aFieldName.Copy(sTableAlias.Len()+1,aFieldName.Len() - sTableAlias.Len() -1);
                             Reference<XConnection> xConnection = pController->getConnection();
                             if ( !xConnection.is() )
                                 return sal_False;
