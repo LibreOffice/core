@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmetadata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:11:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,10 +109,10 @@ namespace dbtools
         }
 
         /// wraps XDatabaseMetaData::getIdentifierQuoteString
-        const ::rtl::OUString&  SAL_CALL getIdentifierQuoteString() const;
+        const ::rtl::OUString&  getIdentifierQuoteString() const;
 
         /// wraps XDatabaseMetaData::getCatalogSeparator
-        const ::rtl::OUString&  SAL_CALL getCatalogSeparator() const;
+        const ::rtl::OUString&  getCatalogSeparator() const;
 
         /** determines whether the database supports sub queries in the FROM part
             of a SELECT clause are supported.
@@ -120,14 +120,14 @@ namespace dbtools
                 with SQLState 08003 (connection does not exist) if the instances was
                 default-constructed and does not have a connection, yet.
         */
-        bool SAL_CALL supportsSubqueriesInFrom() const;
+        bool supportsSubqueriesInFrom() const;
 
         /** determines whether names in the database should be restricted to SQL-92 identifiers
 
             Effectively, this method checks the EnableSQL92Check property of the data source settings,
             if present.
         */
-        bool SAL_CALL restrictIdentifiersToSQL92() const;
+        bool restrictIdentifiersToSQL92() const;
 
         /** determines whether when generating SQL statements, an AS keyword should be generated
             before a correlation name.
@@ -135,7 +135,13 @@ namespace dbtools
             E.g., it determines whether <code>SELECT * FROM table AS correlation_name</code> or
             <code>SELECT * FROM table correlation_name</code> is generated.
         */
-        bool SAL_CALL generateASBeforeCorrelationName() const;
+        bool generateASBeforeCorrelationName() const;
+
+        /**
+        *
+        * \return <TRUE/> when relations are supported, otherwise <FALSE/>
+        */
+        bool supportsRelations() const;
     };
 
 //........................................................................
