@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlReportElementBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:18 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:23:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,6 @@
 
 namespace rptxml
 {
-    using namespace ::rtl;
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::report;
     using namespace ::com::sun::star::uno;
@@ -63,7 +62,7 @@ namespace rptxml
 
 OXMLReportElementBase::OXMLReportElementBase( ORptFilter& rImport
                 ,sal_uInt16 nPrfx
-                , const OUString& rLName
+                , const ::rtl::OUString& rLName
                 ,const Reference< XReportComponent > & _xComponent
                 ,OXMLTable* _pContainer) :
     SvXMLImportContext( rImport, nPrfx, rLName )
@@ -80,7 +79,7 @@ OXMLReportElementBase::~OXMLReportElementBase()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLReportElementBase::CreateChildContext(
         sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        const ::rtl::OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = _CreateChildContext(nPrefix,rLocalName,xAttrList);
@@ -91,7 +90,7 @@ SvXMLImportContext* OXMLReportElementBase::CreateChildContext(
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLReportElementBase::_CreateChildContext(
         sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        const ::rtl::OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlColumn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:20:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,6 @@
 namespace rptxml
 {
     using namespace ::comphelper;
-    using namespace ::rtl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xml::sax;
@@ -95,7 +94,7 @@ DBG_NAME( rpt_OXMLRowColumn )
 
 OXMLRowColumn::OXMLRowColumn( ORptFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
+                ,const ::rtl::OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,OXMLTable* _pContainer
                 ) :
@@ -110,7 +109,7 @@ OXMLRowColumn::OXMLRowColumn( ORptFilter& rImport
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        OUString sLocalName;
+     ::rtl::OUString sLocalName;
         const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         rtl::OUString sValue = _xAttrList->getValueByIndex( i );
@@ -134,7 +133,7 @@ OXMLRowColumn::~OXMLRowColumn()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLRowColumn::CreateChildContext(
         sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        const ::rtl::OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

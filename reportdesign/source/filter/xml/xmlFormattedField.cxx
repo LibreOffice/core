@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlFormattedField.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:22:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,13 +74,12 @@
 
 namespace rptxml
 {
-    using namespace ::rtl;
     using namespace ::com::sun::star;
     using namespace xml::sax;
 DBG_NAME( rpt_OXMLFormattedField )
 
 OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName
+                sal_uInt16 nPrfx, const ::rtl::OUString& rLName
                 ,const uno::Reference< xml::sax::XAttributeList > & _xAttrList
                 ,const uno::Reference< XFormattedField > & _xComponent
                 ,OXMLTable* _pContainer
@@ -97,7 +96,7 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
     {
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
-            OUString sLocalName;
+         ::rtl::OUString sLocalName;
             const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
             rtl::OUString sValue = _xAttrList->getValueByIndex( i );

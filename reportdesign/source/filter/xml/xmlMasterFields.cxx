@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlMasterFields.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:18 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:22:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,6 @@
 
 namespace rptxml
 {
-    using namespace ::rtl;
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::report;
     using namespace ::com::sun::star::uno;
@@ -70,7 +69,7 @@ namespace rptxml
 DBG_NAME( rpt_OXMLMasterFields )
 
 OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName,
+                sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
                 const Reference< XAttributeList > & _xAttrList
                 ,OXMLSubDocument* _pSubDocument
                 ) :
@@ -86,7 +85,7 @@ OXMLMasterFields::OXMLMasterFields( ORptFilter& rImport,
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        OUString sLocalName;
+     ::rtl::OUString sLocalName;
         const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         rtl::OUString sValue = _xAttrList->getValueByIndex( i );
@@ -117,7 +116,7 @@ OXMLMasterFields::~OXMLMasterFields()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLMasterFields::CreateChildContext(
         sal_uInt16 _nPrefix,
-        const OUString& _rLocalName,
+        const ::rtl::OUString& _rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlFormatCondition.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:22:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,6 @@
 
 namespace rptxml
 {
-    using namespace ::rtl;
     using namespace ::comphelper;
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::report;
@@ -93,7 +92,7 @@ namespace rptxml
 DBG_NAME( rpt_OXMLFormatCondition )
 
 OXMLFormatCondition::OXMLFormatCondition( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName,
+                sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
                 const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XFormatCondition > & _xComponent ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
@@ -110,7 +109,7 @@ OXMLFormatCondition::OXMLFormatCondition( ORptFilter& rImport,
     {
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
-            OUString sLocalName;
+         ::rtl::OUString sLocalName;
             const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
             rtl::OUString sValue = _xAttrList->getValueByIndex( i );

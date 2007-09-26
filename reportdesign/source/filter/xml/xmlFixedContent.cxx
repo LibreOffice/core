@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlFixedContent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:21:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,6 @@
 
 namespace rptxml
 {
-    using namespace ::rtl;
     using namespace ::com::sun::star;
 
 class OXMLCharContent : public XMLCharContext
@@ -156,7 +155,7 @@ void OXMLCharContent::InsertString(const ::rtl::OUString& _sString)
 DBG_NAME( rpt_OXMLFixedContent )
 
 OXMLFixedContent::OXMLFixedContent( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName
+                sal_uInt16 nPrfx, const ::rtl::OUString& rLName
                 ,OXMLCell& _rCell
                 ,OXMLTable* _pContainer
                 ,bool _bInP) :
@@ -177,7 +176,7 @@ OXMLFixedContent::~OXMLFixedContent()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
         sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        const ::rtl::OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = OXMLReportElementBase::_CreateChildContext(nPrefix,rLocalName,xAttrList);
