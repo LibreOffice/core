@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDocuments.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:15:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:43:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,6 @@
 
 namespace dbaxml
 {
-    using namespace ::rtl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::xml::sax;
@@ -79,7 +78,7 @@ DBG_NAME(OXMLDocuments)
 
 OXMLDocuments::OXMLDocuments( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                , const OUString& rLName
+                , const ::rtl::OUString& rLName
                 ,const Reference< XNameAccess >& _xContainer
                 ,const ::rtl::OUString& _sCollectionServiceName
                 ,const ::rtl::OUString& _sComponentServiceName) :
@@ -94,7 +93,7 @@ OXMLDocuments::OXMLDocuments( ODBFilter& rImport
 // -----------------------------------------------------------------------------
 OXMLDocuments::OXMLDocuments( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                , const OUString& rLName
+                , const ::rtl::OUString& rLName
                 ,const Reference< XNameAccess >& _xContainer
                 ,const ::rtl::OUString& _sCollectionServiceName
                 ) :
@@ -115,7 +114,7 @@ OXMLDocuments::~OXMLDocuments()
 
 SvXMLImportContext* OXMLDocuments::CreateChildContext(
         sal_uInt16 nPrefix,
-        const OUString& rLocalName,
+        const ::rtl::OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
