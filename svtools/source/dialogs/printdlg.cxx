@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:04:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 15:02:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,8 @@ PrintDialog::PrintDialog( Window* pWindow ) :
 
     maRbtAll.Check();
     ImplSetImages();
+
+    maNumCopies.GrabFocus();
 }
 
 // -----------------------------------------------------------------------
