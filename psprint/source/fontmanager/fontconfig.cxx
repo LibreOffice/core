@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:06:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 15:04:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #ifdef ENABLE_FONTCONFIG
 #include <fontconfig/fontconfig.h>
+#include <fontconfig/fcfreetype.h>
 // be compatible with fontconfig 2.2.0 release
 #ifndef FC_WEIGHT_BOOK
 #define FC_WEIGHT_BOOK 75
@@ -51,6 +52,9 @@ typedef int FcResult;
 typedef int FcBool;
 typedef int FcMatchKind;
 typedef char FcChar8;
+typedef int FcChar32;
+typedef unsigned int FT_UInt;
+typedef void* FT_Face;
 #endif
 
 #include <cstdio>
@@ -104,6 +108,7 @@ class FontCfgWrapper
     FcBool          (*m_pFcConfigSubstitute)(FcConfig*,FcPattern*,FcMatchKind);
     FcBool          (*m_pFcPatternAddInteger)(FcPattern*,const char*,int);
     FcBool          (*m_pFcPatternAddString)(FcPattern*,const char*,const FcChar8*);
+    FT_UInt         (*m_pFcFreeTypeCharIndex)(FT_Face,FcChar32);
 
     oslGenericFunction loadSymbol( const char* );
 
@@ -178,6 +183,8 @@ public:
     { return m_pFcPatternAddInteger( pPattern, pObject, nValue ); }
     FcBool FcPatternAddString( FcPattern* pPattern, const char* pObject, const FcChar8* pString )
     { return m_pFcPatternAddString( pPattern, pObject, pString ); }
+    FT_UInt FcFreeTypeCharIndex( FT_Face face, FcChar32 ucs4 )
+    { return m_pFcFreeTypeCharIndex ? m_pFcFreeTypeCharIndex( face, ucs4 ) : 0; }
 };
 
 oslGenericFunction FontCfgWrapper::loadSymbol( const char* pSymbol )
@@ -252,6 +259,8 @@ FontCfgWrapper::FontCfgWrapper()
         loadSymbol( "FcPatternAddInteger" );
     m_pFcPatternAddString = (FcBool(*)(FcPattern*,const char*,const FcChar8*))
         loadSymbol( "FcPatternAddString" );
+    m_pFcFreeTypeCharIndex = (FT_UInt(*)(FT_Face,FcChar32))
+        loadSymbol( "FcFreeTypeCharIndex" );
 
     if( ! (
             m_pFcInit                       &&
@@ -277,9 +286,10 @@ FontCfgWrapper::FontCfgWrapper()
     {
         osl_unloadModule( (oslModule)m_pLib );
         m_pLib = NULL;
-        #if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "not all needed symbols were found in libfontconfig\n" );
-        #endif
+#endif
+        return;
     }
 
     FcInit();
@@ -561,6 +571,12 @@ bool PrintFontManager::initFontconfig()
 void PrintFontManager::deinitFontconfig()
 {
     FontCfgWrapper::release();
+}
+
+int PrintFontManager::FreeTypeCharIndex( void *pFace, sal_uInt32 aChar )
+{
+    FontCfgWrapper& rWrapper = FontCfgWrapper::get();
+    return rWrapper.isValid() ? rWrapper.FcFreeTypeCharIndex( (FT_Face)pFace, aChar ) : 0;
 }
 
 bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale )
