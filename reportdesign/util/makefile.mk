@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 13:38:50 $
+#   last change: $Author: hr $ $Date: 2007-09-26 14:25:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ SHL3STDLIBS+= \
 .ENDIF
 
 
-SHL3DEPN=
+SHL3DEPN=$(SHL1TARGETN)
 SHL3LIBS=$(LIB3TARGET)
 SHL3IMPLIB=	i$(SHL3TARGET)
 SHL3VERSIONMAP=rptui.map
