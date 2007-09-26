@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:28:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:53:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,27 +237,7 @@ BOOL ORelationTableView::IsAddAllowed()
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
 
-    BOOL bAllowed = !m_pView->getController()->isReadOnly();
-    if ( bAllowed )
-    {
-        Reference<XConnection> xConnection = m_pView->getController()->getConnection();
-        if(!xConnection.is())
-            bAllowed = FALSE;
-        else
-        {
-            try
-            {
-                Reference < XDatabaseMetaData > xMetaData( xConnection->getMetaData() );
-                OSL_ENSURE(xMetaData.is(),"ORelationTableView::IsAddAllowed: The metadata is null!");
-
-                bAllowed = xMetaData.is() && xMetaData->supportsIntegrityEnhancementFacility();
-            }
-            catch(const SQLException&)
-            {
-            }
-        }
-    }
-    return bAllowed;
+    return !m_pView->getController()->isReadOnly();
 }
 //------------------------------------------------------------------------
 void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest)
