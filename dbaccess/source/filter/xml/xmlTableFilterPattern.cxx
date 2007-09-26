@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlTableFilterPattern.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:48:50 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:45:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,14 +47,13 @@
 
 namespace dbaxml
 {
-    using namespace ::rtl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
 DBG_NAME(OXMLTableFilterPattern)
 
 OXMLTableFilterPattern::OXMLTableFilterPattern( SvXMLImport& rImport,
                 sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
+                ,const ::rtl::OUString& _sLocalName
                 ,sal_Bool _bNameFilter
                 ,OXMLTableFilterList& _rParent)
     :SvXMLImportContext( rImport, nPrfx, _sLocalName )
