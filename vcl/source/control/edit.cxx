@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 16:32:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 15:06:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,8 @@
 #ifndef _VCL_CONTROLLAYOUT_HXX
 #include <vcl/controllayout.hxx>
 #endif
+
+#include <vcl/msgbox.hxx>
 
 #include <vos/mutex.hxx>
 
@@ -873,15 +875,39 @@ Reference < i18n::XExtendedInputSequenceChecker > Edit::ImplGetInputSequenceChec
 
 // -----------------------------------------------------------------------
 
+void Edit::ShowTruncationWarning( Window* pParent )
+{
+    ResMgr* pResMgr = ImplGetResMgr();
+    if( pResMgr )
+    {
+        WarningBox aBox( pParent, ResId( SV_EDIT_WARNING_BOX, *pResMgr ) );
+        aBox.Execute();
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void Edit::ImplTruncateToMaxLen( rtl::OUString& rStr, sal_uInt32 nSelectionLen ) const
+{
+    const sal_uInt32 nMaxLen = mnMaxTextLen < 65534 ? mnMaxTextLen : 65534;
+    sal_uInt32 nLenAfter = static_cast<sal_uInt32>(maText.Len()) + rStr.getLength() - nSelectionLen;
+    if ( nLenAfter > nMaxLen )
+    {
+        sal_uInt32 nErasePos = nMaxLen - static_cast<sal_uInt32>(maText.Len()) + nSelectionLen;
+        rStr = rStr.copy( 0, nErasePos );
+        ShowTruncationWarning( const_cast<Edit*>(this) );
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_Bool bIsUserInput )
 {
     Selection aSelection( maSelection );
     aSelection.Justify();
 
-    XubString aNewText( ImplGetValidString( rStr ) );
-
-    if ( (maText.Len() + aNewText.Len() - aSelection.Len()) > mnMaxTextLen )
-        return;
+    rtl::OUString aNewText( ImplGetValidString( rStr ) );
+    ImplTruncateToMaxLen( aNewText, aSelection.Len() );
 
     delete mpLayoutData, mpLayoutData = NULL;
 
@@ -996,12 +1022,12 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
         // at this point now we will insert the non-empty text 'normally' some lines below...
     }
 
-    if ( aNewText.Len() )
-        maText.Insert( aNewText, (xub_StrLen)aSelection.Min() );
+    if ( aNewText.getLength() )
+        maText.Insert( String( aNewText ), (xub_StrLen)aSelection.Min() );
 
     if ( !pNewSel )
     {
-        maSelection.Min() = aSelection.Min() + aNewText.Len();
+        maSelection.Min() = aSelection.Min() + aNewText.getLength();
         maSelection.Max() = maSelection.Min();
     }
     else
@@ -1427,6 +1453,7 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                 uno::Any aData = xDataObj->getTransferData( aFlavor );
                 ::rtl::OUString aText;
                 aData >>= aText;
+                ImplTruncateToMaxLen( aText, maSelection.Len() );
                 ReplaceSelected( aText );
             }
             catch( const ::com::sun::star::uno::Exception& )
