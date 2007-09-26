@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 13:39:08 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:31:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1533,7 +1533,8 @@ void OSQLParseTreeIterator::impl_traverse( sal_uInt32 _nIncludeMask )
         traverseCreateColumns(pCreateNode);
     }
     break;
-
+    case SQL_STATEMENT_INSERT:
+        break;
     default:
         OSL_ENSURE( false, "OSQLParseTreeIterator::traverseAll: not yet implemented for this statement type!" );
         break;
