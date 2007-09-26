@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 10:05:46 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 15:03:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,8 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #endif
+
+#include <vcl/edit.hxx>
 
 
 #include <sot/exchange.hxx>
@@ -1207,14 +1209,16 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                     ::rtl::OUString aText;
                     aData >>= aText;
 
+                    bool bWasTruncated = ImplTruncateNewText( aText );
+
                     String aStr( aText );
                     aStr.ConvertLineEnd( LINEEND_LF );
 
-                    if ( !mpImpl->mpTextEngine->GetMaxTextLen() || ImplCheckTextLen( aStr ) )
-                    {
-                        InsertText( aText, FALSE );
-                        mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
-                    }
+                    InsertText( aText, FALSE );
+                    mpImpl->mpTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
+
+                    if( bWasTruncated )
+                        Edit::ShowTruncationWarning( mpImpl->mpWindow );
                 }
                 catch( const ::com::sun::star::datatransfer::UnsupportedFlavorException& )
                 {
@@ -1739,7 +1743,10 @@ void TextView::ImpShowCursor( BOOL bGotoCursor, BOOL bForceVisCursor, BOOL bSpec
 
     aEditCursor.Left() -= 1;
 
-    if ( bGotoCursor  )
+    if ( bGotoCursor
+        // #i81283# protext maStartDocPos against initialization problems
+        && aOutSz.Width() && aOutSz.Height()
+    )
     {
         long nVisStartY = mpImpl->maStartDocPos.Y();
         long nVisEndY = mpImpl->maStartDocPos.Y() + aOutSz.Height();
@@ -1937,6 +1944,34 @@ BOOL TextView::Read( SvStream& rInput )
 BOOL TextView::Write( SvStream& rOutput )
 {
     return mpImpl->mpTextEngine->Read( rOutput, &mpImpl->maSelection );
+}
+
+bool TextView::ImplTruncateNewText( rtl::OUString& rNewText ) const
+{
+    bool bTruncated = false;
+
+    if( rNewText.getLength() > 65534 ) // limit to String API
+    {
+        rNewText = rNewText.copy( 0, 65534 );
+        bTruncated = true;
+    }
+
+    ULONG nMaxLen = mpImpl->mpTextEngine->GetMaxTextLen();
+    ULONG nCurLen = mpImpl->mpTextEngine->GetTextLen();
+
+    sal_uInt32 nNewLen = rNewText.getLength();
+    if ( nCurLen + nNewLen > nMaxLen )
+    {
+        // see how much text will be replaced
+        ULONG nSelLen = mpImpl->mpTextEngine->GetTextLen( mpImpl->maSelection );
+        if ( nCurLen + nNewLen - nSelLen > nMaxLen )
+        {
+            sal_uInt32 nTruncatedLen = static_cast<sal_uInt32>(nMaxLen - (nCurLen - nSelLen));
+            rNewText = rNewText.copy( 0, nTruncatedLen );
+            bTruncated = true;
+        }
+    }
+    return bTruncated;
 }
 
 BOOL TextView::ImplCheckTextLen( const String& rNewText )
