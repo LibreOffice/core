@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContainerMediator.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:29:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:40:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,19 +89,28 @@ OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContain
     , m_eType( _eType )
 {
     DBG_CTOR(OContainerMediator,NULL);
-    osl_incrementInterlockedCount(&m_refCount);
-    try
+
+    if ( _xSettings.is() && _xContainer.is() )
     {
-        m_xContainer->addContainerListener(this);
-        Reference< XContainer > xContainer(m_xSettings, UNO_QUERY);
-        if ( xContainer.is() )
-            xContainer->addContainerListener(this);
+        osl_incrementInterlockedCount(&m_refCount);
+        try
+        {
+            m_xContainer->addContainerListener(this);
+            Reference< XContainer > xContainer(_xSettings, UNO_QUERY);
+            if ( xContainer.is() )
+                xContainer->addContainerListener(this);
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(sal_False, "OContainerMediator::OContainerMediator: caught an exception!");
+        }
+        osl_decrementInterlockedCount( &m_refCount );
     }
-    catch(Exception&)
+    else
     {
-        OSL_ENSURE(sal_False, "OContainerMediator::OContainerMediator: caught an exception!");
+        m_xSettings.clear();
+        m_xContainer.clear();
     }
-    osl_decrementInterlockedCount( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 OContainerMediator::~OContainerMediator()
@@ -119,11 +128,14 @@ void OContainerMediator::impl_cleanup_nothrow()
         Reference< XContainer > xContainer( m_xSettings, UNO_QUERY );
         if ( xContainer.is() )
             xContainer->removeContainerListener( this );
-        m_xSettings = NULL;
+        m_xSettings.clear();
 
-        if ( m_xContainer.is() )
-            m_xContainer->removeContainerListener( this );
-        m_xContainer = NULL;
+        xContainer = m_xContainer;
+        if ( xContainer.is() )
+            xContainer->removeContainerListener( this );
+        m_xContainer.clear();//WeakReference< XContainer >();
+
+        m_aForwardList.clear();
     }
     catch( const Exception& )
     {
@@ -151,7 +163,8 @@ void SAL_CALL OContainerMediator::elementInserted( const ContainerEvent& _rEvent
 void SAL_CALL OContainerMediator::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    if ( _rEvent.Source == m_xContainer && m_xContainer.is() )
+    Reference< XContainer > xContainer = m_xContainer;
+    if ( _rEvent.Source == xContainer && xContainer.is() )
     {
         ::rtl::OUString sElementName;
         _rEvent.Accessor >>= sElementName;
@@ -176,12 +189,14 @@ void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& /*_rEve
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL OContainerMediator::disposing( const EventObject& Source ) throw(RuntimeException)
+void SAL_CALL OContainerMediator::disposing( const EventObject& /*Source*/ ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    if ( Source.Source == m_xContainer || Source.Source == m_xSettings )
-        impl_cleanup_nothrow();
+//    Reference< XContainer > xContainer = m_xContainer;
+//  if ( Source.Source == xContainer || Source.Source == m_xSettings )
+    // this can only be one of them :-) So no check needed here
+    impl_cleanup_nothrow();
 }
 
 // -----------------------------------------------------------------------------
@@ -191,7 +206,7 @@ Reference< XPropertySet > OContainerMediator::impl_getSettingsForInitialization_
     Reference< XPropertySet > xSettings;
     try
     {
-        if ( m_xSettings->hasByName( _rName ) )
+        if ( m_xSettings.is() && m_xSettings->hasByName( _rName ) )
             OSL_VERIFY( m_xSettings->getByName( _rName ) >>= xSettings );
         else if ( m_eType == eColumns )
         {
