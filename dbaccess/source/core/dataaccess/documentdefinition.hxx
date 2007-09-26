@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:25:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,18 +113,24 @@ private:
     *
     * \param _rArgs
     * \param _rEmbeddedObjectDescriptor
+    * \param _xConnection
+    * \param _bReadOnly
+    * \param _nMarcoExcecMode
     */
     void fillLoadArgs(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rArgs
                     , ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rEmbeddedObjectDescriptor
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
-                    ,sal_Bool _bReadOnly);
+                    ,sal_Bool _bReadOnly
+                    ,sal_Int16 _nMarcoExcecMode);
     /** loads the EmbeddedObject if not already loaded
         @param  _aClassID
             If set, it will be used to create the embedded object.
     */
-    void loadEmbeddedObject(const ::com::sun::star::uno::Sequence< sal_Int8 >& _aClassID = ::com::sun::star::uno::Sequence< sal_Int8 >()
+    void loadEmbeddedObject(sal_Int16 _nMarcoExcecMode
+                            ,const ::com::sun::star::uno::Sequence< sal_Int8 >& _aClassID = ::com::sun::star::uno::Sequence< sal_Int8 >()
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>()
-                            ,sal_Bool _bReadOnly = sal_False);
+                            ,sal_Bool _bReadOnly = sal_False
+                            );
 
 
     void generateNewImage(::com::sun::star::uno::Any& _rImage);
