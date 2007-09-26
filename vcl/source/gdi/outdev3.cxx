@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.230 $
+ *  $Revision: 1.231 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:12:25 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 15:06:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -7155,6 +7155,7 @@ FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
         aFontInfo.SetPitch( rData.mePitch );
         aFontInfo.SetWeight( rData.meWeight );
         aFontInfo.SetItalic( rData.meItalic );
+        aFontInfo.SetWidthType( rData.meWidthType );
         if( rData.IsScalable() )
             aFontInfo.mpImplMetric->mnMiscFlags |= ImplFontMetric::SCALABLE_FLAG;
         if( rData.mbDevice )
@@ -7273,6 +7274,7 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.SetPitch( pMetric->mePitch );
     aMetric.SetWeight( pMetric->meWeight );
     aMetric.SetItalic( pMetric->meItalic );
+    aMetric.SetWidthType( pMetric->meWidthType );
     if ( pEntry->mnOwnOrientation )
         aMetric.SetOrientation( pEntry->mnOwnOrientation );
     else
