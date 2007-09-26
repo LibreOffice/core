@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:35:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,9 +291,11 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
             }
 
             sal_Int32 nPos = 1;
+            OSL_ENSURE((nPos) < static_cast<sal_Int32>(aTypes.size()),"aTypes: Illegal index for vector");
             aValue.fill(nPos,aTypes[nPos],xRow);
             ::rtl::OUString sTypeName = aValue;
             ++nPos;
+            OSL_ENSURE((nPos) < static_cast<sal_Int32>(aTypes.size()),"aTypes: Illegal index for vector");
             aValue.fill(nPos,aTypes[nPos],xRow);
             sal_Int32 nType = aValue;
             ++nPos;
@@ -305,6 +307,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 m_pTypeInfo->aTypeName      = sTypeName;
                 m_pTypeInfo->nType          = nType;
 
+                OSL_ENSURE((nPos) < static_cast<sal_Int32>(aTypes.size()),"aTypes: Illegal index for vector");
                 aValue.fill(nPos,aTypes[nPos],xRow);
                 m_pTypeInfo->nPrecision     = aValue;
                 ++nPos;
@@ -380,91 +383,99 @@ void ODatabaseExport::insertValueIntoColumn()
         if(pField)
         {
             sal_Int32 nNewPos = m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos;
-            OSL_ENSURE((nNewPos) < static_cast<sal_Int32>(m_vColumns.size()),"Illegal index for vector");
+            OSL_ENSURE((nNewPos) < static_cast<sal_Int32>(m_vColumns.size()),"m_vColumns: Illegal index for vector");
 
-            sal_Int32 nPos = m_vColumns[nNewPos].first;
-            if ( nPos != COLUMN_POSITION_NOT_FOUND )
+            if ( (nNewPos) < static_cast<sal_Int32>(m_vColumns.size() ) )
             {
-//                  if(m_nDefToken != LANGUAGE_DONTKNOW) // falls Sprache anders als Systemsprache
-//                      m_pNF->ChangeIntl((LanguageType)m_nDefToken);
-
-                if(!m_sTextToken.Len() && m_xResultSetMetaData->isNullable(nPos))
-                    m_pUpdateHelper->updateNull(nPos,pField->GetType());
-                else
+                sal_Int32 nPos = m_vColumns[nNewPos].first;
+                if ( nPos != COLUMN_POSITION_NOT_FOUND )
                 {
-                    sal_Int32 nNumberFormat = 0;
-                    double fOutNumber = 0.0;
-                    OSL_ENSURE((nNewPos) < static_cast<sal_Int32>(m_vColumnTypes.size()),"Illegal index for vector");
-                    if (m_vColumnTypes[nNewPos] != DataType::VARCHAR)
-                    {
-                        Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
-                        Reference<XPropertySet> xNumberFormatSettings = xSupplier->getNumberFormatSettings();
-                        com::sun::star::util::Date aNullDate;
-                        xNumberFormatSettings->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate"))) >>= aNullDate;
+    //                  if(m_nDefToken != LANGUAGE_DONTKNOW) // falls Sprache anders als Systemsprache
+    //                      m_pNF->ChangeIntl((LanguageType)m_nDefToken);
 
-                        ensureFormatter();
-                        if ( m_pFormatter && m_sNumToken.Len() )
+                    if(!m_sTextToken.Len() && m_xResultSetMetaData->isNullable(nPos))
+                        m_pUpdateHelper->updateNull(nPos,pField->GetType());
+                    else
+                    {
+                        sal_Int32 nNumberFormat = 0;
+                        double fOutNumber = 0.0;
+                        OSL_ENSURE((nNewPos) < static_cast<sal_Int32>(m_vColumnTypes.size()),"Illegal index for vector");
+                        if (m_vColumnTypes[nNewPos] != DataType::VARCHAR && m_vColumnTypes[nNewPos] != DataType::CHAR && m_vColumnTypes[nNewPos] != DataType::LONGVARCHAR )
                         {
-                            LanguageType eNumLang;
-                            sal_uInt32 nNumberFormat2;
-                            fOutNumber = SfxHTMLParser::GetTableDataOptionsValNum(nNumberFormat2,eNumLang,m_sTextToken,m_sNumToken,*m_pFormatter);
-                            nNumberFormat = static_cast<sal_Int32>(nNumberFormat2);
-                        }
-                        else
-                        {
-                            Reference<XNumberFormatTypes> xNumType(xSupplier->getNumberFormats(),UNO_QUERY);
-                            sal_Int16 nFormats[] = { NumberFormat::DATETIME
-                                ,NumberFormat::DATETIME
-                                ,NumberFormat::DATE
-                                ,NumberFormat::TIME
-                                ,NumberFormat::NUMBER
-                                ,NumberFormat::LOGICAL
-                            };
-                            for (size_t i = 0; i < sizeof(nFormats)/sizeof(nFormats[0]); ++i)
+                            Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
+                            Reference<XPropertySet> xNumberFormatSettings = xSupplier->getNumberFormatSettings();
+                            com::sun::star::util::Date aNullDate;
+                            xNumberFormatSettings->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate"))) >>= aNullDate;
+
+                            ensureFormatter();
+                            bool bNumberFormatError = false;
+                            if ( m_pFormatter && m_sNumToken.Len() )
                             {
+                                LanguageType eNumLang;
+                                sal_uInt32 nNumberFormat2;
+                                fOutNumber = SfxHTMLParser::GetTableDataOptionsValNum(nNumberFormat2,eNumLang,m_sTextToken,m_sNumToken,*m_pFormatter);
+                                nNumberFormat = static_cast<sal_Int32>(nNumberFormat2);
+                            }
+                            else
+                            {
+                                Reference<XNumberFormatTypes> xNumType(xSupplier->getNumberFormats(),UNO_QUERY);
+                                sal_Int16 nFormats[] = { NumberFormat::DATETIME
+                                    ,NumberFormat::DATETIME
+                                    ,NumberFormat::DATE
+                                    ,NumberFormat::TIME
+                                    ,NumberFormat::NUMBER
+                                    ,NumberFormat::LOGICAL
+                                };
+                                for (size_t i = 0; i < sizeof(nFormats)/sizeof(nFormats[0]); ++i)
+                                {
+                                    try
+                                    {
+                                        nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(nFormats[i],m_aLocale),m_sTextToken);
+                                        break;
+                                    }
+                                    catch(Exception&)
+                                    {
+                                    }
+                                }
                                 try
                                 {
-                                    nNumberFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(nFormats[i],m_aLocale),m_sTextToken);
-                                    break;
+                                    fOutNumber = m_xFormatter->convertStringToNumber(nNumberFormat,m_sTextToken);
                                 }
                                 catch(Exception&)
                                 {
+                                    bNumberFormatError = true;
+                                    m_pUpdateHelper->updateString(nPos,m_sTextToken);
                                 }
                             }
-                            try
+                            if ( !bNumberFormatError )
                             {
-                                fOutNumber = m_xFormatter->convertStringToNumber(nNumberFormat,m_sTextToken);
+                                try
+                                {
+                                    Reference< XNumberFormats >         xFormats = xSupplier->getNumberFormats();
+                                    Reference<XPropertySet> xProp = xFormats->getByKey(nNumberFormat);
+                                    sal_Int16 nType = 0;
+                                    xProp->getPropertyValue(PROPERTY_TYPE) >>= nType;
+                                    switch(nType)
+                                    {
+                                        case NumberFormat::DATE:
+                                        case NumberFormat::DATETIME:
+                                            fOutNumber = ::dbtools::DBTypeConversion::toStandardDbDate(aNullDate,fOutNumber);
+                                            break;
+                                        default:
+                                            ;
+                                    }
+                                    m_pUpdateHelper->updateDouble(nPos,fOutNumber);//::dbtools::DBTypeConversion::getStandardDate()
+                                }
+                                catch(Exception&)
+                                {
+                                    m_pUpdateHelper->updateString(nPos,m_sTextToken);
+                                }
                             }
-                            catch(Exception&)
-                            {
-                                OSL_ENSURE(0,"Could not convert to number!");
-                            }
-                        }
-                        try
-                        {
-                            Reference< XNumberFormats >         xFormats = xSupplier->getNumberFormats();
-                            Reference<XPropertySet> xProp = xFormats->getByKey(nNumberFormat);
-                            sal_Int16 nType = 0;
-                            xProp->getPropertyValue(PROPERTY_TYPE) >>= nType;
-                            switch(nType)
-                            {
-                                case NumberFormat::DATE:
-                                case NumberFormat::DATETIME:
-                                    fOutNumber = ::dbtools::DBTypeConversion::toStandardDbDate(aNullDate,fOutNumber);
-                                    break;
-                                default:
-                                    ;
-                            }
-                            m_pUpdateHelper->updateDouble(nPos,fOutNumber);//::dbtools::DBTypeConversion::getStandardDate()
-                        }
-                        catch(Exception&)
-                        {
-                            m_pUpdateHelper->updateString(nPos,m_sTextToken);
-                        }
 
+                        }
+                        else
+                            m_pUpdateHelper->updateString(nPos,m_sTextToken);
                     }
-                    else
-                        m_pUpdateHelper->updateString(nPos,m_sTextToken);
                 }
             }
             eraseTokens();
@@ -621,6 +632,8 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
         {
             sal_Int32 nDataType;
             sal_Int32 nLength(0),nScale(0);
+            OSL_ENSURE((i) < static_cast<sal_Int32>(m_vFormatKey.size()),"m_vFormatKey: Illegal index for vector");
+            OSL_ENSURE((i) < static_cast<sal_Int32>(m_vColumnSize.size()),"m_vColumnSize: Illegal index for vector");
             Reference<XPropertySet> xProp = xFormats->getByKey(m_vFormatKey[i]);
             sal_Int16 nType = 0;
             xProp->getPropertyValue(PROPERTY_TYPE) >>= nType;
@@ -683,13 +696,11 @@ void ODatabaseExport::CreateDefaultColumn(const ::rtl::OUString& _rColumnName)
         aAlias = ::dbtools::convertName2SQLName(_rColumnName,xDestMetaData->getExtraNameCharacters());
 
     if(nMaxNameLen && aAlias.getLength() > nMaxNameLen)
-        aAlias = aAlias.copy(0, ::std::min<sal_Int32>( nMaxNameLen, aAlias.getLength() ) );
+        aAlias = aAlias.copy(0, ::std::min<sal_Int32>( nMaxNameLen-1, aAlias.getLength() ) );
 
     ::rtl::OUString sName(aAlias);
     if(m_aDestColumns.find(sName) != m_aDestColumns.end())
     {
-        aAlias = aAlias.copy(0,::std::min<sal_Int32>( nMaxNameLen-1, aAlias.getLength() ));
-
         sal_Int32 nPos = 0;
         sal_Int32 nCount = 2;
         while(m_aDestColumns.find(sName) != m_aDestColumns.end())
@@ -765,14 +776,25 @@ sal_Bool ODatabaseExport::createRowSet()
 sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _sTableName,const Any& _aTextColor,const FontDescriptor& _rFont)
 {
     DBG_CHKTHIS(ODatabaseExport,NULL);
-    OCopyTableWizard aWizard(NULL,_sTableName,m_aDestColumns,m_vDestVector,m_xConnection,m_xFormatter,m_xFactory);
 
+    //--------dyf add 20070601
+    //if there is a table was selected,then create with m_sDefaultTableName,otherwise,with _sTableName
+    OCopyTableWizard aWizard(NULL,_sTableName,m_aDestColumns,m_vDestVector,m_xConnection,m_xFormatter,m_xFactory);
+    if (m_sDefaultTableName.getLength() != 0 )
+    {
+        aWizard.ResetsName(m_sDefaultTableName);
+        aWizard.setCreateStyle(OCopyTableWizard::WIZARD_APPEND_DATA);
+    }
     sal_Bool bError = sal_False;
     try
     {
         aWizard.fillTypeInfo();
 
-        OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, sal_False,OCopyTableWizard::WIZARD_DEF_DATA);
+        OCopyTable*         pPage1;
+        pPage1 = new OCopyTable(&aWizard,COPY, sal_False);
+        pPage1->setCreateStyleAction();
+    //---------dyf add end
+
         OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
         OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
         OWizTypeSelect*     pPage4 = createPage(&aWizard);
@@ -861,12 +883,19 @@ void ODatabaseExport::adjustFormat()
 {
     if ( m_sTextToken.Len() )
     {
-        sal_Int32 nColPos = m_vColumns[m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos].first;
-        if( nColPos != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND))
+        sal_Int32 nNewPos = m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos;
+        OSL_ENSURE((nNewPos) < static_cast<sal_Int32>(m_vColumns.size()),"Illegal index for vector");
+        if ( (nNewPos) < static_cast<sal_Int32>(m_vColumns.size()) )
         {
-            --nColPos;
-            m_vFormatKey[nColPos] = CheckString(m_sTextToken,m_vFormatKey[nColPos]);
-            m_vColumnSize[nColPos] = ::std::max<sal_Int32>((sal_Int32)m_vColumnSize[nColPos],(sal_Int32)m_sTextToken.Len());
+            sal_Int32 nColPos = m_vColumns[nNewPos].first;
+            if( nColPos != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND))
+            {
+                --nColPos;
+                OSL_ENSURE((nColPos) < static_cast<sal_Int32>(m_vFormatKey.size()),"m_vFormatKey: Illegal index for vector");
+                OSL_ENSURE((nColPos) < static_cast<sal_Int32>(m_vColumnSize.size()),"m_vColumnSize: Illegal index for vector");
+                m_vFormatKey[nColPos] = CheckString(m_sTextToken,m_vFormatKey[nColPos]);
+                m_vColumnSize[nColPos] = ::std::max<sal_Int32>((sal_Int32)m_vColumnSize[nColPos],(sal_Int32)m_sTextToken.Len());
+            }
         }
         eraseTokens();
     }
@@ -926,6 +955,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
             ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),i+1),::std::select2nd<ODatabaseExport::TPositions::value_type>()));
         if ( _rvColumns.end() != aFind && aFind->second != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND) && aFind->first != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND) )
         {
+            OSL_ENSURE((aFind->first) < static_cast<sal_Int32>(aInsertList.size()),"aInsertList: Illegal index for vector");
             aInsertList[aFind->first] = ::dbtools::quoteName( aQuote,*(pIter+i));
         }
     }
