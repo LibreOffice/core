@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:11:43 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,11 +174,9 @@ void SAL_CALL ODBTableDecorator::disposing()
     m_pTables       = NULL;
     m_xColumnDefinitions = NULL;
     m_xNumberFormats = NULL;
-    m_xColumnMediator = NULL;
     if ( m_pColumns )
-    {
         m_pColumns->disposing();
-    }
+    m_xColumnMediator = NULL;
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ODBTableDecorator::convertFastPropertyValue(
@@ -398,22 +396,22 @@ void ODBTableDecorator::construct()
     Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
 
     Sequence< Property > aTableProps = xInfo->getProperties();
-    Property* pBegin = aTableProps.getArray();
-    Property* pEnd = pBegin + aTableProps.getLength();
-    for (;pBegin != pEnd ; ++pBegin)
+    Property* pIter = aTableProps.getArray();
+    Property* pEnd = pIter + aTableProps.getLength();
+    for (;pIter != pEnd ; ++pIter)
     {
-        if (0 == pBegin->Name.compareToAscii(PROPERTY_CATALOGNAME))
-            pBegin->Handle = PROPERTY_ID_CATALOGNAME;
-        else if (0 ==pBegin->Name.compareToAscii(PROPERTY_SCHEMANAME))
-            pBegin->Handle = PROPERTY_ID_SCHEMANAME;
-        else if (0 ==pBegin->Name.compareToAscii(PROPERTY_NAME))
-            pBegin->Handle = PROPERTY_ID_NAME;
-        else if (0 ==pBegin->Name.compareToAscii(PROPERTY_DESCRIPTION))
-            pBegin->Handle = PROPERTY_ID_DESCRIPTION;
-        else if (0 ==pBegin->Name.compareToAscii(PROPERTY_TYPE))
-            pBegin->Handle = PROPERTY_ID_TYPE;
-        else if (0 ==pBegin->Name.compareToAscii(PROPERTY_PRIVILEGES))
-            pBegin->Handle = PROPERTY_ID_PRIVILEGES;
+        if (0 == pIter->Name.compareToAscii(PROPERTY_CATALOGNAME))
+            pIter->Handle = PROPERTY_ID_CATALOGNAME;
+        else if (0 ==pIter->Name.compareToAscii(PROPERTY_SCHEMANAME))
+            pIter->Handle = PROPERTY_ID_SCHEMANAME;
+        else if (0 ==pIter->Name.compareToAscii(PROPERTY_NAME))
+            pIter->Handle = PROPERTY_ID_NAME;
+        else if (0 ==pIter->Name.compareToAscii(PROPERTY_DESCRIPTION))
+            pIter->Handle = PROPERTY_ID_DESCRIPTION;
+        else if (0 ==pIter->Name.compareToAscii(PROPERTY_TYPE))
+            pIter->Handle = PROPERTY_ID_TYPE;
+        else if (0 ==pIter->Name.compareToAscii(PROPERTY_PRIVILEGES))
+            pIter->Handle = PROPERTY_ID_PRIVILEGES;
     }
 
     describeProperties(aTableProps);
@@ -647,10 +645,10 @@ void ODBTableDecorator::refreshColumns()
         if(xNames.is())
         {
             Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
-            const ::rtl::OUString* pBegin   = aNames.getConstArray();
-            const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-            for(;pBegin != pEnd;++pBegin)
-                aVector.push_back(*pBegin);
+            const ::rtl::OUString* pIter    = aNames.getConstArray();
+            const ::rtl::OUString* pEnd     = pIter + aNames.getLength();
+            for(;pIter != pEnd;++pIter)
+                aVector.push_back(*pIter);
         }
     }
     if(!m_pColumns)
