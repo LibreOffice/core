@@ -6,9 +6,9 @@
 //
 //  $RCSfile: sqlflex.l,v $
 //
-//  $Revision: 1.30 $
+//  $Revision: 1.31 $
 //
-//  last change: $Author: rt $ $Date: 2006-07-25 07:45:46 $
+//  last change: $Author: hr $ $Date: 2007-09-26 14:31:39 $
 //
 //  The Contents of this file are made available subject to
 //  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,6 +183,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 
 [Dd]											{SQL_NEW_KEYWORD(SQL_TOKEN_D); return SQL_TOKEN_D; }
 [Dd][Aa][Tt][Ee]								{SQL_NEW_KEYWORD(SQL_TOKEN_DATE); return SQL_TOKEN_DATE; }
+[Dd][Aa][Tt][Ee][Dd][Ii][Ff][Ff]				{SQL_NEW_KEYWORD(SQL_TOKEN_DATEDIFF); return SQL_TOKEN_DATEDIFF; }
 [Dd][Aa][Tt][Ee][Vv][Aa][Ll][Uu][Ee]			{SQL_NEW_KEYWORD(SQL_TOKEN_DATEVALUE); return SQL_TOKEN_DATEVALUE; }
 [Dd][Aa][Yy]									{SQL_NEW_KEYWORD(SQL_TOKEN_DAY); return SQL_TOKEN_DAY; }
 [Dd][Aa][Yy][Nn][Aa][Mm][Ee]					{SQL_NEW_KEYWORD(SQL_TOKEN_DAYNAME); return SQL_TOKEN_DAYNAME; }
@@ -245,7 +246,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Ll][Nn]								{SQL_NEW_KEYWORD(SQL_TOKEN_LN); return SQL_TOKEN_LN; }
 [Ll][Oo][Cc][Aa][Ll]							{SQL_NEW_KEYWORD(SQL_TOKEN_LOCAL); return SQL_TOKEN_LOCAL; }
 [Ll][Oo][Cc][Aa][Tt][Ee]						{SQL_NEW_KEYWORD(SQL_TOKEN_LOCATE); return SQL_TOKEN_LOCATE; }
-[Ll][Oo][Gg]									{SQL_NEW_KEYWORD(SQL_TOKEN_LOGF); return SQL_TOKEN_LOGF; }
+[Ll][Oo][Gg]									{SQL_NEW_KEYWORD(SQL_TOKEN_LOG); return SQL_TOKEN_LOG; }
 [Ll][Oo][Gg][Ff]								{SQL_NEW_KEYWORD(SQL_TOKEN_LOGF); return SQL_TOKEN_LOGF; }
 [Ll][Oo][Gg]10									{SQL_NEW_KEYWORD(SQL_TOKEN_LOG10); return SQL_TOKEN_LOG10; }
 [Ll][Oo][Ww][Ee][Rr]							{SQL_NEW_KEYWORD(SQL_TOKEN_LOWER); return SQL_TOKEN_LOWER; }
@@ -294,6 +295,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Rr][Ee][Pp][Ll][Aa][Cc][Ee]				    {SQL_NEW_KEYWORD(SQL_TOKEN_REPLACE); return SQL_TOKEN_REPLACE; }
 [Rr][Oo][Ll][Ll][Bb][Aa][Cc][Kk]                {SQL_NEW_KEYWORD(SQL_TOKEN_ROLLBACK); return SQL_TOKEN_ROLLBACK; }
 [Rr][Oo][Uu][Nn][Dd]			                {SQL_NEW_KEYWORD(SQL_TOKEN_ROUND); return SQL_TOKEN_ROUND; }
+[Rr][Oo][Uu][Nn][Dd][Mm][Aa][Gg][Ii][Cc]        {SQL_NEW_KEYWORD(SQL_TOKEN_ROUNDMAGIC); return SQL_TOKEN_ROUNDMAGIC; }
 [Rr][Ii][Gg][Hh][Tt]							{SQL_NEW_KEYWORD(SQL_TOKEN_RIGHT); return SQL_TOKEN_RIGHT; }
 [Rr][Tt][Rr][Ii][Mm]							{SQL_NEW_KEYWORD(SQL_TOKEN_RTRIM); return SQL_TOKEN_RTRIM; }
 
