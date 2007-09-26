@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:04:48 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:40:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,9 +138,12 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
             The media descriptor
         @param  _xStorageToSaveTo
             The storage which should be used for saving
+        @param  _rGuard
+            The gurad will be clear before notifying
     */
     void store(const ::rtl::OUString& sURL
-             , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& lArguments);
+             , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& lArguments
+             ,ModelMethodGuard& _rGuard);
 
     /** notifies the global event broadcaster
         @param  _sEventName
@@ -359,6 +362,13 @@ private:
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
             impl_getDocumentContainer_throw( ODatabaseModelImpl::ObjectType _eType );
+
+    /** clears the guard before notifying.
+    *
+    * \param _bModified
+    * \param _rGuard
+    */
+    void setModified( sal_Bool _bModified,ModelMethodGuard& _rGuard );
 };
 
 //........................................................................
