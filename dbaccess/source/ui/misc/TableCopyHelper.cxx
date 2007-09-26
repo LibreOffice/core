@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableCopyHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:13:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,6 @@ void insertRows(const Reference<XResultSet>& xSrcRs,
     const Any* pSelBegin    = _aSelection.getConstArray();
     const Any* pSelEnd      = pSelBegin + _aSelection.getLength();
     sal_Bool bNext = sal_True;
-    sal_Bool bAlreadyAsked = sal_False;
     do // loop as long as there are more rows or the selection ends
     {
         if ( bUseSelection )
@@ -327,14 +326,12 @@ void insertRows(const Reference<XResultSet>& xSrcRs,
             catch(SQLWarning& e) { aInfo = e; }
             catch(SQLException& e) { aInfo = e; }
 
-            if ( aInfo.isValid() && !bAlreadyAsked )
+            if ( aInfo.isValid() )
             {
                 String sAskIfContinue = String(ModuleRes(STR_ERROR_OCCURED_WHILE_COPYING));
                 String sTitle = String(ModuleRes(STR_STAT_WARNING));
-                OSQLMessageBox aDlg(_pParent,sTitle,sAskIfContinue,WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Warning);
-                if ( aDlg.Execute() == RET_YES )
-                    bAlreadyAsked = sal_True;
-                else
+                OSQLMessageBox aDlg(_pParent,sTitle,sAskIfContinue,WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Warning,&aInfo);
+                if ( aDlg.Execute() != RET_YES )
                 {
                     SQLException e;
                     switch( aInfo.getType() )
@@ -439,7 +436,9 @@ Reference<XResultSet> createResultSet(  OGenericUnoController* _pBrowser,sal_Boo
 }
 }
 // -----------------------------------------------------------------------------
-OTableCopyHelper::OTableCopyHelper(OGenericUnoController* _pControler) : m_pController(_pControler)
+OTableCopyHelper::OTableCopyHelper(OGenericUnoController* _pControler)
+    :m_pController(_pControler)
+    ,m_bSelectCopyTable(sal_False)
 {
 }
 // -----------------------------------------------------------------------------
@@ -468,6 +467,10 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
 
             aTrans.nType            = E_TABLE;
             aTrans.bHtml            = SOT_FORMATSTR_ID_HTML == _nFormatId || SOT_FORMATSTR_ID_HTML_SIMPLE == _nFormatId;
+            ///dyf add 20070601
+            //add for transfor the selected tablename
+            aTrans.sDefaultTableName       = GetDefaultTableName();
+            //dyf add end
             if ( !copyTagTable(aTrans,sal_False,_xConnection) )
                 m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
         }
@@ -610,9 +613,21 @@ void OTableCopyHelper::insertTable(sal_Int32 _nCommandType
                                             _xDestConnection,
                                             getNumberFormatter(_xDestConnection,m_pController->getORB()),
                                             m_pController->getORB());
+
+                //--------dyf modify 2006/6/27
                 aWizard.fillTypeInfo();
                 aWizard.loadData();
-                OCopyTable*         pPage1 = new OCopyTable(&aWizard,COPY, bIsView,OCopyTableWizard::WIZARD_DEF_DATA);
+                if(GetIsSelectCopytable())
+                {
+                    aWizard.ResetsName( GetDefaultTableName());
+                    aWizard.setCreateStyle(OCopyTableWizard::WIZARD_APPEND_DATA);
+                }
+
+                OCopyTable*         pPage1;
+                pPage1 = new OCopyTable(&aWizard,COPY, bIsView);
+                pPage1->setCreateStyleAction();
+
+                //--------dyf modify end
                 OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
                 OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
                 OWizNormalExtend*   pPage4 = new OWizNormalExtend(&aWizard);
@@ -747,6 +762,10 @@ sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc
     if ( _bCheck )
         pImport->enableCheckOnly();
 
+    //dyf add 20070601
+    //set the selected tablename
+    pImport->setSTableName(_rDesc.sDefaultTableName);
+    //dyf add end
     pImport->setStream(pStream);
     return pImport->Read();
 }
