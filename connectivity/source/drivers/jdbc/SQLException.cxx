@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SQLException.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:49:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:29:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,12 +107,12 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
-        static const char * cSignature = "()Ljava/sql/Exception;";
+        static const char * cSignature = "()Ljava/sql/SQLException;";
         static const char * cMethodName = "getNextException";
         // Java-Call absetzen
         static jmethodID mID = NULL;
         if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,0);
