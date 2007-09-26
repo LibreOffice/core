@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:30:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:38:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -637,6 +637,10 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
+
+    // if nothing is changed, do nothing
+    if ( getSQLPart( _ePart, m_aAdditiveIterator, sal_False ) == _rClause )
+        return;
 
     // collect the 4 single parts as they're currently set
     ::std::vector< ::rtl::OUString > aClauses;
