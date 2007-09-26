@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:06:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:46:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,7 +419,7 @@ void OApplicationController::previewChanged( sal_Int32 _nMode )
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    if ( m_xDataSource.is() )
+    if ( m_xDataSource.is() && !isDataSourceReadOnly() )
     {
         try
         {
