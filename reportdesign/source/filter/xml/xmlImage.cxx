@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlImage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:57:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:22:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,14 +67,13 @@
 
 namespace rptxml
 {
-    using namespace ::rtl;
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
 DBG_NAME( rpt_OXMLImage )
 
 OXMLImage::OXMLImage( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const OUString& rLName,
+                sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
                 const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XImageControl > & _xComponent
                 ,OXMLTable* _pContainer) :
@@ -92,7 +91,7 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
     {
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
-            OUString sLocalName;
+         ::rtl::OUString sLocalName;
             const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
             rtl::OUString sValue = _xAttrList->getValueByIndex( i );
