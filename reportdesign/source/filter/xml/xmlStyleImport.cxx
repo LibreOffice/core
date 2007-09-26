@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlStyleImport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:34:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:24:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,6 @@
 namespace rptxml
 {
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -133,7 +132,7 @@ TYPEINIT1( OReportStylesContext, SvXMLStylesContext );
 DBG_NAME( rpt_OControlStyleContext )
 
 OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
-        sal_uInt16 nPrfx, const OUString& rLName,
+        sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle ) :
     XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle ),
@@ -200,8 +199,8 @@ void OControlStyleContext::AddProperty(const sal_Int16 nContextID, const uno::An
 }
 // -----------------------------------------------------------------------------
 void OControlStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                        const OUString& rLocalName,
-                                        const OUString& rValue )
+                                        const ::rtl::OUString& rLocalName,
+                                        const ::rtl::OUString& rValue )
 {
     // TODO: use a map here
     if( IsXMLToken(rLocalName, XML_DATA_STYLE_NAME ) )
@@ -221,7 +220,7 @@ DBG_NAME( rpt_OReportStylesContext )
 
 OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
         sal_uInt16 nPrfx ,
-        const OUString& rLName ,
+        const ::rtl::OUString& rLName ,
         const Reference< XAttributeList > & xAttrList,
         const sal_Bool bTempAutoStyles ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
@@ -314,7 +313,7 @@ UniReference < SvXMLImportPropertyMapper >
 }
 // -----------------------------------------------------------------------------
 SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
-        sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
+        sal_uInt16 nFamily, sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle = 0;
@@ -337,7 +336,7 @@ SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
 }
 // ----------------------------------------------------------------------------
 SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
-        sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
+        sal_uInt16 nFamily, sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nPrefix,
@@ -369,7 +368,7 @@ Reference < XNameContainer >
     Reference < XNameContainer > xStyles(SvXMLStylesContext::GetStylesContainer(nFamily));
     if (!xStyles.is())
     {
-        OUString sName;
+     ::rtl::OUString sName;
         switch( nFamily )
         {
             case XML_STYLE_FAMILY_TABLE_TABLE:
@@ -378,7 +377,7 @@ Reference < XNameContainer >
                     xStyles.set(m_xTableStyles);
                 else
                     sName =
-                        OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TableStyles" ) ));
+                     ::rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TableStyles" ) ));
             }
             break;
             case XML_STYLE_FAMILY_TABLE_CELL:
@@ -387,7 +386,7 @@ Reference < XNameContainer >
                     xStyles.set(m_xCellStyles);
                 else
                     sName =
-                        OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CellStyles" ) ));
+                     ::rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CellStyles" ) ));
             }
             break;
             case XML_STYLE_FAMILY_TABLE_COLUMN:
@@ -396,7 +395,7 @@ Reference < XNameContainer >
                     xStyles.set(m_xColumnStyles);
                 else
                     sName =
-                        OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ColumnStyles" ) ));
+                     ::rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ColumnStyles" ) ));
             }
             break;
             case XML_STYLE_FAMILY_TABLE_ROW:
@@ -405,7 +404,7 @@ Reference < XNameContainer >
                     xStyles.set(m_xRowStyles);
                 else
                     sName =
-                        OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowStyles" ) ));
+                     ::rtl::OUString( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowStyles" ) ));
             }
             break;
             case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
@@ -449,7 +448,7 @@ Reference < XNameContainer >
 }
 // -----------------------------------------------------------------------------
 
-OUString OReportStylesContext::GetServiceName( sal_uInt16 nFamily ) const
+::rtl::OUString OReportStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 {
     rtl::OUString sServiceName = SvXMLStylesContext::GetServiceName(nFamily);
     if (!sServiceName.getLength())
