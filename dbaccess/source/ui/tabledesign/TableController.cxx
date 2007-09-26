@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:43:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:53:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1481,46 +1481,35 @@ void OTableController::alterColumns()
 // -----------------------------------------------------------------------------
 void OTableController::dropPrimaryKey()
 {
-    Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
-    Reference<XIndexAccess> xKeys;
-    if(xKeySup.is())
-        xKeys = xKeySup->getKeys();
-
-    if(xKeys.is())
+    try
     {
-        Reference<XPropertySet> xProp;
-        for(sal_Int32 i=0;i< xKeys->getCount();++i)
+        Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
+        Reference<XIndexAccess> xKeys;
+        if(xKeySup.is())
+            xKeys = xKeySup->getKeys();
+
+        if(xKeys.is())
         {
-            xKeys->getByIndex(i) >>= xProp;
-            sal_Int32 nKeyType = 0;
-            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-            if(KeyType::PRIMARY == nKeyType)
+            Reference<XPropertySet> xProp;
+            for(sal_Int32 i=0;i< xKeys->getCount();++i)
             {
-                Reference<XNameAccess> xKeyColumns  = getKeyColumns();
-                Sequence< ::rtl::OUString> aColumnNames = xKeyColumns->getElementNames();
-                xKeyColumns = NULL;
-                Reference<XDrop> xDrop(xKeys,UNO_QUERY);
-                xDrop->dropByIndex(i); // delete the key
-                ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_vRowList.begin();
-                ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_vRowList.end();
-                for(;aIter != aEnd;++aIter)
+                xProp.set(xKeys->getByIndex(i),UNO_QUERY);
+                sal_Int32 nKeyType = 0;
+                xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+                if(KeyType::PRIMARY == nKeyType)
                 {
-                    OSL_ENSURE(*aIter,"OTableRow is null!");
-                    OFieldDescription* pField = (*aIter)->GetActFieldDescr();
-                    if ( !pField )
-                        continue;
-                    ::rtl::OUString sName = pField->GetName();
-                    const ::rtl::OUString* pIter = aColumnNames.getConstArray();
-                    const ::rtl::OUString* pEnd = pIter + aColumnNames.getLength();
-                    for(;pIter != pEnd && *pIter != sName;++pIter)
-                        ;
-                    if ( pIter != pEnd )
-                        pField->SetPrimaryKey(sal_False);
+                    Reference<XDrop> xDrop(xKeys,UNO_QUERY);
+                    xDrop->dropByIndex(i); // delete the key
+                    break;
                 }
-                break;
             }
         }
     }
+    catch(Exception&)
+    {
+        OSL_ENSURE(0,"Exception caught!");
+    }
+
 }
 // -----------------------------------------------------------------------------
 void OTableController::assignTable()
