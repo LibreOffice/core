@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:26:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,6 +398,7 @@ void OGenericUnoController::modified(const EventObject& aEvent) throw( RuntimeEx
 // -----------------------------------------------------------------------
 void OGenericUnoController::attachFrame(const Reference< XFrame > & xFrame) throw( RuntimeException )
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
     stopFrameListening( );
 
