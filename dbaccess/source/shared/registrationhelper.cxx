@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registrationhelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:41:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,19 +41,18 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-uno::Sequence< OUString >*                  OModuleRegistration::s_pImplementationNames = NULL;
-uno::Sequence< uno::Sequence< OUString > >* OModuleRegistration::s_pSupportedServices = NULL;
+uno::Sequence< ::rtl::OUString >*                   OModuleRegistration::s_pImplementationNames = NULL;
+uno::Sequence< uno::Sequence< ::rtl::OUString > >*  OModuleRegistration::s_pSupportedServices = NULL;
 uno::Sequence< sal_Int64 >*                 OModuleRegistration::s_pCreationFunctionPointers = NULL;
 uno::Sequence< sal_Int64 >*                 OModuleRegistration::s_pFactoryFunctionPointers = NULL;
 
 //--------------------------------------------------------------------------
 void OModuleRegistration::registerComponent(
-    const OUString& _rImplementationName,
-    const uno::Sequence< OUString >& _rServiceNames,
+    const ::rtl::OUString& _rImplementationName,
+    const uno::Sequence< ::rtl::OUString >& _rServiceNames,
     ComponentInstantiation _pCreateFunction,
     FactoryInstantiation _pFactoryFunction)
 {
@@ -61,8 +60,8 @@ void OModuleRegistration::registerComponent(
     {
         OSL_ENSURE(!s_pSupportedServices && !s_pCreationFunctionPointers && !s_pFactoryFunctionPointers,
             "OModuleRegistration::registerComponent : inconsistent state (the pointers (1)) !");
-        s_pImplementationNames = new uno::Sequence< OUString >;
-        s_pSupportedServices = new uno::Sequence< uno::Sequence< OUString > >;
+        s_pImplementationNames = new uno::Sequence< ::rtl::OUString >;
+        s_pSupportedServices = new uno::Sequence< uno::Sequence< ::rtl::OUString > >;
         s_pCreationFunctionPointers = new uno::Sequence< sal_Int64 >;
         s_pFactoryFunctionPointers = new uno::Sequence< sal_Int64 >;
     }
@@ -102,7 +101,7 @@ void OModuleRegistration::revokeComponent(const ::rtl::OUString& _rImplementatio
         "OModuleRegistration::revokeComponent : inconsistent state !");
 
     sal_Int32 nLen = s_pImplementationNames->getLength();
-    const OUString* pImplNames = s_pImplementationNames->getConstArray();
+    const ::rtl::OUString* pImplNames = s_pImplementationNames->getConstArray();
     for (sal_Int32 i=0; i<nLen; ++i, ++pImplNames)
     {
         if (pImplNames->equals(_rImplementationName))
@@ -144,21 +143,21 @@ sal_Bool OModuleRegistration::writeComponentInfos(
         "OModuleRegistration::writeComponentInfos : inconsistent state !");
 
     sal_Int32 nLen = s_pImplementationNames->getLength();
-    const OUString* pImplName = s_pImplementationNames->getConstArray();
-    const uno::Sequence< OUString >* pServices = s_pSupportedServices->getConstArray();
+    const ::rtl::OUString* pImplName = s_pImplementationNames->getConstArray();
+    const uno::Sequence< ::rtl::OUString >* pServices = s_pSupportedServices->getConstArray();
 
-    OUString sRootKey("/", 1, RTL_TEXTENCODING_ASCII_US);
+    ::rtl::OUString sRootKey("/", 1, RTL_TEXTENCODING_ASCII_US);
     for (sal_Int32 i=0; i<nLen; ++i, ++pImplName, ++pServices)
     {
-        OUString aMainKeyName(sRootKey);
+        ::rtl::OUString aMainKeyName(sRootKey);
         aMainKeyName += *pImplName;
-        aMainKeyName += OUString::createFromAscii("/UNO/SERVICES");
+        aMainKeyName += ::rtl::OUString::createFromAscii("/UNO/SERVICES");
 
         try
         {
             uno::Reference< registry::XRegistryKey >  xNewKey( _rxRootKey->createKey(aMainKeyName) );
 
-            const OUString* pService = pServices->getConstArray();
+            const ::rtl::OUString* pService = pServices->getConstArray();
             for (sal_Int32 j=0; j<pServices->getLength(); ++j, ++pService)
                 xNewKey->createKey(*pService);
         }
@@ -197,8 +196,8 @@ uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
 
 
     sal_Int32 nLen = s_pImplementationNames->getLength();
-    const OUString* pImplName = s_pImplementationNames->getConstArray();
-    const uno::Sequence< OUString >* pServices = s_pSupportedServices->getConstArray();
+    const ::rtl::OUString* pImplName = s_pImplementationNames->getConstArray();
+    const uno::Sequence< ::rtl::OUString >* pServices = s_pSupportedServices->getConstArray();
     const sal_Int64* pComponentFunction = s_pCreationFunctionPointers->getConstArray();
     const sal_Int64* pFactoryFunction = s_pFactoryFunctionPointers->getConstArray();
 
