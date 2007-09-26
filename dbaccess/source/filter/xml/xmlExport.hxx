@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:48:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:43:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,6 @@
 
 namespace dbaxml
 {
-using namespace ::rtl;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
