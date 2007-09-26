@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TKeys.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:00:42 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:27:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,6 +308,11 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
 
     return createObject( sNewName );
 }
+// -----------------------------------------------------------------------------
+::rtl::OUString OKeysHelper::getDropForeignKey() const
+{
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP CONSTRAINT "));
+}
 // -------------------------------------------------------------------------
 // XDrop
 void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
@@ -332,7 +337,7 @@ void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName
         }
         else
         {
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP CONSTRAINT "));
+            aSql += getDropForeignKey();
             ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
             aSql += ::dbtools::quoteName( aQuote,_sElementName);
         }

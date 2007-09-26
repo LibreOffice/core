@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YTable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:03:45 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:30:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,27 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+namespace connectivity
+{
+    namespace mysql
+    {
+        class OMySQLKeysHelper : public OKeysHelper
+        {
+        protected:
+            // -----------------------------------------------------------------------------
+            virtual ::rtl::OUString getDropForeignKey() const
+            {
+                return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP FOREIGN KEY "));
+            }
+        public:
+            OMySQLKeysHelper(   OTableHelper* _pTable,
+                ::osl::Mutex& _rMutex,
+                const TStringVector& _rVector
+                ) : OKeysHelper(_pTable,_rMutex,_rVector){}
+
+        };
+    }
+}
 
 OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
                            const Reference< XConnection >& _xConnection)
@@ -174,7 +195,7 @@ sdbcx::OCollection* OMySQLTable::createColumns(const TStringVector& _rNames)
 // -----------------------------------------------------------------------------
 sdbcx::OCollection* OMySQLTable::createKeys(const TStringVector& _rNames)
 {
-    return new OKeysHelper(this,m_aMutex,_rNames);
+    return new OMySQLKeysHelper(this,m_aMutex,_rNames);
 }
 // -----------------------------------------------------------------------------
 sdbcx::OCollection* OMySQLTable::createIndexes(const TStringVector& _rNames)
