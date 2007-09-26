@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComponentDefinition.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:53:00 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:39:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #ifndef DBA_CONTENTHELPER_HXX
 #include "ContentHelper.hxx"
 #endif
@@ -122,7 +123,6 @@ namespace dbaccess
 //=========================================================================
 //= OComponentDefinition - a database "document" which describes a query
 //=========================================================================
-
 class OComponentDefinition  :public OContentHelper
                             ,public ODataSettings
                             ,public IColumnFactory
@@ -132,8 +132,10 @@ class OComponentDefinition  :public OContentHelper
     OComponentDefinition();
 
 protected:
-    ::std::auto_ptr< OColumns > m_pColumns;
-    sal_Bool                    m_bTable;
+    ::std::auto_ptr< OColumns >     m_pColumns;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener>
+                                    m_xColumnPropertyListener;
+    sal_Bool                        m_bTable;
 
     virtual ~OComponentDefinition();
     virtual void SAL_CALL disposing();
@@ -186,6 +188,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createColumnDescriptor();
     virtual void columnAppended( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSourceDescriptor );
     virtual void columnDropped(const ::rtl::OUString& _sName);
+    virtual void notifyDataSourceModified() { OContentHelper::notifyDataSourceModified(); }
 
 protected:
 // OPropertyArrayUsageHelper
