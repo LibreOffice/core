@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:22:23 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:40:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -534,7 +534,7 @@ ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxConta
     DBG_CTOR(ODocumentDefinition, NULL);
     registerProperties();
     if ( _aClassID.getLength() )
-        loadEmbeddedObject(_aClassID,_xConnection);
+        loadEmbeddedObject(MacroExecMode::USE_CONFIG,_aClassID,_xConnection);
 }
 
 //--------------------------------------------------------------------------
@@ -892,7 +892,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             if ( m_pImpl->m_aProps.sPersistentName.getLength() )
             {
                 m_bOpenInDesign = bOpenInDesign;
-                loadEmbeddedObject(Sequence< sal_Int8 >(),xConnection,!bOpenInDesign);
+                loadEmbeddedObject(MacroExecMode::USE_CONFIG,Sequence< sal_Int8 >(),xConnection,!bOpenInDesign);
                 if ( m_xEmbeddedObject.is() )
                 {
                     xModel.set(getComponent(),UNO_QUERY);
@@ -946,7 +946,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             Reference< XStorage> xStorage(aIni[0],UNO_QUERY);
             ::rtl::OUString sPersistentName;
             aIni[1] >>= sPersistentName;
-            loadEmbeddedObject( Sequence< sal_Int8 >(), Reference< XConnection >(), sal_False );
+            loadEmbeddedObject(MacroExecMode::USE_CONFIG, Sequence< sal_Int8 >(), Reference< XConnection >(), sal_False );
             Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
             if ( xPersist.is() )
             {
@@ -1209,7 +1209,7 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::fillLoadArgs(Sequence<PropertyValue>& _rArgs,Sequence<PropertyValue>& _rEmbeddedObjectDescriptor,const Reference<XConnection>& _xConnection,sal_Bool _bReadOnly)
+void ODocumentDefinition::fillLoadArgs(Sequence<PropertyValue>& _rArgs,Sequence<PropertyValue>& _rEmbeddedObjectDescriptor,const Reference<XConnection>& _xConnection,sal_Bool _bReadOnly,sal_Int16 _nMarcoExcecMode)
 {
     sal_Int32 nLen = _rArgs.getLength();
     {
@@ -1230,7 +1230,7 @@ void ODocumentDefinition::fillLoadArgs(Sequence<PropertyValue>& _rArgs,Sequence<
     _rArgs[nLen++].Value <<= _bReadOnly;
 
     _rArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
-    _rArgs[nLen++].Value <<= MacroExecMode::USE_CONFIG;
+    _rArgs[nLen++].Value <<= _nMarcoExcecMode;
 
     if ( m_pImpl->m_aProps.aTitle.getLength() )
     {
@@ -1280,7 +1280,7 @@ void ODocumentDefinition::fillLoadArgs(Sequence<PropertyValue>& _rArgs,Sequence<
     _rEmbeddedObjectDescriptor[nLen++].Value <<= aOutFrameProps;
 }
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClassID,const Reference<XConnection>& _xConnection,sal_Bool _bReadOnly)
+void ODocumentDefinition::loadEmbeddedObject(sal_Int16 _nMarcoExcecMode,const Sequence< sal_Int8 >& _aClassID,const Reference<XConnection>& _xConnection,sal_Bool _bReadOnly)
 {
     if ( !m_xEmbeddedObject.is() )
     {
@@ -1331,7 +1331,7 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
                 OSL_ENSURE( aClassID.getLength(),"No Class ID" );
 
                 Sequence<PropertyValue> aArgs,aEmbeddedObjectDescriptor;
-                fillLoadArgs(aArgs,aEmbeddedObjectDescriptor,_xConnection,_bReadOnly);
+                fillLoadArgs(aArgs,aEmbeddedObjectDescriptor,_xConnection,_bReadOnly,_nMarcoExcecMode);
 
                 m_xEmbeddedObject.set(xEmbedFactory->createInstanceUserInit(aClassID
                                                                             ,sDocumentService
@@ -1374,7 +1374,7 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
         m_xEmbeddedObject->setClientSite(xClient);
 
         Sequence<PropertyValue> aArgs,aEmbeddedObjectDescriptor;
-        fillLoadArgs(aArgs,aEmbeddedObjectDescriptor,_xConnection,_bReadOnly);
+        fillLoadArgs(aArgs,aEmbeddedObjectDescriptor,_xConnection,_bReadOnly,_nMarcoExcecMode);
         Reference<XCommonEmbedPersist> xCommon(m_xEmbeddedObject,UNO_QUERY);
         OSL_ENSURE(xCommon.is(),"unsupported interface!");
         if ( xCommon.is() )
@@ -1412,7 +1412,7 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentTitle" ) )] <<= m_pImpl->m_aProps.aTitle;
 
         aHelper[
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MacroExecutionMode" ))] <<= MacroExecMode::USE_CONFIG;
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MacroExecutionMode" ))] <<= _nMarcoExcecMode;
 
         aHelper >> aArgs;
 
@@ -1422,7 +1422,7 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::generateNewImage(Any& _rImage)
 {
-    loadEmbeddedObject( Sequence< sal_Int8 >(), Reference< XConnection >(), sal_True );
+    loadEmbeddedObject( MacroExecMode::NEVER_EXECUTE,Sequence< sal_Int8 >(), Reference< XConnection >(), sal_True );
     if ( m_xEmbeddedObject.is() )
     {
         try
@@ -1451,7 +1451,7 @@ void ODocumentDefinition::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, An
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::fillDocumentInfo(Any& _rInfo)
 {
-    loadEmbeddedObject( Sequence< sal_Int8 >(), Reference< XConnection >(), sal_True );
+    loadEmbeddedObject( MacroExecMode::NEVER_EXECUTE,Sequence< sal_Int8 >(), Reference< XConnection >(), sal_True );
     if ( m_xEmbeddedObject.is() )
     {
         try
