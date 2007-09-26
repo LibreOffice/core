@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:11:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:49:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,10 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
 
         SvNumberFormatter*  m_pFormatter;
-
+        //dyf add 2006/06/01
+        //for save the selected tablename
+        ::rtl::OUString     m_sDefaultTableName;
+        //dyf add end
         String              m_sTextToken;       // Zellen Inhalt
         String              m_sNumToken;        /// SDNUM value
         String              m_sValToken;        /// SDVAL value
@@ -184,6 +187,11 @@ namespace dbaui
                         sal_Bool _bAutoIncrementEnabled);
 
         void    SetColumnTypes(const TColumnVector* rList,const OTypeInfoMap* _pInfoMap);
+
+        //dyf add 20070601
+        inline void                    SetTableName(const ::rtl::OUString &_sTableName){ m_sDefaultTableName = _sTableName ; }
+        //dyf add end
+
         virtual void release() = 0;
 
         void enableCheckOnly() { m_bCheckOnly = sal_True; }
