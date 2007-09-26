@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlTable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:58:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:24:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,6 @@
 
 namespace rptxml
 {
-    using namespace ::rtl;
     using namespace ::xmloff;
     using namespace ::com::sun::star;
     using ::com::sun::star::uno::Reference;
@@ -106,7 +105,7 @@ DBG_NAME( rpt_OXMLTable )
 
 OXMLTable::OXMLTable( ORptFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
+                ,const ::rtl::OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const uno::Reference< report::XSection >& _xSection
                 )
@@ -173,7 +172,7 @@ OXMLTable::~OXMLTable()
 
 SvXMLImportContext* OXMLTable::CreateChildContext(
         sal_uInt16 _nPrefix,
-        const OUString& _rLocalName,
+        const ::rtl::OUString& _rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
