@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:22:16 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:30:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 #ifndef _CONNECTIVITY_ODBC_ODRIVER_HXX_
 #include "odbc/ODriver.hxx"
 #endif
+#include "odbc/OResultSet.hxx"
 #ifndef _CONNECTIVITY_ODBC_ORESULTSETMETADATA_HXX_
 #include "odbc/OResultSetMetaData.hxx"
 #endif
@@ -1043,5 +1044,10 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
     }
 }
 // -----------------------------------------------------------------------------
-
-
+OResultSet* OPreparedStatement::createResulSet()
+{
+    OResultSet* pReturn = new OResultSet(m_aStatementHandle,this);
+    pReturn->setMetaData(getMetaData());
+    return pReturn;
+}
+// -----------------------------------------------------------------------------
