@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RTableConnectionData.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:27:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:53:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,7 +382,33 @@ ORelationTableConnectionData& ORelationTableConnectionData::operator=( const ORe
 
     return *this;
 }
+namespace dbaui
+{
+//-------------------------------------------------------------------------
+bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs)
+{
+    bool bEqual = (lhs.m_nUpdateRules == rhs.m_nUpdateRules)
+        && (lhs.m_nDeleteRules == rhs.m_nDeleteRules)
+        && (lhs.m_nCardinality == rhs.m_nCardinality)
+        && (lhs.m_aSourceWinName == rhs.m_aSourceWinName)
+        && (lhs.m_aDestWinName == rhs.m_aDestWinName)
+        && (lhs.m_aConnName == rhs.m_aConnName)
+        && (lhs.m_vConnLineData.size() == rhs.m_vConnLineData.size());
 
+    if ( bEqual )
+    {
+        std::vector< OConnectionLineDataRef >::const_iterator aIter = lhs.m_vConnLineData.begin();
+        std::vector< OConnectionLineDataRef >::const_iterator aEnd = lhs.m_vConnLineData.end();
+        for (sal_Int32 i = 0; aIter != aEnd; ++aIter,++i)
+        {
+            if ( *(rhs.m_vConnLineData[i]) != **aIter )
+                break;
+        }
+        bEqual = aIter == aEnd;
+    }
+    return bEqual;
+}
+}
 //------------------------------------------------------------------------
 BOOL ORelationTableConnectionData::Update()
 {
