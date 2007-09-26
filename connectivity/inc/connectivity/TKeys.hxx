@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TKeys.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:15:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,8 @@ namespace connectivity
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor();
         virtual sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
         virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
+
+        virtual ::rtl::OUString getDropForeignKey() const;
 
     public:
         OKeysHelper(    OTableHelper* _pTable,
