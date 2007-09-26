@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:01:25 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:30:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,19 +332,20 @@ namespace connectivity
             virtual BOOL OpenImpl();
             virtual void doTableSpecials(const OSQLTable& _xTable);
 
-            sal_Int32 getRowCountResult() const { return m_nRowCountResult; }
-            void setParameterRow(const OValueRefRow& _rParaRow)                     { m_aParameterRow = _rParaRow; }
-            void setEvaluationRow(const OValueRefRow& _aRow)                        { m_aEvaluateRow = _aRow; }
-            void setParameterColumns(const ::vos::ORef<connectivity::OSQLColumns>&  _xParamColumns) { m_xParamColumns = _xParamColumns; }
-            void setAssignValues(const ORefAssignValues& _aAssignValues)            { m_aAssignValues = _aAssignValues; }
-            void setBindingRow(const OValueRefRow& _aRow)                           { m_aRow = _aRow; }
-            void setSelectRow(const OValueRefRow& _rRow)                            { m_aSelectRow = _rRow; }
-            void setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping)  { m_aColMapping = _aColumnMapping; }
-            void setSqlAnalyzer(OSQLAnalyzer* _pSQLAnalyzer)                        { m_pSQLAnalyzer = _pSQLAnalyzer; }
+            inline sal_Int32 getRowCountResult() const { return m_nRowCountResult; }
+            inline void setParameterRow(const OValueRefRow& _rParaRow)                  { m_aParameterRow = _rParaRow; }
+            inline void setEvaluationRow(const OValueRefRow& _aRow)                     { m_aEvaluateRow = _aRow; }
+            inline void setParameterColumns(const ::vos::ORef<connectivity::OSQLColumns>&   _xParamColumns) { m_xParamColumns = _xParamColumns; }
+            inline void setAssignValues(const ORefAssignValues& _aAssignValues)         { m_aAssignValues = _aAssignValues; }
+            inline void setBindingRow(const OValueRefRow& _aRow)                        { m_aRow = _aRow; }
+            inline void setSelectRow(const OValueRefRow& _rRow)                         { m_aSelectRow = _rRow; }
+            inline void setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping)   { m_aColMapping = _aColumnMapping; }
+            inline void setSqlAnalyzer(OSQLAnalyzer* _pSQLAnalyzer)                     { m_pSQLAnalyzer = _pSQLAnalyzer; }
 
-            void setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy) { m_aOrderbyColumnNumber = _aColumnOrderBy; }
-            void setOrderByAscending(const ::std::vector<TAscendingOrder>& _aOrderbyAsc)    { m_aOrderbyAscending = _aOrderbyAsc; }
-            void setEvaluationKeySet(TIntVector* _pEvaluationKeySet)                { m_pEvaluationKeySet = _pEvaluationKeySet; }
+            inline void setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy)  { m_aOrderbyColumnNumber = _aColumnOrderBy; }
+            inline void setOrderByAscending(const ::std::vector<TAscendingOrder>& _aOrderbyAsc)    { m_aOrderbyAscending = _aOrderbyAsc; }
+            inline void setEvaluationKeySet(TIntVector* _pEvaluationKeySet)             { m_pEvaluationKeySet = _pEvaluationKeySet; }
+            inline void setMetaData(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
 
             // clears the resultset so it can be reused by a preparedstatement
             void clear();
