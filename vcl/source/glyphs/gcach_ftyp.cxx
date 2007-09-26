@@ -93,6 +93,7 @@ typedef FT_Vector* FT_Vector_CPtr;
     #include <fcntl.h>
     #include <sys/stat.h>
     #include <sys/mman.h>
+    #include <psprint/fontmanager.hxx>
 #elif defined(WNT)
     #include <io.h>
     #define strncasecmp strnicmp
@@ -1160,6 +1161,9 @@ int FreetypeServerFont::GetRawGlyphIndex( sal_UCS4 aChar ) const
             // check if symbol aliasing helps
             if( (aChar <= 0x00FF) && mpFontInfo->IsSymbolFont() )
                 nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar | 0xF000 );
+            // Finally try the postscript name table
+            if (!nGlyphIndex)
+                nGlyphIndex = psp::PrintFontManager::get().FreeTypeCharIndex( maFaceFT, aChar );
         }
         mpFontInfo->CacheGlyphIndex( aChar, nGlyphIndex );
     }
