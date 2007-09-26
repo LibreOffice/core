@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofunocontrol.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:48:23 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:37:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1799,7 +1799,24 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
 
-        if ( !bVisibleControl )
+
+        // we need to paint if the control is not visible
+        bool bNeedPaint = !bVisibleControl;
+
+        // or if our control is visible, but the paint request is for a device other than the
+        // control's parent window
+        if ( !bNeedPaint )
+        {
+            try
+            {
+                Window* pControlWindow = VCLUnoHelper::GetWindow( m_pImpl->getExistentControl()->getPeer() );
+                Window* pControlParentWindow = pControlWindow ? pControlWindow->GetParent() : NULL;
+                bNeedPaint = pControlParentWindow != _rDisplayInfo.GetOutputDevice();
+            }
+            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+        }
+
+        if ( bNeedPaint )
         {
             OSL_ENSURE( _rDisplayInfo.GetOutputDevice(), "UnoControlWindowContact::doPaintObject: invalid output device!" );
             if ( !_rDisplayInfo.GetOutputDevice() )
@@ -1808,27 +1825,9 @@ namespace sdr { namespace contact {
             if ( m_pImpl->preparePaintOnDevice( *_rDisplayInfo.GetOutputDevice() ) )
                 m_pImpl->paintControl( _rDisplayInfo );
         }
-        else
-        {
-#ifdef DBG_UTIL
-            // We do effectively nothing here in alive mode. This only works because when we paint onto
-            // a window, then this is the parent window of our control. If we ever happen to paint onto
-            // a foreign window *while in alive mode*, then we probably need to always paint the control.
-            // However, for the moment we don't need this complete handling, since it always worked in
-            // the reduced way ...
-            try
-            {
-                Window* pControlWindow = VCLUnoHelper::GetWindow( m_pImpl->getExistentControl()->getPeer() );
-                Window* pControlParentWindow = pControlWindow ? pControlWindow->GetParent() : NULL;
-                DBG_ASSERT( pControlParentWindow == _rDisplayInfo.GetOutputDevice(),
-                    "UnoControlWindowContact::doPaintObject: oops. Special handling needed!" );
-            }
-            catch( const Exception& )
-            {
-                OSL_ENSURE( sal_False, "UnoControlWindowContact::doPaintObject: caught an exception while validating the control/output device!" );
-            }
-#endif
 
+        if ( bVisibleControl )
+        {
             try
             {
                 Reference< XControl > xControl( m_pImpl->getExistentControl() );
@@ -1842,10 +1841,7 @@ namespace sdr { namespace contact {
                         xControlPeer->invalidate( INVALIDATE_NOTRANSPARENT | INVALIDATE_CHILDREN );
                 }
             }
-            catch( const Exception& )
-            {
-                OSL_ENSURE( sal_False, "UnoControlWindowContact::doPaintObject: caught an exception while invalidating the control!" );
-            }
+            catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
         }
     }
 
