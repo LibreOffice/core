@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svids.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 07:43:56 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 15:05:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,8 @@
 #define SV_SHORTCUT_TODOCUMENT              10606
 #define SV_SHORTCUT_MENUBAR                 10607
 #define SV_SHORTCUT_SPLITTER                10608
+
+#define SV_EDIT_WARNING_BOX                 10650
 
 #define SV_FUNIT_STRINGS                    10700
 
