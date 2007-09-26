@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlFunction.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:33:12 $
+ *  last change: $Author: hr $ $Date: 2007-09-26 14:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,6 @@
 
 namespace rptxml
 {
-    using namespace ::rtl;
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::report;
@@ -72,7 +71,7 @@ DBG_NAME( rpt_OXMLFunction )
 
 OXMLFunction::OXMLFunction( ORptFilter& _rImport
                 ,sal_uInt16 nPrfx
-                ,const OUString& _sLocalName
+                ,const ::rtl::OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XFunctionsSupplier >& _xFunctions
                 ,bool _bAddToReport
@@ -95,7 +94,7 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
     static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        OUString sLocalName;
+     ::rtl::OUString sLocalName;
         const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         rtl::OUString sValue = _xAttrList->getValueByIndex( i );
