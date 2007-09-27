@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:47:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:56:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@
 #include <svtools/colorcfg.hxx>
 #include <svx/editstat.hxx>     // EE_CNTRL_RTFSTYLESHEETS
 #include <svx/fmview.hxx>
+#include <svx/frmdiritem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/paperinf.hxx>
 #include <svx/pbinitem.hxx>
@@ -1777,6 +1778,8 @@ void ScPrintFunc::MakeEditEngine()
         //  #69193# dont use font color, because background color is not used
         //! there's no way to set the background for note pages
         pEditDefaults->ClearItem( EE_CHAR_COLOR );
+        if (ScGlobal::IsSystemRTL())
+            pEditDefaults->Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
     }
 
     pEditEngine->SetData( aFieldData );     // Seitennummer etc. setzen
