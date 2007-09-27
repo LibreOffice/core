@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txmsrt.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:10:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:59:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #ifndef _TOX_HXX
 #include <tox.hxx>
 #endif
+
+#include <com/sun/star/lang/Locale.hpp>
+
 
 class CharClass;
 class SwCntntNode;
@@ -143,6 +146,7 @@ struct SwTOXSortTabBase
                       const SwTxtTOXMark* pTxtMark,
                       const SwTOXInternational* pIntl,
                       const ::com::sun::star::lang::Locale* pLocale = NULL );
+    virtual ~SwTOXSortTabBase() {}
 
     USHORT  GetType() const         { return nType; }
     USHORT  GetOptions() const      { return nOpt; }
@@ -193,6 +197,7 @@ struct SwTOXIndex : public SwTOXSortTabBase
     SwTOXIndex( const SwTxtNode&, const SwTxtTOXMark*, USHORT nOptions, BYTE nKeyLevel,
                 const SwTOXInternational& rIntl,
                 const ::com::sun::star::lang::Locale& rLocale );
+    virtual ~SwTOXIndex() {}
 
 
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
@@ -211,6 +216,7 @@ struct SwTOXCustom : public SwTOXSortTabBase
     SwTOXCustom( const String& rKey, const String& rReading, USHORT nLevel,
                  const SwTOXInternational& rIntl,
                  const ::com::sun::star::lang::Locale& rLocale );
+    virtual ~SwTOXCustom() {}
 
     virtual USHORT GetLevel() const;
     virtual BOOL   operator==( const SwTOXSortTabBase& );
@@ -232,6 +238,7 @@ struct SwTOXContent : public SwTOXSortTabBase
 {
     SwTOXContent( const SwTxtNode&, const SwTxtTOXMark*,
                 const SwTOXInternational& rIntl );
+    virtual ~SwTOXContent() {}
 
     virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
     virtual USHORT  GetLevel() const;
@@ -243,6 +250,7 @@ private:
 struct SwTOXPara : public SwTOXSortTabBase
 {
     SwTOXPara( const SwCntntNode&, SwTOXElement, USHORT nLevel = FORM_ALPHA_DELIMITTER );
+    virtual ~SwTOXPara() {}
 
     void    SetStartIndex( xub_StrLen nSet)     { nStartIndex = nSet;}
     void    SetEndIndex( xub_StrLen nSet )      { nEndIndex = nSet;}
@@ -263,6 +271,8 @@ private:
 struct SwTOXTable : public SwTOXSortTabBase
 {
     SwTOXTable( const SwCntntNode& rNd );
+    virtual ~SwTOXTable() {}
+
     void    SetLevel(USHORT nSet){nLevel = nSet;}
 
     virtual USHORT  GetLevel() const;
@@ -283,6 +293,8 @@ private:
 
 public:
     SwTOXAuthority( const SwCntntNode& rNd, SwFmtFld& rField, const SwTOXInternational& rIntl );
+    virtual ~SwTOXAuthority() {}
+
     SwFmtFld& GetFldFmt() {return m_rField;}
 
     virtual BOOL    operator==( const SwTOXSortTabBase& );
