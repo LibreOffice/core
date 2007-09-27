@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-21 11:52:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,6 @@
 #ifndef _CHCMPRSE_HXX
 #include <chcmprse.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #endif
@@ -459,8 +458,8 @@ class SwDoc :
                                     // von AutoFmt-Redlines. Wird vom SwAutoFmt
                                     // verwaltet!
     sal_uInt16  nLinkUpdMode;       // UpdateMode fuer Links
-    sal_uInt16  nFldUpdMode;        // Mode fuer Felder/Charts automatisch aktualisieren
-    IDocumentRedlineAccess::RedlineMode_t eRedlineMode;     // aktueller Redline Modus
+    SwFldUpdateFlags    eFldUpdMode;        // Mode fuer Felder/Charts automatisch aktualisieren
+    RedlineMode_t eRedlineMode;     // aktueller Redline Modus
     SwCharCompressType eChrCmprType;    // for ASIAN: compress punctuation/kana
 
     sal_Int32   mReferenceCount;
@@ -620,15 +619,13 @@ class SwDoc :
     // COMPATIBILITY FLAGS END
     //
 
-    sal_Bool    bWinEncryption                      ;    // imported document password encrypted?
-
     sal_Bool    mbStartIdleTimer                 ;    // idle timer mode start/stop
 
     static SwAutoCompleteWord *pACmpltWords;    // Liste aller Worte fuers AutoComplete
     static sal_uInt16 nUndoActions;     // anzahl von Undo ::com::sun::star::chaos::Action
 
     //---------------- private Methoden ------------------------------
-    void checkRedlining(IDocumentRedlineAccess::RedlineMode_t& _rReadlineMode);
+    void checkRedlining(RedlineMode_t& _rReadlineMode);
 
     sal_Bool DelUndoObj( sal_uInt16 nEnde  );   // loescht alle UndoObjecte vom Anfang
                                         // bis zum angegebenen Ende
@@ -720,6 +717,10 @@ class SwDoc :
     DECL_LINK( DoUpdateAllCharts, Timer * );
     DECL_LINK( DoUpdateModifiedOLE, Timer * );
 
+    SwFmt *_MakeCharFmt(const String &, SwFmt *, BOOL, BOOL );
+    SwFmt *_MakeFrmFmt(const String &, SwFmt *, BOOL, BOOL );
+    SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, BOOL, BOOL );
+
 public:
 
     /** Life cycle
@@ -751,8 +752,8 @@ public:
     virtual const vos::ORef<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const;
     virtual sal_uInt16 getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const;
     virtual void setLinkUpdateMode( /*[in]*/ sal_uInt16 nMode );
-    virtual sal_uInt16 getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const;
-    virtual void setFieldUpdateFlags( /*[in]*/ sal_uInt16 nMode );
+    virtual SwFldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const;
+    virtual void setFieldUpdateFlags( /*[in]*/ SwFldUpdateFlags eMode );
     virtual SwCharCompressType getCharacterCompressionType() const;
     virtual void setCharacterCompressionType( /*[in]*/SwCharCompressType nType );
 
@@ -784,9 +785,9 @@ public:
 
     /** IDocumentRedlineAccess
     */
-    virtual IDocumentRedlineAccess::RedlineMode_t GetRedlineMode() const;
-    virtual void SetRedlineMode_intern(/*[in]*/IDocumentRedlineAccess::RedlineMode_t eMode);
-    virtual void SetRedlineMode(/*[in]*/IDocumentRedlineAccess::RedlineMode_t eMode);
+    virtual RedlineMode_t GetRedlineMode() const;
+    virtual void SetRedlineMode_intern(/*[in]*/RedlineMode_t eMode);
+    virtual void SetRedlineMode(/*[in]*/RedlineMode_t eMode);
     virtual bool IsRedlineOn() const;
     virtual bool IsIgnoreRedline() const;
     virtual bool IsInRedlines(const SwNode& rNode) const;
@@ -822,20 +823,20 @@ public:
     virtual void DoGroupUndo(bool bUn);
     virtual bool DoesGroupUndo() const;
     virtual bool Undo(SwUndoIter& );
-    virtual sal_uInt16 StartUndo(sal_uInt16 nUndoId, const SwRewriter * pRewriter);
-    virtual sal_uInt16 EndUndo(sal_uInt16 nUndoId, const SwRewriter * pRewriter);
+    virtual SwUndoId StartUndo(SwUndoId eUndoId, const SwRewriter * pRewriter);
+    virtual SwUndoId EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter);
     virtual void DelAllUndoObj();
-    virtual sal_uInt16 GetUndoIds(String* pStr, SwUndoIds *pUndoIds) const;
+    virtual SwUndoId GetUndoIds(String* pStr, SwUndoIds *pUndoIds) const;
     virtual String GetUndoIdsStr(String* pStr, SwUndoIds *pUndoIds) const;
-    virtual bool HasUndoId(sal_uInt16 nId) const;
+    virtual bool HasUndoId(SwUndoId eId) const;
     virtual const SwNodes* GetUndoNds() const;
-    virtual SwUndo* RemoveLastUndo(sal_uInt16 nUndoId);
+    virtual SwUndo* RemoveLastUndo(SwUndoId eUndoId);
     virtual bool HasTooManyUndos() const;
     virtual bool Redo(SwUndoIter&);
-    virtual sal_uInt16 GetRedoIds(String* pStr, SwUndoIds *pRedoIds) const;
+    virtual SwUndoId GetRedoIds(String* pStr, SwUndoIds *pRedoIds) const;
     virtual String GetRedoIdsStr(String* pStr, SwUndoIds *pRedoIds) const;
     virtual bool Repeat(SwUndoIter&, sal_uInt16 nRepeatCnt);
-    virtual sal_uInt16 GetRepeatIds(String* pStr, SwUndoIds *pRedoIds) const;
+    virtual SwUndoId GetRepeatIds(String* pStr, SwUndoIds *pRedoIds) const;
     virtual String GetRepeatIdsStr(String* pStr, SwUndoIds *pRedoIds) const;
     virtual void AppendUndo(SwUndo*);
     virtual void ClearRedo();
@@ -870,7 +871,7 @@ public:
     virtual void RemoveFldType(sal_uInt16 nFld);
     virtual void UpdateFlds( SfxPoolItem* pNewHt, bool bCloseDB);
     virtual void InsDeletedFldType(SwFieldType &);
-    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, BYTE nMId);
+    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, USHORT nWhich);
     virtual bool UpdateFld(SwTxtFld * rDstFmtFld, SwField & rSrcFld, SwMsgPoolItem * pMsgHnt, bool bUpdateTblFlds);
     virtual void UpdateRefFlds(SfxPoolItem* pHt);
     virtual void UpdateTblFlds(SfxPoolItem* pHt);
@@ -1264,7 +1265,7 @@ public:
 
     //Rahmenzugriff
     //iterieren ueber Flys - fuer Basic-Collections
-    sal_uInt16 GetFlyCount(FlyCntType eType = FLYCNTTYPE_ALL) const;
+    sal_uInt16 GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL) const;
     SwFrmFmt* GetFlyNum(sal_uInt16 nIdx, FlyCntType eType = FLYCNTTYPE_ALL);
 
 
@@ -1555,7 +1556,7 @@ public:
     */
     const SwTable* InsertTable( const SwInsertTableOptions& rInsTblOpts,  // HEADLINE_NO_BORDER
                                 const SwPosition& rPos, sal_uInt16 nRows,
-                                sal_uInt16 nCols, SwHoriOrient eAdjust,
+                                sal_uInt16 nCols, short eAdjust,
                                 const SwTableAutoFmt* pTAFmt = 0,
                                 const SvUShorts* pColArr = 0,
                                 BOOL bCalledFromShell = FALSE,
@@ -1568,7 +1569,7 @@ public:
         // erzeuge aus dem makierten Bereich eine ausgeglichene Tabelle
     const SwTable* TextToTable( const SwInsertTableOptions& rInsTblOpts, // HEADLINE_NO_BORDER,
                                 const SwPaM& rRange, sal_Unicode cCh,
-                                SwHoriOrient eAdjust,
+                                short eAdjust,
                                 const SwTableAutoFmt* = 0 );
     // text to table conversion - API support
     const SwTable* TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes );
