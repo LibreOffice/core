@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:14:56 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:48:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,13 +148,13 @@ SV_IMPL_PTRARR( _SwSeqFldList, _SeqFldLstElem* )
 //-----------------------------------------------------------------------------
 sal_Int16 lcl_SubTypeToAPI(USHORT nSubType)
 {
-        sal_Int16 nRet;
+        sal_Int16 nRet = 0;
         switch(nSubType)
         {
-            case GSE_EXPR   :   nRet = SetVariableType::VAR /*0*/; break;
-            case GSE_SEQ    :   nRet = SetVariableType::SEQUENCE /*1*/; break;
-            case GSE_FORMULA:   nRet = SetVariableType::FORMULA /*2*/; break;
-            case GSE_STRING :   nRet = SetVariableType::STRING /*3*/; break;
+            case nsSwGetSetExpType::GSE_EXPR    :   nRet = SetVariableType::VAR /*0*/; break;
+            case nsSwGetSetExpType::GSE_SEQ     :   nRet = SetVariableType::SEQUENCE /*1*/; break;
+            case nsSwGetSetExpType::GSE_FORMULA :   nRet = SetVariableType::FORMULA /*2*/; break;
+            case nsSwGetSetExpType::GSE_STRING  :   nRet = SetVariableType::STRING /*3*/; break;
         }
         return nRet;
 }
@@ -166,10 +166,10 @@ sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
         sal_Int32 nSet = 0;
         switch(nVal)
         {
-            case SetVariableType::VAR:      nSet = GSE_EXPR;  break;
-            case SetVariableType::SEQUENCE: nSet = GSE_SEQ;  break;
-            case SetVariableType::FORMULA:  nSet = GSE_FORMULA; break;
-            case SetVariableType::STRING:   nSet = GSE_STRING;  break;
+            case SetVariableType::VAR:      nSet = nsSwGetSetExpType::GSE_EXPR;  break;
+            case SetVariableType::SEQUENCE: nSet = nsSwGetSetExpType::GSE_SEQ;  break;
+            case SetVariableType::FORMULA:  nSet = nsSwGetSetExpType::GSE_FORMULA; break;
+            case SetVariableType::STRING:   nSet = nsSwGetSetExpType::GSE_STRING;   break;
             default:
                 DBG_ERROR("wrong value")
                 nSet = -1;
@@ -207,7 +207,7 @@ void ReplacePoint( String& rTmpName, BOOL bWithCommandType )
 SwTxtNode* GetFirstTxtNode( const SwDoc& rDoc, SwPosition& rPos,
                             const SwCntntFrm *pCFrm, Point &rPt )
 {
-    SwTxtNode* pTxtNode;
+    SwTxtNode* pTxtNode = 0;
     if ( !pCFrm )
     {
         const SwNodes& rNodes = rDoc.GetNodes();
@@ -337,8 +337,8 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
     Beschreibung: SwSetExpFieldType by JP
  --------------------------------------------------------------------*/
 
-SwGetExpFieldType::SwGetExpFieldType(SwDoc* pDoc)
-    : SwValueFieldType( pDoc, RES_GETEXPFLD )
+SwGetExpFieldType::SwGetExpFieldType(SwDoc* pDc)
+    : SwValueFieldType( pDc, RES_GETEXPFLD )
 {
 }
 
@@ -361,15 +361,15 @@ void SwGetExpFieldType::Modify( SfxPoolItem*, SfxPoolItem* pNew )
 SwGetExpField::SwGetExpField(SwGetExpFieldType* pTyp, const String& rFormel,
                             USHORT nSub, ULONG nFmt)
     : SwFormulaField( pTyp, nFmt, 0.0 ),
-    nSubType(nSub),
-    bIsInBodyTxt( TRUE )
+    bIsInBodyTxt( TRUE ),
+    nSubType(nSub)
 {
     SetFormula( rFormel );
 }
 
 String SwGetExpField::Expand() const
 {
-    if(nSubType & SUB_CMD)
+    if(nSubType & nsSwExtendedSubType::SUB_CMD)
         return GetFormula();
     else
         return sExpand;
@@ -379,9 +379,9 @@ String SwGetExpField::GetCntnt(BOOL bName) const
 {
     if ( bName )
     {
-        String aStr( SwFieldType::GetTypeStr( GSE_FORMULA & nSubType
+        String aStr( SwFieldType::GetTypeStr( static_cast<USHORT>(nsSwGetSetExpType::GSE_FORMULA & nSubType
                                                 ? TYP_FORMELFLD
-                                                : TYP_GETFLD ) );
+                                                : TYP_GETFLD ) ));
         aStr += ' ';
         aStr += GetFormula();
         return aStr;
@@ -425,7 +425,7 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
         return;
 
     _SetGetExpFld aEndFld( aPos.nNode, &rFld, &aPos.nContent );
-    if(GetSubType() & GSE_STRING)
+    if(GetSubType() & nsSwGetSetExpType::GSE_STRING)
     {
         SwHash** ppHashTbl;
         USHORT nSize;
@@ -470,7 +470,7 @@ void SwGetExpField::SetSubType(USHORT nType)
 
 void SwGetExpField::SetLanguage(USHORT nLng)
 {
-    if (nSubType & SUB_CMD)
+    if (nSubType & nsSwExtendedSubType::SUB_CMD)
         SwField::SetLanguage(nLng);
     else
         SwValueField::SetLanguage(nLng);
@@ -479,10 +479,9 @@ void SwGetExpField::SetLanguage(USHORT nLng)
 /*-----------------07.03.98 16:08-------------------
 
 --------------------------------------------------*/
-BOOL SwGetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwGetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_DOUBLE:
         rAny <<= GetValue();
@@ -504,7 +503,7 @@ BOOL SwGetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         break;
     case FIELD_PROP_BOOL2:
         {
-            BOOL bTmp = 0 != (nSubType & SUB_CMD);
+            BOOL bTmp = 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
             rAny.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
@@ -512,19 +511,18 @@ BOOL SwGetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= rtl::OUString(GetExpStr());
         break;
     default:
-        return SwField::QueryValue(rAny, nMId);
+        return SwField::QueryValue(rAny, nWhichId);
     }
     return TRUE;
 }
 /*-----------------07.03.98 16:08-------------------
 
 --------------------------------------------------*/
-BOOL SwGetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwGetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
     sal_Int32 nTmp;
     String sTmp;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_DOUBLE:
         SwValueField::SetValue(*(double*) rAny.getValue());
@@ -535,7 +533,7 @@ BOOL SwGetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
         break;
     case FIELD_PROP_USHORT1:
          rAny >>= nTmp;
-         nSubType = nTmp;
+         nSubType = static_cast<USHORT>(nTmp);
         break;
     case FIELD_PROP_PAR1:
          SetFormula( ::GetString( rAny, sTmp ));
@@ -543,19 +541,19 @@ BOOL SwGetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
     case FIELD_PROP_SUBTYPE:
         nTmp = lcl_APIToSubType(rAny);
         if( nTmp >=0 )
-            SetSubType( (GetSubType() & 0xff00) | nTmp);
+            SetSubType( static_cast<USHORT>((GetSubType() & 0xff00) | nTmp));
         break;
     case FIELD_PROP_BOOL2:
         if(*(sal_Bool*) rAny.getValue())
-            nSubType |= SUB_CMD;
+            nSubType |= nsSwExtendedSubType::SUB_CMD;
         else
-            nSubType &= (~SUB_CMD);
+            nSubType &= (~nsSwExtendedSubType::SUB_CMD);
         break;
     case FIELD_PROP_PAR4:
         ChgExpStr(::GetString( rAny, sTmp ));
         break;
     default:
-        return SwField::PutValue(rAny, nMId);
+        return SwField::PutValue(rAny, nWhichId);
     }
     return TRUE;
 }
@@ -564,15 +562,15 @@ BOOL SwGetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
  Set-Expression-Type
  --------------------------------------------------*/
 
-SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDoc, const String& rName, USHORT nTyp )
-    : SwValueFieldType( pDoc, RES_SETEXPFLD ),
+SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const String& rName, USHORT nTyp )
+    : SwValueFieldType( pDc, RES_SETEXPFLD ),
     sName( rName ),
-    nType(nTyp),
-    sDelim( String::CreateFromAscii( "." ) ), nLevel( UCHAR_MAX ),
-    bDeleted( FALSE ),
-    pOutlChgNd( 0 )
+    pOutlChgNd( 0 ),
+    sDelim( String::CreateFromAscii( "." ) ),
+    nType(nTyp), nLevel( UCHAR_MAX ),
+    bDeleted( FALSE )
 {
-    if( ( GSE_SEQ | GSE_STRING ) & nType )
+    if( ( nsSwGetSetExpType::GSE_SEQ | nsSwGetSetExpType::GSE_STRING ) & nType )
         EnableFormat(FALSE);    // Numberformatter nicht einsetzen
 }
 
@@ -615,7 +613,7 @@ ULONG SwSetExpFieldType::GetSeqFormat()
 
 USHORT SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rFld )
 {
-    if( !GetDepends() || !(GSE_SEQ & nType) )
+    if( !GetDepends() || !(nsSwGetSetExpType::GSE_SEQ & nType) )
         return USHRT_MAX;
 
 extern void InsertSort( SvUShorts& rArr, USHORT nIdx, USHORT* pInsPos = 0 );
@@ -713,10 +711,9 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
 /* -----------------24.03.99 09:44-------------------
  *
  * --------------------------------------------------*/
-BOOL SwSetExpFieldType::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwSetExpFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_SUBTYPE:
         {
@@ -739,16 +736,15 @@ BOOL SwSetExpFieldType::QueryValue( uno::Any& rAny, BYTE nMId ) const
     return TRUE;
 }
 
-BOOL SwSetExpFieldType::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwSetExpFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_SUBTYPE:
         {
             sal_Int32 nSet = lcl_APIToSubType(rAny);
             if(nSet >=0)
-                SetType(nSet);
+                SetType(static_cast<USHORT>(nSet));
         }
         break;
     case FIELD_PROP_PAR2:
@@ -796,7 +792,7 @@ BOOL SwSeqFldList::InsertSort( _SeqFldLstElem* pNew )
 
 BOOL SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, USHORT* pP )
 {
-    register USHORT nO = Count(), nM, nU = 0;
+    USHORT nO = Count(), nM, nU = 0;
     if( nO > 0 )
     {
         CollatorWrapper & rCaseColl = ::GetAppCaseCollator(),
@@ -880,13 +876,13 @@ SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const String& rFormel,
 String SwSetExpField::Expand() const
 {
     String aStr;
-    if (nSubType & SUB_CMD)
+    if (nSubType & nsSwExtendedSubType::SUB_CMD)
     {   // Der CommandString ist gefragt
         aStr = GetTyp()->GetName();
         aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " = " ));
         aStr += GetFormula();
     }
-    else if(!(nSubType & SUB_INVISIBLE))
+    else if(!(nSubType & nsSwExtendedSubType::SUB_INVISIBLE))
     {   // Der Wert ist sichtbar
         aStr = sExpand;
     }
@@ -1038,7 +1034,7 @@ String SwSetExpField::GetPar2() const
 {
     USHORT nType = ((SwSetExpFieldType*)GetTyp())->GetType();
 
-    if (nType & GSE_STRING)
+    if (nType & nsSwGetSetExpType::GSE_STRING)
         return GetFormula();
     return GetExpandedFormula();
 }
@@ -1047,9 +1043,9 @@ void SwSetExpField::SetPar2(const String& rStr)
 {
     USHORT nType = ((SwSetExpFieldType*)GetTyp())->GetType();
 
-    if( !(nType & GSE_SEQ) || rStr.Len() )
+    if( !(nType & nsSwGetSetExpType::GSE_SEQ) || rStr.Len() )
     {
-        if (nType & GSE_STRING)
+        if (nType & nsSwGetSetExpType::GSE_STRING)
             SetFormula(rStr);
         else
             SetExpandedFormula(rStr);
@@ -1075,10 +1071,9 @@ SwFieldType* SwInputFieldType::Copy() const
     Beschreibung: Eingabefeld
  --------------------------------------------------------------------*/
 
-
-SwInputField::SwInputField(SwInputFieldType* pType, const String& rContent,
+SwInputField::SwInputField(SwInputFieldType* pTyp, const String& rContent,
                            const String& rPrompt, USHORT nSub, ULONG nFmt) :
-    SwField(pType, nFmt), nSubType(nSub), aContent(rContent), aPText(rPrompt)
+    SwField(pTyp, nFmt), aContent(rContent), aPText(rPrompt), nSubType(nSub)
 {
 }
 
@@ -1130,10 +1125,9 @@ String SwInputField::Expand() const
 /*-----------------06.03.98 11:12-------------------
 
 --------------------------------------------------*/
-BOOL SwInputField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwInputField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
          rAny <<= OUString( aContent );
@@ -1155,10 +1149,9 @@ BOOL SwInputField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------06.03.98 11:12-------------------
 
 --------------------------------------------------*/
-BOOL SwInputField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwInputField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
          ::GetString( rAny, aContent );
@@ -1242,14 +1235,13 @@ void SwInputField::SetSubType(USHORT nSub)
 /*-----------------05.03.98 17:22-------------------
 
 --------------------------------------------------*/
-BOOL SwSetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwSetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_BOOL2:
         {
-            sal_Bool bVal = 0 == (nSubType & SUB_INVISIBLE);
+            sal_Bool bVal = 0 == (nSubType & nsSwExtendedSubType::SUB_INVISIBLE);
             rAny.setValue(&bVal, ::getBooleanCppuType());
         }
         break;
@@ -1263,15 +1255,15 @@ BOOL SwSetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= (sal_Int16)nSeqNo;
         break;
     case FIELD_PROP_PAR1:
-        rAny <<= OUString ( SwStyleNameMapper::GetProgName(GetPar1(), GET_POOLID_TXTCOLL ) );
+        rAny <<= OUString ( SwStyleNameMapper::GetProgName(GetPar1(), nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ) );
         break;
     case FIELD_PROP_PAR2:
         {
             //I18N - if the formula contains only "TypeName+1"
             //and it's one of the initially created sequence fields
             //then the localized names has to be replaced by a programmatic name
-            OUString sFormula = SwXFieldMaster::LocalizeFormula(*this, GetFormula(), TRUE);
-            rAny <<= OUString( sFormula );
+            OUString sMyFormula = SwXFieldMaster::LocalizeFormula(*this, GetFormula(), TRUE);
+            rAny <<= OUString( sMyFormula );
         }
         break;
     case FIELD_PROP_DOUBLE:
@@ -1289,7 +1281,7 @@ BOOL SwSetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         break;
     case FIELD_PROP_BOOL3:
         {
-            BOOL bTmp = 0 != (nSubType & SUB_CMD);
+            BOOL bTmp = 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
             rAny.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
@@ -1303,26 +1295,25 @@ BOOL SwSetExpField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= rtl::OUString(GetExpStr());
         break;
     default:
-        return SwField::QueryValue(rAny, nMId);
+        return SwField::QueryValue(rAny, nWhichId);
     }
     return TRUE;
 }
 /*-----------------05.03.98 17:22-------------------
 
 --------------------------------------------------*/
-BOOL SwSetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwSetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
     sal_Int32 nTmp32;
     sal_Int16 nTmp16;
     String sTmp;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_BOOL2:
         if(*(sal_Bool*)rAny.getValue())
-            nSubType &= ~SUB_INVISIBLE;
+            nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
         else
-            nSubType |= SUB_INVISIBLE;
+            nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
         break;
     case FIELD_PROP_FORMAT:
         rAny >>= nTmp32;
@@ -1344,7 +1335,7 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
         break;
     case FIELD_PROP_PAR1:
         SetPar1( SwStyleNameMapper::GetUIName(
-                            ::GetString( rAny, sTmp ), GET_POOLID_TXTCOLL ) );
+                            ::GetString( rAny, sTmp ), nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ) );
         break;
     case FIELD_PROP_PAR2:
         {
@@ -1353,8 +1344,8 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
             //I18N - if the formula contains only "TypeName+1"
             //and it's one of the initially created sequence fields
             //then the localized names has to be replaced by a programmatic name
-            OUString sFormula = SwXFieldMaster::LocalizeFormula(*this, uTmp, FALSE);
-            SetFormula( sFormula );
+            OUString sMyFormula = SwXFieldMaster::LocalizeFormula(*this, uTmp, FALSE);
+            SetFormula( sMyFormula );
         }
         break;
     case FIELD_PROP_DOUBLE:
@@ -1367,16 +1358,16 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
     case FIELD_PROP_SUBTYPE:
         nTmp32 = lcl_APIToSubType(rAny);
         if(nTmp32 >= 0)
-            SetSubType((GetSubType() & 0xff00) | nTmp32);
+            SetSubType(static_cast<USHORT>((GetSubType() & 0xff00) | nTmp32));
         break;
     case FIELD_PROP_PAR3:
         ::GetString( rAny, aPText );
         break;
     case FIELD_PROP_BOOL3:
         if(*(sal_Bool*) rAny.getValue())
-            nSubType |= SUB_CMD;
+            nSubType |= nsSwExtendedSubType::SUB_CMD;
         else
-            nSubType &= (~SUB_CMD);
+            nSubType &= (~nsSwExtendedSubType::SUB_CMD);
         break;
     case FIELD_PROP_BOOL1:
         SetInputFlag(*(sal_Bool*) rAny.getValue());
@@ -1385,7 +1376,7 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, BYTE nMId )
         ChgExpStr( ::GetString( rAny, sTmp ));
         break;
     default:
-        return SwField::PutValue(rAny, nMId);
+        return SwField::PutValue(rAny, nWhichId);
     }
     return TRUE;
 }
