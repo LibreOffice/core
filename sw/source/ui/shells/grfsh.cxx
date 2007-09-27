@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:23:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:28:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,7 @@
 #include "itemdef.hxx"
 #include "swslots.hxx"
 
-#include "swabstdlg.hxx" //CHINA001
+#include "swabstdlg.hxx"
 
 #define TOOLBOX_NAME    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "colorbar" ) )
 
@@ -187,7 +187,6 @@ SFX_IMPL_INTERFACE(SwGrfShell, SwBaseShell, SW_RES(STR_SHELLNAME_GRAPHIC))
 
 void SwGrfShell::Execute(SfxRequest &rReq)
 {
-    const SfxItemSet* pArgs = rReq.GetArgs();
     SwWrtShell &rSh = GetShell();
 
     USHORT nSlot = rReq.GetSlot();
@@ -221,7 +220,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             USHORT nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
             aSet.Put(SfxUInt16Item(SID_HTML_MODE, nHtmlMode));
             FieldUnit eMetric = ::GetDfltMetric((0 != (nHtmlMode&HTMLMODE_ON)));
-            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)) );
 
             const SwRect* pRect = &rSh.GetAnyCurRect(RECT_PAGE);
             SwFmtFrmSize aFrmSize( ATT_VAR_SIZE, pRect->Width(), pRect->Height());
@@ -300,16 +299,13 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             aSet.Put(SfxFrameItem( SID_DOCFRAME, GetView().GetViewFrame()->GetTopFrame()));
 
-//CHINA001          SwFrmDlg *pDlg = new SwFrmDlg( GetView().GetViewFrame(),
-//CHINA001          GetView().GetWindow(),
-//CHINA001          aSet, FALSE, DLG_FRM_GRF );
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_GRF,
                                                     GetView().GetViewFrame(),
                                                     GetView().GetWindow(),
                                                     aSet, FALSE, DLG_FRM_GRF);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             if( pDlg->Execute() )
             {
                 rSh.StartAllAction();
@@ -329,9 +325,9 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     if( SFX_ITEM_SET == pSet->GetItemState(
                             SID_ATTR_GRAF_FRMSIZE_PERCENT, FALSE, &pItem ))
                     {
-                        const Size& rSz = ((SvxSizeItem*)pItem)->GetSize();
-                        aSize.SetWidthPercent( static_cast< BYTE >( rSz.Width() ) );
-                        aSize.SetHeightPercent( static_cast< BYTE >( rSz.Height() ) );
+                        const Size& rRelativeSize = ((SvxSizeItem*)pItem)->GetSize();
+                        aSize.SetWidthPercent( static_cast< BYTE >( rRelativeSize.Width() ) );
+                        aSize.SetHeightPercent( static_cast< BYTE >( rRelativeSize.Height() ) );
                     }
                     pSet->Put( aSize );
                 }
@@ -464,25 +460,25 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
                 if( FN_FLIP_VERT_GRAFIC == nSlot )
                     switch( nMirror )
                     {
-                    case RES_DONT_MIRROR_GRF:   nMirror = RES_MIRROR_GRF_VERT;
+                    case RES_MIRROR_GRAPH_DONT: nMirror = RES_MIRROR_GRAPH_VERT;
                                                 break;
-                    case RES_MIRROR_GRF_HOR:    nMirror = RES_MIRROR_GRF_BOTH;
+                    case RES_MIRROR_GRAPH_HOR:  nMirror = RES_MIRROR_GRAPH_BOTH;
                                                 break;
-                    case RES_MIRROR_GRF_VERT:   nMirror = RES_DONT_MIRROR_GRF;
+                    case RES_MIRROR_GRAPH_VERT:   nMirror = RES_MIRROR_GRAPH_DONT;
                                                 break;
-                    case RES_MIRROR_GRF_BOTH:   nMirror = RES_MIRROR_GRF_HOR;
+                    case RES_MIRROR_GRAPH_BOTH: nMirror = RES_MIRROR_GRAPH_HOR;
                                                 break;
                     }
                 else
                     switch( nMirror )
                     {
-                    case RES_DONT_MIRROR_GRF:   nMirror = RES_MIRROR_GRF_HOR;
+                    case RES_MIRROR_GRAPH_DONT: nMirror = RES_MIRROR_GRAPH_HOR;
                                                 break;
-                    case RES_MIRROR_GRF_VERT:   nMirror = RES_MIRROR_GRF_BOTH;
+                    case RES_MIRROR_GRAPH_VERT: nMirror = RES_MIRROR_GRAPH_BOTH;
                                                 break;
-                    case RES_MIRROR_GRF_HOR:    nMirror = RES_DONT_MIRROR_GRF;
+                    case RES_MIRROR_GRAPH_HOR:    nMirror = RES_MIRROR_GRAPH_DONT;
                                                 break;
-                    case RES_MIRROR_GRF_BOTH:   nMirror = RES_MIRROR_GRF_VERT;
+                    case RES_MIRROR_GRAPH_BOTH: nMirror = RES_MIRROR_GRAPH_VERT;
                                                 break;
                     }
                 aMirror.SetValue( nMirror );
@@ -589,8 +585,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
     SwWrtShell &rSh = GetShell();
     SfxItemSet aCoreSet( GetPool(), aNoTxtNodeSetRange );
     rSh.GetAttr( aCoreSet );
-    BOOL bParentCntProt = 0 != rSh.IsSelObjProtected(
-                    (FlyProtectType)(FLYPROTECT_CONTENT|FLYPROTECT_PARENT) );
+    BOOL bParentCntProt = 0 != rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
     BOOL bIsGrfCntnt = CNT_GRF == GetShell().GetCntType();
     // --> OD 2006-11-03 #i59688#
 //    BOOL bSwappedOut = rSh.IsGrfSwapOut( TRUE );
@@ -624,22 +619,22 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case FN_FLIP_VERT_GRAFIC:
             if( !bParentCntProt )
             {
-                UINT16 nState = ((const SwMirrorGrf &) aCoreSet.Get(
-                                        RES_GRFATR_MIRRORGRF )).GetValue();
+                MirrorGraph nState = static_cast< MirrorGraph >(((const SwMirrorGrf &) aCoreSet.Get(
+                                        RES_GRFATR_MIRRORGRF )).GetValue());
 
-                rSet.Put(SfxBoolItem( nWhich, nState == RES_MIRROR_GRF_VERT ||
-                                              nState == RES_MIRROR_GRF_BOTH));
+                rSet.Put(SfxBoolItem( nWhich, nState == RES_MIRROR_GRAPH_VERT ||
+                                              nState == RES_MIRROR_GRAPH_BOTH));
             }
             break;
 
         case FN_FLIP_HORZ_GRAFIC:
             if( !bParentCntProt )
             {
-                UINT16 nState = ((const SwMirrorGrf &) aCoreSet.Get(
-                                        RES_GRFATR_MIRRORGRF )).GetValue();
+                MirrorGraph nState = static_cast< MirrorGraph >(((const SwMirrorGrf &) aCoreSet.Get(
+                                        RES_GRFATR_MIRRORGRF )).GetValue());
 
-                rSet.Put(SfxBoolItem( nWhich, nState == RES_MIRROR_GRF_HOR ||
-                                              nState == RES_MIRROR_GRF_BOTH));
+                rSet.Put(SfxBoolItem( nWhich, nState == RES_MIRROR_GRAPH_HOR ||
+                                              nState == RES_MIRROR_GRAPH_BOTH));
             }
             break;
 
@@ -699,7 +694,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 
         case SID_ATTR_GRAF_MODE:
             if( !bParentCntProt )
-                rSet.Put( SfxUInt16Item( nWhich, (GraphicDrawMode)((SwDrawModeGrf&)
+                rSet.Put( SfxUInt16Item( nWhich, ((SwDrawModeGrf&)
                         aCoreSet.Get(RES_GRFATR_DRAWMODE)).GetValue() ));
             break;
 
@@ -760,8 +755,8 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 }
 
 
-SwGrfShell::SwGrfShell(SwView &rView) :
-    SwBaseShell(rView)
+SwGrfShell::SwGrfShell(SwView &_rView) :
+    SwBaseShell(_rView)
 
 {
     SetName(String::CreateFromAscii("Graphic"));
