@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctxm.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:45:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:55:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ struct SwTOXSortTabBase;
 
 typedef SwTOXSortTabBase* SwTOXSortTabBasePtr;
 
-SV_DECL_PTRARR(SwTOXSortTabBases, SwTOXSortTabBasePtr, 0, 5 );
+SV_DECL_PTRARR(SwTOXSortTabBases, SwTOXSortTabBasePtr, 0, 5 )
 
 /*--------------------------------------------------------------------
      Beschreibung: Ring der speziellen Verzeichnisse
@@ -80,8 +80,7 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
                             const SwTxtNode* pOwnChapterNode );
     void    UpdateTable( const SwTxtNode* pOwnChapterNode );
     void    UpdateSequence( const SwTxtNode* pOwnChapterNode );
-    void    UpdateAuthorities( const SwTxtNode* pOwnChapterNode,
-                                        const SwTOXInternational& rIntl );
+    void    UpdateAuthorities( const SwTOXInternational& rIntl );
     void    UpdateAll();
 
     // Sortiert einfuegen ins Array fuer die Generierung
