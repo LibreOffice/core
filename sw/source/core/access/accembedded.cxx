@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accembedded.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:34:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:19:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,8 @@
 #include "accembedded.hxx"
 #endif
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
@@ -69,9 +69,9 @@ const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextEmbeddedObject"
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleEmbeddedObject";
 
 SwAccessibleEmbeddedObject::SwAccessibleEmbeddedObject(
-        SwAccessibleMap *pMap,
-        const SwFlyFrm *pFlyFrm ) :
-    SwAccessibleNoTextFrame( pMap, AccessibleRole::EMBEDDED_OBJECT, pFlyFrm )
+        SwAccessibleMap* pInitMap,
+        const SwFlyFrm* pFlyFrm  ) :
+    SwAccessibleNoTextFrame( pInitMap, AccessibleRole::EMBEDDED_OBJECT, pFlyFrm )
 {
 }
 
@@ -80,14 +80,14 @@ SwAccessibleEmbeddedObject::~SwAccessibleEmbeddedObject()
 }
 
 OUString SAL_CALL SwAccessibleEmbeddedObject::getImplementationName()
-        throw( RuntimeException )
+        throw( uno::RuntimeException )
 {
     return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationName));
 }
 
 sal_Bool SAL_CALL SwAccessibleEmbeddedObject::supportsService(
         const ::rtl::OUString& sTestServiceName)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (uno::RuntimeException)
 {
     return sTestServiceName.equalsAsciiL( sServiceName,
                                           sizeof(sServiceName)-1 ) ||
@@ -95,10 +95,10 @@ sal_Bool SAL_CALL SwAccessibleEmbeddedObject::supportsService(
                                              sizeof(sAccessibleServiceName)-1 );
 }
 
-Sequence< OUString > SAL_CALL SwAccessibleEmbeddedObject::getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SwAccessibleEmbeddedObject::getSupportedServiceNames()
+        throw( uno::RuntimeException )
 {
-    Sequence< OUString > aRet(2);
+    uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
     pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
@@ -106,11 +106,11 @@ Sequence< OUString > SAL_CALL SwAccessibleEmbeddedObject::getSupportedServiceNam
 }
 
 
-Sequence< sal_Int8 > SAL_CALL SwAccessibleEmbeddedObject::getImplementationId()
-        throw(RuntimeException)
+uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleEmbeddedObject::getImplementationId()
+        throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    static Sequence< sal_Int8 > aId( 16 );
+    static uno::Sequence< sal_Int8 > aId( 16 );
     static sal_Bool bInit = sal_False;
     if(!bInit)
     {
