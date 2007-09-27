@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoevtlstnr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:25:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:15:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,8 @@ namespace com{namespace sun{namespace star{
  *  Verwaltung der EventListener
  * --------------------------------------------------*/
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > *  XEventListenerPtr;
-SV_DECL_PTRARR(SwEvtLstnrArray, XEventListenerPtr, 4, 4);
+SV_DECL_PTRARR(SwEvtLstnrArray, XEventListenerPtr, 4, 4)
+
 class SwEventListenerContainer
 {
     protected:
