@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ascatr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:03:57 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:43:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,12 +124,12 @@ SwASC_AttrIter::SwASC_AttrIter( SwASCWriter& rWr, const SwTxtNode& rTxtNd,
 
 xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
 {
-    register xub_StrLen nMinPos = STRING_MAXLEN;
+    xub_StrLen nMinPos = STRING_MAXLEN;
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
     {
-        register USHORT i;
-        register xub_StrLen nPos;
+        USHORT i;
+        xub_StrLen nPos;
         const xub_StrLen * pPos;
 
 // kann noch optimiert werden, wenn ausgenutzt wird, dass die TxtAttrs
@@ -160,7 +160,7 @@ BOOL SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
     {
-        register USHORT i;
+        USHORT i;
         for( i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
