@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undraw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:03:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:31:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,10 +108,6 @@
 #include <viewsh.hxx>
 #endif
 
-#ifdef _MSC_VER
-#pragma optimize("elg",off)
-#endif
-
 struct SwUndoGroupObjImpl
 {
     SwDrawFrmFmt* pFmt;
@@ -131,6 +127,7 @@ IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo )
 {
 #if OSL_DEBUG_LEVEL > 1
     USHORT nId = pUndo->GetId();
+    (void)nId;
     String sComment( pUndo->GetComment() );
 #endif
 
@@ -281,12 +278,12 @@ void SwUndoDrawGroup::Undo( SwUndoIter& )
 
     // das Group-Object sichern
     SwDrawFrmFmt* pFmt = pObjArr->pFmt;
-    SwDrawContact* pContact = (SwDrawContact*)pFmt->FindContactObj();
-    SdrObject* pObj = pContact->GetMaster();
+    SwDrawContact* pDrawContact = (SwDrawContact*)pFmt->FindContactObj();
+    SdrObject* pObj = pDrawContact->GetMaster();
     pObjArr->pObj = pObj;
 
     //loescht sich selbst!
-    pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
+    pDrawContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
     pObj->SetUserCall( 0 );
 
     ::lcl_SaveAnchor( pFmt, pObjArr->nNodeIdx );
