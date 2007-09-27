@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrtxt.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:39:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:15:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,12 +72,12 @@ protected:
 
     // Zuruecksetzen in die erste Zeile.
     void Init();
-    void CtorInit( SwTxtFrm *pFrm, SwTxtInfo *pInf );
+    void CtorInitTxtIter( SwTxtFrm *pFrm, SwTxtInfo *pInf );
     inline SwTxtIter() { }
 
 public:
-    inline SwTxtIter( SwTxtFrm *pFrm, SwTxtInfo *pInf )
-           { CtorInit( pFrm, pInf ); }
+    inline SwTxtIter( SwTxtFrm *pTxtFrm, SwTxtInfo *pTxtInf )
+           { CtorInitTxtIter( pTxtFrm, pTxtInf ); }
     inline const SwLineLayout *GetCurr() const { return pCurr; } // niemals 0!
     inline const SwLineLayout *GetNext() const { return pCurr->GetNext(); }
            const SwLineLayout *GetPrev();
@@ -158,11 +158,11 @@ protected:
     // fuer CalcFlyAdjust
     inline void SetDropLeft( const KSHORT nNew ) { nDropLeft = nNew; }
 
-    void CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
+    void CtorInitTxtMargin( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
     inline SwTxtMargin() { }
 public:
-    inline SwTxtMargin( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf )
-           { CtorInit( pFrm, pInf ); }
+    inline SwTxtMargin( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf )
+           { CtorInitTxtMargin( pTxtFrm, pTxtSizeInf ); }
     inline SwTwips GetLeftMargin() const;
     inline SwTwips Left() const;
     inline SwTwips Right() const { return nRight; }
@@ -229,8 +229,8 @@ protected:
         SwTwips nReal = 0 );
     SwTwips CalcKanaAdj( SwLineLayout *pCurr );
 public:
-    inline SwTxtAdjuster( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf )
-           { SwTxtMargin::CtorInit( pFrm, pInf ); }
+    inline SwTxtAdjuster( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf )
+           { CtorInitTxtMargin( pTxtFrm, pTxtSizeInf ); }
 
     // wird von SwTxtFormatter wegen UpdatePos ueberladen
     void CalcAdjLine( SwLineLayout *pCurr );
@@ -261,11 +261,11 @@ class SwTxtCursor : public SwTxtAdjuster
     static sal_Bool bRightMargin;
     void _GetCharRect(SwRect *, const xub_StrLen, SwCrsrMoveState* );
 protected:
-    void CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
+    void CtorInitTxtCursor( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
     inline SwTxtCursor() { }
 public:
-    inline SwTxtCursor( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf )
-           { CtorInit( pFrm, pInf ); }
+    inline SwTxtCursor( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf )
+           { CtorInitTxtCursor( pTxtFrm, pTxtSizeInf ); }
     sal_Bool GetCharRect(SwRect *, const xub_StrLen, SwCrsrMoveState* = 0,
         const long nMax = 0 );
     sal_Bool GetEndCharRect(SwRect *, const xub_StrLen, SwCrsrMoveState* = 0,
@@ -308,20 +308,20 @@ public:
 
 inline sal_Bool SwTxtIter::SeekAndChg( SwTxtSizeInfo &rInf )
 {
-    return SwAttrIter::SeekAndChg( rInf.GetIdx(), rInf.GetOut() );
+    return SeekAndChgAttrIter( rInf.GetIdx(), rInf.GetOut() );
 }
 
 inline sal_Bool SwTxtIter::SeekAndChgBefore( SwTxtSizeInfo &rInf )
 {
     if ( rInf.GetIdx() )
-        return SwAttrIter::SeekAndChg( rInf.GetIdx()-1, rInf.GetOut() );
+        return SeekAndChgAttrIter( rInf.GetIdx()-1, rInf.GetOut() );
     else
-        return SwAttrIter::SeekAndChg( rInf.GetIdx(), rInf.GetOut() );
+        return SeekAndChgAttrIter( rInf.GetIdx(), rInf.GetOut() );
 }
 
 inline sal_Bool SwTxtIter::SeekStartAndChg( SwTxtSizeInfo &rInf, const sal_Bool bPara )
 {
-    return SwAttrIter::SeekStartAndChg( rInf.GetOut(), bPara );
+    return SeekStartAndChgAttrIter( rInf.GetOut(), bPara );
 }
 
 inline SwTwips SwTxtMargin::GetLeftMargin() const
