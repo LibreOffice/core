@@ -4,9 +4,9 @@
  *
  *  $RCSfile: break.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:37:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:18:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,11 +166,13 @@ IMPL_LINK( SwBreakDlg, OkHdl, Button *, EMPTYARG )
         ASSERT(pPageDesc, Seitenvorlage nicht gefunden.);
         const USHORT nUserPage = USHORT(aPageNumEdit.GetValue());
         BOOL bOk = TRUE;
-        switch(pPageDesc->GetUseOn()) {
-            case PD_MIRROR:
-            case PD_ALL: break;
-            case PD_LEFT: bOk = 0 == nUserPage % 2; break;
-            case PD_RIGHT: bOk = nUserPage % 2; break;
+        switch(pPageDesc->GetUseOn())
+        {
+            case nsUseOnPage::PD_MIRROR:
+            case nsUseOnPage::PD_ALL: break;
+            case nsUseOnPage::PD_LEFT: bOk = 0 == nUserPage % 2; break;
+            case nsUseOnPage::PD_RIGHT: bOk = static_cast< sal_Bool >(nUserPage % 2); break;
+            default:; //prevent warning
         }
         if(!bOk) {
             InfoBox(this, SW_RES(MSG_ILLEGAL_PAGENUM)).Execute();
@@ -195,12 +197,15 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     aPageNumBox(this, SW_RES(CB_PAGENUM)),
     aPageNumEdit(this, SW_RES(ED_PAGENUM)),
     aBreakFL(this,SW_RES(FL_BREAK)),
+
     aOkBtn(this,SW_RES(BT_OK)),
     aCancelBtn(this,SW_RES(BT_CANCEL)),
     aHelpBtn(this,SW_RES(BT_HELP)),
-    bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell())),
+
+    nKind(0),
     nPgNum(0),
-    nKind(0)
+
+    bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
 {
     Link aLk = LINK(this,SwBreakDlg,ClickHdl);
     aPageBtn.SetClickHdl( aLk );
