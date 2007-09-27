@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:21:07 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:10:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,10 +218,10 @@ inline sal_Bool SwXMLConditionParser_Impl::MatchNumber( sal_uInt32& rNumber )
 
 SwXMLConditionParser_Impl::SwXMLConditionParser_Impl( const OUString& rInp ) :
     sInput( rInp ),
-    nPos( 0 ),
-    nLength( rInp.getLength() ),
     nCondition( 0 ),
-    nSubCondition( 0 )
+    nSubCondition( 0 ),
+    nPos( 0 ),
+    nLength( rInp.getLength() )
 {
     OUString sFunc;
     sal_Bool bHasSub = sal_False;
@@ -352,7 +352,7 @@ TYPEINIT1( SwXMLConditionContext_Impl, XMLTextStyleContext );
 // ---------------------------------------------------------------------
 
 typedef SwXMLConditionContext_Impl *SwXMLConditionContextPtr;
-SV_DECL_PTRARR( SwXMLConditions_Impl, SwXMLConditionContextPtr, 5, 2 );
+SV_DECL_PTRARR( SwXMLConditions_Impl, SwXMLConditionContextPtr, 5, 2 )
 
 class SwXMLTextStyleContext_Impl : public XMLTextStyleContext
 {
@@ -477,8 +477,8 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
     uno::Reference<lang::XUnoTunnel> xStyleTunnel( xStyle, uno::UNO_QUERY);
     if( xStyleTunnel.is() )
     {
-        pStyle = (SwXStyle*)xStyleTunnel->getSomething(
-                                            SwXStyle::getUnoTunnelId() );
+        pStyle = reinterpret_cast< SwXStyle * >(
+                sal::static_int_cast< sal_IntPtr >( xStyleTunnel->getSomething( SwXStyle::getUnoTunnelId() )));
     }
     if( !pStyle )
         return;
@@ -501,7 +501,7 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
                 pCond->GetApplyStyle() ) );
         SwStyleNameMapper::FillUIName( aDisplayName,
                                       aString,
-                                      GET_POOLID_TXTCOLL,
+                                      nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
                                       sal_True);
         sName = aString;
         SwTxtFmtColl* pCondColl = pDoc->FindTxtFmtCollByName( sName );
@@ -665,7 +665,6 @@ SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImpo
     rStyles( rStylesC ),
     bHasMasterPageName( sal_False ),
     bPageDescConnected( sal_False ),
-    sDataStyleName(),
     bDataStyleIsResolved( sal_True )
 {
 }
@@ -737,7 +736,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
                                              GetMasterPageName() );
     SwStyleNameMapper::FillUIName( sName,
                                    sName,
-                                   GET_POOLID_PAGEDESC,
+                                   nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC,
                                    sal_True);
     // <--
     SwPageDesc *pPageDesc = pDoc->FindPageDescByName( sName );
@@ -745,7 +744,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     {
         // If the page style is a pool style, then we maybe have to create it
         // first if it hasn't been used by now.
-        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sName, GET_POOLID_PAGEDESC );
+        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
         if( USHRT_MAX != nPoolId )
             pPageDesc = pDoc->GetPageDescFromPool( nPoolId, false );
     }
@@ -780,8 +779,6 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
 
 sal_Bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
 {
-    sal_Bool bTmp = bDataStyleIsResolved;
-
     // resolve, if not already done
     if (! bDataStyleIsResolved)
     {
