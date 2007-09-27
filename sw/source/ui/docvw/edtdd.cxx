@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:16:04 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,8 @@
 #include <swundo.hxx>
 #endif
 
+using namespace ::com::sun::star;
+
 // no include "dbgoutsw.hxx" here!!!!!!
 
 extern BOOL bNoInterrupt;
@@ -126,7 +128,7 @@ void SwEditWin::StopDDTimer(SwWrtShell *pSh, const Point &rPt)
     aTimer.SetTimeoutHdl(LINK(this,SwEditWin, TimerHandler));
 }
 
-void SwEditWin::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     if( rSh.GetDrawView() )
@@ -200,8 +202,8 @@ void SwEditWin::StartExecuteDrag()
     bIsInDrag = TRUE;
 
     SwTransferable* pTransfer = new SwTransferable( rView.GetWrtShell() );
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::datatransfer::XTransferable > xRef( pTransfer );
+    uno::Reference<
+        datatransfer::XTransferable > xRef( pTransfer );
 
     pTransfer->StartDrag( this, aMovePos );
 }
@@ -288,19 +290,19 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     USHORT nEventAction;
     sal_Int8 nUserOpt = rEvt.mbDefault ? EXCHG_IN_ACTION_DEFAULT
                                        : rEvt.mnAction;
-    nDropAction = SotExchange::GetExchangeAction(
+    m_nDropAction = SotExchange::GetExchangeAction(
                                 GetDataFlavorExVector(),
-                                nDropDestination,
+                                m_nDropDestination,
                                 rEvt.mnAction,
 //!!                                rEvt.GetSourceOptions(),
-                                nUserOpt, nDropFormat, nEventAction, 0,
+                                nUserOpt, m_nDropFormat, nEventAction, 0,
                                 &rEvt.maDropEvent.Transferable );
 
 
     TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
     nRet = rEvt.mnAction;
-    if( !SwTransferable::PasteData( aData, rSh, nDropAction, nDropFormat,
-                                nDropDestination, FALSE, rEvt.mbDefault, &aDocPt, nRet))
+    if( !SwTransferable::PasteData( aData, rSh, m_nDropAction, m_nDropFormat,
+                                m_nDropDestination, FALSE, rEvt.mbDefault, &aDocPt, nRet))
 //!!    nRet = SFX_APP()->ExecuteDrop( rEvt );
         nRet = DND_ACTION_NONE;
     else if ( SW_MOD()->pDragDrop )
@@ -437,22 +439,22 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
     }
 
     SdrObject *pObj = NULL;
-    nDropDestination = GetDropDestination( aPixPt, &pObj );
-    if( !nDropDestination )
+    m_nDropDestination = GetDropDestination( aPixPt, &pObj );
+    if( !m_nDropDestination )
         return DND_ACTION_NONE;
 
     USHORT nEventAction;
     sal_Int8 nUserOpt = rEvt.mbDefault ? EXCHG_IN_ACTION_DEFAULT
                                        : rEvt.mnAction;
 
-    nDropAction = SotExchange::GetExchangeAction(
+    m_nDropAction = SotExchange::GetExchangeAction(
                                 GetDataFlavorExVector(),
-                                nDropDestination,
+                                m_nDropDestination,
                                 rEvt.mnAction,
 //!!                                rEvt.GetSourceOptions(),
-                                nUserOpt, nDropFormat, nEventAction );
+                                nUserOpt, m_nDropFormat, nEventAction );
 
-    if( EXCHG_INOUT_ACTION_NONE != nDropAction )
+    if( EXCHG_INOUT_ACTION_NONE != m_nDropAction )
     {
         const Point aDocPt( PixelToLogic( aPixPt ) );
 
@@ -498,9 +500,9 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
                 DND_ACTION_MOVE == rEvt.mnAction )
                 nEventAction = DND_ACTION_COPY;
 
-            if( (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE == nDropFormat &&
-                 EXCHG_IN_ACTION_LINK == nDropAction) ||
-                 SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE == nDropFormat  )
+            if( (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE == m_nDropFormat &&
+                 EXCHG_IN_ACTION_LINK == m_nDropAction) ||
+                 SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE == m_nDropFormat  )
             {
                 SdrMarkView* pMView = PTR_CAST( SdrMarkView, rSh.GetDrawView() );
                 if( pMView && !pMView->IsDesignMode() )
@@ -512,8 +514,8 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             nUserOpt = (sal_Int8)nEventAction;
 
         // show DropCursor or UserMarker ?
-        if( EXCHG_DEST_SWDOC_FREE_AREA_WEB == nDropDestination ||
-            EXCHG_DEST_SWDOC_FREE_AREA == nDropDestination )
+        if( EXCHG_DEST_SWDOC_FREE_AREA_WEB == m_nDropDestination ||
+            EXCHG_DEST_SWDOC_FREE_AREA == m_nDropDestination )
         {
             CleanupDropUserMarker();
             SwContentAtPos aCont( SwContentAtPos::SW_CONTENT_CHECK );
