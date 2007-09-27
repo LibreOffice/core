@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:02:00 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:16:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,6 @@
 #include <vcl/outdev.hxx>
 #endif
 
-#ifndef _FRMSH_HXX
-#include <frmsh.hxx>
-#endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>  // SwViewOptions
 #endif
@@ -139,22 +136,23 @@ void SwFldPortion::TakeNextOffset( const SwFldPortion* pFld )
     bFollow = sal_True;
 }
 
-SwFldPortion::SwFldPortion( const XubString &rExpand, SwFont *pFnt )
-    : aExpand(rExpand), pFnt(pFnt), nViewWidth(0), nNextOffset(0), nNextScriptChg(STRING_LEN),
+SwFldPortion::SwFldPortion( const XubString &rExpand, SwFont *pFont )
+    : aExpand(rExpand), pFnt(pFont), nNextOffset(0), nNextScriptChg(STRING_LEN), nViewWidth(0),
       bFollow( sal_False ), bHasFollow( sal_False )
 {
     SetWhichPor( POR_FLD );
 }
 
 SwFldPortion::SwFldPortion( const SwFldPortion& rFld )
-    : aExpand( rFld.GetExp() ),
-      bCenter( rFld.IsCenter() ),
-      bFollow( rFld.IsFollow() ),
-      bHasFollow( rFld.HasFollow() ),
-      bHide( rFld.IsHide() ),
-      bLeft( rFld.IsLeft() ),
+    : SwExpandPortion( rFld ),
+      aExpand( rFld.GetExp() ),
       nNextOffset( rFld.GetNextOffset() ),
-      nNextScriptChg( rFld.GetNextScriptChg() )
+      nNextScriptChg( rFld.GetNextScriptChg() ),
+      bFollow( rFld.IsFollow() ),
+      bLeft( rFld.IsLeft() ),
+      bHide( rFld.IsHide() ),
+      bCenter( rFld.IsCenter() ),
+      bHasFollow( rFld.HasFollow() )
 {
     if ( rFld.HasFont() )
         pFnt = new SwFont( *rFld.GetFont() );
@@ -263,7 +261,6 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
         {
             nScript = pBreakIt->xBreak->getScriptType( aTxt, 0 );
             xub_StrLen nChg = 0;
-            USHORT nCnt = 0;
             if( i18n::ScriptType::WEAK == nScript )
             {
                 nChg =(xub_StrLen)pBreakIt->xBreak->endOfScript(aTxt,0,nScript);
@@ -399,7 +396,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             xub_StrLen nNextOfst = aExpand.Len() - nRest;
 
             if ( IsQuoVadisPortion() )
-                nNextOfst += ((SwQuoVadisPortion*)this)->GetContTxt().Len();
+                nNextOfst = nNextOfst + ((SwQuoVadisPortion*)this)->GetContTxt().Len();
 
             XubString aNew( aExpand, nNextOfst, STRING_LEN );
             aExpand.Erase( nNextOfst, STRING_LEN );
@@ -446,7 +443,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             // der Offset, an dem es selbst im Originalstring beginnt.
             // Wenn beim Formatieren ein FollowFeld angelegt wird, wird
             // der Offset dieses FollowFelds in nNextOffset festgehalten.
-            nNextOffset += nNextOfst;
+            nNextOffset = nNextOffset + nNextOfst;
             pFld->SetNextOffset( nNextOffset );
             rInf.SetRest( pFld );
         }
@@ -549,9 +546,9 @@ sal_Bool SwHiddenPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt 
  *                      class SwNumberPortion
  *************************************************************************/
 
-SwNumberPortion::SwNumberPortion( const XubString &rExpand, SwFont *pFnt,
+SwNumberPortion::SwNumberPortion( const XubString &rExpand, SwFont *pFont,
                     const sal_Bool bLft, const sal_Bool bCntr, const KSHORT nMinDst )
-        : SwFldPortion( rExpand, pFnt ), nFixWidth(0), nMinDist( nMinDst )
+        : SwFldPortion( rExpand, pFont ), nFixWidth(0), nMinDist( nMinDst )
 {
     SetWhichPor( POR_NUMBER );
     SetLeft( bLft );
@@ -649,7 +646,7 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
     return bFull;
 }
 
-void SwNumberPortion::FormatEOL( SwTxtFormatInfo &rInf )
+void SwNumberPortion::FormatEOL( SwTxtFormatInfo& )
 {
 /*  Ein FormatEOL deutet daraufhin, dass der folgende Text
  *  nicht mit auf die Zeile passte. Damit die Numerierung mitwandert,
@@ -690,7 +687,7 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
     const SwLinePortion* pTmp = this;
     while ( pTmp && pTmp->InNumberGrp() )
     {
-        nSumWidth += pTmp->Width();
+        nSumWidth = nSumWidth + pTmp->Width();
         if ( ((SwNumberPortion*)pTmp)->HasFollow() )
             pTmp = pTmp->GetPortion();
         else
@@ -752,12 +749,12 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
                             nOffset = nTmpOffset - nMinDist;
                     }
                     else
-                        nOffset -= nMinDist;
+                        nOffset = nOffset - nMinDist;
                 }
                 aInf.X( aInf.X() + nOffset );
                 SwExpandPortion::Paint( aInf );
                 if( bPaintSpace )
-                    nSpaceOffs += nOffset;
+                    nSpaceOffs = nSpaceOffs + nOffset;
             }
             if( bPaintSpace && nOldWidth > nSpaceOffs )
             {
@@ -831,7 +828,7 @@ SwGrfNumPortion::SwGrfNumPortion(
     else
     {
         nYPos = 0;
-        eOrient = VERT_TOP;
+        eOrient = text::VertOrientation::TOP;
     }
     Width( static_cast<USHORT>(rGrfSize.Width() + 2 * GRFNUM_SECURE) );
     nFixWidth = Width();
@@ -922,11 +919,11 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
     Size aSize( nTmpWidth, GetGrfHeight() - 2 * GRFNUM_SECURE );
 
 
-    const sal_Bool bLeft = ( IsLeft() && ! rInf.GetTxtFrm()->IsRightToLeft() ) ||
-                           ( ! IsLeft() && ! IsCenter() && rInf.GetTxtFrm()->IsRightToLeft() );
+    const sal_Bool bTmpLeft = ( IsLeft() && ! rInf.GetTxtFrm()->IsRightToLeft() ) ||
+                              ( ! IsLeft() && ! IsCenter() && rInf.GetTxtFrm()->IsRightToLeft() );
 
 
-    if( nFixWidth < Width() && !bLeft )
+    if( nFixWidth < Width() && !bTmpLeft )
     {
         KSHORT nOffset = Width() - nFixWidth;
         if( nOffset < nMinDist )
@@ -940,7 +937,7 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
                     nOffset = Width() - nFixWidth - nMinDist;
             }
             else
-                nOffset -= nMinDist;
+                nOffset = nOffset - nMinDist;
         }
         aPos.X() += nOffset;
     }
@@ -1018,20 +1015,20 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
 void SwGrfNumPortion::SetBase( long nLnAscent, long nLnDescent,
                                long nFlyAsc, long nFlyDesc )
 {
-    if ( GetOrient() != VERT_NONE )
+    if ( GetOrient() != text::VertOrientation::NONE )
     {
         SetRelPos( 0 );
-        if ( GetOrient() == VERT_CENTER )
+        if ( GetOrient() == text::VertOrientation::CENTER )
             SetRelPos( GetGrfHeight() / 2 );
-        else if ( GetOrient() == VERT_TOP )
+        else if ( GetOrient() == text::VertOrientation::TOP )
             SetRelPos( GetGrfHeight() - GRFNUM_SECURE );
-        else if ( GetOrient() == VERT_BOTTOM )
+        else if ( GetOrient() == text::VertOrientation::BOTTOM )
             ;
-        else if ( GetOrient() == VERT_CHAR_CENTER )
+        else if ( GetOrient() == text::VertOrientation::CHAR_CENTER )
             SetRelPos( ( GetGrfHeight() + nLnAscent - nLnDescent ) / 2 );
-        else if ( GetOrient() == VERT_CHAR_TOP )
+        else if ( GetOrient() == text::VertOrientation::CHAR_TOP )
             SetRelPos( nLnAscent );
-        else if ( GetOrient() == VERT_CHAR_BOTTOM )
+        else if ( GetOrient() == text::VertOrientation::CHAR_BOTTOM )
             SetRelPos( GetGrfHeight() - nLnDescent );
         else
         {
@@ -1043,11 +1040,11 @@ void SwGrfNumPortion::SetBase( long nLnAscent, long nLnDescent,
 
                 SetRelPos( nFlyAsc );
             }
-            else if ( GetOrient() == VERT_LINE_CENTER )
+            else if ( GetOrient() == text::VertOrientation::LINE_CENTER )
                 SetRelPos( ( GetGrfHeight() + nFlyAsc - nFlyDesc ) / 2 );
-            else if ( GetOrient() == VERT_LINE_TOP )
+            else if ( GetOrient() == text::VertOrientation::LINE_TOP )
                 SetRelPos( nFlyAsc );
-            else if ( GetOrient() == VERT_LINE_BOTTOM )
+            else if ( GetOrient() == text::VertOrientation::LINE_BOTTOM )
                 SetRelPos( GetGrfHeight() - nFlyDesc );
         }
     }
@@ -1216,7 +1213,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     USHORT nMaxDescent, nMaxAscent, nMaxWidth;
     USHORT nMainDescent = rInf.GetFont()->GetHeight( pSh, *rInf.GetOut() );
     const USHORT nMainAscent = rInf.GetFont()->GetAscent( pSh, *rInf.GetOut() );
-    nMainDescent -= nMainAscent;
+    nMainDescent = nMainDescent - nMainAscent;
     // we start with a 50% font, but if we notice that the combined portion
     // becomes bigger than the surrounding font, we check 45% and maybe 40%.
     do
@@ -1260,7 +1257,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
                 nMaxDescent = 0;
                 nMaxWidth = 0;
             }
-            nMaxWidth += aPos[ i++ ];
+            nMaxWidth = nMaxWidth + aPos[ i++ ];
             if( nAsc > nMaxAscent )
                 nMaxAscent = nAsc;
             if( aSize.Height() - nAsc > nMaxDescent )
