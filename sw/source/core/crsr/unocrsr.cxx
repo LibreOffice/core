@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:24:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:31:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,8 @@ SwUnoCrsr * SwUnoCrsr::Clone() const
 
 SwUnoCrsr::operator SwUnoCrsr* ()   { return this; }
 
-FASTBOOL SwUnoCrsr::IsSelOvr( int eFlags )
+
+BOOL SwUnoCrsr::IsSelOvr( int eFlags )
 {
     if( bRemainInSection )
     {
@@ -230,9 +231,9 @@ SwCursor* SwUnoTableCrsr::Create( SwPaM* pRing ) const
 }
 */
 
-FASTBOOL SwUnoTableCrsr::IsSelOvr( int eFlags )
+BOOL SwUnoTableCrsr::IsSelOvr( int eFlags )
 {
-    FASTBOOL bRet = SwUnoCrsr::IsSelOvr( eFlags );
+    BOOL bRet = SwUnoCrsr::IsSelOvr( eFlags );
     if( !bRet )
     {
         const SwTableNode* pTNd = GetPoint()->nNode.GetNode().FindTableNode();
