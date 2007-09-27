@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcache.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:46:25 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:58:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,7 +253,7 @@ public:
 
 inline void SwCache::IncreaseMax( const USHORT nAdd )
 {
-    nCurMax = nCurMax + nAdd;
+    nCurMax = nCurMax + sal::static_int_cast< USHORT >(nAdd);
 #ifndef PRODUCT
     ++nIncreaseMax;
 #endif
@@ -261,7 +261,7 @@ inline void SwCache::IncreaseMax( const USHORT nAdd )
 inline void SwCache::DecreaseMax( const USHORT nSub )
 {
     if ( nCurMax > nSub )
-        nCurMax = nCurMax - nSub;
+        nCurMax = nCurMax - sal::static_int_cast< USHORT >(nSub);
 #ifndef PRODUCT
     ++nDecreaseMax;
 #endif
