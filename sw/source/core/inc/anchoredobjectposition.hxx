@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:23:44 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,6 @@
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
-#endif
-#ifndef _ORNTENUM_HXX
-#include <orntenum.hxx>
 #endif
 // OD 2004-03-16 #i11860#
 #ifndef _FRAME_HXX
@@ -110,7 +107,7 @@ namespace objectpositioning
 
         protected:
             SwAnchoredObjectPosition( SdrObject& _rDrawObj );
-            ~SwAnchoredObjectPosition();
+            virtual ~SwAnchoredObjectPosition();
 
          // accessors for object and its corresponding data/information
             inline SdrObject& GetObject() const
@@ -166,7 +163,7 @@ namespace objectpositioning
         // *********************************************************************
             void _GetVertAlignmentValues( const SwFrm& _rVertOrientFrm,
                                           const SwFrm& _rPageAlignLayFrm,
-                                          const SwRelationOrient _eRelOrient,
+                                          const sal_Int16 _eRelOrient,
                                           SwTwips&      _orAlignAreaHeight,
                                           SwTwips&      _orAlignAreaOffset ) const;
 
@@ -174,8 +171,8 @@ namespace objectpositioning
         // --> OD 2004-06-17 #i26791# - add output parameter <_roVertOffsetToFrmAnchorPos>
             SwTwips _GetVertRelPos( const SwFrm& _rVertOrientFrm,
                                     const SwFrm& _rPageAlignLayFrm,
-                                    const SwVertOrient     _eVertOrient,
-                                    const SwRelationOrient _eRelOrient,
+                                    const sal_Int16 _eVertOrient,
+                                    const sal_Int16 _eRelOrient,
                                     const SwTwips          _nVertPos,
                                     const SvxLRSpaceItem& _rLRSpacing,
                                     const SvxULSpaceItem& _rULSpacing,
@@ -328,9 +325,9 @@ namespace objectpositioning
                 optional input/output parameter (default value NULL)
                 - if set, relative alignment, that is toggled, if needed.
             */
-            void _ToggleHoriOrientAndAlign( const bool         _bToggleLeftRight,
-                                            SwHoriOrient&      _ioeHoriOrient,
-                                            SwRelationOrient&  _iopeRelOrient
+            void _ToggleHoriOrientAndAlign( const bool _bToggleLeftRight,
+                                            sal_Int16& _ioeHoriOrient,
+                                            sal_Int16& _iopeRelOrient
                                           ) const;
 
         // *********************************************************************
@@ -375,7 +372,7 @@ namespace objectpositioning
             */
             void _GetHoriAlignmentValues( const SwFrm&  _rHoriOrientFrm,
                                           const SwFrm&  _rPageAlignLayFrm,
-                                          const SwRelationOrient _eRelOrient,
+                                          const sal_Int16 _eRelOrient,
                                           const bool    _bObjWrapThrough,
                                           SwTwips&      _orAlignAreaWidth,
                                           SwTwips&      _orAlignAreaOffset,
@@ -418,8 +415,8 @@ namespace objectpositioning
             SwTwips _AdjustHoriRelPosForDrawAside( const SwFrm&  _rHoriOrientFrm,
                                                    const SwTwips _nProposedRelPosX,
                                                    const SwTwips _nRelPosY,
-                                                   const SwHoriOrient _eHoriOrient,
-                                                   const SwRelationOrient _eRelOrient,
+                                                   const sal_Int16 _eHoriOrient,
+                                                   const sal_Int16 _eRelOrient,
                                                    const SvxLRSpaceItem& _rLRSpacing,
                                                    const SvxULSpaceItem& _rULSpacing,
                                                    const bool _bEvenPage
@@ -461,8 +458,8 @@ namespace objectpositioning
                                 const SwFrm*    _pObjContext,
                                 const ULONG     _nObjIndex,
                                 const bool      _bEvenPage,
-                                const SwHoriOrient _eHoriOrient,
-                                const SwRelationOrient _eRelOrient
+                                const sal_Int16 _eHoriOrient,
+                                const sal_Int16 _eRelOrient
                               ) const;
 
         // *********************************************************************
@@ -491,13 +488,13 @@ namespace objectpositioning
                 <_eRelOrient1> has to be drawn aside an object with an
                 alignment <_eRelOrient2>
             */
-            bool _Minor( SwRelationOrient _eRelOrient1,
-                         SwRelationOrient _eRelOrient2,
+            bool _Minor( sal_Int16 _eRelOrient1,
+                         sal_Int16 _eRelOrient2,
                          bool             _bLeft ) const;
 
         public:
             virtual void CalcPosition() = 0;
     };
-};
+} // namespace objectpositioning
 
 #endif
