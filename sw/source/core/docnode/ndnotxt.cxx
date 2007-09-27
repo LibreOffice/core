@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndnotxt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:41:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:41:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ void SwNoTxtNode::NewAttrSet( SwAttrPool& rPool )
     // put names of parent style and conditional style:
     const SwFmtColl* pFmtColl = GetFmtColl();
     String sVal;
-    SwStyleNameMapper::FillProgName( pFmtColl->GetName(), sVal, GET_POOLID_TXTCOLL, sal_True );
+    SwStyleNameMapper::FillProgName( pFmtColl->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
     SfxStringItem aFmtColl( RES_FRMATR_STYLE_NAME, sVal );
     aNewAttrSet.Put( aFmtColl );
 
