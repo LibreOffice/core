@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:37:57 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:23:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,8 @@
 #include <SwStyleNameMapper.hxx>
 #endif
 
+using namespace ::com::sun::star;
+
 /* -----------------22.10.98 15:12-------------------
  *
  * --------------------------------------------------*/
@@ -116,20 +118,22 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     aLinkFT             ( this, SW_RES( FT_LINK ) ),
     aAlwaysRB           ( this, SW_RES( RB_ALWAYS ) ),
     aRequestRB          ( this, SW_RES( RB_REQUEST ) ),
-    aNeverRB            ( this, SW_RES( RB_NEVER    ) ),
+    aNeverRB            ( this, SW_RES( RB_NEVER  ) ),
+
     aFieldFT            ( this, SW_RES( FT_FIELD ) ),
     aAutoUpdateFields   ( this, SW_RES( CB_AUTO_UPDATE_FIELDS ) ),
     aAutoUpdateCharts   ( this, SW_RES( CB_AUTO_UPDATE_CHARTS ) ),
+
     aSettingsFL         ( this, SW_RES( FL_SETTINGS ) ),
-    aMetricLB           ( this, SW_RES( LB_METRIC ) ),
     aMetricFT           ( this, SW_RES( FT_METRIC ) ),
+    aMetricLB           ( this, SW_RES( LB_METRIC ) ),
     aTabFT              ( this, SW_RES( FT_TAB ) ),
     aTabMF              ( this, SW_RES( MF_TAB ) ),
 
     pWrtShell   ( NULL ),
+    bHTMLMode   ( FALSE ),
     nLastTab    ( 0 ),
-    nOldLinkMode( MANUAL ),
-    bHTMLMode   ( FALSE )
+    nOldLinkMode( MANUAL )
 
 {
     FreeResource();
@@ -152,6 +156,7 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
                 USHORT nPos = aMetricLB.InsertEntry( sMetric );
                 aMetricLB.SetEntryData( nPos, (void*)(long)eFUnit );
             }
+            default:; //prevent warning
         }
     }
     aMetricLB.SetSelectHdl(LINK(this, SwLoadOptPage, MetricHdl));
@@ -192,24 +197,22 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     BOOL bRet = FALSE;
     SwModule* pMod = SW_MOD();
 
-    USHORT nNewLinkMode;
+    USHORT nNewLinkMode = AUTOMATIC;
     if (aNeverRB.IsChecked())
         nNewLinkMode = NEVER;
     else if (aRequestRB.IsChecked())
         nNewLinkMode = MANUAL;
-    else if (aAlwaysRB.IsChecked())
-        nNewLinkMode = AUTOMATIC;
 
-    USHORT nFldFlags = aAutoUpdateFields.IsChecked() ?
+    SwFldUpdateFlags eFldFlags = aAutoUpdateFields.IsChecked() ?
         aAutoUpdateCharts.IsChecked() ? AUTOUPD_FIELD_AND_CHARTS : AUTOUPD_FIELD_ONLY : AUTOUPD_OFF;
 
     if(aAutoUpdateFields.IsChecked() != aAutoUpdateFields.GetSavedValue() ||
             aAutoUpdateCharts.IsChecked() != aAutoUpdateCharts.GetSavedValue())
     {
-        pMod->ApplyFldUpdateFlags(nFldFlags);
+        pMod->ApplyFldUpdateFlags(eFldFlags);
         if(pWrtShell)
         {
-            pWrtShell->SetFldUpdateFlags(nFldFlags);
+            pWrtShell->SetFldUpdateFlags(eFldFlags);
             pWrtShell->SetModified();
         }
     }
@@ -255,20 +258,20 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
     if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_WRTSHELL, FALSE, &pItem))
         pWrtShell = (SwWrtShell*)((const SwPtrItem*)pItem)->GetValue();
 
-    sal_Int32 nFldFlags = AUTOUPD_GLOBALSETTING;
+    SwFldUpdateFlags eFldFlags = AUTOUPD_GLOBALSETTING;
     nOldLinkMode = GLOBALSETTING;
     if (pWrtShell)
     {
-        nFldFlags = pWrtShell->GetFldUpdateFlags(TRUE);
+        eFldFlags = pWrtShell->GetFldUpdateFlags(TRUE);
         nOldLinkMode = pWrtShell->GetLinkUpdMode(TRUE);
     }
     if(GLOBALSETTING == nOldLinkMode)
         nOldLinkMode = pUsrPref->GetUpdateLinkMode();
-    if(AUTOUPD_GLOBALSETTING == nFldFlags)
-        nFldFlags = pUsrPref->GetFldUpdateFlags();
+    if(AUTOUPD_GLOBALSETTING == eFldFlags)
+        eFldFlags = pUsrPref->GetFldUpdateFlags();
 
-    aAutoUpdateFields.Check(nFldFlags != AUTOUPD_OFF);
-    aAutoUpdateCharts.Check(nFldFlags == AUTOUPD_FIELD_AND_CHARTS);
+    aAutoUpdateFields.Check(eFldFlags != AUTOUPD_OFF);
+    aAutoUpdateCharts.Check(eFldFlags == AUTOUPD_FIELD_AND_CHARTS);
 
     switch (nOldLinkMode)
     {
@@ -321,7 +324,7 @@ IMPL_LINK(SwLoadOptPage, MetricHdl, ListBox*, EMPTYARG)
         FieldUnit eFieldUnit = (FieldUnit)(long)aMetricLB.GetEntryData( nMPos );
         BOOL bModified = aTabMF.IsModified();
         long nVal = bModified ?
-            aTabMF.Denormalize( aTabMF.GetValue( FUNIT_TWIP ) ) :
+            sal::static_int_cast<sal_Int32, sal_Int64 >( aTabMF.Denormalize( aTabMF.GetValue( FUNIT_TWIP ) )) :
                 nLastTab;
         ::SetFieldUnit( aTabMF, eFieldUnit );
         aTabMF.SetValue( aTabMF.Normalize( nVal ), FUNIT_TWIP );
@@ -351,8 +354,7 @@ SwCaptionOptDlg::SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet) :
     SfxSingleTabDialog(pParent, rSet, 0)
 {
     // TabPage erzeugen
-    SwCaptionOptPage* pPage = (SwCaptionOptPage*) SwCaptionOptPage::Create(this, rSet);
-    SetTabPage(pPage);
+    SetTabPage((SwCaptionOptPage*) SwCaptionOptPage::Create(this, rSet));
 }
 
 /*--------------------------------------------------------------------
@@ -472,7 +474,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     {
         aFormatBox.InsertEntry( pMgr->GetFormatStr(TYP_SEQFLD, i) );
         USHORT nFmtId = pMgr->GetFormatId(TYP_SEQFLD, i);
-        aFormatBox.SetEntryData( i, (void*)nFmtId );
+        aFormatBox.SetEntryData( i, reinterpret_cast<void*>(nFmtId) );
         if( nFmtId == nSelFmt )
             aFormatBox.SelectEntryPos( i );
     }
@@ -480,7 +482,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     for (i = 0; i < MAXLEVEL; i++)
         aLbLevel.InsertEntry(String::CreateFromInt32(i + 1));
 
-    sal_Unicode cDelim = '.', nLvl = MAXLEVEL;
+    sal_Unicode nLvl = MAXLEVEL;
     String  sDelim( String::CreateFromAscii( ": " ) );
 
     if (pSh)
@@ -538,7 +540,7 @@ SfxTabPage* SwCaptionOptPage::Create( Window* pParent,
 
 --------------------------------------------------*/
 
-BOOL SwCaptionOptPage::FillItemSet( SfxItemSet& rSet )
+BOOL SwCaptionOptPage::FillItemSet( SfxItemSet&  )
 {
     BOOL bRet = FALSE;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
@@ -587,7 +589,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     // get Productname and -version
     String sComplete, sWithoutVersion;
     ::rtl::OUString sTemp;
-    ::com::sun::star::uno::Any aAny =
+    uno::Any aAny =
         ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
     if ( aAny >>= sTemp )
     {
@@ -633,10 +635,11 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
 
 --------------------------------------------------*/
 
-void SwCaptionOptPage::SetOptions(const USHORT nPos, const SwCapObjType eType, const SvGlobalName *pOleId)
+void SwCaptionOptPage::SetOptions(const USHORT nPos,
+        const SwCapObjType eObjType, const SvGlobalName *pOleId)
 {
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-    const InsCaptionOpt* pOpt = pModOpt->GetCapOption(bHTMLMode, eType, pOleId);
+    const InsCaptionOpt* pOpt = pModOpt->GetCapOption(bHTMLMode, eObjType, pOleId);
 
     if (pOpt)
     {
@@ -644,7 +647,7 @@ void SwCaptionOptPage::SetOptions(const USHORT nPos, const SwCapObjType eType, c
         aCheckLB.CheckEntryPos(nPos, pOpt->UseCaption());
     }
     else
-        aCheckLB.SetEntryData(nPos, new InsCaptionOpt(eType, pOleId));
+        aCheckLB.SetEntryData(nPos, new InsCaptionOpt(eObjType, pOleId));
 }
 
 /*-----------------18.01.97 12.42-------------------
@@ -709,7 +712,7 @@ IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
             {
                 SwFieldType *pType = pMgr->GetFldType( USHRT_MAX, i );
                 if( pType->Which() == RES_SETEXPFLD &&
-                    ((SwSetExpFieldType *) pType)->GetType() & GSE_SEQ )
+                    ((SwSetExpFieldType *) pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
                     aCategoryBox.InsertEntry(SwBoxEntry(pType->GetName()));
             }
         }
@@ -738,7 +741,7 @@ IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
                 case TABLE_CAP:         nPos = 2;   break;
                 case FRAME_CAP:         nPos = 3;   break;
             }
-            aCategoryBox.SetText(aCategoryBox.GetEntry(nPos).aName);
+            aCategoryBox.SetText(aCategoryBox.GetEntry(nPos).GetName());
         }
 
         for (USHORT i = 0; i < aFormatBox.GetEntryCount(); i++)
@@ -867,7 +870,7 @@ IMPL_LINK( SwCaptionOptPage, ModifyHdl, Edit *, EMPTYARG )
  *
  * --------------------------------------------------*/
 
-IMPL_LINK_INLINE_START( SwCaptionOptPage, SelectHdl, ListBox *, pBox )
+IMPL_LINK_INLINE_START( SwCaptionOptPage, SelectHdl, ListBox *, EMPTYARG )
 {
     DrawSample();
     return 0;
