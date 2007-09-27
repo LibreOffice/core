@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:02:40 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:01:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ class SVX_DLLPUBLIC SvxNumberFormat : public SvxNumberType
     short               nCharTextDistance;  //Abstand Nummer<->Text
 
     SvxBrushItem*       pGraphicBrush;          //
-    SvxFrameVertOrient  eVertOrient;        // vert. Ausrichtung einer Bitmap
+    sal_Int16           eVertOrient;        // vert. Ausrichtung einer Bitmap
 
     Size                aGraphicSize;       // immer! in 1/100 mm
     Font*               pBulletFont;        // Pointer auf den BulletFont
@@ -206,11 +206,11 @@ public:
     void            SetStart(USHORT nSet) {nStart = nSet;}
     USHORT          GetStart() const {return nStart;}
 
-    virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const SvxFrameVertOrient* pOrient = 0);
+    virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const sal_Int16* pOrient = 0);
     const SvxBrushItem*         GetBrush() const {return pGraphicBrush;}
     void            SetGraphic( const String& rName );
-    virtual void                SetVertOrient(SvxFrameVertOrient eSet);
-    virtual SvxFrameVertOrient  GetVertOrient() const;
+    virtual void        SetVertOrient(sal_Int16 eSet);
+    virtual sal_Int16   GetVertOrient() const;
     void            SetGraphicSize(const Size& rSet) {aGraphicSize = rSet;}
     const Size&     GetGraphicSize() const {return aGraphicSize;}
 

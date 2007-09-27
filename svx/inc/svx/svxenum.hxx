@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxenum.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:30:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:01:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,21 +248,6 @@ enum SvxFrameAnchor
     SVX_FLY_AT_CNTNT,       //Absatzgebundener Rahmen
     SVX_FLY_IN_CNTNT,       //Zeichengebundener Rahmen
     SVX_FLY_PAGE            //Seitengebundener Rahmen
-};
-
-enum SvxFrameVertOrient
-{
-    // vertikale Rahmenausrichtung - fuer Writer
-    SVX_VERT_NONE,
-    SVX_VERT_TOP,
-    SVX_VERT_CENTER,
-    SVX_VERT_BOTTOM,
-    SVX_VERT_CHAR_TOP,
-    SVX_VERT_CHAR_CENTER,
-    SVX_VERT_CHAR_BOTTOM,
-    SVX_VERT_LINE_TOP,
-    SVX_VERT_LINE_CENTER,
-    SVX_VERT_LINE_BOTTOM
 };
 
 enum SvxExtNumType
