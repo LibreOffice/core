@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:26:08 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:19:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
-using ::com::sun::star::lang::IndexOutOfBoundsException;
+using lang::IndexOutOfBoundsException;
 
 
 
@@ -108,11 +108,11 @@ using ::com::sun::star::lang::IndexOutOfBoundsException;
 // SwAccessiblePreview
 //
 
-SwAccessibleDocumentBase::SwAccessibleDocumentBase ( SwAccessibleMap *pMap ) :
-    SwAccessibleContext( pMap, AccessibleRole::DOCUMENT,
-                         pMap->GetShell()->getIDocumentLayoutAccess()->GetRootFrm() ),
-    xParent( pMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() ),
-    pChildWin( 0 )
+SwAccessibleDocumentBase::SwAccessibleDocumentBase ( SwAccessibleMap* pInitMap ) :
+    SwAccessibleContext( pInitMap, AccessibleRole::DOCUMENT,
+                         pInitMap->GetShell()->getIDocumentLayoutAccess()->GetRootFrm() ),
+    mxParent( pInitMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() ),
+    mpChildWin( 0 )
 {
 }
 
@@ -137,16 +137,16 @@ void SwAccessibleDocumentBase::AddChild( Window *pWin, sal_Bool bFireEvent )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    ASSERT( !pChildWin, "only one child window is supported" );
-    if( !pChildWin )
+    ASSERT( !mpChildWin, "only one child window is supported" );
+    if( !mpChildWin )
     {
-        pChildWin = pWin;
+        mpChildWin = pWin;
 
         if( bFireEvent )
         {
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::CHILD;
-            aEvent.NewValue <<= pChildWin->GetAccessible();
+            aEvent.NewValue <<= mpChildWin->GetAccessible();
             FireAccessibleEvent( aEvent );
         }
     }
@@ -156,15 +156,15 @@ void SwAccessibleDocumentBase::RemoveChild( Window *pWin )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    ASSERT( !pChildWin || pWin == pChildWin, "invalid child window to remove" );
-    if( pChildWin && pWin == pChildWin )
+    ASSERT( !mpChildWin || pWin == mpChildWin, "invalid child window to remove" );
+    if( mpChildWin && pWin == mpChildWin )
     {
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::CHILD;
-        aEvent.OldValue <<= pChildWin->GetAccessible();
+        aEvent.OldValue <<= mpChildWin->GetAccessible();
         FireAccessibleEvent( aEvent );
 
-        pChildWin = 0;
+        mpChildWin = 0;
     }
 }
 
@@ -176,7 +176,7 @@ sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleChildCount( void )
     // CHECK_FOR_DEFUNC is called by parent
 
     sal_Int32 nChildren = SwAccessibleContext::getAccessibleChildCount();
-    if( !IsDisposing() && pChildWin )
+    if( !IsDisposing() && mpChildWin )
         nChildren++;
 
     return nChildren;
@@ -184,15 +184,16 @@ sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleChildCount( void )
 
 uno::Reference< XAccessible> SAL_CALL
     SwAccessibleDocumentBase::getAccessibleChild( sal_Int32 nIndex )
-        throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+        throw (uno::RuntimeException,
+                lang::IndexOutOfBoundsException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    if( pChildWin  )
+    if( mpChildWin  )
     {
         CHECK_FOR_DEFUNC( XAccessibleContext )
         if( nIndex == GetChildCount() )
-            return pChildWin->GetAccessible();
+            return mpChildWin->GetAccessible();
     }
 
     return SwAccessibleContext::getAccessibleChild( nIndex );
@@ -202,7 +203,7 @@ uno::Reference< XAccessible> SAL_CALL
 uno::Reference< XAccessible> SAL_CALL SwAccessibleDocumentBase::getAccessibleParent (void)
         throw (uno::RuntimeException)
 {
-    return xParent;
+    return mxParent;
 }
 
 sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent (void)
@@ -210,7 +211,7 @@ sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent (void)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    uno::Reference < XAccessibleContext > xAcc( xParent->getAccessibleContext() );
+    uno::Reference < XAccessibleContext > xAcc( mxParent->getAccessibleContext() );
     uno::Reference < XAccessible > xThis( this );
     sal_Int32 nCount = xAcc->getAccessibleChildCount();
 
@@ -315,7 +316,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    if( pChildWin  )
+    if( mpChildWin  )
     {
         CHECK_FOR_DEFUNC( XAccessibleComponent )
 
@@ -323,8 +324,8 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
         CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
         Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to window
-        if( pChildWin->GetWindowExtentsRelative( pWin ).IsInside( aPixPoint ) )
-            return pChildWin->GetAccessible();
+        if( mpChildWin->GetWindowExtentsRelative( pWin ).IsInside( aPixPoint ) )
+            return mpChildWin->GetAccessible();
     }
 
     return SwAccessibleContext::getAccessibleAtPoint( aPoint );
@@ -344,19 +345,19 @@ void SwAccessibleDocument::GetStates(
 }
 
 
-SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap *pMap ) :
-    SwAccessibleDocumentBase( pMap ),
-    aSelectionHelper( *this )
+SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap* pInitMap ) :
+    SwAccessibleDocumentBase( pInitMap ),
+    maSelectionHelper( *this )
 {
     SetName( GetResource( STR_ACCESS_DOC_NAME ) );
-    Window *pWin = pMap->GetShell()->GetWin();
+    Window *pWin = pInitMap->GetShell()->GetWin();
     if( pWin )
     {
         pWin->AddChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
         USHORT nCount =   pWin->GetChildCount();
         for( sal_uInt16 i=0; i < nCount; i++ )
         {
-            Window *pChildWin = pWin->GetChild( i );
+            Window* pChildWin = pWin->GetChild( i );
             if( pChildWin &&
                 AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                 AddChild( pChildWin, sal_False );
@@ -502,7 +503,7 @@ void SwAccessibleDocument::selectAccessibleChild(
     throw ( lang::IndexOutOfBoundsException,
             uno::RuntimeException )
 {
-    aSelectionHelper.selectAccessibleChild(nChildIndex);
+    maSelectionHelper.selectAccessibleChild(nChildIndex);
 }
 
 sal_Bool SwAccessibleDocument::isAccessibleChildSelected(
@@ -510,25 +511,25 @@ sal_Bool SwAccessibleDocument::isAccessibleChildSelected(
     throw ( lang::IndexOutOfBoundsException,
             uno::RuntimeException )
 {
-    return aSelectionHelper.isAccessibleChildSelected(nChildIndex);
+    return maSelectionHelper.isAccessibleChildSelected(nChildIndex);
 }
 
 void SwAccessibleDocument::clearAccessibleSelection(  )
     throw ( uno::RuntimeException )
 {
-    aSelectionHelper.clearAccessibleSelection();
+    maSelectionHelper.clearAccessibleSelection();
 }
 
 void SwAccessibleDocument::selectAllAccessibleChildren(  )
     throw ( uno::RuntimeException )
 {
-    aSelectionHelper.selectAllAccessibleChildren();
+    maSelectionHelper.selectAllAccessibleChildren();
 }
 
 sal_Int32 SwAccessibleDocument::getSelectedAccessibleChildCount(  )
     throw ( uno::RuntimeException )
 {
-    return aSelectionHelper.getSelectedAccessibleChildCount();
+    return maSelectionHelper.getSelectedAccessibleChildCount();
 }
 
 uno::Reference<XAccessible> SwAccessibleDocument::getSelectedAccessibleChild(
@@ -536,7 +537,7 @@ uno::Reference<XAccessible> SwAccessibleDocument::getSelectedAccessibleChild(
     throw ( lang::IndexOutOfBoundsException,
             uno::RuntimeException)
 {
-    return aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
+    return maSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
 // --> OD 2004-11-16 #111714# - index has to be treated as global child index.
@@ -545,5 +546,5 @@ void SwAccessibleDocument::deselectAccessibleChild(
     throw ( lang::IndexOutOfBoundsException,
             uno::RuntimeException )
 {
-    aSelectionHelper.deselectAccessibleChild( nChildIndex );
+    maSelectionHelper.deselectAccessibleChild( nChildIndex );
 }
