@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:35:16 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:13:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ void SwTxtAdjuster::FormatBlock( )
         }
     }
 
-    const int nOldIdx = GetInfo().GetIdx();
+    const xub_StrLen nOldIdx = GetInfo().GetIdx();
     GetInfo().SetIdx( nStart );
     CalcNewBlock( pCurr, pFly );
     GetInfo().SetIdx( nOldIdx );
@@ -142,40 +142,40 @@ void SwTxtAdjuster::FormatBlock( )
  * (Tabs und Flys). Dabei werden die Glues gezaehlt und ExpandBlock gerufen.
  *************************************************************************/
 
-void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
+void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                                   const SwLinePortion *pStopAt, SwTwips nReal )
 {
     ASSERT( GetInfo().IsMulti() || SVX_ADJUST_BLOCK == GetAdjust(),
             "CalcNewBlock: Why?" );
-    ASSERT( pCurr->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
+    ASSERT( pCurrent->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
 
-    pCurr->InitSpaceAdd();
+    pCurrent->InitSpaceAdd();
     xub_StrLen nGluePortion = 0;
     xub_StrLen nCharCnt = 0;
     MSHORT nSpaceIdx = 0;
 
     // Nicht vergessen:
-    // CalcRightMargin() setzt pCurr->Width() auf die Zeilenbreite !
-    CalcRightMargin( pCurr, nReal );
+    // CalcRightMargin() setzt pCurrent->Width() auf die Zeilenbreite !
+    CalcRightMargin( pCurrent, nReal );
 
     // --> FME 2005-06-08 #i49277#
     const sal_Bool bDoNotJustifyLinesWithManualBreak =
                 GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK);
     // <--
 
-    SwLinePortion *pPos = pCurr->GetPortion();
+    SwLinePortion *pPos = pCurrent->GetPortion();
 
     while( pPos )
     {
         if ( bDoNotJustifyLinesWithManualBreak &&
              pPos->IsBreakPortion() && !IsLastBlock() )
         {
-           pCurr->FinishSpaceAdd();
+           pCurrent->FinishSpaceAdd();
            break;
         }
 
         if ( pPos->InTxtGrp() )
-            nGluePortion += ((SwTxtPortion*)pPos)->GetSpaceCnt( GetInfo(), nCharCnt );
+            nGluePortion = nGluePortion + ((SwTxtPortion*)pPos)->GetSpaceCnt( GetInfo(), nCharCnt );
         else if( pPos->IsMultiPortion() )
         {
             SwMultiPortion* pMulti = (SwMultiPortion*)pPos;
@@ -185,25 +185,25 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
             // in the wider line
             if( pMulti->HasTabulator() )
             {
-                if ( nSpaceIdx == pCurr->GetLLSpaceAddCount() )
-                    pCurr->SetLLSpaceAdd( 0, nSpaceIdx );
+                if ( nSpaceIdx == pCurrent->GetLLSpaceAddCount() )
+                    pCurrent->SetLLSpaceAdd( 0, nSpaceIdx );
 
                 nSpaceIdx++;
                 nGluePortion = 0;
                 nCharCnt = 0;
             }
             else if( pMulti->IsDouble() )
-                nGluePortion += ((SwDoubleLinePortion*)pMulti)->GetSpaceCnt();
+                nGluePortion = nGluePortion + ((SwDoubleLinePortion*)pMulti)->GetSpaceCnt();
             else if ( pMulti->IsBidi() )
-                nGluePortion += ((SwBidiPortion*)pMulti)->GetSpaceCnt();
+                nGluePortion = nGluePortion + ((SwBidiPortion*)pMulti)->GetSpaceCnt();
         }
 
         if( pPos->InGlueGrp() )
         {
             if( pPos->InFixMargGrp() )
             {
-                if ( nSpaceIdx == pCurr->GetLLSpaceAddCount() )
-                    pCurr->SetLLSpaceAdd( 0, nSpaceIdx );
+                if ( nSpaceIdx == pCurrent->GetLLSpaceAddCount() )
+                    pCurrent->SetLLSpaceAdd( 0, nSpaceIdx );
 
                 const long nGluePortionWidth = static_cast<SwGluePortion*>(pPos)->GetPrtGlue() *
                                                SPACING_PRECISION_FACTOR;
@@ -211,13 +211,13 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
                 if( nGluePortion )
                 {
                     const long nSpaceAdd = nGluePortionWidth / nGluePortion;
-                    pCurr->SetLLSpaceAdd( nSpaceAdd , nSpaceIdx );
+                    pCurrent->SetLLSpaceAdd( nSpaceAdd , nSpaceIdx );
                     pPos->Width( ( (SwGluePortion*)pPos )->GetFixWidth() );
                 }
                 else if ( IsOneBlock() && nCharCnt > 1 )
                 {
                     const long nSpaceAdd = - nGluePortionWidth / ( nCharCnt - 1 );
-                    pCurr->SetLLSpaceAdd( nSpaceAdd, nSpaceIdx );
+                    pCurrent->SetLLSpaceAdd( nSpaceAdd, nSpaceIdx );
                     pPos->Width( ( (SwGluePortion*)pPos )->GetFixWidth() );
                 }
 
@@ -231,7 +231,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
         GetInfo().SetIdx( GetInfo().GetIdx() + pPos->GetLen() );
         if ( pPos == pStopAt )
         {
-            pCurr->SetLLSpaceAdd( 0, nSpaceIdx );
+            pCurrent->SetLLSpaceAdd( 0, nSpaceIdx );
             break;
         }
         pPos = pPos->GetPortion();
@@ -242,13 +242,13 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
  *                    SwTxtAdjuster::CalcKanaAdj()
  *************************************************************************/
 
-SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
+SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 {
-    ASSERT( pCurr->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
-    ASSERT( !pCurr->GetpKanaComp(), "pKanaComp already exists!!" );
+    ASSERT( pCurrent->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
+    ASSERT( !pCurrent->GetpKanaComp(), "pKanaComp already exists!!" );
 
     SvUShorts *pNewKana = new SvUShorts;
-    pCurr->SetKanaComp( pNewKana );
+    pCurrent->SetKanaComp( pNewKana );
 
     const USHORT nNull = 0;
     MSHORT nKanaIdx = 0;
@@ -258,10 +258,10 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
     sal_Bool bNoCompression = sal_False;
 
     // Nicht vergessen:
-    // CalcRightMargin() setzt pCurr->Width() auf die Zeilenbreite !
-    CalcRightMargin( pCurr, 0 );
+    // CalcRightMargin() setzt pCurrent->Width() auf die Zeilenbreite !
+    CalcRightMargin( pCurrent, 0 );
 
-    SwLinePortion* pPos = pCurr->GetPortion();
+    SwLinePortion* pPos = pCurrent->GetPortion();
 
     while( pPos )
     {
@@ -272,8 +272,8 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
             USHORT nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (ULONG)pPos );
 
             // check, if information is stored under other key
-            if ( !nMaxWidthDiff && pPos == pCurr->GetFirstPortion() )
-                nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (ULONG)pCurr );
+            if ( !nMaxWidthDiff && pPos == pCurrent->GetFirstPortion() )
+                nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (ULONG)pCurrent );
 
             // calculate difference between portion width and max. width
             nKanaDiffSum += nMaxWidthDiff;
@@ -285,8 +285,8 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
         }
         else if( pPos->InGlueGrp() && pPos->InFixMargGrp() )
         {
-            if ( nKanaIdx == pCurr->GetKanaComp().Count() )
-                pCurr->GetKanaComp().Insert( nNull, nKanaIdx );
+            if ( nKanaIdx == pCurrent->GetKanaComp().Count() )
+                pCurrent->GetKanaComp().Insert( nNull, nKanaIdx );
 
             USHORT nRest;
 
@@ -323,7 +323,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
                 else
                     nCompress = 10000 - nCompress;
 
-                ( pCurr->GetKanaComp() )[ nKanaIdx ] = (USHORT)nCompress;
+                ( pCurrent->GetKanaComp() )[ nKanaIdx ] = (USHORT)nCompress;
                 nKanaDiffSum = 0;
             }
 
@@ -336,8 +336,8 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
 
     // set portion width
     nKanaIdx = 0;
-    USHORT nCompress = ( pCurr->GetKanaComp() )[ nKanaIdx ];
-    pPos = pCurr->GetPortion();
+    USHORT nCompress = ( pCurrent->GetKanaComp() )[ nKanaIdx ];
+    pPos = pCurrent->GetPortion();
     long nDecompress = 0;
     nKanaDiffSum = 0;
 
@@ -352,8 +352,8 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
             USHORT nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (ULONG)pPos );
 
             // check, if information is stored under other key
-            if ( !nMaxWidthDiff && pPos == pCurr->GetFirstPortion() )
-                nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (ULONG)pCurr );
+            if ( !nMaxWidthDiff && pPos == pCurrent->GetFirstPortion() )
+                nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (ULONG)pCurrent );
             nKanaDiffSum += nMaxWidthDiff;
             pPos->Width( nMinWidth +
                        ( ( 10000 - nCompress ) * nMaxWidthDiff ) / 10000 );
@@ -373,9 +373,9 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
                 // set fix width to width
                 ((SwTabPortion*)pPos)->SetFixWidth( pPos->Width() );
 
-            const SvUShorts& rKanaComp = pCurr->GetKanaComp();
+            const SvUShorts& rKanaComp = pCurrent->GetKanaComp();
             if ( ++nKanaIdx < rKanaComp.Count() )
-                nCompress = ( pCurr->GetKanaComp() )[ nKanaIdx ];
+                nCompress = ( pCurrent->GetKanaComp() )[ nKanaIdx ];
 
             nKanaDiffSum = 0;
             nDecompress = 0;
@@ -390,15 +390,15 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
  *                    SwTxtAdjuster::CalcRightMargin()
  *************************************************************************/
 
-SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurr,
+SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurrent,
     SwTwips nReal )
 {
     long nRealWidth;
     const USHORT nRealHeight = GetLineHeight();
-    const USHORT nLineHeight = pCurr->Height();
+    const USHORT nLineHeight = pCurrent->Height();
 
-    KSHORT nPrtWidth = pCurr->PrtWidth();
-    SwLinePortion *pLast = pCurr->FindLastPortion();
+    KSHORT nPrtWidth = pCurrent->PrtWidth();
+    SwLinePortion *pLast = pCurrent->FindLastPortion();
 
     if( GetInfo().IsMulti() )
         nRealWidth = nReal;
@@ -432,15 +432,15 @@ SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurr,
     if( long( nPrtWidth )< nRealWidth )
         pRight->PrtWidth( KSHORT( nRealWidth - nPrtWidth ) );
 
-    // pCurr->Width() wird auf die reale Groesse gesetzt,
+    // pCurrent->Width() wird auf die reale Groesse gesetzt,
     // da jetzt die MarginPortions eingehaengt sind.
     // Dieser Trick hat wundersame Auswirkungen.
-    // Wenn pCurr->Width() == nRealWidth ist, dann wird das gesamte
+    // Wenn pCurrent->Width() == nRealWidth ist, dann wird das gesamte
     // Adjustment implizit ausgecontert. GetLeftMarginAdjust() und
     // IsBlocksatz() sind der Meinung, sie haetten eine mit Zeichen
     // gefuellte Zeile.
 
-    pCurr->PrtWidth( KSHORT( nRealWidth ) );
+    pCurrent->PrtWidth( KSHORT( nRealWidth ) );
     return pRight;
 }
 
@@ -448,17 +448,17 @@ SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurr,
  *                    SwTxtAdjuster::CalcFlyAdjust()
  *************************************************************************/
 
-void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurr )
+void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
 {
     // 1) Es wird ein linker Rand eingefuegt:
-    SwMarginPortion *pLeft = pCurr->CalcLeftMargin();
+    SwMarginPortion *pLeft = pCurrent->CalcLeftMargin();
     SwGluePortion *pGlue = pLeft;       // die letzte GluePortion
 
 
     // 2) Es wird ein rechter Rand angehaengt:
     // CalcRightMargin berechnet auch eventuelle Ueberlappungen mit
     // FlyFrms.
-    CalcRightMargin( pCurr );
+    CalcRightMargin( pCurrent );
 
     SwLinePortion *pPos = pLeft->GetPortion();
     xub_StrLen nLen = 0;
@@ -500,7 +500,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurr )
                         {
                             // Wenn es nur einen linken und rechten Rand gibt,
                             // dann teilen sich die Raender den Glue.
-                            if( nLen + pPos->GetLen() >= pCurr->GetLen() )
+                            if( nLen + pPos->GetLen() >= pCurrent->GetLen() )
                                 ((SwGluePortion*)pPos)->MoveHalfGlue( pGlue );
                             else
                                 ((SwGluePortion*)pPos)->MoveAllGlue( pGlue );
@@ -520,24 +520,24 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurr )
             pGlue = (SwFlyPortion*)pPos;
             bComplete = sal_False;
         }
-        nLen += pPos->GetLen();
+        nLen = nLen + pPos->GetLen();
         pPos = pPos->GetPortion();
      }
 
      if( ! bTabCompat && ! bMultiTab && SVX_ADJUST_RIGHT == GetAdjust() )
         // portions are moved to the right if possible
-        pLeft->AdjustRight( pCurr );
+        pLeft->AdjustRight( pCurrent );
 }
 
 /*************************************************************************
  *                  SwTxtAdjuster::CalcAdjLine()
  *************************************************************************/
 
-void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurr )
+void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
 {
-    ASSERT( pCurr->IsFormatAdj(), "CalcAdjLine: Why?" );
+    ASSERT( pCurrent->IsFormatAdj(), "CalcAdjLine: Why?" );
 
-    pCurr->SetFormatAdj(sal_False);
+    pCurrent->SetFormatAdj(sal_False);
 
     SwParaPortion* pPara = GetInfo().GetParaPortion();
 
@@ -546,7 +546,7 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurr )
         case SVX_ADJUST_RIGHT:
         case SVX_ADJUST_CENTER:
         {
-            CalcFlyAdjust( pCurr );
+            CalcFlyAdjust( pCurrent );
             pPara->GetRepaint()->SetOfst( 0 );
             break;
         }
@@ -554,13 +554,13 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurr )
         {
             // disabled for #i13507#
             // 8311: In Zeilen mit LineBreaks gibt es keinen Blocksatz!
-/*          if( pCurr->GetLen() &&
-                CH_BREAK == GetInfo().GetChar( nStart + pCurr->GetLen() - 1 ) &&
+/*          if( pCurrent->GetLen() &&
+                CH_BREAK == GetInfo().GetChar( nStart + pCurrent->GetLen() - 1 ) &&
                 !IsLastBlock() )
             {
                 if( IsLastCenter() )
                 {
-                    CalcFlyAdjust( pCurr );
+                    CalcFlyAdjust( pCurrent );
                     pPara->GetRepaint()->SetOfst( 0 );
                     break;
                 }
@@ -639,7 +639,7 @@ void SwTxtAdjuster::CalcDropAdjust()
     ASSERT( 1<GetDropLines() && SVX_ADJUST_LEFT!=GetAdjust() && SVX_ADJUST_BLOCK!=GetAdjust(),
             "CalcDropAdjust: No reason for DropAdjustment." )
 
-    const MSHORT nLineNr = GetLineNr();
+    const MSHORT nLineNumber = GetLineNr();
 
     // 1) Dummies ueberspringen
     Top();
@@ -712,10 +712,10 @@ void SwTxtAdjuster::CalcDropAdjust()
         }
     }
 
-    if( nLineNr != GetLineNr() )
+    if( nLineNumber != GetLineNr() )
     {
         Top();
-        while( nLineNr != GetLineNr() && Next() )
+        while( nLineNumber != GetLineNr() && Next() )
             ;
     }
 }
