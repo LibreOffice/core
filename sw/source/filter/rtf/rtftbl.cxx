@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:07:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:54:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,8 @@
 #include <fmtrowsplt.hxx>
 #endif
 
+using namespace ::com::sun::star;
+
 typedef SwTableBoxFmt* SwTableBoxFmtPtr;
 SV_DECL_PTRARR( SwBoxFrmFmts, SwTableBoxFmtPtr, 25, 50 )
 
@@ -119,16 +121,16 @@ static void SetRowBorder(SfxItemSet& rSet, const Row &rRow)
 {
 #if 1
     SvxBoxItem aBox((const SvxBoxItem&)rSet.Get(RES_BOX, false));
-    aBox.SetDistance(rRow.mbUseLeftRowPad ? rRow.mnLeftRowPad : rRow.mnBrdDist,
+    aBox.SetDistance( static_cast< USHORT >(rRow.mbUseLeftRowPad ? rRow.mnLeftRowPad : rRow.mnBrdDist),
             BOX_LINE_LEFT);
 
-    aBox.SetDistance(rRow.mbUseRightRowPad ? rRow.mnRightRowPad : rRow.mnBrdDist,
+    aBox.SetDistance( static_cast< USHORT >(rRow.mbUseRightRowPad ? rRow.mnRightRowPad : rRow.mnBrdDist),
             BOX_LINE_RIGHT);
 
-    aBox.SetDistance(rRow.mbUseTopRowPad ? rRow.mnTopRowPad : 0,
+    aBox.SetDistance( static_cast< USHORT >(rRow.mbUseTopRowPad ? rRow.mnTopRowPad : 0),
             BOX_LINE_TOP);
 
-    aBox.SetDistance(rRow.mbUseBottomRowPad ? rRow.mnBottomRowPad : 0,
+    aBox.SetDistance( static_cast< USHORT >(rRow.mbUseBottomRowPad ? rRow.mnBottomRowPad : 0),
             BOX_LINE_BOTTOM);
 
     rSet.Put(aBox);
@@ -209,7 +211,7 @@ void SwRTFParser::ReadTable( int nToken )
 
     SvBools aMergeBackup;
     int nCount = aMergeBoxes.Count();
-    for (int i = 0; i < nCount; ++i)
+    for (USHORT i = 0; i < nCount; ++i)
         aMergeBackup.Insert(aMergeBoxes[i], i);
 
     // kein TROWD aber ein TabellenToken -> zwischen TROWD und Tab.Token
@@ -254,7 +256,7 @@ void SwRTFParser::ReadTable( int nToken )
     }
 
 
-    SwHoriOrient eAdjust = HORI_LEFT;       // default fuer Tabellen
+    sal_Int16 eAdjust = text::HoriOrientation::LEFT;      // default fuer Tabellen
     SwTwips nLSpace = 0;
     Row aRow;
 
@@ -263,7 +265,7 @@ void SwRTFParser::ReadTable( int nToken )
     long nLeftCellPad = 0, nRightCellPad = 0, nTopCellPad = 0,
         nBottomCellPad = 0;
 
-    SwVertOrient eVerOrient = VERT_NONE;
+    sal_Int16 eVerOrient = text::VertOrientation::NONE;
     long nLineHeight = 0;
     USHORT nBoxCnt = aMergeBoxes.Count()-1;
     SwBoxFrmFmts aBoxFmts;
@@ -376,16 +378,16 @@ void SwRTFParser::ReadTable( int nToken )
                 SvxBoxItem aBox(pFmt->GetBox());
 
                 if (bUseRightCellPad)
-                    aBox.SetDistance(nRightCellPad, BOX_LINE_RIGHT);
+                    aBox.SetDistance( static_cast< USHORT >(nRightCellPad), BOX_LINE_RIGHT);
                 if (bUseBottomCellPad)
-                    aBox.SetDistance(nBottomCellPad, BOX_LINE_BOTTOM);
+                    aBox.SetDistance( static_cast< USHORT >(nBottomCellPad), BOX_LINE_BOTTOM);
 
                 //Yes, these are the wrong way around, there appears to
                 //be a bug in word where these are swapped.
                 if (bUseLeftCellPad)
-                    aBox.SetDistance(nLeftCellPad, BOX_LINE_TOP);
+                    aBox.SetDistance( static_cast< USHORT >(nLeftCellPad), BOX_LINE_TOP);
                 if (bUseTopCellPad)
-                    aBox.SetDistance(nTopCellPad, BOX_LINE_LEFT);
+                    aBox.SetDistance( static_cast< USHORT >(nTopCellPad), BOX_LINE_LEFT);
 
 
                 /*#106415# The Cell Borders are now balanced on import to
@@ -469,20 +471,20 @@ void SwRTFParser::ReadTable( int nToken )
                 aRow.mnBrdDist = (nTokenValue>0?(USHORT)nTokenValue:0); // filter out negative values of \trgaph
             break;
 
-        case RTF_TRQL:          eAdjust = HORI_LEFT;    break;
-        case RTF_TRQR:          eAdjust = HORI_RIGHT;   break;
-        case RTF_TRQC:          eAdjust = HORI_CENTER;  break;
+        case RTF_TRQL:          eAdjust = text::HoriOrientation::LEFT;    break;
+        case RTF_TRQR:          eAdjust = text::HoriOrientation::RIGHT;   break;
+        case RTF_TRQC:          eAdjust = text::HoriOrientation::CENTER;  break;
 
-                                // mit VERT_TOP kommt der Dialog nicht klar!
+                                // mit text::VertOrientation::TOP kommt der Dialog nicht klar!
                                 // Bug #65126#
-        case RTF_CLVERTALT:     eVerOrient = VERT_NONE;     break;
+        case RTF_CLVERTALT:     eVerOrient = text::VertOrientation::NONE;     break;
 
-        case RTF_CLVERTALC:     eVerOrient = VERT_CENTER;   break;
-        case RTF_CLVERTALB:     eVerOrient = VERT_BOTTOM;   break;
+        case RTF_CLVERTALC:     eVerOrient = text::VertOrientation::CENTER;   break;
+        case RTF_CLVERTALB:     eVerOrient = text::VertOrientation::BOTTOM;   break;
 
         case RTF_TRLEFT:
-            if( HORI_LEFT == eAdjust )
-                eAdjust = HORI_LEFT_AND_WIDTH;
+            if( text::HoriOrientation::LEFT == eAdjust )
+                eAdjust = text::HoriOrientation::LEFT_AND_WIDTH;
             nLSpace = nTokenValue;
             nTblSz = nTokenValue;
             break;
@@ -545,11 +547,11 @@ void SwRTFParser::ReadTable( int nToken )
             break;
         }
 
-        if( VERT_NONE != eVerOrient )
+        if( text::VertOrientation::NONE != eVerOrient )
         {
             if( !aMergeBoxes[ nBoxCnt ] )
                 pBoxFmt->SetAttr( SwFmtVertOrient( 0, eVerOrient ));
-            eVerOrient = VERT_NONE;
+            eVerOrient = text::VertOrientation::NONE;
         }
         if( bWeiter )
             nToken = GetNextToken();
@@ -561,8 +563,8 @@ void SwRTFParser::ReadTable( int nToken )
     // es wurde keine einzige Box erkannt
     if( nAktBox == nBoxCnt || ( bReadNewCell && !pTableNode ))
     {
-        int nCount = aMergeBackup.Count();
-        for (int i = 0; i < nCount; ++i)
+        int nC = aMergeBackup.Count();
+        for (USHORT i = 0; i < nC; ++i)
             aMergeBoxes.Insert(aMergeBackup[i], i);
         SkipToken( -1 );            // zum Letzen gueltigen zurueck
         return;
@@ -610,7 +612,7 @@ void SwRTFParser::ReadTable( int nToken )
                 ((SfxItemSet&)pFmt->GetAttrSet()).Put( aSz );
             }
 
-            if( HORI_LEFT_AND_WIDTH == eAdjust &&
+            if( text::HoriOrientation::LEFT_AND_WIDTH == eAdjust &&
                 nLSpace != pFmt->GetLRSpace().GetLeft() )
             {
                 SvxLRSpaceItem aL( RES_LR_SPACE ); aL.SetLeft( nLSpace );
@@ -624,7 +626,7 @@ void SwRTFParser::ReadTable( int nToken )
                 rTblSz.GetWidth() != nTblSz ||
                 rHoriz.GetHoriOrient() != eAdjust ||
                 (
-                  HORI_LEFT_AND_WIDTH == eAdjust &&
+                  text::HoriOrientation::LEFT_AND_WIDTH == eAdjust &&
                   nLSpace != pFmt->GetLRSpace().GetLeft()
                 ) ||
                 pTableNode->GetTable().GetTabSortBoxes().Count() >= eMAXCELLS
@@ -648,7 +650,7 @@ void SwRTFParser::ReadTable( int nToken )
             ((SfxItemSet&)pFmt->GetAttrSet()).Put( aSz );
             ((SfxItemSet&)pFmt->GetAttrSet()).Put( SwFmtHoriOrient( 0,
                                                             eAdjust ) );
-            if( HORI_LEFT_AND_WIDTH == eAdjust && nLSpace )
+            if( text::HoriOrientation::LEFT_AND_WIDTH == eAdjust && nLSpace )
             {
                 SvxLRSpaceItem aL( RES_LR_SPACE ); aL.SetLeft( nLSpace );
                 ((SfxItemSet&)pFmt->GetAttrSet()).Put( aL );
@@ -775,7 +777,7 @@ void SwRTFParser::ReadTable( int nToken )
             ((SfxItemSet&)pFmt->GetAttrSet()).Put( aSz );
             ((SfxItemSet&)pFmt->GetAttrSet()).Put(SvxFrameDirectionItem(eDir, RES_FRAMEDIR));
 
-            if( HORI_LEFT_AND_WIDTH == eAdjust && nLSpace )
+            if( text::HoriOrientation::LEFT_AND_WIDTH == eAdjust && nLSpace )
             {
                 SvxLRSpaceItem aL( RES_LR_SPACE ); aL.SetLeft( nLSpace );
                 ((SfxItemSet&)pFmt->GetAttrSet()).Put( aL );
@@ -955,7 +957,7 @@ void SwRTFParser::NewTblLine()
     nInsTblRow = USHRT_MAX;
 
     // erweiter die aktuelle um eine neue Line
-    FASTBOOL bMakeCopy = FALSE;
+    BOOL bMakeCopy = FALSE;
     SwNode* pNd = pDoc->GetNodes()[ pPam->GetPoint()->nNode.GetIndex()-1 ];
     if( !pNd->IsEndNode() ||
         !(pNd = pNd->StartOfSectionNode())->IsTableNode() )
