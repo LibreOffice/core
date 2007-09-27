@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwStyleNameMapper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:48:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:32:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,19 +337,22 @@ sal_Bool SwStyleNameMapper::SuffixIsUser ( const String & rString )
 {
     const sal_Unicode *pChar = rString.GetBuffer();
     sal_Int32 nLen = rString.Len();
-    return nLen <= 8 ? sal_False :
-           pChar[nLen-7] == ' ' &&
-           pChar[nLen-6] == '(' &&
-           pChar[nLen-5] == 'u' &&
-           pChar[nLen-4] == 's' &&
-           pChar[nLen-3] == 'e' &&
-           pChar[nLen-2] == 'r' &&
-           pChar[nLen-1] == ')';
+    sal_Bool bRet = sal_False;
+    if( nLen > 8 &&
+        pChar[nLen-7] == ' ' &&
+        pChar[nLen-6] == '(' &&
+        pChar[nLen-5] == 'u' &&
+        pChar[nLen-4] == 's' &&
+        pChar[nLen-3] == 'e' &&
+        pChar[nLen-2] == 'r' &&
+        pChar[nLen-1] == ')' )
+        bRet = sal_True;
+    return bRet;
 }
 void SwStyleNameMapper::CheckSuffixAndDelete ( String & rString )
 {
     const sal_Unicode *pChar = rString.GetBuffer();
-    sal_Int32 nLen = rString.Len();
+    xub_StrLen nLen = rString.Len();
     if (nLen > 8 &&
         pChar[nLen-7] == ' ' &&
         pChar[nLen-6] == '(' &&
@@ -364,12 +367,12 @@ void SwStyleNameMapper::CheckSuffixAndDelete ( String & rString )
 }
 const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlags, sal_Bool bProgName )
 {
-    NameToIdHash *pHash;
+    NameToIdHash *pHash = 0;
     const SvStringsDtor *pStrings;
 
     switch ( eFlags )
     {
-        case GET_POOLID_TXTCOLL:
+        case nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL:
         {
             sal_uInt16 nIndex;
             sal_uInt16 nId;
@@ -409,7 +412,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             }
         }
         break;
-        case GET_POOLID_CHRFMT:
+        case nsSwGetPoolIdFromName::GET_POOLID_CHRFMT:
         {
             pHash = bProgName ? pCharProgMap : pCharUIMap;
             if ( !pHash )
@@ -432,7 +435,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             }
         }
         break;
-        case GET_POOLID_FRMFMT:
+        case nsSwGetPoolIdFromName::GET_POOLID_FRMFMT:
         {
             pHash = bProgName ? pFrameProgMap : pFrameUIMap;
             if ( !pHash )
@@ -448,7 +451,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             }
         }
         break;
-        case GET_POOLID_PAGEDESC:
+        case nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC:
         {
             pHash = bProgName ? pPageProgMap : pPageUIMap;
             if ( !pHash )
@@ -464,7 +467,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             }
         }
         break;
-        case GET_POOLID_NUMRULE:
+        case nsSwGetPoolIdFromName::GET_POOLID_NUMRULE:
         {
             pHash = bProgName ? pNumRuleProgMap : pNumRuleUIMap;
             if ( !pHash )
@@ -491,11 +494,11 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             {
                 String aString, bString;
                 FillUIName ( nId, aString );
-                bString = GetProgName ( GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, GET_POOLID_TXTCOLL );
+                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
+                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, GET_POOLID_TXTCOLL );
+                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
                     *((sal_Int32*)0) = 42;
             }
@@ -503,11 +506,11 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             {
                 String aString, bString;
                 FillUIName ( nId, aString );
-                bString = GetProgName ( GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, GET_POOLID_TXTCOLL );
+                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
+                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, GET_POOLID_TXTCOLL );
+                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
                     *((sal_Int32*)0) = 42;
             }
@@ -515,11 +518,11 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             {
                 String aString, bString;
                 FillUIName ( nId, aString );
-                bString = GetProgName ( GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, GET_POOLID_TXTCOLL );
+                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
+                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, GET_POOLID_TXTCOLL );
+                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
                     *((sal_Int32*)0) = 42;
             }
@@ -527,11 +530,11 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             {
                 String aString, bString;
                 FillUIName ( nId, aString );
-                bString = GetProgName ( GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, GET_POOLID_TXTCOLL );
+                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
+                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, GET_POOLID_TXTCOLL );
+                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
                     *((sal_Int32*)0) = 42;
             }
@@ -539,11 +542,11 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             {
                 String aString, bString;
                 FillUIName ( nId, aString );
-                bString = GetProgName ( GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, GET_POOLID_TXTCOLL );
+                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
+                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, GET_POOLID_TXTCOLL );
+                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
                     *((sal_Int32*)0) = 42;
             }
@@ -551,11 +554,11 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             {
                 String aString, bString;
                 FillUIName ( nId, aString );
-                bString = GetProgName ( GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, GET_POOLID_TXTCOLL );
+                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
+                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, GET_POOLID_TXTCOLL );
+                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
                     *((sal_Int32*)0) = 42;
             }
@@ -565,11 +568,11 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             {
                 String aString, bString;
                 FillUIName ( nId, aString );
-                bString = GetProgName ( GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, GET_POOLID_TXTCOLL );
+                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
+                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, GET_POOLID_TXTCOLL );
+                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
                     *((sal_Int32*)0) = 42;
             }
@@ -577,11 +580,11 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             {
                 String aString, bString;
                 FillUIName ( nId, aString );
-                bString = GetProgName ( GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, GET_POOLID_TXTCOLL );
+                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
+                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, GET_POOLID_TXTCOLL );
+                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
                     *((sal_Int32*)0) = 42;
             }
@@ -591,11 +594,11 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             {
                 String aString, bString;
                 FillUIName ( nId, aString );
-                bString = GetProgName ( GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, GET_POOLID_TXTCOLL );
+                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
+                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, GET_POOLID_TXTCOLL );
+                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
                     *((sal_Int32*)0) = 42;
             }
@@ -605,11 +608,11 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             {
                 String aString, bString;
                 FillUIName ( nId, aString );
-                bString = GetProgName ( GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, GET_POOLID_TXTCOLL );
+                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
+                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, GET_POOLID_TXTCOLL );
+                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
                     *((sal_Int32*)0) = 42;
             }
@@ -619,11 +622,11 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             {
                 String aString, bString;
                 FillUIName ( nId, aString );
-                bString = GetProgName ( GET_POOLID_TXTCOLL, aString );
-                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, GET_POOLID_TXTCOLL );
+                bString = GetProgName ( nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, aString );
+                sal_uInt16 nNewId = GetPoolIdFromProgName ( bString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 FillProgName ( nNewId, aString );
-                bString = GetUIName ( aString, GET_POOLID_TXTCOLL );
-                nNewId = GetPoolIdFromUIName ( aString, GET_POOLID_TXTCOLL );
+                bString = GetUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                nNewId = GetPoolIdFromUIName ( aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if ( nNewId != nId )
                     *((sal_Int32*)0) = 42;
             }
