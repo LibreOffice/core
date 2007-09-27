@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:47:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:56:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1073,7 +1073,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if ( bOldProtection )
                         Unprotect( nTab, aPassword );
                     else
+                    {
+                        pScMod->InputEnterHandler();
+
                         Protect( nTab, aPassword );
+                    }
 
                     if( !pReqArgs )
                     {
