@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrong.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:18:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:00:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,8 @@
 #endif
 
 #include <vector>
+
+#include <tools/string.hxx>
 
 class SwWrongList;
 
@@ -84,7 +86,7 @@ class SwWrongList
 
 public:
 
-    SwWrongList() : nBeginInvalid( STRING_LEN ) { maList.reserve( 5 ); }
+    SwWrongList();
     ~SwWrongList()
     {
         for ( unsigned int i=0; i< maList.size(); i++)
