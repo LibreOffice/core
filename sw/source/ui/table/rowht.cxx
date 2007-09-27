@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rowht.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:20:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:33:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@
 
 void SwTableHeightDlg::Apply()
 {
-    SwTwips nHeight = aHeightEdit.Denormalize(aHeightEdit.GetValue(FUNIT_TWIP));
+    SwTwips nHeight = static_cast< SwTwips >(aHeightEdit.Denormalize(aHeightEdit.GetValue(FUNIT_TWIP)));
     SwFmtFrmSize aSz(ATT_FIX_SIZE, 0, nHeight);
 
     SwFrmSize eFrmSize = (SwFrmSize) aAutoHeightCB.IsChecked() ?
