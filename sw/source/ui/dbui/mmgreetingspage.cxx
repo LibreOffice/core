@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmgreetingspage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:05:50 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:33:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,8 @@
 #include <helpid.h>
 
 using namespace svt;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 // -----------------------------------------------------------------------
 void lcl_FillGreetingsBox(ListBox& rBox,
                         SwMailMergeConfigItem& rConfig,
@@ -238,7 +238,7 @@ void    SwGreetingsHandler::Contains(sal_Bool bContainsGreeting)
   -----------------------------------------------------------------------*/
 SwMailMergeGreetingsPage::SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_GREETINGS_PAGE)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aHeaderFI(this, SW_RES(          FI_HEADER     ) ),
@@ -264,7 +264,7 @@ SwMailMergeGreetingsPage::SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent)
     m_aPrevSetIB(       this, SW_RES( IB_PREVSET     ) ),
     m_aNextSetIB(       this, SW_RES( IB_NEXTSET     ) ),
     m_sDocument(        SW_RES(       STR_DOCUMENT  ) )
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
 {
@@ -454,7 +454,7 @@ IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, ImageButton*, pButton)
   -----------------------------------------------------------------------*/
 SwMailBodyDialog::SwMailBodyDialog(Window* pParent, SwMailMergeWizard* _pWizard) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_MAILBODY)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aGreetingLineCB(this, SW_RES(    CB_GREETINGLINE ) ),
@@ -478,7 +478,7 @@ SwMailBodyDialog::SwMailBodyDialog(Window* pParent, SwMailMergeWizard* _pWizard)
     m_aOK(   this, SW_RES(             PB_OK           ) ),
     m_aCancel(   this, SW_RES(         PB_CANCEL       ) ),
     m_aHelp(   this, SW_RES(           PB_HELP         ) )
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
 {
