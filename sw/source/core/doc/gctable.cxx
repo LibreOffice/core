@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gctable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:45:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:38:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,7 +252,7 @@ BOOL lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
 
         const SwTableBox *pBtmBox = &aBottom.GetBox( nSttBtm++, &nBtmPos ),
                          *pTopBox = &aTop.GetBox( nSttTop++, &nTopPos );
-        const SfxPoolItem *pBtmItem, *pTopItem;
+        const SfxPoolItem *pBtmItem = 0, *pTopItem = 0;
         const SvxBorderLine *pBtmLine(0), *pTopLine(0);
         BOOL bGetTopItem = TRUE, bGetBtmItem = TRUE;
 
