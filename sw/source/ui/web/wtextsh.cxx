@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wtextsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:40:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:52:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,8 @@
 #include "shells.hrc"
 #include "web.hrc"
 
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
+#include <unomid.h>
+
 
 // STATIC DATA -----------------------------------------------------------
 #define SwWebTextShell
@@ -96,8 +97,8 @@ TYPEINIT1(SwWebTextShell, SwTextShell)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SwWebTextShell::SwWebTextShell(SwView &rView) :
-    SwTextShell(rView)
+SwWebTextShell::SwWebTextShell(SwView &_rView) :
+    SwTextShell(_rView)
 {
     SetHelpId(SW_WEBTEXTSHELL);
 }
