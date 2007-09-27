@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swserv.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:34:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:12:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@ public:
     BOOL SetData( const String & rMimeType,
                     const ::com::sun::star::uno::Any& rData );
 
+    using sfx2::SvLinkSource::SendDataChanged;
     virtual void SendDataChanged( const SwPosition& rPos );
     virtual void SendDataChanged( const SwPaM& rRange );
 
