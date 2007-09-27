@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibilityoptions.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:15:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:55:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 #ifndef _ACCESSIBILITYOPTIONS_HXX
 #define _ACCESSIBILITYOPTIONS_HXX
+
+#include <tools/solar.h>
 
 struct SwAccessibilityOptions
 {
