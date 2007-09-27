@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:31:48 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:14:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,12 +159,12 @@ inline void ClearFly( SwTxtFormatInfo &rInf )
 }
 
 /*************************************************************************
- *                  SwTxtFormatter::CtorInit()
+ *                  SwTxtFormatter::CtorInitTxtFormatter()
  *************************************************************************/
 
-void SwTxtFormatter::CtorInit( SwTxtFrm *pFrm, SwTxtFormatInfo *pNewInf )
+void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *pNewInf )
 {
-    SwTxtPainter::CtorInit( pFrm, pNewInf );
+    CtorInitTxtPainter( pNewFrm, pNewInf );
     pInf = pNewInf;
     pDropFmt = GetInfo().GetDropFmt();
     pMulti = NULL;
@@ -277,24 +277,24 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
         // die noch eine echte Breite hat.
         // Ausnahme: SoftHyphPortions duerfen dabei natuerlich
         // nicht vergessen werden, obwohl sie keine Breite haben.
-        SwLinePortion *pPrev = pPor;
+        SwLinePortion *pTmpPrev = pPor;
         while( pPor && pPor != pUnderFlow )
         {
             DBG_LOOP;
             if( !pPor->IsKernPortion() &&
                 ( pPor->Width() || pPor->IsSoftHyphPortion() ) )
             {
-                while( pPrev != pPor )
+                while( pTmpPrev != pPor )
                 {
-                    pPrev->Move( rInf );
-                    rInf.SetLast( pPrev );
-                    pPrev = pPrev->GetPortion();
-                    ASSERT( pPrev, "UnderFlow: Loosing control!" );
+                    pTmpPrev->Move( rInf );
+                    rInf.SetLast( pTmpPrev );
+                    pTmpPrev = pTmpPrev->GetPortion();
+                    ASSERT( pTmpPrev, "UnderFlow: Loosing control!" );
                 };
             }
             pPor = pPor->GetPortion();
         }
-        pPor = pPrev;
+        pPor = pTmpPrev;
         if( pPor && // Flies + Initialen werden nicht beim UnderFlow mitgenommen
             ( pPor->IsFlyPortion() || pPor->IsDropPortion() ||
               pPor->IsFlyCntPortion() ) )
@@ -730,7 +730,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 USHORT nSumWidth = pPor->Width();
                 while ( pTmpPor )
                 {
-                    nSumWidth += pTmpPor->Width();
+                    nSumWidth = nSumWidth + pTmpPor->Width();
                     pTmpPor = pTmpPor->GetPortion();
                 }
 
@@ -795,17 +795,17 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
  *                 SwTxtFormatter::CalcAdjustLine()
  *************************************************************************/
 
-void SwTxtFormatter::CalcAdjustLine( SwLineLayout *pCurr )
+void SwTxtFormatter::CalcAdjustLine( SwLineLayout *pCurrent )
 {
     if( SVX_ADJUST_LEFT != GetAdjust() && !pMulti)
     {
-        pCurr->SetFormatAdj(sal_True);
+        pCurrent->SetFormatAdj(sal_True);
         if( IsFlyInCntBase() )
         {
-            CalcAdjLine( pCurr );
+            CalcAdjLine( pCurrent );
             // 23348: z.B. bei zentrierten Flys muessen wir den RefPoint
             // auf jeden Fall umsetzen, deshalb bAllWays = sal_True
-            UpdatePos( pCurr, GetTopLeft(), GetStart(), sal_True );
+            UpdatePos( pCurrent, GetTopLeft(), GetStart(), sal_True );
         }
     }
 }
@@ -951,8 +951,8 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     pPor->SetLen(1);
     CalcAscent( rInf, pPor );
 
-    const SwFont* pFnt = rInf.GetFont();
-    KSHORT nExpect = Min( KSHORT( ((Font *)pFnt)->GetSize().Height() ),
+    const SwFont* pTmpFnt = rInf.GetFont();
+    KSHORT nExpect = Min( KSHORT( ((Font *)pTmpFnt)->GetSize().Height() ),
                           KSHORT( pPor->GetAscent() ) ) / 8;
     if ( !nExpect )
         nExpect = 1;
@@ -1474,10 +1474,10 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
  *                      SwTxtFormatter::FormatLine()
  *************************************************************************/
 
-xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
+xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
 {
     ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
-            "SwTxtFormatter::FormatLine( nStart ) with unswapped frame" );
+            "SwTxtFormatter::FormatLine( nStartPos ) with unswapped frame" );
 
     // For the formatting routines, we set pOut to the reference device.
     SwHookOut aHook( GetInfo() );
@@ -1508,7 +1508,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     // for an optimal repaint rectangle, we want to compare fly portions
     // before and after the BuildPortions call
     const sal_Bool bOptimizeRepaint = AllowRepaintOpt();
-    const xub_StrLen nOldLineEnd = nStart + pCurr->GetLen();
+    const xub_StrLen nOldLineEnd = nStartPos + pCurr->GetLen();
     SvLongs* pFlyStart = 0;
 
     // these are the conditions for a fly position comparison
@@ -1557,7 +1557,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
             pCurr->SetRealHeight( GetFrmRstHeight() + 1 );
             pCurr->Width(0);
             pCurr->Truncate();
-            return nStart;
+            return nStartPos;
         }
         else if( GetInfo().IsDropInit() )
         {
@@ -1632,7 +1632,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     if ( pSaveFld )
         delete pSaveFld;
 
-    xub_StrLen nNewStart = nStart + pCurr->GetLen();
+    xub_StrLen nNewStart = nStartPos + pCurr->GetLen();
 
     // adjust text if kana compression is enabled
     if ( GetInfo().CompressLine() )
@@ -1692,11 +1692,11 @@ void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
         const USHORT nRubyHeight = pGrid->GetRubyHeight();
         const sal_Bool bRubyTop = ! pGrid->GetRubyTextBelow();
 
-        USHORT nLineHeight = nGridWidth + nRubyHeight;
+        nLineHeight = nGridWidth + nRubyHeight;
         USHORT nLineDist = nLineHeight;
 
         while ( pCurr->Height() > nLineHeight )
-            nLineHeight += nLineDist;
+            nLineHeight = nLineHeight + nLineDist;
 
         KSHORT nAsc = pCurr->GetAscent() +
                       ( bRubyTop ?
@@ -1781,7 +1781,7 @@ void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
                     }
                     case SVX_INTER_LINE_SPACE_FIX:
                     {
-                        nLineHeight += pSpace->GetInterLineSpace();
+                        nLineHeight = nLineHeight + pSpace->GetInterLineSpace();
                         break;
                     }
                     default: ASSERT( sal_False, ": unknown InterLineSpaceRule" );
@@ -1789,6 +1789,7 @@ void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
         }
 #if OSL_DEBUG_LEVEL > 1
         KSHORT nDummy = nLineHeight + 1;
+        (void)nDummy;
 #endif
 
         if( IsRegisterOn() )
@@ -2079,8 +2080,8 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
 
                 nCnt++;
             }
-            nX += pPor->Width();
-            nIdx += pPor->GetLen();
+            nX = nX + pPor->Width();
+            nIdx = nIdx + pPor->GetLen();
             pPor = pPor->GetPortion();
         }
 
