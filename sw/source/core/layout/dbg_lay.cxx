@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbg_lay.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:17:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:01:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,7 +316,7 @@ void SwProtocol::GetVar( const USHORT nNo, long& rVar )
 
 SwImplProtocol::SwImplProtocol()
     : pStream( NULL ), pFrmIds( NULL ), pVar( NULL ), nTypes( 0xffff ),
-    nTestMode( 0 ), nLineCount( 0 ), nMaxLines( USHRT_MAX )
+      nLineCount( 0 ), nMaxLines( USHRT_MAX ), nTestMode( 0 )
 {
     NewStream();
 }
@@ -720,7 +720,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, ULONG nFunction, ULONG nAct, vo
  * hier werden die Ausgaben rund um SectionFrms abgehandelt.
  * --------------------------------------------------*/
 
-void SwImplProtocol::SectFunc( ByteString &rOut, const SwFrm* pFrm, ULONG nAct, void* pParam )
+void SwImplProtocol::SectFunc( ByteString &rOut, const SwFrm* , ULONG nAct, void* pParam )
 {
     BOOL bTmp = FALSE;
     switch( nAct )
