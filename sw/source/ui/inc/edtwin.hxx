@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:17:08 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:59:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,9 @@
  ************************************************************************/
 #ifndef _EDTWIN_HXX
 #define _EDTWIN_HXX
+
+#include <svx/svdobj.hxx>
+
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
@@ -130,13 +133,13 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
 
     int             aActHitType;    // aktueller Mauspointer
 
-    ULONG           nDropFormat;    //Format aus dem letzten QueryDrop
-    USHORT          nDropAction;    //Action aus dem letzten QueryDrop
-    USHORT          nDropDestination;   //Ziel aus dem letzten QueryDrop
+    ULONG           m_nDropFormat;   //Format aus dem letzten QueryDrop
+    USHORT          m_nDropAction;   //Action aus dem letzten QueryDrop
+    USHORT          m_nDropDestination;  //Ziel aus dem letzten QueryDrop
 
-    UINT16          eDrawMode;
     UINT16          eBezierMode;
     UINT16          nInsFrmColCount; //Spaltenzahl fuer interaktiven Rahmen
+    SdrObjKind      eDrawMode;
     BOOL            bLinkRemoved    : 1,
                     bMBPressed      : 1,
                     bInsDraw        : 1,
@@ -155,7 +158,8 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
                     /** #i42732# display status of font size/name depending on either the input language or the
                         selection position depending on what has changed lately
                      */
-                    bUseInputLanguage: 1;
+                    bUseInputLanguage: 1,
+                    bObjectSelect   : 1;
 
 
     USHORT          nKS_NUMDOWN_Count; // #i23725#
@@ -171,7 +175,7 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     void            ChangeDrawing( BYTE nDir );
 
     BOOL            EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos);
-    BOOL            RulerColumnDrag( SwView& , const MouseEvent& rMEvt, BOOL bVerticalMode);
+    BOOL            RulerColumnDrag( const MouseEvent& rMEvt, BOOL bVerticalMode);
 
     //Hilfsfunktionen fuer D&D
     void            DropCleanup();
@@ -232,9 +236,14 @@ public:
     BOOL            IsDrawSelMode();
     BOOL            IsDrawAction()                  { return (bInsDraw); }
     void            SetDrawAction(BOOL bFlag)       { bInsDraw = bFlag; }
-    inline UINT16   GetDrawMode(BOOL bBuf = FALSE) const { return eDrawMode; }
-    inline void     SetDrawMode(UINT16 eDrwMode)    { eDrawMode = eDrwMode; }
-    void            StdDrawMode(USHORT nSlotId);
+
+    void            SetObjectSelect( BOOL bVal )    { bObjectSelect = bVal; }
+    BOOL            IsObjectSelect() const          { return bObjectSelect; }
+
+    inline SdrObjKind   GetSdrDrawMode(/*BOOL bBuf = FALSE*/) const { return eDrawMode; }
+    inline void         SetSdrDrawMode( SdrObjKind eSdrObjectKind ) { eDrawMode = eSdrObjectKind; SetObjectSelect( FALSE ); }
+    void                StdDrawMode( SdrObjKind eSdrObjectKind, BOOL bObjSelect );
+
     BOOL            IsFrmAction()                   { return (bInsFrm); }
     inline UINT16   GetBezierMode()                 { return eBezierMode; }
     void            SetBezierMode(UINT16 eBezMode)  { eBezierMode = eBezMode; }
@@ -259,10 +268,12 @@ public:
 
     void            StartExecuteDrag();
     void            DragFinished();
-    USHORT          GetDropAction() const { return nDropAction; }
-    ULONG           GetDropFormat() const { return nDropFormat; }
+    USHORT          GetDropAction() const { return m_nDropAction; }
+    ULONG           GetDropFormat() const { return m_nDropFormat; }
 
+    using OutputDevice::GetTextColor;
     Color           GetTextColor() { return aTextColor; }
+
     void            SetTextColor(const Color& rCol ) { aTextColor = rCol; }
 
     Color           GetTextBackColor()
@@ -293,8 +304,7 @@ public:
     void StopQuickHelp();
 
     // --> OD 2005-02-18 #i42921# - add parameter <bVerticalMode>
-    BOOL RulerMarginDrag( SwView& rView,
-                                     const MouseEvent& rMEvt,
+    BOOL RulerMarginDrag( const MouseEvent& rMEvt,
                                      const bool bVerticalMode );
     // <--
 
