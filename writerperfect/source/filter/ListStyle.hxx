@@ -26,7 +26,13 @@
  */
 #ifndef _LISTSTYLE_H
 #define _LISTSTYLE_H
+#if defined _MSC_VER
+#pragma warning( push, 1 )
+#endif
 #include <libwpd/libwpd.h>
+#if defined _MSC_VER
+#pragma warning( pop )
+#endif
 
 #define WP6_NUM_LIST_LEVELS 8 // see WP6FileStructure.h (we shouldn't need to reference this)
 
