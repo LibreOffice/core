@@ -4,9 +4,9 @@
  *
  *  $RCSfile: concustomshape.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:21:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:24:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@ BOOL ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
     BOOL bReturn = SwDrawBase::MouseButtonDown(rMEvt);
     if ( bReturn )
     {
-        SdrView *pSdrView = pSh->GetDrawView();
+        SdrView *pSdrView = m_pSh->GetDrawView();
         if ( pSdrView )
         {
             SdrObject* pObj = pSdrView->GetCreateObj();
@@ -175,7 +175,7 @@ BOOL ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
                     bForceNoFillStyle = sal_True;
                 }
 
-                SfxItemSet aAttr( pView->GetPool() );
+                SfxItemSet aAttr( m_pView->GetPool() );
                 if ( bForceNoFillStyle )
                     aAttr.Put( XFillStyleItem( XFILL_NONE ) );
                 pObj->SetMergedItemSet(aAttr);
@@ -204,7 +204,7 @@ BOOL ConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 
 void ConstCustomShape::Activate(const USHORT nSlotId)
 {
-    pWin->SetDrawMode( OBJ_CUSTOMSHAPE );
+    m_pWin->SetSdrDrawMode( OBJ_CUSTOMSHAPE );
 
     SwDrawBase::Activate(nSlotId);
 }
@@ -281,11 +281,10 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
 void ConstCustomShape::CreateDefaultObject()
 {
     SwDrawBase::CreateDefaultObject();
-    SdrView *pSdrView = pSh->GetDrawView();
+    SdrView *pSdrView = m_pSh->GetDrawView();
     if ( pSdrView )
     {
         const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-        sal_uInt32 nCount = rMarkList.GetMarkCount();
         if ( rMarkList.GetMarkCount() == 1 )
         {
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
