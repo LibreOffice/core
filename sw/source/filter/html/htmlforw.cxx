@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:38:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:48:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,12 +348,12 @@ sal_Bool SwHTMLWriter::HasControls() const
     return i < aHTMLControls.Count() && aHTMLControls[i]->nNdIdx == nStartIdx;
 }
 
-void SwHTMLWriter::OutForm( sal_Bool bTagOn, const SwStartNode *pStartNd )
+void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
 {
     if( bPreserveForm )     // wir sind in einer Tabelle oder einem Bereich
         return;             // ueber dem eine Form aufgespannt wurde
 
-    if( !bTagOn )
+    if( !bTag_On )
     {
         // die Form beenden wenn alle Controls ausgegeben wurden
         if( pxFormComps && pxFormComps->is() &&
@@ -414,7 +414,7 @@ void SwHTMLWriter::OutForm( sal_Bool bTagOn, const SwStartNode *pStartNd )
                         xNewFormComps = xCurrentFormComps;
                         break;
                     }
-                    nCurrentCtrls += aHTMLControls[i]->nCount;
+                    nCurrentCtrls = nCurrentCtrls + aHTMLControls[i]->nCount;
                 }
                 else
                 {
@@ -542,14 +542,14 @@ void SwHTMLWriter::OutHiddenForm( const uno::Reference< form::XForm > & rForm )
             OUString sPropName = OUString::createFromAscii( "ClassId" );
             if( xPropSet->getPropertySetInfo()->hasPropertyByName( sPropName ) )
             {
-                uno::Any aTmp = xPropSet->getPropertyValue( sPropName );
-                if( aTmp.getValueType() == ::getCppuType((sal_Int16*)0) )
+                uno::Any aAny2 = xPropSet->getPropertyValue( sPropName );
+                if( aAny2.getValueType() == ::getCppuType((sal_Int16*)0) )
                 {
                     if( form::FormComponentType::HIDDENCONTROL ==
-                                                *(sal_Int16*)aTmp.getValue() )
+                                                *(sal_Int16*)aAny2.getValue() )
                         bHidden = sal_True;
                     else if( lcl_html_isHTMLControl(
-                                            *(sal_Int16*)aTmp.getValue() ) )
+                                            *(sal_Int16*)aAny2.getValue() ) )
                         bHiddenOnly = sal_False;
                 }
             }
@@ -642,6 +642,8 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
         case form::FormSubmitEncoding_TEXT:
             pStr = sHTML_ET_text;
             break;
+        default:
+            ;
         }
 
         if( pStr )
@@ -1323,7 +1325,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
             for( sal_Int32 i = 0; i < nCnt; i++ )
             {
-                OUString sValue;
+                OUString sVal;
                 sal_Bool bSelected = sal_False, bEmptyVal = sal_False;
                 if( i < nValCnt )
                 {
@@ -1331,7 +1333,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                     if( rVal.compareToAscii( "$$$empty$$$" ) == 0 )
                         bEmptyVal = sal_True;
                     else
-                        sValue = rVal;
+                        sVal = rVal;
                 }
 
                 bSelected = (nSel < nSelCnt) && pSels[nSel] == i;
@@ -1340,11 +1342,11 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
                 rHTMLWrt.OutNewLine(); // jede Option bekommt eine eigene Zeile
                 (sOut = '<') += sHTML_option;
-                if( sValue.getLength() || bEmptyVal )
+                if( sVal.getLength() || bEmptyVal )
                 {
                     ((sOut += ' ') += sHTML_O_value) += "=\"";
                     rWrt.Strm() << sOut.GetBuffer();
-                    HTMLOutFuncs::Out_String( rWrt.Strm(), sValue,
+                    HTMLOutFuncs::Out_String( rWrt.Strm(), sVal,
                         rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
                     sOut = '\"';
                 }
@@ -1368,23 +1370,23 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     {
         // In TextAreas duerfen keine zusaetzlichen Spaces oder LF exportiert
         // werden!
-        String sValue;
+        String sVal;
         aTmp = xPropSet->getPropertyValue(
                         OUString::createFromAscii( "DefaultText" ) );
         if( aTmp.getValueType() == ::getCppuType((const OUString*)0)&&
             ((OUString*)aTmp.getValue())->getLength() )
         {
-            sValue = String( *(OUString*)aTmp.getValue() );
+            sVal = String( *(OUString*)aTmp.getValue() );
         }
-        if( sValue.Len() )
+        if( sVal.Len() )
         {
-            sValue.ConvertLineEnd( LINEEND_LF );
+            sVal.ConvertLineEnd( LINEEND_LF );
             xub_StrLen nPos = 0;
             while ( nPos != STRING_NOTFOUND )
             {
                 if( nPos )
                     rWrt.Strm() << SwHTMLWriter::sNewLine;
-                String aLine = sValue.GetToken( 0, 0x0A, nPos );
+                String aLine = sVal.GetToken( 0, 0x0A, nPos );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aLine,
                                         rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             }
