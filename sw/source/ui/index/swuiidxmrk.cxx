@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuiidxmrk.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:12:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:17:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,8 @@
 #endif
 
 #include "swuiidxmrk.hxx"
+#include <unomid.h>
+
 
 #define POS_CONTENT 0
 #define POS_INDEX   1
@@ -168,19 +170,14 @@ static sal_uInt16 nKey1Pos = USHRT_MAX;
 
 static sal_uInt16 nKey2Pos = USHRT_MAX;
 
-static const char*  pUserItemNamePosX = "POSX";
-static const char*  pUserItemNamePosY = "POSY";
-
 using namespace com::sun::star;
-using namespace com::sun::star::i18n;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::util;
-using namespace com::sun::star::i18n;
+using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::i18n;
 using namespace ::rtl;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
-
-#define C2U(cChar) OUString::createFromAscii(cChar)
 
 /*--------------------------------------------------------------------
      Beschreibung:  Dialog zum Einfuegen einer Verzeichnismarkierung
@@ -190,55 +187,64 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
                                const ResId& rResId,
                                sal_Int32 _nOptionsId ) :
       Window(pParent, rResId),
-    nOptionsId( _nOptionsId ),
-    bDel(sal_False),
-    bNewMark(bNewDlg),
-    pTOXMgr(0),
-    pSh(0),
-    aOKBT(this,     SW_RES(BT_OK    )),
-    aCancelBT(this, SW_RES(BT_CANCEL )),
-    aHelpBT(this,   SW_RES(BT_HELP   )),
-    aDelBT(this,    SW_RES(BT_DEL   )),
-    aNewBT(this,    SW_RES(BT_NEW   )),
-    aPrevBT(this,   SW_RES(BT_PREV  )),
-    aPrevSameBT(this,SW_RES(BT_PREVSAME)),
-    aNextBT(this,   SW_RES(BT_NXT   )),
-    aNextSameBT(this,SW_RES(BT_NXTSAME)),
     aTypeFT (this,  SW_RES(LBL_INDEX    )),
     aTypeDCB(this,  SW_RES(DCB_INDEX    )),
+    aNewBT(this,    SW_RES(BT_NEW   )),
+
     aEntryFT(this,  SW_RES(LBL_ENTRY    )),
     aEntryED(this,  SW_RES(SL_ENTRY )),
     aPhoneticFT0(this,  SW_RES(FT_PHONETIC_1 )),
     aPhoneticED0(this,  SW_RES(ED_PHONETIC_1 )),
+
     aKeyFT(this,    SW_RES(LBL_KEY  )),
     aKeyDCB(this,   SW_RES(DCB_KEY  )),
     aPhoneticFT1(this,  SW_RES(FT_PHONETIC_2 )),
     aPhoneticED1(this,  SW_RES(ED_PHONETIC_2 )),
+
     aKey2FT(this,   SW_RES(LBL_KEY2 )),
     aKey2DCB(this,  SW_RES(DCB_KEY2 )),
     aPhoneticFT2(this,  SW_RES(FT_PHONETIC_3 )),
     aPhoneticED2(this,  SW_RES(ED_PHONETIC_3 )),
+
     aLevelFT(this,  SW_RES(LBL_LEVEL    )),
     aLevelED(this,  SW_RES(SL_LEVEL )),
     aMainEntryCB(this, SW_RES(CB_MAIN_ENTRY )),
     aApplyToAllCB(this,SW_RES(CB_APPLY_TO_ALL)),
     aSearchCaseSensitiveCB(this,    SW_RES(CB_CASESENSITIVE )),
     aSearchCaseWordOnlyCB(this,     SW_RES(CB_WORDONLY      )),
+
     aIndexFL(this,  SW_RES(FL_INDEX )),
+
+    aOKBT(this,     SW_RES(BT_OK    )),
+    aCancelBT(this, SW_RES(BT_CANCEL )),
+    aHelpBT(this,   SW_RES(BT_HELP   )),
+    aDelBT(this,    SW_RES(BT_DEL   )),
+
+    aPrevSameBT(this,SW_RES(BT_PREVSAME)),
+    aNextSameBT(this,SW_RES(BT_NXTSAME)),
+    aPrevBT(this,   SW_RES(BT_PREV  )),
+    aNextBT(this,   SW_RES(BT_NXT   )),
+
+    nOptionsId( _nOptionsId ),
+    bDel(sal_False),
+    bNewMark(bNewDlg),
     bSelected(sal_False),
+
     bPhoneticED0_ChangedByUser(FALSE),
     bPhoneticED1_ChangedByUser(FALSE),
     bPhoneticED2_ChangedByUser(FALSE),
-    xExtendedIndexEntrySupplier(NULL),
     nLangForPhoneticReading(2052),
-    bIsPhoneticReadingEnabled(FALSE)
+    bIsPhoneticReadingEnabled(FALSE),
+    xExtendedIndexEntrySupplier(NULL),
+    pTOXMgr(0),
+    pSh(0)
 {
     if( SvtCJKOptions().IsCJKFontEnabled() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
 
         xExtendedIndexEntrySupplier =
-            uno::Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier > (
+            uno::Reference< i18n::XExtendedIndexEntrySupplier > (
                     xMSF->createInstance( C2U("com.sun.star.i18n.IndexEntrySupplier") ),
                                                                         uno::UNO_QUERY );
     }
@@ -599,7 +605,7 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, BOOL bWordOnly, BOOL bCaseSen
 
     rSh.ClearMark();
     BOOL bCancel;
-    ULONG nRet = rSh.Find( aSearchOpt,  DOCPOS_START, DOCPOS_END, bCancel,
+    rSh.Find( aSearchOpt,  DOCPOS_START, DOCPOS_END, bCancel,
                         (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), FALSE );
 }
 
@@ -680,7 +686,7 @@ void SwIndexMarkDlg::UpdateMark()
         eType = TOX_INDEX;
 
     SwTOXMarkDescription aDesc(eType);
-    aDesc.SetLevel(aLevelED.GetValue());
+    aDesc.SetLevel( static_cast< int >(aLevelED.GetValue()) );
     if(pAltText)
         aDesc.SetAltStr(*pAltText);
 
@@ -743,13 +749,13 @@ class SwNewUserIdxDlg : public ModalDialog
     public:
         SwNewUserIdxDlg(SwIndexMarkDlg* pParent) :
             ModalDialog(pParent, SW_RES(DLG_NEW_USER_IDX)),
-            pDlg(pParent),
             aOKPB(this, SW_RES(     PB_OK       )),
             aCancelPB(this, SW_RES( PB_CANCEL   )),
             aHelpPB(this, SW_RES(   PB_HELP     )),
             aNameFL(this, SW_RES(    FL_NAME     )),
             aNameFT(this, SW_RES(   FT_NAME     )),
-            aNameED(this, SW_RES(   ED_NAME     ))
+            aNameED(this, SW_RES(    ED_NAME     )),
+            pDlg(pParent)
             {
                 FreeResource();
                 aNameED.SetModifyHdl(LINK(this, SwNewUserIdxDlg, ModifyHdl));
@@ -770,7 +776,7 @@ IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, Edit*, pEdit)
     return 0;
 }
 
-IMPL_LINK( SwIndexMarkDlg, NewUserIdxHdl, Button*, pButton)
+IMPL_LINK( SwIndexMarkDlg, NewUserIdxHdl, Button*, EMPTYARG)
 {
     SwNewUserIdxDlg* pDlg = new SwNewUserIdxDlg(this);
     if(RET_OK == pDlg->Execute())
@@ -806,7 +812,7 @@ IMPL_LINK( SwIndexMarkDlg, InsertHdl, Button *, pButton )
 /* -----------------07.09.99 10:29-------------------
 
  --------------------------------------------------*/
-IMPL_LINK( SwIndexMarkDlg, CloseHdl, Button *, pButton )
+IMPL_LINK( SwIndexMarkDlg, CloseHdl, Button *, EMPTYARG )
 {
     if(bNewMark)
     {
@@ -1178,12 +1184,12 @@ void    SwIndexMarkDlg::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark)
 /* -----------------06.10.99 10:00-------------------
 
  --------------------------------------------------*/
-SwIndexMarkFloatDlg::SwIndexMarkFloatDlg(SfxBindings* pBindings,
+SwIndexMarkFloatDlg::SwIndexMarkFloatDlg(SfxBindings* _pBindings,
                                    SfxChildWindow* pChild,
                                    Window *pParent,
                                 SfxChildWinInfo* pInfo,
                                    sal_Bool bNew) :
-SfxModelessDialog(pBindings, pChild, pParent, SvtCJKOptions().IsCJKFontEnabled()?SW_RES(DLG_INSIDXMARK_CJK):SW_RES(DLG_INSIDXMARK)),
+SfxModelessDialog(_pBindings, pChild, pParent, SvtCJKOptions().IsCJKFontEnabled()?SW_RES(DLG_INSIDXMARK_CJK):SW_RES(DLG_INSIDXMARK)),
     aDlg(this, bNew, SW_RES(WIN_DLG), SvtCJKOptions().IsCJKFontEnabled()?DLG_INSIDXMARK_CJK:DLG_INSIDXMARK)
 {
     FreeResource();
@@ -1223,44 +1229,11 @@ void    SwIndexMarkModalDlg::Apply()
 {
     aDlg.Apply();
 }
-/* -----------------07.09.99 08:15-------------------
-
- --------------------------------------------------*/
-//CHINA001 SFX_IMPL_CHILDWINDOW(SwInsertIdxMarkWrapper, FN_INSERT_IDX_ENTRY_DLG)
-
-//CHINA001 SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper(  Window *pParentWindow,
-//CHINA001                          sal_uInt16 nId,
-//CHINA001                          SfxBindings* pBindings,
-//CHINA001                          SfxChildWinInfo* pInfo ) :
-//CHINA001      SfxChildWindow(pParentWindow, nId)
-//CHINA001 {
-//CHINA001
-//CHINA001 pWindow = new SwIndexMarkFloatDlg(pBindings, this, pParentWindow, pInfo );
-//CHINA001 pWindow->Show(); // at this point,because before pSh has to be initialized in ReInitDlg()
-//CHINA001 // -> Show() will invoke StateChanged() and save pos
-//CHINA001 eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-//CHINA001 }
-/* -----------------07.09.99 09:14-------------------
-
- --------------------------------------------------*/
-//CHINA001 SfxChildWinInfo SwInsertIdxMarkWrapper::GetInfo() const
-//CHINA001 {
-//CHINA001 SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
-//CHINA001
-//CHINA001 return aInfo;
-//CHINA001 }
-
-//CHINA001 void SwInsertIdxMarkWrapper::ReInitDlg(SwWrtShell& rWrtShell)
-//CHINA001 {
-//CHINA001 ((SwIndexMarkFloatDlg*)pWindow)->ReInitDlg(rWrtShell);
-//CHINA001 }
-
 /* -----------------16.09.99 14:19-------------------
 
  --------------------------------------------------*/
 class SwCreateAuthEntryDlg_Impl : public ModalDialog
 {
-
     FixedLine       aEntriesFL;
 
     FixedText*      pFixedTexts[AUTH_FIELD_END];
@@ -1347,23 +1320,28 @@ SwAuthMarkDlg::SwAuthMarkDlg(  Window *pParent,
     Window(pParent, rResId),
     aFromComponentRB(   this, ResId(RB_FROMCOMPONENT, *rResId.GetResMgr()   )),
     aFromDocContentRB(  this, ResId(RB_FROMDOCCONTENT, *rResId.GetResMgr()  )),
-    aEntryFT(   this, ResId(FT_ENTRY, *rResId.GetResMgr()   )),
+
+    aAuthorFT(  this, ResId(FT_AUTHOR, *rResId.GetResMgr()       )),
+    aAuthorFI(  this, ResId(FI_AUTHOR, *rResId.GetResMgr()   )),
+    aTitleFT(   this, ResId(FT_TITLE, *rResId.GetResMgr()    )),
+    aTitleFI(   this, ResId(FI_TITLE, *rResId.GetResMgr()    )),
+    aEntryFT(   this, ResId(FT_ENTRY, *rResId.GetResMgr()    )),
     aEntryED(   this, ResId(ED_ENTRY, *rResId.GetResMgr()   )),
     aEntryLB(   this, ResId(LB_ENTRY, *rResId.GetResMgr()   )),
-    aAuthorFT(  this, ResId(FT_AUTHOR, *rResId.GetResMgr()      )),
-    aAuthorFI(  this, ResId(FI_AUTHOR, *rResId.GetResMgr()      )),
-    aTitleFT(   this, ResId(FT_TITLE, *rResId.GetResMgr()   )),
-    aTitleFI(   this, ResId(FI_TITLE, *rResId.GetResMgr()   )),
+
     aEntryFL(   this, ResId(FL_ENTRY, *rResId.GetResMgr()    )),
-    aOKBT(      this, ResId(PB_OK, *rResId.GetResMgr()      )),
+
+    aOKBT(      this, ResId(PB_OK, *rResId.GetResMgr()       )),
     aCancelBT(  this, ResId(PB_CANCEL, *rResId.GetResMgr()  )),
     aHelpBT(    this, ResId(PB_HELP, *rResId.GetResMgr()    )),
-    sChangeST(  ResId(ST_CHANGE, *rResId.GetResMgr())),
     aCreateEntryPB(this,ResId(PB_CREATEENTRY, *rResId.GetResMgr())),
     aEditEntryPB(this,  ResId(PB_EDITENTRY, *rResId.GetResMgr())),
+
+    sChangeST(  ResId(ST_CHANGE, *rResId.GetResMgr())),
     bNewEntry(bNewDlg),
-    pSh(0),
-    bBibAccessInitialized(sal_False)
+    bBibAccessInitialized(sal_False),
+
+    pSh(0)
 {
     SetStyle(GetStyle()|WB_DIALOGCONTROL);
     FreeResource();
@@ -1754,39 +1732,6 @@ void    SwAuthMarkDlg::Activate()
     aOKBT.Enable(!pSh->HasReadonlySel());
     Window::Activate();
 }
-/* -----------------07.09.99 08:15-------------------
-
- --------------------------------------------------*/
-//CHINA001 SFX_IMPL_CHILDWINDOW(SwInsertAuthMarkWrapper, FN_INSERT_AUTH_ENTRY_DLG)
-
-//CHINA001 SwInsertAuthMarkWrapper::SwInsertAuthMarkWrapper(    Window *pParentWindow,
-//CHINA001                          sal_uInt16 nId,
-//CHINA001                          SfxBindings* pBindings,
-//CHINA001                          SfxChildWinInfo* pInfo ) :
-//CHINA001      SfxChildWindow(pParentWindow, nId)
-//CHINA001 {
-//CHINA001
-//CHINA001 pWindow = new SwAuthMarkFloatDlg(pBindings, this, pParentWindow, pInfo );
-//CHINA001
-//CHINA001
-//CHINA001 eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-//CHINA001 }
-/* -----------------07.09.99 09:14-------------------
-
- --------------------------------------------------*/
-//CHINA001 SfxChildWinInfo SwInsertAuthMarkWrapper::GetInfo() const
-//CHINA001 {
-//CHINA001 SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
-//CHINA001 return aInfo;
-//CHINA001 }
-/* -----------------19.10.99 11:16-------------------
-
- --------------------------------------------------*/
-//CHINA001 void SwInsertAuthMarkWrapper::ReInitDlg(SwWrtShell& rWrtShell)
-//CHINA001 {
-//CHINA001 ((SwAuthMarkFloatDlg*)pWindow)->ReInitDlg(rWrtShell);
-//CHINA001 }
-
 /* -----------------16.09.99 14:27-------------------
 
  --------------------------------------------------*/
@@ -1796,12 +1741,12 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
         sal_Bool bNewEntry,
         sal_Bool bCreate) :
     ModalDialog(pParent, SW_RES(DLG_CREATE_AUTH_ENTRY)),
-    aOKBT(this,         SW_RES(PB_OK            )),
+    aEntriesFL(this,    SW_RES(FL_ENTRIES    )),
+    pTypeListBox(0),
+    pIdentifierBox(0),
+    aOKBT(this,         SW_RES(PB_OK         )),
     aCancelBT(this,     SW_RES(PB_CANCEL        )),
     aHelpBT(this,       SW_RES(PB_HELP      )),
-    aEntriesFL(this,    SW_RES(FL_ENTRIES    )),
-    pIdentifierBox(0),
-    pTypeListBox(0),
     rWrtSh(rSh),
     m_bNewEntryMode(bNewEntry),
     m_bNameAllowed(sal_True)
@@ -1829,7 +1774,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
     aEditSize.Height() = aTmpSz.Height();
     aEditSize.Width() = nControlWidth;
 
-    sal_uInt16 nOffset = aTmpSz.Width() * 3 / 2;
+    sal_uInt16 nOffset = static_cast< sal_uInt16 >(aTmpSz.Width() * 3 / 2);
     sal_Bool bLeft = sal_True;
     Window* pRefWindow = 0;
     for(sal_uInt16 nIndex = 0; nIndex < AUTH_FIELD_END; nIndex++)
@@ -1858,7 +1803,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
                 pTypeListBox->InsertEntry(String(SW_RES(STR_AUTH_TYPE_START + j)));
             if(pFields[aCurInfo.nToxField].Len())
             {
-                sal_uInt16 nIndexPos = pFields[aCurInfo.nToxField].ToInt32();
+                sal_uInt16 nIndexPos = static_cast< sal_uInt16 >(pFields[aCurInfo.nToxField].ToInt32());
                 pTypeListBox->SelectEntryPos(nIndexPos);
             }
             Size aTmp(aEditSize);
@@ -2037,12 +1982,12 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, EnableHdl, ListBox*, pBox)
 /* -----------------06.10.99 10:00-------------------
 
  --------------------------------------------------*/
-SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* pBindings,
+SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,
                                    SfxChildWindow* pChild,
                                    Window *pParent,
                                 SfxChildWinInfo* pInfo,
                                    sal_Bool bNew) :
-    SfxModelessDialog(pBindings, pChild, pParent, SW_RES(DLG_INSAUTHMARK)),
+    SfxModelessDialog(_pBindings, pChild, pParent, SW_RES(DLG_INSAUTHMARK)),
     aDlg(this, SW_RES(WIN_DLG), bNew)
 {
     FreeResource();
