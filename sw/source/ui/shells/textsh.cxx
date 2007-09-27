@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:22:40 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:30:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,13 +267,15 @@
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
-#include "swabstdlg.hxx" //CHINA001
-#include <misc.hrc> //CHINA001
-#include <table.hrc> //CHINA001
-#include <frmui.hrc> //CHINA001
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
+#include "swabstdlg.hxx"
+#include <misc.hrc>
+#include <table.hrc>
+#include <frmui.hrc>
+#include <unomid.h>
+
+
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -412,7 +414,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     }
                 }
 
-                rSh.InsertObject( xObj, 0, TRUE, nSlot, &rReq);
+                rSh.InsertObject( xObj, 0, TRUE, nSlot);
             }
         }
     }
@@ -484,8 +486,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             else
             {
                 comphelper::EmbeddedObjectContainer aCnt;
-                ::rtl::OUString aName;
-                xObj.Assign( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aName ),
+                ::rtl::OUString sName;
+                xObj.Assign( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), sName ),
                             embed::Aspects::MSOLE_CONTENT );
                 svt::EmbeddedObjectRef::TryRunningState( xObj.GetObject() );
                 uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
@@ -519,7 +521,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         else
         {
             DBG_ASSERT( !pNameItem || nSlot == SID_INSERT_OBJECT, "Superfluous argument!" );
-            rSh.InsertObject( xObj, pName, TRUE, nSlot, &rReq);
+            rSh.InsertObject( xObj, pName, TRUE, nSlot);
             rReq.Done();
         }
         break;
@@ -591,7 +593,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         else
         {
-            rSh.InsertObject( xObj, 0, TRUE, nSlot, &rReq);
+            rSh.InsertObject( xObj, 0, TRUE, nSlot);
             rReq.Done();
         }
     }
@@ -604,7 +606,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             if(!rReq.IsAPI())
             {
                 SfxViewFrame* pVFrame = GetView().GetViewFrame();
-                SwInsertChart( &GetView().GetEditWin(), &GetView().GetViewFrame()->GetBindings() );
+                SwInsertChart( &GetView().GetEditWin(), &pVFrame->GetBindings() );
             }
             else
             {
@@ -656,7 +658,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             // the suggestion has to be removed before
             GetView().GetEditWin().StopQuickHelp();
             SvGlobalName aGlobalName( SO3_SM_CLASSID );
-            rSh.InsertObject( svt::EmbeddedObjectRef(), &aGlobalName, TRUE, 0, &rReq );
+            rSh.InsertObject( svt::EmbeddedObjectRef(), &aGlobalName, TRUE, 0 );
         }
         break;
 
@@ -706,10 +708,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     break;
     case FN_INSERT_FRAME:
     {
-        const int nSel = rSh.GetSelectionType();
-
         BOOL bSingleCol = FALSE;
-        if( 0!= PTR_CAST(SwWebDocShell, GetView().GetDocShell()) )
+        if( 0!= dynamic_cast< SwWebDocShell*>( GetView().GetDocShell()) )
         {
             SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
             USHORT nExport = pHtmlOpt->GetExportMode();
@@ -782,7 +782,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             aSet.Put(aMgr.GetAttrSet());
             aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
-            // Minimalgroesse in Spalten l�schen
+            // Minimalgroesse in Spalten loeschen
             SvxBoxInfoItem aBoxInfo((SvxBoxInfoItem &)aSet.Get(SID_ATTR_BORDER_INNER));
             const SvxBoxItem& rBox = (const SvxBoxItem&)aSet.Get(RES_BOX);
             aBoxInfo.SetMinDist(FALSE);
@@ -790,13 +790,12 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             aSet.Put(aBoxInfo);
 
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, GetView().GetDocShell()));
-            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
-            //CHINA001 SwFrmDlg* pDlg = new SwFrmDlg(GetView().GetViewFrame(), &GetView().GetViewFrame()->GetWindow(), aSet, TRUE);
+            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)));
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_STD,
                                                     GetView().GetViewFrame(), &GetView().GetViewFrame()->GetWindow(), aSet, TRUE);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             if(pDlg->Execute() && pDlg->GetOutputItemSet())
             {
                 GetShell().StartAllAction();
@@ -811,7 +810,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
                 aMgr.InsertFlyFrm();
 
-                com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+                uno::Reference< frame::XDispatchRecorder > xRecorder =
                         GetView().GetViewFrame()->GetBindings().GetRecorder();
                 if ( xRecorder.is() )
                 {
@@ -854,12 +853,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         else
         {
-            //CHINA001 SwInsertGrfRulerDlg* pDlg = new SwInsertGrfRulerDlg(pParent);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractInsertGrfRulerDlg* pDlg = pFact->CreateInsertGrfRulerDlg( DLG_INSERT_RULER,
                                                         pParent );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             // MessageBox fuer fehlende Grafiken
             if(!pDlg->HasImages())
                 InfoBox( pParent, SW_RES(MSG_NO_RULER)).Execute();
@@ -875,7 +873,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
 
         rSh.StartAllAction();
-        rSh.StartUndo(UIUNDO_INSERT_RULER);
+        rSh.StartUndo(UNDO_UI_INSERT_RULER);
         if(bSimpleLine)
         {
             if(!(rSh.IsSttOfPara() && rSh.IsEndOfPara())) // kein leerer Absatz?
@@ -903,18 +901,17 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             rSh.Right(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
         }
         rSh.EndAllAction();
-        rSh.EndUndo(UIUNDO_INSERT_RULER);
+        rSh.EndUndo(UNDO_UI_INSERT_RULER);
         rReq.SetReturnValue(SfxBoolItem(nSlot, bRet));
         rReq.Done();
     }
     break;
     case FN_FORMAT_COLUMN :
     {
-        //CHINA001 SwColumnDlg* pColDlg = new SwColumnDlg(GetView().GetWindow(), rSh);
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
         VclAbstractDialog* pColDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_COLUMN);
-        DBG_ASSERT(pColDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pColDlg, "Dialogdiet fail!");
         pColDlg->Execute();
         delete pColDlg;
     }
@@ -1054,7 +1051,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                 if(rSh.IsSelFrmMode())
                 {
                     const int nSel = rSh.GetSelectionType();
-                    if( (SwWrtShell::SEL_GRF | SwWrtShell::SEL_OLE ) & nSel )
+                    if( (nsSelectionType::SEL_GRF | nsSelectionType::SEL_OLE ) & nSel )
                         rSet.DisableItem(nWhich);
                 }
             break;
@@ -1161,8 +1158,8 @@ void SwTextShell::ExecTransliteration( SfxRequest & rReq )
 
 
 
-SwTextShell::SwTextShell(SwView &rView) :
-    SwBaseShell(rView), pPostItFldMgr( 0 )
+SwTextShell::SwTextShell(SwView &_rView) :
+    SwBaseShell(_rView), pPostItFldMgr( 0 )
 {
     SetName(String::CreateFromAscii("Text"));
     SetHelpId(SW_TEXTSHELL);
@@ -1223,11 +1220,10 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     if( !aChars.Len() )
     {
         // Eingestellten Font als Default
-        //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap( &GetView().GetViewFrame()->GetWindow(), FALSE );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( &GetView().GetViewFrame()->GetWindow(), RID_SVXDLG_CHARMAP, FALSE );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
+        AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( &GetView().GetViewFrame()->GetWindow(),  RID_SVXDLG_CHARMAP, FALSE );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
         Font aDlgFont( pDlg->GetCharFont() );
         SwViewOption aOpt(*GetShell().GetViewOptions());
@@ -1313,9 +1309,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 
             rSh.SetMark();
             rSh.ExtendSelection( FALSE, aChars.Len() );
-
-            rSh.SetAttr( aSet, SETATTR_DONTEXPAND | SETATTR_NOFORMATATTR );
-
+            rSh.SetAttr( aSet, nsSetAttrMode::SETATTR_DONTEXPAND | nsSetAttrMode::SETATTR_NOFORMATATTR );
             if( !rSh.IsCrsrPtAtEnd() )
                 rSh.SwapPam();
 
