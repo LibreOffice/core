@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpreview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:38:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:23:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentPageVie
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentPageView";
 
 
-// using namespace ::com::sun::star::accessibility;
+// using namespace accessibility;
 
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::uno::RuntimeException;
@@ -71,8 +71,8 @@ using ::rtl::OUString;
 // SwAccessiblePreview
 //
 
-SwAccessiblePreview::SwAccessiblePreview( SwAccessibleMap *pMap ) :
-    SwAccessibleDocumentBase( pMap )
+SwAccessiblePreview::SwAccessiblePreview( SwAccessibleMap *pMp ) :
+    SwAccessibleDocumentBase( pMp )
 {
     SetName( GetResource( STR_ACCESS_DOC_NAME ) );
 }
