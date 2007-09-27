@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accfrmobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:38:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:21:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ sal_Bool SwFrmOrObj::IsBoundAsChar() const
     else
     {
         const SwFrmFmt *pFrmFmt = pObj ? ::FindFrmFmt( pObj ) : 0;
-        return pFrmFmt ? FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId()
+        return pFrmFmt ? static_cast<sal_Bool>(FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId())
                        : sal_False;
     }
 }
