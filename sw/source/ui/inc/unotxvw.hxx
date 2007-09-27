@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:48:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:13:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,10 +98,14 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
+
+#include <sfx2/objsh.hxx>
+
+class SdrObject;
 class SwView;
 
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener > * XSelectionChangeListenerPtr;
-SV_DECL_PTRARR_DEL( SelectionChangeListenerArr, XSelectionChangeListenerPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( SelectionChangeListenerArr, XSelectionChangeListenerPtr, 4, 4 )
 
 /******************************************************************************
  *
@@ -232,8 +236,7 @@ protected:
 public:
     SwXTextViewCursor(SwView* pVw);
 
-
-    DECLARE_XINTERFACE();
+    DECLARE_XINTERFACE()
 
     //XTextViewCursor
     virtual sal_Bool SAL_CALL isVisible(void) throw( ::com::sun::star::uno::RuntimeException );
