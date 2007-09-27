@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:13:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:53:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,8 +152,8 @@
 #ifndef _WRTSH_HRC
 #include <wrtsh.hrc>
 #endif
-#include "swabstdlg.hxx" //CHINA001
-#include "fldui.hrc" //CHINA001
+#include "swabstdlg.hxx"
+#include "fldui.hrc"
 
 #include <undobj.hxx>
 
@@ -241,12 +241,11 @@ BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton,
 //              das TopWindow der Application benutzt werden.
 //  SwFldInputDlg* pDlg = new SwFldInputDlg( GetWin(), *this, pFld );
 
-    //CHINA001 SwFldInputDlg* pDlg = new SwFldInputDlg( NULL, *this, pFld, bNextButton );
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pFact, "Dialogdiet fail!");
     AbstractFldInputDlg* pDlg = pFact->CreateFldInputDlg( DLG_FLD_INPUT,
                                                         pParentWin, *this, pFld, bNextButton);
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
     if(pWindowState && pWindowState->Len())
         pDlg->SetWindowState(*pWindowState);
     BOOL bRet = RET_CANCEL == pDlg->Execute();
@@ -262,12 +261,11 @@ BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton,
  --------------------------------------------------*/
 BOOL SwWrtShell::StartDropDownFldDlg(SwField* pFld, BOOL bNextButton, ByteString* pWindowState)
 {
-    //CHINA001 sw::DropDownFieldDialog* pDlg = new sw::DropDownFieldDialog( NULL, *this, pFld, bNextButton );
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractDropDownFieldDialog* pDlg = pFact->CreateDropDownFieldDialog( NULL, *this, pFld, DLG_FLD_DROPDOWN,bNextButton );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    AbstractDropDownFieldDialog* pDlg = pFact->CreateDropDownFieldDialog( NULL, *this, pFld, DLG_FLD_DROPDOWN ,bNextButton );
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
     if(pWindowState && pWindowState->Len())
         pDlg->SetWindowState(*pWindowState);
     USHORT nRet = pDlg->Execute();
@@ -315,10 +313,10 @@ BOOL SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 
         if (pSet == NULL)
         {
-            SwDoc * pDoc = GetDoc();
+            SwDoc * _pDoc = GetDoc();
 
-            if (pDoc != NULL)
-                pDoc->DelAllUndoObj();
+            if (_pDoc != NULL)
+                _pDoc->DelAllUndoObj();
         }
     }
 
@@ -329,7 +327,7 @@ BOOL SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
     // Fuehre die vor definierten Aktionen aus.
 
 
-void SwWrtShell::ClickToField( const SwField& rFld, USHORT nFilter )
+void SwWrtShell::ClickToField( const SwField& rFld )
 {
     bIsInClickToEdit = TRUE;
     switch( rFld.GetTyp()->Which() )
@@ -529,7 +527,6 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
         const SwDocShell* pDocShell = GetView().GetDocShell();
         if(pDocShell->HasName())
         {
-            USHORT nPos = 0;
             const String rName = pDocShell->GetMedium()->GetURLObject().GetURLNoMark();
 
             if(COMPARE_EQUAL == sURL.CompareTo(rName, rName.Len()))
