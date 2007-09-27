@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:05:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:32:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,9 +81,9 @@
 using namespace svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
-using namespace com::sun::star::sdb;
-using namespace com::sun::star::sdbc;
-using namespace com::sun::star::sdbcx;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 
 //-------------------------------------------------------------------------
 void lcl_Move(Control* pCtrl, long nYOffset)
@@ -97,7 +97,7 @@ void lcl_Move(Control* pCtrl, long nYOffset)
   -----------------------------------------------------------------------*/
 SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_ADDRESSBLOCK_PAGE)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aHeaderFI(        this, SW_RES(  FI_HEADER           ) ),
@@ -115,18 +115,18 @@ SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pP
     m_aSecondFL(        this, SW_RES( FL_SECOND )),
     m_aThirdFI(         this, SW_RES( FI_THIRD ) ),
     m_aMatchFieldsFI(   this, SW_RES( FI_MATCH_FIELDS ) ),
+    m_aAssignPB(        this, SW_RES( PB_ASSIGN      ) ),
     m_aThirdFL(         this, SW_RES( FL_THIRD ) ),
     m_aFourthFI(        this, SW_RES( FI_FOURTH ) ),
     m_aPreviewFI(       this, SW_RES( FI_PREVIEW     ) ),
     m_aPreviewWIN(      this, SW_RES( WIN_PREVIEW    ) ),
-    m_aAssignPB(        this, SW_RES( PB_ASSIGN      ) ),
     m_aDocumentIndexFI( this, SW_RES( FI_DOCINDEX    ) ),
     m_aPrevSetIB(       this, SW_RES( IB_PREVSET     ) ),
     m_aNextSetIB(       this, SW_RES( IB_NEXTSET     ) ),
-    m_sDocument(        SW_RES(       STR_DOCUMENT  ) ),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
+    m_sDocument(        SW_RES(       STR_DOCUMENT  ) ),
     m_sChangeAddress(   SW_RES(      STR_CHANGEADDRESS )),
     m_pWizard(_pParent)
 {
@@ -214,7 +214,7 @@ sal_Bool    SwMailMergeAddressBlockPage::commitPage(COMMIT_REASON _eReason)
 /*-- 07.04.2004 16:19:30---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK(SwMailMergeAddressBlockPage, AddressListHdl_Impl, PushButton*, pButton)
+IMPL_LINK(SwMailMergeAddressBlockPage, AddressListHdl_Impl, PushButton*, EMPTYARG)
 {
     SwAddressListDialog* pAddrDialog = new SwAddressListDialog(this);
     if(RET_OK == pAddrDialog->Execute())
@@ -402,14 +402,14 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
 SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
                 Window* pParent, SwMailMergeConfigItem& rConfig) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_SELECTADDRESSBLOCK)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aSelectFT( this, SW_RES(         FT_SELECT)),
     m_aPreview( this, SW_RES(          WIN_PREVIEW)),
     m_aNewPB( this, SW_RES(            PB_NEW)),
-    m_aDeletePB( this, SW_RES(         PB_DELETE)),
     m_aCustomizePB( this, SW_RES(      PB_CUSTOMIZE)),
+    m_aDeletePB( this, SW_RES(         PB_DELETE)),
     m_aSettingsFI( this, SW_RES(       FI_SETTINGS)),
     m_aNeverRB( this, SW_RES(          RB_NEVER)),
     m_aAlwaysRB( this, SW_RES(         RB_ALWAYS)),
@@ -419,7 +419,7 @@ SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
     m_aOK( this, SW_RES(               PB_OK)),
     m_aCancel( this, SW_RES(           PB_CANCEL)),
     m_aHelp( this, SW_RES(             PB_HELP)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
     m_rConfig(rConfig)
@@ -630,7 +630,7 @@ void SwRestrictedComboBox::Modify()
 SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
         Window* pParent, SwMailMergeConfigItem& rConfig, DialogType eType) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_CUSTOMIZEADDRESSBLOCK)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aAddressElementsFT( this, SW_RES(       FT_ADDRESSELEMENTS             )),
@@ -651,11 +651,11 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     m_aOK( this, SW_RES(                      PB_OK                          )),
     m_aCancel( this, SW_RES(                  PB_CANCEL                      )),
     m_aHelp( this, SW_RES(                    PB_HELP                        )),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
-    m_eType(eType),
-    m_rConfigItem(rConfig)
+    m_rConfigItem(rConfig),
+    m_eType(eType)
 {
     m_aFieldCB.SetForbiddenChars( String::CreateFromAscii("<>"));
     m_aDragED.SetStyle(m_aDragED.GetStyle() |WB_NOHIDESELECTION);
@@ -857,7 +857,6 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiL
     if(m_aFieldCB.IsVisible() && (USER_DATA_NONE != nSelected) && (nSelected < 0))
     {
         //search in ListBox if it's one of the first entries
-        sal_Bool bFound = sal_False;
         String sSelect;
         ::std::vector<String>* pVector = 0;
         switch(nSelected) {
@@ -1085,19 +1084,19 @@ public:
 SwAssignFieldsControl::SwAssignFieldsControl(
         Window* pParent, const ResId& rResId, SwMailMergeConfigItem& rConfigItem) :
     Control(pParent, rResId),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aVScroll(this,  ResId(SCR_1, *rResId.GetResMgr()     )),
     m_aHeaderHB(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
     m_aWindow(this, ResId(WIN_DATA, *rResId.GetResMgr())),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
     m_rConfigItem(rConfigItem),
     m_nLBStartTopPos(0),
-    m_nFirstYPos(0),
-    m_nYOffset(0)
+    m_nYOffset(0),
+    m_nFirstYPos(0)
 {
     SetStyle(GetStyle()|WB_TABSTOP|WB_DIALOGCONTROL);
     SetHelpId(HID_MM_ASSIGN_FIELDS);
@@ -1140,7 +1139,6 @@ SwAssignFieldsControl::SwAssignFieldsControl(
         pNewLB->SelectEntryPos(0);
         for(sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
             pNewLB->InsertEntry(pFields[nField]);
-
         FixedInfo* pNewPreview = new FixedInfo(&m_aWindow, ResId( FT_PREVIEW, *rResId.GetResMgr() ));
         //select the ListBox
         //if there is an assignment
@@ -1160,9 +1158,8 @@ SwAssignFieldsControl::SwAssignFieldsControl(
                 {
                     pNewPreview->SetText(xColumn->getString());
                 }
-                catch(SQLException& rEx)
+                catch(SQLException& )
                 {
-                    rEx;
                 }
         }
         if(!i)
@@ -1361,7 +1358,7 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
         const ::rtl::OUString& rPreview,
         bool bIsAddressBlock) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_ASSIGNFIELDS)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aMatchingFI( this, SW_RES(     FI_MATCHING)),
@@ -1372,12 +1369,12 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
     m_aOK( this, SW_RES(             PB_OK       )),
     m_aCancel( this, SW_RES(         PB_CANCEL   )),
     m_aHelp( this, SW_RES(           PB_HELP     )),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
     m_sNone(SW_RES(ST_NONE)),
-    m_rConfigItem(rConfigItem),
-    m_rPreviewString(rPreview)
+    m_rPreviewString(rPreview),
+    m_rConfigItem(rConfigItem)
 {
     //resize the HeaderBar
     String sAddressElement(  SW_RES(ST_ADDRESSELEMENT ));
@@ -1487,7 +1484,7 @@ DDListBox::~DDListBox()
 /*-- 26.05.2004 11:20:16---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void  DDListBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void  DDListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
 {
     SvLBoxEntry* pEntry = GetCurEntry();
     if(pEntry)
@@ -1537,7 +1534,7 @@ AddressMultiLineEdit::~AddressMultiLineEdit()
 /*-- 25.06.2004 13:02:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void    AddressMultiLineEdit::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void    AddressMultiLineEdit::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if(rHint.ISA(TextHint) &&
             static_cast<const TextHint&>(rHint).GetId() == TEXT_HINT_VIEWSELECTIONCHANGED &&
@@ -1646,7 +1643,7 @@ void AddressMultiLineEdit::InsertNewEntry( const String& rStr )
     USHORT nIndex = rSelection.GetEnd().GetIndex();
     ExtTextEngine *pTextEngine = GetTextEngine();
     const TextCharAttrib *pAttrib;
-    if(pAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED ))
+    if(0 != (pAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED )))
         nIndex = pAttrib->GetEnd();
     InsertNewEntryAtPosition( rStr, nPara, nIndex );
 
@@ -1682,7 +1679,7 @@ void AddressMultiLineEdit::RemoveCurrentEntry()
     ExtTextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
     const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
-    const TextCharAttrib* pEndAttrib = pTextEngine->FindCharAttrib( rSelection.GetEnd(), TEXTATTR_PROTECTED );
+//    const TextCharAttrib* pEndAttrib = pTextEngine->FindCharAttrib( rSelection.GetEnd(), TEXTATTR_PROTECTED );
     if(pBeginAttrib &&
             (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
@@ -1704,7 +1701,6 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
     ExtTextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
     const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
-    const TextCharAttrib* pEndAttrib = pTextEngine->FindCharAttrib( rSelection.GetEnd(), TEXTATTR_PROTECTED );
     if(pBeginAttrib &&
             (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
@@ -1737,7 +1733,7 @@ void AddressMultiLineEdit::MoveCurrentItem(sal_uInt16 nMove)
             {
                 //go right to find a successor or simple text
                 ++nIndex;
-                pEndAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
+                const TextCharAttrib* pEndAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
                 if(pEndAttrib && pEndAttrib->GetEnd() >= nIndex)
                 {
                     nIndex = pEndAttrib->GetEnd();
@@ -1818,7 +1814,6 @@ String AddressMultiLineEdit::GetCurrentItem()
     ExtTextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
     const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
-    const TextCharAttrib* pEndAttrib = pTextEngine->FindCharAttrib( rSelection.GetEnd(), TEXTATTR_PROTECTED );
     if(pBeginAttrib &&
             (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
@@ -1838,7 +1833,6 @@ void AddressMultiLineEdit::SelectCurrentItem()
     ExtTextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
     const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
-    const TextCharAttrib* pEndAttrib = pTextEngine->FindCharAttrib( rSelection.GetEnd(), TEXTATTR_PROTECTED );
     if(pBeginAttrib &&
             (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
