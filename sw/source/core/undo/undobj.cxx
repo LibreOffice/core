@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:28:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:30:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ public:
 SV_IMPL_PTRARR( SwUndos, SwUndo*)
 SV_IMPL_PTRARR( SwRedlineSaveDatas, SwRedlineSaveDataPtr )
 
-SwUndoIter::SwUndoIter( SwPaM* pPam, USHORT nId )
+SwUndoIter::SwUndoIter( SwPaM* pPam, SwUndoId nId )
 {
     nUndoId = nId;
     bWeiter = nId ? TRUE : FALSE;
@@ -238,9 +238,9 @@ void SwUndo::RemoveIdxRel( ULONG nIdx, const SwPosition& rPos )
     ::PaMCorrRel( aIdx, rPos );
 }
 
-SwUndo::SwUndo( USHORT nI )
-    : nId(nI), nOrigRedlineMode(IDocumentRedlineAccess::REDLINE_NONE), pComment(NULL),
-      bCacheComment(true)
+SwUndo::SwUndo( SwUndoId nI )
+    : nId(nI), nOrigRedlineMode(nsRedlineMode_t::REDLINE_NONE),
+      bCacheComment(true), pComment(NULL)
 {
 }
 
@@ -289,7 +289,7 @@ String SwUndo::GetComment() const
     return aResult;
 }
 
-USHORT SwUndo::GetEffectiveId() const
+SwUndoId SwUndo::GetEffectiveId() const
 {
     return GetId();
 }
@@ -536,7 +536,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
     pDoc->DoUndo( FALSE );
 
     // 1. Fussnoten
-    if( DELCNT_FTN & nDelCntntType )
+    if( nsDelCntntType::DELCNT_FTN & nDelCntntType )
     {
         SwFtnIdxs& rFtnArr = pDoc->GetFtnIdxs();
         if( rFtnArr.Count() )
@@ -552,7 +552,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         <= pEnd->nNode.GetIndex() )
             {
                 xub_StrLen nFtnSttIdx = *pSrch->GetStart();
-                if( (DELCNT_CHKNOCNTNT & nDelCntntType )
+                if( (nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType )
                     ? (&pEnd->nNode.GetNode() == pFtnNd )
                     : (( &pStt->nNode.GetNode() == pFtnNd &&
                     pStt->nContent.GetIndex() > nFtnSttIdx) ||
@@ -579,7 +579,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     GetTxtNode())->GetIndex() >= pStt->nNode.GetIndex() )
             {
                 xub_StrLen nFtnSttIdx = *pSrch->GetStart();
-                if( !(DELCNT_CHKNOCNTNT & nDelCntntType) && (
+                if( !(nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType) && (
                     ( &pStt->nNode.GetNode() == pFtnNd &&
                     pStt->nContent.GetIndex() > nFtnSttIdx ) ||
                     ( &pEnd->nNode.GetNode() == pFtnNd &&
@@ -601,7 +601,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
     }
 
     // 2. Flys
-    if( DELCNT_FLY & nDelCntntType )
+    if( nsDelCntntType::DELCNT_FLY & nDelCntntType )
     {
         USHORT nChainInsPos = pHistory ? pHistory->Count() : 0;
         const SwSpzFrmFmts& rSpzArr = *pDoc->GetSpzFrmFmts();
@@ -621,7 +621,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                 {
                 case FLY_IN_CNTNT:
                     if( 0 != (pAPos = pAnchor->GetCntntAnchor() ) &&
-                        (( DELCNT_CHKNOCNTNT & nDelCntntType )
+                        (( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType )
                         ? ( pStt->nNode <= pAPos->nNode &&
                             pAPos->nNode < pEnd->nNode )
                         : ( *pStt <= *pAPos && *pAPos < *pEnd )) )
@@ -642,7 +642,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         if( pAPos )
                         {
                             bool bTmp;
-                            if( DELCNT_CHKNOCNTNT & nDelCntntType )
+                            if( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType )
                                 bTmp = pStt->nNode <= pAPos->nNode && pAPos->nNode < pEnd->nNode;
                             else
                             {
@@ -660,7 +660,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                                     pHistory = new SwHistory;
 
                                 // Moving the anchor?
-                                if( !( DELCNT_CHKNOCNTNT & nDelCntntType ) &&
+                                if( !( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType ) &&
                                     ( rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex() ) )
                                 {
                                     // Do not try to move the anchor to a table!
@@ -692,7 +692,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         if( !pHistory )
                             pHistory = new SwHistory;
                         if( pAPos->nNode < pEnd->nNode &&
-                            ( ( DELCNT_CHKNOCNTNT & nDelCntntType ) ||
+                            ( ( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType ) ||
                               ( pStt->nNode < pAPos->nNode || !pStt->nContent.GetIndex() ) ) )
                         {
                             // Here we identified the objects to destroy:
@@ -702,7 +702,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                             pHistory->Add( *pFmt, nChainInsPos );
                             n = n >= rSpzArr.Count() ? rSpzArr.Count() : n+1;
                         }
-                        else if( !( DELCNT_CHKNOCNTNT & nDelCntntType ) )
+                        else if( !( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType ) )
                         {
                             if( *pStt <= *pAPos && *pAPos < *pEnd )
                             {
@@ -734,13 +734,14 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         n = n >= rSpzArr.Count() ? rSpzArr.Count() : n+1;
                     }
                     break;
+                default: break;
                 }
             }
         }
     }
 
     // 3. Bookmarks
-    if( DELCNT_BKM & nDelCntntType )
+    if( nsDelCntntType::DELCNT_BKM & nDelCntntType )
     {
         const SwBookmarks& rBkmkTbl = pDoc->getBookmarks();
         if( rBkmkTbl.Count() )
@@ -750,7 +751,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
             for( USHORT n = 0; n < rBkmkTbl.Count(); ++n )
             {
                 BYTE nTyp = 0;
-                if( ( DELCNT_CHKNOCNTNT & nDelCntntType )
+                if( ( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType )
                     ? (pStt->nNode <= ( pBkmk = rBkmkTbl[ n ])->GetPos().nNode &&
                                     pBkmk->GetPos().nNode < pEnd->nNode )
                     : (*pStt <= ( pBkmk = rBkmkTbl[ n ])->GetPos() &&
@@ -758,7 +759,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     nTyp = SwHstryBookmark::BKMK_POS;
 
                 if( pBkmk->GetOtherPos() &&
-                    (( DELCNT_CHKNOCNTNT & nDelCntntType )
+                    (( nsDelCntntType::DELCNT_CHKNOCNTNT & nDelCntntType )
                     ? (pStt->nNode <= pBkmk->GetOtherPos()->nNode &&
                         pBkmk->GetOtherPos()->nNode < pEnd->nNode )
                     : ( *pStt <= *pBkmk->GetOtherPos() &&
@@ -788,7 +789,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
 // sicher eine vollstaendige Section im Undo-Nodes-Array
 
 SwUndoSaveSection::SwUndoSaveSection()
-    : nStartPos( ULONG_MAX ), pMvStt( 0 ), nMvLen( 0 ), pRedlSaveData( 0 )
+    : pMvStt( 0 ), pRedlSaveData( 0 ), nMvLen( 0 ), nStartPos( ULONG_MAX )
 {
 }
 
@@ -812,7 +813,7 @@ void SwUndoSaveSection::SaveSection( SwDoc* pDoc, const SwNodeIndex& rSttIdx )
 }
 
 
-void SwUndoSaveSection::SaveSection( SwDoc* pDoc, const SwNodeRange& rRange )
+void SwUndoSaveSection::SaveSection( SwDoc* , const SwNodeRange& rRange )
 {
     SwPaM aPam( rRange.aStart, rRange.aEnd );
 
@@ -885,8 +886,8 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos 
 }
 
 // START
-SwUndoStart::SwUndoStart( USHORT nId )
-    : SwUndo( UNDO_START ), nUserId( nId ), nEndOffset( 0 )
+SwUndoStart::SwUndoStart( SwUndoId nInitId )
+    : SwUndo( UNDO_START ), nUserId( nInitId ), nEndOffset( 0 )
 {
 }
 
@@ -934,7 +935,7 @@ SwRewriter SwUndoStart::GetRewriter() const
     return mRewriter;
 }
 
-USHORT SwUndoStart::GetEffectiveId() const
+SwUndoId SwUndoStart::GetEffectiveId() const
 {
     return GetUserId();
 }
@@ -945,8 +946,8 @@ void SwUndoStart::SetRewriter(const SwRewriter & rRewriter)
 }
 
 // END
-SwUndoEnd::SwUndoEnd( USHORT nId )
-    : SwUndo( UNDO_END ), nUserId( nId ), nSttOffset( 0 )
+SwUndoEnd::SwUndoEnd( SwUndoId nInitId )
+    : SwUndo( UNDO_END ), nUserId( nInitId ), nSttOffset( 0 )
 {
 }
 
@@ -995,7 +996,7 @@ void SwUndoEnd::SetRewriter(const SwRewriter & rRewriter)
     mRewriter = rRewriter;
 }
 
-USHORT SwUndoEnd::GetEffectiveId() const
+SwUndoId SwUndoEnd::GetEffectiveId() const
 {
     return GetUserId();
 }
@@ -1081,8 +1082,8 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     // naehmlich das gerade restaurierte wieder geloescht - nicht das gewollte
     rDoc.DeleteRedline( *pRedl, false, USHRT_MAX );
 
-    IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
-    rDoc.SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld | IDocumentRedlineAccess::REDLINE_DONTCOMBINE_REDLINES));
+    RedlineMode_t eOld = rDoc.GetRedlineMode();
+    rDoc.SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_DONTCOMBINE_REDLINES));
     rDoc.AppendRedline( pRedl, true );
     rDoc.SetRedlineMode_intern( eOld );
 }
@@ -1130,7 +1131,7 @@ BOOL SwUndo::FillSaveDataForFmt( const SwPaM& rRange, SwRedlineSaveDatas& rSData
     for( ; n < rTbl.Count(); ++n )
     {
         SwRedline* pRedl = rTbl[ n ];
-        if( IDocumentRedlineAccess::REDLINE_FORMAT == pRedl->GetType() )
+        if( nsRedlineType_t::REDLINE_FORMAT == pRedl->GetType() )
         {
             const SwPosition *pRStt = pRedl->Start(), *pREnd = pRedl->End();
 
@@ -1151,8 +1152,8 @@ BOOL SwUndo::FillSaveDataForFmt( const SwPaM& rRange, SwRedlineSaveDatas& rSData
 
 void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
 {
-    IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
-    rDoc.SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE) | IDocumentRedlineAccess::REDLINE_ON ));
+    RedlineMode_t eOld = rDoc.GetRedlineMode();
+    rDoc.SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
     SwPaM aPam( rDoc.GetNodes().GetEndOfContent() );
 
     for( USHORT n = rSData.Count(); n; )
@@ -1213,28 +1214,28 @@ BOOL SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
 }
 
 // #111827#
-String ShortenString(const String & rStr, int aLength, const String & rFillStr)
+String ShortenString(const String & rStr, xub_StrLen nLength, const String & rFillStr)
 {
-    if (aLength - rFillStr.Len() < 2)
-        ASSERT(0, "improper arguments");
+    ASSERT( nLength - rFillStr.Len() >= 2, "improper arguments")
 
     String aResult;
 
-    if (rStr.Len() <= aLength)
+    if (rStr.Len() <= nLength)
         aResult = rStr;
     else
     {
-        aLength -= rFillStr.Len();
+        long nTmpLength = nLength - rFillStr.Len();
+        if ( nTmpLength < 2 )
+            nTmpLength = 2;
 
-        if (aLength < 2)
-            aLength = 2;
+        nLength = static_cast<xub_StrLen>(nTmpLength);
 
-        int aFrontLen = aLength - aLength / 2;
-        int aBackLen = aLength - aFrontLen;
+        const xub_StrLen nFrontLen = nLength - nLength / 2;
+        const xub_StrLen nBackLen = nLength - nFrontLen;
 
-        aResult += rStr.Copy(0, aFrontLen);
+        aResult += rStr.Copy(0, nFrontLen);
         aResult += rFillStr;
-        aResult += rStr.Copy(rStr.Len() - aBackLen, aBackLen);
+        aResult += rStr.Copy(rStr.Len() - nBackLen, nBackLen);
     }
 
     return aResult;
