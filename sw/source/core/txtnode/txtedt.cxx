@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 13:57:16 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:28:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,6 +176,8 @@
 #include <fmtautofmt.hxx>
 #include <istyleaccess.hxx>
 
+#include <unomid.h>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::beans;
@@ -216,7 +218,7 @@ USHORT lcl_MaskRedlines( const SwTxtNode& rNode, XubString& rText,
         if ( pRed->Start()->nNode > rNode.GetIndex() )
             break;
 
-        if( IDocumentRedlineAccess::REDLINE_DELETE == pRed->GetType() )
+        if( nsRedlineType_t::REDLINE_DELETE == pRed->GetType() )
         {
             xub_StrLen nRedlineEnd;
             xub_StrLen nRedlineStart;
@@ -254,7 +256,7 @@ USHORT lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, XubString& rText,
     USHORT nHiddenCharsMasked = 0;
 
     const SwDoc& rDoc = *rNode.GetDoc();
-    const sal_Bool bShowChg = IDocumentRedlineAccess::IsShowChanges( rDoc.GetRedlineMode() );
+    const bool bShowChg = 0 != IDocumentRedlineAccess::IsShowChanges( rDoc.GetRedlineMode() );
 
     // If called from word count or from spell checking, deleted redlines
     // should be masked:
@@ -536,8 +538,8 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
         return;
 
     USHORT i = 0;
-    xub_StrLen nStart = rIdx.GetIndex();
-    xub_StrLen nEnd = nStart + nLen;
+    xub_StrLen nStt = rIdx.GetIndex();
+    xub_StrLen nEnd = nStt + nLen;
     xub_StrLen *pAttrEnd;
     xub_StrLen nAttrStart;
     SwTxtAttr *pHt;
@@ -546,7 +548,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
     // nMin und nMax werden invers auf das Maximum bzw. Minimum gesetzt.
     xub_StrLen nMin = aText.Len();
-    xub_StrLen nMax = nStart;
+    xub_StrLen nMax = nStt;
 
     const BOOL bNoLen = !nMin;
 
@@ -611,7 +613,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
         }
 
 
-        if( nStart <= nAttrStart )          // Faelle: 1,3,5
+        if( nStt <= nAttrStart )          // Faelle: 1,3,5
         {
             if( nEnd > nAttrStart
                 || ( nEnd == *pAttrEnd && nEnd==nAttrStart ) )
@@ -634,7 +636,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                     if ( pStyleHandle.get() )
                     {
                         SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nAttrStart, nAttrEnd );
-                        Insert( pNew, SETATTR_NOHINTADJUST );
+                        Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
 
                     // falls das letzte Attribut ein Field ist, loescht
@@ -661,7 +663,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                     if ( pStyleHandle.get() && nAttrStart < nEnd )
                     {
                         SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nAttrStart, nEnd );
-                        Insert( pNew, SETATTR_NOHINTADJUST );
+                        Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
 
                     bChanged = TRUE;
@@ -669,7 +671,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
             }
         }
         else                                // Faelle: 2,4,5
-            if( *pAttrEnd > nStart )        // Faelle: 2,4
+            if( *pAttrEnd > nStt )     // Faelle: 2,4
             {
                 if( *pAttrEnd < nEnd )      // Fall: 2
                 {
@@ -682,13 +684,13 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                     const xub_StrLen nAttrEnd = *pAttrEnd;
 
                     pSwpHints->NoteInHistory( pHt );
-                    *pAttrEnd = nStart;
+                    *pAttrEnd = nStt;
                     pSwpHints->NoteInHistory( pHt, TRUE );
 
                     if ( pStyleHandle.get() )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nStart, nAttrEnd );
-                        Insert( pNew, SETATTR_NOHINTADJUST );
+                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, static_cast< xub_StrLen >(nStart), nAttrEnd );
+                        Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
                 }
                 else if( nLen )             // Fall: 4
@@ -701,18 +703,18 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
                     bChanged = TRUE;
                     xub_StrLen nTmpEnd = *pAttrEnd;
                     pSwpHints->NoteInHistory( pHt );
-                    *pAttrEnd = nStart;
+                    *pAttrEnd = nStt;
                     pSwpHints->NoteInHistory( pHt, TRUE );
 
                     if ( pStyleHandle.get() && nStart < nEnd )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nStart, nEnd );
-                        Insert( pNew, SETATTR_NOHINTADJUST );
+                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, static_cast< xub_StrLen >(nStart), nEnd );
+                        Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
 
                     if( nEnd < nTmpEnd )
                     {
-                         InsertItem( pHt->GetAttr(), nEnd, nTmpEnd, SETATTR_NOHINTADJUST );
+                         InsertItem( pHt->GetAttr(), nEnd, nTmpEnd, nsSetAttrMode::SETATTR_NOHINTADJUST );
                         // jetzt kein i+1, weil das eingefuegte Attribut
                         // ein anderes auf die Position geschoben hat !
                         continue;
@@ -768,6 +770,8 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
 #ifdef DEBUG
         BOOL bBegin = rxBreak->isBeginWord( aText, nPos, aLocale, nWordType );
         BOOL bEnd   = rxBreak->isEndWord  ( aText, nPos, aLocale, nWordType );
+        (void)bBegin;
+        (void)bEnd;
 #endif
         aBndry = rxBreak->getWordBoundary( aText, nPos, aLocale, nWordType, TRUE );
 
@@ -787,8 +791,7 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
 
 SwScanner::SwScanner( const SwTxtNode& rNd,
                       USHORT nType, xub_StrLen nStart, xub_StrLen nEnde, BOOL bClp )
-    : rNode( rNd ), nWordType( nType ), nLen( 0 ),
-      bClip( bClp )
+    : rNode( rNd ), nLen( 0 ), nWordType( nType ), bClip( bClp )
 {
     ASSERT( rNd.GetTxt().Len(), "SwScanner: EmptyString" );
     nStartPos = nBegin = nStart;
@@ -797,15 +800,14 @@ SwScanner::SwScanner( const SwTxtNode& rNd,
     aCurrLang = rNd.GetLang( nBegin );
 }
 
-
 BOOL SwScanner::NextWord()
 {
-    nBegin += nLen;
+    nBegin = nBegin + nLen;
     const XubString& rText = rNode.GetTxt();
     Boundary aBound;
 
     CharClass& rCC = GetAppCharClass();
-    ::com::sun::star::lang::Locale aOldLocale = rCC.getLocale();
+    lang::Locale aOldLocale = rCC.getLocale();
 
     while ( true )
     {
@@ -1093,7 +1095,7 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
 
     sal_Bool    bFound  = sal_False;
     xub_StrLen  nBegin  = nTextBegin;
-    xub_StrLen  nLen;
+    xub_StrLen  nLen = 0;
     LanguageType nLangFound = LANGUAGE_NONE;
     if (!aText.Len())
     {
@@ -1279,7 +1281,6 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
             LanguageType eActLang = aScanner.GetCurrentLanguage();
 
             BOOL bSpell = TRUE;
-            BOOL bSoft = FALSE;
             bSpell = xSpell.is() ? xSpell->hasLanguage( eActLang ) : FALSE;
             if( bSpell && rWord.Len() > 0 )
             {
@@ -1366,7 +1367,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
 
     @return SwRect: Repaint area
 */
-SwRect SwTxtFrm::SmartTagScan( SwCntntNode* pActNode, xub_StrLen nActPos )
+SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/ )
 {
     SwRect aRet;
     SwTxtNode *pNode = GetTxtNode();
@@ -1378,7 +1379,7 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* pActNode, xub_StrLen nActPos )
     SwWrongList* pSmartTagList = pNode->GetSmartTags();
 
     xub_StrLen nBegin = 0;
-    xub_StrLen nEnd = rText.getLength();
+    xub_StrLen nEnd = static_cast< xub_StrLen >(rText.getLength());
 
     if ( pSmartTagList )
     {
@@ -1391,8 +1392,8 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* pActNode, xub_StrLen nActPos )
             {
                 const LanguageType aCurrLang = pNode->GetLang( nBegin );
                 const com::sun::star::lang::Locale aCurrLocale = pBreakIt->GetLocale( aCurrLang );
-                nBegin = pBreakIt->xBreak->beginOfSentence( rText, nBegin, aCurrLocale );
-                nEnd = Min( rText.getLength(), pBreakIt->xBreak->endOfSentence( rText, nEnd, aCurrLocale ) );
+                nBegin = static_cast< xub_StrLen >(pBreakIt->xBreak->beginOfSentence( rText, nBegin, aCurrLocale ));
+                nEnd = static_cast< xub_StrLen >(Min( rText.getLength(), pBreakIt->xBreak->endOfSentence( rText, nEnd, aCurrLocale ) ));
             }
         }
     }
@@ -1465,7 +1466,10 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* pActNode, xub_StrLen nActPos )
         //
         // Calculate repaint area:
         //
-        const USHORT nNumberOfEntriesAfterRecognize = pSmartTagList->Count();
+#if OSL_DEBUG_LEVEL > 1
+        const USHORT nNumberOfEntriesAfterRecognize2 = pSmartTagList->Count();
+        (void) nNumberOfEntriesAfterRecognize2;
+#endif
         if ( nBegin < nEnd && ( 0 != nNumberOfRemovedEntries ||
                                 0 != nNumberOfInsertedEntries ) )
         {
@@ -1661,13 +1665,13 @@ void SwLinguStatistik::Flush()
 
 // change text to Upper/Lower/Hiragana/Katagana/...
 void SwTxtNode::TransliterateText( utl::TransliterationWrapper& rTrans,
-        xub_StrLen nStart, xub_StrLen nEnd, SwUndoTransliterate* pUndo )
+        xub_StrLen nStt, xub_StrLen nEnd, SwUndoTransliterate* pUndo )
 {
-    if( nStart < nEnd )
+    if( nStt < nEnd )
     {
         SwLanguageIterator* pIter;
         if( rTrans.needLanguageForTheMode() )
-            pIter = new SwLanguageIterator( *this, nStart );
+            pIter = new SwLanguageIterator( *this, nStt );
         else
             pIter = 0;
 
@@ -1686,18 +1690,18 @@ void SwTxtNode::TransliterateText( utl::TransliterationWrapper& rTrans,
                 nLang = LANGUAGE_SYSTEM;
                 nEndPos = nEnd;
             }
-            xub_StrLen nLen = nEndPos - nStart;
+            xub_StrLen nLen = nEndPos - nStt;
 
             Sequence <sal_Int32> aOffsets;
-            String sChgd( rTrans.transliterate( aText, nLang, nStart, nLen,
+            String sChgd( rTrans.transliterate( aText, nLang, nStt, nLen,
                                                     &aOffsets ));
-            if( !aText.Equals( sChgd, nStart, nLen ) )
+            if( !aText.Equals( sChgd, nStt, nLen ) )
             {
                 if( pUndo )
-                    pUndo->AddChanges( *this, nStart, nLen, aOffsets );
-                ReplaceTextOnly( nStart, nLen, sChgd, aOffsets );
+                    pUndo->AddChanges( *this, nStt, nLen, aOffsets );
+                ReplaceTextOnly( nStt, nLen, sChgd, aOffsets );
             }
-            nStart = nEndPos;
+            nStt = nEndPos;
         } while( nEndPos < nEnd && pIter && pIter->Next() );
         delete pIter;
     }
@@ -1749,9 +1753,9 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
 }
 
 void SwTxtNode::CountWords( SwDocStat& rStat,
-                            xub_StrLen nStart, xub_StrLen nEnd ) const
+                            xub_StrLen nStt, xub_StrLen nEnd ) const
 {
-    if( nStart < nEnd )
+    if( nStt < nEnd )
     {
         if ( !IsHidden() )
         {
@@ -1761,7 +1765,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
 
             // Shortcut: Whole paragraph should be considered and cached values
             // are valid:
-            if ( 0 == nStart && GetTxt().Len() == nEnd && !IsWordCountDirty() )
+            if ( 0 == nStt && GetTxt().Len() == nEnd && !IsWordCountDirty() )
             {
                 nTmpWords = GetParaNumberOfWords();
                 nTmpChars = GetParaNumberOfChars();
@@ -1774,14 +1778,14 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
                 // fills the deleted redlines and hidden ranges with cChar:
                 const xub_Unicode cChar(' ');
                 const USHORT nNumOfMaskedChars =
-                        lcl_MaskRedlinesAndHiddenText( *this, rWordStr, nStart, nEnd, cChar, false );
+                        lcl_MaskRedlinesAndHiddenText( *this, rWordStr, nStt, nEnd, cChar, false );
 
 
                 if( rWordStr.Len() && pBreakIt->xBreak.is() )
                 {
                     SwScanner aScanner( *this,
-                                        ::com::sun::star::i18n::WordType::WORD_COUNT,
-                                        nStart, nEnd );
+                                        i18n::WordType::WORD_COUNT,
+                                        nStt, nEnd );
 
                     while ( aScanner.NextWord() )
                     {
@@ -1793,12 +1797,12 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
 
                 ASSERT( rWordStr.Len() >= nNumOfMaskedChars,
                         "More characters hidden that characters in string!" )
-                nTmpChars = nEnd - nStart - nNumOfMaskedChars;
+                nTmpChars = nEnd - nStt - nNumOfMaskedChars;
                 rWordStr = aOldStr;
 
                 // If the whole paragraph has been calculated, update cached
                 // values:
-                if ( 0 == nStart && GetTxt().Len() == nEnd )
+                if ( 0 == nStt && GetTxt().Len() == nEnd )
                 {
                     SetParaNumberOfWords( nTmpWords );
                     SetParaNumberOfChars( nTmpChars );
