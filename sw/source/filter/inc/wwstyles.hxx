@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wwstyles.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-26 18:19:07 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,7 +225,7 @@ namespace ww
         <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
     */
     bool StandardStiIsCharStyle(sti eSti) throw();
-};
+} // namespace ww
 
 #endif
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
