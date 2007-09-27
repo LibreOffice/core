@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellfml.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:42:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:47:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,8 +300,8 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
 // Struktur, die zum TabelleRechnen benoetigt wird
 
 SwTblCalcPara::SwTblCalcPara( SwCalc& rCalculator, const SwTable& rTable )
-    : rCalc( rCalculator ), pTbl( &rTable ), nStackCnt( 0 ),
-    nMaxSize( cMAXSTACKSIZE ), pLastTblBox( 0 )
+    : pLastTblBox( 0 ), nStackCnt( 0 ), nMaxSize( cMAXSTACKSIZE ),
+    rCalc( rCalculator ), pTbl( &rTable )
 {
     pBoxStk = new SwTableSortBoxes;
 }
@@ -376,14 +376,14 @@ void SwTableFormula::_MakeFormel( const SwTable& rTbl, String& rNewStr,
     // ein Bereich in dieser Klammer ?
     if( pLastBox )
     {
-        pEndBox = (SwTableBox*)pLastBox->ToInt64();
+        pEndBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(pLastBox->ToInt64()));
 
         // ist das ueberhaupt ein gueltiger Pointer ??
         if( !rTbl.GetTabSortBoxes().Seek_Entry( pEndBox ))
             pEndBox = 0;
         rFirstBox.Erase( 0, pLastBox->Len()+1 );
     }
-    pSttBox = (SwTableBox*)rFirstBox.ToInt64();
+    pSttBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(rFirstBox.ToInt64()));
     // ist das ueberhaupt ein gueltiger Pointer ??
     if( !rTbl.GetTabSortBoxes().Seek_Entry( pSttBox ))
         pSttBox = 0;
@@ -532,7 +532,7 @@ void SwTableFormula::PtrToBoxNms( const SwTable& rTbl, String& rNewStr,
     rFirstBox.Erase(0,1);
     if( pLastBox )
     {
-        pBox = (SwTableBox*)pLastBox->ToInt64();
+        pBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(pLastBox->ToInt64()));
 
         // ist das ueberhaupt ein gueltiger Pointer ??
         if( rTbl.GetTabSortBoxes().Seek_Entry( pBox ))
@@ -543,7 +543,7 @@ void SwTableFormula::PtrToBoxNms( const SwTable& rTbl, String& rNewStr,
         rFirstBox.Erase( 0, pLastBox->Len()+1 );
     }
 
-    pBox = (SwTableBox*)rFirstBox.ToInt64();
+    pBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(rFirstBox.ToInt64()));
     // ist das ueberhaupt ein gueltiger Pointer ??
     if( rTbl.GetTabSortBoxes().Seek_Entry( pBox ))
         rNewStr += pBox->GetName();
@@ -900,7 +900,7 @@ String lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
     if( !bExtrnlNm )
     {
         // in die Externe Darstellung umwandeln.
-        SwTableBox* pBox = (SwTableBox*)sTmp.ToInt64();
+        SwTableBox* pBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(sTmp.ToInt64()));
         if( !rTbl.GetTabSortBoxes().Seek_Entry( pBox ))
             return '?';
         sTmp = pBox->GetName();
@@ -946,7 +946,7 @@ USHORT SwTableFormula::GetBoxesOfFormula( const SwTable& rTbl,
     return rBoxes.Count();
 }
 
-void SwTableFormula::_GetFmlBoxes( const SwTable& rTbl, String& rNewStr,
+void SwTableFormula::_GetFmlBoxes( const SwTable& rTbl, String& ,
                     String& rFirstBox, String* pLastBox, void* pPara ) const
 {
     SwSelBoxes* pBoxes = (SwSelBoxes*)pPara;
@@ -956,7 +956,7 @@ void SwTableFormula::_GetFmlBoxes( const SwTable& rTbl, String& rNewStr,
     // ein Bereich in dieser Klammer ?
     if( pLastBox )
     {
-        pEndBox = (SwTableBox*)pLastBox->ToInt64();
+        pEndBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(pLastBox->ToInt64()));
 
         // ist das ueberhaupt ein gueltiger Pointer ??
         if( !rTbl.GetTabSortBoxes().Seek_Entry( pEndBox ))
@@ -964,7 +964,7 @@ void SwTableFormula::_GetFmlBoxes( const SwTable& rTbl, String& rNewStr,
         rFirstBox.Erase( 0, pLastBox->Len()+1 );
     }
 
-    pSttBox = (SwTableBox*)rFirstBox.ToInt64();
+    pSttBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(rFirstBox.ToInt64()));
     // ist das ueberhaupt ein gueltiger Pointer ??
     if( !rTbl.GetTabSortBoxes().Seek_Entry( pSttBox ))
         pSttBox = 0;
@@ -1037,13 +1037,13 @@ void SwTableFormula::GetBoxes( const SwTableBox& rSttBox,
 }
 
     // sind alle Boxen gueltig, auf die sich die Formel bezieht?
-void SwTableFormula::_HasValidBoxes( const SwTable& rTbl, String& rNewStr,
+void SwTableFormula::_HasValidBoxes( const SwTable& rTbl, String& ,
                     String& rFirstBox, String* pLastBox, void* pPara ) const
 {
     BOOL* pBValid = (BOOL*)pPara;
     if( *pBValid )      // einmal falsch, immer falsch
     {
-        SwTableBox* pSttBox, *pEndBox = 0;
+        SwTableBox* pSttBox = 0, *pEndBox = 0;
         rFirstBox.Erase(0,1);       // Kennung fuer Box loeschen
 
         // ein Bereich in dieser Klammer ?
@@ -1054,8 +1054,8 @@ void SwTableFormula::_HasValidBoxes( const SwTable& rTbl, String& rNewStr,
         {
         case INTRNL_NAME:
             if( pLastBox )
-                pEndBox = (SwTableBox*)pLastBox->ToInt64();
-            pSttBox = (SwTableBox*)rFirstBox.ToInt64();
+                pEndBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(pLastBox->ToInt64()));
+            pSttBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(rFirstBox.ToInt64()));
             break;
 
         case REL_NAME:
@@ -1160,13 +1160,13 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, String& rNewStr,
     if( pTblNmBox == pLastBox )
         rFirstBox.Erase( 0, nLastBoxLen + 1 );
 
-    SwTableBox* pSttBox, *pEndBox = 0;
+    SwTableBox* pSttBox = 0, *pEndBox = 0;
     switch( eNmType )
     {
     case INTRNL_NAME:
         if( pLastBox )
-            pEndBox = (SwTableBox*)pLastBox->ToInt64();
-        pSttBox = (SwTableBox*)rFirstBox.ToInt64();
+            pEndBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(pLastBox->ToInt64()));
+        pSttBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(rFirstBox.ToInt64()));
         break;
 
     case REL_NAME:
