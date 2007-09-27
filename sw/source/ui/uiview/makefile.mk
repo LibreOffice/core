@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-18 12:59:25 $
+#   last change: $Author: hr $ $Date: 2007-09-27 12:35:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,14 @@ SRC1FILES =  \
         view.src \
         pview.src
 
+EXCEPTIONSFILES= \
+        $(SLO)$/formatclipboard.obj \
+        $(SLO)$/srcview.obj \
+        $(SLO)$/swcli.obj  \
+        $(SLO)$/uivwimp.obj \
+        $(SLO)$/view2.obj \
+        $(SLO)$/viewling.obj
+
 SLOFILES =  \
         $(SLO)$/view0.obj \
         $(SLO)$/view.obj \
@@ -72,15 +80,7 @@ SLOFILES =  \
         $(SLO)$/swcli.obj  \
         $(SLO)$/srcview.obj \
         $(SLO)$/uivwimp.obj \
-    $(SLO)$/formatclipboard.obj
-
-EXCEPTIONSFILES= \
-        $(SLO)$/srcview.obj \
-        $(SLO)$/swcli.obj  \
-        $(SLO)$/uivwimp.obj \
-        $(SLO)$/view2.obj \
-        $(SLO)$/viewling.obj \
-        $(SLO)$/formatclipboard.obj \
+        $(SLO)$/formatclipboard.obj
 
 # --- Tagets -------------------------------------------------------
 
