@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergehelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:48:42 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:04:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,6 +263,7 @@ public:
     virtual void SAL_CALL disconnected(const ::com::sun::star::lang::EventObject& aEvent)
         throw (::com::sun::star::uno::RuntimeException);
 
+    using cppu::WeakComponentImplHelperBase::disposing;
     virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& aEvent)
         throw(com::sun::star::uno::RuntimeException);
 };
