@@ -4,9 +4,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:03:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:47:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,12 +102,13 @@
 #include <unoprnms.hxx>
 #endif
 
+#include <unomid.h>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace rtl;
 
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
 typedef SwAuthEntry* SwAuthEntryPtr;
 SV_DECL_PTRARR_DEL( SwAuthDataArr, SwAuthEntryPtr, 5, 5 )
@@ -147,10 +148,10 @@ SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
     m_pDataArr(new SwAuthDataArr ),
     m_pSequArr(new SvLongs(5, 5)),
     m_pSortKeyArr(new SortKeyArr(3, 3)),
-    m_bSortByDocument(TRUE),
-    m_bIsSequence(FALSE),
     m_cPrefix('['),
     m_cSuffix(']'),
+    m_bIsSequence(FALSE),
+    m_bSortByDocument(TRUE),
     m_eLanguage((LanguageType)::GetAppLanguage())
 {
 }
@@ -160,10 +161,10 @@ SwAuthorityFieldType::SwAuthorityFieldType( const SwAuthorityFieldType& rFType)
     m_pDataArr(new SwAuthDataArr ),
     m_pSequArr(new SvLongs(5, 5)),
     m_pSortKeyArr(new SortKeyArr(3, 3)),
-    m_bSortByDocument(rFType.m_bSortByDocument),
-    m_bIsSequence(rFType.m_bIsSequence),
     m_cPrefix(rFType.m_cPrefix),
     m_cSuffix(rFType.m_cSuffix),
+    m_bIsSequence(rFType.m_bIsSequence),
+    m_bSortByDocument(rFType.m_bSortByDocument),
     m_eLanguage(rFType.m_eLanguage),
     m_sSortAlgorithm(rFType.m_sSortAlgorithm)
 {
@@ -400,12 +401,11 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
         for( SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
                                 pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
         {
-            SwAuthorityField* pAFld = (SwAuthorityField*)pFmtFld->GetFld();
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
             if(!pTxtFld || !pTxtFld->GetpTxtNode())
             {
 #ifdef DBG_UTIL
-                if(nHandle == pAFld->GetHandle())
+                if(nHandle == ((SwAuthorityField*)pFmtFld->GetFld())->GetHandle())
                     bCurrentFieldWithoutTextNode = sal_True;
 #endif
                 continue;
@@ -421,7 +421,6 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
             //body the directly available text node will be used
             if(!pTxtNode)
                 pTxtNode = &rFldTxtNode;
-            ULONG nPos = pTxtNode->GetIndex();
             if( pTxtNode->GetTxt().Len() && pTxtNode->GetFrm() &&
                 pTxtNode->GetNodes().IsDocNodes() )
             {
@@ -483,16 +482,15 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
 /* -----------------------------15.11.00 17:33--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, BYTE nMId ) const
+BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
     case FIELD_PROP_PAR2:
         {
             OUString sVal;
-            sal_Unicode uRet = FIELD_PROP_PAR1 == nMId ? m_cPrefix : m_cSuffix;
+            sal_Unicode uRet = FIELD_PROP_PAR1 == nWhichId ? m_cPrefix : m_cSuffix;
             if(uRet)
                 sVal = OUString(uRet);
             rVal <<= sVal;
@@ -505,7 +503,7 @@ BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, BYTE nMId ) const
     case FIELD_PROP_BOOL1:
     case FIELD_PROP_BOOL2:
         {
-            sal_Bool bVal = FIELD_PROP_BOOL1 == nMId ? m_bIsSequence: m_bSortByDocument;
+            sal_Bool bVal = FIELD_PROP_BOOL1 == nWhichId ? m_bIsSequence: m_bSortByDocument;
             rVal.setValue(&bVal, ::getBooleanCppuType());
         }
         break;
@@ -541,19 +539,18 @@ BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, BYTE nMId ) const
 /* -----------------------------15.11.00 17:33--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwAuthorityFieldType::PutValue( const Any& rAny, BYTE nMId )
+BOOL    SwAuthorityFieldType::PutValue( const Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
     sal_Bool bRet = TRUE;
     String sTmp;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
     case FIELD_PROP_PAR2:
     {
         ::GetString( rAny, sTmp );
         sal_Unicode uSet = sTmp.GetChar(0);
-        if( FIELD_PROP_PAR1 == nMId )
+        if( FIELD_PROP_PAR1 == nWhichId )
             m_cPrefix = uSet;
         else
             m_cSuffix = uSet;
@@ -656,21 +653,21 @@ void SwAuthorityFieldType::SetSortKeys(USHORT nKeyCount, SwTOXSortKey aKeys[])
 /* -----------------14.09.99 16:15-------------------
 
  --------------------------------------------------*/
-SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pType,
+SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
                                     const String& rFieldContents )
-    : SwField(pType)
+    : SwField(pInitType)
 {
-    nHandle = pType->AddField( rFieldContents );
+    nHandle = pInitType->AddField( rFieldContents );
 }
 /* -----------------17.09.99 14:24-------------------
 
  --------------------------------------------------*/
-SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pType,
+SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
                                                 long nSetHandle )
-    : SwField( pType ),
+    : SwField( pInitType ),
     nHandle( nSetHandle )
 {
-    pType->AddField( nHandle );
+    pInitType->AddField( nHandle );
 }
 /* -----------------15.09.99 15:00-------------------
 
@@ -726,16 +723,16 @@ const String&   SwAuthorityField::GetFieldText(ToxAuthorityField eField) const
  --------------------------------------------------*/
 void    SwAuthorityField::SetPar1(const String& rStr)
 {
-    SwAuthorityFieldType* pType = (SwAuthorityFieldType* )GetTyp();
-    pType->RemoveField(nHandle);
-    nHandle = pType->AddField(rStr);
+    SwAuthorityFieldType* pInitType = (SwAuthorityFieldType* )GetTyp();
+    pInitType->RemoveField(nHandle);
+    nHandle = pInitType->AddField(rStr);
 }
 /* -----------------11.10.99 09:43-------------------
 
  --------------------------------------------------*/
 String SwAuthorityField::GetDescription() const
 {
-    return SW_RES(STR_AUTHORITY);
+    return SW_RES(STR_AUTHORITY_ENTRY);
 }
 
 
@@ -780,9 +777,8 @@ const char* aFieldNames[] =
 /* -----------------------------16.11.00 12:27--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwAuthorityField::QueryValue( Any& rAny, BYTE nMId ) const
+BOOL    SwAuthorityField::QueryValue( Any& rAny, USHORT /*nWhichId*/ ) const
 {
-    nMId &= ~CONVERT_TWIPS;
     if(!GetTyp())
         return FALSE;
     const SwAuthEntry* pAuthEntry = ((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(nHandle);
@@ -813,9 +809,8 @@ sal_Int16 lcl_Find(const OUString& rFieldName)
     return -1;
 }
 //----------------------------------------------------------------------------
-BOOL    SwAuthorityField::PutValue( const Any& rAny, BYTE nMId )
+BOOL    SwAuthorityField::PutValue( const Any& rAny, USHORT /*nWhichId*/ )
 {
-    nMId &= ~CONVERT_TWIPS;
     if(!GetTyp() || !((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(nHandle))
         return FALSE;
 
