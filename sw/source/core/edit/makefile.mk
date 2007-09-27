@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 16:27:17 $
+#   last change: $Author: hr $ $Date: 2007-09-27 08:47:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,31 +48,10 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        acorrect.cxx \
-        autofmt.cxx \
-        edatmisc.cxx \
-        edattr.cxx \
-        eddel.cxx \
-        edfcol.cxx \
-        edfld.cxx \
-        edfmt.cxx \
-        edglbldc.cxx \
-        edglss.cxx \
-        editsh.cxx \
-        edlingu.cxx \
-        ednumber.cxx \
-        edredln.cxx \
-        edtab.cxx \
-        edtox.cxx \
-        edundo.cxx \
-        edws.cxx \
-        edsect.cxx
-
 EXCEPTIONSFILES=\
-        $(SLO)$/edfldexp.obj\
+        $(SLO)$/edlingu.obj \
+        $(SLO)$/edfldexp.obj \
         $(SLO)$/edtab.obj
-
 
 SLOFILES =	\
         $(EXCEPTIONSFILES)\
@@ -87,7 +66,6 @@ SLOFILES =	\
         $(SLO)$/edglbldc.obj \
         $(SLO)$/edglss.obj \
         $(SLO)$/editsh.obj \
-        $(SLO)$/edlingu.obj \
         $(SLO)$/ednumber.obj \
         $(SLO)$/edredln.obj \
         $(SLO)$/edtox.obj \
