@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldpage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:35:57 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include <fldmgr.hxx>
 #endif
 
+class ListBox;
 
 /*--------------------------------------------------------------------
    Beschreibung:
@@ -52,30 +53,29 @@ const int coLBCount = 3;
 
 class SwFldPage : public SfxTabPage
 {
-    String              aLstStrArr[ coLBCount ];
-    SwFldMgr            aMgr;
-    SwField             *pCurFld;
-    SwWrtShell*         pWrtShell;
-    USHORT              nFldDlgAktGrpSel;
-    USHORT              nPageId;
-    USHORT              nTypeSel;
-    USHORT              nSelectionSel;
-    BOOL                bFldEdit;
-    BOOL                bInsert;
-    BOOL                bFldDlgHtmlMode;
-    BOOL                bRefresh;
-    BOOL                bFirstHTMLInit;
+    String              m_aLstStrArr[ coLBCount ];
+    SwFldMgr            m_aMgr;
+    SwField             *m_pCurFld;
+    SwWrtShell*         m_pWrtShell;
+    USHORT              m_nPageId;
+    USHORT              m_nTypeSel;
+    USHORT              m_nSelectionSel;
+    BOOL                m_bFldEdit;
+    BOOL                m_bInsert;
+    BOOL                m_bFldDlgHtmlMode;
+    BOOL                m_bRefresh;
+    BOOL                m_bFirstHTMLInit;
 
 protected:
 
-    USHORT              GetTypeSel() const          { return nTypeSel;}
-    void                SetTypeSel(USHORT nSet)     { nTypeSel = nSet;}
-    USHORT              GetSelectionSel() const     { return nSelectionSel;}
-    void                SetSelectionSel(USHORT nSet){ nSelectionSel = nSet;}
-    BOOL                IsFldDlgHtmlMode() const    { return bFldDlgHtmlMode;}
-    BOOL                IsRefresh() const           { return bRefresh;}
-    SwField*            GetCurField()               { return pCurFld;}
-    SwWrtShell*         GetWrtShell() { return pWrtShell;}
+    USHORT              GetTypeSel() const          { return m_nTypeSel;}
+    void                SetTypeSel(USHORT nSet)     { m_nTypeSel = nSet;}
+    USHORT              GetSelectionSel() const     { return m_nSelectionSel;}
+    void                SetSelectionSel(USHORT nSet){ m_nSelectionSel = nSet;}
+    BOOL                IsFldDlgHtmlMode() const    { return m_bFldDlgHtmlMode;}
+    BOOL                IsRefresh() const           { return m_bRefresh;}
+    SwField*            GetCurField()               { return m_pCurFld;}
+    SwWrtShell*         GetWrtShell() { return m_pWrtShell;}
 
     DECL_LINK( InsertHdl, Button *pBtn = 0 );
     DECL_LINK( NumFormatHdl, ListBox *pBtn = 0 );
@@ -87,7 +87,7 @@ protected:
     void                RestorePos( ListBox* pLst1, ListBox* pLst2 = 0,
                                     ListBox* pLst3 = 0 );
     void                EnableInsert(BOOL bEnable = TRUE);
-    inline BOOL         IsFldEdit() const   { return bFldEdit; }
+    inline BOOL         IsFldEdit() const   { return m_bFldEdit; }
 
     // Feld einfuegen
     BOOL                InsertFld(  USHORT nTypeId,
@@ -105,10 +105,11 @@ public:
 
                         virtual ~SwFldPage();
 
+    using SfxTabPage::ActivatePage;
     virtual void        ActivatePage();
 
-    inline SwFldMgr&    GetFldMgr()         { return aMgr; }
-    void                SetWrtShell( SwWrtShell* pWrtShell );
+    inline SwFldMgr&    GetFldMgr()         { return m_aMgr; }
+    void                SetWrtShell( SwWrtShell* m_pWrtShell );
     void                EditNewField( BOOL bOnlyActivate = FALSE );
     virtual USHORT      GetGroup() = 0;
 };
