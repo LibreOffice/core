@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:06:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:35:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
 
     // Undo/Redline aufjedenfall abschalten
     DoUndo( FALSE );
-    SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(GetRedlineMode() & ~IDocumentRedlineAccess::REDLINE_ON));
+    SetRedlineMode_intern( (RedlineMode_t)(GetRedlineMode() & ~nsRedlineMode_t::REDLINE_ON));
 
     String sExt( pFilter->GetSuffixes().GetToken(0, ',') );
     if( !sExt.Len() )
@@ -499,10 +499,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
 //  if( pOutlNds != (SwOutlineNodes*)&GetNodes().GetOutLineNds();
     if( pOutlNds != &GetNodes().GetOutLineNds() )
         delete pOutlNds;
-
-#ifdef DBG_UTIL
-    USHORT nFltCnt;
-#endif
 
     switch( eDocType )
     {
