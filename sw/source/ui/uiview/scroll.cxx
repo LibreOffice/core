@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scroll.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:22:50 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:35:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #define SCROLL_LINE_SIZE 250
 
 
-SwScrollbar::SwScrollbar( Window *pWin, int bHoriz ) :
+SwScrollbar::SwScrollbar( Window *pWin, BOOL bHoriz ) :
     ScrollBar( pWin,
     WinBits( WB_3DLOOK | WB_HIDE | ( bHoriz ? WB_HSCROLL : WB_VSCROLL)  ) ),
     bHori( bHoriz ),
@@ -101,8 +101,6 @@ void SwScrollbar::ViewPortChgd( const Rectangle &rRect )
     DocSzChgd(aDocSz);
     if ( bThumbEnabled )
         SetThumbPos( nThumb );
-    long nVis = GetVisibleSize();
-    long nLen = GetRange().Len();
     if(bAuto)
         AutoShow();
 }
@@ -110,7 +108,7 @@ void SwScrollbar::ViewPortChgd( const Rectangle &rRect )
 /*-----------------10/21/97 02:48pm-----------------
 
 --------------------------------------------------*/
-void SwScrollbar::Show( BOOL bSet )
+void SwScrollbar::ExtendedShow( BOOL bSet )
 {
     bVisible = bSet;
     if( (!bSet ||  !bAuto) && IsUpdateMode() && bSizeSet)
@@ -125,7 +123,7 @@ void SwScrollbar::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
     ScrollBar::SetPosSizePixel(rNewPos, rNewSize);
     bSizeSet = TRUE;
     if(bVisible)
-        Show();
+        ExtendedShow();
 
 }
 
@@ -141,7 +139,7 @@ void SwScrollbar::SetAuto(BOOL bSet)
 
         // automatisch versteckt - dann anzeigen
         if(!bAuto && bVisible && !ScrollBar::IsVisible())
-            Show(TRUE);
+            ExtendedShow(TRUE);
         else if(bAuto)
             AutoShow(); // oder automatisch verstecken
     }
