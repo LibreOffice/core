@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wgrfsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:37:42 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:51:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,8 +72,8 @@ SFX_IMPL_INTERFACE(SwWebGrfShell, SwGrfShell, SW_RES(STR_SHELLNAME_GRAPHIC))
 
 TYPEINIT1(SwWebGrfShell,SwGrfShell)
 
-SwWebGrfShell::SwWebGrfShell(SwView &rView) :
-    SwGrfShell(rView)
+SwWebGrfShell::SwWebGrfShell(SwView &_rView) :
+    SwGrfShell(_rView)
 
 {
     SetName(String::CreateFromAscii("Graphic"));
