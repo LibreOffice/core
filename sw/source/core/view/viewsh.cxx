@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:40:32 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:43:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 
 #define _SVX_PARAITEM_HXX
 #define _SVX_TEXTITEM_HXX
+
+#include <com/sun/star/accessibility/XAccessible.hpp>
 
 #include <sfx2/viewfrm.hxx>
 
@@ -172,7 +174,7 @@
 // #i74769#
 #ifndef _SDRPAINTWINDOW_HXX
 #include <svx/sdrpaintwindow.hxx>
-#endif _SDRPAINTWINDOW_HXX
+#endif
 
 BOOL ViewShell::bLstAct = FALSE;
 ShellResource *ViewShell::pShellRes = 0;
@@ -180,11 +182,13 @@ Window *ViewShell::pCareWindow = 0;
 BitmapEx* ViewShell::pErrorBmp = NULL;
 BitmapEx* ViewShell::pReplaceBmp = NULL;
 
-FASTBOOL bInSizeNotify = FALSE;
+BOOL bInSizeNotify = FALSE;
 
-DBG_NAME(LayoutIdle);
+DBG_NAME(LayoutIdle)
 
 TYPEINIT0(ViewShell);
+
+using namespace ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
 // #i72754# 2nd set of Pre/PostPaints
@@ -281,7 +285,7 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
     if ( Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea() )
         Imp()->DelRegions();
 
-    const FASTBOOL bExtraData = ::IsExtraData( GetDoc() );
+    const BOOL bExtraData = ::IsExtraData( GetDoc() );
 
     if ( !bIdleEnd )
     {
@@ -311,7 +315,7 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
     {
         if ( !nLockPaint )
         {
-            FASTBOOL bPaintsFromSystem = aInvalidRect.HasArea();
+            BOOL bPaintsFromSystem = aInvalidRect.HasArea();
             GetWin()->Update();
             if ( aInvalidRect.HasArea() )
             {
@@ -349,7 +353,6 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                 //Erst Invert dann Compress, niemals andersherum!
                 pRegion->Invert();
 
-                const USHORT nCnt = pRegion->Count();
                 pRegion->Compress();
 
                 VirtualDevice *pVout = 0;
@@ -1137,7 +1140,7 @@ void ViewShell::SetFirstVisPageInvalid()
 |*
 ******************************************************************************/
 
-void ViewShell::SizeChgNotify(const Size &rSize)
+void ViewShell::SizeChgNotify()
 {
     if ( !pWin )
         bDocSizeChgd = TRUE;
@@ -1355,6 +1358,7 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
     const bool bAllowedWithChildWindows(GetWin()->GetWindowClipRegionPixel(WINDOW_GETCLIPREGION_NOCHILDREN|WINDOW_GETCLIPREGION_NULL).IsNull());
     const bool bSmoothScrollAllowed(bOnlyYScroll && bEnableSmooth && GetViewOptions()->IsSmoothScroll() &&  bAllowedWithChildWindows);
     const bool bIAmCursorShell(ISA(SwCrsrShell));
+    (void) bIAmCursorShell;
 
     // #i75172# with selection on overlay, smooth scroll should be allowed with it
     const bool bAllowedForSelection(true || (bIAmCursorShell && !((SwCrsrShell*)this)->HasSelection()));
@@ -1484,24 +1488,24 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
                     lDiff -= lMaDelta;
                 }
 
-                SwRect aOldVis = VisArea();
+                const SwRect aTmpOldVis = VisArea();
                 aVisArea.Pos().Y() -= lScroll;
                 aVisArea.Pos() = GetWin()->PixelToLogic( GetWin()->LogicToPixel( VisArea().Pos()));
-                lScroll = aOldVis.Top() - VisArea().Top();
+                lScroll = aTmpOldVis.Top() - VisArea().Top();
                 if ( pRect )
                 {
-                    Rectangle aTmp( aOldVis.SVRect() );
+                    Rectangle aTmp( aTmpOldVis.SVRect() );
                     aTmp.Left() = pRect->Left();
                     aTmp.Right()= pRect->Right();
                     GetWin()->Scroll( 0, lScroll, aTmp, SCROLL_CHILDREN);
                 }
                 else
-                    GetWin()->Scroll( 0, lScroll, SCROLL_CHILDREN);
+                    GetWin()->Scroll( 0, lScroll, SCROLL_CHILDREN );
 
-                const Point aPt( -VisArea().Left(), -VisArea().Top() );
-                MapMode aMapMode( GetWin()->GetMapMode() );
-                aMapMode.SetOrigin( aPt );
-                GetWin()->SetMapMode( aMapMode );
+                const Point aTmpPt( -VisArea().Left(), -VisArea().Top() );
+                MapMode aTmpMapMode( GetWin()->GetMapMode() );
+                aTmpMapMode.SetOrigin( aTmpPt );
+                GetWin()->SetMapMode( aTmpMapMode );
 
                 if ( Imp()->HasDrawView() )
                     Imp()->GetDrawView()->VisAreaChanged( GetWin() );
@@ -1643,7 +1647,7 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
     //Kann z.B. waehrend des Idle'ns zwischenzeitlich auftreten.
     //Die Rechtecke neben den Seiten muessen wir leider auf jedenfall Painten,
     //den diese werden spaeter beim VisPortChgd ausgespart.
-    FASTBOOL bBorderOnly = FALSE;
+    BOOL bBorderOnly = FALSE;
     const SwRootFrm *pRoot = GetDoc()->GetRootFrm();
     if ( rRect.Top() > pRoot->Frm().Bottom() )
     {
@@ -2014,7 +2018,7 @@ void ViewShell::SetBrowseBorder( const Size& rNew )
 |*
 ******************************************************************************/
 
-void ViewShell::CheckBrowseView( FASTBOOL bBrowseChgd )
+void ViewShell::CheckBrowseView( BOOL bBrowseChgd )
 {
     if ( !bBrowseChgd &&
          !getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
@@ -2040,8 +2044,6 @@ void ViewShell::CheckBrowseView( FASTBOOL bBrowseChgd )
         }
         return;
     }
-
-    FASTBOOL bBrowseOn = getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
     LockPaint();
     StartAction();
@@ -2111,7 +2113,7 @@ const SwNodes& ViewShell::GetNodes() const
 }
 
 
-void ViewShell::DrawSelChanged(SdrView*)
+void ViewShell::DrawSelChanged()
 {
 }
 
@@ -2177,10 +2179,10 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 {
     ASSERT( !(*pOpt == rOpt), "ViewShell::ApplyViewOptions: ");
 
-    Window *pWin = GetWin();
-    if( !pWin )
+    Window *pMyWin = GetWin();
+    if( !pMyWin )
     {
-        ASSERT( pWin, "ViewShell::ApplyViewOptions: no window" );
+        ASSERT( pMyWin, "ViewShell::ApplyViewOptions: no window" );
         return;
     }
 
@@ -2219,11 +2221,11 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     // Der Mapmode wird veraendert, Minima/Maxima werden von der UI beachtet
     if( pOpt->GetZoom() != rOpt.GetZoom() && !IsPreView() )
     {
-        MapMode aMode( pWin->GetMapMode() );
+        MapMode aMode( pMyWin->GetMapMode() );
         Fraction aNewFactor( rOpt.GetZoom(), 100 );
         aMode.SetScaleX( aNewFactor );
         aMode.SetScaleY( aNewFactor );
-        pWin->SetMapMode( aMode );
+        pMyWin->SetMapMode( aMode );
         // Wenn kein ReferenzDevice (Drucker) zum Formatieren benutzt wird,
         // sondern der Bildschirm, muss bei Zoomfaktoraenderung neu formatiert
         // werden.
@@ -2263,7 +2265,7 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
         if ( pOpt->IsDraw() != rOpt.IsDraw() )
         {
-            FASTBOOL bDraw = !rOpt.IsDraw();
+            BOOL bDraw = !rOpt.IsDraw();
             pDView->SetLineDraft( bDraw );
             pDView->SetFillDraft( bDraw );
             pDView->SetGrafDraft( bDraw );
@@ -2277,14 +2279,14 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
             pDView->SetMarkHdlSizePixel(rOpt.IsBigMarkHdl() ? 9 : 7);
     }
 
-    FASTBOOL bOnlineSpellChgd = pOpt->IsOnlineSpell() != rOpt.IsOnlineSpell();
+    BOOL bOnlineSpellChgd = pOpt->IsOnlineSpell() != rOpt.IsOnlineSpell();
 
     *pOpt = rOpt;   // Erst jetzt werden die Options uebernommen.
     pOpt->SetUIOptions(rOpt);
 
     pDoc->set(IDocumentSettingAccess::HTML_MODE, 0 != ::GetHtmlMode(pDoc->GetDocShell()));
 
-    pWin->Invalidate();
+    pMyWin->Invalidate();
     if ( bReformat )
     {
         // Es hilft alles nichts, wir muessen an alle CntntFrms ein
@@ -2419,7 +2421,7 @@ void ViewShell::UISizeNotify()
     if ( bDocSizeChgd )
     {
         bDocSizeChgd = FALSE;
-        FASTBOOL bOld = bInSizeNotify;
+        BOOL bOld = bInSizeNotify;
         bInSizeNotify = TRUE;
         ::SizeNotify( this, GetLayout()->Frm().SSize() );
         bInSizeNotify = bOld;
@@ -2442,32 +2444,25 @@ BOOL ViewShell::IsNewLayout() const
     return GetLayout()->IsNewLayout();
 }
 
-::com::sun::star::uno::Reference<
-    ::com::sun::star::accessibility::XAccessible > ViewShell::CreateAccessible()
+uno::Reference< ::com::sun::star::accessibility::XAccessible > ViewShell::CreateAccessible()
 {
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::accessibility;
-    Reference< XAccessible > xAcc;
+    uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc;
 
-    SwDoc *pDoc = GetDoc();
+    SwDoc *pMyDoc = GetDoc();
 
     // We require a layout and an XModel to be accessible.
-    ASSERT( pDoc->GetRootFrm(), "no layout, no access" );
+    ASSERT( pMyDoc->GetRootFrm(), "no layout, no access" );
     ASSERT( GetWin(), "no window, no access" );
 
-    if( pDoc->GetRootFrm() && GetWin() )
+    if( pMyDoc->GetRootFrm() && GetWin() )
         xAcc = Imp()->GetAccessibleMap().GetDocumentView();
 
     return xAcc;
 }
 
-::com::sun::star::uno::Reference<
-    ::com::sun::star::accessibility::XAccessible >
+uno::Reference< ::com::sun::star::accessibility::XAccessible >
 ViewShell::CreateAccessiblePreview()
 {
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::accessibility::XAccessible;
-
     DBG_ASSERT( IsPreView(),
                 "Can't create accessible preview for non-preview ViewShell" );
 
