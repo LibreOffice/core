@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfld.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:43:50 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:23:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,9 +89,9 @@ SwFmtFld::SwFmtFld( const SwField &rFld )
 // full pool range, all items need to be clonable. Thus, this one needed to be
 // corrected
 SwFmtFld::SwFmtFld( const SwFmtFld& rAttr )
-    : SfxPoolItem( RES_TXTATR_FIELD ),
-    pTxtAttr( 0 ),
-    pField( 0 )
+    : SfxPoolItem( RES_TXTATR_FIELD ), SwClient(),
+    pField( 0 ),
+    pTxtAttr( 0 )
 {
     if(rAttr.GetFld())
     {
@@ -258,8 +258,8 @@ BOOL SwFmtFld::IsProtect() const
 |*
 *************************************************************************/
 
-SwTxtFld::SwTxtFld( const SwFmtFld& rAttr, xub_StrLen nStart )
-    : SwTxtAttr( rAttr, nStart ),
+SwTxtFld::SwTxtFld( const SwFmtFld& rAttr, xub_StrLen nStartPos )
+    : SwTxtAttr( rAttr, nStartPos ),
     aExpand( rAttr.GetFld()->Expand() ),
     pMyTxtNd( 0 )
 {
@@ -340,7 +340,7 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
         if( nFldWhich != RES_DBFLD && nFldWhich != RES_USERFLD &&
             nFldWhich != RES_SETEXPFLD && nFldWhich != RES_DDEFLD &&
             RES_AUTHORITY != nFldWhich )
-            pFldType = pDestIDFA->GetSysFldType( (const RES_FIELDS)nFldWhich );
+            pFldType = pDestIDFA->GetSysFldType( nFldWhich );
         else
             pFldType = pDestIDFA->InsertFldType( *rFmtFld.GetFld()->GetTyp() );
 
