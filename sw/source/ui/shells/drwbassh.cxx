@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:15:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:27:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,12 +70,6 @@
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
 #endif
-//CHINA001 #ifndef _SVX_TRANSFRM_HXX //autogen
-//CHINA001 #include <svx/transfrm.hxx>
-//CHINA001 #endif
-//#ifndef _SVX_LABDLG_HXX //autogen
-//#include <svx/labdlg.hxx>
-//#endif    delete by CHINA001
 #ifndef _SVXSWFRAMEVALIDATION_HXX
 #include <svx/swframevalidation.hxx>
 #endif
@@ -134,11 +128,9 @@
 #include <svx/svdpage.hxx>
 #endif
 
-// --> OD 2006-03-09 #i51726#
 #ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
 #endif
-// <--
 
 #include <shells.hrc>
 #define SwDrawBaseShell
@@ -148,16 +140,13 @@
 #ifndef _SWSLOTS_HXX
 #include <swslots.hxx>
 #endif
-//add header of cui CHINA001
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include "swabstdlg.hxx" //CHINA001
-#include "dialog.hrc" //CHINA001
-// --> OD 2004-07-14 #i30451#
+#include "swabstdlg.hxx"
+#include "dialog.hrc"
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
-// <--
 
 #ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -171,7 +160,7 @@
 
 #include <IDocumentDrawModelAccess.hxx>
 
-using namespace ::com::sun::star::text;
+using namespace ::com::sun::star;
 
 SFX_IMPL_INTERFACE(SwDrawBaseShell, SwBaseShell, SW_RES(0))
 {
@@ -184,8 +173,8 @@ TYPEINIT1(SwDrawBaseShell,SwBaseShell)
  --------------------------------------------------------------------*/
 
 
-SwDrawBaseShell::SwDrawBaseShell(SwView &rView):
-    SwBaseShell( rView )
+SwDrawBaseShell::SwDrawBaseShell(SwView &_rView):
+    SwBaseShell( _rView )
 {
     GetShell().NoEdit(TRUE);
 
@@ -193,8 +182,8 @@ SwDrawBaseShell::SwDrawBaseShell(SwView &rView):
 
     rWin.SetBezierMode(SID_BEZIER_MOVE);
 
-    if ( !rView.GetDrawFuncPtr() )
-        rView.GetEditWin().StdDrawMode(SID_OBJECT_SELECT);
+    if ( !_rView.GetDrawFuncPtr() )
+        _rView.GetEditWin().StdDrawMode( OBJ_NONE, TRUE );
 
     SwTransferable::CreateSelection( GetShell() );
 }
@@ -232,7 +221,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     if(pItem && nSlotId == SID_OBJECT_ALIGN)
     {
         DBG_ASSERT(PTR_CAST(SfxEnumItem, pItem),"SfxEnumItem erwartet")
-        nSlotId += ((const SfxEnumItem*)pItem)->GetValue();
+        nSlotId = nSlotId + ((const SfxEnumItem*)pItem)->GetValue();
         nSlotId++;
     }
 
@@ -249,8 +238,6 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         {
             if(pSdrView->AreObjectsMarked())
             {
-                const SfxItemSet* pArgs = rReq.GetArgs();
-
                 if(!pArgs)
                 {
                     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
@@ -263,27 +250,25 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                                     FN_DRAW_WRAP_DLG, FN_DRAW_WRAP_DLG,
                                                     0);
 
-                        const SwViewOption* pVOpt = pSh->GetViewOptions();
                         aSet.Put(SfxBoolItem(SID_HTML_MODE,
                             0 != ::GetHtmlMode(pSh->GetView().GetDocShell())));
 
                         aSet.Put(SfxInt16Item(FN_DRAW_WRAP_DLG, pSh->GetLayerId()));
 
                         pSh->GetObjAttr(aSet);
-                        //CHINA001 SwWrapDlg aDlg(GetView().GetWindow(), aSet, pSh, TRUE);
-                        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
                         AbstractSfxSingleTabDialog* pDlg = pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh, TRUE, RC_DLG_SWWRAPDLG );
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
-                        if (pDlg->Execute() == RET_OK) //CHINA001 if (aDlg.Execute() == RET_OK)
+                        if (pDlg->Execute() == RET_OK)
                         {
-                            const SfxPoolItem* pItem;
-                            const SfxItemSet* pOutSet = pDlg->GetOutputItemSet(); //CHINA001 const SfxItemSet* pOutSet = aDlg.GetOutputItemSet();
-                            if(SFX_ITEM_SET == pOutSet->GetItemState(FN_DRAW_WRAP_DLG, FALSE, &pItem))
+                            const SfxPoolItem* pWrapItem;
+                            const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+                            if(SFX_ITEM_SET == pOutSet->GetItemState(FN_DRAW_WRAP_DLG, FALSE, &pWrapItem))
                             {
-                                short nLayer = ((const SfxInt16Item*)pItem)->GetValue();
+                                short nLayer = ((const SfxInt16Item*)pWrapItem)->GetValue();
                                 if (nLayer == 1)
                                     pSh->SelectionToHeaven();
                                 else
@@ -292,7 +277,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                             pSh->SetObjAttr(*pOutSet);
                         }
-                    delete pDlg; //CHINA001
+                    delete pDlg;
                     }
                 }
             }
@@ -303,16 +288,13 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
         {
             if(pSdrView->AreObjectsMarked())
             {
-                const SfxItemSet* pArgs = rReq.GetArgs();
-
                 if(!pArgs)
                 {
                     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                     if( rMarkList.GetMark(0) != 0 )
                     {
                         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                        //SfxTabDialog *pDlg;       delete for cui CHINA001
-                        SfxAbstractTabDialog *pDlg=NULL; //add CHINA001
+                        SfxAbstractTabDialog *pDlg=NULL;
                         BOOL bCaption = FALSE;
 
                         // Erlaubte Verankerungen:
@@ -329,8 +311,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             bCaption = TRUE;
 
                         if (bCaption)
-                            //pDlg = new SvxCaptionTabDialog(NULL, pSdrView, nAllowedAnchors);
-                        {//change for cui CHINA001
+                        {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                             if ( pFact )
                             {
@@ -338,12 +319,11 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                         pFact->CreateCaptionDialog( NULL, pSdrView, RID_SVXDLG_CAPTION, nAllowedAnchors );
                                 pCaptionDlg->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                                 pDlg = pCaptionDlg;
-                                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                             }
                         }
                         else
                         {
-                            //CHINA001 SfxTabDialog *pDlg = new SvxTransformTabDialog(NULL, NULL, pSdrView, nAllowedAnchors);
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                             if ( pFact )
                             {
@@ -352,16 +332,15 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                             pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView, RID_SVXDLG_TRANSFORM, nAllowedAnchors );
                                 pTransform->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                                 pDlg = pTransform;
-                                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                             }
                         }
                         SfxItemSet aNewAttr(pSdrView->GetGeoAttrFromMarked());
 
                         const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                         SfxItemSet aSet( *aNewAttr.GetPool(), pRange );
-                        SwView& rView = GetView();
-                        FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rView));
-                        SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+                        FieldUnit eMetric = ::GetDfltMetric(0 != dynamic_cast<SwWebView*>(&GetView()));
+                        SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)) );
 
                         aSet.Put( aNewAttr, FALSE );
 
@@ -411,22 +390,22 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                 SFX_ITEM_SET != pOutSet->GetItemState(
                                     SID_ATTR_TRANSFORM_POS_Y, FALSE );
 
-                            SfxItemSet aSet(GetPool(), RES_FRMATR_BEGIN, RES_FRMATR_END - 1);
+                            SfxItemSet aFrmAttrSet(GetPool(), RES_FRMATR_BEGIN, RES_FRMATR_END - 1);
 
                             bool bSingleSelection = rMarkList.GetMarkCount() == 1;
 
-                            const SfxPoolItem* pItem;
+                            const SfxPoolItem* pAnchorItem;
                             if(SFX_ITEM_SET == pOutSet->GetItemState(
-                                SID_ATTR_TRANSFORM_ANCHOR, FALSE, &pItem))
+                                SID_ATTR_TRANSFORM_ANCHOR, FALSE, &pAnchorItem))
                             {
                                 if(!bSingleSelection)
-                                    pSh->ChgAnchor(((const SfxInt16Item*)pItem)
+                                    pSh->ChgAnchor(((const SfxInt16Item*)pAnchorItem)
                                             ->GetValue(), FALSE, bPosCorr );
                                 else
                                 {
                                     SwFmtAnchor aAnchor(pFrmFmt->GetAnchor());
-                                    aAnchor.SetType((RndStdIds)((const SfxInt16Item*)pItem)->GetValue());
-                                    aSet.Put( aAnchor );
+                                    aAnchor.SetType((RndStdIds)((const SfxInt16Item*)pAnchorItem)->GetValue());
+                                    aFrmAttrSet.Put( aAnchor );
                                 }
                             }
                             const SfxPoolItem* pHoriOrient = 0;
@@ -440,16 +419,16 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             if(pHoriOrient || pHoriRelation || pHoriPosition || pHoriMirror)
                             {
                                 if(pHoriOrient)
-                                    aHOrient.SetHoriOrient( (SwHoriOrient)
+                                    aHOrient.SetHoriOrient(
                                           static_cast<const SfxInt16Item*>(pHoriOrient)->GetValue());
                                 if(pHoriRelation)
-                                    aHOrient.SetRelationOrient( (SwRelationOrient)
+                                    aHOrient.SetRelationOrient(
                                               static_cast<const SfxInt16Item*>(pHoriRelation)->GetValue());
                                 if(pHoriPosition)
                                     aHOrient.SetPos( static_cast<const SfxInt32Item*>(pHoriPosition)->GetValue());
                                 if(pHoriMirror)
                                     aHOrient.SetPosToggle( static_cast<const SfxBoolItem*>(pHoriMirror)->GetValue());
-                                aSet.Put(aHOrient);
+                                aFrmAttrSet.Put(aHOrient);
                             }
 
                             const SfxPoolItem* pVertOrient = 0;
@@ -461,22 +440,22 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             if(pVertOrient || pVertRelation || pVertPosition )
                             {
                                 if(pVertOrient)
-                                    aVOrient.SetVertOrient( (SwVertOrient)
+                                    aVOrient.SetVertOrient(
                                         static_cast<const SfxInt16Item*>(pVertOrient)->GetValue());
                                 if(pVertRelation)
-                                    aVOrient.SetRelationOrient( (SwRelationOrient)
+                                    aVOrient.SetRelationOrient(
                                         static_cast<const SfxInt16Item*>(pVertRelation)->GetValue());
                                 if(pVertPosition)
                                     aVOrient.SetPos( static_cast<const SfxInt32Item*>(pVertPosition)->GetValue());
-                                aSet.Put( aVOrient );
+                                aFrmAttrSet.Put( aVOrient );
                             }
                             const SfxPoolItem* pFollowItem = 0;
                             pOutSet->GetItemState(RES_FOLLOW_TEXT_FLOW, FALSE, &pFollowItem);
                             if(pFollowItem)
-                                aSet.Put(*pFollowItem);
+                                aFrmAttrSet.Put(*pFollowItem);
 
-                            if(aSet.Count())
-                                pSh->SetDrawingAttr(aSet);
+                            if(aFrmAttrSet.Count())
+                                pSh->SetDrawingAttr(aFrmAttrSet);
 
                             rBind.InvalidateAll(FALSE);
 
@@ -509,7 +488,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                 pSh->DelSelectedObj();
 
                 if (rReq.IsAPI() ||
-                    SID_OBJECT_SELECT == GetView().GetEditWin().GetDrawMode() )
+                    GetView().GetEditWin().IsObjectSelect() )
                 {
                     // Wenn Basic-Aufruf, dann zurueck in die Textshell, da das
                     // Basic sonst keine Rueckkehrmoeglichkeit hat.
@@ -580,18 +559,18 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                     USHORT nAnchor = pSh->GetAnchorId();
                     if (nAnchor == FLY_IN_CNTNT)
                     {
-                        int nVertOrient = -1;
+                        sal_Int16 nVertOrient = -1;
 
                         switch (nSlotId)
                         {
                             case SID_OBJECT_ALIGN_UP:
-                                nVertOrient = SVX_VERT_TOP;
+                                nVertOrient = text::VertOrientation::TOP;
                                 break;
                             case SID_OBJECT_ALIGN_MIDDLE:
-                                nVertOrient = SVX_VERT_CENTER;
+                                nVertOrient = text::VertOrientation::CENTER;
                                 break;
                             case SID_OBJECT_ALIGN_DOWN:
-                                nVertOrient = SVX_VERT_BOTTOM;
+                                nVertOrient = text::VertOrientation::BOTTOM;
                                 break;
                             default:
                                 break;
@@ -602,7 +581,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             SwFrmFmt* pFrmFmt = FindFrmFmt( pObj );
                             SwFmtVertOrient aVOrient((SwFmtVertOrient&)pFrmFmt->GetAttr(RES_VERT_ORIENT));
-                            aVOrient.SetVertOrient((SwVertOrient)nVertOrient);
+                            aVOrient.SetVertOrient( nVertOrient );
                             pFrmFmt->SetAttr(aVOrient);
                             pSh->EndAction();
                         }
@@ -745,7 +724,6 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     DBG_ASSERT(rMarkList.GetMarkCount() == 1, "wrong draw selection")
     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-    ULONG nMarkCount = rMarkList.GetMarkCount();
     const String sCurrentName = pObj->GetName();
     String sNewName;
     pNameDialog->GetName(sNewName);
@@ -795,7 +773,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
     BOOL bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
 
     if (!bProtected)    // Im Parent nachsehen
-        bProtected |= rSh.IsSelObjProtected( (FlyProtectType)(FLYPROTECT_CONTENT|FLYPROTECT_PARENT) ) != 0;
+        bProtected |= rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
     while( nWhich )
     {
@@ -865,8 +843,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
             // #i68101#
             case FN_TITLE_DESCRIPTION_SHAPE:
                 {
-                    SwView& rView = GetView();
-                    const bool bIsWebView(NULL != PTR_CAST(SwWebView, &rView));
+                    const bool bIsWebView(NULL != dynamic_cast<SwWebView*>(&GetView()));
 
                     if(!bIsWebView && 1L != pSdrView->GetMarkedObjectCount())
                     {
@@ -932,8 +909,8 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
     }
 
     pSh->CalcBoundRect( aBoundRect, eAnchorType,
-                           static_cast<SwRelationOrient>(pValidation->nHRelOrient),
-                           static_cast<SwRelationOrient>(pValidation->nVRelOrient),
+                           pValidation->nHRelOrient,
+                           pValidation->nVRelOrient,
                            pCntntPos,
                            pValidation->bFollowTextFlow,
                            pValidation->bMirror, NULL, &pValidation->aPercentSize);
@@ -966,7 +943,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
 
         if (pValidation->nHPos + pValidation->nWidth > aBoundRect.Right())
         {
-            if (pValidation->nHoriOrient == HoriOrientation::NONE)
+            if (pValidation->nHoriOrient == text::HoriOrientation::NONE)
             {
                 pValidation->nHPos -= ((pValidation->nHPos + pValidation->nWidth) - aBoundRect.Right());
                 nH = pValidation->nHPos;
@@ -980,7 +957,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
 
         if (pValidation->nVPos + pValidation->nHeight > aBoundRect.Bottom())
         {
-            if (pValidation->nVertOrient == VertOrientation::NONE)
+            if (pValidation->nVertOrient == text::VertOrientation::NONE)
             {
                 pValidation->nVPos -= ((pValidation->nVPos + pValidation->nHeight) - aBoundRect.Bottom());
                 nV = pValidation->nVPos;
@@ -992,10 +969,10 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
         if (pValidation->nVPos + pValidation->nHeight > aBoundRect.Bottom())
             pValidation->nHeight = aBoundRect.Bottom() - pValidation->nVPos;
 
-        if ( pValidation->nVertOrient != VertOrientation::NONE )
+        if ( pValidation->nVertOrient != text::VertOrientation::NONE )
             nV = aBoundRect.Top();
 
-        if ( pValidation->nHoriOrient != HoriOrientation::NONE )
+        if ( pValidation->nHoriOrient != text::HoriOrientation::NONE )
             nH = aBoundRect.Left();
 
         pValidation->nMaxHPos   = aBoundRect.Right()  - pValidation->nWidth;
@@ -1008,7 +985,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
     {
         if (pValidation->nHPos + pValidation->nWidth > aBoundRect.Right())
         {
-            if (pValidation->nHoriOrient == HoriOrientation::NONE)
+            if (pValidation->nHoriOrient == text::HoriOrientation::NONE)
             {
                 pValidation->nHPos -= ((pValidation->nHPos + pValidation->nWidth) - aBoundRect.Right());
             }
@@ -1019,8 +996,8 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
         // OD 29.09.2003 #i17567#, #i18732# - consider following the text flow
         // and alignment at page areas.
         const bool bMaxVPosAtBottom = !pValidation->bFollowTextFlow ||
-                                      pValidation->nVRelOrient == RelOrientation::PAGE_FRAME ||
-                                      pValidation->nVRelOrient == RelOrientation::PAGE_PRINT_AREA;
+                                      pValidation->nVRelOrient == text::RelOrientation::PAGE_FRAME ||
+                                      pValidation->nVRelOrient == text::RelOrientation::PAGE_PRINT_AREA;
         {
             SwTwips nTmpMaxVPos = ( bMaxVPosAtBottom
                                     ? aBoundRect.Bottom()
@@ -1028,7 +1005,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
                                   pValidation->nHeight;
             if ( pValidation->nVPos > nTmpMaxVPos )
             {
-                if (pValidation->nVertOrient == VertOrientation::NONE)
+                if (pValidation->nVertOrient == text::VertOrientation::NONE)
                 {
                     pValidation->nVPos = nTmpMaxVPos;
                 }
@@ -1056,10 +1033,10 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
         }
 
         // Maximale Breite Hoehe
-        const SwTwips nH = ( pValidation->nHoriOrient != HoriOrientation::NONE )
+        const SwTwips nH = ( pValidation->nHoriOrient != text::HoriOrientation::NONE )
                            ? aBoundRect.Left()
                            : pValidation->nHPos;
-        const SwTwips nV = ( pValidation->nVertOrient != VertOrientation::NONE )
+        const SwTwips nV = ( pValidation->nVertOrient != text::VertOrientation::NONE )
                            ? aBoundRect.Top()
                            : pValidation->nVPos;
         pValidation->nMaxHeight  = pValidation->nMaxVPos + pValidation->nHeight - nV;
