@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 16:04:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:36:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,6 +265,8 @@
 #include "formatclipboard.hxx"
 #endif
 
+#include <unomid.h>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -272,8 +274,6 @@ using namespace ::com::sun::star::scanner;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
-#define C2S(cChar) String::CreateFromAscii(cChar)
 
 extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
@@ -306,7 +306,7 @@ SvxSearchDialog*    SwView::pSrchDlg    = 0;
 SearchAttrItemList* SwView::pSrchList   = 0;
 SearchAttrItemList* SwView::pReplList   = 0;
 
-DBG_NAME(viewhdl);
+DBG_NAME(viewhdl)
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -325,11 +325,11 @@ void SwView::ImpSetVerb( int nSelType )
 {
     sal_Bool bResetVerbs = bVerbsActive;
     if ( !GetViewFrame()->GetFrame()->IsInPlace() &&
-         (SwWrtShell::SEL_OLE|SwWrtShell::SEL_GRF) & nSelType )
+         (nsSelectionType::SEL_OLE|nsSelectionType::SEL_GRF) & nSelType )
     {
         if ( !pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT) )
         {
-            if ( nSelType & SwWrtShell::SEL_OLE )
+            if ( nSelType & nsSelectionType::SEL_OLE )
             {
                 SetVerbs( GetWrtShell().GetOLEObject()->getSupportedVerbs() );
                 bVerbsActive = sal_True;
@@ -412,16 +412,16 @@ void SwView::SelectShell()
 
     //SEL_TBL und SEL_TBL_CELLS koennen verodert sein!
     int nNewSelectionType = (pWrtShell->GetSelectionType()
-                                & ~SwWrtShell::SEL_TBL_CELLS);
+                                & ~nsSelectionType::SEL_TBL_CELLS);
 
     if ( pFormShell && pFormShell->IsActiveControl() )
-        nNewSelectionType |= SwWrtShell::FOC_FRM_CTRL;
+        nNewSelectionType |= nsSelectionType::SEL_FOC_FRM_CTRL;
 
     if ( nNewSelectionType == nSelectionType )
     {
         GetViewFrame()->GetBindings().InvalidateAll( sal_False );
-        if ( nSelectionType & SwWrtShell::SEL_OLE ||
-             nSelectionType & SwWrtShell::SEL_GRF )
+        if ( nSelectionType & nsSelectionType::SEL_OLE ||
+             nSelectionType & nsSelectionType::SEL_GRF )
             //Fuer Grafiken und OLE kann sich natuerlich das Verb aendern!
             ImpSetVerb( nNewSelectionType );
     }
@@ -437,7 +437,7 @@ void SwView::SelectShell()
             rDispatcher.Flush();        // alle gecachten Shells wirklich loeschen
 
             //Zur alten Selektion merken welche Toolbar sichtbar war
-            sal_uInt16 nId = rDispatcher.GetObjectBarId( SFX_OBJECTBAR_OBJECT );
+            USHORT nId = static_cast< USHORT >( rDispatcher.GetObjectBarId( SFX_OBJECTBAR_OBJECT ));
             if ( nId )
                 pBarCfg->SetTopToolbar( nSelectionType, nId );
 
@@ -462,7 +462,7 @@ void SwView::SelectShell()
             }
         }
 
-        FASTBOOL bInitFormShell = sal_False;
+        BOOL bInitFormShell = sal_False;
         if (!pFormShell)
         {
             bInitFormShell = sal_True;
@@ -471,75 +471,75 @@ void SwView::SelectShell()
             StartListening(*pFormShell);
         }
 
-        FASTBOOL bSetExtInpCntxt = sal_False;
+        BOOL bSetExtInpCntxt = sal_False;
         nSelectionType = nNewSelectionType;
         ShellModes eShellMode;
 
-        if ( !( nSelectionType & SwWrtShell::FOC_FRM_CTRL ) )
+        if ( !( nSelectionType & nsSelectionType::SEL_FOC_FRM_CTRL ) )
             rDispatcher.Push( *pFormShell );
 
-        if ( nSelectionType & SwWrtShell::SEL_OLE )
+        if ( nSelectionType & nsSelectionType::SEL_OLE )
         {
-            eShellMode = SEL_OBJECT;
+            eShellMode = SHELL_MODE_OBJECT;
             pShell = new SwOleShell( *this );
             rDispatcher.Push( *pShell );
         }
-        else if ( nSelectionType & SwWrtShell::SEL_FRM
-            || nSelectionType & SwWrtShell::SEL_GRF)
+        else if ( nSelectionType & nsSelectionType::SEL_FRM
+            || nSelectionType & nsSelectionType::SEL_GRF)
         {
-            eShellMode = SEL_FRAME;
+            eShellMode = SHELL_MODE_FRAME;
             pShell = new SwFrameShell( *this );
             rDispatcher.Push( *pShell );
-            if(nSelectionType & SwWrtShell::SEL_GRF )
+            if(nSelectionType & nsSelectionType::SEL_GRF )
             {
-                eShellMode = SEL_GRAPHIC;
+                eShellMode = SHELL_MODE_GRAPHIC;
                 pShell = new SwGrfShell( *this );
                 rDispatcher.Push( *pShell );
             }
         }
-        else if ( nSelectionType & SwWrtShell::SEL_DRW )
+        else if ( nSelectionType & nsSelectionType::SEL_DRW )
         {
-            eShellMode = SEL_DRAW;
+            eShellMode = SHELL_MODE_DRAW;
             pShell = new SwDrawShell( *this );
             rDispatcher.Push( *pShell );
 
-            if ( nSelectionType & SwWrtShell::SEL_BEZ )
+            if ( nSelectionType & nsSelectionType::SEL_BEZ )
             {
-                eShellMode = SEL_BEZIER;
+                eShellMode = SHELL_MODE_BEZIER;
                 pShell = new SwBezierShell( *this );
                 rDispatcher.Push( *pShell );
             }
-            else if( nSelectionType & SwWrtShell::SEL_MEDIA )
+            else if( nSelectionType & nsSelectionType::SEL_MEDIA )
             {
-                eShellMode = SEL_MEDIA;
+                eShellMode = SHELL_MODE_MEDIA;
                 pShell = new SwMediaShell( *this );
                 rDispatcher.Push( *pShell );
             }
 
-            if (nSelectionType & SwWrtShell::SEL_EXTRUDED_CUSTOMSHAPE)
+            if (nSelectionType & nsSelectionType::SEL_EXTRUDED_CUSTOMSHAPE)
             {
-                eShellMode = SEL_EXTRUDED_CUSTOMSHAPE;
+                eShellMode = SHELL_MODE_EXTRUDED_CUSTOMSHAPE;
                 pShell = new svx::ExtrusionBar(this);
                 rDispatcher.Push( *pShell );
             }
-            if (nSelectionType & SwWrtShell::SEL_FONTWORK)
+            if (nSelectionType & nsSelectionType::SEL_FONTWORK)
             {
-                eShellMode = SEL_FONTWORK;
+                eShellMode = SHELL_MODE_FONTWORK;
                 pShell = new svx::FontworkBar(this);
                 rDispatcher.Push( *pShell );
             }
         }
-        else if ( nSelectionType & SwWrtShell::SEL_DRW_FORM )
+        else if ( nSelectionType & nsSelectionType::SEL_DRW_FORM )
         {
-            eShellMode = SEL_DRAW_FORM;
+            eShellMode = SHELL_MODE_DRAW_FORM;
             pShell = new SwDrawFormShell( *this );
 
             rDispatcher.Push( *pShell );
         }
-        else if ( nSelectionType & SwWrtShell::SEL_DRW_TXT )
+        else if ( nSelectionType & nsSelectionType::SEL_DRW_TXT )
         {
             bSetExtInpCntxt = sal_True;
-            eShellMode = SEL_DRAWTEXT;
+            eShellMode = SHELL_MODE_DRAWTEXT;
             rDispatcher.Push( *(new SwBaseShell( *this )) );
             pShell = new SwDrawTextShell( *this );
             rDispatcher.Push( *pShell );
@@ -547,11 +547,11 @@ void SwView::SelectShell()
         else
         {
             bSetExtInpCntxt = sal_True;
-            eShellMode = SEL_TEXT;
+            eShellMode = SHELL_MODE_TEXT;
             sal_uInt32 nHelpId = 0;
-            if ( nSelectionType & SwWrtShell::SEL_NUM )
+            if ( nSelectionType & nsSelectionType::SEL_NUM )
             {
-                eShellMode = SEL_LIST_TEXT;
+                eShellMode = SHELL_MODE_LIST_TEXT;
                 pShell = new SwListShell( *this );
                 nHelpId = pShell->GetHelpId();
                 rDispatcher.Push( *pShell );
@@ -560,16 +560,16 @@ void SwView::SelectShell()
             if(nHelpId)
                 pShell->SetHelpId(nHelpId);
             rDispatcher.Push( *pShell );
-            if ( nSelectionType & SwWrtShell::SEL_TBL )
+            if ( nSelectionType & nsSelectionType::SEL_TBL )
             {
-                eShellMode = eShellMode == SEL_LIST_TEXT ? SEL_TABLE_LIST_TEXT
-                                                        : SEL_TABLE_TEXT;
+                eShellMode = eShellMode == SHELL_MODE_LIST_TEXT ? SHELL_MODE_TABLE_LIST_TEXT
+                                                        : SHELL_MODE_TABLE_TEXT;
                 pShell = new SwTableShell( *this );
                 rDispatcher.Push( *pShell );
             }
         }
 
-        if ( nSelectionType & SwWrtShell::FOC_FRM_CTRL )
+        if ( nSelectionType & nsSelectionType::SEL_FOC_FRM_CTRL )
             rDispatcher.Push( *pFormShell );
 
         pViewImpl->SetShellMode(eShellMode);
@@ -626,16 +626,12 @@ void SwView::SelectShell()
 
 
 
-int
-#if defined( WNT )
- __cdecl
-#endif
-#if defined( ICC )
- _Optlink
-#endif
-    lcl_CmpIds( const void *pFirst, const void *pSecond)
+extern "C"
 {
-    return (*(sal_uInt16*)pFirst) - (*(sal_uInt16*)pSecond);
+    int lcl_CmpIds( const void *pFirst, const void *pSecond)
+    {
+        return (*(sal_uInt16*)pFirst) - (*(sal_uInt16*)pSecond);
+    }
 }
 
 
@@ -819,10 +815,10 @@ void SwView::_CheckReadonlySelection()
         // Shell auf dem Stack steht.
         switch( pViewImpl->GetShellMode() )
         {
-        case SEL_TEXT:
-        case SEL_LIST_TEXT:
-        case SEL_TABLE_TEXT:
-        case SEL_TABLE_LIST_TEXT:
+        case SHELL_MODE_TEXT:
+        case SHELL_MODE_LIST_TEXT:
+        case SHELL_MODE_TABLE_TEXT:
+        case SHELL_MODE_TABLE_LIST_TEXT:
             {
 //JP 22.01.99: temporaere Loesung!!! Sollte bei jeder Cursorbewegung
 //          den Font von der akt. Einfuegeposition setzen, also ausserhalb
@@ -842,6 +838,8 @@ void SwView::_CheckReadonlySelection()
                 GetEditWin().SetInputContext( aCntxt );
             }
             break;
+        default:
+            ;
         }
 
     }
@@ -854,16 +852,19 @@ void SwView::_CheckReadonlySelection()
 }
 
 
-SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
-    : SfxViewShell( pFrame, SWVIEWFLAGS ),
+SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
+    : SfxViewShell( _pFrame, SWVIEWFLAGS ),
+
     aPageStr( SW_RES( STR_PAGE )),
-    pEditWin( new SwEditWin( &pFrame->GetWindow(), *this ) ),
-    pShell(0),
+    nNewPage(USHRT_MAX),
+    pNumRuleNodeFromDoc(0), // #i23726#
+    pEditWin( new SwEditWin( &_pFrame->GetWindow(), *this ) ),
     pWrtShell(0),
+    pShell(0),
     pFormShell(0),
     pHScrollbar(0),
     pVScrollbar(0),
-    pScrollFill(new ScrollBarBox( &pFrame->GetWindow(), pFrame->GetFrame()->GetParentFrame() ? 0 : WB_SIZEABLE )),
+    pScrollFill(new ScrollBarBox( &_pFrame->GetWindow(), _pFrame->GetFrame()->GetParentFrame() ? 0 : WB_SIZEABLE )),
     pHRuler( new SvxRuler(&GetViewFrame()->GetWindow(), pEditWin,
                     SVXRULER_SUPPORT_TABS |
                     SVXRULER_SUPPORT_PARAGRAPH_MARGINS |
@@ -885,17 +886,15 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     pDrawActual(0),
     pLastTableFormat(0),
     pFormatClipboard(new SwFormatClipboard()),
+    nSelectionType( INT_MAX ),
     nDrawSfxId( USHRT_MAX ),
     nFormSfxId( USHRT_MAX ),
-    nSelectionType( INT_MAX ),
     nLastPasteDestination( 0xFFFF ),
     nLeftBorderDistance( 0 ),
     nRightBorderDistance( 0 ),
-    nNewPage(USHRT_MAX),
     bInMailMerge(FALSE),
     bInDtor(FALSE),
-    bOldShellWasPagePreView(FALSE),
-    pNumRuleNodeFromDoc(0) // #i23726#
+    bOldShellWasPagePreView(FALSE)
 {
     // OD 18.12.2002 #103492# - According to discussion with MBA and further
     // investigations, no old SfxViewShell will be set as parameter <pOldSh>,
@@ -922,7 +921,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
 
     aTimer.SetTimeout( 120 );
 
-    SwDocShell* pDocSh = PTR_CAST( SwDocShell, pFrame->GetObjectShell() );
+    SwDocShell* pDocSh = PTR_CAST( SwDocShell, _pFrame->GetObjectShell() );
     BOOL bOldModifyFlag = pDocSh->IsEnableSetModified();
     if(bOldModifyFlag)
         pDocSh->EnableSetModified( sal_False );
@@ -951,7 +950,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     else
     {
         SfxViewFrame *pF = SfxViewFrame::GetFirst( pDocSh );
-        if( pF == pFrame )
+        if( pF == _pFrame )
             pF = SfxViewFrame::GetNext( *pF, pDocSh );
         if( pF )
             pExistingSh = pF->GetViewShell();
@@ -993,7 +992,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         }
         if(pDocSh->IsPreview())
             aUsrPref.SetZoomType( SVX_ZOOM_WHOLEPAGE );
-        pWrtShell = new SwWrtShell( rDoc, pEditWin, *this, 0, &aUsrPref );
+        pWrtShell = new SwWrtShell( rDoc, pEditWin, *this, &aUsrPref );
         //#97610# creating an SwView from a SwPagePreView needs to
         // add the ViewShell to the ring of the other ViewShell(s)
         if(bOldShellWasPagePreView)
@@ -1033,7 +1032,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     if( SFX_CREATE_MODE_EMBEDDED != pDocSh->GetCreateMode() )
         aBrwsBorder = GetMargin();
 
-    if( pFrame->GetFrameType() & SFXFRAME_INTERNAL )
+    if( _pFrame->GetFrameType() & SFXFRAME_INTERNAL )
         pWrtShell->SetFrameView( aBrwsBorder );
     else
         pWrtShell->SetBrowseBorder( aBrwsBorder );
@@ -1090,7 +1089,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         static_cast< USHORT >( SW_MOD()->GetUndoOptions().GetUndoCount() ) );
     pWrtShell->DoUndo( 0 != SwEditShell::GetUndoActionCount() );
 
-    const FASTBOOL bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const BOOL bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
     SetNewWindowAllowed(!bBrowse);
 
     ShowVScrollbar(aUsrPref.IsViewVScrollBar());
@@ -1107,7 +1106,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
 
     if( UseObjectSize() )
     {
-        //Damit der Sfx _rechtzeitig weiss_, wie gross die ::com::sun::star::sheet::Border sind.
+        //Damit der Sfx _rechtzeitig weiss_, wie gross die sheet::Border sind.
         SvBorder aTmp;
         CalcAndSetBorderPixel( aTmp, sal_True );
     }
@@ -1128,7 +1127,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         SfxRequest aSfxRequest( FN_UPDATE_TOX, SFX_CALLMODE_SLOT, GetPool() );
         Execute( aSfxRequest );
         pWrtShell->GetDoc()->SetUpdateTOX( sal_False );     // wieder zurueck setzen
-        pWrtShell->SwCrsrShell::SttDoc();
+        pWrtShell->SttEndDoc(TRUE);
     }
 
     // kein ResetModified, wenn es schone eine View auf dieses Doc gibt
@@ -1160,7 +1159,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
 
 
     /*uno::Reference< awt::XWindow >  aTmpRef;
-    pFrame->GetFrame()->GetFrameInterface()->setComponent( aTmpRef,
+    _pFrame->GetFrame()->GetFrameInterface()->setComponent( aTmpRef,
                                             pViewImpl->GetUNOObject_Impl());*/
 
    uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame()->GetFrameInterface();
@@ -1382,23 +1381,23 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
             //apply information from print preview - if available
             if( sNewCrsrPos.Len() )
             {
-                long nX = sNewCrsrPos.GetToken( 0, ';' ).ToInt32(),
-                      nY = sNewCrsrPos.GetToken( 1, ';' ).ToInt32();
-                Point aCrsrPos( nX, nY );
-                bSelectObj = pWrtShell->IsObjSelectable( aCrsrPos );
+                long nXTmp = sNewCrsrPos.GetToken( 0, ';' ).ToInt32(),
+                      nYTmp = sNewCrsrPos.GetToken( 1, ';' ).ToInt32();
+                Point aCrsrPos2( nXTmp, nYTmp );
+                bSelectObj = pWrtShell->IsObjSelectable( aCrsrPos2 );
 
-                pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, FALSE );
+                pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos2, FALSE );
                 if( bSelectObj )
                 {
-                    pWrtShell->SelectObj( aCrsrPos );
-                    pWrtShell->EnterSelFrmMode( &aCrsrPos );
+                    pWrtShell->SelectObj( aCrsrPos2 );
+                    pWrtShell->EnterSelFrmMode( &aCrsrPos2 );
                 }
                 pWrtShell->MakeSelVisible();
                 sNewCrsrPos.Erase();
             }
             else if(USHRT_MAX != nNewPage)
             {
-                pWrtShell->GotoPage(nNewPage);
+                pWrtShell->GotoPage(nNewPage, TRUE);
                 nNewPage = USHRT_MAX;
             }
 
@@ -1417,7 +1416,7 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
     }
 }
 
-void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >& rSequence, sal_Bool bBrowse )
 {
     if(GetDocShell()->IsPreview())
         return;
@@ -1427,13 +1426,13 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
     if (nLength && (!pWrtShell->IsNewLayout() || pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) || bBrowse) )
     {
         SET_CURR_SHELL(pWrtShell);
-        const com::sun::star::beans::PropertyValue *pValue = rSequence.getConstArray();
+        const beans::PropertyValue *pValue = rSequence.getConstArray();
         const SwRect& rRect = pWrtShell->GetCharRect();
         const Rectangle &rVis = GetVisArea();
 
         long nX = rRect.Left(), nY = rRect.Top(), nLeft = rVis.Left(), nTop = rVis.Top();
         long nRight = bBrowse ? LONG_MIN : rVis.Right(), nBottom = bBrowse ? LONG_MIN : rVis.Bottom();
-        sal_Int16 nZoomType = pWrtShell->GetViewOptions()->GetZoomType();
+        sal_Int16 nZoomType = static_cast< sal_Int16 >(pWrtShell->GetViewOptions()->GetZoomType());
         sal_Int16 nZoomFactor = static_cast < sal_Int16 > (pWrtShell->GetViewOptions()->GetZoom());
         sal_Bool bSelectedFrame = ( pWrtShell->GetSelFrmType() != FRMTYPE_NONE ),
                  bGotViewLeft = sal_False, bGotViewTop = sal_False, bGotVisibleLeft = sal_False,
@@ -1582,7 +1581,7 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
     }
 }
 #define NUM_VIEW_SETTINGS 10
-void SwView::WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
+void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSequence, sal_Bool bBrowse )
 {
     const SwRect& rRect = pWrtShell->GetCharRect();
     const Rectangle& rVis = GetVisArea();
@@ -1590,7 +1589,7 @@ void SwView::WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::s
 
     rSequence.realloc ( NUM_VIEW_SETTINGS );
     sal_Int16 nIndex = 0;
-    com::sun::star::beans::PropertyValue *pValue = rSequence.getArray();
+    beans::PropertyValue *pValue = rSequence.getArray();
 
     sal_uInt16 nViewID( GetViewFrame()->GetCurViewId());
     pValue->Name = rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM( "ViewId" ) );
@@ -1623,7 +1622,7 @@ void SwView::WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::s
     pValue->Value <<= TWIP_TO_MM100 ( bBrowse ? LONG_MIN : rVis.Bottom() );
     pValue++;nIndex++;
 
-    sal_Int16 nInt16 = pWrtShell->GetViewOptions()->GetZoomType();
+    sal_Int16 nInt16 = static_cast< sal_Int16 >(pWrtShell->GetViewOptions()->GetZoomType());
     pValue->Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ZoomType" ) );
     pValue->Value <<= nInt16;
     pValue++;nIndex++;
@@ -1667,7 +1666,7 @@ ErrCode SwView::DoVerb( long nVerb )
     {
         SwWrtShell &rSh = GetWrtShell();
         const int nSel = rSh.GetSelectionType();
-        if ( nSel & SwWrtShell::SEL_OLE )
+        if ( nSel & nsSelectionType::SEL_OLE )
             rSh.LaunchOLEObj( nVerb );
     }
     return ERRCODE_NONE;
@@ -1728,7 +1727,7 @@ SwGlossaryHdl* SwView::GetGlosHdl()
 
 void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    FASTBOOL bCallBase = sal_True;
+    BOOL bCallBase = sal_True;
     if ( rHint.ISA(SfxSimpleHint) )
     {
         sal_uInt32 nId = ((SfxSimpleHint&)rHint).GetId();
@@ -1811,7 +1810,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 --------------------------------------------------*/
 #if defined WIN || defined WNT || defined UNX
 
-void SwView::ScannerEventHdl( const EventObject& rEventObject )
+void SwView::ScannerEventHdl( const EventObject& /*rEventObject*/ )
 {
     uno::Reference< XScannerManager > xScanMgr = SW_MOD()->GetScannerManager();
     if( xScanMgr.is() )
@@ -1867,7 +1866,6 @@ void    SwView::StopShellTimer()
 sal_uInt16  SwView::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
 {
     SfxViewFrame* pVFrame = GetViewFrame();
-    SfxApplication* pSfxApp = SFX_APP();
     pVFrame->SetChildWindow( SwInputChild::GetChildWindowId(), sal_False );
     if( pVFrame->GetDispatcher()->IsLocked() )
         pVFrame->GetDispatcher()->Lock(sal_False);
