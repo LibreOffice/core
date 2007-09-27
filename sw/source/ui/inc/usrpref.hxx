@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrpref.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:50:12 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:13:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ class SwMasterUsrPref : public SwViewOption
     SwCursorConfig      aCursorConfig;
     SwWebColorConfig*   pWebColorConfig;
 
-    sal_Int32   nFldUpdateFlags;    //udpate of fields and charts
+    SwFldUpdateFlags eFldUpdateFlags;    //udpate of fields and charts
     sal_Int32   nLinkUpdateMode;
     FieldUnit   eUserMetric;
     FieldUnit   eHScrollMetric;
@@ -199,25 +199,25 @@ public:
 
     void SetUpdateFields(BOOL bSet, sal_Bool bNoModify = sal_False)
         {
-            if(bSet && nFldUpdateFlags == AUTOUPD_OFF)
+            if(bSet && eFldUpdateFlags == AUTOUPD_OFF)
             {
-                nFldUpdateFlags = AUTOUPD_FIELD_ONLY;
+                eFldUpdateFlags = AUTOUPD_FIELD_ONLY;
                 if(!bNoModify)
                     aContentConfig.SetModified();
              }
             else if(!bSet)
             {
-                nFldUpdateFlags = AUTOUPD_OFF;
+                eFldUpdateFlags = AUTOUPD_OFF;
                 if(!bNoModify)
                     aContentConfig.SetModified();
             }
         };
-    sal_Bool IsUpdateFields()const {return nFldUpdateFlags != AUTOUPD_OFF; }
+    sal_Bool IsUpdateFields()const {return eFldUpdateFlags != AUTOUPD_OFF; }
 
-    sal_Int32   GetFldUpdateFlags()const {return nFldUpdateFlags;}
-    void        SetFldUpdateFlags(sal_Int32 nSet, sal_Bool bNoModify = sal_False)
+    SwFldUpdateFlags   GetFldUpdateFlags()const {return eFldUpdateFlags;}
+    void        SetFldUpdateFlags(SwFldUpdateFlags eSet, sal_Bool bNoModify = sal_False)
         {
-            nFldUpdateFlags = nSet;
+            eFldUpdateFlags = eSet;
             if(!bNoModify)
                 aContentConfig.SetModified();
         }
@@ -226,18 +226,18 @@ public:
         {
             if(bSet)
             {
-                nFldUpdateFlags = AUTOUPD_FIELD_AND_CHARTS;
+                eFldUpdateFlags = AUTOUPD_FIELD_AND_CHARTS;
                 if(!bNoModify)
                     aContentConfig.SetModified();
              }
-             else if(nFldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS)
+             else if(eFldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS)
              {
-                nFldUpdateFlags = AUTOUPD_FIELD_ONLY;
+                eFldUpdateFlags = AUTOUPD_FIELD_ONLY;
                 if(!bNoModify)
                     aContentConfig.SetModified();
              }
         };
-    sal_Bool IsUpdateCharts()const {return nFldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS; }
+    sal_Bool IsUpdateCharts()const {return eFldUpdateFlags == AUTOUPD_FIELD_AND_CHARTS; }
 
     FieldUnit   GetMetric() const { return eUserMetric;}
     void        SetMetric(FieldUnit eSet, sal_Bool bNoModify = sal_False)
