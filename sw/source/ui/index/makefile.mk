@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 10:23:13 $
+#   last change: $Author: hr $ $Date: 2007-09-27 12:17:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,10 @@ SRC1FILES =  \
         idxmrk.src \
         multmrk.src
 
+EXCEPTIONSFILES =  \
+        $(SLO)$/cnttab.obj \
+        $(SLO)$/cntex.obj
+
 SLOFILES =  \
         $(SLO)$/cnttab.obj \
         $(SLO)$/cntex.obj \
@@ -60,8 +64,6 @@ SLOFILES =  \
         $(SLO)$/multmrk.obj \
         $(SLO)$/toxmgr.obj
 
-EXCEPTIONSFILES =  \
-        $(SLO)$/cntex.obj
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
 LIB1OBJFILES = \
