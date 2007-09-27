@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toxmgr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:10:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:13:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,14 +96,14 @@ public:
     explicit SwTOXDescription(TOXTypes eType) :
         eTOXType(eType),
         pTitle(0),
-        pForm(0),
-        nContent(TOX_MARK | TOX_OUTLINELEVEL),
-        nLevel(MAXLEVEL),
-        eLanguage((LanguageType)::GetAppLanguage()),
         pTOUName(0),
-        nIndexOptions(TOI_SAME_ENTRY|TOI_FF|TOI_CASE_SENSITIVE),
+        pForm(0),
+        nContent(nsSwTOXElement::TOX_MARK | nsSwTOXElement::TOX_OUTLINELEVEL),
+        nIndexOptions(nsSwTOIOptions::TOI_SAME_ENTRY|nsSwTOIOptions::TOI_FF|nsSwTOIOptions::TOI_CASE_SENSITIVE),
         nOLEOptions(0),
+        eLanguage((LanguageType)::GetAppLanguage()),
         eCaptionDisplay(CAPTION_COMPLETE),
+        nLevel(MAXLEVEL),
         bFromObjectNames(FALSE),
         bFromChapter(FALSE),
         bReadonly(TRUE),
@@ -121,10 +121,10 @@ public:
     void            SetTOXType(TOXTypes eSet) { eTOXType = eSet;}
     TOXTypes        GetTOXType() const { return eTOXType;}
 
-    const String&   GetStyleNames(USHORT nLevel) const
-                                {return aStyleNames[nLevel];}
-    void            SetStyleNames(const String& rSet, USHORT nLevel)
-                                {aStyleNames[nLevel] = rSet; }
+    const String&   GetStyleNames(USHORT nLvl) const
+                                {return aStyleNames[nLvl];}
+    void            SetStyleNames(const String& rSet, USHORT nLvl)
+                                {aStyleNames[nLvl] = rSet; }
 
     const String&   GetAutoMarkURL() const { return sAutoMarkURL;}
     void            SetAutoMarkURL(const String& rSet) {sAutoMarkURL = rSet;}
@@ -222,15 +222,15 @@ public:
     // single argument ctors shall be explicit.
     explicit SwTOXMarkDescription(TOXTypes eType) :
         eTOXType(eType),
+        nLevel(0),
+        bMainEntry(FALSE),
         pPrimKey(0),
         pSecKey(0),
         pAltStr(0),
         pTOUName(0),
         pPhoneticReadingOfAltStr(0),
         pPhoneticReadingOfPrimKey(0),
-        pPhoneticReadingOfSecKey(0),
-        nLevel(0),
-        bMainEntry(FALSE)
+        pPhoneticReadingOfSecKey(0)
         {
         }
     ~SwTOXMarkDescription()
