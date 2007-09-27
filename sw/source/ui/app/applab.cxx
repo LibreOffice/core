@@ -4,9 +4,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:13:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:15:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,9 +111,6 @@
 #ifndef _GLOSHDL_HXX
 #include <gloshdl.hxx>
 #endif
-//CHINA001 #ifndef _GLOSSARY_HXX
-//CHINA001 #include <glossary.hxx>
-//CHINA001 #endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>
 #endif
@@ -178,9 +175,9 @@
 #ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
 #endif
-#include "swabstdlg.hxx" //CHINA001
-#include "envelp.hrc" //CHINA001
-#include <misc.hrc> //CHINA001
+#include "swabstdlg.hxx"
+#include "envelp.hrc"
+#include <misc.hrc>
 
 #include <IDocumentDeviceAccess.hxx>
 
@@ -207,9 +204,9 @@ const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
     if (!bPage)
     {
         aSet.Put(SwFmtHoriOrient(rItem.lLeft + nCol * rItem.lHDist,
-                                                    HORI_NONE, REL_PG_FRAME ));
+                                                    text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
         aSet.Put(SwFmtVertOrient(rItem.lUpper + nRow * rItem.lVDist,
-                                                    VERT_NONE, REL_PG_FRAME ));
+                                                    text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
     }
     const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Fly einfuegen
     ASSERT( pFmt, "Fly not inserted" );
@@ -222,11 +219,10 @@ const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
     if(!rItem.bSynchron || !(nCol|nRow))
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
         ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
         if ( fnSetActGroup )
             (*fnSetActGroup)( rItem.sGlossaryGroup );
-        //CHINA001 end
         SwGlossaryHdl* pGlosHdl = rSh.GetView().GetGlosHdl();
         pGlosHdl->SetCurGroup(rItem.sGlossaryGroup, sal_True);
         pGlosHdl->InsertGlossary( rItem.sGlossaryBlockName );
@@ -248,9 +244,9 @@ const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
     if (!bPage)
     {
         aSet.Put(SwFmtHoriOrient(rItem.lLeft + nCol * rItem.lHDist,
-                                                    HORI_NONE, REL_PG_FRAME ));
+                                                    text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
         aSet.Put(SwFmtVertOrient(rItem.lUpper + nRow * rItem.lVDist,
-                                                    VERT_NONE, REL_PG_FRAME ));
+                                                    text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
     }
     const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Fly einfuegen
     ASSERT( pFmt, "Fly not inserted" );
@@ -289,12 +285,11 @@ static sal_uInt16 nBCTitleNo = 0;
     SfxItemSet aSet( GetPool(), FN_LABEL, FN_LABEL, 0 );
     aSet.Put( aLabCfg.GetItem() );
 
-    //CHINA001 SwLabDlg* pDlg = new SwLabDlg(0, aSet, pNewDBMgr, bLabel);
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+    SwAbstractDialogFactory* pDialogFactory = SwAbstractDialogFactory::Create();
+    DBG_ASSERT(pDialogFactory, "SwAbstractDialogFactory fail!");
 
-    AbstarctSwLabDlg* pDlg = pFact->CreateSwLabDlg( 0, aSet, pNewDBMgr, bLabel, DLG_LAB );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    AbstarctSwLabDlg* pDlg = pDialogFactory->CreateSwLabDlg( 0, aSet, pNewDBMgr, bLabel, DLG_LAB );
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
     if ( RET_OK == pDlg->Execute() )
     {
@@ -327,8 +322,8 @@ static sal_uInt16 nBCTitleNo = 0;
         xDocSh->PutItem(SfxBoolItem(SID_HIDDEN, TRUE));
         pFr->InsertDocument(xDocSh);
         SfxViewFrame *pFrame = pFr->GetCurrentViewFrame();
-        SwView      *pView = (SwView*) pFrame->GetViewShell();
-        pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
+        SwView      *pNewView = (SwView*) pFrame->GetViewShell();
+        pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );//Damit SelectShell gerufen wird.
 
         // Dokumenttitel setzen
         String aTmp;
@@ -347,7 +342,7 @@ static sal_uInt16 nBCTitleNo = 0;
         pFrame->GetFrame()->Appear();
 
         // Shell ermitteln
-        SwWrtShell *pSh = pView->GetWrtShellPtr();
+        SwWrtShell *pSh = pNewView->GetWrtShellPtr();
         ASSERT( pSh, "missing WrtShell" );
 
         {   // block for locks the dispatcher!!
@@ -381,7 +376,7 @@ static sal_uInt16 nBCTitleNo = 0;
             aDesc.ChgFooterShare(sal_False);
 
 
-            aDesc.SetUseOn(PD_ALL);             // Seitennumerierung
+            aDesc.SetUseOn(nsUseOnPage::PD_ALL);                // Seitennumerierung
 
             // Einstellen der Seitengroesse
             rFmt.SetAttr(SwFmtFrmSize(ATT_FIX_SIZE,
@@ -450,7 +445,7 @@ static sal_uInt16 nBCTitleNo = 0;
             if ( rItem.bPage )
             {
                 SwFmtVertOrient aFrmVertOrient( pFmt->GetVertOrient() );
-                aFrmVertOrient.SetVertOrient( VERT_TOP );
+                aFrmVertOrient.SetVertOrient( text::VertOrientation::TOP );
                 pFmt->SetAttr(aFrmVertOrient);
 
                 for ( sal_uInt16 i = 0; i < rItem.nRows; ++i )
@@ -511,18 +506,19 @@ static sal_uInt16 nBCTitleNo = 0;
             {
                 pFirstFlyFmt = bLabel ?
                     lcl_InsertLabText( *pSh, rItem, *pFmt, *pFldMgr,
-                            rItem.nCol - 1, rItem.nRow - 1, sal_True, sal_False ) :
-                    lcl_InsertBCText(*pSh, rItem, *pFmt, rItem.nCol - 1, rItem.nRow - 1, sal_False);
+                            static_cast< sal_uInt16 >(rItem.nCol - 1),
+                            static_cast< sal_uInt16 >(rItem.nRow - 1), sal_True, sal_False ) :
+                    lcl_InsertBCText(*pSh, rItem, *pFmt,
+                            static_cast< sal_uInt16 >(rItem.nCol - 1),
+                            static_cast< sal_uInt16 >(rItem.nRow - 1), sal_False);
             }
 
             //fill the user fields
             if(!bLabel)
             {
                 uno::Reference< frame::XModel >  xModel = pSh->GetView().GetDocShell()->GetBaseModel();
-                //CHINA001 SwLabDlg::UpdateFieldInformation(xModel, rItem);
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-                SwLabDlgMethod SwLabDlgUpdateFieldInformation = pFact->GetSwLabDlgStaticMethod ();
+                DBG_ASSERT(pDialogFactory, "SwAbstractDialogFactory fail!");
+                SwLabDlgMethod SwLabDlgUpdateFieldInformation = pDialogFactory->GetSwLabDlgStaticMethod ();
                 SwLabDlgUpdateFieldInformation(xModel, rItem);
             }
 
@@ -540,7 +536,7 @@ static sal_uInt16 nBCTitleNo = 0;
         if( rItem.aWriting.indexOf( '<' ) >= 0 )
         {
             // Datenbankbrowser mit zuletzt verwendeter Datenbank oeffnen
-            ShowDBObj( *pView, pSh->GetDBData() );
+            ShowDBObj( *pNewView, pSh->GetDBData() );
         }
 
         if( rItem.bSynchron )
