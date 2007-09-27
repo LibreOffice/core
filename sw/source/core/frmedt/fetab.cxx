@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:59:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:51:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,9 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
+
+using namespace ::com::sun::star;
+
 
 //siehe auch swtable.cxx
 #define COLFUZZY 20L
@@ -307,7 +310,7 @@ BOOL SwFEShell::InsertRow( USHORT nCnt, BOOL bBehind )
 
     // lasse ueber das Layout die Boxen suchen
     SwSelBoxes aBoxes;
-    GetTblSel( *this, aBoxes, TBLSEARCH_ROW );
+    GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_ROW );
 
     TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.Count() );
 
@@ -335,7 +338,7 @@ BOOL SwFEShell::InsertCol( USHORT nCnt, BOOL bBehind )
 
     SET_CURR_SHELL( this );
 
-    if( !CheckSplitCells( *this, nCnt + 1, TBLSEARCH_COL ) )
+    if( !CheckSplitCells( *this, nCnt + 1, nsSwTblSearchType::TBLSEARCH_COL ) )
     {
         ErrorHandler::HandleError( ERR_TBLINSCOL_ERROR,
                         ERRCODE_MSG_INFO | ERRCODE_BUTTON_DEF_OK );
@@ -345,7 +348,7 @@ BOOL SwFEShell::InsertCol( USHORT nCnt, BOOL bBehind )
     StartAllAction();
     // lasse ueber das Layout die Boxen suchen
     SwSelBoxes aBoxes;
-    GetTblSel( *this, aBoxes, TBLSEARCH_COL );
+    GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
 
     TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.Count() );
 
@@ -403,7 +406,7 @@ BOOL SwFEShell::DeleteCol()
     // lasse ueber das Layout die Boxen suchen
     BOOL bRet;
     SwSelBoxes aBoxes;
-    GetTblSel( *this, aBoxes, TBLSEARCH_COL );
+    GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
     if ( aBoxes.Count() )
     {
         TblWait( aBoxes.Count(), pFrm, *GetDoc()->GetDocShell() );
@@ -449,7 +452,7 @@ BOOL SwFEShell::DeleteRow()
     // lasse ueber das Layout die Boxen suchen
     BOOL bRet;
     SwSelBoxes aBoxes;
-    GetTblSel( *this, aBoxes, TBLSEARCH_ROW );
+    GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_ROW );
 
     if( aBoxes.Count() )
     {
@@ -563,8 +566,8 @@ USHORT SwFEShell::MergeTab()
     USHORT nRet = TBLMERGE_NOSELECTION;
     if( IsTableMode() )
     {
-        SwShellTableCrsr* pTblCrsr = GetTableCrsr();
-        const SwTableNode* pTblNd = pTblCrsr->GetNode()->FindTableNode();
+        SwShellTableCrsr* pTableCrsr = GetTableCrsr();
+        const SwTableNode* pTblNd = pTableCrsr->GetNode()->FindTableNode();
         if( pTblNd->GetTable().ISA( SwDDETable ))
         {
             ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
@@ -575,10 +578,10 @@ USHORT SwFEShell::MergeTab()
             SET_CURR_SHELL( this );
             StartAllAction();
 
-            TblWait( pTblCrsr->GetBoxesCount(), 0, *GetDoc()->GetDocShell(),
+            TblWait( pTableCrsr->GetBoxesCount(), 0, *GetDoc()->GetDocShell(),
                      pTblNd->GetTable().GetTabLines().Count() );
 
-            nRet = GetDoc()->MergeTbl( *pTblCrsr );
+            nRet = GetDoc()->MergeTbl( *pTableCrsr );
 
             KillPams();
 
@@ -644,7 +647,7 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
     if ( pLastCols )
     {
         //Paar Kleinigkeiten muessen wir schon noch sicherstellen
-        FASTBOOL bDel = TRUE;
+        BOOL bDel = TRUE;
         if ( pColumnCacheLastTable == pTab->GetTable() )
         {
             bDel = FALSE;
@@ -663,7 +666,7 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
                 //Wenn der TabFrm gewechselt hat, brauchen wir bei gleicher
                 //Breite nur ein wenig shiften.
                 SWRECTFNX( pColumnCacheLastTabFrm )
-                if( (pColumnCacheLastTabFrm->Frm().*fnRect->fnGetWidth)() ==
+                if( (pColumnCacheLastTabFrm->Frm().*fnRectX->fnGetWidth)() ==
                     (pTab->Frm().*fnRect->fnGetWidth)() )
                 {
                     pLastCols->SetLeftMin( nLeftMin );
@@ -710,9 +713,10 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
 
 #if OSL_DEBUG_LEVEL > 1
     SwTabColsEntry aEntry;
-    for ( int i = 0; i < rToFill.Count(); ++i )
+    for ( USHORT i = 0; i < rToFill.Count(); ++i )
     {
         aEntry = rToFill.GetEntry( i );
+        (void)aEntry;
     }
 #endif
 }
@@ -729,7 +733,7 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
     if ( pLastRows )
     {
         //Paar Kleinigkeiten muessen wir schon noch sicherstellen
-        FASTBOOL bDel = TRUE;
+        BOOL bDel = TRUE;
         if ( pRowCacheLastTable == pTab->GetTable() )
         {
             bDel = FALSE;
@@ -1541,7 +1545,6 @@ USHORT SwFEShell::GetCurTabColNum() const
             pFrm = pFrm->GetUpper();
         } while ( !pFrm->IsCellFrm() );
         SWRECTFN( pFrm )
-        const long nX = (pFrm->Frm().*fnRect->fnGetLeft)();
 
         //TabCols besorgen, den nur ueber diese erreichen wir die Position.
         SwTabCols aTabCols;
@@ -1889,7 +1892,6 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd )
 
         if ( pFrm )
         {
-            const SwTabFrm* pTabFrm = pFrm->FindTabFrm();
             const SwCntntFrm* pCntnt = ::GetCellCntnt( *pFrm );
 
             if ( pCntnt && pCntnt->IsTxtFrm() )
@@ -2359,7 +2361,7 @@ BOOL SwFEShell::SetColRowWidthHeight( USHORT eType, USHORT nDiff )
     if( !pFrm || !pFrm->IsInTab() )
         return FALSE;
 
-    if( WH_FLAG_INSDEL & eType &&
+    if( nsTblChgWidthHeightType::WH_FLAG_INSDEL & eType &&
         pFrm->ImplFindTabFrm()->GetTable()->ISA( SwDDETable ))
     {
         ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
@@ -2382,8 +2384,8 @@ BOOL SwFEShell::SetColRowWidthHeight( USHORT eType, USHORT nDiff )
     SWRECTFN( pTab )
     long nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
     if( TBLVAR_CHGABS == pTab->GetTable()->GetTblChgMode() &&
-        ( eType & WH_COL_LEFT || eType & WH_COL_RIGHT ) &&
-        HORI_NONE == pTab->GetFmt()->GetHoriOrient().GetHoriOrient() &&
+        ( eType & nsTblChgWidthHeightType::WH_COL_LEFT || eType & nsTblChgWidthHeightType::WH_COL_RIGHT ) &&
+        text::HoriOrientation::NONE == pTab->GetFmt()->GetHoriOrient().GetHoriOrient() &&
         nPrtWidth != rTblFrmSz.GetWidth() )
     {
         SwFmtFrmSize aSz( rTblFrmSz );
@@ -2391,8 +2393,8 @@ BOOL SwFEShell::SetColRowWidthHeight( USHORT eType, USHORT nDiff )
         pTab->GetFmt()->SetAttr( aSz );
     }
 
-    if( (eType & (WH_FLAG_BIGGER | WH_FLAG_INSDEL)) ==
-        (WH_FLAG_BIGGER | WH_FLAG_INSDEL) )
+    if( (eType & (nsTblChgWidthHeightType::WH_FLAG_BIGGER | nsTblChgWidthHeightType::WH_FLAG_INSDEL)) ==
+        (nsTblChgWidthHeightType::WH_FLAG_BIGGER | nsTblChgWidthHeightType::WH_FLAG_INSDEL) )
     {
         nDiff = USHORT((pFrm->Frm().*fnRect->fnGetWidth)());
 
@@ -2402,16 +2404,16 @@ BOOL SwFEShell::SetColRowWidthHeight( USHORT eType, USHORT nDiff )
             static_cast<TblChgWidthHeightType>( eType & 0xfff );
         switch( eTmp )
         {
-        case WH_ROW_TOP:
+        case nsTblChgWidthHeightType::WH_ROW_TOP:
             lcl_GoTableRow( this, true );
             break;
-        case WH_ROW_BOTTOM:
+        case nsTblChgWidthHeightType::WH_ROW_BOTTOM:
             lcl_GoTableRow( this, false );
             break;
-        case WH_COL_LEFT:
+        case nsTblChgWidthHeightType::WH_COL_LEFT:
             GoPrevCell();
             break;
-        case WH_COL_RIGHT:
+        case nsTblChgWidthHeightType::WH_COL_RIGHT:
             GoNextCell();
             break;
         default:
@@ -2431,27 +2433,27 @@ BOOL SwFEShell::SetColRowWidthHeight( USHORT eType, USHORT nDiff )
     delete pLastCols, pLastCols = 0;
     EndAllActionAndCall();
 
-    if( bRet && (eType & (WH_FLAG_BIGGER | WH_FLAG_INSDEL)) == WH_FLAG_INSDEL )
+    if( bRet && (eType & (nsTblChgWidthHeightType::WH_FLAG_BIGGER | nsTblChgWidthHeightType::WH_FLAG_INSDEL)) == nsTblChgWidthHeightType::WH_FLAG_INSDEL )
     {
-        switch(eType & ~(WH_FLAG_BIGGER | WH_FLAG_INSDEL))
+        switch(eType & ~(nsTblChgWidthHeightType::WH_FLAG_BIGGER | nsTblChgWidthHeightType::WH_FLAG_INSDEL))
         {
-        case WH_CELL_LEFT:
-        case WH_COL_LEFT:
+        case nsTblChgWidthHeightType::WH_CELL_LEFT:
+        case nsTblChgWidthHeightType::WH_COL_LEFT:
                 GoPrevCell();
                 break;
 
-        case WH_CELL_RIGHT:
-        case WH_COL_RIGHT:
+        case nsTblChgWidthHeightType::WH_CELL_RIGHT:
+        case nsTblChgWidthHeightType::WH_COL_RIGHT:
                 GoNextCell();
                 break;
 
-        case WH_CELL_TOP:
-        case WH_ROW_TOP:
+        case nsTblChgWidthHeightType::WH_CELL_TOP:
+        case nsTblChgWidthHeightType::WH_ROW_TOP:
                 lcl_GoTableRow( this, true );
                 break;
 
-        case WH_CELL_BOTTOM:
-        case WH_ROW_BOTTOM:
+        case nsTblChgWidthHeightType::WH_CELL_BOTTOM:
+        case nsTblChgWidthHeightType::WH_ROW_BOTTOM:
                 lcl_GoTableRow( this, false );
                 break;
         }
