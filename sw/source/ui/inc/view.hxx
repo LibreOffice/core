@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 16:04:15 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:14:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,21 +137,21 @@ const long nScrollY  =   30;
 
 enum ShellModes
 {
-    SEL_TEXT,
-    SEL_FRAME,
-    SEL_GRAPHIC,
-    SEL_OBJECT,
-    SEL_DRAW,
-    SEL_DRAW_CTRL,
-    SEL_DRAW_FORM,
-    SEL_DRAWTEXT,
-    SEL_BEZIER,
-    SEL_LIST_TEXT,
-    SEL_TABLE_TEXT,
-    SEL_TABLE_LIST_TEXT,
-    SEL_MEDIA,
-    SEL_EXTRUDED_CUSTOMSHAPE,
-    SEL_FONTWORK
+    SHELL_MODE_TEXT,
+    SHELL_MODE_FRAME,
+    SHELL_MODE_GRAPHIC,
+    SHELL_MODE_OBJECT,
+    SHELL_MODE_DRAW,
+    SHELL_MODE_DRAW_CTRL,
+    SHELL_MODE_DRAW_FORM,
+    SHELL_MODE_DRAWTEXT,
+    SHELL_MODE_BEZIER,
+    SHELL_MODE_LIST_TEXT,
+    SHELL_MODE_TABLE_TEXT,
+    SHELL_MODE_TABLE_LIST_TEXT,
+    SHELL_MODE_MEDIA,
+    SHELL_MODE_EXTRUDED_CUSTOMSHAPE,
+    SHELL_MODE_FONTWORK
 };
 
 /*--------------------------------------------------------------------
@@ -209,7 +209,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     static USHORT           nInsertObjectCtrlState;
     static USHORT           nInsertFieldCtrlState;
     static USHORT           nMoveType; // fuer Buttons unter dem Scrollbar (viewmdi)
-    static BYTE             nActMark; // aktuelle Sprungmarke fuer unbenannte Merker
+    static USHORT           nActMark; // aktuelle Sprungmarke fuer unbenannte Merker
 
     static BOOL             bExtra;
     static BOOL             bFound;
@@ -343,8 +343,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE long          PhyPageUp();
     SW_DLLPRIVATE long          PhyPageDown();
 
-    SW_DLLPRIVATE int               _CreateScrollbar( int bHori );
-    SW_DLLPRIVATE int               _KillScrollbar( int bHori );
+    SW_DLLPRIVATE int               _CreateScrollbar( BOOL bHori );
     SW_DLLPRIVATE DECL_LINK( ScrollHdl, SwScrollbar * );
     SW_DLLPRIVATE DECL_LINK( EndScrollHdl, SwScrollbar * );
     SW_DLLPRIVATE BOOL          UpdateScrollbars();
@@ -388,7 +387,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                               SvxZoomType eZoomType,
                               short nFactor = 100,
                               BOOL bViewOnly = FALSE);
-    SW_DLLPRIVATE void          CalcAndSetBorderPixel( SvBorder &rToFill, FASTBOOL bInner );
+    SW_DLLPRIVATE void          CalcAndSetBorderPixel( SvBorder &rToFill, BOOL bInner );
 
     SW_DLLPRIVATE void          ShowAtResize();
 
@@ -428,9 +427,10 @@ protected:
 public:
 
     SFX_DECL_VIEWFACTORY(SwView);
-    SFX_DECL_INTERFACE(SW_VIEWSHELL);
+    SFX_DECL_INTERFACE(SW_VIEWSHELL)
     TYPEINFO();
 
+    using SfxShell::GetDispatcher;
     SfxDispatcher   &GetDispatcher();
 
     void                    GotFocus() const;
@@ -480,7 +480,7 @@ public:
     long        SetVScrollMax(long lMax);
     long        SetHScrollMax(long lMax);
 
-    DECL_LINK( SpellError, void * );
+    DECL_LINK( SpellError, LanguageType * );
     BOOL            ExecSpellPopup( const Point& rPt );
 
     // SMARTTAGS
@@ -570,7 +570,7 @@ public:
 
     // Funktionen fuer Drawing
     void            SetDrawFuncPtr(SwDrawBase* pFuncPtr);
-    inline SwDrawBase* GetDrawFuncPtr(BOOL bBuf = FALSE) const  { return pDrawActual; }
+    inline SwDrawBase* GetDrawFuncPtr(/*BOOL bBuf = FALSE*/) const  { return pDrawActual; }
     void            GetDrawState(SfxItemSet &rSet);
     void            ExitDraw();
     inline BOOL     IsDrawRotate()      { return bDrawRotate; }
