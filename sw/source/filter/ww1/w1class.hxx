@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1class.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:13:45 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:57:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,9 +200,9 @@ public:
 class Ww1DocText : public Ww1PlainText
 {
 public:
-    Ww1DocText(Ww1Fib& rFib) :
-        Ww1PlainText(rFib, rFib.GetFIB().fcMinGet(),
-         rFib.GetFIB().ccpTextGet()) {
+    Ww1DocText(Ww1Fib& rFibL) :
+        Ww1PlainText(rFibL, rFibL.GetFIB().fcMinGet(),
+         rFibL.GetFIB().ccpTextGet()) {
         }
 };
 
@@ -210,11 +210,11 @@ public:
 class Ww1FtnText : public Ww1PlainText
 {
 public:
-    ULONG Offset(Ww1Fib& rFib) {
-        return rFib.GetFIB().ccpTextGet(); }
-    Ww1FtnText(Ww1Fib& rFib) :
-        Ww1PlainText(rFib, rFib.GetFIB().fcMinGet() +
-         Offset(rFib), rFib.GetFIB().ccpFtnGet()) {
+    ULONG Offset(Ww1Fib& rFibL) {
+        return rFibL.GetFIB().ccpTextGet(); }
+    Ww1FtnText(Ww1Fib& rFibL) :
+        Ww1PlainText(rFibL, rFibL.GetFIB().fcMinGet() +
+         Offset(rFibL), rFibL.GetFIB().ccpFtnGet()) {
         }
 };
 
@@ -222,11 +222,11 @@ public:
 class Ww1HddText : public Ww1PlainText
 {
 public:
-    ULONG Offset(Ww1Fib& rFib) {
-        return rFib.GetFIB().ccpTextGet() + rFib.GetFIB().ccpFtnGet(); }
-    Ww1HddText(Ww1Fib& rFib) :
-        Ww1PlainText(rFib, rFib.GetFIB().fcMinGet() +
-         Offset(rFib), rFib.GetFIB().ccpHddGet()) {
+    ULONG Offset(Ww1Fib& rFibL) {
+        return rFibL.GetFIB().ccpTextGet() + rFibL.GetFIB().ccpFtnGet(); }
+    Ww1HddText(Ww1Fib& rFibL) :
+        Ww1PlainText(rFibL, rFibL.GetFIB().fcMinGet() +
+         Offset(rFibL), rFibL.GetFIB().ccpHddGet()) {
         }
 };
 
@@ -234,12 +234,12 @@ public:
 class Ww1McrText : public Ww1PlainText
 {
 public:
-    ULONG Offset(Ww1Fib& rFib) {
-        return rFib.GetFIB().ccpTextGet() + rFib.GetFIB().ccpFtnGet()
-         + rFib.GetFIB().ccpHddGet(); }
-    Ww1McrText(Ww1Fib& rFib) :
-        Ww1PlainText(rFib, rFib.GetFIB().fcMinGet() +
-         Offset(rFib), rFib.GetFIB().ccpMcrGet()) {
+    ULONG Offset(Ww1Fib& rFibL) {
+        return rFibL.GetFIB().ccpTextGet() + rFibL.GetFIB().ccpFtnGet()
+         + rFibL.GetFIB().ccpHddGet(); }
+    Ww1McrText(Ww1Fib& rFibL) :
+        Ww1PlainText(rFibL, rFibL.GetFIB().fcMinGet() +
+         Offset(rFibL), rFibL.GetFIB().ccpMcrGet()) {
         }
 };
 
@@ -247,12 +247,12 @@ public:
 class Ww1AtnText : public Ww1PlainText
 {
 public:
-    ULONG Offset(Ww1Fib& rFib) {
-        return rFib.GetFIB().ccpTextGet() + rFib.GetFIB().ccpFtnGet()
-         + rFib.GetFIB().ccpHddGet() + rFib.GetFIB().ccpMcrGet(); }
-    Ww1AtnText(Ww1Fib& rFib) :
-        Ww1PlainText(rFib, rFib.GetFIB().fcMinGet() +
-         Offset(rFib), rFib.GetFIB().ccpAtnGet()) {
+    ULONG Offset(Ww1Fib& rFibL) {
+        return rFibL.GetFIB().ccpTextGet() + rFibL.GetFIB().ccpFtnGet()
+         + rFibL.GetFIB().ccpHddGet() + rFibL.GetFIB().ccpMcrGet(); }
+    Ww1AtnText(Ww1Fib& rFibL) :
+        Ww1PlainText(rFibL, rFibL.GetFIB().fcMinGet() +
+         Offset(rFibL), rFibL.GetFIB().ccpAtnGet()) {
         }
 };
 
@@ -389,8 +389,8 @@ public:
     virtual USHORT Size(BYTE*);
     USHORT nCountBytes;
 
-    Ww1SingleSprm(USHORT nCountBytes, const sal_Char* pName = 0 )
-        : nCountBytes(nCountBytes)
+    Ww1SingleSprm(USHORT nBytes, const sal_Char* /*pName*/ = 0 )
+        : nCountBytes(nBytes)
 #ifdef DUMP
         , sName( pName)
 #endif
@@ -402,8 +402,8 @@ class Ww1SingleSprmByteSized : public Ww1SingleSprm {
 public:
 //  ostream& Dump(ostream&, BYTE*, USHORT);
     USHORT Size(BYTE*);
-    Ww1SingleSprmByteSized(USHORT nCountBytes, sal_Char* sName = 0) :
-        Ww1SingleSprm(nCountBytes, sName) {
+    Ww1SingleSprmByteSized(USHORT nBytes, sal_Char* sName = 0) :
+        Ww1SingleSprm(nBytes, sName) {
         }
 };
 
@@ -411,8 +411,8 @@ class Ww1SingleSprmWordSized : public Ww1SingleSprm {
 public:
 //  ostream& Dump(ostream&, BYTE*, USHORT);
     USHORT Size(BYTE*);
-    Ww1SingleSprmWordSized(USHORT nCountBytes, sal_Char* sName = 0) :
-        Ww1SingleSprm(nCountBytes, sName) {
+    Ww1SingleSprmWordSized(USHORT nBytes, sal_Char* sName = 0) :
+        Ww1SingleSprm(nBytes, sName) {
         }
 };
 
@@ -464,8 +464,8 @@ class Ww1SingleSprmTab : public Ww1SingleSprm {
 public:
     ostream& Dump(ostream&, BYTE*, USHORT);
     USHORT Size(BYTE*);
-    Ww1SingleSprmTab(USHORT nCountBytes, sal_Char* sName = 0) :
-        Ww1SingleSprm(nCountBytes, sName) {
+    Ww1SingleSprmTab(USHORT nBytes, sal_Char* sName = 0) :
+        Ww1SingleSprm(nBytes, sName) {
         }
 };
 
@@ -542,6 +542,7 @@ protected:
 //  SvxBorderLine* SetBorder(SvxBorderLine*, W1_BRC*);
     // spezielle start-routine, je nach sprm verschieden versorgt
     // mit einem BoxItem.
+    using Ww1SingleSprm::Start;
     void Start(Ww1Shell&, BYTE, W1_BRC10*, USHORT, Ww1Manager&, SvxBoxItem&);
     void Start(Ww1Shell&, BYTE, W1_BRC*, USHORT, Ww1Manager&, SvxBoxItem&);
 public:
@@ -566,9 +567,14 @@ public:
 class Ww1SingleSprmPBrc10 : public Ww1SingleSprmPBrc
 {
     USHORT nLine;   // BRC_TOP, BRC_LEFT, ...
+
+protected:
+    using Ww1SingleSprmPBrc::Start;
+
 public:
     Ww1SingleSprmPBrc10(USHORT nL, sal_Char* sName)
     : Ww1SingleSprmPBrc(sName), nLine(nL) {}
+
     void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
 };
 
@@ -893,9 +899,9 @@ public:
 class Ww1PlcGlossary : public Ww1Plc
 {
 public:
-    Ww1PlcGlossary(Ww1Fib& rFib) :
-        Ww1Plc(rFib, rFib.GetFIB().fcPlcfglsyGet(),
-         rFib.GetFIB().cbPlcfglsyGet(), 0) {
+    Ww1PlcGlossary(Ww1Fib& rFibL) :
+        Ww1Plc(rFibL, rFibL.GetFIB().fcPlcfglsyGet(),
+         rFibL.GetFIB().cbPlcfglsyGet(), 0) {
         }
 };
 
@@ -903,9 +909,9 @@ public:
 class Ww1PlcAnnotationRef : public Ww1Plc
 {
 public:
-    Ww1PlcAnnotationRef(Ww1Fib& rFib) :
-        Ww1Plc(rFib, rFib.GetFIB().fcPlcfandRefGet(),
-         rFib.GetFIB().cbPlcfandRefGet(), 0) {
+    Ww1PlcAnnotationRef(Ww1Fib& rFibL) :
+        Ww1Plc(rFibL, rFibL.GetFIB().fcPlcfandRefGet(),
+         rFibL.GetFIB().cbPlcfandRefGet(), 0) {
         }
 };
 
@@ -913,9 +919,9 @@ public:
 class Ww1PlcAnnotationTxt : public Ww1Plc
 {
 public:
-    Ww1PlcAnnotationTxt(Ww1Fib& rFib) :
-        Ww1Plc(rFib, rFib.GetFIB().fcPlcfandTxtGet(),
-         rFib.GetFIB().cbPlcfandTxtGet(), 0) {
+    Ww1PlcAnnotationTxt(Ww1Fib& rFibL) :
+        Ww1Plc(rFibL, rFibL.GetFIB().fcPlcfandTxtGet(),
+         rFibL.GetFIB().cbPlcfandTxtGet(), 0) {
         }
 };
 
@@ -935,9 +941,9 @@ public:
 class Ww1PlcSep : public Ww1Plc
 {
 public:
-    Ww1PlcSep(Ww1Fib& rFib):
-        Ww1Plc(rFib, rFib.GetFIB().fcPlcfsedGet(),
-         rFib.GetFIB().cbPlcfsedGet(), 6) {
+    Ww1PlcSep(Ww1Fib& rFibL):
+        Ww1Plc(rFibL, rFibL.GetFIB().fcPlcfsedGet(),
+         rFibL.GetFIB().cbPlcfsedGet(), 6) {
         }
     friend ostream& operator <<(ostream&, Ww1PlcSep&);
 };
@@ -946,9 +952,9 @@ public:
 class Ww1PlcChp : public Ww1Plc
 {
 public:
-    Ww1PlcChp(Ww1Fib& rFib) :
-        Ww1Plc(rFib, rFib.GetFIB().fcPlcfbteChpxGet(),
-         rFib.GetFIB().cbPlcfbteChpxGet(), 2) {
+    Ww1PlcChp(Ww1Fib& rFibL) :
+        Ww1Plc(rFibL, rFibL.GetFIB().fcPlcfbteChpxGet(),
+         rFibL.GetFIB().cbPlcfbteChpxGet(), 2) {
         }
     friend ostream& operator <<(ostream&, Ww1PlcChp&);
 };
@@ -957,9 +963,9 @@ public:
 class Ww1PlcPap : public Ww1Plc
 {
 public:
-    Ww1PlcPap(Ww1Fib& rFib) :
-        Ww1Plc(rFib, rFib.GetFIB().fcPlcfbtePapxGet(),
-         rFib.GetFIB().cbPlcfbtePapxGet(), 2) {
+    Ww1PlcPap(Ww1Fib& rFibL) :
+        Ww1Plc(rFibL, rFibL.GetFIB().fcPlcfbtePapxGet(),
+         rFibL.GetFIB().cbPlcfbtePapxGet(), 2) {
         }
     friend ostream& operator <<(ostream&, Ww1PlcPap&);
 };
@@ -968,9 +974,9 @@ public:
 class Ww1PlcFootnoteRef : public Ww1Plc
 {
 public:
-    Ww1PlcFootnoteRef(Ww1Fib& rFib) :
-        Ww1Plc(rFib, rFib.GetFIB().fcPlcffndRefGet(),
-         rFib.GetFIB().cbPlcffndRefGet(), 2) {
+    Ww1PlcFootnoteRef(Ww1Fib& rFibL) :
+        Ww1Plc(rFibL, rFibL.GetFIB().fcPlcffndRefGet(),
+         rFibL.GetFIB().cbPlcffndRefGet(), 2) {
         }
     friend ostream& operator <<(ostream&, Ww1PlcFootnoteRef&);
 };
@@ -979,9 +985,9 @@ public:
 class Ww1PlcFootnoteTxt : public Ww1Plc
 {
 public:
-    Ww1PlcFootnoteTxt(Ww1Fib& rFib) :
-        Ww1Plc(rFib, rFib.GetFIB().fcPlcffndTxtGet(),
-         rFib.GetFIB().cbPlcffndTxtGet(), 0) {
+    Ww1PlcFootnoteTxt(Ww1Fib& rFibL) :
+        Ww1Plc(rFibL, rFibL.GetFIB().fcPlcffndTxtGet(),
+         rFibL.GetFIB().cbPlcffndTxtGet(), 0) {
         }
     friend ostream& operator <<(ostream&, Ww1PlcFootnoteTxt&);
 };
@@ -991,8 +997,8 @@ class Ww1PlcFields : public Ww1Plc
 {
     //USHORT Fill(USHORT, BYTE&, String&, String&, String&);
 public:
-    Ww1PlcFields(Ww1Fib& rFib, ULONG start, USHORT nCountBytes)
-        : Ww1Plc(rFib, start, nCountBytes, 2)
+    Ww1PlcFields(Ww1Fib& rFibL, ULONG start, USHORT nBytes)
+        : Ww1Plc(rFibL, start, nBytes, 2)
     {}
     W1_FLD* GetData(USHORT nIndex)
         { return (W1_FLD*)Ww1Plc::GetData(nIndex); }
@@ -1028,8 +1034,8 @@ class Ww1PlcBookmarkPos : public Ww1Plc
 {
 //  USHORT Fill(USHORT, BYTE&, String&, String&, String&);
 public:
-    Ww1PlcBookmarkPos(Ww1Fib& rFib, ULONG start, USHORT nCountBytes, BOOL bEnd)
-        : Ww1Plc(rFib, start, nCountBytes, (bEnd) ? 0 : 2)
+    Ww1PlcBookmarkPos(Ww1Fib& _rFib, ULONG start, USHORT nBytes, BOOL bEnd)
+        : Ww1Plc(_rFib, start, nBytes, (bEnd) ? 0 : 2)
     {}
 
     BYTE* GetData(USHORT nIndex)    {   return Ww1Plc::GetData(nIndex); }
@@ -1049,9 +1055,9 @@ public:
 class Ww1PlcHdd : public Ww1Plc
 {
 public:
-    Ww1PlcHdd(Ww1Fib& rFib)
-        : Ww1Plc(rFib, rFib.GetFIB().fcPlcfhddGet(),
-                     rFib.GetFIB().cbPlcfhddGet(), 0)
+    Ww1PlcHdd(Ww1Fib& rFibL)
+        : Ww1Plc(rFibL, rFibL.GetFIB().fcPlcfhddGet(),
+                    rFibL.GetFIB().cbPlcfhddGet(), 0)
     {}
 };
 
@@ -1183,8 +1189,8 @@ class Ww1HeaderFooter : public Ww1PlcHdd
     } eHeaderFooterMode;
 
 public:
-    Ww1HeaderFooter(Ww1Fib& rFib, USHORT grpfIhdt)
-        : Ww1PlcHdd(rFib),
+    Ww1HeaderFooter(Ww1Fib& rFibL, USHORT grpfIhdt)
+        : Ww1PlcHdd(rFibL),
         nextIhdd(0),
         nFtnSep(0xffff),
         nFtnFollowSep(0xffff),
@@ -1300,8 +1306,8 @@ class Ww1Fields : public Ww1PlcFields
         { return Ww1PlcFields::Where(nIndex) - rFib.GetFIB().fcMinGet(); }
 
 public:
-    Ww1Fields(Ww1Fib& rFib, ULONG ulFilePos, USHORT nCountBytes)
-        : Ww1PlcFields(rFib, ulFilePos, nCountBytes), nPlcIndex(0), pField(0)
+    Ww1Fields(Ww1Fib& rFibL, ULONG ulFilePos, USHORT nBytes)
+        : Ww1PlcFields(rFibL, ulFilePos, nBytes), nPlcIndex(0), pField(0)
     {}
 //  ~Ww1Fields() {}
     // innerhalb des textes
@@ -1327,36 +1333,36 @@ public:
 class Ww1TextFields : public Ww1Fields
 {
 public:
-    Ww1TextFields(Ww1Fib& rFib)
-        : Ww1Fields(rFib, rFib.GetFIB().fcPlcffldMomGet(),
-                     rFib.GetFIB().cbPlcffldMomGet())
+    Ww1TextFields(Ww1Fib& rFibL)
+        : Ww1Fields(rFibL, rFibL.GetFIB().fcPlcffldMomGet(),
+                    rFibL.GetFIB().cbPlcffldMomGet())
     {}
 };
 
 class Ww1FootnoteFields : public Ww1Fields
 {
 public:
-    Ww1FootnoteFields(Ww1Fib& rFib)
-        : Ww1Fields(rFib, rFib.GetFIB().fcPlcffldFtnGet(),
-                     rFib.GetFIB().cbPlcffldFtnGet())
+    Ww1FootnoteFields(Ww1Fib& rFibL)
+        : Ww1Fields(rFibL, rFibL.GetFIB().fcPlcffldFtnGet(),
+                    rFibL.GetFIB().cbPlcffldFtnGet())
     {}
 };
 
 class Ww1HeaderFooterFields : public Ww1Fields
 {
 public:
-    Ww1HeaderFooterFields(Ww1Fib& rFib)
-        : Ww1Fields(rFib, rFib.GetFIB().fcPlcffldHdrGet(),
-                     rFib.GetFIB().cbPlcffldHdrGet())
+    Ww1HeaderFooterFields(Ww1Fib& rFibL)
+        : Ww1Fields(rFibL, rFibL.GetFIB().fcPlcffldHdrGet(),
+                    rFibL.GetFIB().cbPlcffldHdrGet())
     {}
 };
 
 class Ww1MacroFields : public Ww1Fields
 {
 public:
-    Ww1MacroFields(Ww1Fib& rFib)
-        : Ww1Fields(rFib, rFib.GetFIB().fcPlcffldMcrGet(),
-                     rFib.GetFIB().cbPlcffldMcrGet())
+    Ww1MacroFields(Ww1Fib& rFibL)
+        : Ww1Fields(rFibL, rFibL.GetFIB().fcPlcffldMcrGet(),
+                    rFibL.GetFIB().cbPlcffldMcrGet())
     {}
 };
 
@@ -1399,8 +1405,8 @@ class Ww1Footnotes : public Ww1PlcFootnoteRef
     Ww1PlcFootnoteTxt aText;
     BOOL bStarted;
 public:
-    Ww1Footnotes(Ww1Fib& rFib)
-        : Ww1PlcFootnoteRef(rFib), nPlcIndex(0), aText(rFib), bStarted(FALSE)
+    Ww1Footnotes(Ww1Fib& rFibL)
+        : Ww1PlcFootnoteRef(rFibL), nPlcIndex(0), aText(rFibL), bStarted(FALSE)
     {}
 //  ~Ww1Footnotes() {}
     // innerhalb des textes
@@ -1426,8 +1432,8 @@ class Ww1Sep : public Ww1PlcSep
     Ww1HeaderFooter aHdd;
     USHORT nPlcIndex;
 public:
-    Ww1Sep(Ww1Fib& rFib, USHORT grpfIhdt)
-    : Ww1PlcSep(rFib), aHdd(rFib, grpfIhdt), nPlcIndex(0) {}
+    Ww1Sep(Ww1Fib& rFibL, USHORT grpfIhdt)
+    : Ww1PlcSep(rFibL), aHdd(rFibL, grpfIhdt), nPlcIndex(0) {}
 
     Ww1HeaderFooter& GetHdd()   { return aHdd; }
     void operator++(int)        { nPlcIndex++; }
@@ -1473,25 +1479,25 @@ public:
     ~Ww1Pap()   { delete pPap; }
     ULONG Where( BOOL bSetIndex = TRUE ); // innerhalb des textes
     void operator++(int);
-    BOOL FillStart(BYTE*& p, USHORT& nSize)
+    BOOL FillStart(BYTE*& pB, USHORT& nSize)
     {
         UpdateIdx();
-        return pPap->Fill(nFkpIndex, p, nSize);
+        return pPap->Fill(nFkpIndex, pB, nSize);
     }
-    BOOL FillStop(BYTE*& p, USHORT& nSize)
+    BOOL FillStop(BYTE*& pB, USHORT& nSize)
     {
-        return nFkpIndex ? pPap->Fill(nFkpIndex-1, p, nSize) : FALSE;
+        return nFkpIndex ? pPap->Fill(nFkpIndex-1, pB, nSize) : FALSE;
     }
     void Start(Ww1Shell&, Ww1Manager&);
     void Stop(Ww1Shell&, Ww1Manager&, sal_Unicode&);
     void Seek(ULONG);
-    void Push(ULONG ulOffset = 0)
+    void Push(ULONG ulOffsetTmp = 0)
     {
         DBG_ASSERT(!Pushed(), "Ww1Pap");
         nPushedPlcIndex = nPlcIndex;
         nPushedFkpIndex = nFkpIndex;
-        Seek(ulOffset);
-        this->ulOffset = ulOffset;
+        Seek(ulOffsetTmp);
+        ulOffset = ulOffsetTmp;
         delete pPap;
         pPap = NULL;
     }
@@ -1550,13 +1556,13 @@ public:
     void Start(Ww1Shell&, Ww1Manager&);
     void Stop(Ww1Shell&, Ww1Manager&, sal_Unicode&);
     void Seek(ULONG);
-    void Push(ULONG ulOffset = 0)
+    void Push(ULONG ulOffsetTmp = 0)
     {
         DBG_ASSERT(!Pushed(), "Ww1Chp");
         nPushedPlcIndex = nPlcIndex;
         nPushedFkpIndex = nFkpIndex;
-        Seek(ulOffset);
-        this->ulOffset = ulOffset;
+        Seek(ulOffsetTmp);
+        ulOffset = ulOffsetTmp;
         delete pChp;
         pChp = NULL;
     }
@@ -1638,7 +1644,7 @@ public:
     BYTE Fill( String& rStr, ULONG ulLen)
     {
         ulLen += pDoc->Where();
-        return pDoc->Out(rStr, ulLen);
+        return sal::static_int_cast< BYTE >(pDoc->Out(rStr, ulLen));
     }
     SvxFontItem GetFont(USHORT nFCode);
     friend Ww1Shell& operator <<(Ww1Shell&, Ww1Manager&);
