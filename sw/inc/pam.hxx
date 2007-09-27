@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pam.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:20:04 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:07:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ namespace com { namespace sun { namespace star { namespace util {
 
 namespace utl {
     class TextSearch;
-};
+}
 
 struct SwPosition
 {
@@ -100,12 +100,12 @@ struct SwPosition
     */
     SwDoc * GetDoc() const;
 
-    FASTBOOL operator < (const SwPosition &) const;
-    FASTBOOL operator > (const SwPosition &) const;
-    FASTBOOL operator <=(const SwPosition &) const;
-    FASTBOOL operator >=(const SwPosition &) const;
-    FASTBOOL operator ==(const SwPosition &) const;
-    FASTBOOL operator !=(const SwPosition &) const;
+    BOOL operator < (const SwPosition &) const;
+    BOOL operator > (const SwPosition &) const;
+    BOOL operator <=(const SwPosition &) const;
+    BOOL operator >=(const SwPosition &) const;
+    BOOL operator ==(const SwPosition &) const;
+    BOOL operator !=(const SwPosition &) const;
 };
 
 
@@ -136,7 +136,7 @@ typedef SwMoveFnCollection* SwMoveFn;
 SW_DLLPUBLIC extern SwMoveFn fnMoveForward; // SwPam::Move()/Find() default argument.
 extern SwMoveFn fnMoveBackward;
 
-typedef FASTBOOL (*SwGoInDoc)( SwPaM& rPam, SwMoveFn fnMove );
+typedef BOOL (*SwGoInDoc)( SwPaM& rPam, SwMoveFn fnMove );
 extern SwGoInDoc fnGoDoc;
 extern SwGoInDoc fnGoSection;
 extern SwGoInDoc fnGoNode;
@@ -153,7 +153,7 @@ class SwPaM : public Ring
     SwPosition aBound2;
     SwPosition *pPoint;
     SwPosition *pMark;
-    FASTBOOL bIsInFrontOfLabel;
+    BOOL bIsInFrontOfLabel;
 
     SwPaM* MakeRegion( SwMoveFn fnMove, const SwPaM * pOrigRg = 0 );
 
@@ -178,27 +178,27 @@ public:
     SwPaM& operator=( const SwPaM & );
 
     // Bewegen des Cursors
-    FASTBOOL Move( SwMoveFn fnMove = fnMoveForward,
+    BOOL Move( SwMoveFn fnMove = fnMoveForward,
                     SwGoInDoc fnGo = fnGoCntnt );
 
     // Suchen
     BYTE Find(  const com::sun::star::util::SearchOptions& rSearchOpt,
                 utl::TextSearch& rSTxt,
                 SwMoveFn fnMove = fnMoveForward,
-                const SwPaM *pPam =0, FASTBOOL bInReadOnly = FALSE);
-    FASTBOOL Find(  const SwFmt& rFmt,
+                const SwPaM *pPam =0, BOOL bInReadOnly = FALSE);
+    BOOL Find(  const SwFmt& rFmt,
                 SwMoveFn fnMove = fnMoveForward,
-                const SwPaM *pPam =0, FASTBOOL bInReadOnly = FALSE);
-    FASTBOOL Find(  const SfxPoolItem& rAttr, FASTBOOL bValue = TRUE,
+                const SwPaM *pPam =0, BOOL bInReadOnly = FALSE);
+    BOOL Find(  const SfxPoolItem& rAttr, BOOL bValue = TRUE,
                 SwMoveFn fnMove = fnMoveForward,
-                const SwPaM *pPam =0, FASTBOOL bInReadOnly = FALSE );
-    FASTBOOL Find(  const SfxItemSet& rAttr, FASTBOOL bNoColls = FALSE,
+                const SwPaM *pPam =0, BOOL bInReadOnly = FALSE );
+    BOOL Find(  const SfxItemSet& rAttr, BOOL bNoColls = FALSE,
                 SwMoveFn fnMove = fnMoveForward,
-                const SwPaM *pPam =0, FASTBOOL bInReadOnly = FALSE );
+                const SwPaM *pPam =0, BOOL bInReadOnly = FALSE );
 
 
-    inline FASTBOOL IsInFrontOfLabel() const { return bIsInFrontOfLabel; }
-    inline void _SetInFrontOfLabel( FASTBOOL bNew ) { bIsInFrontOfLabel = bNew; }
+    inline BOOL IsInFrontOfLabel() const { return bIsInFrontOfLabel; }
+    inline void _SetInFrontOfLabel( BOOL bNew ) { bIsInFrontOfLabel = bNew; }
 
     virtual void SetMark();
     void DeleteMark() { pMark = pPoint; }
@@ -221,7 +221,7 @@ public:
      * Selektion: Point und Mark zeigen auf unterschiedliche
      * Puffer.
      */
-    FASTBOOL HasMark() const { return pPoint == pMark? FALSE : TRUE; }
+    BOOL HasMark() const { return pPoint == pMark? FALSE : TRUE; }
 
     const SwPosition *GetPoint() const { return pPoint; }
           SwPosition *GetPoint()       { return pPoint; }
@@ -267,9 +267,9 @@ public:
 
     // steht in etwas geschuetztem oder in die Selektion umspannt
     // etwas geschuetztes.
-    FASTBOOL HasReadonlySel( bool bFormView ) const;
+    BOOL HasReadonlySel( bool bFormView ) const;
 
-    FASTBOOL ContainsPosition(const SwPosition & rPos)
+    BOOL ContainsPosition(const SwPosition & rPos)
     { return *Start() <= rPos && rPos <= *End(); }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwPaM);
@@ -278,8 +278,8 @@ public:
 };
 
 
-FASTBOOL CheckNodesRange( const SwNodeIndex&, const SwNodeIndex&, FASTBOOL );
-FASTBOOL GoInCntnt( SwPaM & rPam, SwMoveFn fnMove );
+BOOL CheckNodesRange( const SwNodeIndex&, const SwNodeIndex&, BOOL );
+BOOL GoInCntnt( SwPaM & rPam, SwMoveFn fnMove );
 
 
 #endif  // _PAM_HXX
