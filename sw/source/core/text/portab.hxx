@@ -4,9 +4,9 @@
  *
  *  $RCSfile: portab.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:45:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:18:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,8 +70,8 @@ public:
 class SwTabLeftPortion : public SwTabPortion
 {
 public:
-    inline SwTabLeftPortion( const KSHORT nTabPos, const xub_Unicode cFill='\0' )
-         : SwTabPortion( nTabPos, cFill )
+    inline SwTabLeftPortion( const KSHORT nTabPosVal, const xub_Unicode cFillChar='\0' )
+         : SwTabPortion( nTabPosVal, cFillChar )
     { SetWhichPor( POR_TABLEFT ); }
     OUTPUT_OPERATOR
 };
@@ -83,8 +83,8 @@ public:
 class SwTabRightPortion : public SwTabPortion
 {
 public:
-    inline SwTabRightPortion( const KSHORT nTabPos, const xub_Unicode cFill='\0' )
-         : SwTabPortion( nTabPos, cFill )
+    inline SwTabRightPortion( const KSHORT nTabPosVal, const xub_Unicode cFillChar='\0' )
+         : SwTabPortion( nTabPosVal, cFillChar )
     { SetWhichPor( POR_TABRIGHT ); }
     OUTPUT_OPERATOR
 };
@@ -96,8 +96,8 @@ public:
 class SwTabCenterPortion : public SwTabPortion
 {
 public:
-    inline SwTabCenterPortion( const KSHORT nTabPos, const xub_Unicode cFill='\0' )
-         : SwTabPortion( nTabPos, cFill )
+    inline SwTabCenterPortion( const KSHORT nTabPosVal, const xub_Unicode cFillChar='\0' )
+         : SwTabPortion( nTabPosVal, cFillChar )
     { SetWhichPor( POR_TABCENTER ); }
     OUTPUT_OPERATOR
 };
@@ -118,9 +118,9 @@ class SwTabDecimalPortion : public SwTabPortion
     USHORT mnWidthOfPortionsUpTpDecimalPosition;
 
 public:
-    inline SwTabDecimalPortion( const KSHORT nTabPos, const xub_Unicode cTab,
-                                const xub_Unicode cFill = '\0' )
-         : SwTabPortion( nTabPos, cFill ),
+    inline SwTabDecimalPortion( const KSHORT nTabPosVal, const xub_Unicode cTab,
+                                const xub_Unicode cFillChar = '\0' )
+         : SwTabPortion( nTabPosVal, cFillChar ),
            mcTab(cTab),
            mnWidthOfPortionsUpTpDecimalPosition( USHRT_MAX )
     { SetWhichPor( POR_TABDECIMAL ); }
@@ -147,9 +147,9 @@ public:
 class SwAutoTabDecimalPortion : public SwTabDecimalPortion
 {
 public:
-    inline SwAutoTabDecimalPortion( const KSHORT nTabPos, const xub_Unicode cTab,
-                                    const xub_Unicode cFill = '\0' )
-         : SwTabDecimalPortion( nTabPos, cTab, cFill )
+    inline SwAutoTabDecimalPortion( const KSHORT nTabPosVal, const xub_Unicode cTab,
+                                    const xub_Unicode cFillChar = '\0' )
+         : SwTabDecimalPortion( nTabPosVal, cTab, cFillChar )
     { SetLen( 0 ); }
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
 };
