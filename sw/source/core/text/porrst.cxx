@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:38:59 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:18:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,9 +103,6 @@
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> // SwPageDesc
 #endif
-#ifndef _FRMSH_HXX
-#include <frmsh.hxx>
-#endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
@@ -161,7 +158,7 @@ SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
 xub_StrLen SwBreakPortion::GetCrsrOfst( const KSHORT ) const
 { return 0; }
 
-KSHORT SwBreakPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
+KSHORT SwBreakPortion::GetViewWidth( const SwTxtSizeInfo & ) const
 { return 0; }
 
 SwLinePortion *SwBreakPortion::Compress()
@@ -179,7 +176,7 @@ void SwBreakPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 sal_Bool SwBreakPortion::Format( SwTxtFormatInfo &rInf )
 {
-    register const SwLinePortion *pRoot = rInf.GetRoot();
+    const SwLinePortion *pRoot = rInf.GetRoot();
     Width( 0 );
     Height( pRoot->Height() );
     SetAscent( pRoot->GetAscent() );
@@ -363,7 +360,7 @@ sal_Bool SwTxtFrm::FormatEmpty()
          IsInFtn() || ( HasPara() && GetPara()->IsPrepMustFit() ) )
         return sal_False;
     const SwAttrSet& aSet = GetTxtNode()->GetSwAttrSet();
-    const USHORT nAdjust = aSet.GetAdjust().GetAdjust();
+    const SvxAdjust nAdjust = aSet.GetAdjust().GetAdjust();
     if( ( ( ! IsRightToLeft() && ( SVX_ADJUST_LEFT != nAdjust ) ) ||
           (   IsRightToLeft() && ( SVX_ADJUST_RIGHT != nAdjust ) ) ) ||
           aSet.GetRegister().GetValue() )
@@ -511,7 +508,7 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                                 }
                                 case SVX_INTER_LINE_SPACE_FIX:
                                 {
-                                    rRegDiff += rSpace.GetInterLineSpace();
+                                    rRegDiff = rRegDiff + rSpace.GetInterLineSpace();
                                     nNettoHeight = rRegDiff;
                                     break;
                                 }
@@ -539,8 +536,9 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
  *              virtual SwHiddenTextPortion::Paint()
  *************************************************************************/
 
-void SwHiddenTextPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwHiddenTextPortion::Paint( const SwTxtPaintInfo & rInf) const
 {
+    (void)rInf;
 #if OSL_DEBUG_LEVEL > 1
     OutputDevice* pOut = (OutputDevice*)rInf.GetOut();
     Color aCol( SwViewOption::GetFieldShadingsColor() );
