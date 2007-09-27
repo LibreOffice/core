@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calbck.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:17:56 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:25:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ SwClient::SwClient(SwModify *pToRegisterIn)
 *************************************************************************/
 
 
-void SwClient::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwClient::Modify( SfxPoolItem *pOld, SfxPoolItem * )
 {
     if( (!pOld || pOld->Which() != RES_OBJECTDYING) )
         return;
@@ -150,6 +150,7 @@ SwModify::SwModify( SwModify *pToRegisterIn )
 
 // @@@ forbidden and not implemented, but needs to be accessible (protected).
 SwModify::SwModify( const SwModify & )
+    : SwClient( 0 )
 {
     OSL_PRECOND(0, "SwModify(const SwModify&): not implemented.");
 }
@@ -353,8 +354,8 @@ SwClient *SwModify::_Remove(SwClient * pDepend)
     // Registrierungs-Pointer zurueck
     if( pDepend->pRegisteredIn == this )
     {
-        register SwClient* pR = pDepend->pRight;
-        register SwClient* pL = pDepend->pLeft;
+        SwClient* pR = pDepend->pRight;
+        SwClient* pL = pDepend->pLeft;
         if( pRoot == pDepend )
             pRoot = pL ? pL : pR;
 
