@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:10:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:20:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,6 @@
 #include "porlay.hxx"
 #include "txtfrm.hxx"
 #include "itrform2.hxx"
-#include "frmsh.hxx"
 #include "ftnfrm.hxx"   // FindQuoVadisFrm(),
 #include "pagedesc.hxx"
 #include "redlnitr.hxx" // SwRedlnItr
@@ -328,7 +327,7 @@ SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
  *                      SwTxtFrm::GetFtnLine()
  *************************************************************************/
 
-SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn, sal_Bool bLocked ) const
+SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn ) const
 {
     ASSERT( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::GetFtnLine with swapped frame" )
@@ -385,7 +384,7 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
     SWAP_IF_SWAPPED( this )
 
     SwTwips nHeight = pRef->IsInFtnConnect() ?
-                            1 : pRef->GetFtnLine( pFtnFrm->GetAttr(), sal_False );
+                            1 : pRef->GetFtnLine( pFtnFrm->GetAttr() );
     if( nHeight )
     {
         // So komisch es aussehen mag: Die erste Ftn auf der Seite darf sich
@@ -868,6 +867,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
     if( pFtnFrm && pBoss != pFtnFrm->FindFtnBossFrm( !bEnd ) )
     {
         int bla = 5;
+        (void)bla;
     }
     nRstHeight = GetRstHeight();
 #endif
@@ -916,9 +916,8 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
 
     SwTwips nLower = Y() + nReal;
 
-    SWRECTFN( pFrm )
-
-    if( bVert )
+    const bool bVertical = pFrm->IsVertical();
+    if( bVertical )
         nLower = pFrm->SwitchHorizontalToVertical( nLower );
 
     nLower = lcl_GetFtnLower( pFrm, nLower );
@@ -974,8 +973,8 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                         SwFtnContFrm* pFtnC = pTmp->FindFtnCont();
                         if( pFtnC )
                         {
-                            SwFtnFrm* pTmp = (SwFtnFrm*)pFtnC->Lower();
-                            if( pTmp && *pTmp < pFtn )
+                            SwFtnFrm* pTmpFrm = (SwFtnFrm*)pFtnC->Lower();
+                            if( pTmpFrm && *pTmpFrm < pFtn )
                             {
                                 rInf.SetStop( sal_True );
                                 UNDO_SWAP( pFrm )
@@ -986,14 +985,14 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                     // Ist dies die letzte passende Zeile?
                     SwTwips nTmpBot = Y() + nReal * 2;
 
-                    if( bVert )
+                    if( bVertical )
                         nTmpBot = pFrm->SwitchHorizontalToVertical( nTmpBot );
 
                     SWRECTFN( pFtnCont )
 
-                    long nDiff = (*fnRect->fnYDiff)(
-                                     (pFtnCont->Frm().*fnRect->fnGetTop)(),
-                                      nTmpBot );
+                    const long nDiff = (*fnRect->fnYDiff)(
+                                            (pFtnCont->Frm().*fnRect->fnGetTop)(),
+                                             nTmpBot );
 
                     if( pScrFrm && nDiff < 0 )
                     {
@@ -1152,7 +1151,7 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
     {
         const SwPageFrm* pPage = pFrm->FindPageFrm();
         const SwPageFrm* pErgoPage = pErgoFrm->FindPageFrm();
-        if( pPage == pErgoFrm->FindPageFrm() )
+        if( pPage == pErgoPage )
             return nOffset; // Wenn der ErgoSum auf der selben Seite steht
     }
 
@@ -1207,7 +1206,7 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
 
         // format the rest and append it to the other QuoVadis parts
         pFollow->Format( rInf );
-        nQuoWidth += pFollow->Width();
+        nQuoWidth = nQuoWidth + pFollow->Width();
 
         pCurrPor->Append( pFollow );
         pCurrPor = pFollow;
@@ -1244,7 +1243,7 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
 
     // Luxus: Wir sorgen durch das Aufspannen von Glues dafuer,
     // dass der QuoVadis-Text rechts erscheint:
-    nLastLeft -= nQuoWidth;
+    nLastLeft = nLastLeft - nQuoWidth;
     if( nLastLeft )
     {
         if( nLastLeft > pQuo->GetAscent() ) // Mindestabstand
@@ -1256,18 +1255,18 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
                     if( !pCurr->GetLen() ||
                         CH_BREAK != GetInfo().GetChar(nStart+pCurr->GetLen()-1))
                         nLastLeft = pQuo->GetAscent();
-                    nQuoWidth += nLastLeft;
+                    nQuoWidth = nQuoWidth + nLastLeft;
                     break;
                 }
                 case SVX_ADJUST_RIGHT:
                 {
                     nLastLeft = pQuo->GetAscent();
-                    nQuoWidth += nLastLeft;
+                    nQuoWidth = nQuoWidth + nLastLeft;
                     break;
                 }
                 case SVX_ADJUST_CENTER:
                 {
-                    nQuoWidth += pQuo->GetAscent();
+                    nQuoWidth = nQuoWidth + pQuo->GetAscent();
                     long nDiff = nLastLeft - nQuoWidth;
                     if( nDiff < 0 )
                     {
@@ -1282,11 +1281,11 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
                     break;
                 }
                 default:
-                    nQuoWidth += nLastLeft;
+                    nQuoWidth = nQuoWidth + nLastLeft;
             }
         }
         else
-            nQuoWidth += nLastLeft;
+            nQuoWidth = nQuoWidth + nLastLeft;
         if( nLastLeft )
         {
             pGlue = new SwGluePortion(0);
@@ -1344,7 +1343,7 @@ void SwTxtFormatter::MakeDummyLine()
     if( pCurr && nRstHeight > pCurr->Height() )
     {
         SwLineLayout *pLay = new SwLineLayout;
-        nRstHeight -= pCurr->Height();
+        nRstHeight = nRstHeight - pCurr->Height();
         pLay->Height( nRstHeight );
         pLay->SetAscent( nRstHeight );
         Insert( pLay );
@@ -1426,9 +1425,9 @@ SwFtnSave::~SwFtnSave()
  *                      SwFtnPortion::SwFtnPortion()
  *************************************************************************/
 
-SwFtnPortion::SwFtnPortion( const XubString &rExpand, SwTxtFrm *pFrm,
-                            SwTxtFtn *pFtn, KSHORT nReal )
-        : SwFldPortion( rExpand, 0 ), pFrm(pFrm), pFtn(pFtn), nOrigHeight( nReal )
+SwFtnPortion::SwFtnPortion( const XubString &rExpand, SwTxtFrm *pFrame,
+                            SwTxtFtn *pFootn, KSHORT nReal )
+        : SwFldPortion( rExpand, 0 ), pFrm(pFrame), pFtn(pFootn), nOrigHeight( nReal )
 {
     SetLen(1);
     SetWhichPor( POR_FTN );
