@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldpage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:58:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:47:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,8 @@
 #include <sfx2/bindings.hxx>
 #endif
 
+using namespace ::com::sun::star;
+
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -109,17 +111,16 @@
 SwFldPage::SwFldPage( Window *pParent, const ResId &rId,
                         const SfxItemSet &rAttrSet )
     :SfxTabPage     (pParent, rId, rAttrSet),
-    pCurFld         (0),
-    pWrtShell       (0),
-    nPageId         (rId.GetId()),
-    nFldDlgAktGrpSel(0),
-    nTypeSel        (LISTBOX_ENTRY_NOTFOUND),
-    nSelectionSel   (LISTBOX_ENTRY_NOTFOUND),
-    bFldDlgHtmlMode (FALSE),
-    bFldEdit        (FALSE),
-    bInsert         (TRUE),
-    bRefresh        (FALSE),
-    bFirstHTMLInit  (TRUE)
+    m_pCurFld       (0),
+    m_pWrtShell     (0),
+    m_nPageId       ( static_cast< USHORT >(rId.GetId()) ),
+    m_nTypeSel      (LISTBOX_ENTRY_NOTFOUND),
+    m_nSelectionSel (LISTBOX_ENTRY_NOTFOUND),
+    m_bFldEdit      (FALSE),
+    m_bInsert           (TRUE),
+    m_bFldDlgHtmlMode   (FALSE),
+    m_bRefresh          (FALSE),
+    m_bFirstHTMLInit    (TRUE)
 {
 //  FreeResource();
 }
@@ -141,23 +142,21 @@ void SwFldPage::Init()
     SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
     BOOL bNewMode = 0 != (::GetHtmlMode(pDocSh) & HTMLMODE_ON);
 
-    bFldEdit = 0 == GetTabDialog();
+    m_bFldEdit = 0 == GetTabDialog();
 
     // FieldManager neu initialisieren wichtig fuer
     // Dok-Wechsel (fldtdlg:ReInitTabPage)
-    pCurFld = aMgr.GetCurFld();
+    m_pCurFld = m_aMgr.GetCurFld();
 
-    nFldDlgAktGrpSel = GetGroup();
-
-    if( bNewMode != bFldDlgHtmlMode )
+    if( bNewMode != m_bFldDlgHtmlMode )
     {
-        bFldDlgHtmlMode = bNewMode;
+        m_bFldDlgHtmlMode = bNewMode;
 
         // Bereichslistbox initialisieren
-        if( bFldDlgHtmlMode && bFirstHTMLInit )
+        if( m_bFldDlgHtmlMode && m_bFirstHTMLInit )
         {
-            bFirstHTMLInit = FALSE;
-            SwWrtShell *pSh = pWrtShell;
+            m_bFirstHTMLInit = FALSE;
+            SwWrtShell *pSh = m_pWrtShell;
             if(! pSh)
                 pSh = ::GetActiveWrtShell();
             if(pSh)
@@ -178,7 +177,7 @@ void SwFldPage::Init()
 
 void SwFldPage::ActivatePage()
 {
-    EnableInsert(bInsert);
+    EnableInsert(m_bInsert);
 }
 
 /*--------------------------------------------------------------------
@@ -189,13 +188,12 @@ void SwFldPage::EditNewField( BOOL bOnlyActivate )
 {
     if( !bOnlyActivate )
     {
-        nFldDlgAktGrpSel = 0;
-        nTypeSel = LISTBOX_ENTRY_NOTFOUND;
+        m_nTypeSel = LISTBOX_ENTRY_NOTFOUND;
     }
-    nSelectionSel = LISTBOX_ENTRY_NOTFOUND;
-    bRefresh = TRUE;
+    m_nSelectionSel = LISTBOX_ENTRY_NOTFOUND;
+    m_bRefresh = TRUE;
     Reset(*(SfxItemSet*)0);
-    bRefresh = FALSE;
+    m_bRefresh = FALSE;
 }
 
 /*--------------------------------------------------------------------
@@ -208,16 +206,16 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
 {
     BOOL bRet = FALSE;
     SwView* pView = GetActiveView();
-    SwWrtShell *pSh = pWrtShell ? pWrtShell : pView->GetWrtShellPtr();
+    SwWrtShell *pSh = m_pWrtShell ? m_pWrtShell : pView->GetWrtShellPtr();
 
     if (!IsFldEdit())   // Neues Feld einfuegen
     {
         SwInsertFld_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, 0, cSeparator, bIsAutomaticLanguage );
         //#i26566# provide parent for SwWrtShell::StartInputFldDlg
         aData.pParent = &GetTabDialog()->GetOKButton();
-        bRet = aMgr.InsertFld( aData );
+        bRet = m_aMgr.InsertFld( aData );
 
-        com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+        uno::Reference< frame::XDispatchRecorder > xRecorder =
                 pView->GetViewFrame()->GetBindings().GetRecorder();
         if ( xRecorder.is() )
         {
@@ -256,7 +254,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
     }
     else    // Feld aendern
     {
-        SwField * pTmpFld = pCurFld->Copy();
+        SwField * pTmpFld = m_pCurFld->Copy();
 
         String sPar1(rPar1);
         String sPar2(rPar2);
@@ -265,8 +263,8 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
         {
         case TYP_DATEFLD:
         case TYP_TIMEFLD:
-            nSubType = ((nTypeId == TYP_DATEFLD) ? DATEFLD : TIMEFLD) |
-                       ((nSubType == DATE_VAR) ? 0 : FIXEDFLD);
+            nSubType = static_cast< USHORT >(((nTypeId == TYP_DATEFLD) ? DATEFLD : TIMEFLD) |
+                       ((nSubType == DATE_VAR) ? 0 : FIXEDFLD));
             break;
 
         case TYP_DBNAMEFLD:
@@ -304,7 +302,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
                 for( SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
                     pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
                 {
-                    if( pFmtFld->GetFld() == pCurFld)
+                    if( pFmtFld->GetFld() == m_pCurFld)
                     {
                         pTyp->Add(pFmtFld); // Feld auf neuen Typ umhaengen
                         pTmpFld->ChgTyp(pTyp);
@@ -318,17 +316,17 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
         case TYP_SEQFLD:
             {
                 SwSetExpFieldType* pTyp = (SwSetExpFieldType*)pTmpFld->GetTyp();
-                pTyp->SetOutlineLvl(nSubType & 0xff);
+                pTyp->SetOutlineLvl( static_cast< BYTE >(nSubType & 0xff));
                 pTyp->SetDelimiter(cSeparator);
 
-                nSubType = GSE_SEQ;
+                nSubType = nsSwGetSetExpType::GSE_SEQ;
             }
             break;
 
         case TYP_INPUTFLD:
             {
                 // User- oder SetField ?
-                if (aMgr.GetFldType(RES_USERFLD, sPar1) == 0 &&
+                if (m_aMgr.GetFldType(RES_USERFLD, sPar1) == 0 &&
                 !(pTmpFld->GetSubType() & INP_TXT)) // SETEXPFLD
                 {
                     SwSetExpField* pFld = (SwSetExpField*)pTmpFld;
@@ -344,15 +342,15 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
         pTmpFld->SetSubType(nSubType);
         pTmpFld->SetAutomaticLanguage(bIsAutomaticLanguage);
 
-        aMgr.UpdateCurFld( nFormatId, sPar1, sPar2, pTmpFld );
+        m_aMgr.UpdateCurFld( nFormatId, sPar1, sPar2, pTmpFld );
 
-        pCurFld = aMgr.GetCurFld();
+        m_pCurFld = m_aMgr.GetCurFld();
 
         switch (nTypeId)
         {
             case TYP_HIDDENTXTFLD:
             case TYP_HIDDENPARAFLD:
-                aMgr.EvalExpFlds(pSh);
+                m_aMgr.EvalExpFlds(pSh);
                 break;
         }
 
@@ -375,9 +373,9 @@ void SwFldPage::SavePos( const ListBox* pLst1, const ListBox* pLst2,
     const ListBox** ppLB = aLBArr;
     for( int i = 0; i < coLBCount; ++i, ++ppLB )
         if( (*ppLB) && (*ppLB)->GetEntryCount() )
-            aLstStrArr[ i ] = (*ppLB)->GetSelectEntry();
+            m_aLstStrArr[ i ] = (*ppLB)->GetSelectEntry();
         else
-            aLstStrArr[ i ].Erase();
+            m_aLstStrArr[ i ].Erase();
 }
 
 /*--------------------------------------------------------------------
@@ -390,9 +388,9 @@ void SwFldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
     ListBox* aLBArr [ coLBCount ] = { pLst1, pLst2, pLst3 };
     ListBox** ppLB = aLBArr;
     for( int i = 0; i < coLBCount; ++i, ++ppLB )
-        if( (*ppLB) && (*ppLB)->GetEntryCount() && aLstStrArr[ i ].Len() &&
+        if( (*ppLB) && (*ppLB)->GetEntryCount() && m_aLstStrArr[ i ].Len() &&
             LISTBOX_ENTRY_NOTFOUND !=
-                        ( nPos = (*ppLB)->GetEntryPos(aLstStrArr[ i ] ) ) )
+                        ( nPos = (*ppLB)->GetEntryPos(m_aLstStrArr[ i ] ) ) )
             (*ppLB)->SelectEntryPos( nPos );
 }
 
@@ -430,7 +428,7 @@ void SwFldPage::EnableInsert(BOOL bEnable)
 
     if (pDlg)
     {
-        if (pDlg->GetCurPageId() == nPageId)
+        if (pDlg->GetCurPageId() == m_nPageId)
             pDlg->EnableInsert(bEnable);
     }
     else
@@ -439,14 +437,14 @@ void SwFldPage::EnableInsert(BOOL bEnable)
         pEditDlg->EnableInsert(bEnable);
     }
 
-    bInsert = bEnable;
+    m_bInsert = bEnable;
 }
 
 /*--------------------------------------------------------------------
      Beschreibung:
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwFldPage, NumFormatHdl, ListBox *, pLst )
+IMPL_LINK( SwFldPage, NumFormatHdl, ListBox *, EMPTYARG )
 {
     InsertHdl();
 
@@ -457,6 +455,6 @@ IMPL_LINK( SwFldPage, NumFormatHdl, ListBox *, pLst )
   -----------------------------------------------------------------------*/
 void SwFldPage::SetWrtShell( SwWrtShell* pShell )
 {
-    pWrtShell = pShell;
-    aMgr.SetWrtShell( pShell );
+    m_pWrtShell = pShell;
+    m_aMgr.SetWrtShell( pShell );
 }
