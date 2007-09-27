@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:20:15 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:16:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ protected:
 public:
 
     SFX_DECL_VIEWFACTORY(SwWebView);
-    SFX_DECL_INTERFACE(SW_WEBVIEWSHELL);
+    SFX_DECL_INTERFACE(SW_WEBVIEWSHELL)
     TYPEINFO();
 
     SwWebView(SfxViewFrame* pFrame, SfxViewShell*);
