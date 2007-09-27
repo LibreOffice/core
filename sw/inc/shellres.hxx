@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellres.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:14:13 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:09:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,8 @@ struct ShellResource : public Resource
     String          aCalc_Error;
 
     // fuers GetRefFeld - oben/unten
-    String          aGetRefFld_Up, aGetRefFld_Down;
+    String          aGetRefFld_Up;
+    String          aGetRefFld_Down;
     // fuer dynamisches Menu - String "alle"
     String          aStrAllPageHeadFoot;
     // fuer einige Listboxen - String "keine"
@@ -107,7 +108,9 @@ struct ShellResource : public Resource
 private:
     void _GetAutoFmtNameLst() const;
     SvStringsDtor   *pAutoFmtNameLst;
-    String          sPageDescFirstName, sPageDescFollowName, sPageDescName;
+    String          sPageDescFirstName;
+    String          sPageDescFollowName;
+    String          sPageDescName;
 };
 
 inline const SvStringsDtor& ShellResource::GetAutoFmtNameLst() const
