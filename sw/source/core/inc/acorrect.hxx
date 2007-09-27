@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acorrect.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:41:47 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:53:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,14 @@
 #include <svx/svxacorr.hxx>
 #endif
 
+#include <swundo.hxx>
+
+
 class SwEditShell;
 class SwPaM;
 class SwNodeIndex;
 struct SwPosition;
+class SfxItemSet;
 
 class SwDontExpandItem
 {
@@ -62,7 +66,8 @@ class SwAutoCorrDoc : public SvxAutoCorrDoc
     SwEditShell& rEditSh;
     SwPaM& rCrsr;
     SwNodeIndex* pIdx;
-    USHORT nUndoId;
+    SwUndoId nUndoId;
+    bool    bUndoIdInitialized;
 
     void DeleteSel( SwPaM& rDelPam );
 
