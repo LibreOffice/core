@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtswtbl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:02:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:56:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@
 #include <htmltbl.hxx>
 #endif
 
+using namespace ::com::sun::star;
 
 SV_IMPL_PTRARR( SwWriteTableCells, SwWriteTableCellPtr )
 SV_IMPL_OP_PTRARR_SORT( SwWriteTableRows, SwWriteTableRowPtr )
@@ -81,18 +82,18 @@ SV_IMPL_OP_PTRARR_SORT( SwWriteTableCols, SwWriteTableColPtr )
 
 //-----------------------------------------------------------------------
 
-SwVertOrient SwWriteTableCell::GetVertOri() const
+sal_Int16 SwWriteTableCell::GetVertOri() const
 {
-    SwVertOrient eCellVertOri = VERT_TOP;
+    sal_Int16 eCellVertOri = text::VertOrientation::TOP;
     if( pBox->GetSttNd() )
     {
         const SfxItemSet& rItemSet = pBox->GetFrmFmt()->GetAttrSet();
         const SfxPoolItem *pItem;
         if( SFX_ITEM_SET == rItemSet.GetItemState( RES_VERT_ORIENT, FALSE, &pItem ) )
         {
-            SwVertOrient eBoxVertOri =
+            sal_Int16 eBoxVertOri =
                 ((const SwFmtVertOrient *)pItem)->GetVertOrient();
-            if( VERT_CENTER==eBoxVertOri || VERT_BOTTOM==eBoxVertOri)
+            if( text::VertOrientation::CENTER==eBoxVertOri || text::VertOrientation::BOTTOM==eBoxVertOri)
                 eCellVertOri = eBoxVertOri;
         }
     }
@@ -113,11 +114,11 @@ SwWriteTableCell *SwWriteTableRow::AddCell( const SwTableBox *pBox,
                                 USHORT nRow, USHORT nCol,
                                 USHORT nRowSpan, USHORT nColSpan,
                                 long nHeight,
-                                const SvxBrushItem *pBackground )
+                                const SvxBrushItem *pBackgroundBrush )
 {
     SwWriteTableCell *pCell =
         new SwWriteTableCell( pBox, nRow, nCol, nRowSpan, nColSpan,
-                                nHeight, pBackground );
+                                nHeight, pBackgroundBrush );
     aCells.Insert( pCell, aCells.Count() );
 
     return pCell;
@@ -153,8 +154,8 @@ long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
     if( bUseLayoutHeights )
     {
         // Erstmal versuchen wir die Hoehe ueber das Layout zu bekommen
-        bool bLayoutAvailable;
-        long nHeight = pLine->GetTableLineHeight( bLayoutAvailable );
+        bool bLayoutAvailable = false;
+        nHeight = pLine->GetTableLineHeight(bLayoutAvailable);
         if( nHeight > 0 )
             return nHeight;
 
@@ -343,7 +344,7 @@ USHORT SwWriteTable::GetRawWidth( USHORT nCol, USHORT nColSpan ) const
 {
     USHORT nWidth = aCols[nCol+nColSpan-1]->GetPos();
     if( nCol > 0 )
-        nWidth -= aCols[nCol-1]->GetPos();
+        nWidth = nWidth - aCols[nCol-1]->GetPos();
 
     return nWidth;
 }
@@ -355,11 +356,11 @@ USHORT SwWriteTable::GetLeftSpace( USHORT nCol ) const
     // In der ersten Spalte auch noch die Liniendicke abziehen
     if( nCol==0 )
     {
-        nSpace += nLeftSub;
+        nSpace = nSpace + nLeftSub;
 
         const SwWriteTableCol *pCol = aCols[nCol];
         if( pCol->HasLeftBorder() )
-            nSpace += nBorder;
+            nSpace = nSpace + nBorder;
     }
 
     return nSpace;
@@ -377,7 +378,7 @@ USHORT SwWriteTable::GetRightSpace( USHORT nCol, USHORT nColSpan ) const
 
         const SwWriteTableCol *pCol = aCols[nCol+nColSpan-1];
         if( pCol->HasRightBorder() )
-            nSpace += nBorder;
+            nSpace = nSpace + nBorder;
     }
 
     return nSpace;
@@ -445,7 +446,7 @@ long SwWriteTable::GetAbsHeight( long nRawHeight, USHORT nRow,
     return nRawHeight > 0 ? nRawHeight : 0;
 }
 
-BOOL SwWriteTable::ShouldExpandSub(const SwTableBox *pBox, BOOL bExpandedBefore,
+BOOL SwWriteTable::ShouldExpandSub(const SwTableBox *pBox, BOOL /*bExpandedBefore*/,
     USHORT nDepth) const
 {
     return !pBox->GetSttNd() && nDepth > 0;
@@ -497,7 +498,9 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
         }
         else
         {
+#ifndef PRODUCT
             long nCheckPos = nRPos + GetLineHeight( pLine );
+#endif
             nRPos = nStartRPos + nParentLineHeight;
 #ifndef PRODUCT
             SwWriteTableRow aRow( nStartRPos + nParentLineHeight, bUseLayoutHeights );
@@ -524,7 +527,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
 
             if( nBox < nBoxes-1 || (nParentLineWidth==0 && nLine==0)  )
             {
-                nCPos += (USHORT)GetBoxWidth( pBox );
+                nCPos = nCPos + (USHORT)GetBoxWidth( pBox );
                 SwWriteTableCol *pCol = new SwWriteTableCol( nCPos );
 
                 USHORT nCol;
@@ -622,7 +625,10 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
         // Und ihren Index
         USHORT nOldRow = nRow;
         SwWriteTableRow aRow( nRPos,bUseLayoutHeights );
-        BOOL bFound = aRows.Seek_Entry( &aRow, &nRow );
+#ifndef PRODUCT
+        BOOL bFound =
+#endif
+            aRows.Seek_Entry( &aRow, &nRow );
         ASSERT( bFound, "Wo ist die Zeile geblieben?" );
 
         ASSERT( nOldRow <= nRow, "Don't look back!" );
@@ -694,7 +700,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
             USHORT nOldCPos = nCPos;
             if( nBox < nBoxes-1 || (nParentLineWidth==0 && nLine==0) )
             {
-                nCPos += (USHORT)GetBoxWidth( pBox );
+                nCPos = nCPos + (USHORT)GetBoxWidth( pBox );
                 if( nBox==nBoxes-1 )
                     nParentLineWidth = nCPos - nStartCPos;
             }
@@ -704,8 +710,11 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
             // Und ihren Index
             USHORT nOldCol = nCol;
             SwWriteTableCol aCol( nCPos );
-            BOOL bFound = aCols.Seek_Entry( &aCol, &nCol );
-            ASSERT( bFound, "Wo ist die Spalte geblieben?" );
+#ifndef PRODUCT
+            BOOL bFound2 =
+#endif
+                aCols.Seek_Entry( &aCol, &nCol );
+            ASSERT( bFound2, "Wo ist die Spalte geblieben?" );
 
             if( !ShouldExpandSub( pBox, bSubExpanded, nDepth ) )
             {
@@ -813,7 +822,7 @@ SwWriteTable::SwWriteTable(const SwTableLines& rLines, long nWidth,
     CollectTableRowsCols( 0, 0, 0, nParentWidth, rLines, nMaxDepth - 1 );
 
     // Und jetzt mit leben fuellen
-    FillTableRowsCols( 0, 0, 0, 0, 0, nParentWidth, rLines, 0, nMaxDepth - 1, nNumOfRowsToRepeat );
+    FillTableRowsCols( 0, 0, 0, 0, 0, nParentWidth, rLines, 0, nMaxDepth - 1, static_cast< sal_uInt16 >(nNumOfRowsToRepeat) );
 
     // Einige Twip-Werte an Pixel-Grenzen anpassen
     if( !nBorder )
