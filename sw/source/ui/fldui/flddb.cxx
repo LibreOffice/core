@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddb.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:09:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:45:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ __EXPORT SwFldDBPage::~SwFldDBPage()
     Beschreibung: TabPage initialisieren
  --------------------------------------------------------------------*/
 
-void __EXPORT SwFldDBPage::Reset(const SfxItemSet& rSet)
+void __EXPORT SwFldDBPage::Reset(const SfxItemSet&)
 {
     Init(); // Allgemeine initialisierung
 
@@ -149,14 +149,14 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet& rSet)
         {
             nTypeId = GetFldMgr().GetTypeId(i);
             nPos = aTypeLB.InsertEntry(GetFldMgr().GetTypeStr(i));
-            aTypeLB.SetEntryData(nPos, (void*)nTypeId);
+            aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
         }
     }
     else
     {
         nTypeId = GetCurField()->GetTypeId();
         nPos = aTypeLB.InsertEntry(GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
-        aTypeLB.SetEntryData(nPos, (void*)nTypeId);
+        aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
     }
 
     // alte Pos selektieren
@@ -168,11 +168,11 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet& rSet)
     USHORT nSize = GetFldMgr().GetFormatCount(TYP_DBSETNUMBERFLD, FALSE, IsFldDlgHtmlMode());
     for( i = 0; i < nSize; ++i )
     {
-        USHORT nPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr(TYP_DBSETNUMBERFLD, i));
+        USHORT nEntryPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr(TYP_DBSETNUMBERFLD, i));
         USHORT nFmtId = GetFldMgr().GetFormatId( TYP_DBSETNUMBERFLD, i );
-        aFormatLB.SetEntryData( nPos, (void*)nFmtId );
+        aFormatLB.SetEntryData( nEntryPos, reinterpret_cast<void*>(nFmtId) );
         if( SVX_NUM_ARABIC == nFmtId )
-            aFormatLB.SelectEntryPos( nPos );
+            aFormatLB.SelectEntryPos( nEntryPos );
     }
 
     if (!IsFldEdit())
@@ -206,7 +206,7 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet& rSet)
             USHORT nVal = (USHORT)sVal.ToInt32();
             if(nVal != USHRT_MAX)
             {
-                for(USHORT i = 0; i < aTypeLB.GetEntryCount(); i++)
+                for(i = 0; i < aTypeLB.GetEntryCount(); i++)
                     if(nVal == (USHORT)(ULONG)aTypeLB.GetEntryData(i))
                     {
                         aTypeLB.SelectEntryPos(i);
@@ -235,7 +235,7 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet& rSet)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& rSet)
+BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& )
 {
     String sTableName, sColumnName;
     SwDBData aData;
@@ -276,7 +276,7 @@ BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& rSet)
         case TYP_DBFLD:
             nFormat = aNumFormatLB.GetFormat();
             if (aNewFormatRB.IsEnabled() && aNewFormatRB.IsChecked())
-                nSubType = SUB_OWN_FMT;
+                nSubType = nsSwExtendedSubType::SUB_OWN_FMT;
             aName = sDBName;
             break;
 
@@ -383,7 +383,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
                     if (GetCurField()->GetFormat() != 0 && GetCurField()->GetFormat() != ULONG_MAX)
                         aNumFormatLB.SetDefFormat(GetCurField()->GetFormat());
 
-                    if (GetCurField()->GetSubType() & SUB_OWN_FMT)
+                    if (GetCurField()->GetSubType() & nsSwExtendedSubType::SUB_OWN_FMT)
                         aNewFormatRB.Check();
                     else
                         aDBFormatRB.Check();
