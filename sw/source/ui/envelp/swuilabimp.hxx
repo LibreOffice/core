@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuilabimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:32:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:45:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,10 @@ class SwLabPage : public SfxTabPage
     SwLabRec* GetSelectedEntryPos();
 
 public:
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet);
@@ -90,6 +94,7 @@ public:
     virtual sal_Bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 
+    using Window::GetParent;
     SwLabDlg* GetParent() {return (SwLabDlg*) SfxTabPage::GetParent()->GetParent();}
 
     void    SetToBusinessCard();
@@ -129,6 +134,8 @@ class SwVisitingCardPage : public SfxTabPage
     void            UpdateFields();
 
     void            ClearUserData();
+
+    using SfxTabPage::SetUserData;
     void            SetUserData( sal_uInt32 nCnt,
                                     const rtl::OUString* pNames,
                                     const rtl::OUString* pValues );
@@ -137,6 +144,10 @@ class SwVisitingCardPage : public SfxTabPage
     ~SwVisitingCardPage();
 
 public:
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet);
@@ -185,6 +196,10 @@ class SwPrivateDataPage : public SfxTabPage
     ~SwPrivateDataPage();
 
 public:
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet);
@@ -231,6 +246,10 @@ class SwBusinessDataPage : public SfxTabPage
     ~SwBusinessDataPage();
 
 public:
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet);
@@ -240,3 +259,4 @@ public:
 };
 
 #endif
+
