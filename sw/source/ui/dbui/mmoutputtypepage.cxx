@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputtypepage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:06:48 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:35:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@
   -----------------------------------------------------------------------*/
 SwMailMergeOutputTypePage::SwMailMergeOutputTypePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_OUTPUTTYPE_PAGE)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aHeaderFI(    this, SW_RES( FI_HEADER    )),
@@ -77,14 +77,14 @@ SwMailMergeOutputTypePage::SwMailMergeOutputTypePage( SwMailMergeWizard* _pParen
     m_aHintHeaderFI(this, SW_RES( FI_HINTHEADER)),
     m_aHintFI(      this, SW_RES( FI_HINT)),
     m_aNoMailHintFI(this, SW_RES( FT_NOMAILHINT)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
-    m_pWizard(_pParent),
     m_sLetterHintHeader(  SW_RES( ST_LETTERHINTHEADER)),
     m_sMailHintHeader(      SW_RES( ST_MAILHINTHEADER)),
     m_sLetterHint(          SW_RES( ST_LETTERHINT)),
-    m_sMailHint(            SW_RES( ST_MAILHINT))
+    m_sMailHint(            SW_RES( ST_MAILHINT)),
+    m_pWizard(_pParent)
 {
     FreeResource();
     Link aLink = LINK(this, SwMailMergeOutputTypePage, TypeHdl_Impl);
