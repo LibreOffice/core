@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblsel.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:20:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:13:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,28 +73,29 @@ SV_DECL_PTRARR_SORT( SwSelBoxes, SwTableBoxPtr, 10, 20 )
 //erweitert.
 //Die Boxen werden ueber das Layout zusammengsucht, es wird auch bei
 //aufgespaltenen Tabellen korrekt gearbeitet (siehe: MakeSelUnions()).
-enum SwTblSearchType
+typedef USHORT SwTblSearchType;
+namespace nsSwTblSearchType
 {
-    TBLSEARCH_NONE      = 0x1,       // keine Erweiterung
-    TBLSEARCH_ROW       = 0x2,       // erweiter auf Zeilen
-    TBLSEARCH_COL       = 0x3,       // erweiter auf Spalten
+    const SwTblSearchType TBLSEARCH_NONE = 0x1;       // keine Erweiterung
+    const SwTblSearchType TBLSEARCH_ROW  = 0x2;       // erweiter auf Zeilen
+    const SwTblSearchType TBLSEARCH_COL  = 0x3;       // erweiter auf Spalten
 
     // als Flag zu den anderen Werten!!
-    TBLSEARCH_PROTECT           = 0x8,      // auch geschuetzte Boxen einsammeln
-    TBLSEARCH_NO_UNION_CORRECT  = 0x10      // die zusammenges. Union nicht korrigieren
-};
+    const SwTblSearchType TBLSEARCH_PROTECT = 0x8;      // auch geschuetzte Boxen einsammeln
+    const SwTblSearchType TBLSEARCH_NO_UNION_CORRECT = 0x10; // die zusammenges. Union nicht korrigieren
+}
 
 SW_DLLPUBLIC void GetTblSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
-                const SwTblSearchType = TBLSEARCH_NONE );
+                const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
 
 void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
-                const SwTblSearchType = TBLSEARCH_NONE );
+                const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
 
 //wie vor, jedoch wird nicht von der Selektion sondern von den
 //Start- EndFrms ausgegangen.
 void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                 SwSelBoxes& rBoxes, SwCellFrms* pCells,
-                const SwTblSearchType = TBLSEARCH_NONE );
+                const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
 
 // Desgleichen nocheinmal direkt per PaM's
 void GetTblSelCrs( const SwCrsrShell& rShell, SwSelBoxes& rBoxes );
@@ -107,8 +108,8 @@ BOOL GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );
 BOOL HasProtectedCells( const SwSelBoxes& rBoxes );
 
 // teste, ob die Selektion ausgeglichen ist
-SV_DECL_PTRARR( SwChartBoxes, SwTableBoxPtr, 16, 16);
-SV_DECL_PTRARR_DEL( SwChartLines, SwChartBoxes*, 25, 50);
+SV_DECL_PTRARR( SwChartBoxes, SwTableBoxPtr, 16, 16)
+SV_DECL_PTRARR_DEL( SwChartLines, SwChartBoxes*, 25, 50)
 
 BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                     SwChartLines* pGetCLines = 0 );
@@ -135,9 +136,9 @@ BOOL IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam );
 // teste ob ein Split oder InsertCol dazu fuehrt, das eine Box
 // kleiner als MINLAY wird.
 BOOL CheckSplitCells( const SwCrsrShell& rShell, USHORT nDiv,
-                        const SwTblSearchType = TBLSEARCH_NONE );
+                        const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
 BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
-                        const SwTblSearchType = TBLSEARCH_NONE );
+                        const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
 
 //Fuer das Arbeiten auf TabSelektion auch fuer aufgespaltene Tabellen.
 class SwSelUnion
@@ -159,11 +160,11 @@ SV_DECL_PTRARR_DEL( SwSelUnions, SwSelUnion*, 10, 20 )
 
 //Ermittelt die von einer Tabellenselektion betroffenen Tabellen und die
 //Union-Rechteckte der Selektionen - auch fuer aufgespaltene Tabellen.
-//Wenn ein Parameter != TBLSEARCH_NONE uebergeben wird, so wird die
+//Wenn ein Parameter != nsSwTblSearchType::TBLSEARCH_NONE uebergeben wird, so wird die
 //Selektion in der angegebenen Richtung erweitert.
 void MakeSelUnions( SwSelUnions&, const SwLayoutFrm *pStart,
                     const SwLayoutFrm *pEnd,
-                    const SwTblSearchType = TBLSEARCH_NONE );
+                    const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
 
 
 // -------------------------------------------------------------------
