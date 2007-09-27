@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labelexp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:55:11 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,13 +74,11 @@
 
 
 using namespace ::com::sun::star;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::container;
-using namespace com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::uno;
 using namespace ::comphelper;
 using namespace ::rtl;
-
-#define C2U(char) rtl::OUString::createFromAscii(char)
 
 #ifdef SW_PROP_NAME_STR
 #undef SW_PROP_NAME_STR
