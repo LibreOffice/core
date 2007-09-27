@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:27:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ using ::com::sun::star::lang::XUnoTunnel;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 // collision with tools/DateTime: use UNO DateTime as util::DateTime
-// using ::com::sun::star::util::DateTime;
+// using util::DateTime;
 
 
 //
@@ -108,8 +108,8 @@ SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> & rCursor )
 {
     Reference<XUnoTunnel> xTunnel( rCursor, UNO_QUERY);
     DBG_ASSERT( xTunnel.is(), "missing XUnoTunnel for Cursor" );
-    OTextCursorHelper* pSwXCursor =
-        (OTextCursorHelper*)xTunnel->getSomething(OTextCursorHelper::getUnoTunnelId());
+    OTextCursorHelper* pSwXCursor = reinterpret_cast< OTextCursorHelper * >(
+            sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(OTextCursorHelper::getUnoTunnelId())) );
     DBG_ASSERT( NULL != pSwXCursor, "OTextCursorHelper missing" );
     return pSwXCursor->GetDoc();
 }
@@ -118,8 +118,8 @@ SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
 {
     Reference<XUnoTunnel> xTunnel(rRange, UNO_QUERY);
     DBG_ASSERT(xTunnel.is(), "Can't tunnel XTextRange");
-    SwXTextRange *pRange =
-        (SwXTextRange*)xTunnel->getSomething(SwXTextRange::getUnoTunnelId());
+    SwXTextRange *pRange = reinterpret_cast< SwXTextRange *>(
+            sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SwXTextRange::getUnoTunnelId())) );
     DBG_ASSERT( NULL != pRange, "SwXTextRange missing" );
     return pRange->GetDoc();
 }
@@ -193,7 +193,10 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
 
     // SwXTextRange -> PaM
     SwUnoInternalPaM aPaM(*pDoc);
-    sal_Bool bSuccess = SwXTextRange::XTextRangeToSwPaM( aPaM, rRange);
+#ifdef DBG_UTIL
+    sal_Bool bSuccess =
+#endif
+        SwXTextRange::XTextRangeToSwPaM( aPaM, rRange);
     DBG_ASSERT(bSuccess, "illegal range");
 
     // PaM -> Index
@@ -208,7 +211,10 @@ void XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos)
     if (NULL == pIndex)
     {
         SwUnoInternalPaM aUnoPaM(*GetDoc());
-        sal_Bool bSuccess = SwXTextRange::XTextRangeToSwPaM(aUnoPaM, xRange);
+#ifdef DBG_UTIL
+        sal_Bool bSuccess =
+#endif
+            SwXTextRange::XTextRangeToSwPaM(aUnoPaM, xRange);
         DBG_ASSERT(bSuccess, "illegal range");
 
         rPos = *aUnoPaM.GetPoint();
@@ -245,7 +251,7 @@ public:
     ~RedlineInfo();
 
     /// redline type (insert, delete, ...)
-    IDocumentRedlineAccess::RedlineType_t eType;
+    RedlineType_t eType;
 
     // info fields:
     OUString sAuthor;               /// change author string
@@ -272,16 +278,16 @@ public:
 };
 
 RedlineInfo::RedlineInfo() :
-    eType(IDocumentRedlineAccess::REDLINE_INSERT),
+    eType(nsRedlineType_t::REDLINE_INSERT),
     sAuthor(),
     sComment(),
     aDateTime(),
+    bMergeLastParagraph( sal_False ),
     aAnchorStart(),
     aAnchorEnd(),
     pContentIndex(NULL),
     pNextRedline(NULL),
-    bNeedsAdjustment( sal_False ),
-    bMergeLastParagraph( sal_False )
+    bNeedsAdjustment( sal_False )
 {
 }
 
@@ -441,18 +447,18 @@ void XMLRedlineImportHelper::Add(
     // 3b) attach to existing redline
 
     // ad 1)
-    IDocumentRedlineAccess::RedlineType_t eType;
+    RedlineType_t eType;
     if (rType.equals(sInsertion))
     {
-        eType = IDocumentRedlineAccess::REDLINE_INSERT;
+        eType = nsRedlineType_t::REDLINE_INSERT;
     }
     else if (rType.equals(sDeletion))
     {
-        eType = IDocumentRedlineAccess::REDLINE_DELETE;
+        eType = nsRedlineType_t::REDLINE_DELETE;
     }
     else if (rType.equals(sFormatChange))
     {
-        eType = IDocumentRedlineAccess::REDLINE_FORMAT;
+        eType = nsRedlineType_t::REDLINE_FORMAT;
     }
     else
     {
@@ -589,8 +595,8 @@ void XMLRedlineImportHelper::SetCursor(
 
 void XMLRedlineImportHelper::AdjustStartNodeCursor(
     const OUString& rId,        /// ID used in RedlineAdd() call
-    sal_Bool bStart,
-    Reference<XTextRange> & rRange)
+    sal_Bool /*bStart*/,
+    Reference<XTextRange> & /*rRange*/)
 {
     // this method will modify the document directly -> lock SolarMutex
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -673,7 +679,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
     {
         // ignore redline (e.g. file loaded in insert mode):
         // delete 'deleted' redlines and forget about the whole thing
-        if (IDocumentRedlineAccess::REDLINE_DELETE == pRedlineInfo->eType)
+        if (nsRedlineType_t::REDLINE_DELETE == pRedlineInfo->eType)
         {
             pDoc->Delete(aPaM);
         }
@@ -702,9 +708,9 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         }
 
         // set redline mode (without doing the associated book-keeping)
-        pDoc->SetRedlineMode_intern(IDocumentRedlineAccess::REDLINE_ON);
+        pDoc->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_ON);
         pDoc->AppendRedline(pRedline, false);
-        pDoc->SetRedlineMode_intern(IDocumentRedlineAccess::REDLINE_NONE);
+        pDoc->SetRedlineMode_intern(nsRedlineMode_t::REDLINE_NONE);
     }
 }
 
@@ -731,8 +737,8 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
     //    ( check presence and sanity of hierarchical redline info )
     SwRedlineData* pNext = NULL;
     if ( (NULL != pRedlineInfo->pNextRedline) &&
-         (IDocumentRedlineAccess::REDLINE_DELETE == pRedlineInfo->eType) &&
-         (IDocumentRedlineAccess::REDLINE_INSERT == pRedlineInfo->pNextRedline->eType) )
+         (nsRedlineType_t::REDLINE_DELETE == pRedlineInfo->eType) &&
+         (nsRedlineType_t::REDLINE_INSERT == pRedlineInfo->pNextRedline->eType) )
     {
         pNext = ConvertRedline(pRedlineInfo->pNextRedline, pDoc);
     }
