@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edglbldc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:43:11 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:00:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ public:
 
 
 typedef SwGlblDocContent* SwGlblDocContentPtr;
-SV_DECL_PTRARR_SORT_DEL( SwGlblDocContents, SwGlblDocContentPtr, 10, 10 );
+SV_DECL_PTRARR_SORT_DEL( SwGlblDocContents, SwGlblDocContentPtr, 10, 10 )
 
 
 
