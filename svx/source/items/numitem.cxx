@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:29:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:01:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,10 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/numitem.hxx>
+
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
@@ -205,7 +209,7 @@ SvxNumberFormat::SvxNumberFormat(sal_Int16 eType) :
     nLSpace(0),
     nCharTextDistance(0),
     pGraphicBrush(0),
-    eVertOrient(SVX_VERT_NONE),
+    eVertOrient(text::VertOrientation::NONE),
     pBulletFont(0)
 {
 }
@@ -271,7 +275,7 @@ SvxNumberFormat::SvxNumberFormat(SvStream &rStream)
         pGraphicBrush = 0;
 
     rStream >> nUSHORT;
-    eVertOrient          = (SvxFrameVertOrient)nUSHORT;
+    eVertOrient          = (sal_Int16)nUSHORT;
 
     rStream >> nUSHORT;
     if(nUSHORT)
@@ -450,7 +454,7 @@ BOOL  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
  *
  * --------------------------------------------------*/
 void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
-                    const Size* pSize, const SvxFrameVertOrient* pOrient)
+                    const Size* pSize, const sal_Int16* pOrient)
 {
     if(!pBrushItem)
     {
@@ -467,7 +471,7 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
     if(pOrient)
         eVertOrient = *pOrient;
     else
-        eVertOrient = SVX_VERT_NONE;
+        eVertOrient = text::VertOrientation::NONE;
     if(pSize)
         aGraphicSize = *pSize;
     else
@@ -488,22 +492,22 @@ void SvxNumberFormat::SetGraphic( const String& rName )
     String sTmp;
     pGraphicBrush = new SvxBrushItem( rName, sTmp, GPOS_AREA, 0 );
     pGraphicBrush->SetDoneLink( STATIC_LINK( this, SvxNumberFormat, GraphicArrived) );
-    if( eVertOrient == SVX_VERT_NONE )
-        eVertOrient = SVX_VERT_TOP;
+    if( eVertOrient == text::VertOrientation::NONE )
+        eVertOrient = text::VertOrientation::TOP;
 
     aGraphicSize.Width() = aGraphicSize.Height() = 0;
 }
 /* -----------------------------22.02.01 15:55--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SvxNumberFormat::SetVertOrient(SvxFrameVertOrient eSet)
+void SvxNumberFormat::SetVertOrient(sal_Int16 eSet)
 {
     eVertOrient = eSet;
 }
 /* -----------------------------22.02.01 15:55--------------------------------
 
  ---------------------------------------------------------------------------*/
-SvxFrameVertOrient  SvxNumberFormat::GetVertOrient() const
+sal_Int16    SvxNumberFormat::GetVertOrient() const
 {
     return eVertOrient;
 }
@@ -970,7 +974,7 @@ BOOL SvxNumRule::UnLinkGraphics()
                 SvxBrushItem aTempItem(*pBrush);
                 aTempItem.SetGraphicLink( String());
                 aTempItem.SetGraphic(*pGraphic);
-                SvxFrameVertOrient  eOrient = aFmt.GetVertOrient();
+                sal_Int16    eOrient = aFmt.GetVertOrient();
                 aFmt.SetGraphicBrush( &aTempItem, &aFmt.GetGraphicSize(), &eOrient );
                 bRet = TRUE;
             }
