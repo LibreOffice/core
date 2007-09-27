@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodalredlineacceptdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:21:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:23:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,6 @@
 #ifndef _SVX_POSTATTR_HXX //autogen
 #include <svx/postattr.hxx>
 #endif
-//CHINA001 #ifndef _SVX_POSTDLG_HXX //autogen
-//CHINA001 #include <svx/postdlg.hxx>
-//CHINA001 #endif
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
@@ -119,7 +116,9 @@
 #endif
 #include "swmodalredlineacceptdlg.hxx"
 
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
+#include <unomid.h>
+
+
 SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MOD_REDLINE_ACCEPT))
 {
