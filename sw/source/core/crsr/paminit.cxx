@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paminit.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:47:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:30:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,9 +85,9 @@ SwPosSection fnSectionStart     = &aFwrd;
 SwPosSection fnSectionEnd       = &aBwrd;
 
 // Travelling in Tabellen
-FASTBOOL GotoPrevTable( SwPaM&, SwPosTable, FASTBOOL bInReadOnly );
-FASTBOOL GotoCurrTable( SwPaM&, SwPosTable, FASTBOOL bInReadOnly );
-FASTBOOL GotoNextTable( SwPaM&, SwPosTable, FASTBOOL bInReadOnly );
+BOOL GotoPrevTable( SwPaM&, SwPosTable, BOOL bInReadOnly );
+BOOL GotoCurrTable( SwPaM&, SwPosTable, BOOL bInReadOnly );
+BOOL GotoNextTable( SwPaM&, SwPosTable, BOOL bInReadOnly );
 
 SwWhichTable fnTablePrev = &GotoPrevTable;
 SwWhichTable fnTableCurr = &GotoCurrTable;
@@ -96,10 +96,10 @@ SwPosTable fnTableStart = &aFwrd;
 SwPosTable fnTableEnd = &aBwrd;
 
 // Travelling in Bereichen
-FASTBOOL GotoPrevRegion( SwPaM&, SwPosRegion, FASTBOOL bInReadOnly );
-FASTBOOL GotoCurrRegion( SwPaM&, SwPosRegion, FASTBOOL bInReadOnly );
-FASTBOOL GotoCurrRegionAndSkip( SwPaM&, SwPosRegion, FASTBOOL bInReadOnly );
-FASTBOOL GotoNextRegion( SwPaM&, SwPosRegion, FASTBOOL bInReadOnly );
+BOOL GotoPrevRegion( SwPaM&, SwPosRegion, BOOL bInReadOnly );
+BOOL GotoCurrRegion( SwPaM&, SwPosRegion, BOOL bInReadOnly );
+BOOL GotoCurrRegionAndSkip( SwPaM&, SwPosRegion, BOOL bInReadOnly );
+BOOL GotoNextRegion( SwPaM&, SwPosRegion, BOOL bInReadOnly );
 
 SwWhichRegion fnRegionPrev = &GotoPrevRegion;
 SwWhichRegion fnRegionCurr = &GotoCurrRegion;
@@ -111,31 +111,31 @@ SwPosRegion fnRegionEnd = &aBwrd;
 SwMoveFn fnMoveBackward = &aBwrd;
 SwMoveFn fnMoveForward  = &aFwrd;
 
-SwWhichPara GetfnParaCurr() //CHINA001
+SwWhichPara GetfnParaCurr()
 {
     return fnParaCurr;
 }
-SwPosPara GetfnParaStart() //CHINA001
+SwPosPara GetfnParaStart()
 {
      return  fnParaStart;
 }
-SwWhichTable GetfnTablePrev() //CHINA001
+SwWhichTable GetfnTablePrev()
 {
     return fnTablePrev;
 }
-SwPosPara GetfnParaEnd() //CHINA001
+SwPosPara GetfnParaEnd()
 {
      return  fnParaEnd;
 }
-SwPosTable GetfnTableStart() //CHINA001
+SwPosTable GetfnTableStart()
 {
     return fnTableStart;
 }
-SwWhichTable GetfnTableCurr() //CHINA001
+SwWhichTable GetfnTableCurr()
 {
     return fnTableCurr;
 }
-SwPosTable GetfnTableEnd() //CHINA001
+SwPosTable GetfnTableEnd()
 {
     return fnTableEnd;
 }
