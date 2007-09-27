@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:40:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:59:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,14 +80,12 @@
 #define RC_MACASSGN_BEGIN       (RC_DIALOG_BEGIN + 80)
 #define RC_MACASSGN_END         (RC_DIALOG_BEGIN + 89)
 
-//CHINA001 add begin
 #define RC_DLG_ADDR         (RC_DIALOG_BEGIN + 90)
 #define RC_SWDLG_BACKGROUND     (RC_DIALOG_BEGIN + 91)
 #define RC_DLG_SWNUMFMTDLG      (RC_DIALOG_BEGIN + 92)
 #define RC_DLG_SWBORDERDLG      (RC_DIALOG_BEGIN + 93)
 #define RC_DLG_SWWRAPDLG        (RC_DIALOG_BEGIN + 94)
 #define RC_DLG_SWFLDEDITDLG     (RC_DIALOG_BEGIN + 95)
-//CHINA001 add end
 // Ueberlaufpruefung ********************************************************
 
 #define DIALOG_ACT_END  RC_MACASSGN_END
