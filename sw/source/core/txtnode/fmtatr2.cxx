@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:46:16 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:24:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,15 +158,15 @@ BOOL SwFmtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
     return pTxtAttr ? pTxtAttr->GetInfo( rInfo ) : FALSE;
 }
-BOOL SwFmtCharFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+BOOL SwFmtCharFmt::QueryValue( uno::Any& rVal, BYTE ) const
 {
     String sCharFmtName;
     if(GetCharFmt())
-        SwStyleNameMapper::FillProgName(GetCharFmt()->GetName(), sCharFmtName,  GET_POOLID_CHRFMT, sal_True );
+        SwStyleNameMapper::FillProgName(GetCharFmt()->GetName(), sCharFmtName,  nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
     rVal <<= OUString( sCharFmtName );
     return TRUE;
 }
-BOOL SwFmtCharFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
+BOOL SwFmtCharFmt::PutValue( const uno::Any& , BYTE   )
 {
     DBG_ERROR("Zeichenvorlage kann mit PutValue nicht gesetzt werden!")
     return FALSE;
@@ -206,14 +206,14 @@ SfxPoolItem* SwFmtAutoFmt::Clone( SfxItemPool* ) const
     return new SwFmtAutoFmt( *this );
 }
 
-BOOL SwFmtAutoFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+BOOL SwFmtAutoFmt::QueryValue( uno::Any& rVal, BYTE ) const
 {
     String sCharFmtName = StylePool::nameOf( mpHandle );
     rVal <<= OUString( sCharFmtName );
     return TRUE;
 }
 
-BOOL SwFmtAutoFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
+BOOL SwFmtAutoFmt::PutValue( const uno::Any& , BYTE )
 {
     DBG_ERROR("ToDo!")
     return FALSE;
@@ -230,8 +230,8 @@ BOOL SwFmtAutoFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
 
 SwFmtINetFmt::SwFmtINetFmt()
     : SfxPoolItem( RES_TXTATR_INETFMT ),
-    pTxtAttr( 0 ),
     pMacroTbl( 0 ),
+    pTxtAttr( 0 ),
     nINetId( 0 ),
     nVisitedId( 0 )
 {}
@@ -240,32 +240,28 @@ SwFmtINetFmt::SwFmtINetFmt( const XubString& rURL, const XubString& rTarget )
     : SfxPoolItem( RES_TXTATR_INETFMT ),
     aURL( rURL ),
     aTargetFrame( rTarget ),
-    pTxtAttr( 0 ),
     pMacroTbl( 0 ),
+    pTxtAttr( 0 ),
     nINetId( 0 ),
     nVisitedId( 0 )
 {
 }
 
-
-
 SwFmtINetFmt::SwFmtINetFmt( const SwFmtINetFmt& rAttr )
     : SfxPoolItem( RES_TXTATR_INETFMT ),
     aURL( rAttr.GetValue() ),
-    aName( rAttr.aName ),
     aTargetFrame( rAttr.aTargetFrame ),
     aINetFmt( rAttr.aINetFmt ),
     aVisitedFmt( rAttr.aVisitedFmt ),
-    pTxtAttr( 0 ),
+    aName( rAttr.aName ),
     pMacroTbl( 0 ),
+    pTxtAttr( 0 ),
     nINetId( rAttr.nINetId ),
     nVisitedId( rAttr.nVisitedId )
 {
     if( rAttr.GetMacroTbl() )
         pMacroTbl = new SvxMacroTableDtor( *rAttr.GetMacroTbl() );
 }
-
-
 
 SwFmtINetFmt::~SwFmtINetFmt()
 {
@@ -387,14 +383,14 @@ BOOL SwFmtINetFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             if( !sVal.Len() && nVisitedId != 0 )
                 SwStyleNameMapper::FillUIName( nVisitedId, sVal );
             if( sVal.Len() )
-                SwStyleNameMapper::FillProgName( sVal, sVal, GET_POOLID_CHRFMT, sal_True );
+                SwStyleNameMapper::FillProgName( sVal, sVal, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
         break;
         case MID_URL_UNVISITED_FMT:
             sVal = aINetFmt;
             if( !sVal.Len() && nINetId != 0 )
                 SwStyleNameMapper::FillUIName( nINetId, sVal );
             if( sVal.Len() )
-                SwStyleNameMapper::FillProgName( sVal, sVal, GET_POOLID_CHRFMT, sal_True );
+                SwStyleNameMapper::FillProgName( sVal, sVal, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
         break;
         case MID_URL_HYPERLINKEVENTS:
         {
@@ -408,9 +404,8 @@ BOOL SwFmtINetFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             rVal <<= xNameReplace;
             return bRet;
         }
-        break;
         default:
-            bRet = FALSE;
+        break;
     }
     rVal <<= OUString(sVal);
     return bRet;
@@ -432,7 +427,7 @@ BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
             // from argument into descriptor. Then copy events from
             // the descriptor into the format.
             SwHyperlinkEventDescriptor* pEvents = new SwHyperlinkEventDescriptor();
-            uno::Reference< ::com::sun::star::lang::XServiceInfo> xHold = pEvents;
+            uno::Reference< lang::XServiceInfo> xHold = pEvents;
             pEvents->copyMacrosFromNameReplace(xReplace);
             pEvents->copyMacrosIntoINetFmt(*this);
         }
@@ -462,18 +457,18 @@ BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
             case MID_URL_VISITED_FMT:
             {
                 String aString;
-                SwStyleNameMapper::FillUIName( sVal, aString, GET_POOLID_CHRFMT, sal_True );
+                SwStyleNameMapper::FillUIName( sVal, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
                 aVisitedFmt = OUString ( aString );
                 nVisitedId = SwStyleNameMapper::GetPoolIdFromUIName( aVisitedFmt,
-                                               GET_POOLID_CHRFMT );
+                                               nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             }
             break;
             case MID_URL_UNVISITED_FMT:
             {
                 String aString;
-                SwStyleNameMapper::FillUIName( sVal, aString, GET_POOLID_CHRFMT, sal_True );
+                SwStyleNameMapper::FillUIName( sVal, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
                 aINetFmt = OUString ( aString );
-                nINetId = SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt, GET_POOLID_CHRFMT );
+                nINetId = SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             }
             break;
             default:
@@ -491,9 +486,10 @@ BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
 SwFmtRuby::SwFmtRuby( const String& rRubyTxt )
     : SfxPoolItem( RES_TXTATR_CJK_RUBY ),
     sRubyTxt( rRubyTxt ),
+    pTxtAttr( 0 ),
     nCharFmtId( 0 ),
-    nPosition( 0 ), nAdjustment( 0 ),
-    pTxtAttr( 0 )
+    nPosition( 0 ),
+    nAdjustment( 0 )
 {
 }
 
@@ -501,9 +497,10 @@ SwFmtRuby::SwFmtRuby( const SwFmtRuby& rAttr )
     : SfxPoolItem( RES_TXTATR_CJK_RUBY ),
     sRubyTxt( rAttr.sRubyTxt ),
     sCharFmtName( rAttr.sCharFmtName ),
+    pTxtAttr( 0 ),
     nCharFmtId( rAttr.nCharFmtId),
-    nPosition( rAttr.nPosition ), nAdjustment( rAttr.nAdjustment ),
-    pTxtAttr( 0 )
+    nPosition( rAttr.nPosition ),
+    nAdjustment( rAttr.nAdjustment )
 {
 }
 
@@ -537,7 +534,7 @@ SfxPoolItem* SwFmtRuby::Clone( SfxItemPool* ) const
     return new SwFmtRuby( *this );
 }
 
-BOOL SwFmtRuby::QueryValue( com::sun::star::uno::Any& rVal,
+BOOL SwFmtRuby::QueryValue( uno::Any& rVal,
                             BYTE nMemberId ) const
 {
     BOOL bRet = TRUE;
@@ -549,7 +546,7 @@ BOOL SwFmtRuby::QueryValue( com::sun::star::uno::Any& rVal,
         case MID_RUBY_CHARSTYLE:
         {
             String aString;
-            SwStyleNameMapper::FillProgName(sCharFmtName, aString, GET_POOLID_CHRFMT, sal_True );
+            SwStyleNameMapper::FillProgName(sCharFmtName, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
             rVal <<= OUString ( aString );
         }
         break;
@@ -564,7 +561,7 @@ BOOL SwFmtRuby::QueryValue( com::sun::star::uno::Any& rVal,
     }
     return bRet;
 }
-BOOL SwFmtRuby::PutValue( const com::sun::star::uno::Any& rVal,
+BOOL SwFmtRuby::PutValue( const uno::Any& rVal,
                             BYTE nMemberId  )
 {
     BOOL bRet = TRUE;
@@ -581,7 +578,7 @@ BOOL SwFmtRuby::PutValue( const com::sun::star::uno::Any& rVal,
          case MID_RUBY_ADJUST:
         {
             sal_Int16 nSet; rVal >>= nSet;
-            if(nSet >= 0 && nSet <= com::sun::star::text::RubyAdjust_INDENT_BLOCK)
+            if(nSet >= 0 && nSet <= text::RubyAdjust_INDENT_BLOCK)
                 nAdjustment = nSet;
             else
                 bRet = sal_False;
@@ -602,7 +599,7 @@ BOOL SwFmtRuby::PutValue( const com::sun::star::uno::Any& rVal,
             OUString sTmp;
             bRet = rVal >>= sTmp;
             if(bRet)
-                sCharFmtName = SwStyleNameMapper::GetUIName(sTmp, GET_POOLID_CHRFMT );
+                sCharFmtName = SwStyleNameMapper::GetUIName(sTmp, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
         }
         break;
         default:
