@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 11:33:57 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:15:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,9 +273,6 @@
 #include <sfx2/objface.hxx>
 #include <comphelper/storagehelper.hxx>
 
-using namespace rtl;
-using namespace ::com::sun::star::uno;
-
 #define SwDocShell
 #ifndef _ITEMDEF_HXX
 #include <itemdef.hxx>
@@ -287,12 +284,14 @@ using namespace ::com::sun::star::uno;
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
 
+#include <unomid.h>
+
+using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 
-#define C2S(cChar) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
 
 SFX_IMPL_INTERFACE( SwDocShell, SfxObjectShell, SW_RES(0) )
 {
@@ -391,7 +390,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
     }
     // #i30171# set the UpdateDocMode at the SwDocShell
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
-    nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
+    nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
 
     if( pFlt->GetDefaultTemplate().Len() )
         pRead->SetTemplateName( pFlt->GetDefaultTemplate() );
@@ -994,7 +993,9 @@ sal_Bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xS
         for( sal_Int32 n = aNames.getLength(); n; n-- )
         {
             if ( !pOLEChildList->MoveEmbeddedObject( aNames[n-1], GetEmbeddedObjectContainer() ) )
+            {
                 DBG_ERROR( "Copying of objects didn't work!" );
+            }
 
             //SvPersist* pPersist = this;
             //SvInfoObjectRef aRef( pInfList->GetObject( --n ));
@@ -1027,7 +1028,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     JobSetup *pOrig = 0;
     if ( rSetup.GetPrinterName().Len() && ASPECT_THUMBNAIL != nAspect )
     {
-        JobSetup* pOrig = const_cast<JobSetup*>(pDoc->getJobsetup());
+        pOrig = const_cast<JobSetup*>(pDoc->getJobsetup());
         if( pOrig )         // dann kopieren wir uns den
             pOrig = new JobSetup( *pOrig );
         pDoc->setJobsetup( rSetup );
@@ -1200,7 +1201,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         // break;
         case SID_PRINTPREVIEW:
         {
-            FASTBOOL bDisable = IsInPlaceActive();
+            BOOL bDisable = IsInPlaceActive();
             if ( !bDisable )
             {
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);
@@ -1232,9 +1233,9 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 rSet.DisableItem(nWhich);
             else
             {
-                SfxViewShell* pView = GetView() ? (SfxViewShell*)GetView()
+                SfxViewShell* pCurrView = GetView() ? (SfxViewShell*)GetView()
                                             : SfxViewShell::Current();
-                BOOL bSourceView = 0 != PTR_CAST(SwSrcView, pView);
+                BOOL bSourceView = 0 != PTR_CAST(SwSrcView, pCurrView);
                 rSet.Put(SfxBoolItem(SID_SOURCEVIEW, bSourceView));
             }
         }
@@ -1290,8 +1291,9 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             {
                 const SvNumberFormatter* pFmtr = pDoc->GetNumberFormatter(FALSE);
                 rSet.Put( SfxUInt16Item( nWhich,
+                        static_cast< sal_uInt16 >(
                         pFmtr ? pFmtr->GetYear2000()
-                              : SFX_APP()->GetMiscConfig()->GetYear2000() ));
+                              : SFX_APP()->GetMiscConfig()->GetYear2000() )));
             }
             break;
         case SID_ATTR_CHAR_FONTLIST:
@@ -1452,7 +1454,7 @@ void SwDocShell::UpdateLinks()
     // <--
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
+uno::Reference< frame::XController >
                                 SwDocShell::GetController()
 {
     return GetView()->GetController();
