@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unorefmk.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:35:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:39:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ sal_Int64 SAL_CALL SwXReferenceMark::getSomething( const uno::Sequence< sal_Int8
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
-            return (sal_Int64)this;
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
     return 0;
 }
@@ -146,12 +146,17 @@ SwXReferenceMark::~SwXReferenceMark()
 /* -----------------03.11.99 14:14-------------------
 
  --------------------------------------------------*/
-void SwXReferenceMark::InsertRefMark(SwPaM& rPam, SwDoc* pDoc)
+void SwXReferenceMark::InsertRefMark( SwPaM& rPam )
 {
-    UnoActionContext aCont(pDoc);
+    //! in some cases when this function is called the pDoc pointer member may have become
+    //! invalid/deleted thus we obtain the document pointer from rPaM where it should always
+    //! be valid.
+    SwDoc *pDoc2 = rPam.GetDoc();
+
+    UnoActionContext aCont(pDoc2);
     SwTxtAttr* pTxtAttr = 0;
     SwFmtRefMark aRefMark(sMarkName);
-    SfxItemSet  aSet(pDoc->GetAttrPool(), RES_TXTATR_REFMARK, RES_TXTATR_REFMARK, 0L);
+    SfxItemSet  aSet(pDoc2->GetAttrPool(), RES_TXTATR_REFMARK, RES_TXTATR_REFMARK, 0L);
     aSet.Put(aRefMark);
     sal_Bool bMark = *rPam.GetPoint() != *rPam.GetMark();
     SwXTextCursor::SetCrsrAttr(rPam, aSet, 0);
@@ -169,7 +174,7 @@ void SwXReferenceMark::InsertRefMark(SwPaM& rPam, SwDoc* pDoc)
     if(pTxtAttr)
         pMark = &pTxtAttr->GetRefMark();
 
-    pDoc->GetUnoCallBack()->Add(this);
+    pDoc2->GetUnoCallBack()->Add(this);
 }
 
 /* -----------------18.02.99 13:33-------------------
@@ -185,10 +190,10 @@ void SwXReferenceMark::attachToRange(const uno::Reference< text::XTextRange > & 
     OTextCursorHelper* pCursor = 0;
     if(xRangeTunnel.is())
     {
-        pRange = (SwXTextRange*)xRangeTunnel->getSomething(
-                                SwXTextRange::getUnoTunnelId());
-        pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
-                                OTextCursorHelper::getUnoTunnelId());
+        pRange  = reinterpret_cast< SwXTextRange * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
+        pCursor = reinterpret_cast< OTextCursorHelper * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
     }
     SwDoc* pDocument = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ? (SwDoc*)pCursor->GetDoc() : 0;
     if(pDocument)
@@ -196,7 +201,7 @@ void SwXReferenceMark::attachToRange(const uno::Reference< text::XTextRange > & 
         SwUnoInternalPaM aPam(*pDocument);
         //das muss jetzt sal_True liefern
         SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
-        InsertRefMark(aPam, pDocument);
+        InsertRefMark(aPam);
         m_bIsDescriptor = sal_False;
         pDoc = pDocument;
         pDoc->GetUnoCallBack()->Add(this);
@@ -319,11 +324,10 @@ void SwXReferenceMark::setName(const OUString& Name_) throw( uno::RuntimeExcepti
         const SwFmtRefMark* pCurMark = pDoc->GetRefMark(sMarkName);
         if(sNewName != sMarkName && pCurMark && pCurMark == pMark)
         {
-            SwDoc* pTempDoc = pDoc;
-            UnoActionContext aCont(pTempDoc);
+            UnoActionContext aCont(pDoc);
             const SwTxtRefMark* pTxtMark = pMark->GetTxtRefMark();
             if(pTxtMark &&
-                &pTxtMark->GetTxtNode().GetNodes() == &pTempDoc->GetNodes())
+                &pTxtMark->GetTxtNode().GetNodes() == &pDoc->GetNodes())
             {
                 SwTxtNode& rTxtNode = (SwTxtNode&)pTxtMark->GetTxtNode();
                 xub_StrLen nStt = *pTxtMark->GetStart(),
@@ -331,12 +335,13 @@ void SwXReferenceMark::setName(const OUString& Name_) throw( uno::RuntimeExcepti
                                                      : nStt + 1;
 
                 SwPaM aPam( rTxtNode, nStt, rTxtNode, nEnd );
-                pDoc->DeleteAndJoin( aPam );
+                pDoc->DeleteAndJoin( aPam );    //! deletes the pDoc member in the SwXReferenceMark
+                                                //! The aPam will keep the correct and functional doc though
 
                 sMarkName = sNewName;
                 //create a new one
-                InsertRefMark( aPam, pTempDoc );
-                pDoc = pTempDoc;
+                InsertRefMark( aPam );
+                pDoc = aPam.GetDoc();
             }
         }
     }
@@ -393,7 +398,7 @@ uno::Reference< beans::XPropertySetInfo > SwXReferenceMark::getPropertySetInfo( 
 
   -----------------------------------------------------------------------*/
 void SwXReferenceMark::setPropertyValue(
-    const OUString& aPropertyName, const uno::Any& aValue )
+    const OUString& /*rPropertyName*/, const uno::Any& /*rValue*/ )
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     throw lang::IllegalArgumentException();
@@ -413,7 +418,7 @@ uno::Any SwXReferenceMark::getPropertyValue( const OUString& rPropertyName )
 
   -----------------------------------------------------------------------*/
 void SwXReferenceMark::addPropertyChangeListener(
-    const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
+    const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
@@ -421,15 +426,15 @@ void SwXReferenceMark::addPropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXReferenceMark::removePropertyChangeListener(
-    const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener )
+    const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
             throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
 /*-- 12.09.00 12:58:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXReferenceMark::addVetoableChangeListener( const OUString& PropertyName,
-    const uno::Reference< beans::XVetoableChangeListener >& aListener )
+void SwXReferenceMark::addVetoableChangeListener( const OUString& /*rPropertyName*/,
+    const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
@@ -437,7 +442,7 @@ void SwXReferenceMark::addVetoableChangeListener( const OUString& PropertyName,
 
   -----------------------------------------------------------------------*/
 void SwXReferenceMark::removeVetoableChangeListener(
-    const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
+    const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
