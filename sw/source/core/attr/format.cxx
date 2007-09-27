@@ -4,9 +4,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:23:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:25:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -472,9 +472,9 @@ BOOL SwFmt::SetAttr(const SfxPoolItem& rAttr )
     // wenn Modify gelockt ist, werden keine Modifies verschickt;
     // fuer FrmFmt's immer das Modify verschicken!
     BOOL bRet = FALSE;
-    USHORT nFmtWhich;
+    const USHORT nFmtWhich = Which();
     if( IsModifyLocked() || (!GetDepends() &&
-        (RES_GRFFMTCOLL == (nFmtWhich = Which()) ||
+        (RES_GRFFMTCOLL == nFmtWhich  ||
          RES_TXTFMTCOLL == nFmtWhich ) ) )
     {
         if( 0 != ( bRet = (0 != aSet.Put( rAttr ))) )
@@ -492,7 +492,8 @@ BOOL SwFmt::SetAttr(const SfxPoolItem& rAttr )
         SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
                     aNew( *aSet.GetPool(), aSet.GetRanges() );
 
-        if( 0 != (bRet = aSet.Put_BC( rAttr, &aOld, &aNew )))
+        bRet = 0 != aSet.Put_BC( rAttr, &aOld, &aNew );
+        if( bRet )
         {
             // einige Sonderbehandlungen fuer Attribute
             aSet.SetModifyAtAttr( this );
@@ -521,10 +522,10 @@ BOOL SwFmt::SetAttr( const SfxItemSet& rSet )
     // wenn Modify gelockt ist, werden keine Modifies verschickt;
     // fuer FrmFmt's immer das Modify verschicken!
     BOOL bRet = FALSE;
-    USHORT nFmtWhich;
+    const USHORT nFmtWhich = Which();
     if ( IsModifyLocked() ||
          ( !GetDepends() &&
-           ( RES_GRFFMTCOLL == ( nFmtWhich = Which() ) ||
+           ( RES_GRFFMTCOLL == nFmtWhich ||
              RES_TXTFMTCOLL == nFmtWhich ) ) )
     {
         if( 0 != ( bRet = (0 != aSet.Put( rSet ))) )
@@ -540,7 +541,8 @@ BOOL SwFmt::SetAttr( const SfxItemSet& rSet )
     {
         SwAttrSet aOld( *aSet.GetPool(), aSet.GetRanges() ),
                     aNew( *aSet.GetPool(), aSet.GetRanges() );
-        if( 0 != ( bRet = aSet.Put_BC( rSet, &aOld, &aNew ) ) )
+        bRet = 0 != aSet.Put_BC( rSet, &aOld, &aNew );
+        if( bRet )
         {
             // einige Sonderbehandlungen fuer Attribute
             aSet.SetModifyAtAttr( this );
