@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1par.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:19:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:58:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ static ULONG WW1_Read_FieldIniFlags()
 // Diese werden dann einfach per Pipe 'uebertragen'.
 //
 
-ULONG WW1Reader::Read(SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam, const String& cName)
+ULONG WW1Reader::Read(SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam, const String& /*cName*/)
 {
     ULONG nRet = ERR_SWG_READ_ERROR;
     ASSERT(pStrm!=NULL, "W1-Read ohne Stream");
