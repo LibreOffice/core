@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldref.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:58:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     {
         SwSetExpFieldType* pType = (SwSetExpFieldType*)pSh->GetFldType(n, RES_SETEXPFLD);
 
-        if ((GSE_SEQ & pType->GetType()) && pType->GetDepends() && pSh->IsUsed(*pType))
+        if ((nsSwGetSetExpType::GSE_SEQ & pType->GetType()) && pType->GetDepends() && pSh->IsUsed(*pType))
         {
             nPos = aTypeLB.InsertEntry(pType->GetName());
             aTypeLB.SetEntryData(nPos, (void*)(REFFLDFLAG | n));
@@ -191,7 +191,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
         if (!IsFldEdit() || nTypeId != TYP_SETREFFLD)
         {
             nPos = aTypeLB.InsertEntry(GetFldMgr().GetTypeStr(i), i - rRg.nStart);
-            aTypeLB.SetEntryData(nPos, (void*)nTypeId);
+            aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
         }
     }
 
@@ -215,7 +215,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
                                 EqualsIgnoreCaseAscii(USER_DATA_VERSION_1))
         {
             String sVal = sUserData.GetToken(1, ';');
-            USHORT nVal = sVal.ToInt32();
+            USHORT nVal = static_cast< USHORT >(sVal.ToInt32());
             if(nVal != USHRT_MAX)
             {
                 for(USHORT i = 0; i < aTypeLB.GetEntryCount(); i++)
@@ -243,7 +243,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, pBox )
+IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
 {
     // Alte ListBoxPos sichern
     const USHORT nOld = GetTypeSel();
@@ -287,10 +287,10 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, pBox )
                     break;
             }
 
-            if (aTypeLB.GetEntryPos(sName) == LISTBOX_ENTRY_NOTFOUND)   // Referenz zu gel”schter Marke
+            if (aTypeLB.GetEntryPos(sName) == LISTBOX_ENTRY_NOTFOUND)   // Referenz zu gel?schter Marke
             {
                 USHORT nPos = aTypeLB.InsertEntry(sName);
-                aTypeLB.SetEntryData(nPos, (void*)nFlag);
+                aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nFlag));
             }
 
             aTypeLB.SelectEntry(sName);
@@ -310,8 +310,7 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, pBox )
         // Auswahl-Listbox fuellen
         UpdateSubType();
 
-        BOOL bName = FALSE;
-        nFldDlgFmtSel = 0;
+        BOOL bName = FALSE;     nFldDlgFmtSel = 0;
 
         if ((!IsFldEdit() || aSelectionLB.GetEntryCount()) && nOld != LISTBOX_ENTRY_NOTFOUND)
         {
@@ -366,7 +365,7 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, pBox )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwFldRefPage, SubTypeHdl, ListBox *, pBox )
+IMPL_LINK( SwFldRefPage, SubTypeHdl, ListBox *, EMPTYARG )
 {
     USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
 
@@ -446,7 +445,6 @@ void SwFldRefPage::UpdateSubType()
             aSelectionLB.SetStyle(aSelectionLB.GetStyle() & ~WB_SORT);
             SwSeqFldList aArr;
             USHORT nCnt = pSh->GetSeqFtnList( aArr );
-            USHORT nFnd = 0;
 
             for( USHORT n = 0; n < nCnt; ++n )
             {
@@ -460,7 +458,6 @@ void SwFldRefPage::UpdateSubType()
             aSelectionLB.SetStyle(aSelectionLB.GetStyle() & ~WB_SORT);
             SwSeqFldList aArr;
             USHORT nCnt = pSh->GetSeqFtnList( aArr, TRUE );
-            USHORT nFnd = 0;
 
             for( USHORT n = 0; n < nCnt; ++n )
             {
@@ -554,7 +551,7 @@ USHORT SwFldRefPage::FillFormatLB(USHORT nTypeId)
 
     default:
         nSize = GetFldMgr().GetFormatCount( (REFFLDFLAG & nTypeId)
-                                                ? TYP_GETREFFLD : nTypeId,
+                                                ? (USHORT)TYP_GETREFFLD : nTypeId,
                                             FALSE, IsFldDlgHtmlMode() );
         break;
     }
@@ -565,7 +562,7 @@ USHORT SwFldRefPage::FillFormatLB(USHORT nTypeId)
     for (USHORT i = 0; i < nSize; i++)
     {
         USHORT nPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr( nTypeId, i ));
-        aFormatLB.SetEntryData( nPos, (void*)GetFldMgr().GetFormatId( nTypeId, i ));
+        aFormatLB.SetEntryData( nPos, reinterpret_cast<void*>(GetFldMgr().GetFormatId( nTypeId, i )));
     }
 
     if (nSize)
@@ -616,7 +613,6 @@ IMPL_LINK( SwFldRefPage, ModifyHdl, Edit *, EMPTYARG )
 
 BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
 {
-    BOOL bPage = FALSE;
     BOOL bModified = FALSE;
     USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
 
@@ -792,7 +788,7 @@ void    SwFldRefPage::FillUserData()
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;
     else
-        nTypeSel = (ULONG)aTypeLB.GetEntryData( nTypeSel );
+        nTypeSel = sal::static_int_cast< USHORT >(reinterpret_cast< sal_uIntPtr >(aTypeLB.GetEntryData( nTypeSel )));
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
 }
