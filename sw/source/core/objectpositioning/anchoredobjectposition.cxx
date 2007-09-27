@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:25:40 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:07:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,7 @@
 #include <IDocumentSettingAccess.hxx>
 #endif
 
+using namespace ::com::sun::star;
 using namespace objectpositioning;
 
 // **************************************************************************
@@ -112,6 +113,7 @@ SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
             mrDrawObj.ISA(SwDrawVirtObj)    || // 'virtual' drawing object
             ( !mrDrawObj.ISA(SdrVirtObj) &&    // 'master' drawing object
               !mrDrawObj.ISA(SwFlyDrawObj) );  // - indirectly checked
+    (void) bObjOfExceptedType;
     ASSERT( bObjOfExceptedType,
             "SwAnchoredObjectPosition(..) - object of unexcepted type!" );
 #endif
@@ -241,7 +243,7 @@ SwTwips SwAnchoredObjectPosition::_GetTopForObjPos( const SwFrm& _rFrm,
 void SwAnchoredObjectPosition::_GetVertAlignmentValues(
                                         const SwFrm& _rVertOrientFrm,
                                         const SwFrm& _rPageAlignLayFrm,
-                                        const SwRelationOrient _eRelOrient,
+                                        const sal_Int16 _eRelOrient,
                                         SwTwips&      _orAlignAreaHeight,
                                         SwTwips&      _orAlignAreaOffset ) const
 {
@@ -259,7 +261,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             : 0;
     switch ( _eRelOrient )
     {
-        case FRAME:
+        case text::RelOrientation::FRAME:
         {
             // OD 2004-03-11 #i11860# - consider upper space of previous frame
             nHeight = (_rVertOrientFrm.Frm().*fnRect->fnGetHeight)() -
@@ -267,7 +269,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             nOffset = 0;
         }
         break;
-        case PRTAREA:
+        case text::RelOrientation::PRINT_AREA:
         {
             nHeight = (_rVertOrientFrm.Prt().*fnRect->fnGetHeight)();
             // OD 2004-03-11 #i11860# - consider upper space of previous frame
@@ -295,7 +297,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             }
         }
         break;
-        case REL_PG_FRAME:
+        case text::RelOrientation::PAGE_FRAME:
         {
             nHeight = (_rPageAlignLayFrm.Frm().*fnRect->fnGetHeight)();
             nOffset = (*fnRect->fnYDiff)(
@@ -303,7 +305,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
                         nVertOrientTop );
         }
         break;
-        case REL_PG_PRTAREA:
+        case text::RelOrientation::PAGE_PRINT_AREA:
         {
             nHeight = (_rPageAlignLayFrm.Prt().*fnRect->fnGetHeight)();
             nOffset = (_rPageAlignLayFrm.*fnRect->fnGetTopMargin)() +
@@ -333,7 +335,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
         }
         break;
         // OD 12.11.2003 #i22341# - vertical alignment at top of line
-        case REL_VERT_LINE:
+        case text::RelOrientation::TEXT_LINE:
         {
             if ( IsAnchoredToChar() )
             {
@@ -347,7 +349,7 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             }
         }
         break;
-        case REL_CHAR:
+        case text::RelOrientation::CHAR:
         {
             if ( IsAnchoredToChar() )
             {
@@ -362,12 +364,12 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
             }
         }
         break;
-        // no break here, because REL_CHAR is invalid, if !mbAnchorToChar
+        // no break here, because text::RelOrientation::CHAR is invalid, if !mbAnchorToChar
         default:
-        //case REL_PG_LEFT:     not valid for vertical alignment
-        //case REL_PG_RIGHT:    not valid for vertical alignment
-        //case REL_FRM_LEFT:    not valid for vertical alignment
-        //case REL_FRM_RIGHT:   not valid for vertical alignment
+        //case text::RelOrientation::PAGE_LEFT:     not valid for vertical alignment
+        //case text::RelOrientation::PAGE_RIGHT:    not valid for vertical alignment
+        //case text::RelOrientation::FRAME_LEFT:    not valid for vertical alignment
+        //case text::RelOrientation::FRAME_RIGHT:   not valid for vertical alignment
         {
             ASSERT( false,
                     "<SwAnchoredObjectPosition::_GetVertAlignmentValues(..)> - invalid relative alignment" );
@@ -382,8 +384,8 @@ void SwAnchoredObjectPosition::_GetVertAlignmentValues(
 SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
                                     const SwFrm& _rVertOrientFrm,
                                     const SwFrm& _rPageAlignLayFrm,
-                                    const SwVertOrient     _eVertOrient,
-                                    const SwRelationOrient _eRelOrient,
+                                    const sal_Int16 _eVertOrient,
+                                    const sal_Int16 _eRelOrient,
                                     const SwTwips          _nVertPos,
                                     const SvxLRSpaceItem& _rLRSpacing,
                                     const SvxULSpaceItem& _rULSpacing,
@@ -403,23 +405,23 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
 
     switch ( _eVertOrient )
     {
-        case VERT_NONE:
+        case text::VertOrientation::NONE:
         {
             // 'manual' vertical position
             nRelPosY += _nVertPos;
         }
         break;
-        case VERT_TOP:
+        case text::VertOrientation::TOP:
         {
             nRelPosY += bVert ? _rLRSpacing.GetRight() : _rULSpacing.GetUpper();
         }
         break;
-        case VERT_CENTER:
+        case text::VertOrientation::CENTER:
         {
             nRelPosY += (nAlignAreaHeight / 2) - (nObjHeight / 2);
         }
         break;
-        case VERT_BOTTOM:
+        case text::VertOrientation::BOTTOM:
         {
             nRelPosY += nAlignAreaHeight -
                        ( nObjHeight + ( bVert ? _rLRSpacing.GetLeft() : _rULSpacing.GetLower() ) );
@@ -543,7 +545,7 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustHoriRelPos(
     SwTwips nAdjustedRelPosX = _nProposedRelPosX;
 
     const SwFrm& rAnchorFrm = GetAnchorFrm();
-    SWRECTFN( (&rAnchorFrm) );
+    const bool bVert = rAnchorFrm.IsVertical();
 
     const Size aObjSize( GetAnchoredObj().GetObjRect().SSize() );
 
@@ -589,7 +591,7 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustHoriRelPos(
 */
 void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrientFrm,
                                                         const SwFrm&  _rPageAlignLayFrm,
-                                                        const SwRelationOrient _eRelOrient,
+                                                        const sal_Int16 _eRelOrient,
                                                         const bool    _bObjWrapThrough,
                                                         SwTwips&      _orAlignAreaWidth,
                                                         SwTwips&      _orAlignAreaOffset,
@@ -600,7 +602,7 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
     SWRECTFN( (&_rHoriOrientFrm) )
     switch ( _eRelOrient )
     {
-        case PRTAREA:
+        case text::RelOrientation::PRINT_AREA:
         {
             nWidth = (_rHoriOrientFrm.Prt().*fnRect->fnGetWidth)();
             nOffset = (_rHoriOrientFrm.*fnRect->fnGetLeftMargin)();
@@ -631,7 +633,7 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
             }
             break;
         }
-        case REL_PG_LEFT:
+        case text::RelOrientation::PAGE_LEFT:
         {
             // align at left border of page frame/fly frame/cell frame
             nWidth = (_rPageAlignLayFrm.*fnRect->fnGetLeftMargin)();
@@ -641,7 +643,7 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
             _obAlignedRelToPage = true;
         }
         break;
-        case REL_PG_RIGHT:
+        case text::RelOrientation::PAGE_RIGHT:
         {
             // align at right border of page frame/fly frame/cell frame
             nWidth = (_rPageAlignLayFrm.*fnRect->fnGetRightMargin)();
@@ -651,14 +653,14 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
             _obAlignedRelToPage = true;
         }
         break;
-        case REL_FRM_LEFT:
+        case text::RelOrientation::FRAME_LEFT:
         {
             // align at left border of anchor frame
             nWidth = (_rHoriOrientFrm.*fnRect->fnGetLeftMargin)();
             nOffset = 0;
         }
         break;
-        case REL_FRM_RIGHT:
+        case text::RelOrientation::FRAME_RIGHT:
         {
             // align at right border of anchor frame
             // OD 19.08.2003 #110978# - unify and simplify
@@ -668,7 +670,7 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
             nOffset = (_rHoriOrientFrm.Prt().*fnRect->fnGetRight)();
         }
         break;
-        case REL_CHAR:
+        case text::RelOrientation::CHAR:
         {
             // alignment relative to character - assure, that corresponding
             // character rectangle is set.
@@ -682,7 +684,7 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
             }
             // no break!
         }
-        case REL_PG_PRTAREA:
+        case text::RelOrientation::PAGE_PRINT_AREA:
         {
             nWidth = (_rPageAlignLayFrm.Prt().*fnRect->fnGetWidth)();
             nOffset = (*fnRect->fnXDiff)(
@@ -711,7 +713,7 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
             _obAlignedRelToPage = true;
             break;
         }
-        case REL_PG_FRAME:
+        case text::RelOrientation::PAGE_FRAME:
         {
             nWidth = (_rPageAlignLayFrm.Frm().*fnRect->fnGetWidth)();
             nOffset = (*fnRect->fnXDiff)(
@@ -721,7 +723,7 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
             break;
         }
         default:
-        // case FRAME:
+        // case text::RelOrientation::FRAME:
         {
             nWidth = (_rHoriOrientFrm.Frm().*fnRect->fnGetWidth)();
             nOffset = _rHoriOrientFrm.IsTxtFrm() ?
@@ -740,9 +742,9 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
     @author OD
 */
 void SwAnchoredObjectPosition::_ToggleHoriOrientAndAlign(
-                                        const bool         _bToggleLeftRight,
-                                        SwHoriOrient&      _ioeHoriOrient,
-                                        SwRelationOrient&  _iopeRelOrient
+                                        const bool _bToggleLeftRight,
+                                        sal_Int16& _ioeHoriOrient,
+                                        sal_Int16& _iopeRelOrient
                                       ) const
 {
     if( _bToggleLeftRight )
@@ -750,40 +752,44 @@ void SwAnchoredObjectPosition::_ToggleHoriOrientAndAlign(
         // toggle orientation
         switch ( _ioeHoriOrient )
         {
-            case HORI_RIGHT :
+            case text::HoriOrientation::RIGHT :
                 {
-                    _ioeHoriOrient = HORI_LEFT;
+                    _ioeHoriOrient = text::HoriOrientation::LEFT;
                 }
                 break;
-            case HORI_LEFT :
+            case text::HoriOrientation::LEFT :
                 {
-                    _ioeHoriOrient = HORI_RIGHT;
+                    _ioeHoriOrient = text::HoriOrientation::RIGHT;
                 }
+                break;
+            default:
                 break;
         }
 
         // toggle relative alignment
         switch ( _iopeRelOrient )
         {
-            case REL_PG_RIGHT :
+            case text::RelOrientation::PAGE_RIGHT :
                 {
-                    _iopeRelOrient = REL_PG_LEFT;
+                    _iopeRelOrient = text::RelOrientation::PAGE_LEFT;
                 }
                 break;
-            case REL_PG_LEFT :
+            case text::RelOrientation::PAGE_LEFT :
                 {
-                    _iopeRelOrient = REL_PG_RIGHT;
+                    _iopeRelOrient = text::RelOrientation::PAGE_RIGHT;
                 }
                 break;
-            case REL_FRM_RIGHT :
+            case text::RelOrientation::FRAME_RIGHT :
                 {
-                    _iopeRelOrient = REL_FRM_LEFT;
+                    _iopeRelOrient = text::RelOrientation::FRAME_LEFT;
                 }
                 break;
-            case REL_FRM_LEFT :
+            case text::RelOrientation::FRAME_LEFT :
                 {
-                    _iopeRelOrient = REL_FRM_RIGHT;
+                    _iopeRelOrient = text::RelOrientation::FRAME_RIGHT;
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -812,8 +818,8 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
     const bool bToggle = _rHoriOrient.IsPosToggle() && bEvenPage;
 
     // determine orientation and relative alignment
-    SwHoriOrient eHoriOrient = _rHoriOrient.GetHoriOrient();
-    SwRelationOrient eRelOrient = _rHoriOrient.GetRelationOrient();
+    sal_Int16 eHoriOrient = _rHoriOrient.GetHoriOrient();
+    sal_Int16 eRelOrient = _rHoriOrient.GetRelationOrient();
     // toggle orientation and relative alignment
     _ToggleHoriOrientAndAlign( bToggle, eHoriOrient, eRelOrient );
 
@@ -831,11 +837,11 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
     SWRECTFN( (&_rHoriOrientFrm) )
     SwTwips nObjWidth = (GetAnchoredObj().GetObjRect().*fnRect->fnGetWidth)();
     SwTwips nRelPosX = nOffset;
-    if ( _rHoriOrient.GetHoriOrient() == HORI_NONE )
+    if ( _rHoriOrient.GetHoriOrient() == text::HoriOrientation::NONE )
     {
         // 'manual' horizonal position
         const bool bR2L = rAnchorFrm.IsRightToLeft();
-        if( IsAnchoredToChar() && REL_CHAR == eRelOrient )
+        if( IsAnchoredToChar() && text::RelOrientation::CHAR == eRelOrient )
         {
             if( bR2L )
                 nRelPosX -= _rHoriOrient.GetPos();
@@ -853,9 +859,9 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
             nRelPosX += _rHoriOrient.GetPos();
         }
     }
-    else if ( HORI_CENTER == eHoriOrient )
+    else if ( text::HoriOrientation::CENTER == eHoriOrient )
         nRelPosX += (nWidth / 2) - (nObjWidth / 2);
-    else if ( HORI_RIGHT == eHoriOrient )
+    else if ( text::HoriOrientation::RIGHT == eHoriOrient )
         nRelPosX += nWidth -
                     ( nObjWidth +
                       ( bVert ? _rULSpacing.GetLower() : _rLRSpacing.GetRight() ) );
@@ -875,7 +881,7 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
 //    // adjust relative horizontal position, if object is manual horizontal
 //    // positioned (not 'page' aligned) and orients not at the anchor frame,
 //    // but it overlaps anchor frame.
-//    if ( _rHoriOrient.GetHoriOrient() == HORI_NONE && !bAlignedRelToPage &&
+//    if ( _rHoriOrient.GetHoriOrient() == text::HoriOrientation::NONE && !bAlignedRelToPage &&
 //         &rAnchorFrm != &_rHoriOrientFrm )
 //    {
 //        // E.g.: consider a columned page/section with an horizontal
@@ -917,8 +923,8 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
     // position and lay below it.
     if ( GetAnchoredObj().ISA(SwFlyFrm) &&
          ( GetContact().ObjAnchoredAtPara() || GetContact().ObjAnchoredAtChar() ) &&
-         ( eHoriOrient == HORI_LEFT || eHoriOrient == HORI_RIGHT ) &&
-         eRelOrient != REL_CHAR )
+         ( eHoriOrient == text::HoriOrientation::LEFT || eHoriOrient == text::HoriOrientation::RIGHT ) &&
+         eRelOrient != text::RelOrientation::CHAR )
     {
         nRelPosX = _AdjustHoriRelPosForDrawAside( _rHoriOrientFrm,
                                                   nRelPosX, _nRelPosY,
@@ -946,8 +952,8 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
                                             const SwFrm&  _rHoriOrientFrm,
                                             const SwTwips _nProposedRelPosX,
                                             const SwTwips _nRelPosY,
-                                            const SwHoriOrient _eHoriOrient,
-                                            const SwRelationOrient _eRelOrient,
+                                            const sal_Int16 _eHoriOrient,
+                                            const sal_Int16 _eRelOrient,
                                             const SvxLRSpaceItem& _rLRSpacing,
                                             const SvxULSpaceItem& _rULSpacing,
                                             const bool _bEvenPage
@@ -1004,7 +1010,7 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
                 if ( nOtherTop <= aTmpObjRect.Bottom() + _rULSpacing.GetLower() &&
                      nOtherBot >= aTmpObjRect.Top() - _rULSpacing.GetUpper() )
                 {
-                    if ( _eHoriOrient == HORI_LEFT )
+                    if ( _eHoriOrient == text::HoriOrientation::LEFT )
                     {
                         SwTwips nTmp = nOtherBot + 1 + _rULSpacing.GetUpper() -
                                        rAnchorTxtFrm.Frm().Top();
@@ -1016,7 +1022,7 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
                             nAdjustedRelPosX = nTmp;
                         }
                     }
-                    else if ( _eHoriOrient == HORI_RIGHT )
+                    else if ( _eHoriOrient == text::HoriOrientation::RIGHT )
                     {
                         SwTwips nTmp = nOtherTop - 1 - _rULSpacing.GetLower() -
                                        aObjBoundRect.Height() -
@@ -1040,7 +1046,7 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
                 if( nOtherLeft <= aTmpObjRect.Right() + _rLRSpacing.GetRight() &&
                     nOtherRight >= aTmpObjRect.Left() - _rLRSpacing.GetLeft() )
                 {
-                    if ( _eHoriOrient == HORI_LEFT )
+                    if ( _eHoriOrient == text::HoriOrientation::LEFT )
                     {
                         SwTwips nTmp = nOtherRight + 1 + _rLRSpacing.GetLeft() -
                                        rAnchorTxtFrm.Frm().Left();
@@ -1052,7 +1058,7 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
                             nAdjustedRelPosX = nTmp;
                         }
                     }
-                    else if ( _eHoriOrient == HORI_RIGHT )
+                    else if ( _eHoriOrient == text::HoriOrientation::RIGHT )
                     {
                         SwTwips nTmp = nOtherLeft - 1 - _rLRSpacing.GetRight() -
                                        aObjBoundRect.Width() -
@@ -1087,8 +1093,8 @@ bool SwAnchoredObjectPosition::_DrawAsideFly( const SwFlyFrm* _pFly,
                                               const SwFrm*    _pObjContext,
                                               const ULONG     _nObjIndex,
                                               const bool      _bEvenPage,
-                                              const SwHoriOrient _eHoriOrient,
-                                              const SwRelationOrient _eRelOrient
+                                              const sal_Int16 _eHoriOrient,
+                                              const sal_Int16 _eRelOrient
                                             ) const
 {
     bool bRetVal = false;
@@ -1105,15 +1111,15 @@ bool SwAnchoredObjectPosition::_DrawAsideFly( const SwFlyFrm* _pFly,
         if( _nObjIndex >= nOtherIndex )
         {
             const SwFmtHoriOrient& rHori = _pFly->GetFmt()->GetHoriOrient();
-            SwRelationOrient eOtherRelOrient = rHori.GetRelationOrient();
-            if( REL_CHAR != eOtherRelOrient )
+            sal_Int16 eOtherRelOrient = rHori.GetRelationOrient();
+            if( text::RelOrientation::CHAR != eOtherRelOrient )
             {
-                SwHoriOrient eOtherHoriOrient = rHori.GetHoriOrient();
+                sal_Int16 eOtherHoriOrient = rHori.GetHoriOrient();
                 _ToggleHoriOrientAndAlign( _bEvenPage && rHori.IsPosToggle(),
                                            eOtherHoriOrient,
                                            eOtherRelOrient );
                 if ( eOtherHoriOrient == _eHoriOrient &&
-                    _Minor( _eRelOrient, eOtherRelOrient, HORI_LEFT == _eHoriOrient ) )
+                    _Minor( _eRelOrient, eOtherRelOrient, text::HoriOrientation::LEFT == _eHoriOrient ) )
                 {
                     bRetVal = true;
                 }
@@ -1135,17 +1141,19 @@ bool SwAnchoredObjectPosition::_DrawAsideFly( const SwFlyFrm* _pFly,
 
     @author OD
 */
-bool SwAnchoredObjectPosition::_Minor( SwRelationOrient _eRelOrient1,
-                                       SwRelationOrient _eRelOrient2,
+bool SwAnchoredObjectPosition::_Minor( sal_Int16 _eRelOrient1,
+                                       sal_Int16 _eRelOrient2,
                                        bool             _bLeft ) const
 {
     bool bRetVal;
 
     // draw aside order for left horizontal position
-    static USHORT __READONLY_DATA aLeft[ LAST_ENUM_DUMMY ] =
+    //! one array entry for each value in text::RelOrientation
+    static USHORT __READONLY_DATA aLeft[ 10 ] =
         { 5, 6, 0, 1, 8, 4, 7, 2, 3, 9 };
     // draw aside order for right horizontal position
-    static USHORT __READONLY_DATA aRight[ LAST_ENUM_DUMMY ] =
+    //! one array entry for each value in text::RelOrientation
+    static USHORT __READONLY_DATA aRight[ 10 ] =
         { 5, 6, 0, 8, 1, 7, 4, 2, 3, 9 };
 
     // decide depending on given order, which frame has to draw aside another frame
