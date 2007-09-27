@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfldw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:09:23 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:47:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,8 @@
 #include "flddat.hxx"
 #include "htmlfld.hxx"
 #include "wrthtml.hxx"
+
+using namespace nsSwDocInfoSubType;
 
 //-----------------------------------------------------------------------
 
@@ -185,6 +187,8 @@ const sal_Char *SwHTMLWriter::GetNumFormat( USHORT nFmt )
     case SVX_NUM_PAGEDESC:              pFmtStr = sHTML_FF_page;        break;
     case SVX_NUM_CHARS_UPPER_LETTER_N:  pFmtStr = sHTML_FF_ulettern;    break;
     case SVX_NUM_CHARS_LOWER_LETTER_N:  pFmtStr = sHTML_FF_llettern;    break;
+    default:
+        ;
     }
 
     return pFmtStr;
@@ -206,7 +210,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
     String aValue;              // VALUE (SW)
     BOOL bNumFmt=FALSE;         // SDNUM (Number-Formatter-Format)
     BOOL bNumValue=FALSE;       // SDVAL (Number-Formatter-Value)
-    double dNumValue;           // SDVAL (Number-Formatter-Value)
+    double dNumValue = 0.0;     // SDVAL (Number-Formatter-Value)
     BOOL bFixed=FALSE;          // SDFIXED
 
     switch( nField )
@@ -230,6 +234,8 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                 case EU_FAX:        pSubStr = sHTML_FS_fax;         break;
                 case EU_EMAIL:      pSubStr = sHTML_FS_email;       break;
                 case EU_STATE:      pSubStr = sHTML_FS_state;       break;
+                default:
+                    ;
             }
             ASSERT( pSubStr, "ubekannter Subtyp fuer SwExtUserField" );
             bFixed = ((const SwExtUserField*)pFld)->IsFixed();
@@ -267,7 +273,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                     case PG_PREV:       pSubStr = sHTML_FS_prev;        break;
                 }
                 ASSERT( pSubStr, "ubekannter Subtyp fuer SwPageNumberField" );
-                pFmtStr = SwHTMLWriter::GetNumFormat( (SvxExtNumType)nFmt );
+                pFmtStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(nFmt) );
 
                 if( (SvxExtNumType)nFmt==SVX_NUM_CHAR_SPECIAL )
                 {
@@ -360,7 +366,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                     case DS_OLE:        pSubStr = sHTML_FS_ole;     break;
                     default:            pTypeStr = 0;               break;
                 }
-                pFmtStr = SwHTMLWriter::GetNumFormat( (SvxExtNumType)nFmt );
+                pFmtStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(nFmt) );
             }
             break;
 
@@ -372,6 +378,8 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                 case FF_PATHNAME:   pFmtStr = sHTML_FF_pathname;    break;
                 case FF_PATH:       pFmtStr = sHTML_FF_path;        break;
                 case FF_NAME_NOEXT: pFmtStr = sHTML_FF_name_noext;  break;
+                default:
+                    ;
             }
             bFixed = ((const SwFileNameField*)pFld)->IsFixed();
             ASSERT( pFmtStr, "unbekanntes Format fuer SwFileNameField" );
@@ -447,7 +455,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
             { RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE,
               RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT };
 
-        sal_uInt16 *pRefWhichIds;
+        sal_uInt16 *pRefWhichIds = 0;
         switch( rHTMLWrt.nCSS1Script )
         {
         case CSS1_OUTMODE_WESTERN:
@@ -472,7 +480,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
             if( nScript != CSS1_OUTMODE_ANY_SCRIPT &&
                 /* #108791# */ nScript != rHTMLWrt.nCSS1Script )
             {
-                sal_uInt16 *pWhichIds;
+                sal_uInt16 *pWhichIds = 0;
                 switch( nScript )
                 {
                 case CSS1_OUTMODE_WESTERN:  pWhichIds = aWesternWhichIds; break;
@@ -536,7 +544,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
     const SwFieldType* pFldTyp = pFld->GetTyp();
 
     if( RES_SETEXPFLD == pFldTyp->Which() &&
-        (GSE_STRING & pFld->GetSubType()) )
+        (nsSwGetSetExpType::GSE_STRING & pFld->GetSubType()) )
     {
         int bOn = FALSE;
         if( pFldTyp->GetName().EqualsAscii("HTML_ON" ) )
