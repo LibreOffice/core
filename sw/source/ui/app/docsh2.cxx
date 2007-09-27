@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:10:23 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:16:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,18 +274,18 @@
 
 #include <sfx2/fcontnr.hxx>
 
-#include "swabstdlg.hxx" //CHINA001
-#include "dialog.hrc" //CHINA001
-#include "swabstdlg.hxx" //CHINA001
+#include "swabstdlg.hxx"
+#include "dialog.hrc"
+#include "swabstdlg.hxx"
 
-using namespace com::sun::star::ui::dialogs;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 using namespace ::sfx2;
 
-extern FASTBOOL FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
+extern BOOL FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
 
 /*--------------------------------------------------------------------
     Beschreibung:   DocInfo kreieren (virtuell)
@@ -306,11 +306,9 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
         //Nicht fuer SourceView.
         SfxViewShell *pVSh = SfxViewShell::Current();
         if ( pVSh && !pVSh->ISA(SwSrcView) )
-//CHINA001          pDlg->AddTabPage(TP_DOC_STAT, SW_RESSTR(STR_DOC_STAT),
-//CHINA001 SwDocStatPage::Create, 0);
         {
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
             pDlg->AddTabPage(TP_DOC_STAT, SW_RESSTR(STR_DOC_STAT),pFact->GetTabPageCreatorFunc( TP_DOC_STAT ),0);
         }
     }
@@ -806,7 +804,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 BOOL bSet = FALSE, bFound = FALSE, bOnly = TRUE;
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);
                 SfxViewShell* pViewShell = SfxViewShell::Current();
-                SwView* pView = PTR_CAST( SwView, pViewShell );
+                SwView* pCurrView = dynamic_cast< SwView *> ( pViewShell );
                 BOOL bCurrent = IS_TYPE( SwPagePreView, pViewShell );
 
                 while( pTmpFrm )    // search PreView
@@ -846,8 +844,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if( ISA(SwWebDocShell) && SID_VIEWSHELL1 == nSlotId )
                         nSlotId = SID_VIEWSHELL2;
 
-                    if( pView && pView->GetDocShell() == this )
-                        pTmpFrm = pView->GetViewFrame();
+                    if( pCurrView && pCurrView->GetDocShell() == this )
+                        pTmpFrm = pCurrView->GetViewFrame();
                     else
                         pTmpFrm = SfxViewFrame::GetFirst( this );
 
@@ -879,10 +877,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 if ( pArgs )
                 {
-                    SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_TEMPLATE_NAME, FALSE );
-                    if ( pItem )
+                    SFX_REQUEST_ARG( rReq, pTemplateItem, SfxStringItem, SID_TEMPLATE_NAME, FALSE );
+                    if ( pTemplateItem )
                     {
-                        aFileName = pItem->GetValue();
+                        aFileName = pTemplateItem->GetValue();
                         SFX_REQUEST_ARG( rReq, pFlagsItem, SfxInt32Item, SID_TEMPLATE_LOAD, FALSE );
                         if ( pFlagsItem )
                             nFlags = (USHORT) pFlagsItem->GetValue();
@@ -980,7 +978,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                             ? (SfxViewShell*)GetView()
                                             : SfxViewShell::Current();
                 SfxViewFrame*  pViewFrm = pViewShell->GetViewFrame();
-                SwSrcView* pSrcView = PTR_CAST(SwSrcView, pViewShell);
+                SwSrcView* pSrcView = dynamic_cast< SwSrcView *>( pViewShell );
                 if(!pSrcView)
                 {
                     // 3 possible state:
@@ -991,8 +989,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                     SwIoSystem::GetFilterOfFormat(
                                         String::CreateFromAscii("HTML"),
                                         SwWebDocShell::Factory().GetFilterContainer() );
-                    BOOL bHasName = HasName();
-                    if(bHasName)
+                    BOOL bLocalHasName = HasName();
+                    if(bLocalHasName)
                     {
                         //check for filter type
                         const SfxFilter* pFlt = GetMedium()->GetFilter();
@@ -1000,12 +998,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         {
                             QueryBox aQuery(&pViewFrm->GetWindow(), SW_RES(MSG_SAVEAS_HTML_QUERY));
                             if(RET_YES == aQuery.Execute())
-                                bHasName = FALSE;
+                                bLocalHasName = FALSE;
                             else
                                 break;
                         }
                     }
-                    if(!bHasName)
+                    if(!bLocalHasName)
                     {
                         FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
                         aDlgHelper.AddFilter( pHtmlFlt->GetFilterName(), pHtmlFlt->GetDefaultExtension() );
@@ -1028,7 +1026,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 }
 #ifdef DBG_UTIL
                 {
-                    BOOL bWeb = 0 != PTR_CAST(SwWebDocShell, this);
+                    BOOL bWeb = 0 != dynamic_cast<SwWebDocShell*>(this);
                     DBG_ASSERT(bWeb == TRUE, "SourceView nur in der WebDocShell")
                 }
 #endif
@@ -1102,12 +1100,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case FN_ABSTRACT_STARIMPRESS:
         case FN_ABSTRACT_NEWDOC:
         {
-            //CHINA001 SwInsertAbstractDlg* pDlg = new SwInsertAbstractDlg(0);
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-            AbstractSwInsertAbstractDlg* pDlg = pFact->CreateSwInsertAbstractDlg(0, DLG_INSERT_ABSTRACT);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            AbstractSwInsertAbstractDlg* pDlg = pFact->CreateSwInsertAbstractDlg(0, DLG_INSERT_ABSTRACT );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             if(RET_OK == pDlg->Execute())
             {
                 BYTE nLevel = pDlg->GetLevel();
@@ -1129,13 +1126,13 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     ErrCode eErr = aWrt.Write( xWrt );
                     if( !ERRCODE_TOERROR( eErr ) )
                     {
-                        uno::Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
-                        uno::Reference< com::sun::star::frame::XDispatchProvider > xProv(
+                        uno::Reference< lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+                        uno::Reference< frame::XDispatchProvider > xProv(
                             xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
                         if ( xProv.is() )
                         {
                             ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( "SendOutlineToImpress" );
-                            uno::Reference< com::sun::star::frame::XDispatchHelper > xHelper(
+                            uno::Reference< frame::XDispatchHelper > xHelper(
                                 xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
                             if ( xHelper.is() )
                             {
@@ -1150,10 +1147,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 {
                                     sal_uInt32 nLen = aStat.nSize;
                                     ULONG nRead = 0;
-                                    com::sun::star::uno::Sequence< sal_Int8 > aSeq( nLen );
+                                    uno::Sequence< sal_Int8 > aSeq( nLen );
                                     aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 
-                                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs(1);
+                                    uno::Sequence< beans::PropertyValue > aArgs(1);
                                     aArgs[0].Name = ::rtl::OUString::createFromAscii("RtfOutline");
                                     aArgs[0].Value <<= aSeq;
                                     xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aArgs );
@@ -1168,13 +1165,13 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     // Neues Dokument erzeugen.
                     SfxViewFrame *pFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0 );
-                    SwView      *pView = (SwView*) pFrame->GetViewShell();
+                    SwView      *pCurrView = (SwView*) pFrame->GetViewShell();
 
                     // Dokumenttitel setzen
                     String aTmp( SW_RES(STR_ABSTRACT_TITLE) );
                     aTmp += GetTitle();
                     xDocSh->SetTitle( aTmp );
-                    pView->GetWrtShell().SetNewDoc();
+                    pCurrView->GetWrtShell().SetNewDoc();
                     pFrame->Show();
                     pSmryDoc->SetModified();
                 }
@@ -1200,13 +1197,13 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     pStrm->Seek( STREAM_SEEK_TO_BEGIN );
                     if ( nWhich == FN_OUTLINE_TO_IMPRESS )
                     {
-                        uno::Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
-                        uno::Reference< com::sun::star::frame::XDispatchProvider > xProv(
+                        uno::Reference< lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
+                        uno::Reference< frame::XDispatchProvider > xProv(
                             xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
                         if ( xProv.is() )
                         {
                             ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( "SendOutlineToImpress" );
-                            uno::Reference< com::sun::star::frame::XDispatchHelper > xHelper(
+                            uno::Reference< frame::XDispatchHelper > xHelper(
                                 xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
                             if ( xHelper.is() )
                             {
@@ -1221,10 +1218,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 {
                                     sal_uInt32 nLen = aStat.nSize;
                                     ULONG nRead = 0;
-                                    com::sun::star::uno::Sequence< sal_Int8 > aSeq( nLen );
+                                    uno::Sequence< sal_Int8 > aSeq( nLen );
                                     aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 
-                                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs(1);
+                                    uno::Sequence< beans::PropertyValue > aArgs(1);
                                     aArgs[0].Name = ::rtl::OUString::createFromAscii("RtfOutline");
                                     aArgs[0].Value <<= aSeq;
                                     xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aArgs );
@@ -1541,15 +1538,15 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 SfxViewFrame* pVFrame = SfxViewFrame::GetFirst( this );
                 SfxViewShell* pViewShell = pVFrame ? pVFrame->GetViewShell() : 0;
-                SwView* pView = PTR_CAST(SwView, pViewShell);
-                while(pView)
+                SwView* pCurrView = dynamic_cast< SwView* >( pViewShell );
+                while(pCurrView)
                 {
-                    FmFormShell* pFormShell = pView->GetFormShell();
+                    FmFormShell* pFormShell = pCurrView->GetFormShell();
                     if(pFormShell)
                         pFormShell->SetY2KState(nYear2K);
                     pVFrame = SfxViewFrame::GetNext( *pVFrame, this );
                     pViewShell = pVFrame ? pVFrame->GetViewShell() : 0;
-                    pView = PTR_CAST(SwView, pViewShell);
+                    pCurrView = dynamic_cast<SwView*>( pViewShell );
                 }
                 pDoc->GetNumberFormatter(TRUE)->SetYear2000(nYear2K);
             }
@@ -1565,7 +1562,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
  --------------------------------------------------------------------*/
 
 long SwDocShell::DdeGetData( const String& rItem, const String& rMimeType,
-                                ::com::sun::star::uno::Any & rValue )
+                                uno::Any & rValue )
 {
     return pDoc->GetData( rItem, rMimeType, rValue );
 }
@@ -1576,7 +1573,7 @@ long SwDocShell::DdeGetData( const String& rItem, const String& rMimeType,
  --------------------------------------------------------------------*/
 
 long SwDocShell::DdeSetData( const String& rItem, const String& rMimeType,
-                            const ::com::sun::star::uno::Any & rValue )
+                            const uno::Any & rValue )
 {
     return pDoc->SetData( rItem, rMimeType, rValue );
 }
@@ -1678,8 +1675,8 @@ class SwReloadFromHtmlReader : public SwReader
     public:
         SwReloadFromHtmlReader( SfxMedium& _rTmpMedium,
                                 const String& _rFilename,
-                                SwDoc* pDoc )
-            : SwReader( _rTmpMedium, _rFilename, pDoc )
+                                SwDoc* _pDoc )
+            : SwReader( _rTmpMedium, _rFilename, _pDoc )
         {
             SetBaseURL( _rFilename );
         }
@@ -1769,12 +1766,12 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     // <--
     aReader.Read( *ReadHTML );
 
-    const SwView* pView = GetView();
+    const SwView* pCurrView = GetView();
     //in print layout the first page(s) may have been formatted as a mix of browse
     //and print layout
-    if(!bWasBrowseMode && pView)
+    if(!bWasBrowseMode && pCurrView)
     {
-        SwWrtShell& rWrtSh = pView->GetWrtShell();
+        SwWrtShell& rWrtSh = pCurrView->GetWrtShell();
         if( rWrtSh.GetLayout())
             rWrtSh.CheckBrowseView( TRUE );
     }
@@ -1794,11 +1791,11 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
 /* -----------------------------14.12.99 16:52--------------------------------
 
  ---------------------------------------------------------------------------*/
-void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
+void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* _pView )
 {
     GetDoc()->set(IDocumentSettingAccess::BROWSE_MODE, bSet );
     UpdateFontList();
-    SwView* pTempView = pView ? pView : (SwView*)GetView();
+    SwView* pTempView = _pView ? _pView : (SwView*)GetView();
     if( pTempView )
     {
         pTempView->GetViewFrame()->GetBindings().Invalidate(FN_SHADOWCURSOR);
@@ -1874,8 +1871,7 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     }
     if( aMed.IsStorage() )
     {
-        ULONG nVersion = pFlt ? pFlt->GetVersion() : 0;
-        DBG_ASSERT(nVersion >= SOFFICE_FILEFORMAT_60, "which file version?")
+        DBG_ASSERT((pFlt ? pFlt->GetVersion() : 0) >= SOFFICE_FILEFORMAT_60, "which file version?")
         pRead =  ReadXML;
         // the SW3IO - Reader need the pam/wrtshell, because only then he
         // insert the styles!
