@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 09:13:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:02:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,6 +166,8 @@
 #endif
 
 using namespace sw::util;
+using namespace nsHdFtFlags;
+
 
 struct WW8_SED
 {
@@ -262,7 +264,7 @@ WW8WrtStyle::~WW8WrtStyle()
 // Sty_SetWWSlot() fuer Abhaengigkeiten der Styles -> nil ist erlaubt
 USHORT WW8WrtStyle::Sty_GetWWSlot( const SwFmt& rFmt ) const
 {
-    register USHORT n;
+    USHORT n;
     for( n = 0; n < nUsedSlots; n++ )
         if( pFmtA[n] == &rFmt )
             return n;
@@ -303,16 +305,16 @@ USHORT WW8WrtStyle::GetWWId( const SwFmt& rFmt ) const
         nRet = 0;
     else if( nPoolId >= RES_POOLCOLL_HEADLINE1 &&
              nPoolId <= RES_POOLCOLL_HEADLINE9 )
-        nRet = nPoolId + 1 - RES_POOLCOLL_HEADLINE1;
+        nRet = static_cast< USHORT >(nPoolId + 1 - RES_POOLCOLL_HEADLINE1);
     else if( nPoolId >= RES_POOLCOLL_TOX_IDX1 &&
              nPoolId <= RES_POOLCOLL_TOX_IDX3 )
-        nRet = nPoolId + 10 - RES_POOLCOLL_TOX_IDX1;
+        nRet = static_cast< USHORT >(nPoolId + 10 - RES_POOLCOLL_TOX_IDX1);
     else if( nPoolId >= RES_POOLCOLL_TOX_CNTNT1 &&
              nPoolId <= RES_POOLCOLL_TOX_CNTNT5 )
-        nRet = nPoolId + 19 - RES_POOLCOLL_TOX_CNTNT1;
+        nRet = static_cast< USHORT >(nPoolId + 19 - RES_POOLCOLL_TOX_CNTNT1);
     else if( nPoolId >= RES_POOLCOLL_TOX_CNTNT6 &&
              nPoolId <= RES_POOLCOLL_TOX_CNTNT9 )
-        nRet = nPoolId + 24 - RES_POOLCOLL_TOX_CNTNT6;
+        nRet = static_cast< USHORT >(nPoolId + 24 - RES_POOLCOLL_TOX_CNTNT6);
     else
         switch( nPoolId )
         {
@@ -412,14 +414,14 @@ void WW8WrtStyle::BuildStd(const String& rName, bool bPapFmt, short nWwBase,
     }
 
 
-    UINT16 nLen = ( pData - aWW8_STD ) + 1 +
-                ((rWrt.bWrtWW8 ? 2 : 1 ) * (rName.Len() + 1));  // vorlaeufig
+    UINT16 nLen = static_cast< UINT16 >( ( pData - aWW8_STD ) + 1 +
+                ((rWrt.bWrtWW8 ? 2 : 1 ) * (rName.Len() + 1)) );  // vorlaeufig
 
     WW8Bytes* pO = rWrt.pO;
     nPOPosStdLen1 = pO->Count();        // Adr1 zum nachtragen der Laenge
 
     SwWW8Writer::InsUInt16( *pO, nLen );
-    pO->Insert( aWW8_STD, ( pData - aWW8_STD ), pO->Count() );
+    pO->Insert( aWW8_STD, static_cast< USHORT >( pData - aWW8_STD ), pO->Count() );
 
     nPOPosStdLen2 = nPOPosStdLen1 + 8;  // Adr2 zum nachtragen von "end of upx"
 
@@ -448,7 +450,7 @@ void WW8WrtStyle::Set1StyleDefaults(const SwFmt& rFmt, bool bPap)
 {
     const SwModify* pOldMod = rWrt.pOutFmtNode;
     rWrt.pOutFmtNode = &rFmt;
-    bool aFlags[ RES_FRMATR_END - RES_CHRATR_BEGIN ];
+    bool aFlags[ static_cast< USHORT >(RES_FRMATR_END) - RES_CHRATR_BEGIN ];
     USHORT nStt, nEnd, n;
     if( bPap )
        nStt = RES_PARATR_BEGIN, nEnd = RES_FRMATR_END;
@@ -463,8 +465,8 @@ void WW8WrtStyle::Set1StyleDefaults(const SwFmt& rFmt, bool bPap)
     // static defaults, that differs between WinWord and SO
     if( bPap )
     {
-        aFlags[ RES_PARATR_WIDOWS - RES_CHRATR_BEGIN ] = 1;
-        aFlags[ RES_PARATR_HYPHENZONE - RES_CHRATR_BEGIN ] = 1;
+        aFlags[ static_cast< USHORT >(RES_PARATR_WIDOWS) - RES_CHRATR_BEGIN ] = 1;
+        aFlags[ static_cast< USHORT >(RES_PARATR_HYPHENZONE) - RES_CHRATR_BEGIN ] = 1;
     }
     else
     {
@@ -484,7 +486,7 @@ void WW8WrtStyle::Set1StyleDefaults(const SwFmt& rFmt, bool bPap)
             //western/asian ones that must be collapsed together for export to
             //word. If so default to the western varient.
             if ( bPap || rWrt.CollapseScriptsforWordOk(
-                ::com::sun::star::i18n::ScriptType::LATIN, n) )
+                i18n::ScriptType::LATIN, n) )
             {
                 Out(aWW8AttrFnTab, rFmt.GetAttr(n, true), rWrt);
             }
@@ -654,13 +656,13 @@ wwFont::wwFont(const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
     {
         maWW8_FFN[0] = (BYTE)( 6 - 1 + 0x22 + ( 2 * ( 1 + msFamilyNm.Len() ) ));
         if (mbAlt)
-            maWW8_FFN[0] += 2 * ( 1 + msAltNm.Len());
+            maWW8_FFN[0] = static_cast< BYTE >(maWW8_FFN[0] + 2 * ( 1 + msAltNm.Len()));
     }
     else
     {
         maWW8_FFN[0] = (BYTE)( 6 - 1 + 1 + msFamilyNm.Len() );
         if (mbAlt)
-            maWW8_FFN[0] += 1 + msAltNm.Len();
+            maWW8_FFN[0] = static_cast< BYTE >(maWW8_FFN[0] + 1 + msAltNm.Len());
     }
 
     BYTE aB = 0;
@@ -704,7 +706,7 @@ wwFont::wwFont(const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
     maWW8_FFN[4] = sw::ms::rtl_TextEncodingToWinCharset(eChrSet);
 
     if (mbAlt)
-        maWW8_FFN[5] = msFamilyNm.Len()+1;
+        maWW8_FFN[5] = static_cast< BYTE >(msFamilyNm.Len() + 1);
 }
 
 bool wwFont::Write(SvStream *pTableStrm) const
@@ -756,7 +758,7 @@ USHORT wwFontHelper::GetId(const wwFont &rFont)
         nRet = aIter->second;
     else
     {
-        nRet = maFonts.size();
+        nRet = static_cast< USHORT >(maFonts.size());
         maFonts[rFont] = nRet;
     }
     return nRet;
@@ -781,7 +783,7 @@ void wwFontHelper::InitFontTable(bool bWrtWW8,const SwDoc& rDoc)
         pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
 
     const SfxItemPool& rPool = rDoc.GetAttrPool();
-    if ((pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem(RES_CHRATR_FONT)))
+    if (0 != (pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem(RES_CHRATR_FONT)))
     {
         GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
             pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
@@ -1127,10 +1129,10 @@ void WW8_WrPlcSepx::CheckForFacinPg( SwWW8Writer& rWrt ) const
             else if( !( 1 & nEnde ) &&
                 pPd->GetFollow() && pPd != pPd->GetFollow() &&
                 pPd->GetFollow()->GetFollow() == pPd &&
-                (( PD_LEFT == ( PD_ALL & pPd->ReadUseOn() ) &&
-                   PD_RIGHT == ( PD_ALL & pPd->GetFollow()->ReadUseOn() )) ||
-                 ( PD_RIGHT == ( PD_ALL & pPd->ReadUseOn() ) &&
-                   PD_LEFT == ( PD_ALL & pPd->GetFollow()->ReadUseOn() )) ))
+                (( nsUseOnPage::PD_LEFT == ( nsUseOnPage::PD_ALL & pPd->ReadUseOn() ) &&
+                   nsUseOnPage::PD_RIGHT == ( nsUseOnPage::PD_ALL & pPd->GetFollow()->ReadUseOn() )) ||
+                 ( nsUseOnPage::PD_RIGHT == ( nsUseOnPage::PD_ALL & pPd->ReadUseOn() ) &&
+                   nsUseOnPage::PD_LEFT == ( nsUseOnPage::PD_ALL & pPd->GetFollow()->ReadUseOn() )) ))
             {
                 rWrt.pDop->fFacingPages = rWrt.pDop->fMirrorMargins = true;
                 nEnde |= 1;
@@ -1143,7 +1145,7 @@ void WW8_WrPlcSepx::CheckForFacinPg( SwWW8Writer& rWrt ) const
                 nEnde |= 1;
             }
             if( !( 2 & nEnde ) &&
-                PD_MIRROR == ( PD_MIRROR & pPd->ReadUseOn() ))
+                nsUseOnPage::PD_MIRROR == ( nsUseOnPage::PD_MIRROR & pPd->ReadUseOn() ))
             {
                 rWrt.pDop->fSwapBordersFacingPgs =
                     rWrt.pDop->fMirrorMargins = true;
@@ -1310,7 +1312,7 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
 
                 SvxLRSpaceItem aResultLR(rPageLR.GetLeft() +
                     rSectionLR.GetLeft(), rPageLR.GetRight() +
-                    rSectionLR.GetRight(), 0, 0, RES_LR_SPACE );
+                    rSectionLR.GetRight(), 0, 0, RES_LR_SPACE);
 
                 aSet.Put(aResultLR);
 
@@ -1427,16 +1429,16 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
             // left-/right chain of pagedescs ?
             if( pPd->GetFollow() && pPd != pPd->GetFollow() &&
                 pPd->GetFollow()->GetFollow() == pPd &&
-                (( PD_LEFT == ( PD_ALL & pPd->ReadUseOn() ) &&
-                   PD_RIGHT == ( PD_ALL & pPd->GetFollow()->ReadUseOn() )) ||
-                 ( PD_RIGHT == ( PD_ALL & pPd->ReadUseOn() ) &&
-                   PD_LEFT == ( PD_ALL & pPd->GetFollow()->ReadUseOn() )) ))
+                (( nsUseOnPage::PD_LEFT == ( nsUseOnPage::PD_ALL & pPd->ReadUseOn() ) &&
+                   nsUseOnPage::PD_RIGHT == ( nsUseOnPage::PD_ALL & pPd->GetFollow()->ReadUseOn() )) ||
+                 ( nsUseOnPage::PD_RIGHT == ( nsUseOnPage::PD_ALL & pPd->ReadUseOn() ) &&
+                   nsUseOnPage::PD_LEFT == ( nsUseOnPage::PD_ALL & pPd->GetFollow()->ReadUseOn() )) ))
             {
                 bLeftRightPgChain = true;
 
                 // welches ist der Bezugspunkt ????? (links oder rechts?)
                 // annahme die rechte Seite!
-                if( PD_LEFT == ( PD_ALL & pPd->ReadUseOn() ))
+                if( nsUseOnPage::PD_LEFT == ( nsUseOnPage::PD_ALL & pPd->ReadUseOn() ))
                 {
                     nBreakCode = 3;
                     pPd = pPd->GetFollow();
@@ -1482,9 +1484,9 @@ bool WW8_WrPlcSepx::WriteKFTxt(SwWW8Writer& rWrt)
             // werden es nur linke oder nur rechte Seiten?
             if( 2 == nBreakCode )
             {
-                if( PD_LEFT == ( PD_ALL & pPd->ReadUseOn() ))
+                if( nsUseOnPage::PD_LEFT == ( nsUseOnPage::PD_ALL & pPd->ReadUseOn() ))
                     nBreakCode = 3;
-                else if( PD_RIGHT == ( PD_ALL & pPd->ReadUseOn() ))
+                else if( nsUseOnPage::PD_RIGHT == ( nsUseOnPage::PD_ALL & pPd->ReadUseOn() ))
                     nBreakCode = 4;
             }
         }
@@ -1966,8 +1968,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( SwWW8Writer& rWrt, BYTE nTTyp,
                         aStrArr.end(), rPFld.GetPar1());
                     ASSERT(aIter != aStrArr.end() && *aIter == rPFld.GetPar1(),
                         "Impossible");
-                    sal_uInt16 nFndPos = aIter - aStrArr.begin();
-
+                    sal_uInt16 nFndPos = static_cast< sal_uInt16 >(aIter - aStrArr.begin());
                     String sAuthor(*aIter);
                     BYTE nNameLen = (BYTE)sAuthor.Len();
                     if (nNameLen > 9)
