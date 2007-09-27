@@ -4,9 +4,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:04:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:59:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,10 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::reflection;
 
+//--------------------------------------------------------------------------------------------------
+
+extern rtl_StandardModuleCount g_moduleCount;
+
 namespace stoc_rdbtdp
 {
 
@@ -136,9 +140,6 @@ createTypeDescription(
         ::com::sun::star::container::XHierarchicalNameAccess > & xNameAccess,
     bool bReturnEmptyRefForUnknownType );
 
-//--------------------------------------------------------------------------------------------------
-
-extern rtl_StandardModuleCount g_moduleCount;
 
 //--------------------------------------------------------------------------------------------------
 inline sal_Int32 getRTValueAsInt32( const RTConstValue & rVal )
