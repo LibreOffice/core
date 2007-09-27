@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:21:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:00:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,12 @@
 
 #ifndef _EDIMP_HXX
 #define _EDIMP_HXX
+
+#include <tools/solar.h>
+#include <svtools/svarray.hxx>
+
+class SwPaM;
+class SwNodeIndex;
 
 /*
  * MACROS um ueber alle Bereiche zu iterieren
