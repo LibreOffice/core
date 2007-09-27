@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwUndoField.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:48:44 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:28:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,8 @@
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
 #include <dbfld.hxx>
-using namespace com::sun::star::uno;
+
+using namespace ::com::sun::star::uno;
 
 SwUndoField::SwUndoField(const SwPosition & rPos)
     : SwUndo(UNDO_FIELD)
@@ -87,7 +88,7 @@ SwUndoFieldFromDoc::~SwUndoFieldFromDoc()
     delete pNewField;
 }
 
-void SwUndoFieldFromDoc::Undo(SwUndoIter & rIt)
+void SwUndoFieldFromDoc::Undo( SwUndoIter& )
 {
     SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
     const SwField * pField = pTxtFld->GetFld().GetFld();
@@ -102,7 +103,7 @@ void SwUndoFieldFromDoc::Undo(SwUndoIter & rIt)
     }
 }
 
-void SwUndoFieldFromDoc::Redo(SwUndoIter & rIt)
+void SwUndoFieldFromDoc::Redo( SwUndoIter& )
 {
     SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
     const SwField * pField = pTxtFld->GetFld().GetFld();
@@ -124,8 +125,8 @@ void SwUndoFieldFromDoc::Repeat(SwUndoIter & rIt)
 
 SwUndoFieldFromAPI::SwUndoFieldFromAPI(const SwPosition & rPos,
                                        const Any & rOldVal, const Any & rNewVal,
-                                       BYTE _nMId)
-    : SwUndoField(rPos), aOldVal(rOldVal), aNewVal(rNewVal), nMId(_nMId)
+                                       USHORT _nWhich)
+    : SwUndoField(rPos), aOldVal(rOldVal), aNewVal(rNewVal), nWhich(_nWhich)
 {
 }
 
@@ -133,20 +134,20 @@ SwUndoFieldFromAPI::~SwUndoFieldFromAPI()
 {
 }
 
-void SwUndoFieldFromAPI::Undo(SwUndoIter & rIter)
+void SwUndoFieldFromAPI::Undo( SwUndoIter& )
 {
     SwField * pField = SwDoc::GetField(GetPosition());
 
     if (pField)
-        pField->PutValue(aOldVal, nMId);
+        pField->PutValue(aOldVal, nWhich);
 }
 
-void SwUndoFieldFromAPI::Redo(SwUndoIter & rIter)
+void SwUndoFieldFromAPI::Redo( SwUndoIter& )
 {
     SwField * pField = SwDoc::GetField(GetPosition());
 
     if (pField)
-        pField->PutValue(aNewVal, nMId);
+        pField->PutValue(aNewVal, nWhich);
 }
 
 
