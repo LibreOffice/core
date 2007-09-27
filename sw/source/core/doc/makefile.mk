@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 16:25:37 $
+#   last change: $Author: hr $ $Date: 2007-09-27 08:38:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,17 +46,24 @@ TARGET=doc
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES = \
+    $(SLO)$/SwStyleNameMapper.obj \
+    $(SLO)$/acmplwrd.obj \
+    $(SLO)$/doc.obj \
+    $(SLO)$/docdraw.obj \
+    $(SLO)$/docfmt.obj \
     $(SLO)$/doclay.obj \
     $(SLO)$/docxforms.obj \
     $(SLO)$/docnew.obj \
+    $(SLO)$/docnum.obj \
     $(SLO)$/docsort.obj \
+    $(SLO)$/doctxm.obj \
+    $(SLO)$/number.obj \
+    $(SLO)$/swstylemanager.obj \
+    $(SLO)$/tblcpy.obj \
     $(SLO)$/tblrwcl.obj
 
 SLOFILES =	$(EXCEPTIONSFILES) \
-        $(SLO)$/SwStyleNameMapper.obj \
-        $(SLO)$/acmplwrd.obj \
         $(SLO)$/dbgoutsw.obj \
-        $(SLO)$/doc.obj \
         $(SLO)$/docbasic.obj \
         $(SLO)$/docbm.obj \
         $(SLO)$/docchart.obj \
@@ -64,32 +71,25 @@ SLOFILES =	$(EXCEPTIONSFILES) \
         $(SLO)$/doccorr.obj \
         $(SLO)$/docdde.obj \
         $(SLO)$/docdesc.obj \
-        $(SLO)$/docdraw.obj \
         $(SLO)$/docedt.obj \
         $(SLO)$/docfld.obj \
         $(SLO)$/docfly.obj \
-        $(SLO)$/docfmt.obj \
         $(SLO)$/docftn.obj \
         $(SLO)$/docglbl.obj \
         $(SLO)$/docglos.obj \
-        $(SLO)$/docnum.obj \
         $(SLO)$/docredln.obj \
         $(SLO)$/docruby.obj \
         $(SLO)$/docstat.obj \
-        $(SLO)$/doctxm.obj \
         $(SLO)$/extinput.obj \
         $(SLO)$/fmtcol.obj \
         $(SLO)$/ftnidx.obj \
         $(SLO)$/gctable.obj \
         $(SLO)$/lineinfo.obj \
         $(SLO)$/notxtfrm.obj \
-        $(SLO)$/number.obj \
         $(SLO)$/poolfmt.obj \
         $(SLO)$/sortopt.obj \
         $(SLO)$/swserv.obj \
-        $(SLO)$/swstylemanager.obj \
         $(SLO)$/tblafmt.obj \
-        $(SLO)$/tblcpy.obj \
         $(SLO)$/visiturl.obj \
         $(SLO)$/htmltbl.obj \
         $(SLO)$/headerfooterhelper.obj
