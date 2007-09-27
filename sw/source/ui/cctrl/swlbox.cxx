@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swlbox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:49:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:18:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,8 @@
 #include <swlbox.hxx>
 #endif
 
+using namespace nsSwComboBoxStyle;
+
 
 SV_IMPL_PTRARR(SwEntryLst, SwBoxEntry*)
 
@@ -78,150 +80,14 @@ SwBoxEntry::SwBoxEntry(const String& aNam, USHORT nIdx) :
 
 
 SwBoxEntry::SwBoxEntry(const SwBoxEntry& rOld) :
-    aName(rOld.aName),
-    nId(rOld.nId),
+    bModified(rOld.bModified),
     bNew(rOld.bNew),
-    bModified(rOld.bModified)
+    aName(rOld.aName),
+    nId(rOld.nId)
 {
 
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
-
-/*SwListBox::SwListBox(Window* pParent, const ResId& rId):
-    ListBox(pParent, rId)
-{
-    DBG_ASSERT( 0 == (ListBox::GetStyle() & WB_SORT), "NIE sortiert aus der Resource lesen!" );
-    // falls eine Liste ueber die Resource gelesen wurde, die interne
-    // entsprechend updaten
-    USHORT nCnt = ListBox::GetEntryCount();
-    for( USHORT n = 0; n < nCnt; ++n )
-    {
-        const SwBoxEntry* pTmp = new SwBoxEntry( ListBox::GetEntry( n ), n );
-        aEntryLst.Insert( pTmp, n );
-    }
-}
-
-/*--------------------------------------------------------------------
-     Beschreibung: Basisklasse Dtor
- --------------------------------------------------------------------*/
-
-
-/*SwListBox::~SwListBox()
-{
-}
-
-/*--------------------------------------------------------------------
-     Beschreibung: Listen loeschen und Anzeige loeschen
- --------------------------------------------------------------------*/
-
-
-/*void SwListBox::Clear()
-{
-    ListBox::Clear();
-    aEntryLst.DeleteAndDestroy( 0, aEntryLst.Count() );
-}
-
-/*--------------------------------------------------------------------
-     Beschreibung: Rund um die Entries
- --------------------------------------------------------------------*/
-
-
-/*const SwBoxEntry& SwListBox::GetEntry(USHORT nPos) const
-{
-    if( nPos < aEntryLst.Count() )
-        return *aEntryLst[ nPos ];
-
-    return aDefault;
-}
-
-/*--------------------------------------------------------------------
-     Beschreibung: aktullen Eintrag zurueckgeben
- --------------------------------------------------------------------*/
-
-
-/*const SwBoxEntry& SwListBox::GetSelectEntry() const
-{
-    USHORT nPos = ListBox::GetSelectEntryPos();
-    if( nPos < aEntryLst.Count() )
-        return *aEntryLst[ nPos ];
-
-    return aDefault;
-}
-
-
-void SwListBox::RemoveEntry( USHORT nPos )
-{
-    if( nPos < aEntryLst.Count() )
-    {
-        aEntryLst.DeleteAndDestroy( nPos, 1 );
-        ListBox::RemoveEntry( nPos );
-    }
-}
-
-/*--------------------------------------------------------------------
-     Beschreibung: Eintrag in die ListBox aufnehmen
- --------------------------------------------------------------------*/
-
-
-/*void SwListBox::InsertEntry( const SwBoxEntry& rEntry, USHORT nPos )
-{
-    if( nPos >= aEntryLst.Count() )
-        nPos = aEntryLst.Count();
-
-    SwBoxEntry* pEntry = new SwBoxEntry( rEntry );
-    ListBox::InsertEntry( pEntry->aName, nPos );
-    aEntryLst.C40_INSERT( SwBoxEntry, pEntry, nPos );
-}
-
-/*--------------------------------------------------------------------
-     Beschreibung: Sortiert einfuegen
- --------------------------------------------------------------------*/
-
-
-/*void SwListBox::InsertEntrySort( const SwBoxEntry& rEntry )
-{
-    USHORT nPos;
-    if( !SeekEntry( rEntry, &nPos ) )
-    {
-        SwBoxEntry* pEntry = new SwBoxEntry( rEntry );
-        ListBox::InsertEntry( pEntry->aName, nPos );
-        aEntryLst.C40_INSERT( SwBoxEntry, pEntry, nPos );
-    }
-}
-
-
-BOOL SwListBox::SeekEntry( const SwBoxEntry& rEntry, USHORT* pPos )
-{
-    register USHORT nO = aEntryLst.Count(), nM, nU = 0;
-    if( nO > 0 )
-    {
-        nO--;
-        while( nU <= nO )
-        {
-            nM = nU + ( nO - nU ) / 2;
-            StringCompare eCmp = aEntryLst[ nM ]->aName.ICompare( rEntry.aName );
-            if( COMPARE_EQUAL == eCmp )
-            {
-                if( pPos ) *pPos = nM;
-                return TRUE;
-            }
-            else if( COMPARE_GREATER == eCmp )
-                nU = nM + 1;
-            else if( nM == 0 )
-                break;
-            else
-                nO = nM - 1;
-        }
-    }
-    if( pPos ) *pPos = nU;
-    return FALSE;
-}
-
-/*  */
 
 
 SwComboBox::SwComboBox(Window* pParent, const ResId& rId, USHORT nStyleBits ):
