@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styles.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:20:16 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,8 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>         //do we have to...
 #endif
+
+#include <tools/debug.hxx>
 
 #ifndef WW_STATICASSERT_HXX
 #   include "staticassert.hxx"      //StaticAssert
@@ -162,8 +164,7 @@ namespace
             "Plain Text"
         };
 
-        StaticAssert((sizeof(stiName) / sizeof(stiName[0])) == ww::stiMax,
-            WrongSizeOfArray);
+        DBG_ASSERT( (sizeof(stiName) / sizeof(stiName[0])) == ww::stiMax, "WrongSizeOfArray" );
 
         return stiName;
     }
