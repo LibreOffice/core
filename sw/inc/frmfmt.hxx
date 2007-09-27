@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmfmt.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:19:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:03:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,6 +243,7 @@ protected:
     SwDrawFrmFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_DRAWFRMFMT ),
+          pSdrObjCached(NULL),
           // --> OD 2004-07-28 #i31698#
           meLayoutDir( SwFrmFmt::HORI_L2R ),
           // <--
@@ -251,13 +252,14 @@ protected:
           mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
           // <--
           // --> OD 2005-03-11 #i44334#, #i44681#
-          mbPosAttrSet( false ),
+          mbPosAttrSet( false )
           // <--
-          pSdrObjCached(NULL)
+
     {}
     SwDrawFrmFmt( SwAttrPool& rPool, const String &rFmtNm,
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_DRAWFRMFMT ),
+          pSdrObjCached(NULL),
           // --> OD 2004-07-28 #i31698#
           meLayoutDir( SwFrmFmt::HORI_L2R ),
           // <--
@@ -266,9 +268,8 @@ protected:
           mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
           // <--
           // --> OD 2005-03-11 #i44334#, #i44681#
-          mbPosAttrSet( false ),
+          mbPosAttrSet( false )
           // <--
-          pSdrObjCached(NULL)
     {}
 
 public:
