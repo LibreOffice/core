@@ -4,9 +4,9 @@
  *
  *  $RCSfile: condedit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:32:23 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ ConditionEdit::ConditionEdit( Window* pParent, const ResId& rResId )
     Beschreibung: Drop moeglich, bzw Format bekannt?
  --------------------------------------------------------------------*/
 
-sal_Int8 ConditionEdit::AcceptDrop( const AcceptDropEvent& rEvt )
+sal_Int8 ConditionEdit::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return OColumnTransferable::canExtractColumnDescriptor
         ( GetDataFlavorExVector(),
