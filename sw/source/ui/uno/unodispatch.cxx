@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodispatch.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 11:07:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:42:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,7 @@ void SwXDispatchProviderInterceptor::setMasterDispatchProvider(
 /*-- 07.11.00 13:25:53---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXDispatchProviderInterceptor::disposing( const lang::EventObject& Source )
+void SwXDispatchProviderInterceptor::disposing( const lang::EventObject& )
     throw(uno::RuntimeException)
 {
     DispatchMutexLock_Impl aLock(*this);
@@ -218,7 +218,7 @@ sal_Int64 SwXDispatchProviderInterceptor::getSomething(
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         aIdentifier.getConstArray(), 16 ) )
     {
-            return (sal_Int64)this;
+            return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
     }
     return 0;
 }
@@ -332,10 +332,10 @@ void SwXDispatch::addStatusListener(
     if(!m_pView)
         throw uno::RuntimeException();
     ShellModes eMode = m_pView->GetShellMode();
-    sal_Bool bEnable = SEL_TEXT == eMode  ||
-                       SEL_LIST_TEXT == eMode  ||
-                       SEL_TABLE_TEXT == eMode  ||
-                       SEL_TABLE_LIST_TEXT == eMode;
+    sal_Bool bEnable = SHELL_MODE_TEXT == eMode  ||
+                       SHELL_MODE_LIST_TEXT == eMode  ||
+                       SHELL_MODE_TABLE_TEXT == eMode  ||
+                       SHELL_MODE_TABLE_LIST_TEXT == eMode;
 
     m_bOldEnable = bEnable;
     frame::FeatureStateEvent aEvent;
@@ -378,7 +378,7 @@ void SwXDispatch::addStatusListener(
 
   -----------------------------------------------------------------------*/
 void SwXDispatch::removeStatusListener(
-    const uno::Reference< frame::XStatusListener >& xControl, const util::URL& aURL ) throw(uno::RuntimeException)
+    const uno::Reference< frame::XStatusListener >& xControl, const util::URL&  ) throw(uno::RuntimeException)
 {
     StatusListenerList::iterator aListIter = m_aListenerList.begin();
     for(aListIter = m_aListenerList.begin(); aListIter != m_aListenerList.end(); ++aListIter)
@@ -401,19 +401,18 @@ void SwXDispatch::removeStatusListener(
 /* -----------------------------07.03.01 10:27--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwXDispatch::selectionChanged( const lang::EventObject& aEvent ) throw(uno::RuntimeException)
+void SwXDispatch::selectionChanged( const lang::EventObject&  ) throw(uno::RuntimeException)
 {
     ShellModes eMode = m_pView->GetShellMode();
-    sal_Bool bEnable = SEL_TEXT == eMode  ||
-                       SEL_LIST_TEXT == eMode  ||
-                       SEL_TABLE_TEXT == eMode  ||
-                       SEL_TABLE_LIST_TEXT == eMode;
+    sal_Bool bEnable = SHELL_MODE_TEXT == eMode  ||
+                       SHELL_MODE_LIST_TEXT == eMode  ||
+                       SHELL_MODE_TABLE_TEXT == eMode  ||
+                       SHELL_MODE_TABLE_LIST_TEXT == eMode;
     if(bEnable != m_bOldEnable)
     {
         m_bOldEnable = bEnable;
         frame::FeatureStateEvent aEvent;
         aEvent.IsEnabled = bEnable;
-        sal_Bool Requery = FALSE;
         aEvent.Source = *(cppu::OWeakObject*)this;
 
         StatusListenerList::iterator aListIter = m_aListenerList.begin();
@@ -458,7 +457,7 @@ const sal_Char* SwXDispatch::GetDBChangeURL()
 
  ---------------------------------------------------------------------------*/
 SwXDispatchProviderInterceptor::DispatchMutexLock_Impl::DispatchMutexLock_Impl(
-                                                 SwXDispatchProviderInterceptor& rInterceptor) :
+                                                 SwXDispatchProviderInterceptor& ) :
 //    aGuard(rInterceptor.m_aMutex) #102295# solar mutex has to be used currently
     aGuard(Application::GetSolarMutex())
 {
