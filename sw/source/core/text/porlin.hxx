@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlin.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:44:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:17:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,8 @@ inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
 
 inline sal_Bool SwLinePortion::operator==(const SwLinePortion &rPortion ) const
 {
-    return( *(SwPosSize*)this == rPortion &&
+    return( Height() == rPortion.Height() &&
+            Width() == rPortion.Width() &&
             nLineLength == rPortion.GetLen() &&
             nAscent == rPortion.GetAscent() );
 }
