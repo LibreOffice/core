@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IDocumentState.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:44:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:54:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
  #ifndef IDOCUMENTSTATE_HXX_INCLUDED
  #define IDOCUMENTSTATE_HXX_INCLUDED
+
+ #include <tools/solar.h>
 
  /** Get information about the current document state
  */
