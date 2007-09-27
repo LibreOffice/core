@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:06:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:34:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,11 +165,13 @@
 #include <dbui.hrc>
 #include <helpid.h>
 #include <sfx2/app.hxx>
+
+#include <unomid.h>
+
 using namespace svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#define C2U(cChar) ::rtl::OUString::createFromAscii(cChar)
 /*-- 01.07.2004 16:47:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -359,7 +361,7 @@ public:
   -----------------------------------------------------------------------*/
 SwCopyToDialog::SwCopyToDialog(Window* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_COPYTO)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aDescriptionFI( this, SW_RES(       FI_DESCRIPTION )),
@@ -372,7 +374,7 @@ SwCopyToDialog::SwCopyToDialog(Window* pParent) :
     m_aOK( this, SW_RES(                  PB_OK          )),
     m_aCancel( this, SW_RES(              PB_CANCEL      )),
     m_aHelp( this, SW_RES(                PB_HELP        ))
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
 {
@@ -390,7 +392,7 @@ SwCopyToDialog::~SwCopyToDialog()
   -----------------------------------------------------------------------*/
 SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_OUTPUT_PAGE)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aHeaderFI(this,           SW_RES(  FI_HEADER           ) ),
@@ -399,19 +401,25 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     m_aSaveMergedDocRB(this,    SW_RES(  RB_SAVEMERGEDDOC    ) ),
     m_aPrintRB(this,            SW_RES(  RB_PRINT            ) ),
     m_aSendMailRB(this,         SW_RES(  RB_SENDMAIL         ) ),
+
     m_aSeparatorFL(this,        SW_RES(  FL_SEPARATOR        ) ),
+
     m_aSaveStartDocPB(this,     SW_RES(  PB_SAVESTARTDOC     ) ),
+
     m_aSaveAsOneRB(this,        SW_RES(  RB_SAVEASONE        ) ),
     m_aSaveIndividualRB(this,   SW_RES(  RB_SAVEINDIVIDUAL   ) ),
+    m_aPrintAllRB(this,         SW_RES(  RB_PRINTALL         ) ),
+    m_aSendAllRB( this, SW_RES(       RB_SENDALL             ) ),
+
     m_aFromRB(this,             SW_RES(  RB_FROM             ) ),
     m_aFromNF(this,             SW_RES(  NF_FROM             ) ),
     m_aToFT(this,               SW_RES(  FT_TO               ) ),
     m_aToNF(this,               SW_RES(  NF_TO               ) ),
     m_aSaveNowPB(this,          SW_RES(  PB_SAVENOW          ) ),
+
     m_aPrinterFT(this,          SW_RES(  FT_PRINT            ) ),
     m_aPrinterLB(this,          SW_RES(  LB_PRINT            ) ),
     m_aPrinterSettingsPB(this,  SW_RES(  PB_PRINTERSETTINGS  ) ),
-    m_aPrintAllRB(this,         SW_RES(  RB_PRINTALL         ) ),
     m_aPrintNowPB(this,         SW_RES(  PB_PRINTNOW         ) ),
 
     m_aMailToFT( this, SW_RES(        FT_MAILTO              ) ),
@@ -421,27 +429,27 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     m_aSubjectED( this, SW_RES(       ED_SUBJECT             ) ),
     m_aSendAsFT( this, SW_RES(        FT_SENDAS              ) ),
     m_aSendAsLB( this, SW_RES(        LB_SENDAS              ) ),
-    m_aSendAsPB( this, SW_RES(        PB_SENDAS              ) ),
     m_aAttachmentFT( this, SW_RES(    FT_ATTACHMENT              ) ),
     m_aAttachmentED( this, SW_RES(    ED_ATTACHMENT              ) ),
-    m_aSendAllRB( this, SW_RES(       RB_SENDALL             ) ),
+    m_aSendAsPB( this, SW_RES(        PB_SENDAS              ) ),
     m_aSendDocumentsPB( this, SW_RES( PB_SENDDOCUMENTS       ) ),
 
     m_sSaveStartST(SW_RES(           ST_SAVESTART  ) ),
     m_sSaveMergedST(SW_RES(          ST_SAVEMERGED ) ),
     m_sPrintST(SW_RES(               ST_PRINT      ) ),
+    m_sSendMailST(SW_RES(            ST_SENDMAIL   ) ),
+
     m_sDefaultAttachmentST(SW_RES(   ST_DEFAULTATTACHMENT )),
     m_sNoSubjectQueryST(SW_RES(      ST_SUBJECTQUERY      )),
     m_sNoSubjectST(SW_RES(           ST_NOSUBJECT )),
     m_sNoAttachmentNameST(SW_RES(    ST_NOATTACHMENTNAME )),
-    m_sSendMailST(SW_RES(            ST_SENDMAIL   ) ),
     m_sConfigureMail(SW_RES(         ST_CONFIGUREMAIL)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
     m_pWizard(_pParent),
-    m_pDocumentPrinterCopy(0),
-    m_pTempPrinter( 0 )
+    m_pTempPrinter( 0 ),
+    m_pDocumentPrinterCopy(0)
 {
     FreeResource();
 
@@ -493,7 +501,6 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
   -----------------------------------------------------------------------*/
 SwMailMergeOutputPage::~SwMailMergeOutputPage()
 {
-    USHORT nEntryCount = m_aPrinterLB.GetEntryCount();
     delete m_pTempPrinter;
     delete m_pDocumentPrinterCopy;
 }
@@ -509,7 +516,7 @@ void SwMailMergeOutputPage::ActivatePage()
     {
         for( unsigned int i = 0; i < nCount; i++ )
         {
-            USHORT nPos = m_aPrinterLB.InsertEntry( rPrinters[i] );
+            m_aPrinterLB.InsertEntry( rPrinters[i] );
         }
 
     }
@@ -590,12 +597,12 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             &m_aSaveNowPB,
             0
         };
-        Control** pControl = aSaveMergedControls;
+        Control** pSaveMergeControl = aSaveMergedControls;
         do
         {
-            (*pControl)->Show(sal_True);
+            (*pSaveMergeControl)->Show(sal_True);
 
-        } while(*(++pControl));
+        } while(*(++pSaveMergeControl));
         if(!m_aFromRB.IsChecked() && !m_aSaveAsOneRB.IsChecked())
         {
             m_aSaveIndividualRB.Check();
@@ -619,19 +626,18 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             &m_aPrintNowPB,
             0
         };
-        Control** pControl = aPrintControls;
+        Control** pPrinterControl = aPrintControls;
         do
         {
-            (*pControl)->Show(sal_True);
+            (*pPrinterControl)->Show(sal_True);
 
-        } while(*(++pControl));
+        } while(*(++pPrinterControl));
         if(!m_aFromRB.IsChecked())
             m_aPrintAllRB.Check();
 
         m_aSeparatorFL.SetText(m_sPrintST);
         //reposition the from/to line
         long nRB_FT_Offset = m_nFromToRBPos - m_nFromToFTPos;
-        long nRB_NF_Offset = m_nFromToRBPos - m_nFromToNFPos;
         long nNewRBXPos = m_aPrintAllRB.GetPosPixel().Y() + m_nRBOffset;
 
         Point aPos(m_aFromRB.GetPosPixel());aPos.Y() = nNewRBXPos;                 m_aFromRB.SetPosPixel(aPos);
@@ -650,12 +656,12 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             &m_aAttachmentFT, &m_aAttachmentED,
             &m_aSendAllRB, &m_aSendDocumentsPB, 0
         };
-        Control** pControl = aMailControls;
+        Control** pMailControl = aMailControls;
         do
         {
-            (*pControl)->Show(sal_True);
+            (*pMailControl)->Show(sal_True);
 
-        } while(*(++pControl));
+        } while(*(++pMailControl));
 
         if(!m_aFromRB.IsChecked())
             m_aSendAllRB.Check();
@@ -700,7 +706,6 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
         if(m_aSendAllRB.GetPosPixel().Y() + m_nRBOffset != m_aFromRB.GetPosPixel().Y())
         {
             long nRB_FT_Offset = m_nFromToRBPos - m_nFromToFTPos;
-            long nRB_NF_Offset = m_nFromToRBPos - m_nFromToNFPos;
             long nNewRBXPos = m_aSendAllRB.GetPosPixel().Y() + m_nRBOffset;
 
             Point aPos(m_aFromRB.GetPosPixel());aPos.Y() = nNewRBXPos;                 m_aFromRB.SetPosPixel(aPos);
@@ -767,7 +772,6 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
             //update the attachment name
             if(!m_aAttachmentED.GetText().Len())
             {
-                SwDocShell* pDocShell = pSourceView->GetDocShell();
                 if ( pDocShell->HasName() )
                 {
                     m_aAttachmentED.SetText(aURL.getName(
@@ -821,8 +825,8 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         }
         else
         {
-            nBegin = m_aFromNF.GetValue() - 1;
-            nEnd =   m_aToNF.GetValue();
+            nBegin  = static_cast< sal_Int32 >(m_aFromNF.GetValue() - 1);
+            nEnd    = static_cast< sal_Int32 >(m_aToNF.GetValue());
             if(nEnd > rConfigItem.GetMergedDocumentCount())
                 nEnd = rConfigItem.GetMergedDocumentCount();
         }
@@ -885,7 +889,6 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             //SfxStringItem aName(SID_FILE_NAME, sOutPath);
             //SfxStringItem aFilter(SID_FILTER_NAME, sFilter);
 
-            const SfxBoolItem* pBool = 0;
             while(true)
             {
                 //time for other slots is needed
@@ -894,13 +897,9 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
                 bool bFailed = false;
                 try
                 {
-                    uno::Sequence< beans::PropertyValue > aValues(1);
-                    beans::PropertyValue* pValues = aValues.getArray();
-                    pValues[0].Name = C2U("FilterName");
                     pValues[0].Value <<= ::rtl::OUString(sFilter);
-
-                    uno::Reference< frame::XStorable > xStore( xTempDocShell->GetModel(), uno::UNO_QUERY);
-                    xStore->storeToURL( sOutPath, aValues   );
+                    uno::Reference< frame::XStorable > xTempStore( xTempDocShell->GetModel(), uno::UNO_QUERY);
+                    xTempStore->storeToURL( sOutPath, aValues   );
                 }
                 catch( const uno::Exception& )
                 {
@@ -975,7 +974,7 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
 /*-- 17.05.2004 13:51:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, pButton)
+IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
 {
     SwView* pTargetView = m_pWizard->GetConfigItem().GetTargetView();
     DBG_ASSERT(pTargetView, "no target view exists")
@@ -992,8 +991,8 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, pButton)
     }
     else
     {
-        nBegin = m_aFromNF.GetValue() - 1;
-        nEnd =   m_aToNF.GetValue();
+        nBegin  = static_cast< sal_Int32 >(m_aFromNF.GetValue() - 1);
+        nEnd    = static_cast< sal_Int32 >(m_aToNF.GetValue());
         if(nEnd > rConfigItem.GetMergedDocumentCount())
             nEnd = rConfigItem.GetMergedDocumentCount();
     }
@@ -1114,8 +1113,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     }
     else
     {
-        nBegin = m_aFromNF.GetValue() - 1;
-        nEnd =   m_aToNF.GetValue();
+        nBegin  = static_cast< sal_Int32 >(m_aFromNF.GetValue() - 1);
+        nEnd    = static_cast< sal_Int32 >(m_aToNF.GetValue());
         if(nEnd > rConfigItem.GetMergedDocumentCount())
             nEnd = rConfigItem.GetMergedDocumentCount();
     }
@@ -1236,7 +1235,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     xStore->storeToURL( sTargetTempURL, aValues   );
 
     pDlg->SetDocumentCount( nEnd );
-    pDlg->Show();
+    pDlg->ShowDialog();
     //help to force painting the dialog
     //TODO/CLEANUP
     //Sollbruchstelle
@@ -1271,7 +1270,6 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                 URIHelper::SmartRel2Abs(
                     INetURLObject(), utl::TempFile::CreateTempName(0),
                     URIHelper::GetMaybeFileHdl()) );
-        const SfxStringItem* pFilterOptions = 0;
 
 /*        if(bIsPDF)
         {
@@ -1282,24 +1280,26 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         }
         else*/
         {
-            uno::Sequence< beans::PropertyValue > aValues(MM_DOCTYPE_TEXT == nDocType ? 2 : 1);
-            beans::PropertyValue* pValues = aValues.getArray();
-            pValues[0].Name = C2U("FilterName");
-            pValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
+            uno::Sequence< beans::PropertyValue > aFilterValues(MM_DOCTYPE_TEXT == nDocType ? 2 : 1);
+            beans::PropertyValue* pFilterValues = aValues.getArray();
+            pFilterValues[0].Name = C2U("FilterName");
+            pFilterValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
             if(MM_DOCTYPE_TEXT == nDocType)
             {
-                pValues[1].Name = C2U("FilterOptions");
-                pValues[1].Value <<= ::rtl::OUString(sFilterOptions);
+                pFilterValues[1].Name = C2U("FilterOptions");
+                pFilterValues[1].Value <<= ::rtl::OUString(sFilterOptions);
             }
 
-            uno::Reference< frame::XStorable > xStore( pTempView->GetDocShell()->GetModel(), uno::UNO_QUERY);
-            xStore->storeToURL( aName.GetValue(), aValues );
+            uno::Reference< frame::XStorable > xTempStore( pTempView->GetDocShell()->GetModel(), uno::UNO_QUERY);
+            xTempStore->storeToURL( aName.GetValue(), aFilterValues );
         }
         xTempDocShell->DoClose();
 
-        sal_Int32 nTarget = rConfigItem.MoveResultSet(rInfo.nDBRow);
+#ifdef DBG_UTIL
+        sal_Int32 nTarget =
+#endif
+                rConfigItem.MoveResultSet(rInfo.nDBRow);
         DBG_ASSERT( nTarget == rInfo.nDBRow, "row of current document could not be selected")
-        String sEMailColumn = m_aMailToLB.GetSelectEntry();
         DBG_ASSERT( sEMailColumn.Len(), "No email column selected");
         ::rtl::OUString sEMail = lcl_GetColumnValueOf(sEMailColumn, xColAccess);
         SwMailDescriptor aDesc;
