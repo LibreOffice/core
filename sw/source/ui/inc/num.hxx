@@ -4,9 +4,9 @@
  *
  *  $RCSfile: num.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:42:16 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:05:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,9 +137,13 @@ class SwNumPositionTabPage : public SfxTabPage
     DECL_LINK( StandardHdl, PushButton * );
 
     public:
-        SwNumPositionTabPage(Window* pParent,
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
+    SwNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet);
-        ~SwNumPositionTabPage();
+    ~SwNumPositionTabPage();
 
     virtual void        ActivatePage(const SfxItemSet& rSet);
     virtual int         DeactivatePage(SfxItemSet *pSet);
@@ -155,7 +159,7 @@ class SwNumPositionTabPage : public SfxTabPage
     void                SetModified(BOOL bRepaint = TRUE);
 #else
     void                SetModified(BOOL bRepaint = TRUE)
-                            {bModified = TRUE;
+                            {   bModified = TRUE;
                                 if(bRepaint)
                                 {
                                     aPreviewWIN.SetLevel(nActNumLvl);
