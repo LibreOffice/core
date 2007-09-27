@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swregion.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:16:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:11:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,13 +41,13 @@
 
 #include "swrect.hxx"
 
-SV_DECL_VARARR( SwRects, SwRect, 20, 8 );
+SV_DECL_VARARR( SwRects, SwRect, 20, 8 )
 
 class SwRegionRects : public SwRects
 {
     SwRect aOrigin; // die Kopie des StartRects
 
-    inline void InsertRect( const SwRect &rRect, const USHORT nPos, FASTBOOL &rDel);
+    inline void InsertRect( const SwRect &rRect, const USHORT nPos, BOOL &rDel);
 
 public:
     SwRegionRects( const SwRect& rStartRect, USHORT nInit = 20,
