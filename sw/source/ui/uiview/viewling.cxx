@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 08:32:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:38:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,13 +176,14 @@
 #endif
 #include <svx/dialogs.hrc>
 
+#include <unomid.h>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::smarttags;
 
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 /*--------------------------------------------------------------------
     Beschreibung:   Lingu-Dispatcher
  --------------------------------------------------------------------*/
@@ -458,7 +459,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
 
 
 // Der uebergebene Pointer nLang ist selbst der Wert
-IMPL_LINK( SwView, SpellError, void *, nLang )
+IMPL_LINK( SwView, SpellError, LanguageType *, pLang )
 {
 #if OSL_DEBUG_LEVEL > 1
     sal_Bool bFocus = GetEditWin().HasFocus();
@@ -476,7 +477,7 @@ IMPL_LINK( SwView, SpellError, void *, nLang )
         }
         while( pWrtShell->ActionPend() );
     }
-    LanguageType eLang = (LanguageType)(sal_uIntPtr)nLang;
+    LanguageType eLang = pLang ? *pLang : LANGUAGE_NONE;
     String aErr(::GetLanguageString( eLang ) );
 
     SwEditWin &rEditWin = GetEditWin();
@@ -576,7 +577,7 @@ void SwView::HyphenateDocument()
         return;
     }
 
-    if (pWrtShell->GetSelectionType() & (SwWrtShell::SEL_DRW_TXT|SwWrtShell::SEL_DRW))
+    if (pWrtShell->GetSelectionType() & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_DRW))
     {
         // Silbentrennung in einem Draw-Objekt
         HyphenateDrawText();
@@ -652,7 +653,8 @@ void SwView::StartThesaurus()
 
     if( eLang == LANGUAGE_DONTKNOW || eLang == LANGUAGE_NONE )
     {
-        SpellError( (void *) LANGUAGE_NONE );
+        LanguageType nLanguage = LANGUAGE_NONE;
+        SpellError( &nLanguage );
         return;
     }
 
@@ -676,7 +678,7 @@ void SwView::StartThesaurus()
 
     if ( !xThes.is() || !xThes->hasLocale( SvxCreateLocale( eLang ) ) )
     {
-        SpellError( (void *) eLang );
+        SpellError( &eLang );
     }
     else
     {
@@ -782,7 +784,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
         !pVOpt->IsHideSpell() &&
         !pWrtShell->IsSelection())
     {
-        if (pWrtShell->GetSelectionType() & SwWrtShell::SEL_DRW_TXT)
+        if (pWrtShell->GetSelectionType() & nsSelectionType::SEL_DRW_TXT)
             bRet = ExecDrwTxtSpellPopup(rPt);
         else if (!pWrtShell->IsSelFrmMode())
         {
@@ -805,7 +807,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 bRet = sal_True;
                 pWrtShell->SttSelect();
                 SwSpellPopup aPopup( pWrtShell, xAlt, aParaText );
-                ::com::sun::star::ui::ContextMenuExecuteEvent aEvent;
+                ui::ContextMenuExecuteEvent aEvent;
                 const Point aPixPos = GetEditWin().LogicToPixel( rPt );
 
                 aEvent.SourceWindow = VCLUnoHelper::GetInterface( pEditWin );
@@ -823,9 +825,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                     }
                     else
                     {
-                        aPopup.Execute(
-                            pEditWin,
-                            aToFill.SVRect());
+                        aPopup.Execute( aToFill.SVRect(), pEditWin );
                     }
                 }
             }
@@ -864,7 +864,7 @@ sal_Bool SwView::ExecSmartTagPopup( const Point& rPt )
         bRet = sal_True;
         pWrtShell->SttSelect();
         SwSmartTagPopup aPopup( this, aSmartTagTypes, aStringKeyMaps, xRange );
-        aPopup.Execute( pEditWin, aToFill.SVRect() );
+        aPopup.Execute( aToFill.SVRect(), pEditWin );
     }
 
     pWrtShell->Pop( sal_False );
