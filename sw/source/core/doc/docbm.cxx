@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:50:01 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:33:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ SV_IMPL_OP_PTRARR_SORT(SwBookmarks, SwBookmarkPtr)
 #define PCURSH ((SwCrsrShell*)_pStartShell)
 #define FOREACHSHELL_START( pEShell ) \
     {\
-        register ViewShell *_pStartShell = pEShell; \
+        ViewShell *_pStartShell = pEShell; \
         do { \
             if( _pStartShell->IsA( TYPE( SwCrsrShell )) ) \
             {
@@ -303,11 +303,11 @@ SaveBookmark::SaveBookmark( int eType, const SwBookmark& rBkmk,
     nNode1 = rBkmk.GetPos().nNode.GetIndex();
     nCntnt1 = rBkmk.GetPos().nContent.GetIndex();
 
-    if( BKMK_POS & eBkmkType )
+    if( nsSaveBookmarkType::BKMK_POS & eBkmkType )
     {
         nNode1 -= rMvPos.GetIndex();
         if( pIdx && !nNode1 )
-            nCntnt1 -= pIdx->GetIndex();
+            nCntnt1 = nCntnt1 - pIdx->GetIndex();
     }
 
     if( rBkmk.GetOtherPos() )
@@ -315,11 +315,11 @@ SaveBookmark::SaveBookmark( int eType, const SwBookmark& rBkmk,
         nNode2 = rBkmk.GetOtherPos()->nNode.GetIndex();
         nCntnt2 = rBkmk.GetOtherPos()->nContent.GetIndex();
 
-        if( BKMK_POS_OTHER & eBkmkType )
+        if( nsSaveBookmarkType::BKMK_POS_OTHER & eBkmkType )
         {
             nNode2 -= rMvPos.GetIndex();
             if( pIdx && !nNode2 )
-                nCntnt2 -= pIdx->GetIndex();
+                nCntnt2 = nCntnt2 - pIdx->GetIndex();
         }
     }
     else
@@ -337,7 +337,7 @@ void SaveBookmark::SetInDoc( SwDoc* pDoc, const SwNodeIndex& rNewPos,
     {
         aPam.SetMark();
 
-        if( BKMK_POS_OTHER & eBkmkType )
+        if( nsSaveBookmarkType::BKMK_POS_OTHER & eBkmkType )
         {
             aPam.GetMark()->nNode += nNode2;
             if( pIdx && !nNode2 )
@@ -354,7 +354,7 @@ void SaveBookmark::SetInDoc( SwDoc* pDoc, const SwNodeIndex& rNewPos,
         }
     }
 
-    if( BKMK_POS & eBkmkType )
+    if( nsSaveBookmarkType::BKMK_POS & eBkmkType )
     {
         aPam.GetPoint()->nNode += nNode1;
 
@@ -414,44 +414,44 @@ void _DelBookmarks( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
     for( nCnt = 0; nCnt < rBkmks.Count(); ++nCnt )
     {
         // liegt auf der Position ??
-        int eType = BKMK_POS_NONE;
+        int eType = nsSaveBookmarkType::BKMK_POS_NONE;
         SwBookmark* pBkmk = rBkmks[ nCnt ];
         //simple marks should not be moved
         if(pBkmk->IsMark())
             continue;
         if( GreaterThan( pBkmk->GetPos(), rStt, pSttIdx ) &&
             Lower( pBkmk->GetPos(), rEnd, pEndIdx ))
-            eType = BKMK_POS;
+            eType = nsSaveBookmarkType::BKMK_POS;
         if( pBkmk->GetOtherPos() &&
             GreaterThan( *pBkmk->GetOtherPos(), rStt, pSttIdx ) &&
             Lower( *pBkmk->GetOtherPos(), rEnd, pEndIdx ))
-            eType |= BKMK_POS_OTHER;
+            eType |= nsSaveBookmarkType::BKMK_POS_OTHER;
 
-        if( BKMK_POS_NONE == eType )        // auf zum naechsten
+        if( nsSaveBookmarkType::BKMK_POS_NONE == eType )        // auf zum naechsten
             continue;
 
         if( pSaveBkmk )
         {
                 // Besonderheit: komplett eingeschlossen? dann mitnehmen
-            if( pEndIdx && (BKMK_POS_OTHER | BKMK_POS) != eType &&
-                ( ( BKMK_POS_OTHER & eType &&
+            if( pEndIdx && (nsSaveBookmarkType::BKMK_POS_OTHER | nsSaveBookmarkType::BKMK_POS) != eType &&
+                ( ( nsSaveBookmarkType::BKMK_POS_OTHER & eType &&
                     pBkmk->GetPos().nNode == rEnd &&
                     pBkmk->GetPos().nContent == *pEndIdx ) ||
-                ( BKMK_POS & eType && pBkmk->GetOtherPos() &&
+                ( nsSaveBookmarkType::BKMK_POS & eType && pBkmk->GetOtherPos() &&
                     pBkmk->GetOtherPos()->nNode == rEnd &&
                     pBkmk->GetOtherPos()->nContent == *pEndIdx ) ) )
-                    eType = BKMK_POS_OTHER | BKMK_POS;
+                    eType = nsSaveBookmarkType::BKMK_POS_OTHER | nsSaveBookmarkType::BKMK_POS;
 
             SaveBookmark * pSBkmk = new SaveBookmark( eType, *pBkmk, rStt, pSttIdx );
             pSaveBkmk->C40_INSERT( SaveBookmark, pSBkmk, pSaveBkmk->Count() );
             pDoc->deleteBookmark( nCnt-- );
         }
-        else if( (BKMK_POS_OTHER | BKMK_POS ) == eType ||
-                ( BKMK_POS == eType && !pBkmk->GetOtherPos() ) )
+        else if( (nsSaveBookmarkType::BKMK_POS_OTHER | nsSaveBookmarkType::BKMK_POS ) == eType ||
+                ( nsSaveBookmarkType::BKMK_POS == eType && !pBkmk->GetOtherPos() ) )
             pDoc->deleteBookmark( nCnt-- );
         else
         {
-            SwPosition* pPos = (SwPosition*)(BKMK_POS & eType
+            SwPosition* pPos = (SwPosition*)(nsSaveBookmarkType::BKMK_POS & eType
                                     ? &pBkmk->GetPos()
                                     : pBkmk->GetOtherPos());
             pPos->nNode = rEnd;
@@ -467,7 +467,7 @@ void _DelBookmarks( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
                     pPos->nNode = rStt;
                     if( 0 == ( pCNd = pDoc->GetNodes().GoPrevious( &pPos->nNode )) )
                     {
-                        pPos->nNode = BKMK_POS == eType
+                        pPos->nNode = nsSaveBookmarkType::BKMK_POS == eType
                                         ? pBkmk->GetOtherPos()->nNode
                                         : pBkmk->GetPos().nNode;
                         pCNd = pPos->nNode.GetNode().GetCntntNode();
@@ -596,7 +596,7 @@ public:
     _SwSaveTypeCountContent( const SvULongs& rArr, USHORT& rPos )
         {
             TYPECOUNT.nTypeCount = rArr[ rPos++ ];
-            nContent = rArr[ rPos++ ];
+            nContent = static_cast<xub_StrLen>(rArr[ rPos++ ]);
         }
     void Add( SvULongs& rArr )
     {
@@ -627,7 +627,7 @@ void _ChkPaM( SvULongs& rSaveArr, ULONG nNode, xub_StrLen nCntnt,
                 BOOL bChkSelDirection )
 {
     // SelektionsRichtung beachten
-    BOOL bBound1IsStart = !bChkSelDirection ? TRUE :
+    bool bBound1IsStart = !bChkSelDirection ? TRUE :
                         ( *rPam.GetPoint() < *rPam.GetMark()
                             ? rPam.GetPoint() == &rPam.GetBound()
                             : rPam.GetMark() == &rPam.GetBound());
@@ -716,7 +716,6 @@ void _SaveCntntIdx( SwDoc* pDoc, ULONG nNode, xub_StrLen nCntnt,
     for( ; aSave.GetCount() < rRedlTbl.Count(); aSave.IncCount() )
     {
         const SwRedline* pRdl = rRedlTbl[ aSave.GetCount() ];
-        ULONG nPointIdx = pRdl->GetPoint()->nNode.GetIndex();
         int nPointPos = lcl_RelativePosition( *pRdl->GetPoint(), nNode, nCntnt );
         int nMarkPos = pRdl->HasMark() ? lcl_RelativePosition( *pRdl->GetMark(), nNode, nCntnt ) :
                                           nPointPos;
@@ -836,7 +835,7 @@ void _SaveCntntIdx( SwDoc* pDoc, ULONG nNode, xub_StrLen nCntnt,
         {
             aSave.SetTypeAndCount( 0x800, 0 );
             FOREACHSHELL_START( pShell )
-                register SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
+                SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
                 if( _pStkCrsr )
                 do {
                     ::_ChkPaM( rSaveArr, nNode, nCntnt, *_pStkCrsr,
@@ -857,7 +856,7 @@ void _SaveCntntIdx( SwDoc* pDoc, ULONG nNode, xub_StrLen nCntnt,
     // 6. UnoCrsr
     {
         aSave.SetTypeAndCount( 0x400, 0 );
-        register const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
+        const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
         for( USHORT n = 0; n < rTbl.Count(); ++n )
         {
             FOREACHPAM_START( rTbl[ n ] )
@@ -940,7 +939,7 @@ void _RestoreCntntIdx( SwDoc* pDoc, SvULongs& rSaveArr,
                 if( pShell )
                 {
                     FOREACHSHELL_START( pShell )
-                        register SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
+                        SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
                         if( _pStkCrsr )
                         do {
                             if( aSave.GetCount() == nCnt )
@@ -977,7 +976,7 @@ void _RestoreCntntIdx( SwDoc* pDoc, SvULongs& rSaveArr,
         case 0x0401:
             {
                 USHORT nCnt = 0;
-                register const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
+                const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
                 for( USHORT i = 0; i < rTbl.Count(); ++i )
                 {
                     FOREACHPAM_START( rTbl[ i ] )
@@ -1081,7 +1080,7 @@ void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
                     if( pShell )
                     {
                         FOREACHSHELL_START( pShell )
-                            register SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
+                            SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
                             if( _pStkCrsr )
                             do {
                                 if( aSave.GetCount() == nCnt )
@@ -1118,7 +1117,7 @@ void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
             case 0x0401:
                 {
                     USHORT nCnt = 0;
-                    register const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
+                    const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
                     for( USHORT i = 0; i < rTbl.Count(); ++i )
                     {
                         FOREACHPAM_START( rTbl[ i ] )
