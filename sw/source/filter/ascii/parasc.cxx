@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:03:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:44:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,7 +328,7 @@ ULONG SwASCIIParser::ReadChars()
     sal_Unicode *pStt = 0, *pEnd = 0, *pLastStt = 0;
     long nReadCnt = 0, nLineLen = 0;
     sal_Unicode cLastCR = 0;
-    bool bSwapUnicode;
+    bool bSwapUnicode = false;
 
     const SwAsciiOptions *pUseMe=&rOpt;
     SwAsciiOptions aEmpty;
@@ -404,7 +404,7 @@ ULONG SwASCIIParser::ReadChars()
             {
                 sal_uInt32 nInfo;
                 sal_Size nNewLen = lGCount, nCntBytes;
-                sal_Unicode* pBuf = sWork.AllocBuffer( nNewLen );
+                sal_Unicode* pBuf = sWork.AllocBuffer( static_cast< xub_StrLen >(nNewLen) );
 
                 nNewLen = rtl_convertTextToUnicode( hConverter, hContext,
                                 pArr, lGCount, pBuf, nNewLen,
@@ -418,7 +418,7 @@ ULONG SwASCIIParser::ReadChars()
                                 &nCntBytes );
                 if( 0 != ( nArrOffset = lGCount - nCntBytes ) )
                     memmove( pArr, pArr + nCntBytes, nArrOffset );
-                sWork.ReleaseBufferAccess( nNewLen );
+                sWork.ReleaseBufferAccess( static_cast< xub_StrLen >(nNewLen) );
 
                 pStt = pLastStt = sWork.GetBufferAccess();
                 pEnd = pStt + nNewLen;
