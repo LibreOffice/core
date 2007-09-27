@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergechildwindow.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:05:05 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:31:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,13 +100,13 @@ SFX_IMPL_FLOATINGWINDOW( SwMailMergeChildWindow, FN_MAILMERGE_CHILDWINDOW )
     Beschreibung:
 ------------------------------------------------------------------------*/
 
-SwMailMergeChildWindow::SwMailMergeChildWindow( Window* pParent,
+SwMailMergeChildWindow::SwMailMergeChildWindow( Window* _pParent,
                                 USHORT nId,
                                 SfxBindings* pBindings,
                                 SfxChildWinInfo* pInfo ) :
-                                SfxChildWindow( pParent, nId )
+                                SfxChildWindow( _pParent, nId )
 {
-    pWindow = new SwMailMergeChildWin( pBindings, this, pParent);
+    pWindow = new SwMailMergeChildWin( pBindings, this, _pParent);
 
     if (!pInfo->aSize.Width() || !pInfo->aSize.Height())
     {
@@ -117,7 +117,7 @@ SwMailMergeChildWindow::SwMailMergeChildWindow( Window* pParent,
             pWindow->SetPosPixel(rEditWin.OutputToScreenPixel(Point(0, 0)));
         }
         else
-            pWindow->SetPosPixel(pParent->OutputToScreenPixel(Point(0, 0)));
+            pWindow->SetPosPixel(_pParent->OutputToScreenPixel(Point(0, 0)));
         pInfo->aPos = pWindow->GetPosPixel();
         pInfo->aSize = pWindow->GetSizePixel();
     }
@@ -130,10 +130,10 @@ SwMailMergeChildWindow::SwMailMergeChildWindow( Window* pParent,
     Beschreibung:
 ------------------------------------------------------------------------*/
 
-SwMailMergeChildWin::SwMailMergeChildWin( SfxBindings* pBindings,
+SwMailMergeChildWin::SwMailMergeChildWin( SfxBindings* _pBindings,
                             SfxChildWindow* pChild,
                             Window *pParent) :
-    SfxFloatingWindow(pBindings, pChild, pParent, SW_RES(DLG_MAILMERGECHILD)),
+    SfxFloatingWindow(_pBindings, pChild, pParent, SW_RES(DLG_MAILMERGECHILD)),
     m_aBackTB(this, SW_RES( TB_BACK ))
 {
     m_aBackTB.SetSelectHdl(LINK(this, SwMailMergeChildWin, BackHdl));
@@ -265,20 +265,20 @@ SwMailDispatcherListener_Impl::~SwMailDispatcherListener_Impl()
 /*-- 23.06.2004 10:04:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwMailDispatcherListener_Impl::started(::rtl::Reference<MailDispatcher> xMailDispatcher)
+void SwMailDispatcherListener_Impl::started(::rtl::Reference<MailDispatcher> /*xMailDispatcher*/)
 {
 }
 /*-- 23.06.2004 10:04:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwMailDispatcherListener_Impl::stopped(
-                        ::rtl::Reference<MailDispatcher> xMailDispatcher)
+                        ::rtl::Reference<MailDispatcher> /*xMailDispatcher*/)
 {
 }
 /*-- 23.06.2004 10:04:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwMailDispatcherListener_Impl::idle(::rtl::Reference<MailDispatcher> xMailDispatcher)
+void SwMailDispatcherListener_Impl::idle(::rtl::Reference<MailDispatcher> /*xMailDispatcher*/)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     m_pSendMailDialog->AllMailsSent();
@@ -287,7 +287,7 @@ void SwMailDispatcherListener_Impl::idle(::rtl::Reference<MailDispatcher> xMailD
 
   -----------------------------------------------------------------------*/
 void SwMailDispatcherListener_Impl::mailDelivered(
-                        ::rtl::Reference<MailDispatcher> xMailDispatcher,
+                        ::rtl::Reference<MailDispatcher> /*xMailDispatcher*/,
                         uno::Reference< mail::XMailMessage> xMailMessage)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -298,7 +298,7 @@ void SwMailDispatcherListener_Impl::mailDelivered(
 
   -----------------------------------------------------------------------*/
 void SwMailDispatcherListener_Impl::mailDeliveryError(
-                ::rtl::Reference<MailDispatcher> xMailDispatcher,
+                ::rtl::Reference<MailDispatcher> /*xMailDispatcher*/,
                 uno::Reference< mail::XMailMessage> xMailMessage,
                 const rtl::OUString& sErrorMessage)
 {
@@ -309,7 +309,7 @@ void SwMailDispatcherListener_Impl::mailDeliveryError(
 /*-- 23.06.2004 12:30:39---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMailMessage >& xMessage )
+void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMailMessage >& /*xMessage*/ )
 {
 //DBG_ERROR("SwMailDispatcherListener_Impl::DeleteAttachments not implemented")
 //    uno::Sequence< mail::MailAttachmentDescriptor > aAttachments = xMessage->getAttachments();
@@ -364,14 +364,14 @@ SwSendWarningBox_Impl::~SwSendWarningBox_Impl()
 
 SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConfigItem) :
     ModelessDialog /*SfxModalDialog*/(pParent, SW_RES(DLG_MM_SENDMAILS)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aStatusFL( this, SW_RES(             FL_STATUS             )),
     m_aStatusFT( this, SW_RES(             FT_STATUS1            )),
-    m_PausedFI(this, SW_RES(               FI_PAUSED             )),
     m_aTransferStatusFL( this, SW_RES(     FL_TRANSFERSTATUS     )),
     m_aTransferStatusFT( this, SW_RES(     FT_TRANSFERSTATUS     )),
+    m_PausedFI(this, SW_RES(               FI_PAUSED             )),
     m_aProgressBar( this,      SW_RES(     PB_PROGRESS           )),
     m_aErrorStatusFT( this, SW_RES(        FT_ERRORSTATUS        )),
     m_aDetailsPB( this, SW_RES(            PB_DETAILS            )),
@@ -380,7 +380,7 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_aSeparatorFL( this, SW_RES(          FL_SEPARATOR          )),
     m_aStopPB( this, SW_RES(               PB_STOP               )),
     m_aClosePB( this, SW_RES(              PB_CLOSE              )),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
     m_sMore(m_aDetailsPB.GetText()),
@@ -394,14 +394,14 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_sCompleted(   SW_RES(ST_COMPLETED )),
     m_sFailed(      SW_RES(ST_FAILED     )),
     m_sTerminateQuery( SW_RES( ST_TERMINATEQUERY )),
+    m_bCancel(false),
+    m_bDesctructionEnabled(false),
     m_aImageList( SW_RES( ILIST ) ),
     m_aImageListHC( SW_RES( ILIST_HC ) ),
     m_pImpl(new SwSendMailDialog_Impl),
     m_pConfigItem(&rConfigItem),
-    m_bCancel(false),
     m_nSendCount(0),
-    m_nErrorCount(0),
-    m_bDesctructionEnabled(false)
+    m_nErrorCount(0)
 {
     m_nStatusHeight =  m_aSeparatorFL.GetPosPixel().Y() - m_aStatusLB.GetPosPixel().Y();
     String sTask(SW_RES(ST_TASK));
@@ -562,7 +562,7 @@ IMPL_LINK( SwSendMailDialog, StopHdl_Impl, PushButton*, pButton )
 /*-- 21.05.2004 14:10:40---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK( SwSendMailDialog, CloseHdl_Impl, PushButton*, pButton )
+IMPL_LINK( SwSendMailDialog, CloseHdl_Impl, PushButton*, EMPTYARG )
 {
     ModelessDialog::Show( sal_False );
     return 0;
@@ -570,7 +570,7 @@ IMPL_LINK( SwSendMailDialog, CloseHdl_Impl, PushButton*, pButton )
 /*-- 14.06.2004 09:48:30---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_STATIC_LINK( SwSendMailDialog, StartSendMails, SwSendMailDialog*, pDialog )
+IMPL_STATIC_LINK_NOINSTANCE( SwSendMailDialog, StartSendMails, SwSendMailDialog*, pDialog )
 {
     pDialog->SendMails();
     return 0;
@@ -603,7 +603,7 @@ IMPL_STATIC_LINK( SwSendMailDialog, RemoveThis, Timer*, pTimer )
 /*-- 07.07.2004 14:34:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_STATIC_LINK( SwSendMailDialog, StopSendMails, SwSendMailDialog*, pDialog )
+IMPL_STATIC_LINK_NOINSTANCE( SwSendMailDialog, StopSendMails, SwSendMailDialog*, pDialog )
 {
     if(pDialog->m_pImpl->xMailDispatcher.is() &&
         pDialog->m_pImpl->xMailDispatcher->isStarted())
@@ -624,7 +624,6 @@ void  SwSendMailDialog::SendMails()
         DBG_ERROR("config item not set")
         return;
     }
-    long nSent = 0;
     String sErrorMessage;
     bool bIsLoggedIn = false;
     EnterWait();
@@ -732,7 +731,7 @@ void  SwSendMailDialog::IterateMails()
 /*-- 27.08.2004 10:50:17---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwSendMailDialog::Show()
+void SwSendMailDialog::ShowDialog()
 {
     Application::PostUserEvent( STATIC_LINK( this, SwSendMailDialog,
                                                 StartSendMails ), this );
