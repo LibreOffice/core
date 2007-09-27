@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 14:48:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:10:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,10 +138,9 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
         refStg  = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READWRITE );
         bReadOnly = FALSE;
     }
-    catch( const uno::Exception& rEx)
+    catch( const uno::Exception& )
     {
         //couldn't open the file - maybe it's readonly
-        rEx; // make the compiler happy
     }
     if( !refStg.is())
     {
@@ -231,14 +230,14 @@ void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong,
 
 ULONG SwXMLTextBlocks::Delete( USHORT n )
 {
-    String aName (aNames[ n ]->aPackageName);
+    String aPckName (aNames[ n ]->aPackageName);
     uno::Reference < container::XNameAccess > xAccess( xBlkRoot, uno::UNO_QUERY );
     if ( xAccess.is() &&
-            xAccess->hasByName( aName ) && xBlkRoot->isStreamElement( aName ) )
+            xAccess->hasByName( aPckName ) && xBlkRoot->isStreamElement( aPckName ) )
     {
         try
         {
-            xBlkRoot->removeElement ( aName );
+            xBlkRoot->removeElement ( aPckName );
             uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
             if ( xTrans.is() )
                 xTrans->commit();
@@ -252,7 +251,7 @@ ULONG SwXMLTextBlocks::Delete( USHORT n )
     return 0;
 }
 
-ULONG SwXMLTextBlocks::Rename( USHORT nIdx, const String& rNewShort, const String& rNewLong )
+ULONG SwXMLTextBlocks::Rename( USHORT nIdx, const String& rNewShort, const String& )
 {
     DBG_ASSERT( xBlkRoot.is(), "No storage set" )
     if(!xBlkRoot.is())
@@ -363,7 +362,7 @@ ULONG SwXMLTextBlocks::StartPutBlock( const String& rShort, const String& rPacka
     DBG_ASSERT( xBlkRoot.is(), "No storage set" )
     if(!xBlkRoot.is())
         return 0;
-    USHORT nIndex = GetIndex ( rShort );
+    GetIndex ( rShort );
     /*
     if( xBlkRoot->IsContained( rPackageName ) )
     {
@@ -395,7 +394,7 @@ ULONG SwXMLTextBlocks::BeginPutDoc( const String& rShort, const String& rLong )
     return StartPutBlock (rShort, aPackageName);
 }
 
-ULONG SwXMLTextBlocks::PutBlock( SwPaM& rPam, const String& rLong )
+ULONG SwXMLTextBlocks::PutBlock( SwPaM& , const String& )
 {
     ULONG nRes = 0;
     USHORT nCommitFlags = nFlags & (SWXML_CONVBLOCK|SWXML_NOROOTCOMMIT);
@@ -461,9 +460,9 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& rPam, const String& rLong )
         xRoot = 0;
         if ( !nCommitFlags )
         {
-            uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
-            if ( xTrans.is() )
-                xTrans->commit();
+            uno::Reference < embed::XTransactedObject > xTmpTrans( xBlkRoot, uno::UNO_QUERY );
+            if ( xTmpTrans.is() )
+                xTmpTrans->commit();
         }
     }
     catch (uno::Exception&)
@@ -550,7 +549,7 @@ BOOL SwXMLTextBlocks::PutMuchEntries( BOOL bOn )
     return bRet;
 }
 
-ULONG SwXMLTextBlocks::OpenFile( BOOL bReadOnly )
+ULONG SwXMLTextBlocks::OpenFile( BOOL bRdOnly )
 {
     if( bAutocorrBlock )
         return 0;
@@ -558,7 +557,7 @@ ULONG SwXMLTextBlocks::OpenFile( BOOL bReadOnly )
     try
     {
         uno::Reference < embed::XStorage > refStg  = comphelper::OStorageHelper::GetStorageFromURL( aFile,
-                bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE );
+                bRdOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE );
         InitBlockMode ( refStg );
     }
     catch ( uno::Exception& )
