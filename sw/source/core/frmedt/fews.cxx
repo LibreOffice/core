@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:30:18 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:51:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
     if( !pFrm )
         return GetLayout()->Frm();
 
-    FASTBOOL  bFrm  = TRUE;
+    BOOL  bFrm  = TRUE;
     switch ( eType )
     {
         case RECT_PAGE_PRT:         bFrm = FALSE; /* no break */
@@ -247,9 +247,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                         return GetLayout()->Frm();
                                     break;
 
-//JP 20.08.98: wo zu diese Statements? unnoetiger Code
-//      case RECT_FRM:
-//      default:                    break;
+        default:                    break;
     }
     return bFrm ? pFrm->Frm() : pFrm->Prt();
 }
@@ -780,15 +778,14 @@ USHORT SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
     return nRet;
 }
 
-SwFEShell::SwFEShell( SwDoc& rDoc, Window *pWin,
-                     SwRootFrm *pMaster, const SwViewOption *pOpt )
-    : SwEditShell( rDoc, pWin, pMaster, pOpt ),
+SwFEShell::SwFEShell( SwDoc& rDoc, Window *pWindow, const SwViewOption *pOptions )
+    : SwEditShell( rDoc, pWindow, pOptions ),
     pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( FALSE )
 {
 }
 
-SwFEShell::SwFEShell( SwEditShell& rShell, Window *pWin )
-    : SwEditShell( rShell, pWin ),
+SwFEShell::SwFEShell( SwEditShell& rShell, Window *pWindow )
+    : SwEditShell( rShell, pWindow ),
     pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( FALSE )
 {
 }
@@ -807,8 +804,8 @@ SwFEShell::~SwFEShell()
 //          for to character anchored objects.
 void SwFEShell::CalcBoundRect( SwRect& _orRect,
                                const RndStdIds _nAnchorId,
-                               const SwRelationOrient _eHoriRelOrient,
-                               const SwRelationOrient _eVertRelOrient,
+                               const sal_Int16 _eHoriRelOrient,
+                               const sal_Int16 _eVertRelOrient,
                                const SwPosition* _pToCharCntntPos,
                                const bool _bFollowTextFlow,
                                bool _bMirror,
@@ -873,22 +870,23 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             _bMirror = false; // no mirroring in vertical environment
             switch ( _eHoriRelOrient )
             {
-                case REL_PG_RIGHT:
-                case REL_FRM_RIGHT: aPos.Y() += pFrm->Prt().Height();
+                case text::RelOrientation::PAGE_RIGHT:
+                case text::RelOrientation::FRAME_RIGHT: aPos.Y() += pFrm->Prt().Height();
                 // no break!
-                case PRTAREA:
-                case REL_PG_PRTAREA: aPos.Y() += pFrm->Prt().Top(); break;
+                case text::RelOrientation::PRINT_AREA:
+                case text::RelOrientation::PAGE_PRINT_AREA: aPos.Y() += pFrm->Prt().Top(); break;
+                default: break;
             }
         }
         else if ( _bMirror )
         {
             switch ( _eHoriRelOrient )
             {
-                case PRTAREA:
-                case REL_PG_PRTAREA: aPos.X() += pFrm->Prt().Width();
+                case text::RelOrientation::PRINT_AREA:
+                case text::RelOrientation::PAGE_PRINT_AREA: aPos.X() += pFrm->Prt().Width();
                 // kein break
-                case REL_PG_RIGHT:
-                case REL_FRM_RIGHT: aPos.X() += pFrm->Prt().Left(); break;
+                case text::RelOrientation::PAGE_RIGHT:
+                case text::RelOrientation::FRAME_RIGHT: aPos.X() += pFrm->Prt().Left(); break;
                 default: aPos.X() += pFrm->Frm().Width();
             }
         }
@@ -896,23 +894,25 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         {
             switch ( _eHoriRelOrient )
             {
-                case PRTAREA:
-                case REL_PG_PRTAREA: aPos.X() += pFrm->Prt().Width();
+                case text::RelOrientation::PRINT_AREA:
+                case text::RelOrientation::PAGE_PRINT_AREA: aPos.X() += pFrm->Prt().Width();
                 // kein break!
-                case REL_PG_LEFT:
-                case REL_FRM_LEFT: aPos.X() += pFrm->Prt().Left() -
+                case text::RelOrientation::PAGE_LEFT:
+                case text::RelOrientation::FRAME_LEFT: aPos.X() += pFrm->Prt().Left() -
                                                pFrm->Frm().Width(); break;
+                default: break;
             }
         }
         else
         {
             switch ( _eHoriRelOrient )
             {
-                case REL_PG_RIGHT:
-                case REL_FRM_RIGHT: aPos.X() += pFrm->Prt().Width();
+                case text::RelOrientation::PAGE_RIGHT:
+                case text::RelOrientation::FRAME_RIGHT:   aPos.X() += pFrm->Prt().Width();
                 // kein break!
-                case PRTAREA:
-                case REL_PG_PRTAREA: aPos.X() += pFrm->Prt().Left(); break;
+                case text::RelOrientation::PRINT_AREA:
+                case text::RelOrientation::PAGE_PRINT_AREA: aPos.X() += pFrm->Prt().Left(); break;
+                default:break;
             }
         }
         // --> OD 2006-12-12 #i67221# - proposed patch
@@ -920,8 +920,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         {
             switch ( _eVertRelOrient )
             {
-                case PRTAREA:
-                case REL_PG_PRTAREA:
+                case text::RelOrientation::PRINT_AREA:
+                case text::RelOrientation::PAGE_PRINT_AREA:
                 {
                     aPos.X() -= pFrm->GetRightMargin();
                 }
@@ -932,8 +932,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         {
             switch ( _eVertRelOrient )
             {
-                case PRTAREA:
-                case REL_PG_PRTAREA:
+                case text::RelOrientation::PRINT_AREA:
+                case text::RelOrientation::PAGE_PRINT_AREA:
                 {
                     if ( pFrm->IsPageFrm() )
                     {
@@ -965,7 +965,6 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             aPos = pFrm->Frm().TopRight();
         else
             aPos = (pFrm->Frm().*fnRect->fnGetPos)();
-
         // OD 08.09.2003 #i17567#, #108749#, #110354# - allow negative positions
         // for fly frames anchor to paragraph/to character.
         if ( _nAnchorId == FLY_AT_CNTNT || _nAnchorId == FLY_AUTO_CNTNT )
@@ -991,7 +990,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 // OD 19.09.2003 #i18732# - adjust vertical 'virtual' anchor position
                 // (<aPos.Y()> respectively <aPos.X()>), if object is vertical aligned
                 // to page areas.
-                if ( _eVertRelOrient == REL_PG_FRAME || _eVertRelOrient == REL_PG_PRTAREA )
+                if ( _eVertRelOrient == text::RelOrientation::PAGE_FRAME || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
                 {
                     if ( bVert )
                     {
@@ -1011,12 +1010,12 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 // OD 19.09.2003 #i18732# - adjustment vertical 'virtual' anchor position
                 // (<aPos.Y()> respectively <aPos.X()>), if object is vertical aligned
                 // to page areas.
-                if ( _eVertRelOrient == REL_PG_FRAME || _eVertRelOrient == REL_PG_PRTAREA )
+                if ( _eVertRelOrient == text::RelOrientation::PAGE_FRAME || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
                 {
                     if ( bVert )
                     {
                         aPos.X() = aVertEnvironRect.Right();
-                        if ( _eVertRelOrient == REL_PG_PRTAREA )
+                        if ( _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
                         {
                             aPos.X() -= rVertEnvironLayFrm.GetRightMargin();
                         }
@@ -1024,7 +1023,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     else
                     {
                         aPos.Y() = aVertEnvironRect.Top();
-                        if ( _eVertRelOrient == REL_PG_PRTAREA )
+                        if ( _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
                         {
                             aPos.Y() += rVertEnvironLayFrm.GetTopMargin();
                             // add height of page header
@@ -1048,24 +1047,24 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             const SwTxtFrm* pTxtFrm( dynamic_cast<const SwTxtFrm*>(pFrm) );
             if ( pTxtFrm &&
                  _nAnchorId == FLY_AUTO_CNTNT &&
-                 ( _eVertRelOrient == REL_CHAR ||
-                   _eVertRelOrient == REL_VERT_LINE ) )
+                 ( _eVertRelOrient == text::RelOrientation::CHAR ||
+                   _eVertRelOrient == text::RelOrientation::TEXT_LINE ) )
             {
                 SwTwips nTop = 0L;
-                if ( _eVertRelOrient == REL_CHAR )
+                if ( _eVertRelOrient == text::RelOrientation::CHAR )
                 {
-                    SwRect aCharRect;
+                    SwRect aChRect;
                     if ( _pToCharCntntPos )
                     {
-                        pTxtFrm->GetAutoPos( aCharRect, *_pToCharCntntPos );
+                        pTxtFrm->GetAutoPos( aChRect, *_pToCharCntntPos );
                     }
                     else
                     {
                         // No content position provided. Thus, use a default one.
                         SwPosition aDefaultCntntPos( *(pTxtFrm->GetTxtNode()) );
-                        pTxtFrm->GetAutoPos( aCharRect, aDefaultCntntPos );
+                        pTxtFrm->GetAutoPos( aChRect, aDefaultCntntPos );
                     }
-                    nTop = (aCharRect.*fnRect->fnGetBottom)();
+                    nTop = (aChRect.*fnRect->fnGetBottom)();
                 }
                 else
                 {
@@ -1095,21 +1094,21 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             // anchored to character and horizontal aligned at character.
             if ( pTxtFrm &&
                  _nAnchorId == FLY_AUTO_CNTNT &&
-                 _eHoriRelOrient == REL_CHAR )
+                 _eHoriRelOrient == text::RelOrientation::CHAR )
             {
                 SwTwips nLeft = 0L;
-                SwRect aCharRect;
+                SwRect aChRect;
                 if ( _pToCharCntntPos )
                 {
-                    pTxtFrm->GetAutoPos( aCharRect, *_pToCharCntntPos );
+                    pTxtFrm->GetAutoPos( aChRect, *_pToCharCntntPos );
                 }
                 else
                 {
                     // No content position provided. Thus, use a default one.
                     SwPosition aDefaultCntntPos( *(pTxtFrm->GetTxtNode()) );
-                    pTxtFrm->GetAutoPos( aCharRect, aDefaultCntntPos );
+                    pTxtFrm->GetAutoPos( aChRect, aDefaultCntntPos );
                 }
-                nLeft = (aCharRect.*fnRect->fnGetLeft)();
+                nLeft = (aChRect.*fnRect->fnGetLeft)();
                 if ( bVert )
                 {
                     aPos.Y() = nLeft;
@@ -1172,86 +1171,90 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
 
             switch ( _eHoriRelOrient )
             {
-                case REL_FRM_RIGHT: aPos.Y() += pFrm->Prt().Height();
+                case text::RelOrientation::FRAME_RIGHT: aPos.Y() += pFrm->Prt().Height();
                                     aPos += (pFrm->Prt().*fnRect->fnGetPos)();
                                     break;
-                case PRTAREA: aPos += (pFrm->Prt().*fnRect->fnGetPos)();
+                case text::RelOrientation::PRINT_AREA: aPos += (pFrm->Prt().*fnRect->fnGetPos)();
                               aPos.Y() += nBaseOfstForFly;
                               break;
-                case REL_PG_RIGHT: aPos.Y() = pPage->Frm().Top()
+                case text::RelOrientation::PAGE_RIGHT: aPos.Y() = pPage->Frm().Top()
                                             + pPage->Prt().Bottom(); break;
-                case REL_PG_PRTAREA: aPos.Y() = pPage->Frm().Top()
+                case text::RelOrientation::PAGE_PRINT_AREA: aPos.Y() = pPage->Frm().Top()
                                               + pPage->Prt().Top(); break;
-                case REL_PG_LEFT:
-                case REL_PG_FRAME: aPos.Y() = pPage->Frm().Top(); break;
-                case FRAME: aPos.Y() += nBaseOfstForFly; break;
+                case text::RelOrientation::PAGE_LEFT:
+                case text::RelOrientation::PAGE_FRAME: aPos.Y() = pPage->Frm().Top(); break;
+                case text::RelOrientation::FRAME: aPos.Y() += nBaseOfstForFly; break;
+                default: break;
             }
         }
         else if( _bMirror )
         {
             switch ( _eHoriRelOrient )
             {
-                case REL_FRM_RIGHT: aPos.X() += pFrm->Prt().Left(); break;
-                case FRAME:
-                case REL_FRM_LEFT: aPos.X() += pFrm->Frm().Width(); break;
-                case PRTAREA: aPos.X() += pFrm->Prt().Right(); break;
-                case REL_PG_LEFT:
-                case REL_PG_FRAME: aPos.X() = pPage->Frm().Right(); break;
-                case REL_PG_PRTAREA: aPos.X() = pPage->Frm().Left()
+                case text::RelOrientation::FRAME_RIGHT:   aPos.X() += pFrm->Prt().Left(); break;
+                case text::RelOrientation::FRAME:
+                case text::RelOrientation::FRAME_LEFT: aPos.X() += pFrm->Frm().Width(); break;
+                case text::RelOrientation::PRINT_AREA: aPos.X() += pFrm->Prt().Right(); break;
+                case text::RelOrientation::PAGE_LEFT:
+                case text::RelOrientation::PAGE_FRAME: aPos.X() = pPage->Frm().Right(); break;
+                case text::RelOrientation::PAGE_PRINT_AREA: aPos.X() = pPage->Frm().Left()
                                               + pPage->Prt().Left(); break;
+                default: break;
             }
         }
         else if ( bRTL )
         {
             switch ( _eHoriRelOrient )
             {
-                case REL_FRM_LEFT:
+                case text::RelOrientation::FRAME_LEFT:
                     aPos.X() = pFrm->Frm().Left() +
                                pFrm->Prt().Left();
                     break;
 
-                case PRTAREA:
+                case text::RelOrientation::PRINT_AREA:
                     aPos.X() = pFrm->Frm().Left() + pFrm->Prt().Left() +
                                pFrm->Prt().Width();
                     aPos.X() += nBaseOfstForFly;
                     break;
 
-                case REL_PG_LEFT:
+                case text::RelOrientation::PAGE_LEFT:
                     aPos.X() = pPage->Frm().Left() + pPage->Prt().Left();
                     break;
 
-                case REL_PG_PRTAREA:
+                case text::RelOrientation::PAGE_PRINT_AREA:
                     aPos.X() = pPage->Frm().Left() + pPage->Prt().Left() +
                                pPage->Prt().Width() ;
                     break;
 
-                case REL_PG_RIGHT:
-                case REL_PG_FRAME:
+                case text::RelOrientation::PAGE_RIGHT:
+                case text::RelOrientation::PAGE_FRAME:
                     aPos.X() = pPage->Frm().Right();
                     break;
 
-                case FRAME:
+                case text::RelOrientation::FRAME:
                     aPos.X() += nBaseOfstForFly;
                     break;
+                default: break;
             }
         }
         else
         {
             switch ( _eHoriRelOrient )
             {
-                case REL_FRM_RIGHT: aPos.X() += pFrm->Prt().Width();
+                case text::RelOrientation::FRAME_RIGHT:   aPos.X() += pFrm->Prt().Width();
                                     aPos += pFrm->Prt().Pos();
                                     break;
-                case PRTAREA: aPos += pFrm->Prt().Pos();
+                case text::RelOrientation::PRINT_AREA: aPos += pFrm->Prt().Pos();
                               aPos.X() += nBaseOfstForFly;
                               break;
-                case REL_PG_RIGHT: aPos.X() = pPage->Frm().Left()
+                case text::RelOrientation::PAGE_RIGHT: aPos.X() = pPage->Frm().Left()
                                             + pPage->Prt().Right(); break;
-                case REL_PG_PRTAREA: aPos.X() = pPage->Frm().Left()
+                case text::RelOrientation::PAGE_PRINT_AREA: aPos.X() = pPage->Frm().Left()
                                               + pPage->Prt().Left(); break;
-                case REL_PG_LEFT:
-                case REL_PG_FRAME: aPos.X() = pPage->Frm().Left(); break;
-                case FRAME: aPos.X() += nBaseOfstForFly; break;
+                case text::RelOrientation::PAGE_LEFT:
+                case text::RelOrientation::PAGE_FRAME: aPos.X() = pPage->Frm().Left(); break;
+                case text::RelOrientation::FRAME: aPos.X() += nBaseOfstForFly; break;
+                default: break;
             }
         }
 
