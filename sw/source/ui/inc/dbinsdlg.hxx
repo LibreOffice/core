@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbinsdlg.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:51:42 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:56:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,8 +104,13 @@ struct SwInsDBColumn
     BOOL bIsDBFmt : 1;
 
     SwInsDBColumn( const String& rStr, USHORT nColumn )
-        : sColumn( rStr ), nCol( nColumn ), nDBNumFmt( 0 ), nUsrNumFmt( 0 ),
-        bHasFmt(FALSE), bIsDBFmt(TRUE), eUsrNumFmtLng( LANGUAGE_SYSTEM )
+        : sColumn( rStr ),
+        nDBNumFmt( 0 ),
+        nUsrNumFmt( 0 ),
+        eUsrNumFmtLng( LANGUAGE_SYSTEM ),
+        nCol( nColumn ),
+        bHasFmt(FALSE),
+        bIsDBFmt(TRUE)
     {}
 
     int operator==( const SwInsDBColumn& rCmp ) const
@@ -182,7 +187,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     DECL_LINK( DblClickHdl, ListBox* );
     DECL_LINK( HeaderHdl, Button* );
 
-    FASTBOOL SplitTextToColArr( const String& rTxt, _DB_Columns& rColArr, BOOL bInsField );
+    BOOL SplitTextToColArr( const String& rTxt, _DB_Columns& rColArr, BOOL bInsField );
 
 
     virtual void            Commit();
