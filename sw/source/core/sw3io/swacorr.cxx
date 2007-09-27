@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swacorr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:27:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:09:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,9 @@
 #endif
 #include <sot/storage.hxx>
 
+using namespace ::com::sun::star;
+
+
 TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
 
 
@@ -68,9 +71,9 @@ TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
     //      koennen aus der Wortliste herausgeholt werden!)
     //      rShort ist der Stream-Name - gecryptet!
 
-BOOL SwAutoCorrect::GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String& rFileName, const String& rShort, String& rLong )
+BOOL SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg, const String& rFileName, const String& rShort, String& rLong )
 {
-    ULONG nRet;
+    ULONG nRet = 0;
     if (rStg.is())
     {
         // mba: relative URLs don't make sense here
@@ -84,7 +87,7 @@ BOOL SwAutoCorrect::GetLongText( const com::sun::star::uno::Reference < com::sun
 
     //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
     //      rShort ist der Stream-Name - gecryptet!
-BOOL SwAutoCorrect::PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&  rStg, const String& rFileName, const String& rShort,
+BOOL SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg, const String& rFileName, const String& rShort,
                             SfxObjectShell& rObjSh, String& rLong )
 {
     if( !rObjSh.IsA( TYPE(SwDocShell) ) )
