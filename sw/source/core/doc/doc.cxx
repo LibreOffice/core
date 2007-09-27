@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:59:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,6 +239,7 @@
 #endif
 // <--
 
+using namespace ::com::sun::star;
 
 // Seiten-Deskriptoren
 SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
@@ -442,10 +443,10 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
     }
 }
 
-const com::sun::star::i18n::ForbiddenCharacters*
+const i18n::ForbiddenCharacters*
     SwDoc::getForbiddenCharacters(/*[in]*/ USHORT nLang, /*[in]*/ bool bLocaleData ) const
 {
-    const com::sun::star::i18n::ForbiddenCharacters* pRet = 0;
+    const i18n::ForbiddenCharacters* pRet = 0;
     if( xForbiddenCharsTable.isValid() )
         pRet = xForbiddenCharsTable->GetForbiddenCharacters( nLang, FALSE );
     if( bLocaleData && !pRet && pBreakIt )
@@ -454,12 +455,12 @@ const com::sun::star::i18n::ForbiddenCharacters*
 }
 
 void SwDoc::setForbiddenCharacters(/*[in]*/ USHORT nLang,
-                                   /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rFChars )
+                                   /*[in]*/ const i18n::ForbiddenCharacters& rFChars )
 {
     if( !xForbiddenCharsTable.isValid() )
     {
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+        uno::Reference<
+            lang::XMultiServiceFactory > xMSF =
                                     ::comphelper::getProcessServiceFactory();
         xForbiddenCharsTable = new SvxForbiddenCharactersTable( xMSF );
     }
@@ -484,8 +485,8 @@ vos::ORef<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
 {
     if( !xForbiddenCharsTable.isValid() )
     {
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+        uno::Reference<
+            lang::XMultiServiceFactory > xMSF =
                                     ::comphelper::getProcessServiceFactory();
         xForbiddenCharsTable = new SvxForbiddenCharactersTable( xMSF );
     }
@@ -510,17 +511,17 @@ void SwDoc::setLinkUpdateMode( /*[in]*/sal_uInt16 eMode )
     nLinkUpdMode = eMode;
 }
 
-sal_uInt16 SwDoc::getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const
+SwFldUpdateFlags SwDoc::getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const
 {
-    sal_uInt16 nRet = nFldUpdMode;
-    if( bGlobalSettings && AUTOUPD_GLOBALSETTING == nRet )
-        nRet = SW_MOD()->GetFldUpdateFlags(get(IDocumentSettingAccess::HTML_MODE));
-    return nRet;
+    SwFldUpdateFlags eRet = eFldUpdMode;
+    if( bGlobalSettings && AUTOUPD_GLOBALSETTING == eRet )
+        eRet = SW_MOD()->GetFldUpdateFlags(get(IDocumentSettingAccess::HTML_MODE));
+    return eRet;
 }
 
-void SwDoc::setFieldUpdateFlags(/*[in]*/sal_uInt16 eMode )
+void SwDoc::setFieldUpdateFlags(/*[in]*/SwFldUpdateFlags eMode )
 {
-    nFldUpdMode = eMode;
+    eFldUpdMode = eMode;
 }
 
 SwCharCompressType SwDoc::getCharacterCompressionType() const
@@ -535,7 +536,7 @@ void SwDoc::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
         eChrCmprType = n;
         if( pDrawModel )
         {
-            pDrawModel->SetCharCompressType( n );
+            pDrawModel->SetCharCompressType( static_cast<UINT16>(n) );
             if( !mbInReading )
                 pDrawModel->ReformatAllTextObjects();
         }
@@ -591,7 +592,7 @@ VirtualDevice* SwDoc::getVirtualDevice(/*[in]*/ bool bCreate ) const
     return pRet;
 }
 
-void SwDoc::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool bCallVirDevDataChanged )
+void SwDoc::setVirtualDevice(/*[in]*/ VirtualDevice* pVd,/*[in]*/ bool bDeleteOld, /*[in]*/ bool )
 {
     if ( pVirDev != pVd )
     {
@@ -628,11 +629,11 @@ void SwDoc::setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewH
     {
         if ( bNewVirtual )
         {
-            VirtualDevice* pVirDev = getVirtualDevice( true );
+            VirtualDevice* pMyVirDev = getVirtualDevice( true );
             if ( !bNewHiRes )
-                pVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE06 );
+                pMyVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE06 );
             else
-                pVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
+                pMyVirDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
         }
         else
         {
@@ -838,7 +839,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
             aPam.SetMark();
             aPam.Move( fnMoveBackward );
             if( IsRedlineOn() )
-                AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aPam ), true);
+                AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
             else
                 SplitRedline( aPam );
         }
@@ -879,7 +880,7 @@ bool SwDoc::AppendTxtNode( SwPosition& rPos )
         aPam.SetMark();
         aPam.Move( fnMoveBackward );
         if( IsRedlineOn() )
-            AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aPam ), true);
+            AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
         else
             SplitRedline( aPam );
     }
@@ -974,7 +975,7 @@ bool SwDoc::Insert( const SwPaM &rRg, const String &rStr, bool bHintExpand )
         SwPaM aPam( pPos->nNode, aTmp.GetCntnt(),
                     pPos->nNode, pPos->nContent.GetIndex());
         if( IsRedlineOn() )
-            AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aPam ), true);
+            AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
         else
             SplitRedline( aPam );
     }
@@ -1077,7 +1078,7 @@ SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, const String& rObjName,
 
 SwFieldType *SwDoc::GetSysFldType( const USHORT eWhich ) const
 {
-    for( register int i = 0; i < INIT_FLDTYPES; i++ )
+    for( USHORT i = 0; i < INIT_FLDTYPES; ++i )
         if( eWhich == (*pFldTypes)[i]->Which() )
             return (*pFldTypes)[i];
     return 0;
@@ -1133,8 +1134,9 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
         rStat.nPara = 0;        // Default ist auf 1 !!
         SwNode* pNd;
 
-        for( ULONG n = GetNodes().Count(); n; )
-            switch( ( pNd = GetNodes()[ --n ])->GetNodeType() )
+        for( ULONG i = GetNodes().Count(); i; )
+        {
+            switch( ( pNd = GetNodes()[ --i ])->GetNodeType() )
             {
             case ND_TEXTNODE:
                 ((SwTxtNode*)pNd)->CountWords( rStat, 0, ((SwTxtNode*)pNd)->GetTxt().Len() );
@@ -1144,6 +1146,7 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
             case ND_OLENODE:        ++rStat.nOLE;   break;
             case ND_SECTIONNODE:    break;
             }
+        }
 
         rStat.nPage     = GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
         rStat.bModified = FALSE;
@@ -1189,6 +1192,7 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
 void SwDoc::DocInfoChgd( const SfxDocumentInfo& rInfo )
 {
     DBG_ASSERT( pSwgInfo && rInfo.GetInfo() == pSwgInfo->GetInfo(), "DocInfo chaos!" );
+    (void) rInfo;
 
     GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
     GetSysFldType( RES_TEMPLNAMEFLD )->UpdateFlds();
@@ -1375,7 +1379,7 @@ void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
 
         // Weil nicht bekannt ist, ob sich die Grafik spiegeln laesst,
         // immer das SpiegelungsAttribut zuruecksetzen
-        if( RES_DONT_MIRROR_GRF != pGrfNd->GetSwAttrSet().
+        if( RES_MIRROR_GRAPH_DONT != pGrfNd->GetSwAttrSet().
                                                 GetMirrorGrf().GetValue() )
             pGrfNd->SetAttr( SwMirrorGrf() );
 
@@ -1549,11 +1553,11 @@ void SwDoc::Summary( SwDoc* pExtDoc, BYTE nLevel, BYTE nPara, BOOL bImpress )
                     pNd->ResetAttr( RES_PAGEDESC, RES_BREAK );
                 if( bImpress )
                 {
-                    SwTxtFmtColl* pColl = pNd->GetTxtColl();
-                    USHORT nHeadLine = pColl->GetOutlineLevel()==NO_NUMBERING ?
-                                RES_POOLCOLL_HEADLINE2 : RES_POOLCOLL_HEADLINE1;
-                    pColl = pExtDoc->GetTxtCollFromPool( nHeadLine );
-                    pNd->ChgFmtColl( pColl );
+                    SwTxtFmtColl* pMyColl = pNd->GetTxtColl();
+                    USHORT nHeadLine = static_cast<USHORT>(pMyColl->GetOutlineLevel()==NO_NUMBERING ?
+                                RES_POOLCOLL_HEADLINE2 : RES_POOLCOLL_HEADLINE1);
+                    pMyColl = pExtDoc->GetTxtCollFromPool( nHeadLine );
+                    pNd->ChgFmtColl( pMyColl );
                 }
                 if( !pNd->Len() &&
                     pNd->StartOfSectionIndex()+2 < pNd->EndOfSectionIndex() )
@@ -1574,7 +1578,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, BYTE nLevel, BYTE nPara, BOOL bImpress )
 BOOL SwDoc::RemoveInvisibleContent()
 {
     BOOL bRet = FALSE;
-    StartUndo( UIUNDO_DELETE_INVISIBLECNTNT, NULL );
+    StartUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
 
     {
         SwTxtNode* pTxtNd;
@@ -1739,7 +1743,7 @@ BOOL SwDoc::RemoveInvisibleContent()
 
     if( bRet )
         SetModified();
-    EndUndo( UIUNDO_DELETE_INVISIBLECNTNT, NULL );
+    EndUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
     return bRet;
 }
 /*-- 11.06.2004 08:34:04---------------------------------------------------
@@ -1748,14 +1752,14 @@ BOOL SwDoc::RemoveInvisibleContent()
 BOOL SwDoc::ConvertFieldsToText()
 {
     BOOL bRet = FALSE;
-    StartUndo( UIUNDO_REPLACE, NULL );
+    StartUndo( UNDO_UI_REPLACE, NULL );
 
-    const SwFldTypes* pFldTypes = GetFldTypes();
-    sal_uInt16 nCount = pFldTypes->Count();
+    const SwFldTypes* pMyFldTypes = GetFldTypes();
+    sal_uInt16 nCount = pMyFldTypes->Count();
     //go backward, field types are removed
     for(sal_uInt16 nType = nCount;  nType > 0;  --nType)
     {
-        const SwFieldType *pCurType = pFldTypes->GetObject(nType - 1);
+        const SwFieldType *pCurType = pMyFldTypes->GetObject(nType - 1);
 
         if ( RES_POSTITFLD == pCurType->Which() )
             continue;
@@ -1815,7 +1819,7 @@ BOOL SwDoc::ConvertFieldsToText()
 
     if( bRet )
         SetModified();
-    EndUndo( UIUNDO_REPLACE, NULL );
+    EndUndo( UNDO_UI_REPLACE, NULL );
     return bRet;
 
 }
