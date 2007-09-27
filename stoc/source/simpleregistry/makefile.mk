@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:51:56 $
+#   last change: $Author: hr $ $Date: 2007-09-27 13:03:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,40 +34,20 @@
 #*************************************************************************
 PRJ=..$/..
 
-PRJNAME=	stoc
-TARGET = simplereg.uno
+PRJNAME= stoc
+TARGET = simplereg
 ENABLE_EXCEPTIONS=TRUE
 BOOTSTRAP_SERVICE=TRUE
-COMP1TYPELIST = simreg
+UNOUCROUT=$(OUT)$/inc$/bootstrap
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-DLLPRE =
 
 # ------------------------------------------------------------------
 
-.INCLUDE :  ..$/cppumaker.mk
-
 SLOFILES= \
         $(SLO)$/simpleregistry.obj
-
-SHL1TARGET= 	$(TARGET)
-
-SHL1STDLIBS= \
-        $(SALLIB)	\
-        $(SALHELPERLIB)		\
-        $(CPPULIB)		\
-        $(CPPUHELPERLIB)
-
-SHL1DEPN=
-
-SHL1VERSIONMAP = simreg.map
-SHL1IMPLIB=	i$(TARGET)
-SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=	$(SHL1TARGET)
 
 # --- Targets ------------------------------------------------------
 
