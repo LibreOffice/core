@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtypes.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:00:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:28:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,14 +112,7 @@
 #include <sectfrm.hxx>
 #endif
 
-namespace css = com::sun::star;
-
-#ifndef PROFILE
-// Code zum Initialisieren von Statics im eigenen Code-Segment
-#ifdef _MSC_VER
-#pragma code_seg( "SWSTATICS" )
-#endif
-#endif
+using namespace com::sun::star;
 
 ByteString aEmptyByteStr;       // Konstante Strings
 String aEmptyStr;               // Konstante Strings
@@ -155,12 +148,6 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwTableBoxFmt, 50, 50 )
 IMPL_FIXEDMEMPOOL_NEWDEL( _SwCursor_SavePos, 20, 20 )
 
 
-#ifndef PROFILE
-#ifdef _MSC_VER
-#pragma code_seg()
-#endif
-#endif
-
 Size GetGraphicSizeTwip( const Graphic& rGraphic, OutputDevice* pOutDev )
 {
     const MapMode aMapTwip( MAP_TWIP );
@@ -178,31 +165,31 @@ Size GetGraphicSizeTwip( const Graphic& rGraphic, OutputDevice* pOutDev )
 }
 
 
-css::uno::Reference< css::linguistic2::XSpellChecker1 >  GetSpellChecker()
+uno::Reference< linguistic2::XSpellChecker1 >  GetSpellChecker()
 {
     return LinguMgr::GetSpellChecker();
 }
 
 
-css::uno::Reference< css::linguistic2::XHyphenator >  GetHyphenator()
+uno::Reference< linguistic2::XHyphenator >  GetHyphenator()
 {
     return LinguMgr::GetHyphenator();
 }
 
 
-css::uno::Reference< css::linguistic2::XThesaurus >  GetThesaurus()
+uno::Reference< linguistic2::XThesaurus >  GetThesaurus()
 {
     return LinguMgr::GetThesaurus();
 }
 
 
-css::uno::Reference< css::linguistic2::XDictionaryList >  GetDictionaryList()
+uno::Reference< linguistic2::XDictionaryList >  GetDictionaryList()
 {
     return LinguMgr::GetDictionaryList();
 }
 
 
-css::uno::Reference< css::beans::XPropertySet >     GetLinguPropertySet()
+uno::Reference< beans::XPropertySet >  GetLinguPropertySet()
 {
     return LinguMgr::GetLinguPropertySet();
 }
