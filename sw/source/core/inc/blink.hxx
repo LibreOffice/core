@@ -4,9 +4,9 @@
  *
  *  $RCSfile: blink.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:17:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:53:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@ class SwTxtFrm;
 #ifndef _GEN_HXX //autogen
 #include <tools/gen.hxx>
 #endif
+
+#include <svtools/svarray.hxx>
 
 class SwBlinkPortion
 {

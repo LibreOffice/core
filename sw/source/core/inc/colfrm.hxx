@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colfrm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:18:32 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:54:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 #ifndef _COLFRM_HXX
 #define _COLFRM_HXX
+
+#include <tools/mempool.hxx>
 #include "ftnboss.hxx"
 
 class SwColumnFrm: public SwFtnBossFrm

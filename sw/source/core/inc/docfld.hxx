@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfld.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:19:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:54:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@ class SwTxtINetFmt;
 class SwFlyFrmFmt;
 class SwDoc;
 class SwNode;
+struct SwPosition;
 
 // Update an den Expression Feldern
 class _SetGetExpFld
