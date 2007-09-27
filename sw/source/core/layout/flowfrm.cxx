@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 11:48:44 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:01:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,6 @@
 #include "tabfrm.hxx"
 #include "pagedesc.hxx"
 #include "layact.hxx"
-#include "frmsh.hxx"
 #include "fmtornt.hxx"
 #include "flyfrms.hxx"
 #include "sectfrm.hxx"
@@ -178,7 +177,10 @@ BOOL SwFlowFrm::IsKeepFwdMoveAllowed()
         } while ( pFrm );
 
                   //Siehe IsFwdMoveAllowed()
-    return pFrm ? pFrm->GetIndPrev() != 0 : FALSE;
+    BOOL bRet = FALSE;
+    if ( pFrm && pFrm->GetIndPrev() )
+        bRet = TRUE;
+    return bRet;
 }
 
 /*************************************************************************
@@ -261,6 +263,7 @@ BOOL SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKeep 
             {
                 bKeep = FALSE;
             }
+            default: break;
         }
         if ( bKeep )
         {
@@ -314,6 +317,7 @@ BOOL SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKeep 
                         case SVX_BREAK_PAGE_BEFORE:
                         case SVX_BREAK_PAGE_BOTH:
                             bKeep = FALSE;
+                        default: break;
                     }
                 }
             }
@@ -556,7 +560,7 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
         }
     }
     SwFrm *pFloat = pStart;
-    SwFrm *pLst;
+    SwFrm *pLst = 0;
     SWRECTFN( pParent )
     SwTwips nGrowVal = 0;
     do
@@ -666,12 +670,12 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
         rThis.GetUpper()->Calc();
     else if( rThis.GetUpper()->IsSctFrm() )
     {
-        SwSectionFrm* pSct = (SwSectionFrm*)rThis.GetUpper();
-        BOOL bOld = pSct->IsCntntLocked();
-        pSct->SetCntntLock( TRUE );
-        pSct->Calc();
+        SwSectionFrm* pTmpSct = (SwSectionFrm*)rThis.GetUpper();
+        BOOL bOld = pTmpSct->IsCntntLocked();
+        pTmpSct->SetCntntLock( TRUE );
+        pTmpSct->Calc();
         if( !bOld )
-            pSct->SetCntntLock( FALSE );
+            pTmpSct->SetCntntLock( FALSE );
     }
     SwPageFrm *pPage = rThis.FindPageFrm();
 
@@ -1136,7 +1140,7 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
 |*************************************************************************/
 
 
-SwLayoutFrm *SwFrm::GetPrevLeaf( MakePageType eMakeFtn )
+SwLayoutFrm *SwFrm::GetPrevLeaf( MakePageType )
 {
     ASSERT( !IsInFtn(), "GetPrevLeaf(), don't call me for Ftn." );
 
@@ -1824,7 +1828,7 @@ SwTwips SwFlowFrm::CalcAddLowerSpaceAsLastInTableCell(
 |*************************************************************************/
 
 
-BOOL SwFlowFrm::CheckMoveFwd( BOOL &rbMakePage, BOOL bKeep, BOOL bMovedBwd )
+BOOL SwFlowFrm::CheckMoveFwd( BOOL &rbMakePage, BOOL bKeep, BOOL )
 {
     const SwFrm* pNxt = rThis.GetIndNext();
 
@@ -1837,7 +1841,7 @@ BOOL SwFlowFrm::CheckMoveFwd( BOOL &rbMakePage, BOOL bKeep, BOOL bMovedBwd )
             const SwFrm* pTmp = NULL;
             while( pNxt && pNxt->IsSctFrm() &&
                    ( !((SwSectionFrm*)pNxt)->GetSection() ||
-                     !( pTmp = ((SwSectionFrm*)pNxt)->ContainsAny() ) ) )
+                     0 == ( pTmp = ((SwSectionFrm*)pNxt)->ContainsAny() ) ) )
             {
                 pNxt = pNxt->FindNext();
                 pTmp = NULL;
@@ -2155,7 +2159,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
     SwFtnBossFrm * pOldBoss = rThis.FindFtnBossFrm();
     SwPageFrm * const pOldPage = pOldBoss->FindPageFrm();
     SwLayoutFrm *pNewUpper = 0;
-    FASTBOOL bCheckPageDescs = FALSE;
+    BOOL bCheckPageDescs = FALSE;
     bool bCheckPageDescOfNextPage = false;
 
     if ( pFtn )
@@ -2580,7 +2584,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
             }
         }
         BOOL bUnlock = FALSE;
-        BOOL bFollow;
+        BOOL bFollow = FALSE;
         //Section locken, sonst kann sie bei Fluss des einzigen Cntnt etwa
         //von zweiter in die erste Spalte zerstoert werden.
         SwSectionFrm* pSect = pNewUpper->FindSctFrm();
