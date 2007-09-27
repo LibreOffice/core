@@ -4,9 +4,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:17:00 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:27:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -902,8 +902,8 @@ void _InitCore()
     for ( i = 110; i <= 130; ++i )
         SwAttrPool::pVersionMap5[ i-1 ] = i + 6;
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+    uno::Reference<
+            lang::XMultiServiceFactory > xMSF =
                                     ::comphelper::getProcessServiceFactory();
 
     SwBreakIt::_Create( xMSF );
@@ -1044,7 +1044,7 @@ void SwCalendarWrapper::LoadDefaultCalendar( USHORT eLang )
         loadDefaultCalendar( SvxCreateLocale( nLang = eLang ));
 }
 
-ULONG GetAppLanguage()
+LanguageType GetAppLanguage()
 {
     return Application::GetSettings().GetLanguage();
 }
@@ -1053,10 +1053,10 @@ CollatorWrapper& GetAppCollator()
 {
     if( !pCollator )
     {
-        const ::com::sun::star::lang::Locale& rLcl = pBreakIt->GetLocale(
+        const lang::Locale& rLcl = pBreakIt->GetLocale(
                                             (LanguageType)GetAppLanguage() );
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+        uno::Reference<
+            lang::XMultiServiceFactory > xMSF =
                                     ::comphelper::getProcessServiceFactory();
 
         pCollator = new CollatorWrapper( xMSF );
@@ -1068,10 +1068,10 @@ CollatorWrapper& GetAppCaseCollator()
 {
     if( !pCaseCollator )
     {
-        const ::com::sun::star::lang::Locale& rLcl = pBreakIt->GetLocale(
+        const lang::Locale& rLcl = pBreakIt->GetLocale(
                                             (LanguageType)GetAppLanguage() );
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+        uno::Reference<
+            lang::XMultiServiceFactory > xMSF =
                                     ::comphelper::getProcessServiceFactory();
 
         pCaseCollator = new CollatorWrapper( xMSF );
@@ -1084,15 +1084,15 @@ const ::utl::TransliterationWrapper& GetAppCmpStrIgnore()
 {
     if( !pTransWrp )
     {
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > xMSF =
+        uno::Reference<
+            lang::XMultiServiceFactory > xMSF =
                                     ::comphelper::getProcessServiceFactory();
 
         pTransWrp = new ::utl::TransliterationWrapper( xMSF,
-                ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE |
-                ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA |
-                ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH );
-        pTransWrp->loadModuleIfNeeded( GetAppLanguage() );
+                i18n::TransliterationModules_IGNORE_CASE |
+                i18n::TransliterationModules_IGNORE_KANA |
+                i18n::TransliterationModules_IGNORE_WIDTH );
+        pTransWrp->loadModuleIfNeeded( static_cast<sal_uInt16>(GetAppLanguage()) );
     }
     return *pTransWrp;
 }
