@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crbm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:44:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:28:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,11 +54,11 @@
 
 
 // am CurCrsr.SPoint
-FASTBOOL SwCrsrShell::SetBookmark( const KeyCode& rCode, const String& rName,
+BOOL SwCrsrShell::SetBookmark( const KeyCode& rCode, const String& rName,
                                 const String& rShortName, IDocumentBookmarkAccess::BookmarkType eMark )
 {
     StartAction();
-    FASTBOOL bRet = 0 != getIDocumentBookmarkAccess()->makeBookmark( *GetCrsr(), rCode, rName,
+    BOOL bRet = 0 != getIDocumentBookmarkAccess()->makeBookmark( *GetCrsr(), rCode, rName,
                                                                     rShortName, eMark);
     EndAction();
     return bRet;
@@ -66,10 +66,10 @@ FASTBOOL SwCrsrShell::SetBookmark( const KeyCode& rCode, const String& rName,
 // setzt CurCrsr.SPoint
 
 
-FASTBOOL SwCrsrShell::GotoBookmark(USHORT nPos, BOOL bAtStart)
+BOOL SwCrsrShell::GotoBookmark(USHORT nPos, BOOL bAtStart)
 {
     // Crsr-Moves ueberwachen, evt. Link callen
-    FASTBOOL bRet = TRUE;
+    BOOL bRet = TRUE;
     SwCallLink aLk( *this );
 
     SwBookmark* pBkmk = getIDocumentBookmarkAccess()->getBookmarks()[ nPos ];
@@ -90,7 +90,8 @@ FASTBOOL SwCrsrShell::GotoBookmark(USHORT nPos, BOOL bAtStart)
     else
         *pCrsr->GetPoint() = pBkmk->GetPos();
 
-    if( pCrsr->IsSelOvr( SELOVER_CHECKNODESSECTION | SELOVER_TOGGLE ) )
+    if( pCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
+                         nsSwCursorSelOverFlags::SELOVER_TOGGLE ) )
     {
         pCrsr->DeleteMark();
         pCrsr->RestoreSavePos();
@@ -102,10 +103,10 @@ FASTBOOL SwCrsrShell::GotoBookmark(USHORT nPos, BOOL bAtStart)
 }
 
 
-FASTBOOL SwCrsrShell::GotoBookmark(USHORT nPos)
+BOOL SwCrsrShell::GotoBookmark(USHORT nPos)
 {
     // Crsr-Moves ueberwachen, evt. Link callen
-    FASTBOOL bRet = TRUE;
+    BOOL bRet = TRUE;
     SwCallLink aLk( *this );
     SwBookmark* pBkmk = getIDocumentBookmarkAccess()->getBookmarks()[ nPos ];
     SwCursor* pCrsr = GetSwCrsr();
@@ -120,7 +121,8 @@ FASTBOOL SwCrsrShell::GotoBookmark(USHORT nPos)
             pCrsr->Exchange();
     }
 
-    if( pCrsr->IsSelOvr( SELOVER_CHECKNODESSECTION | SELOVER_TOGGLE ) )
+    if( pCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
+                         nsSwCursorSelOverFlags::SELOVER_TOGGLE ) )
     {
         pCrsr->DeleteMark();
         pCrsr->RestoreSavePos();
@@ -133,7 +135,7 @@ FASTBOOL SwCrsrShell::GotoBookmark(USHORT nPos)
 // TRUE, wenn's noch eine gab
 
 
-FASTBOOL SwCrsrShell::GoNextBookmark()
+BOOL SwCrsrShell::GoNextBookmark()
 {
     SwBookmark aBM(*GetCrsr()->GetPoint());
     USHORT nPos;
@@ -155,7 +157,7 @@ FASTBOOL SwCrsrShell::GoNextBookmark()
 }
 
 
-FASTBOOL SwCrsrShell::GoPrevBookmark()
+BOOL SwCrsrShell::GoPrevBookmark()
 {
     const SwBookmarks& rBkmks = getIDocumentBookmarkAccess()->getBookmarks();
     if ( !rBkmks.Count() )
@@ -176,7 +178,7 @@ FASTBOOL SwCrsrShell::GoPrevBookmark()
     SwCallLink aLk( *this );
     SwCrsrSaveState aSaveState( *pCrsr );
 
-    FASTBOOL bRet = FALSE;
+    BOOL bRet = FALSE;
     do {
         pBkmk = rBkmks[ nPos ];
 
@@ -188,7 +190,8 @@ FASTBOOL SwCrsrShell::GoPrevBookmark()
             if( *pCrsr->GetMark() < *pCrsr->GetPoint() )
                 pCrsr->Exchange();
         }
-        if( !pCrsr->IsSelOvr( SELOVER_CHECKNODESSECTION | SELOVER_TOGGLE ) )
+        if( !pCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
+                              nsSwCursorSelOverFlags::SELOVER_TOGGLE ) )
         {
             UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
             bRet = TRUE;
