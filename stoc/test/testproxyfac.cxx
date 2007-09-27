@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testproxyfac.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:23:00 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:08:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,9 +186,10 @@ Reference< XInterface > TestMaster::create(
 
 
 static void test_proxyfac_(
-    Reference< XInterface > const & xMaster, OUString const & /*test*/,
+    Reference< XInterface > const & xMaster, OUString const & test,
     Reference< reflection::XProxyFactory > const & /*xProxyFac*/ )
 {
+    (void)test;
     Reference< lang::XServiceInfo > xMaster_XServiceInfo(
         xMaster, UNO_QUERY_THROW );
     OSL_ASSERT( xMaster_XServiceInfo->getImplementationName().equals( test ) );
@@ -336,8 +337,9 @@ SAL_IMPLEMENT_MAIN()
                 xProxyFac );
             uno_dumpEnvironment( stdout, cpp_env.get(), 0 );
         }
-        catch (Exception & /*rExc*/)
+        catch (Exception & rExc)
         {
+            (void)rExc;
             OSL_ENSURE(
                 ! __FILE__,
                 OUStringToOString(
