@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tolayoutanchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:06:29 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:59:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,6 @@
 #ifndef _SWRECT_HXX
 #include <swrect.hxx>
 #endif
-#ifndef _ORNTENUM_HXX
-#include <orntenum.hxx>
-#endif
 
 namespace objectpositioning
 {
@@ -62,7 +59,7 @@ namespace objectpositioning
 
         public:
             SwToLayoutAnchoredObjectPosition( SdrObject& _rDrawObj );
-            ~SwToLayoutAnchoredObjectPosition();
+            virtual ~SwToLayoutAnchoredObjectPosition();
 
             /** calculate position for object
 
@@ -78,6 +75,6 @@ namespace objectpositioning
             */
             Point GetRelPos() const;
     };
-};
+} // namespace objectpositioning
 
 #endif
