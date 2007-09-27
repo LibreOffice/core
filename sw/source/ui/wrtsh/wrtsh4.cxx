@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:40:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:53:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@
 */
 
 
-FASTBOOL SwWrtShell::_SttWrd()
+BOOL SwWrtShell::_SttWrd()
 {
     if ( IsSttPara() )
         return 1;
@@ -85,7 +85,7 @@ FASTBOOL SwWrtShell::_SttWrd()
 
 
 
-FASTBOOL SwWrtShell::_EndWrd()
+BOOL SwWrtShell::_EndWrd()
 {
     if ( IsEndWrd() )
         return 1;
@@ -103,7 +103,7 @@ FASTBOOL SwWrtShell::_EndWrd()
 
 
 
-FASTBOOL SwWrtShell::_NxtWrd()
+BOOL SwWrtShell::_NxtWrd()
 {
     if( IsEndPara() )               // wenn schon am Ende, dann naechsten ???
     {
@@ -126,7 +126,7 @@ FASTBOOL SwWrtShell::_NxtWrd()
 
 
 
-FASTBOOL SwWrtShell::_PrvWrd()
+BOOL SwWrtShell::_PrvWrd()
 {
     if(IsSttPara())
     {                               // wenn schon am Anfang, dann naechsten ???
@@ -149,7 +149,7 @@ FASTBOOL SwWrtShell::_PrvWrd()
 
 
 
-FASTBOOL SwWrtShell::_FwdSentence()
+BOOL SwWrtShell::_FwdSentence()
 {
     Push();
     ClearMark();
@@ -168,7 +168,7 @@ FASTBOOL SwWrtShell::_FwdSentence()
 
 
 
-FASTBOOL SwWrtShell::_BwdSentence()
+BOOL SwWrtShell::_BwdSentence()
 {
     Push();
     ClearMark();
@@ -191,7 +191,7 @@ FASTBOOL SwWrtShell::_BwdSentence()
 }
 
 
-FASTBOOL SwWrtShell::_FwdPara()
+BOOL SwWrtShell::_FwdPara()
 {
     Push();
     ClearMark();
@@ -201,7 +201,7 @@ FASTBOOL SwWrtShell::_FwdPara()
         return 0;
     }
     SwCrsrShell::Left(1,CRSR_SKIP_CHARS);
-    FASTBOOL bRet = SwCrsrShell::MovePara(fnParaNext, fnParaStart);
+    BOOL bRet = SwCrsrShell::MovePara(fnParaNext, fnParaStart);
 
     ClearMark();
     Combine();
@@ -209,7 +209,7 @@ FASTBOOL SwWrtShell::_FwdPara()
 }
 
 
-FASTBOOL SwWrtShell::_BwdPara()
+BOOL SwWrtShell::_BwdPara()
 {
     Push();
     ClearMark();
@@ -221,7 +221,7 @@ FASTBOOL SwWrtShell::_BwdPara()
     SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
     if(!IsSttOfPara())
         SttPara();
-    FASTBOOL bRet = SwCrsrShell::MovePara(fnParaPrev, fnParaStart);
+    BOOL bRet = SwCrsrShell::MovePara(fnParaPrev, fnParaStart);
 
     ClearMark();
     Combine();
