@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labimg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:55:44 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:44:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,23 +63,23 @@
 #include "labimg.hxx"
 #include "cmdid.h"
 #include "swtypes.hxx"
+#include <unomid.h>
 
 using namespace utl;
 using namespace rtl;
-using namespace com::sun::star::uno;
+using namespace ::com::sun::star::uno;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
 
 // ----------------------------------------------------------------------------
 SwLabItem::SwLabItem() :
 
     SfxPoolItem(FN_LABEL),
-    nCol  (1),
-    nRow  (1),
     lLeft (0),
     lUpper(0),
     nCols (1),
-    nRows (1)
+    nRows (1),
+    nCol  (1),
+    nRow  (1)
 {
     bAddr = bCont = bSynchron = FALSE;
     bPage = TRUE;
@@ -432,7 +432,6 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
 void    SwLabCfgItem::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
