@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:33:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:02:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1149,7 +1149,7 @@ UINT32 EscherEx::QueryTextID( const Reference< XShape >&, UINT32 )
 
 // -------------------------------------------------------------------
 // add an dummy rectangle shape into the escher stream
-UINT32 EscherEx::AddDummyShape( const SdrObject& /* rObj */ )
+UINT32 EscherEx::AddDummyShape()
 {
     OpenContainer( ESCHER_SpContainer );
     UINT32 nShapeID = GetShapeID();
