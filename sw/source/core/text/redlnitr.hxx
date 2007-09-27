@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlnitr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:43:07 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:19:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ class SwExtend
     sal_Bool Inside() const { return ( nPos >= nStart && nPos < nEnd ); }
     void ActualizeFont( SwFont &rFnt, xub_StrLen nAttr );
 public:
-    SwExtend( const SvUShorts &rA, xub_StrLen nSt ) : rArr( rA ), pFnt(0),
+    SwExtend( const SvUShorts &rA, xub_StrLen nSt ) : pFnt(0), rArr( rA ),
         nStart( nSt ), nPos( STRING_LEN ), nEnd( nStart + rA.Count() ) {}
     ~SwExtend() { delete pFnt; }
     sal_Bool IsOn() const { return pFnt != 0; }
@@ -94,7 +94,7 @@ class SwRedlineItr
 
     void _Clear( SwFont* pFnt );
     sal_Bool _ChkSpecialUnderline() const;
-    void FillHints( MSHORT nAuthor, IDocumentRedlineAccess::RedlineType_t eType );
+    void FillHints( MSHORT nAuthor, RedlineType_t eType );
     short _Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld );
     xub_StrLen _GetNextRedln( xub_StrLen nNext );
     inline short EnterExtend( SwFont& rFnt, xub_StrLen nNew )
