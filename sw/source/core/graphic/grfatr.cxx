@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfatr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:15:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:52:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ SfxPoolItem* SwMirrorGrf::Clone( SfxItemPool* ) const
 
 sal_uInt16 SwMirrorGrf::GetValueCount() const
 {
-    return RES_GRFMIRROR_END - RES_GRFMIRROR_BEGIN;
+    return RES_MIRROR_GRAPH_END - RES_MIRROR_GRAPH_BEGIN;
 }
 
 int SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
@@ -125,14 +125,14 @@ int SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
 
 BOOL lcl_IsHoriOnEvenPages(int nEnum, BOOL bToggle)
 {
-    BOOL bEnum = nEnum == RES_MIRROR_GRF_VERT ||
-                   nEnum == RES_MIRROR_GRF_BOTH;
+    BOOL bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
+                   nEnum == RES_MIRROR_GRAPH_BOTH;
             return bEnum != bToggle;
 }
 BOOL lcl_IsHoriOnOddPages(int nEnum)
 {
-    BOOL bEnum = nEnum == RES_MIRROR_GRF_VERT ||
-                   nEnum == RES_MIRROR_GRF_BOTH;
+    BOOL bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
+                   nEnum == RES_MIRROR_GRAPH_BOTH;
             return bEnum;
 }
 BOOL SwMirrorGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
@@ -150,8 +150,8 @@ BOOL SwMirrorGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             bVal = lcl_IsHoriOnOddPages(GetValue());
         break;
         case MID_MIRROR_VERT:
-            bVal = GetValue() == RES_MIRROR_GRF_HOR ||
-                   GetValue() == RES_MIRROR_GRF_BOTH;
+            bVal = GetValue() == RES_MIRROR_GRAPH_HOR ||
+                   GetValue() == RES_MIRROR_GRAPH_BOTH;
             break;
         default:
             ASSERT( !this, "unknown MemberId" );
@@ -172,34 +172,34 @@ BOOL SwMirrorGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_MIRROR_HORZ_EVEN_PAGES:
         case MID_MIRROR_HORZ_ODD_PAGES:
         {
-            BOOL bIsVert = GetValue() == RES_MIRROR_GRF_HOR ||
-                                   GetValue() == RES_MIRROR_GRF_BOTH;
+            BOOL bIsVert = GetValue() == RES_MIRROR_GRAPH_HOR ||
+                                GetValue() == RES_MIRROR_GRAPH_BOTH;
             BOOL bOnOddPages = nMemberId == MID_MIRROR_HORZ_EVEN_PAGES ?
                                     lcl_IsHoriOnOddPages(GetValue()) : bVal;
             BOOL bOnEvenPages = nMemberId == MID_MIRROR_HORZ_ODD_PAGES ?
                                        lcl_IsHoriOnEvenPages(GetValue(), IsGrfToggle()) : bVal;
-            GRFMIRROR nEnum = bOnOddPages ?
-                    bIsVert ? RES_MIRROR_GRF_BOTH : RES_MIRROR_GRF_VERT :
-                        bIsVert ? RES_MIRROR_GRF_HOR : RES_DONT_MIRROR_GRF;
+            MirrorGraph nEnum = bOnOddPages ?
+                    bIsVert ? RES_MIRROR_GRAPH_BOTH : RES_MIRROR_GRAPH_VERT :
+                        bIsVert ? RES_MIRROR_GRAPH_HOR : RES_MIRROR_GRAPH_DONT;
             BOOL bToggle = bOnOddPages != bOnEvenPages;
-            SetValue(nEnum);
+            SetValue(static_cast<USHORT>(nEnum));
             SetGrfToggle( bToggle );
         }
         break;
         case MID_MIRROR_VERT:
             if ( bVal )
             {
-                if ( GetValue() == RES_MIRROR_GRF_VERT )
-                    SetValue( RES_MIRROR_GRF_BOTH );
-                else if ( GetValue() != RES_MIRROR_GRF_BOTH )
-                    SetValue( RES_MIRROR_GRF_HOR );
+                if ( GetValue() == RES_MIRROR_GRAPH_VERT )
+                    SetValue( RES_MIRROR_GRAPH_BOTH );
+                else if ( GetValue() != RES_MIRROR_GRAPH_BOTH )
+                    SetValue( RES_MIRROR_GRAPH_HOR );
             }
             else
             {
-                if ( GetValue() == RES_MIRROR_GRF_BOTH )
-                    SetValue( RES_MIRROR_GRF_VERT );
-                else if ( GetValue() == RES_MIRROR_GRF_HOR )
-                    SetValue( RES_DONT_MIRROR_GRF );
+                if ( GetValue() == RES_MIRROR_GRAPH_BOTH )
+                    SetValue( RES_MIRROR_GRAPH_VERT );
+                else if ( GetValue() == RES_MIRROR_GRAPH_HOR )
+                    SetValue( RES_MIRROR_GRAPH_DONT );
             }
             break;
         default:
@@ -242,7 +242,7 @@ int SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
 }
 
 
-BOOL SwRotationGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+BOOL SwRotationGrf::QueryValue( uno::Any& rVal, BYTE ) const
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
@@ -250,7 +250,7 @@ BOOL SwRotationGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return TRUE;
 }
 
-BOOL SwRotationGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
+BOOL SwRotationGrf::PutValue( const uno::Any& rVal, BYTE )
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
@@ -268,42 +268,42 @@ BOOL SwRotationGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
 // ------------------------------------------------------------------
 
-SfxPoolItem* SwLuminanceGrf::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SwLuminanceGrf::Clone( SfxItemPool * ) const
 {
     return new SwLuminanceGrf( *this );
 }
 
 // ------------------------------------------------------------------
 
-SfxPoolItem* SwContrastGrf::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SwContrastGrf::Clone( SfxItemPool * ) const
 {
     return new SwContrastGrf( *this );
 }
 
 // ------------------------------------------------------------------
 
-SfxPoolItem* SwChannelRGrf::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SwChannelRGrf::Clone( SfxItemPool * ) const
 {
     return new SwChannelRGrf( *this );
 }
 
 // ------------------------------------------------------------------
 
-SfxPoolItem* SwChannelGGrf::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SwChannelGGrf::Clone( SfxItemPool * ) const
 {
     return new SwChannelGGrf( *this );
 }
 
 // ------------------------------------------------------------------
 
-SfxPoolItem* SwChannelBGrf::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SwChannelBGrf::Clone( SfxItemPool * ) const
 {
     return new SwChannelBGrf( *this );
 }
 
 // ------------------------------------------------------------------
 
-SfxPoolItem* SwGammaGrf::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SwGammaGrf::Clone( SfxItemPool * ) const
 {
     return new SwGammaGrf( *this );
 }
@@ -314,33 +314,33 @@ int SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
         nValue == ((SwGammaGrf&)rCmp).GetValue();
 }
 
-BOOL SwGammaGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+BOOL SwGammaGrf::QueryValue( uno::Any& rVal, BYTE ) const
 {
     rVal <<= nValue;
     return sal_True;
 }
 
-BOOL SwGammaGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
+BOOL SwGammaGrf::PutValue( const uno::Any& rVal, BYTE )
 {
     return rVal >>= nValue;
 }
 
 // ------------------------------------------------------------------
 
-SfxPoolItem* SwInvertGrf::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SwInvertGrf::Clone( SfxItemPool * ) const
 {
     return new SwInvertGrf( *this );
 }
 
 // ------------------------------------------------------------------
 
-SfxPoolItem* SwTransparencyGrf::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SwTransparencyGrf::Clone( SfxItemPool * ) const
 {
     return new SwTransparencyGrf( *this );
 }
 // ------------------------------------------------------------------
-BOOL SwTransparencyGrf::QueryValue( com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId  ) const
+BOOL SwTransparencyGrf::QueryValue( uno::Any& rVal,
+                                        BYTE ) const
 {
     DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!")
     sal_Int16 nRet = GetValue();
@@ -349,8 +349,8 @@ BOOL SwTransparencyGrf::QueryValue( com::sun::star::uno::Any& rVal,
     return TRUE;
 }
 // ------------------------------------------------------------------
-BOOL SwTransparencyGrf::PutValue( const com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId  )
+BOOL SwTransparencyGrf::PutValue( const uno::Any& rVal,
+                                        BYTE )
 {
     //temporary conversion until this is a SfxInt16Item!
     DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!")
@@ -366,13 +366,13 @@ BOOL SwTransparencyGrf::PutValue( const com::sun::star::uno::Any& rVal,
         nVal += 128;
     }
     DBG_ASSERT( 0 <= nVal && nVal <= 100, "value out of range" );
-    SetValue(nVal);
+    SetValue(static_cast<BYTE>(nVal));
     return TRUE;
 }
 
 // ------------------------------------------------------------------
 
-SfxPoolItem* SwDrawModeGrf::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SwDrawModeGrf::Clone( SfxItemPool * ) const
 {
     return new SwDrawModeGrf( *this );
 }
@@ -386,16 +386,16 @@ USHORT SwDrawModeGrf::GetValueCount() const
     return GRAPHICDRAWMODE_WATERMARK + 1;
 }
 
-BOOL SwDrawModeGrf::QueryValue( com::sun::star::uno::Any& rVal,
-                                BYTE nMemberId ) const
+BOOL SwDrawModeGrf::QueryValue( uno::Any& rVal,
+                                BYTE ) const
 {
     drawing::ColorMode eRet = (drawing::ColorMode)GetEnumValue();
     rVal <<= eRet;
     return TRUE;
 }
 
-BOOL SwDrawModeGrf::PutValue( const com::sun::star::uno::Any& rVal,
-                                BYTE nMemberId  )
+BOOL SwDrawModeGrf::PutValue( const uno::Any& rVal,
+                                BYTE )
 {
     sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
     if(eVal >= 0 && eVal <= GRAPHICDRAWMODE_WATERMARK)
