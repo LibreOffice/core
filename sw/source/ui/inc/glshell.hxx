@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glshell.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:42:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:01:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,14 @@ protected:
     virtual BOOL Save();
 
 public:
+
+    using SotObject::GetInterface;
+
     TYPEINFO();
-    SFX_DECL_INTERFACE(SW_GLOSDOCSHELL);
-                SwGlosDocShell( sal_Bool bNewShow = sal_True);
-        virtual ~SwGlosDocShell();
+    SFX_DECL_INTERFACE(SW_GLOSDOCSHELL)
+
+    SwGlosDocShell( sal_Bool bNewShow = sal_True);
+    virtual ~SwGlosDocShell();
 
     void            Execute( SfxRequest& );
     void            GetState( SfxItemSet& );
@@ -72,10 +76,14 @@ protected:
     virtual BOOL Save();
 
 public:
+
+    using SotObject::GetInterface;
+
     TYPEINFO();
-    SFX_DECL_INTERFACE(SW_WEBGLOSDOCSHELL);
-                SwWebGlosDocShell();
-        virtual ~SwWebGlosDocShell();
+    SFX_DECL_INTERFACE(SW_WEBGLOSDOCSHELL)
+
+    SwWebGlosDocShell();
+    virtual ~SwWebGlosDocShell();
 
     void            Execute( SfxRequest& );
     void            GetState( SfxItemSet& );
