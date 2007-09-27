@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddok.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:57:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:46:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,8 @@
 #include <svtools/zformat.hxx>
 #endif
 
+#include <index.hrc>
+
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
@@ -133,7 +135,7 @@ __EXPORT SwFldDokPage::~SwFldDokPage()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void __EXPORT SwFldDokPage::Reset(const SfxItemSet& rSet)
+void __EXPORT SwFldDokPage::Reset(const SfxItemSet& )
 {
     SavePos(&aTypeLB);
     Init(); // Allgemeine initialisierung
@@ -169,7 +171,7 @@ void __EXPORT SwFldDokPage::Reset(const SfxItemSet& rSet)
 
                 default:
                     nPos = aTypeLB.InsertEntry(GetFldMgr().GetTypeStr(i));
-                    aTypeLB.SetEntryData(nPos, (void*)nTypeId);
+                    aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
                     break;
             }
         }
@@ -183,7 +185,7 @@ void __EXPORT SwFldDokPage::Reset(const SfxItemSet& rSet)
         if (nTypeId == TYP_FIXTIMEFLD)
             nTypeId = TYP_TIMEFLD;
         nPos = aTypeLB.InsertEntry(GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
-        aTypeLB.SetEntryData(nPos, (void*)nTypeId);
+        aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
         aNumFormatLB.SetAutomaticLanguage(pCurField->IsAutomaticLanguage());
         SwWrtShell *pSh = GetWrtShell();
         if(!pSh)
@@ -210,7 +212,7 @@ void __EXPORT SwFldDokPage::Reset(const SfxItemSet& rSet)
         if( sUserData.GetToken(0, ';').EqualsIgnoreCaseAscii(USER_DATA_VERSION_1 ))
         {
             String sVal = sUserData.GetToken(1, ';');
-            USHORT nVal = sVal.ToInt32();
+            USHORT nVal = static_cast< USHORT >(sVal.ToInt32());
             if(nVal != USHRT_MAX)
             {
                 for(USHORT i = 0; i < aTypeLB.GetEntryCount(); i++)
@@ -283,7 +285,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
                     else
                         nPos = aSelectionLB.InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
 
-                    aSelectionLB.SetEntryData(nPos, (void*)i);
+                    aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(i));
                 }
                 else
                 {
@@ -294,7 +296,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
                         case TYP_DATEFLD:
                         case TYP_TIMEFLD:
                             nPos = aSelectionLB.InsertEntry(*aLst[i]);
-                            aSelectionLB.SetEntryData(nPos, (void*)i);
+                            aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(i));
                             if (((SwDateTimeField*)GetCurField())->IsFixed() && !i)
                                 aSelectionLB.SelectEntryPos(nPos);
                             if (!((SwDateTimeField*)GetCurField())->IsFixed() && i)
@@ -304,7 +306,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
                         case TYP_EXTUSERFLD:
                         case TYP_DOCSTATFLD:
                             nPos = aSelectionLB.InsertEntry(*aLst[i]);
-                            aSelectionLB.SetEntryData(nPos, (void*)i);
+                            aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(i));
                             if (GetCurField()->GetSubType() == i)
                                 aSelectionLB.SelectEntryPos(nPos);
                             break;
@@ -313,7 +315,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
                         {
                             String sFmt(GetFldMgr().GetFormatStr(nTypeId, i));
                             nPos = aSelectionLB.InsertEntry(sFmt);
-                            aSelectionLB.SetEntryData(nPos, (void*)i);
+                            aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(i));
                             aSelectionLB.SelectEntry(GetFldMgr().GetFormatStr(nTypeId, GetCurField()->GetFormat()));
                             break;
                         }
@@ -326,7 +328,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
                     if (bInsert)
                     {
                         nPos = aSelectionLB.InsertEntry(*aLst[i]);
-                        aSelectionLB.SetEntryData(nPos, (void*)i);
+                        aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(i));
                         break;
                     }
                 }
@@ -396,7 +398,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 
                     if(SVX_NUM_CHAR_SPECIAL != nTmp)
                     {
-                        short nOff = GetCurField()->GetPar2().ToInt32();
+                        INT32 nOff = GetCurField()->GetPar2().ToInt32();
                         if( TYP_NEXTPAGEFLD == nTypeId && 1 != nOff )
                             aValueED.SetText(
                                 String::CreateFromInt32(nOff - 1) );
@@ -482,7 +484,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
         aFixedCB.Enable(bFixed);
 
         if (IsFldEdit())
-            aFixedCB.Check(((GetCurField()->GetFormat() & AF_FIXED) != 0) & bFixed);
+            aFixedCB.Check( static_cast< BOOL >(((GetCurField()->GetFormat() & AF_FIXED) != 0) & bFixed));
 
         if (aNumFormatLB.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND)
             aNumFormatLB.SelectEntryPos(0);
@@ -500,7 +502,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
 void SwFldDokPage::AddSubType(USHORT nTypeId)
 {
     USHORT nPos = aSelectionLB.InsertEntry(SwFieldType::GetTypeStr(nTypeId));
-    aSelectionLB.SetEntryData(nPos, (void*)nTypeId);
+    aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
 }
 
 /*--------------------------------------------------------------------
@@ -559,7 +561,7 @@ USHORT SwFldDokPage::FillFormatLB(USHORT nTypeId)
     {
         USHORT nPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
         USHORT nFmtId = GetFldMgr().GetFormatId( nTypeId, i );
-        aFormatLB.SetEntryData( nPos, (void*)nFmtId );
+        aFormatLB.SetEntryData( nPos, reinterpret_cast<void*>( nFmtId ));
         if (IsFldEdit() && nFmtId == (GetCurField()->GetFormat() & ~AF_FIXED))
             aFormatLB.SelectEntryPos( nPos );
     }
@@ -620,7 +622,7 @@ IMPL_LINK( SwFldDokPage, FormatHdl, ListBox *, EMPTYARG )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-BOOL __EXPORT SwFldDokPage::FillItemSet(SfxItemSet& rSet)
+BOOL __EXPORT SwFldDokPage::FillItemSet(SfxItemSet& )
 {
     BOOL bPage = FALSE;
     USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
@@ -670,7 +672,7 @@ BOOL __EXPORT SwFldDokPage::FillItemSet(SfxItemSet& rSet)
         case TYP_TIMEFLD:
         {
             nFormat = aNumFormatLB.GetFormat();
-            long nVal = aDateOffsetED.GetValue();
+            long nVal = static_cast< long >(aDateOffsetED.GetValue());
             if (nTypeId == TYP_DATEFLD)
                 aVal = String::CreateFromInt32(nVal * 60 * 24);
             else
@@ -686,7 +688,7 @@ BOOL __EXPORT SwFldDokPage::FillItemSet(SfxItemSet& rSet)
             if( SVX_NUM_CHAR_SPECIAL != nFormat &&
                 (TYP_PREVPAGEFLD == nTypeId || TYP_NEXTPAGEFLD == nTypeId))
             {
-                short nVal = aValueED.GetText().ToInt32();
+                INT32 nVal = aValueED.GetText().ToInt32();
                 aVal = String::CreateFromInt32(nVal);
             }
             break;
@@ -745,7 +747,7 @@ void    SwFldDokPage::FillUserData()
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;
     else
-        nTypeSel = (ULONG)aTypeLB.GetEntryData( nTypeSel );
+        nTypeSel = sal::static_int_cast< USHORT >(reinterpret_cast< sal_uIntPtr >(aTypeLB.GetEntryData( nTypeSel )));
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
 }
