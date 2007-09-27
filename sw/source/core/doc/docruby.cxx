@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docruby.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:54:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:36:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ USHORT SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                             Insert( aPam, pEntry->GetText(), true );
                             aPam.SetMark();
                             aPam.GetMark()->nContent -= pEntry->GetText().Len();
-                            Insert( aPam, pEntry->GetRubyAttr(), SETATTR_DONTEXPAND );
+                            Insert( aPam, pEntry->GetRubyAttr(), nsSetAttrMode::SETATTR_DONTEXPAND );
                         }
                         else
                             break;
@@ -229,8 +229,7 @@ USHORT SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
     return nListEntry;
 }
 
-BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry,
-                                    USHORT nMode )
+BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, USHORT )
 {
     // Point must be the startposition, Mark is optional the end position
     SwPosition* pPos = rPam.GetPoint();
