@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodefaults.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:29:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:42:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ SwSvxUnoDrawPool::~SwSvxUnoDrawPool() throw()
 /* -----------------------------13.03.01 14:16--------------------------------
 
  ---------------------------------------------------------------------------*/
-SfxItemPool* SwSvxUnoDrawPool::getModelPool( sal_Bool bReadOnly ) throw()
+SfxItemPool* SwSvxUnoDrawPool::getModelPool( sal_Bool /*bReadOnly*/ ) throw()
 {
     if(m_pDoc)
     {
