@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wlistsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:27:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:51:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,8 @@ SFX_IMPL_INTERFACE(SwWebListShell, SwListShell, SW_RES(STR_SHELLNAME_LIST))
 
 TYPEINIT1(SwWebListShell,SwListShell)
 
-SwWebListShell::SwWebListShell(SwView &rView) :
-    SwListShell(rView)
+SwWebListShell::SwWebListShell(SwView &_rView) :
+    SwListShell(_rView)
 {
     SetName(String::CreateFromAscii("List"));
     SetHelpId(SW_LISTSHELL);
