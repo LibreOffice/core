@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:53:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:00:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -437,7 +437,7 @@ public:
 
     // Wenn wir eine Ftn sind, die auf ihre Referenz zu waechst...
     // public weil von SwCntntFrm::MakeAll benoetigt.
-    SwTwips GetFtnLine( const SwTxtFtn *pFtn, sal_Bool bLocked ) const;
+    SwTwips GetFtnLine( const SwTxtFtn *pFtn ) const;
 
     // Liefern den linken und den rechten Rand in
     // Dokumentkoordinaten (unter Beachtung der Absatzattribute).
