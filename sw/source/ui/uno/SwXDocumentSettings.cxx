@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:12:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:39:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,11 +103,11 @@
 
 using namespace rtl;
 using namespace comphelper;
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::i18n;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::i18n;
 
 enum SwDocumentSettingsPropertyHandles
 {
@@ -264,14 +264,14 @@ Any SAL_CALL SwXDocumentSettings::queryInterface( const Type& rType )
 {
         return ::cppu::queryInterface ( rType,
                                         // OWeakObject interfaces
-                                        reinterpret_cast< XInterface* > ( this ),
-                                        static_cast< XWeak* > ( this ),
+                                        dynamic_cast< XInterface* > ( dynamic_cast< OWeakObject*  >(this) ),
+                                        dynamic_cast< XWeak* > ( this ),
                                         // my own interfaces
-                                        static_cast< XPropertySet*  > ( this ),
-                                        static_cast< XPropertyState* > ( this ),
-                                        static_cast< XMultiPropertySet* > ( this ),
-                                        static_cast< XServiceInfo* > ( this ),
-                                        static_cast< XTypeProvider* > ( this ) );
+                                        dynamic_cast< XPropertySet*  > ( this ),
+                                        dynamic_cast< XPropertyState* > ( this ),
+                                        dynamic_cast< XMultiPropertySet* > ( this ),
+                                        dynamic_cast< XServiceInfo* > ( this ),
+                                        dynamic_cast< XTypeProvider* > ( this ) );
 }
 void SwXDocumentSettings::acquire ()
     throw ()
@@ -318,7 +318,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXDocumentSettings::getImplementationId(  )
 }
 
 void SwXDocumentSettings::_preSetValues ()
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
+        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     mpDocSh = mpModel->GetDocShell();
     mpDoc = mpDocSh->GetDoc();
@@ -328,8 +328,8 @@ void SwXDocumentSettings::_preSetValues ()
 }
 
 
-void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
+void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
+        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     if (rInfo.mnAttributes & PropertyAttribute::READONLY)
         throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + C2U(rInfo.mpName), static_cast < cppu::OWeakObject * > ( 0 ) );
@@ -358,7 +358,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_FIELD_AUTO_UPDATE:
         {
             sal_Bool bUpdateField = *(sal_Bool*)rValue.getValue();
-            sal_uInt16 nFlag = mpDoc->getFieldUpdateFlags(true);
+            SwFldUpdateFlags nFlag = mpDoc->getFieldUpdateFlags(true);
             mpDoc->setFieldUpdateFlags( bUpdateField ?
                                         nFlag == AUTOUPD_FIELD_AND_CHARTS ?
                                         AUTOUPD_FIELD_AND_CHARTS :
@@ -369,7 +369,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_CHART_AUTO_UPDATE:
         {
             sal_Bool bUpdateChart = *(sal_Bool*)rValue.getValue();
-            sal_uInt16 nFlag = mpDoc->getFieldUpdateFlags(true);
+            SwFldUpdateFlags nFlag = mpDoc->getFieldUpdateFlags(true);
             mpDoc->setFieldUpdateFlags( (nFlag == AUTOUPD_FIELD_ONLY || nFlag == AUTOUPD_FIELD_AND_CHARTS ) ?
                                         bUpdateChart ?
                                         AUTOUPD_FIELD_AND_CHARTS :
@@ -612,8 +612,8 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 if(aNew.getLength())
                 {
                     sal_uInt16 eMode = mpDoc->GetRedlineMode();
-                    eMode = eMode|IDocumentRedlineAccess::REDLINE_ON;
-                    mpDoc->SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)( eMode ));
+                    eMode = eMode|nsRedlineMode_t::REDLINE_ON;
+                    mpDoc->SetRedlineMode((RedlineMode_t)( eMode ));
                 }
             }
         }
@@ -690,7 +690,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
 }
 
 void SwXDocumentSettings::_postSetValues ()
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
+        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     // set printer only once, namely here!
     if( mpPrinter != NULL )
@@ -702,7 +702,7 @@ void SwXDocumentSettings::_postSetValues ()
 }
 
 void SwXDocumentSettings::_preGetValues ()
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
+        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     mpDocSh = mpModel->GetDocShell();
     mpDoc = mpDocSh->GetDoc();
@@ -710,8 +710,8 @@ void SwXDocumentSettings::_preGetValues ()
         throw UnknownPropertyException();
 }
 
-void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, ::com::sun::star::uno::Any & rValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException )
+void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException )
 {
     switch( rInfo.mnHandle )
     {
@@ -728,14 +728,14 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_FIELD_AUTO_UPDATE:
         {
-            sal_uInt16 nFlags = mpDoc->getFieldUpdateFlags(true);
+            SwFldUpdateFlags nFlags = mpDoc->getFieldUpdateFlags(true);
             BOOL bFieldUpd = (nFlags == AUTOUPD_FIELD_ONLY || nFlags == AUTOUPD_FIELD_AND_CHARTS );
             rValue.setValue(&bFieldUpd, ::getBooleanCppuType());
         }
         break;
         case HANDLE_CHART_AUTO_UPDATE:
         {
-            sal_uInt16 nFlags = mpDoc->getFieldUpdateFlags(true);
+            SwFldUpdateFlags nFlags = mpDoc->getFieldUpdateFlags(true);
             BOOL bChartUpd = nFlags == AUTOUPD_FIELD_AND_CHARTS;
             rValue.setValue(&bChartUpd, ::getBooleanCppuType());
         }
@@ -841,9 +841,9 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             // returns short (see css.document.PrinterIndependentLayout)
             sal_Int16 nVirDevType = mpDoc->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) ?
                                     ( mpDoc->get(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE) ?
-                                      com::sun::star::document::PrinterIndependentLayout::HIGH_RESOLUTION :
-                                      com::sun::star::document::PrinterIndependentLayout::LOW_RESOLUTION ) :
-                                    com::sun::star::document::PrinterIndependentLayout::DISABLED;
+                                      document::PrinterIndependentLayout::HIGH_RESOLUTION :
+                                      document::PrinterIndependentLayout::LOW_RESOLUTION ) :
+                                    document::PrinterIndependentLayout::DISABLED;
             rValue <<= nVirDevType;
         }
         break;
@@ -984,7 +984,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
 }
 
 void SwXDocumentSettings::_postGetValues ()
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
+        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     mpDocSh = 0;
     mpDoc = 0;
