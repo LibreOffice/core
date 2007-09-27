@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:28:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:20:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,9 +151,6 @@
 #endif
 #ifndef _FNTCACHE_HXX
 #include <fntcache.hxx>     // GetLineSpace benutzt pLastFont
-#endif
-#ifndef _FRMSH_HXX
-#include <frmsh.hxx>
 #endif
 #ifndef _WRONG_HXX
 #include <wrong.hxx>        // SwWrongList
@@ -851,12 +848,12 @@ void SwTxtFrm::CalcLineSpace()
     // 4291: Unterlauf bei Flys
     if( aInf.GetTxtFly()->IsOn() )
     {
-        SwRect aFrm( Frm() );
+        SwRect aTmpFrm( Frm() );
         if( nDelta < 0 )
-            aFrm.Height( Prt().Height() );
+            aTmpFrm.Height( Prt().Height() );
         else
-            aFrm.Height( aNewSize.Height() );
-        if( aInf.GetTxtFly()->Relax( aFrm ) )
+            aTmpFrm.Height( aNewSize.Height() );
+        if( aInf.GetTxtFly()->Relax( aTmpFrm ) )
         {
             Init();
             return;
@@ -900,13 +897,13 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt )
         SwTxtNode* pTxtNode = rFrm.GetTxtNode();
         if ( !pTxtNode->GetWrong() && !pTxtNode->IsWrongDirty() )
         {
-            pTxtNode->SetWrong( new SwWrongList() );
+            pTxtNode->SetWrong( new SwWrongList );
             pTxtNode->GetWrong()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
         }
         if ( !pTxtNode->GetSmartTags() && !pTxtNode->IsSmartTagDirty() )
         {
             // SMARTTAGS
-            pTxtNode->SetSmartTags( new SwWrongList() );
+            pTxtNode->SetSmartTags( new SwWrongList );
             pTxtNode->GetSmartTags()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
         }
         pTxtNode->SetWrongDirty( true );
@@ -941,8 +938,6 @@ void lcl_SetScriptInval( SwTxtFrm& rFrm, xub_StrLen nPos )
 
 void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, xub_StrLen nLen )
 {
-    if( nLen < 0 )
-        nPos -= nLen;
     while( pFrm && pFrm->GetOfst() <= nPos )
         pFrm = pFrm->GetFollow();
     while( pFrm )
@@ -1041,7 +1036,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             SET_SCRIPT_INVAL( nPos )
             bSetFldsDirty = bRecalcFtnFlag = sal_True;
             if( HasFollow() )
-                lcl_ModifyOfst( this, nPos, -1 );
+                lcl_ModifyOfst( this, nPos, STRING_LEN );
         }
         break;
         case RES_DEL_TXT:
@@ -1528,6 +1523,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
 
 #if OSL_DEBUG_LEVEL > 1
     const SwTwips nDbgY = Frm().Top();
+    (void)nDbgY;
 #endif
 
     if ( IsEmpty() )
@@ -1574,6 +1570,8 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
 
                 return;
             }
+            default:
+                break;
         }
     }
 
@@ -2070,7 +2068,7 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
 
     WidowsAndOrphans aFrmBreak( this, rMaxHeight, bSplit );
 
-    register sal_Bool bRet = sal_True;
+    sal_Bool bRet = sal_True;
 
     aLine.Bottom();
     // Ist Aufspalten ueberhaupt notwendig?
@@ -2124,7 +2122,7 @@ KSHORT SwTxtFrm::GetParHeight() const
     while ( pLineLayout && pLineLayout->GetNext() )
     {
         pLineLayout = pLineLayout->GetNext();
-        nHeight += pLineLayout->GetRealHeight();
+        nHeight = nHeight + pLineLayout->GetRealHeight();
     }
 
     return nHeight;
@@ -2415,6 +2413,8 @@ long SwTxtFrm::GetLineSpace( const bool _bNoPropLineSpace ) const
                 nRet = rSpace.GetInterLineSpace();
         }
             break;
+        default:
+            break;
     }
     return nRet;
 }
@@ -2453,7 +2453,7 @@ MSHORT SwTxtFrm::GetLineCount( xub_StrLen nPos )
             aLine.Bottom();
         else
             aLine.CharToLine( nPos );
-        nRet += aLine.GetLineNr();
+        nRet = nRet + aLine.GetLineNr();
         pFrm = pFrm->GetFollow();
     } while ( pFrm && pFrm->GetOfst() <= nPos );
     return nRet;
