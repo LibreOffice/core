@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textcontrolcombo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:35:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:47:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ TextControlCombo::~TextControlCombo()
 {
 }
 
-void TextControlCombo::Arrange( FixedText& _rFTcomplete, BOOL bShow )
+void TextControlCombo::Arrange( FixedText& _rFTcomplete, BOOL /*bShow*/ )
 {
     Point           aBasePos( GetPosPixel() );
     Size            aMetricVals( GetSizePixel() );
