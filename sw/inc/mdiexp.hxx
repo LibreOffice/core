@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mdiexp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:26:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:05:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,9 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
-
+#ifndef _TBLENUM_HXX
+#include <tblenum.hxx>
+#endif
 class UniString;
 class SwRect;
 class Size;
@@ -77,7 +79,7 @@ void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect );
 void DelAllGrfCacheEntries( SwDoc* pDoc );
 
 // ChgMode fuer Tabellen aus der Konfiguration lesen
-USHORT GetTblChgDefaultMode();
+TblChgMode GetTblChgDefaultMode();
 
 BOOL JumpToSwMark( ViewShell* pVwSh, const UniString& rMark );
 
