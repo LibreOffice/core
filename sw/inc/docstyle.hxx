@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstyle.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:20:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:59:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,8 +210,11 @@ public:
     virtual void Replace( SfxStyleSheetBase& rSource,
                           SfxStyleSheetBase& rTarget );
     virtual SfxStyleSheetBase& Make(const String&, SfxStyleFamily, USHORT nMask, USHORT nPos = 0xffff);
+
+    using SfxStyleSheetBasePool::Find;
     virtual SfxStyleSheetBase* Find( const String&, SfxStyleFamily eFam,
                                     USHORT n=0xFFFF );
+
     virtual BOOL SetParent( SfxStyleFamily eFam, const String &rStyle,
                             const String &rParent );
 
