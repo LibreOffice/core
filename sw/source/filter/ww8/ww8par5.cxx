@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:46:57 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:05:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,13 @@
 #include <ctype.h>              // tolower
 #include <stdio.h>              // sscanf()
 
+#include <sal/types.h>
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
+
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -198,8 +202,11 @@
 
 #define WW8_TOX_LEVEL_DELIM     ':'
 
+using namespace ::com::sun::star;
 using namespace sw::util;
 using namespace std; // #i24377#
+using namespace nsSwDocInfoSubType;
+
 
 class _ReadFieldParams
 {
@@ -692,7 +699,7 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
             bRTL = true;
     }
     RES_CHRATR eLang = bRTL ? RES_CHRATR_CTL_LANGUAGE : RES_CHRATR_LANGUAGE;
-    const SvxLanguageItem *pLang = (SvxLanguageItem*)GetFmtAttr(eLang);
+    const SvxLanguageItem *pLang = (SvxLanguageItem*)GetFmtAttr( static_cast< USHORT >(eLang));
     ASSERT(pLang, "impossible");
     rLang = pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
 
@@ -959,7 +966,8 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         mycFieldIter aEnd = maFieldStack.end();
         for(mycFieldIter aIter = maFieldStack.begin(); aIter != aEnd; ++aIter)
         {
-            if (bNested = !AcceptableNestedField(aIter->mnFieldId))
+            bNested = !AcceptableNestedField(aIter->mnFieldId);
+            if (bNested)
                 break;
         }
     }
@@ -975,7 +983,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     if (bNested)
         return 0;
 
-    USHORT n = ( aF.nId <= eMax ) ? aF.nId : eMax; // alle > 91 werden 92
+    USHORT n = ( aF.nId <= eMax ) ? aF.nId : static_cast< USHORT >(eMax); // alle > 91 werden 92
     USHORT nI = n / 32;                     // # des UINT32
     ULONG nMask = 1 << ( n % 32 );          // Maske fuer Bits
 
@@ -1156,10 +1164,10 @@ void SwWW8ImplReader::InsertTagField( const USHORT nId, const String& rTagText )
     {                                                   // normal tagggen
 
         SwFieldType* pFT = rDoc.InsertFldType(
-                                SwSetExpFieldType( &rDoc, aName, GSE_STRING ) );
+                                SwSetExpFieldType( &rDoc, aName, nsSwGetSetExpType::GSE_STRING ) );
         SwSetExpField aFld( (SwSetExpFieldType*)pFT, rTagText );                            // SUB_INVISIBLE
-        USHORT nSubType = ( SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_VISIBLE ) ) ? 0 : SUB_INVISIBLE;
-        aFld.SetSubType(nSubType|GSE_STRING);
+        USHORT nSubType = ( SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_VISIBLE ) ) ? 0 : nsSwExtendedSubType::SUB_INVISIBLE;
+        aFld.SetSubType(nSubType | nsSwGetSetExpType::GSE_STRING);
 
         rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
     }
@@ -1347,7 +1355,7 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pFld,
         if (aResult != aFieldVarNames.end())
         {
             SwGetExpField aFld( (SwGetExpFieldType*)
-                pDoc->GetSysFldType(RES_GETEXPFLD), rName, GSE_STRING, 0);
+                pDoc->GetSysFldType(RES_GETEXPFLD), rName, nsSwGetSetExpType::GSE_STRING, 0);
             delete pEntry->pAttr;
             SwFmtFld aTmp(aFld);
             pEntry->pAttr = aTmp.Clone();
@@ -1417,9 +1425,9 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
     long nNo = MapBookmarkVariables(pF, sOrigName, aResult);
 
     SwSetExpFieldType* pFT = (SwSetExpFieldType*)rDoc.InsertFldType(
-        SwSetExpFieldType(&rDoc, sOrigName, GSE_STRING));
+        SwSetExpFieldType(&rDoc, sOrigName, nsSwGetSetExpType::GSE_STRING));
     SwSetExpField aFld(pFT, aResult);
-    aFld.SetSubType(SUB_INVISIBLE|GSE_STRING);
+    aFld.SetSubType(nsSwExtendedSubType::SUB_INVISIBLE | nsSwGetSetExpType::GSE_STRING);
     aFld.SetInputFlag(true);
     aFld.SetPromptText( aQ );
 
@@ -1433,7 +1441,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
 eF_ResT SwWW8ImplReader::Read_F_ANumber( WW8FieldDesc*, String& rStr )
 {
     if( !pNumFldType ){     // 1. Mal
-        SwSetExpFieldType aT( &rDoc, CREATE_CONST_ASC("AutoNr"), GSE_SEQ );
+        SwSetExpFieldType aT( &rDoc, CREATE_CONST_ASC("AutoNr"), nsSwGetSetExpType::GSE_SEQ );
         pNumFldType = rDoc.InsertFldType( aT );
     }
     SwSetExpField aFld( (SwSetExpFieldType*)pNumFldType, aEmptyStr,
@@ -1507,7 +1515,7 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
         return FLD_TAGIGN;
 
     SwSetExpFieldType* pFT = (SwSetExpFieldType*)rDoc.InsertFldType(
-                        SwSetExpFieldType( &rDoc, aSequenceName, GSE_SEQ ) );
+                        SwSetExpFieldType( &rDoc, aSequenceName, nsSwGetSetExpType::GSE_SEQ ) );
     SwSetExpField aFld( pFT, aEmptyStr, eNumFormat );
 
     if (sStart.Len())
@@ -2008,9 +2016,9 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, String& rStr )
     long nNo = MapBookmarkVariables(pF,sOrigName,sVal);
 
     SwFieldType* pFT = rDoc.InsertFldType( SwSetExpFieldType( &rDoc, sOrigName,
-        GSE_STRING ) );
+        nsSwGetSetExpType::GSE_STRING ) );
     SwSetExpField aFld( (SwSetExpFieldType*)pFT, sVal, ULONG_MAX );
-    aFld.SetSubType(SUB_INVISIBLE|GSE_STRING);
+    aFld.SetSubType(nsSwExtendedSubType::SUB_INVISIBLE | nsSwGetSetExpType::GSE_STRING);
 
     rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
 
@@ -2242,8 +2250,8 @@ bool CanUseRemoteLink(const String &rGrfName)
     try
     {
         ::ucbhelper::Content aCnt(rGrfName,
-            ::com::sun::star::uno::Reference<
-            ::com::sun::star::ucb::XCommandEnvironment >() );
+            uno::Reference<
+            ucb::XCommandEnvironment >() );
         rtl::OUString   aTitle;
 
         aCnt.getPropertyValue(rtl::OUString::createFromAscii("Title" ))
@@ -2304,7 +2312,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
         SfxItemSet aFlySet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
             RES_FRMATR_END-1 );
         aFlySet.Put( SwFmtAnchor( FLY_IN_CNTNT ) );
-        aFlySet.Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ));
+        aFlySet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
         pFlyFmtOfJustInsertedGraphic = rDoc.Insert( *pPaM,
                                                     aGrfName,
                                                     aEmptyStr,
@@ -2326,7 +2334,7 @@ String wwSectionNamer::UniqueName()
 }
 
 // "EINFUEGENTEXT"
-eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
+eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, String& rStr )
 {
     String aPara;
     String aBook;
@@ -2615,7 +2623,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
         if (pBreakIt->xBreak.is())
             nScript = pBreakIt->xBreak->getScriptType(sRuby, 0);
         else
-            nScript = com::sun::star::i18n::ScriptType::ASIAN;
+            nScript = i18n::ScriptType::ASIAN;
 
         //Check to see if we already have a ruby charstyle that this fits
         std::vector<const SwCharFmt*>::const_iterator aEnd =
@@ -2673,7 +2681,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
 //        Verzeichnis-Felder
 //-----------------------------------------
 
-void lcl_toxMatchACSwitch(  SwWW8ImplReader& rReader,
+void lcl_toxMatchACSwitch(  SwWW8ImplReader& /*rReader*/,
                             SwDoc& rDoc,
                             SwTOXBase& rBase,
                             _ReadFieldParams& rParam,
@@ -2836,7 +2844,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
             break;
     }
 
-    USHORT nCreateOf = (eTox == TOX_CONTENT) ? TOX_OUTLINELEVEL : TOX_MARK;
+    USHORT nCreateOf = (eTox == TOX_CONTENT) ? nsSwTOXElement::TOX_OUTLINELEVEL : nsSwTOXElement::TOX_MARK;
 
     USHORT nIndexCols = 1;
 
@@ -2847,7 +2855,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     switch( eTox ){
     case TOX_INDEX:
         {
-            USHORT eOptions = TOI_SAME_ENTRY | TOI_CASE_SENSITIVE;
+            USHORT eOptions = nsSwTOIOptions::TOI_SAME_ENTRY | nsSwTOIOptions::TOI_CASE_SENSITIVE;
 
             // TOX_OUTLINELEVEL setzen wir genau dann, wenn
             // die Parameter \o in 1 bis 9 liegen
@@ -2936,7 +2944,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                     break;
                 case 'h':
                     {
-                        eOptions |= TOI_ALPHA_DELIMITTER;
+                        eOptions |= nsSwTOIOptions::TOI_ALPHA_DELIMITTER;
                     }
                     break;
                 }
@@ -2977,11 +2985,11 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                             nVal = aOrigForm.GetFormMax()-1;
                         if( nMaxLevel < nVal )
                             nMaxLevel = nVal;
-                        eCreateFrom |= TOX_OUTLINELEVEL;
+                        eCreateFrom |= nsSwTOXElement::TOX_OUTLINELEVEL;
                     }
                     break;
                 case 'f':
-                    eCreateFrom |= TOX_MARK;
+                    eCreateFrom |= nsSwTOXElement::TOX_MARK;
                     break;
                 case 'l':
                     {
@@ -2990,14 +2998,14 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         {
                             if( nMaxLevel < nVal )
                                 nMaxLevel = nVal;
-                            eCreateFrom |= TOX_MARK;
+                            eCreateFrom |= nsSwTOXElement::TOX_MARK;
                         }
                     }
                     break;
                 case 't': // paragraphs using special styles shall
                           // provide the TOX's content
                     lcl_toxMatchTSwitch(*this, *pBase, aReadParam);
-                    eCreateFrom |= TOX_TEMPLATE;
+                    eCreateFrom |= nsSwTOXElement::TOX_TEMPLATE;
                     break;
                 case 'p':
                     {
@@ -3130,7 +3138,6 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                 for(USHORT nLevel = 1; nLevel <= nEnd; ++nLevel)
                 {
                     SwFormTokens aPattern = aForm.GetPattern(nLevel);
-                    SwFormTokens::iterator aIt = aPattern.begin();
 
                     aPattern.insert(aPattern.begin(), aLinkStart);
                     aPattern.push_back(aLinkEnd);
@@ -3153,11 +3160,11 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                     {
                         //If we would be created from outlines, either explictly or by default
                         //then see if we need extra styles added to the outlines
-                        USHORT eEffectivelyFrom = eCreateFrom ? eCreateFrom : TOX_OUTLINELEVEL;
-                        if (eEffectivelyFrom & TOX_OUTLINELEVEL)
+                        USHORT eEffectivelyFrom = eCreateFrom ? eCreateFrom : nsSwTOXElement::TOX_OUTLINELEVEL;
+                        if (eEffectivelyFrom & nsSwTOXElement::TOX_OUTLINELEVEL)
                         {
                             if (AddExtraOutlinesAsExtraStyles(*pBase))
-                                eCreateFrom |= (TOX_TEMPLATE | TOX_OUTLINELEVEL);
+                                eCreateFrom |= (nsSwTOXElement::TOX_TEMPLATE | nsSwTOXElement::TOX_OUTLINELEVEL);
 
                             // --> FME 2004-12-16 #i19683# Insert a text token " " between the
                             // number and entry token. In an ideal world we could handle the
@@ -3206,7 +3213,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                 case TOX_ILLUSTRATIONS:
                     {
                         if( !eCreateFrom )
-                            eCreateFrom = TOX_SEQUENCE;
+                            eCreateFrom = nsSwTOXElement::TOX_SEQUENCE;
                         pBase->SetCreate( eCreateFrom );
 
                         /*
@@ -3301,7 +3308,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     SwPaM aRegion(*pPaM);
     aRegion.Move(fnMoveBackward);
     ASSERT(rDoc.GetCurTOX(*aRegion.GetPoint()), "Misunderstood how toc works");
-    if (SwTOXBase* pBase = (SwTOXBase*)rDoc.GetCurTOX(*aRegion.GetPoint()))
+    if (SwTOXBase* pBase2 = (SwTOXBase*)rDoc.GetCurTOX(*aRegion.GetPoint()))
     {
         if(nIndexCols>1)
         {
@@ -3310,7 +3317,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
             SwFmtCol aCol;
             aCol.Init( nIndexCols, 708, USHRT_MAX );
             aSet.Put( aCol );
-            pBase->SetAttrSet( aSet );
+            pBase2->SetAttrSet( aSet );
         }
 
         maSectionManager.PrependedInlineNode(*pPaM->GetPoint(),
@@ -3325,7 +3332,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     return FLD_OK;
 }
 
-eF_ResT SwWW8ImplReader::Read_F_Shape(WW8FieldDesc* pF, String& rStr)
+eF_ResT SwWW8ImplReader::Read_F_Shape(WW8FieldDesc* /*pF*/, String& /*rStr*/)
 {
     /*
     #i3958# 0x8 followed by 0x1 where the shape is the 0x8 and its anchoring
@@ -3335,7 +3342,7 @@ eF_ResT SwWW8ImplReader::Read_F_Shape(WW8FieldDesc* pF, String& rStr)
     return FLD_TEXT;
  }
 
-eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
+eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
 {
     String sURL, sTarget, sMark;
     bool bDataImport = false;
