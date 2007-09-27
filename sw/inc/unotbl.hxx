@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 13:11:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:16:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,8 +88,8 @@ class SwChartDataProvider;
 class SwChartEventListenerContainer : public SwEventListenerContainer
 {
     public:
-        SwChartEventListenerContainer( ::com::sun::star::uno::XInterface* pxParent) :
-            SwEventListenerContainer(pxParent){}
+        SwChartEventListenerContainer( ::com::sun::star::uno::XInterface* pxParentL) :
+            SwEventListenerContainer(pxParentL){}
         void ChartDataChanged();
 };
 /* ---------------------------------------------------------------------------
@@ -124,8 +124,12 @@ class SwXCell : public SwXCellBaseClass,
 protected:
     virtual const SwStartNode *GetStartNode() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
-    sal_Bool                            IsValid();
+
+    using SwXText::IsValid;
+    sal_Bool    IsValid();
+
     virtual ~SwXCell();
+
 public:
     SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, sal_uInt16 nPos=USHRT_MAX );
     SwXCell(SwFrmFmt* pTblFmt, const SwStartNode& rStartNode); // XML import interface
@@ -184,7 +188,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
     SwTableBox*   GetTblBox()const {return pBox;}
-    static SwXCell*     CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, const String* pCellName = 0, SwTable *pTbl = 0 );
+    static SwXCell*     CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTbl = 0 );
     SwTableBox*     FindBox(SwTable* pTable, SwTableBox* pBox);
 
     SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
@@ -257,7 +261,8 @@ public:
                         const SwTableCursor* pTableSelection);
 
 
-    DECLARE_XINTERFACE();
+    DECLARE_XINTERFACE()
+
     //XTextTableCursor
     virtual ::rtl::OUString SAL_CALL getRangeName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL gotoCellByName( const ::rtl::OUString& aCellName, sal_Bool bExpand ) throw(::com::sun::star::uno::RuntimeException);
