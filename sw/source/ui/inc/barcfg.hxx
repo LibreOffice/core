@@ -4,9 +4,9 @@
  *
  *  $RCSfile: barcfg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:15:25 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:53:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 
 class SwToolbarConfigItem : public utl::ConfigItem
 {
-    sal_uInt16          aTbxIdArray[5];
+    sal_Int32            aTbxIdArray[5];
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
 
@@ -50,7 +50,7 @@ public:
 
     virtual void            Commit();
 
-    void        SetTopToolbar( sal_Int32 nSelType, sal_uInt16 nBarId );
+    void        SetTopToolbar( sal_Int32 nSelType, sal_Int32 nBarId );
 };
 
 #endif
