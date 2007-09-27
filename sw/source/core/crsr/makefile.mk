@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-12 10:41:31 $
+#   last change: $Author: hr $ $Date: 2007-09-27 08:30:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,52 +52,30 @@ CDEFS+=-Dmydebug
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        bookmrk.cxx \
-        callnk.cxx \
-        crbm.cxx \
-        crsrsh.cxx \
-        crstrvl.cxx \
-        crstrvl1.cxx \
-        findattr.cxx \
-        findcoll.cxx \
-        findfmt.cxx \
-        findtxt.cxx \
-        pam.cxx \
-        paminit.cxx \
-        swcrsr.cxx \
-        trvlcol.cxx \
-        trvlfnfl.cxx \
-        trvlreg.cxx \
-        trvltbl.cxx \
-        unocrsr.cxx \
-        viscrs.cxx
-
-.IF "$(mydebug)" != ""
-CXXFILES += \
-        pamio.cxx
-.ENDIF
+EXCEPTIONSFILES=    \
+    $(SLO)$/crsrsh.obj \
+    $(SLO)$/viscrs.obj
 
 SLOFILES =	\
-        $(SLO)$/bookmrk.obj \
-        $(SLO)$/callnk.obj \
-        $(SLO)$/crbm.obj \
-        $(SLO)$/crsrsh.obj \
-        $(SLO)$/crstrvl.obj \
-        $(SLO)$/crstrvl1.obj \
-        $(SLO)$/findattr.obj \
-        $(SLO)$/findcoll.obj \
-        $(SLO)$/findfmt.obj \
-        $(SLO)$/findtxt.obj \
-        $(SLO)$/pam.obj \
-        $(SLO)$/paminit.obj \
-        $(SLO)$/swcrsr.obj \
-        $(SLO)$/trvlcol.obj \
-        $(SLO)$/trvlfnfl.obj \
-        $(SLO)$/trvlreg.obj \
-        $(SLO)$/trvltbl.obj \
-        $(SLO)$/unocrsr.obj \
-        $(SLO)$/viscrs.obj
+    $(SLO)$/bookmrk.obj \
+    $(SLO)$/callnk.obj \
+    $(SLO)$/crbm.obj \
+    $(SLO)$/crsrsh.obj \
+    $(SLO)$/crstrvl.obj \
+    $(SLO)$/crstrvl1.obj \
+    $(SLO)$/findattr.obj \
+    $(SLO)$/findcoll.obj \
+    $(SLO)$/findfmt.obj \
+    $(SLO)$/findtxt.obj \
+    $(SLO)$/pam.obj \
+    $(SLO)$/paminit.obj \
+    $(SLO)$/swcrsr.obj \
+    $(SLO)$/trvlcol.obj \
+    $(SLO)$/trvlfnfl.obj \
+    $(SLO)$/trvlreg.obj \
+    $(SLO)$/trvltbl.obj \
+    $(SLO)$/unocrsr.obj \
+    $(SLO)$/viscrs.obj
 
 .IF "$(mydebug)" != ""
 SLOFILES +=  \
