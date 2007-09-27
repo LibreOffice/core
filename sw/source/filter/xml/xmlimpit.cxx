@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimpit.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:12:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-using com::sun::star::uno::Any;
+using uno::Any;
 
 SvXMLImportItemMapper::SvXMLImportItemMapper(
                                 SvXMLItemMapEntriesRef rMapEntries,
@@ -276,12 +276,12 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
 /** this method is called for every item that has the
     MID_SW_FLAG_SPECIAL_ITEM_IMPORT flag set */
 BOOL
-SvXMLImportItemMapper::handleSpecialItem(  const SvXMLItemMapEntry& rEntry,
-                                            SfxPoolItem& rItem,
-                                            SfxItemSet& rSet,
-                                            const OUString& rValue,
-                                            const SvXMLUnitConverter& rUnitConverter,
-                                            const SvXMLNamespaceMap& rNamespaceMap ) const
+SvXMLImportItemMapper::handleSpecialItem(  const SvXMLItemMapEntry& /*rEntry*/,
+                                            SfxPoolItem& /*rItem*/,
+                                            SfxItemSet& /*rSet*/,
+                                            const OUString& /*rValue*/,
+                                            const SvXMLUnitConverter& /*rUnitConverter*/,
+                                            const SvXMLNamespaceMap& /*rNamespaceMap*/ ) const
 {
     DBG_ERROR( "unsuported special item in xml import" );
     return FALSE;
@@ -289,11 +289,11 @@ SvXMLImportItemMapper::handleSpecialItem(  const SvXMLItemMapEntry& rEntry,
 
 /** this method is called for every item that has the
     MID_SW_FLAG_NO_ITEM_IMPORT flag set */
-BOOL SvXMLImportItemMapper::handleNoItem( const SvXMLItemMapEntry& rEntry,
-                                           SfxItemSet& rSet,
-                                           const OUString& rValue,
-                                           const SvXMLUnitConverter& rUnitConverter,
-                                           const SvXMLNamespaceMap& rNamespaceMap) const
+BOOL SvXMLImportItemMapper::handleNoItem( const SvXMLItemMapEntry& /*rEntry*/,
+                                           SfxItemSet& /*rSet*/,
+                                           const OUString& /*rValue*/,
+                                           const SvXMLUnitConverter& /*rUnitConverter*/,
+                                           const SvXMLNamespaceMap& /*rNamespaceMap*/ ) const
 {
     DBG_ERROR( "unsuported no item in xml import" );
     return FALSE;
@@ -684,14 +684,14 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                 switch( nMemberId )
                 {
                     case MID_BREAK_BEFORE:
-                        pFmtBreak->SetValue( (eEnum == 1) ?
+                        pFmtBreak->SetValue( static_cast< USHORT >((eEnum == 1) ?
                                              SVX_BREAK_COLUMN_BEFORE :
-                                             SVX_BREAK_PAGE_BEFORE );
+                                             SVX_BREAK_PAGE_BEFORE) );
                         break;
                     case MID_BREAK_AFTER:
-                        pFmtBreak->SetValue( (eEnum == 1) ?
+                        pFmtBreak->SetValue( static_cast< USHORT >((eEnum == 1) ?
                                              SVX_BREAK_COLUMN_AFTER :
-                                             SVX_BREAK_PAGE_AFTER );
+                                             SVX_BREAK_PAGE_AFTER) );
                         break;
                 }
                 bOk = sal_True;
@@ -906,7 +906,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             bOk = rUnitConverter.convertEnum( nValue, rValue,
                                               aXMLTableAlignMap );
             if( bOk )
-                pHoriOrient->SetHoriOrient( (SwHoriOrient)nValue );
+                pHoriOrient->SetHoriOrient( nValue );
         }
         break;
 
@@ -919,7 +919,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             bOk = rUnitConverter.convertEnum( nValue, rValue,
                                               aXMLTableVAlignMap );
             if( bOk )
-                pVertOrient->SetVertOrient( (SwVertOrient)nValue );
+                pVertOrient->SetVertOrient( nValue );
         }
         break;
 
