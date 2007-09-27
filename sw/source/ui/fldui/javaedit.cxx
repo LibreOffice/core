@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaedit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:26:07 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:49:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,22 +109,24 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     aTypeFT         ( this, SW_RES( FT_TYPE ) ),
     aTypeED         ( this, SW_RES( ED_TYPE ) ),
     aUrlRB          ( this, SW_RES( RB_URL ) ),
-    aUrlED          ( this, SW_RES( ED_URL ) ),
-    aUrlPB          ( this, SW_RES( PB_URL ) ),
     aEditRB         ( this, SW_RES( RB_EDIT ) ),
+    aUrlPB          ( this, SW_RES( PB_URL ) ),
+    aUrlED          ( this, SW_RES( ED_URL ) ),
     aEditED         ( this, SW_RES( ED_EDIT ) ),
     aPostItFL       ( this, SW_RES( FL_POSTIT ) ),
+
     aOKBtn          ( this, SW_RES( BTN_POST_OK ) ),
     aCancelBtn      ( this, SW_RES( BTN_POST_CANCEL ) ),
     aPrevBtn        ( this, SW_RES( BTN_PREV ) ),
     aNextBtn        ( this, SW_RES( BTN_NEXT ) ),
     aHelpBtn        ( this, SW_RES( BTN_POST_HELP ) ),
 
+    bNew(TRUE),
+    bIsUrl(FALSE),
+
     pSh(pWrtSh),
     pFileDlg(NULL),
-    pOldDefDlgParent(NULL),
-    bNew(TRUE),
-    bIsUrl(FALSE)
+    pOldDefDlgParent(NULL)
 {
     // Handler installieren
     aPrevBtn.SetClickHdl( LINK( this, SwJavaEditDialog, PrevHdl ) );
@@ -336,7 +338,7 @@ BOOL SwJavaEditDialog::IsUpdate()
  Beschreibung:
 ------------------------------------------------------------------------*/
 
-IMPL_LINK( SwJavaEditDialog, RadioButtonHdl, RadioButton *, pBtn )
+IMPL_LINK( SwJavaEditDialog, RadioButtonHdl, RadioButton *, EMPTYARG )
 {
     BOOL bEnable = aUrlRB.IsChecked();
     aUrlPB.Enable(bEnable);
