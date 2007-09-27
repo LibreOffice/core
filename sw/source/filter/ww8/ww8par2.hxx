@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:46:43 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:05:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,10 +115,10 @@ struct WW8SwFlyPara
 
     SwFrmSize eHeightFix;       // Hoehe Fix oder Min
     RndStdIds eAnchor;          // Bindung
-    SwRelationOrient eHRel;     // Seite oder Seitenrand
-    SwRelationOrient eVRel;     // Seite oder Seitenrand
-    SwVertOrient eVAlign;       // Oben, unten, mittig
-    SwHoriOrient eHAlign;       // links, rechts, mittig
+    short eHRel;     // Seite oder Seitenrand
+    short eVRel;     // Seite oder Seitenrand
+    sal_Int16 eVAlign;       // Oben, unten, mittig
+    sal_Int16 eHAlign;       // links, rechts, mittig
     SwSurround eSurround;       // Wrap-Mode
 
     BYTE nXBind, nYBind;        // relativ zu was gebunden
