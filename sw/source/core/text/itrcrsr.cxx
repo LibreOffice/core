@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:19:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:14:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
             if ( ! pPor->GetPortion() || nFldIdx + nFldLen > nCharOfst )
                 break;
 
-            nFldIdx += nFldLen;
+            nFldIdx = nFldIdx + nFldLen;
             rOrig.Pos().X() += pPor->Width();
             pPor = pPor->GetPortion();
 
@@ -171,11 +171,11 @@ void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
 }
 
 /*************************************************************************
- *                SwTxtMargin::CtorInit()
+ *                SwTxtMargin::CtorInitTxtMargin()
  *************************************************************************/
-void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
+void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
 {
-    SwTxtIter::CtorInit( pFrm, pNewInf );
+    CtorInitTxtIter( pNewFrm, pNewInf );
 
     pInf = pNewInf;
     GetInfo().SetFont( GetFnt() );
@@ -319,7 +319,7 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
             nFirst = nRight - 1;
     }
     const SvxAdjustItem& rAdjust = pFrm->GetTxtNode()->GetSwAttrSet().GetAdjust();
-    nAdjust = rAdjust.GetAdjust();
+    nAdjust = static_cast<USHORT>(rAdjust.GetAdjust());
 
     // left is left and right is right
     if ( pFrm->IsRightToLeft() )
@@ -386,11 +386,11 @@ SwTwips SwTxtMargin::GetLineStart() const
 }
 
 /*************************************************************************
- *                      SwTxtCursor::CtorInit()
+ *                      SwTxtCursor::CtorInitTxtCursor()
  *************************************************************************/
-void SwTxtCursor::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf )
+void SwTxtCursor::CtorInitTxtCursor( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
 {
-    SwTxtMargin::CtorInit( pFrm, pInf );
+    CtorInitTxtMargin( pNewFrm, pNewInf );
     // 6096: Vorsicht, die Iteratoren sind abgeleitet!
     // GetInfo().SetOut( GetInfo().GetWin() );
 }
@@ -437,7 +437,7 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     // Die letzte Text/EndPortion der Zeile suchen
     while( pPor )
     {
-        nX += pPor->Width();
+        nX = nX + pPor->Width();
         if( pPor->InTxtGrp() || ( pPor->GetLen() && !pPor->IsFlyPortion()
             && !pPor->IsHolePortion() ) || pPor->IsBreakPortion() )
         {
@@ -452,9 +452,9 @@ sal_Bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     pOrig->Pos( GetTopLeft() );
     pOrig->SSize( aCharSize );
     pOrig->Pos().X() += nLast;
-    const SwTwips nRight = Right() - 1;
-    if( pOrig->Left() > nRight )
-        pOrig->Pos().X() = nRight;
+    const SwTwips nTmpRight = Right() - 1;
+    if( pOrig->Left() > nTmpRight )
+        pOrig->Pos().X() = nTmpRight;
 
     if ( pCMS && pCMS->bRealHeight )
     {
@@ -515,7 +515,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         KSHORT nPorHeight = nTmpHeight;
         KSHORT nPorAscent = nTmpAscent;
         SwTwips nX = 0;
-        SwTwips nFirst = 0;
+        SwTwips nTmpFirst = 0;
         SwLinePortion *pPor = pCurr->GetFirstPortion();
         SwBidiPortion* pLastBidiPor = 0;
         SvUShorts* pKanaComp = pCurr->GetpKanaComp();
@@ -537,12 +537,12 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
             if ( pPor->InSpaceGrp() && nSpaceAdd )
                 nX += pPor->CalcSpacing( nSpaceAdd, aInf );
             if( bNoTxt )
-                nFirst = nX;
+                nTmpFirst = nX;
             // 8670: EndPortions zaehlen hier einmal als TxtPortions.
             if( pPor->InTxtGrp() || pPor->IsBreakPortion() )
             {
                 bNoTxt = sal_False;
-                nFirst = nX;
+                nTmpFirst = nX;
             }
             if( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->HasTabulator() )
             {
@@ -582,7 +582,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         if( !pPor )
         {
             // Es sind nur Spezialportions unterwegs.
-            nX = nFirst;
+            nX = nTmpFirst;
         }
         else
         {
@@ -932,7 +932,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     while( pNext && !pNext->InFldGrp() )
                     {
                         ASSERT( !pNext->GetLen(), "Where's my field follow?" );
-                        nAddX += pNext->Width();
+                        nAddX = nAddX + pNext->Width();
                         pNext = pNext->GetPortion();
                     }
                     if( !pNext )
@@ -1164,10 +1164,9 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
     if ( bSpecialPos )
     {
-        xub_StrLen nLineOfst = pCMS->pSpecialPos->nLineOfst;
-        BYTE nExtendRange = pCMS->pSpecialPos->nExtendRange;
+        const BYTE nExtendRange = pCMS->pSpecialPos->nExtendRange;
 
-        ASSERT( ! nLineOfst || SP_EXTEND_RANGE_BEFORE != nExtendRange,
+        ASSERT( ! pCMS->pSpecialPos->nLineOfst || SP_EXTEND_RANGE_BEFORE != nExtendRange,
                 "LineOffset AND Number Portion?" )
 
         // portions which are behind the string
@@ -1187,7 +1186,7 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
     _GetCharRect( pOrig, nFindOfst, pCMS );
 
-    const SwTwips nRight = Right() - 12;
+    const SwTwips nTmpRight = Right() - 12;
 
     pOrig->Pos().X() += aCharPos.X();
     pOrig->Pos().Y() += aCharPos.Y();
@@ -1200,8 +1199,8 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         pCMS->p2Lines->aPortion.Pos().Y() += aCharPos.Y();
     }
 
-    if( pOrig->Left() > nRight )
-        pOrig->Pos().X() = nRight;
+    if( pOrig->Left() > nTmpRight )
+        pOrig->Pos().X() = nTmpRight;
 
     if( nMax )
     {
@@ -1275,7 +1274,6 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     // suchen, in dem nX liegt.
     SwLinePortion *pPor = pCurr->GetFirstPortion();
     xub_StrLen nCurrStart  = nStart;
-    sal_Bool bLastPortion;
     sal_Bool bHolePortion = sal_False;
     sal_Bool bLastHyph = sal_False;
 
@@ -1295,7 +1293,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         if ( pPor->InSpaceGrp() && nSpaceAdd )
         {
             ((SwTxtSizeInfo&)GetInfo()).SetIdx( nCurrStart );
-            nWidth += USHORT( pPor->CalcSpacing( nSpaceAdd, GetInfo() ) );
+            nWidth = nWidth + USHORT( pPor->CalcSpacing( nSpaceAdd, GetInfo() ) );
         }
         if( ( pPor->InFixMargGrp() && ! pPor->IsMarginPortion() ) ||
             ( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->HasTabulator() )
@@ -1327,11 +1325,10 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                      30 :
                      nWidth;
 
-    while(!(bLastPortion = (0 == pPor->GetPortion())) && nWidth30 < nX &&
-        !pPor->IsBreakPortion() )
+    while( pPor->GetPortion() && nWidth30 < nX && !pPor->IsBreakPortion() )
     {
-        nX -= nWidth;
-        nCurrStart += pPor->GetLen();
+        nX = nX - nWidth;
+        nCurrStart = nCurrStart + pPor->GetLen();
         bHolePortion = pPor->IsHolePortion();
         pPor = pPor->GetPortion();
         nWidth = pPor->Width();
@@ -1340,7 +1337,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             if ( pPor->InSpaceGrp() && nSpaceAdd )
             {
                 ((SwTxtSizeInfo&)GetInfo()).SetIdx( nCurrStart );
-                nWidth += USHORT( pPor->CalcSpacing( nSpaceAdd, GetInfo() ) );
+                nWidth = nWidth + USHORT( pPor->CalcSpacing( nSpaceAdd, GetInfo() ) );
             }
 
             if( ( pPor->InFixMargGrp() && ! pPor->IsMarginPortion() ) ||
@@ -1375,12 +1372,14 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             bLastHyph = pPor->InHyphGrp();
     }
 
+    const sal_Bool bLastPortion = (0 == pPor->GetPortion());
+
     if( nX==nWidth )
     {
         SwLinePortion *pNextPor = pPor->GetPortion();
         while( pNextPor && pNextPor->InFldGrp() && !pNextPor->Width() )
         {
-            nCurrStart += pPor->GetLen();
+            nCurrStart = nCurrStart + pPor->GetLen();
             pPor = pNextPor;
             if( !pPor->IsFlyPortion() && !pPor->IsMarginPortion() )
                 bLastHyph = pPor->InHyphGrp();
@@ -1561,7 +1560,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             {
                 USHORT nPreWidth = ((SwDoubleLinePortion*)pPor)->PreWidth();
                 if ( nX > nPreWidth )
-                    nX -= nPreWidth;
+                    nX = nX - nPreWidth;
                 else
                     nX = 0;
             }
