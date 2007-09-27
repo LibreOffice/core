@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScriptInfo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:50:12 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:11:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -476,7 +476,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
             SwScanner aScanner( rNode,
-                                ::com::sun::star::i18n::WordType::DICTIONARY_WORD,
+                                i18n::WordType::DICTIONARY_WORD,
                                 nLastKashida, nChg );
 
             // the search has to be performed on a per word base
