@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:31:16 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:10:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::rtl;
+
 using ::xmloff::token::XML_BLOCK_LIST;
 using ::xmloff::token::XML_UNFORMATTED_TEXT;
 using ::xmloff::token::GetXMLToken;
@@ -233,7 +234,8 @@ ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx,
         try
         {
             xRoot = xBlkRoot->openStorageElement( aPackageName, embed::ElementModes::READ );
-            sal_Bool bOasis = ( SotStorage::GetVersion( xRoot ) > SOT_FORMATSTR_ID_STARWRITER_60 );
+            long nTmp = SOT_FORMATSTR_ID_STARWRITER_60;
+            sal_Bool bOasis = ( SotStorage::GetVersion( xRoot ) > nTmp );
 
             OUString sStreamName = OUString::createFromAscii("atevent.xml");
             uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement(
@@ -423,10 +425,10 @@ ULONG SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
     return n;
 }
 
-ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& rName,
+ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
                                      const String& rText,  const String& rPackageName )
 {
-    USHORT nIndex = GetIndex ( rShort );
+    GetIndex ( rShort );
     /*
     if (xBlkRoot->IsContained ( rPackageName ) )
     {
@@ -482,9 +484,9 @@ ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& rName,
 
     if (! (nFlags & SWXML_NOROOTCOMMIT) )
     {
-        uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
-        if ( xTrans.is() )
-            xTrans->commit();
+        uno::Reference < embed::XTransactedObject > xTmpTrans( xBlkRoot, uno::UNO_QUERY );
+        if ( xTmpTrans.is() )
+            xTmpTrans->commit();
     }
     }
     catch ( uno::Exception& )
@@ -676,8 +678,8 @@ ULONG SwXMLTextBlocks::SetMacroTable(
         {
             xRoot = xBlkRoot->openStorageElement( aPackageName, embed::ElementModes::WRITE );
             OUString sStreamName( RTL_CONSTASCII_USTRINGPARAM("atevent.xml") );
-
-            sal_Bool bOasis = ( SotStorage::GetVersion( xRoot ) > SOT_FORMATSTR_ID_STARWRITER_60 );
+            long nTmp = SOT_FORMATSTR_ID_STARWRITER_60;
+            sal_Bool bOasis = ( SotStorage::GetVersion( xRoot ) > nTmp );
 
             uno::Reference < io::XStream > xDocStream = xRoot->openStreamElement( sStreamName,
                         embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
@@ -741,9 +743,9 @@ ULONG SwXMLTextBlocks::SetMacroTable(
                 nRes = ERR_SWG_WRITE_ERROR;
 
             // finally, commit stream, sub-storage and storage
-            uno::Reference < embed::XTransactedObject > xTrans( xRoot, uno::UNO_QUERY );
-            if ( xTrans.is() )
-                xTrans->commit();
+            uno::Reference < embed::XTransactedObject > xTmpTrans( xRoot, uno::UNO_QUERY );
+            if ( xTmpTrans.is() )
+                xTmpTrans->commit();
 
             if ( !bFileAlreadyOpen )
             {
