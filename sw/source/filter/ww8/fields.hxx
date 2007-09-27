@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fields.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:59:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ namespace ww
         <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
     */
     const char *GetEnglishFieldName(eField eIndex) throw();
-};
+}
 
 #endif
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
