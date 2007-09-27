@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 14:39:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:26:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,10 +48,6 @@
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
-
-#ifdef WNT
-#include <tools/svwin.h>
 #endif
 
 #ifndef INCLUDED_RTL_MATH_HXX
@@ -120,6 +116,8 @@
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
+
+using namespace ::com::sun::star;
 
 // tippt sich schneller
 #define RESOURCE ViewShell::GetShellRes()
@@ -209,14 +207,14 @@ double __READONLY_DATA nKorrVal[] = {
 
     // First character may be any alphabetic or underscore.
 const sal_Int32 coStartFlags =
-        ::com::sun::star::i18n::KParseTokens::ANY_LETTER_OR_NUMBER |
-        ::com::sun::star::i18n::KParseTokens::ASC_UNDERSCORE |
-        ::com::sun::star::i18n::KParseTokens::IGNORE_LEADING_WS;
+        i18n::KParseTokens::ANY_LETTER_OR_NUMBER |
+        i18n::KParseTokens::ASC_UNDERSCORE |
+        i18n::KParseTokens::IGNORE_LEADING_WS;
 
     // Continuing characters may be any alphanumeric or underscore or dot.
 const sal_Int32 coContFlags =
-    ( coStartFlags | ::com::sun::star::i18n::KParseTokens::ASC_DOT )
-        & ~::com::sun::star::i18n::KParseTokens::IGNORE_LEADING_WS;
+    ( coStartFlags | i18n::KParseTokens::ASC_DOT )
+        & ~i18n::KParseTokens::IGNORE_LEADING_WS;
 
 
 extern "C" {
@@ -272,8 +270,8 @@ _CalcOp* FindOperator( const String& rSrch )
 SwHash* Find( const String& rStr, SwHash** ppTable, USHORT nTblSize,
                 USHORT* pPos )
 {
-    ULONG ii = 0, n;
-    for( n = 0; n < rStr.Len(); ++n )
+    ULONG ii = 0;
+    for( xub_StrLen n = 0; n < rStr.Len(); ++n )
         ii = ii << 1 ^ rStr.GetChar( n );
     ii %= nTblSize;
 
@@ -493,10 +491,6 @@ SwSbxValue SwCalc::Calculate( const String& rStr )
     if( eError )
         nResult.PutDouble( DBL_MAX );
 
-#ifndef PRODUCT
-    SbxDataType eResDType = nResult.GetType();
-    const String& rResStr = nResult.GetString();
-#endif
     return nResult;
 }
 
@@ -521,7 +515,7 @@ String SwCalc::GetStrResult( const SwSbxValue& rVal, BOOL bRound )
 }
 
 
-String SwCalc::GetStrResult( double nValue, BOOL bRound )
+String SwCalc::GetStrResult( double nValue, BOOL )
 {
     if( nValue >= DBL_MAX )
         switch( eError )
@@ -603,7 +597,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
         if( pFndExp->pFldType && pFndExp->pFldType->Which() == RES_USERFLD )
         {
             SwUserFieldType* pUFld = (SwUserFieldType*)pFndExp->pFldType;
-            if( GSE_STRING & pUFld->GetType() )
+            if( nsSwGetSetExpType::GSE_STRING & pUFld->GetType() )
                 pFndExp->nValue.PutString( pUFld->GetContent() );
             else if( !pUFld->IsValid() )
             {
@@ -779,10 +773,9 @@ BOOL SwCalc::Push( const VoidPtr pPtr )
 |*
 |******************************************************************************/
 
-void SwCalc::Pop( const VoidPtr pPtr )
+void SwCalc::Pop( const VoidPtr )
 {
-    ASSERT( aRekurStk.Count() && aRekurStk.GetPos( pPtr ) ==
-            (aRekurStk.Count() - 1 ), "SwCalc: Pop auf ungueltigen Ptr" );
+    ASSERT( aRekurStk.Count(), "SwCalc: Pop auf ungueltigen Ptr" );
 
     aRekurStk.Remove( aRekurStk.Count() - 1 );
 }
@@ -827,7 +820,7 @@ if( !nUseOld )
         }
         else if( aRes.TokenType & KParseType::IDENTNAME )
         {
-            String aName( sCommand.Copy( nRealStt, aRes.EndPos - nRealStt ));
+            String aName( sCommand.Copy( nRealStt, static_cast<xub_StrLen>(aRes.EndPos) - nRealStt ));
             //#101436#: the variable may contain a database name it must not be converted to lower case
             // instead all further comparisons must be done case-insensitive
             //pCharClass->toLower( aName );
@@ -874,7 +867,7 @@ if( !nUseOld )
         }
         else if( aRes.TokenType & KParseType::ONE_SINGLE_CHAR )
         {
-            String aName( sCommand.Copy( nRealStt, aRes.EndPos - nRealStt ));
+            String aName( sCommand.Copy( nRealStt, static_cast<xub_StrLen>(aRes.EndPos) - nRealStt ));
             if( 1 == aName.Len() )
             {
                 bSetError = FALSE;
@@ -963,7 +956,7 @@ if( !nUseOld )
         }
         else if( aRes.TokenType & KParseType::BOOLEAN )
         {
-            String aName( sCommand.Copy( nRealStt, aRes.EndPos - nRealStt ));
+            String aName( sCommand.Copy( nRealStt, static_cast<xub_StrLen>(aRes.EndPos) - nRealStt ));
             if( aName.Len() )
             {
                 sal_Unicode ch = aName.GetChar(0);
@@ -1099,7 +1092,7 @@ else
                         String aStr;
                         BOOL bIgnore = FALSE;
                         do {
-                            while( ( ch = NextCh( sCommand, nCommandPos  ))
+                            while( 0 != ( ch = NextCh( sCommand, nCommandPos  ))
                                     && ch != ']' )
                             {
                                 if( !bIgnore && '\\' == ch )
@@ -1122,7 +1115,7 @@ else
 
         case '"':   {
                         xub_StrLen nStt = nCommandPos;
-                        while( ( ch = NextCh( sCommand, nCommandPos ))
+                        while( 0 != ( ch = NextCh( sCommand, nCommandPos ) )
                                 && '"' != ch )
                             ;
 
@@ -1168,6 +1161,8 @@ else
                                                     break;
                                 case CALC_MAX  : eCurrListOper = CALC_MAX_IN;
                                                     break;
+                                default :
+                                    break;
                             }
                             return eCurrOper;
                         }
@@ -1365,8 +1360,6 @@ SwSbxValue SwCalc::Term()
             }
         }
     }
-    left.Clear();
-    return left;
 }
 
 /******************************************************************************
@@ -1378,15 +1371,13 @@ SwSbxValue SwCalc::Term()
 |*
 |******************************************************************************/
 
+extern "C" typedef double (*pfCalc)( double );
+
 SwSbxValue SwCalc::Prim()
 {
     SwSbxValue nErg;
 
-    double (
-#ifdef WNT
-            __cdecl
-#endif
-            *pFnc)( double ) = 0;
+    pfCalc pFnc = 0;
 
     BOOL bChkTrig = FALSE, bChkPow = FALSE;
 
@@ -1578,8 +1569,6 @@ SwSbxValue  SwCalc::Expr()
 
             default:            return left;
         }
-    left.Clear();
-    return left;
 }
 
 //------------------------------------------------------------------------------
@@ -1619,12 +1608,12 @@ String SwCalc::GetDBName(const String& rName)
 //------------------------------------------------------------------------------
 
 /******************************************************************************
- *  Methode     :   FASTBOOL SwCalc::Str2Double( double& )
+ *  Methode     :   BOOL SwCalc::Str2Double( double& )
  *  Beschreibung:
  *  Erstellt    :   OK 07.06.94 12:56
  *  Aenderung   :   JP 27.10.98
  ******************************************************************************/
-FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
+BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
                             double& rVal, const LocaleDataWrapper* pLclData )
 {
     const LocaleDataWrapper* pLclD = pLclData;
@@ -1639,7 +1628,7 @@ FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
             pLclD->getNumDecimalSep().GetChar(0),
             pLclD->getNumThousandSep().GetChar(0),
             &eStatus, &pEnd );
-    rCommandPos = pEnd - rCommand.GetBuffer();
+    rCommandPos = static_cast<xub_StrLen>(pEnd - rCommand.GetBuffer());
 
     if( !pLclData && pLclD != &GetAppLocaleData() )
         delete (LocaleDataWrapper*)pLclD;
@@ -1647,7 +1636,7 @@ FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
     return rtl_math_ConversionStatus_Ok == eStatus && nCurrCmdPos != rCommandPos;
 }
 
-FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
+BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
                             double& rVal, SwDoc* pDoc )
 {
     const LocaleDataWrapper* pLclD = &GetAppLocaleData();
@@ -1669,7 +1658,7 @@ FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
             pLclD->getNumDecimalSep().GetChar(0),
             pLclD->getNumThousandSep().GetChar(0),
             &eStatus, &pEnd );
-    rCommandPos = pEnd - rCommand.GetBuffer();
+    rCommandPos = static_cast<xub_StrLen>(pEnd - rCommand.GetBuffer());
 
     if( pLclD != &GetAppLocaleData() )
         delete (LocaleDataWrapper*)pLclD;
@@ -1679,10 +1668,10 @@ FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
 
 //------------------------------------------------------------------------------
 
-FASTBOOL SwCalc::IsValidVarName( const String& rStr,
+BOOL SwCalc::IsValidVarName( const String& rStr,
                                     String* pValidName )
 {
-    FASTBOOL bRet = FALSE;
+    BOOL bRet = FALSE;
     using namespace ::com::sun::star::i18n;
     {
         // Parse any token.
@@ -1696,7 +1685,7 @@ FASTBOOL SwCalc::IsValidVarName( const String& rStr,
             if( pValidName )
             {
                 xub_StrLen nRealStt = (xub_StrLen)aRes.LeadingWhiteSpace;
-                *pValidName = rStr.Copy( nRealStt, aRes.EndPos - nRealStt );
+                *pValidName = rStr.Copy( nRealStt, static_cast<xub_StrLen>(aRes.EndPos) - nRealStt );
             }
         }
         else if( pValidName )
@@ -1750,7 +1739,7 @@ SwSbxValue::~SwSbxValue()
 BOOL SwSbxValue::GetBool() const
 {
     return SbxSTRING == GetType() ? 0 != GetString().Len()
-                                  : SbxValue::GetBool();
+                                  : 0 != SbxValue::GetBool();
 }
 
 double SwSbxValue::GetDouble() const
