@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:27:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:46:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ extern void ClearFEShellTabCols();
 
 const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts,
                                          USHORT nRows, USHORT nCols,
-                                         SwHoriOrient eAdj,
+                                         sal_Int16 eAdj,
                                          const SwTableAutoFmt* pTAFmt )
 {
     StartAllAction();
@@ -152,7 +152,7 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts
 
 BOOL SwEditShell::TextToTable( const SwInsertTableOptions& rInsTblOpts,
                                sal_Unicode cCh,
-                               SwHoriOrient eAdj,
+                               sal_Int16 eAdj,
                                const SwTableAutoFmt* pTAFmt )
 {
     SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
@@ -211,9 +211,9 @@ BOOL SwEditShell::TableToText( sal_Unicode cCh )
     return bRet;
 }
 
-FASTBOOL SwEditShell::IsTextToTableAvailable() const
+BOOL SwEditShell::IsTextToTableAvailable() const
 {
-    FASTBOOL bOnlyText = FALSE;
+    BOOL bOnlyText = FALSE;
     FOREACHPAM_START(this)
         if( PCURCRSR->HasMark() && *PCURCRSR->GetPoint() != *PCURCRSR->GetMark() )
         {
@@ -242,7 +242,7 @@ FASTBOOL SwEditShell::IsTextToTableAvailable() const
 void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTblOpts,
                                   SwDDEFieldType* pDDEType,
                                   USHORT nRows, USHORT nCols,
-                                  SwHoriOrient eAdj )
+                                  sal_Int16 eAdj )
 {
     SwPosition* pPos = GetCrsr()->GetPoint();
 
@@ -294,25 +294,25 @@ void SwEditShell::UpdateTable()
 }
 
     // Change Modus erfragen/setzen
-USHORT SwEditShell::GetTblChgMode() const
+TblChgMode SwEditShell::GetTblChgMode() const
 {
-    USHORT nMode;
+    TblChgMode eMode;
     const SwTableNode* pTblNd = IsCrsrInTbl();
     if( pTblNd )
-        nMode = pTblNd->GetTable().GetTblChgMode();
+        eMode = pTblNd->GetTable().GetTblChgMode();
     else
-        nMode = GetTblChgDefaultMode();
-    return nMode;
+        eMode = GetTblChgDefaultMode();
+    return eMode;
 }
 
-void SwEditShell::SetTblChgMode( USHORT eMode )
+void SwEditShell::SetTblChgMode( TblChgMode eMode )
 {
     const SwTableNode* pTblNd = IsCrsrInTbl();
 
     // Keine Arme keine Kekse
     if( pTblNd )
     {
-        ((SwTable&)pTblNd->GetTable()).SetTblChgMode( (TblChgMode)eMode );
+        ((SwTable&)pTblNd->GetTable()).SetTblChgMode( eMode );
         if( !GetDoc()->IsModified() )   // Bug 57028
             GetDoc()->SetUndoNoResetModified();
         GetDoc()->SetModified();
@@ -462,11 +462,11 @@ BOOL SwEditShell::SplitTable( USHORT eMode )
     if( pCrsr->GetNode()->FindTableNode() )
     {
         StartAllAction();
-        GetDoc()->StartUndo(0, NULL);
+        GetDoc()->StartUndo(UNDO_EMPTY, NULL);
 
         bRet = GetDoc()->SplitTable( *pCrsr->GetPoint(), eMode, TRUE );
 
-        GetDoc()->EndUndo(0, NULL);
+        GetDoc()->EndUndo(UNDO_EMPTY, NULL);
         ClearFEShellTabCols();
         EndAllAction();
     }
@@ -480,11 +480,11 @@ BOOL SwEditShell::MergeTable( BOOL bWithPrev, USHORT nMode )
     if( pCrsr->GetNode()->FindTableNode() )
     {
         StartAllAction();
-        GetDoc()->StartUndo(0, NULL);
+        GetDoc()->StartUndo(UNDO_EMPTY, NULL);
 
         bRet = GetDoc()->MergeTable( *pCrsr->GetPoint(), bWithPrev, nMode );
 
-        GetDoc()->EndUndo(0, NULL);
+        GetDoc()->EndUndo(UNDO_EMPTY, NULL);
         ClearFEShellTabCols();
         EndAllAction();
     }
