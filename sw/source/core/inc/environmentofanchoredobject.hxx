@@ -4,9 +4,9 @@
  *
  *  $RCSfile: environmentofanchoredobject.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:46:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:55:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,6 @@ namespace objectpositioning
             */
             const SwLayoutFrm& GetVertEnvironmentLayoutFrm( const SwFrm& _rVertOrientFrm ) const;
     };
-};
+} // namespace objectpositioning
 
 #endif
