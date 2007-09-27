@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfld.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:07:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:47:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,8 @@
 #ifndef _SWHTML_HXX
 #include <swhtml.hxx>
 #endif
+
+using namespace nsSwDocInfoSubType;
 
 struct HTMLNumFmtTblEntry
 {
@@ -246,16 +248,16 @@ void SwHTMLParser::NewField()
 {
     BOOL bKnownType = FALSE, bFixed = FALSE,
          bHasNumFmt = FALSE, bHasNumValue = FALSE;
-    USHORT nType;
+    USHORT nType = 0;
     String aValue, aNumFmt, aNumValue ;
     const HTMLOption *pSubOption=0, *pFmtOption=0;
 
-    const HTMLOptions *pOptions = GetOptions();
+    const HTMLOptions *pHTMLOptions = GetOptions();
     USHORT i;
 
-    for( i = pOptions->Count(); i; )
+    for( i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
         case HTML_O_TYPE:
@@ -349,9 +351,9 @@ void SwHTMLParser::NewField()
     case RES_DATEFLD:
     case RES_TIMEFLD:
         {
-            ULONG nNumFmt;
+            ULONG nNumFmt = 0;
             ULONG nTime = Time().GetTime(), nDate = Date().GetDate();
-            USHORT nSub;
+            USHORT nSub = 0;
             BOOL bValidFmt = FALSE;
             HTMLNumFmtTblEntry * pFmtTbl;
 
@@ -376,12 +378,12 @@ void SwHTMLParser::NewField()
             if( pFmtOption )
             {
                 const String& rFmt = pFmtOption->GetString();
-                for( USHORT i=0; pFmtTbl[i].pName; i++ )
+                for( USHORT k = 0; pFmtTbl[k].pName; k++ )
                 {
-                    if( rFmt.EqualsIgnoreCaseAscii( pFmtTbl[i].pName ) )
+                    if( rFmt.EqualsIgnoreCaseAscii( pFmtTbl[k].pName ) )
                     {
                         nNumFmt = pFormatter->GetFormatIndex(
-                                        pFmtTbl[i].eFmt, LANGUAGE_SYSTEM);
+                                        pFmtTbl[k].eFmt, LANGUAGE_SYSTEM);
                         bValidFmt = TRUE;
                         break;
                     }
@@ -467,8 +469,8 @@ void SwHTMLParser::NewField()
             if( pSubOption->GetEnum( nSub, aHTMLDocInfoFldSubTable ) )
             {
                 USHORT nExtSub = 0;
-                if( DI_CREATE==(SwExtUserSubType)nSub ||
-                    DI_CHANGE==(SwExtUserSubType)nSub )
+                if( DI_CREATE==(SwDocInfoSubType)nSub ||
+                    DI_CHANGE==(SwDocInfoSubType)nSub )
                 {
                     nExtSub = DI_SUB_AUTHOR;
                     if( pFmtOption )
@@ -533,6 +535,8 @@ void SwHTMLParser::NewField()
             pFld = new SwFileNameField( (SwFileNameFieldType *)pType, nFmt );
         }
         break;
+    default:
+        ;
     }
 
     if( pFld )
