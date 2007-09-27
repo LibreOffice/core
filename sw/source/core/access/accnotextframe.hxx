@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accnotextframe.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:45:43 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:22:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,8 @@ protected:
 
 public:
 
-    SwAccessibleNoTextFrame( SwAccessibleMap *pMap, sal_Int16 nRole,
+    SwAccessibleNoTextFrame( SwAccessibleMap* pInitMap,
+                             sal_Int16 nInitRole,
                              const SwFlyFrm *pFlyFrm );
 
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
