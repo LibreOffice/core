@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tmplctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:35:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:48:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,10 +100,10 @@ void TemplatePopup_Impl::Select()
 
 // class SvxZoomStatusBarControl ------------------------------------------
 
-SwTemplateControl::SwTemplateControl( USHORT nSlotId,
-                                      USHORT nId,
+SwTemplateControl::SwTemplateControl( USHORT _nSlotId,
+                                      USHORT _nId,
                                       StatusBar& rStb ) :
-    SfxStatusBarControl( nSlotId, nId, rStb )
+    SfxStatusBarControl( _nSlotId, _nId, rStb )
 {
 }
 
@@ -116,7 +116,7 @@ SwTemplateControl::~SwTemplateControl()
 // -----------------------------------------------------------------------
 
 void SwTemplateControl::StateChanged(
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( eState != SFX_ITEM_AVAILABLE || pState->ISA( SfxVoidItem ) )
         GetStatusBar().SetItemText( GetId(), String() );
@@ -166,11 +166,11 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
                     }
 
                     aPop.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
-                    USHORT nId = aPop.GetCurId();
-                    if( nId != USHRT_MAX)
+                    USHORT nCurrId = aPop.GetCurId();
+                    if( nCurrId != USHRT_MAX)
                     {
                         // sieht etwas umstaendlich aus, anders geht's aber nicht
-                        pStyle = pPool->operator[]( nId - 1 );
+                        pStyle = pPool->operator[]( nCurrId - 1 );
                         SfxStringItem aStyle( FN_SET_PAGE_STYLE, pStyle->GetName() );
                         pWrtShell->GetView().GetViewFrame()->GetDispatcher()->Execute(
                                     FN_SET_PAGE_STYLE,
