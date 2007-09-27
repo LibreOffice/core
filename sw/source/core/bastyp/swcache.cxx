@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcache.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:41:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:27:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,10 +201,8 @@ SwCache::~SwCache()
 |*************************************************************************/
 
 
-void SwCache::Flush( const BYTE nPercent )
+void SwCache::Flush( const BYTE )
 {
-    ASSERT( nPercent == 100, "SwCache::Flush() arbeitet nur 100%'ig" );
-
     INCREMENT( nFlushCnt );
     SwCacheObj *pObj = pRealFirst;
     pRealFirst = pFirst = pLast = 0;
@@ -418,13 +416,13 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
         //wiederfinden werden.
         for ( USHORT i = 0; i < Count(); ++i )
         {
-            SwCacheObj *pObj = operator[](i);
-            if ( !pObj )
+            SwCacheObj *pTmpObj = operator[](i);
+            if ( !pTmpObj )
             {   SwCacheObjArr::Remove( i, 1 );
                 --i;
             }
             else
-                pObj->SetCachePos( i );
+                pTmpObj->SetCachePos( i );
         }
         aFreePositions.Remove( 0, aFreePositions.Count() );
     }
