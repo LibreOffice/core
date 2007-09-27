@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlndlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:44:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:08:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include "chldwrap.hxx"
 #endif
 #ifndef _REDLINE_HXX
-#include <redline.hxx> //CHINA001
+#include <redline.hxx>
 #endif
 #ifndef _DATETIME_HXX //autogen
 #include <tools/datetime.hxx>
@@ -73,8 +73,6 @@
 
 class SwChildWinWrapper;
 
-//CHINA001 class SwRedlineAcceptDlg;
-//add CHINA001 begin this part is extracted from sw\source\ui\misc\redlndlg.cxx
 struct SwRedlineDataChild
 {
     const SwRedlineData*        pChild;     // Verweis auf originale gestackte Daten
@@ -160,7 +158,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
 
 public:
     SwRedlineAcceptDlg(Dialog *pParent, BOOL bAutoFmt = FALSE);
-    ~SwRedlineAcceptDlg();
+    virtual ~SwRedlineAcceptDlg();
 
     DECL_LINK( FilterChangedHdl, void *pDummy = 0 );
 
@@ -176,7 +174,6 @@ public:
     virtual void    Activate();
     virtual void    Resize();
 };
-//add CHINA001 end
 
 /*------------------------------------------------------------------------
     Beschreibung:
@@ -198,23 +195,6 @@ public:
     void            Initialize (SfxChildWinInfo* pInfo);
 };
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-//CHINA001 class SwModalRedlineAcceptDlg : public SfxModalDialog
-//CHINA001 {
-//CHINA001 SwRedlineAcceptDlg*      pImplDlg;
-//CHINA001
-//CHINA001 virtual void Resize();
-//CHINA001
-//CHINA001 public:
-//CHINA001 SwModalRedlineAcceptDlg(Window *pParent);
-//CHINA001 ~SwModalRedlineAcceptDlg();
-//CHINA001
-//CHINA001 void         AcceptAll( BOOL bAccept );
-//CHINA001 virtual void Activate();
-//CHINA001 };
 
 /*------------------------------------------------------------------------
     Beschreibung:
