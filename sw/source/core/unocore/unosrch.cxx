@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosrch.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:36:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:40:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,10 +466,9 @@ sal_Bool    SwSearchProperties_Impl::HasAttributes() const
 
   -----------------------------------------------------------------------*/
 SwXTextSearch::SwXTextSearch() :
-    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_SEARCH)),
     pSearchProperties( new SwSearchProperties_Impl),
     pReplaceProperties( new SwSearchProperties_Impl),
-    bIsValueSearch(sal_True),
+    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_SEARCH)),
     bAll(sal_False),
     bWord(sal_False),
     bBack(sal_False),
@@ -480,7 +479,8 @@ SwXTextSearch::SwXTextSearch() :
     bLevRelax(sal_False),
     nLevExchange(2),
     nLevAdd(2),
-    nLevRemove(2)
+    nLevRemove(2),
+    bIsValueSearch(sal_True)
 {
 }
 /*-- 14.12.98 13:07:12    ---------------------------------------------------
@@ -509,7 +509,7 @@ sal_Int64 SAL_CALL SwXTextSearch::getSomething( const uno::Sequence< sal_Int8 >&
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
-            return (sal_Int64)this;
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
     return 0;
 }
@@ -585,7 +585,6 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
             case WID_SIMILARITY_EXCHANGE:   aValue >>= nLevExchange; break;
             case WID_SIMILARITY_ADD:        aValue >>= nLevAdd; break;
             case WID_SIMILARITY_REMOVE :    aValue >>= nLevRemove;break;
-            break;
         };
     }
     else
@@ -634,28 +633,28 @@ SET_UINT16:
 /*-- 14.12.98 13:07:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextSearch::addPropertyChangeListener(const OUString& PropertyName, const uno::Reference< beans::XPropertyChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXTextSearch::addPropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
 /*-- 14.12.98 13:07:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextSearch::removePropertyChangeListener(const OUString& PropertyName, const uno::Reference< beans::XPropertyChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXTextSearch::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException,uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
 /*-- 14.12.98 13:07:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextSearch::addVetoableChangeListener(const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXTextSearch::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException,uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
 /*-- 14.12.98 13:07:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextSearch::removeVetoableChangeListener(const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXTextSearch::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*xListener*/) throw(beans::UnknownPropertyException, lang::WrappedTargetException,uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
