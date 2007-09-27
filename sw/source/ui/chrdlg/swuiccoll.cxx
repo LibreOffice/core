@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuiccoll.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:51:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:20:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,8 +107,9 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     sNoTmpl     (       SW_RES( STR_NOTEMPL  ) ),
     aStrArr     (       SW_RES( STR_REGIONS  ) ),
     rSh(::GetActiveView()->GetWrtShell()),
-    pFmt(0),
     pCmds( SwCondCollItem::GetCmds() ),
+    pFmt(0),
+
     bNewTemplate(FALSE)
 {
     FreeResource();
@@ -132,7 +133,7 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     aTbLinks.SetHelpId(HID_COND_COLL_TABLIST);
 
     SfxStyleFamilies aFamilies(SW_RES(DLG_STYLE_DESIGNER));
-    const SfxStyleFamilyItem* pFamilyItem;
+    const SfxStyleFamilyItem* pFamilyItem = 0;
     USHORT nCount = aFamilies.Count();
     USHORT i;
 
@@ -168,10 +169,10 @@ __EXPORT SwCondCollPage::~SwCondCollPage()
 }
 
 
-int __EXPORT SwCondCollPage::DeactivatePage(SfxItemSet * pSet)
+int __EXPORT SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
 {
-    if( pSet )
-        FillItemSet(*pSet);
+    if( _pSet )
+        FillItemSet(*_pSet);
 
     return LEAVE_PAGE;
 }
@@ -209,7 +210,7 @@ Page: Reset-Overload
 ****************************************************************************/
 
 
-void __EXPORT SwCondCollPage::Reset(const SfxItemSet &rSet)
+void __EXPORT SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
 {
     if(bNewTemplate)
         aConditionCB.Enable();
@@ -236,7 +237,7 @@ void __EXPORT SwCondCollPage::Reset(const SfxItemSet &rSet)
         String aEntry( aStrArr.GetString(n) );
         aEntry += '\t';
 
-        const SwCollCondition* pCond;
+        const SwCollCondition* pCond = 0;
         if( pFmt && RES_CONDTXTFMTCOLL == pFmt->Which() &&
             0 != ( pCond = ((SwConditionTxtFmtColl*)pFmt)->
             HasCondition( SwCollCondition( 0, pCmds[n].nCnd, pCmds[n].nSubCond ) ) )
