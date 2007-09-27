@@ -4,9 +4,9 @@
  *
  *  $RCSfile: index.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:25:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:05:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,9 +153,7 @@ protected:
 
 public:
     SwIndexReg();
-#ifndef PRODUCT
-    ~SwIndexReg();
-#endif
+    virtual ~SwIndexReg();
 
     // rtti, abgeleitete moegens gleichtun oder nicht. Wenn sie es gleichtun
     // kann ueber das SwIndexReg typsicher gecastet werden.
