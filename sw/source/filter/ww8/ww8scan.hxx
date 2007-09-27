@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-21 11:53:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:06:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,14 +78,14 @@
 #include <types.hxx>
 #endif
 
+#include <unomid.h>
+
 #define APPEND_CONST_ASC(s) AppendAscii(RTL_CONSTASCII_STRINGPARAM(s))
 #define ASSIGN_CONST_ASC(s) AssignAscii(RTL_CONSTASCII_STRINGPARAM(s))
 #define CREATE_CONST_ASC(s) String::CreateFromAscii( \
     RTL_CONSTASCII_STRINGPARAM(s))
 
-#ifndef C2U
-#define C2U(s) rtl::OUString::createFromAscii(s)
-#endif
+
 
 //--Line below which the code has meaningful comments
 
@@ -1475,11 +1475,16 @@ public:
     USHORT GetMax() const { return nMax; }
 };
 
-enum HdFtFlags
+typedef BYTE HdFtFlags;
+namespace nsHdFtFlags
 {
-    WW8_HEADER_EVEN = 0x01, WW8_HEADER_ODD = 0x02, WW8_FOOTER_EVEN = 0x04,
-    WW8_FOOTER_ODD = 0x08, WW8_HEADER_FIRST = 0x10, WW8_FOOTER_FIRST = 0x20
-};
+    const HdFtFlags WW8_HEADER_EVEN     = 0x01;
+    const HdFtFlags WW8_HEADER_ODD      = 0x02;
+    const HdFtFlags WW8_FOOTER_EVEN     = 0x04;
+    const HdFtFlags WW8_FOOTER_ODD      = 0x08;
+    const HdFtFlags WW8_HEADER_FIRST    = 0x10;
+    const HdFtFlags WW8_FOOTER_FIRST    = 0x20;
+}
 
 class WW8Dop            // Document Properties
 {
@@ -1531,16 +1536,16 @@ public:
     UINT16  fLockRev : 1;       //   when 1, the current revision marking state is locked
     UINT16  fEmbedFonts : 1;    //   when 1, document contains embedded True Type fonts
     //    compatability options
-    UINT16 copts_fNoTabForInd : 1;          //    when 1, don’t add automatic tab stops for hanging indent
-    UINT16 copts_fNoSpaceRaiseLower : 1;        //    when 1, don’t add extra space for raised or lowered characters
+    UINT16 copts_fNoTabForInd : 1;          //    when 1, donï¿½t add automatic tab stops for hanging indent
+    UINT16 copts_fNoSpaceRaiseLower : 1;        //    when 1, donï¿½t add extra space for raised or lowered characters
     UINT16 copts_fSupressSpbfAfterPgBrk : 1;    // when 1, supress the paragraph Space Before and Space After options after a page break
     UINT16 copts_fWrapTrailSpaces : 1;      //    when 1, wrap trailing spaces at the end of a line to the next line
     UINT16 copts_fMapPrintTextColor : 1;        //    when 1, print colors as black on non-color printers
-    UINT16 copts_fNoColumnBalance : 1;      //    when 1, don’t balance columns for Continuous Section starts
+    UINT16 copts_fNoColumnBalance : 1;      //    when 1, donï¿½t balance columns for Continuous Section starts
     UINT16 copts_fConvMailMergeEsc : 1;
     UINT16 copts_fSupressTopSpacing : 1;        //    when 1, supress extra line spacing at top of page
     UINT16 copts_fOrigWordTableRules : 1;   //    when 1, combine table borders like Word 5.x for the Macintosh
-    UINT16 copts_fTransparentMetafiles : 1; //    when 1, don’t blank area between metafile pictures
+    UINT16 copts_fTransparentMetafiles : 1; //    when 1, donï¿½t blank area between metafile pictures
     UINT16 copts_fShowBreaksInFrames : 1;   //    when 1, show hard page or column breaks in frames
     UINT16 copts_fSwapBordersFacingPgs : 1; //    when 1, swap left and right pages on odd facing pages
 
@@ -1558,7 +1563,7 @@ public:
     INT32   cCh;                //      count of characters tallied by last Word Count execution
     INT16   cPg;                //      count of pages tallied by last Word Count execution
     INT32   cParas;             //      count of paragraphs tallied by last Word Count execution
-    UINT16 rncEdn : 2;          //      restart endnote number code: 0 don’t restart endnote numbering, 1 section, 2 page
+    UINT16 rncEdn : 2;          //      restart endnote number code: 0 donï¿½t restart endnote numbering, 1 section, 2 page
     UINT16 nEdn : 14;           //      beginning endnote number
     UINT16 epc : 2;         //      endnote position code: 0 at end of section, 3 at end of document
     // UINT16 nfcFtnRef : 4;        //      number format code for auto footnotes: 0 Arabic, 1 Upper case Roman, 2 Lower case Roman
