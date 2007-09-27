@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:56:15 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:13:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,11 +113,11 @@ class SwLineInfo
     const SvxLineSpacingItem *pSpace;
     USHORT nVertAlign;
     KSHORT nDefTabStop;
-    void CtorInit( const SwAttrSet& rAttrSet );
+    void CtorInitLineInfo( const SwAttrSet& rAttrSet );
     inline SwLineInfo() {}
 public:
     inline SwLineInfo( const SwAttrSet& rAttrSet )
-           { CtorInit( rAttrSet ); }
+           { CtorInitLineInfo( rAttrSet ); }
     // Liefert den Tabstop, der auf LinePos folgt, oder 0.
     const SvxTabStop *GetTabStop( const SwTwips nLinePos,
                                  const SwTwips nLeft,
@@ -155,9 +155,9 @@ class SwTxtInfo
 protected:
     inline SwTxtInfo() { }
 public:
-    void CtorInit( SwTxtFrm *pFrm );
+    void CtorInitTxtInfo( SwTxtFrm *pFrm );
     SwTxtInfo( const SwTxtInfo &rInf );
-    inline SwTxtInfo( SwTxtFrm *pFrm ) { CtorInit( pFrm ); }
+    inline SwTxtInfo( SwTxtFrm *pFrm ) { CtorInitTxtInfo( pFrm ); }
     inline SwParaPortion *GetParaPortion() { return pPara; }
     inline const SwParaPortion *GetParaPortion() const { return pPara; }
     inline xub_StrLen GetTxtStart() const { return nTxtStart; }
@@ -212,7 +212,7 @@ protected:
     sal_uInt8 nDirection : 2;       // writing direction: 0/90/180/270 degree
 
 protected:
-    void CtorInit( SwTxtFrm *pFrm, SwFont *pFnt = 0,
+    void CtorInitTxtSizeInfo( SwTxtFrm *pFrm, SwFont *pFnt = 0,
                    const xub_StrLen nIdx = 0,
                    const xub_StrLen nLen = STRING_LEN );
     SwTxtSizeInfo() {}
@@ -222,10 +222,10 @@ public:
                    const xub_StrLen nIdx = 0,
                    const xub_StrLen nLen = STRING_LEN );
 
-    inline SwTxtSizeInfo( SwTxtFrm *pFrm, SwFont *pFnt = 0,
-                   const xub_StrLen nIdx = 0,
-                   const xub_StrLen nLen = STRING_LEN )
-           { CtorInit( pFrm, pFnt, nIdx, nLen ); }
+    inline SwTxtSizeInfo( SwTxtFrm *pTxtFrm, SwFont *pTxtFnt = 0,
+                   const xub_StrLen nIndex = 0,
+                   const xub_StrLen nLength = STRING_LEN )
+           { CtorInitTxtSizeInfo( pTxtFrm, pTxtFnt, nIndex, nLength ); }
 
     // GetMultiAttr returns the text attribute of the multiportion,
     // if rPos is inside any multi-line part.
@@ -419,7 +419,7 @@ public:
     SwTxtPaintInfo( const SwTxtPaintInfo &rInf );
     SwTxtPaintInfo( const SwTxtPaintInfo &rInf, const XubString &rTxt );
 
-    void CtorInit( SwTxtFrm *pFrame, const SwRect &rPaint );
+    void CtorInitTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPaint );
 
     void SetBack( const SvxBrushItem *pItem,
                   const SwRect &rRect ) { pBrushItem = pItem; aItemRect = rRect;}
@@ -427,7 +427,7 @@ public:
     const SwRect       &GetBrushRect() const { return aItemRect;  }
 
     inline SwTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPaint )
-           { CtorInit( pFrame, rPaint ); }
+           { CtorInitTxtPaintInfo( pFrame, rPaint ); }
 
     inline SwTwips X() const { return aPos.X(); }
     inline void X( const long nNew ) { aPos.X() = nNew; }
@@ -566,11 +566,11 @@ class SwTxtFormatInfo : public SwTxtPaintInfo
     sal_Bool _CheckFtnPortion( SwLineLayout* pCurr );
 
 public:
-    void CtorInit( SwTxtFrm *pFrm, const sal_Bool bInterHyph = sal_False,
+    void CtorInitTxtFormatInfo( SwTxtFrm *pFrm, const sal_Bool bInterHyph = sal_False,
         const sal_Bool bQuick = sal_False, const sal_Bool bTst = sal_False );
-    inline SwTxtFormatInfo(SwTxtFrm *pFrame,const sal_Bool bInterHyph=sal_False,
-            const sal_Bool bQuick = sal_False, const sal_Bool bTst = sal_False )
-           { CtorInit( pFrame, bInterHyph, bQuick, bTst ); }
+    inline SwTxtFormatInfo(SwTxtFrm *pFrame,const sal_Bool bInterHyphL=sal_False,
+            const sal_Bool bQuickL = sal_False, const sal_Bool bTst = sal_False )
+           { CtorInitTxtFormatInfo( pFrame, bInterHyphL, bQuickL, bTst ); }
 
     // For the formatting inside a double line in a line (multi-line portion)
     // we need a modified text-format-info:
@@ -844,25 +844,25 @@ inline void SwTxtPaintInfo::SetPaintOfst( const SwTwips nNew )
 
 inline void SwTxtPaintInfo::DrawText( const XubString &rText,
                             const SwLinePortion &rPor,
-                            const xub_StrLen nStart, const xub_StrLen nLen,
+                            const xub_StrLen nStart, const xub_StrLen nLength,
                             const sal_Bool bKern ) const
 {
-    ((SwTxtPaintInfo*)this)->_DrawText( rText, rPor, nStart, nLen, bKern );
+    ((SwTxtPaintInfo*)this)->_DrawText( rText, rPor, nStart, nLength, bKern );
 }
 
 inline void SwTxtPaintInfo::DrawText( const SwLinePortion &rPor,
-        const xub_StrLen nLen, const sal_Bool bKern ) const
+        const xub_StrLen nLength, const sal_Bool bKern ) const
 {
-    ((SwTxtPaintInfo*)this)->_DrawText( *pTxt, rPor, nIdx, nLen, bKern );
+    ((SwTxtPaintInfo*)this)->_DrawText( *pTxt, rPor, nIdx, nLength, bKern );
 }
 
 inline void SwTxtPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
-                                            const xub_StrLen nLen,
+                                            const xub_StrLen nLength,
                                             const sal_Bool bKern,
                                             const sal_Bool bWrong,
                                             const sal_Bool bSmartTags ) const
 {
-    ((SwTxtPaintInfo*)this)->_DrawText( *pTxt, rPor, nIdx, nLen, bKern, bWrong, bSmartTags );
+    ((SwTxtPaintInfo*)this)->_DrawText( *pTxt, rPor, nIdx, nLength, bKern, bWrong, bSmartTags );
 }
 
 /*************************************************************************
