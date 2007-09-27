@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txatbase.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:34:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:14:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,6 +193,8 @@ protected:
 
 public:
     SwTxtAttrEnd( const SfxPoolItem& rAttr, USHORT nStart, USHORT nEnd );
+
+    using SwTxtAttr::GetEnd;
     virtual xub_StrLen* GetEnd();
 };
 
