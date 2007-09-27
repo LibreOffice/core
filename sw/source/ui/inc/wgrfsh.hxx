@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wgrfsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:17:46 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:14:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ public:
     SwWebGrfShell(SwView &rShell);
     virtual     ~SwWebGrfShell();
 
-    SFX_DECL_INTERFACE(SW_WEBGRFSHELL);
+    SFX_DECL_INTERFACE(SW_WEBGRFSHELL)
     TYPEINFO();
 };
 
