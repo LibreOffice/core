@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 13:43:04 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:42:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@
 // #i75172#
 #include "dview.hxx"
 
-DBG_NAME(RefreshTimer);
+DBG_NAME(RefreshTimer)
 
 SV_IMPL_VARARR(SwStripeArr,SwStripe);
 SV_IMPL_OP_PTRARR_SORT(SwScrollStripes, SwStripesPtr);
@@ -164,18 +164,21 @@ void ViewShell::Scroll()
             bPositive = !bPositive;
         int i = bPositive ? pScrollRects->Count()-1 : 0;
 
-        for ( ; bPositive ? i >= 0 : i < (int)pScrollRects->Count();
-                bPositive ? --i : ++i )
+        for ( ; bPositive ?
+                i >= 0 :
+                i < (int)pScrollRects->Count();
+                bPositive ?
+                --i :
+                ++i )
         {
-            const SwScrollArea &rScroll = *(*pScrollRects)[i];
+            const SwScrollArea &rScroll = *(*pScrollRects)[ sal::static_int_cast<USHORT>(i) ];
             if( rScroll.Count() )
             {
                 int j = bPositive ? rScroll.Count()-1 : 0;
                 for ( ; bPositive ? j >= 0 : j < (int)rScroll.Count();
                     bPositive ? --j : ++j )
                 {
-                    const SwStripes& rStripes = *rScroll[j];
-
+                    const SwStripes& rStripes = *rScroll[ sal::static_int_cast<USHORT>(j) ];
                     if( rScroll.IsVertical() )
                     {
                         Rectangle aRectangle( rStripes.GetY() -
@@ -381,9 +384,9 @@ void SwViewImp::MoveScrollArea()
             delete pScr;
         else
         {
-            USHORT nIdx;
-            if( pScrolledArea->Seek_Entry( pScr, &nIdx ) )
-                pScrolledArea->GetObject(nIdx)->Add( pScr );
+            USHORT nIndx;
+            if( pScrolledArea->Seek_Entry( pScr, &nIndx ) )
+                pScrolledArea->GetObject(nIndx)->Add( pScr );
             else
                 pScrolledArea->Insert( pScr );
         }
@@ -563,7 +566,6 @@ IMPL_LINK( SwViewImp, RefreshScrolledHdl, Timer *, EMPTYARG )
 
     if( pScrolledArea )
     {
-        BOOL bFound = FALSE;
         const SwRect aRect( GetShell()->VisArea() );
         BOOL bNoRefresh = GetShell()->IsA( TYPE(SwCrsrShell) ) &&
             ( ((SwCrsrShell*)GetShell())->HasSelection() ||
@@ -997,16 +999,16 @@ SwStripes& SwStripes::Plus( const SwStripes& rOther, BOOL bVert )
             const SwStripe& rAdd = rOther[ nIdx ];
             long nBottom = rAdd.GetY() - rAdd.GetHeight();
             USHORT nCount = Count();
-            USHORT nY = nStart;
-            while( nY < nCount )
+            USHORT nTmpY = nStart;
+            while( nTmpY < nCount )
             {
-                SwStripe& rChk = GetObject( nY );
+                SwStripe& rChk = GetObject( nTmpY );
                 if( rChk.GetY() - rChk.GetHeight() < rAdd.GetY() )
                     break;
                 else
-                    ++nY;
+                    ++nTmpY;
             }
-            USHORT nB = nY;
+            USHORT nB = nTmpY;
             while( nB < nCount )
             {
                 const SwStripe& rChk = GetObject( nB );
@@ -1015,9 +1017,9 @@ SwStripes& SwStripes::Plus( const SwStripes& rOther, BOOL bVert )
                 else
                     ++nB;
             }
-            nStart = nY;
-            if( nY == nB )
-                Insert( rAdd, nY );
+            nStart = nTmpY;
+            if( nTmpY == nB )
+                Insert( rAdd, nTmpY );
             else
             {
                 long nChkBottom = rAdd.GetY() - rAdd.GetHeight();;
@@ -1025,56 +1027,58 @@ SwStripes& SwStripes::Plus( const SwStripes& rOther, BOOL bVert )
                 long nTmp = rChkB.GetY() - rChkB.GetHeight();
                 if( nTmp < nChkBottom )
                     nChkBottom = nTmp;
-                SwStripe& rChk = GetObject( nY );
+                SwStripe& rChk = GetObject( nTmpY );
                 if( rAdd.GetY() > rChk.GetY() )
                     rChk.Y() = rAdd.GetY();
                 rChk.Height() = rChk.GetY() - nChkBottom;
-                nChkBottom = nB - nY - 1;
+                nChkBottom = nB - nTmpY - 1;
                 if( nChkBottom )
-                    Remove( nY + 1, (USHORT)nChkBottom );
+                    Remove( nTmpY + 1, (USHORT)nChkBottom );
             }
         }
         else
-        for( USHORT nIdx = 0; nIdx < nCnt; ++nIdx )
         {
-            const SwStripe& rAdd = rOther[ nIdx ];
-            long nBottom = rAdd.GetY() + rAdd.GetHeight();
-            USHORT nCount = Count();
-            USHORT nY = nStart;
-            while( nY < nCount )
+            for( USHORT nIdx = 0; nIdx < nCnt; ++nIdx )
             {
-                SwStripe& rChk = GetObject( nY );
-                if( rChk.GetY() + rChk.GetHeight() > rAdd.GetY() )
-                    break;
+                const SwStripe& rAdd = rOther[ nIdx ];
+                long nBottom = rAdd.GetY() + rAdd.GetHeight();
+                USHORT nCount = Count();
+                USHORT nTmpY = nStart;
+                while( nTmpY < nCount )
+                {
+                    SwStripe& rChk = GetObject( nTmpY );
+                    if( rChk.GetY() + rChk.GetHeight() > rAdd.GetY() )
+                        break;
+                    else
+                        ++nTmpY;
+                }
+                USHORT nB = nTmpY;
+                while( nB < nCount )
+                {
+                    const SwStripe& rChk = GetObject( nB );
+                    if( rChk.GetY() >= nBottom )
+                        break;
+                    else
+                        ++nB;
+                }
+                nStart = nTmpY;
+                if( nTmpY == nB )
+                    Insert( rAdd, nTmpY );
                 else
-                    ++nY;
-            }
-            USHORT nB = nY;
-            while( nB < nCount )
-            {
-                const SwStripe& rChk = GetObject( nB );
-                if( rChk.GetY() >= nBottom )
-                    break;
-                else
-                    ++nB;
-            }
-            nStart = nY;
-            if( nY == nB )
-                Insert( rAdd, nY );
-            else
-            {
-                long nChkBottom = rAdd.GetY() + rAdd.GetHeight();;
-                const SwStripe& rChkB = GetObject( nB - 1 );
-                long nTmp = rChkB.GetY() + rChkB.GetHeight();
-                if( nTmp > nChkBottom )
-                    nChkBottom = nTmp;
-                SwStripe& rChk = GetObject( nY );
-                if( rAdd.GetY() < rChk.GetY() )
-                    rChk.Y() = rAdd.GetY();
-                rChk.Height() = nChkBottom - rChk.GetY();
-                nChkBottom = nB - nY - 1;
-                if( nChkBottom )
-                    Remove( nY + 1, (USHORT)nChkBottom );
+                {
+                    long nChkBottom = rAdd.GetY() + rAdd.GetHeight();;
+                    const SwStripe& rChkB = GetObject( nB - 1 );
+                    long nTmp = rChkB.GetY() + rChkB.GetHeight();
+                    if( nTmp > nChkBottom )
+                        nChkBottom = nTmp;
+                    SwStripe& rChk = GetObject( nTmpY );
+                    if( rAdd.GetY() < rChk.GetY() )
+                        rChk.Y() = rAdd.GetY();
+                    rChk.Height() = nChkBottom - rChk.GetY();
+                    nChkBottom = nB - nTmpY - 1;
+                    if( nChkBottom )
+                        Remove( nTmpY + 1, (USHORT)nChkBottom );
+                }
             }
         }
     }
