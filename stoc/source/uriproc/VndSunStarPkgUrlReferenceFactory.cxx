@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VndSunStarPkgUrlReferenceFactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:39:05 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 
-#include "VndSunStarPkgUrlReferenceFactory.hxx"
+#include "stocservices.hxx"
 
 #include "supportsService.hxx"
 
@@ -102,7 +102,7 @@ rtl::OUString Factory::getImplementationName()
     throw (css::uno::RuntimeException)
 {
     return
-        stoc::uriproc::VndSunStarPkgUrlReferenceFactory::
+        stoc_services::VndSunStarPkgUrlReferenceFactory::
         getImplementationName();
 }
 
@@ -116,7 +116,7 @@ sal_Bool Factory::supportsService(rtl::OUString const & serviceName)
 css::uno::Sequence< rtl::OUString > Factory::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
-    return stoc::uriproc::VndSunStarPkgUrlReferenceFactory::
+    return stoc_services::VndSunStarPkgUrlReferenceFactory::
         getSupportedServiceNames();
 }
 
@@ -145,7 +145,7 @@ Factory::createVndSunStarPkgUrlReference(
 
 }
 
-namespace stoc { namespace uriproc { namespace VndSunStarPkgUrlReferenceFactory
+namespace stoc_services { namespace VndSunStarPkgUrlReferenceFactory
 {
 
 css::uno::Reference< css::uno::XInterface > create(
@@ -172,4 +172,4 @@ css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
     return s;
 }
 
-} } }
+} }
