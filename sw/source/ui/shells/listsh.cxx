@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:23:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:28:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,8 +296,6 @@ void SwListShell::GetState(SfxItemSet &rSet)
     BOOL bHasChildren;
     SwWrtShell& rSh = GetShell();
     BYTE nCurrentNumLevel = rSh.GetNumLevel( &bHasChildren );
-    BOOL bNoNumbering = nCurrentNumLevel == NO_NUMBERING;
-    BOOL bNoNumLevel = ! IsNum(nCurrentNumLevel);
     nCurrentNumLevel = GetRealLevel(nCurrentNumLevel);
     while ( nWhich )
     {
@@ -330,8 +328,8 @@ void SwListShell::GetState(SfxItemSet &rSet)
 }
 
 
-SwListShell::SwListShell(SwView &rView) :
-    SwBaseShell(rView)
+SwListShell::SwListShell(SwView &_rView) :
+    SwBaseShell(_rView)
 {
     SetName(String::CreateFromAscii("List"));
     SetHelpId(SW_LISTSHELL);
