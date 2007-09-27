@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblcpy.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:41:43 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:40:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,9 +265,9 @@ namespace
                     }
                     while( nEndLn < nNewEndLn )
                     {
-                        SwTableLine *pLine = rLines[ ++nEndLn ];
-                        SwTableBox *pTmpBox = pLine->GetTabBoxes()[0];
-                        _FndLine *pInsLine = new _FndLine( pLine, &rFndBox );
+                        SwTableLine *pLine2 = rLines[ ++nEndLn ];
+                        SwTableBox *pTmpBox = pLine2->GetTabBoxes()[0];
+                        _FndLine *pInsLine = new _FndLine( pLine2, &rFndBox );
                         _FndBox *pFndBox = new _FndBox( pTmpBox, pInsLine );
                         pInsLine->GetBoxes().C40_INSERT( _FndBox, pFndBox, 0 );
                         rFndLines.C40_INSERT( _FndLine, pInsLine, rFndLines.Count() );
@@ -292,7 +292,7 @@ namespace
                 mnStartCol = 0;
                 while( nIdx && pC != pEnd )
                 {
-                    mnStartCol += pC->mnColSpan;
+                    mnStartCol = mnStartCol + pC->mnColSpan;
                     --nIdx;
                     ++pC;
                 }
@@ -567,7 +567,7 @@ namespace
             }
         }
     }
-};
+}
 
 // ---------------------------------------------------------------
 
@@ -686,9 +686,10 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                 : RES_POOLCOLL_TABLE_HDLN == nPoolId ) )
         {
             SwTxtFmtColl* pColl = pDoc->GetTxtCollFromPool(
+                static_cast<sal_uInt16>(
                                     RES_POOLCOLL_TABLE == nPoolId
                                         ? RES_POOLCOLL_TABLE_HDLN
-                                        : RES_POOLCOLL_TABLE );
+                                        : RES_POOLCOLL_TABLE ) );
             if( pColl )         // Vorlage umsetzen
             {
                 SwPaM aPam( aSavePos );
@@ -1082,9 +1083,9 @@ BOOL SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 
     if( 1 == rCpyTbl.GetTabSortBoxes().Count() )
     {
-        SwTableBox *pTmpBox = rCpyTbl.GetTabSortBoxes()[0];
+        SwTableBox *pTmpBx = rCpyTbl.GetTabSortBoxes()[0];
         for( USHORT n = 0; n < rSelBoxes.Count(); ++n )
-            lcl_CpyBox( rCpyTbl, pTmpBox, *this,
+            lcl_CpyBox( rCpyTbl, pTmpBx, *this,
                         (SwTableBox*)rSelBoxes[n], TRUE, pUndo );
     }
     else
