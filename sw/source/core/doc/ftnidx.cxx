@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftnidx.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:56:07 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:37:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ BOOL _SwFtnIdxs::Seek_Entry( const SwTxtFtnPtr rSrch, USHORT* pFndPos ) const
     ULONG nIdx = _SwTxtFtn_GetIndex( rSrch );
     xub_StrLen nCntIdx = *rSrch->GetStart();
 
-    register USHORT nO = Count(), nM, nU = 0;
+    USHORT nO = Count(), nM, nU = 0;
     if( nO > 0 )
     {
         nO--;
@@ -183,7 +183,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
 
     // BOOL, damit hier auch bei Chapter-Einstellung die Endnoten
     // durchlaufen.
-    const FASTBOOL bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
+    const BOOL bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
 
     USHORT nPos, nFtnNo = 1, nEndNo = 1;
     ULONG nUpdNdIdx = rStt.GetIndex();
@@ -293,7 +293,7 @@ void SwFtnIdxs::UpdateAllFtn()
 
     // BOOL, damit hier auch bei Chapter-Einstellung die Endnoten
     // durchlaufen.
-    const FASTBOOL bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
+    const BOOL bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
     USHORT nFtnNo = 0, nEndNo = 0;
     for( USHORT nPos = 0; nPos < Count(); ++nPos )
     {
@@ -325,7 +325,7 @@ SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, USHORT* pFndPos ) const
 {
     ULONG nIdx = rPos.GetIndex();
 
-    register USHORT nO = Count(), nM, nU = 0;
+    USHORT nO = Count(), nM, nU = 0;
     if( nO > 0 )
     {
         nO--;
@@ -361,8 +361,8 @@ SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, USHORT* pFndPos ) const
 const SwSectionNode* SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr(
                 const SwTxtFtn& rTxtFtn )
 {
-    USHORT nWh = rTxtFtn.GetFtn().IsEndNote() ? RES_END_AT_TXTEND
-                                              : RES_FTN_AT_TXTEND;
+    USHORT nWh = static_cast<USHORT>( rTxtFtn.GetFtn().IsEndNote() ?
+                        RES_END_AT_TXTEND : RES_FTN_AT_TXTEND );
     USHORT nVal;
     const SwSectionNode* pNd = rTxtFtn.GetTxtNode().FindSectionNode();
     while( pNd && FTNEND_ATTXTEND_OWNNUMSEQ != ( nVal =
