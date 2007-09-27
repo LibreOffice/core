@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:50:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:12:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/text/HoriOrientation.hpp>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -89,9 +90,6 @@
 #ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>  // DrawGraphic
 #endif
-#ifndef _FRMSH_HXX
-#include <frmsh.hxx>
-#endif
 #ifndef _TXTCFG_HXX
 #include <txtcfg.hxx>
 #endif
@@ -141,10 +139,15 @@ namespace numfunc
 }
 // <--
 
-sal_Bool bInitFont = sal_True;
 
 #define REDLINE_DISTANCE 567/4
 #define REDLINE_MINDIST  567/10
+
+using namespace ::com::sun::star;
+
+////////////////////////////////////////////////////////////
+
+sal_Bool bInitFont = sal_True;
 
 class SwExtraPainter
 {
@@ -163,8 +166,8 @@ class SwExtraPainter
     inline sal_Bool IsClipChg() { return aClip.IsChg(); }
 public:
     SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
-        const SwLineNumberInfo &rLnInf, const SwRect &rRct, MSHORT nStart,
-        SwHoriOrient eHor, sal_Bool bLnNm );
+        const SwLineNumberInfo &rLnInf, const SwRect &rRct,
+        sal_Int16 eHor, sal_Bool bLnNm );
     ~SwExtraPainter() { delete pFnt; }
     inline SwFont* GetFont() const { return pFnt; }
     inline void IncLineNr() { ++nLineNr; }
@@ -178,10 +181,10 @@ public:
 
 
 SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
-    const SwLineNumberInfo &rLnInf, const SwRect &rRct, MSHORT nStart,
-    SwHoriOrient eHor, sal_Bool bLnNm )
-    : pTxtFrm( pFrm), pSh( pVwSh ), pFnt( 0 ), rLineInf( rLnInf ), aRect( rRct ),
-      aClip( pVwSh->GetWin() || pFrm->IsUndersized() ? pVwSh->GetOut() : 0 ),
+    const SwLineNumberInfo &rLnInf, const SwRect &rRct,
+    sal_Int16 eHor, sal_Bool bLnNm )
+    : aClip( pVwSh->GetWin() || pFrm->IsUndersized() ? pVwSh->GetOut() : 0 ),
+      aRect( rRct ), pTxtFrm( pFrm ), pSh( pVwSh ), pFnt( 0 ), rLineInf( rLnInf ),
       nLineNr( 1L ), bLineNum( bLnNm )
 {
     if( pFrm->IsUndersized() )
@@ -240,21 +243,21 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
                 bLineNum = sal_False;
         }
     }
-    if( eHor != HORI_NONE )
+    if( eHor != text::HoriOrientation::NONE )
     {
-        if( HORI_INSIDE == eHor || HORI_OUTSIDE == eHor )
+        if( text::HoriOrientation::INSIDE == eHor || text::HoriOrientation::OUTSIDE == eHor )
         {
             if( !nVirtPageNum )
                 nVirtPageNum = pFrm->FindPageFrm()->OnRightPage() ? 1 : 2;
             if( nVirtPageNum % 2 )
-                eHor = eHor == HORI_INSIDE ? HORI_LEFT : HORI_RIGHT;
+                eHor = eHor == text::HoriOrientation::INSIDE ? text::HoriOrientation::LEFT : text::HoriOrientation::RIGHT;
             else
-                eHor = eHor == HORI_OUTSIDE ? HORI_LEFT : HORI_RIGHT;
+                eHor = eHor == text::HoriOrientation::OUTSIDE ? text::HoriOrientation::LEFT : text::HoriOrientation::RIGHT;
         }
         const SwFrm* pTmpFrm = pFrm->FindTabFrm();
         if( !pTmpFrm )
             pTmpFrm = pFrm;
-        nRedX = HORI_LEFT == eHor ? pTmpFrm->Frm().Left() - REDLINE_DISTANCE :
+        nRedX = text::HoriOrientation::LEFT == eHor ? pTmpFrm->Frm().Left() - REDLINE_DISTANCE :
             pTmpFrm->Frm().Right() + REDLINE_DISTANCE;
     }
 }
@@ -373,10 +376,10 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
     const SwFmtLineNumber &rLineNum = GetAttrSet()->GetLineNumber();
     sal_Bool bLineNum = !IsInTab() && rLineInf.IsPaintLineNumbers() &&
                ( !IsInFly() || rLineInf.IsCountInFlys() ) && rLineNum.IsCount();
-    SwHoriOrient eHor = (SwHoriOrient)SW_MOD()->GetRedlineMarkPos();
-    if( eHor != HORI_NONE && !IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
-        eHor = HORI_NONE;
-    sal_Bool bRedLine = eHor != HORI_NONE;
+    sal_Int16 eHor = (sal_Int16)SW_MOD()->GetRedlineMarkPos();
+    if( eHor != text::HoriOrientation::NONE && !IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
+        eHor = text::HoriOrientation::NONE;
+    sal_Bool bRedLine = eHor != text::HoriOrientation::NONE;
     if ( bLineNum || bRedLine )
     {
         if( IsLocked() || IsHiddenNow() || !Prt().Height() )
@@ -396,15 +399,14 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pSh->GetOut() );
         // <--
 
-        SwExtraPainter aExtra( this, pSh, rLineInf, rRect,
-            (USHORT)rLineNum.GetStartValue(), eHor, bLineNum );
+        SwExtraPainter aExtra( this, pSh, rLineInf, rRect, eHor, bLineNum );
 
         if( HasPara() )
         {
             SwTxtFrmLocker aLock((SwTxtFrm*)this);
 
             SwTxtLineAccess aAccess( (SwTxtFrm*)this );
-            SwParaPortion *pPara = aAccess.GetPara();
+            aAccess.GetPara();
 
             SwTxtPaintInfo aInf( (SwTxtFrm*)this, rRect );
 
@@ -429,8 +431,8 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
 
             long nBottom = rRect.Bottom();
 
-            sal_Bool bNoPrtLine;
-            if( !( bNoPrtLine = 0 == GetMinPrtLine() ) )
+            sal_Bool bNoPrtLine = 0 == GetMinPrtLine();
+            if( !bNoPrtLine )
             {
                 while ( aLine.Y() < GetMinPrtLine() )
                 {
@@ -495,6 +497,7 @@ SwRect SwTxtFrm::Paint()
 {
 #if OSL_DEBUG_LEVEL > 1
     const SwTwips nDbgY = Frm().Top();
+    (void)nDbgY;
 #endif
 
     // finger layout
@@ -675,6 +678,7 @@ void SwTxtFrm::Paint( const SwRect &rRect ) const
     {
 #if OSL_DEBUG_LEVEL > 1
         const SwTwips nDbgY = Frm().Top();
+        (void)nDbgY;
 #endif
 
 #ifdef DBGTXT
@@ -768,8 +772,8 @@ void SwTxtFrm::Paint( const SwRect &rRect ) const
         aLine.TwipsToLine( rRect.Top() + 1 );
         long nBottom = rRect.Bottom();
 
-        sal_Bool bNoPrtLine;
-        if( !( bNoPrtLine = 0 == GetMinPrtLine() ) )
+        sal_Bool bNoPrtLine = 0 == GetMinPrtLine();
+        if( !bNoPrtLine )
         {
             while ( aLine.Y() < GetMinPrtLine() && aLine.Next() )
                 ;
@@ -778,7 +782,12 @@ void SwTxtFrm::Paint( const SwRect &rRect ) const
         if( bNoPrtLine )
         {
             do
-            {   DBG_LOOP;
+            {
+                //DBG_LOOP; shadows declaration above.
+                //resolved into:
+#if  OSL_DEBUG_LEVEL > 1
+                DbgLoop aDbgLoop2( (const void*) this );
+#endif
                 aLine.DrawTextLine( rRect, aClip, IsUndersized() );
 
             } while( aLine.Next() && aLine.Y() <= nBottom );
@@ -786,17 +795,7 @@ void SwTxtFrm::Paint( const SwRect &rRect ) const
 
         // Einmal reicht:
         if( aLine.IsPaintDrop() )
-        {
-#if NIE
-            if( !bRetouche )
-            {
-                const SvxBrushItem *pItem; SwRect aOrigRect;
-                GetBackgroundBrush( pItem, aOrigRect, sal_False, sal_True );
-                aInf.SetBack( pItem, aOrigRect );
-            }
-#endif
             aLine.PaintDropPortion();
-        }
 
         if( rRepaint.HasArea() )
             rRepaint.Clear();
@@ -870,7 +869,7 @@ void SwTxtFrm::CriticalLines( const OutputDevice& rOut, SwStripes &rStripes,
             rStripes.Insert( aStripe, rStripes.Count() );
         }
     }
-    else if( nFrmHeight = (Frm().*fnRect->fnGetHeight)() )
+    else if( 0 != (nFrmHeight = (Frm().*fnRect->fnGetHeight)() ))
         rStripes.Insert( SwStripe( (Frm().*fnRect->fnGetTop)(), nFrmHeight ),
                          rStripes.Count() );
 }
