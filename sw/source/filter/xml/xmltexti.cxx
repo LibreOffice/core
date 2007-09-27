@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:22:45 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:14:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::xml::sax;
+using namespace xml::sax;
 
 
 struct XMLServiceMapEntry_Impl
@@ -183,7 +183,7 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
     SERVICE_MAP_ENTRY( IMPRESS, SIMPRESS ),
     SERVICE_MAP_ENTRY( CHART, SCH ),
     SERVICE_MAP_ENTRY( MATH, SM ),
-    { 0, 0, 0, 0 }
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
         sal_Int32 nHeight, sal_Int32 nWidth,
@@ -238,10 +238,10 @@ SwXMLTextImportHelper::SwXMLTextImportHelper(
         const uno::Reference < XModel>& rModel,
         SvXMLImport& rImport,
         const uno::Reference<XPropertySet> & rInfoSet,
-        sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress,
+        sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool _bProgress,
         sal_Bool bBlockM, sal_Bool bOrganizerM,
-        sal_Bool bPreserveRedlineMode ) :
-    XMLTextImportHelper( rModel, rImport, bInsertM, bStylesOnlyM, bProgress,
+        sal_Bool /*bPreserveRedlineMode*/ ) :
+    XMLTextImportHelper( rModel, rImport, bInsertM, bStylesOnlyM, _bProgress,
                          bBlockM, bOrganizerM ),
     pRedlineHelper( NULL )
 {
@@ -278,9 +278,8 @@ sal_Bool SwXMLTextImportHelper::IsInHeaderFooter() const
     uno::Reference<XUnoTunnel> xCrsrTunnel(
             ((SwXMLTextImportHelper *)this)->GetCursor(), UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    OTextCursorHelper *pTxtCrsr =
-                (OTextCursorHelper*)xCrsrTunnel->getSomething(
-                                            OTextCursorHelper::getUnoTunnelId() );
+    OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+                sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
@@ -301,7 +300,7 @@ SwOLENode *lcl_GetOLENode( const SwFrmFmt *pFrmFmt )
 }
 
 uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
-           SvXMLImport& rImport,
+        SvXMLImport& rImport,
         const OUString& rHRef,
         const OUString& rStyleName,
         const OUString& rTblName,
@@ -323,9 +322,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    OTextCursorHelper *pTxtCrsr =
-                (OTextCursorHelper*)xCrsrTunnel->getSomething(
-                                            OTextCursorHelper::getUnoTunnelId() );
+    OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+                sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( rImport );
 
@@ -459,8 +457,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     {
         const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
         const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
-        SwOLENode *pOLENd = pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetOLENode();
-        ASSERT( pOLENd, "Where is the OLE node" );
+        SwOLENode *pOLENode = pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetOLENode();
+        ASSERT( pOLENode, "Where is the OLE node" );
 
         OUStringBuffer aBuffer( rTblName.getLength() );
         sal_Bool bQuoted = sal_False;
@@ -527,7 +525,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         if( !bError )
         {
             OUString sTblName( aBuffer.makeStringAndClear() );
-            pOLENd->SetChartTblName( GetRenameMap().Get( XML_TEXT_RENAME_TYPE_TABLE, sTblName ) );
+            pOLENode->SetChartTblName( GetRenameMap().Get( XML_TEXT_RENAME_TYPE_TABLE, sTblName ) );
         }
     }
 
@@ -618,10 +616,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 }
 
 uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
-           SvXMLImport& rImport,
+        SvXMLImport& rImport,
         const OUString& rHRef,
-        const OUString& rStyleName,
-        const OUString& rTblName,
+        const OUString& /*rStyleName*/,
+        const OUString& /*rTblName*/,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     // this method will modify the document directly -> lock SolarMutex
@@ -631,9 +629,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
 
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    OTextCursorHelper *pTxtCrsr =
-                (OTextCursorHelper*)xCrsrTunnel->getSomething(
-                                            OTextCursorHelper::getUnoTunnelId() );
+    OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+                sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( rImport );
 
@@ -720,9 +717,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    OTextCursorHelper *pTxtCrsr =
-                (OTextCursorHelper*)xCrsrTunnel->getSomething(
-                                            OTextCursorHelper::getUnoTunnelId() );
+    OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+                sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
@@ -766,9 +762,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    OTextCursorHelper *pTxtCrsr =
-                (OTextCursorHelper*)xCrsrTunnel->getSomething(
-                                            OTextCursorHelper::getUnoTunnelId() );
+    OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+            sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
@@ -849,9 +844,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    OTextCursorHelper *pTxtCrsr =
-                (OTextCursorHelper*)xCrsrTunnel->getSomething(
-                                            OTextCursorHelper::getUnoTunnelId() );
+    OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+                sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     SwDoc *pDoc = pTxtCrsr->GetDoc();
 
@@ -1000,9 +994,8 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
 
     uno::Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );
-    SwXFrame *pFrame =
-                (SwXFrame *)xCrsrTunnel->getSomething(
-                                    SwXFrame::getUnoTunnelId() );
+    SwXFrame *pFrame = reinterpret_cast< SwXFrame * >(
+                sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( SwXFrame::getUnoTunnelId() )));
     ASSERT( pFrame, "SwXFrame missing" );
     SwFrmFmt *pFrmFmt = pFrame->GetFrmFmt();
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
