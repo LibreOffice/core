@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DropDownFieldDialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:09:08 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:45:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,8 @@
 #include <DropDownFieldDialog.hrc>
 #endif
 
-using com::sun::star::uno::Sequence;
+using namespace ::com::sun::star;
+
 
 /*--------------------------------------------------------------------
     Beschreibung: Feldeinfuegen bearbeiten
@@ -79,13 +80,16 @@ sw::DropDownFieldDialog::DropDownFieldDialog( Window *pParent, SwWrtShell &rS,
     SvxStandardDialog(pParent,  SW_RES(DLG_FLD_DROPDOWN)),
     aItemsFL(       this, SW_RES( FL_ITEMS       )),
     aListItemsLB(   this, SW_RES( LB_LISTITEMS   )),
+
     aOKPB(          this, SW_RES( PB_OK          )),
     aCancelPB(      this, SW_RES( PB_CANCEL      )),
     aNextPB(        this, SW_RES( PB_NEXT        )),
     aHelpPB(        this, SW_RES( PB_HELP        )),
+
     aEditPB(        this, SW_RES( PB_EDIT        )),
-    pDropField(0),
-    rSh( rS )
+
+    rSh( rS ),
+    pDropField(0)
 {
     Link aButtonLk = LINK(this, DropDownFieldDialog, ButtonHdl);
     aEditPB.SetClickHdl(aButtonLk);
@@ -108,7 +112,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog( Window *pParent, SwWrtShell &rS,
         String sTitle = GetText();
         sTitle += pDropField->GetPar2();
         SetText(sTitle);
-        Sequence<rtl::OUString> aItems = pDropField->GetItemSequence();
+        uno::Sequence< rtl::OUString > aItems = pDropField->GetItemSequence();
         const rtl::OUString* pArray = aItems.getConstArray();
         for(sal_Int32 i = 0; i < aItems.getLength(); i++)
             aListItemsLB.InsertEntry(pArray[i]);
