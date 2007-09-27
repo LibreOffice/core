@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:37:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:22:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,12 +67,14 @@
 #include <pagefrm.hxx>
 #endif
 
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::Sequence;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+
+using uno::Reference;
+using uno::RuntimeException;
+using uno::Sequence;
 using ::rtl::OUString;
-using ::com::sun::star::accessibility::XAccessibleContext;
+
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessiblePageView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessiblePageView";
@@ -148,12 +150,12 @@ void SwAccessiblePage::_InvalidateFocus()
     }
 }
 
-SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pMap,
-                                    const SwFrm *pFrame ) :
-    SwAccessibleContext( pMap, AccessibleRole::PANEL, pFrame )
+SwAccessiblePage::SwAccessiblePage( SwAccessibleMap* pInitMap,
+                                    const SwFrm* pFrame ) :
+    SwAccessibleContext( pInitMap, AccessibleRole::PANEL, pFrame )
 {
     DBG_ASSERT( pFrame != NULL, "need frame" );
-    DBG_ASSERT( pMap != NULL, "need map" );
+    DBG_ASSERT( pInitMap != NULL, "need map" );
     DBG_ASSERT( pFrame->IsPageFrm(), "need page frame" );
 
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -215,7 +217,7 @@ Sequence< sal_Int8 > SAL_CALL SwAccessiblePage::getImplementationId()
 OUString SwAccessiblePage::getAccessibleDescription( )
     throw( RuntimeException )
 {
-    CHECK_FOR_DEFUNC( XAccessibleContext );
+    CHECK_FOR_DEFUNC( ::com::sun::star::accessibility::XAccessibleContext );
 
     OUString sArg( GetFormattedPageNumber() );
     return GetResource( STR_ACCESS_PAGE_DESC, &sArg );
