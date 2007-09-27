@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:40:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,11 +79,13 @@
 #include <com/sun/star/uno/Any.hxx>
 #endif
 
+#include <unomid.h>
+
 using namespace utl;
 using namespace rtl;
-using namespace com::sun::star::uno;
+using namespace ::com::sun::star::uno;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+
 #define GLOB_NAME_CALC      0
 #define GLOB_NAME_IMPRESS   1
 #define GLOB_NAME_DRAW      2
@@ -237,7 +239,8 @@ String SwModuleOptions::ConvertWordDelimiter(const String& rDelim, BOOL bFromUI)
                                 break;
                             }
 
-                            (nChar <<= 4 ) += nVal;
+                            (nChar <<= 4 );
+                            nChar = nChar + nVal;
                         }
                         if( bValidData )
                             sReturn += nChar;
@@ -362,11 +365,9 @@ sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
 void SwRevisionConfig::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
-    const OUString* pNames = aNames.getConstArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         sal_Int32 nVal = -1;
@@ -436,7 +437,7 @@ void SwRevisionConfig::Load()
                     case 3 : aDeletedAttr.nColor    = nVal; break;
                     case 4 : lcl_ConvertCfgToAttr(nVal, aFormatAttr); break;
                     case 5 : aFormatAttr.nColor     = nVal; break;
-                    case 6 : nMarkAlign             = nVal; break;
+                    case 6 : nMarkAlign = sal::static_int_cast< sal_uInt16, sal_Int32>(nVal); break;
                     case 7 : aMarkColor.SetColor(nVal); break;
                 }
             }
@@ -559,10 +560,10 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
 SwInsertConfig::SwInsertConfig(sal_Bool bWeb) :
     ConfigItem(bWeb ? C2U("Office.WriterWeb/Insert") : C2U("Office.Writer/Insert"),
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
-    bIsWeb(bWeb),
     pCapOptions(0),
     pOLEMiscOpt(0),
-    aInsTblOpts(0,0)
+    aInsTblOpts(0,0),
+    bIsWeb(bWeb)
 {
     aGlobalNames[GLOB_NAME_CALC   ] = SvGlobalName(SO3_SC_CLASSID);
     aGlobalNames[GLOB_NAME_IMPRESS] = SvGlobalName(SO3_SIMPRESS_CLASSID);
@@ -609,14 +610,12 @@ void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nProp, sal_
 void SwInsertConfig::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
-    const OUString* pNames = aNames.getConstArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
     const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        sal_Int32 nVal = -1;
         const InsCaptionOpt* pWriterTableOpt = 0;
         const InsCaptionOpt* pWriterFrameOpt = 0;
         const InsCaptionOpt* pWriterGraphicOpt = 0;
@@ -719,7 +718,7 @@ void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp, sal_I
         case 2:
         {
             sal_Int32 nTemp;  pValues[nProp] >>= nTemp;
-            rOpt.SetNumType(nTemp);
+            rOpt.SetNumType(sal::static_int_cast< sal_uInt16, sal_Int32>(nTemp));
         }
         break;//Numbering",
         case 3:
@@ -738,13 +737,13 @@ void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp, sal_I
         case 5:
         {
             sal_Int32 nTemp;  pValues[nProp] >>= nTemp;
-            rOpt.SetLevel(nTemp);
+            rOpt.SetLevel(sal::static_int_cast< sal_uInt16, sal_Int32>(nTemp));
         }
         break;//Level",
         case 6:
         {
             sal_Int32 nTemp;  pValues[nProp] >>= nTemp;
-            rOpt.SetPos(nTemp);
+            rOpt.SetPos(sal::static_int_cast< sal_uInt16, sal_Int32>(nTemp));
         }
         break;//Position",
         case 7 : //CharacterStyle
@@ -948,7 +947,6 @@ SwTableConfig::~SwTableConfig()
 void SwTableConfig::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
-    const OUString* pNames = aNames.getConstArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
@@ -957,10 +955,10 @@ void SwTableConfig::Commit()
     {
         switch(nProp)
         {
-            case 0 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100(nTblHMove); break;  //"Shift/Row",
-            case 1 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100(nTblVMove); break;     //"Shift/Column",
-            case 2 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100(nTblHInsert); break;   //"Insert/Row",
-            case 3 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100(nTblVInsert); break;   //"Insert/Column",
+            case 0 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(nTblHMove); break;   //"Shift/Row",
+            case 1 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(nTblVMove); break;     //"Shift/Column",
+            case 2 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(nTblHInsert); break;   //"Insert/Row",
+            case 3 : pValues[nProp] <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(nTblVInsert); break;   //"Insert/Column",
             case 4 : pValues[nProp] <<= (sal_Int32)eTblChgMode; break;   //"Change/Effect",
             case 5 : pValues[nProp].setValue(&bInsTblFormatNum, rType); break;  //"Input/NumberRecognition",
             case 6 : pValues[nProp].setValue(&bInsTblChangeNumFormat, rType); break;  //"Input/NumberFormatRecognition",
@@ -1060,7 +1058,6 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
 void SwMiscConfig::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
-    const OUString* pNames = aNames.getConstArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
