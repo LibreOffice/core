@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:49:29 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:41:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,9 +135,6 @@
 #endif
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
-#endif
-#ifndef _FRMSH_HXX
-#include <frmsh.hxx>
 #endif
 // <--
 
@@ -271,8 +268,8 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
 
     SwSectionNode* pNewSectNode = 0;
 
-    IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
-    SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)((eOld & ~IDocumentRedlineAccess::REDLINE_SHOW_MASK) | IDocumentRedlineAccess::REDLINE_IGNORE));
+    RedlineMode_t eOld = GetRedlineMode();
+    SetRedlineMode_intern( (RedlineMode_t)((eOld & ~nsRedlineMode_t::REDLINE_SHOW_MASK) | nsRedlineMode_t::REDLINE_IGNORE));
 
     if( rRange.HasMark() )
     {
@@ -381,7 +378,7 @@ SwSection* SwDoc::Insert( const SwPaM& rRange, const SwSection& rNew,
     {
         SwPaM aPam( *pNewSectNode->EndOfSectionNode(), *pNewSectNode, 1 );
         if( IsRedlineOn() )
-            AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aPam ), true);
+            AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
         else
             SplitRedline( aPam );
     }
@@ -951,7 +948,7 @@ SwSectionNode* SwNodes::InsertSection( const SwNodeIndex& rNdIdx,
         else
             new SwTxtNode( aInsPos, (SwTxtFmtColl*)GetDoc()->GetDfltTxtFmtColl() );
     }
-    SwEndNode* pEndNd = new SwEndNode( aInsPos, *pSectNd );
+    new SwEndNode( aInsPos, *pSectNd );
 
     pSectNd->GetSection() = rSection;
     SwSectionFmt* pSectFmt = pSectNd->GetSection().GetFmt();
@@ -1488,7 +1485,8 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
     String aName( aId );
     xub_StrLen nNmLen = aName.Len();
 
-    USHORT nNum, nTmp, nFlagSize = ( pSectionFmtTbl->Count() / 8 ) +2;
+    USHORT nNum = 0;
+    USHORT nTmp, nFlagSize = ( pSectionFmtTbl->Count() / 8 ) +2;
     BYTE* pSetFlags = new BYTE[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
@@ -1502,7 +1500,7 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
             if( rNm.Match( aName ) == nNmLen )
             {
                 // Nummer bestimmen und das Flag setzen
-                nNum = rNm.Copy( nNmLen ).ToInt32();
+                nNum = static_cast<USHORT>(rNm.Copy( nNmLen ).ToInt32());
                 if( nNum-- && nNum < pSectionFmtTbl->Count() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
