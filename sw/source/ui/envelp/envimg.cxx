@@ -4,9 +4,9 @@
  *
  *  $RCSfile: envimg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:53:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,8 @@
 #include <envelp.hrc>
 #endif
 
+#include <unomid.h>
+
 #ifdef WIN
 #define NEXTLINE  UniString::CreateFromAscii("\r\n")
 #else
@@ -92,14 +94,13 @@
 
 using namespace utl;
 using namespace rtl;
-using namespace com::sun::star::uno;
+using namespace ::com::sun::star::uno;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
 
 TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );
 
 // --------------------------------------------------------------------------
-String MakeSender()
+SW_DLLPUBLIC String MakeSender()
 {
     SvtUserOptions& rUserOpt = SW_MOD()->GetUserOptions();
 
@@ -166,10 +167,10 @@ SwEnvItem::SwEnvItem(const SwEnvItem& rItem) :
     aAddrText      (rItem.aAddrText),
     bSend          (rItem.bSend),
     aSendText      (rItem.aSendText),
-    lSendFromLeft  (rItem.lSendFromLeft),
-    lSendFromTop   (rItem.lSendFromTop),
     lAddrFromLeft  (rItem.lAddrFromLeft),
     lAddrFromTop   (rItem.lAddrFromTop),
+    lSendFromLeft  (rItem.lSendFromLeft),
+    lSendFromTop   (rItem.lSendFromTop),
     lWidth         (rItem.lWidth),
     lHeight        (rItem.lHeight),
     eAlign         (rItem.eAlign),
@@ -298,7 +299,6 @@ SwEnvCfgItem::~SwEnvCfgItem()
 void    SwEnvCfgItem::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
