@@ -4,9 +4,9 @@
  *
  *  $RCSfile: beziersh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:19:13 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:26:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,9 @@
 #include "itemdef.hxx"
 #include "swslots.hxx"
 
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
+#include <unomid.h>
+
+
 SFX_IMPL_INTERFACE(SwBezierShell, SwBaseShell, SW_RES(STR_SHELLNAME_BEZIER))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_DRAW_POPUPMENU));
@@ -91,8 +93,8 @@ TYPEINIT1(SwBezierShell,SwBaseShell)
  --------------------------------------------------------------------*/
 
 
-SwBezierShell::SwBezierShell(SwView &rView):
-    SwBaseShell( rView )
+SwBezierShell::SwBezierShell(SwView &_rView):
+    SwBaseShell( _rView )
 {
     SetName(C2S("Bezier"));
     SetHelpId(SW_BEZIERSHELL);
@@ -209,7 +211,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
                     case SID_BEZIER_SMOOTH:
                     case SID_BEZIER_SYMMTR:
                     {
-                        SdrPathSmoothKind eKind;
+                        SdrPathSmoothKind eKind = SDRPATHSMOOTH_ASYMMETRIC;
 
                         switch (nSlotId)
                         {
@@ -314,6 +316,7 @@ void SwBezierShell::GetState(SfxItemSet &rSet)
                         case SDRPATHSEGMENT_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CONVERT); break;
                         case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,FALSE)); break; // Button reingedrueckt = Kurve
                         case SDRPATHSEGMENT_CURVE   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,TRUE));  break;
+                        default:; //prevent warning
                     }
                 }
                 break;
@@ -358,6 +361,7 @@ void SwBezierShell::GetState(SfxItemSet &rSet)
                         case SDROBJCLOSED_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CLOSE); break;
                         case SDROBJCLOSED_OPEN    : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,FALSE)); break;
                         case SDROBJCLOSED_CLOSED  : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,TRUE)); break;
+                        default:; //prevent warning
                     }
                 }
                 break;
