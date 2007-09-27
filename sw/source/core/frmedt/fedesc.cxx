@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fedesc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:13:57 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:51:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
     StartAllAction();
 
     SwPageFrm *pPage = GetCurrFrm()->FindPageFrm();
-    const SwFrm *pFlow;
+    const SwFrm *pFlow = 0;
     USHORT nPageNmOffset = 0;
 
     ASSERT( !GetCrsr()->HasMark(), "ChgCurPageDesc nur ohne Selektion!");
@@ -210,7 +210,7 @@ SwPageDesc* SwFEShell::FindPageDescByName( const String& rName,
     SwPageDesc* pDesc = GetDoc()->FindPageDescByName( rName, pPos );
     if( !pDesc && bGetFromPool )
     {
-        USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( rName, GET_POOLID_PAGEDESC );
+        USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( rName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
         if( USHRT_MAX != nPoolId &&
             0 != (pDesc = GetDoc()->GetPageDescFromPool( nPoolId ))
             && pPos )
@@ -230,10 +230,10 @@ USHORT SwFEShell::GetMousePageDesc( const Point &rPt ) const
         {
             while( pPage->GetNext() && rPt.Y() > pPage->Frm().Bottom() )
                 pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
-            SwDoc *pDoc = GetDoc();
+            SwDoc *pMyDoc = GetDoc();
             for ( USHORT i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
             {
-                if ( pPage->GetPageDesc() == &const_cast<const SwDoc *>(pDoc)
+                if ( pPage->GetPageDesc() == &const_cast<const SwDoc *>(pMyDoc)
                      ->GetPageDesc(i) )
                     return i;
             }
@@ -250,10 +250,10 @@ USHORT SwFEShell::GetCurPageDesc( const BOOL bCalcFrm ) const
         const SwPageFrm *pPage = pFrm->FindPageFrm();
         if ( pPage )
         {
-            SwDoc *pDoc = GetDoc();
+            SwDoc *pMyDoc = GetDoc();
             for ( USHORT i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
             {
-                if ( pPage->GetPageDesc() == &const_cast<const SwDoc *>(pDoc)
+                if ( pPage->GetPageDesc() == &const_cast<const SwDoc *>(pMyDoc)
                      ->GetPageDesc(i) )
                     return i;
             }
