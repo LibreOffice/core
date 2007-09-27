@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pamtyp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:53:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:57:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,38 +60,38 @@ void GoStartDoc( SwPosition*);
 void GoEndDoc( SwPosition*);
 void GoStartSection( SwPosition*);
 void GoEndSection( SwPosition*);
-FASTBOOL GoInDoc( SwPaM&, SwMoveFn);
-FASTBOOL GoInSection( SwPaM&, SwMoveFn);
-FASTBOOL GoInNode( SwPaM&, SwMoveFn);
-FASTBOOL GoInCntnt( SwPaM&, SwMoveFn);
-FASTBOOL GoInCntntCells( SwPaM&, SwMoveFn);
-FASTBOOL GoInCntntSkipHidden( SwPaM&, SwMoveFn);
-FASTBOOL GoInCntntCellsSkipHidden( SwPaM&, SwMoveFn);
+BOOL GoInDoc( SwPaM&, SwMoveFn);
+BOOL GoInSection( SwPaM&, SwMoveFn);
+BOOL GoInNode( SwPaM&, SwMoveFn);
+BOOL GoInCntnt( SwPaM&, SwMoveFn);
+BOOL GoInCntntCells( SwPaM&, SwMoveFn);
+BOOL GoInCntntSkipHidden( SwPaM&, SwMoveFn);
+BOOL GoInCntntCellsSkipHidden( SwPaM&, SwMoveFn);
 const SwTxtAttr* GetFrwrdTxtHint( const SwpHints&, USHORT&, xub_StrLen );
 const SwTxtAttr* GetBkwrdTxtHint( const SwpHints&, USHORT&, xub_StrLen );
 
-FASTBOOL GoNext(SwNode* pNd, SwIndex * pIdx, USHORT nMode );
-FASTBOOL GoPrevious(SwNode* pNd, SwIndex * pIdx, USHORT nMode );
-SwCntntNode* GoNextNds( SwNodeIndex * pIdx, FASTBOOL );
-SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, FASTBOOL );
+BOOL GoNext(SwNode* pNd, SwIndex * pIdx, USHORT nMode );
+BOOL GoPrevious(SwNode* pNd, SwIndex * pIdx, USHORT nMode );
+SwCntntNode* GoNextNds( SwNodeIndex * pIdx, BOOL );
+SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, BOOL );
 
 // --------- Funktionsdefinitionen fuer die SwCrsrShell --------------
 
-FASTBOOL GoPrevPara( SwPaM&, SwPosPara);
-FASTBOOL GoCurrPara( SwPaM&, SwPosPara);
-FASTBOOL GoNextPara( SwPaM&, SwPosPara);
-FASTBOOL GoPrevSection( SwPaM&, SwPosSection);
-FASTBOOL GoCurrSection( SwPaM&, SwPosSection);
-FASTBOOL GoNextSection( SwPaM&, SwPosSection);
+BOOL GoPrevPara( SwPaM&, SwPosPara);
+BOOL GoCurrPara( SwPaM&, SwPosPara);
+BOOL GoNextPara( SwPaM&, SwPosPara);
+BOOL GoPrevSection( SwPaM&, SwPosSection);
+BOOL GoCurrSection( SwPaM&, SwPosSection);
+BOOL GoNextSection( SwPaM&, SwPosSection);
 
 
 // ------------ Typedefiniton fuer Funktionen ----------------------
 
-typedef FASTBOOL (*GoNd)( SwNode*, SwIndex*, USHORT );
-typedef SwCntntNode* (*GoNds)( SwNodeIndex*, FASTBOOL );
+typedef BOOL (*GoNd)( SwNode*, SwIndex*, USHORT );
+typedef SwCntntNode* (*GoNds)( SwNodeIndex*, BOOL );
 typedef void (*GoDoc)( SwPosition* );
 typedef void (*GoSection)( SwPosition* );
-typedef FASTBOOL (SwPosition:: *CmpOp)( const SwPosition& ) const;
+typedef BOOL (SwPosition:: *CmpOp)( const SwPosition& ) const;
 typedef const SwTxtAttr* (*GetHint)( const SwpHints&, USHORT&, xub_StrLen );
 typedef int (utl::TextSearch:: *SearchTxt)( const String&, xub_StrLen*,
                     xub_StrLen*, ::com::sun::star::util::SearchResult* );
@@ -111,7 +111,7 @@ struct SwMoveFnCollection
 };
 
 // --------- Funktionsdefinitionen fuers Suchen --------------
-SwCntntNode* GetNode( SwPaM&, FASTBOOL&, SwMoveFn, FASTBOOL bInReadOnly = FALSE );
+SwCntntNode* GetNode( SwPaM&, BOOL&, SwMoveFn, BOOL bInReadOnly = FALSE );
 
 
 
