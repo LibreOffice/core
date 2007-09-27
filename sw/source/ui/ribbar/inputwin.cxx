@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 15:10:44 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:25:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,12 +89,12 @@ SFX_IMPL_POS_CHILDWINDOW( SwInputChild, FN_EDIT_FORMULA, SFX_OBJECTBAR_OBJECT )
 
 SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     : ToolBox(  pParent ,   SW_RES( RID_TBX_FORMULA )),
-    aEdit(      this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION),
     aPos(       this,       SW_RES(ED_POS)),
+    aEdit(      this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION),
     aPopMenu(   SW_RES(MN_CALC_POPUP)),
     pMgr(0),
-    pView(0),
     pWrtShell(0),
+    pView(0),
     pBindings(pBind),
     aAktTableName(aEmptyStr)
 {
@@ -204,7 +204,7 @@ void __EXPORT SwInputWindow::Resize()
 
 //==================================================================
 
-void SwInputWindow::Show()
+void SwInputWindow::ShowWin()
 {
     bIsTable = FALSE;
     //Lineale anhalten
@@ -231,7 +231,7 @@ void SwInputWindow::Show()
             aAktTableName = pWrtShell->GetTableFmt()->GetName();
         }
         else
-            aPos.SetText(SW_RESSTR(STR_FORMULA));
+            aPos.SetText(SW_RESSTR(STR_TBL_FORMULA));
 
         // Aktuelles Feld bearbeiten
         ASSERT(pMgr == 0, FieldManager nicht geloescht.);
@@ -345,7 +345,7 @@ static const char * __READONLY_DATA aStrArr[] = {
     return 0;
 }
 
-IMPL_LINK( SwInputWindow, DropdownClickHdl, ToolBox*, pToolBox )
+IMPL_LINK( SwInputWindow, DropdownClickHdl, ToolBox*, EMPTYARG )
 {
     USHORT nCurID = GetCurItemId();
     EndSelection(); // setzt CurItemId zurueck !
@@ -372,7 +372,6 @@ void __EXPORT SwInputWindow::Click( )
     EndSelection(); // setzt CurItemId zurueck !
     switch ( nCurID )
     {
-        break;
         case FN_FORMULA_CANCEL:
         {
             CancelFormula();
@@ -568,7 +567,7 @@ void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
         return;
     }
     const sal_Unicode   cOpen = '<', cClose = '>',
-                cOpenBracket = '(', cCloseBracket = ')';
+                cOpenBracket = '(';
     String aPrefix = rName;
     if(rName.Len())
         aPrefix += '.';
@@ -600,7 +599,7 @@ void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
     {
         BOOL bFound = FALSE;
         sal_Unicode cCh;
-        USHORT nPos, nEndPos, nStartPos = (USHORT) aSelection.Min();
+        USHORT nPos, nEndPos = 0, nStartPos = (USHORT) aSelection.Min();
         if( nStartPos-- )
         {
             do {
@@ -636,7 +635,7 @@ void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
             nPos = ++nStartPos + 1; // wir wollen dahinter
             aActText.Erase( nStartPos, nEndPos - nStartPos );
             aActText.Insert( aBoxes, nStartPos );
-            nPos += aBoxes.Len();
+            nPos = nPos + aBoxes.Len();
         }
         else
         {
@@ -645,7 +644,7 @@ void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
             aTmp += (char)cClose;
             nPos = (USHORT)aSelection.Min();
             aActText.Insert( aTmp, nPos );
-            nPos += aTmp.Len();
+            nPos = nPos + aTmp.Len();
         }
         if( GetText() != aActText )
         {
@@ -660,15 +659,15 @@ void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
 //==================================================================
 
 
-SwInputChild::SwInputChild(Window* pParent,
+SwInputChild::SwInputChild(Window* _pParent,
                                 USHORT nId,
                                 SfxBindings* pBindings,
                                 SfxChildWinInfo* ) :
-                                SfxChildWindow( pParent, nId )
+                                SfxChildWindow( _pParent, nId )
 {
     pDispatch = pBindings->GetDispatcher();
-    pWindow = new SwInputWindow( pParent, pBindings );
-    ((SwInputWindow*)pWindow)->Show();
+    pWindow = new SwInputWindow( _pParent, pBindings );
+    ((SwInputWindow*)pWindow)->ShowWin();
     eChildAlignment = SFX_ALIGN_LOWESTTOP;
 }
 
