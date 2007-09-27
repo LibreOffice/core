@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modeltoviewhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:13:43 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:06:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,6 @@ namespace ModelToViewHelper
             returned.
     */
     ModelPosition ConvertToModelPosition( const ConversionMap* pMap, sal_uInt32 nViewPos );
-};
+}
 
 #endif
