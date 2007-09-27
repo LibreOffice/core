@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:53:12 $
+#   last change: $Author: hr $ $Date: 2007-09-27 13:05:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,8 @@
 PRJ=..$/..
 
 PRJNAME=stoc
-TARGET = typeconverter.uno
+TARGET = typeconverter
 ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST = tcv
 
 # --- Settings -----------------------------------------------------
 
@@ -50,21 +49,6 @@ DLLPRE =
 
 SLOFILES= \
         $(SLO)$/convert.obj
-
-SHL1TARGET=	$(TARGET)
-
-SHL1STDLIBS= \
-        $(CPPULIB)		\
-        $(CPPUHELPERLIB)	\
-        $(SALLIB)
-
-SHL1DEPN=
-SHL1VERSIONMAP = tcv.map
-SHL1IMPLIB=	i$(TARGET)
-SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=	$(SHL1TARGET)
 
 # --- Targets ------------------------------------------------------
 
