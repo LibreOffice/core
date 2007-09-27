@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cshtyp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:18:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,19 +62,19 @@ extern SwPosPage fnPageStart, fnPageEnd;
 
 // Richtungsparameter fuer MovePara ( wird in SwPaM initialisiert )
 typedef SwMoveFnCollection* SwPosPara;
-typedef FASTBOOL (*SwWhichPara)( SwPaM&, SwPosPara );
+typedef BOOL (*SwWhichPara)( SwPaM&, SwPosPara );
 extern SwWhichPara fnParaPrev, fnParaCurr, fnParaNext;
 extern SwPosPara fnParaStart, fnParaEnd;
 
 // Richtungsparameter fuer MoveSection
 typedef SwMoveFnCollection* SwPosSection;
-typedef FASTBOOL (*SwWhichSection)( SwPaM&, SwPosSection );
+typedef BOOL (*SwWhichSection)( SwPaM&, SwPosSection );
 extern SwWhichSection fnSectionPrev, fnSectionCurr, fnSectionNext;
 extern SwPosSection fnSectionStart, fnSectionEnd;
 
 // Richtungsparameter fuer MoveTable
 typedef SwMoveFnCollection* SwPosTable;
-typedef FASTBOOL (*SwWhichTable)( SwPaM&, SwPosTable, FASTBOOL bInReadOnly );
+typedef BOOL (*SwWhichTable)( SwPaM&, SwPosTable, BOOL bInReadOnly );
 extern SwWhichTable fnTablePrev, fnTableCurr, fnTableNext;
 extern SwPosTable fnTableStart, fnTableEnd;
 
@@ -86,7 +86,7 @@ extern SwPosColumn fnColumnStart, fnColumnEnd;
 
 // Richtungsparameter fuer MoveRegion   (Bereiche!)
 typedef SwMoveFnCollection* SwPosRegion;
-typedef FASTBOOL (*SwWhichRegion)( SwPaM&, SwPosRegion, FASTBOOL bInReadOnly );
+typedef BOOL (*SwWhichRegion)( SwPaM&, SwPosRegion, BOOL bInReadOnly );
 extern SwWhichRegion fnRegionPrev, fnRegionCurr, fnRegionNext, fnRegionCurrAndSkip;
 extern SwPosRegion fnRegionStart, fnRegionEnd;
 
@@ -120,13 +120,13 @@ enum SwDocPositions
     DOCPOS_OTHEREND
 };
 
-SW_DLLPUBLIC SwWhichPara GetfnParaCurr(); //CHINA001
-SW_DLLPUBLIC SwPosPara GetfnParaStart(); //CHINA001
-SW_DLLPUBLIC SwPosPara GetfnParaEnd(); //CHINA001
+SW_DLLPUBLIC SwWhichPara GetfnParaCurr();
+SW_DLLPUBLIC SwPosPara GetfnParaStart();
+SW_DLLPUBLIC SwPosPara GetfnParaEnd();
 
-SW_DLLPUBLIC SwWhichTable GetfnTablePrev(); //CHINA001
-SW_DLLPUBLIC SwWhichTable GetfnTableCurr(); //CHINA001
-SW_DLLPUBLIC SwPosTable GetfnTableStart(); //CHINA001
-SW_DLLPUBLIC SwPosTable GetfnTableEnd(); //CHINA001
+SW_DLLPUBLIC SwWhichTable GetfnTablePrev();
+SW_DLLPUBLIC SwWhichTable GetfnTableCurr();
+SW_DLLPUBLIC SwPosTable GetfnTableStart();
+SW_DLLPUBLIC SwPosTable GetfnTableEnd();
 
 #endif  // _CSHTYP_HXX
