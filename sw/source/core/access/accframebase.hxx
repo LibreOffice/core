@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accframebase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:43:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:20:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,9 @@ protected:
 
 public:
 
-    SwAccessibleFrameBase( SwAccessibleMap *pMap, sal_Int16 nRole,
-                             const SwFlyFrm *pFlyFrm );
+    SwAccessibleFrameBase( SwAccessibleMap* pInitMap,
+                           sal_Int16 nInitRole,
+                           const SwFlyFrm *pFlyFrm );
 
     virtual sal_Bool HasCursor();   // required by map to remember that object
 
