@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splargs.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:31:29 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:10:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 #ifndef _SPLARGS_HXX
 #define _SPLARGS_HXX
 
+#include <i18npool/lang.h>
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -49,6 +51,7 @@
 class SwTxtNode;
 class SwIndex;
 class SpellCheck;
+class Font;
 
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLALTERNATIVES_HPP_
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
@@ -166,11 +169,11 @@ public:
     sal_uInt16 nMinTrail;
 
     inline SwInterHyphInfo( const Point &rCrsrPos,
-                            const sal_uInt16 nStart = 0,
-                            const sal_uInt16 nLen = USHRT_MAX )
+                            const sal_uInt16 nStartPos = 0,
+                            const sal_uInt16 nLength = USHRT_MAX )
          : aCrsrPos( rCrsrPos ),
            bAuto(sal_False), bNoLang(sal_False), bCheck(sal_False),
-           nStart(nStart), nLen(nLen),
+           nStart(nStartPos), nLen(nLength),
            nWordStart(0), nWordLen(0),
            nHyphPos(0), nMinTrail(0)
          { }
