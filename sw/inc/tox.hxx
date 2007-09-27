@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tox.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:57:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:13:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,12 +34,15 @@
  ************************************************************************/
 #ifndef _TOX_HXX
 #define _TOX_HXX
+
 #ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
 #endif
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
+
+#include <svx/svxenum.hxx>
 
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
@@ -226,7 +229,7 @@ struct SW_DLLPUBLIC SwFormToken
     SwTwips         nTabStopPosition;
     FormTokenType   eTokenType;
     USHORT          nPoolId;
-    USHORT          eTabAlign;
+    SvxTabAdjust    eTabAlign;
     USHORT          nChapterFormat;     //SwChapterFormat;
     USHORT          nAuthorityField;    //enum ToxAuthorityField
     sal_Unicode     cTabFillChar;
@@ -238,7 +241,7 @@ struct SW_DLLPUBLIC SwFormToken
         nTabStopPosition(0),
         eTokenType(eType),
         nPoolId(USHRT_MAX),
-        eTabAlign(0 /*SVX_TAB_ADJUST_LEFT*/),
+        eTabAlign( SVX_TAB_ADJUST_LEFT ),
         nChapterFormat(0 /*CF_NUMBER*/),
         nAuthorityField(0 /*AUTH_FIELD_IDENTIFIER*/),
         cTabFillChar(' '),
@@ -359,7 +362,9 @@ class SW_DLLPUBLIC SwForm
     SwFormTokens    aPattern[ AUTH_TYPE_END + 1 ]; // #i21237#
     String  aTemplate[ AUTH_TYPE_END + 1 ];
 
-    USHORT  nType, nFormMaxLevel;
+    TOXTypes    eType;
+    USHORT      nFormMaxLevel;
+
     //USHORT    nFirstTabPos; -> Value in tab token
 //  BOOL    bHasFirstTabPos : 1;
     BOOL    bGenerateTabPos : 1;
@@ -367,7 +372,7 @@ class SW_DLLPUBLIC SwForm
     BOOL    bCommaSeparated : 1;
 
 public:
-    SwForm( USHORT nType = TOX_CONTENT );
+    SwForm( TOXTypes eTOXType = TOX_CONTENT );
     SwForm( const SwForm& rForm );
 
     SwForm& operator=( const SwForm& rForm );
@@ -385,7 +390,7 @@ public:
     void                    AdjustTabStops(SwDoc& rDoc,
                                            BOOL bInsertNewTabStops = FALSE);
 
-    inline USHORT   GetTOXType() const;
+    inline TOXTypes GetTOXType() const;
     inline USHORT   GetFormMax() const;
 
     BOOL IsRelTabPos() const    {   return bIsRelTabPos; }
@@ -394,7 +399,7 @@ public:
     BOOL IsCommaSeparated() const       { return bCommaSeparated;}
     void SetCommaSeparated( BOOL b)     { bCommaSeparated = b;}
 
-    static USHORT GetFormMaxLevel( USHORT nType );
+    static USHORT GetFormMaxLevel( TOXTypes eType );
 
     static const sal_Char*  aFormEntry;             // <E>
     static BYTE nFormEntryLen;                      // 3 characters
@@ -422,28 +427,30 @@ public:
      Description: Content to create indexes of
  --------------------------------------------------------------------*/
 
-enum SwTOXElement
+typedef USHORT SwTOXElement;
+namespace nsSwTOXElement
 {
-    TOX_MARK            = 1,
-    TOX_OUTLINELEVEL    = 2,
-    TOX_TEMPLATE        = 4,
-    TOX_OLE             = 8,
-    TOX_TABLE           = 16,
-    TOX_GRAPHIC         = 32,
-    TOX_FRAME           = 64,
-    TOX_SEQUENCE        = 128
-};
+    const SwTOXElement TOX_MARK             = 1;
+    const SwTOXElement TOX_OUTLINELEVEL     = 2;
+    const SwTOXElement TOX_TEMPLATE         = 4;
+    const SwTOXElement TOX_OLE              = 8;
+    const SwTOXElement TOX_TABLE            = 16;
+    const SwTOXElement TOX_GRAPHIC          = 32;
+    const SwTOXElement TOX_FRAME            = 64;
+    const SwTOXElement TOX_SEQUENCE         = 128;
+}
 
-enum SwTOIOptions
+typedef USHORT SwTOIOptions;
+namespace nsSwTOIOptions
 {
-    TOI_SAME_ENTRY          = 1,
-    TOI_FF                  = 2,
-    TOI_CASE_SENSITIVE      = 4,
-    TOI_KEY_AS_ENTRY        = 8,
-    TOI_ALPHA_DELIMITTER    = 16,
-    TOI_DASH                = 32,
-    TOI_INITIAL_CAPS        = 64
-};
+    const SwTOIOptions TOI_SAME_ENTRY       = 1;
+    const SwTOIOptions TOI_FF               = 2;
+    const SwTOIOptions TOI_CASE_SENSITIVE   = 4;
+    const SwTOIOptions TOI_KEY_AS_ENTRY     = 8;
+    const SwTOIOptions TOI_ALPHA_DELIMITTER = 16;
+    const SwTOIOptions TOI_DASH             = 32;
+    const SwTOIOptions TOI_INITIAL_CAPS     = 64;
+}
 
 //which part of the caption is to be displayed
 enum SwCaptionDisplay
@@ -453,16 +460,16 @@ enum SwCaptionDisplay
     CAPTION_TEXT
 };
 
-enum SwTOOElements
+typedef USHORT SwTOOElements;
+namespace nsSwTOOElements
 {
-    TOO_MATH        = 0x01,
-    TOO_CHART       = 0x02,
-    TOO_CALC        = 0x08,
-    TOO_DRAW_IMPRESS= 0x10,
-//  TOO_IMPRESS     = 0x20,
-
-    TOO_OTHER       = 0x80
-};
+    const SwTOOElements TOO_MATH            = 0x01;
+    const SwTOOElements TOO_CHART           = 0x02;
+    const SwTOOElements TOO_CALC            = 0x08;
+    const SwTOOElements TOO_DRAW_IMPRESS    = 0x10;
+//  const SwTOOElements TOO_IMPRESS         = 0x20;
+    const SwTOOElements TOO_OTHER           = 0x80;
+}
 
 #define TOX_STYLE_DELIMITER ((sal_Unicode)0x01)     //JP 19.07.00: use a control char
 
@@ -698,9 +705,9 @@ inline const String& SwForm::GetTemplate(USHORT nLevel) const
     return aTemplate[nLevel];
 }
 
-inline USHORT SwForm::GetTOXType() const
+inline TOXTypes SwForm::GetTOXType() const
 {
-    return nType;
+    return eType;
 }
 
 inline USHORT SwForm::GetFormMax() const
