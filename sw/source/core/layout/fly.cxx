@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 11:48:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:02:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,6 @@
 #include "frmfmt.hxx"
 #include "hints.hxx"
 #include "swregion.hxx"
-#include "frmsh.hxx"
 #include "tabfrm.hxx"
 #include "txtfrm.hxx"
 #include "ndnotxt.hxx"
@@ -167,6 +166,9 @@
 #ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>     // FRound
 #endif
+
+using namespace ::com::sun::star;
+
 
 // OD 2004-03-23 #i26791
 TYPEINIT2(SwFlyFrm,SwLayoutFrm,SwAnchoredObject);
@@ -436,10 +438,6 @@ void SwFlyFrm::DeleteCnt()
 |*  Letzte Aenderung    MA 30. Nov. 95
 |*
 |*************************************************************************/
-#ifdef _MSC_VER
-#pragma optimize("",off)
-#endif
-
 void SwFlyFrm::InitDrawObj( BOOL bNotify )
 {
     //ContactObject aus dem Format suchen. Wenn bereits eines existiert, so
@@ -471,10 +469,6 @@ void SwFlyFrm::InitDrawObj( BOOL bNotify )
     if ( bNotify )
         NotifyDrawObj();
 }
-
-#ifdef _MSC_VER
-#pragma optimize("",on)
-#endif
 
 /*************************************************************************
 |*
@@ -1214,7 +1208,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
     if ( GetCurrRelPos() != rNewPos )
     {
         SwFrmFmt *pFmt = GetFmt();
-        SWRECTFN( GetAnchorFrm() )
+        const bool bVert = GetAnchorFrm()->IsVertical();
         const SwTwips nNewY = bVert ? rNewPos.X() : rNewPos.Y();
         SwTwips nTmpY = nNewY == LONG_MAX ? 0 : nNewY;
         if( bVert )
@@ -1229,22 +1223,22 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
         const RndStdIds eAnchorType = GetFrmFmt().GetAnchor().GetAnchorId();
         if ( eAnchorType == FLY_PAGE )
         {
-            aVert.SetVertOrient( VERT_NONE );
-            aVert.SetRelationOrient( REL_PG_FRAME );
+            aVert.SetVertOrient( text::VertOrientation::NONE );
+            aVert.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
         }
         else if ( eAnchorType == FLY_AT_FLY )
         {
-            aVert.SetVertOrient( VERT_NONE );
-            aVert.SetRelationOrient( FRAME );
+            aVert.SetVertOrient( text::VertOrientation::NONE );
+            aVert.SetRelationOrient( text::RelOrientation::FRAME );
         }
         // <--
-        else if ( IsFlyAtCntFrm() || VERT_NONE != aVert.GetVertOrient() )
+        else if ( IsFlyAtCntFrm() || text::VertOrientation::NONE != aVert.GetVertOrient() )
         {
-            if( REL_CHAR == aVert.GetRelationOrient() && IsAutoPos() )
+            if( text::RelOrientation::CHAR == aVert.GetRelationOrient() && IsAutoPos() )
             {
                 if( LONG_MAX != nNewY )
                 {
-                    aVert.SetVertOrient( VERT_NONE );
+                    aVert.SetVertOrient( text::VertOrientation::NONE );
                     xub_StrLen nOfs =
                         pFmt->GetAnchor().GetCntntAnchor()->nContent.GetIndex();
                     ASSERT( GetAnchorFrm()->IsTxtFrm(), "TxtFrm expected" );
@@ -1260,12 +1254,12 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
                     nTmpY = ((SwFlyAtCntFrm*)this)->GetRelCharY(pAutoFrm)-nTmpY;
                 }
                 else
-                    aVert.SetVertOrient( VERT_CHAR_BOTTOM );
+                    aVert.SetVertOrient( text::VertOrientation::CHAR_BOTTOM );
             }
             else
             {
-                aVert.SetVertOrient( VERT_NONE );
-                aVert.SetRelationOrient( FRAME );
+                aVert.SetVertOrient( text::VertOrientation::NONE );
+                aVert.SetRelationOrient( text::RelOrientation::FRAME );
             }
         }
         aVert.SetPos( nTmpY );
@@ -1282,21 +1276,21 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
             // Writer fly frames
             if ( eAnchorType == FLY_PAGE )
             {
-                aHori.SetHoriOrient( HORI_NONE );
-                aHori.SetRelationOrient( REL_PG_FRAME );
+                aHori.SetHoriOrient( text::HoriOrientation::NONE );
+                aHori.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
                 aHori.SetPosToggle( FALSE );
             }
             else if ( eAnchorType == FLY_AT_FLY )
             {
-                aHori.SetHoriOrient( HORI_NONE );
-                aHori.SetRelationOrient( FRAME );
+                aHori.SetHoriOrient( text::HoriOrientation::NONE );
+                aHori.SetRelationOrient( text::RelOrientation::FRAME );
                 aHori.SetPosToggle( FALSE );
             }
             // <--
-            else if ( IsFlyAtCntFrm() || HORI_NONE != aHori.GetHoriOrient() )
+            else if ( IsFlyAtCntFrm() || text::HoriOrientation::NONE != aHori.GetHoriOrient() )
             {
-                aHori.SetHoriOrient( HORI_NONE );
-                if( REL_CHAR == aHori.GetRelationOrient() && IsAutoPos() )
+                aHori.SetHoriOrient( text::HoriOrientation::NONE );
+                if( text::RelOrientation::CHAR == aHori.GetRelationOrient() && IsAutoPos() )
                 {
                     if( LONG_MAX != nNewX )
                     {
@@ -1314,7 +1308,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
                     }
                 }
                 else
-                    aHori.SetRelationOrient( FRAME );
+                    aHori.SetRelationOrient( text::RelOrientation::FRAME );
                 aHori.SetPosToggle( FALSE );
             }
             aHori.SetPos( nTmpX );
@@ -1359,18 +1353,16 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
 
         const SwTwips nUL = pAttrs->CalcTopLine()  + pAttrs->CalcBottomLine();
         const SwTwips nLR = pAttrs->CalcLeftLine() + pAttrs->CalcRightLine();
-        const Size   &rSz = pAttrs->GetSize();
         const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
               Size aRelSize( CalcRel( rFrmSz ) );
 
-        ASSERT( rSz.Height() != 0 || rFrmSz.GetHeightPercent(), "Hoehe des RahmenAttr ist 0." );
-        ASSERT( rSz.Width()  != 0 || rFrmSz.GetWidthPercent(), "Breite des RahmenAttr ist 0." );
+        ASSERT( pAttrs->GetSize().Height() != 0 || rFrmSz.GetHeightPercent(), "Hoehe des RahmenAttr ist 0." );
+        ASSERT( pAttrs->GetSize().Width()  != 0 || rFrmSz.GetWidthPercent(), "Breite des RahmenAttr ist 0." );
 
         SWRECTFN( this )
         if( !HasFixSize() )
         {
             SwTwips nRemaining = 0;
-            SwTwips nOldHeight = (Frm().*fnRect->fnGetHeight)();
 
             long nMinHeight = 0;
             if( IsMinHeight() )
@@ -2143,13 +2135,13 @@ Size SwFlyFrm::ChgSize( const Size& aNewSize )
 |*
 |*************************************************************************/
 
-BOOL SwFlyFrm::IsLowerOf( const SwLayoutFrm* pUpper ) const
+BOOL SwFlyFrm::IsLowerOf( const SwLayoutFrm* pUpperFrm ) const
 {
     ASSERT( GetAnchorFrm(), "8-( Fly is lost in Space." );
     const SwFrm* pFrm = GetAnchorFrm();
     do
     {
-        if ( pFrm == pUpper )
+        if ( pFrm == pUpperFrm )
             return TRUE;
         pFrm = pFrm->IsFlyFrm()
                ? ((const SwFlyFrm*)pFrm)->GetAnchorFrm()
@@ -2597,7 +2589,7 @@ SwTwips lcl_CalcAutoWidth( const SwLayoutFrm& rFrm )
         {
             const SwFmtFrmSize& rTblFmtSz = ((SwTabFrm*)pFrm)->GetTable()->GetFrmFmt()->GetFrmSize();
             if ( USHRT_MAX == rTblFmtSz.GetSize().Width() ||
-                 HORI_NONE == ((SwTabFrm*)pFrm)->GetFmt()->GetHoriOrient().GetHoriOrient() )
+                 text::HoriOrientation::NONE == ((SwTabFrm*)pFrm)->GetFmt()->GetHoriOrient().GetHoriOrient() )
             {
                 const SwPageFrm* pPage = rFrm.FindPageFrm();
                 // auto width table
