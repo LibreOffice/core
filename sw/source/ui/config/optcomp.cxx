@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcomp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 14:59:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:22:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,6 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
 
     // set handler
     m_aFormattingLB.SetSelectHdl( LINK( this, SwCompatibilityOptPage, SelectHdl ) );
-    m_aOptionsLB.SetCheckButtonHdl( LINK( this, SwCompatibilityOptPage, CheckHdl ) );
     m_aDefaultPB.SetClickHdl( LINK( this, SwCompatibilityOptPage, UseAsDefaultHdl ) );
 
     // hide some controls, will be implemented later!!!
@@ -328,17 +327,17 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     Sequence< Sequence< PropertyValue > > aList = m_aConfigItem.GetList();
     OUString sName;
     OUString sModule;
-    bool bUsePrtMetrics;
-    bool bAddSpacing;
-    bool bAddSpacingAtPages;
-    bool bUseOurTabStops;
-    bool bNoExtLeading;
-    bool bUseLineSpacing;
-    bool bAddTableSpacing;
-    bool bUseObjPos;
-    bool bUseOurTextWrapping;
-    bool bConsiderWrappingStyle;
-    bool bExpandWordSpace;
+    bool bUsePrtMetrics = false;
+    bool bAddSpacing = false;
+    bool bAddSpacingAtPages = false;
+    bool bUseOurTabStops = false;
+    bool bNoExtLeading = false;
+    bool bUseLineSpacing = false;
+    bool bAddTableSpacing = false;
+    bool bUseObjPos = false;
+    bool bUseOurTextWrapping = false;
+    bool bConsiderWrappingStyle = false;
+    bool bExpandWordSpace = false;
     int i, j, nCount = aList.getLength();
     for ( i = 0; i < nCount; ++i )
     {
@@ -436,15 +435,6 @@ IMPL_LINK( SwCompatibilityOptPage, SelectHdl, ListBox*, EMPTYARG )
     ULONG nOptions = (ULONG)(void*)m_aFormattingLB.GetEntryData( nPos );
     SetCurrentOptions( nOptions );
 
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( SwCompatibilityOptPage, CheckHdl, SvxCheckListBox*, EMPTYARG )
-{
-    USHORT nPos = m_aOptionsLB.GetSelectEntryPos();
-    //...
     return 0;
 }
 
@@ -557,7 +547,7 @@ SfxTabPage* SwCompatibilityOptPage::Create( Window* pParent, const SfxItemSet& r
 
 // -----------------------------------------------------------------------
 
-BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet& rSet )
+BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
 {
     BOOL bModified = FALSE;
     if ( m_pWrtShell )
@@ -648,7 +638,7 @@ BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-void SwCompatibilityOptPage::Reset( const SfxItemSet& rSet )
+void SwCompatibilityOptPage::Reset( const SfxItemSet&  )
 {
     ULONG nOptions = GetDocumentOptions();
     SetCurrentOptions( nOptions );
