@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 12:55:37 $
+#   last change: $Author: hr $ $Date: 2007-09-27 09:29:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,13 @@ AUTOSEG=true
 SRS1NAME=$(TARGET)
 SRC1FILES =  \
         undo.src
+
+EXCEPTIONSFILES = \
+        $(SLO)$/SwRewriter.obj \
+        $(SLO)$/unattr.obj \
+        $(SLO)$/undobj.obj \
+        $(SLO)$/undraw.obj \
+        $(SLO)$/untbl.obj
 
 SLOFILES =	\
         $(SLO)$/SwRewriter.obj \
