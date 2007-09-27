@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrfld.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:58:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:17:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,8 +86,8 @@ public:
     BOOL                    IsDeleted() const       { return bDeleted; }
     void                    SetDeleted( BOOL b )    { bDeleted = b; }
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nMId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nMId );
 };
 
 inline BOOL SwUserFieldType::IsValid() const
@@ -108,7 +108,7 @@ inline USHORT SwUserFieldType::GetType() const
 inline void SwUserFieldType::SetType(USHORT nSub)
 {
     nType = nSub;
-    EnableFormat(!(nSub & GSE_STRING));
+    EnableFormat(!(nSub & nsSwGetSetExpType::GSE_STRING));
 }
 
 /*--------------------------------------------------------------------
@@ -138,8 +138,8 @@ public:
     // Inhalt
     virtual String          GetPar2() const;
     virtual void            SetPar2(const String& rStr);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
 };
 
 #endif // _USRFLD_HXX
