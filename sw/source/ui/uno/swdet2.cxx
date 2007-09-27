@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdet2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:28:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:41:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,8 @@
 
 #include <svtools/moduleoptions.hxx>
 
-#define C2S(cChar) String::CreateFromAscii(cChar)
+#include <unomid.h>
+
 
 USHORT AutoDetec( const String& FileName, USHORT & rVersion );
 
