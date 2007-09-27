@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:02:25 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,9 +117,6 @@
 #ifndef _FRMTOOL_HXX //autogen
 #include <frmtool.hxx>
 #endif
-#ifndef _FRMSH_HXX
-#include <frmsh.hxx>
-#endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
@@ -216,9 +213,6 @@ BOOL SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 |*  Letzte Aenderung    MA 18. Jul. 96
 |*
 |*************************************************************************/
-#ifdef _MSC_VER
-#pragma optimize("e",off)
-#endif
 
 BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                              SwCrsrMoveState* pCMS ) const
@@ -332,10 +326,6 @@ BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         rPoint = aPoint;
     return bRet;
 }
-
-#ifdef _MSC_VER
-#pragma optimize("",on)
-#endif
 
 /*************************************************************************
 |*
@@ -578,7 +568,7 @@ const SwCntntFrm *lcl_GetPrvCnt( const SwCntntFrm* pCnt )
 typedef const SwCntntFrm *(*GetNxtPrvCnt)( const SwCntntFrm* );
 
 //Frame in wiederholter Headline?
-FASTBOOL lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
+BOOL lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
                                     const SwTabFrm** ppTFrm = 0 )
 {
     const SwTabFrm *pTab = pFrm->FindTabFrm();
@@ -593,10 +583,10 @@ FASTBOOL lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
 //MA 26. Jan. 98: Chg auch andere Geschuetzte Bereiche ueberspringen.
 // FME: Skip follow flow cells
 const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
-                                                        GetNxtPrvCnt fnNxtPrv,
-                                                        FASTBOOL bMissHeadline,
-                                                        FASTBOOL bInReadOnly,
-                                                        FASTBOOL bMissFollowFlowLine )
+                                                       GetNxtPrvCnt fnNxtPrv,
+                                                       BOOL bMissHeadline,
+                                                       BOOL bInReadOnly,
+                                                       BOOL bMissFollowFlowLine )
 {
     if ( pCnt && pCnt->IsInTab() )
     {
@@ -634,7 +624,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
     //Wenn gerade eine Tabellenselection laeuft muss ein bischen getricktst
     //werden: Beim hochlaufen an den Anfang der Zelle gehen, beim runterlaufen
     //an das Ende der Zelle gehen.
-    FASTBOOL bTblSel = false;
+    BOOL bTblSel = false;
     if ( pStart->IsInTab() &&
         pPam->GetNode( TRUE )->StartOfSectionNode() !=
         pPam->GetNode( FALSE )->StartOfSectionNode() )
@@ -653,7 +643,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             ((SwCellFrm*)pCell)->GetPreviousCell();
 
         const SwCntntFrm* pTmpStart = pStart;
-        while ( pTmpCell && ( pTmpStart = pTmpCell->ContainsCntnt() ) )
+        while ( pTmpCell && 0 != ( pTmpStart = pTmpCell->ContainsCntnt() ) )
         {
             pCell = pTmpCell;
             pTmpCell = bFwd ?
@@ -674,7 +664,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
 
 
     const SwTabFrm *pStTab = pStart->FindTabFrm();
-    const SwTabFrm *pTable;
+    const SwTabFrm *pTable = 0;
     const BOOL bTab = pStTab || (pCnt && pCnt->IsInTab()) ? TRUE : FALSE;
     BOOL bEnd = bTab ? FALSE : TRUE;
 
@@ -683,7 +673,7 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
         pVertRefFrm = pStTab;
     SWRECTFN( pVertRefFrm )
 
-    SwTwips nX;
+    SwTwips nX = 0;
     if ( bTab )
     {
         //
@@ -1161,12 +1151,6 @@ const SwLayoutFrm* lcl_Inside( const SwCntntFrm *pCnt, Point& rPt )
     return NULL;
 }
 
-//Fuer MSC keine Optimierung mit e (enable register...) hier, sonst gibts
-//einen Bug (ID: 2857)
-#ifdef _MSC_VER
-#pragma optimize("e",off)
-#endif
-
 const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
                                             const BOOL bDontLeave,
                                             const BOOL bBodyOnly,
@@ -1372,10 +1356,6 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
     rPoint = aPoint;
     return pActual;
 }
-
-#ifdef _MSC_VER
-#pragma optimize("",on)
-#endif
 
 /*************************************************************************
 |*
@@ -1913,7 +1893,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 
         SwSelBoxes aNew;
 
-        const FASTBOOL bReadOnlyAvailable = rTblCrsr.IsReadOnlyAvailable();
+        const BOOL bReadOnlyAvailable = rTblCrsr.IsReadOnlyAvailable();
 
         for ( USHORT i = 0; i < aUnions.Count(); ++i )
         {
@@ -2266,7 +2246,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
 
             if( pEnd2Pos )
             {
-                SWRECTFN( pEndFrm )
+                SWRECTFNX( pEndFrm )
                 SwRect aTmp( aEndRect );
 
                 // BiDi-Portions are swimming against the current.
@@ -2275,19 +2255,19 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                                              bEndR2L;
 
                 if( MT_BIDI == pEnd2Pos->nMultiType &&
-                    (pEnd2Pos->aPortion2.*fnRect->fnGetWidth)() )
+                    (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)() )
                 {
                     // nested bidi portion
-                    long nRightAbs = (pEnd2Pos->aPortion.*fnRect->fnGetRight)();
-                    nRightAbs = nRightAbs - (pEnd2Pos->aPortion2.*fnRect->fnGetLeft)();
-                    long nLeftAbs = nRightAbs - (pEnd2Pos->aPortion2.*fnRect->fnGetWidth)();
+                    long nRightAbs = (pEnd2Pos->aPortion.*fnRectX->fnGetRight)();
+                    nRightAbs = nRightAbs - (pEnd2Pos->aPortion2.*fnRectX->fnGetLeft)();
+                    long nLeftAbs = nRightAbs - (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)();
 
-                    (aTmp.*fnRect->fnSetLeft)( nLeftAbs );
+                    (aTmp.*fnRectX->fnSetLeft)( nLeftAbs );
 
                     if ( ! pSt2Pos || pSt2Pos->aPortion != pEnd2Pos->aPortion )
                     {
                         SwRect aTmp2( pEnd2Pos->aPortion );
-                        (aTmp2.*fnRect->fnSetLeft)( nRightAbs );
+                        (aTmp2.*fnRectX->fnSetLeft)( nRightAbs );
                         aTmp2.Intersection( aEndFrm );
                         Sub( aRegion, aTmp2 );
                     }
@@ -2295,19 +2275,19 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                 else
                 {
                     if ( bPorR2L )
-                        (aTmp.*fnRect->fnSetRight)(
-                            (pEnd2Pos->aPortion.*fnRect->fnGetRight)() );
+                        (aTmp.*fnRectX->fnSetRight)(
+                            (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
                     else
-                        (aTmp.*fnRect->fnSetLeft)(
-                            (pEnd2Pos->aPortion.*fnRect->fnGetLeft)() );
+                        (aTmp.*fnRectX->fnSetLeft)(
+                            (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
                 }
 
                 if( MT_ROT_90 == pEnd2Pos->nMultiType ||
-                    (pEnd2Pos->aPortion.*fnRect->fnGetBottom)() ==
-                    (aEndRect.*fnRect->fnGetBottom)() )
+                    (pEnd2Pos->aPortion.*fnRectX->fnGetBottom)() ==
+                    (aEndRect.*fnRectX->fnGetBottom)() )
                 {
-                    (aTmp.*fnRect->fnSetBottom)(
-                        (pEnd2Pos->aLine.*fnRect->fnGetBottom)() );
+                    (aTmp.*fnRectX->fnSetBottom)(
+                        (pEnd2Pos->aLine.*fnRectX->fnGetBottom)() );
                 }
 
                 aTmp.Intersection( aEndFrm );
@@ -2316,30 +2296,30 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                 // The next statement means neither ruby nor rotate(90):
                 if( !( MT_RUBY & pEnd2Pos->nMultiType ) )
                 {
-                    SwTwips nTmp = (pEnd2Pos->aLine.*fnRect->fnGetTop)();
-                    if( (aEndRect.*fnRect->fnGetTop)() != nTmp )
+                    SwTwips nTmp = (pEnd2Pos->aLine.*fnRectX->fnGetTop)();
+                    if( (aEndRect.*fnRectX->fnGetTop)() != nTmp )
                     {
-                        (aTmp.*fnRect->fnSetBottom)(
-                            (aTmp.*fnRect->fnGetTop)() );
-                        (aTmp.*fnRect->fnSetTop)( nTmp );
-                        if( (aEndRect.*fnRect->fnGetTop)() !=
-                            (pEnd2Pos->aPortion.*fnRect->fnGetTop)() )
+                        (aTmp.*fnRectX->fnSetBottom)(
+                            (aTmp.*fnRectX->fnGetTop)() );
+                        (aTmp.*fnRectX->fnSetTop)( nTmp );
+                        if( (aEndRect.*fnRectX->fnGetTop)() !=
+                            (pEnd2Pos->aPortion.*fnRectX->fnGetTop)() )
                         if( bPorR2L )
-                            (aTmp.*fnRect->fnSetLeft)(
-                                (pEnd2Pos->aPortion.*fnRect->fnGetLeft)() );
+                            (aTmp.*fnRectX->fnSetLeft)(
+                                (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
                         else
-                            (aTmp.*fnRect->fnSetRight)(
-                                (pEnd2Pos->aPortion.*fnRect->fnGetRight)() );
+                            (aTmp.*fnRectX->fnSetRight)(
+                                (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
                         aTmp.Intersection( aEndFrm );
                         Sub( aRegion, aTmp );
                     }
                 }
 
                 aEndRect = pEnd2Pos->aLine;
-                (aEndRect.*fnRect->fnSetLeft)( bEndR2L ?
-                        (pEnd2Pos->aPortion.*fnRect->fnGetRight)() :
-                        (pEnd2Pos->aPortion.*fnRect->fnGetLeft)() );
-                (aEndRect.*fnRect->fnSetWidth)( 1 );
+                (aEndRect.*fnRectX->fnSetLeft)( bEndR2L ?
+                        (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() :
+                        (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
+                (aEndRect.*fnRectX->fnSetWidth)( 1 );
             }
         }
         else if( pSt2Pos && pEnd2Pos &&
@@ -2368,21 +2348,21 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                 (aStRect.*fnRect->fnSetWidth)( 1 );
             }
 
-            SWRECTFN( pEndFrm )
-            if ( (pEnd2Pos->aPortion2.*fnRect->fnGetWidth)() )
+            SWRECTFNX( pEndFrm )
+            if ( (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)() )
             {
                 SwRect aTmp( aEndRect );
-                long nRightAbs = (pEnd2Pos->aPortion.*fnRect->fnGetRight)();
-                nRightAbs -= (pEnd2Pos->aPortion2.*fnRect->fnGetLeft)();
-                long nLeftAbs = nRightAbs - (pEnd2Pos->aPortion2.*fnRect->fnGetWidth)();
+                long nRightAbs = (pEnd2Pos->aPortion.*fnRectX->fnGetRight)();
+                nRightAbs -= (pEnd2Pos->aPortion2.*fnRectX->fnGetLeft)();
+                long nLeftAbs = nRightAbs - (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)();
 
-                (aTmp.*fnRect->fnSetLeft)( nLeftAbs );
+                (aTmp.*fnRectX->fnSetLeft)( nLeftAbs );
                 aTmp.Intersection( aEndFrm );
                 Sub( aRegion, aTmp );
 
                 aEndRect = pEnd2Pos->aLine;
-                (aEndRect.*fnRect->fnSetLeft)( bEndR2L ? nLeftAbs : nRightAbs );
-                (aEndRect.*fnRect->fnSetWidth)( 1 );
+                (aEndRect.*fnRectX->fnSetLeft)( bEndR2L ? nLeftAbs : nRightAbs );
+                (aEndRect.*fnRectX->fnSetWidth)( 1 );
             }
         }
 
@@ -2510,11 +2490,11 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             else
                 (aSubRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)());
             Sub( aRegion, aSubRect );
-            SwTwips nTmp = (aStRect.*fnRect->fnGetBottom)();
-            if( (aStFrm.*fnRect->fnGetBottom)() != nTmp )
+            SwTwips nTmpTwips = (aStRect.*fnRect->fnGetBottom)();
+            if( (aStFrm.*fnRect->fnGetBottom)() != nTmpTwips )
             {
                 aSubRect = aStFrm;
-                (aSubRect.*fnRect->fnSetTop)( nTmp );
+                (aSubRect.*fnRect->fnSetTop)( nTmpTwips );
                 Sub( aRegion, aSubRect );
             }
 
@@ -2581,11 +2561,11 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             bRev = pEndFrm->IsReverse();
             fnRect = bVert ? ( bRev ? fnRectVL2R : fnRectVert ) :
                              ( bRev ? fnRectB2T : fnRectHori );
-            nTmp = (aEndRect.*fnRect->fnGetTop)();
-            if( (aEndFrm.*fnRect->fnGetTop)() != nTmp )
+            nTmpTwips = (aEndRect.*fnRect->fnGetTop)();
+            if( (aEndFrm.*fnRect->fnGetTop)() != nTmpTwips )
             {
                 aSubRect = aEndFrm;
-                (aSubRect.*fnRect->fnSetBottom)( nTmp );
+                (aSubRect.*fnRect->fnSetBottom)( nTmpTwips );
                 Sub( aRegion, aSubRect );
             }
             aSubRect = aEndRect;
@@ -2630,7 +2610,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                     if ( aSortObjs.Contains( *pAnchoredObj ) )
                         continue;
 
-                    FASTBOOL bSub = TRUE;
+                    BOOL bSub = TRUE;
                     const UINT32 nPos = pObj->GetOrdNum();
                     for ( USHORT k = 0; bSub && k < aSortObjs.Count(); ++k )
                     {
