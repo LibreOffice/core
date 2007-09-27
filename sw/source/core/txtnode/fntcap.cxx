@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:03:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:24:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ xub_StrLen lcl_CalcCaseMap( const SwFont& rFnt,
     // special case for title case:
     const bool bTitle = SVX_CASEMAP_TITEL == rFnt.GetCaseMap() &&
                         pBreakIt->xBreak.is();
-    for ( int i = nOfst; i < nEnd; ++i )
+    for ( xub_StrLen i = nOfst; i < nEnd; ++i )
     {
         XubString aTmp( rOrigString, i, 1 );
 
@@ -182,7 +182,7 @@ public:
     const Size &GetSize() const { return aTxtSize; }
 };
 
-void SwDoGetCapitalSize::Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont )
+void SwDoGetCapitalSize::Init( SwFntObj *, SwFntObj * )
 {
     aTxtSize.Height() = 0;
     aTxtSize.Width() = 0;
@@ -234,15 +234,15 @@ protected:
     xub_StrLen nBreak;
 public:
     SwDoGetCapitalBreak( SwDrawTextInfo &rInfo, long nWidth, xub_StrLen *pExtra)
-        :   SwDoCapitals ( rInfo ), nTxtWidth( nWidth ),
-            nBreak( STRING_LEN ), pExtraPos( pExtra )
+        :   SwDoCapitals ( rInfo ), pExtraPos( pExtra ), nTxtWidth( nWidth ),
+            nBreak( STRING_LEN )
         { }
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
     virtual void Do();
     const xub_StrLen GetBreak() const { return nBreak; }
 };
 
-void SwDoGetCapitalBreak::Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont )
+void SwDoGetCapitalBreak::Init( SwFntObj *, SwFntObj * )
 {
 }
 
@@ -279,7 +279,7 @@ void SwDoGetCapitalBreak::Do()
                                               GetCapInf()->nIdx,
                                               GetCapInf()->nLen, nBreak );
                 else
-                    nBreak += GetCapInf()->nIdx;
+                    nBreak = nBreak + GetCapInf()->nIdx;
             }
 
             nTxtWidth = 0;
@@ -421,7 +421,7 @@ protected:
     USHORT nOfst;
 public:
     SwDoCapitalCrsrOfst( SwDrawTextInfo &rInfo, const USHORT nOfs ) :
-        SwDoCapitals( rInfo ), nOfst( nOfs ), nCrsr( 0 )
+        SwDoCapitals( rInfo ), nCrsr( 0 ), nOfst( nOfs )
         { }
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
     virtual void Do();
@@ -442,8 +442,8 @@ void SwDoCapitalCrsrOfst::Do()
     {
         if ( nOfst > rInf.GetSize().Width() )
         {
-            nOfst -= USHORT(rInf.GetSize().Width());
-            nCrsr += rInf.GetLen();
+            nOfst = nOfst - USHORT(rInf.GetSize().Width());
+            nCrsr = nCrsr + rInf.GetLen();
         }
         else
         {
@@ -461,12 +461,12 @@ void SwDoCapitalCrsrOfst::Do()
             if ( rInf.GetUpper() )
             {
                 aDrawInf.SetSpace( 0 );
-                nCrsr += pUpperFnt->GetCrsrOfst( aDrawInf );
+                nCrsr = nCrsr + pUpperFnt->GetCrsrOfst( aDrawInf );
             }
             else
             {
                 aDrawInf.SetSpace( rInf.GetSpace() );
-                nCrsr += pLowerFnt->GetCrsrOfst( aDrawInf );
+                nCrsr = nCrsr + pLowerFnt->GetCrsrOfst( aDrawInf );
             }
             nOfst = 0;
         }
@@ -502,11 +502,11 @@ class SwDoDrawStretchCapital : public SwDoDrawCapital
 public:
     virtual void Do();
 
-    SwDoDrawStretchCapital( SwDrawTextInfo &rInfo, const USHORT nCapWidth )
+    SwDoDrawStretchCapital( SwDrawTextInfo &rInfo, const USHORT nCapitalWidth )
             : SwDoDrawCapital( rInfo ),
-              nCapWidth( nCapWidth ),
-              nOrgWidth( rInfo.GetWidth() ),
-              nStrLen( rInfo.GetLen() )
+              nStrLen( rInfo.GetLen() ),
+              nCapWidth( nCapitalWidth ),
+              nOrgWidth( rInfo.GetWidth() )
         { }
 };
 
@@ -602,7 +602,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     rDo.GetInf().SetSize( aPartSize );
     xub_StrLen nPos = rDo.GetInf().GetIdx();
     xub_StrLen nOldPos = nPos;
-    nMaxPos += nPos;
+    nMaxPos = nMaxPos + nPos;
 
     // #107816#
     // Look if the length of the original text and the ToUpper-converted
@@ -628,7 +628,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                             || aFont.GetStrikeout() != STRIKEOUT_NONE;
     const BOOL bWordWise = bUnderStriked && aFont.IsWordLineMode() &&
                            rDo.GetInf().GetDrawSpace();
-    const long nKern = rDo.GetInf().GetKern();
+    const long nTmpKern = rDo.GetInf().GetKern();
 
     if ( bUnderStriked )
     {
@@ -716,8 +716,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
             aPartSize = pSmallFont->GetTextSize( rDo.GetInf() );
             nKana += rDo.GetInf().GetKanaDiff();
             rDo.GetInf().SetOut( *pOldOut );
-            if( nKern && nPos < nMaxPos )
-                aPartSize.Width() += nKern;
+            if( nTmpKern && nPos < nMaxPos )
+                aPartSize.Width() += nTmpKern;
             rDo.Do();
             nOldPos = nPos;
         }
@@ -782,8 +782,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                         rDo.GetInf().SetOut( *pOldOut );
                         if( nSpaceAdd )
                             aPartSize.Width() += nSpaceAdd * ( nTmp - nOldPos );
-                        if( nKern && nPos < nMaxPos )
-                            aPartSize.Width() += nKern;
+                        if( nTmpKern && nPos < nMaxPos )
+                            aPartSize.Width() += nTmpKern;
                         rDo.Do();
                         aStartPos = rDo.GetInf().GetPos();
                         nOldPos = nTmp;
@@ -828,8 +828,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                                 aPartSize.Width() += nSpaceAdd;
                         }
                     }
-                    if( nKern && nPos < nMaxPos )
-                        aPartSize.Width() += nKern;
+                    if( nTmpKern && nPos < nMaxPos )
+                        aPartSize.Width() += nTmpKern;
                     rDo.Do();
                     nOldPos = nTmp;
                 }
