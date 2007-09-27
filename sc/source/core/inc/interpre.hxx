@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:34:04 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:53:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,6 +299,10 @@ inline void CurFmtToFuncFmt()
 static inline BOOL CheckStringResultLen( String& rResult, const String& rAdd );
 // Set error according to rVal, and set rVal to 0.0 if there was an error.
 inline void TreatDoubleError( double& rVal );
+// Lookup using ScLookupCache, @returns TRUE if found and result address
+bool LookupQueryWithCache( ScAddress & o_rResultPos,
+        const ScQueryParam & rParam ) const;
+
 //---------------------------------Funktionen in interpr1.cxx---------
 void ScIfJump();
 void ScChoseJump();
