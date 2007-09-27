@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conpoly.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:18:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,26 +122,26 @@ BOOL ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FALSE;
 
-    if (pSh->IsDrawCreate())
+    if (m_pSh->IsDrawCreate())
     {
         if (rMEvt.IsLeft() && rMEvt.GetClicks() == 1 &&
-                                        pWin->GetDrawMode() != OBJ_FREELINE)
+                                        m_pWin->GetSdrDrawMode() != OBJ_FREELINE)
         {
-            if (!pSh->EndCreate(SDRCREATE_NEXTPOINT))
+            if (!m_pSh->EndCreate(SDRCREATE_NEXTPOINT))
             {
-                pSh->BreakCreate();
+                m_pSh->BreakCreate();
                 EnterSelectMode(rMEvt);
                 return TRUE;
             }
         }
         else
         {
-            Point aPnt(pWin->PixelToLogic(rMEvt.GetPosPixel()));
+            Point aPnt(m_pWin->PixelToLogic(rMEvt.GetPosPixel()));
             bReturn = SwDrawBase::MouseButtonUp(rMEvt);
 
-            if (!(bReturn && (aPnt == aStartPos || rMEvt.IsRight())))
+            if (!(bReturn && (aPnt == m_aStartPos || rMEvt.IsRight())))
             {
-                SdrView *pSdrView = pSh->GetDrawView();
+                SdrView *pSdrView = m_pSh->GetDrawView();
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
 
                 if (rMarkList.GetMark(0))
@@ -165,7 +165,7 @@ BOOL ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
                                 const ::basegfx::B2DPoint aLast(aPolygon.getB2DPoint(aPolygon.count() - 1L));
                                 const ::basegfx::B2DVector aDiff(aLast - aFirst);
 
-                                const long nCloseDist(pWin->PixelToLogic(Size(CLOSE_PIXDIST, 0)).Width());
+                                const long nCloseDist(m_pWin->PixelToLogic(Size(CLOSE_PIXDIST, 0)).Width());
                                 if(aDiff.getLength() < (double)nCloseDist)
                                 {
                                     pPathObj->ToggleClosed();
@@ -196,15 +196,15 @@ void ConstPolygon::Activate(const USHORT nSlotId)
     switch (nSlotId)
     {
         case SID_DRAW_POLYGON_NOFILL:
-            pWin->SetDrawMode(OBJ_PLIN);
+            m_pWin->SetSdrDrawMode(OBJ_PLIN);
             break;
 
         case SID_DRAW_BEZIER_NOFILL:
-            pWin->SetDrawMode(OBJ_PATHLINE);
+            m_pWin->SetSdrDrawMode(OBJ_PATHLINE);
             break;
 
         case SID_DRAW_FREELINE_NOFILL:
-            pWin->SetDrawMode(OBJ_FREELINE);
+            m_pWin->SetSdrDrawMode(OBJ_FREELINE);
             break;
 
         default:
