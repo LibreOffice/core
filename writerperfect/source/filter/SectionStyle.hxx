@@ -26,8 +26,14 @@
  */
 #ifndef _SECTIONSTYLE_H
 #define _SECTIONSTYLE_H
+#if defined _MSC_VER
+#pragma warning( push, 1 )
+#endif
 #include <libwpd/libwpd.h>
 #include <libwpd/WPXPropertyListVector.h>
+#if defined _MSC_VER
+#pragma warning( pop )
+#endif
 
 #include "Style.hxx"
 #include "WriterProperties.hxx"
