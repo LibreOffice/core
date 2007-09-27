@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:26:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:38:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,10 +134,10 @@
 #endif
 
 using namespace com::sun::star;
-using namespace com::sun::star::i18n;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::util;
-using namespace com::sun::star::i18n;
+using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::i18n;
 
 #define SRCH_ATTR_OFF   0
 #define SRCH_ATTR_ON    1
@@ -183,7 +183,6 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
         bQuiet = ((const SfxBoolItem*) pItem)->GetValue();
 
     BOOL bApi = bQuiet | bNoMessage;
-    BOOL bSrchList = TRUE;
 
     USHORT nSlot = rReq.GetSlot();
     if (nSlot == FN_REPEAT_SEARCH && !pSrchItem)
@@ -215,9 +214,6 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
             // Dialog abmelden
             delete pSrchItem;
             pSrchItem = (SvxSearchItem*) pArgs->Get(SID_SEARCH_ITEM).Clone();
-
-            const USHORT nId = SvxSearchDialogWrapper::GetChildWindowId();
-            SvxSearchDialogWrapper *pWrp = (SvxSearchDialogWrapper*)GetViewFrame()->GetChildWindow(nId);
 
             DELETEZ( pSrchList );
             DELETEZ( pReplList );
@@ -394,7 +390,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                 }
                 break;
             }
-            com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+            uno::Reference< frame::XDispatchRecorder > xRecorder =
                     GetViewFrame()->GetBindings().GetRecorder();
             //prevent additional dialogs in recorded macros
             if ( xRecorder.is() )
@@ -638,13 +634,13 @@ void SwView::Replace()
         aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
         aRewriter.AddRule(UNDO_ARG3, pSrchItem->GetReplaceString());
 
-        pWrtShell->StartUndo(UIUNDO_REPLACE_STYLE, &aRewriter); // #111827#
+        pWrtShell->StartUndo(UNDO_UI_REPLACE_STYLE, &aRewriter); // #111827#
 
         pWrtShell->SetTxtFmtColl( pWrtShell->GetParaStyle(
                             pSrchItem->GetReplaceString(),
                             SwWrtShell::GETSTYLE_CREATESOME ));
 
-        pWrtShell->EndUndo(UIUNDO_REPLACE_STYLE); // #111827#
+        pWrtShell->EndUndo(UNDO_UI_REPLACE_STYLE); // #111827#
     }
     else
     {
@@ -787,7 +783,6 @@ void SwView::StateSearch(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
     USHORT nWhich = aIter.FirstWhich();
-    SearchAttrItemList* pSrchRepList = pSrchList;
 
     while(nWhich)
     {
