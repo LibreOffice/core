@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltbl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:40:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:38:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,9 @@
 #include "htmltbl.hxx"
 #include "ndindex.hxx"
 
+using namespace ::com::sun::star;
+
+
 #define COLFUZZY 20
 #define MAX_TABWIDTH (USHRT_MAX - 2001)
 
@@ -120,7 +123,7 @@ SwHTMLTableLayoutCnts::SwHTMLTableLayoutCnts( const SwStartNode *pSttNd,
                                           BOOL bNoBrTag,
                                           SwHTMLTableLayoutCnts* pNxt ) :
     pNext( pNxt ), pBox( 0 ), pTable( pTab ), pStartNode( pSttNd ),
-    nWidthSet( 0 ), nPass1Done( 0 ), bNoBreakTag( bNoBrTag )
+    nPass1Done( 0 ), nWidthSet( 0 ), bNoBreakTag( bNoBrTag )
 {}
 
 SwHTMLTableLayoutCnts::~SwHTMLTableLayoutCnts()
@@ -172,9 +175,9 @@ SwHTMLTableLayoutColumn::SwHTMLTableLayoutColumn( USHORT nWidth,
 
 SwHTMLTableLayoutConstraints::SwHTMLTableLayoutConstraints(
     ULONG nMin, ULONG nMax, USHORT nRw, USHORT nColumn, USHORT nColSp ):
-    nMinNoAlign( nMin ), nMaxNoAlign( nMax ),
     nRow( nRw ), nCol( nColumn ), nColSpan( nColSp ),
-    pNext( 0 )
+    pNext( 0 ),
+    nMinNoAlign( nMin ), nMaxNoAlign( nMax )
 {}
 
 SwHTMLTableLayoutConstraints::~SwHTMLTableLayoutConstraints()
@@ -231,14 +234,14 @@ SwHTMLTableLayout::SwHTMLTableLayout(
     nMin( 0 ), nMax( 0 ),
     nRows( nRws ), nCols( nCls ),
     nLeftMargin( nLMargin ), nRightMargin( nRMargin ),
+    nInhAbsLeftSpace( 0 ), nInhAbsRightSpace( 0 ),
+    nRelLeftFill( 0 ), nRelRightFill( 0 ),
+    nRelTabWidth( 0 ), nWidthOption( nWdth ),
     nCellPadding( nCellPad ), nCellSpacing( nCellSp ), nBorder( nBorderOpt ),
-    nBorderWidth( nBWidth ),
     nLeftBorderWidth( nLeftBWidth ), nRightBorderWidth( nRightBWidth ),
     nInhLeftBorderWidth( nInhLeftBWidth ),
     nInhRightBorderWidth( nInhRightBWidth ),
-    nRelLeftFill( 0 ), nRelRightFill( 0 ),
-    nInhAbsLeftSpace( 0 ), nInhAbsRightSpace( 0 ),
-    nRelTabWidth( 0 ), nWidthOption( nWdth ),
+    nBorderWidth( nBWidth ),
     nDelayedResizeAbsAvail( 0 ), nLastResizeAbsAvail( 0 ),
     nPass1Done( 0 ), nWidthSet( 0 ), eTableAdjust( eAdjust ),
     bColsOption( bColsOpt ), bColTags( bColTgs ),
@@ -279,7 +282,7 @@ USHORT SwHTMLTableLayout::GetLeftCellSpace( USHORT nCol, USHORT nColSpan,
 
     if( nCol == 0 )
     {
-        nSpace += nBorder;
+        nSpace = nSpace + nBorder;
 
         if( bSwBorders && nSpace < nLeftBorderWidth )
             nSpace = nLeftBorderWidth;
@@ -367,8 +370,8 @@ void SwHTMLTableLayout::GetAvail( USHORT nCol, USHORT nColSpan,
     for( USHORT i=nCol; i<nCol+nColSpan;i++ )
     {
         const SwHTMLTableLayoutColumn *pColumn = GetColumn(i);
-        rAbsAvail += pColumn->GetAbsColWidth();
-        rRelAvail += pColumn->GetRelColWidth();
+        rAbsAvail = rAbsAvail + pColumn->GetAbsColWidth();
+        rRelAvail = rRelAvail + pColumn->GetRelColWidth();
     }
 }
 
@@ -453,7 +456,7 @@ USHORT SwHTMLTableLayout::GetBrowseWidthByTabFrm(
     rTabFrm.CalcFlyOffsets( nUpperDummy, nLeftOffset, nRightOffset );
     nWidth -= (nLeftOffset + nRightOffset);
 
-    return nWidth < USHRT_MAX ? nWidth : USHRT_MAX;
+    return nWidth < USHRT_MAX ? static_cast<USHORT>(nWidth) : USHRT_MAX;
 }
 
 USHORT SwHTMLTableLayout::GetBrowseWidthByTable( const SwDoc& rDoc ) const
@@ -903,9 +906,9 @@ void SwHTMLTableLayout::AutoLayoutPass1()
         // Spalten
         ULONG nColsMin = 0;
         ULONG nColsMax = 0;
-        for( USHORT i=nCol; i<nCol+nColSpan; i++ )
+        for( USHORT j=nCol; j<nCol+nColSpan; j++ )
         {
-            SwHTMLTableLayoutColumn *pColumn = GetColumn( i );
+            SwHTMLTableLayoutColumn *pColumn = GetColumn( j );
             nColsMin += pColumn->GetMin();
             nColsMax += pColumn->GetMax();
         }
@@ -920,15 +923,15 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                 // Anteilig anhand der Mindestbreiten
                 USHORT nEndCol = nCol+nColSpan;
                 ULONG nDiff = nMinD;
-                for( USHORT i=nCol; i<nEndCol; i++ )
+                for( USHORT ic=nCol; ic<nEndCol; ic++ )
                 {
-                    SwHTMLTableLayoutColumn *pColumn = GetColumn( i );
+                    SwHTMLTableLayoutColumn *pColumn = GetColumn( ic );
 
                     ULONG nColMin = pColumn->GetMin();
                     ULONG nColMax = pColumn->GetMax();
 
                     nMin -= nColMin;
-                    ULONG nAdd = i<nEndCol-1 ? (nColMin * nMinD) / nColsMin
+                    ULONG nAdd = ic<nEndCol-1 ? (nColMin * nMinD) / nColsMin
                                              : nDiff;
                     nColMin += nAdd;
                     nMin += nColMin;
@@ -950,9 +953,9 @@ void SwHTMLTableLayout::AutoLayoutPass1()
             else
             {
                 // Anteilig anhand der Differenz zwischen Max und Min
-                for( USHORT i=nCol; i<nCol+nColSpan; i++ )
+                for( USHORT ic=nCol; ic<nCol+nColSpan; ic++ )
                 {
-                    SwHTMLTableLayoutColumn *pColumn = GetColumn( i );
+                    SwHTMLTableLayoutColumn *pColumn = GetColumn( ic );
 
                     ULONG nDiff = pColumn->GetMax()-pColumn->GetMin();
                     if( nMinD < nDiff )
@@ -973,9 +976,9 @@ void SwHTMLTableLayout::AutoLayoutPass1()
         {
             ULONG nMaxD = nConstrMax-nColsMax;
 
-            for( USHORT i=nCol; i<nCol+nColSpan; i++ )
+            for( USHORT ic=nCol; ic<nCol+nColSpan; ic++ )
             {
-                SwHTMLTableLayoutColumn *pColumn = GetColumn( i );
+                SwHTMLTableLayoutColumn *pColumn = GetColumn( ic );
 
                 nMax -= pColumn->GetMax();
 
@@ -1070,7 +1073,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                         pColumn->SetWidthOption( nColWidth, TRUE, FALSE );
                     }
                     nRelMax += pColumn->GetMax();
-                    nRel += nColWidth;
+                    nRel = nRel + nColWidth;
                     nRelCols++;
                 }
                 else if( !pColumn->GetMin() )
@@ -1221,8 +1224,8 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
         {
             // sonst beruecksichtigen wir die Raender nur, wenn auch Platz
             // fuer sie da ist (nMin ist hier bereits berechnet!)
-            nAbsLeftFill += nLeftMargin;
-            nAbsRightFill += nRightMargin;
+            nAbsLeftFill = nAbsLeftFill + nLeftMargin;
+            nAbsRightFill = nAbsRightFill + nRightMargin;
         }
     }
 
@@ -1360,8 +1363,8 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
                         (USHORT)((nColMinD * nRelTabWidth) / nMin) );
                 }
 
-                nAbs += (USHORT)pColumn->GetAbsColWidth();
-                nRel += (USHORT)pColumn->GetRelColWidth();
+                nAbs = nAbs + (USHORT)pColumn->GetAbsColWidth();
+                nRel = nRel + (USHORT)pColumn->GetRelColWidth();
             }
             pColumn = GetColumn( nCols-1 );
             pColumn->SetAbsColWidth( nAbsTabWidth - nAbs );
@@ -1397,8 +1400,8 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
                         (USHORT)((((nColMinD-nRealColMin) * nDistRel) / nDistMin) + nRealColMin) );
                 }
 
-                nAbs += (USHORT)pColumn->GetAbsColWidth();
-                nRel += (USHORT)pColumn->GetRelColWidth();
+                nAbs = nAbs + (USHORT)pColumn->GetAbsColWidth();
+                nRel = nRel + (USHORT)pColumn->GetRelColWidth();
             }
             pColumn = GetColumn( nCols-1 );
             pColumn->SetAbsColWidth( nAbsTabWidth - nAbs );
@@ -1480,8 +1483,8 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
                         nRelColWidth--;
                     pColumn->SetRelColWidth( (USHORT)nRelColWidth );
 
-                    nAbs += (USHORT)nColMax;
-                    nRel += (USHORT)nRelColWidth;
+                    nAbs = nAbs + (USHORT)nColMax;
+                    nRel = nRel + (USHORT)nRelColWidth;
                 }
             }
 
@@ -1514,8 +1517,8 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
                         pColumn->SetRelColWidth(
                             (USHORT)((nColMax * nDistRelTabWidth) / nDistMax) );
                     }
-                    nAbs += pColumn->GetAbsColWidth();
-                    nRel += pColumn->GetRelColWidth();
+                    nAbs = nAbs + pColumn->GetAbsColWidth();
+                    nRel = nRel + pColumn->GetRelColWidth();
                 }
             }
             ASSERT( nCols==nFixedCols, "Spalte vergessen!" );
@@ -1567,8 +1570,8 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
 
             GetColumn( i )->SetAbsColWidth( (USHORT)nAbsColWidth );
             GetColumn( i )->SetRelColWidth( (USHORT)nRelColWidth );
-            nAbs += (USHORT)nAbsColWidth;
-            nRel += (USHORT)nRelColWidth;
+            nAbs = nAbs + (USHORT)nAbsColWidth;
+            nRel = nRel + (USHORT)nRelColWidth;
         }
         GetColumn( nCols-1 )->SetAbsColWidth( nAbsTabWidth - nAbs );
         GetColumn( nCols-1 )->SetRelColWidth( nRelTabWidth - nRel );
@@ -1592,17 +1595,17 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
         switch( eTableAdjust )
         {
         case SVX_ADJUST_RIGHT:
-            nAbsLeftFill += nAbsDist;
-            nRelLeftFill += nRelDist;
+            nAbsLeftFill = nAbsLeftFill + nAbsDist;
+            nRelLeftFill = nRelLeftFill + nRelDist;
             nParentInhAbsLeftSpace = nParentInhAbsSpace;
             break;
         case SVX_ADJUST_CENTER:
             {
                 USHORT nAbsLeftDist = nAbsDist / 2;
-                nAbsLeftFill += nAbsLeftDist;
+                nAbsLeftFill = nAbsLeftFill + nAbsLeftDist;
                 nAbsRightFill += nAbsDist - nAbsLeftDist;
                 USHORT nRelLeftDist = nRelDist / 2;
-                nRelLeftFill += nRelLeftDist;
+                nRelLeftFill = nRelLeftFill + nRelLeftDist;
                 nRelRightFill += nRelDist - nRelLeftDist;
                 nParentInhAbsLeftSpace = nParentInhAbsSpace / 2;
                 nParentInhAbsRightSpace = nParentInhAbsSpace -
@@ -1611,8 +1614,8 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
             break;
         case SVX_ADJUST_LEFT:
         default:
-            nAbsRightFill += nAbsDist;
-            nRelRightFill += nRelDist;
+            nAbsRightFill = nAbsRightFill + nAbsDist;
+            nRelRightFill = nRelRightFill + nRelDist;
             nParentInhAbsRightSpace = nParentInhAbsSpace;
             break;
         }
@@ -1663,11 +1666,11 @@ static BOOL lcl_ResizeBox( const SwTableBox*& rpBox, void* pPara )
         USHORT nWidth = 0;
         ((SwTableBox *)rpBox)->GetTabLines().ForEach( &lcl_ResizeLine, &nWidth );
         rpBox->GetFrmFmt()->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth, 0 ));
-        *pWidth += nWidth;
+        *pWidth = *pWidth + nWidth;
     }
     else
     {
-        *pWidth += (USHORT)rpBox->GetFrmFmt()->GetFrmSize().GetSize().Width();
+        *pWidth = *pWidth + (USHORT)rpBox->GetFrmFmt()->GetFrmSize().GetSize().Width();
     }
 
     return TRUE;
@@ -1768,7 +1771,7 @@ void SwHTMLTableLayout::SetWidths( BOOL bCallPass2, USHORT nAbsAvail,
         SwFmtFrmSize aFrmSize( pFrmFmt->GetFrmSize() );
         aFrmSize.SetWidth( nRelTabWidth );
         BOOL bRel = bUseRelWidth &&
-                    HORI_FULL!=pFrmFmt->GetHoriOrient().GetHoriOrient();
+                    text::HoriOrientation::FULL!=pFrmFmt->GetHoriOrient().GetHoriOrient();
         aFrmSize.SetWidthPercent( (BYTE)(bRel ? nWidthOption : 0) );
         pFrmFmt->SetAttr( aFrmSize );
         ((SwTable *)pSwTable)->UnlockModify();
