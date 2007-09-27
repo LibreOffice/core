@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtinit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:02:40 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:21:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,24 +66,11 @@ long SwTxtFrm::nMinPrtLine = 0;
 SwContourCache *pContourCache = 0;
 SwDropCapCache *pDropCapCache = 0;
 
-#ifndef PROFILE
-// Code zum Initialisieren von Statics im eigenen Code-Segment
-#ifdef _MSC_VER
-#pragma code_seg( "SWSTATICS" )
-#endif
-#endif
-
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtLine,      50,  50 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwParaPortion,  50,  50 ) //Absaetze
 IMPL_FIXEDMEMPOOL_NEWDEL( SwLineLayout,  150, 150 ) //Zeilen
 IMPL_FIXEDMEMPOOL_NEWDEL( SwHolePortion, 150, 150 ) //z.B. Blanks am Zeilenende
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtPortion,  200, 100 ) //Attributwechsel
-
-#ifndef PROFILE
-#ifdef _MSC_VER
-#pragma code_seg()
-#endif
-#endif
 
 /*************************************************************************
  *                  _TextInit(), _TextFinit()
