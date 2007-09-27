@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_policy.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:36:04 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:01:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,16 +67,15 @@ using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+extern ::rtl_StandardModuleCount g_moduleCount;
+
 namespace stoc_sec
 {
-
 // static stuff initialized when loading lib
 static OUString s_implName = OUSTR(IMPL_NAME);
 static OUString s_serviceName = OUSTR(SERVICE_NAME);
 
 static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
-extern ::rtl_StandardModuleCount s_moduleCount;
-
 //##################################################################################################
 
 //--------------------------------------------------------------------------------------------------
@@ -145,13 +144,13 @@ FilePolicy::FilePolicy( Reference< XComponentContext > const & xComponentContext
     , m_ac( xComponentContext )
     , m_init( false )
 {
-    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 FilePolicy::~FilePolicy()
     SAL_THROW( () )
 {
-    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 void FilePolicy::disposing()
@@ -589,25 +588,25 @@ Sequence< OUString > FilePolicy::getSupportedServiceNames()
 {
     return s_serviceNames;
 }
-
+}
 //##################################################################################################
-
+namespace stoc_bootstrap
+{
 //--------------------------------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL filepolicy_create(
     Reference< XComponentContext > const & xComponentContext )
     SAL_THROW( (Exception) )
 {
-    return (OWeakObject *)new FilePolicy( xComponentContext );
+    return (OWeakObject *)new stoc_sec::FilePolicy( xComponentContext );
 }
 //--------------------------------------------------------------------------------------------------
 Sequence< OUString > filepolicy_getSupportedServiceNames() SAL_THROW( () )
 {
-    return s_serviceNames;
+    return stoc_sec::s_serviceNames;
 }
 //--------------------------------------------------------------------------------------------------
 OUString filepolicy_getImplementationName() SAL_THROW( () )
 {
-    return s_implName;
+    return stoc_sec::s_implName;
 }
-
 }
