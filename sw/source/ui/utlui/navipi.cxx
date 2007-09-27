@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:51:44 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:45:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,8 @@
 #include <utlui.hrc>
 #endif
 
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
+#include <unomid.h>
+
 
 static const sal_Unicode cPrefix = '_';
 
@@ -262,39 +263,6 @@ IMPL_LINK( SwNavigationPI, DocListBoxSelectHdl, ListBox *, pBox )
     }
     return 0;
 }
-/*------------------------------------------------------------------------
- Beschreibung:  Select der Typenlistbox
-------------------------------------------------------------------------*/
-/*
-
-IMPL_LINK( SwNavigationPI, TypeListBoxSelectHdl, ListBox *, pBox )
-{
-    USHORT nEntryIdx = pBox->GetSelectEntryPos();
-    USHORT nCount =  pBox->GetEntryCount();
-    if(nEntryIdx == nCount - 1)
-    {
-        if(!bPageCtrlsVisible)
-        {
-            bPageCtrlsVisible = TRUE;
-            aContentToolBox.ShowItem( FN_PAGENUMBER );
-            aContentToolBox.HideItem( FN_UP );
-            aContentToolBox.HideItem( FN_DOWN );
-        }
-    }
-    else
-    {
-        if(bPageCtrlsVisible)
-        {
-            aContentToolBox.HideItem( FN_PAGENUMBER );
-            aContentToolBox.ShowItem( FN_UP );
-            aContentToolBox.ShowItem( FN_DOWN );
-            bPageCtrlsVisible = FALSE;
-        }
-    }
-
-    pConfig->SetSelectedPos( nEntryIdx );
-    return 0;
-}
 
 /*------------------------------------------------------------------------
  Beschreibung:  Fuellen der ListBox fuer Outline Sicht oder Dokumente
@@ -355,7 +323,7 @@ void SwNavigationPI::UsePage(SwWrtShell *pSh)
 
 IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
 {
-    const USHORT nId = pBox->GetCurItemId();
+    const USHORT nCurrItemId = pBox->GetCurItemId();
     SwView *pView = GetCreateView();
     if (!pView)
         return 1;
@@ -367,13 +335,13 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
     BOOL bOutlineWithChilds  = ( KEY_MOD1 != pBox->GetModifier());
     int nFuncId = 0;
     BOOL bFocusToDoc = FALSE;
-    switch (nId)
+    switch (nCurrItemId)
     {
         case FN_UP:
         case FN_DOWN:
         {
             // #i75416# move the execution of the search to an asynchronously called static link
-            bool* pbNext = new bool( FN_DOWN == nId );
+            bool* pbNext = new bool( FN_DOWN == nCurrItemId );
             Application::PostUserEvent( STATIC_LINK(pView, SwView, MoveNavigationHdl), pbNext );
         }
         break;
@@ -463,9 +431,9 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
         case FN_GLOBAL_EDIT:
         {
             if(IsGlobalMode())
-                aGlobalTree.ExecCommand(nId);
+                aGlobalTree.ExecCommand(nCurrItemId);
             else
-                aContentTree.ExecCommand(nId, bOutlineWithChilds);
+                aContentTree.ExecCommand(nCurrItemId, bOutlineWithChilds);
         }
         break;
         case FN_GLOBAL_SWITCH:
@@ -498,13 +466,13 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
 
 IMPL_LINK( SwNavigationPI, ToolBoxClickHdl, ToolBox *, pBox )
 {
-    const USHORT nId = pBox->GetCurItemId();
-    switch (nId)
+    const USHORT nCurrItemId = pBox->GetCurItemId();
+    switch (nCurrItemId)
     {
         case FN_GLOBAL_UPDATE:
         case FN_GLOBAL_OPEN:
         {
-            aGlobalTree.TbxMenuHdl(nId, pBox);
+            aGlobalTree.TbxMenuHdl(nCurrItemId, pBox);
         }
         break;
     }
@@ -517,8 +485,8 @@ IMPL_LINK( SwNavigationPI, ToolBoxClickHdl, ToolBox *, pBox )
 
 IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
 {
-    const USHORT nId = pBox->GetCurItemId();
-    switch (nId)
+    const USHORT nCurrItemId = pBox->GetCurItemId();
+    switch (nCurrItemId)
     {
         case FN_CREATE_NAVIGATION:
         {
@@ -539,11 +507,11 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
             }
             pMenu->CheckItem( nRegionMode + 1 );
             pMenu->SetSelectHdl(LINK(this, SwNavigationPI, MenuSelectHdl));
-            pBox->SetItemDown( nId, TRUE );
+            pBox->SetItemDown( nCurrItemId, TRUE );
             pMenu->Execute( pBox,
                     pBox->GetItemRect(FN_DROP_REGION),
                     POPUPMENU_EXECUTE_DOWN );
-            pBox->SetItemDown( nId, FALSE );
+            pBox->SetItemDown( nCurrItemId, FALSE );
             pBox->EndSelection();
             delete pMenu;
             pBox->Invalidate();
@@ -559,11 +527,11 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
             }
             pMenu->CheckItem( aContentTree.GetOutlineLevel() + 100 );
             pMenu->SetSelectHdl(LINK(this, SwNavigationPI, MenuSelectHdl));
-            pBox->SetItemDown( nId, TRUE );
+            pBox->SetItemDown( nCurrItemId, TRUE );
             pMenu->Execute( pBox,
                     pBox->GetItemRect(FN_OUTLINE_LEVEL),
                     POPUPMENU_EXECUTE_DOWN );
-            pBox->SetItemDown( nId, FALSE );
+            pBox->SetItemDown( nCurrItemId, FALSE );
             delete pMenu;
             pBox->EndSelection();
             pBox->Invalidate();
@@ -644,7 +612,7 @@ IMPL_LINK( SwNavigationPI, EditAction, NumEditAction *, pEdit )
     {
         if(aPageChgTimer.IsActive())
             aPageChgTimer.Stop();
-        pCreateView->GetWrtShell().GotoPage((USHORT)pEdit->GetValue());
+        pCreateView->GetWrtShell().GotoPage((USHORT)pEdit->GetValue(), TRUE);
         pCreateView->GetEditWin().GrabFocus();
         pCreateView->GetViewFrame()->GetBindings().Invalidate(FN_STAT_PAGE);
     }
@@ -759,11 +727,11 @@ void SwNavigationPI::_ZoomOut()
         FillBox();
         if(IsGlobalMode())
         {
-            aGlobalTree.Show();
+            aGlobalTree.ShowTree();
         }
         else
         {
-            aContentTree.Show();
+            aContentTree.ShowTree();
             aDocListBox.Show();
         }
         SvLBoxEntry* pFirst = aContentTree.FirstSelected();
@@ -784,9 +752,9 @@ void SwNavigationPI::_ZoomIn()
     if (pFloat &&
         (!_IsZoomedIn() || ( pContextWin->GetFloatingWindow()->IsRollUp())))
     {
-        aContentTree.Hide();
+        aContentTree.HideTree();
         aDocListBox.Hide();
-        aGlobalTree.Hide();
+        aGlobalTree.HideTree();
         bIsZoomedIn = TRUE;
         Size aSz(GetOutputSizePixel());
         if( aSz.Height() > nZoomIn )
@@ -861,37 +829,43 @@ void SwNavigationPI::Resize()
  Beschreibung:
 ------------------------------------------------------------------------*/
 
-SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
+SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
                                 SfxChildWindowContext* pCw,
                                 Window* pParent) :
 
     Window( pParent, SW_RES(DLG_NAVIGATION_PI)),
-    SfxControllerItem( SID_DOCFULLNAME, *pBindings ),
-    aContentTree(this, SW_RES(TL_CONTENT)),
-    aGlobalTree(this, SW_RES(TL_GLOBAL)),
+    SfxControllerItem( SID_DOCFULLNAME, *_pBindings ),
+
     aContentToolBox(this, SW_RES(TB_CONTENT)),
     aGlobalToolBox(this, SW_RES(TB_GLOBAL)),
     aContentImageList(SW_RES(IL_CONTENT)),
     aContentImageListH(SW_RES(ILH_CONTENT)),
+    aContentTree(this, SW_RES(TL_CONTENT)),
+    aGlobalTree(this, SW_RES(TL_GLOBAL)),
     aDocListBox(this, SW_RES(LB_DOCS)),
-    nActMark(0),
-    nAutoMarkIdx(0),
-    rBindings(*pBindings),
-    bSmallMode(FALSE),
-    bIsZoomedIn(FALSE),
-    bPageCtrlsVisible(FALSE),
-    bGlobalMode(FALSE),
-    nRegionMode(REGION_MODE_NONE),
+
     pxObjectShell(0),
     pContentView(0),
     pContentWrtShell(0),
     pActContView(0),
-    pContextWin(pCw),
-    nWishWidth(0),
-    pConfig(SW_MOD()->GetNavigationConfig()),
     pCreateView(0),
     pPopupWindow(0),
-    pFloatingWindow(0)
+    pFloatingWindow(0),
+
+    pContextWin(pCw),
+
+    pConfig(SW_MOD()->GetNavigationConfig()),
+    rBindings(*_pBindings),
+
+    nWishWidth(0),
+    nActMark(0),
+    nAutoMarkIdx(0),
+    nRegionMode(REGION_MODE_NONE),
+
+    bSmallMode(FALSE),
+    bIsZoomedIn(FALSE),
+    bPageCtrlsVisible(FALSE),
+    bGlobalMode(FALSE)
 {
     GetCreateView();
     InitImageList();
@@ -972,7 +946,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
                                     SV_DRAGDROP_CTRL_COPY |
                                     SV_DRAGDROP_ENABLE_TOP );
     aContentTree.EnableAsyncDrag(TRUE);
-    aContentTree.Show();
+    aContentTree.ShowTree();
     aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, TRUE);
 
 //  TreeListBox fuer Globaldokument
@@ -1118,8 +1092,8 @@ IMPL_LINK( SwNavigationPI, ClosePopupWindow, SfxPopupWindow *, pWindow )
  Beschreibung:
 ------------------------------------------------------------------------*/
 
-void SwNavigationPI::StateChanged( USHORT nSID, SfxItemState eState,
-                                            const SfxPoolItem* pState )
+void SwNavigationPI::StateChanged( USHORT nSID, SfxItemState /*eState*/,
+                                            const SfxPoolItem* /*pState*/ )
 {
     if(nSID == SID_DOCFULLNAME)
     {
@@ -1232,7 +1206,7 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
                     aContentTree.SetActiveShell(pWrtShell);
                     if(aGlobalTree.IsVisible())
                     {
-                        if(aGlobalTree.Update())
+                        if(aGlobalTree.Update( FALSE ))
                             aGlobalTree.Display();
                         else
                         // wenn kein Update notwendig, dann zumindest painten
@@ -1257,7 +1231,7 @@ IMPL_LINK( SwNavigationPI, MenuSelectHdl, Menu *, pMenu )
         if(nMenuId < 100)
             SetRegionDropMode( --nMenuId);
         else
-            aContentTree.SetOutlineLevel(nMenuId - 100);
+            aContentTree.SetOutlineLevel( static_cast< BYTE >(nMenuId - 100) );
     }
     return 0;
 }
@@ -1403,7 +1377,7 @@ String SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
     Beschreibung:
 ------------------------------------------------------------------------*/
 
-sal_Int8 SwNavigationPI::AcceptDrop( const AcceptDropEvent& rEvt )
+sal_Int8 SwNavigationPI::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return ( !aContentTree.IsInDrag() &&
         ( aContentTree.IsDropFormatSupported( FORMAT_FILE ) ||
@@ -1465,17 +1439,17 @@ void SwNavigationPI::SetRegionDropMode(USHORT nNewMode)
     nRegionMode = nNewMode;
     pConfig->SetRegionMode( nRegionMode );
 
-    USHORT nId = FN_DROP_REGION;
+    USHORT nDropId = FN_DROP_REGION;
     if(nRegionMode == REGION_MODE_LINK)
-        nId = FN_DROP_REGION_LINK;
+        nDropId = FN_DROP_REGION_LINK;
     else if(nRegionMode == REGION_MODE_EMBEDDED)
-        nId = FN_DROP_REGION_COPY;
+        nDropId = FN_DROP_REGION_COPY;
 
     ImageList& rImgLst = aContentToolBox.GetDisplayBackground().GetColor().IsDark()
                 ? aContentImageListH : aContentImageList;
 
     aContentToolBox.SetItemImage( FN_DROP_REGION,
-                                    rImgLst.GetImage(nId));
+                                    rImgLst.GetImage(nDropId));
 }
 
 
@@ -1492,9 +1466,9 @@ BOOL    SwNavigationPI::ToggleTree()
         SetUpdateMode(FALSE);
         if(_IsZoomedIn())
             _ZoomOut();
-        aGlobalTree.Show();
+        aGlobalTree.ShowTree();
         aGlobalToolBox.Show();
-        aContentTree.Hide();
+        aContentTree.HideTree();
         aContentToolBox.Hide();
         aDocListBox.Hide();
         SetGlobalMode(TRUE);
@@ -1502,11 +1476,11 @@ BOOL    SwNavigationPI::ToggleTree()
     }
     else
     {
-        aGlobalTree.Hide();
+        aGlobalTree.HideTree();
         aGlobalToolBox.Hide();
         if(!_IsZoomedIn())
         {
-            aContentTree.Show();
+            aContentTree.ShowTree();
             aContentToolBox.Show();
             aDocListBox.Show();
         }
@@ -1579,13 +1553,13 @@ SwView*  SwNavigationPI::GetCreateView() const
 
 SwNavigationChild::SwNavigationChild( Window* pParent,
                         USHORT nId,
-                        SfxBindings* pBindings,
+                        SfxBindings* _pBindings,
                         SfxChildWinInfo* pInfo )
     : SfxChildWindowContext( nId )
 {
-    SwNavigationPI* pNavi  = new SwNavigationPI( pBindings, this, pParent );
+    SwNavigationPI* pNavi  = new SwNavigationPI( _pBindings, this, pParent );
     SetWindow( pNavi );
-    pBindings->Invalidate(SID_NAVIGATOR);
+    _pBindings->Invalidate(SID_NAVIGATOR);
     String sExtra = pInfo->aExtraString;
 
     SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();
@@ -1637,12 +1611,12 @@ void SwNavigationPI::InitImageList()
             aGlobalToolBox.SetItemImage(aGlobalToolBox.GetItemId(k),
                     rImgLst.GetImage(aGlobalToolBox.GetItemId(k)));
 
-    USHORT nId = FN_DROP_REGION;
+    USHORT nDropId = FN_DROP_REGION;
     if(nRegionMode == REGION_MODE_LINK)
-        nId = FN_DROP_REGION_LINK;
+        nDropId = FN_DROP_REGION_LINK;
     else if(nRegionMode == REGION_MODE_EMBEDDED)
-        nId = FN_DROP_REGION_COPY;
+        nDropId = FN_DROP_REGION_COPY;
     aContentToolBox.SetItemImage( FN_DROP_REGION,
-                                    rImgLst.GetImage(nId));
+                                    rImgLst.GetImage(nDropId));
 }
 
