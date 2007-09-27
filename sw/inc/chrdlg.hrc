@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chrdlg.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:36:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:57:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,13 +57,12 @@
 
 #define MSG_ILLEGAL_PAGENUM     (RC_CHRDLG_BEGIN +  1)
 
-#define CHRDLG_ACT_END  WIN_QUERY_KILL_HEADER
+#define CHRDLG_ACT_END  DLG_DRAWPARA
 
 #if CHRDLG_ACT_END > RC_CHRDLG_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 
-//add CHINA001
 #define DLG_SWDROPCAPS            (RC_CHRDLG_BEGIN + 11)
 
 #endif
