@@ -4,9 +4,9 @@
  *
  *  $RCSfile: createaddresslistdialog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:49:16 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:30:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,12 +85,12 @@ class SwCreateAddressListDialog : public SfxModalDialog
     PushButton              m_aEndPB;
 
     FixedLine               m_aSeparatorFL;
-    String                  m_sAddressListFilterName;
 
     OKButton                m_aOK;
     CancelButton            m_aCancel;
     HelpButton              m_aHelp;
 
+    String                  m_sAddressListFilterName;
     String                  m_sURL;
 
     SwCSVData*              m_pCSVData;
