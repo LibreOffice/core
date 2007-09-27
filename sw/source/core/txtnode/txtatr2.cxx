@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtatr2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:47:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:27:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,8 +87,8 @@ TYPEINIT1(SwTxtRuby,SwClient);
  *                      class SwTxtHardBlank
  *************************************************************************/
 
-SwTxtHardBlank::SwTxtHardBlank( const SwFmtHardBlank& rAttr, xub_StrLen nStart )
-    : SwTxtAttr( rAttr, nStart ),
+SwTxtHardBlank::SwTxtHardBlank( const SwFmtHardBlank& rAttr, xub_StrLen nStt )
+    : SwTxtAttr( rAttr, nStt ),
     cChar( rAttr.GetChar() )
 {
     ASSERT( ' ' != cChar && '-' != cChar,
@@ -102,8 +102,8 @@ SwTxtHardBlank::SwTxtHardBlank( const SwFmtHardBlank& rAttr, xub_StrLen nStart )
  *************************************************************************/
 
 SwTxtCharFmt::SwTxtCharFmt( const SwFmtCharFmt& rAttr,
-                    xub_StrLen nStart, xub_StrLen nEnd )
-    : SwTxtAttrEnd( rAttr, nStart, nEnd ),
+                    xub_StrLen nStt, xub_StrLen nEnde )
+    : SwTxtAttrEnd( rAttr, nStt, nEnde ),
     pMyTxtNd( 0 ),
     mnSortNumber( 0 )
 {
@@ -149,8 +149,8 @@ BOOL SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
  *************************************************************************/
 
 SwTxtINetFmt::SwTxtINetFmt( const SwFmtINetFmt& rAttr,
-                            xub_StrLen nStart, xub_StrLen nEnd )
-    : SwTxtAttrEnd( rAttr, nStart, nEnd ),
+                            xub_StrLen nStt, xub_StrLen nEnde )
+    : SwTxtAttrEnd( rAttr, nStt, nEnde ),
     SwClient( 0 ),
     pMyTxtNd( 0 )
 {
@@ -182,7 +182,7 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
         if( rStr.Len() )
             nId = IsVisited() ? rFmt.GetVisitedFmtId() : rFmt.GetINetFmtId();
         else
-            nId = IsVisited() ? RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL;
+            nId = static_cast<USHORT>(IsVisited() ? RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL);
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //      correct charstyle.
@@ -251,8 +251,8 @@ BOOL SwTxtINetFmt::IsProtect( ) const
 
 SwTxtXMLAttrContainer::SwTxtXMLAttrContainer(
                             const SvXMLAttrContainerItem& rAttr,
-                            xub_StrLen nStart, xub_StrLen nEnd )
-    : SwTxtAttrEnd( rAttr, nStart, nEnd )
+                            xub_StrLen nStt, xub_StrLen nEnde )
+    : SwTxtAttrEnd( rAttr, nStt, nEnde )
 {}
 
 
@@ -260,8 +260,8 @@ SwTxtXMLAttrContainer::SwTxtXMLAttrContainer(
 // ******************************
 
 SwTxtRuby::SwTxtRuby( const SwFmtRuby& rAttr,
-                        xub_StrLen nStart, xub_StrLen nEnd )
-    : SwTxtAttrEnd( rAttr, nStart, nEnd ),
+                        xub_StrLen nStt, xub_StrLen nEnde )
+    : SwTxtAttrEnd( rAttr, nStt, nEnde ),
     SwClient( 0 ),
     pMyTxtNd( 0 )
 {
@@ -313,7 +313,9 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
     {
         const SwDoc* pDoc = GetTxtNode().GetDoc();
         const String& rStr = rFmt.GetCharFmtName();
-        USHORT nId = rStr.Len() ? rFmt.GetCharFmtId() : RES_POOLCHR_RUBYTEXT;
+        USHORT nId = RES_POOLCHR_RUBYTEXT;
+        if ( rStr.Len() )
+            nId = rFmt.GetCharFmtId();
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //              correct charstyle.
@@ -347,8 +349,8 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
 // ******************************
 
 SwTxt2Lines::SwTxt2Lines( const SvxTwoLinesItem& rAttr,
-                        xub_StrLen nStart, xub_StrLen nEnd )
-    : SwTxtAttrEnd( rAttr, nStart, nEnd )
+                        xub_StrLen nStt, xub_StrLen nEnde )
+    : SwTxtAttrEnd( rAttr, nStt, nEnde )
 {
 }
 
