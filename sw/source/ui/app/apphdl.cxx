@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:22:40 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:15:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+
+#include <tools/debug.hxx>
+#include <tools/link.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -254,9 +257,10 @@
 #include "salhelper/simplereferenceobject.hxx"
 #include "rtl/ref.hxx"
 
+#include <unomid.h>
+
 using namespace ::com::sun::star;
 
-#define C2S(cChar) String::CreateFromAscii(cChar)
 /*--------------------------------------------------------------------
     Beschreibung: Slotmaps fuer Methoden der Applikation
  --------------------------------------------------------------------*/
@@ -312,8 +316,8 @@ void SwModule::StateOther(SfxItemSet &rSet)
             case FN_ENVELOP:
             {
                 sal_Bool bDisable = sal_False;
-                SfxViewShell* pView = SfxViewShell::Current();
-                if( !pView || (pView && !pView->ISA(SwView)) )
+                SfxViewShell* pCurrView = SfxViewShell::Current();
+                if( !pCurrView || (pCurrView && !pCurrView->ISA(SwView)) )
                     bDisable = sal_True;
                 SwDocShell *pDocSh = (SwDocShell*) SfxObjectShell::Current();
                 if ( bDisable ||
@@ -336,12 +340,12 @@ void SwModule::StateOther(SfxItemSet &rSet)
                         nSelection = pSh->GetSelectionType();
 
                     if( (pSh && pSh->HasSelection()) ||
-                        !(nSelection & (SwWrtShell::SEL_TXT | SwWrtShell::SEL_TBL)))
+                        !(nSelection & (nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL)))
                         rSet.DisableItem(nWhich);
                 }
             break;
             case SID_ATTR_METRIC:
-                rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, ::GetDfltMetric(bWebView)));
+                rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, static_cast< UINT16 >(::GetDfltMetric(bWebView))));
             break;
             case FN_SET_MODOPT_TBLNUMFMT:
                 rSet.Put( SfxBoolItem( nWhich, pModuleConfig->
@@ -359,7 +363,6 @@ void SwModule::StateOther(SfxItemSet &rSet)
   -----------------------------------------------------------------------*/
 SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
 {
-    sal_Bool bRet = sal_False;
     SwView* pNewView = 0;
     if(rURL.Len())
     {
@@ -567,9 +570,16 @@ void SwMailMergeWizardExecutor::ExecuteWizard()
         LINK( this, SwMailMergeWizardExecutor, EndDialogHdl ) );
 }
 
+#if OSL_DEBUG_LEVEL > 1
 IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pDialog )
+#else
+IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EMPTYARG )
+#endif
 {
+#if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT( pDialog == m_pWizard, "wrong dialog passed to EndDialogHdl!" );
+    (void) pDialog;
+#endif
 
     long nRet = m_pWizard->GetResult();
     sal_uInt16 nRestartPage = m_pWizard->GetRestartPage();
@@ -703,7 +713,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
     return 0L;
 }
 
-IMPL_LINK( SwMailMergeWizardExecutor, DestroyDialogHdl, AbstractMailMergeWizard*, pDialog )
+IMPL_LINK( SwMailMergeWizardExecutor, DestroyDialogHdl, AbstractMailMergeWizard*, EMPTYARG )
 {
     delete m_pWizard;
     m_pWizard = 0;
@@ -789,6 +799,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
                     ::SetDfltMetric(eUnit, bWebView);
                 }
                 break;
+                default:;//prevent warning
             }
         }
         break;
@@ -822,7 +833,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
 
 
     // Hint abfangen fuer DocInfo
-void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if( rHint.ISA( SfxEventHint ) )
     {
@@ -847,7 +858,7 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
                     sal_Bool bUpdateFields = sal_True;
-                    if( pUpdateDocItem &&  pUpdateDocItem->GetValue() == com::sun::star::document::UpdateDocMode::NO_UPDATE)
+                    if( pUpdateDocItem &&  pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE)
                         bUpdateFields = sal_False;
                     pWrtSh->SetFixFields();
                     if(bUpdateFields)
@@ -955,7 +966,7 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     pDocShell = (SwDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
                 }
             }
-            SwEditShell::SetUndoActionCount(nNew);
+            SwEditShell::SetUndoActionCount( static_cast< USHORT >(nNew));
         }
         else if(SFX_HINT_DEINITIALIZING == nHintId)
         {
