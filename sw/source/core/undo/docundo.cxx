@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:01:29 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:29:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,10 @@
 #ifndef _UNDO_HRC
 #include <undo.hrc>
 #endif
+
+
+using namespace ::com::sun::star;
+
 
 USHORT SwDoc::nUndoActions = UNDO_ACTION_COUNT;     // anzahl von Undo-Action
 
@@ -164,7 +168,7 @@ const SwNodes* SwDoc::GetUndoNds() const
 
 void SwDoc::AppendUndo( SwUndo* pUndo )
 {
-    if( IDocumentRedlineAccess::REDLINE_NONE == pUndo->GetRedlineMode() )
+    if( nsRedlineMode_t::REDLINE_NONE == pUndo->GetRedlineMode() )
         pUndo->SetRedlineMode( GetRedlineMode() );
 
     // Unfortunately, the silly SvPtrArr can only store a little less than
@@ -217,10 +221,11 @@ void SwDoc::AppendUndo( SwUndo* pUndo )
 // nur zum Testen der neuen DOC-Member
 #ifndef PRODUCT
 {
-    USHORT nId, nUndosCnt = 0, nSttEndCnt = 0;
+    SwUndoId nId = UNDO_EMPTY;
+    USHORT nUndosCnt = 0, nSttEndCnt = 0;
     for( USHORT nCnt = 0; nCnt < nUndoPos; ++nCnt )
     {
-        if( UNDO_START == ( nId = (*pUndos)[ nCnt ]->GetId() ))
+        if( UNDO_START == ( nId = (*pUndos)[ nCnt ]->GetId()) )
             ++nSttEndCnt;
         else if( UNDO_END == nId )
             --nSttEndCnt;
@@ -259,7 +264,7 @@ void SwDoc::ClearRedo()
             for( USHORT nCnt = pUndos->Count(); nUndoPos < nCnt; --nUndoCnt )
                 // Klammerung ueberspringen
                 if( UNDO_END == (pUndo = (*pUndos)[ --nCnt ])->GetId() )
-                    nCnt -= ((SwUndoEnd*)pUndo)->GetSttOffset();
+                    nCnt = nCnt - ((SwUndoEnd*)pUndo)->GetSttOffset();
         }
 
         // loesche die Undo-Aktionen (immer von hinten !)
@@ -310,7 +315,8 @@ BOOL SwDoc::DelUndoObj( USHORT nEnde )
     DoUndo( FALSE );
 
     // pruefe erstmal, wo das Ende steht
-    USHORT nId = 0, nSttEndCnt = 0;
+    SwUndoId nId = UNDO_EMPTY;
+    USHORT nSttEndCnt = 0;
     USHORT nCnt;
 
     for( nCnt = 0; nEnde && nCnt < nUndoPos; ++nCnt )
@@ -331,7 +337,7 @@ BOOL SwDoc::DelUndoObj( USHORT nEnde )
     if( nUndoSavePos < nSttEndCnt )     // SavePos wird aufgegeben
         nUndoSavePos = USHRT_MAX;
     else if( nUndoSavePos != USHRT_MAX )
-        nUndoSavePos -= nSttEndCnt;
+        nUndoSavePos = nUndoSavePos - nSttEndCnt;
 
     while( nSttEndCnt )
         pUndos->DeleteAndDestroy( --nSttEndCnt, 1 );
@@ -356,16 +362,16 @@ SwUndoNoModifiedPosition SwDoc::getUndoNoModifiedPosition() const
 }
 
 
-bool SwDoc::HasUndoId(sal_uInt16 nId) const
+bool SwDoc::HasUndoId(SwUndoId eId) const
 {
     USHORT nSize = nUndoPos;
     SwUndo * pUndo;
     while( nSize-- )
-        if( ( pUndo = (*pUndos)[nSize])->GetId() == nId ||
+        if( ( pUndo = (*pUndos)[nSize])->GetId() == eId ||
             ( UNDO_START == pUndo->GetId() &&
-                ((SwUndoStart*)pUndo)->GetUserId() == nId )
+                ((SwUndoStart*)pUndo)->GetUserId() == eId )
             || ( UNDO_END == pUndo->GetId() &&
-                ((SwUndoEnd*)pUndo)->GetUserId() == nId ) )
+                ((SwUndoEnd*)pUndo)->GetUserId() == eId ) )
         {
             return TRUE;
         }
@@ -389,17 +395,17 @@ bool SwDoc::Undo( SwUndoIter& rUndoIter )
 
     SwUndo *pUndo = (*pUndos)[ --nUndoPos ];
 
-    IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
-    IDocumentRedlineAccess::RedlineMode_t eTmpMode = (IDocumentRedlineAccess::RedlineMode_t)pUndo->GetRedlineMode();
-    if( (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eTmpMode) != (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eOld) &&
+    RedlineMode_t eOld = GetRedlineMode();
+    RedlineMode_t eTmpMode = (RedlineMode_t)pUndo->GetRedlineMode();
+    if( (nsRedlineMode_t::REDLINE_SHOW_MASK & eTmpMode) != (nsRedlineMode_t::REDLINE_SHOW_MASK & eOld) &&
         UNDO_START != pUndo->GetId() && UNDO_END != pUndo->GetId() )
         SetRedlineMode( eTmpMode );
 
-    SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eTmpMode | IDocumentRedlineAccess::REDLINE_IGNORE));
+    SetRedlineMode_intern((RedlineMode_t)(eTmpMode | nsRedlineMode_t::REDLINE_IGNORE));
     // Undo ausfuehren
 
     // zum spaeteren ueberpruefen
-    USHORT nAktId = pUndo->GetId();
+    SwUndoId nAktId = pUndo->GetId();
     //JP 11.05.98: FlyFormate ueber die EditShell selektieren, nicht aus dem
     //              Undo heraus
     switch( nAktId )
@@ -447,34 +453,34 @@ bool SwDoc::Undo( SwUndoIter& rUndoIter )
 // setzt Undoklammerung auf, liefert nUndoId der Klammerung
 
 
-USHORT SwDoc::StartUndo( USHORT nUndoId, const SwRewriter * pRewriter )
+SwUndoId SwDoc::StartUndo( SwUndoId eUndoId, const SwRewriter * pRewriter )
 {
     if( !mbUndo )
-        return 0;
+        return UNDO_EMPTY;
 
-    if( !nUndoId )
-        nUndoId = UNDO_START;
+    if( !eUndoId )
+        eUndoId = UNDO_START;
 
-    SwUndoStart * pUndo = new SwUndoStart( nUndoId );
+    SwUndoStart * pUndo = new SwUndoStart( eUndoId );
 
     if (pRewriter)
         pUndo->SetRewriter(*pRewriter);
 
     AppendUndo(pUndo);
 
-    return nUndoId;
+    return eUndoId;
 }
 // schliesst Klammerung der nUndoId, nicht vom UI benutzt
 
 
-USHORT SwDoc::EndUndo(USHORT nUndoId, const SwRewriter * pRewriter)
+SwUndoId SwDoc::EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter)
 {
     USHORT nSize = nUndoPos;
     if( !mbUndo || !nSize-- )
-        return 0;
+        return UNDO_EMPTY;
 
-    if( UNDO_START == nUndoId || !nUndoId )
-        nUndoId = UNDO_END;
+    if( UNDO_START == eUndoId || !eUndoId )
+        eUndoId = UNDO_END;
 
     SwUndo* pUndo = (*pUndos)[ nSize ];
     if( UNDO_START == pUndo->GetId() )
@@ -483,7 +489,7 @@ USHORT SwDoc::EndUndo(USHORT nUndoId, const SwRewriter * pRewriter)
         pUndos->DeleteAndDestroy( nSize );
         --nUndoPos;
         --nUndoSttEnd;
-        return 0;
+        return UNDO_EMPTY;
     }
 
     // exist above any redo objects? If yes, delete them
@@ -493,13 +499,13 @@ USHORT SwDoc::EndUndo(USHORT nUndoId, const SwRewriter * pRewriter)
         for( USHORT nCnt = pUndos->Count(); nUndoPos < nCnt; --nUndoCnt )
             // Klammerung ueberspringen
             if( UNDO_END == (pUndo = (*pUndos)[ --nCnt ])->GetId() )
-                nCnt -= ((SwUndoEnd*)pUndo)->GetSttOffset();
+                nCnt = nCnt - ((SwUndoEnd*)pUndo)->GetSttOffset();
 
         pUndos->DeleteAndDestroy( nUndoPos, pUndos->Count() - nUndoPos );
     }
 
     // suche den Anfang dieser Klammerung
-    USHORT nId;
+    SwUndoId nId = UNDO_EMPTY;
     while( nSize )
         if( UNDO_START == ( nId = (pUndo = (*pUndos)[ --nSize ] )->GetId()) &&
             !((SwUndoStart*)pUndo)->GetEndOffset() )
@@ -517,19 +523,19 @@ USHORT SwDoc::EndUndo(USHORT nUndoId, const SwRewriter * pRewriter)
         nUndoSttEnd = 0;
         nUndoCnt = 0;
         // setze UndoCnt auf den neuen Wert
-        SwUndo* pUndo;
+        SwUndo* pTmpUndo;
         for( USHORT nCnt = 0; nCnt < pUndos->Count(); ++nCnt, ++nUndoCnt )
             // Klammerung ueberspringen
-            if( UNDO_START == (pUndo = (*pUndos)[ nCnt ])->GetId() )
-                nCnt += ((SwUndoStart*)pUndo)->GetEndOffset();
-        return 0;
+            if( UNDO_START == (pTmpUndo = (*pUndos)[ nCnt ])->GetId() )
+                nCnt = nCnt + ((SwUndoStart*)pTmpUndo)->GetEndOffset();
+        return UNDO_EMPTY;
 
     }
 
     // Klammerung um eine einzelne Action muss nicht sein!
     // Aussnahme: es ist eine eigene ID definiert
     if(  2 == pUndos->Count() - nSize &&
-        (UNDO_END == nUndoId || nUndoId == (*pUndos)[ nSize+1 ]->GetId() ))
+        (UNDO_END == eUndoId || eUndoId == (*pUndos)[ nSize+1 ]->GetId() ))
     {
         pUndos->DeleteAndDestroy( nSize );
         nUndoPos = pUndos->Count();
@@ -550,23 +556,24 @@ USHORT SwDoc::EndUndo(USHORT nUndoId, const SwRewriter * pRewriter)
                     DelUndoObj( nUndosCnt / 10 );
             }
         }
-        return nUndoId;
+        return eUndoId;
     }
 
     // setze die Klammerung am Start/End-Undo
     nSize = pUndos->Count() - nSize;
     ((SwUndoStart*)pUndo)->SetEndOffset( nSize );
 
-    SwUndoEnd* pUndoEnd = new SwUndoEnd( nUndoId );
+    SwUndoEnd* pUndoEnd = new SwUndoEnd( eUndoId );
     pUndoEnd->SetSttOffset( nSize );
 
 // nur zum Testen der Start/End-Verpointerung vom Start/End Undo
 #ifndef PRODUCT
     {
-        USHORT nEndCnt = 1, nCnt = pUndos->Count(), nId;
+        USHORT nEndCnt = 1, nCnt = pUndos->Count();
+        SwUndoId nTmpId = UNDO_EMPTY;
         while( nCnt )
         {
-            if( UNDO_START == ( nId = (*pUndos)[ --nCnt ]->GetId()) )
+            if( UNDO_START == ( nTmpId = (*pUndos)[ --nCnt ]->GetId()) )
             {
                 if( !nEndCnt ) // falls mal ein Start ohne Ende vorhanden ist
                     continue;
@@ -574,7 +581,7 @@ USHORT SwDoc::EndUndo(USHORT nUndoId, const SwRewriter * pRewriter)
                 if( !nEndCnt )      // hier ist der Anfang
                     break;
             }
-            else if( UNDO_END == nId )
+            else if( UNDO_END == nTmpId )
                 ++nEndCnt;
             else if( !nEndCnt )
                 break;
@@ -593,7 +600,7 @@ USHORT SwDoc::EndUndo(USHORT nUndoId, const SwRewriter * pRewriter)
         pUndoEnd->SetRewriter(((SwUndoStart *) pUndo)->GetRewriter());
 
     AppendUndo( pUndoEnd );
-    return nUndoId;
+    return eUndoId;
 }
 
 // liefert die Id der letzten Undofaehigen Aktion zurueck oder 0
@@ -624,7 +631,7 @@ sal_Bool SwDoc::RestoreInvisibleContent()
     {
         SwUndo * pUndo = (*pUndos)[ nUndoPos - 1 ];
         if( ( pUndo->GetId() == UNDO_END &&
-            static_cast<SwUndoEnd *>(pUndo)->GetUserId() == UIUNDO_DELETE_INVISIBLECNTNT) )
+            static_cast<SwUndoEnd *>(pUndo)->GetUserId() == UNDO_UI_DELETE_INVISIBLECNTNT) )
         {
             SwPaM aPam( GetNodes().GetEndOfPostIts() );
             SwUndoIter aUndoIter( &aPam );
@@ -664,13 +671,13 @@ sal_Bool SwDoc::RestoreInvisibleContent()
 
    @return SwUndoIdAndName object containing the query result
  */
-SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, int nPos)
+SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
 {
-    SwUndo * pUndo = rUndos[nPos];
-    USHORT nId = 0;
+    SwUndo * pUndo = rUndos[ nPos ];
+    SwUndoId nId = UNDO_EMPTY;
     String sStr("??", RTL_TEXTENCODING_ASCII_US);
 
-    ASSERT(nPos >= 0 && nPos < rUndos.Count(), "nPos out of range");
+    ASSERT( nPos < rUndos.Count(), "nPos out of range");
 
     switch (pUndo->GetId())
     {
@@ -692,7 +699,7 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, int nPos)
                 do
                 {
                     nTmpPos--;
-                    pTmpUndo = rUndos[nTmpPos];
+                    pTmpUndo = rUndos[ static_cast<USHORT>(nTmpPos) ];
 
                     if (pTmpUndo->GetEffectiveId() > UNDO_END)
                         nSubstitute = nTmpPos;
@@ -701,7 +708,7 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, int nPos)
 
                 if (nSubstitute >= 0)
                 {
-                    SwUndo * pSubUndo = rUndos[nSubstitute];
+                    SwUndo * pSubUndo = rUndos[ static_cast<USHORT>(nSubstitute) ];
                     nId = pSubUndo->GetEffectiveId();
                     sStr = pSubUndo->GetComment();
                 }
@@ -735,7 +742,7 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, int nPos)
                     do
                     {
                         nTmpPos--;
-                        pTmpUndo = rUndos[nTmpPos];
+                        pTmpUndo = rUndos[ static_cast<USHORT>(nTmpPos) ];
 
                         if (pTmpUndo->GetEffectiveId() > UNDO_END)
                             nSubstitute = nTmpPos;
@@ -744,7 +751,7 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, int nPos)
 
                     if (nSubstitute >= 0)
                     {
-                        SwUndo * pSubUndo = rUndos[nSubstitute];
+                        SwUndo * pSubUndo = rUndos[ static_cast<USHORT>(nSubstitute) ];
                         nId = pSubUndo->GetEffectiveId();
                         sStr = pSubUndo->GetComment();
                     }
@@ -764,16 +771,16 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, int nPos)
     return new SwUndoIdAndName(nId, &sStr);
 }
 
-USHORT SwDoc::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
+SwUndoId SwDoc::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
 {
     int nTmpPos = nUndoPos - 1;
-    USHORT nId = 0;
+    SwUndoId nId = UNDO_EMPTY;
 
     while (nTmpPos >= 0)
     {
-        SwUndo * pUndo = (*pUndos)[nTmpPos];
+        SwUndo * pUndo = (*pUndos)[ static_cast<USHORT>(nTmpPos) ];
 
-        SwUndoIdAndName * pIdAndName = lcl_GetUndoIdAndName(*pUndos, nTmpPos);
+        SwUndoIdAndName * pIdAndName = lcl_GetUndoIdAndName( *pUndos, static_cast<sal_uInt16>(nTmpPos) );
 
         if (nTmpPos == nUndoPos - 1)
         {
@@ -826,12 +833,12 @@ bool SwDoc::Redo( SwUndoIter& rUndoIter )
 
     SwUndo *pUndo = (*pUndos)[ nUndoPos++ ];
 
-    IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
-    IDocumentRedlineAccess::RedlineMode_t eTmpMode = (IDocumentRedlineAccess::RedlineMode_t)pUndo->GetRedlineMode();
-    if( (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eTmpMode) != (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eOld) &&
+    RedlineMode_t eOld = GetRedlineMode();
+    RedlineMode_t eTmpMode = (RedlineMode_t)pUndo->GetRedlineMode();
+    if( (nsRedlineMode_t::REDLINE_SHOW_MASK & eTmpMode) != (nsRedlineMode_t::REDLINE_SHOW_MASK & eOld) &&
         UNDO_START != pUndo->GetId() && UNDO_END != pUndo->GetId() )
         SetRedlineMode( eTmpMode );
-    SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(eTmpMode | IDocumentRedlineAccess::REDLINE_IGNORE));
+    SetRedlineMode_intern( (RedlineMode_t)(eTmpMode | nsRedlineMode_t::REDLINE_IGNORE));
 
     //JP 11.05.98: FlyFormate ueber die EditShell selektieren, nicht aus dem
     //              Undo heraus
@@ -883,10 +890,10 @@ String SwDoc::GetRedoIdsStr( String* pStr, SwUndoIds *pRedoIds ) const
 }
 
 
-USHORT SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
+SwUndoId SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
 {
-    int nTmpPos = nUndoPos;
-    USHORT nId = 0;
+    sal_uInt16 nTmpPos = nUndoPos;
+    SwUndoId nId = UNDO_EMPTY;
 
     while (nTmpPos < pUndos->Count())
     {
@@ -908,7 +915,7 @@ USHORT SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
             break;
 
         if (pUndo->GetId() == UNDO_START)
-            nTmpPos += ((SwUndoStart *) pUndo)->GetEndOffset();
+            nTmpPos = nTmpPos + ((SwUndoStart *) pUndo)->GetEndOffset();
 
         nTmpPos++;
     }
@@ -936,13 +943,13 @@ bool SwDoc::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
     // dann suche jetzt ueber die End/Start-Gruppen die gueltige Repeat-Aktion
     SwUndo *pUndo = (*pUndos)[ --nSize ];
     if( UNDO_END == pUndo->GetId() )
-        nSize -= ((SwUndoEnd*)pUndo)->GetSttOffset();
+        nSize = nSize - ((SwUndoEnd*)pUndo)->GetSttOffset();
 
     USHORT nEndCnt = nUndoPos;
     BOOL bOneUndo = nSize + 1 == nUndoPos;
 
     SwPaM* pTmpCrsr = rUndoIter.pAktPam;
-    USHORT nId = 0;
+    SwUndoId nId = UNDO_EMPTY;
 
     if( pTmpCrsr != pTmpCrsr->GetNext() || !bOneUndo )  // Undo-Klammerung aufbauen
     {
@@ -977,7 +984,7 @@ bool SwDoc::Repeat( SwUndoIter& rUndoIter, sal_uInt16 nRepeatCnt )
 String SwDoc::GetRepeatIdsStr(String* pStr, SwUndoIds *pRepeatIds) const
 {
     String aTmpStr;
-    USHORT nId;
+    SwUndoId nId;
 
     if ( pStr != NULL)
     {
@@ -993,19 +1000,19 @@ String SwDoc::GetRepeatIdsStr(String* pStr, SwUndoIds *pRepeatIds) const
     return aTmpStr;
 }
 
-USHORT SwDoc::GetRepeatIds(String* pStr, SwUndoIds *pRepeatIds) const
+SwUndoId SwDoc::GetRepeatIds(String* pStr, SwUndoIds *pRepeatIds) const
 {
-    USHORT nRepeatId = GetUndoIds( pStr, pRepeatIds );
+    SwUndoId nRepeatId = GetUndoIds( pStr, pRepeatIds );
     if( REPEAT_START <= nRepeatId && REPEAT_END > nRepeatId )
         return nRepeatId;
-    return 0;
+    return UNDO_EMPTY;
 }
 
 
-SwUndo* SwDoc::RemoveLastUndo( USHORT nUndoId )
+SwUndo* SwDoc::RemoveLastUndo( SwUndoId eUndoId )
 {
     SwUndo* pUndo = (*pUndos)[ nUndoPos - 1 ];
-    if( nUndoId == pUndo->GetId() && nUndoPos == pUndos->Count() )
+    if( eUndoId == pUndo->GetId() && nUndoPos == pUndos->Count() )
     {
         if( !nUndoSttEnd )
             --nUndoCnt;
@@ -1020,8 +1027,8 @@ SwUndo* SwDoc::RemoveLastUndo( USHORT nUndoId )
     return pUndo;
 }
 
-SwUndoIdAndName::SwUndoIdAndName( USHORT nId, const String* pStr )
-    : nUndoId( nId ), pUndoStr( pStr ? new String( *pStr ) : 0 )
+SwUndoIdAndName::SwUndoIdAndName( SwUndoId nId, const String* pStr )
+    : eUndoId( nId ), pUndoStr( pStr ? new String( *pStr ) : 0 )
 {
 }
 
