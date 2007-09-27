@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 13:27:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:10:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,14 +117,14 @@ USHORT SwImpBlocks::Hash( const String& r )
 
 
 SwBlockName::SwBlockName( const String& rShort, const String& rLong, long n )
-    : aShort( rShort ), aLong( rLong ), nPos( n ), aPackageName (rShort),
+    : nPos( n ), aShort( rShort ), aLong( rLong ), aPackageName (rShort),
     bIsOnlyTxtFlagInit( FALSE ), bIsOnlyTxt( FALSE )
 {
     nHashS = SwImpBlocks::Hash( rShort );
     nHashL = SwImpBlocks::Hash( rLong );
 }
 SwBlockName::SwBlockName( const String& rShort, const String& rLong, const String& rPackageName)
-    : aShort( rShort ), aLong( rLong ), nPos( 0 ), aPackageName (rPackageName),
+    : nPos( 0 ), aShort( rShort ), aLong( rLong ), aPackageName (rPackageName),
     bIsOnlyTxtFlagInit( FALSE ), bIsOnlyTxt( FALSE )
 {
     nHashS = SwImpBlocks::Hash( rShort );
@@ -147,9 +147,9 @@ short SwImpBlocks::GetFileType( const String& rFile )
 }
 
 
-SwImpBlocks::SwImpBlocks( const String& rFile, BOOL bMake )
-    : aFile( rFile ), bReadOnly( TRUE ), bInPutMuchBlocks( FALSE ),
-    nCur( (USHORT)-1 ), pDoc( 0 )
+SwImpBlocks::SwImpBlocks( const String& rFile, BOOL )
+    : aFile( rFile ), pDoc( 0 ), nCur( (USHORT)-1 ),
+    bReadOnly( TRUE ), bInPutMuchBlocks( FALSE )
 {
     FStatHelper::GetModifiedDateTimeOfFile( rFile,
                                             &aDateModified, &aTimeModified );
@@ -285,13 +285,13 @@ ULONG SwImpBlocks::GetMacroTable( USHORT, SvxMacroTableDtor&, sal_Bool )
     return 0;
 }
 
-ULONG SwImpBlocks::SetMacroTable( USHORT nIdx,
-                                const SvxMacroTableDtor& rMacroTbl, sal_Bool )
+ULONG SwImpBlocks::SetMacroTable( USHORT ,
+                                const SvxMacroTableDtor& , sal_Bool )
 {
     return 0;
 }
 
-BOOL SwImpBlocks::PutMuchEntries( BOOL bOn )
+BOOL SwImpBlocks::PutMuchEntries( BOOL )
 {
     return FALSE;
 }
@@ -807,55 +807,19 @@ BOOL SwTextBlocks::IsOnlyTextBlock( const String& rShort ) const
 
 BOOL SwTextBlocks::GetMacroTable( USHORT nIdx, SvxMacroTableDtor& rMacroTbl )
 {
-    return ( pImp && !pImp->bInPutMuchBlocks )
-                ? 0 == pImp->GetMacroTable( nIdx, rMacroTbl )
-                : TRUE;
+    BOOL bRet = TRUE;
+    if ( pImp && !pImp->bInPutMuchBlocks )
+        bRet = ( 0 == pImp->GetMacroTable( nIdx, rMacroTbl ) );
+    return bRet;
 }
 
 BOOL SwTextBlocks::SetMacroTable( USHORT nIdx,
                                 const SvxMacroTableDtor& rMacroTbl )
 {
-    return ( pImp && !pImp->bInPutMuchBlocks )
-                ? 0 == pImp->SetMacroTable( nIdx, rMacroTbl )
-                : TRUE;
-}
-
-
-String SwTextBlocks::GetValidShortCut( const String& rLong,
-                                         BOOL bCheckInBlock ) const
-{
-    String sRet;
-    xub_StrLen nLen = rLong.Len();
-    if( nLen )
-    {
-        xub_StrLen nStart = 0;
-        while( ' ' == rLong.GetChar( nStart ) )
-            if( ++nStart < nLen )
-                break;
-
-        if( nStart < nLen )
-        {
-            sal_Unicode cCurr, cPrev = rLong.GetChar( nStart );
-            sRet = cPrev;
-            for( ++nStart; nStart < nLen; ++nStart, cPrev = cCurr )
-                if( ' ' == cPrev &&
-                    ' ' != ( cCurr = rLong.GetChar( nStart )) )
-                    sRet += cCurr;
-        }
-        if( bCheckInBlock )
-        {
-            USHORT nCurPos = GetIndex( sRet );
-            nStart = 0;
-            nLen = sRet.Len();
-            while( (USHORT)-1 != nCurPos )
-            {
-                sRet.Erase( nLen ) +=
-                    String::CreateFromInt32( ++nStart );// add an Number to it
-                nCurPos = GetIndex( sRet );
-            }
-        }
-    }
-    return sRet;
+    BOOL bRet = TRUE;
+    if ( pImp && !pImp->bInPutMuchBlocks )
+        bRet = ( 0 == pImp->SetMacroTable( nIdx, rMacroTbl ) );
+    return bRet;
 }
 
 BOOL SwTextBlocks::StartPutMuchBlockEntries()
