@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2005-11-16 13:54:08 $
+#   last change: $Author: hr $ $Date: 2007-09-27 10:08:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,31 +49,6 @@ CDEFS=$(CDEFS) -Dmydebug
 .ENDIF
 
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-        swxml.cxx      \
-        xmlimp.cxx      \
-        wrtxml.cxx      \
-        xmlexp.cxx      \
-        xmltext.cxx      \
-        xmltexte.cxx      \
-        xmltexti.cxx      \
-        xmltbli.cxx      \
-        xmltble.cxx      \
-        xmlfmt.cxx      \
-        xmlfmte.cxx      \
-        xmlmeta.cxx      \
-        xmlitemm.cxx	\
-        xmlitemi.cxx	\
-        xmliteme.cxx	\
-        xmlbrsh.cxx		\
-        xmlfonte.cxx	\
-        XMLRedlineImportHelper.cxx \
-        xmlitem.cxx	\
-        xmlithlp.cxx \
-        xmlitmpr.cxx	\
-        xmlimpit.cxx \
-        xmlexpit.cxx
 
 SLOFILES =  \
         $(SLO)$/swxml.obj \
