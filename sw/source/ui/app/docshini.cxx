@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:37:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:16:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::rtl;
-#define C2U(cChar) OUString::createFromAscii(cChar)
 /*-----------------21.09.96 15.29-------------------
 
 --------------------------------------------------*/
@@ -330,7 +329,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             RES_CHRATR_CTL_LANGUAGE
         };
 
-        for(USHORT i = 0; i < 3; i++)
+        for(sal_uInt8 i = 0; i < 3; i++)
         {
             USHORT nFontWhich = aFontWhich[i];
             USHORT nFontId = aFontIds[i];
@@ -415,7 +414,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         USHORT nFontWhich = RES_CHRATR_FONT;
         USHORT nFontHeightWhich = RES_CHRATR_FONTSIZE;
         LanguageType eLanguage = static_cast<const SvxLanguageItem&>(pDoc->GetDefault( RES_CHRATR_LANGUAGE )).GetLanguage();
-        for(USHORT nIdx = 0; nIdx < 24; nIdx += 2)
+        for(sal_uInt8 nIdx = 0; nIdx < 24; nIdx += 2)
         {
             if(nIdx == 8)
             {
@@ -454,13 +453,13 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                     delete (SfxFont*) pFnt;
                 }
             }
-            sal_Int32 nFontHeight = pStdFont->GetFontHeight( aFontIdPoolId[nIdx], 0, eLanguage );
+            sal_Int32 nFontHeight = pStdFont->GetFontHeight( static_cast< sal_Int8 >(aFontIdPoolId[nIdx]), 0, eLanguage );
             if(nFontHeight <= 0)
                 nFontHeight = pStdFont->GetDefaultHeightFor( aFontIdPoolId[nIdx], eLanguage );
             if(!pColl)
                 pColl = pDoc->GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
             SvxFontHeightItem aFontHeight( (const SvxFontHeightItem&)pColl->GetAttr( nFontHeightWhich, sal_True ));
-            if(aFontHeight.GetHeight() != nFontHeight)
+            if(aFontHeight.GetHeight() != sal::static_int_cast<sal_uInt32, sal_Int32>(nFontHeight))
             {
                 aFontHeight.SetHeight(nFontHeight);
                 pColl->SetAttr( aFontHeight );
@@ -503,10 +502,10 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 
 
 SwDocShell::SwDocShell(SfxObjectCreateMode eMode) :
+    SfxObjectShell ( eMode ),
     pDoc(0),
     pBasePool(0),
     pFontList(0),
-    SfxObjectShell ( eMode ),
     pView( 0 ),
     pWrtShell( 0 ),
     pOLEChildList( 0 ),
@@ -523,10 +522,10 @@ SwDocShell::SwDocShell(SfxObjectCreateMode eMode) :
 
 
 SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
+    SfxObjectShell ( eMode ),
     pDoc(pD),
     pBasePool(0),
     pFontList(0),
-    SfxObjectShell ( eMode ),
     pView( 0 ),
     pWrtShell( 0 ),
     pOLEChildList( 0 ),
@@ -648,7 +647,7 @@ void SwDocShell::RemoveLink()
     if(pDoc)
     {
         DELETEZ(pBasePool);
-        sal_Int8 nRefCt = pDoc->release();
+        sal_Int8 nRefCt = static_cast< sal_Int8 >(pDoc->release());
         pDoc->SetOle2Link(Link());
         pDoc->SetDocShell( 0 );
         if( !nRefCt )
@@ -694,7 +693,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
             if(GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
             {
                 SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
-                nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
+                nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
             }
 
         SwWait aWait( *this, sal_True );
@@ -761,10 +760,8 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
             }
             break;
 
-#ifndef PRODUCT
         default:
             ASSERT( !this, "Load: new CreateMode?" );
-#endif
 
         }
 
@@ -908,12 +905,12 @@ void SwDocShell::SubInitNew()
     {
         SvxHyphenZoneItem aHyp( (SvxHyphenZoneItem&) pDoc->GetDefault(
                                                         RES_PARATR_HYPHENZONE) );
-        aHyp.GetMinLead()   = aLinguOpt.nHyphMinLeading;
-        aHyp.GetMinTrail()  = aLinguOpt.nHyphMinTrailing;
+        aHyp.GetMinLead()   = static_cast< BYTE >(aLinguOpt.nHyphMinLeading);
+        aHyp.GetMinTrail()  = static_cast< BYTE >(aLinguOpt.nHyphMinTrailing);
 
         aDfltSet.Put( aHyp );
 
-        sal_uInt16 nNewPos = SW_MOD()->GetUsrPref(FALSE)->GetDefTab();
+        sal_uInt16 nNewPos = static_cast< sal_uInt16 >(SW_MOD()->GetUsrPref(FALSE)->GetDefTab());
         if( nNewPos )
             aDfltSet.Put( SvxTabStopItem( 1, nNewPos,
                                           SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP ) );
