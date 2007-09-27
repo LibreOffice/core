@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwUndoFmt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:48:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:28:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #include <comcore.hrc>
 
 SwUndoFmtCreate::SwUndoFmtCreate
-(USHORT nUndoId, SwFmt * _pNew, SwFmt * _pDerivedFrom, SwDoc * _pDoc)
+(SwUndoId nUndoId, SwFmt * _pNew, SwFmt * _pDerivedFrom, SwDoc * _pDoc)
     : SwUndo(nUndoId), pNew(_pNew),
       pDoc(_pDoc), pNewSet(NULL), nId(0), bAuto(FALSE)
 {
@@ -62,7 +62,7 @@ SwUndoFmtCreate::~SwUndoFmtCreate()
 {
 }
 
-void SwUndoFmtCreate::Undo(SwUndoIter & rIter)
+void SwUndoFmtCreate::Undo(SwUndoIter &)
 {
     if (pNew)
     {
@@ -87,7 +87,7 @@ void SwUndoFmtCreate::Undo(SwUndoIter & rIter)
     }
 }
 
-void SwUndoFmtCreate::Redo(SwUndoIter & rIter)
+void SwUndoFmtCreate::Redo(SwUndoIter &)
 {
     BOOL bDoesUndo = pDoc->DoesUndo();
 
@@ -124,7 +124,7 @@ SwRewriter SwUndoFmtCreate::GetRewriter() const
 }
 
 SwUndoFmtDelete::SwUndoFmtDelete
-(USHORT nUndoId, SwFmt * _pOld, SwDoc * _pDoc)
+(SwUndoId nUndoId, SwFmt * _pOld, SwDoc * _pDoc)
     : SwUndo(nUndoId),
       pDoc(_pDoc), sOldName(_pOld->GetName()),
       aOldSet(_pOld->GetAttrSet())
@@ -138,7 +138,7 @@ SwUndoFmtDelete::~SwUndoFmtDelete()
 {
 }
 
-void SwUndoFmtDelete::Undo(SwUndoIter & rIter)
+void SwUndoFmtDelete::Undo(SwUndoIter &)
 {
     BOOL bDoesUndo = pDoc->DoesUndo();
 
@@ -161,7 +161,7 @@ void SwUndoFmtDelete::Undo(SwUndoIter & rIter)
     pDoc->DoUndo(bDoesUndo);
 }
 
-void SwUndoFmtDelete::Redo(SwUndoIter & rIter)
+void SwUndoFmtDelete::Redo(SwUndoIter &)
 {
     SwFmt * pOld = Find(sOldName);
 
@@ -184,7 +184,7 @@ SwRewriter SwUndoFmtDelete::GetRewriter() const
     return aRewriter;
 }
 
-SwUndoRenameFmt::SwUndoRenameFmt(USHORT nUndoId,
+SwUndoRenameFmt::SwUndoRenameFmt(SwUndoId nUndoId,
                                  const String & _sOldName,
                                  const String & _sNewName,
                                  SwDoc * _pDoc)
@@ -198,7 +198,7 @@ SwUndoRenameFmt::~SwUndoRenameFmt()
 {
 }
 
-void SwUndoRenameFmt::Undo(SwUndoIter & rIter)
+void SwUndoRenameFmt::Undo(SwUndoIter &)
 {
     SwFmt * pFmt = Find(sNewName);
 
@@ -212,7 +212,7 @@ void SwUndoRenameFmt::Undo(SwUndoIter & rIter)
     }
 }
 
-void SwUndoRenameFmt::Redo(SwUndoIter & rIter)
+void SwUndoRenameFmt::Redo(SwUndoIter &)
 {
     SwFmt *  pFmt = Find(sOldName);
 
@@ -279,10 +279,10 @@ SwFmt * SwUndoTxtFmtCollDelete::Find(const String & rName) const
     return pDoc->FindTxtFmtCollByName(rName);
 }
 
-SwUndoRenameFmtColl::SwUndoRenameFmtColl(const String & sOldName,
-                                         const String & sNewName,
+SwUndoRenameFmtColl::SwUndoRenameFmtColl(const String & sInitOldName,
+                                         const String & sInitNewName,
                                          SwDoc * _pDoc)
-    : SwUndoRenameFmt(UNDO_TXTFMTCOL_RENAME, sOldName, sNewName, _pDoc)
+    : SwUndoRenameFmt(UNDO_TXTFMTCOL_RENAME, sInitOldName, sInitNewName, _pDoc)
 {
 }
 
@@ -291,10 +291,10 @@ SwFmt * SwUndoRenameFmtColl::Find(const String & rName) const
     return pDoc->FindTxtFmtCollByName(rName);
 }
 
-SwUndoCharFmtCreate::SwUndoCharFmtCreate(SwCharFmt * pNew,
+SwUndoCharFmtCreate::SwUndoCharFmtCreate(SwCharFmt * pNewFmt,
                                          SwCharFmt * pDerivedFrom,
-                                         SwDoc * pDoc)
-    : SwUndoFmtCreate(UNDO_CHARFMT_CREATE, pNew, pDerivedFrom, pDoc)
+                                         SwDoc * pDocument)
+    : SwUndoFmtCreate(UNDO_CHARFMT_CREATE, pNewFmt, pDerivedFrom, pDocument)
 {
 }
 
@@ -313,8 +313,8 @@ SwFmt * SwUndoCharFmtCreate::Find(const String & rName) const
     return pDoc->FindCharFmtByName(rName);
 }
 
-SwUndoCharFmtDelete::SwUndoCharFmtDelete(SwCharFmt * pOld, SwDoc * pDoc)
-    : SwUndoFmtDelete(UNDO_CHARFMT_DELETE, pOld, pDoc)
+SwUndoCharFmtDelete::SwUndoCharFmtDelete(SwCharFmt * pOld, SwDoc * pDocument)
+    : SwUndoFmtDelete(UNDO_CHARFMT_DELETE, pOld, pDocument)
 {
 }
 
@@ -333,10 +333,10 @@ SwFmt * SwUndoCharFmtDelete::Find(const String & rName) const
     return pDoc->FindCharFmtByName(rName);
 }
 
-SwUndoRenameCharFmt::SwUndoRenameCharFmt(const String & sOldName,
-                                         const String & sNewName,
-                                         SwDoc * pDoc)
-    : SwUndoRenameFmt(UNDO_CHARFMT_RENAME, sOldName, sNewName, pDoc)
+SwUndoRenameCharFmt::SwUndoRenameCharFmt(const String & sInitOldName,
+                                         const String & sInitNewName,
+                                         SwDoc * pDocument)
+    : SwUndoRenameFmt(UNDO_CHARFMT_RENAME, sInitOldName, sInitNewName, pDocument)
 {
 }
 
@@ -345,11 +345,11 @@ SwFmt * SwUndoRenameCharFmt::Find(const String & rName) const
     return pDoc->FindCharFmtByName(rName);
 }
 
-SwUndoFrmFmtCreate::SwUndoFrmFmtCreate(SwFrmFmt * pNew,
+SwUndoFrmFmtCreate::SwUndoFrmFmtCreate(SwFrmFmt * pNewFmt,
                                        SwFrmFmt * pDerivedFrom,
-                                       SwDoc * pDoc)
-    : SwUndoFmtCreate(UNDO_FRMFMT_CREATE, pNew, pDerivedFrom, pDoc),
-      bAuto(pNew->IsAuto())
+                                       SwDoc * pDocument)
+    : SwUndoFmtCreate(UNDO_FRMFMT_CREATE, pNewFmt, pDerivedFrom, pDocument),
+      bAuto(pNewFmt->IsAuto())
 {
 }
 
@@ -368,8 +368,8 @@ SwFmt * SwUndoFrmFmtCreate::Find(const String & rName) const
     return pDoc->FindFrmFmtByName(rName);
 }
 
-SwUndoFrmFmtDelete::SwUndoFrmFmtDelete(SwFrmFmt * pOld, SwDoc * pDoc)
-    : SwUndoFmtDelete(UNDO_FRMFMT_DELETE, pOld, pDoc)
+SwUndoFrmFmtDelete::SwUndoFrmFmtDelete(SwFrmFmt * pOld, SwDoc * pDocument)
+    : SwUndoFmtDelete(UNDO_FRMFMT_DELETE, pOld, pDocument)
 {
 }
 
@@ -388,10 +388,10 @@ SwFmt * SwUndoFrmFmtDelete::Find(const String & rName) const
     return pDoc->FindFrmFmtByName(rName);
 }
 
-SwUndoRenameFrmFmt::SwUndoRenameFrmFmt(const String & sOldName,
-                                       const String & sNewName,
-                                       SwDoc * pDoc)
-    : SwUndoRenameFmt(UNDO_FRMFMT_RENAME, sOldName, sNewName, pDoc)
+SwUndoRenameFrmFmt::SwUndoRenameFrmFmt(const String & sInitOldName,
+                                       const String & sInitNewName,
+                                       SwDoc * pDocument)
+    : SwUndoRenameFmt(UNDO_FRMFMT_RENAME, sInitOldName, sInitNewName, pDocument)
 {
 }
 
@@ -407,7 +407,7 @@ SwUndoNumruleCreate::SwUndoNumruleCreate(const SwNumRule * _pNew,
 {
 }
 
-void SwUndoNumruleCreate::Undo(SwUndoIter & rIter)
+void SwUndoNumruleCreate::Undo(SwUndoIter &)
 {
     BOOL bDoesUndo = pDoc->DoesUndo();
 
@@ -423,7 +423,7 @@ void SwUndoNumruleCreate::Undo(SwUndoIter & rIter)
     pDoc->DoUndo(bDoesUndo);
 }
 
-void SwUndoNumruleCreate::Redo(SwUndoIter & rIter)
+void SwUndoNumruleCreate::Redo(SwUndoIter &)
 {
     BOOL bDoesUndo = pDoc->DoesUndo();
 
@@ -453,7 +453,7 @@ SwUndoNumruleDelete::SwUndoNumruleDelete(const SwNumRule & rRule,
 {
 }
 
-void SwUndoNumruleDelete::Undo(SwUndoIter & rIter)
+void SwUndoNumruleDelete::Undo(SwUndoIter &)
 {
     BOOL bDoesUndo = pDoc->DoesUndo();
 
@@ -462,7 +462,7 @@ void SwUndoNumruleDelete::Undo(SwUndoIter & rIter)
     pDoc->DoUndo(bDoesUndo);
 }
 
-void SwUndoNumruleDelete::Redo(SwUndoIter & rIter)
+void SwUndoNumruleDelete::Redo(SwUndoIter &)
 {
     BOOL bDoesUndo = pDoc->DoesUndo();
 
@@ -488,7 +488,7 @@ SwUndoNumruleRename::SwUndoNumruleRename(const String & _aOldName,
 {
 }
 
-void SwUndoNumruleRename::Undo(SwUndoIter & rIter)
+void SwUndoNumruleRename::Undo(SwUndoIter &)
 {
     BOOL bDoesUndo = pDoc->DoesUndo();
 
@@ -497,7 +497,7 @@ void SwUndoNumruleRename::Undo(SwUndoIter & rIter)
     pDoc->DoUndo(bDoesUndo);
 }
 
-void SwUndoNumruleRename::Redo(SwUndoIter & rIter)
+void SwUndoNumruleRename::Redo(SwUndoIter &)
 {
     BOOL bDoesUndo = pDoc->DoesUndo();
 
