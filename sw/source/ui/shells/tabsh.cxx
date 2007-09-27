@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:23:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:29:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,50 +158,33 @@
 #include <tabsh.hxx>
 #endif
 #ifndef _SWTABLEREP_HXX
-#include "swtablerep.hxx" //CHINA001
+#include "swtablerep.hxx"
 #endif
 #ifndef _TABLEMGR_HXX
 #include <tablemgr.hxx>
 #endif
-//CHINA001 #ifndef _TAUTOFMT_HXX
-//CHINA001 #include <tautofmt.hxx>
-//CHINA001 #endif
 #ifndef _CELLATR_HXX
 #include <cellatr.hxx>
 #endif
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
 #endif
-//CHINA001 #ifndef _ROWHT_HXX
-//CHINA001 #include <rowht.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _SPLIT_HXX
-//CHINA001 #include <split.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _INSRC_HXX
-//CHINA001 #include <insrc.hxx>
-//CHINA001 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
 #endif
-//CHINA001 #ifndef _TBLNUMFM_HXX
-//CHINA001 #include <tblnumfm.hxx>
-//CHINA001 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
-//CHINA001 #ifndef _SPLITTBL_HXX
-//CHINA001 #include <splittbl.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _MERGETBL_HXX
-//CHINA001 #include <mergetbl.hxx>
-//CHINA001 #endif
 #ifndef _TBLSEL_HXX
 #include <tblsel.hxx>
 #endif
+
+#include <dialog.hrc>
+
+
 
 //!!! new: insert table
 /*
@@ -250,9 +233,10 @@
 #include <swslots.hxx>
 #endif
 
-#include "swabstdlg.hxx" //CHINA001
-#include "dialog.hrc" //CHINA001
-#include <table.hrc> //CHINA001
+#include "swabstdlg.hxx"
+#include <table.hrc>
+
+using namespace ::com::sun::star;
 
 //-----------------------------------------------------------------------------
 BOOL lcl_IsNumeric(const String& rStr)
@@ -353,7 +337,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     if(rSh.GetBoxDirection( aBoxDirection ))
         rSet.Put(aBoxDirection, FN_TABLE_BOX_TEXTDIRECTION);
 
-    FASTBOOL bTableSel = rSh.IsTableMode();
+    BOOL bTableSel = rSh.IsTableMode();
     if(!bTableSel)
     {
         rSh.StartAllAction();
@@ -371,7 +355,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
         // Minimalgroesse in Tabellen und Absaetzen setzen
     aBoxInfo.SetMinDist( !bTableSel || rSh.IsTableMode() ||
                             rSh.GetSelectionType() &
-                            (SwWrtShell::SEL_TXT | SwWrtShell::SEL_TBL));
+                            (nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL));
         // Default-Abstand immer setzen
     aBoxInfo.SetDefDist        (MIN_BORDER_DIST);
         // Einzelne Linien koennen nur in Tabellen DontCare-Status haben
@@ -416,21 +400,21 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     SwTwips nLeft = aLRSpace.GetLeft();
     SwTwips nRight = aLRSpace.GetRight();
     SwTwips nDiff = pRep->GetSpace() - nRight - nLeft - nWidth;
-    if(nAlign != HORI_FULL && Abs(nDiff) > 2)
+    if(nAlign != text::HoriOrientation::FULL && Abs(nDiff) > 2)
     {
         SwTwips nLR = pRep->GetSpace() - nWidth;
         switch ( nAlign )
         {
-            case HORI_CENTER: nLeft = nRight = nLR / 2;
+            case text::HoriOrientation::CENTER: nLeft = nRight = nLR / 2;
             break;
-            case HORI_LEFT: nRight = nLR; nLeft = 0;
+            case text::HoriOrientation::LEFT: nRight = nLR; nLeft = 0;
             break;
-            case HORI_RIGHT: nLeft = nLR, nRight = 0;
+            case text::HoriOrientation::RIGHT: nLeft = nLR, nRight = 0;
             break;
-            case HORI_LEFT_AND_WIDTH:
+            case text::HoriOrientation::LEFT_AND_WIDTH:
                 nRight = nLR - nLeft;
             break;
-            case HORI_NONE:
+            case text::HoriOrientation::NONE:
                 if(!nPercent)
                     nWidth = pRep->GetSpace() - nLeft - nRight;
             break;
@@ -465,7 +449,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         aUsrPref.SetTblDest((BYTE)nBackgroundDestination);
         SW_MOD()->ApplyUsrPref(aUsrPref, &rSh.GetView());
     }
-    FASTBOOL bBorder = ( SFX_ITEM_SET == rSet.GetItemState( RES_BOX ) ||
+    BOOL bBorder = ( SFX_ITEM_SET == rSet.GetItemState( RES_BOX ) ||
             SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BORDER_INNER ) );
     pItem = 0;
     BOOL bBackground = SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, FALSE, &pItem );
@@ -484,7 +468,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
          Der Hintergrund wird immer auf den aktuellen Zustand angewendet.
          */
 
-        FASTBOOL bTableSel = rSh.IsTableMode();
+        BOOL bTableSel = rSh.IsTableMode();
         rSh.StartAllAction();
 
         if(bBackground)
@@ -548,10 +532,10 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         pRep = (SwTableRep*)((const SwPtrItem*)pItem)->GetValue();
 
         const SwTwips nWidth = pRep->GetWidth();
-        if ( HORI_FULL == (SwHoriOrient)pRep->GetAlign() )
+        if ( text::HoriOrientation::FULL == pRep->GetAlign() )
         {
             SwFmtHoriOrient aAttr( pFmt->GetHoriOrient() );
-            aAttr.SetHoriOrient( HORI_FULL );
+            aAttr.SetHoriOrient( text::HoriOrientation::FULL );
             aSet.Put( aAttr );
         }
         else
@@ -569,12 +553,12 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         aLRSpace.SetRight(pRep->GetRightSpace());
         aSet.Put( aLRSpace );
 
-        SwHoriOrient eOrient = (SwHoriOrient)pRep->GetAlign();
+        sal_Int16 eOrient = pRep->GetAlign();
         SwFmtHoriOrient aAttr( 0, eOrient );
         aSet.Put( aAttr );
     // Damit beim recording die Ausrichtung nicht durch die Abstaende ueberschrieben
     // wird, darf das Item nur bei manueller Ausrichtung aufgez. werden
-        if(eOrient != HORI_NONE)
+        if(eOrient != text::HoriOrientation::NONE)
             ((SfxItemSet&)rSet).ClearItem( SID_ATTR_LRSPACE );
 
 
@@ -692,10 +676,10 @@ void SwTableShell::Execute(SfxRequest &rReq)
             rSh.GetTabBorders( aCoreSet );
             const SvxBoxItem& rCoreBox = (const SvxBoxItem&)
                                                     aCoreSet.Get(RES_BOX);
-            const SfxPoolItem *pItem = 0;
-            if ( pArgs->GetItemState(RES_BOX, TRUE, &pItem) == SFX_ITEM_SET )
+            const SfxPoolItem *pBoxItem = 0;
+            if ( pArgs->GetItemState(RES_BOX, TRUE, &pBoxItem) == SFX_ITEM_SET )
             {
-                aBox = *(SvxBoxItem*)pItem;
+                aBox = *(SvxBoxItem*)pBoxItem;
                 if ( !rReq.IsAPI() )
                     aBox.SetDistance( Max(rCoreBox.GetDistance(),USHORT(55)) );
                 else if ( aBox.GetDistance() < MIN_BORDER_DIST )
@@ -705,8 +689,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 {ASSERT( !this, "Wo ist das Box-Item?" )}
 
             SvxBoxInfoItem aInfo( SID_ATTR_BORDER_INNER );
-            if (pArgs->GetItemState(SID_ATTR_BORDER_INNER, TRUE, &pItem) == SFX_ITEM_SET)
-                aInfo = *(SvxBoxInfoItem*)pItem;
+            if (pArgs->GetItemState(SID_ATTR_BORDER_INNER, TRUE, &pBoxItem) == SFX_ITEM_SET)
+                aInfo = *(SvxBoxInfoItem*)pBoxItem;
             aInfo.SetTable( TRUE );
             aInfo.SetValid( VALID_DISABLE, FALSE );
 
@@ -780,17 +764,16 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SfxItemSet aCoreSet( GetPool(), aUITableAttrRange);
 
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
-            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)));
             SwTableRep* pTblRep = ::lcl_TableParamToItemSet( aCoreSet, rSh );
-            //CHINA001 SwTableTabDlg* pDlg = NULL;
             SfxAbstractTabDialog * pDlg = NULL;
             if ( bUseDialog )
             {
-                //CHINA001 pDlg = new SwTableTabDlg( GetView().GetWindow(), GetPool(), &aCoreSet, &rSh);
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+
                 pDlg = pFact->CreateSwTableTabDlg( GetView().GetWindow(), GetPool(), &aCoreSet, &rSh, DLG_FORMAT_TABLE );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
             }
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
             rSh.GetTblAttr(aCoreSet);
@@ -833,7 +816,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if(pView)
             {
                 FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
-                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)));
                 SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
                 SfxItemSet aCoreSet( GetPool(),
                                  SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,
@@ -863,36 +846,35 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                         RES_BOXATR_VALUE)).GetValue(),
                                     sCurText, SID_ATTR_NUMBERFORMAT_INFO ));
 
-//CHINA001              SwNumFmtDlg* pDlg = new SwNumFmtDlg( GetView().GetWindow(),
-//CHINA001              aCoreSet );
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+
                 AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( GetView().GetWindow(),aCoreSet, RC_DLG_SWNUMFMTDLG );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
                 if (RET_OK == pDlg->Execute())
                 {
-                    const SfxPoolItem* pItem = GetView().GetDocShell()->
+                    const SfxPoolItem* pNumberFormatItem = GetView().GetDocShell()->
                                     GetItem( SID_ATTR_NUMBERFORMAT_INFO );
 
-                    if( pItem && 0 != ((SvxNumberInfoItem*)pItem)->GetDelCount() )
+                    if( pNumberFormatItem && 0 != ((SvxNumberInfoItem*)pNumberFormatItem)->GetDelCount() )
                     {
                         const sal_uInt32* pDelArr = ((SvxNumberInfoItem*)
-                                                        pItem)->GetDelArray();
+                                                        pNumberFormatItem)->GetDelArray();
 
-                        for ( USHORT i = 0; i < ((SvxNumberInfoItem*)pItem)->GetDelCount(); i++ )
-                            ((SvxNumberInfoItem*)pItem)->
+                        for ( USHORT i = 0; i < ((SvxNumberInfoItem*)pNumberFormatItem)->GetDelCount(); i++ )
+                            ((SvxNumberInfoItem*)pNumberFormatItem)->
                             GetNumberFormatter()->DeleteEntry( pDelArr[i] );
                     }
 
                     if( SFX_ITEM_SET == pDlg->GetOutputItemSet()->GetItemState(
-                        SID_ATTR_NUMBERFORMAT_VALUE, FALSE, &pItem ))
+                        SID_ATTR_NUMBERFORMAT_VALUE, FALSE, &pNumberFormatItem ))
                     {
-                        SfxItemSet aBoxSet( *aCoreSet.GetPool(),
+                        SfxItemSet aBoxFormatSet( *aCoreSet.GetPool(),
                                     RES_BOXATR_FORMAT, RES_BOXATR_FORMAT );
-                        aBoxSet.Put( SwTblBoxNumFormat(
-                                ((SfxUInt32Item*)pItem)->GetValue() ));
-                        rSh.SetTblBoxFormulaAttrs( aBoxSet );
+                        aBoxFormatSet.Put( SwTblBoxNumFormat(
+                                ((SfxUInt32Item*)pNumberFormatItem)->GetValue() ));
+                        rSh.SetTblBoxFormulaAttrs( aBoxFormatSet );
 
                     }
                 }
@@ -1010,24 +992,22 @@ void SwTableShell::Execute(SfxRequest &rReq)
         break;
         case SID_AUTOFORMAT:
         {
-            //CHINA001 SwAutoFormatDlg* pDlg = new SwAutoFormatDlg(
-            //CHINA001              &GetView().GetViewFrame()->GetWindow(), &rSh );
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+
             AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(&GetView().GetViewFrame()->GetWindow(), &rSh , DLG_AUTOFMT_TABLE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
         }
         break;
         case FN_TABLE_SET_ROW_HEIGHT:
         {
-            //CHINA001 SwTableHeightDlg *pDlg = new SwTableHeightDlg(
-            //CHINA001                          GetView().GetWindow(), rSh );
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+
             VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_ROW_HEIGHT );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
         }
@@ -1059,7 +1039,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 SfxItemSet aCoreSet( GetPool(), aUITableAttrRange);
                 ::lcl_TableParamToItemSet( aCoreSet, rSh );
                 bool bSetInnerBorders = false;
-                sal_uInt16 nUndoId = 0;
+                SwUndoId nUndoId = UNDO_EMPTY;
                 // <--End
 
                 if( bColumn )
@@ -1102,13 +1082,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
         {
             if ( FN_TABLE_INSERT_ROW_DLG != nSlot || !rSh.IsInRepeatedHeadline())
             {
-//CHINA001              SwInsRowColDlg *pDlg = new SwInsRowColDlg( GetView(),
-//CHINA001              FN_TABLE_INSERT_COL_DLG == nSlot );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pFact, "Dialogdiet fail!");
                 VclAbstractDialog* pDlg = pFact->CreateVclSwViewDialog( DLG_INS_ROW_COL,
                                                         GetView(), FN_TABLE_INSERT_COL_DLG == nSlot );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 pDlg->Execute();
                 delete pDlg;
             }
@@ -1132,11 +1110,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                //CHINA001 SwSplitTableDlg *pDlg = new SwSplitTableDlg( GetView().GetWindow(), rSh );
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+
                 AbstractSwSplitTableDlg* pDlg = pFact->CreateSwSplitTableDlg( GetView().GetWindow(), rSh, DLG_SPLIT );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     nCount = pDlg->GetCount();
@@ -1162,11 +1140,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
         case FN_TABLE_SPLIT_TABLE:
         {
-            //CHINA001 SwSplitTblDlg *pDlg = new SwSplitTblDlg( GetView().GetWindow(), rSh );
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-            VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh , DLG_SPLIT_TABLE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+
+            VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh ,DLG_SPLIT_TABLE );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
         }
@@ -1179,13 +1157,10 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             if( bPrev && bNext )
             {
-                // Dialog: welche denn?
-                //CHINA001 SwMergeTblDlg* pDlg = new SwMergeTblDlg(
-                    //CHINA001 GetView().GetWindow(), bPrev );
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
                 VclAbstractDialog* pDlg = pFact->CreateSwVclDialog( DLG_MERGE_TABLE, GetView().GetWindow(), bPrev );
-                DBG_ASSERT(pDlg, "dialogdiet pDlg fail!");//CHINA001
+                DBG_ASSERT(pDlg, "dialogdiet pDlg fail!");
                 if( RET_OK != pDlg->Execute())
                     bPrev = bNext = FALSE;
                 delete pDlg;
@@ -1288,7 +1263,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 aLRSpace.SetWhich( RES_LR_SPACE );
                 aSet.Put( aLRSpace );
                 SwFmtHoriOrient aHori( pFmt->GetHoriOrient() );
-                aHori.SetHoriOrient( HORI_NONE );
+                aHori.SetHoriOrient( text::HoriOrientation::NONE );
                 aSet.Put( aLRSpace );
                 rSh.SetTblAttr( aSet );
             }
@@ -1306,9 +1281,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case FN_TABLE_VERT_BOTTOM:
         {
             USHORT nAlign = nSlot == FN_TABLE_VERT_NONE ?
-                                VERT_NONE :
+                                text::VertOrientation::NONE :
                                     nSlot == FN_TABLE_VERT_CENTER ?
-                                        VERT_CENTER : VERT_BOTTOM;
+                                        text::VertOrientation::CENTER : text::VertOrientation::BOTTOM;
             rSh.SetBoxAlign(nAlign);
             bCallDone = TRUE;
         }
@@ -1449,9 +1424,9 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case FN_TABLE_VERT_BOTTOM:
             {
                 USHORT nAlign = rSh.GetBoxAlign();
-                BOOL bSet = nSlot == FN_TABLE_VERT_NONE && nAlign == VERT_NONE||
-                            nSlot == FN_TABLE_VERT_CENTER && nAlign == VERT_CENTER ||
-                            nSlot == FN_TABLE_VERT_BOTTOM && nAlign == VERT_BOTTOM;
+                BOOL bSet = nSlot == FN_TABLE_VERT_NONE && nAlign == text::VertOrientation::NONE||
+                            nSlot == FN_TABLE_VERT_CENTER && nAlign == text::VertOrientation::CENTER ||
+                            nSlot == FN_TABLE_VERT_BOTTOM && nAlign == text::VertOrientation::BOTTOM;
                 rSet.Put(SfxBoolItem(nSlot, bSet));
             }
             break;
@@ -1460,7 +1435,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case FN_TABLE_MODE_FIX_PROP  :
             case FN_TABLE_MODE_VARIABLE  :
                 {
-                    USHORT nMode = rSh.GetTblChgMode();
+                    TblChgMode nMode = rSh.GetTblChgMode();
                     BOOL bSet = nSlot == FN_TABLE_MODE_FIX && nMode == TBLFIX_CHGABS ||
                             nSlot == FN_TABLE_MODE_FIX_PROP && nMode == TBLFIX_CHGPROP ||
                             nSlot == FN_TABLE_MODE_VARIABLE && nMode == TBLVAR_CHGABS;
@@ -1492,7 +1467,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case FN_TABLE_DELETE_ROW:
                 {
                     SwSelBoxes aBoxes;
-                    ::GetTblSel( rSh, aBoxes, TBLSEARCH_ROW );
+                    ::GetTblSel( rSh, aBoxes, nsSwTblSearchType::TBLSEARCH_ROW );
                     if( ::HasProtectedCells( aBoxes ))
                         rSet.DisableItem( nSlot );
                 }
@@ -1500,7 +1475,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case FN_TABLE_DELETE_COL:
                 {
                     SwSelBoxes aBoxes;
-                    ::GetTblSel( rSh, aBoxes, TBLSEARCH_COL );
+                    ::GetTblSel( rSh, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
                     if( ::HasProtectedCells( aBoxes ))
                         rSet.DisableItem( nSlot );
                 }
@@ -1551,8 +1526,8 @@ void SwTableShell::GetState(SfxItemSet &rSet)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SwTableShell::SwTableShell(SwView &rView) :
-    SwBaseShell(rView)
+SwTableShell::SwTableShell(SwView &_rView) :
+    SwBaseShell(_rView)
 {
     SetName(String::CreateFromAscii("Table"));
     SetHelpId(SW_TABSHELL);
