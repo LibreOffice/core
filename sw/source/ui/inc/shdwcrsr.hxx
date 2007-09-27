@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shdwcrsr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:01:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:09:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ class SwShadowCursor
 
 public:
     SwShadowCursor( Window& rWin, const Color& rCol )
-        : pWin( &rWin ), nOldMode( USHRT_MAX ), aCol( rCol ) {}
+        : pWin( &rWin ), aCol( rCol ), nOldHeight(0), nOldMode( USHRT_MAX ) {}
     ~SwShadowCursor();
 
     void SetPos( const Point& rPt, long nHeight, USHORT nMode );
