@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:56:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:39:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,7 @@ SwBoxAutoFmt::SwBoxAutoFmt()
 //    aBLTR( RES_... ),
     aRotateMode( SVX_ROTATE_MODE_STANDARD, 0 )
 {
-    eSysLanguage = eNumFmtLanguage = ::GetAppLanguage();
+    eSysLanguage = eNumFmtLanguage = static_cast<LanguageType>(::GetAppLanguage());
     aBox.SetDistance( 55 );
 }
 
@@ -291,11 +291,11 @@ SwBoxAutoFmt::SwBoxAutoFmt( const SwBoxAutoFmt& rNew )
     aContour( rNew.aContour ),
     aShadowed( rNew.aShadowed ),
     aColor( rNew.aColor ),
-    aAdjust( rNew.aAdjust ),
     aBox( rNew.aBox ),
     aTLBR( rNew.aTLBR ),
     aBLTR( rNew.aBLTR ),
     aBackground( rNew.aBackground ),
+    aAdjust( rNew.aAdjust ),
     aHorJustify( rNew.aHorJustify ),
     aVerJustify( rNew.aVerJustify ),
     aStacked( rNew.aStacked ),
@@ -435,7 +435,7 @@ BOOL SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, USHOR
         eSysLanguage = (LanguageType) eSys;
         eNumFmtLanguage = (LanguageType) eLge;
         if ( eSysLanguage == LANGUAGE_SYSTEM )      // von alten Versionen (Calc)
-            eSysLanguage = ::GetAppLanguage();
+            eSysLanguage = static_cast<LanguageType>(::GetAppLanguage());
     }
 
     aStacked.SetValue( aOrientation.IsStacked() );
@@ -613,7 +613,7 @@ SwTableAutoFmt::~SwTableAutoFmt()
 
 void SwTableAutoFmt::SetBoxFmt( const SwBoxAutoFmt& rNew, BYTE nPos )
 {
-    ASSERT( 0 <= nPos && nPos < 16, "falscher Bereich" );
+    ASSERT( nPos < 16, "falscher Bereich" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
     if( pFmt )      // ist gesetzt -> kopieren
@@ -625,7 +625,7 @@ void SwTableAutoFmt::SetBoxFmt( const SwBoxAutoFmt& rNew, BYTE nPos )
 
 const SwBoxAutoFmt& SwTableAutoFmt::GetBoxFmt( BYTE nPos ) const
 {
-    ASSERT( 0 <= nPos && nPos < 16, "falscher Bereich" );
+    ASSERT( nPos < 16, "falscher Bereich" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
     if( pFmt )      // ist gesetzt -> kopieren
@@ -646,7 +646,7 @@ SwBoxAutoFmt& SwTableAutoFmt::UpdateFromSet( BYTE nPos,
                                             UpdateFlags eFlags,
                                             SvNumberFormatter* pNFmtr )
 {
-    ASSERT( 0 <= nPos && nPos < 16, "falscher Bereich" );
+    ASSERT( nPos < 16, "falscher Bereich" );
 
     SwBoxAutoFmt* pFmt = aBoxAutoFmt[ nPos ];
     if( !pFmt )     // ist gesetzt -> kopieren
@@ -691,12 +691,12 @@ SwBoxAutoFmt& SwTableAutoFmt::UpdateFromSet( BYTE nPos,
             0 != (pNumFormat = pNFmtr->GetEntry( pNumFmtItem->GetValue() )) )
             pFmt->SetValueFormat( ((SvNumberformat*)pNumFormat)->GetFormatstring(),
                                     pNumFormat->GetLanguage(),
-                                    ::GetAppLanguage() );
+                                    static_cast<LanguageType>(::GetAppLanguage()));
         else
         {
             // defaulten
             pFmt->SetValueFormat( aEmptyStr, LANGUAGE_SYSTEM,
-                                    ::GetAppLanguage() );
+                                  static_cast<LanguageType>(::GetAppLanguage() ));
         }
     }
     // den Rest koennen wir nicht, StarCalc spezifisch
