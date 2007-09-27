@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrt_fn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:18:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:56:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
     else
     {
         SfxWhichIter aIter( *pSet );
-        register USHORT nWhich = aIter.FirstWhich();
+        USHORT nWhich = aIter.FirstWhich();
         while( nWhich )
         {
             if( SFX_ITEM_SET == pSet->GetItemState( nWhich, bDeep, &pItem ) &&
