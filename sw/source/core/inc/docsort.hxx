@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsort.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:45:07 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:54:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ class LocaleDataWrapper;
 
 namespace com { namespace sun { namespace star { namespace lang {
     struct Locale;
-}}}};
+}}}}
 
 /*--------------------------------------------------------------------
     Beschreibung: Liste aller sortierten Elemente
@@ -66,8 +66,8 @@ typedef const _FndBox*      _FndBoxPtr;
 typedef SwSortElement*      SwSortElementPtr;
 typedef const SwTableBox*   SwMovedBoxPtr;
 
-SV_DECL_PTRARR_SORT(SwSortElements, SwSortElementPtr, 0, 1 );
-SV_DECL_PTRARR(SwMovedBoxes,        SwMovedBoxPtr, 10, 10 );
+SV_DECL_PTRARR_SORT(SwSortElements, SwSortElementPtr, 0, 1 )
+SV_DECL_PTRARR(SwMovedBoxes,        SwMovedBoxPtr, 10, 10 )
 
 /*--------------------------------------------------------------------
     Beschreibung: Funktionen zum Moven von Boxen
