@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 18:00:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:10:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,6 +303,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Acceptor,
 	gid_File_Lib_Basprov,
 	gid_File_Lib_Behelper,
+	gid_File_Lib_Bootstrap,
 	gid_File_Lib_Brdgfctr,
 	gid_File_Lib_Configmgr2,
 	gid_File_Lib_Connectr,
@@ -313,9 +314,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Cppu,
 	gid_File_Lib_Cppuhelper,
 	gid_File_Lib_PurpEnvHelper,
-	gid_File_Lib_Defreg,
 	gid_File_Lib_Corefl,
-	gid_File_Lib_Cpld,
 	gid_File_Lib_Sysmgr1,
 	gid_File_Lib_Adabas_2,
 	gid_File_Lib_Cached1,
@@ -351,7 +350,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Localedata_Es,
 	gid_File_Lib_Localedata_Euro,
 	gid_File_Lib_Localedata_Others,
-	gid_File_Lib_Impreg,
 	gid_File_Lib_Insp,
 	gid_File_Lib_Inv,
 	gid_File_Lib_Invadp,
@@ -391,11 +389,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Sal,
 	gid_File_Lib_Salhelper,
 	gid_File_Lib_Proxyfac,
-	gid_File_Lib_Rdbtdp,
 	gid_File_Lib_Sax,
-	gid_File_Lib_Sec,
-	gid_File_Lib_Smgr,
-	gid_File_Lib_Simreg,
 	gid_File_Lib_Slideshow,
 	gid_File_Lib_Stm,
 	gid_File_Lib_Recentfile,
@@ -405,6 +399,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Sdbc_2,
 	gid_File_Lib_Srtrs1,
 	gid_File_Lib_Stlport,
+	gid_File_Lib_Stocserv,
 	gid_File_Lib_Store,
 	gid_File_Lib_Bat,
 	gid_File_Lib_Tab,
@@ -420,11 +415,8 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Syssh,
 	gid_File_Lib_Tinstrm,
 	gid_File_Lib_Toutstrm,
-	gid_File_Lib_Tcv,
-	gid_File_Lib_Tdmgr,
 	gid_File_Ucptdoc1,
 	gid_File_Ucpexpand1,
-	gid_File_Lib_Uriproc,
 	gid_File_Lib_Uuresolver,
 	gid_File_Lib_Hunspell,
 	gid_File_Lib_Portaudio,
