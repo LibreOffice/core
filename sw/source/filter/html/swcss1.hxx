@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcss1.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:36:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:51:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,9 @@ protected:
     virtual BOOL StyleParsed( const CSS1Selector *pSelector,
                               SfxItemSet& rItemSet,
                               SvxCSS1PropertyInfo& rPropInfo );
+
+    using CSS1Parser::ParseStyleSheet;
+
 public:
     SwCSS1Parser( SwDoc *pDoc, sal_uInt32 aFHeight[7], const String& rBaseURL, BOOL bNewDoc );
     virtual ~SwCSS1Parser();
