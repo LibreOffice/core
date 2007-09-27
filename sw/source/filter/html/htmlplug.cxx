@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:05:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:49:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,7 @@ const ULONG HTML_FRMOPTS_OLE_CSS1       =
 void SwHTMLParser::SetFixSize( const Size& rPixSize,
                                const Size& rTwipDfltSize,
                                BOOL bPrcWidth, BOOL bPrcHeight,
-                               SfxItemSet& rCSS1ItemSet,
+                               SfxItemSet& /*rCSS1ItemSet*/,
                                SvxCSS1PropertyInfo& rCSS1PropInfo,
                                SfxItemSet& rFlyItemSet )
 {
@@ -303,7 +303,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         {
             const SwFmtHoriOrient& rHoriOri =
                 (const SwFmtHoriOrient&)rFlyItemSet.Get( RES_HORI_ORIENT );
-            if( HORI_NONE == rHoriOri.GetHoriOrient() )
+            if( text::HoriOrientation::NONE == rHoriOri.GetHoriOrient() )
             {
                 SwFmtHoriOrient aHoriOri( rHoriOri );
                 aHoriOri.SetPos( aHoriOri.GetPos() + nLeftSpace );
@@ -339,7 +339,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         {
             const SwFmtVertOrient& rVertOri =
                 (const SwFmtVertOrient&)rFlyItemSet.Get( RES_VERT_ORIENT );
-            if( VERT_NONE == rVertOri.GetVertOrient() )
+            if( text::VertOrientation::NONE == rVertOri.GetVertOrient() )
             {
                 SwFmtVertOrient aVertOri( rVertOri );
                 aVertOri.SetPos( aVertOri.GetPos() + nUpperSpace );
@@ -357,18 +357,18 @@ void SwHTMLParser::InsertEmbed()
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( USHRT_MAX, USHRT_MAX );
     BOOL bPrcWidth = FALSE, bPrcHeight = FALSE, bHidden = FALSE;
-    SwVertOrient eVertOri = VERT_NONE;
-    SwHoriOrient eHoriOri = HORI_NONE;
+    sal_Int16 eVertOri = text::VertOrientation::NONE;
+    sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     SvCommandList aCmdLst;
-    const HTMLOptions *pOptions = GetOptions();
+    const HTMLOptions *pHTMLOptions = GetOptions();
 
     // Die Optionen werden vorwaerts gelesen, weil die Plugins sie in
     // dieser Reihenfolge erwarten. Trotzdem darf immer nur der erste
     // Wert einer Option beruecksichtigt werden.
-    USHORT nArrLen = pOptions->Count();
+    USHORT nArrLen = pHTMLOptions->Count();
     for( USHORT i=0; i<nArrLen; i++ )
     {
-        const HTMLOption *pOption = (*pOptions)[i];
+        const HTMLOption *pOption = (*pHTMLOptions)[i];
         switch( pOption->GetToken() )
         {
         case HTML_O_ID:
@@ -395,10 +395,10 @@ void SwHTMLParser::InsertEmbed()
                 aType = pOption->GetString();
             break;
         case HTML_O_ALIGN:
-            if( eVertOri==VERT_NONE && eHoriOri==HORI_NONE )
+            if( eVertOri==text::VertOrientation::NONE && eHoriOri==text::HoriOrientation::NONE )
             {
-                eVertOri = (SwVertOrient)pOption->GetEnum( aHTMLImgVAlignTable, eVertOri );
-                eHoriOri = (SwHoriOrient)pOption->GetEnum( aHTMLImgHAlignTable, eHoriOri );
+                eVertOri = pOption->GetEnum( aHTMLImgVAlignTable, eVertOri );
+                eHoriOri = pOption->GetEnum( aHTMLImgHAlignTable, eHoriOri );
             }
             break;
         case HTML_O_WIDTH:
@@ -424,9 +424,9 @@ void SwHTMLParser::InsertEmbed()
                 aSpace.Height() = (long)pOption->GetNumber();
             break;
         case HTML_O_UNKNOWN:
-            if( pOption->GetTokenString().EqualsIgnoreCaseAscii( sHTML_O_hidden ) )
+            if( pOption->GetTokenString().EqualsIgnoreCaseAscii( sHTML_O_Hidden ) )
                 bHidden =
-                    !pOption->GetString().EqualsIgnoreCaseAscii( sHTML_HIDDEN_false );
+                    !pOption->GetString().EqualsIgnoreCaseAscii( sHTML_O_Hidden_False );
             break;
         }
 
@@ -441,8 +441,8 @@ void SwHTMLParser::InsertEmbed()
 
     // Die Default-Werte umsetzen (ausser Hoehe/Breite, das macht schon
     // SetFrmSize() fuer uns)
-    if( eVertOri==VERT_NONE && eHoriOri==HORI_NONE )
-        eVertOri = VERT_TOP;
+    if( eVertOri==text::VertOrientation::NONE && eHoriOri==text::HoriOrientation::NONE )
+        eVertOri = text::VertOrientation::TOP;
     if( USHRT_MAX==aSpace.Width() )
         aSpace.Width() = 0;
     if( USHRT_MAX==aSpace.Height() )
@@ -508,9 +508,9 @@ void SwHTMLParser::InsertEmbed()
         SwFmtAnchor aAnchor( FLY_AT_CNTNT );
         aAnchor.SetAnchor( pPam->GetPoint() );
         aFrmSet.Put( aAnchor );
-        aFrmSet.Put( SwFmtHoriOrient( 0, HORI_LEFT, FRAME) );
+        aFrmSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME) );
         aFrmSet.Put( SwFmtSurround( SURROUND_THROUGHT ) );
-        aFrmSet.Put( SwFmtVertOrient( 0, VERT_TOP, PRTAREA ) );
+        aFrmSet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::PRINT_AREA ) );
     }
 
     // und noch die Groesse des Rahmens
@@ -521,7 +521,7 @@ void SwHTMLParser::InsertEmbed()
 
     // und in das Dok einfuegen
     SwFrmFmt* pFlyFmt =
-        pDoc->Insert( *pPam, ::svt::EmbeddedObjectRef( xObj, ::com::sun::star::embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
+        pDoc->Insert( *pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
 
     // Namen am FrmFmt setzen
     if( aName.Len() )
@@ -551,8 +551,8 @@ void SwHTMLParser::NewObject()
     String aClassID, aName, aStandBy, aId, aStyle, aClass;
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
-    SwVertOrient eVertOri = VERT_TOP;
-    SwHoriOrient eHoriOri = HORI_NONE;
+    sal_Int16 eVertOri = text::VertOrientation::TOP;
+    sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
     sal_Bool bPrcWidth = sal_False, bPrcHeight = sal_False,
              bDeclare = sal_False;
@@ -562,10 +562,10 @@ void SwHTMLParser::NewObject()
     pAppletImpl = new SwApplet_Impl( pDoc->GetAttrPool(),
                                      RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
         case HTML_O_ID:
@@ -606,8 +606,8 @@ void SwHTMLParser::NewObject()
             aSize.Height() = (long)pOption->GetNumber();
             break;
         case HTML_O_ALIGN:
-            eVertOri = (SwVertOrient)pOption->GetEnum( aHTMLImgVAlignTable, eVertOri );
-            eHoriOri = (SwHoriOrient)pOption->GetEnum( aHTMLImgHAlignTable, eHoriOri );
+            eVertOri = pOption->GetEnum( aHTMLImgVAlignTable, eVertOri );
+            eHoriOri = pOption->GetEnum( aHTMLImgHAlignTable, eHoriOri );
             break;
         case HTML_O_USEMAP:
             break;
@@ -696,7 +696,7 @@ void SwHTMLParser::EndObject()
         // und in das Dok einfuegen
         SwFrmFmt* pFlyFmt =
             pDoc->Insert( *pPam,
-                    ::svt::EmbeddedObjectRef( pAppletImpl->GetApplet(), ::com::sun::star::embed::Aspects::MSOLE_CONTENT ),
+                    ::svt::EmbeddedObjectRef( pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
                     &pAppletImpl->GetItemSet(),
                     NULL,
                     NULL );
@@ -723,18 +723,18 @@ void SwHTMLParser::InsertApplet()
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
     BOOL bPrcWidth = FALSE, bPrcHeight = FALSE, bMayScript = FALSE;
-    SwVertOrient eVertOri = VERT_TOP;
-    SwHoriOrient eHoriOri = HORI_NONE;
+    sal_Int16 eVertOri = text::VertOrientation::TOP;
+    sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
     // Eine neue Command-List anlegen
     if( pAppletImpl )
         delete pAppletImpl;
     pAppletImpl = new SwApplet_Impl( pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
         case HTML_O_ID:
@@ -759,8 +759,8 @@ void SwHTMLParser::InsertApplet()
             aAlt = pOption->GetString();
             break;
         case HTML_O_ALIGN:
-            eVertOri = (SwVertOrient)pOption->GetEnum( aHTMLImgVAlignTable, eVertOri );
-            eHoriOri = (SwHoriOrient)pOption->GetEnum( aHTMLImgHAlignTable, eHoriOri );
+            eVertOri = pOption->GetEnum( aHTMLImgVAlignTable, eVertOri );
+            eHoriOri = pOption->GetEnum( aHTMLImgHAlignTable, eHoriOri );
             break;
         case HTML_O_WIDTH:
             bPrcWidth = (pOption->GetString().Search('%') != STRING_NOTFOUND);
@@ -829,7 +829,7 @@ void SwHTMLParser::EndApplet()
     // und in das Dok einfuegen
     SwFrmFmt* pFlyFmt =
         pDoc->Insert( *pPam,
-                    ::svt::EmbeddedObjectRef( pAppletImpl->GetApplet(), ::com::sun::star::embed::Aspects::MSOLE_CONTENT ),
+                    ::svt::EmbeddedObjectRef( pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
                     &pAppletImpl->GetItemSet(),
                     NULL,
                     NULL );
@@ -856,10 +856,10 @@ void SwHTMLParser::InsertParam()
 
     String aName, aValue;
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
         case HTML_O_NAME:
@@ -887,16 +887,16 @@ void SwHTMLParser::InsertFloatingFrame()
     Size aSize( USHRT_MAX, USHRT_MAX );
     Size aSpace( 0, 0 );
     BOOL bPrcWidth = FALSE, bPrcHeight = FALSE;
-    SwVertOrient eVertOri = VERT_TOP;
-    SwHoriOrient eHoriOri = HORI_NONE;
+    sal_Int16 eVertOri = text::VertOrientation::TOP;
+    sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
-    const HTMLOptions *pOptions = GetOptions();
+    const HTMLOptions *pHTMLOptions = GetOptions();
 
     // Erstmal die Optionen f?r das Writer-Frame-Format holen
-    USHORT nArrLen = pOptions->Count();
+    USHORT nArrLen = pHTMLOptions->Count();
     for ( USHORT i=0; i<nArrLen; i++ )
     {
-        const HTMLOption *pOption = (*pOptions)[i];
+        const HTMLOption *pOption = (*pHTMLOptions)[i];
         switch( pOption->GetToken() )
         {
         case HTML_O_ID:
@@ -912,8 +912,8 @@ void SwHTMLParser::InsertFloatingFrame()
             aAlt = pOption->GetString();
             break;
         case HTML_O_ALIGN:
-            eVertOri = (SwVertOrient)pOption->GetEnum( aHTMLImgVAlignTable, eVertOri );
-            eHoriOri = (SwHoriOrient)pOption->GetEnum( aHTMLImgHAlignTable, eHoriOri );
+            eVertOri = pOption->GetEnum( aHTMLImgVAlignTable, eVertOri );
+            eHoriOri = pOption->GetEnum( aHTMLImgHAlignTable, eHoriOri );
             break;
         case HTML_O_WIDTH:
             bPrcWidth = (pOption->GetString().Search('%') != STRING_NOTFOUND);
@@ -935,7 +935,7 @@ void SwHTMLParser::InsertFloatingFrame()
     // und jetzt die fuer den SfxFrame
     SfxFrameDescriptor aFrameDesc;
 
-    SfxFrameHTMLParser::ParseFrameOptions( &aFrameDesc, pOptions, sBaseURL );
+    SfxFrameHTMLParser::ParseFrameOptions( &aFrameDesc, pHTMLOptions, sBaseURL );
 
     // den Floating-Frame anlegen
     comphelper::EmbeddedObjectContainer aCnt;
@@ -1009,7 +1009,7 @@ void SwHTMLParser::InsertFloatingFrame()
 
     // und in das Dok einfuegen
     SwFrmFmt* pFlyFmt =
-        pDoc->Insert( *pPam, ::svt::EmbeddedObjectRef( xObj, ::com::sun::star::embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
+        pDoc->Insert( *pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrmSet, NULL, NULL );
 
     // den alternativen Namen setzen
     SwNoTxtNode *pNoTxtNd =
@@ -1044,7 +1044,7 @@ static USHORT GetOptionType( const String& rName, BOOL bApplet )
             nType = SWHTML_OPTTYPE_IGNORE;
         else if( bApplet &&
                  (rName.EqualsIgnoreCaseAscii( sHTML_O_archive ) ||
-                 rName.EqualsIgnoreCaseAscii( sHTML_O_archives )) )
+                 rName.EqualsIgnoreCaseAscii( sHTML_O_Archives )) )
             nType = SWHTML_OPTTYPE_TAG;
         break;
     case 'C':
@@ -1058,7 +1058,7 @@ static USHORT GetOptionType( const String& rName, BOOL bApplet )
     case 'h':
         if( rName.EqualsIgnoreCaseAscii( sHTML_O_height ) ||
             rName.EqualsIgnoreCaseAscii( sHTML_O_hspace ) ||
-            (!bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_hidden )) )
+            (!bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_Hidden )) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'I':
@@ -1078,7 +1078,7 @@ static USHORT GetOptionType( const String& rName, BOOL bApplet )
         break;
     case 'O':
     case 'o':
-        if( bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_object ) )
+        if( bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_Object ) )
             nType = SWHTML_OPTTYPE_TAG;
         break;
     case 'S':
@@ -1131,7 +1131,7 @@ USHORT SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )
     }
 #endif
 
-    return eType;
+    return static_cast< USHORT >(eType);
 }
 
 Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
@@ -1211,7 +1211,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             SURROUND_THROUGHT == rFrmFmt.GetSurround().GetSurround() )
         {
             // Das Plugin ist HIDDEN
-            (sOut += ' ') += sHTML_O_hidden;
+            (sOut += ' ') += sHTML_O_Hidden;
             nFrmOpts = HTML_FRMOPTS_HIDDEN_EMBED;
             bHiddenEmbed = TRUE;
         }
