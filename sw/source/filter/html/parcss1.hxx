@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parcss1.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:47:01 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:50:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,12 +257,13 @@ class CSS1Parser
     inline sal_uInt32 SetLinePos( sal_uInt32 nlPos );           // inline unten
 
     // Parsen von Teilen der Grammatik
-    void ParseStyleSheet();
     void ParseRule();
     CSS1Selector *ParseSelector();
     CSS1Expression *ParseDeclaration( String& rProperty );
 
 protected:
+
+    void ParseStyleSheet();
 
     // Den Inhalt eines HTML-Style-Elements parsen.
     // Fuer jeden Selektor und jede Deklaration wird
@@ -270,7 +271,7 @@ protected:
     sal_Bool ParseStyleSheet( const String& rIn );
 
     // Den Inhalt einer HTML-Style-Option parsen.
-    // FÅr jede Deklaration wird DeclarationParsed() aufgerufen.
+    // FÔøΩr jede Deklaration wird DeclarationParsed() aufgerufen.
     sal_Bool ParseStyleOption( const String& rIn );
 
     // Diese Methode wird aufgerufen, wenn ein Selektor geparsed wurde
