@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwGetPoolIdFromName.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:29:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:54:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,15 @@
 /* When using the NameMapper to translate pool ids to UI or programmatic
  * names, this enum is used to define which family is required */
 
-enum SwGetPoolIdFromName
+typedef USHORT SwGetPoolIdFromName;
+
+namespace nsSwGetPoolIdFromName
 {
-    GET_POOLID_TXTCOLL  = 0x01,
-    GET_POOLID_CHRFMT   = 0x02,
-    GET_POOLID_FRMFMT   = 0x04,
-    GET_POOLID_PAGEDESC = 0x08,
-    GET_POOLID_NUMRULE  = 0x10
-};
+    const SwGetPoolIdFromName GET_POOLID_TXTCOLL  = 0x01;
+    const SwGetPoolIdFromName GET_POOLID_CHRFMT   = 0x02;
+    const SwGetPoolIdFromName GET_POOLID_FRMFMT   = 0x04;
+    const SwGetPoolIdFromName GET_POOLID_PAGEDESC = 0x08;
+    const SwGetPoolIdFromName GET_POOLID_NUMRULE  = 0x10;
+}
 
 #endif
