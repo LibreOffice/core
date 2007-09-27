@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toxhlp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:43:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:22:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,11 +58,13 @@
 #include <toxwrap.hxx>
 #endif
 
+using namespace ::com::sun::star;
+
 
 IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
 {
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory > rxMSF =
+    uno::Reference<
+            lang::XMultiServiceFactory > rxMSF =
                                     ::comphelper::getProcessServiceFactory();
 
     try {
@@ -72,11 +74,15 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
         if( xI.is() )
         {
             UNO_NMSPC::Any x = xI->queryInterface( ::getCppuType(
-                    (const com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier>*)0) );
+                    (const uno::Reference< i18n::XExtendedIndexEntrySupplier>*)0) );
             x >>= xIES;
         }
     }
-    catch ( UNO_NMSPC::Exception& e )
+    catch ( UNO_NMSPC::Exception&
+#ifndef PRODUCT
+        e
+#endif
+        )
     {
 #ifndef PRODUCT
         ByteString aMsg( "IndexEntrySupplierWrapper: Exception caught\n" );
@@ -98,7 +104,11 @@ String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
     try {
         sRet = xIES->getIndexKey( rTxt, rTxtReading, rLocale );
     }
-    catch ( UNO_NMSPC::Exception& e )
+    catch ( UNO_NMSPC::Exception&
+#ifndef PRODUCT
+        e
+#endif
+        )
     {
 #ifndef PRODUCT
         ByteString aMsg( "getIndexKey: Exception caught\n" );
@@ -115,7 +125,11 @@ String IndexEntrySupplierWrapper::GetFollowingText( BOOL bMorePages ) const
     try {
         sRet = xIES->getIndexFollowPageWord( bMorePages, aLcl );
     }
-    catch ( UNO_NMSPC::Exception& e )
+    catch ( UNO_NMSPC::Exception&
+#ifndef PRODUCT
+        e
+#endif
+        )
     {
 #ifndef PRODUCT
         ByteString aMsg( "getIndexFollowPageWord: Exception caught\n" );
@@ -129,12 +143,16 @@ String IndexEntrySupplierWrapper::GetFollowingText( BOOL bMorePages ) const
 STAR_NMSPC::uno::Sequence< ::rtl::OUString >
 IndexEntrySupplierWrapper::GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLcl ) const
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > sRet;
+    uno::Sequence< ::rtl::OUString > sRet;
 
     try {
         sRet = xIES->getAlgorithmList( rLcl );
     }
-    catch ( UNO_NMSPC::Exception& e )
+    catch ( UNO_NMSPC::Exception&
+#ifndef PRODUCT
+        e
+#endif
+        )
     {
 #ifndef PRODUCT
         ByteString aMsg( "getAlgorithmList: Exception caught\n" );
@@ -153,7 +171,11 @@ sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
     try {
         bRet = xIES->loadAlgorithm( rLcl, sSortAlgorithm, nOptions );
     }
-    catch ( UNO_NMSPC::Exception& e )
+    catch ( UNO_NMSPC::Exception&
+#ifndef PRODUCT
+        e
+#endif
+        )
     {
 #ifndef PRODUCT
         ByteString aMsg( "loadAlgorithm: Exception caught\n" );
@@ -175,7 +197,11 @@ sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
         nRet = xIES->compareIndexEntry( rTxt1, rTxtReading1, rLocale1,
                                         rTxt2, rTxtReading2, rLocale2 );
     }
-    catch ( UNO_NMSPC::Exception& e )
+    catch ( UNO_NMSPC::Exception&
+#ifndef PRODUCT
+        e
+#endif
+        )
     {
 #ifndef PRODUCT
         ByteString aMsg( "compareIndexEntry: Exception caught\n" );
