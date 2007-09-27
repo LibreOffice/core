@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:05:23 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:49:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_sw.hxx"
 
 
+#include <com/sun/star/style/NumberingType.hpp>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -93,6 +94,8 @@
 #include "swhtml.hxx"
 #include "wrthtml.hxx"
 
+using namespace ::com::sun::star;
+
 // TODO: Unicode: Are these characters the correct ones?
 #define HTML_BULLETCHAR_DISC    (0xe008)
 #define HTML_BULLETCHAR_CIRCLE  (0xe009)
@@ -120,7 +123,7 @@ void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
          pTxtNdNumRule != rTxtNd.GetDoc()->GetOutlineNumRule() )
     {
         pNumRule = const_cast<SwNumRule*>(pTxtNdNumRule);
-        nDeep = pNumRule ? rTxtNd.GetLevel() + 1 : 0;
+        nDeep = static_cast< sal_uInt16 >(pNumRule ? rTxtNd.GetLevel() + 1 : 0);
         bNumbered = rTxtNd.IsCounted();
         // --> OD 2005-11-16 #i57919#
         // correction of refactoring done by cws swnumtree:
@@ -203,7 +206,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
         if( nLevel > 0 )
         {
             const SwNumFmt& rPrevNumFmt = rInfo.GetNumRule()->Get( nLevel-1 );
-            nAbsLSpace += rPrevNumFmt.GetAbsLSpace();
+            nAbsLSpace = nAbsLSpace + rPrevNumFmt.GetAbsLSpace();
             nFirstLineIndent = rPrevNumFmt.GetFirstLineOffset();
         }
         aNumFmt.SetAbsLSpace( nAbsLSpace );
@@ -221,12 +224,12 @@ void SwHTMLParser::NewNumBulList( int nToken )
 
     // und es ggf. durch die Optionen veraendern
     String aId, aStyle, aClass, aBulletSrc, aLang, aDir;
-    SvxFrameVertOrient eVertOri = SVX_VERT_NONE;
+    sal_Int16 eVertOri = text::VertOrientation::NONE;
     sal_uInt16 nWidth=USHRT_MAX, nHeight=USHRT_MAX;
-    const HTMLOptions *pOptions = GetOptions();
-    for( sal_uInt16 i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
         case HTML_O_ID:
@@ -299,8 +302,8 @@ void SwHTMLParser::NewNumBulList( int nToken )
             break;
         case HTML_O_ALIGN:
             eVertOri =
-                (SvxFrameVertOrient)pOption->GetEnum( aHTMLImgVAlignTable,
-                                                eVertOri );
+                (sal_Int16)pOption->GetEnum( aHTMLImgVAlignTable,
+                                                static_cast< sal_uInt16 >(eVertOri) );
             break;
         }
     }
@@ -328,7 +331,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
         // Die Ausrichtung auch nur beachten, wenn eine Ausrichtung
         // angegeben wurde
         aNumFmt.SetGraphicBrush( &aBrushItem, pTwipSz,
-                            SVX_VERT_NONE!=eVertOri ? &eVertOri : 0);
+                            text::VertOrientation::NONE!=eVertOri ? &eVertOri : 0);
 
         // Und noch die Grafik merken, um sie in den Absaetzen nicht
         // einzufuegen
@@ -346,7 +349,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
     }
 
     // einen neuen Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
+    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -432,7 +435,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
         AddParSpace();
 
     // den aktuellen Kontext vom Stack holen
-    _HTMLAttrContext *pCntxt = nToken!=0 ? PopContext( nToken & ~1 ) : 0;
+    _HTMLAttrContext *pCntxt = nToken!=0 ? PopContext( static_cast< sal_uInt16 >(nToken & ~1) ) : 0;
 
     // Keine Liste aufgrund eines Tokens beenden, wenn der Kontext
     // nie angelgt wurde oder nicht beendet werden darf.
@@ -456,7 +459,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
                 {
                     SwNumFmt aNumFmt( rInfo.GetNumRule()->Get(i) );
                     aNumFmt.SetNumberingType(pRefNumFmt->GetNumberingType() != SVX_NUM_BITMAP
-                                        ? pRefNumFmt->GetNumberingType() : SVX_NUM_CHAR_SPECIAL);
+                                        ? pRefNumFmt->GetNumberingType() : style::NumberingType::CHAR_SPECIAL);
                     if( SVX_NUM_CHAR_SPECIAL == aNumFmt.GetNumberingType() )
                     {
                         // --> OD 2006-06-27 #b6440955#
@@ -519,10 +522,10 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     if( USHRT_MAX != nStart )
         GetNumInfo().SetNodeStartValue( nLevel );
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( sal_uInt16 i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
             case HTML_O_VALUE:
@@ -554,7 +557,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     if( HTML_LISTHEADER_ON==nToken )
         SetNoNum(&nLevel, TRUE);
 
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
+    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
     String aNumRuleName;
     if( GetNumInfo().GetNumRule() )
@@ -585,7 +588,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         // beim naechsten Absatz wenigstens die Numerierung
         // weggeschmissen, die nach dem naechsten AppendTxtNode uebernommen
         // wird.
-        nOpenParaToken = nToken;
+        nOpenParaToken = static_cast< sal_uInt16 >(nToken);
     }
 
     SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
@@ -593,7 +596,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     pTxtNode->SetLevel(nLevel);
     // --> OD 2005-11-14 #i57656#
     // <IsCounted()> state of text node has to be adjusted accordingly.
-    if ( nLevel >= 0 && nLevel < MAXLEVEL )
+    if ( /*nLevel >= 0 &&*/ nLevel < MAXLEVEL )
     {
         pTxtNode->SetCounted( true );
     }
@@ -636,7 +639,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
 }
 
 void SwHTMLParser::EndNumBulListItem( int nToken, sal_Bool bSetColl,
-                                      sal_Bool bLastPara )
+                                      sal_Bool /*bLastPara*/ )
 {
     // einen neuen Absatz aufmachen
     if( !nToken && pPam->GetPoint()->nContent.GetIndex() )
@@ -695,7 +698,7 @@ void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel )
 
     // --> OD 2005-11-14 #i57656#
     // consider usage of NO_NUMLEVEL - see implementation of <SwTxtNode::SetLevel(..)>
-    if ( nLevel >= 0 && ( nLevel & NO_NUMLEVEL ) )
+    if ( /*nLevel >= 0 &&*/ ( nLevel & NO_NUMLEVEL ) )
     {
         pTxtNode->SetLevel( nLevel & ~NO_NUMLEVEL );
         pTxtNode->SetCounted( false );
@@ -720,7 +723,6 @@ void SwHTMLWriter::FillNextNumInfo()
 
     ULONG nPos = pCurPam->GetPoint()->nNode.GetIndex() + 1;
 
-    sal_Bool bDone = sal_False;
     sal_Bool bTable = sal_False;
     do
     {
@@ -916,8 +918,8 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                 // --> OD 2005-11-02 #i51089 - TUNING#
                 if ( rWrt.pCurPam->GetNode()->GetTxtNode()->GetNum() )
                 {
-                    nStartVal = rWrt.pCurPam->GetNode()->GetTxtNode()->GetNum()->
-                        GetNumberVector()[i];
+                    nStartVal = static_cast< sal_uInt16 >( rWrt.pCurPam->GetNode()
+                                ->GetTxtNode()->GetNum()->GetNumberVector()[i] );
                 }
                 else
                 {
