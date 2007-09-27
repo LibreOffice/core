@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:09:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:53:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@
 #include "conditio.hxx"
 #include "chartlis.hxx"
 #include "fillinfo.hxx"
+#include "bcaslot.hxx"
 #include "globstr.hrc"
 
 // STATIC DATA -----------------------------------------------------------
@@ -167,8 +168,11 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
                     *pUndoOutline = TRUE;
     }
 
-    for (SCCOL j=nStartCol; j<=nEndCol; j++)
-        aCol[j].DeleteRow( nStartRow, nSize );
+    {   // scope for bulk broadcast
+        ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
+        for (SCCOL j=nStartCol; j<=nEndCol; j++)
+            aCol[j].DeleteRow( nStartRow, nSize );
+    }
     if( !--nRecalcLvl )
         SetDrawPageSize();
 }
@@ -260,8 +264,11 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
     }
 
 
-    for (SCSIZE i = 0; i < nSize; i++)
-        aCol[nStartCol + i].DeleteArea(nStartRow, nEndRow, IDF_ALL);
+    {   // scope for bulk broadcast
+        ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
+        for (SCSIZE i = 0; i < nSize; i++)
+            aCol[nStartCol + i].DeleteArea(nStartRow, nEndRow, IDF_ALL);
+    }
 
     if ((nStartRow == 0) && (nEndRow == MAXROW))
     {
@@ -287,8 +294,11 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
     {
 //      nRecalcLvl++;
 
-        for (SCCOL i = nCol1; i <= nCol2; i++)
-            aCol[i].DeleteArea(nRow1, nRow2, nDelFlag);
+        {   // scope for bulk broadcast
+            ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
+            for (SCCOL i = nCol1; i <= nCol2; i++)
+                aCol[i].DeleteArea(nRow1, nRow2, nDelFlag);
+        }
 
             //
             // Zellschutz auf geschuetzter Tabelle nicht setzen
@@ -310,8 +320,11 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
 
 void ScTable::DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark )
 {
-    for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].DeleteSelection( nDelFlag, rMark );
+    {   // scope for bulk broadcast
+        ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
+        for (SCCOL i=0; i<=MAXCOL; i++)
+            aCol[i].DeleteSelection( nDelFlag, rMark );
+    }
 
         //
         // Zellschutz auf geschuetzter Tabelle nicht setzen
