@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swblocks.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:22:46 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:58:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,9 @@
  ************************************************************************/
 #ifndef _SWBLOCKS_HXX
 #define _SWBLOCKS_HXX
+
+#include <tools/string.hxx>
+
 #ifndef _DATE_HXX //autogen
 #include <tools/datetime.hxx>
 #endif
@@ -71,7 +74,7 @@ public:
     int operator< ( const SwBlockName& r ) { return aShort <  r.aShort; }
 };
 
-SV_DECL_PTRARR_SORT( SwBlockNames, SwBlockName*, 10, 10 );
+SV_DECL_PTRARR_SORT( SwBlockNames, SwBlockName*, 10, 10 )
 
 
 class SwImpBlocks
