@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdlgfact.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 07:39:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:37:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,6 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-// class ResId
-#include <tools/rc.hxx>
 #include "dialog.hrc"
 #include "misc.hrc"
 #include "chrdlg.hrc"
@@ -61,9 +59,9 @@
 #include "fldui.hrc"
 #include "envelp.hrc"
 #include "dochdl.hrc"
-#include <index.hrc> //CHINA001
-#include <regionsw.hrc> //CHINA001
-#include <fmtui.hrc> //CHINA001
+#include <index.hrc>
+#include <regionsw.hrc>
+#include <fmtui.hrc>
 
 #include <wordcountdialog.hxx>
 #include "abstract.hxx" // add for SwInsertAbstractDlg
@@ -130,11 +128,13 @@
 #include <mailconfigpage.hxx>
 #endif
 
+using namespace ::com::sun::star;
+
 IMPL_ABSTDLG_BASE(AbstractSwWordCountDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl);//CHINA001 add for SwInsertAbstractDlg
-IMPL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl); //CHINA001 add for SwAddrDlg, SwDropCapsDlg ,SwBackgroundDlg, SwNumFmtDlg SwBorderDlg SwWrapDlg, SwFldEditDlg
-IMPL_ABSTDLG_BASE(AbstractSwAsciiFilterDlg_Impl); //CHINA001 add for SwAsciiFilterDlg
-IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl); // CHINA001 add for SwInsertBookmarkDlg,  SwChangeDBDlg, SwTableHeightDlg ,SwSplitTblDlg  SwSortDlg SwTableWidthDlg
+IMPL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl);
+IMPL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractSwAsciiFilterDlg_Impl);
+IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwBreakDlg_Impl); //add for SwBreakDlg
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl); //add for SwCharDlg, SwFootNoteOptionDlg, SwEnvDlg  SwParaDlg SwTableTabDlg
 IMPL_ABSTDLG_BASE(AbstractSwConvertTableDlg_Impl); //add for SwConvertTableDlg
@@ -172,12 +172,12 @@ const SfxItemSet* AbstractTabDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
-//add by CHINA001
+
 const USHORT* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
-//add by CHINA001
+
 void AbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );
@@ -251,10 +251,10 @@ void AbstractSwConvertTableDlg_Impl::GetValues( sal_Unicode& rDelim,SwInsertTabl
 //add for SwConvertTableDlg end
 
 //add for SwInsertDBColAutoPilot begin
-void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rSelection,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection,
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet)
+void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const uno::Sequence< uno::Any >& rSelection,
+        uno::Reference< sdbc::XDataSource> rxSource,
+        uno::Reference< sdbc::XConnection> xConnection,
+        uno::Reference< sdbc::XResultSet > xResultSet)
 {
     pDlg->DataToDoc(rSelection, rxSource, xConnection, xResultSet);
 }
@@ -282,12 +282,12 @@ const SfxItemSet* AbstarctSwLabDlg_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
-//add by CHINA001
+
 const USHORT* AbstarctSwLabDlg_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
-//add by CHINA001
+
 void AbstarctSwLabDlg_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );
@@ -542,7 +542,7 @@ const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > AbstractMail
 {
     return pDlg->GetSelection();
 }
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> AbstractMailMergeDlg_Impl::GetResultSet() const
+uno::Reference< sdbc::XResultSet> AbstractMailMergeDlg_Impl::GetResultSet() const
 {
     return pDlg->GetResultSet();
 }
@@ -631,7 +631,11 @@ long AbstractMailMergeWizard_Impl::GetResult()
     return pDlg->GetResult();
 }
 
+#ifdef DBG_UTIL
 IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, SwMailMergeWizard*, pDialog )
+#else
+IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, SwMailMergeWizard*, EMPTYARG )
+#endif
 {
     DBG_ASSERT( pDialog == pDlg, "wrong dialog passed to EndDialogHdl!" );
 
@@ -686,7 +690,6 @@ AbstractSwInsertAbstractDlg * SwAbstractDialogFactory_Impl::CreateSwInsertAbstra
 }
 //add for SwInsertAbstractDlg end
 
-//CHINA001  SwAddrDlg ,SwDropCapsDlg, SwBackgroundDlg  SwNumFmtDlg   begin
 AbstractSfxSingleTabDialog* SwAbstractDialogFactory_Impl::CreateSfxSingleTabDialog( Window* pParent,
                                                                                  SfxItemSet& rSet,
                                                                                 int nResId
@@ -715,7 +718,6 @@ AbstractSfxSingleTabDialog* SwAbstractDialogFactory_Impl::CreateSfxSingleTabDial
         return new AbstractSfxSingleTabDialog_Impl( pDlg );
     return 0;
 }
-//CHINA001  SwAddrDlg ,SwDropCapsDlg, SwBackgroundDlg  SwNumFmtDlg   end
 
 // add for SwAsciiFilterDlg begin
 AbstractSwAsciiFilterDlg* SwAbstractDialogFactory_Impl::CreateSwAsciiFilterDlg( Window* pParent,
@@ -875,8 +877,8 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwCaptionDialog ( Window
 //add for  SwInsertDBColAutoPilot begin
 
 AbstractSwInsertDBColAutoPilot* SwAbstractDialogFactory_Impl::CreateSwInsertDBColAutoPilot( SwView& rView, // add for SwInsertDBColAutoPilot
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,
-        com::sun::star::uno::Reference<com::sun::star::sdbcx::XColumnsSupplier> xColSupp,
+        uno::Reference< sdbc::XDataSource> rxSource,
+        uno::Reference<sdbcx::XColumnsSupplier> xColSupp,
         const SwDBData& rData,  int nResId)
 {
     SwInsertDBColAutoPilot* pDlg=NULL;
@@ -1286,22 +1288,6 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwVclDialog( int nResId,
         return new VclAbstractDialog_Impl( pDlg );
     return 0;
 }
-//CHINA001 VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwWrtShDialog( int nResId,
-//CHINA001                                              Window* pParent, SwWrtShell& rSh ) //add for SwColumnDlg
-//CHINA001 {
-//CHINA001 Dialog* pDlg=NULL;
-//CHINA001 switch ( nResId )
-//CHINA001 {
-//CHINA001      case DLG_COLUMN :
-//CHINA001 pDlg = new SwColumnDlg( pParent, rSh );
-//CHINA001 break;
-//CHINA001      default:
-//CHINA001 break;
-//CHINA001  }
-//CHINA001 if ( pDlg )
-//CHINA001 return new VclAbstractDialog_Impl( pDlg );
-//CHINA001 return 0;
-//CHINA001 }
 SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrmTabDialog( int nResId,
                                                 SfxViewFrame *pFrame, Window *pParent,
                                                 const SfxItemSet& rCoreSet,
@@ -1483,8 +1469,8 @@ AbstractMailMergeDlg * SwAbstractDialogFactory_Impl::CreateMailMergeDlg( int nRe
                                                  const String& rSourceName,
                                                 const String& rTblName,
                                                 sal_Int32 nCommandType,
-                                                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection,
-                                                ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection ) //add for SwMailMergeDlg
+                                                const uno::Reference< sdbc::XConnection>& xConnection,
+                                                uno::Sequence< uno::Any >* pSelection ) //add for SwMailMergeDlg
 {
     SwMailMergeDlg* pDlg=NULL;
     switch ( nResId )
@@ -1699,7 +1685,6 @@ GlossaryGetCurrGroup    SwAbstractDialogFactory_Impl::GetGlossaryCurrGroupFunc( 
     {
         case DLG_RENAME_GLOS :
             return SwGlossaryDlg::GetCurrGroup;
-            break;
         default:
             break;
     }
@@ -1711,7 +1696,6 @@ GlossarySetActGroup SwAbstractDialogFactory_Impl::SetGlossaryActGroupFunc( USHOR
     {
         case DLG_RENAME_GLOS :
             return SwGlossaryDlg::SetActGroup;
-            break;
         default:
             break;
     }
@@ -1735,7 +1719,6 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
         case TP_OPTCAPTION_PAGE:
         case RID_SW_TP_OPTCAPTION_PAGE:
             return SwCaptionOptPage::Create;
-            break;
         case TP_CONTENT_OPT :
         case RID_SW_TP_CONTENT_OPT:
         case RID_SW_TP_HTML_CONTENT_OPT:
