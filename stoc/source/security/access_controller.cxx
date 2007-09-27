@@ -4,9 +4,9 @@
  *
  *  $RCSfile: access_controller.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:25:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:00:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,9 +81,10 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::rtl::OString;
 
+extern ::rtl_StandardModuleCount g_moduleCount;
+
 namespace stoc_sec
 {
-
 // static stuff initialized when loading lib
 static OUString s_envType = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
 static OUString s_implName = OUSTR(IMPL_NAME);
@@ -91,7 +92,6 @@ static OUString s_serviceName = OUSTR(SERVICE_NAME);
 static OUString s_acRestriction = OUSTR("access-control.restriction");
 
 static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
-::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
 
 //##################################################################################################
 
@@ -129,13 +129,13 @@ inline acc_Intersection::acc_Intersection(
     : m_x1( x1 )
     , m_x2( x2 )
 {
-    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 acc_Intersection::~acc_Intersection()
     SAL_THROW( () )
 {
-    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 //--------------------------------------------------------------------------------------------------
 inline Reference< security::XAccessControlContext > acc_Intersection::create(
@@ -192,13 +192,13 @@ inline acc_Union::acc_Union(
     : m_x1( x1 )
     , m_x2( x2 )
 {
-    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 acc_Union::~acc_Union()
     SAL_THROW( () )
 {
-    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 //--------------------------------------------------------------------------------------------------
 inline Reference< security::XAccessControlContext > acc_Union::create(
@@ -252,13 +252,13 @@ inline acc_Policy::acc_Policy(
     SAL_THROW( () )
     : m_permissions( permissions )
 {
-    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 acc_Policy::~acc_Policy()
     SAL_THROW( () )
 {
-    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 void acc_Policy::checkPermission(
@@ -303,7 +303,7 @@ inline acc_CurrentContext::acc_CurrentContext(
     : m_refcount( 0 )
     , m_xDelegate( xDelegate )
 {
-    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 
     if (xRestriction.is())
     {
@@ -315,7 +315,7 @@ inline acc_CurrentContext::acc_CurrentContext(
 acc_CurrentContext::~acc_CurrentContext()
     SAL_THROW( () )
 {
-    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 void acc_CurrentContext::acquire()
@@ -491,7 +491,7 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
     , m_singleUser_init( false )
     , m_rec( 0 )
 {
-    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 
     OUString mode;
     if (m_xComponentContext->getValueByName( OUSTR("/services/" SERVICE_NAME "/mode") ) >>= mode)
@@ -546,7 +546,7 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
 AccessController::~AccessController()
     SAL_THROW( () )
 {
-    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 void AccessController::disposing()
@@ -1038,25 +1038,25 @@ Sequence< OUString > AccessController::getSupportedServiceNames()
 {
     return s_serviceNames;
 }
-
+}
 //##################################################################################################
-
+namespace stoc_bootstrap {
 //--------------------------------------------------------------------------------------------------
-static Reference< XInterface > SAL_CALL ac_create(
+Reference< XInterface > SAL_CALL ac_create(
     Reference< XComponentContext > const & xComponentContext )
     SAL_THROW( (Exception) )
 {
-    return (OWeakObject *)new AccessController( xComponentContext );
+    return (OWeakObject *)new stoc_sec::AccessController( xComponentContext );
 }
 //--------------------------------------------------------------------------------------------------
-static Sequence< OUString > ac_getSupportedServiceNames() SAL_THROW( () )
+Sequence< OUString > ac_getSupportedServiceNames() SAL_THROW( () )
 {
-    return s_serviceNames;
+    return stoc_sec::s_serviceNames;
 }
 //--------------------------------------------------------------------------------------------------
-static OUString ac_getImplementationName() SAL_THROW( () )
+OUString ac_getImplementationName() SAL_THROW( () )
 {
-    return s_implName;
+    return stoc_sec::s_implName;
 }
 //--------------------------------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL filepolicy_create(
@@ -1066,47 +1066,4 @@ Reference< XInterface > SAL_CALL filepolicy_create(
 Sequence< OUString > filepolicy_getSupportedServiceNames() SAL_THROW( () );
 //--------------------------------------------------------------------------------------------------
 OUString filepolicy_getImplementationName() SAL_THROW( () );
-//--------------------------------------------------------------------------------------------------
-static struct ImplementationEntry s_entries [] =
-{
-    {
-        ac_create, ac_getImplementationName,
-        ac_getSupportedServiceNames, createSingleComponentFactory,
-        &s_moduleCount.modCnt, 0
-    },
-    {
-        filepolicy_create, filepolicy_getImplementationName,
-        filepolicy_getSupportedServiceNames, createSingleComponentFactory,
-        &s_moduleCount.modCnt, 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
-}
-
-extern "C"
-{
-//==================================================================================================
-sal_Bool SAL_CALL component_canUnload( TimeValue * time )
-{
-    return ::stoc_sec::s_moduleCount.canUnload( &::stoc_sec::s_moduleCount, time );
-}
-//==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
-    sal_Char const ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    lang::XMultiServiceFactory * smgr, registry::XRegistryKey * key )
-{
-    return component_writeInfoHelper( smgr, key, ::stoc_sec::s_entries );
-}
-//==================================================================================================
-void * SAL_CALL component_getFactory(
-    sal_Char const * implName, lang::XMultiServiceFactory * smgr, registry::XRegistryKey * key )
-{
-    return component_getFactoryHelper( implName, smgr, key, ::stoc_sec::s_entries );
-}
 }
