@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:12:47 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:50:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,9 +198,9 @@ BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
     // solange bis ein Frame ungleich ist ?
     while( nRefCnt && nCnt && aRefArr[ nRefCnt ] == aArr[ nCnt ] )
     {
-        const SwFrm* pFrm = (const SwFrm*)aArr[ nCnt ];
-        bVert = pFrm->IsVertical();
-        bR2L = pFrm->IsRightToLeft();
+        const SwFrm* pTmpFrm = (const SwFrm*)aArr[ nCnt ];
+        bVert = pTmpFrm->IsVertical();
+        bR2L = pTmpFrm->IsRightToLeft();
         --nCnt, --nRefCnt;
     }
 
@@ -217,7 +217,7 @@ BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
     const SwFrm* pFldFrm = (const SwFrm*)aArr[ nCnt ];
 
     // unterschiedliche Frames, dann ueberpruefe deren Y-/X-Position
-    BOOL bRefIsLower;
+    BOOL bRefIsLower = FALSE;
     if( ( FRM_COLUMN | FRM_CELL ) & pFldFrm->GetType() ||
         ( FRM_COLUMN | FRM_CELL ) & pRefFrm->GetType() )
     {
@@ -537,10 +537,9 @@ String SwGetRefField::GetPar2() const
 /*-----------------06.03.98 13:34-------------------
 
 --------------------------------------------------*/
-BOOL SwGetRefField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwGetRefField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_USHORT1:
         {
@@ -579,7 +578,7 @@ BOOL SwGetRefField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         String  sTmp(GetPar1());
         if(REF_SEQUENCEFLD == nSubType)
         {
-            sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sTmp, GET_POOLID_TXTCOLL );
+            sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sTmp, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
             switch( nPoolId )
             {
                 case RES_POOLCOLL_LABEL_ABB:
@@ -607,11 +606,10 @@ BOOL SwGetRefField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------06.03.98 13:34-------------------
 
 --------------------------------------------------*/
-BOOL SwGetRefField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     String sTmp;
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_USHORT1:
         {
@@ -655,9 +653,9 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, BYTE nMId )
         break;
     case FIELD_PROP_PAR1:
     {
-        OUString sTmp;
-        rAny >>= sTmp;
-        SetPar1(sTmp);
+        OUString sTmpStr;
+        rAny >>= sTmpStr;
+        SetPar1(sTmpStr);
         ConvertProgrammaticToUIName();
     }
     break;
@@ -689,7 +687,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
         //don't convert when the name points to an existing field type
         if(!pDoc->GetFldType(RES_SETEXPFLD, rPar1, false))
         {
-            sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, GET_POOLID_TXTCOLL );
+            sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
             USHORT nResId = USHRT_MAX;
             switch( nPoolId )
             {
@@ -779,7 +777,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
         {
             SwFieldType* pFldType = pDoc->GetFldType( RES_SETEXPFLD, rRefMark, false );
             if( pFldType && pFldType->GetDepends() &&
-                GSE_SEQ & ((SwSetExpFieldType*)pFldType)->GetType() )
+                nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType*)pFldType)->GetType() )
             {
                 SwClientIter aIter( *pFldType );
                 for( SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
