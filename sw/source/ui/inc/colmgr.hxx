@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:05:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:55:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,9 +99,9 @@ inline  USHORT SwColMgr::GetCount() const
 {
     return aFmtCol.GetNumCols();
 }
-inline void         SwColMgr::SetLineWidthAndColor(ULONG nWidth, const Color& rCol)
+inline void         SwColMgr::SetLineWidthAndColor(ULONG nLWidth, const Color& rCol)
 {
-    aFmtCol.SetLineWidth(nWidth);
+    aFmtCol.SetLineWidth(nLWidth);
     aFmtCol.SetLineColor(rCol);
 }
 inline ULONG        SwColMgr::GetLineWidth() const
