@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conarc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:10:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:23:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ BOOL ConstArc::MouseButtonDown( const MouseEvent& rMEvt )
     if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)) == TRUE)
     {
         if (!nAnzButUp)
-            aStartPnt = pWin->PixelToLogic(rMEvt.GetPosPixel());
+            aStartPnt = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
     }
     return (bReturn);
 }
@@ -96,9 +96,9 @@ BOOL ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
     BOOL bReturn = FALSE;
 
-    if ((pSh->IsDrawCreate() || pWin->IsDrawAction()) && rMEvt.IsLeft())
+    if ((m_pSh->IsDrawCreate() || m_pWin->IsDrawAction()) && rMEvt.IsLeft())
     {
-        Point aPnt(pWin->PixelToLogic(rMEvt.GetPosPixel()));
+        Point aPnt(m_pWin->PixelToLogic(rMEvt.GetPosPixel()));
         if (!nAnzButUp && aPnt == aStartPnt)
         {
             SwDrawBase::MouseButtonUp(rMEvt);
@@ -114,7 +114,7 @@ BOOL ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
                 bReturn = TRUE;
             }
             else
-                pSh->EndCreate(SDRCREATE_NEXTPOINT);
+                m_pSh->EndCreate(SDRCREATE_NEXTPOINT);
         }
     }
 /*  else if ( pView->IsCreateObj() && rMEvt.IsRight() )
@@ -139,16 +139,16 @@ void ConstArc::Activate(const USHORT nSlotId)
     switch (nSlotId)
     {
         case SID_DRAW_ARC:
-            pWin->SetDrawMode(OBJ_CARC);
+            m_pWin->SetSdrDrawMode(OBJ_CARC);
             break;
         case SID_DRAW_PIE:
-            pWin->SetDrawMode(OBJ_SECT);
+            m_pWin->SetSdrDrawMode(OBJ_SECT);
             break;
         case SID_DRAW_CIRCLECUT:
-            pWin->SetDrawMode(OBJ_CCUT);
+            m_pWin->SetSdrDrawMode(OBJ_CCUT);
             break;
         default:
-            pWin->SetDrawMode(OBJ_NONE);
+            m_pWin->SetSdrDrawMode(OBJ_NONE);
             break;
     }
 
