@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: testdefaultbootstrapping.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:19:52 $
+#   last change: $Author: hr $ $Date: 2007-09-27 12:51:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,9 @@ my $defExeExt;
 
 if ($ENV{GUI} eq "WNT") {
     %services = (
-                 'com.sun.star.uno.NamingService'         => 'namingservice.uno.dll',
-                 'com.sun.star.reflection.CoreReflection' => 'reflection.uno.dll',
-                 'com.sun.star.script.Converter'          => 'typeconverter.uno.dll',
+                 'com.sun.star.uno.NamingService'               => 'namingservice.uno.dll',
+                 'com.sun.star.reflection.CoreReflection'       => 'reflection.uno.dll',
+                 'com.sun.star.script.InvocationAdapterFactory' => 'invocadapt.uno.dll',
                  );
 
     $defExeExt = ".exe";
@@ -55,9 +55,9 @@ if ($ENV{GUI} eq "WNT") {
 }
 else {
     %services = (
-                 'com.sun.star.uno.NamingService'         => 'namingservice.uno.so',
-                 'com.sun.star.reflection.CoreReflection' => 'reflection.uno.so',
-                 'com.sun.star.script.Converter'          => 'typeconverter.uno.so'
+                 'com.sun.star.uno.NamingService'               => 'namingservice.uno.so',
+                 'com.sun.star.reflection.CoreReflection'       => 'reflection.uno.so',
+                 'com.sun.star.script.InvocationAdapterFactory' => 'invocadapt.uno.so'
                  );
 
     $defExeExt = "";
