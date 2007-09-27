@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLBlockExport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:27:56 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:09:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,10 @@ using namespace ::rtl;
 
 // #110680#
 SwXMLBlockListExport::SwXMLBlockListExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SwXMLTextBlocks & rBlocks,
     const rtl::OUString &rFileName,
-    com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler)
+    uno::Reference< xml::sax::XDocumentHandler> &rHandler)
 :   SvXMLExport( xServiceFactory, rFileName, rHandler ),
     rBlockList(rBlocks)
 {
@@ -66,7 +66,7 @@ SwXMLBlockListExport::SwXMLBlockListExport(
                             XML_NAMESPACE_BLOCKLIST );
 }
 
-sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum eClass)
+sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum )
 {
     GetDocHandler()->startDocument();
 
@@ -103,10 +103,10 @@ sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum eClass)
 
 // #110680#
 SwXMLTextBlockExport::SwXMLTextBlockExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SwXMLTextBlocks & rBlocks,
     const rtl::OUString &rFileName,
-    com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler)
+    uno::Reference< xml::sax::XDocumentHandler> &rHandler)
 :   SvXMLExport( xServiceFactory, rFileName, rHandler ),
     rBlockList(rBlocks)
 {
