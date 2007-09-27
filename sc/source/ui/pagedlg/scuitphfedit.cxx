@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scuitphfedit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:58:11 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,18 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
     {
         maFtDefinedHF.SetText(ScGlobal::GetRscString( STR_FOOTER ));
         maFtCustomHF.SetText(ScGlobal::GetRscString( STR_HF_CUSTOM_FOOTER ));
+    }
+    if( Application::GetSettings().GetLayoutRTL() )
+    {
+        Point pt1 = aWndLeft.GetPosPixel();
+        Point pt2 = aWndRight.GetPosPixel();
+        aWndLeft.SetPosPixel(pt2);
+        aWndRight.SetPosPixel(pt1);
+
+        pt1 = aFtLeft.GetPosPixel();
+        pt2 = aFtRight.GetPosPixel();
+        aFtLeft.SetPosPixel(pt2);
+        aFtRight.SetPosPixel(pt1);
     }
     aWndLeft.   SetFont( aPatAttr );
     aWndCenter. SetFont( aPatAttr );
