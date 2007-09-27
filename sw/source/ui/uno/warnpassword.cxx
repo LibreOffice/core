@@ -4,9 +4,9 @@
  *
  *  $RCSfile: warnpassword.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:31:43 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:44:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,11 +64,8 @@
 #endif
 
 using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::task::XInteractionHandler;
-using ::com::sun::star::task::XInteractionRequest;
+
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::task;
@@ -76,17 +73,17 @@ using namespace ::com::sun::star::task;
 bool SwWarnPassword::WarningOnPassword( SfxMedium& rMedium )
 {
     bool bReturn = true;
-    Reference< XInteractionHandler > xHandler( rMedium.GetInteractionHandler());
+    uno::Reference< task::XInteractionHandler > xHandler( rMedium.GetInteractionHandler());
     if( xHandler.is() )
     {
 
         OUString empty;
-        Any xException( makeAny(InteractiveAppException(empty,
-                Reference <XInterface> (),
+        uno::Any xException( makeAny(InteractiveAppException(empty,
+                uno::Reference <XInterface> (),
             InteractionClassification_QUERY,
                  ERRCODE_SVX_EXPORT_FILTER_CRYPT)));
 
-        Reference< ucbhelper::SimpleInteractionRequest > xRequest
+        uno::Reference< ucbhelper::SimpleInteractionRequest > xRequest
                     = new ucbhelper::SimpleInteractionRequest(
                         xException,
                  ucbhelper::CONTINUATION_APPROVE
