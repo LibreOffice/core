@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:35:13 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:39:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,8 @@ using namespace ::rtl;
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-SwXRedlineText::SwXRedlineText(SwDoc* pDoc, SwNodeIndex aIndex) :
-    SwXText(pDoc, CURSOR_REDLINE),
+SwXRedlineText::SwXRedlineText(SwDoc* _pDoc, SwNodeIndex aIndex) :
+    SwXText(_pDoc, CURSOR_REDLINE),
     aNodeIndex(aIndex)
 {
 }
@@ -281,16 +281,16 @@ static util::DateTime lcl_DateTimeToUno(const DateTime& rDT)
 }
 
 // ---------------------------------------------------------------------------
-static OUString lcl_RedlineTypeToOUString(IDocumentRedlineAccess::RedlineType_t eType)
+static OUString lcl_RedlineTypeToOUString(RedlineType_t eType)
 {
     OUString sRet;
-    switch(eType & IDocumentRedlineAccess::REDLINE_NO_FLAG_MASK)
+    switch(eType & nsRedlineType_t::REDLINE_NO_FLAG_MASK)
     {
-        case IDocumentRedlineAccess::REDLINE_INSERT: sRet = C2U("Insert"); break;
-        case IDocumentRedlineAccess::REDLINE_DELETE: sRet = C2U("Delete"); break;
-        case IDocumentRedlineAccess::REDLINE_FORMAT: sRet = C2U("Format"); break;
-        case IDocumentRedlineAccess::REDLINE_TABLE:  sRet = C2U("TextTable"); break;
-        case IDocumentRedlineAccess::REDLINE_FMTCOLL:sRet = C2U("Style"); break;
+        case nsRedlineType_t::REDLINE_INSERT: sRet = C2U("Insert"); break;
+        case nsRedlineType_t::REDLINE_DELETE: sRet = C2U("Delete"); break;
+        case nsRedlineType_t::REDLINE_FORMAT: sRet = C2U("Format"); break;
+        case nsRedlineType_t::REDLINE_TABLE:  sRet = C2U("TextTable"); break;
+        case nsRedlineType_t::REDLINE_FMTCOLL:sRet = C2U("Style"); break;
     }
     return sRet;
 }
@@ -406,7 +406,7 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
     else if (rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_IDENTIFIER)))
     {
         OUStringBuffer sBuf;
-        sBuf.append((sal_Int64)&rRedline);
+        sBuf.append( sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(&rRedline) ) );
         aRet <<= sBuf.makeStringAndClear();
     }
     else if (rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_IS_IN_HEADER_FOOTER)))
@@ -433,7 +433,7 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     beans::PropertyValue* pRet = aRet.getArray();
 
     OUStringBuffer sRedlineIdBuf;
-    sRedlineIdBuf.append((sal_Int64)&rRedline);
+    sRedlineIdBuf.append( sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(&rRedline) ) );
 
     sal_Int32 nPropIdx  = 0;
     pRet[nPropIdx].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_REDLINE_AUTHOR));
@@ -482,8 +482,8 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
   -----------------------------------------------------------------------*/
 TYPEINIT1(SwXRedline, SwClient);
 SwXRedline::SwXRedline(SwRedline& rRedline, SwDoc& rDoc) :
-    pDoc(&rDoc),
     SwXText(&rDoc, CURSOR_REDLINE),
+    pDoc(&rDoc),
     pRedline(&rRedline)
 {
     pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
@@ -653,8 +653,8 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
 
   -----------------------------------------------------------------------*/
 void SwXRedline::addPropertyChangeListener(
-    const OUString& aPropertyName,
-    const uno::Reference< beans::XPropertyChangeListener >& xListener )
+    const OUString& /*aPropertyName*/,
+    const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
@@ -662,7 +662,7 @@ void SwXRedline::addPropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXRedline::removePropertyChangeListener(
-    const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener )
+    const OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
@@ -670,7 +670,7 @@ void SwXRedline::removePropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXRedline::addVetoableChangeListener(
-    const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
+    const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
@@ -678,7 +678,7 @@ void SwXRedline::addVetoableChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXRedline::removeVetoableChangeListener(
-    const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
+    const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
@@ -770,11 +770,10 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor(void) throw( u
 
  ---------------------------------------------------------------------------*/
 uno::Reference< text::XTextCursor >  SwXRedline::createTextCursorByRange(
-    const uno::Reference< text::XTextRange > & aTextPosition)
+    const uno::Reference< text::XTextRange > & /*aTextPosition*/)
         throw( uno::RuntimeException )
 {
     throw uno::RuntimeException();
-    return uno::Reference< text::XTextCursor >  ();
 }
 /* ---------------------------------------------------------------------------
 
