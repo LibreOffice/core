@@ -4,9 +4,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:42:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:03:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -659,8 +659,6 @@ ULONG SwLayHelper::CalcPageCount()
                                        ULONG(20 + nNdCount / 1000 * 3) );
 #ifdef PM2
                 const ULONG nMax = 49;
-#elif UNIX
-                const ULONG nMax = 57;
 #else
                 const ULONG nMax = 53;
 #endif
@@ -689,7 +687,7 @@ ULONG SwLayHelper::CalcPageCount()
 
 BOOL SwLayHelper::CheckInsertPage()
 {
-    FASTBOOL bEnd = 0 == rpPage->GetNext();
+    BOOL bEnd = 0 == rpPage->GetNext();
     const SwAttrSet* pAttr = rpFrm->GetAttrSet();
     const SvxFmtBreakItem& rBrk = pAttr->GetBreak();
     const SwFmtPageDesc& rDesc = pAttr->GetPageDesc();
@@ -882,6 +880,7 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
 #if OSL_DEBUG_LEVEL > 1
     ULONG nBreakIndex = ( pImpl && nIndex < pImpl->Count() ) ?
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
+    (void)nBreakIndex;
 #endif
     // OD 09.04.2003 #108698# - always split a big tables.
     if ( !bFirst ||
@@ -896,13 +895,14 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
 #if OSL_DEBUG_LEVEL > 1
                 ULONG nBrkIndex = ( pImpl && nIndex < pImpl->Count() ) ?
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
+                (void)nBrkIndex;
 #endif
                 xub_StrLen nOfst = STRING_LEN;
                 USHORT nType = SW_LAYCACHE_IO_REC_PAGES;
                 if( bLongTab )
                 {
                     rbBreakAfter = sal_True;
-                    nOfst = nRowCount + nMaxRowPerPage;
+                    nOfst = static_cast<xub_StrLen>(nRowCount + nMaxRowPerPage);
                 }
                 else
                 {
@@ -971,7 +971,7 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
 
                                 bDontCreateObjects = FALSE;
                                 pPrv = pHeadline;
-                                nRows += nRepeat;
+                                nRows = nRows + nRepeat;
                             }
                             else
                                 pPrv = 0;
@@ -1195,20 +1195,20 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
 
             while ( aFlyCacheSetIt != aFlyCacheSet.end() )
             {
-                const SwFlyCache* pFlyC = *aFlyCacheSetIt;
+                const SwFlyCache* pFlyCache = *aFlyCacheSetIt;
                 SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)*aFlySetIt)->GetFlyFrm();
 
                 if ( pFly->Frm().Left() == WEIT_WECH )
                 {
                     // we get the stored information
-                    pFly->Frm().Pos().X() = pFlyC->Left() +
+                    pFly->Frm().Pos().X() = pFlyCache->Left() +
                                             pPage->Frm().Left();
-                    pFly->Frm().Pos().Y() = pFlyC->Top() +
+                    pFly->Frm().Pos().Y() = pFlyCache->Top() +
                                             pPage->Frm().Top();
                     if ( pImpl->IsUseFlyCache() )
                     {
-                        pFly->Frm().Width( pFlyC->Width() );
-                        pFly->Frm().Height( pFlyC->Height() );
+                        pFly->Frm().Width( pFlyCache->Width() );
+                        pFly->Frm().Height( pFlyCache->Height() );
                     }
                 }
 
@@ -1243,7 +1243,7 @@ BOOL SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
         USHORT nIdx = 0;
         USHORT nCnt = pCache->GetFlyCount();
         ULONG nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
-        SwFlyCache* pFlyC;
+        SwFlyCache* pFlyC = 0;
 
         // skip fly frames from pages before the current page
         while( nIdx < nCnt &&
@@ -1340,7 +1340,7 @@ BOOL SwLayCacheIoImpl::OpenRec( BYTE cType )
 
 // Close record
 
-BOOL SwLayCacheIoImpl::CloseRec( BYTE cType )
+BOOL SwLayCacheIoImpl::CloseRec( BYTE )
 {
     BOOL bRes = TRUE;
     UINT16 nLvl = aRecTypes.Count();
@@ -1349,8 +1349,6 @@ BOOL SwLayCacheIoImpl::CloseRec( BYTE cType )
     if( nLvl )
     {
         nLvl--;
-        ASSERT( cType == aRecTypes[nLvl],
-                "CloseRec: Wrong Block-Header" );
         UINT32 nPos = pStream->Tell();
         if( bWriteMode )
         {
