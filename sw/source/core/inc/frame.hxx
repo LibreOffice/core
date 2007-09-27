@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 11:48:16 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:56:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,7 +355,7 @@ class SwFrm: public SwClient
     SwCntntFrm* _FindPrevCnt( const bool _bInSameFtn = false );
 
 
-    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE & );
+    void _UpdateAttrFrm( SfxPoolItem*, SfxPoolItem*, BYTE & );
     SwFrm* _GetIndPrev();
     SwFrm* _GetIndNext();
     void SetDirFlags( BOOL bVert );
@@ -625,7 +625,7 @@ public:
 
     //Kann 0 liefern, pruefen auch ob die Shell zum richtigen Dokument
     //gehoert. Impl in frmsh.hxx
-    inline ViewShell *GetShell() const;
+    ViewShell *GetShell() const;
 
     //Prueft alle Seiten ab der Uebergebenen und korrigiert ggf.
     static void CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields = TRUE );
