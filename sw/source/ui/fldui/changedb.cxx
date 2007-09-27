@@ -4,9 +4,9 @@
  *
  *  $RCSfile: changedb.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:09:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:45:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,11 +107,13 @@
 #include <changedb.hrc>
 #endif
 
-using namespace rtl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::container;
-using namespace com::sun::star::lang;
-#define C2U(cChar) OUString::createFromAscii(cChar)
+#include <unomid.h>
+
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
+
 
 /*--------------------------------------------------------------------
     Beschreibung: Feldeinfuegen bearbeiten
@@ -137,8 +139,8 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aImageList      (SW_RES(ILIST_DB_DLG    )),
     aImageListHC    (SW_RES(ILIST_DB_DLG_HC )),
 
-    pMgr( new SwFldMgr() ),
-    pSh(rVw.GetWrtShellPtr())
+    pSh(rVw.GetWrtShellPtr()),
+    pMgr( new SwFldMgr() )
 {
     aAvailDBTLB.SetWrtShell(*pSh);
     FillDBPopup();
@@ -192,13 +194,10 @@ void SwChangeDBDlg::FillDBPopup()
 
     Sequence<OUString> aDBNames = xDBContext->getElementNames();
     const OUString* pDBNames = aDBNames.getConstArray();
-    long nDBCount = aDBNames.getLength();
-    long i;
-
-    for( i = 0; i < nDBCount; i++)
+    sal_Int32 nDBCount = aDBNames.getLength();
+    for(sal_Int32 i = 0; i < nDBCount; i++)
     {
-        String sDBName(pDBNames[i]);
-        aAllDBNames.Insert(new String(sDBName), aAllDBNames.Count());
+        aAllDBNames.Insert(new String(pDBNames[i]), aAllDBNames.Count());
     }
 
     SvStringsDtor aDBNameList(5, 1);
@@ -209,9 +208,9 @@ void SwChangeDBDlg::FillDBPopup()
     SvLBoxEntry *pFirst = 0;
     SvLBoxEntry *pLast = 0;
 
-    for (i = 0; i < nCount; i++)
+    for (USHORT k = 0; k < nCount; k++)
     {
-        sDBName = *aDBNameList.GetObject(i);
+        sDBName = *aDBNameList.GetObject(k);
         sDBName = sDBName.GetToken(0);
         pLast = Insert(sDBName);
         if (!pFirst)
@@ -333,7 +332,7 @@ void SwChangeDBDlg::UpdateFlds()
 ------------------------------------------------------------------------*/
 
 
-IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, pBtn )
+IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, EMPTYARG )
 {
     String sTableName, sColumnName;
     SwDBData aData;
@@ -353,7 +352,7 @@ IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, pBtn )
 ------------------------------------------------------------------------*/
 
 
-IMPL_LINK( SwChangeDBDlg, TreeSelectHdl, SvTreeListBox *, pBox )
+IMPL_LINK( SwChangeDBDlg, TreeSelectHdl, SvTreeListBox *, EMPTYARG )
 {
     BOOL bEnable = FALSE;
 
