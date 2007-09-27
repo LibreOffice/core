@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 14:36:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:01:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ USHORT SwWW8Writer::DupNumRuleWithLvlStart(const SwNumRule *pRule,BYTE nLvl,
     SwNumRule* pMyNumRule = new SwNumRule(pDoc->GetUniqueNumRuleName(&sPrefix));
     pUsedNumTbl->Insert( pMyNumRule, pUsedNumTbl->Count() );
 
-    for (int i=0;i<MAXLEVEL;i++)
+    for (USHORT i=0;i<MAXLEVEL;i++)
     {
         const SwNumFmt& rSubRule = pRule->Get(i);
         pMyNumRule->Set( i, rSubRule );
@@ -240,8 +240,8 @@ void SwWW8Writer::OutListTab()
     {
         const SwNumRule& rRule = *pUsedNumTbl->GetObject( n );
         BYTE nLvl, nFlags, nAlign;
-        BYTE nLevels = rRule.IsContinusNum() ?
-            WW8ListManager::nMinLevel : WW8ListManager::nMaxLevel;
+        BYTE nLevels = static_cast< BYTE >(rRule.IsContinusNum() ?
+            WW8ListManager::nMinLevel : WW8ListManager::nMaxLevel);
         for( nLvl = 0; nLvl < nLevels; ++nLvl )
         {
             // write the static data of the SwNumFmt of this level
@@ -592,7 +592,7 @@ void SwWW8Writer::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
             if ( (eChrSet == RTL_TEXTENCODING_SYMBOL) && (cChar >= 0xF000) && (
                 cChar <= 0xF0FF) )
             {
-                *rpCh = cChar - 0xF000;
+                *rpCh = static_cast< BYTE >(cChar - 0xF000);
             }
             else
                 *rpCh =  ByteString::ConvertFromUnicode(cChar, eChrSet);
@@ -673,7 +673,7 @@ static void SwWw8_InsertAnlText( const String& rStr, BYTE*& rpCh,
         nb = (BYTE)nCnt;
         memcpy( rpCh, aO.GetData(), nCnt );
         rpCh += nCnt;
-        rCharLen -= nCnt;
+        rCharLen = rCharLen - nCnt;
     }
     ByteToSVBT8( nb, r8Len );
 }
@@ -779,7 +779,7 @@ bool SwWW8Writer::Out_SwNum(const SwTxtNode* pNd)
         return false;
     }
 
-    BYTE nSwLevel = nLevel;
+    BYTE nSwLevel = static_cast< BYTE >(nLevel);
 
     const SwNumRule* pRul = pNd->GetNumRule();
     if( !pRul || nSwLevel == WW8ListManager::nMaxLevel)
