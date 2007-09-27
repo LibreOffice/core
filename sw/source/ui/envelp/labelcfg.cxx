@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labelcfg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:54:57 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:43:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,12 +50,13 @@
 #include <unotools/configpathes.hxx>
 #endif
 
+#include <unomid.h>
+
 using namespace utl;
 using namespace rtl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
 /* -----------------------------15.01.01 11:17--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -112,7 +113,6 @@ SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufactur
                     pValues[nProp] >>= sTmp;
                     String sMeasure(sTmp);
                     USHORT nTokenCount = sMeasure.GetTokenCount(';');
-                    xub_StrLen nIdx = 0;
                     for(USHORT i = 0; i < nTokenCount; i++)
                     {
                         String sToken(sMeasure.GetToken(i, ';' ));
