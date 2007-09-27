@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:21:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:37:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,13 +226,13 @@ void SwView::ExecDraw(SfxRequest& rReq)
 
                 if ( pObj )
                 {
-                    Size aDocSz(pWrtShell->GetDocSize());
+                    Size aDocSize(pWrtShell->GetDocSize());
                     const SwRect& rVisArea = pWrtShell->VisArea();
                     Point aStartPos = rVisArea.Center();
-                    if(rVisArea.Width() > aDocSz.Width())
-                        aStartPos.X() = aDocSz.Width() / 2 + rVisArea.Left();
-                    if(rVisArea.Height() > aDocSz.Height())
-                        aStartPos.Y() = aDocSz.Height() / 2 + rVisArea.Top();
+                    if(rVisArea.Width() > aDocSize.Width())
+                        aStartPos.X() = aDocSize.Width() / 2 + rVisArea.Left();
+                    if(rVisArea.Height() > aDocSize.Height())
+                        aStartPos.Y() = aDocSize.Height() / 2 + rVisArea.Top();
 
                     //determine the size of the object
                     if(pObj->IsGroupObject())
@@ -251,10 +251,10 @@ void SwView::ExecDraw(SfxRequest& rReq)
     }
     else if ( nSlotId == SID_FONTWORK_GALLERY_FLOATER )
     {
-        Window*  pWindow = &( pWrtShell->GetView().GetViewFrame()->GetWindow() );
+        Window*  pWin = &( pWrtShell->GetView().GetViewFrame()->GetWindow() );
 
-        if ( pWindow )
-            pWindow->EnterWait();
+        if ( pWin )
+            pWin->EnterWait();
 
         if( !pWrtShell->HasDrawView() )
             pWrtShell->MakeDrawView();
@@ -263,27 +263,27 @@ void SwView::ExecDraw(SfxRequest& rReq)
         if ( pSdrView )
         {
             SdrObject* pObj = NULL;
-            svx::FontWorkGalleryDialog aDlg( pSdrView, pWindow, nSlotId );
+            svx::FontWorkGalleryDialog aDlg( pSdrView, pWin, nSlotId );
             aDlg.SetSdrObjectRef( &pObj, pSdrView->GetModel() );
             aDlg.Execute();
             if ( pObj )
             {
-                Size            aDocSz( pWrtShell->GetDocSize() );
+                Size            aDocSize( pWrtShell->GetDocSize() );
                 const SwRect&   rVisArea = pWrtShell->VisArea();
                 Point           aPos( rVisArea.Center() );
                 Size            aSize;
                 Size            aPrefSize( pObj->GetSnapRect().GetSize() );
 
-                if( rVisArea.Width() > aDocSz.Width())
-                    aPos.X() = aDocSz.Width() / 2 + rVisArea.Left();
+                if( rVisArea.Width() > aDocSize.Width())
+                    aPos.X() = aDocSize.Width() / 2 + rVisArea.Left();
 
-                if(rVisArea.Height() > aDocSz.Height())
-                    aPos.Y() = aDocSz.Height() / 2 + rVisArea.Top();
+                if(rVisArea.Height() > aDocSize.Height())
+                    aPos.Y() = aDocSize.Height() / 2 + rVisArea.Top();
 
                 if( aPrefSize.Width() && aPrefSize.Height() )
                 {
-                    if( pWindow )
-                        aSize = pWindow->PixelToLogic( aPrefSize, MAP_TWIP );
+                    if( pWin )
+                        aSize = pWin->PixelToLogic( aPrefSize, MAP_TWIP );
                     else
                         aSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_TWIP );
                 }
@@ -295,8 +295,8 @@ void SwView::ExecDraw(SfxRequest& rReq)
                 rReq.Ignore ();
             }
         }
-        if( pWindow )
-            pWindow->LeaveWait();
+        if( pWin )
+            pWin->LeaveWait();
     }
 
     if( nSlotId == SID_DRAW_CS_ID )
@@ -455,9 +455,8 @@ void SwView::ExecDraw(SfxRequest& rReq)
                 SetDrawFuncPtr(NULL);
                 LeaveDrawCreate();
                 pWrtShell->EnterStdMode();
-                SdrView *pSdrView = pWrtShell->GetDrawView();
-                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                sal_uInt32 nCount = rMarkList.GetMarkCount();
+                SdrView *pTmpSdrView = pWrtShell->GetDrawView();
+                const SdrMarkList& rMarkList = pTmpSdrView->GetMarkedObjectList();
                 if(rMarkList.GetMarkCount() == 1 &&
                         (SID_DRAW_TEXT == nSlotId || SID_DRAW_TEXT_VERTICAL == nSlotId ||
                             SID_DRAW_TEXT_MARQUEE == nSlotId ))
