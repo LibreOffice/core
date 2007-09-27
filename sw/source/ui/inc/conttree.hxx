@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conttree.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:03:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:56:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,10 @@ class SwNavigationPI;
 class SwNavigationConfig;
 class Menu;
 class ToolBox;
+class SwGlblDocContents;
+class SwGlblDocContent;
+class SfxObjectShell;
+
 
 #define EDIT_MODE_EDIT          0
 #define EDIT_MODE_UPD_IDX       1
@@ -114,6 +118,8 @@ protected:
     virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
     virtual void    DragFinished( sal_Int8 );
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+
+    using SvLBox::ExecuteDrop;
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     sal_Bool        FillTransferData( TransferDataContainer& rTransfer,
@@ -136,7 +142,9 @@ protected:
                                 );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
 
-    void            EditEntry(SvLBoxEntry* pEntry, BYTE nMode = EDIT_MODE_EDIT);
+    using SvTreeListBox::EditEntry;
+    void            EditEntry( SvLBoxEntry* pEntry, BYTE nMode );
+
     void            GotoContent(SwContent* pCnt);
     static void     SetInDrag(BOOL bSet) {bIsInDrag = bSet;}
 
@@ -171,11 +179,17 @@ public:
 
     BYTE            GetOutlineLevel()const {return nOutlineLevel;}
     void            SetOutlineLevel(BYTE nSet);
+
+    using SvListView::Expand;
     BOOL            Expand( SvLBoxEntry* pParent );
+
+    using SvListView::Collapse;
     BOOL            Collapse( SvLBoxEntry* pParent );
+
     void            ExecCommand(USHORT nCmd, BOOL bModifier);
-    void            Show();
-    void            Hide();
+
+    void            ShowTree();
+    void            HideTree();
 
     BOOL            IsConstantView() {return bIsConstant;}
     BOOL            IsActiveView()   {return bIsActive;}
@@ -192,6 +206,8 @@ public:
     virtual void    RequestingChilds( SvLBoxEntry* pParent );
     virtual void    GetFocus();
     virtual void    KeyInput(const KeyEvent& rKEvt);
+
+    using SvListView::Select;
     virtual BOOL    Select( SvLBoxEntry* pEntry, BOOL bSelect=TRUE );
 };
 
@@ -199,9 +215,6 @@ public:
 //----------------------------------------------------------------------------
 // TreeListBox fuer Globaldokumente
 //----------------------------------------------------------------------------
-
-class SwGlblDocContents;
-class SwGlblDocContent;
 
 class SwLBoxString : public SvLBoxString
 {
@@ -248,8 +261,14 @@ private:
     DECL_LINK(  DialogClosedHdl, sfx2::FileDialogHelper* );
 
 protected:
+
+    using SvLBox::DoubleClickHdl;
+
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
+
+    using SvLBox::ExecuteDrop;
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
+
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual void    RequestHelp( const HelpEvent& rHEvt );
@@ -308,13 +327,16 @@ public:
     void                InsertRegion( const SwGlblDocContent* pCont,
                                         const String* pFileName = 0 );
     void                EditContent(const SwGlblDocContent* pCont );
-    void                Show();
-    void                Hide();
+
+    void                ShowTree();
+    void                HideTree();
 
     void                ExecCommand(USHORT nCmd);
 
     void                Display(BOOL bOnlyUpdateUserData = FALSE);
-    BOOL                Update(BOOL bHard = FALSE);
+
+    using Window::Update;
+    BOOL                Update(BOOL bHard);
 };
 
 #endif
