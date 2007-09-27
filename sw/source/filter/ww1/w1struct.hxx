@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1struct.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:40:44 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:58:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,16 +68,16 @@ struct W1_FIB /////////////////////////////////////////////////////////
         return SVBT16ToShort(fFlags); }
     // SVBT16 fDot :1;// 0xa    0001
     BOOL fDotGet() {
-        return ((fFlagsGet() >> 0) & 1); }
+        return 0 != ((fFlagsGet() >> 0) & 1); }
     // SVBT16 fGlsy :1;//       0002
     BOOL fGlsyGet() {
-        return ((fFlagsGet() >> 1) & 1); }
+        return 0 != ((fFlagsGet() >> 1) & 1); }
     // SVBT16 fComplex :1;//        0004 when 1, file is in complex, fast-saved format.
     BOOL fComplexGet() {
-        return ((fFlagsGet() >> 2) & 1); }
+        return 0 != ((fFlagsGet() >> 2) & 1); }
     // SVBT16 fHasPic :1;//     0008 file contains 1 or more pictures
     BOOL fHasPicGet() {
-        return ((fFlagsGet() >> 3) & 1); }
+        return 0 != ((fFlagsGet() >> 3) & 1); }
     // SVBT16 cQuickSaves :4;//     00F0 count of times file was quicksaved
     USHORT cQuickSavesGet() {
         return (USHORT)((fFlagsGet() >> 4) & 0xf); }
@@ -397,17 +397,17 @@ struct W1_DOP ///////////////////////////////////// Document Properties
         return SVBT16ToShort(fFlags); }
     // SVBT16 fFacingPages : 1;// 1 when facing pages should be printed
     BOOL fFacingPagesGet() {
-        return ((fFlagsGet() >> 0) & 1); }
+        return 0 != ((fFlagsGet() >> 0) & 1); }
     // SVBT16 fWidowControl : 1;// 1 when widow control is in effect. 0 when widow control disabled.
     BOOL fWidowControlGet() {
-        return ((fFlagsGet() >> 1) & 1); }
+        return 0 != ((fFlagsGet() >> 1) & 1); }
     // SVBT16 : 3;// unused
     // SVBT16 fpc : 2;// 1 footnote position code: 0 as endnotes, 1 at bottom of page, 2 immediately beneath text
     USHORT fpcGet() {
         return (USHORT)((fFlagsGet() >> 5) & 3); }
     // SVBT16 fWide : 1;// Landscape
     BOOL fWideGet() {
-        return ((fFlagsGet() >> 7) & 1); }
+        return 0 != ((fFlagsGet() >> 7) & 1); }
     // SVBT16 grpfIhdt : 8;// 0 specification of document headers and footers. See explanation under Headers and Footers topic.
     USHORT grpfIhdtGet() {
         return (USHORT)((fFlagsGet() >> 8) & 0xff); }
@@ -416,7 +416,7 @@ struct W1_DOP ///////////////////////////////////// Document Properties
         return SVBT16ToShort(fFtnFlags); }
     // SVBT16 fFtnRestart : 1;
     BOOL fFtnRestartGet() {
-        return ((fFtnFlagsGet() >> 0) & 1); }
+        return 0 != ((fFtnFlagsGet() >> 0) & 1); }
     // SVBT16 nFtn : 15;// 1 initial footnote number for document
     USHORT nFtnGet() {
         return (USHORT)((fFtnFlagsGet() >> 1) & 0x7fff); }
@@ -431,28 +431,28 @@ struct W1_DOP ///////////////////////////////////// Document Properties
         return (USHORT)((fRvsFlagsGet() >> 8) & 0x7f); }
     // SVBT16 fRevMarking   : 1;//   when 1, Word will mark revisions as the document is edited
     BOOL fRevMarkingGet() {
-        return ((fRvsFlagsGet() >> 15) & 1); }
+        return 0 != ((fRvsFlagsGet() >> 15) & 1); }
     SVBT16 fSveFlags;
     USHORT fSveFlagsGet() {
         return SVBT16ToShort(fSveFlags); }
     // SVBT16 fBackup : 1;//     always make backup when document saved when 1.
     BOOL fBackupGet() {
-        return ((fSveFlagsGet() >> 0) & 1); }
+        return 0 != ((fSveFlagsGet() >> 0) & 1); }
     // SVBT16 fExactCWords : 1;
     BOOL fExactCWordsGet() {
-        return ((fSveFlagsGet() >> 1) & 1); }
+        return 0 != ((fSveFlagsGet() >> 1) & 1); }
     // SVBT16 fPagHidden : 1;//
     BOOL fPagHiddenGet() {
-        return ((fSveFlagsGet() >> 2) & 1); }
+        return 0 != ((fSveFlagsGet() >> 2) & 1); }
     // SVBT16 fPagResults : 1;
     BOOL fPagResultsGet() {
-        return ((fSveFlagsGet() >> 3) & 1); }
+        return 0 != ((fSveFlagsGet() >> 3) & 1); }
     // SVBT16 fLockAtn : 1;//    when 1, annotations are locked for editing
     BOOL fLockAtnGet() {
-        return ((fSveFlagsGet() >> 4) & 1); }
+        return 0 != ((fSveFlagsGet() >> 4) & 1); }
     // SVBT16 fMirrorMargins : 1;//  swap margins on left/right pages when 1.
     BOOL fMirrorMarginsGet() {
-        return ((fSveFlagsGet() >> 5) & 1); }
+        return 0 != ((fSveFlagsGet() >> 5) & 1); }
     // SVBT16 : 10;// unused
     SVBT16 fSpares;
     USHORT fSparesGet() {
@@ -531,27 +531,27 @@ struct W1_CHP /////////////////////////////////////////////////////////
 
     USHORT fCharGet()       { return SVBT16ToShort(fChar); }
     void fCharSet(USHORT n) { ShortToSVBT16(n, fChar); }
-    BOOL fBoldGet()         { return ((fCharGet() >> 0) & 1); }
+    BOOL fBoldGet()         { return 0 != ((fCharGet() >> 0) & 1); }
     void fBoldSet(BOOL b)   { fCharSet( ( fCharGet() & 0xfffe ) | ( b << 0 ) ); }
-    BOOL fItalicGet()       { return ((fCharGet() >> 1) & 1); }
+    BOOL fItalicGet()       { return 0 != ((fCharGet() >> 1) & 1); }
     void fItalicSet(BOOL b) { fCharSet( ( fCharGet() & 0xfffd ) | ( b << 1 ) ); }
-    BOOL fStrikeGet()       { return ((fCharGet() >> 2) & 1); }
-    BOOL fOutlineGet()      { return ((fCharGet() >> 3) & 1); }
-    BOOL fFldVanishGet()    { return ((fCharGet() >> 4) & 1); }
-    BOOL fSmallCapsGet()    { return ((fCharGet() >> 5) & 1); }
-    BOOL fCapsGet()         { return ((fCharGet() >> 6) & 1); }
-    BOOL fVanishGet()       { return ((fCharGet() >> 7) & 1); }
-    BOOL fRMarkGet()        { return ((fCharGet() >> 8) & 1); }
-    BOOL fSpecGet()         { return ((fCharGet() >> 9) & 1); }
-    BOOL fsIcoGet()         { return ((fCharGet() >> 10) & 1); }
-    BOOL fsFtcGet()         { return ((fCharGet() >> 11) & 1); }
+    BOOL fStrikeGet()       { return 0 != ((fCharGet() >> 2) & 1); }
+    BOOL fOutlineGet()      { return 0 != ((fCharGet() >> 3) & 1); }
+    BOOL fFldVanishGet()    { return 0 != ((fCharGet() >> 4) & 1); }
+    BOOL fSmallCapsGet()    { return 0 != ((fCharGet() >> 5) & 1); }
+    BOOL fCapsGet()         { return 0 != ((fCharGet() >> 6) & 1); }
+    BOOL fVanishGet()       { return 0 != ((fCharGet() >> 7) & 1); }
+    BOOL fRMarkGet()        { return 0 != ((fCharGet() >> 8) & 1); }
+    BOOL fSpecGet()         { return 0 != ((fCharGet() >> 9) & 1); }
+    BOOL fsIcoGet()         { return 0 != ((fCharGet() >> 10) & 1); }
+    BOOL fsFtcGet()         { return 0 != ((fCharGet() >> 11) & 1); }
     void fsFtcSet(BOOL b)   { fCharSet( ( fCharGet() & 0xf7ff ) | ( b << 11 ) ); }
-    BOOL fsHpsGet()         { return ((fCharGet() >> 12) & 1); }
+    BOOL fsHpsGet()         { return 0 != ((fCharGet() >> 12) & 1); }
     void fsHpsSet(BOOL b)   { fCharSet( ( fCharGet() & 0xefff ) | ( b << 12 ) ); }
-    BOOL fsKulGet()         { return ((fCharGet() >> 13) & 1); }
+    BOOL fsKulGet()         { return 0 != ((fCharGet() >> 13) & 1); }
     void fsKulSet(BOOL b)   { fCharSet( ( fCharGet() & 0xdfff ) | ( b << 13 ) ); }
-    BOOL fsPosGet()         { return ((fCharGet() >> 14) & 1); }
-    BOOL fsSpaceGet()       { return ((fCharGet() >> 15) & 1); }
+    BOOL fsPosGet()         { return 0 != ((fCharGet() >> 14) & 1); }
+    BOOL fsSpaceGet()       { return 0 != ((fCharGet() >> 15) & 1); }
     // SVBT16 fBold :1;// 1 == opposite boldness of style
     // SVBT16 fItalic :1;// 1 == opposite of style
     // SVBT16 fStrike :1;// 1 == opposite of style
@@ -582,7 +582,7 @@ struct W1_CHP /////////////////////////////////////////////////////////
     USHORT icoGet()         { return (USHORT)((fTextGet() >> 8) & 0xf); }
     USHORT kulGet()         { return (USHORT)((fTextGet() >> 12) & 7); }
     void kulSet(USHORT n)   { fTextSet( ( fTextGet() & 0x8fff ) | ( ( n & 7 ) << 12 ) ); }
-    BOOL fSysVanishGet()    { return ((fTextGet() >> 15) & 1); }
+    BOOL fSysVanishGet()    { return 0 != ((fTextGet() >> 15) & 1); }
     // SVBT16 qpsSpace :6;// Char Spacing, -7 .. 56; 57 = -7, 63 = -1
     // SVBT16 wSpare2 : 2;// reserved
     // SVBT16 ico :4;// color of Text: 0=black, 1=blue, 2=cyan, 3=green, 4=magenta, 5=red, 6=yellow, 7=white
@@ -609,7 +609,7 @@ struct W1_FFN ///////////////////////////////////////// Font Descriptor
         return (USHORT)((fFlagsGet() >> 0) & 3); }
     // SVBT8 fTrueType : 1;//   0x1:04  when 1, font is a TrueType font
     BOOL fTrueTypeGet() {
-        return ((fFlagsGet() >> 2) & 1); }
+        return 0 != ((fFlagsGet() >> 2) & 1); }
     // SVBT8 : 1;// 0x1:08  reserved
     // SVBT8 ff : 3;//  0x1:70  font family id
     USHORT ffGet() {
@@ -629,13 +629,13 @@ struct W1_PHE /////////////////////////////////////// Paragraph Height
     USHORT fFlagsGet() {
         return SVBT16ToShort(fFlags); }
     BOOL fSpareGet() {
-        return fFlagsGet() & 1; }
+        return 0 != (fFlagsGet() & 1); }
     BOOL fUnkGet() {
-        return (fFlagsGet() >> 1) & 1; }
+        return 0 != ((fFlagsGet() >> 1) & 1); }
     BOOL fDiffLinesGet() {
-        return (fFlagsGet() >> 2) & 1; }
+        return 0 != ((fFlagsGet() >> 2) & 1); }
     BYTE clMacGet() {
-        return (fFlagsGet() >> 8) & 0xff; }
+        return sal::static_int_cast< sal_uInt8, sal_uInt16 >((fFlagsGet() >> 8) & 0xff); }
     SVBT16 dxaCol;
     USHORT dxaColGet() {
         return SVBT16ToShort(dxaCol); }
@@ -669,23 +669,23 @@ struct W1_BRC //////////////////////////////////////////// Border Code
                                 // in units of 0.75 points Must be nonzero when brcType
                                 // is nonzero. 6 == dotted, 7 == dashed.
     BYTE dxpLineWidthGet() {
-        return (aBitsGet() >> 0) & 0x0007; }
+        return sal::static_int_cast< sal_uInt8, sal_uInt16 >((aBitsGet() >> 0) & 0x0007); }
     // SVBT16 brcType : 2;// 0018 border type code: 0 == none, 1 == single, 2 == thick,
                             // 3 == double
     BYTE brcTypeGet() {
-        return (aBitsGet() >> 3) & 0x0003; }
+        return sal::static_int_cast< sal_uInt8, sal_uInt16 >((aBitsGet() >> 3) & 0x0003); }
     // SVBT16 fShadow : 1;// 0020   when 1, border is drawn with shadow. Must be 0
                             // when BRC is a substructure of the TC
     BYTE fShadowGet() {
-        return (aBitsGet() >> 5) & 0x0001; }
+        return sal::static_int_cast< sal_uInt8, sal_uInt16 >((aBitsGet() >> 5) & 0x0001); }
     // SVBT16 ico : 5;// 07C0 color code (see chp.ico)
     BYTE icoGet() {
-        return (aBitsGet() >> 6) & 0x001f; }
+        return sal::static_int_cast< sal_uInt8, sal_uInt16 >((aBitsGet() >> 6) & 0x001f); }
     // SVBT16 dxpSpace : 5;// F800  width of space to maintain between border and
                                 // text within border. Must be 0 when BRC is a
                                 // substructure of the TC. Stored in points for Windows.
     BYTE dxpSpaceGet() {
-        return (aBitsGet() >> 11) & 0x001f; }
+        return sal::static_int_cast< sal_uInt8, sal_uInt16 >((aBitsGet() >> 11) & 0x001f); }
 };
 
 struct W1_BRC10 ///////////////////////////////// Border Code Word 1.0
@@ -694,17 +694,17 @@ struct W1_BRC10 ///////////////////////////////// Border Code Word 1.0
     USHORT aBitsGet() {
         return SVBT16ToShort(aBits); }
     BYTE dxpLine2WidthGet() {
-        return (aBitsGet() >> 0) & 0x0007; }
+        return sal::static_int_cast< sal_uInt8, sal_uInt16 >((aBitsGet() >> 0) & 0x0007); }
     BYTE dxpSpaceBetweenGet() {
-        return (aBitsGet() >> 3) & 0x0007; }
+        return sal::static_int_cast< sal_uInt8, sal_uInt16 >((aBitsGet() >> 3) & 0x0007); }
     BYTE dxpLine1WidthGet() {
-        return (aBitsGet() >> 6) & 0x0007; }
+        return sal::static_int_cast< sal_uInt8, sal_uInt16 >((aBitsGet() >> 6) & 0x0007); }
     BYTE dxpSpaceGet() {
-        return (aBitsGet() >> 9) & 0x001f; }
+        return sal::static_int_cast< sal_uInt8, sal_uInt16 >((aBitsGet() >> 9) & 0x001f); }
     BYTE fShadowGet() {
-        return (aBitsGet() >> 14) & 0x0001; }
+        return sal::static_int_cast< sal_uInt8, sal_uInt16 >((aBitsGet() >> 14) & 0x0001); }
     BYTE fSpareGet() {
-        return (aBitsGet() >> 15) & 0x0001; }
+        return sal::static_int_cast< sal_uInt8, sal_uInt16 >((aBitsGet() >> 15) & 0x0001); }
 };
 
 struct W1_FLD //////////////////////////////////////// FieldDescriptor
@@ -785,10 +785,10 @@ struct W1_PIC /////////////////////////////////////// PictureStructure
         return SVBT16ToShort(flags); }
 //  brcl : 4;// 000F    Obsolete, superseded by brcTop, etc. In
     BYTE brclGet() {
-        return flagsGet() & 0xf; }
+        return sal::static_int_cast< BYTE, sal_uInt16 >(flagsGet() & 0xf); }
 //  fFrameEmpty : 1;// 0010 picture consists of a single frame
     BOOL fFrameEmptyGet() {
-        return (flagsGet() >> 4) & 1; }
+        return sal::static_int_cast< BYTE, sal_uInt16 >((flagsGet() >> 4) & 1); }
 // win6 stuff:
 //  fBitmap : 1;// 0020 ==1, when picture is just a bitmap
 //  BOOL fBitmapGet() {
