@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:26:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:39:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,9 +173,9 @@ void SwView::GetState(SfxItemSet &rSet)
                 // Captions gibt's fuer Grafiken, OLE-Objekte, Rahmen und Tabellen
                 if( !bGetFrmType )
                     eFrmType = pWrtShell->GetFrmType(0,sal_True), bGetFrmType = sal_True;
-                if (! ( ((eFrmType & FRMTYPE_FLY_ANY) && nSelectionType != SwWrtShell::SEL_DRW_TXT)||
-                        nSelectionType & SwWrtShell::SEL_TBL ||
-                        nSelectionType & SwWrtShell::SEL_DRW) )
+                if (! ( ((eFrmType & FRMTYPE_FLY_ANY) && nSelectionType != nsSelectionType::SEL_DRW_TXT)||
+                        nSelectionType & nsSelectionType::SEL_TBL ||
+                        nSelectionType & nsSelectionType::SEL_DRW) )
                     rSet.DisableItem(nWhich);
                 else if((pWrtShell->IsObjSelected()||pWrtShell->IsFrmSelected()) &&
                         (pWrtShell->IsSelObjProtected( FLYPROTECT_PARENT)||
@@ -231,7 +231,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_CLEARHISTORY:
             {
-                rSet.Put(SfxBoolItem(nWhich, pWrtShell->GetUndoIds() != 0));
+                rSet.Put(SfxBoolItem(nWhich, pWrtShell->GetUndoIds() != UNDO_EMPTY));
             }
             break;
             case SID_UNDO:
@@ -331,13 +331,13 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 sal_Bool bCheck = sal_False;
 
-                if (pWrtShell->GetSelectionType() & (SwWrtShell::SEL_DRW_TXT|SwWrtShell::SEL_DRW))
+                if (pWrtShell->GetSelectionType() & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_DRW))
                     bCheck = IsDrawTextHyphenate();
                 rSet.Put(SfxBoolItem(nWhich, bCheck));
             }
             break;
             case FN_REDLINE_ON:
-                rSet.Put( SfxBoolItem( nWhich, (pWrtShell->GetRedlineMode() & IDocumentRedlineAccess::REDLINE_ON) != 0 ) );
+                rSet.Put( SfxBoolItem( nWhich, (pWrtShell->GetRedlineMode() & nsRedlineMode_t::REDLINE_ON) != 0 ) );
                 break;
             case FN_REDLINE_PROTECT :
             {
@@ -346,7 +346,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case FN_REDLINE_SHOW:
             {
-                sal_uInt16 nMask = IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
+                sal_uInt16 nMask = nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE;
                 rSet.Put( SfxBoolItem( nWhich,
                     (pWrtShell->GetRedlineMode() & nMask) == nMask ));
             }
@@ -453,9 +453,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     SelectShell();
                 USHORT nAlias = 0;
                 bool bDraw = false;
-                int nNewSelectionType = (GetWrtShell().GetSelectionType()
-                                    & ~SwWrtShell::SEL_TBL_CELLS);
-                if( nSelectionType & (SwWrtShell::SEL_DRW_TXT|SwWrtShell::SEL_TXT) )
+                if( nSelectionType & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_TXT) )
                 {
                     switch( nWhich )
                     {
@@ -468,7 +466,7 @@ void SwView::GetState(SfxItemSet &rSet)
                         case SID_ALIGN_ANY_BOTTOM   :   nAlias = FN_TABLE_VERT_BOTTOM; break;
                     }
                 }
-                else if(nSelectionType & (SwWrtShell::SEL_DRW))
+                else if(nSelectionType & (nsSelectionType::SEL_DRW))
                 {
                     //the draw shell cannot provide a status per item - only one for SID_OBJECT_ALIGN
                     if(nWhich != SID_ALIGN_ANY_JUSTIFIED)
