@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:05:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:55:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,7 +226,10 @@ class SwColumnPage : public SfxTabPage
     SwColumnPage(Window *pParent, const SfxItemSet &rSet);
 
 public:
-    ~SwColumnPage();
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
+    virtual ~SwColumnPage();
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
     static USHORT* GetRanges();
