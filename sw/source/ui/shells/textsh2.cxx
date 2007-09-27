@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:18:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,23 +133,23 @@
 #include "swevent.hxx"
 #include "shells.hrc"
 #include "textsh.hxx"
-//CHINA001 #include "dbinsdlg.hxx"
-#include "swabstdlg.hxx" //CHINA001
-#include "dbui.hrc" //CHINA001
+#include "swabstdlg.hxx"
+#include "dbui.hrc"
 
-using namespace rtl;
-using namespace svx;
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::container;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::sdb;
-using namespace com::sun::star::sdbc;
-using namespace com::sun::star::sdbcx;
-using namespace com::sun::star::beans;
+#include <unomid.h>
 
-#define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
+using namespace ::rtl;
+using namespace ::svx;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+
+
 #define DB_DD_DELIM 0x0b
 
 struct DBTextStruct_Impl
@@ -294,7 +294,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                     aData.aDBColumn = ((SfxUsrAnyItem*)pColumnItem)->GetValue();
                 aFldMgr.InsertFld(aData);
                 SfxViewFrame* pViewFrame = GetView().GetViewFrame();
-                com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+                uno::Reference< frame::XDispatchRecorder > xRecorder =
                         pViewFrame->GetBindings().GetRecorder();
                 if ( xRecorder.is() )
                 {
@@ -346,18 +346,13 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
         if( xColSupp.is() )
         {
             SwDBData aDBData = pDBStruct->aDBData;
-//CHINA001          ::std::auto_ptr<SwInsertDBColAutoPilot> pDlg( new SwInsertDBColAutoPilot(
-//CHINA001          pThis->GetView(),
-//CHINA001          xSource,
-//CHINA001          xColSupp,
-//CHINA001          aDBData ) );
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
             ::std::auto_ptr<AbstractSwInsertDBColAutoPilot>pDlg (pFact->CreateSwInsertDBColAutoPilot( pThis->GetView(),
                                                                                                 xSource,
                                                                                                 xColSupp,
                                                                                                 aDBData,
-                                                                                                DLG_AP_INSERT_DB_SEL )); //CHINA001
+                                                                                                DLG_AP_INSERT_DB_SEL ));
             if( RET_OK == pDlg->Execute() )
             {
                 Reference <XResultSet> xResSet = pDBStruct->xCursor;
