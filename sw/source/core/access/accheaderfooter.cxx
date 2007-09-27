@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accheaderfooter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:36:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:21:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@
 #include "access.hrc"
 #endif
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
@@ -79,9 +80,9 @@ const sal_Char sImplementationNameHeader[] = "com.sun.star.comp.Writer.SwAccessi
 const sal_Char sImplementationNameFooter[] = "com.sun.star.comp.Writer.SwAccessibleFooterView";
 
 SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
-        SwAccessibleMap *pMap,
-        const SwHeaderFrm *pHdFrm   ) :
-    SwAccessibleContext( pMap, AccessibleRole::HEADER, pHdFrm )
+        SwAccessibleMap* pInitMap,
+        const SwHeaderFrm* pHdFrm    ) :
+    SwAccessibleContext( pInitMap, AccessibleRole::HEADER, pHdFrm )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -90,9 +91,9 @@ SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
 }
 
 SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
-        SwAccessibleMap *pMap,
-        const SwFooterFrm *pFtFrm   ) :
-    SwAccessibleContext( pMap, AccessibleRole::FOOTER, pFtFrm )
+        SwAccessibleMap* pInitMap,
+        const SwFooterFrm* pFtFrm    ) :
+    SwAccessibleContext( pInitMap, AccessibleRole::FOOTER, pFtFrm )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -105,7 +106,7 @@ SwAccessibleHeaderFooter::~SwAccessibleHeaderFooter()
 }
 
 OUString SAL_CALL SwAccessibleHeaderFooter::getAccessibleDescription (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -131,7 +132,7 @@ OUString SAL_CALL SwAccessibleHeaderFooter::getImplementationName()
 
 sal_Bool SAL_CALL SwAccessibleHeaderFooter::supportsService(
         const ::rtl::OUString& sTestServiceName)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (uno::RuntimeException)
 {
     if( sTestServiceName.equalsAsciiL( sAccessibleServiceName,
                                        sizeof(sAccessibleServiceName)-1 ) )
@@ -144,7 +145,7 @@ sal_Bool SAL_CALL SwAccessibleHeaderFooter::supportsService(
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException )
+        throw( uno::RuntimeException )
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
