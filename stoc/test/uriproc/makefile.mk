@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-12 10:56:21 $
+#   last change: $Author: hr $ $Date: 2007-09-27 13:08:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ ALLTAR: test
 
 $(BIN)$/$(TARGET).rdb .ERRREMOVE:
     $(COPY) $(SOLARBINDIR)$/types.rdb $@
-    regcomp -register -r $@ -c $(subst,$/,/ $(DLLDEST)$/uriproc.uno$(DLLPOST))
+    regcomp -register -r $@ -c $(subst,$/,/ $(DLLDEST)$/stocservices.uno$(DLLPOST))
 
 test .PHONY: $(SHL1TARGETN) $(BIN)$/$(TARGET).rdb
     testshl2 $(SHL1TARGETN) -forward $(BIN)$/$(TARGET).rdb
