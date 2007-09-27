@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:56:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:09:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,7 +310,7 @@ public:
                                     SvStrings& rStrings ) const;
 
     SotStorageRef getSotStorageRef() { return pStg; };
-    void setSotStorageRef(SotStorageRef pStg) { this->pStg=pStg; };
+    void setSotStorageRef(SotStorageRef pStgRef) { pStg = pStgRef; };
 
 private:
     virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &)=0;
@@ -429,9 +429,6 @@ public:
 
     BOOL GetMacroTable( USHORT nIdx, SvxMacroTableDtor& rMacroTbl );
     BOOL SetMacroTable( USHORT nIdx, const SvxMacroTableDtor& rMacroTbl );
-
-    String GetValidShortCut( const String& rLong,
-                             BOOL bCheckInBlock = FALSE ) const;
 
     BOOL StartPutMuchBlockEntries();
     void EndPutMuchBlockEntries();
@@ -601,6 +598,8 @@ public:
     StgWriter() : Writer() {}
 
     virtual BOOL IsStgWriter() const;
+
+    using Writer::Write;
     virtual ULONG Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0, SfxMedium* = 0 );
     virtual ULONG Write( SwPaM&, SotStorage&, const String* = 0 );
 
@@ -690,11 +689,11 @@ public:
 
         // Feststellen ob das File in dem vorgegebenen Format vorliegt.
         // Z.z werden nur unsere eigene Filter unterstuetzt!!
-    static FASTBOOL IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
+    static BOOL IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
                                     const SfxFilter** ppFlt = 0 );
 
-    static FASTBOOL IsValidStgFilter( SotStorage& , const SfxFilter& );
-    static FASTBOOL IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);
+    static BOOL IsValidStgFilter( SotStorage& , const SfxFilter& );
+    static BOOL IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);
 
         static bool IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
         CharSet *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0);
