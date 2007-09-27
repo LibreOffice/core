@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 16:32:51 $
+#   last change: $Author: hr $ $Date: 2007-09-27 13:54:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,7 @@ SLOFILES =  \
         $(SLO)$/interpr4.obj \
         $(SLO)$/interpr5.obj \
         $(SLO)$/interpr6.obj \
+        $(SLO)$/lookupcache.obj \
         $(SLO)$/navicfg.obj \
         $(SLO)$/optutil.obj \
         $(SLO)$/parclass.obj \
@@ -132,6 +133,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/interpr3.obj \
         $(SLO)$/interpr4.obj \
         $(SLO)$/interpr5.obj \
+        $(SLO)$/lookupcache.obj \
         $(SLO)$/prnsave.obj
 
 # [kh] POWERPC compiler problem
