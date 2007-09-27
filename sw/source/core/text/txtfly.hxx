@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfly.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-15 11:43:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,13 +191,13 @@ public:
         pMaster = 0;
     }
     inline SwTxtFly( const SwTxtFrm *pFrm )
-        { CtorInit( pFrm ); }
+        { CtorInitTxtFly( pFrm ); }
 
     SwTxtFly( const SwTxtFly& rTxtFly );
     // --> OD 2006-08-15 #i68520#
     inline ~SwTxtFly() { delete mpAnchoredObjList; }
     // <--
-    void CtorInit( const SwTxtFrm *pFrm );
+    void CtorInitTxtFly( const SwTxtFrm *pFrm );
     void SetTopRule(){ bTopRule = sal_False; }
 
     inline SwRect GetFrm( const SwRect &rPortion, sal_Bool bTop = sal_True ) const;
