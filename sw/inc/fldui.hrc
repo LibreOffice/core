@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldui.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:46:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:02:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,7 +284,7 @@
 #define STR_SETNO               (STR_EXTRA  + 7)
 #define STR_OFFSET              (STR_EXTRA  + 8)
 #define STR_VALUE               (STR_EXTRA  + 9)
-#define STR_LEVEL               (STR_EXTRA  + 10)
+
 #define STR_URLPROMPT           (STR_EXTRA  + 11)
 #define STR_FORMULA             (STR_EXTRA  + 12)
 #define STR_ALL_DATABASE        (STR_EXTRA  + 13)
