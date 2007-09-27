@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediash.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:23:25 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:28:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@
 #define SwMediaShell
 #include "itemdef.hxx"
 #include "swslots.hxx"
-#include "swabstdlg.hxx" //CHINA001
+#include "swabstdlg.hxx"
 
 SFX_IMPL_INTERFACE(SwMediaShell, SwBaseShell, SW_RES(STR_SHELLNAME_MEDIA))
 {
@@ -215,7 +215,6 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
                 if( pSh->IsObjSelected() )
                 {
                     const SfxPoolItem*  pItem;
-                    USHORT              nSlot = rReq.GetSlot();
 
                     if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, FALSE, &pItem ) ) )
                         pItem = NULL;
@@ -298,8 +297,8 @@ void SwMediaShell::GetMediaState(SfxItemSet &rSet)
 
 // ------------------------------------------------------------------------------
 
-SwMediaShell::SwMediaShell(SwView &rView) :
-    SwBaseShell(rView)
+SwMediaShell::SwMediaShell(SwView &_rView) :
+    SwBaseShell(_rView)
 
 {
     SetName(String::CreateFromAscii("Media Playback"));
