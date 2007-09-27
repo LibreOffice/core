@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labfmt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:29:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:43:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 #ifndef _LABFMT_HXX
 #define _LABFMT_HXX
 
-#include "swuilabimp.hxx" //CHINA001
+#include "swuilabimp.hxx"
 #include "labimg.hxx"
 
 #ifndef _SV_MSGBOX_HXX
@@ -78,6 +78,8 @@ class SwLabPreview : public Window
     void Paint(const Rectangle&);
 
     void DrawArrow(const Point& rP1, const Point& rP2, BOOL bArrow);
+
+    using Window::GetParent;
     SwLabFmtPage* GetParent() {return (SwLabFmtPage*) Window::GetParent();}
 
 public:
@@ -85,6 +87,7 @@ public:
      SwLabPreview(const SwLabFmtPage* pParent, const ResId& rResID);
     ~SwLabPreview();
 
+    using Window::Update;
     void Update(const SwLabItem& rItem);
 };
 
@@ -130,6 +133,9 @@ class SwLabFmtPage : public SfxTabPage
 
 public:
 
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
 
     virtual void ActivatePage(const SfxItemSet& rSet);
@@ -138,6 +144,7 @@ public:
     virtual BOOL FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 
+    using Window::GetParent;
     SwLabDlg* GetParent() {return (SwLabDlg*) SfxTabPage::GetParent()->GetParent();}
 };
 /* -----------------------------23.01.01 10:26--------------------------------
