@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acctable.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:34:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:24:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ protected:
 
 public:
 
-    SwAccessibleTable( SwAccessibleMap *pMap, const SwTabFrm *pTableFrm );
+    SwAccessibleTable( SwAccessibleMap* pInitMap, const SwTabFrm* pTableFrm );
 
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
