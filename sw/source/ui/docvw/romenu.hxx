@@ -4,9 +4,9 @@
  *
  *  $RCSfile: romenu.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:23:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:41:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,8 @@ class SwReadOnlyPopup : public PopupMenu
 public:
     SwReadOnlyPopup( const Point &rDPos, SwView &rV );
     ~SwReadOnlyPopup();
+
+    using PopupMenu::Execute;
     void Execute( Window* pWin, const Point &rPPos );
     void Execute( Window* pWin, USHORT nId );
 };
