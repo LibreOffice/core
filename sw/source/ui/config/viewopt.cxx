@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:23:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,21 +235,22 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
 |*************************************************************************/
 
 SwViewOption::SwViewOption() :
-    nZoom( 100 ),
+    aRetoucheColor( COL_TRANSPARENT ),
     nPagePrevRow( 1 ),
     nPagePrevCol( 2 ),
-    eZoom( 0 ),
-    nTblDest(TBL_DEST_CELL),
+    nShdwCrsrFillMode( FILL_TAB ),
     bReadonly(FALSE),
+    bStarOneSetting(FALSE),
+    bIsPagePreview(FALSE),
     bSelectionInReadonly(FALSE),
     // --> FME 2004-06-29 #114856# Formular view
     bFormView(FALSE),
     // <--
-    aRetoucheColor( COL_TRANSPARENT ),
-    nShdwCrsrFillMode( FILL_TAB ),
-    bStarOneSetting(FALSE),
-    bIsPagePreview(FALSE),
-    bBookview(FALSE)
+    bBookview(FALSE),
+
+    nZoom( 100 ),
+    eZoom( SVX_ZOOM_PERCENT ),
+    nTblDest(TBL_DEST_CELL)
 {
     // Initialisierung ist jetzt etwas einfacher
     // alle Bits auf 0
@@ -382,7 +383,7 @@ BOOL SwViewOption::IsAutoCompleteWords() const
 }
 
 /*************************************************************************/
-/*
+/*                                                                       */
 /*************************************************************************/
 
 AuthorCharAttr::AuthorCharAttr() :
@@ -628,15 +629,15 @@ void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, BOOL bSet, BOOL bSaveInCon
         };
         static const FlagToConfig_Impl aFlags[] =
         {
-            VIEWOPT_DOC_BOUNDARIES     ,   svtools::DOCBOUNDARIES     ,
-            VIEWOPT_OBJECT_BOUNDARIES  ,   svtools::OBJECTBOUNDARIES  ,
-            VIEWOPT_TABLE_BOUNDARIES   ,   svtools::TABLEBOUNDARIES   ,
-            VIEWOPT_INDEX_SHADINGS     ,   svtools::WRITERIDXSHADINGS     ,
-            VIEWOPT_LINKS              ,   svtools::LINKS              ,
-            VIEWOPT_VISITED_LINKS      ,   svtools::LINKSVISITED      ,
-            VIEWOPT_FIELD_SHADINGS     ,   svtools::WRITERFIELDSHADINGS     ,
-            VIEWOPT_SECTION_BOUNDARIES ,   svtools::WRITERSECTIONBOUNDARIES ,
-            0                          ,   svtools::ColorConfigEntryCount
+            { VIEWOPT_DOC_BOUNDARIES     ,   svtools::DOCBOUNDARIES },
+            { VIEWOPT_OBJECT_BOUNDARIES  ,   svtools::OBJECTBOUNDARIES },
+            { VIEWOPT_TABLE_BOUNDARIES   ,   svtools::TABLEBOUNDARIES },
+            { VIEWOPT_INDEX_SHADINGS     ,   svtools::WRITERIDXSHADINGS },
+            { VIEWOPT_LINKS              ,   svtools::LINKS },
+            { VIEWOPT_VISITED_LINKS      ,   svtools::LINKSVISITED },
+            { VIEWOPT_FIELD_SHADINGS     ,   svtools::WRITERFIELDSHADINGS },
+            { VIEWOPT_SECTION_BOUNDARIES ,   svtools::WRITERSECTIONBOUNDARIES },
+            { 0                          ,   svtools::ColorConfigEntryCount }
         };
         sal_uInt16 nPos = 0;
         while(aFlags[nPos].nFlag)
