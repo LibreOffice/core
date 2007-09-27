@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:43:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,7 @@
 extern BOOL IsFrameBehind( const SwTxtNode& rMyNd, xub_StrLen nMySttPos,
                            const SwTxtNode& rBehindNd, xub_StrLen nSttPos );
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 /*--------------------------------------------------------------------
@@ -141,7 +142,7 @@ void SwTOXInternational::Init()
 {
     pIndexWrapper = new IndexEntrySupplierWrapper();
 
-    const ::com::sun::star::lang::Locale aLcl( SvxCreateLocale( eLang ) );
+    const lang::Locale aLcl( SvxCreateLocale( eLang ) );
     pIndexWrapper->SetLocale( aLcl );
 
     if(!sSortAlgorithm.Len())
@@ -151,7 +152,7 @@ void SwTOXInternational::Init()
             sSortAlgorithm = aSeq.getConstArray()[0];
     }
 
-    if ( nOptions & TOI_CASE_SENSITIVE )
+    if ( nOptions & nsSwTOIOptions::TOI_CASE_SENSITIVE )
         pIndexWrapper->LoadAlgorithm( aLcl, sSortAlgorithm, 0 );
     else
         pIndexWrapper->LoadAlgorithm( aLcl, sSortAlgorithm, SW_COLLATOR_IGNORES );
@@ -176,16 +177,16 @@ inline BOOL SwTOXInternational::IsNumeric( const String& rStr ) const
 }
 
 sal_Int32 SwTOXInternational::Compare( const String& rTxt1, const String& rTxtReading1,
-                                       const ::com::sun::star::lang::Locale& rLocale1,
+                                       const lang::Locale& rLocale1,
                                        const String& rTxt2, const String& rTxtReading2,
-                                       const ::com::sun::star::lang::Locale& rLocale2 ) const
+                                       const lang::Locale& rLocale2 ) const
 {
     return pIndexWrapper->CompareIndexEntry( rTxt1, rTxtReading1, rLocale1,
                                              rTxt2, rTxtReading2, rLocale2 );
 }
 
 String SwTOXInternational::GetIndexKey( const String& rTxt, const String& rTxtReading,
-                                        const ::com::sun::star::lang::Locale& rLocale ) const
+                                        const lang::Locale& rLocale ) const
 {
     return pIndexWrapper->GetIndexKey( rTxt, rTxtReading, rLocale );
 }
@@ -203,9 +204,9 @@ String SwTOXInternational::GetFollowingText( BOOL bMorePages ) const
 SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
                                     const SwTxtTOXMark* pMark,
                                     const SwTOXInternational* pInter,
-                                    const ::com::sun::star::lang::Locale* pLocale )
-    : pTxtMark( pMark ), pTOXNd( 0 ), nPos( 0 ), nType( nTyp ),
-    pTOXIntl( pInter ), bValidTxt( FALSE ), nCntPos( 0 )
+                                    const lang::Locale* pLocale )
+    : pTOXNd( 0 ), pTxtMark( pMark ), pTOXIntl( pInter ),
+    nPos( 0 ), nCntPos( 0 ), nType( static_cast<USHORT>(nTyp) ), bValidTxt( FALSE )
 {
     if ( pLocale )
         aLocale = *pLocale;
@@ -250,6 +251,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
             else
                 nCntPos = n;
             break;
+        default: break;
         }
     }
 }
@@ -369,7 +371,7 @@ SwTOXIndex::SwTOXIndex( const SwTxtNode& rNd,
                         const SwTxtTOXMark* pMark, USHORT nOptions,
                         BYTE nKyLevel,
                         const SwTOXInternational& rIntl,
-                        const ::com::sun::star::lang::Locale& rLocale )
+                        const lang::Locale& rLocale )
     : SwTOXSortTabBase( TOX_SORT_INDEX, &rNd, pMark, &rIntl, &rLocale ),
     nKeyLevel(nKyLevel)
 {
@@ -391,7 +393,6 @@ BOOL SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
         return FALSE;
 
     ASSERT(pTxtMark, "pTxtMark == 0, Kein Stichwort");
-    const SwTOXMark& rTOXMark = pTxtMark->GetTOXMark();
 
     String sMyTxt;
     String sMyTxtReading;
@@ -405,7 +406,7 @@ BOOL SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
                                    sOtherTxt, sOtherTxtReading, rCmp.GetLocale() );
 
     // Wenn nicht zusammengefasst wird muss die Pos aus gewertet werden
-    if(bRet && !(GetOptions() & TOI_SAME_ENTRY))
+    if(bRet && !(GetOptions() & nsSwTOIOptions::TOI_SAME_ENTRY))
         bRet = nPos == rCmp.nPos;
 
     return bRet;
@@ -422,7 +423,6 @@ BOOL SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
     SwTOXIndex& rCmp = (SwTOXIndex&)rCmpBase;
 
     ASSERT(pTxtMark, "pTxtMark == 0, Kein Stichwort");
-    const SwTOXMark& rTOXMark = pTxtMark->GetTOXMark();
 
     String sMyTxt;
     String sMyTxtReading;
@@ -437,7 +437,7 @@ BOOL SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
                                   sOtherTxt, sOtherTxtReading, rCmp.GetLocale() );
 
     // Wenn nicht zusammengefasst wird muss die Pos aus gewertet werden
-    if( !bRet && !(GetOptions() & TOI_SAME_ENTRY) )
+    if( !bRet && !(GetOptions() & nsSwTOIOptions::TOI_SAME_ENTRY) )
     {
         bRet = pTOXIntl->IsEqual( sMyTxt, sMyTxtReading, GetLocale(),
                                    sOtherTxt, sOtherTxtReading, rCmp.GetLocale() ) &&
@@ -479,7 +479,7 @@ void SwTOXIndex::_GetText( String& rTxt, String& rTxtReading )
         break;
     }
     // if TOI_INITIAL_CAPS is set, first character is to be capitalized
-    if( TOI_INITIAL_CAPS & nOpt && pTOXIntl )
+    if( nsSwTOIOptions::TOI_INITIAL_CAPS & nOpt && pTOXIntl )
     {
         String sUpper( pTOXIntl->ToUpper( rTxt, 0 ));
         rTxt.Erase( 0, 1 ).Insert( sUpper, 0 );
@@ -492,12 +492,12 @@ void SwTOXIndex::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) cons
     String sTmp;
     String sTmpReading;
     if( pEnd && !pTxtMark->GetTOXMark().IsAlternativeText() &&
-            0 == (GetOptions() & TOI_KEY_AS_ENTRY))
+            0 == (GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY))
     {
         sTmp = ((SwTxtNode*)aTOXSources[0].pNd)->GetExpandTxt(
                             *pTxtMark->GetStart(),
                             *pEnd - *pTxtMark->GetStart());
-        if(TOI_INITIAL_CAPS&nOpt && pTOXIntl)
+        if(nsSwTOIOptions::TOI_INITIAL_CAPS&nOpt && pTOXIntl)
         {
             String sUpper( pTOXIntl->ToUpper( sTmp, 0 ));
             sTmp.Erase( 0, 1 ).Insert( sUpper, 0 );
@@ -517,7 +517,7 @@ USHORT SwTOXIndex::GetLevel() const
 
     USHORT nForm = FORM_PRIMARY_KEY;
 
-    if( 0 == (GetOptions() & TOI_KEY_AS_ENTRY)&&
+    if( 0 == (GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY)&&
         pTxtMark->GetTOXMark().GetPrimaryKey().Len() )
     {
         nForm = FORM_SECONDARY_KEY;
@@ -535,7 +535,7 @@ USHORT SwTOXIndex::GetLevel() const
 SwTOXCustom::SwTOXCustom(const String& rStr, const String& rReading,
                          USHORT nLevel,
                          const SwTOXInternational& rIntl,
-                         const ::com::sun::star::lang::Locale& rLocale )
+                         const lang::Locale& rLocale )
     : SwTOXSortTabBase( TOX_SORT_CUSTOM, 0, 0, &rIntl, &rLocale ),
     aKey(rStr), sReading(rReading), nLev(nLevel)
 {
@@ -662,14 +662,14 @@ SwTOXPara::SwTOXPara( const SwCntntNode& rNd, SwTOXElement eT, USHORT nLevel )
 }
 
 
-void SwTOXPara::_GetText( String& rTxt, String& rTxtReading )
+void SwTOXPara::_GetText( String& rTxt, String& )
 {
     const SwCntntNode* pNd = aTOXSources[0].pNd;
     switch( eType )
     {
-    case TOX_SEQUENCE:
-    case TOX_TEMPLATE:
-    case TOX_OUTLINELEVEL:
+    case nsSwTOXElement::TOX_SEQUENCE:
+    case nsSwTOXElement::TOX_TEMPLATE:
+    case nsSwTOXElement::TOX_OUTLINELEVEL:
         {
             xub_StrLen nStt = nStartIndex;
 /* JP 22.01.98:
@@ -685,9 +685,9 @@ void SwTOXPara::_GetText( String& rTxt, String& rTxtReading )
         }
         break;
 
-    case TOX_OLE:
-    case TOX_GRAPHIC:
-    case TOX_FRAME:
+    case nsSwTOXElement::TOX_OLE:
+    case nsSwTOXElement::TOX_GRAPHIC:
+    case nsSwTOXElement::TOX_FRAME:
         {
             // suche das FlyFormat, dort steht der Object/Grafik-Name
             SwFrmFmt* pFly = pNd->GetFlyFmt();
@@ -696,21 +696,22 @@ void SwTOXPara::_GetText( String& rTxt, String& rTxtReading )
             else
             {
                 ASSERT( !this, "Grafik/Object ohne Namen" )
-                USHORT nId = TOX_OLE == eType
+                USHORT nId = nsSwTOXElement::TOX_OLE == eType
                                 ? STR_OBJECT_DEFNAME
-                                : TOX_GRAPHIC == eType
+                                : nsSwTOXElement::TOX_GRAPHIC == eType
                                     ? STR_GRAPHIC_DEFNAME
                                     : STR_FRAME_DEFNAME;
                 rTxt = SW_RESSTR( nId );
             }
         }
         break;
+    default: break;
     }
 }
 
 void SwTOXPara::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) const
 {
-    if( TOX_TEMPLATE == eType || TOX_SEQUENCE == eType  || TOX_OUTLINELEVEL == eType)
+    if( nsSwTOXElement::TOX_TEMPLATE == eType || nsSwTOXElement::TOX_SEQUENCE == eType  || nsSwTOXElement::TOX_OUTLINELEVEL == eType)
     {
         SwTxtNode* pSrc = (SwTxtNode*)aTOXSources[0].pNd;
         xub_StrLen nStt = nStartIndex;
@@ -740,7 +741,7 @@ USHORT SwTOXPara::GetLevel() const
     USHORT nRet = m_nLevel;
     const SwCntntNode*  pNd = aTOXSources[0].pNd;
 
-    if( TOX_OUTLINELEVEL == eType && pNd->GetTxtNode() )
+    if( nsSwTOXElement::TOX_OUTLINELEVEL == eType && pNd->GetTxtNode() )
     {
         USHORT nTmp = ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel();
         if(nTmp < NO_NUMBERING)
@@ -756,8 +757,8 @@ String SwTOXPara::GetURL() const
     const SwCntntNode* pNd = aTOXSources[0].pNd;
     switch( eType )
     {
-    case TOX_TEMPLATE:
-    case TOX_OUTLINELEVEL:
+    case nsSwTOXElement::TOX_TEMPLATE:
+    case nsSwTOXElement::TOX_OUTLINELEVEL:
         {
             const SwTxtNode * pTxtNd = static_cast<const SwTxtNode *>(pNd);
 
@@ -768,7 +769,7 @@ String SwTOXPara::GetURL() const
                 if( pRule )
                 {
                     // dann noch die rel. Nummer davor setzen
-                    const USHORT nCurrLevel = pTxtNd->GetLevel();
+                    const USHORT nCurrLevel = static_cast<USHORT>(pTxtNd->GetLevel());
                     if(nCurrLevel <= MAXLEVEL)
                     {
                         // --> OD 2005-11-02 #i51089 - TUNING#
@@ -777,7 +778,7 @@ String SwTOXPara::GetURL() const
                             SwNodeNum::tNumberVector aNumVector =
                                 pTxtNd->GetNum()->GetNumberVector();
 
-                            for( int n = 0; n <= nCurrLevel; ++n )
+                            for( USHORT n = 0; n <= nCurrLevel; ++n )
                             {
                                 int nNum = aNumVector[ n ];
                                 nNum -= ( pRule->Get( n ).GetStart() - 1 );
@@ -797,9 +798,9 @@ String SwTOXPara::GetURL() const
         }
         break;
 
-    case TOX_OLE:
-    case TOX_GRAPHIC:
-    case TOX_FRAME:
+    case nsSwTOXElement::TOX_OLE:
+    case nsSwTOXElement::TOX_GRAPHIC:
+    case nsSwTOXElement::TOX_FRAME:
         {
             // suche das FlyFormat, dort steht der Object/Grafik-Name
             SwFrmFmt* pFly = pNd->GetFlyFmt();
@@ -809,9 +810,9 @@ String SwTOXPara::GetURL() const
                 const sal_Char* pStr;
                 switch( eType )
                 {
-                case TOX_OLE:       pStr = pMarkToOLE; break;
-                case TOX_GRAPHIC:   pStr = pMarkToGraphic; break;
-                case TOX_FRAME:     pStr = pMarkToFrame; break;
+                case nsSwTOXElement::TOX_OLE:       pStr = pMarkToOLE; break;
+                case nsSwTOXElement::TOX_GRAPHIC:   pStr = pMarkToGraphic; break;
+                case nsSwTOXElement::TOX_FRAME:     pStr = pMarkToFrame; break;
                 default:            pStr = 0;
                 }
                 if( pStr )
@@ -819,6 +820,7 @@ String SwTOXPara::GetURL() const
             }
         }
         break;
+    default: break;
     }
     return aTxt;
 }
@@ -836,7 +838,7 @@ SwTOXTable::SwTOXTable( const SwCntntNode& rNd )
 }
 
 
-void SwTOXTable::_GetText( String& rTxt, String& rTxtReading )
+void SwTOXTable::_GetText( String& rTxt, String& )
 {
     const SwNode* pNd = aTOXSources[0].pNd;
     if( pNd && 0 != ( pNd = pNd->FindTableNode() ) )
@@ -903,7 +905,7 @@ USHORT SwTOXAuthority::GetLevel() const
 /*-- 15.09.99 14:28:08---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwTOXAuthority::_GetText( String& rTxt, String& rTxtReading )
+void SwTOXAuthority::_GetText( String& rTxt, String& )
 {
     //
     rTxt = m_rField.GetFld()->Expand();
