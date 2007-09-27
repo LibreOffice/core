@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accselectionhelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:38:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:24:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,13 +69,12 @@
 #endif
 
 
-
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::com::sun::star::uno::RuntimeException;
+
 using ::com::sun::star::accessibility::XAccessible;
 using ::com::sun::star::accessibility::XAccessibleContext;
 using ::com::sun::star::accessibility::XAccessibleSelection;
-using ::com::sun::star::lang::IndexOutOfBoundsException;
 
 
 
@@ -106,11 +105,11 @@ SwFEShell* SwAccessibleSelectionHelper::GetFEShell()
 }
 
 void SwAccessibleSelectionHelper::throwIndexOutOfBoundsException()
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException )
+        throw ( lang::IndexOutOfBoundsException )
 {
     Reference < XAccessibleContext > xThis( &rContext );
     Reference < XAccessibleSelection >xSelThis( xThis, UNO_QUERY );
-    IndexOutOfBoundsException aExcept(
+    lang::IndexOutOfBoundsException aExcept(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("index out of bounds") ),
                 xSelThis );                                     \
     throw aExcept;
@@ -121,7 +120,7 @@ void SwAccessibleSelectionHelper::throwIndexOutOfBoundsException()
 
 void SwAccessibleSelectionHelper::selectAccessibleChild(
     sal_Int32 nChildIndex )
-    throw ( IndexOutOfBoundsException,
+    throw ( lang::IndexOutOfBoundsException,
             RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -150,7 +149,7 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
 
 sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
     sal_Int32 nChildIndex )
-    throw ( IndexOutOfBoundsException,
+    throw ( lang::IndexOutOfBoundsException,
             RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -268,7 +267,7 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
 
 Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     sal_Int32 nSelectedChildIndex )
-    throw ( IndexOutOfBoundsException,
+    throw ( lang::IndexOutOfBoundsException,
             RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -276,7 +275,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     // Since the index is relative to the selected children, and since
     // there can be at most one selected frame child, the index must
     // be 0, and a selection must exist, otherwise we have to throw an
-    // IndexOutOfBoundsException
+    // lang::IndexOutOfBoundsException
     SwFEShell* pFEShell = GetFEShell();
     if( 0 == pFEShell )
         throwIndexOutOfBoundsException();
@@ -350,7 +349,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
 // --> OD 2004-11-16 #111714# - index has to be treated as global child index.
 void SwAccessibleSelectionHelper::deselectAccessibleChild(
     sal_Int32 nChildIndex )
-    throw ( IndexOutOfBoundsException,
+    throw ( lang::IndexOutOfBoundsException,
             RuntimeException )
 {
     // return sal_False     // we can't deselect
