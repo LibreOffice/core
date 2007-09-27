@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:52:43 $
+#   last change: $Author: hr $ $Date: 2007-09-27 13:04:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,40 +34,22 @@
 #*************************************************************************
 PRJ=..$/..
 
-PRJNAME=	stoc
-TARGET = typemgr.uno
+PRJNAME= stoc
+TARGET = typemgr
 ENABLE_EXCEPTIONS=TRUE
 BOOTSTRAP_SERVICE=TRUE
-COMP1TYPELIST = tdmgr
+UNOUCROUT= $(OUT)$/inc$/bootstrap
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-DLLPRE =
 
 # ------------------------------------------------------------------
-
-.INCLUDE :  ..$/cppumaker.mk
 
 SLOFILES= \
         $(SLO)$/tdmgr.obj \
         $(SLO)$/tdmgr_check.obj \
         $(SLO)$/tdmgr_tdenumeration.obj
-
-SHL1TARGET=	$(TARGET)
-
-SHL1STDLIBS= \
-        $(CPPULIB)		\
-        $(CPPUHELPERLIB)	\
-        $(SALLIB)
-SHL1VERSIONMAP = tdmgr.map
-
-SHL1DEPN=
-SHL1IMPLIB=	i$(TARGET)
-SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=	$(SHL1TARGET)
 
 # --- Targets ------------------------------------------------------
 
