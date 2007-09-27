@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmliteme.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:30:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:12:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
                 SFX_ITEM_SET == pSet->GetItemState( RES_HORI_ORIENT, sal_True,
                                                     &pItem ) )
             {
-                SwHoriOrient eHoriOrient =
+                sal_Int16 eHoriOrient =
                     ((const SwFmtHoriOrient *)pItem)->GetHoriOrient();
                 sal_Bool bExport = sal_False;
                 sal_uInt16 nMemberId =
@@ -200,11 +200,11 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
                 switch( nMemberId )
                 {
                 case MID_L_MARGIN:
-                    bExport = HORI_NONE == eHoriOrient ||
-                              HORI_LEFT_AND_WIDTH == eHoriOrient;
+                    bExport = text::HoriOrientation::NONE == eHoriOrient ||
+                              text::HoriOrientation::LEFT_AND_WIDTH == eHoriOrient;
                     break;
                 case MID_R_MARGIN:
-                    bExport = HORI_NONE == eHoriOrient;
+                    bExport = text::HoriOrientation::NONE == eHoriOrient;
                     break;
                 }
                 OUString sValue;
@@ -254,10 +254,10 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
 /** this method is called for every item that has the
     MID_SW_FLAG_ELEMENT_EXPORT flag set */
 void SwXMLTableItemMapper_Impl::handleElementItem(
-        SvXMLExport& rExport,
+        SvXMLExport& /*rExport*/,
         const SvXMLItemMapEntry& rEntry,
         const SfxPoolItem& rItem,
-        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLUnitConverter& /*rUnitConverter*/,
         const SfxItemSet&,
         sal_uInt16 ) const
 {
