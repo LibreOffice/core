@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotools.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:12:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:13:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,10 +114,10 @@ public:
 class SwView;
 class SW_DLLPUBLIC SwOneExampleFrame
 {
-    STAR_REFERENCE( awt::XControl )         _xControl;
-    STAR_REFERENCE( frame::XModel )         _xModel;
-    STAR_REFERENCE( frame::XController )    _xController;
-    STAR_REFERENCE( text::XTextCursor )     _xCursor;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >         _xControl;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >         _xModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >    _xController;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >     _xCursor;
 
     SwFrmCtrlWindow aTopWindow;
     Window&         rWindow;
