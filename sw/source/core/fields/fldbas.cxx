@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:42:45 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:49:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,7 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace nsSwDocInfoSubType;
 
 USHORT lcl_GetLanguageOfFormat( USHORT nLng, ULONG nFmt,
                                 const SvNumberFormatter& rFormatter )
@@ -121,6 +122,7 @@ USHORT lcl_GetLanguageOfFormat( USHORT nLng, ULONG nFmt,
         case NF_DATETIME_SYSTEM_SHORT_HHMM:
             nLng = LANGUAGE_SYSTEM;
             break;
+        default: break;
         }
     return nLng;
 }
@@ -132,7 +134,7 @@ USHORT lcl_GetLanguageOfFormat( USHORT nLng, ULONG nFmt,
 
 SvStringsDtor* SwFieldType::pFldNames = 0;
 
-DBG_NAME(SwFieldType);
+DBG_NAME(SwFieldType)
 
     USHORT __FAR_DATA aTypeTab[] = {
     /* RES_DBFLD            */      TYP_DBFLD,
@@ -218,11 +220,11 @@ const String& SwFieldType::GetName() const
     return aEmptyStr;
 }
 
-BOOL SwFieldType::QueryValue( uno::Any& rVal, BYTE nMId ) const
+BOOL SwFieldType::QueryValue( uno::Any&, USHORT ) const
 {
     return FALSE;
 }
-BOOL SwFieldType::PutValue( const uno::Any& rVal, BYTE nMId )
+BOOL SwFieldType::PutValue( const uno::Any& , USHORT )
 {
     return FALSE;
 }
@@ -234,9 +236,9 @@ BOOL SwFieldType::PutValue( const uno::Any& rVal, BYTE nMId )
  --------------------------------------------------------------------*/
 
 SwField::SwField(SwFieldType* pTyp, sal_uInt32 nFmt, USHORT nLng) :
-    nFormat(nFmt),
     nLang(nLng),
-    bIsAutomaticLanguage(TRUE)
+    bIsAutomaticLanguage(TRUE),
+    nFormat(nFmt)
 {
     ASSERT( pTyp, "SwField: ungueltiger SwFieldType" );
     pType = pTyp;
@@ -270,12 +272,12 @@ USHORT SwField::GetTypeId() const
     {
     case RES_DATETIMEFLD:
         if (GetSubType() & FIXEDFLD)
-            nRet = GetSubType() & DATEFLD ? TYP_FIXDATEFLD : TYP_FIXTIMEFLD;
+            nRet = static_cast<USHORT>(GetSubType() & DATEFLD ? TYP_FIXDATEFLD : TYP_FIXTIMEFLD);
         else
-            nRet = GetSubType() & DATEFLD ? TYP_DATEFLD : TYP_TIMEFLD;
+            nRet = static_cast<USHORT>(GetSubType() & DATEFLD ? TYP_DATEFLD : TYP_TIMEFLD);
         break;
     case RES_GETEXPFLD:
-        nRet = GSE_FORMULA & GetSubType() ? TYP_FORMELFLD : TYP_GETFLD;
+        nRet = static_cast<USHORT>(nsSwGetSetExpType::GSE_FORMULA & GetSubType() ? TYP_FORMELFLD : TYP_GETFLD);
         break;
 
     case RES_HIDDENTXTFLD:
@@ -283,7 +285,7 @@ USHORT SwField::GetTypeId() const
         break;
 
     case RES_SETEXPFLD:
-        if( GSE_SEQ & GetSubType() )
+        if( nsSwGetSetExpType::GSE_SEQ & GetSubType() )
             nRet = TYP_SEQFLD;
         else if( ((SwSetExpField*)this)->GetInputFlag() )
             nRet = TYP_SETINPFLD;
@@ -319,7 +321,7 @@ String SwField::GetCntnt( BOOL bName ) const
     {
         USHORT nTypeId = GetTypeId();
         if( RES_DATETIMEFLD == GetTyp()->Which() )
-            nTypeId = GetSubType() & DATEFLD ? TYP_DATEFLD : TYP_TIMEFLD;
+            nTypeId = static_cast<USHORT>(GetSubType() & DATEFLD ? TYP_DATEFLD : TYP_TIMEFLD);
 
         sRet = SwFieldType::GetTypeStr( nTypeId );
         if( IsFixed() )
@@ -349,10 +351,10 @@ String SwField::GetFormula() const
     return GetPar2();
 }
 
-void SwField::SetPar1(const String& rStr)
+void SwField::SetPar1(const String& )
 {}
 
-void SwField::SetPar2(const String& rStr)
+void SwField::SetPar2(const String& )
 {}
 
 USHORT SwField::GetSubType() const
@@ -361,15 +363,14 @@ USHORT SwField::GetSubType() const
     return 0;
 }
 
-void SwField::SetSubType(USHORT nType)
+void SwField::SetSubType(USHORT )
 {
 //  ASSERT(0, "Sorry Not implemented");
 }
 
-BOOL  SwField::QueryValue( uno::Any& rVal, BYTE nMId ) const
+BOOL  SwField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
         case FIELD_PROP_BOOL4:
         {
@@ -382,10 +383,9 @@ BOOL  SwField::QueryValue( uno::Any& rVal, BYTE nMId ) const
     }
     return TRUE;
 }
-BOOL SwField::PutValue( const uno::Any& rVal, BYTE nMId )
+BOOL SwField::PutValue( const uno::Any& rVal, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
         case FIELD_PROP_BOOL4:
         {
@@ -418,9 +418,9 @@ SwFieldType* SwField::ChgTyp( SwFieldType* pNewType )
 }
 
     // hat das Feld eine Action auf dem ClickHandler ? (z.B. INetFelder,..)
-FASTBOOL SwField::HasClickHdl() const
+BOOL SwField::HasClickHdl() const
 {
-    FASTBOOL bRet = FALSE;
+    BOOL bRet = FALSE;
     switch( pType->Which() )
     {
     case RES_INTERNETFLD:
@@ -449,9 +449,9 @@ void SwField::ChangeFormat(sal_uInt32 n)
     nFormat = n;
 }
 
-FASTBOOL SwField::IsFixed() const
+BOOL SwField::IsFixed() const
 {
-    FASTBOOL bRet = FALSE;
+    BOOL bRet = FALSE;
     switch( pType->Which() )
     {
     case RES_FIXDATEFLD:
@@ -605,8 +605,8 @@ void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
  --------------------------------------------------------------------*/
 
 SwValueField::SwValueField( SwValueFieldType* pFldType, sal_uInt32 nFmt,
-                            USHORT nLang, const double fVal )
-    : SwField(pFldType, nFmt, nLang),
+                            USHORT nLng, const double fVal )
+    : SwField(pFldType, nFmt, nLng),
     fValue(fVal)
 {
 }
@@ -641,16 +641,6 @@ SwFieldType* SwValueField::ChgTyp( SwFieldType* pNewType )
     }
 
     return SwField::ChgTyp(pNewType);
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung: Format aendern
- --------------------------------------------------------------------*/
-/*
- Was sollte das denn?
-void SwValueField::ChangeFormat(ULONG n)
-{
-    nFormat = n;
 }
 
 /*--------------------------------------------------------------------
@@ -704,7 +694,7 @@ void SwValueField::SetLanguage( USHORT nLng )
 
         if( (GetFormat() >= SV_COUNTRY_LANGUAGE_OFFSET ||
              LANGUAGE_SYSTEM != nFmtLng ) &&
-            !(Which() == RES_USERFLD && (GetSubType()&SUB_CMD) ) )
+            !(Which() == RES_USERFLD && (GetSubType()&nsSwExtendedSubType::SUB_CMD) ) )
         {
             const SvNumberformat* pEntry = pFormatter->GetEntry(GetFormat());
 
@@ -784,9 +774,9 @@ void SwFormulaField::SetFormula(const String& rStr)
     if( nFmt && SAL_MAX_UINT32 != nFmt )
     {
         xub_StrLen nPos = 0;
-        double fValue;
-        if( SwCalc::Str2Double( rStr, nPos, fValue, GetDoc() ) )
-            SwValueField::SetValue( fValue );
+        double fTmpValue;
+        if( SwCalc::Str2Double( rStr, nPos, fTmpValue, GetDoc() ) )
+            SwValueField::SetValue( fTmpValue );
     }
 }
 
@@ -800,16 +790,16 @@ void SwFormulaField::SetExpandedFormula( const String& rStr )
 
     if (nFmt && nFmt != SAL_MAX_UINT32 && ((SwValueFieldType *)GetTyp())->UseFormat())
     {
-        double fValue;
+        double fTmpValue;
 
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
 
-        if (pFormatter->IsNumberFormat(rStr, nFmt, fValue))
+        if (pFormatter->IsNumberFormat(rStr, nFmt, fTmpValue))
         {
-            SwValueField::SetValue(fValue);
+            SwValueField::SetValue(fTmpValue);
             sFormula.Erase();
 
-            ((SwValueFieldType *)GetTyp())->DoubleToString(sFormula, fValue, nFmt);
+            ((SwValueFieldType *)GetTyp())->DoubleToString(sFormula, fTmpValue, nFmt);
             return;
         }
     }
