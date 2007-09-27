@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmmergepage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:06:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:34:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@
   -----------------------------------------------------------------------*/
 SwMailMergeMergePage::SwMailMergeMergePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_MERGE_PAGE)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aHeaderFI(this,           SW_RES(  FI_HEADER           ) ),
@@ -87,7 +87,7 @@ SwMailMergeMergePage::SwMailMergeMergePage( SwMailMergeWizard* _pParent) :
     m_aWholeWordsCB(this, SW_RES(     CB_WHOLEWORDS)),
     m_aBackwardsCB(this, SW_RES(      CB_BACKWARDS )),
     m_aMatchCaseCB(this, SW_RES(      CB_MATCHCASE )),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
     m_pWizard(_pParent)
@@ -111,7 +111,7 @@ SwMailMergeMergePage::~SwMailMergeMergePage()
 /*-- 25.05.2004 16:14:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK( SwMailMergeMergePage, EditDocumentHdl_Impl, PushButton*, pButton)
+IMPL_LINK( SwMailMergeMergePage, EditDocumentHdl_Impl, PushButton*, EMPTYARG)
 {
     m_pWizard->SetRestartPage(MM_MERGEPAGE);
     m_pWizard->EndDialog(RET_EDIT_RESULT_DOC);
@@ -120,7 +120,7 @@ IMPL_LINK( SwMailMergeMergePage, EditDocumentHdl_Impl, PushButton*, pButton)
 /*-- 25.05.2004 16:14:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK( SwMailMergeMergePage, FindHdl_Impl, PushButton*, pButton)
+IMPL_LINK( SwMailMergeMergePage, FindHdl_Impl, PushButton*, EMPTYARG)
 {
     SvxSearchItem aSearchItem( SID_SEARCH_ITEM );
 
