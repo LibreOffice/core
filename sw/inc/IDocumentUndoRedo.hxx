@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IDocumentUndoRedo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:59:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:54:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,28 +33,32 @@
  *
  ************************************************************************/
 
- #ifndef IDOCUMENTUNDOREDO_HXX_INCLUDED
- #define IDOCUMENTUNDOREDO_HXX_INCLUDED
+#ifndef IDOCUMENTUNDOREDO_HXX_INCLUDED
+#define IDOCUMENTUNDOREDO_HXX_INCLUDED
 
- #ifndef _SAL_TYPES_H_
- #include <sal/types.h>
- #endif
-
- class SwUndoIter;
- class SwRewriter;
- class String;
- class SwUndoIds;
- class SwNodes;
- class SwUndo;
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+#ifndef _SWUNDO_HXX
+#include <swundo.hxx>
+#endif
 
 
- typedef sal_uInt16 SwUndoNoModifiedPosition;
+class SwUndoIter;
+class SwRewriter;
+class String;
+class SwUndoIds;
+class SwNodes;
+class SwUndo;
 
- /** IDocumentUndoRedo
- */
- class IDocumentUndoRedo
- {
- public:
+
+typedef sal_uInt16 SwUndoNoModifiedPosition;
+
+/** IDocumentUndoRedo
+*/
+class IDocumentUndoRedo
+{
+public:
     /**
     */
     virtual void SetUndoNoResetModified() = 0;
@@ -97,7 +101,7 @@
 
         @return the undo ID of the created object
     */
-    virtual sal_uInt16 StartUndo( sal_uInt16 nUndoId, const SwRewriter * pRewriter) = 0;
+    virtual SwUndoId StartUndo( SwUndoId eUndoId, const SwRewriter * pRewriter) = 0;
 
     /**
        Closes undo block.
@@ -114,7 +118,7 @@
        corresponding start object will be propagated to the generated
        closure object.
     */
-    virtual sal_uInt16 EndUndo( sal_uInt16 nUndoId, const SwRewriter * pRewriter) = 0;
+    virtual SwUndoId EndUndo( SwUndoId eUndoId, const SwRewriter * pRewriter) = 0;
 
     /** <- #111827#
         loescht die gesamten UndoObjecte ( fuer Methoden die am Nodes
@@ -125,7 +129,7 @@
     /** liefert die Id der letzten undofaehigen Aktion zurueck
         oder USHRT_MAX fuellt ggf. VARARR mit ::com::sun::star::sdbcx::User-UndoIds
     */
-    virtual sal_uInt16 GetUndoIds(String* pStr, SwUndoIds *pUndoIds) const = 0;
+    virtual SwUndoId GetUndoIds(String* pStr, SwUndoIds *pUndoIds) const = 0;
 
     /**
     */
@@ -133,7 +137,7 @@
 
     /** gibt es Klammerung mit der Id?
     */
-    virtual bool HasUndoId(sal_uInt16 nId) const = 0;
+    virtual bool HasUndoId(SwUndoId eId) const = 0;
 
     /* @@@MAINTAINABILITY-HORROR@@@
        Implementation details made public.
@@ -142,7 +146,7 @@
     */
     virtual const SwNodes* GetUndoNds() const = 0;
 
-    virtual SwUndo* RemoveLastUndo(sal_uInt16 nUndoId) = 0;
+    virtual SwUndo* RemoveLastUndo(SwUndoId eUndoId) = 0;
 
     /** 2002-05-31 dvo, #95884#: To prevent an undo array overflow when
         doing nested undos, undo may have to be disabled. Undo-intensive
@@ -157,7 +161,7 @@
     /** liefert die Id der letzten Redofaehigen Aktion zurueck
         fuellt ggf. VARARR mit RedoIds
     */
-    virtual sal_uInt16 GetRedoIds( String* pStr, SwUndoIds *pRedoIds) const = 0;
+    virtual SwUndoId GetRedoIds( String* pStr, SwUndoIds *pRedoIds) const = 0;
 
     /**
     */
@@ -170,7 +174,7 @@
     /** liefert die Id der letzten Repeatfaehigen Aktion zurueck
         fuellt ggf. VARARR mit RedoIds
     */
-    virtual sal_uInt16 GetRepeatIds( String* pStr, SwUndoIds *pRedoIds) const = 0;
+    virtual SwUndoId GetRepeatIds( String* pStr, SwUndoIds *pRedoIds) const = 0;
 
     /**
     */
@@ -193,8 +197,9 @@
     */
     virtual SwUndoNoModifiedPosition getUndoNoModifiedPosition() const = 0;
 
- protected:
+protected:
      virtual ~IDocumentUndoRedo() {};
- };
+};
 
- #endif
+#endif
+
