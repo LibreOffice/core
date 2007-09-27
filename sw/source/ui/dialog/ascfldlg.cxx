@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:05:40 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:36:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -418,10 +418,10 @@ LineEnd SwAsciiFilterDlg::GetCRLF() const
 IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
 {
     LineEnd eOldEnd = GetCRLF(), eEnd = (LineEnd)-1;
-    ULONG nLng = aFontLB.IsVisible()
-                    ? (ULONG)aLanguageLB.GetSelectLanguage()
-                    : 0,
-            nOldLng = nLng;
+    LanguageType nLng = aFontLB.IsVisible()
+                    ? aLanguageLB.GetSelectLanguage()
+                    : LANGUAGE_SYSTEM,
+                nOldLng = nLng;
 
     rtl_TextEncoding nChrSet = pBox->GetSelectTextEncoding();
     if( nChrSet == gsl_getSystemTextEncoding() )
