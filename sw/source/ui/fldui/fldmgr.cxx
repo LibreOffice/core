@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:10:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:47:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,14 +205,16 @@
 #include <fldui.hrc>
 #endif
 
-using namespace rtl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::container;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::text;
-using namespace com::sun::star::style;
-using namespace com::sun::star::sdbc;
+using namespace ::rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::sdbc;
+using namespace nsSwDocInfoSubType;
 
 /*--------------------------------------------------------------------
     Beschreibung: Gruppen der Felder
@@ -282,14 +284,14 @@ static const USHORT __FAR_DATA aUsrFmt[] =
 // die Reihenfolge muss zu Beginn mit den ResourceIds fuer FMT_SETVAR_???
 // uebereinstimmen
     0,
-    SUB_CMD
+    nsSwExtendedSubType::SUB_CMD
 };
 
 static const USHORT __FAR_DATA aDBFmt[] =
 {
 // die Reihenfolge muss zu Beginn mit den ResourceIds fuer FMT_DBFLD_???
 // uebereinstimmen
-    SUB_OWN_FMT
+    nsSwExtendedSubType::SUB_OWN_FMT
 };
 
 static const USHORT VF_COUNT        = sizeof(aGetFmt) / sizeof(USHORT);
@@ -316,54 +318,54 @@ struct SwFldPack
 static const SwFldPack __FAR_DATA aSwFlds[] =
 {
     // Dokument
-    TYP_EXTUSERFLD,     FLD_EU_BEGIN,       FLD_EU_END,     0,                  0,
-    TYP_AUTHORFLD,      0,                  0,              FMT_AUTHOR_BEGIN,   FMT_AUTHOR_END,
-    TYP_DATEFLD,        FLD_DATE_BEGIN,     FLD_DATE_END,   0,                  0,
-    TYP_TIMEFLD,        FLD_TIME_BEGIN,     FLD_TIME_END,   0,                  0,
-    TYP_PAGENUMBERFLD,  0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-1,
-    TYP_NEXTPAGEFLD,    0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END,
-    TYP_PREVPAGEFLD,    0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END,
-    TYP_FILENAMEFLD,    0,                  0,              FMT_FF_BEGIN,       FMT_FF_END,
-    TYP_DOCSTATFLD,     FLD_STAT_BEGIN,     FLD_STAT_END,   FMT_NUM_BEGIN,      FMT_NUM_END-1,
+    { TYP_EXTUSERFLD,       FLD_EU_BEGIN,       FLD_EU_END,     0,                  0 },
+    { TYP_AUTHORFLD,        0,                  0,              FMT_AUTHOR_BEGIN,   FMT_AUTHOR_END },
+    { TYP_DATEFLD,          FLD_DATE_BEGIN,     FLD_DATE_END,   0,                  0 },
+    { TYP_TIMEFLD,          FLD_TIME_BEGIN,     FLD_TIME_END,   0,                  0 },
+    { TYP_PAGENUMBERFLD,    0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-1 },
+    { TYP_NEXTPAGEFLD,      0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END },
+    { TYP_PREVPAGEFLD,      0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END },
+    { TYP_FILENAMEFLD,      0,                  0,              FMT_FF_BEGIN,       FMT_FF_END },
+    { TYP_DOCSTATFLD,       FLD_STAT_BEGIN,     FLD_STAT_END,   FMT_NUM_BEGIN,      FMT_NUM_END-1 },
 
-    TYP_CHAPTERFLD,     0,                  0,              FMT_CHAPTER_BEGIN,  FMT_CHAPTER_END,
-    TYP_TEMPLNAMEFLD,   0,                  0,              FMT_FF_BEGIN,       FMT_FF_END,
+    { TYP_CHAPTERFLD,       0,                  0,              FMT_CHAPTER_BEGIN,  FMT_CHAPTER_END },
+    { TYP_TEMPLNAMEFLD,     0,                  0,              FMT_FF_BEGIN,       FMT_FF_END },
 
     // Funktion
-    TYP_CONDTXTFLD,     0,                  0,              0,                  0,
-    TYP_DROPDOWN,       0,                  0,              0,                  0,
-    TYP_INPUTFLD,       FLD_INPUT_BEGIN,    FLD_INPUT_END,  0,                  0,
-    TYP_MACROFLD,       0,                  0,              0,                  0,
-    TYP_JUMPEDITFLD,    0,                  0,              FMT_MARK_BEGIN,     FMT_MARK_END,
-    TYP_COMBINED_CHARS,  0,                 0,              0,                  0,
-    TYP_HIDDENTXTFLD,   0,                  0,              0,                  0,
-    TYP_HIDDENPARAFLD,  0,                  0,              0,                  0,
+    { TYP_CONDTXTFLD,       0,                  0,              0,                  0 },
+    { TYP_DROPDOWN,         0,                  0,              0,                  0 },
+    { TYP_INPUTFLD,         FLD_INPUT_BEGIN,    FLD_INPUT_END,  0,                  0 },
+    { TYP_MACROFLD,         0,                  0,              0,                  0 },
+    { TYP_JUMPEDITFLD,      0,                  0,              FMT_MARK_BEGIN,     FMT_MARK_END },
+    { TYP_COMBINED_CHARS,   0,                  0,              0,                  0 },
+    { TYP_HIDDENTXTFLD,     0,                  0,              0,                  0 },
+    { TYP_HIDDENPARAFLD,    0,                  0,              0,                  0 },
 
     // Referenzen
-    TYP_SETREFFLD,      0,                  0,              0,                  0,
-    TYP_GETREFFLD,      0,                  0,              FMT_REF_BEGIN,      FMT_REF_END,
+    { TYP_SETREFFLD,        0,                  0,              0,                  0 },
+    { TYP_GETREFFLD,        0,                  0,              FMT_REF_BEGIN,      FMT_REF_END },
 
     // Ablage
-    TYP_DOCINFOFLD,     0,                  0,              FMT_REG_BEGIN,      FMT_REG_END,
+    { TYP_DOCINFOFLD,       0,                  0,              FMT_REG_BEGIN,      FMT_REG_END },
 
     // Datenbank
-    TYP_DBFLD,          0,                  0,              FMT_DBFLD_BEGIN,    FMT_DBFLD_END,
-    TYP_DBNEXTSETFLD,   0,                  0,              0,                  0,
-    TYP_DBNUMSETFLD,    0,                  0,              0,                  0,
-    TYP_DBSETNUMBERFLD, 0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-2,
-    TYP_DBNAMEFLD,      0,                  0,              0,                  0,
+    { TYP_DBFLD,            0,                  0,              FMT_DBFLD_BEGIN,    FMT_DBFLD_END },
+    { TYP_DBNEXTSETFLD,     0,                  0,              0,                  0 },
+    { TYP_DBNUMSETFLD,      0,                  0,              0,                  0 },
+    { TYP_DBSETNUMBERFLD,   0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-2 },
+    { TYP_DBNAMEFLD,        0,                  0,              0,                  0 },
 
     // Variablen
-    TYP_SETFLD,         0,                  0,              FMT_SETVAR_BEGIN,   FMT_SETVAR_END,
+    { TYP_SETFLD,           0,                  0,              FMT_SETVAR_BEGIN,   FMT_SETVAR_END },
 
-    TYP_GETFLD,         0,                  0,              FMT_GETVAR_BEGIN,   FMT_GETVAR_END,
-    TYP_DDEFLD,         0,                  0,              FMT_DDE_BEGIN,      FMT_DDE_END,
-    TYP_FORMELFLD,      0,                  0,              FMT_GETVAR_BEGIN,   FMT_GETVAR_END,
-    TYP_INPUTFLD,       FLD_INPUT_BEGIN,    FLD_INPUT_END,  0,                  0,
-    TYP_SEQFLD,         0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-2,
-    TYP_SETREFPAGEFLD,  FLD_PAGEREF_BEGIN,  FLD_PAGEREF_END,0,                  0,
-    TYP_GETREFPAGEFLD,  0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-1,
-    TYP_USERFLD,        0,                  0,              FMT_USERVAR_BEGIN,  FMT_USERVAR_END
+    { TYP_GETFLD,           0,                  0,              FMT_GETVAR_BEGIN,   FMT_GETVAR_END },
+    { TYP_DDEFLD,           0,                  0,              FMT_DDE_BEGIN,      FMT_DDE_END },
+    { TYP_FORMELFLD,        0,                  0,              FMT_GETVAR_BEGIN,   FMT_GETVAR_END },
+    { TYP_INPUTFLD,         FLD_INPUT_BEGIN,    FLD_INPUT_END,  0,                  0 },
+    { TYP_SEQFLD,           0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-2 },
+    { TYP_SETREFPAGEFLD,    FLD_PAGEREF_BEGIN,  FLD_PAGEREF_END,0,                  0 },
+    { TYP_GETREFPAGEFLD,    0,                  0,              FMT_NUM_BEGIN,      FMT_NUM_END-1 },
+    { TYP_USERFLD,          0,                  0,              FMT_USERVAR_BEGIN,  FMT_USERVAR_END }
 };
 
 /*--------------------------------------------------------------------
@@ -387,10 +389,10 @@ inline USHORT GetPackCount() {  return sizeof(aSwFlds) / sizeof(SwFldPack); }
  --------------------------------------------------------------------*/
 
 SwFldMgr::SwFldMgr(SwWrtShell* pSh ) :
-    bEvalExp(TRUE),
     pModule(0),
     pMacroItem(0),
-    pWrtShell(pSh)
+    pWrtShell(pSh),
+    bEvalExp(TRUE)
 {
     // aktuelles Feld ermitteln falls vorhanden
     GetCurFld();
@@ -511,21 +513,21 @@ const SwFldGroupRgn& SwFldMgr::GetGroupRange(BOOL bHtmlMode, USHORT nGrpId) cons
 {
 static SwFldGroupRgn __READONLY_DATA aRanges[] =
 {
-    /* Dokument     */  GRP_DOC_BEGIN,  GRP_DOC_END,
-    /* Funktionen   */  GRP_FKT_BEGIN,  GRP_FKT_END,
-    /* Referenzen   */  GRP_REF_BEGIN,  GRP_REF_END,
-    /* Ablage       */  GRP_REG_BEGIN,  GRP_REG_END,
-    /* DB           */  GRP_DB_BEGIN,   GRP_DB_END,
-    /* User         */  GRP_VAR_BEGIN,  GRP_VAR_END,
+    { /* Dokument   */  GRP_DOC_BEGIN,  GRP_DOC_END },
+    { /* Funktionen */  GRP_FKT_BEGIN,  GRP_FKT_END },
+    { /* Referenzen */  GRP_REF_BEGIN,  GRP_REF_END },
+    { /* Ablage     */  GRP_REG_BEGIN,  GRP_REG_END },
+    { /* DB         */  GRP_DB_BEGIN,   GRP_DB_END },
+    { /* User       */  GRP_VAR_BEGIN,  GRP_VAR_END }
 };
 static SwFldGroupRgn __READONLY_DATA aWebRanges[] =
 {
-    /* Dokument     */  GRP_WEB_DOC_BEGIN,  GRP_WEB_DOC_END,
-    /* Funktionen   */  GRP_WEB_FKT_BEGIN,  GRP_WEB_FKT_END,
-    /* Referenzen   */  GRP_WEB_REF_BEGIN,  GRP_WEB_REF_END,
-    /* Ablage       */  GRP_WEB_REG_BEGIN,  GRP_WEB_REG_END,
-    /* DB           */  GRP_WEB_DB_BEGIN,   GRP_WEB_DB_END,
-    /* User         */  GRP_WEB_VAR_BEGIN,  GRP_WEB_VAR_END,
+    { /* Dokument   */  GRP_WEB_DOC_BEGIN,  GRP_WEB_DOC_END },
+    { /* Funktionen */  GRP_WEB_FKT_BEGIN,  GRP_WEB_FKT_END },
+    { /* Referenzen */  GRP_WEB_REF_BEGIN,  GRP_WEB_REF_END },
+    { /* Ablage     */  GRP_WEB_REG_BEGIN,  GRP_WEB_REG_END },
+    { /* DB         */  GRP_WEB_DB_BEGIN,   GRP_WEB_DB_END },
+    { /* User       */  GRP_WEB_VAR_BEGIN,  GRP_WEB_VAR_END }
 };
 
     if (bHtmlMode)
@@ -670,18 +672,18 @@ BOOL SwFldMgr::GetSubTypes(USHORT nTypeId, SvStringsDtor& rToFill)
                        (nTypeId == TYP_USERFLD && nWhich == RES_USERFLD) ||
 
                        (nTypeId == TYP_GETFLD && nWhich == RES_SETEXPFLD &&
-                        !(((SwSetExpFieldType*)pFldType)->GetType() & GSE_SEQ)) ||
+                        !(((SwSetExpFieldType*)pFldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
 
                        (nTypeId == TYP_SETFLD && nWhich == RES_SETEXPFLD &&
-                        !(((SwSetExpFieldType*)pFldType)->GetType() & GSE_SEQ)) ||
+                        !(((SwSetExpFieldType*)pFldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
 
                        (nTypeId == TYP_SEQFLD && nWhich == RES_SETEXPFLD  &&
-                       (((SwSetExpFieldType*)pFldType)->GetType() & GSE_SEQ)) ||
+                       (((SwSetExpFieldType*)pFldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
 
                        ((nTypeId == TYP_INPUTFLD  || nTypeId == TYP_FORMELFLD) &&
                          (nWhich == RES_USERFLD ||
                           nWhich == RES_SETEXPFLD &&
-                          !(((SwSetExpFieldType*)pFldType)->GetType() & GSE_SEQ)) ) )
+                          !(((SwSetExpFieldType*)pFldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ) )
                     {
                         String* pNew = new String(pFldType->GetName());
                         rToFill.Insert(pNew, rToFill.Count());
@@ -987,7 +989,6 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
     SwWrtShell* pCurShell = rData.pSh;
     if(!pCurShell)
         pCurShell = pWrtShell ? pWrtShell : ::lcl_GetShell();
-    SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
     DBG_ASSERT(pCurShell, "no SwWrtShell found")
     if(!pCurShell)
         return FALSE;
@@ -1031,7 +1032,7 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
         case TYP_DATEFLD:
         case TYP_TIMEFLD:
         {
-            USHORT nSub = (rData.nTypeId == TYP_DATEFLD) ? DATEFLD : TIMEFLD;
+            USHORT nSub = static_cast< USHORT >(rData.nTypeId == TYP_DATEFLD ? DATEFLD : TIMEFLD);
             nSub |= nSubType == DATE_VAR ? 0 : FIXEDFLD;
 
             SwDateTimeFieldType* pTyp =
@@ -1224,7 +1225,7 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
             pFld = new SwDBField(pTyp);
             pFld->SetSubType(nSubType);
 
-            if( !(nSubType & SUB_OWN_FMT) ) // Datenbankformat ermitteln
+            if( !(nSubType & nsSwExtendedSubType::SUB_OWN_FMT) ) // Datenbankformat ermitteln
             {
                 Reference< XDataSource> xSource;
                 rData.aDBDataSource >>= xSource;
@@ -1365,7 +1366,7 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
                     (SwInputFieldType*)pCurShell->GetFldType(0, RES_INPUTFLD);
 
                 SwInputField* pInpFld =
-                    new SwInputField(pTyp, rData.sPar1, rData.sPar2, nSubType|SUB_INVISIBLE, nFormatId);
+                    new SwInputField(pTyp, rData.sPar1, rData.sPar2, nSubType|nsSwExtendedSubType::SUB_INVISIBLE, nFormatId);
                 pFld = pInpFld;
             }
 
@@ -1392,9 +1393,9 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
         case TYP_SEQFLD:
         {
             SwSetExpFieldType* pTyp = (SwSetExpFieldType*)pCurShell->InsertFldType(
-                    SwSetExpFieldType(pCurShell->GetDoc(), rData.sPar1, GSE_SEQ));
+                    SwSetExpFieldType(pCurShell->GetDoc(), rData.sPar1, nsSwGetSetExpType::GSE_SEQ));
 
-            BYTE nLevel = nSubType & 0xff;
+            BYTE nLevel = static_cast< BYTE >(nSubType & 0xff);
 
             pTyp->SetOutlineLvl(nLevel);
             if (nLevel != 0x7f && cSeparator == 0)
@@ -1404,7 +1405,7 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
             SwSetExpField* pExpFld = new SwSetExpField(pTyp, rData.sPar2, nFormatId);
             bExp = TRUE;
             pFld = pExpFld;
-            nSubType = GSE_SEQ;
+            nSubType = nsSwGetSetExpType::GSE_SEQ;
             break;
         }
         case TYP_GETFLD:
@@ -1459,14 +1460,14 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
 /*              // In der Tabelle Tabellenformeln einfuegen
                 SwTblFieldType* pTyp = (SwTblFieldType*)pCurShell->GetFldType(
                                                         0, RES_TABLEFLD);
-                pFld = new SwTblField(pTyp, rData.sPar2, GSE_EXPR, nFormatId);
+                pFld = new SwTblField(pTyp, rData.sPar2, nsSwGetSetExpType::GSE_EXPR, nFormatId);
                 bTbl = TRUE;*/
             }
             else
             {
                 SwGetExpFieldType* pTyp = (SwGetExpFieldType*)
                                             pCurShell->GetFldType(0, RES_GETEXPFLD);
-                pFld = new SwGetExpField(pTyp, rData.sPar2, GSE_FORMULA, nFormatId);
+                pFld = new SwGetExpField(pTyp, rData.sPar2, nsSwGetSetExpType::GSE_FORMULA, nFormatId);
                 pFld->SetSubType(nSubType);
                 bExp = TRUE;
             }
@@ -1779,7 +1780,7 @@ void SwFieldType::_GetFldName()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-BOOL SwFldMgr::ChooseMacro(const String &rSelMacro)
+BOOL SwFldMgr::ChooseMacro(const String&)
 {
     BOOL bRet = FALSE;
 
@@ -1807,14 +1808,14 @@ void SwFldMgr::SetMacroPath(const String& rPath)
     Reference< XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
 
-    Reference< com::sun::star::uri::XUriReferenceFactory >
+    Reference< uri::XUriReferenceFactory >
         xFactory( xSMgr->createInstance(
             ::rtl::OUString::createFromAscii(
                 "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
 
     if ( xFactory.is() )
     {
-        Reference< com::sun::star::uri::XVndSunStarScriptUrl >
+        Reference< uri::XVndSunStarScriptUrl >
             xUrl( xFactory->parse( sMacroPath ), UNO_QUERY );
 
         if ( xUrl.is() )
