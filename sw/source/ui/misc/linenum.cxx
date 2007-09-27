@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linenum.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:07:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,8 +97,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw) :
     pSh(pVw->GetWrtShellPtr())
 {
     // TabPage erzeugen
-    SfxTabPage* pPage = SwLineNumberingPage::Create(this, *(SfxItemSet*)0);
-    SetTabPage(pPage);
+    SetTabPage(SwLineNumberingPage::Create(this, *(SfxItemSet*)0));
 
     GetOKButton()->SetClickHdl(LINK(this, SwLineNumberingDlg, OKHdl));
 }
@@ -115,13 +114,13 @@ __EXPORT SwLineNumberingDlg::~SwLineNumberingDlg()
      Beschreibung:
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwLineNumberingDlg, OKHdl, Button *, pBtn )
+IMPL_LINK( SwLineNumberingDlg, OKHdl, Button *, EMPTYARG )
 {
     if (GetOKButton()->IsEnabled())
     {
-        SfxTabPage* pPage = GetTabPage();
-        if (pPage)
-            pPage->FillItemSet(*(SfxItemSet*)0);
+        SfxTabPage* pCurPage = GetTabPage();
+        if( pCurPage )
+            pCurPage->FillItemSet(*(SfxItemSet*)0);
 
         EndDialog( RET_OK );
     }
@@ -189,7 +188,7 @@ SfxTabPage* __EXPORT SwLineNumberingPage::Create( Window* pParent, const SfxItem
     Beschreibung:
  -----------------------------------------------------------------------*/
 
-void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet& rSet )
+void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet&  )
 {
     const SwLineNumberInfo &rInf = pSh->GetLineNumberInfo();
     IDocumentStylePoolAccess* pIDSPA = pSh->getIDocumentStylePoolAccess();
@@ -311,7 +310,7 @@ IMPL_LINK( SwLineNumberingPage, LineOnOffHdl, CheckBox *, EMPTYARG )
     Beschreibung:
  -----------------------------------------------------------------------*/
 
-BOOL __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& rSet )
+BOOL __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& )
 {
     SwLineNumberInfo aInf(pSh->GetLineNumberInfo());
 
