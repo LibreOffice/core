@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:15:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:00:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1474,7 +1474,7 @@ class SVX_DLLPUBLIC EscherEx : public EscherPersistTable, public EscherGraphicPr
                 /// Called if an ESCHER_Prop_lTxid shall be written
     virtual UINT32  QueryTextID( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >&, UINT32 nShapeId );
             // add an dummy rectangle shape into the escher stream
-        UINT32  AddDummyShape( const SdrObject& rObj );
+        UINT32  AddDummyShape();
 
     static const SdrObject* GetSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rXShape );
 
