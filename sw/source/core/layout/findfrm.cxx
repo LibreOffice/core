@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:41:48 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:01:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,7 +373,7 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
 {
     const SwFrm       *pFrm = this;
     const SwLayoutFrm *pLayoutFrm = 0;
-    const SwFrm       *p;
+    const SwFrm       *p = 0;
     bool bGoingUp = !bFwd;          // false for forward, true for backward
     do {
 
@@ -441,10 +441,10 @@ const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
     const SwFrm *pFrm = this;
     // #100926#
     SwCntntFrm *pCntntFrm = 0;
-    FASTBOOL bGoingUp = FALSE;
+    BOOL bGoingUp = FALSE;
     do {
-        const SwFrm *p;
-        FASTBOOL bGoingFwdOrBwd = FALSE, bGoingDown = FALSE;
+        const SwFrm *p = 0;
+        BOOL bGoingFwdOrBwd = FALSE, bGoingDown = FALSE;
 
         bGoingDown = ( !bGoingUp && ( 0 != ( p = lcl_GetLower( pFrm, true ) ) ) );
         if ( !bGoingDown )
@@ -695,14 +695,25 @@ const SwAttrSet* SwFrm::GetAttrSet() const
 SwFrm* lcl_NextFrm( SwFrm* pFrm )
 {
     SwFrm *pRet = 0;
-    FASTBOOL bGoingUp = FALSE;
+    BOOL bGoingUp = FALSE;
     do {
         SwFrm *p = 0;
-        FASTBOOL bGoingFwd = FALSE, bGoingDown = FALSE;
-        if( !(bGoingDown = (!bGoingUp && ( 0 != (p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0)))) &&
-            !(bGoingFwd = (0 != (p = ( pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->GetNextLink() : pFrm->GetNext())))) &&
-            !(bGoingUp = (0 != (p = pFrm->GetUpper()))))
-            return 0;
+
+        BOOL bGoingFwd = FALSE;
+        BOOL bGoingDown = (!bGoingUp && ( 0 != (p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0)));
+
+        if( !bGoingDown )
+        {
+            bGoingFwd = (0 != (p = ( pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->GetNextLink() : pFrm->GetNext())));
+            if ( !bGoingFwd )
+            {
+                bGoingUp = (0 != (p = pFrm->GetUpper()));
+                if ( !bGoingUp )
+                {
+                    return 0;
+                }
+            }
+        }
         bGoingUp = !(bGoingFwd || bGoingDown);
         pFrm = p;
     } while ( 0 == (pRet = ( ( pFrm->IsCntntFrm() || ( !bGoingUp &&
@@ -746,9 +757,9 @@ SwFrm *SwFrm::_FindNext()
     }
     else if ( IsRowFrm() )
     {
-        SwFrm* pUpper = GetUpper();
-        if ( pUpper->IsTabFrm() && ((SwTabFrm*)pUpper)->GetFollow() )
-            return ((SwTabFrm*)pUpper)->GetFollow()->GetLower();
+        SwFrm* pMyUpper = GetUpper();
+        if ( pMyUpper->IsTabFrm() && ((SwTabFrm*)pMyUpper)->GetFollow() )
+            return ((SwTabFrm*)pMyUpper)->GetFollow()->GetLower();
         else return NULL;
     }
     else
@@ -1782,10 +1793,10 @@ bool SwFrm::IsInBalancedSection() const
  */
 const SwFrm* SwLayoutFrm::GetLastLower() const
 {
-    const SwFrm* pLower = Lower();
-    if ( !pLower )
+    const SwFrm* pRet = Lower();
+    if ( !pRet )
         return 0;
-    while ( pLower->GetNext() )
-        pLower = pLower->GetNext();
-    return pLower;
+    while ( pRet->GetNext() )
+        pRet = pRet->GetNext();
+    return pRet;
 }
