@@ -4,9 +4,9 @@
  *
  *  $RCSfile: envfmt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:17:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:41:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,9 +90,6 @@
 #ifndef _BASESH_HXX
 #include <basesh.hxx>
 #endif
-//CHINA001 #ifndef _CHRDLG_HXX
-//CHINA001 #include <chrdlg.hxx>
-//CHINA001 #endif
 #ifndef _DRPCPS_HXX
 #include <drpcps.hxx>
 #endif
@@ -103,7 +100,7 @@
 #include <fmtcol.hxx>
 #endif
 #ifndef _PARDLG_HXX
-#include "swuipardlg.hxx" //CHINA001
+#include "swuipardlg.hxx"
 #endif
 #ifndef _PATTERN_HXX
 #include <pattern.hxx>
@@ -122,8 +119,8 @@
 #include <envfmt.hrc>
 #endif
 
-#include "swabstdlg.hxx" //CHINA001
-#include "chrdlg.hrc" //CHINA001
+#include "swabstdlg.hxx"
+#include "chrdlg.hrc"
 
 namespace swui
 {
@@ -216,8 +213,7 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aSizeFormatBox     .SetSelectHdl(LINK(this, SwEnvFmtPage, FormatHdl));
 
     // aSizeFormatBox
-    int i;
-    for (i = SVX_PAPER_A3; i <= SVX_PAPER_KAI32BIG; i++)
+    for (USHORT i = SVX_PAPER_A3; i <= SVX_PAPER_KAI32BIG; i++)
     {
         if (i != SVX_PAPER_USER)
         {
@@ -258,8 +254,8 @@ __EXPORT SwEnvFmtPage::~SwEnvFmtPage()
 
 IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
 {
-    long lWVal = GetFldVal(aSizeWidthField );
-    long lHVal = GetFldVal(aSizeHeightField);
+    long lWVal = static_cast< long >(GetFldVal(aSizeWidthField ));
+    long lHVal = static_cast< long >(GetFldVal(aSizeHeightField));
 
     long lWidth  = Max(lWVal, lHVal);
     long lHeight = Min(lWVal, lHVal);
@@ -302,18 +298,18 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
     // Collection-Ptr ermitteln
     BOOL bSender = pButton != &aAddrEditButton;
 
-    SwTxtFmtColl* pColl = pSh->GetTxtCollFromPool(
-        bSender ? RES_POOLCOLL_SENDADRESS : RES_POOLCOLL_JAKETADRESS);
+    SwTxtFmtColl* pColl = pSh->GetTxtCollFromPool( static_cast< USHORT >(
+        bSender ? RES_POOLCOLL_SENDADRESS : RES_POOLCOLL_JAKETADRESS));
     ASSERT(pColl, "Text-Collection fehlt");
 
     switch (pButton->GetCurItemId())
     {
         case MID_CHAR:
         {
-            SfxItemSet *pSet = GetCollItemSet(pColl, bSender);
+            SfxItemSet *pCollSet = GetCollItemSet(pColl, bSender);
 
             // Damit die Hintergrundfarbe nicht uebergebuegelt wird:
-            SfxAllItemSet aTmpSet(*pSet);
+            SfxAllItemSet aTmpSet(*pCollSet);
 
             // Das CHRATR_BACKGROUND-Attribut wird fuer den Dialog in
             // ein RES_BACKGROUND verwandelt und wieder zurueck ...
@@ -329,12 +325,11 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
             else
                 aTmpSet.ClearItem( RES_BACKGROUND );
 
-            //CHINA001 SwCharDlg* pDlg = new SwCharDlg(GetParent(), pSh->GetView(), aTmpSet, &pColl->GetName());
-            SwAbstractDialogFactory* pFact = swui::GetFactory();//CHINA001
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+            SwAbstractDialogFactory* pFact = swui::GetFactory();
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-            SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( GetParent(), pSh->GetView(), aTmpSet, DLG_CHAR,&pColl->GetName() );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( GetParent(), pSh->GetView(), aTmpSet, DLG_CHAR ,&pColl->GetName() );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             if (pDlg->Execute() == RET_OK)
             {
                 SfxItemSet aOutputSet( *pDlg->GetOutputItemSet() );
@@ -343,11 +338,11 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
                 {
                     SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
                     aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
-                    pSet->Put( aTmpBrush );
+                    pCollSet->Put( aTmpBrush );
                 }
                 aOutputSet.ClearItem( RES_BACKGROUND );
                 //pColl->SetAttr( aTmpSet );
-                pSet->Put(aOutputSet);
+                pCollSet->Put(aOutputSet);
             }
             delete pDlg;
         }
@@ -355,10 +350,10 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
 
         case MID_PARA:
         {
-            SfxItemSet *pSet = GetCollItemSet(pColl, bSender);
+            SfxItemSet *pCollSet = GetCollItemSet(pColl, bSender);
 
             // Damit die Tabulatoren nicht uebergebuegelt werden:
-            SfxAllItemSet aTmpSet(*pSet);
+            SfxAllItemSet aTmpSet(*pCollSet);
 
             // Tabulatoren, DefaultTabs ins ItemSet Stecken
             const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
@@ -401,7 +396,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
                 if( pOutputSet->Count() )
                 {
                     //pColl->SetAttr( *pOutputSet );
-                    pSet->Put(*pOutputSet);
+                    pCollSet->Put(*pOutputSet);
                 }
             }
             delete pDlg;
@@ -417,9 +412,9 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
 
 SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender)
 {
-    SfxItemSet *&pSet = bSender ? GetParent()->pSenderSet : GetParent()->pAddresseeSet;
+    SfxItemSet *&pAddrSet = bSender ? GetParent()->pSenderSet : GetParent()->pAddresseeSet;
 
-    if (!pSet)
+    if (!pAddrSet)
     {
         // Range ermitteln (Ranges beider Itemsets mergen)
         const USHORT *pRanges = pColl->GetAttrSet().GetRanges();
@@ -486,14 +481,14 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender)
 
         pNewRanges[i] = 0;
 
-        pSet = new SfxItemSet(GetParent()->pSh->GetView().GetCurShell()->GetPool(),
+        pAddrSet = new SfxItemSet(GetParent()->pSh->GetView().GetCurShell()->GetPool(),
                                 pNewRanges);
 
-        pSet->Put(pColl->GetAttrSet());
+        pAddrSet->Put(pColl->GetAttrSet());
         delete[] pNewRanges;
     }
 
-    return pSet;
+    return pAddrSet;
 }
 
 // --------------------------------------------------------------------------
@@ -546,8 +541,8 @@ IMPL_LINK( SwEnvFmtPage, FormatHdl, ListBox *, EMPTYARG )
 
 void SwEnvFmtPage::SetMinMax()
 {
-    long lWVal = GetFldVal(aSizeWidthField );
-    long lHVal = GetFldVal(aSizeHeightField);
+    long lWVal = static_cast< long >(GetFldVal(aSizeWidthField ));
+    long lHVal = static_cast< long >(GetFldVal(aSizeHeightField));
 
     long lWidth  = Max(lWVal, lHVal),
          lHeight = Min(lWVal, lHVal);
@@ -602,10 +597,10 @@ void __EXPORT SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)
 // ----------------------------------------------------------------------------
 
 
-int __EXPORT SwEnvFmtPage::DeactivatePage(SfxItemSet* pSet)
+int __EXPORT SwEnvFmtPage::DeactivatePage(SfxItemSet* _pSet)
 {
-    if( pSet )
-        FillItemSet(*pSet);
+    if( _pSet )
+        FillItemSet(*_pSet);
     return SfxTabPage::LEAVE_PAGE;
 }
 
@@ -614,16 +609,16 @@ int __EXPORT SwEnvFmtPage::DeactivatePage(SfxItemSet* pSet)
 
 void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
 {
-    rItem.lAddrFromLeft = GetFldVal(aAddrLeftField);
-    rItem.lAddrFromTop  = GetFldVal(aAddrTopField );
-    rItem.lSendFromLeft = GetFldVal(aSendLeftField);
-    rItem.lSendFromTop  = GetFldVal(aSendTopField );
+    rItem.lAddrFromLeft = static_cast< sal_Int32 >(GetFldVal(aAddrLeftField));
+    rItem.lAddrFromTop  = static_cast< sal_Int32 >(GetFldVal(aAddrTopField ));
+    rItem.lSendFromLeft = static_cast< sal_Int32 >(GetFldVal(aSendLeftField));
+    rItem.lSendFromTop  = static_cast< sal_Int32 >(GetFldVal(aSendTopField ));
 
     USHORT nPaper = aIDs[aSizeFormatBox.GetSelectEntryPos()];
     if (nPaper == (USHORT)SVX_PAPER_USER)
     {
-        long lWVal = GetFldVal(aSizeWidthField );
-        long lHVal = GetFldVal(aSizeHeightField);
+        long lWVal = static_cast< long >(GetFldVal(aSizeWidthField ));
+        long lHVal = static_cast< long >(GetFldVal(aSizeHeightField));
         rItem.lWidth  = Max(lWVal, lHVal);
         rItem.lHeight = Min(lWVal, lHVal);
     }
