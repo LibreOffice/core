@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:14:42 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,14 +55,14 @@
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
-//#ifndef SW_SWDLL_HXX
-//#include <swdll.hxx>
-//#endif
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
 #ifndef _SHELLID_HXX
 #include "shellid.hxx"
+#endif
+#ifndef _FLDUPDE_HXX
+#include <fldupde.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEEVENTLISTENER_HPP_
@@ -164,9 +164,8 @@ public:
     // public Data - used for internal Clipboard / Drag & Drop / XSelection
     SwTransferable  *pClipboard, *pDragDrop, *pXSelection;
 
-
     TYPEINFO();
-    SFX_DECL_INTERFACE(SW_INTERFACE_MODULE);
+    SFX_DECL_INTERFACE(SW_INTERFACE_MODULE)
 
     // dieser Ctor nur fuer SW-Dll
     SwModule( SfxObjectFactory* pFact,
@@ -192,7 +191,7 @@ public:
     void                ApplyUsrPref(const SwViewOption &, SwView*,
                                      sal_uInt16 nDest = VIEWOPT_DEST_VIEW );
     void ApplyUserMetric( FieldUnit eMetric, BOOL bWeb );
-    SW_DLLPUBLIC void ApplyFldUpdateFlags(sal_Int32 nFldFlags);
+    SW_DLLPUBLIC void ApplyFldUpdateFlags(SwFldUpdateFlags eFldFlags);
     SW_DLLPUBLIC void ApplyLinkMode(sal_Int32 nNewLinkMode);
 
     // ConfigItems erzeugen
@@ -244,7 +243,7 @@ public:
 
     // Update-Stati durchreichen
     sal_uInt16 GetLinkUpdMode( sal_Bool bWeb ) const;
-    sal_uInt16 GetFldUpdateFlags( sal_Bool bWeb ) const;
+    SwFldUpdateFlags GetFldUpdateFlags( sal_Bool bWeb ) const;
 
     //virtuelle Methoden fuer den Optionendialog
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId );
