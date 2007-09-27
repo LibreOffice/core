@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:04:46 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:44:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ BOOL SwEditShell::GetAttr( SfxItemSet& rSet ) const
                 if (pNumRule)
                 {
                     const String & aCharFmtName =
-                        pNumRule->Get(pTxtNd->GetLevel()).
+                        pNumRule->Get(static_cast<USHORT>(pTxtNd->GetLevel())).
 
                         GetCharFmtName();
                     SwCharFmt * pCharFmt =
@@ -394,7 +394,7 @@ BOOL SwEditShell::IsMoveLeftMargin( BOOL bRight, BOOL bModulus ) const
 
     const SvxTabStopItem& rTabItem = (SvxTabStopItem&)GetDoc()->
                                 GetDefault( RES_PARATR_TABSTOP );
-    USHORT nDefDist = rTabItem.Count() ? rTabItem[0].GetTabPos() : 1134;
+    USHORT nDefDist = static_cast<USHORT>(rTabItem.Count() ? rTabItem[0].GetTabPos() : 1134);
     if( !nDefDist )
         return FALSE;
 
@@ -422,9 +422,9 @@ BOOL SwEditShell::IsMoveLeftMargin( BOOL bRight, BOOL bModulus ) const
                     SwFrm* pFrm = pCNd->GetFrm();
                     if ( pFrm )
                     {
-                        const USHORT nFrmWidth = pFrm->IsVertical() ?
+                        const USHORT nFrmWidth = static_cast<USHORT>( pFrm->IsVertical() ?
                                                  pFrm->Frm().Height() :
-                                                 pFrm->Frm().Width();
+                                                 pFrm->Frm().Width() );
                         bRet = nFrmWidth > ( nNext + MM50 );
                     }
                     else
@@ -490,7 +490,7 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
 
         if( pNumRule && MAXLEVEL > rTNd.GetLevel() )
         {
-            const SwNumFmt &rNumFmt = pNumRule->Get( rTNd.GetLevel() );
+            const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<USHORT>(rTNd.GetLevel()) );
 
             if( SVX_NUM_BITMAP != rNumFmt.GetNumberingType() )
             {
@@ -541,7 +541,7 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
 
 
 // returns the scripttpye of the selection
-USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
+USHORT SwEditShell::GetScriptType() const
 {
     USHORT nRet = 0;
     if( pBreakIt->xBreak.is() )
