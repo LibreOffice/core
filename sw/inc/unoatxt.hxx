@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoatxt.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:23:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:14:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,6 +327,7 @@ public:
 
 protected:
 
+    using SvBaseEventDescriptor::replaceByName;
     virtual void replaceByName(
         const USHORT nEvent,        /// item ID of event
         const SvxMacro& rMacro)     /// event (will be copied)
@@ -336,6 +337,7 @@ protected:
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 
+    using SvBaseEventDescriptor::getByName;
     virtual void getByName(
         SvxMacro& rMacro,           /// macro to be filled
         const USHORT nEvent )       /// item ID of event
