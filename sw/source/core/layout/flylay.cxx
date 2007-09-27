@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 11:49:11 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:02:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,9 +91,10 @@
 #ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
 #endif
-#ifndef _FRMSH_HXX
-#include <frmsh.hxx>
-#endif
+
+
+using namespace ::com::sun::star;
+
 
 /*************************************************************************
 |*
@@ -161,10 +162,10 @@ TYPEINIT1(SwFlyFreeFrm,SwFlyFrm);
 |*
 |*************************************************************************/
 
-void SwFlyFreeFrm::NotifyBackground( SwPageFrm *pPage,
+void SwFlyFreeFrm::NotifyBackground( SwPageFrm *pPageFrm,
                                      const SwRect& rRect, PrepareHint eHint )
 {
-    ::Notify_Background( GetVirtDrawObj(), pPage, rRect, eHint, TRUE );
+    ::Notify_Background( GetVirtDrawObj(), pPageFrm, rRect, eHint, TRUE );
 }
 
 /*************************************************************************
@@ -190,9 +191,9 @@ void SwFlyFreeFrm::MakeAll()
     if( !GetPageFrm() && GetAnchorFrm() && GetAnchorFrm()->IsInFly() )
     {
         SwFlyFrm* pFly = AnchorFrm()->FindFlyFrm();
-        SwPageFrm *pPage = pFly ? pFly->FindPageFrm() : NULL;
-        if( pPage )
-            pPage->AppendFlyToPage( this );
+        SwPageFrm *pPageFrm = pFly ? pFly->FindPageFrm() : NULL;
+        if( pPageFrm )
+            pPageFrm->AppendFlyToPage( this );
     }
     if( !GetPageFrm() )
         return;
@@ -380,11 +381,11 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
     const long nClipBot = aClip.Top() + aClip.Height();
     const long nClipRig = aClip.Left() + aClip.Width();
 
-    const FASTBOOL bBot = nBot > nClipBot;
-    const FASTBOOL bRig = nRig > nClipRig;
+    const BOOL bBot = nBot > nClipBot;
+    const BOOL bRig = nRig > nClipRig;
     if ( bBot || bRig )
     {
-        FASTBOOL bAgain = FALSE;
+        BOOL bAgain = FALSE;
         // --> OD 2004-11-12 #i37068# - no move, if it's requested
         if ( bBot && !IsNoMoveOnCheckClip() &&
              !GetDrawObjs() && !GetAnchorFrm()->IsInTab() )
@@ -413,7 +414,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 const SwFmtHoriOrient &rH = GetFmt()->GetHoriOrient();
                 // Links ausgerichtete duerfen nicht nach links verschoben werden,
                 // wenn sie einem anderen ausweichen.
-                if( rH.GetHoriOrient() == HORI_LEFT )
+                if( rH.GetHoriOrient() == text::HoriOrientation::LEFT )
                     Frm().Pos().X() = nOld;
                 else
                     bAgain = TRUE;
@@ -526,10 +527,10 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
             if ( Lower() && Lower()->IsColumnFrm() )
             {
                 ColLock();  //Grow/Shrink locken.
-                const Size aOldSize( Prt().SSize() );
+                const Size aTmpOldSize( Prt().SSize() );
                 Prt().Height( Frm().Height() - nPrtHeightDiff );
                 Prt().Width ( Frm().Width()  - nPrtWidthDiff );
-                ChgLowersProp( aOldSize );
+                ChgLowersProp( aTmpOldSize );
                 SwFrm *pLow = Lower();
                 do
                 {   pLow->Calc();
@@ -631,18 +632,18 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         {
             USHORT nPgNum = pAnch->GetPageNum();
             SwRootFrm *pRoot = FindRootFrm();
-            SwPageFrm *pPage = (SwPageFrm*)pRoot->Lower();
-            for ( USHORT i = 1; (i <= nPgNum) && pPage; ++i,
-                                pPage = (SwPageFrm*)pPage->GetNext() )
+            SwPageFrm *pTmpPage = (SwPageFrm*)pRoot->Lower();
+            for ( USHORT i = 1; (i <= nPgNum) && pTmpPage; ++i,
+                                pTmpPage = (SwPageFrm*)pTmpPage->GetNext() )
             {
                 if ( i == nPgNum )
                 {
                     // --> OD 2005-06-09 #i50432# - adjust synopsis of <PlaceFly(..)>
-                    pPage->PlaceFly( this, 0 );
+                    pTmpPage->PlaceFly( this, 0 );
                     // <--
                 }
             }
-            if( !pPage )
+            if( !pTmpPage )
             {
                 pRoot->SetAssertFlyPages();
                 pRoot->AssertFlyPages();
@@ -719,8 +720,15 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 
         if ( !pSortedObjs )
             pSortedObjs = new SwSortedObjs();
-        if ( !pSortedObjs->Insert( *pNew ) )
-            ASSERT( FALSE, "Fly nicht in Sorted eingetragen." );
+
+#if OSL_DEBUG_LEVEL > 1
+        const bool bSucessInserted =
+#endif
+        pSortedObjs->Insert( *pNew );
+#if OSL_DEBUG_LEVEL > 1
+        ASSERT( bSucessInserted, "Fly nicht in Sorted eingetragen." )
+        (void) bSucessInserted;
+#endif
 
         // --> OD 2004-06-30 #i28701# - use new method <SetPageFrm(..)>
         pNew->SetPageFrm( this );
@@ -746,17 +754,17 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
         SwSortedObjs &rObjs = *pNew->GetDrawObjs();
         for ( USHORT i = 0; i < rObjs.Count(); ++i )
         {
-            SwAnchoredObject* pObj = rObjs[i];
-            if ( pObj->ISA(SwFlyFrm) )
+            SwAnchoredObject* pTmpObj = rObjs[i];
+            if ( pTmpObj->ISA(SwFlyFrm) )
             {
-                SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObj);
+                SwFlyFrm* pTmpFly = static_cast<SwFlyFrm*>(pTmpObj);
                 // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
-                if ( pFly->IsFlyFreeFrm() && !pFly->GetPageFrm() )
-                    AppendFlyToPage( pFly );
+                if ( pTmpFly->IsFlyFreeFrm() && !pTmpFly->GetPageFrm() )
+                    AppendFlyToPage( pTmpFly );
             }
-            else if ( pObj->ISA(SwAnchoredDrawObject) )
+            else if ( pTmpObj->ISA(SwAnchoredDrawObject) )
             {
-                AppendDrawObjToPage( *pObj );
+                AppendDrawObjToPage( *pTmpObj );
             }
         }
     }
@@ -869,8 +877,15 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
     //Anmelden
     if ( !pDest->GetSortedObjs() )
         pDest->pSortedObjs = new SwSortedObjs();
-    if ( !pDest->GetSortedObjs()->Insert( *pToMove ) )
-        ASSERT( FALSE, "Fly nicht in Sorted eingetragen." );
+
+#if OSL_DEBUG_LEVEL > 1
+    const bool bSucessInserted =
+#endif
+    pDest->GetSortedObjs()->Insert( *pToMove );
+#if OSL_DEBUG_LEVEL > 1
+    ASSERT( bSucessInserted, "Fly nicht in Sorted eingetragen." )
+    (void) bSucessInserted;
+#endif
 
     // --> OD 2004-06-30 #i28701# - use new method <SetPageFrm(..)>
     pToMove->SetPageFrm( pDest );
@@ -1090,16 +1105,16 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             SWRECTFN( pClip )
 
             //Vertikales clipping: Top und Bottom, ggf. an PrtArea
-            if( rV.GetVertOrient() != VERT_NONE &&
-                rV.GetRelationOrient() == PRTAREA )
+            if( rV.GetVertOrient() != text::VertOrientation::NONE &&
+                rV.GetRelationOrient() == text::RelOrientation::PRINT_AREA )
             {
                 (rRect.*fnRect->fnSetTop)( (pClip->*fnRect->fnGetPrtTop)() );
                 (rRect.*fnRect->fnSetBottom)( (pClip->*fnRect->fnGetPrtBottom)() );
             }
             //Horizontales clipping: Left und Right, ggf. an PrtArea
             const SwFmtHoriOrient &rH = pFly->GetFmt()->GetHoriOrient();
-            if( rH.GetHoriOrient() != HORI_NONE &&
-                rH.GetRelationOrient() == PRTAREA )
+            if( rH.GetHoriOrient() != text::HoriOrientation::NONE &&
+                rH.GetRelationOrient() == text::RelOrientation::PRINT_AREA )
             {
                 (rRect.*fnRect->fnSetLeft)( (pClip->*fnRect->fnGetPrtLeft)() );
                 (rRect.*fnRect->fnSetRight)((pClip->*fnRect->fnGetPrtRight)());
@@ -1148,19 +1163,19 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                     // <--
                 }
             }
-            else if ( rV.GetRelationOrient() == REL_PG_FRAME ||
-                      rV.GetRelationOrient() == REL_PG_PRTAREA )
+            else if ( rV.GetRelationOrient() == text::RelOrientation::PAGE_FRAME ||
+                      rV.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA )
             {
                 // OD 29.10.2003 #113049# - new class <SwEnvironmentOfAnchoredObject>
                 objectpositioning::SwEnvironmentOfAnchoredObject
                                                 aEnvOfObj( bFollowTextFlow );
                 const SwLayoutFrm& rVertClipFrm =
                     aEnvOfObj.GetVertEnvironmentLayoutFrm( *pVertPosOrientFrm );
-                if ( rV.GetRelationOrient() == REL_PG_FRAME )
+                if ( rV.GetRelationOrient() == text::RelOrientation::PAGE_FRAME )
                 {
                     rRect = rVertClipFrm.Frm();
                 }
-                else if ( rV.GetRelationOrient() == REL_PG_PRTAREA )
+                else if ( rV.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA )
                 {
                     if ( rVertClipFrm.IsPageFrm() )
                     {
