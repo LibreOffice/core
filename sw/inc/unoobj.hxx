@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:55:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:16:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,13 +185,11 @@
 #include <cppuhelper/weakref.hxx>
 #endif
 
+#include <unomid.h>
 
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
-
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
 
 class SwUnoCrsr;
 class SwCursor;
@@ -247,7 +245,7 @@ enum CursorType
  *
  * --------------------------------------------------*/
 
-SV_DECL_PTRARR(SwDependArr, SwDepend*, 2, 2);
+SV_DECL_PTRARR(SwDependArr, SwDepend*, 2, 2)
 
 SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName);
 ::com::sun::star::uno::Sequence< sal_Int8 > CreateUnoTunnelId();
@@ -297,7 +295,7 @@ class UnoActionRemoveContext
  *
  ******************************************************************************/
 typedef com::sun::star::uno::Reference< com::sun::star::text::XTextRange > * XTextRangeRefPtr;
-SV_DECL_PTRARR(XTextRangeArr, XTextRangeRefPtr, 4, 4);
+SV_DECL_PTRARR(XTextRangeArr, XTextRangeRefPtr, 4, 4)
 
 void ClientModify(SwClient* pClient, SfxPoolItem *pOld, SfxPoolItem *pNew);
 
@@ -469,7 +467,7 @@ public:
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
-    DECLARE_XINTERFACE();
+    DECLARE_XINTERFACE()
 
     //XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
@@ -1506,7 +1504,7 @@ class SwXReferenceMark : public SwRefBookmarkBaseClass,
     BOOL                        m_bIsDescriptor;
 
     BOOL    IsValid() const {return 0 != GetRegisteredIn();}
-    void    InsertRefMark(SwPaM& rPam, SwDoc* pDoc);
+    void    InsertRefMark( SwPaM& rPam );
 public:
     SwXReferenceMark(SwDoc* pDoc, const SwFmtRefMark* pMark);
     ~SwXReferenceMark();
