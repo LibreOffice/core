@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stmenu.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:24:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,13 +86,16 @@ class SwSmartTagPopup : public PopupMenu
 
     std::vector< InvokeAction > maInvokeActions;
 
+protected:
+  using PopupMenu::Execute;
+
 public:
     SwSmartTagPopup( SwView* _pSwView,
                      ::com::sun::star::uno::Sequence< rtl::OUString >& rSmartTagTypes,
                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
                      ::com::sun::star::uno::Reference< com::sun::star::text::XTextRange > xTextRange );
 
-    sal_uInt16  Execute( Window* pWin, const Rectangle& rPopupPos );
+    sal_uInt16  Execute( const Rectangle& rPopupPos, Window* pWin );
 };
 
 #endif
