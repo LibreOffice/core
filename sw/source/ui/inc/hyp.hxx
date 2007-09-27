@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:19:46 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:02:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,28 +54,28 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenator >  xHyph;
     Link            aOldLnk;
-    sal_uInt32          nLangError;     // nicht vorhandene Sprache
+    LanguageType        nLangError;     // nicht vorhandene Sprache
     sal_uInt16          nPageCount;     // Seitenanzahl fuer Progressanzeige
     sal_uInt16          nPageStart;     // 1. gepruefte Seite
     sal_Bool            bInSelection : 1; // Trennen von selektiertem Text
     sal_Bool            bShowError : 1; // nicht vorhandene Sprache melden
     sal_Bool            bAutomatic : 1; // Trennstellen ohne Rueckfrage einfuegen
     sal_Bool            bInfoBox : 1;   // display info-box when ending
-    DECL_LINK( SpellError, void * );
+    DECL_LINK( SpellError, LanguageType * );
 
-public:
-    SwHyphWrapper( SwView* pVw,
-                   ::com::sun::star::uno::Reference<
-                        ::com::sun::star::linguistic2::XHyphenator >  &rxHyph,
-                   sal_Bool bStart, sal_Bool bOther, sal_Bool bSelect );
-
-    ~SwHyphWrapper();
 protected:
     virtual void SpellStart( SvxSpellArea eSpell );
     virtual sal_Bool SpellContinue();
     virtual void SpellEnd( );
     virtual sal_Bool SpellMore();
     virtual void InsertHyphen( const sal_uInt16 nPos ); // Hyphen einfuegen
+
+public:
+    SwHyphWrapper( SwView* pVw,
+                   ::com::sun::star::uno::Reference<
+                        ::com::sun::star::linguistic2::XHyphenator >  &rxHyph,
+                   sal_Bool bStart, sal_Bool bOther, sal_Bool bSelect );
+    ~SwHyphWrapper();
 };
 
 #endif
