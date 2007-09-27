@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:19:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:29:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,8 +282,8 @@ SwSetFmtHint::~SwSetFmtHint()
 SwResetFmtHint::SwResetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNodeIdx, SwDoc& rDoc )
 // <--
     : SwHstryHint( HSTRY_RESETFMTHNT ),
-      nWhich( pFmtHt->Which() ),
       nNode( nNodeIdx ),
+      nWhich( pFmtHt->Which() ),
       // --> OD 2007-07-11 #i56253#
       mnNumLvl( NO_NUMBERING ),
       mbIsRestart( false ),
@@ -307,7 +307,7 @@ SwResetFmtHint::SwResetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNodeIdx, SwDoc
 }
 
 
-void SwResetFmtHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
+void SwResetFmtHint::SetInDoc( SwDoc* pDoc, BOOL )
 {
     SwNode * pNode = pDoc->GetNodes()[ nNode ];
     if ( pNode->IsCntntNode() )
@@ -356,7 +356,7 @@ SwSetTxtHint::~SwSetTxtHint()
 }
 
 
-void SwSetTxtHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
+void SwSetTxtHint::SetInDoc( SwDoc* pDoc, BOOL )
 {
     if( !pAttr )
         return;
@@ -373,7 +373,7 @@ void SwSetTxtHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
     ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
 
     pTxtNd->InsertItem( *pAttr, nStart, nEnd,
-                        SETATTR_NOTXTATRCHR | SETATTR_NOHINTADJUST );
+                        nsSetAttrMode::SETATTR_NOTXTATRCHR | nsSetAttrMode::SETATTR_NOHINTADJUST );
 }
 
 
@@ -411,7 +411,7 @@ SwSetTxtFldHint::~SwSetTxtFldHint()
 }
 
 
-void SwSetTxtFldHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
+void SwSetTxtFldHint::SetInDoc( SwDoc* pDoc, BOOL )
 {
     if( !pFld )
         return;
@@ -428,7 +428,7 @@ void SwSetTxtFldHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
     ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
 
-    pTxtNd->InsertItem( *pFld, nPos, nPos, SETATTR_NOTXTATRCHR );
+    pTxtNd->InsertItem( *pFld, nPos, nPos, nsSetAttrMode::SETATTR_NOTXTATRCHR );
 }
 
 
@@ -443,7 +443,7 @@ SwSetRefMarkHint::SwSetRefMarkHint( SwTxtRefMark* pTxtHt, ULONG nNodePos )
 }
 
 
-void SwSetRefMarkHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
+void SwSetRefMarkHint::SetInDoc( SwDoc* pDoc, BOOL )
 {
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
     ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
@@ -453,7 +453,7 @@ void SwSetRefMarkHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
     // existiert hier schon eine Referenz-Markierung ohne Ende, so
     // darf es nicht eingefuegt werden !!
     if( nStart != nEnd || !pTxtNd->GetTxtAttr( nStart, RES_TXTATR_REFMARK ) )
-        pTxtNd->InsertItem( aRefMark, nStart, nEnd, SETATTR_NOTXTATRCHR );
+        pTxtNd->InsertItem( aRefMark, nStart, nEnd, nsSetAttrMode::SETATTR_NOTXTATRCHR );
 }
 
 
@@ -470,7 +470,7 @@ SwSetTOXMarkHint::SwSetTOXMarkHint( SwTxtTOXMark* pTxtHt, ULONG nNodePos )
 }
 
 
-void SwSetTOXMarkHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
+void SwSetTOXMarkHint::SetInDoc( SwDoc* pDoc, BOOL )
 {
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
     ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
@@ -492,7 +492,7 @@ void SwSetTOXMarkHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
     SwTOXMark aNew( aTOXMark );
     ((SwTOXType*)pToxType)->Add( &aNew );
 
-    pTxtNd->InsertItem( aNew, nStart, nEnd, SETATTR_NOTXTATRCHR );
+    pTxtNd->InsertItem( aNew, nStart, nEnd, nsSetAttrMode::SETATTR_NOTXTATRCHR );
 }
 
 
@@ -512,12 +512,12 @@ int SwSetTOXMarkHint::IsEqual( const SwTOXMark& rCmp ) const
 SwResetTxtHint::SwResetTxtHint( USHORT nWhich, xub_StrLen nAttrStt,
                                 xub_StrLen nAttrEnd, ULONG nNodePos )
     : SwHstryHint( HSTRY_RESETTXTHNT ),
-    nAttr( nWhich ), nNode( nNodePos ), nStart( nAttrStt ), nEnd( nAttrEnd )
+    nNode( nNodePos ), nStart( nAttrStt ), nEnd( nAttrEnd ), nAttr( nWhich )
 {
 }
 
 
-void SwResetTxtHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
+void SwResetTxtHint::SetInDoc( SwDoc* pDoc, BOOL )
 {
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
     ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
@@ -552,9 +552,9 @@ SwSetFtnHint::SwSetFtnHint( SwTxtFtn* pTxtFtn, ULONG nNodePos )
 
 SwSetFtnHint::SwSetFtnHint( const SwTxtFtn &rTxtFtn ) :
     SwHstryHint( HSTRY_SETFTNHNT ),
+    pUndo( 0 ),
     nNode( _SwTxtFtn_GetIndex( (&rTxtFtn) ) ),
-    nStart( *rTxtFtn.GetStart() ),
-    pUndo( 0 )
+    nStart( *rTxtFtn.GetStart() )
 {
     ASSERT( rTxtFtn.GetStartNode(), "Footnote ohne Section" );
 
@@ -573,7 +573,7 @@ SwSetFtnHint::~SwSetFtnHint()
 }
 
 
-void SwSetFtnHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
+void SwSetFtnHint::SetInDoc( SwDoc* pDoc, BOOL )
 {
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
     ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
@@ -614,15 +614,15 @@ void SwSetFtnHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
 SwChgFmtColl::SwChgFmtColl( const SwFmtColl* pFmtColl, ULONG nNd,
                             BYTE nNodeWhich )
     : SwHstryHint( HSTRY_CHGFMTCOLL ),
-      pColl( pFmtColl ),
-      nNode( nNd ),
-      nNdWhich( nNodeWhich ),
-       // --> OD 2007-07-09 #i77372#
-       mnNumLvl( NO_NUMBERING ),
-       mbIsRestart( false ),
-       mnRestartVal( USHRT_MAX ),
-       mbIsCounted( false )
-       // <--
+    pColl( pFmtColl ),
+    nNode( nNd ),
+    nNdWhich( nNodeWhich ),
+    // --> OD 2007-07-09 #i77372#
+    mnNumLvl( NO_NUMBERING ),
+    mbIsRestart( false ),
+    mnRestartVal( USHRT_MAX ),
+    mbIsCounted( false )
+    // <--
 {
     const SwDoc* pDoc = pFmtColl->GetDoc();
     const SwTxtNode* pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
@@ -638,7 +638,7 @@ SwChgFmtColl::SwChgFmtColl( const SwFmtColl* pFmtColl, ULONG nNd,
 }
 
 
-void SwChgFmtColl::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
+void SwChgFmtColl::SetInDoc( SwDoc* pDoc, BOOL )
 {
     SwCntntNode * pCntntNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
     ASSERT( pCntntNd, "Undo-ChgFmt: kein ContentNode" );
@@ -695,7 +695,7 @@ SwHstryTxtFlyCnt::~SwHstryTxtFlyCnt()
 }
 
 
-void SwHstryTxtFlyCnt::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
+void SwHstryTxtFlyCnt::SetInDoc( SwDoc* pDoc, BOOL )
 {
     SwPaM aPam( pDoc->GetNodes().GetEndOfPostIts() );
     SwUndoIter aUndoIter( &aPam );
@@ -707,8 +707,8 @@ void SwHstryTxtFlyCnt::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
 // JP 21.03.94: jetzt auch die Bookmarks in die History aufnehmen
 SwHstryBookmark::SwHstryBookmark( const SwBookmark& rBkmk, BYTE nType )
     : SwHstryHint( HSTRY_BOOKMARK ),
-    nTyp( nType ), nNode1( 0 ), nCntnt1( 0 ),
-    nNode2( rBkmk.GetOtherPos() ? 0 : ULONG_MAX ), nCntnt2( 0 )
+    nNode1( 0 ), nNode2( rBkmk.GetOtherPos() ? 0 : ULONG_MAX ),
+    nCntnt1( 0 ), nCntnt2( 0 ), nTyp( nType )
 {
     aName = rBkmk.GetName();
     aShortName = rBkmk.GetShortName();
@@ -1035,7 +1035,7 @@ SwHstryChgFlyAnchor::SwHstryChgFlyAnchor( const SwFrmFmt& rFmt )
 }
 
 
-void SwHstryChgFlyAnchor::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
+void SwHstryChgFlyAnchor::SetInDoc( SwDoc* pDoc, BOOL )
 {
     BOOL bDoesUndo = pDoc->DoesUndo();
     pDoc->DoUndo( FALSE );
@@ -1074,7 +1074,7 @@ SwHstryChgFlyChain::SwHstryChgFlyChain( const SwFlyFrmFmt& rFmt,
 }
 
 
-void SwHstryChgFlyChain::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
+void SwHstryChgFlyChain::SetInDoc( SwDoc* pDoc, BOOL )
 {
     if( USHRT_MAX != pDoc->GetSpzFrmFmts()->GetPos( pFlyFmt ) )
     {
@@ -1107,7 +1107,7 @@ SwHstryChgCharFmt::SwHstryChgCharFmt(const SfxItemSet & rSet,
 {
 }
 
-void SwHstryChgCharFmt::SetInDoc(SwDoc * pDoc, BOOL bTmpSet)
+void SwHstryChgCharFmt::SetInDoc(SwDoc * pDoc, BOOL )
 {
     SwCharFmt * pCharFmt = pDoc->FindCharFmtByName(sFmt);
 
@@ -1232,12 +1232,12 @@ void SwHistory::Add( const SwFrmFmt& rFmt )
 void SwHistory::Add( const SwFlyFrmFmt& rFmt, USHORT& rSetPos )
 {
     ASSERT( !nEndDiff, "nach REDO wurde die History noch nicht geloescht" );
-    SwHstryHint * pHt;
+    SwHstryHint * pHint;
     const USHORT nWh = rFmt.Which();
     if( RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh )
     {
-        pHt = new SwHstryTxtFlyCnt( (SwFlyFrmFmt*)&rFmt );
-        Insert( pHt, Count() );
+        pHint = new SwHstryTxtFlyCnt( (SwFlyFrmFmt*)&rFmt );
+        Insert( pHint, Count() );
 
         const SwFmtChain* pChainItem;
         if( SFX_ITEM_SET == rFmt.GetItemState( RES_CHAIN, FALSE,
@@ -1519,7 +1519,7 @@ SwRegHistory::SwRegHistory( SwTxtNode* pTxtNode, const SfxItemSet& rSet,
     if( !rSet.Count() )
         return;
 
-    register BOOL bInsert;
+    BOOL bInsert;
 
     if( pTxtNode->GetpSwpHints() && pHst )
     {
@@ -1539,8 +1539,6 @@ SwRegHistory::SwRegHistory( SwTxtNode* pTxtNode, const SfxItemSet& rSet,
     {
         SwHstryHint* pNewHstr = new SwHstryResetAttrSet( rSet,
                                     pTxtNode->GetIndex(), nStart, nEnd );
-        // !!! ----                     /|\
-        // !!! ----                    /|||\
         // der NodeIndex kann verschoben sein !!
 
         pHst->Insert( pNewHstr, pHst->Count() );
