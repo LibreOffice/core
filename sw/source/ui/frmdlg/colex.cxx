@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colex.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:17:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:50:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,8 +104,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     {
         // Orientation und Size aus dem PageItem
         const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get( nWhich );
-        Size aSize( rSize.GetSize() );
-        SetSize( aSize );
+        SetSize( rSize.GetSize() );
     }
     nWhich = RES_LR_SPACE;
     if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
@@ -317,6 +316,7 @@ void SwColExample::DrawPage( const Point& rOrg,
                         aUp.Y() += nLength / 2;
                         aDown.Y() -= nLength / 2;
                     break;
+                    default:; // prevent warning
                 }
             }
 
@@ -344,23 +344,22 @@ void SwColExample::DrawPage( const Point& rOrg,
 
 SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) :
     Window(pParent, rResId),
-    aFrmSize(1,1)
+    m_aFrmSize(1,1)
 {
     SetMapMode( MapMode( MAP_TWIP ) );
-    aWinSize = GetOutputSizePixel();
-    aWinSize.Height() -= 4;
-    aWinSize.Width() -= 4;
+    m_aWinSize = GetOutputSizePixel();
+    m_aWinSize.Height() -= 4;
+    m_aWinSize.Width() -= 4;
 
-    aWinSize = PixelToLogic( aWinSize );
+    m_aWinSize = PixelToLogic( m_aWinSize );
 
     SetBorderStyle( WINDOW_BORDER_MONO );
 
-    aFrmSize  = Size(11907, 16433);// DIN A4
-    ::FitToActualSize(aCols, (USHORT)aFrmSize.Width());
+    m_aFrmSize  = Size(11907, 16433);// DIN A4
+    ::FitToActualSize(m_aCols, (USHORT)m_aFrmSize.Width());
 
-    long nWidth = aFrmSize.Width();
-    long nHeight = aFrmSize.Height();
-    Fraction aScale( aWinSize.Height(), nHeight );
+    long nHeight = m_aFrmSize.Height();
+    Fraction aScale( m_aWinSize.Height(), nHeight );
     MapMode aMapMode( GetMapMode() );
     aMapMode.SetScaleX( aScale );
     aMapMode.SetScaleY( aScale );
@@ -372,7 +371,7 @@ SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) 
 --------------------------------------------------*/
 
 
-void SwColumnOnlyExample::Paint( const Rectangle& rRect )
+void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const Color& rFieldColor = rStyleSettings.GetFieldColor();
@@ -389,9 +388,9 @@ void SwColumnOnlyExample::Paint( const Rectangle& rRect )
     DrawRect(aCompleteRect);
 
     SetLineColor( rFieldTextColor );
-    Point aTL(  (aLogSize.Width() - aFrmSize.Width()) / 2,
-                (aLogSize.Height() - aFrmSize.Height()) / 2);
-    Rectangle aRect(aTL, aFrmSize);
+    Point aTL(  (aLogSize.Width() - m_aFrmSize.Width()) / 2,
+                (aLogSize.Height() - m_aFrmSize.Height()) / 2);
+    Rectangle aRect(aTL, m_aFrmSize);
 
     //draw a shadow rectangle
     SetFillColor( Color(COL_GRAY) );
@@ -409,15 +408,15 @@ void SwColumnOnlyExample::Paint( const Rectangle& rRect )
     Point aUp( aTL );
     Point aDown( aTL.X(), nLength );
     BOOL bLines = FALSE;
-    if(aCols.GetLineAdj() != COLADJ_NONE)
+    if(m_aCols.GetLineAdj() != COLADJ_NONE)
     {
         bLines = TRUE;
 
-        USHORT nPercent = aCols.GetLineHeight();
+        USHORT nPercent = m_aCols.GetLineHeight();
         if( nPercent != 100 )
         {
             nLength -= nLength * nPercent / 100;
-            switch(aCols.GetLineAdj())
+            switch(m_aCols.GetLineAdj())
             {
                 case COLADJ_BOTTOM: aUp.Y() += nLength; break;
                 case COLADJ_TOP: aDown.Y() -= nLength; break;
@@ -425,17 +424,18 @@ void SwColumnOnlyExample::Paint( const Rectangle& rRect )
                         aUp.Y() += nLength / 2;
                         aDown.Y() -= nLength / 2;
                 break;
+                default:; //prevent warning
             }
         }
 
     }
-    const SwColumns& rCols = aCols.GetColumns();
+    const SwColumns& rCols = m_aCols.GetColumns();
     USHORT nColCount = rCols.Count();
     if( nColCount )
     {
         DrawRect(aRect);
         SetFillColor( rFieldColor );
-        Rectangle aFrmRect(aTL, aFrmSize);
+        Rectangle aFrmRect(aTL, m_aFrmSize);
         long nSum = aTL.X();
         for(USHORT i = 0; i < nColCount; i++)
         {
@@ -466,10 +466,10 @@ void SwColumnOnlyExample::Paint( const Rectangle& rRect )
 
 void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
 {
-    aCols = rCol;
-    USHORT nWishSum = aCols.GetWishWidth();
-    long nFrmWidth = aFrmSize.Width();
-    SwColumns& rCols = aCols.GetColumns();
+    m_aCols = rCol;
+    USHORT nWishSum = m_aCols.GetWishWidth();
+    long nFrmWidth = m_aFrmSize.Width();
+    SwColumns& rCols = m_aCols.GetColumns();
     USHORT nColCount = rCols.Count();
 
     for(USHORT i = 0; i < nColCount; i++)
@@ -489,7 +489,7 @@ void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
         pCol->SetRight((USHORT)nRight);
     }
     // #97495# make sure that the automatic column width's are always equal
-    if(nColCount && aCols.IsOrtho())
+    if(nColCount && m_aCols.IsOrtho())
     {
         sal_Int32 nColumnWidthSum = 0;
         USHORT i;
@@ -503,7 +503,7 @@ void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
         for(i = 0; i < nColCount; ++i)
         {
             SwColumn* pCol = rCols[i];
-            pCol->SetWishWidth(nColumnWidthSum + pCol->GetRight() + pCol->GetLeft());
+            pCol->SetWishWidth( static_cast< USHORT >(nColumnWidthSum + pCol->GetRight() + pCol->GetLeft()));
         }
     }
 }
@@ -576,13 +576,13 @@ void SwPageGridExample::DrawPage( const Point& rOrg,
         // determine start position
         if(m_bVertical)
         {
-            sal_Int16 nXStart = aRect.GetWidth() / 2 - nLineHeight * nLines /2;
+            sal_Int16 nXStart = static_cast< sal_Int16 >(aRect.GetWidth() / 2 - nLineHeight * nLines /2);
             aRubyRect.Move(nXStart, 0);
             aCharRect.Move(nXStart, 0);
         }
         else
         {
-            sal_Int16 nYStart = aRect.GetHeight() / 2 - nLineHeight * nLines /2;
+            sal_Int16 nYStart = static_cast< sal_Int16 >(aRect.GetHeight() / 2 - nLineHeight * nLines /2);
             aRubyRect.Move(0, nYStart);
             aCharRect.Move(0, nYStart);
         }
