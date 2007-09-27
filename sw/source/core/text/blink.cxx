@@ -4,9 +4,9 @@
  *
  *  $RCSfile: blink.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:33:25 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:11:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ SwBlink::~SwBlink( )
  * invalidieren.
  *************************************************************************/
 
-IMPL_LINK( SwBlink, Blinker, Timer *, pTimer )
+IMPL_LINK( SwBlink, Blinker, Timer *, EMPTYARG )
 {
     bVisible = !bVisible;
     if( bVisible )
