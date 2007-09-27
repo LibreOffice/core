@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acmplwrd.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:49:05 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:32:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,7 @@ SwAutoCompleteClient::SwAutoCompleteClient(SwAutoCompleteWord& rToTell, SwDoc& r
 
  ---------------------------------------------------------------------------*/
 SwAutoCompleteClient::SwAutoCompleteClient(const SwAutoCompleteClient& rClient) :
+    SwClient(),
     pAutoCompleteWord(rClient.pAutoCompleteWord),
     pDoc(rClient.pDoc)
 {
@@ -193,7 +194,7 @@ SwAutoCompleteClient& SwAutoCompleteClient::operator=(const SwAutoCompleteClient
 /* -----------------------------05.08.2002 12:49------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwAutoCompleteClient::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwAutoCompleteClient::Modify(SfxPoolItem *pOld, SfxPoolItem *)
 {
     switch( pOld ? pOld->Which() : 0 )
     {
