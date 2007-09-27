@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drpcps.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:33:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:19:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,9 +107,10 @@
 #include "drpcps.hrc"
 
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-//using namespace ::com::sun::star::i18n;   !using this namespace leads to mysterious conflicts with ScriptType::...!
+//using namespace i18n; !using this namespace leads to mysterious conflicts with ScriptType::...!
 //                                              so don't use this instead of the following defines!
 
 #define I18N                ::com::sun::star::i18n
@@ -277,7 +278,6 @@ void SwDropCapsPict::UpdatePaintSettings( void )
             pPage->rSh.SttCrsrMove();
             pPage->rSh.Push();
             pPage->rSh.ClearMark();
-            //CHINA001 pPage->rSh.MovePara(fnParaCurr,fnParaStart);
             SwWhichPara pSwuifnParaCurr = GetfnParaCurr();
             SwPosPara pSwuifnParaStart = GetfnParaStart();
             pPage->rSh.MovePara(pSwuifnParaCurr,pSwuifnParaStart);
@@ -345,7 +345,7 @@ void SwDropCapsPict::UpdatePaintSettings( void )
 Pict: Paint-Overload
 ****************************************************************************/
 
-void  SwDropCapsPict::Paint(const Rectangle &rRect)
+void  SwDropCapsPict::Paint(const Rectangle &/*rRect*/)
 {
     if (!IsVisible())
         return;
@@ -575,9 +575,9 @@ SwDropCapsDlg::SwDropCapsDlg(Window *pParent, const SfxItemSet &rSet ) :
     SfxSingleTabDialog(pParent, rSet, 0)
 
 {
-    SwDropCapsPage* pPage = (SwDropCapsPage*) SwDropCapsPage::Create(this, rSet);
-    pPage->SetFormat(FALSE);
-    SetTabPage(pPage);
+    SwDropCapsPage* pNewPage = (SwDropCapsPage*) SwDropCapsPage::Create(this, rSet);
+    pNewPage->SetFormat(FALSE);
+    SetTabPage(pNewPage);
 }
 
 /****************************************************************************
@@ -606,13 +606,16 @@ SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet) :
     aLinesField   (this, SW_RES(FLD_LINES   )),
     aDistanceText (this, SW_RES(TXT_DISTANCE)),
     aDistanceField(this, SW_RES(FLD_DISTANCE)),
+    aSettingsFL   (this, SW_RES(FL_SETTINGS)),
+
     aTextText     (this, SW_RES(TXT_TEXT    )),
     aTextEdit     (this, SW_RES(EDT_TEXT    )),
     aTemplateText (this, SW_RES(TXT_TEMPLATE)),
     aTemplateBox  (this, SW_RES(BOX_TEMPLATE)),
-    aSettingsFL   (this, SW_RES(FL_SETTINGS)),
     aContentFL    (this, SW_RES(FL_CONTENT )),
+
     pPict         (new SwDropCapsPict(this, SW_RES(CNT_PICT))),
+
     bModified(FALSE),
     bFormat(TRUE),
     rSh(::GetActiveView()->GetWrtShell())
@@ -654,10 +657,10 @@ Page: Dtor
 }
 
 
-int  SwDropCapsPage::DeactivatePage(SfxItemSet * pSet)
+int  SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
 {
-    if ( pSet )
-        FillSet( *pSet );
+    if ( _pSet )
+        FillSet( *_pSet );
 
     return LEAVE_PAGE;
 }
@@ -907,7 +910,7 @@ void SwDropCapsPage::FillSet( SfxItemSet &rSet )
             String sText(aTextEdit.GetText());
 
             if (!aWholeWordCB.IsChecked())
-                sText.Erase(aDropCapsField.GetValue());
+                sText.Erase( static_cast< xub_StrLen >(aDropCapsField.GetValue()));
 
             SfxStringItem aStr(FN_PARAM_1, sText);
             rSet.Put( aStr );
