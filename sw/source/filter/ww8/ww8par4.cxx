@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:53:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:05:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,7 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     SwFlyFrmFmt *pRet = 0;
 
     SfxItemSet *pMathFlySet = 0;
-    com::sun::star::uno::Reference < com::sun::star::embed::XClassifiedObject > xClass( rObject.GetObjRef(), com::sun::star::uno::UNO_QUERY );
+    uno::Reference < embed::XClassifiedObject > xClass( rObject.GetObjRef(), uno::UNO_QUERY );
     if( xClass.is() )
     {
         SvGlobalName aClassName( xClass->getClassID() );
@@ -371,7 +371,7 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
 
         pTempSet->Put( SwFmtFrmSize( ATT_FIX_SIZE, aSizeTwip.Width(),
             aSizeTwip.Height() ) );
-        pTempSet->Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ));
+        pTempSet->Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
 
         if( pSFlyPara )
         {
@@ -548,7 +548,7 @@ void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
     WW8ReadSTTBF( !bVer67, rStrm, nTblPos, nTblSiz, bVer67 ? 2 : 0,
         eStructCharSet, aAuthorNames );
 
-    USHORT nCount = aAuthorNames.size();
+    USHORT nCount = static_cast< USHORT >(aAuthorNames.size());
     for( USHORT nAuthor = 0; nAuthor < nCount; ++nAuthor )
     {
         // Store author in doc
@@ -566,7 +566,7 @@ void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
    Revision Marks ( == Redlining )
 */
 // insert or delete content (change char attributes resp.)
-void SwWW8ImplReader::Read_CRevisionMark(IDocumentRedlineAccess::RedlineType_t eType,
+void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
     const BYTE* pData, short nLen )
 {
     // there *must* be a SprmCIbstRMark[Del] and a SprmCDttmRMark[Del]
@@ -575,7 +575,7 @@ void SwWW8ImplReader::Read_CRevisionMark(IDocumentRedlineAccess::RedlineType_t e
         return;
     const BYTE* pSprmCIbstRMark;
     const BYTE* pSprmCDttmRMark;
-    if( IDocumentRedlineAccess::REDLINE_FORMAT == eType )
+    if( nsRedlineType_t::REDLINE_FORMAT == eType )
     {
         pSprmCIbstRMark = pData+1;
         pSprmCDttmRMark = pData+3;
@@ -589,7 +589,7 @@ void SwWW8ImplReader::Read_CRevisionMark(IDocumentRedlineAccess::RedlineType_t e
          list" varient of HasCharSprm and take the last one as the true one.
         */
         std::vector<const BYTE *> aResult;
-        bool bIns = (IDocumentRedlineAccess::REDLINE_INSERT == eType);
+        bool bIns = (nsRedlineType_t::REDLINE_INSERT == eType);
         if( bVer67 )
         {
             pPlcxMan->HasCharSprm(69, aResult);
@@ -634,13 +634,13 @@ void SwWW8ImplReader::Read_CRevisionMark(IDocumentRedlineAccess::RedlineType_t e
 // insert new content
 void SwWW8ImplReader::Read_CFRMark(USHORT , const BYTE* pData, short nLen)
 {
-    Read_CRevisionMark( IDocumentRedlineAccess::REDLINE_INSERT, pData, nLen );
+    Read_CRevisionMark( nsRedlineType_t::REDLINE_INSERT, pData, nLen );
 }
 
 // delete old content
 void SwWW8ImplReader::Read_CFRMarkDel(USHORT , const BYTE* pData, short nLen)
 {
-    Read_CRevisionMark( IDocumentRedlineAccess::REDLINE_DELETE, pData, nLen );
+    Read_CRevisionMark( nsRedlineType_t::REDLINE_DELETE, pData, nLen );
 }
 
 // change properties of content ( == char formating)
@@ -650,7 +650,7 @@ void SwWW8ImplReader::Read_CPropRMark(USHORT , const BYTE* pData, short nLen)
     // 1 byte  - chp.fPropRMark
     // 2 bytes - chp.ibstPropRMark
     // 4 bytes - chp.dttmPropRMark;
-    Read_CRevisionMark( IDocumentRedlineAccess::REDLINE_FORMAT, pData, nLen );
+    Read_CRevisionMark( nsRedlineType_t::REDLINE_FORMAT, pData, nLen );
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
