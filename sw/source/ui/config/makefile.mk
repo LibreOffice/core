@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2006-06-02 12:50:09 $
+#   last change: $Author: hr $ $Date: 2007-09-27 10:22:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,11 @@ SRC1FILES =	\
         optcomp.src \
         redlopt.src
 
+EXCEPTIONSFILES = \
+        $(SLO)$/mailconfigpage.obj \
+        $(SLO)$/optcomp.obj \
+        $(SLO)$/optload.obj
+
 SLOFILES =	\
         $(EXCEPTIONSFILES) \
         $(SLO)$/barcfg.obj \
@@ -64,17 +69,12 @@ SLOFILES =	\
         $(SLO)$/dbconfig.obj \
         $(SLO)$/fontcfg.obj \
         $(SLO)$/modcfg.obj \
-        $(SLO)$/optload.obj \
-        $(SLO)$/optcomp.obj \
         $(SLO)$/optpage.obj \
         $(SLO)$/prtopt.obj \
         $(SLO)$/uinums.obj \
         $(SLO)$/usrpref.obj \
         $(SLO)$/viewopt.obj \
         $(SLO)$/swlinguconfig.obj
-
-EXCEPTIONSFILES= \
-        $(SLO)$/mailconfigpage.obj 
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
