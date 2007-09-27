@@ -73,7 +73,14 @@
 #include "filter/DocumentCollector.hxx"
 #include "stream/WPXSvStream.h"
 
+#if defined _MSC_VER
+#pragma warning( push, 1 )
+#endif
 #include <libwpd/WPDocument.h>
+#if defined _MSC_VER
+#pragma warning( pop )
+#endif
+
 #include "WordPerfectCollector.hxx"
 #include "WordPerfectImportFilter.hxx"
 
