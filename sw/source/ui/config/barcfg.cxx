@@ -4,9 +4,9 @@
  *
  *  $RCSfile: barcfg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:14:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:21:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,11 +52,12 @@
 #endif
 #include "barcfg.hxx"
 
+#include <unomid.h>
+
 using namespace utl;
 using namespace rtl;
-using namespace com::sun::star::uno;
+using namespace ::com::sun::star::uno;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
 
 #define SEL_TYPE_TABLE_TEXT     0
 #define SEL_TYPE_LIST_TEXT      1
@@ -72,7 +73,7 @@ SwToolbarConfigItem::SwToolbarConfigItem( BOOL bWeb ) :
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
 {
     for(USHORT i = 0; i <= SEL_TYPE_GRAPHIC; i++ )
-        aTbxIdArray[i] = (USHORT)-1;
+        aTbxIdArray[i] = -1;
 
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -86,7 +87,7 @@ SwToolbarConfigItem::SwToolbarConfigItem( BOOL bWeb ) :
             {
                 sal_Int32 nVal;
                 pValues[nProp] >>= nVal;
-                aTbxIdArray[nProp] = (sal_uInt16)nVal;
+                aTbxIdArray[nProp] = nVal;
             }
         }
     }
@@ -103,25 +104,25 @@ SwToolbarConfigItem::~SwToolbarConfigItem()
 sal_Int32 lcl_getArrayIndex(int nSelType)
 {
     sal_Int32 nRet = -1;
-    if(nSelType & SwWrtShell::SEL_NUM)
+    if(nSelType & nsSelectionType::SEL_NUM)
     {
-        if(nSelType & SwWrtShell::SEL_TBL)
+        if(nSelType & nsSelectionType::SEL_TBL)
             nRet = SEL_TYPE_TABLE_LIST;
         else
             nRet = SEL_TYPE_LIST_TEXT;
     }
-    else if(nSelType & SwWrtShell::SEL_TBL)
+    else if(nSelType & nsSelectionType::SEL_TBL)
         nRet = SEL_TYPE_TABLE_TEXT;
-    else if(nSelType & SwWrtShell::SEL_BEZ)
+    else if(nSelType & nsSelectionType::SEL_BEZ)
         nRet = SEL_TYPE_BEZIER;
-    else if(nSelType & SwWrtShell::SEL_GRF)
+    else if(nSelType & nsSelectionType::SEL_GRF)
         nRet = SEL_TYPE_GRAPHIC;
     return nRet;
 }
 /* -----------------------------10.10.00 14:38--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwToolbarConfigItem::SetTopToolbar( sal_Int32 nSelType, USHORT nBarId )
+void SwToolbarConfigItem::SetTopToolbar( sal_Int32 nSelType, sal_Int32 nBarId )
 {
     sal_Int32 nProp = lcl_getArrayIndex(nSelType);
     if(nProp >= 0)
@@ -157,13 +158,11 @@ void SwToolbarConfigItem::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
 
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
-        pValues[nProp] <<= (sal_Int32) (aTbxIdArray[nProp] == 0xffff ? -1 : aTbxIdArray[nProp]);
+        pValues[nProp] <<= aTbxIdArray[nProp];
     PutProperties(aNames, aValues);
 }
 
