@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortopt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:58:00 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:39:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,8 +64,8 @@ SwSortKey::SwSortKey() :
 }
 
 SwSortKey::SwSortKey(USHORT nId, const String& rSrtType, SwSortOrder eOrder) :
-    eSortOrder( eOrder ),
     sSortType( rSrtType ),
+    eSortOrder( eOrder ),
     nColumnId( nId ),
     bIsNumeric( 0 == rSrtType.Len() )
 {
@@ -73,8 +73,8 @@ SwSortKey::SwSortKey(USHORT nId, const String& rSrtType, SwSortOrder eOrder) :
 
 
 SwSortKey::SwSortKey(const SwSortKey& rOld) :
-    eSortOrder( rOld.eSortOrder ),
     sSortType( rOld.sSortType ),
+    eSortOrder( rOld.eSortOrder ),
     nColumnId( rOld.nColumnId ),
     bIsNumeric( rOld.bIsNumeric )
 {
@@ -87,8 +87,8 @@ SwSortKey::SwSortKey(const SwSortKey& rOld) :
 
 SwSortOptions::SwSortOptions()
     : eDirection( SRT_ROWS ),
-    nLanguage( LANGUAGE_SYSTEM ),
     cDeli( 9 ),
+    nLanguage( LANGUAGE_SYSTEM ),
     bTable( FALSE ),
     bIgnoreCase( FALSE )
 {
