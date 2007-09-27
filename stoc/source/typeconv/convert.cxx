@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:37:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:05:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,42 @@ using namespace osl;
 #define IMPLNAME    "com.sun.star.comp.stoc.TypeConverter"
 
 
+extern rtl_StandardModuleCount g_moduleCount;
+
+namespace stoc_services
+{
+Sequence< OUString > tcv_getSupportedServiceNames()
+{
+    static Sequence < OUString > *pNames = 0;
+    if( ! pNames )
+    {
+    MutexGuard guard( Mutex::getGlobalMutex() );
+    if( !pNames )
+    {
+        static Sequence< OUString > seqNames(1);
+        seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
+        pNames = &seqNames;
+    }
+    }
+    return *pNames;
+}
+
+OUString tcv_getImplementationName()
+{
+    static OUString *pImplName = 0;
+    if( ! pImplName )
+    {
+    MutexGuard guard( Mutex::getGlobalMutex() );
+    if( ! pImplName )
+    {
+        static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
+        pImplName = &implName;
+    }
+    }
+    return *pImplName;
+}
+}
+
 namespace stoc_tcv
 {
 
@@ -100,39 +136,6 @@ static inline double unsigned_int64_to_double( sal_uInt64 n ) SAL_THROW( () )
 }
 #endif
 
-
-static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-
-static Sequence< OUString > tcv_getSupportedServiceNames()
-{
-    static Sequence < OUString > *pNames = 0;
-    if( ! pNames )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( !pNames )
-        {
-            static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICENAME));
-            pNames = &seqNames;
-        }
-    }
-    return *pNames;
-}
-
-static OUString tcv_getImplementationName()
-{
-    static OUString *pImplName = 0;
-    if( ! pImplName )
-    {
-        MutexGuard guard( Mutex::getGlobalMutex() );
-        if( ! pImplName )
-        {
-            static OUString implName( RTL_CONSTASCII_USTRINGPARAM( IMPLNAME ) );
-            pImplName = &implName;
-        }
-    }
-    return *pImplName;
-}
 
 //--------------------------------------------------------------------------------------------------
 static inline double round( double aVal )
@@ -331,7 +334,7 @@ TypeConverter_Impl::~TypeConverter_Impl()
 // XServiceInfo
 OUString TypeConverter_Impl::getImplementationName() throw( RuntimeException )
 {
-    return tcv_getImplementationName();
+    return stoc_services::tcv_getImplementationName();
 }
 
 // XServiceInfo
@@ -348,7 +351,7 @@ sal_Bool TypeConverter_Impl::supportsService(const OUString& ServiceName) throw(
 // XServiceInfo
 Sequence< OUString > TypeConverter_Impl::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    return tcv_getSupportedServiceNames();
+    return stoc_services::tcv_getSupportedServiceNames();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -952,57 +955,17 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         OUString( RTL_CONSTASCII_USTRINGPARAM("conversion not possible!") ),
         Reference< XInterface >(), aDestinationClass, FailReason::INVALID, 0 );
 }
+}
 
+namespace stoc_services
+{
 //*************************************************************************
 Reference< XInterface > SAL_CALL TypeConverter_Impl_CreateInstance(
     const Reference< XComponentContext > & )
     throw( RuntimeException )
 {
-    static Reference< XInterface > s_ref( (OWeakObject *) new TypeConverter_Impl() );
+    static Reference< XInterface > s_ref( (OWeakObject *) new stoc_tcv::TypeConverter_Impl() );
     return s_ref;
 }
-
 }
 
-
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
-using namespace stoc_tcv;
-
-static struct ImplementationEntry g_entries[] =
-{
-    {
-        TypeConverter_Impl_CreateInstance, tcv_getImplementationName,
-        tcv_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt , 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
-extern "C"
-{
-sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
-{
-    return g_moduleCount.canUnload( &g_moduleCount , pTime );
-}
-
-//==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
-}
-//==================================================================================================
-void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
-}
-}
