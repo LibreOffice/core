@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:27:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:36:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,8 @@ using namespace ::rtl;
 
 #include <IDocumentSettingAccess.hxx>
 
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
+#include <unomid.h>
+
 
 SFX_IMPL_VIEWFACTORY(SwView, SW_RES(STR_NONAME))
 {
@@ -326,7 +327,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case FN_VIEW_SMOOTH_SCROLL:
                 aBool.SetValue( pOpt->IsSmoothScroll()); break;
             case FN_VLINEAL:
-                aBool.SetValue( StatVLineal() ); break;
+                aBool.SetValue( 0 != StatVLineal() ); break;
             case FN_HSCROLLBAR:
                 if(bBrowse)
                 {
@@ -385,7 +386,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         eState = bSet ? STATE_ON : STATE_OFF;
     }
 
-    int bFlag = STATE_ON == eState;
+    BOOL bFlag = STATE_ON == eState;
     uno::Reference< beans::XPropertySet >  xLngProp( ::GetLinguPropertySet() );
 
     switch ( nSlot )
