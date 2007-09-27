@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:40:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:20:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ sal_Bool lcl_IsInBody( SwFrm *pFrm )
 SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                                                 const SwTxtAttr *pHint ) const
 {
-    SwExpandPortion *pRet;
+    SwExpandPortion *pRet = 0;
     SwFrm *pFrame = (SwFrm*)pFrm;
     SwField *pFld = (SwField*)pHint->GetFld().GetFld();
     const sal_Bool bName = rInf.GetOpt().IsFldName();
@@ -354,7 +354,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
     // hat ein "gueltige" Nummer ?
     if( pTxtNd->IsNumbered() && pTxtNd->IsCounted())
     {
-        CONST SwNumFmt &rNumFmt = pNumRule->Get( pTxtNd->GetLevel() );
+        const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<USHORT>(pTxtNd->GetLevel()) );
         const sal_Bool bLeft = SVX_ADJUST_LEFT == rNumFmt.GetNumAdjust();
         const sal_Bool bCenter = SVX_ADJUST_CENTER == rNumFmt.GetNumAdjust();
         const KSHORT nMinDist = rNumFmt.GetCharTextDistance();
