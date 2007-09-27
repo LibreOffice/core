@@ -4,9 +4,9 @@
  *
  *  $RCSfile: possiz.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:03:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:19:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,8 @@ class SwPosSize
     KSHORT nWidth;
     KSHORT nHeight;
 public:
-    inline SwPosSize( const KSHORT nWidth = 0, const KSHORT nHeight = 0 )
-        : nWidth(nWidth), nHeight(nHeight) { }
+    inline SwPosSize( const KSHORT nW = 0, const KSHORT nH = 0 )
+        : nWidth(nW), nHeight(nH) { }
     inline SwPosSize( const Size &rSize )
         : nWidth(KSHORT(rSize.Width())), nHeight(KSHORT(rSize.Height())){ }
     inline KSHORT Height() const { return nHeight; }
@@ -59,16 +59,9 @@ public:
     inline Size SvLSize() const { return Size( nWidth, nHeight ); }
     inline void SvLSize( const Size &rSize );
     inline void SvXSize( const Size &rSize );
-    inline sal_Bool operator==( const SwPosSize &rSize ) const;
     inline SwPosSize &operator=( const SwPosSize &rSize );
     inline SwPosSize &operator=( const Size &rSize );
 };
-
-inline sal_Bool SwPosSize::operator==(const SwPosSize &rSize ) const
-{
-    return( Height() == rSize.Height() &&
-            Width() == rSize.Width() );
-}
 
 inline SwPosSize &SwPosSize::operator=(const SwPosSize &rSize )
 {
