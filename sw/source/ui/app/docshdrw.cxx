@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshdrw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:13:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:16:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,8 @@
 #include <doc.hxx>
 #endif
 
+using namespace ::com::sun::star;
+
 /*--------------------------------------------------------------------
     Beschreibung: Document laden
  --------------------------------------------------------------------*/
@@ -93,7 +95,7 @@ void  SwDocShell::InitDraw()
         PutItem( SvxLineEndListItem( pDrDoc->GetLineEndList(), SID_LINEEND_LIST ) );
 
         Outliner& rOutliner = pDrDoc->GetDrawOutliner();
-        com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenator> xHyphenator( ::GetHyphenator() );
+        uno::Reference<linguistic2::XHyphenator> xHyphenator( ::GetHyphenator() );
         rOutliner.SetHyphenator( xHyphenator );
     }
     else
