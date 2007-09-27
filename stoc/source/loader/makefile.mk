@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:48:43 $
+#   last change: $Author: hr $ $Date: 2007-09-27 12:59:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,38 +34,20 @@
 #*************************************************************************
 PRJ=..$/..
 
-PRJNAME=	stoc
-TARGET = shlibloader.uno
+PRJNAME= stoc
+TARGET = shlibloader
 ENABLE_EXCEPTIONS=TRUE
 BOOTSTRAP_SERVICE=TRUE
-COMP1TYPELIST = cpld
+UNOUCROUT= $(OUT)$/inc$/bootstrap
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-DLLPRE =
 
 # ------------------------------------------------------------------
 
-.INCLUDE :  ..$/cppumaker.mk
-
 SLOFILES= \
         $(SLO)$/dllcomponentloader.obj
-
-SHL1TARGET=	$(TARGET)
-
-SHL1STDLIBS= \
-        $(CPPULIB)		\
-        $(CPPUHELPERLIB)	\
-        $(SALLIB)
-
-SHL1VERSIONMAP = cpld.map
-SHL1DEPN=
-SHL1IMPLIB=	i$(TARGET)
-SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=	$(SHL1TARGET)
 
 # --- Targets ------------------------------------------------------
 
