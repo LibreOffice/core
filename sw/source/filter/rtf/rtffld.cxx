@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:06:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:54:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,12 +220,12 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
         int nLen = *pCmp++;
         xub_StrLen nFndPos = sNm.SearchAscii( pCmp );
         if( STRING_NOTFOUND != nFndPos &&
-            ( !nFndPos || !isalpha(sNm.GetChar( nFndPos-1 )) ) &&
-            ( nFndPos+nLen == sNm.Len() || !isalpha(sNm.GetChar(nFndPos+nLen) ) ) )
+            ( !nFndPos || !isalpha(sNm.GetChar( static_cast< xub_StrLen >(nFndPos-1) )) ) &&
+            ( nFndPos+nLen == sNm.Len() || !isalpha(sNm.GetChar( static_cast< xub_StrLen >(nFndPos+nLen) ) ) ) )
         {
 //          rName = sNm.Copy( nFndPos, nLen );
-            rName = rName.Copy( nFndPos, nLen );
-            nFndPos += nTokenStt + nLen;
+            rName = rName.Copy( nFndPos, static_cast< xub_StrLen >(nLen) );
+            nFndPos += nTokenStt + static_cast< xub_StrLen >(nLen);
             while( rNext.GetChar( nFndPos ) == ' ' )    ++nFndPos;
             rNext.Erase( 0, nFndPos );
             rNext.EraseTrailingChars();
@@ -256,8 +256,8 @@ static USHORT CheckNumberFmtStr( const String& rNStr )
     {
         const sal_Char* pCmp = aNumberTypeTab[n - SVX_NUM_CHARS_UPPER_LETTER];
         int nLen = *pCmp++;
-        if( rNStr.EqualsAscii( pCmp, 0, nLen ))
-            return 2 <= n ? n : (n + SVX_NUM_CHARS_UPPER_LETTER_N);
+        if( rNStr.EqualsAscii( pCmp, 0, static_cast< xub_StrLen >(nLen) ))
+            return static_cast< USHORT >(2 <= n ? n : (n + SVX_NUM_CHARS_UPPER_LETTER_N));
     }
     return SVX_NUM_PAGEDESC;        // default-Wert
 }
@@ -450,7 +450,6 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
     // sicher den Original-String fuer die FeldNamen (User/Datenbank)
     String aSaveStr( rFieldStr );
     SwFieldType * pFldType;
-    USHORT nSubType;
     int nRet = _WhichFld(rFieldStr, aSaveStr);
 
     //Strip Mergeformat from fields
@@ -558,15 +557,12 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 // #117892# M.M. Put the word date and time formatter stuff in a common area
                 // and get the rtf filter to use it
                 SwField *pFld = 0;
-                UINT16 nCheckPos = 0;
-                INT16  nType = NUMBERFORMAT_DEFINED;
-                ULONG  nKey = NUMBERFORMAT_UNDEFINED;
                 short nNumFmtType = NUMBERFORMAT_UNDEFINED;
                 ULONG nFmtIdx = NUMBERFORMAT_UNDEFINED;
 
                 USHORT rLang(0);
                 RES_CHRATR eLang = maPageDefaults.mbRTLdoc ? RES_CHRATR_CTL_LANGUAGE : RES_CHRATR_LANGUAGE;
-                const SvxLanguageItem *pLang = (SvxLanguageItem*)&pDoc->GetAttrPool().GetDefaultItem(eLang);
+                const SvxLanguageItem *pLang = (SvxLanguageItem*)&pDoc->GetAttrPool().GetDefaultItem( static_cast< USHORT >(eLang) );
                 rLang = pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
 
                 SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
@@ -775,7 +771,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     if (pBreakIt->xBreak.is())
                         nScript = pBreakIt->xBreak->getScriptType( aData.sUp, 0);
                     else
-                        nScript = com::sun::star::i18n::ScriptType::ASIAN;
+                        nScript = i18n::ScriptType::ASIAN;
 
                     USHORT nFntHWhich = GetWhichOfScript( RES_CHRATR_FONTSIZE, nScript ),
                            nFntWhich = GetWhichOfScript( RES_CHRATR_FONT, nScript );
@@ -788,9 +784,9 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                                                     pFmt->GetAttr( nFntHWhich );
                         if( rF.GetHeight() == USHORT(aData.nFontSize * 10 ))
                         {
-                            const SvxFontItem &rF = (const SvxFontItem &)
+                            const SvxFontItem &rFI = (const SvxFontItem &)
                                                     pFmt->GetAttr( nFntWhich );
-                            if( rF.GetFamilyName().Equals( aData.sFontName ))
+                            if( rFI.GetFamilyName().Equals( aData.sFontName ))
                             {
                                 pCharFmt = pFmt;
                                 break;
@@ -830,7 +826,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 pDoc->Insert( *pPam, aData.sText, true );
                 pPam->SetMark();
                 pPam->GetMark()->nContent -= aData.sText.Len();
-                pDoc->Insert( *pPam, aRuby, SETATTR_DONTEXPAND );
+                pDoc->Insert( *pPam, aRuby, nsSetAttrMode::SETATTR_DONTEXPAND );
                 pPam->DeleteMark();
             }
             // or a combined character field?
@@ -958,19 +954,18 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
 void SwRTFParser::ReadXEField()
 {
     bReadSwFly = false; //#it may be that any uses of this need to be removed and replaced
-    int nRet = 0;
-    int nOpenBrakets = 1;
+    int nNumOpenBrakets = 1;
     String sFieldStr;
     BYTE cCh;
 
     int nToken;
-    while (nOpenBrakets && IsParserWorking())
+    while (nNumOpenBrakets && IsParserWorking())
     {
         switch (nToken = GetNextToken())
         {
         case '}':
             {
-                --nOpenBrakets;
+                --nNumOpenBrakets;
 
                 if( sFieldStr.Len())
                 {
@@ -1011,7 +1006,7 @@ void SwRTFParser::ReadXEField()
                     eState = SVPAR_ERROR;
                 break;
             }
-            ++nOpenBrakets;
+            ++nNumOpenBrakets;
             break;
 
         case RTF_U:
@@ -1068,20 +1063,20 @@ void SwRTFParser::ReadField()
 {
     bReadSwFly = false; //#it may be that any uses of this need to be removed and replaced
     int nRet = 0;
-    int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt !!
+    int nNumOpenBrakets = 1;        // die erste wurde schon vorher erkannt !!
     int bFldInst = FALSE, bFldRslt = FALSE;
     String sFieldStr, sFieldNm;
     BYTE cCh;
 
     int nToken;
-    while (nOpenBrakets && IsParserWorking())
+    while (nNumOpenBrakets && IsParserWorking())
     {
         switch (nToken = GetNextToken())
         {
         case '}':
             {
-                --nOpenBrakets;
-                if( 1 != nOpenBrakets || !bFldInst )
+                --nNumOpenBrakets;
+                if( 1 != nNumOpenBrakets || !bFldInst )
                     break;
 
                 if( !bFldRslt )
@@ -1154,7 +1149,7 @@ void SwRTFParser::ReadField()
                             pPam->GetMark()->nContent -= sFieldStr.Len();
                             pDoc->Insert( *pPam,
                                             SwFmtINetFmt( sFieldNm, sTarget ),
-                                            SETATTR_DONTEXPAND );
+                                            nsSetAttrMode::SETATTR_DONTEXPAND );
                             pPam->DeleteMark();
 
                         }
@@ -1189,7 +1184,7 @@ void SwRTFParser::ReadField()
                     eState = SVPAR_ERROR;
                 break;
             }
-            ++nOpenBrakets;
+            ++nNumOpenBrakets;
             break;
 
         case RTF_DATAFIELD:
