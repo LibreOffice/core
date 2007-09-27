@@ -28,7 +28,13 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#if defined _MSC_VER
+#pragma warning( push, 1 )
+#endif
 #include <libwpd/libwpd.h>
+#if defined _MSC_VER
+#pragma warning( pop )
+#endif
 #include <string.h> // for strcmp
 
 #include "DocumentCollector.hxx"
