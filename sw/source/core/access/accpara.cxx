@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:34:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,17 +188,18 @@
 
 #include <algorithm>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::beans::XMultiPropertySet;
-using ::com::sun::star::beans::UnknownPropertyException;
-using ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
+using beans::PropertyValue;
+using beans::XMultiPropertySet;
+using beans::UnknownPropertyException;
+using beans::PropertyState_DIRECT_VALUE;
+
 using std::max;
 using std::min;
 using std::sort;
@@ -595,10 +596,9 @@ void SwAccessibleParagraph::_InvalidateFocus()
 }
 
 SwAccessibleParagraph::SwAccessibleParagraph(
-        SwAccessibleMap *pMap,
-        sal_Int32 nPara,
+        SwAccessibleMap* pInitMap,
         const SwTxtFrm *pTxtFrm ) :
-    SwAccessibleContext( pMap, AccessibleRole::PARAGRAPH, pTxtFrm ),
+    SwAccessibleContext( pInitMap, AccessibleRole::PARAGRAPH, pTxtFrm ),
     pPortionData( NULL ),
     pHyperTextData( NULL ),
     nOldCaretPos( -1 ),
@@ -630,7 +630,7 @@ sal_Bool SwAccessibleParagraph::HasCursor()
 }
 
 void SwAccessibleParagraph::UpdatePortionData()
-    throw( RuntimeException )
+    throw( uno::RuntimeException )
 {
     // obtain the text frame
     DBG_ASSERT( GetFrm() != NULL, "The text frame has vanished!" );
@@ -703,7 +703,7 @@ SwXTextPortion* SwAccessibleParagraph::CreateUnoPortion(
     pUnoCursor->GetMark()->nContent = nEnd;
 
     // create a (dummy) text portion to be returned
-    Reference<com::sun::star::text::XText> aEmpty;
+    uno::Reference<text::XText> aEmpty;
     SwXTextPortion* pPortion =
         new SwXTextPortion ( pUnoCursor, aEmpty, PORTION_TEXT);
     delete pUnoCursor;
@@ -742,7 +742,7 @@ sal_Bool SwAccessibleParagraph::IsValidRange(
 
 sal_Bool SwAccessibleParagraph::GetCharBoundary(
     Boundary& rBound,
-    const OUString& rText,
+    const OUString&,
     sal_Int32 nPos )
 {
     rBound.startPos = nPos;
@@ -791,7 +791,7 @@ sal_Bool SwAccessibleParagraph::GetWordBoundary(
 
 sal_Bool SwAccessibleParagraph::GetSentenceBoundary(
     Boundary& rBound,
-    const OUString& rText,
+    const OUString&,
     sal_Int32 nPos )
 {
     GetPortionData().GetSentenceBoundary( rBound, nPos );
@@ -813,7 +813,7 @@ sal_Bool SwAccessibleParagraph::GetLineBoundary(
 sal_Bool SwAccessibleParagraph::GetParagraphBoundary(
     Boundary& rBound,
     const OUString& rText,
-    sal_Int32 nPos )
+    sal_Int32 )
 {
     rBound.startPos = 0;
     rBound.endPos = rText.getLength();
@@ -822,7 +822,7 @@ sal_Bool SwAccessibleParagraph::GetParagraphBoundary(
 
 sal_Bool SwAccessibleParagraph::GetAttributeBoundary(
     Boundary& rBound,
-    const OUString& rText,
+    const OUString&,
     sal_Int32 nPos )
 {
     GetPortionData().GetAttributeBoundary( rBound, nPos );
@@ -877,7 +877,7 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
     throw (
         IndexOutOfBoundsException,
         IllegalArgumentException,
-        RuntimeException)
+        uno::RuntimeException)
 {
     // error checking
     if( !( AccessibleTextType::LINE == nTextType
@@ -919,14 +919,13 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
 
         default:
             throw IllegalArgumentException( );
-            break;
     }
 
     return bRet;
 }
 
 OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -940,7 +939,7 @@ OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription (void)
 }
 
 Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
-        throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException)
+        throw (IllegalAccessibleComponentStateException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -962,8 +961,8 @@ Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
 
     @author OD
 */
-Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccessibleRelationSet()
-    throw ( RuntimeException )
+uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccessibleRelationSet()
+    throw ( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC( XAccessibleContext );
@@ -978,7 +977,7 @@ Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccessibleR
         const SwCntntFrm* pPrevCntFrm( pTxtFrm->FindPrevCnt( true ) );
         if ( pPrevCntFrm )
         {
-            Sequence<Reference<XInterface> > aSequence(1);
+            uno::Sequence< uno::Reference<XInterface> > aSequence(1);
             aSequence[0] = GetMap()->GetContext( pPrevCntFrm );
             AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_FROM,
                                         aSequence );
@@ -988,7 +987,7 @@ Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccessibleR
         const SwCntntFrm* pNextCntFrm( pTxtFrm->FindNextCnt( true ) );
         if ( pNextCntFrm )
         {
-            Sequence<Reference<XInterface> > aSequence(1);
+            uno::Sequence< uno::Reference<XInterface> > aSequence(1);
             aSequence[0] = GetMap()->GetContext( pNextCntFrm );
             AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_TO,
                                         aSequence );
@@ -1000,7 +999,7 @@ Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccessibleR
 }
 
 void SAL_CALL SwAccessibleParagraph::grabFocus()
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1071,7 +1070,7 @@ bool lcl_GetBackgroundColor( Color & rColor,
 }
 
 sal_Int32 SAL_CALL SwAccessibleParagraph::getForeground()
-                                throw (::com::sun::star::uno::RuntimeException)
+                                throw (uno::RuntimeException)
 {
     Color aBackgroundCol;
 
@@ -1091,7 +1090,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getForeground()
 }
 
 sal_Int32 SAL_CALL SwAccessibleParagraph::getBackground()
-                                throw (::com::sun::star::uno::RuntimeException)
+                                throw (uno::RuntimeException)
 {
     Color aBackgroundCol;
 
@@ -1105,14 +1104,14 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getBackground()
 // <--
 
 OUString SAL_CALL SwAccessibleParagraph::getImplementationName()
-        throw( RuntimeException )
+        throw( uno::RuntimeException )
 {
     return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationName));
 }
 
 sal_Bool SAL_CALL SwAccessibleParagraph::supportsService(
         const ::rtl::OUString& sTestServiceName)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (uno::RuntimeException)
 {
     return sTestServiceName.equalsAsciiL( sServiceName,
                                           sizeof(sServiceName)-1 ) ||
@@ -1121,7 +1120,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::supportsService(
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException )
+        throw( uno::RuntimeException )
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -1182,31 +1181,31 @@ Any SwAccessibleParagraph::queryInterface( const Type& rType )
     throw (RuntimeException)
 {
     Any aRet;
-    if ( rType == ::getCppuType((Reference<XAccessibleText> *)0) )
+    if ( rType == ::getCppuType((uno::Reference<XAccessibleText> *)0) )
     {
-        Reference<XAccessibleText> aAccText = (XAccessibleText *) *this; // resolve ambiguity
+        uno::Reference<XAccessibleText> aAccText = (XAccessibleText *) *this; // resolve ambiguity
         aRet <<= aAccText;
     }
-    else if ( rType == ::getCppuType((Reference<XAccessibleEditableText> *)0) )
+    else if ( rType == ::getCppuType((uno::Reference<XAccessibleEditableText> *)0) )
     {
-        Reference<XAccessibleEditableText> aAccEditText = this;
+        uno::Reference<XAccessibleEditableText> aAccEditText = this;
         aRet <<= aAccEditText;
     }
-    else if ( rType == ::getCppuType((Reference<XAccessibleSelection> *)0) )
+    else if ( rType == ::getCppuType((uno::Reference<XAccessibleSelection> *)0) )
     {
-        Reference<XAccessibleSelection> aAccSel = this;
+        uno::Reference<XAccessibleSelection> aAccSel = this;
         aRet <<= aAccSel;
     }
-    else if ( rType == ::getCppuType((Reference<XAccessibleHypertext> *)0) )
+    else if ( rType == ::getCppuType((uno::Reference<XAccessibleHypertext> *)0) )
     {
-        Reference<XAccessibleHypertext> aAccHyp = this;
+        uno::Reference<XAccessibleHypertext> aAccHyp = this;
         aRet <<= aAccHyp;
     }
     // --> OD 2006-07-13 #i63870#
     // add interface com::sun:star:accessibility::XAccessibleTextAttributes
-    else if ( rType == ::getCppuType((Reference<XAccessibleTextAttributes> *)0) )
+    else if ( rType == ::getCppuType((uno::Reference<XAccessibleTextAttributes> *)0) )
     {
-        Reference<XAccessibleTextAttributes> aAccTextAttr = this;
+        uno::Reference<XAccessibleTextAttributes> aAccTextAttr = this;
         aRet <<= aAccTextAttr;
     }
     // <--
@@ -1225,14 +1224,14 @@ Sequence< Type > SAL_CALL SwAccessibleParagraph::getTypes() throw(RuntimeExcepti
 
     sal_Int32 nIndex = aTypes.getLength();
     // --> OD 2006-07-13 #i63870#
-    // add type com::sun::star::accessibility::XAccessibleTextAttributes
+    // add type accessibility::XAccessibleTextAttributes
     aTypes.realloc( nIndex + 4 );
 
     Type* pTypes = aTypes.getArray();
-    pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XAccessibleEditableText > * >( 0 ) );
-    pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XAccessibleTextAttributes > * >( 0 ) );
-    pTypes[nIndex++] = ::getCppuType( static_cast< Reference< XAccessibleSelection > * >( 0 ) );
-    pTypes[nIndex] = ::getCppuType( static_cast< Reference< XAccessibleHypertext > * >( 0 ) );
+    pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleEditableText > * >( 0 ) );
+    pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleTextAttributes > * >( 0 ) );
+    pTypes[nIndex++] = ::getCppuType( static_cast< uno::Reference< XAccessibleSelection > * >( 0 ) );
+    pTypes[nIndex] = ::getCppuType( static_cast< uno::Reference< XAccessibleHypertext > * >( 0 ) );
     // <--
 
     return aTypes;
@@ -1266,7 +1265,7 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
 
     sal_Int32 nRet = GetCaretPos();
     {
-        vos::OGuard aGuard( aMutex );
+        vos::OGuard aOldCaretPosGuard( aMutex );
         ASSERT( nRet == nOldCaretPos, "caret pos out of sync" );
         nOldCaretPos = nRet;
     }
@@ -1280,7 +1279,7 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
 }
 
 sal_Bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1313,7 +1312,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
 }
 
 sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1334,8 +1333,8 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
 // re-implement method on behalf of methods <_getDefaultAttributesImpl(..)> and
 // <_getRunAttributesImpl(..)>
 Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
-    sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    sal_Int32 nIndex, const uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
 
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1411,7 +1410,7 @@ Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
 
 // --> OD 2006-07-11 #i63870#
 void SwAccessibleParagraph::_getDefaultAttributesImpl(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
+        const uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
         tAccParaPropValMap& rDefAttrSeq,
         const bool bOnlyCharAttrs )
 {
@@ -1453,7 +1452,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
                     rPropVal.Name = OUString::createFromAscii( pPropMap->pName );
                     rPropVal.Value = aVal;
                     rPropVal.Handle = -1;
-                    rPropVal.State = ::com::sun::star::beans::PropertyState_DEFAULT_VALUE;
+                    rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
 
                     aDefAttrSeq[rPropVal.Name] = rPropVal;
                 }
@@ -1475,7 +1474,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
                     Any aVal( makeAny( OUString( pTxtNode->GetTxtColl()->GetName() ) ) );
                     rPropVal.Value = aVal;
                     rPropVal.Handle = -1;
-                    rPropVal.State = ::com::sun::star::beans::PropertyState_DEFAULT_VALUE;
+                    rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
 
                     aDefAttrSeq[rPropVal.Name] = rPropVal;
                 }
@@ -1483,7 +1482,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
             // <--
 
             // --> OD 2007-01-15 #i73371#
-            // resolve value css::WritingMode2::PAGE of property value entry WritingMode
+            // resolve value text::WritingMode2::PAGE of property value entry WritingMode
             if ( !bOnlyCharAttrs && GetFrm() )
             {
                 const OUString sWritingMode =
@@ -1495,7 +1494,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
                     PropertyValue rPropVal( (*aIter).second );
                     sal_Int16 nVal;
                     rPropVal.Value >>= nVal;
-                    if ( nVal == com::sun::star::text::WritingMode2::PAGE )
+                    if ( nVal == text::WritingMode2::PAGE )
                     {
                         const SwFrm* pUpperFrm( GetFrm()->GetUpper() );
                         while ( pUpperFrm )
@@ -1505,15 +1504,15 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
                             {
                                 if ( pUpperFrm->IsVertical() )
                                 {
-                                    nVal = com::sun::star::text::WritingMode2::TB_RL;
+                                    nVal = text::WritingMode2::TB_RL;
                                 }
                                 else if ( pUpperFrm->IsRightToLeft() )
                                 {
-                                    nVal = com::sun::star::text::WritingMode2::RL_TB;
+                                    nVal = text::WritingMode2::RL_TB;
                                 }
                                 else
                                 {
-                                    nVal = com::sun::star::text::WritingMode2::LR_TB;
+                                    nVal = text::WritingMode2::LR_TB;
                                 }
                                 rPropVal.Value <<= nVal;
                                 aDefAttrSeq[rPropVal.Name] = rPropVal;
@@ -1559,7 +1558,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
 
 Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
         const Sequence< ::rtl::OUString >& aRequestedAttributes )
-        throw ( RuntimeException )
+        throw ( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
@@ -1583,7 +1582,7 @@ Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
 
 void SwAccessibleParagraph::_getRunAttributesImpl(
         const sal_Int32 nIndex,
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
+        const uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
         tAccParaPropValMap& rRunAttrSeq )
 {
     // create PaM for character at position <nIndex>
@@ -1591,9 +1590,9 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     {
         const SwTxtNode* pTxtNode( GetTxtNode() );
         SwPosition* pStartPos = new SwPosition( *pTxtNode );
-        pStartPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), nIndex );
+        pStartPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), static_cast<USHORT>(nIndex) );
         SwPosition* pEndPos = new SwPosition( *pTxtNode );
-        pEndPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), nIndex+1 );
+        pEndPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), static_cast<USHORT>(nIndex+1) );
 
         pPaM = new SwPaM( *pStartPos, *pEndPos );
 
@@ -1661,7 +1660,7 @@ Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
         sal_Int32 nIndex,
         const Sequence< ::rtl::OUString >& aRequestedAttributes )
         throw ( IndexOutOfBoundsException,
-                RuntimeException )
+                uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
@@ -1692,9 +1691,9 @@ Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
 }
 // <--
 
-com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
+awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     sal_Int32 nIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1751,7 +1750,7 @@ com::sun::star::awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     aScreenRect.Move( -aFrmPixPos.X(), -aFrmPixPos.Y() );
 
     // convert into AWT Rectangle
-    return com::sun::star::awt::Rectangle(
+    return awt::Rectangle(
         aScreenRect.Left(), aScreenRect.Top(),
         aScreenRect.GetWidth(), aScreenRect.GetHeight() );
 }
@@ -1766,7 +1765,7 @@ sal_Int32 SwAccessibleParagraph::getCharacterCount()
     return GetString().getLength();
 }
 
-sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const com::sun::star::awt::Point& rPoint )
+sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1794,7 +1793,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const com::sun::star::awt::Poi
         /* #i12332# rPoint is may also be in rectangle returned by
             getCharacterBounds(getCharacterCount() */
 
-        com::sun::star::awt::Rectangle aRectEndPos =
+        awt::Rectangle aRectEndPos =
             getCharacterBounds(getCharacterCount());
 
         if (rPoint.X - aRectEndPos.X >= 0 &&
@@ -1856,7 +1855,7 @@ sal_Int32 SwAccessibleParagraph::getSelectionEnd()
 }
 
 sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1903,7 +1902,7 @@ OUString SwAccessibleParagraph::getText()
 
 OUString SwAccessibleParagraph::getTextRange(
     sal_Int32 nStartIndex, sal_Int32 nEndIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1920,13 +1919,13 @@ OUString SwAccessibleParagraph::getTextRange(
         throw IndexOutOfBoundsException();
 }
 
-::com::sun::star::accessibility::TextSegment SwAccessibleParagraph::getTextAtIndex( sal_Int32 nIndex, sal_Int16 nTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+/*accessibility::*/TextSegment SwAccessibleParagraph::getTextAtIndex( sal_Int32 nIndex, sal_Int16 nTextType ) throw (lang::IndexOutOfBoundsException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
-    ::com::sun::star::accessibility::TextSegment aResult;
+    /*accessibility::*/TextSegment aResult;
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
 
@@ -1956,7 +1955,7 @@ OUString SwAccessibleParagraph::getTextRange(
     return aResult;
 }
 
-::com::sun::star::accessibility::TextSegment SwAccessibleParagraph::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 nTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+/*accessibility::*/TextSegment SwAccessibleParagraph::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 nTextType ) throw (lang::IndexOutOfBoundsException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1964,7 +1963,7 @@ OUString SwAccessibleParagraph::getTextRange(
 
     const OUString rText = GetString();
 
-    ::com::sun::star::accessibility::TextSegment aResult;
+    /*accessibility::*/TextSegment aResult;
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
 
@@ -2000,13 +1999,13 @@ OUString SwAccessibleParagraph::getTextRange(
     return aResult;
 }
 
-::com::sun::star::accessibility::TextSegment SwAccessibleParagraph::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 nTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+/*accessibility::*/TextSegment SwAccessibleParagraph::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 nTextType ) throw (lang::IndexOutOfBoundsException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
 
-    ::com::sun::star::accessibility::TextSegment aResult;
+    /*accessibility::*/TextSegment aResult;
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
     const OUString rText = GetString();
@@ -2041,7 +2040,7 @@ OUString SwAccessibleParagraph::getTextRange(
 }
 
 sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     CHECK_FOR_DEFUNC_THIS( XAccessibleText, *this );
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -2058,7 +2057,7 @@ sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
 //
 
 sal_Bool SwAccessibleParagraph::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     CHECK_FOR_DEFUNC( XAccessibleEditableText );
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -2073,7 +2072,7 @@ sal_Bool SwAccessibleParagraph::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIn
 }
 
 sal_Bool SwAccessibleParagraph::pasteText( sal_Int32 nIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     CHECK_FOR_DEFUNC( XAccessibleEditableText );
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -2088,13 +2087,13 @@ sal_Bool SwAccessibleParagraph::pasteText( sal_Int32 nIndex )
 }
 
 sal_Bool SwAccessibleParagraph::deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     return replaceText( nStartIndex, nEndIndex, OUString() );
 }
 
 sal_Bool SwAccessibleParagraph::insertText( const OUString& sText, sal_Int32 nIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     return replaceText( nIndex, nIndex, sText );
 }
@@ -2102,7 +2101,7 @@ sal_Bool SwAccessibleParagraph::insertText( const OUString& sText, sal_Int32 nIn
 sal_Bool SwAccessibleParagraph::replaceText(
     sal_Int32 nStartIndex, sal_Int32 nEndIndex,
     const OUString& sReplacement )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -2162,7 +2161,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
     sal_Int32 nStartIndex,
     sal_Int32 nEndIndex,
     const Sequence<PropertyValue>& rAttributeSet )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC( XAccessibleEditableText );
@@ -2178,7 +2177,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
 
     // create a (dummy) text portion for the sole purpose of calling
     // setPropertyValue on it
-    Reference<XMultiPropertySet> xPortion = CreateUnoPortion( nStartIndex,
+    uno::Reference<XMultiPropertySet> xPortion = CreateUnoPortion( nStartIndex,
                                                               nEndIndex );
 
     // build sorted index array
@@ -2229,7 +2228,7 @@ sal_Bool SwAccessibleParagraph::setText( const OUString& sText )
 void SwAccessibleParagraph::selectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( IndexOutOfBoundsException,
-            RuntimeException )
+            uno::RuntimeException )
 {
     CHECK_FOR_DEFUNC( XAccessibleSelection );
 
@@ -2239,7 +2238,7 @@ void SwAccessibleParagraph::selectAccessibleChild(
 sal_Bool SwAccessibleParagraph::isAccessibleChildSelected(
     sal_Int32 nChildIndex )
     throw ( IndexOutOfBoundsException,
-            RuntimeException )
+            uno::RuntimeException )
 {
     CHECK_FOR_DEFUNC( XAccessibleSelection );
 
@@ -2247,7 +2246,7 @@ sal_Bool SwAccessibleParagraph::isAccessibleChildSelected(
 }
 
 void SwAccessibleParagraph::clearAccessibleSelection(  )
-    throw ( RuntimeException )
+    throw ( uno::RuntimeException )
 {
     CHECK_FOR_DEFUNC( XAccessibleSelection );
 
@@ -2255,7 +2254,7 @@ void SwAccessibleParagraph::clearAccessibleSelection(  )
 }
 
 void SwAccessibleParagraph::selectAllAccessibleChildren(  )
-    throw ( RuntimeException )
+    throw ( uno::RuntimeException )
 {
     CHECK_FOR_DEFUNC( XAccessibleSelection );
 
@@ -2263,17 +2262,17 @@ void SwAccessibleParagraph::selectAllAccessibleChildren(  )
 }
 
 sal_Int32 SwAccessibleParagraph::getSelectedAccessibleChildCount(  )
-    throw ( RuntimeException )
+    throw ( uno::RuntimeException )
 {
     CHECK_FOR_DEFUNC( XAccessibleSelection );
 
     return aSelectionHelper.getSelectedAccessibleChildCount();
 }
 
-Reference<XAccessible> SwAccessibleParagraph::getSelectedAccessibleChild(
+uno::Reference<XAccessible> SwAccessibleParagraph::getSelectedAccessibleChild(
     sal_Int32 nSelectedChildIndex )
     throw ( IndexOutOfBoundsException,
-            RuntimeException)
+            uno::RuntimeException)
 {
     CHECK_FOR_DEFUNC( XAccessibleSelection );
 
@@ -2284,7 +2283,7 @@ Reference<XAccessible> SwAccessibleParagraph::getSelectedAccessibleChild(
 void SwAccessibleParagraph::deselectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( IndexOutOfBoundsException,
-            RuntimeException )
+            uno::RuntimeException )
 {
     CHECK_FOR_DEFUNC( XAccessibleSelection );
 
@@ -2365,14 +2364,14 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkCount()
     return nCount;
 }
 
-Reference< XAccessibleHyperlink > SAL_CALL
+uno::Reference< XAccessibleHyperlink > SAL_CALL
     SwAccessibleParagraph::getHyperLink( sal_Int32 nLinkIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC( XAccessibleHypertext );
 
-    Reference< XAccessibleHyperlink > xRet;
+    uno::Reference< XAccessibleHyperlink > xRet;
 
     // --> OD 2007-06-27 #i77108# - provide hyperlinks also in editable documents.
 //    if( !IsEditableState() )
@@ -2422,7 +2421,7 @@ Reference< XAccessibleHyperlink > SAL_CALL
 }
 
 sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharIndex )
-    throw (IndexOutOfBoundsException, RuntimeException)
+    throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC( XAccessibleHypertext );
