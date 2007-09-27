@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addincol.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:10:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:50:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #ifndef SC_ADDINCOL_HXX
 #define SC_ADDINCOL_HXX
 
+#include "global.hxx"
 
 #ifndef _COM_SUN_STAR_SHEET_XVOLATILERESULT_HPP_
 #include <com/sun/star/sheet/XVolatileResult.hpp>
@@ -87,14 +88,7 @@ class ScMatrix;
 class ScFuncDesc;
 
 
-struct ScAddInStringHashCode
-{
-    size_t operator()( const String& rStr ) const
-    {
-        return rtl_ustr_hashCode_WithLength( rStr.GetBuffer(), rStr.Len() );
-    }
-};
-typedef ::std::hash_map< String, const ScUnoAddInFuncData*, ScAddInStringHashCode, ::std::equal_to< String > > ScAddInHashMap;
+typedef ::std::hash_map< String, const ScUnoAddInFuncData*, ScStringHashCode, ::std::equal_to< String > > ScAddInHashMap;
 
 
 enum ScAddInArgumentType
