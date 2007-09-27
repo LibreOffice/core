@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:01:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:33:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,6 +175,7 @@ public:
                                 sal_uInt16 nSelected);
     const com::sun::star::uno::Sequence< ::rtl::OUString>&    GetAddressBlocks();
 
+    using Window::SetSettings;
     void                SetSettings(sal_Bool bIsCountry, ::rtl::OUString sCountry);
     sal_Bool            IsIncludeCountry() const {return !m_aNeverRB.IsChecked();}
     ::rtl::OUString     GetCountry() const;
@@ -212,10 +213,12 @@ public:
     AddressMultiLineEdit(SwCustomizeAddressBlockDialog* pParent, const ResId& rResId);
     ~AddressMultiLineEdit();
 
+    using Window::Notify;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     void            SetSelectionChangedHdl( const Link& rLink ) {m_aSelectionLink = rLink;}
 
+    using MultiLineEdit::SetText;
     void            SetText( const String& rStr );
     String          GetAddress();
 
