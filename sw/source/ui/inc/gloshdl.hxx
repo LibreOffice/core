@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gloshdl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:17:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:01:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,9 +116,6 @@ public:
     BOOL    FindGroupName(String & rGroup); // Gruppe ohne Pfadindex finden
 
     BOOL    ImportGlossaries( const String& rName );
-
-    String  GetValidShortCut( const String& rLong,
-                                 BOOL bCheckInBlock = FALSE ) const;
 
             SwGlossaryHdl(SfxViewFrame* pViewFrame, SwWrtShell *);
             ~SwGlossaryHdl();
