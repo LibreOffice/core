@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shdwcrsr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:34:40 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:46:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_sw.hxx"
 
 
+#include <com/sun/star/text/HoriOrientation.hpp>
 
 #ifndef _SV_WINDOW_HXX //autogen
 #include <vcl/window.hxx>
@@ -44,6 +45,8 @@
 
 #include "swtypes.hxx"
 #include "shdwcrsr.hxx"
+
+using namespace ::com::sun::star;
 
 
 SwShadowCursor::~SwShadowCursor()
@@ -70,15 +73,15 @@ void SwShadowCursor::SetPos( const Point& rPt, long nHeight, USHORT nMode )
 
 void SwShadowCursor::DrawTri( const Point& rPt, long nHeight, BOOL bLeft )
 {
-    USHORT nLineDiff = ( nHeight / 2 );
-    USHORT nLineDiffHalf = nLineDiff / 2;
+    long nLineDiff = ( nHeight / 2 );
+    long nLineDiffHalf = nLineDiff / 2;
 
     // Punkt oben
     Point aPt1( (bLeft ? rPt.X() - 3 : rPt.X() + 3),
                 rPt.Y() + nLineDiffHalf );
     // Punkt unten
     Point aPt2( aPt1.X(), aPt1.Y() + nHeight - nLineDiff - 1 );
-    short nDiff = bLeft ? -1 : 1;
+    long nDiff = bLeft ? -1 : 1;
     while( aPt1.Y() <= aPt2.Y() )
     {
         pWin->DrawLine( aPt1, aPt2 );
@@ -103,9 +106,9 @@ void SwShadowCursor::DrawCrsr( const Point& rPt, long nHeight, USHORT nMode )
               Point( rPt.X(), rPt.Y() - 2 + nHeight ));
 
     // 2. das Dreieck
-    if( HORI_LEFT == nMode || HORI_CENTER == nMode )    // Pfeil nach rechts
+    if( text::HoriOrientation::LEFT == nMode || text::HoriOrientation::CENTER == nMode )    // Pfeil nach rechts
         DrawTri( rPt, nHeight, FALSE );
-    if( HORI_RIGHT == nMode || HORI_CENTER == nMode )   // Pfeil nach links
+    if( text::HoriOrientation::RIGHT == nMode || text::HoriOrientation::CENTER == nMode )   // Pfeil nach links
         DrawTri( rPt, nHeight, TRUE );
 
     pWin->Pop();
@@ -123,13 +126,13 @@ Rectangle SwShadowCursor::GetRect() const
     Point aPt( aOldPt );
 
     nH = (((nH / 4)+1) * 4) + 1;
-    USHORT nWidth = nH / 4 + 3 + 1;
+    long nWidth = nH / 4 + 3 + 1;
 
     Size aSz( nWidth, nH );
 
-    if( HORI_RIGHT == nOldMode )
+    if( text::HoriOrientation::RIGHT == nOldMode )
         aPt.X() -= aSz.Width();
-    else if( HORI_CENTER == nOldMode )
+    else if( text::HoriOrientation::CENTER == nOldMode )
     {
         aPt.X() -= aSz.Width();
         aSz.Width() *= 2;
