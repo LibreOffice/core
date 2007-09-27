@@ -4,9 +4,9 @@
  *
  *  $RCSfile: climaker_app.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 11:18:01 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:09:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,7 +481,7 @@ SAL_IMPLEMENT_MAIN()
         // get rdb tdprovider factory
         Reference< lang::XSingleComponentFactory > xTDprov_factory(
             ::cppu::loadSharedLibComponentFactory(
-                OUSTR("regtypeprov.uno" SAL_DLLEXTENSION), OUString(),
+                OUSTR("bootstrap.uno" SAL_DLLEXTENSION), OUString(),
                 OUSTR("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"),
                 Reference< lang::XMultiServiceFactory >(
                     xContext->getServiceManager(), UNO_QUERY ),
@@ -490,7 +490,7 @@ SAL_IMPLEMENT_MAIN()
         {
             throw RuntimeException(
                 OUSTR("cannot get registry typedescription provider: "
-                      "regtypeprov.uno" SAL_DLLEXTENSION "!"),
+                      "bootstrap.uno" SAL_DLLEXTENSION "!"),
                 Reference< XInterface >() );
         }
 
