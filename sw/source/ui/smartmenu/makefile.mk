@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 16:53:53 $
+#   last change: $Author: hr $ $Date: 2007-09-27 12:31:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@ TARGET=smartmenu
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
 
 # --- Files --------------------------------------------------------
+
+EXCEPTIONSFILES = \
+               $(SLO)$/stmenu.obj
 
 SLOFILES =  \
                $(SLO)$/stmenu.obj
