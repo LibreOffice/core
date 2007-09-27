@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:21:18 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:14:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,8 +95,8 @@ class SwXBookmark;
 --------------------------------------------------*/
 class SwUnoCollection
 {
+    SwDoc*      pDoc;
     sal_Bool    bObjectValid;
-    SwDoc*  pDoc;
 
     public:
         SwUnoCollection(SwDoc* p) :
@@ -113,15 +113,15 @@ class SwUnoCollection
 /******************************************************************************
  *
  ******************************************************************************/
-#define SW_SERVICE_TYPE_TEXTTABLE                       0   //
-#define SW_SERVICE_TYPE_TEXTFRAME                       1   //
+#define SW_SERVICE_TYPE_TEXTTABLE                       0
+#define SW_SERVICE_TYPE_TEXTFRAME                       1
 #define SW_SERVICE_TYPE_GRAPHIC                         2
 #define SW_SERVICE_TYPE_OLE                             3
 #define SW_SERVICE_TYPE_BOOKMARK                        4
 #define SW_SERVICE_TYPE_FOOTNOTE                        5
 #define SW_SERVICE_TYPE_ENDNOTE                         6
-#define SW_SERVICE_TYPE_INDEXMARK                       7 // Stichwortverzeichniseintrag
-#define SW_SERVICE_TYPE_INDEX                           8 // Stichwortverzeichnis
+#define SW_SERVICE_TYPE_INDEXMARK                       7
+#define SW_SERVICE_TYPE_INDEX                           8
 #define SW_SERVICE_REFERENCE_MARK                       9
 #define SW_SERVICE_STYLE_CHARACTER_STYLE                10
 #define SW_SERVICE_STYLE_PARAGRAPH_STYLE                11
