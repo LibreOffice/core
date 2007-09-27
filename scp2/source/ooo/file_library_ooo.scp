@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.259 $
+ *  $Revision: 1.260 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 18:07:08 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:10:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,18 @@ File gid_File_Lib_Basprov
 End
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Bib , bib)
+
+File gid_File_Lib_Bootstrap
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(bootstrap.uno,UNXSUFFIX));
+  #else
+    Name = "bootstrap.uno.dll";
+  #endif
+End
 
 File gid_File_Lib_Brdgfctr
     TXT_FILE_BODY;
@@ -477,18 +489,6 @@ File gid_File_Lib_Corefl
   #endif
 End
 
-File gid_File_Lib_Cpld
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT,PATCH);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(shlibloader.uno,UNXSUFFIX));
-  #else
-    Name = "shlibloader.uno.dll";
-  #endif
-End
-
 File gid_File_Lib_Cppu
     TXT_FILE_BODY;
   #ifdef UNX
@@ -643,18 +643,6 @@ End
 STD_LIB_FILE_PATCH( gid_File_Lib_Dbt, dbtools )
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbaxml, dbaxml )
-
-File gid_File_Lib_Defreg
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT,PATCH);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(nestedreg.uno,UNXSUFFIX));
-  #else
-    Name = "nestedreg.uno.dll";
-  #endif
-End
 
 File gid_File_Lib_Dict_Ja
     TXT_FILE_BODY;
@@ -1174,18 +1162,6 @@ File gid_File_Lib_Iiopbrdg
     Name = STRING(CONCAT2(remotebridge.uno,UNXSUFFIX));
   #else
     Name = "remotebridge.uno.dll";
-  #endif
-End
-
-File gid_File_Lib_Impreg
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT,PATCH);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(implreg.uno,UNXSUFFIX));
-  #else
-    Name = "implreg.uno.dll";
   #endif
 End
 
@@ -1767,18 +1743,6 @@ STD_LIB_FILE_PATCH( gid_File_Lib_Vclplug_Svp, vclplug_svp )
 STD_LIB_FILE_PATCH( gid_File_Lib_BaseBmp, basebmp )
 #endif
 
-File gid_File_Lib_Rdbtdp
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT,PATCH);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(regtypeprov.uno,UNXSUFFIX));
-  #else
-    Name = "regtypeprov.uno.dll";
-  #endif
-End
-
 #ifdef UNX
 
 File gid_File_Lib_Recentfile
@@ -1960,18 +1924,6 @@ End
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sdd , sdd)
 
-File gid_File_Lib_Sec
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT,PATCH);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(security.uno,UNXSUFFIX));
-  #else
-    Name = "security.uno.dll";
-  #endif
-End
-
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sf_Prothdlr, protocolhandler )
 
 File gid_File_Lib_Sfx
@@ -2006,30 +1958,6 @@ File gid_File_Lib_Instooofiltmsi
 End
 
 #endif
-
-File gid_File_Lib_Simreg
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT,PATCH);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(simplereg.uno,UNXSUFFIX));
-  #else
-    Name = "simplereg.uno.dll";
-  #endif
-End
-
-File gid_File_Lib_Smgr
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT,PATCH);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(servicemgr.uno,UNXSUFFIX));
-  #else
-    Name = "servicemgr.uno.dll";
-  #endif
-End
 
 #ifdef WNT
 
@@ -2146,6 +2074,18 @@ File gid_File_Lib_Stm
   #endif
 End
 
+File gid_File_Lib_Stocserv
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(stocservices.uno,UNXSUFFIX));
+  #else
+    Name = "stocservices.uno.dll";
+  #endif
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
+    RegistryID = gid_Starregistry_Services_Rdb;
+End
+
 File gid_File_Lib_Store
     TXT_FILE_BODY;
   #ifdef UNX
@@ -2206,30 +2146,6 @@ SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Wininetbe, wininetbe1.uno )
 #ifdef MACOSX
 SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Macbe, macbe1.uno )
 #endif
-
-File gid_File_Lib_Tcv
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT,DONT_OVERWRITE,PATCH);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(typeconverter.uno,UNXSUFFIX));
-  #else
-    Name = "typeconverter.uno.dll";
-  #endif
-End
-
-File gid_File_Lib_Tdmgr
-    TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT,PATCH);
-    RegistryID = gid_Starregistry_Services_Rdb;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(typemgr.uno,UNXSUFFIX));
-  #else
-    Name = "typemgr.uno.dll";
-  #endif
-End
 
 SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH(gid_File_Lib_Tinstrm,textinstream.uno)
 
@@ -2348,18 +2264,6 @@ File gid_File_Lib_Unicows
 End
 
 #endif
-
-File gid_File_Lib_Uriproc
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    Name = STRING(CONCAT2(uriproc.uno,UNXSUFFIX));
-  #else
-    Name = "uriproc.uno.dll";
-  #endif
-    Styles = (PACKED,UNO_COMPONENT,DONT_OVERWRITE,PATCH);
-    RegistryID = gid_Starregistry_Services_Rdb;
-End
 
 File gid_File_Lib_Urp_Uno
     TXT_FILE_BODY;
