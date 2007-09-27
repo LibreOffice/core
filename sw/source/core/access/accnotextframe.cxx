@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accnotextframe.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:27:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:22:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,9 +93,10 @@ const SwNoTxtNode *SwAccessibleNoTextFrame::GetNoTxtNode() const
 }
 
 SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
-        SwAccessibleMap *pMap, sal_Int16 nRole,
-        const SwFlyFrm *pFlyFrm ) :
-    SwAccessibleFrameBase( pMap, nRole, pFlyFrm ),
+        SwAccessibleMap* pInitMap,
+        sal_Int16 nInitRole,
+        const SwFlyFrm* pFlyFrm  ) :
+    SwAccessibleFrameBase( pInitMap, nInitRole, pFlyFrm ),
     aDepend( this, const_cast < SwNoTxtNode * >( GetNoTxtNode() ) )
 {
     const SwNoTxtNode *pNd = GetNoTxtNode();
