@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pam.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:46:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:30:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ SwPosition &SwPosition::operator=(const SwPosition &rPos)
 }
 
 
-FASTBOOL SwPosition::operator<(const SwPosition &rPos) const
+BOOL SwPosition::operator<(const SwPosition &rPos) const
 {
     if( nNode < rPos.nNode )
         return TRUE;
@@ -157,7 +157,7 @@ FASTBOOL SwPosition::operator<(const SwPosition &rPos) const
 }
 
 
-FASTBOOL SwPosition::operator>(const SwPosition &rPos) const
+BOOL SwPosition::operator>(const SwPosition &rPos) const
 {
     if(nNode > rPos.nNode )
         return TRUE;
@@ -167,7 +167,7 @@ FASTBOOL SwPosition::operator>(const SwPosition &rPos) const
 }
 
 
-FASTBOOL SwPosition::operator<=(const SwPosition &rPos) const
+BOOL SwPosition::operator<=(const SwPosition &rPos) const
 {
     if(nNode < rPos.nNode )
         return TRUE;
@@ -177,7 +177,7 @@ FASTBOOL SwPosition::operator<=(const SwPosition &rPos) const
 }
 
 
-FASTBOOL SwPosition::operator>=(const SwPosition &rPos) const
+BOOL SwPosition::operator>=(const SwPosition &rPos) const
 {
     if(nNode > rPos.nNode )
         return TRUE;
@@ -187,7 +187,7 @@ FASTBOOL SwPosition::operator>=(const SwPosition &rPos) const
 }
 
 
-FASTBOOL SwPosition::operator==(const SwPosition &rPos) const
+BOOL SwPosition::operator==(const SwPosition &rPos) const
 {
     return
         ( ( nNode == rPos.nNode ) && ( nContent == rPos.nContent ) ?
@@ -195,7 +195,7 @@ FASTBOOL SwPosition::operator==(const SwPosition &rPos) const
 }
 
 
-FASTBOOL SwPosition::operator!=(const SwPosition &rPos) const
+BOOL SwPosition::operator!=(const SwPosition &rPos) const
 {
     if( nNode != rPos.nNode )
         return TRUE;
@@ -300,7 +300,7 @@ CHKSECTION lcl_TstIdx( ULONG nSttIdx, ULONG nEndIdx, const SwNode& rEndNd )
 }
 
 
-FASTBOOL lcl_ChkOneRange( CHKSECTION eSec, BOOL bChkSections,
+BOOL lcl_ChkOneRange( CHKSECTION eSec, BOOL bChkSections,
                     const SwNode& rBaseEnd, ULONG nStt, ULONG nEnd )
 {
     if( eSec != Chk_Both )
@@ -332,8 +332,8 @@ FASTBOOL lcl_ChkOneRange( CHKSECTION eSec, BOOL bChkSections,
 }
 
 
-FASTBOOL CheckNodesRange( const SwNodeIndex& rStt,
-                        const SwNodeIndex& rEnd, FASTBOOL bChkSection )
+BOOL CheckNodesRange( const SwNodeIndex& rStt,
+                        const SwNodeIndex& rEnd, BOOL bChkSection )
 {
     const SwNodes& rNds = rStt.GetNodes();
     ULONG nStt = rStt.GetIndex(), nEnd = rEnd.GetIndex();
@@ -364,7 +364,7 @@ FASTBOOL CheckNodesRange( const SwNodeIndex& rStt,
 }
 
 
-FASTBOOL GoNext(SwNode* pNd, SwIndex * pIdx, USHORT nMode )
+BOOL GoNext(SwNode* pNd, SwIndex * pIdx, USHORT nMode )
 {
     if( pNd->IsCntntNode() )
         return ((SwCntntNode*)pNd)->GoNext( pIdx, nMode );
@@ -372,7 +372,7 @@ FASTBOOL GoNext(SwNode* pNd, SwIndex * pIdx, USHORT nMode )
 }
 
 
-FASTBOOL GoPrevious( SwNode* pNd, SwIndex * pIdx, USHORT nMode )
+BOOL GoPrevious( SwNode* pNd, SwIndex * pIdx, USHORT nMode )
 {
     if( pNd->IsCntntNode() )
         return ((SwCntntNode*)pNd)->GoPrevious( pIdx, nMode );
@@ -380,7 +380,7 @@ FASTBOOL GoPrevious( SwNode* pNd, SwIndex * pIdx, USHORT nMode )
 }
 
 
-SwCntntNode* GoNextNds( SwNodeIndex* pIdx, FASTBOOL bChk )
+SwCntntNode* GoNextNds( SwNodeIndex* pIdx, BOOL bChk )
 {
     SwNodeIndex aIdx( *pIdx );
     SwCntntNode* pNd = aIdx.GetNodes().GoNext( &aIdx );
@@ -396,7 +396,7 @@ SwCntntNode* GoNextNds( SwNodeIndex* pIdx, FASTBOOL bChk )
 }
 
 
-SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, FASTBOOL bChk )
+SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, BOOL bChk )
 {
     SwNodeIndex aIdx( *pIdx );
     SwCntntNode* pNd = aIdx.GetNodes().GoPrevious( &aIdx );
@@ -554,9 +554,9 @@ void SwPaM::Exchange()
 // Bewegen des Cursors
 
 
-FASTBOOL SwPaM::Move( SwMoveFn fnMove, SwGoInDoc fnGo )
+BOOL SwPaM::Move( SwMoveFn fnMove, SwGoInDoc fnGo )
 {
-    FASTBOOL bRet = (*fnGo)( *this, fnMove );
+    BOOL bRet = (*fnGo)( *this, fnMove );
 
     bIsInFrontOfLabel = FALSE;
 
@@ -663,9 +663,9 @@ const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
 
 // steht in etwas geschuetztem oder in die Selektion umspannt
 // etwas geschuetztes.
-FASTBOOL SwPaM::HasReadonlySel( bool bFormView ) const
+BOOL SwPaM::HasReadonlySel( bool bFormView ) const
 {
-    FASTBOOL bRet = FALSE;
+    BOOL bRet = FALSE;
     Point aTmpPt;
     const SwCntntNode *pNd;
     const SwCntntFrm *pFrm;
@@ -823,8 +823,8 @@ FASTBOOL SwPaM::HasReadonlySel( bool bFormView ) const
 // Fall, darf die Position vom Pam nicht veraendert werden!
 
 
-SwCntntNode* GetNode( SwPaM & rPam, FASTBOOL& rbFirst, SwMoveFn fnMove,
-                        FASTBOOL bInReadOnly )
+SwCntntNode* GetNode( SwPaM & rPam, BOOL& rbFirst, SwMoveFn fnMove,
+                        BOOL bInReadOnly )
 {
     SwCntntNode * pNd = 0;
     SwCntntFrm* pFrm;
@@ -847,7 +847,7 @@ SwCntntNode* GetNode( SwPaM & rPam, FASTBOOL& rbFirst, SwMoveFn fnMove,
         if( !pNd )          // steht Cursor auf keinem ContentNode ?
         {
             SwPosition aPos( *rPam.GetPoint() );
-            FASTBOOL bSrchForward = fnMove == fnMoveForward;
+            BOOL bSrchForward = fnMove == fnMoveForward;
             SwNodes& rNodes = aPos.nNode.GetNodes();
 
             // zum naechsten / vorherigen ContentNode
@@ -952,21 +952,21 @@ void GoEndSection( SwPosition * pPos )
 
 
 
-FASTBOOL GoInDoc( SwPaM & rPam, SwMoveFn fnMove )
+BOOL GoInDoc( SwPaM & rPam, SwMoveFn fnMove )
 {
     (*fnMove->fnDoc)( rPam.GetPoint() );
     return TRUE;
 }
 
 
-FASTBOOL GoInSection( SwPaM & rPam, SwMoveFn fnMove )
+BOOL GoInSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     (*fnMove->fnSections)( (SwPosition*)rPam.GetPoint() );
     return TRUE;
 }
 
 
-FASTBOOL GoInNode( SwPaM & rPam, SwMoveFn fnMove )
+BOOL GoInNode( SwPaM & rPam, SwMoveFn fnMove )
 {
     SwCntntNode *pNd = (*fnMove->fnNds)( &rPam.GetPoint()->nNode, TRUE );
     if( pNd )
@@ -976,7 +976,7 @@ FASTBOOL GoInNode( SwPaM & rPam, SwMoveFn fnMove )
 }
 
 
-FASTBOOL GoInCntnt( SwPaM & rPam, SwMoveFn fnMove )
+BOOL GoInCntnt( SwPaM & rPam, SwMoveFn fnMove )
 {
     if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
                         &rPam.GetPoint()->nContent, CRSR_SKIP_CHARS ))
@@ -984,7 +984,7 @@ FASTBOOL GoInCntnt( SwPaM & rPam, SwMoveFn fnMove )
     return GoInNode( rPam, fnMove );
 }
 
-FASTBOOL GoInCntntCells( SwPaM & rPam, SwMoveFn fnMove )
+BOOL GoInCntntCells( SwPaM & rPam, SwMoveFn fnMove )
 {
     if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
                          &rPam.GetPoint()->nContent, CRSR_SKIP_CELLS ))
@@ -992,7 +992,7 @@ FASTBOOL GoInCntntCells( SwPaM & rPam, SwMoveFn fnMove )
     return GoInNode( rPam, fnMove );
 }
 
-FASTBOOL GoInCntntSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
+BOOL GoInCntntSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
 {
     if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
                         &rPam.GetPoint()->nContent, CRSR_SKIP_CHARS | CRSR_SKIP_HIDDEN ) )
@@ -1000,7 +1000,7 @@ FASTBOOL GoInCntntSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
     return GoInNode( rPam, fnMove );
 }
 
-FASTBOOL GoInCntntCellsSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
+BOOL GoInCntntCellsSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
 {
     if( (*fnMove->fnNd)( &rPam.GetPoint()->nNode.GetNode(),
                          &rPam.GetPoint()->nContent, CRSR_SKIP_CELLS | CRSR_SKIP_HIDDEN ) )
@@ -1013,7 +1013,7 @@ FASTBOOL GoInCntntCellsSkipHidden( SwPaM & rPam, SwMoveFn fnMove )
 // --------- Funktionsdefinitionen fuer die SwCrsrShell --------------
 
 
-FASTBOOL GoPrevPara( SwPaM & rPam, SwPosPara aPosPara )
+BOOL GoPrevPara( SwPaM & rPam, SwPosPara aPosPara )
 {
     if( rPam.Move( fnMoveBackward, fnGoNode ) )
     {
@@ -1028,7 +1028,7 @@ FASTBOOL GoPrevPara( SwPaM & rPam, SwPosPara aPosPara )
 }
 
 
-FASTBOOL GoCurrPara( SwPaM & rPam, SwPosPara aPosPara )
+BOOL GoCurrPara( SwPaM & rPam, SwPosPara aPosPara )
 {
     SwPosition& rPos = *rPam.GetPoint();
     SwCntntNode * pNd = rPos.nNode.GetNode().GetCntntNode();
@@ -1057,7 +1057,7 @@ FASTBOOL GoCurrPara( SwPaM & rPam, SwPosPara aPosPara )
 }
 
 
-FASTBOOL GoNextPara( SwPaM & rPam, SwPosPara aPosPara )
+BOOL GoNextPara( SwPaM & rPam, SwPosPara aPosPara )
 {
     if( rPam.Move( fnMoveForward, fnGoNode ) )
     {
@@ -1073,7 +1073,7 @@ FASTBOOL GoNextPara( SwPaM & rPam, SwPosPara aPosPara )
 
 
 
-FASTBOOL GoCurrSection( SwPaM & rPam, SwMoveFn fnMove )
+BOOL GoCurrSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     SwPosition& rPos = *rPam.GetPoint();
     SwPosition aSavePos( rPos );        // eine Vergleichsposition
@@ -1093,7 +1093,7 @@ FASTBOOL GoCurrSection( SwPaM & rPam, SwMoveFn fnMove )
 }
 
 
-FASTBOOL GoNextSection( SwPaM & rPam, SwMoveFn fnMove )
+BOOL GoNextSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     SwPosition& rPos = *rPam.GetPoint();
     SwPosition aSavePos( rPos );        // eine Vergleichsposition
@@ -1114,7 +1114,7 @@ FASTBOOL GoNextSection( SwPaM & rPam, SwMoveFn fnMove )
 }
 
 
-FASTBOOL GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
+BOOL GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
 {
     SwPosition& rPos = *rPam.GetPoint();
     SwPosition aSavePos( rPos );        // eine Vergleichsposition
