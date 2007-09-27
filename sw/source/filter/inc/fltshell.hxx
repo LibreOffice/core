@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltshell.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 10:53:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:52:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,12 @@
  ************************************************************************/
 #ifndef _FLTSHELL_HXX
 #define _FLTSHELL_HXX
+
 #include <deque>
+
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -65,6 +70,8 @@ class Graphic;
 class SwTableBox;
 class SwDoc;
 class SwPaM;
+
+using namespace com::sun::star;
 
 inline void SwFltClearFlag(ULONG& rFieldFlags, int no)
     { rFieldFlags &= ~(1L << no); }
@@ -136,8 +143,8 @@ public:
     BOOL IsFlagSet(Flags no) const  { return ::SwFltGetFlag(nFieldFlags, no);}
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem & rAttr );
-    void SetAttr(const SwPosition& rPos, USHORT nAttrId=0, BOOL bTstEnde=TRUE,
-                 long nHand = LONG_MAX);
+
+    virtual void SetAttr(const SwPosition& rPos, USHORT nAttrId=0, BOOL bTstEnde=TRUE, long nHand = LONG_MAX);
 
     void StealAttr(const SwPosition* pPos, USHORT nAttrId = 0);
     void MarkAllAttrsOld();
@@ -170,15 +177,15 @@ class SwFltRedline : public SfxPoolItem
 public:
     DateTime        aStamp;
     DateTime        aStampPrev;
-    IDocumentRedlineAccess::RedlineType_t   eType;
-    IDocumentRedlineAccess::RedlineType_t   eTypePrev;
+    RedlineType_t   eType;
+    RedlineType_t   eTypePrev;
     USHORT          nAutorNo;
     USHORT          nAutorNoPrev;
 
-    SwFltRedline(IDocumentRedlineAccess::RedlineType_t   eType_,
+    SwFltRedline(RedlineType_t   eType_,
                  USHORT          nAutorNo_,
                  const DateTime& rStamp_,
-                 IDocumentRedlineAccess::RedlineType_t   eTypePrev_    = IDocumentRedlineAccess::REDLINE_INSERT,
+                 RedlineType_t   eTypePrev_    = nsRedlineType_t::REDLINE_INSERT,
                  USHORT          nAutorNoPrev_ = USHRT_MAX,
                  const DateTime* pStampPrev_   = 0)
         : SfxPoolItem(RES_FLTR_REDLINE), aStamp(rStamp_), eType(eType_),
@@ -308,7 +315,7 @@ public:
     virtual void NextTableCell();
     virtual void NextTableRow();
     virtual void SetTableWidth(SwTwips nW);
-    virtual void SetTableOrient(SwHoriOrient eOri);
+    virtual void SetTableOrient(sal_Int16 eOri);
     virtual void SetCellWidth(SwTwips nWidth, USHORT nCell);
     virtual void SetCellHeight(SwTwips nH);
     virtual void SetCellBorder(const SvxBoxItem& rFmtBox, USHORT nCell);
@@ -365,7 +372,7 @@ public:
     virtual void NextTableCell();
     virtual void NextTableRow();
     virtual void SetTableWidth(SwTwips nW);
-    virtual void SetTableOrient(SwHoriOrient eOri);
+    virtual void SetTableOrient(sal_Int16 eOri);
     virtual void SetCellWidth(SwTwips nWidth, USHORT nCell);
     virtual void SetCellHeight(SwTwips nH);
     virtual void SetCellBorder(const SvxBoxItem& rFmtBox, USHORT nCell);
@@ -530,7 +537,7 @@ public:
         pOut->SetTableWidth(nW); }
     BOOL IsTableWidthSet() {
         return pOutDoc->IsTableWidthSet(); }
-    void SetTableOrient(SwHoriOrient eOri) {
+    void SetTableOrient(sal_Int16 eOri) {
         pOut->SetTableOrient(eOri); }
     void SetCellWidth(SwTwips nWidth, USHORT nCell = USHRT_MAX ) {
         pOut->SetCellWidth(nWidth, nCell); }
@@ -549,10 +556,10 @@ public:
     BOOL BeginFly( RndStdIds eAnchor = FLY_AT_CNTNT, BOOL bAbsolutePos = FALSE );
     void SetFlyAnchor( RndStdIds eAnchor )
         { pOut->SetFlyAnchor( eAnchor ); }
-    void SetFlyXPos( short nXPos,SwRelationOrient eHRel = FRAME,
-                     SwHoriOrient eHAlign = HORI_NONE );
-    void SetFlyYPos( short nYPos, SwRelationOrient eVRel = FRAME,
-                     SwVertOrient eVAlign = VERT_NONE );
+    void SetFlyXPos( short nXPos, sal_Int16 eHRel = com::sun::star::text::RelOrientation::FRAME,
+                     sal_Int16 eHAlign = com::sun::star::text::HoriOrientation::NONE );
+    void SetFlyYPos( short nYPos, sal_Int16 eVRel = com::sun::star::text::RelOrientation::FRAME,
+                     sal_Int16 eVAlign = com::sun::star::text::VertOrientation::NONE );
     void SetFlyFrmAttr(const SfxPoolItem& rAttr){
         pOut->SetFlyFrmAttr( rAttr ); }
     void EndFly();
