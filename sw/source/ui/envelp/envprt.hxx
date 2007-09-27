@@ -4,9 +4,9 @@
  *
  *  $RCSfile: envprt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:26:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:42:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,9 +90,13 @@ class SwEnvPrtPage : public SfxTabPage
     DECL_LINK( AlignHdl, ToolBox * );
     DECL_LINK( ButtonHdl, Button * );
 
+    using Window::GetParent;
     SwEnvDlg* GetParent() {return (SwEnvDlg*) SfxTabPage::GetParent()->GetParent();}
 
 public:
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
 
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
 
