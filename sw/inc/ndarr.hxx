@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndarr.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:54:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:06:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ class SwNodes: private BigPtrArray
     // fuer dier Verwaltung der Indizies
     void RegisterIndex( SwNodeIndex& rIdx );
     void DeRegisterIndex( SwNodeIndex& rIdx );
-    void RemoveNode( ULONG nDelPos, ULONG nLen, FASTBOOL bDel );
+    void RemoveNode( ULONG nDelPos, ULONG nLen, BOOL bDel );
 
     // Aktionen auf die Nodes
     void SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEnd );
