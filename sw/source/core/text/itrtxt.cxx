@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:36:32 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:15:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,10 +73,10 @@
 #endif
 
 /*************************************************************************
- *                      SwTxtIter::CtorInit()
+ *                      SwTxtIter::CtorInitTxtIter()
  *************************************************************************/
 
-void SwTxtIter::CtorInit( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
+void SwTxtIter::CtorInitTxtIter( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
 {
 #ifdef DBGTXT
     // nStopAt laesst sich vom CV bearbeiten.
@@ -91,11 +91,11 @@ void SwTxtIter::CtorInit( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
 
     ASSERT( pNewFrm->GetPara(), "No paragraph" );
 
-    SwAttrIter::CtorInit( *pNode, pNewFrm->GetPara()->GetScriptInfo(), pNewFrm );
+    CtorInitAttrIter( *pNode, pNewFrm->GetPara()->GetScriptInfo(), pNewFrm );
 
     pFrm = pNewFrm;
     pInf = pNewInf;
-    aLineInf.CtorInit( pNode->GetSwAttrSet() );
+    aLineInf.CtorInitLineInfo( pNode->GetSwAttrSet() );
     nFrameStart = pFrm->Frm().Pos().Y() + pFrm->Prt().Pos().Y();
     SwTxtIter::Init();
     if( pNode->GetSwAttrSet().GetRegister().GetValue() )
@@ -167,8 +167,8 @@ const SwLineLayout *SwTxtIter::Prev()
     {
         bPrev = sal_False;
         pCurr = pPrev;
-        nStart -= pCurr->GetLen();
-        nY -= GetLineHeight();
+        nStart = nStart - pCurr->GetLen();
+        nY = nY - GetLineHeight();
         if( !pCurr->IsDummy() && !(--nLineNr) )
             ++nLineNr;
         return pCurr;
@@ -187,7 +187,7 @@ const SwLineLayout *SwTxtIter::Next()
     {
         pPrev = pCurr;
         bPrev = sal_True;
-        nStart += pCurr->GetLen();
+        nStart = nStart + pCurr->GetLen();
         nY += GetLineHeight();
         if( pCurr->GetLen() || ( nLineNr>1 && !pCurr->IsDummy() ) )
             ++nLineNr;
@@ -263,18 +263,18 @@ const SwLineLayout *SwTxtIter::GetPrevLine()
 
 const SwLineLayout *SwTxtIter::PrevLine()
 {
-    const SwLineLayout *pPrev = Prev();
-    if( !pPrev )
+    const SwLineLayout *pMyPrev = Prev();
+    if( !pMyPrev )
         return 0;
 
-    const SwLineLayout *pLast = pPrev;
-    while( pPrev && pPrev->IsDummy() )
+    const SwLineLayout *pLast = pMyPrev;
+    while( pMyPrev && pMyPrev->IsDummy() )
     {
         DBG_LOOP;
-        pLast = pPrev;
-        pPrev = Prev();
+        pLast = pMyPrev;
+        pMyPrev = Prev();
     }
-    return (SwLineLayout*)(pPrev ? pPrev : pLast);
+    return (SwLineLayout*)(pMyPrev ? pMyPrev : pLast);
 }
 
 /*************************************************************************
@@ -306,16 +306,16 @@ void SwTxtIter::CharToLine(const xub_StrLen nChar)
  *************************************************************************/
 
 // 1170: beruecksichtigt Mehrdeutigkeiten:
-const SwLineLayout *SwTxtCursor::CharCrsrToLine( const xub_StrLen nPos )
+const SwLineLayout *SwTxtCursor::CharCrsrToLine( const xub_StrLen nPosition )
 {
-    CharToLine( nPos );
-    if( nPos != nStart )
+    CharToLine( nPosition );
+    if( nPosition != nStart )
         bRightMargin = sal_False;
-    sal_Bool bPrev = bRightMargin && pCurr->GetLen() && GetPrev() &&
+    sal_Bool bPrevious = bRightMargin && pCurr->GetLen() && GetPrev() &&
         GetPrev()->GetLen();
-    if( bPrev && nPos && CH_BREAK == GetInfo().GetChar( nPos-1 ) )
-        bPrev = sal_False;
-    return bPrev ? PrevLine() : pCurr;
+    if( bPrevious && nPosition && CH_BREAK == GetInfo().GetChar( nPosition-1 ) )
+        bPrevious = sal_False;
+    return bPrevious ? PrevLine() : pCurr;
 }
 
 /*************************************************************************
@@ -352,7 +352,7 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
         {
             // We have to take care for ruby portions.
             // The ruby portion is NOT centered
-            nOfst += nPorAscent;
+            nOfst = nOfst + nPorAscent;
 
             if ( ! pPor || ! pPor->IsMultiPortion() ||
                  ! ((SwMultiPortion*)pPor)->IsRuby() )
@@ -364,7 +364,7 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
                                             nGridWidth;
                 nOfst += ( nLineNetto - nPorHeight ) / 2;
                 if ( bRubyTop )
-                    nOfst += nRubyHeight;
+                    nOfst = nOfst + nRubyHeight;
             }
         }
     }
@@ -372,7 +372,7 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
     {
         switch ( GetLineInfo().GetVertAlign() ) {
             case SvxParaVertAlignItem::TOP :
-                nOfst += nPorAscent;
+                nOfst = nOfst + nPorAscent;
                 break;
             case SvxParaVertAlignItem::CENTER :
                 ASSERT( rLine.Height() >= nPorHeight, "Portion height > Line height");
@@ -389,7 +389,7 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
                 }
             case SvxParaVertAlignItem::BASELINE :
                 // base line
-                nOfst += rLine.GetAscent();
+                nOfst = nOfst + rLine.GetAscent();
                 break;
         }
     }
@@ -455,23 +455,23 @@ void SwTxtIter::TruncLines( sal_Bool bNoteFollow )
                 // determine range to be searched for flys anchored as characters
                 while ( pLine )
                 {
-                    nRangeEnd += pLine->GetLen();
+                    nRangeEnd = nRangeEnd + pLine->GetLen();
                     pLine = pLine->GetNext();
                 }
 
-                SwpHints* pHints = GetTxtFrm()->GetTxtNode()->GetpSwpHints();
+                SwpHints* pTmpHints = GetTxtFrm()->GetTxtNode()->GetpSwpHints();
 
                 // examine hints in range nEnd - (nEnd + nRangeChar)
-                for( USHORT i = 0; i < pHints->Count(); i++ )
+                for( USHORT i = 0; i < pTmpHints->Count(); i++ )
                 {
-                    const SwTxtAttr* pHt = pHints->GetHt( i );
+                    const SwTxtAttr* pHt = pTmpHints->GetHt( i );
                     if( RES_TXTATR_FLYCNT == pHt->Which() )
                     {
                         // check, if hint is in our range
-                        const USHORT nPos = *pHt->GetStart();
-                        if ( nEnd <= nPos && nPos < nRangeEnd )
+                        const USHORT nTmpPos = *pHt->GetStart();
+                        if ( nEnd <= nTmpPos && nTmpPos < nRangeEnd )
                             pFollow->_InvalidateRange(
-                                SwCharRange( nPos, nPos ), 0 );
+                                SwCharRange( nTmpPos, nTmpPos ), 0 );
                     }
                 }
             }
