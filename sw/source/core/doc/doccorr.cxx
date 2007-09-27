@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doccorr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:00:47 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:33:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@
 #define PCURSH ((SwCrsrShell*)_pStartShell)
 #define FOREACHSHELL_START( pEShell ) \
     {\
-        register ViewShell *_pStartShell = pEShell; \
+        ViewShell *_pStartShell = pEShell; \
         do { \
             if( _pStartShell->IsA( TYPE( SwCrsrShell )) ) \
             {
@@ -128,7 +128,7 @@ void PaMCorrAbs( const SwNodeIndex &rOldNode,
     if( pShell )
     {
         FOREACHSHELL_START( pShell )
-            register SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
+            SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
     // Alle ueberfluessigen Crsr sind vom Stack, oder ??
     //      ASSERT( !_pStkCrsr, "Es stehen noch Crsr auf dem CrsrStack" );
             if( _pStkCrsr )
@@ -148,7 +148,7 @@ void PaMCorrAbs( const SwNodeIndex &rOldNode,
     }
 
     {
-        register SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
+        SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
         for( USHORT n = 0; n < rTbl.Count(); ++n )
         {
             FOREACHPAM_START( rTbl[ n ] )
@@ -176,8 +176,8 @@ void SwDoc::CorrAbs( const SwNodeIndex& rOldNode,
     SwPosition aNewPos( rNewPos );
 
     { // erstmal die Bookmark korrigieren
-        register SwBookmarks& rBkmks = *pBookmarkTbl;
-        register SwBookmark* pBkmk;
+        SwBookmarks& rBkmks = *pBookmarkTbl;
+        SwBookmark* pBkmk;
         for( USHORT n = 0; n < rBkmks.Count(); ++n )
         {
             // liegt auf der Position ??
@@ -211,7 +211,7 @@ void SwDoc::CorrAbs( const SwNodeIndex& rOldNode,
         }
     }
     { // dann die Redlines korrigieren
-        register SwRedlineTbl& rTbl = *pRedlineTbl;
+        SwRedlineTbl& rTbl = *pRedlineTbl;
         for( USHORT n = 0; n < rTbl.Count(); ++n )
         {
             // liegt auf der Position ??
@@ -268,7 +268,7 @@ void PaMCorrAbs( const SwNodeIndex &rStartNode,
     if( pShell )
     {
         FOREACHSHELL_START( pShell )
-            register SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
+            SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
     // Alle ueberfluessigen Crsr sind vom Stack, oder ??
     //      ASSERT( !_pStkCrsr, "Es stehen noch Crsr auf dem CrsrStack" );
             if( _pStkCrsr )
@@ -288,7 +288,7 @@ void PaMCorrAbs( const SwNodeIndex &rStartNode,
     }
 
     {
-        register SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
+        SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
         for( USHORT n = 0; n < rTbl.Count(); ++n )
         {
             bool bChange = false;
@@ -334,8 +334,6 @@ void SwDoc::CorrAbs( const SwNodeIndex& rStartNode,
                      const SwPosition& rNewPos,
                      BOOL bMoveCrsr )
 {
-    const ULONG nSttNode = rStartNode.GetIndex();
-    const ULONG nEndNode = rEndNode.GetIndex();
     SwPosition aNewPos( rNewPos );
 
 //  if( !DoesUndo() )
@@ -367,7 +365,7 @@ void PaMCorrAbs( const SwPaM& rRange,
     if( pShell )
     {
         FOREACHSHELL_START( pShell )
-            register SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
+            SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
     // Alle ueberfluessigen Crsr sind vom Stack, oder ??
     //      ASSERT( !_pStkCrsr, "Es stehen noch Crsr auf dem CrsrStack" );
             if( _pStkCrsr )
@@ -386,7 +384,7 @@ void PaMCorrAbs( const SwPaM& rRange,
         FOREACHSHELL_END( pShell )
     }
     {
-        register SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
+        SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
         for( USHORT n = 0; n < rTbl.Count(); ++n )
         {
             FOREACHPAM_START( rTbl[ n ] )
@@ -451,7 +449,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
     if( pShell )
     {
         FOREACHSHELL_START( pShell )
-            register SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
+            SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
     // Alle ueberfluessigen Crsr sind vom Stack, oder ??
     //      ASSERT( !_pStkCrsr, "Es stehen noch Crsr auf dem CrsrStack" );
             if( _pStkCrsr )
@@ -470,7 +468,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
         FOREACHSHELL_END( pShell )
     }
     {
-        register SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
+        SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
         for( USHORT n = 0; n < rTbl.Count(); ++n )
         {
             FOREACHPAM_START( rTbl[ n ] )
@@ -498,8 +496,8 @@ void SwDoc::CorrRel( const SwNodeIndex& rOldNode,
     xub_StrLen nCntIdx = aNewPos.nContent.GetIndex() + nOffset;
 
     { // erstmal die Bookmark korrigieren
-        register SwBookmarks& rBkmks = *pBookmarkTbl;
-        register SwBookmark* pBkmk;
+        SwBookmarks& rBkmks = *pBookmarkTbl;
+        SwBookmark* pBkmk;
         for( USHORT n = 0; n < rBkmks.Count(); ++n )
         {
             // liegt auf der Position ??
@@ -539,7 +537,7 @@ void SwDoc::CorrRel( const SwNodeIndex& rOldNode,
         }
     }
     { // dann die Redlines korrigieren
-        register SwRedlineTbl& rTbl = *pRedlineTbl;
+        SwRedlineTbl& rTbl = *pRedlineTbl;
         for( USHORT n = 0; n < rTbl.Count(); ++n )
         {
             // liegt auf der Position ??
@@ -559,7 +557,7 @@ SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
     // Layout und OLE-Shells sollten vorhanden sein!
     if( pLayout && pLayout->GetCurrShell() )
     {
-        register ViewShell *pSh = pLayout->GetCurrShell(), *pVSh = pSh;
+        ViewShell *pSh = pLayout->GetCurrShell(), *pVSh = pSh;
         if( ppSh )
             *ppSh = pSh;
 
