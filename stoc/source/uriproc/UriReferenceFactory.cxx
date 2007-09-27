@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UriReferenceFactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:38:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:06:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 
-#include "UriReferenceFactory.hxx"
+#include "stocservices.hxx"
 
 #include "UriReference.hxx"
 #include "supportsService.hxx"
@@ -363,7 +363,7 @@ private:
 rtl::OUString Factory::getImplementationName()
     throw (css::uno::RuntimeException)
 {
-    return stoc::uriproc::UriReferenceFactory::getImplementationName();
+    return stoc_services::UriReferenceFactory::getImplementationName();
 }
 
 sal_Bool Factory::supportsService(rtl::OUString const & serviceName)
@@ -376,7 +376,7 @@ sal_Bool Factory::supportsService(rtl::OUString const & serviceName)
 css::uno::Sequence< rtl::OUString > Factory::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
-    return stoc::uriproc::UriReferenceFactory::getSupportedServiceNames();
+    return stoc_services::UriReferenceFactory::getSupportedServiceNames();
 }
 
 css::uno::Reference< css::uri::XUriReference > Factory::parse(
@@ -703,7 +703,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
 
 }
 
-namespace stoc { namespace uriproc { namespace UriReferenceFactory {
+namespace stoc_services { namespace UriReferenceFactory {
 
 css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
@@ -729,4 +729,4 @@ css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
     return s;
 }
 
-} } }
+} }
