@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wdocsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:36:46 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:50:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,8 @@
 #define SwWebDocShell
 #include "swslots.hxx"
 
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
+#include <unomid.h>
+
 
 SFX_IMPL_INTERFACE( SwWebDocShell, SfxObjectShell, SW_RES(0) )
 {
@@ -97,7 +98,7 @@ SwWebDocShell::~SwWebDocShell()
 
 void SwWebDocShell::FillClass( SvGlobalName * pClassName,
                                    sal_uInt32 * pClipFormat,
-                                   String * pAppName,
+                                   String * /*pAppName*/,
                                    String * pLongUserName,
                                    String * pUserName,
                                    sal_Int32 nVersion ) const
