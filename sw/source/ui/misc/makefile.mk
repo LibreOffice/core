@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 10:35:47 $
+#   last change: $Author: hr $ $Date: 2007-09-27 12:22:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,14 @@ SRC1FILES=\
     redlndlg.src \
     srtdlg.src
 
+EXCEPTIONSFILES = \
+        $(SLO)$/glossary.obj \
+        $(SLO)$/glosdoc.obj \
+        $(SLO)$/numberingtypelistbox.obj \
+        $(SLO)$/outline.obj \
+        $(SLO)$/redlndlg.obj
+        
+
 SLOFILES =	\
         $(SLO)$/bookmark.obj \
         $(SLO)$/docfnote.obj \
@@ -81,10 +89,6 @@ SLOFILES =	\
         $(SLO)$/swmodalredlineacceptdlg.obj	\
         $(SLO)$/srtdlg.obj
 
-EXCEPTIONSFILES = \
-        $(SLO)$/glossary.obj \
-        $(SLO)$/numberingtypelistbox.obj
-        
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
 LIB1OBJFILES =	\
