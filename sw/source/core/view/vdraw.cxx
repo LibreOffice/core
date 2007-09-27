@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vdraw.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:28:50 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:42:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,7 @@ void SwViewImp::UnlockPaint()
 // outliner of the draw view for painting layers <hell> and <heaven>.
 // OD 25.06.2003 #108784# - correct type of 1st parameter
 void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
-                            const SwRect& _rRect,
+                            const SwRect& ,
                             const Color* _pPageBackgrdColor,
                             const bool _bIsPageRightToLeft ) const
 {
@@ -240,7 +240,7 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
         Color aOldOutlinerBackgrdColor;
         // OD 09.12.2002 #103045# - set default horizontal text direction on
         // painting <hell> or <heaven>.
-        EEHorizontalTextDirection aOldEEHoriTextDir;
+        EEHorizontalTextDirection aOldEEHoriTextDir = EE_HTEXTDIR_L2R;
         const IDocumentDrawModelAccess* pIDDMA = GetShell()->getIDocumentDrawModelAccess();
         if ( (_nLayerID == pIDDMA->GetHellId()) ||
              (_nLayerID == pIDDMA->GetHeavenId()) )
