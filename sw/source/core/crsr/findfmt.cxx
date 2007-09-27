@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findfmt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:46:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:29:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,11 +46,11 @@
 #endif
 
 
-FASTBOOL SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
-                        const SwPaM *pRegion, FASTBOOL bInReadOnly  )
+BOOL SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
+                        const SwPaM *pRegion, BOOL bInReadOnly  )
 {
-    FASTBOOL bFound = FALSE;
-    FASTBOOL bSrchForward = fnMove == fnMoveForward;
+    BOOL bFound = FALSE;
+    BOOL bSrchForward = fnMove == fnMoveForward;
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
 
     // Wenn am Anfang/Ende, aus dem Node moven
@@ -68,7 +68,7 @@ FASTBOOL SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
         pPam->GetPoint()->nContent.Assign( pNd, nTmpPos );
     }
 
-    FASTBOOL bFirst = TRUE;
+    BOOL bFirst = TRUE;
     SwCntntNode* pNode;
     while( !bFound &&
             0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly )))
