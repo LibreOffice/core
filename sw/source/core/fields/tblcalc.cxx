@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblcalc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:13:15 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:50:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,10 +95,10 @@ void SwTblField::CalcField( SwTblCalcPara& rCalcPara )
 
 
 
-SwTblField::SwTblField( SwTblFieldType* pType, const String& rFormel,
+SwTblField::SwTblField( SwTblFieldType* pInitType, const String& rFormel,
                         USHORT nType, ULONG nFmt )
-    : SwValueField( pType, nFmt ), SwTableFormula( rFormel ),
-    nSubType(nType), sExpand( '0' )
+    : SwValueField( pInitType, nFmt ), SwTableFormula( rFormel ),
+    sExpand( '0' ), nSubType(nType)
 {
 }
 
@@ -124,7 +124,7 @@ String SwTblField::GetCntnt(BOOL bName) const
 
         USHORT nOldSubType = nSubType;
         SwTblField* pThis = (SwTblField*)this;
-        pThis->nSubType |= SUB_CMD;
+        pThis->nSubType |= nsSwExtendedSubType::SUB_CMD;
         aStr += Expand();
         pThis->nSubType = nOldSubType;
 
@@ -155,7 +155,7 @@ const SwNode* SwTblField::GetNodeOfFormula() const
 String SwTblField::Expand() const
 {
     String aStr;
-    if (nSubType & SUB_CMD)
+    if (nSubType & nsSwExtendedSubType::SUB_CMD)
     {
         if( EXTRNL_NAME != GetNameType() )
         {
@@ -170,7 +170,7 @@ String SwTblField::Expand() const
     else
     {
         aStr = sExpand;
-        if(nSubType & GSE_STRING)
+        if(nSubType & nsSwGetSetExpType::GSE_STRING)
         {
             // es ist ein String
             aStr = sExpand;
@@ -218,24 +218,23 @@ void SwTblField::SetPar2(const String& rStr)
 /*-----------------04.03.98 10:33-------------------
 
 --------------------------------------------------*/
-BOOL SwTblField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwTblField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
     BOOL bRet = TRUE;
-    switch ( nMId )
+    switch ( nWhichId )
     {
     case FIELD_PROP_PAR2:
         {
             USHORT nOldSubType = nSubType;
             SwTblField* pThis = (SwTblField*)this;
-            pThis->nSubType |= SUB_CMD;
+            pThis->nSubType |= nsSwExtendedSubType::SUB_CMD;
             rAny <<= rtl::OUString( Expand() );
             pThis->nSubType = nOldSubType;
         }
         break;
     case FIELD_PROP_BOOL1:
         {
-            BOOL bFormula = 0 != (SUB_CMD & nSubType);
+            BOOL bFormula = 0 != (nsSwExtendedSubType::SUB_CMD & nSubType);
             rAny.setValue(&bFormula, ::getBooleanCppuType());
         }
         break;
@@ -253,21 +252,20 @@ BOOL SwTblField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------04.03.98 10:33-------------------
 
 --------------------------------------------------*/
-BOOL SwTblField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwTblField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
     BOOL bRet = TRUE;
     String sTmp;
-    switch ( nMId )
+    switch ( nWhichId )
     {
     case FIELD_PROP_PAR2:
         SetFormula( ::GetString( rAny, sTmp ));
         break;
     case FIELD_PROP_BOOL1:
         if(*(sal_Bool*)rAny.getValue())
-            nSubType = GSE_FORMULA|SUB_CMD;
+            nSubType = nsSwGetSetExpType::GSE_FORMULA|nsSwExtendedSubType::SUB_CMD;
         else
-            nSubType = GSE_FORMULA;
+            nSubType = nsSwGetSetExpType::GSE_FORMULA;
         break;
     case FIELD_PROP_PAR1:
         ChgExpStr( ::GetString( rAny, sTmp ));
