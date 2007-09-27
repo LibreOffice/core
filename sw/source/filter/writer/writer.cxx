@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:08:32 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:56:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,10 @@
 #include <swerror.h>
 #endif
 
+
+using namespace ::com::sun::star;
+
+
 // Stringbuffer fuer die umgewandelten Zahlen
 static sal_Char aNToABuf[] = "0000000000000000000000000";
 #define NTOABUFLEN (sizeof(aNToABuf))
@@ -104,7 +108,7 @@ struct Writer_Impl
     void InsertBkmk( const SwBookmark& rBkmk );
 };
 
-Writer_Impl::Writer_Impl( const SwDoc& rDoc )
+Writer_Impl::Writer_Impl( const SwDoc& /*rDoc*/ )
     : pSrcArr( 0 ), pDestArr( 0 ), pFontRemoveLst( 0 ), pBkmkNodePos( 0 )
 {
 }
@@ -269,14 +273,18 @@ SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
     SwNodeIndex aStt( *pNds, nStartIdx );
     SwCntntNode* pCNode = aStt.GetNode().GetCntntNode();
     if( !pCNode && 0 == ( pCNode = pNds->GoNext( &aStt )) )
+    {
         ASSERT( !this, "An StartPos kein ContentNode mehr" );
+    }
 
     SwPaM* pNew = new SwPaM( aStt );
     pNew->SetMark();
     aStt = nEndIdx;
     if( 0 == (pCNode = aStt.GetNode().GetCntntNode()) &&
         0 == (pCNode = pNds->GoPrevious( &aStt )) )
+    {
         ASSERT( !this, "An StartPos kein ContentNode mehr" );
+    }
     pCNode->MakeEndIndex( &pNew->GetPoint()->nContent );
     pNew->GetPoint()->nNode = aStt;
     return pNew;
@@ -381,13 +389,13 @@ ULONG Writer::Write( SwPaM& rPam, SfxMedium& rMed, const String* pFileName )
     //          : Write( rPam, *rMed.GetOutStream(), pFileName );
 }
 
-ULONG Writer::Write( SwPaM& rPam, SvStorage&, const String* )
+ULONG Writer::Write( SwPaM& /*rPam*/, SvStorage&, const String* )
 {
     ASSERT( !this, "Schreiben in Storages auf einem Stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
-ULONG Writer::Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String*, SfxMedium* )
+ULONG Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, const String*, SfxMedium* )
 {
     ASSERT( !this, "Schreiben in Storages auf einem Stream?" );
     return ERR_SWG_WRITE_ERROR;
@@ -650,7 +658,7 @@ ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
     return nRet;
 }
 
-ULONG StgWriter::Write( SwPaM& rPaM, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String* pFName, SfxMedium* pMedium )
+ULONG StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& rStg, const String* pFName, SfxMedium* pMedium )
 {
     pStrm = 0;
     pStg = 0;
