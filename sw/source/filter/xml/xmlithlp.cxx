@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlithlp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-18 07:52:45 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:12:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@
 
 using namespace ::rtl;
 using namespace ::xmloff::token;
+using namespace ::com::sun::star;
 
 
 #define SVX_XML_BORDER_STYLE_NONE 0
@@ -397,6 +398,8 @@ void lcl_frmitems_MergeXMLHoriPos( SvxGraphicPosition& ePos,
     case GPOS_RB:
         ePos = GPOS_LM==eHori ? GPOS_LB : (GPOS_MM==eHori ? GPOS_MB : GPOS_RB);
         break;
+    default:
+        ;
     }
 }
 
@@ -426,6 +429,8 @@ void lcl_frmitems_MergeXMLVertPos( SvxGraphicPosition& ePos,
     case GPOS_RB:
         ePos = GPOS_MT==eVert ? GPOS_RT : (GPOS_MM==eVert ? GPOS_RM : GPOS_RB);
         break;
+    default:
+        ;
     }
 }
 
@@ -442,20 +447,20 @@ const struct SvXMLEnumMapEntry psXML_BreakType[] =
 
 const struct  SvXMLEnumMapEntry aXMLTableAlignMap[] =
 {
-    { XML_LEFT,             HORI_LEFT           },
-    { XML_LEFT,             HORI_LEFT_AND_WIDTH },
-    { XML_CENTER,           HORI_CENTER         },
-    { XML_RIGHT,            HORI_RIGHT          },
-    { XML_MARGINS,          HORI_FULL           },
-    { XML_MARGINS,          HORI_NONE           },
+    { XML_LEFT,             text::HoriOrientation::LEFT           },
+    { XML_LEFT,             text::HoriOrientation::LEFT_AND_WIDTH },
+    { XML_CENTER,           text::HoriOrientation::CENTER         },
+    { XML_RIGHT,            text::HoriOrientation::RIGHT          },
+    { XML_MARGINS,          text::HoriOrientation::FULL           },
+    { XML_MARGINS,          text::HoriOrientation::NONE           },
     { XML_TOKEN_INVALID, 0 }
 };
 
 const struct  SvXMLEnumMapEntry aXMLTableVAlignMap[] =
 {
-    { XML_TOP,                  VERT_TOP        },
-    { XML_MIDDLE,               VERT_CENTER     },
-    { XML_BOTTOM,               VERT_BOTTOM     },
+    { XML_TOP,                  text::VertOrientation::TOP        },
+    { XML_MIDDLE,               text::VertOrientation::CENTER     },
+    { XML_BOTTOM,               text::VertOrientation::BOTTOM     },
     { XML_TOKEN_INVALID, 0 }
 };
 
