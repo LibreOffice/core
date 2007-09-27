@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblenum.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:19:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:13:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,25 +36,27 @@
 #define _TBLENUM_HXX
 
 //fuers aendern der Tabellen/Spalten/Zeilen Breiten/Hoehen
-enum TblChgWidthHeightType
+typedef USHORT TblChgWidthHeightType;
+
+namespace nsTblChgWidthHeightType
 {
-    WH_COL_LEFT,
-    WH_COL_RIGHT,
-    WH_ROW_TOP,
-    WH_ROW_BOTTOM,
-    WH_CELL_LEFT,
-    WH_CELL_RIGHT,
-    WH_CELL_TOP,
-    WH_CELL_BOTTOM,
+    const TblChgWidthHeightType WH_COL_LEFT = 0;
+    const TblChgWidthHeightType WH_COL_RIGHT = 1;
+    const TblChgWidthHeightType WH_ROW_TOP = 2;
+    const TblChgWidthHeightType WH_ROW_BOTTOM = 3;
+    const TblChgWidthHeightType WH_CELL_LEFT = 4;
+    const TblChgWidthHeightType WH_CELL_RIGHT = 5;
+    const TblChgWidthHeightType WH_CELL_TOP = 6;
+    const TblChgWidthHeightType WH_CELL_BOTTOM = 7;
 
 
     // folgende koennen hinein verodert werden
-    WH_FLAG_INSDEL  = 0x4000,           // Insert/Del-Modus: das Bigger-Flag
-                                        // besagt was passiert:
-                                        // bBigger -> Box wird entfernt
-                                        // !bBigger-> Box wird eingefuegt
-    WH_FLAG_BIGGER  = 0x8000            // Box wird groesser -> sonst kleiner
-};
+    const TblChgWidthHeightType WH_FLAG_INSDEL  = 0x4000;           // Insert/Del-Modus: das Bigger-Flag
+                                                                    // besagt was passiert:
+                                                                    // bBigger -> Box wird entfernt
+                                                                    // !bBigger-> Box wird eingefuegt
+    const TblChgWidthHeightType WH_FLAG_BIGGER  = 0x8000;           // Box wird groesser -> sonst kleiner
+}
 
 enum TblChgMode
 {
