@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdev.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:45:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:55:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,8 @@ class SwDrawDev
     const Point *pPos;
 
 public:
-    inline SwDrawDev( OutputDevice *pOut, const Point *pPos )
-        :pOut(pOut), pPos(pPos) { }
+    inline SwDrawDev( OutputDevice *pOutDev, const Point *pPosition )
+        :pOut(pOutDev), pPos(pPosition) { }
 
     inline OutputDevice *GetOut() { return pOut; }
 
