@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:06:42 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:03:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,12 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     void            SelectHdl( ToolBox*);
-    virtual void    Show();
+
+    void            ShowWin();
+
+    using Window::IsActive;
     BOOL            IsActive(){ return bActive; };
+
     DECL_LINK( SelTblCellsNotify, SwWrtShell * );
 
     void            SetFormula( const String& rFormula, BOOL bDelSel = TRUE );
