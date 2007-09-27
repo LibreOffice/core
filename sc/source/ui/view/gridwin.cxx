@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-21 09:23:50 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,6 +194,7 @@ private:
     BOOL            bButtonDown;
     BOOL            bInit;
     BOOL            bCancelled;
+    BOOL            bInSelect;
     ULONG           nSel;
     ScFilterBoxMode eMode;
 
@@ -215,6 +216,7 @@ public:
     BOOL            IsDataSelect() const    { return (eMode == SC_FILTERBOX_DATASELECT); }
     void            EndInit();
     void            SetCancelled()          { bCancelled = TRUE; }
+    BOOL            IsInSelect() const      { return bInSelect; }
 };
 
 //-------------------------------------------------------------------
@@ -229,6 +231,7 @@ ScFilterListBox::ScFilterListBox( Window* pParent, ScGridWindow* pGrid,
     bButtonDown( FALSE ),
     bInit( TRUE ),
     bCancelled( FALSE ),
+    bInSelect( FALSE ),
     nSel( 0 ),
     eMode( eNewMode )
 {
@@ -301,7 +304,12 @@ void __EXPORT ScFilterListBox::SelectHdl()
         {
             nSel = nPos;
             if (!bButtonDown)
+            {
+                // #i81298# set bInSelect flag, so the box isn't deleted from modifications within FilterSelect
+                bInSelect = TRUE;
                 pGridWin->FilterSelect( nSel );
+                bInSelect = FALSE;
+            }
         }
     }
 }
@@ -478,6 +486,11 @@ void __EXPORT ScGridWindow::Resize( const Size& )
 
 void ScGridWindow::ClickExtern()
 {
+    // #i81298# don't delete the filter box when called from its select handler
+    // (possible through row header size update)
+    if ( pFilterBox && pFilterBox->IsInSelect() )
+        return;
+
     DELETEZ(pFilterBox);
     DELETEZ(pFilterFloat);
 }
@@ -2034,11 +2047,12 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             MouseEvent aEditEvt( rMEvt.GetPosPixel(), 1, MOUSE_SYNTHETIC, MOUSE_LEFT, 0 );
             pEditView->MouseButtonDown( aEditEvt );
             pEditView->MouseButtonUp( aEditEvt );
+            return;
         }
     }
 
             //
-            //      Links in Edit-Zellen
+            //      Links in edit cells
             //
 
     BOOL bAlt = rMEvt.IsMod2();
@@ -2618,11 +2632,6 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
         return;
     }
 
-    BOOL bDisable = pScMod->IsFormulaMode() ||
-                    pScMod->IsModalMode(pViewData->GetSfxDocShell());
-    if (bDisable)
-        return;
-
     if ( nCmd == COMMAND_WHEEL || nCmd == COMMAND_STARTAUTOSCROLL || nCmd == COMMAND_AUTOSCROLL )
     {
         BOOL bDone = pViewData->GetView()->ScrollCommand( rCEvt, eWhich );
@@ -2630,6 +2639,11 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
             Window::Command(rCEvt);
         return;
     }
+    // #i7560# FormulaMode check is below scrolling - scrolling is allowed during formula input
+    BOOL bDisable = pScMod->IsFormulaMode() ||
+                    pScMod->IsModalMode(pViewData->GetSfxDocShell());
+    if (bDisable)
+        return;
 
     if ( nCmd == COMMAND_CONTEXTMENU && !SC_MOD()->GetIsWaterCan() )
     {
