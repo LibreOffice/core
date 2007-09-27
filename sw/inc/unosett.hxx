@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosett.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:17:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:16:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -301,7 +301,7 @@ class SwXTextColumns : public cppu::WeakAggImplHelper4
     ::com::sun::star::lang::XServiceInfo
 >
 {
-    sal_uInt32                  nReference;
+    sal_Int32                   nReference;
     ::com::sun::star::uno::Sequence< ::com::sun::star::text::TextColumn>    aTextColumns;
     sal_Bool                    bIsAutomaticWidth;
     sal_Int32                   nAutoDistance;
