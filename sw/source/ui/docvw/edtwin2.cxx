@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:43:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,11 +162,11 @@ static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL bBall
     USHORT nResId = 0;
     switch( rRedl.GetType() )
     {
-    case IDocumentRedlineAccess::REDLINE_INSERT:    nResId = STR_REDLINE_INSERT; break;
-    case IDocumentRedlineAccess::REDLINE_DELETE:    nResId = STR_REDLINE_DELETE; break;
-    case IDocumentRedlineAccess::REDLINE_FORMAT:    nResId = STR_REDLINE_FORMAT; break;
-    case IDocumentRedlineAccess::REDLINE_TABLE:     nResId = STR_REDLINE_TABLE; break;
-    case IDocumentRedlineAccess::REDLINE_FMTCOLL:   nResId = STR_REDLINE_FMTCOLL; break;
+    case nsRedlineType_t::REDLINE_INSERT:   nResId = STR_REDLINE_INSERT; break;
+    case nsRedlineType_t::REDLINE_DELETE:   nResId = STR_REDLINE_DELETE; break;
+    case nsRedlineType_t::REDLINE_FORMAT:   nResId = STR_REDLINE_FORMAT; break;
+    case nsRedlineType_t::REDLINE_TABLE:        nResId = STR_REDLINE_TABLE; break;
+    case nsRedlineType_t::REDLINE_FMTCOLL:  nResId = STR_REDLINE_FMTCOLL; break;
     }
 
     if( nResId )
@@ -192,7 +192,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
     SET_CURR_SHELL(&rSh);
     String sTxt;
     Point aPos( PixelToLogic( ScreenToOutputPixel( rEvt.GetMousePosPixel() ) ));
-    BOOL bBalloon = rEvt.GetMode() & HELPMODE_BALLOON;
+    BOOL bBalloon = static_cast< BOOL >(rEvt.GetMode() & HELPMODE_BALLOON);
 
     SdrView *pSdrView = rSh.GetDrawView();
 
@@ -314,7 +314,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         case RES_GETEXPFLD:
                         {
                             USHORT nOldSubType = pFld->GetSubType();
-                            ((SwField*)pFld)->SetSubType(SUB_CMD);
+                            ((SwField*)pFld)->SetSubType(nsSwExtendedSubType::SUB_CMD);
                             sTxt = pFld->Expand();
                             ((SwField*)pFld)->SetSubType(nOldSubType);
                         }
@@ -452,7 +452,6 @@ aktuelle Zeichenvorlage anzeigen?
             // URL-Feld in zum Editieren ge?ffneten DrawText-Objekt suchen
             OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
             const SvxFieldItem* pFieldItem;
-            const SdrTextObj* pTextObj = NULL;
 
             if (pSdrView->AreObjectsMarked())
             {
@@ -465,9 +464,9 @@ aktuelle Zeichenvorlage anzeigen?
             if (pObj && pObj->ISA(SdrTextObj) && pOLV &&
                     (pFieldItem = pOLV->GetFieldUnderMousePointer()) != 0)
             {
-                const SvxFieldData* pField = pFieldItem->GetField();
+                pField = dynamic_cast<const SvxURLField*>(pFieldItem->GetField());
 
-                if (pField && pField->ISA(SvxURLField))
+                if (pField )
                 {
                     sTxt = ((const SvxURLField*) pField)->GetURL();
                     bWeiter = FALSE;
@@ -525,11 +524,11 @@ void  SwEditWin::Paint(const Rectangle& rRect)
             bPaintShadowCrsr = TRUE;
         }
     }
-
+/*
+    //TODO/LATER: what's the replacement for this? Do we need it?
     SwDocShell* pDocShell = GetView().GetDocShell();
 
-    //TODO/LATER: what's the replacement for this? Do we need it?
-/*  SvInPlaceEnvironment *pIpEnv =  pDocShell ?
+  SvInPlaceEnvironment *pIpEnv =  pDocShell ?
                                   pDocShell->GetIPEnv() : 0;
     if ( pIpEnv && pIpEnv->GetRectsChangedLockCount() )
         //Wir stehen in Groessenverhandlungen (MM), Paint verzoegern
