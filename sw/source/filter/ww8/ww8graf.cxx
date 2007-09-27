@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:52:56 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:03:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,6 +262,7 @@
 
 #include <math.h>
 
+using namespace ::com::sun::star;
 using namespace sw::types;
 using namespace sw::util;
 
@@ -312,7 +313,7 @@ Color WW8TransCol(SVBT32 nWC)
     if (nWC[3] & 0x1)
     {
         //Special colour gray
-        register BYTE u = (BYTE)( (ULONG)( 200 - nWC[0] ) * 256 / 200 );
+        BYTE u = (BYTE)( (ULONG)( 200 - nWC[0] ) * 256 / 200 );
         return Color(u, u, u);
     }
 
@@ -352,15 +353,15 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
     if( eAnchor == FLY_AT_CNTNT )
     {
         if( SVBT8ToByte( pDo->bx ) == 1 )       // Pos: echt links
-            nDrawXOfs2 -= maSectionManager.GetPageLeft();
+            nDrawXOfs2 = static_cast< short >(nDrawXOfs2 - maSectionManager.GetPageLeft());
         if( nInTable )                          // Obj in Table
-            nDrawXOfs2 -= GetTableLeft();       // -> siehe Kommentar
+            nDrawXOfs2 = nDrawXOfs2 - GetTableLeft();       // -> siehe Kommentar
                                                 // bei GetTableLeft()
     }
     else
     {
         if( SVBT8ToByte( pDo->bx ) != 1 )
-            nDrawXOfs2 += maSectionManager.GetPageLeft();
+            nDrawXOfs2 = static_cast< short >(nDrawXOfs2 + maSectionManager.GetPageLeft());
     }
 
     return true;
@@ -774,7 +775,7 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
      paragraph mark as part of the paragraph text.
     */
     WW8ReaderSave aSave(this);
-    pPlcxMan = new WW8PLCFMan(pSBase, eType, nStartCp, true);
+    pPlcxMan = new WW8PLCFMan(pSBase, static_cast< short >(eType), nStartCp, true);
 
     WW8_CP nStart = pPlcxMan->Where();
     WW8_CP nNext, nEnd, nStartReplace=0;
@@ -788,7 +789,7 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
     std::deque<Chunk> aChunks;
 
     //Here store stack location
-    USHORT nCurrentCount = pCtrlStck->Count();
+    USHORT nCurrentCount = static_cast< USHORT >(pCtrlStck->Count());
     while (nStart < nEndCp)
     {
         //nStart is the beginning of the attributes for this range, and
@@ -846,11 +847,11 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
             {
                 if (bStartAttr)
                 {
-                    USHORT nCount = pCtrlStck->Count();
+                    USHORT nCount = static_cast< USHORT >(pCtrlStck->Count());
                     if (maFieldStack.empty() && Read_Field(&aRes))
                     {
                         String sURL;
-                        for (USHORT nI = pCtrlStck->Count(); nI > nCount; --nI)
+                        for (USHORT nI = static_cast< USHORT >(pCtrlStck->Count()); nI > nCount; --nI)
                         {
                             const SfxPoolItem *pItem = ((*pCtrlStck)[nI-1])->pAttr;
                             USHORT nWhich = pItem->Which();
@@ -925,7 +926,7 @@ void SwWW8ImplReader::InsertTxbxAttrs(long nStartCp, long nEndCp,
 
     //pop off as far as recorded location just in case there were some left
     //unclosed
-    for (USHORT nI = pCtrlStck->Count(); nI > nCurrentCount; --nI)
+    for (USHORT nI = static_cast< USHORT >(pCtrlStck->Count()); nI > nCurrentCount; --nI)
         pCtrlStck->DeleteAndDestroy(nI-1);
 
     typedef std::deque<Chunk>::iterator myIter;
@@ -1419,8 +1420,8 @@ SdrObject *SwWW8ImplReader::ReadGroup( WW8_DPHEAD* pHd, const WW8_DO* pDo,
     nGrouped = (INT16)SWAPSHORT( nGrouped );
 #endif
 
-    nDrawXOfs += (INT16)SVBT16ToShort( pHd->xa );
-    nDrawYOfs += (INT16)SVBT16ToShort( pHd->ya );
+    nDrawXOfs = nDrawXOfs + (INT16)SVBT16ToShort( pHd->xa );
+    nDrawYOfs = nDrawYOfs + (INT16)SVBT16ToShort( pHd->ya );
 
     SdrObject* pObj = new SdrObjGroup;
 
@@ -1440,8 +1441,8 @@ SdrObject *SwWW8ImplReader::ReadGroup( WW8_DPHEAD* pHd, const WW8_DO* pDo,
         }
     }
 
-    nDrawXOfs -= (INT16)SVBT16ToShort( pHd->xa );
-    nDrawYOfs -= (INT16)SVBT16ToShort( pHd->ya );
+    nDrawXOfs = nDrawXOfs - (INT16)SVBT16ToShort( pHd->xa );
+    nDrawYOfs = nDrawYOfs - (INT16)SVBT16ToShort( pHd->ya );
 
     return pObj;
 }
@@ -1493,7 +1494,7 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive( short& rLeft, const WW8_DO* pDo,
     {
         ASSERT( !this, "+Grafik-Overlap" );
     }
-    rLeft -= SVBT16ToShort( aHd.cb );
+    rLeft = rLeft - SVBT16ToShort( aHd.cb );
     return pRet;
 }
 
@@ -1827,8 +1828,8 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     };
     const SfxPoolItem* pPoolItem;
     for(USHORT nItem = 0; nItem < nDirectMatch; ++nItem)
-        if( SFX_ITEM_SET == rOldSet.GetItemState( aDirectMatch[ nItem ], false,
-            &pPoolItem) )
+        if( SFX_ITEM_SET == rOldSet.GetItemState(
+                    static_cast< USHORT >(aDirectMatch[ nItem ]), false, &pPoolItem) )
         {
             rFlySet.Put( *pPoolItem );
         }
@@ -1865,25 +1866,25 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     rInnerDist.Bottom()+=nLineThick;
 
     const SvxBorderLine *pLine;
-    if ((pLine = aBox.GetLine(BOX_LINE_LEFT)))
+    if (0 != (pLine = aBox.GetLine(BOX_LINE_LEFT)))
     {
         rInnerDist.Left() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
             pLine->GetDistance());
     }
 
-    if ((pLine = aBox.GetLine(BOX_LINE_TOP)))
+    if (0 != (pLine = aBox.GetLine(BOX_LINE_TOP)))
     {
         rInnerDist.Top() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
             pLine->GetDistance());
     }
 
-    if ((pLine = aBox.GetLine(BOX_LINE_RIGHT)))
+    if (0 != (pLine = aBox.GetLine(BOX_LINE_RIGHT)))
     {
         rInnerDist.Right() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
             pLine->GetDistance());
     }
 
-    if ((pLine = aBox.GetLine(BOX_LINE_BOTTOM)))
+    if (0 != (pLine = aBox.GetLine(BOX_LINE_BOTTOM)))
     {
         rInnerDist.Bottom() -= (pLine->GetOutWidth() + pLine->GetInWidth() +
             pLine->GetDistance());
@@ -2242,7 +2243,7 @@ void SwWW8ImplReader::SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord,
 {
     const SwNodeIndex* pIdx = pFlyFmt->GetCntnt(false).GetCntntIdx();
     SwGrfNode* pGrfNd;
-    if( pIdx && (pGrfNd = rDoc.GetNodes()[pIdx->GetIndex() + 1]->GetGrfNode() ))
+    if( pIdx && 0 != (pGrfNd = rDoc.GetNodes()[pIdx->GetIndex() + 1]->GetGrfNode() ))
     {
         Size aSz(pGrfNd->GetTwipSize());
         // --> OD 2005-08-01 #124722# - use type <sal_uInt64> instead of <ULONG>
@@ -2261,21 +2262,21 @@ void SwWW8ImplReader::SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord,
             SwCropGrf aCrop;            // Cropping is stored in 'fixed floats'
                                         // 16.16 (it est fraction times total
             if( pRecord->nCropFromTop ) //        image width or height resp.)
-                aCrop.SetTop(
+                aCrop.SetTop( static_cast< sal_Int32 >(
                 (   ( (pRecord->nCropFromTop    >> 16   ) * rHeight )
-                  + (((pRecord->nCropFromTop    & 0xffff) * rHeight ) >> 16) ));
+                  + (((pRecord->nCropFromTop    & 0xffff) * rHeight ) >> 16) )));
             if( pRecord->nCropFromBottom )
-                aCrop.SetBottom(
+                aCrop.SetBottom( static_cast< sal_Int32 >(
                 (   ( (pRecord->nCropFromBottom >> 16   ) * rHeight )
-                  + (((pRecord->nCropFromBottom & 0xffff) * rHeight ) >> 16) ));
+                  + (((pRecord->nCropFromBottom & 0xffff) * rHeight ) >> 16) )));
             if( pRecord->nCropFromLeft )
-                aCrop.SetLeft(
+                aCrop.SetLeft( static_cast< sal_Int32 >(
                 (   ( (pRecord->nCropFromLeft   >> 16   ) * rWidth  )
-                  + (((pRecord->nCropFromLeft   & 0xffff) * rWidth  ) >> 16) ));
+                  + (((pRecord->nCropFromLeft   & 0xffff) * rWidth  ) >> 16) )));
             if( pRecord->nCropFromRight )
-                aCrop.SetRight(
+                aCrop.SetRight( static_cast< sal_Int32 >(
                 (   ( (pRecord->nCropFromRight  >> 16   ) * rWidth  )
-                  + (((pRecord->nCropFromRight  & 0xffff) * rWidth  ) >> 16) ));
+                  + (((pRecord->nCropFromRight  & 0xffff) * rWidth  ) >> 16) )));
 
             pGrfNd->SetAttr( aCrop );
         }
@@ -2312,8 +2313,8 @@ void SwWW8ImplReader::SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord,
             //drawmode
             if (WW8ITEMVALUE(rOldSet, SDRATTR_GRAFMODE, SdrGrafModeItem))
             {
-                SwDrawModeGrf aDrawMode(WW8ITEMVALUE(rOldSet, SDRATTR_GRAFMODE,
-                    SdrGrafModeItem));
+                SwDrawModeGrf aDrawMode( static_cast< USHORT >(WW8ITEMVALUE(rOldSet,
+                    SDRATTR_GRAFMODE, SdrGrafModeItem)) );
                 pGrfNd->SetAttr( aDrawMode );
             }
         }
@@ -2343,7 +2344,7 @@ SdrObject* SwWW8ImplReader::CreateContactObject(SwFrmFmt* pFlyFmt)
 //#109311# Miserable miserable hack to fudge word's graphic layout in
 //RTL mode to ours.
 bool SwWW8ImplReader::MiserableRTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
-    SwHoriOrient eHoriOri, SwRelationOrient eHoriRel)
+    sal_Int16 eHoriOri, sal_Int16 eHoriRel)
 {
     if (!IsRightToLeft())
         return false;
@@ -2354,7 +2355,7 @@ bool SwWW8ImplReader::MiserableRTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
 }
 
 RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
-    WW8_FSPA *pFSPA, SfxItemSet &rFlySet, bool bOrgObjectWasReplace)
+    WW8_FSPA *pFSPA, SfxItemSet &rFlySet, bool /*bOrgObjectWasReplace*/)
 {
     ASSERT(pRecord || pFSPA, "give me something! to work with for anchoring");
     if (!pRecord && !pFSPA)
@@ -2428,82 +2429,80 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         //character the following 4 tables may need to be changed.
 
         // horizontal Adjustment
-        static const SwHoriOrient aHoriOriTab[ nCntXAlign ] =
+        static const sal_Int16 aHoriOriTab[ nCntXAlign ] =
         {
-            HORI_NONE,     // From left position
-            HORI_LEFT,     // left
-            HORI_CENTER,   // centered
-            HORI_RIGHT,    // right
+            text::HoriOrientation::NONE,     // From left position
+            text::HoriOrientation::LEFT,     // left
+            text::HoriOrientation::CENTER,   // centered
+            text::HoriOrientation::RIGHT,    // right
             // --> OD 2004-12-06 #i36649#
-            // - inside -> HORI_LEFT and outside -> HORI_RIGHT
-            HORI_LEFT,   // inside
-            HORI_RIGHT   // outside
+            // - inside -> text::HoriOrientation::LEFT and outside -> text::HoriOrientation::RIGHT
+            text::HoriOrientation::LEFT,   // inside
+            text::HoriOrientation::RIGHT   // outside
             // <--
         };
 
 
         // generic vertical Adjustment
-        static const SwVertOrient aVertOriTab[ nCntYAlign ] =
+        static const sal_Int16 aVertOriTab[ nCntYAlign ] =
         {
-            VERT_NONE,         // From Top position
-            VERT_TOP,          // top
-            VERT_CENTER,       // centered
-            VERT_BOTTOM,       // bottom
-            VERT_LINE_TOP,     // inside (obscure)
-            VERT_LINE_BOTTOM   // outside (obscure)
+            text::VertOrientation::NONE,         // From Top position
+            text::VertOrientation::TOP,          // top
+            text::VertOrientation::CENTER,       // centered
+            text::VertOrientation::BOTTOM,       // bottom
+            text::VertOrientation::LINE_TOP,     // inside (obscure)
+            text::VertOrientation::LINE_BOTTOM   // outside (obscure)
         };
 
         // CMC,OD 24.11.2003 #i22673# - to-line vertical alignment
-        static const SwVertOrient aToLineVertOriTab[ nCntYAlign ] =
+        static const sal_Int16 aToLineVertOriTab[ nCntYAlign ] =
         {
-            VERT_NONE,         // below
-            VERT_LINE_BOTTOM,  // top
-            VERT_LINE_CENTER,  // centered
-            VERT_LINE_TOP,     // bottom
-            VERT_LINE_BOTTOM,  // inside (obscure)
-            VERT_LINE_TOP      // outside (obscure)
+            text::VertOrientation::NONE,         // below
+            text::VertOrientation::LINE_BOTTOM,  // top
+            text::VertOrientation::LINE_CENTER,  // centered
+            text::VertOrientation::LINE_TOP,     // bottom
+            text::VertOrientation::LINE_BOTTOM,  // inside (obscure)
+            text::VertOrientation::LINE_TOP      // outside (obscure)
         };
 
         // Adjustment is horizontally relative to...
-        static const SwRelationOrient aHoriRelOriTab[nCntRelTo] =
+        static const sal_Int16 aHoriRelOriTab[nCntRelTo] =
         {
-            REL_PG_PRTAREA,    // 0 is page textarea margin
-            REL_PG_FRAME,  // 1 is page margin
-            FRAME,         // 2 is relative to column
-            REL_CHAR       // 3 is relative to character
+            text::RelOrientation::PAGE_PRINT_AREA,    // 0 is page textarea margin
+            text::RelOrientation::PAGE_FRAME,  // 1 is page margin
+            text::RelOrientation::FRAME,         // 2 is relative to column
+            text::RelOrientation::CHAR       // 3 is relative to character
         };
 
         // Adjustment is vertically relative to...
         // CMC, OD 24.11.2003 #i22673# - adjustment for new vertical alignment
         // at top of line.
-        static const SwRelationOrient aVertRelOriTab[nCntRelTo] =
+        static const sal_Int16 aVertRelOriTab[nCntRelTo] =
         {
-            REL_PG_PRTAREA, // 0 is page textarea margin
-            REL_PG_FRAME,   // 1 is page margin
-            FRAME,          // 2 is relative to paragraph
-            REL_VERT_LINE   // 3 is relative to line
+            text::RelOrientation::PAGE_PRINT_AREA, // 0 is page textarea margin
+            text::RelOrientation::PAGE_FRAME,   // 1 is page margin
+            text::RelOrientation::FRAME,          // 2 is relative to paragraph
+            text::RelOrientation::TEXT_LINE   // 3 is relative to line
         };
 
-        SwHoriOrient eHoriOri;
-        eHoriOri = aHoriOriTab[ nXAlign ];
-        SwRelationOrient eHoriRel;
-        eHoriRel = aHoriRelOriTab[  nXRelTo ];
+        sal_Int16 eHoriOri = aHoriOriTab[ nXAlign ];
+        sal_Int16 eHoriRel = aHoriRelOriTab[  nXRelTo ];
 
         // --> OD 2004-12-06 #i36649# - adjustments for certain alignments
-        if ( eHoriOri == HORI_LEFT && eHoriRel == REL_PG_FRAME )
+        if ( eHoriOri == text::HoriOrientation::LEFT && eHoriRel == text::RelOrientation::PAGE_FRAME )
         {
             // convert 'left to page' to 'from left -<width> to page text area'
-            eHoriOri = HORI_NONE;
-            eHoriRel = REL_PG_PRTAREA;
+            eHoriOri = text::HoriOrientation::NONE;
+            eHoriRel = text::RelOrientation::PAGE_PRINT_AREA;
             const long nWidth = pFSPA->nXaRight - pFSPA->nXaLeft;
             pFSPA->nXaLeft = -nWidth;
             pFSPA->nXaRight = 0;
         }
-        else if ( eHoriOri == HORI_RIGHT && eHoriRel == REL_PG_FRAME )
+        else if ( eHoriOri == text::HoriOrientation::RIGHT && eHoriRel == text::RelOrientation::PAGE_FRAME )
         {
             // convert 'right to page' to 'from left 0 to right page border'
-            eHoriOri = HORI_NONE;
-            eHoriRel = REL_PG_RIGHT;
+            eHoriOri = text::HoriOrientation::NONE;
+            eHoriRel = text::RelOrientation::PAGE_RIGHT;
             const long nWidth = pFSPA->nXaRight - pFSPA->nXaLeft;
             pFSPA->nXaLeft = 0;
             pFSPA->nXaRight = nWidth;
@@ -2531,11 +2530,11 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         // has wrap through, but its attribute 'layout in table cell' isn't set,
         // convert its horizontal alignment to page text area.
         if ( nInTable &&
-             ( eHoriRel == FRAME || eHoriRel == REL_CHAR ) &&
+             ( eHoriRel == text::RelOrientation::FRAME || eHoriRel == text::RelOrientation::CHAR ) &&
              pFSPA->nwr == 3 &&
              pRecord->nLayoutInTableCell == 0x80000000 )
         {
-            eHoriRel = REL_PG_PRTAREA;
+            eHoriRel = text::RelOrientation::PAGE_PRINT_AREA;
         }
         // <--
 
@@ -2547,17 +2546,17 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
         //Writer honours this wrap distance when aligned as "left" or "right",
         //Word doesn't. Writer doesn't honour it when its "from left".
-        if (eHoriOri == HORI_LEFT)
+        if (eHoriOri == text::HoriOrientation::LEFT)
             pRecord->nDxWrapDistLeft=0;
-        else if (eHoriOri == HORI_RIGHT)
+        else if (eHoriOri == text::HoriOrientation::RIGHT)
             pRecord->nDxWrapDistRight=0;
 
-        SwRelationOrient eVertRel;
+        sal_Int16 eVertRel;
         // OD 14.10.2003 #i18732#
         eVertRel = aVertRelOriTab[  nYRelTo ];
         // CMC, OD 24.11.2003 #i22673# - fill <eVertOri> in dependence of <eVertRel>
-        SwVertOrient eVertOri;
-        if ( eVertRel == REL_VERT_LINE )
+        sal_Int16 eVertOri;
+        if ( eVertRel == text::RelOrientation::TEXT_LINE )
         {
             eVertOri = aToLineVertOriTab[ nYAlign ];
         }
@@ -2570,14 +2569,14 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         //negative
         long nYPos = pFSPA->nYaTop;
         // CMC, OD 24.11.2003 #i22673#
-        if ((eVertRel == REL_VERT_LINE) && (eVertOri == VERT_NONE))
+        if ((eVertRel == text::RelOrientation::TEXT_LINE) && (eVertOri == text::VertOrientation::NONE))
             nYPos = -nYPos;
 
         rFlySet.Put(SwFmtVertOrient(MakeSafePositioningValue(nYPos),
             eVertOri, eVertRel));
 
         if (
-            (pFSPA->nYaTop < 0) && (eVertOri == VERT_NONE) &&
+            (pFSPA->nYaTop < 0) && (eVertOri == text::VertOrientation::NONE) &&
             ((eAnchor == FLY_AT_CNTNT) || (eAnchor == FLY_AUTO_CNTNT))
            )
         {
@@ -2878,8 +2877,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             */
             if (aData.HasRecords())
             {
-                USHORT nRecCount = aData.GetRecCount();
-                for (USHORT nTxbx=0; nTxbx < nRecCount; ++nTxbx)
+                USHORT nCount = aData.GetRecCount();
+                for (USHORT nTxbx=0; nTxbx < nCount; ++nTxbx)
                 {
                     pRecord = aData.GetRecord(nTxbx);
                     if (pRecord && pRecord->pObj && pRecord->aTextId.nTxBxS)
@@ -2907,8 +2906,8 @@ SwFrmFmt *SwWW8ImplReader::AddAutoAnchor(SwFrmFmt *pFmt)
 {
     if (pFmt && (pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT))
     {
-        sal_uInt16 nTextAreaWidth = maSectionManager.GetPageWidth() -
-            maSectionManager.GetPageRight() - maSectionManager.GetPageLeft();
+        sal_uInt16 nTextAreaWidth = static_cast< sal_uInt16 >( maSectionManager.GetPageWidth() -
+            maSectionManager.GetPageRight() - maSectionManager.GetPageLeft());
 
         if (pFmt->GetFrmSize().GetSize().Width() > nTextAreaWidth)
             maTracer.Log(sw::log::eTooWideAsChar);
@@ -3123,8 +3122,8 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             // lies den Text ein
             bTxbxFlySection = true;
             bool bJoined = ReadText(nStartCp, (nEndCp-nStartCp),
-                MAN_MAINTEXT == pPlcxMan->GetManType() ?
-                MAN_TXBX : MAN_TXBX_HDFT);
+                static_cast< short >(MAN_MAINTEXT == pPlcxMan->GetManType() ?
+                        MAN_TXBX : MAN_TXBX_HDFT));
 
             pWWZOrder->OutsideEscher();
 
@@ -3141,14 +3140,14 @@ void MatchEscherMirrorIntoFlySet(const SvxMSDffImportRec &rRecord,
 {
     if (rRecord.bVFlip || rRecord.bHFlip)
     {
-        GRFMIRROR eType(RES_DONT_MIRROR_GRF);
+        MirrorGraph eType(RES_MIRROR_GRAPH_DONT);
         if (rRecord.bVFlip && rRecord.bHFlip)
-            eType = RES_MIRROR_GRF_BOTH;
+            eType = RES_MIRROR_GRAPH_BOTH;
         else if (rRecord.bVFlip)
-            eType = RES_MIRROR_GRF_HOR;
+            eType = RES_MIRROR_GRAPH_HOR;
         else
-            eType = RES_MIRROR_GRF_VERT;
-        rFlySet.Put(SwMirrorGrf(eType));
+            eType = RES_MIRROR_GRAPH_VERT;
+        rFlySet.Put( SwMirrorGrf(eType) );
     }
 }
 
@@ -3301,7 +3300,7 @@ void SwWW8FltAnchorStack::AddAnchor(const SwPosition& rPos, SwFrmFmt *pFmt)
 
 void SwWW8FltAnchorStack::Flush()
 {
-    USHORT nCnt = Count();
+    USHORT nCnt = static_cast< USHORT >(Count());
     for (USHORT i=0; i < nCnt; ++i)
     {
         SwFltStackEntry *pEntry = (*this)[i];
