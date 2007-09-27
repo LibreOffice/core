@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swhtml.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 10:52:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:52:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ public:
     xub_StrLen GetEndCnt() const { return nEndCntnt; }
 
     sal_Bool IsLikePara() const { return bLikePara; }
-    void SetLikePara( sal_Bool bPara=sal_True ) { bLikePara = sal_True; }
+    void SetLikePara( sal_Bool bPara=sal_True ) { bLikePara = bPara; }
 
           SfxPoolItem& GetItem()        { return *pItem; }
     const SfxPoolItem& GetItem() const  { return *pItem; }
@@ -276,29 +276,47 @@ public:
     _HTMLAttrContext( sal_uInt16 nTokn, sal_uInt16 nPoolId, const String& rClass,
                       sal_Bool bDfltColl=sal_False ) :
         aClass( rClass ),
-        pSaveDocContext( 0 ), pFrmItemSet( 0 ),
-        nToken( nTokn ), nTxtFmtColl( nPoolId ),
-        nLeftMargin( 0 ), nRightMargin( 0 ), nFirstLineIndent( 0 ),
-        nUpperSpace( 0 ), nLowerSpace( 0 ),
+        pSaveDocContext( 0 ),
+        pFrmItemSet( 0 ),
+        nToken( nTokn ),
+        nTxtFmtColl( nPoolId ),
+        nLeftMargin( 0 ),
+        nRightMargin( 0 ),
+        nFirstLineIndent( 0 ),
+        nUpperSpace( 0 ),
+        nLowerSpace( 0 ),
         eAppend( AM_NONE ),
-        bLRSpaceChanged( sal_False ), bULSpaceChanged( sal_False ),
-        bSpansSection( sal_False ), bPopStack( sal_False ),
+        bLRSpaceChanged( sal_False ),
+        bULSpaceChanged( sal_False ),
+        bDfltTxtFmtColl( bDfltColl ),
+        bSpansSection( sal_False ),
+        bPopStack( sal_False ),
         bFinishPREListingXMP( sal_False ),
-        bRestartPRE( sal_False ), bRestartXMP( sal_False ), bRestartListing( sal_False ),
-        bDfltTxtFmtColl( bDfltColl )
+        bRestartPRE( sal_False ),
+        bRestartXMP( sal_False ),
+        bRestartListing( sal_False )
     {}
 
     _HTMLAttrContext( sal_uInt16 nTokn ) :
-        pSaveDocContext( 0 ), pFrmItemSet( 0 ),
-        nToken( nTokn ), nTxtFmtColl( 0 ),
-        nLeftMargin( 0 ), nRightMargin( 0 ), nFirstLineIndent( 0 ),
-        nUpperSpace( 0 ), nLowerSpace( 0 ),
+        pSaveDocContext( 0 ),
+        pFrmItemSet( 0 ),
+        nToken( nTokn ),
+        nTxtFmtColl( 0 ),
+        nLeftMargin( 0 ),
+        nRightMargin( 0 ),
+        nFirstLineIndent( 0 ),
+        nUpperSpace( 0 ),
+        nLowerSpace( 0 ),
         eAppend( AM_NONE ),
-        bLRSpaceChanged( sal_False ), bULSpaceChanged( sal_False ),
-        bSpansSection( sal_False ), bPopStack( sal_False ),
+        bLRSpaceChanged( sal_False ),
+        bULSpaceChanged( sal_False ),
+        bDfltTxtFmtColl( sal_False ),
+        bSpansSection( sal_False ),
+        bPopStack( sal_False ),
         bFinishPREListingXMP( sal_False ),
-        bRestartPRE( sal_False ), bRestartXMP( sal_False ), bRestartListing( sal_False ),
-        bDfltTxtFmtColl( sal_False )
+        bRestartPRE( sal_False ),
+        bRestartXMP( sal_False ),
+        bRestartListing( sal_False )
     {}
 
     ~_HTMLAttrContext() { ClearSaveDocContext(); delete pFrmItemSet; }
@@ -691,13 +709,13 @@ private:
 
     // Verankerung eines Fly-Frames bestimmen und entsprechende Attribute
     // in den Attrset setzen (htmlgrin.cxx)
-    void SetAnchorAndAdjustment( SwVertOrient eVertOri,
-                                 SwHoriOrient eHoriOri,
+    void SetAnchorAndAdjustment( sal_Int16 eVertOri,
+                                 sal_Int16 eHoriOri,
                                  const SfxItemSet &rItemSet,
                                  const SvxCSS1PropertyInfo &rPropInfo,
                                  SfxItemSet& rFrmSet );
-    void SetAnchorAndAdjustment( SwVertOrient eVertOri,
-                                 SwHoriOrient eHoriOri,
+    void SetAnchorAndAdjustment( sal_Int16 eVertOri,
+                                 sal_Int16 eHoriOri,
                                  SfxItemSet& rFrmSet,
                                  sal_Bool bDontAppend=sal_False );
     void SetAnchorAndAdjustment( const SfxItemSet &rItemSet,
@@ -800,16 +818,16 @@ private:
 
     // Ein Draw-Objekt in das Dokuement eintragen
     void InsertDrawObject( SdrObject* pNewDrawObj, const Size& rSpace,
-                           SwVertOrient eVertOri,
-                           SwHoriOrient eHoriOri,
+                           sal_Int16 eVertOri,
+                           sal_Int16 eHoriOri,
                            SfxItemSet& rCSS1ItemSet,
                            SvxCSS1PropertyInfo& rCSS1PropInfo,
                            sal_Bool bHidden=sal_False );
                         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  InsertControl( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & rFormComp,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rFCompPropSet,
                         const Size& rSize,
-                        SwVertOrient eVertOri,
-                        SwHoriOrient eHoriOri,
+                        sal_Int16 eVertOri,
+                        sal_Int16 eHoriOri,
                         SfxItemSet& rCSS1ItemSet,
                         SvxCSS1PropertyInfo& rCSS1PropInfo,
                         const SvxMacroTableDtor& rMacroTbl,
@@ -865,7 +883,7 @@ private:
 
     void BuildTableCell( HTMLTable *pTable, sal_Bool bReadOptions, sal_Bool bHead );
     void BuildTableRow( HTMLTable *pTable, sal_Bool bReadOptions,
-                        SvxAdjust eGrpAdjust, SwVertOrient eVertOri );
+                        SvxAdjust eGrpAdjust, sal_Int16 eVertOri );
     void BuildTableSection( HTMLTable *pTable, sal_Bool bReadOptions, sal_Bool bHead );
     void BuildTableColGroup( HTMLTable *pTable, sal_Bool bReadOptions );
     void BuildTableCaption( HTMLTable *pTable );
