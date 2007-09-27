@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcli.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:14:59 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:36:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,6 @@ void SwOleClient::ViewChanged()
     }
 
     SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
-    Window     *pWin = rSh.GetWin();
 
     //Einstellen der Groesse des Objektes in der Core. Die Scalierung muss
     //beruecksichtigt werden. Rueckwirkung auf das Objekt werden von
