@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlnaut.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:30:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:08:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,13 +45,14 @@
 #include "swtypes.hxx"
 
 class SfxItemSet;
+class SwAttrPool;
 
 class SwRedlineAuthor
 {
     String sAuthor;
     Color aChgLineColor;
     SfxItemSet *pInsAttrSet, *pDelAttrSet, *pFmtAttrSet;
-    SwHoriOrient eChgLineOrient;
+    short eChgLineOrient;
     BYTE cDelChar;
 public:
     SwRedlineAuthor( SwAttrPool& rPool, const String& );
