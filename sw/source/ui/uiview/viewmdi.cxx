@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:51:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:38:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@
 #endif
 
 USHORT  SwView::nMoveType = NID_PGE;
-BYTE    SwView::nActMark = 0;
+USHORT  SwView::nActMark = 0;
 
 #define VIEW_IMAGECOLOR COL_LIGHTBLUE
 
@@ -161,7 +161,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         const long nOf = DOCUMENTBORDER * 2L;
         Size aPageSize( pWrtShell->GetAnyCurRect(RECT_PAGE_CALC).SSize() );
 
-        if( PD_MIRROR == rDesc.GetUseOn() ) // gespiegelte Seiten
+        if( nsUseOnPage::PD_MIRROR == rDesc.GetUseOn() )    // gespiegelte Seiten
         {
             const SvxLRSpaceItem &rLeftLRSpace = rDesc.GetLeft().GetLRSpace();
             aPageSize.Width() +=
@@ -195,7 +195,6 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     nFac = Max( long( MINZOOM ), nFac );
 
     SwViewOption aOpt( *pOpt );
-    SwDocShell* pDocShell = GetDocShell();
     if ( !GetViewFrame()->GetFrame()->IsInPlace() )
     {
         //MasterUsrPrefs updaten UND DANACH die ViewOptions der aktuellen
@@ -205,7 +204,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
                 BYTE  (eZoomType) != pUsrPref->GetZoomType()) )
         {
             pUsrPref->SetZoom    ( USHORT(nFac) );
-            pUsrPref->SetZoomType( BYTE( eZoomType ) );
+            pUsrPref->SetZoomType( eZoomType );
             SW_MOD()->ApplyUsrPref( *pUsrPref,
                     bViewOnly ? this: 0,
                     bViewOnly ? VIEWOPT_DEST_VIEW_ONLY : 0 );
@@ -238,7 +237,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         }
         // OS: Notloesung - in CalcVisArea wird u.U. wieder SetZoom gerufen und
         // dann werden falsche Werte eingestellt
-        ((SwViewOption*)pWrtShell->GetViewOptions())->SetZoomType((BYTE)eZoomType);
+        ((SwViewOption*)pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
         CalcVisArea( rEditSize );   //fuer das Neuberechnen des sichtbaren Bereiches
     }
     else if ( USHORT(nFac) != pOpt->GetZoom() )
@@ -252,7 +251,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     pVRuler->ForceUpdate();
     pHRuler->SetZoom( aFrac );
     pHRuler->ForceUpdate();
-    ((SwViewOption*)pWrtShell->GetViewOptions())->SetZoomType((BYTE)eZoomType);
+    ((SwViewOption*)pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
     }
     pWrtShell->UnlockPaint();
     if( bUnLockView )
@@ -264,7 +263,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
  * Scrollbar - Handler
  */
 
-int SwView::_CreateScrollbar( int bHori )
+int SwView::_CreateScrollbar( BOOL bHori )
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
     SwScrollbar** ppScrollbar = bHori ? &pHScrollbar : &pVScrollbar;
@@ -290,7 +289,7 @@ int SwView::_CreateScrollbar( int bHori )
     // Scrollbar muss nochmals getestet werden, da im InvalidateBorder u.U. der
     // Scrollbar wieder geloescht wurde
     if ( !bShowAtResize && (*ppScrollbar))
-        (*ppScrollbar)->Show();
+        (*ppScrollbar)->ExtendedShow();
 
     return 1;
 }
@@ -357,11 +356,11 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         case NID_GRF:
         case NID_OLE:
         {
-            GotoObjType eType = FLY_FRM;
+            USHORT eType = GOTOOBJ_FLY_FRM;
             if(nMoveType == NID_GRF)
-                eType = FLY_GRF;
+                eType = GOTOOBJ_FLY_GRF;
             else if(nMoveType == NID_OLE)
-                eType = FLY_OLE;
+                eType = GOTOOBJ_FLY_OLE;
             BOOL bSuccess = bNext ?
                     rSh.GotoNextFly(eType) :
                         rSh.GotoPrevFly(eType);
@@ -376,8 +375,8 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         case NID_CTRL:
             rSh.GotoObj(bNext,
                     nMoveType == NID_DRW ?
-                        DRAW_SIMPLE :
-                            DRAW_CONTROL);
+                        GOTOOBJ_DRAW_SIMPLE :
+                        GOTOOBJ_DRAW_CONTROL);
         break;
         case NID_REG :
             rSh.EnterStdMode();
@@ -561,7 +560,6 @@ int SwView::CreateVLineal()
     pHRuler->SetBorderPos( pVRuler->GetSizePixel().Width()-1 );
 
     pVRuler->SetActive(GetFrame() && IsActive());
-    const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     pVRuler->Show();
     InvalidateBorder();
     return 1;
@@ -674,7 +672,7 @@ void SwView::SetImageButtonColor(Color& rColor)
 void SwView::ShowHScrollbar(sal_Bool bShow)
 {
     DBG_ASSERT(pHScrollbar, "Scrollbar invalid")
-    pHScrollbar->Show(bShow);
+    pHScrollbar->ExtendedShow(bShow);
 }
 /* -----------------------------2002/06/26 13:57------------------------------
 
@@ -682,7 +680,7 @@ void SwView::ShowHScrollbar(sal_Bool bShow)
 sal_Bool SwView::IsHScrollbarVisible()const
 {
     DBG_ASSERT(pHScrollbar, "Scrollbar invalid")
-    return pHScrollbar->IsVisible() || pHScrollbar->IsAuto();
+    return pHScrollbar->IsVisible( FALSE ) || pHScrollbar->IsAuto();
 }
 /* -----------------------------2002/06/26 13:57------------------------------
 
@@ -690,7 +688,7 @@ sal_Bool SwView::IsHScrollbarVisible()const
 void SwView::ShowVScrollbar(sal_Bool bShow)
 {
     DBG_ASSERT(pVScrollbar, "Scrollbar invalid")
-    pVScrollbar->Show(bShow);
+    pVScrollbar->ExtendedShow(bShow);
     pPageUpBtn->Show(bShow);
     pPageDownBtn->Show(bShow);
     pNaviBtn->Show(bShow);
@@ -701,7 +699,7 @@ void SwView::ShowVScrollbar(sal_Bool bShow)
 sal_Bool SwView::IsVScrollbarVisible()const
 {
     DBG_ASSERT(pVScrollbar, "Scrollbar invalid")
-    return pVScrollbar->IsVisible();
+    return pVScrollbar->IsVisible( FALSE );
 }
 
 
