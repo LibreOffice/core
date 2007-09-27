@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:10:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:51:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,10 +122,6 @@
 #endif
 using namespace ::com::sun::star;
 
-//CHINA001 extern String* pOldGrfCat;
-//CHINA001 extern String* pOldTabCat;
-//CHINA001 extern String* pOldFrmCat;
-//CHINA001 extern String* pOldDrwCat;
 extern String* GetOldGrfCat();
 extern String* GetOldTabCat();
 extern String* GetOldFrmCat();
@@ -165,36 +161,36 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
 
     SvxStandardDialog( pParent, SW_RES(DLG_CAPTION) ),
 
+    aTextText     (this, SW_RES(TXT_TEXT    )),
+    aTextEdit     (this, SW_RES(EDT_TEXT    )),
+    aSettingsFL  (this, SW_RES(FL_SETTINGS)),
+    aCategoryText (this, SW_RES(TXT_CATEGORY)),
+    aCategoryBox  (this, SW_RES(BOX_CATEGORY)),
+    aFormatText   (this, SW_RES(TXT_FORMAT  )),
+    aFormatBox    (this, SW_RES(BOX_FORMAT  )),
+    aSepText      (this, SW_RES(TXT_SEP     )),
+    aSepEdit      (this, SW_RES(EDT_SEP     )),
+    aPosText      (this, SW_RES(TXT_POS     )),
+    aPosBox       (this, SW_RES(BOX_POS     )),
     aOKButton     (this, SW_RES(BTN_OK      )),
     aCancelButton (this, SW_RES(BTN_CANCEL  )),
     aHelpButton   (this, SW_RES(BTN_HELP    )),
     aAutoCaptionButton(this, SW_RES(BTN_AUTOCAPTION)),
     aOptionButton (this, SW_RES(BTN_OPTION  )),
-    aCategoryText (this, SW_RES(TXT_CATEGORY)),
-    aCategoryBox  (this, SW_RES(BOX_CATEGORY)),
-    aFormatText   (this, SW_RES(TXT_FORMAT  )),
-    aFormatBox    (this, SW_RES(BOX_FORMAT  )),
-    aTextText     (this, SW_RES(TXT_TEXT    )),
-    aTextEdit     (this, SW_RES(EDT_TEXT    )),
-    aSepText      (this, SW_RES(TXT_SEP     )),
-    aSepEdit      (this, SW_RES(EDT_SEP     )),
-    aPosText      (this, SW_RES(TXT_POS     )),
-    aPosBox       (this, SW_RES(BOX_POS     )),
-    aPrevWin      (this, SW_RES(WIN_SAMPLE  )),
     sNone(      SW_RES( STR_CATEGORY_NONE )),
-    aSettingsFL  (this, SW_RES(FL_SETTINGS)),
+    aPrevWin      (this, SW_RES(WIN_SAMPLE  )),
     rView( rV ),
-    bCopyAttributes( FALSE ),
-    pMgr( new SwFldMgr(rView.GetWrtShellPtr()) )
+    pMgr( new SwFldMgr(rView.GetWrtShellPtr()) ),
+    bCopyAttributes( FALSE )
 
 {
     SwWrtShell &rSh = rView.GetWrtShell();
      uno::Reference< frame::XModel >  xModel = rView.GetDocShell()->GetBaseModel();
 
-    eType = (SwWrtShell::SelectionType)rSh.GetSelectionType();
-    if ( eType & SwWrtShell::SEL_OLE )
+    eType = rSh.GetSelectionType();
+    if ( eType & nsSelectionType::SEL_OLE )
     {
-        eType = SwWrtShell::SEL_GRF;
+        eType = nsSelectionType::SEL_GRF;
          uno::Reference< text::XTextEmbeddedObjectsSupplier >  xObjs(xModel, uno::UNO_QUERY);
         xNameAccess = xObjs->getEmbeddedObjects();
     }
@@ -217,16 +213,16 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     {
         SwFieldType *pType = pMgr->GetFldType( USHRT_MAX, i );
         if( pType->Which() == RES_SETEXPFLD &&
-            ((SwSetExpFieldType *) pType)->GetType() & GSE_SEQ )
+            ((SwSetExpFieldType *) pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
             aCategoryBox.InsertEntry(pType->GetName());
     }
 
-    String* pString;
+    String* pString = 0;
     sal_uInt16 nPoolId = 0;
-    if (eType & SwWrtShell::SEL_GRF)
+    if (eType & nsSelectionType::SEL_GRF)
     {
         nPoolId = RES_POOLCOLL_LABEL_ABB;
-        pString = ::GetOldGrfCat(); //CHINA001 pString = pOldGrfCat;
+        pString = ::GetOldGrfCat();
         bCopyAttributes = TRUE;
         sObjectName = rSh.GetFlyName();
         //if not OLE
@@ -237,31 +233,31 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
         }
 
     }
-    else if( eType & SwWrtShell::SEL_TBL )
+    else if( eType & nsSelectionType::SEL_TBL )
     {
         nPoolId = RES_POOLCOLL_LABEL_TABLE;
-        pString = ::GetOldTabCat(); //CHINA001 pString = pOldTabCat;
+        pString = ::GetOldTabCat();
         uno::Reference< text::XTextTablesSupplier >  xTables(xModel, uno::UNO_QUERY);
         xNameAccess = xTables->getTextTables();
         sObjectName = rSh.GetTableFmt()->GetName();
     }
-    else if( eType & SwWrtShell::SEL_FRM )
+    else if( eType & nsSelectionType::SEL_FRM )
     {
         nPoolId = RES_POOLCOLL_LABEL_FRAME;
-        pString = ::GetOldFrmCat(); //CHINA001 pString = pOldFrmCat;
+        pString = ::GetOldFrmCat();
          uno::Reference< text::XTextFramesSupplier >  xFrms(xModel, uno::UNO_QUERY);
         xNameAccess = xFrms->getTextFrames();
         sObjectName = rSh.GetFlyName();
     }
-    else if( eType == SwWrtShell::SEL_TXT )
+    else if( eType == nsSelectionType::SEL_TXT )
     {
         nPoolId = RES_POOLCOLL_LABEL_FRAME;
-        pString = ::GetOldFrmCat(); //CHINA001 pString = pOldFrmCat;
+        pString = ::GetOldFrmCat();
     }
-    else if( eType & SwWrtShell::SEL_DRW )
+    else if( eType & nsSelectionType::SEL_DRW )
     {
         nPoolId = RES_POOLCOLL_LABEL_DRAWING;
-        pString = ::GetOldDrwCat(); //CHINA001 pString = pOldDrwCat;
+        pString = ::GetOldDrwCat();
     }
     if( nPoolId )
     {
@@ -290,7 +286,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     {
         aFormatBox.InsertEntry( pMgr->GetFormatStr(TYP_SEQFLD, i) );
         sal_uInt16 nFmtId = pMgr->GetFormatId(TYP_SEQFLD, i);
-        aFormatBox.SetEntryData( i, (void*)nFmtId );
+        aFormatBox.SetEntryData( i, reinterpret_cast<void*>( nFmtId ) );
         if( nFmtId == nSelFmt )
             aFormatBox.SelectEntryPos( i );
     }
@@ -298,24 +294,24 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     // aPosBox
     switch (eType)
     {
-        case SwWrtShell::SEL_GRF:
-        case SwWrtShell::SEL_TBL:
-        case SwWrtShell::SEL_TBL | SwWrtShell::SEL_NUM:
-        case SwWrtShell::SEL_TBL | SwWrtShell::SEL_TXT:
-        case SwWrtShell::SEL_TBL | SwWrtShell::SEL_NUM | SwWrtShell::SEL_TXT:
-        case SwWrtShell::SEL_DRW:
-        case SwWrtShell::SEL_DRW | SwWrtShell::SEL_BEZ:
+        case nsSelectionType::SEL_GRF:
+        case nsSelectionType::SEL_TBL:
+        case nsSelectionType::SEL_TBL | nsSelectionType::SEL_NUM:
+        case nsSelectionType::SEL_TBL | nsSelectionType::SEL_TXT:
+        case nsSelectionType::SEL_TBL | nsSelectionType::SEL_NUM | nsSelectionType::SEL_TXT:
+        case nsSelectionType::SEL_DRW:
+        case nsSelectionType::SEL_DRW | nsSelectionType::SEL_BEZ:
             aPosBox.InsertEntry(SW_RESSTR(STR_ABOVE));
             aPosBox.InsertEntry(SW_RESSTR(STR_CP_BELOW));
             break;
-        case SwWrtShell::SEL_FRM:
-        case SwWrtShell::SEL_TXT:
+        case nsSelectionType::SEL_FRM:
+        case nsSelectionType::SEL_TXT:
             aPosBox.InsertEntry(SW_RESSTR(STR_BEGINNING));
             aPosBox.InsertEntry(SW_RESSTR(STR_END     ));
             break;
     }
     aPosBox.SelectEntryPos(1);
-    if (eType & (SwWrtShell::SEL_GRF|SwWrtShell::SEL_DRW))
+    if (eType & (nsSelectionType::SEL_GRF|nsSelectionType::SEL_DRW))
     {
         aPosText.Enable( sal_False );
         aPosBox.Enable( sal_False );
@@ -369,7 +365,7 @@ IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
 }
 IMPL_LINK_INLINE_END( SwCaptionDialog, OptionHdl, Button*, EMPTYARG )
 
-IMPL_LINK_INLINE_START( SwCaptionDialog, SelectHdl, ListBox *, pBox )
+IMPL_LINK_INLINE_START( SwCaptionDialog, SelectHdl, ListBox *, EMPTYARG )
 {
     DrawSample();
     return 0;
@@ -378,7 +374,7 @@ IMPL_LINK_INLINE_END( SwCaptionDialog, SelectHdl, ListBox *, EMPTYARG )
 
 
 
-IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, pEdit )
+IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, EMPTYARG )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     String sFldTypeName = aCategoryBox.GetText();
@@ -389,7 +385,7 @@ IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, pEdit )
                     : 0;
     aOKButton.Enable( bCorrectFldName &&
                         (!pType ||
-                            ((SwSetExpFieldType*)pType)->GetType() == GSE_SEQ)
+                            ((SwSetExpFieldType*)pType)->GetType() == nsSwGetSetExpType::GSE_SEQ)
                                 && 0 != sFldTypeName.Len() );
     aOptionButton.Enable( aOKButton.IsEnabled() && !bNone );
     aFormatText.Enable( !bNone );
@@ -428,7 +424,6 @@ void SwCaptionDialog::DrawSample()
                 aStr += ' ';
 
             SwWrtShell &rSh = rView.GetWrtShell();
-            String sFldTypeName( aCategoryBox.GetText() );
             SwSetExpFieldType* pFldType = (SwSetExpFieldType*)rSh.GetFldType(
                                             RES_SETEXPFLD, sFldTypeName );
             if( pFldType && pFldType->GetOutlineLvl() < MAXLEVEL )
@@ -484,7 +479,7 @@ void SwCaptionDialog::CheckButtonWidth()
             &aOKButton, &aCancelButton, &aHelpButton, &aAutoCaptionButton, &aOptionButton
         };
         Button** pCurrent = pBtns;
-        for ( sal_Int32 i = 0; i < sizeof( pBtns ) / sizeof( pBtns[ 0 ] ); ++i, ++pCurrent )
+        for ( sal_uInt32 i = 0; i < sizeof( pBtns ) / sizeof( pBtns[ 0 ] ); ++i, ++pCurrent )
         {
             aNewSize = (*pCurrent)->GetSizePixel();
             aNewSize.Width() += nDelta;
@@ -507,9 +502,6 @@ SwCaptionDialog::~SwCaptionDialog()
 SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
                                             const String& rSeqFldType )
     : SvxStandardDialog( pParent, SW_RES(DLG_SEQUENCE_OPTION) ),
-    aOKButton       (this, SW_RES(BTN_OK       )),
-    aCancelButton   (this, SW_RES(BTN_CANCEL   )),
-    aHelpButton     (this, SW_RES(BTN_HELP     )),
     aFlHeader       (this, SW_RES(FL_HEADER    )),
     aFtLevel        (this, SW_RES(FT_LEVEL     )),
     aLbLevel        (this, SW_RES(LB_LEVEL     )),
@@ -519,9 +511,12 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
     aFtCharStyle    (this, SW_RES(FT_CHARSTYLE )),
     aLbCharStyle    (this, SW_RES(LB_CHARSTYLE )),
     aApplyBorderAndShadowCB(this, SW_RES(CB_APPLYBAS)),
+    aOKButton       (this, SW_RES(BTN_OK       )),
+    aCancelButton   (this, SW_RES(BTN_CANCEL   )),
+    aHelpButton     (this, SW_RES(BTN_HELP     )),
 
-    aFldTypeName( rSeqFldType ),
-    rView( rV )
+    rView( rV ),
+    aFldTypeName( rSeqFldType )
 {
     FreeResource();
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -569,7 +564,7 @@ void SwSequenceOptionDialog::Apply()
     else if( aFldTypeName.Len() && nLvl < MAXLEVEL )
     {
         // dann muessen wir das mal einfuegen
-        SwSetExpFieldType aFldType( rSh.GetDoc(), aFldTypeName, GSE_SEQ );
+        SwSetExpFieldType aFldType( rSh.GetDoc(), aFldTypeName, nsSwGetSetExpType::GSE_SEQ );
         aFldType.SetDelimiter( cDelim );
         aFldType.SetOutlineLvl( nLvl );
         rSh.InsertFldType( aFldType );
