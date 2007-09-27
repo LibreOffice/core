@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unspnd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:29:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:33:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,9 +69,9 @@ inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
                                     BOOL bChkTable )
-    : SwUndo( UNDO_SPLITNODE ), nNode( rPos.nNode.GetIndex() ),
-        nCntnt( rPos.nContent.GetIndex() ), pHistory( 0 ),
-        bTblFlag( FALSE ), bChkTblStt( bChkTable ), pRedlData( 0 )
+    : SwUndo( UNDO_SPLITNODE ), pHistory( 0 ), pRedlData( 0 ), nNode( rPos.nNode.GetIndex() ),
+        nCntnt( rPos.nContent.GetIndex() ),
+        bTblFlag( FALSE ), bChkTblStt( bChkTable )
 {
     SwTxtNode* pTxtNd = pDoc->GetNodes()[ rPos.nNode ]->GetTxtNode();
     ASSERT( pTxtNd, "nur beim TextNode rufen!" );
@@ -86,7 +86,7 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
     // Redline beachten
     if( pDoc->IsRedlineOn() )
     {
-        pRedlData = new SwRedlineData( IDocumentRedlineAccess::REDLINE_INSERT, pDoc->GetRedlineAuthor() );
+        pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, pDoc->GetRedlineAuthor() );
         SetRedlineMode( pDoc->GetRedlineMode() );
     }
 }
@@ -206,7 +206,7 @@ void SwUndoSplitNode::Redo( SwUndoIter& rUndoIter )
             pHistory->SetTmpEnd( pHistory->Count() );
 
         if( ( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() )) ||
-            ( !( IDocumentRedlineAccess::REDLINE_IGNORE & GetRedlineMode() ) &&
+            ( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
                 pDoc->GetRedlineTbl().Count() ))
         {
             rPam.SetMark();
@@ -214,8 +214,8 @@ void SwUndoSplitNode::Redo( SwUndoIter& rUndoIter )
             {
                 if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
                 {
-                    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-                    pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE));
+                    RedlineMode_t eOld = pDoc->GetRedlineMode();
+                    pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
                     pDoc->AppendRedline( new SwRedline( *pRedlData, rPam ), true);
                     pDoc->SetRedlineMode_intern( eOld );
                 }
