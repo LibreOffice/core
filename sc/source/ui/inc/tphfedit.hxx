@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tphfedit.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:27:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:55:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,7 @@ private:
     ScHeaderEditEngine* pEdEngine;
     EditView*           pEdView;
     ScEditWindowLocation eLocation;
+    bool mbRTL;
 
     com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > xAcc;
     ScAccessibleEditObject* pAcc;
