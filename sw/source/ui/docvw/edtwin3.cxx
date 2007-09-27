@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:41:01 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ void FrameNotify( ViewShell* pVwSh, FlyMode eMode )
 /*--------------------------------------------------------------------
     Beschreibung:   Notify fuer Seitenzahl-Update
  --------------------------------------------------------------------*/
-BOOL SwEditWin::RulerColumnDrag( SwView& rView , const MouseEvent& rMEvt, BOOL bVerticalMode)
+BOOL SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, BOOL bVerticalMode)
 {
     SvxRuler& rRuler = bVerticalMode ?  rView.GetVLineal() : rView.GetHLineal();
     return (!rRuler.StartDocDrag( rMEvt, RULER_TYPE_BORDER ) &&
@@ -158,8 +158,7 @@ BOOL SwEditWin::RulerColumnDrag( SwView& rView , const MouseEvent& rMEvt, BOOL b
 // #i23726#
 // --> OD 2005-02-18 #i42921# - add 3rd parameter <bVerticalMode> in order
 // to consider vertical layout
-BOOL SwEditWin::RulerMarginDrag( SwView& rView,
-                                 const MouseEvent& rMEvt,
+BOOL SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
                                  const bool bVerticalMode )
 {
     SvxRuler& rRuler = bVerticalMode ?  rView.GetVLineal() : rView.GetHLineal();
@@ -172,7 +171,7 @@ Dialog* GetSearchDialog()
     return SwView::GetSearchDialog();
 }
 
-USHORT GetTblChgDefaultMode()
+TblChgMode GetTblChgDefaultMode()
 {
     SwModuleOptions* pOpt = SW_MOD()->GetModuleConfig();
     return pOpt ? pOpt->GetTblMode() : TBLVAR_CHGABS;
