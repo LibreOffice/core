@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:55:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:07:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,10 @@ public:
     virtual ~SwNumFmt();
 
     SwNumFmt& operator=( const SwNumFmt& );
+
+    using SvxNumberFormat::operator ==;
     BOOL operator==( const SwNumFmt& ) const;
+    using SvxNumberFormat::operator !=;
     BOOL operator!=( const SwNumFmt& r ) const { return !(*this == r); }
 
     SwCharFmt* GetCharFmt() const { return (SwCharFmt*)pRegisteredIn; }
@@ -123,10 +126,10 @@ public:
     virtual void            SetCharFmtName(const String& rSet);
     virtual const String&   GetCharFmtName()const;
 
-    virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const SvxFrameVertOrient* pOrient = 0);
+    virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const sal_Int16* pOrient = 0);
 
-    virtual void                SetVertOrient(SvxFrameVertOrient eSet);
-    virtual SvxFrameVertOrient  GetVertOrient() const;
+    virtual void                SetVertOrient(sal_Int16 eSet);
+    virtual sal_Int16   GetVertOrient() const;
     const SwFmtVertOrient*      GetGraphicOrientation() const;
 
     BOOL IsEnumeration() const; // #i22362#
