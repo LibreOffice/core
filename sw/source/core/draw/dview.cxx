@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:56:56 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:43:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ BOOL SwSdrHdl::IsFocusHdl() const
     return SdrHdl::IsFocusHdl();
 }
 
-const SwFrm *lcl_FindAnchor( const SdrObject *pObj, FASTBOOL bAll )
+const SwFrm *lcl_FindAnchor( const SdrObject *pObj, BOOL bAll )
 {
     const SwVirtFlyDrawObj *pVirt = pObj->ISA(SwVirtFlyDrawObj) ?
                                             (SwVirtFlyDrawObj*)pObj : 0;
@@ -256,8 +256,8 @@ SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
 
                         if ( pO->GetOrdNumDirect() > nOrdNum )
                         {
-                            const SwFrm *pAnch = ::lcl_FindAnchor( pO, FALSE );
-                            if ( pFly->IsAnLower( pAnch ) )
+                            const SwFrm *pTmpAnch = ::lcl_FindAnchor( pO, FALSE );
+                            if ( pFly->IsAnLower( pTmpAnch ) )
                             {
                                 nOrdNum = pO->GetOrdNumDirect();
                             }
@@ -265,11 +265,11 @@ SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
                     }
                     if ( nOrdNum )
                     {
-                        SdrPage *pPage = GetModel()->GetPage( 0 );
+                        SdrPage *pTmpPage = GetModel()->GetPage( 0 );
                         ++nOrdNum;
-                        if ( nOrdNum < pPage->GetObjCount() )
+                        if ( nOrdNum < pTmpPage->GetObjCount() )
                         {
-                            return pPage->GetObj( nOrdNum );
+                            return pTmpPage->GetObj( nOrdNum );
                         }
                     }
                 }
@@ -437,14 +437,14 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                 pContact->GetAnchoredObjs( aAnchoredObjs );
             }
             // move 'repeated' ones to the same order number as the already moved one.
-            sal_uInt32 nNewPos = pChildObj->GetOrdNum();
+            const sal_uInt32 nTmpNewPos = pChildObj->GetOrdNum();
             while ( !aAnchoredObjs.empty() )
             {
                 SwAnchoredObject* pAnchoredObj = aAnchoredObjs.back();
                 if ( pAnchoredObj->GetDrawObj() != pChildObj )
                 {
                     pDrawPage->SetObjectOrdNum( pAnchoredObj->GetDrawObj()->GetOrdNum(),
-                                                nNewPos );
+                                                nTmpNewPos );
                     pDrawPage->RecalcObjOrdNums();
                     // adjustments for accessibility API
                     if ( pAnchoredObj->ISA(SwFlyFrm) )
@@ -850,7 +850,7 @@ void SwDrawView::ShowDragAnchor()
 
 void SwDrawView::MarkListHasChanged()
 {
-    Imp().GetShell()->DrawSelChanged(this);
+    Imp().GetShell()->DrawSelChanged();
     FmFormView::MarkListHasChanged();
 }
 
@@ -887,9 +887,9 @@ void SwDrawView::ModelHasChanged()
     }
 }
 
-void SwDrawView::MakeVisible( const Rectangle &rRect, Window &rWin )
+void SwDrawView::MakeVisible( const Rectangle &rRect, Window & )
 {
-    ASSERT( rImp.GetShell()->GetWin() && &rWin, "MakeVisible, unknown Window");
+    ASSERT( rImp.GetShell()->GetWin(), "MakeVisible, unknown Window");
     rImp.GetShell()->MakeVisible( SwRect( rRect ) );
 }
 
@@ -905,7 +905,7 @@ void SwDrawView::CheckPossibilities()
     //OLE-Objekte konnen selbst einen Resize-Schutz wuenschen (StarMath)
 
     const SdrMarkList &rMrkList = GetMarkedObjectList();
-    FASTBOOL bProtect = FALSE,
+    BOOL bProtect = FALSE,
              bSzProtect = FALSE;
     for ( USHORT i = 0; !bProtect && i < rMrkList.GetMarkCount(); ++i )
     {
@@ -1023,7 +1023,7 @@ void SwDrawView::DeleteMarked()
     SwDoc* pDoc = Imp().GetShell()->GetDoc();
     if ( pDoc->GetRootFrm() )
         pDoc->GetRootFrm()->StartAllAction();
-    pDoc->StartUndo(0, NULL);
+    pDoc->StartUndo(UNDO_EMPTY, NULL);
     // OD 18.06.2003 #108784# - replace marked <SwDrawVirtObj>-objects by its
     // reference objects.
     {
@@ -1042,7 +1042,7 @@ void SwDrawView::DeleteMarked()
         FmFormView::DeleteMarked();
         ::FrameNotify( Imp().GetShell(), FLY_DRAG_END );
     }
-    pDoc->EndUndo(0, NULL);
+    pDoc->EndUndo(UNDO_EMPTY, NULL);
     if( pDoc->GetRootFrm() )
         pDoc->GetRootFrm()->EndAllAction();
 }
