@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:11:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:05:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -356,7 +356,7 @@ struct WW8LFO   // nur DIE Eintraege, die WIR benoetigen!
 struct WW8LVL   // nur DIE Eintraege, die WIR benoetigen!
 {
     long    nStartAt;       // start at value for this value
-    long    nV6DxaSpace;// Ver6-Compatible: min Space between Num anf ::com::sun::star::text::Paragraph
+    long    nV6DxaSpace;// Ver6-Compatible: min Space between Num anf text::Paragraph
     long    nV6Indent;  // Ver6-Compatible: Breite des Prefix Textes; ggfs. zur
                         // Definition d. Erstzl.einzug nutzen!
     // Absatzattribute aus GrpprlPapx
@@ -474,7 +474,7 @@ sal_uInt8* WW8ListManager::GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms,
 
         // gib Zeiger auf Daten
         USHORT x = maSprmParser.GetSprmSize(nAktId, pSprms);
-        i += x;
+        i = i + x;
         pSprms += x;
     }
     return 0;                           // Sprm not found
@@ -574,7 +574,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
             return false;
         // "sprmPDxaLeft"  pap.dxaLeft;dxa;word;
         sal_uInt8* pSprm;
-        if ((pSprm = GrpprlHasSprm(0x840F,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)))
+        if (0 != (pSprm = GrpprlHasSprm(0x840F,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)))
         {
             sal_uInt8 *pBegin = pSprm-2;
             for(int i=0;i<4;++i)
@@ -585,7 +585,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         }
 
         // "sprmPDxaLeft1" pap.dxaLeft1;dxa;word;
-        if( (pSprm = GrpprlHasSprm(0x8411,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
+        if(0 != (pSprm = GrpprlHasSprm(0x8411,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
         {
             sal_uInt8 *pBegin = pSprm-2;
             for(int i=0;i<4;++i)
@@ -597,7 +597,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         // Ideally we would allow tabs to be used in numbering fields and set
         // this on the containing paragraph which would make it actually work
         // most of the time.
-        if( (pSprm = GrpprlHasSprm(0xC615,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
+        if(0 != (pSprm = GrpprlHasSprm(0xC615,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
         {
             bool bDone=false;
             if (*(pSprm-1) == 5)
@@ -678,7 +678,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         while (0 < nLen)
         {
             sal_uInt16 nL1 = rReader.ImportSprm( pSprms1 );
-            nLen      -= nL1;
+            nLen       = nLen - nL1;
             pSprms1   += nL1;
         }
         // Reader-ItemSet-Pointer und Reader-Style zuruecksetzen
@@ -860,7 +860,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     // 6. entsprechendes NumFmt konfigurieren
     if( bSetStartNo )
         rNumFmt.SetStart( nStartNo );
-    rNumFmt.SetNumberingType(eType);
+    rNumFmt.SetNumberingType( static_cast< sal_Int16 >(eType) );
     rNumFmt.SetNumAdjust( eAdj );
 
     if( SVX_NUM_CHAR_SPECIAL == eType )
@@ -1103,7 +1103,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         // 1.2 alle LVL aller aLST einlesen
         //
         sal_uInt8 nLevel;
-        sal_uInt16 nLSTInfos = maLSTInfos.size();
+        sal_uInt16 nLSTInfos = static_cast< sal_uInt16 >(maLSTInfos.size());
         for (sal_uInt16 nList = 0; nList < nLSTInfos; ++nList)
         {
             bOk = false;
@@ -1113,7 +1113,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             //
             // 1.2.1 betreffende(n) LVL(s) fuer diese aLST einlesen
             //
-            sal_uInt16 nLvlCount=pListInfo->bSimpleList ? nMinLevel : nMaxLevel;
+            sal_uInt16 nLvlCount = static_cast< sal_uInt16 >(pListInfo->bSimpleList ? nMinLevel : nMaxLevel);
             std::deque<bool> aNotReallyThere;
             aNotReallyThere.resize(nMaxLevel);
             pListInfo->maParaSprms.resize(nMaxLevel);
@@ -1770,7 +1770,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
             pTxtNd->SetLevel(nActLevel);
             // --> OD 2005-11-01 #126924#
             // - <IsCounted()> state of text node has to be adjusted accordingly.
-            if ( nActLevel >= 0 && nActLevel < MAXLEVEL )
+            if ( /*nActLevel >= 0 &&*/ nActLevel < MAXLEVEL )
             {
                 pTxtNd->SetCounted( true );
             }
@@ -1789,7 +1789,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
              formatting and apply them to the paragraph. I'm convinced that
              this is exactly what word does.
             */
-            if (short nLen = aParaSprms.size())
+            if (short nLen = static_cast< short >(aParaSprms.size()))
             {
                 SfxItemSet* pOldAktItemSet = pAktItemSet;
                 SetAktItemSet(&aListIndent);
@@ -1798,7 +1798,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                 while (0 < nLen)
                 {
                     sal_uInt16 nL1 = ImportSprm(pSprms1);
-                    nLen -= nL1;
+                    nLen = nLen - nL1;
                     pSprms1 += nL1;
                 }
 
@@ -2067,10 +2067,10 @@ sal_Bool SwMSConvertControls::InsertFormula(WW8FormulaControl &rFormula)
     awt::Size aSz;
     uno::Reference< form::XFormComponent> xFComp;
 
-    if ((bRet = rFormula.Import(rServiceFactory, xFComp, aSz)))
+    if (sal_True == (bRet = rFormula.Import(rServiceFactory, xFComp, aSz)))
     {
         uno::Reference <drawing::XShape> xShapeRef;
-        if ((bRet = InsertControl(xFComp, aSz, &xShapeRef, false)))
+        if (sal_True == (bRet = InsertControl(xFComp, aSz, &xShapeRef, false)))
             GetShapes()->add(xShapeRef);
     }
     return bRet;
@@ -2081,8 +2081,6 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
 {
     UINT8 nField;
     UINT8 nHeaderByte;
-
-    sal_Size nOffset = pDataStream->Tell();
 
     int nType=0;
     *pDataStream >> nHeaderByte;
