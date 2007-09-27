@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccell.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:41:07 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:18:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ protected:
 
 public:
 
-    SwAccessibleCell( SwAccessibleMap *pMap, const SwCellFrm *pCellFrm );
+    SwAccessibleCell( SwAccessibleMap* pInitMap, const SwCellFrm *pCellFrm );
 
     virtual sal_Bool HasCursor();   // required by map to remember that object
 
