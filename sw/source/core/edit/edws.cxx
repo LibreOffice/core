@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edws.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:08:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:47:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,17 +77,16 @@
 // verkleideter Copy-Constructor
 
 
-SwEditShell::SwEditShell( SwEditShell& rEdSH, Window *pWin )
-    : SwCrsrShell( rEdSH, pWin )
+SwEditShell::SwEditShell( SwEditShell& rEdSH, Window *pWindow )
+    : SwCrsrShell( rEdSH, pWindow )
 {
 }
 
 // ctor/dtor
 
 
-SwEditShell::SwEditShell( SwDoc& rDoc, Window *pWin, SwRootFrm *pRootFrm,
-                            const SwViewOption *pOpt )
-    : SwCrsrShell( rDoc, pWin, pRootFrm, pOpt)
+SwEditShell::SwEditShell( SwDoc& rDoc, Window *pWindow, const SwViewOption *pOptions )
+    : SwCrsrShell( rDoc, pWindow, pOptions )
 {
     GetDoc()->DoUndo(true);
 }
@@ -308,22 +307,22 @@ void SwEditShell::DelAllUndoObj()
 // setzt Undoklammerung auf, liefert nUndoId der Klammerung
 
 
-sal_uInt16 SwEditShell::StartUndo( sal_uInt16 nUndoId,
+SwUndoId SwEditShell::StartUndo( SwUndoId eUndoId,
                                    const SwRewriter *pRewriter )
-{ return GetDoc()->StartUndo( nUndoId, pRewriter ); }
+{ return GetDoc()->StartUndo( eUndoId, pRewriter ); }
 
 // schliesst Klammerung der nUndoId, nicht vom UI benutzt
 
 
-sal_uInt16 SwEditShell::EndUndo(sal_uInt16 nUndoId,
+SwUndoId SwEditShell::EndUndo(SwUndoId eUndoId,
                                 const SwRewriter *pRewriter)
-{ return GetDoc()->EndUndo(nUndoId, pRewriter); }
+{ return GetDoc()->EndUndo(eUndoId, pRewriter); }
 
 // liefert die Id der letzten undofaehigen Aktion zurueck
 // fuellt ggf. VARARR mit sdbcx::User-UndoIds
 
 
-sal_uInt16 SwEditShell::GetUndoIds(String* pStr,SwUndoIds *pUndoIds) const
+SwUndoId SwEditShell::GetUndoIds(String* pStr,SwUndoIds *pUndoIds) const
 { return GetDoc()->GetUndoIds(pStr,pUndoIds); }
 
 String SwEditShell::GetUndoIdsStr(String* pStr,SwUndoIds *pUndoIds) const
@@ -333,7 +332,7 @@ String SwEditShell::GetUndoIdsStr(String* pStr,SwUndoIds *pUndoIds) const
 // fuellt ggf. VARARR mit RedoIds
 
 
-sal_uInt16 SwEditShell::GetRedoIds(String* pStr,SwUndoIds *pRedoIds) const
+SwUndoId SwEditShell::GetRedoIds(String* pStr,SwUndoIds *pRedoIds) const
 { return GetDoc()->GetRedoIds(pStr,pRedoIds); }
 
 String SwEditShell::GetRedoIdsStr(String* pStr,SwUndoIds *pRedoIds) const
@@ -343,7 +342,7 @@ String SwEditShell::GetRedoIdsStr(String* pStr,SwUndoIds *pRedoIds) const
 // fuellt ggf. VARARR mit RedoIds
 
 
-sal_uInt16 SwEditShell::GetRepeatIds(String* pStr, SwUndoIds *pRedoIds) const
+SwUndoId SwEditShell::GetRepeatIds(String* pStr, SwUndoIds *pRedoIds) const
 { return GetDoc()->GetRepeatIds(pStr,pRedoIds); }
 
 String SwEditShell::GetRepeatIdsStr(String* pStr, SwUndoIds *pRedoIds) const
