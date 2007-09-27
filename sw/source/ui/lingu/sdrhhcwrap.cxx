@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrhhcwrap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:16:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:19:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,11 +130,11 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     pTextObj( NULL ),
     pOutlView( NULL ),
     pListIter( NULL ),
+    nOptions( nConvOptions ),
     nDocIndex( 0 ),
     nSourceLang( nSourceLanguage ),
     nTargetLang( nTargetLanguage ),
     pTargetFont( pTargetFnt ),
-    nOptions( nConvOptions ),
     bIsInteractive( bInteractive )
 {
     SetRefDevice( pView->GetDocShell()->GetDoc()->getPrinter( false ) );
