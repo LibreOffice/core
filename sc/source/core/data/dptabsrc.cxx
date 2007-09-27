@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:40:18 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:52:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,6 +274,9 @@ void ScDPSource::SetOrientation(long nColumn, USHORT nNew)
             break;
         case sheet::DataPilotFieldOrientation_PAGE:
             nPageDims[nPageDimCount++] = nColumn;
+            break;
+        default:
+            DBG_ERROR( "ScDPSource::SetOrientation: unexpected orientation" );
             break;
     }
 }
@@ -917,6 +920,9 @@ void ScDPSource::FillLevelList( USHORT nOrientation, List& rList )
         case sheet::DataPilotFieldOrientation_PAGE:
             pDimIndex = nPageDims;
             nDimCount = nPageDimCount;
+            break;
+        default:
+            DBG_ERROR( "ScDPSource::FillLevelList: unexpected orientation" );
             break;
     }
     if (!pDimIndex)
@@ -1710,6 +1716,9 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPHierarchy::getLevels()
         case SC_DAPI_HIERARCHY_WEEK:
             aRet = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Week"));
             break;  //! name ???????
+        default:
+            DBG_ERROR( "ScDPHierarchy::getName: unexpected hierarchy" );
+            break;
     }
     return aRet;
 }
@@ -2005,6 +2014,9 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
                 case SC_DAPI_LEVEL_DAY:
                     aRet = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Day"));
                     break;
+                default:
+                    DBG_ERROR( "ScDPLevel::getName: unexpected level" );
+                    break;
             }
         }
         else if ( nHier == SC_DAPI_HIERARCHY_WEEK )
@@ -2019,6 +2031,9 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
                     break;
                 case SC_DAPI_LEVEL_WEEKDAY:
                     aRet = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Weekday"));
+                    break;
+                default:
+                    DBG_ERROR( "ScDPLevel::getName: unexpected level" );
                     break;
             }
         }
@@ -2194,6 +2209,9 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
                 case SC_DAPI_LEVEL_QUARTER: nMbrCount = 4;  break;
                 case SC_DAPI_LEVEL_MONTH:   nMbrCount = 12; break;
                 case SC_DAPI_LEVEL_DAY:     nMbrCount = 31; break;
+                default:
+                    DBG_ERROR( "ScDPMembers::ScDPMembers: unexpected level" );
+                    break;
             }
         }
         else if ( nHier == SC_DAPI_HIERARCHY_WEEK )
@@ -2203,6 +2221,9 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
                 case SC_DAPI_LEVEL_YEAR:    nMbrCount = 1;  break;      //! get years from source
                 case SC_DAPI_LEVEL_WEEK:    nMbrCount = 53; break;
                 case SC_DAPI_LEVEL_WEEKDAY: nMbrCount = 7;  break;
+                default:
+                    DBG_ERROR( "ScDPMembers::ScDPMembers: unexpected level" );
+                    break;
             }
         }
     }
