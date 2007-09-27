@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:02:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:03:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,6 @@
 #include "txtfrm.hxx"
 #include "notxtfrm.hxx"
 #include "flyfrms.hxx"
-#include "frmsh.hxx"
 #include "layact.hxx"
 #include "pagedesc.hxx"
 #include "section.hxx"
@@ -132,6 +131,8 @@
 #ifndef _LAYCACHE_HXX
 #include <laycache.hxx>
 #endif
+
+#include <rootfrm.hxx>
 
 #include "mdiexp.hxx"
 #include "statstr.hrc"
@@ -152,9 +153,12 @@
 // ftnfrm.cxx:
 void lcl_RemoveFtns( SwFtnBossFrm* pBoss, BOOL bPageOnly, BOOL bEndNotes );
 
-FASTBOOL bObjsDirect = TRUE;
-FASTBOOL bDontCreateObjects = FALSE;
-FASTBOOL bSetCompletePaintOnInvalidate = FALSE;
+using namespace ::com::sun::star;
+
+
+BOOL bObjsDirect = TRUE;
+BOOL bDontCreateObjects = FALSE;
+BOOL bSetCompletePaintOnInvalidate = FALSE;
 
 BYTE StackHack::nCnt = 0;
 BOOL StackHack::bLocked = FALSE;
@@ -215,12 +219,12 @@ SwFrmNotify::~SwFrmNotify()
     // <--
 
     SWRECTFN( pFrm )
-    const FASTBOOL bAbsP = POS_DIFF( aFrm, pFrm->Frm() );
-    const FASTBOOL bChgWidth =
+    const BOOL bAbsP = POS_DIFF( aFrm, pFrm->Frm() );
+    const BOOL bChgWidth =
             (aFrm.*fnRect->fnGetWidth)() != (pFrm->Frm().*fnRect->fnGetWidth)();
-    const FASTBOOL bChgHeight =
+    const BOOL bChgHeight =
             (aFrm.*fnRect->fnGetHeight)()!=(pFrm->Frm().*fnRect->fnGetHeight)();
-    const FASTBOOL bChgFlyBasePos = pFrm->IsTxtFrm() &&
+    const BOOL bChgFlyBasePos = pFrm->IsTxtFrm() &&
        ( ( mnFlyAnchorOfst != ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( sal_True ) ) ||
          ( mnFlyAnchorOfstNoWrap != ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( sal_False ) ) );
 
@@ -303,9 +307,9 @@ SwFrmNotify::~SwFrmNotify()
     }
 
     //Fuer Hintergrundgrafiken muss bei Groessenaenderungen ein Repaint her.
-    const FASTBOOL bPrtWidth =
+    const BOOL bPrtWidth =
             (aPrt.*fnRect->fnGetWidth)() != (pFrm->Prt().*fnRect->fnGetWidth)();
-    const FASTBOOL bPrtHeight =
+    const BOOL bPrtHeight =
             (aPrt.*fnRect->fnGetHeight)()!=(pFrm->Prt().*fnRect->fnGetHeight)();
     if ( bPrtWidth || bPrtHeight )
     {
@@ -324,7 +328,7 @@ SwFrmNotify::~SwFrmNotify()
         }
     }
 
-    const FASTBOOL bPrtP = POS_DIFF( aPrt, pFrm->Prt() );
+    const BOOL bPrtP = POS_DIFF( aPrt, pFrm->Prt() );
     if ( bAbsP || bPrtP || bChgWidth || bChgHeight ||
          bPrtWidth || bPrtHeight || bChgFlyBasePos )
     {
@@ -398,9 +402,9 @@ SwFrmNotify::~SwFrmNotify()
                     {
                         const SwFmtVertOrient& rVert =
                                         pContact->GetFmt()->GetVertOrient();
-                        if ( ( rVert.GetVertOrient() == VERT_CENTER ||
-                               rVert.GetVertOrient() == VERT_BOTTOM ||
-                               rVert.GetRelationOrient() == PRTAREA ) &&
+                        if ( ( rVert.GetVertOrient() == text::VertOrientation::CENTER ||
+                               rVert.GetVertOrient() == text::VertOrientation::BOTTOM ||
+                               rVert.GetRelationOrient() == text::RelOrientation::PRINT_AREA ) &&
                              ( bChgHeight || bPrtHeight ) )
                         {
                             bNotify = true;
@@ -409,9 +413,9 @@ SwFrmNotify::~SwFrmNotify()
                         {
                             const SwFmtHoriOrient& rHori =
                                         pContact->GetFmt()->GetHoriOrient();
-                            if ( ( rHori.GetHoriOrient() != HORI_NONE ||
-                                   rHori.GetRelationOrient()== PRTAREA ||
-                                   rHori.GetRelationOrient()== FRAME ) &&
+                            if ( ( rHori.GetHoriOrient() != text::HoriOrientation::NONE ||
+                                   rHori.GetRelationOrient()== text::RelOrientation::PRINT_AREA ||
+                                   rHori.GetRelationOrient()== text::RelOrientation::FRAME ) &&
                                  ( bChgWidth || bPrtWidth || bChgFlyBasePos ) )
                             {
                                 bNotify = true;
@@ -576,7 +580,7 @@ SwLayNotify::~SwLayNotify()
 
     SwLayoutFrm *pLay = GetLay();
     SWRECTFN( pLay )
-    FASTBOOL bNotify = FALSE;
+    BOOL bNotify = FALSE;
     if ( pLay->Prt().SSize() != aPrt.SSize() )
     {
         if ( !IsLowersComplete() )
@@ -645,12 +649,12 @@ SwLayNotify::~SwLayNotify()
                       pLay->Prt().Width()  > aPrt.Width()) &&
                      (pLay->IsMoveable() || pLay->IsFlyFrm()) )
                 {
-                    SwFrm *pFrm = pLay->Lower();
-                    if ( pFrm && pFrm->IsFlowFrm() )
+                    SwFrm *pTmpFrm = pLay->Lower();
+                    if ( pTmpFrm && pTmpFrm->IsFlowFrm() )
                     {
-                        while ( pFrm->GetNext() )
-                            pFrm = pFrm->GetNext();
-                        pFrm->InvalidateNextPos();
+                        while ( pTmpFrm->GetNext() )
+                            pTmpFrm = pTmpFrm->GetNext();
+                        pTmpFrm->InvalidateNextPos();
                     }
                 }
             }
@@ -943,7 +947,7 @@ SwCntntNotify::~SwCntntNotify()
         while( !pCell->IsCellFrm() && pCell->GetUpper() )
             pCell = pCell->GetUpper();
         ASSERT( pCell->IsCellFrm(), "Where's my cell?" );
-        if ( VERT_NONE != pCell->GetFmt()->GetVertOrient().GetVertOrient() )
+        if ( text::VertOrientation::NONE != pCell->GetFmt()->GetVertOrient().GetVertOrient() )
             pCell->InvalidatePrt(); //fuer vertikale Ausrichtung.
     }
 
@@ -994,7 +998,7 @@ SwCntntNotify::~SwCntntNotify()
         }
     }
 
-    FASTBOOL bFirst = (aFrm.*fnRect->fnGetWidth)() == 0;
+    BOOL bFirst = (aFrm.*fnRect->fnGetWidth)() == 0;
 
     if ( pCnt->IsNoTxtFrm() )
     {
@@ -1089,7 +1093,7 @@ SwCntntNotify::~SwCntntNotify()
                      FLY_AT_CNTNT   != rAnch.GetAnchorId() )
                     continue;   //#60878# nicht etwa zeichengebundene.
 
-                FASTBOOL bCheckPos = FALSE;
+                BOOL bCheckPos = FALSE;
                 if ( rAnch.GetCntntAnchor() )
                 {
                     if ( !pIdx )
@@ -1249,7 +1253,7 @@ void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
     }
 }
 
-FASTBOOL MA_FASTCALL lcl_ObjConnected( SwFrmFmt *pFmt )
+BOOL MA_FASTCALL lcl_ObjConnected( SwFrmFmt *pFmt )
 {
     SwClientIter aIter( *pFmt );
     if ( RES_FLYFRMFMT == pFmt->Which() )
@@ -1307,7 +1311,7 @@ void AppendAllObjs( const SwSpzFrmFmts *pTbl )
         {
             SwFrmFmt *pFmt = (SwFrmFmt*)aCpy[ USHORT(i) ];
             const SwFmtAnchor &rAnch = pFmt->GetAnchor();
-            FASTBOOL bRemove = FALSE;
+            BOOL bRemove = FALSE;
             if ( rAnch.GetAnchorId() == FLY_PAGE || rAnch.GetAnchorId() == FLY_IN_CNTNT )
                 //Seitengebunde sind bereits verankert, zeichengebundene
                 //will ich hier nicht.
@@ -1641,11 +1645,11 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 //ist. Dann ist es jetzt an der Zeit ihn zu entfernen.
                 if ( !pLay->ContainsCntnt() )
                 {
-                    SwFrm *pTmp = pLay;
-                    pLay = pTmp->GetUpper();
-                    pPrv = pTmp->GetPrev();
-                    pTmp->Remove();
-                    delete pTmp;
+                    SwFrm *pTmpFrm = pLay;
+                    pLay = pTmpFrm->GetUpper();
+                    pPrv = pTmpFrm->GetPrev();
+                    pTmpFrm->Remove();
+                    delete pTmpFrm;
                 }
                 else
                 {
@@ -1895,7 +1899,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                     // MoveFwd==TRUE bedeutet, dass wir auf der gleichen
                     // Seite geblieben sind, wir wollen aber die Seite wechseln,
                     // sofern dies moeglich ist
-                    BOOL bOldLock = pTmp->IsJoinLocked();
+                    BOOL bTmpOldLock = pTmp->IsJoinLocked();
                     pTmp->LockJoin();
                     while( pTmp->MoveFwd( TRUE, FALSE, TRUE ) )
                     {
@@ -1903,7 +1907,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                             break;
                         pOldUp = pTmp->GetFrm()->GetUpper();
                     }
-                    if( !bOldLock )
+                    if( !bTmpOldLock )
                         pTmp->UnlockJoin();
                 }
                 ::_InsertCnt( pUpper, pDoc, rSttIdx.GetIndex(),
@@ -2102,7 +2106,7 @@ void SwBorderAttrs::_CalcTopLine()
     nTopLine = (bBorderDist && !rBox.GetTop())
                             ? rBox.GetDistance  (BOX_LINE_TOP)
                             : rBox.CalcLineSpace(BOX_LINE_TOP);
-    nTopLine += rShadow.CalcShadowSpace(SHADOW_TOP);
+    nTopLine = nTopLine + rShadow.CalcShadowSpace(SHADOW_TOP);
     bTopLine = FALSE;
 }
 
@@ -2111,7 +2115,7 @@ void SwBorderAttrs::_CalcBottomLine()
     nBottomLine = (bBorderDist && !rBox.GetBottom())
                             ? rBox.GetDistance  (BOX_LINE_BOTTOM)
                             : rBox.CalcLineSpace(BOX_LINE_BOTTOM);
-    nBottomLine += rShadow.CalcShadowSpace(SHADOW_BOTTOM);
+    nBottomLine = nBottomLine + rShadow.CalcShadowSpace(SHADOW_BOTTOM);
     bBottomLine = FALSE;
 }
 
@@ -2120,7 +2124,7 @@ void SwBorderAttrs::_CalcLeftLine()
     nLeftLine = (bBorderDist && !rBox.GetLeft())
                             ? rBox.GetDistance  (BOX_LINE_LEFT)
                             : rBox.CalcLineSpace(BOX_LINE_LEFT);
-    nLeftLine += rShadow.CalcShadowSpace(SHADOW_LEFT);
+    nLeftLine = nLeftLine + rShadow.CalcShadowSpace(SHADOW_LEFT);
     bLeftLine = FALSE;
 }
 
@@ -2129,7 +2133,7 @@ void SwBorderAttrs::_CalcRightLine()
     nRightLine = (bBorderDist && !rBox.GetRight())
                             ? rBox.GetDistance  (BOX_LINE_RIGHT)
                             : rBox.CalcLineSpace(BOX_LINE_RIGHT);
-    nRightLine += rShadow.CalcShadowSpace(SHADOW_RIGHT);
+    nRightLine = nRightLine + rShadow.CalcShadowSpace(SHADOW_RIGHT);
     bRightLine = FALSE;
 }
 
@@ -2344,13 +2348,13 @@ void SwBorderAttrs::_GetBottomLine( const SwFrm& _rFrm )
 |*
 |*************************************************************************/
 
-SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCache, const SwFrm *pFrm ) :
-    SwCacheAccess( rCache, (pFrm->IsCntntFrm() ?
+SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCach, const SwFrm *pFrm ) :
+    SwCacheAccess( rCach, (pFrm->IsCntntFrm() ?
                                 (void*)((SwCntntFrm*)pFrm)->GetNode() :
                                 (void*)((SwLayoutFrm*)pFrm)->GetFmt()),
                            (BOOL)(pFrm->IsCntntFrm() ?
-                (BOOL)((SwModify*)((SwCntntFrm*)pFrm)->GetNode())->IsInCache() :
-                (BOOL)((SwModify*)((SwLayoutFrm*)pFrm)->GetFmt())->IsInCache()) ),
+                ((SwModify*)((SwCntntFrm*)pFrm)->GetNode())->IsInCache() :
+                ((SwModify*)((SwLayoutFrm*)pFrm)->GetFmt())->IsInCache()) ),
     pConstructor( pFrm )
 {
 }
@@ -2384,7 +2388,7 @@ SwBorderAttrs *SwBorderAttrAccess::Get()
 |*
 |*************************************************************************/
 
-SwOrderIter::SwOrderIter( const SwPageFrm *pPg, FASTBOOL bFlys ) :
+SwOrderIter::SwOrderIter( const SwPageFrm *pPg, BOOL bFlys ) :
     pPage( pPg ),
     pCurrent( 0 ),
     bFlysOnly( bFlys )
@@ -3124,11 +3128,6 @@ void lcl_CheckFlowBack( SwFrm* pFrm, const SwRect &rRect )
     }
 }
 
-
-#ifdef _MSC_VER
-#pragma optimize("",off)
-#endif
-
 void MA_FASTCALL lcl_NotifyCntnt( const SdrObject *pThis, SwCntntFrm *pCnt,
     const SwRect &rRect, const PrepareHint eHint )
 {
@@ -3243,7 +3242,7 @@ void Notify_Background( const SdrObject* pObj,
             // <--
             {
                 const SwFmtVertOrient &rOri = pCell->GetFmt()->GetVertOrient();
-                if ( VERT_NONE != rOri.GetVertOrient() )
+                if ( text::VertOrientation::NONE != rOri.GetVertOrient() )
                     pCell->InvalidatePrt();
             }
             SwTabFrm *pTab = pCnt->FindTabFrm();
@@ -3326,9 +3325,9 @@ void Notify_Background( const SdrObject* pObj,
                         pFlyFrm && !pFly->IsLowerOf( pFlyFrm ) )
                 {
                     const SwFmtHoriOrient &rH = pFly->GetFmt()->GetHoriOrient();
-                    if ( HORI_NONE != rH.GetHoriOrient()  &&
-                            HORI_CENTER != rH.GetHoriOrient()  &&
-                            ( !pFly->IsAutoPos() || REL_CHAR != rH.GetRelationOrient() ) &&
+                    if ( text::HoriOrientation::NONE != rH.GetHoriOrient()  &&
+                            text::HoriOrientation::CENTER != rH.GetHoriOrient()  &&
+                            ( !pFly->IsAutoPos() || text::RelOrientation::CHAR != rH.GetRelationOrient() ) &&
                             (pFly->Frm().Bottom() >= rRect.Top() &&
                             pFly->Frm().Top() <= rRect.Bottom()) )
                         pFly->InvalidatePos();
@@ -3343,10 +3342,6 @@ void Notify_Background( const SdrObject* pObj,
     if( bInva && 0 != (pSh = pPage->GetShell()) )
         pSh->InvalidateWindows( rRect );
 }
-
-#ifdef _MSC_VER
-#pragma optimize("",on)
-#endif
 
 /*************************************************************************
 |*
@@ -3689,12 +3684,12 @@ SwFrm* GetFrmOfModify( SwModify& rMod, USHORT nFrmType, const Point* pPoint,
     return pMinFrm;
 }
 
-FASTBOOL IsExtraData( const SwDoc *pDoc )
+BOOL IsExtraData( const SwDoc *pDoc )
 {
     const SwLineNumberInfo &rInf = pDoc->GetLineNumberInfo();
     return rInf.IsPaintLineNumbers() ||
            rInf.IsCountInFlys() ||
-           ((SwHoriOrient)SW_MOD()->GetRedlineMarkPos() != HORI_NONE &&
+           ((sal_Int16)SW_MOD()->GetRedlineMarkPos() != text::HoriOrientation::NONE &&
             pDoc->GetRedlineTbl().Count());
 }
 
