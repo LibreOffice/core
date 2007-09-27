@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdlg2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:21:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:37:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,18 +64,16 @@
 #include "wview.hxx"
 #include "wrtsh.hxx"
 #include "cmdid.h"
-//CHINA001 #include "cption.hxx"
 #include "caption.hxx"
-//CHINA001 #include "insfnote.hxx"
 #include "poolfmt.hxx"
 #include "edtwin.hxx"
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
 
-#include "swabstdlg.hxx" //CHINA001
-#include "frmui.hrc" //CHINA001
-#include "misc.hrc" //CHINA001
+#include "swabstdlg.hxx"
+#include "frmui.hrc"
+#include "misc.hrc"
 
 #include "view.hrc"
 
@@ -91,19 +89,16 @@ extern String* pOldDrwCat;
 void SwView::ExecDlgExt(SfxRequest &rReq)
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
-    //CHINA001 ModalDialog *pDialog = 0;
-    const SfxItemSet* pOutSet = 0;
 
     switch ( rReq.GetSlot() )
     {
         case FN_INSERT_CAPTION:
         {
-            //CHINA001 pDialog = new SwCaptionDialog( pMDI, *this );
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDialog = pFact->CreateSwCaptionDialog( pMDI, *this, DLG_CAPTION );
-            DBG_ASSERT(pDialog, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDialog, "Dialogdiet fail!");
             if ( pDialog )
             {
                 pDialog->Execute();
@@ -113,25 +108,19 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
         }
         case  FN_EDIT_FOOTNOTE:
         {
-            //CHINA001 pDialog = new SwInsFootNoteDlg( pMDI, *pWrtShell, TRUE );
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg( DLG_INS_FOOTNOTE,
                                                         pMDI, *pWrtShell, TRUE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
-            pDlg->SetHelpId(FN_EDIT_FOOTNOTE);//CHINA001 pDialog->SetHelpId(FN_EDIT_FOOTNOTE);
-            pDlg->SetText( SW_RESSTR(STR_EDIT_FOOTNOTE) );//CHINA001 pDialog->SetText( SW_RESSTR(STR_EDIT_FOOTNOTE) );
+            pDlg->SetHelpId(FN_EDIT_FOOTNOTE);
+            pDlg->SetText( SW_RESSTR(STR_EDIT_FOOTNOTE) );
             pDlg->Execute();
             delete pDlg;
             break;
         }
     }
-//CHINA001  if ( pDialog )
-//CHINA001  {
-//CHINA001  pDialog->Execute();
-//CHINA001  delete pDialog;
-//CHINA001 }
 }
 
 /* -----------------06.11.98 14:53-------------------
@@ -166,7 +155,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     SwWrtShell &rSh = GetWrtShell();
     if(rName.Len())
     {
-        USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, GET_POOLID_TXTCOLL);
+        USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
         if( USHRT_MAX != nPoolId )
             rSh.GetTxtCollFromPool(nPoolId);
             // Pool-Vorlage existiert nicht: Existiert sie am Dokument?
@@ -178,15 +167,15 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
         }
     }
 
-    USHORT eType = (SwWrtShell::SelectionType)rSh.GetSelectionType();
-    if (eType & SwWrtShell::SEL_OLE)
-        eType = SwWrtShell::SEL_GRF;
+    SelectionType eType = rSh.GetSelectionType();
+    if (eType & nsSelectionType::SEL_OLE)
+        eType = nsSelectionType::SEL_GRF;
 
     // SwLabelType
-    const USHORT eT = eType & SwWrtShell::SEL_TBL ? LTYPE_TABLE :
-                      eType & SwWrtShell::SEL_FRM ? LTYPE_FLY :
-                      eType == SwWrtShell::SEL_TXT ? LTYPE_FLY :
-                      eType & SwWrtShell::SEL_DRW ? LTYPE_DRAW :
+    const SwLabelType eT = eType & nsSelectionType::SEL_TBL ? LTYPE_TABLE :
+                      eType & nsSelectionType::SEL_FRM ? LTYPE_FLY :
+                      eType == nsSelectionType::SEL_TXT ? LTYPE_FLY :
+                      eType & nsSelectionType::SEL_DRW ? LTYPE_DRAW :
                                                     LTYPE_OBJECT;
 
     SwFldMgr aMgr(&rSh);
@@ -195,7 +184,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     if (!pFldType && rName.Len() )
     {
         // Neuen Feldtypen erzeugen
-        SwSetExpFieldType aSwSetExpFieldType(rSh.GetDoc(), rName, GSE_SEQ);
+        SwSetExpFieldType aSwSetExpFieldType(rSh.GetDoc(), rName, nsSwGetSetExpType::GSE_SEQ);
         aMgr.InsertFldType(aSwSetExpFieldType);
         pFldType = (SwSetExpFieldType*)aMgr.GetFldType(RES_SETEXPFLD, rName);
     }
@@ -205,7 +194,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
         if (pFldType)
         {
             pFldType->SetDelimiter(pOpt->GetSeparator());
-            pFldType->SetOutlineLvl(pOpt->GetLevel());
+            pFldType->SetOutlineLvl( static_cast< BYTE >(pOpt->GetLevel()) );
         }
     }
 
@@ -227,7 +216,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     }
     rSh.StartAllAction();
 
-    GetWrtShell().InsertLabel( (SwLabelType)eT,
+    GetWrtShell().InsertLabel( eT,
                                 pOpt->GetCaption(),
                                 pOpt->GetSeparator(),
                                 !pOpt->GetPos(),
@@ -250,15 +239,15 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 
     // Kategorie merken
     String** ppStr = 0;
-    if (eType & SwWrtShell::SEL_GRF)
+    if (eType & nsSelectionType::SEL_GRF)
         ppStr = &pOldGrfCat;
-    else if( eType & SwWrtShell::SEL_TBL)
+    else if( eType & nsSelectionType::SEL_TBL)
         ppStr = &pOldTabCat;
-    else if( eType & SwWrtShell::SEL_FRM)
+    else if( eType & nsSelectionType::SEL_FRM)
         ppStr = &pOldFrmCat;
-    else if( eType == SwWrtShell::SEL_TXT)
+    else if( eType == nsSelectionType::SEL_TXT)
         ppStr = &pOldFrmCat;
-    else if( eType & SwWrtShell::SEL_DRW)
+    else if( eType & nsSelectionType::SEL_DRW)
         ppStr = &pOldDrwCat;
 
     if( ppStr )
