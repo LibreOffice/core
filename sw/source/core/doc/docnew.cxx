@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-21 11:52:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:36:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,8 +292,8 @@ SwDoc::SwDoc() :
     pUndos( new SwUndos( 0, 20 ) ),
     pUpdtFlds( new SwDocUpdtFld() ),
     pFldTypes( new SwFldTypes() ),
-    pPrt( 0 ),
     pVirDev( 0 ),
+    pPrt( 0 ),
     pPrtData( 0 ),
     pGlossaryDoc( 0 ),
     pOutlineRule( 0 ),
@@ -326,21 +326,21 @@ SwDoc::SwDoc() :
     nUndoCnt( 0 ),
     nUndoSttEnd( 0 ),
     nAutoFmtRedlnCommentNo( 0 ),
-    eRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE)),
+    nLinkUpdMode( GLOBALSETTING ),
+     eFldUpdMode( AUTOUPD_GLOBALSETTING ),
+    eRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE)),
     eChrCmprType( CHARCOMPRESS_NONE ),
     mReferenceCount(0),
     mIdleBlockCount(0),
     nLockExpFld( 0 ),
-    nLinkUpdMode( GLOBALSETTING ),
-     nFldUpdMode( AUTOUPD_GLOBALSETTING ),
     mbReadlineChecked(false),
     mbWinEncryption(sal_False),
-    mbStartIdleTimer(sal_False),
     // --> OD 2005-02-11 #i38810#
     mbLinksUpdated( sal_False ),
     // i#78591#
     n32DummyCompatabilityOptions1(0),
-    n32DummyCompatabilityOptions2(0)
+    n32DummyCompatabilityOptions2(0),
+    mbStartIdleTimer(sal_False)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
 
@@ -783,7 +783,7 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
 
 
 
-com::sun::star::uno::Reference < com::sun::star::embed::XStorage > SwDoc::GetDocStorage()
+uno::Reference < embed::XStorage > SwDoc::GetDocStorage()
 {
     if( pDocShell )
         return pDocShell->GetStorage();
@@ -828,7 +828,7 @@ void SwDoc::ClearDoc()
 
     // stehen noch FlyFrames rum, loesche auch diese
     USHORT n;
-    while ((n = GetSpzFrmFmts()->Count()))
+    while ( 0 != (n = GetSpzFrmFmts()->Count()) )
         DelLayoutFmt((*pSpzFrmFmtTbl)[n-1]);
     ASSERT( !pDrawModel || !pDrawModel->GetPage(0)->GetObjCount(),
                 "not all DrawObjects removed from the page" );
@@ -979,7 +979,7 @@ void SwDoc::UpdateLinks( BOOL bUI )
     USHORT nLinkMode = getLinkUpdateMode( true );
     USHORT nUpdateDocMode = GetDocShell()->GetUpdateDocMode();
     if( GetDocShell() &&
-            (nLinkMode != NEVER ||  ::com::sun::star::document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
+            (nLinkMode != NEVER ||  document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
         GetLinkManager().GetLinks().Count() &&
         SFX_CREATE_MODE_INTERNAL !=
                     ( eMode = GetDocShell()->GetCreateMode()) &&
@@ -992,9 +992,9 @@ void SwDoc::UpdateLinks( BOOL bUI )
         BOOL bUpdate = TRUE;
         switch(nUpdateDocMode)
         {
-            case ::com::sun::star::document::UpdateDocMode::NO_UPDATE:   bUpdate = FALSE;break;
-            case ::com::sun::star::document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = FALSE; break;
-            case ::com::sun::star::document::UpdateDocMode::FULL_UPDATE: bAskUpdate = TRUE; break;
+            case document::UpdateDocMode::NO_UPDATE:   bUpdate = FALSE;break;
+            case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = FALSE; break;
+            case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = TRUE; break;
         }
         if( bUpdate && (bUI || !bAskUpdate) )
         {
