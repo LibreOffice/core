@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtftntx.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:50:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:03:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,8 @@ class SW_DLLPUBLIC SwFmtFtnEndAtTxtEnd : public SfxEnumItem
     USHORT      nOffset;
 
 protected:
-    SwFmtFtnEndAtTxtEnd( USHORT nWhich, SwFtnEndPosEnum ePos )
-        : SfxEnumItem( nWhich, ePos ), nOffset( 0 )
+    SwFmtFtnEndAtTxtEnd( USHORT nWhichL, SwFtnEndPosEnum ePos )
+        : SfxEnumItem( nWhichL, sal::static_int_cast< USHORT >(ePos) ), nOffset( 0 )
     {}
     SwFmtFtnEndAtTxtEnd( const SwFmtFtnEndAtTxtEnd& rAttr )
         : SfxEnumItem( rAttr ), sPrefix( rAttr.sPrefix ),
