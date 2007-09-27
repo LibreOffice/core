@@ -5,7 +5,13 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
 
+#if defined _MSC_VER
+#pragma warning( push, 1 )
+#endif
 #include <libwpd/libwpd.h>
+#if defined _MSC_VER
+#pragma warning( pop )
+#endif
 
 using com::sun::star::uno::Reference;
 using com::sun::star::xml::sax::XDocumentHandler;

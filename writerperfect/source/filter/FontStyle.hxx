@@ -26,7 +26,13 @@
  */
 #ifndef _FONTSTYLE_H
 #define _FONTSTYLE_H
+#if defined _MSC_VER
+#pragma warning( push, 1 )
+#endif
 #include <libwpd/libwpd.h>
+#if defined _MSC_VER
+#pragma warning( pop )
+#endif
 
 #include "Style.hxx"
 #include "WriterProperties.hxx"
