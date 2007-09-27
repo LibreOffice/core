@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convert.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:30:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:56:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,8 @@
 class SwTableAutoFmt;
 class SwView;
 class SwWrtShell;
+class NumericField;
+struct SwInsertTableOptions;
 
 class SwConvertTableDlg: public SfxModalDialog
 {
