@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuiexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:50:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:38:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ namespace swui
             SwDialogsResMgr::GetResMgr();
         return pFactory;
     }
-};
+}
 
 extern "C"
 {
