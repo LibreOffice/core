@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abstract.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:05:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,10 @@
 SwInsertAbstractDlg::SwInsertAbstractDlg( Window* pParent ) :
     SfxModalDialog(pParent, SW_RES(DLG_INSERT_ABSTRACT)),
     aFL     (this, SW_RES(FL_1       )),
+    aLevelFT(this, SW_RES(FT_LEVEL   )),
+    aLevelNF(this, SW_RES(NF_LEVEL   )),
     aParaFT (this, SW_RES(FT_PARA   )),
     aParaNF (this, SW_RES(NF_PARA   )),
-    aLevelFT(this, SW_RES(FT_LEVEL  )),
-    aLevelNF(this, SW_RES(NF_LEVEL  )),
     aDescFT (this, SW_RES(FT_DESC   )),
     aOkPB   (this, SW_RES(PB_OK     )),
     aCancelPB (this, SW_RES(PB_CANCEL   )),
@@ -82,7 +82,7 @@ SwInsertAbstractDlg::~SwInsertAbstractDlg()
 
 BYTE SwInsertAbstractDlg::GetLevel() const
 {
-    return aLevelNF.GetValue() - 1;
+    return static_cast< BYTE >(aLevelNF.GetValue() - 1);
 }
 /*-----------------22.02.97 15.34-------------------
 
