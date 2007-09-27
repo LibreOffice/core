@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prtopt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:48:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,11 +58,12 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+#include <unomid.h>
+
 using namespace utl;
 using namespace rtl;
-using namespace com::sun::star::uno;
+using namespace ::com::sun::star::uno;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
 /*--------------------------------------------------------------------
      Beschreibung: Ctor
  --------------------------------------------------------------------*/
@@ -159,7 +160,6 @@ void    SwPrintOptions::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
 
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
