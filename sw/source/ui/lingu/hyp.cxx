@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:05:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:18:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,12 +67,14 @@
 #include "mdiexp.hxx"
 #include "olmenu.hrc"
 
+#include <unomid.h>
+
 #define HYPHHERE    '-'
 #define PSH         (&pView->GetWrtShell())
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
-#define C2U(cChar) OUString::createFromAscii(cChar)
+
 /*--------------------------------------------------------------------
      Beschreibung: Interaktive Trennung
  --------------------------------------------------------------------*/
@@ -81,14 +83,14 @@ SwHyphWrapper::SwHyphWrapper( SwView* pVw,
             uno::Reference< linguistic2::XHyphenator >  &rxHyph,
             sal_Bool bStart, sal_Bool bOther, sal_Bool bSelect ) :
     SvxSpellWrapper( &pVw->GetEditWin(), rxHyph, bStart, bOther ),
+    pView( pVw ),
     xHyph( rxHyph ),
     nLangError( 0 ),
     nPageCount( 0 ),
     nPageStart( 0 ),
     bInSelection( bSelect ),
     bShowError( sal_False ),
-    bInfoBox( sal_False ),
-    pView( pVw )
+    bInfoBox( sal_False )
 {
     uno::Reference< beans::XPropertySet >  xProp( GetLinguPropertySet() );
     bAutomatic = xProp.is() ?
@@ -113,7 +115,7 @@ void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )
 sal_Bool SwHyphWrapper::SpellContinue()
 {
     // Fuer autom. Trennung Aktionen erst am Ende sichtbar machen
-    SwWait *pWait;
+    SwWait *pWait = 0;
     if( bAutomatic )
     {
         PSH->StartAllAction();
@@ -137,7 +139,7 @@ sal_Bool SwHyphWrapper::SpellContinue()
         bShowError = sal_False;
         PSH->Push();
         PSH->ClearMark();
-        pView->SpellError( (void*)nLangError );
+        pView->SpellError( &nLangError );
         PSH->Combine();
     }
     return GetLast().is();
@@ -150,12 +152,11 @@ void SwHyphWrapper::SpellEnd()
     SvxSpellWrapper::SpellEnd();
 }
 
-IMPL_LINK( SwHyphWrapper, SpellError, void *, nLang )
+IMPL_LINK( SwHyphWrapper, SpellError, LanguageType *, pLang )
 {
-    sal_uInt32 nNew = (sal_uInt32)(sal_uIntPtr)nLang;
-    if( nNew != nLangError )
+    if (pLang &&  *pLang != nLangError )
     {
-        nLangError = nNew;
+        nLangError = *pLang;
         bShowError = sal_True;
     }
     return 0;
