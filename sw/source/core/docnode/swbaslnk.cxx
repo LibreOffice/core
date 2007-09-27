@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swbaslnk.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:57:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:42:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,7 @@ void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 
 
 void SwBaseLink::DataChanged( const String& rMimeType,
-                            const ::com::sun::star::uno::Any & rValue )
+                            const uno::Any & rValue )
 {
     if( !pCntntNode )
     {
@@ -211,10 +211,10 @@ void SwBaseLink::DataChanged( const String& rMimeType,
         return;         // das wars!
     }
 
-    FASTBOOL bUpdate = FALSE;
-    FASTBOOL bGraphicArrived = FALSE;
-    FASTBOOL bGraphicPieceArrived = FALSE;
-    FASTBOOL bDontNotify = FALSE;
+    BOOL bUpdate = FALSE;
+    BOOL bGraphicArrived = FALSE;
+    BOOL bGraphicPieceArrived = FALSE;
+    BOOL bDontNotify = FALSE;
     Size aGrfSz, aFrmFmtSz;
 
     if( pCntntNode->IsGrfNode() )
@@ -310,8 +310,8 @@ void SwBaseLink::DataChanged( const String& rMimeType,
         else if( pSh )
             pSh->StartAction();
 
-        SwMsgPoolItem aMsgHint( bGraphicArrived ? RES_GRAPHIC_ARRIVED :
-                                                  RES_UPDATE_ATTR );
+        SwMsgPoolItem aMsgHint( static_cast<USHORT>(
+            bGraphicArrived ? RES_GRAPHIC_ARRIVED : RES_UPDATE_ATTR ) );
 
         if ( bGraphicArrived )
         {
@@ -372,7 +372,6 @@ void SwBaseLink::DataChanged( const String& rMimeType,
             pSh->LockView( FALSE );
     }
 }
-
 
 BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
 {
@@ -456,174 +455,11 @@ BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
 }
 
 
-class ReReadThread : public osl::Thread {
-public:
-
-    class DelCondition : public ::salhelper::Condition {
-
-    public:
-
-        DelCondition(ReReadThread& rThread)
-            : salhelper::Condition(rThread.m_aMutex),
-              m_rThread(rThread)
-        {
-        }
-
-    protected:
-
-        bool applies() const {
-            return m_rThread.m_bIsRead;
-        }
-
-    private:
-
-        ReReadThread& m_rThread;
-    };
-
-    friend class DelCondition;
-
-    ~ReReadThread();
-
-    String getGrfName() {
-        osl::MutexGuard aGuard(m_aMutex);
-        return m_rGrfName;
-    }
-
-    BOOL waitForData() {
-        osl::MutexGuard aGuard(m_aMutex);
-        return m_bWaitForData;
-    }
-
-    BOOL nativFormat() {
-        osl::MutexGuard aGuard(m_aMutex);
-        return m_bNativFormat;
-    }
-
-    uno::Reference<io::XInputStream> getInputStream() {
-        osl::MutexGuard aGuard(m_aMutex);
-        return m_xInputStream;
-    }
-
-    sal_Bool getIsReadOnly() {
-        return m_bIsReadOnly;
-    }
-
-    SwBaseLink* getSwBaseLink() {
-        osl::MutexGuard aGuard(m_aMutex);
-        return m_pSwBaseLink;
-    }
-
-    void setReRead()
-    {
-        salhelper::ConditionModifier aCM(m_aCond);
-        m_bIsRead = true;
-    }
-
-    void releaseSwBaseLink() {
-        osl::MutexGuard aGuard(m_aMutex);
-        m_pSwBaseLink = 0;
-    }
-
-protected:
-
-    void SAL_CALL run();
-
-    void SAL_CALL onTerminated();
-
-private:
-
-    osl::Mutex m_aMutex;
-    DelCondition m_aCond;
-    bool m_bIsRead;
-
-    SwBaseLink* m_pSwBaseLink;
-    String m_rGrfName;
-    BOOL m_bWaitForData, m_bNativFormat;
-
-    sal_Bool m_bIsReadOnly;
-    uno::Reference<io::XInputStream> m_xInputStream;
-};
-
-
-ReReadThread::~ReReadThread() {
-}
-
-
-long GrfNodeChanged( void* pLink, void* pCaller ) {
-
-    // is called in the main thread
-    if(!pCaller)
-        return 0;
-
-    ReReadThread* pReReadThread = static_cast<ReReadThread*>(pCaller);
-    SwBaseLink* pSwBaseLink = pReReadThread->getSwBaseLink();
-    if(pSwBaseLink) {
-        uno::Reference<io::XInputStream> xInputStream(
-            pReReadThread->getInputStream());
-        sal_Bool bIsReadOnly(
-            pReReadThread->getIsReadOnly());
-        if(xInputStream.is()) {
-            pSwBaseLink->setStreamToLoadFrom(
-                xInputStream,bIsReadOnly);
-            pSwBaseLink->Update();
-        }
-        else
-        {
-            ASSERT( false, "<GrfNodeChanged()> - no input stream" );
-        }
-        pSwBaseLink->m_pReReadThread = 0;
-    }
-
-    pReReadThread->setReRead();
-    return 0;
-}
-
-
-void SAL_CALL ReReadThread::run() {
-    uno::Sequence < beans::PropertyValue > xProps(1);
-    xProps[0].Name = ::rtl::OUString::createFromAscii("URL");
-    xProps[0].Value <<= ::rtl::OUString(m_rGrfName);
-    comphelper::MediaDescriptor aMedium( xProps );
-
-    aMedium.addInputStream();
-    m_bIsReadOnly = aMedium.isStreamReadOnly();
-    uno::Reference<io::XInputStream> xInputStream;
-    uno::Reference<io::XStream> xStream;
-    aMedium[comphelper::MediaDescriptor::PROP_STREAM()] >>= xStream;
-    aMedium[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
-    if( !xInputStream.is() && xStream.is() )
-        xInputStream = xStream->getInputStream();
-
-    if( xInputStream.is() ) {
-        osl::MutexGuard aGuard(m_aMutex);
-        m_xInputStream = xInputStream;
-    }
-
-    //TODO error handling
-    Application* pApp = GetpApp();
-    Link aLink(0,
-               // important that this is 0,
-               // because the main thread might have killed
-               // the node already
-               GrfNodeChanged); // the method
-    pApp->PostUserEvent(aLink,this);
-}
-
-
-void SAL_CALL ReReadThread::onTerminated() {
-    {
-        ::salhelper::ConditionWaiter aCW(m_aCond);
-    }
-    delete this;
-}
-
-
-
-FASTBOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
+BOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
 {
     bSwapIn = TRUE;
 
-    FASTBOOL bRes;
+    BOOL bRes;
 
     if( !GetObj() && ( bNativFormat || ( !IsSynchron() && bWaitForData ) ))
     {
@@ -638,6 +474,7 @@ FASTBOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
         if(GetLinkManager())
             GetLinkManager()->GetDisplayNames( this, 0, &sGrfNm, 0, 0 );
         int x = 0;
+        ++x;
     }
 #endif
 
@@ -665,7 +502,7 @@ FASTBOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
 //!!        if( bNativFormat )
 //!!            aData.SetAspect( aData.GetAspect() | ASPECT_ICON );
 
-        ::com::sun::star::uno::Any aValue;
+        uno::Any aValue;
         GetObj()->GetData( aValue, aMimeType, !IsSynchron() && bWaitForData );
 
         if( bWaitForData && !GetObj() )
@@ -760,6 +597,4 @@ BOOL SwBaseLink::IsInRange( ULONG, ULONG, xub_StrLen, xub_StrLen ) const
 
 SwBaseLink::~SwBaseLink()
 {
-    if(m_pReReadThread)
-        m_pReReadThread->releaseSwBaseLink();
 }
