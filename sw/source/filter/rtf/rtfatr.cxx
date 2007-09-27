@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 14:40:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:53:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,6 +366,9 @@
 #undef GetProp
 #endif
 
+
+using namespace com::sun::star;
+
 //-----------------------------------------------------------------------
 
 static Writer& OutRTF_SwFmtCol( Writer& rWrt, const SfxPoolItem& rHt );
@@ -404,7 +407,7 @@ void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
     SfxWhichIter aIter( rSet );
     const SfxPoolItem* pItem;
     FnAttrOut pOut;
-    register USHORT nWhich = aIter.FirstWhich();
+    USHORT nWhich = aIter.FirstWhich();
     while( nWhich )
     {
         if( SFX_ITEM_SET == rSet.GetItemState( nWhich, bDeep, &pItem ))
@@ -494,12 +497,14 @@ void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
     //output alignment
     if (bFrameDirOut && !bAdjustOut && !rWrt.pFlyFmt && !rWrt.bOutPageDesc)
     {
-        if ((pOut = aRTFAttrFnTab[RES_PARATR_ADJUST - RES_CHRATR_BEGIN]))
+        pOut = aRTFAttrFnTab[ static_cast< USHORT >(RES_PARATR_ADJUST) - RES_CHRATR_BEGIN];
+        if (pOut)
             (*pOut)(rWrt, rSet.Get(RES_PARATR_ADJUST));
     }
     if (rWrt.pFlyFmt && !rWrt.bOutPageDesc && !bFrameDirOut)
     {
-        if ((pOut = aRTFAttrFnTab[RES_FRAMEDIR - RES_CHRATR_BEGIN]))
+        pOut = aRTFAttrFnTab[ static_cast< USHORT >(RES_FRAMEDIR) - RES_CHRATR_BEGIN];
+        if (pOut)
             (*pOut)(rWrt, rSet.Get(RES_FRAMEDIR));
     }
 
@@ -508,21 +513,21 @@ void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
         SvPtrarr* aArr[4];
         switch (rWrt.GetCurrScriptType())
         {
-        case ::com::sun::star::i18n::ScriptType::LATIN:
+        case i18n::ScriptType::LATIN:
             aArr[ 0 ] = &aCmplx;
             aArr[ 1 ] = &aAsian;
             aArr[ 2 ] = &aLatin;
             aArr[ 3 ] = &aLatin;
             break;
 
-        case ::com::sun::star::i18n::ScriptType::ASIAN:
+        case i18n::ScriptType::ASIAN:
             aArr[ 0 ] = &aCmplx;
             aArr[ 1 ] = &aLatin;
             aArr[ 2 ] = &aLatin;
             aArr[ 3 ] = &aAsian;
             break;
 
-        case ::com::sun::star::i18n::ScriptType::COMPLEX:
+        case i18n::ScriptType::COMPLEX:
             aArr[ 0 ] = &aLatin;
             aArr[ 1 ] = &aLatin;
             aArr[ 2 ] = &aAsian;
@@ -772,9 +777,9 @@ class RTFEndPosLst : private _EndPosLst
     xub_StrLen nCurPos;
     USHORT nCurScript;
 public:
-    _EndPosLst::Count;
-    _EndPosLst::operator[];
-    _EndPosLst::DeleteAndDestroy;
+    using _EndPosLst::Count;
+    using _EndPosLst::operator[];
+    using _EndPosLst::DeleteAndDestroy;
 
     RTFEndPosLst( SwRTFWriter& rWrt, const SwTxtNode& rNd, xub_StrLen nStart );
     ~RTFEndPosLst();
@@ -805,17 +810,17 @@ SttEndPos::SttEndPos( const SfxPoolItem& rAttr,
 
 SttEndPos::~SttEndPos()
 {
-    for( USHORT n = 0, nEnd = aArr.Count(); n < nEnd; ++n )
+    for( USHORT n = 0, nCount = aArr.Count(); n < nCount; ++n )
         if( RES_FLTRATTR_BEGIN <= aArr[ n ]->Which() )
             delete aArr[ n ];
 }
 
 BOOL SttEndPos::HasScriptChange() const
 {
-    for( USHORT n = 0, nEnd = aArr.Count(); n < nEnd; ++n )
+    for( USHORT n = 0, nCount = aArr.Count(); n < nCount; ++n )
         if( RES_FLTR_SCRIPTTYPE == aArr[ n ]->Which() )
             return TRUE;
-    return false;
+    return FALSE;
 }
 
 void SttEndPos::AddAttr( const SfxPoolItem& rAttr )
@@ -987,15 +992,15 @@ void RTFEndPosLst::OutFontAttrs(USHORT nScript, bool bRTL)
     {
         default:    //fall through
             ASSERT(pIdArr, "unknown script, strange");
-        case ::com::sun::star::i18n::ScriptType::LATIN:
+        case i18n::ScriptType::LATIN:
             rWrt.Strm() << sRTF_LOCH;
             pIdArr = aLatinIds;
             break;
-        case ::com::sun::star::i18n::ScriptType::ASIAN:
+        case i18n::ScriptType::ASIAN:
             rWrt.Strm() << sRTF_DBCH;
             pIdArr = aAsianIds;
             break;
-        case ::com::sun::star::i18n::ScriptType::COMPLEX:
+        case i18n::ScriptType::COMPLEX:
             pIdArr = aCmplxIds;
             break;
     }
@@ -1086,21 +1091,21 @@ BOOL RTFEndPosLst::MatchScriptToId( USHORT nWhich ) const
     case RES_CHRATR_LANGUAGE:
     case RES_CHRATR_POSTURE:
     case RES_CHRATR_WEIGHT:
-        bRet = nCurScript == ::com::sun::star::i18n::ScriptType::LATIN;
+        bRet = nCurScript == i18n::ScriptType::LATIN;
         break;
     case RES_CHRATR_CJK_FONT:
     case RES_CHRATR_CJK_FONTSIZE:
     case RES_CHRATR_CJK_LANGUAGE:
     case RES_CHRATR_CJK_POSTURE:
     case RES_CHRATR_CJK_WEIGHT:
-        bRet = nCurScript == ::com::sun::star::i18n::ScriptType::ASIAN;
+        bRet = nCurScript == i18n::ScriptType::ASIAN;
         break;
     case RES_CHRATR_CTL_FONT:
     case RES_CHRATR_CTL_FONTSIZE:
     case RES_CHRATR_CTL_LANGUAGE:
     case RES_CHRATR_CTL_POSTURE:
     case RES_CHRATR_CTL_WEIGHT:
-        bRet = nCurScript == ::com::sun::star::i18n::ScriptType::COMPLEX;
+        bRet = nCurScript == i18n::ScriptType::COMPLEX;
         break;
     }
     return bRet;
@@ -1409,7 +1414,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         const SwNumRule* pRule = pNd->GetNumRule();
         if( pRule && pNd->IsCounted())
         {
-            BYTE nLvl = pNd->GetLevel() ;
+            BYTE nLvl = static_cast< BYTE >(pNd->GetLevel());
             const SwNumFmt* pFmt = pRule->GetNumFmt( nLvl );
             if( !pFmt )
                 pFmt = &pRule->Get( nLvl );
@@ -1805,7 +1810,7 @@ static Writer& OutRTF_SwGrfNode(Writer& rWrt, SwCntntNode & rNode)
 
     String aGrfNm;
     const SwMirrorGrf& rMirror = pNd->GetSwAttrSet().GetMirrorGrf();
-    if( !pNd->IsLinkedFile() || RES_DONT_MIRROR_GRF != rMirror.GetValue() )
+    if( !pNd->IsLinkedFile() || RES_MIRROR_GRAPH_DONT != rMirror.GetValue() )
     {
         USHORT nErr = 1;
         // Grafik als File-Referenz speichern (als JPEG-Grafik speichern)
@@ -1817,9 +1822,9 @@ static Writer& OutRTF_SwGrfNode(Writer& rWrt, SwCntntNode & rNode)
             ULONG nFlags = XOUTBMP_USE_NATIVE_IF_POSSIBLE;
             switch( rMirror.GetValue() )
             {
-            case RES_MIRROR_GRF_VERT:   nFlags = XOUTBMP_MIRROR_HORZ; break;
-            case RES_MIRROR_GRF_HOR:    nFlags = XOUTBMP_MIRROR_VERT; break;
-            case RES_MIRROR_GRF_BOTH:
+            case RES_MIRROR_GRAPH_VERT: nFlags = XOUTBMP_MIRROR_HORZ; break;
+            case RES_MIRROR_GRAPH_HOR:    nFlags = XOUTBMP_MIRROR_VERT; break;
+            case RES_MIRROR_GRAPH_BOTH:
                 nFlags = XOUTBMP_MIRROR_VERT | XOUTBMP_MIRROR_HORZ;
                 break;
             }
@@ -1867,7 +1872,7 @@ static Writer& OutRTF_SwGrfNode(Writer& rWrt, SwCntntNode & rNode)
     return rRTFWrt;
 }
 
-static Writer& OutRTF_SwOLENode( Writer& rWrt, SwCntntNode & rNode )
+static Writer& OutRTF_SwOLENode( Writer& rWrt, SwCntntNode & /*rNode*/ )
 {
     SwRTFWriter & rRTFWrt = (SwRTFWriter&)rWrt;
 
@@ -1995,15 +2000,15 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
         if( aRect.IsEmpty() )
         {
             // dann besorge mal die Seitenbreite ohne Raender !!
-            const SwFrmFmt* pFmt = rRTFWrt.pFlyFmt ? rRTFWrt.pFlyFmt :
+            const SwFrmFmt* pFrmFmt = rRTFWrt.pFlyFmt ? rRTFWrt.pFlyFmt :
                 const_cast<const SwDoc *>(rWrt.pDoc)
                 ->GetPageDesc(0).GetPageFmtOfNode(rNode, false);
 
-            aRect = pFmt->FindLayoutRect( TRUE );
+            aRect = pFrmFmt->FindLayoutRect( TRUE );
             if( 0 == ( nPageSize = aRect.Width() ))
             {
-                const SvxLRSpaceItem& rLR = pFmt->GetLRSpace();
-                nPageSize = pFmt->GetFrmSize().GetWidth() -
+                const SvxLRSpaceItem& rLR = pFrmFmt->GetLRSpace();
+                nPageSize = pFrmFmt->GetFrmSize().GetWidth() -
                                 rLR.GetLeft() - rLR.GetRight();
             }
         }
@@ -2016,14 +2021,14 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
     ByteString aTblAdjust( sRTF_TRQL );
     switch (pFmt->GetHoriOrient().GetHoriOrient())
     {
-        case HORI_CENTER:
+        case text::HoriOrientation::CENTER:
             aTblAdjust = sRTF_TRQC;
             break;
-        case HORI_RIGHT:
+        case text::HoriOrientation::RIGHT:
             aTblAdjust = sRTF_TRQR;
             break;
-        case HORI_NONE:
-        case HORI_LEFT_AND_WIDTH:
+        case text::HoriOrientation::NONE:
+        case text::HoriOrientation::LEFT_AND_WIDTH:
             {
                 const SvxLRSpaceItem& rLRSp = pFmt->GetLRSpace();
                 nTblOffset = rLRSp.GetLeft();
@@ -2197,8 +2202,8 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
                                             RES_VERT_ORIENT, TRUE, &pItem ) )
                 switch( ((SwFmtVertOrient*)pItem)->GetVertOrient() )
                 {
-                case VERT_CENTER:   rWrt.Strm() << sRTF_CLVERTALC; break;
-                case VERT_BOTTOM:   rWrt.Strm() << sRTF_CLVERTALB; break;
+                case text::VertOrientation::CENTER:   rWrt.Strm() << sRTF_CLVERTALC; break;
+                case text::VertOrientation::BOTTOM:   rWrt.Strm() << sRTF_CLVERTALB; break;
                 default:            rWrt.Strm() << sRTF_CLVERTALT; break;
                 }
 
@@ -2856,7 +2861,7 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             if( pBreakIt->xBreak.is() )
                 nScript = pBreakIt->xBreak->getScriptType( rFldPar1, 0);
             else
-                nScript = ::com::sun::star::i18n::ScriptType::ASIAN;
+                nScript = i18n::ScriptType::ASIAN;
 
             long nHeight = ((SvxFontHeightItem&)rRTFWrt.GetItem(
                 GetWhichOfScript(RES_CHRATR_FONTSIZE, nScript ))).GetHeight();
@@ -3176,7 +3181,7 @@ static Writer& OutRTF_SwTxtRuby( Writer& rWrt, const SfxPoolItem& rHt )
     if( pBreakIt->xBreak.is() )
         nScript = pBreakIt->xBreak->getScriptType( rRuby.GetText(), 0);
     else
-        nScript = ::com::sun::star::i18n::ScriptType::ASIAN;
+        nScript = i18n::ScriptType::ASIAN;
 
     const SwCharFmt* pFmt = pRubyTxt->GetCharFmt();
     const SvxFontItem *pFont;
@@ -3220,7 +3225,7 @@ static Writer& OutRTF_SwTxtRuby( Writer& rWrt, const SfxPoolItem& rHt )
         nScript = pBreakIt->xBreak->getScriptType( pNd->GetTxt(),
                                                    *pRubyTxt->GetStart() );
     else
-        nScript = ::com::sun::star::i18n::ScriptType::ASIAN;
+        nScript = i18n::ScriptType::ASIAN;
 
     const SwAttrSet& rSet = pNd->GetSwAttrSet();
     nHeight = ((SvxFontHeightItem&)rSet.Get(
@@ -3359,15 +3364,15 @@ static Writer& OutRTF_SwFmtULSpace( Writer& rWrt, const SfxPoolItem& rHt )
                 {
                     aRect = pHdr->GetHeaderFmt()->FindLayoutRect( FALSE );
                     if( aRect.Height() )
-                        nValue += aRect.Height();
+                        nValue = nValue + static_cast< USHORT >(aRect.Height());
                     else
                     {
                         const SwFmtFrmSize& rSz = pHdr->GetHeaderFmt()->GetFrmSize();
                         if( ATT_VAR_SIZE != rSz.GetHeightSizeType() )
-                            nValue += rSz.GetHeight();
+                            nValue = nValue + static_cast< USHORT >(rSz.GetHeight());
                         else
-                            nValue += 274;      // defaulten fuer 12pt Schrift
-                        nValue += pHdr->GetHeaderFmt()->GetULSpace().GetLower();
+                            nValue = nValue + 274;       // defaulten fuer 12pt Schrift
+                        nValue = nValue + pHdr->GetHeaderFmt()->GetULSpace().GetLower();
                     }
                 }
             }
@@ -3397,15 +3402,15 @@ static Writer& OutRTF_SwFmtULSpace( Writer& rWrt, const SfxPoolItem& rHt )
                 {
                     aRect = pFtr->GetFooterFmt()->FindLayoutRect( FALSE );
                     if( aRect.Height() )
-                        nValue += aRect.Height();
+                        nValue = nValue + static_cast< USHORT >(aRect.Height());
                     else
                     {
                         const SwFmtFrmSize& rSz = pFtr->GetFooterFmt()->GetFrmSize();
                         if( ATT_VAR_SIZE != rSz.GetHeightSizeType() )
-                            nValue += rSz.GetHeight();
+                            nValue = nValue + static_cast< USHORT >(rSz.GetHeight());
                         else
                             nValue += 274;      // defaulten fuer 12pt Schrift
-                        nValue += pFtr->GetFooterFmt()->GetULSpace().GetUpper();
+                        nValue = nValue + pFtr->GetFooterFmt()->GetULSpace().GetUpper();
                     }
                 }
             }
@@ -3644,7 +3649,7 @@ static Writer& OutRTF_SwFmtSurround( Writer& rWrt, const SfxPoolItem& rHt )
         BOOL bGold = SURROUND_IDEAL == eSurround;
         if( bGold )
             eSurround = SURROUND_PARALLEL;
-        RTFSurround aMC( bGold, eSurround );
+        RTFSurround aMC( bGold, static_cast< BYTE >(eSurround) );
         rWrt.Strm() << sRTF_FLYMAINCNT;
         rWrt.OutULong( aMC.GetValue() );
         rRTFWrt.bOutFmtAttr = TRUE;
@@ -3655,7 +3660,7 @@ static Writer& OutRTF_SwFmtSurround( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutRTF_SwFmtVertOrient ( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const SwFmtVertOrient& rFlyVert = (const SwFmtVertOrient&) rHt;
-    RTFVertOrient aVO( rFlyVert.GetVertOrient(), rFlyVert.GetRelationOrient() );
+    RTFVertOrient aVO( static_cast< USHORT >(rFlyVert.GetVertOrient()), static_cast< USHORT >(rFlyVert.GetRelationOrient()) );
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
 
     if( rRTFWrt.bRTFFlySyntax && rRTFWrt.pFlyFmt )
@@ -3663,10 +3668,10 @@ static Writer& OutRTF_SwFmtVertOrient ( Writer& rWrt, const SfxPoolItem& rHt )
         rRTFWrt.bOutFmtAttr = TRUE;
         const char* pOrient;
         RndStdIds eAnchor = rRTFWrt.pFlyFmt->GetAnchor().GetAnchorId();
-        SwRelationOrient eOrient = rFlyVert.GetRelationOrient();
+        sal_Int16 eOrient = rFlyVert.GetRelationOrient();
         if( FLY_PAGE == eAnchor )
         {
-            if( REL_PG_FRAME == eOrient || FRAME == eOrient )
+            if( text::RelOrientation::PAGE_FRAME == eOrient || text::RelOrientation::FRAME == eOrient )
                 pOrient = sRTF_PVPG;
             else
                 pOrient = sRTF_PVMRG;
@@ -3677,19 +3682,19 @@ static Writer& OutRTF_SwFmtVertOrient ( Writer& rWrt, const SfxPoolItem& rHt )
 
         switch (rFlyVert.GetVertOrient())
         {
-            case VERT_TOP:
-            case VERT_LINE_TOP:
+            case text::VertOrientation::TOP:
+            case text::VertOrientation::LINE_TOP:
                 rWrt.Strm() << sRTF_POSYT;
                 break;
-            case VERT_BOTTOM:
-            case VERT_LINE_BOTTOM:
+            case text::VertOrientation::BOTTOM:
+            case text::VertOrientation::LINE_BOTTOM:
                 rWrt.Strm() << sRTF_POSYB;
                 break;
-            case VERT_CENTER:
-            case VERT_LINE_CENTER:
+            case text::VertOrientation::CENTER:
+            case text::VertOrientation::LINE_CENTER:
                 rWrt.Strm() << sRTF_POSYC;
                 break;
-            case VERT_NONE:
+            case text::VertOrientation::NONE:
                 rWrt.Strm() << sRTF_POSY;
                 rWrt.OutULong(rFlyVert.GetPos());
                 break;
@@ -3710,8 +3715,8 @@ static Writer& OutRTF_SwFmtVertOrient ( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutRTF_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const SwFmtHoriOrient& rFlyHori = (const SwFmtHoriOrient&) rHt;
-    RTFHoriOrient aHO( rFlyHori.GetHoriOrient(),
-                          rFlyHori.GetRelationOrient() );
+    RTFHoriOrient aHO( static_cast< USHORT >(rFlyHori.GetHoriOrient()),
+                       static_cast< USHORT >(rFlyHori.GetRelationOrient()) );
 
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
     if( rRTFWrt.bRTFFlySyntax && rRTFWrt.pFlyFmt )
@@ -3719,10 +3724,10 @@ static Writer& OutRTF_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt )
         rRTFWrt.bOutFmtAttr = TRUE;
         const char* pS;
         RndStdIds eAnchor = rRTFWrt.pFlyFmt->GetAnchor().GetAnchorId();
-        SwRelationOrient eOrient = rFlyHori.GetRelationOrient();
+        sal_Int16 eOrient = rFlyHori.GetRelationOrient();
         if( FLY_PAGE == eAnchor )
         {
-            if( REL_PG_FRAME == eOrient || FRAME == eOrient )
+            if( text::RelOrientation::PAGE_FRAME == eOrient || text::RelOrientation::FRAME == eOrient )
                 pS = sRTF_PHPG;
             else
                 pS = sRTF_PHMRG;
@@ -3734,16 +3739,16 @@ static Writer& OutRTF_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt )
         pS = 0;
         switch(rFlyHori.GetHoriOrient())
         {
-            case HORI_RIGHT:
+            case text::HoriOrientation::RIGHT:
                 pS = rFlyHori.IsPosToggle() ? sRTF_POSXO : sRTF_POSXR;
                 break;
-            case HORI_LEFT:
+            case text::HoriOrientation::LEFT:
                 pS = rFlyHori.IsPosToggle() ? sRTF_POSXI : sRTF_POSXL;
                 break;
-            case HORI_CENTER:
+            case text::HoriOrientation::CENTER:
                 pS = sRTF_POSXC;
                 break;
-            case HORI_NONE:
+            case text::HoriOrientation::NONE:
                 rWrt.Strm() << sRTF_POSX;
                 rWrt.OutULong( rFlyHori.GetPos() );
                 break;
@@ -3768,7 +3773,7 @@ static Writer& OutRTF_SwFmtAnchor( Writer& rWrt, const SfxPoolItem& rHt )
     if( !rRTFWrt.bRTFFlySyntax )
     {
         const SwFmtAnchor& rAnchor = (const SwFmtAnchor&) rHt;
-        USHORT nId = rAnchor.GetAnchorId();
+        USHORT nId = static_cast< USHORT >(rAnchor.GetAnchorId());
         rWrt.Strm() << sRTF_FLYANCHOR;
         rWrt.OutULong( nId );
         rRTFWrt.bOutFmtAttr = TRUE;
@@ -3961,8 +3966,8 @@ static Writer& OutRTF_SwFmtCol( Writer& rWrt, const SfxPoolItem& rHt )
 
         const SvxLRSpaceItem& rLR = pFmt->GetLRSpace();
 
-        USHORT nPageSize = pFmt->GetFrmSize().GetWidth() -
-                            rLR.GetLeft() - rLR.GetRight();
+        USHORT nPageSize = static_cast< USHORT >( pFmt->GetFrmSize().GetWidth() -
+                            rLR.GetLeft() - rLR.GetRight() );
 
         rWrt.Strm() << sRTF_COLS;
         rWrt.OutLong( nCols );
@@ -4016,7 +4021,7 @@ static Writer& OutRTF_SvxFrmDir( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutRTF_SwMirrorGrf( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const SwMirrorGrf & rMirror = (const SwMirrorGrf&)rHt;
-    if( RES_DONT_MIRROR_GRF == rMirror.GetValue() )
+    if( RES_MIRROR_GRAPH_DONT == rMirror.GetValue() )
         return rWrt;
 
     ((SwRTFWriter&)rWrt).bOutFmtAttr = TRUE;
