@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 08:27:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:57:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,14 +100,11 @@ using namespace cppu;
 using namespace rtl;
 using namespace osl;
 
-namespace stoc_impreg
-{
 
 #define IMPLNAME "com.sun.star.comp.stoc.ImplementationRegistration"
 #define SERVICENAME         "com.sun.star.registry.ImplementationRegistration"
-
-rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-
+namespace stoc_impreg
+{
 struct StringPool
 {
     OUString sImplementationName;
@@ -160,8 +157,13 @@ const StringPool &spool()
     }
     return *pPool;
 }
+}
 
-static Sequence< OUString > impreg_getSupportedServiceNames()
+extern rtl_StandardModuleCount g_moduleCount;
+
+namespace stoc_bootstrap
+{
+Sequence< OUString > impreg_getSupportedServiceNames()
 {
     static Sequence < OUString > *pNames = 0;
     if( ! pNames )
@@ -170,19 +172,21 @@ static Sequence< OUString > impreg_getSupportedServiceNames()
         if( !pNames )
         {
             static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = spool().sServiceName;
+            seqNames.getArray()[0] = stoc_impreg::spool().sServiceName;
             pNames = &seqNames;
         }
     }
     return *pNames;
 }
 
-static OUString impreg_getImplementationName()
+OUString impreg_getImplementationName()
 {
-    return spool().sImplementationName;
+    return stoc_impreg::spool().sImplementationName;
+}
 }
 
-
+namespace stoc_impreg
+{
 //*************************************************************************
 //  static deleteAllLinkReferences()
 //
@@ -1405,7 +1409,7 @@ ImplementationRegistration::~ImplementationRegistration()
 // XServiceInfo
 OUString ImplementationRegistration::getImplementationName() throw(RuntimeException)
 {
-    return impreg_getImplementationName();
+    return stoc_bootstrap::impreg_getImplementationName();
 }
 
 // XServiceInfo
@@ -1422,7 +1426,7 @@ sal_Bool ImplementationRegistration::supportsService(const OUString& ServiceName
 // XServiceInfo
 Sequence< OUString > ImplementationRegistration::getSupportedServiceNames(void) throw(RuntimeException)
 {
-    return impreg_getSupportedServiceNames();
+    return stoc_bootstrap::impreg_getSupportedServiceNames();
 }
 
 Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceManager()
@@ -1940,54 +1944,16 @@ Reference< XSimpleRegistry > ImplementationRegistration::createTemporarySimpleRe
     OSL_ASSERT( xReg.is() );
     return xReg;
 }
+}
 
-
-
+namespace stoc_bootstrap
+{
 //*************************************************************************
-static Reference<XInterface> SAL_CALL ImplementationRegistration_CreateInstance(
+Reference<XInterface> SAL_CALL ImplementationRegistration_CreateInstance(
     const Reference<XComponentContext> & xCtx ) // throw(Exception)
 {
-    return (XImplementationRegistration *)new ImplementationRegistration(xCtx);
+    return (XImplementationRegistration *)new stoc_impreg::ImplementationRegistration(xCtx);
 }
 
 }
-
-using namespace stoc_impreg;
-static struct ImplementationEntry g_entries[] =
-{
-    {
-        ImplementationRegistration_CreateInstance, impreg_getImplementationName,
-        impreg_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt , 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
-extern "C"
-{
-sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
-{
-    return g_moduleCount.canUnload( &g_moduleCount , pTime );
-}
-
-//==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
-}
-//==================================================================================================
-void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
-}
-}
-
 
