@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:01:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:06:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,9 +109,6 @@
 #endif
 #ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
-#endif
-#ifndef _FRMSH_HXX
-#include <frmsh.hxx>
 #endif
 
 // OD 2004-05-24 #i28701#
@@ -315,7 +312,7 @@ void SwFrm::CheckDirChange()
 
             SwFrm* pFrm = ((SwLayoutFrm*)this)->Lower();
             const SwFmtCol* pCol = NULL;
-            SwLayoutFrm* pBody;
+            SwLayoutFrm* pBody = 0;
             if( pFrm )
             {
                 if( IsPageFrm() )
@@ -657,7 +654,7 @@ const SwRect SwFrm::PaintArea() const
     // NEW TABLES
     // Cell frames may not leave their upper:
     SwRect aRect = IsRowFrm() ? GetUpper()->Frm() : Frm();
-    const FASTBOOL bVert = IsVertical();
+    const BOOL bVert = IsVertical();
     SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
     long nRight = (aRect.*fnRect->fnGetRight)();
     long nLeft  = (aRect.*fnRect->fnGetLeft)();
