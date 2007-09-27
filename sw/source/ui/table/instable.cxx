@@ -4,9 +4,9 @@
  *
  *  $RCSfile: instable.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:19:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:33:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@
 #include "view.hxx"
 #include "itabenum.hxx"
 #include "instable.hxx"
-//CHINA001 #include "tautofmt.hxx"
 #include "tblafmt.hxx"
 #include "modcfg.hxx"
 #include "swmodule.hxx"
@@ -64,7 +63,7 @@
 #include "table.hrc"
 #include "instable.hrc"
 
-#include "swabstdlg.hxx" //CHINA001
+#include "swabstdlg.hxx"
 
 namespace swui
 {
@@ -106,13 +105,16 @@ void SwInsTableDlg::GetValues( String& rName, USHORT& rRow, USHORT& rCol,
 
 SwInsTableDlg::SwInsTableDlg( SwView& rView )
     : SfxModalDialog( rView.GetWindow(), SW_RES(DLG_INSERT_TABLE) ),
-    aNameEdit               (this, SW_RES(ED_NAME)),
     aNameFT                 (this, SW_RES(FT_NAME)),
+    aNameEdit               (this, SW_RES(ED_NAME)),
+
+    aFL                     (this, SW_RES(FL_TABLE)),
     aColLbl                 (this, SW_RES(FT_COL)),
     aColEdit                (this, SW_RES(ED_COL)),
     aRowLbl                 (this, SW_RES(FT_ROW)),
     aRowEdit                (this, SW_RES(ED_ROW)),
-    aFL                     (this, SW_RES(FL_TABLE)),
+
+    aOptionsFL              (this, SW_RES(FL_OPTIONS)),
     aHeaderCB               (this, SW_RES(CB_HEADER)),
     aRepeatHeaderCB         (this, SW_RES(CB_REPEAT_HEADER)),
     aRepeatHeaderFT         (this, SW_RES(FT_REPEAT_HEADER)),
@@ -120,15 +122,17 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     aRepeatHeaderNF         (this, SW_RES(NF_REPEAT_HEADER)),
     aRepeatHeaderAfterFT    (this),
     aRepeatHeaderCombo      (this, SW_RES(WIN_REPEAT_HEADER), aRepeatHeaderNF, aRepeatHeaderBeforeFT, aRepeatHeaderAfterFT),
+
     aDontSplitCB            (this, SW_RES(CB_DONT_SPLIT)),
     aBorderCB               (this, SW_RES(CB_BORDER)),
-    aOptionsFL              (this, SW_RES(FL_OPTIONS)),
+
     aOkBtn                  (this, SW_RES(BT_OK)),
     aCancelBtn              (this, SW_RES(BT_CANCEL)),
     aHelpBtn                (this, SW_RES(BT_HELP)),
     aAutoFmtBtn             (this, SW_RES(BT_AUTOFORMAT)),
-    pTAutoFmt( 0 ),
+
     pShell(&rView.GetWrtShell()),
+    pTAutoFmt( 0 ),
     nEnteredValRepeatHeaderNF( -1 )
 {
     FreeResource();
@@ -147,7 +151,7 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTblFlags(bHTMLMode);
     USHORT nInsTblFlags = aInsOpts.mnInsMode;
 
-    aHeaderCB.Check(nInsTblFlags & tabopts::HEADLINE);
+    aHeaderCB.Check( 0 != (nInsTblFlags & tabopts::HEADLINE) );
     aRepeatHeaderCB.Check(aInsOpts.mnRowsToRepeat > 0);
     if(bHTMLMode)
     {
@@ -156,9 +160,9 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     }
     else
     {
-        aDontSplitCB.Check(!(nInsTblFlags & tabopts::SPLIT_LAYOUT));
+        aDontSplitCB.Check( 0 == (nInsTblFlags & tabopts::SPLIT_LAYOUT) );
     }
-    aBorderCB.Check(nInsTblFlags & tabopts::DEFAULT_BORDER);
+    aBorderCB.Check( 0 != (nInsTblFlags & tabopts::DEFAULT_BORDER) );
 
     aRepeatHeaderNF.SetModifyHdl( LINK( this, SwInsTableDlg, ModifyRepeatHeaderNF_Hdl ) );
     aHeaderCB.SetClickHdl(LINK(this, SwInsTableDlg, CheckBoxHdl));
@@ -166,7 +170,7 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     ReapeatHeaderCheckBoxHdl();
     CheckBoxHdl();
 
-    long nMax = aRowEdit.GetValue();
+    sal_Int64 nMax = aRowEdit.GetValue();
     if( nMax <= 1 )
         nMax = 1;
     else
@@ -202,21 +206,21 @@ IMPL_LINK( SwInsTableDlg, ModifyRowCol, NumericField *, pField )
 {
     if(pField == &aColEdit)
     {
-        long nCol = aColEdit.GetValue();
+        sal_Int64 nCol = aColEdit.GetValue();
         if(!nCol)
             nCol = 1;
         aRowEdit.SetMax(ROW_COL_PROD/nCol);
     }
     else
     {
-        long nRow = aRowEdit.GetValue();
+        sal_Int64 nRow = aRowEdit.GetValue();
         if(!nRow)
             nRow = 1;
         aColEdit.SetMax(ROW_COL_PROD/nRow);
 
         // adjust depending NF for repeated rows
-        long nMax = ( nRow == 1 )? 1 : nRow - 1 ;
-        long nActVal = aRepeatHeaderNF.GetValue();
+        sal_Int64 nMax = ( nRow == 1 )? 1 : nRow - 1 ;
+        sal_Int64 nActVal = aRepeatHeaderNF.GetValue();
 
         aRepeatHeaderNF.SetMax( nMax );
 
@@ -230,15 +234,14 @@ IMPL_LINK( SwInsTableDlg, ModifyRowCol, NumericField *, pField )
 
 IMPL_LINK( SwInsTableDlg, AutoFmtHdl, PushButton*, pButton )
 {
-    //CHINA001 SwAutoFormatDlg aDlg( pButton, pShell, FALSE, pTAutoFmt );
-    SwAbstractDialogFactory* pFact = swui::GetFactory();//CHINA001
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+    SwAbstractDialogFactory* pFact = swui::GetFactory();
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
     AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton,pShell, DLG_AUTOFMT_TABLE, FALSE, pTAutoFmt );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-    if( RET_OK == pDlg->Execute()) //CHINA001  if( RET_OK == aDlg.Execute())
-        pDlg->FillAutoFmtOfIndex( pTAutoFmt ); //CHINA001 aDlg.FillAutoFmtOfIndex( pTAutoFmt );
-    delete pDlg; //CHINA001
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    if( RET_OK == pDlg->Execute())
+        pDlg->FillAutoFmtOfIndex( pTAutoFmt );
+    delete pDlg;
     return 0;
 }
 
