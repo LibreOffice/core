@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:35:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:09:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,7 @@
 // <--
 
 using namespace ::rtl;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
@@ -212,7 +213,7 @@ void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
 
 // #110680#
 SwXMLExport::SwXMLExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     sal_uInt16 nExportFlags)
 :   SvXMLExport( xServiceFactory, MAP_INCH, XML_TEXT, nExportFlags ),
 #ifdef XML_CORE_API
@@ -237,7 +238,7 @@ SwXMLExport::SwXMLExport(
 #ifdef XML_CORE_API
 // #110680#
 SwXMLExport::SwXMLExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     const Reference< XModel >& rModel,
     SwPaM& rPaM,
     const OUString& rFileName,
@@ -304,8 +305,8 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         }
     }
 
-    SwXText *pText = (SwXText *)xTextTunnel->getSomething(
-                                        SwXText::getUnoTunnelId() );
+    SwXText *pText = reinterpret_cast< SwXText * >(
+            sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
     ASSERT( pText, "SwXText missing" );
     if( !pText )
         return ERR_SWG_WRITE_ERROR;
@@ -479,7 +480,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         // now save and switch redline mode
         nRedlineMode = pDoc->GetRedlineMode();
         pDoc->SetRedlineMode(
-                 (IDocumentRedlineAccess::RedlineMode_t)(( nRedlineMode & IDocumentRedlineAccess::REDLINE_SHOW_MASK ) | IDocumentRedlineAccess::REDLINE_INSERT ));
+                 (RedlineMode_t)(( nRedlineMode & nsRedlineMode_t::REDLINE_SHOW_MASK ) | nsRedlineType_t::REDLINE_INSERT ));
     }
 
      sal_uInt32 nRet = SvXMLExport::exportDoc( eClass );
@@ -487,7 +488,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     // now we can restore the redline mode (if we changed it previously)
     if( bSaveRedline )
     {
-      pDoc->SetRedlineMode( (IDocumentRedlineAccess::RedlineMode_t)(nRedlineMode ));
+      pDoc->SetRedlineMode( (RedlineMode_t)(nRedlineMode ));
     }
 
 
@@ -565,8 +566,8 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
         ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
         if( xTextTunnel.is() )
         {
-            pText = (SwXText *)xTextTunnel->getSomething(
-                                                SwXText::getUnoTunnelId() );
+            pText = reinterpret_cast< SwXText * >(
+                    sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId()) ));
             ASSERT( pText, "SwXText missing" );
         }
     }
@@ -644,8 +645,8 @@ void SwXMLExport::SetBodyAttributes()
         ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
         if( xTextTunnel.is() )
         {
-            SwXText *pText = (SwXText *)xTextTunnel->getSomething(
-                                        SwXText::getUnoTunnelId() );
+            SwXText *pText = reinterpret_cast< SwXText * >(
+                    sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
             ASSERT( pText, "SwXText missing" );
             if( pText )
             {
@@ -970,7 +971,7 @@ sal_Int64 SAL_CALL SwXMLExport::getSomething( const Sequence< sal_Int8 >& rId )
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
-            return (sal_Int64)this;
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
     return SvXMLExport::getSomething( rId );
 }
@@ -985,24 +986,18 @@ OUString SAL_CALL SwXMLExport::getImplementationName()
     {
         case EXPORT_ALL:
             return SwXMLExport_getImplementationName();
-            break;
         case (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS):
             return SwXMLExportStyles_getImplementationName();
-            break;
         case (EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS):
             return SwXMLExportContent_getImplementationName();
-            break;
         case EXPORT_META:
             return SwXMLExportMeta_getImplementationName();
-            break;
         case EXPORT_SETTINGS:
             return SwXMLExportSettings_getImplementationName();
-            break;
         default:
             // generic name for 'unknown' cases
             return OUString( RTL_CONSTASCII_USTRINGPARAM(
                 "com.sun.star.comp.Writer.SwXMLExport" ) );
-            break;
     }
 }
 
