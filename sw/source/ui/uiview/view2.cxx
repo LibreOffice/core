@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:51:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:36:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,9 +146,6 @@
 #ifndef _TXTCMP_HXX //autogen
 #include <svtools/txtcmp.hxx>
 #endif
-//CHINA001 #ifndef _SVX_ZOOM_HXX //autogen
-//CHINA001 #include <svx/zoom.hxx>
-//CHINA001 #endif
 #ifndef _UNO_LINGU_HXX
 #include "svx/unolingu.hxx"
 #endif
@@ -335,21 +332,20 @@
 // #include <frmmgr.hxx>
 // #endif
 
-//CHINA001 #ifndef _MAILMRGE_HXX
-//CHINA001 #include "mailmrge.hxx"
-//CHINA001 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
-#include "swabstdlg.hxx" //CHINA001
-#include "globals.hrc" //CHINA001
-#include <envelp.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
+#include "swabstdlg.hxx"
+#include "globals.hrc"
+#include <envelp.hrc>
 #include <fmthdft.hxx>
 #include <svx/ofaitem.hxx>
+#include <unomid.h>
+
 
 //Damit die Seitenanzeige in der Statusleiste nicht unnoetig erfolgt.
 static String sLstPg;
@@ -358,18 +354,16 @@ const char __FAR_DATA sStatusDelim[] = " : ";
 
 using namespace ::rtl;
 using namespace sfx2;
-using namespace com::sun::star;
-using namespace com::sun::star::i18n;
-using namespace com::sun::star::util;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::scanner;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-using namespace com::sun::star::ui::dialogs;
-
-#define C2U(char) rtl::OUString::createFromAscii(char)
+using namespace ::com::sun::star::ui::dialogs;
 
 /*---------------------------------------------------------------------------
     Beschreibung:   String fuer die Seitenanzeige in der Statusbar basteln.
@@ -534,7 +528,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
             rReq.AppendItem( SfxStringItem( SID_INSERT_GRAPHIC, aFileName ) );
             rReq.AppendItem( SfxStringItem( FN_PARAM_FILTER, aFilterName ) );
 
-            sal_Bool bAsLink;
+            sal_Bool bAsLink = sal_False;
             if(nHtmlMode & HTMLMODE_ON)
                 bAsLink = sal_True;
             else
@@ -562,7 +556,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
         SFX_REQUEST_ARG( rReq, pAsLink, SfxBoolItem, FN_PARAM_1 , sal_False );
         SFX_REQUEST_ARG( rReq, pStyle, SfxStringItem, FN_PARAM_2 , sal_False );
 
-        sal_Bool bAsLink;
+        sal_Bool bAsLink = sal_False;
         if( nHtmlMode & HTMLMODE_ON )
             bAsLink = sal_True;
         else
@@ -600,7 +594,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
 
         rSh.StartUndo(UNDO_INSERT, &aRewriter);
 
-        USHORT nError = InsertGraphic( aFileName, aFilterName, bAsLink, ::GetGrfFilter() );
+        int nError = InsertGraphic( aFileName, aFilterName, bAsLink, ::GetGrfFilter() );
 
         // Format ist ungleich Current Filter, jetzt mit auto. detection
         if( nError == GRFILTER_FORMATERROR )
@@ -681,11 +675,10 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
 
         case FN_LINE_NUMBERING_DLG:
         {
-            //CHINA001 SwLineNumberingDlg *pDlg = new SwLineNumberingDlg(this);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            VclAbstractDialog* pDlg = pFact->CreateVclSwViewDialog( DLG_LINE_NUMBERING, *this);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
+            VclAbstractDialog* pDlg = pFact->CreateVclSwViewDialog( DLG_LINE_NUMBERING,    *this);
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             break;
@@ -745,9 +738,9 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     }
                 }
 
-                USHORT nOn = ((const SfxBoolItem*)pItem)->GetValue() ? IDocumentRedlineAccess::REDLINE_ON : 0;
+                USHORT nOn = ((const SfxBoolItem*)pItem)->GetValue() ? nsRedlineMode_t::REDLINE_ON : 0;
                 USHORT nMode = pWrtShell->GetRedlineMode();
-                pWrtShell->SetRedlineMode( (nMode & ~IDocumentRedlineAccess::REDLINE_ON) | nOn);
+                pWrtShell->SetRedlineMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
             }
         }
         break;
@@ -772,7 +765,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
             if (aPasswdDlg.Execute())
             {
-                USHORT nOn = IDocumentRedlineAccess::REDLINE_ON;
+                USHORT nOn = nsRedlineMode_t::REDLINE_ON;
                 String sNewPasswd( aPasswdDlg.GetPassword() );
                 Sequence <sal_Int8> aNewPasswd =
                         pIDRA->GetRedlinePassword();
@@ -787,8 +780,8 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     nOn = 0;
                 }
                 USHORT nMode = pIDRA->GetRedlineMode();
-                pWrtShell->SetRedlineMode( (nMode & ~IDocumentRedlineAccess::REDLINE_ON) | nOn);
-                rReq.AppendItem( SfxBoolItem( FN_REDLINE_PROTECT, ((nMode&IDocumentRedlineAccess::REDLINE_ON)==0) ) );
+                pWrtShell->SetRedlineMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
+                rReq.AppendItem( SfxBoolItem( FN_REDLINE_PROTECT, ((nMode&nsRedlineMode_t::REDLINE_ON)==0) ) );
             }
             else
                 bIgnore = TRUE;
@@ -799,10 +792,10 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             if( pArgs &&
                 SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem))
             {
-                USHORT nMode = ( ~(IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE)
-                        & pWrtShell->GetRedlineMode() ) | IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
+                USHORT nMode = ( ~(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE)
+                        & pWrtShell->GetRedlineMode() ) | nsRedlineMode_t::REDLINE_SHOW_INSERT;
                 if( ((const SfxBoolItem*)pItem)->GetValue() )
-                    nMode |= IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
+                    nMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
 
                 pWrtShell->SetRedlineMode( nMode );
             }
@@ -988,7 +981,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         {
             pWrtShell->StartAction();
             pWrtShell->EnterStdMode();
-            FASTBOOL bOldCrsrInReadOnly = pWrtShell->IsReadOnlyAvailable();
+            BOOL bOldCrsrInReadOnly = pWrtShell->IsReadOnlyAvailable();
             pWrtShell->SetReadOnlyAvailable( TRUE );
 
             for( USHORT i = 0; i < 2; ++i )
@@ -1189,15 +1182,13 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             BOOL bQuery = !pArgs||SFX_ITEM_SET != pArgs->GetItemState(nSlot);
             if(bQuery)
             {
-                SfxViewFrame* pFrame = GetViewFrame();
-                SfxHelp::OpenHelpAgent( pFrame->GetFrame(), HID_MAIL_MERGE_SELECT );
-//CHINA001                 SwMailMergeCreateFromDlg* pDlg = new SwMailMergeCreateFromDlg(
-//CHINA001              &pFrame->GetWindow());
+                SfxViewFrame* pTmpFrame = GetViewFrame();
+                SfxHelp::OpenHelpAgent( pTmpFrame->GetFrame(), HID_MAIL_MERGE_SELECT );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pFact, "Dialogdiet fail!");
                 AbstractMailMergeCreateFromDlg* pDlg = pFact->CreateMailMergeCreateFromDlg( DLG_MERGE_CREATE,
-                                                        &pFrame->GetWindow());
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                                                        &pTmpFrame->GetWindow());
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 if(RET_OK == pDlg->Execute())
                     bUseCurrentDocument = pDlg->IsThisDocument();
                 else
@@ -1232,10 +1223,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         case SID_ALIGN_ANY_VDEFAULT :
         {
             USHORT nAlias = 0;
-            SwWrtShell &rSh = GetWrtShell();
-            int nNewSelectionType = (rSh.GetSelectionType()
-                                & ~SwWrtShell::SEL_TBL_CELLS);
-            if( nSelectionType & (SwWrtShell::SEL_DRW_TXT|SwWrtShell::SEL_TXT) )
+            if( nSelectionType & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_TXT) )
             {
                 switch( nSlot )
                 {
@@ -1261,7 +1249,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 }
             }
             //special handling for the draw shell
-            if(nAlias && (nSelectionType & (SwWrtShell::SEL_DRW)))
+            if(nAlias && (nSelectionType & (nsSelectionType::SEL_DRW)))
             {
                 SfxAllEnumItem aEnumItem(SID_OBJECT_ALIGN, nAlias - SID_OBJECT_ALIGN_LEFT);
                 GetViewFrame()->GetDispatcher()->Execute(
@@ -1404,8 +1392,8 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     SwBaseShell::_SetFrmMode( FLY_DRAG_END );
                 else
                 {
-                    USHORT nFrameMode = SwBaseShell::GetFrmMode();
-                    if ( nFrameMode == FLY_DRAG_START || nFrameMode == FLY_DRAG )
+                    FlyMode eFrameMode = SwBaseShell::GetFrmMode();
+                    if ( eFrameMode == FLY_DRAG_START || eFrameMode == FLY_DRAG )
                     {
                         if ( nWhich == SID_ATTR_POSITION )
                             rSet.Put( SfxPointItem( SID_ATTR_POSITION,
@@ -1578,7 +1566,6 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             if ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
             {
                 const SfxItemSet *pSet = 0;
-                //CHINA001 SvxZoomDialog *pDlg = 0;
                 AbstractSvxZoomDialog *pDlg = 0;
                 if ( pArgs )
                     pSet = pArgs;
@@ -1599,12 +1586,11 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     }
                     aCoreSet.Put( aZoom );
 
-                    //CHINA001 pDlg = new SvxZoomDialog( &GetViewFrame()->GetWindow(), aCoreSet );
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
                         pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet, RID_SVXDLG_ZOOM);
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
                     }
 
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
@@ -1991,7 +1977,7 @@ long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
 
     if( bInsert )
     {
-        com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+        uno::Reference< frame::XDispatchRecorder > xRecorder =
                 GetViewFrame()->GetBindings().GetRecorder();
         if ( xRecorder.is() )
         {
@@ -2100,8 +2086,8 @@ extern int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
 
             if (!bCompare && !nFound)
             {
-                Window* pWindow = &GetEditWin();
-                InfoBox(pWindow, SW_RES(MSG_NO_MERGE_ENTRY)).Execute();
+                Window* pWin = &GetEditWin();
+                InfoBox(pWin, SW_RES(MSG_NO_MERGE_ENTRY)).Execute();
             }
         }
         if( 2 == nRet && xDocSh.Is() )
@@ -2222,14 +2208,12 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
             else
             {
                 //take an existing data source or create a new one?
-//CHINA001                     SwMailMergeFieldConnectionsDlg* pConnectionsDlg = new SwMailMergeFieldConnectionsDlg(
-//CHINA001              &GetViewFrame()->GetWindow());
                     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                    DBG_ASSERT(pFact, "Dialogdiet fail!");
                     AbstractMailMergeFieldConnectionsDlg* pConnectionsDlg = pFact->CreateMailMergeFieldConnectionsDlg(
                                                         DLG_MERGE_FIELD_CONNECTIONS,
                                                         &GetViewFrame()->GetWindow());
-                    DBG_ASSERT(pConnectionsDlg, "Dialogdiet fail!");//CHINA001
+                    DBG_ASSERT(pConnectionsDlg, "Dialogdiet fail!");
                     if(RET_OK == pConnectionsDlg->Execute())
                         bCallAddressPilot = !pConnectionsDlg->IsUseExistingConnections();
                     else
