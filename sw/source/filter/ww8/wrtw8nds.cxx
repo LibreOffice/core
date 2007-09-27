@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:44:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:01:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,9 +216,11 @@
 #include "ww8par.hxx"
 #endif
 
-using namespace com::sun::star::i18n;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::i18n;
 using namespace sw::util;
 using namespace sw::types;
+using namespace nsFieldFlags;
 
 /*  */
 
@@ -342,9 +344,13 @@ void WW8_SwAttrIter::IterToCurrent()
     mbCharIsRTL = maCharRunIter->mbRTL;
 }
 
-WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
-    : WW8_AttrIter(rWr), maCharRuns(GetPseudoCharRuns(rTxtNd, 0, !rWr.bWrtWW8)),
-    rNd(rTxtNd), pCurRedline(0), nAktSwPos(0), nCurRedlinePos(USHRT_MAX),
+WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd) :
+    WW8_AttrIter(rWr),
+    rNd(rTxtNd),
+    maCharRuns(GetPseudoCharRuns(rTxtNd, 0, !rWr.bWrtWW8)),
+    pCurRedline(0),
+    nAktSwPos(0),
+    nCurRedlinePos(USHRT_MAX),
     mrSwFmtDrop(rTxtNd.GetSwAttrSet().GetDrop())
 {
 
@@ -381,8 +387,8 @@ WW8_SwAttrIter::WW8_SwAttrIter(SwWW8Writer& rWr, const SwTxtNode& rTxtNd)
 
     if (rWrt.pDoc->GetRedlineTbl().Count())
     {
-        SwPosition aPos( rNd, SwIndex( (SwTxtNode*)&rNd ) );
-        pCurRedline = rWrt.pDoc->GetRedline( aPos, &nCurRedlinePos );
+        SwPosition aPosition( rNd, SwIndex( (SwTxtNode*)&rNd ) );
+        pCurRedline = rWrt.pDoc->GetRedline( aPosition, &nCurRedlinePos );
     }
 
     nAktSwPos = SearchNext(1);
@@ -711,7 +717,6 @@ bool WW8_SwAttrIter::IsDropCap( int nSwPos )
 bool WW8_SwAttrIter::RequiresImplicitBookmark()
 {
     SwImplBookmarksIter bkmkIterEnd = rWrt.maImplicitBookmarks.end();
-    ULONG test = rNd.GetIndex();
     for (SwImplBookmarksIter aIter = rWrt.maImplicitBookmarks.begin(); aIter != bkmkIterEnd; ++aIter)
     {
         ULONG sample  = aIter->second;
@@ -1134,10 +1139,17 @@ void WW8_SwAttrIter::FieldVanish( const String& rTxt )
                                     aItems.GetData() );
 }
 
-void WW8_SwAttrIter::OutSwTOXMark(const SwTOXMark& rAttr, bool bStart)
+void WW8_SwAttrIter::OutSwTOXMark(const SwTOXMark& rAttr,
+    bool
+#ifndef PRODUCT
+        bStart
+#endif
+    )
 {
     // its a field; so get the Text form the Node and build the field
+#ifndef PRODUCT
     ASSERT( bStart, "calls only with the startposition!" );
+#endif
     String sTxt;
 
     const SwTxtTOXMark& rTxtTOXMark = *rAttr.GetTxtTOXMark();
@@ -1481,7 +1493,7 @@ String WW8_SwAttrIter::GetSnippet(const String &rStr, xub_StrLen nAktPos,
         //with whitespace
         if (pBreakIt->xBreak.is() && !pBreakIt->xBreak->isBeginWord(
             rStr, nAktPos, pBreakIt->GetLocale(nLanguage),
-            com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
+            i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
         {
             aSnippet.SetChar(0, rStr.GetChar(nAktPos));
         }
@@ -1510,7 +1522,7 @@ SwTxtFmtColl& lcl_getFormatCollection( Writer& rWrt, SwTxtNode* pTxtNode )
                                     ? pRedl->GetMark()
                                     : pRedl->GetPoint();
         // Looking for deletions, which ends in current pTxtNode
-        if( IDocumentRedlineAccess::REDLINE_DELETE == pRedl->GetRedlineData().GetType() &&
+        if( nsRedlineType_t::REDLINE_DELETE == pRedl->GetRedlineData().GetType() &&
             pEnd->nNode == *pTxtNode && pStt->nNode != *pTxtNode &&
             pStt->nNode.GetNode().IsTxtNode() )
         {
@@ -1572,7 +1584,6 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
     if (aAttrIter.RequiresImplicitBookmark())
     {
-        ULONG test = pNd->GetIndex();
         String sBkmkName = String(RTL_CONSTASCII_STRINGPARAM("_toc"));
         sBkmkName += String::CreateFromInt32(pNd->GetIndex());
         rWW8Wrt.AddBookmark(sBkmkName);
@@ -1636,7 +1647,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
                 rWW8Wrt.InsUInt16( 0x442c );            // Dropcap (sprmPDcs)
                 int nDCS = (nDropLines << 3) | 0x01;
-                rWW8Wrt.InsUInt16( nDCS );
+                rWW8Wrt.InsUInt16( static_cast< UINT16 >(nDCS) );
 
                 rWW8Wrt.InsUInt16( 0x842F );            // Distance from text (sprmPDxaFromText)
                 rWW8Wrt.InsUInt16( nDistance );
@@ -1644,7 +1655,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 if (pNd->GetDropSize(rFontHeight, rDropHeight, rDropDescent))
                 {
                     rWW8Wrt.InsUInt16( 0x6412 );            // Line spacing
-                    rWW8Wrt.InsUInt16( -rDropHeight );
+                    rWW8Wrt.InsUInt16( static_cast< UINT16 >(-rDropHeight) );
                     rWW8Wrt.InsUInt16( 0 );
                 }
             }
@@ -1658,7 +1669,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
                 rWW8Wrt.pO->Insert( 46, rWW8Wrt.pO->Count() );    // Dropcap (sprmPDcs)
                 int nDCS = (nDropLines << 3) | 0x01;
-                rWW8Wrt.InsUInt16( nDCS );
+                rWW8Wrt.InsUInt16( static_cast< UINT16 >(nDCS) );
 
                 rWW8Wrt.pO->Insert( 49, rWW8Wrt.pO->Count() );      // Distance from text (sprmPDxaFromText)
                 rWW8Wrt.InsUInt16( nDistance );
@@ -1666,7 +1677,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 if (pNd->GetDropSize(rFontHeight, rDropHeight, rDropDescent))
                 {
                     rWW8Wrt.pO->Insert( 20, rWW8Wrt.pO->Count() );  // Line spacing
-                    rWW8Wrt.InsUInt16( -rDropHeight );
+                    rWW8Wrt.InsUInt16( static_cast< UINT16 >(-rDropHeight) );
                     rWW8Wrt.InsUInt16( 0 );
                 }
             }
@@ -1689,10 +1700,10 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                     }
 
                     rWW8Wrt.InsUInt16( 0x4845 );            // Lower the chars
-                    rWW8Wrt.InsUInt16(-((nDropLines - 1)*rDropDescent) / 10 );
+                    rWW8Wrt.InsUInt16( static_cast< UINT16 >(-((nDropLines - 1)*rDropDescent) / 10 ));
 
                     rWW8Wrt.InsUInt16( 0x4a43 );            // Font Size
-                    rWW8Wrt.InsUInt16( rFontHeight / 10 );
+                    rWW8Wrt.InsUInt16( static_cast< UINT16 >(rFontHeight / 10) );
                 }
                 else
                 {
@@ -1704,10 +1715,10 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                     }
 
                     rWW8Wrt.pO->Insert(101, rWW8Wrt.pO->Count() );      // Lower the chars
-                    rWW8Wrt.InsUInt16(-((nDropLines - 1)*rDropDescent) / 10 );
+                    rWW8Wrt.InsUInt16( static_cast< UINT16 >(-((nDropLines - 1)*rDropDescent) / 10) );
 
                     rWW8Wrt.pO->Insert( 99, rWW8Wrt.pO->Count() );      // Font Size
-                    rWW8Wrt.InsUInt16( rFontHeight / 10 );
+                    rWW8Wrt.InsUInt16( static_cast< UINT16 >(rFontHeight / 10) );
                 }
             }
 
@@ -1859,7 +1870,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         if( pNd->IsNumbered())
         {
             const SwNumRule* pRule = pNd->GetNumRule();
-            BYTE nLvl = pNd->GetLevel();
+            BYTE nLvl = static_cast< BYTE >(pNd->GetLevel());
             const SwNumFmt* pFmt = pRule->GetNumFmt( nLvl );
             if( !pFmt )
                 pFmt = &pRule->Get( nLvl );
@@ -1938,16 +1949,16 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 pTmpSet = new SfxItemSet(pNd->GetSwAttrSet());
 
             // create new LRSpace item, based on the current (if present)
-            const SfxPoolItem* pItem = NULL;
-            pTmpSet->GetItemState(RES_LR_SPACE, TRUE, &pItem);
+            const SfxPoolItem* pPoolItem = NULL;
+            pTmpSet->GetItemState(RES_LR_SPACE, TRUE, &pPoolItem);
             SvxLRSpaceItem aLRSpace(
-                ( pItem == NULL )
-                    ? SvxLRSpaceItem( 0, 0, 0, 0, RES_LR_SPACE )
-                    : *static_cast<const SvxLRSpaceItem*>( pItem ) );
+                ( pPoolItem == NULL )
+                    ? SvxLRSpaceItem(0, 0, 0, 0, RES_LR_SPACE)
+                    : *static_cast<const SvxLRSpaceItem*>( pPoolItem ) );
 
             // new left margin = old left + label space
             const SwNumRule* pRule = pNd->GetNumRule();
-            const SwNumFmt& rNumFmt = pRule->Get( pNd->GetLevel() );
+            const SwNumFmt& rNumFmt = pRule->Get( static_cast< USHORT >(pNd->GetLevel()) );
             aLRSpace.SetTxtLeft( aLRSpace.GetLeft() + rNumFmt.GetAbsLSpace() );
 
             // new first line indent = 0
@@ -2061,7 +2072,7 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
             // Pap-Attrs, so script is not necessary
             rWW8Wrt.Out_SfxItemSet( *pNewSet, true, false,
-                com::sun::star::i18n::ScriptType::LATIN);
+                i18n::ScriptType::LATIN);
 
             rWW8Wrt.pStyAttr = 0;
             rWW8Wrt.pOutFmtNode = pOldMod;
@@ -2113,23 +2124,23 @@ USHORT SwWW8Writer::StartTableFromFrmFmt(WW8Bytes &rAt, const SwFrmFmt *pFmt,
         const SwFmtHoriOrient &rHori = pFmt->GetHoriOrient();
         const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
         if (
-            (PRTAREA == rHori.GetRelationOrient() ||
-             FRAME == rHori.GetRelationOrient())
+            (text::RelOrientation::PRINT_AREA == rHori.GetRelationOrient() ||
+             text::RelOrientation::FRAME == rHori.GetRelationOrient())
             &&
-            (PRTAREA == rVert.GetRelationOrient() ||
-             FRAME == rVert.GetRelationOrient())
+            (text::RelOrientation::PRINT_AREA == rVert.GetRelationOrient() ||
+             text::RelOrientation::FRAME == rVert.GetRelationOrient())
            )
         {
-            SwHoriOrient eHOri = rHori.GetHoriOrient();
+            sal_Int16 eHOri = rHori.GetHoriOrient();
             switch (eHOri)
             {
-                case HORI_CENTER:
-                case HORI_RIGHT:
+                case text::HoriOrientation::CENTER:
+                case text::HoriOrientation::RIGHT:
                     if( bWrtWW8 )
                         InsUInt16( rAt, 0x5400 );
                     else
                         rAt.Insert( 182, rAt.Count() );
-                    InsUInt16( rAt, (HORI_RIGHT == eHOri ? 2 : 1 ));
+                    InsUInt16( rAt, (text::HoriOrientation::RIGHT == eHOri ? 2 : 1 ));
                     break;
                 default:
 #if 1
@@ -2214,15 +2225,15 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     rWW8Wrt.Out_SfxBreakItems(&(pFmt->GetAttrSet()), rNode);
 
     /*
-    ALWAYS relative when HORI_NONE (nPageSize + ( nPageSize / 10 )) < nTblSz,
+    ALWAYS relative when text::HoriOrientation::NONE (nPageSize + ( nPageSize / 10 )) < nTblSz,
     in that case the cell width's and table width's are not real. The table
     width is maxed and cells relative, so we need the frame (generally page)
     width that the table is in to work out the true widths.
     */
     const SwFmtFrmSize &rSize = pFmt->GetFrmSize();
     int nWidthPercent = rSize.GetWidthPercent();
-    bool bManualAligned = pFmt->GetHoriOrient().GetHoriOrient() == HORI_NONE;
-    if ( (pFmt->GetHoriOrient().GetHoriOrient() == HORI_FULL) || bManualAligned )
+    bool bManualAligned = pFmt->GetHoriOrient().GetHoriOrient() == text::HoriOrientation::NONE;
+    if ( (pFmt->GetHoriOrient().GetHoriOrient() == text::HoriOrientation::FULL) || bManualAligned )
         nWidthPercent = 100;
     bool bRelBoxSize = nWidthPercent != 0;
     unsigned long nTblSz = static_cast<unsigned long>(rSize.GetWidth());
@@ -2245,7 +2256,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                 &(rWW8Wrt.mpParentFrame->GetFrmFmt()) :
                 const_cast<const SwDoc *>(rWrt.pDoc)->GetPageDesc(0).GetPageFmtOfNode(rNode, false);
             aRect = pParentFmt->FindLayoutRect(true);
-            if (!(nPageSize = aRect.Width()))
+            if (0 == (nPageSize = aRect.Width()))
             {
                 const SvxLRSpaceItem& rLR = pParentFmt->GetLRSpace();
                 nPageSize = pParentFmt->GetFrmSize().GetWidth() - rLR.GetLeft()
@@ -2524,10 +2535,10 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
 
                 switch (rFmt.GetVertOrient().GetVertOrient())
                 {
-                    case VERT_CENTER:
+                    case text::VertOrientation::CENTER:
                         nFlags |= 0x080;
                         break;
-                    case VERT_BOTTOM:
+                    case text::VertOrientation::BOTTOM:
                         nFlags |= 0x100;
                         break;
                     default:
@@ -2786,9 +2797,9 @@ Writer& OutWW8_SwSectionNode( Writer& rWrt, SwSectionNode& rSectionNode )
             rWW8Wrt.ReplaceCr( (char)0xc ); // Indikator fuer Page/Section-Break
 
             //Get the page in use at the top of this section
-            SwNodeIndex aIdx(rSectionNode, 1);
+            SwNodeIndex aIdxTmp(rSectionNode, 1);
             const SwPageDesc *pCurrent =
-                SwPageDesc::GetPageDescOfNode(aIdx.GetNode());
+                SwPageDesc::GetPageDescOfNode(aIdxTmp.GetNode());
             if (!pCurrent)
                 pCurrent = rWW8Wrt.pAktPageDesc;
 
@@ -3012,15 +3023,15 @@ void SwWW8Writer::OutRedline( const SwRedlineData& rRedline )
     const USHORT* pSprmIds = 0;
     switch( rRedline.GetType() )
     {
-    case IDocumentRedlineAccess::REDLINE_INSERT:
+    case nsRedlineType_t::REDLINE_INSERT:
         pSprmIds = aSprmIds;
         break;
 
-    case IDocumentRedlineAccess::REDLINE_DELETE:
+    case nsRedlineType_t::REDLINE_DELETE:
         pSprmIds = aSprmIds + (2 * 3);
         break;
 
-    case IDocumentRedlineAccess::REDLINE_FORMAT:
+    case nsRedlineType_t::REDLINE_FORMAT:
         if( bWrtWW8 )
         {
             InsUInt16( 0xca57 );
