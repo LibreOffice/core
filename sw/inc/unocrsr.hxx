@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:21:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:15:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ public:
     SwUnoCrsr( SwUnoCrsr& );
 private:
     // forbidden and not implemented.
-    SwUnoCrsr( const SwUnoCrsr& );
+    //SwUnoCrsr( const SwUnoCrsr& );
     SwUnoCrsr & operator= ( const SwUnoCrsr& );
 public:
 
@@ -66,9 +66,10 @@ public:
 
     // gibt es eine Selection vom Content in die Tabelle
     // Return Wert gibt an, ob der Crsr auf der alten Position verbleibt
-    virtual FASTBOOL IsSelOvr( int eFlags =
-                                ( SELOVER_CHECKNODESSECTION |
-                                  SELOVER_TOGGLE | SELOVER_CHANGEPOS ));
+    virtual BOOL IsSelOvr( int eFlags =
+                                ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
+                                  nsSwCursorSelOverFlags::SELOVER_TOGGLE |
+                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
 
     BOOL IsRemainInSection() const          { return bRemainInSection; }
     void SetRemainInSection( BOOL bFlag )   { bRemainInSection = bFlag; }
@@ -110,11 +111,14 @@ public:
 
     // gibt es eine Selection vom Content in die Tabelle
     // Return Wert gibt an, ob der Crsr auf der alten Position verbleibt
-    virtual FASTBOOL IsSelOvr( int eFlags =
-                                ( SELOVER_CHECKNODESSECTION |
-                                  SELOVER_TOGGLE | SELOVER_CHANGEPOS ));
+    virtual BOOL IsSelOvr( int eFlags =
+                                ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
+                                  nsSwCursorSelOverFlags::SELOVER_TOGGLE |
+                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
 
+    using SwTableCursor::MakeBoxSels;
     void MakeBoxSels();
+
           SwCursor& GetSelRing()            { return aTblSel; }
     const SwCursor& GetSelRing() const      { return aTblSel; }
 };
