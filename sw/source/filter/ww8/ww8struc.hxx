@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:47:50 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:07:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,52 @@ struct Word2CHPX
     sal_uInt16 hpsBi;
     sal_uInt16 lidBi;
     sal_uInt32 fcPic;
+
+    Word2CHPX()
+    {
+        fBold = 0;
+        fItalic = 0;
+        fRMarkDel = 0;
+        fOutline = 0;
+        fFldVanish = 0;
+        fSmallCaps = 0;
+        fCaps = 0;
+        fVanish = 0;
+        fRMark = 0;
+        fSpec = 0;
+        fStrike = 0;
+        fObj = 0;
+        fBoldBi = 0;
+        fItalicBi = 0;
+        fBiDi = 0;
+        fDiacUSico = 0;
+        fsIco = 0;
+        fsFtc = 0;
+        fsHps = 0;
+        fsKul = 0;
+        fsPos = 0;
+        fsSpace = 0;
+        fsLid = 0;
+        fsIcoBi = 0;
+        fsFtcBi = 0;
+        fsHpsBi = 0;
+        fsLidBi = 0;
+
+        ftc = 0;
+        hps = 0;
+        qpsSpace = 0;
+        fSysVanish = 0;
+        fNumRun = 0;
+        ico = 0;
+        kul = 0;
+        hpsPos = 0;
+        icoBi = 0;
+        lid = 0;
+        ftcBi = 0;
+        hpsBi = 0;
+        lidBi = 0;
+        fcPic = 0;
+    }
 };
 
 
@@ -1012,7 +1058,7 @@ namespace wwUtility
 {
     sal_uInt32 BGRToRGB(sal_uInt32 nColour);
     inline sal_uInt32 RGBToBGR(sal_uInt32 nColour) { return BGRToRGB(nColour); }
-};
+}
 
 #endif
 
