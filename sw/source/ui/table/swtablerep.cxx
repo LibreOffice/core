@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtablerep.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:24:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:33:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,12 +54,6 @@
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
 #endif
-//CHINA001 #ifndef _SVX_BORDER_HXX //autogen
-//CHINA001 #include <svx/border.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _SVX_BACKGRND_HXX //autogen
-//CHINA001 #include <svx/backgrnd.hxx>
-//CHINA001 #endif
 #ifndef _SVX_HTMLMODE_HXX
 #include <svx/htmlmode.hxx>
 #endif
@@ -165,22 +159,18 @@ void DbgTColumn(TColumn* pTColumn, USHORT nCount)
 #endif
 
 
-#ifdef DEBUG_TBLDLG
-#define DEBUG_TBLDLG_TCOLUMN(pTColumn, nCount) DbgTColumn(pTColumn, nCount)
-#else
-#define DEBUG_TBLDLG_TCOLUMN
-#endif
 /*-----------------20.08.96 09.43-------------------
 --------------------------------------------------*/
 SwTableRep::SwTableRep( const SwTabCols& rTabCol, BOOL bCplx )
-    : nTblWidth(0),
+    :
+    nTblWidth(0),
     nSpace(0),
     nLeftSpace(0),
     nRightSpace(0),
     nAlign(0),
     nWidthPercent(0),
-    bLineSelected(FALSE),
     bComplex(bCplx),
+    bLineSelected(FALSE),
     bWidthChanged(FALSE),
     bColsChanged(FALSE)
 {
@@ -227,7 +217,9 @@ BOOL SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
             break;
         }
 
-DEBUG_TBLDLG_TCOLUMN(pTColumns, nAllCols);
+#ifdef DEBUG_TBLDLG
+#define DbgTColumn(pTColumns, nAllCols);
+#endif
 
     SwTwips nPos = 0;
     SwTwips nLeft = GetLeftSpace();
@@ -239,7 +231,7 @@ DEBUG_TBLDLG_TCOLUMN(pTColumns, nAllCols);
         TColumn*    pOldTColumns = new TColumn[nAllCols + 1];
         SwTwips nStart = 0,
                 nEnd;
-        for(USHORT i = 0; i < nAllCols - 1; i++)
+        for(i = 0; i < nAllCols - 1; i++)
         {
             nEnd  = rTabCols[i] - rTabCols.GetLeft();
             pOldTColumns[i].nWidth = nEnd - nStart;
@@ -249,7 +241,9 @@ DEBUG_TBLDLG_TCOLUMN(pTColumns, nAllCols);
         pOldTColumns[nAllCols - 1].nWidth = rTabCols.GetRight() - rTabCols.GetLeft() - nStart;
         pOldTColumns[nAllCols - 1].bVisible = TRUE;
 
-DEBUG_TBLDLG_TCOLUMN(pOldTColumns, nAllCols);
+#ifdef DEBUG_TBLDLG
+#define DbgTColumn(pOldTColumns, nAllCols);
+#endif
 
         USHORT nOldPos = 0;
         USHORT nNewPos = 0;
