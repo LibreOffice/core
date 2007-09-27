@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:48:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:06:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,6 @@
 #include "dbg_lay.hxx"
 #include "viewsh.hxx"
 #include "viewimp.hxx"
-#include "frmsh.hxx"
 #ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
 #endif
@@ -500,7 +499,6 @@ BOOL SwSectionFrm::HasToBreak( const SwFrm* pFrm ) const
         if( pTmp == pOtherFmt )
             return TRUE;
     } while( TRUE ); // ( pTmp->GetSect().GetValue() );
-    return FALSE;
 }
 
 /*************************************************************************
@@ -662,10 +660,10 @@ SwCntntFrm* lcl_GetNextCntntFrm( const SwLayoutFrm* pLay, bool bFwd )
     // #100926#
     const SwFrm* pFrm = pLay;
     SwCntntFrm *pCntntFrm = 0;
-    FASTBOOL bGoingUp = TRUE;
+    BOOL bGoingUp = TRUE;
     do {
-        const SwFrm *p;
-        FASTBOOL bGoingFwdOrBwd = FALSE, bGoingDown = FALSE;
+        const SwFrm *p = 0;
+        BOOL bGoingFwdOrBwd = FALSE, bGoingDown = FALSE;
 
         bGoingDown = !bGoingUp && ( 0 !=  ( p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0 ) );
         if ( !bGoingDown )
@@ -852,6 +850,7 @@ void SwSectionFrm::MakeAll()
 
 #if OSL_DEBUG_LEVEL > 1
     const SwFmtCol &rCol = GetFmt()->GetCol();
+    (void)rCol;
 #endif
     SwLayoutFrm::MakeAll();
     UnlockJoin();
@@ -859,7 +858,7 @@ void SwSectionFrm::MakeAll()
         DelEmpty( FALSE );
 }
 
-BOOL SwSectionFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReformat )
+BOOL SwSectionFrm::ShouldBwdMoved( SwLayoutFrm *, BOOL , BOOL & )
 {
     ASSERT( FALSE, "Hups, wo ist meine Tarnkappe?" );
     return FALSE;
@@ -1793,7 +1792,7 @@ SwLayoutFrm *SwFrm::GetNextSctLeaf( MakePageType eMakePage )
 |*************************************************************************/
 
 
-SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType eMakeFtn )
+SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
 {
     PROTOCOL_ENTER( this, PROT_LEAF, ACT_PREV_SECT, GetUpper()->FindSctFrm() )
 
@@ -1944,17 +1943,17 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType eMakeFtn )
         {
             // In existent section columns we're looking for the last not empty
             // column.
-            SwLayoutFrm *pTmp = pLayLeaf;
+            SwLayoutFrm *pTmpLay = pLayLeaf;
             while( pLayLeaf->GetUpper()->GetNext() )
             {
                 pLayLeaf = (SwLayoutFrm*)((SwLayoutFrm*)pLayLeaf->GetUpper()->GetNext())->Lower();
                 if( pLayLeaf->Lower() )
-                    pTmp = pLayLeaf;
+                    pTmpLay = pLayLeaf;
             }
             // If we skipped an empty column, we've to set the jump-flag
-            if( pLayLeaf != pTmp )
+            if( pLayLeaf != pTmpLay )
             {
-                pLayLeaf = pTmp;
+                pLayLeaf = pTmpLay;
                 SwFlowFrm::SetMoveBwdJump( TRUE );
             }
         }
