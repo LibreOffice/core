@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testiadapter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:22:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:08:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1040,7 +1040,7 @@ SAL_IMPLEMENT_MAIN()
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
-            OUString::createFromAscii("typeconverter.uno" SAL_DLLEXTENSION),
+            OUString::createFromAscii("stocservices.uno" SAL_DLLEXTENSION),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),

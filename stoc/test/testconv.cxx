@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testconv.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:21:56 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:07:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -692,7 +692,7 @@ SAL_IMPLEMENT_MAIN()
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         OUString aLibName(
-            RTL_CONSTASCII_USTRINGPARAM("typeconverter.uno" SAL_DLLEXTENSION) );
+            RTL_CONSTASCII_USTRINGPARAM("stocservices.uno" SAL_DLLEXTENSION) );
         xImplReg->registerImplementation(
             OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
             aLibName, Reference< XSimpleRegistry >() );
