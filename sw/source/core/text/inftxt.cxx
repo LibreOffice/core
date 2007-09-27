@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:19:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:13:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,9 +140,6 @@
 #ifndef _PORRST_HXX
 #include <porrst.hxx>       // SwHangingPortion
 #endif
-#ifndef _FRMSH_HXX
-#include <frmsh.hxx>
-#endif
 #ifndef _ITRATR_HXX
 #include <itratr.hxx>
 #endif
@@ -157,12 +154,14 @@
 #endif
 // <--
 
+#include <unomid.h>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
+
 #define CHAR_UNDERSCORE ((sal_Unicode)0x005F)
 #define CHAR_LEFT_ARROW ((sal_Unicode)0x25C0)
 #define CHAR_RIGHT_ARROW ((sal_Unicode)0x25B6)
@@ -222,7 +221,7 @@ sal_Bool SwTxtSizeInfo::IsOptTest8() const { return GetOpt().IsTest8(); }
  *                      SwLineInfo::SwLineInfo()
  *************************************************************************/
 
-void SwLineInfo::CtorInit( const SwAttrSet& rAttrSet )
+void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet )
 {
     pRuler = &rAttrSet.GetTabStops();
     pSpace = &rAttrSet.GetLineSpacing();
@@ -231,10 +230,10 @@ void SwLineInfo::CtorInit( const SwAttrSet& rAttrSet )
 }
 
 /*************************************************************************
- *                      SwTxtInfo::CtorInit()
+ *                      SwTxtInfo::CtorInitTxtInfo()
  *************************************************************************/
 
-void SwTxtInfo::CtorInit( SwTxtFrm *pFrm )
+void SwTxtInfo::CtorInitTxtInfo( SwTxtFrm *pFrm )
 {
     pPara = pFrm->GetPara();
     nTxtStart = pFrm->GetOfst();
@@ -263,7 +262,6 @@ void ChkOutDev( const SwTxtSizeInfo &rInf )
         return;
 
     const OutputDevice* pOut = rInf.GetOut();
-    const OutputDevice* pWin = rInf.GetVsh()->GetWin();
     const OutputDevice* pRef = rInf.GetRefDev();
     ASSERT( pOut && pRef, "ChkOutDev: invalid output devices" )
 }
@@ -310,13 +308,13 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
 #endif
 }
 
-void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
+void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
                    const xub_StrLen nNewIdx, const xub_StrLen nNewLen )
 {
     pKanaComp = NULL;
     nKanaIdx = 0;
     pFrm = pFrame;
-    SwTxtInfo::CtorInit( pFrm );
+    CtorInitTxtInfo( pFrm );
     const SwTxtNode *pNd = pFrm->GetTxtNode();
     pVsh = pFrm->GetShell();
 
@@ -401,7 +399,7 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
 }
 
 SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
-                              const xub_StrLen nIdx, const xub_StrLen nLen )
+                              const xub_StrLen nIndex, const xub_StrLen nLength )
     : SwTxtInfo( rNew ),
       pKanaComp(((SwTxtSizeInfo&)rNew).GetpKanaComp()),
       pVsh(((SwTxtSizeInfo&)rNew).GetVsh()),
@@ -412,8 +410,8 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       pFrm( rNew.pFrm ),
       pOpt(&rNew.GetOpt()),
       pTxt(&rTxt),
-      nIdx(nIdx),
-      nLen(nLen),
+      nIdx(nIndex),
+      nLen(nLength),
       nKanaIdx( rNew.GetKanaIdx() ),
       bOnWin( rNew.OnWin() ),
       bNotEOL( rNew.NotEOL() ),
@@ -469,11 +467,11 @@ void SwTxtSizeInfo::NoteAnimation() const
 SwPosSize SwTxtSizeInfo::GetTxtSize( OutputDevice* pOutDev,
                                      const SwScriptInfo* pSI,
                                      const XubString& rTxt,
-                                     const xub_StrLen nIdx,
-                                     const xub_StrLen nLen,
+                                     const xub_StrLen nIndex,
+                                     const xub_StrLen nLength,
                                      const USHORT nComp ) const
 {
-    SwDrawTextInfo aDrawInf( pVsh, *pOutDev, pSI, rTxt, nIdx, nLen );
+    SwDrawTextInfo aDrawInf( pVsh, *pOutDev, pSI, rTxt, nIndex, nLength );
     aDrawInf.SetFrm( pFrm );
     aDrawInf.SetFont( pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
@@ -511,11 +509,11 @@ SwPosSize SwTxtSizeInfo::GetTxtSize() const
  *                      SwTxtSizeInfo::GetTxtSize()
  *************************************************************************/
 
-void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIdx,
-                                const xub_StrLen nLen, const USHORT nComp,
+void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIndex,
+                                const xub_StrLen nLength, const USHORT nComp,
                                 USHORT& nMinSize, USHORT& nMaxSizeDiff ) const
 {
-    SwDrawTextInfo aDrawInf( pVsh, *pOut, pSI, *pTxt, nIdx, nLen );
+    SwDrawTextInfo aDrawInf( pVsh, *pOut, pSI, *pTxt, nIndex, nLength );
     aDrawInf.SetFrm( pFrm );
     aDrawInf.SetFont( pFnt );
     aDrawInf.SetSnapToGrid( SnapToGrid() );
@@ -573,13 +571,13 @@ xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
 }
 
 /*************************************************************************
- *                     SwTxtPaintInfo::CtorInit()
+ *                     SwTxtPaintInfo::CtorInitTxtPaintInfo()
  *************************************************************************/
 
-void SwTxtPaintInfo::CtorInit( SwTxtFrm *pFrame, const SwRect &rPaint )
+void SwTxtPaintInfo::CtorInitTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPaint )
 {
-    SwTxtSizeInfo::CtorInit( pFrame );
-    aTxtFly.CtorInit( pFrame ),
+    CtorInitTxtSizeInfo( pFrame );
+    aTxtFly.CtorInitTxtFly( pFrame ),
     aPaintRect = rPaint;
     nSpaceIdx = 0;
     pSpaceAdd = NULL;
@@ -595,26 +593,26 @@ void SwTxtPaintInfo::CtorInit( SwTxtFrm *pFrame, const SwRect &rPaint )
 
 SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf, const XubString &rTxt )
     : SwTxtSizeInfo( rInf, rTxt ),
+      pWrongList( rInf.GetpWrongList() ),
+      pSmartTags( rInf.GetSmartTags() ),    // SMARTTAGS
+      pSpaceAdd( rInf.GetpSpaceAdd() ),
+      pBrushItem( rInf.GetBrushItem() ),
       aTxtFly( *rInf.GetTxtFly() ),
       aPos( rInf.GetPos() ),
       aPaintRect( rInf.GetPaintRect() ),
-      nSpaceIdx( rInf.GetSpaceIdx() ),
-      pSpaceAdd( rInf.GetpSpaceAdd() ),
-      pWrongList( rInf.GetpWrongList() ),
-      pSmartTags( rInf.GetSmartTags() ),    // SMARTTAGS
-      pBrushItem( rInf.GetBrushItem() )
+      nSpaceIdx( rInf.GetSpaceIdx() )
 { }
 
 SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf )
     : SwTxtSizeInfo( rInf ),
+      pWrongList( rInf.GetpWrongList() ),
+      pSmartTags( rInf.GetSmartTags() ),    // SMARTTAGS
+      pSpaceAdd( rInf.GetpSpaceAdd() ),
+      pBrushItem( rInf.GetBrushItem() ),
       aTxtFly( *rInf.GetTxtFly() ),
       aPos( rInf.GetPos() ),
       aPaintRect( rInf.GetPaintRect() ),
-      nSpaceIdx( rInf.GetSpaceIdx() ),
-      pSpaceAdd( rInf.GetpSpaceAdd() ),
-      pWrongList( rInf.GetpWrongList() ),
-      pSmartTags( rInf.GetSmartTags() ),    // SMARTTAGS
-      pBrushItem( rInf.GetBrushItem() )
+      nSpaceIdx( rInf.GetSpaceIdx() )
 { }
 
 extern Color aGlobalRetoucheColor;
@@ -665,11 +663,11 @@ sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
  *************************************************************************/
 
 void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPor,
-                                const xub_StrLen nStart, const xub_StrLen nLen,
+                                const xub_StrLen nStart, const xub_StrLen nLength,
                                 const sal_Bool bKern, const sal_Bool bWrong,
                                 const sal_Bool bSmartTag )  // SMARTTAGS
 {
-    if( !nLen )
+    if( !nLength )
         return;
 
     if( GetFont()->IsBlink() && OnWin() && rPor.Width() )
@@ -721,9 +719,8 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
                                !GetOpt().IsHideSpell();
     const sal_Bool bTmpSmart = bSmartTag && OnWin() && SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
 
-    SwParaPortion* pPara = GetParaPortion();
-    ASSERT( pPara, "No paragraph!");
-    SwDrawTextInfo aDrawInf( pFrm->GetShell(), *pOut, pSI, rText, nStart, nLen,
+    ASSERT( GetParaPortion(), "No paragraph!");
+    SwDrawTextInfo aDrawInf( pFrm->GetShell(), *pOut, pSI, rText, nStart, nLength,
                              rPor.Width(), bBullet );
 
     aDrawInf.SetLeft( GetPaintRect().Left() );
@@ -919,7 +916,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
 
     // The maximum width depends on the current orientation
     const USHORT nDir = pFnt->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
-    SwTwips nMaxWidth;
+    SwTwips nMaxWidth = 0;
     switch ( nDir )
     {
     case 0 :
@@ -1106,7 +1103,7 @@ void SwTxtPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
  *                     SwTxtPaintInfo::DrawPostIts()
  *************************************************************************/
 
-void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) const
+void SwTxtPaintInfo::DrawPostIts( const SwLinePortion&, sal_Bool bScript ) const
 {
     if( OnWin() && pOpt->IsPostIts() )
     {
@@ -1165,22 +1162,22 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
 
     if ( aIntersect.HasArea() )
     {
-        OutputDevice* pOut = (OutputDevice*)GetOut();
-        pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+        OutputDevice* pTmpOut = (OutputDevice*)GetOut();
+        pTmpOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
 
         // For dark background we do not want to have a filled rectangle
         if ( GetVsh() && GetVsh()->GetWin() && lcl_IsDarkBackground( *this ) )
         {
-            pOut->SetLineColor( SwViewOption::GetFontColor().GetColor() );
+            pTmpOut->SetLineColor( SwViewOption::GetFontColor().GetColor() );
         }
         else
         {
-            pOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
-            pOut->SetLineColor();
+            pTmpOut->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+            pTmpOut->SetLineColor();
         }
 
         DrawRect( aIntersect, sal_True );
-        pOut->Pop();
+        pTmpOut->Pop();
     }
 }
 
@@ -1193,20 +1190,20 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
 
     if ( aIntersect.HasArea() )
     {
-        OutputDevice* pOut = (OutputDevice*)GetOut();
+        OutputDevice* pTmpOut = (OutputDevice*)GetOut();
 
         // --> FME 2004-06-24 #i16816# tagged pdf support
-        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pOut );
+        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pTmpOut );
         // <--
 
-        pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+        pTmpOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
 
-        pOut->SetFillColor( *pFnt->GetBackColor() );
-        pOut->SetLineColor();
+        pTmpOut->SetFillColor( *pFnt->GetBackColor() );
+        pTmpOut->SetLineColor();
 
         DrawRect( aIntersect, sal_True, sal_False );
 
-        pOut->Pop();
+        pTmpOut->Pop();
     }
 }
 
@@ -1324,7 +1321,7 @@ const PropertyValues & SwTxtFormatInfo::GetHyphValues() const
  *                  SwTxtFormatInfo::InitHyph()
  *************************************************************************/
 
-sal_Bool SwTxtFormatInfo::InitHyph( const sal_Bool bAutoHyph )
+sal_Bool SwTxtFormatInfo::InitHyph( const sal_Bool bAutoHyphen )
 {
     const SwAttrSet& rAttrSet = GetTxtFrm()->GetTxtNode()->GetSwAttrSet();
     SetHanging( rAttrSet.GetHangingPunctuation().GetValue() );
@@ -1332,27 +1329,27 @@ sal_Bool SwTxtFormatInfo::InitHyph( const sal_Bool bAutoHyph )
     SetForbiddenChars( rAttrSet.GetForbiddenRule().GetValue() );
     const SvxHyphenZoneItem &rAttr = rAttrSet.GetHyphenZone();
     MaxHyph() = rAttr.GetMaxHyphens();
-    sal_Bool bAuto = bAutoHyph || rAttr.IsHyphen();
+    sal_Bool bAuto = bAutoHyphen || rAttr.IsHyphen();
     if( bAuto || bInterHyph )
     {
         nHyphStart = nHyphWrdStart = STRING_LEN;
         nHyphWrdLen = 0;
 
-        INT16 nMinLeading  = Max(rAttr.GetMinLead(), sal_uInt8(2));
-        INT16 nMinTrailing = rAttr.GetMinTrail();
-        lcl_InitHyphValues( aHyphVals, nMinLeading, nMinTrailing);
+        const INT16 nMinimalLeading  = Max(rAttr.GetMinLead(), sal_uInt8(2));
+        const INT16 nMinimalTrailing = rAttr.GetMinTrail();
+        lcl_InitHyphValues( aHyphVals, nMinimalLeading, nMinimalTrailing);
     }
     return bAuto;
 }
 
 /*************************************************************************
- *                  SwTxtFormatInfo::CtorInit()
+ *                  SwTxtFormatInfo::CtorInitTxtFormatInfo()
  *************************************************************************/
 
-void SwTxtFormatInfo::CtorInit( SwTxtFrm *pNewFrm, const sal_Bool bNewInterHyph,
+void SwTxtFormatInfo::CtorInitTxtFormatInfo( SwTxtFrm *pNewFrm, const sal_Bool bNewInterHyph,
                                 const sal_Bool bNewQuick, const sal_Bool bTst )
 {
-    SwTxtPaintInfo::CtorInit( pNewFrm, SwRect() );
+    CtorInitTxtPaintInfo( pNewFrm, SwRect() );
 
     bQuick = bNewQuick;
     bInterHyph = bNewInterHyph;
@@ -1437,12 +1434,12 @@ void SwTxtFormatInfo::Init()
     if ( GetTxtFrm()->IsFollow() )
     {
         const SwTxtFrm* pMaster = GetTxtFrm()->FindMaster();
-        const SwLinePortion* pPara = pMaster->GetPara();
+        const SwLinePortion* pTmpPara = pMaster->GetPara();
 
         // there is a master for this follow and the master does not have
         // any contents (especially it does not have a number portion)
-        bNumDone = ! pPara ||
-                   ! ((SwParaPortion*)pPara)->GetFirstPortion()->IsFlyPortion();
+        bNumDone = ! pTmpPara ||
+                   ! ((SwParaPortion*)pTmpPara)->GetFirstPortion()->IsFlyPortion();
     }
 
     pRoot = 0;
@@ -1722,7 +1719,7 @@ SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
             pOldSmartTagList = static_cast<SwTxtPaintInfo*>(pInf)->GetSmartTags();
             if ( pOldSmartTagList )
             {
-                const sal_Int32 nPos = pOldSmartTagList->GetWrongPos(nIdx);
+                const USHORT nPos = pOldSmartTagList->GetWrongPos(nIdx);
                 if ( pOldSmartTagList->Pos(nPos) == nIdx )
                     ((SwTxtPaintInfo*)pInf)->SetSmartTags( pOldSmartTagList->SubList( nPos ) );
                 else
@@ -1817,14 +1814,14 @@ SwFontSave::~SwFontSave()
 SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
         : pFnt( ((SwTxtSizeInfo&)rInf).GetFont()  )
 {
-    BOOL bAlter = pFnt->GetFixKerning() ||
+    const BOOL bTmpAlter = pFnt->GetFixKerning() ||
          ( RTL_TEXTENCODING_SYMBOL == pFnt->GetCharSet(pFnt->GetActual()) )
         ;
 
     // --> OD 2006-06-27 #b6440955#
 //    const sal_Bool bFamily = bAlter && COMPARE_EQUAL !=
 //            pFnt->GetName( pFnt->GetActual() ).CompareToAscii( sBulletFntName );
-    const sal_Bool bFamily = bAlter &&
+    const sal_Bool bFamily = bTmpAlter &&
          pFnt->GetName( pFnt->GetActual() ) != numfunc::GetDefBulletFontname();
     // <--
     const sal_Bool bRotation = (sal_Bool)pFnt->GetOrientation() &&
