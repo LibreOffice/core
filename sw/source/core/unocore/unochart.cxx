@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unochart.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-05 17:40:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:34:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -781,9 +781,10 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
             for (sal_Int32 i = 0;  i < nSubRanges;  ++i)
             {
                 String aTblName, aStartCell, aEndCell;
-                sal_Bool bOk = GetTableAndCellsFromRangeRep(
+                sal_Bool bOk2 = GetTableAndCellsFromRangeRep(
                                     pSubRanges[i], aTblName, aStartCell, aEndCell );
-                DBG_ASSERT( bOk, "failed to get table and start/end cells" );
+                (void) bOk2;
+                DBG_ASSERT( bOk2, "failed to get table and start/end cells" );
 
                 sal_Int32 nStartRow, nStartCol, nEndRow, nEndCol;
                 lcl_GetCellPosition( aStartCell, nStartCol, nStartRow );
@@ -1144,9 +1145,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
                                     // -1: don't know yet, 0: not used, 1: always a single labe cell, ...
                                     // -2: neither/failed
 //     sal_Int32 nValuesSeqLen = -1;   // used to see if all value sequences have the same size
-    for (sal_Int32 i = 0;  i < nNumDS_LDS;  ++i)
+    for (sal_Int32 nDS1 = 0;  nDS1 < nNumDS_LDS;  ++nDS1)
     {
-        uno::Reference< chart2::data::XLabeledDataSequence > xLabeledDataSequence( pDS_LDS[i] );
+        uno::Reference< chart2::data::XLabeledDataSequence > xLabeledDataSequence( pDS_LDS[nDS1] );
         if( !xLabeledDataSequence.is() )
         {
             DBG_ERROR("got NULL for XLabeledDataSequence from Data source");
@@ -1201,7 +1202,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         // try to get 'DataRowSource' value (ROWS or COLUMNS) from inspecting
         // first and last cell used in both sequences
         //
-        sal_Int32 nFirstCol, nFirstRow, nLastCol, nLastRow;
+        sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
         String aCell( aLabelStartCell.Len() ? aLabelStartCell : aValuesStartCell );
         DBG_ASSERT( aCell.Len() , "start cell missing?" );
         lcl_GetCellPosition( aCell, nFirstCol, nFirstRow);
@@ -1242,7 +1243,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             DBG_ASSERT( nDtaSrcIsColumns == 0  ||   /* rows */
                         nDtaSrcIsColumns == 1,      /* columns */
                     "unexpected value for 'nDtaSrcIsColumns'" );
-            pSequenceMapping[i] = nDtaSrcIsColumns ? nFirstCol : nFirstRow;
+            pSequenceMapping[nDS1] = nDtaSrcIsColumns ? nFirstCol : nFirstRow;
 
 
             // build data used to determine 'CellRangeRepresentation' later on
@@ -1258,7 +1259,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             //
             if (aLabelStartCell.Len() && aLabelEndCell.Len())
             {
-                sal_Int32 nStartCol, nStartRow, nEndCol, nEndRow;
+                sal_Int32 nStartCol = -1, nStartRow = -1, nEndCol = -1, nEndRow = -1;
                 lcl_GetCellPosition( aLabelStartCell, nStartCol, nStartRow );
                 lcl_GetCellPosition( aLabelEndCell,   nEndCol,   nEndRow );
                 if (nStartRow < 0 || nEndRow >= nTableRows ||
@@ -1280,7 +1281,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             }
             if (aValuesStartCell.Len() && aValuesEndCell.Len())
             {
-                sal_Int32 nStartCol, nStartRow, nEndCol, nEndRow;
+                sal_Int32 nStartCol = -1, nStartRow = -1, nEndCol = -1, nEndRow = -1;
                 lcl_GetCellPosition( aValuesStartCell, nStartCol, nStartRow );
                 lcl_GetCellPosition( aValuesEndCell,   nEndCol,   nEndRow );
                 if (nStartRow < 0 || nEndRow >= nTableRows ||
@@ -1306,7 +1307,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         // do some extra sanity checking that the length of the sequences
         // matches their range representation
         {
-            sal_Int32 nStartRow, nStartCol, nEndRow, nEndCol;
+            sal_Int32 nStartRow = -1, nStartCol = -1, nEndRow = -1, nEndCol = -1;
             if (xCurLabel.is())
             {
                 lcl_GetCellPosition( aLabelStartCell, nStartCol, nStartRow);
@@ -1340,18 +1341,18 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             if (aMap[i][k] != '\0')  // top-left cell of a sub-range found
             {
                 // find rectangular sub-range to use
-                sal_Int32 ri = i;   // row index
-                sal_Int32 ci = k;   // column index
+                sal_Int32 nRowIndex1 = i;   // row index
+                sal_Int32 nColIndex1 = k;   // column index
                 sal_Int32 nRowSubLen = 0;
                 sal_Int32 nColSubLen = 0;
-                while (ri < nTableRows && aMap[ri++][k] != '\0')
+                while (nRowIndex1 < nTableRows && aMap[nRowIndex1++][k] != '\0')
                     ++nRowSubLen;
                 // be aware of shifted sequences!
                 // (according to the checks done prior the length should be ok)
-                while (ci < nTableCols && aMap[i][ci] != '\0'
-                                       && aMap[i + nRowSubLen-1][ci] != '\0')
+                while (nColIndex1 < nTableCols && aMap[i][nColIndex1] != '\0'
+                                       && aMap[i + nRowSubLen-1][nColIndex1] != '\0')
                 {
-                    ++ci;
+                    ++nColIndex1;
                     ++nColSubLen;
                 }
                 String aStartCell( lcl_GetCellName( k, i ) );
@@ -1365,9 +1366,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
                 aCellRanges += aCurRange;
 
                 // clear already found sub-range from map
-                for (sal_Int32 ri = 0;  ri < nRowSubLen;  ++ri)
-                    for (sal_Int32 ci = 0;  ci < nColSubLen;  ++ci)
-                        aMap[i + ri][k + ci] = '\0';
+                for (sal_Int32 nRowIndex2 = 0;  nRowIndex2 < nRowSubLen;  ++nRowIndex2)
+                    for (sal_Int32 nColumnIndex2 = 0;  nColumnIndex2 < nColSubLen;  ++nColumnIndex2)
+                        aMap[i + nRowIndex2][k + nColumnIndex2] = '\0';
             }
         }
     }
@@ -1760,8 +1761,6 @@ void SwChartDataProvider::AddRowCols(
     SwTableBox* pFirstBox   = *( rBoxes.GetData() + 0 );
     SwTableBox* pLastBox    = *( rBoxes.GetData() + nBoxes - 1 );
 
-    bool bChanged = false; // no data-sequence changed yet...
-
     sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
     if (pFirstBox && pLastBox)
     {
@@ -2018,13 +2017,13 @@ SwChartDataSequence::SwChartDataSequence(
     SwClient( &rTblFmt ),
     aEvtListeners( GetChartMutex() ),
     aModifyListeners( GetChartMutex() ),
+    aRowLabelText( SW_RES( STR_CHART2_ROW_LABEL_TEXT ) ),
+    aColLabelText( SW_RES( STR_CHART2_COL_LABEL_TEXT ) ),
     xDataProvider( &rProvider ),
     pDataProvider( &rProvider ),
     pTblCrsr( pTableCursor ),
     aCursorDepend( this, pTableCursor ),
-    pMap( aSwMapProvider.GetPropertyMap( PROPERTY_MAP_CHART2_DATA_SEQUENCE ) ),
-    aRowLabelText( SW_RES( STR_CHART2_ROW_LABEL_TEXT ) ),
-    aColLabelText( SW_RES( STR_CHART2_COL_LABEL_TEXT ) )
+    pMap( aSwMapProvider.GetPropertyMap( PROPERTY_MAP_CHART2_DATA_SEQUENCE ) )
 {
     bDisposed = sal_False;
 
@@ -2063,17 +2062,18 @@ SwChartDataSequence::SwChartDataSequence(
 
 
 SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
+    SwChartDataSequenceBaseClass(),
     SwClient( rObj.GetFrmFmt() ),
     aEvtListeners( GetChartMutex() ),
     aModifyListeners( GetChartMutex() ),
     aRole( rObj.aRole ),
+    aRowLabelText( SW_RES(STR_CHART2_ROW_LABEL_TEXT) ),
+    aColLabelText( SW_RES(STR_CHART2_COL_LABEL_TEXT) ),
     xDataProvider( rObj.pDataProvider ),
     pDataProvider( rObj.pDataProvider ),
     pTblCrsr( rObj.pTblCrsr->Clone() ),
     aCursorDepend( this, pTblCrsr ),
-    pMap( rObj.pMap ),
-    aRowLabelText( SW_RES(STR_CHART2_ROW_LABEL_TEXT) ),
-    aColLabelText( SW_RES(STR_CHART2_COL_LABEL_TEXT) )
+    pMap( rObj.pMap )
 {
     bDisposed = sal_False;
 
@@ -2134,7 +2134,7 @@ sal_Int64 SAL_CALL SwChartDataSequence::getSomething( const uno::Sequence< sal_I
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
     return 0;
 }
@@ -2641,8 +2641,8 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
     }
     else if (pPointStartNode == rBox.GetSttNd()  ||  pMarkStartNode == rBox.GetSttNd())
     {
-        sal_Int32 nPointRow, nPointCol;
-        sal_Int32 nMarkRow, nMarkCol;
+        sal_Int32 nPointRow = -1, nPointCol = -1;
+        sal_Int32 nMarkRow  = -1, nMarkCol  = -1;
         const SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
         String aPointCellName( pTable->GetTblBox( pPointStartNode->GetIndex() )->GetName() );
         String aMarkCellName( pTable->GetTblBox( pMarkStartNode->GetIndex() )->GetName() );
