@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conrect.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:18:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:24:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,13 +119,13 @@ BOOL ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
     BOOL bReturn;
 
     if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)) == TRUE
-                                    && pWin->GetDrawMode() == OBJ_CAPTION)
+                                    && m_pWin->GetSdrDrawMode() == OBJ_CAPTION)
     {
-        pView->NoRotate();
-        if (pView->IsDrawSelMode())
+        m_pView->NoRotate();
+        if (m_pView->IsDrawSelMode())
         {
-            pView->FlipDrawSelMode();
-            pSh->GetDrawView()->SetFrameDragSingles(pView->IsDrawSelMode());
+            m_pView->FlipDrawSelMode();
+            m_pSh->GetDrawView()->SetFrameDragSingles(m_pView->IsDrawSelMode());
         }
     }
     return (bReturn);
@@ -139,23 +139,21 @@ BOOL ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 
 BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    Point aPnt(pWin->PixelToLogic(rMEvt.GetPosPixel()));
+    Point aPnt(m_pWin->PixelToLogic(rMEvt.GetPosPixel()));
 
     BOOL bRet = SwDrawBase::MouseButtonUp(rMEvt);
     if( bRet )
     {
-        SdrView *pSdrView = pSh->GetDrawView();
+        SdrView *pSdrView = m_pSh->GetDrawView();
         const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
         SdrObject* pObj = rMarkList.GetMark(0) ? rMarkList.GetMark(0)->GetMarkedSdrObj()
                                                : 0;
-        switch( pWin->GetDrawMode() )
+        switch( m_pWin->GetSdrDrawMode() )
         {
         case OBJ_TEXT:
             if( bMarquee )
             {
-                BOOL bNewMode = 0 != (::GetHtmlMode(pView->GetDocShell())
-                                                        & HTMLMODE_ON);
-                pSh->ChgAnchor(FLY_IN_CNTNT);
+                m_pSh->ChgAnchor(FLY_IN_CNTNT);
 
                 if( pObj )
                 {
@@ -169,7 +167,7 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                     aItemSet.Put( SdrTextAniDirectionItem( SDRTEXTANI_LEFT ) );
                     aItemSet.Put( SdrTextAniCountItem( 0 ) );
                     aItemSet.Put( SdrTextAniAmountItem(
-                            (INT16)pWin->PixelToLogic(Size(2,1)).Width()) );
+                            (INT16)m_pWin->PixelToLogic(Size(2,1)).Width()) );
 
                     pObj->SetMergedItemSetAndBroadcast(aItemSet);
                 }
@@ -192,10 +190,10 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             if( pObj )
             {
                 SdrPageView* pPV = pSdrView->GetSdrPageView();
-                pView->BeginTextEdit( pObj, pPV, pWin, sal_True );
+                m_pView->BeginTextEdit( pObj, pPV, m_pWin, sal_True );
             }
-            pView->LeaveDrawCreate();   // In Selektionsmode wechseln
-            pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
+            m_pView->LeaveDrawCreate();  // In Selektionsmode wechseln
+            m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
             break;
 
         case OBJ_CAPTION:
@@ -208,6 +206,7 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                     pOPO->SetVertical( TRUE );
             }
             break;
+        default:; //prevent warning
         }
     }
     return bRet;
@@ -227,41 +226,41 @@ void ConstRectangle::Activate(const USHORT nSlotId)
     switch (nSlotId)
     {
     case SID_DRAW_LINE:
-        pWin->SetDrawMode(OBJ_LINE);
+        m_pWin->SetSdrDrawMode(OBJ_LINE);
         break;
 
     case SID_DRAW_RECT:
-        pWin->SetDrawMode(OBJ_RECT);
+        m_pWin->SetSdrDrawMode(OBJ_RECT);
         break;
 
     case SID_DRAW_ELLIPSE:
-        pWin->SetDrawMode(OBJ_CIRC);
+        m_pWin->SetSdrDrawMode(OBJ_CIRC);
         break;
 
     case SID_DRAW_TEXT_MARQUEE:
         bMarquee = TRUE;
-        pWin->SetDrawMode(OBJ_TEXT);
+        m_pWin->SetSdrDrawMode(OBJ_TEXT);
         break;
 
     case SID_DRAW_TEXT_VERTICAL:
         // #93382#
         mbVertical = sal_True;
-        pWin->SetDrawMode(OBJ_TEXT);
+        m_pWin->SetSdrDrawMode(OBJ_TEXT);
         break;
 
     case SID_DRAW_TEXT:
-        pWin->SetDrawMode(OBJ_TEXT);
+        m_pWin->SetSdrDrawMode(OBJ_TEXT);
         break;
 
     case SID_DRAW_CAPTION_VERTICAL:
         bCapVertical = TRUE;
         // no break
     case SID_DRAW_CAPTION:
-        pWin->SetDrawMode(OBJ_CAPTION);
+        m_pWin->SetSdrDrawMode(OBJ_CAPTION);
         break;
 
     default:
-        pWin->SetDrawMode(OBJ_NONE);
+        m_pWin->SetSdrDrawMode(OBJ_NONE);
         break;
     }
 
