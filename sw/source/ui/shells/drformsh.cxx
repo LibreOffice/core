@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drformsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 11:06:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:27:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,8 @@
 #include "itemdef.hxx"
 #include "swslots.hxx"
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+#include <unomid.h>
+
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -150,13 +151,13 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                 {
                     if(bConvertToText)
                     {
-                        SwView& rView = rSh.GetView();
                         //remove object -> results in destruction of this!
-                        rView.GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SFX_CALLMODE_SYNCHRON );
-                        rView.StopShellTimer();
+                        SwView& rTempView = GetView();
+                        rTempView.GetViewFrame()->GetDispatcher()->Execute(SID_DELETE, SFX_CALLMODE_SYNCHRON );
+                        rTempView.StopShellTimer();
                         //issue a new command to insert the link
-                        rView.GetViewFrame()->GetDispatcher()->Execute(
-                                SID_HYPERLINK_SETLINK, SFX_CALLMODE_ASYNCHRON, &rHLinkItem, 0L);
+                        rTempView.GetViewFrame()->GetDispatcher()->Execute(
+                                SID_HYPERLINK_SETLINK, SFX_CALLMODE_ASYNCHRON, &rHLinkItem, 0);
                     }
                     else
                     {
@@ -299,8 +300,8 @@ void SwDrawFormShell::GetState(SfxItemSet& rSet)
 }
 
 
-SwDrawFormShell::SwDrawFormShell(SwView &rView) :
-    SwDrawBaseShell(rView)
+SwDrawFormShell::SwDrawFormShell(SwView &_rView) :
+    SwDrawBaseShell(_rView)
 {
     SetHelpId(SW_DRAWFORMSHELL);
     GetShell().NoEdit(sal_True);
