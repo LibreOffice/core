@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:37:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,10 +100,11 @@
 #endif
 
 // setze Crsr in die naechsten/vorherigen Celle
-FASTBOOL SwCrsrShell::GoNextCell( BOOL bAppendLine )
+BOOL SwCrsrShell::GoNextCell( BOOL bAppendLine )
 {
-    FASTBOOL bRet = FALSE;
+    BOOL bRet = FALSE;
     const SwTableNode* pTblNd = 0;
+
     if( IsTableMode() || 0 != ( pTblNd = IsCrsrInTbl() ))
     {
         SwCursor* pCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
@@ -164,9 +165,9 @@ FASTBOOL SwCrsrShell::GoNextCell( BOOL bAppendLine )
 }
 
 
-FASTBOOL SwCrsrShell::GoPrevCell()
+BOOL SwCrsrShell::GoPrevCell()
 {
-    FASTBOOL bRet = FALSE;
+    BOOL bRet = FALSE;
     const SwTableNode* pTblNd;
     if( IsTableMode() || 0 != ( pTblNd = IsCrsrInTbl() ))
     {
@@ -178,7 +179,6 @@ FASTBOOL SwCrsrShell::GoPrevCell()
     }
     return bRet;
 }
-
 
 const SwFrm* lcl_FindMostUpperCellFrm( const SwFrm* pFrm )
 {
@@ -192,7 +192,7 @@ const SwFrm* lcl_FindMostUpperCellFrm( const SwFrm* pFrm )
     return pFrm;
 }
 
-FASTBOOL SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
+BOOL SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
 {
     // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
     SwFrm *pFrm = GetCurrFrm();
@@ -209,11 +209,11 @@ FASTBOOL SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
 
     // lasse ueber das Layout die Boxen suchen
     SwSelBoxes aBoxes;
-    SwTblSearchType eType = bRow ? TBLSEARCH_ROW : TBLSEARCH_COL;
+    SwTblSearchType eType = bRow ? nsSwTblSearchType::TBLSEARCH_ROW : nsSwTblSearchType::TBLSEARCH_COL;
     const bool bCheckProtected = !IsReadOnlyAvailable();
 
     if( bCheckProtected )
-        eType = (SwTblSearchType)(eType | TBLSEARCH_PROTECT);
+        eType = (SwTblSearchType)(eType | nsSwTblSearchType::TBLSEARCH_PROTECT);
 
     if ( !bRowSimple )
     {
@@ -304,7 +304,7 @@ FASTBOOL SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
     return TRUE;
 }
 
-FASTBOOL SwCrsrShell::SelTbl()
+BOOL SwCrsrShell::SelTbl()
 {
     // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
     SwFrm *pFrm = GetCurrFrm();
@@ -334,7 +334,7 @@ FASTBOOL SwCrsrShell::SelTbl()
 }
 
 
-FASTBOOL SwCrsrShell::SelTblBox()
+BOOL SwCrsrShell::SelTblBox()
 {
     // if we're in a table, create a table cursor, and select the cell
     // that the current cursor's point resides in
@@ -398,7 +398,7 @@ FASTBOOL SwCrsrShell::SelTblBox()
 //      !0  - Node hinter der Tabelle
 
 
-SwNode* lcl_FindNextCell( SwNodeIndex& rIdx, FASTBOOL bInReadOnly )
+SwNode* lcl_FindNextCell( SwNodeIndex& rIdx, BOOL bInReadOnly )
 {
     // ueberpruefe geschuetzte Zellen
     SwCntntFrm* pFrm;
@@ -442,7 +442,7 @@ SwNode* lcl_FindNextCell( SwNodeIndex& rIdx, FASTBOOL bInReadOnly )
 //      !0  - Node hinter der Tabelle
 
 
-SwNode* lcl_FindPrevCell( SwNodeIndex& rIdx, FASTBOOL bInReadOnly  )
+SwNode* lcl_FindPrevCell( SwNodeIndex& rIdx, BOOL bInReadOnly  )
 {
     // ueberpruefe geschuetzte Zellen
     SwCntntFrm* pFrm;
@@ -479,8 +479,8 @@ SwNode* lcl_FindPrevCell( SwNodeIndex& rIdx, FASTBOOL bInReadOnly  )
 
 
 
-FASTBOOL GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
-                        FASTBOOL bInReadOnly )
+BOOL GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
+                        BOOL bInReadOnly )
 {
     SwNodeIndex aIdx( rCurCrsr.GetPoint()->nNode );
 
@@ -537,8 +537,8 @@ FASTBOOL GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
 }
 
 
-FASTBOOL GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
-                        FASTBOOL bInReadOnly )
+BOOL GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
+                        BOOL bInReadOnly )
 {
     SwNodeIndex aIdx( rCurCrsr.GetPoint()->nNode );
     SwTableNode* pTblNd = aIdx.GetNode().FindTableNode();
@@ -582,8 +582,8 @@ FASTBOOL GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
 }
 
 
-FASTBOOL GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
-                        FASTBOOL bInReadOnly )
+BOOL GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
+                        BOOL bInReadOnly )
 {
     SwTableNode* pTblNd = rCurCrsr.GetPoint()->nNode.GetNode().FindTableNode();
     if( !pTblNd )
@@ -608,28 +608,29 @@ FASTBOOL GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
 }
 
 
-FASTBOOL SwCursor::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
+BOOL SwCursor::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 {
-    FASTBOOL bRet = FALSE;
+    BOOL bRet = FALSE;
     SwTableCursor* pTblCrsr = (SwTableCursor*)*this;
 
     if( pTblCrsr || !HasMark() )    // nur wenn kein Mark oder ein TblCrsr
     {
         SwCrsrSaveState aSaveState( *this );
         bRet = (*fnWhichTbl)( *this, fnPosTbl, IsReadOnlyAvailable() ) &&
-                !IsSelOvr( SELOVER_CHECKNODESSECTION | SELOVER_TOGGLE );
+                !IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
+                           nsSwCursorSelOverFlags::SELOVER_TOGGLE );
     }
     return bRet;
 }
 
-FASTBOOL SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
+BOOL SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 {
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
 
     SwShellCrsr* pCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
-    FASTBOOL bCheckPos, bRet;
-    ULONG nPtNd;
-    xub_StrLen nPtCnt;
+    BOOL bCheckPos, bRet;
+    ULONG nPtNd = 0;
+    xub_StrLen nPtCnt = 0;
 
     if( !pTblCrsr && pCurCrsr->HasMark() )      // wenn Mark und kein TblCrsr,
     {
@@ -667,7 +668,7 @@ FASTBOOL SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 }
 
 
-FASTBOOL SwCrsrShell::IsTblComplex() const
+BOOL SwCrsrShell::IsTblComplex() const
 {
     SwFrm *pFrm = GetCurrFrm( FALSE );
     if ( pFrm && pFrm->IsInTab() )
@@ -676,9 +677,9 @@ FASTBOOL SwCrsrShell::IsTblComplex() const
 }
 
 
-FASTBOOL SwCrsrShell::IsTblComplexForChart()
+BOOL SwCrsrShell::IsTblComplexForChart()
 {
-    FASTBOOL bRet = FALSE;
+    BOOL bRet = FALSE;
 
     StartAction();  // IsTblComplexForChart() may trigger table formatting
                     // we better do that inside an action
@@ -745,10 +746,10 @@ String SwCrsrShell::GetBoxNms() const
 }
 
 
-FASTBOOL SwCrsrShell::GotoTable( const String& rName )
+BOOL SwCrsrShell::GotoTable( const String& rName )
 {
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
-    FASTBOOL bRet = !pTblCrsr && pCurCrsr->GotoTable( rName );
+    BOOL bRet = !pTblCrsr && pCurCrsr->GotoTable( rName );
     if( bRet )
     {
         pCurCrsr->GetPtPos() = Point();
@@ -759,7 +760,7 @@ FASTBOOL SwCrsrShell::GotoTable( const String& rName )
 }
 
 
-FASTBOOL SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
+BOOL SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
 {
     if( !pBoxIdx || !pBoxPtr || IsSelTblCells() || !IsAutoUpdateCells() )
         return FALSE;
@@ -767,7 +768,7 @@ FASTBOOL SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
     // ueberpruefe, ob der Box Inhalt mit dem angegebenen Format der Box
     // ueber einstimmt. Wenn nicht, setze neu
     SwTableBox* pChkBox = 0;
-    SwStartNode* pSttNd;
+    SwStartNode* pSttNd = 0;
     if( !pPos )
     {
         // gesicherte Position heraus holen.
@@ -874,9 +875,9 @@ void SwCrsrShell::ClearTblBoxCntnt()
     pBoxPtr = 0;
 }
 
-FASTBOOL SwCrsrShell::EndAllTblBoxEdit()
+BOOL SwCrsrShell::EndAllTblBoxEdit()
 {
-    FASTBOOL bRet = FALSE;
+    BOOL bRet = FALSE;
     ViewShell *pSh = this;
     do {
         if( pSh->IsA( TYPE( SwCrsrShell ) ) )
