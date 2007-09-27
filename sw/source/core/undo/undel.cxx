@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:20:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:30:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,7 +191,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
     {
         ASSERT( rPam.HasMark(), "PaM ohne Mark" );
         DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint(),
-                        DelCntntType(DELCNT_ALL | DELCNT_CHKNOCNTNT) );
+                        DelCntntType(nsDelCntntType::DELCNT_ALL | nsDelCntntType::DELCNT_CHKNOCNTNT) );
 
         BOOL bDoesUndo = pDoc->DoesUndo();
         pDoc->DoUndo( FALSE );
@@ -571,9 +571,8 @@ static SwRewriter lcl_RewriterFromHistory(SwHistory & rHistory)
 
     bool bDone = false;
 
-    for (int n = 0; n < rHistory.Count(); n++)
+    for ( USHORT n = 0; n < rHistory.Count(); n++)
     {
-        USHORT nWhich = rHistory[n]->Which();
         String aDescr = rHistory[n]->GetDescription();
 
         if (aDescr.Len() > 0)
@@ -792,9 +791,9 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
 
         if( bNodeMove )
         {
-            SwNodeRange aRg( *pMvStt, 0, *pMvStt, nNode );
+            SwNodeRange aRange( *pMvStt, 0, *pMvStt, nNode );
             SwNodeIndex aCopyIndex( aPos.nNode, -1 );
-            pUNds->_Copy( aRg, aPos.nNode );
+            pUNds->_Copy( aRange, aPos.nNode );
 
             if( nReplaceDummy )
             {
@@ -866,8 +865,8 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
 
         if( bResetPgDesc || bResetPgBrk )
         {
-            USHORT nStt = bResetPgDesc ? RES_PAGEDESC : RES_BREAK;
-            USHORT nEnd = bResetPgBrk ? RES_BREAK : RES_PAGEDESC;
+            USHORT nStt = static_cast<USHORT>( bResetPgDesc ? RES_PAGEDESC : RES_BREAK );
+            USHORT nEnd = static_cast<USHORT>( bResetPgBrk ? RES_BREAK : RES_PAGEDESC );
 
             SwNode* pNode = pDoc->GetNodes()[ nEndNode + 1 ];
             if( pNode->IsCntntNode() )
@@ -918,7 +917,7 @@ void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
         {
             ASSERT( rPam.HasMark(), "PaM ohne Mark" );
             DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint(),
-                            DelCntntType(DELCNT_ALL | DELCNT_CHKNOCNTNT) );
+                            DelCntntType(nsDelCntntType::DELCNT_ALL | nsDelCntntType::DELCNT_CHKNOCNTNT) );
 
             _DelBookmarks( rPam.GetMark()->nNode, rPam.GetPoint()->nNode );
         }
@@ -934,7 +933,7 @@ void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
         {
             ASSERT( rPam.HasMark(), "PaM ohne Mark" );
             DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint(),
-                            DelCntntType(DELCNT_ALL | DELCNT_CHKNOCNTNT) );
+                            DelCntntType(nsDelCntntType::DELCNT_ALL | nsDelCntntType::DELCNT_CHKNOCNTNT) );
 
             _DelBookmarks( rPam.GetMark()->nNode, rPam.GetPoint()->nNode );
         }
