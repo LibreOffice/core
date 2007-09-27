@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ccoll.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:37:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:19:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#define C2U(x) rtl::OUString::createFromAscii(x)
+#include <unomid.h>
 
 // ******************************************************************
 
@@ -131,346 +131,49 @@ rtl::OUString GetCommandContextByIndex( sal_Int16 nIndex )
 
 // Globals ******************************************************************
 
-//CHINA001 static USHORT __FAR_DATA aPageRg[] = {
-//CHINA001 FN_COND_COLL, FN_COND_COLL,
-//CHINA001 0
-//CHINA001 };
 
-// Achtung im Code wird dieses Array direkt (0, 1, ...) indiziert
-//CHINA001 static long nTabs[] =
-//CHINA001  {   2, // Number of Tabs
-//CHINA001 0, 100
-//CHINA001  };
-
-
-CommandStruct SwCondCollItem::aCmds[] = {
-         PARA_IN_TABLEHEAD, 0,
-         PARA_IN_TABLEBODY, 0,
-         PARA_IN_FRAME,     0,
-         PARA_IN_SECTION,   0,
-         PARA_IN_FOOTENOTE, 0,
-         PARA_IN_ENDNOTE,   0,
-         PARA_IN_HEADER,    0,
-         PARA_IN_FOOTER,    0,
-         PARA_IN_OUTLINE,   0,
-         PARA_IN_OUTLINE,   1,
-         PARA_IN_OUTLINE,   2,
-         PARA_IN_OUTLINE,   3,
-         PARA_IN_OUTLINE,   4,
-         PARA_IN_OUTLINE,   5,
-         PARA_IN_OUTLINE,   6,
-         PARA_IN_OUTLINE,   7,
-         PARA_IN_OUTLINE,   8,
-         PARA_IN_OUTLINE,   9,
-         PARA_IN_LIST,      0,
-         PARA_IN_LIST,      1,
-         PARA_IN_LIST,      2,
-         PARA_IN_LIST,      3,
-         PARA_IN_LIST,      4,
-         PARA_IN_LIST,      5,
-         PARA_IN_LIST,      6,
-         PARA_IN_LIST,      7,
-         PARA_IN_LIST,      8,
-         PARA_IN_LIST,      9
-    };
-
+CommandStruct SwCondCollItem::aCmds[] =
+{
+    { PARA_IN_TABLEHEAD,    0 },
+    { PARA_IN_TABLEBODY,    0 },
+    { PARA_IN_FRAME,        0 },
+    { PARA_IN_SECTION,      0 },
+    { PARA_IN_FOOTENOTE,    0 },
+    { PARA_IN_ENDNOTE,      0 },
+    { PARA_IN_HEADER,       0 },
+    { PARA_IN_FOOTER,       0 },
+    { PARA_IN_OUTLINE,      0 },
+    { PARA_IN_OUTLINE,      1 },
+    { PARA_IN_OUTLINE,      2 },
+    { PARA_IN_OUTLINE,      3 },
+    { PARA_IN_OUTLINE,      4 },
+    { PARA_IN_OUTLINE,      5 },
+    { PARA_IN_OUTLINE,      6 },
+    { PARA_IN_OUTLINE,      7 },
+    { PARA_IN_OUTLINE,      8 },
+    { PARA_IN_OUTLINE,      9 },
+    { PARA_IN_LIST,         0 },
+    { PARA_IN_LIST,         1 },
+    { PARA_IN_LIST,         2 },
+    { PARA_IN_LIST,         3 },
+    { PARA_IN_LIST,         4 },
+    { PARA_IN_LIST,         5 },
+    { PARA_IN_LIST,         6 },
+    { PARA_IN_LIST,         7 },
+    { PARA_IN_LIST,         8 },
+    { PARA_IN_LIST,         9 }
+};
 
 
 TYPEINIT1_AUTOFACTORY(SwCondCollItem, SfxPoolItem)
-
-
-/****************************************************************************
-Page: Ctor
-****************************************************************************/
-
-
-//CHINA001 SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
-//CHINA001
-//CHINA001 : SfxTabPage(pParent, SW_RES(TP_CONDCOLL), rSet),
-//CHINA001 aConditionFL( this, ResId( FL_CONDITION )),
-//CHINA001 aConditionCB( this, ResId( CB_CONDITION ) ),
-//CHINA001 aContextFT  ( this, ResId( FT_CONTEXT    ) ),
-//CHINA001 aUsedFT     ( this, ResId( FT_USED       ) ),
-//CHINA001 aTbLinks(      this, ResId( TB_CONDCOLLS ) ),
-//CHINA001 aStyleFT    ( this, ResId( FT_STYLE  ) ),
-//CHINA001 aStyleLB    ( this, ResId( LB_STYLE  ) ),
-//CHINA001 aFilterLB   ( this, ResId( LB_FILTER     ) ),
-//CHINA001 aRemovePB   ( this, ResId( PB_REMOVE     ) ),
-//CHINA001 aAssignPB   ( this, ResId( PB_ASSIGN     ) ),
-//CHINA001 sNoTmpl      (       ResId( STR_NOTEMPL  ) ),
-//CHINA001 aStrArr  (       ResId( STR_REGIONS  ) ),
-//CHINA001 rSh(::GetActiveView()->GetWrtShell()),
-//CHINA001 pFmt(0),
-//CHINA001 pCmds( SwCondCollItem::GetCmds() ),
-//CHINA001 bNewTemplate(FALSE)
-//CHINA001 {
-//CHINA001 FreeResource();
-//CHINA001 SetExchangeSupport();
-//CHINA001
-//CHINA001 // Handler installieren
-//CHINA001 aConditionCB.SetClickHdl(    LINK(this, SwCondCollPage, OnOffHdl));
-//CHINA001 aTbLinks.SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
-//CHINA001 aStyleLB.SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
-//CHINA001 aRemovePB.SetClickHdl(       LINK(this, SwCondCollPage, AssignRemoveHdl ));
-//CHINA001 aAssignPB.SetClickHdl(       LINK(this, SwCondCollPage, AssignRemoveHdl ));
-//CHINA001 aTbLinks.SetSelectHdl(       LINK(this, SwCondCollPage, SelectHdl));
-//CHINA001 aStyleLB.SetSelectHdl(       LINK(this, SwCondCollPage, SelectHdl));
-//CHINA001 aFilterLB.SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
-//CHINA001
-//CHINA001 aTbLinks.SetWindowBits(WB_HSCROLL|WB_CLIPCHILDREN);
-//CHINA001 aTbLinks.SetSelectionMode( SINGLE_SELECTION );
-//CHINA001 aTbLinks.SetTabs( &nTabs[0], MAP_APPFONT );
-//CHINA001 aTbLinks.Resize();   // OS: Hack fuer richtige Selektion
-//CHINA001 aTbLinks.SetSpaceBetweenEntries( 0 );
-//CHINA001 aTbLinks.SetHelpId(HID_COND_COLL_TABLIST);
-//CHINA001
-//CHINA001 SfxStyleFamilies aFamilies(SW_RES(DLG_STYLE_DESIGNER));
-//CHINA001 const SfxStyleFamilyItem* pFamilyItem;
-//CHINA001 USHORT nCount = aFamilies.Count();
-//CHINA001 USHORT i;
-//CHINA001
-//CHINA001 for( i = 0; i < nCount; ++i)
-//CHINA001 {
-//CHINA001 if(SFX_STYLE_FAMILY_PARA == (USHORT)(pFamilyItem = aFamilies.GetObject(i))->GetFamily())
-//CHINA001 break;
-//CHINA001  }
-//CHINA001
-//CHINA001 const SfxStyleFilter& rFilterList = pFamilyItem->GetFilterList();
-//CHINA001 for( i = 0; i < rFilterList.Count(); ++i)
-//CHINA001 {
-//CHINA001 aFilterLB.InsertEntry(rFilterList.GetObject(i)->aName);
-//CHINA001 USHORT* pFilter = new USHORT(rFilterList.GetObject(i)->nFlags);
-//CHINA001 aFilterLB.SetEntryData(i, pFilter);
-//CHINA001  }
-//CHINA001 aFilterLB.SelectEntryPos(1);
-//CHINA001
-//CHINA001 aTbLinks.Show();
-//CHINA001
-//CHINA001 }
-
-/****************************************************************************
-Page: Dtor
-****************************************************************************/
-
-
-//CHINA001 __EXPORT SwCondCollPage::~SwCondCollPage()
-//CHINA001 {
-//CHINA001 for(USHORT i = 0; i < aFilterLB.GetEntryCount(); ++i)
-//CHINA001 delete (USHORT*)aFilterLB.GetEntryData(i);
-//CHINA001
-//CHINA001 }
-
-
-//CHINA001 int __EXPORT SwCondCollPage::DeactivatePage(SfxItemSet * pSet)
-//CHINA001 {
-//CHINA001 if( pSet )
-//CHINA001 FillItemSet(*pSet);
-//CHINA001
-//CHINA001 return LEAVE_PAGE;
-//CHINA001 }
-
-/****************************************************************************
-Page: Factory
-****************************************************************************/
-
-
-//CHINA001 SfxTabPage* __EXPORT SwCondCollPage::Create(Window *pParent, const SfxItemSet &rSet)
-//CHINA001 {
-//CHINA001 return new SwCondCollPage(pParent, rSet);
-//CHINA001 }
-
-/****************************************************************************
-Page: FillItemSet-Overload
-****************************************************************************/
-
-
-//CHINA001 BOOL __EXPORT SwCondCollPage::FillItemSet(SfxItemSet &rSet)
-//CHINA001 {
-//CHINA001 BOOL bModified = TRUE;
-//CHINA001 SwCondCollItem aCondItem;
-//CHINA001 for(USHORT i = 0; i < aStrArr.Count(); i++)
-//CHINA001  {
-//CHINA001 String sEntry = aTbLinks.GetEntryText(i, 1);
-//CHINA001 aCondItem.SetStyle( &sEntry, i);
-//CHINA001  }
-//CHINA001 rSet.Put(aCondItem);
-//CHINA001 return bModified;
-//CHINA001 }
-
-/****************************************************************************
-Page: Reset-Overload
-****************************************************************************/
-
-
-//CHINA001 void __EXPORT SwCondCollPage::Reset(const SfxItemSet &rSet)
-//CHINA001 {
-//CHINA001 if(bNewTemplate)
-//CHINA001 aConditionCB.Enable();
-//CHINA001 if(RES_CONDTXTFMTCOLL == pFmt->Which())
-//CHINA001 aConditionCB.Check();
-//CHINA001 OnOffHdl(&aConditionCB);
-//CHINA001
-//CHINA001 aTbLinks.Clear();
-//CHINA001
-//CHINA001 SfxStyleSheetBasePool* pPool = rSh.GetView().GetDocShell()->GetStyleSheetPool();
-//CHINA001 pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL);
-//CHINA001 aStyleLB.Clear();
-//CHINA001 const SfxStyleSheetBase* pBase = pPool->First();
-//CHINA001 while( pBase )
-//CHINA001  {
-//CHINA001 if(!pFmt || pBase->GetName() != pFmt->GetName())
-//CHINA001 aStyleLB.InsertEntry(pBase->GetName());
-//CHINA001 pBase = pPool->Next();
-//CHINA001  }
-//CHINA001 aStyleLB.SelectEntryPos(0);
-//CHINA001
-//CHINA001 for( USHORT n = 0; n < aStrArr.Count(); n++)
-//CHINA001  {
-//CHINA001 String aEntry( aStrArr.GetString(n) );
-//CHINA001 aEntry += '\t';
-//CHINA001
-//CHINA001 const SwCollCondition* pCond;
-//CHINA001 if( pFmt && RES_CONDTXTFMTCOLL == pFmt->Which() &&
-//CHINA001 0 != ( pCond = ((SwConditionTxtFmtColl*)pFmt)->
-//CHINA001 HasCondition( SwCollCondition( 0, pCmds[n].nCnd, pCmds[n].nSubCond ) ) )
-//CHINA001 && pCond->GetTxtFmtColl() )
-//CHINA001      {
-//CHINA001 aEntry += pCond->GetTxtFmtColl()->GetName();
-//CHINA001      }
-//CHINA001
-//CHINA001 SvLBoxEntry* pE = aTbLinks.InsertEntry( aEntry, n );
-//CHINA001 if(0 == n)
-//CHINA001 aTbLinks.Select(pE);
-//CHINA001  }
-//CHINA001
-//CHINA001 }
-
-/****************************************************************************
-
-****************************************************************************/
-
-
-//CHINA001 USHORT* __EXPORT SwCondCollPage::GetRanges()
-//CHINA001 {
-//CHINA001 return aPageRg;
-//CHINA001 }
-
-
-/****************************************************************************
-
-****************************************************************************/
-
-
-//CHINA001 IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
-//CHINA001 {
-//CHINA001 const BOOL bEnable = pBox->IsChecked();
-//CHINA001 aContextFT.Enable( bEnable );
-//CHINA001 aUsedFT   .Enable( bEnable );
-//CHINA001 aTbLinks  .Enable( bEnable );
-//CHINA001 aStyleFT  .Enable( bEnable );
-//CHINA001 aStyleLB  .Enable( bEnable );
-//CHINA001 aFilterLB .Enable( bEnable );
-//CHINA001 aRemovePB .Enable( bEnable );
-//CHINA001 aAssignPB .Enable( bEnable );
-//CHINA001 if( bEnable )
-//CHINA001 SelectHdl(0);
-//CHINA001 return 0;
-//CHINA001 }
-//CHINA001
-/****************************************************************************
-
-****************************************************************************/
-
-
-//CHINA001 IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
-//CHINA001 {
-//CHINA001 SvLBoxEntry* pE = aTbLinks.FirstSelected();
-//CHINA001 ULONG nPos;
-//CHINA001 if( !pE || LISTBOX_ENTRY_NOTFOUND ==
-//CHINA001 ( nPos = aTbLinks.GetModel()->GetAbsPos( pE ) ) )
-//CHINA001  {
-//CHINA001 ASSERT( pE, "wo kommt der leere Eintrag her?" );
-//CHINA001 return 0;
-//CHINA001  }
-//CHINA001
-//CHINA001 String sSel = aStrArr.GetString( USHORT(nPos) );
-//CHINA001 sSel += '\t';
-//CHINA001
-//CHINA001 const BOOL bAssEnabled = pBtn != &aRemovePB && aAssignPB.IsEnabled();
-//CHINA001 aAssignPB.Enable( !bAssEnabled );
-//CHINA001 aRemovePB.Enable(  bAssEnabled );
-//CHINA001 if ( bAssEnabled )
-//CHINA001 sSel += aStyleLB.GetSelectEntry();
-//CHINA001
-//CHINA001 aTbLinks.SetUpdateMode(FALSE);
-//CHINA001 aTbLinks.GetModel()->Remove(pE);
-//CHINA001 pE = aTbLinks.InsertEntry(sSel, nPos);
-//CHINA001 aTbLinks.Select(pE);
-//CHINA001 aTbLinks.MakeVisible(pE);
-//CHINA001 aTbLinks.SetUpdateMode(TRUE);
-//CHINA001 return 0;
-//CHINA001 }
-//CHINA001
-/****************************************************************************
-
-****************************************************************************/
-
-
-//CHINA001 IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
-//CHINA001 {
-//CHINA001 if(pBox == &aFilterLB)
-//CHINA001  {
-//CHINA001 aStyleLB.Clear();
-//CHINA001 USHORT nSearchFlags = pBox->GetSelectEntryPos();
-//CHINA001 nSearchFlags = *(USHORT*)aFilterLB.GetEntryData(nSearchFlags);
-//CHINA001 SfxStyleSheetBasePool* pPool = rSh.GetView().GetDocShell()->GetStyleSheetPool();
-//CHINA001 pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, nSearchFlags);
-//CHINA001 const SfxStyleSheetBase* pBase = pPool->First();
-//CHINA001 while( pBase )
-//CHINA001      {
-//CHINA001 if(!pFmt || pBase->GetName() != pFmt->GetName())
-//CHINA001 aStyleLB.InsertEntry(pBase->GetName());
-//CHINA001 pBase = pPool->Next();
-//CHINA001      }
-//CHINA001 aStyleLB.SelectEntryPos(0);
-//CHINA001 SelectHdl(&aStyleLB);
-//CHINA001
-//CHINA001  }
-//CHINA001  else
-//CHINA001  {
-//CHINA001 String sTbEntry;
-//CHINA001 SvLBoxEntry* pE = aTbLinks.FirstSelected();
-//CHINA001 if(pE)
-//CHINA001 sTbEntry = aTbLinks.GetEntryText(pE);
-//CHINA001 sTbEntry = sTbEntry.GetToken(1, '\t');
-//CHINA001 String sStyle = aStyleLB.GetSelectEntry();
-//CHINA001
-//CHINA001 aAssignPB.Enable( sStyle != sTbEntry && aConditionCB.IsChecked() );
-//CHINA001
-//CHINA001 if(pBox != &aStyleLB)
-//CHINA001 aRemovePB.Enable( aConditionCB.IsChecked() && sTbEntry.Len() );
-//CHINA001  }
-//CHINA001 return 0;
-//CHINA001 }
-
-/****************************************************************************
-
-****************************************************************************/
-
-
-//CHINA001 void SwCondCollPage::SetCollection( SwFmt* pFormat, BOOL bNew )
-//CHINA001 {
-//CHINA001 pFmt = pFormat;
-//CHINA001 bNewTemplate = bNew;
-//CHINA001 }
 
 /****************************************************************************
     Item fuer den Transport der Bedingungstabelle
 ****************************************************************************/
 
 
-SwCondCollItem::SwCondCollItem(USHORT nWhich ) :
-    SfxPoolItem(nWhich)
+SwCondCollItem::SwCondCollItem(USHORT _nWhich ) :
+    SfxPoolItem(_nWhich)
 {
 
 }
@@ -488,7 +191,7 @@ SwCondCollItem::~SwCondCollItem()
 ****************************************************************************/
 
 
-SfxPoolItem*   SwCondCollItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem*   SwCondCollItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwCondCollItem(*this);
 }
