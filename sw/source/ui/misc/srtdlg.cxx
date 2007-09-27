@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srtdlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:14:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:23:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,10 +63,10 @@
 #include <svx/charmap.hxx>
 #endif
 #ifndef _SVX_DIALOG_HXX
-#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/svxdlg.hxx>
 #endif
 #ifndef _SVX_DIALOGS_HRC
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/dialogs.hrc>
 #endif
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #include <unotools/collatorwrapper.hxx>
@@ -180,51 +180,61 @@ BOOL lcl_GetSelTbl( SwWrtShell &rSh, USHORT& rX, USHORT& rY )
 SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_SORTING)),
-    rSh(rShell),
-    aOkBtn(this,        SW_RES(BT_OK    )),
-    aCancelBtn(this,    SW_RES(BT_CANCEL)),
-    aHelpBtn(this,      SW_RES(BT_HELP  )),
     aColLbl(this,       SW_RES(FT_COL   )),
     aTypLbl(this,       SW_RES(FT_KEYTYP)),
     aDirLbl(this,       SW_RES(FT_DIR   )),
+
+    aDirFL(this,       SW_RES(FL_DIR   )),
+
     aKeyCB1(this,       SW_RES(CB_KEY1  )),
     aColEdt1(this,      SW_RES(ED_KEY1  )),
     aTypDLB1(this,      SW_RES(DLB_KEY1 )),
     aSortUpRB(this,     SW_RES(RB_UP    )),
     aSortDnRB(this,     SW_RES(RB_DN    )),
+
     aKeyCB2(this,       SW_RES(CB_KEY2  )),
     aColEdt2(this,      SW_RES(ED_KEY2  )),
     aTypDLB2(this,      SW_RES(DLB_KEY2 )),
     aSortUp2RB(this,    SW_RES(RB_UP2    )),
     aSortDn2RB(this,    SW_RES(RB_DN2    )),
+
     aKeyCB3(this,       SW_RES(CB_KEY3  )),
     aColEdt3(this,      SW_RES(ED_KEY3  )),
     aTypDLB3(this,      SW_RES(DLB_KEY3 )),
     aSortUp3RB(this,    SW_RES(RB_UP3    )),
     aSortDn3RB(this,    SW_RES(RB_DN3    )),
+
     aSortFL(this,      SW_RES(FL_SORT_2  )),
     aColumnRB(this,     SW_RES(RB_COL   )),
     aRowRB(this,        SW_RES(RB_ROW   )),
-    aDirFL(this,       SW_RES(FL_DIR   )),
+
+    aDelimFL(this,     SW_RES(FL_DELIM )),
     aDelimTabRB(this,   SW_RES(RB_TAB   )),
     aDelimFreeRB(this,  SW_RES(RB_TABCH )),
     aDelimEdt(this,     SW_RES(ED_TABCH )),
-    aDelimFL(this,     SW_RES(FL_DELIM )),
     aDelimPB(this,      SW_RES( PB_DELIM)),
+
     aLangFL(this,       SW_RES( FL_LANG )),
     aLangLB(this,       SW_RES( LB_LANG )),
+
     aSortOptFL(this,    SW_RES( FL_SORT )),
     aCaseCB(this,       SW_RES( CB_CASE )),
-    aNumericTxt(        SW_RES(STR_NUMERIC)),
+
+    aOkBtn(this,        SW_RES(BT_OK    )),
+    aCancelBtn(this,    SW_RES(BT_CANCEL)),
+    aHelpBtn(this,      SW_RES(BT_HELP  )),
+
     aColTxt(            SW_RES(STR_COL)),
     aRowTxt(            SW_RES(STR_ROW)),
+    aNumericTxt(        SW_RES(STR_NUMERIC)),
+    rSh(rShell),
+    pColRes( 0 ),
     nX( 99 ),
-    nY( 99 ),
-    pColRes( 0 )
+    nY( 99 )
 {
     aDelimEdt.SetMaxTextLen( 1 );
     if(rSh.GetSelectionType() &
-            (SwWrtShell::SEL_TBL|SwWrtShell::SEL_TBL_CELLS) )
+            (nsSelectionType::SEL_TBL|nsSelectionType::SEL_TBL_CELLS) )
     {
         aColumnRB.Check(bCol);
         aColLbl.SetText(bCol ? aRowTxt : aColTxt);
@@ -311,14 +321,14 @@ SwSortDlg::~SwSortDlg()
 
 sal_Unicode SwSortDlg::GetDelimChar() const
 {
-    sal_Unicode cDeli = '\t';
+    sal_Unicode cRet = '\t';
     if( !aDelimTabRB.IsChecked() )
     {
         String aTmp( aDelimEdt.GetText() );
         if( aTmp.Len() )
-            cDeli = aTmp.GetChar( 0 );
+            cRet = aTmp.GetChar( 0 );
     }
-    return cDeli;
+    return cRet;
 }
 
 /*--------------------------------------------------------------------
@@ -422,14 +432,13 @@ IMPL_LINK( SwSortDlg, DelimHdl, RadioButton*, pButton )
     return 0;
 }
 
-IMPL_LINK( SwSortDlg, DelimCharHdl, PushButton*, pButton )
+IMPL_LINK( SwSortDlg, DelimCharHdl, PushButton*, EMPTYARG )
 {
-    //CHINA001 SvxCharacterMap* pMap = new SvxCharacterMap( &aDelimPB );
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxCharacterMap* pMap = pFact->CreateSvxCharacterMap( &aDelimPB, RID_SVXDLG_CHARMAP);
-        DBG_ASSERT(pMap, "Dialogdiet fail!");//CHINA001
+        AbstractSvxCharacterMap* pMap = pFact->CreateSvxCharacterMap( &aDelimPB,  RID_SVXDLG_CHARMAP);
+        DBG_ASSERT(pMap, "Dialogdiet fail!");
         pMap->SetChar( GetDelimChar() );
         if( RET_OK == pMap->Execute() )
             aDelimEdt.SetText( pMap->GetChar() );
