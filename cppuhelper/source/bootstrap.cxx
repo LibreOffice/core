@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:18:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:50:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,7 +398,7 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
     Reference<registry::XRegistryKey> xEmptyKey;
     Reference<lang::XSingleServiceFactory> xSimRegFac(
         loadSharedLibComponentFactory(
-            OUSTR("simplereg.uno" SAL_DLLEXTENSION), bootstrapPath,
+            OUSTR("bootstrap.uno" SAL_DLLEXTENSION), bootstrapPath,
             OUSTR("com.sun.star.comp.stoc.SimpleRegistry"),
             smgr_XMultiServiceFactory,
             xEmptyKey),
@@ -406,7 +406,7 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
 
     Reference<lang::XSingleServiceFactory> xNesRegFac(
         loadSharedLibComponentFactory(
-            OUSTR("nestedreg.uno" SAL_DLLEXTENSION), bootstrapPath,
+            OUSTR("bootstrap.uno" SAL_DLLEXTENSION), bootstrapPath,
             OUSTR("com.sun.star.comp.stoc.NestedRegistry"),
             smgr_XMultiServiceFactory,
             xEmptyKey),
