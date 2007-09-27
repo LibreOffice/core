@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofldmid.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:20:47 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:00:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 #ifndef SW_UNOFLDMID_H
 #define SW_UNOFLDMID_H
+
+#include <tools/solar.h>
 
 class String;
 namespace com { namespace sun { namespace star { namespace uno {
