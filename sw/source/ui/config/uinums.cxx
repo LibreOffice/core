@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uinums.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:41:59 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:29:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,11 @@
 #include <frmatr.hxx>
 #endif
 
+#include <unomid.h>
+
+using namespace ::com::sun::star;
+
+
 #define VERSION_30B     ((USHORT)250)
 #define VERSION_31B     ((USHORT)326)
 #define VERSION_40A     ((USHORT)364)
@@ -99,7 +104,7 @@
 
 #define NUMRULE_FILENAME "numrule.cfg"
 #define CHAPTER_FILENAME "chapter.cfg"
-#define C2S(cChar) String::CreateFromAscii(cChar)
+
 /*------------------------------------------------------------------------
  Beschreibung:  Ops. zum Laden / Speichern
 ------------------------------------------------------------------------*/
@@ -118,8 +123,9 @@ SV_IMPL_PTRARR( _SwNumFmtsAttrs, SfxPoolItem* )
 ------------------------------------------------------------------------*/
 
 SwBaseNumRules::SwBaseNumRules( const String& rFileName )
-    : nVersion(0),
+    :
     sFileName( rFileName ),
+    nVersion(0),
     bModified( FALSE )
 {
     Init();
@@ -271,7 +277,7 @@ SwNumRulesWithName::SwNumRulesWithName(const SwNumRule &rCopy,
                                         const String &rName)
     : aName(rName)
 {
-    for( int n = 0; n < MAXLEVEL; ++n )
+    for( USHORT n = 0; n < MAXLEVEL; ++n )
     {
         const SwNumFmt* pFmt = rCopy.GetNumFmt( n );
         if( pFmt )
@@ -425,8 +431,10 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const SwNumFmt& rFmt )
 ------------------------------------------------------------------------*/
 
 SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( const _SwNumFmtGlobal& rFmt )
-    : aFmt( rFmt.aFmt ), nCharPoolId( rFmt.nCharPoolId ),
-    sCharFmtName( rFmt.sCharFmtName )
+    :
+    aFmt( rFmt.aFmt ),
+    sCharFmtName( rFmt.sCharFmtName ),
+    nCharPoolId( rFmt.nCharPoolId )
 {
     for( USHORT n = rFmt.aItems.Count(); n; )
         aItems.Insert( rFmt.aItems[ --n ]->Clone(), aItems.Count() );
@@ -512,7 +520,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
 
         if( VERSION_53A > nVersion )
             aFmt.SetBulletChar( ByteString::ConvertToUnicode(
-                                            aFmt.GetBulletChar(), nCharSet ));
+                                            sal_Char(aFmt.GetBulletChar()), nCharSet ));
     }
 
     if( VERSION_30B != nVersion )
@@ -558,9 +566,9 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
                 pVOrient = (SwFmtVertOrient*)GetDfltAttr( RES_VERT_ORIENT )
                                         ->Create( rStream, nVer );
             }
-            SvxFrameVertOrient eOrient = SVX_VERT_NONE;
+            sal_Int16 eOrient = text::VertOrientation::NONE;
             if(pVOrient)
-                eOrient = (SvxFrameVertOrient)pVOrient->GetVertOrient();
+                eOrient = (sal_Int16)pVOrient->GetVertOrient();
             aFmt.SetGraphicBrush( pBrush, &aSz, pVOrient ? &eOrient : 0 );
         }
     }
