@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:45:00 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,10 +104,10 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                             const SwNodeIndex &rEndIdx );
 
 //Um z.B. fuer Tabelleheadlines das Erzeugen der Flys in _InsertCnt zu unterbinden.
-extern FASTBOOL bDontCreateObjects;
+extern BOOL bDontCreateObjects;
 
 //Fuer FlyCnts, siehe SwFlyAtCntFrm::MakeAll()
-extern FASTBOOL bSetCompletePaintOnInvalidate;
+extern BOOL bSetCompletePaintOnInvalidate;
 
 //Fuer Tabelleneinstellung per Tastatur.
 long MA_FASTCALL CalcRowRstHeight( SwLayoutFrm *pRow );
@@ -148,7 +148,7 @@ SwFrm* GetFrmOfModify( SwModify&, USHORT nFrmType, const Point* = 0,
                         const BOOL bCalcFrm = FALSE );
 
 //Sollen ExtraDaten (Reline-Strich, Zeilennummern) gepaintet werden?
-FASTBOOL IsExtraData( const SwDoc *pDoc );
+BOOL IsExtraData( const SwDoc *pDoc );
 
 // OD 14.03.2003 #i11760# - method declaration <CalcCntnt(..)>
 void CalcCntnt( SwLayoutFrm *pLay,
@@ -167,9 +167,9 @@ protected:
     const SwRect aPrt;
     SwTwips mnFlyAnchorOfst;
     SwTwips mnFlyAnchorOfstNoWrap;
-    FASTBOOL     bHadFollow;
-    FASTBOOL     bInvaKeep;
-    FASTBOOL     bValidSize;
+    BOOL     bHadFollow;
+    BOOL     bInvaKeep;
+    BOOL     bValidSize;
 protected:
     // --> OD 2005-07-29 #i49383#
     bool mbFrmDeleted;
@@ -192,15 +192,15 @@ public:
 
 class SwLayNotify : public SwFrmNotify
 {
-    FASTBOOL bLowersComplete;
+    BOOL bLowersComplete;
 
     SwLayoutFrm *GetLay() { return (SwLayoutFrm*)pFrm; }
 public:
     SwLayNotify( SwLayoutFrm *pLayFrm );
     ~SwLayNotify();
 
-    void SetLowersComplete( FASTBOOL b ) { bLowersComplete = b; }
-    FASTBOOL IsLowersComplete()          { return bLowersComplete; }
+    void SetLowersComplete( BOOL b ) { bLowersComplete = b; }
+    BOOL IsLowersComplete()          { return bLowersComplete; }
 };
 
 class SwFlyNotify : public SwLayNotify
@@ -405,9 +405,9 @@ class SwOrderIter
 {
     const SwPageFrm *pPage;
     const SdrObject *pCurrent;
-    const FASTBOOL bFlysOnly;
+    const BOOL bFlysOnly;
 public:
-    SwOrderIter( const SwPageFrm *pPage, FASTBOOL bFlysOnly = TRUE );
+    SwOrderIter( const SwPageFrm *pPage, BOOL bFlysOnly = TRUE );
 
     void             Current( const SdrObject *pNew ) { pCurrent = pNew; }
     const SdrObject *Current()    const { return pCurrent; }
