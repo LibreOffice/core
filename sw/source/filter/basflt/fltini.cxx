@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:44:47 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:44:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@
 
 using namespace utl;
 using namespace rtl;
-using namespace com::sun::star::uno;
+using namespace ::com::sun::star::uno;
 
 SwRead ReadRtf = 0, ReadAscii = 0, /*ReadSwg = 0, ReadSw3 = 0,*/
         ReadHTML = 0, ReadXML = 0;
@@ -170,17 +170,23 @@ bool IsDocShellRegistered()
 }
 
 inline void _SetFltPtr( USHORT& rPos, SwRead pReader
-                        , const sal_Char* pNm
-/* pNm optimiert der Compiler weg, wird nur in der nicht PRODUCT benoetigt! */
+                        , const sal_Char*
+#if OSL_DEBUG_LEVEL > 1
+                            pNm
+#endif
+    /* pNm optimiert der Compiler weg, wird nur in der nicht PRODUCT benoetigt! */
                         )
 {
+#if OSL_DEBUG_LEVEL > 1
     ASSERT( !strcmp( aReaderWriter[ rPos ].pName, pNm ), "falscher Filter" );
+    (void) pNm;
+#endif
     aReaderWriter[ rPos++ ].pReader = pReader;
 }
 
 void _InitFilter()
 {
-    SwRead pRd, pWW8Rd = new WW8Reader;
+    SwRead pWW8Rd = new WW8Reader;
 
     USHORT nCnt = 0;
     _SetFltPtr( nCnt, (ReadRtf = new RtfReader), FILTER_RTF );
@@ -374,14 +380,14 @@ BOOL StgWriter::IsStgWriter() const { return TRUE; }
 
 
 
-BOOL SwReader::NeedsPasswd( const Reader& rOptions )
+BOOL SwReader::NeedsPasswd( const Reader& /*rOptions*/ )
 {
     BOOL bRes = FALSE;
     return bRes;
 }
 
 
-BOOL SwReader::CheckPasswd( const String& rPasswd, const Reader& rOptions )
+BOOL SwReader::CheckPasswd( const String& /*rPasswd*/, const Reader& /*rOptions*/ )
 {
     return TRUE;
 }
@@ -584,7 +590,7 @@ void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
     BYTE nLvl = 0;
     if ( rNd.GetLevel() >= 0 && rNd.GetLevel() < MAXLEVEL )
     {
-        nLvl = rNd.GetLevel();
+        nLvl = static_cast< BYTE >(rNd.GetLevel());
     }
     // <--
     const SwNumFmt& rFmt = rRule.Get( nLvl );
@@ -721,10 +727,10 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                     const SvxBorderLine* pLn = rBoxItem.GetLine( nLine );
                     if( pLn )
                     {
-                        USHORT nWidth = pLn->GetOutWidth() + pLn->GetInWidth();
-                        nWidth += rBoxItem.GetDistance( nLine );
-                        nMinFrm += nWidth;
-                        nMaxFrm += nWidth;
+                        USHORT nWidthTmp = pLn->GetOutWidth() + pLn->GetInWidth();
+                        nWidthTmp = nWidthTmp + rBoxItem.GetDistance( nLine );
+                        nMinFrm += nWidthTmp;
+                        nMaxFrm += nWidthTmp;
                     }
                     nLine = BOX_LINE_RIGHT;
                 }
