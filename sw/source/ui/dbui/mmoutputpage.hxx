@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:32:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:34:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,9 +128,6 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     PushButton      m_aSendAsPB;
     PushButton      m_aSendDocumentsPB;
 
-    SwMailMergeWizard*  m_pWizard;
-
-
     //some FixedLine labels
     String          m_sSaveStartST;
     String          m_sSaveMergedST;
@@ -150,6 +147,8 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     long            m_nFromToFTPos;
     long            m_nFromToNFPos;
     long            m_nRBOffset;
+
+    SwMailMergeWizard*  m_pWizard;
 
     //some dialog data
     Printer*        m_pTempPrinter;
@@ -261,7 +260,7 @@ public:
     void                AddDocument( SwMailDescriptor& rDesc );
     void                SetDocumentCount( sal_Int32 nAllDocuments );
     void                EnableDesctruction() {m_bDesctructionEnabled = true;}
-    void                Show();
+    void                ShowDialog();
 
     void                DocumentSent( ::com::sun::star::uno::Reference< ::com::sun::star::mail::XMailMessage>,
                                         bool bResult,
