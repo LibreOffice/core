@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:21:57 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:01:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,9 +159,9 @@ namespace myImplHelpers
                 nDist += aRect.Height();
             else
             {
-                const SwFmtFrmSize& rSz = rFmt.GetFrmSize();
-                if (ATT_VAR_SIZE != rSz.GetHeightSizeType())
-                    nDist += rSz.GetHeight();
+                const SwFmtFrmSize& rSize = rFmt.GetFrmSize();
+                if (ATT_VAR_SIZE != rSize.GetHeightSizeType())
+                    nDist += rSize.GetHeight();
                 else
                 {
                     nDist += 274;       // default for 12pt text
@@ -240,8 +240,8 @@ namespace myImplHelpers
         //If this is a built-in word style that has a built-in writer
         //equivalent, then map it to one of our built in styles regardless
         //of its name
-        if (eSti < nArrSize && aArr[eSti] != RES_NONE)
-            pRet = mrDoc.GetTxtCollFromPool(aArr[eSti], false);
+        if (sal::static_int_cast< size_t >(eSti) < nArrSize && aArr[eSti] != RES_NONE)
+            pRet = mrDoc.GetTxtCollFromPool( static_cast< sal_uInt16 >(aArr[eSti]), false);
         return pRet;
     }
 
@@ -302,7 +302,7 @@ namespace myImplHelpers
         }
         SwCharFmt *pRet = 0;
         if (eLookup != RES_POOLCHR_NORMAL_END)
-            pRet = mrDoc.GetCharFmtFromPool(eLookup);
+            pRet = mrDoc.GetCharFmtFromPool( static_cast< sal_uInt16 >(eLookup) );
         return pRet;
     }
 
@@ -370,7 +370,7 @@ namespace myImplHelpers
         String aName(rName);
         C* pColl = 0;
 
-        if (pColl = maHelper.GetStyle(aName))
+        if (0 != (pColl = maHelper.GetStyle(aName)))
         {
             //If the style collides first stick WW- in front of it, unless
             //it already has it and then successively add a larger and
@@ -380,7 +380,7 @@ namespace myImplHelpers
 
             sal_Int32 nI = 1;
             while (
-                    (pColl = maHelper.GetStyle(aName)) &&
+                    0 != (pColl = maHelper.GetStyle(aName)) &&
                     (nI < SAL_MAX_INT32)
                   )
             {
@@ -408,7 +408,7 @@ namespace myImplHelpers
     */
     rtl_TextEncoding getScriptClass(sal_Unicode cChar)
     {
-        using namespace com::sun::star::i18n;
+        using namespace ::com::sun::star::i18n;
 
         static ScriptTypeList aScripts[] =
         {
@@ -524,8 +524,8 @@ namespace sw
             }
             const SvxULSpaceItem &rUL =
                 ItemGet<SvxULSpaceItem>(rPage, RES_UL_SPACE);
-            dyaHdrTop += rUL.GetUpper();
-            dyaHdrBottom += rUL.GetLower();
+            dyaHdrTop = dyaHdrTop + rUL.GetUpper();
+            dyaHdrBottom = dyaHdrBottom + rUL.GetLower();
 
             dyaTop = dyaHdrTop;
             dyaBottom = dyaHdrBottom;
@@ -536,7 +536,7 @@ namespace sw
             if (pHd && pHd->IsActive() && pHd->GetHeaderFmt())
             {
                 mbHasHeader = true;
-                dyaTop += (myImplHelpers::CalcHdDist(*(pHd->GetHeaderFmt())));
+                dyaTop = dyaTop + static_cast< sal_uInt16 >( (myImplHelpers::CalcHdDist(*(pHd->GetHeaderFmt()))) );
             }
             else
                 mbHasHeader = false;
@@ -545,7 +545,7 @@ namespace sw
             if (pFt && pFt->IsActive() && pFt->GetFooterFmt())
             {
                 mbHasFooter = true;
-                dyaBottom += (myImplHelpers::CalcFtDist(*(pFt->GetFooterFmt())));
+                dyaBottom = dyaBottom + static_cast< sal_uInt16 >( (myImplHelpers::CalcFtDist(*(pFt->GetFooterFmt()))) );
             }
             else
                 mbHasFooter = false;
@@ -639,7 +639,7 @@ namespace sw
                 }
             }
 
-            using namespace com::sun::star::i18n;
+            using namespace ::com::sun::star::i18n;
 
             sal_uInt16 nScript = ScriptType::LATIN;
             if (rTxt.Len() && pBreakIt && pBreakIt->xBreak.is())
@@ -677,8 +677,8 @@ namespace sw
             UBiDiDirection eDefaultDir = bParaIsRTL ? UBIDI_RTL : UBIDI_LTR;
             UErrorCode nError = U_ZERO_ERROR;
             UBiDi* pBidi = ubidi_openSized(rTxt.Len(), 0, &nError);
-            ubidi_setPara(pBidi, rTxt.GetBuffer(), rTxt.Len(), eDefaultDir,
-                0, &nError);
+            ubidi_setPara(pBidi, rTxt.GetBuffer(), rTxt.Len(),
+                    static_cast< UBiDiLevel >(eDefaultDir), 0, &nError);
 
             sal_Int32 nCount = ubidi_countRuns(pBidi, &nError);
             aDirChanges.reserve(nCount);
@@ -735,12 +735,12 @@ namespace sw
                 xub_StrLen nPos = 0;
                 while (nPos < nLen)
                 {
-                    sal_Int32 nEnd = pBreakIt->xBreak->endOfScript(rTxt, nPos,
+                    sal_Int32 nEnd2 = pBreakIt->xBreak->endOfScript(rTxt, nPos,
                         nScript);
-                    if (nEnd < 0)
+                    if (nEnd2 < 0)
                         break;
-//                    nPos = writer_cast<xub_StrLen>(nEnd);
-                    nPos = nEnd;
+//                    nPos = writer_cast<xub_StrLen>(nEnd2);
+                    nPos = static_cast< xub_StrLen >(nEnd2);
                     aScripts.push_back(ScriptEntry(nPos, nScript));
                     nScript = pBreakIt->xBreak->getScriptType(rTxt, nPos);
                 }
@@ -768,7 +768,7 @@ namespace sw
                 {
                     if (aBiDiIter->first < nMinPos)
 //                        nMinPos = writer_cast<xub_StrLen>(aBiDiIter->first);
-                        nMinPos = aBiDiIter->first;
+                        nMinPos = static_cast< xub_StrLen >(aBiDiIter->first);
                     bCharIsRTL = aBiDiIter->second;
                 }
 
