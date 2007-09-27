@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtui.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:53:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:03:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #define MN_TEXT                     (RC_FMTUI_BEGIN + 20)
 #define MN_GRAFIC                   (RC_FMTUI_BEGIN + 21)
 #define MN_TABLE                    (RC_FMTUI_BEGIN + 22)
-#define MN_FRAME                    (RC_FMTUI_BEGIN + 23)
+
 #define MN_REGION                   (RC_FMTUI_BEGIN + 24)
 #define MN_REGION_SUB                (RC_FMTUI_BEGIN + 25)
 
