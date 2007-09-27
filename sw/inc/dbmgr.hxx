@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 07:37:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:58:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,6 @@
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
-// @@@ #include "swtypes.hxx"   // fuer aEmptyStr
 
 #ifndef _SWDBDATA_HXX
 #include <swdbdata.hxx>
@@ -61,8 +60,8 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
-#include <com/sun/star/uno/Sequence.h>
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -110,7 +109,6 @@ class SfxProgress;
 class ListBox;
 class Button;
 class SvNumberFormatter;
-//CHINA001 class SwMailMergeDlg;
 class SwDbtoolsClient;
 class SwXMailMerge;
 class SwMailMergeConfigItem;
@@ -211,12 +209,13 @@ struct SwMergeDescriptor
     SwMergeDescriptor( USHORT nType, SwWrtShell& rShell, ::svx::ODataAccessDescriptor& rDesc ) :
         nMergeType(nType),
         rSh(rShell),
-        pMailMergeConfigItem(0),
         rDescriptor(rDesc),
+        bSendAsHTML( sal_True ),
+        bSendAsAttachment( sal_False ),
         bPrintAsync( sal_True ),
         bCreateSingleFile( sal_False ),
-        bSendAsHTML( sal_True ),
-        bSendAsAttachment( sal_False ){}
+        pMailMergeConfigItem(0)
+        {}
 
 };
 
