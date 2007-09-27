@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:31:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:00:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,8 @@
 #include <ndtxt.hxx>
 #endif
 // <--
+
+using namespace ::com::sun::star;
 
 // ============================================================================
 // helper class for correct notification due to the positioning of
@@ -788,8 +790,8 @@ void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrm* _pNewAnchorFrm,
         nVertRelPos = aObjRect.Top() - aAnchorPos.Y();
     }
 
-    GetFrmFmt().SetAttr( SwFmtHoriOrient( nHoriRelPos, HORI_NONE, FRAME ) );
-    GetFrmFmt().SetAttr( SwFmtVertOrient( nVertRelPos, VERT_NONE, FRAME ) );
+    GetFrmFmt().SetAttr( SwFmtHoriOrient( nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
+    GetFrmFmt().SetAttr( SwFmtVertOrient( nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
 }
 
 // --> OD 2004-09-29 #i34748# - change return type
@@ -848,7 +850,7 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
         // --> OD 2005-03-10 #i44334#, #i44681#
         // perform conversion only if position is in horizontal-left-to-right-layout.
         if ( GetFrmFmt().GetPositionLayoutDir() ==
-                com::sun::star::text::PositionLayoutDir::PositionInHoriL2R )
+                text::PositionLayoutDir::PositionInHoriL2R )
         {
             SwFrmFmt::tLayoutDir eLayoutDir = GetFrmFmt().GetLayoutDir();
             switch ( eLayoutDir )
@@ -886,8 +888,8 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
 
         SwFmtVertOrient aVert( GetFrmFmt().GetVertOrient() );
         // --> OD 2007-01-03 #i73079# - vertical position already correct
-//        if ( aVert.GetRelationOrient() == REL_CHAR ||
-//             aVert.GetRelationOrient() == REL_VERT_LINE )
+//        if ( aVert.GetRelationOrient() == text::RelOrientation::CHAR ||
+//             aVert.GetRelationOrient() == text::RelOrientation::TEXT_LINE )
 //        {
 //            nVertPos = -nVertPos;
 //        }
@@ -898,7 +900,7 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
 
         // --> OD 2004-10-25 #i36010# - set layout direction of the position
         GetFrmFmt().SetPositionLayoutDir(
-            com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
+            text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
         // <--
         // --> OD 2005-05-10 #i45952# - indicate that position
         // attributes are set now.
