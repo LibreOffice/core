@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:18:16 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:51:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
+#include <svx/dialogs.hrc>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -55,15 +55,6 @@
 #ifndef _SVX_HTMLMODE_HXX
 #include <svx/htmlmode.hxx>
 #endif
-//CHINA001 #ifndef _SVX_BORDER_HXX
-//CHINA001 #include <svx/border.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _SVX_BACKGRND_HXX //autogen
-//CHINA001 #include <svx/backgrnd.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _SVX_GRFPAGE_HXX //autogen
-//CHINA001 #include <svx/grfpage.hxx>
-//CHINA001 #endif
 
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
@@ -99,34 +90,33 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
-#include <svx/svxids.hrc> //CHINA001
-#include <svx/flagsdef.hxx> //CHINA001
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
+#include <svx/flagsdef.hxx>
+#include <svx/svxdlg.hxx>
 
 /*--------------------------------------------------------------------
     Beschreibung:   Der Traeger des Dialoges
  --------------------------------------------------------------------*/
 
-SwFrmDlg::SwFrmDlg( SfxViewFrame*       pFrame,
+SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
                     Window*             pParent,
                     const SfxItemSet&   rCoreSet,
                     BOOL                bNewFrm,
                     USHORT              nResType,
-                    BOOL                bFmt,
+                    BOOL                bFormat,
                     UINT16              nDefPage,
                     const String*       pStr) :
 
-    SfxTabDialog(pFrame, pParent, SW_RES(nResType), &rCoreSet, pStr != 0),
-    bNew(bNewFrm),
-    bFormat(bFmt),
-    rSet(rCoreSet),
-    nDlgType(nResType),
-    pWrtShell(((SwView*)pFrame->GetViewShell())->GetWrtShellPtr())
+    SfxTabDialog(pViewFrame, pParent, SW_RES(nResType), &rCoreSet, pStr != 0),
+    m_bFormat(bFormat),
+    m_bNew(bNewFrm),
+    m_rSet(rCoreSet),
+    m_nDlgType(nResType),
+    m_pWrtShell(((SwView*)pViewFrame->GetViewShell())->GetWrtShellPtr())
 {
     FreeResource();
-    USHORT nHtmlMode = ::GetHtmlMode(pWrtShell->GetView().GetDocShell());
-    bHTMLMode = nHtmlMode & HTMLMODE_ON;
+    USHORT nHtmlMode = ::GetHtmlMode(m_pWrtShell->GetView().GetDocShell());
+    m_bHTMLMode = static_cast< BOOL >(nHtmlMode & HTMLMODE_ON);
 
     // BspFont fuer beide Bsp-TabPages
     //
@@ -141,24 +131,24 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pFrame,
     AddTabPage(TP_FRM_ADD,  SwFrmAddPage::Create, 0);
     AddTabPage(TP_FRM_WRAP, SwWrapTabPage::Create, 0);
     AddTabPage(TP_FRM_URL,  SwFrmURLPage::Create, 0);
-    if(nDlgType == DLG_FRM_GRF)
+    if(m_nDlgType == DLG_FRM_GRF)
     {
         AddTabPage( TP_GRF_EXT, SwGrfExtPage::Create, 0 );
-        AddTabPage( RID_SVXPAGE_GRFCROP ); //CHINA001 AddTabPage( RID_SVXPAGE_GRFCROP, SvxGrfCropPage::Create, 0 );
+        AddTabPage( RID_SVXPAGE_GRFCROP );
     }
-    if (nDlgType == DLG_FRM_STD)
+    if (m_nDlgType == DLG_FRM_STD)
     {
         AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
     }
-    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create(); //CHINA001
-    DBG_ASSERT(pFact, "Dialogdiet fail!"); //CHINA001
-    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 ); //CHINA001 AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,    0);
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
     AddTabPage( TP_MACRO_ASSIGN, SfxMacroTabPage::Create, 0);
-    AddTabPage( TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), 0 ); //CHINA001 AddTabPage( TP_BORDER,    SvxBorderTabPage::Create,      0);
+    AddTabPage( TP_BORDER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), 0 );
 
-    if(bHTMLMode)
+    if(m_bHTMLMode)
     {
-        switch( nDlgType )
+        switch( m_nDlgType )
         {
         case DLG_FRM_STD:
                 if(0  == (nHtmlMode & HTMLMODE_SOME_ABS_POS))
@@ -174,11 +164,11 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pFrame,
             break;
         }
         if( 0  == (nHtmlMode & HTMLMODE_SOME_ABS_POS) ||
-            nDlgType != DLG_FRM_STD )
+            m_nDlgType != DLG_FRM_STD )
             RemoveTabPage(TP_BACKGROUND);
     }
 
-    if (bNew)
+    if (m_bNew)
         SetCurPageId(TP_FRM_STD);
 
     if (nDefPage)
@@ -198,51 +188,51 @@ SwFrmDlg::~SwFrmDlg()
 
 void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
-    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));//CHINA001
+    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch ( nId )
     {
     case TP_FRM_STD:
-        ((SwFrmPage&)rPage).SetNewFrame(bNew);
-        ((SwFrmPage&)rPage).SetFormatUsed(bFormat);
-        ((SwFrmPage&)rPage).SetFrmType(nDlgType);
+        ((SwFrmPage&)rPage).SetNewFrame(m_bNew);
+        ((SwFrmPage&)rPage).SetFormatUsed(m_bFormat);
+        ((SwFrmPage&)rPage).SetFrmType(m_nDlgType);
         break;
 
     case TP_FRM_ADD:
-        ((SwFrmAddPage&)rPage).SetFormatUsed(bFormat);
-        ((SwFrmAddPage&)rPage).SetFrmType(nDlgType);
-        ((SwFrmAddPage&)rPage).SetNewFrame(bNew);
-        ((SwFrmAddPage&)rPage).SetShell(pWrtShell);
+        ((SwFrmAddPage&)rPage).SetFormatUsed(m_bFormat);
+        ((SwFrmAddPage&)rPage).SetFrmType(m_nDlgType);
+        ((SwFrmAddPage&)rPage).SetNewFrame(m_bNew);
+        ((SwFrmAddPage&)rPage).SetShell(m_pWrtShell);
         break;
 
     case TP_FRM_WRAP:
-        ((SwWrapTabPage&)rPage).SetNewFrame(bNew);
-        ((SwWrapTabPage&)rPage).SetFormatUsed(bFormat, FALSE);
-        ((SwWrapTabPage&)rPage).SetShell(pWrtShell);
+        ((SwWrapTabPage&)rPage).SetNewFrame(m_bNew);
+        ((SwWrapTabPage&)rPage).SetFormatUsed(m_bFormat, FALSE);
+        ((SwWrapTabPage&)rPage).SetShell(m_pWrtShell);
         break;
 
     case TP_COLUMN:
         {
             ((SwColumnPage&)rPage).SetFrmMode(TRUE);
-            ((SwColumnPage&)rPage).SetFormatUsed(bFormat);
+            ((SwColumnPage&)rPage).SetFormatUsed(m_bFormat);
 
             const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)
-                                                rSet.Get( RES_FRM_SIZE );
+                                                m_rSet.Get( RES_FRM_SIZE );
             ((SwColumnPage&)rPage).SetPageWidth( rSize.GetWidth() );
         }
         break;
 
     case TP_MACRO_ASSIGN:
         SwMacroAssignDlg::AddEvents( (SfxMacroTabPage&)rPage,
-            DLG_FRM_GRF == nDlgType ? MACASSGN_GRAPHIC
-                            : DLG_FRM_OLE == nDlgType ? MACASSGN_OLE
+            DLG_FRM_GRF == m_nDlgType ? MACASSGN_GRAPHIC
+                            : DLG_FRM_OLE == m_nDlgType ? MACASSGN_OLE
                                                       : MACASSGN_FRMURL );
         break;
 
     case TP_BACKGROUND:
-        if( DLG_FRM_STD == nDlgType )
+        if( DLG_FRM_STD == m_nDlgType )
         {
             sal_Int32 nFlagType = SVX_SHOW_SELECTOR;
-            if(!bHTMLMode)
+            if(!m_bHTMLMode)
                 nFlagType |= SVX_ENABLE_TRANSPARENCY;
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
             rPage.PageCreated(aSet);
@@ -250,7 +240,6 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         break;
 
     case TP_BORDER:
-        //CHINA001 ((SvxBorderTabPage&) rPage).SetSWMode(SW_BORDER_MODE_FRAME);
         {
             aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_FRAME));
             rPage.PageCreated(aSet);
