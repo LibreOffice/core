@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cption.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:08:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:56:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,8 +91,10 @@
 class SwFldMgr;
 class SwView;
 
+#include <wrtsh.hxx>
 #include "optload.hxx"
 #include "swlbox.hxx"
+
 
 class SwCaptionDialog : public SvxStandardDialog
 {
@@ -129,7 +131,7 @@ class SwCaptionDialog : public SvxStandardDialog
 
     SwView       &rView; //Suchen per aktive ::com::sun::star::sdbcx::View vermeiden.
     SwFldMgr     *pMgr;      //Ptr um das include zu sparen
-    sal_uInt16   eType;
+    SelectionType eType;
 
     String       sCharacterStyle;
     String       sObjectName;
