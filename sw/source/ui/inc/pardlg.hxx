@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pardlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:56:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:07:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,26 +45,5 @@ class SfxItemSet;
 //DialogModes:
 #define DLG_STD         0
 #define DLG_ENVELOP     2
-
-//CHINA001 class SwParaDlg: public SfxTabDialog
-//CHINA001 {
-//CHINA001 SwView& rView;
-//CHINA001 USHORT nHtmlMode;
-//CHINA001 BYTE nDlgMode;
-//CHINA001 BOOL bDrawParaDlg;
-//CHINA001
-//CHINA001 void PageCreated(USHORT nID, SfxTabPage& rPage);
-//CHINA001
-//CHINA001 public:
-//CHINA001 SwParaDlg(  Window *pParent,
-//CHINA001 SwView& rVw,
-//CHINA001 const SfxItemSet&,
-//CHINA001 BYTE nDialogMode,
-//CHINA001 const String *pCollName = 0,
-//CHINA001 BOOL bDraw = FALSE,
-//CHINA001 UINT16 nDefPage = 0);
-//CHINA001 ~SwParaDlg();
-//CHINA001 };
-
 
 #endif
