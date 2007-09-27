@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcview.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:11:18 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:10:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ protected:
 public:
 
     SFX_DECL_VIEWFACTORY(SwSrcView);
-    SFX_DECL_INTERFACE(SW_SRC_VIEWSHELL);
+    SFX_DECL_INTERFACE(SW_SRC_VIEWSHELL)
     TYPEINFO();
 
 
