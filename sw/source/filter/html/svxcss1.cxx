@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxcss1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:45:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:51:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -465,20 +465,27 @@ SvxCSS1PropertyInfo::SvxCSS1PropertyInfo()
 
 SvxCSS1PropertyInfo::SvxCSS1PropertyInfo( const SvxCSS1PropertyInfo& rProp ) :
     aId( rProp.aId ),
-    bTopMargin( rProp.bTopMargin ), bBottomMargin( rProp.bBottomMargin ),
-    bLeftMargin( rProp.bLeftMargin ), bRightMargin( rProp.bRightMargin ),
+    bTopMargin( rProp.bTopMargin ),
+    bBottomMargin( rProp.bBottomMargin ),
+    bLeftMargin( rProp.bLeftMargin ),
+    bRightMargin( rProp.bRightMargin ),
     bTextIndent( rProp.bTextIndent ),
-    nLeftMargin( rProp.nLeftMargin ), nRightMargin( rProp.nRightMargin ),
     eFloat( rProp.eFloat ),
     ePosition( rProp.ePosition ),
     nTopBorderDistance( rProp.nTopBorderDistance ),
     nBottomBorderDistance( rProp.nBottomBorderDistance ),
     nLeftBorderDistance( rProp.nLeftBorderDistance ),
     nRightBorderDistance( rProp.nRightBorderDistance ),
-    nLeft( rProp.nLeft ), nTop( rProp.nTop ),
-    nWidth( rProp.nWidth ), nHeight( rProp.nHeight ),
-    eLeftType( rProp.eLeftType ), eTopType( rProp.eTopType ),
-    eWidthType( rProp.eWidthType ), eHeightType( rProp.eHeightType ),
+    nLeft( rProp.nLeft ),
+    nTop( rProp.nTop ),
+    nWidth( rProp.nWidth ),
+    nHeight( rProp.nHeight ),
+    nLeftMargin( rProp.nLeftMargin ),
+    nRightMargin( rProp.nRightMargin ),
+    eLeftType( rProp.eLeftType ),
+    eTopType( rProp.eTopType ),
+    eWidthType( rProp.eWidthType ),
+    eHeightType( rProp.eHeightType ),
 // Feature: PrintExt
     eSizeType( rProp.eSizeType ),
     ePageBreakBefore( rProp.ePageBreakBefore ),
@@ -704,7 +711,7 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
 
     for( i=0; i<4; i++ )
     {
-        USHORT nLine, nDist;
+        USHORT nLine = BOX_LINE_TOP, nDist = 0;
         switch( i )
         {
         case 0: nLine = BOX_LINE_TOP;
@@ -781,9 +788,9 @@ SV_IMPL_OP_PTRARR_SORT( SvxCSS1Map, SvxCSS1MapEntryPtr )
 
 /*  */
 
-BOOL SvxCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
-                                 SfxItemSet& rItemSet,
-                                 SvxCSS1PropertyInfo& rPropInfo )
+BOOL SvxCSS1Parser::StyleParsed( const CSS1Selector * /*pSelector*/,
+                                 SfxItemSet& /*rItemSet*/,
+                                 SvxCSS1PropertyInfo& /*rPropInfo*/ )
 {
     // wie man sieht passiert hier gar nichts
     return TRUE;
@@ -836,11 +843,13 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const String& rBaseURL, USHORT
                               USHORT *pWhichIds, USHORT nWhichIds ) :
     CSS1Parser(),
     sBaseURL( rBaseURL ),
-    pSheetItemSet(0), pItemSet(0),
+    pSheetItemSet(0),
+    pItemSet(0),
+    pSearchEntry( 0 ),
     nMinFixLineSpace( nMinFixLineSp ),
-    pSearchEntry( 0 ), bIgnoreFontFamily( FALSE ),
     eDfltEnc( RTL_TEXTENCODING_DONTKNOW ),
-    nScriptFlags( CSS1_SCRIPT_ALL )
+    nScriptFlags( CSS1_SCRIPT_ALL ),
+    bIgnoreFontFamily( FALSE )
 {
     // Item-Ids auch initialisieren
     aItemIds.nFont = rPool.GetTrueWhich( SID_ATTR_CHAR_FONT, FALSE );
@@ -1126,7 +1135,7 @@ void SvxCSS1Parser::SetDfltEncoding( rtl_TextEncoding eEnc )
 
 static void ParseCSS1_font_size( const CSS1Expression *pExpr,
                                  SfxItemSet &rItemSet,
-                                 SvxCSS1PropertyInfo& rPropInfo,
+                                 SvxCSS1PropertyInfo& /*rPropInfo*/,
                                  const SvxCSS1Parser& rParser )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
@@ -1176,6 +1185,9 @@ static void ParseCSS1_font_size( const CSS1Expression *pExpr,
 #endif
         }
         break;
+
+    default:
+        ;
     }
 
     if( nHeight || nPropHeight!=100 )
@@ -1202,7 +1214,7 @@ static void ParseCSS1_font_size( const CSS1Expression *pExpr,
 
 static void ParseCSS1_font_family( const CSS1Expression *pExpr,
                                    SfxItemSet &rItemSet,
-                                   SvxCSS1PropertyInfo& rPropInfo,
+                                   SvxCSS1PropertyInfo& /*rPropInfo*/,
                                    const SvxCSS1Parser& rParser )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
@@ -1283,7 +1295,7 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
 
 static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
                                    SfxItemSet &rItemSet,
-                                   SvxCSS1PropertyInfo& rPropInfo,
+                                   SvxCSS1PropertyInfo& /*rPropInfo*/,
                                    const SvxCSS1Parser& rParser )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
@@ -1332,6 +1344,9 @@ static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
             }
         }
         break;
+
+    default:
+        ;
     }
 }
 
@@ -1339,15 +1354,15 @@ static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
 
 static void ParseCSS1_font_style( const CSS1Expression *pExpr,
                                   SfxItemSet &rItemSet,
-                                  SvxCSS1PropertyInfo& rPropInfo,
+                                  SvxCSS1PropertyInfo& /*rPropInfo*/,
                                   const SvxCSS1Parser& rParser )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
     BOOL bPosture = FALSE;
     BOOL bCaseMap = FALSE;
-    FontItalic eItalic;
-    SvxCaseMap eCaseMap;
+    FontItalic eItalic = ITALIC_NONE;
+    SvxCaseMap eCaseMap = SVX_CASEMAP_NOT_MAPPED;
 
     // normal | italic || small-caps | oblique || small-caps | small-caps
     // (wobei nor noch normal | italic und oblique zulaessig sind
@@ -1410,8 +1425,8 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
 
 static void ParseCSS1_font_variant( const CSS1Expression *pExpr,
                                     SfxItemSet &rItemSet,
-                                    SvxCSS1PropertyInfo& rPropInfo,
-                                    const SvxCSS1Parser& rParser )
+                                    SvxCSS1PropertyInfo& /*rPropInfo*/,
+                                    const SvxCSS1Parser& /*rParser*/ )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
@@ -1429,6 +1444,8 @@ static void ParseCSS1_font_variant( const CSS1Expression *pExpr,
                                                 aItemIds.nCaseMap ) );
             }
         }
+    default:
+        ;
     }
 }
 
@@ -1436,8 +1453,8 @@ static void ParseCSS1_font_variant( const CSS1Expression *pExpr,
 
 static void ParseCSS1_color( const CSS1Expression *pExpr,
                              SfxItemSet &rItemSet,
-                             SvxCSS1PropertyInfo& rPropInfo,
-                             const SvxCSS1Parser& rParser )
+                             SvxCSS1PropertyInfo& /*rPropInfo*/,
+                             const SvxCSS1Parser& /*rParser*/ )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
@@ -1453,14 +1470,15 @@ static void ParseCSS1_color( const CSS1Expression *pExpr,
                 rItemSet.Put( SvxColorItem( aColor, aItemIds.nColor ) );
         }
         break;
-
+    default:
+        ;
     }
 }
 
 static void ParseCSS1_direction( const CSS1Expression *pExpr,
                              SfxItemSet &rItemSet,
-                             SvxCSS1PropertyInfo& rPropInfo,
-                             const SvxCSS1Parser& rParser )
+                             SvxCSS1PropertyInfo& /*rPropInfo*/,
+                             const SvxCSS1Parser& /*rParser*/ )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
@@ -1477,6 +1495,8 @@ static void ParseCSS1_direction( const CSS1Expression *pExpr,
                        aItemIds.nDirection ) );
         }
         break;
+    default:
+        ;
     }
 }
 
@@ -1506,6 +1526,9 @@ static void MergeHori( SvxGraphicPosition& ePos, SvxGraphicPosition eHori )
     case GPOS_RB:
         ePos = GPOS_LT==eHori ? GPOS_LB : (GPOS_MT==eHori ? GPOS_MB : GPOS_RB);
         break;
+
+    default:
+        ;
     }
 }
 
@@ -1533,12 +1556,15 @@ static void MergeVert( SvxGraphicPosition& ePos, SvxGraphicPosition eVert )
     case GPOS_RB:
         ePos = GPOS_LT==eVert ? GPOS_RT : (GPOS_LM==eVert ? GPOS_RM : GPOS_RB);
         break;
+
+    default:
+        ;
     }
 }
 
 static void ParseCSS1_background( const CSS1Expression *pExpr,
                                   SfxItemSet &rItemSet,
-                                  SvxCSS1PropertyInfo& rPropInfo,
+                                  SvxCSS1PropertyInfo& /*rPropInfo*/,
                                   const SvxCSS1Parser& rParser )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
@@ -1638,6 +1664,9 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
                 // <scroll> kennen wir nicht
             }
             break;
+
+        default:
+            ;
         }
 
         pExpr = pExpr->GetNext();
@@ -1675,8 +1704,8 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
 
 static void ParseCSS1_background_color( const CSS1Expression *pExpr,
                                   SfxItemSet &rItemSet,
-                                  SvxCSS1PropertyInfo& rPropInfo,
-                                  const SvxCSS1Parser& rParser )
+                                  SvxCSS1PropertyInfo& /*rPropInfo*/,
+                                  const SvxCSS1Parser& /*rParser*/ )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
@@ -1702,6 +1731,8 @@ static void ParseCSS1_background_color( const CSS1Expression *pExpr,
             bColor = pExpr->GetColor( aColor );
         }
         break;
+    default:
+        ;
     }
 
     if( bTransparent || bColor )
@@ -1721,7 +1752,7 @@ static void ParseCSS1_background_color( const CSS1Expression *pExpr,
 
 static void ParseCSS1_line_height( const CSS1Expression *pExpr,
                                    SfxItemSet &rItemSet,
-                                   SvxCSS1PropertyInfo& rPropInfo,
+                                   SvxCSS1PropertyInfo& /*rPropInfo*/,
                                    const SvxCSS1Parser& rParser )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
@@ -1754,6 +1785,8 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
             nPropHeight = nPHeight <= 200 ? (BYTE)nPHeight : 200;
         }
         break;
+    default:
+        ;
     }
 
     if( nHeight )
@@ -1896,8 +1929,8 @@ static void ParseCSS1_font( const CSS1Expression *pExpr,
 
 static void ParseCSS1_letter_spacing( const CSS1Expression *pExpr,
                                       SfxItemSet &rItemSet,
-                                      SvxCSS1PropertyInfo& rPropInfo,
-                                      const SvxCSS1Parser& rParser )
+                                      SvxCSS1PropertyInfo& /*rPropInfo*/,
+                                      const SvxCSS1Parser& /*rParser*/ )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
@@ -1932,6 +1965,8 @@ static void ParseCSS1_letter_spacing( const CSS1Expression *pExpr,
             rItemSet.Put( SvxKerningItem( (short)0, aItemIds.nKerning ) );
         }
         break;
+    default:
+        ;
     }
 }
 
@@ -1939,17 +1974,17 @@ static void ParseCSS1_letter_spacing( const CSS1Expression *pExpr,
 
 static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
                                        SfxItemSet &rItemSet,
-                                       SvxCSS1PropertyInfo& rPropInfo,
-                                       const SvxCSS1Parser& rParser )
+                                       SvxCSS1PropertyInfo& /*rPropInfo*/,
+                                       const SvxCSS1Parser& /*rParser*/ )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
     BOOL bUnderline = FALSE;
     BOOL bCrossedOut = FALSE;
     BOOL bBlink = FALSE;
-    BOOL bBlinkOn;
-    FontUnderline eUnderline;
-    FontStrikeout eCrossedOut;
+    BOOL bBlinkOn = FALSE;
+    FontUnderline eUnderline  = UNDERLINE_NONE;
+    FontStrikeout eCrossedOut = STRIKEOUT_NONE;
 
     // der Wert kann zwei Werte enthalten! Und MS-IE auch Strings
     while( pExpr && (pExpr->GetType() == CSS1_IDENT ||
@@ -2031,8 +2066,8 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
 
 static void ParseCSS1_text_align( const CSS1Expression *pExpr,
                                   SfxItemSet &rItemSet,
-                                  SvxCSS1PropertyInfo& rPropInfo,
-                                  const SvxCSS1Parser& rParser )
+                                  SvxCSS1PropertyInfo& /*rPropInfo*/,
+                                  const SvxCSS1Parser& /*rParser*/ )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
@@ -2054,7 +2089,7 @@ static void ParseCSS1_text_align( const CSS1Expression *pExpr,
 static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
                                    SfxItemSet &rItemSet,
                                    SvxCSS1PropertyInfo& rPropInfo,
-                                   const SvxCSS1Parser& rParser )
+                                   const SvxCSS1Parser& /*rParser*/ )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
@@ -2078,6 +2113,8 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
     case CSS1_PERCENTAGE:
         // koennen wir nicht
         break;
+    default:
+        ;
     }
 
     if( bSet )
@@ -2105,7 +2142,7 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
 static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
                                    SfxItemSet &rItemSet,
                                    SvxCSS1PropertyInfo& rPropInfo,
-                                   const SvxCSS1Parser& rParser )
+                                   const SvxCSS1Parser& /*rParser*/ )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
@@ -2130,6 +2167,8 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
     case CSS1_PERCENTAGE:
         // koennen wir nicht
         break;
+    default:
+        ;
     }
 
     if( bSet )
@@ -2160,7 +2199,7 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
 static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
                                     SfxItemSet &rItemSet,
                                     SvxCSS1PropertyInfo& rPropInfo,
-                                    const SvxCSS1Parser& rParser )
+                                    const SvxCSS1Parser& /*rParser*/ )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
@@ -2185,6 +2224,8 @@ static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
     case CSS1_PERCENTAGE:
         // koennen wir nicht
         break;
+    default:
+        ;
     }
 
     if( bSet )
@@ -2215,7 +2256,7 @@ static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
 static void ParseCSS1_margin_top( const CSS1Expression *pExpr,
                                   SfxItemSet &rItemSet,
                                   SvxCSS1PropertyInfo& rPropInfo,
-                                  const SvxCSS1Parser& rParser )
+                                  const SvxCSS1Parser& /*rParser*/ )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
@@ -2246,6 +2287,8 @@ static void ParseCSS1_margin_top( const CSS1Expression *pExpr,
     case CSS1_PERCENTAGE:
         // koennen wir nicht
         break;
+    default:
+        ;
     }
 
     if( bSet )
@@ -2273,7 +2316,7 @@ static void ParseCSS1_margin_top( const CSS1Expression *pExpr,
 static void ParseCSS1_margin_bottom( const CSS1Expression *pExpr,
                                      SfxItemSet &rItemSet,
                                      SvxCSS1PropertyInfo& rPropInfo,
-                                     const SvxCSS1Parser& rParser )
+                                     const SvxCSS1Parser& /*rParser*/ )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
@@ -2304,6 +2347,8 @@ static void ParseCSS1_margin_bottom( const CSS1Expression *pExpr,
     case CSS1_PERCENTAGE:
         // koennen wir nicht
         break;
+    default:
+        ;
     }
 
     if( bSet )
@@ -2331,7 +2376,7 @@ static void ParseCSS1_margin_bottom( const CSS1Expression *pExpr,
 static void ParseCSS1_margin( const CSS1Expression *pExpr,
                               SfxItemSet &rItemSet,
                               SvxCSS1PropertyInfo& rPropInfo,
-                              const SvxCSS1Parser& rParser )
+                              const SvxCSS1Parser& /*rParser*/ )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
@@ -2341,7 +2386,7 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
     for( USHORT i=0; pExpr && i<4 && !pExpr->GetOp(); i++ )
     {
         BOOL bSetThis = FALSE;
-        long nMargin;
+        long nMargin = 0;
 
         switch( pExpr->GetType() )
         {
@@ -2362,6 +2407,8 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
         case CSS1_PERCENTAGE:
             // koennen wir nicht
             break;
+        default:
+            ;
         }
 
         if( bSetThis )
@@ -2469,9 +2516,9 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
 /*  */
 
 static BOOL ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
-                                   SfxItemSet &rItemSet,
+                                   SfxItemSet & /*rItemSet*/,
                                    SvxCSS1PropertyInfo& rPropInfo,
-                                   const SvxCSS1Parser& rParser,
+                                   const SvxCSS1Parser& /*rParser*/,
                                    USHORT nWhichLine )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
@@ -2508,6 +2555,8 @@ static BOOL ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
     case CSS1_PERCENTAGE:
         // koennen wir nicht
         break;
+    default:
+        ;
     }
 
     if( bSet )
@@ -2589,9 +2638,9 @@ static void ParseCSS1_padding( const CSS1Expression *pExpr,
 /*  */
 
 static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
-                                  SfxItemSet &rItemSet,
+                                  SfxItemSet & /*rItemSet*/,
                                   SvxCSS1PropertyInfo& rPropInfo,
-                                  const SvxCSS1Parser& rParser,
+                                  const SvxCSS1Parser& /*rParser*/,
                                   USHORT nWhichLine, BOOL bAll )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
@@ -2652,6 +2701,9 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
                     nWidth = 1;
             }
             break;
+
+        default:
+            ;
         }
 
         pExpr = pExpr->GetNext();
@@ -2659,7 +2711,7 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
 
     for( USHORT i=0; i<4; i++ )
     {
-        USHORT nLine;
+        USHORT nLine = 0;
         switch( i )
         {
         case 0: nLine = BOX_LINE_TOP; break;
@@ -2681,9 +2733,9 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
 }
 
 static void ParseCSS1_border_xxx_width( const CSS1Expression *pExpr,
-                                        SfxItemSet &rItemSet,
+                                        SfxItemSet & /*rItemSet*/,
                                         SvxCSS1PropertyInfo& rPropInfo,
-                                        const SvxCSS1Parser& rParser,
+                                        const SvxCSS1Parser& /*rParser*/,
                                         USHORT nWhichLine )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
@@ -2718,6 +2770,9 @@ static void ParseCSS1_border_xxx_width( const CSS1Expression *pExpr,
             nWidth = (USHORT)(bHori ? nPHeight : nPWidth);
         }
         break;
+
+    default:
+        ;
     }
 
     SvxCSS1BorderInfo *pInfo = rPropInfo.GetBorderInfo( nWhichLine );
@@ -2777,9 +2832,9 @@ static void ParseCSS1_border_width( const CSS1Expression *pExpr,
 }
 
 static void ParseCSS1_border_color( const CSS1Expression *pExpr,
-                                    SfxItemSet &rItemSet,
+                                    SfxItemSet & /*rItemSet*/,
                                     SvxCSS1PropertyInfo& rPropInfo,
-                                    const SvxCSS1Parser& rParser )
+                                    const SvxCSS1Parser& /*rParser*/ )
 {
     USHORT n=0;
     while( n<4 && pExpr && !pExpr->GetOp() )
@@ -2794,6 +2849,8 @@ static void ParseCSS1_border_color( const CSS1Expression *pExpr,
             if( pExpr->GetColor( aColor ) )
                 rPropInfo.GetBorderInfo( nLine )->aColor = aColor;
             break;
+        default:
+            ;
         }
         rPropInfo.CopyBorderInfo( n, SVX_CSS1_BORDERINFO_COLOR );
 
@@ -2803,9 +2860,9 @@ static void ParseCSS1_border_color( const CSS1Expression *pExpr,
 }
 
 static void ParseCSS1_border_style( const CSS1Expression *pExpr,
-                                    SfxItemSet &rItemSet,
+                                    SfxItemSet & /*rItemSet*/,
                                     SvxCSS1PropertyInfo& rPropInfo,
-                                    const SvxCSS1Parser& rParser )
+                                    const SvxCSS1Parser& /*rParser*/ )
 {
     USHORT n=0;
     while( n<4 && pExpr && !pExpr->GetOp() )
@@ -2869,9 +2926,9 @@ static void ParseCSS1_border( const CSS1Expression *pExpr,
 /*  */
 
 static void ParseCSS1_float( const CSS1Expression *pExpr,
-                             SfxItemSet &rItemSet,
+                             SfxItemSet & /*rItemSet*/,
                              SvxCSS1PropertyInfo& rPropInfo,
-                             const SvxCSS1Parser& rParser )
+                             const SvxCSS1Parser& /*rParser*/ )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
@@ -2887,9 +2944,9 @@ static void ParseCSS1_float( const CSS1Expression *pExpr,
 /*  */
 
 static void ParseCSS1_position( const CSS1Expression *pExpr,
-                                SfxItemSet &rItemSet,
+                                SfxItemSet & /*rItemSet*/,
                                 SvxCSS1PropertyInfo& rPropInfo,
-                                const SvxCSS1Parser& rParser )
+                                const SvxCSS1Parser& /*rParser*/ )
 {
     DBG_ASSERT( pExpr, "kein Ausdruck" );
 
@@ -2941,39 +2998,42 @@ static void ParseCSS1_length( const CSS1Expression *pExpr,
             rLength = 100;
         rLengthType = SVX_CSS1_LTYPE_PERCENTAGE;
         break;
+
+    default:
+        ;
     }
 }
 
 /*  */
 
 static void ParseCSS1_width( const CSS1Expression *pExpr,
-                             SfxItemSet &rItemSet,
+                             SfxItemSet & /*rItemSet*/,
                              SvxCSS1PropertyInfo& rPropInfo,
-                             const SvxCSS1Parser& rParser )
+                             const SvxCSS1Parser& /*rParser*/ )
 {
     ParseCSS1_length( pExpr, rPropInfo.nWidth, rPropInfo.eWidthType, TRUE );
 }
 
 static void ParseCSS1_height( const CSS1Expression *pExpr,
-                              SfxItemSet &rItemSet,
+                              SfxItemSet & /*rItemSet*/,
                               SvxCSS1PropertyInfo& rPropInfo,
-                              const SvxCSS1Parser& rParser )
+                              const SvxCSS1Parser& /*rParser*/ )
 {
     ParseCSS1_length( pExpr, rPropInfo.nHeight, rPropInfo.eHeightType, FALSE );
 }
 
 static void ParseCSS1_left( const CSS1Expression *pExpr,
-                             SfxItemSet &rItemSet,
+                             SfxItemSet & /*rItemSet*/,
                              SvxCSS1PropertyInfo& rPropInfo,
-                             const SvxCSS1Parser& rParser )
+                             const SvxCSS1Parser& /*rParser*/ )
 {
     ParseCSS1_length( pExpr, rPropInfo.nLeft, rPropInfo.eLeftType, TRUE );
 }
 
 static void ParseCSS1_top( const CSS1Expression *pExpr,
-                           SfxItemSet &rItemSet,
+                           SfxItemSet & /*rItemSet*/,
                            SvxCSS1PropertyInfo& rPropInfo,
-                           const SvxCSS1Parser& rParser )
+                           const SvxCSS1Parser& /*rParser*/ )
 {
     ParseCSS1_length( pExpr, rPropInfo.nTop, rPropInfo.eTopType, FALSE );
 }
@@ -2982,9 +3042,9 @@ static void ParseCSS1_top( const CSS1Expression *pExpr,
 
 // Feature: PrintExt
 static void ParseCSS1_size( const CSS1Expression *pExpr,
-                            SfxItemSet &rItemSet,
+                            SfxItemSet & /*rItemSet*/,
                             SvxCSS1PropertyInfo& rPropInfo,
-                            const SvxCSS1Parser& rParser )
+                            const SvxCSS1Parser& /*rParser*/ )
 {
     USHORT n=0;
     while( n<2 && pExpr && !pExpr->GetOp() )
@@ -3020,6 +3080,9 @@ static void ParseCSS1_size( const CSS1Expression *pExpr,
                 rPropInfo.eSizeType = SVX_CSS1_STYPE_TWIP;
             }
             break;
+
+        default:
+            ;
         }
 
         pExpr = pExpr->GetNext();
@@ -3048,25 +3111,25 @@ static void ParseCSS1_page_break_xxx( const CSS1Expression *pExpr,
 }
 
 static void ParseCSS1_page_break_before( const CSS1Expression *pExpr,
-                                         SfxItemSet &rItemSet,
+                                         SfxItemSet & /*rItemSet*/,
                                          SvxCSS1PropertyInfo& rPropInfo,
-                                         const SvxCSS1Parser& rParser )
+                                         const SvxCSS1Parser& /*rParser*/ )
 {
     ParseCSS1_page_break_xxx( pExpr, rPropInfo.ePageBreakBefore );
 }
 
 static void ParseCSS1_page_break_after( const CSS1Expression *pExpr,
-                                        SfxItemSet &rItemSet,
+                                        SfxItemSet & /*rItemSet*/,
                                         SvxCSS1PropertyInfo& rPropInfo,
-                                        const SvxCSS1Parser& rParser )
+                                        const SvxCSS1Parser& /*rParser*/ )
 {
     ParseCSS1_page_break_xxx( pExpr, rPropInfo.ePageBreakAfter );
 }
 
 static void ParseCSS1_page_break_inside( const CSS1Expression *pExpr,
                                          SfxItemSet &rItemSet,
-                                         SvxCSS1PropertyInfo& rPropInfo,
-                                         const SvxCSS1Parser& rParser )
+                                         SvxCSS1PropertyInfo& /*rPropInfo*/,
+                                         const SvxCSS1Parser& /*rParser*/ )
 {
     SvxCSS1PageBreak eBreak;
     ParseCSS1_page_break_xxx( pExpr, eBreak );
@@ -3081,6 +3144,8 @@ static void ParseCSS1_page_break_inside( const CSS1Expression *pExpr,
         bSplit = FALSE;
         bSetSplit = TRUE;
         break;
+    default:
+        ;
     }
 
     if( bSetSplit )
@@ -3089,8 +3154,8 @@ static void ParseCSS1_page_break_inside( const CSS1Expression *pExpr,
 
 static void ParseCSS1_widows( const CSS1Expression *pExpr,
                               SfxItemSet &rItemSet,
-                              SvxCSS1PropertyInfo& rPropInfo,
-                              const SvxCSS1Parser& rParser )
+                              SvxCSS1PropertyInfo& /*rPropInfo*/,
+                              const SvxCSS1Parser& /*rParser*/ )
 {
     if( CSS1_NUMBER == pExpr->GetType() )
     {
@@ -3104,8 +3169,8 @@ static void ParseCSS1_widows( const CSS1Expression *pExpr,
 
 static void ParseCSS1_orphans( const CSS1Expression *pExpr,
                                SfxItemSet &rItemSet,
-                               SvxCSS1PropertyInfo& rPropInfo,
-                               const SvxCSS1Parser& rParser )
+                               SvxCSS1PropertyInfo& /*rPropInfo*/,
+                               const SvxCSS1Parser& /*rParser*/ )
 {
     if( CSS1_NUMBER == pExpr->GetType() )
     {
@@ -3120,7 +3185,7 @@ static void ParseCSS1_orphans( const CSS1Expression *pExpr,
 
 static void ParseCSS1_so_language( const CSS1Expression *pExpr,
                                SfxItemSet &rItemSet,
-                               SvxCSS1PropertyInfo& rPropInfo,
+                               SvxCSS1PropertyInfo& /*rPropInfo*/,
                                const SvxCSS1Parser& rParser )
 {
     if( CSS1_IDENT == pExpr->GetType() ||
