@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 13:59:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:11:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,7 @@
 #endif
 #endif
 
+using namespace com::sun::star;
 
 TYPEINIT1( SwTable, SwClient );
 TYPEINIT1( SwTableBox, SwClient );
@@ -473,7 +474,7 @@ void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
             {
                 nBox = nWishedSum;
                 pFmt = rBox.ClaimFrmFmt();
-                SwFmtFrmSize aNewBox( ATT_VAR_SIZE, nBox, 0 );
+                SwFmtFrmSize aNewBox( ATT_VAR_SIZE, static_cast< SwTwips >(nBox), 0 );
                 pFmt->LockModify();
                 pFmt->SetAttr( aNewBox );
                 pFmt->UnlockModify();
@@ -544,7 +545,7 @@ void lcl_RefreshHidden( SwTabCols &rToFill, USHORT nPos )
 }
 
 void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
-                   const SwFrmFmt *pTabFmt, const FASTBOOL bHidden,
+                   const SwFrmFmt *pTabFmt, const BOOL bHidden,
                    const FASTBOOL bRefreshHidden )
 {
     const long nWish = pTabFmt->GetFrmSize().GetWidth();
@@ -585,7 +586,7 @@ void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
         pLine = pCur ? pCur->GetUpper() : 0;
     }
 
-    FASTBOOL bInsert = !bRefreshHidden;
+    BOOL bInsert = !bRefreshHidden;
     for ( USHORT j = 0; bInsert && (j < rToFill.Count()); ++j )
     {
         long nCmp = rToFill[j];
@@ -683,9 +684,8 @@ void lcl_ProcessLineGet( const SwTableLine *pLine, SwTabCols &rToFill,
 #pragma optimize("", off)
 #endif
 
-
 void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
-                          FASTBOOL bRefreshHidden, BOOL bCurRowOnly ) const
+              BOOL bRefreshHidden, BOOL bCurRowOnly ) const
 {
     //MA 30. Nov. 95: Opt: wenn bHidden gesetzt ist, wird nur das Hidden
     //Array aktualisiert.
@@ -732,8 +732,8 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
 
     //1.
     const SwTableBoxes &rBoxes = pStart->GetUpper()->GetTabBoxes();
-    USHORT i;
 
+    USHORT i;
     for ( i = 0; i < rBoxes.Count(); ++i )
         ::lcl_ProcessBoxGet( rBoxes[i], rToFill, pTabFmt, bRefreshHidden );
 
@@ -742,9 +742,9 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
                                 pStart->GetUpper()->GetUpper()->GetUpper() : 0;
     while ( pLine )
     {
-        const SwTableBoxes &rBoxes = pLine->GetTabBoxes();
-        for ( USHORT i = 0; i < rBoxes.Count(); ++i )
-            ::lcl_SortedTabColInsert( rToFill, rBoxes[i],
+        const SwTableBoxes &rBoxes2 = pLine->GetTabBoxes();
+        for ( USHORT k = 0; k < rBoxes2.Count(); ++k )
+            ::lcl_SortedTabColInsert( rToFill, rBoxes2[k],
                                       pTabFmt, FALSE, bRefreshHidden );
         pLine = pLine->GetUpper() ? pLine->GetUpper()->GetUpper() : 0;
     }
@@ -813,7 +813,7 @@ void lcl_ProcessLine( SwTableLine *pLine, Parm &rParm )
 {
     SwTableBoxes &rBoxes = pLine->GetTabBoxes();
     for ( int i = rBoxes.Count()-1; i >= 0; --i )
-        ::lcl_ProcessBoxSet( rBoxes[i], rParm );
+        ::lcl_ProcessBoxSet( rBoxes[ static_cast< USHORT >(i) ], rParm );
 }
 
 void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
@@ -821,7 +821,7 @@ void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
     if ( pBox->GetTabLines().Count() )
     {   SwTableLines &rLines = pBox->GetTabLines();
         for ( int i = rLines.Count()-1; i >= 0; --i )
-            lcl_ProcessLine( rLines[i], rParm );
+            lcl_ProcessLine( rLines[ static_cast< USHORT >(i) ], rParm );
     }
     else
     {
@@ -1047,18 +1047,18 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             //das geschieht so, dass die Tabelle genauso stehenbleibt wie der
             //Anwender sie gerade hingezuppelt hat.
             SwFmtHoriOrient aOri( pFmt->GetHoriOrient() );
-            if(HORI_NONE != aOri.GetHoriOrient())
+            if(text::HoriOrientation::NONE != aOri.GetHoriOrient())
             {
                 BOOL bLeftDist = rNew.GetLeft() != nShLeft;
                 BOOL bRightDist = rNew.GetRight() + nShRight != rNew.GetRightMax();
                 if(!bLeftDist && !bRightDist)
-                    aOri.SetHoriOrient( HORI_FULL );
+                    aOri.SetHoriOrient( text::HoriOrientation::FULL );
                 else if(!bRightDist && rNew.GetLeft() > nShLeft )
-                    aOri.SetHoriOrient( HORI_RIGHT );
+                    aOri.SetHoriOrient( text::HoriOrientation::RIGHT );
                 else if(!bLeftDist && rNew.GetRight() + nShRight < rNew.GetRightMax())
-                    aOri.SetHoriOrient( HORI_LEFT );
+                    aOri.SetHoriOrient( text::HoriOrientation::LEFT );
                 else
-                    aOri.SetHoriOrient( HORI_NONE );
+                    aOri.SetHoriOrient( text::HoriOrientation::NONE );
             }
             pFmt->SetAttr( aOri );
         }
@@ -1122,12 +1122,12 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             const SwTableBox  *pExcl = pStart->GetUpper()->GetUpper();
             while ( pLine )
             {
-                const SwTableBoxes &rBoxes = pLine->GetTabBoxes();
+                const SwTableBoxes &rBoxes2 = pLine->GetTabBoxes();
                 BOOL bBefore = TRUE;
-                for ( USHORT i = 0; i < rBoxes.Count(); ++i )
+                for ( USHORT i = 0; i < rBoxes2.Count(); ++i )
                 {
-                    if ( rBoxes[i] != pExcl )
-                        ::lcl_ProcessBoxPtr( rBoxes[i], aParm.aBoxArr, bBefore );
+                    if ( rBoxes2[i] != pExcl )
+                        ::lcl_ProcessBoxPtr( rBoxes2[i], aParm.aBoxArr, bBefore );
                     else
                         bBefore = FALSE;
                 }
@@ -1139,7 +1139,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             //verarbeitet zu werden.
             for ( int j = aParm.aBoxArr.Count()-1; j >= 0; --j )
             {
-                SwTableBox *pBox = (SwTableBox*)aParm.aBoxArr[j];
+                SwTableBox *pBox = (SwTableBox*)aParm.aBoxArr[ static_cast< USHORT >(j)];
                 ::lcl_ProcessBoxSet( pBox, aParm );
             }
         }
@@ -1151,7 +1151,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
             //gearbeitet werden!
             SwTableLines &rLines = GetTabLines();
             for ( int i = rLines.Count()-1; i >= 0; --i )
-                ::lcl_ProcessLine( rLines[i], aParm );
+                ::lcl_ProcessLine( rLines[ static_cast< USHORT >(i) ], aParm );
         }
     }
 
@@ -1476,7 +1476,6 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
 |*
 |*************************************************************************/
 
-
 BOOL IsValidRowName( const String& rStr )
 {
     BOOL bIsValid = TRUE;
@@ -1492,12 +1491,12 @@ BOOL IsValidRowName( const String& rStr )
 
 // --> OD 2007-08-03 #i80314#
 // add 3rd parameter and its handling
-USHORT SwTable::_GetBoxNum( String& rStr, BOOL bFirst,
+USHORT SwTable::_GetBoxNum( String& rStr, BOOL bFirstPart,
                             const bool bPerformValidCheck )
 {
     USHORT nRet = 0;
     xub_StrLen nPos = 0;
-    if( bFirst )    // TRUE == column; FALSE == row
+    if( bFirstPart )   // TRUE == column; FALSE == row
     {
         // die 1. ist mit Buchstaben addressiert!
         sal_Unicode cChar;
@@ -1851,9 +1850,9 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwNodeIndex &rIdx,
 SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwStartNode& rSttNd, SwTableLine *pUp ) :
     SwClient( 0 ),
     aLines( 0, 0 ),
+    pSttNd( &rSttNd ),
     pUpper( pUp ),
-    pImpl( 0 ),
-    pSttNd( &rSttNd )
+    pImpl( 0 )
 {
     CheckBoxFmt( pFmt )->Add( this );
 
@@ -2012,7 +2011,7 @@ void SwTableBox::ChgFrmFmt( SwTableBoxFmt* pNewFmt )
 void lcl_GetTblBoxColStr( USHORT nCol, String& rNm )
 {
     const USHORT coDiff = 52;   // 'A'-'Z' 'a' - 'z'
-    register USHORT nCalc;
+    USHORT nCalc;
 
     do {
         nCalc = nCol % coDiff;
@@ -2021,7 +2020,7 @@ void lcl_GetTblBoxColStr( USHORT nCol, String& rNm )
         else
             rNm.Insert( sal_Unicode('A' + nCalc ), 0 );
 
-        if( !(nCol -= nCalc) )
+        if( 0 == (nCol = nCol - nCalc) )
             break;
         nCol /= coDiff;
         --nCol;
@@ -2037,7 +2036,7 @@ String SwTableBox::GetName() const
     }
 
     const SwTable& rTbl = pSttNd->FindTableNode()->GetTable();
-    register USHORT nPos;
+    USHORT nPos;
     String sNm, sTmp;
     const SwTableBox* pBox = this;
     do {
@@ -2249,7 +2248,7 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
             if( pDoc->IsRedlineOn() )
             {
                 SwPaM aTemp(*pTNd, 0, *pTNd, rTxt.Len());
-                pDoc->AppendRedline(new SwRedline(IDocumentRedlineAccess::REDLINE_INSERT, aTemp), true);
+                pDoc->AppendRedline(new SwRedline(nsRedlineType_t::REDLINE_INSERT, aTemp), true);
             }
         }
 
@@ -2257,9 +2256,9 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
         if( bChgAlign &&
             ( SFX_ITEM_SET != rBox.GetFrmFmt()->GetItemState(
                 RES_VERT_ORIENT, TRUE, &pItem ) ||
-                VERT_TOP == ((SwFmtVertOrient*)pItem)->GetVertOrient() ))
+                text::VertOrientation::TOP == ((SwFmtVertOrient*)pItem)->GetVertOrient() ))
         {
-            rBox.GetFrmFmt()->SetAttr( SwFmtVertOrient( 0, VERT_BOTTOM ));
+            rBox.GetFrmFmt()->SetAttr( SwFmtVertOrient( 0, text::VertOrientation::BOTTOM ));
         }
     }
 }
@@ -2347,9 +2346,9 @@ void ChgNumToText( SwTableBox& rBox, ULONG nFmt )
         if( bChgAlign &&
             SFX_ITEM_SET == rBox.GetFrmFmt()->GetItemState(
             RES_VERT_ORIENT, FALSE, &pItem ) &&
-            VERT_BOTTOM == ((SwFmtVertOrient*)pItem)->GetVertOrient() )
+            text::VertOrientation::BOTTOM == ((SwFmtVertOrient*)pItem)->GetVertOrient() )
         {
-            rBox.GetFrmFmt()->SetAttr( SwFmtVertOrient( 0, VERT_TOP ));
+            rBox.GetFrmFmt()->SetAttr( SwFmtVertOrient( 0, text::VertOrientation::TOP ));
         }
     }
 }
