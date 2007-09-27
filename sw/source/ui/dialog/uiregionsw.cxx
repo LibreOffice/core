@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiregionsw.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:16:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:38:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,14 +162,16 @@
 #include <svx/dlgutil.hxx>
 #endif
 #ifndef _SVX_DIALOGS_HRC
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/dialogs.hrc>
 #endif
 #ifndef _SVX_DIALOG_HXX
-#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/svxdlg.hxx>
 #endif
 #ifndef _SVX_FLAGSDEF_HXX
-#include <svx/flagsdef.hxx> //CHINA001
+#include <svx/flagsdef.hxx>
 #endif
+
+using namespace ::com::sun::star;
 
 // sw/inc/docary.hxx
 SV_IMPL_PTRARR( SwSectionFmts, SwSectionFmtPtr )
@@ -328,8 +330,6 @@ String SectRepr::GetSubRegion() const
 
 SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     : SfxModalDialog( pParent, SW_RES(MD_EDIT_REGION) ),
-    pAktEntry( 0 ),
-    rSh( rWrtSh ),
     aNameFL             ( this, SW_RES( FL_NAME ) ),
     aCurName            ( this, SW_RES( ED_RANAME ) ),
     aTree               ( this, SW_RES( TLB_SECTION )),
@@ -337,9 +337,11 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aFileCB             ( this, SW_RES( CB_FILE ) ),
 #ifdef DDE_AVAILABLE
     aDDECB              ( this, SW_RES( CB_DDE ) ) ,
-    aDDECommandFT       ( this, SW_RES( FT_DDE ) ) ,
 #endif
     aFileNameFT         ( this, SW_RES( FT_FILE ) ) ,
+#ifdef DDE_AVAILABLE
+    aDDECommandFT       ( this, SW_RES( FT_DDE ) ) ,
+#endif
     aFileNameED         ( this, SW_RES( ED_FILE ) ),
     aFilePB             ( this, SW_RES( PB_FILE ) ),
     aSubRegionFT        ( this, SW_RES( FT_SUBREG ) ) ,
@@ -361,14 +363,18 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     // <--
 
     aOK                 ( this, SW_RES( PB_OK ) ),
+    aCancel             ( this, SW_RES( PB_CANCEL ) ),
     aOptionsPB          ( this, SW_RES( PB_OPTIONS ) ),
     aDismiss            ( this, SW_RES( CB_DISMISS ) ),
     aHelp               ( this, SW_RES( PB_HELP ) ),
-    aCancel             ( this, SW_RES( PB_CANCEL ) ),
+
     aImageIL            (       SW_RES(IL_BITMAPS)),
     aImageILH           (       SW_RES(ILH_BITMAPS)),
-    pDocInserter        ( NULL ),
-    pOldDefDlgParent    ( NULL ),
+
+    rSh( rWrtSh ),
+    pAktEntry( 0 ),
+    m_pDocInserter        ( NULL ),
+    m_pOldDefDlgParent    ( NULL ),
     bDontCheckPasswd    ( sal_True)
 {
     FreeResource();
@@ -479,13 +485,11 @@ BOOL SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
 
 void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry )
 {
-    SwSection* pSect;
+    SwSection* pSect = 0;
     SvLBoxEntry* pSelEntry = 0;
 
     if (!pFmt)
     {
-        SvLBoxEntry* pEntry;
-        const SwSectionFmt* pFmt;
         USHORT nCount=rSh.GetSectionFmtCount();
         for ( USHORT n=0; n < nCount; n++ )
         {
@@ -521,7 +525,7 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry
             for( USHORT n = 0; n < nCnt; ++n )
             {
                 SectionType eTmpType;
-                const SwSectionFmt* pFmt = aTmpArr[n]->GetFmt();
+                pFmt = aTmpArr[n]->GetFmt();
                 if( pFmt->IsInNodesArr() &&
                     (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                     && TOX_HEADER_SECTION != eTmpType )
@@ -579,7 +583,7 @@ SwEditRegionDlg::~SwEditRegionDlg( )
     }
 
     aSectReprArr.DeleteAndDestroy( 0, aSectReprArr.Count() );
-    delete pDocInserter;
+    delete m_pDocInserter;
 }
 /* -----------------------------09.10.2001 15:41------------------------------
 
@@ -642,7 +646,6 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         BOOL bFile              = TRUE;
         BOOL bPasswdValid       = TRUE;
 
-        SvLBoxEntry* pEntry = pBox->FirstSelected();
         while( pEntry )
         {
             SectRepr* pRepr=(SectRepr*) pEntry->GetUserData();
@@ -1134,12 +1137,12 @@ IMPL_LINK( SwEditRegionDlg, FileSearchHdl, PushButton *, EMPTYARG )
     if(!CheckPasswd(0))
         return 0;
 
-    pOldDefDlgParent = Application::GetDefDialogParent();
+    m_pOldDefDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
-    if ( pDocInserter )
-        delete pDocInserter;
-    pDocInserter = new ::sfx2::DocumentInserter( 0, String::CreateFromAscii("swriter") );
-    pDocInserter->StartExecuteModal( LINK( this, SwEditRegionDlg, DlgClosedHdl ) );
+    if ( m_pDocInserter )
+        delete m_pDocInserter;
+    m_pDocInserter = new ::sfx2::DocumentInserter( 0, String::CreateFromAscii("swriter") );
+    m_pDocInserter->StartExecuteModal( LINK( this, SwEditRegionDlg, DlgClosedHdl ) );
     return 0;
 }
 
@@ -1219,10 +1222,10 @@ IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
                     SFX_ITEM_SET == eFrmDirState||
                     SFX_ITEM_SET == eLRState)
                 {
-                    SvLBoxEntry* pEntry = aTree.FirstSelected();
-                    while( pEntry )
+                    SvLBoxEntry* pSelEntry = aTree.FirstSelected();
+                    while( pSelEntry )
                     {
-                        SectReprPtr pRepr = (SectReprPtr)pEntry->GetUserData();
+                        SectReprPtr pRepr = (SectReprPtr)pSelEntry->GetUserData();
                         if( SFX_ITEM_SET == eColState )
                             pRepr->GetCol() = *(SwFmtCol*)pColItem;
                         if( SFX_ITEM_SET == eBrushState )
@@ -1238,7 +1241,7 @@ IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
                         if( SFX_ITEM_SET == eLRState )
                             pRepr->GetLRSpace() = *(SvxLRSpaceItem*)pLRSpaceItem;
 
-                        pEntry = aTree.NextSelected(pEntry);
+                        pSelEntry = aTree.NextSelected(pSelEntry);
                     }
                 }
             }
@@ -1459,7 +1462,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
     String sFileName, sFilterName, sPassword;
     if ( _pFileDlg->GetError() == ERRCODE_NONE )
     {
-        SfxMedium* pMedium = pDocInserter->CreateMedium();
+        SfxMedium* pMedium = m_pDocInserter->CreateMedium();
         if ( pMedium )
         {
             sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
@@ -1483,7 +1486,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
         aFileNameED.SetText( pSectRepr->GetFile() );
     }
 
-    Application::SetDefDialogParent( pOldDefDlgParent );
+    Application::SetDefDialogParent( m_pOldDefDlgParent );
     return 0;
 }
 
@@ -1500,10 +1503,10 @@ Image SwEditRegionDlg::BuildBitmap(BOOL bProtect,BOOL bHidden, BOOL bHighContras
     Beschreibung:   Hilfsfunktion - Bereichsnamen aus dem Medium lesen
  --------------------------------------------------------------------*/
 
-static void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBox )
+static void lcl_ReadSections( SwWrtShell& /*rSh*/, SfxMedium& rMedium, ComboBox& rBox )
 {
     rBox.Clear();
-    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
+    uno::Reference < embed::XStorage > xStg;
     if( rMedium.IsStorage() && (xStg = rMedium.GetStorage()).is() )
     {
         SvStringsDtor aArr( 10, 10 );
@@ -1528,11 +1531,11 @@ SwInsertSectionTabDialog::SwInsertSectionTabDialog(
     String sInsert(SW_RES(ST_INSERT));
     GetOKButton().SetText(sInsert);
     FreeResource();
-    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create(); //CHINA001
-    DBG_ASSERT(pFact, "Dialogdiet fail!"); //CHINA001
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");
     AddTabPage(TP_INSERT_SECTION, SwInsertSectionTabPage::Create, 0);
     AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
-    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0); //CHINA001 AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,     0);
+    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0);
     AddTabPage(TP_SECTION_FTNENDNOTES, SwSectionFtnEndTabPage::Create, 0);
     AddTabPage(TP_SECTION_INDENTS, SwSectionIndentTabPage::Create, 0);
 
@@ -1564,8 +1567,7 @@ void SwInsertSectionTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
     if(TP_INSERT_SECTION == nId)
         ((SwInsertSectionTabPage&)rPage).SetWrtShell(rWrtSh);
     else if( TP_BACKGROUND == nId  )
-        //CHINA001 ((SvxBackgroundTabPage&)rPage).ShowSelector();
-    {   //add CHINA001
+    {
             SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_SELECTOR));
             rPage.PageCreated(aSet);
@@ -1596,16 +1598,16 @@ short   SwInsertSectionTabDialog::Ok()
 {
     short nRet = SfxTabDialog::Ok();
     DBG_ASSERT(pToInsertSection, "keiner Section?")
-    const SfxItemSet* pOutSet = GetOutputItemSet();
-    rWrtSh.InsertSection(*pToInsertSection, pOutSet);
+    const SfxItemSet* pOutputItemSet = GetOutputItemSet();
+    rWrtSh.InsertSection(*pToInsertSection, pOutputItemSet);
     SfxViewFrame* pViewFrm = rWrtSh.GetView().GetViewFrame();
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+    uno::Reference< frame::XDispatchRecorder > xRecorder =
             pViewFrm->GetBindings().GetRecorder();
     if ( xRecorder.is() )
     {
         SfxRequest aRequest( pViewFrm, FN_INSERT_REGION);
         const SfxPoolItem* pCol;
-        if(SFX_ITEM_SET == pOutSet->GetItemState(RES_COL, FALSE, &pCol))
+        if(SFX_ITEM_SET == pOutputItemSet->GetItemState(RES_COL, FALSE, &pCol))
         {
             aRequest.AppendItem(SfxUInt16Item(SID_ATTR_COLUMNS,
                 ((const SwFmtCol*)pCol)->GetColumns().Count()));
@@ -1661,10 +1663,9 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     aEditInReadonlyCB   ( this, SW_RES( CB_EDIT_IN_READONLY ) ),
     // <--
 
-    sSection            (SW_RES( STR_REGION_DEFNAME )),
-    pWrtSh(0),
-    pDocInserter(NULL),
-    pOldDefDlgParent(NULL)
+    m_pWrtSh(0),
+    m_pDocInserter(NULL),
+    m_pOldDefDlgParent(NULL)
 {
     FreeResource();
 
@@ -1688,16 +1689,16 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
  * --------------------------------------------------*/
 SwInsertSectionTabPage::~SwInsertSectionTabPage()
 {
-    delete pDocInserter;
+    delete m_pDocInserter;
 }
 /* -----------------21.05.99 12:58-------------------
  *
  * --------------------------------------------------*/
 void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
 {
-    pWrtSh = &rSh;
+    m_pWrtSh = &rSh;
 
-    BOOL bWeb = 0 != PTR_CAST(SwWebDocShell, pWrtSh->GetView().GetDocShell());
+    BOOL bWeb = 0 != PTR_CAST(SwWebDocShell, m_pWrtSh->GetView().GetDocShell());
     if(bWeb)
     {
         aHideCB         .Hide();
@@ -1709,12 +1710,11 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
 #endif
     }
 
-    USHORT nCount = pWrtSh->GetSectionFmtCount();
     FillList();
-    USHORT nCnt = pWrtSh->GetBookmarkCnt();
+    USHORT nCnt = m_pWrtSh->GetBookmarkCnt();
     for( USHORT i = 0; i < nCnt; ++i )
     {
-        SwBookmark& rBm = pWrtSh->GetBookmark( i );
+        SwBookmark& rBm = m_pWrtSh->GetBookmark( i );
         if( rBm.GetOtherPos() )
             aSubRegionED.InsertEntry( rBm.GetName() );
     }
@@ -1724,10 +1724,10 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
     {
         aCurName.SetText( rSh.GetUniqueSectionName( &pSect->GetName() ));
         aProtectCB.Check( 0 != pSect->IsProtect() );
-        sFileName = pSect->GetLinkFileName();
-        sFilePasswd = pSect->GetLinkFilePassWd();
-        aFileCB.Check( 0 != sFileName.Len() );
-        aFileNameED.SetText( sFileName );
+        m_sFileName = pSect->GetLinkFileName();
+        m_sFilePasswd = pSect->GetLinkFilePassWd();
+        aFileCB.Check( 0 != m_sFileName.Len() );
+        aFileNameED.SetText( m_sFileName );
         UseFileHdl( &aFileCB );
     }
     else
@@ -1738,7 +1738,7 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
 /* -----------------21.05.99 10:32-------------------
  *
  * --------------------------------------------------*/
-BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& rSet)
+BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
 {
     SwSection aSection(CONTENT_SECTION, aCurName.GetText());
     aSection.SetCondition(aConditionED.GetText());
@@ -1749,7 +1749,7 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& rSet)
     aSection.SetEditInReadonly(aEditInReadonlyCB.IsChecked());
     // <--
     if(bProtected)
-        aSection.SetPasswd(aNewPasswd);
+        aSection.SetPasswd(m_aNewPasswd);
     String sFileName = aFileNameED.GetText();
     String sSubRegion = aSubRegionED.GetText();
     BOOL bDDe = FALSE;
@@ -1774,17 +1774,17 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& rSet)
         {
             if(sFileName.Len())
             {
-                SfxMedium* pMedium = pWrtSh->GetView().GetDocShell()->GetMedium();
+                SfxMedium* pMedium = m_pWrtSh->GetView().GetDocShell()->GetMedium();
                 INetURLObject aAbs;
                 if( pMedium )
                     aAbs = pMedium->GetURLObject();
                 aLinkFile = URIHelper::SmartRel2Abs(
                     aAbs, sFileName, URIHelper::GetMaybeFileHdl() );
-                aSection.SetLinkFilePassWd( sFilePasswd );
+                aSection.SetLinkFilePassWd( m_sFilePasswd );
             }
 
             aLinkFile += sfx2::cTokenSeperator;
-            aLinkFile += sFilterName;
+            aLinkFile += m_sFilterName;
             aLinkFile += sfx2::cTokenSeperator;
             aLinkFile += sSubRegion;
         }
@@ -1833,7 +1833,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangeHideHdl, CheckBox *, pBox )
 
 ---------------------------------------------------------------------*/
 
-IMPL_LINK( SwInsertSectionTabPage, ChangeEditInReadonlyHdl, CheckBox *, pBox )
+IMPL_LINK( SwInsertSectionTabPage, ChangeEditInReadonlyHdl, CheckBox *, EMPTYARG )
 {
     return 0;
 }
@@ -1857,7 +1857,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
     sal_Bool bSet = bChange ? bChange : aPasswdCB.IsChecked();
     if(bSet)
     {
-        if(!aNewPasswd.getLength() || bChange)
+        if(!m_aNewPasswd.getLength() || bChange)
         {
             SwTestPasswdDlg aPasswdDlg(this);
             aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
@@ -1866,7 +1866,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
                 String sNewPasswd( aPasswdDlg.GetPassword() );
                 if( aPasswdDlg.GetConfirm() == sNewPasswd )
                 {
-                    SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
+                    SvPasswordHelper::GetHashPassword( m_aNewPasswd, sNewPasswd );
                 }
                 else
                 {
@@ -1878,7 +1878,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
         }
     }
     else
-        aNewPasswd.realloc(0);
+        m_aNewPasswd.realloc(0);
     return 0;
 }
 /*---------------------------------------------------------------------
@@ -1901,7 +1901,7 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
 {
     if( pBox->IsChecked() )
     {
-        if( pWrtSh->HasSelection() &&
+        if( m_pWrtSh->HasSelection() &&
             RET_NO == QueryBox( this, SW_RES(QB_CONNECT) ).Execute() )
             pBox->Check( FALSE );
     }
@@ -1939,12 +1939,12 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
 
 IMPL_LINK( SwInsertSectionTabPage, FileSearchHdl, PushButton *, EMPTYARG )
 {
-    pOldDefDlgParent = Application::GetDefDialogParent();
+    m_pOldDefDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
-    if ( pDocInserter )
-        delete pDocInserter;
-    pDocInserter = new ::sfx2::DocumentInserter( 0, String::CreateFromAscii("swriter") );
-    pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
+    if ( m_pDocInserter )
+        delete m_pDocInserter;
+    m_pDocInserter = new ::sfx2::DocumentInserter( 0, String::CreateFromAscii("swriter") );
+    m_pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
     return 0;
 }
 
@@ -1983,24 +1983,24 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
 {
     if ( _pFileDlg->GetError() == ERRCODE_NONE )
     {
-        SfxMedium* pMedium = pDocInserter->CreateMedium();
+        SfxMedium* pMedium = m_pDocInserter->CreateMedium();
         if ( pMedium )
         {
-            sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-            sFilterName = pMedium->GetFilter()->GetFilterName();
+            m_sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+            m_sFilterName = pMedium->GetFilter()->GetFilterName();
             const SfxPoolItem* pItem;
             if ( SFX_ITEM_SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, FALSE, &pItem ) )
-                sFilePasswd = ( (SfxStringItem*)pItem )->GetValue();
+                m_sFilePasswd = ( (SfxStringItem*)pItem )->GetValue();
             aFileNameED.SetText( INetURLObject::decode(
-                sFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 ) );
-            ::lcl_ReadSections( *pWrtSh, *pMedium, aSubRegionED );
+                m_sFileName, INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 ) );
+            ::lcl_ReadSections( *m_pWrtSh, *pMedium, aSubRegionED );
             delete pMedium;
         }
     }
     else
-        sFilterName = sFilePasswd = aEmptyStr;
+        m_sFilterName = m_sFilePasswd = aEmptyStr;
 
-    Application::SetDefDialogParent( pOldDefDlgParent );
+    Application::SetDefDialogParent( m_pOldDefDlgParent );
     return 0;
 }
 
@@ -2013,11 +2013,11 @@ void SwInsertSectionTabPage::FillList(  const SwSectionFmt* pNewFmt )
     const SwSectionFmt* pFmt;
     if( !pNewFmt )
     {
-        USHORT nCount = pWrtSh->GetSectionFmtCount();
+        USHORT nCount = m_pWrtSh->GetSectionFmtCount();
         for(USHORT i=0;i<nCount;i++)
         {
             SectionType eTmpType;
-            if( !(pFmt = &pWrtSh->GetSectionFmt(i))->GetParent() &&
+            if( !(pFmt = &m_pWrtSh->GetSectionFmt(i))->GetParent() &&
                     pFmt->IsInNodesArr() &&
                     (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                     && TOX_HEADER_SECTION != eTmpType )
@@ -2077,24 +2077,29 @@ SwSectionFtnEndTabPage::SwSectionFtnEndTabPage( Window *pParent,
     : SfxTabPage( pParent, SW_RES( TP_SECTION_FTNENDNOTES ), rAttrSet ),
     aFtnFL              ( this, SW_RES( FL_FTN ) ),
     aFtnNtAtTextEndCB   ( this, SW_RES( CB_FTN_AT_TXTEND ) ),
+
     aFtnNtNumCB         ( this, SW_RES( CB_FTN_NUM ) ),
-    aFtnNtNumFmtCB      ( this, SW_RES( CB_FTN_NUM_FMT ) ),
-    aFtnNumViewBox      ( this, SW_RES( LB_FTN_NUMVIEW  ), INSERT_NUM_EXTENDED_TYPES),
     aFtnOffsetLbl       ( this, SW_RES( FT_FTN_OFFSET   )),
     aFtnOffsetFld       ( this, SW_RES( FLD_FTN_OFFSET   )),
+
+    aFtnNtNumFmtCB      ( this, SW_RES( CB_FTN_NUM_FMT ) ),
     aFtnPrefixFT        ( this, SW_RES( FT_FTN_PREFIX   )),
     aFtnPrefixED        ( this, SW_RES( ED_FTN_PREFIX    )),
+    aFtnNumViewBox      ( this, SW_RES( LB_FTN_NUMVIEW  ), INSERT_NUM_EXTENDED_TYPES),
     aFtnSuffixFT        ( this, SW_RES( FT_FTN_SUFFIX    )),
     aFtnSuffixED        ( this, SW_RES( ED_FTN_SUFFIX    )),
+
     aEndFL              ( this, SW_RES( FL_END ) ),
     aEndNtAtTextEndCB   ( this, SW_RES( CB_END_AT_TXTEND )),
+
     aEndNtNumCB         ( this, SW_RES( CB_END_NUM )),
-    aEndNtNumFmtCB      ( this, SW_RES( CB_END_NUM_FMT ) ),
-    aEndNumViewBox      ( this, SW_RES( LB_END_NUMVIEW  ), INSERT_NUM_EXTENDED_TYPES),
     aEndOffsetLbl       ( this, SW_RES( FT_END_OFFSET   )),
     aEndOffsetFld       ( this, SW_RES( FLD_END_OFFSET   )),
+
+    aEndNtNumFmtCB      ( this, SW_RES( CB_END_NUM_FMT ) ),
     aEndPrefixFT        ( this, SW_RES( FT_END_PREFIX   )),
     aEndPrefixED        ( this, SW_RES( ED_END_PREFIX    )),
+    aEndNumViewBox      ( this, SW_RES( LB_END_NUMVIEW  ), INSERT_NUM_EXTENDED_TYPES),
     aEndSuffixFT        ( this, SW_RES( FT_END_SUFFIX    )),
     aEndSuffixED        ( this, SW_RES( ED_END_SUFFIX    ))
 {
@@ -2115,8 +2120,6 @@ SwSectionFtnEndTabPage::~SwSectionFtnEndTabPage()
 
 BOOL SwSectionFtnEndTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    BOOL bRecording = FALSE;//pRequest && 0 != SfxRequest::GetRecordingMacro();
-
     SwFmtFtnAtTxtEnd aFtn( aFtnNtAtTextEndCB.IsChecked()
                             ? ( aFtnNtNumCB.IsChecked()
                                 ? ( aFtnNtNumFmtCB.IsChecked()
@@ -2326,10 +2329,10 @@ SwSectionPropertyTabDialog::SwSectionPropertyTabDialog(
     rWrtSh(rSh)
 {
     FreeResource();
-    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create(); //CHINA001
-    DBG_ASSERT(pFact, "Dialogdiet fail!"); //CHINA001
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");
     AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
-    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 ); //CHINA001 AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,    0);
+    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
     AddTabPage(TP_SECTION_FTNENDNOTES, SwSectionFtnEndTabPage::Create, 0);
     AddTabPage(TP_SECTION_INDENTS, SwSectionIndentTabPage::Create, 0);
 
@@ -2356,8 +2359,7 @@ SwSectionPropertyTabDialog::~SwSectionPropertyTabDialog()
 void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     if( TP_BACKGROUND == nId  )
-        //CHINA001 ((SvxBackgroundTabPage&)rPage).ShowSelector();
-    {   //add CHINA001
+    {
             SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_SELECTOR));
             rPage.PageCreated(aSet);
@@ -2401,8 +2403,9 @@ BOOL SwSectionIndentTabPage::FillItemSet( SfxItemSet& rSet)
     if(aBeforeMF.IsValueModified() ||
             aAfterMF.IsValueModified())
     {
-        SvxLRSpaceItem aLRSpace(aBeforeMF.Denormalize(aBeforeMF.GetValue(FUNIT_TWIP)) ,
-                aAfterMF.Denormalize(aAfterMF.GetValue(FUNIT_TWIP)), 0, 0, RES_LR_SPACE);
+        SvxLRSpaceItem aLRSpace(
+                static_cast< long >(aBeforeMF.Denormalize(aBeforeMF.GetValue(FUNIT_TWIP))) ,
+                static_cast< long >(aAfterMF.Denormalize(aAfterMF.GetValue(FUNIT_TWIP))), 0, 0, RES_LR_SPACE);
         rSet.Put(aLRSpace);
     }
     return TRUE;
@@ -2459,8 +2462,8 @@ void SwSectionIndentTabPage::SetWrtShell(SwWrtShell& rSh)
  --------------------------------------------------*/
 IMPL_LINK(SwSectionIndentTabPage, IndentModifyHdl, MetricField*, EMPTYARG)
 {
-    aPreviewWin.SetLeftMargin( aBeforeMF.Denormalize(aBeforeMF.GetValue(FUNIT_TWIP)) );
-    aPreviewWin.SetRightMargin( aAfterMF.Denormalize(aAfterMF.GetValue(FUNIT_TWIP))   );
+    aPreviewWin.SetLeftMargin( static_cast< long >(aBeforeMF.Denormalize(aBeforeMF.GetValue(FUNIT_TWIP))) );
+    aPreviewWin.SetRightMargin( static_cast< long >(aAfterMF.Denormalize(aAfterMF.GetValue(FUNIT_TWIP))) );
     aPreviewWin.Draw(TRUE);
     return 0;
 }
