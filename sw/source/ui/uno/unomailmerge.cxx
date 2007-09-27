@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:30:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:42:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,16 +182,18 @@
 #endif
 #include <memory>
 
-#define C2U(x)         OUString::createFromAscii(x)
+#include <unomid.h>
+
+
 #define SN_MAIL_MERGE               "com.sun.star.text.MailMerge"
 #define SN_DATA_ACCESS_DESCRIPTOR   "com.sun.star.sdb.DataAccessDescriptor"
 
-using namespace com::sun::star;
-using namespace com::sun::star::frame;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::text;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::text;
 using ::rtl::OUString;
 using namespace SWUnoHelper;
 
@@ -281,7 +283,8 @@ static BOOL LoadFromURL_impl(
     Reference < XUnoTunnel > xTunnel( xTmpModel, UNO_QUERY );
     if (xTunnel.is())
     {
-        SwXTextDocument* pTextDoc = (SwXTextDocument *) xTunnel->getSomething( SwXTextDocument::getUnoTunnelId() );
+        SwXTextDocument* pTextDoc = reinterpret_cast<SwXTextDocument *>(
+                xTunnel->getSomething( SwXTextDocument::getUnoTunnelId() ));
         pTmpDocShell = pTextDoc ? pTextDoc->GetDocShell() : 0;
     }
 
@@ -307,7 +310,7 @@ static BOOL LoadFromURL_impl(
 //==========================================================
 namespace
 {
-    class DelayedFileDeletion : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
+    class DelayedFileDeletion : public ::cppu::WeakImplHelper1< util::XCloseListener >
     {
     protected:
         ::osl::Mutex                    m_aMutex;
@@ -342,9 +345,10 @@ namespace
     DBG_NAME( DelayedFileDeletion )
     //------------------------------------------------------
     DelayedFileDeletion::DelayedFileDeletion( const Reference< XModel >& _rxModel, const String& _rTemporaryFile )
-        :m_sTemporaryFile( _rTemporaryFile )
+        :
+        m_xDocument( _rxModel, UNO_QUERY )
+        ,m_sTemporaryFile( _rTemporaryFile )
         ,m_nPendingDeleteAttempts( 0 )
-        ,m_xDocument( _rxModel, UNO_QUERY )
     {
         DBG_CTOR( DelayedFileDeletion, NULL );
 
@@ -368,7 +372,7 @@ namespace
     }
 
     //--------------------------------------------------------------------
-    IMPL_LINK( DelayedFileDeletion, OnTryDeleteFile, void*, NOTINTERESTEDIN )
+    IMPL_LINK( DelayedFileDeletion, OnTryDeleteFile, void*, EMPTYARG )
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -429,7 +433,7 @@ namespace
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL DelayedFileDeletion::queryClosing( const EventObject& _rSource, sal_Bool _bGetsOwnership ) throw (util::CloseVetoException, RuntimeException)
+    void SAL_CALL DelayedFileDeletion::queryClosing( const EventObject& , sal_Bool _bGetsOwnership ) throw (util::CloseVetoException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( _bGetsOwnership )
@@ -441,7 +445,7 @@ namespace
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL DelayedFileDeletion::notifyClosing( const EventObject& _rSource ) throw (RuntimeException)
+    void SAL_CALL DelayedFileDeletion::notifyClosing( const EventObject&  ) throw (RuntimeException)
     {
         DBG_ERROR( "DelayedFileDeletion::notifyClosing: how this?" );
         // this should not happen:
@@ -450,7 +454,7 @@ namespace
     }
 
     //------------------------------------------------------
-    void SAL_CALL DelayedFileDeletion::disposing( const EventObject& Source ) throw (RuntimeException)
+    void SAL_CALL DelayedFileDeletion::disposing( const EventObject&  ) throw (RuntimeException)
     {
         DBG_ERROR( "DelayedFileDeletion::disposing: how this?" );
         // this should not happen:
@@ -506,10 +510,10 @@ static BOOL DeleteTmpFile_Impl(
 ////////////////////////////////////////////////////////////
 
 SwXMailMerge::SwXMailMerge() :
-    pMap( aSwMapProvider.GetPropertyMap( PROPERTY_MAP_MAILMERGE ) ),
     aEvtListeners   ( GetMailMergeMutex() ),
     aMergeListeners ( GetMailMergeMutex() ),
     aPropListeners  ( GetMailMergeMutex() ),
+    pMap( aSwMapProvider.GetPropertyMap( PROPERTY_MAP_MAILMERGE ) ),
     bSendAsHTML(sal_False),
     bSendAsAttachment(sal_False),
     bSaveAsSingleFile(sal_False)
@@ -997,7 +1001,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
     else
     {
         void *pData = NULL;
-        const com::sun::star::uno::Type* pType = pCur->pType;
+        const uno::Type* pType = pCur->pType;
         switch (pCur->nWID)
         {
             case WID_SELECTION :                pData = &aSelection;  break;
@@ -1226,8 +1230,8 @@ void SAL_CALL SwXMailMerge::removePropertyChangeListener(
 }
 
 void SAL_CALL SwXMailMerge::addVetoableChangeListener(
-        const OUString& rPropertyName,
-        const uno::Reference< beans::XVetoableChangeListener >& rListener )
+        const OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XVetoableChangeListener >& /*rListener*/ )
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // no vetoable property, thus no support for vetoable change listeners
@@ -1235,8 +1239,8 @@ void SAL_CALL SwXMailMerge::addVetoableChangeListener(
 }
 
 void SAL_CALL SwXMailMerge::removeVetoableChangeListener(
-        const OUString& rPropertyName,
-        const uno::Reference< beans::XVetoableChangeListener >& rListener )
+        const OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XVetoableChangeListener >& /*rListener*/ )
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // no vetoable property, thus no support for vetoable change listeners
@@ -1337,7 +1341,7 @@ OUString SAL_CALL SwXMailMerge_getImplementationName()
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SwXMailMerge_createInstance(
-        const uno::Reference< XMultiServiceFactory > & rSMgr)
+        const uno::Reference< XMultiServiceFactory > & /*rSMgr*/)
     throw( uno::Exception )
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
