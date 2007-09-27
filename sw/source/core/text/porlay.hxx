@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 13:40:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:17:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ public:
     void InitSpaceAdd();     // Creates pLLSpaceAdd if necessary
     void CreateSpaceAdd( const long nInit = 0 );
     inline void FinishSpaceAdd() { delete pLLSpaceAdd; pLLSpaceAdd = NULL; }
-    inline USHORT GetLLSpaceAddCount() const { return pLLSpaceAdd->size(); }
+    inline USHORT GetLLSpaceAddCount() const { return sal::static_int_cast< USHORT >(pLLSpaceAdd->size()); }
     inline void SetLLSpaceAdd( long nNew, USHORT nIdx )
     {
         if ( nIdx == GetLLSpaceAddCount() )
@@ -397,7 +397,7 @@ inline void SwLineLayout::ResetFlags()
 }
 
 inline SwLineLayout::SwLineLayout()
-    : pNext( 0 ), nRealHeight( 0 ), pLLSpaceAdd( 0 ), pKanaComp( 0 ),
+    : pNext( 0 ), pLLSpaceAdd( 0 ), pKanaComp( 0 ), nRealHeight( 0 ),
       bUnderscore( sal_False )
 {
     ResetFlags();
@@ -425,7 +425,7 @@ inline void SwParaPortion::FormatReset()
 // C30 ist mit dem ternaeren Ausdruck ueberfordert.
 inline SwLinePortion *SwLineLayout::GetFirstPortion() const
 {
-    register SwLinePortion *pTmp = pPortion;
+    SwLinePortion *pTmp = pPortion;
     if ( !pPortion )
         pTmp = (SwLinePortion*)this;
     return( pTmp );
