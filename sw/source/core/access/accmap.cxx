@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:34:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:22:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,7 +232,7 @@ void SAL_CALL SwDrawModellListener_Impl::removeEventListener( const uno::Referen
     maEventListeners.removeInterface( xListener );
 }
 
-void SwDrawModellListener_Impl::Notify( SfxBroadcaster& rBC,
+void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
         const SfxHint& rHint )
 {
     // do not broadcast notifications for writer fly frames, because there
@@ -270,6 +270,7 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& rBC,
         }
         catch( uno::RuntimeException const & r )
         {
+            (void)r;
 #if OSL_DEBUG_LEVEL > 1
             ByteString aError( "Runtime exception caught while notifying shape.:\n" );
             aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
@@ -1073,6 +1074,7 @@ SwAccessibleMap::~SwAccessibleMap()
                 {
                     SwAccessibleContext *pTmp =
                         static_cast< SwAccessibleContext * >( xTmp.get() );
+                    (void) pTmp;
                 }
                 ++aIter;
             }
@@ -1089,6 +1091,7 @@ SwAccessibleMap::~SwAccessibleMap()
                 {
                     ::accessibility::AccessibleShape *pTmp =
                         static_cast< ::accessibility::AccessibleShape* >( xTmp.get() );
+                    (void) pTmp;
                 }
                 ++aIter;
             }
@@ -1118,7 +1121,6 @@ SwAccessibleMap::~SwAccessibleMap()
             SwAccessibleEventList_Impl::iterator aIter = mpEvents->begin();
             while( aIter != mpEvents->end() )
             {
-                const SwAccessibleEvent_Impl& rEvent = *aIter;
                 ++aIter;
             }
         }
@@ -1127,8 +1129,6 @@ SwAccessibleMap::~SwAccessibleMap()
             SwAccessibleEventMap_Impl::iterator aIter = mpEventMap->begin();
             while( aIter != mpEventMap->end() )
             {
-                const SwFrmOrObj& rFrmOrObj = (*aIter).first;
-                const SwAccessibleEvent_Impl& rEvent = *(*aIter).second;
                 ++aIter;
             }
         }
@@ -1251,7 +1251,8 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                 switch( pFrm->GetType() )
                 {
                 case FRM_TXT:
-                    pAcc = new SwAccessibleParagraph( this, mnPara++,
+                    mnPara++;
+                    pAcc = new SwAccessibleParagraph( this,
                                     static_cast< const SwTxtFrm * >( pFrm ) );
                     break;
                 case FRM_HEADER:
@@ -2228,8 +2229,8 @@ Size SwAccessibleMap::PixelToLogic( const Size& rSize ) const
 sal_Bool SwAccessibleMap::ReplaceChild (
         ::accessibility::AccessibleShape* pCurrentChild,
         const uno::Reference< drawing::XShape >& _rxShape,
-        const long _nIndex,
-        const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
+        const long /*_nIndex*/,
+        const ::accessibility::AccessibleShapeTreeInfo& /*_rShapeTreeInfo*/
     )   throw (uno::RuntimeException)
 {
     const SdrObject *pObj = 0;
@@ -2483,11 +2484,11 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
                         if ( pTxtFrm )
                         {
                             uno::WeakReference < XAccessible > xWeakAcc;
-                            SwAccessibleContextMap_Impl::iterator aIter =
+                            SwAccessibleContextMap_Impl::iterator aMapIter =
                                                     mpFrmMap->find( pTxtFrm );
-                            if( aIter != mpFrmMap->end() )
+                            if( aMapIter != mpFrmMap->end() )
                             {
-                                xWeakAcc = (*aIter).second;
+                                xWeakAcc = (*aMapIter).second;
                                 SwAccessibleParaSelection aDataEntry(
                                     pTxtNode == &(pStartPos->nNode.GetNode())
                                                 ? pStartPos->nContent.GetIndex()
