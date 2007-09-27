@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:29:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:08:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,28 +139,28 @@
 
 using namespace utl;
 using namespace rtl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 
 class SwOLELRUCache : private SvPtrarr, private utl::ConfigItem
 {
     sal_uInt16 nLRU_InitSize;
     sal_Bool bInUnload;
-    com::sun::star::uno::Sequence< rtl::OUString > GetPropertyNames();
+    uno::Sequence< rtl::OUString > GetPropertyNames();
 
 public:
     SwOLELRUCache();
 
-    virtual void Notify( const com::sun::star::uno::Sequence<
+    virtual void Notify( const uno::Sequence<
                                 rtl::OUString>& aPropertyNames );
     virtual void Commit();
     void Load();
 
     void SetInUnload( BOOL bFlag )  { bInUnload = bFlag; }
-    SvPtrarr::Count;
+    using SvPtrarr::Count;
 
-    void Insert( SwOLEObj& rObj );
-    void Remove( SwOLEObj& rObj );
+    void InsertObj( SwOLEObj& rObj );
+    void RemoveObj( SwOLEObj& rObj );
 
     void RemovePtr( SwOLEObj* pObj )
     {
@@ -178,9 +178,9 @@ class SwOLEListener_Impl : public ::cppu::WeakImplHelper1< embed::XStateChangeLi
 public:
     SwOLEListener_Impl( SwOLEObj* pObj );
     void Release();
-    virtual void SAL_CALL changingState( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL changingState( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (embed::WrongStateException, uno::RuntimeException);
+    virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (uno::RuntimeException);
+    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw (uno::RuntimeException);
 };
 
 SwOLEListener_Impl::SwOLEListener_Impl( SwOLEObj* pObj )
@@ -188,41 +188,41 @@ SwOLEListener_Impl::SwOLEListener_Impl( SwOLEObj* pObj )
 {
     if ( mpObj->IsOleRef() && mpObj->GetOleRef()->getCurrentState() == embed::EmbedStates::RUNNING )
     {
-        pOLELRU_Cache->Insert( *mpObj );
+        pOLELRU_Cache->InsertObj( *mpObj );
     }
 }
 
-void SAL_CALL SwOLEListener_Impl::changingState( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL SwOLEListener_Impl::changingState( const lang::EventObject&, ::sal_Int32 , ::sal_Int32 ) throw (embed::WrongStateException, uno::RuntimeException)
 {
 }
 
-void SAL_CALL SwOLEListener_Impl::stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SwOLEListener_Impl::stateChanged( const lang::EventObject&, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (uno::RuntimeException)
 {
     if ( mpObj && nOldState == embed::EmbedStates::LOADED && nNewState == embed::EmbedStates::RUNNING )
     {
         if( !pOLELRU_Cache )
             pOLELRU_Cache = new SwOLELRUCache;
-        pOLELRU_Cache->Insert( *mpObj );
+        pOLELRU_Cache->InsertObj( *mpObj );
     }
     else if ( mpObj && nNewState == embed::EmbedStates::LOADED && nOldState == embed::EmbedStates::RUNNING )
     {
         if ( pOLELRU_Cache )
-            pOLELRU_Cache->Remove( *mpObj );
+            pOLELRU_Cache->RemoveObj( *mpObj );
     }
 }
 
 void SwOLEListener_Impl::Release()
 {
     if ( mpObj && pOLELRU_Cache )
-        pOLELRU_Cache->Remove( *mpObj );
+        pOLELRU_Cache->RemoveObj( *mpObj );
     mpObj=0;
     release();
 }
 
-void SAL_CALL SwOLEListener_Impl::disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SwOLEListener_Impl::disposing( const lang::EventObject& ) throw (uno::RuntimeException)
 {
     if ( mpObj && pOLELRU_Cache )
-        pOLELRU_Cache->Remove( *mpObj );
+        pOLELRU_Cache->RemoveObj( *mpObj );
 }
 
 // --------------------
@@ -241,7 +241,7 @@ public:
 
     virtual void        Closed();
     virtual void        DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue );
+                                const uno::Any & rValue );
 
     sal_Bool            Connect() { return GetRealObject() != NULL; }
 };
@@ -263,8 +263,8 @@ SwEmbedObjectLink::~SwEmbedObjectLink()
 
 // -----------------------------------------------------------------------------
 
-void SwEmbedObjectLink::DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue )
+void SwEmbedObjectLink::DataChanged( const String& ,
+                                const uno::Any & )
 {
     if ( !pOleNode->UpdateLinkURL_Impl() )
     {
@@ -707,9 +707,9 @@ void SwOLENode::CheckFileLink_Impl()
 }
 
 SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
-    xOLERef( xObj ),
     pOLENd( 0 ),
-    pListener( 0 )
+    pListener( 0 ),
+    xOLERef( xObj )
 {
     xOLERef.Lock( TRUE );
     if ( xObj.is() )
@@ -723,8 +723,8 @@ SwOLEObj::SwOLEObj( const svt::EmbeddedObjectRef& xObj ) :
 
 SwOLEObj::SwOLEObj( const String &rString, sal_Int64 nAspect ) :
     pOLENd( 0 ),
-    aName( rString ),
-    pListener( 0 )
+    pListener( 0 ),
+    aName( rString )
 {
     xOLERef.Lock( TRUE );
     xOLERef.SetViewAspect( nAspect );
@@ -857,8 +857,8 @@ uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
                 aArea.SetSize( Size( 5000,  5000 ) );
             // TODO/LATER: set replacement graphic for dead object
             // It looks as if it should work even without the object, because the replace will be generated automatically
-            ::rtl::OUString aName;
-            xObj = p->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_DUMMY_CLASSID ).GetByteSequence(), aName );
+            ::rtl::OUString aTmpName;
+            xObj = p->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_DUMMY_CLASSID ).GetByteSequence(), aTmpName );
         }
         // else
         {
@@ -876,7 +876,7 @@ uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
         // move object to first position in cache
         if( !pOLELRU_Cache )
             pOLELRU_Cache = new SwOLELRUCache;
-        pOLELRU_Cache->Insert( *this );
+        pOLELRU_Cache->InsertObj( *this );
     }
 
     return xOLERef.GetObject();
@@ -958,7 +958,7 @@ String SwOLEObj::GetDescription()
     {
         SvGlobalName aClassID( xEmbObj->getClassID() );
         if ( SotExchange::IsMath( aClassID ) )
-            aResult = SW_RES(STR_FORMULA);
+            aResult = SW_RES(STR_MATH_FORMULA);
         else if ( SotExchange::IsChart( aClassID ) )
             aResult = SW_RES(STR_CHART);
         else
@@ -972,14 +972,14 @@ String SwOLEObj::GetDescription()
 SwOLELRUCache::SwOLELRUCache()
     : SvPtrarr( 64, 16 ),
     utl::ConfigItem( OUString::createFromAscii( "Office.Common/Cache" )),
-    bInUnload( sal_False ),
-    nLRU_InitSize( 20 )
+    nLRU_InitSize( 20 ),
+    bInUnload( sal_False )
 {
     EnableNotification( GetPropertyNames() );
     Load();
 }
 
-com::sun::star::uno::Sequence< rtl::OUString > SwOLELRUCache::GetPropertyNames()
+uno::Sequence< rtl::OUString > SwOLELRUCache::GetPropertyNames()
 {
     Sequence< OUString > aNames( 1 );
     OUString* pNames = aNames.getArray();
@@ -987,7 +987,7 @@ com::sun::star::uno::Sequence< rtl::OUString > SwOLELRUCache::GetPropertyNames()
     return aNames;
 }
 
-void SwOLELRUCache::Notify( const com::sun::star::uno::Sequence< rtl::OUString>& rPropertyNames )
+void SwOLELRUCache::Notify( const uno::Sequence< rtl::OUString>&  )
 {
     Load();
 }
@@ -1032,7 +1032,7 @@ void SwOLELRUCache::Load()
     }
 }
 
-void SwOLELRUCache::Insert( SwOLEObj& rObj )
+void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
 {
     SwOLEObj* pObj = &rObj;
     USHORT nPos = SvPtrarr::GetPos( pObj );
@@ -1056,7 +1056,7 @@ void SwOLELRUCache::Insert( SwOLEObj& rObj )
     }
 }
 
-void SwOLELRUCache::Remove( SwOLEObj& rObj )
+void SwOLELRUCache::RemoveObj( SwOLEObj& rObj )
 {
     USHORT nPos = SvPtrarr::GetPos( &rObj );
     if ( nPos != 0xFFFF )
