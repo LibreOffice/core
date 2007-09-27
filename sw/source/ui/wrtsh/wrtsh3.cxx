@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:40:25 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:53:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,27 +79,28 @@
 #include "doc.hxx"
 #include "wrtsh.hrc"
 
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
+#include <unomid.h>
+
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
 extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
-FASTBOOL SwWrtShell::MoveBookMark(  BookMarkMove eFuncId,
-                                    sal_uInt16 nPos,
-                                    sal_Bool bStart )
+BOOL SwWrtShell::MoveBookMark(  BookMarkMove eFuncId,
+                                    sal_uInt16 nPos )
 {
 //JP 08.03.96: die Wizards brauchen die Selektion !!
 //  EndSelect();
     (this->*fnKillSel)( 0, sal_False );
 
-    FASTBOOL bRet = sal_True;
+    BOOL bRet = sal_True;
     switch(eFuncId)
     {
         case BOOKMARK_INDEX:bRet = SwCrsrShell::GotoBookmark( nPos );break;
         case BOOKMARK_NEXT: bRet = SwCrsrShell::GoNextBookmark();break;
         case BOOKMARK_PREV: bRet = SwCrsrShell::GoPrevBookmark();break;
+        default:;//prevent warning
     }
 
     if( bRet && IsSelFrmMode() )
@@ -121,7 +122,7 @@ FASTBOOL SwWrtShell::MoveBookMark(  BookMarkMove eFuncId,
  --------------------------------------------------------------------*/
 
 
-void SwWrtShell::DrawSelChanged(SdrView* pView)
+void SwWrtShell::DrawSelChanged( )
 {
     static sal_uInt16 __READONLY_DATA aInval[] =
     {
@@ -137,7 +138,7 @@ void SwWrtShell::DrawSelChanged(SdrView* pView)
     bNoInterrupt = bOldVal;
 }
 
-FASTBOOL SwWrtShell::GotoBookmark( const String& rName )
+BOOL SwWrtShell::GotoBookmark( const String& rName )
 {
     sal_uInt16 nPos = FindBookmark( rName );
     if( USHRT_MAX == nPos )
@@ -147,19 +148,19 @@ FASTBOOL SwWrtShell::GotoBookmark( const String& rName )
 }
 
 
-FASTBOOL SwWrtShell::GotoBookmark( sal_uInt16 nPos )
+BOOL SwWrtShell::GotoBookmark( sal_uInt16 nPos )
 {
     return MoveBookMark( BOOKMARK_INDEX, nPos );
 }
 
 
-FASTBOOL SwWrtShell::GoNextBookmark()
+BOOL SwWrtShell::GoNextBookmark()
 {
     return MoveBookMark( BOOKMARK_NEXT );
 }
 
 
-FASTBOOL SwWrtShell::GoPrevBookmark()
+BOOL SwWrtShell::GoPrevBookmark()
 {
     return MoveBookMark( BOOKMARK_PREV );
 }
