@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frminf.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:47:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:56:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ class SwTxtFrmInfo
     SwTwips GetLineStart( const SwTxtCursor &rLine ) const;
 
 public:
-    inline SwTxtFrmInfo( const SwTxtFrm *pFrm ) : pFrm(pFrm) { }
+    inline SwTxtFrmInfo( const SwTxtFrm *pTxtFrm ) : pFrm(pTxtFrm) { }
 
     // Passt der Absatz in eine Zeile?
     BOOL IsOneLine() const;
