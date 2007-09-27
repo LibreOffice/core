@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txatritr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:21:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:27:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ SwTxtAttrIterator::SwTxtAttrIterator( const SwTxtNode& rTNd, USHORT nWhchId,
                                         xub_StrLen nStt,
                                         sal_Bool bUseGetWhichOfScript )
     : aSIter( rTNd.GetTxt(), nStt ), rTxtNd( rTNd ),
-    nChgPos( nStt ), nAttrPos( 0 ), pParaItem( 0 ), nWhichId( nWhchId ),
+    pParaItem( 0 ), nChgPos( nStt ), nAttrPos( 0 ), nWhichId( nWhchId ),
     bIsUseGetWhichOfScript( bUseGetWhichOfScript )
 {
     SearchNextChg();
