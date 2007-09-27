@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwUndoField.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:14:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:55:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,13 +75,13 @@ public:
 class SwUndoFieldFromAPI : public SwUndoField
 {
     com::sun::star::uno::Any aOldVal, aNewVal;
-    BYTE nMId;
+    USHORT nWhich;
 
 public:
     SwUndoFieldFromAPI(const SwPosition & rPos,
                        const com::sun::star::uno::Any & rOldVal,
                        const com::sun::star::uno::Any & rNewVal,
-                       BYTE nMId);
+                       USHORT nWhich);
     virtual ~SwUndoFieldFromAPI();
 
     virtual void Undo(SwUndoIter & rIt);
