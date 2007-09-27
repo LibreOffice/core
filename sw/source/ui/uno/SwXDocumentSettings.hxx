@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:08:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:40:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 #ifdef PRECOMPILED
 #include "ui_pch.hxx"
-#endif
-#ifdef _MSC_VER
-#pragma hdrstop
 #endif
 
 #ifndef _COMPHELPER_MASTERPROPERTYSET_HXX_
