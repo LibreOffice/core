@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrftn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:44:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:23:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,8 +97,8 @@
 
 SwFmtFtn::SwFmtFtn( BOOL bEN )
     : SfxPoolItem( RES_TXTATR_FTN ),
-    nNumber( 0 ),
     pTxtAttr( 0 ),
+    nNumber( 0 ),
     bEndNote( bEN )
 {
 }
@@ -168,7 +168,9 @@ XubString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, BOOL bInclStrings ) const
         {
             const SwFmtFtnEndAtTxtEnd& rFtnEnd = (SwFmtFtnEndAtTxtEnd&)
                 pSectNd->GetSection().GetFmt()->GetAttr(
-                    IsEndNote() ? RES_END_AT_TXTEND : RES_FTN_AT_TXTEND );
+                                IsEndNote() ?
+                                static_cast<USHORT>(RES_END_AT_TXTEND) :
+                                static_cast<USHORT>(RES_FTN_AT_TXTEND) );
 
             if( FTNEND_ATTXTEND_OWNNUMANDFMT == rFtnEnd.GetValue() )
             {
@@ -204,10 +206,10 @@ XubString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, BOOL bInclStrings ) const
  *                      class SwTxt/FmtFnt
  *************************************************************************/
 
-SwTxtFtn::SwTxtFtn( const SwFmtFtn& rAttr, xub_StrLen nStart )
-    : SwTxtAttr( rAttr, nStart ),
-    pMyTxtNd( 0 ),
+SwTxtFtn::SwTxtFtn( const SwFmtFtn& rAttr, xub_StrLen nStartPos )
+    : SwTxtAttr( rAttr, nStartPos ),
     pStartNode( 0 ),
+    pMyTxtNd( 0 ),
     nSeqNo( USHRT_MAX )
 {
     ((SwFmtFtn&)rAttr).pTxtAttr = this;
@@ -320,7 +322,6 @@ void SwTxtFtn::CopyFtn( SwTxtFtn *pDest )
     if( pStartNode && pDest->GetStartNode() )
     {
         // die Fussnoten koennen in unterschiedlichen Dokumenten stehen !!
-        SwNodes &rSrcNodes = pMyTxtNd->GetDoc()->GetNodes();
         SwDoc* pDstDoc = pDest->pMyTxtNd->GetDoc();
         SwNodes &rDstNodes = pDstDoc->GetNodes();
 
@@ -456,7 +457,7 @@ USHORT SwTxtFtn::SetSeqRefNo()
 
     USHORT n, nFtnCnt = pDoc->GetFtnIdxs().Count();
 
-    BYTE nTmp = 255 < nFtnCnt ? 255 : nFtnCnt;
+    const BYTE nTmp = 255 < nFtnCnt ? 255 : static_cast<BYTE>(nFtnCnt);
     SvUShortsSort aArr( nTmp, nTmp );
 
     // dann testmal, ob die Nummer schon vergeben ist oder ob eine neue
@@ -491,7 +492,7 @@ void SwTxtFtn::SetUniqueSeqRefNo( SwDoc& rDoc )
 {
     USHORT n, nStt = 0, nFtnCnt = rDoc.GetFtnIdxs().Count();
 
-    BYTE nTmp = 255 < nFtnCnt ? 255 : nFtnCnt;
+    const BYTE nTmp = 255 < nFtnCnt ? 255 : static_cast<BYTE>(nFtnCnt);
     SvUShortsSort aArr( nTmp, nTmp );
 
     // dann alle Nummern zusammensammeln die schon existieren
