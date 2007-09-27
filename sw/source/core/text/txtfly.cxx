@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:11:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #include <vcl/virdev.hxx>
 #endif
 
-#include "frmsh.hxx"
 #include "viewsh.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
@@ -155,6 +154,8 @@
 #include "viewopt.hxx"  // SwViewOptions, nur zum Testen (Test2)
 #endif
 
+using namespace ::com::sun::star;
+
 /*****************************************************************************
  * Beschreibung:
  * Die Klasse SwTxtFly soll die Universalschnittstelle zwischen der
@@ -209,7 +210,7 @@ void SwTxtFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
  * ( hauptsaechlich Korrrektur der X-Position )
  *************************************************************************/
 
-void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
+void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     xub_StrLen nStartIdx, sal_Bool bAllWays ) const
 {
     ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
@@ -217,12 +218,12 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
 
     if( GetInfo().IsTest() )
         return;
-    SwLinePortion *pFirst = pCurr->GetFirstPortion();
+    SwLinePortion *pFirst = pCurrent->GetFirstPortion();
     SwLinePortion *pPos = pFirst;
     SwTxtPaintInfo aTmpInf( GetInfo() );
-    aTmpInf.SetpSpaceAdd( pCurr->GetpLLSpaceAdd() );
+    aTmpInf.SetpSpaceAdd( pCurrent->GetpLLSpaceAdd() );
     aTmpInf.ResetSpaceIdx();
-    aTmpInf.SetKanaComp( pCurr->GetpKanaComp() );
+    aTmpInf.SetKanaComp( pCurrent->GetpKanaComp() );
     aTmpInf.ResetKanaIdx();
 
     // Die Groesse des Frames
@@ -232,10 +233,10 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
     long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
     // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
     //lcl_MaxAscDescent( pPos, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
-    pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
+    pCurrent->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
 
-    KSHORT nTmpHeight = pCurr->GetRealHeight();
-    KSHORT nAscent = pCurr->GetAscent() + nTmpHeight - pCurr->Height();
+    KSHORT nTmpHeight = pCurrent->GetRealHeight();
+    KSHORT nAscent = pCurrent->GetAscent() + nTmpHeight - pCurrent->Height();
     objectpositioning::AsCharFlags nFlags = AS_CHAR_ULSPACE;
     if( GetMulti() )
     {
@@ -272,7 +273,7 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
             // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
             //lcl_MaxAscDescent( pFirst, nTmpAscent, nTmpDescent,
             //                  nFlyAsc, nFlyDesc, pPos );
-            pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, pPos );
+            pCurrent->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, pPos );
 
             if( pPos->IsGrfNumPortion() )
             {
@@ -311,7 +312,7 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
             }
             else if( GetMulti()->HasRotation() )
             {
-                aSt.Y() += pCurr->GetAscent() - GetMulti()->GetAscent();
+                aSt.Y() += pCurrent->GetAscent() - GetMulti()->GetAscent();
                 if( GetMulti()->IsRevers() )
                     aSt.X() += GetMulti()->Width();
                 else
@@ -325,7 +326,7 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
             do
             {
                 UpdatePos( pLay, aSt, nStIdx, bAllWays );
-                nStIdx += pLay->GetLen();
+                nStIdx = nStIdx + pLay->GetLen();
                 aSt.Y() += pLay->Height();
                 pLay = pLay->GetNext();
             } while ( pLay );
@@ -506,7 +507,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
     if( !pTxtFly->IsOn() || rInf.IsIgnoreFly() )
         return;
 
-    register const SwLinePortion *pLast = rInf.GetLast();
+    const SwLinePortion *pLast = rInf.GetLast();
 
     long nAscent;
     long nTop = Y();
@@ -632,9 +633,8 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             // ausweichen oder die Oberkante des naechsten Rahmens, den wir
             // beachten muessen. Wir koennen also jetzt getrost bis zu diesem
             // Wert anwachsen, so sparen wir einige Leerzeilen.
-            SWRECTFN( pFrm )
             long nNextTop = pTxtFly->GetNextTop();
-            if ( bVert )
+            if ( pFrm->IsVertical() )
                 nNextTop = pFrm->SwitchVerticalToHorizontal( nNextTop );
             if( nNextTop > aInter.Bottom() )
             {
@@ -740,14 +740,27 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
     // der Rahmen zunaechst zu weit nach oben gesetzt, um dann doch wieder
     // nach unten zu rutschen und dabei ein Repaint in einem Bereich ausloesen,
     // indem er niemals wirklich war.
-    KSHORT nAscent;
-    if ( IsQuick() || !pFly || !pFly->GetValidPosFlag() ||
-        ( GetInfo().GetTxtFrm()->IsVertical() ?
-          ( ! pFly->GetRefPoint().X() ||
-            ( nAscent = Abs( int( pFly->GetRelPos().X() ) ) ) ) :
-          ( ! pFly->GetRefPoint().Y() ||
-            ( nAscent = Abs( int( pFly->GetRelPos().Y() ) ) ) ) ) )
+    KSHORT nAscent = 0;
+
+    const bool bTxtFrmVertical = GetInfo().GetTxtFrm()->IsVertical();
+
+    const bool bUseFlyAscent = pFly && pFly->GetValidPosFlag() &&
+                               0 != ( bTxtFrmVertical ?
+                                      pFly->GetRefPoint().X() :
+                                      pFly->GetRefPoint().Y() );
+
+    if ( bUseFlyAscent )
+         nAscent = static_cast<USHORT>( Abs( int( bTxtFrmVertical ?
+                                                  pFly->GetRelPos().X() :
+                                                  pFly->GetRelPos().Y() ) ) );
+
+    // check if be prefer to use the ascent of the last portion:
+    if ( IsQuick() ||
+         !bUseFlyAscent ||
+         nAscent < rInf.GetLast()->GetAscent() )
+    {
         nAscent = rInf.GetLast()->GetAscent();
+    }
     else if( nAscent > nFlyAsc )
         nFlyAsc = nAscent;
 
@@ -825,7 +838,7 @@ SwTxtFly::SwTxtFly( const SwTxtFly& rTxtFly )
     bTopRule = rTxtFly.bTopRule;
 }
 
-void SwTxtFly::CtorInit( const SwTxtFrm *pFrm )
+void SwTxtFly::CtorInitTxtFly( const SwTxtFrm *pFrm )
 {
     mbIgnoreCurrentFrame = sal_False;
     mbIgnoreContour = sal_False;
@@ -967,8 +980,6 @@ const SwCntntFrm* SwTxtFly::_GetMaster()
  * Die On-Optimierung uebernimmt DrawText()!
  *************************************************************************/
 
-#define UINT32_MAX 0xFFFFFFFF
-
 sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
 {
     SwSaveClip aClipSave( rInf.GetpOut() );
@@ -1005,7 +1016,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     // --> OD 2006-08-15 #i68520#
     const UINT32 nCurrOrd = mpCurrAnchoredObj
                             ? mpCurrAnchoredObj->GetDrawObj()->GetOrdNum()
-                            : UINT32_MAX;
+                            : SAL_MAX_UINT32;
     // <--
     ASSERT( !bTopRule, "DrawTextOpaque: Wrong TopRule" );
 
@@ -1219,8 +1230,8 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                 if ( bInFooterOrHeader )
                 {
                     SwFmtVertOrient aVert( rFrmFmt.GetVertOrient() );
-                    BOOL bVertPrt = aVert.GetRelationOrient() == PRTAREA ||
-                            aVert.GetRelationOrient() == REL_PG_PRTAREA;
+                    BOOL bVertPrt = aVert.GetRelationOrient() == text::RelOrientation::PRINT_AREA ||
+                            aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA;
                     if( bVertPrt )
                         return sal_False;
                 }
@@ -1635,7 +1646,7 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
                 {
                     const SwFmtVertOrient &rTmpFmt =
                                     pAnchoredObj->GetFrmFmt().GetVertOrient();
-                    if( VERT_BOTTOM != rTmpFmt.GetVertOrient() )
+                    if( text::VertOrientation::BOTTOM != rTmpFmt.GetVertOrient() )
                         nMinBottom = ( bVert && nMinBottom ) ?
                                      Min( nMinBottom, aBound.Left() ) :
                                      Max( nMinBottom, (aBound.*fnRect->fnGetBottom)() );
@@ -1682,7 +1693,7 @@ SwTwips SwTxtFly::CalcMinBottom() const
             {
                 const SwFmtVertOrient &rTmpFmt =
                                     pAnchoredObj->GetFrmFmt().GetVertOrient();
-                if( VERT_BOTTOM != rTmpFmt.GetVertOrient() )
+                if( text::VertOrientation::BOTTOM != rTmpFmt.GetVertOrient() )
                 {
                     const SwRect aBound( pAnchoredObj->GetObjRectWithSpaces() );
                     if( aBound.Top() < nEndOfFrm )
@@ -1708,7 +1719,7 @@ SwTwips SwTxtFly::CalcMinBottom() const
  *************************************************************************/
 
 SwContourCache::SwContourCache() :
-    nObjCnt( 0 ), nPntCnt( 0 )
+    nPntCnt( 0 ), nObjCnt( 0 )
 {
     memset( (SdrObject**)pSdrObj, 0, sizeof(pSdrObj) );
     memset( pTextRanger, 0, sizeof(pTextRanger) );
@@ -1770,8 +1781,6 @@ const SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj
                                             const long nXPos,
                                             const sal_Bool bRight )
 {
-    SWRECTFN( pFrm )
-
     SwRect aRet;
     const SwFrmFmt* pFmt = &(pAnchoredObj->GetFrmFmt());
     if( pFmt->GetSurround().IsContour() &&
@@ -1983,9 +1992,8 @@ void SwContourCache::ShowContour( OutputDevice* pOut, const SdrObject* pObj,
 void SwTxtFly::ShowContour( OutputDevice* pOut )
 {
     MSHORT nFlyCount;
-    if( bOn && ( 0 != ( nFlyCount = GetAnchoredObjList()->size() ) ) )
+    if( bOn && ( 0 != ( nFlyCount = static_cast<USHORT>(GetAnchoredObjList()->size() ) ) ) )
     {
-        static ULONG nWidth = 20;
         Color aRedColor( COL_LIGHTRED );
         Color aGreenColor( COL_LIGHTGREEN );
         Color aSaveColor( pOut->GetLineColor() );
@@ -2212,17 +2220,13 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly,
         if( aTmp.IsOver( aLine ) && nTmpRight > nFlyRight )
         {
             nFlyRight = nTmpRight;
-            switch( eSurroundForTextWrap )
+            if( SURROUND_RIGHT == eSurroundForTextWrap ||
+                SURROUND_PARALLEL == eSurroundForTextWrap )
             {
-                case SURROUND_RIGHT :
-                case SURROUND_PARALLEL :
-                {
-                    // der FlyFrm wird ueberstimmt.
-                    if( nRight > nFlyRight )
-                        nRight = nFlyRight;
-                    bStop = sal_True;
-                    break;
-                }
+                // der FlyFrm wird ueberstimmt.
+                if( nRight > nFlyRight )
+                    nRight = nFlyRight;
+                bStop = sal_True;
             }
         }
     }
@@ -2367,6 +2371,8 @@ SwRect SwTxtFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
             CalcLeftMargin( aFly, nFlyPos, rLine );
             break;
         }
+        default:
+            break;
     }
     return aFly;
 }
