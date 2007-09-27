@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ascharanchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:17:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:53:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ namespace objectpositioning
                                             const SwTwips     _nLineDescent,
                                             const SwTwips     _nLineAscentInclObjs,
                                             const SwTwips     _nLineDescentInclObjs );
-            ~SwAsCharAnchoredObjectPosition();
+            virtual ~SwAsCharAnchoredObjectPosition();
 
             /** calculate position for object position
 
@@ -182,6 +182,6 @@ namespace objectpositioning
             */
             sal_uInt8 GetLineAlignment() const;
     };
-};
+} // namespace objectpositioning
 
 #endif
