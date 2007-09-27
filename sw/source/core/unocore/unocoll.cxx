@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:33:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:35:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,180 +158,180 @@ using namespace ::com::sun::star::lang;
  ******************************************************************************/
 struct  ProvNamesId_Type
 {
-    char *      pName;
-    sal_uInt16  nType;
+    const char *    pName;
+    sal_uInt16      nType;
 };
 
 const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
 {
-    "com.sun.star.text.TextTable",                          SW_SERVICE_TYPE_TEXTTABLE,
-    "com.sun.star.text.TextFrame",                          SW_SERVICE_TYPE_TEXTFRAME,
-    "com.sun.star.text.GraphicObject",                      SW_SERVICE_TYPE_GRAPHIC,
-    "com.sun.star.text.TextEmbeddedObject",                 SW_SERVICE_TYPE_OLE,
-    "com.sun.star.text.Bookmark",                           SW_SERVICE_TYPE_BOOKMARK,
-    "com.sun.star.text.Footnote",                           SW_SERVICE_TYPE_FOOTNOTE,
-    "com.sun.star.text.Endnote",                            SW_SERVICE_TYPE_ENDNOTE,
-    "com.sun.star.text.DocumentIndexMark",                  SW_SERVICE_TYPE_INDEXMARK,
-    "com.sun.star.text.DocumentIndex",                      SW_SERVICE_TYPE_INDEX,
-    "com.sun.star.text.ReferenceMark",                      SW_SERVICE_REFERENCE_MARK,
-    "com.sun.star.style.CharacterStyle",                    SW_SERVICE_STYLE_CHARACTER_STYLE,
-    "com.sun.star.style.ParagraphStyle",                    SW_SERVICE_STYLE_PARAGRAPH_STYLE,
-    "com.sun.star.style.FrameStyle",                        SW_SERVICE_STYLE_FRAME_STYLE,
-    "com.sun.star.style.PageStyle",                         SW_SERVICE_STYLE_PAGE_STYLE,
-    "com.sun.star.style.NumberingStyle",                    SW_SERVICE_STYLE_NUMBERING_STYLE,
-    "com.sun.star.text.ContentIndexMark",                   SW_SERVICE_CONTENT_INDEX_MARK,
-    "com.sun.star.text.ContentIndex",                       SW_SERVICE_CONTENT_INDEX,
-    "com.sun.star.text.UserIndexMark",                      SW_SERVICE_USER_INDEX_MARK,
-    "com.sun.star.text.UserIndex",                          SW_SERVICE_USER_INDEX,
-    "com.sun.star.text.TextSection",                        SW_SERVICE_TEXT_SECTION,
-    "com.sun.star.text.TextField.DateTime",                 SW_SERVICE_FIELDTYPE_DATETIME,
-    "com.sun.star.text.TextField.User",                     SW_SERVICE_FIELDTYPE_USER,
-    "com.sun.star.text.TextField.SetExpression",            SW_SERVICE_FIELDTYPE_SET_EXP,
-    "com.sun.star.text.TextField.GetExpression",            SW_SERVICE_FIELDTYPE_GET_EXP,
-    "com.sun.star.text.TextField.FileName",                 SW_SERVICE_FIELDTYPE_FILE_NAME,
-    "com.sun.star.text.TextField.PageNumber",               SW_SERVICE_FIELDTYPE_PAGE_NUM,
-    "com.sun.star.text.TextField.Author",                   SW_SERVICE_FIELDTYPE_AUTHOR,
-    "com.sun.star.text.TextField.Chapter",                  SW_SERVICE_FIELDTYPE_CHAPTER,
-    "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_0,
-    "com.sun.star.text.TextField.GetReference",             SW_SERVICE_FIELDTYPE_GET_REFERENCE,
-    "com.sun.star.text.TextField.ConditionalText",          SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT,
-    "com.sun.star.text.TextField.Annotation",               SW_SERVICE_FIELDTYPE_ANNOTATION,
-    "com.sun.star.text.TextField.Input",                    SW_SERVICE_FIELDTYPE_INPUT,
-    "com.sun.star.text.TextField.Macro",                    SW_SERVICE_FIELDTYPE_MACRO,
-    "com.sun.star.text.TextField.DDE",                      SW_SERVICE_FIELDTYPE_DDE,
-    "com.sun.star.text.TextField.HiddenParagraph",          SW_SERVICE_FIELDTYPE_HIDDEN_PARA,
-    "" /*com.sun.star.text.TextField.DocumentInfo"*/,       SW_SERVICE_FIELDTYPE_DOC_INFO,
-    "com.sun.star.text.TextField.TemplateName",             SW_SERVICE_FIELDTYPE_TEMPLATE_NAME,
-    "com.sun.star.text.TextField.ExtendedUser",             SW_SERVICE_FIELDTYPE_USER_EXT,
-    "com.sun.star.text.TextField.ReferencePageSet",         SW_SERVICE_FIELDTYPE_REF_PAGE_SET,
-    "com.sun.star.text.TextField.ReferencePageGet",         SW_SERVICE_FIELDTYPE_REF_PAGE_GET,
-    "com.sun.star.text.TextField.JumpEdit",                 SW_SERVICE_FIELDTYPE_JUMP_EDIT,
-    "com.sun.star.text.TextField.Script",                   SW_SERVICE_FIELDTYPE_SCRIPT,
-    "com.sun.star.text.TextField.DatabaseNextSet",          SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET,
-    "com.sun.star.text.TextField.DatabaseNumberOfSet",      SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET,
-    "com.sun.star.text.TextField.DatabaseSetNumber",        SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM,
-    "com.sun.star.text.TextField.Database",                 SW_SERVICE_FIELDTYPE_DATABASE,
-    "com.sun.star.text.TextField.DatabaseName",             SW_SERVICE_FIELDTYPE_DATABASE_NAME,
-    "com.sun.star.text.TextField.TableFormula",             SW_SERVICE_FIELDTYPE_TABLE_FORMULA,
-    "com.sun.star.text.TextField.PageCount",                SW_SERVICE_FIELDTYPE_PAGE_COUNT,
-    "com.sun.star.text.TextField.ParagraphCount",           SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT,
-    "com.sun.star.text.TextField.WordCount",                SW_SERVICE_FIELDTYPE_WORD_COUNT,
-    "com.sun.star.text.TextField.CharacterCount",           SW_SERVICE_FIELDTYPE_CHARACTER_COUNT,
-    "com.sun.star.text.TextField.TableCount",               SW_SERVICE_FIELDTYPE_TABLE_COUNT,
-    "com.sun.star.text.TextField.GraphicObjectCount",       SW_SERVICE_FIELDTYPE_GRAPHIC_OBJECT_COUNT,
-    "com.sun.star.text.TextField.EmbeddedObjectCount",      SW_SERVICE_FIELDTYPE_EMBEDDED_OBJECT_COUNT,
-    "com.sun.star.text.TextField.DocInfo.ChangeAuthor",     SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR,
-    "com.sun.star.text.TextField.DocInfo.ChangeDateTime",   SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME,
-    "com.sun.star.text.TextField.DocInfo.EditTime",         SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME,
-    "com.sun.star.text.TextField.DocInfo.Description",      SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION,
-    "com.sun.star.text.TextField.DocInfo.CreateAuthor",     SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR,
-    "com.sun.star.text.TextField.DocInfo.CreateDateTime",   SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME,
-    "com.sun.star.text.TextField.DocInfo.Info0",            SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0,
-    "com.sun.star.text.TextField.DocInfo.Info1",            SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1,
-    "com.sun.star.text.TextField.DocInfo.Info2",            SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2,
-    "com.sun.star.text.TextField.DocInfo.Info3",            SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3,
-    "com.sun.star.text.TextField.DocInfo.PrintAuthor",      SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR,
-    "com.sun.star.text.TextField.DocInfo.PrintDateTime",    SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME,
-    "com.sun.star.text.TextField.DocInfo.KeyWords",         SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS,
-    "com.sun.star.text.TextField.DocInfo.Subject",          SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT,
-    "com.sun.star.text.TextField.DocInfo.Title",            SW_SERVICE_FIELDTYPE_DOCINFO_TITLE,
-    "com.sun.star.text.TextField.DocInfo.Revision",         SW_SERVICE_FIELDTYPE_DOCINFO_REVISION,
-    "com.sun.star.text.TextField.Bibliography",             SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY,
-    "com.sun.star.text.TextField.CombinedCharacters",       SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS,
-    "com.sun.star.text.TextField.DropDown",                 SW_SERVICE_FIELDTYPE_DROPDOWN,
-    "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_4,
-    "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_5,
-    "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_6,
-    "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_7,
-    "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_8,
-    "com.sun.star.text.FieldMaster.User",                   SW_SERVICE_FIELDMASTER_USER,
-    "com.sun.star.text.FieldMaster.DDE",                    SW_SERVICE_FIELDMASTER_DDE,
-    "com.sun.star.text.FieldMaster.SetExpression",          SW_SERVICE_FIELDMASTER_SET_EXP,
-    "com.sun.star.text.FieldMaster.Database",               SW_SERVICE_FIELDMASTER_DATABASE,
-    "com.sun.star.text.FieldMaster.Bibliography",           SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY,
-    "",                                                     SW_SERVICE_FIELDMASTER_DUMMY2,
-    "",                                                     SW_SERVICE_FIELDMASTER_DUMMY3,
-    "",                                                     SW_SERVICE_FIELDMASTER_DUMMY4,
-    "",                                                     SW_SERVICE_FIELDMASTER_DUMMY5,
-    "com.sun.star.text.IllustrationsIndex",                 SW_SERVICE_INDEX_ILLUSTRATIONS,
-    "com.sun.star.text.ObjectIndex",                        SW_SERVICE_INDEX_OBJECTS,
-    "com.sun.star.text.TableIndex",                         SW_SERVICE_INDEX_TABLES,
-    "com.sun.star.text.Bibliography",                       SW_SERVICE_INDEX_BIBLIOGRAPHY,
-    "com.sun.star.text.Paragraph",                          SW_SERVICE_PARAGRAPH,
-    "com.sun.star.text.TextField.InputUser",                SW_SERVICE_FIELDTYPE_INPUT_USER,
-    "com.sun.star.text.TextField.HiddenText",               SW_SERVICE_FIELDTYPE_HIDDEN_TEXT,
-    "com.sun.star.style.ConditionalParagraphStyle",         SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE,
-    "com.sun.star.text.NumberingRules",                     SW_SERVICE_NUMBERING_RULES,
-    "com.sun.star.text.TextColumns",                        SW_SERVICE_TEXT_COLUMNS,
-    "com.sun.star.text.IndexHeaderSection",                 SW_SERVICE_INDEX_HEADER_SECTION,
-    "com.sun.star.text.Defaults",                           SW_SERVICE_DEFAULTS,
-    "com.sun.star.image.ImageMapRectangleObject",           SW_SERVICE_IMAP_RECTANGLE,
-    "com.sun.star.image.ImageMapCircleObject",              SW_SERVICE_IMAP_CIRCLE,
-    "com.sun.star.image.ImageMapPolygonObject",             SW_SERVICE_IMAP_POLYGON,
-    "com.sun.star.text.TextGraphicObject",                  SW_SERVICE_TYPE_TEXT_GRAPHIC,
-    "com.sun.star.chart2.data.DataProvider",                SW_SERVICE_CHART2_DATA_PROVIDER,
+    { "com.sun.star.text.TextTable",                          SW_SERVICE_TYPE_TEXTTABLE },
+    { "com.sun.star.text.TextFrame",                          SW_SERVICE_TYPE_TEXTFRAME },
+    { "com.sun.star.text.GraphicObject",                      SW_SERVICE_TYPE_GRAPHIC },
+    { "com.sun.star.text.TextEmbeddedObject",                 SW_SERVICE_TYPE_OLE },
+    { "com.sun.star.text.Bookmark",                           SW_SERVICE_TYPE_BOOKMARK },
+    { "com.sun.star.text.Footnote",                           SW_SERVICE_TYPE_FOOTNOTE },
+    { "com.sun.star.text.Endnote",                            SW_SERVICE_TYPE_ENDNOTE },
+    { "com.sun.star.text.DocumentIndexMark",                  SW_SERVICE_TYPE_INDEXMARK },
+    { "com.sun.star.text.DocumentIndex",                      SW_SERVICE_TYPE_INDEX },
+    { "com.sun.star.text.ReferenceMark",                      SW_SERVICE_REFERENCE_MARK },
+    { "com.sun.star.style.CharacterStyle",                    SW_SERVICE_STYLE_CHARACTER_STYLE },
+    { "com.sun.star.style.ParagraphStyle",                    SW_SERVICE_STYLE_PARAGRAPH_STYLE },
+    { "com.sun.star.style.FrameStyle",                        SW_SERVICE_STYLE_FRAME_STYLE },
+    { "com.sun.star.style.PageStyle",                         SW_SERVICE_STYLE_PAGE_STYLE },
+    { "com.sun.star.style.NumberingStyle",                    SW_SERVICE_STYLE_NUMBERING_STYLE },
+    { "com.sun.star.text.ContentIndexMark",                   SW_SERVICE_CONTENT_INDEX_MARK },
+    { "com.sun.star.text.ContentIndex",                       SW_SERVICE_CONTENT_INDEX },
+    { "com.sun.star.text.UserIndexMark",                      SW_SERVICE_USER_INDEX_MARK },
+    { "com.sun.star.text.UserIndex",                          SW_SERVICE_USER_INDEX },
+    { "com.sun.star.text.TextSection",                        SW_SERVICE_TEXT_SECTION },
+    { "com.sun.star.text.TextField.DateTime",                 SW_SERVICE_FIELDTYPE_DATETIME },
+    { "com.sun.star.text.TextField.User",                     SW_SERVICE_FIELDTYPE_USER },
+    { "com.sun.star.text.TextField.SetExpression",            SW_SERVICE_FIELDTYPE_SET_EXP },
+    { "com.sun.star.text.TextField.GetExpression",            SW_SERVICE_FIELDTYPE_GET_EXP },
+    { "com.sun.star.text.TextField.FileName",                 SW_SERVICE_FIELDTYPE_FILE_NAME },
+    { "com.sun.star.text.TextField.PageNumber",               SW_SERVICE_FIELDTYPE_PAGE_NUM },
+    { "com.sun.star.text.TextField.Author",                   SW_SERVICE_FIELDTYPE_AUTHOR },
+    { "com.sun.star.text.TextField.Chapter",                  SW_SERVICE_FIELDTYPE_CHAPTER },
+    { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_0 },
+    { "com.sun.star.text.TextField.GetReference",             SW_SERVICE_FIELDTYPE_GET_REFERENCE },
+    { "com.sun.star.text.TextField.ConditionalText",          SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT },
+    { "com.sun.star.text.TextField.Annotation",               SW_SERVICE_FIELDTYPE_ANNOTATION },
+    { "com.sun.star.text.TextField.Input",                    SW_SERVICE_FIELDTYPE_INPUT },
+    { "com.sun.star.text.TextField.Macro",                    SW_SERVICE_FIELDTYPE_MACRO },
+    { "com.sun.star.text.TextField.DDE",                      SW_SERVICE_FIELDTYPE_DDE },
+    { "com.sun.star.text.TextField.HiddenParagraph",          SW_SERVICE_FIELDTYPE_HIDDEN_PARA },
+    { "" /*com.sun.star.text.TextField.DocumentInfo"*/,       SW_SERVICE_FIELDTYPE_DOC_INFO },
+    { "com.sun.star.text.TextField.TemplateName",             SW_SERVICE_FIELDTYPE_TEMPLATE_NAME },
+    { "com.sun.star.text.TextField.ExtendedUser",             SW_SERVICE_FIELDTYPE_USER_EXT },
+    { "com.sun.star.text.TextField.ReferencePageSet",         SW_SERVICE_FIELDTYPE_REF_PAGE_SET },
+    { "com.sun.star.text.TextField.ReferencePageGet",         SW_SERVICE_FIELDTYPE_REF_PAGE_GET },
+    { "com.sun.star.text.TextField.JumpEdit",                 SW_SERVICE_FIELDTYPE_JUMP_EDIT },
+    { "com.sun.star.text.TextField.Script",                   SW_SERVICE_FIELDTYPE_SCRIPT },
+    { "com.sun.star.text.TextField.DatabaseNextSet",          SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET },
+    { "com.sun.star.text.TextField.DatabaseNumberOfSet",      SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET },
+    { "com.sun.star.text.TextField.DatabaseSetNumber",        SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM },
+    { "com.sun.star.text.TextField.Database",                 SW_SERVICE_FIELDTYPE_DATABASE },
+    { "com.sun.star.text.TextField.DatabaseName",             SW_SERVICE_FIELDTYPE_DATABASE_NAME },
+    { "com.sun.star.text.TextField.TableFormula",             SW_SERVICE_FIELDTYPE_TABLE_FORMULA },
+    { "com.sun.star.text.TextField.PageCount",                SW_SERVICE_FIELDTYPE_PAGE_COUNT },
+    { "com.sun.star.text.TextField.ParagraphCount",           SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT },
+    { "com.sun.star.text.TextField.WordCount",                SW_SERVICE_FIELDTYPE_WORD_COUNT },
+    { "com.sun.star.text.TextField.CharacterCount",           SW_SERVICE_FIELDTYPE_CHARACTER_COUNT },
+    { "com.sun.star.text.TextField.TableCount",               SW_SERVICE_FIELDTYPE_TABLE_COUNT },
+    { "com.sun.star.text.TextField.GraphicObjectCount",       SW_SERVICE_FIELDTYPE_GRAPHIC_OBJECT_COUNT },
+    { "com.sun.star.text.TextField.EmbeddedObjectCount",      SW_SERVICE_FIELDTYPE_EMBEDDED_OBJECT_COUNT },
+    { "com.sun.star.text.TextField.DocInfo.ChangeAuthor",     SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR },
+    { "com.sun.star.text.TextField.DocInfo.ChangeDateTime",   SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME },
+    { "com.sun.star.text.TextField.DocInfo.EditTime",         SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME },
+    { "com.sun.star.text.TextField.DocInfo.Description",      SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION },
+    { "com.sun.star.text.TextField.DocInfo.CreateAuthor",     SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR },
+    { "com.sun.star.text.TextField.DocInfo.CreateDateTime",   SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME },
+    { "com.sun.star.text.TextField.DocInfo.Info0",            SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0 },
+    { "com.sun.star.text.TextField.DocInfo.Info1",            SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1 },
+    { "com.sun.star.text.TextField.DocInfo.Info2",            SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2 },
+    { "com.sun.star.text.TextField.DocInfo.Info3",            SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3 },
+    { "com.sun.star.text.TextField.DocInfo.PrintAuthor",      SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR },
+    { "com.sun.star.text.TextField.DocInfo.PrintDateTime",    SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME },
+    { "com.sun.star.text.TextField.DocInfo.KeyWords",         SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS },
+    { "com.sun.star.text.TextField.DocInfo.Subject",          SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT },
+    { "com.sun.star.text.TextField.DocInfo.Title",            SW_SERVICE_FIELDTYPE_DOCINFO_TITLE },
+    { "com.sun.star.text.TextField.DocInfo.Revision",         SW_SERVICE_FIELDTYPE_DOCINFO_REVISION },
+    { "com.sun.star.text.TextField.Bibliography",             SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY },
+    { "com.sun.star.text.TextField.CombinedCharacters",       SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS },
+    { "com.sun.star.text.TextField.DropDown",                 SW_SERVICE_FIELDTYPE_DROPDOWN },
+    { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_4 },
+    { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_5 },
+    { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_6 },
+    { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_7 },
+    { "",                                                     SW_SERVICE_FIELDTYPE_DUMMY_8 },
+    { "com.sun.star.text.FieldMaster.User",                   SW_SERVICE_FIELDMASTER_USER },
+    { "com.sun.star.text.FieldMaster.DDE",                    SW_SERVICE_FIELDMASTER_DDE },
+    { "com.sun.star.text.FieldMaster.SetExpression",          SW_SERVICE_FIELDMASTER_SET_EXP },
+    { "com.sun.star.text.FieldMaster.Database",               SW_SERVICE_FIELDMASTER_DATABASE },
+    { "com.sun.star.text.FieldMaster.Bibliography",           SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY },
+    { "",                                                     SW_SERVICE_FIELDMASTER_DUMMY2 },
+    { "",                                                     SW_SERVICE_FIELDMASTER_DUMMY3 },
+    { "",                                                     SW_SERVICE_FIELDMASTER_DUMMY4 },
+    { "",                                                     SW_SERVICE_FIELDMASTER_DUMMY5 },
+    { "com.sun.star.text.IllustrationsIndex",                 SW_SERVICE_INDEX_ILLUSTRATIONS },
+    { "com.sun.star.text.ObjectIndex",                        SW_SERVICE_INDEX_OBJECTS },
+    { "com.sun.star.text.TableIndex",                         SW_SERVICE_INDEX_TABLES },
+    { "com.sun.star.text.Bibliography",                       SW_SERVICE_INDEX_BIBLIOGRAPHY },
+    { "com.sun.star.text.Paragraph",                          SW_SERVICE_PARAGRAPH },
+    { "com.sun.star.text.TextField.InputUser",                SW_SERVICE_FIELDTYPE_INPUT_USER },
+    { "com.sun.star.text.TextField.HiddenText",               SW_SERVICE_FIELDTYPE_HIDDEN_TEXT },
+    { "com.sun.star.style.ConditionalParagraphStyle",         SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE },
+    { "com.sun.star.text.NumberingRules",                     SW_SERVICE_NUMBERING_RULES },
+    { "com.sun.star.text.TextColumns",                        SW_SERVICE_TEXT_COLUMNS },
+    { "com.sun.star.text.IndexHeaderSection",                 SW_SERVICE_INDEX_HEADER_SECTION },
+    { "com.sun.star.text.Defaults",                           SW_SERVICE_DEFAULTS },
+    { "com.sun.star.image.ImageMapRectangleObject",           SW_SERVICE_IMAP_RECTANGLE },
+    { "com.sun.star.image.ImageMapCircleObject",              SW_SERVICE_IMAP_CIRCLE },
+    { "com.sun.star.image.ImageMapPolygonObject",             SW_SERVICE_IMAP_POLYGON },
+    { "com.sun.star.text.TextGraphicObject",                  SW_SERVICE_TYPE_TEXT_GRAPHIC },
+    { "com.sun.star.chart2.data.DataProvider",                SW_SERVICE_CHART2_DATA_PROVIDER },
 
     // case-correct versions of the service names (see #i67811)
-    CSS_TEXT_TEXTFIELD_DATE_TIME,                   SW_SERVICE_FIELDTYPE_DATETIME,
-    CSS_TEXT_TEXTFIELD_USER,                        SW_SERVICE_FIELDTYPE_USER,
-    CSS_TEXT_TEXTFIELD_SET_EXPRESSION,              SW_SERVICE_FIELDTYPE_SET_EXP,
-    CSS_TEXT_TEXTFIELD_GET_EXPRESSION,              SW_SERVICE_FIELDTYPE_GET_EXP,
-    CSS_TEXT_TEXTFIELD_FILE_NAME,                   SW_SERVICE_FIELDTYPE_FILE_NAME,
-    CSS_TEXT_TEXTFIELD_PAGE_NUMBER,                 SW_SERVICE_FIELDTYPE_PAGE_NUM,
-    CSS_TEXT_TEXTFIELD_AUTHOR,                      SW_SERVICE_FIELDTYPE_AUTHOR,
-    CSS_TEXT_TEXTFIELD_CHAPTER,                     SW_SERVICE_FIELDTYPE_CHAPTER,
-    CSS_TEXT_TEXTFIELD_GET_REFERENCE,               SW_SERVICE_FIELDTYPE_GET_REFERENCE,
-    CSS_TEXT_TEXTFIELD_CONDITIONAL_TEXT,            SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT,
-    CSS_TEXT_TEXTFIELD_ANNOTATION,                  SW_SERVICE_FIELDTYPE_ANNOTATION,
-    CSS_TEXT_TEXTFIELD_INPUT,                       SW_SERVICE_FIELDTYPE_INPUT,
-    CSS_TEXT_TEXTFIELD_MACRO,                       SW_SERVICE_FIELDTYPE_MACRO,
-    CSS_TEXT_TEXTFIELD_DDE,                         SW_SERVICE_FIELDTYPE_DDE,
-    CSS_TEXT_TEXTFIELD_HIDDEN_PARAGRAPH,            SW_SERVICE_FIELDTYPE_HIDDEN_PARA,
-    CSS_TEXT_TEXTFIELD_TEMPLATE_NAME,               SW_SERVICE_FIELDTYPE_TEMPLATE_NAME,
-    CSS_TEXT_TEXTFIELD_EXTENDED_USER,               SW_SERVICE_FIELDTYPE_USER_EXT,
-    CSS_TEXT_TEXTFIELD_REFERENCE_PAGE_SET,          SW_SERVICE_FIELDTYPE_REF_PAGE_SET,
-    CSS_TEXT_TEXTFIELD_REFERENCE_PAGE_GET,          SW_SERVICE_FIELDTYPE_REF_PAGE_GET,
-    CSS_TEXT_TEXTFIELD_JUMP_EDIT,                   SW_SERVICE_FIELDTYPE_JUMP_EDIT,
-    CSS_TEXT_TEXTFIELD_SCRIPT,                      SW_SERVICE_FIELDTYPE_SCRIPT,
-    CSS_TEXT_TEXTFIELD_DATABASE_NEXT_SET,           SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET,
-    CSS_TEXT_TEXTFIELD_DATABASE_NUMBER_OF_SET,      SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET,
-    CSS_TEXT_TEXTFIELD_DATABASE_SET_NUMBER,         SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM,
-    CSS_TEXT_TEXTFIELD_DATABASE,                    SW_SERVICE_FIELDTYPE_DATABASE,
-    CSS_TEXT_TEXTFIELD_DATABASE_NAME,               SW_SERVICE_FIELDTYPE_DATABASE_NAME,
-    CSS_TEXT_TEXTFIELD_TABLE_FORMULA,               SW_SERVICE_FIELDTYPE_TABLE_FORMULA,
-    CSS_TEXT_TEXTFIELD_PAGE_COUNT,                  SW_SERVICE_FIELDTYPE_PAGE_COUNT,
-    CSS_TEXT_TEXTFIELD_PARAGRAPH_COUNT,             SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT,
-    CSS_TEXT_TEXTFIELD_WORD_COUNT,                  SW_SERVICE_FIELDTYPE_WORD_COUNT,
-    CSS_TEXT_TEXTFIELD_CHARACTER_COUNT,             SW_SERVICE_FIELDTYPE_CHARACTER_COUNT,
-    CSS_TEXT_TEXTFIELD_TABLE_COUNT,                 SW_SERVICE_FIELDTYPE_TABLE_COUNT,
-    CSS_TEXT_TEXTFIELD_GRAPHIC_OBJECT_COUNT,        SW_SERVICE_FIELDTYPE_GRAPHIC_OBJECT_COUNT,
-    CSS_TEXT_TEXTFIELD_EMBEDDED_OBJECT_COUNT,       SW_SERVICE_FIELDTYPE_EMBEDDED_OBJECT_COUNT,
-    CSS_TEXT_TEXTFIELD_DOCINFO_CHANGE_AUTHOR,       SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR,
-    CSS_TEXT_TEXTFIELD_DOCINFO_CHANGE_DATE_TIME,    SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME,
-    CSS_TEXT_TEXTFIELD_DOCINFO_EDIT_TIME,           SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME,
-    CSS_TEXT_TEXTFIELD_DOCINFO_DESCRIPTION,         SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION,
-    CSS_TEXT_TEXTFIELD_DOCINFO_CREATE_AUTHOR,       SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR,
-    CSS_TEXT_TEXTFIELD_DOCINFO_CREATE_DATE_TIME,    SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME,
-    CSS_TEXT_TEXTFIELD_DOCINFO_INFO0,               SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0,
-    CSS_TEXT_TEXTFIELD_DOCINFO_INFO1,               SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1,
-    CSS_TEXT_TEXTFIELD_DOCINFO_INFO2,               SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2,
-    CSS_TEXT_TEXTFIELD_DOCINFO_INFO3,               SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3,
-    CSS_TEXT_TEXTFIELD_DOCINFO_PRINT_AUTHOR,        SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR,
-    CSS_TEXT_TEXTFIELD_DOCINFO_PRINT_DATE_TIME,     SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME,
-    CSS_TEXT_TEXTFIELD_DOCINFO_KEY_WORDS,           SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS,
-    CSS_TEXT_TEXTFIELD_DOCINFO_SUBJECT,             SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT,
-    CSS_TEXT_TEXTFIELD_DOCINFO_TITLE,               SW_SERVICE_FIELDTYPE_DOCINFO_TITLE,
-    CSS_TEXT_TEXTFIELD_DOCINFO_REVISION,            SW_SERVICE_FIELDTYPE_DOCINFO_REVISION,
-    CSS_TEXT_TEXTFIELD_BIBLIOGRAPHY,                SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY,
-    CSS_TEXT_TEXTFIELD_COMBINED_CHARACTERS,         SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS,
-    CSS_TEXT_TEXTFIELD_DROP_DOWN,                   SW_SERVICE_FIELDTYPE_DROPDOWN,
-    CSS_TEXT_TEXTFIELD_INPUT_USER,                  SW_SERVICE_FIELDTYPE_INPUT_USER,
-    CSS_TEXT_TEXTFIELD_HIDDEN_TEXT,                 SW_SERVICE_FIELDTYPE_HIDDEN_TEXT,
-    CSS_TEXT_FIELDMASTER_USER,                      SW_SERVICE_FIELDMASTER_USER,
-    CSS_TEXT_FIELDMASTER_DDE,                       SW_SERVICE_FIELDMASTER_DDE,
-    CSS_TEXT_FIELDMASTER_SET_EXPRESSION,            SW_SERVICE_FIELDMASTER_SET_EXP,
-    CSS_TEXT_FIELDMASTER_DATABASE,                  SW_SERVICE_FIELDMASTER_DATABASE,
-    CSS_TEXT_FIELDMASTER_BIBLIOGRAPHY,              SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY
+    { CSS_TEXT_TEXTFIELD_DATE_TIME,                   SW_SERVICE_FIELDTYPE_DATETIME },
+    { CSS_TEXT_TEXTFIELD_USER,                        SW_SERVICE_FIELDTYPE_USER },
+    { CSS_TEXT_TEXTFIELD_SET_EXPRESSION,              SW_SERVICE_FIELDTYPE_SET_EXP },
+    { CSS_TEXT_TEXTFIELD_GET_EXPRESSION,              SW_SERVICE_FIELDTYPE_GET_EXP },
+    { CSS_TEXT_TEXTFIELD_FILE_NAME,                   SW_SERVICE_FIELDTYPE_FILE_NAME },
+    { CSS_TEXT_TEXTFIELD_PAGE_NUMBER,                 SW_SERVICE_FIELDTYPE_PAGE_NUM },
+    { CSS_TEXT_TEXTFIELD_AUTHOR,                      SW_SERVICE_FIELDTYPE_AUTHOR },
+    { CSS_TEXT_TEXTFIELD_CHAPTER,                     SW_SERVICE_FIELDTYPE_CHAPTER },
+    { CSS_TEXT_TEXTFIELD_GET_REFERENCE,               SW_SERVICE_FIELDTYPE_GET_REFERENCE },
+    { CSS_TEXT_TEXTFIELD_CONDITIONAL_TEXT,            SW_SERVICE_FIELDTYPE_CONDITIONED_TEXT },
+    { CSS_TEXT_TEXTFIELD_ANNOTATION,                  SW_SERVICE_FIELDTYPE_ANNOTATION },
+    { CSS_TEXT_TEXTFIELD_INPUT,                       SW_SERVICE_FIELDTYPE_INPUT },
+    { CSS_TEXT_TEXTFIELD_MACRO,                       SW_SERVICE_FIELDTYPE_MACRO },
+    { CSS_TEXT_TEXTFIELD_DDE,                         SW_SERVICE_FIELDTYPE_DDE },
+    { CSS_TEXT_TEXTFIELD_HIDDEN_PARAGRAPH,            SW_SERVICE_FIELDTYPE_HIDDEN_PARA },
+    { CSS_TEXT_TEXTFIELD_TEMPLATE_NAME,               SW_SERVICE_FIELDTYPE_TEMPLATE_NAME },
+    { CSS_TEXT_TEXTFIELD_EXTENDED_USER,               SW_SERVICE_FIELDTYPE_USER_EXT },
+    { CSS_TEXT_TEXTFIELD_REFERENCE_PAGE_SET,          SW_SERVICE_FIELDTYPE_REF_PAGE_SET },
+    { CSS_TEXT_TEXTFIELD_REFERENCE_PAGE_GET,          SW_SERVICE_FIELDTYPE_REF_PAGE_GET },
+    { CSS_TEXT_TEXTFIELD_JUMP_EDIT,                   SW_SERVICE_FIELDTYPE_JUMP_EDIT },
+    { CSS_TEXT_TEXTFIELD_SCRIPT,                      SW_SERVICE_FIELDTYPE_SCRIPT },
+    { CSS_TEXT_TEXTFIELD_DATABASE_NEXT_SET,           SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET },
+    { CSS_TEXT_TEXTFIELD_DATABASE_NUMBER_OF_SET,      SW_SERVICE_FIELDTYPE_DATABASE_NUM_SET },
+    { CSS_TEXT_TEXTFIELD_DATABASE_SET_NUMBER,         SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM },
+    { CSS_TEXT_TEXTFIELD_DATABASE,                    SW_SERVICE_FIELDTYPE_DATABASE },
+    { CSS_TEXT_TEXTFIELD_DATABASE_NAME,               SW_SERVICE_FIELDTYPE_DATABASE_NAME },
+    { CSS_TEXT_TEXTFIELD_TABLE_FORMULA,               SW_SERVICE_FIELDTYPE_TABLE_FORMULA },
+    { CSS_TEXT_TEXTFIELD_PAGE_COUNT,                  SW_SERVICE_FIELDTYPE_PAGE_COUNT },
+    { CSS_TEXT_TEXTFIELD_PARAGRAPH_COUNT,             SW_SERVICE_FIELDTYPE_PARAGRAPH_COUNT },
+    { CSS_TEXT_TEXTFIELD_WORD_COUNT,                  SW_SERVICE_FIELDTYPE_WORD_COUNT },
+    { CSS_TEXT_TEXTFIELD_CHARACTER_COUNT,             SW_SERVICE_FIELDTYPE_CHARACTER_COUNT },
+    { CSS_TEXT_TEXTFIELD_TABLE_COUNT,                 SW_SERVICE_FIELDTYPE_TABLE_COUNT },
+    { CSS_TEXT_TEXTFIELD_GRAPHIC_OBJECT_COUNT,        SW_SERVICE_FIELDTYPE_GRAPHIC_OBJECT_COUNT },
+    { CSS_TEXT_TEXTFIELD_EMBEDDED_OBJECT_COUNT,       SW_SERVICE_FIELDTYPE_EMBEDDED_OBJECT_COUNT },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_CHANGE_AUTHOR,       SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_CHANGE_DATE_TIME,    SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_DATE_TIME },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_EDIT_TIME,           SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_DESCRIPTION,         SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_CREATE_AUTHOR,       SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_AUTHOR },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_CREATE_DATE_TIME,    SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_INFO0,               SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0 },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_INFO1,               SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1 },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_INFO2,               SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2 },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_INFO3,               SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3 },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_PRINT_AUTHOR,        SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_PRINT_DATE_TIME,     SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_KEY_WORDS,           SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_SUBJECT,             SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_TITLE,               SW_SERVICE_FIELDTYPE_DOCINFO_TITLE },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_REVISION,            SW_SERVICE_FIELDTYPE_DOCINFO_REVISION },
+    { CSS_TEXT_TEXTFIELD_BIBLIOGRAPHY,                SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY },
+    { CSS_TEXT_TEXTFIELD_COMBINED_CHARACTERS,         SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS },
+    { CSS_TEXT_TEXTFIELD_DROP_DOWN,                   SW_SERVICE_FIELDTYPE_DROPDOWN },
+    { CSS_TEXT_TEXTFIELD_INPUT_USER,                  SW_SERVICE_FIELDTYPE_INPUT_USER },
+    { CSS_TEXT_TEXTFIELD_HIDDEN_TEXT,                 SW_SERVICE_FIELDTYPE_HIDDEN_TEXT },
+    { CSS_TEXT_FIELDMASTER_USER,                      SW_SERVICE_FIELDMASTER_USER },
+    { CSS_TEXT_FIELDMASTER_DDE,                       SW_SERVICE_FIELDMASTER_DDE },
+    { CSS_TEXT_FIELDMASTER_SET_EXPRESSION,            SW_SERVICE_FIELDMASTER_SET_EXP },
+    { CSS_TEXT_FIELDMASTER_DATABASE,                  SW_SERVICE_FIELDMASTER_DATABASE },
+    { CSS_TEXT_FIELDMASTER_BIBLIOGRAPHY,              SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY }
 };
 
 /* -----------------------------23.03.01 13:38--------------------------------
@@ -707,7 +707,7 @@ uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nIndex)
     {
         if(0 <= nIndex && GetDoc()->GetTblFrmFmtCount(sal_True) > nIndex)
         {
-            SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt( nIndex, sal_True);
+            SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt( static_cast< xub_StrLen >(nIndex), sal_True);
             uno::Reference< XTextTable >  xTbl = SwXTextTables::GetObject(rFmt);
             aRet.setValue( &xTbl,
                 ::getCppuType((uno::Reference< XTextTable>*)0));
@@ -885,8 +885,8 @@ Sequence< OUString > SwXFrames::getSupportedServiceNames(void) throw( RuntimeExc
 /*-- 14.01.99 08:20:18---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXFrames::SwXFrames(SwDoc* pDoc, FlyCntType eSet) :
-    SwUnoCollection(pDoc),
+SwXFrames::SwXFrames(SwDoc* _pDoc, FlyCntType eSet) :
+    SwUnoCollection(_pDoc),
     eType(eSet)
 {
 }
@@ -904,7 +904,7 @@ SwXFrames::~SwXFrames()
 sal_Int32 SwXFrames::getCount(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    sal_uInt16 nRet = 0;
+    sal_Int32 nRet = 0;
     if(IsValid())
         nRet = GetDoc()->GetFlyCount(eType);
     else
@@ -946,6 +946,9 @@ uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
                     aRet.setValue(&xRef, ::getCppuType((Reference<XEmbeddedObjectSupplier>*)0));
                 }
                 break;
+
+                default:
+                    ;
             }
         }
         else
@@ -1002,6 +1005,9 @@ uno::Any SwXFrames::getByName(const OUString& rName)
             aRet.setValue(&xRef, ::getCppuType((Reference<XEmbeddedObjectSupplier>*)0));
         }
         break;
+
+        default:
+            ;
     }
     return aRet;
 }
@@ -1040,6 +1046,8 @@ sal_Bool SwXFrames::hasByName(const OUString& rName) throw( uno::RuntimeExceptio
     {
         case FLYCNTTYPE_GRF:    nNodeType = ND_GRFNODE; break;
         case FLYCNTTYPE_OLE:    nNodeType = ND_OLENODE; break;
+        default:
+            ;
     }
 
     return 0 != GetDoc()->FindFlyByName( rName, nNodeType );
@@ -1065,6 +1073,8 @@ uno::Type SAL_CALL SwXFrames::getElementType() throw(uno::RuntimeException)
         case FLYCNTTYPE_OLE:
             aRet = ::getCppuType((uno::Reference<XEmbeddedObjectSupplier>*)0);
         break;
+        default:
+            ;
     }
     return aRet;
 }
@@ -1101,6 +1111,8 @@ SwXFrame*   SwXFrames::GetObject( SwFrmFmt& rFmt, FlyCntType eType )
             case FLYCNTTYPE_OLE:
                 pFrm = new SwXTextEmbeddedObject(rFmt);
             break;
+            default:
+                ;
         }
     }
     return pFrm;
@@ -1136,8 +1148,8 @@ Sequence< OUString > SwXTextFrames::getSupportedServiceNames(void) throw( Runtim
 /*-- 14.01.99 08:06:16---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXTextFrames::SwXTextFrames(SwDoc* pDoc) :
-    SwXFrames(pDoc, FLYCNTTYPE_FRM)
+SwXTextFrames::SwXTextFrames(SwDoc* _pDoc) :
+    SwXFrames(_pDoc, FLYCNTTYPE_FRM)
 {
 }
 /*-- 14.01.99 08:06:17---------------------------------------------------
@@ -1179,8 +1191,8 @@ Sequence< OUString > SwXTextGraphicObjects::getSupportedServiceNames(void) throw
 /*-- 14.01.99 08:45:53---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXTextGraphicObjects::SwXTextGraphicObjects(SwDoc* pDoc) :
-    SwXFrames(pDoc, FLYCNTTYPE_GRF)
+SwXTextGraphicObjects::SwXTextGraphicObjects(SwDoc* _pDoc) :
+    SwXFrames(_pDoc, FLYCNTTYPE_GRF)
 {
 }
 /*-- 14.01.99 08:45:54---------------------------------------------------
@@ -1220,8 +1232,8 @@ Sequence< OUString > SwXTextEmbeddedObjects::getSupportedServiceNames(void) thro
 /*-- 14.01.99 08:45:13---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXTextEmbeddedObjects::SwXTextEmbeddedObjects(SwDoc* pDoc) :
-        SwXFrames(pDoc, FLYCNTTYPE_OLE)
+SwXTextEmbeddedObjects::SwXTextEmbeddedObjects(SwDoc* _pDoc) :
+        SwXFrames(_pDoc, FLYCNTTYPE_OLE)
 {
 }
 /*-- 14.01.99 08:45:31---------------------------------------------------
@@ -1262,8 +1274,8 @@ Sequence< OUString > SwXTextSections::getSupportedServiceNames(void) throw( Runt
 /*-- 14.01.99 09:06:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXTextSections::SwXTextSections(SwDoc* pDoc) :
-    SwUnoCollection(pDoc)
+SwXTextSections::SwXTextSections(SwDoc* _pDoc) :
+    SwUnoCollection(_pDoc)
 {
 }
 /*-- 14.01.99 09:06:05---------------------------------------------------
@@ -1487,8 +1499,8 @@ Sequence< OUString > SwXBookmarks::getSupportedServiceNames(void) throw( Runtime
 /*-- 14.01.99 09:05:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXBookmarks::SwXBookmarks(SwDoc*   pDoc) :
-    SwUnoCollection(pDoc)
+SwXBookmarks::SwXBookmarks(SwDoc* _pDoc) :
+    SwUnoCollection(_pDoc)
 {
 }
 /*-- 14.01.99 09:05:48---------------------------------------------------
@@ -1638,8 +1650,8 @@ SwXBookmark*    SwXBookmarks::GetObject( SwBookmark& rBkm, SwDoc* pDoc )
  *
  ******************************************************************/
 
-SwXNumberingRulesCollection::SwXNumberingRulesCollection( SwDoc* pDoc ) :
-    SwUnoCollection(pDoc)
+SwXNumberingRulesCollection::SwXNumberingRulesCollection( SwDoc* _pDoc ) :
+    SwUnoCollection(_pDoc)
 {
 }
 
@@ -1660,13 +1672,12 @@ uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Any aRet;
-    sal_uInt32 nCount = 0;
     if(IsValid())
     {
         uno::Reference< XIndexReplace >  xRef;
         if ( nIndex < GetDoc()->GetNumRuleTbl().Count() )
         {
-            xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTbl()[nIndex] );
+            xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTbl()[ static_cast< USHORT >(nIndex) ] );
             aRet.setValue(&xRef, ::getCppuType((uno::Reference<XIndexReplace>*)0));
         }
 
@@ -1718,8 +1729,8 @@ Sequence< OUString > SwXFootnotes::getSupportedServiceNames(void) throw( Runtime
 /*-- 14.01.99 09:03:52---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXFootnotes::SwXFootnotes(sal_Bool bEnd, SwDoc* pDoc) :
-    SwUnoCollection(pDoc),
+SwXFootnotes::SwXFootnotes(sal_Bool bEnd, SwDoc* _pDoc) :
+    SwUnoCollection(_pDoc),
     bEndnote(bEnd)
 {
 }
@@ -1758,7 +1769,7 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Any aRet;
-    sal_uInt32 nCount = 0;
+    sal_Int32 nCount = 0;
     if(IsValid())
     {
         sal_uInt16 n, nFtnCnt = GetDoc()->GetFtnIdxs().Count();
@@ -1846,8 +1857,8 @@ Sequence< OUString > SwXReferenceMarks::getSupportedServiceNames(void) throw( Ru
 /*-- 14.01.99 09:03:16---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXReferenceMarks::SwXReferenceMarks(SwDoc* pDoc) :
-    SwUnoCollection(pDoc)
+SwXReferenceMarks::SwXReferenceMarks(SwDoc* _pDoc) :
+    SwUnoCollection(_pDoc)
 {
 }
 /*-- 14.01.99 09:03:16---------------------------------------------------
