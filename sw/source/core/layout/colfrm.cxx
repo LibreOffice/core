@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:17:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:01:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,9 +196,9 @@ static BOOL lcl_AddColumns( SwLayoutFrm *pCont, USHORT nCount )
         }
         for ( USHORT i = 0; i < nCount; ++i )
         {
-            SwColumnFrm *pTmp = new SwColumnFrm( pNeighbourCol->GetFmt() );
-            pTmp->SetMaxFtnHeight( nMax );
-            pTmp->InsertBefore( pCont, NULL );
+            SwColumnFrm *pTmpCol = new SwColumnFrm( pNeighbourCol->GetFmt() );
+            pTmpCol->SetMaxFtnHeight( nMax );
+            pTmpCol->InsertBefore( pCont, NULL );
             pNeighbourCol = (SwLayoutFrm*)pNeighbourCol->GetNext();
         }
     }
@@ -348,7 +348,7 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
         return;
     }
 
-    const FASTBOOL bVert = IsVertical();
+    const BOOL bVert = IsVertical();
     SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
 
     //Ist ein Pointer da, oder sollen wir die Attribute einstellen,
