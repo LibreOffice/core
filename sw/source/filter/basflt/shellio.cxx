@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:35:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:44:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,7 @@ void adjustOutlineLevel(SwDoc &rDoc)
     }
     for(int i=0;i<MAXLEVEL;i++) {
         if (fmtsPerOutlineLevel[i]>0) {
-            SwTxtFmtColl* heading=rDoc.GetTxtCollFromPool(RES_POOLCOLL_HEADLINE1+i);
+            SwTxtFmtColl* heading=rDoc.GetTxtCollFromPool( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1+i) );
             if (!rDoc.IsUsed(*heading)) {
                 fmtsPerOutlineLevel[i]++; // just for the statistics
             }
@@ -272,8 +272,8 @@ ULONG SwReader::Read( const Reader& rOptions )
 
     SwNodeIndex aSplitIdx( pDoc->GetNodes() );
 
-    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_IGNORE );
+    RedlineMode_t eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
 
     // Array von FlyFormaten
     SwSpzFrmFmts aFlyFrmArr;
@@ -369,7 +369,7 @@ ULONG SwReader::Read( const Reader& rOptions )
                             {
                                 pDoc->SetRedlineMode_intern( eOld );
                                 pDoc->AppendUndo( new SwUndoInsLayFmt( pFrmFmt ) );
-                                pDoc->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_IGNORE );
+                                pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
                             }
                             if( pFrmFmt->GetDepends() )
                             {
@@ -399,17 +399,17 @@ ULONG SwReader::Read( const Reader& rOptions )
 
             pDoc->SetRedlineMode_intern( eOld );
             if( pDoc->IsRedlineOn() )
-                pDoc->AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, *pUndoPam ), true);
+                pDoc->AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, *pUndoPam ), true);
             else
                 pDoc->SplitRedline( *pUndoPam );
-            pDoc->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_IGNORE );
+            pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
         }
         if( bSaveUndo )
         {
             pDoc->SetRedlineMode_intern( eOld );
             pUndo->SetInsertRange( *pUndoPam, FALSE );
             pDoc->AppendUndo( pUndo );
-            pDoc->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_IGNORE );
+            pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
         }
 
         delete pUndoPam;
@@ -452,7 +452,7 @@ ULONG SwReader::Read( const Reader& rOptions )
         {
             pDoc->SetRedlineMode_intern( eOld );
             pDoc->EndUndo( UNDO_INSDOKUMENT, NULL );
-            pDoc->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_IGNORE );
+            pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
         }
     }
 
@@ -467,7 +467,7 @@ ULONG SwReader::Read( const Reader& rOptions )
         pDoc->UpdateLinks( TRUE );
         // <--
 
-    eOld = (IDocumentRedlineAccess::RedlineMode_t)(pDoc->GetRedlineMode() & ~IDocumentRedlineAccess::REDLINE_IGNORE);
+    eOld = (RedlineMode_t)(pDoc->GetRedlineMode() & ~nsRedlineMode_t::REDLINE_IGNORE);
 
         pDoc->SetFieldsDirty(false, NULL, 0);
     }
@@ -517,8 +517,8 @@ SwReader::SwReader(const uno::Reference < embed::XStorage >& rStg, const String&
 {
 }
                                          */
-SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwDoc *pDoc)
-    : SwDocFac(pDoc), pStrm(0), pMedium(&rMedium), pCrsr(0),
+SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwDoc *pDocument)
+    : SwDocFac(pDocument), pStrm(0), pMedium(&rMedium), pCrsr(0),
     aFileName(rFileName)
 {
     SetBaseURL( rMedium.GetBaseURL() );
@@ -546,8 +546,8 @@ SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwPaM& rPam)
     SetBaseURL( rMedium.GetBaseURL() );
 }
 
-SwReader::SwReader( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage > &rStg, const String& rFilename, SwPaM &rPam )
-    : SwDocFac(rPam.GetDoc()), pStrm(0), pMedium(0), pCrsr(&rPam), xStg( rStg ), aFileName(rFilename)
+SwReader::SwReader( const uno::Reference < embed::XStorage > &rStg, const String& rFilename, SwPaM &rPam )
+    : SwDocFac(rPam.GetDoc()), pStrm(0), xStg( rStg ), pMedium(0), pCrsr(&rPam), aFileName(rFilename)
 {
 }
 
@@ -743,7 +743,7 @@ void Reader::SetFltName( const String& )
 }
 
 
-void Reader::SetNoOutlineNum( SwDoc& rDoc )
+void Reader::SetNoOutlineNum( SwDoc& /*rDoc*/ )
 {
     // JP 10.03.96: jetzt wieder keine Nummerierung in den Vorlagen
 }
@@ -859,8 +859,8 @@ SwWriter::SwWriter(SvStream& rStrm, SwCrsrShell &rShell, BOOL bInWriteAll)
 {
 }
 
-SwWriter::SwWriter(SvStream& rStrm,SwDoc &rDoc)
-    : pStrm(&rStrm), pMedium(0), pOutPam(0), pShell(0), rDoc(rDoc),
+SwWriter::SwWriter(SvStream& rStrm,SwDoc &rDocument)
+    : pStrm(&rStrm), pMedium(0), pOutPam(0), pShell(0), rDoc(rDocument),
     bWriteAll(true)
 {
 }
@@ -871,8 +871,8 @@ SwWriter::SwWriter(SvStream& rStrm, SwPaM& rPam, BOOL bInWriteAll)
 {
 }
 
-SwWriter::SwWriter( const uno::Reference < embed::XStorage >& rStg,SwDoc &rDoc)
-    : pStrm(0), pMedium(0), pOutPam(0), pShell(0), rDoc(rDoc), xStg( rStg ), bWriteAll(true)
+SwWriter::SwWriter( const uno::Reference < embed::XStorage >& rStg, SwDoc &rDocument)
+    : pStrm(0), xStg( rStg ), pMedium(0), pOutPam(0), pShell(0), rDoc(rDocument), bWriteAll(true)
 {
 }
 
@@ -882,8 +882,8 @@ SwWriter::SwWriter(SfxMedium& rMedium, SwCrsrShell &rShell, BOOL bInWriteAll)
 {
 }
 
-SwWriter::SwWriter(SfxMedium& rMedium, SwDoc &rDoc)
-    : pStrm(0), pMedium(&rMedium), pOutPam(0), pShell(0), rDoc(rDoc),
+SwWriter::SwWriter(SfxMedium& rMedium, SwDoc &rDocument)
+    : pStrm(0), pMedium(&rMedium), pOutPam(0), pShell(0), rDoc(rDocument),
     bWriteAll(true)
 {
 }
@@ -947,9 +947,9 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
             if( pShell )
             {
                 pShell->Push();
-                pShell->SttDoc();
+                pShell->SttEndDoc(TRUE);
                 pShell->SetMark();
-                pShell->EndDoc();
+                pShell->SttEndDoc(FALSE);
             }
             else
             {
