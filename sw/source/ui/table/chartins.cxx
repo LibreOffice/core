@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartins.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:39:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:32:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,7 +198,6 @@ Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, co
     return aRet;
 }
 
-
 /*------------------------------------------------------------------------
     Beschreibung:
 ------------------------------------------------------------------------*/
@@ -206,6 +205,8 @@ Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, co
 
 void SwInsertChart(Window* pParent, SfxBindings* pBindings )
 {
+    (void) pParent;
+    (void) pBindings;
     SwView *pView = ::GetActiveView();
 
     // get range string of marked data
