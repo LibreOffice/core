@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accframe.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:35:05 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,6 @@
 #endif
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
-#endif
-#ifndef _FRMSH_HXX
-#include <frmsh.hxx>
 #endif
 #ifndef _SECTION_HXX
 #include <section.hxx>
