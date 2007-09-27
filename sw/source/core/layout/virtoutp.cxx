@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virtoutp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:25:11 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:07:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,6 @@
 #include "rootfrm.hxx"
 // OD 12.11.2002 #96272# - include declaration for <SetMappingForVirtDev>
 #include "setmapvirtdev.hxx"
-
-static const ViewShell *pVsh = 0;
 
 #ifndef PRODUCT
 
@@ -135,20 +133,14 @@ BOOL SwRootFrm::HasSameRect( const SwRect& rRect )
 */
 // define to control, if old or new solution for setting the mapping for
 // an virtual output device is used.
-#define USE_NEW_MAPPING
 void SetMappingForVirtDev(  const Point&    _rNewOrigin,
-                            MapMode*        _pMapMode,
+                            MapMode*        ,
                             const OutputDevice* _pOrgOutDev,
                             VirtualDevice*  _pVirDev )
 {
-#ifndef USE_NEW_MAPPING
-        // old solution: set origin at the mapping mode
-        _pMapMode->SetOrigin( Point(0,0) - _rNewOrigin );
-#else
         // new solution: set pixel offset at virtual output device
         Point aPixelOffset = _pOrgOutDev->LogicToPixel( _rNewOrigin );
         _pVirDev->SetPixelOffset( Size( -aPixelOffset.X(), -aPixelOffset.Y() ) );
-#endif
 }
 
 
