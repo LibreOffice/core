@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frminf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:34:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,11 +57,11 @@
 xub_StrLen SwTxtMargin::GetTxtStart() const
 {
     const XubString &rTxt = GetInfo().GetTxt();
-    const xub_StrLen nPos = nStart;
-    const xub_StrLen nEnd = nPos + pCurr->GetLen();
+    const xub_StrLen nTmpPos = nStart;
+    const xub_StrLen nEnd = nTmpPos + pCurr->GetLen();
     xub_StrLen i;
 
-    for( i = nPos; i < nEnd; ++i )
+    for( i = nTmpPos; i < nEnd; ++i )
     {
         const xub_Unicode aChar = rTxt.GetChar( i );
         if( CH_TAB != aChar && ' ' != aChar )
@@ -77,10 +77,10 @@ xub_StrLen SwTxtMargin::GetTxtStart() const
 xub_StrLen SwTxtMargin::GetTxtEnd() const
 {
     const XubString &rTxt = GetInfo().GetTxt();
-    const xub_StrLen nPos = nStart;
-    const xub_StrLen nEnd = nPos + pCurr->GetLen();
+    const xub_StrLen nTmpPos = nStart;
+    const xub_StrLen nEnd = nTmpPos + pCurr->GetLen();
     long i;
-    for( i = nEnd - 1; i >= nPos; --i )
+    for( i = nEnd - 1; i >= nTmpPos; --i )
     {
         xub_Unicode aChar = rTxt.GetChar( static_cast<xub_StrLen>(i) );
         if( CH_TAB != aChar && CH_BREAK != aChar && ' ' != aChar )
