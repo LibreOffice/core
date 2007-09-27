@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calbck.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:17:18 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:56:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,10 +109,10 @@ public:
     void UnlockModify()                 { bModifyLocked = FALSE; }
     void SetInCache( BOOL bNew )        { bInCache = bNew;       }
     void SetInSwFntCache( BOOL bNew )   { bInSwFntCache = bNew;  }
-    int  IsModifyLocked() const         { return bModifyLocked;  }
-    int  IsInDocDTOR()    const         { return bInDocDTOR;     }
-    int  IsInCache()      const         { return bInCache;       }
-    int  IsInSwFntCache()  const        { return bInSwFntCache;  }
+    BOOL IsModifyLocked() const         { return bModifyLocked;  }
+    BOOL IsInDocDTOR()    const         { return bInDocDTOR;     }
+    BOOL IsInCache()      const         { return bInCache;       }
+    BOOL IsInSwFntCache()  const        { return bInSwFntCache;  }
 
         // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
