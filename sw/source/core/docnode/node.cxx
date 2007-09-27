@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:19:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:42:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,9 +162,6 @@
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
 #endif
-#ifndef _FRMSH_HXX
-#include <frmsh.hxx>
-#endif
 // <--
 #include <istyleaccess.hxx>
 
@@ -219,12 +216,12 @@ void SetParent( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
 
         if ( pParentFmt )
         {
-            SwStyleNameMapper::FillProgName( pParentFmt->GetName(), sVal, GET_POOLID_TXTCOLL, sal_True );
+            SwStyleNameMapper::FillProgName( pParentFmt->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
             const SfxStringItem aAnyFmtColl( RES_FRMATR_STYLE_NAME, sVal );
             aNewSet.Put( aAnyFmtColl );
 
             if ( pConditionalFmt != pParentFmt )
-                SwStyleNameMapper::FillProgName( pConditionalFmt->GetName(), sVal, GET_POOLID_TXTCOLL, sal_True );
+                SwStyleNameMapper::FillProgName( pConditionalFmt->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
 
             const SfxStringItem aFmtColl( RES_FRMATR_CONDITIONAL_STYLE_NAME, sVal );
             aNewSet.Put( aFmtColl );
@@ -430,7 +427,7 @@ long SwNode::nSerial = 0;
 #endif
 
 SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
-    : pStartOfSection( 0 ), nNodeType( nNdType )
+    : nNodeType( nNdType ), pStartOfSection( 0 )
 {
     bSetNumLSpace = bIgnoreDontExpand = FALSE;
     nAFmtNumLvl = 0;
@@ -464,7 +461,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
 }
 
 SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
-    : pStartOfSection( 0 ), nNodeType( nNdType )
+    : nNodeType( nNdType ), pStartOfSection( 0 )
 {
     bSetNumLSpace = bIgnoreDontExpand = FALSE;
     nAFmtNumLvl = 0;
@@ -628,22 +625,22 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
 
     const SwPageDesc* pPgDesc = 0;
 
-    const SwCntntNode* pNd;
+    const SwCntntNode* pNode;
     if( ND_STARTNODE & nNodeType )
     {
         SwNodeIndex aIdx( *this );
-        pNd = GetNodes().GoNext( &aIdx );
+        pNode = GetNodes().GoNext( &aIdx );
     }
     else if( ND_ENDNODE & nNodeType )
     {
         SwNodeIndex aIdx( *EndOfSectionNode() );
-        pNd = GetNodes().GoPrevious( &aIdx );
+        pNode = GetNodes().GoPrevious( &aIdx );
     }
     else
     {
-        pNd = GetCntntNode();
-        if( pNd )
-            pPgDesc = ((SwFmtPageDesc&)pNd->GetAttr( RES_PAGEDESC )).GetPageDesc();
+        pNode = GetCntntNode();
+        if( pNode )
+            pPgDesc = ((SwFmtPageDesc&)pNode->GetAttr( RES_PAGEDESC )).GetPageDesc();
     }
 
     // geht es uebers Layout?
@@ -651,14 +648,14 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
     {
         const SwFrm* pFrm;
         const SwPageFrm* pPage;
-        if( pNd && 0 != ( pFrm = pNd->GetFrm( 0, 0, bCalcLay ) ) &&
+        if( pNode && 0 != ( pFrm = pNode->GetFrm( 0, 0, bCalcLay ) ) &&
             0 != ( pPage = pFrm->FindPageFrm() ) )
         {
             pPgDesc = pPage->GetPageDesc();
             // OD 18.03.2003 #106329#
             if ( pPgDescNdIdx )
             {
-                *pPgDescNdIdx = pNd->GetIndex();
+                *pPgDescNdIdx = pNode->GetIndex();
             }
         }
     }
@@ -757,12 +754,12 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
                     if( SwHeaderStartNode == pSttNd->GetStartNodeType())
                     {
                         nId = RES_HEADER;
-                        eAskUse = PD_HEADERSHARE;
+                        eAskUse = nsUseOnPage::PD_HEADERSHARE;
                     }
                     else
                     {
                         nId = RES_FOOTER;
-                        eAskUse = PD_FOOTERSHARE;
+                        eAskUse = nsUseOnPage::PD_FOOTERSHARE;
                     }
 
                     for( USHORT n = pDoc->GetPageDescCnt(); n && !pPgDesc; )
@@ -1120,10 +1117,10 @@ SwEndNode::SwEndNode( SwNodes& rNds, ULONG nPos, SwStartNode& rSttNd )
 
 SwCntntNode::SwCntntNode( const SwNodeIndex &rWhere, const BYTE nNdType,
                             SwFmtColl *pColl )
-    : SwNode( rWhere, nNdType ),
+    : SwModify( pColl ),     // CrsrsShell, FrameFmt,
+    SwNode( rWhere, nNdType ),
     pCondColl( 0 ),
-    mbSetModifyAtAttr( false ),
-    SwModify( pColl )    // CrsrsShell, FrameFmt
+    mbSetModifyAtAttr( false )
 #ifdef OLD_INDEX
     ,SwIndexReg(2)
 #endif
@@ -1289,7 +1286,7 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
             SwNumRule* pRule = GetDoc()->FindNumRulePtr( sNumRule );
             if( !pRule )
             {
-                USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sNumRule, GET_POOLID_NUMRULE );
+                USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( sNumRule, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
                 if( USHRT_MAX != nPoolId )
                     pRule = GetDoc()->GetNumRuleFromPool( nPoolId );
             }
@@ -1739,7 +1736,7 @@ BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
     {
         SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
                   aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
-        if( 0 != ( bRet = AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rAttr, &aOld, &aNew ) ))
+        if( 0 != ( bRet = 0 != AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rAttr, &aOld, &aNew ) ))
         {
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
@@ -1826,7 +1823,7 @@ BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
     {
         SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
                   aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
-        if( 0 != (bRet = AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rSet, &aOld, &aNew )) )
+        if( 0 != (bRet = 0 != AttrSetHandleHelper::Put_BC( mpAttrSet, *this, rSet, &aOld, &aNew )) )
         {
             // einige Sonderbehandlungen fuer Attribute
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
@@ -1995,7 +1992,7 @@ USHORT SwCntntNode::ClearItemsFromAttrSet( const std::vector<USHORT>& rWhichIds 
           aIter != rWhichIds.end();
           ++aIter )
     {
-        nRet += aNewAttrSet.ClearItem( *aIter );
+        nRet = nRet + aNewAttrSet.ClearItem( *aIter );
     }
     if ( nRet )
         AttrSetHandleHelper::GetNewAutoStyle( mpAttrSet, *this, aNewAttrSet );
@@ -2161,6 +2158,7 @@ BOOL SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
                     break;
                 case SwHeaderStartNode:     nCond = PARA_IN_HEADER; break;
                 case SwFooterStartNode:     nCond = PARA_IN_FOOTER; break;
+                case SwNormalStartNode:     break;
                 }
             }
 
