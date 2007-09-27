@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:34:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:24:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -395,7 +395,7 @@ void SwAccessibleTableData_Impl::GetSelection(
 }
 
 const SwFrm *SwAccessibleTableData_Impl::GetCell(
-        sal_Int32 nRow, sal_Int32 nColumn, sal_Bool bExact,
+        sal_Int32 nRow, sal_Int32 nColumn, sal_Bool,
         SwAccessibleTable *pThis ) const
     throw(lang::IndexOutOfBoundsException )
 {
@@ -600,7 +600,12 @@ public:
     uno::Sequence < sal_Int32 > GetSelSequence();
 
     virtual void Unselect( sal_Int32 nRowOrCol, sal_Int32 nExt );
+    virtual ~SwAccAllTableSelHander_Impl();
 };
+
+SwAccAllTableSelHander_Impl::~SwAccAllTableSelHander_Impl()
+{
+}
 
 inline SwAccAllTableSelHander_Impl::SwAccAllTableSelHander_Impl( sal_Int32 nSize ) :
     aSelected( nSize, sal_True ),
@@ -758,9 +763,9 @@ void SwAccessibleTable::GetStates(
 }
 
 SwAccessibleTable::SwAccessibleTable(
-        SwAccessibleMap *pMap,
-        const SwTabFrm *pTabFrm ) :
-    SwAccessibleContext( pMap, AccessibleRole::TABLE, pTabFrm ),
+        SwAccessibleMap* pInitMap,
+        const SwTabFrm* pTabFrm  ) :
+    SwAccessibleContext( pInitMap, AccessibleRole::TABLE, pTabFrm ),
     mpTableData( 0 )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -957,11 +962,11 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleRowDescription(
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     // TODO: Is there any reasonable we can do here?
-    OUString sDesc;
+    OUString sTmpDesc;
 
     GetTableData().CheckRowAndCol(nRow, 0, this);
 
-    return sDesc;
+    return sTmpDesc;
 }
 
 OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
@@ -969,11 +974,11 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     // TODO: Is there any reasonable we can do here?
-    OUString sDesc;
+    OUString sTmpDesc;
 
     GetTableData().CheckRowAndCol(0, nColumn, this);
 
-    return sDesc;
+    return sTmpDesc;
 }
 
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowExtentAt(
@@ -1676,9 +1681,9 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
 
 // --> OD 2007-06-28 #i77106#
 // implementation of class <SwAccessibleTableColHeaders>
-SwAccessibleTableColHeaders::SwAccessibleTableColHeaders( SwAccessibleMap *pMap,
+SwAccessibleTableColHeaders::SwAccessibleTableColHeaders( SwAccessibleMap *pMap2,
                                                           const SwTabFrm *pTabFrm )
-    : SwAccessibleTable( pMap, pTabFrm )
+    : SwAccessibleTable( pMap2, pTabFrm )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1699,8 +1704,8 @@ SwAccessibleTableColHeaders::SwAccessibleTableColHeaders( SwAccessibleMap *pMap,
     OUString sArg1( aBuffer2.makeStringAndClear() );
     OUString sArg2( GetFormattedPageNumber() );
 
-    OUString sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
-    SetDesc( sDesc );
+    OUString sDesc2 = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
+    SetDesc( sDesc2 );
 }
 
 SwAccessibleTableData_Impl* SwAccessibleTableColHeaders::CreateNewTableData()
@@ -1710,7 +1715,7 @@ SwAccessibleTableData_Impl* SwAccessibleTableColHeaders::CreateNewTableData()
 }
 
 
-void SwAccessibleTableColHeaders::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwAccessibleTableColHeaders::Modify( SfxPoolItem * /*pOld*/, SfxPoolItem * /*pNew*/ )
 {
 }
 
