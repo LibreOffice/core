@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtswtbl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:09:13 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:53:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,13 +43,6 @@
 #endif
 #ifndef _SVARRAY_HXX
 #include <svtools/svarray.hxx>
-#endif
-
-#ifndef _ORNTENUM_HXX
-#include <orntenum.hxx>
-#endif
-#ifndef _HORIORNT_HXX
-#include <horiornt.hxx>
 #endif
 
 class Color;
@@ -109,7 +102,7 @@ public:
     USHORT GetColSpan() const { return nColSpan; }
 
     long GetHeight() const { return nHeight; }
-    SwVertOrient GetVertOri() const;
+    sal_Int16 GetVertOri() const;
 
     const SvxBrushItem *GetBackground() const { return pBackground; }
 
