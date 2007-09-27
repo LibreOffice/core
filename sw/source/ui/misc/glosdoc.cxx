@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:06:50 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:20:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <memory>
 
-
+#include <com/sun/star/container/XNamed.hpp>
 
 #define _SVSTDARR_STRINGS
 
@@ -85,12 +86,17 @@
 #include <swunohelper.hxx>
 #endif
 
+#include <unoatxt.hxx>
+
 #ifndef _SWSWERROR_H
 #include <swerror.h>
 #endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 
 // PUBLIC METHODES -------------------------------------------------------
@@ -185,7 +191,7 @@ sal_Bool SwGlossaries::FindGroupName(String & rGroup)
         String sTemp( GetGroupName( i ));
         sal_uInt16 nPath = (sal_uInt16)sTemp.GetToken(1, GLOS_DELIM).ToInt32();
 
-        if( !SWUnoHelper::UCB_IsCaseSensitiveFileName( *(*pPathArr)[nPath] )
+        if( !SWUnoHelper::UCB_IsCaseSensitiveFileName( *(*m_pPathArr)[nPath] )
              && rSCmp.isEqual( rGroup, sTemp.GetToken( 0, GLOS_DELIM) ) )
         {
             rGroup = sTemp;
@@ -200,8 +206,8 @@ sal_Bool SwGlossaries::FindGroupName(String & rGroup)
 
 String SwGlossaries::GetGroupName(sal_uInt16 nGroupId)
 {
-    ASSERT(nGroupId < pGlosArr->Count(), Textbausteinarray ueberindiziert);
-    return *(*pGlosArr)[nGroupId];
+    ASSERT(nGroupId < m_pGlosArr->Count(), Textbausteinarray ueberindiziert);
+    return *(*m_pGlosArr)[nGroupId];
 }
 /* -----------------------------08.02.00 13:04--------------------------------
 
@@ -229,22 +235,22 @@ SwTextBlocks* SwGlossaries::GetGroupDoc(const String &rName,
                                         sal_Bool bCreate) const
 {
         // gfs. in die Liste der Textbausteine eintragen
-    if(bCreate && pGlosArr)
+    if(bCreate && m_pGlosArr)
     {
         const String aName(rName);
-        const sal_uInt16 nCount = pGlosArr->Count();
+        const sal_uInt16 nCount = m_pGlosArr->Count();
         sal_uInt16 i;
 
         for( i = 0; i < nCount; ++i)
         {
-            const String *pName = (*pGlosArr)[i];
+            const String *pName = (*m_pGlosArr)[i];
             if(*pName == aName)
                 break;
         }
         if(i == nCount)
         {   // Baustein nicht in der Liste
             String *pTmp = new String(aName);
-            pGlosArr->Insert(pTmp, pGlosArr->Count());
+            m_pGlosArr->Insert(pTmp, m_pGlosArr->Count());
         }
     }
     return GetGlosDoc( rName, bCreate );
@@ -267,7 +273,7 @@ void SwGlossaries::PutGroupDoc(SwTextBlocks *pBlock) {
 sal_Bool SwGlossaries::NewGroupDoc(String& rGroupName, const String& rTitle)
 {
     sal_uInt16 nNewPath = (sal_uInt16)rGroupName.GetToken(1, GLOS_DELIM).ToInt32();
-    String sNewFilePath(*(*pPathArr)[nNewPath]);
+    String sNewFilePath(*(*m_pPathArr)[nNewPath]);
     String sNewGroup = lcl_CheckFileName(sNewFilePath, rGroupName.GetToken(0, GLOS_DELIM));
     sNewGroup += GLOS_DELIM;
     sNewGroup += rGroupName.GetToken(1, GLOS_DELIM);
@@ -293,9 +299,9 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
 {
     sal_Bool bRet = sal_False;
     sal_uInt16 nOldPath = (sal_uInt16)rOldGroup.GetToken(1, GLOS_DELIM).ToInt32();
-    if(nOldPath < pPathArr->Count())
+    if(nOldPath < m_pPathArr->Count())
     {
-        String sOldFileURL(*(*pPathArr)[nOldPath]);
+        String sOldFileURL(*(*m_pPathArr)[nOldPath]);
         sOldFileURL += INET_PATH_TOKEN;
         sOldFileURL += rOldGroup.GetToken(0, GLOS_DELIM);
         sOldFileURL += SwGlossaries::GetExtension();
@@ -304,9 +310,9 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
         if(bExist)
         {
             sal_uInt16 nNewPath = (sal_uInt16)rNewGroup.GetToken(1, GLOS_DELIM).ToInt32();
-            if( nNewPath < pPathArr->Count())
+            if( nNewPath < m_pPathArr->Count())
             {
-                String sNewFilePath(*(*pPathArr)[nNewPath]);
+                String sNewFilePath(*(*m_pPathArr)[nNewPath]);
                 String sNewFileName = lcl_CheckFileName(
                                     sNewFilePath, rNewGroup.GetToken(0, GLOS_DELIM));
                 //String aTmp( rNewGroup.GetToken(0, GLOS_DELIM));
@@ -315,7 +321,7 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
                 String sTempNewFilePath(sNewFilePath);
                 sTempNewFilePath += INET_PATH_TOKEN;
                 sTempNewFilePath += sNewFileName ;
-                BOOL bExist = FStatHelper::IsDocument( sTempNewFilePath );
+                bExist = FStatHelper::IsDocument( sTempNewFilePath );
                 DBG_ASSERT(!bExist, "Gruppe existiert bereits!")
                 if(!bExist)
                 {
@@ -330,10 +336,10 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
                         rNewGroup += GLOS_DELIM;
                         rNewGroup += String::CreateFromInt32(nNewPath);
                         String *pTmp = new String(rNewGroup);
-                        if(!pGlosArr)
+                        if(!m_pGlosArr)
                             GetNameList();
                         else
-                            pGlosArr->Insert(pTmp, pGlosArr->Count());
+                            m_pGlosArr->Insert(pTmp, m_pGlosArr->Count());
 
                         sNewFilePath += INET_PATH_TOKEN;
                         sNewFilePath += sNewFileName ;
@@ -356,9 +362,9 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
 sal_Bool SwGlossaries::DelGroupDoc(const String &rName)
 {
     sal_uInt16 nPath = (sal_uInt16)rName.GetToken(1, GLOS_DELIM).ToInt32();
-    if(nPath >= pPathArr->Count())
+    if(nPath >= m_pPathArr->Count())
         return sal_False;
-    String sFileURL(*(*pPathArr)[nPath]);
+    String sFileURL(*(*m_pPathArr)[nPath]);
     String aTmp( rName.GetToken(0, GLOS_DELIM));
     String aName(aTmp);
     aName += GLOS_DELIM;
@@ -382,22 +388,22 @@ sal_Bool SwGlossaries::DelGroupDoc(const String &rName)
 
 SwGlossaries::~SwGlossaries()
 {
-    sal_uInt16 nCount = pGlosArr? pGlosArr->Count() : 0;
+    sal_uInt16 nCount = m_pGlosArr? m_pGlosArr->Count() : 0;
     sal_uInt16 i;
 
     for( i = 0; i < nCount; ++i)
     {
-        String *pTmp = (*pGlosArr)[i];
+        String *pTmp = (*m_pGlosArr)[i];
         delete pTmp;
     }
-    nCount = pPathArr? pPathArr->Count() : 0;
+    nCount = m_pPathArr? m_pPathArr->Count() : 0;
     for(i = 0; i < nCount; ++i)
     {
-        String *pTmp = (*pPathArr)[i];
+        String *pTmp = (*m_pPathArr)[i];
         delete pTmp;
     }
-    delete pGlosArr;
-    delete pPathArr;
+    delete m_pGlosArr;
+    delete m_pPathArr;
 
     InvalidateUNOOjects();
 }
@@ -410,9 +416,9 @@ SwTextBlocks* SwGlossaries::GetGlosDoc( const String &rName, sal_Bool bCreate ) 
 {
     sal_uInt16 nPath = (sal_uInt16)rName.GetToken(1, GLOS_DELIM).ToInt32();
     SwTextBlocks *pTmp = 0;
-    if(nPath < pPathArr->Count())
+    if(nPath < m_pPathArr->Count())
     {
-        String sFileURL(*(*pPathArr)[nPath]);
+        String sFileURL(*(*m_pPathArr)[nPath]);
         String aTmp( rName.GetToken(0, GLOS_DELIM));
         aTmp += SwGlossaries::GetExtension();
         sFileURL += INET_PATH_TOKEN;
@@ -446,15 +452,15 @@ SwTextBlocks* SwGlossaries::GetGlosDoc( const String &rName, sal_Bool bCreate ) 
 
 SvStrings* SwGlossaries::GetNameList()
 {
-    if( !pGlosArr )
+    if( !m_pGlosArr )
     {
-        pGlosArr = new SvStrings;
+        m_pGlosArr = new SvStrings;
         String sExt( SwGlossaries::GetExtension() );
-        for( sal_uInt16 i = 0; i < pPathArr->Count(); i++ )
+        for( sal_uInt16 i = 0; i < m_pPathArr->Count(); i++ )
         {
             SvStrings aFiles( 16, 16 );
 
-            SWUnoHelper::UCB_GetFileListOfFolder( *(*pPathArr)[i], aFiles,
+            SWUnoHelper::UCB_GetFileListOfFolder( *(*m_pPathArr)[i], aFiles,
                                                     &sExt );
             for( USHORT nFiles = 0, nFEnd = aFiles.Count();
                     nFiles < nFEnd; ++nFiles )
@@ -463,22 +469,22 @@ SvStrings* SwGlossaries::GetNameList()
                 String sName( pTitle->Copy( 0, pTitle->Len() - sExt.Len() ));
                 sName += GLOS_DELIM;
                 sName += String::CreateFromInt32( i );
-                pGlosArr->Insert( new String(sName), pGlosArr->Count() );
+                m_pGlosArr->Insert( new String(sName), m_pGlosArr->Count() );
 
                 // don't need any more these pointers
                 delete pTitle;
             }
         }
-        if(!pGlosArr->Count())
+        if(!m_pGlosArr->Count())
         {
             // Der Standard-Baustein steht im ersten Teil des Pfades
             String *pTmp = new String( SwGlossaries::GetDefName() );
             (*pTmp) += GLOS_DELIM;
             (*pTmp) += '0';
-            pGlosArr->Insert(pTmp, pGlosArr->Count());
+            m_pGlosArr->Insert(pTmp, m_pGlosArr->Count());
         }
     }
-    return pGlosArr;
+    return m_pGlosArr;
 }
 
 /*------------------------------------------------------------------------
@@ -487,10 +493,10 @@ SvStrings* SwGlossaries::GetNameList()
 
 
 SwGlossaries::SwGlossaries() :
-    pGlosArr(0),
-    pPathArr(0)
+    m_pPathArr(0),
+    m_pGlosArr(0)
 {
-    pPathArr = new SvStrings;
+    m_pPathArr = new SvStrings;
     UpdateGlosPath(sal_True);
 }
 
@@ -503,7 +509,6 @@ SwGlossaries::SwGlossaries() :
  * --------------------------------------------------*/
 sal_Bool lcl_FindSameEntry(const SvStrings& rDirArr, const String& rEntryURL)
 {
-    sal_uInt16 nSize = rDirArr.Count();
     for(sal_uInt16 i = 0; i < rDirArr.Count(); i++)
         if(rEntryURL == (*rDirArr.GetObject(i)))
             return sal_True;
@@ -514,25 +519,24 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
 {
     SvtPathOptions aPathOpt;
     String aNewPath( aPathOpt.GetAutoTextPath() );
-    sal_Bool bPathChanged = aPath != aNewPath;
+    sal_Bool bPathChanged = m_aPath != aNewPath;
     if (bFull || bPathChanged)
     {
-        aPath = aNewPath;
-        sal_uInt16 nCount = pPathArr? pPathArr->Count() : 0;
+        m_aPath = aNewPath;
+        sal_uInt16 nCount = m_pPathArr? m_pPathArr->Count() : 0;
         sal_uInt16 i;
 
         for( i = nCount; i; --i)
         {
-            String *pTmp = (*pPathArr)[i - 1];
-            pPathArr->Remove(i - 1);
+            String *pTmp = (*m_pPathArr)[i - 1];
+            m_pPathArr->Remove(i - 1);
             delete pTmp;
         }
-        String sErrPath;
-        sal_uInt16 nTokenCount = aPath.GetTokenCount(SVT_SEARCHPATH_DELIMITER);
+        sal_uInt16 nTokenCount = m_aPath.GetTokenCount(SVT_SEARCHPATH_DELIMITER);
         SvStrings aDirArr;
         for( i = 0; i < nTokenCount; i++ )
         {
-            String sPth(aPath.GetToken(i, SVT_SEARCHPATH_DELIMITER));
+            String sPth(m_aPath.GetToken(i, SVT_SEARCHPATH_DELIMITER));
             sPth = URIHelper::SmartRel2Abs(
                 INetURLObject(), sPth, URIHelper::GetMaybeFileHdl());
 
@@ -543,38 +547,37 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
             aDirArr.Insert(new String(sPth), aDirArr.Count());
             if( !FStatHelper::IsFolder( sPth ) )
             {
-                if( sErrPath.Len() )
-                    sErrPath += SVT_SEARCHPATH_DELIMITER;
+                if( m_sErrPath.Len() )
+                    m_sErrPath += SVT_SEARCHPATH_DELIMITER;
                 INetURLObject aTemp( sPth );
-                sErrPath += String(aTemp.GetFull());
+                m_sErrPath += String(aTemp.GetFull());
             }
             else
-                pPathArr->Insert(new String(sPth), pPathArr->Count());
+                m_pPathArr->Insert(new String(sPth), m_pPathArr->Count());
         }
         aDirArr.DeleteAndDestroy(0, aDirArr.Count());
 
         if(!nTokenCount ||
-            sErrPath.Len() && (bPathChanged || sOldErrPath != sErrPath) )
+            m_sErrPath.Len() && (bPathChanged || m_sOldErrPath != m_sErrPath) )
         {
-            sOldErrPath = sErrPath;
+            m_sOldErrPath = m_sErrPath;
             // Falscher Pfad, d.h. AutoText-Verzeichnis existiert nicht
 
             ErrorHandler::HandleError( *new StringErrorInfo(
-                                    ERR_AUTOPATH_ERROR, sErrPath,
+                                    ERR_AUTOPATH_ERROR, m_sErrPath,
                                     ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ));
-            bError = sal_True;
+            m_bError = sal_True;
         }
         else
-            bError = sal_False;
+            m_bError = sal_False;
 
-        if(pGlosArr)
+        if(m_pGlosArr)
         {
-            const sal_uInt16 nCount = pGlosArr->Count();
-            for(sal_uInt16 i = 0; i < nCount; ++i)
+            for(i = 0; i < m_pGlosArr->Count(); ++i)
             {
-                delete (String *)(*pGlosArr)[i];
+                delete (String *)(*m_pGlosArr)[i];
             }
-            DELETEZ(pGlosArr);
+            DELETEZ(m_pGlosArr);
             GetNameList();
         }
     }
@@ -588,7 +591,7 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
 void SwGlossaries::ShowError()
 {
     sal_uInt32 nPathError = *new StringErrorInfo(ERR_AUTOPATH_ERROR,
-                                            sErrPath, ERRCODE_BUTTON_OK );
+                                            m_sErrPath, ERRCODE_BUTTON_OK );
     ErrorHandler::HandleError( nPathError );
 }
 /* -----------------------------09.02.00 11:37--------------------------------
@@ -598,5 +601,241 @@ String SwGlossaries::GetExtension()
 {
     return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".bau" ));
 }
+
+
+
+void SwGlossaries::RemoveFileFromList( const String& rGroup )
+{
+    if(m_pGlosArr)
+    {
+        const sal_uInt16 nCount = m_pGlosArr->Count();
+        for(sal_uInt16 i = 0; i < nCount; ++i)
+        {
+            String *pTmp = (*m_pGlosArr)[i];
+            if(*pTmp == rGroup)
+            {
+                rtl::OUString aUName = rGroup;
+                {
+                    // tell the UNO AutoTextGroup object that it's not valid anymore
+                    for (   UnoAutoTextGroups::iterator aLoop = m_aGlossaryGroups.begin();
+                            aLoop != m_aGlossaryGroups.end();
+                            ++aLoop
+                        )
+                    {
+                        Reference< container::XNamed > xNamed( aLoop->get(), UNO_QUERY );
+                        if ( xNamed.is() && ( xNamed->getName() == aUName ) )
+                        {
+                            static_cast< SwXAutoTextGroup* >( xNamed.get() )->Invalidate();
+                                // note that this static_cast works because we know that the array only
+                                // contains SwXAutoTextGroup implementation
+                            m_aGlossaryGroups.erase( aLoop );
+                            break;
+                        }
+                    }
+                }
+
+                {
+                    // tell all our UNO AutoTextEntry objects that they're not valid anymore
+                    for (   UnoAutoTextEntries::iterator aLoop = m_aGlossaryEntries.begin();
+                            aLoop != m_aGlossaryEntries.end();
+                        )
+                    {
+                        Reference< lang::XUnoTunnel > xEntryTunnel( aLoop->get(), UNO_QUERY );
+
+                        SwXAutoTextEntry* pEntry = NULL;
+                        if ( xEntryTunnel.is() )
+                            pEntry = reinterpret_cast< SwXAutoTextEntry* >(
+                                xEntryTunnel->getSomething( SwXAutoTextEntry::getUnoTunnelId() ) );
+
+                        if ( pEntry && ( pEntry->GetGroupName() == rGroup ) )
+                        {
+                            pEntry->Invalidate();
+                            aLoop = m_aGlossaryEntries.erase( aLoop );
+                        }
+                        else
+                            ++aLoop;
+                    }
+                }
+
+                m_pGlosArr->Remove(i);
+                delete pTmp;
+                break;
+            }
+        }
+    }
+}
+
+
+String SwGlossaries::GetCompleteGroupName( const rtl::OUString& GroupName )
+{
+    sal_uInt16 nCount = GetGroupCnt();
+    //wenn der Gruppenname intern erzeugt wurde, dann steht auch hier der Pfad drin
+    String sGroup(GroupName);
+    String sGroupName(sGroup.GetToken(0, GLOS_DELIM));
+    String sPath = sGroup.GetToken(1, GLOS_DELIM);
+    sal_Bool bPathLen = sPath.Len() > 0;
+    for ( sal_uInt16 i = 0; i < nCount; i++ )
+    {
+        String sGrpName = GetGroupName(i);
+        if(bPathLen ? sGroup == sGrpName : sGroupName == sGrpName.GetToken(0, GLOS_DELIM))
+        {
+            return sGrpName;
+        }
+    }
+    return aEmptyStr;
+}
+
+
+void SwGlossaries::InvalidateUNOOjects()
+{
+    // invalidate all the AutoTextGroup-objects
+    for (   UnoAutoTextGroups::iterator aGroupLoop = m_aGlossaryGroups.begin();
+            aGroupLoop != m_aGlossaryGroups.end();
+            ++aGroupLoop
+        )
+    {
+        Reference< text::XAutoTextGroup > xGroup( aGroupLoop->get(), UNO_QUERY );
+        if ( xGroup.is() )
+            static_cast< SwXAutoTextGroup* >( xGroup.get() )->Invalidate();
+    }
+    UnoAutoTextGroups aTmpg = UnoAutoTextGroups();
+    m_aGlossaryGroups.swap( aTmpg );
+
+    // invalidate all the AutoTextEntry-objects
+    for (   UnoAutoTextEntries::const_iterator aEntryLoop = m_aGlossaryEntries.begin();
+            aEntryLoop != m_aGlossaryEntries.end();
+            ++aEntryLoop
+        )
+    {
+        Reference< lang::XUnoTunnel > xEntryTunnel( aEntryLoop->get(), UNO_QUERY );
+        SwXAutoTextEntry* pEntry = NULL;
+        if ( xEntryTunnel.is() )
+            pEntry = reinterpret_cast< SwXAutoTextEntry* >(
+                xEntryTunnel->getSomething( SwXAutoTextEntry::getUnoTunnelId() ) );
+
+        if ( pEntry )
+            pEntry->Invalidate();
+    }
+    UnoAutoTextEntries aTmpe = UnoAutoTextEntries();
+    m_aGlossaryEntries.swap( aTmpe );
+}
+
+//-----------------------------------------------------------------------
+//--- 03.03.2003 14:15:32 -----------------------------------------------
+
+Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const ::rtl::OUString& _rGroupName, bool _bCreate )
+{
+    // first, find the name with path-extension
+    String sCompleteGroupName = GetCompleteGroupName( _rGroupName );
+
+    Reference< text::XAutoTextGroup >  xGroup;
+
+    // look up the group in the cache
+    UnoAutoTextGroups::iterator aSearch = m_aGlossaryGroups.begin();
+    for ( ; aSearch != m_aGlossaryGroups.end(); )
+    {
+        Reference< lang::XUnoTunnel > xGroupTunnel( aSearch->get(), UNO_QUERY );
+
+        SwXAutoTextGroup* pSwGroup = 0;
+        if ( xGroupTunnel.is() )
+            pSwGroup = reinterpret_cast< SwXAutoTextGroup* >( xGroupTunnel->getSomething( SwXAutoTextGroup::getUnoTunnelId() ) );
+
+        if ( !pSwGroup )
+        {
+            // the object is dead in the meantime -> remove from cache
+            aSearch = m_aGlossaryGroups.erase( aSearch );
+            continue;
+        }
+
+        if ( _rGroupName == pSwGroup->getName() )
+        {                               // the group is already cached
+            if ( sCompleteGroupName.Len() )
+            {   // the group still exists -> return it
+                xGroup = pSwGroup;
+                break;
+            }
+            else
+            {
+                // this group does not exist (anymore) -> release the cached UNO object for it
+                aSearch = m_aGlossaryGroups.erase( aSearch );
+                // so it won't be created below
+                _bCreate = sal_False;
+                break;
+            }
+        }
+
+        ++aSearch;
+    }
+
+    if ( !xGroup.is() && _bCreate )
+    {
+        xGroup = new SwXAutoTextGroup( sCompleteGroupName, this );
+        // cache it
+        m_aGlossaryGroups.push_back( AutoTextGroupRef( xGroup ) );
+    }
+
+    return xGroup;
+}
+
+//-----------------------------------------------------------------------
+//--- 03.03.2003 13:46:06 -----------------------------------------------
+
+Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry( const String& _rCompleteGroupName, const ::rtl::OUString& _rGroupName, const ::rtl::OUString& _rEntryName,
+    bool _bCreate )
+{
+    //standard must be created
+    sal_Bool bCreate = ( _rCompleteGroupName == GetDefName() );
+    ::std::auto_ptr< SwTextBlocks > pGlosGroup( GetGroupDoc( _rCompleteGroupName, bCreate ) );
+
+    if ( pGlosGroup.get() && !pGlosGroup->GetError() )
+    {
+        sal_uInt16 nIdx = pGlosGroup->GetIndex( _rEntryName );
+        if ( USHRT_MAX == nIdx )
+            throw container::NoSuchElementException();
+    }
+    else
+        throw lang::WrappedTargetException();
+
+    Reference< text::XAutoTextEntry > xReturn;
+    String sGroupName( _rGroupName );
+    String sEntryName( _rEntryName );
+
+    UnoAutoTextEntries::iterator aSearch( m_aGlossaryEntries.begin() );
+    for ( ; aSearch != m_aGlossaryEntries.end(); )
+    {
+        Reference< lang::XUnoTunnel > xEntryTunnel( aSearch->get(), UNO_QUERY );
+
+        SwXAutoTextEntry* pEntry = NULL;
+        if ( xEntryTunnel.is() )
+            pEntry = reinterpret_cast< SwXAutoTextEntry* >( xEntryTunnel->getSomething( SwXAutoTextEntry::getUnoTunnelId() ) );
+        else
+        {
+            // the object is dead in the meantime -> remove from cache
+            aSearch = m_aGlossaryEntries.erase( aSearch );
+            continue;
+        }
+
+        if  (   pEntry
+            &&  ( COMPARE_EQUAL == pEntry->GetGroupName().CompareTo( sGroupName ) )
+            &&  ( COMPARE_EQUAL == pEntry->GetEntryName().CompareTo( sEntryName ) )
+            )
+        {
+            xReturn = pEntry;
+            break;
+        }
+
+        ++aSearch;
+    }
+
+    if ( !xReturn.is() && _bCreate )
+    {
+        xReturn = new SwXAutoTextEntry( this, sGroupName, sEntryName );
+        // cache it
+        m_aGlossaryEntries.push_back( AutoTextEntryRef( xReturn ) );
+    }
+
+    return xReturn;
+}
+
 
 
