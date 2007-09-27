@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:46:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:58:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     friend void CalcCntnt( SwLayoutFrm *pLay, bool bNoColl, bool bNoCalcFollow );
 
     //Fuert Spezialbehandlung fuer _Get[Next|Prev]Leaf() durch.
+    using SwFrm::GetLeaf;
     SwLayoutFrm *GetLeaf( MakePageType eMakePage, BOOL bFwd );
 
     SwTable* pTable;
