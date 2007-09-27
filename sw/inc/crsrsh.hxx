@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:13:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:57:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,11 +119,11 @@ namespace com { namespace sun { namespace star { namespace util {
 
 namespace com { namespace sun { namespace star { namespace text {
     class XTextRange;
-}}}};
+}}}}
 
 namespace com { namespace sun { namespace star { namespace container {
     class XStringKeyMap;
-}}}};
+}}}}
 
 // enum und struktur, um ueber die Doc-Position Informationen zu erfragen
 
@@ -171,7 +171,7 @@ struct SwContentAtPos
     }
 
     // befindet sich der Node in einem geschuetzten Bereich?
-    FASTBOOL IsInProtectSect() const;
+    BOOL IsInProtectSect() const;
     bool     IsInRTLText()const;
 };
 
@@ -311,16 +311,15 @@ private:
     // <- #i27615#
 
     // private method(s) accessed from public inline method(s) must be exported.
-                  FASTBOOL LeftRight( BOOL, USHORT, USHORT, BOOL );
-    SW_DLLPRIVATE FASTBOOL UpDown( BOOL, USHORT );
-    SW_DLLPRIVATE FASTBOOL LRMargin( BOOL, BOOL bAPI = FALSE );
-    SW_DLLPRIVATE FASTBOOL IsAtLRMargin( BOOL, BOOL bAPI = FALSE ) const;
-    FASTBOOL SttEndDoc( BOOL bStt );
+                  BOOL LeftRight( BOOL, USHORT, USHORT, BOOL );
+    SW_DLLPRIVATE BOOL UpDown( BOOL, USHORT );
+    SW_DLLPRIVATE BOOL LRMargin( BOOL, BOOL bAPI = FALSE );
+    SW_DLLPRIVATE BOOL IsAtLRMargin( BOOL, BOOL bAPI = FALSE ) const;
 
     SW_DLLPRIVATE short GetTextDirection( const Point* pPt = 0 ) const;
 
-typedef FASTBOOL (SwCursor:: *FNCrsr)();
-    SW_DLLPRIVATE FASTBOOL CallCrsrFN( FNCrsr );
+typedef BOOL (SwCursor:: *FNCrsr)();
+    SW_DLLPRIVATE BOOL CallCrsrFN( FNCrsr );
 
     SW_DLLPRIVATE const SwRedline* _GotoRedline( USHORT nArrPos, BOOL bSelect );
 
@@ -348,11 +347,11 @@ protected:
                     const xub_StrLen nOffset = 0 );
 
     // --> FME 2004-07-30 #i32329# Enhanced table selection
-    FASTBOOL _SelTblRowOrCol( bool bRow, bool bRowSimple = false );
+    BOOL _SelTblRowOrCol( bool bRow, bool bRowSimple = false );
     // <--
 
     // --> FME 2005-01-31 #i41424# Only update the marked number levels if necessary
-    bool SetInFrontOfLabel( FASTBOOL bNew );
+    bool SetInFrontOfLabel( BOOL bNew );
     // <--
 
     /**
@@ -363,8 +362,7 @@ protected:
 
 public:
     TYPEINFO();
-    SwCrsrShell( SwDoc& rDoc, Window *pWin,
-                SwRootFrm * = 0, const SwViewOption *pOpt = 0 );
+    SwCrsrShell( SwDoc& rDoc, Window *pWin, const SwViewOption *pOpt = 0 );
     // verkleideter Copy-Constructor
     SwCrsrShell( SwCrsrShell& rShell, Window *pWin );
     virtual ~SwCrsrShell();
@@ -374,12 +372,12 @@ public:
     // neuen Cusror erzeugen und den alten anhaengen
     SwPaM * CreateCrsr();
     // loesche den aktuellen Cursor und der folgende wird zum Aktuellen
-    FASTBOOL DestroyCrsr();
+    BOOL DestroyCrsr();
     // TableCursor in normale Cursor verwandeln, Tablemode aufheben
     void TblCrsrToCursor();
 
-    SwPaM* GetCrsr( FASTBOOL bMakeTblCrsr = TRUE ) const;
-    inline SwCursor* GetSwCrsr( FASTBOOL bMakeTblCrsr = TRUE ) const;
+    SwPaM* GetCrsr( BOOL bMakeTblCrsr = TRUE ) const;
+    inline SwCursor* GetSwCrsr( BOOL bMakeTblCrsr = TRUE ) const;
     // nur den akt. Cursor returnen
           SwShellCrsr* _GetCrsr()                       { return pCurCrsr; }
     const SwShellCrsr* _GetCrsr() const                 { return pCurCrsr; }
@@ -403,23 +401,22 @@ public:
     // Basiscursortravelling
     long GetUpDownX() const             { return nUpDownX; }
 
-    FASTBOOL Left( USHORT nCnt, USHORT nMode, BOOL bAllowVisual = FALSE )
+    BOOL Left( USHORT nCnt, USHORT nMode, BOOL bAllowVisual = FALSE )
         { return LeftRight( TRUE, nCnt, nMode, bAllowVisual ); }
-    FASTBOOL Right( USHORT nCnt, USHORT nMode, BOOL bAllowVisual = FALSE )
+    BOOL Right( USHORT nCnt, USHORT nMode, BOOL bAllowVisual = FALSE )
         { return LeftRight( FALSE, nCnt, nMode, bAllowVisual ); }
-    FASTBOOL Up( USHORT nCnt = 1 )      { return UpDown( TRUE, nCnt ); }
-    FASTBOOL Down( USHORT nCnt = 1 )    { return UpDown( FALSE, nCnt ); }
-    FASTBOOL LeftMargin()               { return LRMargin( TRUE ); }
-    FASTBOOL RightMargin(BOOL bAPI = FALSE) { return LRMargin( FALSE, bAPI ); }
-    FASTBOOL SttDoc()                   { return SttEndDoc( TRUE ); }
-    FASTBOOL EndDoc()                   { return SttEndDoc( FALSE ); }
+    BOOL Up( USHORT nCnt = 1 )      { return UpDown( TRUE, nCnt ); }
+    BOOL Down( USHORT nCnt = 1 )    { return UpDown( FALSE, nCnt ); }
+    BOOL LeftMargin()               { return LRMargin( TRUE ); }
+    BOOL RightMargin(BOOL bAPI = FALSE) { return LRMargin( FALSE, bAPI ); }
+    BOOL SttEndDoc( BOOL bStt );
 
-    FASTBOOL MovePage( SwWhichPage, SwPosPage );
-    FASTBOOL MovePara( SwWhichPara, SwPosPara );
-    FASTBOOL MoveSection( SwWhichSection, SwPosSection );
-    FASTBOOL MoveTable( SwWhichTable, SwPosTable );
-    FASTBOOL MoveColumn( SwWhichColumn, SwPosColumn );
-    FASTBOOL MoveRegion( SwWhichRegion, SwPosRegion );
+    BOOL MovePage( SwWhichPage, SwPosPage );
+    BOOL MovePara( SwWhichPara, SwPosPara );
+    BOOL MoveSection( SwWhichSection, SwPosSection );
+    BOOL MoveTable( SwWhichTable, SwPosTable );
+    BOOL MoveColumn( SwWhichColumn, SwPosColumn );
+    BOOL MoveRegion( SwWhichRegion, SwPosRegion );
 
     // die Suchfunktionen
     ULONG Find( const com::sun::star::util::SearchOptions& rSearchOpt,
@@ -432,7 +429,7 @@ public:
                 BOOL& bCancel,
                 FindRanges eRng, const SwTxtFmtColl* pReplFmt = 0 );
 
-    ULONG Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
+    ULONG Find( const SfxItemSet& rSet, BOOL bNoCollections,
                 SwDocPositions eStart, SwDocPositions eEnde,
                 BOOL& bCancel,
                 FindRanges eRng,
@@ -461,7 +458,7 @@ public:
 
     // Bereiche
     inline void SetMark();
-    inline FASTBOOL HasMark();
+    inline BOOL HasMark();
 
     void ClearMark();
 
@@ -475,7 +472,7 @@ public:
     void NormalizePam(BOOL bPointFirst = TRUE);
 
     void SwapPam();
-    FASTBOOL ChgCurrPam( const Point & rPt,
+    BOOL ChgCurrPam( const Point & rPt,
                      BOOL bTstOnly = TRUE,      //Nur testen, nicht setzen
                      BOOL bTstHit  = FALSE );   //Nur genaue Treffer
     void KillPams();
@@ -489,7 +486,7 @@ public:
      *
      *  Return:  es war auf dem Stack noch einer vorhanden
      */
-    FASTBOOL Pop( BOOL bOldCrsr = TRUE );
+    BOOL Pop( BOOL bOldCrsr = TRUE );
     /*
      * Verbinde zwei Cursor miteinander.
      * Loesche vom Stack den obersten und setzen dessen Mark im Aktuellen.
@@ -523,22 +520,22 @@ public:
     void ShowCrsrs( BOOL bCrsrVis );
     void HideCrsrs();
 
-    FASTBOOL IsOverwriteCrsr() const { return bOverwriteCrsr; }
-    void SetOverwriteCrsr( FASTBOOL bFlag ) { bOverwriteCrsr = bFlag; }
+    BOOL IsOverwriteCrsr() const { return bOverwriteCrsr; }
+    void SetOverwriteCrsr( BOOL bFlag ) { bOverwriteCrsr = bFlag; }
 
     // gebe den aktuellen Frame, in dem der Cursor steht, zurueck
     SwCntntFrm *GetCurrFrm( const BOOL bCalcFrm = TRUE ) const;
 
     //TRUE wenn der Crsr wenn der Crsr wegen Readonly gehidet ist,
     //FALSE wenn der arbeitet (trotz Readonly).
-    FASTBOOL IsCrsrReadonly() const;
+    BOOL IsCrsrReadonly() const;
     // Cursor steht in etwas geschuetztem oder in die Selektion umspannt
     // etwas geschuetztes.
-    FASTBOOL HasReadonlySel() const;
+    BOOL HasReadonlySel() const;
     // darf der Cursor in ReadOnlyBereiche?
-    FASTBOOL IsReadOnlyAvailable() const { return bSetCrsrInReadOnly; }
+    BOOL IsReadOnlyAvailable() const { return bSetCrsrInReadOnly; }
     void SetReadOnlyAvailable( BOOL bFlag );
-    FASTBOOL IsOverReadOnlyPos( const Point& rPt ) const;
+    BOOL IsOverReadOnlyPos( const Point& rPt ) const;
 
     // Methoden fuer aFlyMacroLnk
     void        SetFlyMacroLnk( const Link& rLnk ) { aFlyMacroLnk = rLnk; }
@@ -557,21 +554,21 @@ public:
 
     // Abfrage, ob der aktuelle Cursor eine Selektion aufspannt,
     // also, ob Mark gesetzt und SPoint und Mark unterschiedlich sind.
-    FASTBOOL HasSelection() const;
+    BOOL HasSelection() const;
 
     // Abfrage, ob ueberhaupt eine Selektion existiert, sprich der akt. Cursor
     // aufgespannt oder nicht der einzigste ist.
-    inline FASTBOOL IsSelection() const;
+    inline BOOL IsSelection() const;
     // returns if multiple cursors are available
-    inline FASTBOOL IsMultiSelection() const;
+    inline BOOL IsMultiSelection() const;
 
     // Abfrage, ob ein kompletter Absatz selektiert wurde
-    FASTBOOL IsSelFullPara() const;
+    BOOL IsSelFullPara() const;
     // Abfrage, ob die Selektion in einem Absatz ist
-    inline FASTBOOL IsSelOnePara() const;
+    inline BOOL IsSelOnePara() const;
 
     //Sollte fuer das Clipboard der WaitPtr geschaltet werden.
-    FASTBOOL ShouldWait() const;
+    BOOL ShouldWait() const;
 
     /*
      * liefert das SRectangle, auf dem der Cursor steht.
@@ -581,7 +578,7 @@ public:
      * liefert zurueck, ob der Cursor sich ganz oder teilweise im
      * sichtbaren Bereich befindet.
      */
-    FASTBOOL IsCrsrVisible() const { return VisArea().IsOver( GetCharRect() ); }
+    BOOL IsCrsrVisible() const { return VisArea().IsOver( GetCharRect() ); }
 
     // gebe die aktuelle Seitennummer zurueck:
     // TRUE:  in der der Cursor steht
@@ -593,23 +590,23 @@ public:
     USHORT GetNextPrevPageNum( BOOL bNext = TRUE );
 
     // setze den Cursor auf die Seite "nPage" an den Anfang
-    FASTBOOL GotoPage( USHORT nPage );
+    BOOL GotoPage( USHORT nPage );
 
     // gebe alle Dokumentseiten zurueck
     USHORT GetPageCnt();
 
     // Gehe zur naechsten Selection
-    FASTBOOL GoNextCrsr();
+    BOOL GoNextCrsr();
     // gehe zur vorherigen Selection
-    FASTBOOL GoPrevCrsr();
+    BOOL GoPrevCrsr();
 
     // am CurCrsr.SPoint
-    FASTBOOL SetBookmark( const KeyCode&, const String& rName,
+    BOOL SetBookmark( const KeyCode&, const String& rName,
                 const String& rShortName, IDocumentBookmarkAccess::BookmarkType eMark = IDocumentBookmarkAccess::BOOKMARK);
-    FASTBOOL GotoBookmark( USHORT );    // setzt CurCrsr.SPoint
-    FASTBOOL GotoBookmark( USHORT nPos, BOOL bAtStart ); //
-    FASTBOOL GoNextBookmark(); // TRUE, wenn's noch eine gab
-    FASTBOOL GoPrevBookmark();
+    BOOL GotoBookmark( USHORT );    // setzt CurCrsr.SPoint
+    BOOL GotoBookmark( USHORT nPos, BOOL bAtStart ); //
+    BOOL GoNextBookmark(); // TRUE, wenn's noch eine gab
+    BOOL GoPrevBookmark();
     USHORT GetBookmarkCnt(BOOL bBkmrk = FALSE) const;
     SwBookmark& GetBookmark( USHORT, BOOL bBkmrk = FALSE );
     void DelBookmark( USHORT );
@@ -635,36 +632,36 @@ public:
     inline const SwTableNode* IsCrsrInTbl( BOOL bIsPtInTbl = TRUE ) const;
     // erfrage die Document - Layout - Position vom akt. Crsr
     inline Point& GetCrsrDocPos( BOOL bPoint = TRUE ) const;
-    inline FASTBOOL IsCrsrPtAtEnd() const;
+    inline BOOL IsCrsrPtAtEnd() const;
 
     inline const  SwPaM* GetTblCrs() const;
     inline        SwPaM* GetTblCrs();
 
-    FASTBOOL IsTblComplex() const;
-    FASTBOOL IsTblComplexForChart();
+    BOOL IsTblComplex() const;
+    BOOL IsTblComplexForChart();
     // erfrage die akt. TabellenSelektion als Text
     String GetBoxNms() const;
 
     // setze Crsr in die naechsten/vorherigen Celle
-    FASTBOOL GoNextCell( BOOL bAppendLine = TRUE );
-    FASTBOOL GoPrevCell();
+    BOOL GoNextCell( BOOL bAppendLine = TRUE );
+    BOOL GoPrevCell();
     // gehe zu dieser Box (wenn vorhanden und in Tabelle!)
-    FASTBOOL GotoTable( const String& rName );
+    BOOL GotoTable( const String& rName );
 
     // select a table row, column or box (based on the current cursor)
-    FASTBOOL SelTblRow() { return _SelTblRowOrCol( true  ); }
-    FASTBOOL SelTblCol() { return _SelTblRowOrCol( false ); }
-    FASTBOOL SelTblBox();
+    BOOL SelTblRow() { return _SelTblRowOrCol( true  ); }
+    BOOL SelTblCol() { return _SelTblRowOrCol( false ); }
+    BOOL SelTblBox();
     // --> FME 2004-07-30 #i32329# Enhanced table selection
-    FASTBOOL SelTbl();
+    BOOL SelTbl();
     // <--
 
     // zum naechsten/vorhergehenden Punkt auf gleicher Ebene
-    FASTBOOL GotoNextNum();
-    FASTBOOL GotoPrevNum();
+    BOOL GotoNextNum();
+    BOOL GotoPrevNum();
 
         // zu diesem Gliederungspunkt
-    FASTBOOL GotoOutline( const String& rName );
+    BOOL GotoOutline( const String& rName );
         // zum naechsten/vorhergehenden oder angegebenen OultineNode
     void GotoOutline( USHORT nIdx );
         // suche die "Outline-Position" im Nodes-Array vom akt. Kaiptel
@@ -672,138 +669,138 @@ public:
         // selektiere den angeben Bereich von OutlineNodes. Optional
         // inclusive der Childs. Die USHORT sind die Positionen im
         // OutlineNds-Array!! (EditShell)
-    FASTBOOL MakeOutlineSel( USHORT nSttPos, USHORT nEndPos,
+    BOOL MakeOutlineSel( USHORT nSttPos, USHORT nEndPos,
                         BOOL bWithChilds = FALSE );
 
-    FASTBOOL GotoNextOutline();         // naechster Node mit Outline-Num.
-    FASTBOOL GotoPrevOutline();         // vorheriger Node mit Outline-Num.
+    BOOL GotoNextOutline();         // naechster Node mit Outline-Num.
+    BOOL GotoPrevOutline();         // vorheriger Node mit Outline-Num.
 
         // ist der Crsr in einer Tabelle und ist die Selection ueber
         // zwei Spalten
-    FASTBOOL IsTableMode() const { return 0 != pTblCrsr; }
+    BOOL IsTableMode() const { return 0 != pTblCrsr; }
 
         // erfrage den Tabellen Crsr; ausserhalb von Tabellen immer 0
     const SwShellTableCrsr* GetTableCrsr() const { return pTblCrsr; }
     SwShellTableCrsr* GetTableCrsr() { return pTblCrsr; }
     USHORT UpdateTblSelBoxes();
 
-    FASTBOOL GotoFtnTxt();      // springe aus dem Content zur Fussnote
-    FASTBOOL GotoFtnAnchor();   // springe aus der Fussnote zum Anker
-    FASTBOOL GotoPrevFtnAnchor();
-    FASTBOOL GotoNextFtnAnchor();
+    BOOL GotoFtnTxt();      // springe aus dem Content zur Fussnote
+    BOOL GotoFtnAnchor();   // springe aus der Fussnote zum Anker
+    BOOL GotoPrevFtnAnchor();
+    BOOL GotoNextFtnAnchor();
 
-    FASTBOOL GotoFlyAnchor();       // springe aus dem Rahmen zum Anker
-    FASTBOOL GotoHeaderTxt();       // springe aus dem Content zum Header
-    FASTBOOL GotoFooterTxt();       // springe aus dem Content zum Footer
+    BOOL GotoFlyAnchor();       // springe aus dem Rahmen zum Anker
+    BOOL GotoHeaderTxt();       // springe aus dem Content zum Header
+    BOOL GotoFooterTxt();       // springe aus dem Content zum Footer
     // springe in den Header/Footer des angegebenen oder akt. PageDesc
-    FASTBOOL SetCrsrInHdFt( USHORT nDescNo = USHRT_MAX,
-                            FASTBOOL bInHeader = TRUE );
+    BOOL SetCrsrInHdFt( USHORT nDescNo = USHRT_MAX,
+                            BOOL bInHeader = TRUE );
     // is point of cursor in header/footer. pbInHeader return TRUE if it is
     // in a headerframe otherwise in a footerframe
-    FASTBOOL IsInHeaderFooter( FASTBOOL* pbInHeader = 0 ) const;
+    BOOL IsInHeaderFooter( BOOL* pbInHeader = 0 ) const;
 
     // springe zum naechsten Verzeichnis [mit dem Namen]
-    FASTBOOL GotoNextTOXBase( const String* = 0 );
+    BOOL GotoNextTOXBase( const String* = 0 );
     // springe zum vorherigen Verzeichnis [mit dem Namen]
-    FASTBOOL GotoPrevTOXBase( const String* = 0 );
-    FASTBOOL GotoTOXMarkBase();     // springe zum Verzeichnis vom TOXMark
+    BOOL GotoPrevTOXBase( const String* = 0 );
+    BOOL GotoTOXMarkBase();     // springe zum Verzeichnis vom TOXMark
     // springe zum naechsten (vorherigen) Verzeichniseintrag
-    FASTBOOL GotoNxtPrvTOXMark( BOOL bNext = TRUE );
+    BOOL GotoNxtPrvTOXMark( BOOL bNext = TRUE );
     // Zur naechsten/ vorherigen Verzeichnismarke dieses Typs traveln
     const SwTOXMark& GotoTOXMark( const SwTOXMark& rStart, SwTOXSearch eDir );
 
     // springe zum naechsten (vorherigen) Tabellenformel
     // optional auch nur zu kaputten Formeln springen
-    FASTBOOL GotoNxtPrvTblFormula( BOOL bNext = TRUE,
+    BOOL GotoNxtPrvTblFormula( BOOL bNext = TRUE,
                                     BOOL bOnlyErrors = FALSE );
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
-    FASTBOOL SelectNxtPrvHyperlink( BOOL bNext = TRUE );
+    BOOL SelectNxtPrvHyperlink( BOOL bNext = TRUE );
 
     // springe zu dieser Refmark
-    FASTBOOL GotoRefMark( const String& rRefMark, USHORT nSubType = 0,
+    BOOL GotoRefMark( const String& rRefMark, USHORT nSubType = 0,
                             USHORT nSeqNo = 0 );
 
     // hole vom Start/Ende der akt. Selection das nte Zeichen
     sal_Unicode GetChar( BOOL bEnd = TRUE, long nOffset = 0 );
     // erweiter die akt. Selection am Anfang/Ende um n Zeichen
-    FASTBOOL ExtendSelection( BOOL bEnd = TRUE, xub_StrLen nCount = 1 );
+    BOOL ExtendSelection( BOOL bEnd = TRUE, xub_StrLen nCount = 1 );
     // setze nur den sichtbaren Cursor an die angegebene Dokument-Pos.
     // returnt FALSE: wenn der ob der SPoint vom Layout korrigiert wurde.
     // (wird zum Anzeigen von Drag&Drop/Copy-Cursor benoetigt)
-    FASTBOOL SetVisCrsr( const Point &rPt );
+    BOOL SetVisCrsr( const Point &rPt );
     inline void UnSetVisCrsr();
 
     // springe zum nachsten/vorherigen Feld des entsprechenden Types
-    FASTBOOL MoveFldType( const SwFieldType* pFldType, BOOL bNext,
+    BOOL MoveFldType( const SwFieldType* pFldType, BOOL bNext,
                                             USHORT nSubType = USHRT_MAX,
                                             USHORT nResType = USHRT_MAX );
     // springe genau zu diesem Feld
-    FASTBOOL GotoFld( const SwFmtFld& rFld );
+    BOOL GotoFld( const SwFmtFld& rFld );
 
     // returne die Anzahl der Cursor im Ring (Flag besagt ob man nur
     // aufgepspannte haben will - sprich etwas selektiert ist (Basic))
     USHORT GetCrsrCnt( BOOL bAll = TRUE ) const;
 
     // Char Travelling - Methoden (in crstrvl1.cxx)
-    FASTBOOL GoStartWord();
-    FASTBOOL GoEndWord();
-    FASTBOOL GoNextWord();
-    FASTBOOL GoPrevWord();
-    FASTBOOL GoNextSentence();
-    FASTBOOL GoPrevSentence();
-    FASTBOOL GoStartSentence();
-    FASTBOOL GoEndSentence();
-    FASTBOOL SelectWord( const Point* pPt = 0 );
+    BOOL GoStartWord();
+    BOOL GoEndWord();
+    BOOL GoNextWord();
+    BOOL GoPrevWord();
+    BOOL GoNextSentence();
+    BOOL GoPrevSentence();
+    BOOL GoStartSentence();
+    BOOL GoEndSentence();
+    BOOL SelectWord( const Point* pPt = 0 );
 
     // Position vom akt. Cursor erfragen
-    FASTBOOL IsStartWord()const;
-    FASTBOOL IsEndWord() const;
-    FASTBOOL IsInWord() const;
-    FASTBOOL IsStartSentence() const;
-    FASTBOOL IsEndSentence() const;
-    FASTBOOL IsSttPara() const;
-    FASTBOOL IsEndPara() const;
-    FASTBOOL IsStartOfDoc() const;
-    FASTBOOL IsEndOfDoc() const;
-    FASTBOOL IsInFrontOfLabel() const;
-    FASTBOOL IsAtLeftMargin()   const       { return IsAtLRMargin( TRUE ); }
-    FASTBOOL IsAtRightMargin(BOOL bAPI = FALSE) const   { return IsAtLRMargin( FALSE, bAPI ); }
+    BOOL IsStartWord()const;
+    BOOL IsEndWord() const;
+    BOOL IsInWord() const;
+    BOOL IsStartSentence() const;
+    BOOL IsEndSentence() const;
+    BOOL IsSttPara() const;
+    BOOL IsEndPara() const;
+    BOOL IsStartOfDoc() const;
+    BOOL IsEndOfDoc() const;
+    BOOL IsInFrontOfLabel() const;
+    BOOL IsAtLeftMargin()   const       { return IsAtLRMargin( TRUE ); }
+    BOOL IsAtRightMargin(BOOL bAPI = FALSE) const   { return IsAtLRMargin( FALSE, bAPI ); }
 
     // loesche alle erzeugten Crsr, setze den Tabellen-Crsr und den letzten
     // Cursor auf seinen TextNode (oder StartNode?).
     // Beim naechsten ::GetCrsr werden sie wieder alle erzeugt.
     // Wird fuers Drag&Drop/ClipBorad-Paste in Tabellen benoetigt.
-    FASTBOOL ParkTblCrsr();
+    BOOL ParkTblCrsr();
 
     // gibt es nicht aufgespannte Attribute?
-    FASTBOOL IsGCAttr() const { return bGCAttr; }
+    BOOL IsGCAttr() const { return bGCAttr; }
     void ClearGCAttr() { bGCAttr = FALSE; }
     void    UpdateAttr() {  bGCAttr = TRUE; }
 
     // ist das gesamte Dokument geschuetzt/versteckt?? (fuer UI,..)
-    FASTBOOL IsAllProtect() const { return bAllProtect; }
+    BOOL IsAllProtect() const { return bAllProtect; }
 
 #ifdef SW_CRSR_TIMER
     // setze das Flag am VisCrsr, ob dieser ueber Timer getriggert (TRUE)
     // oder direkt (FALSE) angezeigt wird. (default ist Timer getriggert)
-    FASTBOOL ChgCrsrTimerFlag( BOOL bTimerOn = TRUE );
+    BOOL ChgCrsrTimerFlag( BOOL bTimerOn = TRUE );
 #endif
 
     BOOL BasicActionPend() const    { return nBasicActionCnt != nStartAction; }
 
         // springe zum benannten Bereich
-    FASTBOOL GotoRegion( const String& rName );
+    BOOL GotoRegion( const String& rName );
 
     // zeige die aktuelle Selektion an
     virtual void MakeSelVisible();
 
     // setzte den Cursor auf einen NICHT geschuetzten/versteckten Node
-    FASTBOOL FindValidCntntNode( BOOL bOnlyText = FALSE );
+    BOOL FindValidCntntNode( BOOL bOnlyText = FALSE );
 
-    FASTBOOL GetContentAtPos( const Point& rPt,
+    BOOL GetContentAtPos( const Point& rPt,
                             SwContentAtPos& rCntntAtPos,
-                            FASTBOOL bSetCrsr = FALSE,
+                            BOOL bSetCrsr = FALSE,
                             SwRect* pFldRect = 0 );
 
     // get smart tags at point position
@@ -818,18 +815,17 @@ public:
                           ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
                           ::com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rRange ) const;
 
-    FASTBOOL IsPageAtPos( const Point &rPt ) const;
+    BOOL IsPageAtPos( const Point &rPt ) const;
 
         // Attribut selelktieren
-    FASTBOOL SelectTxtAttr( USHORT nWhich, BOOL bExpand = FALSE,
-                            const SwTxtAttr* pAttr = 0 );
-    FASTBOOL GotoINetAttr( const SwTxtINetFmt& rAttr );
+    BOOL SelectTxtAttr( USHORT nWhich, BOOL bExpand, const SwTxtAttr* pAttr = 0 );
+    BOOL GotoINetAttr( const SwTxtINetFmt& rAttr );
     const SwFmtINetFmt* FindINetAttr( const String& rName ) const;
 
-    FASTBOOL CheckTblBoxCntnt( const SwPosition* pPos = 0 );
+    BOOL CheckTblBoxCntnt( const SwPosition* pPos = 0 );
     void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
     void ClearTblBoxCntnt();
-    FASTBOOL EndAllTblBoxEdit();
+    BOOL EndAllTblBoxEdit();
 
     // wird gerufen, wenn eine Tabellenselektion im UpdateCrsr erzeugt wird,
     // ohne das die UI davon etaws weiss
@@ -841,18 +837,18 @@ public:
     BOOL IsAutoUpdateCells() const              { return bAutoUpdateCells; }
     void SetAutoUpdateCells( BOOL bFlag )       { bAutoUpdateCells = bFlag; }
 
-    FASTBOOL GetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode,
-                            SwRect& rRect, SwHoriOrient& rOrient );
-    FASTBOOL SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode );
+    BOOL GetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode,
+                            SwRect& rRect, short& rOrient );
+    BOOL SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode );
 
     const SwRedline* SelNextRedline();
     const SwRedline* SelPrevRedline();
     const SwRedline* GotoRedline( USHORT nArrPos, BOOL bSelect = FALSE );
 
     // is cursor or the point in/over a vertical formatted text?
-    FASTBOOL IsInVerticalText( const Point* pPt = 0 ) const;
+    BOOL IsInVerticalText( const Point* pPt = 0 ) const;
     // is cursor or the point in/over a right to left formatted text?
-    FASTBOOL IsInRightToLeftText( const Point* pPt = 0 ) const;
+    BOOL IsInRightToLeftText( const Point* pPt = 0 ) const;
 
     // If the current cursor position is inside a hidden range, the hidden range
     // is selected and true is returned:
@@ -892,7 +888,7 @@ inline SwMoveFnCollection* SwCrsrShell::MakeFindRange(
     return pCurCrsr->MakeFindRange( (SwDocPositions)nStt, (SwDocPositions)nEnd, pPam );
 }
 
-inline SwCursor* SwCrsrShell::GetSwCrsr( FASTBOOL bMakeTblCrsr ) const
+inline SwCursor* SwCrsrShell::GetSwCrsr( BOOL bMakeTblCrsr ) const
 {
     return (SwCursor*)GetCrsr( bMakeTblCrsr );
 }
@@ -901,19 +897,19 @@ inline SwPaM* SwCrsrShell::GetStkCrsr() const { return pCrsrStk; }
 
 inline void SwCrsrShell::SetMark() { pCurCrsr->SetMark(); }
 
-inline FASTBOOL SwCrsrShell::HasMark() { return( pCurCrsr->HasMark() ); }
+inline BOOL SwCrsrShell::HasMark() { return( pCurCrsr->HasMark() ); }
 
-inline FASTBOOL SwCrsrShell::IsSelection() const
+inline BOOL SwCrsrShell::IsSelection() const
 {
     return IsTableMode() || pCurCrsr->HasMark() ||
             pCurCrsr->GetNext() != pCurCrsr;
 }
-inline FASTBOOL SwCrsrShell::IsMultiSelection() const
+inline BOOL SwCrsrShell::IsMultiSelection() const
 {
     return pCurCrsr->GetNext() != pCurCrsr;
 }
 
-inline FASTBOOL SwCrsrShell::IsSelOnePara() const
+inline BOOL SwCrsrShell::IsSelOnePara() const
 {
     return pCurCrsr == pCurCrsr->GetNext() &&
            pCurCrsr->GetPoint()->nNode == pCurCrsr->GetMark()->nNode;
@@ -924,7 +920,7 @@ inline const SwTableNode* SwCrsrShell::IsCrsrInTbl( BOOL bIsPtInTbl ) const
     return pCurCrsr->GetNode( bIsPtInTbl )->FindTableNode();
 }
 
-inline FASTBOOL SwCrsrShell::IsCrsrPtAtEnd() const
+inline BOOL SwCrsrShell::IsCrsrPtAtEnd() const
 {
     return pCurCrsr->End() == pCurCrsr->GetPoint();
 }
