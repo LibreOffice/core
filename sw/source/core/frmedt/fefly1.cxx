@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 15:55:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:51:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,8 +333,8 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
     //    an ihnen veraendert.
     //  Der Rahmen darf nicht per Dokumentposition selektiert werden, weil er
     //  auf jedenfall selektiert sein muss!
-    SwViewImp *pImp = Imp();
-    if( GetWin() && (bNew || !pImp->GetDrawView()->AreObjectsMarked()) )
+    SwViewImp *pImpl = Imp();
+    if( GetWin() && (bNew || !pImpl->GetDrawView()->AreObjectsMarked()) )
     {
         ASSERT( rFrm.IsFlyFrm(), "SelectFlyFrm will einen Fly" );
 
@@ -354,11 +354,11 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
 //        if( !rFrm.GetAnchorFrm()->IsInFly() )
 //            rFrm.Calc();
 
-        if( pImp->GetDrawView()->AreObjectsMarked() )
-            pImp->GetDrawView()->UnmarkAll();
+        if( pImpl->GetDrawView()->AreObjectsMarked() )
+            pImpl->GetDrawView()->UnmarkAll();
 
-        pImp->GetDrawView()->MarkObj( rFrm.GetVirtDrawObj(),
-                                      pImp->GetPageView(), sal_False, sal_False );
+        pImpl->GetDrawView()->MarkObj( rFrm.GetVirtDrawObj(),
+                                      pImpl->GetPageView(), sal_False, sal_False );
         KillPams();
         ClearMark();
         SelFlyGrabCrsr();
@@ -658,6 +658,8 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
                         }
                         break;
                     }
+                    default:
+                        break;
                 }
                 if( bMoveIt )
                 {
@@ -776,10 +778,9 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
         }
         break;
 
-#ifndef PRODUCT
     default:
-            ASSERT( !this, "Was sollte das fuer ein Fly werden?" );
-#endif
+        ASSERT( !this, "Was sollte das fuer ein Fly werden?" )
+        break;
     }
 
     SwFlyFrmFmt *pRet;
@@ -803,18 +804,18 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
 
             const SfxPoolItem* pItem;
             if( SFX_ITEM_SET == rSet.GetItemState( RES_HORI_ORIENT, sal_False, &pItem )
-                && HORI_NONE == ((SwFmtHoriOrient*)pItem)->GetHoriOrient() )
+                && text::HoriOrientation::NONE == ((SwFmtHoriOrient*)pItem)->GetHoriOrient() )
             {
                 bHOriChgd = sal_True;
                 aOldH = *((SwFmtHoriOrient*)pItem);
-                ((SfxItemSet&)rSet).Put( SwFmtHoriOrient( 0, HORI_LEFT ) );
+                ((SfxItemSet&)rSet).Put( SwFmtHoriOrient( 0, text::HoriOrientation::LEFT ) );
             }
             if( SFX_ITEM_SET == rSet.GetItemState( RES_VERT_ORIENT, sal_False, &pItem )
-                && VERT_NONE == ((SwFmtVertOrient*)pItem)->GetVertOrient() )
+                && text::VertOrientation::NONE == ((SwFmtVertOrient*)pItem)->GetVertOrient() )
             {
                 bVOriChgd = sal_True;
                 aOldV = *((SwFmtVertOrient*)pItem);
-                ((SfxItemSet&)rSet).Put( SwFmtVertOrient( 0, VERT_TOP ) );
+                ((SfxItemSet&)rSet).Put( SwFmtVertOrient( 0, text::VertOrientation::TOP ) );
             }
         }
 
@@ -926,6 +927,8 @@ void SwFEShell::Insert( const String& rGrfName, const String& rFltName,
                         pAnchor->SetPageNum( PCURCRSR->GetPageNum(
                                     sal_True, &PCURCRSR->GetPtPos() ) );
                     }
+                    break;
+                default :
                     break;
                 }
             }
@@ -1085,7 +1088,7 @@ void SwFEShell::SetPageObjsNewPage( SvPtrarr& rFillArr, int nOffset )
     long nNewPage;
     SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetRootFrm();
     sal_uInt16 nMaxPage = pTmpRootFrm->GetPageNum();
-    sal_Bool bAssert = sal_False;
+    sal_Bool bTmpAssert = sal_False;
     for( sal_uInt16 n = 0; n < rFillArr.Count(); ++n )
     {
         pFmt = (SwFrmFmt*)rFillArr[n];
@@ -1109,14 +1112,14 @@ void SwFEShell::SetPageObjsNewPage( SvPtrarr& rFillArr, int nOffset )
                 }
                 else
                     pFmt->DelFrms();
-                bAssert = sal_True;
+                bTmpAssert = sal_True;
             }
             aNewAnchor.SetPageNum( sal_uInt16(nNewPage) );
             pDoc->SetAttr( aNewAnchor, *pFmt );
         }
     }
 
-    if( bAssert )
+    if( bTmpAssert )
         pTmpRootFrm->SetAssertFlyPages();
 
     EndUndo();
@@ -1700,24 +1703,24 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
         const SwFmtURL &rURL = pFly->GetFmt()->GetURL();
         if( rURL.GetURL().Len() || rURL.GetMap() )
         {
-            FASTBOOL bSetTargetFrameName = pTargetFrameName != 0;
-            FASTBOOL bSetDescription = pDescription != 0;
+            BOOL bSetTargetFrameName = pTargetFrameName != 0;
+            BOOL bSetDescription = pDescription != 0;
             if ( rURL.GetMap() )
             {
-                IMapObject *pObj = pFly->GetFmt()->GetIMapObject( rPt, pFly );
-                if ( pObj && pObj->GetURL().Len() )
+                IMapObject *pObject = pFly->GetFmt()->GetIMapObject( rPt, pFly );
+                if ( pObject && pObject->GetURL().Len() )
                 {
                     if( pURL )
-                        *pURL = pObj->GetURL();
-                    if ( bSetTargetFrameName && pObj->GetTarget().Len() )
+                        *pURL = pObject->GetURL();
+                    if ( bSetTargetFrameName && pObject->GetTarget().Len() )
                     {
                         bSetTargetFrameName = sal_False;
-                        *pTargetFrameName = pObj->GetTarget();
+                        *pTargetFrameName = pObject->GetTarget();
                     }
                     if ( bSetDescription )
                     {
                         bSetDescription = sal_False;
-                        *pDescription = pObj->GetAltText();
+                        *pDescription = pObject->GetAltText();
                     }
                     pRet = pFly->GetFmt();
                 }
@@ -1838,7 +1841,7 @@ const SwFrmFmt* SwFEShell::GetFmtFromAnyObj( const Point& rPt ) const
 
 ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
 {
-    ObjCntType eType;
+    ObjCntType eType = OBJCNT_NONE;
 
     // OD 23.06.2003 #108784# - investigate 'master' drawing object, if method
     // is called for a 'virtual' drawing object.
@@ -2005,14 +2008,14 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
                                 Max( nHeight, long(MINFLY) )));
 
             if( SFX_ITEM_SET != aFrmSet.GetItemState( RES_HORI_ORIENT ))
-                aFrmSet.Put( SwFmtHoriOrient( aRelPos.X(), HORI_NONE, FRAME ));
+                aFrmSet.Put( SwFmtHoriOrient( aRelPos.X(), text::HoriOrientation::NONE, text::RelOrientation::FRAME ));
 
             if( SFX_ITEM_SET != aFrmSet.GetItemState( RES_VERT_ORIENT ))
-                aFrmSet.Put( SwFmtVertOrient( aRelPos.Y(), VERT_NONE, FRAME ));
+                aFrmSet.Put( SwFmtVertOrient( aRelPos.Y(), text::VertOrientation::NONE, text::RelOrientation::FRAME ));
 
         }
 
-        sal_uInt32 nOrdNum = pObj->GetOrdNum();
+        pObj->GetOrdNum();
 
         StartAllAction();
         StartUndo();
@@ -2077,7 +2080,7 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
     /* potential successors resp. predecessors */
     ::std::vector< const SwFrmFmt * > aTmpSpzArray;
 
-    SwFrmFmt * pNext = (SwFrmFmt *) pDoc->FindFlyByName(rReference);
+    (SwFrmFmt *) pDoc->FindFlyByName(rReference);
 
     for (sal_uInt16 n = 0; n < nCnt; n++)
     {
