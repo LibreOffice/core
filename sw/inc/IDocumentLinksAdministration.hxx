@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IDocumentLinksAdministration.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:04:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:53:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 #ifndef IDOCUMENTLINKSADMINISTRATION_HXX_INCLUDED
 #define IDOCUMENTLINKSADMINISTRATION_HXX_INCLUDED
+
+#include <tools/solar.h>
 
 class String;
 class SvxLinkManager;
