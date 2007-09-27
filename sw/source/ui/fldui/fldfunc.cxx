@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldfunc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:10:13 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:47:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,8 @@
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
-using com::sun::star::uno::Sequence;
+using namespace ::com::sun::star;
+
 using rtl::OUString;
 
 /*--------------------------------------------------------------------
@@ -156,7 +157,7 @@ SwFldFuncPage::~SwFldFuncPage()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwFldFuncPage::Reset(const SfxItemSet& rSet)
+void SwFldFuncPage::Reset(const SfxItemSet& )
 {
     SavePos(&aTypeLB);
     Init(); // Allgemeine initialisierung
@@ -165,7 +166,6 @@ void SwFldFuncPage::Reset(const SfxItemSet& rSet)
     aTypeLB.Clear();
 
     USHORT nPos, nTypeId;
-    BOOL bPage = FALSE;
 
     if (!IsFldEdit())
     {
@@ -177,14 +177,14 @@ void SwFldFuncPage::Reset(const SfxItemSet& rSet)
         {
             nTypeId = GetFldMgr().GetTypeId(i);
             nPos = aTypeLB.InsertEntry(GetFldMgr().GetTypeStr(i));
-            aTypeLB.SetEntryData(nPos, (void*)nTypeId);
+            aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
         }
     }
     else
     {
         nTypeId = GetCurField()->GetTypeId();
         nPos = aTypeLB.InsertEntry(GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
-        aTypeLB.SetEntryData(nPos, (void*)nTypeId);
+        aTypeLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
 
         if (nTypeId == TYP_MACROFLD)
         {
@@ -218,7 +218,7 @@ void SwFldFuncPage::Reset(const SfxItemSet& rSet)
         if(sUserData.GetToken(0, ';').EqualsIgnoreCaseAscii(USER_DATA_VERSION_1))
         {
             String sVal = sUserData.GetToken(1, ';');
-            USHORT nVal = sVal.ToInt32();
+            USHORT nVal = static_cast< USHORT >(sVal.ToInt32());
             if(nVal != USHRT_MAX)
             {
                 for(USHORT i = 0; i < aTypeLB.GetEntryCount(); i++)
@@ -248,7 +248,7 @@ void SwFldFuncPage::Reset(const SfxItemSet& rSet)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
+IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
 {
     // Alte ListBoxPos sichern
     const USHORT nOld = GetTypeSel();
@@ -277,7 +277,7 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
         for (USHORT i = 0; i < nSize; i++)
         {
             USHORT nPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
-            aFormatLB.SetEntryData( nPos, (void*)GetFldMgr().GetFormatId( nTypeId, i ) );
+            aFormatLB.SetEntryData( nPos, reinterpret_cast<void*>(GetFldMgr().GetFormatId( nTypeId, i )) );
         }
 
         if (nSize)
@@ -325,7 +325,7 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
             if(bDropDown)
             {
                 const SwDropDownField* pDrop = (const SwDropDownField*)GetCurField();
-                Sequence<OUString> aItems = pDrop->GetItemSequence();
+                uno::Sequence<OUString> aItems = pDrop->GetItemSequence();
                 const OUString* pArray = aItems.getConstArray();
                 aListItemsLB.Clear();
                 for(sal_Int32 i = 0; i < aItems.getLength(); i++)
@@ -460,7 +460,7 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwFldFuncPage, SelectHdl, ListBox *, pBox )
+IMPL_LINK( SwFldFuncPage, SelectHdl, ListBox *, EMPTYARG )
 {
     USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
 
@@ -474,7 +474,7 @@ IMPL_LINK( SwFldFuncPage, SelectHdl, ListBox *, pBox )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwFldFuncPage, InsertMacroHdl, ListBox *, pBox )
+IMPL_LINK( SwFldFuncPage, InsertMacroHdl, ListBox *, EMPTYARG )
 {
     SelectHdl();
     InsertHdl();
@@ -567,7 +567,7 @@ void SwFldFuncPage::UpdateSubType()
     for (USHORT i = 0; i < nCount; ++i)
     {
         USHORT nPos = aSelectionLB.InsertEntry(*aLst[i]);
-        aSelectionLB.SetEntryData(nPos, (void*)i);
+        aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(i));
     }
 
     BOOL bEnable = nCount != 0;
@@ -620,9 +620,8 @@ IMPL_LINK( SwFldFuncPage, MacroHdl, Button *, pBtn )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-BOOL SwFldFuncPage::FillItemSet(SfxItemSet& rSet)
+BOOL SwFldFuncPage::FillItemSet(SfxItemSet& )
 {
-    BOOL bPage = FALSE;
     USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
 
     USHORT nSubType = 0;
@@ -749,7 +748,7 @@ void    SwFldFuncPage::FillUserData()
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;
     else
-        nTypeSel = (ULONG)aTypeLB.GetEntryData( nTypeSel );
+        nTypeSel = sal::static_int_cast< USHORT >(reinterpret_cast< sal_uIntPtr >(aTypeLB.GetEntryData( nTypeSel )));
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
 }
