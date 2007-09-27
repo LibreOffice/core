@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:32:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:35:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
 
                 sal_Int8 nRet = -1;
                 if (pTmpNode && pTmpNode->GetOutlineLevel() != NO_NUMBERING)
-                    nRet = pTmpNode->GetOutlineLevel();
+                    nRet = sal::static_int_cast< sal_Int8 >(pTmpNode->GetOutlineLevel());
 
                 *pAny <<= nRet;
             }
@@ -215,7 +215,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                 if( pAny )
                 {
                     String sVal;
-                    SwStyleNameMapper::FillProgName(pFmt->GetName(), sVal, GET_POOLID_TXTCOLL, sal_True );
+                    SwStyleNameMapper::FillProgName(pFmt->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
                     *pAny <<= OUString(sVal);
                 }
             }
@@ -384,7 +384,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                 {
                     const SwTableNode* pTblNode = pSttNode->FindTableNode();
                     SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
-                    SwTable& rTable = ((SwTableNode*)pSttNode)->GetTable();
+                    //SwTable& rTable = ((SwTableNode*)pSttNode)->GetTable();
                     if(FN_UNO_TEXT_TABLE == pMap->nWID)
                     {
                         uno::Reference< XTextTable >  xTable = SwXTextTables::GetObject(*pTableFmt);
@@ -491,7 +491,6 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                     nPaMEnd = nTmp;
                 }
                 Sequence< ::rtl::OUString> aCharStyles;
-                USHORT nCharStylesFound = 0;
                 SwpHints* pHints = pTxtNode->GetpSwpHints();
                 for(USHORT nAttr = 0; nAttr < pHints->GetStartCount(); nAttr++ )
                 {
@@ -523,7 +522,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
                             DBG_ASSERT(pAttr->GetCharFmt().GetCharFmt(), "no character format set");
                             aCharStyles.getArray()[aCharStyles.getLength() - 1] =
                                         SwStyleNameMapper::GetProgName(
-                                            pAttr->GetCharFmt().GetCharFmt()->GetName(), GET_POOLID_CHRFMT);
+                                            pAttr->GetCharFmt().GetCharFmt()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
                         }
                     }
 
@@ -554,8 +553,8 @@ sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
     if( pTxtNd && pTxtNd->GetNumRule() && pTxtNd->IsRestart())
     {
         eState = PropertyState_DIRECT_VALUE;
-        sal_uInt16 nTmp = pTxtNd->GetStart();
-        return (sal_Int16)nTmp;
+        sal_Int16 nTmp = sal::static_int_cast< sal_Int16 >(pTxtNd->GetStart());
+        return nTmp;
     }
     eState = PropertyState_DEFAULT_VALUE;
     return -1;
@@ -574,8 +573,8 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
         uno::Reference<XUnoTunnel> xNumTunnel(xIndexReplace, UNO_QUERY);
         if(xNumTunnel.is())
         {
-            pSwNum = (SwXNumberingRules*)
-                xNumTunnel->getSomething( SwXNumberingRules::getUnoTunnelId() );
+            pSwNum = reinterpret_cast< SwXNumberingRules * >(
+                sal::static_int_cast< sal_IntPtr >( xNumTunnel->getSomething( SwXNumberingRules::getUnoTunnelId() )));
         }
 
         if(pSwNum)
@@ -700,7 +699,7 @@ void GetCurPageStyle(SwPaM& rPaM, String &rString)
 {
     const SwPageFrm* pPage = rPaM.GetCntntNode()->GetFrm()->FindPageFrm();
     if(pPage)
-        SwStyleNameMapper::FillProgName( pPage->GetPageDesc()->GetName(), rString, GET_POOLID_PAGEDESC, sal_True );
+        SwStyleNameMapper::FillProgName( pPage->GetPageDesc()->GetName(), rString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True );
 }
 /* -----------------30.03.99 10:52-------------------
  * spezielle Properties am Cursor zuruecksetzen
