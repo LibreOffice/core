@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcont.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:02:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:10:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ public:
     virtual BOOL            IsProtect() const;
     const SwContentType*    GetParent() const {return pParent;}
     const String&           GetName()   const {return sContentName;}
-    int                     operator==(const SwContent& rCont) const
+    int                     operator==(const SwContent& /*rCont*/) const
                                 {
                                     //gleich sind sie nie, sonst fallen sie aus dem Array
                                     return FALSE;
