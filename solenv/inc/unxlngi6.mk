@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:06:20 $
+#   last change: $Author: hr $ $Date: 2007-09-27 07:49:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -140,8 +140,7 @@ CFLAGSWERRCC=-Werror
 # settings.mk):
 MODULES_WITH_WARNINGS := \
     extensions \
-    soldep \
-    sw
+    soldep
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
@@ -154,7 +153,7 @@ LINKC*=$(CC)
 # default linker flags
 LINKFLAGSDEFS*=-Wl,-z,defs
 LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
-# flag -Wl,-z,noexecstack sets the NX bit on the stack 
+# flag -Wl,-z,noexecstack sets the NX bit on the stack
 LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
 
 # linker flags for linking applications
