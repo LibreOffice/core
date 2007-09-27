@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:58:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:10:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-using ::com::sun::star::uno::Any;
+using uno::Any;
 
 /** fills the given attribute list with the items in the given set */
 void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
@@ -203,7 +203,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                                  const SvXMLItemMapEntry& rEntry,
                                  const SvXMLUnitConverter& rUnitConverter,
                                  const SvXMLNamespaceMap& rNamespaceMap,
-                                 sal_uInt16 nFlags,
+                                 sal_uInt16 /*nFlags*/,
                                  const SfxItemSet *pSet ) const
 {
     if( 0 != (rEntry.nMemberId & MID_SW_FLAG_SPECIAL_ITEM_EXPORT) )
@@ -410,23 +410,23 @@ void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
 
 /** this method is called for every item that has the
     MID_SW_FLAG_SPECIAL_ITEM_EXPORT flag set */
-void SvXMLExportItemMapper::handleSpecialItem( SvXMLAttributeList& rAttrList,
-                                    const SvXMLItemMapEntry& rEntry,
-                                    const SfxPoolItem& rItem,
-                                    const SvXMLUnitConverter& rUnitConverter,
-                                    const SvXMLNamespaceMap& rNamespaceMap,
-                                    const SfxItemSet* pSet /* = NULL */ ) const
+void SvXMLExportItemMapper::handleSpecialItem( SvXMLAttributeList& /*rAttrList*/,
+                                    const SvXMLItemMapEntry& /*rEntry*/,
+                                    const SfxPoolItem& /*rItem*/,
+                                    const SvXMLUnitConverter& /*rUnitConverter*/,
+                                    const SvXMLNamespaceMap& /*rNamespaceMap*/,
+                                    const SfxItemSet* /*pSet*/ /* = NULL */ ) const
 {
     DBG_ERROR( "special item not handled in xml export" );
 }
 
 /** this method is called for every item that has the
     MID_SW_FLAG_NO_ITEM_EXPORT flag set */
-void SvXMLExportItemMapper::handleNoItem( SvXMLAttributeList& rAttrList,
-                               const SvXMLItemMapEntry& rEntry,
-                               const SvXMLUnitConverter& rUnitConverter,
-                               const SvXMLNamespaceMap& rNamespaceMap,
-                               const SfxItemSet& rSet ) const
+void SvXMLExportItemMapper::handleNoItem( SvXMLAttributeList& /*rAttrList*/,
+                               const SvXMLItemMapEntry& /*rEntry*/,
+                               const SvXMLUnitConverter& /*rUnitConverter*/,
+                               const SvXMLNamespaceMap& /*rNamespaceMap*/,
+                               const SfxItemSet& /*rSet*/ ) const
 {
     DBG_ERROR( "no item not handled in xml export" );
 }
@@ -434,12 +434,12 @@ void SvXMLExportItemMapper::handleNoItem( SvXMLAttributeList& rAttrList,
 /** this method is called for every item that has the
     MID_SW_FLAG_ELEMENT_EXPORT flag set */
 void SvXMLExportItemMapper::handleElementItem(
-                        SvXMLExport& rExport,
-                        const SvXMLItemMapEntry& rEntry,
-                        const SfxPoolItem& rItem,
-                        const SvXMLUnitConverter& rUnitConverter,
-                        const SfxItemSet& rSet,
-                        sal_uInt16 nFlags ) const
+                        SvXMLExport& /*rExport*/,
+                        const SvXMLItemMapEntry& /*rEntry*/,
+                        const SfxPoolItem& /*rItem*/,
+                        const SvXMLUnitConverter& /*rUnitConverter*/,
+                        const SfxItemSet& /*rSet*/,
+                        sal_uInt16 /*nFlags*/ ) const
 {
     DBG_ERROR( "element item not handled in xml export" );
 }
@@ -934,6 +934,8 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                         aOut.append( GetXMLToken(XML_BOTTOM) );
                         bOk = sal_True;
                         break;
+                    default:
+                        ;
                     }
 
                     if( bOk )
@@ -957,6 +959,8 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                         case GPOS_RB:
                             aOut.append( GetXMLToken(XML_RIGHT) );
                             break;
+                        default:
+                            ;
                         }
                     }
                     break;
