@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawbase.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:10:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:57:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,14 +56,14 @@ class MouseEvent;
 class SwDrawBase
 {
 protected:
-    SwView*         pView;
-    SwWrtShell*     pSh;
-    SwEditWin*      pWin;
-    Point           aStartPos;              // Position von BeginCreate
-    Point           aMDPos;                 // Position von MouseButtonDown
-    USHORT          nSlotId;
-    BOOL            bCreateObj  :1;
-    BOOL            bInsForm    :1;
+    SwView*         m_pView;
+    SwWrtShell*     m_pSh;
+    SwEditWin*      m_pWin;
+    Point           m_aStartPos;                 // Position von BeginCreate
+    Point           m_aMDPos;                // Position von MouseButtonDown
+    USHORT          m_nSlotId;
+    BOOL            m_bCreateObj  :1;
+    BOOL            m_bInsForm   :1;
 
     Point           GetDefaultCenterPos();
 public:
@@ -72,8 +72,8 @@ public:
 
     void         SetDrawPointer();
     void         EnterSelectMode(const MouseEvent& rMEvt);
-    inline BOOL  IsInsertForm() const { return bInsForm; }
-    inline BOOL  IsCreateObj() const { return bCreateObj; }
+    inline BOOL  IsInsertForm() const { return m_bInsForm; }
+    inline BOOL  IsCreateObj() const { return m_bCreateObj; }
 
     // Mouse- & Key-Events; Returnwert=TRUE: Event wurde bearbeitet
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
@@ -82,8 +82,8 @@ public:
     virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
 
     void         BreakCreate();
-    void         SetSlotId(USHORT nSlot) {nSlotId = nSlot;}
-    USHORT       GetSlotId() { return nSlotId;}
+    void         SetSlotId(USHORT nSlot) {m_nSlotId = nSlot;}
+    USHORT       GetSlotId() { return m_nSlotId;}
 
     virtual void Activate(const USHORT nSlotId);    // Function aktivieren
     virtual void Deactivate();                      // Function deaktivieren
