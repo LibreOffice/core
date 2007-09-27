@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acorrect.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:04:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:43:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,9 @@
 
 #include <svx/acorrcfg.hxx>
 
+using namespace ::com::sun::star;
+
+
 class _PaMIntoCrsrShellRing
 {
     SwCrsrShell& rSh;
@@ -133,14 +136,15 @@ void _PaMIntoCrsrShellRing::RemoveFromRing( SwPaM& rPam, Ring* pPrev )
 SwAutoCorrDoc::SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam,
                                 sal_Unicode cIns )
     : rEditSh( rEditShell ), rCrsr( rPam ), pIdx( 0 ),
-    nUndoId( cIns ? 0 : USHRT_MAX )
+    nUndoId( UNDO_EMPTY  ),
+    bUndoIdInitialized( cIns ? false : true )
 {
 }
 
 
 SwAutoCorrDoc::~SwAutoCorrDoc()
 {
-    if( nUndoId && USHRT_MAX != nUndoId )
+    if( UNDO_EMPTY != nUndoId )
         rEditSh.EndUndo( nUndoId );
     delete pIdx;
 }
@@ -165,8 +169,8 @@ BOOL SwAutoCorrDoc::Delete( xub_StrLen nStt, xub_StrLen nEnd )
     SwPaM aSel( rNd, nStt, rNd, nEnd );
     DeleteSel( aSel );
 
-    if( !nUndoId )
-        nUndoId = USHRT_MAX;
+    if( bUndoIdInitialized )
+        bUndoIdInitialized = true;
     return TRUE;
 }
 
@@ -175,12 +179,11 @@ BOOL SwAutoCorrDoc::Insert( xub_StrLen nPos, const String& rTxt )
 {
     SwPaM aPam( rCrsr.GetPoint()->nNode.GetNode(), nPos );
     rEditSh.GetDoc()->Insert( aPam, rTxt, true );
-    if( !nUndoId )
+    if( !bUndoIdInitialized )
     {
+        bUndoIdInitialized = true;
         if( 1 == rTxt.Len() )
             rEditSh.StartUndo( nUndoId = UNDO_AUTOCORRECT );
-        else
-            nUndoId = USHRT_MAX;
     }
     return TRUE;
 }
@@ -239,12 +242,11 @@ BOOL SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
             pDoc->Overwrite( *pPam, rTxt );
 
 //      pDoc->SetRedlineMode_intern( eOld );
-        if( !nUndoId )
+        if( bUndoIdInitialized )
         {
+            bUndoIdInitialized = true;
             if( 1 == rTxt.Len() )
                 rEditSh.StartUndo( nUndoId = UNDO_AUTOCORRECT );
-            else
-                nUndoId = USHRT_MAX;
         }
     }
 
@@ -273,8 +275,8 @@ BOOL SwAutoCorrDoc::SetAttr( xub_StrLen nStt, xub_StrLen nEnd, USHORT nSlotId,
 
         rEditSh.GetDoc()->SetFmtItemByAutoFmt( aPam, aSet );
 
-        if( !nUndoId )
-            nUndoId = USHRT_MAX;
+        if( bUndoIdInitialized )
+            bUndoIdInitialized = true;
     }
     return 0 != nWhich;
 }
@@ -290,8 +292,8 @@ BOOL SwAutoCorrDoc::SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const String&
                         RES_TXTATR_INETFMT, RES_TXTATR_INETFMT );
     aSet.Put( SwFmtINetFmt( rURL, aEmptyStr ));
     rEditSh.GetDoc()->SetFmtItemByAutoFmt( aPam, aSet );
-    if( !nUndoId )
-        nUndoId = USHRT_MAX;
+    if( bUndoIdInitialized )
+        bUndoIdInitialized = true;
     return TRUE;
 }
 
@@ -321,8 +323,8 @@ const String* SwAutoCorrDoc::GetPrevPara( BOOL bAtNormalPos )
     if( pTNd && NO_NUMBERING == pTNd->GetTxtColl()->GetOutlineLevel() )
         pStr = &pTNd->GetTxt();
 
-    if( !nUndoId )
-        nUndoId = USHRT_MAX;
+    if( bUndoIdInitialized )
+        bUndoIdInitialized = true;
     return pStr;
 }
 
@@ -331,8 +333,8 @@ BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
                                             SvxAutoCorrect& rACorrect,
                                             const String** ppPara )
 {
-    if( !nUndoId )
-        nUndoId = USHRT_MAX;
+    if( bUndoIdInitialized )
+        bUndoIdInitialized = true;
 
     // Absatz-Anfang oder ein Blank gefunden, suche nach dem Wort
     // Kuerzel im Auto
@@ -518,9 +520,9 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
         if( pTxtNd->GetpSwpHints() && pTxtNd->GetpSwpHints()->Count() )
         {
             const USHORT nSize = pTxtNd->GetpSwpHints()->Count();
-            register USHORT n;
+            USHORT n;
             xub_StrLen nAttrStart;
-            register const xub_StrLen* pAttrEnd;
+            const xub_StrLen* pAttrEnd;
 
             for( n = 0; n < nSize; ++n )
             {
