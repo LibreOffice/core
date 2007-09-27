@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffld.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:30:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:09:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,8 +126,8 @@ public:
     virtual void        SetPar1(const String& rStr);
 
     virtual String      GetPar2() const;
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
 
     void                ConvertProgrammaticToUIName();
 
