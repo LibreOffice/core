@@ -4,9 +4,9 @@
  *
  *  $RCSfile: concustomshape.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:06:15 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:55:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,11 @@
 #ifndef _SW_CONCUSTOMSHAPE_HXX
 #define _SW_CONCUSTOMSHAPE_HXX
 
+#include <rtl/ustring.hxx>
 #include "drawbase.hxx"
+
+class SdrObject;
+class SfxRequest;
 
 /*************************************************************************
 |*
