@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:17:43 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:14:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,9 @@
 #endif
 #include <svx/svdundo.hxx> // #111827#
 
+#include <swundo.hxx>
+
+
 // --> OD 2006-11-01 #130889#
 #include <vector>
 // <--
@@ -120,7 +123,7 @@ class SwRedline;
 
 namespace utl {
     class TransliterationWrapper;
-};
+}
 
 #ifndef PRODUCT
 class Writer;
@@ -141,7 +144,7 @@ SV_DECL_PTRARR_DEL( SwRedlineSaveDatas, SwRedlineSaveDataPtr, 8, 8 )
 
 class SwUndo
 {
-    USHORT nId;
+    SwUndoId nId;
     USHORT nOrigRedlineMode;
 
 protected:
@@ -152,7 +155,7 @@ protected:
     void RemoveIdxFromRange( SwPaM& rPam, BOOL bMoveNext );
     void RemoveIdxRel( ULONG, const SwPosition& );
 
-    void SetId( USHORT nNew ) { nId = nNew; }
+    void SetId( SwUndoId nNew ) { nId = nNew; }
 
     static BOOL CanRedlineGroup( SwRedlineSaveDatas& rCurr,
                                 const SwRedlineSaveDatas& rCheck,
@@ -166,11 +169,11 @@ protected:
     */
     virtual SwRewriter GetRewriter() const;
 public:
-    SwUndo( USHORT nI );
+    SwUndo( SwUndoId nI );
     virtual ~SwUndo();
 
-    USHORT GetId() const { return nId; }
-    virtual USHORT GetEffectiveId() const;
+    SwUndoId GetId() const { return nId; }
+    virtual SwUndoId GetEffectiveId() const;
     virtual void Undo( SwUndoIter& ) = 0;
     virtual void Redo( SwUndoIter& ) = 0;
     virtual void Repeat( SwUndoIter& );
@@ -202,6 +205,17 @@ public:
     static BOOL HasHiddenRedlines( const SwRedlineSaveDatas& rSData );
 };
 
+typedef USHORT DelCntntType;
+namespace nsDelCntntType
+{
+    const DelCntntType DELCNT_FTN = 0x01;
+    const DelCntntType DELCNT_FLY = 0x02;
+    const DelCntntType DELCNT_TOC = 0x04;
+    const DelCntntType DELCNT_BKM = 0x08;
+    const DelCntntType DELCNT_ALL = 0x0F;
+    const DelCntntType DELCNT_CHKNOCNTNT = 0x80;
+}
+
 // diese Klasse muss in ein Undo-Object vererbt werden, wenn dieses Inhalt
 // fuers Redo/Undo ... speichert
 class SwUndoSaveCntnt
@@ -232,15 +246,8 @@ protected:
 
     // vor dem Move ins UndoNodes-Array muss dafuer gesorgt werden, das
     // die Inhaltstragenden Attribute aus dem Nodes-Array entfernt werden.
-    enum DelCntntType{  DELCNT_FTN = 0x01,
-                        DELCNT_FLY = 0x02,
-                        DELCNT_TOC = 0x04,
-                        DELCNT_BKM = 0x08,
-                        DELCNT_ALL = 0x0F,
-                        DELCNT_CHKNOCNTNT = 0x80    // nur den NodeIndex beachten
-                    };
     void DelCntntIndex( const SwPosition& pMark, const SwPosition& pPoint,
-                        DelCntntType nDelCntntType = DELCNT_ALL );
+                        DelCntntType nDelCntntType = nsDelCntntType::DELCNT_ALL );
 
 public:
     SwUndoSaveCntnt();
@@ -298,14 +305,14 @@ class SwUndoStart: public SwUndo
     // Um innerhalb von Undo zuerkennen, wann ein Start vorliegt, gibt
     // GetId() immer die UNDO_START zurueck. Die UserId kann ueber
     // GetUserId() erfragt werden.
-    USHORT nUserId;
+    SwUndoId nUserId;
     // fuer die "Verpointerung" von Start- und End-Undos
     USHORT nEndOffset;
 
     SwRewriter mRewriter;
 
 public:
-    SwUndoStart( USHORT nId );
+    SwUndoStart( SwUndoId nId );
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
@@ -316,8 +323,8 @@ public:
     virtual SwRewriter GetRewriter() const;
     // <- #111827#
 
-    virtual USHORT GetEffectiveId() const;
-    USHORT GetUserId() const { return nUserId; }
+    virtual SwUndoId GetEffectiveId() const;
+    SwUndoId GetUserId() const { return nUserId; }
     // Setzen vom End-Undo-Offset geschieht im Doc::EndUndo
     USHORT GetEndOffset() const { return nEndOffset; }
     void SetEndOffset( USHORT n ) { nEndOffset = n; }
@@ -329,14 +336,14 @@ class SwUndoEnd: public SwUndo
     // Um innerhalb von Undo zuerkennen, wann ein Ende vorliegt, gibt
     // GetId() immer die UNDO_END zurueck. Die UserId kann ueber
     // GetUserId() erfragt werden.
-    USHORT nUserId;
+    SwUndoId nUserId;
     // fuer die "Verpointerung" von Start- und End-Undos
     USHORT nSttOffset;
 
     SwRewriter mRewriter;
 
 public:
-    SwUndoEnd( USHORT nId );
+    SwUndoEnd( SwUndoId nId );
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
@@ -347,8 +354,8 @@ public:
     virtual SwRewriter GetRewriter() const;
     // <- #111827#
 
-    virtual USHORT GetEffectiveId() const;
-    USHORT GetUserId() const { return nUserId; }
+    virtual SwUndoId GetEffectiveId() const;
+    SwUndoId GetUserId() const { return nUserId; }
 
     // Setzen vom Start-Undo-Offset geschieht im Doc::EndUndo
     void SetSttOffset(USHORT _nSttOffSet) { nSttOffset = _nSttOffSet; }
@@ -752,7 +759,7 @@ protected:
     SwPosition *pPos;                   // Inhalt fuers Redo
     USHORT nSetPos;                     // Start in der History-Liste
 
-    SwUndoInserts( USHORT nUndoId, const SwPaM& );
+    SwUndoInserts( SwUndoId nUndoId, const SwPaM& );
 public:
     virtual ~SwUndoInserts();
 
@@ -904,14 +911,14 @@ class SwUndoTblNdsChg : public SwUndo
     BOOL bFlag;
     BOOL bSameHeight;                   // only used for SplitRow
 public:
-    SwUndoTblNdsChg( USHORT UndoId,
+    SwUndoTblNdsChg( SwUndoId UndoId,
                     const SwSelBoxes& rBoxes,
                     const SwTableNode& rTblNd,
                     long nMn, long nMx,
                     USHORT nCnt, BOOL bFlg, BOOL bSameHeight );
 
     // fuer SetColWidth
-    SwUndoTblNdsChg( USHORT UndoId, const SwSelBoxes& rBoxes,
+    SwUndoTblNdsChg( SwUndoId UndoId, const SwSelBoxes& rBoxes,
                     const SwTableNode& rTblNd );
 
     virtual ~SwUndoTblNdsChg();
@@ -987,8 +994,8 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
 
-    void SetNumFmt( ULONG nNewFmtIdx, const double& rNewNumber )
-            { nFmtIdx = nNewFmtIdx; fNum = rNewNumber; }
+    void SetNumFmt( ULONG nNewNumFmtIdx, const double& rNewNumber )
+            { nFmtIdx = nNewNumFmtIdx; fNum = rNewNumber; }
     void SetBox( const SwTableBox& rBox );
     OUT_UNDOBJ( TblNumFmt )
 };
@@ -1075,7 +1082,7 @@ class SwUndoBookmark : public SwUndo
 {
     SwHstryBookmark* pHBookmark;
 protected:
-    SwUndoBookmark( USHORT nUndoId, const SwBookmark& );
+    SwUndoBookmark( SwUndoId nUndoId, const SwBookmark& );
 
     void SetInDoc( SwDoc* );
     void ResetInDoc( SwDoc* );
@@ -1193,7 +1200,7 @@ protected:
     void InsFly( SwUndoIter&, BOOL bShowSel = TRUE );
     void DelFly( SwDoc* );
 
-    SwUndoFlyBase( SwFrmFmt* pFormat, USHORT nUndoId );
+    SwUndoFlyBase( SwFrmFmt* pFormat, SwUndoId nUndoId );
 
     SwNodeIndex* GetMvSttIdx() const { return SwUndoSaveSection::GetMvSttIdx(); }
     ULONG GetMvNodeCnt() const { return SwUndoSaveSection::GetMvNodeCnt(); }
@@ -1268,7 +1275,7 @@ public:
 //--------------------------------------------------------------------
 
 class _UnReplaceData;
-SV_DECL_PTRARR_DEL( _UnReplaceDatas, _UnReplaceData*, 10, 25 );
+SV_DECL_PTRARR_DEL( _UnReplaceDatas, _UnReplaceData*, 10, 25 )
 
 class SwUndoReplace : public SwUndo
 {
@@ -1774,19 +1781,19 @@ class SwUndoRedline : public SwUndo, public SwUndRng
 protected:
     SwRedlineData* pRedlData;
     SwRedlineSaveDatas* pRedlSaveData;
-    USHORT nUserId;
+    SwUndoId nUserId;
     BOOL bHiddenRedlines;
 
     virtual void _Undo( SwUndoIter& );
     virtual void _Redo( SwUndoIter& );
 
 public:
-    SwUndoRedline( USHORT nUserId, const SwPaM& rRange );
+    SwUndoRedline( SwUndoId nUserId, const SwPaM& rRange );
     virtual ~SwUndoRedline();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
 
-    USHORT GetUserId() const { return nUserId; }
+    SwUndoId GetUserId() const { return nUserId; }
     USHORT GetRedlSaveCount() const
         { return pRedlSaveData ? pRedlSaveData->Count() : 0; }
 };
@@ -1801,7 +1808,7 @@ class SwUndoRedlineDelete : public SwUndoRedline
     virtual void _Redo( SwUndoIter& );
 
 public:
-    SwUndoRedlineDelete( const SwPaM& rRange, USHORT nUserId = 0 );
+    SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUserId = UNDO_EMPTY );
 
     BOOL CanGrouping( const SwUndoRedlineDelete& rPrev );
 };
@@ -1875,7 +1882,7 @@ class SwUndoIter
     friend void SwUndoReplace::Undo( SwUndoIter& );
     friend void SwUndoReplace::Redo( SwUndoIter& );
 
-    USHORT nUndoId;
+    SwUndoId nUndoId;
     USHORT nEndCnt;
     BOOL bWeiter : 1;
     BOOL bUpdateAttr : 1;   // Setze das GCAttr an der CursorShell
@@ -1886,16 +1893,16 @@ public:
     SwFrmFmt* pSelFmt;      // ggfs. das Format Rahmen/Object-Selektionen
     SdrMarkList* pMarkList; // MarkList for all selected SdrObjects
 
-    SwUndoIter( SwPaM * pPam, USHORT nId = 0 );
+    SwUndoIter( SwPaM * pPam, SwUndoId nId = UNDO_EMPTY );
 
     BOOL IsNextUndo() const             { return bWeiter; }
     BOOL IsUpdateAttr() const           { return bUpdateAttr; }
     void SetUpdateAttr( BOOL bNew )     { bUpdateAttr = bNew; }
 
     inline SwDoc& GetDoc() const;
-    USHORT GetId() const    { return nUndoId; }
-    USHORT GetLastUndoId() const
-        { return  pLastUndoObj ? pLastUndoObj->GetId() : 0 ; }
+    SwUndoId GetId() const  { return nUndoId; }
+    SwUndoId GetLastUndoId() const
+        { return  pLastUndoObj ? pLastUndoObj->GetId() : UNDO_EMPTY ; }
     void ClearSelections()  { pSelFmt = 0; pMarkList = 0; }
 };
 
@@ -1907,26 +1914,26 @@ const int nUndoStringLength = 20;
    Shortens a string to a maximum length.
 
    @param rStr      the string to be shortened
-   @param aLength   the maximum length for rStr
+   @param nLength   the maximum length for rStr
    @param rFillStr  string to replace cut out characters with
 
-   If rStr has less than aLength characters it will be returned unaltered.
+   If rStr has less than nLength characters it will be returned unaltered.
 
-   If rStr has more than aLength characters the following algorithm
+   If rStr has more than nLength characters the following algorithm
    generates the shortened string:
 
-       frontLength = (aLength - length(rFillStr)) / 2
-       rearLength = aLength - length(rFillStr) - frontLength
+       frontLength = (nLength - length(rFillStr)) / 2
+       rearLength = nLength - length(rFillStr) - frontLength
        shortenedString = concat(<first frontLength characters of rStr,
                                 rFillStr,
                                 <last rearLength characters of rStr>)
 
    Preconditions:
-      - aLength - length(rFillStr) >= 2
+      - nLength - length(rFillStr) >= 2
 
    @return the shortened string
  */
-String ShortenString(const String & rStr, int aLength, const String & rFillStr);
+String ShortenString(const String & rStr, xub_StrLen nLength, const String & rFillStr);
 // <- #111827#
 
 // #16487#
