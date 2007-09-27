@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:57:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:36:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,9 +281,9 @@ extern sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet )
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-using com::sun::star::frame::XModel;
-using com::sun::star::container::XNameAccess;
-using com::sun::star::style::XStyleFamiliesSupplier;
+using ::com::sun::star::frame::XModel;
+using ::com::sun::star::container::XNameAccess;
+using ::com::sun::star::style::XStyleFamiliesSupplier;
 
 const sal_Char __FAR_DATA sPackageProtocol[] = "vnd.sun.star.Package:";
 const sal_Char __FAR_DATA sGraphicObjectProtocol[] = "vnd.sun.star.GraphicObject:";
@@ -301,7 +301,7 @@ public:
 
     BaseFrameProperties_Impl ( const SfxItemPropertyMap* pMap ) :
         _pMap(pMap) {}
-    ~BaseFrameProperties_Impl();
+    virtual ~BaseFrameProperties_Impl();
 
     void            SetProperty(USHORT nWID, BYTE nMemberId, uno::Any aVal);
     sal_Bool        GetProperty(USHORT nWID, BYTE nMemberId, uno::Any*& pAny );
@@ -933,7 +933,7 @@ sal_Int64 SAL_CALL SwXFrame::getSomething( const uno::Sequence< sal_Int8 >& rId 
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
-            return (sal_Int64)this;
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
     return 0;
 }
@@ -975,14 +975,13 @@ uno::Sequence< OUString > SwXFrame::getSupportedServiceNames(void) throw( uno::R
 /*-- 14.01.99 11:31:52---------------------------------------------------
     Dieser CTor legt den Frame als Descriptor an
   -----------------------------------------------------------------------*/
-SwXFrame::SwXFrame(FlyCntType eSet, const SfxItemPropertyMap* pMap, SwDoc *pDoc)
-    :
+SwXFrame::SwXFrame(FlyCntType eSet, const SfxItemPropertyMap* pMap, SwDoc *pDoc) :
     aLstnrCntnr( (container::XNamed*)this),
-    eType(eSet),
     aPropSet(pMap),
     _pMap(pMap),
-    bIsDescriptor(sal_True),
     mpDoc ( pDoc ),
+    eType(eSet),
+    bIsDescriptor(sal_True),
     m_pCopySource( 0 )
 {
     // Register ourselves as a listener to the document (via the page descriptor)
@@ -1003,25 +1002,28 @@ SwXFrame::SwXFrame(FlyCntType eSet, const SfxItemPropertyMap* pMap, SwDoc *pDoc)
     {
         case FLYCNTTYPE_FRM:
         {
-            uno::Any aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Frame" ) ) );
-            aAny >>= mxStyleData;
+            uno::Any aAny2 = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Frame" ) ) );
+            aAny2 >>= mxStyleData;
             pProps = new SwFrameProperties_Impl( );
         }
         break;
         case FLYCNTTYPE_GRF:
         {
-            uno::Any aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Graphics" ) ) );
-            aAny >>= mxStyleData;
+            uno::Any aAny2 = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Graphics" ) ) );
+            aAny2 >>= mxStyleData;
             pProps = new SwGraphicProperties_Impl( );
         }
         break;
         case FLYCNTTYPE_OLE:
         {
-            uno::Any aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "OLE" ) ) );
-            aAny >>= mxStyleData;
+            uno::Any aAny2 = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "OLE" ) ) );
+            aAny2 >>= mxStyleData;
             pProps = new SwOLEProperties_Impl( );
         }
         break;
+
+        default:
+            ;
     }
 }
 
@@ -1029,13 +1031,13 @@ SwXFrame::SwXFrame(FlyCntType eSet, const SfxItemPropertyMap* pMap, SwDoc *pDoc)
 
   -----------------------------------------------------------------------*/
 SwXFrame::SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet, const SfxItemPropertyMap* pMap) :
-    eType(eSet),
     SwClient( &rFrmFmt ),
     aLstnrCntnr( (container::XNamed*)this),
     aPropSet(pMap),
     _pMap(pMap),
-    bIsDescriptor(sal_False),
+    eType(eSet),
     pProps(0),
+    bIsDescriptor(sal_False),
     m_pCopySource(0)
 {
 
@@ -1114,6 +1116,8 @@ uno::Reference< beans::XPropertySetInfo >  SwXFrame::getPropertySetInfo(void) th
             xOLERef = aPropSet.getPropertySetInfo();
         xRef = xOLERef;
         break;
+    default:
+        ;
     }
     return xRef;
 }
@@ -1166,7 +1170,7 @@ SwFrmFmt *lcl_GetFrmFmt( const uno::Any& rValue, SwDoc *pDoc )
         OUString uTemp;
         rValue >>= uTemp;
         String sStyle;
-        SwStyleNameMapper::FillUIName(String (uTemp), sStyle, GET_POOLID_FRMFMT, sal_True );
+        SwStyleNameMapper::FillUIName(String (uTemp), sStyle, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT, sal_True );
         SwDocStyleSheet* pStyle =
                 (SwDocStyleSheet*)pDocSh->GetStyleSheetPool()->Find(sStyle,
                                                     SFX_STYLE_FAMILY_FRAME);
@@ -1398,7 +1402,6 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
 
             if ( pGrfObj )
             {
-                SwDoc* pDoc = pFmt->GetDoc();
                 const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
                 if ( pCnt->GetCntntIdx() && pDoc->GetNodes()[ pCnt->GetCntntIdx()->GetIndex() + 1 ] )
                 {
@@ -1439,10 +1442,10 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 SwFrmFmt* pChain = 0;
                 for( sal_uInt16 i = 0; i < nCount; i++)
                 {
-                    SwFrmFmt* pFmt = pDoc->GetFlyNum(i, FLYCNTTYPE_FRM);
-                    if(sChainName == pFmt->GetName() )
+                    SwFrmFmt* pFmt2 = pDoc->GetFlyNum(i, FLYCNTTYPE_FRM);
+                    if(sChainName == pFmt2->GetName() )
                     {
-                        pChain = pFmt;
+                        pChain = pFmt2;
                         break;
                     }
                 }
@@ -1475,7 +1478,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             {
                 uno::Reference<lang::XUnoTunnel> xTunnel(xFrame, uno::UNO_QUERY);
                 SwXFrame* pFrame = xTunnel.is() ?
-                        (SwXFrame*)xTunnel->getSomething(SwXFrame::getUnoTunnelId()) : 0;
+                        reinterpret_cast< SwXFrame * >( sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXFrame::getUnoTunnelId()) ))
+                        : 0;
                 if(pFrame && this != pFrame && pFrame->GetFrmFmt() && pFrame->GetFrmFmt()->GetDoc() == pDoc)
                 {
                     SfxItemSet aSet( pDoc->GetAttrPool(),
@@ -1510,8 +1514,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 if(aAnchor.GetAnchorId() == FLY_AT_FLY)
                 {
                     const SwPosition* pPosition = aAnchor.GetCntntAnchor();
-                    SwFrmFmt* pFmt = pPosition ? pPosition->nNode.GetNode().GetFlyFmt() : 0;
-                    if(!pFmt || pFmt->Which() == RES_DRAWFRMFMT)
+                    SwFrmFmt* pFlyFmt = pPosition ? pPosition->nNode.GetNode().GetFlyFmt() : 0;
+                    if(!pFlyFmt || pFlyFmt->Which() == RES_DRAWFRMFMT)
                     {
                         lang::IllegalArgumentException aExcept;
                         aExcept.Message = C2U("Anchor to frame: no frame found");
@@ -1520,7 +1524,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     else
                     {
                         SwPosition aPos = *pPosition;
-                        aPos.nNode = *pFmt->GetCntnt().GetCntntIdx();
+                        aPos.nNode = *pFlyFmt->GetCntnt().GetCntntIdx();
                         aAnchor.SetAnchor(&aPos);
                         aSet.Put(aAnchor);
                     }
@@ -1714,7 +1718,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         }
         else if(FN_UNO_FRAME_STYLE_NAME == pCur->nWID)
         {
-            aAny <<= OUString(SwStyleNameMapper::GetProgName(pFmt->DerivedFrom()->GetName(), GET_POOLID_FRMFMT ) );
+            aAny <<= OUString(SwStyleNameMapper::GetProgName(pFmt->DerivedFrom()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_FRMFMT ) );
         }
         else if(eType == FLYCNTTYPE_GRF &&
                 (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ACTUAL_SIZE)) ||
@@ -1826,8 +1830,8 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
 /*-- 11.12.98 15:05:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXFrame::addPropertyChangeListener(const OUString& PropertyName,
-    const uno::Reference< beans::XPropertyChangeListener > & aListener)
+void SwXFrame::addPropertyChangeListener(const OUString& /*PropertyName*/,
+    const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
@@ -1835,8 +1839,8 @@ void SwXFrame::addPropertyChangeListener(const OUString& PropertyName,
 /*-- 11.12.98 15:05:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXFrame::removePropertyChangeListener(const OUString& PropertyName,
-    const uno::Reference< beans::XPropertyChangeListener > & aListener)
+void SwXFrame::removePropertyChangeListener(const OUString& /*PropertyName*/,
+    const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
@@ -1844,8 +1848,8 @@ void SwXFrame::removePropertyChangeListener(const OUString& PropertyName,
 /*-- 11.12.98 15:05:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXFrame::addVetoableChangeListener(const OUString& PropertyName,
-                                const uno::Reference< beans::XVetoableChangeListener > & aListener)
+void SwXFrame::addVetoableChangeListener(const OUString& /*PropertyName*/,
+                                const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
@@ -1854,7 +1858,7 @@ void SwXFrame::addVetoableChangeListener(const OUString& PropertyName,
 
   -----------------------------------------------------------------------*/
 void SwXFrame::removeVetoableChangeListener(
-    const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener)
+    const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
@@ -1948,7 +1952,6 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        const SwAttrSet& rFmtSet = pFmt->GetAttrSet();
         const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
         if (!pCur)
             throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
@@ -2149,10 +2152,10 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     OTextCursorHelper* pCursor = 0;
     if(xRangeTunnel.is())
     {
-        pRange = (SwXTextRange*)xRangeTunnel->getSomething(
-                                SwXTextRange::getUnoTunnelId());
-        pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
-                                OTextCursorHelper::getUnoTunnelId());
+        pRange  = reinterpret_cast< SwXTextRange * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
+        pCursor = reinterpret_cast< OTextCursorHelper * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
     }
 
     SwDoc* pDoc = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ? (SwDoc*)pCursor->GetDoc() : 0;
@@ -2351,7 +2354,6 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             std::auto_ptr < comphelper::EmbeddedObjectContainer > pCnt;
             if( (*pCLSID) >>= aCLSID )
             {
-                sal_Bool bInternal = sal_True;
                 if( !aClassName.MakeId( aCLSID ) )
                 {
                     lang::IllegalArgumentException aExcept;
@@ -2409,17 +2411,17 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     aFrmSz.SetSize(aSz);
                     aFrmSet.Put(aFrmSz);
                 }
-                SwFlyFrmFmt* pFmt = 0;
+                SwFlyFrmFmt* pFmt2 = 0;
 
                 // TODO/LATER: Is it the only possible aspect here?
-                sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
-                pFmt = pDoc->Insert(aPam, ::svt::EmbeddedObjectRef( xIPObj, nAspect ), &aFrmSet, NULL, NULL );
-                ASSERT( pFmt, "Doc->Insert(notxt) failed." );
+                sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+                pFmt2 = pDoc->Insert(aPam, ::svt::EmbeddedObjectRef( xIPObj, nAspect ), &aFrmSet, NULL, NULL );
+                ASSERT( pFmt2, "Doc->Insert(notxt) failed." );
 
                 pDoc->EndUndo(UNDO_INSERT, NULL);
-                pFmt->Add(this);
+                pFmt2->Add(this);
                 if(sName.Len())
-                    pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt, sName);
+                    pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt2, sName);
             }
         }
 
@@ -2450,10 +2452,10 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
         OTextCursorHelper* pCursor = 0;
         if(xRangeTunnel.is())
         {
-            pRange = (SwXTextRange*)xRangeTunnel->getSomething(
-                                    SwXTextRange::getUnoTunnelId());
-            pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
-                                    OTextCursorHelper::getUnoTunnelId());
+            pRange  = reinterpret_cast< SwXTextRange * >(
+                    sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
+            pCursor = reinterpret_cast< OTextCursorHelper * >(
+                    sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
         }
         SwDoc* pDoc = pFmt->GetDoc();
         SwUnoInternalPaM aIntPam(*pDoc);
@@ -2480,12 +2482,11 @@ awt::Point SwXFrame::getPosition(void) throw( uno::RuntimeException )
     uno::RuntimeException aRuntime;
     aRuntime.Message = C2U("position cannot be determined with this method");
     throw aRuntime;
-    return awt::Point();
 }
 /*-- 22.04.99 08:03:21---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXFrame::setPosition(const awt::Point& aPosition) throw( uno::RuntimeException )
+void SwXFrame::setPosition(const awt::Point& /*aPosition*/) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::RuntimeException aRuntime;
@@ -2525,17 +2526,17 @@ OUString SwXFrame::getShapeType(void) throw( uno::RuntimeException )
 /*-- 14.01.99 11:27:51---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXTextFrame::SwXTextFrame( SwDoc *pDoc ) :
-    SwXFrame(FLYCNTTYPE_FRM, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_FRAME), pDoc ),
-    SwXText(0, CURSOR_FRAME)
+SwXTextFrame::SwXTextFrame( SwDoc *_pDoc ) :
+    SwXText(0, CURSOR_FRAME),
+    SwXFrame(FLYCNTTYPE_FRM, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_FRAME), _pDoc )
 {
 }
 /*-- 11.12.98 15:23:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SwXTextFrame::SwXTextFrame(SwFrmFmt& rFmt) :
-    SwXFrame(rFmt, FLYCNTTYPE_FRM, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_FRAME)),
-    SwXText(rFmt.GetDoc(), CURSOR_FRAME)
+    SwXText(rFmt.GetDoc(), CURSOR_FRAME),
+    SwXFrame(rFmt, FLYCNTTYPE_FRM, aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_FRAME))
 {
 
 }
@@ -2575,7 +2576,7 @@ uno::Any SAL_CALL SwXTextFrame::queryInterface( const uno::Type& aType )
 /* -----------------------------15.03.00 16:30--------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL SwXTextFrame::getTypes(  ) throw(uno::RuntimeException)
+uno::Sequence< uno::Type > SAL_CALL SwXTextFrame::getTypes(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< uno::Type > aTextFrameTypes = SwXTextFrameBaseClass::getTypes();
     uno::Sequence< uno::Type > aFrameTypes = SwXFrame::getTypes();
@@ -2682,12 +2683,10 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor(void) throw(
 
         SwXTextCursor* pXCrsr = new SwXTextCursor(this, *aPam.GetPoint(), CURSOR_FRAME, pFmt->GetDoc());
         aRef =  (text::XWordCursor*)pXCrsr;
+#if OSL_DEBUG_LEVEL > 1
         SwUnoCrsr*  pUnoCrsr = pXCrsr->GetCrsr();
-//      // no Cursor in protected sections
-//      SwCrsrSaveState aSave( *pUnoCrsr );
-//      if(pUnoCrsr->IsInProtectTable( sal_True ) ||
-//          pUnoCrsr->IsSelOvr( SELOVER_TOGGLE | SELOVER_CHANGEPOS ))
-//          throw  uno::RuntimeException() );
+        (void) pUnoCrsr;
+#endif
     }
     else
         throw uno::RuntimeException();
@@ -2708,6 +2707,8 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const
 #if OSL_DEBUG_LEVEL > 1
         const SwStartNode* p1 = aPam.GetNode()->FindFlyStartNode();
         const SwStartNode* p2 = rNode.FindFlyStartNode();
+        (void)p1;
+        (void)p2;
 #endif
         if(aPam.GetNode()->FindFlyStartNode() == rNode.FindFlyStartNode())
             aRef =  (text::XWordCursor*)new SwXTextCursor(this ,
@@ -2725,7 +2726,6 @@ uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration(void)
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< container::XEnumeration >  aRef;
     SwFrmFmt* pFmt = GetFrmFmt();
- uno::XInterface* pRet = 0;
     if(pFmt)
     {
         SwPosition aPos(pFmt->GetCntnt().GetCntntIdx()->GetNode());
@@ -3381,7 +3381,7 @@ SwXOLEListener::SwXOLEListener( SwFmt& rOLEFmt, uno::Reference< XModel > xOLE) :
 SwXOLEListener::~SwXOLEListener()
 {}
 
-void SwXOLEListener::modified( const lang::EventObject& rEvent )
+void SwXOLEListener::modified( const lang::EventObject& /*rEvent*/ )
                                         throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
