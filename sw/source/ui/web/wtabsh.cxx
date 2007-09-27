@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wtabsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:27:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:51:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,8 +77,8 @@ SFX_IMPL_INTERFACE(SwWebTableShell, SwTableShell, SW_RES(STR_SHELLNAME_TABLE))
 
 TYPEINIT1(SwWebTableShell,SwTableShell)
 
-SwWebTableShell::SwWebTableShell(SwView &rView) :
-    SwTableShell(rView)
+SwWebTableShell::SwWebTableShell(SwView &_rView) :
+    SwTableShell(_rView)
 {
     GetShell().UpdateTable();
     SetName(String::CreateFromAscii("Table"));
