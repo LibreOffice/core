@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accgraphic.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:36:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:21:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@
 #include "accgraphic.hxx"
 #endif
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
@@ -69,9 +70,9 @@ const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextGraphicObject";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleGraphic";
 
 SwAccessibleGraphic::SwAccessibleGraphic(
-        SwAccessibleMap *pMap,
-        const SwFlyFrm *pFlyFrm ) :
-    SwAccessibleNoTextFrame( pMap, AccessibleRole::GRAPHIC, pFlyFrm )
+        SwAccessibleMap* pInitMap,
+        const SwFlyFrm* pFlyFrm  ) :
+    SwAccessibleNoTextFrame( pInitMap, AccessibleRole::GRAPHIC, pFlyFrm )
 {
 }
 
@@ -87,7 +88,7 @@ OUString SAL_CALL SwAccessibleGraphic::getImplementationName()
 
 sal_Bool SAL_CALL SwAccessibleGraphic::supportsService(
         const ::rtl::OUString& sTestServiceName)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (uno::RuntimeException)
 {
     return sTestServiceName.equalsAsciiL( sServiceName,
                                           sizeof(sServiceName)-1 ) ||
@@ -96,7 +97,7 @@ sal_Bool SAL_CALL SwAccessibleGraphic::supportsService(
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleGraphic::getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException )
+        throw( uno::RuntimeException )
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
