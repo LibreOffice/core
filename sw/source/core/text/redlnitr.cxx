@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:45:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:19:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,6 @@
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
 #endif
-#ifndef _FRMSH_HXX
-#include <frmsh.hxx>
-#endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
 #endif
@@ -110,9 +107,9 @@
 using namespace ::com::sun::star;
 
 /*************************************************************************
- *                      SwAttrIter::CtorInit()
+ *                      SwAttrIter::CtorInitAttrIter()
  *************************************************************************/
-void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm )
+void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm )
 {
     // Beim HTML-Import kann es vorkommen, dass kein Layout existiert.
     SwRootFrm* pRootFrm = rTxtNode.getIDocumentLayoutAccess()->GetRootFrm();
@@ -197,7 +194,7 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm*
     const IDocumentRedlineAccess* pIDRA = rTxtNode.getIDocumentRedlineAccess();
 
     const SwExtTextInput* pExtInp = pDoc->GetExtTextInput( rTxtNode );
-    sal_Bool bShow = IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() );
+    const bool bShow = IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() );
     if( pExtInp || bShow )
     {
         MSHORT nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
@@ -241,9 +238,9 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm*
 SwRedlineItr::SwRedlineItr( const SwTxtNode& rTxtNd, SwFont& rFnt,
     SwAttrHandler& rAH, MSHORT nRed, sal_Bool bShw, const SvUShorts *pArr,
     xub_StrLen nExtStart )
-    : rDoc( *rTxtNd.GetDoc() ), rNd( rTxtNd ), rAttrHandler( rAH ),
+    : rDoc( *rTxtNd.GetDoc() ), rNd( rTxtNd ), rAttrHandler( rAH ), pSet( 0 ),
       nNdIdx( rTxtNd.GetIndex() ), nFirst( nRed ),
-      nAct( MSHRT_MAX ), bOn( sal_False ), pSet(0), bShow( bShw )
+      nAct( MSHRT_MAX ), bOn( sal_False ), bShow( bShw )
 {
     if( pArr )
         pExt = new SwExtend( *pArr, nExtStart );
@@ -320,7 +317,7 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
                     FillHints( pRed->GetAuthor(), pRed->GetType() );
 
                     SfxWhichIter aIter( *pSet );
-                    register MSHORT nWhich = aIter.FirstWhich();
+                    MSHORT nWhich = aIter.FirstWhich();
                     while( nWhich )
                     {
                         const SfxPoolItem* pItem;
@@ -348,19 +345,21 @@ short SwRedlineItr::_Seek( SwFont& rFnt, xub_StrLen nNew, xub_StrLen nOld )
     return nRet + EnterExtend( rFnt, nNew );
 }
 
-void SwRedlineItr::FillHints( MSHORT nAuthor, IDocumentRedlineAccess::RedlineType_t eType )
+void SwRedlineItr::FillHints( MSHORT nAuthor, RedlineType_t eType )
 {
     switch ( eType )
     {
-        case IDocumentRedlineAccess::REDLINE_INSERT:
+        case nsRedlineType_t::REDLINE_INSERT:
             SW_MOD()->GetInsertAuthorAttr(nAuthor, *pSet);
             break;
-        case IDocumentRedlineAccess::REDLINE_DELETE:
+        case nsRedlineType_t::REDLINE_DELETE:
             SW_MOD()->GetDeletedAuthorAttr(nAuthor, *pSet);
             break;
-        case IDocumentRedlineAccess::REDLINE_FORMAT:
-        case IDocumentRedlineAccess::REDLINE_FMTCOLL:
+        case nsRedlineType_t::REDLINE_FORMAT:
+        case nsRedlineType_t::REDLINE_FMTCOLL:
             SW_MOD()->GetFormatAuthorAttr(nAuthor, *pSet);
+            break;
+        default:
             break;
     }
 }
@@ -431,7 +430,6 @@ sal_Bool SwRedlineItr::_ChkSpecialUnderline() const
     // unter der Grundlinie an.
     for( MSHORT i = 0; i < aHints.Count(); ++i )
     {
-        SwTxtAttr *pPos = aHints[ i ];
         MSHORT nWhich = aHints[i]->Which();
         if( RES_CHRATR_UNDERLINE == nWhich ||
             RES_CHRATR_ESCAPEMENT == nWhich )
@@ -544,7 +542,7 @@ xub_StrLen SwExtend::Next( xub_StrLen nNext )
         MSHORT nAttr = rArr[ nIdx ];
         while( ++nIdx < rArr.Count() && nAttr == rArr[ nIdx ] )
             ; //nothing
-        nIdx += nStart;
+        nIdx = nIdx + nStart;
         if( nNext > nIdx )
             nNext = nIdx;
     }
