@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomailmerge.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:05:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:15:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 #ifndef _UNOMAILMERGE_HXX_
 #define _UNOMAILMERGE_HXX_
+
+#include <functional>
 
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx> // WeakImplHelper4
@@ -72,7 +74,9 @@
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>   // SfxObjectShellRef
 #endif
+
 #include <functional>
+
 namespace com { namespace sun { namespace star {
 
     namespace sdbc {
