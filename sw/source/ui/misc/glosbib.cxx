@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:06:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:19:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,18 +114,20 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
                         SwGlossaryHdl *pHdl) :
     SvxStandardDialog(pParent, SW_RES(DLG_BIB_BASE)),
 
-    aGroupTLB(  this, SW_RES(TLB_GROUPS)),
     aNameED(    this, SW_RES(ED_NAME)),
     aPathLB(    this, SW_RES(LB_PATH)),
-    aBibFT(     this, SW_RES(FT_BIB)),
-    aPathFT(     this, SW_RES(FT_PATH)),
-    aSelectFT(   this, SW_RES(FT_SELECT)),
-    aRenamePB(  this, SW_RES(PB_RENAME)),
-    aNewPB(     this, SW_RES(PB_NEW)),
-    aDelPB(     this, SW_RES(PB_DELETE)),
+    aGroupTLB(  this, SW_RES(TLB_GROUPS)),
+
     aOkPB(      this, SW_RES(BT_OK)),
     aCancelPB(  this, SW_RES(BT_CANCEL)),
     aHelpPB(    this, SW_RES(BT_HELP)),
+    aNewPB(     this, SW_RES(PB_NEW)),
+    aDelPB(     this, SW_RES(PB_DELETE)),
+    aRenamePB(  this, SW_RES(PB_RENAME)),
+    aBibFT(     this, SW_RES(FT_BIB)),
+    aPathFT(     this, SW_RES(FT_PATH)),
+    aSelectFT(   this, SW_RES(FT_SELECT)),
+
     pRemovedArr(0),
     pInsertedArr(0),
     pRenamedArr(0),
@@ -294,10 +296,10 @@ void __EXPORT SwGlossaryGroupDlg::Apply()
 IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
 {
     aNewPB.Enable(FALSE);
-    SvLBoxEntry* pEntry = aGroupTLB.FirstSelected();
-    if(pEntry)
+    SvLBoxEntry* pFirstEntry = aGroupTLB.FirstSelected();
+    if(pFirstEntry)
     {
-        GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
+        GlosBibUserData* pUserData = (GlosBibUserData*)pFirstEntry->GetUserData();
         String sEntry(pUserData->sGroupName);
         String sName(aNameED.GetText());
         BOOL bExists = FALSE;
@@ -399,10 +401,10 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     {
         if(!pRemovedArr)
             pRemovedArr = new SvStrings;
-        String sEntry(pUserData->sGroupName);
-        sEntry += '\t';
-        sEntry += pUserData->sGroupTitle;
-        pRemovedArr->Insert(new String(sEntry), pRemovedArr->Count());
+        String sGroupEntry(pUserData->sGroupName);
+        sGroupEntry += '\t';
+        sGroupEntry += pUserData->sGroupTitle;
+        pRemovedArr->Insert(new String(sGroupEntry), pRemovedArr->Count());
     }
     delete pUserData;
     aGroupTLB.GetModel()->Remove(pEntry);
@@ -503,7 +505,7 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
             for(USHORT i = 0; i < aGroupTLB.GetEntryCount(); i++)
             {
                 String sTemp = aGroupTLB.GetEntryText( i, 0 );
-                ULONG nCaseReadonly = (ULONG)aPathLB.GetEntryData(
+                nCaseReadonly = (ULONG)aPathLB.GetEntryData(
                     aPathLB.GetEntryPos(aGroupTLB.GetEntryText(i,1)));
                 BOOL bCase = 0 != (nCaseReadonly & PATH_CASE_SENSITIVE);
 
