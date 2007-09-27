@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swbaslnk.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:56:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:10:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,9 +84,9 @@ public:
     SwCntntNode *GetCntntNode() { return pCntntNode; }
 
     // nur fuer Grafiken
-    FASTBOOL SwapIn( BOOL bWaitForData = FALSE, BOOL bNativFormat = FALSE );
+    BOOL SwapIn( BOOL bWaitForData = FALSE, BOOL bNativFormat = FALSE );
 
-    FASTBOOL Connect() { return 0 != SvBaseLink::GetRealObject(); }
+    BOOL Connect() { return 0 != SvBaseLink::GetRealObject(); }
 
     // nur fuer Grafik-Links ( zum Umschalten zwischen DDE / Grf-Link)
     void SetObjType( USHORT nType ) { SvBaseLink::SetObjType( nType ); }
@@ -96,7 +96,7 @@ public:
                             xub_StrLen nEnd = STRING_NOTFOUND ) const;
 
     void SetNoDataFlag()    { bNoDataFlag = TRUE; }
-    BOOL ChkNoDataFlag()    { return bNoDataFlag ? !(bNoDataFlag = FALSE) : FALSE; }
+    BOOL ChkNoDataFlag()    { BOOL bRet = bNoDataFlag; bNoDataFlag = FALSE; return bRet; }
     BOOL IsNoDataFlag() const           { return bNoDataFlag; }
 };
 
