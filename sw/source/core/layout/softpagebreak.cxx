@@ -4,9 +4,9 @@
  *
  *  $RCSfile: softpagebreak.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:16:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:06:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,13 +60,13 @@ void SwTxtNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
         // No soft page break at the first page
         if( pPage && pPage->GetPrev() )
         {
-            const SwCntntFrm* pFirst = pPage->FindFirstBodyCntnt();
+            const SwCntntFrm* pFirst2 = pPage->FindFirstBodyCntnt();
             // Special handling for content frame in table frames
             if( pFrm->IsInTab() )
             {
                 // No soft page break if I'm in a table but the first content frame
                 // at my page is not in a table
-                if( !pFirst->IsInTab() )
+                if( !pFirst2->IsInTab() )
                     continue;
                 const SwLayoutFrm *pRow = pFrm->GetUpper();
                 // Looking for the "most upper" row frame,
@@ -78,7 +78,7 @@ void SwTxtNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
                 // For master tables the soft page break will exported at the table row,
                 // not at the content frame.
                 // If the first content is outside my table frame, no soft page break.
-                if( !pTab->IsFollow() || !pTab->IsAnLower( pFirst ) )
+                if( !pTab->IsFollow() || !pTab->IsAnLower( pFirst2 ) )
                     continue;
                 // Only content of non-heading-rows can get a soft page break
                 const SwFrm* pFirstRow = pTab->GetFirstNonHeadlineRow();
@@ -95,8 +95,8 @@ void SwTxtNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
                     const SwFrm* pCell = pRow->Lower();
                     while( pCell )
                     {
-                        pFirst = static_cast<const SwLayoutFrm*>(pCell)->ContainsCntnt();
-                        if( pFirst == pFrm )
+                        pFirst2 = static_cast<const SwLayoutFrm*>(pCell)->ContainsCntnt();
+                        if( pFirst2 == pFrm )
                         {   // Here we are: a first content inside a cell
                             // inside the splitted row => soft page break
                             rBreak.insert( pFrm->GetOfst() );
@@ -107,7 +107,7 @@ void SwTxtNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
                 }
             }
             else // No soft page break if there's a "hard" page break attribute
-            if( pFirst == pFrm && !pFrm->IsPageBreak( TRUE ) )
+            if( pFirst2 == pFrm && !pFrm->IsPageBreak( TRUE ) )
                 rBreak.insert( pFrm->GetOfst() );
         }
     }
