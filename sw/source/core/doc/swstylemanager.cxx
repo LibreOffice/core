@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swstylemanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:00:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#ifdef _MSC_VER
-#pragma hdrstop
-#endif
 
 #include "swstylemanager.hxx"
 #include <hash_map>
