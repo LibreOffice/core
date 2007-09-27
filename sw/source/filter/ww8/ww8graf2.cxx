@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:53:12 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:04:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,7 @@
 #include "ww8graf.hxx"
 #endif
 
+using namespace ::com::sun::star;
 using namespace sw::types;
 
 wwZOrderer::wwZOrderer(const sw::util::SetLayer &rSetLayer, SdrPage* pDrawPg,
@@ -399,7 +400,7 @@ able to calculate the proper prefsize (especially if the wmf fileheader was miss
     if (nData > 0)
     {
         rpGraphic = new Graphic();
-        if (!(bOk = SwWW8ImplReader::GetPictGrafFromStream(*rpGraphic, *pSt)))
+        if (0 == (bOk = SwWW8ImplReader::GetPictGrafFromStream(*rpGraphic, *pSt)))
             DELETEZ(rpGraphic);
     }
     return bOk; // Grafik drin
@@ -732,10 +733,10 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                 {
                     aAttrSet.Put( pOldFlyFmt->GetAttrSet() );
                     const SwFmtHoriOrient &rHori = pOldFlyFmt->GetHoriOrient();
-                    if( FRAME == rHori.GetRelationOrient() )
+                    if( text::RelOrientation::FRAME == rHori.GetRelationOrient() )
                     {
                         aAttrSet.Put( SwFmtHoriOrient( rHori.GetPos(),
-                            HORI_NONE, REL_PG_PRTAREA ) );
+                            text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ) );
                     }
                 }
 
