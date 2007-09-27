@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:09:25 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/
 #define _FLDUI_SRC
+#include "index.hrc"
 #include "fldui.hrc"
 #include "helpid.h"
 
@@ -638,10 +639,6 @@ String STR_VALUE
 String STR_FORMULA
 {
     Text [ en-US ] = "Formula" ;
-};
-String STR_LEVEL
-{
-    Text [ en-US ] = "Layer " ;
 };
 String STR_URLPROMPT
 {
