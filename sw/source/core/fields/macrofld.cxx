@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrofld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:12:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:49:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,9 +87,9 @@ SwFieldType* SwMacroFieldType::Copy() const
     Beschreibung: Das Macrofeld selbst
  --------------------------------------------------------------------*/
 
-SwMacroField::SwMacroField(SwMacroFieldType* pType,
+SwMacroField::SwMacroField(SwMacroFieldType* pInitType,
                            const String& rLibAndName, const String& rTxt) :
-    SwField(pType), aMacro(rLibAndName), aText(rTxt), bIsScriptURL(FALSE)
+    SwField(pInitType), aMacro(rLibAndName), aText(rTxt), bIsScriptURL(FALSE)
 {
     bIsScriptURL = isScriptURL(aMacro);
 }
@@ -205,10 +205,9 @@ String SwMacroField::GetPar2() const
 /*-----------------05.03.98 13:38-------------------
 
 --------------------------------------------------*/
-BOOL SwMacroField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwMacroField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
         rAny <<= OUString(GetMacroName());
@@ -230,11 +229,10 @@ BOOL SwMacroField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------05.03.98 13:38-------------------
 
 --------------------------------------------------*/
-BOOL SwMacroField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwMacroField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     String sTmp;
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
         CreateMacroString( aMacro, ::GetString(rAny, sTmp), GetLibName());
