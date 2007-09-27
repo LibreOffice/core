@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakit.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:41:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:26:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,12 +60,12 @@
 #include "swtypes.hxx"
 #endif
 
-namespace css = com::sun::star;
+using namespace com::sun::star;
 
 SwBreakIt * pBreakIt = 0;
 
 void SwBreakIt::_Create(
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & rxMSF)
+    const uno::Reference< lang::XMultiServiceFactory > & rxMSF)
 {
     delete pBreakIt, pBreakIt = new SwBreakIt( rxMSF );
 }
@@ -81,7 +81,7 @@ SwBreakIt * SwBreakIt::Get()
 }
 
 SwBreakIt::SwBreakIt(
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & rxMSF)
+    const uno::Reference< lang::XMultiServiceFactory > & rxMSF)
     : m_xMSF( rxMSF ),
       m_pLocale( NULL ),
       m_pForbidden( NULL ),
@@ -91,10 +91,10 @@ SwBreakIt::SwBreakIt(
     DBG_ASSERT( m_xMSF.is(), "SwBreakIt: no MultiServiceFactory" );
     if ( m_xMSF.is() )
     {
-        xBreak = css::uno::Reference< css::i18n::XBreakIterator >(
+        xBreak = uno::Reference< i18n::XBreakIterator >(
             m_xMSF->createInstance(
                 rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),
-            css::uno::UNO_QUERY);
+            uno::UNO_QUERY);
     }
 }
 
@@ -108,7 +108,7 @@ void SwBreakIt::_GetLocale( const LanguageType aLang )
 {
     aLast = aLang;
     delete m_pLocale;
-    m_pLocale = new css::lang::Locale( SvxCreateLocale( aLast ) );
+    m_pLocale = new lang::Locale( SvxCreateLocale( aLast ) );
 }
 
 void SwBreakIt::_GetForbidden( const LanguageType aLang )
@@ -117,29 +117,29 @@ void SwBreakIt::_GetForbidden( const LanguageType aLang )
 
     aForbiddenLang = aLang;
     delete m_pForbidden;
-    m_pForbidden = new css::i18n::ForbiddenCharacters( aWrap.getForbiddenCharacters() );
+    m_pForbidden = new i18n::ForbiddenCharacters( aWrap.getForbiddenCharacters() );
 }
 
 USHORT SwBreakIt::GetRealScriptOfText( const String& rTxt,
                                         xub_StrLen nPos ) const
 {
-    USHORT nScript = css::i18n::ScriptType::WEAK;
+    USHORT nScript = i18n::ScriptType::WEAK;
     if( xBreak.is() && rTxt.Len() )
     {
         if( nPos && nPos == rTxt.Len() )
             --nPos;
         nScript = xBreak->getScriptType( rTxt, nPos );
-        sal_Int32 nChgPos;
-        if( css::i18n::ScriptType::WEAK == nScript && nPos &&
+        sal_Int32 nChgPos = 0;
+        if( i18n::ScriptType::WEAK == nScript && nPos &&
             0 < (nChgPos = xBreak->beginOfScript( rTxt, nPos, nScript )) )
             nScript = xBreak->getScriptType( rTxt, nChgPos-1 );
 
-        if( css::i18n::ScriptType::WEAK == nScript && rTxt.Len() >
+        if( i18n::ScriptType::WEAK == nScript && rTxt.Len() >
             ( nChgPos = xBreak->endOfScript( rTxt, nPos, nScript ) ) &&
             0 <= nChgPos )
             nScript = xBreak->getScriptType( rTxt, nChgPos );
     }
-    if( css::i18n::ScriptType::WEAK == nScript )
+    if( i18n::ScriptType::WEAK == nScript )
         nScript = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
     return nScript;
 }
@@ -155,14 +155,14 @@ USHORT SwBreakIt::GetAllScriptsOfText( const String& rTxt ) const
     else if( rTxt.Len() )
     {
         for( xub_StrLen n = 0, nEnd = rTxt.Len(); n < nEnd;
-                n = xBreak->endOfScript( rTxt, n, nScript ) )
+                n = static_cast<xub_StrLen>(xBreak->endOfScript( rTxt, n, nScript )) )
         {
             switch( nScript = xBreak->getScriptType( rTxt, n ) )
             {
-            case css::i18n::ScriptType::LATIN:      nRet |= SCRIPTTYPE_LATIN;   break;
-            case css::i18n::ScriptType::ASIAN:      nRet |= SCRIPTTYPE_ASIAN;   break;
-            case css::i18n::ScriptType::COMPLEX:    nRet |= SCRIPTTYPE_COMPLEX; break;
-            case css::i18n::ScriptType::WEAK:
+            case i18n::ScriptType::LATIN:       nRet |= SCRIPTTYPE_LATIN;   break;
+            case i18n::ScriptType::ASIAN:       nRet |= SCRIPTTYPE_ASIAN;   break;
+            case i18n::ScriptType::COMPLEX: nRet |= SCRIPTTYPE_COMPLEX; break;
+            case i18n::ScriptType::WEAK:
                     if( !nRet )
                         nRet |= coAllScripts;
                     break;
