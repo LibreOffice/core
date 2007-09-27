@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chpfld.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:10:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:48:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
             SwNumRule* pRule( pTxtNd->GetNumRule() );
             if ( pTxtNd->IsCounted() && pRule )
             {
-                const SwNumFmt& rNFmt = pRule->Get( pTxtNd->GetLevel() );
+                const SwNumFmt& rNFmt = pRule->Get( static_cast<USHORT>(pTxtNd->GetLevel()) );
                 sPost = rNFmt.GetSuffix();
                 sPre = rNFmt.GetPrefix();
             }
@@ -221,10 +221,9 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
 /*-----------------05.03.98 16:19-------------------
 
 --------------------------------------------------*/
-BOOL SwChapterField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) const
+BOOL SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_BYTE1:
         rAny <<= (sal_Int8)nLevel;
@@ -258,11 +257,10 @@ BOOL SwChapterField::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) con
 /*-----------------05.03.98 16:19-------------------
 
 --------------------------------------------------*/
-BOOL SwChapterField::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
+BOOL SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     BOOL bRet = TRUE;
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_BYTE1:
         sal_Int8 nTmp;
