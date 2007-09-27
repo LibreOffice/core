@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldlst.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:12:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:49:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@
     Beschreibung: Sortieren der Input-Eintraege
  --------------------------------------------------------------------*/
 
-SwInputFieldList::SwInputFieldList( SwEditShell* pShell, FASTBOOL bBuildTmpLst )
+SwInputFieldList::SwInputFieldList( SwEditShell* pShell, BOOL bBuildTmpLst )
     : pSh(pShell)
 {
     // Hier die Liste aller Eingabefelder sortiert erstellen
