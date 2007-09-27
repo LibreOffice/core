@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edatmisc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:04:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, USHORT nFlags )
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
     {
-        FASTBOOL bIsTblMode = IsTableMode();
+        BOOL bIsTblMode = IsTableMode();
         GetDoc()->StartUndo(UNDO_INSATTR, NULL);
 
         FOREACHPAM_START(this)
@@ -181,7 +181,7 @@ void SwEditShell::SetAttr( const SfxItemSet& rSet, USHORT nFlags )
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
     {
-        FASTBOOL bIsTblMode = IsTableMode();
+        BOOL bIsTblMode = IsTableMode();
         GetDoc()->StartUndo(UNDO_INSATTR, NULL);
 
         FOREACHPAM_START(this)
