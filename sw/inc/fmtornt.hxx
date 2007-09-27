@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtornt.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:54:48 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:03:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,10 @@
 #ifndef _FMTORNT_HXX
 #define _FMTORNT_HXX
 
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
+
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
@@ -47,12 +51,10 @@
 #ifndef _FORMAT_HXX //autogen
 #include <format.hxx>
 #endif
-#ifndef _ORNTENUM_HXX
-#include <orntenum.hxx>
-#endif
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
+
 
 class IntlWrapper;
 
@@ -60,13 +62,13 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtVertOrient: public SfxPoolItem
 {
-    SwTwips          nYPos; //Enthaelt _immer_ die aktuelle RelPos.
-    SwVertOrient     eOrient;
-    SwRelationOrient eRelation;
+    SwTwips         nYPos;  //Enthaelt _immer_ die aktuelle RelPos.
+    sal_Int16       eOrient;
+    sal_Int16       eRelation;
 public:
     TYPEINFO();
-    SwFmtVertOrient( SwTwips nY = 0, SwVertOrient eVert = VERT_NONE,
-                     SwRelationOrient eRel = PRTAREA );
+    SwFmtVertOrient( SwTwips nY = 0, sal_Int16 eVert = com::sun::star::text::VertOrientation::NONE,
+                     sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA );
     inline SwFmtVertOrient &operator=( const SwFmtVertOrient &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
@@ -80,10 +82,10 @@ public:
     virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-    SwVertOrient GetVertOrient() const { return eOrient; }
-    SwRelationOrient GetRelationOrient() const { return eRelation; }
-    void   SetVertOrient( SwVertOrient eNew ) { eOrient = eNew; }
-    void   SetRelationOrient( SwRelationOrient eNew ) { eRelation = eNew; }
+    sal_Int16 GetVertOrient() const { return eOrient; }
+    sal_Int16 GetRelationOrient() const { return eRelation; }
+    void   SetVertOrient( sal_Int16 eNew ) { eOrient = eNew; }
+    void   SetRelationOrient( sal_Int16 eNew ) { eRelation = eNew; }
 
     SwTwips GetPos() const { return nYPos; }
     void    SetPos( SwTwips nNew ) { nYPos = nNew; }
@@ -97,14 +99,14 @@ public:
 
 class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
 {
-    SwTwips          nXPos; //Enthaelt _immer_ die aktuelle RelPos.
-    SwHoriOrient     eOrient;
-    SwRelationOrient eRelation;
-    BOOL             bPosToggle : 1; // auf geraden Seiten Position spiegeln
+    SwTwips         nXPos;  //Enthaelt _immer_ die aktuelle RelPos.
+    sal_Int16       eOrient;
+    sal_Int16       eRelation;
+    BOOL            bPosToggle : 1; // auf geraden Seiten Position spiegeln
 public:
     TYPEINFO();
-    SwFmtHoriOrient( SwTwips nX = 0, SwHoriOrient eHori = HORI_NONE,
-        SwRelationOrient eRel = PRTAREA, BOOL bPos = FALSE );
+    SwFmtHoriOrient( SwTwips nX = 0, sal_Int16 eHori = com::sun::star::text::HoriOrientation::NONE,
+        sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA, BOOL bPos = FALSE );
     inline SwFmtHoriOrient &operator=( const SwFmtHoriOrient &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
@@ -118,10 +120,10 @@ public:
     virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-    SwHoriOrient GetHoriOrient() const { return eOrient; }
-    SwRelationOrient GetRelationOrient() const { return eRelation; }
-    void SetHoriOrient( SwHoriOrient eNew ) { eOrient = eNew; }
-    void SetRelationOrient( SwRelationOrient eNew ) { eRelation = eNew; }
+    sal_Int16 GetHoriOrient() const { return eOrient; }
+    sal_Int16 GetRelationOrient() const { return eRelation; }
+    void SetHoriOrient( sal_Int16 eNew ) { eOrient = eNew; }
+    void SetRelationOrient( sal_Int16 eNew ) { eRelation = eNew; }
 
     SwTwips GetPos() const { return nXPos; }
     void    SetPos( SwTwips nNew ) { nXPos = nNew; }
