@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tgrditem.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:20:07 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:13:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 #ifndef SW_TGRDITEM_HXX
 #define SW_TGRDITEM_HXX
 
+#include <tools/color.hxx>
 
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
