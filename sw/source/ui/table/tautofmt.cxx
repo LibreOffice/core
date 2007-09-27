@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:25:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@
 #include "tautofmt.hrc"
 #endif
 
-namespace css = com::sun::star;
+using namespace com::sun::star;
 
 #define FRAME_OFFSET 4
 
@@ -133,8 +133,8 @@ private:
     const String            aStrSum;
     SvNumberFormatter*      pNumFmt;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xMSF;
-    css::uno::Reference< css::i18n::XBreakIterator >       m_xBreak;
+    uno::Reference< lang::XMultiServiceFactory > m_xMSF;
+    uno::Reference< i18n::XBreakIterator >       m_xBreak;
 
     //-------------------------------------------
     void    Init            ();
@@ -182,9 +182,9 @@ SwStringInputDlg::SwStringInputDlg( Window*         pParent,
     ModalDialog     ( pParent, SW_RES( DLG_SWDLG_STRINPUT ) ),
     //
     aEdInput        ( this, SW_RES( ED_INPUT ) ),
+    aFtEditTitle    ( this, SW_RES( FT_LABEL ) ),
     aBtnOk          ( this, SW_RES( BTN_OK ) ),
-    aBtnCancel      ( this, SW_RES( BTN_CANCEL ) ),
-    aFtEditTitle    ( this, SW_RES( FT_LABEL ) )
+    aBtnCancel      ( this, SW_RES( BTN_CANCEL ) )
 {
     SetText( rTitle );
     aFtEditTitle.SetText( rEditTitle );
@@ -215,7 +215,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
     //
     aFlFormat       ( this, SW_RES( FL_FORMAT ) ),
     aLbFormat       ( this, SW_RES( LB_FORMAT ) ),
-    pWndPreview     ( new AutoFmtPreview( this, SW_RES( WND_PREVIEW ) ) ),
+
     aBtnNumFormat   ( this, SW_RES( BTN_NUMFORMAT ) ),
     aBtnBorder      ( this, SW_RES( BTN_BORDER ) ),
     aBtnFont        ( this, SW_RES( BTN_FONT ) ),
@@ -227,8 +227,8 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
     aBtnHelp        ( this, SW_RES( BTN_HELP ) ),
     aBtnAdd         ( this, SW_RES( BTN_ADD ) ),
     aBtnRemove      ( this, SW_RES( BTN_REMOVE ) ),
-    aBtnMore        ( this, SW_RES( BTN_MORE ) ),
     aBtnRename      ( this, SW_RES( BTN_RENAME ) ),
+    aBtnMore        ( this, SW_RES( BTN_MORE ) ),
     aStrTitle       ( SW_RES( STR_ADD_TITLE ) ),
     aStrLabel       ( SW_RES( STR_ADD_LABEL ) ),
     aStrClose       ( SW_RES( STR_BTN_CLOSE ) ),
@@ -236,12 +236,13 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
     aStrDelMsg      ( SW_RES( STR_DEL_MSG ) ),
     aStrRenameTitle ( SW_RES( STR_RENAME_TITLE ) ),
     aStrInvalidFmt  ( SW_RES( STR_INVALID_AFNAME )),
+    pWndPreview     ( new AutoFmtPreview( this, SW_RES( WND_PREVIEW ) ) ),
     //
+    pShell          ( pWrtShell ),
     nIndex          ( 0 ),
     nDfltStylePos   ( 0 ),
     bCoreDataChanged( FALSE ),
-    bSetAutoFmt     ( bSetAutoFormat ),
-    pShell          ( pWrtShell )
+    bSetAutoFmt     ( bSetAutoFormat )
 {
     pTableTbl = new SwTableAutoFmtTbl;
     pTableTbl->Load();
@@ -613,10 +614,16 @@ IMPL_LINK_INLINE_END( SwAutoFormatDlg, OkHdl, Button *, EMPTYARG )
 
 AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes ) :
         Window          ( pParent, rRes ),
+
+        aCurData        ( aEmptyStr ),
         aVD             ( *this ),
         aScriptedText   ( aVD ),
-        aCurData        ( aEmptyStr ),
         bFitWidth       ( FALSE ),
+        aPrvSize        ( GetSizePixel().Width() - 6, GetSizePixel().Height() - 30 ),
+        nLabelColWidth  ( (aPrvSize.Width() - 4) / 4 - 12 ),
+        nDataColWidth1  ( (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 3 ),
+        nDataColWidth2  ( (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 4 ),
+        nRowHeight      ( (aPrvSize.Height() - 4) / 5 ),
         aStrJan         ( SW_RES( STR_JAN ) ),
         aStrFeb         ( SW_RES( STR_FEB ) ),
         aStrMar         ( SW_RES( STR_MAR ) ),
@@ -624,20 +631,15 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes ) :
         aStrMid         ( SW_RES( STR_MID ) ),
         aStrSouth       ( SW_RES( STR_SOUTH ) ),
         aStrSum         ( SW_RES( STR_SUM ) ),
-        aPrvSize        ( GetSizePixel().Width() - 6, GetSizePixel().Height() - 30 ),
-        nLabelColWidth  ( (aPrvSize.Width() - 4) / 4 - 12 ),
-        nDataColWidth1  ( (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 3 ),
-        nDataColWidth2  ( (aPrvSize.Width() - 4 - 2 * nLabelColWidth) / 4 ),
-        nRowHeight      ( (aPrvSize.Height() - 4) / 5 ),
         m_xMSF          ( comphelper::getProcessServiceFactory() )
 {
     DBG_ASSERT( m_xMSF.is(), "AutoFmtPreview: no MultiServiceFactory");
     if ( m_xMSF.is() )
     {
-        m_xBreak = css::uno::Reference< css::i18n::XBreakIterator >(
+        m_xBreak = uno::Reference< i18n::XBreakIterator >(
             m_xMSF->createInstance (
                 rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),
-            css::uno::UNO_QUERY);
+            uno::UNO_QUERY);
     }
     pNumFmt = new SvNumberFormatter( m_xMSF, LANGUAGE_SYSTEM );
 
@@ -774,7 +776,7 @@ MAKENUMSTR:
                 pNumFmt->GetOutputString( nVal, nKey, cellString, &pDummy );
             }
             else
-                cellString = String::CreateFromInt32(nVal);
+                cellString = String::CreateFromInt32((sal_Int32)nVal);
             break;
 
     }
@@ -954,10 +956,10 @@ void __EXPORT AutoFmtPreview::Init()
 //------------------------------------------------------------------------
 
 
-void AutoFmtPreview::CalcCellArray( BOOL bFitWidth )
+void AutoFmtPreview::CalcCellArray( BOOL _bFitWidth )
 {
     maArray.SetXOffset( 2 );
-    maArray.SetAllColWidths( bFitWidth ? nDataColWidth2 : nDataColWidth1 );
+    maArray.SetAllColWidths( _bFitWidth ? nDataColWidth2 : nDataColWidth1 );
     maArray.SetColWidth( 0, nLabelColWidth );
     maArray.SetColWidth( 4, nLabelColWidth );
 
@@ -1017,7 +1019,7 @@ void AutoFmtPreview::NotifyChange( const SwTableAutoFmt& rNewData )
 //------------------------------------------------------------------------
 
 
-void AutoFmtPreview::DoPaint( const Rectangle& rRect )
+void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
 {
     sal_uInt32 nOldDrawMode = aVD.GetDrawMode();
     if( GetSettings().GetStyleSettings().GetHighContrastMode() &&
