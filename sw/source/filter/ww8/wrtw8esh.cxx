@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 14:36:15 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:01:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,6 +228,8 @@
 using namespace com::sun::star;
 using namespace sw::util;
 using namespace sw::types;
+using namespace nsFieldFlags;
+
 //#110185# get a part fix for this type of element
 bool SwWW8Writer::MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt)
 {
@@ -680,7 +682,6 @@ void SwWW8Writer::DoFormText(const SwInputField * pFld)
     OutField(0, ww::eFORMTEXT, aEmptyStr, WRITEFIELD_CLOSE);
 }
 
-
 PlcDrawObj::~PlcDrawObj()
 {
 }
@@ -690,21 +691,21 @@ PlcDrawObj::~PlcDrawObj()
 //the SO drawings and writer frames have different ideas themselves as to
 //how to be positioned when in RTL mode!
 bool RTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
-    SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, SwTwips nPageLeft,
+sal_Int16 eHoriOri, sal_Int16 eHoriRel, SwTwips nPageLeft,
     SwTwips nPageRight, SwTwips nPageSize)
 {
     bool bRet = false;
-    if (eHoriOri == HORI_NONE)
+    if (eHoriOri == text::HoriOrientation::NONE)
     {
-        if (eHoriRel == REL_PG_FRAME)
+        if (eHoriRel == text::RelOrientation::PAGE_FRAME)
         {
             rLeft = nPageSize - rLeft;
             bRet = true;
         }
         else if (
-                  (eHoriRel == REL_PG_PRTAREA) ||
-                  (eHoriRel == FRAME) ||
-                  (eHoriRel == PRTAREA)
+                  (eHoriRel == text::RelOrientation::PAGE_PRINT_AREA) ||
+                  (eHoriRel == text::RelOrientation::FRAME) ||
+                  (eHoriRel == text::RelOrientation::PRINT_AREA)
                 )
         {
             rLeft = nPageSize - nPageLeft - nPageRight - rLeft;
@@ -716,22 +717,22 @@ bool RTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
     return bRet;
 }
 
-bool RTLDrawingsHack(long &rLeft, long nWidth,
-    SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, SwTwips nPageLeft,
+bool RTLDrawingsHack(long &rLeft, long /*nWidth*/,
+    sal_Int16 eHoriOri, sal_Int16 eHoriRel, SwTwips nPageLeft,
     SwTwips nPageRight, SwTwips nPageSize)
 {
     bool bRet = false;
-    if (eHoriOri == HORI_NONE)
+    if (eHoriOri == text::HoriOrientation::NONE)
     {
-        if (eHoriRel == REL_PG_FRAME)
+        if (eHoriRel == text::RelOrientation::PAGE_FRAME)
         {
             rLeft = nPageSize + rLeft;
             bRet = true;
         }
         else if (
-                  (eHoriRel == REL_PG_PRTAREA) ||
-                  (eHoriRel == FRAME) ||
-                  (eHoriRel == PRTAREA)
+                  (eHoriRel == text::RelOrientation::PAGE_PRINT_AREA) ||
+                  (eHoriRel == text::RelOrientation::FRAME) ||
+                  (eHoriRel == text::RelOrientation::PRINT_AREA)
                 )
         {
             rLeft = nPageSize - nPageLeft - nPageRight + rLeft;
@@ -856,16 +857,16 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
             {
                 aRect -= aIter->maParentPos;
                 aObjPos = aRect.TopLeft();
-                if (VERT_NONE == rVOr.GetVertOrient())
+                if (text::VertOrientation::NONE == rVOr.GetVertOrient())
                 {
                     // CMC, OD 24.11.2003 #i22673#
-                    SwRelationOrient eOri = rVOr.GetRelationOrient();
-                    if (eOri == REL_CHAR || eOri == REL_VERT_LINE)
+                    sal_Int16 eOri = rVOr.GetRelationOrient();
+                    if (eOri == text::RelOrientation::CHAR || eOri == text::RelOrientation::TEXT_LINE)
                         aObjPos.Y() = -rVOr.GetPos();
                     else
                         aObjPos.Y() = rVOr.GetPos();
                 }
-                if (HORI_NONE == rHOr.GetHoriOrient())
+                if (text::HoriOrientation::NONE == rHOr.GetHoriOrient())
                     aObjPos.X() = rHOr.GetPos();
                 aRect.SetPos( aObjPos );
             }
@@ -1124,8 +1125,6 @@ void SwWW8Writer::AppendFlyInFlys(const sw::Frame& rFrmFmt,
         WriteChar( 0x8 );
         pChpPlc->AppendFkpEntry( Strm().Tell(), sizeof( aSpec8 ), aSpec8 );
 
-        const SwFrmFmt &rFmt = rFrmFmt.GetFrmFmt();
-
         //Need dummy picture frame
         if (rFrmFmt.IsInline())
             OutGrf(rFrmFmt);
@@ -1219,9 +1218,9 @@ rtl_TextEncoding WW8_SdrAttrIter::GetNextCharSet() const
 // der erste Parameter in SearchNext() liefert zurueck, ob es ein TxtAtr ist.
 xub_StrLen WW8_SdrAttrIter::SearchNext( xub_StrLen nStartPos )
 {
-    register xub_StrLen nPos;
-    register xub_StrLen nMinPos = STRING_MAXLEN;
-    register xub_StrLen i;
+    xub_StrLen nPos;
+    xub_StrLen nMinPos = STRING_MAXLEN;
+    xub_StrLen i;
 
     for( i = 0; i < aTxtAtrArr.Count(); i++ )
     {
@@ -1318,7 +1317,7 @@ void WW8_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
         const SfxItemPool& rDstPool = rWrt.pDoc->GetAttrPool();
 
         nTmpSwPos = nSwPos;
-        register USHORT i, nWhich, nSlotId;
+        USHORT i, nWhich, nSlotId;
         FnAttrOut pOut;
         for( i = 0; i < aTxtAtrArr.Count(); i++ )
         {
@@ -1343,7 +1342,7 @@ void WW8_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
                     nWhich = rDstPool.GetWhich(nSlotId);
                     if (nWhich && nWhich != nSlotId &&
                         nWhich < RES_UNKNOWNATR_BEGIN &&
-                        (pOut = aWW8AttrFnTab[nWhich - RES_CHRATR_BEGIN]))
+                        0 != (pOut = aWW8AttrFnTab[nWhich - RES_CHRATR_BEGIN]))
                     {
                         if (rWrt.CollapseScriptsforWordOk(nScript,nWhich))
                         {
@@ -1666,15 +1665,15 @@ UINT32 AddMirrorFlags(UINT32 nFlags, const SwMirrorGrf &rMirror)
     switch (rMirror.GetValue())
     {
         default:
-        case RES_DONT_MIRROR_GRF:
+        case RES_MIRROR_GRAPH_DONT:
             break;
-        case RES_MIRROR_GRF_VERT:
+        case RES_MIRROR_GRAPH_VERT:
             nFlags |= SHAPEFLAG_FLIPH;
             break;
-        case RES_MIRROR_GRF_HOR:
+        case RES_MIRROR_GRAPH_HOR:
             nFlags |= SHAPEFLAG_FLIPV;
             break;
-        case RES_MIRROR_GRF_BOTH:
+        case RES_MIRROR_GRAPH_BOTH:
             nFlags |= SHAPEFLAG_FLIPH;
             nFlags |= SHAPEFLAG_FLIPV;
             break;
@@ -1877,12 +1876,12 @@ INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
         SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
         sal_Int64 nAspect = rOLENd.GetAspect();
 
-        ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > xObj(rOLENd.GetOLEObj().GetOleRef());
+        uno::Reference < embed::XEmbeddedObject > xObj(rOLENd.GetOLEObj().GetOleRef());
 
         // the rectangle is used to transport the size of the object
         // the left, top corner is set to ( 0, 0 ) by default constructor,
         // if the width and height are set correctly bRectIsSet should be set to true
-        ::com::sun::star::awt::Rectangle aRect;
+        awt::Rectangle aRect;
         sal_Bool bRectIsSet = sal_False;
 
 
@@ -1891,7 +1890,7 @@ INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
         {
             try
             {
-                ::com::sun::star::awt::Size aSize = xObj->getVisualAreaSize( nAspect );
+                awt::Size aSize = xObj->getVisualAreaSize( nAspect );
                 aRect.Width = aSize.Width;
                 aRect.Height = aSize.Height;
                 bRectIsSet = sal_True;
@@ -1961,7 +1960,7 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
                 rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,sal_True);
         }
 
-        if ((nOpaque = pGraphicObject->GetAttr().GetTransparency()))
+        if (0 != (nOpaque = pGraphicObject->GetAttr().GetTransparency()))
             bSetOpacity = true;
 
         rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
@@ -1975,7 +1974,7 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
         rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillColor ^ 0xffffff );
         rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
 
-        if ((nOpaque = rBrush.GetColor().GetTransparency()))
+        if (0 != (nOpaque = rBrush.GetColor().GetTransparency()))
             bSetOpacity = true;
     }
 
@@ -2002,7 +2001,7 @@ INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
         };
         const SvxBorderLine* pLine;
 
-        for( int n = 0; n < 4; ++n )
+        for( USHORT n = 0; n < 4; ++n )
             if( 0 != ( pLine = ((SvxBoxItem*)pItem)->GetLine( n )) )
             {
                 if( bFirstLine )
@@ -2298,25 +2297,26 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
                     break;
                 case sw::Frame::eDrawing:
                     aWinwordAnchoring.SetAnchoring(rFmt);
-                    if (const SdrObject* pObj = rFmt.FindRealSdrObject())
+                    const SdrObject* pSdrObj = rFmt.FindRealSdrObject();
+                    if (pSdrObj)
                     {
                         bool bSwapInPage = false;
-                        if (!pObj->GetPage())
+                        if (!pSdrObj->GetPage())
                         {
                             if (SdrModel* pModel = rWrt.pDoc->GetDrawModel())
                             {
                                 if (SdrPage *pPage = pModel->GetPage(0))
                                 {
                                     bSwapInPage = true;
-                                    (const_cast<SdrObject*>(pObj))->SetPage(pPage);
+                                    (const_cast<SdrObject*>(pSdrObj))->SetPage(pPage);
                                 }
                             }
                         }
 
-                        nShapeId = AddSdrObject(*pObj);
+                        nShapeId = AddSdrObject(*pSdrObj);
 
                         if (bSwapInPage)
-                            (const_cast<SdrObject*>(pObj))->SetPage(0);
+                            (const_cast<SdrObject*>(pSdrObj))->SetPage(0);
                     }
 #ifndef PRODUCT
                     else
@@ -2326,8 +2326,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
 
             if( !nShapeId )
             {
-                /*!!!*/ const SdrObject* pObj = 0;
-                nShapeId = AddDummyShape( *pObj );
+                nShapeId = AddDummyShape();
             }
 
             pObj->SetShapeDetails(nShapeId, nBorderThick);
@@ -2490,10 +2489,10 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         // determine, if conversion has to be performed due to the position orientation
         bool bConvDueToOrientation( false );
         {
-            const SwHoriOrient eHOri = _iorHoriOri.GetHoriOrient();
-            bConvDueToOrientation = eHOri == HORI_LEFT || eHOri == HORI_RIGHT ||
-                                    eHOri == HORI_INSIDE || eHOri == HORI_OUTSIDE ||
-                                    ( eHOri != HORI_CENTER && _iorHoriOri.IsPosToggle() );
+            const sal_Int16 eHOri = _iorHoriOri.GetHoriOrient();
+            bConvDueToOrientation = eHOri == text::HoriOrientation::LEFT || eHOri == text::HoriOrientation::RIGHT ||
+                                    eHOri == text::HoriOrientation::INSIDE || eHOri == text::HoriOrientation::OUTSIDE ||
+                                    ( eHOri != text::HoriOrientation::CENTER && _iorHoriOri.IsPosToggle() );
         }
 
         // determine conversion type due to the position relation
@@ -2506,35 +2505,35 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         {
             switch ( _iorHoriOri.GetRelationOrient() )
             {
-                case REL_PG_FRAME:
-                case REL_PG_PRTAREA:
+                case text::RelOrientation::PAGE_FRAME:
+                case text::RelOrientation::PAGE_PRINT_AREA:
                 {
                     if ( bConvDueToOrientation || bFollowTextFlow )
                         eHoriConv = CONV2PG;
                 }
                 break;
-                case REL_PG_LEFT:
-                case REL_PG_RIGHT:
+                case text::RelOrientation::PAGE_LEFT:
+                case text::RelOrientation::PAGE_RIGHT:
                 {
                     // relation not supported by WW8. Thus, conversion always needed.
                     eHoriConv = CONV2PG;
                 }
                 break;
-                case FRAME:
+                case text::RelOrientation::FRAME:
                 {
                     if ( bConvDueToOrientation )
                         eHoriConv = CONV2COL;
                 }
                 break;
-                case PRTAREA:
-                case REL_FRM_LEFT:
-                case REL_FRM_RIGHT:
+                case text::RelOrientation::PRINT_AREA:
+                case text::RelOrientation::FRAME_LEFT:
+                case text::RelOrientation::FRAME_RIGHT:
                 {
                     // relation not supported by WW8. Thus, conversion always needed.
                     eHoriConv = CONV2COL;
                 }
                 break;
-                case REL_CHAR:
+                case text::RelOrientation::CHAR:
                 {
                     if ( bConvDueToOrientation )
                         eHoriConv = CONV2CHAR;
@@ -2548,31 +2547,31 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         // <--
         if ( eHoriConv != NO_CONV )
         {
-            _iorHoriOri.SetHoriOrient( HORI_NONE );
+            _iorHoriOri.SetHoriOrient( text::HoriOrientation::NONE );
             SwTwips nPosX( 0L );
             {
                 Point aPos;
                 if ( eHoriConv == CONV2PG )
                 {
-                    _iorHoriOri.SetRelationOrient( REL_PG_FRAME );
+                    _iorHoriOri.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
                     // --> OD 2005-01-27 #i33818#
                     bool bRelToTableCell( false );
                     aPos = pAnchoredObj->GetRelPosToPageFrm( bFollowTextFlow,
                                                              bRelToTableCell );
                     if ( bRelToTableCell )
                     {
-                        _iorHoriOri.SetRelationOrient( REL_PG_PRTAREA );
+                        _iorHoriOri.SetRelationOrient( text::RelOrientation::PAGE_PRINT_AREA );
                     }
                     // <--
                 }
                 else if ( eHoriConv == CONV2COL )
                 {
-                    _iorHoriOri.SetRelationOrient( FRAME );
+                    _iorHoriOri.SetRelationOrient( text::RelOrientation::FRAME );
                     aPos = pAnchoredObj->GetRelPosToAnchorFrm();
                 }
                 else if ( eHoriConv == CONV2CHAR )
                 {
-                    _iorHoriOri.SetRelationOrient( REL_CHAR );
+                    _iorHoriOri.SetRelationOrient( text::RelOrientation::CHAR );
                     aPos = pAnchoredObj->GetRelPosToChar();
                 }
                 // No distinction between layout directions, because of missing
@@ -2592,15 +2591,15 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         // determine, if conversion has to be performed due to the position orientation
         bool bConvDueToOrientation( false );
         {
-            const SwVertOrient eVOri = _iorVertOri.GetVertOrient();
-            bConvDueToOrientation = ( eVOri == VERT_TOP ||
-                                      eVOri == VERT_BOTTOM ||
-                                      eVOri == VERT_CHAR_TOP ||
-                                      eVOri == VERT_CHAR_BOTTOM ||
-                                      eVOri == VERT_CHAR_CENTER ||
-                                      eVOri == VERT_LINE_TOP ||
-                                      eVOri == VERT_LINE_BOTTOM ||
-                                      eVOri == VERT_LINE_CENTER );
+            const sal_Int16 eVOri = _iorVertOri.GetVertOrient();
+            bConvDueToOrientation = ( eVOri == text::VertOrientation::TOP ||
+                                      eVOri == text::VertOrientation::BOTTOM ||
+                                      eVOri == text::VertOrientation::CHAR_TOP ||
+                                      eVOri == text::VertOrientation::CHAR_BOTTOM ||
+                                      eVOri == text::VertOrientation::CHAR_CENTER ||
+                                      eVOri == text::VertOrientation::LINE_TOP ||
+                                      eVOri == text::VertOrientation::LINE_BOTTOM ||
+                                      eVOri == text::VertOrientation::LINE_CENTER );
         }
 
         // determine conversion type due to the position relation
@@ -2613,47 +2612,47 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         {
             switch ( _iorVertOri.GetRelationOrient() )
             {
-                case REL_PG_FRAME:
-                case REL_PG_PRTAREA:
+                case text::RelOrientation::PAGE_FRAME:
+                case text::RelOrientation::PAGE_PRINT_AREA:
                 {
                     if ( bConvDueToOrientation || bFollowTextFlow )
                         eVertConv = CONV2PG;
                 }
                 break;
-                case FRAME:
+                case text::RelOrientation::FRAME:
                 {
                     if ( bConvDueToOrientation ||
-                         _iorVertOri.GetVertOrient() == VERT_CENTER )
+                         _iorVertOri.GetVertOrient() == text::VertOrientation::CENTER )
                     {
                         eVertConv = CONV2PARA;
                     }
                 }
                 break;
-                case PRTAREA:
+                case text::RelOrientation::PRINT_AREA:
                 {
                     // relation not supported by WW8. Thus, conversion always needed.
                     eVertConv = CONV2PARA;
                 }
                 break;
-                case REL_CHAR:
+                case text::RelOrientation::CHAR:
                 {
                     // relation not supported by WW8. Thus, conversion always needed.
                     eVertConv = CONV2PARA;
                 }
                 break;
-                case REL_VERT_LINE:
+                case text::RelOrientation::TEXT_LINE:
                 {
                     if ( bConvDueToOrientation ||
-                         _iorVertOri.GetVertOrient() == VERT_NONE )
+                         _iorVertOri.GetVertOrient() == text::VertOrientation::NONE )
                     {
                         eVertConv = CONV2LINE;
                     }
                 }
                 break;
-                case REL_PG_LEFT:
-                case REL_PG_RIGHT:
-                case REL_FRM_LEFT:
-                case REL_FRM_RIGHT:
+                case text::RelOrientation::PAGE_LEFT:
+                case text::RelOrientation::PAGE_RIGHT:
+                case text::RelOrientation::FRAME_LEFT:
+                case text::RelOrientation::FRAME_RIGHT:
                 default:
                     ASSERT( false,
                             "<WinwordAnchoring::ConvertPosition(..)> - unknown vertical relation" );
@@ -2662,31 +2661,31 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         // <--
         if ( eVertConv != NO_CONV )
         {
-            _iorVertOri.SetVertOrient( VERT_NONE );
+            _iorVertOri.SetVertOrient( text::VertOrientation::NONE );
             SwTwips nPosY( 0L );
             {
                 Point aPos;
                 if ( eVertConv == CONV2PG )
                 {
-                    _iorVertOri.SetRelationOrient( REL_PG_FRAME );
+                    _iorVertOri.SetRelationOrient( text::RelOrientation::PAGE_FRAME );
                     // --> OD 2005-01-27 #i33818#
                     bool bRelToTableCell( false );
                     aPos = pAnchoredObj->GetRelPosToPageFrm( bFollowTextFlow,
                                                              bRelToTableCell );
                     if ( bRelToTableCell )
                     {
-                        _iorVertOri.SetRelationOrient( REL_PG_PRTAREA );
+                        _iorVertOri.SetRelationOrient( text::RelOrientation::PAGE_PRINT_AREA );
                     }
                     // <--
                 }
                 else if ( eVertConv == CONV2PARA )
                 {
-                    _iorVertOri.SetRelationOrient( FRAME );
+                    _iorVertOri.SetRelationOrient( text::RelOrientation::FRAME );
                     aPos = pAnchoredObj->GetRelPosToAnchorFrm();
                 }
                 else if ( eVertConv == CONV2LINE )
                 {
-                    _iorVertOri.SetRelationOrient( REL_VERT_LINE );
+                    _iorVertOri.SetRelationOrient( text::RelOrientation::TEXT_LINE );
                     aPos = pAnchoredObj->GetRelPosToLine();
                 }
                 // No distinction between layout directions, because of missing
@@ -2714,33 +2713,33 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt)
     const bool bPosConverted = ConvertPosition( rHoriOri, rVertOri, rFmt );
     // <--
 
-    const SwHoriOrient eHOri = rHoriOri.GetHoriOrient();
+    const sal_Int16 eHOri = rHoriOri.GetHoriOrient();
     // CMC, OD 24.11.2003 #i22673#
-    const SwVertOrient eVOri = rVertOri.GetVertOrient();
+    const sal_Int16 eVOri = rVertOri.GetVertOrient();
 
-    const SwRelationOrient eHRel = rHoriOri.GetRelationOrient();
-    const SwRelationOrient eVRel = rVertOri.GetRelationOrient();
+    const sal_Int16 eHRel = rHoriOri.GetRelationOrient();
+    const sal_Int16 eVRel = rVertOri.GetRelationOrient();
 
     // horizontal Adjustment
     switch (eHOri)
     {
         default:
-        case HORI_NONE:
+        case text::HoriOrientation::NONE:
             mnXAlign = 0;
             break;
-        case HORI_LEFT:
+        case text::HoriOrientation::LEFT:
             mnXAlign = 1;
             break;
-        case HORI_CENTER:
+        case text::HoriOrientation::CENTER:
             mnXAlign = 2;
             break;
-        case HORI_RIGHT:
+        case text::HoriOrientation::RIGHT:
             mnXAlign = 3;
             break;
-        case HORI_INSIDE:
+        case text::HoriOrientation::INSIDE:
             mnXAlign = 4;
             break;
-        case HORI_OUTSIDE:
+        case text::HoriOrientation::OUTSIDE:
             mnXAlign = 5;
             break;
     }
@@ -2750,26 +2749,26 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt)
     // When adjustment is vertically relative to line or to char
     // bottom becomes top and vice versa
     const bool bVertSwap = !bPosConverted &&
-                           ( (eVRel == REL_CHAR) ||
-                             (eVRel == REL_VERT_LINE) );
+                           ( (eVRel == text::RelOrientation::CHAR) ||
+                             (eVRel == text::RelOrientation::TEXT_LINE) );
     switch (eVOri)
     {
         default:
-        case VERT_NONE:
+        case text::VertOrientation::NONE:
             mnYAlign = 0;
             break;
-        case VERT_TOP:
-        case VERT_LINE_TOP:
-        case VERT_CHAR_TOP:
+        case text::VertOrientation::TOP:
+        case text::VertOrientation::LINE_TOP:
+        case text::VertOrientation::CHAR_TOP:
             mnYAlign = bVertSwap ? 3 : 1;
             break;
-        case VERT_CENTER:
-        case VERT_LINE_CENTER:
+        case text::VertOrientation::CENTER:
+        case text::VertOrientation::LINE_CENTER:
             mnYAlign = 2;
             break;
-        case VERT_BOTTOM:
-        case VERT_LINE_BOTTOM:
-        case VERT_CHAR_BOTTOM:
+        case text::VertOrientation::BOTTOM:
+        case text::VertOrientation::LINE_BOTTOM:
+        case text::VertOrientation::CHAR_BOTTOM:
             mnYAlign = bVertSwap ? 1 : 3;
             break;
     }
@@ -2777,60 +2776,62 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt)
     // Adjustment is horizontally relative to...
     switch (eHRel)
     {
-        case REL_PG_PRTAREA:
+        case text::RelOrientation::PAGE_PRINT_AREA:
             mnXRelTo = 0;
             break;
-        case REL_PG_FRAME:
-        case REL_PG_LEFT:  //:-(
-        case REL_PG_RIGHT: //:-(
+        case text::RelOrientation::PAGE_FRAME:
+        case text::RelOrientation::PAGE_LEFT:  //:-(
+        case text::RelOrientation::PAGE_RIGHT: //:-(
             mnXRelTo = 1;
             break;
-        case FRAME:
-        case REL_FRM_LEFT: //:-(
-        case REL_FRM_RIGHT: //:-(
+        case text::RelOrientation::FRAME:
+        case text::RelOrientation::FRAME_LEFT: //:-(
+        case text::RelOrientation::FRAME_RIGHT: //:-(
             if (eAnchor == FLY_PAGE)
                 mnXRelTo = 1;
             else
                 mnXRelTo = 2;
             break;
-        case PRTAREA:
+        case text::RelOrientation::PRINT_AREA:
             if (eAnchor == FLY_PAGE)
                 mnXRelTo = 0;
             else
                 mnXRelTo = 2;
             break;
-        case REL_CHAR:
+        case text::RelOrientation::CHAR:
             mnXRelTo = 3;
+            break;
+        case text::RelOrientation::TEXT_LINE:
             break;
     }
 
         // Adjustment is vertically relative to...
     switch (eVRel)
     {
-        case REL_PG_PRTAREA:
+        case text::RelOrientation::PAGE_PRINT_AREA:
             mnYRelTo = 0;
             break;
-        case REL_PG_FRAME:
+        case text::RelOrientation::PAGE_FRAME:
             mnYRelTo = 1;
             break;
-        case PRTAREA:
+        case text::RelOrientation::PRINT_AREA:
             if (eAnchor == FLY_PAGE)
                 mnYRelTo = 0;
             else
                 mnYRelTo = 2;
             break;
-        case FRAME:
+        case text::RelOrientation::FRAME:
             if (eAnchor == FLY_PAGE)
                 mnYRelTo = 1;
             else
                 mnYRelTo = 2;
             break;
-        case REL_CHAR:
-        case REL_VERT_LINE: // CMC, OD 24.11.2003 #i22673# - vertical alignment at top of line
-        case REL_PG_LEFT:   //nonsense
-        case REL_PG_RIGHT:  //nonsense
-        case REL_FRM_LEFT:  //nonsense
-        case REL_FRM_RIGHT: //nonsense
+        case text::RelOrientation::CHAR:
+        case text::RelOrientation::TEXT_LINE: // CMC, OD 24.11.2003 #i22673# - vertical alignment at top of line
+        case text::RelOrientation::PAGE_LEFT:   //nonsense
+        case text::RelOrientation::PAGE_RIGHT:  //nonsense
+        case text::RelOrientation::FRAME_LEFT:  //nonsense
+        case text::RelOrientation::FRAME_RIGHT: //nonsense
             mnYRelTo = 3;
             break;
     }
@@ -2852,8 +2853,6 @@ INT32 SwEscherEx::WriteFlyFrm(const DrawObj &rObj, UINT32 &rShapeId,
     DrawObjPointerVector &rPVec)
 {
     const SwFrmFmt &rFmt = rObj.maCntnt.GetFrmFmt();
-    short nDirection = rObj.mnDirection;
-    unsigned int nHdFtIndex = rObj.mnHdFtIndex;
 
     // check for textflyframe and if it is the first in a Chain
     INT32 nBorderThick = 0;
@@ -2935,7 +2934,7 @@ USHORT FindPos(const SwFrmFmt &rFmt, unsigned int nHdFtIndex,
              &rFmt == (&pObj->maCntnt.GetFrmFmt())
            )
         {
-            return aIter - rPVec.begin();
+            return static_cast< USHORT >(aIter - rPVec.begin());
         }
     }
     return USHRT_MAX;
@@ -2993,7 +2992,7 @@ INT32 SwEscherEx::WriteTxtFlyFrame(const DrawObj &rObj, UINT32 nShapeId,
 
 void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
     sal_uInt32 nShapeFlags, const Graphic &rGraphic, const SdrObject &rObj,
-    sal_uInt32 nShapeId, const com::sun::star::awt::Rectangle* pVisArea )
+    sal_uInt32 nShapeId, const awt::Rectangle* pVisArea )
 {
     //nShapeFlags == 0xA00 + flips and ole active
     AddShape(ESCHER_ShpInst_PictureFrame, nShapeFlags, nShapeId);
@@ -3049,7 +3048,7 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
 void SwEscherEx::MakeZOrderArrAndFollowIds(
     std::vector<DrawObj>& rSrcArr, std::vector<DrawObj*>&rDstArr)
 {
-    USHORT n, nCnt = rSrcArr.size();
+    USHORT n, nCnt = static_cast< USHORT >(rSrcArr.size());
     SvULongsSort aSort( 255 < nCnt ? 255 : nCnt, 255 );
     rDstArr.clear();
     rDstArr.reserve(nCnt);
