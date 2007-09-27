@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsort.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:25:12 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:37:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,7 @@ double SwSortElement::StrToDouble( const String& rStr ) const
  --------------------------------------------------------------------*/
 
 
-BOOL SwSortElement::operator==(const SwSortElement& rCmp)
+BOOL SwSortElement::operator==(const SwSortElement& )
 {
     return FALSE;
 }
@@ -348,14 +348,14 @@ String SwSortBoxElement::GetKey(USHORT nKey) const
     String aRetStr;
     if( pFndBox )
     {   // StartNode holen und ueberlesen
-        const SwTableBox* pBox = pFndBox->GetBox();
-        ASSERT(pBox, "Keine atomare Box");
+        const SwTableBox* pMyBox = pFndBox->GetBox();
+        ASSERT(pMyBox, "Keine atomare Box");
 
-        if( pBox->GetSttNd() )
+        if( pMyBox->GetSttNd() )
         {
             // ueber alle TextNodes der Box
-            const SwNode *pNd = 0, *pEndNd = pBox->GetSttNd()->EndOfSectionNode();
-            for( ULONG nIdx = pBox->GetSttIdx() + 1; pNd != pEndNd; ++nIdx )
+            const SwNode *pNd = 0, *pEndNd = pMyBox->GetSttNd()->EndOfSectionNode();
+            for( ULONG nIdx = pMyBox->GetSttIdx() + 1; pNd != pEndNd; ++nIdx )
                 if( ( pNd = pDoc->GetNodes()[ nIdx ])->IsTxtNode() )
                     aRetStr += ((SwTxtNode*)pNd)->GetTxt();
         }
@@ -373,7 +373,6 @@ double SwSortBoxElement::GetValue( USHORT nKey ) const
     else
         pFndBox = pBox->GetBox(nRow, nCol);         // Spalten sortieren
 
-    double aVal;
     double nVal;
     if( pFndBox )
     {
@@ -418,7 +417,7 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
     // pruefe ob nur TextNodes in der Selection liegen
     {
-        register ULONG nStart = pStart->nNode.GetIndex(),
+        ULONG nStart = pStart->nNode.GetIndex(),
                         nEnd = pEnd->nNode.GetIndex();
         while( nStart <= nEnd )
             // Iterieren ueber einen selektierten Bereich
@@ -533,14 +532,14 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         SwNodeIndex aSttIdx( GetNodes(), nBeg );
 
         // der Kopierte Bereich ist das Geloeschte
-        AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_DELETE, *pRedlPam ), true);
+        AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_DELETE, *pRedlPam ), true);
 
         // das sortierte ist das Eingefuegte
         pRedlPam->GetPoint()->nNode = aSttIdx;
         SwCntntNode* pCNd = aSttIdx.GetNode().GetCntntNode();
         pRedlPam->GetPoint()->nContent.Assign( pCNd, 0 );
 
-        AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, *pRedlPam ), true);
+        AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, *pRedlPam ), true);
 
         if( pRedlUndo )
             pRedlUndo->SetOffset( aSttIdx );
@@ -987,7 +986,7 @@ USHORT FlatFndBox::GetRowCount(const _FndBox& rBox)
                 //  Rekursiv ueber die Lines Iterieren
                 nLn = Max(GetRowCount(*rBoxes[j]), nLn);
 
-        nLines += nLn;
+        nLines = nLines + nLn;
     }
     return nLines;
 }
@@ -1060,20 +1059,20 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, BOOL bLastBox)
  --------------------------------------------------------------------*/
 
 
-const _FndBox* FlatFndBox::GetBox(USHORT nCol, USHORT nRow) const
+const _FndBox* FlatFndBox::GetBox(USHORT n_Col, USHORT n_Row) const
 {
-    USHORT nOff = nRow * nCols + nCol;
+    USHORT nOff = n_Row * nCols + n_Col;
     const _FndBox* pTmp = *(pArr + nOff);
 
-    ASSERT(nCol < nCols && nRow < nRows && pTmp, "unzulaessiger Array-Zugriff");
+    ASSERT(n_Col < nCols && n_Row < nRows && pTmp, "unzulaessiger Array-Zugriff");
     return pTmp;
 }
 
-const SfxItemSet* FlatFndBox::GetItemSet(USHORT nCol, USHORT nRow) const
+const SfxItemSet* FlatFndBox::GetItemSet(USHORT n_Col, USHORT n_Row) const
 {
-    ASSERT( !ppItemSets || ( nCol < nCols && nRow < nRows), "unzulaessiger Array-Zugriff");
+    ASSERT( !ppItemSets || ( n_Col < nCols && n_Row < nRows), "unzulaessiger Array-Zugriff");
 
-    return ppItemSets ? *(ppItemSets + (nRow * nCols + nCol )) : 0;
+    return ppItemSets ? *(ppItemSets + (n_Row * nCols + n_Col )) : 0;
 }
 
 
