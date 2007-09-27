@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regionsw.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:27:00 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:08:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,9 @@
  ************************************************************************/
 #ifndef _REGIONSW_HXX
 #define _REGIONSW_HXX
+
+#include <hintids.hxx>
+
 #ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
 #endif
@@ -98,6 +101,8 @@
 #ifndef _SVX_LRSPITEM_HXX
 #include <svx/lrspitem.hxx>
 #endif
+
+
 class SwWrtShell;
 class EditRegionDlg;
 
@@ -128,10 +133,10 @@ class SectRepr
     ::com::sun::star::uno::Sequence <sal_Int8 >     aTempPasswd;
 public:
     SectRepr(USHORT nPos, SwSection& rSect);
-    int     operator ==(SectRepr& rSectRef) const
+    BOOL    operator ==(SectRepr& rSectRef) const
             {return nArrPos==rSectRef.GetArrPos();}
 
-    int     operator <(SectRepr& rSectRef) const
+    BOOL    operator <(SectRepr& rSectRef) const
             {return nArrPos<rSectRef.GetArrPos();}
 
     SwSection&          GetSection()        { return aSection; }
@@ -156,23 +161,23 @@ public:
                         { aSection.SetLinkFilePassWd( rPasswd ); }
     void                SetCondition( const String& rString )
                         {aSection.SetCondition( rString);}
-    int                 IsCondHidden()const
+    BOOL                IsCondHidden()const
                         {return aSection.IsCondHidden();}
-    int                 IsHidden()const
+    BOOL                IsHidden()const
                         {return aSection.IsHidden();}
-    int                 IsProtect()const
+    BOOL                IsProtect()const
                         {return aSection.IsProtect();}
     // --> FME 2004-06-22 #114856# edit in readonly sections
-    int                 IsEditInReadonly()const
+    BOOL                 IsEditInReadonly()const
                         {return aSection.IsEditInReadonly();}
-    void                SetEditInReadonly(int bFlag = TRUE)
+    void                SetEditInReadonly(BOOL bFlag = TRUE)
                         {aSection.SetEditInReadonly(bFlag);}
     // <--
-    void                SetHidden(int bFlag = TRUE)
+    void                SetHidden(BOOL bFlag = TRUE)
                         {aSection.SetHidden(bFlag);}
-    void                SetCondHidden(int bFlag = TRUE)
+    void                SetCondHidden(BOOL bFlag = TRUE)
                         {aSection.SetCondHidden(bFlag);}
-    void                SetProtect(int bFlag = TRUE)
+    void                SetProtect(BOOL bFlag = TRUE)
                         {aSection.SetProtect(bFlag);}
     BOOL                IsContent(){return bContent;}
     void                SetContent(BOOL bValue){bContent = bValue;}
@@ -212,8 +217,8 @@ class SwEditRegionDlg : public SfxModalDialog
 #endif
     Edit            aFileNameED;
     PushButton      aFilePB;
-    ComboBox        aSubRegionED;
     FixedText       aSubRegionFT;
+    ComboBox        aSubRegionED;
 
     FixedLine       aProtectFL;
     TriStateBox     aProtectCB;
@@ -242,8 +247,8 @@ class SwEditRegionDlg : public SfxModalDialog
     SectReprArr             aSectReprArr;
     SvLBoxEntry*            pAktEntry;
     const SwSection*        pCurrSect;
-    sfx2::DocumentInserter* pDocInserter;
-    Window*                 pOldDefDlgParent;
+    sfx2::DocumentInserter* m_pDocInserter;
+    Window*                 m_pOldDefDlgParent;
 
     BOOL            bDontCheckPasswd :1;
     BOOL            bWeb            :1;
@@ -325,16 +330,15 @@ class SwInsertSectionTabPage : public SfxTabPage
     CheckBox        aEditInReadonlyCB;
     // <--
 
-    String          sSection;
-    String          sFileName;
-    String          sFilterName;
-    String          sFilePasswd;
+    String          m_sFileName;
+    String          m_sFilterName;
+    String          m_sFilePasswd;
 
 //  SwFmtCol*       pCols;
-    ::com::sun::star::uno::Sequence <sal_Int8 > aNewPasswd;
-    SwWrtShell*     pWrtSh;
-    sfx2::DocumentInserter* pDocInserter;
-    Window*                 pOldDefDlgParent;
+    ::com::sun::star::uno::Sequence <sal_Int8 > m_aNewPasswd;
+    SwWrtShell*             m_pWrtSh;
+    sfx2::DocumentInserter* m_pDocInserter;
+    Window*                 m_pOldDefDlgParent;
 
     DECL_LINK( ChangeHideHdl, CheckBox * );
     // --> FME 2004-06-22 #114856# edit in readonly sections
