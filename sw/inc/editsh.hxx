@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:28:46 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:00:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 #ifndef _EDITSH_HXX
 #define _EDITSH_HXX
+
+#include <com/sun/star/text/HoriOrientation.hpp>
 
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -69,8 +71,15 @@
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #endif
 
-#include <vector>
+#ifndef _FLDUPDE_HXX
+#include <fldupde.hxx>
+#endif
+#ifndef _TBLENUM_HXX
+#include <tblenum.hxx>
+#endif
 
+#include <vector>
+#include <swundo.hxx>
 #include <svtools/embedhlp.hxx>
 
 class PolyPolygon;
@@ -138,28 +147,13 @@ struct SwConversionArgs;
 
 namespace com { namespace sun { namespace star { namespace uno {
     template < class > class Sequence;
-}}}};
+}}}}
+
 namespace svx{
 struct SpellPortion;
 typedef std::vector<SpellPortion> SpellPortions;
 }
 
-// Flags for GetScriptType - to define how handle weak - scripts (b.e.
-// symbol characters):
-// GETSCRIPT_WEAKTOAPPLANGSCRIPT:
-//      app language define the script type if only weak characters
-//      are selected and before the weak script no weak script if found
-//      (mostly the default for Get any attributes, etc)
-// GETSCRIPT_WEAKTOAPPLANGSCRIPT:
-//      app language defines the script type if only weak characters
-//      are selected and before the weak script no weak script is found
-//      (mostly the default for Get any attributes, etc)
-// GETSCRIPT_WEAKTOALL:
-//      all script flags are set.
-//      are selected and before the weak script no weak script if found
-//      (mostly the default for Get any attributes, etc)
-#define GETSCRIPT_WEAKTOAPPLANGSCRIPT   0
-#define GETSCRIPT_WEAKTOALL             1
 
 
 #define GETSELTXT_PARABRK_TO_BLANK      0
@@ -295,7 +289,7 @@ public:
     void GCAttr();
 
     // returns the scripttpye of the selection
-    USHORT GetScriptType( USHORT nFlags = GETSCRIPT_WEAKTOAPPLANGSCRIPT ) const;
+    USHORT GetScriptType() const;
 
     // returns the language at current cursor position
     USHORT GetCurLang() const;
@@ -356,6 +350,7 @@ public:
     void Insert(SwField&);
     SwField* GetCurFld() const;
 
+    using ViewShell::UpdateFlds;
     void UpdateFlds( SwField & );       // ein einzelnes Feld
 
     USHORT GetFldTypeCount(USHORT nResId = USHRT_MAX, BOOL bUsed = FALSE) const;
@@ -387,8 +382,8 @@ public:
     void LockExpFlds();
     void UnlockExpFlds();
 
-    USHORT GetFldUpdateFlags(BOOL bDocSettings = FALSE) const;
-    void SetFldUpdateFlags( USHORT eFlags );
+    SwFldUpdateFlags GetFldUpdateFlags(BOOL bDocSettings = FALSE) const;
+    void SetFldUpdateFlags( SwFldUpdateFlags eFlags );
 
     // fuer die Evaluierung der DBFelder (neuer DB-Manager)
     SwNewDBMgr* GetNewDBMgr() const;
@@ -405,6 +400,7 @@ public:
     void UpdateDocStat( SwDocStat& rStat );
 
     // Dokument - Info
+    using SwModify::GetInfo;
     const SfxDocumentInfo* GetInfo() const;
 
     // Verzeichnismarke einfuegen loeschen
@@ -481,7 +477,7 @@ public:
     BOOL IsFirstOfNumRule(const SwPaM & rPaM) const;
     // <- #i23726#
 
-    BOOL IsNoNum( BOOL bChkStart = TRUE, BOOL bOutline = FALSE ) const;
+    BOOL IsNoNum( BOOL bChkStart = TRUE ) const;
     // returne den Num-Level des Nodes, in dem sich der Point vom
     // Cursor befindet. Return kann sein :
     // - NO_NUMBERING, 0..MAXLEVEL-1, NO_NUMLEVEL .. NO_NUMLEVEL|MAXLEVEL-1
@@ -520,12 +516,12 @@ public:
 
     // macht rueckgaengig:
     // setzt Undoklammerung auf, liefert nUndoId der Klammerung
-    USHORT StartUndo( USHORT nUndoId = 0, const SwRewriter * pRewriter = 0 );
+    SwUndoId StartUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = 0 );
     // schliesst Klammerung der nUndoId, nicht vom UI benutzt
-    USHORT EndUndo( USHORT nUndoId = 0, const SwRewriter * pRewriter = 0 );
+    SwUndoId EndUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = 0 );
     // liefert die Id der letzten undofaehigen Aktion zurueck
     // fuellt ggf. VARARR mit User-UndoIds
-    USHORT GetUndoIds( String* pUndoStr = 0, SwUndoIds *pUndoIds = 0) const;
+    SwUndoId GetUndoIds( String* pUndoStr = 0, SwUndoIds *pUndoIds = 0) const;
     String GetUndoIdsStr( String* pUndoStr = 0, SwUndoIds *pUndoIds = 0) const;
 
         // abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions
@@ -535,19 +531,19 @@ public:
     // Redo
     // liefert die Id der letzten Redofaehigen Aktion zurueck
     // fuellt ggf. VARARR mit RedoIds
-    USHORT GetRedoIds( String* pRedoStr = 0, SwUndoIds *pRedoIds = 0) const;
+    SwUndoId GetRedoIds( String* pRedoStr = 0, SwUndoIds *pRedoIds = 0) const;
     String GetRedoIdsStr( String* pRedoStr = 0, SwUndoIds *pRedoIds = 0) const;
 
     // Repeat
     // liefert die Id der letzten Repeatfaehigen Aktion zurueck
     // fuellt ggf. VARARR mit RedoIds
-    USHORT GetRepeatIds( String* pRepeatStr = 0, SwUndoIds *pRedoIds = 0) const;
+    SwUndoId GetRepeatIds( String* pRepeatStr = 0, SwUndoIds *pRedoIds = 0) const;
     String GetRepeatIdsStr( String* pRepeatStr = 0,
                             SwUndoIds *pRedoIds = 0) const;
 
     // 0 letzte Aktion, sonst Aktionen bis zum Start der Klammerung nUndoId
     // mit KillPaMs, ClearMark
-    BOOL Undo(USHORT nUndoId = 0, USHORT nCnt = 1 );
+    BOOL Undo(SwUndoId nUndoId = UNDO_EMPTY, USHORT nCnt = 1 );
     // wiederholt
     USHORT Repeat( USHORT nCount );
     // wiederholt
@@ -636,7 +632,7 @@ public:
     //befindet.
     void SetChartName( const String &rName );
     // returne den ChartNamen - vom Crsr oder vom uebergebenen OLE-Object
-    // reurnt aEmptyStr wenn nicht gefunden wurde
+    // returnt aEmptyStr wenn nicht gefunden wurde
     const String& GetChartName( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj
             = ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >() );
     //Sucht die Tabelle und liefert ein mit den Daten der Tabelle gefuelltes
@@ -655,12 +651,11 @@ public:
     // Textbausteindokument einfuegen, einschliesslich Vorlagen
     USHORT MakeGlossary( SwTextBlocks& rToFill, const String& rName,
                          const String& rShortName, BOOL bSaveRelFile = FALSE,
-                         BOOL bSaveRelNet = FALSE, const String* pOnlyTxt=0 );
+                         const String* pOnlyTxt=0 );
     // speicher den gesamten Inhalt des Docs als Textbaustein
     USHORT SaveGlossaryDoc( SwTextBlocks& rGlossary, const String& rName,
                             const String& rShortName,
                             BOOL bSaveRelFile = FALSE,
-                            BOOL bSaveRelNet = FALSE,
                             BOOL bOnlyTxt = FALSE );
 
     // Linguistik
@@ -668,7 +663,7 @@ public:
     void HyphStart( SwDocPositions eStart, SwDocPositions eEnde );
     // Selektionen wiederherstellen
     void HyphEnd();
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
+    com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
                 HyphContinue( USHORT* pPageCnt, USHORT* pPageSt );
     // zu trennendes Wort ignorieren
     void HyphIgnore();
@@ -680,13 +675,13 @@ public:
     //Tabelle
     const SwTable& InsertTable( const SwInsertTableOptions& rInsTblOpts,  // ALL_TBL_INS_ATTR
                                 USHORT nRows, USHORT nCols,
-                                SwHoriOrient = HORI_FULL,
+                                sal_Int16 eAdj = com::sun::star::text::HoriOrientation::FULL,
                                 const SwTableAutoFmt* pTAFmt = 0 );
 
     void InsertDDETable( const SwInsertTableOptions& rInsTblOpts,  // HEADLINE_NO_BORDER
                          SwDDEFieldType* pDDEType,
                          USHORT nRows, USHORT nCols,
-                         SwHoriOrient eAdj = HORI_FULL );
+                         sal_Int16 eAdj = com::sun::star::text::HoriOrientation::FULL );
 
     void UpdateTable();
     void SetTableName( SwFrmFmt& rTblFmt, const String &rNewName );
@@ -694,10 +689,10 @@ public:
     SwFrmFmt *GetTableFmt();
     BOOL TextToTable( const SwInsertTableOptions& rInsTblOpts,  //ALL_TBL_INS_ATTR
                       sal_Unicode cCh,
-                      SwHoriOrient eAdj = HORI_FULL,
+                      sal_Int16 eAdj = com::sun::star::text::HoriOrientation::FULL,
                       const SwTableAutoFmt* pTAFmt = 0 );
     BOOL TableToText( sal_Unicode cCh );
-    FASTBOOL IsTextToTableAvailable() const;
+    BOOL IsTextToTableAvailable() const;
 
     BOOL GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const;
     void SetTblBoxFormulaAttrs( const SfxItemSet& rSet );
@@ -706,8 +701,8 @@ public:
     String GetTableBoxText() const;
 
     // Change Modus erfragen/setzen
-    USHORT GetTblChgMode() const;
-    void SetTblChgMode( USHORT eMode );
+    TblChgMode GetTblChgMode() const;
+    void SetTblChgMode( TblChgMode eMode );
 
     // Tabelle an der Cursor Position aufsplitten
     BOOL SplitTable( USHORT eMode );
@@ -929,8 +924,7 @@ public:
     USHORT GetScalingOfSelectedText() const;
 
     // ctor/dtor
-    SwEditShell( SwDoc&, Window*,
-                 SwRootFrm* = 0, const SwViewOption *pOpt = 0 );
+    SwEditShell( SwDoc&, Window*, const SwViewOption *pOpt = 0 );
     // verkleideter Copy-Constructor
     SwEditShell( SwEditShell&, Window* );
     virtual ~SwEditShell();
