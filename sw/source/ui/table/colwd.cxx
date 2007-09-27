@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colwd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:19:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,8 +114,8 @@ SwTableWidthDlg::SwTableWidthDlg(Window *pParent, SwTableFUNC &rTableFnc ) :
     FreeResource();
 
     BOOL bIsWeb = rTableFnc.GetShell()
-                    ? 0 != PTR_CAST( SwWebDocShell,
-                            rTableFnc.GetShell()->GetView().GetDocShell() )
+                    ? static_cast< BOOL >(0 != PTR_CAST( SwWebDocShell,
+                            rTableFnc.GetShell()->GetView().GetDocShell()) )
                     : FALSE;
     FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( bIsWeb )->GetMetric();
     ::SetFieldUnit(aWidthEdit, eFieldUnit );
@@ -137,8 +137,9 @@ SwTableWidthDlg::SwTableWidthDlg(Window *pParent, SwTableFUNC &rTableFnc ) :
 void SwTableWidthDlg::Apply()
 {
     rFnc.InitTabCols();
-    rFnc.SetColWidth( aColEdit.GetValue()-1,
-            aWidthEdit.Denormalize(aWidthEdit.GetValue(FUNIT_TWIP)));
+    rFnc.SetColWidth(
+            static_cast< USHORT >(aColEdit.GetValue() - 1),
+            static_cast< USHORT >(aWidthEdit.Denormalize(aWidthEdit.GetValue(FUNIT_TWIP))));
 }
 
 
