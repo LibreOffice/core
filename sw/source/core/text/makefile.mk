@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-14 16:40:02 $
+#   last change: $Author: hr $ $Date: 2007-09-27 09:15:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,15 @@ SLOFILES =  \
 SLOFILES +=  \
         $(SLO)$/txtio.obj
 .ENDIF
+
+EXCEPTIONSFILES = \
+                $(SLO)$/EnhancedPDFExportHelper.obj \
+        $(SLO)$/itradj.obj \
+        $(SLO)$/porlay.obj \
+        $(SLO)$/pormulti.obj \
+        $(SLO)$/txtfly.obj \
+        $(SLO)$/wrong.obj
+
 
 .IF "$(CPUNAME)" == "SPARC"
 .IF "$(OS)" == "NETBSD"
