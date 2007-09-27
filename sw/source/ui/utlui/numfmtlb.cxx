@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:26:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:46:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,14 +74,8 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-//CHINA001 #ifndef _SVX_NUMFMT_HXX //autogen
-//CHINA001 #include <svx/numfmt.hxx>
-//CHINA001 #endif
-#include <svx/flagsdef.hxx> //CHINA001
+#include <svx/flagsdef.hxx>
 #include <svtools/itemset.hxx>
-//CHINA001 #ifndef _TBLNUMFM_HXX
-//CHINA001 #include <tblnumfm.hxx>
-//CHINA001 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
@@ -104,12 +98,15 @@
 #ifndef _UTLUI_HRC
 #include <utlui.hrc>
 #endif
-#include "swabstdlg.hxx" //CHINA001
-#include "dialog.hrc" //CHINA001
+#include "swabstdlg.hxx"
+#include "dialog.hrc"
+
+#include <unomid.h>
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
+
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -130,8 +127,8 @@ NumFormatListBox::NumFormatListBox( Window* pWin, const ResId& rResId,
     nDefFormat          (nDefFmt),
     pVw                 (0),
     pOwnFormatter       (0),
-    bUseAutomaticLanguage(TRUE),
-    bShowLanguageControl(FALSE)
+    bShowLanguageControl(FALSE),
+    bUseAutomaticLanguage(TRUE)
 {
     Init(nFormatType, bUsrFmts);
 }
@@ -150,8 +147,8 @@ NumFormatListBox::NumFormatListBox( Window* pWin, SwView* pView,
     nDefFormat          (nDefFmt),
     pVw                 (pView),
     pOwnFormatter       (0),
-    bUseAutomaticLanguage(TRUE),
-    bShowLanguageControl(FALSE)
+    bShowLanguageControl(FALSE),
+    bUseAutomaticLanguage(TRUE)
 {
     Init(nFormatType, bUsrFmts);
 }
@@ -481,12 +478,11 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_NOLANGUAGE, !bShowLanguageControl));
         aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO, bUseAutomaticLanguage));
 
-        //CHINA001 SwNumFmtDlg* pDlg = new SwNumFmtDlg(this, aCoreSet);
-        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
         AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( this, aCoreSet, RC_DLG_SWNUMFMTDLG );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
         if (RET_OK == pDlg->Execute())
         {
@@ -505,13 +501,13 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
             if( SFX_ITEM_SET == pOutSet->GetItemState(
                 SID_ATTR_NUMBERFORMAT_VALUE, FALSE, &pItem ))
             {
-                UINT32 nFormat = ((SfxUInt32Item*)pItem)->GetValue();
+                UINT32 nNumberFormat = ((SfxUInt32Item*)pItem)->GetValue();
                 // oj #105473# change order of calls
-                const SvNumberformat* pFmt = pFormatter->GetEntry(nFormat);
+                const SvNumberformat* pFmt = pFormatter->GetEntry(nNumberFormat);
                 if( pFmt )
                     eCurLanguage = pFmt->GetLanguage();
                 // SetDefFormat uses eCurLanguage to look for if this format already in the list
-                SetDefFormat(nFormat);
+                SetDefFormat(nNumberFormat);
             }
             if( bShowLanguageControl && SFX_ITEM_SET == pOutSet->GetItemState(
                 SID_ATTR_NUMBERFORMAT_ADD_AUTO, FALSE, &pItem ))
@@ -554,7 +550,6 @@ double NumFormatListBox::GetDefValue(const short nFormatType) const
 
         case NUMBERFORMAT_TEXT:
         case NUMBERFORMAT_UNDEFINED:
-        case NUMBERFORMAT_ENTRY_NOT_FOUND:
             fDefValue = 0;
             break;
 
