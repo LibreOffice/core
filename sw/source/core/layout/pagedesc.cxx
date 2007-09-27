@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagedesc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:00:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:05:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,32 +112,30 @@
 SwPageDesc::SwPageDesc( const String& rName, SwFrmFmt *pFmt, SwDoc *pDc ) :
     SwModify( 0 ),
     aDescName( rName ),
-    aDepend( this, 0 ),
-    nRegHeight( 0 ),
-    nRegAscent( 0 ),
-    bLandscape( FALSE ),
-    eUse( (UseOnPage)(PD_ALL | PD_HEADERSHARE | PD_FOOTERSHARE) ),
     aMaster( pDc->GetAttrPool(), rName, pFmt ),
     aLeft( pDc->GetAttrPool(), rName, pFmt ),
+    aDepend( this, 0 ),
     pFollow( this ),
+    nRegHeight( 0 ),
+    nRegAscent( 0 ),
+    eUse( (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE) ),
+    bLandscape( FALSE ),
     aFtnInfo()
 {
 }
 
-
-
 SwPageDesc::SwPageDesc( const SwPageDesc &rCpy ) :
     SwModify( 0 ),
-    aDepend( this, (SwModify*)rCpy.aDepend.GetRegisteredIn() ),
-    nRegHeight( rCpy.GetRegHeight() ),
-    nRegAscent( rCpy.GetRegAscent() ),
     aDescName( rCpy.GetName() ),
-    bLandscape( rCpy.GetLandscape() ),
     aNumType( rCpy.GetNumType() ),
-    eUse( rCpy.ReadUseOn() ),
     aMaster( rCpy.GetMaster() ),
     aLeft( rCpy.GetLeft() ),
+    aDepend( this, (SwModify*)rCpy.aDepend.GetRegisteredIn() ),
     pFollow( rCpy.pFollow ),
+    nRegHeight( rCpy.GetRegHeight() ),
+    nRegAscent( rCpy.GetRegAscent() ),
+    eUse( rCpy.ReadUseOn() ),
+    bLandscape( rCpy.GetLandscape() ),
     aFtnInfo( rCpy.GetFtnInfo() )
 {
 }
@@ -351,12 +349,11 @@ void SwPageDesc::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
 {
     SwModify* pMod;
-    USHORT nFrmType;
+    USHORT nFrmType = FRM_CNTNT;
 
     if( rNd.IsCntntNode() )
     {
         pMod = &(SwCntntNode&)rNd;
-        nFrmType = FRM_CNTNT;
     }
     else if( rNd.IsTableNode() )
     {
@@ -375,7 +372,7 @@ const SwPageDesc* SwPageDesc::GetPageDescOfNode(const SwNode& rNd)
 {
     const SwPageDesc* pRet = 0;
     const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
-    if (pChkFrm && (pChkFrm = pChkFrm->FindPageFrm()))
+    if (pChkFrm && 0 != (pChkFrm = pChkFrm->FindPageFrm()))
         pRet = ((const SwPageFrm*)pChkFrm)->GetPageDesc();
     return pRet;
 }
