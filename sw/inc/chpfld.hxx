@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chpfld.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:45:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:57:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,8 +93,8 @@ public:
 
     inline const String& GetNumber() const;
     inline const String& GetTitle() const;
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 inline BYTE SwChapterField::GetLevel() const    { return nLevel; }
