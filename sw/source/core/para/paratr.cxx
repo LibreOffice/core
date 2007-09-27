@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paratr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:27:07 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:08:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,12 +110,12 @@ TYPEINIT1_AUTOFACTORY( SwParaConnectBorderItem, SfxBoolItem);
 SwFmtDrop::SwFmtDrop()
     : SfxPoolItem( RES_PARATR_DROP ),
     SwClient( 0 ),
+    pDefinedIn( 0 ),
+    nDistance( 0 ),
+    nReadFmt( USHRT_MAX ),
     nLines( 0 ),
     nChars( 0 ),
-    nDistance( 0 ),
-    pDefinedIn( 0 ),
-    bWholeWord( sal_False ),
-    nReadFmt( USHRT_MAX )
+    bWholeWord( sal_False )
 {
 }
 
@@ -124,12 +124,12 @@ SwFmtDrop::SwFmtDrop()
 SwFmtDrop::SwFmtDrop( const SwFmtDrop &rCpy )
     : SfxPoolItem( RES_PARATR_DROP ),
     SwClient( rCpy.pRegisteredIn ),
+    pDefinedIn( 0 ),
+    nDistance( rCpy.GetDistance() ),
+    nReadFmt( rCpy.nReadFmt ),
     nLines( rCpy.GetLines() ),
     nChars( rCpy.GetChars() ),
-    nDistance( rCpy.GetDistance() ),
-    bWholeWord( rCpy.GetWholeWord() ),
-    pDefinedIn( 0 ),
-    nReadFmt( rCpy.nReadFmt )
+    bWholeWord( rCpy.GetWholeWord() )
 {
 }
 
@@ -153,7 +153,7 @@ void SwFmtDrop::SetCharFmt( SwCharFmt *pNew )
 
 
 
-void SwFmtDrop::Modify( SfxPoolItem *pA, SfxPoolItem *pB )
+void SwFmtDrop::Modify( SfxPoolItem *, SfxPoolItem * )
 {
     if( pDefinedIn )
     {
@@ -177,7 +177,7 @@ void SwFmtDrop::Modify( SfxPoolItem *pA, SfxPoolItem *pB )
     }
 }
 
-sal_Bool SwFmtDrop::GetInfo( SfxPoolItem& rInfo ) const
+sal_Bool SwFmtDrop::GetInfo( SfxPoolItem& ) const
 {
     return sal_True;    // weiter
 }
@@ -204,13 +204,13 @@ sal_Bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_DROPCAP_LINES : rVal <<= (sal_Int16)nLines; break;
         case MID_DROPCAP_COUNT : rVal <<= (sal_Int16)nChars; break;
-        case MID_DROPCAP_DISTANCE : rVal <<= (sal_Int16) TWIP_TO_MM100(nDistance); break;
+        case MID_DROPCAP_DISTANCE : rVal <<= (sal_Int16) TWIP_TO_MM100_UNSIGNED(nDistance); break;
         case MID_DROPCAP_FORMAT:
         {
              style::DropCapFormat aDrop;
             aDrop.Lines = nLines   ;
             aDrop.Count = nChars   ;
-            aDrop.Distance  = TWIP_TO_MM100(nDistance);
+            aDrop.Distance  = TWIP_TO_MM100_UNSIGNED(nDistance);
             rVal.setValue(&aDrop, ::getCppuType((const style::DropCapFormat*)0));
         }
         break;
@@ -222,7 +222,7 @@ sal_Bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rtl::OUString sName;
             if(GetCharFmt())
                 sName = SwStyleNameMapper::GetProgName(
-                        GetCharFmt()->GetName(), GET_POOLID_CHRFMT );
+                        GetCharFmt()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             rVal <<= sName;
         }
         break;
@@ -292,7 +292,7 @@ SfxPoolItem* SwRegisterItem::Clone( SfxItemPool * ) const
 }
 
 // class SwNumRuleItem -------------------------------------------------
-SfxPoolItem* SwNumRuleItem::Clone( SfxItemPool *pPool  ) const
+SfxPoolItem* SwNumRuleItem::Clone( SfxItemPool * ) const
 {
     return new SwNumRuleItem( *this );
 }
@@ -305,20 +305,20 @@ int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 /* -----------------------------27.06.00 11:05--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwNumRuleItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+BOOL    SwNumRuleItem::QueryValue( uno::Any& rVal, BYTE ) const
 {
-    rtl::OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), GET_POOLID_NUMRULE );
+    rtl::OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
     rVal <<= sRet;
     return TRUE;
 }
 /* -----------------------------27.06.00 11:05--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwNumRuleItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+BOOL    SwNumRuleItem::PutValue( const uno::Any& rVal, BYTE )
 {
     rtl::OUString uName;
     rVal >>= uName;
-    SetValue(SwStyleNameMapper::GetUIName(uName, GET_POOLID_NUMRULE));
+    SetValue(SwStyleNameMapper::GetUIName(uName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE));
     return TRUE;
 }
 /* -----------------19.05.2003 10:44-----------------
