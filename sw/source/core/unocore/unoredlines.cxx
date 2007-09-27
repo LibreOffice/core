@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoredlines.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:35:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:39:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,8 @@ using namespace ::rtl;
 /*-- 11.01.01 15:28:54---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXRedlines::SwXRedlines(SwDoc* pDoc) :
-    SwUnoCollection(pDoc)
+SwXRedlines::SwXRedlines(SwDoc* _pDoc) :
+    SwUnoCollection(_pDoc)
 {
 }
 /*-- 11.01.01 15:28:55---------------------------------------------------
@@ -126,7 +126,6 @@ uno::Reference< container::XEnumeration >  SwXRedlines::createEnumeration(void)
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw uno::RuntimeException();
-    const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
     return uno::Reference< container::XEnumeration >(new SwXRedlineEnumeration(*GetDoc()));
 }
 /*-- 11.01.01 15:28:55---------------------------------------------------
@@ -157,7 +156,7 @@ OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException )
 /*-- 11.01.01 15:28:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-BOOL SwXRedlines::supportsService(const rtl::OUString& ServiceName)
+BOOL SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
     throw( uno::RuntimeException )
 {
     DBG_ERROR("not implemented")
@@ -240,7 +239,7 @@ rtl::OUString SwXRedlineEnumeration::getImplementationName(void) throw( uno::Run
 /*-- 12.01.01 15:06:10---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-BOOL SwXRedlineEnumeration::supportsService(const rtl::OUString& ServiceName) throw( uno::RuntimeException )
+BOOL SwXRedlineEnumeration::supportsService(const rtl::OUString& /*ServiceName*/) throw( uno::RuntimeException )
 {
     return FALSE;
 }
