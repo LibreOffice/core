@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bcaslot.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:47:12 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,7 +280,11 @@ void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
         {
             ScBroadcastArea* pArea = *aIter;
             if (!pArea->DecRef())
+            {
+                if (pBASM->IsInBulkBroadcast())
+                    pBASM->RemoveBulkArea( pArea);
                 delete pArea;
+            }
             ScBroadcastAreas::iterator aDel( aIter);
             ++aIter;
             aBroadcastAreaTbl.erase( aDel);
@@ -337,6 +341,8 @@ void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
             {
                 aBroadcastAreaTbl.erase( aDel);
                 pArea->DecRef();
+                if (pBASM->IsInBulkBroadcast())
+                    pBASM->RemoveBulkArea( pArea);
                 pArea->SetInUpdateChain( TRUE );
                 ScBroadcastArea* pUC = pBASM->GetEOUpdateChain();
                 if ( pUC )
@@ -700,4 +706,10 @@ void ScBroadcastAreaSlotMachine::LeaveBulkBroadcast()
 bool ScBroadcastAreaSlotMachine::InsertBulkArea( const ScBroadcastArea* pArea )
 {
     return aBulkBroadcastAreas.insert( pArea ).second;
+}
+
+
+size_t ScBroadcastAreaSlotMachine::RemoveBulkArea( const ScBroadcastArea* pArea )
+{
+    return aBulkBroadcastAreas.erase( pArea );
 }
