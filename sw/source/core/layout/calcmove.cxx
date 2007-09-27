@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 11:48:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:01:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,6 @@
 #include "tabfrm.hxx"
 #include "ftnfrm.hxx"
 #include "txtfrm.hxx"
-#include "frmsh.hxx"
 #include "pagedesc.hxx"
 #include "ftninfo.hxx"
 #include "sectfrm.hxx"
@@ -552,7 +551,7 @@ void SwFrm::MakePos()
     if ( !bValidPos )
     {
         bValidPos = TRUE;
-        FASTBOOL bUseUpper = FALSE;
+        BOOL bUseUpper = FALSE;
         SwFrm* pPrv = lcl_Prev( this );
         if ( pPrv &&
              ( !pPrv->IsCntntFrm() ||
@@ -980,7 +979,7 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
         bValidPrtArea = TRUE;
 
         SWRECTFN( this )
-        const FASTBOOL bTxtFrm = IsTxtFrm();
+        const BOOL bTxtFrm = IsTxtFrm();
         SwTwips nUpper = 0;
         if ( bTxtFrm && ((SwTxtFrm*)this)->IsHiddenNow() )
         {
@@ -1021,7 +1020,7 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                     // <SwSortedObjs> entries
                     SwAnchoredObject* pObj = (*GetDrawObjs())[i];
                     const SwFrmFmt& rFmt = pObj->GetFrmFmt();
-                    const FASTBOOL bFly = pObj->ISA(SwFlyFrm);
+                    const BOOL bFly = pObj->ISA(SwFlyFrm);
                     if ( bFly &&
                          WEIT_WECH == pObj->GetObjRect().Width()||
                          rFmt.GetFrmSize().GetWidthPercent() )
@@ -1222,8 +1221,7 @@ void SwCntntFrm::MakeAll()
                                     pFtn->GetAttr()->GetFtn().IsEndNote() );
             if( !pSct || pSct->IsColLocked() || !pSct->Growable() )
                 pSaveFtn = new SwSaveFtnHeight( pBoss,
-                    ((SwTxtFrm*)pFtn->GetRef())->GetFtnLine( pFtn->GetAttr(),
-                                                   pFtn->IsBackMoveLocked() ) );
+                    ((SwTxtFrm*)pFtn->GetRef())->GetFtnLine( pFtn->GetAttr() ) );
         }
     }
 
@@ -1607,8 +1605,8 @@ void SwCntntFrm::MakeAll()
                 }
                 if ( pNxt )
                 {
-                    const FASTBOOL bMoveFwdInvalid = 0 != GetIndNext();
-                    const FASTBOOL bNxtNew =
+                    const BOOL bMoveFwdInvalid = 0 != GetIndNext();
+                    const BOOL bNxtNew =
                         ( 0 == (pNxt->Prt().*fnRect->fnGetHeight)() ) &&
                         (!pNxt->IsTxtFrm() ||!((SwTxtFrm*)pNxt)->IsHiddenNow());
 
@@ -1899,11 +1897,11 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
     BOOL bRet;
     BOOL bSplit = !pNewUpper->Lower();
     SwCntntFrm *pFrm = this;
-    const SwFrm *pPrev = pNewUpper->Lower();
-    if( pPrev && pPrev->IsFtnFrm() )
-        pPrev = ((SwFtnFrm*)pPrev)->Lower();
-    while ( pPrev && pPrev->GetNext() )
-        pPrev = pPrev->GetNext();
+    const SwFrm *pTmpPrev = pNewUpper->Lower();
+    if( pTmpPrev && pTmpPrev->IsFtnFrm() )
+        pTmpPrev = ((SwFtnFrm*)pTmpPrev)->Lower();
+    while ( pTmpPrev && pTmpPrev->GetNext() )
+        pTmpPrev = pTmpPrev->GetNext();
     do
     {
         // --> FME 2005-03-31 #b6236853# #i46181#
@@ -1943,7 +1941,7 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
                )
             {
                 bTstMove = TRUE;
-                bRet = ((SwTxtFrm*)pFrm)->TestFormat( pPrev, nSpace, bSplit );
+                bRet = ((SwTxtFrm*)pFrm)->TestFormat( pTmpPrev, nSpace, bSplit );
             }
             else
                 bRet = pFrm->WouldFit( nSpace, bSplit, sal_False );
@@ -1966,9 +1964,9 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
         {
             SwTwips nUpper;
 
-            if ( pPrev )
+            if ( pTmpPrev )
             {
-                nUpper = CalcUpperSpace( NULL, pPrev );
+                nUpper = CalcUpperSpace( NULL, pTmpPrev );
 
                 // in balanced columned section frames we do not want the
                 // common border
@@ -2079,13 +2077,13 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
                 //er den Absatzabstand bereits berechnet. Er braucht dann nicht
                 //teuer kalkuliert werden.
                 if( lcl_NotHiddenPrev( pNxt ) )
-                    pPrev = 0;
+                    pTmpPrev = 0;
                 else
                 {
                     if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsHiddenNow() )
-                        pPrev = lcl_NotHiddenPrev( pFrm );
+                        pTmpPrev = lcl_NotHiddenPrev( pFrm );
                     else
-                        pPrev = pFrm;
+                        pTmpPrev = pFrm;
                 }
                 pFrm = (SwCntntFrm*)pNxt;
             }
