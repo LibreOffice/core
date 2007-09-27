@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:41:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,10 +87,10 @@
 #include <txtnodenumattr.hxx>
 // <--
 
-extern FASTBOOL CheckNodesRange( const SwNodeIndex& rStt,
-                            const SwNodeIndex& rEnd, FASTBOOL bChkSection );
+extern BOOL CheckNodesRange( const SwNodeIndex& rStt,
+                            const SwNodeIndex& rEnd, BOOL bChkSection );
 
-SV_DECL_PTRARR(SwSttNdPtrs,SwStartNode*,2,2);
+SV_DECL_PTRARR(SwSttNdPtrs,SwStartNode*,2,2)
 
 
 //#define JP_DEBUG
@@ -113,7 +113,7 @@ USHORT HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange );
 |*      Inserts, Icons, Inhalt) an
 *******************************************************************/
 SwNodes::SwNodes( SwDoc* pDocument )
-    : pMyDoc( pDocument ), pRoot( 0 )
+    : pRoot( 0 ), pMyDoc( pDocument )
 {
     bInNodesDel = bInDelUpdOutl = bInDelUpdNum = FALSE;
 
@@ -181,7 +181,7 @@ SwNodes::~SwNodes()
     delete pEndOfContent;
 }
 
-void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
+void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                         SwNodeIndex& rInsPos, BOOL bNewFrms )
 {
     // im UndoBereich brauchen wir keine Frames
@@ -190,7 +190,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
 
     //JP 03.02.99: alle Felder als invalide erklaeren, aktu. erfolgt im
     //              Idle-Handler des Docs
-    if( GetDoc()->SetFieldsDirty( TRUE, &rDelPos.GetNode(), nSize ) &&
+    if( GetDoc()->SetFieldsDirty( TRUE, &rDelPos.GetNode(), nSz ) &&
         rNds.GetDoc() != GetDoc() )
         rNds.GetDoc()->SetFieldsDirty( true, NULL, 0 );
 
@@ -206,7 +206,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
         // nachgeschoben, d.H. die Loeschposition ist immer gleich
         USHORT nDiff = rDelPos.GetIndex() < rInsPos.GetIndex() ? 0 : 1;
 
-        for( ULONG n = rDelPos.GetIndex(); nSize; n += nDiff, --nSize )
+        for( ULONG n = rDelPos.GetIndex(); nSz; n += nDiff, --nSz )
         {
             SwNodeIndex aDelIdx( *this, n );
             SwNode& rNd = aDelIdx.GetNode();
@@ -290,8 +290,8 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
 
         String sNumRule;
         SwNodeIndex aInsPos( rInsPos );
-        unsigned int nTxtNdLevel;
-        for( ULONG n = 0; n < nSize; n++ )
+        unsigned int nTxtNdLevel = 0;
+        for( ULONG n = 0; n < nSz; n++ )
         {
             SwNode* pNd = &rDelPos.GetNode();
 
@@ -834,7 +834,7 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     aRg.aEnd++;
                     {
                         SwNodeIndex aCntIdx( aRg.aEnd );
-                        for( register ULONG n = 0; n < nInsPos; n++, aCntIdx++)
+                        for( ULONG n = 0; n < nInsPos; n++, aCntIdx++)
                             aCntIdx.GetNode().pStartOfSection = pTmpStt;
                     }
 
@@ -1524,7 +1524,7 @@ SwCntntNode* SwNodes::GoNext(SwNodeIndex *pIdx) const
         return 0;
 
     SwNodeIndex aTmp(*pIdx, +1);
-    SwNode* pNd;
+    SwNode* pNd = 0;
     while( aTmp < Count()-1 && 0 == ( pNd = &aTmp.GetNode())->IsCntntNode() )
         aTmp++;
 
@@ -1541,7 +1541,7 @@ SwCntntNode* SwNodes::GoPrevious(SwNodeIndex *pIdx) const
         return 0;
 
     SwNodeIndex aTmp( *pIdx, -1 );
-    SwNode* pNd;
+    SwNode* pNd = 0;
     while( aTmp.GetIndex() && 0 == ( pNd = &aTmp.GetNode())->IsCntntNode() )
         aTmp--;
 
@@ -1558,7 +1558,7 @@ SwNode* SwNodes::GoNextWithFrm(SwNodeIndex *pIdx) const
         return 0;
 
     SwNodeIndex aTmp(*pIdx, +1);
-    SwNode* pNd;
+    SwNode* pNd = 0;
     while( aTmp < Count()-1 )
     {
         pNd = &aTmp.GetNode();
@@ -1804,7 +1804,7 @@ USHORT HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange )
 |*
 *************************************************************************/
 void SwNodes::Move( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes,
-                    BOOL bSplitNd )
+                    BOOL )
 {
     SwPosition *pStt = (SwPosition*)rPam.Start(), *pEnd = (SwPosition*)rPam.End();
 
@@ -2465,9 +2465,6 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                     // falls aber der Node in einer Tabelle steht, muss
                     // natuerlich dieser returnt werden, wenn der SttNode eine
                     // Section oder Tabelle ist!
-#if OSL_DEBUG_LEVEL > 1
-                    SwTableNode* pDebugNode = pSttNd->StartOfSectionNode()->FindTableNode();
-#endif
                     SwTableNode* pTblNd;
                     if( pSttNd->IsTableNode() &&
                         0 != ( pTblNd = pFrmNd->FindTableNode() ) &&
@@ -2534,9 +2531,9 @@ struct _TempBigPtrEntry : public BigPtrEntry
 };
 
 
-void SwNodes::RemoveNode( ULONG nDelPos, ULONG nSize, FASTBOOL bDel )
+void SwNodes::RemoveNode( ULONG nDelPos, ULONG nSz, BOOL bDel )
 {
-    ULONG nEnd = nDelPos + nSize;
+    ULONG nEnd = nDelPos + nSz;
     SwNode* pNew = (*this)[ nEnd ];
 
     if( pRoot )
@@ -2565,7 +2562,7 @@ void SwNodes::RemoveNode( ULONG nDelPos, ULONG nSize, FASTBOOL bDel )
     }
 
     {
-        for (int nCnt = 0; nCnt < nSize; nCnt++)
+        for (ULONG nCnt = 0; nCnt < nSz; nCnt++)
         {
             SwTxtNode * pTxtNd = ((*this)[ nDelPos + nCnt ])->GetTxtNode();
 
@@ -2578,7 +2575,7 @@ void SwNodes::RemoveNode( ULONG nDelPos, ULONG nSize, FASTBOOL bDel )
 
     if( bDel )
     {
-        ULONG nCnt = nSize;
+        ULONG nCnt = nSz;
         SwNode *pDel = (*this)[ nDelPos+nCnt-1 ], *pPrev = (*this)[ nDelPos+nCnt-2 ];
 
 // temp. Object setzen
@@ -2603,7 +2600,7 @@ void SwNodes::RemoveNode( ULONG nDelPos, ULONG nSize, FASTBOOL bDel )
         nDelPos = pDel->GetIndex() + 1;
     }
 
-    BigPtrArray::Remove( nDelPos, nSize );
+    BigPtrArray::Remove( nDelPos, nSz );
 }
 
 void SwNodes::RegisterIndex( SwNodeIndex& rIdx )
@@ -2627,8 +2624,8 @@ void SwNodes::RegisterIndex( SwNodeIndex& rIdx )
 
 void SwNodes::DeRegisterIndex( SwNodeIndex& rIdx )
 {
-    register SwNodeIndex* pN = rIdx.pNext;
-    register SwNodeIndex* pP = rIdx.pPrev;
+    SwNodeIndex* pN = rIdx.pNext;
+    SwNodeIndex* pP = rIdx.pPrev;
 
     if( pRoot == &rIdx )
         pRoot = pP ? pP : pN;
