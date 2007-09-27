@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddefld.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:23:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:48:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@
 #endif
 
 using namespace rtl;
+using namespace ::com::sun::star;
 
 #ifdef PM2
 #define DDE_TXT_ENCODING    RTL_TEXTENCODING_IBM_850
@@ -99,7 +100,7 @@ public:
 
     virtual void Closed();
     virtual void DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue );
+                                const uno::Any & rValue );
 
     virtual const SwNode* GetAnchor() const;
     virtual BOOL IsInRange( ULONG nSttNd, ULONG nEndNd, xub_StrLen nStt = 0,
@@ -108,16 +109,16 @@ public:
 
 
 void SwIntrnlRefLink::DataChanged( const String& rMimeType,
-                                const ::com::sun::star::uno::Any & rValue )
+                                const uno::Any & rValue )
 {
     switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )
     {
     case FORMAT_STRING:
         if( !IsNoDataFlag() )
         {
-            ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+            uno::Sequence< sal_Int8 > aSeq;
             rValue >>= aSeq;
-            String sStr( (sal_Char*)aSeq.getConstArray(), aSeq.getLength(),
+            String sStr( (sal_Char*)aSeq.getConstArray(), static_cast<xub_StrLen>(aSeq.getLength()),
                                DDE_TXT_ENCODING  );
 
             // CR-LF am Ende entfernen, ist ueberfluessig!
@@ -365,11 +366,10 @@ void SwDDEFieldType::_RefCntChgd()
 /* -----------------------------28.08.00 16:23--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwDDEFieldType::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const
+BOOL SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
 {
     BYTE nPart = 0;
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR2:      nPart = 3; break;
     case FIELD_PROP_PAR4:      nPart = 2; break;
@@ -393,18 +393,18 @@ BOOL SwDDEFieldType::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) con
 /* -----------------------------28.08.00 16:23--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwDDEFieldType::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId )
+BOOL SwDDEFieldType::PutValue( const uno::Any& rVal, USHORT nWhichId )
 {
     BYTE nPart = 0;
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR2:      nPart = 3; break;
     case FIELD_PROP_PAR4:      nPart = 2; break;
     case FIELD_PROP_SUBTYPE:   nPart = 1; break;
     case FIELD_PROP_BOOL1:
-        SetType( *(sal_Bool*)rVal.getValue() ? sfx2::LINKUPDATE_ALWAYS
-                                             : sfx2::LINKUPDATE_ONCALL );
+        SetType( static_cast<USHORT>(*(sal_Bool*)rVal.getValue() ?
+                                     sfx2::LINKUPDATE_ALWAYS :
+                                     sfx2::LINKUPDATE_ONCALL ) );
         break;
     case FIELD_PROP_PAR5:
     {
@@ -429,8 +429,8 @@ BOOL SwDDEFieldType::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId )
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-SwDDEField::SwDDEField( SwDDEFieldType* pType )
-    : SwField(pType)
+SwDDEField::SwDDEField( SwDDEFieldType* pInitType )
+    : SwField(pInitType)
 {
 }
 
