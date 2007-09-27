@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdlgfact.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 07:39:40 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:38:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #define _SW_DLGFACT_HXX
 
 // include ---------------------------------------------------------------
-#include "swabstdlg.hxx" //CHINA001
+#include "swabstdlg.hxx"
 
 class SwSaveLabelDlg;
 class SwInsertAbstractDlg;
@@ -85,23 +85,16 @@ USHORT Class::Execute()                             \
 }
 
 
-//CHINA001 class AbstractSwSaveLabelDlg_Impl : public AbstractSwSaveLabelDlg    //CHINA001 add for SwSaveLabelDlg
-//CHINA001 {
-//CHINA001 DECL_ABSTDLG_BASE(AbstractSwSaveLabelDlg_Impl,SwSaveLabelDlg);
-//CHINA001 virtual void SetLabel(const rtl::OUString& rMake, const rtl::OUString& rType);
-//CHINA001 virtual sal_Bool GetLabel(SwLabItem& rItem);
-//CHINA001 }
-
 class AbstractSwWordCountDialog_Impl : public AbstractSwWordCountDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSwWordCountDialog_Impl,SwWordCountDialog);
+    DECL_ABSTDLG_BASE(AbstractSwWordCountDialog_Impl,SwWordCountDialog)
     void    SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc);
 };
 
 //add for SwInsertAbstractDlg begin
 class AbstractSwInsertAbstractDlg_Impl : public AbstractSwInsertAbstractDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl,SwInsertAbstractDlg);
+    DECL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl,SwInsertAbstractDlg)
     virtual BYTE    GetLevel() const ;
     virtual BYTE    GetPara() const ;
 };
@@ -112,7 +105,7 @@ class AbstractSwInsertAbstractDlg_Impl : public AbstractSwInsertAbstractDlg
 class SfxSingleTabDialog;
 class AbstractSfxSingleTabDialog_Impl :public AbstractSfxSingleTabDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl,SfxSingleTabDialog);
+    DECL_ABSTDLG_BASE(AbstractSfxSingleTabDialog_Impl,SfxSingleTabDialog)
     virtual const SfxItemSet*   GetOutputItemSet() const;
 
 };
@@ -121,7 +114,7 @@ class AbstractSfxSingleTabDialog_Impl :public AbstractSfxSingleTabDialog
 // add for SwAsciiFilterDlg begin
 class AbstractSwAsciiFilterDlg_Impl : public AbstractSwAsciiFilterDlg
 {
-    DECL_ABSTDLG_BASE( AbstractSwAsciiFilterDlg_Impl,SwAsciiFilterDlg );
+    DECL_ABSTDLG_BASE( AbstractSwAsciiFilterDlg_Impl,SwAsciiFilterDlg )
     virtual void FillOptions( SwAsciiOptions& rOptions );
 
 };
@@ -130,14 +123,14 @@ class AbstractSwAsciiFilterDlg_Impl : public AbstractSwAsciiFilterDlg
 // add for SwInsertBookmarkDlg  SwChangeDBDlg, SwTableHeightDlg, SwSplitTblDlg  SwSortDlg   SwTableWidthDlgbegin
 class VclAbstractDialog_Impl : public VclAbstractDialog
 {
-    DECL_ABSTDLG_BASE(VclAbstractDialog_Impl,Dialog);
+    DECL_ABSTDLG_BASE(VclAbstractDialog_Impl,Dialog)
 };
 // add for SwInsertBookmarkDlg SwChangeDBDlg, SwTableHeightDlg SwSplitTblDlg  SwSortDlg   SwTableWidthDlg end
 
 // add for SwBreakDlg begin
 class AbstractSwBreakDlg_Impl : public AbstractSwBreakDlg // add for SwBreakDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSwBreakDlg_Impl,SwBreakDlg);
+    DECL_ABSTDLG_BASE(AbstractSwBreakDlg_Impl,SwBreakDlg)
     virtual String  GetTemplateName();
     virtual USHORT  GetKind();
     virtual USHORT  GetPageNumber();
@@ -148,21 +141,21 @@ class AbstractSwBreakDlg_Impl : public AbstractSwBreakDlg // add for SwBreakDlg
 //add for SwCharDlg , SwEnvDlg , SwFootNoteOptionDlg SwParaDlg  SwTableTabDlg begin
 class AbstractTabDialog_Impl : public SfxAbstractTabDialog
 {
-    DECL_ABSTDLG_BASE( AbstractTabDialog_Impl,SfxTabDialog );
+    DECL_ABSTDLG_BASE( AbstractTabDialog_Impl,SfxTabDialog )
     virtual void                SetCurPageId( USHORT nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
-    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem ); //add by CHINA001
-    virtual void                SetInputSet( const SfxItemSet* pInSet );   //add by CHINA001
+    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem );
+    virtual void                SetInputSet( const SfxItemSet* pInSet );
         //From class Window.
-    virtual void        SetText( const XubString& rStr ); //add by CHINA001
-    virtual String      GetText() const; //add by CHINA001
+    virtual void        SetText( const XubString& rStr );
+    virtual String      GetText() const;
 };
 //add for SwCharDlg, SwEnvDlg ,SwFootNoteOptionDlg SwParaDlg  SwTableTabDlg end
 
 //add for SwConvertTableDlg begin
 class AbstractSwConvertTableDlg_Impl :  public AbstractSwConvertTableDlg // add for SwConvertTableDlg
 {
-    DECL_ABSTDLG_BASE( AbstractSwConvertTableDlg_Impl,SwConvertTableDlg);
+    DECL_ABSTDLG_BASE( AbstractSwConvertTableDlg_Impl,SwConvertTableDlg)
     virtual void GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTblFlags,
                     SwTableAutoFmt *& prTAFmt );
 };
@@ -171,7 +164,7 @@ class AbstractSwConvertTableDlg_Impl :  public AbstractSwConvertTableDlg // add 
 //add for SwInsertDBColAutoPilot begin
 class AbstractSwInsertDBColAutoPilot_Impl :  public AbstractSwInsertDBColAutoPilot // add for SwInsertDBColAutoPilot
 {
-    DECL_ABSTDLG_BASE( AbstractSwInsertDBColAutoPilot_Impl,SwInsertDBColAutoPilot);
+    DECL_ABSTDLG_BASE( AbstractSwInsertDBColAutoPilot_Impl,SwInsertDBColAutoPilot)
     virtual void DataToDoc( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rSelection,
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection,
@@ -182,7 +175,7 @@ class AbstractSwInsertDBColAutoPilot_Impl :  public AbstractSwInsertDBColAutoPil
 //add for DropDownFieldDialog begin
 class AbstractDropDownFieldDialog_Impl : public AbstractDropDownFieldDialog //add for DropDownFieldDialog
 {
-    DECL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl, sw::DropDownFieldDialog);
+    DECL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl, sw::DropDownFieldDialog)
     virtual ByteString      GetWindowState( ULONG nMask = WINDOWSTATE_MASK_ALL ) const; //this method inherit from SystemWindow
     virtual void            SetWindowState( const ByteString& rStr );//this method inherit from SystemWindow
 };
@@ -191,14 +184,14 @@ class AbstractDropDownFieldDialog_Impl : public AbstractDropDownFieldDialog //ad
 
 class AbstarctSwLabDlg_Impl  : public AbstarctSwLabDlg
 {
-    DECL_ABSTDLG_BASE(AbstarctSwLabDlg_Impl,SwLabDlg);
+    DECL_ABSTDLG_BASE(AbstarctSwLabDlg_Impl,SwLabDlg)
     virtual void                SetCurPageId( USHORT nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
-    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem ); //add by CHINA001
-    virtual void                SetInputSet( const SfxItemSet* pInSet );   //add by CHINA001
+    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem );
+    virtual void                SetInputSet( const SfxItemSet* pInSet );
         //From class Window.
-    virtual void        SetText( const XubString& rStr ); //add by CHINA001
-    virtual String      GetText() const; //add by CHINA001
+    virtual void        SetText( const XubString& rStr );
+    virtual String      GetText() const;
      virtual const String& GetBusinessCardStr() const;
      virtual Printer *GetPrt();
 };
@@ -207,7 +200,7 @@ class AbstarctSwLabDlg_Impl  : public AbstarctSwLabDlg
 //add for SwSelGlossaryDlg begin
 class AbstarctSwSelGlossaryDlg_Impl : public AbstarctSwSelGlossaryDlg
 {
-    DECL_ABSTDLG_BASE(AbstarctSwSelGlossaryDlg_Impl,SwSelGlossaryDlg);
+    DECL_ABSTDLG_BASE(AbstarctSwSelGlossaryDlg_Impl,SwSelGlossaryDlg)
     virtual void InsertGlos(const String &rRegion, const String &rGlosName);    // inline
     virtual USHORT GetSelectedIdx() const;  // inline
     virtual void SelectEntryPos(USHORT nIdx);   // inline
@@ -217,7 +210,7 @@ class AbstarctSwSelGlossaryDlg_Impl : public AbstarctSwSelGlossaryDlg
 //add for SwSplitTableDlg begin
 class AbstractSwSplitTableDlg_Impl :public AbstractSwSplitTableDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSwSplitTableDlg_Impl,SwSplitTableDlg);
+    DECL_ABSTDLG_BASE(AbstractSwSplitTableDlg_Impl,SwSplitTableDlg)
     virtual BOOL                IsHorizontal() const;
     virtual BOOL                IsProportional() const;
     virtual long                GetCount() const;
@@ -227,7 +220,7 @@ class AbstractSwSplitTableDlg_Impl :public AbstractSwSplitTableDlg
 //add for SwAutoFormatDlg begin
 class AbstractSwAutoFormatDlg_Impl : public AbstractSwAutoFormatDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSwAutoFormatDlg_Impl,SwAutoFormatDlg );
+    DECL_ABSTDLG_BASE(AbstractSwAutoFormatDlg_Impl,SwAutoFormatDlg )
     virtual void FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const;
 };
 //add for SwAutoFormatDlg end
@@ -236,14 +229,14 @@ class AbstractSwAutoFormatDlg_Impl : public AbstractSwAutoFormatDlg
 
 class AbstractSwFldDlg_Impl : public AbstractSwFldDlg //add for SwFldDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSwFldDlg_Impl,SwFldDlg );
+    DECL_ABSTDLG_BASE(AbstractSwFldDlg_Impl,SwFldDlg )
     virtual void                SetCurPageId( USHORT nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
-    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem ); //add by CHINA001
-    virtual void                SetInputSet( const SfxItemSet* pInSet );   //add by CHINA001
+    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem );
+    virtual void                SetInputSet( const SfxItemSet* pInSet );
         //From class Window.
-    virtual void        SetText( const XubString& rStr ); //add by CHINA001
-    virtual String      GetText() const; //add by CHINA001
+    virtual void        SetText( const XubString& rStr );
+    virtual String      GetText() const;
     virtual void                Start( BOOL bShow = TRUE );  //this method from SfxTabDialog
     virtual void                ShowPage( USHORT nId );// this method from SfxTabDialog
     virtual void                Initialize(SfxChildWinInfo *pInfo);
@@ -256,7 +249,7 @@ class AbstractSwFldDlg_Impl : public AbstractSwFldDlg //add for SwFldDlg
 //add for SwRenameXNamedDlg begin
 class AbstractSwRenameXNamedDlg_Impl : public AbstractSwRenameXNamedDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSwRenameXNamedDlg_Impl,SwRenameXNamedDlg );
+    DECL_ABSTDLG_BASE(AbstractSwRenameXNamedDlg_Impl,SwRenameXNamedDlg )
     virtual void    SetForbiddenChars( const String& rSet );
     virtual void SetAlternativeAccess(
              STAR_REFERENCE( container::XNameAccess ) & xSecond,
@@ -266,7 +259,7 @@ class AbstractSwRenameXNamedDlg_Impl : public AbstractSwRenameXNamedDlg
 //add for SwModalRedlineAcceptDlg begin
 class AbstractSwModalRedlineAcceptDlg_Impl : public AbstractSwModalRedlineAcceptDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSwModalRedlineAcceptDlg_Impl,SwModalRedlineAcceptDlg );
+    DECL_ABSTDLG_BASE(AbstractSwModalRedlineAcceptDlg_Impl,SwModalRedlineAcceptDlg )
     virtual void            AcceptAll( BOOL bAccept );
 };
 //add for SwModalRedlineAcceptDlg end
@@ -275,7 +268,7 @@ class AbstractSwModalRedlineAcceptDlg_Impl : public AbstractSwModalRedlineAccept
 class SwGlossaryDlg;
 class AbstractGlossaryDlg_Impl : public AbstractGlossaryDlg
 {
-    DECL_ABSTDLG_BASE(AbstractGlossaryDlg_Impl,SwGlossaryDlg);
+    DECL_ABSTDLG_BASE(AbstractGlossaryDlg_Impl,SwGlossaryDlg)
     virtual String          GetCurrGrpName() const;
     virtual String          GetCurrShortName() const;
 };
@@ -285,7 +278,7 @@ class AbstractGlossaryDlg_Impl : public AbstractGlossaryDlg
 class SwFldInputDlg;
 class AbstractFldInputDlg_Impl : public AbstractFldInputDlg
 {
-    DECL_ABSTDLG_BASE(AbstractFldInputDlg_Impl,SwFldInputDlg);
+    DECL_ABSTDLG_BASE(AbstractFldInputDlg_Impl,SwFldInputDlg)
     //from class SalFrame
     virtual void            SetWindowState( const ByteString& rStr ) ;
     virtual ByteString      GetWindowState( ULONG nMask = WINDOWSTATE_MASK_ALL ) const ;
@@ -296,7 +289,7 @@ class AbstractFldInputDlg_Impl : public AbstractFldInputDlg
 class SwInsFootNoteDlg;
 class AbstractInsFootNoteDlg_Impl : public AbstractInsFootNoteDlg
 {
-    DECL_ABSTDLG_BASE(AbstractInsFootNoteDlg_Impl,SwInsFootNoteDlg);
+    DECL_ABSTDLG_BASE(AbstractInsFootNoteDlg_Impl,SwInsFootNoteDlg)
     virtual String          GetFontName();
     virtual BOOL            IsEndNote();
     virtual String          GetStr();
@@ -310,7 +303,7 @@ class AbstractInsFootNoteDlg_Impl : public AbstractInsFootNoteDlg
 class SwInsertGrfRulerDlg;
 class AbstractInsertGrfRulerDlg_Impl : public AbstractInsertGrfRulerDlg
 {
-    DECL_ABSTDLG_BASE(AbstractInsertGrfRulerDlg_Impl,SwInsertGrfRulerDlg);
+    DECL_ABSTDLG_BASE(AbstractInsertGrfRulerDlg_Impl,SwInsertGrfRulerDlg)
     virtual String          GetGraphicName();
     virtual BOOL            IsSimpleLine();
     virtual BOOL            HasImages() const ;
@@ -321,7 +314,7 @@ class AbstractInsertGrfRulerDlg_Impl : public AbstractInsertGrfRulerDlg
 class SwInsTableDlg;
 class AbstractInsTableDlg_Impl : public AbstractInsTableDlg
 {
-    DECL_ABSTDLG_BASE(AbstractInsTableDlg_Impl,SwInsTableDlg);
+    DECL_ABSTDLG_BASE(AbstractInsTableDlg_Impl,SwInsTableDlg)
     virtual void            GetValues( String& rName, USHORT& rRow, USHORT& rCol,
                                 SwInsertTableOptions& rInsTblFlags, String& rTableAutoFmtName,
                                 SwTableAutoFmt *& prTAFmt );
@@ -332,7 +325,7 @@ class AbstractInsTableDlg_Impl : public AbstractInsTableDlg
 class SwJavaEditDialog;
 class AbstractJavaEditDialog_Impl : public AbstractJavaEditDialog
 {
-    DECL_ABSTDLG_BASE(AbstractJavaEditDialog_Impl,SwJavaEditDialog);
+    DECL_ABSTDLG_BASE(AbstractJavaEditDialog_Impl,SwJavaEditDialog)
     virtual String              GetText();
     virtual String              GetType();
     virtual BOOL                IsUrl();
@@ -345,7 +338,7 @@ class AbstractJavaEditDialog_Impl : public AbstractJavaEditDialog
 class SwMailMergeDlg;
 class AbstractMailMergeDlg_Impl : public AbstractMailMergeDlg
 {
-    DECL_ABSTDLG_BASE(AbstractMailMergeDlg_Impl,SwMailMergeDlg);
+    DECL_ABSTDLG_BASE(AbstractMailMergeDlg_Impl,SwMailMergeDlg)
     virtual USHORT  GetMergeType() ;
     virtual const ::rtl::OUString& GetSaveFilter() const;
     virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const ;
@@ -356,7 +349,7 @@ class AbstractMailMergeDlg_Impl : public AbstractMailMergeDlg
 class SwMailMergeCreateFromDlg;
 class AbstractMailMergeCreateFromDlg_Impl : public AbstractMailMergeCreateFromDlg
 {
-    DECL_ABSTDLG_BASE(AbstractMailMergeCreateFromDlg_Impl,SwMailMergeCreateFromDlg);
+    DECL_ABSTDLG_BASE(AbstractMailMergeCreateFromDlg_Impl,SwMailMergeCreateFromDlg)
     virtual BOOL    IsThisDocument() const ;
 };
 //for SwMailMergeCreateFromDlg end
@@ -364,7 +357,7 @@ class AbstractMailMergeCreateFromDlg_Impl : public AbstractMailMergeCreateFromDl
 class SwMailMergeFieldConnectionsDlg;
 class AbstractMailMergeFieldConnectionsDlg_Impl : public AbstractMailMergeFieldConnectionsDlg
 {
-    DECL_ABSTDLG_BASE(AbstractMailMergeFieldConnectionsDlg_Impl,SwMailMergeFieldConnectionsDlg);
+    DECL_ABSTDLG_BASE(AbstractMailMergeFieldConnectionsDlg_Impl,SwMailMergeFieldConnectionsDlg)
     virtual BOOL    IsUseExistingConnections() const ;
 };
 //for SwMailMergeFieldConnectionsDlg end
@@ -373,7 +366,7 @@ class AbstractMailMergeFieldConnectionsDlg_Impl : public AbstractMailMergeFieldC
 class SwMultiTOXTabDialog;
 class AbstractMultiTOXTabDialog_Impl : public AbstractMultiTOXTabDialog
 {
-    DECL_ABSTDLG_BASE(AbstractMultiTOXTabDialog_Impl,SwMultiTOXTabDialog);
+    DECL_ABSTDLG_BASE(AbstractMultiTOXTabDialog_Impl,SwMultiTOXTabDialog)
     virtual SwForm*             GetForm(CurTOXType eType);
     virtual CurTOXType          GetCurrentTOXType() const ;
     virtual SwTOXDescription&   GetTOXDescription(CurTOXType eTOXTypes);
@@ -386,7 +379,7 @@ class AbstractMultiTOXTabDialog_Impl : public AbstractMultiTOXTabDialog
 class SwEditRegionDlg;
 class AbstractEditRegionDlg_Impl : public AbstractEditRegionDlg
 {
-    DECL_ABSTDLG_BASE(AbstractEditRegionDlg_Impl,SwEditRegionDlg);
+    DECL_ABSTDLG_BASE(AbstractEditRegionDlg_Impl,SwEditRegionDlg)
     virtual void    SelectSection(const String& rSectionName);
 };
 //for SwEditRegionDlg end
@@ -394,7 +387,7 @@ class AbstractEditRegionDlg_Impl : public AbstractEditRegionDlg
 class SwInsertSectionTabDialog;
 class AbstractInsertSectionTabDialog_Impl : public AbstractInsertSectionTabDialog
 {
-    DECL_ABSTDLG_BASE(AbstractInsertSectionTabDialog_Impl,SwInsertSectionTabDialog);
+    DECL_ABSTDLG_BASE(AbstractInsertSectionTabDialog_Impl,SwInsertSectionTabDialog)
     virtual void        SetSection(const SwSection& rSect);
 };
 //for SwInsertSectionTabDialog end
@@ -403,7 +396,7 @@ class AbstractInsertSectionTabDialog_Impl : public AbstractInsertSectionTabDialo
 class SwIndexMarkFloatDlg;
 class AbstractIndexMarkFloatDlg_Impl : public AbstractMarkFloatDlg
 {
-    DECL_ABSTDLG_BASE(AbstractIndexMarkFloatDlg_Impl,SwIndexMarkFloatDlg);
+    DECL_ABSTDLG_BASE(AbstractIndexMarkFloatDlg_Impl,SwIndexMarkFloatDlg)
     virtual void    ReInitDlg(SwWrtShell& rWrtShell);
     virtual Window *            GetWindow(); //this method is added for return a Window type pointer
 };
@@ -413,7 +406,7 @@ class AbstractIndexMarkFloatDlg_Impl : public AbstractMarkFloatDlg
 class SwAuthMarkFloatDlg;
 class AbstractAuthMarkFloatDlg_Impl : public AbstractMarkFloatDlg
 {
-    DECL_ABSTDLG_BASE(AbstractAuthMarkFloatDlg_Impl,SwAuthMarkFloatDlg);
+    DECL_ABSTDLG_BASE(AbstractAuthMarkFloatDlg_Impl,SwAuthMarkFloatDlg)
     virtual void    ReInitDlg(SwWrtShell& rWrtShell);
     virtual Window *            GetWindow(); //this method is added for return a Window type pointer
 };
@@ -446,14 +439,12 @@ class SwAbstractDialogFactory_Impl : public SwAbstractDialogFactory
 {
 
 public:
-    //CHINA001 AbstractSwSaveLabelDlg*          CreateSwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec, int nResId );
-
     virtual AbstractSwWordCountDialog* CreateSwWordCountDialog(Window* pParent);
-    virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg( Window* pParent,int nResId ); //CHINA001 add for SwInsertAbstractDlg
-    virtual AbstractSfxSingleTabDialog*  CreateSfxSingleTabDialog ( Window* pParent, SfxItemSet& rSet,int nResId   );//CHINA001 add for  SwAddrDlg SwDropCapsDlg, SwBackgroundDlg,SwNumFmtDlg,
+    virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg( Window* pParent,int nResId );
+    virtual AbstractSfxSingleTabDialog*  CreateSfxSingleTabDialog ( Window* pParent, SfxItemSet& rSet,int nResId   );//add for  SwAddrDlg SwDropCapsDlg, SwBackgroundDlg,SwNumFmtDlg,
     virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,
-                                                                SvStream* pStream, int nResId ); //CHINA001 add for SwAsciiFilterDlg
-    virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, int nResId );//CHINA001 add for SwInsertBookmarkDlg
+                                                                SvStream* pStream, int nResId ); //add for SwAsciiFilterDlg
+    virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, int nResId );//add for SwInsertBookmarkDlg
     virtual AbstractSwBreakDlg * CreateSwBreakDlg ( Window *pParent, SwWrtShell &rSh,int nResId ); // add for SwBreakDlg
     virtual VclAbstractDialog   * CreateSwChangeDBDlg( SwView& rVw, int nResId  ); //add for SwChangeDBDlg
     virtual SfxAbstractTabDialog *  CreateSwCharDlg( Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet, int nResId, // add for SwCharDlg
@@ -506,8 +497,6 @@ public:
 
     virtual VclAbstractDialog*          CreateSwVclDialog( int nResId,
                                                 Window* pParent, BOOL& rWithPrev ); //add for SwMergeTblDlg
-//CHINA001  virtual VclAbstractDialog*          CreateSwWrtShDialog( int nResId,
-//CHINA001                                              Window* pParent, SwWrtShell& rSh ); //add for SwColumnDlg
     virtual SfxAbstractTabDialog*       CreateFrmTabDialog( int nResId,
                                                 SfxViewFrame *pFrame, Window *pParent,
                                                 const SfxItemSet& rCoreSet,
