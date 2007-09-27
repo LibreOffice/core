@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:48:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:12:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,14 +53,12 @@
 #include <com/sun/star/uno/Reference.h>
 #endif
 
-#ifndef _HORIORNT_HXX
-#include <horiornt.hxx>
-#endif
-
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
-
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
+#endif
 // wenn das hier geaendert wird, dann auch im globals.hrc aendern!!!
 //#define SW_FILEFORMAT_40 SOFFICE_FILEFORMAT_40
 
@@ -237,24 +235,28 @@ extern const sal_Char* __FAR_DATA pMarkToOLE;
 #endif
 
 
-enum SetAttrMode
-{
-    SETATTR_DEFAULT         = 0x0000,   // default
-    SETATTR_DONTEXPAND      = 0x0001,   // TextAttribute nicht weiter expand.
-    SETATTR_DONTREPLACE     = 0x0002,   // kein anderes TextAttrib verdraengen
+typedef USHORT SetAttrMode;
 
-    SETATTR_NOTXTATRCHR     = 0x0004,   // bei Attr ohne Ende kein 0xFF einfuegen
-    SETATTR_NOHINTADJUST    = 0x0008,   // keine Zusammenfassung von Bereichen.
-    SETATTR_NOFORMATATTR    = 0x0010,   // nicht zum FormatAttribut umwandeln
-    SETATTR_DONTCHGNUMRULE  = 0x0020,   // nicht die NumRule veraendern
-    SETATTR_APICALL         = 0x0040    // called from API (all UI related
-                                        // functionality will be disabled)
-};
+namespace nsSetAttrMode
+{
+    const SetAttrMode SETATTR_DEFAULT        = 0x0000;  // default
+    const SetAttrMode SETATTR_DONTEXPAND     = 0x0001;  // TextAttribute nicht weiter expand.
+    const SetAttrMode SETATTR_DONTREPLACE    = 0x0002;  // kein anderes TextAttrib verdraengen
+
+    const SetAttrMode SETATTR_NOTXTATRCHR    = 0x0004;  // bei Attr ohne Ende kein 0xFF einfuegen
+    const SetAttrMode SETATTR_NOHINTADJUST   = 0x0008;  // keine Zusammenfassung von Bereichen.
+    const SetAttrMode SETATTR_NOFORMATATTR   = 0x0010;  // nicht zum FormatAttribut umwandeln
+    const SetAttrMode SETATTR_DONTCHGNUMRULE = 0x0020;  // nicht die NumRule veraendern
+    const SetAttrMode SETATTR_APICALL        = 0x0040;  // called from API (all UI related
+                                                        // functionality will be disabled)
+}
 
 //Umrechnung Twip<-> 1/100 mm fuer UNO
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
+#define TWIP_TO_MM100_UNSIGNED(TWIP)     ((((TWIP)*127L+36L)/72L))
+#define MM100_TO_TWIP_UNSIGNED(MM100)    ((((MM100)*72L+63L)/127L))
 
 #define SW_ISPRINTABLE( c ) ( c >= ' ' && 127 != c )
 
@@ -278,7 +280,7 @@ enum SetAttrMode
 // returns the APP - CharClass instance - used for all ToUpper/ToLower/...
 SW_DLLPUBLIC CharClass& GetAppCharClass();
 SW_DLLPUBLIC LocaleDataWrapper& GetAppLocaleData();
-SW_DLLPUBLIC ULONG GetAppLanguage();
+SW_DLLPUBLIC LanguageType GetAppLanguage();
 
 
 #if 0
