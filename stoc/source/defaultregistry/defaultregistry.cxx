@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultregistry.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:29:00 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:56:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
+#include <bootstrapservices.hxx>
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::lang;
@@ -89,11 +91,11 @@ using namespace rtl;
 #define SERVICENAME "com.sun.star.registry.NestedRegistry"
 #define IMPLNAME       "com.sun.star.comp.stoc.NestedRegistry"
 
-namespace stoc_defreg
-{
-rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+extern rtl_StandardModuleCount g_moduleCount;
 
-static Sequence< OUString > defreg_getSupportedServiceNames()
+namespace stoc_bootstrap
+{
+Sequence< OUString > defreg_getSupportedServiceNames()
 {
     static Sequence < OUString > *pNames = 0;
     if( ! pNames )
@@ -123,7 +125,10 @@ OUString defreg_getImplementationName()
     }
     return *pImplName;
 }
+}
 
+namespace stoc_defreg
+{
 //*************************************************************************
 // NestedRegistryImpl
 //*************************************************************************
@@ -1253,7 +1258,7 @@ sal_Bool SAL_CALL NestedRegistryImpl::hasElements(  ) throw (RuntimeException)
 OUString SAL_CALL NestedRegistryImpl::getImplementationName(  )
     throw(RuntimeException)
 {
-    return defreg_getImplementationName();
+    return stoc_bootstrap::defreg_getImplementationName();
 }
 
 //*************************************************************************
@@ -1273,7 +1278,7 @@ sal_Bool SAL_CALL NestedRegistryImpl::supportsService( const OUString& ServiceNa
 Sequence<OUString> SAL_CALL NestedRegistryImpl::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
-    return defreg_getSupportedServiceNames();
+    return stoc_bootstrap::defreg_getSupportedServiceNames();
 }
 
 //*************************************************************************
@@ -1422,13 +1427,16 @@ void SAL_CALL NestedRegistryImpl::mergeKey( const OUString& aKeyName, const OUSt
         m_state++;
     }
 }
+} // namespace stco_defreg
 
+namespace stoc_bootstrap
+{
 //*************************************************************************
 Reference<XInterface> SAL_CALL NestedRegistry_CreateInstance( const Reference<XComponentContext>& )
     throw(Exception)
 {
     Reference<XInterface>   xRet;
-    XSimpleRegistry *pRegistry = (XSimpleRegistry*) new NestedRegistryImpl;
+    XSimpleRegistry *pRegistry = (XSimpleRegistry*) new stoc_defreg::NestedRegistryImpl;
 
     if (pRegistry)
     {
@@ -1438,44 +1446,5 @@ Reference<XInterface> SAL_CALL NestedRegistry_CreateInstance( const Reference<XC
     return xRet;
 }
 
-} // namespace stco_defreg
-
-using namespace stoc_defreg;
-
-static struct ImplementationEntry g_entries[] =
-{
-    {
-        NestedRegistry_CreateInstance, defreg_getImplementationName,
-        defreg_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt , 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
-extern "C"
-{
-
-sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
-{
-    return g_moduleCount.canUnload( &g_moduleCount , pTime );
 }
 
-//==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
-}
-//==================================================================================================
-void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
-}
-}
