@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:18:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:35:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -450,7 +450,7 @@ void SwDoc::ResetAttr( const SwPaM &rRg, BOOL bTxtAttr,
     {
         ClearRedo();
         SwUndoRstAttr* pUndo = new SwUndoRstAttr( rRg,
-                    bTxtAttr ? RES_CONDTXTFMTCOLL : RES_TXTFMTCOLL );
+            static_cast<USHORT>(bTxtAttr ? RES_CONDTXTFMTCOLL : RES_TXTFMTCOLL ));
         if( pAttrs && pAttrs->Count() )
             pUndo->SetAttrs( *pAttrs );
         pHst = pUndo->GetHistory();
@@ -522,7 +522,7 @@ void SwDoc::ResetAttr( const SwPaM &rRg, BOOL bTxtAttr,
             {
                 if ( pHst )
                 {
-                    SwRegHistory( pTNd, aCharSet, 0, pTNd->GetTxt().Len(), SETATTR_NOFORMATATTR, pHst );
+                    SwRegHistory( pTNd, aCharSet, 0, pTNd->GetTxt().Len(), nsSetAttrMode::SETATTR_NOFORMATATTR, pHst );
                 }
                 else
                 {
@@ -683,7 +683,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             }
             // <--
 
-            SwNumFmt aNumFmt = pNumRule->Get(pTxtNd->GetLevel());
+            SwNumFmt aNumFmt = pNumRule->Get(static_cast<USHORT>(pTxtNd->GetLevel()));
             SwCharFmt * pCharFmt =
                 pDoc->FindCharFmtByName(aNumFmt.GetCharFmtName());
 
@@ -725,7 +725,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                         pUndo->SaveRedlineData( aPam, TRUE );
 
                     if( pDoc->IsRedlineOn() )
-                        pDoc->AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aPam ), true);
+                        pDoc->AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, aPam ), true);
                     else
                         pDoc->SplitRedline( aPam );
                 }
@@ -767,7 +767,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
                     if( pDoc->IsRedlineOn() )
                         pDoc->AppendRedline( new SwRedline( bTxtIns
-                                ? IDocumentRedlineAccess::REDLINE_INSERT : IDocumentRedlineAccess::REDLINE_FORMAT, aPam ), true);
+                                ? nsRedlineType_t::REDLINE_INSERT : nsRedlineType_t::REDLINE_FORMAT, aPam ), true);
                     else if( bTxtIns )
                         pDoc->SplitRedline( aPam );
                 }
@@ -793,7 +793,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                 // aNew.SetAuto();
 
                 // Tabellen kennen jetzt auch Umbrueche
-                if( 0 == (nFlags & SETATTR_APICALL) &&
+                if( 0 == (nFlags & nsSetAttrMode::SETATTR_APICALL) &&
                     0 != ( pTblNd = pNode->FindTableNode() ) )
                 {
                     SwTableNode* pCurTblNd = pTblNd;
@@ -828,7 +828,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
         // Tabellen kennen jetzt auch Umbrueche
         const SvxFmtBreakItem* pBreak;
-        if( pNode && 0 == (nFlags & SETATTR_APICALL) &&
+        if( pNode && 0 == (nFlags & nsSetAttrMode::SETATTR_APICALL) &&
             0 != (pTblNd = pNode->FindTableNode() ) &&
             SFX_ITEM_SET == pOtherSet->GetItemState( RES_BREAK,
                         FALSE, (const SfxPoolItem**)&pBreak ) )
@@ -868,7 +868,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
                                 FALSE, (const SfxPoolItem**)&pRule ) &&
                 !pDoc->FindNumRulePtr( pRule->GetValue() ) &&
                 USHRT_MAX != (nPoolId = SwStyleNameMapper::GetPoolIdFromUIName ( pRule->GetValue(),
-                                GET_POOLID_NUMRULE )) )
+                                nsSwGetPoolIdFromName::GET_POOLID_NUMRULE )) )
                 pDoc->GetNumRuleFromPool( nPoolId );
         }
 
@@ -922,7 +922,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             // SwpHintsArray entfernen, wenn die Selektion den gesamten
             // Absatz umspannt. (Diese Attribute werden als FormatAttr.
             // eingefuegt und verdraengen nie die TextAttr.!)
-            if( !(nFlags & SETATTR_DONTREPLACE ) &&
+            if( !(nFlags & nsSetAttrMode::SETATTR_DONTREPLACE ) &&
                 pTxtNd->HasHints() && !nMkPos && nPtPos == rStr.Len() )
             {
                 SwIndex aSt( pTxtNd );
@@ -950,7 +950,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
                 if( pUndo )
                     pUndo->SaveRedlineData( aPam, FALSE );
-                pDoc->AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_FORMAT, aPam ), true);
+                pDoc->AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_FORMAT, aPam ), true);
             }
         }
         if( pOtherSet && pOtherSet->Count() )
@@ -968,7 +968,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
     {
         if( pUndo )
             pUndo->SaveRedlineData( rRg, FALSE );
-        pDoc->AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_FORMAT, rRg ), true);
+        pDoc->AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_FORMAT, rRg ), true);
     }
 
     /* jetzt wenn Bereich */
@@ -1058,7 +1058,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
 
     /* Bearbeitung der vollstaendig selektierten Nodes. */
 // alle Attribute aus dem Set zuruecksetzen !!
-    if( pCharSet && pCharSet->Count() && !( SETATTR_DONTREPLACE & nFlags ) )
+    if( pCharSet && pCharSet->Count() && !( nsSetAttrMode::SETATTR_DONTREPLACE & nFlags ) )
     {
 
         ParaRstFmt aPara( pStt, pEnd, pHistory, 0, pCharSet );
@@ -1226,7 +1226,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     SwAttrSet aOld( GetAttrPool(), rSet.GetRanges() ),
             aNew( GetAttrPool(), rSet.GetRanges() );
     SfxItemIter aIter( rSet );
-    register USHORT nWhich;
+    USHORT nWhich;
     const SfxPoolItem* pItem = aIter.GetCurItem();
     SfxItemPool* pSdrPool = GetAttrPool().GetSecondaryPool();
     while( TRUE )
@@ -1288,10 +1288,10 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             AppendUndo( new SwUndoDefaultAttr( aOld ) );
         }
 
-        const SfxPoolItem* pItem;
+        const SfxPoolItem* pTmpItem;
         if( ( SFX_ITEM_SET ==
-                aNew.GetItemState( RES_PARATR_TABSTOP, FALSE, &pItem ) ) &&
-            ((SvxTabStopItem*)pItem)->Count() )
+                aNew.GetItemState( RES_PARATR_TABSTOP, FALSE, &pTmpItem ) ) &&
+            ((SvxTabStopItem*)pTmpItem)->Count() )
         {
             // TabStop-Aenderungen behandeln wir erstmal anders:
             // dann aender bei allen TabStop die dafault's auf den neuen Wert
@@ -1299,15 +1299,15 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             //              damit nicht in allen Sets die gleiche Berechnung
             //              auf dem gleichen TabStop (gepoolt!) vorgenommen
             //              wird. Als Modify wird ein FmtChg verschickt.
-            SwTwips nNewWidth = (*(SvxTabStopItem*)pItem)[ 0 ].GetTabPos(),
+            SwTwips nNewWidth = (*(SvxTabStopItem*)pTmpItem)[ 0 ].GetTabPos(),
                     nOldWidth = ((SvxTabStopItem&)aOld.Get(RES_PARATR_TABSTOP))[ 0 ].GetTabPos();
 
             int bChg = FALSE;
             USHORT nMaxItems = GetAttrPool().GetItemCount( RES_PARATR_TABSTOP );
             for( USHORT n = 0; n < nMaxItems; ++n )
-                if( 0 != (pItem = GetAttrPool().GetItem( RES_PARATR_TABSTOP, n ) ))
+                if( 0 != (pTmpItem = GetAttrPool().GetItem( RES_PARATR_TABSTOP, n ) ))
                     bChg |= lcl_SetNewDefTabStops( nOldWidth, nNewWidth,
-                                                *(SvxTabStopItem*)pItem );
+                                                *(SvxTabStopItem*)pTmpItem );
 
             aNew.ClearItem( RES_PARATR_TABSTOP );
             aOld.ClearItem( RES_PARATR_TABSTOP );
@@ -1515,11 +1515,21 @@ SwFrmFmt *SwDoc::MakeFrmFmt(const String &rFmtName,
     return pFmt;
 }
 
+SwFmt *SwDoc::_MakeFrmFmt(const String &rFmtName,
+                            SwFmt *pDerivedFrom,
+                            BOOL bBroadcast, BOOL bAuto)
+{
+    SwFrmFmt *pFrmFmt = dynamic_cast<SwFrmFmt*>(pDerivedFrom);
+    pFrmFmt = MakeFrmFmt( rFmtName, pFrmFmt, bBroadcast, bAuto );
+    return dynamic_cast<SwFmt*>(pFrmFmt);
+}
+
+
 // --> OD 2005-01-13 #i40550# - add parameter <bAuto> - not relevant
 SwCharFmt *SwDoc::MakeCharFmt( const String &rFmtName,
                                SwCharFmt *pDerivedFrom,
                                BOOL bBroadcast,
-                               BOOL bAuto )
+                               BOOL )
 // <--
 {
     SwCharFmt *pFmt = new SwCharFmt( GetAttrPool(), rFmtName, pDerivedFrom );
@@ -1543,6 +1553,15 @@ SwCharFmt *SwDoc::MakeCharFmt( const String &rFmtName,
     return pFmt;
 }
 
+SwFmt *SwDoc::_MakeCharFmt(const String &rFmtName,
+                            SwFmt *pDerivedFrom,
+                            BOOL bBroadcast, BOOL bAuto)
+{
+    SwCharFmt *pCharFmt = dynamic_cast<SwCharFmt*>(pDerivedFrom);
+    pCharFmt = MakeCharFmt( rFmtName, pCharFmt, bBroadcast, bAuto );
+    return dynamic_cast<SwFmt*>(pCharFmt);
+}
+
 
 /*
  * Erzeugen der FormatCollections
@@ -1552,7 +1571,7 @@ SwCharFmt *SwDoc::MakeCharFmt( const String &rFmtName,
 SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const String &rFmtName,
                                      SwTxtFmtColl *pDerivedFrom,
                                      BOOL bBroadcast,
-                                     BOOL bAuto )
+                                     BOOL )
 // <--
 {
     SwTxtFmtColl *pFmtColl = new SwTxtFmtColl( GetAttrPool(), rFmtName,
@@ -1574,6 +1593,16 @@ SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const String &rFmtName,
 
     return pFmtColl;
 }
+
+SwFmt *SwDoc::_MakeTxtFmtColl(const String &rFmtName,
+                            SwFmt *pDerivedFrom,
+                            BOOL bBroadcast, BOOL bAuto)
+{
+    SwTxtFmtColl *pTxtFmtColl = dynamic_cast<SwTxtFmtColl*>(pDerivedFrom);
+    pTxtFmtColl = MakeTxtFmtColl( rFmtName, pTxtFmtColl, bBroadcast, bAuto );
+    return dynamic_cast<SwFmt*>(pTxtFmtColl);
+}
+
 
 //FEATURE::CONDCOLL
 SwConditionTxtFmtColl* SwDoc::MakeCondTxtFmtColl( const String &rFmtName,
@@ -1744,11 +1773,12 @@ SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
     return pNewFmt;
 }
 
+
 // ---- kopiere das Frame-Format --------
 SwFrmFmt* SwDoc::CopyFrmFmt( const SwFrmFmt& rFmt )
 {
-    return (SwFrmFmt*)CopyFmt( rFmt, *GetFrmFmts(),
-                                (FNCopyFmt)&SwDoc::MakeFrmFmt,
+
+    return (SwFrmFmt*)CopyFmt( rFmt, *GetFrmFmts(), &SwDoc::_MakeFrmFmt,
                                 *GetDfltFrmFmt() );
 }
 
@@ -1756,7 +1786,7 @@ SwFrmFmt* SwDoc::CopyFrmFmt( const SwFrmFmt& rFmt )
 SwCharFmt* SwDoc::CopyCharFmt( const SwCharFmt& rFmt )
 {
     return (SwCharFmt*)CopyFmt( rFmt, *GetCharFmts(),
-                                (FNCopyFmt)&SwDoc::MakeCharFmt,
+                                &SwDoc::_MakeCharFmt,
                                 *GetDfltCharFmt() );
 }
 
@@ -1967,7 +1997,7 @@ void SwDoc::_CopyPageDescHeaderFooter( BOOL bCpyHeader,
 {
     // jetzt noch Header-/Footer-Attribute richtig behandeln
     // Contenten Nodes Dokumentuebergreifend kopieren!
-    USHORT nAttr = bCpyHeader ? RES_HEADER : RES_FOOTER;
+    USHORT nAttr = static_cast<USHORT>( bCpyHeader ? RES_HEADER : RES_FOOTER );
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET != rSrcFmt.GetAttrSet().GetItemState( nAttr, FALSE, &pItem ))
         return ;
@@ -2023,7 +2053,7 @@ void SwDoc::_CopyPageDescHeaderFooter( BOOL bCpyHeader,
 void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
                             BOOL bCopyPoolIds )
 {
-    FASTBOOL bNotifyLayout = FALSE;
+    BOOL bNotifyLayout = FALSE;
 
     rDstDesc.SetLandscape( rSrcDesc.GetLandscape() );
     rDstDesc.SetNumType( rSrcDesc.GetNumType() );
@@ -2118,11 +2148,11 @@ void SwDoc::ReplaceStyles( SwDoc& rSource )
     DoUndo( FALSE );
 
     CopyFmtArr( *rSource.pCharFmtTbl, *pCharFmtTbl,
-                (FNCopyFmt)&SwDoc::MakeCharFmt, *pDfltCharFmt );
+                &SwDoc::_MakeCharFmt, *pDfltCharFmt );
     CopyFmtArr( *rSource.pFrmFmtTbl, *pFrmFmtTbl,
-                (FNCopyFmt)&SwDoc::MakeFrmFmt, *pDfltFrmFmt );
+                &SwDoc::_MakeFrmFmt, *pDfltFrmFmt );
     CopyFmtArr( *rSource.pTxtFmtCollTbl, *pTxtFmtCollTbl,
-                (FNCopyFmt)&SwDoc::MakeTxtFmtColl, *pDfltTxtFmtColl );
+                &SwDoc::_MakeTxtFmtColl, *pDfltTxtFmtColl );
 
     // und jetzt noch die Seiten-Vorlagen
     USHORT nCnt = rSource.aPageDescs.Count();
@@ -2206,7 +2236,8 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, BOOL bRight, BOOL bModulus )
     }
 
     const SvxTabStopItem& rTabItem = (SvxTabStopItem&)GetDefault( RES_PARATR_TABSTOP );
-    USHORT nDefDist = rTabItem.Count() ? rTabItem[0].GetTabPos() : 1134;
+    USHORT nDefDist = rTabItem.Count() ?
+        static_cast<USHORT>(rTabItem[0].GetTabPos()) : 1134;
     const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
     SwNodeIndex aIdx( rStt.nNode );
     while( aIdx <= rEnd.nNode )
@@ -2281,7 +2312,7 @@ void SwDoc::_CreateNumberFormatter()
     Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     pNumberFormatter = new SvNumberFormatter( xMSF, eLang );
     pNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
-    pNumberFormatter->SetYear2000(SFX_APP()->GetMiscConfig()->GetYear2000());
+    pNumberFormatter->SetYear2000(static_cast<USHORT>(SFX_APP()->GetMiscConfig()->GetYear2000()));
 
 }
 
@@ -2315,7 +2346,7 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, USHORT nPoolId,
     {
         // dann das Redline Object anlegen
         const SwTxtFmtColl& rColl = *pTNd->GetTxtColl();
-        SwRedline* pRedl = new SwRedline( IDocumentRedlineAccess::REDLINE_FMTCOLL, aPam );
+        SwRedline* pRedl = new SwRedline( nsRedlineType_t::REDLINE_FMTCOLL, aPam );
         pRedl->SetMark();
 
         // interressant sind nur die Items, die vom Set NICHT wieder
@@ -2353,12 +2384,12 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
 {
     SwTxtNode* pTNd = rPam.GetPoint()->nNode.GetNode().GetTxtNode();
 
-    IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
+    RedlineMode_t eOld = GetRedlineMode();
 
     if( mbIsAutoFmtRedline && pTNd )
     {
         // dann das Redline Object anlegen
-        SwRedline* pRedl = new SwRedline( IDocumentRedlineAccess::REDLINE_FORMAT, rPam );
+        SwRedline* pRedl = new SwRedline( nsRedlineType_t::REDLINE_FORMAT, rPam );
         if( !pRedl->HasMark() )
             pRedl->SetMark();
 
@@ -2384,10 +2415,10 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
 // !!!!!!!!! Undo fehlt noch !!!!!!!!!!!!!!!!!!
         AppendRedline( pRedl, true );
 
-        SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(eOld | IDocumentRedlineAccess::REDLINE_IGNORE));
+        SetRedlineMode_intern( (RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
     }
 
-    Insert( rPam, rSet, SETATTR_DONTEXPAND );
+    Insert( rPam, rSet, nsSetAttrMode::SETATTR_DONTEXPAND );
     SetRedlineMode_intern( eOld );
 }
 
