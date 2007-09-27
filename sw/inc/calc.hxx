@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calc.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 18:47:46 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:56:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,7 @@ public:
     SwSbxValue( long n = 0 ) : bVoid(false)  { PutLong( n ); }
     SwSbxValue( const double& rD ) : bVoid(false) { PutDouble( rD ); }
     SwSbxValue( const SwSbxValue& rVal ) :
+        SvRefBase( rVal ),
         SbxValue( rVal ),
         bVoid(rVal.bVoid)
         {}
@@ -236,15 +237,15 @@ public:
     void        Pop( const VoidPtr pPtr );
 
     void        SetCalcError( SwCalcError eErr )    { eError = eErr; }
-    BOOL        IsCalcError() const                 { return eError; }
+    BOOL        IsCalcError() const                 { return 0 != eError; }
 
-    static FASTBOOL Str2Double( const String& rStr, xub_StrLen& rPos,
+    static BOOL Str2Double( const String& rStr, xub_StrLen& rPos,
                                 double& rVal,
                                 const LocaleDataWrapper* pData = 0 );
-    static FASTBOOL Str2Double( const String& rStr, xub_StrLen& rPos,
+    static BOOL Str2Double( const String& rStr, xub_StrLen& rPos,
                                 double& rVal, SwDoc* pDoc );
 
-    SW_DLLPUBLIC static FASTBOOL IsValidVarName( const String& rStr,
+    SW_DLLPUBLIC static BOOL IsValidVarName( const String& rStr,
                                     String* pValidName = 0 );
 };
 
