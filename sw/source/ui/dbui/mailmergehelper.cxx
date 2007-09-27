@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergehelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:08:11 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:32:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,13 +114,10 @@ String  CallSaveAsDialog(String& rFilter)
 {
     ErrCode nRet;
     String sFactory(String::CreateFromAscii(SwDocShell::Factory().GetShortName()));
-    ::sfx2::FileDialogHelper aDialog( com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
+    ::sfx2::FileDialogHelper aDialog( ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                 0,
                 sFactory );
-    String& rLastSaveDir = (String&)SFX_APP()->GetLastSaveDirectory();
 
-    SvStringsDtor* pURLList = NULL;
-    SfxItemSet* pSet=0;
     String sRet;
     nRet = aDialog.Execute();
     if(ERRCODE_NONE == nRet)
@@ -129,7 +126,6 @@ String  CallSaveAsDialog(String& rFilter)
         sRet = xFP->getFiles().getConstArray()[0];
         rFilter = aDialog.GetCurrentFilter();
         SfxFilterMatcher aMatcher( sFactory );
-        const SfxFilter* p1 = aMatcher.GetFilter4FilterName( rFilter );
         const SfxFilter* p2 = aMatcher.GetFilter4UIName( rFilter );
         if(p2)
             rFilter = p2->GetFilterName();
@@ -231,10 +227,9 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
             xSmtpServer->connect(xConnectionContext, xAuthenticator);
             rxInMailService = uno::Reference< mail::XMailService >( xSmtpServer, uno::UNO_QUERY );
         }
-        catch(uno::Exception& rEx)
+        catch(uno::Exception& )
         {
             DBG_ERROR("exception caught")
-            rEx;
         }
     return xSmtpServer;
 }
@@ -419,7 +414,6 @@ void SwAddressPreview::Paint(const Rectangle&)
     aFont.SetColor(aPaintColor);
     SetFont(aFont);
 
-    sal_uInt16 nAddresses = pImpl->nRows * pImpl->nColumns;
     Size aSize = GetOutputSizePixel();
     sal_uInt16 nStartRow = 0;
     if(aVScrollBar.IsVisible())
@@ -432,7 +426,7 @@ void SwAddressPreview::Paint(const Rectangle&)
     aPartSize.Height() -= 2;
 
     sal_uInt16 nAddress = nStartRow * pImpl->nColumns;
-    const sal_uInt16 nNumAddresses = pImpl->aAdresses.size();
+    const sal_uInt16 nNumAddresses = static_cast< sal_uInt16 >(pImpl->aAdresses.size());
     for(sal_uInt16 nRow = 0; nRow < pImpl->nRows ; ++nRow)
     {
         for(sal_uInt16 nCol = 0; nCol < pImpl->nColumns; ++nCol)
@@ -577,7 +571,6 @@ String SwAddressPreview::FillData(
     const ::rtl::OUString* pAssignment = aAssignment.getConstArray();
     const ResStringArray& rDefHeaders = rConfigItem.GetDefaultAddressHeaders();
     String sAddress(rAddress);
-    xub_StrLen nIndex = 0;
     String sNotAssigned(SW_RES(STR_NOTASSIGNED));
     sNotAssigned.Insert('<', 0);
     sNotAssigned += '>';
@@ -589,11 +582,10 @@ String SwAddressPreview::FillData(
     if( bSpecialReplacementForCountry )
     {
         sCountryColumn = rDefHeaders.GetString(MM_PART_COUNTRY);
-        Sequence< ::rtl::OUString> aAssignment =
+        Sequence< ::rtl::OUString> aSpecialAssignment =
                         rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
-        const ::rtl::OUString* pAssignment = aAssignment.getConstArray();
-        if(aAssignment.getLength() > MM_PART_COUNTRY && aAssignment[MM_PART_COUNTRY].getLength())
-            sCountryColumn = aAssignment[MM_PART_COUNTRY];
+        if(aSpecialAssignment.getLength() > MM_PART_COUNTRY && aSpecialAssignment[MM_PART_COUNTRY].getLength())
+            sCountryColumn = aSpecialAssignment[MM_PART_COUNTRY];
     }
 
     SwAddressIterator aIter(sAddress);
@@ -775,24 +767,24 @@ SwConnectionListener::~SwConnectionListener()
 /*-- 21.05.2004 10:45:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwConnectionListener::connected(const ::com::sun::star::lang::EventObject& aEvent)
-    throw (::com::sun::star::uno::RuntimeException)
+void SwConnectionListener::connected(const lang::EventObject& /*aEvent*/)
+    throw (uno::RuntimeException)
 {
     //OSL_ENSURE(false, "Connection opened");
 }
 /*-- 21.05.2004 10:45:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwConnectionListener::disconnected(const ::com::sun::star::lang::EventObject& aEvent)
-    throw (::com::sun::star::uno::RuntimeException)
+void SwConnectionListener::disconnected(const lang::EventObject& /*aEvent*/)
+    throw (uno::RuntimeException)
 {
     //OSL_ENSURE(false, "Connection closed");
 }
 /*-- 21.05.2004 10:45:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwConnectionListener::disposing(const com::sun::star::lang::EventObject& aEvent)
-    throw(com::sun::star::uno::RuntimeException)
+void SwConnectionListener::disposing(const lang::EventObject& /*aEvent*/)
+    throw(uno::RuntimeException)
 {
 }
 /*-- 21.05.2004 10:17:22---------------------------------------------------
@@ -839,7 +831,7 @@ SwMailTransferable::~SwMailTransferable()
 /*-- 13.07.2004 09:07:08---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SwMailTransferable::getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
+uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavor& /*aFlavor*/ )
                             throw (datatransfer::UnsupportedFlavorException,
                             io::IOException, uno::RuntimeException)
 {
