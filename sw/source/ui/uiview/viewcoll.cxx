@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcoll.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:24:47 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:37:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,6 @@
 
 void SwView::ExecColl(SfxRequest &rReq)
 {
-    Window *pMDI = &GetViewFrame()->GetWindow();
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
     USHORT nWhich = rReq.GetSlot();
