@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:25:01 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:37:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,8 @@
 #include "viewopt.hxx"
 #include "uitool.hxx"
 #include "cmdid.h"
-//CHINA001 #include "docstdlg.hxx"
 #ifndef _SFXTABDLG_HXX //autogen
-#include <sfx2/tabdlg.hxx>//add CHINA001
+#include <sfx2/tabdlg.hxx>
 #endif
 
 #include "pagedesc.hxx"
@@ -70,7 +69,6 @@
 
 void SwView::ExecDlg(SfxRequest &rReq)
 {
-    Window *pMDI = &GetViewFrame()->GetWindow();
     ModalDialog *pDialog = 0;
     //Damit aus dem Basic keine Dialoge fuer Hintergrund-Views aufgerufen werden:
     const SfxPoolItem* pItem = 0;
