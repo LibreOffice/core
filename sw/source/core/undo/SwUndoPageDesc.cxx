@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwUndoPageDesc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:49:12 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:28:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,9 +151,9 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
 SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
                                const SwPageDesc & _aNew,
                                SwDoc * _pDoc)
-    : SwUndo(_aOld.GetName() != _aNew.GetName() ?
-             UNDO_RENAME_PAGEDESC
-             :UNDO_CHANGE_PAGEDESC),
+    : SwUndo( _aOld.GetName() != _aNew.GetName() ?
+              UNDO_RENAME_PAGEDESC :
+              UNDO_CHANGE_PAGEDESC ),
       aOld(_aOld, _pDoc), aNew(_aNew, _pDoc), pDoc(_pDoc), bExchange( false )
 {
     ASSERT(0 != pDoc, "no document?");
@@ -201,7 +201,7 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
             {
                 pFormat = new SwFrmFmt( *rNewDesc.GetLeft().GetHeader().GetHeaderFmt() );
                 // The Ctor of this object will remove the duplicate!
-                SwFmtHeader aFmtHeader( pFormat );
+                SwFmtHeader aFormatHeader( pFormat );
             }
         }
         // Same procedure for footers...
@@ -214,7 +214,7 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
             {
                 pFormat = new SwFrmFmt( *rNewDesc.GetLeft().GetFooter().GetFooterFmt() );
                 // The Ctor of this object will remove the duplicate!
-                SwFmtFooter aFmtFooter( pFormat );
+                SwFmtFooter aFormatFooter( pFormat );
             }
         }
 
@@ -248,7 +248,9 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         SwFrmFmt* pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
 #ifdef DEBUG
         const SwFmtCntnt& rSourceCntnt = rSourceHead.GetHeaderFmt()->GetCntnt();
+        (void)rSourceCntnt;
         const SwFmtCntnt& rDestCntnt = rDestHead.GetHeaderFmt()->GetCntnt();
+        (void)rDestCntnt;
 #endif
         pNewFmt->SetAttr( rSourceHead.GetHeaderFmt()->GetCntnt() );
         delete pNewItem;
@@ -269,8 +271,10 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
 #ifdef DEBUG
-            const SwFmtCntnt& rSourceCntnt = rSourceLeftHead.GetHeaderFmt()->GetCntnt();
-            const SwFmtCntnt& rDestCntnt = rDest.GetLeft().GetHeader().GetHeaderFmt()->GetCntnt();
+            const SwFmtCntnt& rSourceCntnt1 = rSourceLeftHead.GetHeaderFmt()->GetCntnt();
+            (void)rSourceCntnt1;
+            const SwFmtCntnt& rDestCntnt1 = rDest.GetLeft().GetHeader().GetHeaderFmt()->GetCntnt();
+            (void)rDestCntnt1;
 #endif
             pNewFmt->SetAttr( rSourceLeftHead.GetHeaderFmt()->GetCntnt() );
             delete pNewItem;
@@ -295,7 +299,9 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 
 #ifdef DEBUG
         const SwFmtCntnt& rFooterSourceCntnt = rSourceFoot.GetFooterFmt()->GetCntnt();
+        (void)rFooterSourceCntnt;
         const SwFmtCntnt& rFooterDestCntnt = rDestFoot.GetFooterFmt()->GetCntnt();
+        (void)rFooterDestCntnt;
 #endif
         rSource.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, FALSE, &pItem );
         pNewItem = pItem->Clone();
@@ -307,9 +313,11 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         {
             const SwFmtFooter& rSourceLeftFoot = rSource.GetLeft().GetFooter();
 #ifdef DEBUG
-            const SwFmtCntnt& rFooterSourceCntnt = rSourceLeftFoot.GetFooterFmt()->GetCntnt();
-            const SwFmtCntnt& rFooterDestCntnt =
+            const SwFmtCntnt& rFooterSourceCntnt2 = rSourceLeftFoot.GetFooterFmt()->GetCntnt();
+            const SwFmtCntnt& rFooterDestCntnt2 =
                 rDest.GetLeft().GetFooter().GetFooterFmt()->GetCntnt();
+            (void)rFooterSourceCntnt2;
+            (void)rFooterDestCntnt2;
 #endif
             rDest.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, FALSE, &pItem );
             pNewItem = pItem->Clone();
@@ -325,7 +333,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
     }
 }
 
-void SwUndoPageDesc::Undo(SwUndoIter & rIt)
+void SwUndoPageDesc::Undo(SwUndoIter &)
 {
     BOOL bUndo = pDoc->DoesUndo();
 
@@ -338,7 +346,7 @@ void SwUndoPageDesc::Undo(SwUndoIter & rIt)
     pDoc->DoUndo(bUndo);
 }
 
-void SwUndoPageDesc::Redo(SwUndoIter & rIt)
+void SwUndoPageDesc::Redo(SwUndoIter &)
 {
     BOOL bUndo = pDoc->DoesUndo();
 
@@ -351,7 +359,7 @@ void SwUndoPageDesc::Redo(SwUndoIter & rIt)
     pDoc->DoUndo(bUndo);
 }
 
-void SwUndoPageDesc::Repeat(SwUndoIter & rIt)
+void SwUndoPageDesc::Repeat(SwUndoIter &)
 {
 }
 
@@ -379,7 +387,7 @@ SwUndoPageDescCreate::~SwUndoPageDescCreate()
 {
 }
 
-void SwUndoPageDescCreate::Undo(SwUndoIter & rIt)
+void SwUndoPageDescCreate::Undo(SwUndoIter &)
 {
     BOOL bUndo = pDoc->DoesUndo();
 
@@ -398,7 +406,7 @@ void SwUndoPageDescCreate::Undo(SwUndoIter & rIt)
 }
 
 
-void SwUndoPageDescCreate::Redo(SwUndoIter & rIt)
+void SwUndoPageDescCreate::Redo(SwUndoIter &)
 {
     BOOL bUndo = pDoc->DoesUndo();
 
@@ -439,7 +447,7 @@ SwUndoPageDescDelete::~SwUndoPageDescDelete()
 {
 }
 
-void SwUndoPageDescDelete::Undo(SwUndoIter & rIt)
+void SwUndoPageDescDelete::Undo(SwUndoIter &)
 {
     BOOL bUndo = pDoc->DoesUndo();
 
@@ -450,7 +458,7 @@ void SwUndoPageDescDelete::Undo(SwUndoIter & rIt)
     pDoc->DoUndo(bUndo);
 }
 
-void SwUndoPageDescDelete::Redo(SwUndoIter & rIt)
+void SwUndoPageDescDelete::Redo(SwUndoIter &)
 {
     BOOL bUndo = pDoc->DoesUndo();
 
