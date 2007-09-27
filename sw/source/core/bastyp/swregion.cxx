@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swregion.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:59:47 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:28:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ SwRegionRects::SwRegionRects( const SwRect &rStartRect, USHORT nInit,
  *************************************************************************/
 
 inline void SwRegionRects::InsertRect( const SwRect &rRect, const USHORT nPos,
-                                       FASTBOOL &rDel )
+                                       BOOL &rDel )
 {
     if( rDel )
     {
@@ -113,7 +113,7 @@ void SwRegionRects::operator-=( const SwRect &rRect )
 
             // Das erste Rect, das wir inserten wollen, nimmt die
             // Stelle von i ein. So ersparen wir uns das Delete().
-            FASTBOOL bDel = TRUE;
+            BOOL bDel = TRUE;
 
             //Jetzt aufteilen das Teil: Es sollen diejenigen Rechtecke
             //zurueckbleiben, die im alten aber nicht im neuen liegen.
@@ -214,9 +214,6 @@ inline SwTwips CalcArea( const SwRect &rRect )
 }
 
 
-#ifdef _MSC_VER
-#pragma optimize("e",off)
-#endif
 void SwRegionRects::Compress( BOOL bFuzzy )
 {
     for ( int i = 0; i < Count(); ++i )
@@ -227,13 +224,13 @@ void SwRegionRects::Compress( BOOL bFuzzy )
             //uberfluessig.
             if ( (*(pData + i)).IsInside( *(pData + j) ) )
             {
-                Remove( j, 1 );
+                Remove( static_cast<USHORT>(j), 1 );
                 --j;
             }
             else if ( (*(pData + j)).IsInside( *(pData + i) ) )
             {
                 *(pData + i) = *(pData + j);
-                Remove( j, 1 );
+                Remove( static_cast<USHORT>(j), 1 );
                 i = -1;
                 break;
             }
@@ -255,7 +252,7 @@ void SwRegionRects::Compress( BOOL bFuzzy )
                      (::CalcArea( aUnion ) - CalcArea( aInter )) )
                 {
                     *(pData + i) = aUnion;
-                    Remove( j, 1 );
+                    Remove( static_cast<USHORT>(j), 1 );
                     i = -1;
                     break;
                 }
@@ -263,8 +260,4 @@ void SwRegionRects::Compress( BOOL bFuzzy )
         }
     }
 }
-#ifdef _MSC_VER
-#pragma optimize("",on)
-#endif
-
 
