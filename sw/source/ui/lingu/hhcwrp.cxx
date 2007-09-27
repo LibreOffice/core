@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hhcwrp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:19:32 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:18:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,14 +133,14 @@
 #include <olmenu.hrc>
 #endif
 
+#include <unomid.h>
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::i18n;
-
-#define C2U(cChar) OUString::createFromAscii(cChar)
 
 #define CHAR_PAR_BRK    ((sal_Char) 0x0D)
 
@@ -321,7 +321,7 @@ void SwHHCWrapper::HandleNewUnit(
 
 void SwHHCWrapper::ChangeText( const String &rNewText,
         const OUString& rOrigText,
-        const ::com::sun::star::uno::Sequence< sal_Int32 > *pOffsets,
+        const uno::Sequence< sal_Int32 > *pOffsets,
         SwPaM *pCrsr )
 {
     //!! please see also TextConvWrapper::ChangeText with is a modified
@@ -478,7 +478,7 @@ void SwHHCWrapper::ReplaceUnit(
          const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
          const ::rtl::OUString& rOrigText,
          const OUString& rReplaceWith,
-         const ::com::sun::star::uno::Sequence< sal_Int32 > &rOffsets,
+         const uno::Sequence< sal_Int32 > &rOffsets,
          ReplacementAction eAction,
          LanguageType *pNewUnitLanguage )
 {
@@ -574,6 +574,7 @@ void SwHHCWrapper::ReplaceUnit(
         //pRuby->SetCharFmtId( USHORT nNew );
 #ifdef DEBUG
         SwPaM *pPaM = rWrtShell.GetCrsr();
+        (void)pPaM;
 #endif
         rWrtShell.SetAttr(*pRuby);
         delete pRuby;
@@ -846,31 +847,31 @@ sal_Bool SwHHCWrapper::HasOtherCnt_impl()
 }
 
 
-void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConvArgs, SvxSpellArea eArea )
+void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConversionArgs, SvxSpellArea eArea )
 {
     SetDrawObj( SVX_SPELL_OTHER == eArea );
-    pView->SpellStart( eArea, bStartDone, bEndDone, /* [out] */pConvArgs );
+    pView->SpellStart( eArea, bStartDone, bEndDone, /* [out] */ pConversionArgs );
 }
 
 
-void SwHHCWrapper::ConvEnd_impl( SwConversionArgs *pConvArgs )
+void SwHHCWrapper::ConvEnd_impl( SwConversionArgs *pConversionArgs )
 {
-    pView->SpellEnd( pConvArgs );
+    pView->SpellEnd( pConversionArgs );
     //ShowLanguageErrors();
 }
 
 
-sal_Bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConvArgs )
+sal_Bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
 {
     sal_Bool bProgress = !bIsDrawObj && !bIsSelection;
 //    bLastRet = aConvText.getLength() == 0;
-    pConvArgs->aConvText = OUString();
-    pConvArgs->nConvTextLang = LANGUAGE_NONE;
+    pConversionArgs->aConvText = OUString();
+    pConversionArgs->nConvTextLang = LANGUAGE_NONE;
     uno::Any  aRet = bProgress ?
-        pView->GetWrtShell().SpellContinue( &nPageCount, &nPageStart, pConvArgs ) :
-        pView->GetWrtShell().SpellContinue( &nPageCount, NULL, pConvArgs );
+        pView->GetWrtShell().SpellContinue( &nPageCount, &nPageStart, pConversionArgs ) :
+        pView->GetWrtShell().SpellContinue( &nPageCount, NULL, pConversionArgs );
     //aRet >>= aConvText;
-    return pConvArgs->aConvText.getLength() != 0;
+    return pConversionArgs->aConvText.getLength() != 0;
 }
 
 //////////////////////////////////////////////////////////////////////
