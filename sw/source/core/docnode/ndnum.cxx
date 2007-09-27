@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndnum.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:00:23 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:41:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ BOOL SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, USHORT* pFndPos ) const
 {
     ULONG nIdx = rSrch->GetIndex();
 
-    register USHORT nO = Count(), nM, nU = 0;
+    USHORT nO = Count(), nM, nU = 0;
     if( nO > 0 )
     {
 //JP 17.03.98: aufgrund des Bug 48592 - wo unter anderem nach Undo/Redo
@@ -69,7 +69,7 @@ BOOL SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, USHORT* pFndPos ) const
 //              jetzt mal einen Check eingebaut.
 #ifndef PRODUCT
         {
-            for( register USHORT n = 1; n < nO; ++n )
+            for( USHORT n = 1; n < nO; ++n )
                 if( &(*this)[ n-1 ]->GetNodes() !=
                     &(*this)[ n ]->GetNodes() )
                 {
