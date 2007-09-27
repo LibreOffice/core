@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unnum.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:52:32 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:32:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
 #endif
 
 
-SV_DECL_PTRARR_DEL( _SfxPoolItems, SfxPoolItem*, 16, 16 );
+SV_DECL_PTRARR_DEL( _SfxPoolItems, SfxPoolItem*, 16, 16 )
 SV_IMPL_PTRARR( _SfxPoolItems, SfxPoolItem* );
 
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
@@ -72,8 +72,8 @@ inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 SwUndoInsNum::SwUndoInsNum( const SwNumRule& rOldRule,
                             const SwNumRule& rNewRule )
     : SwUndo( UNDO_INSNUM ),
-    aNumRule( rNewRule ), pHistory( 0 ), nLRSavePos( 0 ),
-    nSttSet( ULONG_MAX ), pOldNumRule( new SwNumRule( rOldRule ))
+    aNumRule( rNewRule ), pHistory( 0 ), nSttSet( ULONG_MAX ),
+    pOldNumRule( new SwNumRule( rOldRule )), nLRSavePos( 0 )
 {
     ASSERT( rOldRule.IsAutoRule(),
             "darf nur fuer AutoNumRules gerufen werden" );
@@ -81,17 +81,17 @@ SwUndoInsNum::SwUndoInsNum( const SwNumRule& rOldRule,
 
 SwUndoInsNum::SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule )
     : SwUndo( UNDO_INSNUM ), SwUndRng( rPam ),
-    aNumRule( rRule ), pHistory( 0 ), nLRSavePos( 0 ),
-    nSttSet( ULONG_MAX ), pOldNumRule( 0 )
+    aNumRule( rRule ), pHistory( 0 ),
+    nSttSet( ULONG_MAX ), pOldNumRule( 0 ), nLRSavePos( 0 )
 {
 }
 
 SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
                             const String& rReplaceRule )
     : SwUndo( UNDO_INSNUM ),
-    aNumRule( rRule ), pHistory( 0 ), nLRSavePos( 0 ),
+    aNumRule( rRule ), pHistory( 0 ),
     nSttSet( ULONG_MAX ), pOldNumRule( 0 ),
-    sReplaceRule( rReplaceRule )
+    sReplaceRule( rReplaceRule ), nLRSavePos( 0 )
 {
     // keine Selektion !!
     nEndNode = 0, nEndCntnt = USHRT_MAX;
@@ -262,14 +262,14 @@ void SwUndoDelNum::Repeat( SwUndoIter& rUndoIter )
     rUndoIter.GetDoc().DelNumRules( *rUndoIter.pAktPam );
 }
 
-void SwUndoDelNum::AddNode( const SwTxtNode& rNd, BOOL bFlag )
+void SwUndoDelNum::AddNode( const SwTxtNode& rNd, BOOL )
 {
     if( rNd.GetNumRule() )
     {
-        register USHORT nIns = aNodeIdx.Count();
+        USHORT nIns = aNodeIdx.Count();
         aNodeIdx.Insert( rNd.GetIndex(), nIns );
 
-        aLevels.Insert( rNd.GetLevel(), nIns );
+        aLevels.Insert( static_cast<BYTE>(rNd.GetLevel()), nIns );
     }
 }
 
@@ -279,8 +279,8 @@ void SwUndoDelNum::AddNode( const SwTxtNode& rNd, BOOL bFlag )
 
 SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, long nOff, BOOL bIsOutlMv )
     : SwUndo( bIsOutlMv ? UNDO_OUTLINE_UD : UNDO_MOVENUM ),
-    SwUndRng( rPam ), nOffset( nOff ),
-    nNewStt( 0 )
+    SwUndRng( rPam ),
+    nNewStt( 0 ), nOffset( nOff )
 {
     // nOffset: nach unten  =>  1
     //          nach oben   => -1
@@ -414,19 +414,19 @@ void SwUndoNumOrNoNum::Repeat( SwUndoIter& rUndoIter )
 
 SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, BOOL bFlg )
     : SwUndo( UNDO_SETNUMRULESTART ),
-    nIdx( rPos.nNode.GetIndex() ), bFlag( bFlg ), bSetSttValue( FALSE ),
-    nNewStt( USHRT_MAX ), nOldStt( USHRT_MAX )
+    nIdx( rPos.nNode.GetIndex() ), nOldStt( USHRT_MAX ),
+    nNewStt( USHRT_MAX ), bSetSttValue( FALSE ), bFlag( bFlg )
 {
 }
 
 SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, USHORT nStt )
     : SwUndo( UNDO_SETNUMRULESTART ),
-    nIdx( rPos.nNode.GetIndex() ), bSetSttValue( TRUE ),
-    nNewStt( nStt ), nOldStt( USHRT_MAX )
+    nIdx( rPos.nNode.GetIndex() ),
+    nOldStt( USHRT_MAX ), nNewStt( nStt ), bSetSttValue( TRUE )
 {
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( pTxtNd )
-        nOldStt = pTxtNd->GetStart();
+        nOldStt = static_cast<USHORT>(pTxtNd->GetStart());
 }
 
 
