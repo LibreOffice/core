@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:20:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:38:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -312,7 +312,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
     // gebunden sind
     SwDoc* pDoc = rIdx.GetNode().GetDoc();
 
-    USHORT nChkType = _bAtCharAnchoredObjs ? FLY_AUTO_CNTNT : FLY_AT_CNTNT;
+    USHORT nChkType = static_cast< USHORT >(_bAtCharAnchoredObjs ? FLY_AUTO_CNTNT : FLY_AT_CNTNT);
     const SwCntntFrm* pCFrm;
     const SwCntntNode* pCNd;
     if( pDoc->GetRootFrm() &&
@@ -372,7 +372,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                              ( (*aIter).first == nCntIndex &&
                                (*aIter).second > nAnchorOrder ) )
                         {
-                            nInsPos = aIter - aSortLst.begin();
+                            nInsPos = sal::static_int_cast< USHORT >(aIter - aSortLst.begin());
                             aInsIter = aIter;
                             break;
                         }
@@ -418,9 +418,9 @@ void SwXTextCursor::insertDocumentFromURL(const OUString& rURL,
             {
                 if ( rProp.Value.getValueType() == ::getCppuType((const OUString*)0))
                 {
-                    OUString uFilterName;
-                    rProp.Value >>= uFilterName;
-                    sFilterName = String(uFilterName);
+                    OUString uTmp;
+                    rProp.Value >>= uTmp;
+                    sFilterName = uTmp;
                 }
                 else if ( rProp.Value.getValueType() != ::getVoidCppuType() )
                     bIllegalArgument = sal_True;
@@ -429,9 +429,9 @@ void SwXTextCursor::insertDocumentFromURL(const OUString& rURL,
             {
                 if ( rProp.Value.getValueType() == ::getCppuType((const OUString*)0))
                 {
-                    OUString uFilterOption;
-                    rProp.Value >>= uFilterOption;
-                    sFilterOption = String(uFilterOption) ;
+                    OUString uTmp;
+                    rProp.Value >>= uTmp;
+                    sFilterOption = uTmp;
                 }
                 else if ( rProp.Value.getValueType() != ::getVoidCppuType() )
 
@@ -441,9 +441,9 @@ void SwXTextCursor::insertDocumentFromURL(const OUString& rURL,
             {
                 if ( rProp.Value.getValueType() == ::getCppuType((const OUString*)0))
                 {
-                    OUString uPassword;
-                    rProp.Value >>= uPassword;
-                    sPassword = String(uPassword );
+                    OUString uTmp;
+                    rProp.Value >>= uTmp;
+                    sPassword = uTmp;
                 }
                 else if ( rProp.Value.getValueType() != ::getVoidCppuType() )
                     bIllegalArgument = sal_True;
@@ -467,8 +467,6 @@ uno::Sequence< beans::PropertyValue > SwXTextCursor::createSortDescriptor(sal_Bo
     beans::PropertyValue* pArray = aRet.getArray();
 
     uno::Any aVal;
-    sal_Bool bFalse = sal_False;
-    sal_Bool bTrue = sal_True;
     aVal.setValue( &bFromTable, ::getCppuBooleanType());
     pArray[0] = beans::PropertyValue(C2U("IsSortInTable"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
@@ -478,10 +476,10 @@ uno::Sequence< beans::PropertyValue > SwXTextCursor::createSortDescriptor(sal_Bo
     aVal <<= uSpace;
     pArray[1] = beans::PropertyValue(C2U("Delimiter"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    aVal.setValue( &bTrue, ::getCppuBooleanType());
+    aVal <<= (sal_Bool) sal_False;
     pArray[2] = beans::PropertyValue(C2U("IsSortColumns"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    aVal <<= (INT32)3;
+    aVal <<= (sal_Int32) 3;
     pArray[3] = beans::PropertyValue(C2U("MaxSortFieldsCount"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     uno::Sequence< table::TableSortField > aFields(3);
@@ -498,6 +496,7 @@ uno::Sequence< beans::PropertyValue > SwXTextCursor::createSortDescriptor(sal_Bo
 
 #if OSL_DEBUG_LEVEL > 1
     const OUString *pTxt = aSeq.getConstArray();
+    (void)pTxt;
 #endif
 
     pFields[0].Field = 1;
@@ -548,7 +547,6 @@ sal_Bool SwXTextCursor::convertSortProperties(
     rSortOpt.cDeli = ' ';
     rSortOpt.eDirection = SRT_COLUMNS;  //!! UI text may be contrary though !!
 
-    rSortOpt.aKeys;
     SwSortKey* pKey1 = new SwSortKey;
     pKey1->nColumnId = USHRT_MAX;
     pKey1->bIsNumeric = TRUE;
@@ -707,7 +705,7 @@ sal_Bool SwXTextCursor::convertSortProperties(
                         rSortOpt.bIgnoreCase = !pFields[i].IsCaseSensitive;
                         rSortOpt.nLanguage = SvxLocaleToLanguage( pFields[i].CollatorLocale );
                         aKeys[i]->sSortType = pFields[i].CollatorAlgorithm;
-                        aKeys[i]->nColumnId = pFields[i].Field;
+                        aKeys[i]->nColumnId = static_cast< USHORT >(pFields[i].Field);
                         aKeys[i]->bIsNumeric = (pFields[i].FieldType == table::TableSortFieldType_NUMERIC);
                         aKeys[i]->eSortOrder = pFields[i].IsAscending ? SRT_ASCENDING : SRT_DESCENDING;
                     }
@@ -826,7 +824,8 @@ uno::Reference< XEnumeration >  SwXTextCursor::createEnumeration(void) throw( Ru
     SwXText* pParentText = 0;
     if(xTunnel.is())
     {
-        pParentText = (SwXText*)xTunnel->getSomething(SwXText::getUnoTunnelId());
+        pParentText = reinterpret_cast< SwXText *>(
+                sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXText::getUnoTunnelId()) ));
     }
     DBG_ASSERT(pParentText, "parent is not a SwXText")
 
@@ -882,10 +881,10 @@ Sequence< OUString > SAL_CALL SwXTextCursor::getAvailableServiceNames(void) thro
   -----------------------------------------------------------------------*/
 
 IMPL_STATIC_LINK( SwXTextCursor, RemoveCursor_Impl,
-                  uno::Reference<XInterface>*, pArg )
+                  uno::Reference< XInterface >*, EMPTYARG )
 {
     ASSERT( pThis != NULL, "no reference?" );
-    ASSERT( pArg != NULL, "no reference?" );
+    //ASSERT( pArg != NULL, "no reference?" );
 
     // --> FME 2006-03-07 #126177# Tell the SwXTextCursor that the user event
     // has been executed. It is not necessary to remove the user event in
@@ -971,9 +970,9 @@ SwDoc* SwXTextCursor::GetDoc()
   -----------------------------------------------------------------------*/
 void SwXTextCursor::SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, USHORT nAttrMode)
 {
-    sal_uInt16 nFlags = SETATTR_APICALL | (nAttrMode & SETATTR_NOFORMATATTR);
+    sal_uInt16 nFlags = nsSetAttrMode::SETATTR_APICALL | (nAttrMode & nsSetAttrMode::SETATTR_NOFORMATATTR);
     if(nAttrMode & CRSR_ATTR_MODE_DONTREPLACE)
-        nFlags |= SETATTR_DONTREPLACE;
+        nFlags |= nsSetAttrMode::SETATTR_DONTREPLACE;
     SwDoc* pDoc = rPam.GetDoc();
     //StartEndAction
     UnoActionContext aAction(pDoc);
@@ -1105,11 +1104,11 @@ SwXParagraphEnumeration::SwXParagraphEnumeration(SwXText* pParent,
                                                     SwPosition& rPos,
                                                     CursorType eType) :
         xParentText(pParent),
-        bFirstParagraph(sal_True),
-        eCursorType(eType),
-        nEndIndex(rPos.nNode.GetIndex()),
         nFirstParaStart(-1),
-        nLastParaEnd(-1)
+        nLastParaEnd(-1),
+        nEndIndex(rPos.nNode.GetIndex()),
+        eCursorType(eType),
+        bFirstParagraph(sal_True)
 {
     pOwnTable = 0;
     pOwnStartNode = 0;
@@ -1125,11 +1124,11 @@ SwXParagraphEnumeration::SwXParagraphEnumeration(SwXText* pParent,
                                                 CursorType eType) :
         SwClient(pCrsr),
         xParentText(pParent),
-        bFirstParagraph(sal_True),
-        eCursorType(eType),
-        nEndIndex(pCrsr->End()->nNode.GetIndex()),
         nFirstParaStart(-1),
-        nLastParaEnd(-1)
+        nLastParaEnd(-1),
+        nEndIndex(pCrsr->End()->nNode.GetIndex()),
+        eCursorType(eType),
+        bFirstParagraph(sal_True)
 {
     pOwnTable = 0;
     pOwnStartNode = 0;
@@ -1326,13 +1325,6 @@ void SwXParagraphEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
  ******************************************************************/
 TYPEINIT1(SwXTextRange, SwClient);
 
-/* -----------------10.12.98 13:19-------------------
- *
- * --------------------------------------------------*/
-/*uno::Reference< uno::XInterface >  SwXTextRange_NewInstance_Impl()
-{
-    return *new SwXTextRange();
-};
 /* -----------------------------10.03.00 18:02--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1353,7 +1345,7 @@ sal_Int64 SAL_CALL SwXTextRange::getSomething(
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
         {
-                return (sal_Int64)this;
+            return sal::static_int_cast< sal_Int64 >( reinterpret_cast <sal_IntPtr >(this) );
         }
     return 0;
 }
@@ -1399,13 +1391,13 @@ Sequence< OUString > SwXTextRange::getSupportedServiceNames(void) throw( Runtime
 
   -----------------------------------------------------------------------*/
 SwXTextRange::SwXTextRange(SwPaM& rPam, const uno::Reference< XText > & rxParent) :
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
-    xParentText(rxParent),
-    aObjectDepend(this, 0),
+    eRangePosition(RANGE_IN_TEXT),
     pDoc(rPam.GetDoc()),
     pBox(0),
     pBoxStartNode(0),
-    eRangePosition(RANGE_IN_TEXT)
+    aObjectDepend(this, 0),
+    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    xParentText(rxParent)
 {
     //Bookmark an der anlegen
     _CreateNewBookmark(rPam);
@@ -1414,12 +1406,12 @@ SwXTextRange::SwXTextRange(SwPaM& rPam, const uno::Reference< XText > & rxParent
 
   -----------------------------------------------------------------------*/
 SwXTextRange::SwXTextRange(SwFrmFmt& rFmt, SwPaM& rPam) :
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
-    aObjectDepend(this, &rFmt),
+    eRangePosition(RANGE_IN_FRAME),
     pDoc(rPam.GetDoc()),
     pBox(0),
     pBoxStartNode(0),
-    eRangePosition(RANGE_IN_FRAME)
+    aObjectDepend(this, &rFmt),
+    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR))
 {
     //Bookmark an der anlegen
     _CreateNewBookmark(rPam);
@@ -1428,12 +1420,12 @@ SwXTextRange::SwXTextRange(SwFrmFmt& rFmt, SwPaM& rPam) :
 
   -----------------------------------------------------------------------*/
 SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt, SwTableBox& rTblBox, SwPaM& rPam) :
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    eRangePosition(RANGE_IN_CELL),
     pDoc(rPam.GetDoc()),
-    aObjectDepend(this, &rTblFmt),
     pBox(&rTblBox),
     pBoxStartNode(0),
-    eRangePosition(RANGE_IN_CELL)
+    aObjectDepend(this, &rTblFmt),
+    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR))
 {
     //Bookmark an der anlegen
     _CreateNewBookmark(rPam);
@@ -1442,12 +1434,12 @@ SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt, SwTableBox& rTblBox, SwPaM& rPam) 
 
  ---------------------------------------------------------------------------*/
 SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt, const SwStartNode& rStartNode, SwPaM& rPam) :
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    eRangePosition(RANGE_IN_CELL),
     pDoc(rPam.GetDoc()),
-    aObjectDepend(this, &rTblFmt),
     pBox(0),
     pBoxStartNode(&rStartNode),
-    eRangePosition(RANGE_IN_CELL)
+    aObjectDepend(this, &rTblFmt),
+    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR))
 {
     //Bookmark an der anlegen
     _CreateNewBookmark(rPam);
@@ -1456,12 +1448,12 @@ SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt, const SwStartNode& rStartNode, SwP
  *
  * --------------------------------------------------*/
 SwXTextRange::SwXTextRange(SwFrmFmt& rTblFmt) :
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
-    aObjectDepend(this, &rTblFmt),
+    eRangePosition(RANGE_IS_TABLE),
     pDoc(rTblFmt.GetDoc()),
     pBox(0),
     pBoxStartNode(0),
-    eRangePosition(RANGE_IS_TABLE)
+    aObjectDepend(this, &rTblFmt),
+    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR))
 {
 }
 
@@ -1530,14 +1522,13 @@ void    SwXTextRange::DeleteAndInsert(const String& rText) throw( uno::RuntimeEx
         const SwPosition& rPoint = *pBkm->Start();
         const SwPosition* pMark = pBkm->End();
         SwCursor aNewCrsr( rPoint);
-        SwDoc* pDoc = aNewCrsr.GetDoc();
         if(pMark)
         {
             aNewCrsr.SetMark();
             *aNewCrsr.GetMark() = *pMark;
         }
 
-        UnoActionContext aAction(aNewCrsr.GetDoc());
+        UnoActionContext aAction( pDoc );
         pDoc->StartUndo(UNDO_INSERT, NULL);
         if(aNewCrsr.HasMark())
             pDoc->DeleteAndJoin(aNewCrsr);
@@ -1593,7 +1584,6 @@ uno::Reference< XText >  SwXTextRange::getText(void) throw( uno::RuntimeExceptio
             aObjectDepend.GetRegisteredIn() )
         {
             SwFrmFmt* pTblFmt = (SwFrmFmt*)aObjectDepend.GetRegisteredIn();
-            SwDoc* pDoc = pTblFmt->GetDoc();
             SwTable* pTable = SwTable::FindTable( pTblFmt );
             SwTableNode* pTblNode = pTable->GetTableNode();
             SwPosition aPosition( *pTblNode );
@@ -1764,16 +1754,16 @@ sal_Bool        SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
     SwXParagraph* pPara = 0;
     if(xRangeTunnel.is())
     {
-        pRange = (SwXTextRange*)xRangeTunnel->getSomething(
-                                SwXTextRange::getUnoTunnelId());
-        pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
-                                OTextCursorHelper::getUnoTunnelId());
-        pPortion = (SwXTextPortion*)xRangeTunnel->getSomething(
-                                SwXTextPortion::getUnoTunnelId());
-        pText = (SwXText*)xRangeTunnel->getSomething(
-                                SwXText::getUnoTunnelId());
-        pPara = (SwXParagraph*)xRangeTunnel->getSomething(
-                                SwXParagraph::getUnoTunnelId());
+        pRange  = reinterpret_cast< SwXTextRange * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
+        pCursor = reinterpret_cast< OTextCursorHelper * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
+        pPortion = reinterpret_cast< SwXTextPortion * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextPortion::getUnoTunnelId()) ));
+        pText   = reinterpret_cast< SwXText * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXText::getUnoTunnelId()) ));
+        pPara   = reinterpret_cast< SwXParagraph * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXParagraph::getUnoTunnelId()) ));
     }
 
     //if it's a text cursor then create a temporary cursor there and re-use the pCursor variable
@@ -1783,8 +1773,8 @@ sal_Bool        SwXTextRange::XTextRangeToSwPaM( SwUnoInternalPaM& rToFill,
         xTextCursor = pText->createCursor();
         xTextCursor->gotoEnd(sal_True);
         uno::Reference<XUnoTunnel> xCrsrTunnel( xTextCursor, UNO_QUERY);
-        pCursor = (OTextCursorHelper*)xCrsrTunnel->getSomething(
-                                                    OTextCursorHelper::getUnoTunnelId());
+        pCursor = reinterpret_cast<  OTextCursorHelper * >(
+                sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
     }
     if(pRange && pRange->GetDoc() == rToFill.GetDoc())
     {
@@ -1840,7 +1830,7 @@ sal_Bool lcl_IsStartNodeInFormat(sal_Bool bHeader, SwStartNode* pSttNode,
     const SfxItemSet& rSet = pFrmFmt->GetAttrSet();
     const SfxPoolItem* pItem;
     SwFrmFmt* pHeadFootFmt;
-    if(SFX_ITEM_SET == rSet.GetItemState(bHeader ? RES_HEADER : RES_FOOTER, sal_True, &pItem) &&
+    if(SFX_ITEM_SET == rSet.GetItemState( static_cast< USHORT >(bHeader ? RES_HEADER : RES_FOOTER), sal_True, &pItem) &&
             0 != (pHeadFootFmt = bHeader ?
                     ((SwFmtHeader*)pItem)->GetHeaderFmt() :
                                 ((SwFmtFooter*)pItem)->GetFooterFmt()))
@@ -1933,16 +1923,16 @@ uno::Reference< XTextRange >  SwXTextRange::CreateTextRangeFromPosition(SwDoc* p
         case SwFootnoteStartNode:
         {
             sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().Count();
-            SwTxtFtn* pTxtFtn;
             uno::Reference< XFootnote >  xRef;
             for( n = 0; n < nFtnCnt; ++n )
             {
-                pTxtFtn = pDoc->GetFtnIdxs()[ n ];
+                const SwTxtFtn* pTxtFtn = pDoc->GetFtnIdxs()[ n ];
                 const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
-                const SwTxtFtn* pTxtFtn = rFtn.GetTxtFtn();
+                pTxtFtn = rFtn.GetTxtFtn();
 #if OSL_DEBUG_LEVEL > 1
                 const SwStartNode* pTmpSttNode = pTxtFtn->GetStartNode()->GetNode().
                                 FindSttNodeByType(SwFootnoteStartNode);
+                (void)pTmpSttNode;
 #endif
 
                 if(pSttNode == pTxtFtn->GetStartNode()->GetNode().
@@ -1971,128 +1961,6 @@ uno::Reference< XTextRange >  SwXTextRange::CreateTextRangeFromPosition(SwDoc* p
     delete pNewCrsr;
     return aRet;
 }
-/*uno::Reference< XTextRange > SwXTextRange::createTextRangeFromPaM(
-    SwPaM& rPaM, uno::Reference<XText> xParentText)
-{
-    uno::Reference< XTextRange > xRet;
-    // in welcher Umgebung steht denn der PaM?
-    SwStartNode* pSttNode = rPaM.GetNode()->StartOfSectionNode();
-    SwStartNodeType eType = pSttNode->GetStartNodeType();
-    uno::Reference< XText >  xCurParentRef;
-    switch(eType)
-    {
-        case SwTableBoxStartNode:
-        {
-            SwTableBox* pBox = pSttNode->GetTblBox();
-            xRet = new SwXTextRange(*pBox->GetFrmFmt(), *pBox, rPaM);
-        }
-        break;
-        case SwFlyStartNode:
-        {
-            SwFrmFmt* pFlyFmt = pSttNode->GetFlyFmt();
-            SwXTextFrame* pxFrm = (SwXTextFrame*)SwClientIter( *pFlyFmt ).
-                                        First( TYPE( SwXTextFrame ));
-            if(pxFrm)
-                xCurParentRef = pxFrm;
-            else
-                xRet = new SwXTextRange(*pFlyFmt, rPaM);
-        }
-        break;
-        case SwFootnoteStartNode:
-        {
-            const SwFtnIdxs& rIdxs = rPaM.GetDoc()->GetFtnIdxs();
-            sal_uInt16 n, nFtnCnt = rIdxs.Count();
-            for( n = 0; n < nFtnCnt; ++n )
-            {
-                const SwTxtFtn* pFtn = rIdxs[ n ];
-
-                const SwStartNode* pTemp = 0;
-                const SwNode& rNode = pFtn->GetStartNode()->GetNode();
-                if(rNode.GetNodeType() == ND_STARTNODE)
-                    pTemp = (const SwStartNode*)&rNode;
-                if(pSttNode == pTemp)
-                {
-                    const SwFmtFtn& rFtn = pFtn->GetFtn();
-                    //TODO: schon existierendes Fussnotenobjekt wiederfinden!
-                    xCurParentRef = new SwXFootnote(rPaM.GetDoc(), rFtn);
-                    break;
-                }
-            }
-        }
-        break;
-        case SwHeaderStartNode:
-        case SwFooterStartNode:
-        {
-            //PageStyle besorgen, HeaderText anlegen/erfragen,
-            //und dann SwXTextPosition damit anlegen
-            String sPageStyleName = SwUnoCursorHelper::GetCurPageStyle(rPaM);
-            uno::Reference< style::XStyleFamiliesSupplier >  xStyleSupp(
-                rPaM.GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
-
-            uno::Reference< container::XNameAccess >  xStyles = xStyleSupp->getStyleFamilies();
-            uno::Any aStyleFamily = xStyles->getByName(C2U("PageStyles"));
-
-            uno::Reference< container::XNameContainer > xFamily =
-                *(uno::Reference< container::XNameContainer > *)aStyleFamily.getValue();
-            uno::Any aStyle = xFamily->getByName(sPageStyleName);
-            uno::Reference< style::XStyle >  xStyle = *(uno::Reference< style::XStyle > *)aStyle.getValue();
-
-            uno::Reference< beans::XPropertySet >  xPropSet(xStyle, uno::UNO_QUERY);
-            uno::Any aLayout = xPropSet->getPropertyValue(C2U(UNO_NAME_PAGE_STYLE_LAYOUT));
-
-            style::PageStyleLayout eLayout = *(style::PageStyleLayout*)aLayout.getValue();
-            uno::Any aShare = xPropSet->getPropertyValue(C2U(UNO_NAME_HEADER_IS_SHARED));
-            sal_Bool bShare;
-            aShare >>= bShare;
-            sal_Bool bLeft = sal_False;
-            sal_Bool bRight = sal_False;
-            //jetzt evtl. noch zw. linker/rechter Kopf-/Fusszeile unterscheiden
-            if(!bShare && eLayout == style::PageStyleLayout_MIRRORED)
-            {
-                uno::Reference<lang::XUnoTunnel> xTunnel(xStyle, uno::UNO_QUERY);
-                SwXPageStyle* pStyle = (SwXPageStyle*)
-                    xTunnel->getSomething( SwXPageStyle::getUnoTunnelId());
-
-                DBG_ASSERT(pStyle, "Was ist das fuer ein style::XStyle?")
-                bLeft = pSttNode == pStyle->GetStartNode(eType == SwHeaderStartNode, sal_True);
-                bRight = !bLeft;
-            }
-            uno::Any aParent;
-            sal_Bool bFooter = eType == SwFooterStartNode;
-            if(eLayout == style::PageStyleLayout_LEFT || bLeft)
-                aParent = xPropSet->getPropertyValue(C2U(bFooter ? UNO_NAME_FOOTER_TEXT_LEFT : UNO_NAME_HEADER_TEXT_LEFT));
-            else if(eLayout == style::PageStyleLayout_RIGHT)
-                aParent = xPropSet->getPropertyValue(C2U(bFooter ? UNO_NAME_FOOTER_TEXT_RIGHT : UNO_NAME_HEADER_TEXT_RIGHT));
-            else
-                aParent = xPropSet->getPropertyValue(C2U(bFooter ? UNO_NAME_FOOTER_TEXT : UNO_NAME_HEADER_TEXT));
-
-            if(aParent.getValueType() != ::getVoidCppuType())
-            {
-                uno::Reference< XText >  xText = *(uno::Reference< XText > *)aParent.getValue();
-                xCurParentRef = xText;
-            }
-        }
-
-
-        break;
-//              case SwNormalStartNode:
-        default:
-        {
-            if(!xParentText.is())
-            {
-                uno::Reference< XTextDocument >  xDoc(
-                    rPaM.GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
-                xParentText = xDoc->getText();
-            }
-            xCurParentRef = xParentText;
-        }
-    }
-    if(xCurParentRef.is() && !xRet.is())
-        xRet = new SwXTextRange(rPaM, xCurParentRef);
-    DBG_ASSERT(xRet.is(), "SwXTextRange not created")
-    return xRet;
-}*/
-
 /* -----------------------------03.04.00 09:11--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -2136,7 +2004,8 @@ uno::Reference< XEnumeration >  SwXTextRange::createEnumeration(void) throw( Run
     SwXText* pParentText = 0;
     if(xTunnel.is())
     {
-        pParentText = (SwXText*)xTunnel->getSomething(SwXText::getUnoTunnelId());
+        pParentText = reinterpret_cast< SwXText * >(
+                sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXText::getUnoTunnelId()) ));
     }
     DBG_ASSERT(pParentText, "parent is not a SwXText")
     CursorType eSetType = RANGE_IN_CELL == eRangePosition ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
@@ -2209,8 +2078,8 @@ Any SAL_CALL SwXTextRange::getPropertyValue( const OUString& rPropertyName )
 
   -----------------------------------------------------------------------*/
 void SAL_CALL SwXTextRange::addPropertyChangeListener(
-    const OUString& aPropertyName, const uno::Reference< XPropertyChangeListener >& xListener )
-    throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     DBG_WARNING("not implemented")
 }
@@ -2218,8 +2087,8 @@ void SAL_CALL SwXTextRange::addPropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void SAL_CALL SwXTextRange::removePropertyChangeListener(
-    const OUString& aPropertyName, const uno::Reference< XPropertyChangeListener >& aListener )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     DBG_WARNING("not implemented")
 }
@@ -2227,8 +2096,8 @@ void SAL_CALL SwXTextRange::removePropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void SAL_CALL SwXTextRange::addVetoableChangeListener(
-    const OUString& PropertyName, const uno::Reference< XVetoableChangeListener >& aListener )
-    throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    const OUString& /*PropertyName*/, const uno::Reference< XVetoableChangeListener >& /*aListener*/ )
+    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     DBG_WARNING("not implemented")
 }
@@ -2236,8 +2105,8 @@ void SAL_CALL SwXTextRange::addVetoableChangeListener(
 
   -----------------------------------------------------------------------*/
 void SAL_CALL SwXTextRange::removeVetoableChangeListener(
-    const OUString& PropertyName, const uno::Reference< XVetoableChangeListener >& aListener )
-        throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+    const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
+        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     DBG_WARNING("not implemented")
 }
@@ -2315,7 +2184,7 @@ sal_Int64 SAL_CALL SwXTextRanges::getSomething( const uno::Sequence< sal_Int8 >&
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
-            return (sal_Int64)this;
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast <sal_IntPtr >(this) );
     }
     return 0;
 }
@@ -2738,7 +2607,7 @@ void    SwXParaFrameEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_REFCOUNT( SwXTextCursor,SwXTextCursor_Base )
 
-::com::sun::star::uno::Any SAL_CALL SwXTextCursor::queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException)
+uno::Any SAL_CALL SwXTextCursor::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)
 {
     if( _rType == ::getCppuType( (uno::Reference<XUnoTunnel>*)0)  )
         return OTextCursorHelper::queryInterface( _rType );
