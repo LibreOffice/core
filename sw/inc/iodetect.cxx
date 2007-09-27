@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 13:22:05 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:05:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,11 @@
 #ifndef _IODETECT_CXX
 #define _IODETECT_CXX
 
+#include <sfx2/docfilt.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <svtools/parhtml.hxx>
+
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
 #endif
@@ -63,6 +68,7 @@ using namespace com::sun::star;
 class Reader;
 USHORT AutoDetec(const String& FileName, USHORT & rVersion);
 bool IsDocShellRegistered();
+void GetWW8Writer( const String&, const String&, WriterRef& );
 
 typedef void (*FnGetWriter)(const String&, const String& rBaseURL, WriterRef&);
 
@@ -188,11 +194,11 @@ struct W1_FIB
     USHORT wIdentGet()  { return SVBT16ToShort(wIdent); }
     USHORT fFlagsGet()  { return SVBT16ToShort(fFlags); }
     // SVBT16 fComplex :1;//        0004 when 1, file is in complex, fast-saved format.
-    BOOL fComplexGet() { return ((fFlagsGet() >> 2) & 1); }
+    BOOL fComplexGet() { return static_cast< BOOL >((fFlagsGet() >> 2) & 1); }
 };
 
 const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, ULONG nLen_,
-    const String &rFileName, const String& rUserData) const
+    const String & /*rFileName*/, const String& /*rUserData*/) const
 {
     int bRet = FALSE;
     if( sHTML == pName )
@@ -259,7 +265,7 @@ const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
     return 0;
 }
 
-FASTBOOL SwIoSystem::IsValidStgFilter( const uno::Reference < embed::XStorage >& rStg, const SfxFilter& rFilter)
+BOOL SwIoSystem::IsValidStgFilter( const uno::Reference < embed::XStorage >& rStg, const SfxFilter& rFilter)
 {
     BOOL bRet = FALSE;
     try
@@ -276,7 +282,7 @@ FASTBOOL SwIoSystem::IsValidStgFilter( const uno::Reference < embed::XStorage >&
     return bRet;
 }
 
-FASTBOOL SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
+BOOL SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
 {
     ULONG nStgFmtId = rStg.GetFormat();
     /*#i8409# We cannot trust the clipboard id anymore :-(*/
@@ -332,10 +338,10 @@ void TerminateBuffer(sal_Char *pBuffer, ULONG nBytesRead, ULONG nBufferLen)
 
     /* Feststellen ob das File in dem entsprechenden Format vorliegt. */
     /* Z.z werden nur unsere eigene Filter unterstuetzt               */
-FASTBOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
+BOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
                                     const SfxFilter** ppFilter )
 {
-    FASTBOOL bRet = FALSE;
+    BOOL bRet = FALSE;
 
     SfxFilterContainer aCntSw( String::CreateFromAscii( pSw ) );
     SfxFilterContainer aCntSwWeb( String::CreateFromAscii( pSwWeb ) );
@@ -498,7 +504,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
 
     sal_Char aBuffer[4098];
     const ULONG nMaxRead = sizeof(aBuffer) - 2;
-    ULONG nBytesRead;
+    ULONG nBytesRead = 0;
     if (pMedium)
     {
         SvStream* pIStrm = pMedium->GetInStream();
@@ -531,19 +537,17 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
     /* nie erkannt und es wird auch der ASCII-Filter returnt.             */
     /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
     {
-        const SfxFilter* pFilter;
+        const SfxFilter* pFilterTmp = 0;
         const sal_Char* pNm;
         for( USHORT n = 0; n < MAXFILTER; ++n )
         {
             String sEmptyUserData;
-            if(
-               (pNm = aReaderWriter[n].IsReader(aBuffer, nBytesRead, rFileName, sEmptyUserData))
-                && (pFilter = SwIoSystem::GetFilterOfFormat(
-                     String::CreateFromAscii(pNm), pFCntnr))
-              )
-              {
-                return pFilter;
-              }
+            pNm = aReaderWriter[n].IsReader(aBuffer, nBytesRead, rFileName, sEmptyUserData);
+            pFilterTmp = pNm ? SwIoSystem::GetFilterOfFormat(String::CreateFromAscii(pNm), pFCntnr) : 0;
+            if (pNm && pFilterTmp)
+            {
+                return pFilterTmp;
+            }
         }
     }
 
@@ -595,7 +599,7 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
     if (eCharSet != RTL_TEXTENCODING_DONTKNOW)
     {
         String sWork;
-        sal_Unicode *pNewBuf = sWork.AllocBuffer(rLen);
+        sal_Unicode *pNewBuf = sWork.AllocBuffer( static_cast< xub_StrLen >(rLen));
         sal_Size nNewLen;
         if (eCharSet != RTL_TEXTENCODING_UCS2)
         {
@@ -639,7 +643,7 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
             }
         }
 
-        sWork.ReleaseBufferAccess(nNewLen);
+        sWork.ReleaseBufferAccess( static_cast< xub_StrLen >(nNewLen) );
         pNewBuf = sWork.GetBufferAccess();
 
         for (ULONG nCnt = 0; nCnt < nNewLen; ++nCnt, ++pNewBuf)
