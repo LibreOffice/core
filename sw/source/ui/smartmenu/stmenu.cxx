@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stmenu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:26:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:32:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
    smarttag library.
 
 */
-sal_uInt16 SwSmartTagPopup::Execute( Window* pWin, const Rectangle& rWordPos )
+sal_uInt16 SwSmartTagPopup::Execute( const Rectangle& rWordPos, Window* pWin )
 {
     sal_uInt16 nId = PopupMenu::Execute(pWin, pWin->LogicToPixel(rWordPos));
 
