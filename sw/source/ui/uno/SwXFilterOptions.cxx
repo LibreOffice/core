@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXFilterOptions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:22:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:40:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,6 @@
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
 #endif
-//CHINA001 #ifndef _ASCFLDLG_HXX
-//CHINA001 #include <ascfldlg.hxx>
-//CHINA001 #endif
 
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
@@ -76,8 +73,8 @@
 #include <unotxdoc.hxx>
 #endif
 
-#include "swabstdlg.hxx" //CHINA001
-#include "dialog.hrc" //CHINA001
+#include "swabstdlg.hxx"
+#include "dialog.hrc"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
@@ -153,11 +150,11 @@ void   SwXFilterOptions::setPropertyValues( const uno::Sequence<beans::PropertyV
 /*-- 2002/06/21 11:01:25---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void   SwXFilterOptions::setTitle( const ::rtl::OUString& aTitle )
+void   SwXFilterOptions::setTitle( const ::rtl::OUString& /*rTitle*/ )
     throw (uno::RuntimeException)
 {
 }
-/*-- 2002/06/21 11:01:25---------------------------------------------------
+/*-- 2002.06.21 11:01:25---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException)
@@ -172,21 +169,22 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException)
     SwDocShell* pDocShell = 0;
     if(xTunnel.is())
     {
-        SwXTextDocument* pXDoc = (SwXTextDocument*)xTunnel->getSomething(SwXTextDocument::getUnoTunnelId());
+        SwXTextDocument* pXDoc = reinterpret_cast< SwXTextDocument * >(
+                sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SwXTextDocument::getUnoTunnelId())));
         pDocShell = pXDoc ? pXDoc->GetDocShell() : 0;
     }
     if(pDocShell)
     {
-        //CHINA001 SwAsciiFilterDlg aAsciiDlg( NULL, *pDocShell, pInStream );
-        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-        AbstractSwAsciiFilterDlg* pAsciiDlg = pFact->CreateSwAsciiFilterDlg( NULL, *pDocShell,pInStream, DLG_ASCII_FILTER );
-        DBG_ASSERT(pAsciiDlg, "Dialogdiet fail!");//CHINA001
-        if(RET_OK == pAsciiDlg->Execute()) //CHINA001 if(RET_OK == aAsciiDlg.Execute())
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+
+        AbstractSwAsciiFilterDlg* pAsciiDlg = pFact->CreateSwAsciiFilterDlg( NULL, *pDocShell,pInStream,  DLG_ASCII_FILTER );
+        DBG_ASSERT(pAsciiDlg, "Dialogdiet fail!");
+        if(RET_OK == pAsciiDlg->Execute())
         {
             SwAsciiOptions aOptions;
-            pAsciiDlg->FillOptions( aOptions );//CHINA001 aAsciiDlg.FillOptions( aOptions );
+            pAsciiDlg->FillOptions( aOptions );
             String sTmp;
             aOptions.WriteUserData(sTmp);
             sFilterOptions = sTmp;
