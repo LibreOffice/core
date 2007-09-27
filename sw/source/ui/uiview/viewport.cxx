@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 16:04:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:38:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,9 +116,9 @@ BOOL SwView::IsDocumentBorder()
            pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
            SVX_ZOOM_PAGEWIDTH_NOBORDER == (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType();
 }
+
 inline long GetLeftMargin( SwView &rView )
 {
-    BOOL bWeb = 0 != PTR_CAST(SwWebView, &rView);
     SvxZoomType eType = (SvxZoomType)rView.GetWrtShell().GetViewOptions()->GetZoomType();
     long lRet = rView.GetWrtShell().GetAnyCurRect(RECT_PAGE_PRT).Left();
     return eType == SVX_ZOOM_PERCENT   ? lRet + DOCUMENTBORDER :
@@ -131,7 +131,7 @@ inline long GetLeftMargin( SwView &rView )
 void lcl_GetPos(SwView* pView,
                 Point& rPos,
                 SwScrollbar* pScrollbar,
-                FASTBOOL bBorder)
+                BOOL bBorder)
 {
     SwWrtShell &rSh = pView->GetWrtShell();
     const Size aDocSz( rSh.GetDocSize() );
@@ -325,7 +325,7 @@ void SwView::SetVisArea( const Rectangle &rRect, BOOL bUpdateScrollbar )
 
     aVisArea = aLR;
 
-    const FASTBOOL bOuterResize = bUpdateScrollbar && UpdateScrollbars();
+    const BOOL bOuterResize = bUpdateScrollbar && UpdateScrollbars();
 
     if ( pWrtShell )
     {
@@ -547,8 +547,8 @@ void SwView::Scroll( const Rectangle &rRect, USHORT nRangeX, USHORT nRangeY )
         aSize.Height()= Min( aSize.Height(),aVisSize.Height());
 
         CalcPt( &aPt, Rectangle( rRect.TopLeft(), aSize ),
-                (aVisSize.Width() - aSize.Width()) / 2,
-                (aVisSize.Height()- aSize.Height())/ 2 );
+                static_cast< USHORT >((aVisSize.Width() - aSize.Width()) / 2),
+                static_cast< USHORT >((aVisSize.Height()- aSize.Height())/ 2) );
 
         if( bTopCrsr )
         {
@@ -839,7 +839,7 @@ IMPL_LINK( SwView, EndScrollHdl, SwScrollbar *, pScrollbar )
             Help::ShowQuickHelp(pScrollbar, Rectangle(), aEmptyStr, 0);
         }
         Point aPos( aVisArea.TopLeft() );
-        FASTBOOL bBorder = IsDocumentBorder();
+        BOOL bBorder = IsDocumentBorder();
         lcl_GetPos(this, aPos, pScrollbar, bBorder);
         if ( bBorder && aPos == aVisArea.TopLeft() )
             UpdateScrollbars();
@@ -920,7 +920,7 @@ void SwView::CalcVisArea( const Size &rOutPixel )
  --------------------------------------------------------------------*/
 
 
-void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, FASTBOOL bInner )
+void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, BOOL /*bInner*/ )
 {
     BOOL bRightVRuler = pWrtShell->GetViewOptions()->IsVRulerRight();
     if ( pVRuler->IsVisible() )
@@ -947,7 +947,7 @@ void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, FASTBOOL bInner )
     }
     //#i32913# in browse mode the visibility of the horizontal scrollbar
     // depends on the content (fixed width tables may require a scrollbar)
-    if ( pHScrollbar->IsVisible(pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))  )
+    if ( pHScrollbar->IsVisible(pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE)) )
         rToFill.Bottom() = nTmp;
 
     SetBorderPixel( rToFill );
@@ -958,7 +958,7 @@ void ViewResizePixel( const Window &rRef,
                     const Point &rOfst,
                     const Size &rSize,
                     const Size &rEditSz,
-                    const BOOL bInner,
+                    const BOOL /*bInner*/,
                     SwScrollbar& rVScrollbar,
                     SwScrollbar& rHScrollbar,
                     ImageButton* pPageUpBtn,
@@ -978,12 +978,12 @@ void ViewResizePixel( const Window &rRef,
     const BOOL bVLineal = pVLineal && pVLineal->IsVisible();
     const long nVLinSzWidth = bVLineal ?
                         pVLineal->GetSizePixel().Width() : 0;
-    long nHBSzHeight2= rHScrollbar.IsVisible() || !rHScrollbar.IsAuto() ?
+    long nHBSzHeight2= rHScrollbar.IsVisible( FALSE ) || !rHScrollbar.IsAuto() ?
                        rRef.GetSettings().GetStyleSettings().GetScrollBarSize() : 0;
     long nHBSzHeight =
-                rHScrollbar.IsVisible(TRUE) ||  (rHScrollbar.IsVisible() && !rHScrollbar.IsAuto()) ?
+                rHScrollbar.IsVisible(TRUE) ||  (rHScrollbar.IsVisible( FALSE ) && !rHScrollbar.IsAuto()) ?
                                 nHBSzHeight2:0;
-    long nVBSzWidth = rVScrollbar.IsVisible(TRUE) ||  (rVScrollbar.IsVisible() && !rVScrollbar.IsAuto()) ?
+    long nVBSzWidth = rVScrollbar.IsVisible(TRUE) ||  (rVScrollbar.IsVisible( FALSE ) && !rVScrollbar.IsAuto()) ?
                          rRef.GetSettings().GetStyleSettings().GetScrollBarSize() : 0;
 
     if(pVLineal)
@@ -1077,7 +1077,7 @@ void ViewResizePixel( const Window &rRef,
         pPageDownBtn->SetPosSizePixel( aPos, aImgSz );
 
 
-        if( rHScrollbar.IsVisible() )
+        if( rHScrollbar.IsVisible( FALSE ) )
         {
             aScrollFillPos.X() = aPos.X();
 
@@ -1090,14 +1090,9 @@ void ViewResizePixel( const Window &rRef,
 
 void SwView::ShowAtResize()
 {
-    const FASTBOOL bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
     bShowAtResize = FALSE;
     if ( pWrtShell->GetViewOptions()->IsViewHRuler() )
         pHRuler->Show();
-//    if ( !bBrowse ||GetViewFrame()->GetFrame()->IsInPlace())
-//        pHScrollbar->Show();
-//    if ( !bBrowse && pVScrollbar->IsVisible() && pHScrollbar->IsVisible())
-//            pScrollFill->Show();
 }
 
 
@@ -1141,7 +1136,6 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
         }
 
         Size aEditSz( GetEditWin().GetOutputSizePixel() );
-        const BOOL bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
         ViewResizePixel( GetEditWin(), rOfst, aSz, aEditSz, TRUE, *pVScrollbar,
                             *pHScrollbar, pPageUpBtn, pPageDownBtn,
                             pNaviBtn,
@@ -1193,11 +1187,11 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     bInOuterResizePixel = TRUE;
 
 // feststellen, ob Scrollbars angezeigt werden duerfen
-    FASTBOOL bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
-    FASTBOOL bShowH,
-             bShowV,
-             bAuto = FALSE,
-             bHAuto= bBrowse;
+    BOOL bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    BOOL bShowH = FALSE,
+         bShowV = FALSE,
+         bAuto  = FALSE,
+         bHAuto = bBrowse;
     switch( GetScrollingMode() )
     {
     case SCROLLING_DEFAULT:
@@ -1228,15 +1222,15 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     {
         bShowH = bShowV = bHAuto = bAuto = FALSE;
     }
-    if(pHScrollbar->IsVisible() != bShowH)
+    if(pHScrollbar->IsVisible(FALSE) != bShowH)
         ShowHScrollbar(bShowH);
     pHScrollbar->SetAuto( bHAuto );
-    if(pVScrollbar->IsVisible() != bShowV)
+    if(pVScrollbar->IsVisible(FALSE) != bShowV)
         ShowVScrollbar(bShowV);
     pVScrollbar->SetAuto(bAuto);
 
     SET_CURR_SHELL( pWrtShell );
-    FASTBOOL bRepeat = FALSE;
+    BOOL bRepeat = FALSE;
     long nCnt = 0;
 
     BOOL bUnLockView = !pWrtShell->IsViewLocked();
@@ -1245,8 +1239,8 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
     do {
         ++nCnt;
-        const FASTBOOL bScroll1 = pVScrollbar->IsVisible(TRUE);
-        const FASTBOOL bScroll2 = pHScrollbar->IsVisible(TRUE);
+        const BOOL bScroll1 = pVScrollbar->IsVisible(TRUE);
+        const BOOL bScroll2 = pHScrollbar->IsVisible(TRUE);
         SvBorder aBorder;
         CalcAndSetBorderPixel( aBorder, FALSE );
         const Size aEditSz( GetEditWin().GetOutputSizePixel() );
@@ -1266,9 +1260,6 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         //nicht mehr zum aktuell sichtbaren Bereich passen
         pWrtShell->ResetCursorStack();
 
-#if OSL_DEBUG_LEVEL > 1
-        SwEditWin &rW = GetEditWin();
-#endif
         ASSERT( !GetEditWin().IsVisible() ||
                     (( aEditSz.Width() > 0 && aEditSz.Height() > 0 )
                         || !aVisArea.IsEmpty()), "Small world, isn't it?" );
@@ -1308,7 +1299,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
     }while ( bRepeat );
 
-    if( pVScrollbar->IsVisible() || pVScrollbar->IsAuto())
+    if( pVScrollbar->IsVisible(FALSE) || pVScrollbar->IsAuto())
     {
         BOOL bShowButtons = pVScrollbar->IsVisible(TRUE);
         if(pPageUpBtn && pPageUpBtn->IsVisible() != bShowButtons)
@@ -1355,7 +1346,7 @@ Size SwView::GetOptimalSizePixel() const
                                                     pWrtShell->GetCurPageDesc() );
         const SvxLRSpaceItem &rLRSpace = rDesc.GetMaster().GetLRSpace();
         aPgSize = GetWrtShell().GetAnyCurRect(RECT_PAGE).SSize();
-        if( PD_MIRROR == rDesc.GetUseOn() )
+        if( nsUseOnPage::PD_MIRROR == rDesc.GetUseOn() )
         {
             const SvxLRSpaceItem &rLeftLRSpace = rDesc.GetLeft().GetLRSpace();
             aPgSize.Width() +=
@@ -1370,9 +1361,9 @@ Size SwView::GetOptimalSizePixel() const
 BOOL SwView::UpdateScrollbars()
 {
     BOOL bRet = FALSE;
-    if ( !aVisArea.IsEmpty() /*&& (pHScrollbar->IsVisible() || pVScrollbar->IsVisible())*/ )
+    if ( !aVisArea.IsEmpty() )
     {
-        const FASTBOOL bBorder = IsDocumentBorder();
+        const BOOL bBorder = IsDocumentBorder();
         Rectangle aTmpRect( aVisArea );
         if ( bBorder )
         {
@@ -1431,9 +1422,9 @@ BOOL SwView::HandleWheelCommands( const CommandEvent& rCEvt )
     {
         USHORT nFact = pWrtShell->GetViewOptions()->GetZoom();
         if( 0L > pWData->GetDelta() )
-            nFact = Max( 20, nFact - 10 );
+            nFact = static_cast< USHORT >(Max( 20, nFact - 10 ));
         else
-            nFact = Min( 600, nFact + 10 );
+            nFact = static_cast< USHORT >(Min( 600, nFact + 10 ));
 
         SetZoom( SVX_ZOOM_PERCENT, nFact );
         bOk = TRUE;
