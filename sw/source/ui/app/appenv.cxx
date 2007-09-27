@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:12:46 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:14:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,9 +123,6 @@
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
-//CHINA001 #ifndef _ENVLOP_HXX
-//CHINA001 #include <envlop.hxx>
-//CHINA001 #endif
 #ifndef _FMTCOL_HXX
 #include <fmtcol.hxx>
 #endif
@@ -163,9 +160,9 @@
 #ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
 #endif
-#include "swabstdlg.hxx" //CHINA001
-#include "envelp.hrc" //CHINA001
-#include "envimg.hxx" //CHINA001
+#include "swabstdlg.hxx"
+#include "envelp.hrc"
+#include "envimg.hxx"
 
 #define ENV_NEWDOC      RET_OK
 #define ENV_INSERT      RET_USER
@@ -259,7 +256,7 @@ static USHORT nTitleNo = 0;
 
     SwDocShell      *pMyDocSh;
     SfxViewFrame    *pFrame;
-    SwView          *pView;
+    SwView          *pNewView;
     SwWrtShell      *pOldSh,
                     *pSh;
 
@@ -271,9 +268,9 @@ static USHORT nTitleNo = 0;
     SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
     xDocSh->DoInitNew( 0 );
     pFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
-    pView = (SwView*) pFrame->GetViewShell();
-    pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
-    pSh = pView->GetWrtShellPtr();
+    pNewView = (SwView*) pFrame->GetViewShell();
+    pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );//Damit SelectShell gerufen wird.
+    pSh = pNewView->GetWrtShellPtr();
 
     String aTmp( SW_RES(STR_ENV_TITLE) );
     aTmp += String::CreateFromInt32( ++nTitleNo );
@@ -317,19 +314,17 @@ static USHORT nTitleNo = 0;
     }
 
     Window *pParent = pOldSh ? pOldSh->GetWin() : 0;
-    //CHINA001 SwEnvDlg* pDlg = NULL;
     SfxAbstractTabDialog * pDlg=NULL;
     short nMode = ENV_INSERT;
 
     SFX_REQUEST_ARG( rReq, pItem, SwEnvItem, FN_ENVELOP, sal_False );
     if ( !pItem )
     {
-        //CHINA001 pDlg = new SwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange);
-        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
         pDlg = pFact->CreateSwEnvDlg( pParent, aSet, pOldSh, pTempPrinter, !bEnvChange, DLG_ENV );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");
         nMode = pDlg->Execute();
     }
     else
@@ -379,9 +374,9 @@ static USHORT nTitleNo = 0;
             //not be deleted on inserting envelopes
             pSh->EnterStdMode();
             // Los geht's (Einfuegen)
-            pSh->StartUndo(UIUNDO_INSERT_ENVELOPE, NULL);
+            pSh->StartUndo(UNDO_UI_INSERT_ENVELOPE, NULL);
             pSh->StartAllAction();
-            pSh->SwCrsrShell::SttDoc();
+            pSh->SttEndDoc(TRUE);
 
             if (bEnvChange)
             {
@@ -403,7 +398,7 @@ static USHORT nTitleNo = 0;
                     pSh->EnterSelFrmMode();
                     pSh->DelRight();
                 }
-                pSh->SwCrsrShell::SttDoc();
+                pSh->SttEndDoc(TRUE);
             }
             else
                 // Folgevorlage: Seite 1
@@ -414,13 +409,13 @@ static USHORT nTitleNo = 0;
             {
                 pSh->SplitNode();
                 pSh->Right( CRSR_SKIP_CHARS, FALSE, 1, FALSE );
-                SfxItemSet aSet( pSh->GetAttrPool(), RES_BREAK, RES_BREAK, 0 );
-                aSet.Put( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK ) );
-                pSh->SetTblAttr( aSet );
+                SfxItemSet aBreakSet( pSh->GetAttrPool(), RES_BREAK, RES_BREAK, 0 );
+                aBreakSet.Put( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK) );
+                pSh->SetTblAttr( aBreakSet );
             }
             else
                 pSh->InsertPageBreak(0, FALSE);
-            pSh->SwCrsrShell::SttDoc();
+            pSh->SttEndDoc(TRUE);
         }
         else
         {
@@ -499,7 +494,7 @@ static USHORT nTitleNo = 0;
         pDesc->ChgFooterShare(FALSE);
 
         // Seitennumerierung
-        pDesc->SetUseOn(PD_ALL);
+        pDesc->SetUseOn(nsUseOnPage::PD_ALL);
 
         // Einstellen der Seitengroesse
         rFmt.SetAttr(SwFmtFrmSize(ATT_FIX_SIZE,
@@ -542,7 +537,7 @@ static USHORT nTitleNo = 0;
         // Absender
         if (rItem.bSend)
         {
-            pSh->SwCrsrShell::SttDoc();
+            pSh->SttEndDoc(TRUE);
             aMgr.InsertFlyFrm(FLY_PAGE,
                 Point(rItem.lSendFromLeft + lLeft, rItem.lSendFromTop  + lUpper),
                 Size (rItem.lAddrFromLeft - rItem.lSendFromLeft, 0));
@@ -557,7 +552,7 @@ static USHORT nTitleNo = 0;
         }
 
         // Empfaenger
-        pSh->SwCrsrShell::SttDoc();
+        pSh->SttEndDoc(TRUE);
 
         aMgr.InsertFlyFrm(FLY_PAGE,
             Point(rItem.lAddrFromLeft + lLeft, rItem.lAddrFromTop  + lUpper),
@@ -574,14 +569,14 @@ static USHORT nTitleNo = 0;
             pSh->SetPageObjsNewPage(aFlyArr, 1);
 
         // Fertig
-        pSh->SwCrsrShell::SttDoc();
+        pSh->SttEndDoc(TRUE);
 
         pSh->EndAllAction();
 
         if (nMode == ENV_NEWDOC)
             pSh->DoUndo(TRUE);
         else
-            pSh->EndUndo(UIUNDO_INSERT_ENVELOPE);
+            pSh->EndUndo(UNDO_UI_INSERT_ENVELOPE);
 
         if (nMode == ENV_NEWDOC)
         {
@@ -599,7 +594,7 @@ static USHORT nTitleNo = 0;
                 pFrame->GetBindings().Invalidate( aInva );
 
                 // Datenbankbeamer oeffnen
-                ShowDBObj(*pView, pSh->GetDBData());
+                ShowDBObj(*pNewView, pSh->GetDBData());
             }
         }
 
