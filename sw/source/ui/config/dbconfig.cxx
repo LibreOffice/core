@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbconfig.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:39:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,11 +54,13 @@
 #ifndef _SWDBDATA_HXX
 #include <swdbdata.hxx>
 #endif
+
+#include <unomid.h>
+
 using namespace utl;
 using namespace rtl;
-using namespace com::sun::star::uno;
+using namespace ::com::sun::star::uno;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
 /*--------------------------------------------------------------------
      Beschreibung: Ctor
  --------------------------------------------------------------------*/
