@@ -4,9 +4,9 @@
  *
  *  $RCSfile: envlop1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:07:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:42:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,15 +70,18 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-using namespace com::sun::star::lang;
-using namespace com::sun::star::container;
-using namespace com::sun::star::uno;
-using namespace com::sun::star;
-using namespace rtl;
-#define C2U(char) rtl::OUString::createFromAscii(char)
+
+#include <unomid.h>
+
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
+using namespace ::rtl;
+
 
 //impl in envimg.cxx
-extern String MakeSender();
+extern SW_DLLPUBLIC String MakeSender();
 
 // --------------------------------------------------------------------------
 
@@ -118,9 +121,9 @@ void SwEnvPreview::Paint(const Rectangle &)
     USHORT nPageW = (USHORT) Max(rItem.lWidth, rItem.lHeight),
            nPageH = (USHORT) Min(rItem.lWidth, rItem.lHeight);
 
-    float fx = (float) GetOutputSizePixel().Width () / nPageW,
-          fy = (float) GetOutputSizePixel().Height() / nPageH,
-          f  = 0.8 * ( fx < fy ? fx : fy );
+    float fx = static_cast< float >(GetOutputSizePixel().Width () / nPageW),
+          fy = static_cast< float >(GetOutputSizePixel().Height() / nPageH),
+          f  = static_cast< float >(0.8 * ( fx < fy ? fx : fy ));
 
     Color aBack = rSettings.GetWindowColor( );
     Color aFront = SwViewOption::GetFontColor();
@@ -410,11 +413,11 @@ void SwEnvPage::ActivatePage(const SfxItemSet& rSet)
 
 
 
-int SwEnvPage::DeactivatePage(SfxItemSet* pSet)
+int SwEnvPage::DeactivatePage(SfxItemSet* _pSet)
 {
     FillItem(GetParent()->aEnvItem);
-    if( pSet )
-        FillItemSet(*pSet);
+    if( _pSet )
+        FillItemSet(*_pSet);
     return SfxTabPage::LEAVE_PAGE;
 }
 
