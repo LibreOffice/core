@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1class.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:19:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:57:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,8 @@ Ww1SingleSprm* Ww1Sprm::pSingleSprm = 0;
 
 
 /////////////////////////////////////////////////////////////////// Fib
-Ww1Fib::Ww1Fib( SvStream& rStream )
-    : rStream(rStream)
+Ww1Fib::Ww1Fib( SvStream& _rStream )
+    : rStream(_rStream)
 {
     bOK = 0 == rStream.Seek(0) &&
           rStream.Read( &aFib, sizeof( aFib )) == sizeof( aFib );
@@ -97,7 +97,7 @@ String Ww1PlainText::GetText( ULONG ulOffset, ULONG nLen ) const
     ByteString aStr;
     DBG_ASSERT(ulOffset+nLen<Count(), "Ww1PlainText");
     if( rFib.GetStream().Seek(ulFilePos+ulOffset) == ulFilePos+ulOffset &&
-        rFib.GetStream().Read( aStr.AllocBuffer( nLen ), nLen ) == nLen )
+        rFib.GetStream().Read( aStr.AllocBuffer( static_cast< xub_StrLen >(nLen) ), nLen ) == nLen )
         sRet = String( aStr, RTL_TEXTENCODING_MS_1252 );
     return sRet;
 }
@@ -130,7 +130,7 @@ USHORT Ww1Style::ReadName( BYTE*&p, USHORT& rnCountBytes, USHORT stc )
     rnCountBytes--;
     if( !nCountBytes ) // default
     {
-        static sal_Char* __READONLY_DATA names[] =
+        static const sal_Char* __READONLY_DATA names[] =
         {
             "W1 Null",  //222
             "W1 Annotation reference",  //223
@@ -183,7 +183,7 @@ USHORT Ww1Style::ReadName( BYTE*&p, USHORT& rnCountBytes, USHORT stc )
         SetName( String( (sal_Char*)p, nCountBytes, RTL_TEXTENCODING_MS_1252 ));
         p += nCountBytes;
         DBG_ASSERT(rnCountBytes>=nCountBytes, "Ww1Style");
-        rnCountBytes -= nCountBytes;
+        rnCountBytes = rnCountBytes - nCountBytes;
     }
     return 0;
 }
@@ -201,7 +201,7 @@ USHORT Ww1Style::ReadChpx( BYTE*&p, USHORT& rnCountBytes )
         memcpy( &aChpx, p, nCountBytes );
         p += nCountBytes;
         DBG_ASSERT(rnCountBytes>=nCountBytes, "Ww1Style");
-        rnCountBytes -= nCountBytes;
+        rnCountBytes = rnCountBytes - nCountBytes;
     }
     return 0;
 }
@@ -216,7 +216,7 @@ USHORT Ww1Style::ReadPapx(BYTE*&p, USHORT& rnCountBytes)
         pPapx = new Ww1SprmPapx(p, nCountBytes);
         p += nCountBytes;
         DBG_ASSERT(rnCountBytes>=nCountBytes, "Ww1Style");
-        rnCountBytes -= nCountBytes;
+        rnCountBytes = rnCountBytes - nCountBytes;
     }
     else
         pPapx = new Ww1SprmPapx(p, 0);
@@ -236,9 +236,9 @@ USHORT Ww1Style::ReadEstcp(BYTE*&p, USHORT& rnCountBytes)
 }
 
 //////////////////////////////////////////////////////////// StyleSheet
-Ww1StyleSheet::Ww1StyleSheet(Ww1Fib& rFib)
+Ww1StyleSheet::Ww1StyleSheet(Ww1Fib& _rFib)
     : cstcStd(0),
-    rFib(rFib),
+    rFib(_rFib),
     bOK(FALSE)
 {
     USHORT cbStshf = rFib.GetFIB().cbStshfGet();
@@ -273,8 +273,8 @@ USHORT Ww1StyleSheet::ReadNames( BYTE*& p, USHORT& rnCountBytes )
     USHORT nCountBytes = SVBT16ToShort(p);
     p += sizeof(SVBT16);
     DBG_ASSERT(rnCountBytes>=nCountBytes, "Ww1StyleSheet");
-    rnCountBytes -= nCountBytes;
-    nCountBytes -= sizeof(SVBT16);
+    rnCountBytes = rnCountBytes - nCountBytes;
+    nCountBytes = nCountBytes - sizeof(SVBT16);
     USHORT stcp = 0;
     while (nCountBytes > 0)
     {
@@ -291,8 +291,8 @@ USHORT Ww1StyleSheet::ReadChpx(BYTE*& p, USHORT& rnCountBytes)
     USHORT nCountBytes = SVBT16ToShort(p);
     p += sizeof(SVBT16);
     DBG_ASSERT(rnCountBytes>=nCountBytes, "Ww1StyleSheet");
-    rnCountBytes -= nCountBytes;
-    nCountBytes -= sizeof(SVBT16);
+    rnCountBytes = rnCountBytes - nCountBytes;
+    nCountBytes = nCountBytes - sizeof(SVBT16);
     USHORT stcp = 0;
     while (nCountBytes > 0)
     {
@@ -309,8 +309,8 @@ USHORT Ww1StyleSheet::ReadPapx(BYTE*& p, USHORT& rnCountBytes)
     USHORT nCountBytes = SVBT16ToShort(p);
     p += sizeof(SVBT16);
     DBG_ASSERT(rnCountBytes>=nCountBytes, "Ww1StyleSheet");
-    rnCountBytes -= nCountBytes;
-    nCountBytes -= sizeof(SVBT16);
+    rnCountBytes = rnCountBytes - nCountBytes;
+    nCountBytes = nCountBytes - sizeof(SVBT16);
     USHORT stcp = 0;
     while (nCountBytes > 0)
     {
@@ -406,8 +406,8 @@ W1_FFN* Ww1Fonts::GetFFN(USHORT nNum)
 }
 
 /////////////////////////////////////////////////////////////////// DOP
-Ww1Dop::Ww1Dop(Ww1Fib& rFib)
-    : rFib(rFib)
+Ww1Dop::Ww1Dop(Ww1Fib& _rFib)
+    : rFib(_rFib)
 {
     long nRead;
     memset(&aDop, 0, sizeof(aDop)); // set defaults
@@ -439,9 +439,9 @@ Ww1Picture::Ww1Picture(SvStream& rStream, ULONG ulFilePos)
 }
 
 ////////////////////////////////////////////////////////////////// Sprm
-Ww1Sprm::Ww1Sprm(BYTE* x, USHORT nCountBytes)
+Ww1Sprm::Ww1Sprm(BYTE* x, USHORT _nCountBytes)
     : p(NULL),
-    nCountBytes(nCountBytes),
+    nCountBytes(_nCountBytes),
     bOK(FALSE),
     pArr(NULL),
     count(0)
@@ -484,7 +484,7 @@ Ww1Sprm::~Ww1Sprm()
     delete p;
 }
 
-USHORT Ww1SingleSprm::Size(BYTE* pSprm)
+USHORT Ww1SingleSprm::Size(BYTE* /*pSprm*/)
 {
     return nCountBytes;
 }
@@ -495,7 +495,7 @@ USHORT Ww1SingleSprmTab::Size(BYTE* pSprm) // Doc 24/25, Fastsave-Sprm
     USHORT nRet = sizeof(SVBT8);
     USHORT nSize = SVBT8ToByte(pSprm);
     if (nSize != 255)
-        nRet += nSize;
+        nRet = nRet + nSize;
     else
     {
         USHORT nDel = SVBT8ToByte(pSprm+1) * 4;
@@ -514,7 +514,7 @@ USHORT Ww1SingleSprmByteSized::Size(BYTE* pSprm)
     nRet = SVBT8ToByte(pSprm);
     nRet += sizeof(SVBT8);  // var. l. byte-size
 //  pSprm += sizeof(SVBT8); // var. l. byte-size
-    nRet += nCountBytes;
+    nRet = nRet + nCountBytes;
     return nRet;
 }
 
@@ -524,7 +524,7 @@ USHORT Ww1SingleSprmWordSized::Size(BYTE* pSprm)
     nRet = SVBT16ToShort(pSprm);
     nRet += sizeof(SVBT16);  // var. l. word-size
 //  pSprm += sizeof(SVBT16); // var. l. word-size
-    nRet += nCountBytes;
+    nRet = nRet + nCountBytes;
     return nRet;
 }
 
@@ -532,17 +532,17 @@ static BYTE nLast = 0;
 static BYTE nCurrent = 0;
 USHORT Ww1Sprm::GetSize(BYTE nId, BYTE* pSprm)
 {
-    DBG_ASSERT(nId<sizeof(aTab)/sizeof(*aTab), "Ww1Sprm");
+    //DBG_ASSERT( nId < sizeof(aTab) / sizeof(*aTab), "Ww1Sprm" );
     USHORT nL = 0;
     nL = GetTab(nId).Size(pSprm);
-nLast = nCurrent;
-nCurrent = nId;
+    nLast = nCurrent;
+    nCurrent = nId;
     return nL;
 }
 
 BOOL Ww1Sprm::Fill(USHORT index, BYTE& nId, USHORT& nL, BYTE*& pSprm)
 {
-    DBG_ASSERT(nId<sizeof(aTab)/sizeof(*aTab), "Ww1Sprm");
+    //DBG_ASSERT( nId < sizeof(aTab) / sizeof(*aTab), "Ww1Sprm");
     DBG_ASSERT(index < Count(), "Ww1Sprm");
     pSprm = p + pArr[index];
     nId = SVBT8ToByte(pSprm);
@@ -570,7 +570,7 @@ BOOL Ww1Sprm::ReCalc()
             else
             {
                 psik += iLen;
-                cbsik -= iLen;
+                cbsik = cbsik - iLen;
                 count++;
             }
         }
@@ -589,8 +589,8 @@ BOOL Ww1Sprm::ReCalc()
                 if (iLen > cbsik)
                     cbsik = 0;
                 else
-                    cbsik -= iLen;
-                offset += iLen;
+                    cbsik = cbsik - iLen;
+                offset = offset + iLen;
             }
 
         }
@@ -726,11 +726,11 @@ void Ww1Sprm::InitTab()
 }
 
 ////////////////////////////////////////////////////////////// SprmPapx
-Ww1SprmPapx::Ww1SprmPapx(BYTE* p, USHORT nSize) :
-    Ww1Sprm(Sprm(p, nSize), SprmSize(p, nSize))
+Ww1SprmPapx::Ww1SprmPapx(BYTE* pByte, USHORT nSize) :
+    Ww1Sprm(Sprm(pByte, nSize), SprmSize(pByte, nSize))
 {
     memset(&aPapx, 0, sizeof(aPapx));
-    memcpy(&aPapx, p, nSize<sizeof(aPapx)?nSize:sizeof(aPapx));
+    memcpy(&aPapx, pByte, nSize<sizeof(aPapx)?nSize:sizeof(aPapx));
 }
 
 USHORT Ww1SprmPapx::SprmSize(BYTE*, USHORT nSize)
@@ -742,11 +742,11 @@ USHORT Ww1SprmPapx::SprmSize(BYTE*, USHORT nSize)
     return nRet;
 }
 
-BYTE* Ww1SprmPapx::Sprm(BYTE* p, USHORT nSize)
+BYTE* Ww1SprmPapx::Sprm(BYTE* pByte, USHORT nSize)
 {
     BYTE* pRet = NULL;
     if (nSize >= sizeof(W1_PAPX))
-        pRet = ((W1_PAPX*)(p))->grpprlGet();
+        pRet = ((W1_PAPX*)(pByte))->grpprlGet();
     return pRet;
 }
 
@@ -925,8 +925,8 @@ void Ww1Bookmarks::operator ++( int )
     {
         nPlcIdx[nIsEnd]++;
 
-        register ULONG l0 = pPos[0]->Where(nPlcIdx[0]);
-        register ULONG l1 = pPos[1]->Where(nPlcIdx[1]);
+        ULONG l0 = pPos[0]->Where(nPlcIdx[0]);
+        ULONG l1 = pPos[1]->Where(nPlcIdx[1]);
         if( l0 < l1 )
             nIsEnd = 0;
         else if( l1 < l0 )
@@ -969,8 +969,8 @@ const String Ww1Bookmarks::GetName() const
 }
 
 /////////////////////////////////////////////////////////////////// Fkp
-Ww1Fkp::Ww1Fkp(SvStream& rStream, ULONG ulFilePos, USHORT nItemSize) :
-    nItemSize(nItemSize),
+Ww1Fkp::Ww1Fkp(SvStream& rStream, ULONG ulFilePos, USHORT _nItemSize) :
+    nItemSize(_nItemSize),
     bOK(FALSE)
 {
     if (rStream.Seek(ulFilePos) == (ULONG)ulFilePos)
@@ -1044,8 +1044,8 @@ BOOL Ww1FkpChp::Fill(USHORT nIndex, W1_CHP& aChp)
 }
 
 ///////////////////////////////////////////////////////////////// Assoc
-Ww1Assoc::Ww1Assoc(Ww1Fib& rFib)
-    : rFib(rFib), pBuffer(NULL), bOK(FALSE)
+Ww1Assoc::Ww1Assoc(Ww1Fib& _rFib)
+    : rFib(_rFib), pBuffer(NULL), bOK(FALSE)
 {
     USHORT cb = rFib.GetFIB().cbSttbfAssocGet();
     USHORT i;
@@ -1079,8 +1079,8 @@ String Ww1Assoc::GetStr(USHORT code)
 }
 
 /////////////////////////////////////////////////////////////////// Pap
-Ww1Pap::Ww1Pap(Ww1Fib& rFib)
-    : Ww1PlcPap(rFib), nPlcIndex(0), nPushedPlcIndex(0xffff), nFkpIndex(0),
+Ww1Pap::Ww1Pap(Ww1Fib& _rFib)
+    : Ww1PlcPap(_rFib), nPlcIndex(0), nPushedPlcIndex(0xffff), nFkpIndex(0),
     nPushedFkpIndex(0xffff), ulOffset(0), pPap(0)
 {
 }
@@ -1129,9 +1129,9 @@ void Ww1Pap::operator++(int)
 // Rueckgabe: Pointer oder 0
 BOOL Ww1Pap::FindSprm(USHORT nId, BYTE* pStart, BYTE* pEnd)
 {
-    Ww1Sprm aSprm( pStart, pEnd-pStart );
+    Ww1Sprm aSprm( pStart, static_cast< USHORT >(pEnd-pStart) );
     USHORT nC = aSprm.Count();
-    int i;
+    USHORT i;
     BYTE nI;
     USHORT nLen;
     BYTE *pData;
@@ -1153,11 +1153,11 @@ BOOL Ww1Pap::HasId0(USHORT nId)
         return FALSE;
     }
 
-    BYTE* p;
+    BYTE* pByte;
     USHORT n;
-    if( pPap->Fill(nFkpIndex, p, n) ){
-        BYTE* p2 = ((W1_PAPX*)(p))->grpprlGet(); // SH: Offset fehlte
-        bRet = FindSprm( nId, p2, p+n );
+    if( pPap->Fill(nFkpIndex, pByte, n) ){
+        BYTE* p2 = ((W1_PAPX*)(pByte))->grpprlGet(); // SH: Offset fehlte
+        bRet = FindSprm( nId, p2, pByte + n );
     }
     return bRet;
 }
@@ -1165,23 +1165,23 @@ BOOL Ww1Pap::HasId0(USHORT nId)
 BOOL Ww1Pap::HasId(USHORT nId)
 {
     BOOL bRet = FALSE;
-    USHORT nPushedPlcIndex = nPlcIndex;
-    USHORT nPushedFkpIndex = nFkpIndex;
+    USHORT nPushedPlcIndex2 = nPlcIndex;
+    USHORT nPushedFkpIndex2 = nFkpIndex;
     bRet = HasId0( nId );
-    if (nPlcIndex != nPushedPlcIndex)
+    if (nPlcIndex != nPushedPlcIndex2)
     {
         delete pPap;
         pPap = NULL;
     }
-    nPlcIndex = nPushedPlcIndex;
-    nFkpIndex = nPushedFkpIndex;
+    nPlcIndex = nPushedPlcIndex2;
+    nFkpIndex = nPushedFkpIndex2;
     Where( FALSE );
     return bRet;
 }
 
 /////////////////////////////////////////////////////////////////// Chp
-Ww1Chp::Ww1Chp(Ww1Fib& rFib)
-    : Ww1PlcChp(rFib), nPlcIndex(0), nPushedPlcIndex(0xffff), nFkpIndex(0),
+Ww1Chp::Ww1Chp(Ww1Fib& _rFib)
+    : Ww1PlcChp(_rFib), nPlcIndex(0), nPushedPlcIndex(0xffff), nFkpIndex(0),
     nPushedFkpIndex(0xffff), ulOffset(0), pChp(0)
 {
 }
