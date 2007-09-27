@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:18:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:30:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,30 +154,18 @@
 #ifndef _TEXTSH_HXX
 #include <textsh.hxx>
 #endif
-//CHINA001 #ifndef _BOOKMARK_HXX
-//CHINA001 #include <bookmark.hxx>
-//CHINA001 #endif
 #ifndef _BOOKMRK_HXX
 #include <bookmrk.hxx>
 #endif
-//CHINA001 #ifndef _BREAK_HXX
-//CHINA001 #include <break.hxx>
-//CHINA001 #endif
 #ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
 #endif
 #ifndef _DOCSTAT_HXX
 #include <docstat.hxx>
 #endif
-//CHINA001 #ifndef _INSFNOTE_HXX
-//CHINA001 #include <insfnote.hxx>
-//CHINA001 #endif
 #ifndef _OUTLINE_HXX
 #include <outline.hxx>
 #endif
-//CHINA001 #ifndef _SRTDLG_HXX
-//CHINA001 #include <srtdlg.hxx>
-//CHINA001 #endif
 #ifndef _TABLEMGR_HXX
 #include <tablemgr.hxx>
 #endif
@@ -199,12 +187,6 @@
 #ifndef _PARDLG_HXX
 #include <pardlg.hxx>
 #endif
-//CHINA001 #ifndef _CHRDLG_HXX
-//CHINA001 #include <chrdlg.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _DOCFNOTE_HXX
-//CHINA001 #include <docfnote.hxx>
-//CHINA001 #endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
@@ -256,9 +238,9 @@
 #include <SwSmartTagMgr.hxx>
 
 #include <svx/acorrcfg.hxx>
-#include "swabstdlg.hxx" //CHINA001
-#include "misc.hrc" //CHINA001
-#include "chrdlg.hrc" //CHINA001
+#include "swabstdlg.hxx"
+#include "misc.hrc"
+#include "chrdlg.hrc"
 #include <IDocumentStatistics.hxx>
 
 using namespace ::com::sun::star;
@@ -313,12 +295,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             String aStr;
             SFX_REQUEST_ARG( rReq, pFont, SfxStringItem, FN_PARAM_1 , sal_False );
-            SFX_REQUEST_ARG( rReq, pCharset, SfxInt16Item, FN_PARAM_2 , sal_False );
-            SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, nSlot , sal_False );
-            if ( pItem )
-                aStr = pItem->GetValue();
+//            SFX_REQUEST_ARG( rReq, pCharset, SfxInt16Item, FN_PARAM_2 , sal_False );
+            SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, nSlot , sal_False );
+            if ( pNameItem )
+                aStr = pNameItem->GetValue();
             BOOL bFont = pFont && pFont->GetValue().Len();
-            rWrtSh.StartUndo( UIUNDO_INSERT_FOOTNOTE );
+            rWrtSh.StartUndo( UNDO_UI_INSERT_FOOTNOTE );
             rWrtSh.InsertFootnote( aStr, nSlot == FN_INSERT_ENDNOTE, !bFont );
             if ( bFont )
             {
@@ -329,23 +311,22 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SvxFontItem aFont( rFont.GetFamily(), pFont->GetValue(),
                                     rFont.GetStyleName(), rFont.GetPitch(), RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
                                     //pCharset ? (CharSet) pCharset->GetValue() : RTL_TEXTENCODING_DONTKNOW );
-                rWrtSh.SetAttr( aSet, SETATTR_DONTEXPAND );
+                rWrtSh.SetAttr( aSet, nsSetAttrMode::SETATTR_DONTEXPAND );
                 rWrtSh.ResetSelect(0, FALSE);
                 rWrtSh.EndSelect();
                 rWrtSh.GotoFtnTxt();
             }
-            rWrtSh.EndUndo( UIUNDO_INSERT_FOOTNOTE );
+            rWrtSh.EndUndo( UNDO_UI_INSERT_FOOTNOTE );
             rReq.Done();
         }
         break;
         case FN_INSERT_FOOTNOTE_DLG:
         {
-            //CHINA001 SwInsFootNoteDlg *pDlg = new SwInsFootNoteDlg( GetView().GetWindow(), rWrtSh, FALSE );
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg( DLG_INS_FOOTNOTE,
                                                         GetView().GetWindow(), rWrtSh, FALSE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             pDlg->SetHelpId(nSlot);
             if ( pDlg->Execute() == RET_OK )
             {
@@ -365,12 +346,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case FN_FORMAT_FOOTNOTE_DLG:
         {
-            //CHINA001 SwFootNoteOptionDlg *pDlg = new SwFootNoteOptionDlg(GetView().GetWindow(), rWrtSh);
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg( GetView().GetWindow(), rWrtSh, DLG_DOC_FOOTNOTE );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             break;
@@ -400,12 +380,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                //CHINA001 SwBreakDlg *pDlg = new SwBreakDlg(GetView().GetWindow(), rWrtSh);
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
                 AbstractSwBreakDlg* pDlg = pFact->CreateSwBreakDlg( GetView().GetWindow(), rWrtSh, DLG_BREAK );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
                     nKind = pDlg->GetKind();
@@ -450,13 +429,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                //CHINA001 SwInsertBookmarkDlg *pDlg = new SwInsertBookmarkDlg( GetView().GetWindow(), rWrtSh, rReq );
-                //CHINA001 pDlg->Execute();
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
                 VclAbstractDialog* pDlg = pFact->CreateSwInsertBookmarkDlg( GetView().GetWindow(), rWrtSh, rReq, DLG_INSERT_BOOKMARK );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 pDlg->Execute();
                 delete pDlg;
             }
@@ -482,18 +459,17 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if (pVFrame->HasChildWindow(FN_REDLINE_ACCEPT))
                 pVFrame->ToggleChildWindow(FN_REDLINE_ACCEPT);
 
-            //CHINA001 SwModalRedlineAcceptDlg aDlg(&GetView().GetEditWin());
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
             AbstractSwModalRedlineAcceptDlg* pDlg = pFact->CreateSwModalRedlineAcceptDlg( &GetView().GetEditWin(), DLG_MOD_REDLINE_ACCEPT );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
             switch (lcl_AskRedlineMode(&GetView().GetEditWin()))
             {
                 case RET_OK:
                 {
-                    pDlg->AcceptAll(TRUE);//CHINA001 aDlg.AcceptAll(TRUE);
+                    pDlg->AcceptAll(TRUE);
                     SfxRequest aReq( pVFrame, FN_AUTOFORMAT_APPLY );
                     aReq.Done();
                     rReq.Ignore();
@@ -501,16 +477,16 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
 
                 case RET_CANCEL:
-                    pDlg->AcceptAll(FALSE);//CHINA001 aDlg.AcceptAll(FALSE);
+                    pDlg->AcceptAll(FALSE);
                     rReq.Ignore();
                     break;
 
                 case 2:
-                    pDlg->Execute();//CHINA001 aDlg.Execute();
+                    pDlg->Execute();
                     rReq.Done();
                     break;
             }
-            delete pDlg; //CHINA001
+            delete pDlg;
         }
         break;
 
@@ -548,12 +524,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_TABLE_SORT_DIALOG:
         case FN_SORTING_DLG:
         {
-            //CHINA001 SwSortDlg *pDlg = new SwSortDlg(GetView().GetWindow(), rWrtSh );
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
             VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rWrtSh, DLG_SORTING );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             rReq.Done();
@@ -562,12 +537,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_NUMBERING_OUTLINE_DLG:
         {
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
-            //CHINA001 SwOutlineTabDialog* pDlg = new SwOutlineTabDialog(GetView().GetWindow(), &aTmp, rWrtSh);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pFact, "Dialogdiet fail!");
             SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                         GetView().GetWindow(), &aTmp, rWrtSh);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
             delete pDlg;
             rReq.Done();
@@ -576,8 +550,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_CALCULATE:
             {
                 SwTransferable* pTransfer = new SwTransferable( rWrtSh );
-/*??*/          ::com::sun::star::uno::Reference<
-                    ::com::sun::star::datatransfer::XTransferable > xRef(
+/*??*/          uno::Reference<
+                    datatransfer::XTransferable > xRef(
                                                     pTransfer );
                 pTransfer->CalculateAndCopy();
                 rReq.Done();
@@ -639,7 +613,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     {
                         SvNumberFormatter* pFormatter = rWrtSh.GetNumberFormatter();
                         ULONG nSysNumFmt = pFormatter->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM);
-                        SwInsertFld_Data aData(TYP_FORMELFLD, GSE_FORMULA, aEmptyStr, sFormula, nSysNumFmt);
+                        SwInsertFld_Data aData(TYP_FORMELFLD, nsSwGetSetExpType::GSE_FORMULA, aEmptyStr, sFormula, nSysNumFmt);
                         aFldMgr.InsertFld(aData);
                     }
                 }
@@ -682,7 +656,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_CHAR_DLG:
         {
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
-            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)));
             SfxItemSet aCoreSet( GetPool(),
                                 RES_CHRATR_BEGIN,      RES_CHRATR_END-1,
                                 RES_TXTATR_INETFMT,    RES_TXTATR_INETFMT,
@@ -726,16 +700,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
 
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
-            //CHINA001 SwCharDlg* pDlg = NULL;
             SfxAbstractTabDialog* pDlg = NULL;
             if ( bUseDialog && GetActiveView() )
             {
-                //CHINA001 pDlg = new SwCharDlg(GetView().GetWindow(), GetView(), aCoreSet);
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg = pFact->CreateSwCharDlg( GetView().GetWindow(), GetView(), aCoreSet, DLG_CHAR );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 if( FN_INSERT_HYPERLINK == nSlot )
                     pDlg->SetCurPageId(TP_CHAR_URL);
             }
@@ -760,14 +732,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                 aTmpSet.ClearItem( RES_BACKGROUND );
 
-                const SfxPoolItem* pItem;
+                const SfxPoolItem* pSelectionItem;
                 BOOL bInsert = FALSE;
                 xub_StrLen nInsert = 0;
 
                 // aus ungeklaerter Ursache ist das alte Item wieder im Set
-                if( !bSelectionPut && SFX_ITEM_SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, FALSE, &pItem) )
+                if( !bSelectionPut && SFX_ITEM_SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, FALSE, &pSelectionItem) )
                 {
-                    String sInsert = ((const SfxStringItem*)pItem)->GetValue();
+                    String sInsert = ((const SfxStringItem*)pSelectionItem)->GetValue();
                     bInsert = sInsert.Len() != 0;
                     if(bInsert)
                     {
@@ -833,7 +805,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_PARA_DLG:
         {
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
-            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)));
             SfxItemSet aCoreSet( GetPool(),
                             RES_PARATR_BEGIN,           RES_PARATR_END - 1,
                             RES_FRMATR_BEGIN,           RES_FRMATR_END - 1,
@@ -891,19 +863,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                 rWrtSh.IsNodeNumStart());
                 aCoreSet.Put(aStartAt);
             }
-            //CHINA001 SwParaDlg *pDlg = NULL;
-            SfxAbstractTabDialog* pDlg = NULL; //CHINA001
+            SfxAbstractTabDialog* pDlg = NULL;
 
             if ( bUseDialog && GetActiveView() )
             {
-                //CHINA001                 pDlg = new SwParaDlg( GetView().GetWindow(),
-                //CHINA001              GetView(), aCoreSet, DLG_STD,
-                //CHINA001              NULL, FALSE, nDefPage );
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
                 pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet,DLG_STD, DLG_PARA,NULL, FALSE, nDefPage );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
             }
             SfxItemSet* pSet = NULL;
             if ( !bUseDialog )
@@ -1049,8 +1017,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if(pItem)
             {
                 Color aSet = ((const SvxColorItem*)pItem)->GetValue();
-                SwView& rView = GetView();
-                SwEditWin& rEditWin = rView.GetEditWin();
+                SwEditWin& rEditWin = GetView().GetEditWin();
                 rEditWin.SetTextColor(aSet);
                 SwApplyTemplate* pApply = rEditWin.GetApplyTemplate();
                 SvxColorItem aItem(aSet, RES_CHRATR_COLOR);
@@ -1058,12 +1025,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 // besteht eine Selektion, wird sie gleich gefaerbt
                 if(!pApply && rWrtSh.HasSelection())
                 {
-                    SvxColorItem aItem(aSet, RES_CHRATR_COLOR);
-                    rWrtSh.SetAttr(aItem);
+                    rWrtSh.SetAttr(SvxColorItem (aSet, RES_CHRATR_COLOR));
                 }
                 else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
                 {
-                    rView.GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR_COLOR_EXT);
+                    GetView().GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR_COLOR_EXT);
                 }
 
                 rReq.Done();
@@ -1083,8 +1049,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
         {
-            SwView& rView = GetView();
-            SwEditWin& rEdtWin = rView.GetEditWin();
+            SwEditWin& rEdtWin = GetView().GetEditWin();
             SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
             rEdtWin.SetTextBackColorTransparent(0 == pItem);
             Color aSet;
@@ -1104,7 +1069,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
             {
-                rView.GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR_COLOR_BACKGROUND_EXT);
+                GetView().GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR_COLOR_BACKGROUND_EXT);
             }
 
             rReq.Done();
@@ -1208,13 +1173,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
     {
         try
         {
-            com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), com::sun::star::uno::UNO_QUERY);
+            uno::Reference < ui::dialogs::XExecutableDialog > xDialog(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString::createFromAscii("com.sun.star.comp.ui.XSLTFilterDialog")), uno::UNO_QUERY);
             if( xDialog.is() )
             {
                 xDialog->execute();
             }
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( uno::Exception& )
         {
         }
         rReq.Ignore ();
@@ -1292,9 +1257,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_INSERT_SYMBOL:
             {
                 const int nType = rSh.GetSelectionType();
-                if (!(nType & SwWrtShell::SEL_TXT) &&
-                    !(nType & SwWrtShell::SEL_TBL) &&
-                    !(nType & SwWrtShell::SEL_NUM))
+                if (!(nType & nsSelectionType::SEL_TXT) &&
+                    !(nType & nsSelectionType::SEL_TBL) &&
+                    !(nType & nsSelectionType::SEL_NUM))
                     rSet.DisableItem(nWhich);
             }
             break;
@@ -1505,8 +1470,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                                                       aActionComponentsSequence,
                                                       aActionIndicesSequence );
 
-                     SwView& rView = GetView();
-                     uno::Reference <frame::XController> xController = rView.GetController();
+                     uno::Reference <frame::XController> xController = GetView().GetController();
                      const lang::Locale aLocale( SW_BREAKITER()->GetLocale( (LanguageType)GetAppLanguage() ) );
                      const rtl::OUString aApplicationName( rSmartTagMgr.GetApplicationName() );
                      const rtl::OUString aRangeText = xRange->getString();
