@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrfld.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:04:25 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:50:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ SwUserField::SwUserField(SwUserFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFmt
 String SwUserField::Expand() const
 {
     String sStr;
-    if(!(nSubType & SUB_INVISIBLE))
+    if(!(nSubType & nsSwExtendedSubType::SUB_INVISIBLE))
         sStr = ((SwUserFieldType*)GetTyp())->Expand(GetFormat(), nSubType, GetLanguage());
 
     return sStr;
@@ -159,20 +159,19 @@ void SwUserField::SetSubType(sal_uInt16 nSub)
 /*-----------------09.03.98 08:04-------------------
 
 --------------------------------------------------*/
-BOOL SwUserField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_BOOL2:
         {
-            BOOL bTmp = 0 != (nSubType & SUB_CMD);
+            BOOL bTmp = 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
             rAny.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
     case FIELD_PROP_BOOL1:
         {
-            BOOL bTmp = 0 == (nSubType & SUB_INVISIBLE);
+            BOOL bTmp = 0 == (nSubType & nsSwExtendedSubType::SUB_INVISIBLE);
             rAny.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
@@ -180,29 +179,28 @@ BOOL SwUserField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         rAny <<= (sal_Int32)GetFormat();
         break;
     default:
-        return SwField::QueryValue(rAny, nMId);
+        return SwField::QueryValue(rAny, nWhichId);
     }
     return sal_True;
 }
 /*-----------------09.03.98 08:04-------------------
 
 --------------------------------------------------*/
-sal_Bool SwUserField::PutValue( const uno::Any& rAny, BYTE nMId )
+sal_Bool SwUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
         if(*(sal_Bool*) rAny.getValue())
-            nSubType &= (~SUB_INVISIBLE);
+            nSubType &= (~nsSwExtendedSubType::SUB_INVISIBLE);
         else
-            nSubType |= SUB_INVISIBLE;
+            nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
         break;
     case FIELD_PROP_BOOL2:
         if(*(sal_Bool*) rAny.getValue())
-            nSubType |= SUB_CMD;
+            nSubType |= nsSwExtendedSubType::SUB_CMD;
         else
-            nSubType &= (~SUB_CMD);
+            nSubType &= (~nsSwExtendedSubType::SUB_CMD);
         break;
     case FIELD_PROP_FORMAT:
         {
@@ -212,7 +210,7 @@ sal_Bool SwUserField::PutValue( const uno::Any& rAny, BYTE nMId )
         }
         break;
     default:
-        return SwField::PutValue(rAny, nMId);
+        return SwField::PutValue(rAny, nWhichId);
     }
     return sal_True;
 }
@@ -223,20 +221,20 @@ sal_Bool SwUserField::PutValue( const uno::Any& rAny, BYTE nMId )
 
 SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const String& aNam )
     : SwValueFieldType( pDocPtr, RES_USERFLD ),
-    nType(GSE_STRING),
-    nValue( 0 )
+    nValue( 0 ),
+    nType(nsSwGetSetExpType::GSE_STRING)
 {
     bValidValue = bDeleted = sal_False;
     aName = aNam;
 
-    if (nType & GSE_STRING)
+    if (nType & nsSwGetSetExpType::GSE_STRING)
         EnableFormat(sal_False);    // Numberformatter nicht einsetzen
 }
 
 String SwUserFieldType::Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 nLng)
 {
     String aStr(aContent);
-    if((nType & GSE_EXPR) && !(nSubType & SUB_CMD))
+    if((nType & nsSwGetSetExpType::GSE_EXPR) && !(nSubType & nsSwExtendedSubType::SUB_CMD))
     {
         EnableFormat(sal_True);
         aStr = ExpandValue(nValue, nFmt, nLng);
@@ -341,10 +339,9 @@ void SwUserFieldType::SetContent( const String& rStr, sal_uInt32 nFmt )
 /*-----------------04.03.98 17:05-------------------
 
 --------------------------------------------------*/
-BOOL SwUserFieldType::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwUserFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_DOUBLE:
         rAny <<= (double) nValue;
@@ -354,7 +351,7 @@ BOOL SwUserFieldType::QueryValue( uno::Any& rAny, BYTE nMId ) const
         break;
     case FIELD_PROP_BOOL1:
         {
-            BOOL bExpression = 0 != (GSE_EXPR&nType);
+            BOOL bExpression = 0 != (nsSwGetSetExpType::GSE_EXPR&nType);
             rAny.setValue(&bExpression, ::getBooleanCppuType());
         }
         break;
@@ -366,10 +363,9 @@ BOOL SwUserFieldType::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------04.03.98 17:05-------------------
 
 --------------------------------------------------*/
-BOOL SwUserFieldType::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwUserFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_DOUBLE:
         {
@@ -390,13 +386,13 @@ BOOL SwUserFieldType::PutValue( const uno::Any& rAny, BYTE nMId )
     case FIELD_PROP_BOOL1:
         if(*(sal_Bool*)rAny.getValue())
         {
-            nType |= GSE_EXPR;
-            nType &= ~GSE_STRING;
+            nType |= nsSwGetSetExpType::GSE_EXPR;
+            nType &= ~nsSwGetSetExpType::GSE_STRING;
         }
         else
         {
-            nType &= ~GSE_EXPR;
-            nType |= GSE_STRING;
+            nType &= ~nsSwGetSetExpType::GSE_EXPR;
+            nType |= nsSwGetSetExpType::GSE_STRING;
         }
         break;
     default:
