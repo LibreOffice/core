@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addrdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:48:32 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:36:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 
 #include "addrdlg.hxx"
 
-//CHINA001 #ifndef _SVX_OPTGENRL_HXX //autogen
-//CHINA001 #include <svx/optgenrl.hxx>
-//CHINA001 #endif
 #ifndef _SVX_DIALOG_HXX
 #include <svx/svxdlg.hxx>
 #endif
@@ -63,14 +60,13 @@ SwAddrDlg::SwAddrDlg(Window* pParent, SfxItemSet& rSet ) :
 
 {
     // TabPage erzeugen
-    //CHINA001 SvxGeneralTabPage* pPage = (SvxGeneralTabPage*) SvxGeneralTabPage::Create(this, rSet);
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pFact, "Dialogdiet fail!");
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SFXPAGE_GENERAL );
     if ( fnCreatePage )
     {
-        SfxTabPage* pPage = (*fnCreatePage)( this, rSet );
-        SetTabPage(pPage);
+        SfxTabPage* pPage2 = (*fnCreatePage)( this, rSet );
+        SetTabPage(pPage2);
     }
 }
 
