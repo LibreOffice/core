@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porglue.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:01:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:17:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,8 +192,8 @@ SwFixPortion::SwFixPortion( const SwRect &rRect )
     SetWhichPor( POR_FIX );
 }
 
-SwFixPortion::SwFixPortion(const KSHORT nFixWidth, const KSHORT nFixPos)
-       : SwGluePortion(nFixWidth), nFix(nFixPos)
+SwFixPortion::SwFixPortion(const KSHORT nFixedWidth, const KSHORT nFixedPos)
+       : SwGluePortion(nFixedWidth), nFix(nFixedPos)
 {
     SetWhichPor( POR_FIX );
 }
@@ -202,8 +202,8 @@ SwFixPortion::SwFixPortion(const KSHORT nFixWidth, const KSHORT nFixPos)
  *                class SwMarginPortion
  *************************************************************************/
 
-SwMarginPortion::SwMarginPortion( const KSHORT nFixWidth )
-    :SwGluePortion( nFixWidth )
+SwMarginPortion::SwMarginPortion( const KSHORT nFixedWidth )
+    :SwGluePortion( nFixedWidth )
 {
     SetWhichPor( POR_MARGIN );
 }
@@ -265,7 +265,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                 {
                     // Hier entsteht eine neue TxtPortion, die dass zuvor
                     // vom Fly verschluckte Blank reaktiviert.
-                    nRightGlue -= pFly->GetBlankWidth();
+                    nRightGlue = nRightGlue - pFly->GetBlankWidth();
                     pFly->SubPrtWidth( pFly->GetBlankWidth() );
                     pFly->SetLen( 0 );
                     SwTxtPortion *pNewPor = new SwTxtPortion;
@@ -291,7 +291,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                 }
                 else
                 {
-                    nRightGlue -= pPrev->PrtWidth();
+                    nRightGlue = nRightGlue - pPrev->PrtWidth();
                     // pPrev wird hinter pRight verschoben.
                     // Dazu wird der Gluewert zwischen pRight und pLeft
                     // ausgeglichen.
