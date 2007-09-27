@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textcontrolcombo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:09:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:12:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,8 @@
 #include <vcl/fixed.hxx>
 #endif
 
+#include <vcl/field.hxx>
+
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
@@ -61,7 +63,11 @@ public:
     // identical to window functionality
     void        Show( BOOL bVisible = TRUE, USHORT nFlags = 0 );
     void        Hide( USHORT nFlags = 0 ) { Show( FALSE, nFlags ); }
+
+    using Window::Enable;
     void        Enable( BOOL bEnable = TRUE, BOOL bChild = TRUE );
+
+    using Window::Disable;
     void        Disable( BOOL bChild = TRUE ) { Enable( FALSE, bChild ); }
 };
 
