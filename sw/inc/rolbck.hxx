@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rolbck.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:17:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:09:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@ class SwFrmFmt;
 class SwpHints;
 class SwFmtChain;
 class SwNode;
+class SwCharFmt;
 
 #ifndef ROLBCK_HISTORY_ONLY
 
@@ -365,7 +366,7 @@ public:
 #endif
 
 typedef SwHstryHint* SwHstryHintPtr;
-SV_DECL_PTRARR_DEL( SwpHstry, SwHstryHintPtr, 0, 2 );
+SV_DECL_PTRARR_DEL( SwpHstry, SwHstryHintPtr, 0, 2 )
 
 class SwHistory : private SwpHstry
 {
