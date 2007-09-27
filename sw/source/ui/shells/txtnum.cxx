@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtnum.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:19:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:31:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,10 +64,9 @@
 #include "wdocsh.hxx"
 #include "textsh.hxx"
 #include "uiitems.hxx"
-//CHINA001 #include "num.hxx"
-#include "swabstdlg.hxx" //CHINA001
-#include <globals.hrc> //CHINA001
-#include <sfx2/tabdlg.hxx> //CHINA001
+#include "swabstdlg.hxx"
+#include <globals.hrc>
+#include <sfx2/tabdlg.hxx>
 
 void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 {
@@ -190,13 +189,11 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         // vor dem Dialog wird der HtmlMode an der DocShell versenkt
         pDocSh->PutItem(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(pDocSh)));
 
-//CHINA001      SwSvxNumBulletTabDialog* pDlg = new SwSvxNumBulletTabDialog(
-//CHINA001      GetView().GetWindow(), &aSet, GetShell() );
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
         SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
                                                         GetView().GetWindow(), &aSet, GetShell());
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");
         USHORT nRet = pDlg->Execute();
         const SfxPoolItem* pItem;
         if( RET_OK == nRet )
