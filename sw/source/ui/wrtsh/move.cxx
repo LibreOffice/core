@@ -4,9 +4,9 @@
  *
  *  $RCSfile: move.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:39:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:52:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ class ShellMoveCrsr
     SwWrtShell* pSh;
     BOOL bAct;
 public:
-    inline ShellMoveCrsr( SwWrtShell* pWrtSh, FASTBOOL bSel )
+    inline ShellMoveCrsr( SwWrtShell* pWrtSh, BOOL bSel )
     {
         bAct = !pWrtSh->ActionPend() && (pWrtSh->GetFrmType(0,FALSE) & FRMTYPE_FLY_ANY);
         ( pSh = pWrtSh )->MoveCrsr( BOOL(bSel) );
@@ -90,7 +90,7 @@ public:
     }
 };
 
-void SwWrtShell::MoveCrsr( FASTBOOL bWithSelect )
+void SwWrtShell::MoveCrsr( BOOL bWithSelect )
 {
     ResetCursorStack();
     if ( IsGCAttr() )
@@ -107,9 +107,9 @@ void SwWrtShell::MoveCrsr( FASTBOOL bWithSelect )
     }
 }
 
-FASTBOOL SwWrtShell::SimpleMove( FNSimpleMove FnSimpleMove, FASTBOOL bSelect )
+BOOL SwWrtShell::SimpleMove( FNSimpleMove FnSimpleMove, BOOL bSelect )
 {
-    FASTBOOL nRet;
+    BOOL nRet;
     if( bSelect )
     {
         SttCrsrMove();
@@ -123,7 +123,7 @@ FASTBOOL SwWrtShell::SimpleMove( FNSimpleMove FnSimpleMove, FASTBOOL bSelect )
 }
 
 
-FASTBOOL SwWrtShell::Left( USHORT nMode, FASTBOOL bSelect,
+BOOL SwWrtShell::Left( USHORT nMode, BOOL bSelect,
                             USHORT nCount, BOOL bBasicCall, BOOL bVisual )
 {
     if ( !bSelect && !bBasicCall && IsCrsrReadonly()  && !GetViewOptions()->IsSelectionInReadonly())
@@ -142,7 +142,7 @@ FASTBOOL SwWrtShell::Left( USHORT nMode, FASTBOOL bSelect,
 
 
 
-FASTBOOL SwWrtShell::Right( USHORT nMode, FASTBOOL bSelect,
+BOOL SwWrtShell::Right( USHORT nMode, BOOL bSelect,
                             USHORT nCount, BOOL bBasicCall, BOOL bVisual )
 {
     if ( !bSelect && !bBasicCall && IsCrsrReadonly() && !GetViewOptions()->IsSelectionInReadonly() )
@@ -162,7 +162,7 @@ FASTBOOL SwWrtShell::Right( USHORT nMode, FASTBOOL bSelect,
 
 
 
-FASTBOOL SwWrtShell::Up( FASTBOOL bSelect, USHORT nCount, BOOL bBasicCall )
+BOOL SwWrtShell::Up( BOOL bSelect, USHORT nCount, BOOL bBasicCall )
 {
     if ( !bSelect && !bBasicCall && IsCrsrReadonly()  && !GetViewOptions()->IsSelectionInReadonly())
     {
@@ -180,7 +180,7 @@ FASTBOOL SwWrtShell::Up( FASTBOOL bSelect, USHORT nCount, BOOL bBasicCall )
 
 
 
-FASTBOOL SwWrtShell::Down( FASTBOOL bSelect, USHORT nCount, BOOL bBasicCall )
+BOOL SwWrtShell::Down( BOOL bSelect, USHORT nCount, BOOL bBasicCall )
 {
     if ( !bSelect && !bBasicCall && IsCrsrReadonly() && !GetViewOptions()->IsSelectionInReadonly())
     {
@@ -199,7 +199,7 @@ FASTBOOL SwWrtShell::Down( FASTBOOL bSelect, USHORT nCount, BOOL bBasicCall )
 
 
 
-FASTBOOL SwWrtShell::LeftMargin( FASTBOOL bSelect, FASTBOOL bBasicCall )
+BOOL SwWrtShell::LeftMargin( BOOL bSelect, BOOL bBasicCall )
 {
     if ( !bSelect && !bBasicCall && IsCrsrReadonly() )
     {
@@ -217,7 +217,7 @@ FASTBOOL SwWrtShell::LeftMargin( FASTBOOL bSelect, FASTBOOL bBasicCall )
 
 
 
-FASTBOOL SwWrtShell::RightMargin( FASTBOOL bSelect, FASTBOOL bBasicCall  )
+BOOL SwWrtShell::RightMargin( BOOL bSelect, BOOL bBasicCall  )
 {
     if ( !bSelect && !bBasicCall && IsCrsrReadonly() )
     {
@@ -294,7 +294,7 @@ BOOL SwWrtShell::GoStart( BOOL bKeepArea, BOOL *pMoveTable,
     }
     // Bereiche ???
     return SwCrsrShell::MoveRegion( fnRegionCurrAndSkip, fnRegionStart ) ||
-           SwCrsrShell::SttDoc();
+           SwCrsrShell::SttEndDoc(TRUE);
 }
 
 
@@ -330,12 +330,12 @@ BOOL SwWrtShell::GoEnd(BOOL bKeepArea, BOOL *pMoveTable)
     }
     // Bereiche ???
     return SwCrsrShell::MoveRegion( fnRegionCurrAndSkip, fnRegionEnd ) ||
-           SwCrsrShell::EndDoc();
+           SwCrsrShell::SttEndDoc(FALSE);
 }
 
 
 
-FASTBOOL SwWrtShell::SttDoc( FASTBOOL bSelect )
+BOOL SwWrtShell::SttDoc( BOOL bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return GoStart(FALSE, 0, bSelect );
@@ -343,14 +343,14 @@ FASTBOOL SwWrtShell::SttDoc( FASTBOOL bSelect )
 
 
 
-FASTBOOL SwWrtShell::EndDoc( FASTBOOL bSelect)
+BOOL SwWrtShell::EndDoc( BOOL bSelect)
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return GoEnd();
 }
 
 
-FASTBOOL SwWrtShell::SttNxtPg( FASTBOOL bSelect )
+BOOL SwWrtShell::SttNxtPg( BOOL bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return MovePage( fnPageNext, fnPageStart );
@@ -358,7 +358,7 @@ FASTBOOL SwWrtShell::SttNxtPg( FASTBOOL bSelect )
 
 
 
-FASTBOOL SwWrtShell::SttPrvPg( FASTBOOL bSelect )
+BOOL SwWrtShell::SttPrvPg( BOOL bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return MovePage( fnPagePrev, fnPageStart );
@@ -366,7 +366,7 @@ FASTBOOL SwWrtShell::SttPrvPg( FASTBOOL bSelect )
 
 
 
-FASTBOOL SwWrtShell::EndNxtPg( FASTBOOL bSelect )
+BOOL SwWrtShell::EndNxtPg( BOOL bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return MovePage( fnPageNext, fnPageEnd );
@@ -374,7 +374,7 @@ FASTBOOL SwWrtShell::EndNxtPg( FASTBOOL bSelect )
 
 
 
-FASTBOOL SwWrtShell::EndPrvPg( FASTBOOL bSelect )
+BOOL SwWrtShell::EndPrvPg( BOOL bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return MovePage( fnPagePrev, fnPageEnd );
@@ -382,7 +382,7 @@ FASTBOOL SwWrtShell::EndPrvPg( FASTBOOL bSelect )
 
 
 
-FASTBOOL SwWrtShell::SttPg( FASTBOOL bSelect )
+BOOL SwWrtShell::SttPg( BOOL bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return MovePage( fnPageCurr, fnPageStart );
@@ -390,7 +390,7 @@ FASTBOOL SwWrtShell::SttPg( FASTBOOL bSelect )
 
 
 
-FASTBOOL SwWrtShell::EndPg( FASTBOOL bSelect )
+BOOL SwWrtShell::EndPg( BOOL bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return MovePage( fnPageCurr, fnPageEnd );
@@ -398,7 +398,7 @@ FASTBOOL SwWrtShell::EndPg( FASTBOOL bSelect )
 
 
 
-FASTBOOL SwWrtShell::SttPara( FASTBOOL bSelect )
+BOOL SwWrtShell::SttPara( BOOL bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return MovePara( fnParaCurr, fnParaStart );
@@ -406,7 +406,7 @@ FASTBOOL SwWrtShell::SttPara( FASTBOOL bSelect )
 
 
 
-FASTBOOL SwWrtShell::EndPara( FASTBOOL bSelect )
+BOOL SwWrtShell::EndPara( BOOL bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return MovePara(fnParaCurr,fnParaEnd);
@@ -421,7 +421,7 @@ FASTBOOL SwWrtShell::EndPara( FASTBOOL bSelect )
 
 
 
-FASTBOOL SwWrtShell::StartOfColumn( FASTBOOL bSelect )
+BOOL SwWrtShell::StartOfColumn( BOOL bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect);
     return MoveColumn(fnColumnCurr, fnColumnStart);
@@ -429,7 +429,7 @@ FASTBOOL SwWrtShell::StartOfColumn( FASTBOOL bSelect )
 
 
 
-FASTBOOL SwWrtShell::EndOfColumn( FASTBOOL bSelect )
+BOOL SwWrtShell::EndOfColumn( BOOL bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect);
     return MoveColumn(fnColumnCurr, fnColumnEnd);
@@ -437,7 +437,7 @@ FASTBOOL SwWrtShell::EndOfColumn( FASTBOOL bSelect )
 
 
 
-FASTBOOL SwWrtShell::StartOfNextColumn( FASTBOOL bSelect )
+BOOL SwWrtShell::StartOfNextColumn( BOOL bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect);
     return MoveColumn( fnColumnNext, fnColumnStart);
@@ -445,7 +445,7 @@ FASTBOOL SwWrtShell::StartOfNextColumn( FASTBOOL bSelect )
 
 
 
-FASTBOOL SwWrtShell::EndOfNextColumn( FASTBOOL bSelect )
+BOOL SwWrtShell::EndOfNextColumn( BOOL bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect);
     return MoveColumn(fnColumnNext, fnColumnEnd);
@@ -453,7 +453,7 @@ FASTBOOL SwWrtShell::EndOfNextColumn( FASTBOOL bSelect )
 
 
 
-FASTBOOL SwWrtShell::StartOfPrevColumn( FASTBOOL bSelect )
+BOOL SwWrtShell::StartOfPrevColumn( BOOL bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect);
     return MoveColumn(fnColumnPrev, fnColumnStart);
@@ -461,7 +461,7 @@ FASTBOOL SwWrtShell::StartOfPrevColumn( FASTBOOL bSelect )
 
 
 
-FASTBOOL SwWrtShell::EndOfPrevColumn( FASTBOOL bSelect )
+BOOL SwWrtShell::EndOfPrevColumn( BOOL bSelect )
 {
     ShellMoveCrsr aTmp( this, bSelect);
     return MoveColumn(fnColumnPrev, fnColumnEnd);
@@ -677,7 +677,7 @@ BOOL SwWrtShell::GotoPage(USHORT nPage, BOOL bRecord)
 
 
 
-FASTBOOL SwWrtShell::GotoBookmark( USHORT nPos, BOOL bSelect, BOOL bStart )
+BOOL SwWrtShell::GotoBookmark( USHORT nPos, BOOL bSelect, BOOL bStart )
 {
     ShellMoveCrsr aTmp( this, bSelect );
     return SwCrsrShell::GotoBookmark( nPos, bStart );
@@ -685,7 +685,7 @@ FASTBOOL SwWrtShell::GotoBookmark( USHORT nPos, BOOL bSelect, BOOL bStart )
 
 
 
-FASTBOOL SwWrtShell::SelectTxtAttr( USHORT nWhich, const SwTxtAttr* pAttr )
+BOOL SwWrtShell::SelectTxtAttr( USHORT nWhich, const SwTxtAttr* pAttr )
 {
     BOOL bRet;
     {
