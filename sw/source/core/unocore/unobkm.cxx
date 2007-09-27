@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unobkm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:55:18 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:34:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ sal_Int64 SAL_CALL SwXBookmark::getSomething( const uno::Sequence< sal_Int8 >& r
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
-            return (sal_Int64)this;
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
     return 0;
 }
@@ -109,9 +109,9 @@ sal_Int64 SAL_CALL SwXBookmark::getSomething( const uno::Sequence< sal_Int8 >& r
  *
  * --------------------------------------------------*/
 SwXBookmark::SwXBookmark(SwBookmark* pBkm, SwDoc* pDc) :
+        aLstnrCntnr( (text::XTextContent*)this ),
         pDoc(pDc),
-        bIsDescriptor(0 == pBkm),
-        aLstnrCntnr( (text::XTextContent*)this)
+        bIsDescriptor(0 == pBkm)
 {
     if(pBkm)
         pBkm->Add(this);
@@ -138,10 +138,10 @@ void SwXBookmark::attachToRange(const uno::Reference< text::XTextRange > & xText
     if(xRangeTunnel.is())
     {
 
-        pRange = (SwXTextRange*)xRangeTunnel->getSomething(
-                                SwXTextRange::getUnoTunnelId());
-        pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
-                                OTextCursorHelper::getUnoTunnelId());
+        pRange = reinterpret_cast< SwXTextRange * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId() )));
+        pCursor = reinterpret_cast< OTextCursorHelper * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
     }
 
     SwDoc* pDc = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ?
@@ -363,7 +363,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXBookmark::getPropertySetInfo(void)
 /*-- 30.03.99 16:02:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXBookmark::setPropertyValue(const OUString& PropertyName, const uno::Any& aValue)
+void SwXBookmark::setPropertyValue(const OUString& PropertyName, const uno::Any& /*aValue*/)
     throw( beans::UnknownPropertyException, beans::PropertyVetoException,
         lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
 {
@@ -386,30 +386,30 @@ uno::Any SwXBookmark::getPropertyValue(const OUString& rPropertyName) throw( bea
 /*-- 30.03.99 16:02:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXBookmark::addPropertyChangeListener(const OUString& PropertyName,
-    const uno::Reference< beans::XPropertyChangeListener > & aListener)
+void SwXBookmark::addPropertyChangeListener(const OUString& /*PropertyName*/,
+    const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
 }
 /*-- 30.03.99 16:02:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXBookmark::removePropertyChangeListener(const OUString& PropertyName,
-    const uno::Reference< beans::XPropertyChangeListener > & aListener)
+void SwXBookmark::removePropertyChangeListener(const OUString& /*PropertyName*/,
+    const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
             throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
 }
 /*-- 30.03.99 16:03:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXBookmark::addVetoableChangeListener(const OUString& PropertyName,
-    const uno::Reference< beans::XVetoableChangeListener > & aListener)
+void SwXBookmark::addVetoableChangeListener(const OUString& /*PropertyName*/,
+    const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
             throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
 }
 /*-- 30.03.99 16:03:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXBookmark::removeVetoableChangeListener(const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXBookmark::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
 }
