@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdetect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:29:04 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:41:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::rtl;
 
-SwFilterDetect::SwFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
+SwFilterDetect::SwFilterDetect( const REFERENCE < lang::XMultiServiceFactory >& /*xFactory*/ )
 {
 }
 
@@ -129,7 +129,7 @@ SwFilterDetect::~SwFilterDetect()
 {
 }
 
-::rtl::OUString SAL_CALL SwFilterDetect::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( ::com::sun::star::uno::RuntimeException )
+::rtl::OUString SAL_CALL SwFilterDetect::detect( uno::Sequence< beans::PropertyValue >& lDescriptor ) throw( uno::RuntimeException )
 {
     REFERENCE< XInputStream > xStream;
     REFERENCE< XContent > xContent;
@@ -218,7 +218,6 @@ SwFilterDetect::~SwFilterDetect()
     bWasReadOnly = pItem && pItem->GetValue();
 
     const SfxFilter* pFilter = 0;
-    String aFilterName;
     String aPrefix = String::CreateFromAscii( "private:factory/" );
     if( aURL.Match( aPrefix ) == aPrefix.Len() )
     {
@@ -278,19 +277,19 @@ SwFilterDetect::~SwFilterDetect()
 
                     try
                     {
-                        const SfxFilter* pFilter = aPreselectedFilterName.Len() ?
+                        const SfxFilter* pPreFilter = aPreselectedFilterName.Len() ?
                                 SfxFilterMatcher().GetFilter4FilterName( aPreselectedFilterName ) : aTypeName.Len() ?
                                 SfxFilterMatcher(String::CreateFromAscii("swriter")).GetFilter4EA( aTypeName ) : 0;
-                        if (!pFilter)
-                            pFilter = SfxFilterMatcher(String::CreateFromAscii("sweb")).GetFilter4EA( aTypeName );
+                        if (!pPreFilter)
+                            pPreFilter = SfxFilterMatcher(String::CreateFromAscii("sweb")).GetFilter4EA( aTypeName );
                         String aFilterName;
-                        if ( pFilter )
+                        if ( pPreFilter )
                         {
-                            aFilterName = pFilter->GetName();
-                            aTypeName = pFilter->GetTypeName();
+                            aFilterName = pPreFilter->GetName();
+                            aTypeName = pPreFilter->GetTypeName();
                         }
 
-                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : FALSE, &aFilterName );
+                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pPreFilter ? pPreFilter->IsOwnTemplateFormat() : FALSE, &aFilterName );
                     }
                     catch( lang::WrappedTargetException& aWrap )
                     {
