@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:45:01 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:47:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 
 
 #include "hintids.hxx"
@@ -137,6 +140,10 @@
 #include "wrthtml.hxx"
 #include "css1kywd.hxx"
 #include "htmlfly.hxx"
+
+using namespace ::com::sun::star;
+
+////////////////////////////////////////////////////////////
 
 const ULONG HTML_FRMOPTS_IMG_ALL        =
     HTML_FRMOPT_ALT |
@@ -366,7 +373,7 @@ USHORT SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
         }
     }
 
-    return eType;
+    return static_cast< USHORT >(eType);
 }
 
 void SwHTMLWriter::CollectFlyFrms()
@@ -388,7 +395,7 @@ void SwHTMLWriter::CollectFlyFrms()
 
         BYTE nMode;
         const SwFmtAnchor& rAnchor = rFrmFmt.GetAnchor();
-        SwRelationOrient eHoriRel = rFrmFmt.GetHoriOrient().GetRelationOrient();
+        sal_Int16 eHoriRel = rFrmFmt.GetHoriOrient().GetRelationOrient();
         switch( rAnchor.GetAnchorId() )
         {
         case FLY_PAGE:
@@ -400,7 +407,7 @@ void SwHTMLWriter::CollectFlyFrms()
             // Absatz-gebundene Rahmen werden nur dann vor den
             // Absatz geschrieben, wenn der Absatz einen Abstand
             // hat.
-            if( FRAME == eHoriRel &&
+            if( text::RelOrientation::FRAME == eHoriRel &&
                 (pAPos = rAnchor.GetCntntAnchor()) != 0 &&
                 (pACNd = pAPos->nNode.GetNode().GetCntntNode()) != 0 )
             {
@@ -416,7 +423,7 @@ void SwHTMLWriter::CollectFlyFrms()
             break;
 
         case FLY_AUTO_CNTNT:
-            if( FRAME == eHoriRel || PRTAREA == eHoriRel )
+            if( text::RelOrientation::FRAME == eHoriRel || text::RelOrientation::PRINT_AREA == eHoriRel )
                 nMode = aHTMLOutFrmParaPrtAreaTable[eType][nExportMode];
             else
                 nMode = aHTMLOutFrmParaOtherTable[eType][nExportMode];
@@ -654,10 +661,10 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
         // zeichengebunden einzufuegen???
         const SwFmtHoriOrient& rHoriOri = rFrmFmt.GetHoriOrient();
         if( !(nFrmOpts & HTML_FRMOPT_S_ALIGN) ||
-            FRAME == rHoriOri.GetRelationOrient() ||
-            PRTAREA == rHoriOri.GetRelationOrient() )
+            text::RelOrientation::FRAME == rHoriOri.GetRelationOrient() ||
+            text::RelOrientation::PRINT_AREA == rHoriOri.GetRelationOrient() )
         {
-            pStr = HORI_RIGHT == rHoriOri.GetHoriOrient()
+            pStr = text::HoriOrientation::RIGHT == rHoriOri.GetHoriOrient()
                         ? sHTML_AL_right
                         : sHTML_AL_left;
         }
@@ -669,15 +676,16 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     {
         switch( ((SwFmtVertOrient*)pItem)->GetVertOrient() )
         {
-        case VERT_LINE_TOP:     pStr = sHTML_VA_top;        break;
-        case VERT_CHAR_TOP:
-        case VERT_BOTTOM:       pStr = sHTML_VA_texttop;    break;  // geht nicht
-        case VERT_LINE_CENTER:
-        case VERT_CHAR_CENTER:  pStr = sHTML_VA_absmiddle;  break;  // geht nicht
-        case VERT_CENTER:       pStr = sHTML_VA_middle;     break;
-        case VERT_LINE_BOTTOM:
-        case VERT_CHAR_BOTTOM:  pStr = sHTML_VA_absbottom;  break;  // geht nicht
-        case VERT_TOP:          pStr = sHTML_VA_bottom;     break;
+        case text::VertOrientation::LINE_TOP:     pStr = sHTML_VA_top;        break;
+        case text::VertOrientation::CHAR_TOP:
+        case text::VertOrientation::BOTTOM:       pStr = sHTML_VA_texttop;    break;  // geht nicht
+        case text::VertOrientation::LINE_CENTER:
+        case text::VertOrientation::CHAR_CENTER:  pStr = sHTML_VA_absmiddle;  break;  // geht nicht
+        case text::VertOrientation::CENTER:       pStr = sHTML_VA_middle;     break;
+        case text::VertOrientation::LINE_BOTTOM:
+        case text::VertOrientation::CHAR_BOTTOM:  pStr = sHTML_VA_absbottom;  break;  // geht nicht
+        case text::VertOrientation::TOP:          pStr = sHTML_VA_bottom;     break;
+        case text::VertOrientation::NONE:     break;
         }
     }
     if( pStr )
@@ -821,13 +829,13 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
         SFX_ITEM_SET == rItemSet.GetItemState( RES_SURROUND, TRUE, &pItem ))
     {
         const SwFmtSurround* pSurround = (const SwFmtSurround*)pItem;
-        SwHoriOrient eHoriOri = rFrmFmt.GetHoriOrient().GetHoriOrient();
+        sal_Int16 eHoriOri =    rFrmFmt.GetHoriOrient().GetHoriOrient();
         pStr = 0;
         SwSurround eSurround = pSurround->GetSurround();
         BOOL bAnchorOnly = pSurround->IsAnchorOnly();
         switch( eHoriOri )
         {
-        case HORI_RIGHT:
+        case text::HoriOrientation::RIGHT:
             {
                 switch( eSurround )
                 {
@@ -840,6 +848,8 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
                     if( bAnchorOnly )
                         bClearRight = TRUE;
                     break;
+                default:
+                    ;
                 }
             }
             break;
@@ -859,6 +869,8 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
                     if( bAnchorOnly )
                         bClearLeft = TRUE;
                     break;
+                default:
+                    ;
                 }
             }
             break;
@@ -1349,15 +1361,16 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
             const sal_Char *pStr = 0;
             switch( pVertOrient->GetVertOrient() )
             {
-            case VERT_LINE_TOP:     pStr = sHTML_VA_top;        break;
-            case VERT_CHAR_TOP:
-            case VERT_BOTTOM:       pStr = sHTML_VA_texttop;    break;  // geht nicht
-            case VERT_LINE_CENTER:
-            case VERT_CHAR_CENTER:  pStr = sHTML_VA_absmiddle;  break;  // geht nicht
-            case VERT_CENTER:       pStr = sHTML_VA_middle;     break;
-            case VERT_LINE_BOTTOM:
-            case VERT_CHAR_BOTTOM:  pStr = sHTML_VA_absbottom;  break;  // geht nicht
-            case VERT_TOP:          pStr = sHTML_VA_bottom;     break;
+            case text::VertOrientation::LINE_TOP:     pStr = sHTML_VA_top;        break;
+            case text::VertOrientation::CHAR_TOP:
+            case text::VertOrientation::BOTTOM:       pStr = sHTML_VA_texttop;    break;  // geht nicht
+            case text::VertOrientation::LINE_CENTER:
+            case text::VertOrientation::CHAR_CENTER:  pStr = sHTML_VA_absmiddle;  break;  // geht nicht
+            case text::VertOrientation::CENTER:       pStr = sHTML_VA_middle;     break;
+            case text::VertOrientation::LINE_BOTTOM:
+            case text::VertOrientation::CHAR_BOTTOM:  pStr = sHTML_VA_absbottom;  break;  // geht nicht
+            case text::VertOrientation::TOP:          pStr = sHTML_VA_bottom;     break;
+            case text::VertOrientation::NONE:     break;
             }
             if( pStr )
                 (((sOut += ' ') += sHTML_O_align) += '=') += pStr;
@@ -1596,7 +1609,7 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
 }
 
 static Writer & OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFrmFmt,
-                                       BOOL bInCntnr )
+                                       BOOL /*bInCntnr*/ )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -1621,8 +1634,6 @@ static Writer & OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         INetURLObject(rWrt.GetBaseURL()), aGrfNm,
         URIHelper::GetMaybeFileHdl() );
     Size aSz( 0, 0 );
-    ULONG nFrmFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
-                                : HTML_FRMOPTS_GENIMG;
     OutHTML_Image( rWrt, rFrmFmt, aGrfNm, rFrmFmt.GetName(), aSz,
                     HTML_FRMOPTS_GENIMG, pMarkToFrame,
                     aIMap.GetIMapObjectCount() ? &aIMap : 0 );
@@ -1645,7 +1656,7 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     const SwMirrorGrf& rMirror = pGrfNd->GetSwAttrSet().GetMirrorGrf();
 
     String aGrfNm;
-    if( !pGrfNd->IsLinkedFile() || RES_DONT_MIRROR_GRF != rMirror.GetValue() )
+    if( !pGrfNd->IsLinkedFile() || RES_MIRROR_GRAPH_DONT != rMirror.GetValue() )
     {
         // Grafik als File-Referenz speichern (als JPEG-Grafik speichern)
         if( rHTMLWrt.GetOrigFileName() )
@@ -1656,9 +1667,9 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                        XOUTBMP_USE_NATIVE_IF_POSSIBLE;
         switch( rMirror.GetValue() )
         {
-        case RES_MIRROR_GRF_VERT:   nFlags = XOUTBMP_MIRROR_HORZ; break;
-        case RES_MIRROR_GRF_HOR:    nFlags = XOUTBMP_MIRROR_VERT; break;
-        case RES_MIRROR_GRF_BOTH:
+        case RES_MIRROR_GRAPH_VERT: nFlags = XOUTBMP_MIRROR_HORZ; break;
+        case RES_MIRROR_GRAPH_HOR:    nFlags = XOUTBMP_MIRROR_VERT; break;
+        case RES_MIRROR_GRAPH_BOTH:
             nFlags = XOUTBMP_MIRROR_VERT | XOUTBMP_MIRROR_HORZ;
             break;
         }
@@ -1952,9 +1963,9 @@ SwHTMLPosFlyFrm::SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
         if( rAnchor.GetCntntAnchor() )
         {
             nCntntIdx = rAnchor.GetCntntAnchor()->nContent.GetIndex();
-            SwRelationOrient eHoriRel = rPosFly.GetFmt().GetHoriOrient().
+            sal_Int16 eHoriRel = rPosFly.GetFmt().GetHoriOrient().
                                                 GetRelationOrient();
-            if( FRAME == eHoriRel || PRTAREA == eHoriRel )
+            if( text::RelOrientation::FRAME == eHoriRel || text::RelOrientation::PRINT_AREA == eHoriRel )
             {
                 const SwCntntNode *pCNd = pNdIdx->GetNode().GetCntntNode();
                 ASSERT( pCNd, "Kein Content-Node an PaM-Position" );
