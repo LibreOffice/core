@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:43:11 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:12:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,8 +136,11 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                             0 ;
 
     SwTwips nLineWidth = rInf.Width() - rInf.X();
-    const xub_StrLen nMaxLen = Min( xub_StrLen(rInf.GetTxt().Len() - rInf.GetIdx()),
-                                rInf.GetLen() );
+    xub_StrLen nMaxLen = rInf.GetTxt().Len() - rInf.GetIdx();
+
+    if ( rInf.GetLen() < nMaxLen )
+        nMaxLen = rInf.GetLen();
+
     if( !nMaxLen )
         return sal_False;
 
@@ -186,7 +189,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                   // if first line ends with a manual line break
                   rInf.GetTxt().GetChar( nCutPos ) == CH_BREAK ) )
                   // <--
-                nBreakWidth += nItalic;
+                nBreakWidth = nBreakWidth + nItalic;
 
             // save maximum width for later use
             if ( nMaxSizeDiff )
@@ -237,7 +240,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         if ( nBreakWidth <= nLineWidth )
         {
             if( nItalic && ( nBreakPos + 1 ) >= rInf.GetTxt().Len() )
-                nBreakWidth += nItalic;
+                nBreakWidth = nBreakWidth + nItalic;
 
             // save maximum width for later use
             if ( nMaxSizeDiff )
@@ -309,8 +312,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             if ( aTxt.Len() )
             {
                 nFieldDiff = aTxt.Len() - 1;
-                nCutPos += nFieldDiff;
-                nHyphPos += nFieldDiff;
+                nCutPos = nCutPos + nFieldDiff;
+                nHyphPos = nHyphPos + nFieldDiff;
 
 #if OSL_DEBUG_LEVEL > 1
                 aDebugString = rInf.GetTxt();
@@ -399,7 +402,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         // !!! We must have a local copy of the locale, because inside
         // getLineBreak the LinguEventListener can trigger a new formatting,
         // which can corrupt the locale pointer inside pBreakIt.
-        const com::sun::star::lang::Locale aLocale = pBreakIt->GetLocale( aLang );
+        const lang::Locale aLocale = pBreakIt->GetLocale( aLang );
 
         // determines first possible line break from nRightPos to
         // start index of current line
@@ -435,8 +438,10 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             const String aHyphenatedWord = xHyphWord->getHyphenatedWord();
             // e.g., Schif-fahrt: 5, referes to our string
             const USHORT nHyphenationPos = xHyphWord->getHyphenationPos();
+            (void)nHyphenationPos;
             // e.g., Schiff-fahrt: 6, referes to the word after hyphenation
             const USHORT nHyphenPos = xHyphWord->getHyphenPos();
+            (void)nHyphenPos;
 #endif
 
             // if not in interactive mode, we have to break behind a soft hyphen
@@ -516,12 +521,12 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             else if ( STRING_LEN != nBreakPos )
             {
                 ASSERT( nBreakPos >= nFieldDiff, "I've got field trouble!" );
-                nBreakPos -= nFieldDiff;
+                nBreakPos = nBreakPos - nFieldDiff;
             }
 
             ASSERT( nCutPos >= rInf.GetIdx() && nCutPos >= nFieldDiff,
                     "I've got field trouble, part2!" );
-            nCutPos -= nFieldDiff;
+            nCutPos = nCutPos - nFieldDiff;
 
             XubString& rOldTxt = (XubString&)rInf.GetTxt();
             rOldTxt.Erase( nOldIdx - 1, nFieldDiff + 1 );
