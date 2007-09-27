@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldbas.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:54:08 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:01:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,7 +198,7 @@ enum SwVarFormat
     VVF_XX_X        = 0x2400,   // 1.234,5
     VVF_XX_XX       = 0x2500,   // 1.234,56
     VVF_XX_XXX      = 0x2600,   // 1.234,567
-    VVF_SYS_CUR     = 0x2700,   // W„hrungsformat aus der Systemeinstellung
+    VVF_SYS_CUR     = 0x2700,   // W???hrungsformat aus der Systemeinstellung
     VVF_CUR_X       = 0x2800,   // DM 1234
     VVF_CUR_XX_XX   = 0x2900,   // DM 1234,56 DM 1234,00
     VVF_CUR_XX_X0   = 0x2a00,   // DM 1234,56 DM 1234,--
@@ -218,22 +218,24 @@ enum SwVarFormat
 
 };
 
-enum SwGetSetExpType
+typedef USHORT SwGetSetExpType;
+namespace nsSwGetSetExpType
 {
-    GSE_STRING      = 0x0001,   // String
-    GSE_EXPR        = 0x0002,   // Expression
-    GSE_INP         = 0x0004,   // InputField
-    GSE_SEQ         = 0x0008,   // Sequence
-    GSE_FORMULA     = 0x0010    // Formel
-};
+    const SwGetSetExpType GSE_STRING  = 0x0001; // String
+    const SwGetSetExpType GSE_EXPR    = 0x0002; // Expression
+    const SwGetSetExpType GSE_INP     = 0x0004; // InputField
+    const SwGetSetExpType GSE_SEQ     = 0x0008; // Sequence
+    const SwGetSetExpType GSE_FORMULA = 0x0010; // Formel
+}
 
-enum SwExtendedSubType
+typedef USHORT SwExtendedSubType;
+namespace nsSwExtendedSubType
 {
-    SUB_CMD         = 0x0100,   // Kommando anzeigen
-    SUB_INVISIBLE   = 0x0200,   // unsichtbar
-    SUB_OWN_FMT     = 0x0400    // SwDBField: Uebernimmt Formatierung nicht
-                                // aus Datenbank
-};
+    const SwExtendedSubType SUB_CMD         = 0x0100;   // Kommando anzeigen
+    const SwExtendedSubType SUB_INVISIBLE   = 0x0200;   // unsichtbar
+    const SwExtendedSubType SUB_OWN_FMT     = 0x0400;   // SwDBField: Uebernimmt Formatierung nicht
+                                                        // aus Datenbank
+}
 
 enum SwInputFieldSubType
 {
@@ -278,7 +280,7 @@ String  FormatNumber(USHORT nNum, sal_uInt32 nFormat);
                     Basisklasse aller Feldtypen ist SwFieldType
  --------------------------------------------------------------------*/
 
-DBG_NAMEEX(SwFieldType);
+DBG_NAMEEX(SwFieldType)
 
 class SW_DLLPUBLIC SwFieldType : public SwModify
 {
@@ -303,8 +305,8 @@ public:
     // nur in abgeleiteten Klassen
     virtual const String&   GetName() const;
     virtual SwFieldType*    Copy()    const = 0;
-    virtual BOOL QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
-    virtual BOOL PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
+    virtual BOOL QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual BOOL PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 
             USHORT          Which() const { return nWhich; }
 
@@ -380,12 +382,12 @@ public:
     virtual void        SetPar1(const String& rStr);
     virtual void        SetPar2(const String& rStr);
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
     // hat das Feld eine Action auf dem ClickHandler ? (z.B. INetFelder,..)
-    FASTBOOL            HasClickHdl() const;
+    BOOL            HasClickHdl() const;
     // ist es ein Fix-Feld?
-    FASTBOOL            IsFixed() const;
+    BOOL            IsFixed() const;
 
     BOOL                IsAutomaticLanguage() const { return bIsAutomaticLanguage;}
     void                SetAutomaticLanguage(BOOL bSet){bIsAutomaticLanguage = bSet;}
