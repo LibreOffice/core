@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undo.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 12:45:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:30:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -607,7 +607,7 @@ String STR_OLE
 {
     Text [ en-US ] = "OLE-object";
 };
-String STR_FORMULA
+String STR_MATH_FORMULA
 {
     Text [ en-US ] = "formula";
 };
@@ -627,7 +627,7 @@ String STR_SCRIPT
 {
     Text [ en-US ] = "script";
 };
-String STR_AUTHORITY
+String STR_AUTHORITY_ENTRY
 {
     Text[ en-US ] = "bibliography entry";
 };
