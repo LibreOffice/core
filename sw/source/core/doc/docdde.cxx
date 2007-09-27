@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdde.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:51:05 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:33:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@
 #include <docary.hxx>
 #endif
 
+using namespace ::com::sun::star;
 
 struct _FindItem
 {
@@ -179,7 +180,7 @@ BOOL lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
 
 
 bool SwDoc::GetData( const String& rItem, const String& rMimeType,
-                     ::com::sun::star::uno::Any & rValue ) const
+                     uno::Any & rValue ) const
 {
     // haben wir ueberhaupt das Item vorraetig?
     String sItem( GetAppCharClass().lower( rItem ));
@@ -213,7 +214,7 @@ bool SwDoc::GetData( const String& rItem, const String& rMimeType,
 
 
 bool SwDoc::SetData( const String& rItem, const String& rMimeType,
-                     const ::com::sun::star::uno::Any & rValue )
+                     const uno::Any & rValue )
 {
     // haben wir ueberhaupt das Item vorraetig?
     String sItem( GetAppCharClass().lower( rItem ));
@@ -375,20 +376,20 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                 BYTE nLvl = pNd->GetTxtNode()->GetTxtColl()->GetOutlineLevel();
 
                 const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
-                USHORT nPos;
-                rOutlNds.Seek_Entry( pNd, &nPos );
+                USHORT nTmpPos;
+                rOutlNds.Seek_Entry( pNd, &nTmpPos );
                 rpRange = new SwNodeRange( aPos.nNode, 0, aPos.nNode );
 
                 // dann suche jetzt noch das Ende vom Bereich
-                for( ++nPos;
-                        nPos < rOutlNds.Count() &&
-                        nLvl < rOutlNds[ nPos ]->GetTxtNode()->
+                for( ++nTmpPos;
+                        nTmpPos < rOutlNds.Count() &&
+                        nLvl < rOutlNds[ nTmpPos ]->GetTxtNode()->
                                 GetTxtColl()->GetOutlineLevel();
-                    ++nPos )
+                    ++nTmpPos )
                     ;       // es gibt keinen Block
 
-                if( nPos < rOutlNds.Count() )
-                    rpRange->aEnd = *rOutlNds[ nPos ];
+                if( nTmpPos < rOutlNds.Count() )
+                    rpRange->aEnd = *rOutlNds[ nTmpPos ];
                 else
                     rpRange->aEnd = GetNodes().GetEndOfContent();
                 return TRUE;
