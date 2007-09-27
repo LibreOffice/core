@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:51:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:11:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,10 @@
 #include <stack>
 
 #include <tools/globname.hxx>
+
+
+using namespace ::com::sun::star;
+
 
 //
 // Some global data structures
@@ -357,13 +361,9 @@ bool SwTaggedPDFHelper::CheckReopenTag()
 
             ASSERT( aIter != rFrmTagIdMap.end(), "Could not find information to reopen paragraph" )
 
-            sal_Int32 nId = aIter != rFrmTagIdMap.end() ?
-                            (*aIter).second :
-                            vcl::PDFWriter::NonStructElement;
-
             nRestoreCurrentTag = mpPDFExtOutDevData->GetCurrentStructureElement();
-            bool bSuccess = mpPDFExtOutDevData->SetCurrentStructureElement( nId );
-            ASSERT( bSuccess, "Failed to reopen flow frame tag" )
+            ASSERT( mpPDFExtOutDevData->SetCurrentStructureElement( (*aIter).second ),
+                    "Failed to reopen flow frame tag" )
 
 #ifndef PRODUCT
             aStructStack.push_back( 99 );
@@ -384,8 +384,8 @@ bool SwTaggedPDFHelper::CheckRestoreTag() const
     bool bRet = false;
     if ( nRestoreCurrentTag != -1 )
     {
-        bool bSuccess = mpPDFExtOutDevData->SetCurrentStructureElement( nRestoreCurrentTag );
-        ASSERT( bSuccess, "Failed to restore reopened tag" )
+        ASSERT( mpPDFExtOutDevData->SetCurrentStructureElement( nRestoreCurrentTag ),
+                "Failed to restore reopened tag" )
 
 #ifndef PRODUCT
         aStructStack.pop_back();
@@ -429,7 +429,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType )
     ++nEndStructureElement;
 
 #ifndef PRODUCT
-    aStructStack.push_back( (USHORT)eType );
+    aStructStack.push_back( static_cast<USHORT>(eType) );
 #endif
 
     if ( pKey )
@@ -547,8 +547,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 bHeight =
                 bBox = true;
                 break;
-
-            default:
+            default :
                 break;
         }
 
@@ -619,7 +618,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
         {
             ASSERT( pFrm->IsTxtFrm(), "Frame type <-> tag attribute mismatch" )
             const SwAttrSet& aSet = static_cast<const SwTxtFrm*>(pFrm)->GetTxtNode()->GetSwAttrSet();
-            const USHORT nAdjust = (USHORT)aSet.GetAdjust().GetAdjust();
+            const SvxAdjust nAdjust = aSet.GetAdjust().GetAdjust();
             if ( SVX_ADJUST_BLOCK == nAdjust || SVX_ADJUST_CENTER == nAdjust ||
                  (  pFrm->IsRightToLeft() && SVX_ADJUST_LEFT == nAdjust ||
                    !pFrm->IsRightToLeft() && SVX_ADJUST_RIGHT == nAdjust ) )
@@ -711,7 +710,6 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 bBaselineShift =
                 bLinkAttribute = true;
                 break;
-
             default:
                 break;
         }
@@ -867,10 +865,10 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 //
                 if ( pNumRule && pNumRule->IsOutlineRule() )
                 {
-                    BYTE nRealLevel = (BYTE)pTxtNd->GetLevel();
+                    int nRealLevel = pTxtNd->GetLevel();
                     nRealLevel = nRealLevel > 5 ? 5 : nRealLevel;
 
-                    nPDFType =  vcl::PDFWriter::H1 + nRealLevel;
+                    nPDFType =  static_cast<USHORT>(vcl::PDFWriter::H1 + nRealLevel);
                     bPara = false;
                 }
 
@@ -885,10 +883,10 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                     // If pPrevNodeNum is set, we know that pTxtNd and pPrevTxtNd
                     // belong to the same NumRule:
-                    const USHORT nMyLevel = (USHORT)pTxtNd->GetLevel() + 1;
-                    USHORT nPreviousLevel = pPrevTxtNd && pPrevTxtNd->IsTxtNode() ?
-                        static_cast<SwTxtNode *>(pPrevTxtNd)->GetLevel() + 1 :
-                        0;
+                    const int nMyLevel = pTxtNd->GetLevel() + 1;
+                    int nPreviousLevel = pPrevTxtNd && pPrevTxtNd->IsTxtNode() ?
+                                         static_cast<SwTxtNode *>(pPrevTxtNd)->GetLevel() + 1 :
+                                         0;
 
                     if ( nMyLevel <= nPreviousLevel )
                     {
@@ -987,7 +985,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     if ( pOLENd )
                     {
                         SwOLEObj& aOLEObj = pOLENd->GetOLEObj();
-                        ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > aRef = aOLEObj.GetOleRef();
+                        uno::Reference< embed::XEmbeddedObject > aRef = aOLEObj.GetOleRef();
                         if ( aRef.is() )
                         {
                             bFormula = 0 != SotExchange::IsMath( SvGlobalName( aRef->getClassID() ) );
@@ -1318,7 +1316,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                         // Create links for all selected rectangles:
                         const USHORT nNumOfRects = aTmp.Count();
-                        for ( int i = 0; i < nNumOfRects; ++i )
+                        for ( USHORT i = 0; i < nNumOfRects; ++i )
                         {
                             // Link Rectangle
                             const SwRect& rLinkRect( aTmp[ i ] );
@@ -1482,7 +1480,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                         // Create links for all selected rectangles:
                         const USHORT nNumOfRects = aTmp.Count();
-                        for ( int i = 0; i < nNumOfRects; ++i )
+                        for ( USHORT i = 0; i < nNumOfRects; ++i )
                         {
                             // Link rectangle
                             const SwRect& rLinkRect( aTmp[ i ] );
