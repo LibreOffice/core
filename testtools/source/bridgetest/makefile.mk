@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:23:27 $
+#   last change: $Author: hr $ $Date: 2007-09-27 12:52:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ $(DLLDEST)$/uno_services.rdb .ERRREMOVE: $(DLLDEST)$/uno_types.rdb \
         -c uuresolver.uno$(DLLPOST) \
         -c bridgetest.uno$(DLLPOST) \
         -c cppobj.uno$(DLLPOST) \
-        -c uriproc.uno$(DLLPOST) \
+        -c stocservices.uno$(DLLPOST) \
         -c $(SHL3TARGETN:f)
 .IF "$(SOLAR_JAVA)" != ""
     $(REGCOMP) -register -br $(DLLDEST)$/uno_types.rdb -r $@ \
@@ -207,5 +207,5 @@ $(MISC)$/$(TARGET)$/bootstrap.rdb .ERRREMOVE:
      $(COPY) $(SOLARBINDIR)$/types.rdb $@
 .IF "$(SOLAR_JAVA)" != ""
     $(REGCOMP) -register -r $@ -c javaloader.uno$(DLLPOST) \
-        -c javavm.uno$(DLLPOST) -c uriproc.uno$(DLLPOST)
+        -c javavm.uno$(DLLPOST) -c stocservices.uno$(DLLPOST)
 .ENDIF
