@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoevtlstnr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:56:43 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:36:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,9 @@ SV_IMPL_PTRARR(SwEvtLstnrArray, XEventListenerPtr);
 /*-- 22.04.99 11:24:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwEventListenerContainer::SwEventListenerContainer( uno::XInterface* pxParent) :
+SwEventListenerContainer::SwEventListenerContainer( uno::XInterface* _pxParent) :
     pListenerArr(0),
-    pxParent(pxParent)
+    pxParent(_pxParent)
 {
 }
 /*-- 22.04.99 11:24:59---------------------------------------------------

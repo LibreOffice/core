@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextCursorHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:54:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:34:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ sal_Int64 SAL_CALL OTextCursorHelper::getSomething(
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
         {
-                return (sal_Int64)this;
+            return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
         }
     return 0;
 }
