@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:59:15 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:23:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,7 +245,7 @@ protected:
 
 public:
 
-    SwAccessibleParagraph( SwAccessibleMap *pMap, sal_Int32 nPara,
+    SwAccessibleParagraph( SwAccessibleMap* pInitMap,
                            const SwTxtFrm *pTxtFrm );
 
     inline operator ::com::sun::star::accessibility::XAccessibleText *();
