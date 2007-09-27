@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:54:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:08:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,8 +330,9 @@ sal_Int32 ReadThroughComponent(
                              ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
         }
     }
-    catch( xml::sax::SAXException& r )
+    catch( xml::sax::SAXException& r)
     {
+        (void)r;
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
@@ -342,8 +343,9 @@ sal_Int32 ReadThroughComponent(
 #endif
         return ERR_SWG_READ_ERROR;
     }
-    catch( packages::zip::ZipIOException& r )
+    catch( packages::zip::ZipIOException& r)
     {
+        (void)r;
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "Zip exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
@@ -351,8 +353,9 @@ sal_Int32 ReadThroughComponent(
 #endif
         return ERRCODE_IO_BROKENPACKAGE;
     }
-    catch( io::IOException& r )
+    catch( io::IOException& r)
     {
+        (void)r;
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "IO exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
@@ -360,8 +363,9 @@ sal_Int32 ReadThroughComponent(
 #endif
         return ERR_SWG_READ_ERROR;
     }
-    catch( uno::Exception& r )
+    catch( uno::Exception& r)
     {
+        (void)r;
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "uno exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
@@ -482,7 +486,7 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
         for ( BYTE i = 0; i < MAXLEVEL; ++i )
         {
             sStyleName =
-                SwStyleNameMapper::GetProgName( RES_POOLCOLL_HEADLINE1 + i,
+                SwStyleNameMapper::GetProgName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
                                                 sStyleName );
             aDefOutlStyleNames[i] = sStyleName;
         }
@@ -716,7 +720,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { "BuildId", sizeof("BuildId")-1, 0,
               &::getCppuType( (OUString *)0 ),
-              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+              beans::PropertyAttribute::MAYBEVOID, 0 },
         // <--
         { NULL, 0, 0, NULL, 0, 0 }
     };
@@ -907,7 +911,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
 
 
     // force redline mode to "none"
-    rDoc.SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_NONE );
+    rDoc.SetRedlineMode_intern( nsRedlineMode_t::REDLINE_NONE );
 
     sal_Bool bOASIS = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
     // --> OD 2004-08-10 #i28749# - set property <ShapePositionInHoriL2R>
@@ -957,10 +961,10 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
         try
         {
             uno::Reference < io::XStream > xStm = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
-            SvStream* pStrm = utl::UcbStreamHelper::CreateStream( xStm );
-            if( !pStrm->GetError() )
-                rDoc.ReadLayoutCache( *pStrm );
-            delete pStrm;
+            SvStream* pStrm2 = utl::UcbStreamHelper::CreateStream( xStm );
+            if( !pStrm2->GetError() )
+                rDoc.ReadLayoutCache( *pStrm2 );
+            delete pStrm2;
         }
         catch ( uno::Exception& )
         {
@@ -990,21 +994,21 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     rDoc.SetRedlinePassword( aKey );
 
     // restore redline mode from import info property set
-    sal_Int16 nRedlineMode = IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
+    sal_Int16 nRedlineMode = nsRedlineMode_t::REDLINE_SHOW_INSERT;
     aAny = xInfoSet->getPropertyValue( sShowChanges );
     if ( *(sal_Bool*)aAny.getValue() )
-        nRedlineMode |= IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
+        nRedlineMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
     aAny = xInfoSet->getPropertyValue( sRecordChanges );
     if ( *(sal_Bool*)aAny.getValue() || (aKey.getLength() > 0) )
-        nRedlineMode |= IDocumentRedlineAccess::REDLINE_ON;
+        nRedlineMode |= nsRedlineMode_t::REDLINE_ON;
     else
-        nRedlineMode |= IDocumentRedlineAccess::REDLINE_NONE;
+        nRedlineMode |= nsRedlineMode_t::REDLINE_NONE;
 
     // ... restore redline mode
     // (First set bogus mode to make sure the mode in SetRedlineMode()
     //  is different from it's previous mode.)
-    rDoc.SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)( ~nRedlineMode ));
-    rDoc.SetRedlineMode( (IDocumentRedlineAccess::RedlineMode_t)( nRedlineMode ));
+    rDoc.SetRedlineMode_intern((RedlineMode_t)( ~nRedlineMode ));
+    rDoc.SetRedlineMode( (RedlineMode_t)( nRedlineMode ));
 
     // #103728# move Pam into valid content
     lcl_EnsureValidPam( rPaM );
@@ -1055,10 +1059,10 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
         if( xModelSet.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
-            OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
-            if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sPropName) )
+            OUString sName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+            if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sName) )
             {
-                xModelSet->setPropertyValue( sPropName, xInfoSet->getPropertyValue(sPropName) );
+                xModelSet->setPropertyValue( sName, xInfoSet->getPropertyValue(sName) );
             }
         }
     }
@@ -1081,8 +1085,8 @@ USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
             comphelper::getProcessServiceFactory();
     ASSERT( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
-    uno::Reference < embed::XStorage > xStg;
-    if( xServiceFactory.is() && ( xStg = rMedium.GetStorage() ).is() )
+    uno::Reference < embed::XStorage > xStg2;
+    if( xServiceFactory.is() && ( xStg2 = rMedium.GetStorage() ).is() )
     {
         try
         {
@@ -1091,7 +1095,7 @@ USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
             OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) );
             aParserInput.sSystemId = sDocName;
 
-            uno::Reference < io::XStream > xStm = xStg->openStreamElement( sDocName, embed::ElementModes::READ );
+            uno::Reference < io::XStream > xStm = xStg2->openStreamElement( sDocName, embed::ElementModes::READ );
             aParserInput.aInputStream = xStm->getInputStream();
 
             // get parser
