@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergechildwindow.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 12:54:18 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:32:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ FloatingWindow DLG_MAILMERGECHILD\
             };
         };
     };
-    #define IMGLIST_IDS\
+    #define IMGLIST1_IDS\
         IdList = \
         { \
             FN_SHOW_ROOT; \
@@ -82,17 +82,16 @@ FloatingWindow DLG_MAILMERGECHILD\
     {
         Prefix = "sc";
         MaskColor = IMAGE_MASK_COLOR;
-        IMGLIST_IDS;
+        IMGLIST1_IDS;
     };
 
     ImageList ILIST_TBX_HC
     {
         Prefix = "sch";
         MaskColor = IMAGE_MASK_COLOR ;
-        IMGLIST_IDS;
+        IMGLIST1_IDS;
     };
 };
-
 
 //FloatingWindow DLG_MM_SENDMAILS
 ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
@@ -191,7 +190,7 @@ ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
     {
         Text[ en-US ] = "~Continue";
     };
-    #define IMGLIST_IDS\
+    #define IMGLIST2_IDS\
         IdList = \
         { \
             FN_FORMULA_CANCEL ;\
@@ -203,14 +202,14 @@ ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
     {
         Prefix = "sc";
         MaskColor = IMAGE_MASK_COLOR;
-        IMGLIST_IDS;
+        IMGLIST2_IDS;
     };
 
     ImageList ILIST_HC
     {
         Prefix = "sch";
         MaskColor = IMAGE_MASK_COLOR ;
-        IMGLIST_IDS;
+        IMGLIST2_IDS;
     };
     String ST_TASK
     {
