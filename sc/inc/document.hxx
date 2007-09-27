@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-21 09:22:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:51:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,8 @@ struct ScTabOpParam;
 class VirtualDevice;
 class ScAutoNameCache;
 class ScTemporaryChartLock;
+class ScLookupCache;
+struct ScLookupCacheMapImpl;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -317,6 +319,8 @@ private:
     ScRecursionHelper*  pRecursionHelper;               // information for recursive and iterative cell formulas
 
     ScAutoNameCache*    pAutoNameCache;                 // for automatic name lookup during CompileXML
+
+    ScLookupCacheMapImpl* pLookupCacheMapImpl;          // cache for lookups like VLOOKUP and MATCH
 
     sal_Int64           nUnoObjectId;                   // counted up for UNO objects
 
@@ -830,6 +834,12 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     void            CompileXML();
 
     ScAutoNameCache* GetAutoNameCache()     { return pAutoNameCache; }
+
+                    // Creates a ScLookupCache cache for the range if it doesn't already exist.
+    ScLookupCache & GetLookupCache( const ScRange & rRange );
+                    // Only ScLookupCache ctor/dtor use Add/Remove.
+    void            AddLookupCache( ScLookupCache & rCache );
+    void            RemoveLookupCache( ScLookupCache & rCache );
 
                     // Automatisch Berechnen
     void            SetAutoCalc( BOOL bNewAutoCalc );
@@ -1432,6 +1442,7 @@ SC_DLLPUBLIC    SvNumberFormatter*  GetFormatTable() const;
     BOOL            IsCalcingAfterLoad() const { return bCalcingAfterLoad; }
     void            SetNoListening( BOOL bVal ) { bNoListening = bVal; }
     BOOL            GetNoListening() const { return bNoListening; }
+    ScBroadcastAreaSlotMachine* GetBASM() const { return pBASM; }
 
     ScChartListenerCollection* GetChartListenerCollection() const
                         { return pChartListenerCollection; }
