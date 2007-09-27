@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autonamecache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:34:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,17 +42,10 @@
 #ifndef SC_ADDRESS_HXX
 #include "address.hxx"
 #endif
-
-struct ScAutoNameHashCode
-{
-    size_t operator()( const String& rStr ) const
-    {
-        return rtl_ustr_hashCode_WithLength( rStr.GetBuffer(), rStr.Len() );
-    }
-};
+#include "global.hxx"
 
 typedef ::std::vector< ScAddress > ScAutoNameAddresses;
-typedef ::std::hash_map< String, ScAutoNameAddresses, ScAutoNameHashCode, ::std::equal_to< String > > ScAutoNameHashMap;
+typedef ::std::hash_map< String, ScAutoNameAddresses, ScStringHashCode, ::std::equal_to< String > > ScAutoNameHashMap;
 
 //
 //  Cache for faster lookup of automatic names during CompileXML
