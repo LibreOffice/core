@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddefld.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:19:42 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:58:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,8 @@ public:
     virtual SwFieldType* Copy() const;
     virtual const String& GetName() const;
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 
     String GetCmd() const;
     void SetCmd( const String& rStr );
