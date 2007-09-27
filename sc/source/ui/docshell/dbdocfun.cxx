@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:06:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:55:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -920,8 +920,9 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     if (!bCopy)
         pDoc->UpdatePageBreaks( nTab );
 
-    ScRange aDirtyRange( aLocalParam.nCol1, aLocalParam.nRow1, nDestTab,
-        aLocalParam.nCol2, aLocalParam.nRow2, nDestTab );
+    // #i23299# because of Subtotal functions, the whole rows must be set dirty
+    ScRange aDirtyRange( 0 , aLocalParam.nRow1, nDestTab,
+        MAXCOL, aLocalParam.nRow2, nDestTab );
     pDoc->SetDirty( aDirtyRange );
 
     if ( bRecord )
