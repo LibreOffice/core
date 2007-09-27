@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syncbtn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:17:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:45:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,13 +62,13 @@ SFX_IMPL_FLOATINGWINDOW( SwSyncChildWin, FN_SYNC_LABELS )
     Beschreibung:
 ------------------------------------------------------------------------*/
 
-SwSyncChildWin::SwSyncChildWin( Window* pParent,
+SwSyncChildWin::SwSyncChildWin( Window* _pParent,
                                 USHORT nId,
                                 SfxBindings* pBindings,
                                 SfxChildWinInfo* pInfo ) :
-                                SfxChildWindow( pParent, nId )
+                                SfxChildWindow( _pParent, nId )
 {
-    pWindow = new SwSyncBtnDlg( pBindings, this, pParent);
+    pWindow = new SwSyncBtnDlg( pBindings, this, _pParent);
 
     if (!pInfo->aSize.Width() || !pInfo->aSize.Height())
     {
@@ -79,7 +79,7 @@ SwSyncChildWin::SwSyncChildWin( Window* pParent,
             pWindow->SetPosPixel(rEditWin.OutputToScreenPixel(Point(0, 0)));
         }
         else
-            pWindow->SetPosPixel(pParent->OutputToScreenPixel(Point(0, 0)));
+            pWindow->SetPosPixel(_pParent->OutputToScreenPixel(Point(0, 0)));
         pInfo->aPos = pWindow->GetPosPixel();
         pInfo->aSize = pWindow->GetSizePixel();
     }
@@ -93,10 +93,10 @@ SwSyncChildWin::SwSyncChildWin( Window* pParent,
     Beschreibung:
 ------------------------------------------------------------------------*/
 
-SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* pBindings,
+SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* _pBindings,
                             SfxChildWindow* pChild,
                             Window *pParent) :
-    SfxFloatingWindow(pBindings, pChild, pParent, SW_RES(DLG_SYNC_BTN)),
+    SfxFloatingWindow(_pBindings, pChild, pParent, SW_RES(DLG_SYNC_BTN)),
     aSyncBtn        (this, SW_RES(BTN_SYNC ))
 {
     FreeResource();
@@ -115,7 +115,7 @@ __EXPORT SwSyncBtnDlg::~SwSyncBtnDlg()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwSyncBtnDlg, BtnHdl, PushButton *, pBtn )
+IMPL_LINK( SwSyncBtnDlg, BtnHdl, PushButton *, EMPTYARG )
 {
     SfxViewFrame::Current()->GetDispatcher()->Execute(FN_UPDATE_ALL_LINKS, SFX_CALLMODE_ASYNCHRON);
     return 0;
