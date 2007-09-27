@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablemgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 13:14:11 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:34:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,17 +55,15 @@
 #include "tablemgr.hxx"
 #include "frmfmt.hxx"
 #include "instable.hxx"
-//CHINA001 #include "colwd.hxx"
 #include "swerror.h"
 #include "table.hrc"
-#include "swabstdlg.hxx" //CHINA001
+#include "swabstdlg.hxx"
+#include "swcli.hxx"
 #include "docsh.hxx"
 #include "unotbl.hxx"
 #include "unochart.hxx"
 
-#include "swcli.hxx"
-
-using namespace com::sun::star;
+using namespace ::com::sun::star;
 
 /*------------------------------------------------------------------------
  Beschreibung:  Zeilenhoehe einstellen (Dialog)
@@ -75,12 +73,11 @@ using namespace com::sun::star;
 void SwTableFUNC::ColWidthDlg( Window *pParent )
 {
     InitTabCols();
-    //CHINA001 SwTableWidthDlg *pDlg = new SwTableWidthDlg( pParent, *this );
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-    VclAbstractDialog* pDlg = pFact->CreateSwTableWidthDlg( pParent, *this , DLG_COL_WIDTH );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    VclAbstractDialog* pDlg = pFact->CreateSwTableWidthDlg( pParent, *this ,DLG_COL_WIDTH );
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
     pDlg->Execute();
     delete pDlg;
 }
@@ -159,20 +156,20 @@ void SwTableFUNC::SetColWidth(USHORT nNum, SwTwips nNewWidth )
 
         int nDiff = (int)(nNewWidth - nWidth);
         if( !nNum )
-            aCols[GetRightSeparator(0)] += nDiff;
+            aCols[ static_cast< USHORT >(GetRightSeparator(0)) ] += nDiff;
         else if( nNum < GetColCount()  )
         {
             if(nDiff < GetColWidth(nNum + 1) - MINLAY)
-                aCols[GetRightSeparator(nNum)] += nDiff;
+                aCols[ static_cast< USHORT >(GetRightSeparator(nNum)) ] += nDiff;
             else
             {
                 int nDiffLeft = nDiff - (int)GetColWidth(nNum + 1) + (int)MINLAY;
-                aCols[GetRightSeparator(nNum)] += (nDiff - nDiffLeft);
-                aCols[GetRightSeparator(nNum - 1)] -= nDiffLeft;
+                aCols[ static_cast< USHORT >(GetRightSeparator(nNum)) ] += (nDiff - nDiffLeft);
+                aCols[ static_cast< USHORT >(GetRightSeparator(nNum - 1)) ] -= nDiffLeft;
             }
         }
         else
-            aCols[GetRightSeparator(nNum-1)] -= nDiff;
+            aCols[ static_cast< USHORT >(GetRightSeparator(nNum-1)) ] -= nDiff;
     }
     else
         aCols.SetRight( Min( nNewWidth, aCols.GetRightMax()) );
@@ -212,42 +209,40 @@ SwTableFUNC::~SwTableFUNC()
         delete pFmt;
 }
 
-
 void SwTableFUNC::UpdateChart()
 {
     //Update der Felder in der Tabelle vom User ausgeloesst, alle
     //Charts zu der Tabelle werden auf den neuesten Stand gebracht.
-    SwFrmFmt *pFmt = pSh->GetTableFmt();
-    if ( pFmt && pSh->HasOLEObj( pFmt->GetName() ) )
+    SwFrmFmt *pFmt2 = pSh->GetTableFmt();
+    if ( pFmt2 && pSh->HasOLEObj( pFmt2->GetName() ) )
     {
         pSh->StartAllAction();
-        pSh->UpdateCharts( pFmt->GetName() );
+        pSh->UpdateCharts( pFmt2->GetName() );
         pSh->EndAllAction();
     }
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SwTableFUNC::InsertChart(
+uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         uno::Reference< chart2::data::XDataProvider > &rxDataProvider,
         sal_Bool bFillWithData,
         const rtl::OUString &rCellRange,
         SwFlyFrmFmt** ppFlyFrmFmt )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xChartModel;
-    pSh->StartUndo( UIUNDO_INSERT_CHART );
+    uno::Reference< frame::XModel > xChartModel;
+    pSh->StartUndo( UNDO_UI_INSERT_CHART );
     pSh->StartAllAction();
 
     String aName;
-
     if (pSh->IsCrsrInTbl())
     {
         aName = pSh->GetTableFmt()->GetName();
         // insert node before table
         pSh->MoveTable( fnTableCurr, fnTableStart );
-        pSh->Up();
+        pSh->Up( FALSE, 1, FALSE );
         if ( pSh->IsCrsrInTbl() )
         {
             if ( aName != pSh->GetTableFmt()->GetName() )
-                pSh->Down(); // two adjacent tables
+                pSh->Down( FALSE, 1, FALSE ); // two adjacent tables
         }
         pSh->SplitNode();
     }
@@ -255,7 +250,7 @@ void SwTableFUNC::UpdateChart()
     // insert chart
     ::rtl::OUString aObjName;
     comphelper::EmbeddedObjectContainer aCnt;
-    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj =
+    uno::Reference < embed::XEmbeddedObject > xObj =
         aCnt.CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aObjName );
 
     ::svt::EmbeddedObjectRef aEmbObjRef( xObj, ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
@@ -267,10 +262,9 @@ void SwTableFUNC::UpdateChart()
         if (ppFlyFrmFmt)
             *ppFlyFrmFmt = pTmp;
 
-        ::com::sun::star::uno::Reference<
-              ::com::sun::star::embed::XComponentSupplier > xCompSupp( xObj, ::com::sun::star::uno::UNO_QUERY );
+        uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
         if( xCompSupp.is())
-            xChartModel.set( xCompSupp->getComponent(), ::com::sun::star::uno::UNO_QUERY );
+            xChartModel.set( xCompSupp->getComponent(), uno::UNO_QUERY );
 
         // set the table name at the OLE-node
         if (aName.Len())
@@ -291,6 +285,7 @@ void SwTableFUNC::UpdateChart()
         //#50270# Error brauchen wir nicht handeln, das erledigt das
         //DoVerb in der SfxViewShell
         ErrCode nErr = pClient->DoVerb( SVVERB_SHOW );
+        (void) nErr;
     }
 
     uno::Reference< chart2::data::XDataReceiver > xDataReceiver( xChartModel, uno::UNO_QUERY );
@@ -342,16 +337,16 @@ void SwTableFUNC::UpdateChart()
         xDataReceiver->setArguments( aArgs );
     }
 
-    pSh->EndUndo( UIUNDO_INSERT_CHART );
+    pSh->EndUndo( UNDO_UI_INSERT_CHART );
 
     return xChartModel;
 }
 
 USHORT  SwTableFUNC::GetCurColNum() const
 {
-    int nPos = pSh->GetCurTabColNum();
-    int nCount = 0;
-    for(int i = 0; i < nPos; i++ )
+    USHORT nPos = pSh->GetCurTabColNum();
+    USHORT nCount = 0;
+    for(USHORT i = 0; i < nPos; i++ )
         if(aCols.IsHidden(i))
             nCount ++;
     return nPos - nCount;
@@ -363,7 +358,7 @@ USHORT  SwTableFUNC::GetCurColNum() const
 USHORT  SwTableFUNC::GetColCount() const
 {
     USHORT nCount = 0;
-    for(int i=0; i < (int)aCols.Count(); i++ )
+    for(USHORT i = 0; i < aCols.Count(); i++ )
         if(aCols.IsHidden(i))
             nCount ++;
     return aCols.Count() - nCount;
@@ -377,7 +372,7 @@ int SwTableFUNC::GetRightSeparator(int nNum) const
     int i = 0;
     while( nNum >= 0 )
     {
-        if( !aCols.IsHidden(i) )
+        if( !aCols.IsHidden( static_cast< USHORT >(i)) )
             nNum--;
         i++;
     }
