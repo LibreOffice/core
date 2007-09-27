@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:17:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:38:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,22 +130,22 @@ SwFmtFld*   SwXTextPortion::GetFldFmt(sal_Bool bInit)
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
         uno::Reference< text::XText > & rParent,
         SwTextPortionType eType) :
+    aLstnrCntnr( (text::XTextRange*)this),
     aPropSet(aSwMapProvider.GetPropertyMap(
                 (PORTION_REDLINE_START == eType ||
                  PORTION_REDLINE_END   == eType) ?
                     PROPERTY_MAP_REDLINE_PORTION : PROPERTY_MAP_TEXTPORTION_EXTENSIONS)),
-    aLstnrCntnr( (text::XTextRange*)this),
-    pFmtFld(0),
     xParentText(rParent),
-    ePortionType(eType),
-    pFrameFmt(0),
-    aFrameDepend(this, 0),
-    bIsCollapsed(FALSE),
-    nControlChar(0),
     pRubyText(0),
     pRubyStyle(0),
     pRubyAdjust(0),
-    pRubyIsAbove(0)
+    pRubyIsAbove(0),
+    pFmtFld(0),
+    aFrameDepend(this, 0),
+    pFrameFmt(0),
+    ePortionType(eType),
+    nControlChar(0),
+    bIsCollapsed(FALSE)
 {
     SwUnoCrsr* pUnoCrsr = pPortionCrsr->GetDoc()->CreateUnoCrsr(*pPortionCrsr->GetPoint());
     if(pPortionCrsr->HasMark())
@@ -165,19 +165,19 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
  * --------------------------------------------------*/
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr, uno::Reference< text::XText > & rParent,
                         SwFrmFmt& rFmt ) :
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXTPORTION_EXTENSIONS)),
     aLstnrCntnr( (text::XTextRange*)this),
-    pFrameFmt(&rFmt),
+    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXTPORTION_EXTENSIONS)),
     xParentText(rParent),
-    ePortionType(PORTION_FRAME),
-    pFmtFld(0),
-    aFrameDepend(this, &rFmt),
-    bIsCollapsed(FALSE),
-    nControlChar(0),
     pRubyText(0),
     pRubyStyle(0),
     pRubyAdjust(0),
-    pRubyIsAbove(0)
+    pRubyIsAbove(0),
+    pFmtFld(0),
+    aFrameDepend(this, &rFmt),
+    pFrameFmt(&rFmt),
+    ePortionType(PORTION_FRAME),
+    nControlChar(0),
+    bIsCollapsed(FALSE)
 {
     SwUnoCrsr* pUnoCrsr = pPortionCrsr->GetDoc()->CreateUnoCrsr(*pPortionCrsr->GetPoint());
     if(pPortionCrsr->HasMark())
@@ -380,7 +380,7 @@ void SwXTextPortion::GetPropertyValue(
             break;
             case FN_UNO_IS_COLLAPSED:
             {
-                BOOL bStart = TRUE, bPut = TRUE;
+                BOOL bPut = TRUE;
                 switch (ePortionType)
                 {
                     case PORTION_REFMARK_START:
@@ -804,31 +804,31 @@ uno::Sequence< GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::GetPro
 
  ---------------------------------------------------------------------------*/
 void SwXTextPortion::addPropertiesChangeListener(
-    const uno::Sequence< OUString >& aPropertyNames,
-    const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+    const uno::Sequence< OUString >& /*aPropertyNames*/,
+    const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
         throw(uno::RuntimeException)
 {}
 /* -----------------------------02.04.01 11:44--------------------------------
 
  ---------------------------------------------------------------------------*/
 void SwXTextPortion::removePropertiesChangeListener(
-    const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+    const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
         throw(uno::RuntimeException)
 {}
 /* -----------------------------02.04.01 11:44--------------------------------
 
  ---------------------------------------------------------------------------*/
 void SwXTextPortion::firePropertiesChangeEvent(
-    const uno::Sequence< OUString >& aPropertyNames,
-    const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+    const uno::Sequence< OUString >& /*aPropertyNames*/,
+    const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
         throw(uno::RuntimeException)
 {}
 /*-- 11.12.98 09:56:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXTextPortion::addPropertyChangeListener(
-    const OUString& PropertyName,
-    const uno::Reference< beans::XPropertyChangeListener > & aListener)
+    const OUString& /*PropertyName*/,
+    const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
@@ -836,21 +836,21 @@ void SwXTextPortion::addPropertyChangeListener(
 /*-- 11.12.98 09:56:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextPortion::removePropertyChangeListener(const OUString& PropertyName, const uno::Reference< beans::XPropertyChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXTextPortion::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
 /*-- 11.12.98 09:56:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextPortion::addVetoableChangeListener(const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXTextPortion::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
 /*-- 11.12.98 09:56:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextPortion::removeVetoableChangeListener(const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXTextPortion::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
@@ -934,7 +934,7 @@ uno::Any SwXTextPortion::getPropertyDefault(const OUString& rPropertyName)
 /*-- 11.12.98 09:56:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-OUString SwXTextPortion::getPresentation(sal_Bool bShowCommand) throw( uno::RuntimeException )
+OUString SwXTextPortion::getPresentation(sal_Bool /*bShowCommand*/) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pUnoCrsr = ((SwXTextPortion*)this)->GetCrsr();
@@ -951,7 +951,7 @@ OUString SwXTextPortion::getPresentation(sal_Bool bShowCommand) throw( uno::Runt
 /*-- 11.12.98 09:56:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextPortion::attach(const uno::Reference< text::XTextRange > & xTextRange)
+void SwXTextPortion::attach(const uno::Reference< text::XTextRange > & /*xTextRange*/)
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1010,7 +1010,7 @@ void SwXTextPortion::removeEventListener(const uno::Reference< lang::XEventListe
 /* -----------------24.03.99 13:30-------------------
  *
  * --------------------------------------------------*/
-uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumeration(const OUString& aServiceName)
+uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumeration(const OUString& /*aServiceName*/)
         throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -1039,7 +1039,7 @@ sal_Int64 SwXTextPortion::getSomething( const uno::Sequence< sal_Int8 >& rId )
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
-            return (sal_Int64)this;
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
     return 0;
 }
