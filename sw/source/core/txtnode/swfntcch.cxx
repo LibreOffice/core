@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfntcch.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:46:42 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:26:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,12 +60,12 @@ SwFontCache *pSwFontCache = NULL;
 |*
 |*************************************************************************/
 
-SwFontObj::SwFontObj( const void *pOwner, ViewShell *pSh ) :
-    SwCacheObj( (void*)pOwner ),
-    aSwFont( &((SwTxtFmtColl *)pOwner)->GetAttrSet(), pSh ? pSh->getIDocumentSettingAccess() : 0 )
+SwFontObj::SwFontObj( const void *pOwn, ViewShell *pSh ) :
+    SwCacheObj( (void*)pOwn ),
+    aSwFont( &((SwTxtFmtColl *)pOwn)->GetAttrSet(), pSh ? pSh->getIDocumentSettingAccess() : 0 )
 {
     aSwFont.GoMagic( pSh, aSwFont.GetActual() );
-    const SwAttrSet& rAttrSet = ((SwTxtFmtColl *)pOwner)->GetAttrSet();
+    const SwAttrSet& rAttrSet = ((SwTxtFmtColl *)pOwn)->GetAttrSet();
     for (USHORT i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i, TRUE );
 }
@@ -83,9 +83,9 @@ SwFontObj::~SwFontObj()
 |*
 |*************************************************************************/
 
-SwFontAccess::SwFontAccess( const void *pOwner, ViewShell *pSh ) :
-    SwCacheAccess( *pSwFontCache, pOwner,
-            (BOOL) ((SwTxtFmtColl*)pOwner)->IsInSwFntCache() ),
+SwFontAccess::SwFontAccess( const void *pOwn, ViewShell *pSh ) :
+    SwCacheAccess( *pSwFontCache, pOwn,
+            ((SwTxtFmtColl*)pOwn)->IsInSwFntCache() ),
     pShell( pSh )
 {
 }
