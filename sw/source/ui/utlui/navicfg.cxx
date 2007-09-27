@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navicfg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:33:40 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:45:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,11 +58,11 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
-using namespace utl;
-using namespace rtl;
-using namespace com::sun::star::uno;
+#include <unomid.h>
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+using namespace ::utl;
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
 
 /* -----------------------------08.09.00 16:30--------------------------------
 
@@ -94,13 +94,13 @@ Sequence<OUString> SwNavigationConfig::GetPropertyNames()
 
 SwNavigationConfig::SwNavigationConfig() :
     utl::ConfigItem(C2U("Office.Writer/Navigator")),
-    bIsGlobalActive(TRUE),
-    bIsSmall(FALSE),
     nRootType(0xffff),
     nSelectedPos(0),
     nOutlineLevel(MAXLEVEL),
     nRegionMode(REGION_MODE_NONE),
-    nActiveBlock(0)
+    nActiveBlock(0),
+    bIsSmall(FALSE),
+    bIsGlobalActive(TRUE)
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -138,7 +138,6 @@ SwNavigationConfig::~SwNavigationConfig()
 void SwNavigationConfig::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
     const Type& rType = ::getBooleanCppuType();
