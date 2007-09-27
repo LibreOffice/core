@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extinput.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:55:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:37:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #endif
 
+using namespace ::com::sun::star;
 
 SwExtTextInput::SwExtTextInput( const SwPaM& rPam, Ring* pRing )
     : SwPaM( *rPam.GetPoint(), (SwPaM*)pRing ),
@@ -111,8 +112,8 @@ SwExtTextInput::~SwExtTextInput()
                 USHORT nWhich = RES_CHRATR_LANGUAGE;
                 switch(GetI18NScriptTypeOfLanguage(eInputLanguage))
                 {
-                    case  ::com::sun::star::i18n::ScriptType::ASIAN:     nWhich = RES_CHRATR_CJK_LANGUAGE; break;
-                    case  ::com::sun::star::i18n::ScriptType::COMPLEX:   nWhich = RES_CHRATR_CTL_LANGUAGE; break;
+                    case  i18n::ScriptType::ASIAN:     nWhich = RES_CHRATR_CJK_LANGUAGE; break;
+                    case  i18n::ScriptType::COMPLEX:   nWhich = RES_CHRATR_CTL_LANGUAGE; break;
                     default: bLang = false;
                 }
                 if ( bLang )
@@ -186,7 +187,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
             {
                 // then we must insert from the saved original text
                 // some characters
-                nReplace -= rNewStr.Len();
+                nReplace = nReplace - rNewStr.Len();
                 aIdx += rNewStr.Len();
                 pTNd->Replace( aIdx, nReplace,
                             sOverwriteText.Copy( rNewStr.Len(), nReplace ));
@@ -195,7 +196,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
             }
             else if( sOverwriteText.Len() < nReplace )
             {
-                nReplace -= sOverwriteText.Len();
+                nReplace = nReplace - sOverwriteText.Len();
                 aIdx += sOverwriteText.Len();
                 pTNd->Erase( aIdx, nReplace );
                 aIdx = nSttCnt;
