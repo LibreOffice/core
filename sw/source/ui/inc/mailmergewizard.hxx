@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergewizard.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:26:47 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:04:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,7 @@ public:
     sal_uInt16              GetRestartPage() const {return m_nRestartPage;}
     void                    SetRestartPage(sal_uInt16 nPage) { m_nRestartPage = nPage;}
 
+    using svt::OWizardMachine::skipUntil;
     sal_Bool                skipUntil( sal_uInt16 nPage)
                                 {return ::svt::RoadmapWizard::skipUntil(WizardState(nPage));}
 
