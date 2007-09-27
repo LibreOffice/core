@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgitems.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:48:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:54:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,9 @@
  ************************************************************************/
 #ifndef _CFGITEMS_HXX
 #define _CFGITEMS_HXX
+
+#include <tools/color.hxx>
+
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
 #endif
@@ -44,6 +47,8 @@
 #ifndef _SW_PRINTDATA_HXX
 #include <printdata.hxx>
 #endif
+
+#include <cmdid.h>
 
 class SwWriterApp;
 class SwModule;
@@ -153,6 +158,8 @@ public:
     SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem);
 
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
+
+    using  SwPrintData::operator ==;
     virtual int          operator==( const SfxPoolItem& ) const;
 
     const rtl::OUString &GetFax() const              { return sFaxName; }
@@ -231,8 +238,8 @@ class SW_DLLPUBLIC SwTestItem : public SfxPoolItem
     BOOL    bTest10:1;
 
 public:
-                            SwTestItem( USHORT nWhich):
-                                            SfxPoolItem(nWhich){};
+                            SwTestItem( USHORT _nWhich):
+                                            SfxPoolItem(_nWhich){};
                             SwTestItem( const SwTestItem& pTestItem);
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
