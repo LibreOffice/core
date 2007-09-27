@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swlbox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:03:29 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:10:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,31 +67,34 @@ class SW_DLLPUBLIC SwBoxEntry
     BOOL    bModified : 1;
     BOOL    bNew : 1;
 
+    String  aName;
+    USHORT  nId;
+
 public:
     SwBoxEntry(const String& aName, USHORT nId=0);
     SwBoxEntry(const SwBoxEntry& rOrg);
     SwBoxEntry();
 
-    String  aName;
-    USHORT  nId;
+    const String& GetName() const { return aName;}
 };
 
 /*--------------------------------------------------------------------
      Beschreibung: fuer ComboBoxen
  --------------------------------------------------------------------*/
 
-enum SwComboBoxStyle
+typedef USHORT SwComboBoxStyle;
+namespace nsSwComboBoxStyle
 {
-    CBS_UPPER       = 0x01,
-    CBS_LOWER       = 0x02,
-    CBS_ALL         = 0x04,
-    CBS_FILENAME    = 0x08,
+    const SwComboBoxStyle CBS_UPPER         = 0x01;
+    const SwComboBoxStyle CBS_LOWER         = 0x02;
+    const SwComboBoxStyle CBS_ALL           = 0x04;
+    const SwComboBoxStyle CBS_FILENAME      = 0x08;
 #ifdef WIN
-    CBS_SW_FILENAME = CBS_FILENAME | CBS_LOWER
+    const SwComboBoxStyle CBS_SW_FILENAME   = CBS_FILENAME | CBS_LOWER;
 #else
-    CBS_SW_FILENAME = CBS_FILENAME
+    const SwComboBoxStyle CBS_SW_FILENAME   = CBS_FILENAME;
 #endif
-};
+}
 
 class SW_DLLPUBLIC SwComboBox : public ComboBox
 {
@@ -105,15 +108,20 @@ class SW_DLLPUBLIC SwComboBox : public ComboBox
 
 public:
     SwComboBox(Window* pParent, const ResId& rId,
-               USHORT nStyleBits = CBS_ALL);
+               USHORT nStyleBits = nsSwComboBoxStyle::CBS_ALL);
     ~SwComboBox();
 
     virtual void            KeyInput( const KeyEvent& rKEvt );
 
+    using ComboBox::InsertEntry;
     void                    InsertEntry(const SwBoxEntry&);
+    USHORT                  InsertEntry( const XubString& rStr, USHORT )
+                            {        InsertEntry( SwBoxEntry( rStr ) ); return 0;    }
 
+    using ComboBox::RemoveEntry;
     void                    RemoveEntry(USHORT nPos);
 
+    using ComboBox::GetEntryPos;
     USHORT                  GetEntryPos(const SwBoxEntry& rEntry) const;
     const SwBoxEntry&       GetEntry(USHORT) const;
 
@@ -121,6 +129,7 @@ public:
     const SwBoxEntry&       GetRemovedEntry(USHORT nPos) const;
 
     USHORT                  GetStyle() const            { return nStyle;    }
+    using Window::SetStyle;
     void                    SetStyle(const USHORT nSt)  { nStyle = nSt;     }
 
     String                  GetText() const;
