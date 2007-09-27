@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgitems.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:39:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,8 +65,8 @@ TYPEINIT1_AUTOFACTORY(SwAddPrinterItem, SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SwShadowCursorItem, SfxPoolItem)
 
 
-SwDocDisplayItem::SwDocDisplayItem( USHORT nWhich ) :
-        SfxPoolItem(nWhich),
+SwDocDisplayItem::SwDocDisplayItem( USHORT _nWhich ) :
+        SfxPoolItem(_nWhich),
         aIndexBackgrndCol(COL_GRAY)
 {
     bParagraphEnd       =
@@ -95,8 +95,8 @@ SwDocDisplayItem::SwDocDisplayItem( const SwDocDisplayItem& rDocDisplayItem ):
 
 --------------------------------------------------------------------*/
 
-SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt, USHORT nWhich ) :
-            SfxPoolItem( nWhich )
+SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt, USHORT _nWhich ) :
+            SfxPoolItem( _nWhich )
 {
     bParagraphEnd       = rVOpt.IsParagraph(TRUE);
     bTab                = rVOpt.IsTab(TRUE);
@@ -178,8 +178,8 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-SwElemItem::SwElemItem( USHORT nWhich ) :
-    SfxPoolItem(nWhich)
+SwElemItem::SwElemItem( USHORT _nWhich ) :
+    SfxPoolItem(_nWhich)
 {
     bHorzScrollbar =
     bVertScrollbar =
@@ -210,8 +210,8 @@ SwElemItem::SwElemItem( const SwElemItem& rElemItem ):
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SwElemItem::SwElemItem(const SwViewOption& rVOpt, USHORT nWhich) :
-            SfxPoolItem( nWhich )
+SwElemItem::SwElemItem(const SwViewOption& rVOpt, USHORT _nWhich) :
+            SfxPoolItem( _nWhich )
 {
     bHorzScrollbar  = rVOpt.IsViewHScrollBar();
     bVertScrollbar  = rVOpt.IsViewVScrollBar();
@@ -321,25 +321,25 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
  --------------------------------------------------------------------*/
 
 SwAddPrinterItem::SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem ):
-            SfxPoolItem(rAddPrinterItem)
+            SfxPoolItem(rAddPrinterItem),
+            SwPrintData( rAddPrinterItem )
 {
-    *((SwPrintData*)this) = rAddPrinterItem;
-};
+}
 
 /*--------------------------------------------------------------------
     Beschreibung: CTOR fuer leeres Item
  --------------------------------------------------------------------*/
 
-SwAddPrinterItem::SwAddPrinterItem( USHORT nWhich):
-                SfxPoolItem(nWhich)
+SwAddPrinterItem::SwAddPrinterItem( USHORT _nWhich):
+                SfxPoolItem(_nWhich)
 {
 }
 /*--------------------------------------------------------------------
     Beschreibung: CTOR aus SwPrintOptions
  --------------------------------------------------------------------*/
 
-SwAddPrinterItem::SwAddPrinterItem( USHORT nWhich, const SwPrintData& rPrtData ) :
-    SfxPoolItem(nWhich)
+SwAddPrinterItem::SwAddPrinterItem( USHORT _nWhich, const SwPrintData& rPrtData ) :
+    SfxPoolItem(_nWhich)
 {
     SwPrintData::operator=(rPrtData);
 }
@@ -368,23 +368,26 @@ int SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
  Item fuer Einstellungsdialog, ShadowCursorSeite
 --------------------------------------------------*/
 
-SwShadowCursorItem::SwShadowCursorItem( USHORT nWhich )
-    : SfxPoolItem( nWhich ),
-    bOn( FALSE ), eMode( FILL_TAB )
+SwShadowCursorItem::SwShadowCursorItem( USHORT _nWhich )
+    : SfxPoolItem( _nWhich ),
+    eMode( FILL_TAB )
+    ,bOn( FALSE )
 {
 }
 
 SwShadowCursorItem::SwShadowCursorItem( const SwShadowCursorItem& rCpy )
     : SfxPoolItem( rCpy.Which() ),
-    bOn( rCpy.IsOn() ),
     eMode( rCpy.GetMode() )
+    ,bOn( rCpy.IsOn() )
+
 {
 }
 
-SwShadowCursorItem::SwShadowCursorItem( const SwViewOption& rVOpt, USHORT nWhich )
-    : SfxPoolItem( nWhich ),
-    bOn( rVOpt.IsShadowCursor() ),
+SwShadowCursorItem::SwShadowCursorItem( const SwViewOption& rVOpt, USHORT _nWhich )
+    : SfxPoolItem( _nWhich ),
     eMode( rVOpt.GetShdwCrsrFillMode() )
+    ,bOn( rVOpt.IsShadowCursor() )
+
 {
 }
 
