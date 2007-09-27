@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaedit.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:26:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:03:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,8 +111,12 @@ public:
     SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh);
     ~SwJavaEditDialog();
 
+    using Window::GetText;
     String              GetText() { return aText; }
+
+    using Window::GetType;
     String              GetType() { return aType; }
+
     BOOL                IsUrl() { return bIsUrl; }
     BOOL                IsNew() { return bNew; }
     BOOL                IsUpdate();
