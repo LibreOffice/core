@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itabenum.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:26:00 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:05:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 #ifndef _ITABENUM_HXX
 #define _ITABENUM_HXX
+
+#include <tools/solar.h>
 
 namespace tabopts
 {
