@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXTextDefaults.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:54:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:33:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,22 +83,22 @@
 #include <hintids.hxx>
 #endif
 
+#include <unomid.h>
+
 
 using namespace rtl;
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::lang;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
 
 // declarations
 void lcl_setPageDesc(SwDoc*, const uno::Any&, SfxItemSet& ); // from unoobj.cxx
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
 
-
-SwXTextDefaults::SwXTextDefaults ( SwDoc * pNewDoc )
-: pDoc (pNewDoc)
-, aPropSet (aSwMapProvider.GetPropertyMap ( PROPERTY_MAP_TEXT_DEFAULT ) )
+SwXTextDefaults::SwXTextDefaults ( SwDoc * pNewDoc ) :
+    aPropSet( aSwMapProvider.GetPropertyMap ( PROPERTY_MAP_TEXT_DEFAULT ) ),
+    pDoc    ( pNewDoc )
 {
 }
 
@@ -143,7 +143,7 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
         if(aValue >>= uStyle)
         {
             String sStyle;
-            SwStyleNameMapper::FillUIName(uStyle, sStyle, GET_POOLID_CHRFMT, sal_True );
+            SwStyleNameMapper::FillUIName(uStyle, sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
             SwDocStyleSheet* pStyle =
                 (SwDocStyleSheet*)pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR);
             SwFmtDrop* pDrop = 0;
@@ -198,28 +198,28 @@ Any SAL_CALL SwXTextDefaults::getPropertyValue( const OUString& rPropertyName )
 }
 
 
-void SAL_CALL SwXTextDefaults::addPropertyChangeListener( const OUString& rPropertyName, const Reference< XPropertyChangeListener >& xListener )
+void SAL_CALL SwXTextDefaults::addPropertyChangeListener( const OUString& /*rPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING ( "not implemented" );
 }
 
 
-void SAL_CALL SwXTextDefaults::removePropertyChangeListener( const OUString& rPropertyName, const Reference< XPropertyChangeListener >& aListener )
+void SAL_CALL SwXTextDefaults::removePropertyChangeListener( const OUString& /*rPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING ( "not implemented" );
 }
 
 
-void SAL_CALL SwXTextDefaults::addVetoableChangeListener( const OUString& rPropertyName, const Reference< XVetoableChangeListener >& aListener )
+void SAL_CALL SwXTextDefaults::addVetoableChangeListener( const OUString& /*rPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING ( "not implemented" );
 }
 
 
-void SAL_CALL SwXTextDefaults::removeVetoableChangeListener( const OUString& rPropertyName, const Reference< XVetoableChangeListener >& aListener )
+void SAL_CALL SwXTextDefaults::removeVetoableChangeListener( const OUString& /*rPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     DBG_WARNING ( "not implemented" );
