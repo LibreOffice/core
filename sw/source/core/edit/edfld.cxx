@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edfld.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:02:48 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:45:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,7 +299,9 @@ void SwEditShell::Insert(SwField& rFld)
 
     FOREACHPAM_START(this)                      // fuer jeden PaM
         if( !GetDoc()->Insert( *PCURCRSR, aFld, 0 ) )
-            ASSERT( FALSE, "Doc->Insert(Field) failed");
+        {
+            ASSERT( FALSE, "Doc->Insert(Field) failed")
+        }
     FOREACHPAM_END()                      // fuer jeden PaM
 
     EndAllAction();
@@ -551,12 +553,13 @@ void SwEditShell::UnlockExpFlds()
     GetDoc()->UnlockExpFlds();
 }
 
-void SwEditShell::SetFldUpdateFlags( USHORT eFlags )
+
+void SwEditShell::SetFldUpdateFlags( SwFldUpdateFlags eFlags )
 {
     getIDocumentSettingAccess()->setFieldUpdateFlags( eFlags );
 }
 
-USHORT SwEditShell::GetFldUpdateFlags(BOOL bDocSettings) const
+SwFldUpdateFlags SwEditShell::GetFldUpdateFlags(BOOL bDocSettings) const
 {
     return getIDocumentSettingAccess()->getFieldUpdateFlags( !bDocSettings );
 }
