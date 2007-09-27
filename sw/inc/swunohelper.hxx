@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swunohelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:18:11 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:12:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 #ifndef _SWUNOHELPER_HXX
 #define _SWUNOHELPER_HXX
 
+#include <tools/solar.h>
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
@@ -47,7 +48,7 @@ namespace com { namespace sun { namespace star {
     namespace uno {
         class Any;
     }
-}}};
+}}}
 
 class String;
 class SvStrings;
