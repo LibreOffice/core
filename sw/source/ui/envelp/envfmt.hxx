@@ -4,9 +4,9 @@
  *
  *  $RCSfile: envfmt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:24:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:41:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,8 @@
 
 #include "envlop.hxx"
 
+class SwTxtFmtColl;
+
 // class SwEnvFmtPage ---------------------------------------------------------
 
 class SwEnvFmtPage : public SfxTabPage
@@ -97,9 +99,14 @@ class SwEnvFmtPage : public SfxTabPage
     void SetMinMax();
 
     SfxItemSet  *GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender);
+
+    using Window::GetParent;
     SwEnvDlg    *GetParent() {return (SwEnvDlg*) SfxTabPage::GetParent()->GetParent();}
 
 public:
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
 
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
 
