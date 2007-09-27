@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:01:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:51:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,8 +184,8 @@ SwColMgr::SwColMgr(const SfxItemSet& rSet, USHORT nActWidth) :
         if (nWidth < MINLAY)
             nWidth = USHRT_MAX;
         const SvxLRSpaceItem &rLR = (const SvxLRSpaceItem&)rSet.Get(RES_LR_SPACE);
-        nWidth -= (USHORT)rLR.GetLeft();
-        nWidth -= (USHORT)rLR.GetRight();
+        nWidth = nWidth - (USHORT)rLR.GetLeft();
+        nWidth = nWidth - (USHORT)rLR.GetRight();
     }
     ::FitToActualSize(aFmtCol, nWidth);
 }
