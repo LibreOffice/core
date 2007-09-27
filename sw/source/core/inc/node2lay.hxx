@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node2lay.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:51:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:57:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 #ifndef _NODE2LAY_HXX
 #define _NODE2LAY_HXX
 
+#include <tools/solar.h>
+
 /* -----------------23.02.99 11:33-------------------
  * Die Klasse SwNode2Layout stellt die Verbindung von Nodes zum Layout her.
  * Sie liefert einen intelligenten Iterator ueber die zum Node oder Nodebereich
@@ -61,6 +63,9 @@ class SwNode2LayImpl;
 class SwFrm;
 class SwLayoutFrm;
 class SwNode;
+class SwNodes;
+class Point;
+struct SwPosition;
 
 class SwNode2Layout
 {
