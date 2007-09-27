@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmconfigitem.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:15:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:33:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,20 +107,21 @@
 #include <dbui.hrc>
 #include <vector>
 
+#include <unomid.h>
+
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 
 using namespace utl;
 using ::rtl::OUString;
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::sdb;
-using namespace com::sun::star::sdbc;
-using namespace com::sun::star::sdbcx;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
 const char* cAddressDataAssignments     = "AddressDataAssignments";
 const char* cDBColumnAssignments        = "DBColumnAssignments";
 const char* cDataSourceName             = "DataSource/DataSourceName";
@@ -236,11 +237,11 @@ public:
     void                SetAddressBlocks(
                                 const Sequence< ::rtl::OUString>& rBlocks,
                                 sal_Bool bConvertFromConfig = sal_False);
-    const com::sun::star::uno::Sequence< ::rtl::OUString>
+    const uno::Sequence< ::rtl::OUString>
                         GetGreetings(SwMailMergeConfigItem::Gender eType,
                                         sal_Bool bConvertToConfig = sal_False) const;
     void                SetGreetings(SwMailMergeConfigItem::Gender eType,
-                                    const com::sun::star::uno::Sequence< ::rtl::OUString>& rBlocks,
+                                    const uno::Sequence< ::rtl::OUString>& rBlocks,
                                     sal_Bool bConvertFromConfig = sal_False);
 
     void                SetCurrentAddressBlockIndex( sal_Int32 nSet );
@@ -256,26 +257,28 @@ public:
   -----------------------------------------------------------------------*/
 SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
     ConfigItem(C2U("Office.Writer/MailMergeWizard"), 0),
-          m_AddressHeaderSA( SW_RES( SA_ADDRESS_HEADER )),
-        bIsOutputToLetter(sal_True),
+        nResultSetCursorPos(-1),
+        nCurrentAddressBlock(0),
         bIsAddressBlock(sal_True),
         bIsHideEmptyParagraphs(sal_False),
-        bIsGreetingLine(sal_True),
+        bIsOutputToLetter(sal_True),
         bIncludeCountry(sal_False),
-        nResultSetCursorPos(-1),
-        nMailPort(0),
-        bIsSMPTAfterPOP(sal_False),
-        nInServerPort( POP_PORT ),
-        bInServerPOP( sal_True ),
-        bIsDefaultPort(sal_False),
-        bIsSecureConnection(sal_False),
-        bIsMailReplyTo(sal_False),
-        bIsAuthentication(sal_False),
-        bIsEMailSupported(sal_False),
-        nCurrentAddressBlock(0),
+        bIsGreetingLine(sal_True),
         nCurrentFemaleGreeting(0),
         nCurrentMaleGreeting(0),
         nCurrentNeutralGreeting(0),
+
+        bIsSMPTAfterPOP(sal_False),
+        nInServerPort( POP_PORT ),
+        bInServerPOP( sal_True ),
+        nMailPort(0),
+        bIsMailReplyTo(sal_False),
+        bIsDefaultPort(sal_False),
+        bIsSecureConnection(sal_False),
+        bIsAuthentication(sal_False),
+
+        bIsEMailSupported(sal_False),
+        m_AddressHeaderSA( SW_RES( SA_ADDRESS_HEADER )),
         bUserSettingWereOverwritten(sal_False),
         bIsAddressBlock_LastUserSetting(sal_False),
         bIsGreetingLineInMail_LastUserSetting(sal_False),
@@ -430,7 +433,7 @@ SwMailMergeConfigItem_Impl::~SwMailMergeConfigItem_Impl()
   -----------------------------------------------------------------------*/
 void SwMailMergeConfigItem_Impl::SetCurrentAddressBlockIndex( sal_Int32 nSet )
 {
-    if(aAddressBlocks.size() >= nSet)
+    if(aAddressBlocks.size() >= sal::static_int_cast<sal_uInt32, sal_Int32>(nSet))
     {
         nCurrentAddressBlock = nSet;
         SetModified();
@@ -683,22 +686,22 @@ void  SwMailMergeConfigItem_Impl::Commit()
             sNodePath += sNewNode;
             sNodePath += sSlash;
             //only one new entry is written
-            Sequence< PropertyValue > aValues(4);
-            PropertyValue* pValues = aValues.getArray();
-            pValues[0].Name = sNodePath;
-            pValues[0].Name += C2U(cDataSourceName);
-            pValues[0].Value <<= aAssignIter->aDBData.sDataSource;
-            pValues[1].Name = sNodePath;
-            pValues[1].Name += C2U(cDataTableName);
-            pValues[1].Value <<= aAssignIter->aDBData.sCommand;
-            pValues[2].Name = sNodePath;
-            pValues[2].Name += C2U(cDataCommandType);
-            pValues[2].Value <<= aAssignIter->aDBData.nCommandType;
-            pValues[3].Name = sNodePath;
-            pValues[3].Name += C2U(cDBColumnAssignments);
-            pValues[3].Value <<= aAssignIter->aDBColumnAssignments;
+            Sequence< PropertyValue > aNewValues(4);
+            PropertyValue* pNewValues = aNewValues.getArray();
+            pNewValues[0].Name = sNodePath;
+            pNewValues[0].Name += C2U(cDataSourceName);
+            pNewValues[0].Value <<= aAssignIter->aDBData.sDataSource;
+            pNewValues[1].Name = sNodePath;
+            pNewValues[1].Name += C2U(cDataTableName);
+            pNewValues[1].Value <<= aAssignIter->aDBData.sCommand;
+            pNewValues[2].Name = sNodePath;
+            pNewValues[2].Name += C2U(cDataCommandType);
+            pNewValues[2].Value <<= aAssignIter->aDBData.nCommandType;
+            pNewValues[3].Name = sNodePath;
+            pNewValues[3].Name += C2U(cDBColumnAssignments);
+            pNewValues[3].Value <<= aAssignIter->aDBColumnAssignments;
 
-            SetSetProperties(C2U(cAddressDataAssignments), aValues);
+            SetSetProperties(C2U(cAddressDataAssignments), aNewValues);
         }
     }
 
@@ -829,13 +832,13 @@ static ::osl::Mutex aMutex;
   -----------------------------------------------------------------------*/
 SwMailMergeConfigItem::SwMailMergeConfigItem() :
     m_bAddressInserted(false),
+    m_bMergeDone(false),
     m_bGreetingInserted(false),
     m_nGreetingMoves(0),
-    m_bMergeDone(false),
     m_nStartPrint(0),
     m_nEndPrint(0),
-    m_pTargetView(0),
-    m_pSourceView(0)
+    m_pSourceView(0),
+    m_pTargetView(0)
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( aMutex );
@@ -1061,9 +1064,8 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
                 m_pImpl->nResultSetCursorPos = 1;
             }
         }
-        catch(Exception& rEx)
+        catch(Exception& )
         {
-            rEx;
             DBG_ERROR("exception caught in: SwMailMergeConfigItem::GetResultSet() ")
         }
     }
@@ -1211,13 +1213,11 @@ void SwMailMergeConfigItem::ExcludeRecord(sal_Int32 nRecord, bool bExclude)
                 GetResultSet();
             if(m_pImpl->xResultSet.is())
             {
-                sal_Int32 nCurrent = m_pImpl->xResultSet->getRow();
                 m_pImpl->xResultSet->last();
                 sal_Int32 nEnd = m_pImpl->xResultSet->getRow();
                 sal_Int32 nStart = m_aSelection.getLength();
                 m_aSelection.realloc(nEnd);
                 Any* pSelection = m_aSelection.getArray();
-                sal_Int32 nRealIdx = 0;
                 for(sal_Int32 nIndex = nStart; nIndex < nEnd; ++nIndex)
                 {
                     if((nRecord - 1) != nIndex)
@@ -1442,7 +1442,7 @@ Sequence< ::rtl::OUString> SwMailMergeConfigItem::GetColumnAssignment(
 {
     ::rtl::OUString sRet;
     Sequence< ::rtl::OUString> aAssignment = GetColumnAssignment( m_pImpl->aDBData );
-    if(aAssignment.getLength() > nColumn && aAssignment[nColumn].getLength())
+    if(aAssignment.getLength() > sal::static_int_cast< sal_Int32, sal_uInt32>(nColumn) && aAssignment[nColumn].getLength())
         sRet = aAssignment[nColumn];
     else if(nColumn < m_pImpl->m_AddressHeaderSA.Count())
         sRet = m_pImpl->m_AddressHeaderSA.GetString(nColumn);
