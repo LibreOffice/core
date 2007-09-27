@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:14:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:05:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,6 @@
 #include "txtfrm.hxx"
 #include "layact.hxx"
 #include "flyfrms.hxx"
-#include "frmsh.hxx"
 #include "htmltbl.hxx"
 #include "pagedesc.hxx"
 #include "poolfmt.hxx"
@@ -107,6 +106,9 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
+
+using namespace ::com::sun::star;
+
 
 /*************************************************************************
 |*
@@ -130,7 +132,7 @@ SwBodyFrm::SwBodyFrm( SwFrmFmt *pFmt ):
 |*  Letzte Aenderung    MA 20. Jan. 99
 |*
 |*************************************************************************/
-void SwBodyFrm::Format( const SwBorderAttrs *pAttrs )
+void SwBodyFrm::Format( const SwBorderAttrs * )
 {
     //Formatieren des Body ist zu einfach, deshalb bekommt er ein eigenes
     //Format; Umrandungen und dergl. sind hier nicht zu beruecksichtigen.
@@ -866,7 +868,7 @@ void AdjustSizeChgNotify( SwRootFrm *pRoot )
     {
         pSh->Imp()->NotifySizeChg( pRoot->Frm().SSize() );//Einmal fuer das Drawing.
         do
-        {   pSh->SizeChgNotify( pRoot->Frm().SSize() );   //Einmal fuer jede Sicht.
+        {   pSh->SizeChgNotify();     //Einmal fuer jede Sicht.
             pSh = (ViewShell*)pSh->GetNext();
         } while ( pSh != pRoot->GetCurrShell() );
     }
@@ -1520,7 +1522,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
 |*
 |*************************************************************************/
 
-SwTwips SwRootFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
+SwTwips SwRootFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL )
 {
     if ( !bTst )
         Frm().SSize().Height() += nDist;
@@ -1534,7 +1536,7 @@ SwTwips SwRootFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 |*  Letzte Aenderung    MA 05. May. 94
 |*
 |*************************************************************************/
-SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
+SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL )
 {
     ASSERT( nDist >= 0, "nDist < 0." );
     ASSERT( nDist <= Frm().Height(), "nDist > als aktuelle Groesse." );
@@ -1728,10 +1730,10 @@ void SwRootFrm::AssertFlyPages()
 
             if ( pPage )
             {
-                SwPageDesc *pDesc = pPage->FindPageDesc();
+                SwPageDesc *pTmpDesc = pPage->FindPageDesc();
                 bOdd = pPage->OnRightPage();
                 if ( pPage->GetFmt() !=
-                     (bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt()) )
+                     (bOdd ? pTmpDesc->GetRightFmt() : pTmpDesc->GetLeftFmt()) )
                     RemoveFtns( pPage, FALSE, TRUE );
             }
         }
@@ -1900,7 +1902,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
             long nWidth = rAttrs.GetSize().Width();
             if ( nWidth < USHRT_MAX-2000 && //-2000, weil bei Randeinstellung per
                                             //Zuppeln das USHRT_MAX verlorengeht!
-                 HORI_FULL != rHori.GetHoriOrient() )
+                 text::HoriOrientation::FULL != rHori.GetHoriOrient() )
             {
                 const SwHTMLTableLayout *pLayoutInfo =
                     ((const SwTabFrm *)pFrm)->GetTable()
@@ -1910,12 +1912,16 @@ void SwRootFrm::ImplCalcBrowseWidth()
 
                 switch ( rHori.GetHoriOrient() )
                 {
-                    case HORI_NONE:
+                    case text::HoriOrientation::NONE:
                         // OD 23.01.2003 #106895# - add 1st param to <SwBorderAttrs::CalcRight(..)>
                         nWidth += rAttrs.CalcLeft( pFrm ) + rAttrs.CalcRight( pFrm );
                         break;
-                    case HORI_LEFT_AND_WIDTH:
+                    case text::HoriOrientation::LEFT_AND_WIDTH:
                         nWidth += rAttrs.CalcLeft( pFrm );
+                        break;
+                    default:
+                        break;
+
                 }
                 nBrowseWidth = Max( nBrowseWidth, nWidth );
             }
@@ -1927,7 +1933,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
                 // --> OD 2004-06-29 #i28701#
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
                 const SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
-                const FASTBOOL bFly = pAnchoredObj->ISA(SwFlyFrm);
+                const BOOL bFly = pAnchoredObj->ISA(SwFlyFrm);
                 if ( bFly &&
                      WEIT_WECH == pAnchoredObj->GetObjRect().Width()||
                      rFmt.GetFrmSize().GetWidthPercent() )
@@ -1953,13 +1959,16 @@ void SwRootFrm::ImplCalcBrowseWidth()
                                 const SwFmtHoriOrient &rHori = rFmt.GetHoriOrient();
                                 switch ( rHori.GetHoriOrient() )
                                 {
-                                    case HORI_NONE:
+                                    case text::HoriOrientation::NONE:
                                         nWidth += rHori.GetPos();
                                         break;
-                                    case HORI_INSIDE:
-                                    case HORI_LEFT:
-                                        if ( PRTAREA == rHori.GetRelationOrient() )
+                                    case text::HoriOrientation::INSIDE:
+                                    case text::HoriOrientation::LEFT:
+                                        if ( text::RelOrientation::PRINT_AREA == rHori.GetRelationOrient() )
                                             nWidth += pFrm->Prt().Left();
+                                        break;
+                                    default:
+                                        break;
                                 }
                             }
                             else
