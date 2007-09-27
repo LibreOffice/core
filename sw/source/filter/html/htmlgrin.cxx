@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:05:12 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:49:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,25 +173,27 @@
 #include <swhtml.hxx>
 #endif
 
+using namespace ::com::sun::star;
+
 
 HTMLOptionEnum __FAR_DATA aHTMLImgHAlignTable[] =
 {
-    { sHTML_AL_left,    HORI_LEFT       },
-    { sHTML_AL_right,   HORI_RIGHT      },
+    { sHTML_AL_left,    text::HoriOrientation::LEFT       },
+    { sHTML_AL_right,   text::HoriOrientation::RIGHT      },
     { 0,                0               }
 };
 
 
 HTMLOptionEnum __FAR_DATA aHTMLImgVAlignTable[] =
 {
-    { sHTML_VA_top,         VERT_LINE_TOP       },
-    { sHTML_VA_texttop,     VERT_CHAR_TOP       },
-    { sHTML_VA_middle,      VERT_CENTER         },
-    { sHTML_AL_center,      VERT_CENTER         },
-    { sHTML_VA_absmiddle,   VERT_LINE_CENTER    },
-    { sHTML_VA_bottom,      VERT_TOP            },
-    { sHTML_VA_baseline,    VERT_TOP            },
-    { sHTML_VA_absbottom,   VERT_LINE_BOTTOM    },
+    { sHTML_VA_top,         text::VertOrientation::LINE_TOP       },
+    { sHTML_VA_texttop,     text::VertOrientation::CHAR_TOP       },
+    { sHTML_VA_middle,      text::VertOrientation::CENTER         },
+    { sHTML_AL_center,      text::VertOrientation::CENTER         },
+    { sHTML_VA_absmiddle,   text::VertOrientation::LINE_CENTER    },
+    { sHTML_VA_bottom,      text::VertOrientation::TOP            },
+    { sHTML_VA_baseline,    text::VertOrientation::TOP            },
+    { sHTML_VA_absbottom,   text::VertOrientation::LINE_BOTTOM    },
     { 0,                    0                   }
 };
 
@@ -199,7 +201,7 @@ SV_IMPL_PTRARR( ImageMaps, ImageMapPtr )
 
 ImageMap *SwHTMLParser::FindImageMap( const String& rName ) const
 {
-    ImageMap *pImageMap = 0;
+    ImageMap *pMap = 0;
 
     ASSERT( rName.GetChar(0) != '#', "FindImageName: Name beginnt mit #!" );
 
@@ -210,12 +212,12 @@ ImageMap *SwHTMLParser::FindImageMap( const String& rName ) const
             ImageMap *pIMap = (*pImageMaps)[i];
             if( rName.EqualsIgnoreCaseAscii( pIMap->GetName() ) )
             {
-                pImageMap = pIMap;
+                pMap = pIMap;
                 break;
             }
         }
     }
-    return pImageMap;
+    return pMap;
 }
 
 void SwHTMLParser::ConnectImageMaps()
@@ -259,8 +261,8 @@ void SwHTMLParser::ConnectImageMaps()
 
 /*  */
 
-void SwHTMLParser::SetAnchorAndAdjustment( SwVertOrient eVertOri,
-                                           SwHoriOrient eHoriOri,
+void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
+                                           sal_Int16 eHoriOri,
                                            const SfxItemSet &rCSS1ItemSet,
                                            const SvxCSS1PropertyInfo &rCSS1PropInfo,
                                            SfxItemSet& rFrmItemSet )
@@ -290,16 +292,16 @@ void SwHTMLParser::SetAnchorAndAdjustment( SwVertOrient eVertOri,
     }
 }
 
-void SwHTMLParser::SetAnchorAndAdjustment( SwVertOrient eVertOri,
-                                           SwHoriOrient eHoriOri,
+void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
+                                           sal_Int16 eHoriOri,
                                            SfxItemSet& rFrmSet,
                                            BOOL bDontAppend )
 {
     BOOL bMoveBackward = FALSE;
     SwFmtAnchor aAnchor( FLY_IN_CNTNT );
-    SwRelationOrient eVertRel = FRAME;
+    sal_Int16 eVertRel = text::RelOrientation::FRAME;
 
-    if( HORI_NONE != eHoriOri )
+    if( text::HoriOrientation::NONE != eHoriOri )
     {
         // den Absatz-Einzug bestimmen
         USHORT nLeftSpace = 0, nRightSpace = 0;
@@ -307,24 +309,24 @@ void SwHTMLParser::SetAnchorAndAdjustment( SwVertOrient eVertOri,
         GetMarginsFromContextWithNumBul( nLeftSpace, nRightSpace, nIndent );
 
         // Horizonale Ausrichtung und Umlauf bestimmen.
-        SwRelationOrient eHoriRel;
+        sal_Int16 eHoriRel;
         SwSurround eSurround;
         switch( eHoriOri )
         {
-        case HORI_LEFT:
-            eHoriRel = nLeftSpace ? PRTAREA : FRAME;
+        case text::HoriOrientation::LEFT:
+            eHoriRel = nLeftSpace ? text::RelOrientation::PRINT_AREA : text::RelOrientation::FRAME;
             eSurround = SURROUND_RIGHT;
             break;
-        case HORI_RIGHT:
-            eHoriRel = nRightSpace ? PRTAREA : FRAME;
+        case text::HoriOrientation::RIGHT:
+            eHoriRel = nRightSpace ? text::RelOrientation::PRINT_AREA : text::RelOrientation::FRAME;
             eSurround = SURROUND_LEFT;
             break;
-        case HORI_CENTER:   // fuer Tabellen
-            eHoriRel = FRAME;
+        case text::HoriOrientation::CENTER:   // fuer Tabellen
+            eHoriRel = text::RelOrientation::FRAME;
             eSurround = SURROUND_NONE;
             break;
         default:
-            eHoriRel = FRAME;
+            eHoriRel = text::RelOrientation::FRAME;
             eSurround = SURROUND_PARALLEL;
             break;
         }
@@ -357,14 +359,14 @@ void SwHTMLParser::SetAnchorAndAdjustment( SwVertOrient eVertOri,
         {
             aAnchor.SetType( FLY_AUTO_CNTNT );
             bMoveBackward = TRUE;
-            eVertOri = VERT_CHAR_BOTTOM;
-            eVertRel = REL_CHAR;
+            eVertOri = text::VertOrientation::CHAR_BOTTOM;
+            eVertRel = text::RelOrientation::CHAR;
         }
         else
         {
             aAnchor.SetType( FLY_AT_CNTNT );
-            eVertOri = VERT_TOP;
-            eVertRel = PRTAREA;
+            eVertOri = text::VertOrientation::TOP;
+            eVertRel = text::RelOrientation::PRINT_AREA;
         }
 
         rFrmSet.Put( SwFmtHoriOrient( 0, eHoriOri, eHoriRel) );
@@ -416,8 +418,8 @@ void SwHTMLParser::InsertImage()
 {
     // und jetzt auswerten
     String sGrfNm, sAltNm, aId, aClass, aStyle, aMap, sHTMLGrfName;
-    SwVertOrient eVertOri = VERT_TOP;
-    SwHoriOrient eHoriOri = HORI_NONE;
+    sal_Int16 eVertOri = text::VertOrientation::TOP;
+    sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     long nWidth=0, nHeight=0;
     long nVSpace=0, nHSpace=0;
 
@@ -431,12 +433,12 @@ void SwHTMLParser::InsertImage()
     String sDfltScriptType;
     GetDefaultScriptType( eDfltScriptType, sDfltScriptType );
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
         USHORT nEvent = 0;
-        ScriptType eScriptType = eDfltScriptType;
-        const HTMLOption *pOption = (*pOptions)[--i];
+        ScriptType eScriptType2 = eDfltScriptType;
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
             case HTML_O_ID:
@@ -455,11 +457,11 @@ void SwHTMLParser::InsertImage()
                 break;
             case HTML_O_ALIGN:
                 eVertOri =
-                    (SwVertOrient)pOption->GetEnum( aHTMLImgVAlignTable,
-                                                    VERT_TOP );
+                    pOption->GetEnum( aHTMLImgVAlignTable,
+                                                    text::VertOrientation::TOP );
                 eHoriOri =
-                    (SwHoriOrient)pOption->GetEnum( aHTMLImgHAlignTable,
-                                                    HORI_NONE );
+                    pOption->GetEnum( aHTMLImgHAlignTable,
+                                                    text::HoriOrientation::NONE );
                 break;
             case HTML_O_WIDTH:
                 // erstmal nur als Pixelwerte merken!
@@ -498,19 +500,19 @@ void SwHTMLParser::InsertImage()
                 break;
 
             case HTML_O_SDONLOAD:
-                eScriptType = STARBASIC;
+                eScriptType2 = STARBASIC;
             case HTML_O_ONLOAD:
                 nEvent = SVX_EVENT_IMAGE_LOAD;
                 goto IMAGE_SETEVENT;
 
             case HTML_O_SDONABORT:
-                eScriptType = STARBASIC;
+                eScriptType2 = STARBASIC;
             case HTML_O_ONABORT:
                 nEvent = SVX_EVENT_IMAGE_ABORT;
                 goto IMAGE_SETEVENT;
 
             case HTML_O_SDONERROR:
-                eScriptType = STARBASIC;
+                eScriptType2 = STARBASIC;
             case HTML_O_ONERROR:
                 nEvent = SVX_EVENT_IMAGE_ERROR;
                 goto IMAGE_SETEVENT;
@@ -521,10 +523,10 @@ IMAGE_SETEVENT:
                     {
                         sTmp.ConvertLineEnd();
                         String sScriptType;
-                        if( EXTENDED_STYPE == eScriptType )
+                        if( EXTENDED_STYPE == eScriptType2 )
                             sScriptType = sDfltScriptType;
                         aMacroItem.SetMacro( nEvent,
-                            SvxMacro( sTmp, sScriptType, eScriptType ));
+                            SvxMacro( sTmp, sScriptType, eScriptType2 ));
                     }
                 }
                 break;
@@ -604,9 +606,9 @@ IMAGE_SETEVENT:
                 ((const SwFmtINetFmt&)aAttrTab.pINetFmt->GetItem()).GetValue();
 
             pCSS1Parser->SetATagStyles();
-            USHORT nPoolId =  pDoc->IsVisitedURL( rURL )
+            USHORT nPoolId =  static_cast< USHORT >(pDoc->IsVisitedURL( rURL )
                                     ? RES_POOLCHR_INET_VISIT
-                                    : RES_POOLCHR_INET_NORMAL;
+                                    : RES_POOLCHR_INET_NORMAL);
             const SwCharFmt *pCharFmt = pCSS1Parser->GetCharFmtFromPool( nPoolId );
             aHBorderLine.SetColor( pCharFmt->GetColor().GetValue() );
             aVBorderLine.SetColor( aHBorderLine.GetColor() );
@@ -658,6 +660,8 @@ IMAGE_SETEVENT:
             nWidth = aPropInfo.nWidth;
             bPrcWidth = TRUE;
             break;
+        default:
+            ;
     }
     switch( aPropInfo.eHeightType )
     {
@@ -671,6 +675,8 @@ IMAGE_SETEVENT:
             nHeight = aPropInfo.nHeight;
             bPrcHeight = TRUE;
             break;
+        default:
+            ;
     }
 
     Size aGrfSz( 0, 0 );
@@ -920,12 +926,12 @@ void SwHTMLParser::InsertBodyOptions()
     String sDfltScriptType;
     GetDefaultScriptType( eDfltScriptType, sDfltScriptType );
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
-        ScriptType eScriptType = eDfltScriptType;
-        USHORT nEvent;
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
+        ScriptType eScriptType2 = eDfltScriptType;
+        USHORT nEvent = 0;
         BOOL bSetEvent = FALSE;
 
         switch( pOption->GetToken() )
@@ -954,28 +960,28 @@ void SwHTMLParser::InsertBodyOptions()
                 break;
 
             case HTML_O_SDONLOAD:
-                eScriptType = STARBASIC;
+                eScriptType2 = STARBASIC;
             case HTML_O_ONLOAD:
                 nEvent = SFX_EVENT_OPENDOC;
                 bSetEvent = TRUE;
                 break;
 
             case HTML_O_SDONUNLOAD:
-                eScriptType = STARBASIC;
+                eScriptType2 = STARBASIC;
             case HTML_O_ONUNLOAD:
                 nEvent = SFX_EVENT_PREPARECLOSEDOC;
                 bSetEvent = TRUE;
                 break;
 
             case HTML_O_SDONFOCUS:
-                eScriptType = STARBASIC;
+                eScriptType2 = STARBASIC;
             case HTML_O_ONFOCUS:
                 nEvent = SFX_EVENT_ACTIVATEDOC;
                 bSetEvent = TRUE;
                 break;
 
             case HTML_O_SDONBLUR:
-                eScriptType = STARBASIC;
+                eScriptType2 = STARBASIC;
             case HTML_O_ONBLUR:
                 nEvent = SFX_EVENT_DEACTIVATEDOC;
                 bSetEvent = TRUE;
@@ -1003,7 +1009,7 @@ void SwHTMLParser::InsertBodyOptions()
         {
             const String& rEvent = pOption->GetString();
             if( rEvent.Len() )
-                InsertBasicDocEvent( nEvent, rEvent, eScriptType,
+                InsertBasicDocEvent( nEvent, rEvent, eScriptType2,
                                      sDfltScriptType );
         }
     }
@@ -1124,8 +1130,9 @@ void SwHTMLParser::InsertBodyOptions()
             }
             if( nWhich )
             {
-                SvxLanguageItem aLang( eLang, nWhich );
-                pDoc->SetDefault( aLang );
+                SvxLanguageItem aLanguage( eLang, nWhich );
+                aLanguage.SetWhich( nWhich );
+                pDoc->SetDefault( aLanguage );
             }
         }
     }
@@ -1156,12 +1163,12 @@ void SwHTMLParser::NewAnchor()
     String sDfltScriptType;
     GetDefaultScriptType( eDfltScriptType, sDfltScriptType );
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
         USHORT nEvent = 0;
-        ScriptType eScriptType = eDfltScriptType;
-        const HTMLOption *pOption = (*pOptions)[--i];
+        ScriptType eScriptType2 = eDfltScriptType;
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
             case HTML_O_NAME:
@@ -1196,19 +1203,19 @@ void SwHTMLParser::NewAnchor()
                 break;
 
             case HTML_O_SDONCLICK:
-                eScriptType = STARBASIC;
+                eScriptType2 = STARBASIC;
             case HTML_O_ONCLICK:
                 nEvent = SFX_EVENT_MOUSECLICK_OBJECT;
                 goto ANCHOR_SETEVENT;
 
             case HTML_O_SDONMOUSEOVER:
-                eScriptType = STARBASIC;
+                eScriptType2 = STARBASIC;
             case HTML_O_ONMOUSEOVER:
                 nEvent = SFX_EVENT_MOUSEOVER_OBJECT;
                 goto ANCHOR_SETEVENT;
 
             case HTML_O_SDONMOUSEOUT:
-                eScriptType = STARBASIC;
+                eScriptType2 = STARBASIC;
             case HTML_O_ONMOUSEOUT:
                 nEvent = SFX_EVENT_MOUSEOUT_OBJECT;
                 goto ANCHOR_SETEVENT;
@@ -1219,10 +1226,10 @@ ANCHOR_SETEVENT:
                     {
                         sTmp.ConvertLineEnd();
                         String sScriptType;
-                        if( EXTENDED_STYPE == eScriptType )
+                        if( EXTENDED_STYPE == eScriptType2 )
                             sScriptType = sDfltScriptType;
                         aMacroTbl.Insert( nEvent,
-                            new SvxMacro( sTmp, sScriptType, eScriptType ));
+                            new SvxMacro( sTmp, sScriptType, eScriptType2 ));
                     }
                 }
                 break;
@@ -1472,15 +1479,15 @@ void SwHTMLParser::StripTrailingPara()
                         (SwPosition&)pBookmark->GetPos();
 
                     SwNodeIndex nNewNdIdx( pPam->GetPoint()->nNode );
-                    SwCntntNode* pCNd = pDoc->GetNodes().GoPrevious( &nNewNdIdx );
-                    if( !pCNd )
+                    SwCntntNode* pNd = pDoc->GetNodes().GoPrevious( &nNewNdIdx );
+                    if( !pNd )
                     {
                         ASSERT( !this, "Hoppla, wo ist mein Vorgaenger-Node" );
                         return;
                     }
 
                     rBookmkPos.nNode = nNewNdIdx;
-                    rBookmkPos.nContent.Assign( pCNd, pCNd->Len() );
+                    rBookmkPos.nContent.Assign( pNd, pNd->Len() );
                 }
                 else if( nBookNdIdx > nNodeIdx )
                     break;
