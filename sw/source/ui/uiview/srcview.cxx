@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:11:57 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:35:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,18 +211,19 @@
 #include <svx/svxslots.hxx>
 #include "swslots.hxx"
 
-using namespace com::sun::star;
-using namespace com::sun::star::i18n;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::util;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::ui::dialogs;
-using namespace com::sun::star::i18n;
+#include <unomid.h>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ui::dialogs;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 using namespace ::sfx2;
 
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
 
 #define SWSRCVIEWFLAGS ( SFX_VIEW_MAXIMIZE_FIRST|           \
                       SFX_VIEW_OBJECTSIZE_EMBEDDED|     \
@@ -361,9 +362,9 @@ void lcl_ConvertTabsToSpaces( String& rLine )
  --------------------------------------------------------------------*/
 
 
-SwSrcView::SwSrcView(SfxViewFrame* pFrame, SfxViewShell*) :
-    SfxViewShell( pFrame, SWSRCVIEWFLAGS ),
-    aEditWin( &pFrame->GetWindow(), this ),
+SwSrcView::SwSrcView(SfxViewFrame* pViewFrame, SfxViewShell*) :
+    SfxViewShell( pViewFrame, SWSRCVIEWFLAGS ),
+    aEditWin( &pViewFrame->GetWindow(), this ),
     pSearchItem(0),
     bSourceSaved(FALSE),
     eLoadEncoding(RTL_TEXTENCODING_DONTKNOW)
@@ -380,7 +381,6 @@ SwSrcView::~SwSrcView()
 {
     SwDocShell* pDocShell = GetDocShell();
     DBG_ASSERT(PTR_CAST(SwWebDocShell, pDocShell), "Wieso keine WebDocShell?")
-    TextEngine* pTextEngine = aEditWin.GetTextEngine();
     const TextSelection&  rSel = aEditWin.GetTextView()->GetSelection();
     ((SwWebDocShell*)pDocShell)->SetSourcePara( static_cast< USHORT >( rSel.GetStart().GetPara() ) );
 
@@ -460,14 +460,12 @@ void SwSrcView::SaveContent(const String& rTmpFile)
 void SwSrcView::Execute(SfxRequest& rReq)
 {
     USHORT nSlot = rReq.GetSlot();
-    const SfxItemSet* pArgs = rReq.GetArgs();
     TextView* pTextView = aEditWin.GetTextView();
     switch( nSlot )
     {
         case SID_SAVEASDOC:
         {
             SvtPathOptions aPathOpt;
-            Window* pParent = &GetViewFrame()->GetWindow();
             // filesave dialog with autoextension
             FileDialogHelper aDlgHelper(
                 TemplateDescription::FILESAVE_AUTOEXTENSION,
@@ -538,11 +536,11 @@ void SwSrcView::Execute(SfxRequest& rReq)
         break;
         case FID_SEARCH_NOW:
         {
-            const SfxItemSet* pArgs = rReq.GetArgs();
+            const SfxItemSet* pTmpArgs = rReq.GetArgs();
 
-            USHORT nWhich = pArgs->GetWhichByPos( 0 );
+            USHORT nWhich = pTmpArgs->GetWhichByPos( 0 );
             DBG_ASSERT( nWhich, "Wich fuer SearchItem ?" );
-            const SfxPoolItem& rItem = pArgs->Get( nWhich );
+            const SfxPoolItem& rItem = pTmpArgs->Get( nWhich );
             SetSearchItem( (const SvxSearchItem&)rItem);
             StartSearchAndReplace( (const SvxSearchItem&)rItem, FALSE, rReq.IsAPI() );
             if(aEditWin.IsModified())
@@ -879,7 +877,6 @@ ErrCode SwSrcView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilen
 
     // Drucker starten
     PreparePrint( pDlg );
-    SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
 
     SfxViewShell::Print(*pProgress, bIsAPI, pDlg ); //???
 
@@ -1016,9 +1013,9 @@ void SwSrcView::Load(SwDocShell* pDocShell)
                                             pDocShell->GetHeaderAttributes() );
             if( RTL_TEXTENCODING_DONTKNOW == eHeaderEnc )
             {
-                const sal_Char *pCharSet =
+                const sal_Char *pTmpCharSet =
                     rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_ISO_8859_1 );
-                eHeaderEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
+                eHeaderEnc = rtl_getTextEncodingFromMimeCharset( pTmpCharSet );
             }
             if( RTL_TEXTENCODING_DONTKNOW != eHeaderEnc &&
                  eDestEnc != eHeaderEnc )
@@ -1035,8 +1032,8 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         }
         else
         {
-            Window *pWindow = &GetViewFrame()->GetWindow();
-            InfoBox(pWindow, SW_RES(MSG_ERR_SRCSTREAM)).Execute();
+            Window *pTmpWindow = &GetViewFrame()->GetWindow();
+            InfoBox(pTmpWindow, SW_RES(MSG_ERR_SRCSTREAM)).Execute();
         }
     }
     else
@@ -1044,7 +1041,6 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         utl::TempFile aTempFile;
         aTempFile.EnableKillingFile();
         String sFileURL( aTempFile.GetURL() );
-        BOOL bIsRemote = pMedium->IsRemote();
         SvtSaveOptions aOpt;
 
         {
