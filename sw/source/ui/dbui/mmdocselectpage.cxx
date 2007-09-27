@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmdocselectpage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:05:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:33:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #endif
 
-using namespace com::sun::star::ui::dialogs;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace svt;
@@ -104,7 +104,7 @@ using namespace svt;
   -----------------------------------------------------------------------*/
 SwMailMergeDocSelectPage::SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent ) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_DOCSELECT_PAGE)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aHeaderFI(this,          SW_RES(  FI_HEADER           ) ),
@@ -112,12 +112,12 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent 
     m_aCurrentDocRB     (this, SW_RES( RB_CURRENTDOC )),
     m_aNewDocRB         (this, SW_RES( RB_NEWDOC )),
     m_aLoadDocRB        (this, SW_RES( RB_LOADDOC )),
-    m_aBrowseDocPB      (this, SW_RES( PB_LOADDOC )),
     m_aLoadTemplateRB   (this, SW_RES( RB_LOADTEMPLATE )),
-    m_aBrowseTemplatePB (this, SW_RES( PB_BROWSETEMPLATE )),
     m_aRecentDocRB      (this, SW_RES( RB_RECENTDOC )),
+    m_aBrowseDocPB      (this, SW_RES( PB_LOADDOC )),
+    m_aBrowseTemplatePB (this, SW_RES( PB_BROWSETEMPLATE )),
     m_aRecentDocLB      (this, SW_RES( LB_RECENTDOC )),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
     m_pWizard(_pParent)
