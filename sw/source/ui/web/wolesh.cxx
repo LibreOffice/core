@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wolesh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:38:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:51:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,8 @@ SFX_IMPL_INTERFACE(SwWebOleShell, SwOleShell, SW_RES(STR_SHELLNAME_OBJECT))
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_WEBOLE_TOOLBOX));
 }
 
-SwWebOleShell::SwWebOleShell(SwView &rView) :
-    SwOleShell(rView)
+SwWebOleShell::SwWebOleShell(SwView &_rView) :
+    SwOleShell(_rView)
 
 {
     SetName(String::CreateFromAscii("Object"));
