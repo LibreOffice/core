@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macassgn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:15:42 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:37:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,7 @@ BOOL SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
 }
 
 
-SvStringsDtor* __EXPORT _GetRangeHdl( _SfxMacroTabPage* pTbPg, const String& rLanguage )
+SvStringsDtor* __EXPORT _GetRangeHdl( _SfxMacroTabPage* /*pTbPg*/, const String& rLanguage )
 {
     SvStringsDtor* pNew = new SvStringsDtor;
 
