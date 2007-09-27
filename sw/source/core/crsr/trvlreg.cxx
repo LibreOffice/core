@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlreg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:47:57 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:31:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,8 @@
 
 
 
-FASTBOOL GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
-                        FASTBOOL bInReadOnly )
+BOOL GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
+                        BOOL bInReadOnly )
 {
     SwNodeIndex aIdx( rCurCrsr.GetPoint()->nNode );
     SwSectionNode* pNd = aIdx.GetNode().FindSectionNode();
@@ -123,8 +123,8 @@ FASTBOOL GotoPrevRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 }
 
 
-FASTBOOL GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
-                        FASTBOOL bInReadOnly )
+BOOL GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
+                        BOOL bInReadOnly )
 {
     SwNodeIndex aIdx( rCurCrsr.GetPoint()->nNode );
     SwSectionNode* pNd = aIdx.GetNode().FindSectionNode();
@@ -179,15 +179,15 @@ FASTBOOL GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 }
 
 
-FASTBOOL GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
-                        FASTBOOL bInReadOnly )
+BOOL GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
+                        BOOL bInReadOnly )
 {
     SwSectionNode* pNd = rCurCrsr.GetNode()->FindSectionNode();
     if( !pNd )
         return FALSE;
 
     SwPosition* pPos = rCurCrsr.GetPoint();
-    FASTBOOL bMoveBackward = fnPosRegion == fnMoveBackward;
+    BOOL bMoveBackward = fnPosRegion == fnMoveBackward;
 
     SwCntntNode* pCNd;
     if( bMoveBackward )
@@ -211,8 +211,8 @@ FASTBOOL GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 }
 
 
-FASTBOOL GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
-                                FASTBOOL bInReadOnly )
+BOOL GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
+                                BOOL bInReadOnly )
 {
     SwNode* pCurrNd = rCurCrsr.GetNode();
     SwSectionNode* pNd = pCurrNd->FindSectionNode();
@@ -221,7 +221,7 @@ FASTBOOL GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 
     SwPosition* pPos = rCurCrsr.GetPoint();
     xub_StrLen nCurrCnt = pPos->nContent.GetIndex();
-    FASTBOOL bMoveBackward = fnPosRegion == fnMoveBackward;
+    BOOL bMoveBackward = fnPosRegion == fnMoveBackward;
 
     do {
         SwCntntNode* pCNd;
@@ -259,7 +259,7 @@ FASTBOOL GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 
 
 
-FASTBOOL SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
+BOOL SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
 {
     SwCrsrSaveState aSaveState( *this );
     return !(SwTableCursor*)*this &&
@@ -269,19 +269,19 @@ FASTBOOL SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosReg
                 GetPoint()->nContent.GetIndex() != pSavePos->nCntnt );
 }
 
-FASTBOOL SwCrsrShell::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
+BOOL SwCrsrShell::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
 {
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
-    FASTBOOL bRet = !pTblCrsr && pCurCrsr->MoveRegion( fnWhichRegion, fnPosRegion );
+    BOOL bRet = !pTblCrsr && pCurCrsr->MoveRegion( fnWhichRegion, fnPosRegion );
     if( bRet )
         UpdateCrsr();
     return bRet;
 }
 
 
-FASTBOOL SwCursor::GotoRegion( const String& rName )
+BOOL SwCursor::GotoRegion( const String& rName )
 {
-    FASTBOOL bRet = FALSE;
+    BOOL bRet = FALSE;
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     for( USHORT n = rFmts.Count(); n; )
     {
@@ -304,10 +304,10 @@ FASTBOOL SwCursor::GotoRegion( const String& rName )
     return bRet;
 }
 
-FASTBOOL SwCrsrShell::GotoRegion( const String& rName )
+BOOL SwCrsrShell::GotoRegion( const String& rName )
 {
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
-    FASTBOOL bRet = !pTblCrsr && pCurCrsr->GotoRegion( rName );
+    BOOL bRet = !pTblCrsr && pCurCrsr->GotoRegion( rName );
     if( bRet )
         UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
                     SwCrsrShell::READONLY ); // und den akt. Updaten

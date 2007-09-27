@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlcol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:47:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:30:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,9 +99,9 @@ SwPosColumn fnColumnStart = &GetColumnStt;
 SwPosColumn fnColumnEnd = &GetColumnEnd;
 
 
-FASTBOOL SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
+BOOL SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
 {
-    FASTBOOL bRet = FALSE;
+    BOOL bRet = FALSE;
     if( !pTblCrsr )
     {
         SwLayoutFrm* pLayFrm = GetCurrFrm()->GetUpper();
