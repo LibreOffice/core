@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:27:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:18:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,7 +324,7 @@ SwNumberTreeNode::tSwNumTreeNumber SwNodeNum::GetStart() const
 
             if (nLevel >= 0 && nLevel < MAXLEVEL)
             {
-                const SwNumFmt * pFmt = pRule->GetNumFmt(nLevel);
+                const SwNumFmt * pFmt = pRule->GetNumFmt( static_cast<USHORT>(nLevel));
 
                 if (pFmt)
                     aResult = pFmt->GetStart();
@@ -393,13 +393,13 @@ String SwNodeNum::ToString() const
 
 void SwNodeNum::SetLevel(unsigned int nLevel)
 {
-    ASSERT(nLevel >= 0 && nLevel < MAXLEVEL, "illegal level");
+    ASSERT( nLevel < MAXLEVEL, "illegal level");
 
     if (mpParent)
     {
         SwNumRule * pRule = GetNumRule();
 
-        if (pRule != mpNumRule || nLevel != GetLevel())
+        if (pRule != mpNumRule || sal::static_int_cast< int >(nLevel) != GetLevel())
         {
             RemoveMe();
 
