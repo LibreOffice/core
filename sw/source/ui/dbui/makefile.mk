@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:25:27 $
+#   last change: $Author: hr $ $Date: 2007-09-27 11:32:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ LIBTARGET=no
 IMGLST_SRS=$(SRS)$/dbui.srs
 BMP_IN=$(PRJ)$/win/imglst
 
+
 SRS1NAME=$(TARGET)
 SRC1FILES =  \
         addresslistdialog.src \
@@ -67,6 +68,22 @@ SRC1FILES =  \
         mmmergepage.src \
         mmpreparemergepage.src \
         selectdbtabledialog.src \
+
+EXCEPTIONSFILES= \
+        $(SLO)$/addresslistdialog.obj \
+        $(SLO)$/createaddresslistdialog.obj \
+        $(SLO)$/customizeaddresslistdialog.obj \
+        $(SLO)$/dbinsdlg.obj \
+        $(SLO)$/dbmgr.obj \
+        $(SLO)$/dbtablepreviewdialog.obj \
+        $(SLO)$/dbtree.obj \
+        $(SLO)$/maildispatcher.obj \
+        $(SLO)$/mailmergechildwindow.obj \
+        $(SLO)$/mailmergehelper.obj \
+        $(SLO)$/mmaddressblockpage.obj \
+        $(SLO)$/mmconfigitem.obj \
+        $(SLO)$/mmlayoutpage.obj \
+        $(SLO)$/mmoutputpage.obj
 
 SLOFILES =  \
         $(SLO)$/addresslistdialog.obj \
@@ -93,19 +110,6 @@ SLOFILES =  \
         $(SLO)$/selectdbtabledialog.obj \
         $(SLO)$/swdbtoolsclient.obj
 
-EXCEPTIONSFILES= \
-        $(SLO)$/addresslistdialog.obj \
-        $(SLO)$/dbinsdlg.obj \
-        $(SLO)$/dbmgr.obj \
-        $(SLO)$/dbtablepreviewdialog.obj \
-        $(SLO)$/dbtree.obj \
-        $(SLO)$/maildispatcher.obj \
-        $(SLO)$/mailmergechildwindow.obj \
-        $(SLO)$/mailmergehelper.obj \
-        $(SLO)$/mmaddressblockpage.obj \
-        $(SLO)$/mmconfigitem.obj \
-        $(SLO)$/mmlayoutpage.obj \
-        $(SLO)$/mmoutputpage.obj
         
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
