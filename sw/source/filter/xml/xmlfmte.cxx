@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:58:08 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:10:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
     if( eFamily != XML_TOKEN_INVALID )
         AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, eFamily );
 
+#ifndef PRODUCT
     // style:parent-style-name="..." (if its not the default only)
     const SwFmt* pParent = rFmt.DerivedFrom();
     // Parent-Namen nur uebernehmen, wenn kein Default
@@ -140,6 +141,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
     ASSERT( USHRT_MAX == rFmt.GetPoolHelpId(), "help ids arent'supported" );
     ASSERT( USHRT_MAX == rFmt.GetPoolHelpId() ||
             UCHAR_MAX == rFmt.GetPoolHlpFileId(), "help file ids aren't supported" );
+#endif
 
     // style:master-page-name
     if( RES_FRMFMT == rFmt.Which() && XML_TABLE == eFamily )
@@ -155,7 +157,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
                 SwStyleNameMapper::FillProgName(
                                     pPageDesc->GetName(),
                                     sName,
-                                    GET_POOLID_PAGEDESC,
+                                    nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC,
                                     sal_True);
             AddAttribute( XML_NAMESPACE_STYLE, XML_MASTER_PAGE_NAME,
                           EncodeStyleName( sName ) );
