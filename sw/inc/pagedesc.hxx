@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagedesc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:56:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:07:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,17 +140,19 @@ public:
  *
  */
 
-enum UseOnPage
-{   PD_NONE           = 0x0000, //for internal use only.
-    PD_LEFT           = 0x0001,
-    PD_RIGHT          = 0x0002,
-    PD_ALL            = 0x0003,
-    PD_MIRROR         = 0x0007,
-    PD_HEADERSHARE    = 0x0040,
-    PD_FOOTERSHARE    = 0x0080,
-    PD_NOHEADERSHARE  = 0x00BF, //for internal use only
-    PD_NOFOOTERSHARE  = 0x007F  //for internal use only
-};
+typedef USHORT UseOnPage;
+namespace nsUseOnPage
+{
+    const UseOnPage PD_NONE           = 0x0000; //for internal use only.
+    const UseOnPage PD_LEFT           = 0x0001;
+    const UseOnPage PD_RIGHT          = 0x0002;
+    const UseOnPage PD_ALL            = 0x0003;
+    const UseOnPage PD_MIRROR         = 0x0007;
+    const UseOnPage PD_HEADERSHARE    = 0x0040;
+    const UseOnPage PD_FOOTERSHARE    = 0x0080;
+    const UseOnPage PD_NOHEADERSHARE  = 0x00BF; //for internal use only
+    const UseOnPage PD_NOFOOTERSHARE  = 0x007F; //for internal use only
+}
 
 class SW_DLLPUBLIC SwPageDesc : public SwModify
 {
@@ -266,49 +268,49 @@ inline void SwPageDesc::SetFollow( const SwPageDesc* pNew )
 
 inline BOOL SwPageDesc::IsHeaderShared() const
 {
-    return eUse & PD_HEADERSHARE ? TRUE : FALSE;
+    return eUse & nsUseOnPage::PD_HEADERSHARE ? TRUE : FALSE;
 }
 inline BOOL SwPageDesc::IsFooterShared() const
 {
-    return eUse & PD_FOOTERSHARE ? TRUE : FALSE;
+    return eUse & nsUseOnPage::PD_FOOTERSHARE ? TRUE : FALSE;
 }
 inline void SwPageDesc::ChgHeaderShare( BOOL bNew )
 {
     if ( bNew )
-        eUse = (UseOnPage) (eUse | PD_HEADERSHARE);
-        // (USHORT&)eUse |= (USHORT)PD_HEADERSHARE;
+        eUse = (UseOnPage) (eUse | nsUseOnPage::PD_HEADERSHARE);
+        // (USHORT&)eUse |= (USHORT)nsUseOnPage::PD_HEADERSHARE;
     else
-        eUse = (UseOnPage) (eUse & PD_NOHEADERSHARE);
-        // (USHORT&)eUse &= (USHORT)PD_NOHEADERSHARE;
+        eUse = (UseOnPage) (eUse & nsUseOnPage::PD_NOHEADERSHARE);
+        // (USHORT&)eUse &= (USHORT)nsUseOnPage::PD_NOHEADERSHARE;
 }
 inline void SwPageDesc::ChgFooterShare( BOOL bNew )
 {
     if ( bNew )
-        eUse = (UseOnPage) (eUse | PD_FOOTERSHARE);
-        // (USHORT&)eUse |= (USHORT)PD_FOOTERSHARE;
+        eUse = (UseOnPage) (eUse | nsUseOnPage::PD_FOOTERSHARE);
+        // (USHORT&)eUse |= (USHORT)nsUseOnPage::PD_FOOTERSHARE;
     else
-        eUse = (UseOnPage) (eUse & PD_NOFOOTERSHARE);
-        // (USHORT&)eUse &= (USHORT)PD_NOFOOTERSHARE;
+        eUse = (UseOnPage) (eUse & nsUseOnPage::PD_NOFOOTERSHARE);
+        // (USHORT&)eUse &= (USHORT)nsUseOnPage::PD_NOFOOTERSHARE;
 }
 inline void SwPageDesc::SetUseOn( UseOnPage eNew )
 {
-    UseOnPage eTmp = PD_NONE;
-    if ( eUse & PD_HEADERSHARE )
-        eTmp = PD_HEADERSHARE;
-        // (USHORT&)eTmp |= (USHORT)PD_HEADERSHARE;
-    if ( eUse & PD_FOOTERSHARE )
-        eTmp = (UseOnPage) (eTmp | PD_FOOTERSHARE);
-        // (USHORT&)eTmp |= (USHORT)PD_FOOTERSHARE;
+    UseOnPage eTmp = nsUseOnPage::PD_NONE;
+    if ( eUse & nsUseOnPage::PD_HEADERSHARE )
+        eTmp = nsUseOnPage::PD_HEADERSHARE;
+        // (USHORT&)eTmp |= (USHORT)nsUseOnPage::PD_HEADERSHARE;
+    if ( eUse & nsUseOnPage::PD_FOOTERSHARE )
+        eTmp = (UseOnPage) (eTmp | nsUseOnPage::PD_FOOTERSHARE);
+        // (USHORT&)eTmp |= (USHORT)nsUseOnPage::PD_FOOTERSHARE;
     eUse = (UseOnPage) (eTmp | eNew);
     // (USHORT&)eUse = eTmp | eNew;
 }
 inline UseOnPage SwPageDesc::GetUseOn() const
 {
     UseOnPage eRet = eUse;
-    eRet = (UseOnPage) (eRet & PD_NOHEADERSHARE);
-    // (USHORT&)eRet &= (USHORT)PD_NOHEADERSHARE;
-    eRet = (UseOnPage) (eRet & PD_NOFOOTERSHARE);
-    // (USHORT&)eRet &= (USHORT)PD_NOFOOTERSHARE;
+    eRet = (UseOnPage) (eRet & nsUseOnPage::PD_NOHEADERSHARE);
+    // (USHORT&)eRet &= (USHORT)nsUseOnPage::PD_NOHEADERSHARE;
+    eRet = (UseOnPage) (eRet & nsUseOnPage::PD_NOFOOTERSHARE);
+    // (USHORT&)eRet &= (USHORT)nsUseOnPage::PD_NOFOOTERSHARE;
     return eRet;
 }
 
@@ -324,19 +326,19 @@ inline void SwPageDesc::ResetAllLeftAttr()
 
 inline SwFrmFmt *SwPageDesc::GetRightFmt()
 {
-    return PD_RIGHT & eUse ? &aMaster : 0;
+    return nsUseOnPage::PD_RIGHT & eUse ? &aMaster : 0;
 }
 inline const SwFrmFmt *SwPageDesc::GetRightFmt() const
 {
-    return PD_RIGHT & eUse ? &aMaster : 0;
+    return nsUseOnPage::PD_RIGHT & eUse ? &aMaster : 0;
 }
 inline SwFrmFmt *SwPageDesc::GetLeftFmt()
 {
-    return PD_LEFT & eUse ? &aLeft : 0;
+    return nsUseOnPage::PD_LEFT & eUse ? &aLeft : 0;
 }
 inline const SwFrmFmt *SwPageDesc::GetLeftFmt() const
 {
-    return PD_LEFT & eUse ? &aLeft : 0;
+    return nsUseOnPage::PD_LEFT & eUse ? &aLeft : 0;
 }
 
 class SwPageDescExt
