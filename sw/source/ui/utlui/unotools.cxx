@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:24:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:50:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,8 +119,7 @@
 #include <doc.hxx>
 #endif
 
-
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
+#include <unomid.h>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -141,9 +140,11 @@ SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
                                         const Link* pInitializedLink,
                                         String* pURL ) :
     aTopWindow( rWin.GetParent(), 0, this ),
-    pModuleView(SW_MOD()->GetView()),
     rWindow(rWin),
     aMenuRes(SW_RES(RES_FRMEX_MENU)),
+
+    pModuleView(SW_MOD()->GetView()),
+
     nStyleFlags(nFlags),
     bIsInitialized(sal_False),
     bServiceAvailable(sal_False)
@@ -402,8 +403,8 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
         if( xTunnel.is() )
         {
-            OTextCursorHelper* pCrsr = (OTextCursorHelper*)xTunnel->getSomething(
-                                        OTextCursorHelper::getUnoTunnelId() );
+            OTextCursorHelper* pCrsr = reinterpret_cast<OTextCursorHelper*>( xTunnel->getSomething(
+                                        OTextCursorHelper::getUnoTunnelId() ));
             if( pCrsr )
             {
                 SwEditShell* pSh = pCrsr->GetDoc()->GetEditShell();
@@ -429,8 +430,8 @@ void SwOneExampleFrame::ClearDocument( BOOL bStartUpdateTimer )
     uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
     if( xTunnel.is() )
     {
-        OTextCursorHelper* pCrsr = (OTextCursorHelper*)xTunnel->getSomething(
-                                        OTextCursorHelper::getUnoTunnelId() );
+        OTextCursorHelper* pCrsr = reinterpret_cast<OTextCursorHelper*>(xTunnel->getSomething(
+                                        OTextCursorHelper::getUnoTunnelId()) );
         if( pCrsr )
         {
             SwDoc* pDoc = pCrsr->GetDoc();
