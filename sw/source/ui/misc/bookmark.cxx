@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bookmark.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:06:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:19:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ void SwInsertBookmarkDlg::Apply()
     //name
     for (USHORT nCount = aBookmarkBox.GetRemovedCount(); nCount > 0; nCount--)
     {
-        String sRemoved = aBookmarkBox.GetRemovedEntry( nCount -1 ).aName;
+        String sRemoved = aBookmarkBox.GetRemovedEntry( nCount -1 ).GetName();
         rSh.DelBookmark( sRemoved );
         SfxRequest aReq( rSh.GetView().GetViewFrame(), FN_DELETE_BOOKMARK );
         aReq.AppendItem( SfxStringItem( FN_DELETE_BOOKMARK, sRemoved ) );
@@ -237,7 +237,7 @@ USHORT BookmarkCombo::GetNextSelEntryPos(USHORT nPos) const
 
 USHORT BookmarkCombo::GetSelEntryPos(USHORT nPos) const
 {
-    char cSep = GetMultiSelectionSeparator();
+    sal_Unicode cSep = GetMultiSelectionSeparator();
 
     USHORT nCnt = GetText().GetTokenCount(cSep);
 
@@ -284,7 +284,7 @@ USHORT BookmarkCombo::GetSelectEntryPos( USHORT nSelIndex ) const
     {
         if (nSelIndex == nCnt)
         {
-            char cSep = GetMultiSelectionSeparator();
+            sal_Unicode cSep = GetMultiSelectionSeparator();
             String sEntry(GetText().GetToken(nPos, cSep));
             sEntry.EraseLeadingChars();
             sEntry.EraseTrailingChars();
