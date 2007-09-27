@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labprt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:55:57 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:44:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@
 #include <labimg.hxx>
 #endif
 #ifndef _LABIMP_HXX
-#include "swuilabimp.hxx" //CHINA001
+#include "swuilabimp.hxx"
 #endif
 
 #ifndef _CMDID_H
@@ -187,10 +187,10 @@ void SwLabPrtPage::ActivatePage( const SfxItemSet& rSet )
 
 
 
-int SwLabPrtPage::DeactivatePage(SfxItemSet* pSet)
+int SwLabPrtPage::DeactivatePage(SfxItemSet* _pSet)
 {
-    if ( pSet )
-        FillItemSet(*pSet);
+    if ( _pSet )
+        FillItemSet(*_pSet);
 
     return TRUE;
 }
@@ -225,7 +225,7 @@ BOOL SwLabPrtPage::FillItemSet(SfxItemSet& rSet)
 
 
 
-void SwLabPrtPage::Reset(const SfxItemSet& rSet)
+void SwLabPrtPage::Reset(const SfxItemSet& )
 {
     SwLabItem aItem;
     GetParent()->GetLabItem(aItem);
