@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 12:16:41 $
+#   last change: $Author: hr $ $Date: 2007-09-27 09:04:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,44 +54,57 @@ CDEFS+=-DDEBUG
 
 # --- Files --------------------------------------------------------
 
+EXCEPTIONSFILES = \
+    $(SLO)$/anchoreddrawobject.obj \
+    $(SLO)$/flycnt.obj \
+    $(SLO)$/laycache.obj \
+    $(SLO)$/layouter.obj \
+    $(SLO)$/movedfwdfrmsbyobjpos.obj \
+    $(SLO)$/objectformatter.obj \
+    $(SLO)$/objstmpconsiderwrapinfl.obj \
+    $(SLO)$/paintfrm.obj \
+    $(SLO)$/softpagebreak.obj \
+    $(SLO)$/sortedobjsimpl.obj
+
+
 SLOFILES =  \
-        $(SLO)$/atrfrm.obj \
-                $(SLO)$/anchoredobject.obj \
-                $(SLO)$/anchoreddrawobject.obj \
-        $(SLO)$/calcmove.obj \
-        $(SLO)$/colfrm.obj \
-        $(SLO)$/findfrm.obj \
-        $(SLO)$/flowfrm.obj \
-        $(SLO)$/fly.obj \
-        $(SLO)$/flycnt.obj \
-        $(SLO)$/flyincnt.obj \
-        $(SLO)$/flylay.obj \
-        $(SLO)$/flypos.obj \
-        $(SLO)$/frmtool.obj \
-        $(SLO)$/ftnfrm.obj \
-        $(SLO)$/hffrm.obj \
-        $(SLO)$/layact.obj \
-                $(SLO)$/laycache.obj \
-        $(SLO)$/layouter.obj \
-                $(SLO)$/movedfwdfrmsbyobjpos.obj \
-        $(SLO)$/newfrm.obj \
-                $(SLO)$/objectformatter.obj \
-                $(SLO)$/objectformattertxtfrm.obj \
-                $(SLO)$/objectformatterlayfrm.obj \
-                $(SLO)$/objstmpconsiderwrapinfl.obj \
-                $(SLO)$/pagechg.obj \
-        $(SLO)$/pagedesc.obj \
-        $(SLO)$/paintfrm.obj \
-        $(SLO)$/sectfrm.obj \
-        $(SLO)$/softpagebreak.obj \
-                $(SLO)$/sortedobjs.obj \
-                $(SLO)$/sortedobjsimpl.obj \
-        $(SLO)$/ssfrm.obj \
-        $(SLO)$/tabfrm.obj \
-        $(SLO)$/trvlfrm.obj \
-        $(SLO)$/unusedf.obj \
-        $(SLO)$/virtoutp.obj \
-                $(SLO)$/wsfrm.obj
+    $(SLO)$/atrfrm.obj \
+    $(SLO)$/anchoredobject.obj \
+    $(SLO)$/anchoreddrawobject.obj \
+    $(SLO)$/calcmove.obj \
+    $(SLO)$/colfrm.obj \
+    $(SLO)$/findfrm.obj \
+    $(SLO)$/flowfrm.obj \
+    $(SLO)$/fly.obj \
+    $(SLO)$/flycnt.obj \
+    $(SLO)$/flyincnt.obj \
+    $(SLO)$/flylay.obj \
+    $(SLO)$/flypos.obj \
+    $(SLO)$/frmtool.obj \
+    $(SLO)$/ftnfrm.obj \
+    $(SLO)$/hffrm.obj \
+    $(SLO)$/layact.obj \
+    $(SLO)$/laycache.obj \
+    $(SLO)$/layouter.obj \
+    $(SLO)$/movedfwdfrmsbyobjpos.obj \
+    $(SLO)$/newfrm.obj \
+    $(SLO)$/objectformatter.obj \
+    $(SLO)$/objectformattertxtfrm.obj \
+    $(SLO)$/objectformatterlayfrm.obj \
+    $(SLO)$/objstmpconsiderwrapinfl.obj \
+    $(SLO)$/pagechg.obj \
+    $(SLO)$/pagedesc.obj \
+    $(SLO)$/paintfrm.obj \
+    $(SLO)$/sectfrm.obj \
+    $(SLO)$/softpagebreak.obj \
+    $(SLO)$/sortedobjs.obj \
+    $(SLO)$/sortedobjsimpl.obj \
+    $(SLO)$/ssfrm.obj \
+    $(SLO)$/tabfrm.obj \
+    $(SLO)$/trvlfrm.obj \
+    $(SLO)$/unusedf.obj \
+    $(SLO)$/virtoutp.obj \
+    $(SLO)$/wsfrm.obj
 
 .IF "$(product)"==""
 .IF "$(cap)"==""
@@ -100,8 +113,6 @@ SLOFILES +=  \
 .ENDIF
 .ENDIF
 
-EXCEPTIONSFILES = \
-                $(SLO)$/laycache.obj
 
 # --- Targets -------------------------------------------------------
 
