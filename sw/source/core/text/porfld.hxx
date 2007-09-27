@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfld.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:57:56 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:16:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,8 +130,8 @@ public:
 class SwHiddenPortion : public SwFldPortion
 {
 public:
-    inline SwHiddenPortion( const XubString &rExpand, SwFont *pFnt = 0 )
-         : SwFldPortion( rExpand, pFnt )
+    inline SwHiddenPortion( const XubString &rExpand, SwFont *pFntL = 0 )
+         : SwFldPortion( rExpand, pFntL )
         { SetLen(1); SetWhichPor( POR_HIDDEN ); }
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
@@ -186,7 +186,7 @@ class SwGrfNumPortion : public SwNumberPortion
     long            nId;    //fuer StopAnimation
     SwTwips         nYPos;  //Enthaelt _immer_ die aktuelle RelPos.
     SwTwips         nGrfHeight;
-    SwVertOrient    eOrient;
+    sal_Int16       eOrient;
 public:
     SwGrfNumPortion( SwFrm *pFrm, const SvxBrushItem* pGrfBrush,
         const SwFmtVertOrient* pGrfOrient, const Size& rGrfSize,
@@ -210,7 +210,7 @@ public:
     inline SwTwips GetRelPos() const { return nYPos; }
     inline SwTwips GetGrfHeight() const { return nGrfHeight; }
     inline SwTwips GetId() const { return nId; }
-    inline SwVertOrient GetOrient() const { return eOrient; }
+    inline sal_Int16 GetOrient() const { return eOrient; }
 
     OUTPUT_OPERATOR
 };
