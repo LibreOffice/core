@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:56:29 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:35:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -335,8 +335,8 @@ void SwHyperlinkEventDescriptor::copyMacrosIntoINetFmt(
 
 
 void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XNameReplace> & xReplace)
+    uno::Reference<
+        container::XNameReplace> & xReplace)
 {
     // iterate over all names (all names that *we* support)
     Sequence<OUString> aNames = getElementNames();
