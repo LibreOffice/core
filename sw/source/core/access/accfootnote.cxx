@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accfootnote.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:34:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:20:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,8 +89,9 @@
 #include "access.hrc"
 #endif
 
-using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
@@ -100,11 +101,11 @@ const sal_Char sImplementationNameFootnote[] = "com.sun.star.comp.Writer.SwAcces
 const sal_Char sImplementationNameEndnote[] = "com.sun.star.comp.Writer.SwAccessibleEndnoteView";
 
 SwAccessibleFootnote::SwAccessibleFootnote(
-        SwAccessibleMap *pMap,
+        SwAccessibleMap* pInitMap,
         sal_Bool bIsEndnote,
         sal_Int32 nFootEndNote,
         const SwFtnFrm *pFtnFrm ) :
-    SwAccessibleContext( pMap,
+    SwAccessibleContext( pInitMap,
         bIsEndnote ? AccessibleRole::END_NOTE : AccessibleRole::FOOTNOTE,
         pFtnFrm )
 {
@@ -121,7 +122,7 @@ SwAccessibleFootnote::~SwAccessibleFootnote()
 }
 
 OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription (void)
-        throw (::com::sun::star::uno::RuntimeException)
+        throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -154,7 +155,7 @@ OUString SAL_CALL SwAccessibleFootnote::getImplementationName()
 
 sal_Bool SAL_CALL SwAccessibleFootnote::supportsService(
         const ::rtl::OUString& sTestServiceName)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (uno::RuntimeException)
 {
     if( sTestServiceName.equalsAsciiL( sAccessibleServiceName,
                                        sizeof(sAccessibleServiceName)-1 ) )
@@ -167,7 +168,7 @@ sal_Bool SAL_CALL SwAccessibleFootnote::supportsService(
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
-        throw( ::com::sun::star::uno::RuntimeException )
+        throw( uno::RuntimeException )
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
