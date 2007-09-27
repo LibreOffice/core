@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:15:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:10:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
 #ifndef _SWDTFLVR_HXX
 #define _SWDTFLVR_HXX
 #ifndef _TRANSFER_HXX
+
+#include <sfx2/objsh.hxx>
+
 #include <svtools/transfer.hxx>
 #endif
 #ifndef _SV_GRAPH_HXX
@@ -60,18 +63,19 @@ class SvxClipboardFmtItem;
 class ViewShell;
 class SwView_Impl;
 
-enum TransferBufferType
+typedef sal_uInt16 TransferBufferType;
+namespace nsTransferBufferType
 {
-    TRNSFR_NONE             = 0x0000,
-    TRNSFR_DOCUMENT         = 0x0001,
-    TRNSFR_DOCUMENT_WORD    = 0x0002,
-    TRNSFR_GRAPHIC          = 0x0004,
-    TRNSFR_TABELLE          = 0x0008,
-    TRNSFR_DDELINK          = 0x0010,
-    TRNSFR_OLE              = 0x0020,
-    TRNSFR_INETFLD          = 0x0040,
-    TRNSFR_DRAWING          = 0x0081    //Drawing ist auch intern!
-};
+    const sal_uInt16 TRNSFR_NONE            = 0x0000;
+    const sal_uInt16 TRNSFR_DOCUMENT        = 0x0001;
+    const sal_uInt16 TRNSFR_DOCUMENT_WORD   = 0x0002;
+    const sal_uInt16 TRNSFR_GRAPHIC         = 0x0004;
+    const sal_uInt16 TRNSFR_TABELLE         = 0x0008;
+    const sal_uInt16 TRNSFR_DDELINK         = 0x0010;
+    const sal_uInt16 TRNSFR_OLE             = 0x0020;
+    const sal_uInt16 TRNSFR_INETFLD         = 0x0040;
+    const sal_uInt16 TRNSFR_DRAWING         = 0x0081;   //Drawing ist auch intern!
+}
 
 #define DATA_FLAVOR     ::com::sun::star::datatransfer::DataFlavor
 
@@ -118,7 +122,7 @@ class SwTransferable : public TransferableHelper
                         USHORT nAction, const Point* pPt, BOOL bInsertGRF );
 
     static int _PasteDDE( TransferableDataHelper& rData, SwWrtShell& rWrtShell,
-                            FASTBOOL bReReadGrf, BOOL bMsg );
+                            BOOL bReReadGrf, BOOL bMsg );
 
     static int _PasteSdrFormat(  TransferableDataHelper& rData,
                                     SwWrtShell& rSh, USHORT nAction,
@@ -208,7 +212,9 @@ public:
                                 SvxClipboardFmtItem & rToFill );
 
     // Interfaces for Drag & Drop
+    using TransferableHelper::StartDrag;
     void StartDrag( Window* pWin, const Point& rPos );
+
     SwWrtShell* GetShell()              { return pWrtShell; }
     void SetCleanUp( BOOL bFlag )       { bCleanUp = bFlag; }
 
