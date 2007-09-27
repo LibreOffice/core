@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swabstdlg.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 07:38:15 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:10:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,13 +143,6 @@ namespace com{namespace sun{namespace star{
 
 typedef   void (*SwLabDlgMethod) (::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& xModel,   const SwLabItem& rItem);
 
-//CHINA001 class AbstractSwSaveLabelDlg : public VclAbstractDialog  //CHINA001 add for SwSaveLabelDlg
-//CHINA001 {
-//CHINA001 public:
-//CHINA001 virtual void SetLabel(const rtl::OUString& rMake, const rtl::OUString& rType) = 0;
-//CHINA001 virtual sal_Bool GetLabel(SwLabItem& rItem) = 0;
-//CHINA001 }
-
 typedef String      (*GlossaryGetCurrGroup)();
 typedef void        (*GlossarySetActGroup)(const String& rNewGroup);
 
@@ -251,7 +244,7 @@ public:
     virtual void    SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc) = 0;
 };
 
-class AbstractSwInsertAbstractDlg : public VclAbstractDialog    //CHINA001 add for SwInsertAbstractDlg
+class AbstractSwInsertAbstractDlg : public VclAbstractDialog    // add for SwInsertAbstractDlg
 {
 public:
     virtual BYTE    GetLevel() const = 0;
@@ -385,14 +378,13 @@ class SwAbstractDialogFactory
 {
 public:
     static SwAbstractDialogFactory*     Create();
-//CHINA001  virtual AbstractSwSaveLabelDlg*             CreateSwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec, int nResId ) = 0;
 
     virtual AbstractSwWordCountDialog* CreateSwWordCountDialog( Window* pWindow ) = 0;
-    virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg ( Window* pParent, int nResId ) = 0; //CHINA001 add for SwInsertAbstractDlg
-    virtual AbstractSfxSingleTabDialog*  CreateSfxSingleTabDialog ( Window* pParent, SfxItemSet& rSet,int nResId   ) = 0; //CHINA001 add for SwAddrDlg SwDropCapsDlg, SwBackgroundDlg,SwNumFmtDlg,
+    virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg ( Window* pParent, int nResId) = 0; // add for SwInsertAbstractDlg
+    virtual AbstractSfxSingleTabDialog*  CreateSfxSingleTabDialog ( Window* pParent, SfxItemSet& rSet, int nResId    ) = 0; // add for SwAddrDlg SwDropCapsDlg, SwBackgroundDlg,SwNumFmtDlg,
     virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,
-                                                                SvStream* pStream, int nResId ) = 0;//CHINA001 add for SwAsciiFilterDlg
-    virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, int nResId ) = 0;//CHINA001 add for SwInsertBookmarkDlg
+                                                                SvStream* pStream, int nResId ) = 0;// add for SwAsciiFilterDlg
+    virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, int nResId ) = 0;// add for SwInsertBookmarkDlg
 
     virtual AbstractSwBreakDlg * CreateSwBreakDlg( Window *pParent, SwWrtShell &rSh,int nResId ) = 0; // add for SwBreakDlg
     virtual VclAbstractDialog   * CreateSwChangeDBDlg( SwView& rVw, int nResId ) = 0; //add for SwChangeDBDlg
@@ -452,7 +444,6 @@ public:
     virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg ( Window *pParent, int nResId ) = 0; //add for SwModalRedlineAcceptDlg
 
     virtual VclAbstractDialog*          CreateSwVclDialog( int nResId, Window* pParent, BOOL& rWithPrev ) = 0; //add for SwMergeTblDlg
-//CHINA001  virtual VclAbstractDialog*          CreateSwWrtShDialog( int nResId, Window* pParent, SwWrtShell& rSh ) = 0; //add for SwColumnDlg
     virtual SfxAbstractTabDialog*       CreateFrmTabDialog( int nResId,
                                                 SfxViewFrame *pFrame, Window *pParent,
                                                 const SfxItemSet& rCoreSet,
