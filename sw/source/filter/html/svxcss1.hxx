@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxcss1.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:45:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:51:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,6 +302,8 @@ protected:
     virtual sal_Bool DeclarationParsed( const String& rProperty,
                                     const CSS1Expression *pExpr );
 
+    using CSS1Parser::ParseStyleOption;
+    using CSS1Parser::ParseStyleSheet;
 
 public:
 
