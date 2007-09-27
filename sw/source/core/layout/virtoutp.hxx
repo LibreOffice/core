@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virtoutp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:32:50 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:07:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ private:
     BOOL DoesFit( const Size &rOut );
 
 public:
-    SwLayVout() : pVirDev(NULL), pOut(0), aSize(0, VIRTUALHEIGHT), nCount(0) {}
+    SwLayVout() : pSh(0), pOut(0), pVirDev(0), aSize(0, VIRTUALHEIGHT), nCount(0) {}
     ~SwLayVout() { delete pVirDev; }
 
     /// OD 27.09.2002 #103636# - change 2nd parameter <rRect> - no longer <const>
