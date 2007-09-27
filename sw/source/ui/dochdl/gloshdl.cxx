@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:49:56 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:39:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,9 +100,6 @@
 #ifndef _GLOSDOC_HXX
 #include <glosdoc.hxx>
 #endif
-//CHINA001 #ifndef _GLOSSARY_HXX
-//CHINA001 #include <glossary.hxx>
-//CHINA001 #endif
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>
 #endif
@@ -110,9 +107,6 @@
 #include <swundo.hxx>                   // fuer Undo-Ids
 #endif
 
-//CHINA001 #ifndef _SELGLOS_HXX
-//CHINA001 #include <selglos.hxx>
-//CHINA001 #endif
 #ifndef _EXPFLD_HXX
 #include <expfld.hxx>
 #endif
@@ -142,16 +136,19 @@
 #include <frmmgr.hxx>
 #endif
 #ifndef _LSTBOX_HXX //autogen
-#include <vcl/lstbox.hxx> //add CHINA001
+#include <vcl/lstbox.hxx>
 #endif
 
 #include <svx/acorrcfg.hxx>
-#include "swabstdlg.hxx" //CHINA001
-#include <misc.hrc> //CHINA001
+#include "swabstdlg.hxx"
+#include <misc.hrc>
 
 #include <IDocumentFieldsAccess.hxx>
 
-const short RET_EDIT = 100; //CHINA001 copy from glossary.hxx
+using namespace ::com::sun::star;
+
+
+const short RET_EDIT = 100;
 
 // PUBLIC METHODES -------------------------------------------------------
 struct TextBlockInfo_Impl
@@ -171,12 +168,11 @@ SV_IMPL_REF( SwDocShell )
 
 void SwGlossaryHdl::GlossaryDlg()
 {
-//CHINA001  SwGlossaryDlg* pDlg = new SwGlossaryDlg( pViewFrame, this, pWrtShell );
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pFact, "Dialogdiet fail!");
     AbstractGlossaryDlg* pDlg = pFact->CreateGlossaryDlg( DLG_RENAME_GLOS,
                                                         pViewFrame, this, pWrtShell);
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
     String sName, sShortName;
 
     if( RET_EDIT == pDlg->Execute() )
@@ -457,7 +453,7 @@ BOOL SwGlossaryHdl::HasShortName(const String& rShortName) const
 /* -----------------------------20.03.01 10:52--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL    SwGlossaryHdl::ConvertToNew(SwTextBlocks& rOld)
+BOOL    SwGlossaryHdl::ConvertToNew(SwTextBlocks& /*rOld*/)
 {
     /*if( rOld.IsOld() )
     {
@@ -503,8 +499,7 @@ BOOL SwGlossaryHdl::NewGlossary(const String& rName, const String& rShortName,
     const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
 
     const USHORT nSuccess = pWrtShell->MakeGlossary( *pTmp, rName, rShortName,
-                            pCfg->IsSaveRelFile(), pCfg->IsSaveRelNet(),
-                            pOnlyTxt );
+                            pCfg->IsSaveRelFile(), pOnlyTxt );
     if(nSuccess == (USHORT) -1 )
     {
         InfoBox(pWrtShell->GetView().GetWindow(), SW_RES(MSG_ERR_INSERT_GLOS)).Execute();
@@ -545,13 +540,11 @@ BOOL SwGlossaryHdl::ExpandGlossary(BOOL bUseStandard, BOOL bApi)
     SwTextBlocks *pGlossary;
     if( bUseStandard )
     {
-        //CHINA001 String sGroupName(SwGlossaryDlg::GetCurrGroup());
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
         ::GlossaryGetCurrGroup fnGetCurrGroup = pFact->GetGlossaryCurrGroupFunc( DLG_RENAME_GLOS );
-        DBG_ASSERT(fnGetCurrGroup, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(fnGetCurrGroup, "Dialogdiet fail!");
         String sGroupName( (*fnGetCurrGroup)() );
-        //CHINA001 end
         if(STRING_NOTFOUND == sGroupName.Search(GLOS_DELIM))
             FindGroupName(sGroupName);
         pGlossary = rStatGlossaries.GetGroupDoc(sGroupName);
@@ -633,13 +626,11 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
             }
             else
             {
-                //CHINA001 SwSelGlossaryDlg *pDlg =
-                    //CHINA001 new SwSelGlossaryDlg(0, aShortName);
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
                 AbstarctSwSelGlossaryDlg* pDlg = pFact->CreateSwSelGlossaryDlg( 0, aShortName, DLG_SEL_GLOS );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 for(USHORT i = 0; i < aFoundArr.Count(); ++i)
                 {
                     TextBlockInfo_Impl* pData = aFoundArr.GetObject(i);
@@ -830,7 +821,7 @@ void SwGlossaryHdl::SetMacros(const String& rShortName,
         aMacroTbl.Insert( SW_EVENT_START_INS_GLOSSARY, new SvxMacro(*pStart));
     if( pEnd )
         aMacroTbl.Insert( SW_EVENT_END_INS_GLOSSARY, new SvxMacro(*pEnd));
-    int nIdx = pGlos->GetIndex( rShortName );
+    USHORT nIdx = pGlos->GetIndex( rShortName );
     if( !pGlos->SetMacroTable( nIdx, aMacroTbl ) && pGlos->GetError() )
         ErrorHandler::HandleError( pGlos->GetError() );
 
@@ -874,10 +865,10 @@ void SwGlossaryHdl::GetMacros( const String &rShortName,
 
 SwGlossaryHdl::SwGlossaryHdl(SfxViewFrame* pVwFrm, SwWrtShell *pSh)
     : rStatGlossaries( *::GetGlossaries() ),
+    aCurGrp( rStatGlossaries.GetDefName() ),
     pViewFrame( pVwFrm ),
     pWrtShell( pSh ),
-    pCurGrp( 0 ),
-    aCurGrp( rStatGlossaries.GetDefName() )
+    pCurGrp( 0 )
 {
 }
 
@@ -969,8 +960,8 @@ BOOL SwGlossaryHdl::CopyToClipboard(SwWrtShell& rSh, const String& rShortName)
                                     : rStatGlossaries.GetGroupDoc(aCurGrp);
 
     SwTransferable* pTransfer = new SwTransferable( rSh );
-/*??*/::com::sun::star::uno::Reference<
-        ::com::sun::star::datatransfer::XTransferable > xRef( pTransfer );
+/*??*/uno::Reference<
+        datatransfer::XTransferable > xRef( pTransfer );
 
     int nRet = pTransfer->CopyGlossary( *pGlossary, rShortName );
     if( !pCurGrp )
@@ -1009,13 +1000,3 @@ BOOL SwGlossaryHdl::ImportGlossaries( const String& rName )
     return bRet;
 }
 
-String SwGlossaryHdl::GetValidShortCut( const String& rLong,
-                                         BOOL bCheckInBlock ) const
-{
-    String sRet;
-    SwTextBlocks *pGlossary = pCurGrp ? pCurGrp
-                                    : rStatGlossaries.GetGroupDoc( aCurGrp );
-    if( pGlossary )
-        sRet = pGlossary->GetValidShortCut( rLong, bCheckInBlock );
-    return sRet;
-}
