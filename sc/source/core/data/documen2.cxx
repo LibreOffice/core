@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:06:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,6 +287,19 @@
 #include "unoreflist.hxx"
 #include "listenercalls.hxx"
 #include "recursionhelper.hxx"
+#include "lookupcache.hxx"
+
+// pImpl because including lookupcache.hxx in document.hxx isn't wanted, and
+// dtor is convenient.
+struct ScLookupCacheMapImpl
+{
+    ScLookupCacheMap aCacheMap;
+    ~ScLookupCacheMapImpl()
+    {
+        for (ScLookupCacheMap::iterator it( aCacheMap.begin()); it != aCacheMap.end(); ++it)
+            delete (*it).second;
+    }
+};
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -327,6 +340,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pLoadedSymbolStringCellList( NULL ),
         pRecursionHelper( NULL ),
         pAutoNameCache( NULL ),
+        pLookupCacheMapImpl( NULL ),
         nUnoObjectId( 0 ),
         nRangeOverflowType( 0 ),
         aCurTextWidthCalcPos(MAXCOL,0,0),
@@ -528,6 +542,7 @@ ScDocument::~ScDocument()
     ScAddInListener::RemoveDocument( this );
     delete pChartListenerCollection;    // vor pBASM wg. evtl. Listener!
     pChartListenerCollection = NULL;
+    DELETEZ( pLookupCacheMapImpl);  // before pBASM because of listeners
     // BroadcastAreas vor allen Zellen zerstoeren um unnoetige
     // Einzel-EndListenings der Formelzellen zu vermeiden
     delete pBASM;       // BroadcastAreaSlotMachine
@@ -1960,4 +1975,49 @@ void ScDocument::DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine)
 ScRecursionHelper* ScDocument::CreateRecursionHelperInstance()
 {
     return new ScRecursionHelper;
+}
+
+//  ----------------------------------------------------------------------------
+
+ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange )
+{
+    ScLookupCache* pCache = 0;
+    if (!pLookupCacheMapImpl)
+        pLookupCacheMapImpl = new ScLookupCacheMapImpl;
+    ScLookupCacheMap::iterator it( pLookupCacheMapImpl->aCacheMap.find( rRange));
+    if (it == pLookupCacheMapImpl->aCacheMap.end())
+    {
+        pCache = new ScLookupCache( this, rRange);
+        AddLookupCache( *pCache);
+    }
+    else
+        pCache = (*it).second;
+    return *pCache;
+}
+
+void ScDocument::AddLookupCache( ScLookupCache & rCache )
+{
+    if (!pLookupCacheMapImpl->aCacheMap.insert( ::std::pair< const ScRange,
+                ScLookupCache*>( rCache.getRange(), &rCache)).second)
+    {
+        DBG_ERRORFILE( "ScDocument::AddLookupCache: couldn't add to hash map");
+    }
+    else
+        StartListeningArea( rCache.getRange(), &rCache);
+}
+
+void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
+{
+    ScLookupCacheMap::iterator it( pLookupCacheMapImpl->aCacheMap.find(
+                rCache.getRange()));
+    if (it == pLookupCacheMapImpl->aCacheMap.end())
+    {
+        DBG_ERRORFILE( "ScDocument::RemoveLookupCache: range not found in hash map");
+    }
+    else
+    {
+        ScLookupCache* pCache = (*it).second;
+        pLookupCacheMapImpl->aCacheMap.erase( it);
+        EndListeningArea( pCache->getRange(), &rCache);
+    }
 }
