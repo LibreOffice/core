@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bparr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:41:13 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:26:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,7 +266,7 @@ BlockInfo* BigPtrArray::InsBlock( USHORT pos )
 
 void BigPtrArray::BlockDel( USHORT nDel )
 {
-    nBlock -= nDel;
+    nBlock = nBlock - nDel;
     if( nMaxBlock - nBlock > nBlockGrowSize )
     {
         // dann koennen wir wieder schrumpfen
@@ -313,8 +313,8 @@ void BigPtrArray::Insert( const ElementPtr& rElem, ULONG pos )
             q = ppInf[ cur+1 ];
             if( q->nElem )
             {
-                register int nCount = q->nElem;
-                register ElementPtr *pFrom = q->pData + nCount,
+                int nCount = q->nElem;
+                ElementPtr *pFrom = q->pData + nCount,
                                     *pTo = pFrom+1;
                 while( nCount-- )
                     ++( *--pTo = *--pFrom )->nOffset;
@@ -361,8 +361,8 @@ void BigPtrArray::Insert( const ElementPtr& rElem, ULONG pos )
     DBG_ASSERT( pos < MAXENTRY, "falsche Pos" );
     if( pos != p->nElem )
     {
-        register int nCount = p->nElem - USHORT(pos);
-        register ElementPtr *pFrom = p->pData + p->nElem,
+        int nCount = p->nElem - USHORT(pos);
+        ElementPtr *pFrom = p->pData + p->nElem,
                             *pTo = pFrom + 1;
         while( nCount-- )
             ++( *--pTo = *--pFrom )->nOffset;
@@ -399,17 +399,18 @@ void BigPtrArray::Remove( ULONG pos, ULONG n )
         // Eventuell Elemente verschieben
         if( ( pos + nel ) < ULONG(p->nElem) )
         {
-            register ElementPtr *pTo = p->pData + pos,
+            ElementPtr *pTo = p->pData + pos,
                                 *pFrom = pTo + nel;
-            register int nCount = p->nElem - nel - USHORT(pos);
+            int nCount = p->nElem - nel - USHORT(pos);
             while( nCount-- )
             {
-                (*pTo++ = *pFrom++)->nOffset -= nel;
-//              (*pTo++)->nOffset -= nel;
+                *pTo = *pFrom++;
+                (*pTo)->nOffset = (*pTo)->nOffset - nel;
+                ++pTo;
             }
         }
         p->nEnd -= nel;
-        p->nElem -= nel;
+        p->nElem = p->nElem - nel;
         if( !p->nElem )
         {
             // eventuell Block ganz entfernen
@@ -485,7 +486,7 @@ USHORT BigPtrArray::Compress( short nMax )
     CHECKIDX( ppInf, nBlock, nSize, nCur );
 
     // Es wird von vorne nach hinten ueber das InfoBlock Array iteriert.
-    // Wenn zwischen durch Block gel”scht werden, dann mussen alle
+    // Wenn zwischen durch Block gelï¿½scht werden, dann mussen alle
     // nachfolgenden verschoben werden. Dazu werden die Pointer pp und qq
     // benutzt; wobei pp das "alte" Array, qq das "neue" Array ist.
     BlockInfo** pp = ppInf, **qq = pp;
@@ -520,18 +521,18 @@ USHORT BigPtrArray::Compress( short nMax )
                 n = nLast;
 
             // Elemente uebertragen, vom akt. in den letzten
-            register ElementPtr* pElem = pLast->pData + pLast->nElem;
-            register ElementPtr* pFrom = p->pData;
-            for( register int nCount = n, nOff = pLast->nElem;
+            ElementPtr* pElem = pLast->pData + pLast->nElem;
+            ElementPtr* pFrom = p->pData;
+            for( USHORT nCount = n, nOff = pLast->nElem;
                             nCount; --nCount, ++pElem )
                 *pElem = *pFrom++,
                     (*pElem)->pBlock = pLast,
                     (*pElem)->nOffset = nOff++;
 
             // korrigieren
-            pLast->nElem += n;
-            nLast    -= n;
-            p->nElem -= n;
+            pLast->nElem = pLast->nElem + n;
+            nLast = nLast - n;
+            p->nElem = p->nElem - n;
 
             // Ist der aktuelle Block dadurch leer geworden?
             if( !p->nElem )
@@ -544,10 +545,12 @@ USHORT BigPtrArray::Compress( short nMax )
             else
             {
                 pElem = p->pData, pFrom = pElem + n;
-                register int nCount = p->nElem;
+                int nCount = p->nElem;
                 while( nCount-- )
                 {
-                    (*pElem++ = *pFrom++)->nOffset -= n;
+                    *pElem = *pFrom++;
+                    (*pElem)->nOffset = (*pElem)->nOffset - n;
+                    ++pElem;
                 }
             }
         }
