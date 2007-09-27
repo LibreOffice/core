@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLBlockExport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:40:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:52:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ public:
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
 
     virtual ~SwXMLTextBlockExport ( void ) {}
-    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) {return 0;}
+    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum /*eClass*/) {return 0;}
     sal_uInt32 exportDoc(const String & rText);
     void _ExportAutoStyles() {}
     void _ExportMasterStyles () {}
