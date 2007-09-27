@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmpreparemergepage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:07:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:35:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,18 +78,20 @@
 #include <mmpreparemergepage.hrc>
 #include <dbui.hrc>
 
+#include <unomid.h>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::rtl;
-#define C2U(cChar) OUString::createFromAscii(cChar)
+
 
 /*-- 02.04.2004 16:42:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_PREPAREMERGE_PAGE)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aHeaderFI(this,  SW_RES(     FI_HEADER ) ),
@@ -104,8 +106,8 @@ SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pP
     m_aNoteHeaderFL(this, SW_RES(  FL_NOTEHEADER ) ),
     m_aEditFI(this, SW_RES(        FI_EDIT       ) ),
     m_aEditPB(this, SW_RES(        PB_EDIT       ) ),
-#ifdef _MSC_VER
-#pragma warning (disable : 4355)
+#ifdef MSC
+#pragma warning (default : 4355)
 #endif
     m_pWizard(_pParent)
 {
@@ -129,7 +131,7 @@ SwMailMergePrepareMergePage::~SwMailMergePrepareMergePage()
 /*-- 13.05.2004 15:36:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK( SwMailMergePrepareMergePage, EditDocumentHdl_Impl, PushButton*, pButton)
+IMPL_LINK( SwMailMergePrepareMergePage, EditDocumentHdl_Impl, PushButton*, EMPTYARG)
 {
     m_pWizard->SetRestartPage(MM_PREPAREMERGEPAGE);
     m_pWizard->EndDialog(RET_EDIT_DOC);
@@ -152,7 +154,7 @@ IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
     }
     else if(pCtrl == &m_aRecordED)
     {
-        rConfigItem.MoveResultSet(m_aRecordED.GetValue());
+        rConfigItem.MoveResultSet( static_cast< sal_Int32 >(m_aRecordED.GetValue()) );
     }
     else if(pCtrl == &m_aNextPB)
         rConfigItem.MoveResultSet(nPos + 1);
@@ -170,22 +172,6 @@ IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
     m_aLastPB.Enable(bValid && !bIsLast);
     m_ExcludeCB.Check(rConfigItem.IsRecordExcluded( rConfigItem.GetResultSetPosition() ));
     //now the record has to be merged into the source document
-    SwView* pView = m_pWizard->GetSwView();
-
-/*
-            { CONST_CHAR("ActiveConnection"),   daConnection,       &::getCppuType( static_cast< Reference< XConnection >* >(NULL) ),   PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("BookmarkSelection"),  daBookmarkSelection,&::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Column"),             daColumnObject,     &::getCppuType( static_cast< Reference< XPropertySet >* >(NULL) ),  PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("ColumnName"),         daColumnName,       &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Command"),            daCommand,          &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("CommandType"),        daCommandType,      &::getCppuType( static_cast< sal_Int32* >(NULL) ),                  PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Cursor"),             daCursor,           &::getCppuType( static_cast< Reference< XResultSet>* >(NULL) ),     PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("DataSourceName"),     daDataSource,       &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("EscapeProcessing"),   daEscapeProcessing, &::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Filter"),             daFilter,           &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Selection"),          daSelection,        &::getCppuType( static_cast< Sequence< Any >* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-
-*/
     const SwDBData& rDBData = rConfigItem.GetCurrentDBData();
 
     Sequence< PropertyValue > aArgs(7);
