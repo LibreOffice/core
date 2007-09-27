@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insfnote.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:20:08 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:20:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,8 +93,8 @@
 #include <insfnote.hrc>
 #endif
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 static BOOL bFootnote = TRUE;
 
@@ -127,7 +127,7 @@ void __EXPORT SwInsFootNoteDlg::Apply()
                                rFont.GetStyleName(), rFont.GetPitch(),
                                eCharSet, RES_CHRATR_FONT );
             aSet.Put( aFont );
-            rSh.SetAttr( aSet, SETATTR_DONTEXPAND );
+            rSh.SetAttr( aSet, nsSetAttrMode::SETATTR_DONTEXPAND );
             rSh.ResetSelect(0, FALSE);
             rSh.Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
         }
@@ -137,7 +137,7 @@ void __EXPORT SwInsFootNoteDlg::Apply()
     else
     {
 /*
-        rSh.StartUndo( UIUNDO_INSERT_FOOTNOTE );
+        rSh.StartUndo( UNDO_UI_INSERT_FOOTNOTE );
         rSh.InsertFootnote( aStr, aEndNoteBtn.IsChecked(), !bExtCharAvailable );
 
         if ( bExtCharAvailable )
@@ -155,7 +155,7 @@ void __EXPORT SwInsFootNoteDlg::Apply()
             rSh.ResetSelect(0, FALSE);
             rSh.GotoFtnTxt();
         }
-        rSh.EndUndo( UIUNDO_INSERT_FOOTNOTE );
+        rSh.EndUndo( UNDO_UI_INSERT_FOOTNOTE );
 */
     }
 
@@ -211,11 +211,10 @@ IMPL_LINK( SwInsFootNoteDlg, NumberExtCharHdl, Button *, EMPTYARG )
     rSh.GetAttr( aSet );
     const SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
 
-    //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap(this, FALSE);
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pFact, "Dialogdiet fail!");
     AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( this, RID_SVXDLG_CHARMAP, FALSE );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
     Font aDlgFont( pDlg->GetCharFont() );
     aDlgFont.SetName( rFont.GetFamilyName() );
@@ -267,13 +266,14 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, BOOL bEd
     SvxStandardDialog(pParent,SW_RES(DLG_INS_FOOTNOTE)),
 
     rSh(rShell),
-    bEdit(bEd),
     bExtCharAvailable(FALSE),
+    bEdit(bEd),
     aNumberAutoBtn  (this,SW_RES(RB_NUMBER_AUTO)),
     aNumberCharBtn  (this,SW_RES(RB_NUMBER_CHAR)),
     aNumberCharEdit (this,SW_RES(ED_NUMBER_CHAR)),
     aNumberExtChar  (this,SW_RES(BT_NUMBER_CHAR)),
     aNumberFL      (this,SW_RES(FL_NUMBER)),
+
     aFtnBtn         (this,SW_RES(RB_TYPE_FTN)),
     aEndNoteBtn     (this,SW_RES(RB_TYPE_ENDNOTE)),
     aTypeFL        (this,SW_RES(FL_TYPE)),
