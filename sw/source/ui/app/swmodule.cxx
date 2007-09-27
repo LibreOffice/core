@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:03:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:18:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,26 +326,14 @@
 ResMgr *pSwResMgr = 0;
 sal_Bool    bNoInterrupt    = sal_False;
 
-#ifndef PROFILE
-// Code zum Initialisieren von Statics im eigenen Code-Segment
-#ifdef _MSC_VER
-#pragma code_seg( "SWSTATICS" )
-#endif
-#endif
-
 #include <sfx2/app.hxx>
-
-#ifndef PROFILE
-#ifdef _MSC_VER
-#pragma code_seg()
-#endif
-#endif
 
 #include <svx/svxerr.hxx>
 
-namespace css = com::sun::star;
+#include <unomid.h>
 
-#define C2S(cChar) String::CreateFromAscii(cChar)
+using namespace com::sun::star;
+
 
 TYPEINIT1( SwModule, SfxModule );
 
@@ -360,14 +348,13 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     : SfxModule( SfxApplication::CreateResManager( "sw" ), sal_False, pWebFact,
                      pFact, pGlobalFact, NULL ),
     pModuleConfig(0),
-    pView(0),
+    pUsrPref(0),
+    pWebUsrPref(0),
+    pPrtOpt(0),
+    pWebPrtOpt(0),
     pChapterNumRules(0),
     pStdFontConfig(0),
     pNavigationConfig(0),
-    pPrtOpt(0),
-    pWebPrtOpt(0),
-    pWebUsrPref(0),
-    pUsrPref(0),
     pToolbarConfig(0),
     pWebToolbarConfig(0),
     pDBConfig(0),
@@ -376,12 +363,13 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     pCTLOptions(0),
     pUserOptions(0),
     pUndoOptions(0),
-    pClipboard(0),
-    pDragDrop(0),
-    pXSelection(0),
     pAttrPool(0),
+    pView(0),
     bAuthorInitialised(sal_False),
-    bEmbeddedLoadSave( sal_False )
+    bEmbeddedLoadSave( sal_False ),
+    pClipboard( 0 ),
+    pDragDrop( 0 ),
+    pXSelection( 0 )
 {
     SetName( String::CreateFromAscii("StarWriter") );
     pSwResMgr = GetResMgr();
@@ -424,21 +412,21 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 
 //************************************************************************
 
-css::uno::Reference< css::scanner::XScannerManager >
+uno::Reference< scanner::XScannerManager >
 SwModule::GetScannerManager()
 {
     if (!m_xScannerManager.is())
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xMgr (
+        uno::Reference< lang::XMultiServiceFactory > xMgr (
             comphelper::getProcessServiceFactory() );
         if( xMgr.is() )
         {
             m_xScannerManager =
-                css::uno::Reference< css::scanner::XScannerManager >(
+                uno::Reference< scanner::XScannerManager >(
                     xMgr->createInstance(
                         rtl::OUString::createFromAscii(
                             "com.sun.star.scanner.ScannerManager" ) ),
-                    css::uno::UNO_QUERY );
+                    uno::UNO_QUERY );
         }
     }
     return m_xScannerManager;
