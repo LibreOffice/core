@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unbkmk.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:50:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,10 @@
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 
-SwUndoBookmark::SwUndoBookmark( USHORT nUndoId, const SwBookmark& rBkmk )
+SwUndoBookmark::SwUndoBookmark( SwUndoId nUndoId, const SwBookmark& rBkmk )
     : SwUndo( nUndoId )
 {
-    int nType = SwHstryBookmark::BKMK_POS;
+    BYTE nType = SwHstryBookmark::BKMK_POS;
     if( rBkmk.GetOtherPos() )
         nType |= SwHstryBookmark::BKMK_OTHERPOS;
     pHBookmark = new SwHstryBookmark( rBkmk, nType );
