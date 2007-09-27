@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porftn.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:10:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:16:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,8 +70,8 @@ public:
 class SwFtnNumPortion : public SwNumberPortion
 {
 public:
-    inline SwFtnNumPortion( const XubString &rExpand, SwFont *pFnt )
-         : SwNumberPortion( rExpand, pFnt, sal_True, sal_False, 0 )
+    inline SwFtnNumPortion( const XubString &rExpand, SwFont *pFntL )
+         : SwNumberPortion( rExpand, pFntL, sal_True, sal_False, 0 )
          { SetWhichPor( POR_FTNNUM ); }
 
     OUTPUT_OPERATOR
