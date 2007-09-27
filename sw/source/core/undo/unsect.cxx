@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unsect.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:20:56 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:32:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,8 +116,8 @@ SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
 
 SwUndoInsSection::SwUndoInsSection( const SwPaM& rPam, const SwSection& rNew,
                                     const SfxItemSet* pSet )
-    : SwUndo( UNDO_INSSECTION ), SwUndRng( rPam ), nSectNodePos( 0 ),
-    pHistory( 0 ), pRedlData( 0 ), pAttr( 0 )
+    : SwUndo( UNDO_INSSECTION ), SwUndRng( rPam ),
+    pHistory( 0 ), pRedlData( 0 ), pAttr( 0 ), nSectNodePos( 0 )
 {
     if( rNew.ISA( SwTOXBaseSection ))
     {
@@ -131,7 +131,7 @@ SwUndoInsSection::SwUndoInsSection( const SwPaM& rPam, const SwSection& rNew,
     SwDoc& rDoc = *(SwDoc*)rPam.GetDoc();
     if( rDoc.IsRedlineOn() )
     {
-        pRedlData = new SwRedlineData( IDocumentRedlineAccess::REDLINE_INSERT,
+        pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT,
                                         rDoc.GetRedlineAuthor() );
         SetRedlineMode( rDoc.GetRedlineMode() );
     }
@@ -235,14 +235,14 @@ void SwUndoInsSection::Redo( SwUndoIter& rUndoIter )
     SwSectionNode* pSectNd = rDoc.GetNodes()[ nSectNodePos ]->GetSectionNode();
     if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
     {
-        IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
-        rDoc.SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE));
+        RedlineMode_t eOld = rDoc.GetRedlineMode();
+        rDoc.SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
 
         SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, 1 );
         rDoc.AppendRedline( new SwRedline( *pRedlData, aPam ), true);
         rDoc.SetRedlineMode_intern( eOld );
     }
-    else if( !( IDocumentRedlineAccess::REDLINE_IGNORE & GetRedlineMode() ) &&
+    else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
             rDoc.GetRedlineTbl().Count() )
     {
         SwPaM aPam( *pSectNd->EndOfSectionNode(), *pSectNd, 1 );
@@ -349,8 +349,7 @@ void SwUndoDelSection::Undo( SwUndoIter& rUndoIter )
     if( pSection->ISA( SwTOXBaseSection ))
     {
         const SwTOXBase& rBase = *(SwTOXBaseSection*)pSection;
-        SwTOXBaseSection* pBaseSect =  (SwTOXBaseSection*)rDoc.InsertTableOf(
-                                        nSttNd, nEndNd-2, rBase, pAttr );
+        rDoc.InsertTableOf( nSttNd, nEndNd-2, rBase, pAttr );
     }
     else
     {
