@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tocntntanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:09:16 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:08:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,10 @@
 #ifndef _DFLYOBJ_HXX
 #include <dflyobj.hxx>
 #endif
+
 using namespace objectpositioning;
+using namespace ::com::sun::star;
+
 
 SwToCntntAnchoredObjectPosition::SwToCntntAnchoredObjectPosition( SdrObject& _rDrawObj )
     : SwAnchoredObjectPosition ( _rDrawObj ),
@@ -301,7 +304,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
         const SwLayoutFrm& rPageAlignLayFrm =
                 aEnvOfObj.GetVertEnvironmentLayoutFrm( *pOrientFrm );
 
-        if ( aVert.GetVertOrient() != VERT_NONE )
+        if ( aVert.GetVertOrient() != text::VertOrientation::NONE )
         {
             // OD 22.09.2003 #i18732# - adjustments for follow text flow or not
             // AND vertical alignment at 'page areas'.
@@ -318,7 +321,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             SwTwips nLowerSpace = bVert ? rLR.GetLeft() : rUL.GetLower();
             switch ( aVert.GetVertOrient() )
             {
-                case VERT_CHAR_BOTTOM:
+                case text::VertOrientation::CHAR_BOTTOM:
                 {
                     if ( mbAnchorToChar )
                     {
@@ -330,12 +333,12 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     }
                 }
                 // no break here
-                case VERT_TOP:
+                case text::VertOrientation::TOP:
                 {
                     // OD 12.11.2003 #i22341# - special case for vertical
                     // alignment at top of line
                     if ( mbAnchorToChar &&
-                         aVert.GetRelationOrient() == REL_VERT_LINE )
+                         aVert.GetRelationOrient() == text::RelOrientation::TEXT_LINE )
                     {
                         nRelPosY -= (nObjHeight + nLowerSpace);
                     }
@@ -346,10 +349,10 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 }
                 break;
                 // OD 14.11.2003 #i22341#
-                case VERT_LINE_TOP:
+                case text::VertOrientation::LINE_TOP:
                 {
                     if ( mbAnchorToChar &&
-                         aVert.GetRelationOrient() == REL_VERT_LINE )
+                         aVert.GetRelationOrient() == text::RelOrientation::TEXT_LINE )
                     {
                         nRelPosY -= (nObjHeight + nLowerSpace);
                     }
@@ -360,16 +363,16 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     }
                 }
                 break;
-                case VERT_CENTER:
+                case text::VertOrientation::CENTER:
                 {
                     nRelPosY += (nAlignAreaHeight / 2) - (nObjHeight / 2);
                 }
                 break;
                 // OD 14.11.2003 #i22341#
-                case VERT_LINE_CENTER:
+                case text::VertOrientation::LINE_CENTER:
                 {
                     if ( mbAnchorToChar &&
-                         aVert.GetRelationOrient() == REL_VERT_LINE )
+                         aVert.GetRelationOrient() == text::RelOrientation::TEXT_LINE )
                     {
                         nRelPosY += (nAlignAreaHeight / 2) - (nObjHeight / 2);
                     }
@@ -380,10 +383,10 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     }
                 }
                 break;
-                case VERT_BOTTOM:
+                case text::VertOrientation::BOTTOM:
                 {
-                    if ( ( aVert.GetRelationOrient() == FRAME ||
-                           aVert.GetRelationOrient() == PRTAREA ) &&
+                    if ( ( aVert.GetRelationOrient() == text::RelOrientation::FRAME ||
+                           aVert.GetRelationOrient() == text::RelOrientation::PRINT_AREA ) &&
                          bNoSurround )
                     {
                         // bottom (aligned to 'paragraph areas')
@@ -394,7 +397,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                         // OD 12.11.2003 #i22341# - special case for vertical
                         // alignment at top of line
                         if ( mbAnchorToChar &&
-                             aVert.GetRelationOrient() == REL_VERT_LINE )
+                             aVert.GetRelationOrient() == text::RelOrientation::TEXT_LINE )
                         {
                             nRelPosY += nUpperSpace;
                         }
@@ -407,10 +410,10 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 }
                 break;
                 // OD 14.11.2003 #i22341#
-                case VERT_LINE_BOTTOM:
+                case text::VertOrientation::LINE_BOTTOM:
                 {
                     if ( mbAnchorToChar &&
-                         aVert.GetRelationOrient() == REL_VERT_LINE )
+                         aVert.GetRelationOrient() == text::RelOrientation::TEXT_LINE )
                     {
                         nRelPosY += nUpperSpace;
                     }
@@ -420,6 +423,8 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                                 "<SwToCntntAnchoredObjectPosition::CalcPosition()> - unknown combination of vertical position and vertical alignment." );
                     }
                 }
+                break;
+                default:
                 break;
             }
 
@@ -494,9 +499,9 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             // anchor character, the anchor frame determines the vertical position.
             if ( &rAnchorTxtFrm == pOrientFrm ||
                  ( rAnchorTxtFrm.FindPageFrm() == pOrientFrm->FindPageFrm() &&
-                   aVert.GetVertOrient() == VERT_NONE &&
-                   aVert.GetRelationOrient() != REL_CHAR &&
-                   aVert.GetRelationOrient() != REL_VERT_LINE ) )
+                   aVert.GetVertOrient() == text::VertOrientation::NONE &&
+                   aVert.GetRelationOrient() != text::RelOrientation::CHAR &&
+                   aVert.GetRelationOrient() != text::RelOrientation::TEXT_LINE ) )
             {
                 pUpperOfOrientFrm = rAnchorTxtFrm.GetUpper();
                 pAnchorFrmForVertPos = &rAnchorTxtFrm;
@@ -521,7 +526,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 pUpperOfOrientFrm = pSctFrm->GetUpper();
         }
 
-        if ( aVert.GetVertOrient() == VERT_NONE )
+        if ( aVert.GetVertOrient() == text::VertOrientation::NONE )
         {
             // local variable <nRelPosY> for calculation of relative vertical
             // distance to anchor.
@@ -533,13 +538,13 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
             // OD 12.11.2003 #i22341# - add special case for vertical alignment
             // at top of line.
             if ( mbAnchorToChar &&
-                 ( aVert.GetRelationOrient() == REL_CHAR ||
-                   aVert.GetRelationOrient() == REL_VERT_LINE ) )
+                 ( aVert.GetRelationOrient() == text::RelOrientation::CHAR ||
+                   aVert.GetRelationOrient() == text::RelOrientation::TEXT_LINE ) )
             {
                 // OD 2004-03-11 #i11860# - use new method <_GetTopForObjPos>
                 // to get top of frame for object positioning.
                 SwTwips nTopOfOrient = _GetTopForObjPos( *pOrientFrm, fnRect, bVert );
-                if ( aVert.GetRelationOrient() == REL_CHAR )
+                if ( aVert.GetRelationOrient() == text::RelOrientation::CHAR )
                 {
                     nVertOffsetToFrmAnchorPos = (*fnRect->fnYDiff)(
                                         (ToCharRect()->*fnRect->fnGetBottom)(),
@@ -564,7 +569,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                         _GetTopForObjPos( *pAnchorFrmForVertPos, fnRect, bVert );
                 // OD 02.10.2002 #102646# - increase <nRelPosY> by margin height,
                 // if position is vertical aligned to "paragraph text area"
-                if ( aVert.GetRelationOrient() == PRTAREA )
+                if ( aVert.GetRelationOrient() == text::RelOrientation::PRINT_AREA )
                 {
                     // OD 2004-03-11 #i11860# - consider upper space amount
                     // of previous frame
@@ -579,13 +584,13 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                 // OD 22.09.2003 #i18732# - adjust <nRelPosY> by difference
                 // between 'page area' and 'anchor' frame, if position is
                 // vertical aligned to 'page areas'
-                else if ( aVert.GetRelationOrient() == REL_PG_FRAME )
+                else if ( aVert.GetRelationOrient() == text::RelOrientation::PAGE_FRAME )
                 {
                     nVertOffsetToFrmAnchorPos += (*fnRect->fnYDiff)(
                                     (rPageAlignLayFrm.Frm().*fnRect->fnGetTop)(),
                                     nTopOfOrient );
                 }
-                else if ( aVert.GetRelationOrient() == REL_PG_PRTAREA )
+                else if ( aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA )
                 {
                     SwRect aPgPrtRect( rPageAlignLayFrm.Frm() );
                     if ( rPageAlignLayFrm.IsPageFrm() )
@@ -695,8 +700,8 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                         // which are anchored inside a table, doesn't follow
                         // the text flow.
                         if ( DoesObjFollowsTextFlow() &&
-                             !( aVert.GetRelationOrient() == REL_PG_FRAME ||
-                                aVert.GetRelationOrient() == REL_PG_PRTAREA ) &&
+                             !( aVert.GetRelationOrient() == text::RelOrientation::PAGE_FRAME ||
+                                aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA ) &&
                              !GetAnchorFrm().IsInTab() )
                         // <--
                         {
@@ -770,7 +775,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
                     }
                 } // end of <while ( nRelPosY )>
             } // end of else <nRelPosY <= 0>
-        } // end of <aVert.GetVertOrient() == VERT_NONE>
+        } // end of <aVert.GetVertOrient() == text::VertOrientation::NONE>
 
         //Damit das Teil ggf. auf die richtige Seite gestellt und in die
         //PrtArea des LayLeaf gezogen werden kann, muss hier seine
@@ -840,8 +845,8 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
         }
 
         if ( DoesObjFollowsTextFlow() &&
-             !( aVert.GetRelationOrient() == REL_PG_FRAME ||
-                aVert.GetRelationOrient() == REL_PG_PRTAREA ) )
+             !( aVert.GetRelationOrient() == text::RelOrientation::PAGE_FRAME ||
+                aVert.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA ) )
         {
 
             nDist = (GetAnchoredObj().GetObjRect().*fnRect->fnBottomDist)(
@@ -1051,7 +1056,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
         // (including the xml-filter)
         {
             SwTwips nAttrRelPosX = nRelPosX - nHoriOffsetToFrmAnchorPos;
-            if ( aHori.GetHoriOrient() != HORI_NONE &&
+            if ( aHori.GetHoriOrient() != text::HoriOrientation::NONE &&
                  aHori.GetPos() != nAttrRelPosX )
             {
                 aHori.SetPos( nAttrRelPosX );
