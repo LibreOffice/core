@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:05:08 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:59:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,8 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 
 public:
 
+    using SotObject::GetInterface;
+
     // aber selbst implementieren
     SFX_DECL_INTERFACE(SW_DOCSHELL)
     SFX_DECL_OBJECTFACTORY()
@@ -170,6 +172,7 @@ public:
 
     // OLE-Geraffel
     virtual void      SetVisArea( const Rectangle &rRect );
+    using SfxObjectShell::GetVisArea;
     virtual Rectangle GetVisArea( USHORT nAspect ) const;
     virtual Printer  *GetDocumentPrinter();
     virtual OutputDevice* GetDocumentRefDev();
@@ -218,6 +221,7 @@ public:
                         USHORT nIdx2 = INDEX_IGNORE,
                         USHORT nIdx3 = INDEX_IGNORE);
 
+    using SfxObjectShell::GetStyleFamilyBitmap;
     virtual Bitmap      GetStyleFamilyBitmap( SfxStyleFamily eFamily, BmpColorMode eColorMode );
 
     // View setzen fuer Aktionen ueber Shell
