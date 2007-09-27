@@ -4,9 +4,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:15:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:49:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,7 @@ static const char * const components[] =
     , SAL_MODULENAME( "ucpfile1" )
     , SAL_MODULENAME( "cfgmgr2" )
     , "sax.uno" SAL_DLLEXTENSION
-    , "typeconverter.uno" SAL_DLLEXTENSION
+    , "stocservices.uno" SAL_DLLEXTENSION
     , SAL_MODULENAME( "fileacc" )
     , SAL_MODULENAME( "mcnttype" )          //Clipboard   Ask Oliver Braun
     , "i18npool.uno" SAL_DLLEXTENSION
