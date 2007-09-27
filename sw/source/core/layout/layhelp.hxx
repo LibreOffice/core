@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layhelp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:27:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:04:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,8 +235,8 @@ class SwFlyCache : public SwRect // position and size
 public:
     ULONG nOrdNum;      // Id to recognize text frames
     USHORT nPageNum;    // page number
-    SwFlyCache( USHORT nP, ULONG nO, long nX, long nY, long nW, long nH ) :
-        SwRect( nX, nY, nW, nH ), nOrdNum( nO ), nPageNum( nP ){}
+    SwFlyCache( USHORT nP, ULONG nO, long nXL, long nYL, long nWL, long nHL ) :
+        SwRect( nXL, nYL, nWL, nHL ), nOrdNum( nO ), nPageNum( nP ){}
 };
 
 #endif
