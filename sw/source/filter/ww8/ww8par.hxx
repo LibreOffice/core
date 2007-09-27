@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:46:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:04:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,6 +263,7 @@ private:
 protected:
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
         SwFltStackEntry* pEntry);
+
 public:
     SwWW8FltControlStack(SwDoc* pDo, ULONG nFieldFl, SwWW8ImplReader& rReader_ )
         : SwFltControlStack( pDo, nFieldFl ), rReader( rReader_ ),
@@ -270,8 +271,9 @@ public:
     {}
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr);
-    void SetAttr(const SwPosition& rPos, USHORT nAttrId=0, bool bTstEnde=true,
-        long nHand=LONG_MAX);
+
+    virtual void SetAttr(const SwPosition& rPos, USHORT nAttrId=0, BOOL bTstEnde=TRUE, long nHand=LONG_MAX);
+
     void SetToggleAttr(BYTE nId, bool bOn)
     {
         if( bOn )
@@ -279,7 +281,9 @@ public:
         else
             nToggleAttrFlags &= ~(1 << nId);
     }
+
     USHORT GetToggleAttrFlags() const { return nToggleAttrFlags; }
+
     void SetToggleBiDiAttr(BYTE nId, bool bOn)
     {
         if( bOn )
@@ -287,6 +291,7 @@ public:
         else
             nToggleBiDiAttrFlags &= ~(1 << nId);
     }
+
     USHORT GetToggleBiDiAttrFlags() const { return nToggleBiDiAttrFlags; }
     void SetToggleAttrFlags(USHORT nFlags) { nToggleAttrFlags = nFlags; }
     void SetToggleBiDiAttrFlags(USHORT nFlags) {nToggleBiDiAttrFlags = nFlags;}
@@ -497,6 +502,8 @@ private:
     WW8FormulaCheckBox& operator=(const WW8FormulaCheckBox&);
 public:
     WW8FormulaCheckBox(SwWW8ImplReader &rR);
+
+    using OCX_Control::Import;
     virtual sal_Bool Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
         com::sun::star::uno::Reference <
@@ -512,6 +519,8 @@ private:
     WW8FormulaListBox& operator=(const WW8FormulaListBox&);
 public:
     WW8FormulaListBox(SwWW8ImplReader &rR);
+
+    using OCX_Control::Import;
     virtual sal_Bool Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
         com::sun::star::uno::Reference <
@@ -530,6 +539,7 @@ public:
 #if 0
     //#i3029# we are no longer importing editboxes as uno textboxes, using
     //input fields instead for superior layout.
+    using OCX_Control::Import;
     virtual sal_Bool Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
         com::sun::star::uno::Reference <
@@ -1306,7 +1316,7 @@ private:
     RndStdIds ProcessEscherAlign(SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
         SfxItemSet &rFlySet, bool bOrgObjectWasReplace);
     bool MiserableRTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
-        SwHoriOrient eHoriOri, SwRelationOrient eHoriRel);
+        sal_Int16 eHoriOri, sal_Int16 eHoriRel);
     SwFrmFmt* Read_GrafLayer( long nGrafAnchorCp );
     SwFlyFrmFmt* ImportReplaceableDrawables( SdrObject* &rpObject,
         SdrObject* &rpOurNewObject, SvxMSDffImportRec* pRecord, WW8_FSPA *pF,
@@ -1455,7 +1465,7 @@ public:     // eigentlich private, geht aber leider nur public
     // Revision Marks ( == Redlining )
 
     // insert or delete content (change char attributes resp.)
-    void Read_CRevisionMark(IDocumentRedlineAccess::RedlineType_t eType, const BYTE* pData, short nLen);
+    void Read_CRevisionMark(RedlineType_t eType, const BYTE* pData, short nLen);
     // insert new content
     void Read_CFRMark(USHORT , const BYTE* pData, short nLen);
     // delete old content
@@ -1581,12 +1591,12 @@ void SyncIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt);
 long GetListFirstLineIndent(const SwNumFmt &rFmt);
 String BookmarkToWriter(const String &rBookmark);
 bool RTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
-    SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, SwTwips nPageLeft,
+    sal_Int16 eHoriOri, sal_Int16 eHoriRel, SwTwips nPageLeft,
     SwTwips nPageRight, SwTwips nPageSize);
 void MatchEscherMirrorIntoFlySet(const SvxMSDffImportRec &rRecord,
     SfxItemSet &rFlySet);
 bool RTLDrawingsHack(long &rLeft, long nWidth,
-    SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, SwTwips nPageLeft,
+    sal_Int16 eHoriOri, sal_Int16 eHoriRel, SwTwips nPageLeft,
     SwTwips nPageRight, SwTwips nPageSize);
 #endif
 
