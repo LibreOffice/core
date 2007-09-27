@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-29 16:19:45 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:18:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,12 +136,11 @@
 #include <undobj.hxx>
 // <- #111827#
 
+#include <unomid.h>
 #include <svtools/languageoptions.hxx>
-
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
 
 /*--------------------------------------------------------------------------
 
@@ -400,28 +399,28 @@ SwSpellPopup::SwSpellPopup(
 
         aDics = xDicList->getDictionaries();
         const uno::Reference< linguistic2::XDictionary >  *pDic = aDics.getConstArray();
-        sal_Int32 nDicCount = aDics.getLength();
+        USHORT nDicCount = static_cast< USHORT >(aDics.getLength());
 
         sal_Int16 nLanguage = LANGUAGE_NONE;
         if (xSpellAlt.is())
             nLanguage = SvxLocaleToLanguage( xSpellAlt->getLocale() );
 
-        for( sal_Int32 i = 0; i < nDicCount; i++ )
+        for( USHORT i = 0; i < nDicCount; i++ )
         {
-            uno::Reference< linguistic2::XDictionary1 >  xDic( pDic[i], uno::UNO_QUERY );
-            if (!xDic.is() || SvxGetIgnoreAllList() == xDic)
+            uno::Reference< linguistic2::XDictionary1 >  xDicTmp( pDic[i], uno::UNO_QUERY );
+            if (!xDicTmp.is() || SvxGetIgnoreAllList() == xDicTmp)
                 continue;
 
-            uno::Reference< frame::XStorable > xStor( xDic, uno::UNO_QUERY );
-            LanguageType nActLanguage = xDic->getLanguage();
-            if( xDic->isActive()
-                &&  xDic->getDictionaryType() != linguistic2::DictionaryType_NEGATIVE
+            uno::Reference< frame::XStorable > xStor( xDicTmp, uno::UNO_QUERY );
+            LanguageType nActLanguage = xDicTmp->getLanguage();
+            if( xDicTmp->isActive()
+                &&  xDicTmp->getDictionaryType() != linguistic2::DictionaryType_NEGATIVE
                 && (nLanguage == nActLanguage || LANGUAGE_NONE == nActLanguage )
                 && (!xStor.is() || !xStor->isReadonly()) )
             {
                 // the extra 1 is because of the (possible) external
                 // linguistic entry above
-                pMenu->InsertItem( MN_INSERT_START + i + 1, xDic->getName() );
+                pMenu->InsertItem( MN_INSERT_START + i + 1, xDicTmp->getName() );
                 bEnable = sal_True;
             }
         }
@@ -435,7 +434,7 @@ SwSpellPopup::SwSpellPopup(
 /*--------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------*/
-sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Rectangle& rWordPos )
+sal_uInt16  SwSpellPopup::Execute( const Rectangle& rWordPos, Window* pWin )
 {
 //    SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
     sal_uInt16 nRet = PopupMenu::Execute(pWin, pWin->LogicToPixel(rWordPos));
@@ -493,7 +492,7 @@ void SwSpellPopup::Execute( USHORT nId )
                 aRewriter.AddRule(UNDO_ARG3, aTmpStr);
             }
 
-            pSh->StartUndo(UIUNDO_REPLACE, &aRewriter);
+            pSh->StartUndo(UNDO_UI_REPLACE, &aRewriter);
             pSh->StartAction();
             pSh->DelLeft();
 
@@ -525,7 +524,7 @@ void SwSpellPopup::Execute( USHORT nId )
                of temporary auto correction is now undoable two and
                must reside in the same undo group.*/
             pSh->EndAction();
-            pSh->EndUndo(UIUNDO_REPLACE);
+            pSh->EndUndo(UNDO_UI_REPLACE);
 
             pSh->SetInsMode( bOldIns );
         }
@@ -546,7 +545,7 @@ void SwSpellPopup::Execute( USHORT nId )
                 case MN_IGNORE :
                 {
                     uno::Reference< linguistic2::XDictionary > xDictionary( SvxGetIgnoreAllList(), uno::UNO_QUERY );
-                    sal_Int16 nAddRes = SvxAddEntryToDic(
+                    SvxAddEntryToDic(
                             xDictionary,
                             xSpellAlt->getWord(), sal_False,
                             aEmptyStr, LANGUAGE_NONE );
