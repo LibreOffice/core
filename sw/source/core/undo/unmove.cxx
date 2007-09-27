@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unmove.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:20:45 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:31:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
         if( 0 != ( pCNd = aMkPos.nNode.GetNode().GetCntntNode() ))
             aMkPos.nContent.Assign( pCNd, 0 );
 
-        DelCntntIndex( aMkPos, aPtPos, SwUndoSaveCntnt::DELCNT_FTN );
+        DelCntntIndex( aMkPos, aPtPos, nsDelCntntType::DELCNT_FTN );
 
         if( pHistory && !pHistory->Count() )
             DELETEZ( pHistory );
@@ -354,7 +354,7 @@ void SwUndoMove::DelFtn( const SwPaM& rRange )
     {
         // loesche alle Fussnoten. Diese sind dort nicht erwuenscht.
         DelCntntIndex( *rRange.GetMark(), *rRange.GetPoint(),
-                            SwUndoSaveCntnt::DELCNT_FTN );
+                            nsDelCntntType::DELCNT_FTN );
 
         if( pHistory && !pHistory->Count() )
             delete pHistory, pHistory = 0;
@@ -367,7 +367,7 @@ void SwUndoMove::AddTblMrgFlyHstry( SwHistory& rHstr )
         pHistory = new SwHistory;
 
     USHORT nInsPos = nFtnStt;
-    nFtnStt += rHstr.Count();
+    nFtnStt = nFtnStt + rHstr.Count();
     pHistory->Move( nInsPos, &rHstr );
 }
 
