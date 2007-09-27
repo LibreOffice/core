@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 14:26:31 $
+#   last change: $Author: hr $ $Date: 2007-09-27 13:38:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -136,27 +136,24 @@ HELPERTYPES:=com.sun.star.uno.XReference;com.sun.star.uno.XAdapter;com.sun.star.
 FACTORYTYPES:=com.sun.star.lang.XComponent;com.sun.star.registry.XSimpleRegistry;com.sun.star.lang.XInitialization;com.sun.star.lang.XMultiServiceFactory;com.sun.star.loader.XImplementationLoader;com.sun.star.registry.XImplementationRegistration;com.sun.star.container.XSet;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XSingleComponentFactory;com.sun.star.lang.XMultiComponentFactory
 
 .IF "$(OS)" == "WNT" || "$(OS)" == "OS2"
-UNO_PATH = $(SOLARBINDIR)
-UNO_OUT = $(OUT)$/bin
+UNO_PATH := $(SOLARBINDIR)
+UNO_OUT := $(OUT)$/bin
+EXT_SO  := .dll
 .ELSE
-UNO_PATH = $(SOLARLIBDIR)
-UNO_OUT = $(OUT)$/lib
+UNO_PATH := $(SOLARLIBDIR)
+UNO_OUT  := $(OUT)$/lib
+EXT_SO   := .so
 .ENDIF
 
-$(BIN)$/cpputest.rdb: $(ALLIDLFILES)
-    idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $?
+$(UNO_OUT)$/%$(EXT_SO): $(UNO_PATH)$/%$(EXT_SO)
+    $(COPY) $^ $@
+
+$(BIN)$/cpputest.rdb: $(ALLIDLFILES) $(UNO_OUT)$/invocadapt.uno$(EXT_SO) $(UNO_OUT)$/bootstrap.uno$(EXT_SO)
+    idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $(ALLIDLFILES)
     regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
     regmerge $@ / $(UNOUCRRDB)
     regcomp -register -r $@ -c reflection.uno$(DLLPOST)
     touch $@
-    $(COPY) $(UNO_PATH)$/servicemgr.uno* $(UNO_OUT)
-    $(COPY) $(UNO_PATH)$/shlibloader.uno* $(UNO_OUT)
-    $(COPY) $(UNO_PATH)$/simplereg.uno* $(UNO_OUT)
-    $(COPY) $(UNO_PATH)$/nestedreg.uno* $(UNO_OUT)
-    $(COPY) $(UNO_PATH)$/typemgr.uno* $(UNO_OUT)
-    $(COPY) $(UNO_PATH)$/regtypeprov.uno* $(UNO_OUT)
-    $(COPY) $(UNO_PATH)$/implreg.uno* $(UNO_OUT)
-    $(COPY) $(UNO_PATH)$/security.uno* $(UNO_OUT)
 
 unoheader: $(BIN)$/cpputest.rdb
     cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TYPES);$(HELPERTYPES)" $(BIN)$/cpputest.rdb
