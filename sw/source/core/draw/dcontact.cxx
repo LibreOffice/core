@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:51:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:42:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,9 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
+using namespace ::com::sun::star;
+
+
 TYPEINIT1( SwContact, SwClient )
 TYPEINIT1( SwFlyDrawContact, SwContact )
 TYPEINIT1( SwDrawContact, SwContact )
@@ -248,7 +251,7 @@ SwContact* GetUserCall( const SdrObject* pObj )
 }
 
 // liefert TRUE falls das SrdObject ein Marquee-Object (Lauftext) ist
-FASTBOOL IsMarqueeTextObj( const SdrObject& rObj )
+BOOL IsMarqueeTextObj( const SdrObject& rObj )
 {
     SdrTextAniKind eTKind;
     return SdrInventor == rObj.GetObjInventor() &&
@@ -532,7 +535,7 @@ sal_uInt32 SwContact::GetMaxOrdNum() const
 |*
 |*************************************************************************/
 
-SwFlyDrawContact::SwFlyDrawContact( SwFlyFrmFmt *pToRegisterIn, SdrModel *pMod ) :
+SwFlyDrawContact::SwFlyDrawContact( SwFlyFrmFmt *pToRegisterIn, SdrModel * ) :
     SwContact( pToRegisterIn )
 {
     // OD 2004-04-01 #i26791# - class <SwFlyDrawContact> contains the 'master'
@@ -700,7 +703,7 @@ sal_uInt32 SwFlyDrawContact::_GetOrdNumForNewRef( const SwFlyFrm* _pFlyFrm )
 |*
 |*************************************************************************/
 
-void SwFlyDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwFlyDrawContact::Modify( SfxPoolItem *, SfxPoolItem * )
 {
 }
 
@@ -1354,7 +1357,7 @@ class NestedUserCallHdl
         {
             if ( IsNestedUserCall() )
             {
-                bool bAssert( true );
+                bool bTmpAssert( true );
                 // Currently its known, that a nested event SDRUSERCALL_RESIZE
                 // could occur during parent user call SDRUSERCALL_INSERTED,
                 // SDRUSERCALL_DELETE and SDRUSERCALL_RESIZE for edge objects.
@@ -1366,15 +1369,15 @@ class NestedUserCallHdl
                        meParentUserCallEventType == SDRUSERCALL_RESIZE ) &&
                      mpDrawContact->meEventTypeOfCurrentUserCall == SDRUSERCALL_RESIZE )
                 {
-                    bAssert = false;
+                    bTmpAssert = false;
                 }
                 else if ( meParentUserCallEventType == SDRUSERCALL_CHILD_RESIZE &&
                           mpDrawContact->meEventTypeOfCurrentUserCall == SDRUSERCALL_CHILD_RESIZE )
                 {
-                    bAssert = false;
+                    bTmpAssert = false;
                 }
 
-                if ( bAssert )
+                if ( bTmpAssert )
                 {
                     ASSERT( false,
                             "<SwDrawContact::_Changed(..)> - unknown nested <UserCall> event. This is serious, please inform OD." );
@@ -1553,13 +1556,13 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 if ( nYPosDiff != 0 )
                 {
 
-                    if ( rVert.GetRelationOrient() == REL_CHAR ||
-                         rVert.GetRelationOrient() == REL_VERT_LINE )
+                    if ( rVert.GetRelationOrient() == text::RelOrientation::CHAR ||
+                         rVert.GetRelationOrient() == text::RelOrientation::TEXT_LINE )
                     {
                         nYPosDiff = -nYPosDiff;
                     }
                     aSet.Put( SwFmtVertOrient( rVert.GetPos()+nYPosDiff,
-                                               VERT_NONE,
+                                               text::VertOrientation::NONE,
                                                rVert.GetRelationOrient() ) );
                 }
 
@@ -1567,7 +1570,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 if ( !bAnchoredAsChar && nXPosDiff != 0 )
                 {
                     aSet.Put( SwFmtHoriOrient( rHori.GetPos()+nXPosDiff,
-                                               HORI_NONE,
+                                               text::HoriOrientation::NONE,
                                                rHori.GetRelationOrient() ) );
                 }
 
@@ -1620,6 +1623,8 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 lcl_NotifyBackgroundOfObj( *this, rObj, pOldBoundRect );
             }
             break;
+        default:
+            break;
     }
 }
 
@@ -1632,7 +1637,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
 |*
 |*************************************************************************/
 
-void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwDrawContact::Modify( SfxPoolItem *, SfxPoolItem *pNew )
 {
     // OD 10.10.2003 #112299#
     ASSERT( !mbDisconnectInProgress,
@@ -2114,9 +2119,9 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                 }
             }
             break;
-#ifndef PRODUCT
-        default:    ASSERT( FALSE, "Unknown Anchor." );
-#endif
+        default:
+            ASSERT( FALSE, "Unknown Anchor." )
+            break;
     }
     if ( GetAnchorFrm() )
     {
@@ -2413,7 +2418,7 @@ sal_Bool SwDrawVirtObj::DoPaintObject( XOutputDevice& rOut,
                                        const SdrPaintInfoRec& rInfoRec ) const
 
 {
-    sal_Bool bRetval;
+    sal_Bool bRetval = sal_True;
     const SdrObject& rReferencedObject = GetReferencedObj();
 
     // rescue offset and set new one
@@ -2458,7 +2463,7 @@ sal_Bool SwDrawVirtObj::DoPaintObject( XOutputDevice& rOut,
 SdrObject* SwDrawVirtObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
 {
     Point aPnt(rPnt - GetOffset());
-    FASTBOOL bRet = rRefObj.CheckHit(aPnt, nTol, pVisiLayer) != NULL;
+    BOOL bRet = rRefObj.CheckHit(aPnt, nTol, pVisiLayer) != NULL;
 
     return bRet ? (SdrObject*)this : NULL;
 }
