@@ -4,9 +4,9 @@
  *
  *  $RCSfile: delete.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:56:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:52:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ long SwWrtShell::DelLeft()
 {
     // wenns denn ein Fly ist, wech damit
     int nSelType = GetSelectionType();
-    const int nCmp = SEL_FRM | SEL_GRF | SEL_OLE | SEL_DRW;
+    const int nCmp = nsSelectionType::SEL_FRM | nsSelectionType::SEL_GRF | nsSelectionType::SEL_OLE | nsSelectionType::SEL_DRW;
     if( nCmp & nSelType )
     {
         /*  #108205# Remember object's position. */
@@ -256,24 +256,24 @@ long SwWrtShell::DelLeft()
     return nRet;
 }
 
-long SwWrtShell::DelRight(BOOL bDelFrm)
+long SwWrtShell::DelRight()
 {
         // werden verodert, wenn Tabellenselektion vorliegt;
-        // wird hier auf SEL_TBL umgesetzt.
+        // wird hier auf nsSelectionType::SEL_TBL umgesetzt.
     long nRet = 0;
     int nSelection = GetSelectionType();
-    if(nSelection & SwWrtShell::SEL_TBL_CELLS)
-        nSelection = SwWrtShell::SEL_TBL;
-    if(nSelection & SwWrtShell::SEL_TXT)
-        nSelection = SwWrtShell::SEL_TXT;
+    if(nSelection & nsSelectionType::SEL_TBL_CELLS)
+        nSelection = nsSelectionType::SEL_TBL;
+    if(nSelection & nsSelectionType::SEL_TXT)
+        nSelection = nsSelectionType::SEL_TXT;
 
     const SwTableNode * pWasInTblNd = NULL;
 
-    switch( nSelection & ~(SEL_BEZ) )
+    switch( nSelection & ~(nsSelectionType::SEL_BEZ) )
     {
-    case SEL_TXT:
-    case SEL_TBL:
-    case SEL_NUM:
+    case nsSelectionType::SEL_TXT:
+    case nsSelectionType::SEL_TBL:
+    case nsSelectionType::SEL_NUM:
             //  wenn eine Selektion existiert, diese loeschen.
         if( IsSelection() )
         {
@@ -292,7 +292,7 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
 
         pWasInTblNd = IsCrsrInTbl();
 
-        if( SEL_TXT & nSelection && SwCrsrShell::IsSttPara() &&
+        if( nsSelectionType::SEL_TXT & nSelection && SwCrsrShell::IsSttPara() &&
             SwCrsrShell::IsEndPara() )
         {
             // save cursor
@@ -363,12 +363,12 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
         CloseMark( 0 != nRet );
         break;
 
-    case SEL_FRM:
-    case SEL_GRF:
-    case SEL_OLE:
-    case SEL_DRW:
-    case SEL_DRW_TXT:
-    case SEL_DRW_FORM:
+    case nsSelectionType::SEL_FRM:
+    case nsSelectionType::SEL_GRF:
+    case nsSelectionType::SEL_OLE:
+    case nsSelectionType::SEL_DRW:
+    case nsSelectionType::SEL_DRW_TXT:
+    case nsSelectionType::SEL_DRW_FORM:
         {
             /*  #108205# Remember object's position. */
             Point aTmpPt = GetObjRect().TopLeft();
@@ -405,10 +405,10 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
         // <--
         {
             nSelection = GetSelectionType();
-            if ( SEL_FRM & nSelection ||
-                 SEL_GRF & nSelection ||
-                 SEL_OLE & nSelection ||
-                 SEL_DRW & nSelection )
+            if ( nsSelectionType::SEL_FRM & nSelection ||
+                 nsSelectionType::SEL_GRF & nSelection ||
+                 nsSelectionType::SEL_OLE & nSelection ||
+                 nsSelectionType::SEL_DRW & nSelection )
             {
                 EnterSelFrmMode();
                 GotoNextFly();
