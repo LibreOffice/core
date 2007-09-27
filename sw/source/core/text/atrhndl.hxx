@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrhndl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:50:29 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,11 +110,12 @@ private:
     const SfxPoolItem* pDefaultArray[ NUM_DEFAULT_VALUES ];
     const IDocumentSettingAccess* mpIDocumentSettingAccess;
     const ViewShell* mpShell;
-    sal_Bool bVertLayout;
 
     // This is the base font for the paragraph. It is stored in order to have
     // a template, if we have to restart the attribute evaluation
     SwFont* pFnt;
+
+    sal_Bool bVertLayout;
 
     // change font according to pool item
     void FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPush );
@@ -122,7 +123,7 @@ private:
     // push attribute to specified stack, returns true, if attribute has
     // been pushed on top of stack (important for stacks containing different
     // attributes with different priority and redlining)
-    sal_Bool Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem, SwFont& rFnt );
+    sal_Bool Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem );
 
     // apply top attribute on stack to font
     void ActivateTop( SwFont& rFnt, USHORT nStackPos );
