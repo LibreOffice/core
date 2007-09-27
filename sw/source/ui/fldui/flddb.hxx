@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddb.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:35:13 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,7 @@ public:
     virtual void        FillUserData();
     void                ActivateMailMergeAddress();
 
+    using SwFldPage::SetWrtShell;
     void                SetWrtShell(SwWrtShell& rSh);
 };
 
