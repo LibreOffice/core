@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:41:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:41:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,8 @@
 #include "docary.hxx"
 #include "ndindex.hxx"
 #include "undobj.hxx"
+
+using namespace ::com::sun::star;
 
 
 extern void ClearFEShellTabCols();
@@ -278,8 +280,8 @@ void lcl_CollectLines( SvPtrarr &rArr, const SwCursor& rCursor, bool bRemoveLine
     LinesAndTable aPara( rArr, rTable );
     _FndBox aFndBox( 0, 0 );
     {
-        _FndPara aPara( aBoxes, &aFndBox );
-        ((SwTableLines&)rTable.GetTabLines()).ForEach( &_FndLineCopyCol, &aPara );
+        _FndPara aTmpPara( aBoxes, &aFndBox );
+        ((SwTableLines&)rTable.GetTabLines()).ForEach( &_FndLineCopyCol, &aTmpPara );
     }
 
     //Diejenigen Lines einsammeln, die nur selektierte Boxen enthalten.
@@ -805,7 +807,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                         BOX_LINE_BOTTOM, BOX_LINE_TOP,
                         BOX_LINE_RIGHT, BOX_LINE_LEFT };
                     const USHORT* pBrd = aBorders;
-                    for( int i = 0; i < 4; ++i, ++pBrd )
+                    for( int k = 0; k < 4; ++k, ++pBrd )
                         aBox.SetDistance( pSetBox->GetDistance( *pBrd ), *pBrd );
                 }
 
@@ -825,14 +827,14 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
             bFirst = FALSE;
         }
 
-        SwHTMLTableLayout *pLayout = rTable.GetHTMLTableLayout();
-        if( pLayout )
+        SwHTMLTableLayout *pTableLayout = rTable.GetHTMLTableLayout();
+        if( pTableLayout )
         {
             SwCntntFrm* pFrm = rCursor.GetCntntNode()->GetFrm();
             SwTabFrm* pTabFrm = pFrm->ImplFindTabFrm();
 
-            pLayout->BordersChanged(
-                pLayout->GetBrowseWidthByTabFrm( *pTabFrm ), TRUE );
+            pTableLayout->BordersChanged(
+                pTableLayout->GetBrowseWidthByTabFrm( *pTabFrm ), TRUE );
         }
         SwTblFmtCmp::Delete( aFmtCmp );
         ::ClearFEShellTabCols();
@@ -922,14 +924,14 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
             }
         }
 
-        SwHTMLTableLayout *pLayout = rTable.GetHTMLTableLayout();
-        if( pLayout )
+        SwHTMLTableLayout *pTableLayout = rTable.GetHTMLTableLayout();
+        if( pTableLayout )
         {
             SwCntntFrm* pFrm = rCursor.GetCntntNode()->GetFrm();
             SwTabFrm* pTabFrm = pFrm->ImplFindTabFrm();
 
-            pLayout->BordersChanged(
-                pLayout->GetBrowseWidthByTabFrm( *pTabFrm ), TRUE );
+            pTableLayout->BordersChanged(
+                pTableLayout->GetBrowseWidthByTabFrm( *pTabFrm ), TRUE );
         }
         ::ClearFEShellTabCols();
         SetModified();
@@ -1123,13 +1125,13 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                     if( !bDistanceSet )     // bei 1. Durchlauf erstmal setzen
                     {
                         bDistanceSet = TRUE;
-                        for( int i = 0; i < 4; ++i, ++pBrd )
+                        for( int k = 0; k < 4; ++k, ++pBrd )
                             aSetBox.SetDistance( rBox.GetDistance( *pBrd ),
                                                 *pBrd );
                     }
                     else
                     {
-                        for( int i = 0; i < 4; ++i, ++pBrd )
+                        for( int k = 0; k < 4; ++k, ++pBrd )
                             if( aSetBox.GetDistance( *pBrd ) !=
                                 rBox.GetDistance( *pBrd ) )
                             {
@@ -1182,14 +1184,14 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
             }
         }
 
-        SwHTMLTableLayout *pLayout = rTable.GetHTMLTableLayout();
-        if( pLayout )
+        SwHTMLTableLayout *pTableLayout = rTable.GetHTMLTableLayout();
+        if( pTableLayout )
         {
             SwCntntFrm* pFrm = rCursor.GetCntntNode()->GetFrm();
             SwTabFrm* pTabFrm = pFrm->ImplFindTabFrm();
 
-            pLayout->Resize(
-                pLayout->GetBrowseWidthByTabFrm( *pTabFrm ), TRUE );
+            pTableLayout->Resize(
+                pTableLayout->GetBrowseWidthByTabFrm( *pTabFrm ), TRUE );
         }
         SwTblFmtCmp::Delete( aFmtCmp );
         SetModified();
@@ -1260,10 +1262,10 @@ BOOL SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) const
 #***********************************************************************/
 void SwDoc::SetBoxAlign( const SwCursor& rCursor, USHORT nAlign )
 {
-    ASSERT( nAlign == VERT_NONE   ||
-            nAlign == VERT_CENTER ||
-            nAlign == VERT_BOTTOM, "wrong alignment" );
-    SwFmtVertOrient aVertOri( 0, SwVertOrient(nAlign) );
+    ASSERT( nAlign == text::VertOrientation::NONE   ||
+            nAlign == text::VertOrientation::CENTER ||
+            nAlign == text::VertOrientation::BOTTOM, "wrong alignment" );
+    SwFmtVertOrient aVertOri( 0, nAlign );
     SetBoxAttr( rCursor, aVertOri );
 }
 
@@ -1278,7 +1280,7 @@ USHORT SwDoc::GetBoxAlign( const SwCursor& rCursor ) const
             const SwFmtVertOrient &rOri =
                             aBoxes[i]->GetFrmFmt()->GetVertOrient();
             if( USHRT_MAX == nAlign )
-                nAlign = rOri.GetVertOrient();
+                nAlign = static_cast<USHORT>(rOri.GetVertOrient());
             else if( rOri.GetVertOrient() != nAlign )
             {
                 nAlign = USHRT_MAX;
@@ -1402,7 +1404,7 @@ void lcl_CalcColValues( SvUShorts &rToFill, const SwTabCols &rCols,
 {
     SwSelUnions aUnions;
     ::MakeSelUnions( aUnions, pStart, pEnd,
-                    bWishValues ? TBLSEARCH_NONE : TBLSEARCH_COL );
+                    bWishValues ? nsSwTblSearchType::TBLSEARCH_NONE : nsSwTblSearchType::TBLSEARCH_COL );
 
     for ( USHORT i2 = 0; i2 < aUnions.Count(); ++i2 )
     {
@@ -1533,21 +1535,21 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, BOOL bBalance )
             if ( nDiff )
             {
                 if ( i == 0 )
-                    nWish += aTabCols[i] - aTabCols.GetLeft();
+                    nWish = static_cast<USHORT>( nWish + aTabCols[i] - aTabCols.GetLeft() );
                 else if ( i == aTabCols.Count() )
-                    nWish += aTabCols.GetRight() - aTabCols[i-1];
+                    nWish = static_cast<USHORT>(nWish + aTabCols.GetRight() - aTabCols[i-1] );
                 else
-                    nWish += aTabCols[i] - aTabCols[i-1];
+                    nWish = static_cast<USHORT>(nWish + aTabCols[i] - aTabCols[i-1] );
                 ++nCnt;
             }
         }
-        nWish /= nCnt;
+        nWish = nWish / nCnt;
         for ( i = 0; i < aWish.Count(); ++i )
             if ( aWish[i] )
                 aWish[i] = nWish;
     }
 
-    const USHORT nOldRight = aTabCols.GetRight();
+    const USHORT nOldRight = static_cast<USHORT>(aTabCols.GetRight());
 
     //Um die Impl. einfach zu gestalten, aber trotzdem in den meissten Faellen
     //den Platz richtig auszunutzen laufen wir zweimal.
@@ -1583,9 +1585,9 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, BOOL bBalance )
                 //auf das erlaubte Maximum.
                 if ( !bBalance && nTabRight > aTabCols.GetRightMax() )
                 {
-                    const long nTmp = nTabRight - aTabCols.GetRightMax();
-                    nDiff     -= nTmp;
-                    nTabRight -= nTmp;
+                    const long nTmpD = nTabRight - aTabCols.GetRightMax();
+                    nDiff     -= nTmpD;
+                    nTabRight -= nTmpD;
                 }
                 for ( USHORT i2 = i; i2 < aTabCols.Count(); ++i2 )
                     aTabCols[i2] += nDiff;
@@ -1594,7 +1596,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, BOOL bBalance )
         }
     }
 
-    const USHORT nNewRight = aTabCols.GetRight();
+    const USHORT nNewRight = static_cast<USHORT>(aTabCols.GetRight());
 
     //So, die richtige Arbeit koennen wir jetzt der SwTable ueberlassen.
     SetTabCols( aTabCols, FALSE, 0, (SwCellFrm*)pBoxFrm );
@@ -1606,10 +1608,10 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, BOOL bBalance )
     {
         SwFrmFmt *pFmt = pTblNd->GetTable().GetFrmFmt();
         const SwFmtHoriOrient &rHori = pFmt->GetHoriOrient();
-        if( rHori.GetHoriOrient() == HORI_FULL )
+        if( rHori.GetHoriOrient() == text::HoriOrientation::FULL )
         {
             SwFmtHoriOrient aHori( rHori );
-            aHori.SetHoriOrient( HORI_LEFT );
+            aHori.SetHoriOrient( text::HoriOrientation::LEFT );
             pFmt->SetAttr( aHori );
         }
     }
