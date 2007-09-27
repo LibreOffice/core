@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:29:48 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:11:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,10 +99,10 @@ SvXMLImportContext *SvXMLItemSetContext::CreateChildContext( USHORT nPrefix,
 */
 SvXMLImportContext *SvXMLItemSetContext::CreateChildContext( USHORT nPrefix,
                                    const rtl::OUString& rLocalName,
-                                   const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-                                    SfxItemSet&  rItemSet,
-                                   const SvXMLItemMapEntry& rEntry,
-                                   const SvXMLUnitConverter& rUnitConv )
+                                   const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/,
+                                    SfxItemSet&  /*rItemSet*/,
+                                   const SvXMLItemMapEntry& /*rEntry*/,
+                                   const SvXMLUnitConverter& /*rUnitConv*/ )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
