@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:58:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     if( !pRoot )
         GetDoc()->SetRootFrm( pRoot = new SwRootFrm( pDoc->GetDfltFrmFmt(), this ) );
 
-    SizeChgNotify( pRoot->Frm().SSize() );
+    SizeChgNotify();
 
     // --> #i31958#
     // XForms mode: initialize XForms mode, based on design mode (draw view)
@@ -202,23 +202,24 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
 ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
                         const SwViewOption *pNewOpt, OutputDevice *pOutput,
                         long nFlags )
-    : pDoc( &rDocument ),
-    pOpt( 0 ),
-    pAccOptions( new SwAccessibilityOptions ),
+    :
+    aBrowseBorder(),
+    pSfxViewShell( 0 ),
+    pImp( new SwViewImp( this ) ),
     pWin( pWindow ),
     pOut( pOutput ? pOutput
                   : pWindow ? (OutputDevice*)pWindow
                             : (OutputDevice*)rDocument.getPrinter( true )),
     mpTmpRef( 0 ),
+    pOpt( 0 ),
+    pAccOptions( new SwAccessibilityOptions ),
+    mpTargetPaintWindow(0), // #i74769#
+    mpBufferedOut(0), // #i74769#
+    pDoc( &rDocument ),
     nStartAction( 0 ),
     nLockPaint( 0 ),
     mnPrePostPaintCount(0L), // #i72754#
-    mpPrePostOutDev(0), // #i72754#
-    pSfxViewShell( 0 ),
-    pImp( new SwViewImp( this ) ),
-    aBrowseBorder(),
-    mpTargetPaintWindow(0), // #i74769#
-    mpBufferedOut(0) // #i74769#
+    mpPrePostOutDev(0) // #i72754#
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
 
@@ -282,7 +283,9 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
 ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
                         OutputDevice *pOutput, long nFlags ) :
     Ring( &rShell ),
-    pDoc( rShell.GetDoc() ),
+    aBrowseBorder( rShell.GetBrowseBorder() ),
+    pSfxViewShell( 0 ),
+    pImp( new SwViewImp( this ) ),
     pWin( pWindow ),
     pOut( pOutput ? pOutput
                   : pWindow ? (OutputDevice*)pWindow
@@ -290,15 +293,13 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     mpTmpRef( 0 ),
     pOpt( 0 ),
     pAccOptions( new SwAccessibilityOptions ),
+    mpTargetPaintWindow(0), // #i74769#
+    mpBufferedOut(0), // #i74769#
+    pDoc( rShell.GetDoc() ),
     nStartAction( 0 ),
     nLockPaint( 0 ),
     mnPrePostPaintCount(0L), // #i72754#
-    mpPrePostOutDev(0), // #i72754#
-    pSfxViewShell( 0 ),
-    pImp( new SwViewImp( this ) ),
-    aBrowseBorder( rShell.GetBrowseBorder() ),
-    mpTargetPaintWindow(0), // #i74769#
-    mpBufferedOut(0) // #i74769#
+    mpPrePostOutDev(0) // #i72754#
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
 
