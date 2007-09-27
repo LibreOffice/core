@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:01:48 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:13:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,7 @@ SwAttrIter::~SwAttrIter()
  * GetAttr() das entartete Attribut.
  *************************************************************************/
 
-SwTxtAttr *SwAttrIter::GetAttr( const xub_StrLen nPos ) const
+SwTxtAttr *SwAttrIter::GetAttr( const xub_StrLen nPosition ) const
 {
     if( pHints )
     {
@@ -205,9 +205,9 @@ SwTxtAttr *SwAttrIter::GetAttr( const xub_StrLen nPos ) const
         {
             SwTxtAttr *pPos = pHints->GetHt(i);
             xub_StrLen nStart = *pPos->GetStart();
-            if( nPos < nStart )
+            if( nPosition < nStart )
                 return 0;
-            if( nPos == nStart && !pPos->GetEnd() )
+            if( nPosition == nStart && !pPos->GetEnd() )
                 return pPos;
         }
     }
@@ -218,7 +218,7 @@ SwTxtAttr *SwAttrIter::GetAttr( const xub_StrLen nPos ) const
  *                        SwAttrIter::SeekAndChg()
  *************************************************************************/
 
-sal_Bool SwAttrIter::SeekAndChg( const xub_StrLen nNewPos, OutputDevice* pOut )
+sal_Bool SwAttrIter::SeekAndChgAttrIter( const xub_StrLen nNewPos, OutputDevice* pOut )
 {
     sal_Bool bChg = nStartIndex && nNewPos == nPos ? pFnt->IsFntChg() : Seek( nNewPos );
     if ( pLastOut != pOut )
@@ -252,7 +252,7 @@ sal_Bool SwAttrIter::IsSymbol( const xub_StrLen nNewPos )
  *                        SwAttrIter::SeekStartAndChg()
  *************************************************************************/
 
-sal_Bool SwAttrIter::SeekStartAndChg( OutputDevice* pOut, const sal_Bool bParaFont )
+sal_Bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool bParaFont )
 {
     if ( pRedln && pRedln->ExtOn() )
         pRedln->LeaveExtend( *pFnt, 0 );
@@ -268,7 +268,7 @@ sal_Bool SwAttrIter::SeekStartAndChg( OutputDevice* pOut, const sal_Bool bParaFo
     {
         pRedln->Clear( pFnt );
         if( !bParaFont )
-            nChgCnt += pRedln->Seek( *pFnt, 0, STRING_LEN );
+            nChgCnt = nChgCnt + pRedln->Seek( *pFnt, 0, STRING_LEN );
         else
             pRedln->Reset();
     }
@@ -287,7 +287,7 @@ sal_Bool SwAttrIter::SeekStartAndChg( OutputDevice* pOut, const sal_Bool bParaFo
         }
     }
 
-    register sal_Bool bChg = pFnt->IsFntChg();
+    sal_Bool bChg = pFnt->IsFntChg();
     if ( pLastOut != pOut )
     {
         pLastOut = pOut;
@@ -391,7 +391,7 @@ sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
     pFnt->SetActual( SwScriptInfo::WhichFont( nNewPos, 0, pScriptInfo ) );
 
     if( pRedln )
-        nChgCnt += pRedln->Seek( *pFnt, nNewPos, nPos );
+        nChgCnt = nChgCnt + pRedln->Seek( *pFnt, nNewPos, nPos );
     nPos = nNewPos;
 
     if( nPropFont )
@@ -427,7 +427,7 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
  *                      SwAttrIter::Dump()
  *************************************************************************/
 
-void SwAttrIter::Dump( SvStream &rOS ) const
+void SwAttrIter::Dump( SvStream &/*rOS*/ ) const
 {
 // Noch nicht an den neuen Attributiterator angepasst ...
 }
@@ -578,7 +578,7 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
         }
 
         const SwFmtHoriOrient& rOrient = ((SwFrmFmt*)rpNd)->GetHoriOrient();
-        SwHoriOrient eHoriOri = rOrient.GetHoriOrient();
+        sal_Int16 eHoriOri = rOrient.GetHoriOrient();
 
         long nDiff;
         if( pLayout )
@@ -625,7 +625,7 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
         // wird dieser Teil hinzuaddiert.
         switch( eHoriOri )
         {
-            case HORI_RIGHT:
+            case text::HoriOrientation::RIGHT:
             {
                 if( nDiff )
                 {
@@ -633,7 +633,7 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
                         ((SwMinMaxNodeArgs*)pArgs)->nRightDiff;
                     ((SwMinMaxNodeArgs*)pArgs)->nRightDiff = nDiff;
                 }
-                if( FRAME!=rOrient.GetRelationOrient() )
+                if( text::RelOrientation::FRAME != rOrient.GetRelationOrient() )
                 {
                     if( ((SwMinMaxNodeArgs*)pArgs)->nRightRest > 0 )
                         ((SwMinMaxNodeArgs*)pArgs)->nRightRest = 0;
@@ -641,7 +641,7 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
                 ((SwMinMaxNodeArgs*)pArgs)->nRightRest -= nMin;
                 break;
             }
-            case HORI_LEFT:
+            case text::HoriOrientation::LEFT:
             {
                 if( nDiff )
                 {
@@ -649,7 +649,7 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
                         ((SwMinMaxNodeArgs*)pArgs)->nLeftDiff;
                     ((SwMinMaxNodeArgs*)pArgs)->nLeftDiff = nDiff;
                 }
-                if( FRAME!=rOrient.GetRelationOrient() &&
+                if( text::RelOrientation::FRAME != rOrient.GetRelationOrient() &&
                     ((SwMinMaxNodeArgs*)pArgs)->nLeftRest < 0 )
                     ((SwMinMaxNodeArgs*)pArgs)->nLeftRest = 0;
                 ((SwMinMaxNodeArgs*)pArgs)->nLeftRest -= nMin;
@@ -728,7 +728,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
     xub_StrLen nIdx = 0;
-    aIter.SeekAndChg( nIdx, pOut );
+    aIter.SeekAndChgAttrIter( nIdx, pOut );
     xub_StrLen nLen = aText.Len();
     long nAktWidth = 0;
     MSHORT nAdd = 0;
@@ -755,7 +755,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
         if( lcl_MinMaxString( aArg, aIter.GetFnt(), aText, nIdx, nStop ) )
             nAdd = 20;
         nIdx = nStop;
-        aIter.SeekAndChg( nIdx, pOut );
+        aIter.SeekAndChgAttrIter( nIdx, pOut );
         switch( cChar )
         {
             case CH_BREAK  :
@@ -764,13 +764,13 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                     rMax = aArg.nRowWidth;
                 aArg.nRowWidth = 0;
                 aArg.NewWord();
-                aIter.SeekAndChg( ++nIdx, pOut );
+                aIter.SeekAndChgAttrIter( ++nIdx, pOut );
             }
             break;
             case CH_TAB    :
             {
                 aArg.NewWord();
-                aIter.SeekAndChg( ++nIdx, pOut );
+                aIter.SeekAndChgAttrIter( ++nIdx, pOut );
             }
             break;
             case CHAR_SOFTHYPHEN:
@@ -867,7 +867,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                              aArg.nWordAdd = nOldAdd;
 
                 }
-                aIter.SeekAndChg( ++nIdx, pOut );
+                aIter.SeekAndChgAttrIter( ++nIdx, pOut );
             }
             break;
         }
@@ -935,7 +935,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
 
         SwScriptInfo aScriptInfo;
         SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
-        aIter.SeekAndChg( nStt, pOut );
+        aIter.SeekAndChgAttrIter( nStt, pOut );
 
         Boundary aBound =
             pBreakIt->xBreak->getWordBoundary( GetTxt(), nStt,
@@ -978,7 +978,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
 
     while( nIdx < nEnd )
     {
-        aIter.SeekAndChg( nIdx, pOut );
+        aIter.SeekAndChgAttrIter( nIdx, pOut );
 
         // scan for end of portion
         xub_StrLen nNextChg = aIter.GetNextAttr();
@@ -1012,7 +1012,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
         }
 
         nIdx = nStop;
-        aIter.SeekAndChg( nIdx, pOut );
+        aIter.SeekAndChgAttrIter( nIdx, pOut );
 
         if ( cChar == CH_BREAK )
         {
@@ -1071,14 +1071,14 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
 
     // search for a text frame this node belongs to
     SwClientIter aClientIter( *(SwTxtNode*)this );
-    SwClient* pLast = aClientIter.GoStart();
+    SwClient* pLastFrm = aClientIter.GoStart();
     SwTxtFrm* pFrm = 0;
 
-    while( pLast )
+    while( pLastFrm )
     {
-        if ( pLast->ISA( SwTxtFrm ) )
+        if ( pLastFrm->ISA( SwTxtFrm ) )
         {
-            SwTxtFrm* pTmpFrm = ( SwTxtFrm* )pLast;
+            SwTxtFrm* pTmpFrm = ( SwTxtFrm* )pLastFrm;
             if ( pTmpFrm->GetOfst() <= nStt &&
                 ( !pTmpFrm->GetFollow() ||
                    pTmpFrm->GetFollow()->GetOfst() > nStt ) )
@@ -1087,7 +1087,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
                 break;
             }
         }
-        pLast = ++aClientIter;
+        pLastFrm = ++aClientIter;
     }
 
     // search for the line containing nStt
@@ -1103,7 +1103,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     // no frame or no paragraph, we take the height of the character
     // at nStt as line height
 
-    aIter.SeekAndChg( nStt, pOut );
+    aIter.SeekAndChgAttrIter( nStt, pOut );
     pOut->SetMapMode( aOldMap );
 
     SwDrawTextInfo aDrawInf( pSh, *pOut, 0, GetTxt(), nStt, 1 );
@@ -1130,15 +1130,15 @@ USHORT SwTxtNode::GetWidthOfLeadingTabs() const
 
         // Find the non-follow text frame:
         SwClientIter aClientIter( (SwTxtNode&)*this );
-        SwClient* pLast = aClientIter.GoStart();
+        SwClient* pLastFrm = aClientIter.GoStart();
 
-        while( pLast )
+        while( pLastFrm )
         {
             // Only consider master frames:
-            if ( pLast->ISA(SwTxtFrm) &&
-                 !static_cast<SwTxtFrm*>(pLast)->IsFollow() )
+            if ( pLastFrm->ISA(SwTxtFrm) &&
+                 !static_cast<SwTxtFrm*>(pLastFrm)->IsFollow() )
             {
-                const SwTxtFrm* pFrm = static_cast<SwTxtFrm*>(pLast);
+                const SwTxtFrm* pFrm = static_cast<SwTxtFrm*>(pLastFrm);
                 SWRECTFN( pFrm )
                 SwRect aRect;
                 pFrm->GetCharRect( aRect, aPos );
@@ -1148,7 +1148,7 @@ USHORT SwTxtNode::GetWidthOfLeadingTabs() const
                             (aRect.*fnRect->fnGetLeft)() - (pFrm->*fnRect->fnGetPrtLeft)() );
                 break;
             }
-            pLast = ++aClientIter;
+            pLastFrm = ++aClientIter;
         }
     }
 
