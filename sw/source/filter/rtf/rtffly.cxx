@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:43:46 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:54:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@
 #define ANCHOR(p)   ((SwFmtAnchor*)p)
 
 // steht in shellio.hxx
-extern SwCntntNode* GoNextNds( SwNodeIndex * pIdx, FASTBOOL bChk );
+extern SwCntntNode* GoNextNds( SwNodeIndex * pIdx, BOOL bChk );
 
 SV_IMPL_PTRARR( SwFlySaveArr, SwFlySave* )
 
@@ -410,7 +410,7 @@ void SwRTFParser::SetFlysInDoc()
                     pNd = &aRg.aEnd.GetNode();
                     ULONG nSectEnd = pNd->EndOfSectionIndex()+1;
 
-                    if (!pNd->IsTableNode() && (pNd = pNd->FindTableNode()))
+                    if (!pNd->IsTableNode() && 0 !=(pNd = pNd->FindTableNode()))
                     {
                         const SwNode* pTblBxNd;
 
@@ -492,26 +492,31 @@ void SwRTFParser::SetFlysInDoc()
         if( pSttNd->GetIndex() + 1 != pSttNd->EndOfSectionIndex() &&
             !bSwPageDesc )
         {
-            SwTxtNode* _pSrcNd = pDoc->GetNodes()[ pSttNd->GetIndex() + 1 ]
-                                    ->GetTxtNode();
             SwCntntNode* pSrcNd = pDoc->GetNodes()[ pSttNd->GetIndex() + 1 ]->GetCntntNode();
             SfxItemSet aTmpSet( pDoc->GetAttrPool(),
                                     RES_BACKGROUND, RES_BOX );
+            const SvxBrushItem* pBackgroundBrush = (const SvxBrushItem*)pFlySave->aFlySet.GetItem(RES_BACKGROUND, FALSE);
             if( pSrcNd && pSrcNd->HasSwAttrSet() )
                 aTmpSet.Put( *pSrcNd->GetpSwAttrSet() );
-            if (const SvxBrushItem* pBackgroundBrush = (const SvxBrushItem*)pFlySave->aFlySet.GetItem(RES_BACKGROUND, FALSE))
+            if (pBackgroundBrush)
             {
                 aTmpSet.Put(*pBackgroundBrush, RES_BACKGROUND);
             }
-            else if (const SvxBrushItem* pBackgroundBrush = (const SvxBrushItem*)aTmpSet.GetItem(RES_BACKGROUND, FALSE))
+            else
             {
-                Color& rBackgroundColor = const_cast<SvxBrushItem*>(pBackgroundBrush)->GetColor();
-                rBackgroundColor.SetTransparency(0xFE);
-            } else {
-                Color aColor = Color(0xff, 0xff, 0xff);
-                aColor.SetTransparency( 0xFE);
-                SvxBrushItem aBrush(aColor, RES_BACKGROUND);
-                aTmpSet.Put(aBrush, RES_BACKGROUND);
+                pBackgroundBrush = (const SvxBrushItem*)aTmpSet.GetItem(RES_BACKGROUND, FALSE);
+                if (pBackgroundBrush)
+                {
+                    Color& rBackgroundColor = const_cast<SvxBrushItem*>(pBackgroundBrush)->GetColor();
+                    rBackgroundColor.SetTransparency(0xFE);
+                }
+                else
+                {
+                    Color aColor = Color(0xff, 0xff, 0xff);
+                    aColor.SetTransparency( 0xFE);
+                    SvxBrushItem aBrush(aColor, RES_BACKGROUND);
+                    aTmpSet.Put(aBrush, RES_BACKGROUND);
+                }
             }
             // #117914# Topic 6.
             pFlySave->aFlySet.Put( aTmpSet );
@@ -635,8 +640,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     // --> OD 2004-06-24 #i27767#
     SwFmtAnchor aAnchor( FLY_AT_CNTNT );
 
-    SwFmtHoriOrient aHori( 0, HORI_LEFT, FRAME );
-    SwFmtVertOrient aVert( 0, VERT_TOP, FRAME );
+    SwFmtHoriOrient aHori( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME );
+    SwFmtVertOrient aVert( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME );
     // <--
     SvxFrameDirectionItem aFrmDir( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
 
@@ -645,7 +650,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
     BOOL bChkDropCap = 0 == pSet;
     USHORT nDropCapLines = 0, nDropCapAnchor = 0;
-    int nOpenBrakets = GetOpenBrakets();
+    int nNumOpenBrakets = GetOpenBrakets();
 
     if( !pSet )
     {
@@ -739,33 +744,33 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                 break;
 
         case RTF_POSNEGX:
-        case RTF_POSX:      aHori.SetHoriOrient( HORI_NONE );
+        case RTF_POSX:      aHori.SetHoriOrient( text::HoriOrientation::NONE );
                             aHori.SetPos( GetSafePos((long)nTokenValue) );
                             break;
-        case RTF_POSXC:     aHori.SetHoriOrient( HORI_CENTER );     break;
-        case RTF_POSXI:     aHori.SetHoriOrient( HORI_LEFT );
+        case RTF_POSXC:     aHori.SetHoriOrient( text::HoriOrientation::CENTER );     break;
+        case RTF_POSXI:     aHori.SetHoriOrient( text::HoriOrientation::LEFT );
                             aHori.SetPosToggle( TRUE );
                             break;
-        case RTF_POSXO:     aHori.SetHoriOrient( HORI_RIGHT );
+        case RTF_POSXO:     aHori.SetHoriOrient( text::HoriOrientation::RIGHT );
                             aHori.SetPosToggle( TRUE );
                             break;
-        case RTF_POSXL:     aHori.SetHoriOrient( HORI_LEFT );       break;
-        case RTF_POSXR:     aHori.SetHoriOrient( HORI_RIGHT );      break;
+        case RTF_POSXL:     aHori.SetHoriOrient( text::HoriOrientation::LEFT );       break;
+        case RTF_POSXR:     aHori.SetHoriOrient( text::HoriOrientation::RIGHT );      break;
 
         case RTF_POSNEGY:
-        case RTF_POSY:      aVert.SetVertOrient( VERT_NONE );
+        case RTF_POSY:      aVert.SetVertOrient( text::VertOrientation::NONE );
                             aVert.SetPos( GetSafePos((long)nTokenValue) );
                             break;
-        case RTF_POSYT:     aVert.SetVertOrient( VERT_TOP );    break;
-        case RTF_POSYB:     aVert.SetVertOrient( VERT_BOTTOM ); break;
-        case RTF_POSYC:     aVert.SetVertOrient( VERT_CENTER ); break;
+        case RTF_POSYT:     aVert.SetVertOrient( text::VertOrientation::TOP );    break;
+        case RTF_POSYB:     aVert.SetVertOrient( text::VertOrientation::BOTTOM ); break;
+        case RTF_POSYC:     aVert.SetVertOrient( text::VertOrientation::CENTER ); break;
 
-        case RTF_PHMRG:     aHori.SetRelationOrient( REL_PG_PRTAREA ); break;
-        case RTF_PVMRG:     aVert.SetRelationOrient( REL_PG_PRTAREA ); break;
-        case RTF_PHPG:      aHori.SetRelationOrient( REL_PG_FRAME ); break;
-        case RTF_PVPG:      aVert.SetRelationOrient( REL_PG_FRAME );break;
-        case RTF_PHCOL:     aHori.SetRelationOrient( FRAME ); break;
-        case RTF_PVPARA:    aVert.SetRelationOrient( FRAME ); break;
+        case RTF_PHMRG:     aHori.SetRelationOrient( text::RelOrientation::PAGE_PRINT_AREA ); break;
+        case RTF_PVMRG:     aVert.SetRelationOrient( text::RelOrientation::PAGE_PRINT_AREA ); break;
+        case RTF_PHPG:      aHori.SetRelationOrient( text::RelOrientation::PAGE_FRAME ); break;
+        case RTF_PVPG:      aVert.SetRelationOrient( text::RelOrientation::PAGE_FRAME );break;
+        case RTF_PHCOL:     aHori.SetRelationOrient( text::RelOrientation::FRAME ); break;
+        case RTF_PVPARA:    aVert.SetRelationOrient( text::RelOrientation::FRAME ); break;
 
         case RTF_POSYIL:
             break;
@@ -890,15 +895,15 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                     case RTF_FLYVERT:
                         {
                             RTFVertOrient aVO( nVal );
-                            aVert.SetVertOrient( (SwVertOrient)aVO.GetOrient() );
-                            aVert.SetRelationOrient( (SwRelationOrient)aVO.GetRelation() );
+                            aVert.SetVertOrient( aVO.GetOrient() );
+                            aVert.SetRelationOrient( aVO.GetRelation() );
                         }
                         break;
                     case RTF_FLYHORZ:
                         {
                             RTFHoriOrient aHO( nVal );
-                            aHori.SetHoriOrient( (SwHoriOrient)aHO.GetOrient() );
-                            aHori.SetRelationOrient( (SwRelationOrient)aHO.GetRelation() );
+                            aHori.SetHoriOrient( aHO.GetOrient() );
+                            aHori.SetRelationOrient( aHO.GetRelation() );
                         }
                         break;
                     case RTF_FLYOUTLEFT:        aLR.SetLeft( nVal );        break;
@@ -1073,7 +1078,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
     // ein neues FlyFormat anlegen oder das alte benutzen ?
     // (teste ob es die selben Attribute besitzt!)
-    SwFlySave* pFlySave;
+    SwFlySave* pFlySave = 0;
     USHORT nFlyArrCnt = aFlyArr.Count();
     /*
     #i5263#
@@ -1111,7 +1116,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
     while( !IsPardTokenRead() && IsParserWorking() )
     {
-        if( RTF_PARD == nToken || nOpenBrakets > GetOpenBrakets() )
+        if( RTF_PARD == nToken || nNumOpenBrakets > GetOpenBrakets() )
             break;
 
         NextToken( nToken );
@@ -1124,8 +1129,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                 USHORT _index=USHORT(nTokenValue);
                 const Color& rColor = GetColor(_index);
                 SvxBrushItem aBrush(rColor, RES_BACKGROUND);
-                SwFlySave* pFlySave = aFlyArr[nFlyArrCnt-1];
-                pFlySave->aFlySet.Put(aBrush, RES_BACKGROUND);
+                SwFlySave* pFS = aFlyArr[nFlyArrCnt-1];
+                pFS->aFlySet.Put(aBrush, RES_BACKGROUND);
             }
 
             nToken = GetNextToken();
@@ -1190,7 +1195,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     }
     else
     {
-        FASTBOOL bMovePaM = 0 != pTblNd;
+        BOOL bMovePaM = 0 != pTblNd;
 
         pFlySave->nEndNd = pPam->GetPoint()->nNode;
         pFlySave->nEndCnt = pPam->GetPoint()->nContent.GetIndex();
@@ -1348,7 +1353,7 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
         SwFmtAnchor aAnchor( FLY_IN_CNTNT );
         aAnchor.SetAnchor( pPos );
         aFlySet.Put( aAnchor );
-        aFlySet.Put( SwFmtVertOrient( 0, VERT_TOP ));
+        aFlySet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP ));
 
         if (pDoc->IsInHeaderFooter(pPos->nNode))
         {
