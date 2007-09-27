@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glosdoc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 16:11:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:01:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,14 +82,15 @@ typedef ::std::vector< AutoTextEntryRef > UnoAutoTextEntries;
 // CLASS -----------------------------------------------------------------
 class SW_DLLPUBLIC SwGlossaries
 {
-    UnoAutoTextGroups       aGlossaryGroups;
-    UnoAutoTextEntries      aGlossaryEntries;
-    String                  aPath;
-    String                  sOldErrPath;
-    String                  sErrPath;
-    SvStrings               *pPathArr;
-    SvStrings               *pGlosArr;
-    BOOL                    bError;
+    UnoAutoTextGroups       m_aGlossaryGroups;
+    UnoAutoTextEntries      m_aGlossaryEntries;
+
+    String                  m_aPath;
+    String                  m_sOldErrPath;
+    String                  m_sErrPath;
+    SvStrings               *m_pPathArr;
+    SvStrings               *m_pGlosArr;
+    BOOL                    m_bError;
 
     SW_DLLPRIVATE SwTextBlocks* GetGlosDoc(const String &rName, BOOL bCreate = TRUE) const;
     SW_DLLPRIVATE SvStrings     *GetNameList();
@@ -153,6 +154,8 @@ public:
     static String   GetDefName();
     static String   GetExtension();
 
+    String          GetCompleteGroupName( const ::rtl::OUString& GroupName );
+
     BOOL            NewGroupDoc(String &rGroupName, const String& rTitle);
     BOOL            RenameGroupDoc(const String& sOldGroup, String& sNewGroup, const String& rNewTitle);
     BOOL            DelGroupDoc(const String &);
@@ -160,8 +163,8 @@ public:
     void            SaveGroupDoc(const String &rGrpName, const String& rLongName );
     void            UpdateGlosPath(BOOL bFull);
     void            ShowError();
-    inline ULONG    IsGlosPathErr() { return bError; }
-    const SvStrings*    GetPathArray() const {return pPathArr;}
+    inline ULONG    IsGlosPathErr() { return m_bError; }
+    const SvStrings*    GetPathArray() const {return m_pPathArr;}
 };
 
 
