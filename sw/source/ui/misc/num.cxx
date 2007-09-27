@@ -4,9 +4,9 @@
  *
  *  $RCSfile: num.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:20:42 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:22:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,11 +148,11 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
-#include <svx/svxids.hrc> //add CHINA001
+#include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
-#include <svtools/stritem.hxx>//add CHINA001
-#include <svtools/aeitem.hxx> //add CHINA001
-#include <svtools/slstitm.hxx> //add CHINA001
+#include <svtools/stritem.hxx>
+#include <svtools/aeitem.hxx>
+#include <svtools/slstitm.hxx>
 
 static BOOL bLastRelative = FALSE;
 
@@ -164,23 +164,27 @@ SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
     SfxTabPage( pParent, SW_RES( TP_NUM_POSITION ), rSet ),
     aLevelFL(       this, SW_RES(FL_LEVEL    )),
     aLevelLB(       this, SW_RES(LB_LEVEL   )),
+
     aPositionFL(    this, SW_RES(FL_POSITION )),
-    aAlignFT(       this, SW_RES(FT_ALIGN   )),
-    aAlignLB(       this, SW_RES(LB_ALIGN   )),
     aDistBorderFT(  this, SW_RES(FT_BORDERDIST  )),
     aDistBorderMF(  this, SW_RES(MF_BORDERDIST  )),
+    aRelativeCB(    this, SW_RES(CB_RELATIVE     )),
+    aIndentFT(      this, SW_RES(FT_INDENT       )),
+    aIndentMF(      this, SW_RES(MF_INDENT       )),
     aDistNumFT(     this, SW_RES(FT_NUMDIST     )),
     aDistNumMF(     this, SW_RES(MF_NUMDIST     )),
-    aRelativeCB(    this, SW_RES(CB_RELATIVE        )),
-    aIndentFT(      this, SW_RES(FT_INDENT      )),
-    aIndentMF(      this, SW_RES(MF_INDENT      )),
+    aAlignFT(       this, SW_RES(FT_ALIGN    )),
+    aAlignLB(       this, SW_RES(LB_ALIGN    )),
     aStandardPB(    this, SW_RES(PB_STANDARD        )),
-    aPreviewWIN(    this, SW_RES(WIN_PREVIEW        )),
-    bInInintControl(FALSE),
+
+    aPreviewWIN(    this, SW_RES(WIN_PREVIEW     )),
+
     pActNum(0),
-    pOutlineDlg(0),
     pSaveNum(0),
-    bPreset( FALSE )
+    pWrtSh(0),
+    pOutlineDlg(0),
+    bPreset( FALSE ),
+    bInInintControl(FALSE)
 {
     FreeResource();
     SetExchangeSupport();
@@ -414,7 +418,7 @@ void SwNumPositionTabPage::InitControls()
 /*-----------------03.12.97 10:02-------------------
 
 --------------------------------------------------*/
-void SwNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
+void SwNumPositionTabPage::ActivatePage(const SfxItemSet& )
 {
     const SfxPoolItem* pItem;
     UINT16 nTmpNumLvl =
@@ -453,11 +457,11 @@ void SwNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
 /*-----------------03.12.97 10:02-------------------
 
 --------------------------------------------------*/
-int  SwNumPositionTabPage::DeactivatePage(SfxItemSet *pSet)
+int  SwNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     SwOutlineTabDialog::SetActNumLevel(nActNumLvl);
-    if(pSet)
-        FillItemSet(*pSet);
+    if(_pSet)
+        FillItemSet(*_pSet);
     return TRUE;
 
 }
@@ -552,11 +556,8 @@ void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
 /*-----------------03.12.97 11:06-------------------
 
 --------------------------------------------------*/
-IMPL_LINK( SwNumPositionTabPage, EditModifyHdl, Edit *, pEdit )
+IMPL_LINK( SwNumPositionTabPage, EditModifyHdl, Edit *, EMPTYARG )
 {
-
-    USHORT nStart = 0;
-    USHORT nEnd = MAXLEVEL;
     USHORT nMask = 1;
     for(USHORT i = 0; i < MAXLEVEL; i++)
     {
@@ -631,7 +632,7 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pFld )
 {
     if(bInInintControl)
         return 0;
-    long nValue = pFld->Denormalize(pFld->GetValue(FUNIT_TWIP));
+    long nValue = static_cast< long >(pFld->Denormalize(pFld->GetValue(FUNIT_TWIP)));
     USHORT nMask = 1;
     for(USHORT i = 0; i < MAXLEVEL; i++)
     {
@@ -782,8 +783,8 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(Window* pParent,
                     const SfxItemSet* pSwItemSet, SwWrtShell & rSh) :
     SfxTabDialog(pParent, SW_RES(DLG_SVXTEST_NUM_BULLET), pSwItemSet, FALSE, &aEmptyStr),
     rWrtSh(rSh),
-    nRetOptionsDialog(USHRT_MAX),
-    sRemoveText(SW_RES(ST_RESET))
+    sRemoveText(SW_RES(ST_RESET)),
+    nRetOptionsDialog(USHRT_MAX)
 {
     FreeResource();
     GetUserButton()->SetText(sRemoveText);
@@ -791,12 +792,12 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(Window* pParent,
     GetUserButton()->SetClickHdl(LINK(this, SwSvxNumBulletTabDialog, RemoveNumberingHdl));
     if(!rWrtSh.GetCurNumRule())
         GetUserButton()->Enable(FALSE);
-    AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );//CHINA001 AddTabPage(RID_SVXPAGE_PICK_SINGLE_NUM,    &SvxSingleNumPickTabPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_PICK_BULLET );//CHINA001 AddTabPage(RID_SVXPAGE_PICK_BULLET, &SvxBulletPickTabPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_PICK_NUM );//CHINA001 AddTabPage(RID_SVXPAGE_PICK_NUM,  &SvxNumPickTabPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_PICK_BMP );//CHINA001 AddTabPage(RID_SVXPAGE_PICK_BMP,  &SvxBitmapPickTabPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_NUM_OPTIONS );//CHINA001 AddTabPage(RID_SVXPAGE_NUM_OPTIONS, &SvxNumOptionsTabPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_NUM_POSITION );//CHINA001 AddTabPage(RID_SVXPAGE_NUM_POSITION,&SvxNumPositionTabPage::Create, 0);
+    AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
+    AddTabPage( RID_SVXPAGE_PICK_BULLET );
+    AddTabPage( RID_SVXPAGE_PICK_NUM );
+    AddTabPage( RID_SVXPAGE_PICK_BMP );
+    AddTabPage( RID_SVXPAGE_NUM_OPTIONS );
+    AddTabPage( RID_SVXPAGE_NUM_POSITION );
 
 }
 /*-----------------07.02.97 12.08-------------------
@@ -822,36 +823,31 @@ void SwSvxNumBulletTabDialog::PageCreated(USHORT nPageId, SfxTabPage& rPage)
     {
     case RID_SVXPAGE_PICK_NUM:
         {
-            //CHINA001 ((SvxNumPickTabPage&)rPage).SetCharFmtNames(sNumCharFmt, sBulletCharFmt);
-            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));//add CHINA001
-            aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));//add CHINA001
-            aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt)); //add CHINA001
-            rPage.PageCreated(aSet);//add CHINA001
+            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+            aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
+            aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+            rPage.PageCreated(aSet);
         }
         break;
     case RID_SVXPAGE_PICK_BULLET :
         {
-            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));//add CHINA001
-            //CHINA001 ((SvxBulletPickTabPage&)rPage).SetCharFmtName(sBulletCharFmt);
-            aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt)); //add CHINA001
-            rPage.PageCreated(aSet);//add CHINA001
+            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+            aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
+            rPage.PageCreated(aSet);
         }
         break;
 
     case RID_SVXPAGE_NUM_OPTIONS:
         {
-            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));//add CHINA001
-            //CHINA001 ((SvxNumOptionsTabPage&)rPage).SetCharFmts(sNumCharFmt, sBulletCharFmt);
-            aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));//add CHINA001
-            aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt)); //add CHINA001
-            //CHINA001 ListBox& rCharFmtLB = ((SvxNumOptionsTabPage&)rPage).GetCharFmtListBox();
+            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+            aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
+            aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
             // Zeichenvorlagen sammeln
-            ListBox rCharFmtLB(this); //add CHINA001
+            ListBox rCharFmtLB(this);
             rCharFmtLB.Clear();
             rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
             SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();
             ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
-            //add CHINA001 begin
             List aList;
             for(USHORT j = 0; j < rCharFmtLB.GetEntryCount(); j++)
             {
@@ -860,11 +856,9 @@ void SwSvxNumBulletTabDialog::PageCreated(USHORT nPageId, SfxTabPage& rPage)
             }
             aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
 
-            //add CHINA001 end
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
-            //CHINA001 ((SvxNumOptionsTabPage&)rPage).SetMetric(eMetric);
-            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,eMetric));//add CHINA001
-            rPage.PageCreated(aSet);//add CHINA001
+            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< USHORT >(eMetric) ) );
+            rPage.PageCreated(aSet);
             for( USHORT i = (USHORT)aList.Count(); i; --i )
                     delete (XubString*)aList.Remove(i);
             aList.Clear();
@@ -874,10 +868,9 @@ void SwSvxNumBulletTabDialog::PageCreated(USHORT nPageId, SfxTabPage& rPage)
         {
             SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
-            //CHINA001 ((SvxNumPositionTabPage&)rPage).SetMetric(eMetric);
-            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));//add CHINA001
-            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,eMetric));//add CHINA001
-            rPage.PageCreated(aSet);//add CHINA001
+            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< USHORT >(eMetric)) );
+            rPage.PageCreated(aSet);
 //          ((SvxNumPositionTabPage&)rPage).SetWrtShell(&rWrtSh);
         }
         break;
