@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texthierarchyprimitive2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-26 11:36:28 $
+ *  last change: $Author: aw $ $Date: 2007-09-27 15:59:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,25 @@ namespace drawinglayer
         private:
         public:
             TextHierarchyLinePrimitive2D(const Primitive2DSequence& rChildren);
+
+            // provide unique ID
+            DeclPrimitrive2DIDBlock()
+        };
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        // see TextHierarchyLinePrimitive2D comment
+        class TextHierarchyBulletPrimitive2D : public GroupPrimitive2D
+        {
+        private:
+        public:
+            TextHierarchyBulletPrimitive2D(const Primitive2DSequence& rChildren);
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

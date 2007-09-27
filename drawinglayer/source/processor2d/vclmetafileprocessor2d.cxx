@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-26 11:36:36 $
+ *  last change: $Author: aw $ $Date: 2007-09-27 15:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -831,6 +831,19 @@ namespace drawinglayer
 
                     // process recursively and add MetaFile comment
                     process(rLinePrimitive.get2DDecomposition(getViewInformation2D()));
+                    mrMetaFile.AddAction(new MetaCommentAction(aCommentString));
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_TEXTHIERARCHYBULLETPRIMITIVE2D :
+                {
+                    // in Outliner::PaintBullet(), a MetafileComment for bullets is added, too. The
+                    // "XTEXT_EOC" is used, use here, too.
+                    const primitive2d::TextHierarchyBulletPrimitive2D& rBulletPrimitive = static_cast< const primitive2d::TextHierarchyBulletPrimitive2D& >(rCandidate);
+                    static const ByteString aCommentString("XTEXT_EOC");
+
+                    // process recursively and add MetaFile comment
+                    process(rBulletPrimitive.get2DDecomposition(getViewInformation2D()));
                     mrMetaFile.AddAction(new MetaCommentAction(aCommentString));
 
                     break;

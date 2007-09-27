@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclhelperbitmaptransform.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:16 $
+ *  last change: $Author: aw $ $Date: 2007-09-27 15:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,7 +353,29 @@ namespace drawinglayer
                     if(rSource.IsTransparent())
                     {
                         // clear bitmap with dest color
-                        aChangedBitmap.Erase(Color(rModifier.getBColor()));
+                        if(aChangedBitmap.GetBitCount() <= 8)
+                        {
+                            // do NOT use erase; for e.g. 8bit Bitmaps, the nearest color to the given
+                            // erase color is determined and used -> this may be different from what is
+                            // wanted here. Better create a new bitmap with the needed color explicitely
+                            BitmapReadAccess* pReadAccess = aChangedBitmap.AcquireReadAccess();
+                            OSL_ENSURE(pReadAccess, "Got no Bitmap ReadAccess ?!?");
+
+                            if(pReadAccess)
+                            {
+                                BitmapPalette aNewPalette(pReadAccess->GetPalette());
+                                aNewPalette[0] = BitmapColor(Color(rModifier.getBColor()));
+                                aChangedBitmap = Bitmap(
+                                    aChangedBitmap.GetSizePixel(),
+                                    aChangedBitmap.GetBitCount(),
+                                    &aNewPalette);
+                                delete pReadAccess;
+                            }
+                        }
+                        else
+                        {
+                            aChangedBitmap.Erase(Color(rModifier.getBColor()));
+                        }
                     }
                     else
                     {

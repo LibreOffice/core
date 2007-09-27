@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawinglayer_primitivetypes2d.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-26 11:36:28 $
+ *  last change: $Author: aw $ $Date: 2007-09-27 15:59:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,7 @@
 #define PRIMITIVE2D_ID_POLYGONWAVEPRIMITIVE2D               (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 42)
 #define PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D                (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 43)
 #define PRIMITIVE2D_ID_TEXTEFFECTPRIMITIVE2D                (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 44)
+#define PRIMITIVE2D_ID_TEXTHIERARCHYBULLETPRIMITIVE2D       (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 45)
 
 //////////////////////////////////////////////////////////////////////////////
 
