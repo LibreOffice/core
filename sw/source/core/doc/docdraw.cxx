@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:55:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:34:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,8 +211,8 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
                 !pAnchorFrm->IsTxtFrm() ||
                 !static_cast<const SwTxtFrm*>(pAnchorFrm)->IsFollow(),
                 "<lcl_AdjustPositioningAttr(..)> - anchor frame is a follow. Please inform OD." );
-        bool bVert;
-        bool bR2L;
+        bool bVert = false;
+        bool bR2L = false;
         // --> OD 2005-05-10 #i45952# - use anchor position of
         // anchor frame, if it exist.
         Point aAnchorPos;
@@ -287,8 +287,8 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
         }
     }
 
-    _pFrmFmt->SetAttr( SwFmtHoriOrient( nHoriRelPos, HORI_NONE, FRAME ) );
-    _pFrmFmt->SetAttr( SwFmtVertOrient( nVertRelPos, VERT_NONE, FRAME ) );
+    _pFrmFmt->SetAttr( SwFmtHoriOrient( nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
+    _pFrmFmt->SetAttr( SwFmtVertOrient( nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
     // --> OD 2005-03-11 #i44334#, #i44681# - positioning attributes already set
     _pFrmFmt->PosAttrSet();
     // <--
@@ -323,8 +323,8 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
     if( bNoGroup )
     {
         //Ankerattribut aufheben.
-        SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
-        const SwFmtAnchor aAnch( pContact->GetFmt()->GetAnchor() );
+        SwDrawContact *pMyContact = (SwDrawContact*)GetUserCall(pObj);
+        const SwFmtAnchor aAnch( pMyContact->GetFmt()->GetAnchor() );
 
         SwUndoDrawGroup* pUndo = !DoesUndo()
                                  ? 0
@@ -334,7 +334,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         bool bGroupMembersNotPositioned( false );
         {
             SwAnchoredDrawObject* pAnchoredDrawObj =
-                static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( pObj ));
+                static_cast<SwAnchoredDrawObject*>(pMyContact->GetAnchoredObj( pObj ));
             bGroupMembersNotPositioned = pAnchoredDrawObj->NotYetPositioned();
         }
         // <--
@@ -378,7 +378,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         pFmt->SetAttr( aAnch );
         // --> OD 2004-10-25 #i36010# - set layout direction of the position
         pFmt->SetPositionLayoutDir(
-            com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
+            text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
         // <--
 
         rDrawView.GroupMarked();
@@ -439,8 +439,8 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
         // --> OD 2006-11-01 #130889#
         pFmtsAndObjs = new std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >[nMarkCount];
         // <--
-        SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-        if( !pObj->GetUpGroup() )
+        SdrObject *pMyObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
+        if( !pMyObj->GetUpGroup() )
         {
             String sDrwFmtNm( String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM("DrawObject" )));
@@ -468,7 +468,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                         pFmt->SetAttr( aAnch );
                         // --> OD 2004-10-25 #i36010# - set layout direction of the position
                         pFmt->SetPositionLayoutDir(
-                            com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
+                            text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
                         // <--
                         // --> OD 2006-11-01 #130889#
                         // creation of <SwDrawContact> instances for the group
@@ -541,9 +541,9 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     if( rMrkList.GetMarkCount() )
     {
-        StartUndo(0, NULL);
+        StartUndo(UNDO_EMPTY, NULL);
         USHORT i;
-        FASTBOOL bDelMarked = TRUE;
+        BOOL bDelMarked = TRUE;
 
         if( 1 == rMrkList.GetMarkCount() )
         {
@@ -621,7 +621,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
         }
         SetModified();
 
-        EndUndo(0, NULL);
+        EndUndo(UNDO_EMPTY, NULL);
     }
 
     return bCallBase;
