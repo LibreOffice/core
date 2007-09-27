@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:18:47 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:36:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ inline BYTE GetUpperLvlChg( BYTE nCurLvl, BYTE nLevel, USHORT nMask )
         else
             nCurLvl = 0;
     }
-    return (nMask - 1) & ~(( 1 << nCurLvl ) - 1);
+    return static_cast<BYTE>((nMask - 1) & ~(( 1 << nCurLvl ) - 1));
 }
 
 // --> OD 2005-11-02 #i51089 - TUNING#
@@ -213,11 +213,11 @@ void SwDoc::PropagateOutlineRule()
             if ( rCollRuleItem.GetValue().Len() == 0 )
             // <--
             {
-                SwNumRule * pOutlineRule = GetOutlineNumRule();
+                SwNumRule * pMyOutlineRule = GetOutlineNumRule();
 
-                if (pOutlineRule)
+                if (pMyOutlineRule)
                 {
-                    SwNumRuleItem aNumItem(pOutlineRule->GetName());
+                    SwNumRuleItem aNumItem( pMyOutlineRule->GetName() );
 
                     pColl->SetAttr(aNumItem);
                 }
@@ -292,7 +292,7 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     // jetzt haben wir unseren Bereich im OutlineNodes-Array
     // dann prufe ersmal, ob nicht unterebenen aufgehoben werden
     // (Stufung ueber die Grenzen)
-    register USHORT n;
+    USHORT n;
 
     // so, dann koennen wir:
     // 1. Vorlagen-Array anlegen
@@ -325,7 +325,7 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
             n++;
 
             SwTxtFmtColl *aTmpColl =
-                GetTxtCollFromPool(RES_POOLCOLL_HEADLINE1 + n);
+                GetTxtCollFromPool(static_cast<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + n));
 
             if (aTmpColl->GetOutlineLevel() == n)
             {
@@ -354,7 +354,7 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
             n--;
 
             SwTxtFmtColl *aTmpColl =
-                GetTxtCollFromPool(RES_POOLCOLL_HEADLINE1 + n);
+                GetTxtCollFromPool(static_cast<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + n));
 
             if (aTmpColl->GetOutlineLevel() == n)
             {
@@ -412,7 +412,7 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 
             while (nCount > 0 && m + nStep >= 0 && m + nStep < MAXLEVEL)
             {
-                m += nStep;
+                m = static_cast<USHORT>(m + nStep);
 
                 if (aCollArr[m] != NULL)
                     nCount--;
@@ -510,7 +510,7 @@ BOOL SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     BYTE nOutLineLevel = NO_NUMBERING;
     SwNode* pSrch = &aSttRg.GetNode();
     if( pSrch->IsTxtNode() )
-        nOutLineLevel = ((SwTxtNode*)pSrch)->GetOutlineLevel();
+        nOutLineLevel = static_cast<BYTE>(((SwTxtNode*)pSrch)->GetOutlineLevel());
     SwNode* pEndSrch = &aEndRg.GetNode();
     if( !GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nAktPos ) )
     {
@@ -849,7 +849,7 @@ BOOL SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
 
 // --- Nummerierung -----------------------------------------
 
-void SwNumRuleInfo::MakeList( SwDoc& rDoc, BOOL bOutline )
+void SwNumRuleInfo::MakeList( SwDoc& rDoc, BOOL )
 {
     SwNumRule* pRule = rDoc.FindNumRulePtr(rName);
 
@@ -875,7 +875,7 @@ void SwNumRuleInfo::MakeList( SwDoc& rDoc, BOOL bOutline )
     {
         const SwOutlineNodes & rOutlineNodes = rDoc.GetNodes().GetOutLineNds();
 
-        for (int i = 0; i < rOutlineNodes.Count(); i++)
+        for (USHORT i = 0; i < rOutlineNodes.Count(); ++i)
         {
             SwTxtNode & aNode = *((SwTxtNode *) rOutlineNodes[i]);
 
@@ -924,8 +924,7 @@ void SwNumRuleInfo::MakeList( SwDoc& rDoc, BOOL bOutline )
 }
 
 
-void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule, SwHistory* pHist,
-                        SwNumRuleInfo* pRuleInfo = 0 )
+void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
 {
     SwNumRule* pOld = rDoc.FindNumRulePtr( rRule.GetName() );
     ASSERT( pOld, "ohne die alte NumRule geht gar nichts" );
@@ -967,21 +966,15 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule, SwHistory* pHist,
         return ;
     }
 
-    SwNumRuleInfo* pUpd;
-    if( !pRuleInfo )
-    {
-        pUpd = new SwNumRuleInfo( rRule.GetName() );
-        pUpd->MakeList( rDoc );
-    }
-    else
-        pUpd = pRuleInfo;
+    SwNumRuleInfo* pUpd = new SwNumRuleInfo( rRule.GetName() );
+    pUpd->MakeList( rDoc );
 
     BYTE nLvl;
     for( ULONG nFirst = 0, nLast = pUpd->GetList().Count();
         nFirst < nLast; ++nFirst )
     {
         SwTxtNode* pTxtNd = pUpd->GetList().GetObject( nFirst );
-        nLvl = pTxtNd->GetLevel();
+        nLvl = static_cast<BYTE>(pTxtNd->GetLevel());
 
         if( nLvl < MAXLEVEL )
         {
@@ -1001,8 +994,7 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule, SwHistory* pHist,
     pOld->SetContinusNum( rRule.IsContinusNum() );
     pOld->SetRuleType( rRule.GetRuleType() );
 
-    if( !pRuleInfo )
-        delete pUpd;
+    delete pUpd;
 
     rDoc.UpdateNumRule();
 }
@@ -1035,12 +1027,12 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
         if( pUndo )
         {
             pUndo->SaveOldNumRule( *pNew );
-            ::lcl_ChgNumRule( *this, rRule, pUndo->GetHistory() );
+            ::lcl_ChgNumRule( *this, rRule );
             pUndo->SetLRSpaceEndPos();
         }
         else
         {
-            ::lcl_ChgNumRule( *this, rRule, NULL );
+            ::lcl_ChgNumRule( *this, rRule );
         }
     }
 
@@ -1220,7 +1212,7 @@ void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule, const String * pName )
             pHistory = pUndo->GetHistory();
             AppendUndo( pUndo );
         }
-        ::lcl_ChgNumRule( *this, rRule, pHistory );
+        ::lcl_ChgNumRule( *this, rRule );
 
         if( pUndo )
             pUndo->SetLRSpaceEndPos();
@@ -1379,7 +1371,7 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 {
     ASSERT( rPaM.GetDoc() == this, "need same doc" );
 
-    map<SwNumRule *, SwNumRule *> aNumRuleMap;
+    map<SwNumRule *, SwNumRule *> aMyNumRuleMap;
 
      ULONG nStt = rPaM.Start()->nNode.GetIndex();
     ULONG nEnd = rPaM.End()->nNode.GetIndex();
@@ -1396,7 +1388,7 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 
             if (pRule && pRule->IsAutoRule() && ! pRule->IsOutlineRule())
             {
-                SwNumRule * pReplaceNumRule = aNumRuleMap[pRule];
+                SwNumRule * pReplaceNumRule = aMyNumRuleMap[pRule];
 
                 if (! pReplaceNumRule)
                 {
@@ -1419,7 +1411,7 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 
                     }
 
-                    aNumRuleMap[pRule] = pReplaceNumRule;
+                    aMyNumRuleMap[pRule] = pReplaceNumRule;
                 }
 
                 SwPaM aPam(*pCNd);
@@ -1534,7 +1526,7 @@ BOOL SwDoc::DelNumRules( const SwPaM& rPam )
 
 void SwDoc::InvalidateNumRules()
 {
-    for (int n = 0; n < pNumRuleTbl->Count(); n++)
+    for (USHORT n = 0; n < pNumRuleTbl->Count(); ++n)
         (*pNumRuleTbl)[n]->SetInvalidRule(TRUE);
 }
 
@@ -1558,7 +1550,7 @@ void SwDoc::SyncNumRulesAndNodes()
 BOOL lcl_IsNumOk( BYTE nSrchNum, BYTE& rLower, BYTE& rUpper,
                     BOOL bOverUpper, BYTE nNumber )
 {
-    register BOOL bRet = FALSE;
+    BOOL bRet = FALSE;
     if( nNumber < MAXLEVEL )            // keine Nummerierung ueberspringen
     {
         if( bOverUpper ? nSrchNum == nNumber : nSrchNum >= nNumber )
@@ -1611,7 +1603,7 @@ BOOL lcl_GotoNextPrevNum( SwPosition& rPos, BOOL bNext,
     if( !pNd || 0 == ( pRule = pNd->GetNumRule()))
         return FALSE;
 
-    register BYTE nSrchNum = pNd->GetLevel();
+    BYTE nSrchNum = static_cast<BYTE>(pNd->GetLevel());
 
     SwNodeIndex aIdx( rPos.nNode );
     if( ! pNd->IsCounted() )
@@ -1626,11 +1618,11 @@ BOOL lcl_GotoNextPrevNum( SwPosition& rPos, BOOL bNext,
                 pNd = aIdx.GetNode().GetTxtNode();
                 pRule = pNd->GetNumRule();
 
-                register BYTE nTmpNum;
+                BYTE nTmpNum;
 
                 if( pRule  )
                 {
-                    nTmpNum = pNd->GetLevel();
+                    nTmpNum = static_cast<BYTE>(pNd->GetLevel());
                     if( !( ! pNd->IsCounted() &&
                          (nTmpNum >= nSrchNum )) )
                         break;      // gefunden
@@ -1665,7 +1657,7 @@ BOOL lcl_GotoNextPrevNum( SwPosition& rPos, BOOL bNext,
             if( pRule )
             {
                 if( ::lcl_IsNumOk( nSrchNum, nLower, nUpper, bOverUpper,
-                                    pNd->GetLevel() ))
+                                    static_cast<BYTE>(pNd->GetLevel()) ))
                 {
                     rPos.nNode = aIdx;
                     rPos.nContent.Assign( (SwTxtNode*)pNd, 0 );
@@ -1859,7 +1851,7 @@ BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
 
                 if (pRule)
                 {
-                    BYTE nLevel = pTNd->GetLevel();
+                    BYTE nLevel = static_cast<BYTE>(pTNd->GetLevel());
                     if( (-1 == nDiff && 0 >= nLevel) ||
                         (1 == nDiff && MAXLEVEL - 1 <= nLevel))
                         bRet = FALSE;
@@ -1889,8 +1881,8 @@ BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
 
                     if (pRule)
                     {
-                        BYTE nLevel = pTNd->GetLevel();
-                        nLevel += nDiff;
+                        BYTE nLevel = static_cast<BYTE>(pTNd->GetLevel());
+                        nLevel = nLevel + nDiff;
 
                         pTNd->SetLevel(nLevel);
                     }
@@ -2003,7 +1995,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
     // werden?
     if( !IsIgnoreRedline() )
     {
-        USHORT nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), IDocumentRedlineAccess::REDLINE_DELETE );
+        USHORT nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_DELETE );
         if( USHRT_MAX != nRedlPos )
         {
             SwPosition aStPos( *pStt ), aEndPos( *pEnd );
@@ -2016,7 +2008,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
             for( ; nRedlPos < GetRedlineTbl().Count(); ++nRedlPos )
             {
                 const SwRedline* pTmp = GetRedlineTbl()[ nRedlPos ];
-                if( !bCheckDel || IDocumentRedlineAccess::REDLINE_DELETE == pTmp->GetType() )
+                if( !bCheckDel || nsRedlineType_t::REDLINE_DELETE == pTmp->GetType() )
                 {
                     const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
                     switch( ComparePosition( *pRStt, *pREnd, aStPos, aEndPos ))
@@ -2061,12 +2053,12 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
     {
         // wenn der Bereich komplett im eigenen Redline liegt, kann es
         // verschoben werden!
-        USHORT nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), IDocumentRedlineAccess::REDLINE_INSERT );
+        USHORT nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_INSERT );
         if( USHRT_MAX != nRedlPos )
         {
             SwRedline* pTmp = GetRedlineTbl()[ nRedlPos ];
             const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
-            SwRedline aTmpRedl( IDocumentRedlineAccess::REDLINE_INSERT, rPam );
+            SwRedline aTmpRedl( nsRedlineType_t::REDLINE_INSERT, rPam );
             const SwCntntNode* pCEndNd = pEnd->nNode.GetNode().GetCntntNode();
             // liegt komplett im Bereich, und ist auch der eigene Redline?
             if( aTmpRedl.IsOwnRedline( *pTmp ) &&
@@ -2170,17 +2162,17 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
             rOrigPam.GetPoint()->nNode++;
             rOrigPam.GetPoint()->nContent.Assign( rOrigPam.GetCntntNode(), 0 );
 
-            IDocumentRedlineAccess::RedlineMode_t eOld = GetRedlineMode();
+            RedlineMode_t eOld = GetRedlineMode();
             checkRedlining(eOld);
             if( DoesUndo() )
             {
                 //JP 06.01.98: MUSS noch optimiert werden!!!
                 SetRedlineMode(
-                   (IDocumentRedlineAccess::RedlineMode_t)(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE));
+                   (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
                 AppendUndo( new SwUndoRedlineDelete( aPam, UNDO_DELETE ));
             }
 
-            SwRedline* pNewRedline = new SwRedline( IDocumentRedlineAccess::REDLINE_DELETE, aPam );
+            SwRedline* pNewRedline = new SwRedline( nsRedlineType_t::REDLINE_DELETE, aPam );
 
             // #101654# prevent assertion from aPam's target being deleted
             // (Alternatively, one could just let aPam go out of scope, but
@@ -2328,7 +2320,7 @@ SwNumRule* SwDoc::FindNumRulePtr( const String& rName ) const
 
     if ( !pResult )
     {
-        for (int n = 0; n < pNumRuleTbl->Count(); n++)
+        for (USHORT n = 0; n < pNumRuleTbl->Count(); ++n)
         {
             if ((*pNumRuleTbl)[n]->GetName() == rName)
             {
