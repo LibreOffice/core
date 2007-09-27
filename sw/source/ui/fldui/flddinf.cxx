@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddinf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:57:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:46:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,9 @@
 
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
+
+using namespace nsSwDocInfoSubType;
+
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -102,8 +105,8 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     aFormatLB   (this, SW_RES(LB_DOKINFFORMAT)),
     aFixedCB    (this, SW_RES(CB_DOKINFFIXEDCONTENT)),
 
-    aInfoStr    (SW_RES(STR_DOKINF_INFO)),
-    pSelEntry   (0)
+    pSelEntry   (0),
+    aInfoStr    (SW_RES(STR_DOKINF_INFO))
 {
     FreeResource();
 
@@ -131,7 +134,7 @@ __EXPORT SwFldDokInfPage::~SwFldDokInfPage()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& rSet)
+void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
 {
     Init(); // Allgemeine initialisierung
 
@@ -167,7 +170,7 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& rSet)
     if(sUserData.GetToken(0, ';').EqualsIgnoreCaseAscii(USER_DATA_VERSION_1))
     {
         String sVal = sUserData.GetToken(1, ';');
-        nSelEntryData = sVal.ToInt32();
+        nSelEntryData = static_cast< USHORT >(sVal.ToInt32());
     }
 
     SvStringsDtor aLst;
@@ -181,17 +184,17 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& rSet)
                 if (!pInfo && !IsFldEdit())
                 {
                     pInfo = aTypeTLB.InsertEntry(aInfoStr);
-                    pInfo->SetUserData((void*)USHRT_MAX);
+                    pInfo->SetUserData(reinterpret_cast<void*>(USHRT_MAX));
                 }
                 pEntry = aTypeTLB.InsertEntry(*aLst[i], pInfo);
-                pEntry->SetUserData((void*)i);
+                pEntry->SetUserData(reinterpret_cast<void*>(i));
             }
             else
             {
                 if (!(IsFldDlgHtmlMode() && (i == DI_EDIT || i == DI_THEMA || i == DI_PRINT)))
                 {
                     pEntry = aTypeTLB.InsertEntry(*aLst[i]);
-                    pEntry->SetUserData((void*)i);
+                    pEntry->SetUserData(reinterpret_cast<void*>(i));
                 }
             }
             if(nSelEntryData == i)
@@ -260,7 +263,7 @@ IMPL_LINK( SwFldDokInfPage, TypeHdl, ListBox *, EMPTYARG )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, pBox )
+IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
 {
     USHORT nSubType = (USHORT)(ULONG)pSelEntry->GetUserData();
     USHORT nPos = aSelectionLB.GetSelectEntryPos();
@@ -329,7 +332,7 @@ IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, pBox )
 
     if (IsFldEdit())
     {
-        USHORT nPos = aSelectionLB.GetSelectEntryPos();
+        nPos = aSelectionLB.GetSelectEntryPos();
         if (nPos != LISTBOX_ENTRY_NOTFOUND)
         {
             nSubType = (USHORT)(ULONG)aSelectionLB.GetEntryData(nPos);
@@ -403,7 +406,7 @@ USHORT SwFldDokInfPage::FillSelectionLB(USHORT nSubType)
         for (USHORT i = 0; i < nSize; i++)
         {
             USHORT nPos = aSelectionLB.InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
-            aSelectionLB.SetEntryData(nPos, (void*)GetFldMgr().GetFormatId(nTypeId, i));
+            aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(GetFldMgr().GetFormatId(nTypeId, i)));
             if (IsFldEdit() && i == nExtSubType)
                 nSelPos = nPos;
         }
@@ -429,7 +432,7 @@ USHORT SwFldDokInfPage::FillSelectionLB(USHORT nSubType)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-BOOL __EXPORT SwFldDokInfPage::FillItemSet(SfxItemSet& rSet)
+BOOL __EXPORT SwFldDokInfPage::FillItemSet(SfxItemSet& )
 {
     if (!pSelEntry || (USHORT)(ULONG)pSelEntry->GetUserData() == USHRT_MAX)
         return FALSE;
@@ -487,7 +490,7 @@ void    SwFldDokInfPage::FillUserData()
                             RTL_CONSTASCII_STRINGPARAM( USER_DATA_VERSION )));
     sData += ';';
     SvLBoxEntry* pEntry = aTypeTLB.FirstSelected();
-    USHORT nTypeSel = pEntry ? (ULONG)pEntry->GetUserData() : USHRT_MAX;
+    USHORT nTypeSel = pEntry ? sal::static_int_cast< USHORT >(reinterpret_cast< sal_uIntPtr >(pEntry->GetUserData())) : USHRT_MAX;
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
 }
