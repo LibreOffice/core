@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmmgr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:15:45 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:00:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,8 +113,8 @@ public:
     void                SetAnchor(RndStdIds eId);
     inline RndStdIds    GetAnchor()  const;
 
-    void                SetHorzOrientation(SwHoriOrient eOrient);
-    void                SetVertOrientation(SvxFrameVertOrient eOrient);
+    void                SetHorzOrientation(sal_Int16 eOrient);
+    void                SetVertOrientation(sal_Int16 eOrient);
 
     // Absolute Position
     void                SetAbsPos(const Point& rLPoint);
