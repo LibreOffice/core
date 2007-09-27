@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testregistry.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 14:01:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:08:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -687,8 +687,9 @@ void test_DefaultRegistry(
     {
         xReg->close();
     }
-    catch(InvalidRegistryException& /*e*/)
+    catch(InvalidRegistryException& e)
     {
+        (void)e;
         TEST_ENSHURE(0, OUStringToOString(e.Message,RTL_TEXTENCODING_ASCII_US).getStr());
     }
 
