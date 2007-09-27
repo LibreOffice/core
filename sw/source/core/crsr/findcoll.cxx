@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findcoll.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:46:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,13 +70,13 @@ struct SwFindParaFmtColl : public SwFindParas
                         const SwTxtFmtColl* pRpColl, SwCursor& rCrsr )
         : pFmtColl( &rFmtColl ), pReplColl( pRpColl ), rCursor( rCrsr )
     {}
-    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, FASTBOOL bInReadOnly );
+    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, BOOL bInReadOnly );
     virtual int IsReplaceMode() const;
 };
 
 
 int SwFindParaFmtColl::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
-                            FASTBOOL bInReadOnly )
+                            BOOL bInReadOnly )
 {
     int nRet = FIND_FOUND;
     if( bInReadOnly && pReplColl )
@@ -119,7 +119,7 @@ ULONG SwCursor::Find( const SwTxtFmtColl& rFmtColl,
         aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
         aRewriter.AddRule(UNDO_ARG3, pReplFmtColl->GetName());
 
-        pDoc->StartUndo( UIUNDO_REPLACE_STYLE, &aRewriter );
+        pDoc->StartUndo( UNDO_UI_REPLACE_STYLE, &aRewriter );
     }
 
     SwFindParaFmtColl aSwFindParaFmtColl( rFmtColl, pReplFmtColl, *this );
@@ -131,7 +131,7 @@ ULONG SwCursor::Find( const SwTxtFmtColl& rFmtColl,
         pDoc->SetModified();
 
     if( bSttUndo )
-        pDoc->EndUndo( UIUNDO_REPLACE_STYLE, NULL );
+        pDoc->EndUndo( UNDO_UI_REPLACE_STYLE, NULL );
     return nRet;
 }
 
