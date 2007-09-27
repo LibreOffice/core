@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergewizard.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:02:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:32:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,7 +338,7 @@ void SwMailMergeWizard::UpdateRoadmap()
   -----------------------------------------------------------------------*/
 void SwMailMergeWizard::CreateTargetDocument()
 {
-    sal_Int32 nMerged = GetSwView()->GetWrtShell().GetNewDBMgr()->
+    GetSwView()->GetWrtShell().GetNewDBMgr()->
                 MergeDocuments( m_rConfigItem, *GetSwView() );
     m_rConfigItem.SetMergeDone();
     if( m_rConfigItem.GetTargetView() )
