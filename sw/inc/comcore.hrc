@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comcore.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:38:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:57:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,12 +80,12 @@
 // -> #115575#
 #define STR_FRAME                           (RC_COMCORE_BEGIN + 34)
 #define STR_OLE                             (RC_COMCORE_BEGIN + 35)
-#define STR_FORMULA                         (RC_COMCORE_BEGIN + 36)
+#define STR_MATH_FORMULA                    (RC_COMCORE_BEGIN + 36)
 #define STR_CHART                           (RC_COMCORE_BEGIN + 37)
 #define STR_NOTE                            (RC_COMCORE_BEGIN + 38)
 #define STR_REFERENCE                       (RC_COMCORE_BEGIN + 39)
 #define STR_SCRIPT                          (RC_COMCORE_BEGIN + 40)
-#define STR_AUTHORITY                       (RC_COMCORE_BEGIN + 41)
+#define STR_AUTHORITY_ENTRY                 (RC_COMCORE_BEGIN + 41)
 #define STR_SPECIALCHAR                     (RC_COMCORE_BEGIN + 42)
 #define STR_FOOTNOTE                        (RC_COMCORE_BEGIN + 43)
 #define STR_GRAPHIC                         (RC_COMCORE_BEGIN + 44)
