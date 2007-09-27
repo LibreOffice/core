@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:58:07 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:43:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
 
     SetForbiddenCharsTable( pD->getForbiddenCharacterTable() );
     // #87795# Implementation for asian compression
-    SetCharCompressType( pD->getCharacterCompressionType() );
+    SetCharCompressType( static_cast<UINT16>(pD->getCharacterCompressionType() ));
 }
 
 /*************************************************************************
@@ -199,7 +199,7 @@ SwDrawDocument::~SwDrawDocument()
 
 SdrPage* SwDrawDocument::AllocPage(FASTBOOL bMasterPage)
 {
-    SwDPage* pPage = new SwDPage(*this, bMasterPage);
+    SwDPage* pPage = new SwDPage(*this, 0 != bMasterPage);
     pPage->SetName( String::CreateFromAscii(
                                     RTL_CONSTASCII_STRINGPARAM( "Controls" )) );
     return pPage;
