@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:15:07 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:17:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
+
+#include <svx/zoomitem.hxx>
 
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
@@ -183,7 +185,7 @@ protected:
 
     // Maszstab
     USHORT          nZoom;              // Angaben in Prozent
-    BYTE            eZoom;              // 'enum' fuer Zoom
+    SvxZoomType     eZoom;              // 'enum' fuer Zoom
     BYTE            nTblDest;           // Ziel fuer Tabellenhintergrund
 
 #ifndef PRODUCT
@@ -481,7 +483,7 @@ public:
     BOOL    IsPrtFormat() const
         { return nUIOptions & VIEWOPT_2_PRTFORMAT ? TRUE : FALSE; }
 
-    BYTE    GetZoomType()      const { return eZoom;              }
+    SvxZoomType    GetZoomType()      const { return eZoom; }
 
     BYTE    GetTblDest() const    { return nTblDest; }
 
@@ -498,7 +500,7 @@ public:
     void SetPrtFormat( BOOL b)
         { b ? (nUIOptions |= VIEWOPT_2_PRTFORMAT) : (nUIOptions &= ~VIEWOPT_2_PRTFORMAT); }
 
-    void            SetZoomType     (BYTE eZoom_){ eZoom = eZoom_;  }
+    void            SetZoomType     (SvxZoomType eZoom_){ eZoom = eZoom_;  }
     void            SetTblDest( BYTE nNew )     { nTblDest = nNew;  }
 
     const String&   GetSymbolFont() const {return sSymbolFont;}
@@ -513,11 +515,11 @@ public:
 
     BOOL            IsViewHRuler(BOOL bDirect = FALSE)     const
                         {
-                            BOOL bRet = bDirect  ?
+                            BOOL bRet = sal::static_int_cast< BOOL >( bDirect  ?
                                     0 != (nUIOptions & VIEWOPT_2_H_RULER) :
                                     !bReadonly ?
                                         (nUIOptions & (VIEWOPT_2_ANY_RULER|VIEWOPT_2_H_RULER)) == (VIEWOPT_2_ANY_RULER|VIEWOPT_2_H_RULER)
-                                        : FALSE;
+                                        : FALSE );
                             return bRet;
 
                         }
@@ -526,12 +528,12 @@ public:
 
     BOOL            IsViewVRuler(BOOL bDirect = FALSE) const
                         {
-                            BOOL bRet = bDirect  ?
+                            BOOL bRet = sal::static_int_cast< BOOL >( bDirect  ?
                                     0 !=(nUIOptions & VIEWOPT_2_V_RULER) :
                                     !bReadonly ?
                                         (nUIOptions &
                                             (VIEWOPT_2_ANY_RULER|VIEWOPT_2_V_RULER)) == (VIEWOPT_2_ANY_RULER|VIEWOPT_2_V_RULER)
-                                        : FALSE;
+                                        : FALSE );
                             return bRet;
                         }
     void            SetViewVRuler     (BOOL b)
