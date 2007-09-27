@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:15:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:55:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 #ifndef _ACCMAP_HXX
 #define _ACCMAP_HXX
+
+#include <cppuhelper/weakref.hxx>
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
