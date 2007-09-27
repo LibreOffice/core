@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numberingtypelistbox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:43:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,14 +58,11 @@
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #endif
 
-//#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
-//#include <svtools/languageoptions.hxx>
-//#endif
+#include <unomid.h>
 
 using namespace com::sun::star;
 using namespace rtl;
 
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
 /* -----------------------------01.03.01 16:04--------------------------------
 
  ---------------------------------------------------------------------------*/
