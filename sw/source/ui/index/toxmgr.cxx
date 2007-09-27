@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toxmgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:16:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:18:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
             ASSERT(rDesc.GetLevel() > 0 && rDesc.GetLevel() <= MAXLEVEL,
                                             ungueltiger Level InsertTOCMark);
             pMark = new SwTOXMark(pSh->GetTOXType(TOX_CONTENT, 0));
-            pMark->SetLevel(rDesc.GetLevel());
+            pMark->SetLevel( static_cast< USHORT >(rDesc.GetLevel()) );
 
             if(rDesc.GetAltStr())
                 pMark->SetAlternativeText(*rDesc.GetAltStr());
@@ -160,12 +160,13 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
             USHORT nId = rDesc.GetTOUName() ?
                 GetUserTypeID(*rDesc.GetTOUName()) : 0;
             pMark = new SwTOXMark(pSh->GetTOXType(TOX_USER, nId));
-            pMark->SetLevel(rDesc.GetLevel());
+            pMark->SetLevel( static_cast< USHORT >(rDesc.GetLevel()) );
 
             if(rDesc.GetAltStr())
                 pMark->SetAlternativeText(*rDesc.GetAltStr());
         }
         break;
+        default:; //prevent warning
     }
     pSh->StartAllAction();
     pSh->SwEditShell::Insert(*pMark);
@@ -219,7 +220,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
         pCurTOXMark->SetMainEntry(rDesc.IsMainEntry());
     }
     else
-        pCurTOXMark->SetLevel(rDesc.GetLevel());
+        pCurTOXMark->SetLevel( static_cast< USHORT >(rDesc.GetLevel()) );
 
     if(rDesc.GetAltStr())
     {
@@ -343,7 +344,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             {
                 const SwTOXType* pType = pSh->GetTOXType(eCurTOXType, 0);
                 SwForm aForm(eCurTOXType);
-                pNewTOX = new SwTOXBase(pType, aForm, TOX_MARK, pType->GetTypeName());
+                pNewTOX = new SwTOXBase(pType, aForm, nsSwTOXElement::TOX_MARK, pType->GetTypeName());
             }
             pNewTOX->SetOptions(rDesc.GetIndexOptions());
             pNewTOX->SetMainEntryCharStyle(rDesc.GetMainEntryCharStyle());
@@ -384,8 +385,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             }
             else
             {
-                SwTOXBase* pNewTOX = (SwTOXBase*)pCurTOX;
-                pNewTOX->SetCreate(rDesc.GetContentOptions());
+                const_cast<SwTOXBase*>( pCurTOX )->SetCreate(rDesc.GetContentOptions());
             }
             pNewTOX->SetLevelFromChapter(rDesc.IsLevelFromChapter());
         }
@@ -424,7 +424,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                 SwForm aForm(eCurTOXType);
                 pNewTOX = new SwTOXBase(
                     pType, aForm,
-                    TOX_AUTHORITIES == eCurTOXType ? TOX_MARK : 0, pType->GetTypeName());
+                    TOX_AUTHORITIES == eCurTOXType ? nsSwTOXElement::TOX_MARK : 0, pType->GetTypeName());
             }
             else
             {
