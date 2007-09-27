@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inpdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:52:47 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:49:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,16 +91,18 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     SvxStandardDialog(pParent,  SW_RES(DLG_FLD_INPUT)),
 
     rSh( rS ),
+    pInpFld(0),
+    pSetFld(0),
+    pUsrType(0),
+
     aLabelED    (this, SW_RES(ED_LABEL  )),
     aEditED     (this, SW_RES(ED_EDIT   )),
     aEditFL     (this, SW_RES(FL_EDIT       )),
+
     aOKBT       (this, SW_RES(BT_OK     )),
     aCancelBT   (this, SW_RES(BT_CANCEL )),
     aNextBT     (this, SW_RES(PB_NEXT   )),
-    aHelpBT     (this, SW_RES(PB_HELP    )),
-    pInpFld(0),
-    pSetFld(0),
-    pUsrType(0)
+    aHelpBT     (this, SW_RES(PB_HELP    ))
 {
     // Font fuers Edit umschalten
     Font aFont(aEditED.GetFont());
