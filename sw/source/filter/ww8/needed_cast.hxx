@@ -4,9 +4,9 @@
  *
  *  $RCSfile: needed_cast.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:59:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #ifndef WW_NEEDED_CAST_HXX
 #define WW_NEEDED_CAST_HXX
 
+#include <tools/debug.hxx>
+
 #ifndef WW_STATICASSERT_HXX
 #   include "staticassert.hxx"
 #endif
@@ -50,7 +52,7 @@ namespace ww
 
     template<typename Ret> Ret checking_cast(Ret in, Ret)
     {
-        StaticAssert(false, UnnecessaryCast);
+        DBG_ASSERT( false, "UnnecessaryCast" );
         return in;
     }
 
