@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:22:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:25:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,7 +287,7 @@ Menu MN_CALC_POPUP
         };
     };
 };
-String STR_FORMULA
+String STR_TBL_FORMULA
 {
     Text [ en-US ] = "Text formula" ;
 };
