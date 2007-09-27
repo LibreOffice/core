@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwAppletImpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:06:59 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:45:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,10 +57,12 @@ using namespace com::sun::star;
 
 /* Some MIB magic...*/
 
-sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_O_hidden, "HIDDEN" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_HIDDEN_false, "FALSE" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_O_archives, "ARCHIVES" );
-sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_O_object, "OBJECT" );
+//sal_Char SVT_DLLPUBLIC const SVTOOLS_CONSTASCII_DEF( sHTML_O_archive, "ARCHIVE" );
+
+sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_O_Hidden, "HIDDEN" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_O_Hidden_False, "FALSE" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_O_Archives, "ARCHIVES" );
+sal_Char const SVTOOLS_CONSTASCII_DEF( sHTML_O_Object, "OBJECT" );
 
 USHORT SwApplet_Impl::GetOptionType( const String& rName, BOOL bApplet )
 {
@@ -75,7 +77,7 @@ USHORT SwApplet_Impl::GetOptionType( const String& rName, BOOL bApplet )
             nType = SWHTML_OPTTYPE_IGNORE;
         else if( bApplet &&
                  (rName.EqualsIgnoreCaseAscii( sHTML_O_archive ) ||
-                 rName.EqualsIgnoreCaseAscii( sHTML_O_archives )) )
+                 rName.EqualsIgnoreCaseAscii( sHTML_O_Archives )) )
             nType = SWHTML_OPTTYPE_TAG;
         break;
     case 'C':
@@ -90,7 +92,7 @@ USHORT SwApplet_Impl::GetOptionType( const String& rName, BOOL bApplet )
         if( rName.EqualsIgnoreCaseAscii( sHTML_O_height ) )
             nType = SWHTML_OPTTYPE_SIZE;
         else if( rName.EqualsIgnoreCaseAscii( sHTML_O_hspace ) ||
-            (!bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_hidden )) )
+            (!bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_Hidden )) )
             nType = SWHTML_OPTTYPE_IGNORE;
         break;
     case 'I':
@@ -110,7 +112,7 @@ USHORT SwApplet_Impl::GetOptionType( const String& rName, BOOL bApplet )
         break;
     case 'O':
     case 'o':
-        if( bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_object ) )
+        if( bApplet && rName.EqualsIgnoreCaseAscii( sHTML_O_Object ) )
             nType = SWHTML_OPTTYPE_TAG;
         break;
     case 'S':
