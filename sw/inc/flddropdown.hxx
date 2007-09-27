@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddropdown.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:13:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:02:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,7 +274,7 @@ public:
           - FIELD_PROP_PAR3 Get the help text of the field.
           - FIELD_PROP_PAR4 Get the tool tip of the field.
     */
-    virtual BOOL QueryValue(com::sun::star::uno::Any &rVal, BYTE nMId) const;
+    virtual BOOL QueryValue(com::sun::star::uno::Any &rVal, USHORT nWhichId) const;
 
     /**
        API: Sets a property value on the dropdown field.
@@ -286,7 +286,7 @@ public:
           - FIELD_PROP_PAR3  Set the help text of the field.
           - FIELD_PROP_PAR4  Set the tool tip of the field.
     */
-        virtual BOOL PutValue(const com::sun::star::uno::Any &rVal, BYTE nMId);
+        virtual BOOL PutValue(const com::sun::star::uno::Any &rVal, USHORT nWhichId);
 };
 
 #endif
