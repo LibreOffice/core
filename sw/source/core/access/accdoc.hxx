@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accdoc.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:42:13 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:19:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,9 +54,9 @@ class VclSimpleEvent;
 class SwAccessibleDocumentBase : public SwAccessibleContext
 {
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible> xParent;
+        ::com::sun::star::accessibility::XAccessible> mxParent;
 
-    Window *pChildWin;  // protected by solar mutext
+    Window* mpChildWin; // protected by solar mutext
 
 protected:
 
@@ -64,9 +64,9 @@ protected:
 
 public:
 
-    SwAccessibleDocumentBase(
-        SwAccessibleMap *pMap );
+    SwAccessibleDocumentBase( SwAccessibleMap* pInitMap );
 
+    using SwAccessibleFrame::SetVisArea;
     void SetVisArea();
 
     virtual void AddChild( Window *pWin, sal_Bool bFireEvent = sal_True );
@@ -130,7 +130,7 @@ class SwAccessibleDocument : public SwAccessibleDocumentBase,
                              public com::sun::star::accessibility::XAccessibleSelection
 {
     // Implementation for XAccessibleSelection interface
-    SwAccessibleSelectionHelper aSelectionHelper;
+    SwAccessibleSelectionHelper maSelectionHelper;
 
 protected:
 
@@ -142,8 +142,7 @@ protected:
 
 public:
 
-    SwAccessibleDocument(
-        SwAccessibleMap *pMap );
+    SwAccessibleDocument( SwAccessibleMap* pInitMap );
 
     DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
 
