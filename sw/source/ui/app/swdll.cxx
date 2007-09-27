@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdll.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:15:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:17:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@
 #include <svx/objfac3d.hxx>
 #endif
 
-#define C2S(cChar) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
+#include <unomid.h>
 
 
 /*************************************************************************
@@ -135,7 +135,7 @@ void SwDLL::Init()
     // 3D-Objekt-Factory eintragen
     E3dObjFactory();
 
-    // ::com::sun::star::form::component::Form-Objekt-Factory eintragen
+    // form::component::Form-Objekt-Factory eintragen
     FmFormObjFactory();
 
     SdrObjFactory::InsertMakeObjectHdl( LINK( &aSwObjectFactory, SwObjectFactory, MakeObject ) );
