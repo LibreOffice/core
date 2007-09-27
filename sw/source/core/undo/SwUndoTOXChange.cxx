@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwUndoTOXChange.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:49:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:29:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,14 +59,14 @@ void SwUndoTOXChange::UpdateTOXBaseSection()
     }
 }
 
-void SwUndoTOXChange::Undo(SwUndoIter & rIter)
+void SwUndoTOXChange::Undo(SwUndoIter &)
 {
     *pTOX = aOld;
 
     UpdateTOXBaseSection();
 }
 
-void SwUndoTOXChange::Redo(SwUndoIter & rIter)
+void SwUndoTOXChange::Redo(SwUndoIter &)
 {
     *pTOX = aNew;
 
