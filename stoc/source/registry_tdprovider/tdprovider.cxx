@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:35:08 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:00:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,11 +93,11 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::registry;
 
-namespace stoc_rdbtdp
-{
-rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+extern rtl_StandardModuleCount g_moduleCount;
 
-static uno::Sequence< OUString > rdbtdp_getSupportedServiceNames()
+namespace stoc_bootstrap
+{
+uno::Sequence< OUString > rdbtdp_getSupportedServiceNames()
 {
     static Sequence < OUString > *pNames = 0;
     if( ! pNames )
@@ -113,7 +113,7 @@ static uno::Sequence< OUString > rdbtdp_getSupportedServiceNames()
     return *pNames;
 }
 
-static OUString rdbtdp_getImplementationName()
+OUString rdbtdp_getImplementationName()
 {
     static OUString *pImplName = 0;
     if( ! pImplName )
@@ -127,7 +127,10 @@ static OUString rdbtdp_getImplementationName()
     }
     return *pImplName;
 }
+}
 
+namespace stoc_rdbtdp
+{
 struct MutexHolder
 {
     Mutex _aComponentMutex;
@@ -349,7 +352,7 @@ void ProviderImpl::initialize(
 OUString ProviderImpl::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return rdbtdp_getImplementationName();
+    return stoc_bootstrap::rdbtdp_getImplementationName();
 }
 //__________________________________________________________________________________________________
 sal_Bool ProviderImpl::supportsService( const OUString & rServiceName )
@@ -368,7 +371,7 @@ sal_Bool ProviderImpl::supportsService( const OUString & rServiceName )
 Sequence< OUString > ProviderImpl::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return rdbtdp_getSupportedServiceNames();
+    return stoc_bootstrap::rdbtdp_getSupportedServiceNames();
 }
 
 // XHierarchicalNameAccess
@@ -502,14 +505,6 @@ ProviderImpl::createTypeDescriptionEnumeration(
                                                         types,
                                                         depth,
                                                         _aBaseKeys ).get() );
-}
-
-//==================================================================================================
-static com::sun::star::uno::Reference< XInterface > SAL_CALL ProviderImpl_create(
-    com::sun::star::uno::Reference< XComponentContext > const & xContext )
-    throw(::com::sun::star::uno::Exception)
-{
-    return com::sun::star::uno::Reference< XInterface >( *new ProviderImpl( xContext ) );
 }
 
 //__________________________________________________________________________________________________
@@ -657,45 +652,13 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
 
 }
 
-
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
-using namespace stoc_rdbtdp;
-
-static struct ImplementationEntry g_entries[] =
+namespace stoc_bootstrap
 {
-    {
-        ProviderImpl_create, rdbtdp_getImplementationName,
-        rdbtdp_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt , 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
-extern "C"
-{
-sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
-{
-    return g_moduleCount.canUnload( &g_moduleCount , pTime );
-}
-
 //==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** )
+com::sun::star::uno::Reference< XInterface > SAL_CALL ProviderImpl_create(
+    com::sun::star::uno::Reference< XComponentContext > const & xContext )
+    throw(::com::sun::star::uno::Exception)
 {
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
-}
-//==================================================================================================
-void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
+    return com::sun::star::uno::Reference< XInterface >( *new stoc_rdbtdp::ProviderImpl( xContext ) );
 }
 }
