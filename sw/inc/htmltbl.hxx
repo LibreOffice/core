@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltbl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:58:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:05:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -402,13 +402,13 @@ inline void SwHTMLTableLayoutCell::SetProtected()
 
 /*  */
 
-inline void SwHTMLTableLayoutColumn::MergeMinMaxNoAlign( ULONG nMin,
-    ULONG nMax, ULONG nAbsMin )
+inline void SwHTMLTableLayoutColumn::MergeMinMaxNoAlign( ULONG nCMin,
+    ULONG nCMax,    ULONG nAbsMin )
 {
-    if( nMin > nMinNoAlign )
-        nMinNoAlign = nMin;
-    if( nMax > nMaxNoAlign )
-        nMaxNoAlign = nMax;
+    if( nCMin > nMinNoAlign )
+        nMinNoAlign = nCMin;
+    if( nCMax > nMaxNoAlign )
+        nMaxNoAlign = nCMax;
     if( nAbsMin > nAbsMinNoAlign )
         nAbsMinNoAlign = nAbsMin;
 }
@@ -448,9 +448,9 @@ inline USHORT SwHTMLTableLayout::GetInhCellSpace( USHORT nCol,
 {
     USHORT nSpace = 0;
     if( nCol==0 )
-        nSpace += nInhAbsLeftSpace;
+        nSpace = nSpace + sal::static_int_cast< USHORT >(nInhAbsLeftSpace);
     if( nCol+nColSpan==nCols )
-        nSpace += nInhAbsRightSpace;
+        nSpace = nSpace + sal::static_int_cast< USHORT >(nInhAbsRightSpace);
 
     return nSpace;
 }
