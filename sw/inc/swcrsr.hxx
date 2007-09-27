@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:36:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:10:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,18 +69,19 @@ const int FIND_NO_RING      = 2;
 
 struct SwFindParas
 {
-    virtual int Find( SwPaM*, SwMoveFn, const SwPaM*, FASTBOOL ) = 0;
+    virtual int Find( SwPaM*, SwMoveFn, const SwPaM*, BOOL ) = 0;
     virtual int IsReplaceMode() const = 0;
 };
 
-enum SwCursorSelOverFlags
+typedef USHORT SwCursorSelOverFlags;
+namespace nsSwCursorSelOverFlags
 {
-    SELOVER_NONE                = 0x00,
-    SELOVER_CHECKNODESSECTION   = 0x01,
-    SELOVER_TOGGLE              = 0x02,
-    SELOVER_ENABLEREVDIREKTION  = 0x04,
-    SELOVER_CHANGEPOS           = 0x08
-};
+    const SwCursorSelOverFlags SELOVER_NONE                = 0x00;
+    const SwCursorSelOverFlags SELOVER_CHECKNODESSECTION   = 0x01;
+    const SwCursorSelOverFlags SELOVER_TOGGLE              = 0x02;
+    const SwCursorSelOverFlags SELOVER_ENABLEREVDIREKTION  = 0x04;
+    const SwCursorSelOverFlags SELOVER_CHANGEPOS           = 0x08;
+}
 
 class SwCursor : public SwPaM
 {
@@ -108,7 +109,7 @@ public:
     SwCursor( SwCursor& rCpy);
 private:
     // forbidden and not implemented.
-    SwCursor( const SwCursor& );
+    //SwCursor( const SwCursor& );
     // @@@ used e.g. in core/frmedt/fetab.cxx @@@
     // SwCursor & operator= ( const SwCursor& );
 public:
@@ -134,19 +135,19 @@ public:
     SwMoveFnCollection* MakeFindRange( SwDocPositions, SwDocPositions,
                                         SwPaM* ) const;
 
+
+    using SwPaM::Find;
     ULONG Find( const com::sun::star::util::SearchOptions& rSearchOpt,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 BOOL& bCancel,
                 FindRanges = FND_IN_BODY,
                 int bReplace = FALSE );
-
     ULONG Find( const SwTxtFmtColl& rFmtColl,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 BOOL& bCancel,
                 FindRanges = FND_IN_BODY,
                 const SwTxtFmtColl* pReplFmt = 0 );
-
-    ULONG Find( const SfxItemSet& rSet, FASTBOOL bNoCollections,
+    ULONG Find( const SfxItemSet& rSet, BOOL bNoCollections,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 BOOL& bCancel,
                 FindRanges = FND_IN_BODY,
@@ -154,26 +155,26 @@ public:
                 const SfxItemSet* rReplSet = 0 );
 
     // UI versions
-    FASTBOOL IsStartWord() const;
-    FASTBOOL IsEndWord() const;
-    FASTBOOL IsStartEndSentence( bool bEnd ) const;
-    FASTBOOL IsInWord() const;
-    FASTBOOL GoStartWord();
-    FASTBOOL GoEndWord();
-    FASTBOOL GoNextWord();
-    FASTBOOL GoPrevWord();
-    FASTBOOL SelectWord( const Point* pPt = 0 );
+    BOOL IsStartWord() const;
+    BOOL IsEndWord() const;
+    BOOL IsStartEndSentence( bool bEnd ) const;
+    BOOL IsInWord() const;
+    BOOL GoStartWord();
+    BOOL GoEndWord();
+    BOOL GoNextWord();
+    BOOL GoPrevWord();
+    BOOL SelectWord( const Point* pPt = 0 );
 
     // API versions of above functions (will be used with a different
     // WordType for the break iterator)
-    FASTBOOL IsStartWordWT( sal_Int16 nWordType ) const;
-    FASTBOOL IsEndWordWT( sal_Int16 nWordType ) const;
-    FASTBOOL IsInWordWT( sal_Int16 nWordType ) const;
-    FASTBOOL GoStartWordWT( sal_Int16 nWordType );
-    FASTBOOL GoEndWordWT( sal_Int16 nWordType );
-    FASTBOOL GoNextWordWT( sal_Int16 nWordType );
-    FASTBOOL GoPrevWordWT( sal_Int16 nWordType );
-    FASTBOOL SelectWordWT( sal_Int16 nWordType, const Point* pPt = 0 );
+    BOOL IsStartWordWT( sal_Int16 nWordType ) const;
+    BOOL IsEndWordWT( sal_Int16 nWordType ) const;
+    BOOL IsInWordWT( sal_Int16 nWordType ) const;
+    BOOL GoStartWordWT( sal_Int16 nWordType );
+    BOOL GoEndWordWT( sal_Int16 nWordType );
+    BOOL GoNextWordWT( sal_Int16 nWordType );
+    BOOL GoPrevWordWT( sal_Int16 nWordType );
+    BOOL SelectWordWT( sal_Int16 nWordType, const Point* pPt = 0 );
 
     enum SentenceMoveType
     {
@@ -182,59 +183,59 @@ public:
         START_SENT,
         END_SENT
     };
-    FASTBOOL GoSentence(SentenceMoveType eMoveType);
-    FASTBOOL GoNextSentence(){return GoSentence(NEXT_SENT);}
-    FASTBOOL GoEndSentence(){return GoSentence(END_SENT);}
-    FASTBOOL GoPrevSentence(){return GoSentence(PREV_SENT);}
-    FASTBOOL GoStartSentence(){return GoSentence(START_SENT);}
+    BOOL GoSentence(SentenceMoveType eMoveType);
+    BOOL GoNextSentence(){return GoSentence(NEXT_SENT);}
+    BOOL GoEndSentence(){return GoSentence(END_SENT);}
+    BOOL GoPrevSentence(){return GoSentence(PREV_SENT);}
+    BOOL GoStartSentence(){return GoSentence(START_SENT);}
 
-    FASTBOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode, BOOL bAllowVisual, BOOL bSkipHidden,
+    BOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode, BOOL bAllowVisual, BOOL bSkipHidden,
                         BOOL bInsertCrsr );
-    FASTBOOL UpDown( BOOL bUp, USHORT nCnt = 1,
-                    Point* pPt = 0, long nUpDownX = 0 );
-    FASTBOOL LeftRightMargin( BOOL bLeftMargin, BOOL bAPI = FALSE );
-    FASTBOOL IsAtLeftRightMargin( BOOL bLeftMargin, BOOL bAPI = FALSE ) const;
-    FASTBOOL SttEndDoc( BOOL bSttDoc );
-    FASTBOOL GoPrevNextCell( BOOL bNext, USHORT nCnt );
+    BOOL UpDown( BOOL bUp, USHORT nCnt, Point* pPt, long nUpDownX );
+    BOOL LeftRightMargin( BOOL bLeftMargin, BOOL bAPI = FALSE );
+    BOOL IsAtLeftRightMargin( BOOL bLeftMargin, BOOL bAPI = FALSE ) const;
+    BOOL SttEndDoc( BOOL bSttDoc );
+    BOOL GoPrevNextCell( BOOL bNext, USHORT nCnt );
 
-    FASTBOOL Left( USHORT nCnt, USHORT nMode, BOOL bAllowVisual, BOOL bSkipHidden )
+    BOOL Left( USHORT nCnt, USHORT nMode, BOOL bAllowVisual, BOOL bSkipHidden )
                                     { return LeftRight( TRUE, nCnt, nMode, bAllowVisual, bSkipHidden, FALSE ); }
-    FASTBOOL Right( USHORT nCnt, USHORT nMode, BOOL bAllowVisual, BOOL bSkipHidden )
+    BOOL Right( USHORT nCnt, USHORT nMode, BOOL bAllowVisual, BOOL bSkipHidden )
                                     { return LeftRight( FALSE, nCnt, nMode, bAllowVisual, bSkipHidden, FALSE ); }
-    FASTBOOL GoNextCell( USHORT nCnt = 1 )  { return GoPrevNextCell( TRUE, nCnt ); }
-    FASTBOOL GoPrevCell( USHORT nCnt = 1 )  { return GoPrevNextCell( FALSE, nCnt ); }
-    FASTBOOL GotoTable( const String& rName );
-    FASTBOOL GotoTblBox( const String& rName );
-    FASTBOOL GotoRegion( const String& rName );
-    FASTBOOL GotoFtnAnchor();
-    FASTBOOL GotoFtnTxt();
-    FASTBOOL GotoNextFtnAnchor();
-    FASTBOOL GotoPrevFtnAnchor();
-    FASTBOOL GotoNextFtnCntnt();
-    FASTBOOL GotoPrevFtnCntnt();
+    BOOL GoNextCell( USHORT nCnt = 1 )  { return GoPrevNextCell( TRUE, nCnt ); }
+    BOOL GoPrevCell( USHORT nCnt = 1 )  { return GoPrevNextCell( FALSE, nCnt ); }
+    BOOL GotoTable( const String& rName );
+    BOOL GotoTblBox( const String& rName );
+    BOOL GotoRegion( const String& rName );
+    BOOL GotoFtnAnchor();
+    BOOL GotoFtnTxt();
+    BOOL GotoNextFtnAnchor();
+    BOOL GotoPrevFtnAnchor();
+    BOOL GotoNextFtnCntnt();
+    BOOL GotoPrevFtnCntnt();
 
-    FASTBOOL MovePara( SwWhichPara, SwPosPara );
-    FASTBOOL MoveSection( SwWhichSection, SwPosSection );
-    FASTBOOL MoveTable( SwWhichTable, SwPosTable );
-    FASTBOOL MoveRegion( SwWhichRegion, SwPosRegion );
+    BOOL MovePara( SwWhichPara, SwPosPara );
+    BOOL MoveSection( SwWhichSection, SwPosSection );
+    BOOL MoveTable( SwWhichTable, SwPosTable );
+    BOOL MoveRegion( SwWhichRegion, SwPosRegion );
 
 
     // gibt es eine Selection vom Content in die Tabelle
     // Return Wert gibt an, ob der Crsr auf der alten Position verbleibt
-    virtual FASTBOOL IsSelOvr( int eFlags =
-                                ( SELOVER_CHECKNODESSECTION |
-                                  SELOVER_TOGGLE | SELOVER_CHANGEPOS ));
-    virtual FASTBOOL IsInProtectTable( FASTBOOL bMove = FALSE,
-                                        FASTBOOL bChgCrsr = TRUE );
-    FASTBOOL IsNoCntnt() const;
+    virtual BOOL IsSelOvr( int eFlags =
+                                ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
+                                  nsSwCursorSelOverFlags::SELOVER_TOGGLE |
+                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
+    virtual BOOL IsInProtectTable( BOOL bMove = FALSE,
+                                        BOOL bChgCrsr = TRUE );
+    BOOL IsNoCntnt() const;
 
     void RestoreSavePos();      // Point auf die SavePos setzen
 
     // TRUE: an die Position kann der Cursor gesetzt werden
-    virtual FASTBOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
+    virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
 
     // darf der Cursor in ReadOnlyBereiche?
-    FASTBOOL IsReadOnlyAvailable() const;
+    BOOL IsReadOnlyAvailable() const;
 
     BYTE GetCrsrBidiLevel() const { return nCursorBidiLevel; }
     void SetCrsrBidiLevel( BYTE nNewLevel ) { nCursorBidiLevel = nNewLevel; }
@@ -297,13 +298,13 @@ public:
         // Baut fuer alle Boxen die Cursor auf
     SwCursor* MakeBoxSels( SwCursor* pAktCrsr );
         // sind irgendwelche Boxen mit einem Schutz versehen?
-    FASTBOOL HasReadOnlyBoxSel() const;
+    BOOL HasReadOnlyBoxSel() const;
 
         // wurde der TabelleCursor veraendert ? Wenn ja speicher gleich
         // die neuen Werte.
-    FASTBOOL IsCrsrMovedUpdt();
+    BOOL IsCrsrMovedUpdt();
         // wurde der TabelleCursor veraendert ?
-    FASTBOOL IsCrsrMoved() const
+    BOOL IsCrsrMoved() const
     {
         return  nTblMkNd != GetMark()->nNode.GetIndex() ||
                 nTblPtNd != GetPoint()->nNode.GetIndex() ||
@@ -311,7 +312,7 @@ public:
                 nTblPtCnt != GetPoint()->nContent.GetIndex();
     }
 
-    FASTBOOL IsChgd() const { return bChg; }
+    BOOL IsChgd() const { return bChg; }
 
     // Parke den Tabellen-Cursor auf dem StartNode der Boxen.
     void ParkCrsr();
