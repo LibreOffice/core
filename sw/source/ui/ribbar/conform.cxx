@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conform.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:10:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:24:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ extern BOOL bNoInterrupt;       // in mainwn.cxx
 ConstFormControl::ConstFormControl(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
     SwDrawBase(pWrtShell, pEditWin, pSwView)
 {
-    bInsForm = TRUE;
+    m_bInsForm = TRUE;
 }
 
 /*************************************************************************
@@ -80,7 +80,7 @@ BOOL ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FALSE;
 
-    SdrView *pSdrView = pSh->GetDrawView();
+    SdrView *pSdrView = m_pSh->GetDrawView();
 
     pSdrView->SetOrtho(rMEvt.IsShift());
     pSdrView->SetAngleSnapEnabled(rMEvt.IsShift());
@@ -100,19 +100,19 @@ BOOL ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
     SdrHitKind eHit = pSdrView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
     // Nur neues Objekt, wenn nicht im Basismode (bzw reinem Selektionsmode)
-    if (rMEvt.IsLeft() && !pWin->IsDrawAction() &&
-        (eHit == SDRHIT_UNMARKEDOBJECT || eHit == SDRHIT_NONE || pSh->IsDrawCreate()))
+    if (rMEvt.IsLeft() && !m_pWin->IsDrawAction() &&
+        (eHit == SDRHIT_UNMARKEDOBJECT || eHit == SDRHIT_NONE || m_pSh->IsDrawCreate()))
     {
         bNoInterrupt = TRUE;
-        pWin->CaptureMouse();
+        m_pWin->CaptureMouse();
 
-        pWin->SetPointer(Pointer(POINTER_DRAW_RECT));
+        m_pWin->SetPointer(Pointer(POINTER_DRAW_RECT));
 
-        aStartPos = pWin->PixelToLogic(rMEvt.GetPosPixel());
-        bReturn = pSh->BeginCreate(pWin->GetDrawMode(), FmFormInventor, aStartPos);
+        m_aStartPos = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
+        bReturn = m_pSh->BeginCreate( static_cast< UINT16 >(m_pWin->GetSdrDrawMode()), FmFormInventor, m_aStartPos);
 
         if (bReturn)
-            pWin->SetDrawAction(TRUE);
+            m_pWin->SetDrawAction(TRUE);
     }
     else
         bReturn = SwDrawBase::MouseButtonDown(rMEvt);
@@ -129,11 +129,11 @@ BOOL ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
 
 void ConstFormControl::Activate(const USHORT nSlotId)
 {
-    pWin->SetDrawMode(nSlotId);
+    m_pWin->SetSdrDrawMode( static_cast<SdrObjKind>(nSlotId) );
     SwDrawBase::Activate(nSlotId);
-    pSh->GetDrawView()->SetCurrentObj(nSlotId);
+    m_pSh->GetDrawView()->SetCurrentObj(nSlotId);
 
-    pWin->SetPointer(Pointer(POINTER_DRAW_RECT));
+    m_pWin->SetPointer(Pointer(POINTER_DRAW_RECT));
 }
 /* -----------------------------19.04.2002 12:42------------------------------
 
@@ -147,13 +147,13 @@ void ConstFormControl::CreateDefaultObject()
     aEndPos.X() += 2 * MM50;
     aEndPos.Y() += MM50;
 
-    if(!pSh->HasDrawView())
-        pSh->MakeDrawView();
+    if(!m_pSh->HasDrawView())
+        m_pSh->MakeDrawView();
 
-    SdrView *pSdrView = pSh->GetDrawView();
+    SdrView *pSdrView = m_pSh->GetDrawView();
     pSdrView->SetDesignMode(TRUE);
-    pSh->BeginCreate(pWin->GetDrawMode(), FmFormInventor, aStartPos);
-    pSh->MoveCreate(aEndPos);
-    pSh->EndCreate(SDRCREATE_FORCEEND);
+    m_pSh->BeginCreate( static_cast< UINT16 >(m_pWin->GetSdrDrawMode()), FmFormInventor, aStartPos);
+    m_pSh->MoveCreate(aEndPos);
+    m_pSh->EndCreate(SDRCREATE_FORCEEND);
 }
 
