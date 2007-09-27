@@ -4,9 +4,9 @@
  *
  *  $RCSfile: split.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:01:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:09:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ public:
 
     BOOL                IsHorizontal() const { return aHorzBox.IsChecked(); }
     BOOL                IsProportional() const { return aPropCB.IsChecked() && aHorzBox.IsChecked(); }
-    long                GetCount() const { return aCountEdit.GetValue(); }
+    long                GetCount() const { return sal::static_int_cast< long >(aCountEdit.GetValue()); }
 };
 
 #endif
