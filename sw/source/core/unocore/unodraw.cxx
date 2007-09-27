@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:02:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:35:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@ public:
             if (bCreate && !pHOrient)
             {
                 // OD 2004-06-03 #i26791# - change default
-                pHOrient = new SwFmtHoriOrient( 0, HORI_NONE, FRAME );
+                pHOrient = new SwFmtHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::FRAME );
             }
             return pHOrient;
         }
@@ -245,7 +245,7 @@ public:
             if(bCreate && !pVOrient)
             {
                 // OD 2004-04-21 #i26791# - change default
-                pVOrient = new SwFmtVertOrient( 0, VERT_NONE, FRAME );
+                pVOrient = new SwFmtVertOrient( 0, text::VertOrientation::NONE, text::RelOrientation::FRAME );
             }
             return pVOrient;
         }
@@ -385,13 +385,6 @@ void SwFmDrawPage::PreUnGroup(const uno::Reference< drawing::XShapeGroup >  xSha
 /*-- 22.01.99 11:13:08---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-/*void  SwFmDrawPage::PostGroup()
-{
-    pView->GroupMarked();
-}
-/*-- 22.01.99 11:13:08---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 SdrPageView*    SwFmDrawPage::GetPageView()
 {
     if(!pPageView)
@@ -447,7 +440,7 @@ uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj )
         SwFlyDrawContact* pFlyContact = (SwFlyDrawContact*)pObj->GetUserCall();
         if(pFlyContact)
         {
-            FlyCntType eType;
+            FlyCntType eType = FLYCNTTYPE_ALL;
             SwFrmFmt* pFlyFmt = pFlyContact->GetFmt();
             SwDoc* pDoc = pFlyFmt->GetDoc();
             const SwNodeIndex* pIdx;
@@ -470,6 +463,7 @@ uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj )
                         "<SwFmDrawPage::_CreateShape(..)> - could not retrieve type. Thus, no shape created." );
                 return xRet;
             }
+            DBG_ASSERT( eType != FLYCNTTYPE_ALL, "unexpected FlyCntType value for eType" );
             xRet = SwXFrames::GetObject( *pFlyFmt, eType );
         }
      }
@@ -484,7 +478,8 @@ uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj )
         //don't create an SwXShape if it already exists
         SwXShape* pShape = 0;
         if(xShapeTunnel.is())
-            pShape = (SwXShape*)xShapeTunnel->getSomething(SwXShape::getUnoTunnelId());
+            pShape = reinterpret_cast< SwXShape * >(
+                    sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SwXShape::getUnoTunnelId()) ));
         if(!pShape)
         {
             xShapeTunnel = 0;
@@ -608,15 +603,10 @@ uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex)
     if(!pDoc)
         throw uno::RuntimeException();
     if(!pDoc->GetDrawModel())
-    {
         throw lang::IndexOutOfBoundsException();
-    }
-    else
-    {
-         ((SwXDrawPage*)this)->GetSvxPage();
-         return pDrawPage->getByIndex( nIndex);
-    }
-    return uno::Any();
+
+    ((SwXDrawPage*)this)->GetSvxPage();
+    return pDrawPage->getByIndex( nIndex );
 }
 /* -----------------22.01.99 13:13-------------------
  *
@@ -653,8 +643,10 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     SvxShape* pSvxShape = 0;
     if(xShapeTunnel.is())
     {
-        pShape = (SwXShape*)xShapeTunnel->getSomething(SwXShape::getUnoTunnelId());
-        pSvxShape = (SvxShape*)xShapeTunnel->getSomething(SvxShape::getUnoTunnelId());
+        pShape      = reinterpret_cast< SwXShape * >(
+                sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SwXShape::getUnoTunnelId()) ));
+        pSvxShape   = reinterpret_cast< SvxShape * >(
+                sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
     }
 
     if(!pShape || pShape->GetRegisteredIn() || !pShape->m_bDescriptor )
@@ -706,7 +698,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         }
         // <--
         {
-            if(pDesc->GetHOrient()->GetHoriOrient() == HORI_NONE)
+            if(pDesc->GetHOrient()->GetHoriOrient() == text::HoriOrientation::NONE)
                 aMM100Pos.X = TWIP_TO_MM100(pDesc->GetHOrient()->GetPos());
             aSet.Put( *pDesc->GetHOrient() );
         }
@@ -719,7 +711,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         }
         // <--
         {
-            if(pDesc->GetVOrient()->GetVertOrient() == VERT_NONE)
+            if(pDesc->GetVOrient()->GetVertOrient() == text::VertOrientation::NONE)
                 aMM100Pos.Y = TWIP_TO_MM100(pDesc->GetVOrient()->GetPos());
             aSet.Put( *pDesc->GetVOrient() );
         }
@@ -934,7 +926,7 @@ sal_Int64 SAL_CALL SwXShape::getSomething( const uno::Sequence< sal_Int8 >& rId 
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
-            return (sal_Int64)this;
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
 
     if( xShapeAgg.is() )
@@ -957,8 +949,8 @@ sal_Int64 SAL_CALL SwXShape::getSomething( const uno::Sequence< sal_Int8 >& rId 
 SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_SHAPE)),
     _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_SHAPE)),
-    pImpl(new SwShapeDescriptor_Impl),
     pImplementationId(0),
+    pImpl(new SwShapeDescriptor_Impl),
     m_bDescriptor(sal_True)
 {
     if(xShape.is())  // default Ctor
@@ -987,7 +979,8 @@ SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
         uno::Reference< lang::XUnoTunnel > xShapeTunnel(xShapeAgg, uno::UNO_QUERY);
         SvxShape* pShape = 0;
         if(xShapeTunnel.is())
-            pShape = (SvxShape*)xShapeTunnel->getSomething(SvxShape::getUnoTunnelId());
+            pShape = reinterpret_cast< SvxShape * >(
+                    sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
 
         SdrObject* pObj = pShape ? pShape->GetSdrObject() : 0;
         if(pObj)
@@ -1018,7 +1011,7 @@ uno::Any SwXShape::queryInterface( const uno::Type& aType ) throw( uno::RuntimeE
 {
     uno::Any aRet = SwXShapeBaseClass::queryInterface(aType);
     // --> OD 2005-08-15 #i53320# - follow-up of #i31698#
-    // interface com::sun::star::drawing::XShape is overloaded. Thus, provide
+    // interface drawing::XShape is overloaded. Thus, provide
     // correct object instance.
     if(!aRet.hasValue() && xShapeAgg.is())
     {
@@ -1156,20 +1149,22 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                     {
                         uno::Reference<lang::XUnoTunnel> xTunnel(xFrame, uno::UNO_QUERY);
                         SwXFrame* pFrame = xTunnel.is() ?
-                                (SwXFrame*)xTunnel->getSomething(SwXFrame::getUnoTunnelId()) : 0;
+                                reinterpret_cast< SwXFrame * >(
+                                    sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXFrame::getUnoTunnelId()) ))
+                                : 0;
                         if(pFrame && pFrame->GetFrmFmt() &&
                             pFrame->GetFrmFmt()->GetDoc() == pDoc)
                         {
                             UnoActionContext aCtx(pDoc);
-                            SfxItemSet aSet( pDoc->GetAttrPool(),
+                            SfxItemSet aItemSet( pDoc->GetAttrPool(),
                                         RES_FRMATR_BEGIN, RES_FRMATR_END - 1 );
-                            aSet.SetParent(&pFmt->GetAttrSet());
-                            SwFmtAnchor aAnchor = (const SwFmtAnchor&)aSet.Get(pMap->nWID);
+                            aItemSet.SetParent(&pFmt->GetAttrSet());
+                            SwFmtAnchor aAnchor = (const SwFmtAnchor&)aItemSet.Get(pMap->nWID);
                             SwPosition aPos(*pFrame->GetFrmFmt()->GetCntnt().GetCntntIdx());
                             aAnchor.SetAnchor(&aPos);
                             aAnchor.SetType(FLY_AT_FLY);
-                            aSet.Put(aAnchor);
-                            pFmt->SetAttr(aSet);
+                            aItemSet.Put(aAnchor);
+                            pFmt->SetAttr(aItemSet);
                             bDone = sal_True;
                         }
                     }
@@ -1422,7 +1417,7 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                         Point aPt = pObj->GetAnchorPos();
                         awt::Point aPoint( TWIP_TO_MM100( aPt.X() ),
                                            TWIP_TO_MM100( aPt.Y() ) );
-                        aRet.setValue(&aPoint, ::getCppuType( (::com::sun::star::awt::Point*)0 ));
+                        aRet.setValue(&aPoint, ::getCppuType( (awt::Point*)0 ));
                     }
                 }
                 // OD 2004-04-22 #i26791# - special handling for FN_TEXT_RANGE
@@ -1519,7 +1514,7 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                     case FN_ANCHOR_POSITION :
                     {
                         awt::Point aPoint;
-                        aRet.setValue(&aPoint, ::getCppuType( (::com::sun::star::awt::Point*)0 ));
+                        aRet.setValue(&aPoint, ::getCppuType( (awt::Point*)0 ));
                     }
                     break;
                     // OD 2004-04-22 #i26791#
@@ -1854,8 +1849,8 @@ uno::Any SwXShape::getPropertyDefault( const rtl::OUString& rPropertyName )
 
   -----------------------------------------------------------------------*/
 void SwXShape::addPropertyChangeListener(
-    const rtl::OUString& PropertyName,
-    const uno::Reference< beans::XPropertyChangeListener > & aListener)
+    const rtl::OUString& /*PropertyName*/,
+    const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
@@ -1865,8 +1860,8 @@ void SwXShape::addPropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXShape::removePropertyChangeListener(
-    const rtl::OUString& PropertyName,
-    const uno::Reference< beans::XPropertyChangeListener > & aListener)
+    const rtl::OUString& /*PropertyName*/,
+    const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
@@ -1876,8 +1871,8 @@ void SwXShape::removePropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXShape::addVetoableChangeListener(
-    const rtl::OUString& PropertyName,
-    const uno::Reference< beans::XVetoableChangeListener > & aListener )
+    const rtl::OUString& /*PropertyName*/,
+    const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/ )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
@@ -1887,8 +1882,8 @@ void SwXShape::addVetoableChangeListener(
 
   -----------------------------------------------------------------------*/
 void SwXShape::removeVetoableChangeListener(
-    const rtl::OUString& PropertyName,
-    const uno::Reference< beans::XVetoableChangeListener > & aListener)
+    const rtl::OUString& /*PropertyName*/,
+    const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
@@ -1920,14 +1915,14 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
         SwXTextPortion* pPortion = 0;
         SwXText* pText = 0;
 
-        pRange = (SwXTextRange*)xRangeTunnel->getSomething(
-                                SwXTextRange::getUnoTunnelId());
-        pText = (SwXText*)xRangeTunnel->getSomething(
-                                SwXText::getUnoTunnelId());
-        pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
-                                OTextCursorHelper::getUnoTunnelId());
-        pPortion = (SwXTextPortion*)xRangeTunnel->getSomething(
-                                SwXTextPortion::getUnoTunnelId());
+        pRange  = reinterpret_cast< SwXTextRange * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
+        pText   = reinterpret_cast< SwXText * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXText::getUnoTunnelId()) ));
+        pCursor = reinterpret_cast< OTextCursorHelper * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
+        pPortion = reinterpret_cast< SwXTextPortion * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextPortion::getUnoTunnelId()) ));
 
         if (pRange)
             pDoc = pRange->GetDoc();
@@ -2115,13 +2110,14 @@ SvxShape*   SwXShape::GetSvxShape()
     {
         uno::Reference< lang::XUnoTunnel > xShapeTunnel(xShapeAgg, uno::UNO_QUERY);
         if(xShapeTunnel.is())
-            pSvxShape = (SvxShape*)xShapeTunnel->getSomething(SvxShape::getUnoTunnelId());
+            pSvxShape = reinterpret_cast< SvxShape * >(
+                    sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
     }
     return pSvxShape;
 }
 
 // --> OD 2004-07-22 #i31698# -
-// implementation of virtual methods from com::sun::star::drawing::XShape
+// implementation of virtual methods from drawing::XShape
 awt::Point SAL_CALL SwXShape::getPosition() throw ( uno::RuntimeException )
 {
     awt::Point aPos( _GetAttrPosition() );
@@ -2269,8 +2265,8 @@ void SAL_CALL SwXShape::setPosition( const awt::Point& aPosition )
             uno::Reference< lang::XUnoTunnel > xGrpShapeTunnel(
                                                     pTopGroupObj->getUnoShape(),
                                                     uno::UNO_QUERY );
-            SvxShape* pSvxGroupShape =
-                (SvxShape*)xGrpShapeTunnel->getSomething(SvxShape::getUnoTunnelId());
+            SvxShape* pSvxGroupShape = reinterpret_cast< SvxShape * >(
+                    sal::static_int_cast< sal_IntPtr >( xGrpShapeTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
             const awt::Point aGroupPos = pSvxGroupShape->getPosition();
             aNewPos.X += aGroupPos.X;
             aNewPos.Y += aGroupPos.Y;
@@ -2300,7 +2296,7 @@ void SAL_CALL SwXShape::setSize( const awt::Size& aSize )
 }
 // <--
 // --> OD 2004-07-22 #i31698# -
-// implementation of virtual methods from com::sun::star::drawing::XShapeDescriptor
+// implementation of virtual methods from drawing::XShapeDescriptor
 ::rtl::OUString SAL_CALL SwXShape::getShapeType() throw ( uno::RuntimeException )
 {
     ::rtl::OUString aType;
@@ -2726,7 +2722,6 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape ) throw (uno::Ru
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pSvxShape && pFmt)
     {
-        sal_Bool bOk = FALSE;
         uno::Reference<XShapes> xShapes;
         if( xShapeAgg.is() )
         {
@@ -2742,10 +2737,12 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape ) throw (uno::Ru
         uno::Reference<lang::XUnoTunnel> xTunnel(xShape, uno::UNO_QUERY);
         SwXShape* pSwShape = 0;
         if(xShape.is())
-            pSwShape = (SwXShape*)xTunnel->getSomething(SwXShape::getUnoTunnelId());
+            pSwShape = reinterpret_cast< SwXShape * >(
+                    sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SwXShape::getUnoTunnelId()) ));
         if(pSwShape && pSwShape->m_bDescriptor)
         {
-            SvxShape* pAddShape = (SvxShape*)xTunnel->getSomething(SvxShape::getUnoTunnelId());
+            SvxShape* pAddShape = reinterpret_cast< SvxShape * >(
+                    sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
             if(pAddShape)
             {
                 SdrObject* pObj = pAddShape->GetSdrObject();
@@ -2768,8 +2765,8 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape ) throw (uno::Ru
             }
             pSwShape->m_bDescriptor = sal_False;
             //add the group member to the format of the group
-            SwFrmFmt* pFmt = ::FindFrmFmt( pSvxShape->GetSdrObject() );
-            if(pFmt)
+            SwFrmFmt* pShapeFmt = ::FindFrmFmt( pSvxShape->GetSdrObject() );
+            if(pShapeFmt)
                 pFmt->Add(pSwShape);
         }
     }
@@ -2782,7 +2779,6 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape ) throw (uno::Ru
 void SwXGroupShape::remove( const uno::Reference< XShape >& xShape ) throw (uno::RuntimeException)
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    sal_Bool bOk = FALSE;
     uno::Reference<XShapes> xShapes;
     if( xShapeAgg.is() )
     {
@@ -2800,7 +2796,6 @@ void SwXGroupShape::remove( const uno::Reference< XShape >& xShape ) throw (uno:
 sal_Int32 SwXGroupShape::getCount(void) throw( uno::RuntimeException )
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    sal_Int32 nRet = 0;
     uno::Reference<XIndexAccess> xAcc;
     if( xShapeAgg.is() )
     {
