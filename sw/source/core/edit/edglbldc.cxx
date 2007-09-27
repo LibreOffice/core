@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edglbldc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:06:11 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:45:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,8 +98,8 @@ USHORT SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
         return 0;
 
     // dann alle gelinkten Bereiche auf der obersten Ebene
-    SwDoc* pDoc = GetDoc();
-    const SwSectionFmts& rSectFmts = pDoc->GetSections();
+    SwDoc* pMyDoc = GetDoc();
+    const SwSectionFmts& rSectFmts = pMyDoc->GetSections();
     USHORT n;
 
     for( n = rSectFmts.Count(); n; )
@@ -127,14 +127,14 @@ USHORT SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
 
     // und als letztes die Dummies (sonstiger Text) einfuegen
     SwNode* pNd;
-    ULONG nSttIdx = pDoc->GetNodes().GetEndOfExtras().GetIndex() + 2;
+    ULONG nSttIdx = pMyDoc->GetNodes().GetEndOfExtras().GetIndex() + 2;
     for( n = 0; n < rArr.Count(); ++n )
     {
         const SwGlblDocContent& rNew = *rArr[ n ];
         // suche von StartPos bis rNew.DocPos nach einem Content Node.
         // Existiert dieser, so muss ein DummyEintrag eingefuegt werden.
         for( ; nSttIdx < rNew.GetDocPos(); ++nSttIdx )
-            if( ( pNd = pDoc->GetNodes()[ nSttIdx ])->IsCntntNode()
+            if( ( pNd = pMyDoc->GetNodes()[ nSttIdx ])->IsCntntNode()
                 || pNd->IsSectionNode() || pNd->IsTableNode() )
             {
                 SwGlblDocContentPtr pNew = new SwGlblDocContent( nSttIdx );
@@ -146,16 +146,16 @@ USHORT SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
             }
 
         // StartPosition aufs Ende setzen
-        nSttIdx = pDoc->GetNodes()[ rNew.GetDocPos() ]->EndOfSectionIndex();
+        nSttIdx = pMyDoc->GetNodes()[ rNew.GetDocPos() ]->EndOfSectionIndex();
         ++nSttIdx;
     }
 
     // sollte man das Ende auch noch setzen??
     if( rArr.Count() )
     {
-        ULONG nNdEnd = pDoc->GetNodes().GetEndOfContent().GetIndex();
+        ULONG nNdEnd = pMyDoc->GetNodes().GetEndOfContent().GetIndex();
         for( ; nSttIdx < nNdEnd; ++nSttIdx )
-            if( ( pNd = pDoc->GetNodes()[ nSttIdx ])->IsCntntNode()
+            if( ( pNd = pMyDoc->GetNodes()[ nSttIdx ])->IsCntntNode()
                 || pNd->IsSectionNode() || pNd->IsTableNode() )
             {
                 SwGlblDocContentPtr pNew = new SwGlblDocContent( nSttIdx );
@@ -167,7 +167,7 @@ USHORT SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
     else
     {
         SwGlblDocContentPtr pNew = new SwGlblDocContent(
-                    pDoc->GetNodes().GetEndOfExtras().GetIndex() + 2 );
+                    pMyDoc->GetNodes().GetEndOfExtras().GetIndex() + 2 );
         rArr.Insert( pNew );
     }
     return rArr.Count();
@@ -190,23 +190,23 @@ BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     rPos.nNode = rInsPos.GetDocPos();
 
     BOOL bEndUndo = FALSE;
-    SwDoc* pDoc = GetDoc();
-    SwTxtNode* pTxtNd = pDoc->GetNodes()[ rPos.nNode ]->GetTxtNode();
+    SwDoc* pMyDoc = GetDoc();
+    SwTxtNode* pTxtNd = pMyDoc->GetNodes()[ rPos.nNode ]->GetTxtNode();
     if( pTxtNd )
         rPos.nContent.Assign( pTxtNd, 0 );
     else
     {
         bEndUndo = TRUE;
-        pDoc->StartUndo( UNDO_START, NULL );
+        pMyDoc->StartUndo( UNDO_START, NULL );
         rPos.nNode--;
-        pDoc->AppendTxtNode( rPos );
+        pMyDoc->AppendTxtNode( rPos );
         pCrsr->SetMark();
     }
 
     InsertSection( rNew );
 
     if( bEndUndo )
-        pDoc->EndUndo( UNDO_END, NULL );
+        pMyDoc->EndUndo( UNDO_END, NULL );
     EndAllAction();
 
     return TRUE;
@@ -229,23 +229,23 @@ BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     rPos.nNode = rInsPos.GetDocPos();
 
     BOOL bEndUndo = FALSE;
-    SwDoc* pDoc = GetDoc();
+    SwDoc* pMyDoc = GetDoc();
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( pTxtNd && pTxtNd->GetTxt().Len() && rPos.nNode.GetIndex() + 1 !=
-        pDoc->GetNodes().GetEndOfContent().GetIndex() )
+        pMyDoc->GetNodes().GetEndOfContent().GetIndex() )
         rPos.nContent.Assign( pTxtNd, 0 );
     else
     {
         bEndUndo = TRUE;
-        pDoc->StartUndo( UNDO_START, NULL );
+        pMyDoc->StartUndo( UNDO_START, NULL );
         rPos.nNode--;
-        pDoc->AppendTxtNode( rPos );
+        pMyDoc->AppendTxtNode( rPos );
     }
 
     InsertTableOf( rTOX );
 
     if( bEndUndo )
-        pDoc->EndUndo( UNDO_END, NULL );
+        pMyDoc->EndUndo( UNDO_END, NULL );
     EndAllAction();
 
     return TRUE;
@@ -267,8 +267,8 @@ BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos )
     rPos.nNode = rInsPos.GetDocPos() - 1;
     rPos.nContent.Assign( 0, 0 );
 
-    SwDoc* pDoc = GetDoc();
-    pDoc->AppendTxtNode( rPos );
+    SwDoc* pMyDoc = GetDoc();
+    pMyDoc->AppendTxtNode( rPos );
     EndAllAction();
     return TRUE;
 }
@@ -289,7 +289,7 @@ BOOL SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
 
     SwPosition& rPos = *pCrsr->GetPoint();
 
-    SwDoc* pDoc = GetDoc();
+    SwDoc* pMyDoc = GetDoc();
     const SwGlblDocContent& rDelPos = *rArr[ nDelPos ];
     ULONG nDelIdx = rDelPos.GetDocPos();
     if( 1 == rArr.Count() )
@@ -298,7 +298,7 @@ BOOL SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
         rPos.nNode = nDelIdx - 1;
         rPos.nContent.Assign( 0, 0 );
 
-        pDoc->AppendTxtNode( rPos );
+        pMyDoc->AppendTxtNode( rPos );
         ++nDelIdx;
     }
 
@@ -311,9 +311,9 @@ BOOL SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
             if( ++nDelPos < rArr.Count() )
                 rPos.nNode = rArr[ nDelPos ]->GetDocPos();
             else
-                rPos.nNode = pDoc->GetNodes().GetEndOfContent();
+                rPos.nNode = pMyDoc->GetNodes().GetEndOfContent();
             rPos.nNode--;
-            if( !pDoc->DelFullPara( *pCrsr ) )
+            if( !pMyDoc->DelFullPara( *pCrsr ) )
                 Delete();
         }
         break;
@@ -321,14 +321,14 @@ BOOL SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
     case GLBLDOC_TOXBASE:
         {
             SwTOXBaseSection* pTOX = (SwTOXBaseSection*)rDelPos.GetTOX();
-            pDoc->DeleteTOX( *pTOX, TRUE );
+            pMyDoc->DeleteTOX( *pTOX, TRUE );
         }
         break;
 
     case GLBLDOC_SECTION:
         {
             SwSectionFmt* pSectFmt = (SwSectionFmt*)rDelPos.GetSection()->GetFmt();
-            pDoc->DelSectionFmt( pSectFmt, TRUE );
+            pMyDoc->DelSectionFmt( pSectFmt, TRUE );
         }
         break;
     }
@@ -355,20 +355,20 @@ BOOL SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
     if( pCrsr->GetNext() != pCrsr || IsTableMode() )
         ClearMark();
 
-    SwDoc* pDoc = GetDoc();
-    SwNodeRange aRg( pDoc->GetNodes(), rArr[ nFromPos ]->GetDocPos() );
+    SwDoc* pMyDoc = GetDoc();
+    SwNodeRange aRg( pMyDoc->GetNodes(), rArr[ nFromPos ]->GetDocPos() );
     if( nToPos < rArr.Count() )
         aRg.aEnd = rArr[ nToPos ]->GetDocPos();
     else
-        aRg.aEnd = pDoc->GetNodes().GetEndOfContent();
+        aRg.aEnd = pMyDoc->GetNodes().GetEndOfContent();
 
-    SwNodeIndex aInsPos( pDoc->GetNodes() );
+    SwNodeIndex aInsPos( pMyDoc->GetNodes() );
     if( nInsPos < rArr.Count() )
         aInsPos = rArr[ nInsPos ]->GetDocPos();
     else
-        aInsPos  = pDoc->GetNodes().GetEndOfContent();
+        aInsPos  = pMyDoc->GetNodes().GetEndOfContent();
 
-    BOOL bRet = pDoc->Move( aRg, aInsPos, IDocumentContentOperations::DOC_MOVEALLFLYS );
+    BOOL bRet = pMyDoc->Move( aRg, aInsPos, IDocumentContentOperations::DOC_MOVEALLFLYS );
 
     EndAllAction();
     return bRet;
@@ -389,10 +389,10 @@ BOOL SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
     SwPosition& rCrsrPos = *pCrsr->GetPoint();
     rCrsrPos.nNode = rPos.GetDocPos();
 
-    SwDoc* pDoc = GetDoc();
-    SwCntntNode* pCNd = pDoc->GetNodes()[ rCrsrPos.nNode ]->GetCntntNode();
+    SwDoc* pMyDoc = GetDoc();
+    SwCntntNode* pCNd = pMyDoc->GetNodes()[ rCrsrPos.nNode ]->GetCntntNode();
     if( !pCNd )
-        pCNd = pDoc->GetNodes().GoNext( &rCrsrPos.nNode );
+        pCNd = pMyDoc->GetNodes().GoNext( &rCrsrPos.nNode );
 
     rCrsrPos.nContent.Assign( pCNd, 0 );
 
