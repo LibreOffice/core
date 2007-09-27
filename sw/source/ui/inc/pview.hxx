@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:11:04 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,8 @@ public:
         return maPaintedPreviewDocRect;
     }
 
-    void Scroll(long nXMove, long nYMove);
+    using Window::Scroll;
+    void Scroll(long nXMove, long nYMove, USHORT nFlags = 0);
 
     /** method to enable/disable book preview
 
@@ -219,7 +220,7 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
     SwScrollbar             *pVScrollbar;
     ImageButton             *pPageUpBtn,
                             *pPageDownBtn;
-    // Dummy-Window zum Fllen der rechten unteren Ecke, wenn beide Scrollbars
+    // Dummy-Window zum Fï¿½llen der rechten unteren Ecke, wenn beide Scrollbars
     // aktiv sind
     Window                  *pScrollFill;
 
@@ -235,7 +236,7 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
     SW_DLLPRIVATE void            Init(const SwViewOption* = 0);
     SW_DLLPRIVATE Point           AlignToPixel(const Point& rPt) const;
 
-    SW_DLLPRIVATE int             _CreateScrollbar( int bHori );
+    SW_DLLPRIVATE int             _CreateScrollbar( BOOL bHori );
     SW_DLLPRIVATE DECL_LINK( ScrollHdl, SwScrollbar * );
     SW_DLLPRIVATE DECL_LINK( EndScrollHdl, SwScrollbar * );
     SW_DLLPRIVATE DECL_LINK( BtnPage, Button * );
@@ -250,7 +251,7 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
                                                 const SfxItemSet &rOptions );
     SW_DLLPRIVATE virtual PrintDialog*    CreatePrintDialog( Window *pParent );
 
-    SW_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, FASTBOOL bInner );
+    SW_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, BOOL bInner );
 
     /** help method to execute SfxRequest FN_PAGE_UP and FN_PAGE_DOWN
 
@@ -277,7 +278,7 @@ protected:
 
 public:
     SFX_DECL_VIEWFACTORY(SwPagePreView);
-    SFX_DECL_INTERFACE(SW_PAGEPREVIEW);
+    SFX_DECL_INTERFACE(SW_PAGEPREVIEW)
     TYPEINFO();
 
     inline Window*          GetFrameWindow() const { return &(GetViewFrame())->GetWindow(); }
