@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtio.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:43:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:21:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,6 @@
 #include "pordrop.hxx"
 #include "pormulti.hxx"
 #include "ndhints.hxx"
-#include "frmsh.hxx"
 
 // So kann man die Layoutstruktur ausgeben lassen
 // #define AMA_LAYOUT
@@ -283,7 +282,7 @@ void LayOutPut( const SwFrm* pFrm )
 
 #endif
 
-SvStream &operator<<( SvStream &rOs, const SwpHints &rHints ) //$ ostream
+SvStream &operator<<( SvStream &rOs, const SwpHints & ) //$ ostream
 {
     rOs << " {HINTS:";
 #ifdef JP_NEWCORE
@@ -403,22 +402,22 @@ IMPL_OUTOP( SwArrowPortion )
 IMPL_OUTOP( SwMultiPortion )
 IMPL_OUTOP( SwCombinedPortion )
 
-const char *GetPortionName( const MSHORT nType )
+const char *GetPortionName( const MSHORT )
 {
     return 0;
 }
 
-const char *GetPrepName( const PrepareHint ePrep )
+const char *GetPrepName( const PrepareHint )
 {
     return 0;
 }
 
-void SwLineLayout::DebugPortions( SvStream &rOs, const XubString &rTxt, //$ ostream
-                                                const xub_StrLen nStart )
+void SwLineLayout::DebugPortions( SvStream &, const XubString &, //$ ostream
+                                                const xub_StrLen  )
 {
 }
 
-const char *GetLangName( const MSHORT nLang )
+const char *GetLangName( const MSHORT  )
 {
     return 0;
 }
@@ -475,7 +474,7 @@ CONSTCHAR( pPOR_BULLET, "BULLET" );
 CONSTCHAR( pPOR_UNKW, "UNKW" );
 CONSTCHAR( pPOR_PAR, "PAR" );
 
-const char *GetPortionName( const MSHORT nType )
+const char *GetPortionName( const MSHORT /*nType*/ )
 {
     return 0;
 }
@@ -523,10 +522,10 @@ const char *GetPrepName( const PrepareHint ePrep )
  * Im Gegensatz zum Ausgabe-Operator werden auch die Textteile ausgegeben.
  *************************************************************************/
 
-void SwLineLayout::DebugPortions( SvStream &rOs, const XubString &rTxt, //$ ostream
-                                                const xub_StrLen nStart )
+void SwLineLayout::DebugPortions( SvStream &rOs, const XubString &/*rTxt*/, //$ ostream
+                                                const xub_StrLen /*nStart*/ )
 {
-    SwLinePortion *pPortion = GetPortion();
+    SwLinePortion *pPortion2 = GetPortion();
 
     xub_StrLen nPos = 0;
     MSHORT nNr = 0;
@@ -536,28 +535,29 @@ void SwLineLayout::DebugPortions( SvStream &rOs, const XubString &rTxt, //$ ostr
     SwLinePortion::operator<<( rOs );
     rOs << '\"' << endl;
 
-    while( pPortion )
+    while( pPortion2 )
     {
         DBG_LOOP;
-        SwTxtPortion *pTxtPor = pPortion->InTxtGrp() ?
-                                (SwTxtPortion *)pPortion : NULL ;
+        SwTxtPortion *pTxtPor = pPortion2->InTxtGrp() ?
+                                (SwTxtPortion *)pPortion2 : NULL ;
+        (void)pTxtPor;
         ++nNr;
         nLastPrt = nPrtWidth;
-        nPrtWidth += pPortion->PrtWidth();
+        nPrtWidth = nPrtWidth + pPortion2->PrtWidth();
         rOs << "\tNr:"  << nNr
             << " Pos:" << nPos
             << " Org:" << nLastPrt
             << endl;
 
         rOs << "\t";
-        pPortion->operator<<( rOs );
+        pPortion2->operator<<( rOs );
         rOs << endl;
-        nPos += pPortion->GetLen();
-        pPortion = pPortion->GetPortion();
+        nPos = nPos + pPortion2->GetLen();
+        pPortion2 = pPortion2->GetPortion();
     }
 }
 
-const char *GetLangName( const MSHORT nLang )
+const char *GetLangName( const MSHORT /*nLang*/ )
 {
     return "???";
 }
@@ -701,14 +701,14 @@ SvStream &SwFlyCntPortion::operator<<( SvStream &rOs ) const //$ ostream
     SwLinePortion::operator<<( rOs );
     if( bDraw )
     {
-        CONSTCHAR( pTxt, " {DRAWINCNT" );
-        rOs << pTxt;
+        CONSTCHAR( pTxt2, " {DRAWINCNT" );
+        rOs << pTxt2;
         rOs << pClose;
     }
     else
     {
-        CONSTCHAR( pTxt, " {FRM:" );
-        rOs << pTxt;
+        CONSTCHAR( pTxt2, " {FRM:" );
+        rOs << pTxt2;
         rOs << " {FRM:" << GetFlyFrm()->Frm() << pClose;
         rOs << " {PRT:" << GetFlyFrm()->Prt() << pClose;
         rOs << pClose;
