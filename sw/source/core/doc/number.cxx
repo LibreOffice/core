@@ -4,9 +4,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:01:47 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:39:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,16 +94,20 @@
 
 #include <hash_map>
 
+using namespace ::com::sun::star;
+
+
 USHORT SwNumRule::nRefCount = 0;
 SwNumFmt* SwNumRule::aBaseFmts[ RULE_END ][ MAXLEVEL ] = {
-    0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0 };
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 // --> OD 2006-06-27 #b6440955#
 // variable moved to class <numfunc::SwDefBulletListConfig>
 //Font* SwNumRule::pDefBulletFont = 0;
 // <--
-sal_Char* SwNumRule::pDefOutlineName = "Outline";
+
+char sOutline[] = "Outline";
+char* SwNumRule::pDefOutlineName = sOutline;
 
 // #i30312#
 USHORT SwNumRule::aDefNumIndents[ MAXLEVEL ] = {
@@ -228,33 +232,33 @@ static void lcl_SetRuleChgd( SwTxtNode& rNd, BYTE nLevel )
 
  ---------------------------------------------------------------------------*/
 SwNumFmt::SwNumFmt() :
-    SwClient( 0 ),
     SvxNumberFormat(SVX_NUM_ARABIC),
-    pVertOrient(new SwFmtVertOrient( 0, VERT_NONE))
+    SwClient( 0 ),
+    pVertOrient(new SwFmtVertOrient( 0, text::VertOrientation::NONE))
 {
 }
 /* -----------------------------22.02.01 13:42--------------------------------
 
  ---------------------------------------------------------------------------*/
 SwNumFmt::SwNumFmt( const SwNumFmt& rFmt) :
-    SwClient( rFmt.pRegisteredIn ),
     SvxNumberFormat(rFmt),
-    pVertOrient(new SwFmtVertOrient( 0, (SwVertOrient)rFmt.GetVertOrient()))
+    SwClient( rFmt.pRegisteredIn ),
+    pVertOrient(new SwFmtVertOrient( 0, rFmt.GetVertOrient()))
 {
-    SvxFrameVertOrient eVertOrient = rFmt.GetVertOrient();
+    sal_Int16 eMyVertOrient = rFmt.GetVertOrient();
     SetGraphicBrush( rFmt.GetBrush(), &rFmt.GetGraphicSize(),
-                                                &eVertOrient);
+                                                &eMyVertOrient);
 }
 /* -----------------------------22.02.01 13:58--------------------------------
 
  ---------------------------------------------------------------------------*/
 SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc) :
     SvxNumberFormat(rNumFmt),
-    pVertOrient(new SwFmtVertOrient( 0, (SwVertOrient)rNumFmt.GetVertOrient()))
+    pVertOrient(new SwFmtVertOrient( 0, rNumFmt.GetVertOrient()))
 {
-    SvxFrameVertOrient eVertOrient = rNumFmt.GetVertOrient();
+    sal_Int16 eMyVertOrient = rNumFmt.GetVertOrient();
     SetGraphicBrush( rNumFmt.GetBrush(), &rNumFmt.GetGraphicSize(),
-                                                &eVertOrient);
+                                                &eMyVertOrient);
     const String& rCharStyleName = rNumFmt.SvxNumberFormat::GetCharFmtName();
     if( rCharStyleName.Len() )
     {
@@ -262,7 +266,7 @@ SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc) :
         if( !pCFmt )
         {
             USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( rCharStyleName,
-                                            GET_POOLID_CHRFMT );
+                                            nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             pCFmt = nId != USHRT_MAX
                         ? pDoc->GetCharFmtFromPool( nId )
                         : pDoc->MakeCharFmt( rCharStyleName, 0 );
@@ -419,23 +423,23 @@ const String&   SwNumFmt::GetCharFmtName() const
 
  ---------------------------------------------------------------------------*/
 void    SwNumFmt::SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize,
-    const SvxFrameVertOrient* pOrient)
+    const sal_Int16* pOrient)
 {
     if(pOrient)
-        pVertOrient->SetVertOrient( (SwVertOrient)*pOrient );
+        pVertOrient->SetVertOrient( *pOrient );
     SvxNumberFormat::SetGraphicBrush( pBrushItem, pSize, pOrient);
 }
 /* -----------------------------22.02.01 16:05--------------------------------
 
  ---------------------------------------------------------------------------*/
-void    SwNumFmt::SetVertOrient(SvxFrameVertOrient eSet)
+void    SwNumFmt::SetVertOrient(sal_Int16 eSet)
 {
     SvxNumberFormat::SetVertOrient(eSet);
 }
 /* -----------------------------22.02.01 16:05--------------------------------
 
  ---------------------------------------------------------------------------*/
-SvxFrameVertOrient  SwNumFmt::GetVertOrient() const
+sal_Int16   SwNumFmt::GetVertOrient() const
 {
     return SvxNumberFormat::GetVertOrient();
 }
@@ -492,12 +496,12 @@ void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
  ---------------------------------------------------------------------------*/
 const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
 {
-    SvxFrameVertOrient  eOrient = SvxNumberFormat::GetVertOrient();
-    if(SVX_VERT_NONE == eOrient)
+    sal_Int16  eOrient = SvxNumberFormat::GetVertOrient();
+    if(text::VertOrientation::NONE == eOrient)
         return 0;
     else
     {
-        pVertOrient->SetVertOrient((SwVertOrient)eOrient);
+        pVertOrient->SetVertOrient(eOrient);
         return pVertOrient;
     }
 }
@@ -507,18 +511,18 @@ long int SwNumRule::nInstances = 0;
 #endif
 
 SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
-    : eRuleType( eType ),
+    : pList(0),
+    aMarkedLevels( MAXLEVEL ), // #i27615#
+    pNumRuleMap(0),
     sName( rNm ),
-      pList(0),
-      aMarkedLevels( MAXLEVEL ), // #i27615#
-      pNumRuleMap(0),
+    eRuleType( eType ),
+    nPoolFmtId( USHRT_MAX ),
+    nPoolHelpId( USHRT_MAX ),
+    nPoolHlpFileId( UCHAR_MAX ),
     bAutoRuleFlag( bAutoFlg ),
     bInvalidRuleFlag( TRUE ),
     bContinusNum( FALSE ),
     bAbsSpaces( FALSE ),
-    nPoolFmtId( USHRT_MAX ),
-    nPoolHelpId( USHRT_MAX ),
-    nPoolHlpFileId( UCHAR_MAX ),
     // --> OD 2005-10-21 - initialize member <mbCountPhantoms>
     mbCountPhantoms( true )
     // <--
@@ -530,7 +534,7 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
     if( !nRefCount++ )          // zum erstmal, also initialisiern
     {
         SwNumFmt* pFmt;
-        int n;
+        BYTE n;
 
         // Nummerierung:
         for( n = 0; n < MAXLEVEL; ++n )
@@ -567,18 +571,18 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
 }
 
 SwNumRule::SwNumRule( const SwNumRule& rNumRule )
-    : eRuleType( rNumRule.eRuleType ),
-    sName( rNumRule.sName ),
-      pList(0),
+    : pList(0),
     aMarkedLevels( MAXLEVEL ), // #i27615#
-      pNumRuleMap(0),
+    pNumRuleMap(0),
+    sName( rNumRule.sName ),
+    eRuleType( rNumRule.eRuleType ),
+    nPoolFmtId( rNumRule.GetPoolFmtId() ),
+    nPoolHelpId( rNumRule.GetPoolHelpId() ),
+    nPoolHlpFileId( rNumRule.GetPoolHlpFileId() ),
     bAutoRuleFlag( rNumRule.bAutoRuleFlag ),
     bInvalidRuleFlag( TRUE ),
     bContinusNum( rNumRule.bContinusNum ),
     bAbsSpaces( rNumRule.bAbsSpaces ),
-    nPoolFmtId( rNumRule.GetPoolFmtId() ),
-    nPoolHelpId( rNumRule.GetPoolHelpId() ),
-    nPoolHlpFileId( rNumRule.GetPoolHlpFileId() ),
     // --> OD 2005-10-21 - initialize member <mbCountPhantoms>
     mbCountPhantoms( true )
     // <--
@@ -764,15 +768,15 @@ String SwNumRule::MakeNumString( const SwNodeNum::tNumberVector & rNumVector,
     }
     // <--
 
-    if (nLevel >= 0 && nLevel < MAXLEVEL)
+    if (nLevel < MAXLEVEL)
     {
-        const SwNumFmt& rMyNFmt = Get( nLevel );
+        const SwNumFmt& rMyNFmt = Get( static_cast<USHORT>(nLevel) );
         // --> OD 2006-06-02 #b6432095#
         // - levels with numbering none has to provide prefix and suffix string
 //        if( SVX_NUM_NUMBER_NONE != rMyNFmt.GetNumberingType() )
         // <--
         {
-            BYTE i = nLevel;
+            BYTE i = static_cast<BYTE>(nLevel);
 
             if( !IsContinusNum() &&
                 // --> OD 2006-09-19 #i69672#
@@ -884,12 +888,11 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
 {
     SvxNumRule aRule(NUM_CONTINUOUS|NUM_CHAR_TEXT_DISTANCE|NUM_CHAR_STYLE|
                         NUM_ENABLE_LINKED_BMP|NUM_ENABLE_EMBEDDED_BMP,
-                        MAXLEVEL,
+                        MAXLEVEL, bContinusNum,
                         eRuleType ==
                             NUM_RULE ?
                                 SVX_RULETYPE_NUMBERING :
                                     SVX_RULETYPE_OUTLINE_NUMBERING );
-    aRule.SetContinuousNumbering(bContinusNum);
 //!!!   aRule.SetAbsSpaces( bAbsSpaces );
     for( USHORT n = 0; n < MAXLEVEL; ++n )
     {
@@ -951,19 +954,19 @@ void SwNumRule::Indent(short nAmount, int nLevel, int nReferenceLevel,
         if (bFirstLine)
         {
             if (nReferenceLevel >= 0)
-                nAmount -= Get(nReferenceLevel).GetFirstLineOffset();
+                nAmount = nAmount - Get(static_cast<USHORT>(nReferenceLevel)).GetFirstLineOffset();
             else
-                nAmount -= Get(nStartLevel).GetFirstLineOffset();
+                nAmount = nAmount - Get(static_cast<USHORT>(nStartLevel)).GetFirstLineOffset();
         }
 
         BOOL bFirst = TRUE;
 
         if (nReferenceLevel >= 0)
-            nRealAmount = nAmount - Get(nReferenceLevel).GetAbsLSpace();
+            nRealAmount = nAmount - Get(static_cast<USHORT>(nReferenceLevel)).GetAbsLSpace();
         else
             for (i = nStartLevel; i < nEndLevel + 1; i++)
             {
-                short nTmp = nAmount - Get(i).GetAbsLSpace();
+                short nTmp = nAmount - Get(static_cast<USHORT>(i)).GetAbsLSpace();
 
                 if (bFirst || nTmp > nRealAmount)
                 {
@@ -975,20 +978,20 @@ void SwNumRule::Indent(short nAmount, int nLevel, int nReferenceLevel,
 
     if (nRealAmount < 0)
         for (i = nStartLevel; i < nEndLevel + 1; i++)
-            if (Get(i).GetAbsLSpace() + nRealAmount < 0)
-                nRealAmount = -Get(i).GetAbsLSpace();
+            if (Get(static_cast<USHORT>(i)).GetAbsLSpace() + nRealAmount < 0)
+                nRealAmount = -Get(static_cast<USHORT>(i)).GetAbsLSpace();
 
     for (i = nStartLevel; i < nEndLevel + 1; i++)
     {
-        short nNew = Get(i).GetAbsLSpace() + nRealAmount;
+        short nNew = Get(static_cast<USHORT>(i)).GetAbsLSpace() + nRealAmount;
 
         if (bCheckGtZero && nNew < 0)
             nNew = 0;
 
-        SwNumFmt aTmpNumFmt(Get(i));
+        SwNumFmt aTmpNumFmt(Get(static_cast<USHORT>(i)));
         aTmpNumFmt.SetAbsLSpace(nNew);
 
-        Set(i, aTmpNumFmt);
+        Set(static_cast<USHORT>(i), aTmpNumFmt);
 
         bGotInvalid = TRUE;
     }
@@ -1097,11 +1100,11 @@ namespace numfunc
             }
             inline const short GetFontWeight() const
             {
-                return meFontWeight;
+                return static_cast<short>(meFontWeight);
             }
             inline const short GetFontItalic() const
             {
-                return meFontItalic;
+                return static_cast<short>(meFontItalic);
             }
             inline const sal_Unicode GetChar( BYTE p_nListLevel ) const
             {
@@ -1126,7 +1129,7 @@ namespace numfunc
 
                 @author OD
             */
-            com::sun::star::uno::Sequence<rtl::OUString> GetPropNames() const;
+            uno::Sequence<rtl::OUString> GetPropNames() const;
 
             /** loads default bullet configuration properties and applies
                 values to internal data
@@ -1145,7 +1148,7 @@ namespace numfunc
 
                 @author OD
             */
-            virtual void Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
+            virtual void Notify( const uno::Sequence<rtl::OUString>& aPropertyNames );
 
             static SwDefBulletConfig* mpInstance;
 
@@ -1194,9 +1197,9 @@ namespace numfunc
         mnLevelChars[9] = 0x25cf;
     }
 
-    com::sun::star::uno::Sequence<rtl::OUString> SwDefBulletConfig::GetPropNames() const
+    uno::Sequence<rtl::OUString> SwDefBulletConfig::GetPropNames() const
     {
-        com::sun::star::uno::Sequence<rtl::OUString> aPropNames(13);
+        uno::Sequence<rtl::OUString> aPropNames(13);
         rtl::OUString* pNames = aPropNames.getArray();
         pNames[0] = rtl::OUString::createFromAscii("BulletFont/FontFamilyname");
         pNames[1] = rtl::OUString::createFromAscii("BulletFont/FontWeight");
@@ -1217,10 +1220,10 @@ namespace numfunc
 
     void SwDefBulletConfig::LoadConfig()
     {
-        com::sun::star::uno::Sequence<rtl::OUString> aPropNames = GetPropNames();
-        com::sun::star::uno::Sequence<com::sun::star::uno::Any> aValues =
+        uno::Sequence<rtl::OUString> aPropNames = GetPropNames();
+        uno::Sequence<uno::Any> aValues =
                                                     GetProperties( aPropNames );
-        const com::sun::star::uno::Any* pValues = aValues.getConstArray();
+        const uno::Any* pValues = aValues.getConstArray();
         ASSERT( aValues.getLength() == aPropNames.getLength(),
                 "<SwDefBulletConfig::SwDefBulletConfig()> - GetProperties failed")
         if ( aValues.getLength() == aPropNames.getLength() )
@@ -1281,7 +1284,7 @@ namespace numfunc
         mpFont->SetItalic( meFontItalic );
     }
 
-    void SwDefBulletConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames )
+    void SwDefBulletConfig::Notify( const uno::Sequence<rtl::OUString>& )
     {
         SetToDefault();
         LoadConfig();
