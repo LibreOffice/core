@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:08:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:58:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,8 @@
 #endif
 
 #define MAX_FIELDLEN 64000
+
+using namespace nsSwDocInfoSubType;
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -356,32 +358,32 @@ SvxFontItem Ww1Manager::GetFont(USHORT nFCode)
     return aFonts.GetFont(nFCode);
 }
 
-void Ww1Manager::Push0(Ww1PlainText* pDoc, ULONG ulSeek, Ww1Fields* pFld)
+void Ww1Manager::Push0(Ww1PlainText* _pDoc, ULONG ulSeek, Ww1Fields* _pFld)
 {
     DBG_ASSERT(!Pushed(), "Ww1Manager");
-    this->pDoc = pDoc;
+    this->pDoc = _pDoc;
     pSeek = new ULONG;
     *pSeek = pDoc->Where();
     aPap.Push(ulSeek);
     aChp.Push(ulSeek);
-    this->pFld = pFld;
+    this->pFld = _pFld;
 }
 
 // ulSeek ist der FC-Abstand zwischen Hauptest-Start und Sondertext-Start
 // ulSeek2 ist der Offset dieses bestimmten Sondertextes im Sondertext-Bereich,
 // also z.B. der Offset des speziellen K/F-Textes
-void Ww1Manager::Push1(Ww1PlainText* pDoc, ULONG ulSeek, ULONG ulSeek2,
-                       Ww1Fields* pFld)
+void Ww1Manager::Push1(Ww1PlainText* _pDoc, ULONG ulSeek, ULONG ulSeek2,
+                       Ww1Fields* _pFld)
 {
     DBG_ASSERT(!Pushed(), "Ww1Manager");
-    this->pDoc = pDoc;
+    this->pDoc = _pDoc;
     pSeek = new ULONG;
     *pSeek = pDoc->Where();
     aPap.Push(ulSeek + ulSeek2);
     aChp.Push(ulSeek + ulSeek2);
-    if( pFld )
-        pFld->Seek( ulSeek2 );
-    this->pFld = pFld;
+    if( _pFld )
+        _pFld->Seek( ulSeek2 );
+    this->pFld = _pFld;
 }
 
 void Ww1Manager::Pop()
@@ -474,7 +476,7 @@ void Ww1Footnotes::Start(Ww1Shell& rOut, Ww1Manager& rMan)
     }
 }
 
-void Ww1Footnotes::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode& c)
+void Ww1Footnotes::Stop(Ww1Shell& /*rOut*/, Ww1Manager& rMan, sal_Unicode& c)
 {
     if (bStarted && rMan.Where() > Where())
     {
@@ -714,9 +716,9 @@ oncemore:
                 0,
                 REF_CONTENT );
 //          pField = new SwGetExpField((SwGetExpFieldType*)
-//           rOut.GetSysFldType(RES_GETEXPFLD), sFormel, GSE_STRING);
+//           rOut.GetSysFldType(RES_GETEXPFLD), sFormel, nsSwGetSetExpType::GSE_STRING);
 //           ,
-//           GSE_STRING, VVF_SYS);
+//           nsSwGetSetExpType::GSE_STRING, VVF_SYS);
         break;
         case 6: // set command
         {
@@ -728,9 +730,9 @@ oncemore:
                 break;
             rOut.ConvertUStr( aName );
             SwFieldType* pFT = rOut.GetDoc().InsertFldType(
-                SwSetExpFieldType( &rOut.GetDoc(), aName, GSE_STRING ) );
+                SwSetExpFieldType( &rOut.GetDoc(), aName, nsSwGetSetExpType::GSE_STRING ) );
             pField = new SwSetExpField((SwSetExpFieldType*)pFT, aStr);
-            ((SwSetExpField*)pField)->SetSubType(SUB_INVISIBLE);
+            ((SwSetExpField*)pField)->SetSubType( nsSwExtendedSubType::SUB_INVISIBLE );
 // Invisible macht in 378 AErger, soll aber demnaechst gehen
 
             // das Ignorieren des Bookmarks ist nicht implementiert
@@ -897,12 +899,12 @@ oncemore:
         {
             if (nDepth == 0)
             {
-                SwGetExpFieldType* p =
+                SwGetExpFieldType* pFieldType =
                  (SwGetExpFieldType*)rOut.GetSysFldType(RES_GETEXPFLD);
-                DBG_ASSERT(p!=0, "Ww1Fields");
-                if (p != 0)
-                    pField = new SwGetExpField(p, sFormel,
-                     GSE_STRING, VVF_SYS);
+                DBG_ASSERT(pFieldType!=0, "Ww1Fields");
+                if (pFieldType != 0)
+                    pField = new SwGetExpField(pFieldType, sFormel,
+                     nsSwGetSetExpType::GSE_STRING, VVF_SYS);
             }
             else // rekursion:
             {
@@ -912,11 +914,11 @@ oncemore:
                 SwFieldType* pFT = rOut.GetDoc().GetFldType( RES_SETEXPFLD, aName, false);
                 if (pFT == 0)
                 {
-                    SwSetExpFieldType aS(&rOut.GetDoc(), aName, GSE_FORMULA);
+                    SwSetExpFieldType aS(&rOut.GetDoc(), aName, nsSwGetSetExpType::GSE_FORMULA);
                     pFT = rOut.GetDoc().InsertFldType(aS);
                 }
                 SwSetExpField aFld((SwSetExpFieldType*)pFT, sFormel);
-                aFld.SetSubType(SUB_INVISIBLE);
+                aFld.SetSubType(nsSwExtendedSubType::SUB_INVISIBLE);
                 rOut << aFld;
             }
         }
@@ -963,10 +965,10 @@ oncemore:
                 break;
 
             SwFieldType* pFT = rOut.GetDoc().InsertFldType(
-                SwSetExpFieldType( &rOut.GetDoc(), aName, GSE_STRING ) );
+                SwSetExpFieldType( &rOut.GetDoc(), aName, nsSwGetSetExpType::GSE_STRING ) );
             pField = new SwSetExpField((SwSetExpFieldType*)pFT, aStr );
             ((SwSetExpField*)pField)->SetInputFlag( TRUE );
-            ((SwSetExpField*)pField)->SetSubType(SUB_INVISIBLE);
+            ((SwSetExpField*)pField)->SetSubType(nsSwExtendedSubType::SUB_INVISIBLE);
 //          pField.SetPromptText( aQ ); //!! fehlt noch
 //          aFld.SetPar2( aDef );       //!! dito
             // das Ignorieren des Bookmarks ist nicht implementiert
@@ -1073,7 +1075,7 @@ oncemore:
             bKnown = FALSE;
         break;
         }
-        if( bKnown || sErgebnis.EqualsAscii( "\0270" ))
+        if( bKnown || sErgebnis.EqualsAscii( "\270" ))
             this->sErgebnis.Erase();
         else
             this->sErgebnis = sErgebnis;
@@ -1115,8 +1117,8 @@ void Ww1Sep::Start(Ww1Shell& rOut, Ww1Manager& rMan)
     // momentanes attribut beginnt, wird dieses attribut eingefuegt.
     // diese methode ist bei den meisten start/stop methoden der
     // memberklassen des managers identisch.
-        BYTE* p = GetData();
-        Ww1SprmSep aSprm(rFib, SVBT32ToUInt32(p+2));
+        BYTE* pByte = GetData();
+        Ww1SprmSep aSprm(rFib, SVBT32ToUInt32(pByte + 2));
         aSprm.Start(rOut, rMan);
         aSprm.Stop(rOut, rMan);
         (*this)++;
@@ -1129,12 +1131,12 @@ void Ww1Pap::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if (rMan.Where() >= Where())
     {
-        BYTE* p;
+        BYTE* pByte;
         USHORT cb;
     // bereitstellen der zu startenden attribute
-        if (FillStart(p, cb))
+        if (FillStart(pByte, cb))
         {
-            Ww1SprmPapx aSprm(p, cb);
+            Ww1SprmPapx aSprm(pByte, cb);
         // und ausgeben:
             aSprm.Start(rOut, rMan);
         }
@@ -1146,10 +1148,10 @@ void Ww1Pap::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
 {
     if (rMan.Where() >= Where() || rMan.IsStopAll())
     {
-        BYTE* p;
+        BYTE* pByte;
         USHORT cb;
-        if (FillStop(p, cb)){
-            Ww1SprmPapx aSprm(p, cb);
+        if (FillStop(pByte, cb)){
+            Ww1SprmPapx aSprm(pByte, cb);
             aSprm.Stop(rOut, rMan);
         }else{
             DBG_ASSERT( !nPlcIndex || rMan.IsStopAll(), "Pap-Attribut-Stop verloren" );
@@ -1721,7 +1723,6 @@ void Ww1StyleSheet::OutOne(Ww1Shell& rOut, Ww1Manager& rMan, USHORT stc)
     {
     case 222: // Null
         aType = RES_POOLCOLL_TEXT; break;   //???
-        break;
     case 223: // annotation reference
         break;
     case 224: // annotation text
@@ -1865,17 +1866,39 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
     USHORT maxx = pPic->mfp.xExtGet();
     USHORT padx = ((maxx + 7) / 8) * 8;
     USHORT maxy = pPic->mfp.yExtGet();
+
     /*USHORT unknown1 = SVBT16ToShort(p);*/ p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
     /*USHORT unknown2 = SVBT16ToShort(p);*/ p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
-    USHORT x = SVBT16ToShort(p); p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
+#if OSL_DEBUG_LEVEL > 1
+    USHORT x = SVBT16ToShort(p);
+    (void) x;
+#endif
+    p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
+#if OSL_DEBUG_LEVEL > 1
+    USHORT y = SVBT16ToShort(p);
+    (void) y;
+#endif
+    p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
+#if OSL_DEBUG_LEVEL > 1
+    USHORT planes = SVBT16ToShort(p);
+    (void) planes;
+#endif
+    p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
+#if OSL_DEBUG_LEVEL > 1
+    USHORT bitcount = SVBT16ToShort(p);
+    (void) bitcount;
+#endif
+    p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
+
+#if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(x==maxx, "Ww1Picture");
-    USHORT y = SVBT16ToShort(p); p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
     DBG_ASSERT(y==maxy, "Ww1Picture");
-    USHORT planes = SVBT16ToShort(p); p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
     DBG_ASSERT(planes==1, "Ww1Picture");
-    USHORT bitcount = SVBT16ToShort(p); p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
     DBG_ASSERT(bitcount==4, "Ww1Picture");
+#endif
+
     DBG_ASSERT(16*3+padx*maxy/2==nSize, "Ww1Picture");
+
     SVBT32 tmpLong;
     SVBT16 tmpShort;
     SVBT8 tmpByte;
@@ -1973,7 +1996,7 @@ error:
     ;
 }
 
-void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& rMan)
+void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
 {
     Graphic* pGraphic = 0;
     USHORT mm;
