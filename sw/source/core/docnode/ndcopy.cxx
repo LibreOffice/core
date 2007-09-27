@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:41:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:40:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ struct _MapTblFrmFmt
     {}
 };
 
-SV_DECL_VARARR( _MapTblFrmFmts, _MapTblFrmFmt, 0, 10 );
+SV_DECL_VARARR( _MapTblFrmFmts, _MapTblFrmFmt, 0, 10 )
 SV_IMPL_VARARR( _MapTblFrmFmts, _MapTblFrmFmt );
 
 SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
@@ -220,8 +220,8 @@ struct _CopyTable
 
     _CopyTable( SwDoc* pDc, _MapTblFrmFmts& rArr, ULONG nOldStt,
                 SwTableNode& rTblNd, const SwTable* pOldTbl )
-        : pDoc(pDc), pTblNd(&rTblNd), nOldTblSttIdx(nOldStt),
-        rMapArr(rArr), pOldTable( pOldTbl ), pInsLine(0), pInsBox(0)
+        : pDoc(pDc), nOldTblSttIdx(nOldStt), rMapArr(rArr),
+        pInsLine(0), pInsBox(0), pTblNd(&rTblNd), pOldTable( pOldTbl )
     {}
 };
 
@@ -553,10 +553,10 @@ void lcl_SetCpyPos( const SwPosition& rOrigPos,
     {
         // dann nur den Content anpassen
         if( nCntntPos > rOrigStt.nContent.GetIndex() )
-            nCntntPos -= rOrigStt.nContent.GetIndex();
+            nCntntPos = nCntntPos - rOrigStt.nContent.GetIndex();
         else
             nCntntPos = 0;
-        nCntntPos += rCpyStt.nContent.GetIndex();
+        nCntntPos = nCntntPos + rCpyStt.nContent.GetIndex();
     }
     rChgPos.nContent.Assign( rChgPos.nNode.GetNode().GetCntntNode(), nCntntPos );
 }
@@ -628,7 +628,7 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
         for( ; n < rTbl.Count(); ++n )
         {
             const SwRedline* pRedl = rTbl[ n ];
-            if( IDocumentRedlineAccess::REDLINE_DELETE == pRedl->GetType() && pRedl->IsVisible() )
+            if( nsRedlineType_t::REDLINE_DELETE == pRedl->GetType() && pRedl->IsVisible() )
             {
                 const SwPosition *pRStt = pRedl->Start(), *pREnd = pRedl->End();
 
@@ -670,8 +670,8 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
 
         if( pDelPam )
         {
-            IDocumentRedlineAccess::RedlineMode_t eOld = pDestDoc->GetRedlineMode();
-            pDestDoc->SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(eOld | IDocumentRedlineAccess::REDLINE_IGNORE));
+            RedlineMode_t eOld = pDestDoc->GetRedlineMode();
+            pDestDoc->SetRedlineMode_intern( (RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
             BOOL bDoesUndo = pDestDoc->DoesUndo();
             pDestDoc->DoUndo( FALSE );
@@ -735,7 +735,7 @@ bool SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
         (!pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() ) )
         pRedlineRange = new SwPaM( rPos );
 
-    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
+    RedlineMode_t eOld = pDoc->GetRedlineMode();
 
     BOOL bRet = FALSE;
 
@@ -751,7 +751,7 @@ bool SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
     else
     {
         ASSERT( this == pDoc, " falscher Copy-Zweig!" );
-        pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld | IDocumentRedlineAccess::REDLINE_IGNORE));
+        pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
         BOOL bDoUndo = pDoc->DoesUndo();
         pDoc->DoUndo( FALSE );  // Auf jedenfall Undo abschalten
@@ -759,7 +759,7 @@ bool SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
         // (mit Start/End-Nodes geklammert) und verschiebe diese
         // dann an die gewuenschte Stelle.
 
-        SwUndoCpyDoc* pUndo;
+        SwUndoCpyDoc* pUndo = 0;
         SwPaM aPam( rPos );         // UndoBereich sichern
         if( bDoUndo )
         {
@@ -811,7 +811,7 @@ bool SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
     if( pRedlineRange )
     {
         if( pDoc->IsRedlineOn() )
-            pDoc->AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, *pRedlineRange ), true);
+            pDoc->AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, *pRedlineRange ), true);
         else
             pDoc->SplitRedline( *pRedlineRange );
         delete pRedlineRange;
@@ -860,7 +860,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
     BOOL bEndEqualIns = pDoc == this && rPos == *pEnd;
 
     // falls Undo eingeschaltet, erzeuge das UndoCopy-Objekt
-    SwUndoCpyDoc* pUndo;
+    SwUndoCpyDoc* pUndo = 0;
     SwPaM aCpyPam( rPos );
 
     SwTblNumFmtMerge aTNFM( *this, *pDoc );
@@ -872,8 +872,8 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
         pDoc->AppendUndo( pUndo );
     }
 
-    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld | IDocumentRedlineAccess::REDLINE_IGNORE));
+    RedlineMode_t eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
 
     // bewege den Pam von der Insert-Position ein zurueck, dadurch wird
@@ -922,7 +922,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                 }
                 else if( !bOneNode )
                 {
-                    BYTE nNumLevel = pDestNd->GetLevel();
+                    BYTE nNumLevel = static_cast<BYTE>(pDestNd->GetLevel());
 
                     xub_StrLen nCntntEnd = pEnd->nContent.GetIndex();
                     BOOL bDoesUndo = pDoc->DoesUndo();
@@ -1034,7 +1034,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                 // (and joined from undo)
                 bStartIsTxtNode = TRUE;
                 // splitte den TextNode, bei dem Eingefuegt wird.
-                BYTE nNumLevel = pDestNd->GetLevel();
+                BYTE nNumLevel = static_cast<BYTE>(pDestNd->GetLevel());
 
                 xub_StrLen nCntntEnd = pEnd->nContent.GetIndex();
                 BOOL bDoesUndo = pDoc->DoesUndo();
@@ -1194,7 +1194,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
     if( bCopyBookmarks && getBookmarks().Count() )
         lcl_CopyBookmarks( rPam, aCpyPam );
 
-    if( IDocumentRedlineAccess::REDLINE_DELETE_REDLINES & eOld )
+    if( nsRedlineMode_t::REDLINE_DELETE_REDLINES & eOld )
         lcl_DeleteRedlines( rPam, aCpyPam );
 
     // falls Undo eingeschaltet ist, so speicher den eingefuegten Bereich
@@ -1273,7 +1273,7 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg,
         lcl_CopyBookmarks( aRgTmp, aCpyTmp );
     }
 
-    if( bDelRedlines && ( IDocumentRedlineAccess::REDLINE_DELETE_REDLINES & pDest->GetRedlineMode() ))
+    if( bDelRedlines && ( nsRedlineMode_t::REDLINE_DELETE_REDLINES & pDest->GetRedlineMode() ))
         lcl_DeleteRedlines( rRg, aCpyRange );
 
     pDest->GetNodes()._DelDummyNodes( aCpyRange );
@@ -1427,7 +1427,7 @@ void SwDoc::_CopyFlyInFly( const SwNodeRange& rRg, const SwNodeIndex& rSttIdx,
 
         // ueberpruefe Rekursion: Inhalt in "seinen eigenen" Frame
         // kopieren. Dann nicht kopieren
-        FASTBOOL bMakeCpy = TRUE;
+        BOOL bMakeCpy = TRUE;
         if( pDest == this )
         {
             const SwFmtCntnt& rCntnt = rZSortFly.GetFmt()->GetCntnt();
