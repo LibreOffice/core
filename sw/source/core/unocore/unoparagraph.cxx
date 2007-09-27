@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:34:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:38:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,8 @@ SwXParagraph* SwXParagraph::GetImplementation(uno::Reference< XInterface> xRef )
 {
     uno::Reference<lang::XUnoTunnel> xParaTunnel( xRef, uno::UNO_QUERY);
     if(xParaTunnel.is())
-        return (SwXParagraph*)xParaTunnel->getSomething(SwXParagraph::getUnoTunnelId());
+        return reinterpret_cast< SwXParagraph * >(
+                sal::static_int_cast< sal_IntPtr >( xParaTunnel->getSomething(SwXParagraph::getUnoTunnelId()) ));
     return 0;
 }
 /* -----------------------------13.03.00 12:15--------------------------------
@@ -138,7 +139,7 @@ sal_Int64 SAL_CALL SwXParagraph::getSomething( const uno::Sequence< sal_Int8 >& 
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
-            return (sal_Int64)this;
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
     return 0;
 }
@@ -185,12 +186,12 @@ uno::Sequence< OUString > SwXParagraph::getSupportedServiceNames(void) throw( un
 
   -----------------------------------------------------------------------*/
 SwXParagraph::SwXParagraph() :
-    aLstnrCntnr( (text::XTextRange*)this),
     xParentText(0),
+    aLstnrCntnr( (text::XTextRange*)this),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH)),
-    m_bIsDescriptor(TRUE),
     nSelectionStartPos(-1),
-    nSelectionEndPos(-1)
+    nSelectionEndPos(-1),
+    m_bIsDescriptor(TRUE)
 {
 }
 
@@ -202,9 +203,9 @@ SwXParagraph::SwXParagraph(SwXText* pParent, SwUnoCrsr* pCrsr, sal_Int32 nSelSta
     xParentText(pParent),
     aLstnrCntnr( (text::XTextRange*)this),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH)),
-    m_bIsDescriptor(FALSE),
     nSelectionStartPos(nSelStart),
-    nSelectionEndPos(nSelEnd)
+    nSelectionEndPos(nSelEnd),
+    m_bIsDescriptor(FALSE)
 {
 }
 /*-- 11.12.98 08:12:48---------------------------------------------------
@@ -401,23 +402,23 @@ uno::Sequence< uno::Any > SwXParagraph::getPropertyValues(
 
  ---------------------------------------------------------------------------*/
 void SwXParagraph::addPropertiesChangeListener(
-    const uno::Sequence< OUString >& aPropertyNames,
-    const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+    const uno::Sequence< OUString >& /*aPropertyNames*/,
+    const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
         throw(uno::RuntimeException)
 {}
 /* -----------------------------02.04.01 11:43--------------------------------
 
  ---------------------------------------------------------------------------*/
 void SwXParagraph::removePropertiesChangeListener(
-    const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+    const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
         throw(uno::RuntimeException)
 {}
 /* -----------------------------02.04.01 11:43--------------------------------
 
  ---------------------------------------------------------------------------*/
 void SwXParagraph::firePropertiesChangeEvent(
-    const uno::Sequence< OUString >& aPropertyNames,
-    const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+    const uno::Sequence< OUString >& /*aPropertyNames*/,
+    const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
         throw(uno::RuntimeException)
 {}
 /* -----------------------------25.09.03 11:09--------------------------------
@@ -694,8 +695,8 @@ BOOL SwXParagraph::getDefaultTextContentValue(uno::Any& rAny, const OUString& rP
 
   -----------------------------------------------------------------------*/
 void SwXParagraph::addPropertyChangeListener(
-    const OUString& PropertyName,
-    const uno::Reference< beans::XPropertyChangeListener > & aListener)
+    const OUString& /*PropertyName*/,
+    const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
@@ -703,21 +704,21 @@ void SwXParagraph::addPropertyChangeListener(
 /*-- 11.12.98 08:12:50---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXParagraph::removePropertyChangeListener(const OUString& PropertyName, const uno::Reference< beans::XPropertyChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXParagraph::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
 /*-- 11.12.98 08:12:50---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXParagraph::addVetoableChangeListener(const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXParagraph::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
 /*-- 11.12.98 08:12:51---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXParagraph::removeVetoableChangeListener(const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener)
+void SwXParagraph::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
@@ -858,7 +859,6 @@ void SwXParagraph::setPropertyToDefault(const OUString& rPropertyName)
 
         // Absatz selektieren
         SwParaSelection aParaSel(pUnoCrsr);
-        SwDoc* pDoc = pUnoCrsr->GetDoc();
         const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                 aPropSet.getPropertyMap(), rPropertyName);
         if(pMap)
@@ -917,7 +917,6 @@ uno::Any SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
         if(SwXParagraph::getDefaultTextContentValue(aRet, rPropertyName))
             return aRet;
 
-        SwDoc* pDoc = pUnoCrsr->GetDoc();
         const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                 aPropSet.getPropertyMap(), rPropertyName);
         if(pMap)
@@ -940,7 +939,7 @@ uno::Any SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
 /*-- 11.12.98 08:12:51---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXParagraph::attach(const uno::Reference< text::XTextRange > & xTextRange)
+void SwXParagraph::attach(const uno::Reference< text::XTextRange > & /*xTextRange*/)
                     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
