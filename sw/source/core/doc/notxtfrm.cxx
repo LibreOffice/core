@@ -4,9 +4,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:39:32 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,9 +156,6 @@
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
 #endif
-#ifndef _FRMSH_HXX
-#include <frmsh.hxx>
-#endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>
 #endif
@@ -206,7 +203,7 @@ inline BOOL GetRealURL( const SwGrfNode& rNd, String& rTxt )
 
 void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
                            const ViewShell &rSh, const SwNoTxtFrm *pFrm,
-                           FASTBOOL bDefect )
+                           BOOL bDefect )
 {
     static Font *pFont = 0;
     if ( !pFont )
@@ -225,7 +222,7 @@ void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
     const SwFmtURL &rURL = pFrm->FindFlyFrm()->GetFmt()->GetURL();
     if( rURL.GetURL().Len() || rURL.GetMap() )
     {
-        FASTBOOL bVisited = FALSE;
+        BOOL bVisited = FALSE;
         if ( rURL.GetMap() )
         {
             ImageMap *pMap = (ImageMap*)rURL.GetMap();
@@ -242,8 +239,8 @@ void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
         else if ( rURL.GetURL().Len() )
             bVisited = rSh.GetDoc()->IsVisitedURL( rURL.GetURL() );
 
-        SwFmt *pFmt = rSh.GetDoc()->GetFmtFromPool( bVisited ?
-                RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL );
+        SwFmt *pFmt = rSh.GetDoc()->GetFmtFromPool( static_cast<sal_uInt16>
+            (bVisited ? RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL ) );
         aCol = pFmt->GetColor().GetValue();
         eUnderline = pFmt->GetUnderline().GetUnderline();
     }
@@ -336,7 +333,7 @@ void SetOutDev( ViewShell *pSh, OutputDevice *pOut )
 
 void lcl_ClearArea( const SwFrm &rFrm,
                     OutputDevice &rOut, const SwRect& rPtArea,
-                    const SwRect &rGrfArea, BOOL bIsOLE )
+                    const SwRect &rGrfArea )
 {
     SwRegionRects aRegion( rPtArea, 4, 4 );
     aRegion -= rGrfArea;
@@ -444,13 +441,11 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
     SwRect aNormal( Frm().Pos() + Prt().Pos(), Prt().SSize() );
     aNormal.Justify(); //Normalisiertes Rechteck fuer die Vergleiche
 
-    BOOL bIsOleNode = GetNode()->IsOLENode();
     if( aPaintArea.IsOver( aNormal ) )
     {
         // berechne die 4 zu loeschenden Rechtecke
         if( pSh->GetWin() )
-            ::lcl_ClearArea( *this, *pSh->GetOut(), aPaintArea, aNormal,
-                            bIsOleNode );
+            ::lcl_ClearArea( *this, *pSh->GetOut(), aPaintArea, aNormal );
 
         // in der Schnittmenge vom PaintBereich und der Bitmap liegt
         // der absolut sichtbare Bereich vom Frame
@@ -463,8 +458,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
     }
     else
         // wenn nicht sichtbar, loesche einfach den angegebenen Bereich
-        lcl_ClearArea( *this, *pSh->GetOut(), aPaintArea, SwRect(),
-                        bIsOleNode );
+        lcl_ClearArea( *this, *pSh->GetOut(), aPaintArea, SwRect() );
     if( pGrfNd )
         pGrfNd->SetFrameInPaint( FALSE );
 
@@ -491,13 +485,13 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
 
 void lcl_CalcRect( Point& rPt, Size& rDim, USHORT nMirror )
 {
-    if( nMirror == RES_MIRROR_GRF_VERT || nMirror == RES_MIRROR_GRF_BOTH )
+    if( nMirror == RES_MIRROR_GRAPH_VERT || nMirror == RES_MIRROR_GRAPH_BOTH )
     {
         rPt.X() += rDim.Width() -1;
         rDim.Width() = -rDim.Width();
     }
 
-    if( nMirror == RES_MIRROR_GRF_HOR || nMirror == RES_MIRROR_GRF_BOTH )
+    if( nMirror == RES_MIRROR_GRAPH_HOR || nMirror == RES_MIRROR_GRAPH_BOTH )
     {
         rPt.Y() += rDim.Height() -1;
         rDim.Height() = -rDim.Height();
@@ -536,10 +530,10 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
         {
             switch ( nMirror )
             {
-                case RES_DONT_MIRROR_GRF: nMirror = RES_MIRROR_GRF_VERT; break;
-                case RES_MIRROR_GRF_VERT: nMirror = RES_DONT_MIRROR_GRF; break;
-                case RES_MIRROR_GRF_HOR: nMirror = RES_MIRROR_GRF_BOTH; break;
-                default: nMirror = RES_MIRROR_GRF_HOR; break;
+                case RES_MIRROR_GRAPH_DONT: nMirror = RES_MIRROR_GRAPH_VERT; break;
+                case RES_MIRROR_GRAPH_VERT: nMirror = RES_MIRROR_GRAPH_DONT; break;
+                case RES_MIRROR_GRAPH_HOR: nMirror = RES_MIRROR_GRAPH_BOTH; break;
+                default: nMirror = RES_MIRROR_GRAPH_HOR; break;
             }
         }
     }
@@ -563,7 +557,7 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
     }
 
     // crop values have to be mirrored too
-    if( nMirror == RES_MIRROR_GRF_VERT || nMirror == RES_MIRROR_GRF_BOTH )
+    if( nMirror == RES_MIRROR_GRAPH_VERT || nMirror == RES_MIRROR_GRAPH_BOTH )
     {
         long nTmpCrop = nLeftCrop;
         nLeftCrop = nRightCrop;
@@ -585,7 +579,7 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
     }
 
     // crop values have to be mirrored too
-    if( nMirror == RES_MIRROR_GRF_HOR || nMirror == RES_MIRROR_GRF_BOTH )
+    if( nMirror == RES_MIRROR_GRAPH_HOR || nMirror == RES_MIRROR_GRAPH_BOTH )
     {
         long nTmpCrop = nTopCrop;
         nTopCrop   = nBottomCrop;
@@ -625,7 +619,7 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
         aGrfPt.Y()      += nTopCrop;
         aTmpSz.Height()-= nTopCrop + nBottomCrop;
 
-        if( RES_DONT_MIRROR_GRF != nMirror )
+        if( RES_MIRROR_GRAPH_DONT != nMirror )
             lcl_CalcRect( aGrfPt, aTmpSz, nMirror );
 
         pOrigRect->Pos  ( aGrfPt );
@@ -759,7 +753,7 @@ BOOL SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
 }
 
 
-BOOL SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& aPoint,
+BOOL SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
                              SwCrsrMoveState* ) const
 {
     SwCntntNode* pCNd = (SwCntntNode*)GetNode();
@@ -793,7 +787,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         SwCntntFrm::Modify( pOld, pNew );
     }
 
-    FASTBOOL bCompletePaint = TRUE;
+    BOOL bComplete = TRUE;
 
     switch( nWhich )
     {
@@ -803,7 +797,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     case RES_GRF_REREAD_AND_INCACHE:
         if( ND_GRFNODE == GetNode()->GetNodeType() )
         {
-            bCompletePaint = FALSE;
+            bComplete = FALSE;
             SwGrfNode* pNd = (SwGrfNode*) GetNode();
 
             ViewShell *pVSh = 0;
@@ -860,7 +854,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     // <--
         if ( GetNode()->GetNodeType() == ND_GRFNODE )
         {
-            bCompletePaint = FALSE;
+            bComplete = FALSE;
             SwGrfNode* pNd = (SwGrfNode*) GetNode();
 
             CLEARCACHE( pNd )
@@ -897,7 +891,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             return;
     }
 
-    if( bCompletePaint )
+    if( bComplete )
     {
         InvalidatePrt();
         SetCompletePaint();
@@ -918,7 +912,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
     SwOLENode* pOLENd = rNoTNd.GetOLENode();
 
-    const FASTBOOL bPrn = pOut == rNoTNd.getIDocumentDeviceAccess()->getPrinter( false ) ||
+    const BOOL bPrn = pOut == rNoTNd.getIDocumentDeviceAccess()->getPrinter( false ) ||
                           pOut->GetConnectMetaFile();
 
     /// OD 25.09.2002 #99739# - calculate aligned rectangle from parameter <rGrfArea>.
@@ -933,7 +927,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
     if( pGrfNd )
     {
-        FASTBOOL bForceSwap = FALSE, bContinue = TRUE;
+        BOOL bForceSwap = FALSE, bContinue = TRUE;
         GraphicObject& rGrfObj = pGrfNd->GetGrfObj();
 
         GraphicAttr aGrfAttr;
@@ -978,11 +972,11 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
         if( bContinue )
         {
-            const FASTBOOL bSwapped = rGrfObj.IsSwappedOut();
-            const FASTBOOL bSwappedIn = pGrfNd->SwapIn( bPrn );
+            const BOOL bSwapped = rGrfObj.IsSwappedOut();
+            const BOOL bSwappedIn = 0 != pGrfNd->SwapIn( bPrn );
             if( bSwappedIn && rGrfObj.GetGraphic().IsSupportedGraphic())
             {
-                const FASTBOOL bAnimate = rGrfObj.IsAnimated() &&
+                const BOOL bAnimate = rGrfObj.IsAnimated() &&
                                          !pShell->IsPreView() &&
                                          !pShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
                 // --> FME 2004-06-21 #i9684# Stop animation during printing/pdf export
@@ -1052,7 +1046,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         // Im BrowseModus gibt es nicht unbedingt einen Drucker und
         // damit kein JobSetup, also legen wir eines an ...
         const JobSetup* pJobSetup = pOLENd->getIDocumentDeviceAccess()->getJobsetup();
-        FASTBOOL bDummyJobSetup = 0 == pJobSetup;
+        BOOL bDummyJobSetup = 0 == pJobSetup;
         if( bDummyJobSetup )
             pJobSetup = new JobSetup();
 
