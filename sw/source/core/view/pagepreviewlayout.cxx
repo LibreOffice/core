@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagepreviewlayout.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 13:42:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:41:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,7 @@ void SwPagePreviewLayout::_CalcPrevwLayoutSizes()
 
         ++mnPages;
         pPage->Calc();
-        register const Size& rPageSize = pPage->Frm().SSize();
+        const Size& rPageSize = pPage->Frm().SSize();
         if ( rPageSize.Width() > maMaxPageSize.Width() )
             maMaxPageSize.Width() = rPageSize.Width();
         if ( rPageSize.Height() > maMaxPageSize.Height() )
@@ -604,8 +604,6 @@ void SwPagePreviewLayout::_CalcDocPrevwPaintRect()
         aSize.Height() = Min( maPreviewDocRect.GetHeight() - aTopLeftPos.Y(),
                               maWinSize.Height() - maAdditionalPaintOffset.Y() );
     maPaintedPrevwDocRect.SetSize( aSize );
-    long nHTmp = maPaintedPrevwDocRect.GetHeight();
-    long nWTmp = maPaintedPrevwDocRect.GetWidth();
 }
 
 /** calculate preview pages
@@ -897,7 +895,6 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
         ++nTmpRelSelPageNum;
     }
     sal_uInt16 nTmpCol = nTmpRelSelPageNum % mnCols;
-    sal_uInt16 nCurrCol = nTmpCol > 0 ? nTmpCol : mnCols;
     sal_uInt16 nCurrRow = nTmpRelSelPageNum / mnCols;
     if ( nTmpCol > 0 )
         ++nCurrRow;
@@ -911,7 +908,7 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
             else if ( (nNewRelSelectedPageNum + _nHoriMove) > mnPages )
                 nNewRelSelectedPageNum = mnPages;
             else
-                nNewRelSelectedPageNum += _nHoriMove;
+                nNewRelSelectedPageNum = nNewRelSelectedPageNum + _nHoriMove;
         }
         if ( _nVertMove != 0 )
         {
