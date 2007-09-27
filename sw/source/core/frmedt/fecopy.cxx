@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:51:58 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:50:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,6 +203,10 @@
 #include <vcl/virdev.hxx>
 #endif
 
+
+using namespace ::com::sun::star;
+
+
 /*************************************************************************
 |*
 |*  FindPageFrm(), Sucht den PageFrm zum Pt, die StartPage wird hereingereicht.
@@ -216,8 +220,8 @@ const SwFrm *FindPage( const SwFrm *pPg, const Point &rPt )
     if ( !pPg->Frm().IsInside( rPt ) )
     {
         const long nTop = rPt.Y();
-        FASTBOOL bPrvAllowed = TRUE;
-        FASTBOOL bNxtAllowed = TRUE;
+        BOOL bPrvAllowed = TRUE;
+        BOOL bNxtAllowed = TRUE;
         do
         {   if ( pPg->Frm().Top() > nTop && bPrvAllowed )
             {
@@ -295,7 +299,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
     }
 
     pClpDoc->LockExpFlds();
-    pClpDoc->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_DELETE_REDLINES );
+    pClpDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_DELETE_REDLINES );
     BOOL bRet;
 
     // soll ein FlyFrame kopiert werden ?
@@ -396,7 +400,7 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
     else
         bRet = _CopySelToDoc( pClpDoc, 0 );     // kopiere die Selectionen
 
-    pClpDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)0 );
+    pClpDoc->SetRedlineMode_intern((RedlineMode_t)0 );
     pClpDoc->UnlockExpFlds();
     if( !pClpDoc->IsExpFldsLocked() )
         pClpDoc->UpdateExpFlds(NULL, true);
@@ -571,8 +575,8 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                         aPos -= rSttPt - pObj->GetSnapRect().TopLeft();
                         // OD 2004-04-05 #i26791# - change attributes instead of
                         // direct positioning
-                        pFmt->SetAttr( SwFmtHoriOrient( aPos.X(), HORI_NONE, FRAME ) );
-                        pFmt->SetAttr( SwFmtVertOrient( aPos.Y(), VERT_NONE, FRAME ) );
+                        pFmt->SetAttr( SwFmtHoriOrient( aPos.X(), text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
+                        pFmt->SetAttr( SwFmtVertOrient( aPos.Y(), text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
                         // --> OD 2005-04-15 #i47455# - notify draw frame format
                         // that position attributes are already set.
                         if ( pFmt->ISA(SwDrawFrmFmt) )
@@ -595,16 +599,16 @@ BOOL SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
             const SdrMarkList aList( pSrcDrwView->GetMarkedObjectList() );
             pSrcDrwView->UnmarkAll();
 
-            ULONG nMarkCount = aMrkList.GetMarkCount();
+            ULONG nMrkCnt = aMrkList.GetMarkCount();
             USHORT i;
-            for ( i = 0; i < nMarkCount; ++i )
+            for ( i = 0; i < nMrkCnt; ++i )
             {
                 SdrObject *pObj = aMrkList.GetMark( i )->GetMarkedSdrObj();
                 pSrcDrwView->MarkObj( pObj, pSrcPgView );
             }
             DelSelectedObj();
-            nMarkCount = aList.GetMarkCount();
-            for ( i = 0; i < nMarkCount; ++i )
+            nMrkCnt = aList.GetMarkCount();
+            for ( i = 0; i < nMrkCnt; ++i )
             {
                 SdrObject *pObj = aList.GetMark( i )->GetMarkedSdrObj();
                 pSrcDrwView->MarkObj( pObj, pSrcPgView );
@@ -637,8 +641,8 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
         // am Doc ein Flag setzen, damit in den TextNodes
         pDoc->SetCopyIsMove( TRUE );
 
-    IDocumentRedlineAccess::RedlineMode_t eOldRedlMode = pDestShell->GetDoc()->GetRedlineMode();
-    pDestShell->GetDoc()->SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)(eOldRedlMode | IDocumentRedlineAccess::REDLINE_DELETE_REDLINES));
+    RedlineMode_t eOldRedlMode = pDestShell->GetDoc()->GetRedlineMode();
+    pDestShell->GetDoc()->SetRedlineMode_intern( (RedlineMode_t)(eOldRedlMode | nsRedlineMode_t::REDLINE_DELETE_REDLINES));
 
     // sind Tabellen-Formeln im Bereich, dann muss erst die Tabelle
     // angezeigt werden, damit die Tabellen-Formel den neuen Wert errechnen
@@ -714,8 +718,8 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 Point aPos( rInsPt );
                 aPos -= aNewAnch;
                 aPos -= rSttPt - pFly->Frm().Pos();
-                pFlyFmt->SetAttr( SwFmtHoriOrient( aPos.X(),HORI_NONE,FRAME ) );
-                pFlyFmt->SetAttr( SwFmtVertOrient( aPos.Y(),VERT_NONE,FRAME ) );
+                pFlyFmt->SetAttr( SwFmtHoriOrient( aPos.X(),text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
+                pFlyFmt->SetAttr( SwFmtVertOrient( aPos.Y(),text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
             }
 
             const Point aPt( pDestShell->GetCrsrDocPos() );
@@ -1148,7 +1152,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                         }
                         else
                             continue;
-                        SwFrmFmt * pNew = GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
+                        GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
                     }
                 }
             }
@@ -1257,7 +1261,7 @@ BOOL SwFEShell::PastePages( SwFEShell& rToFill, USHORT nStartPage, USHORT nEndPa
             }
             else
                 continue;
-            SwFrmFmt * pNew = rToFill.GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
+            rToFill.GetDoc()->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
         }
     }
     GetDoc()->UnlockExpFlds();
@@ -1405,7 +1409,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
 
     rStrm.Seek(0);
 
-    com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( rStrm ) );
+    uno::Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( rStrm ) );
     SvxDrawingLayerImport( pModel, xInputStream );
 
     if ( !Imp()->HasDrawView() )
@@ -1500,7 +1504,7 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
                     pNewObj->NbcSetRelativePos( aNullPt - aNewAnchor );
                     pNewObj->NbcSetAnchorPos( aNewAnchor );
 
-                    UINT32 nOrdNum = pOldObj->GetOrdNum();
+                    pOldObj->GetOrdNum();
 
                     DelSelectedObj();
 
