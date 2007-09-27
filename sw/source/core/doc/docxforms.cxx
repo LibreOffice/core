@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docxforms.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 15:40:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:37:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,15 +80,17 @@
 #endif
 
 
-using com::sun::star::uno::Reference;
-using com::sun::star::uno::XInterface;
-using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::makeAny;
-using com::sun::star::container::XNameContainer;
-using com::sun::star::xforms::XModel;
-using com::sun::star::xforms::XFormsUIHelper1;
-using com::sun::star::frame::XModule;
-using com::sun::star::uno::Exception;
+using namespace ::com::sun::star;
+
+using uno::Reference;
+using uno::XInterface;
+using uno::UNO_QUERY;
+using uno::makeAny;
+using uno::Exception;
+using container::XNameContainer;
+using xforms::XModel;
+using frame::XModule;
+using xforms::XFormsUIHelper1;
 using rtl::OUString;
 
 
