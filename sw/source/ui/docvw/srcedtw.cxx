@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:53:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:41:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,8 +133,6 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
     const sal_Unicode cCloseBracket= '>';
     const sal_Unicode cSlash        = '/';
     const sal_Unicode cExclamation = '!';
-    const sal_Unicode cQuote        = '"';
-    const sal_Unicode cSQuote      = '\'';
     const sal_Unicode cMinus        = '-';
     const sal_Unicode cSpace        = ' ';
     const sal_Unicode cTab          = 0x09;
@@ -249,12 +247,12 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
 
                 if(bFound ||(eFoundType == TT_COMMENT))
                 {
-                    SwTextPortion aText;
-                    aText.nLine = 0;
-                    aText.nStart = nPortStart + 1;
-                    aText.nEnd = nPortEnd;
-                    aText.eType = eFoundType;
-                    aPortionList.Insert(aText, nInsert++);
+                    SwTextPortion aTextPortion;
+                    aTextPortion.nLine = 0;
+                    aTextPortion.nStart = nPortStart + 1;
+                    aTextPortion.nEnd = nPortEnd;
+                    aTextPortion.eType = eFoundType;
+                    aPortionList.Insert(aTextPortion, nInsert++);
                     eFoundType = TT_UNKNOWN;
                 }
 
@@ -279,17 +277,21 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
 
 SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     Window( pParent, WB_BORDER|WB_CLIPCHILDREN ),
+
     pTextEngine(0),
+
     pOutWin(0),
     pHScrollbar(0),
     pVScrollbar(0),
+
     pSrcView(pParentView),
     pSourceViewConfig(new svt::SourceViewConfig),
+
     nCurTextWidth(0),
-    bDoSyntaxHighlight(TRUE),
-    bHighlighting(FALSE),
     nStartLine(USHRT_MAX),
-    eSourceEncoding(gsl_getSystemTextEncoding())
+    eSourceEncoding(gsl_getSystemTextEncoding()),
+    bDoSyntaxHighlight(TRUE),
+    bHighlighting(FALSE)
 {
     SetHelpId(HID_SOURCE_EDITWIN);
     CreateTextEngine();
@@ -695,9 +697,9 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
     {
         nLine = (USHORT)aSyntaxLineTable.GetCurKey();
         DoSyntaxHighlight( nLine );
-        USHORT nCur = (USHORT)aSyntaxLineTable.GetCurKey();
+        USHORT nCurKey = (USHORT)aSyntaxLineTable.GetCurKey();
         p = aSyntaxLineTable.Next();
-        aSyntaxLineTable.Remove(nCur);
+        aSyntaxLineTable.Remove(nCurKey);
         nCount ++;
         if(Time().GetTime() - aSyntaxCheckStart.GetTime() > MAX_HIGHLIGHTTIME)
         {
@@ -805,7 +807,10 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         // Wenn zwei gleiche Attribute hintereinander eingestellt werden,
         // optimiert das die TextEngine.
         USHORT nLastEnd = 0;
+
+#ifdef DBG_UTIL
         USHORT nLine = aPortionList[0].nLine;
+#endif
         for ( USHORT i = 0; i < nCount; i++ )
         {
             SwTextPortion& r = aPortionList[i];
@@ -830,11 +835,10 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         SwTextPortion& r = aPortionList[i];
         if ( r.nStart > r.nEnd )    // Nur bis Bug von MD behoeben
             continue;
-        USHORT nCol = r.eType;
-        if(r.eType !=  svtools::HTMLSGML    &&
-            r.eType != svtools::HTMLCOMMENT &&
-            r.eType != svtools::HTMLKEYWORD &&
-            r.eType != svtools::HTMLUNKNOWN)
+        if(r.eType !=  (SwHtmlTextType)svtools::HTMLSGML    &&
+            r.eType != (SwHtmlTextType)svtools::HTMLCOMMENT &&
+            r.eType != (SwHtmlTextType)svtools::HTMLKEYWORD &&
+            r.eType != (SwHtmlTextType)svtools::HTMLUNKNOWN)
                 r.eType = (SwHtmlTextType)svtools::HTMLUNKNOWN;
         Color aColor((ColorData)SW_MOD()->GetColorConfig().GetColorValue((svtools::ColorConfigEntry)r.eType).nColor);
         USHORT nLine = nLineOff+r.nLine; //
@@ -877,7 +881,7 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 --------------------------------------------------*/
 
-void    SwSrcEditWindow::Invalidate()
+void    SwSrcEditWindow::Invalidate(USHORT )
 {
     pOutWin->Invalidate();
     Window::Invalidate();
