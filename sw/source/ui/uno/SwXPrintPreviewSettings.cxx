@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXPrintPreviewSettings.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:28:04 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:40:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,12 +115,12 @@ Any SAL_CALL SwXPrintPreviewSettings::queryInterface( const Type& rType )
 {
         return ::cppu::queryInterface ( rType                                       ,
                                         // OWeakObject interfaces
-                                        reinterpret_cast< XInterface*       > ( this )  ,
-                                        static_cast< XWeak*         > ( this )  ,
+                                        dynamic_cast< XInterface* >( dynamic_cast< OWeakObject* >(this) )  ,
+                                        dynamic_cast< XWeak* >( this )   ,
                                         // my own interfaces
-                                        static_cast< XServiceInfo*      > ( this )  ,
-                                        static_cast< XPropertySet*      > ( this )  ,
-                                        static_cast< XMultiPropertySet*     > ( this ) );
+                                        dynamic_cast< XServiceInfo* >( this )   ,
+                                        dynamic_cast< XPropertySet* >( this )   ,
+                                        dynamic_cast< XMultiPropertySet* >( this ) );
 }
 void SwXPrintPreviewSettings::acquire ()
     throw ()
@@ -155,7 +155,7 @@ void SwXPrintPreviewSettings::_preSetValues ()
     }
 }
 
-void SwXPrintPreviewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue )
+void SwXPrintPreviewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
     switch( rInfo.mnHandle )
@@ -286,7 +286,7 @@ void SwXPrintPreviewSettings::_preGetValues ()
     if (mpDoc)
         mpConstPreViewData = mpDoc->GetPreViewPrtData();
 }
-void SwXPrintPreviewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, ::com::sun::star::uno::Any & rValue )
+void SwXPrintPreviewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
     throw(UnknownPropertyException, WrappedTargetException )
 {
     sal_Bool bBool = TRUE;
@@ -297,42 +297,42 @@ void SwXPrintPreviewSettings::_getSingleValue( const comphelper::PropertyInfo & 
         {
             bBool = FALSE;
             if ( mpConstPreViewData )
-                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100 ( mpConstPreViewData->GetLeftSpace() ) );
+                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100_UNSIGNED( mpConstPreViewData->GetLeftSpace() ) );
         }
         break;
         case HANDLE_PRINTSET_PREVIEW_RIGHT_MARGIN:
         {
             bBool = FALSE;
             if ( mpConstPreViewData )
-                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100 ( mpConstPreViewData->GetRightSpace() ) );
+                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100_UNSIGNED( mpConstPreViewData->GetRightSpace() ) );
         }
         break;
         case HANDLE_PRINTSET_PREVIEW_TOP_MARGIN:
         {
             bBool = FALSE;
             if ( mpConstPreViewData )
-                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100 ( mpConstPreViewData->GetTopSpace() ) );
+                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100_UNSIGNED( mpConstPreViewData->GetTopSpace() ) );
         }
         break;
         case HANDLE_PRINTSET_PREVIEW_BOTTOM_MARGIN:
         {
             bBool = FALSE;
             if ( mpConstPreViewData )
-                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100 ( mpConstPreViewData->GetBottomSpace() ) );
+                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100_UNSIGNED( mpConstPreViewData->GetBottomSpace() ) );
         }
         break;
         case HANDLE_PRINTSET_PREVIEW_HORIZONTAL_SPACING:
         {
             bBool = FALSE;
             if ( mpConstPreViewData )
-                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100 ( mpConstPreViewData->GetHorzSpace() ) );
+                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100_UNSIGNED( mpConstPreViewData->GetHorzSpace() ) );
         }
         break;
         case HANDLE_PRINTSET_PREVIEW_VERTICAL_SPACING:
         {
             bBool = FALSE;
             if ( mpConstPreViewData )
-                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100 ( mpConstPreViewData->GetVertSpace() ) );
+                rValue <<= static_cast < sal_Int32 > ( TWIP_TO_MM100_UNSIGNED( mpConstPreViewData->GetVertSpace() ) );
         }
         break;
         case HANDLE_PRINTSET_PREVIEW_NUM_ROWS:
