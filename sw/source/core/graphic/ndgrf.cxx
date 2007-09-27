@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:33:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:52:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,16 +147,16 @@ using namespace com::sun::star;
 // SwGrfNode
 // --------------------
 SwGrfNode::SwGrfNode(
-    const SwNodeIndex & rWhere,
-    const String& rGrfName, const String& rFltName,
-    const Graphic* pGraphic,
-    SwGrfFmtColl *pGrfColl,
-    SwAttrSet* pAutoAttr )
+        const SwNodeIndex & rWhere,
+        const String& rGrfName, const String& rFltName,
+        const Graphic* pGraphic,
+        SwGrfFmtColl *pGrfColl,
+        SwAttrSet* pAutoAttr ) :
+    SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
     // --> OD 2007-01-23 #i73788#
-    : mbLinkedInputStreamReady( false ),
-      mbIsStreamReadOnly( sal_False ),
+    mbLinkedInputStreamReady( false ),
+    mbIsStreamReadOnly( sal_False )
     // <--
-      SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr )
 {
     aGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel = bLoadLowResGrf =
@@ -168,12 +168,12 @@ SwGrfNode::SwGrfNode(
 
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                           const GraphicObject& rGrfObj,
-                      SwGrfFmtColl *pGrfColl, SwAttrSet* pAutoAttr )
+                      SwGrfFmtColl *pGrfColl, SwAttrSet* pAutoAttr ) :
+    SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
     // --> OD 2007-01-23 #i73788#
-    : mbLinkedInputStreamReady( false ),
-      mbIsStreamReadOnly( sal_False ),
+    mbLinkedInputStreamReady( false ),
+    mbIsStreamReadOnly( sal_False )
     // <--
-      SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr )
 {
     aGrfObj = rGrfObj;
     aGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
@@ -191,12 +191,12 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       const String& rGrfName, const String& rFltName,
                       SwGrfFmtColl *pGrfColl,
-                      SwAttrSet* pAutoAttr )
+                      SwAttrSet* pAutoAttr ) :
+    SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
     // --> OD 2007-01-23 #i73788#
-    : mbLinkedInputStreamReady( false ),
-      mbIsStreamReadOnly( sal_False ),
+    mbLinkedInputStreamReady( false ),
+    mbIsStreamReadOnly( sal_False )
     // <--
-      SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr )
 {
     aGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
 
@@ -428,7 +428,7 @@ SwGrfNode::~SwGrfNode()
 }
 
 
-SwCntntNode *SwGrfNode::SplitNode( const SwPosition &rPos )
+SwCntntNode *SwGrfNode::SplitNode( const SwPosition & )
 {
     return this;
 }
@@ -882,7 +882,7 @@ uno::Reference< embed::XStorage > SwGrfNode::_GetDocSubstorageOrRoot( const Stri
     @author OD
 */
 SvStream* SwGrfNode::_GetStreamForEmbedGrf(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _refPics,
+            const uno::Reference< embed::XStorage >& _refPics,
             String& _aStrmName ) const
 {
     SvStream* pStrm( 0L );
@@ -1144,9 +1144,9 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
     {
         switch( rMirror.GetValue() )
         {
-        case RES_DONT_MIRROR_GRF:   nMirror = BMP_MIRROR_HORZ; break;
-        case RES_MIRROR_GRF_VERT:   nMirror = BMP_MIRROR_NONE; break;
-        case RES_MIRROR_GRF_HOR:    nMirror = BMP_MIRROR_HORZ|BMP_MIRROR_VERT;
+        case RES_MIRROR_GRAPH_DONT:     nMirror = BMP_MIRROR_HORZ; break;
+        case RES_MIRROR_GRAPH_VERT:     nMirror = BMP_MIRROR_NONE; break;
+        case RES_MIRROR_GRAPH_HOR:  nMirror = BMP_MIRROR_HORZ|BMP_MIRROR_VERT;
                                     break;
         default:                    nMirror = BMP_MIRROR_VERT; break;
         }
@@ -1154,10 +1154,10 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
     else
         switch( rMirror.GetValue() )
         {
-        case RES_MIRROR_GRF_BOTH:   nMirror = BMP_MIRROR_HORZ|BMP_MIRROR_VERT;
+        case RES_MIRROR_GRAPH_BOTH:     nMirror = BMP_MIRROR_HORZ|BMP_MIRROR_VERT;
                                     break;
-        case RES_MIRROR_GRF_VERT:   nMirror = BMP_MIRROR_HORZ; break;
-        case RES_MIRROR_GRF_HOR:    nMirror = BMP_MIRROR_VERT; break;
+        case RES_MIRROR_GRAPH_VERT: nMirror = BMP_MIRROR_HORZ; break;
+        case RES_MIRROR_GRAPH_HOR:  nMirror = BMP_MIRROR_VERT; break;
         }
 
     rGA.SetMirrorFlags( nMirror );
