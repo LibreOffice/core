@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:51:48 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -813,6 +813,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
                 case ffModern:      eFam = FAMILY_MODERN;       break;
                 case ffScript:      eFam = FAMILY_SCRIPT;       break;
                 case ffDecorative:  eFam = FAMILY_DECORATIVE;   break;
+                default:    eFam = FAMILY_DONTKNOW;     break;
             }
             aEditAttribs.Put(   SvxFontItem(
                                     eFam,
@@ -1254,6 +1255,7 @@ void Sc10Import::LoadPatternCollection()
                     case ffModern     : eFam = FAMILY_MODERN;       break;
                     case ffScript     : eFam = FAMILY_SCRIPT;       break;
                     case ffDecorative : eFam = FAMILY_DECORATIVE;   break;
+                    default: eFam = FAMILY_DONTKNOW;        break;
                 }
                 rItemSet.Put( SvxFontItem( eFam, SC10TOSTRING( pPattern->LogFont.lfFaceName ), EMPTY_STRING,
                         PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
@@ -1841,6 +1843,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
                     case ffModern     : eFam = FAMILY_MODERN;       break;
                     case ffScript     : eFam = FAMILY_SCRIPT;       break;
                     case ffDecorative : eFam = FAMILY_DECORATIVE;   break;
+                    default: eFam = FAMILY_DONTKNOW;        break;
                 }
                 ScPatternAttr aScPattern(pDoc->GetPool());
                 aScPattern.GetItemSet().Put(SvxFontItem(eFam, SC10TOSTRING( pFont->FaceName ), EMPTY_STRING,
@@ -2403,6 +2406,8 @@ void Sc10Import::ChangeFormat(USHORT nFormat, USHORT nInfo, ULONG& nKey)
     case vfFormula :
      break;
     case vfString :
+     break;
+    default :
      break;
   }
 }
