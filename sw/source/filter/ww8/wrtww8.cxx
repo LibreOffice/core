@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-21 11:52:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:02:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,7 +331,7 @@ static void WriteDop( SwWW8Writer& rWrt )
     const SwDocStat& rDStat = rWrt.pDoc->GetDocStat();
     rDop.cWords = rDStat.nWord;
     rDop.cCh = rDStat.nChar;
-    rDop.cPg = rDStat.nPage;
+    rDop.cPg = static_cast< INT16 >(rDStat.nPage);
     rDop.cParas = rDStat.nPara;
     rDop.cLines = rDStat.nPara;
 
@@ -485,8 +485,8 @@ void SwWW8Writer::ExportDopTypography(WW8DopTypography &rTypo)
         },
     };
 
-    const com::sun::star::i18n::ForbiddenCharacters *pForbidden = 0;
-    const com::sun::star::i18n::ForbiddenCharacters *pUseMe = 0;
+    const i18n::ForbiddenCharacters *pForbidden = 0;
+    const i18n::ForbiddenCharacters *pUseMe = 0;
     BYTE nUseReserved=0;
     int nNoNeeded=0;
     /*
@@ -513,7 +513,7 @@ void SwWW8Writer::ExportDopTypography(WW8DopTypography &rTypo)
 
     for (rTypo.reserved1=8;rTypo.reserved1>0;rTypo.reserved1-=2)
     {
-        if ((pForbidden = pDoc->getForbiddenCharacters(rTypo.GetConvertedLang(),
+        if (0 != (pForbidden = pDoc->getForbiddenCharacters(rTypo.GetConvertedLang(),
             false)))
         {
             int nIdx = (rTypo.reserved1-2)/2;
@@ -849,7 +849,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const BYTE* pSprms)
 
         Set_UInt16( p, 0x6646 );    // set SprmCode
         Set_UInt32( p, nDataPos );  // set startpos (FC) in the datastream
-        nVarLen = p - aHugePapx;
+        nVarLen = static_cast< short >(p - aHugePapx);
         pSprms = pNewSprms = aHugePapx;
     }
     // if append at the same FC-EndPos and there are sprms, then get the old
@@ -957,7 +957,7 @@ BYTE WW8_WrFkp::SearchSameSprm( USHORT nVarLen, const BYTE* pSprms )
     if( 3 < nVarLen )
     {
         // if the sprms contained picture-references then never equal!
-        for( BYTE n = nVarLen - 1; 3 < n; --n )
+        for( BYTE n = static_cast< BYTE >(nVarLen - 1); 3 < n; --n )
             if( pSprms[ n ] == GRF_MAGIC_3 &&
                 pSprms[ n-1 ] == GRF_MAGIC_2 &&
                 pSprms[ n-2 ] == GRF_MAGIC_1 )
@@ -1060,9 +1060,9 @@ bool WW8_WrFkp::Append( WW8_FC nEndFc, USHORT nVarLen, const BYTE* pSprms )
         nStartGrp = nPos;
         pOfs[nIMax * nItemSize] = (BYTE)( nStartGrp >> 1 );
                                             // ( DatenAnfg >> 1 ) eintragen
-        BYTE nCnt = CHP == ePlc
+        BYTE nCnt = static_cast< BYTE >(CHP == ePlc
                         ? ( nVarLen < 256 ) ? (BYTE) nVarLen : 255
-                        : ( ( nVarLen + 1 ) >> 1 );
+                        : ( ( nVarLen + 1 ) >> 1 ));
 
         pFkp[ nOffset ] = nCnt;                     // DatenLaenge eintragen
         memcpy( pFkp + nOffset + 1, pSprms, nVarLen );  // Sprms speichern
@@ -1088,9 +1088,9 @@ bool WW8_WrFkp::Combine()
     bCombined = true;
 
 #if defined OSL_BIGENDIAN         // Hier werden nur die FCs gedreht, die
-    register USHORT i;          // Sprms muessen an anderer Stelle gedreht
+    USHORT i;          // Sprms muessen an anderer Stelle gedreht
                                 // werden
-    register UINT32* p;
+    UINT32* p;
     for( i = 0, p = (UINT32*)pFkp; i <= nIMax; i++, p++ )
         *p = SWAPLONG( *p );
 #endif // ifdef OSL_BIGENDIAN
@@ -1102,7 +1102,7 @@ void WW8_WrFkp::Write( SvStream& rStrm, SwWW8WrGrf& rGrf )
 {
     Combine();                      // Falls noch nicht Combined
 
-    register BYTE* p;               //  Suche Magic fuer nPicLocFc
+    BYTE* p;               //  Suche Magic fuer nPicLocFc
     BYTE* pEnd = pFkp + nStartGrp;
     for( p = pFkp + 511 - 4; p >= pEnd; p-- )
     {
@@ -1141,7 +1141,7 @@ void WW8_WrFkp::MergeToNew( short& rVarLen, BYTE *& rpNewSprms )
             memcpy( pNew + nOldVarLen, rpNewSprms, rVarLen );
 
             rpNewSprms = pNew;
-            rVarLen += nOldVarLen;
+            rVarLen = rVarLen + nOldVarLen;
         }
         --nIMax;
         // if this sprms dont used from others, remove it
@@ -1502,7 +1502,7 @@ USHORT SwWW8Writer::AddRedlineAuthor( USHORT nId )
 void SwWW8Writer::WriteAsStringTable(const std::vector<String>& rStrings,
     INT32& rfcSttbf, INT32& rlcbSttbf, USHORT nExtraLen)
 {
-    USHORT n, nCount = rStrings.size();
+    USHORT n, nCount = static_cast< USHORT >(rStrings.size());
     if( nCount )
     {
         // we have some Redlines found in the document -> the
@@ -2222,8 +2222,8 @@ ULONG SwWW8Writer::StoreDoc()
     USHORT nRedlineMode = pDoc->GetRedlineMode();
     if (pDoc->GetRedlineTbl().Count())
     {
-        pDoc->SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(nRedlineMode | IDocumentRedlineAccess::REDLINE_SHOW_DELETE |
-                                     IDocumentRedlineAccess::REDLINE_SHOW_INSERT));
+        pDoc->SetRedlineMode((RedlineMode_t)(nRedlineMode | nsRedlineMode_t::REDLINE_SHOW_DELETE |
+                                     nsRedlineMode_t::REDLINE_SHOW_INSERT));
     }
 
     maFontHelper.InitFontTable(bWrtWW8, *pDoc);
@@ -2332,8 +2332,8 @@ ULONG SwWW8Writer::StoreDoc()
     pDop = new WW8Dop;
 
 
-    pDop->fRevMarking = 0 != (IDocumentRedlineAccess::REDLINE_ON & nRedlineMode);
-    pDop->fRMView = 0 != ( IDocumentRedlineAccess::REDLINE_SHOW_DELETE & nRedlineMode );
+    pDop->fRevMarking = 0 != (nsRedlineMode_t::REDLINE_ON & nRedlineMode);
+    pDop->fRMView = 0 != ( nsRedlineMode_t::REDLINE_SHOW_DELETE & nRedlineMode );
     pDop->fRMPrint = pDop->fRMView;
 
     // Tabelle fuer die freifliegenden Rahmen erzeugen, aber nur wenn
@@ -2362,7 +2362,7 @@ ULONG SwWW8Writer::StoreDoc()
     StoreDoc1();
 
     if (nRedlineMode != pDoc->GetRedlineMode())
-      pDoc->SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(nRedlineMode));
+      pDoc->SetRedlineMode((RedlineMode_t)(nRedlineMode));
 
     if (pUsedNumTbl)           // all used NumRules
     {
@@ -2621,11 +2621,11 @@ void SwWW8Writer::RestoreMacroCmds()
 {
     pFib->fcCmds = pTableStrm->Tell();
 
-    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xSrcRoot(pDoc->GetDocShell()->GetStorage());
+    uno::Reference < embed::XStorage > xSrcRoot(pDoc->GetDocShell()->GetStorage());
     try
     {
-        com::sun::star::uno::Reference < com::sun::star::io::XStream > xSrcStream =
-                xSrcRoot->openStreamElement( CREATE_CONST_ASC(SL::aMSMacroCmds), com::sun::star::embed::ElementModes::READ );
+        uno::Reference < io::XStream > xSrcStream =
+                xSrcRoot->openStreamElement( CREATE_CONST_ASC(SL::aMSMacroCmds), embed::ElementModes::READ );
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xSrcStream );
 
         if ( pStream && SVSTREAM_OK == pStream->GetError())
@@ -2643,7 +2643,7 @@ void SwWW8Writer::RestoreMacroCmds()
 
         delete pStream;
     }
-    catch ( com::sun::star::uno::Exception& )
+    catch ( uno::Exception& )
     {
     }
 
