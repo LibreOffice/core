@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:52:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:05:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,6 +176,9 @@ protected:
     void            SetGlobalMode(BOOL bSet) {bGlobalMode = bSet;}
 
 public:
+
+    using Window::Notify;
+
     SwNavigationPI(SfxBindings*, SfxChildWindowContext*, Window*);
     ~SwNavigationPI();
 
@@ -184,6 +187,8 @@ public:
     void            Update() { FillBox(); }
     void            UpdateListBox();
     void            MoveOutline(USHORT nSource, USHORT nTarget, BOOL bWithCilds);
+
+    using Window::StateChanged;
     virtual void    StateChanged( USHORT nSID, SfxItemState eState,
                                             const SfxPoolItem* pState );
 
