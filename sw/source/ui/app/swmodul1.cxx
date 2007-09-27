@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:23:11 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:18:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,8 @@
 #endif
 #include "helpid.h"
 
+#include <unomid.h>
+
 using namespace ::rtl;
 using namespace ::svx;
 using namespace ::com::sun::star;
@@ -149,7 +151,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::lang;
-#define C2U(char) rtl::OUString::createFromAscii(char)
+
 
 /*-----------------08/28/97 08:41pm-----------------
 
@@ -243,19 +245,19 @@ SwView* SwModule::GetNextView(SwView* pView)
 void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
                             sal_uInt16 nDest )
 {
-    SwView* pView = pActView;
-    ViewShell* pSh = pView ? &pView->GetWrtShell() : 0;
+    SwView* pCurrView = pActView;
+    ViewShell* pSh = pCurrView ? &pCurrView->GetWrtShell() : 0;
 
-    SwMasterUsrPref* pPref = (SwMasterUsrPref*)GetUsrPref(
+    SwMasterUsrPref* pPref = (SwMasterUsrPref*)GetUsrPref( static_cast< sal_Bool >(
                                          VIEWOPT_DEST_WEB == nDest ? sal_True  :
                                          VIEWOPT_DEST_TEXT== nDest ? sal_False :
-                                         pView && pView->ISA(SwWebView) );
+                                         pCurrView && pCurrView->ISA(SwWebView) ));
 
     //per Uno soll nur die sdbcx::View, aber nicht das Module veraendert werden
     sal_Bool bViewOnly = VIEWOPT_DEST_VIEW_ONLY == nDest;
     //PreView abfruehstuecken
     SwPagePreView* pPPView;
-    if( !pView && 0 != (pPPView = PTR_CAST( SwPagePreView, SfxViewShell::Current())) )
+    if( !pCurrView && 0 != (pPPView = PTR_CAST( SwPagePreView, SfxViewShell::Current())) )
     {
         if(!bViewOnly)
             pPref->SetUIOptions( rUsrPref );
@@ -275,11 +277,11 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
         pPref->SetModified();
     }
 
-    if( !pView )
+    if( !pCurrView )
         return;
 
     // Weitergabe an die CORE
-    const sal_Bool bReadonly = pView->GetDocShell()->IsReadOnly();
+    const sal_Bool bReadonly = pCurrView->GetDocShell()->IsReadOnly();
     SwViewOption* pViewOpt;
     if(!bViewOnly)
         pViewOpt = new SwViewOption( *pPref );
@@ -297,7 +299,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     if ( pSh->GetViewOptions()->IsReadonly() != bReadonly )
         pSh->SetReadonlyOption(bReadonly);
 
-    lcl_SetUIPrefs(pViewOpt, pView, pSh);
+    lcl_SetUIPrefs(pViewOpt, pCurrView, pSh);
     // zum Schluss wird das Idle-Flag wieder gesetzt
     // #42510#
     pPref->SetIdle(sal_True);
@@ -387,7 +389,7 @@ SwChapterNumRules*  SwModule::GetChapterNumRules()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, BOOL bOnlyIfAvailable)
+void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, BOOL /*bOnlyIfAvailable*/)
 {
     Reference<XFrame> xFrame = rView.GetViewFrame()->GetFrame()->GetFrameInterface();
     Reference<XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);
@@ -630,7 +632,7 @@ sal_uInt16 SwModule::GetMetric( sal_Bool bWeb ) const
             GetUsrPref(sal_False);
         pPref = pUsrPref;
     }
-    return pPref->GetMetric();
+    return static_cast< sal_uInt16 >(pPref->GetMetric());
 }
 /* ---------------------------------------------------------------------------
 
@@ -645,20 +647,20 @@ sal_uInt16 SwModule::GetLinkUpdMode( sal_Bool ) const
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_uInt16 SwModule::GetFldUpdateFlags( sal_Bool ) const
+SwFldUpdateFlags SwModule::GetFldUpdateFlags( sal_Bool ) const
 {
     if(!pUsrPref)
         GetUsrPref(sal_False);
-    return (sal_uInt16)pUsrPref->GetFldUpdateFlags();
+    return pUsrPref->GetFldUpdateFlags();
 }
 /* -----------------------------28.09.00 14:18--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwModule::ApplyFldUpdateFlags(sal_Int32 nFldFlags)
+void SwModule::ApplyFldUpdateFlags(SwFldUpdateFlags eFldFlags)
 {
     if(!pUsrPref)
         GetUsrPref(sal_False);
-    pUsrPref->SetFldUpdateFlags(nFldFlags);
+    pUsrPref->SetFldUpdateFlags(eFldFlags);
 }
 /* -----------------------------28.09.00 14:18--------------------------------
 
