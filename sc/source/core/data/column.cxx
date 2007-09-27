@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:17:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1226,7 +1226,7 @@ BOOL ScColumn::TestInsertCol( SCROW nStartRow, SCROW nEndRow) const
         BOOL bTest = TRUE;
         if (pItems)
             for (SCSIZE i=0; (i<nCount) && bTest; i++)
-                bTest = ((pItems[i].nRow < nStartRow) && (pItems[i].nRow > nEndRow))
+                bTest = (pItems[i].nRow < nStartRow) || (pItems[i].nRow > nEndRow)
                         || !CellVisible(pItems[i].pCell);
 
         //  AttrArray testet nur zusammengefasste
