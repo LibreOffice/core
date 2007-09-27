@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ascharanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:25:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:07:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,10 @@
 #include <fmtornt.hxx>
 #endif
 
+#include <com/sun/star/text/HoriOrientation.hpp>
+
+
+using namespace ::com::sun::star;
 using namespace objectpositioning;
 
 /** constructor
@@ -257,8 +261,8 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
             // save calculated Y-position value for 'automatic' vertical positioning,
             // in order to avoid a switch to 'manual' vertical positioning in
             // <SwDrawContact::_Changed(..)>.
-            const SwVertOrient eVertOrient = rVert.GetVertOrient();
-            if( rVert.GetPos() != nRelPos && eVertOrient != VERT_NONE )
+            const sal_Int16 eVertOrient = rVert.GetVertOrient();
+            if( rVert.GetPos() != nRelPos && eVertOrient != text::VertOrientation::NONE )
             {
                 SwFmtVertOrient aVert( rVert );
                 aVert.SetPos( nRelPos );
@@ -392,23 +396,23 @@ SwTwips SwAsCharAnchoredObjectPosition::_GetRelPosToBase(
 
     mnLineAlignment = 0;
 
-    const SwVertOrient eVertOrient = _rVert.GetVertOrient();
+    const sal_Int16 eVertOrient = _rVert.GetVertOrient();
 
-    if ( eVertOrient == VERT_NONE )
+    if ( eVertOrient == text::VertOrientation::NONE )
         nRelPosToBase = _rVert.GetPos();
     else
     {
-        if ( eVertOrient == VERT_CENTER )
+        if ( eVertOrient == text::VertOrientation::CENTER )
             nRelPosToBase -= _nObjBoundHeight /  2;
-        else if ( eVertOrient == VERT_TOP )
+        else if ( eVertOrient == text::VertOrientation::TOP )
             nRelPosToBase -= _nObjBoundHeight;
-        else if ( eVertOrient == VERT_BOTTOM )
+        else if ( eVertOrient == text::VertOrientation::BOTTOM )
             nRelPosToBase = 0;
-        else if ( eVertOrient == VERT_CHAR_CENTER )
+        else if ( eVertOrient == text::VertOrientation::CHAR_CENTER )
             nRelPosToBase -= ( _nObjBoundHeight + mnLineAscent - mnLineDescent ) / 2;
-        else if ( eVertOrient == VERT_CHAR_TOP )
+        else if ( eVertOrient == text::VertOrientation::CHAR_TOP )
             nRelPosToBase -= mnLineAscent;
-        else if ( eVertOrient == VERT_CHAR_BOTTOM )
+        else if ( eVertOrient == text::VertOrientation::CHAR_BOTTOM )
             nRelPosToBase += mnLineDescent - _nObjBoundHeight;
         else
         {
@@ -417,24 +421,24 @@ SwTwips SwAsCharAnchoredObjectPosition::_GetRelPosToBase(
                 // object is at least as high as the line. Thus, no more is
                 // positioning necessary. Also, the max. ascent isn't changed.
                 nRelPosToBase -= mnLineAscentInclObjs;
-                if ( eVertOrient == VERT_LINE_CENTER )
+                if ( eVertOrient == text::VertOrientation::LINE_CENTER )
                     mnLineAlignment = 2;
-                else if ( eVertOrient == VERT_LINE_TOP )
+                else if ( eVertOrient == text::VertOrientation::LINE_TOP )
                     mnLineAlignment = 1;
-                else if ( eVertOrient == VERT_LINE_BOTTOM )
+                else if ( eVertOrient == text::VertOrientation::LINE_BOTTOM )
                     mnLineAlignment = 3;
             }
-            else if ( eVertOrient == VERT_LINE_CENTER )
+            else if ( eVertOrient == text::VertOrientation::LINE_CENTER )
             {
                 nRelPosToBase -= ( _nObjBoundHeight + mnLineAscentInclObjs - mnLineDescentInclObjs ) / 2;
                 mnLineAlignment = 2;
             }
-            else if ( eVertOrient == VERT_LINE_TOP )
+            else if ( eVertOrient == text::VertOrientation::LINE_TOP )
             {
                 nRelPosToBase -= mnLineAscentInclObjs;
                 mnLineAlignment = 1;
             }
-            else if ( eVertOrient == VERT_LINE_BOTTOM )
+            else if ( eVertOrient == text::VertOrientation::LINE_BOTTOM )
             {
                 nRelPosToBase += mnLineDescentInclObjs - _nObjBoundHeight;
                 mnLineAlignment = 3;
