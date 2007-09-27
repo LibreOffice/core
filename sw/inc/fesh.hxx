@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:19:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:01:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,18 +35,19 @@
 #ifndef _FESH_HXX
 #define _FESH_HXX
 
+#include <com/sun/star/text/RelOrientation.hpp>
+
 #ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #endif
+
+#include <svx/svdobj.hxx>
 
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
-#endif
-#ifndef _ORNTENUM_HXX
-#include <orntenum.hxx>
 #endif
 #ifndef _FLYENUM_HXX
 #include <flyenum.hxx>
@@ -63,6 +64,7 @@
 #include <vector>
 #define INCLUDED_VECTOR
 #endif
+
 
 class SwFlyFrm;
 class SwTabCols;
@@ -81,52 +83,47 @@ class SwFrmFmt;
 struct SwSortOptions;
 class SdrMarkList;
 
-enum FrmType
-{
-    //Fuer GetFrmType() und GetSelFrmType(). Der Return-Wert ist eine
-    //Veroderung.
-    FRMTYPE_NONE    = 0,
-    FRMTYPE_PAGE    = 1,
-    FRMTYPE_HEADER  = 2,
-    FRMTYPE_FOOTER  = 4,
-    FRMTYPE_BODY    = 8,
-    FRMTYPE_COLUMN  = 16,
-    FRMTYPE_TABLE   = 32,
-    FRMTYPE_FLY_FREE    = 64,
-    FRMTYPE_FLY_ATCNT   = 128,
-    FRMTYPE_FLY_INCNT   = 256,
-    FRMTYPE_FOOTNOTE    = 512,
-    FRMTYPE_FTNPAGE     = 1024,
-    FRMTYPE_FLY_ANY     = 2048,
-    FRMTYPE_DRAWOBJ     = 4096,
-    FRMTYPE_COLSECT     = 8192,
-    FRMTYPE_COLSECTOUTTAB = 16384
-};
+
+// return values for GetFrmType() und GetSelFrmType().
+//! values can be combined via logival or
+#define FRMTYPE_NONE            (USHORT)     0
+#define FRMTYPE_PAGE            (USHORT)     1
+#define FRMTYPE_HEADER          (USHORT)     2
+#define FRMTYPE_FOOTER          (USHORT)     4
+#define FRMTYPE_BODY            (USHORT)     8
+#define FRMTYPE_COLUMN          (USHORT)    16
+#define FRMTYPE_TABLE           (USHORT)    32
+#define FRMTYPE_FLY_FREE        (USHORT)    64
+#define FRMTYPE_FLY_ATCNT       (USHORT)   128
+#define FRMTYPE_FLY_INCNT       (USHORT)   256
+#define FRMTYPE_FOOTNOTE        (USHORT)   512
+#define FRMTYPE_FTNPAGE         (USHORT)  1024
+#define FRMTYPE_FLY_ANY         (USHORT)  2048
+#define FRMTYPE_DRAWOBJ         (USHORT)  4096
+#define FRMTYPE_COLSECT         (USHORT)  8192
+#define FRMTYPE_COLSECTOUTTAB   (USHORT) 16384
 
 #define FRMTYPE_ANYCOLSECT ( FRMTYPE_COLSECT | FRMTYPE_COLSECTOUTTAB )
 
-enum GotoObjType
-{
-    DRAW_CONTROL = 1,
-    DRAW_SIMPLE = 2,
-    DRAW_ANY = 3,
-    FLY_FRM = 4,
-    FLY_GRF = 8,
-    FLY_OLE = 16,
-    FLY_ANY = 28,
-    GOTO_ANY = 31
-};
+//! values can be combined via logival or
+#define GOTOOBJ_DRAW_CONTROL    (USHORT)  1
+#define GOTOOBJ_DRAW_SIMPLE     (USHORT)  2
+#define GOTOOBJ_DRAW_ANY        (USHORT)  3
+#define GOTOOBJ_FLY_FRM         (USHORT)  4
+#define GOTOOBJ_FLY_GRF         (USHORT)  8
+#define GOTOOBJ_FLY_OLE         (USHORT) 16
+#define GOTOOBJ_FLY_ANY         (USHORT) 28
+#define GOTOOBJ_GOTO_ANY        (USHORT) 31
 
-enum FlyProtectType
-{
-     FLYPROTECT_CONTENT     = 1,        // kann verodert werden!
-     FLYPROTECT_SIZE        = 2,
-     FLYPROTECT_POS         = 4,
-     FLYPROTECT_PARENT      = 8,        // nur Parents untersuchen
-     FLYPROTECT_FIXED       = 16        // nur nicht aufhebbarer Schutz
-                                        // z.B. durch OLE-Server, gilt auch
-                                        // fuer Dialog
-};
+//! values can be combined via logival or
+#define FLYPROTECT_CONTENT      (USHORT)  1     // kann verodert werden!
+#define FLYPROTECT_SIZE         (USHORT)  2
+#define FLYPROTECT_POS          (USHORT)  4
+#define FLYPROTECT_PARENT       (USHORT)  8     // nur Parents untersuchen
+#define FLYPROTECT_FIXED        (USHORT) 16     // nur nicht aufhebbarer Schutz
+                                                // z.B. durch OLE-Server, gilt auch
+                                                // fuer Dialog
+
 
 enum ObjCntType     //Fuer das Ermitteln des Cntnts per Positon (D&D)
 {
@@ -210,7 +207,7 @@ class SW_DLLPUBLIC SwFEShell : public SwEditShell
     //Actions fuer alle Shells beenden und ChangeLink rufen.
     SW_DLLPRIVATE void EndAllActionAndCall();
 
-    SW_DLLPRIVATE void Scroll( const Point &rPt );
+    SW_DLLPRIVATE void ScrollTo( const Point &rPt );
 
     // OD 25.06.2003 #108784# - correct type of 1st parameter
     SW_DLLPRIVATE void ChangeOpaque( SdrLayerID nLayerId );
@@ -243,8 +240,7 @@ class SW_DLLPUBLIC SwFEShell : public SwEditShell
 
 public:
     TYPEINFO();
-    SwFEShell( SwDoc& rDoc, Window *pWin,
-               SwRootFrm *pMaster = 0, const SwViewOption *pOpt = 0 );
+    SwFEShell( SwDoc& rDoc, Window *pWin, const SwViewOption *pOpt = 0 );
     SwFEShell( SwEditShell& rShell, Window *pWin );
     virtual ~SwFEShell();
 
@@ -254,6 +250,7 @@ public:
     //paste some pages into another doc - used in mailmerge
     BOOL PastePages( SwFEShell& rToFill, USHORT nStartPage, USHORT nEndPage);
     // Copy-Methode fuer Drag&Drop
+    using SwEditShell::Copy;
     BOOL Copy( SwFEShell*, const Point& rSttPt, const Point& rInsPt,
                 BOOL bIsMove = FALSE, BOOL bSelectInsert = TRUE );
 
@@ -281,8 +278,8 @@ public:
 
     // folgende zwei Methoden returnen den enum SdrHdlKind, um sich ein
     // includen von SVDRAW.HXX zu ersparen als int deklariert.
-    int IsObjSelectable( const Point& rPt );
-    int IsInsideSelectedObj( const Point& rPt );
+    bool IsObjSelectable( const Point& rPt );
+    int IsInsideSelectedObj( const Point& rPt );    //!! returns enum values
 
     // #107513#
     // Test if there is a draw object at that position and if it should be selected.
@@ -323,8 +320,8 @@ public:
     // OD 12.11.2003 #i22341# - adjustments for new vertical alignment at top of line
     void CalcBoundRect( SwRect& _orRect,
                         const RndStdIds _nAnchorId,
-                        const SwRelationOrient _eHoriRelOrient = FRAME,
-                        const SwRelationOrient _eVertRelOrient = FRAME,
+                        const sal_Int16 _eHoriRelOrient = com::sun::star::text::RelOrientation::FRAME,
+                        const sal_Int16 _eVertRelOrient = com::sun::star::text::RelOrientation::FRAME,
                         const SwPosition* _pToCharCntntPos = NULL,
                         const bool _bFollowTextFlow = false,
                         bool _bMirror = false,
@@ -359,7 +356,8 @@ public:
     const SwFrmFmt* GetFmtFromAnyObj( const Point& rPt ) const;
 
     //Welcher Schutz ist am selektierten Objekt gesetzt?
-    BYTE IsSelObjProtected( FlyProtectType eType ) const;
+    //!! returns several flags in BYTE
+    BYTE IsSelObjProtected( USHORT /*FLYPROTECT_...*/ eType ) const;
 
     //Liefert neben der Grafik in rName bei gelinkten Grafiken den Namen mit
     //Pfad und sonst den Grafiknamen. rbLink ist TRU bei gelinkten Grafiken.
@@ -387,13 +385,13 @@ public:
     SwFrmFmt* WizzardGetFly();
 
     //Selebstaendiges selektieren von Flys
-    BOOL GotoNextFly(GotoObjType eType = FLY_ANY)
+    BOOL GotoNextFly( USHORT /*GOTOOBJ_...*/ eType = GOTOOBJ_FLY_ANY )
                                 { return GotoObj( TRUE, eType ); }
-    BOOL GotoPrevFly(GotoObjType eType = FLY_ANY)
+    BOOL GotoPrevFly( USHORT /*GOTOOBJ_...*/ eType = GOTOOBJ_FLY_ANY)
                                 { return GotoObj( FALSE, eType); }
 
     //iterieren ueber Flys - fuer Basic-Collections
-    USHORT GetFlyCount(FlyCntType eType = FLYCNTTYPE_ALL) const;
+    USHORT GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL ) const;
     const SwFrmFmt* GetFlyNum(USHORT nIdx, FlyCntType eType = FLYCNTTYPE_ALL) const;
 
     //Wenn ein fly selectiert ist, zieht er den Crsr in den ersten CntntFrm
@@ -470,7 +468,7 @@ public:
     BOOL GetObjAttr( SfxItemSet &rSet ) const;
     BOOL SetObjAttr( const SfxItemSet &rSet );
 
-    BOOL GotoObj( BOOL bNext, GotoObjType eType = DRAW_ANY);
+    BOOL GotoObj( BOOL bNext, USHORT /*GOTOOBJ_...*/ eType = GOTOOBJ_DRAW_ANY);
 
     //Setzen vom DragMode (z.B. Rotate), tut nix bei Rahmenselektion.
     void SetDragMode( UINT16 eSdrDragMode );
@@ -492,15 +490,15 @@ public:
     //selektiert.
     //Mit BreakCreate wird der Vorgang abgebrochen, dann ist kein Objekt
     //mehr selektiert.
-    BOOL BeginCreate( UINT16 eSdrObjectKind, const Point &rPos );
-    BOOL BeginCreate( UINT16 eSdrObjectKind, UINT32 eObjInventor, const Point &);
+    BOOL BeginCreate( UINT16 /*SdrObjKind ?*/ eSdrObjectKind, const Point &rPos );
+    BOOL BeginCreate( UINT16 /*SdrObjKind ?*/ eSdrObjectKind, UINT32 eObjInventor, const Point &);
     void MoveCreate ( const Point &rPos );
     BOOL EndCreate  ( UINT16 eSdrCreateCmd );
     void BreakCreate();
     BOOL IsDrawCreate() const;
-    void CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect, USHORT nSlotId);
+    void CreateDefaultShape( UINT16 /*SdrObjKind ?*/ eSdrObjectKind, const Rectangle& rRect, USHORT nSlotId);
 
-    // Funktionen fÅr Rubberbox, um Draw-Objekte zu selektieren
+    // Funktionen fÔøΩr Rubberbox, um Draw-Objekte zu selektieren
     BOOL BeginMark( const Point &rPos );
     void MoveMark ( const Point &rPos );
     BOOL EndMark  ();
@@ -536,8 +534,15 @@ public:
     BOOL IsAlignPossible() const;
     void SetCalcFieldValueHdl(Outliner* pOutliner);
 
-        //Einfuegen eines DrawObjectes. Das Object muss bereits im DrawModel
-        // angemeldet sein.
+    using SwEditShell::Insert;
+    void Insert(const String& rGrfName,
+                const String& rFltName,
+                const Graphic* pGraphic = 0,
+                const SfxItemSet* pFlyAttrSet = 0,
+                const SfxItemSet* pGrfAttrSet = 0,
+                SwFrmFmt* = 0 );
+    //Einfuegen eines DrawObjectes. Das Object muss bereits im DrawModel
+    // angemeldet sein.
     void Insert( SdrObject& rDrawObj, const SfxItemSet* pFlyAttrSet = 0,
                 SwFrmFmt* = 0, const Point* = 0 );
 
@@ -580,14 +585,6 @@ public:
     //getroffen ist.
     USHORT GetPageNumber( const Point &rPoint ) const;
     BOOL GetPageNumber( long nYPos, BOOL bAtCrsrPos, USHORT& rPhyNum, USHORT& rVirtNum, String &rDisplay ) const;
-
-
-    void Insert(const String& rGrfName,
-                const String& rFltName,
-                const Graphic* pGraphic = 0,
-                const SfxItemSet* pFlyAttrSet = 0,
-                const SfxItemSet* pGrfAttrSet = 0,
-                SwFrmFmt* = 0 );
 
     SwFlyFrmFmt* InsertObject( const svt::EmbeddedObjectRef&,
                 const SfxItemSet* pFlyAttrSet = 0,
