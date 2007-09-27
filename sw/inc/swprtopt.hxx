@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swprtopt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:15:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:11:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,9 +54,24 @@ class SwPrtOptions : public SwPrintData
     String sJobName;
 
 public:
-    SwPrtOptions( const String& rJobName ) : aOffset( Point(0,0) ),
-        nMergeCnt( 0 ), nMergeAct( 0 ), sJobName( rJobName ),
-        nJobNo( 1 ),  bCollate(FALSE), bPrintSelection (FALSE),
+    MultiSelection  aMulti;
+    Point  aOffset;
+    ULONG  nMergeCnt;           // Anzahl der Serienbriefe
+    ULONG  nMergeAct;           // Aktueller Serienbriefnr.
+    USHORT nCopyCount;
+
+    BOOL   bCollate,
+           bPrintSelection,     // Markierung drucken
+           bJobStartet;
+
+    SwPrtOptions( const String& rJobName ) :
+        nJobNo( 1 ),
+        sJobName( rJobName ),
+        aOffset( Point(0,0) ),
+        nMergeCnt( 0 ),
+        nMergeAct( 0 ),
+        bCollate(FALSE),
+        bPrintSelection (FALSE),
         bJobStartet(FALSE)
     {}
 
@@ -68,15 +83,6 @@ public:
     inline  SwPrtOptions(const SwPrtOptions& rNew) {*this = rNew;}
 #endif
 
-    MultiSelection  aMulti;
-    Point  aOffset;
-    ULONG  nMergeCnt;           // Anzahl der Serienbriefe
-    ULONG  nMergeAct;           // Aktueller Serienbriefnr.
-    USHORT nCopyCount;
-
-    BOOL   bCollate,
-           bPrintSelection,     // Markierung drucken
-           bJobStartet;
 
         SwPrtOptions& operator=(const SwPrintData& rData)
             {
