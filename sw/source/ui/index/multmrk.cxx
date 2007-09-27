@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multmrk.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:04:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:17:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,13 +55,13 @@ SwMultiTOXMarkDlg::SwMultiTOXMarkDlg( Window* pParent, SwTOXMgr& rTOXMgr ) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_MULTMRK)),
 
+    aTOXFL(this,    SW_RES(FL_TOX)),
     aEntryFT(this,  SW_RES(FT_ENTRY)),
     aTextFT(this,   SW_RES(FT_TEXT)),
     aTOXFT(this,    SW_RES(FT_TOX)),
+    aTOXLB(this,    SW_RES(LB_TOX)),
     aOkBT(this,     SW_RES(OK_BT)),
     aCancelBT(this, SW_RES(CANCEL_BT)),
-    aTOXLB(this,    SW_RES(LB_TOX)),
-    aTOXFL(this,    SW_RES(FL_TOX)),
     rMgr( rTOXMgr ),
     nPos(0)
 {
