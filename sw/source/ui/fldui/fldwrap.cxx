@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldwrap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:10:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:49:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,33 +67,12 @@
 #ifndef _FLDWRAP_HXX
 #include <fldwrap.hxx>
 #endif
-//CHINA001 #ifndef _FLDDB_HXX
-//CHINA001 #include <flddb.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _FLDDINF_HXX
-//CHINA001 #include <flddinf.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _FLDVAR_HXX
-//CHINA001 #include <fldvar.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _FLDDOK_HXX
-//CHINA001 #include <flddok.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _FLDFUNC_HXX
-//CHINA001 #include <fldfunc.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _FLDREF_HXX
-//CHINA001 #include <fldref.hxx>
-//CHINA001 #endif
 #ifndef _WRTSH_HXX //autogen
 #include <wrtsh.hxx>
 #endif
 #ifndef _SWVIEW_HXX //autogen
 #include <view.hxx>
 #endif
-//CHINA001 #ifndef _FLDTDLG_HXX
-//CHINA001 #include <fldtdlg.hxx>
-//CHINA001 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
 #endif
@@ -110,7 +89,7 @@
 #ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
 #endif
-#include "swabstdlg.hxx" //CHINA001
+#include "swabstdlg.hxx"
 
 SFX_IMPL_CHILDWINDOW(SwFldDlgWrapper, FN_INSERT_FIELD)
 
@@ -120,11 +99,11 @@ SFX_IMPL_CHILDWINDOW(SwFldDlgWrapper, FN_INSERT_FIELD)
 
 SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, USHORT nId) :
         SfxChildWindow(pParentWindow, nId),
-        pDocSh(0)
+        m_pDocSh(0)
 {
     // Flackern der Buttons vermeiden:
-    aUpdateTimer.SetTimeout(200);
-    aUpdateTimer.SetTimeoutHdl(LINK(this, SwChildWinWrapper, UpdateHdl));
+    m_aUpdateTimer.SetTimeout(200);
+    m_aUpdateTimer.SetTimeoutHdl(LINK(this, SwChildWinWrapper, UpdateHdl));
 }
 
 /*--------------------------------------------------------------------
@@ -142,17 +121,17 @@ IMPL_LINK( SwChildWinWrapper, UpdateHdl, void*, EMPTYARG )
     Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
  --------------------------------------------------------------------*/
 
-BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *pDocSh)
+BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *)
 {
     BOOL bRet = FALSE;
 
-    if (pDocSh != GetOldDocShell())
+    if (m_pDocSh != GetOldDocShell())
     {
-        aUpdateTimer.Stop();
+        m_aUpdateTimer.Stop();
         bRet = TRUE;            // Sofortiges Update
     }
     else
-        aUpdateTimer.Start();
+        m_aUpdateTimer.Start();
 
     return bRet;
 }
@@ -173,18 +152,16 @@ SfxChildWinInfo SwFldDlgWrapper::GetInfo() const
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SwFldDlgWrapper::SwFldDlgWrapper( Window* pParent, USHORT nId,
+SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, USHORT nId,
                                     SfxBindings* pB,
-                                    SfxChildWinInfo* pInfo )
-    : SwChildWinWrapper( pParent, nId )
+                                    SfxChildWinInfo*  )
+    : SwChildWinWrapper( _pParent, nId )
 {
-//CHINA001  SwFldDlg *pDlg = new SwFldDlg( pB, this, pParent );
-//CHINA001  pWindow = pDlg;
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, pParent, DLG_FLD_INSERT );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent, DLG_FLD_INSERT );
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
     pDlgInterface = pDlg;
     pWindow = pDlg->GetWindow();
     pDlg->Start();
@@ -201,8 +178,7 @@ BOOL SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 
     if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)  // Sofort aktualisieren, Dok-Wechsel
     {
-    //CHINA001 ((SwFldDlg*)GetWindow())->ReInitDlg();
-        pDlgInterface->ReInitDlg(); //CHINA001
+        pDlgInterface->ReInitDlg();
     }
 
     return bRet;
@@ -214,8 +190,7 @@ BOOL SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 
 void SwFldDlgWrapper::ShowPage(USHORT nPage)
 {
-    //CHINA001 ((SwFldDlg*)GetWindow())->ShowPage(nPage ? nPage : TP_FLD_REF);
-    pDlgInterface->ShowPage(nPage ? nPage : TP_FLD_REF); //CHINA001
+    pDlgInterface->ShowPage(nPage ? nPage : TP_FLD_REF);
 }
 
 SFX_IMPL_CHILDWINDOW(SwFldDataOnlyDlgWrapper, FN_INSERT_FIELD_DATA_ONLY)
@@ -234,21 +209,19 @@ SfxChildWinInfo SwFldDataOnlyDlgWrapper::GetInfo() const
 /* -----------------04.02.2003 14:17-----------------
  *
  * --------------------------------------------------*/
-SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* pParent, USHORT nId,
+SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, USHORT nId,
                                     SfxBindings* pB,
                                     SfxChildWinInfo* pInfo )
-    : SwChildWinWrapper( pParent, nId )
+    : SwChildWinWrapper( _pParent, nId )
 {
-//CHINA001     SwFldDlg *pDlg = new SwFldDlg( pB, this, pParent );
-//CHINA001  pWindow = pDlg;
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, pParent, DLG_FLD_INSERT );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-    pDlgInterface = pDlg; //CHINA001
+    AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, _pParent, DLG_FLD_INSERT );
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    pDlgInterface = pDlg;
 
-    pWindow = pDlg->GetWindow();//CHINA001
+    pWindow = pDlg->GetWindow();
     pDlg->ActivateDatabasePage();
     pDlg->Start();
     pDlg->Initialize( pInfo );
@@ -262,8 +235,7 @@ BOOL SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
     BOOL bRet;
     if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)  // Sofort aktualisieren, Dok-Wechsel
     {
-        //CHINA001 ((SwFldDlg*)GetWindow())->ReInitDlg();
-        pDlgInterface->ReInitDlg(); //CHINA001
+        pDlgInterface->ReInitDlg();
     }
 
     return bRet;
