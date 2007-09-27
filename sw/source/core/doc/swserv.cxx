@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swserv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:58:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:39:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,8 @@
 #include <swerror.h>
 #endif
 
+using namespace ::com::sun::star;
+
 SV_IMPL_REF( SwServerObject )
 
 SwServerObject::~SwServerObject()
@@ -81,7 +83,7 @@ SwServerObject::~SwServerObject()
 }
 
 
-BOOL SwServerObject::GetData( ::com::sun::star::uno::Any & rData,
+BOOL SwServerObject::GetData( uno::Any & rData,
                                  const String & rMimeType, BOOL )
 {
     BOOL bRet = FALSE;
@@ -124,6 +126,7 @@ BOOL SwServerObject::GetData( ::com::sun::star::uno::Any & rData,
             pPam->GetPoint()->nNode = *CNTNT_TYPE.pSectNd->EndOfSectionNode();
             pPam->Move( fnMoveBackward );
             break;
+        case NONE_SERVER: break;
         }
 
         if( pPam )
@@ -134,7 +137,7 @@ BOOL SwServerObject::GetData( ::com::sun::star::uno::Any & rData,
             if( !IsError( aWrt.Write( xWrt )) )
             {
                 aMemStm << '\0';        // append a zero char
-                rData <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
+                rData <<= uno::Sequence< sal_Int8 >(
                                         (sal_Int8*)aMemStm.GetData(),
                                         aMemStm.Seek( STREAM_SEEK_TO_END ) );
                 bRet = TRUE;
@@ -147,8 +150,8 @@ BOOL SwServerObject::GetData( ::com::sun::star::uno::Any & rData,
 }
 
 
-BOOL SwServerObject::SetData( const String & rMimeType,
-                    const ::com::sun::star::uno::Any& rData )
+BOOL SwServerObject::SetData( const String & ,
+                    const uno::Any& )
 {
     // set new data into the "server" -> at first nothing to do
     return FALSE;
@@ -176,10 +179,11 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
 
         case TABLE_SERVER:      pNd = CNTNT_TYPE.pTblNd;    break;
         case SECTION_SERVER:    pNd = CNTNT_TYPE.pSectNd;   break;
+        case NONE_SERVER: break;
         }
         if( pNd )
         {
-            register ULONG nNd = rPos.nNode.GetIndex();
+            ULONG nNd = rPos.nNode.GetIndex();
             bCall = pNd->GetIndex() < nNd && nNd < pNd->EndOfSectionIndex();
         }
 
@@ -225,6 +229,7 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
 
         case TABLE_SERVER:      pNd = CNTNT_TYPE.pTblNd;    break;
         case SECTION_SERVER:    pNd = CNTNT_TYPE.pSectNd;   break;
+        case NONE_SERVER: break;
         }
         if( pNd )
         {
@@ -250,7 +255,8 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
 BOOL SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 {
     ULONG nSttNd = 0, nEndNd = 0;
-    xub_StrLen nStt, nEnd;
+    xub_StrLen nStt = 0;
+    xub_StrLen nEnd = 0;
     const SwNode* pNd = 0;
     const SwNodes* pNds = 0;
 
@@ -335,15 +341,15 @@ if( !pChkLnk )
 
 
 SwDataChanged::SwDataChanged( const SwPaM& rPam, USHORT nTyp )
-    : pPam( &rPam ), nType( nTyp ), pDoc( rPam.GetDoc() ), pPos( 0 )
+    : pPam( &rPam ), pPos( 0 ), pDoc( rPam.GetDoc() ), nType( nTyp )
 {
     nNode = rPam.GetPoint()->nNode.GetIndex();
     nCntnt = rPam.GetPoint()->nContent.GetIndex();
 }
 
 
-SwDataChanged::SwDataChanged( SwDoc* pDoc, const SwPosition& rPos, USHORT nTyp )
-    : pPam( 0 ), nType( nTyp ), pDoc( pDoc ), pPos( &rPos )
+SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos, USHORT nTyp )
+    : pPam( 0 ), pPos( &rPos ), pDoc( pDc ), nType( nTyp )
 {
     nNode = rPos.nNode.GetIndex();
     nCntnt = rPos.nContent.GetIndex();
