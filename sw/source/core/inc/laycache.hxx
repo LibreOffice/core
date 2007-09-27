@@ -4,9 +4,9 @@
  *
  *  $RCSfile: laycache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:49:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:57:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,11 @@
 #ifndef _LAYCACHE_HXX
 #define _LAYCACHE_HXX
 
+#include <tools/solar.h>
 
 class SwDoc;
 class SwLayCacheImpl;
+class SvStream;
 
 /*************************************************************************
  *                      class SwLayoutCache
