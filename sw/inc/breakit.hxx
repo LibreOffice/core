@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakit.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:06:12 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:56:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,14 +65,13 @@ class String;
  *                      class SwBreakIt
  *************************************************************************/
 
-namespace css = com::sun::star;
 
 class SwBreakIt
 {
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xMSF;
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xMSF;
 
-    css::lang::Locale * m_pLocale;
-    css::i18n::ForbiddenCharacters * m_pForbidden;
+    com::sun::star::lang::Locale * m_pLocale;
+    com::sun::star::i18n::ForbiddenCharacters * m_pForbidden;
 
     LanguageType aLast;          // language of the current locale
     LanguageType aForbiddenLang; // language of the current forbiddenChar struct
@@ -87,34 +86,34 @@ class SwBreakIt
 
     // private (see @ _Create, _Delete).
     explicit SwBreakIt(
-        const css::uno::Reference< css::lang::XMultiServiceFactory > & rxMSF);
+        const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & rxMSF);
     ~SwBreakIt();
 
 public:
     // private (see @ source/core/bastyp/init.cxx).
     static void _Create(
-        const css::uno::Reference< css::lang::XMultiServiceFactory > & rxMSF);
+        const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & rxMSF);
     static void _Delete();
 
 public:
     static SwBreakIt * Get();
 
     // @@@ backward compatibility @@@
-    css::uno::Reference< css::i18n::XBreakIterator > xBreak;
+    com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > xBreak;
 
-    const css::uno::Reference< css::i18n::XBreakIterator > & GetBreakIter()
+    const com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > & GetBreakIter()
     {
         return xBreak;
     }
 
-    const css::lang::Locale& GetLocale( const LanguageType aLang )
+    const com::sun::star::lang::Locale& GetLocale( const LanguageType aLang )
     {
         if( !m_pLocale || aLast != aLang )
             _GetLocale( aLang );
         return *m_pLocale;
     }
 
-    const css::i18n::ForbiddenCharacters& GetForbidden( const LanguageType aLang )
+    const com::sun::star::i18n::ForbiddenCharacters& GetForbidden( const LanguageType aLang )
     {
         if( !m_pForbidden || aForbiddenLang != aLang )
             _GetForbidden( aLang );
