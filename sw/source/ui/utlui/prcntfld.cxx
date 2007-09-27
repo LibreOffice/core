@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prcntfld.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:34:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:46:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,16 +50,16 @@
 PercentField::PercentField( Window* pWin, const ResId& rResId ) :
         MetricField ( pWin, rResId ),
 
-        eOldUnit    (FUNIT_NONE),
-        nOldMin     (0),
         nOldMax     (0),
-        nLastPercent(-1L),
-        nLastValue  (-1L),
+        nOldMin     (0),
+        nLastPercent(-1),
+        nLastValue  (-1),
+        eOldUnit    (FUNIT_NONE),
         bLockAutoCalculation(sal_False)
 {
 
     nOldSpinSize = GetSpinSize();
-    nRefValue = Denormalize(MetricField::GetMax(FUNIT_TWIP));
+    nRefValue = DenormalizePercent(MetricField::GetMax(FUNIT_TWIP));
     nOldDigits = GetDecimalDigits();
     SetCustomUnitText('%');
 }
@@ -68,9 +68,9 @@ PercentField::PercentField( Window* pWin, const ResId& rResId ) :
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void PercentField::SetRefValue(long nValue)
+void PercentField::SetRefValue(sal_Int64 nValue)
 {
-    long nRealValue = GetRealValue(eOldUnit);
+    sal_Int64 nRealValue = GetRealValue(eOldUnit);
 
     nRefValue = nValue;
 
@@ -88,11 +88,11 @@ void PercentField::ShowPercent(BOOL bPercent)
         (!bPercent && GetUnit() != FUNIT_CUSTOM))
         return;
 
-    long nOldValue;
+    sal_Int64 nOldValue;
 
     if (bPercent)
     {
-        long nAktWidth, nPercent;
+        sal_Int64 nAktWidth, nPercent;
 
         nOldValue = GetValue();
 
@@ -109,7 +109,7 @@ void PercentField::ShowPercent(BOOL bPercent)
         // Um 0.5 Prozent aufrunden
         nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
 
-        MetricField::SetMin(Max(1L, nPercent));
+        MetricField::SetMin(Max(static_cast< sal_Int64 >(1), nPercent));
         MetricField::SetMax(100);
         SetSpinSize(5);
         MetricField::SetBaseValue(0);
@@ -127,7 +127,7 @@ void PercentField::ShowPercent(BOOL bPercent)
     }
     else
     {
-        long nOldPercent = GetValue(FUNIT_CUSTOM);
+        sal_Int64 nOldPercent = GetValue(FUNIT_CUSTOM);
 
         nOldValue = Convert(GetValue(), GetUnit(), eOldUnit);
 
@@ -152,14 +152,14 @@ void PercentField::ShowPercent(BOOL bPercent)
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-void PercentField::SetValue(long nNewValue, FieldUnit eInUnit)
+void PercentField::SetValue(sal_Int64 nNewValue, FieldUnit eInUnit)
 {
    MetricFormatter::SetValue(nNewValue, eInUnit);
 }
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-void PercentField::SetPrcntValue(long nNewValue, FieldUnit eInUnit)
+void PercentField::SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit)
 {
     if (GetUnit() != FUNIT_CUSTOM || eInUnit == FUNIT_CUSTOM)
         MetricFormatter::SetValue(Convert(nNewValue, eInUnit, GetUnit()));
@@ -167,14 +167,14 @@ void PercentField::SetPrcntValue(long nNewValue, FieldUnit eInUnit)
     else
     {
         // Ausgangswert ueberschreiben, nicht spaeter restaurieren
-        long nPercent, nAktWidth;
+        sal_Int64 nPercent, nAktWidth;
         if(eInUnit == FUNIT_TWIP)
         {
             nAktWidth = ConvertValue(nNewValue, 0, nOldDigits, FUNIT_TWIP, FUNIT_TWIP);
         }
         else
         {
-            long nValue = Convert(nNewValue, eInUnit, eOldUnit);
+            sal_Int64 nValue = Convert(nNewValue, eInUnit, eOldUnit);
             nAktWidth = ConvertValue(nValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
         }
         nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
@@ -186,7 +186,7 @@ void PercentField::SetPrcntValue(long nNewValue, FieldUnit eInUnit)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void PercentField::SetUserValue( long nNewValue, FieldUnit eInUnit )
+void PercentField::SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit )
 {
     if (GetUnit() != FUNIT_CUSTOM || eInUnit == FUNIT_CUSTOM)
         MetricField::SetUserValue(Convert(nNewValue, eInUnit, GetUnit()),FUNIT_NONE);
@@ -194,14 +194,14 @@ void PercentField::SetUserValue( long nNewValue, FieldUnit eInUnit )
     else
     {
         // Ausgangswert ueberschreiben, nicht spaeter restaurieren
-        long nPercent, nAktWidth;
+        sal_Int64 nPercent, nAktWidth;
         if(eInUnit == FUNIT_TWIP)
         {
             nAktWidth = ConvertValue(nNewValue, 0, nOldDigits, FUNIT_TWIP, FUNIT_TWIP);
         }
         else
         {
-            long nValue = Convert(nNewValue, eInUnit, eOldUnit);
+            sal_Int64 nValue = Convert(nNewValue, eInUnit, eOldUnit);
             nAktWidth = ConvertValue(nValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
         }
         nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
@@ -214,7 +214,7 @@ void PercentField::SetUserValue( long nNewValue, FieldUnit eInUnit )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void PercentField::SetBaseValue(long nNewValue, FieldUnit eInUnit)
+void PercentField::SetBaseValue(sal_Int64 nNewValue, FieldUnit eInUnit)
 {
     if (GetUnit() == FUNIT_CUSTOM)
         nOldBaseValue = ConvertValue(nNewValue, 0, nOldDigits, eInUnit, eOldUnit);
@@ -226,7 +226,7 @@ void PercentField::SetBaseValue(long nNewValue, FieldUnit eInUnit)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-long PercentField::GetValue( FieldUnit eOutUnit )
+sal_Int64 PercentField::GetValue( FieldUnit eOutUnit )
 {
     return Convert(MetricField::GetValue(), GetUnit(), eOutUnit);
 }
@@ -235,7 +235,7 @@ long PercentField::GetValue( FieldUnit eOutUnit )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void PercentField::SetMin(long nNewMin, FieldUnit eInUnit)
+void PercentField::SetMin(sal_Int64 nNewMin, FieldUnit eInUnit)
 {
     if (GetUnit() != FUNIT_CUSTOM)
         MetricField::SetMin(nNewMin, eInUnit);
@@ -245,8 +245,8 @@ void PercentField::SetMin(long nNewMin, FieldUnit eInUnit)
             eInUnit = eOldUnit;
         nOldMin = Convert(nNewMin, eInUnit, eOldUnit);
 
-        long nPercent = Convert(nNewMin, eInUnit, FUNIT_CUSTOM);
-        MetricField::SetMin(Max(1L, nPercent));
+        sal_Int64 nPercent = Convert(nNewMin, eInUnit, FUNIT_CUSTOM);
+        MetricField::SetMin(Max( static_cast< sal_Int64 >(1), nPercent));
     }
 }
 
@@ -254,7 +254,7 @@ void PercentField::SetMin(long nNewMin, FieldUnit eInUnit)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void PercentField::SetMax(long nNewMax, FieldUnit eInUnit)
+void PercentField::SetMax(sal_Int64 nNewMax, FieldUnit eInUnit)
 {
     if (GetUnit() != FUNIT_CUSTOM)
         MetricField::SetMax(nNewMax, eInUnit);
@@ -270,7 +270,7 @@ void PercentField::SetMax(long nNewMax, FieldUnit eInUnit)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-long PercentField::Normalize(long nValue)
+sal_Int64 PercentField::NormalizePercent(sal_Int64 nValue)
 {
     if (GetUnit() != FUNIT_CUSTOM)
         nValue = MetricField::Normalize(nValue);
@@ -284,13 +284,13 @@ long PercentField::Normalize(long nValue)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-long PercentField::Denormalize(long nValue)
+sal_Int64 PercentField::DenormalizePercent(sal_Int64 nValue)
 {
     if (GetUnit() != FUNIT_CUSTOM)
         nValue = MetricField::Denormalize(nValue);
     else
     {
-        long nFactor = ImpPower10(nOldDigits);
+        sal_Int64 nFactor = ImpPower10(nOldDigits);
         nValue = ((nValue+(nFactor/2)) / nFactor);
     }
 
@@ -313,10 +313,10 @@ BOOL PercentField::IsValueModified()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-long PercentField::ImpPower10( USHORT n )
+sal_Int64 PercentField::ImpPower10( USHORT n )
 {
     USHORT i;
-    long   nValue = 1;
+    sal_Int64   nValue = 1;
 
     for ( i=0; i < n; i++ )
         nValue *= 10;
@@ -328,7 +328,7 @@ long PercentField::ImpPower10( USHORT n )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-long PercentField::GetRealValue(FieldUnit eOutUnit)
+sal_Int64 PercentField::GetRealValue(FieldUnit eOutUnit)
 {
     if (GetUnit() != FUNIT_CUSTOM)
         return GetValue(eOutUnit);
@@ -340,7 +340,7 @@ long PercentField::GetRealValue(FieldUnit eOutUnit)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-long PercentField::Convert(long nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
+sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
 {
     if (eInUnit == eOutUnit ||
         (eInUnit == FUNIT_NONE && eOutUnit == GetUnit()) ||
@@ -350,19 +350,19 @@ long PercentField::Convert(long nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
     if (eInUnit == FUNIT_CUSTOM)
     {
         // Umrechnen in Metrik
-        long nTwipValue = (nRefValue * nValue + 50) / 100;
+        sal_Int64 nTwipValue = (nRefValue * nValue + 50) / 100;
 
         if (eOutUnit == FUNIT_TWIP) // Nur wandeln, wenn unbedingt notwendig
-            return Normalize(nTwipValue);
+            return NormalizePercent(nTwipValue);
         else
-            return ConvertValue(Normalize(nTwipValue), 0, nOldDigits, FUNIT_TWIP, eOutUnit);
+            return ConvertValue(NormalizePercent(nTwipValue), 0, nOldDigits, FUNIT_TWIP, eOutUnit);
     }
 
     if (eOutUnit == FUNIT_CUSTOM)
     {
         // Umrechnen in Prozent
-        long nAktWidth;
-        nValue = Denormalize(nValue);
+        sal_Int64 nAktWidth;
+        nValue = DenormalizePercent(nValue);
 
         if (eInUnit == FUNIT_TWIP)  // Nur wandeln, wenn unbedingt notwendig
             nAktWidth = nValue;
