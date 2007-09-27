@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-24 12:55:33 $
+#   last change: $Author: hr $ $Date: 2007-09-27 09:59:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,30 +50,27 @@ CDEFS=$(CDEFS) -Dmydebug
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        wrtw8esh.cxx \
-        wrtw8nds.cxx \
-        wrtw8num.cxx \
-        wrtw8sty.cxx \
-        wrtww8.cxx \
-        wrtww8gr.cxx \
-        ww8atr.cxx \
-        ww8graf.cxx \
-        ww8graf2.cxx \
-        ww8par.cxx \
-        ww8par2.cxx \
-        ww8par3.cxx \
-        ww8par4.cxx \
-        ww8par5.cxx \
-        ww8par6.cxx \
-        ww8glsy.cxx \
-        tracer.cxx \
-        fields.cxx \
-        styles.cxx \
-        ww8scan.cxx \
-        writerhelper.cxx \
-        writerwordglue.cxx
-
+EXCEPTIONSFILES = \
+        $(SLO)$/wrtww8gr.obj \
+        $(SLO)$/ww8par2.obj \
+        $(SLO)$/ww8par3.obj \
+        $(SLO)$/ww8par5.obj \
+        $(SLO)$/tracer.obj \
+        $(SLO)$/fields.obj \
+        $(SLO)$/styles.obj \
+        $(SLO)$/ww8graf.obj \
+        $(SLO)$/ww8graf2.obj \
+        $(SLO)$/wrtw8esh.obj \
+        $(SLO)$/wrtw8nds.obj \
+        $(SLO)$/wrtw8num.obj \
+        $(SLO)$/wrtw8sty.obj \
+        $(SLO)$/wrtww8.obj \
+        $(SLO)$/ww8atr.obj \
+        $(SLO)$/ww8par.obj \
+        $(SLO)$/ww8par6.obj \
+        $(SLO)$/writerhelper.obj \
+        $(SLO)$/writerwordglue.obj \
+        $(SLO)$/ww8scan.obj
 
 
 SLOFILES =	\
@@ -100,26 +97,6 @@ SLOFILES =	\
         $(SLO)$/writerhelper.obj \
         $(SLO)$/writerwordglue.obj
 
-EXCEPTIONSFILES = \
-        $(SLO)$/wrtww8gr.obj \
-        $(SLO)$/ww8par2.obj \
-        $(SLO)$/ww8par3.obj \
-        $(SLO)$/ww8par5.obj \
-        $(SLO)$/tracer.obj \
-        $(SLO)$/fields.obj \
-        $(SLO)$/styles.obj \
-        $(SLO)$/ww8graf.obj \
-        $(SLO)$/ww8graf2.obj \
-        $(SLO)$/wrtw8esh.obj \
-        $(SLO)$/wrtw8nds.obj \
-        $(SLO)$/wrtw8num.obj \
-        $(SLO)$/wrtw8sty.obj \
-        $(SLO)$/wrtww8.obj \
-        $(SLO)$/ww8atr.obj \
-        $(SLO)$/ww8par.obj \
-        $(SLO)$/ww8par6.obj \
-        $(SLO)$/writerhelper.obj \
-        $(SLO)$/writerwordglue.obj
 
 # --- Tagets -------------------------------------------------------
 
