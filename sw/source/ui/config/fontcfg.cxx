@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:40:05 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:21:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,12 +61,12 @@
 #include <swlinguconfig.hxx>
 #endif
 
+#include <unomid.h>
+
 using namespace utl;
 using namespace rtl;
-using namespace com::sun::star::uno;
+using namespace ::com::sun::star::uno;
 
-#define C2S(cChar) String::CreateFromAscii(cChar)
-#define C2U(cChar) OUString::createFromAscii(cChar)
 /* -----------------07.10.2002 12:15-----------------
  *
  * --------------------------------------------------*/
@@ -180,7 +180,6 @@ SwStdFontConfig::SwStdFontConfig() :
 void    SwStdFontConfig::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
     SvtLinguOptions aLinguOpt;
@@ -191,7 +190,9 @@ void    SwStdFontConfig::Commit()
     sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
                 eCJK = aLinguOpt.nDefaultLanguage_CJK,
                 eCTL = aLinguOpt.nDefaultLanguage_CTL;
-    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    for(sal_uInt16 nProp = 0;
+        nProp < sal::static_int_cast< sal_uInt16, sal_Int32 >( aNames.getLength() );
+            nProp++)
     {
         if( nProp < DEF_FONT_COUNT )
         {
@@ -216,7 +217,7 @@ SwStdFontConfig::~SwStdFontConfig()
 --------------------------------------------------*/
 BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
 {
-    BOOL bSame;
+    BOOL bSame = sal_False;
     SvtLinguOptions aLinguOpt;
 
     // #107253# Replaced SvtLinguConfig with SwLinguConfig wrapper with UsageCount
