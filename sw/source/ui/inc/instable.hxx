@@ -4,9 +4,9 @@
  *
  *  $RCSfile: instable.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:42:40 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:03:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@
 
 class SwWrtShell;
 class SwTableAutoFmt;
+class SwView;
+struct SwInsertTableOptions;
 
 
 class SwInsTableDlg : public SfxModalDialog
@@ -93,7 +95,7 @@ class SwInsTableDlg : public SfxModalDialog
 
     SwWrtShell*     pShell;
     SwTableAutoFmt* pTAutoFmt;
-    long            nEnteredValRepeatHeaderNF;
+    sal_Int64       nEnteredValRepeatHeaderNF;
 
     DECL_LINK( ModifyName, Edit * );
     DECL_LINK( ModifyRowCol, NumericField * );
