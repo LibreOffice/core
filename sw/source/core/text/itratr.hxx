@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itratr.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:38:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:13:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,15 +86,15 @@ private:
 protected:
     void Chg( SwTxtAttr *pHt );
     void Rst( SwTxtAttr *pHt );
-    void CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm = 0 );
+    void CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm = 0 );
     inline SwAttrIter()
-        : pFnt(0), pLastOut(0), nChgCnt(0), nPropFont(0), pShell(0), pRedln(0){}
+        : pShell(0), pFnt(0), pLastOut(0),  nChgCnt(0), pRedln(0), nPropFont(0) {}
 
 public:
     // Konstruktor, Destruktor
     inline SwAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
-        : pFnt(0), pLastOut(0), nChgCnt(0), nPropFont(0), pShell(0), pRedln(0)
-        { CtorInit( rTxtNode, rScrInf ); }
+        : pShell(0), pFnt(0), pHints(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0),nPropFont(0)
+        { CtorInitAttrIter( rTxtNode, rScrInf ); }
 
     virtual ~SwAttrIter();
 
@@ -111,8 +111,8 @@ public:
     sal_Bool IsSymbol( const xub_StrLen nPos );
 
     // Fuehrt ChgPhysFnt aus, wenn Seek() sal_True zurueckliefert.
-    sal_Bool SeekAndChg( const xub_StrLen nPos, OutputDevice* pOut );
-    sal_Bool SeekStartAndChg( OutputDevice* pOut, const sal_Bool bParaFont = sal_False );
+    sal_Bool SeekAndChgAttrIter( const xub_StrLen nPos, OutputDevice* pOut );
+    sal_Bool SeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool bParaFont = sal_False );
 
     // Gibt es ueberhaupt Attributwechsel ?
     inline sal_Bool HasHints() const { return 0 != pHints; }
