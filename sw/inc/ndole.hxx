@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:08:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:06:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,10 @@ public:
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 
     virtual Size GetTwipSize() const;
+
+    using SwNoTxtNode::GetGraphic;
     Graphic* GetGraphic();
+
     Graphic* GetHCGraphic(); // tries to retrieve HighContrast representation if possible
     void GetNewReplacement();
 
