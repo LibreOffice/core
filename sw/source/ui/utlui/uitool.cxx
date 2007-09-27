@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:13:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:49:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,8 +206,8 @@ using namespace ::com::sun::star;
 
 void SetMetric(MetricFormatter& rCtrl, FieldUnit eUnit)
 {
-    SwTwips nMin = rCtrl.GetMin(FUNIT_TWIP);
-    SwTwips nMax = rCtrl.GetMax(FUNIT_TWIP);
+    SwTwips nMin = static_cast< SwTwips >(rCtrl.GetMin(FUNIT_TWIP));
+    SwTwips nMax = static_cast< SwTwips >(rCtrl.GetMax(FUNIT_TWIP));
 
     rCtrl.SetUnit(eUnit);
 
@@ -234,7 +234,7 @@ void PrepareBoxInfo(SfxItemSet& rSet, const SwWrtShell& rSh)
         // Abstandsfeld immer anzeigen
     aBoxInfo.SetDist           ((BOOL) TRUE);
         // Minimalgroesse in Tabellen und Absaetzen setzen
-    aBoxInfo.SetMinDist        (rSh.IsTableMode() || rSh.GetSelectionType() & (SwWrtShell::SEL_TXT | SwWrtShell::SEL_TBL));
+    aBoxInfo.SetMinDist        (rSh.IsTableMode() || rSh.GetSelectionType() & (nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL));
         // Default-Abstand immer setzen
     aBoxInfo.SetDefDist        (MIN_BORDER_DIST);
         // Einzelne Linien koennen nur in Tabellen DontCare-Status haben
@@ -291,7 +291,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             rPageDesc.SetUseOn( (UseOnPage) nUse );
         rPageDesc.SetLandscape(rPageItem.IsLandscape());
         SvxNumberType aNumType;
-        aNumType.SetNumberingType(rPageItem.GetNumType());
+        aNumType.SetNumberingType( static_cast< sal_Int16 >(rPageItem.GetNumType()) );
         rPageDesc.SetNumType(aNumType);
     }
     // Groesse
@@ -403,7 +403,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName( rColl );
             if( !pColl )
             {
-                USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( rColl, GET_POOLID_TXTCOLL );
+                USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( rColl, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                 if( USHRT_MAX != nId )
                     pColl = rDoc.GetTxtCollFromPool( nId );
                 else
@@ -430,7 +430,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     //
     SvxPageItem aPageItem(SID_ATTR_PAGE);
     aPageItem.SetDescName(rPageDesc.GetName());
-    aPageItem.SetPageUsage((SvxPageUsage)rPageDesc.GetUseOn());
+    aPageItem.SetPageUsage(rPageDesc.GetUseOn());
     aPageItem.SetLandscape(rPageDesc.GetLandscape());
     aPageItem.SetNumType((SvxNumType)rPageDesc.GetNumType().GetNumberingType());
     rSet.Put(aPageItem);
@@ -746,7 +746,7 @@ void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, BOOL bSorted, BO
                 nPos = InsertStringSorted(pBase->GetName(), rToFill, bHasOffset );
             else
                 nPos = rToFill.InsertEntry(pBase->GetName());
-            long nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( pBase->GetName(), GET_POOLID_CHRFMT );
+            long nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( pBase->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             rToFill.SetEntryData( nPos, (void*) (nPoolId));
         }
         pBase = pPool->Next();
@@ -779,15 +779,15 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, USHORT *pPercent,
             SwWrtShell* pSh )
 {
     //Die Breite zu besorgen ist etwas komplizierter.
-    SwTwips nWidth;
-    const SwHoriOrient eOri = pFmt->GetHoriOrient().GetHoriOrient();
+    SwTwips nWidth = 0;
+    const sal_Int16 eOri = pFmt->GetHoriOrient().GetHoriOrient();
     switch(eOri)
     {
-        case HORI_FULL: nWidth = rCols.GetRight(); break;
-        case HORI_LEFT_AND_WIDTH:
-        case HORI_LEFT:
-        case HORI_RIGHT:
-        case HORI_CENTER:
+        case text::HoriOrientation::FULL: nWidth = rCols.GetRight(); break;
+        case text::HoriOrientation::LEFT_AND_WIDTH:
+        case text::HoriOrientation::LEFT:
+        case text::HoriOrientation::RIGHT:
+        case text::HoriOrientation::CENTER:
             nWidth = pFmt->GetFrmSize().GetWidth();
         break;
         default:
