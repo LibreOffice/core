@@ -4,9 +4,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:39:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions;
 } } } }
 
-using namespace com::sun::star::util;
+using namespace ::com::sun::star::util;
 
 
 static long nStartDragX = 0, nStartDragY = 0;
@@ -199,7 +199,7 @@ long SwWrtShell::SelAll()
         else
         {
             EnterStdMode();
-            SwCrsrShell::SttDoc();
+            SttEndDoc(TRUE);
         }
         SttSelect();
         GoEnd(TRUE, &bMoveTable);
@@ -227,7 +227,7 @@ ULONG SwWrtShell::SearchPattern( const SearchOptions& rSearchOpt,
     ULONG nRet = Find( rSearchOpt, eStt, eEnd, bCancel, eFlags, bReplace );
     if(bCancel)
     {
-        Undo(0, 1);
+        Undo(UNDO_EMPTY, 1);
         nRet = ULONG_MAX;
     }
     return nRet;
@@ -255,7 +255,7 @@ ULONG SwWrtShell::SearchTempl( const String &rTempl,
                                eStt,eEnd, bCancel, eFlags, pReplaceColl);
     if(bCancel)
     {
-        Undo(0, 1);
+        Undo(UNDO_EMPTY, 1);
         nRet = ULONG_MAX;
     }
     return nRet;
@@ -280,7 +280,7 @@ ULONG SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, BOOL bNoColls,
 
     if(bCancel)
     {
-        Undo(0, 1);
+        Undo(UNDO_EMPTY, 1);
         nRet = ULONG_MAX;
     }
     return nRet;
@@ -779,7 +779,7 @@ long SwWrtShell::ToggleExtMode()
 
 
 
-long SwWrtShell::BeginDrag(const Point *pPt, BOOL )
+long SwWrtShell::BeginDrag(const Point * /*pPt*/, BOOL )
 {
     if(bSelWrd)
     {
@@ -817,7 +817,7 @@ long SwWrtShell::Drag(const Point *, BOOL )
 
 
 
-long SwWrtShell::EndDrag(const Point *pPt, BOOL )
+long SwWrtShell::EndDrag(const Point * /*pPt*/, BOOL )
 {
     fnDrag = &SwWrtShell::BeginDrag;
     if( IsExtSel() )
@@ -830,7 +830,7 @@ long SwWrtShell::EndDrag(const Point *pPt, BOOL )
 }
 
 // --> FME 2004-07-30 #i32329# Enhanced table selection
-FASTBOOL SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd )
+BOOL SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd )
 {
     MV_KONTEXT(this);
     SttSelect();
@@ -848,7 +848,7 @@ FASTBOOL SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd )
  Beschreibung:  Selektion einer Tabellenzeile / Spalte
 ------------------------------------------------------------------------*/
 
-FASTBOOL SwWrtShell::SelectTableRow()
+BOOL SwWrtShell::SelectTableRow()
 {
     if ( SelTblRow() )
     {
@@ -861,7 +861,7 @@ FASTBOOL SwWrtShell::SelectTableRow()
 
 
 
-FASTBOOL SwWrtShell::SelectTableCol()
+BOOL SwWrtShell::SelectTableCol()
 {
     if ( SelTblCol() )
     {
@@ -872,7 +872,7 @@ FASTBOOL SwWrtShell::SelectTableCol()
     return FALSE;
 }
 
-FASTBOOL SwWrtShell::SelectTableCell()
+BOOL SwWrtShell::SelectTableCell()
 {
     if ( SelTblBox() )
     {
@@ -896,7 +896,7 @@ int SwWrtShell::IntelligentCut(int nSelection, BOOL bCut)
         // kein intelligentes Drag and Drop bei Mehrfachselektion
         // es existieren mehrere Cursor, da ein zweiter bereits
         // an die Zielposition gesetzt wurde
-    if( IsAddMode() || !(nSelection & SEL_TXT) )
+    if( IsAddMode() || !(nSelection & nsSelectionType::SEL_TXT) )
         return FALSE;
 
     String sTxt;
@@ -960,24 +960,24 @@ int SwWrtShell::IntelligentCut(int nSelection, BOOL bCut)
 
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
-FASTBOOL SwWrtShell::SelectNextPrevHyperlink( BOOL bNext )
+BOOL SwWrtShell::SelectNextPrevHyperlink( BOOL bNext )
 {
     StartAction();
-    FASTBOOL bRet = SwCrsrShell::SelectNxtPrvHyperlink( bNext );
+    BOOL bRet = SwCrsrShell::SelectNxtPrvHyperlink( bNext );
     if( !bRet )
     {
         // will we have this feature?
         EnterStdMode();
         if( bNext )
-            SwCrsrShell::SttDoc();
+            SttEndDoc(TRUE);
         else
-            SwCrsrShell::EndDoc();
+            SttEndDoc(FALSE);
         bRet = SwCrsrShell::SelectNxtPrvHyperlink( bNext );
     }
     EndAction();
 
     BOOL bCreateXSelection = FALSE;
-    const FASTBOOL bFrmSelected = IsFrmSelected() || IsObjSelected();
+    const BOOL bFrmSelected = IsFrmSelected() || IsObjSelected();
     if( IsSelection() )
     {
         if ( bFrmSelected )
