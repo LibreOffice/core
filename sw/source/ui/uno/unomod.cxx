@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:28:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,7 +245,7 @@ static ChainablePropertySetInfo * lcl_createPrintSettingsInfo()
  *
  * --------------------------------------------------*/
 Reference< uno::XInterface > SAL_CALL SwXModule_createInstance(
-    const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
+    const Reference< XMultiServiceFactory > & /*rSMgr*/) throw( Exception )
 {
     static Reference< uno::XInterface >  xModule = (cppu::OWeakObject*)new SwXModule();;
     return xModule;
@@ -386,7 +386,7 @@ void SwXPrintSettings::_preSetValues ()
     }
 }
 
-void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue )
+void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
     sal_Bool bVal;
@@ -529,7 +529,7 @@ void SwXPrintSettings::_preGetValues ()
         break;
     }
 }
-void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, ::com::sun::star::uno::Any & rValue )
+void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
     throw(UnknownPropertyException, WrappedTargetException )
 {
     sal_Bool bBool = TRUE;
@@ -633,10 +633,10 @@ Sequence< OUString > SwXPrintSettings::getSupportedServiceNames(void) throw( Run
 SwXViewSettings::SwXViewSettings(sal_Bool bWebView, SwView* pVw)
 : ChainableHelperNoState( lcl_createViewSettingsInfo (), &Application::GetSolarMutex() )
 , pView(pVw)
-, bWeb(bWebView)
-, bObjectValid(sal_True)
 , mpViewOption ( NULL )
 , mpConstViewOption ( NULL )
+, bObjectValid(sal_True)
+, bWeb(bWebView)
 {
     // This property only exists if we have a view (ie, not at the module )
     if ( !pView )
@@ -654,9 +654,6 @@ SwXViewSettings::~SwXViewSettings()
 void SwXViewSettings::_preSetValues ()
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    sal_Bool bApply = sal_True;
-    sal_Bool bApplyZoom = sal_False;
-
     const SwViewOption* pVOpt = 0;
     if(pView)
     {
@@ -672,7 +669,7 @@ void SwXViewSettings::_preSetValues ()
     if(pView)
         mpViewOption->SetStarOneSetting(sal_True);
 }
-void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue )
+void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
     sal_Bool bVal = HANDLE_VIEWSET_ZOOM != rInfo.mnHandle ?
@@ -842,7 +839,7 @@ void SwXViewSettings::_preGetValues ()
     else
         mpConstViewOption = SW_MOD()->GetViewOption(bWeb);
 }
-void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, ::com::sun::star::uno::Any & rValue )
+void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
     throw(UnknownPropertyException, WrappedTargetException )
 {
     sal_Bool bBool = TRUE;
@@ -916,6 +913,8 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, :
                 case SVX_ZOOM_PERCENT:
                     nRet = /*DocumentZoomType_BY_VALUE  */  3;
                 break;
+                default:
+                    ;
             }
             rValue <<= nRet;
         }
