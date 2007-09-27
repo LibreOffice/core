@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 13:13:40 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:15:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,27 @@ namespace com { namespace sun { namespace star { namespace util {
 } } } }
 
 
+typedef sal_Int32 SelectionType;
+namespace nsSelectionType
+{
+    const SelectionType SEL_TXT             = CNT_TXT;  // Text, niemals auch Rahmen    0x0001
+    const SelectionType SEL_GRF             = CNT_GRF;  // Grafik                       0x0002
+    const SelectionType SEL_OLE             = CNT_OLE;  // OLE                          0x0010
+    const SelectionType SEL_FRM             = 0x000020; // Rahmen, keine Inhaltsform
+    const SelectionType SEL_NUM             = 0x000040; // NumListe
+    const SelectionType SEL_TBL             = 0x000080; // Cursor steht in Tabelle
+    const SelectionType SEL_TBL_CELLS       = 0x000100; // Tabellenzellen sind selektiert
+    const SelectionType SEL_DRW             = 0x000200; // Zeichenobjekte (Rechteck, Kreis...)
+    const SelectionType SEL_DRW_TXT         = 0x000400; // Draw-Textobjekte im Editmode
+    const SelectionType SEL_BEZ             = 0x000800; // Bezierobjekte editieren
+    const SelectionType SEL_DRW_FORM        = 0x001000; // Zeichenobjekte: DB-Forms
+    const SelectionType SEL_FOC_FRM_CTRL    = 0x002000; // a form control is focused. Neither set nor evaluated by the SwWrtShell itself, only by it's clients.
+    const SelectionType SEL_MEDIA           = 0x004000; // Media object
+    const SelectionType SEL_EXTRUDED_CUSTOMSHAPE = 0x008000;    // extruded custom shape
+    const SelectionType SEL_FONTWORK        = 0x010000; // fontwork
+}
+
+
 class SW_DLLPUBLIC SwWrtShell: public SwFEShell
 {
 public:
@@ -100,25 +121,7 @@ public:
     //zurueck, falls ein Stack aufgebaut ist
     inline void ResetCursorStack();
 
-    enum SelectionType
-    {
-        SEL_TXT       = CNT_TXT, // Text, niemals auch Rahmen   0x0001
-        SEL_GRF       = CNT_GRF, // Grafik                      0x0002
-        SEL_OLE       = CNT_OLE, // OLE                         0x0010
-        SEL_FRM       = 0x0020, // Rahmen, keine Inhaltsform
-        SEL_NUM       = 0x0040, // NumListe
-        SEL_TBL       = 0x0080, // Cursor steht in Tabelle
-        SEL_TBL_CELLS = 0x0100, // Tabellenzellen sind selektiert
-        SEL_DRW       = 0x0200, // Zeichenobjekte (Rechteck, Kreis...)
-        SEL_DRW_TXT   = 0x0400, // Draw-Textobjekte im Editmode
-        SEL_BEZ       = 0x0800, // Bezierobjekte editieren
-        SEL_DRW_FORM  = 0x1000, // Zeichenobjekte: DB-Forms
-        FOC_FRM_CTRL  = 0x2000, // a form control is focused. Neither set nor evaluated by the SwWrtShell itself, only by it's clients.
-        SEL_MEDIA     = 0x4000, // Media object
-        SEL_EXTRUDED_CUSTOMSHAPE = 0x8000, // extruded custom shape
-        SEL_FONTWORK  = 0x10000 // fontwork
-    };
-    int     GetSelectionType() const;
+    SelectionType   GetSelectionType() const;
 
     BOOL    IsModePushed() const { return 0 != pModeStack; }
     void    PushMode();
@@ -131,7 +134,7 @@ public:
         // Liegt eine Text- oder Rahmenselektion vor?
     BOOL    HasSelection() const { return SwCrsrShell::HasSelection() ||
                                         IsMultiSelection() || IsSelFrmMode() || IsObjSelected(); }
-    FASTBOOL Pop( BOOL bOldCrsr = TRUE );
+    BOOL Pop( BOOL bOldCrsr = TRUE );
 
     void    EnterStdMode();
     BOOL    IsStdMode() const { return !bExtMode && !bAddMode; }
@@ -185,62 +188,73 @@ public:
     long    SelAll();
 
     //Basiscursortravelling
-typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
-    FASTBOOL SimpleMove( FNSimpleMove, FASTBOOL bSelect );
+typedef BOOL (SwWrtShell:: *FNSimpleMove)();
+    BOOL SimpleMove( FNSimpleMove, BOOL bSelect );
 
-    FASTBOOL Left       ( USHORT nMode, FASTBOOL bSelect,
+    using SwCrsrShell::Left;
+    BOOL Left       ( USHORT nMode, BOOL bSelect,
                             USHORT nCount, BOOL bBasicCall, BOOL bVisual = FALSE );
-    FASTBOOL Right      ( USHORT nMode, FASTBOOL bSelect,
+    using SwCrsrShell::Right;
+    BOOL Right      ( USHORT nMode, BOOL bSelect,
                             USHORT nCount, BOOL bBasicCall, BOOL bVisual = FALSE );
-    FASTBOOL Up         ( FASTBOOL bSelect = FALSE, USHORT nCount = 1,
+    using SwCrsrShell::Up;
+    BOOL Up         ( BOOL bSelect = FALSE, USHORT nCount = 1,
                             BOOL bBasicCall = FALSE );
-    FASTBOOL Down       ( FASTBOOL bSelect = FALSE, USHORT nCount = 1,
+    using SwCrsrShell::Down;
+    BOOL Down       ( BOOL bSelect = FALSE, USHORT nCount = 1,
                             BOOL bBasicCall = FALSE );
-    FASTBOOL NxtWrd     ( FASTBOOL bSelect = FALSE ) { return SimpleMove( &SwWrtShell::_NxtWrd, bSelect ); }
-    FASTBOOL PrvWrd     ( FASTBOOL bSelect = FALSE ) { return SimpleMove( &SwWrtShell::_PrvWrd, bSelect ); }
-    FASTBOOL LeftMargin ( FASTBOOL bSelect = FALSE, FASTBOOL bBasicCall = FALSE );
-    FASTBOOL RightMargin( FASTBOOL bSelect = FALSE, FASTBOOL bBasicCall = FALSE );
-    FASTBOOL SttDoc     ( FASTBOOL bSelect = FALSE );
-    FASTBOOL EndDoc     ( FASTBOOL bSelect = FALSE );
+    BOOL NxtWrd     ( BOOL bSelect = FALSE ) { return SimpleMove( &SwWrtShell::_NxtWrd, bSelect ); }
+    BOOL PrvWrd     ( BOOL bSelect = FALSE ) { return SimpleMove( &SwWrtShell::_PrvWrd, bSelect ); }
 
-    FASTBOOL SttNxtPg   ( FASTBOOL bSelect = FALSE );
-    FASTBOOL SttPrvPg   ( FASTBOOL bSelect = FALSE );
-    FASTBOOL EndNxtPg   ( FASTBOOL bSelect = FALSE );
-    FASTBOOL EndPrvPg   ( FASTBOOL bSelect = FALSE );
-    FASTBOOL SttPg      ( FASTBOOL bSelect = FALSE );
-    FASTBOOL EndPg      ( FASTBOOL bSelect = FALSE );
-    FASTBOOL SttPara    ( FASTBOOL bSelect = FALSE );
-    FASTBOOL EndPara    ( FASTBOOL bSelect = FALSE );
-    FASTBOOL FwdPara    ( FASTBOOL bSelect = FALSE )
+    using SwCrsrShell::LeftMargin;
+    BOOL LeftMargin ( BOOL bSelect, BOOL bBasicCall );
+    using SwCrsrShell::RightMargin;
+    BOOL RightMargin( BOOL bSelect, BOOL bBasicCall );
+
+    BOOL SttDoc     ( BOOL bSelect = FALSE );
+    BOOL EndDoc     ( BOOL bSelect = FALSE );
+
+    BOOL SttNxtPg   ( BOOL bSelect = FALSE );
+    BOOL SttPrvPg   ( BOOL bSelect = FALSE );
+    BOOL EndNxtPg   ( BOOL bSelect = FALSE );
+    BOOL EndPrvPg   ( BOOL bSelect = FALSE );
+    BOOL SttPg      ( BOOL bSelect = FALSE );
+    BOOL EndPg      ( BOOL bSelect = FALSE );
+    BOOL SttPara    ( BOOL bSelect = FALSE );
+    BOOL EndPara    ( BOOL bSelect = FALSE );
+    BOOL FwdPara    ( BOOL bSelect = FALSE )
                 { return SimpleMove( &SwWrtShell::_FwdPara, bSelect ); }
-    FASTBOOL BwdPara    ( FASTBOOL bSelect = FALSE )
+    BOOL BwdPara    ( BOOL bSelect = FALSE )
                 { return SimpleMove( &SwWrtShell::_BwdPara, bSelect ); }
-    FASTBOOL FwdSentence( FASTBOOL bSelect = FALSE )
+    BOOL FwdSentence( BOOL bSelect = FALSE )
                 { return SimpleMove( &SwWrtShell::_FwdSentence, bSelect ); }
-    FASTBOOL BwdSentence( FASTBOOL bSelect = FALSE )
+    BOOL BwdSentence( BOOL bSelect = FALSE )
                 { return SimpleMove( &SwWrtShell::_BwdSentence, bSelect ); }
 
     // --> FME 2004-07-30 #i20126# Enhanced table selection
-    FASTBOOL SelectTableRowCol( const Point& rPt, const Point* pEnd = 0 );
+    BOOL SelectTableRowCol( const Point& rPt, const Point* pEnd = 0 );
     // <--
-    FASTBOOL SelectTableRow();
-    FASTBOOL SelectTableCol();
-    FASTBOOL SelectTableCell();
-    FASTBOOL SelectTxtAttr( USHORT nWhich, const SwTxtAttr* pAttr = 0 );
+    BOOL SelectTableRow();
+    BOOL SelectTableCol();
+    BOOL SelectTableCell();
+
+    using SwCrsrShell::SelectTxtAttr;
+    BOOL SelectTxtAttr( USHORT nWhich, const SwTxtAttr* pAttr = 0 );
 
     // Spaltenweise Spruenge
-    FASTBOOL StartOfColumn      ( FASTBOOL bSelect = FALSE );
-    FASTBOOL EndOfColumn        ( FASTBOOL bSelect = FALSE );
-    FASTBOOL StartOfNextColumn  ( FASTBOOL bSelect = FALSE );
-    FASTBOOL EndOfNextColumn    ( FASTBOOL bSelect = FALSE );
-    FASTBOOL StartOfPrevColumn  ( FASTBOOL bSelect = FALSE );
-    FASTBOOL EndOfPrevColumn    ( FASTBOOL bSelect = FALSE );
+    BOOL StartOfColumn      ( BOOL bSelect = FALSE );
+    BOOL EndOfColumn        ( BOOL bSelect = FALSE );
+    BOOL StartOfNextColumn  ( BOOL bSelect = FALSE );
+    BOOL EndOfNextColumn    ( BOOL bSelect = FALSE );
+    BOOL StartOfPrevColumn  ( BOOL bSelect = FALSE );
+    BOOL EndOfPrevColumn    ( BOOL bSelect = FALSE );
 
     // setze den Cursor auf die Seite "nPage" an den Anfang
     // zusaetzlich zu der gleichnamigen Implementierung in crsrsh.hxx
     // werden hier alle bestehenden Selektionen vor dem Setzen des
     // Cursors aufgehoben
-    BOOL    GotoPage(USHORT nPage, BOOL bRecord = TRUE);
+    using SwCrsrShell::GotoPage;
+    BOOL    GotoPage( USHORT nPage, BOOL bRecord );
 
     //setzen des Cursors; merken der alten Position fuer Zurueckblaettern.
     DECL_LINK( ExecFlyMac, void * );
@@ -265,7 +279,7 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
 
     // loescht auch Rahmen bzw. setzt den Cursor in den Rahmen,
     // wenn bDelFrm == FALSE ist
-    long    DelRight( BOOL bDelFrm = FALSE );
+    long    DelRight();
     long    DelToEndOfPara();
     long    DelToStartOfPara();
     long    DelToEndOfSentence();
@@ -286,8 +300,14 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     int     IntelligentCut(int nSelectionType, BOOL bCut = TRUE);
 
     // Editieren
+    using SwEditShell::Insert;
     void    Insert(SwField &);
     void    Insert(const String &);
+    // Graphic
+    void    Insert( const String &rPath, const String &rFilter,
+                    const Graphic &, SwFlyFrmAttrMgr * = 0,
+                    BOOL bRule = FALSE );
+
     void    InsertByWord( const String & );
     void    InsertPageBreak(const String *pPageDesc = 0, USHORT nPgNum = 0 );
     void    InsertLineBreak();
@@ -312,17 +332,13 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     void    NumOn();
     void    BulletOn();
 
-    // Graphic
-    void    Insert( const String &rPath, const String &rFilter,
-                    const Graphic &, SwFlyFrmAttrMgr * = 0,
-                    BOOL bRule = FALSE );
     //OLE
+    using SwFEShell::InsertObject;
     void    InsertObject(     /*SvInPlaceObjectRef *pObj, */       // != 0 fuer Clipboard
                           const svt::EmbeddedObjectRef&,
                           SvGlobalName *pName = 0,      // != 0 entspr. Object erzeugen.
                           BOOL bActivate = TRUE,
-                          USHORT nSlotId = 0,       // SlotId fuer Dialog
-                          SfxRequest* pReq = 0 );
+                          USHORT nSlotId = 0);       // SlotId fuer Dialog
 
     BOOL    InsertOleObject( const svt::EmbeddedObjectRef& xObj, SwFlyFrmFmt **pFlyFrmFmt = 0 );
     void    LaunchOLEObj( long nVerb = 0 );             // Server starten
@@ -378,11 +394,12 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
                          const com::sun::star::util::SearchOptions* pSearchOpt = 0,
                          const SfxItemSet* pReplaceSet = 0);
 
+    using SwEditShell::AutoCorrect;
     void AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar = ' ' );
 
     // Aktion vor Cursorbewegung
     // Hebt gfs. Selektionen auf, triggert Timer und GCAttr()
-    void    MoveCrsr( FASTBOOL bWithSelect = FALSE );
+    void    MoveCrsr( BOOL bWithSelect = FALSE );
 
     // Eingabefelder updaten
     BOOL    StartInputFldDlg(SwField*, BOOL bNextButton, Window* pParentWin = 0, ByteString* pWindowState = 0);
@@ -390,18 +407,19 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     BOOL    StartDropDownFldDlg(SwField*, BOOL bNextButton, ByteString* pWindowState = 0);
 
     //"Handler" fuer Anederungen an der DrawView - fuer Controls.
-    virtual void DrawSelChanged( SdrView * );
+    virtual void DrawSelChanged( );
 
     // springe zum Bookmark und setze die "Selections-Flags" wieder richtig
-    FASTBOOL GotoBookmark( USHORT nPos );
-    FASTBOOL GotoBookmark( USHORT nPos, BOOL bSelect, BOOL bStart );
-    FASTBOOL GotoBookmark( const String& rName );
-    FASTBOOL GoNextBookmark(); // TRUE, wenn's noch eine gab
-    FASTBOOL GoPrevBookmark();
+    using SwCrsrShell::GotoBookmark;
+    BOOL GotoBookmark( USHORT nPos );
+    BOOL GotoBookmark( USHORT nPos, BOOL bSelect, BOOL bStart );
+    BOOL GotoBookmark( const String& rName );
+    BOOL GoNextBookmark(); // TRUE, wenn's noch eine gab
+    BOOL GoPrevBookmark();
 
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
-    FASTBOOL SelectNextPrevHyperlink( BOOL bNext = TRUE );
+    BOOL SelectNextPrevHyperlink( BOOL bNext = TRUE );
 
     // Zugehoerige SwView ermitteln
     const SwView&       GetView() const { return rView; }
@@ -416,7 +434,7 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
 
     // ein Klick aus das angegebene Feld. Der Cursor steht auf diesem.
     // Fuehre die vor definierten Aktionen aus.
-    void ClickToField( const SwField& rFld, USHORT nFilter = URLLOAD_NOFILTER );
+    void ClickToField( const SwField& rFld );
     void ClickToINetAttr( const SwFmtINetFmt& rItem, USHORT nFilter = URLLOAD_NOFILTER );
     BOOL ClickToINetGrf( const Point& rDocPt, USHORT nFilter = URLLOAD_NOFILTER );
     inline BOOL IsInClickToEdit() const ;
@@ -443,7 +461,7 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
     //Sichten auf ein Dokument
     SwWrtShell( SwWrtShell&, Window *pWin, SwView &rShell);
     SwWrtShell( SwDoc& rDoc, Window *pWin, SwView &rShell,
-                SwRootFrm* pMaster = 0, const SwViewOption *pViewOpt = 0);
+                const SwViewOption *pViewOpt = 0);
     virtual ~SwWrtShell();
 
     BOOL TryRemoveIndent(); // #i23725#
@@ -467,9 +485,10 @@ private:
                     bIns;
         ModeStack(ModeStack *pNextMode, BOOL _bIns, BOOL _bExt, BOOL _bAdd):
             pNext(pNextMode),
-            bIns(_bIns),
+            bAdd(_bAdd),
             bExt(_bExt),
-            bAdd(_bAdd) {}
+            bIns(_bIns)
+             {}
     } *pModeStack;
 
     // Cursor bei PageUp / -Down mitnehmen
@@ -490,10 +509,14 @@ private:
 
         CrsrStack( BOOL bValid, BOOL bFrmSel, const Point &rDocPos,
                     SwTwips lOff, CrsrStack *pN )
-            : aDocPos(rDocPos), lOffset(lOff), pNext(pN)
+            : aDocPos(rDocPos),
+            pNext(pN),
+            bValidCurPos( bValid ),
+            bIsFrmSel( bFrmSel ),
+            lOffset(lOff)
         {
-            bValidCurPos = bValid;
-            bIsFrmSel = bFrmSel;
+
+
         }
 
     } *pCrsrStack;
@@ -507,14 +530,14 @@ private:
     SW_DLLPRIVATE BOOL  PopCrsr(BOOL bUpdate, BOOL bSelect = FALSE);
 
     // ENDE Cursor bei PageUp / -Down mitnehmen
-    SW_DLLPRIVATE FASTBOOL _SttWrd();
-    SW_DLLPRIVATE FASTBOOL _EndWrd();
-    SW_DLLPRIVATE FASTBOOL _NxtWrd();
-    SW_DLLPRIVATE FASTBOOL _PrvWrd();
-    SW_DLLPRIVATE FASTBOOL _FwdSentence();
-    SW_DLLPRIVATE FASTBOOL _BwdSentence();
-    FASTBOOL _FwdPara();
-    SW_DLLPRIVATE FASTBOOL _BwdPara();
+    SW_DLLPRIVATE BOOL _SttWrd();
+    SW_DLLPRIVATE BOOL _EndWrd();
+    SW_DLLPRIVATE BOOL _NxtWrd();
+    SW_DLLPRIVATE BOOL _PrvWrd();
+    SW_DLLPRIVATE BOOL _FwdSentence();
+    SW_DLLPRIVATE BOOL _BwdSentence();
+    BOOL _FwdPara();
+    SW_DLLPRIVATE BOOL _BwdPara();
 
         //  Selektionen
     BOOL    bIns            :1;
@@ -538,7 +561,10 @@ private:
     SW_DLLPRIVATE void  _ResetCursorStack();
 
     SW_DLLPRIVATE void  SttDragDrop(Timer *);
+
+    using SwCrsrShell::SetCrsr;
     SW_DLLPRIVATE long  SetCrsr(const Point *, BOOL bProp=FALSE );
+
     SW_DLLPRIVATE long  SetCrsrKillSel(const Point *, BOOL bProp=FALSE );
 
     SW_DLLPRIVATE long  StdSelect(const Point *, BOOL bProp=FALSE );
@@ -577,9 +603,8 @@ private:
         BOOKMARK_LAST_LAST_ENTRY
     };
 
-    SW_DLLPRIVATE FASTBOOL MoveBookMark(    BookMarkMove eFuncId,
-                            USHORT nPos = 0,
-                            BOOL bStart = TRUE );
+    SW_DLLPRIVATE BOOL MoveBookMark(    BookMarkMove eFuncId,
+                            USHORT nPos = 0 );
 };
 
 inline void SwWrtShell::ResetCursorStack()
@@ -608,7 +633,7 @@ inline BOOL SwWrtShell::Is_FnDragEQBeginDrag() const
     SELECTFUNC  fnTmp = &SwWrtShell::BeginDrag;
     return fnDrag == fnTmp;
 #else
-    return fnDrag == &SwWrtShell::BeginDrag;
+    return sal::static_int_cast< BOOL >(fnDrag == &SwWrtShell::BeginDrag);
 #endif
 }
 
