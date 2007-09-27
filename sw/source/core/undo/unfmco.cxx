@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unfmco.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:51:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:31:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,8 @@ inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 
 SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange, SwFmtColl* pColl )
-    : SwUndo( UNDO_SETFMTCOLL ), SwUndRng( rRange ), pFmtColl( pColl ),
-    pHistory( new SwHistory )
+    : SwUndo( UNDO_SETFMTCOLL ), SwUndRng( rRange ),
+    pHistory( new SwHistory ), pFmtColl( pColl )
 {
     // --> FME 2004-08-06 #i31191#
     if ( pColl )
