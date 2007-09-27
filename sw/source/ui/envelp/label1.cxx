@@ -4,9 +4,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:08:15 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:42:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,9 @@
 #include <label.hrc>
 #endif
 
+//impl in envimg.cxx
+extern SW_DLLPUBLIC String MakeSender();
+
 
 SV_IMPL_PTRARR( SwLabRecs, SwLabRec* );
 
@@ -155,14 +158,16 @@ void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
                                 SwNewDBMgr* pDBMgr, sal_Bool bLabel) :
     SfxTabDialog( pParent, SW_RES(DLG_LAB), &rSet, sal_False ),
-    sBusinessCardDlg(SW_RES(ST_BUSINESSCARDDLG)),
-    sMedium(SW_RES(ST_FIRSTPAGE_BC)),
-    sFormat(SW_RES(ST_FIRSTPAGE_LAB)),
-    aTypeIds( 50, 10 ),
-    aMakes  (  5,  0 ),
-    pRecs   ( new SwLabRecs() ),
     pNewDBMgr(pDBMgr),
     pPrtPage(0),
+
+    aTypeIds( 50, 10 ),
+    aMakes  (  5,  0 ),
+
+    pRecs   ( new SwLabRecs() ),
+    sBusinessCardDlg(SW_RES(ST_BUSINESSCARDDLG)),
+    sFormat(SW_RES(ST_FIRSTPAGE_LAB)),
+    sMedium(SW_RES(ST_FIRSTPAGE_BC)),
     m_bLabel(bLabel)
 {
     WaitObject aWait( pParent );
@@ -416,10 +421,6 @@ void SwLabPage::SetToBusinessCard()
 
 // --------------------------------------------------------------------------
 
-//impl in envimg.cxx
-extern String MakeSender();
-
-
 
 IMPL_LINK( SwLabPage, AddrHdl, Button *, EMPTYARG )
 {
@@ -630,10 +631,10 @@ void SwLabPage::ActivatePage(const SfxItemSet& rSet)
     Reset( rSet );
 }
 // --------------------------------------------------------------------------
-int SwLabPage::DeactivatePage(SfxItemSet* pSet)
+int SwLabPage::DeactivatePage(SfxItemSet* _pSet)
 {
-    if (pSet)
-        FillItemSet(*pSet);
+    if (_pSet)
+        FillItemSet(*_pSet);
 
     return sal_True;
 }
@@ -801,10 +802,10 @@ void SwVisitingCardPage::ActivatePage(const SfxItemSet& rSet)
 /*-- 08.07.99 14:00:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-int  SwVisitingCardPage::DeactivatePage(SfxItemSet* pSet)
+int  SwVisitingCardPage::DeactivatePage(SfxItemSet* _pSet)
 {
-    if (pSet)
-        FillItemSet(*pSet);
+    if (_pSet)
+        FillItemSet(*_pSet);
     return LEAVE_PAGE;
 }
 /*-- 08.07.99 14:00:04---------------------------------------------------
@@ -909,15 +910,18 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
 SwPrivateDataPage::SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_PRIVATE_DATA), rSet),
     aDataFL             (this, SW_RES( FL_DATA       )),
-    aNameFT             (this, SW_RES( FT_NAME      )),
+
+    aNameFT             (this, SW_RES( FT_NAME       )),
     aFirstNameED        (this, SW_RES( ED_FIRSTNAME )),
     aNameED             (this, SW_RES( ED_NAME      )),
     aShortCutED         (this, SW_RES( ED_SHORTCUT  )),
-    aName2FT            (this, SW_RES( FT_NAME_2        )),
+
+    aName2FT            (this, SW_RES( FT_NAME_2     )),
     aFirstName2ED       (this, SW_RES( ED_FIRSTNAME_2)),
     aName2ED            (this, SW_RES( ED_NAME_2        )),
     aShortCut2ED        (this, SW_RES( ED_SHORTCUT_2    )),
-    aStreetFT           (this, SW_RES( FT_STREET        )),
+
+    aStreetFT           (this, SW_RES( FT_STREET     )),
     aStreetED           (this, SW_RES( ED_STREET        )),
     aZipCityFT          (this, SW_RES( FT_ZIPCITY   )),
     aZipED              (this, SW_RES( ED_ZIP       )),
@@ -926,8 +930,8 @@ SwPrivateDataPage::SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet) :
     aCountryED          (this, SW_RES( ED_COUNTRY   )),
     aStateED            (this, SW_RES( ED_STATE     )),
     aTitleProfessionFT  (this, SW_RES( FT_TITLEPROF )),
-    aProfessionED       (this, SW_RES( ED_PROFESSION    )),
     aTitleED            (this, SW_RES( ED_TITLE     )),
+    aProfessionED       (this, SW_RES( ED_PROFESSION )),
     aPhoneFT            (this, SW_RES( FT_PHONE_MOBILE  )),
     aPhoneED            (this, SW_RES( ED_PHONE     )),
     aMobilePhoneED      (this, SW_RES( ED_MOBILE        )),
@@ -964,10 +968,10 @@ void SwPrivateDataPage::ActivatePage(const SfxItemSet& rSet)
 /*-- 29.09.99 08:55:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-int  SwPrivateDataPage::DeactivatePage(SfxItemSet* pSet)
+int  SwPrivateDataPage::DeactivatePage(SfxItemSet* _pSet)
 {
-    if (pSet)
-        FillItemSet(*pSet);
+    if (_pSet)
+        FillItemSet(*_pSet);
     return LEAVE_PAGE;
 }
 /*-- 29.09.99 08:55:58---------------------------------------------------
@@ -1082,10 +1086,10 @@ void SwBusinessDataPage::ActivatePage(const SfxItemSet& rSet)
 /*-- 29.09.99 08:56:06---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-int  SwBusinessDataPage::DeactivatePage(SfxItemSet* pSet)
+int  SwBusinessDataPage::DeactivatePage(SfxItemSet* _pSet)
 {
-    if (pSet)
-        FillItemSet(*pSet);
+    if (_pSet)
+        FillItemSet(*_pSet);
     return LEAVE_PAGE;
 }
 /*-- 29.09.99 08:56:06---------------------------------------------------
