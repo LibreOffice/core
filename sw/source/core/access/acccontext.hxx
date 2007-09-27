@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:25:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:19:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ class SwAccessibleMap;
 class SwCrsrShell;
 class SdrObject;
 class SwPaM;
-namespace utl { class AccessibleStateSetHelper; };
+namespace utl { class AccessibleStateSetHelper; }
 namespace accessibility { class AccessibleShape; }
 
 const sal_Char sAccessibleServiceName[] = "com.sun.star.accessibility.Accessible";
