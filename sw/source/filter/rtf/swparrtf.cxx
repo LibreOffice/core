@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 10:06:05 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:55:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,13 +283,15 @@
 #include <vcl/salbtype.hxx>     // FRound
 #endif
 
+using namespace ::com::sun::star;
+
+
 // einige Hilfs-Funktionen
 // char
 inline const SvxFontHeightItem& GetSize(const SfxItemSet& rSet,BOOL bInP=TRUE)
     { return (const SvxFontHeightItem&)rSet.Get( RES_CHRATR_FONTSIZE,bInP); }
 inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,BOOL bInP=TRUE)
     { return (const SvxLRSpaceItem&)rSet.Get( RES_LR_SPACE,bInP); }
-
 
 /*  */
 
@@ -331,18 +333,33 @@ ULONG RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const S
 }
 
 SwRTFParser::SwRTFParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn, const String& rBaseURL,
-    int bReadNewDoc)
-    : SvxRTFParser(pD->GetAttrPool(), rIn, bReadNewDoc),
-    maParaStyleMapper(*pD), maCharStyleMapper(*pD), maSegments(*this),
+    int bReadNewDoc) :
+    SvxRTFParser(pD->GetAttrPool(), rIn, bReadNewDoc),
+    maParaStyleMapper(*pD),
+    maCharStyleMapper(*pD),
+    maSegments(*this),
     maInsertedTables(*pD),
-    aMergeBoxes(0, 5), aTblFmts(0, 10), mpBookmarkStart(0), mpRedlineStack(0),
-    pRedlineInsert(0), pRedlineDelete(0),
-    pGrfAttrSet(0), pTableNode(0), pOldTblNd(0), pSttNdIdx(0), pRegionEndIdx(0), pDoc(pD),
-    pRelNumRule(new SwRelNumRuleSpaces(*pD, bReadNewDoc)), nAktPageDesc(0),
-    nAktFirstPageDesc(0), nAktBox(0), nInsTblRow(USHRT_MAX),
-    nNewNumSectDef(USHRT_MAX), nRowsToRepeat(0),
-    sBaseURL( rBaseURL ),
+    aMergeBoxes(0, 5),
+    aTblFmts(0, 10),
+    mpBookmarkStart(0),
+    mpRedlineStack(0),
     pAuthorInfos(0),
+    pGrfAttrSet(0),
+    pTableNode(0),
+    pOldTblNd(0),
+    pSttNdIdx(0),
+    pRegionEndIdx(0),
+    pDoc(pD),
+    pRelNumRule(new SwRelNumRuleSpaces(*pD, static_cast< BOOL >(bReadNewDoc))),
+    pRedlineInsert(0),
+    pRedlineDelete(0),
+    sBaseURL( rBaseURL ),
+    nAktPageDesc(0),
+    nAktFirstPageDesc(0),
+    nAktBox(0),
+    nInsTblRow(USHRT_MAX),
+    nNewNumSectDef(USHRT_MAX),
+    nRowsToRepeat(0),
     bTrowdRead(0),
     nZOrder(0)
 {
@@ -512,13 +529,13 @@ ASSERT( pSttNdIdx->GetIndex()+1 != pPam->GetBound( FALSE ).nNode.GetIndex(),
 
 if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( TRUE ).nNode.GetIndex() )
 {
-    register xub_StrLen nCntPos = pPam->GetBound( TRUE ).nContent.GetIndex();
+    xub_StrLen nCntPos = pPam->GetBound( TRUE ).nContent.GetIndex();
     pPam->GetBound( TRUE ).nContent.Assign( pTxtNode,
                     pTxtNode->GetTxt().Len() + nCntPos );
 }
 if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
 {
-    register xub_StrLen nCntPos = pPam->GetBound( FALSE ).nContent.GetIndex();
+    xub_StrLen nCntPos = pPam->GetBound( FALSE ).nContent.GetIndex();
     pPam->GetBound( FALSE ).nContent.Assign( pTxtNode,
                     pTxtNode->GetTxt().Len() + nCntPos );
 }
@@ -585,7 +602,6 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
                     const SwSpzFrmFmts* pFrmFmts = pDoc->GetSpzFrmFmts();
                     if ( pFrmFmts && pFrmFmts->Count() )
                     {
-                        bool bFirst = true;
                         for ( USHORT nI = pFrmFmts->Count(); nI; --nI )
                         {
                             const SwFmtAnchor & rAnchor = (*pFrmFmts)[ nI - 1 ]->GetAnchor();
@@ -678,7 +694,7 @@ bool rtfSections::SetCols(SwFrmFmt &rFmt, const rtfSection &rSection,
     USHORT nNettoWidth)
 {
     //sprmSCcolumns - Anzahl der Spalten - 1
-    USHORT nCols = rSection.NoCols();
+    USHORT nCols = static_cast< USHORT >(rSection.NoCols());
 
     if (nCols < 2)
         return false;                   // keine oder bloedsinnige Spalten
@@ -686,7 +702,7 @@ bool rtfSections::SetCols(SwFrmFmt &rFmt, const rtfSection &rSection,
     SwFmtCol aCol;                      // Erzeuge SwFmtCol
 
     //sprmSDxaColumns   - Default-Abstand 1.25 cm
-    USHORT nColSpace = rSection.StandardColSeperation();
+    USHORT nColSpace = static_cast< USHORT >(rSection.StandardColSeperation());
 
     aCol.Init( nCols, nColSpace, nNettoWidth );
 
@@ -699,12 +715,12 @@ bool rtfSections::SetCols(SwFrmFmt &rFmt, const rtfSection &rSection,
         {
             SwColumn* pCol = aCol.GetColumns()[ i ];
             pCol->SetLeft( nHalfPrev );
-            USHORT nSp = rSection.maPageInfo.maColumns[ n+1 ];
+            USHORT nSp = static_cast< USHORT >(rSection.maPageInfo.maColumns[ n+1 ]);
             nHalfPrev = nSp / 2;
             pCol->SetRight( nSp - nHalfPrev );
-            pCol->SetWishWidth(rSection.maPageInfo.maColumns[ n ] +
+            pCol->SetWishWidth( static_cast< USHORT >(rSection.maPageInfo.maColumns[ n ]) +
                 pCol->GetLeft() + pCol->GetRight());
-            nWishWidth += pCol->GetWishWidth();
+            nWishWidth = nWishWidth + pCol->GetWishWidth();
         }
         aCol.SetWishWidth( nWishWidth );
     }
@@ -730,8 +746,8 @@ void rtfSections::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
 
     if (!bIgnoreCols)
     {
-        SetCols(rFmt, rSection, rSection.GetPageWidth() -
-            rSection.GetPageLeft() - rSection.GetPageRight());
+        SetCols(rFmt, rSection, static_cast< USHORT >(rSection.GetPageWidth() -
+            rSection.GetPageLeft() - rSection.GetPageRight()));
     }
 
     rFmt.SetAttr(rSection.maPageInfo.maBox);
@@ -756,10 +772,10 @@ bool HasFooter(const SwFrmFmt &rFmt)
 void rtfSections::GetPageULData(const rtfSection &rSection, bool bFirst,
     rtfSections::wwULSpaceData& rData)
 {
-    short nWWUp = rSection.maPageInfo.mnMargtsxn;
-    short nWWLo = rSection.maPageInfo.mnMargbsxn;
-    short nWWHTop = rSection.maPageInfo.mnHeadery;
-    short nWWFBot = rSection.maPageInfo.mnFootery;
+    short nWWUp     = static_cast< short >(rSection.maPageInfo.mnMargtsxn);
+    short nWWLo     = static_cast< short >(rSection.maPageInfo.mnMargbsxn);
+    short nWWHTop   = static_cast< short >(rSection.maPageInfo.mnHeadery);
+    short nWWFBot   = static_cast< short >(rSection.maPageInfo.mnFootery);
 
     if (bFirst)
     {
@@ -887,7 +903,7 @@ void rtfSections::SetSegmentToPageDesc(const rtfSection &rSection,
     SetPage(rPage, rFmt, rSection, bIgnoreCols);
 
     UseOnPage ePage = rPage.ReadUseOn();
-    if(ePage & PD_ALL)
+    if(ePage & nsUseOnPage::PD_ALL)
     {
         SwFrmFmt &rFmtLeft = rPage.GetLeft();
         SetPageULSpaceItems(rFmtLeft, aULData);
@@ -980,7 +996,8 @@ SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
     mySegrIter aEnd = maSegments.rend();
     for (mySegrIter aIter = maSegments.rbegin(); aIter != aEnd; ++aIter)
     {
-        if ((pPage = aIter->mpPage))
+        pPage = aIter->mpPage;
+        if (pPage)
             break;
     }
 
@@ -1098,7 +1115,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
 
             if (aIter->PageRestartNo() ||
                 ((aIter == aStart) && aIter->PageStartAt() != 1))
-                aPgDesc.SetNumOffset(aIter->PageStartAt());
+                aPgDesc.SetNumOffset( static_cast< USHORT >(aIter->PageStartAt()) );
 
             /*
             If its a table here, apply the pagebreak to the table
@@ -1382,44 +1399,44 @@ void SwRTFParser::ReadDrawingObject()
         aFlySet.Put( aAnchor );
 
         /*
-        FRAME,          // Absatz inkl. Raender
-        PRTAREA,        // Absatz ohne Raender
-        REL_CHAR,       // an einem Zeichen
-        REL_PG_LEFT,    // im linken Seitenrand
-        REL_PG_RIGHT,   // im rechten Seitenrand
-        REL_FRM_LEFT,   // im linken Absatzrand
-        REL_FRM_RIGHT,  // im rechten Absatzrand
-        REL_PG_FRAME,   // Seite inkl. Raender, bei seitengeb. identisch mit FRAME
-        REL_PG_PRTAREA, // Seite ohne Raender, bei seitengeb. identisch mit PRTAREA
+        text::RelOrientation::FRAME,          // Absatz inkl. Raender
+        text::RelOrientation::PRINT_AREA,     // Absatz ohne Raender
+        text::RelOrientation::CHAR,       // an einem Zeichen
+        text::RelOrientation::PAGE_LEFT,  // im linken Seitenrand
+        text::RelOrientation::PAGE_RIGHT,   // im rechten Seitenrand
+        text::RelOrientation::FRAME_LEFT,   // im linken Absatzrand
+        text::RelOrientation::FRAME_RIGHT,  // im rechten Absatzrand
+        text::RelOrientation::PAGE_FRAME, // Seite inkl. Raender, bei seitengeb. identisch mit text::RelOrientation::FRAME
+        text::RelOrientation::PAGE_PRINT_AREA,    // Seite ohne Raender, bei seitengeb. identisch mit text::RelOrientation::PRTAREA
         // OD 11.11.2003 #i22341#
-        REL_VERT_LINE,  // vertical relative to top of text line, only for to-character
+        text::RelOrientation::TEXT_LINE,  // vertical relative to top of text line, only for to-character
                         // anchored objects.
 
 
-            HORI_NONE,      //Der Wert in nYPos gibt die RelPos direkt an.
-        HORI_RIGHT,     //Der Rest ist fuer automatische Ausrichtung.
-        HORI_CENTER,
-        HORI_LEFT,
-        HORI_INSIDE,
-        HORI_OUTSIDE,
-        HORI_FULL,          //Spezialwert fuer Tabellen
-        HORI_LEFT_AND_WIDTH  //Auch fuer Tabellen
+            text::HoriOrientation::NONE,      //Der Wert in nYPos gibt die RelPos direkt an.
+        text::HoriOrientation::RIGHT,     //Der Rest ist fuer automatische Ausrichtung.
+        text::HoriOrientation::CENTER,
+        text::HoriOrientation::LEFT,
+        text::HoriOrientation::INSIDE,
+        text::HoriOrientation::OUTSIDE,
+        text::HoriOrientation::FULL,          //Spezialwert fuer Tabellen
+        text::HoriOrientation::LEFT_AND_WIDTH  //Auch fuer Tabellen
         */
-        SwFmtHoriOrient aHori( 0, HORI_NONE, REL_PG_FRAME );
+        SwFmtHoriOrient aHori( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME );
         aFlySet.Put( aHori );
         /*
-        VERT_NONE,  //Der Wert in nYPos gibt die RelPos direkt an.
-        VERT_TOP,   //Der Rest ist fuer automatische Ausrichtung.
-        VERT_CENTER,
-        VERT_BOTTOM,
-        VERT_CHAR_TOP,      //Ausrichtung _nur_ fuer Zeichengebundene Rahmen
-        VERT_CHAR_CENTER,   //wie der Name jew. sagt wird der RefPoint des Rahmens
-        VERT_CHAR_BOTTOM,   //entsprechend auf die Oberkante, Mitte oder Unterkante
-        VERT_LINE_TOP,      //der Zeile gesetzt. Der Rahmen richtet sich  dann
-        VERT_LINE_CENTER,   //entsprechend aus.
-        VERT_LINE_BOTTOM
+        text::VertOrientation::NONE,  //Der Wert in nYPos gibt die RelPos direkt an.
+        text::VertOrientation::TOP,   //Der Rest ist fuer automatische Ausrichtung.
+        text::VertOrientation::CENTER,
+        text::VertOrientation::BOTTOM,
+        text::VertOrientation::CHAR_TOP,      //Ausrichtung _nur_ fuer Zeichengebundene Rahmen
+        text::VertOrientation::CHAR_CENTER,   //wie der Name jew. sagt wird der RefPoint des Rahmens
+        text::VertOrientation::CHAR_BOTTOM,   //entsprechend auf die Oberkante, Mitte oder Unterkante
+        text::VertOrientation::LINE_TOP,      //der Zeile gesetzt. Der Rahmen richtet sich  dann
+        text::VertOrientation::LINE_CENTER,   //entsprechend aus.
+        text::VertOrientation::LINE_BOTTOM
         */
-        SwFmtVertOrient aVert( 0, VERT_NONE, REL_PG_FRAME );
+        SwFmtVertOrient aVert( 0, text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME );
         aFlySet.Put( aVert );
 
         pDoc->GetOrCreateDrawModel();
@@ -1429,11 +1446,11 @@ void SwRTFParser::ReadDrawingObject()
 
         pStroke->SetSnapRect(aRect);
 
-        SwFrmFmt* pRetFrmFmt = pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
+        /* SwFrmFmt* pRetFrmFmt = */pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
     }
 }
 
-void SwRTFParser::InsertShpObject(SdrObject* pStroke, int nZOrder)
+void SwRTFParser::InsertShpObject(SdrObject* pStroke, int _nZOrder)
 {
         SfxItemSet aFlySet(pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
         SwFmtSurround aSur( SURROUND_THROUGHT );
@@ -1448,10 +1465,10 @@ void SwRTFParser::InsertShpObject(SdrObject* pStroke, int nZOrder)
         aFlySet.Put( aAnchor );
 
 
-        SwFmtHoriOrient aHori( 0, HORI_NONE, REL_PG_FRAME );
+        SwFmtHoriOrient aHori( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME );
         aFlySet.Put( aHori );
 
-        SwFmtVertOrient aVert( 0, VERT_NONE, REL_PG_FRAME );
+        SwFmtVertOrient aVert( 0, text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME );
         aFlySet.Put( aVert );
 
         aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
@@ -1460,8 +1477,8 @@ void SwRTFParser::InsertShpObject(SdrObject* pStroke, int nZOrder)
         SdrModel* pDrawModel  = pDoc->GetDrawModel();
         SdrPage* pDrawPg = pDrawModel->GetPage(0);
         pDrawPg->InsertObject(pStroke);
-        pDrawPg->SetObjectOrdNum(pStroke->GetOrdNum(), nZOrder);
-        SwFrmFmt* pRetFrmFmt = pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
+        pDrawPg->SetObjectOrdNum(pStroke->GetOrdNum(), _nZOrder);
+        /* SwFrmFmt* pRetFrmFmt = */pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
 }
 
 ::basegfx::B2DPoint rotate(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rEnd)
@@ -1672,15 +1689,14 @@ extern void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
 USHORT SwRTFParser::ReadRevTbl()
 {
     // rStr.Erase( 0 );
-    int nOpenBrakets = 1, nToken;       // die erste wurde schon vorher erkannt !!
-    bool bFirstAuthor = true;
+    int nNumOpenBrakets = 1, nToken;        // die erste wurde schon vorher erkannt !!
     USHORT nAuthorTableIndex = 0;
 
-    while( nOpenBrakets && IsParserWorking() )
+    while( nNumOpenBrakets && IsParserWorking() )
     {
         switch( nToken = GetNextToken() )
         {
-        case '}':       --nOpenBrakets; break;
+        case '}':   --nNumOpenBrakets;  break;
         case '{':
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
@@ -1695,7 +1711,7 @@ USHORT SwRTFParser::ReadRevTbl()
                         eState = SVPAR_ERROR;
                     break;
                 }
-                ++nOpenBrakets;
+                ++nNumOpenBrakets;
             }
             break;
 
@@ -1728,7 +1744,7 @@ void fixKeepAndSplitAttributes(SwTableNode *pTableNode)
     if (pTableNode==NULL) return;
     SwTable& rTable=pTableNode->GetTable();
     SwTableLines& rLns = rTable.GetTabLines();
-    int nLines=rLns.Count();
+    USHORT nLines=rLns.Count();
     if (nLines==0) return;
     // get first paragaph in left down-most box
     SwTableLine* pLastLine = rLns[ nLines-1 ];
@@ -1964,14 +1980,10 @@ void SwRTFParser::NextToken( int nToken )
                 rIdx = *pBox->GetSttNd()->EndOfSectionNode();
                 pPam->Move( fnMoveForward, fnGoNode );
             }
-            nInsTblRow = GetOpenBrakets();
+            nInsTblRow = static_cast< USHORT >(GetOpenBrakets());
             SetPardTokenRead( FALSE );
             SwPaM aTmp(*pPam);
             aTmp.Move( fnMoveBackward, fnGoNode );
-            SwTableNode *pTableNode=aTmp.GetMark()->nNode.GetNode().FindTableNode();
-            //fixKeepAndSplitAttributes(pTableNode); $flr disabled in frrtf01, see #117910#
-
-
         }
         ::SetProgressState( rInput.Tell(), pDoc->GetDocShell() );
         break;
@@ -2004,16 +2016,16 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
     case RTF_REVISED:
-        pRedlineInsert = new SwFltRedline(IDocumentRedlineAccess::REDLINE_INSERT, 0, DateTime(Date( 0 ), Time( 0 )));
+        pRedlineInsert = new SwFltRedline(nsRedlineType_t::REDLINE_INSERT, 0, DateTime(Date( 0 ), Time( 0 )));
         break;
 
     case RTF_DELETED:
-        pRedlineDelete = new SwFltRedline(IDocumentRedlineAccess::REDLINE_DELETE, 0, DateTime(Date( 0 ), Time( 0 )));
+        pRedlineDelete = new SwFltRedline(nsRedlineType_t::REDLINE_DELETE, 0, DateTime(Date( 0 ), Time( 0 )));
         break;
 
     case RTF_REVAUTH:
         {
-            sw::util::AuthorInfo aEntry(nTokenValue);
+            sw::util::AuthorInfo aEntry( static_cast< USHORT >(nTokenValue) );
             USHORT nPos;
 
             if(pRedlineInsert)
@@ -2031,7 +2043,7 @@ void SwRTFParser::NextToken( int nToken )
 
     case RTF_REVAUTHDEL:
         {
-            sw::util::AuthorInfo aEntry(nTokenValue);
+            sw::util::AuthorInfo aEntry( static_cast< short >(nTokenValue) );
             USHORT nPos;
 
             if(pRedlineDelete)
@@ -2291,7 +2303,9 @@ void SwRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos, xub_StrLen& rCntPos )
     SwNodeIndex aIdx( pPam->GetPoint()->nNode );
     SwCntntNode* pNode = pDoc->GetNodes().GoPrevious( &aIdx );
     if( !pNode )
+    {
         ASSERT( FALSE, "keinen vorherigen ContentNode gefunden" );
+    }
 
     rpNodePos = new SwNodeIdx( aIdx );
     rCntPos = pNode->Len();
@@ -2361,9 +2375,9 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
                     USHORT nWhich = aIter.GetCurItem()->Which();
                     while( TRUE )
                     {
-                        const SfxPoolItem* pItem;
+                        const SfxPoolItem* pI;
                         if( SFX_ITEM_SET == rStyleSet.GetItemState(
-                            nWhich, FALSE, &pItem ) && *pItem == *aIter.GetCurItem())
+                            nWhich, FALSE, &pI ) && *pI == *aIter.GetCurItem())
                             rAttrSet.ClearItem( nWhich );       // loeschen
 
                         if( aIter.IsAtEnd() )
@@ -2381,7 +2395,7 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         {
             // dann setze ueber diesen Bereich die Attrbiute
             SetSwgValues(rSet.GetAttrSet());
-            pDoc->Insert(aPam, rSet.GetAttrSet(), SETATTR_DONTCHGNUMRULE);
+            pDoc->Insert(aPam, rSet.GetAttrSet(), nsSetAttrMode::SETATTR_DONTCHGNUMRULE);
         }
     }
 
@@ -2510,16 +2524,16 @@ void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
     {
         SwFmtFrmSize aFrmSize(ATT_FIX_SIZE, rInfo.mnPaperw, rInfo.mnPaperh);
 
-        SvxLRSpaceItem aLR(rInfo.mnMargl, rInfo.mnMargr, 0, 0, RES_LR_SPACE );
-        SvxULSpaceItem aUL(rInfo.mnMargt, rInfo.mnMargb, RES_UL_SPACE );
+        SvxLRSpaceItem aLR( static_cast< USHORT >(rInfo.mnMargl), static_cast< USHORT >(rInfo.mnMargr), 0, 0, RES_LR_SPACE );
+        SvxULSpaceItem aUL( static_cast< USHORT >(rInfo.mnMargt), static_cast< USHORT >(rInfo.mnMargb), RES_UL_SPACE );
 
         UseOnPage eUseOn;
         if (rInfo.mbFacingp)
-            eUseOn = UseOnPage(PD_MIRROR | PD_HEADERSHARE | PD_FOOTERSHARE);
+            eUseOn = UseOnPage(nsUseOnPage::PD_MIRROR | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE);
         else
-            eUseOn = UseOnPage(PD_ALL | PD_HEADERSHARE | PD_FOOTERSHARE);
+            eUseOn = UseOnPage(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE);
 
-        USHORT nPgStart(rInfo.mnPgnStart);
+        USHORT nPgStart = static_cast< USHORT >(rInfo.mnPgnStart);
 
         SvxFrameDirectionItem aFrmDir(rInfo.mbRTLdoc ?
             FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR);
@@ -2551,10 +2565,10 @@ void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
 void SwRTFParser::SetBorderLine(SvxBoxItem& rBox, sal_uInt16 nLine)
 {
     int bWeiter = true;
-    int nPageDistance = 0;
-    int nCol = 0;
-    int nIdx = 0;
-    int nLineThickness = 1;
+    short nLineThickness = 1;
+    short nPageDistance = 0;
+    BYTE nCol = 0;
+    short nIdx = 0;
 
     int nToken = GetNextToken();
     do {
@@ -2625,7 +2639,7 @@ void SwRTFParser::SetBorderLine(SvxBoxItem& rBox, sal_uInt16 nLine)
             break;
 
         case RTF_BRSP:
-             nPageDistance = nTokenValue;
+            nPageDistance = static_cast< short >(nTokenValue);
             break;
 
         case RTF_BRDRDOT:           // SO does not have dashed or dotted lines
@@ -2639,7 +2653,7 @@ void SwRTFParser::SetBorderLine(SvxBoxItem& rBox, sal_uInt16 nLine)
             break;
 
         case RTF_BRDRW:
-            nLineThickness = nTokenValue;
+            nLineThickness = static_cast< short >(nTokenValue);
             break;
         default:
             bWeiter = false;
@@ -2938,7 +2952,7 @@ BOOL lcl_SetFmtCol( SwFmt& rFmt, USHORT nCols, USHORT nColSpace,
                 pCol->SetRight( nSp - nHalfPrev );
                 pCol->SetWishWidth( rColumns[ n ] +
                                     pCol->GetLeft() + pCol->GetRight() );
-                nWishWidth += pCol->GetWishWidth();
+                nWishWidth = nWishWidth + pCol->GetWishWidth();
             }
             aCol.SetWishWidth( nWishWidth );
         }
@@ -3336,21 +3350,21 @@ void SwRTFParser::SkipPageDescTbl()
 {
     // M.M. #117907# I have to use this glorified SkipGroup because the
     // SvParser SkipGroup uses nNextCh which is not set correctly <groan>
-    int nOpenBrakets = 1;
+    int nNumOpenBrakets = 1;
 
-    while( nOpenBrakets && IsParserWorking() )
+    while( nNumOpenBrakets && IsParserWorking() )
     {
         switch( GetNextToken() )
         {
         case '}':
             {
-                --nOpenBrakets;
+                --nNumOpenBrakets;
             }
             break;
 
         case '{':
             {
-                nOpenBrakets++;
+                nNumOpenBrakets++;
             }
             break;
         }
@@ -3371,7 +3385,7 @@ void SwRTFParser::ReadPageDescTbl()
     pDoc->SetTxtFmtColl( *pPam, pColl );
 
     int nToken, bSaveChkStyleAttr = IsChkStyleAttr();
-    int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt !!
+    int nNumOpenBrakets = 1;        // die erste wurde schon vorher erkannt !!
 
     SetChkStyleAttr(FALSE);     // Attribute nicht gegen die Styles checken
 
@@ -3390,15 +3404,15 @@ void SwRTFParser::ReadPageDescTbl()
     USHORT nCols = USHRT_MAX, nColSpace = USHRT_MAX, nAktCol = 0;
     SvUShorts aColumns;
 
-    while( nOpenBrakets && IsParserWorking() )
+    while( nNumOpenBrakets && IsParserWorking() )
     {
         switch( nToken = GetNextToken() )
         {
         case '{':
-            ++nOpenBrakets;
+            ++nNumOpenBrakets;
             break;
         case '}':
-            if (1 == --nOpenBrakets)
+            if (1 == --nNumOpenBrakets)
             {
                 ASSERT(pPgFmt && pPg, "Serious problem here");
                 if (pPgFmt && pPg)
@@ -3595,7 +3609,7 @@ void SwRTFParser::ReadPageDescTbl()
         case RTF_FOOTERF:
         case RTF_HEADERF:
             ReadHeaderFooter(nToken, pPg);
-            --nOpenBrakets;     // Klammer wird im ReadAttr ueberlesen!
+            --nNumOpenBrakets;      // Klammer wird im ReadAttr ueberlesen!
             break;
         case RTF_TEXTTOKEN:
             if (!DelCharAtEnd(aToken, ';' ).Len())
@@ -3607,7 +3621,7 @@ void SwRTFParser::ReadPageDescTbl()
 
                 // sollte es eine Vorlage aus dem Pool sein ??
                 USHORT n = SwStyleNameMapper::GetPoolIdFromUIName(aToken,
-                    GET_POOLID_PAGEDESC);
+                    nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC);
                 if (USHRT_MAX != n)
                 {
                     // dann setze bei der Neuen die entsp. PoolId
@@ -3616,18 +3630,18 @@ void SwRTFParser::ReadPageDescTbl()
             }
             break;
         case RTF_BRDBOX:
-            if (3 == nOpenBrakets)
+            if (3 == nNumOpenBrakets)
             {
                 ReadBorderAttr(SkipToken(-2),
                     (SfxItemSet&)pPgFmt->GetAttrSet());
-                --nOpenBrakets;     // Klammer wird im ReadAttr ueberlesen!
+                --nNumOpenBrakets;      // Klammer wird im ReadAttr ueberlesen!
             }
             break;
         case RTF_SHADOW:
-            if( 3 == nOpenBrakets )
+            if( 3 == nNumOpenBrakets )
             {
                 ReadAttr( SkipToken( -2 ), (SfxItemSet*)&pPgFmt->GetAttrSet() );
-                --nOpenBrakets;     // Klammer wird im ReadAttr ueberlesen!
+                --nNumOpenBrakets;      // Klammer wird im ReadAttr ueberlesen!
             }
             break;
 
@@ -3742,9 +3756,9 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
     SwTxtAttr* pTxtAttr = 0;
     int bDelFirstChar = FALSE;
     bool bOldIsFootnote = mbIsFootnote;
-    BOOL bOldGrpStt = IsNewGroup();
+    BOOL bOldGrpStt = sal::static_int_cast< BOOL, int >(IsNewGroup());
 
-    int nOpenBrakets = GetOpenBrakets() - 1;
+    int nNumOpenBrakets = GetOpenBrakets() - 1;
 
     switch( nToken )
     {
@@ -3768,7 +3782,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
             }
 
             pTxtAttr = pTxtNd->InsertItem( aFtnNote, nPos, nPos,
-                        bDelFirstChar ? SETATTR_NOTXTATRCHR : 0 );
+                        bDelFirstChar ? nsSetAttrMode::SETATTR_NOTXTATRCHR : 0 );
 
             ASSERT( pTxtAttr, "konnte die Fussnote nicht einfuegen/finden" );
 
@@ -3805,14 +3819,14 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 
     case RTF_HEADERF:
     case RTF_HEADER:
-        pPageDesc->WriteUseOn( (UseOnPage)(pPageDesc->ReadUseOn() | PD_HEADERSHARE) );
+        pPageDesc->WriteUseOn( (UseOnPage)(pPageDesc->ReadUseOn() | nsUseOnPage::PD_HEADERSHARE) );
         pHdFtFmt = &pPageDesc->GetMaster();
         pSttIdx = SetHeader( pHdFtFmt, FALSE );
         break;
 
     case RTF_HEADERL:
         // we cannot have left or right, must have always both
-        pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~PD_HEADERSHARE) | PD_ALL));
+        pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~nsUseOnPage::PD_HEADERSHARE) | nsUseOnPage::PD_ALL));
         SetHeader( pPageDesc->GetRightFmt(), TRUE );
         pHdFtFmt = pPageDesc->GetLeftFmt();
         pSttIdx = SetHeader(pHdFtFmt, FALSE );
@@ -3820,7 +3834,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 
     case RTF_HEADERR:
         // we cannot have left or right, must have always both
-        pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~PD_HEADERSHARE) | PD_ALL));
+        pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~nsUseOnPage::PD_HEADERSHARE) | nsUseOnPage::PD_ALL));
         SetHeader( pPageDesc->GetLeftFmt(), TRUE );
         pHdFtFmt = pPageDesc->GetRightFmt();
         pSttIdx = SetHeader(pHdFtFmt, FALSE );
@@ -3828,14 +3842,14 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 
     case RTF_FOOTERF:
     case RTF_FOOTER:
-        pPageDesc->WriteUseOn( (UseOnPage)(pPageDesc->ReadUseOn() | PD_FOOTERSHARE) );
+        pPageDesc->WriteUseOn( (UseOnPage)(pPageDesc->ReadUseOn() | nsUseOnPage::PD_FOOTERSHARE) );
         pHdFtFmt = &pPageDesc->GetMaster();
         pSttIdx = SetFooter(pHdFtFmt, FALSE );
         break;
 
     case RTF_FOOTERL:
         // we cannot have left or right, must have always both
-        pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~PD_FOOTERSHARE) | PD_ALL));
+        pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~nsUseOnPage::PD_FOOTERSHARE) | nsUseOnPage::PD_ALL));
         SetFooter( pPageDesc->GetRightFmt(), TRUE );
         pHdFtFmt = pPageDesc->GetLeftFmt();
         pSttIdx = SetFooter(pHdFtFmt, FALSE );
@@ -3843,7 +3857,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 
     case RTF_FOOTERR:
         // we cannot have left or right, must have always both
-        pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~PD_FOOTERSHARE) | PD_ALL));
+        pPageDesc->WriteUseOn( (UseOnPage)((pPageDesc->ReadUseOn() & ~nsUseOnPage::PD_FOOTERSHARE) | nsUseOnPage::PD_ALL));
         SetFooter( pPageDesc->GetLeftFmt(), TRUE );
         pHdFtFmt = pPageDesc->GetRightFmt();
         pSttIdx = SetFooter(pHdFtFmt, FALSE );
@@ -3872,7 +3886,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 
         SetNewGroup( TRUE );
 
-        while( !( nOpenBrakets == GetOpenBrakets() && !GetStackPos()) && IsParserWorking() )
+        while( !( nNumOpenBrakets == GetOpenBrakets() && !GetStackPos()) && IsParserWorking() )
         {
             switch( nToken = GetNextToken() )
             {
@@ -3977,7 +3991,7 @@ void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
         const SvxLRSpaceItem& rLR = GetLRSpace( rSet );
         SvxTabStopItem aTStop( *(SvxTabStopItem*)pItem );
 
-        register long nOffset = rLR.GetTxtLeft();
+        long nOffset = rLR.GetTxtLeft();
         if( nOffset )
         {
             // Tabs anpassen !!
@@ -4440,14 +4454,14 @@ void SwRTFParser::ReadUserProperties()
 {
     // For now we don't support user properties but at least the parser is here.
     // At the moment it just swallows the tokens to prevent them being displayed
-    int nOpenBrakets = 1, nToken;
+    int nNumOpenBrakets = 1, nToken;
 
-    while( nOpenBrakets && IsParserWorking() )
+    while( nNumOpenBrakets && IsParserWorking() )
     {
         switch( nToken = GetNextToken() )
         {
         case '}':
-             --nOpenBrakets;
+             --nNumOpenBrakets;
              break;
         case '{':
             {
@@ -4464,7 +4478,7 @@ void SwRTFParser::ReadUserProperties()
                         eState = SVPAR_ERROR;
                     break;
                 }
-                ++nOpenBrakets;
+                ++nNumOpenBrakets;
             }
             break;
 
