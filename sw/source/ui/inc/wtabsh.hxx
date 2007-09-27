@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wtabsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:19:44 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:16:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 class SwWebTableShell: public SwTableShell
 {
 public:
-    SFX_DECL_INTERFACE(SW_WEBTABSHELL);
+    SFX_DECL_INTERFACE(SW_WEBTABSHELL)
     TYPEINFO();
 
     virtual     ~SwWebTableShell();
