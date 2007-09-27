@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csvruler.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:59:59 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:54:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -523,7 +523,7 @@ void ScCsvRuler::ImplDrawBackgrDev()
     maBackgrDev.SetFillColor();
     sal_Int32 nPos;
 
-    sal_Int32 nFirstPos = Max( GetPosFromX( 0 ) - 1L, 0L );
+    sal_Int32 nFirstPos = Max( GetPosFromX( 0 ) - (sal_Int32)(1L), (sal_Int32)(0L) );
     sal_Int32 nLastPos = GetPosFromX( GetWidth() );
     sal_Int32 nY = (maActiveRect.Top() + maActiveRect.Bottom()) / 2;
     for( nPos = nFirstPos; nPos <= nLastPos; ++nPos )
