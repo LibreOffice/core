@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdbtoolsclient.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:47:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:35:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 //........................................................................
 
 using namespace ::connectivity::simple;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
@@ -141,8 +142,8 @@ void SwDbtoolsClient::registerClient()
             // get the symbol for the method creating the factory
             const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString::createFromAscii("createDataAccessToolsFactory");
             //  reinterpret_cast<createDataAccessToolsFactoryFunction> removed for gcc permissive
-            getDbToolsClientFactoryFunction() = (createDataAccessToolsFactoryFunction)(
-                osl_getSymbol(getDbToolsClientModule(), sFactoryCreationFunc.pData));
+            getDbToolsClientFactoryFunction() = reinterpret_cast< createDataAccessToolsFactoryFunction >(
+                osl_getFunctionSymbol(getDbToolsClientModule(), sFactoryCreationFunc.pData));
 
             if (NULL == getDbToolsClientFactoryFunction())
             {   // did not find the symbol
@@ -250,10 +251,10 @@ sal_Int32 SwDbtoolsClient::getDefaultNumberFormat(
 
  ---------------------------------------------------------------------------*/
 ::rtl::OUString SwDbtoolsClient::getValue(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& _rxFormatter,
-        const ::com::sun::star::lang::Locale& _rLocale,
-        const ::com::sun::star::util::Date& _rNullDate
+        const uno::Reference< beans::XPropertySet>& _rxColumn,
+        const uno::Reference< util::XNumberFormatter>& _rxFormatter,
+        const lang::Locale& _rLocale,
+        const util::Date& _rNullDate
             )
 
 {
