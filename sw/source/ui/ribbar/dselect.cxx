@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dselect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:11:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:25:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ extern BOOL bNoInterrupt;       // in mainwn.cxx
 DrawSelection::DrawSelection(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView) :
                 SwDrawBase(pWrtShell, pEditWin, pSwView)
 {
-    bCreateObj = FALSE;
+    m_bCreateObj = FALSE;
 }
 
 /*************************************************************************
@@ -78,10 +78,10 @@ BOOL DrawSelection::KeyInput(const KeyEvent& rKEvt)
     {
         case KEY_ESCAPE:
         {
-            if (pWin->IsDrawAction())
+            if (m_pWin->IsDrawAction())
             {
-                pSh->BreakMark();
-                pWin->ReleaseMouse();
+                m_pSh->BreakMark();
+                m_pWin->ReleaseMouse();
             }
             bReturn = TRUE;
         }
@@ -102,10 +102,11 @@ BOOL DrawSelection::KeyInput(const KeyEvent& rKEvt)
 
 void DrawSelection::Activate(const USHORT nSlotId)
 {
-    pWin->SetDrawMode(SID_OBJECT_SELECT);
+    m_pWin->SetSdrDrawMode(OBJ_NONE);
+    m_pWin->SetObjectSelect( TRUE );
     SwDrawBase::Activate(nSlotId);
 
-    pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
+    m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
 }
 
 
