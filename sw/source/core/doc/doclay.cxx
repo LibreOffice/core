@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:18:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:36:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,7 +305,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
                 GetNodes().MakeTextSection
                 ( aTmpIdx,
                   bHeader ? SwHeaderStartNode : SwFooterStartNode,
-                  GetTxtCollFromPool(bHeader
+                  GetTxtCollFromPool(static_cast<sal_uInt16>( bHeader
                                      ? ( eRequest == RND_STD_HEADERL
                                          ? RES_POOLCOLL_HEADERL
                                          : eRequest == RND_STD_HEADERR
@@ -316,7 +316,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
                                          : eRequest == RND_STD_FOOTERR
                                          ? RES_POOLCOLL_FOOTERR
                                          : RES_POOLCOLL_FOOTER )
-                                     ) );
+                                     ) ) );
             pFmt->SetAttr( SwFmtCntnt( pSttNd ));
 
             if( pSet )      // noch ein paar Attribute setzen ?
@@ -888,7 +888,8 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
         if( !pFrmFmt )
             pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_FRAME );
 
-        sal_uInt16 nCollId = get(IDocumentSettingAccess::HTML_MODE) ? RES_POOLCOLL_TEXT : RES_POOLCOLL_FRAME;
+        sal_uInt16 nCollId = static_cast<sal_uInt16>(
+            get(IDocumentSettingAccess::HTML_MODE) ? RES_POOLCOLL_TEXT : RES_POOLCOLL_FRAME );
 
         /* #109161# If there exists no adjust item in the paragraph
             style for the content node of the new fly section
@@ -1208,8 +1209,8 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
     for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->Count(); ++n )
     {
         pFly = (*GetSpzFrmFmts())[ n ];
-        sal_Bool bDrawFmt = bDrawAlso ? RES_DRAWFRMFMT == pFly->Which() : sal_False;
-        sal_Bool bFlyFmt = RES_FLYFRMFMT == pFly->Which();
+        bool bDrawFmt = bDrawAlso ? RES_DRAWFRMFMT == pFly->Which() : false;
+        bool bFlyFmt = RES_FLYFRMFMT == pFly->Which();
         if( bFlyFmt || bDrawFmt )
         {
             const SwFmtAnchor& rAnchor = pFly->GetAnchor();
@@ -1521,8 +1522,8 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
 
                 pNewSet->Put( SwFmtSurround( SURROUND_NONE ) );
                 pNewSet->Put( SvxOpaqueItem( RES_OPAQUE, sal_True ) );
-                pNewSet->Put( SwFmtVertOrient( VERT_TOP ) );
-                pNewSet->Put( SwFmtHoriOrient( HORI_CENTER ) );
+                pNewSet->Put( SwFmtVertOrient( text::VertOrientation::TOP ) );
+                pNewSet->Put( SwFmtHoriOrient( text::HoriOrientation::CENTER ) );
 
                 aFrmSize = pOldFmt->GetFrmSize();
                 aFrmSize.SetWidthPercent( 100 );
@@ -1594,12 +1595,12 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
                 SwCharFmt* pCharFmt = FindCharFmtByName( rCharacterStyle );
                 if( !pCharFmt )
                 {
-                    const USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(rCharacterStyle, GET_POOLID_CHRFMT);
-                    pCharFmt = GetCharFmtFromPool( nId );
+                    const USHORT nMyId = SwStyleNameMapper::GetPoolIdFromUIName(rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
+                    pCharFmt = GetCharFmtFromPool( nMyId );
                 }
                 if(pCharFmt)
                     pNew->InsertItem( SwFmtCharFmt( pCharFmt ), 0,
-                                        nSepIdx + 1, SETATTR_DONTEXPAND );
+                                        nSepIdx + 1, nsSetAttrMode::SETATTR_DONTEXPAND );
             }
         }
 
@@ -1811,8 +1812,8 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     pNewSet->Put( SvxULSpaceItem( RES_UL_SPACE ) );
 
     // OD 2004-04-15 #i26791# - set position of the drawing object, which is labeled.
-    pNewSet->Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ) );
-    pNewSet->Put( SwFmtHoriOrient( 0, HORI_CENTER, FRAME ) );
+    pNewSet->Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
+    pNewSet->Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ) );
 
     //Der Alte ist absatzgebunden, und zwar am Absatz im neuen.
     SwFmtAnchor aAnch( FLY_AT_CNTNT );
@@ -1867,11 +1868,11 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
                 SwCharFmt* pCharFmt = FindCharFmtByName( rCharacterStyle );
                 if ( !pCharFmt )
                 {
-                    const USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( rCharacterStyle, GET_POOLID_CHRFMT );
-                    pCharFmt = GetCharFmtFromPool( nId );
+                    const USHORT nMyId = SwStyleNameMapper::GetPoolIdFromUIName( rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+                    pCharFmt = GetCharFmtFromPool( nMyId );
                 }
                 if ( pCharFmt )
-                    pNew->InsertItem( SwFmtCharFmt( pCharFmt ), 0, nSepIdx + 1, SETATTR_DONTEXPAND );
+                    pNew->InsertItem( SwFmtCharFmt( pCharFmt ), 0, nSepIdx + 1, nsSetAttrMode::SETATTR_DONTEXPAND );
             }
         }
     }
@@ -1955,7 +1956,8 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
         sal_uInt16 nFldUpdFlag;
         if( GetRootFrm()->IsIdleFormat() )
             GetRootFrm()->GetCurrShell()->LayoutIdle();
-        else if( ( AUTOUPD_FIELD_ONLY == ( nFldUpdFlag = getFieldUpdateFlags(true) )
+        else if( ( AUTOUPD_FIELD_ONLY ==
+                 ( nFldUpdFlag = static_cast<sal_uInt16>(getFieldUpdateFlags(true)) )
                     || AUTOUPD_FIELD_AND_CHARTS == nFldUpdFlag ) &&
                 GetUpdtFlds().IsFieldsDirty() &&
                 !GetUpdtFlds().IsInUpdateFlds() &&
@@ -2282,7 +2284,7 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
 short SwDoc::GetTextDirection( const SwPosition& rPos,
                                const Point* pPt ) const
 {
-    short nRet;
+    short nRet = -1;
 
     SwCntntNode *pNd = rPos.nNode.GetNode().GetCntntNode();
 
