@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmui.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:16:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:00:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@
 #define MN_COLUMN               (BMP_END + 2)
 #define MN_PAPERSZ              (BMP_END + 3)
 #define MN_BACKGROUND           (BMP_END + 4)
-#define MN_FRAME                (BMP_END + 5)
+
 #define STR_BACKGROUND          (BMP_END + 6)
 #define MN_FOOTNOTE             (BMP_END + 7)
 
@@ -142,7 +142,7 @@
 #define STR_CHAR_BOTTOM         (STR_FRMDLG_BEGIN + 54)
 #define STR_CHAR_CENTER         (STR_FRMDLG_BEGIN + 55)
 
-#define FRMDLG_ACT_END          STR_REL_LINE
+#define FRMDLG_ACT_END                  STR_CHAR_CENTER
 
 #if FRMDLG_ACT_END > RC_FRMDLG_END
 #error Resource-Id Ueberlauf in #file, #line
