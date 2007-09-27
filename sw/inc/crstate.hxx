@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crstate.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:47:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:57:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 #ifndef _CRSTATE_HXX
 #define _CRSTATE_HXX
 
+#include <com/sun/star/text/HoriOrientation.hpp>
+
 #ifndef _GEN_HXX //autogen
 #include <tools/gen.hxx>
 #endif
@@ -45,6 +47,7 @@
 #ifndef _SWRECT_HXX
 #include <swrect.hxx>
 #endif
+
 
 enum SwFillMode
 {
@@ -61,11 +64,11 @@ struct SwFillCrsrPos
     USHORT nTabCnt;         // Anzahl der Tabs bzw. Groesse des Einzugs
     USHORT nSpaceCnt;       // Anzahl der einzufuegenden Leerzeichen
     USHORT nColumnCnt;      // Anzahl der notwendigen Spaltenumbrueche
-    SwHoriOrient eOrient;   // Absatzausrichtung
+    sal_Int16 eOrient;      // Absatzausrichtung
     SwFillMode eMode;       // Gewuenschte Auffuellregel
     SwFillCrsrPos( SwFillMode eMd = FILL_TAB ) :
         nParaCnt( 0 ), nTabCnt( 0 ), nSpaceCnt( 0 ), nColumnCnt( 0 ),
-        eOrient( HORI_NONE ), eMode( eMd )
+        eOrient( com::sun::star::text::HoriOrientation::NONE ), eMode( eMd )
     {}
 };
 
