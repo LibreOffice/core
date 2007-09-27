@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrptfld.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:13:01 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:50:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,10 +71,10 @@ SwFieldType* SwScriptFieldType::Copy() const
     Beschreibung: SwScriptField
  --------------------------------------------------------------------*/
 
-SwScriptField::SwScriptField( SwScriptFieldType* pType,
+SwScriptField::SwScriptField( SwScriptFieldType* pInitType,
                                 const String& rType, const String& rCode,
                                 BOOL bURL )
-    : SwField( pType ), sType( rType ), sCode( rCode ), bCodeURL( bURL )
+    : SwField( pInitType ), sType( rType ), sCode( rCode ), bCodeURL( bURL )
 {
 }
 
@@ -124,10 +124,9 @@ String SwScriptField::GetPar2() const
 /*-----------------05.03.98 15:00-------------------
 
 --------------------------------------------------*/
-BOOL SwScriptField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwScriptField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
         rAny <<= OUString( sType );
@@ -146,10 +145,9 @@ BOOL SwScriptField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------05.03.98 15:00-------------------
 
 --------------------------------------------------*/
-BOOL SwScriptField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwScriptField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
         ::GetString( rAny, sType );
