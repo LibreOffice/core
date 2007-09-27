@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:01:11 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:45:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,9 @@ void SwEditShell::Insert( sal_Unicode c, BOOL bOnlyCurrCrsr )
     FOREACHPAM_START(this)
 
         if( !GetDoc()->Insert(*PCURCRSR, c) )
-            ASSERT( FALSE, "Doc->Insert(c) failed." );
+        {
+            ASSERT( FALSE, "Doc->Insert(c) failed." )
+        }
 
         SaveTblBoxCntnt( PCURCRSR->GetPoint() );
         if( bOnlyCurrCrsr )
@@ -185,7 +187,9 @@ void SwEditShell::Insert(const String &rStr)
     FOREACHPAM_START(this)
         //OPT: GetSystemCharSet
         if( !GetDoc()->Insert( *PCURCRSR, rStr, true ) )
-            ASSERT( FALSE, "Doc->Insert(Str) failed." );
+        {
+            ASSERT( FALSE, "Doc->Insert(Str) failed." )
+        }
 
         SaveTblBoxCntnt( PCURCRSR->GetPoint() );
 
@@ -250,7 +254,9 @@ void SwEditShell::Overwrite(const String &rStr)
     StartAllAction();
     FOREACHPAM_START(this)
         if( !GetDoc()->Overwrite(*PCURCRSR, rStr ) )
-            ASSERT( FALSE, "Doc->Overwrite(Str) failed." );
+        {
+            ASSERT( FALSE, "Doc->Overwrite(Str) failed." )
+        }
         SaveTblBoxCntnt( PCURCRSR->GetPoint() );
     FOREACHPAM_END()
     EndAllAction();
@@ -264,7 +270,7 @@ void SwEditShell::Overwrite(const String &rStr)
 long SwEditShell::SplitNode( BOOL bAutoFormat, BOOL bCheckTableStart )
 {
     StartAllAction();
-    GetDoc()->StartUndo(0, NULL);
+    GetDoc()->StartUndo(UNDO_EMPTY, NULL);
 
     FOREACHPAM_START(this)
         // eine Tabellen Zelle wird jetzt zu einer normalen Textzelle!
@@ -272,7 +278,7 @@ long SwEditShell::SplitNode( BOOL bAutoFormat, BOOL bCheckTableStart )
         GetDoc()->SplitNode( *PCURCRSR->GetPoint(), bCheckTableStart );
     FOREACHPAM_END()
 
-    GetDoc()->EndUndo(0, NULL);
+    GetDoc()->EndUndo(UNDO_EMPTY, NULL);
 
     if( bAutoFormat )
         AutoFmtBySplitNode();
@@ -290,14 +296,14 @@ sal_Bool SwEditShell::AppendTxtNode()
 {
     sal_Bool bRet = sal_False;
     StartAllAction();
-    GetDoc()->StartUndo(0, NULL);
+    GetDoc()->StartUndo(UNDO_EMPTY, NULL);
 
     FOREACHPAM_START(this)
         GetDoc()->ClearBoxNumAttrs( PCURCRSR->GetPoint()->nNode );
-        bRet |= GetDoc()->AppendTxtNode( *PCURCRSR->GetPoint());
+        bRet = GetDoc()->AppendTxtNode( *PCURCRSR->GetPoint()) || bRet;
     FOREACHPAM_END()
 
-    GetDoc()->EndUndo(0, NULL);
+    GetDoc()->EndUndo(UNDO_EMPTY, NULL);
 
     ClearTblBoxCntnt();
 
@@ -389,7 +395,7 @@ const GraphicObject* SwEditShell::GetGraphicObj() const
 USHORT SwEditShell::GetGraphicType() const
 {
     SwGrfNode *pGrfNode = _GetGrfNode();
-    return pGrfNode ? pGrfNode->GetGrfObj().GetType() : GRAPHIC_NONE;
+    return static_cast<USHORT>(pGrfNode ? pGrfNode->GetGrfObj().GetType() : GRAPHIC_NONE);
 }
 
 /******************************************************************************
@@ -401,10 +407,10 @@ USHORT SwEditShell::GetGraphicType() const
 BOOL SwEditShell::GetGrfSize(Size& rSz) const
 {
     SwNoTxtNode* pNoTxtNd;
-    SwPaM* pCurCrsr = GetCrsr();
-    if( ( !pCurCrsr->HasMark()
-         || pCurCrsr->GetPoint()->nNode == pCurCrsr->GetMark()->nNode )
-         && 0 != ( pNoTxtNd = pCurCrsr->GetNode()->GetNoTxtNode() ) )
+    SwPaM* pCurrentCrsr = GetCrsr();
+    if( ( !pCurrentCrsr->HasMark()
+         || pCurrentCrsr->GetPoint()->nNode == pCurrentCrsr->GetMark()->nNode )
+         && 0 != ( pNoTxtNd = pCurrentCrsr->GetNode()->GetNoTxtNode() ) )
     {
         rSz = pNoTxtNd->GetTwipSize();
         return TRUE;
@@ -613,10 +619,6 @@ void SwEditShell::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
     GetDoc()->SetTableName( rTblFmt, rNewName );
 }
 
-#ifdef _MSC_VER
-#pragma optimize("",on)
-#endif
-
 // erfragen des akt. Wortes
 
 String SwEditShell::GetCurWord()
@@ -626,7 +628,6 @@ String SwEditShell::GetCurWord()
     String aString = pNd ?
                      pNd->GetCurWord(rPaM.GetPoint()->nContent.GetIndex()) :
                      aEmptyStr;
-    aString.EraseAllChars('\xff');
     return aString;
 }
 
@@ -688,16 +689,16 @@ String SwEditShell::GetDropTxt( const USHORT nChars ) const
         SwPaM* pTemp = pCrsr;
         while ( bPrev )
         {
-            SwPaM* pPrev = dynamic_cast< SwPaM* >( pTemp->GetPrev() );
-            bPrev = ( pPrev && pPrev != pLast );
+            SwPaM* pPrev2 = dynamic_cast< SwPaM* >( pTemp->GetPrev() );
+            bPrev = ( pPrev2 && pPrev2 != pLast );
             if ( bPrev )
             {
-                pTemp = pPrev;
-                ULONG nTemp = pPrev->GetMark()->nNode.GetIndex();
+                pTemp = pPrev2;
+                ULONG nTemp = pPrev2->GetMark()->nNode.GetIndex();
                 if ( nTemp < nIndex )
                 {
                     nIndex = nTemp;
-                    pCrsr = pPrev;
+                    pCrsr = pPrev2;
                 }
             }
         }
@@ -768,7 +769,7 @@ String SwEditShell::Calculate()
                 ch = aStr.GetChar( nPos++ );
                 if( rCC.isLetter( aStr, nPos-1 ) || ch == '_' )
                 {
-                    xub_StrLen nStt = nPos-1;
+                    xub_StrLen nTmpStt = nPos-1;
                     while(  nPos < aStr.Len() &&
                             0 != ( ch = aStr.GetChar( nPos++ )) &&
                            (rCC.isLetterNumeric( aStr, nPos - 1 ) ||
@@ -778,7 +779,7 @@ String SwEditShell::Calculate()
                     if( nPos < aStr.Len() )
                         --nPos;
 
-                    String sVar( aStr.Copy( nStt, nPos - nStt ));
+                    String sVar( aStr.Copy( nTmpStt, nPos - nTmpStt ));
                     if( !::FindOperator( sVar ) &&
                         (::Find( sVar, aCalc.GetVarTable(),TBLSZ) ||
                          aCalc.VarLook( sVar )) )
@@ -866,7 +867,7 @@ BOOL SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, BOOL 
     if( !rFmt.GetValue().Len() ||   ( !rStr.Len() && !HasSelection() ) )
         return FALSE;
     StartAllAction();
-    GetDoc()->StartUndo( UIUNDO_INSERT_URLTXT, NULL);
+    GetDoc()->StartUndo( UNDO_UI_INSERT_URLTXT, NULL);
     BOOL bInsTxt = TRUE;
 
     if( rStr.Len() )
@@ -910,7 +911,7 @@ BOOL SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, BOOL 
         ClearMark();
     if( bInsTxt )
         DontExpandFmt();
-    GetDoc()->EndUndo( UIUNDO_INSERT_URLTXT, NULL );
+    GetDoc()->EndUndo( UNDO_UI_INSERT_URLTXT, NULL );
     EndAllAction();
     return TRUE;
 }
@@ -954,7 +955,7 @@ USHORT SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
     // geloescht; inclusive des Hinweistextes (wird beim Drag&Drop gebraucht)
 BOOL SwEditShell::DelINetAttrWithText()
 {
-    BOOL bRet = SelectTxtAttr( RES_TXTATR_INETFMT );
+    BOOL bRet = SelectTxtAttr( RES_TXTATR_INETFMT, FALSE );
     if( bRet )
         DeleteSel( *GetCrsr() );
     return bRet;
@@ -1035,7 +1036,8 @@ void SwEditShell::SetNumberingRestart()
                                  ( pTxtNd->HasNumber() || pTxtNd->HasBullet() ) &&
                                  pTxtNd->IsCounted() &&
                                  !pTxtNd->IsRestart() &&
-                                 pTxtNd->GetNum()->GetNumber() == pNumRule->Get( pTxtNd->GetLevel() ).GetStart() )
+                                 pTxtNd->GetNum()->GetNumber() == pNumRule->Get(
+                                    static_cast<USHORT>(pTxtNd->GetLevel()) ).GetStart() )
 //                            const SwNodeNum* pNodeNum = ((SwTxtNode*)pNd)->_GetNodeNum();
 //                            SwNumRule *pNumRule = ((SwTxtNode*)pNd)->GetNumRule();
 
@@ -1080,7 +1082,7 @@ USHORT SwEditShell::GetLineCount( BOOL bActPos )
     SwNodeIndex& rPtIdx = pPam->GetPoint()->nNode;
     SwNodeIndex aStart( rPtIdx );
     SwCntntNode* pCNd;
-    SwCntntFrm *pCntFrm;
+    SwCntntFrm *pCntFrm = 0;
     ULONG nTmpPos;
 
     if( !bActPos )
@@ -1123,7 +1125,7 @@ USHORT SwEditShell::GetLineCount( BOOL bActPos )
         {
             xub_StrLen nActPos = bActPos && aStart == rPtIdx ?
                 pPam->GetPoint()->nContent.GetIndex() : USHRT_MAX;
-            nRet += ((SwTxtFrm*)pCntFrm)->GetLineCount( nActPos );
+            nRet = nRet + ((SwTxtFrm*)pCntFrm)->GetLineCount( nActPos );
         }
     }
     return nRet;
@@ -1289,14 +1291,14 @@ void SwEditShell::TransliterateText( sal_uInt32 nType )
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )
     {
-        GetDoc()->StartUndo(0, NULL);
+        GetDoc()->StartUndo(UNDO_EMPTY, NULL);
         FOREACHPAM_START( this )
 
         if( PCURCRSR->HasMark() )
             GetDoc()->TransliterateText( *PCURCRSR, aTrans );
 
         FOREACHPAM_END()
-        GetDoc()->EndUndo(0, NULL);
+        GetDoc()->EndUndo(UNDO_EMPTY, NULL);
     }
     else
         GetDoc()->TransliterateText( *pCrsr, aTrans );
