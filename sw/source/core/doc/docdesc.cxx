@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:55:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,8 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
     // <--
 
     SwFmtFrmSize aFrmSize( ATT_FIX_SIZE );
-    SvxPaper ePaper = SvxPaperInfo::GetDefaultSvxPaper( GetAppLanguage() );
+    SvxPaper ePaper = SvxPaperInfo::GetDefaultSvxPaper(
+        static_cast<LanguageType>( GetAppLanguage() ) );
     const Size aPhysSize = SvxPaperInfo::GetPaperSize( ePaper );
     aFrmSize.SetSize( aPhysSize );
 
@@ -292,7 +293,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
     }
 
     //Als erstes wird ggf. gespiegelt.
-    if ( rChged.GetUseOn() == PD_MIRROR )
+    if ( rChged.GetUseOn() == nsUseOnPage::PD_MIRROR )
         ((SwPageDesc&)rChged).Mirror();
     else
         //sonst Werte aus Master nach Left uebertragen.
@@ -532,7 +533,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 |*
 |*************************************************************************/
 
-void lcl_RemoveFrms( SwFrmFmt& rFmt, FASTBOOL& rbFtnsRemoved )
+void lcl_RemoveFrms( SwFrmFmt& rFmt, BOOL& rbFtnsRemoved )
 {
     SwClientIter aIter( rFmt );
     SwFrm *pFrm;
@@ -614,7 +615,7 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
         // Wenn wir auf Endnotenseiten stossen, schmeissen wir alle Fussnoten weg,
         // anders kann die Reihenfolge der Seiten (FollowsPageDescs usw.)
         // nicht garantiert werden.
-        FASTBOOL bFtnsRemoved = FALSE;
+        BOOL bFtnsRemoved = FALSE;
 
         ::lcl_RemoveFrms( pDel->GetMaster(), bFtnsRemoved );
         ::lcl_RemoveFrms( pDel->GetLeft(), bFtnsRemoved );
@@ -896,11 +897,11 @@ void SwDoc::PrtOLENotify( BOOL bAll )
                 }
 
                 BOOL bFound = FALSE;
-                for ( USHORT i = 0;
-                      i < pGlobalOLEExcludeList->Count() && !bFound;
-                      ++i )
+                for ( USHORT j = 0;
+                      j < pGlobalOLEExcludeList->Count() && !bFound;
+                      ++j )
                 {
-                    bFound = *(SvGlobalName*)(*pGlobalOLEExcludeList)[i] ==
+                    bFound = *(SvGlobalName*)(*pGlobalOLEExcludeList)[j] ==
                                     aName;
                 }
                 if ( bFound )
@@ -935,7 +936,7 @@ void SwDoc::PrtOLENotify( BOOL bAll )
     }
 }
 
-IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, pTimer )
+IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
 {
     SwFEShell* pSh = (SwFEShell*)GetEditShell();
     if( pSh )
