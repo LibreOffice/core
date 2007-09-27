@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblrwcl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:23:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:59:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,8 +109,9 @@ class SwCollectTblLineBoxes
 public:
     SwCollectTblLineBoxes( BOOL bTop, USHORT nMd = 0, SwHistory* pHist=0 )
         : aPosArr( 16, 16 ), aBoxes( 16, 16 ),
-        bGetFromTop( bTop ), bGetValues( TRUE ), nMode( nMd ),
-        nWidth( 0 ), pHst( pHist )
+        pHst( pHist ), nMode( nMd ), nWidth( 0 ),
+        bGetFromTop( bTop ), bGetValues( TRUE )
+
     {}
 
     void AddBox( const SwTableBox& rBox );
@@ -133,7 +134,7 @@ public:
     USHORT GetMode() const              { return nMode; }
     void SetValues( BOOL bFlag )        { bGetValues = FALSE; nWidth = 0;
                                           bGetFromTop = bFlag; }
-    FASTBOOL Resize( USHORT nOffset, USHORT nWidth );
+    BOOL Resize( USHORT nOffset, USHORT nWidth );
 };
 
 BOOL lcl_Box_CollectBox( const SwTableBox*& rpBox, void* pPara );
@@ -151,10 +152,10 @@ struct _SwGCLineBorder
     USHORT nLinePos;
 
     _SwGCLineBorder( const SwTable& rTable )
-        : pLines( &rTable.GetTabLines() ), nLinePos( 0 ), pShareFmts(0) {}
+        : pLines( &rTable.GetTabLines() ), pShareFmts(0), nLinePos( 0 )  {}
 
     _SwGCLineBorder( const SwTableBox& rBox )
-        : pLines( &rBox.GetTabLines() ), nLinePos( 0 ), pShareFmts(0) {}
+        : pLines( &rBox.GetTabLines() ), pShareFmts(0), nLinePos( 0 )  {}
     BOOL IsLastLine() const { return nLinePos + 1 >= pLines->Count(); }
 };
 
@@ -201,7 +202,7 @@ public:
     SwFrmFmt* GetFormat( const SfxPoolItem& rItem ) const;
     void AddFormat( const SwFrmFmt& rFmt );
     // returnt TRUE, wenn geloescht werden kann
-    FASTBOOL RemoveFormat( const SwFrmFmt& rFmt );
+    BOOL RemoveFormat( const SwFrmFmt& rFmt );
 };
 
 
