@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuiccoll.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:05:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:11:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #define _SWUI_CCOLL_HXX
 
 #include "ccoll.hxx"
+
+class SwWrtShell;
+class SwFmt;
 
 class SwCondCollPage : public SfxTabPage
 {
@@ -76,6 +79,9 @@ class SwCondCollPage : public SfxTabPage
 
 public:
 
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
     static USHORT* GetRanges();
 
@@ -88,3 +94,4 @@ public:
 
 
 #endif
+
