@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RefreshListenerContainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:27:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:39:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-SwRefreshListenerContainer::SwRefreshListenerContainer( uno::XInterface* pxParent)
-: SwEventListenerContainer ( pxParent )
+SwRefreshListenerContainer::SwRefreshListenerContainer( uno::XInterface* pxParent2 )
+: SwEventListenerContainer ( pxParent2 )
 {
 }
 
