@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:20:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:00:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ namespace sw
         Tracer::Tracer(const SfxMedium &rMed)
             : mpTrace(0)
         {
-            using namespace com::sun::star::uno;
+            using namespace ::com::sun::star::uno;
             using namespace ::com::sun::star::beans;
             Sequence<PropertyValue> aConfig(1);
             PropertyValue aPropValue;
@@ -73,7 +73,8 @@ namespace sw
             aPropValue.Name = C2O("DocumentURL");
             aConfig[0] = aPropValue;
             OUString aTraceConfigPath(CAU("Office.Tracing/Import/Word"));
-            if ((mpTrace = new MSFilterTracer(aTraceConfigPath, &aConfig)))
+            mpTrace = new MSFilterTracer(aTraceConfigPath, &aConfig);
+            if (mpTrace)
                 mpTrace->StartTracing();
         }
 
