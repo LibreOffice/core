@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:12:00 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:17:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,13 +156,11 @@ SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper( Window *pParentWindow,
                             SfxChildWinInfo* pInfo ) :
         SfxChildWindow(pParentWindow, nId)
 {
-
-    //CHINA001 pWindow = new SwIndexMarkFloatDlg(pBindings, this, pParentWindow, pInfo );
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-    pAbstDlg = pFact->CreateIndexMarkFloatDlg( DLG_INSIDXMARK, pBindings, this, pParentWindow, pInfo );
-    DBG_ASSERT(pAbstDlg, "Dialogdiet fail!");//CHINA001
-    pWindow = pAbstDlg->GetWindow(); //CHINA001
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+    pAbstDlg = pFact->CreateIndexMarkFloatDlg( DLG_INSIDXMARK , pBindings, this, pParentWindow, pInfo );
+    DBG_ASSERT(pAbstDlg, "Dialogdiet fail!");
+    pWindow = pAbstDlg->GetWindow();
     pWindow->Show();    // at this point,because before pSh has to be initialized in ReInitDlg()
                         // -> Show() will invoke StateChanged() and save pos
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
@@ -179,7 +177,7 @@ SfxChildWinInfo SwInsertIdxMarkWrapper::GetInfo() const
 
 void    SwInsertIdxMarkWrapper::ReInitDlg(SwWrtShell& rWrtShell)
 {
-    pAbstDlg->ReInitDlg(rWrtShell); //CHINA001 ((SwIndexMarkFloatDlg*)pWindow)->ReInitDlg(rWrtShell);
+    pAbstDlg->ReInitDlg(rWrtShell);
 }
 
 
@@ -194,13 +192,11 @@ SwInsertAuthMarkWrapper::SwInsertAuthMarkWrapper(   Window *pParentWindow,
                             SfxChildWinInfo* pInfo ) :
         SfxChildWindow(pParentWindow, nId)
 {
-
-    //CHINA001 pWindow = new SwAuthMarkFloatDlg(pBindings, this, pParentWindow, pInfo );
-    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
     pAbstDlg = pFact->CreateAuthMarkFloatDlg( DLG_INSAUTHMARK, pBindings, this, pParentWindow, pInfo );
-    DBG_ASSERT(pAbstDlg, "Dialogdiet fail!");//CHINA001
-    pWindow = pAbstDlg->GetWindow(); //CHINA001
+    DBG_ASSERT(pAbstDlg, "Dialogdiet fail!");
+    pWindow = pAbstDlg->GetWindow();
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 }
@@ -217,6 +213,6 @@ SfxChildWinInfo SwInsertAuthMarkWrapper::GetInfo() const
  --------------------------------------------------*/
 void    SwInsertAuthMarkWrapper::ReInitDlg(SwWrtShell& rWrtShell)
 {
-    pAbstDlg->ReInitDlg(rWrtShell);//CHINA001 ((SwAuthMarkFloatDlg*)pWindow)->ReInitDlg(rWrtShell);
+    pAbstDlg->ReInitDlg(rWrtShell);
 }
 
