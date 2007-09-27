@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:32:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:21:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
         return sal_False;;
     // Wir machen den Laden erstmal dicht:
     ASSERT( !IsLocked(), "SwTxtFrm::Hyphenate: this is locked" );
-    // 4935: Der ::com::sun::star::frame::Frame muss eine gueltige SSize haben!
+    // 4935: Der frame::Frame muss eine gueltige SSize haben!
     Calc();
     GetFormatted();
 
@@ -252,11 +252,11 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
                 && ( !pPos->IsSoftHyphPortion()
                      || ((SwSoftHyphPortion*)pPos)->IsExpand() ) )
             {
-                nWrdStart += pPos->GetLen();
+                nWrdStart = nWrdStart + pPos->GetLen();
                 break;
             }
 
-            nWrdStart += pPos->GetLen();
+            nWrdStart = nWrdStart + pPos->GetLen();
             pPos = pPos->GetPortion();
         }
         // Wenn pPos 0 ist, wurde keine Trennstelle ermittelt.
@@ -318,7 +318,7 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
                 if( nWrdStart + nLen > nEnd )
                     nMinTrail = nWrdStart + nLen - nEnd - 1;
 
-                //!! rHyphInf.SetHyphWord( ... ) muß hier geschehen
+                //!! rHyphInf.SetHyphWord( ... ) mu??? hier geschehen
                 xHyphWord = rInf.HyphWord( aSelTxt, nMinTrail );
                 bRet = xHyphWord.is();
                 if ( !rHyphInf.IsCheck() && sal_False == bRet )
@@ -485,7 +485,7 @@ void SwHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
 
 sal_Bool SwHyphPortion::Format( SwTxtFormatInfo &rInf )
 {
-    register const SwLinePortion *pLast = rInf.GetLast();
+    const SwLinePortion *pLast = rInf.GetLast();
     Height( pLast->Height() );
     SetAscent( pLast->GetAscent() );
     XubString aTxt;
