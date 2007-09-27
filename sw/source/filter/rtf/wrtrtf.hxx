@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtrtf.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:46:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@ class SwNumRule;
 class SwNumRuleTbl;
 class DateTime;
 class RTFEndPosLst;
+class SvxBorderLine;
 
 extern SwAttrFnTab aRTFAttrFnTab;
 extern SwNodeFnTab aRTFNodeFnTab;
