@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiitems.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:27:04 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:49:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ SwPageFtnInfoItem::SwPageFtnInfoItem( const SwPageFtnInfoItem& rItem ) :
 }
 
 
-SfxPoolItem*  SwPageFtnInfoItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem*  SwPageFtnInfoItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwPageFtnInfoItem( *this );
 }
@@ -131,6 +131,7 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
             }
             return ePres;
         }
+        default:; //prevent warning
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -143,7 +144,7 @@ BOOL SwPageFtnInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
     switch(nMemberId & ~CONVERT_TWIPS)
     {
         case MID_FTN_HEIGHT        :     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetHeight());break;
-        case MID_LINE_WEIGHT       :     rVal <<= (sal_Int16)TWIP_TO_MM100(aFtnInfo.GetLineWidth());break;
+        case MID_LINE_WEIGHT       :     rVal <<= (sal_Int16)TWIP_TO_MM100_UNSIGNED(aFtnInfo.GetLineWidth());break;
         case MID_LINE_COLOR        :     rVal <<= (sal_Int32)aFtnInfo.GetLineColor().GetColor();break;
         case MID_LINE_RELWIDTH     :
         {
@@ -152,7 +153,7 @@ BOOL SwPageFtnInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
             rVal <<= (sal_Int8)(long)aTmp;
         }
         break;
-        case MID_LINE_ADJUST       :     rVal <<= (sal_Int16)aFtnInfo.GetAdj();break;//com::sun::star::text::HorizontalAdjust
+        case MID_LINE_ADJUST       :     rVal <<= (sal_Int16)aFtnInfo.GetAdj();break;//text::HorizontalAdjust
         case MID_LINE_TEXT_DIST    :     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetTopDist());break;
         case MID_LINE_FOOTNOTE_DIST:     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetBottomDist());break;
         default:
@@ -211,7 +212,7 @@ BOOL SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
         case MID_LINE_ADJUST       :
         {
             sal_Int16 nSet; rVal >>= nSet;
-            if(nSet >= 0 && nSet < 3) //com::sun::star::text::HorizontalAdjust
+            if(nSet >= 0 && nSet < 3) //text::HorizontalAdjust
                 aFtnInfo.SetAdj((SwFtnAdj)nSet);
             else
                 bRet = sal_False;
@@ -244,7 +245,7 @@ SwPtrItem::SwPtrItem( const SwPtrItem& rItem ) : SfxPoolItem( rItem )
  --------------------------------------------------------------------*/
 
 
-SfxPoolItem* SwPtrItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SwPtrItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwPtrItem( *this );
 }
@@ -282,7 +283,7 @@ SwUINumRuleItem::SwUINumRuleItem( const SwUINumRuleItem& rItem )
 }
 
 
-SfxPoolItem*  SwUINumRuleItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem*  SwUINumRuleItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwUINumRuleItem( *this );
 }
@@ -293,20 +294,20 @@ int  SwUINumRuleItem::operator==( const SfxPoolItem& rAttr ) const
     return *pRule == *((SwUINumRuleItem&)rAttr).pRule;
 }
 
-BOOL SwUINumRuleItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+BOOL SwUINumRuleItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
     uno::Reference< container::XIndexReplace >xRules = new SwXNumberingRules(*pRule);
     rVal.setValue(&xRules, ::getCppuType((uno::Reference< container::XIndexReplace>*)0));
     return TRUE;
 }
-BOOL SwUINumRuleItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+BOOL SwUINumRuleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 {
     uno::Reference< container::XIndexReplace> xRulesRef;
     if(rVal >>= xRulesRef)
     {
         uno::Reference< lang::XUnoTunnel > xTunnel(xRulesRef, uno::UNO_QUERY);
-        SwXNumberingRules* pSwXRules = xTunnel.is() ? (SwXNumberingRules*)
-                    xTunnel->getSomething(SwXNumberingRules::getUnoTunnelId()) : 0;
+        SwXNumberingRules* pSwXRules = xTunnel.is() ? reinterpret_cast<SwXNumberingRules*>(
+                    xTunnel->getSomething(SwXNumberingRules::getUnoTunnelId())) : 0;
         if(pSwXRules)
         {
             *pRule = *pSwXRules->GetNumRule();
@@ -317,14 +318,14 @@ BOOL SwUINumRuleItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 /* -----------------17.06.98 17:43-------------------
  *
  * --------------------------------------------------*/
-SwBackgroundDestinationItem::SwBackgroundDestinationItem(USHORT  nWhich, USHORT nValue) :
-    SfxUInt16Item(nWhich, nValue)
+SwBackgroundDestinationItem::SwBackgroundDestinationItem(USHORT  _nWhich, USHORT nValue) :
+    SfxUInt16Item(_nWhich, nValue)
 {
 }
 /* -----------------17.06.98 17:44-------------------
  *
  * --------------------------------------------------*/
-SfxPoolItem*     SwBackgroundDestinationItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem*     SwBackgroundDestinationItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwBackgroundDestinationItem(Which(), GetValue());
 }
