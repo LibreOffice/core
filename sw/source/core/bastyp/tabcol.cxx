@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabcol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:44:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:28:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,8 @@ SwTabCols::SwTabCols( const SwTabCols& rCpy ) :
     {
         SwTabColsEntry aEntry1 = aData[i];
         SwTabColsEntry aEntry2 = rCpy.GetData()[i];
+        (void) aEntry1;
+        (void) aEntry2;
         ASSERT( aEntry1.nPos == aEntry2.nPos &&
                 aEntry1.nMin == aEntry2.nMin &&
                 aEntry1.nMax == aEntry2.nMax &&
