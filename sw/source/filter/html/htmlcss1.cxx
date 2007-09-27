@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:04:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:45:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,9 @@
 #include "htmlnum.hxx"
 #include "swhtml.hxx"
 
+using namespace ::com::sun::star;
+
+
 // Wie viele Zeilen/Zeichen sind fuer DropCaps erlaubt?
 // (Gibt es vielleicht woanders entsprechende Werte?)
 #define MAX_DROPCAP_LINES 9
@@ -183,11 +186,18 @@ void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
 SwCSS1Parser::SwCSS1Parser( SwDoc *pD, sal_uInt32 aFHeights[7], const String& rBaseURL, BOOL bNewDoc ) :
     SvxCSS1Parser( pD->GetAttrPool(), rBaseURL, MM50/2,
                    (USHORT*)&aItemIds, sizeof(aItemIds) / sizeof(USHORT) ),
-    nDropCapCnt( 0 ), bIsNewDoc( bNewDoc ), pDoc( pD ),
-    bBodyBGColorSet( FALSE ), bBodyBackgroundSet( FALSE ),
-    bBodyTextSet( FALSE ), bBodyLinkSet( FALSE ), bBodyVLinkSet( FALSE ),
-    bSetFirstPageDesc( FALSE ), bSetRightPageDesc( FALSE ),
-    bTableHeaderTxtCollSet( FALSE ), bTableTxtCollSet( FALSE ),
+    pDoc( pD ),
+    nDropCapCnt( 0 ),
+    bIsNewDoc( bNewDoc ),
+    bBodyBGColorSet( FALSE ),
+    bBodyBackgroundSet( FALSE ),
+    bBodyTextSet( FALSE ),
+    bBodyLinkSet( FALSE ),
+    bBodyVLinkSet( FALSE ),
+    bSetFirstPageDesc( FALSE ),
+    bSetRightPageDesc( FALSE ),
+    bTableHeaderTxtCollSet( FALSE ),
+    bTableTxtCollSet( FALSE ),
     bLinkCharFmtsSet( FALSE )
 {
     aFontHeights[0] = aFHeights[0];
@@ -234,6 +244,8 @@ BOOL SwCSS1Parser::SetFmtBreak( SfxItemSet& rItemSet,
 //  case SVX_CSS1_PBREAK_AVOID:
         // Hier koennte man SvxKeepItem am Absatz davor einfuegen
 //      break;
+    default:
+        ;
     }
     switch( rPropInfo.ePageBreakAfter )
     {
@@ -250,6 +262,8 @@ BOOL SwCSS1Parser::SetFmtBreak( SfxItemSet& rItemSet,
     case SVX_CSS1_PBREAK_AVOID:
         bKeep = bSetKeep = TRUE;
         break;
+    default:
+        ;
     }
 
     if( bSetBreak )
@@ -460,7 +474,7 @@ void SwCSS1Parser::SetTableTxtColl( BOOL bHeader )
 }
 
 void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
-                                     SfxItemSet *pItemSet )
+                                     SfxItemSet *pItemSet2 )
 {
     SvxBrushItem aBrushItem( RES_BACKGROUND );
     SvxBoxItem aBoxItem( RES_BOX );
@@ -469,39 +483,39 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
     if( pBrush )
         aBrushItem = *pBrush;
 
-    if( pItemSet )
+    if( pItemSet2 )
     {
         const SfxPoolItem *pItem = 0;
-        if( SFX_ITEM_SET == pItemSet->GetItemState( RES_BACKGROUND, FALSE,
+        if( SFX_ITEM_SET == pItemSet2->GetItemState( RES_BACKGROUND, FALSE,
                                                    &pItem ) )
         {
             // ein Hintergrund wird gesetzt
             aBrushItem = *((const SvxBrushItem *)pItem);
-            pItemSet->ClearItem( RES_BACKGROUND );
+            pItemSet2->ClearItem( RES_BACKGROUND );
             bSetBrush = TRUE;
         }
 
-        if( SFX_ITEM_SET == pItemSet->GetItemState( RES_BOX, FALSE, &pItem ) )
+        if( SFX_ITEM_SET == pItemSet2->GetItemState( RES_BOX, FALSE, &pItem ) )
         {
             // eine Umrandung wird gesetzt
             aBoxItem = *((const SvxBoxItem *)pItem);
-            pItemSet->ClearItem( RES_BOX );
+            pItemSet2->ClearItem( RES_BOX );
             bSetBox = TRUE;
         }
 
-        if( SFX_ITEM_SET == pItemSet->GetItemState( RES_BOX, FALSE, &pItem ) )
+        if( SFX_ITEM_SET == pItemSet2->GetItemState( RES_BOX, FALSE, &pItem ) )
         {
             // eine Umrandung wird gesetzt
             aBoxItem = *((const SvxBoxItem *)pItem);
-            pItemSet->ClearItem( RES_BOX );
+            pItemSet2->ClearItem( RES_BOX );
             bSetBox = TRUE;
         }
 
-        if( SFX_ITEM_SET == pItemSet->GetItemState( RES_FRAMEDIR, FALSE, &pItem ) )
+        if( SFX_ITEM_SET == pItemSet2->GetItemState( RES_FRAMEDIR, FALSE, &pItem ) )
         {
             // eine Umrandung wird gesetzt
             aFrmDirItem = *static_cast< const SvxFrameDirectionItem *>( pItem );
-            pItemSet->ClearItem( RES_FRAMEDIR );
+            pItemSet2->ClearItem( RES_FRAMEDIR );
             bSetFrmDir = TRUE;
         }
     }
@@ -662,7 +676,7 @@ sal_uInt16 SwCSS1Parser::GetScriptFromClass( String& rClass,
     else
     {
         nPos++;
-        nLen -= nPos;
+        nLen = nLen - nPos;
     }
 
     switch( nLen )
@@ -831,10 +845,10 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         return TRUE;
 
     // Token und Class zu dem Selektor holen
-    String aToken, aClass;
+    String aToken2, aClass;
     sal_uInt16 nScript;
-    eSelType = GetTokenAndClass( pSelector, aToken, aClass, nScript );
-    int nToken = GetHTMLToken( aToken );
+    eSelType = GetTokenAndClass( pSelector, aToken2, aClass, nScript );
+    int nToken2 = GetHTMLToken( aToken2 );
 
     // und noch ein ganz par Infos zum naechsten Element
     CSS1SelectorType eNextType = pNext ? pNext->GetType()
@@ -843,12 +857,12 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     // Erstmal ein par Spezialfaelle
     if( CSS1_SELTYPE_ELEMENT==eSelType )
     {
-        switch( nToken )
+        switch( nToken2 )
         {
         case HTML_ANCHOR_ON:
             if( !pNext )
             {
-                InsertTag( aToken, rItemSet, rPropInfo );
+                InsertTag( aToken2, rItemSet, rPropInfo );
                 return FALSE;
             }
             else if( pNext && CSS1_SELTYPE_PSEUDO == eNextType )
@@ -876,7 +890,7 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 }
                 if( bInsert )
                 {
-                    String sTmp( aToken );
+                    String sTmp( aToken2 );
                     (sTmp += ':') += aPseudo;
                     if( CSS1_SCRIPT_ALL != nScript )
                     {
@@ -933,7 +947,7 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             break;
         }
     }
-    else if( CSS1_SELTYPE_ELEM_CLASS==eSelType &&  HTML_ANCHOR_ON==nToken &&
+    else if( CSS1_SELTYPE_ELEM_CLASS==eSelType &&  HTML_ANCHOR_ON==nToken2 &&
              !pNext && aClass.Len() >= 9 &&
              ('s' == aClass.GetChar(0) || 'S' == aClass.GetChar(0)) )
     {
@@ -962,7 +976,7 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     // Jetzt werden die Selektoren verarbeitet, die zu einer Absatz-Vorlage
     // gehoehren
     USHORT nPoolCollId = 0;
-    switch( nToken )
+    switch( nToken2 )
     {
     case HTML_HEAD1_ON:
         nPoolCollId = RES_POOLCOLL_HEADLINE1;
@@ -1020,7 +1034,7 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     case HTML_TABLEDATA_ON:
         if( CSS1_SELTYPE_ELEMENT==eSelType && !pNext )
         {
-            InsertTag( aToken, rItemSet, rPropInfo );
+            InsertTag( aToken2, rItemSet, rPropInfo );
             return FALSE;
         }
         else if( CSS1_SELTYPE_ELEMENT==eSelType && pNext &&
@@ -1038,13 +1052,13 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
 
                 if( aClass.Len() || pNext )
                 {
-                    nPoolCollId =
-                        HTML_TABLEHEADER_ON == nToken ? RES_POOLCOLL_TABLE_HDLN
-                                                      : RES_POOLCOLL_TABLE;
+                    nPoolCollId = static_cast< USHORT >(
+                        HTML_TABLEHEADER_ON == nToken2 ? RES_POOLCOLL_TABLE_HDLN
+                                                      : RES_POOLCOLL_TABLE );
                 }
                 else
                 {
-                    String sTmp( aToken );
+                    String sTmp( aToken2 );
                     sTmp += ' ';
                     sTmp.AppendAscii( sHTML_parabreak );
 
@@ -1064,6 +1078,9 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             }
         }
         break;
+
+        default:
+            ;
     }
 
     if( nPoolCollId )
@@ -1175,7 +1192,7 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     if( pNext )
         return TRUE;
 
-    SwCharFmt *pCFmt = GetChrFmt( nToken, aEmptyStr );
+    SwCharFmt *pCFmt = GetChrFmt( static_cast< USHORT >(nToken2), aEmptyStr );
     if( pCFmt )
     {
         SwCharFmt *pParentCFmt = 0;
@@ -1232,12 +1249,12 @@ const FontList *SwCSS1Parser::GetFontList() const
 
 /*  */
 
-SwCharFmt* SwCSS1Parser::GetChrFmt( USHORT nToken, const String& rClass ) const
+SwCharFmt* SwCSS1Parser::GetChrFmt( USHORT nToken2, const String& rClass ) const
 {
     // die entsprechende Vorlage suchen
     USHORT nPoolId = 0;
     const sal_Char* sName = 0;
-    switch( nToken )
+    switch( nToken2 )
     {
     case HTML_EMPHASIS_ON:      nPoolId = RES_POOLCHR_HTML_EMPHASIS;    break;
     case HTML_CITIATION_ON:     nPoolId = RES_POOLCHR_HTML_CITIATION;   break;
@@ -1617,8 +1634,8 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
     // ein rechter Rand wird der Abstand zum Text!
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_LR_SPACE, FALSE, &pItem ) )
     {
-        rDrop.GetDistance() =
-            ((const SvxLRSpaceItem *)pItem)->GetRight();
+        rDrop.GetDistance() = static_cast< USHORT >(
+            ((const SvxLRSpaceItem *)pItem)->GetRight() );
         rItemSet.ClearItem( RES_LR_SPACE );
     }
 
@@ -1790,10 +1807,10 @@ void SwHTMLParser::NewStyle()
 {
     String sType;
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pOptions2 = GetOptions();
+    for( USHORT i = pOptions2->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pOptions2)[--i];
         if( HTML_O_TYPE==pOption->GetToken() )
             sType = pOption->GetString();
     }
@@ -1860,6 +1877,7 @@ BOOL SwHTMLParser::FileDownload( const String& rURL,
         CallStartAction( pOldVSh );
 #if OSL_DEBUG_LEVEL > 1
     ASSERT( pOldVSh == pVSh, "FileDownload: ViewShell wurde ausgetauscht" );
+    (void) pVSh;
 #endif
 
     return pStream!=0;
@@ -1884,10 +1902,10 @@ void SwHTMLParser::InsertLink()
     {
         String sRel, sHRef, sType;
 
-        const HTMLOptions *pOptions = GetOptions();
-        for( USHORT i = pOptions->Count(); i; )
+        const HTMLOptions *pOptions2 = GetOptions();
+        for( USHORT i = pOptions2->Count(); i; )
         {
-            const HTMLOption *pOption = (*pOptions)[--i];
+            const HTMLOption *pOption = (*pOptions2)[--i];
             switch( pOption->GetToken() )
             {
                 case HTML_O_REL:
@@ -2105,16 +2123,16 @@ BOOL SwHTMLParser::ParseStyleOptions( const String &rStyle,
     return bRet;
 }
 
-void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet &rItemSet,
+void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
                                            const SvxCSS1PropertyInfo &rPropInfo,
                                            SfxItemSet &rFrmItemSet )
 {
     SwFmtAnchor aAnchor;
 
-    SwHoriOrient eHoriOri = HORI_NONE;
-    SwVertOrient eVertOri = VERT_NONE;
-    SwRelationOrient eHoriRel = FRAME;
-    SwRelationOrient eVertRel = FRAME;
+    sal_Int16 eHoriOri = text::HoriOrientation::NONE;
+    sal_Int16 eVertOri = text::VertOrientation::NONE;
+    sal_Int16 eHoriRel = text::RelOrientation::FRAME;
+    sal_Int16 eVertRel = text::RelOrientation::FRAME;
     SwTwips nHoriPos = 0, nVertPos = 0;
     SwSurround eSurround = SURROUND_THROUGHT;
     if( SVX_CSS1_POS_ABSOLUTE == rPropInfo.ePosition )
@@ -2145,18 +2163,18 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet &rItemSet,
         {
             aAnchor.SetType( FLY_AT_CNTNT );
             aAnchor.SetAnchor( pPam->GetPoint() );
-            eVertOri = VERT_TOP;
-            eVertRel = REL_CHAR;
+            eVertOri = text::VertOrientation::TOP;
+            eVertRel = text::RelOrientation::CHAR;
             if( SVX_CSS1_LTYPE_TWIP == rPropInfo.eLeftType )
             {
-                eHoriOri = HORI_NONE;
-                eHoriRel = REL_PG_FRAME;
+                eHoriOri = text::HoriOrientation::NONE;
+                eHoriRel = text::RelOrientation::PAGE_FRAME;
                 nHoriPos = rPropInfo.nLeft;
             }
             else
             {
-                eHoriOri = HORI_LEFT;
-                eHoriRel = FRAME;   // wird noch umgeschossen
+                eHoriOri = text::HoriOrientation::LEFT;
+                eHoriRel = text::RelOrientation::FRAME;   // wird noch umgeschossen
             }
         }
     }
@@ -2171,14 +2189,14 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet &rItemSet,
         {
             aAnchor.SetType( FLY_AUTO_CNTNT );
             pPam->Move( fnMoveBackward );
-            eVertOri = VERT_CHAR_BOTTOM;
-            eVertRel = REL_CHAR;
+            eVertOri = text::VertOrientation::CHAR_BOTTOM;
+            eVertRel = text::RelOrientation::CHAR;
         }
         else
         {
             aAnchor.SetType( FLY_AT_CNTNT );
-            eVertOri = VERT_TOP;
-            eVertRel = PRTAREA;
+            eVertOri = text::VertOrientation::TOP;
+            eVertRel = text::RelOrientation::PRINT_AREA;
         }
 
         aAnchor.SetAnchor( pPam->GetPoint() );
@@ -2192,14 +2210,14 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet &rItemSet,
 
         if( SVX_ADJUST_RIGHT==rPropInfo.eFloat )
         {
-            eHoriOri = HORI_RIGHT;
-            eHoriRel = nRightSpace ? PRTAREA : FRAME;
+            eHoriOri = text::HoriOrientation::RIGHT;
+            eHoriRel = nRightSpace ? text::RelOrientation::PRINT_AREA : text::RelOrientation::FRAME;
             eSurround = SURROUND_LEFT;
         }
         else
         {
-            eHoriOri = HORI_LEFT;
-            eHoriRel = nLeftSpace ? PRTAREA : FRAME;
+            eHoriOri = text::HoriOrientation::LEFT;
+            eHoriRel = nLeftSpace ? text::RelOrientation::PRINT_AREA : text::RelOrientation::FRAME;
             eSurround = SURROUND_RIGHT;
         }
     }
@@ -2211,7 +2229,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet &rItemSet,
     rFrmItemSet.Put( SwFmtSurround( eSurround ) );
 }
 
-void SwHTMLParser::SetVarSize( SfxItemSet &rItemSet,
+void SwHTMLParser::SetVarSize( SfxItemSet & /*rItemSet*/,
                                SvxCSS1PropertyInfo &rPropInfo,
                                SfxItemSet &rFrmItemSet,
                                SwTwips nDfltWidth, BYTE nDfltPrcWidth )
@@ -2229,6 +2247,8 @@ void SwHTMLParser::SetVarSize( SfxItemSet &rItemSet,
         nWidth = rPropInfo.nWidth > MINFLY ? rPropInfo.nWidth : MINFLY;
         nPrcWidth = 0;
         break;
+    default:
+        ;
     }
     switch( rPropInfo.eHeightType )
     {
@@ -2240,6 +2260,8 @@ void SwHTMLParser::SetVarSize( SfxItemSet &rItemSet,
         // als Mindest-Hoehe, also machwn wir das auch so.
         nHeight = rPropInfo.nHeight > MINFLY ? rPropInfo.nHeight : MINFLY;
         break;
+    default:
+        ;
     }
 
     SwFmtFrmSize aFrmSize( eSize, nWidth, nHeight );
@@ -2249,7 +2271,7 @@ void SwHTMLParser::SetVarSize( SfxItemSet &rItemSet,
 }
 
 void SwHTMLParser::SetFrmFmtAttrs( SfxItemSet &rItemSet,
-                                   SvxCSS1PropertyInfo &rPropInfo,
+                                   SvxCSS1PropertyInfo & /*rPropInfo*/,
                                    USHORT nFlags,
                                    SfxItemSet &rFrmItemSet )
 {
@@ -2368,7 +2390,7 @@ BOOL SwHTMLParser::GetMarginsFromContextWithNumBul( USHORT& nLeft,
         BYTE nLevel = (BYTE)( (rInfo.GetDepth() <= MAXLEVEL ? rInfo.GetDepth()
                                                             : MAXLEVEL) - 1 );
         const SwNumFmt& rNumFmt = rInfo.GetNumRule()->Get(nLevel);
-        nLeft += rNumFmt.GetAbsLSpace();
+        nLeft = nLeft + rNumFmt.GetAbsLSpace();
         nIndent = rNumFmt.GetFirstLineOffset();
     }
 
