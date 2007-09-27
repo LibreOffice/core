@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parcss1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:12:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:50:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,24 +420,24 @@ CSS1Token CSS1Parser::GetNextToken()
                 case 'M': // LENGTH mm | LENGTH IDENT
                     {
                         // die aktuelle Position retten
-                        xub_StrLen nInPosSave = nInPos;
-                        sal_Unicode cNextChSave = cNextCh;
-                        ULONG nlLineNrSave = nlLineNr;
-                        ULONG nlLinePosSave = nlLinePos;
-                        BOOL bEOFSave = bEOF;
+                        xub_StrLen nInPosOld = nInPos;
+                        sal_Unicode cNextChOld = cNextCh;
+                        ULONG nlLineNrOld  = nlLineNr;
+                        ULONG nlLinePosOld = nlLinePos;
+                        BOOL bEOFOld = bEOF;
 
                         // den naechsten Identifer scannen
                         String aIdent;
-                        ::rtl::OUStringBuffer sTmpBuffer( 64L );
+                        ::rtl::OUStringBuffer sTmpBuffer2( 64L );
                         do {
-                            sTmpBuffer.append( cNextCh );
+                            sTmpBuffer2.append( cNextCh );
                             cNextCh = GetNextChar();
                         } while( ( ('A' <= cNextCh && cNextCh <= 'Z') ||
                                     ('a' <= cNextCh && cNextCh <= 'z') ||
                                     ('0' <= cNextCh && cNextCh <= '9') ||
                                  '-'==cNextCh) && !IsEOF() );
 
-                        aIdent += String(sTmpBuffer.makeStringAndClear());
+                        aIdent += String(sTmpBuffer2.makeStringAndClear());
 
                         // Ist es eine Einheit?
                         const sal_Char *pCmp1 = 0, *pCmp2 = 0, *pCmp3 = 0;
@@ -483,7 +483,7 @@ CSS1Token CSS1Parser::GetNextToken()
                             break;
                         }
 
-                        double nScale;
+                        double nScale = 0.0;
                         DBG_ASSERT( pCmp1, "Wo kommt das erste Zeichen her?" );
                         if( aIdent.EqualsIgnoreCaseAscii(pCmp1) )
                         {
@@ -507,16 +507,16 @@ CSS1Token CSS1Parser::GetNextToken()
                             nRet = CSS1_NUMBER;
                         }
 
-                        if( CSS1_LENGTH==nRet && nScale!=1. )
+                        if( CSS1_LENGTH==nRet && nScale!=1.0 )
                             nValue *= nScale;
 
                         if( nRet == CSS1_NUMBER )
                         {
-                            nInPos = nInPosSave;
-                            cNextCh = cNextChSave;
-                            nlLineNr = nlLineNrSave;
-                            nlLinePos = nlLinePosSave;
-                            bEOF = bEOFSave;
+                            nInPos = nInPosOld;
+                            cNextCh = cNextChOld;
+                            nlLineNr = nlLineNrOld;
+                            nlLinePos = nlLinePosOld;
+                            bEOF = bEOFOld;
                         }
                         else
                         {
@@ -674,9 +674,9 @@ CSS1Token CSS1Parser::GetNextToken()
                        aToken.EqualsIgnoreCaseAscii(sCSS1_rgb)) ) )
                 {
                     USHORT nNestCnt = 0;
-                    ::rtl::OUStringBuffer sTmpBuffer( 64L );
+                    ::rtl::OUStringBuffer sTmpBuffer2( 64L );
                     do {
-                        sTmpBuffer.append( cNextCh );
+                        sTmpBuffer2.append( cNextCh );
                         switch( cNextCh )
                         {
                         case '(':   nNestCnt++; break;
@@ -684,8 +684,8 @@ CSS1Token CSS1Parser::GetNextToken()
                         }
                         cNextCh = GetNextChar();
                     } while( (nNestCnt>1 || ')'!=cNextCh) && !IsEOF() );
-                    sTmpBuffer.append( cNextCh );
-                    aToken += String(sTmpBuffer.makeStringAndClear());
+                    sTmpBuffer2.append( cNextCh );
+                    aToken += String(sTmpBuffer2.makeStringAndClear());
                     bNextCh = TRUE;
                     nRet = 'u'==aToken.GetChar(0) || 'U'==aToken.GetChar(0)
                                 ? CSS1_URL
@@ -853,12 +853,12 @@ void CSS1Parser::ParseRule()
         // declaration
         if( CSS1_IDENT == nToken )
         {
-            CSS1Expression *pExpr = ParseDeclaration( aProperty );
-            if( pExpr )
+            CSS1Expression *pExp = ParseDeclaration( aProperty );
+            if( pExp )
             {
                 // expression verarbeiten
-                if( DeclarationParsed( aProperty, pExpr ) )
-                    delete pExpr;
+                if( DeclarationParsed( aProperty, pExp ) )
+                    delete pExp;
             }
         }
     }
@@ -1244,12 +1244,12 @@ BOOL CSS1Parser::ParseStyleOption( const String& rIn )
         nToken = GetNextToken();
         if( CSS1_IDENT==nToken )
         {
-            CSS1Expression *pExpr = ParseDeclaration( aProperty );
-            if( pExpr )
+            CSS1Expression *pExp = ParseDeclaration( aProperty );
+            if( pExp )
             {
                 // expression verarbeiten
-                if( DeclarationParsed( aProperty, pExpr ) )
-                    delete pExpr;
+                if( DeclarationParsed( aProperty, pExp ) )
+                    delete pExp;
             }
         }
     }
@@ -1257,14 +1257,14 @@ BOOL CSS1Parser::ParseStyleOption( const String& rIn )
     return TRUE;
 }
 
-BOOL CSS1Parser::SelectorParsed( const CSS1Selector *pSelector, BOOL bFirst )
+BOOL CSS1Parser::SelectorParsed( const CSS1Selector * /* pSelector */, BOOL /*bFirst*/ )
 {
     // Selektor loeschen
     return TRUE;
 }
 
-BOOL CSS1Parser::DeclarationParsed( const String& rProperty,
-                                    const CSS1Expression *pExpr )
+BOOL CSS1Parser::DeclarationParsed( const String& /*rProperty*/,
+                                    const CSS1Expression * /* pExpr */ )
 {
     // Deklaration loeschen
     return TRUE;
@@ -1334,11 +1334,11 @@ BOOL CSS1Expression::GetColor( Color &rColor ) const
             String aColorStr( aValue.Copy( 4, aValue.Len()-1 ) );
 
             xub_StrLen nPos = 0;
-            USHORT nColor = 0;
+            USHORT nCol = 0;
 
-            while( nColor<3 && nPos<aColorStr.Len() )
+            while( nCol < 3 && nPos < aColorStr.Len() )
             {
-                register sal_Unicode c;
+                sal_Unicode c;
                 while( nPos < aColorStr.Len() &&
                         ((c=aColorStr.GetChar(nPos)) == ' ' || c == '\t' ||
                         c == '\n' || c== '\r' ) )
@@ -1368,8 +1368,8 @@ BOOL CSS1Expression::GetColor( Color &rColor ) const
                 else if( nNumber > 255 )
                     nNumber = 255;
 
-                aColors[nColor] = (BYTE)nNumber;
-                nColor ++;
+                aColors[nCol] = (BYTE)nNumber;
+                nCol ++;
             }
 
             rColor.SetRed( aColors[0] );
@@ -1402,7 +1402,7 @@ BOOL CSS1Expression::GetColor( Color &rColor ) const
             nColor = 0;
             for( ; i<nEnd; i++ )
             {
-                register sal_Unicode c = (i<aValue.Len() ? aValue.GetChar(i)
+                sal_Unicode c = (i<aValue.Len() ? aValue.GetChar(i)
                                                          : '0' );
                 if( c >= '0' && c <= '9' )
                     c -= 48;
@@ -1427,6 +1427,8 @@ BOOL CSS1Expression::GetColor( Color &rColor ) const
             bRet = TRUE;
         }
         break;
+    default:
+        ;
     }
 
 
