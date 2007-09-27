@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swrect.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:00:00 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:27:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ SwRect& SwRect::Union( const SwRect& rRect )
         Top( rRect.Top() );
     if ( Left() > rRect.Left() )
         Left( rRect.Left() );
-    register long n = rRect.Right();
+    long n = rRect.Right();
     if ( Right() < n )
         Right( n );
     n = rRect.Bottom();
@@ -136,7 +136,7 @@ SwRect& SwRect::Intersection( const SwRect& rRect )
             Left( rRect.Left() );
         if ( Top() < rRect.Top() )
             Top( rRect.Top() );
-        register long n = rRect.Right();
+        long n = rRect.Right();
         if ( Right() > n )
             Right( n );
         n = rRect.Bottom();
@@ -160,7 +160,7 @@ SwRect& SwRect::_Intersection( const SwRect& rRect )
         Left( rRect.Left() );
     if ( Top() < rRect.Top() )
         Top( rRect.Top() );
-    register long n = rRect.Right();
+    long n = rRect.Right();
     if ( Right() > n )
         Right( n );
     n = rRect.Bottom();
