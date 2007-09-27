@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ExternalUriReferenceTranslator.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:18:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:06:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 
-#include "ExternalUriReferenceTranslator.hxx"
+#include "stocservices.hxx"
 
 #include "supportsService.hxx"
 
@@ -103,7 +103,7 @@ rtl::OUString Translator::getImplementationName()
     throw (css::uno::RuntimeException)
 {
     return
-        stoc::uriproc::ExternalUriReferenceTranslator::getImplementationName();
+        stoc_services::ExternalUriReferenceTranslator::getImplementationName();
 }
 
 sal_Bool Translator::supportsService(rtl::OUString const & serviceName)
@@ -116,7 +116,7 @@ sal_Bool Translator::supportsService(rtl::OUString const & serviceName)
 css::uno::Sequence< rtl::OUString > Translator::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
-    return stoc::uriproc::ExternalUriReferenceTranslator::
+    return stoc_services::ExternalUriReferenceTranslator::
         getSupportedServiceNames();
 }
 
@@ -219,7 +219,7 @@ rtl::OUString Translator::translateToExternal(
 
 }
 
-namespace stoc { namespace uriproc { namespace ExternalUriReferenceTranslator {
+namespace stoc_services  { namespace ExternalUriReferenceTranslator {
 
 css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
@@ -245,4 +245,4 @@ css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
     return s;
 }
 
-} } }
+} }
