@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLBlockListContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:30:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:09:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,19 +69,19 @@ SwXMLBlockListContext::SwXMLBlockListContext(
    SwXMLBlockListImport& rImport,
    sal_uInt16 nPrefix,
    const OUString& rLocalName,
-   const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XAttributeList > & xAttrList ) :
-    rLocalRef (rImport),
-    SvXMLImportContext ( rImport, nPrefix, rLocalName )
+   const uno::Reference<
+   xml::sax::XAttributeList > & xAttrList ) :
+    SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+    rLocalRef (rImport)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for (sal_Int16 i=0; i < nAttrCount; i++)
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
+        sal_uInt16 nPrefx = rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
         const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-        if ( XML_NAMESPACE_BLOCKLIST == nPrefix )
+        if ( XML_NAMESPACE_BLOCKLIST == nPrefx )
         {
             if ( IsXMLToken ( aLocalName, XML_LIST_NAME ) )
             {
@@ -114,10 +114,10 @@ SwXMLBlockContext::SwXMLBlockContext(
    SwXMLBlockListImport& rImport,
    sal_uInt16 nPrefix,
    const OUString& rLocalName,
-   const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XAttributeList > & xAttrList ) :
-    rLocalRef(rImport),
-    SvXMLImportContext ( rImport, nPrefix, rLocalName )
+   const uno::Reference<
+   xml::sax::XAttributeList > & xAttrList ) :
+    SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+    rLocalRef(rImport)
 {
     static const CharClass & rCC = GetAppCharClass();
     String aShort, aLong, aPackageName;
@@ -128,9 +128,9 @@ SwXMLBlockContext::SwXMLBlockContext(
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
-        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
+        sal_uInt16 nPrefx = rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
         const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-        if (XML_NAMESPACE_BLOCKLIST == nPrefix)
+        if (XML_NAMESPACE_BLOCKLIST == nPrefx)
         {
             if ( IsXMLToken ( aLocalName, XML_ABBREVIATED_NAME ) )
             {
@@ -164,10 +164,10 @@ SwXMLTextBlockDocumentContext::SwXMLTextBlockDocumentContext(
    SwXMLTextBlockImport& rImport,
    sal_uInt16 nPrefix,
    const OUString& rLocalName,
-   const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XAttributeList > & xAttrList ) :
-    rLocalRef(rImport),
-    SvXMLImportContext ( rImport, nPrefix, rLocalName )
+   const uno::Reference<
+   xml::sax::XAttributeList > & ) :
+    SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+    rLocalRef(rImport)
 {
 }
 
@@ -193,10 +193,10 @@ SwXMLTextBlockTextContext::SwXMLTextBlockTextContext(
    SwXMLTextBlockImport& rImport,
    sal_uInt16 nPrefix,
    const OUString& rLocalName,
-   const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XAttributeList > & xAttrList ) :
-    rLocalRef(rImport),
-    SvXMLImportContext ( rImport, nPrefix, rLocalName )
+   const uno::Reference<
+   xml::sax::XAttributeList > & ) :
+    SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+    rLocalRef(rImport)
 {
 }
 
@@ -222,10 +222,10 @@ SwXMLTextBlockBodyContext::SwXMLTextBlockBodyContext(
    SwXMLTextBlockImport& rImport,
    sal_uInt16 nPrefix,
    const OUString& rLocalName,
-   const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XAttributeList > & xAttrList ) :
-    rLocalRef(rImport),
-    SvXMLImportContext ( rImport, nPrefix, rLocalName )
+   const uno::Reference<
+   xml::sax::XAttributeList > & ) :
+    SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+    rLocalRef(rImport)
 {
 }
 
@@ -252,10 +252,10 @@ SwXMLTextBlockParContext::SwXMLTextBlockParContext(
    SwXMLTextBlockImport& rImport,
    sal_uInt16 nPrefix,
    const OUString& rLocalName,
-   const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XAttributeList > & xAttrList ) :
-    rLocalRef(rImport),
-    SvXMLImportContext ( rImport, nPrefix, rLocalName )
+   const uno::Reference<
+   xml::sax::XAttributeList > & ) :
+    SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+    rLocalRef(rImport)
 {
 }
 
