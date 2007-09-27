@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prcntfld.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:58:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:08:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,38 +45,58 @@
 
 class SW_DLLPUBLIC PercentField : public MetricField
 {
-    long        nRefValue;      // 100%-Wert fuer Umrechnung (in Twips)
-    long        nOldMax, nOldMin, nOldSpinSize, nOldBaseValue;
-    long        nLastPercent, nLastValue;
+    sal_Int64   nRefValue;      // 100%-Wert fuer Umrechnung (in Twips)
+    sal_Int64   nOldMax;
+    sal_Int64   nOldMin;
+    sal_Int64   nOldSpinSize;
+    sal_Int64   nOldBaseValue;
+    sal_Int64   nLastPercent;
+    sal_Int64   nLastValue;
     USHORT      nOldDigits;
     FieldUnit   eOldUnit;
     sal_Bool    bLockAutoCalculation; //prevent recalcution of percent values when the
                                         //reference value is changed
 
-    SW_DLLPRIVATE long      ImpPower10(USHORT n);
+    SW_DLLPRIVATE sal_Int64      ImpPower10(USHORT n);
 
 public:
-    virtual void  SetValue(long nNewValue, FieldUnit eInUnit = FUNIT_NONE);
+
+    using MetricField::SetValue;
+    virtual void  SetValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
 
     PercentField( Window* pWin, const ResId& rResId );
 
-    void        SetPrcntValue(long nNewValue, FieldUnit eInUnit = FUNIT_NONE);
-    void        SetUserValue(long nNewValue, FieldUnit eInUnit = FUNIT_NONE);
-    void        SetBaseValue(long nNewValue, FieldUnit eInUnit = FUNIT_NONE);
-    long        GetValue(FieldUnit eOutUnit = FUNIT_NONE);
+    void        SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
+
+    //using NumericFormatter::SetUserValue;
+    using MetricFormatter::SetUserValue;
+    void        SetUserValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
+
+    using MetricFormatter::SetBaseValue;
+    void        SetBaseValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
+
+    using MetricField::GetValue;
+    sal_Int64        GetValue(FieldUnit eOutUnit = FUNIT_NONE);
+
+    using NumericFormatter::IsValueModified;
     BOOL        IsValueModified();
 
-    void        SetMax(long nNewMax, FieldUnit eInUnit = FUNIT_NONE);
-    void        SetMin(long nNewMin, FieldUnit eInUnit = FUNIT_NONE);
+    //using NumericFormatter::SetMax;
+    using MetricFormatter::SetMax;
+    void        SetMax(sal_Int64 nNewMax, FieldUnit eInUnit = FUNIT_NONE);
 
-    long        Normalize(long nValue);
-    long        Denormalize(long nValue);
+    //using NumericFormatter::SetMin;
+    using MetricFormatter::SetMin;
+    void        SetMin(sal_Int64 nNewMin, FieldUnit eInUnit = FUNIT_NONE);
 
-    void        SetRefValue(long nValue);
-    inline long GetRefValue() const { return nRefValue; }
-    long        GetRealValue(FieldUnit eOutUnit = FUNIT_NONE);
+    sal_Int64        NormalizePercent(sal_Int64 nValue);
+    sal_Int64        DenormalizePercent(sal_Int64 nValue);
 
-    long        Convert(long nValue, FieldUnit eInUnit, FieldUnit eOutUnit);
+    void        SetRefValue(sal_Int64 nValue);
+    inline sal_Int64 GetRefValue() const { return nRefValue; }
+    sal_Int64   GetRealValue(FieldUnit eOutUnit = FUNIT_NONE);
+
+    sal_Int64   Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit);
 
     void        ShowPercent(BOOL bPercent);
 
