@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:12:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:38:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,9 +123,6 @@
 #ifndef _SWPRTOPT_HXX
 #include <swprtopt.hxx>
 #endif
-//CHINA001 #ifndef _OPTPAGE_HXX
-//CHINA001 #include <optpage.hxx>
-//CHINA001 #endif
 #ifndef _FONTCFG_HXX
 #include <fontcfg.hxx>
 #endif
@@ -166,12 +163,16 @@
 #ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
 #endif
-#include <swwrtshitem.hxx> //CHINA001
-#include "swabstdlg.hxx" //CHINA001
-#ifndef _SFXSLSTITM_HXX //CHINA001
-#include <svtools/slstitm.hxx> //CHINA001
-#endif //CHINA001
-#define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
+#include <swwrtshitem.hxx>
+#include "swabstdlg.hxx"
+#ifndef _SFXSLSTITM_HXX
+#include <svtools/slstitm.hxx>
+#endif
+
+#include <unomid.h>
+
+using namespace ::com::sun::star;
+
 
 /*--------------------------------------------------------------------
     Beschreibung:   Drucker an Sfx uebergeben
@@ -307,7 +308,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
         SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
         SwPrtOptions aOpts( pObjShell->GetTitle(0) );
         BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
-        USHORT nMergeType = pMgr->GetMergeType();
+        nMergeType = pMgr->GetMergeType();
         if( nMergeType == DBMGR_MERGE_MAILMERGE ||
                 DBMGR_MERGE_DOCUMENTS == nMergeType )
         {
@@ -324,7 +325,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
             pSh->LockView( TRUE );
 
             //BrowseView abschalten und die View gegen alle Paints locken.
-            FASTBOOL bBrowse = pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+            BOOL bBrowse = pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
             SfxAllItemSet aSet( SFX_APP()->GetPool() );
             SfxBoolItem aBrowse( SID_BROWSER_MODE, FALSE );
             if ( bBrowse )
@@ -361,8 +362,8 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
             if( -1 != bPrintSelection )
                 aOpts.bPrintSelection = 0 != bPrintSelection;
 
-            com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue> aViewProperties(16);
-            com::sun::star::beans::PropertyValue* pViewProperties =  aViewProperties.getArray();
+            uno::Sequence< beans::PropertyValue> aViewProperties(16);
+            beans::PropertyValue* pViewProperties =  aViewProperties.getArray();
             pViewProperties[1].Name = C2U("PrintGraphics");
             pViewProperties[1].Value <<= (sal_Bool)aOpts.IsPrintGraphic();
             pViewProperties[2].Name = C2U("PrintTables");
@@ -382,7 +383,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
             pViewProperties[9].Name = C2U("PrintFaxName");
             pViewProperties[9].Value <<= aOpts.GetFaxName();
             pViewProperties[10].Name = C2U("PrintAnnotationMode");
-            pViewProperties[10].Value <<= (::com::sun::star::text::NotePrintMode) aOpts.GetPrintPostIts();
+            pViewProperties[10].Value <<= (text::NotePrintMode) aOpts.GetPrintPostIts();
             pViewProperties[11].Name = C2U("PrintProspect");
             pViewProperties[11].Value <<= (sal_Bool)aOpts.IsPrintProspect();
             pViewProperties[12].Name = C2U("PrintPageBackground");
@@ -624,8 +625,6 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
 SfxTabPage* CreatePrintOptionsPage( Window *pParent,
                                 const SfxItemSet &rOptions, BOOL bPreview )
 {
-//CHINA001  SwAddPrinterTabPage* pPage = ( SwAddPrinterTabPage* )
-//CHINA001  SwAddPrinterTabPage::Create(pParent, rOptions);
     SfxTabPage* pPage = NULL;
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     if ( pFact )
@@ -635,19 +634,7 @@ SfxTabPage* CreatePrintOptionsPage( Window *pParent,
             pPage = (*fnCreatePage)( pParent, rOptions );
     }
     SfxAllItemSet aSet(*(rOptions.GetPool()));
-    //CHINA001 pPage->SetPreview(bPreview);
     aSet.Put (SfxBoolItem(SID_PREVIEWFLAG_TYPE, bPreview));
-//CHINA001  SvStringsDtor aFaxList;
-//CHINA001  const USHORT nCount = Printer::GetQueueCount();
-//CHINA001  pPage->Reset(rOptions);
-//CHINA001  for (USHORT i = 0; i < nCount; ++i)
-//CHINA001  {
-//CHINA001  String* pString = new String( Printer::GetQueueInfo( i ).GetPrinterName() );
-//CHINA001  aFaxList.Insert(pString, 0);
-//CHINA001 }
-//CHINA001  pPage->SetFax( aFaxList );
-    //CHINA001 Reset(rOptions); can't be transfer as Item, so in SwAddPrinterTabPage::PageCreated(), call Reset() after SetPreview().
-    //CHINA001 It's difficult to transfer SvStringsDtor as Item, so move above code directly to SwAddPrinterTabPage::PageCreated()
     aSet.Put (SfxBoolItem(SID_FAX_LIST, sal_True));
     pPage->PageCreated(aSet);
     return pPage;
