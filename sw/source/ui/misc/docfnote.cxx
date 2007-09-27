@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfnote.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:12:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:19:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ SwFootNoteOptionDlg::SwFootNoteOptionDlg( Window *pParent, SwWrtShell &rS ) :
     AddTabPage( TP_ENDNOTEOPTION,  SwEndNoteOptionPage::Create, 0 );
 }
 
-void SwFootNoteOptionDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SwFootNoteOptionDlg::PageCreated( USHORT /*nId*/, SfxTabPage &rPage )
 {
     ((SwEndNoteOptionPage&)rPage).SetShell( rSh );
 }
@@ -151,7 +151,7 @@ IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn )
 SwEndNoteOptionPage::SwEndNoteOptionPage( Window *pParent, BOOL bEN,
                                           const SfxItemSet &rSet ) :
     SfxTabPage( pParent, SW_RES(bEN ? TP_ENDNOTEOPTION : TP_FOOTNOTEOPTION), rSet ),
-    aNumTypeFT      (this, SW_RES( FT_NUMTYPE   )),
+    aNumTypeFT      (this, SW_RES( FT_NUMTYPE    )),
     aNumViewBox     (this, SW_RES( LB_NUMVIEW   ), INSERT_NUM_EXTENDED_TYPES),
     aOffsetLbl      (this, SW_RES( FT_OFFSET    )),
     aOffsetFld      (this, SW_RES( FLD_OFFSET   )),
@@ -172,10 +172,10 @@ SwEndNoteOptionPage::SwEndNoteOptionPage( Window *pParent, BOOL bEN,
     aPageTemplBox   (this, SW_RES( LB_PAGE_TEMPL)),
     aTemplFL       (this, SW_RES( FL_TEMPL      )),
 
-    aFtnCharTextTemplLbl(   this, SW_RES( FT_TEXT_CHARFMT)),
-    aFtnCharTextTemplBox(   this, SW_RES( LB_TEXT_CHARFMT)),
     aFtnCharAnchorTemplLbl( this, SW_RES( FT_ANCHR_CHARFMT)),
     aFtnCharAnchorTemplBox( this, SW_RES( LB_ANCHR_CHARFMT)),
+    aFtnCharTextTemplLbl(   this, SW_RES( FT_TEXT_CHARFMT)),
+    aFtnCharTextTemplBox(   this, SW_RES( LB_TEXT_CHARFMT)),
     aCharTemplFL(          this, SW_RES(FL_CHAR_TEMPL)),
 
     aContLbl        (this, SW_RES( FT_CONT      )),
@@ -284,8 +284,8 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     }
 
     String sStr;
-    SwStyleNameMapper::FillUIName( bEndNote ? RES_POOLCOLL_ENDNOTE
-                           : RES_POOLCOLL_FOOTNOTE, sStr );
+    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(bEndNote ? RES_POOLCOLL_ENDNOTE
+                           : RES_POOLCOLL_FOOTNOTE), sStr );
     if(LISTBOX_ENTRY_NOTFOUND == aParaTemplBox.GetEntryPos( sStr ) )
         aParaTemplBox.InsertEntry( sStr );
 
@@ -476,7 +476,7 @@ BOOL SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
 {
     SwEndNoteInfo *pInf = bEndNote ? new SwEndNoteInfo() : new SwFtnInfo();
 
-    pInf->nFtnOffset = aOffsetFld.GetValue() -1;
+    pInf->nFtnOffset = static_cast< USHORT >(aOffsetFld.GetValue() -1);
     pInf->aFmt.SetNumberingType(aNumViewBox.GetSelectedNumberingType() );
     pInf->SetPrefix(aPrefixED.GetText());
     pInf->SetSuffix(aSuffixED.GetText());
