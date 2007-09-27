@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablepg.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:55:59 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:34:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,9 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
+    using TabPage::ActivatePage;
     virtual void        ActivatePage( const SfxItemSet& rSet );
+    using TabPage::DeactivatePage;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 };
 
@@ -178,7 +180,9 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
+    using TabPage::ActivatePage;
     virtual void        ActivatePage( const SfxItemSet& rSet );
+    using TabPage::DeactivatePage;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
 };
@@ -188,7 +192,7 @@ public:
 --------------------------------------------------*/
 class SwTextFlowPage : public SfxTabPage
 {
-    FixedLine        aFlowFL;
+    FixedLine       aFlowFL;
     CheckBox        aPgBrkCB;
     RadioButton     aPgBrkRB;
     RadioButton     aColBrkRB;
