@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlitemi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:30:16 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:12:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ sal_Bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
                                         const SvXMLNamespaceMap& ) const
 {
     sal_Bool bRet = sal_False;
-    sal_uInt16 nMemberId = rEntry.nMemberId & MID_SW_FLAG_MASK;
+    sal_uInt16 nMemberId = static_cast< sal_Int16 >(rEntry.nMemberId & MID_SW_FLAG_MASK);
     switch( rItem.Which() )
     {
     case RES_FRM_SIZE:
@@ -175,7 +175,7 @@ sal_Bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
     return bRet;
 }
 
-void SwXMLImportTableItemMapper_Impl::finished( SfxItemSet& rSet ) const
+void SwXMLImportTableItemMapper_Impl::finished( SfxItemSet& /*rSet*/ ) const
 {
 }
 
@@ -194,9 +194,10 @@ public:
                   const SvXMLUnitConverter& rUnitConv );
     virtual ~SwXMLItemSetContext_Impl();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                   const OUString& rLocalName,
-                   const Reference< xml::sax::XAttributeList > & xAttrList,
+    using SvXMLItemSetContext::CreateChildContext;
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                   const ::rtl::OUString& rLocalName,
+                   const ::uno::Reference< xml::sax::XAttributeList > & xAttrList,
                    SfxItemSet&  rItemSet,
                    const SvXMLItemMapEntry& rEntry,
                    const SvXMLUnitConverter& rUnitConv );
@@ -206,11 +207,11 @@ SwXMLItemSetContext_Impl::SwXMLItemSetContext_Impl(
                  SwXMLImport& rImport, sal_uInt16 nPrfx,
                  const OUString& rLName,
                  const Reference< xml::sax::XAttributeList > & xAttrList,
-                 SfxItemSet&  rItemSet,
-                 const SvXMLImportItemMapper& rIMapper,
-                 const SvXMLUnitConverter& rUnitConv ) :
+                 SfxItemSet&  _rItemSet,
+                 const SvXMLImportItemMapper& _rIMapper,
+                 const SvXMLUnitConverter& _rUnitConv ) :
     SvXMLItemSetContext( rImport, nPrfx, rLName, xAttrList,
-                         rItemSet, rIMapper, rUnitConv )
+                         _rItemSet, _rIMapper, _rUnitConv )
 {
 }
 
@@ -228,9 +229,9 @@ SvXMLImportContext *SwXMLItemSetContext_Impl::CreateChildContext(
                    sal_uInt16 nPrefix,
                    const OUString& rLocalName,
                    const Reference< xml::sax::XAttributeList > & xAttrList,
-                   SfxItemSet&  rItemSet,
+                   SfxItemSet&  _rItemSet,
                    const SvXMLItemMapEntry& rEntry,
-                   const SvXMLUnitConverter& rUnitConv )
+                   const SvXMLUnitConverter& _rUnitConv )
 {
     SvXMLImportContext *pContext = 0;
 
@@ -239,18 +240,18 @@ SvXMLImportContext *SwXMLItemSetContext_Impl::CreateChildContext(
     case RES_BACKGROUND:
         {
             const SfxPoolItem *pItem;
-            if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND,
+            if( SFX_ITEM_SET == _rItemSet.GetItemState( RES_BACKGROUND,
                                                        sal_False, &pItem ) )
             {
                 pContext = new SwXMLBrushItemImportContext(
                                 GetImport(), nPrefix, rLocalName, xAttrList,
-                                rUnitConv, *(const SvxBrushItem *)pItem );
+                                _rUnitConv, *(const SvxBrushItem *)pItem );
             }
             else
             {
                 pContext = new SwXMLBrushItemImportContext(
                                 GetImport(), nPrefix, rLocalName, xAttrList,
-                                rUnitConv, RES_BACKGROUND );
+                                _rUnitConv, RES_BACKGROUND );
             }
             xBackground = pContext;
         }
@@ -259,8 +260,8 @@ SvXMLImportContext *SwXMLItemSetContext_Impl::CreateChildContext(
 
     if( !pContext )
         pContext = SvXMLItemSetContext::CreateChildContext( nPrefix, rLocalName,
-                                                            xAttrList, rItemSet,
-                                                            rEntry, rUnitConv );
+                                                            xAttrList, _rItemSet,
+                                                            rEntry, _rUnitConv );
 
     return pContext;
 }
