@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edredln.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:27:42 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:46:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ void SwEditShell::SetRedlineMode( USHORT eMode )
     {
         SET_CURR_SHELL( this );
         StartAllAction();
-        GetDoc()->SetRedlineMode( (IDocumentRedlineAccess::RedlineMode_t)eMode );
+        GetDoc()->SetRedlineMode( (RedlineMode_t)eMode );
         EndAllAction();
     }
 }
@@ -134,8 +134,8 @@ const SwRedline* SwEditShell::GetCurrRedline() const
 
 void SwEditShell::UpdateRedlineAttr()
 {
-    if( ( IDocumentRedlineAccess::REDLINE_SHOW_INSERT | IDocumentRedlineAccess::REDLINE_SHOW_DELETE ) ==
-        ( IDocumentRedlineAccess::REDLINE_SHOW_MASK & GetDoc()->GetRedlineMode() ))
+    if( ( nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE ) ==
+        ( nsRedlineMode_t::REDLINE_SHOW_MASK & GetDoc()->GetRedlineMode() ))
     {
         SET_CURR_SHELL( this );
         StartAllAction();
