@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:49:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:37:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,7 +291,7 @@ BOOL lcl_IsNumeric(const String&);
 /****************************************************************************
     static methods
 ****************************************************************************/
-::com::sun::star::uno::Sequence< sal_Int8 >  CreateUnoTunnelId()
+uno::Sequence< sal_Int8 >  CreateUnoTunnelId()
 {
     static osl::Mutex aCreateMutex;
     osl::Guard<osl::Mutex> aGuard( aCreateMutex );
@@ -494,7 +494,7 @@ void lcl_setCharStyle(SwDoc* pDoc, const uno::Any aValue, SfxItemSet& rSet)
         OUString uStyle;
         aValue >>= uStyle;
         String sStyle;
-        SwStyleNameMapper::FillUIName(uStyle, sStyle, GET_POOLID_CHRFMT, sal_True );
+        SwStyleNameMapper::FillUIName(uStyle, sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
         SwDocStyleSheet* pStyle =
             (SwDocStyleSheet*)pDocSh->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR);
         if(pStyle)
@@ -523,7 +523,8 @@ void lcl_setAutoStyle(IStyleAccess& rStyleAccess, const uno::Any aValue, SfxItem
         rStyleAccess.getByName(uStyle, IStyleAccess::AUTO_STYLE_CHAR );
     if(pStyle.get())
     {
-        SwFmtAutoFmt aFmt( bPara ? RES_AUTO_STYLE : RES_TXTATR_AUTOFMT );
+        SwFmtAutoFmt aFmt( bPara ? sal::static_int_cast< USHORT >(RES_AUTO_STYLE)
+                                 : sal::static_int_cast< USHORT >(RES_TXTATR_AUTOFMT) );
         aFmt.SetStyleHandle( pStyle );
         rSet.Put(aFmt);
     }
@@ -545,7 +546,7 @@ void lcl_SetTxtFmtColl(const uno::Any& rAny, SwPaM& rPaM)
     OUString uStyle;
     rAny >>= uStyle;
     String sStyle;
-    SwStyleNameMapper::FillUIName(uStyle, sStyle, GET_POOLID_TXTCOLL, sal_True );
+    SwStyleNameMapper::FillUIName(uStyle, sStyle, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
     SwDocStyleSheet* pStyle =
                     (SwDocStyleSheet*)pDocSh->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_PARA);
     if(pStyle)
@@ -582,10 +583,9 @@ void lcl_SetTxtFmtColl(const uno::Any& rAny, SwPaM& rPaM)
     OUString uDescName;
     aValue >>= uDescName;
     String sDescName;
-    SwStyleNameMapper::FillUIName(uDescName, sDescName, GET_POOLID_PAGEDESC, sal_True );
+    SwStyleNameMapper::FillUIName(uDescName, sDescName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True );
     if(!pNewDesc->GetPageDesc() || pNewDesc->GetPageDesc()->GetName() != sDescName)
     {
-        sal_uInt16 nCount = pDoc->GetPageDescCnt();
         sal_Bool bPut = sal_False;
         if(sDescName.Len())
         {
@@ -758,7 +758,7 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                     if(aValue >>= uStyle)
                     {
                         String sStyle;
-                        SwStyleNameMapper::FillUIName(uStyle, sStyle, GET_POOLID_CHRFMT, sal_True );
+                        SwStyleNameMapper::FillUIName(uStyle, sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
                         SwDoc* pDoc = rPam.GetDoc();
                         //default character style mustn't be set as default format
                         SwDocStyleSheet* pStyle =
@@ -800,12 +800,12 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                         if(!pRuby)
                             pRuby = new SwFmtRuby(aEmptyStr);
                         String sStyle;
-                        SwStyleNameMapper::FillUIName(sTmp, sStyle, GET_POOLID_CHRFMT, sal_True );
+                        SwStyleNameMapper::FillUIName(sTmp, sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
                          pRuby->SetCharFmtName( sStyle );
                         pRuby->SetCharFmtId( 0 );
                         if(sStyle.Len() > 0)
                         {
-                            sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sStyle, GET_POOLID_CHRFMT );
+                            sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
                             pRuby->SetCharFmtId(nId);
                         }
                         rItemSet.Put(*pRuby);
@@ -909,7 +909,7 @@ SwFmtColl* SwXTextCursor::GetCurTxtFmtColl(SwPaM& rPam, BOOL bConditional)
             const String aFmtName(SW_RES(i));
             if(aFmtName == rName)
             {
-                pRet = rDoc.GetPageDescFromPool( RES_POOLPAGE_BEGIN + i - RC_POOLPAGEDESC_BEGIN );
+                pRet = rDoc.GetPageDescFromPool( static_cast< sal_uInt16 >(RES_POOLPAGE_BEGIN + i - RC_POOLPAGEDESC_BEGIN) );
                 break;
             }
         }
@@ -972,8 +972,8 @@ Sequence< OUString > SwXTextCursor::getSupportedServiceNames(void) throw( Runtim
 SwXTextCursor::SwXTextCursor(uno::Reference< XText >  xParent, const SwPosition& rPos,
                     CursorType eSet, SwDoc* pDoc, const SwPosition* pMark) :
     aLstnrCntnr(( util::XSortable*)this),
-    xParentText(xParent),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    xParentText(xParent),
     pLastSortOptions(0),
     eType(eSet),
     mbRemoveUserEvent( false )
@@ -993,8 +993,8 @@ SwXTextCursor::SwXTextCursor(uno::Reference< XText >  xParent, const SwPosition&
 SwXTextCursor::SwXTextCursor(uno::Reference< XText >  xParent,
     SwUnoCrsr* pSourceCrsr, CursorType eSet) :
     aLstnrCntnr( (util::XSortable*)this),
-    xParentText(xParent),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_CURSOR)),
+    xParentText(xParent),
     pLastSortOptions(0),
     eType(eSet),
     mbRemoveUserEvent( false )
@@ -1080,7 +1080,7 @@ sal_Int64 SAL_CALL SwXTextCursor::getSomething( const uno::Sequence< sal_Int8 >&
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
-            return (sal_Int64)this;
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
     return OTextCursorHelper::getSomething(rId);
 }
@@ -1276,10 +1276,10 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
     OTextCursorHelper* pCursor = 0;
     if(xRangeTunnel.is())
     {
-        pRange = (SwXTextRange*)xRangeTunnel->getSomething(
-                                SwXTextRange::getUnoTunnelId());
-        pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
-                                OTextCursorHelper::getUnoTunnelId());
+        pRange  = reinterpret_cast< SwXTextRange * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
+        pCursor = reinterpret_cast< OTextCursorHelper * >(
+                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
     }
 
     SwStartNodeType eSearchNodeType = SwNormalStartNode;
@@ -1292,6 +1292,8 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
         case CURSOR_FOOTER:     eSearchNodeType = SwFooterStartNode;    break;
         //case CURSOR_INVALID:
         //case CURSOR_BODY:
+        default:
+            ;
     }
     const SwStartNode* pOwnStartNode = pOwnCursor->GetNode()->
                                             FindSttNodeByType(eSearchNodeType);
@@ -1339,9 +1341,9 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
         SwPosition* pParamRight;
         if(pCursor)
         {
-            const SwPaM* pTmp = pCursor->GetPaM();
-            pParamLeft = new SwPosition(*pTmp->GetPoint());
-            pParamRight = new SwPosition(pTmp->HasMark() ? *pTmp->GetMark() : *pParamLeft);
+            const SwPaM* pTmp2 = pCursor->GetPaM();
+            pParamLeft = new SwPosition(*pTmp2->GetPoint());
+            pParamRight = new SwPosition(pTmp2->HasMark() ? *pTmp2->GetMark() : *pParamLeft);
         }
         else
         {
@@ -1351,9 +1353,9 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
         }
         if(*pParamRight < *pParamLeft)
         {
-            SwPosition* pTmp = pParamLeft;
+            SwPosition* pTmp2 = pParamLeft;
             pParamLeft = pParamRight;
-            pParamRight = pTmp;
+            pParamRight = pTmp2;
         }
         // jetzt sind vier SwPositions da, zwei davon werden gebraucht, also welche?
         if(aOwnRight > *pParamRight)
@@ -1373,12 +1375,12 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
         //der Cursor soll dem uebergebenen Range entsprechen
         if(pCursor)
         {
-            const SwPaM* pTmp = pCursor->GetPaM();
-            *pOwnCursor->GetPoint() = *pTmp->GetPoint();
-            if(pTmp->HasMark())
+            const SwPaM* pTmp2 = pCursor->GetPaM();
+            *pOwnCursor->GetPoint() = *pTmp2->GetPoint();
+            if(pTmp2->HasMark())
             {
                 pOwnCursor->SetMark();
-                *pOwnCursor->GetMark() = *pTmp->GetMark();
+                *pOwnCursor->GetMark() = *pTmp2->GetMark();
             }
             else
                 pOwnCursor->DeleteMark();
@@ -2197,7 +2199,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextCursor::getPropertySetInfo(voi
         {
             { SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT), FN_SKIP_HIDDEN_TEXT, &::getBooleanCppuType(), PROPERTY_NONE,     0},
             { SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT), FN_SKIP_PROTECTED_TEXT, &::getBooleanCppuType(), PROPERTY_NONE,     0},
-            {0,0,0,0}
+            {0,0,0,0,0,0}
         };
         uno::Reference< beans::XPropertySetInfo >  xInfo = aPropSet.getPropertySetInfo();
         // PropertySetInfo verlaengern!
@@ -2268,28 +2270,28 @@ Any SwXTextCursor::getPropertyValue(const OUString& rPropertyName)
 /*-- 09.12.98 14:18:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextCursor::addPropertyChangeListener(const OUString& PropertyName, const uno::Reference< beans::XPropertyChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXTextCursor::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
 /*-- 09.12.98 14:18:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextCursor::removePropertyChangeListener(const OUString& PropertyName, const uno::Reference< beans::XPropertyChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXTextCursor::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
 /*-- 09.12.98 14:18:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextCursor::addVetoableChangeListener(const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXTextCursor::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
 /*-- 09.12.98 14:18:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextCursor::removeVetoableChangeListener(const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXTextCursor::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     DBG_WARNING("not implemented")
 }
