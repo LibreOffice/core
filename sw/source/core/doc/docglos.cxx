@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docglos.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:06:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,6 @@ BOOL SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
             SwPaM *_pStartCrsr = &rPaM, *__pStartCrsr = _pStartCrsr;
             do {
 
-                const SwTxtNode* pTNd;
                 SwPosition& rInsPos = *_pStartCrsr->GetPoint();
                 SwStartNode* pBoxSttNd = (SwStartNode*)rInsPos.nNode.GetNode().
                                             FindTableBoxStartNode();
