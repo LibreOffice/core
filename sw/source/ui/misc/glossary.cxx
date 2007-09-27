@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:43:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:20:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,11 +72,9 @@
 #ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
 #endif
-//CHINA001 #ifndef _SVX_MULTIPAT_HXX //autogen
-//CHINA001 #include <svx/multipat.hxx>
-//CHINA001 #endif
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 #include <svx/acorrcfg.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -200,6 +198,27 @@ using namespace ::ucbhelper;
 using namespace ::rtl;
 using namespace ::sfx2;
 
+String lcl_GetValidShortCut( const String& rName )
+{
+    const sal_uInt16 nSz = rName.Len();
+
+    if ( 0 == nSz )
+        return rName;
+
+    sal_uInt16 nStart = 1;
+    while( rName.GetChar( nStart-1 ) == ' ' && nStart < nSz )
+        nStart++;
+
+    String aBuf( rName.GetChar( nStart-1 ));
+
+    for( ; nStart < nSz; ++nStart )
+    {
+        if( rName.GetChar( nStart-1 ) == ' ' && rName.GetChar( nStart ) != ' ')
+            aBuf += rName.GetChar( nStart );
+    }
+    return aBuf;
+}
+
 /* -----------------------------08.02.00 10:28--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -248,17 +267,17 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
                             const String& rOldName,
                             const String& rOldShort ) :
     ModalDialog( pParent, SW_RES( DLG_RENAME_GLOS ) ),
+    aNNFT   (this, SW_RES( FT_NN    )),
+    aNewName(this, SW_RES( ED_NN    )),
+    aNSFT   (this, SW_RES( FT_NS    )),
+    aNewShort(this,SW_RES( ED_NS    )),
     aOk     (this, SW_RES( BT_OKNEW)),
     aCancel (this, SW_RES( BT_CANCEL)),
+    aFL    (this, SW_RES( FL_NN    )),
     aONFT   (this, SW_RES( FT_ON    )),
-    aOSFT   (this, SW_RES( FT_OS    )),
-    aNNFT   (this, SW_RES( FT_NN    )),
-    aNSFT   (this, SW_RES( FT_NS    )),
     aOldName(this, SW_RES( ED_ON    )),
-    aOldShort(this,SW_RES( ED_OS    )),
-    aNewName(this, SW_RES( ED_NN    )),
-    aNewShort(this,SW_RES( ED_NS    )),
-    aFL    (this, SW_RES( FL_NN    ))
+    aOSFT   (this, SW_RES( FT_OS    )),
+    aOldShort(this,SW_RES( ED_OS    ))
 {
     FreeResource();
     aOldName.SetText( rOldName );
@@ -277,8 +296,6 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
 
 String SwGlossaryDlg::GetCurrGroup()
 {
-//CHINA001  if( pCurrGlosGroup && pCurrGlosGroup->Len() )
-//CHINA001  return *pCurrGlosGroup;
     if( ::GetCurrGlosGroup() && ::GetCurrGlosGroup()->Len() )
         return *(::GetCurrGlosGroup());
     return SwGlossaries::GetDefName();
@@ -288,9 +305,6 @@ String SwGlossaryDlg::GetCurrGroup()
 
 void SwGlossaryDlg::SetActGroup(const String &rGrp)
 {
-//CHINA001  if( !pCurrGlosGroup )
-//CHINA001  pCurrGlosGroup = new String;
-//CHINA001  *pCurrGlosGroup = rGrp;
     if( !::GetCurrGlosGroup() )
         ::SetCurrGlosGroup( new String );
     *(::GetCurrGlosGroup()) = rGrp;
@@ -302,34 +316,40 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
                             SwGlossaryHdl * pGlosHdl, SwWrtShell *pWrtShell) :
 
     SvxStandardDialog(&pViewFrame->GetWindow(), SW_RES(DLG_GLOSSARY)),
-    aExampleWIN   (this, SW_RES(WIN_EXAMPLE )),
-    aExampleDummyWIN(this, SW_RES(WIN_EXAMPLE_DUMMY )),
-    aShowExampleCB(this, SW_RES(CB_SHOW_EXAMPLE )),
+
     aInsertTipCB  (this, SW_RES(CB_INSERT_TIP)),
     aNameLbl      (this, SW_RES(FT_NAME)),
     aNameED       (this, SW_RES(ED_NAME)),
     aShortNameLbl (this, SW_RES(FT_SHORTNAME)),
     aShortNameEdit(this, SW_RES(ED_SHORTNAME)),
     aCategoryBox  (this, SW_RES(LB_BIB)),
+    aRelativeFL   (this, SW_RES(FL_RELATIVE)),
     aFileRelCB    (this, SW_RES(CB_FILE_REL)),
     aNetRelCB     (this, SW_RES(CB_NET_REL)),
-    aRelativeFL   (this, SW_RES(FL_RELATIVE)),
+    aExampleWIN   (this, SW_RES(WIN_EXAMPLE )),
+    aExampleDummyWIN(this, SW_RES(WIN_EXAMPLE_DUMMY )),
+    aShowExampleCB(this, SW_RES(CB_SHOW_EXAMPLE )),
     aInsertBtn    (this, SW_RES(PB_INSERT)),
+    aCloseBtn     (this, SW_RES(PB_CLOSE)),
+    aHelpBtn      (this, SW_RES(PB_HELP)),
     aEditBtn      (this, SW_RES(PB_EDIT)),
     aBibBtn       (this, SW_RES(PB_BIB)),
     aPathBtn      (this, SW_RES(PB_PATH)),
-    aCloseBtn     (this, SW_RES(PB_CLOSE)),
-    aHelpBtn      (this, SW_RES(PB_HELP)),
+
     sReadonlyPath (SW_RES(ST_READONLY_PATH)),
+    pExampleFrame(0),
+
     pMenu         (new PopupMenu(SW_RES(MNU_EDIT))),
     pGlossaryHdl  (pGlosHdl),
-    pSh           (pWrtShell),
-    pExampleFrame(0),
+
+    bResume(sal_False),
+
     bSelection( pWrtShell->IsSelection() ),
     bReadOnly( sal_False ),
     bIsOld( sal_False ),
     bIsDocReadOnly(sal_False),
-    bResume(sal_False)
+
+    pSh           (pWrtShell)
 {
     // #107253# Hold one local SwLinguConfig here. This creates one incarnation
     // of a SvtLinguConfig which is then used as long as this local incarnation
@@ -338,8 +358,6 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     SwLinguConfig aLocalLinguConfig;
 
     // Static-Pointer initialisieren
-//CHINA001  if( !pCurrGlosGroup )
-//CHINA001  pCurrGlosGroup = new String;//(SwGlossaries::GetDefName());
     if( !::GetCurrGlosGroup() )
         ::SetCurrGlosGroup(new String);//(SwGlossaries::GetDefName());
 
@@ -406,16 +424,11 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
         return 0;
     SvLBoxEntry* pParent = pBox->GetParent(pEntry) ? pBox->GetParent(pEntry) : pEntry;
     GroupUserData* pGroupData = (GroupUserData*)pParent->GetUserData();
-//CHINA001  (*pCurrGlosGroup) = pGroupData->sGroupName;
-//CHINA001  (*pCurrGlosGroup) += GLOS_DELIM;
-//CHINA001  (*pCurrGlosGroup) += String::CreateFromInt32(pGroupData->nPathIdx);
-//CHINA001  pGlossaryHdl->SetCurGroup(*pCurrGlosGroup);
     String *pGlosGroup = ::GetCurrGlosGroup();
     (*pGlosGroup) = pGroupData->sGroupName;
     (*pGlosGroup) += GLOS_DELIM;
     (*pGlosGroup) += String::CreateFromInt32(pGroupData->nPathIdx);
     pGlossaryHdl->SetCurGroup(*pGlosGroup);
-    const sal_uInt16 nCount = pGlossaryHdl->GetGlossaryCnt();
     // Aktuellen Textbaustein setzen
     bReadOnly = pGlossaryHdl->IsReadOnly();
     EnableShortName( !bReadOnly );
@@ -428,7 +441,6 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
         aShortNameEdit.SetText(*(String*)pEntry->GetUserData());
         pEntry = pBox->GetParent(pEntry);
         aInsertBtn.Enable( !bIsDocReadOnly);
-        //CHINA001 ShowAutoText(*pCurrGlosGroup, aShortNameEdit.GetText());
         ShowAutoText(*::GetCurrGlosGroup(), aShortNameEdit.GetText());
     }
     else
@@ -438,7 +450,6 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY );
-        //CHINA001 String sTemp(*pCurrGlosGroup);
         String sTemp(*::GetCurrGlosGroup());
         // der nullte Pfad wird nicht aufgezeichnet!
         if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
@@ -460,7 +471,6 @@ void SwGlossaryDlg::Apply()
     if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
     {
         SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_INSERT_GLOSSARY );
-        //CHINA001 String sTemp(*pCurrGlosGroup);
         String sTemp(*::GetCurrGlosGroup());
         // der nullte Pfad wird nicht aufgezeichnet!
         if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
@@ -531,17 +541,7 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
             // Edit gekommem?
         if(bNotFound)
         {
-            sal_uInt16 nSz = aName.Len();
-            sal_uInt16 nStart = 1;
-            while( aName.GetChar( nStart-1 ) == ' ' && nStart < nSz )
-                nStart++;
-            String aBuf( aName.GetChar( nStart-1 ));
-            for( nStart ; nStart < nSz; ++nStart )
-            {
-                if( aName.GetChar( nStart-1 ) == ' ' && aName.GetChar( nStart ) != ' ')
-                    aBuf += aName.GetChar( nStart );
-            }
-            aShortNameEdit.SetText(aBuf);
+            aShortNameEdit.SetText( lcl_GetValidShortCut( aName ) );
             EnableShortName();
         }
         else
@@ -651,7 +651,6 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
                 {
                     SfxRequest aReq(pSh->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
-                    //CHINA001 String sTemp(*pCurrGlosGroup);
                     String sTemp(*::GetCurrGlosGroup());
                     // der nullte Pfad wird nicht aufgezeichnet!
                     if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
@@ -880,8 +879,8 @@ void SwGlossaryDlg::Init()
     // Textbausteinbereiche anzeigen
     const sal_uInt16 nCnt = pGlossaryHdl->GetGroupCnt();
     SvLBoxEntry* pSelEntry = 0;
-    const String sSelStr(::GetCurrGlosGroup()->GetToken(0, GLOS_DELIM)); //CHINA001 const String sSelStr(pCurrGlosGroup->GetToken(0, GLOS_DELIM));
-    const sal_uInt16 nSelPath = ::GetCurrGlosGroup()->GetToken(1, GLOS_DELIM).ToInt32(); //CHINA001 const sal_uInt16 nSelPath = pCurrGlosGroup->GetToken(1, GLOS_DELIM).ToInt32();
+    const String sSelStr(::GetCurrGlosGroup()->GetToken(0, GLOS_DELIM));
+    const sal_uInt16 nSelPath = static_cast< sal_uInt16 >(::GetCurrGlosGroup()->GetToken(1, GLOS_DELIM).ToInt32());
     for(sal_uInt16 nId = 0; nId < nCnt; ++nId )
     {
         String sTitle;
@@ -891,7 +890,7 @@ void SwGlossaryDlg::Init()
         if(!sTitle.Len())
             sTitle = sGroupName.GetToken( 0, GLOS_DELIM );
         SvLBoxEntry* pEntry = aCategoryBox.InsertEntry( sTitle );
-        sal_uInt16 nPath = sGroupName.GetToken( 1, GLOS_DELIM ).ToInt32();
+        sal_uInt16 nPath = static_cast< sal_uInt16 >(sGroupName.GetToken( 1, GLOS_DELIM ).ToInt32());
 
         GroupUserData* pData = new GroupUserData;
         pData->sGroupName = sGroupName.GetToken(0, GLOS_DELIM);
@@ -908,9 +907,9 @@ void SwGlossaryDlg::Init()
             const sal_uInt16 nCount = pGlossaryHdl->GetGlossaryCnt();
             for(sal_uInt16 i = 0; i < nCount; ++i)
             {
-                String sTitle(pGlossaryHdl->GetGlossaryName(i));
+                String sGroupTitle(pGlossaryHdl->GetGlossaryName(i));
                 SvLBoxEntry* pChild = aCategoryBox.InsertEntry(
-                                    sTitle, pEntry);
+                                    sGroupTitle, pEntry);
                 pChild->SetUserData(new String(pGlossaryHdl->GetGlossaryShortName(i)));
             }
         }
@@ -991,12 +990,7 @@ IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
     SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParent();
 
     if( pBox == &aNewName )
-    {
-        if( aName.Len() )
-            aNewShort.SetText( pDlg->pGlossaryHdl->GetValidShortCut( aName ));
-        else
-            aNewShort.SetText(aName);
-    }
+        aNewShort.SetText( lcl_GetValidShortCut( aName ) );
 
     sal_Bool bEnable = aName.Len() && aNewShort.GetText().Len() &&
         (!pDlg->DoesBlockExist(aName, aNewShort.GetText())
@@ -1127,12 +1121,11 @@ void SwGlTreeListBox::RequestHelp( const HelpEvent& rHEvt )
  *
  * --------------------------------------------------*/
 DragDropMode SwGlTreeListBox::NotifyStartDrag(
-                    TransferDataContainer& rContainer,
+                    TransferDataContainer& /*rContainer*/,
                     SvLBoxEntry* pEntry )
 {
     DragDropMode  eRet;
     pDragEntry = pEntry;
-    String sEntry;
     if(!GetParent(pEntry))
         eRet = SV_DRAGDROP_NONE;
     else
@@ -1144,14 +1137,14 @@ DragDropMode SwGlTreeListBox::NotifyStartDrag(
         String sEntry(pGroupData->sGroupName);
         sEntry += GLOS_DELIM;
         sEntry += String::CreateFromInt32(pGroupData->nPathIdx);
-        sal_Int8 nDragOptions = DND_ACTION_COPY;
+        sal_Int8 nDragOption = DND_ACTION_COPY;
         eRet = SV_DRAGDROP_CTRL_COPY;
         if(!pDlg->pGlossaryHdl->IsReadOnly(&sEntry))
         {
             eRet |= SV_DRAGDROP_CTRL_MOVE;
-            nDragOptions |= DND_ACTION_MOVE;
+            nDragOption |= DND_ACTION_MOVE;
         }
-        SetDragOptions( nDragOptions );
+        SetDragOptions( nDragOption );
     }
     return eRet;
 }
@@ -1172,8 +1165,8 @@ sal_Bool    SwGlTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry)
  * --------------------------------------------------*/
 sal_Bool  SwGlTreeListBox::NotifyMoving(   SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
-                                    SvLBoxEntry*& rpNewParent,
-                                    ULONG&        rNewChildPos
+                                    SvLBoxEntry*& /*rpNewParent*/,
+                                    ULONG&        /*rNewChildPos*/
                                 )
 {
     pDragEntry = 0;
@@ -1220,8 +1213,8 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvLBoxEntry*  pTarget,
  * --------------------------------------------------*/
 sal_Bool  SwGlTreeListBox::NotifyCopying(   SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
-                                    SvLBoxEntry*& rpNewParent,
-                                    ULONG&        rNewChildPos
+                                    SvLBoxEntry*& /*rpNewParent*/,
+                                    ULONG&        /*rNewChildPos*/
                                 )
 {
     pDragEntry = 0;
@@ -1290,12 +1283,11 @@ String SwGlossaryDlg::GetCurrGrpName() const
 --------------------------------------------------*/
 IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
 {
-    //CHINA001 SvxMultiPathDialog* pDlg = new SvxMultiPathDialog(pBtn);
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxMultiPathDialog* pDlg = pFact->CreateSvxMultiPathDialog( pBtn, RID_SVXDLG_MULTIPATH );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        AbstractSvxMultiPathDialog* pDlg = pFact->CreateSvxMultiPathDialog( pBtn, RID_SVXDLG_MULTIPATH);
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");
         SvtPathOptions aPathOpt;
         String sGlosPath( aPathOpt.GetAutoTextPath() );
         pDlg->SetPath(sGlosPath);
@@ -1334,8 +1326,6 @@ IMPL_LINK( SwGlossaryDlg, ShowPreviewHdl, CheckBox *, pBox )
     BOOL bShow = pBox->IsChecked() && !bCreated;
     aExampleWIN.Show( bShow );
     aExampleDummyWIN.Show(!bShow);
-//CHINA001  if( pCurrGlosGroup )
-//CHINA001  ShowAutoText(*pCurrGlosGroup, aShortNameEdit.GetText());
     if( ::GetCurrGlosGroup() )
         ShowAutoText(*::GetCurrGlosGroup(), aShortNameEdit.GetText());
 
