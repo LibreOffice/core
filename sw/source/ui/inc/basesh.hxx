@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:38:43 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:53:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,8 @@
 #endif
 #include <svtools/svstdarr.hxx>
 
+#include <mdiexp.hxx>
+
 class SwWrtShell;
 class SwCrsrShell;
 class SwView;
@@ -69,7 +71,7 @@ class SwBaseShell: public SfxShell
     SwView      &rView;
 
     // DragModus
-    static USHORT nFrameMode;
+    static FlyMode eFrameMode;
 
     // Bug 75078 - if in GetState the asynch call of GetGraphic returns
     //              synch, the set the state directly into the itemset
@@ -96,7 +98,8 @@ protected:
 public:
     SwBaseShell(SwView &rShell);
     virtual     ~SwBaseShell();
-    SFX_DECL_INTERFACE(SW_BASESHELL);
+
+    SFX_DECL_INTERFACE(SW_BASESHELL)
     TYPEINFO();
 
     void        ExecDelete(SfxRequest &);
@@ -133,9 +136,9 @@ public:
 
     void        ExecField(SfxRequest& rReq);
 
-    static void    SetFrmMode( USHORT nMode, SwWrtShell *pShell );  //Mit Update!
-    static void   _SetFrmMode( USHORT nMode )   { nFrameMode = nMode; }
-    static USHORT  GetFrmMode()                 { return nFrameMode;  }
+    static void    SetFrmMode( FlyMode eMode, SwWrtShell *pShell );  //Mit Update!
+    static void   _SetFrmMode( FlyMode eMode )   { eFrameMode = eMode; }
+    static FlyMode  GetFrmMode()                 { return eFrameMode;  }
 
 };
 
