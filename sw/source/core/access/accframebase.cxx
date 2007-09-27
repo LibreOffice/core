@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accframebase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:26:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:20:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,9 +175,10 @@ sal_uInt8 SwAccessibleFrameBase::GetNodeType( const SwFlyFrm *pFlyFrm )
 }
 
 SwAccessibleFrameBase::SwAccessibleFrameBase(
-        SwAccessibleMap *pMap, sal_Int16 nRole,
-        const SwFlyFrm *pFlyFrm ) :
-    SwAccessibleContext( pMap, nRole, pFlyFrm ),
+        SwAccessibleMap* pInitMap,
+        sal_Int16 nInitRole,
+        const SwFlyFrm* pFlyFrm  ) :
+    SwAccessibleContext( pInitMap, nInitRole, pFlyFrm ),
     bIsSelected( sal_False )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
