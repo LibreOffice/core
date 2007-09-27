@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllcomponentloader.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:31:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,11 +115,11 @@ using namespace cppu;
 using namespace rtl;
 using namespace osl;
 
-namespace stoc_loader
-{
-static rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+extern rtl_StandardModuleCount g_moduleCount;
 
-static Sequence< OUString > loader_getSupportedServiceNames()
+namespace stoc_bootstrap
+{
+Sequence< OUString > loader_getSupportedServiceNames()
 {
     static Sequence < OUString > *pNames = 0;
     if( ! pNames )
@@ -135,7 +135,7 @@ static Sequence< OUString > loader_getSupportedServiceNames()
     return *pNames;
 }
 
-static OUString loader_getImplementationName()
+OUString loader_getImplementationName()
 {
     static OUString *pImplName = 0;
     if( ! pImplName )
@@ -149,8 +149,10 @@ static OUString loader_getImplementationName()
     }
     return *pImplName;
 }
+}
 
-
+namespace stoc_loader
+{
 //*************************************************************************
 // DllComponentLoader
 //*************************************************************************
@@ -202,7 +204,7 @@ DllComponentLoader::~DllComponentLoader()
 OUString SAL_CALL DllComponentLoader::getImplementationName(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return loader_getImplementationName();
+    return stoc_bootstrap::loader_getImplementationName();
 }
 
 //*************************************************************************
@@ -221,7 +223,7 @@ sal_Bool SAL_CALL DllComponentLoader::supportsService( const OUString& ServiceNa
 Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return loader_getSupportedServiceNames();
+    return stoc_bootstrap::loader_getSupportedServiceNames();
 }
 
 //*************************************************************************
@@ -319,14 +321,16 @@ sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
         expand_url( rLibName ), OUString(), m_xSMgr, xKey );
     return sal_True;
 }
+}
 
-
+namespace stoc_bootstrap
+{
 //*************************************************************************
 Reference<XInterface> SAL_CALL DllComponentLoader_CreateInstance( const Reference<XComponentContext> & xCtx ) throw(Exception)
 {
     Reference<XInterface> xRet;
 
-    XImplementationLoader *pXLoader = (XImplementationLoader *)new DllComponentLoader(xCtx);
+    XImplementationLoader *pXLoader = (XImplementationLoader *)new stoc_loader::DllComponentLoader(xCtx);
 
     if (pXLoader)
     {
@@ -337,44 +341,4 @@ Reference<XInterface> SAL_CALL DllComponentLoader_CreateInstance( const Referenc
 }
 
 }
-
-using namespace stoc_loader;
-static struct ImplementationEntry g_entries[] =
-{
-    {
-        DllComponentLoader_CreateInstance, loader_getImplementationName,
-        loader_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt , 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
-extern "C"
-{
-sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
-{
-    return g_moduleCount.canUnload( &g_moduleCount , pTime );
-}
-
-//==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
-}
-//==================================================================================================
-void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
-}
-}
-
-
 
