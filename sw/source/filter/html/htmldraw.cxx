@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmldraw.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:04:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:46:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,8 @@
 #include "swhtml.hxx"
 #include "wrthtml.hxx"
 
+using namespace ::com::sun::star;
+
 
 const sal_uInt32 HTML_FRMOPTS_MARQUEE   =
     HTML_FRMOPT_ALIGN |
@@ -147,8 +149,8 @@ static HTMLOptionEnum __FAR_DATA aHTMLMarqDirectionTable[] =
 /*  */
 void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
                                      const Size& rPixSpace,
-                                     SwVertOrient eVertOri,
-                                     SwHoriOrient eHoriOri,
+                                     sal_Int16 eVertOri,
+                                     sal_Int16 eHoriOri,
                                      SfxItemSet& rCSS1ItemSet,
                                      SvxCSS1PropertyInfo& rCSS1PropInfo,
                                      sal_Bool bHidden )
@@ -184,12 +186,12 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aLRItem.SetTxtFirstLineOfst( 0 );
         if( rCSS1PropInfo.bLeftMargin )
         {
-            nLeftSpace = aLRItem.GetLeft();
+            nLeftSpace = static_cast< sal_uInt16 >(aLRItem.GetLeft());
             rCSS1PropInfo.bLeftMargin = sal_False;
         }
         if( rCSS1PropInfo.bRightMargin )
         {
-            nRightSpace = aLRItem.GetRight();
+            nRightSpace = static_cast< sal_uInt16 >(aLRItem.GetRight());
             rCSS1PropInfo.bRightMargin = sal_False;
         }
         rCSS1ItemSet.ClearItem( RES_LR_SPACE );
@@ -252,7 +254,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aFrmSet.Put( SwFmtSurround(SURROUND_THROUGHT) );
     }
     else if( SVX_ADJUST_LEFT == rCSS1PropInfo.eFloat ||
-             HORI_LEFT == eHoriOri )
+             text::HoriOrientation::LEFT == eHoriOri )
     {
         aAnchor.SetType( FLY_AT_CNTNT );
         aFrmSet.Put( SwFmtSurround(bHidden ? SURROUND_THROUGHT
@@ -260,7 +262,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         // OD 2004-04-13 #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(nLeftSpace, nUpperSpace) );
     }
-    else if( VERT_NONE != eVertOri )
+    else if( text::VertOrientation::NONE != eVertOri )
     {
         aFrmSet.Put( SwFmtVertOrient( 0, eVertOri ) );
     }
@@ -332,19 +334,19 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     long nWidth=0, nHeight=0;
     sal_Bool bPrcWidth = sal_False, bDirection = sal_False, bBGColor = sal_False;
     Size aSpace( 0, 0 );
-    SwVertOrient eVertOri = VERT_TOP;
-    SwHoriOrient eHoriOri = HORI_NONE;
+    sal_Int16 eVertOri = text::VertOrientation::TOP;
+    sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     SdrTextAniKind eAniKind = SDRTEXTANI_SCROLL;
     SdrTextAniDirection eAniDir = SDRTEXTANI_LEFT;
     sal_uInt16 nCount = 0, nDelay = 60;
     sal_Int16 nAmount = -6;
     Color aBGColor;
 
-    const HTMLOptions *pOptions = GetOptions();
-    sal_uInt16 nArrLen = pOptions->Count();
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    sal_uInt16 nArrLen = pHTMLOptions->Count();
     for ( sal_uInt16 i=0; i<nArrLen; i++ )
     {
-        const HTMLOption *pOption = (*pOptions)[i];
+        const HTMLOption *pOption = (*pHTMLOptions)[i];
         switch( pOption->GetToken() )
         {
             case HTML_O_ID:
@@ -360,7 +362,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
             case HTML_O_BEHAVIOR:
                 eAniKind =
                     (SdrTextAniKind)pOption->GetEnum( aHTMLMarqBehaviorTable,
-                                                      eAniKind );
+                                                      static_cast< sal_uInt16 >(eAniKind) );
                 break;
 
             case HTML_O_BGCOLOR:
@@ -371,7 +373,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
             case HTML_O_DIRECTION:
                 eAniDir =
                     (SdrTextAniDirection)pOption->GetEnum( aHTMLMarqDirectionTable,
-                                                      eAniDir );
+                                                      static_cast< sal_uInt16 >(eAniDir) );
                 bDirection = sal_True;
                 break;
 
@@ -423,11 +425,11 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
             case HTML_O_ALIGN:
                 eVertOri =
-                    (SwVertOrient)pOption->GetEnum( aHTMLImgVAlignTable,
-                                                    VERT_TOP );
+                    pOption->GetEnum( aHTMLImgVAlignTable,
+                                                    text::VertOrientation::TOP );
                 eHoriOri =
-                    (SwHoriOrient)pOption->GetEnum( aHTMLImgHAlignTable,
-                                                    HORI_NONE );
+                    pOption->GetEnum( aHTMLImgHAlignTable,
+                                                    text::HoriOrientation::NONE );
                 break;
         }
     }
@@ -676,10 +678,10 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
                                          const SdrObject *pObj,
                                          sal_Bool bSetDefaults )
 {
-    // die Edit ::com::sun::star::script::Engine-Attribute aus dem Objekt holen
+    // die Edit script::Engine-Attribute aus dem Objekt holen
     SfxItemSet rObjItemSet = pObj->GetMergedItemSet();
 
-    // ueber die Edit ::com::sun::star::script::Engine-Attribute iterieren und die Attribute
+    // ueber die Edit script::Engine-Attribute iterieren und die Attribute
     // in SW-Attrs wandeln bzw. default setzen
     SfxWhichIter aIter( rObjItemSet );
     sal_uInt16 nEEWhich = aIter.FirstWhich();
@@ -739,8 +741,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    SdrModel* pModel = rWrt.pDoc->GetDrawModel();
-    ASSERT( pModel, "Da gibt's ein Draw-Obj ohne ein Draw-Model zu haben?" );
+    ASSERT( rWrt.pDoc->GetDrawModel(), "Da gibt's ein Draw-Obj ohne ein Draw-Model zu haben?" );
     const SdrTextObj *pTextObj = (const SdrTextObj *)&rSdrObject;
 
     // Gibt es ueberhaupt auszugebenden Text
@@ -768,6 +769,8 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     case SDRTEXTANI_SCROLL:     pStr = sHTML_BEHAV_scroll;      break;
     case SDRTEXTANI_SLIDE:      pStr = sHTML_BEHAV_slide;       break;
     case SDRTEXTANI_ALTERNATE:  pStr = sHTML_BEHAV_alternate;   break;
+    default:
+        ;
     }
 
     if( pStr )
@@ -780,6 +783,8 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     {
     case SDRTEXTANI_LEFT:       pStr = sHTML_AL_left;       break;
     case SDRTEXTANI_RIGHT:      pStr = sHTML_AL_right;      break;
+    default:
+        ;
     }
 
     if( pStr )
