@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glshell.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:07:18 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:20:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,7 @@ BOOL lcl_Save( SwWrtShell& rSh, const String& rGroupName,
     pGlosHdl->GetMacros( rShortNm, aStart, aEnd, pBlock );
 
     USHORT nRet = rSh.SaveGlossaryDoc( *pBlock, rLongNm, rShortNm,
-                                pCfg->IsSaveRelFile(), pCfg->IsSaveRelNet(),
+                                pCfg->IsSaveRelFile(),
                                 pBlock->IsOnlyTextBlock( rShortNm ) );
 
     if(aStart.GetMacName().Len() || aEnd.GetMacName().Len() )
@@ -197,8 +197,9 @@ BOOL lcl_Save( SwWrtShell& rSh, const String& rGroupName,
 
 
 SwGlosDocShell::SwGlosDocShell( sal_Bool bNewShow)
-    : bShow ( bNewShow )
-    , SwDocShell( bShow ? SFX_CREATE_MODE_STANDARD : SFX_CREATE_MODE_INTERNAL )
+    :
+    SwDocShell( bShow ? SFX_CREATE_MODE_STANDARD : SFX_CREATE_MODE_INTERNAL )
+    ,bShow ( bNewShow )
 {
     SetHelpId(SW_GLOSDOCSHELL);
 }
