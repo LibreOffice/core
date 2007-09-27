@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:27:32 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:31:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,15 +456,15 @@ void __EXPORT SwVisCrsr::Timeout()
     }
 }
 
-FASTBOOL SwCrsrShell::ChgCrsrTimerFlag( BOOL bTimerOn )
+BOOL SwCrsrShell::ChgCrsrTimerFlag( BOOL bTimerOn )
 {
     return pVisCrsr->ChgTimerFlag( bTimerOn );
 }
 
 
-FASTBOOL SwVisCrsr::ChgTimerFlag( BOOL bFlag )
+BOOL SwVisCrsr::ChgTimerFlag( BOOL bFlag )
 {
-    register bOld = bTimerOn;
+    bOld = bTimerOn;
     if( !bFlag && bIsVisible && IsActive() )
     {
         Stop();         // Timer Stoppen
@@ -528,7 +528,7 @@ void SwVisCrsr::_SetPosAndShow()
                     const OutputDevice *pOut = pCrsrShell->GetOut();
                     if ( pOut )
                     {
-                        USHORT nSize = pOut->GetSettings().GetStyleSettings().GetCursorSize();
+                        long nSize = pOut->GetSettings().GetStyleSettings().GetCursorSize();
                         Size aSize( nSize, nSize );
                         aSize = pOut->PixelToLogic( aSize );
                         aRect.Left( aRect.Left() - aSize.Width() );
@@ -958,38 +958,32 @@ void SwSelPaintRects::Show()
 
 void SwSelPaintRects::Invalidate( const SwRect& rRect )
 {
-    if(bTestOverlay)
-    {
-    }
-    else
-    {
-        register USHORT nSz = Count();
-        if( !nSz )
-            return;
+    USHORT nSz = Count();
+    if( !nSz )
+        return;
 
-        SwRegionRects aReg( GetShell()->VisArea() );
-        aReg.Remove( 0, aReg.Count() );
-        aReg.Insert( this, 0 );
-        aReg -= rRect;
-        SwRects::Remove( 0, nSz );
-        SwRects::Insert( &aReg, 0 );
+    SwRegionRects aReg( GetShell()->VisArea() );
+    aReg.Remove( 0, aReg.Count() );
+    aReg.Insert( this, 0 );
+    aReg -= rRect;
+    SwRects::Remove( 0, nSz );
+    SwRects::Insert( &aReg, 0 );
 
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // Liegt die Selection rechts oder unten ausserhalb des sichtbaren
-        // Bereiches, so ist diese nie auf eine Pixel rechts/unten aligned.
-        // Das muss hier erkannt und ggf. das Rechteckt erweitert werden.
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if( GetShell()->bVisPortChgd && 0 != ( nSz = Count()) )
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // Liegt die Selection rechts oder unten ausserhalb des sichtbaren
+    // Bereiches, so ist diese nie auf eine Pixel rechts/unten aligned.
+    // Das muss hier erkannt und ggf. das Rechteckt erweitert werden.
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    if( GetShell()->bVisPortChgd && 0 != ( nSz = Count()) )
+    {
+        SwSelPaintRects::Get1PixelInLogic( *GetShell() );
+        SwRect* pRect = (SwRect*)GetData();
+        for( ; nSz--; ++pRect )
         {
-            SwSelPaintRects::Get1PixelInLogic( *GetShell() );
-            register SwRect* pRect = (SwRect*)GetData();
-            for( ; nSz--; ++pRect )
-            {
-                if( pRect->Right() == GetShell()->aOldRBPos.X() )
-                    pRect->Right( pRect->Right() + nPixPtX );
-                if( pRect->Bottom() == GetShell()->aOldRBPos.Y() )
-                    pRect->Bottom( pRect->Bottom() + nPixPtY );
-            }
+            if( pRect->Right() == GetShell()->aOldRBPos.X() )
+                pRect->Right( pRect->Right() + nPixPtX );
+            if( pRect->Bottom() == GetShell()->aOldRBPos.Y() )
+                pRect->Bottom( pRect->Bottom() + nPixPtY );
         }
     }
 }
@@ -1038,9 +1032,9 @@ void SwSelPaintRects::Paint( const SwRect& rRect )
         // der rechten und unteren Seite ein PIXEL abgezogen werden !
         // Pixel heisst, gleichgueltig, welcher MapMode heute zaehlt !
 
-        FASTBOOL bChg = FALSE;
-        FASTBOOL bTstRight  = rRect.Right() < rVisArea.Right();
-        FASTBOOL bTstBottom = rRect.Bottom() < rVisArea.Bottom();
+        BOOL bChg = FALSE;
+        BOOL bTstRight  = rRect.Right() < rVisArea.Right();
+        BOOL bTstBottom = rRect.Bottom() < rVisArea.Bottom();
 
         if( bTstBottom || bTstRight )
         {
@@ -1225,7 +1219,7 @@ short SwShellCrsr::MaxReplaceArived()
 
         for( USHORT n = 0; n < aArr.Count(); ++n )
         {
-            for( USHORT nActCnt = aArr[n]; nActCnt--; )
+            for( nActCnt = aArr[n]; nActCnt--; )
                 pSh->StartAction();
             pSh = (ViewShell*)pSh->GetNext();
         }
@@ -1242,7 +1236,7 @@ void SwShellCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
     ((SwCrsrShell*)GetShell())->SaveTblBoxCntnt( pPos );
 }
 
-FASTBOOL SwShellCrsr::UpDown( BOOL bUp, USHORT nCnt )
+BOOL SwShellCrsr::UpDown( BOOL bUp, USHORT nCnt )
 {
     return SwCursor::UpDown( bUp, nCnt,
                             &GetPtPos(), GetShell()->GetUpDownX() );
@@ -1253,7 +1247,7 @@ FASTBOOL SwShellCrsr::UpDown( BOOL bUp, USHORT nCnt )
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor
 
-FASTBOOL SwShellCrsr::IsSelOvr( int eFlags )
+BOOL SwShellCrsr::IsSelOvr( int eFlags )
 {
     return SwCursor::IsSelOvr( eFlags );
 }
@@ -1261,7 +1255,7 @@ FASTBOOL SwShellCrsr::IsSelOvr( int eFlags )
 #endif
 
 // TRUE: an die Position kann der Cursor gesetzt werden
-FASTBOOL SwShellCrsr::IsAtValidPos( BOOL bPoint ) const
+BOOL SwShellCrsr::IsAtValidPos( BOOL bPoint ) const
 {
     if( GetShell() && ( GetShell()->IsAllProtect() ||
         GetShell()->GetViewOptions()->IsReadonly() ||
@@ -1364,7 +1358,7 @@ void SwShellTableCrsr::FillRects()
 
 
 // Pruefe, ob sich der SPoint innerhalb der Tabellen-SSelection befindet
-FASTBOOL SwShellTableCrsr::IsInside( const Point& rPt ) const
+BOOL SwShellTableCrsr::IsInside( const Point& rPt ) const
 {
     // die neuen Rechtecke berechnen
     // JP 16.01.98: wenn der Cursor noch "geparkt" ist nichts machen!!
@@ -1394,14 +1388,14 @@ FASTBOOL SwShellTableCrsr::IsInside( const Point& rPt ) const
 
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor
-FASTBOOL SwShellTableCrsr::IsSelOvr( int eFlags )
+BOOL SwShellTableCrsr::IsSelOvr( int eFlags )
 {
     return SwShellCrsr::IsSelOvr( eFlags );
 }
 
 #endif
 
-FASTBOOL SwShellTableCrsr::IsAtValidPos( BOOL bPoint ) const
+BOOL SwShellTableCrsr::IsAtValidPos( BOOL bPoint ) const
 {
     return SwShellCrsr::IsAtValidPos( bPoint );
 }
