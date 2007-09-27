@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:41:05 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:43:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,12 +241,12 @@ BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
             String sTxt;
             if( rURL.GetMap() )
             {
-                IMapObject *pObj = pFly->GetFmt()->GetIMapObject( aPos, pFly );
-                if( pObj )
+                IMapObject *pTmpObj = pFly->GetFmt()->GetIMapObject( aPos, pFly );
+                if( pTmpObj )
                 {
-                    sTxt = pObj->GetAltText();
+                    sTxt = pTmpObj->GetAltText();
                     if ( !sTxt.Len() )
-                        sTxt = URIHelper::removePassword( pObj->GetURL(),
+                        sTxt = URIHelper::removePassword( pTmpObj->GetURL(),
                                         INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
                 }
