@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:47:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:27:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,8 +197,8 @@
 #include <shells.hrc>
 #endif
 
-#include "swabstdlg.hxx" //CHINA001
-#include "chrdlg.hrc" //CHINA001
+#include "swabstdlg.hxx"
+#include "chrdlg.hrc"
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
@@ -224,10 +224,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_ATTR_CHAR_WEIGHT:
         case SID_ATTR_CHAR_POSTURE:
         {
-            SfxItemPool* pPool = aEditAttr.GetPool()->GetSecondaryPool();
-            if( !pPool )
-                pPool = aEditAttr.GetPool();
-            SvxScriptSetItem aSetItem( nSlot, *pPool );
+            SfxItemPool* pPool2 = aEditAttr.GetPool()->GetSecondaryPool();
+            if( !pPool2 )
+                pPool2 = aEditAttr.GetPool();
+            SvxScriptSetItem aSetItem( nSlot, *pPool2 );
 
             // #i78017 establish the same behaviour as in Writer
             USHORT nScriptTypes = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
@@ -328,7 +328,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             {
                 SwView* pView = &GetView();
                 FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
-                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)) );
                 SfxItemSet aDlgAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
 
                 // util::Language gibts an der EditEngine nicht! Daher nicht im Set.
@@ -336,12 +336,11 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aDlgAttr.Put( aEditAttr );
                 aDlgAttr.Put( SvxKerningItem(0, RES_CHRATR_KERNING) );
 
-                //CHINA001 SwCharDlg* pDlg = new SwCharDlg(pView->GetWindow(), *pView, aDlgAttr, 0, sal_True);
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( pView->GetWindow(), *pView, aDlgAttr, DLG_CHAR,0, sal_True );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 USHORT nRet = pDlg->Execute();
                 if(RET_OK == nRet )
                 {
@@ -365,7 +364,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             {
                 SwView* pView = &GetView();
                 FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
-                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)) );
                 SfxItemSet aDlgAttr(GetPool(),
                                     EE_ITEMS_START, EE_ITEMS_END,
                                     SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_HYPHENZONE,
@@ -386,13 +385,11 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 aDlgAttr.Put( SvxWidowsItem( 0, RES_PARATR_WIDOWS ) );
                 aDlgAttr.Put( SvxOrphansItem( 0, RES_PARATR_ORPHANS ) );
 
-                //CHINA001 SwParaDlg* pDlg = new SwParaDlg(GetView().GetWindow(), GetView(), aDlgAttr, DLG_STD, 0, sal_True);
-
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr,DLG_STD, DLG_PARA, 0, sal_True );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 USHORT nRet = pDlg->Execute();
                 if(RET_OK == nRet)
                 {
@@ -478,9 +475,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
                 aAttr.Put( SvxWritingModeItem(
                     nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
-                        com::sun::star::text::WritingMode_LR_TB
-                        : com::sun::star::text::WritingMode_TB_RL,
-                    SDRATTR_TEXTDIRECTION ) );
+                        text::WritingMode_LR_TB
+                        : text::WritingMode_TB_RL, SDRATTR_TEXTDIRECTION ) );
                 pTmpView->SetAttributes( aAttr );
 
                 rSh.GetView().BeginTextEdit( pTmpObj, pTmpPV, &rSh.GetView().GetEditWin(), sal_False);
@@ -662,16 +658,16 @@ ASK_ESCAPE:
                             (SID_TEXTDIRECTION_TOP_TO_BOTTOM == nSlotId);
                 else
                 {
-                    com::sun::star::text::WritingMode eMode = (com::sun::star::text::WritingMode)
+                    text::WritingMode eMode = (text::WritingMode)
                                     ( (const SvxWritingModeItem&) aEditAttr.Get( SDRATTR_TEXTDIRECTION ) ).GetValue();
 
                     if( nSlotId == SID_TEXTDIRECTION_LEFT_TO_RIGHT )
                     {
-                        bFlag = eMode == com::sun::star::text::WritingMode_LR_TB;
+                        bFlag = eMode == text::WritingMode_LR_TB;
                     }
                     else
                     {
-                        bFlag = eMode != com::sun::star::text::WritingMode_TB_RL;
+                        bFlag = eMode != text::WritingMode_TB_RL;
                     }
                 }
             }
@@ -763,10 +759,10 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
             case SID_ATTR_CHAR_WEIGHT:
             case SID_ATTR_CHAR_POSTURE:
             {
-                SfxItemPool* pPool = aEditAttr.GetPool()->GetSecondaryPool();
-                if( !pPool )
-                    pPool = aEditAttr.GetPool();
-                SvxScriptSetItem aSetItem( nSlotId, *pPool );
+                SfxItemPool* pEditPool = aEditAttr.GetPool()->GetSecondaryPool();
+                if( !pEditPool )
+                    pEditPool = aEditAttr.GetPool();
+                SvxScriptSetItem aSetItem( nSlotId, *pEditPool );
                 aSetItem.GetItemSet().Put( aEditAttr, FALSE );
                 const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                 if( pI )
