@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8dout.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:26:45 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:07:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ ostream&  __cdecl dec2( ostream& s ) {
 }
 
 ostream&  __cdecl filepos( ostream& s, SvStream& rSt ) {
-    register long pos = rSt.Tell();
+    long pos = rSt.Tell();
 
     if ( pos != lastpos ){
 #ifndef DumpVer8
