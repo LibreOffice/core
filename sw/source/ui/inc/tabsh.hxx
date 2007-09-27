@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabsh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:08:00 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:12:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ SW_DLLPUBLIC const USHORT* SwuiGetUITableAttrRange();
 class SwTableShell: public SwBaseShell
 {
 public:
-    SFX_DECL_INTERFACE(SW_TABSHELL);
+    SFX_DECL_INTERFACE(SW_TABSHELL)
     TYPEINFO();
 
     void    Execute(SfxRequest &);
