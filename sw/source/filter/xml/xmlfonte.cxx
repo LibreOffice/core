@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfonte.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:29:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:11:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,21 +74,21 @@ class SwXMLFontAutoStylePool_Impl: public XMLFontAutoStylePool
 };
 
 SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
-    SwXMLExport& rExport ) :
-    XMLFontAutoStylePool( rExport )
+    SwXMLExport& _rExport ) :
+    XMLFontAutoStylePool( _rExport )
 {
     sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
                                 RES_CHRATR_CTL_FONT };
 
-    Reference < XTextDocument > xTextDoc( rExport.GetModel(), UNO_QUERY );
+    Reference < XTextDocument > xTextDoc( _rExport.GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
     Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
     ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
     if( !xTextTunnel.is() )
         return;
 
-    SwXText *pText = (SwXText *)xTextTunnel->getSomething(
-                                        SwXText::getUnoTunnelId() );
+    SwXText *pText = reinterpret_cast< SwXText *>(
+            sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
     ASSERT( pText, "SwXText missing" );
     if( !pText )
         return;
@@ -102,7 +102,8 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
         const SvxFontItem& rFont =
             (const SvxFontItem&)rPool.GetDefaultItem( nWhichId );
         Add( rFont.GetFamilyName(), rFont.GetStyleName(),
-             rFont.GetFamily(), rFont.GetPitch(), rFont.GetCharSet() );
+             static_cast< sal_uInt16 >(rFont.GetFamily()), static_cast< sal_uInt16 >(rFont.GetPitch()),
+             rFont.GetCharSet() );
         sal_uInt16 nItems = rPool.GetItemCount( nWhichId );
         for( sal_uInt16 j = 0; j < nItems; ++j )
         {
@@ -111,7 +112,7 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
                 const SvxFontItem *pFont =
                             (const SvxFontItem *)pItem;
                 Add( pFont->GetFamilyName(), pFont->GetStyleName(),
-                     pFont->GetFamily(), pFont->GetPitch(),
+                     static_cast< sal_uInt16 >(pFont->GetFamily()), static_cast< sal_uInt16 >(pFont->GetPitch()),
                      pFont->GetCharSet() );
             }
         }
