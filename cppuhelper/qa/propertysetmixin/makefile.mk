@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:07:39 $
+#   last change: $Author: hr $ $Date: 2007-09-27 12:50:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ $(MISC)$/$(TARGET)$/uno.rdb .ERRREMOVE: $(MISC)$/$(TARGET)$/types.rdb \
     $(REGMERGE) $@ / $(MISC)$/$(TARGET)$/types.rdb
     $(REGCOMP) -register -r $@ -c javaloader.uno$(DLLPOST) \
         -c javavm.uno$(DLLPOST) -c reflection.uno$(DLLPOST) \
-        -c uriproc.uno$(DLLPOST)
+        -c stocservices.uno$(DLLPOST)
     $(REGCOMP) -register -r $@ \
         -c $(subst,$/,/ $(DLLDEST)$/$(SHL2TARGET)$(DLLPOST))
     $(REGCOMP) -register -br $(MISC)$/$(TARGET)$/bootstrap.rdb -r $@ \
@@ -113,7 +113,7 @@ $(MISC)$/$(TARGET)$/bootstrap.rdb .ERRREMOVE:
     - $(MKDIR) $(@:d)
     $(COPY) $(SOLARBINDIR)$/types.rdb $@
     $(REGCOMP) -register -r $@ -c javaloader.uno$(DLLPOST) \
-        -c javavm.uno$(DLLPOST) -c uriproc.uno$(DLLPOST)
+        -c javavm.uno$(DLLPOST) -c stocservices.uno$(DLLPOST)
 
 $(MISC)$/$(TARGET)$/cppumaker.flag: $(MISC)$/$(TARGET)$/types.rdb
     $(CPPUMAKER) -O$(MISC)$/$(TARGET)$/inc -BUCR -Gc \
