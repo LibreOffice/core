@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msocximex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 16:00:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:00:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,12 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef C2U
-#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
-#endif
+
+//!! no such defines in global namespaces - it will break other existing code that uses the same define!!
+//#ifndef C2U
+//#define C2U(cChar)    rtl::OUString::createFromAscii(cChar)
+//#endif
+
 #ifndef INCLUDED_SVXDLLAPI_H
 #include "svx/svxdllapi.h"
 #endif
@@ -427,7 +430,7 @@ public:
 class OCX_TabStrip : public OCX_Control
 {
 public:
-    OCX_TabStrip() : OCX_Control(C2U("TabStrip")) {}
+    OCX_TabStrip() : OCX_Control( rtl::OUString::createFromAscii("TabStrip")) {}
         virtual sal_Bool ReadFontData(SotStorageStream *pS);
         virtual sal_Bool Read(SotStorageStream *pS);
 
@@ -440,9 +443,9 @@ public:
 class OCX_Image : public OCX_Control
 {
 public:
-    OCX_Image() : OCX_Control(C2U("Image")), fEnabled(1), fBackStyle(0), bPictureTiling(false), bAutoSize(false) {
-                msFormType = C2U("com.sun.star.form.component.DatabaseImageControl");
-        msDialogType = C2U("com.sun.star.awt.UnoControlImageControlModel");
+    OCX_Image() : OCX_Control(rtl::OUString::createFromAscii("Image")), fEnabled(1), fBackStyle(0), bPictureTiling(false), bAutoSize(false) {
+                msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.DatabaseImageControl");
+        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlImageControlModel");
          }
 
     ~OCX_Image() { }
@@ -935,9 +938,9 @@ private:
 class OCX_CheckBox : public OCX_ModernControl
 {
 public:
-    OCX_CheckBox() : OCX_ModernControl(C2U("CheckBox")){
-        msFormType = C2U("com.sun.star.form.component.CheckBox");
-        msDialogType = C2U("com.sun.star.awt.UnoControlCheckBoxModel");
+    OCX_CheckBox() : OCX_ModernControl(rtl::OUString::createFromAscii("CheckBox")){
+        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.CheckBox");
+        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlCheckBoxModel");
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         aFontData.SetHasAlign(TRUE);
@@ -960,10 +963,10 @@ public:
 class OCX_OptionButton : public OCX_ModernControl
 {
 public:
-    OCX_OptionButton() : OCX_ModernControl(C2U("OptionButton"))
+    OCX_OptionButton() : OCX_ModernControl(rtl::OUString::createFromAscii("OptionButton"))
     {
-        msFormType = C2U("com.sun.star.form.component.RadioButton");
-        msDialogType = C2U("com.sun.star.awt.UnoControlRadioButtonModel");
+        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.RadioButton");
+        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlRadioButtonModel");
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         aFontData.SetHasAlign(TRUE);
@@ -988,9 +991,9 @@ public:
 class OCX_TextBox : public OCX_ModernControl
 {
 public:
-    OCX_TextBox() : OCX_ModernControl(C2U("TextBox")) {
-        msFormType = C2U("com.sun.star.form.component.TextField");
-        msDialogType = C2U("com.sun.star.awt.UnoControlEditModel");
+    OCX_TextBox() : OCX_ModernControl(rtl::OUString::createFromAscii("TextBox")) {
+        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.TextField");
+        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlEditModel");
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         nBorderColor = 0x80000006L;
@@ -1015,7 +1018,7 @@ public:
 class OCX_FieldControl: public OCX_ModernControl
 {
 public:
-    OCX_FieldControl() : OCX_ModernControl(C2U("TextBox")) {
+    OCX_FieldControl() : OCX_ModernControl(rtl::OUString::createFromAscii("TextBox")) {
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         nBorderColor = 0x80000006L;
@@ -1035,9 +1038,9 @@ public:
 class OCX_ToggleButton : public OCX_ModernControl
 {
 public:
-    OCX_ToggleButton() : OCX_ModernControl(C2U("ToggleButton")) {
-                msFormType = C2U("com.sun.star.form.component.CommandButton");
-                msDialogType = C2U("com.sun.star.awt.UnoControlButtonModel");
+    OCX_ToggleButton() : OCX_ModernControl(rtl::OUString::createFromAscii("ToggleButton")) {
+                msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.CommandButton");
+                msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlButtonModel");
 
         mnBackColor = 0x8000000F;
         mnForeColor = 0x80000012;
@@ -1062,9 +1065,9 @@ public:
 class OCX_ComboBox : public OCX_ModernControl
 {
 public:
-    OCX_ComboBox() : OCX_ModernControl(C2U("ComboBox")){
-        msFormType = C2U("com.sun.star.form.component.ComboBox");
-            msDialogType = C2U("com.sun.star.awt.UnoControlComboBoxModel");
+    OCX_ComboBox() : OCX_ModernControl(rtl::OUString::createFromAscii("ComboBox")){
+        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.ComboBox");
+            msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlComboBoxModel");
         mnBackColor = 0x80000005;
         mnForeColor = 0x80000008;
         nBorderColor = 0x80000006;
@@ -1087,9 +1090,9 @@ public:
 class OCX_ListBox : public OCX_ModernControl
 {
 public:
-    OCX_ListBox() : OCX_ModernControl(C2U("ListBox")){
-        msFormType = C2U("com.sun.star.form.component.ListBox");
-        msDialogType = C2U("com.sun.star.awt.UnoControlListBoxModel");
+    OCX_ListBox() : OCX_ModernControl(rtl::OUString::createFromAscii("ListBox")){
+        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.ListBox");
+        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlListBoxModel");
         mnBackColor = 0x80000005;
         mnForeColor = 0x80000008;
         nBorderColor = 0x80000006;
@@ -1119,8 +1122,8 @@ public:
         nAccelerator(0), nIcon(0), pCaption(0), nIconLen(0), pIcon(0), nPictureLen(0),
         pPicture(0), mbTakeFocus( true )
     {
-            msFormType = C2U("com.sun.star.form.component.CommandButton");
-            msDialogType = C2U("com.sun.star.awt.UnoControlButtonModel");
+            msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.CommandButton");
+            msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlButtonModel");
             mnForeColor = 0x80000012L;
                 mnBackColor = 0x8000000FL;
     }
@@ -1228,15 +1231,15 @@ public:
 class OCX_Label : public OCX_Control
 {
 public:
-    OCX_Label(OCX_Control* pParent = NULL ) : OCX_Control(C2U("Label"), pParent ), fEnabled(1),
+    OCX_Label(OCX_Control* pParent = NULL ) : OCX_Control(rtl::OUString::createFromAscii("Label"), pParent ), fEnabled(1),
         fLocked(0),fBackStyle(1),fWordWrap(1),
     fAutoSize(0),nCaptionLen(0),nVertPos(1),nHorzPos(7),nMousePointer(0),
     nBorderColor(0x80000006),nBorderStyle(0),nSpecialEffect(0),
     nPicture(0),nAccelerator(0),nIcon(0),pCaption(0),nIconLen(0),pIcon(0),
     nPictureLen(0),pPicture(0)
     {
-        msFormType = C2U("com.sun.star.form.component.FixedText");
-        msDialogType = C2U("com.sun.star.awt.UnoControlFixedTextModel");
+        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.FixedText");
+        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFixedTextModel");
                 mnForeColor = 0x80000008;
                 mnBackColor = 0x80000005;
         aFontData.SetHasAlign(TRUE);
