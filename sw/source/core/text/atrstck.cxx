@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:43:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:11:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,9 @@
  * Also adjust NUM_ATTRIBUTE_STACKS in atrhndl.hxx.
  *************************************************************************/
 
-const BYTE StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] = {
+const BYTE StackPos[ static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
+                     static_cast<USHORT>(RES_CHRATR_BEGIN) + 1 ] =
+{
      0, //                                       //  0
      1, // RES_CHRATR_CASEMAP = RES_CHRATR_BEGIN //  1
      0, // RES_CHRATR_CHARSETCOLOR,              //  2
@@ -506,7 +508,7 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
     if ( pAS && pAS->Count() )
     {
         SfxItemIter aIter( *pAS );
-        register USHORT nWhich;
+        USHORT nWhich;
         const SfxPoolItem* pItem = aIter.GetCurItem();
         while( TRUE )
         {
@@ -559,7 +561,7 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
             if ( bRet )
             {
                 // we push rAttr onto the appropriate stack
-                if ( Push( rAttr, *pItem , rFnt ) )
+                if ( Push( rAttr, *pItem ) )
                 {
                     // we let pItem change rFnt
                     Color aColor;
@@ -578,7 +580,7 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
     // stack and change the font
     else
     {
-        if ( Push( rAttr, rAttr.GetAttr(), rFnt ) )
+        if ( Push( rAttr, rAttr.GetAttr() ) )
             // we let pItem change rFnt
             FontChg( rAttr.GetAttr(), rFnt, sal_True );
     }
@@ -588,7 +590,7 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
  *                      SwAttrHandler::Push()
  *************************************************************************/
 
-sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem, SwFont& rFnt )
+sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
 {
     ASSERT( rItem.Which() < RES_TXTATR_WITHEND_END ||
             RES_UNKNOWNATR_CONTAINER == rItem.Which() ,
