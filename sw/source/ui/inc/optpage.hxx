@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:48:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:06:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ public:
     void                SetFax( const SvStringsDtor& );
     void                SelectFax( const String& );
     void                SetPreview(BOOL bPrev);
-    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void        PageCreated (SfxAllItemSet aSet);
 
 };
 
@@ -273,7 +273,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 
     void    SetFontMode(sal_uInt8 nGroup) {nFontGroup = nGroup;}
-    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void        PageCreated (SfxAllItemSet aSet);
 };
 
 /*-----------------18.01.97 12.10-------------------
@@ -335,7 +335,7 @@ public:
     virtual void        Reset( const SfxItemSet& rSet );
 
     void SetWrtShell(SwWrtShell* pSh) {pWrtShell = pSh;}
-    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void        PageCreated (SfxAllItemSet aSet);
 
 };
 /*-----------------31.10.97 17:55-------------------
@@ -400,7 +400,9 @@ class SwMarkPreview : public Window
 
     USHORT          nMarkPos;
 
+    using OutputDevice::DrawRect;
     void            DrawRect(const Rectangle &rRect, const Color &rFillColor, const Color &rLineColor);
+
     void            Paint(const Rectangle&);
     void            PaintPage(const Rectangle &rRect);
     void            InitColors( void );
