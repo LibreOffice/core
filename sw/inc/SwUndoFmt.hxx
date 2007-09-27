@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwUndoFmt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:30:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:55:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 #define _SW_UNDO_TXT_FMT_COLL_HXX
 
 #include <undobj.hxx>
+#include <swundo.hxx>
+
 class SwDoc;
 class SwTxtFmtColl;
 class String;
@@ -50,12 +52,12 @@ protected:
     SwDoc * pDoc;
     mutable String sNewName;
     SfxItemSet * pNewSet;
-    USHORT nId;
+    USHORT nId;     // FmtId related
     BOOL bAuto;
 
 public:
 
-    SwUndoFmtCreate(USHORT nUndoId, SwFmt * pNew, SwFmt * pDerivedFrom,
+    SwUndoFmtCreate(SwUndoId nUndoId, SwFmt * pNew, SwFmt * pDerivedFrom,
                     SwDoc * pDoc);
     virtual ~SwUndoFmtCreate();
 
@@ -76,11 +78,11 @@ protected:
     SwDoc * pDoc;
     String sOldName;
     SfxItemSet aOldSet;
-    USHORT nId;
+    USHORT nId;     // FmtId related
     BOOL bAuto;
 
 public:
-    SwUndoFmtDelete(USHORT nUndoId, SwFmt * pOld, SwDoc * pDoc);
+    SwUndoFmtDelete(SwUndoId nUndoId, SwFmt * pOld, SwDoc * pDoc);
     ~SwUndoFmtDelete();
 
     virtual void Undo(SwUndoIter & rIter);
@@ -98,10 +100,10 @@ class SwUndoRenameFmt : public SwUndo
 protected:
     String sOldName, sNewName;
     SwDoc * pDoc;
-    USHORT nId;
+//    SwUndoId nId;
 
 public:
-    SwUndoRenameFmt(USHORT nUndoId, const String & sOldName,
+    SwUndoRenameFmt(SwUndoId nUndoId, const String & sOldName,
                     const String & sNewName,
                     SwDoc * pDoc);
     ~SwUndoRenameFmt();
