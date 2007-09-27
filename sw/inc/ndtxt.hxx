@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:24:32 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:06:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,9 +252,11 @@ public:
 
     // setze diese Attribute am TextNode. Wird der gesamte Bereich umspannt,
     // dann setze sie nur im AutoAttrSet (SwCntntNode:: SetAttr)
+    using SwCntntNode::SetAttr;
     BOOL SetAttr( const SfxItemSet& rSet,
                   xub_StrLen nStt, xub_StrLen nEnd, USHORT nMode = 0 );
     // erfrage die Attribute vom TextNode ueber den Bereich
+    using SwCntntNode::GetAttr;
     BOOL GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                     BOOL bOnlyTxtAttr  = FALSE,
                     BOOL bGetFromChrFmt = TRUE ) const;
