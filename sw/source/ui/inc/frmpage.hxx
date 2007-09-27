@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:16:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:00:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@
 #include <globals.hrc>
 #endif
 
+
 namespace sfx2{class FileDialogHelper;}
 class SwWrtShell;
 struct FrmMap;
@@ -124,8 +125,6 @@ class SwFrmPage: public SfxTabPage
     // OD 02.10.2003 #i18732# - check box for new option 'FollowTextFlow'
     CheckBox        aFollowTextFlowCB;
     FixedLine       aPositionFL;
-    BOOL            bAtHorzPosModified;
-    BOOL            bAtVertPosModified;
 
     // Example
     SvxSwFrameExample   aExampleWN;
@@ -133,13 +132,16 @@ class SwFrmPage: public SfxTabPage
     //'string provider'
     SvxSwFramePosString aFramePosString;
 
+    BOOL            bAtHorzPosModified;
+    BOOL            bAtVertPosModified;
+
     BOOL            bFormat;
     BOOL            bNew;
-    BOOL            bHtmlMode;
     BOOL            bNoModifyHdl;
     BOOL            bVerticalChanged;  //check done whether frame is in vertical environment
     BOOL            bIsVerticalFrame;  //current frame is in vertical environment - strings are exchanged
     BOOL            bIsInRightToLeft; // current frame is in right-to-left environment - strings are exchanged
+    BOOL            bHtmlMode;
     USHORT          nHtmlMode;
     USHORT          nDlgType;
     Size            aGrfSize;
@@ -153,10 +155,10 @@ class SwFrmPage: public SfxTabPage
     const SwPosition* mpToCharCntntPos;
 
     // Die alten Ausrichtungen
-    USHORT          nOldH;
-    USHORT          nOldHRel;
-    USHORT          nOldV;
-    USHORT          nOldVRel;
+    short        nOldH;
+    short    nOldHRel;
+    short        nOldV;
+    short    nOldVRel;
 
     FrmMap* pVMap;
     FrmMap* pHMap;
@@ -169,7 +171,7 @@ class SwFrmPage: public SfxTabPage
     DECL_LINK( AnchorTypeHdl, RadioButton * );
     DECL_LINK( PosHdl, ListBox * );
     DECL_LINK( RelHdl, ListBox * );
-    void            InitPos(USHORT nId, USHORT nH, USHORT nHRel,
+    void            InitPos(RndStdIds eId, USHORT nH, USHORT nHRel,
                             USHORT nV,  USHORT nVRel,
                             long   nX,  long   nY);
 
@@ -202,7 +204,7 @@ class SwFrmPage: public SfxTabPage
     USHORT          GetMapPos( const FrmMap *pMap, ListBox &rAlignLB );
     short           GetAlignment(FrmMap *pMap, USHORT nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
     short           GetRelation(FrmMap *pMap, ListBox &rRelationLB);
-    short           GetAnchor();
+    RndStdIds       GetAnchor();
 
     void            EnableGraficMode( void );   // hides auto check boxes and re-org controls for "Real Size" button
 
@@ -210,6 +212,10 @@ class SwFrmPage: public SfxTabPage
     ~SwFrmPage();
 
 public:
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
     static USHORT* GetRanges();
 
@@ -254,6 +260,10 @@ class SwGrfExtPage: public SfxTabPage
     ~SwGrfExtPage();
 
 public:
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
     virtual BOOL FillItemSet(SfxItemSet &rSet);
@@ -285,6 +295,10 @@ class SwFrmURLPage : public SfxTabPage
     SwFrmURLPage(Window *pParent, const SfxItemSet &rSet);
     ~SwFrmURLPage();
 public:
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
     virtual BOOL FillItemSet(SfxItemSet &rSet);
