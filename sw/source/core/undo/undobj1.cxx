@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:48:56 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:31:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 //---------------------------------------------------------------------
 
-SwUndoFlyBase::SwUndoFlyBase( SwFrmFmt* pFormat, USHORT nUndoId )
+SwUndoFlyBase::SwUndoFlyBase( SwFrmFmt* pFormat, SwUndoId nUndoId )
     : SwUndo( nUndoId ), pFrmFmt( pFormat )
 {
 }
@@ -236,7 +236,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
     const SwPosition* pPos = rAnchor.GetCntntAnchor();
     // die Positionen im Nodes-Array haben sich verschoben
-    if( FLY_IN_CNTNT == ( nRndId = rAnchor.GetAnchorId() ) )
+    if( FLY_IN_CNTNT == ( nRndId = static_cast<USHORT>(rAnchor.GetAnchorId()) ) )
     {
         nNdPgPos = pPos->nNode.GetIndex();
         nCntPos = pPos->nContent.GetIndex();
@@ -275,10 +275,11 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat )
     : SwUndoFlyBase( pFormat,
                      RES_DRAWFRMFMT == pFormat->Which() ?
-                     UNDO_INSDRAWFMT : UNDO_INSLAYFMT )
+                                          UNDO_INSDRAWFMT :
+                                          UNDO_INSLAYFMT )
 {
     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-    nRndId = rAnchor.GetAnchorId();
+    nRndId = static_cast<USHORT>(rAnchor.GetAnchorId());
     bDelFmt = FALSE;
     switch( nRndId )
     {
@@ -478,11 +479,12 @@ void SwUndoDelLayFmt::Redo()
 
 SwUndoSetFlyFmt::SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt )
     : SwUndo( UNDO_SETFLYFRMFMT ), SwClient( &rFlyFmt ), pFrmFmt( &rFlyFmt ),
-    pNewFmt( &rNewFrmFmt ), pOldFmt( (SwFrmFmt*)rFlyFmt.DerivedFrom() ),
+    pOldFmt( (SwFrmFmt*)rFlyFmt.DerivedFrom() ), pNewFmt( &rNewFrmFmt ),
     pItemSet( new SfxItemSet( *rFlyFmt.GetAttrSet().GetPool(),
                                 rFlyFmt.GetAttrSet().GetRanges() )),
-    nOldNode( 0 ), nOldCntnt( 0 ), nOldAnchorTyp( 0 ),
-    nNewNode( 0 ), nNewCntnt( 0 ), nNewAnchorTyp( 0 ), bAnchorChgd( FALSE )
+    nOldNode( 0 ), nNewNode( 0 ),
+    nOldCntnt( 0 ), nNewCntnt( 0 ),
+    nOldAnchorTyp( 0 ), nNewAnchorTyp( 0 ), bAnchorChgd( FALSE )
 {
 }
 
@@ -651,7 +653,7 @@ void SwUndoSetFlyFmt::PutAttr( USHORT nWhich, const SfxPoolItem* pItem )
             bAnchorChgd = TRUE;
 
             const SwFmtAnchor* pAnchor = (SwFmtAnchor*)pItem;
-            switch( nOldAnchorTyp = pAnchor->GetAnchorId() )
+            switch( nOldAnchorTyp = static_cast<USHORT>(pAnchor->GetAnchorId()) )
             {
             case FLY_IN_CNTNT:
             case FLY_AUTO_CNTNT:
@@ -666,7 +668,7 @@ void SwUndoSetFlyFmt::PutAttr( USHORT nWhich, const SfxPoolItem* pItem )
             }
 
             pAnchor = (SwFmtAnchor*)&pFrmFmt->GetAnchor();
-            switch( nNewAnchorTyp = pAnchor->GetAnchorId() )
+            switch( nNewAnchorTyp = static_cast<USHORT>(pAnchor->GetAnchorId()) )
             {
             case FLY_IN_CNTNT:
             case FLY_AUTO_CNTNT:
