@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:49:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:29:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,13 +65,13 @@
 #include <unotools/localedatawrapper.hxx>
 #endif
 
+#include <unomid.h>
+
 using namespace utl;
 using namespace rtl;
 using namespace ::com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::com::sun::star::uno;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
-#define C2S(cChar) String::CreateFromAscii(cChar)
 
 void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
 {
@@ -84,7 +84,7 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     aGridConfig(bWeb, *this),
     aCursorConfig(*this),
     pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : 0),
-    nFldUpdateFlags(0),
+    eFldUpdateFlags(AUTOUPD_OFF),
     nLinkUpdateMode(0),
     bIsHScrollMetricSet(sal_False),
     bIsVScrollMetricSet(sal_False),
@@ -167,7 +167,7 @@ SwContentViewConfig::~SwContentViewConfig()
 /*-- 09.02.07 09:55:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwContentViewConfig::Notify( const Sequence< OUString > &rPropertyNames )
+void SwContentViewConfig::Notify( const Sequence< OUString > & /*rPropertyNames*/ )
 {
     Load();
 }
@@ -181,7 +181,6 @@ void SwContentViewConfig::Commit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         sal_Bool bVal = FALSE;
@@ -318,7 +317,6 @@ void SwLayoutViewConfig::Commit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         sal_Bool bSet;
@@ -398,13 +396,13 @@ void SwLayoutViewConfig::Load()
                     case 11:
                     {
                         sal_Int32 nVal; pValues[nProp] >>= nVal;
-                        rParent.SetZoom((USHORT)nVal);
+                        rParent.SetZoom( static_cast< USHORT >(nVal) );
                     }
                     break;// "Zoom/Value",
                     case 12:
                     {
                         sal_Int32 nVal; pValues[nProp] >>= nVal;
-                        rParent.SetZoomType((BYTE)nVal);
+                        rParent.SetZoomType( static_cast< SvxZoomType >(nVal) );
                     }
                     break;// "Zoom/Type",
                     case 13:
@@ -475,7 +473,6 @@ void SwGridConfig::Commit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         sal_Bool bSet;
@@ -511,7 +508,7 @@ void SwGridConfig::Load()
             if(pValues[nProp].hasValue())
             {
                 sal_Bool bSet = nProp < 3 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
-                sal_Int32 nSet;
+                sal_Int32 nSet = 0;
                 if(nProp >= 3)
                     pValues[nProp] >>= nSet;
                 switch(nProp)
@@ -573,7 +570,6 @@ void SwCursorConfig::Commit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         sal_Bool bSet;
@@ -604,8 +600,8 @@ void SwCursorConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                sal_Bool bSet;
-                sal_Int32 nSet;
+                sal_Bool bSet = sal_False;
+                sal_Int32 nSet = 0;
                 if(nProp != 1 )
                     bSet = *(sal_Bool*)pValues[nProp].getValue();
                 else
