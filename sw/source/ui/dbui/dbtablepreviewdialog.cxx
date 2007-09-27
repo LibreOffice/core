@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtablepreviewdialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:04:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:31:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,23 +67,28 @@
 
 #include <dbui.hrc>
 #include <dbtablepreviewdialog.hrc>
+#include <unomid.h>
 
-using namespace com::sun::star;
-using namespace rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
+using namespace ::rtl;
 
-#define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 /*-- 08.04.2004 15:12:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, uno::Sequence< beans::PropertyValue>& rValues ) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_DBTABLEPREVIEWDIALOG)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aDescriptionFI( this, SW_RES(        FI_DESCRIPTION)),
     m_pBeamerWIN( new Window(this, SW_RES( WIN_BEAMER ))),
     m_aOK( this, SW_RES(                   PB_OK  ))
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
 {
