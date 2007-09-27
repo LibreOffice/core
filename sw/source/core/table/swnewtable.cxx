@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swnewtable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:17:07 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:10:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -674,7 +674,7 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     long nNewBoxWidth = 0;
     std::vector< USHORT > aInsPos( aLines.Count(), USHRT_MAX );
     { // Calculation of the insert positions and the width of the new boxes
-        long nTableWidth = 0;
+        sal_uInt64 nTableWidth = 0;
         for( USHORT i = 0; i < aLines[0]->GetTabBoxes().Count(); ++i )
             nTableWidth += aLines[0]->GetTabBoxes()[i]->GetFrmFmt()->GetFrmSize().GetWidth();
 
@@ -696,7 +696,7 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         nAddWidth = nNewBoxWidth * nCnt; // Rounding
         if( !nAddWidth || nAddWidth >= nTableWidth )
             return FALSE;
-        AdjustWidths( nTableWidth, long(nTableWidth - nAddWidth) );
+        AdjustWidths( static_cast< long >(nTableWidth), static_cast< long >(nTableWidth - nAddWidth) );
     }
 
     _FndBox aFndBox( 0, 0 );
@@ -1022,8 +1022,6 @@ SwTableBox& SwTableBox::FindStartOfRowSpan( const SwTable& rTable, USHORT nMaxSt
     if( getRowSpan() > 0 || !nMaxStep )
         return *this;
 
-    const USHORT nSteps = nMaxStep;
-
     long nLeftBorder = lcl_Box2LeftBorder( *this );
     SwTableBox* pBox = this;
     const SwTableLine* pMyUpper = GetUpper();
@@ -1053,8 +1051,6 @@ SwTableBox& SwTableBox::FindEndOfRowSpan( const SwTable& rTable, USHORT nMaxStep
         nAbsSpan = -nAbsSpan;
     if( nAbsSpan == 1 || !nMaxStep )
         return *this;
-
-    const USHORT nSteps = nMaxStep;
 
     if( nMaxStep > --nAbsSpan )
         nMaxStep = (USHORT)nAbsSpan;
@@ -1108,7 +1104,6 @@ void lcl_UnMerge( const SwTable& rTable, SwTableBox& rBox, USHORT nCnt,
         return;
     if( nCnt > nCount )
         nCnt = nCount;
-    USHORT nIdx = 0;
     USHORT *pSplitIdx = new USHORT[ nCnt ];
     if( bSameHeight )
     {
@@ -1137,6 +1132,7 @@ void lcl_UnMerge( const SwTable& rTable, SwTableBox& rBox, USHORT nCnt,
         for( long i = 1; i <= nCnt; ++i )
             pSplitIdx[ i - 1 ] = (USHORT)( ( i * nCount ) / nCnt );
     }
+    USHORT nIdx = 0;
     for( long i = 0; i < nCnt; ++i )
     {
         USHORT nNextIdx = pSplitIdx[ i ];
@@ -2067,7 +2063,7 @@ void SwTable::CheckConsistency() const
             {
                 ASSERT( aIter != aRowSpanCells.end(), "Missing master box" )
 #ifndef PRODUCT
-                RowSpanCheck &rCheck = *aIter;
+                //RowSpanCheck &rCheck = *aIter;
 #endif
                 ASSERT( aIter->nLeft == nWidth && aIter->nRight == nNewWidth,
                     "Wrong position/size of overlapped table box" );
