@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:39:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:42:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,11 +97,6 @@
 
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
-
-const SwTwips nXFree = 4*142;        // == 0.25 cm * 4
-const SwTwips nYFree = 4*142;
-static USHORT nPrevViewXFreePix = 0;
-static USHORT nPrevViewYFreePix = 0;
 
 // OD 12.12.2002 #103492#
 SwPagePreviewLayout* ViewShell::PagePreviewLayout()
@@ -277,7 +272,7 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
 
         aMulti.Select( Range( nLastPageNo+1, USHRT_MAX ), FALSE );
         USHORT nSelCount = USHORT((aMulti.GetSelectCount()+nPages-1) / nPages);
-        nSelCount *= nCopyCnt;
+        nSelCount = nSelCount * nCopyCnt;
         USHORT nPrintCount = 1;
 
         const XubString aTmp( SW_RES( STR_STATSTR_PRINT ) );
@@ -779,8 +774,8 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
 
             pPrt->EndPage();
             SwPaintQueue::Repaint();
-            nSPg += nStep;
-            nEPg -= nStep;
+            nSPg = nSPg + nStep;
+            nEPg = nEPg - nStep;
         }
         pPrt->SetMapMode( aOld );
 
