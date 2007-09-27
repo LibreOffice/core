@@ -4,9 +4,9 @@
  *
  *  $RCSfile: index.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:42:18 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:26:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,10 +143,10 @@ IDX_CHK_ARRAY
 
 SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue )
 {
-    register SwIndex* pFnd = (SwIndex*)&rIdx;
+    SwIndex* pFnd = (SwIndex*)&rIdx;
     if( rIdx.nIndex > nNewValue )               // nach vorne versuchen
     {
-        register SwIndex* pPrv;
+        SwIndex* pPrv;
         while( 0 != ( pPrv = pFnd->pPrev ) && pPrv->nIndex > nNewValue )
             pFnd = pPrv;
 
@@ -175,7 +175,7 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue )
     }
     else if( rIdx.nIndex < nNewValue )
     {
-        register SwIndex* pNxt;
+        SwIndex* pNxt;
         while( 0 != ( pNxt = pFnd->pNext ) && pNxt->nIndex < nNewValue )
             pFnd = pNxt;
 
@@ -327,7 +327,6 @@ SwIndexReg::SwIndexReg()
 {
 }
 
-#ifndef PRODUCT
 
 
 SwIndexReg::~SwIndexReg()
@@ -335,17 +334,16 @@ SwIndexReg::~SwIndexReg()
     ASSERT( !pFirst || !pLast, "Es sind noch Indizies angemeldet" );
 }
 
-#endif
 
 
 void SwIndexReg::Update( const SwIndex& rIdx, xub_StrLen nDiff, BOOL bNeg,
                          BOOL /* argument is only used in derived class*/ )
 {
-    register SwIndex* pStt = (SwIndex*)&rIdx;
-    register xub_StrLen nNewVal = rIdx.nIndex;
+    SwIndex* pStt = (SwIndex*)&rIdx;
+    xub_StrLen nNewVal = rIdx.nIndex;
     if( bNeg )
     {
-        register xub_StrLen nLast = rIdx.GetIndex() + nDiff;
+        xub_StrLen nLast = rIdx.GetIndex() + nDiff;
         while( pStt && pStt->nIndex == nNewVal )
         {
             pStt->nIndex = nNewVal;
@@ -360,7 +358,7 @@ void SwIndexReg::Update( const SwIndex& rIdx, xub_StrLen nDiff, BOOL bNeg,
         }
         while( pStt )
         {
-            pStt->nIndex -= nDiff;
+            pStt->nIndex = pStt->nIndex - nDiff;
             pStt = pStt->pNext;
         }
     }
@@ -368,13 +366,13 @@ void SwIndexReg::Update( const SwIndex& rIdx, xub_StrLen nDiff, BOOL bNeg,
     {
         while( pStt && pStt->nIndex == nNewVal )
         {
-            pStt->nIndex += nDiff;
+            pStt->nIndex = pStt->nIndex + nDiff;
             pStt = pStt->pPrev;
         }
         pStt = rIdx.pNext;
         while( pStt )
         {
-            pStt->nIndex += nDiff;
+            pStt->nIndex = pStt->nIndex + nDiff;
             pStt = pStt->pNext;
         }
     }
