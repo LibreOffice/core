@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textglos.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:17:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,12 +53,11 @@
 #include "cmdid.h"
 #include "textsh.hxx"
 #include "initui.hxx"
-//CHINA001 #include "glossary.hxx"
 #include "gloshdl.hxx"
 #include "glosdoc.hxx"
 #include "gloslst.hxx"
-#include "swabstdlg.hxx" //CHINA001
-#include <misc.hrc> //CHINA001
+#include "swabstdlg.hxx"
+#include <misc.hrc>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -103,11 +102,10 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                     aShortName = (( const SfxStringItem *)pItem)->GetValue();
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pFact, "Dialogdiet fail!");
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
-                //CHINA001 end
                 pGlosHdl->SetCurGroup(aGroup, TRUE);
                 //eingestellte Gruppe muss in NewGlossary ggf. erzeugt werden!
                 pGlosHdl->NewGlossary( aName, aShortName, TRUE );
@@ -120,11 +118,10 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
             {
                 String aGroup = (( const SfxStringItem *)pItem)->GetValue();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pFact, "Dialogdiet fail!");
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
-                //CHINA001 end
                 rReq.Done();
             }
         break;
@@ -137,11 +134,10 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                 if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, FALSE, &pItem ))
                     aName = (( const SfxStringItem *)pItem)->GetValue();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pFact, "Dialogdiet fail!");
                 ::GlossarySetActGroup fnSetActGroup = pFact->SetGlossaryActGroupFunc( DLG_RENAME_GLOS );
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
-                //CHINA001 end
                 pGlosHdl->SetCurGroup(aGroup, TRUE);
                 rReq.SetReturnValue(SfxBoolItem(nSlot, pGlosHdl->InsertGlossary( aName )));
                 rReq.Done();
