@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:39:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:56:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,8 @@ class SwOutlineContent : public SwContent
                             BYTE nLevel,
                             BOOL bMove,
                             long nYPos) :
-            SwContent(pCnt, rName, nYPos), nOutlineLevel(nLevel),
-                        nOutlinePos(nArrPos), bIsMoveable(bMove){}
+            SwContent(pCnt, rName, nYPos),
+            nOutlinePos(nArrPos), nOutlineLevel(nLevel), bIsMoveable(bMove) {}
 
     USHORT  GetPos(){return nOutlinePos;}
     BYTE    GetOutlineLevel(){return nOutlineLevel;}
@@ -109,8 +109,8 @@ class SwRegionContent : public SwContent
 
 class SwURLFieldContent : public SwContent
 {
-    const SwTxtINetFmt* pINetAttr;
     String sURL;
+    const SwTxtINetFmt* pINetAttr;
 
 public:
     SwURLFieldContent(  const SwContentType* pCnt,
