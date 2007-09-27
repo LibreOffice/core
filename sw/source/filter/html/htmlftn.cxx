@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlftn.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:10:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:48:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ xub_StrLen lcl_html_getEndNoteInfo( SwEndNoteInfo& rInfo,
         switch( nPart )
         {
         case 0:
-            rInfo.aFmt.SetNumberingType(bEndNote ? SVX_NUM_ROMAN_LOWER : SVX_NUM_ARABIC);
+            rInfo.aFmt.SetNumberingType( static_cast< sal_Int16 >(bEndNote ? SVX_NUM_ROMAN_LOWER : SVX_NUM_ARABIC));
             if( aPart.Len() )
                 rInfo.aFmt.SetNumberingType(SwHTMLParser::GetNumType( aPart,
                                                              rInfo.aFmt.GetNumberingType() ));
@@ -287,7 +287,7 @@ void SwHTMLParser::DeleteFootEndNoteImpl()
 
 SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const String& rName )
 {
-    SwNodeIndex *pSttNdIdx = 0;
+    SwNodeIndex *pStartNodeIdx = 0;
 
     if( pFootEndNoteImpl )
     {
@@ -300,7 +300,7 @@ SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const String& rName )
         {
             if( *pFootEndNoteImpl->aNames[i] == aName )
             {
-                pSttNdIdx = pFootEndNoteImpl->aTxtFtns[i]->GetStartNode();
+                pStartNodeIdx = pFootEndNoteImpl->aTxtFtns[i]->GetStartNode();
                 pFootEndNoteImpl->aNames.DeleteAndDestroy( i, 1 );
                 pFootEndNoteImpl->aTxtFtns.Remove( i, 1 );
                 if( !pFootEndNoteImpl->aNames.Count() )
@@ -314,7 +314,7 @@ SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const String& rName )
         }
     }
 
-    return pSttNdIdx;
+    return pStartNodeIdx;
 }
 
 Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
