@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:05:25 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:09:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,9 +315,9 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     aAny.setValue( &bShowChanges, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sShowChanges, aAny );
     // ... and hide redlines for export
-    nRedlineMode &= ~IDocumentRedlineAccess::REDLINE_SHOW_MASK;
-    nRedlineMode |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
-    pDoc->SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)( nRedlineMode ));
+    nRedlineMode &= ~nsRedlineMode_t::REDLINE_SHOW_MASK;
+    nRedlineMode |= nsRedlineMode_t::REDLINE_SHOW_INSERT;
+    pDoc->SetRedlineMode((RedlineMode_t)( nRedlineMode ));
 
     // Set base URI
     OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
@@ -348,9 +348,9 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         OUString sAutoTextMode(
                 RTL_CONSTASCII_USTRINGPARAM("AutoTextMode"));
         sal_Bool bTmp = sal_True;
-        Any aAny;
-        aAny.setValue( &bTmp, ::getBooleanCppuType() );
-        xInfoSet->setPropertyValue( sAutoTextMode, aAny );
+        Any aAny2;
+        aAny2.setValue( &bTmp, ::getBooleanCppuType() );
+        xInfoSet->setPropertyValue( sAutoTextMode, aAny2 );
     }
 
     // --> OD 2006-09-26 #i69627#
@@ -487,19 +487,19 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         try
         {
             uno::Reference < io::XStream > xStm = xStg->openStreamElement( sStreamName, embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
-            SvStream* pStrm = utl::UcbStreamHelper::CreateStream( xStm );
-            if( !pStrm->GetError() )
+            SvStream* pStream = utl::UcbStreamHelper::CreateStream( xStm );
+            if( !pStream->GetError() )
             {
                 uno::Reference < beans::XPropertySet > xSet( xStm, UNO_QUERY );
                 String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
                 OUString aMime( RTL_CONSTASCII_USTRINGPARAM("application/binary") );
-                uno::Any aAny;
-                aAny <<= aMime;
-                xSet->setPropertyValue( aPropName, aAny );
-                pDoc->WriteLayoutCache( *pStrm );
+                uno::Any aAny2;
+                aAny2 <<= aMime;
+                xSet->setPropertyValue( aPropName, aAny2 );
+                pDoc->WriteLayoutCache( *pStream );
             }
 
-            delete pStrm;
+            delete pStream;
         }
         catch ( uno::Exception& )
         {
@@ -517,11 +517,11 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     // restore redline mode
     aAny = xInfoSet->getPropertyValue( sShowChanges );
     nRedlineMode = pDoc->GetRedlineMode();
-    nRedlineMode &= ~IDocumentRedlineAccess::REDLINE_SHOW_MASK;
-    nRedlineMode |= IDocumentRedlineAccess::REDLINE_SHOW_INSERT;
+    nRedlineMode &= ~nsRedlineMode_t::REDLINE_SHOW_MASK;
+    nRedlineMode |= nsRedlineMode_t::REDLINE_SHOW_INSERT;
     if ( *(sal_Bool*)aAny.getValue() )
-        nRedlineMode |= IDocumentRedlineAccess::REDLINE_SHOW_DELETE;
-    pDoc->SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)( nRedlineMode ));
+        nRedlineMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
+    pDoc->SetRedlineMode((RedlineMode_t)( nRedlineMode ));
 
     if (xStatusIndicator.is())
     {
@@ -702,7 +702,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
 
 // -----------------------------------------------------------------------
 
-void GetXMLWriter( const String& rName, const String& rBaseURL, WriterRef& xRet )
+void GetXMLWriter( const String& /*rName*/, const String& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwXMLWriter( rBaseURL );
 }
