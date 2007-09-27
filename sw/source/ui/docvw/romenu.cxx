@@ -4,9 +4,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:53:18 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:40:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace com::sun::star::ui::dialogs;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
 SwReadOnlyPopup::~SwReadOnlyPopup()
@@ -174,16 +174,16 @@ SwReadOnlyPopup::~SwReadOnlyPopup()
 
 void SwReadOnlyPopup::Check( USHORT nMID, USHORT nSID, SfxDispatcher &rDis )
 {
-    SfxPoolItem *pItem = 0;
-    SfxItemState eState = rDis.GetBindings()->QueryState( nSID, pItem );
+    SfxPoolItem *_pItem = 0;
+    SfxItemState eState = rDis.GetBindings()->QueryState( nSID, _pItem );
     if (eState >= SFX_ITEM_AVAILABLE)
     {
         EnableItem( nMID, TRUE );
-        if (pItem)
+        if (_pItem)
         {
-            CheckItem ( nMID, !pItem->ISA(SfxVoidItem) &&
-                            pItem->ISA(SfxBoolItem) &&
-                            ((SfxBoolItem*)pItem)->GetValue());
+            CheckItem ( nMID, !_pItem->ISA(SfxVoidItem) &&
+                            _pItem->ISA(SfxBoolItem) &&
+                            ((SfxBoolItem*)_pItem)->GetValue());
             //remove full screen entry when not in full screen mode
             if(SID_WIN_FULLSCREEN == nSID && !IsItemChecked(SID_WIN_FULLSCREEN) )
                 EnableItem(nMID, FALSE);
@@ -192,14 +192,14 @@ void SwReadOnlyPopup::Check( USHORT nMID, USHORT nSID, SfxDispatcher &rDis )
     else
         EnableItem( nMID, FALSE );
 
-    delete pItem;
+    delete _pItem;
 }
 
 
 SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     PopupMenu( SW_RES(MN_READONLY_POPUP) ),
-    rDocPos( rDPos ),
     rView  ( rV ),
+    rDocPos( rDPos ),
     pImageMap( 0 ),
     pTargetURL( 0 )
 {
@@ -229,11 +229,11 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     {
         aGraphic = *pGrf;
         const SwFrmFmt* pGrfFmt = rSh.GetFmtFromObj( rDocPos );
-        const SfxPoolItem* pItem;
+        const SfxPoolItem* pURLItem;
         if( pGrfFmt && SFX_ITEM_SET == pGrfFmt->GetItemState(
-            RES_URL, TRUE, &pItem ))
+            RES_URL, TRUE, &pURLItem ))
         {
-            const SwFmtURL& rURL = *(SwFmtURL*)pItem;
+            const SwFmtURL& rURL = *(SwFmtURL*)pURLItem;
             if( rURL.GetMap() )
                 pImageMap = new ImageMap( *rURL.GetMap() );
             else if( rURL.GetURL().Len() )
@@ -474,6 +474,7 @@ static void lcl_GetPreferedExtension( String &rExt, /*const*/ Graphic &rGrf )
         case GFX_LINK_TYPE_NATIVE_MET:      pExt = "met"; break;
         case GFX_LINK_TYPE_NATIVE_PCT:      pExt = "pct"; break;
         case GFX_LINK_TYPE_NATIVE_JPG:      pExt = "jpg"; break;
+        default:; //prevent warning
     }
     rExt.AssignAscii( pExt );
 }
@@ -483,7 +484,6 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
 {
     SvtPathOptions aPathOpt;
     String sGrfPath( aPathOpt.GetGraphicPath() );
-    SwWrtShell &rSh = rView.GetWrtShell();
 
     FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
     Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
@@ -525,21 +525,21 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
         lcl_GetPreferedExtension( aExt, aGraphic );
 
     aExt.ToLowerAscii();
-    int nDfltFilter = INT_MAX;
+    USHORT nDfltFilter = USHRT_MAX;
 
     Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
 
-    for ( int i = 0; i < nCount; i++ )
+    for ( USHORT i = 0; i < nCount; i++ )
     {
         xFltMgr->appendFilter( rGF.GetExportFormatName( i ), rGF.GetExportWildcard( i ) );
         if ( COMPARE_EQUAL == aExt.CompareIgnoreCaseToAscii(rGF.GetExportFormatShortName( i ).ToLowerAscii() ))
             nDfltFilter = i;
     }
-    if ( INT_MAX == nDfltFilter )
+    if ( USHRT_MAX == nDfltFilter )
     {
         //"falsche" Extension?
         lcl_GetPreferedExtension( aExt, aGraphic );
-        for ( int i = 0; i < nCount; ++i )
+        for ( USHORT i = 0; i < nCount; ++i )
             if ( aExt == rGF.GetExportFormatShortName( i ).ToLowerAscii() )
             {
                 nDfltFilter =  i;
@@ -547,7 +547,7 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
             }
     }
 
-    if( INT_MAX != nDfltFilter )
+    if( USHRT_MAX != nDfltFilter )
     {
         xFltMgr->setCurrentFilter( rGF.GetExportFormatName( nDfltFilter ) ) ;
 
@@ -582,7 +582,7 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
                 }
             }
 
-            int nFilter;
+            USHORT nFilter;
             if ( xFltMgr->getCurrentFilter().getLength() && rGF.GetExportFormatCount() )
                 nFilter = rGF.GetExportFormatNumber( xFltMgr->getCurrentFilter() );
             else
