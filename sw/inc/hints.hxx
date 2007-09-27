@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hints.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:25:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,9 +220,9 @@ public:
     const SwAttrSet* GetTheChgdSet() const  { return pTheChgdSet; }
 
     USHORT Count() const { return pChgSet->Count(); }
-    void ClearItem( USHORT nWhich = 0 )
+    void ClearItem( USHORT nWhichL = 0 )
 #ifdef PRODUCT
-    { pChgSet->ClearItem( nWhich ); }
+    { pChgSet->ClearItem( nWhichL ); }
 #else
         ;
 #endif
