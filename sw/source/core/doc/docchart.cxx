@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docchart.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:24:32 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:33:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ BOOL SwTable::IsTblComplexForChart( const String& rSelection,
 
 
 
-IMPL_LINK( SwDoc, DoUpdateAllCharts, Timer *, /*pTimer*/ )
+IMPL_LINK( SwDoc, DoUpdateAllCharts, Timer *, EMPTYARG )
 {
     ViewShell* pVSh;
     GetEditShell( &pVSh );
