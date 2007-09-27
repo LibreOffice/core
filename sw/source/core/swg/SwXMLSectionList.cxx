@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLSectionList.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:30:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:09:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,9 +103,9 @@ SvXMLSectionListContext::SvXMLSectionListContext(
    SwXMLSectionList& rImport,
    sal_uInt16 nPrefix,
    const OUString& rLocalName,
-   const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
-   rLocalRef(rImport),
-   SvXMLImportContext ( rImport, nPrefix, rLocalName )
+   const uno::Reference<   xml::sax::XAttributeList > & ) :
+   SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+   rLocalRef(rImport)
 {
 }
 
@@ -126,9 +126,9 @@ SvXMLImportContext *SvXMLSectionListContext::CreateChildContext(
         {
             const OUString& rAttrName = xAttrList->getNameByIndex( i );
             OUString aLocalName;
-            sal_uInt16 nPrefix = rLocalRef.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
+            sal_uInt16 nPrefx = rLocalRef.GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName);
             const OUString& rAttrValue = xAttrList->getValueByIndex( i );
-            if (XML_NAMESPACE_TEXT == nPrefix && IsXMLToken ( aLocalName, XML_NAME ) )
+            if (XML_NAMESPACE_TEXT == nPrefx && IsXMLToken ( aLocalName, XML_NAME ) )
                 sName = rAttrValue;
         }
         if ( sName.Len() )
@@ -146,9 +146,9 @@ SvXMLIgnoreSectionListContext::SvXMLIgnoreSectionListContext(
    SwXMLSectionList& rImport,
    sal_uInt16 nPrefix,
    const OUString& rLocalName,
-   const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
-   rLocalRef(rImport),
-   SvXMLImportContext ( rImport, nPrefix, rLocalName )
+   const uno::Reference< xml::sax::XAttributeList > & ) :
+   SvXMLImportContext ( rImport, nPrefix, rLocalName ),
+   rLocalRef(rImport)
 {
 }
 
