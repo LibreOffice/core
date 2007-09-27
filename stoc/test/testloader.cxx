@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testloader.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 14:00:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:08:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ SAL_IMPLEMENT_MAIN()
     Module module;
 
     OUString dllName(
-        RTL_CONSTASCII_USTRINGPARAM("shlibloader.uno" SAL_DLLEXTENSION) );
+        RTL_CONSTASCII_USTRINGPARAM("bootstrap.uno" SAL_DLLEXTENSION) );
 
     if (module.load(dllName))
     {
