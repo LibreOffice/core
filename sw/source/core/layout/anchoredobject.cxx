@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:07:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:00:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,11 @@
 #ifndef _LAYOUTER_HXX
 #include <layouter.hxx>
 #endif
+
+
+using namespace ::com::sun::star;
+
+
 // <--
 // ============================================================================
 // --> OD 2004-06-30 #i28701# -
@@ -399,19 +404,19 @@ void SwAnchoredObject::_CheckCharRect( const SwFmtAnchor& _rAnch,
             // OD 07.10.2003 #110978# - add condition to invalidate position,
             // if vertical aligned at frame/page area and vertical position
             // of anchor character has changed.
-            const SwRelationOrient eVertRelOrient = aVert.GetRelationOrient();
-            if ( ( aHori.GetRelationOrient() == REL_CHAR &&
+            const sal_Int16 eVertRelOrient = aVert.GetRelationOrient();
+            if ( ( aHori.GetRelationOrient() == text::RelOrientation::CHAR &&
                    (aCharRect.*fnRect->fnGetLeft)() !=
                         (maLastCharRect.*fnRect->fnGetLeft)() ) ||
-                 ( eVertRelOrient == REL_CHAR &&
+                 ( eVertRelOrient == text::RelOrientation::CHAR &&
                    ( (aCharRect.*fnRect->fnGetTop)() !=
                         (maLastCharRect.*fnRect->fnGetTop)() ||
                      (aCharRect.*fnRect->fnGetHeight)() !=
                         (maLastCharRect.*fnRect->fnGetHeight)() ) ) ||
-                 ( ( ( eVertRelOrient == FRAME ) ||
-                     ( eVertRelOrient == PRTAREA ) ||
-                     ( eVertRelOrient == REL_PG_FRAME ) ||
-                     ( eVertRelOrient == REL_PG_PRTAREA ) ) &&
+                 ( ( ( eVertRelOrient == text::RelOrientation::FRAME ) ||
+                     ( eVertRelOrient == text::RelOrientation::PRINT_AREA ) ||
+                     ( eVertRelOrient == text::RelOrientation::PAGE_FRAME ) ||
+                     ( eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA ) ) &&
                    ( (aCharRect.*fnRect->fnGetTop)() !=
                         (maLastCharRect.*fnRect->fnGetTop)() ) ) )
             {
@@ -452,7 +457,7 @@ void SwAnchoredObject::_CheckTopOfLine( const SwFmtAnchor& _rAnch,
         if ( nTopOfLine != mnLastTopOfLine )
         {
             // check alignment for invalidation of position
-            if ( GetFrmFmt().GetVertOrient().GetRelationOrient() == REL_VERT_LINE )
+            if ( GetFrmFmt().GetVertOrient().GetRelationOrient() == text::RelOrientation::TEXT_LINE )
             {
                 // --> OD 2004-10-08 #i26945#, #i35911# - unlock position of
                 // anchored object, if it isn't registered at the page,
