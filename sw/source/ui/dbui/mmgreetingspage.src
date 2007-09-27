@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmgreetingspage.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-24 16:07:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:34:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,11 +133,11 @@
         Size = MAP_APPFONT ( 180 , 50 ) ;                                           \
         DropDown = TRUE;                                                            \
         Border = TRUE;                                                              \
-    };                                                                              \
-
+    };
 
 #define TOP_OFFSET 24
 #define LEFT_OFFSET 6
+
 TabPage DLG_MM_GREETINGS_PAGE
 {
     HelpID = HID_MM_GREETINGSPAGE ;
@@ -200,6 +200,7 @@ TabPage DLG_MM_GREETINGS_PAGE
         Text[ en-US ] = "Document: %1";
     };
 };
+
 #undef TOP_OFFSET
 #undef LEFT_OFFSET
 
