@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfatr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:15:59 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:04:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,14 +66,14 @@
  *  class SwMirrorGrf
  ******************************************************************************/
 
-enum GRFMIRROR
+enum MirrorGraph
 {
-RES_GRFMIRROR_BEGIN,
-    RES_DONT_MIRROR_GRF = RES_GRFMIRROR_BEGIN,
-    RES_MIRROR_GRF_VERT,
-    RES_MIRROR_GRF_HOR,
-    RES_MIRROR_GRF_BOTH,
-RES_GRFMIRROR_END
+RES_MIRROR_GRAPH_BEGIN,
+    RES_MIRROR_GRAPH_DONT = RES_MIRROR_GRAPH_BEGIN,
+    RES_MIRROR_GRAPH_VERT,
+    RES_MIRROR_GRAPH_HOR,
+    RES_MIRROR_GRAPH_BOTH,
+RES_MIRROR_GRAPH_END
 };
 
 class SW_DLLPUBLIC SwMirrorGrf : public SfxEnumItem
@@ -81,8 +81,8 @@ class SW_DLLPUBLIC SwMirrorGrf : public SfxEnumItem
     BOOL bGrfToggle; // auf geraden Seiten Grafiken spiegeln
 
 public:
-    SwMirrorGrf( USHORT nMiro = RES_DONT_MIRROR_GRF )
-        : SfxEnumItem( RES_GRFATR_MIRRORGRF, nMiro ), bGrfToggle( sal_False )
+    SwMirrorGrf( MirrorGraph eMiro = RES_MIRROR_GRAPH_DONT )
+        : SfxEnumItem( RES_GRFATR_MIRRORGRF, static_cast< USHORT >(eMiro) ), bGrfToggle( sal_False )
     {}
     SwMirrorGrf( const SwMirrorGrf &rMirrorGrf )
         : SfxEnumItem( RES_GRFATR_MIRRORGRF, rMirrorGrf.GetValue()),
@@ -197,8 +197,8 @@ public:
 class SwChannelGrf : public SfxInt16Item
 {
 protected:
-    SwChannelGrf( sal_Int16 nVal, USHORT nWhich )
-        : SfxInt16Item( nWhich, nVal )
+    SwChannelGrf( sal_Int16 nVal, USHORT nWhichL )
+        : SfxInt16Item( nWhichL, nVal )
     {}
 
 public:
