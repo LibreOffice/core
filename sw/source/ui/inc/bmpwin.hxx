@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpwin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:42:01 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:54:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,8 @@ public:
     BmpWindow(Window* pPar, USHORT nId,
                 const Graphic& rGraphic, const BitmapEx& rBmp, const BitmapEx& rBmpHC);
     BmpWindow(Window* pParent, const ResId rResId) :
-        Window(pParent, rResId), bLeftAlign(TRUE),
-        bHorz(FALSE), bVert(FALSE),bGraphic(FALSE){}
+        Window(pParent, rResId),
+        bHorz(FALSE), bVert(FALSE),bGraphic(FALSE), bLeftAlign(TRUE) {}
     ~BmpWindow();
     void MirrorVert(BOOL bMirror) { bVert = bMirror; Invalidate(); }
     void MirrorHorz(BOOL bMirror) { bHorz = bMirror; Invalidate(); }
