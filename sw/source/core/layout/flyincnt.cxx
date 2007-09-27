@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flyincnt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:18:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:02:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,7 +230,8 @@ void SwFlyInCntFrm::MakeObjPos()
         const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
         //Und ggf. noch die aktuellen Werte im Format updaten, dabei darf
         //zu diesem Zeitpunkt natuerlich kein Modify verschickt werden.
-        SWRECTFN( GetAnchorFrm() )
+        const bool bVert = GetAnchorFrm()->IsVertical();
+        const bool bRev = GetAnchorFrm()->IsReverse();
         SwTwips nOld = rVert.GetPos();
         SwTwips nAct = bVert ? -GetCurrRelPos().X() : GetCurrRelPos().Y();
         if( bRev )
@@ -249,15 +250,8 @@ void SwFlyInCntFrm::MakeObjPos()
 // --> OD 2004-12-02 #115759#
 void SwFlyInCntFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
 {
-    switch ( _nInvalid )
-    {
-        case INVALID_POS:
-        case INVALID_ALL:
-        {
-            AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, &GetFrmFmt() );
-        }
-        break;
-    }
+    if ( INVALID_POS == _nInvalid || INVALID_ALL == _nInvalid )
+        AnchorFrm()->Prepare( PREP_FLY_ATTR_CHG, &GetFrmFmt() );
 }
 // <--
 /*************************************************************************
