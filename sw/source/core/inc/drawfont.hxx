@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:47:42 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,11 @@
  ************************************************************************/
 #ifndef _DRAWFONT_HXX
 #define _DRAWFONT_HXX
+
+#include <tools/solar.h>
+#include <tools/string.hxx>
+#include <errhdl.hxx>
+
 class SwTxtFrm;
 class OutputDevice;
 class ViewShell;
@@ -522,9 +527,9 @@ public:
         bBullet = bNew;
     }
 
-    void SetUnderFnt( SwUnderlineFont* pFnt )
+    void SetUnderFnt( SwUnderlineFont* pULFnt )
     {
-        pUnderFnt = pFnt;
+        pUnderFnt = pULFnt;
     }
 
     void SetUpper( BOOL bNew )
