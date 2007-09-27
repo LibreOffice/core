@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:08:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:51:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,6 +273,8 @@
 #define TOOLS_CONSTASCII_STRINGPARAM( constAsciiStr ) constAsciiStr, sizeof( constAsciiStr )-1
 #endif
 
+using namespace ::com::sun::star;
+
 // <P ALIGN=xxx>, <Hn ALIGN=xxx>, <TD ALIGN=xxx> usw.
 HTMLOptionEnum __FAR_DATA aHTMLPAlignTable[] =
 {
@@ -314,9 +316,9 @@ String HTMLReader::GetTemplateName() const
     // <--
 #endif
 
-    SvtPathOptions aOpt;
+    SvtPathOptions aPathOpt;
     // OpenDocument Writer/Web template (extension .oth)
-    BOOL bSet = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
+    BOOL bSet = aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
 
 #ifndef MAC_WITHOUT_EXT
     if( !bSet )
@@ -327,7 +329,7 @@ String HTMLReader::GetTemplateName() const
         // search for OpenOffice.org Writer/Web template
         sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".stw") );
         // <--
-        bSet = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
+        bSet = aPathOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
     }
 #endif
 
@@ -413,48 +415,55 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
                             int bReadNewDoc,
                             SfxMedium* pMed, BOOL bReadUTF8,
                             sal_Bool bNoHTMLComments )
-    : SfxHTMLParser( rIn, bReadNewDoc, pMed ),
+    : SfxHTMLParser( rIn, static_cast< BOOL >(bReadNewDoc), pMed ),
     SwClient( 0 ),
     aPathToFile( rPath ),
     sBaseURL( rBaseURL ),
+    pAppletImpl( 0 ),
+    pCSS1Parser( 0 ),
+    pNumRuleInfo( new SwHTMLNumRuleInfo ),
+    pPendStack( 0 ),
     pDoc( pD ),
-    pTable(0), pFormImpl( 0 ), pMarquee( 0 ),
+    pActionViewShell( 0 ),
+    pSttNdIdx( 0 ),
+    pTable(0),
+    pFormImpl( 0 ),
+    pMarquee( 0 ),
     pField( 0 ),
-    pCSS1Parser( 0 ), pNumRuleInfo( new SwHTMLNumRuleInfo ),
-    eParaAdjust( SVX_ADJUST_END ),
+    pImageMap( 0 ),
+    pImageMaps( 0 ),
+    pFootEndNoteImpl( 0 ),
     nScriptStartLineNr( 0 ),
-    nBaseFontStMin( 0 ), nFontStMin( 0 ),
+    nBaseFontStMin( 0 ),
+    nFontStMin( 0 ),
     nDefListDeep( 0 ),
     nFontStHeadStart( 0 ),
     nSBModuleCnt( 0 ),
     nMissingImgMaps( 0 ),
-    nOpenParaToken( 0 ),
-    pImageMap( 0 ),
-    pImageMaps( 0 ),
-    pSttNdIdx( 0 ),
-    pPendStack( 0 ),
     nParaCnt( 5 ),
-    pActionViewShell( 0 ),
-    pAppletImpl( 0 ),
-    pFootEndNoteImpl( 0 ),
-    nContextStMin( 0 ),
-    nContextStAttrMin( 0 ),
+    nOpenParaToken( 0 ),
+    eJumpTo( JUMPTO_NONE ),
+#ifndef PRODUCT
+    nContinue( 0 ),
+#endif
+    eParaAdjust( SVX_ADJUST_END ),
+    bDocInitalized( FALSE ),
+    bSetModEnabled( FALSE ),
     bInFloatingFrame( FALSE ),
-    bInNoEmbed( FALSE ),
-    bInField( FALSE ), bInTitle( FALSE ),
-    bInFootEndNoteAnchor( FALSE ), bInFootEndNoteSymbol( FALSE ),
-    bNoParSpace( FALSE ), bDocInitalized( FALSE ), bCallNextToken( FALSE ),
+    bInField( FALSE ),
+    bCallNextToken( FALSE ),
     bIgnoreRawData( FALSE ),
+    bNoParSpace( FALSE ),
+    bInNoEmbed( FALSE ),
+    bInTitle( FALSE ),
     bUpdateDocStat( FALSE ),
     bFixSelectWidth( FALSE ),
     bFixSelectHeight( FALSE ),
-    bTextArea( FALSE ), bSelect( FALSE ),
-    bSetModEnabled( FALSE ),
-    bIgnoreHTMLComments( bNoHTMLComments ),
-    eJumpTo( JUMPTO_NONE )
-#ifndef PRODUCT
-    ,nContinue( 0 )
-#endif
+    bTextArea( FALSE ),
+    bSelect( FALSE ),
+    bInFootEndNoteAnchor( FALSE ),
+    bInFootEndNoteSymbol( FALSE ),
+    bIgnoreHTMLComments( bNoHTMLComments )
 {
     nEventId = 0;
     bUpperSpace = bViewCreated = bChkJumpMark =
@@ -623,7 +632,7 @@ __EXPORT SwHTMLParser::~SwHTMLParser()
     }
 }
 
-IMPL_LINK( SwHTMLParser, AsyncCallback, void*, pVoid )
+IMPL_LINK( SwHTMLParser, AsyncCallback, void*, /*pVoid*/ )
 {
     nEventId=0;
 
@@ -648,7 +657,6 @@ SvParserState __EXPORT SwHTMLParser::CallParser()
     if( !IsNewDoc() )       // in ein Dokument einfuegen ?
     {
         const SwPosition* pPos = pPam->GetPoint();
-        SwTxtNode* pSttNd = pPos->nNode.GetNode().GetTxtNode();
 
         pDoc->SplitNode( *pPos, false );
 
@@ -847,13 +855,13 @@ ASSERT( pSttNdIdx->GetIndex()+1 != pPam->GetBound( FALSE ).nNode.GetIndex(),
 
 if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( TRUE ).nNode.GetIndex() )
 {
-    register xub_StrLen nCntPos = pPam->GetBound( TRUE ).nContent.GetIndex();
+    xub_StrLen nCntPos = pPam->GetBound( TRUE ).nContent.GetIndex();
     pPam->GetBound( TRUE ).nContent.Assign( pTxtNode,
                     pTxtNode->GetTxt().Len() + nCntPos );
 }
 if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
 {
-    register xub_StrLen nCntPos = pPam->GetBound( FALSE ).nContent.GetIndex();
+    xub_StrLen nCntPos = pPam->GetBound( FALSE ).nContent.GetIndex();
     pPam->GetBound( FALSE ).nContent.Assign( pTxtNode,
                     pTxtNode->GetTxt().Len() + nCntPos );
 }
@@ -1249,7 +1257,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                 break;
 
             default:
-                InsertTextAreaText( nToken );
+                InsertTextAreaText( static_cast< sal_uInt16 >(nToken) );
                 break;
             }
 
@@ -1392,10 +1400,10 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
 
     case HTML_BASE:
         {
-            const HTMLOptions *pOptions = GetOptions();
-            for( USHORT i = pOptions->Count(); i; )
+            const HTMLOptions *pHTMLOptions = GetOptions();
+            for( USHORT i = pHTMLOptions->Count(); i; )
             {
-                const HTMLOption *pOption = (*pOptions)[ --i ];
+                const HTMLOption *pOption = (*pHTMLOptions)[ --i ];
                 switch( pOption->GetToken() )
                 {
                 case HTML_O_HREF:
@@ -1550,7 +1558,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                 const String& rText =
                     pDoc->GetNodes()[ pPam->GetPoint()->nNode ]->GetTxtNode()
                                                                ->GetTxt();
-                register sal_Unicode cLast = rText.GetChar(--nPos);
+                sal_Unicode cLast = rText.GetChar(--nPos);
                 if( ' ' == cLast || '\x0a' == cLast)
                     aToken.Erase(0,1);
             }
@@ -1993,10 +2001,10 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
         break;      // nicht weiter auswerten, oder???
     case HTML_HTML_ON:
         {
-            const HTMLOptions *pOptions = GetOptions();
-            for( USHORT i = pOptions->Count(); i; )
+            const HTMLOptions *pHTMLOptions = GetOptions();
+            for( USHORT i = pHTMLOptions->Count(); i; )
             {
-                const HTMLOption *pOption = (*pOptions)[ --i ];
+                const HTMLOption *pOption = (*pHTMLOptions)[ --i ];
                 if( HTML_O_DIR == pOption->GetToken() )
                 {
                     const String& rDir = pOption->GetString();
@@ -2155,7 +2163,7 @@ void lcl_swhtml_getItemInfo( const _HTMLAttr& rAttr,
     case RES_CHRATR_LANGUAGE:
     case RES_CHRATR_POSTURE:
     case RES_CHRATR_WEIGHT:
-        rScriptType = ::com::sun::star::i18n::ScriptType::LATIN;
+        rScriptType = i18n::ScriptType::LATIN;
         rScriptDependent = sal_True;
         break;
     case RES_CHRATR_CJK_FONT:
@@ -2164,7 +2172,7 @@ void lcl_swhtml_getItemInfo( const _HTMLAttr& rAttr,
     case RES_CHRATR_CJK_LANGUAGE:
     case RES_CHRATR_CJK_POSTURE:
     case RES_CHRATR_CJK_WEIGHT:
-        rScriptType = ::com::sun::star::i18n::ScriptType::ASIAN;
+        rScriptType = i18n::ScriptType::ASIAN;
         rScriptDependent = sal_True;
         break;
     case RES_CHRATR_CTL_FONT:
@@ -2173,7 +2181,7 @@ void lcl_swhtml_getItemInfo( const _HTMLAttr& rAttr,
     case RES_CHRATR_CTL_LANGUAGE:
     case RES_CHRATR_CTL_POSTURE:
     case RES_CHRATR_CTL_WEIGHT:
-        rScriptType = ::com::sun::star::i18n::ScriptType::COMPLEX;
+        rScriptType = i18n::ScriptType::COMPLEX;
         rScriptDependent = sal_True;
         break;
     default:
@@ -2392,7 +2400,7 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
             if( RES_CHRATR_CJK_FONT <= nWhich &&
                     nWhich <= RES_CHRATR_CTL_WEIGHT )
             {
-                nIdx = (nWhich - RES_CHRATR_CJK_FONT + 5);
+                nIdx = static_cast< USHORT >(nWhich - RES_CHRATR_CJK_FONT + 5);
             }
             else switch( nWhich )
             {
@@ -2553,11 +2561,13 @@ ViewShell *SwHTMLParser::CallStartAction( ViewShell *pVSh, BOOL bChkPtr )
 
     if( !pVSh || bChkPtr )
     {
+#ifndef PRODUCT
         ViewShell *pOldVSh = pVSh;
+#endif
         pDoc->GetEditShell( &pVSh );
         ASSERT( !pVSh || !pOldVSh || pOldVSh == pVSh,
                 "CallStartAction: Wer hat die ViewShell ausgetauscht?" );
-#if OSL_DEBUG_LEVEL > 1
+#ifndef PRODUCT
         if( pOldVSh && !pVSh )
             pVSh = 0;
 #endif
@@ -2600,7 +2610,7 @@ ViewShell *SwHTMLParser::CallEndAction( BOOL bChkAction, BOOL bChkPtr )
         ViewShell *pSh = pActionViewShell;
         do {
             if( pSh->IsA( TYPE( SwCrsrShell ) ) )
-                ((SwCrsrShell*)pSh)->SttDoc();
+                ((SwCrsrShell*)pSh)->SttEndDoc(TRUE);
             pSh = (ViewShell *)pSh->GetNext();
         } while( pSh != pActionViewShell );
 
@@ -2609,9 +2619,9 @@ ViewShell *SwHTMLParser::CallEndAction( BOOL bChkAction, BOOL bChkPtr )
     if( pActionViewShell->ISA( SwEditShell ) )
     {
         //Schon gescrollt?, dann dafuer sorgen, dass die View sich nicht bewegt!
-        const FASTBOOL bOldLock = pActionViewShell->IsViewLocked();
+        const BOOL bOldLock = pActionViewShell->IsViewLocked();
         pActionViewShell->LockView( TRUE );
-        const FASTBOOL bOldEndActionByVirDev = pActionViewShell->IsEndActionByVirDev();
+        const BOOL bOldEndActionByVirDev = pActionViewShell->IsEndActionByVirDev();
         pActionViewShell->SetEndActionByVirDev( TRUE );;
         ((SwEditShell*)pActionViewShell)->EndAction();
         pActionViewShell->SetEndActionByVirDev( bOldEndActionByVirDev );
@@ -2911,7 +2921,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
                         eJumpTo = JUMPTO_NONE;
                     }
 
-                    pDoc->Insert( *pAttrPam, *pAttr->pItem, SETATTR_DONTREPLACE );
+                    pDoc->Insert( *pAttrPam, *pAttr->pItem, nsSetAttrMode::SETATTR_DONTREPLACE );
                 }
                 pAttrPam->DeleteMark();
 
@@ -2956,17 +2966,17 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
             pFrmFmt->SetAttr( aAnchor );
 
             const SwFmtHoriOrient& rHoriOri = pFrmFmt->GetHoriOrient();
-            if( HORI_LEFT == rHoriOri.GetHoriOrient() )
+            if( text::HoriOrientation::LEFT == rHoriOri.GetHoriOrient() )
             {
                 SwFmtHoriOrient aHoriOri( rHoriOri );
-                aHoriOri.SetRelationOrient( REL_CHAR );
+                aHoriOri.SetRelationOrient( text::RelOrientation::CHAR );
                 pFrmFmt->SetAttr( aHoriOri );
             }
             const SwFmtVertOrient& rVertOri = pFrmFmt->GetVertOrient();
-            if( VERT_TOP == rVertOri.GetVertOrient() )
+            if( text::VertOrientation::TOP == rVertOri.GetVertOrient() )
             {
                 SwFmtVertOrient aVertOri( rVertOri );
-                aVertOri.SetRelationOrient( REL_CHAR );
+                aVertOri.SetRelationOrient( text::RelOrientation::CHAR );
                 pFrmFmt->SetAttr( aVertOri );
             }
 
@@ -3071,7 +3081,7 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
 
 
     sal_Bool bInsert;
-    sal_uInt16 nScriptItem;
+    sal_uInt16 nScriptItem = 0;
     sal_Bool bScript = sal_False, bFont = sal_False;
     // ein Bereich ??
     if( !bChkEmpty || (RES_PARATR_BEGIN <= nWhich && bMoveBack) ||
@@ -3448,10 +3458,10 @@ void SwHTMLParser::NewStdAttr( int nToken )
 {
     String aId, aStyle, aClass, aLang, aDir;
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
         case HTML_O_ID:
@@ -3473,7 +3483,7 @@ void SwHTMLParser::NewStdAttr( int nToken )
     }
 
     // einen neuen Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
+    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3501,10 +3511,10 @@ void SwHTMLParser::NewStdAttr( int nToken,
 {
     String aId, aStyle, aClass, aLang, aDir;
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
         case HTML_O_ID:
@@ -3526,7 +3536,7 @@ void SwHTMLParser::NewStdAttr( int nToken,
     }
 
     // einen neuen Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
+    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3567,7 +3577,7 @@ void SwHTMLParser::NewStdAttr( int nToken,
 void SwHTMLParser::EndTag( int nToken )
 {
     // den Kontext holen
-    _HTMLAttrContext *pCntxt = PopContext( nToken & ~1 );
+    _HTMLAttrContext *pCntxt = PopContext( static_cast< sal_uInt16 >(nToken & ~1) );
     if( pCntxt )
     {
         // und ggf. die Attribute beenden
@@ -3582,10 +3592,10 @@ void SwHTMLParser::NewBasefontAttr()
     String aId, aStyle, aClass, aLang, aDir;
     USHORT nSize = 3;
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
         case HTML_O_SIZE:
@@ -3679,10 +3689,10 @@ void SwHTMLParser::NewFontAttr( int nToken )
     USHORT nSize = 0;       // Fontgroesse in Netscape-Notation (1-7)
     BOOL bColor = FALSE;
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
         case HTML_O_SIZE:
@@ -3746,7 +3756,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
             // wenn die Schriftgroesse in der Ueberschrift noch
             // nicht veraendert ist, die aus der Vorlage nehmen
             if( nFontStHeadStart==aFontStack.Count() )
-                nFontSize = 6 - (nPoolId - RES_POOLCOLL_HEADLINE1);
+                nFontSize = static_cast< USHORT >(6 - (nPoolId - RES_POOLCOLL_HEADLINE1));
         }
         else
             nPoolId = 0;
@@ -3816,7 +3826,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
 
 
     // einen neuen Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
+    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
@@ -3902,17 +3912,17 @@ void SwHTMLParser::NewPara()
     eParaAdjust = SVX_ADJUST_END;
     String aId, aStyle, aClass, aLang, aDir;
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
             case HTML_O_ID:
                 aId = pOption->GetString();
                 break;
             case HTML_O_ALIGN:
-                eParaAdjust = (SvxAdjust)pOption->GetEnum( aHTMLPAlignTable, eParaAdjust );
+                eParaAdjust = (SvxAdjust)pOption->GetEnum( aHTMLPAlignTable, static_cast< sal_uInt16 >(eParaAdjust) );
                 break;
             case HTML_O_STYLE:
                 aStyle = pOption->GetString();
@@ -3971,7 +3981,9 @@ void SwHTMLParser::EndPara( BOOL bReal )
 {
     if( HTML_LI_ON==nOpenParaToken && pTable )
     {
+#ifndef PRODUCT
         const SwNumRule *pNumRule = pPam->GetNode()->GetTxtNode()->GetNumRule();
+#endif
         ASSERT( pNumRule, "Wo ist die Numrule geblieben" );
     }
 
@@ -3995,8 +4007,8 @@ void SwHTMLParser::EndPara( BOOL bReal )
     // den Kontext vom Stack holen. Er kann auch von einer implizit
     // geoeffneten Definitionsliste kommen
     _HTMLAttrContext *pCntxt =
-        PopContext( nOpenParaToken ? (nOpenParaToken & ~1)
-                                   : HTML_PARABREAK_ON );
+        PopContext( static_cast< sal_uInt16 >(nOpenParaToken ? (nOpenParaToken & ~1)
+                                   : HTML_PARABREAK_ON) );
 
     // Attribute beenden
     if( pCntxt )
@@ -4020,17 +4032,17 @@ void SwHTMLParser::NewHeading( int nToken )
 
     String aId, aStyle, aClass, aLang, aDir;
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
             case HTML_O_ID:
                 aId = pOption->GetString();
                 break;
             case HTML_O_ALIGN:
-                eParaAdjust = (SvxAdjust)pOption->GetEnum( aHTMLPAlignTable, eParaAdjust );
+                eParaAdjust = (SvxAdjust)pOption->GetEnum( aHTMLPAlignTable, static_cast< sal_uInt16 >(eParaAdjust) );
                 break;
             case HTML_O_STYLE:
                 aStyle = pOption->GetString();
@@ -4067,7 +4079,7 @@ void SwHTMLParser::NewHeading( int nToken )
     }
 
     // den Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken, nTxtColl, aClass );
+    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken), nTxtColl, aClass );
 
     // Styles parsen (zu Class siehe auch NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang, &aDir ) )
@@ -4146,10 +4158,10 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, USHORT nColl )
 {
     String aId, aStyle, aClass, aLang, aDir;
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
             case HTML_O_ID:
@@ -4202,7 +4214,7 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, USHORT nColl )
         AddParSpace();
 
     // ... und in einem Kontext merken
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken, nColl, aClass );
+    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken), nColl, aClass );
 
     // Styles parsen (zu Class siehe auch NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyStr, &aLang, &aDir ) )
@@ -4255,7 +4267,7 @@ void SwHTMLParser::EndTxtFmtColl( int nToken )
         AddParSpace();
 
     // den aktuellen Kontext vom Stack holen
-    _HTMLAttrContext *pCntxt = PopContext( nToken & ~1 );
+    _HTMLAttrContext *pCntxt = PopContext( static_cast< sal_uInt16 >(nToken & ~1) );
 
     // und noch Attribute beenden
     if( pCntxt )
@@ -4275,10 +4287,10 @@ void SwHTMLParser::NewDefList()
 {
     String aId, aStyle, aClass, aLang, aDir;
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
             case HTML_O_ID:
@@ -4350,7 +4362,7 @@ void SwHTMLParser::NewDefList()
         SvxLRSpaceItem rLRSpace =
             pCSS1Parser->GetTxtFmtColl( RES_POOLCOLL_HTML_DD, aEmptyStr )
                        ->GetLRSpace();
-        nLeft += rLRSpace.GetTxtLeft();
+        nLeft = nLeft + static_cast< sal_uInt16 >(rLRSpace.GetTxtLeft());
     }
 
     pCntxt->SetMargins( nLeft, nRight, nIndent );
@@ -4430,15 +4442,15 @@ void SwHTMLParser::NewDefListItem( int nToken )
         nDefListDeep++;
         ASSERT( !nOpenParaToken,
                 "Jetzt geht ein offenes Absatz-Element verloren" );
-        nOpenParaToken = nToken;
+        nOpenParaToken = static_cast< sal_uInt16 >(nToken);
     }
 
-    NewTxtFmtColl( nToken, nToken==HTML_DD_ON ? RES_POOLCOLL_HTML_DD
-                                              : RES_POOLCOLL_HTML_DT );
+    NewTxtFmtColl( nToken, static_cast< USHORT >(nToken==HTML_DD_ON ? RES_POOLCOLL_HTML_DD
+                                              : RES_POOLCOLL_HTML_DT) );
 }
 
 void SwHTMLParser::EndDefListItem( int nToken, BOOL bSetColl,
-                                   BOOL bLastPara )
+                                   BOOL /*bLastPara*/ )
 {
     // einen neuen Absatz aufmachen
     if( !nToken && pPam->GetPoint()->nContent.GetIndex() )
@@ -4724,8 +4736,8 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
             }
 
             // die Absatz-Abstaende addieren sich
-            nLeftMargin += nLeft;
-            nRightMargin += nRight;
+            nLeftMargin = nLeftMargin + static_cast< sal_uInt16 >(nLeft);
+            nRightMargin = nRightMargin + static_cast< sal_uInt16 >(nRight);
 
             pContext->SetMargins( nLeftMargin, nRightMargin,
                                   nFirstLineIndent );
@@ -4744,9 +4756,9 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
         pCollToSet = pCSS1Parser->GetTxtCollFromPool( nDfltColl );
         const SvxLRSpaceItem& rLRItem = pCollToSet->GetLRSpace();
         if( !nLeftMargin )
-            nLeftMargin = rLRItem.GetTxtLeft();
+            nLeftMargin = static_cast< sal_uInt16 >(rLRItem.GetTxtLeft());
         if( !nRightMargin )
-            nRightMargin = rLRItem.GetRight();
+            nRightMargin = static_cast< sal_uInt16 >(rLRItem.GetRight());
         if( !nFirstLineIndent )
             nFirstLineIndent = rLRItem.GetTxtFirstLineOfst();
     }
@@ -4802,10 +4814,10 @@ void SwHTMLParser::NewCharFmt( int nToken )
 {
     String aId, aStyle, aClass, aLang, aDir;
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
         case HTML_O_ID:
@@ -4827,10 +4839,10 @@ void SwHTMLParser::NewCharFmt( int nToken )
     }
 
     // einen neuen Kontext anlegen
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
+    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
     // die Vorlage setzen und im Kontext merken
-    SwCharFmt* pCFmt = pCSS1Parser->GetChrFmt( nToken, aClass );
+    SwCharFmt* pCFmt = pCSS1Parser->GetChrFmt( static_cast< sal_uInt16 >(nToken), aClass );
     ASSERT( pCFmt, "keine Zeichenvorlage zu Token gefunden" );
 
 
@@ -4866,18 +4878,18 @@ void SwHTMLParser::InsertSpacer()
 {
     // und es ggf. durch die Optionen veraendern
     String aId;
-    SwVertOrient eVertOri = VERT_TOP;
-    SwHoriOrient eHoriOri = HORI_NONE;
+    sal_Int16 eVertOri = text::VertOrientation::TOP;
+    sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     Size aSize( 0, 0);
     long nSize = 0;
     BOOL bPrcWidth = FALSE;
     BOOL bPrcHeight = FALSE;
     USHORT nType = HTML_SPTYPE_HORI;
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
         case HTML_O_ID:
@@ -4888,11 +4900,11 @@ void SwHTMLParser::InsertSpacer()
             break;
         case HTML_O_ALIGN:
             eVertOri =
-                (SwVertOrient)pOption->GetEnum( aHTMLImgVAlignTable,
-                                                eVertOri );
+                pOption->GetEnum( aHTMLImgVAlignTable,
+                                  eVertOri );
             eHoriOri =
-                (SwHoriOrient)pOption->GetEnum( aHTMLImgHAlignTable,
-                                                eHoriOri );
+                pOption->GetEnum( aHTMLImgHAlignTable,
+                                  eHoriOri );
             break;
         case HTML_O_WIDTH:
             // erstmal nur als Pixelwerte merken!
@@ -5015,7 +5027,7 @@ void SwHTMLParser::InsertSpacer()
                 short nIndent = 0;
 
                 GetMarginsFromContextWithNumBul( nLeft, nRight, nIndent );
-                nIndent += (short)nSize;
+                nIndent = nIndent + (short)nSize;
 
                 SvxLRSpaceItem aLRItem( RES_LR_SPACE );
                 aLRItem.SetTxtLeft( nLeft );
@@ -5079,10 +5091,10 @@ const SwTwips SwHTMLParser::GetCurrentBrowseWidth()
 void SwHTMLParser::InsertIDOption()
 {
     String aId;
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         if( HTML_O_ID==pOption->GetToken() )
         {
             aId = pOption->GetString();
@@ -5121,10 +5133,10 @@ void SwHTMLParser::InsertLineBreak()
     BOOL bCleared = FALSE;  // wurde ein CLEAR ausgefuehrt?
 
     // dann holen wir mal die Optionen
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
             case HTML_O_CLEAR:
@@ -5175,20 +5187,20 @@ void SwHTMLParser::InsertLineBreak()
                     pAPos->nNode == rNodeIdx &&
                     pFmt->GetSurround().GetSurround() != SURROUND_NONE )
                 {
-                    SwHoriOrient eHori = RES_DRAWFRMFMT == pFmt->Which()
-                        ? HORI_LEFT
+                    sal_Int16 eHori = RES_DRAWFRMFMT == pFmt->Which()
+                        ? text::HoriOrientation::LEFT
                         : pFmt->GetHoriOrient().GetHoriOrient();
 
                     SwSurround eSurround = SURROUND_PARALLEL;
                     if( pPam->GetPoint()->nContent.GetIndex() )
                     {
-                        if( bClearLeft && HORI_LEFT==eHori )
+                        if( bClearLeft && text::HoriOrientation::LEFT==eHori )
                             eSurround = SURROUND_RIGHT;
-                        else if( bClearRight && HORI_RIGHT==eHori )
+                        else if( bClearRight && text::HoriOrientation::RIGHT==eHori )
                             eSurround = SURROUND_LEFT;
                     }
-                    else if( (bClearLeft && HORI_LEFT==eHori) ||
-                             (bClearRight && HORI_RIGHT==eHori) )
+                    else if( (bClearLeft && text::HoriOrientation::LEFT==eHori) ||
+                             (bClearRight && text::HoriOrientation::RIGHT==eHori) )
                     {
                         eSurround = SURROUND_NONE;
                     }
@@ -5270,10 +5282,10 @@ void SwHTMLParser::InsertHorzRule()
     String aId;
 
     // dann holen wir mal die Optionen
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
         case HTML_O_ID:
@@ -5294,7 +5306,7 @@ void SwHTMLParser::InsertHorzRule()
             break;
         case HTML_O_ALIGN:
             eAdjust =
-                (SvxAdjust)pOption->GetEnum( aHTMLPAlignTable, eAdjust );
+                (SvxAdjust)pOption->GetEnum( aHTMLPAlignTable, static_cast< sal_uInt16 >(eAdjust) );
             break;
         case HTML_O_NOSHADE:
             bNoShade = TRUE;
@@ -5432,12 +5444,12 @@ void SwHTMLParser::InsertHorzRule()
 void SwHTMLParser::ParseMoreMetaOptions()
 {
     String aName, aContent;
-    BOOL bHTTPEquiv = FALSE, bChanged = FALSE;
+    BOOL bHTTPEquiv = FALSE;
 
-    const HTMLOptions *pOptions = GetOptions();
-    for( USHORT i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( USHORT i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[ --i ];
+        const HTMLOption *pOption = (*pHTMLOptions)[ --i ];
         switch( pOption->GetToken() )
         {
         case HTML_O_NAME:
@@ -5505,23 +5517,35 @@ void SwHTMLParser::ParseMoreMetaOptions()
 /*  */
 
 _HTMLAttr::_HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
-                      _HTMLAttr **ppHd )
-    : nSttPara( rPos.nNode ), nEndPara( rPos.nNode ),
+                      _HTMLAttr **ppHd ) :
+    nSttPara( rPos.nNode ),
+    nEndPara( rPos.nNode ),
     nSttCntnt( rPos.nContent.GetIndex() ),
     nEndCntnt(rPos.nContent.GetIndex() ),
-    nCount( 1 ), pNext( 0 ), pPrev( 0 ), ppHead( ppHd ),
-    bInsAtStart( TRUE ), bLikePara( FALSE ), bValid( TRUE )
+    bInsAtStart( TRUE ),
+    bLikePara( FALSE ),
+    bValid( TRUE ),
+    nCount( 1 ),
+    pNext( 0 ),
+    pPrev( 0 ),
+    ppHead( ppHd )
 {
     pItem = rItem.Clone();
 }
 
 _HTMLAttr::_HTMLAttr( const _HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
                       USHORT nEndCnt, _HTMLAttr **ppHd ) :
-    nSttPara( rAttr.nSttPara ), nEndPara( rEndPara ),
-    nSttCntnt( rAttr.nSttCntnt ), nEndCntnt( nEndCnt ),
-    nCount( rAttr.nCount ), pNext( 0 ), pPrev( 0 ), ppHead( ppHd ),
-    bInsAtStart( rAttr.bInsAtStart ), bLikePara( rAttr.bLikePara ),
-    bValid( rAttr.bValid )
+    nSttPara( rAttr.nSttPara ),
+    nEndPara( rEndPara ),
+    nSttCntnt( rAttr.nSttCntnt ),
+    nEndCntnt( nEndCnt ),
+    bInsAtStart( rAttr.bInsAtStart ),
+    bLikePara( rAttr.bLikePara ),
+    bValid( rAttr.bValid ),
+    nCount( rAttr.nCount ),
+    pNext( 0 ),
+    pPrev( 0 ),
+    ppHead( ppHd )
 {
     pItem = rAttr.pItem->Clone();
 }
