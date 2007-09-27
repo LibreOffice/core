@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 14:41:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:36:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,9 +118,9 @@ using namespace ::com::sun::star::datatransfer::clipboard;
  *
  * --------------------------------------------------*/
 SwView_Impl::SwView_Impl(SwView* pShell) :
-        pView(pShell),
         pxXTextView(new uno::Reference<view::XSelectionSupplier>),
-        eShellMode(SEL_TEXT),
+        pView(pShell),
+        eShellMode(SHELL_MODE_TEXT),
         pConfigItem(0),
         nMailMergeRestartPage(0),
         bMailMergeSourceView(sal_True),
@@ -141,8 +141,9 @@ SwView_Impl::~SwView_Impl()
     Reference<XUnoTunnel> xDispTunnel(xDisProvInterceptor, UNO_QUERY);
     SwXDispatchProviderInterceptor* pInterceptor = 0;
     if(xDispTunnel.is() &&
-        0 != (pInterceptor = (SwXDispatchProviderInterceptor*)xDispTunnel->getSomething(
-            SwXDispatchProviderInterceptor::getUnoTunnelId())))
+        0 != (pInterceptor = reinterpret_cast< SwXDispatchProviderInterceptor * >(
+                    sal::static_int_cast< sal_IntPtr >(
+                    xDispTunnel->getSomething(SwXDispatchProviderInterceptor::getUnoTunnelId())))))
     {
         pInterceptor->Invalidate();
     }
@@ -295,7 +296,9 @@ void SwView_Impl::Invalidate()
     if(xTunnel.is())
 
     {
-        SwTransferable* pTransferable = (SwTransferable*)xTunnel->getSomething(SwTransferable::getUnoTunnelId());
+        SwTransferable* pTransferable = reinterpret_cast< SwTransferable * >(
+                sal::static_int_cast< sal_IntPtr >(
+                xTunnel->getSomething(SwTransferable::getUnoTunnelId())));
         if(pTransferable)
             pTransferable->Invalidate();
     }
@@ -337,7 +340,7 @@ SwScannerEventListener::~SwScannerEventListener()
 {
 }
 
-void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject) throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 #if defined WIN || defined WNT || defined UNX
@@ -352,7 +355,7 @@ SwClipboardChangeListener::~SwClipboardChangeListener()
 {
 }
 
-void SAL_CALL SwClipboardChangeListener::disposing( const EventObject& rEventObject )
+void SAL_CALL SwClipboardChangeListener::disposing( const EventObject& /*rEventObject*/ )
     throw ( RuntimeException )
 {
 }
@@ -417,7 +420,7 @@ JP 4.7.2001: change for WebTop - get Clipboard from the Window.
             }
         }  while ( FALSE );
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
 }
