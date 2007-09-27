@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 16:24:59 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:31:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,9 +116,6 @@
 #ifndef _TEXTSH_HXX
 #include <textsh.hxx>
 #endif
-//CHINA001 #ifndef _DRPCPS_HXX
-//CHINA001 #include <drpcps.hxx>
-//CHINA001 #endif
 #ifndef _NUM_HXX
 #include <num.hxx>
 #endif
@@ -141,8 +138,8 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
-#include "swabstdlg.hxx" //CHINA001
-#include "chrdlg.hrc" //CHINA001
+#include "swabstdlg.hxx"
+#include "chrdlg.hrc"
 const SwTwips lFontInc = 2 * 20;           // ==> PointToTwips(2)
 const SwTwips lFontMaxSz = 72 * 20;        // ==> PointToTwips(72)
 
@@ -174,7 +171,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
         case FN_SET_SUB_SCRIPT:
         case FN_SET_SUPER_SCRIPT:
         {
-            SvxEscapement eEscape;
+            SvxEscapement eEscape = SVX_ESCAPEMENT_SUBSCRIPT;
             switch (eState)
             {
             case STATE_TOGGLE:
@@ -264,7 +261,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
 
 void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
 {
-    int nSlot = rReq.GetSlot();
+    USHORT nSlot = rReq.GetSlot();
     const SfxItemSet* pArgs = rReq.GetArgs();
     BOOL bArgs = pArgs != 0 && pArgs->Count() > 0;
     int bGrow = FALSE;
@@ -292,12 +289,12 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             if( USHRT_MAX == aINetFmt.GetVisitedFmtId() )
             {
                 aINetFmt.SetVisitedFmtId(
-                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetVisitedFmt(), GET_POOLID_CHRFMT));
+                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetVisitedFmt(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT));
             }
             if( USHRT_MAX == aINetFmt.GetINetFmtId() )
             {
                 aINetFmt.SetINetFmtId(
-                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetINetFmt(), GET_POOLID_CHRFMT));
+                        SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt.GetINetFmt(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT));
             }
 
             if ( pColl )
@@ -594,12 +591,11 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 SfxItemSet aSet(GetPool(), RES_PARATR_DROP, RES_PARATR_DROP,
                                            HINT_END, HINT_END, 0);
                 rSh.GetAttr(aSet);
-                //CHINA001 SwDropCapsDlg *pDlg = new SwDropCapsDlg(GetView().GetWindow(), aSet);
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-                AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( GetView().GetWindow(), aSet, DLG_SWDROPCAPS );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( GetView().GetWindow(), aSet,DLG_SWDROPCAPS );
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 if (pDlg->Execute() == RET_OK)
                 {
                     rSh.StartAction();
@@ -656,8 +652,8 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     rSh.GetAttr(aCoreSet);  // *alle* Textattribute von der Core erfragen
 
     SfxWhichIter aIter(rSet);
-    register USHORT nSlot = aIter.FirstWhich();
-    register int bFlag;
+    USHORT nSlot = aIter.FirstWhich();
+    sal_Bool bFlag = sal_False;
     SfxBoolItem aFlagItem;
     const SfxPoolItem* pItem = 0;
     int eAdjust = -1;   // Illegaler Wert, um DONTCARE zu erkennen
