@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtclds.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:47:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:02:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ public:
 };
 
 typedef SwColumn* SwColumnPtr;
-SV_DECL_PTRARR_DEL( SwColumns, SwColumnPtr, 0, 2 );
+SV_DECL_PTRARR_DEL( SwColumns, SwColumnPtr, 0, 2 )
 
 enum SwColLineAdj
 {
@@ -155,7 +155,7 @@ public:
     USHORT GetGutterWidth( BOOL bMin = FALSE ) const;
 
 //  void SetLinePen( const Pen& rNew )  { aPen = rNew; }
-    void SetLineWidth(ULONG nWidth)         { nLineWidth = nWidth;}
+    void SetLineWidth(ULONG nLWidth)        { nLineWidth = nLWidth;}
     void SetLineColor(const Color& rCol )   { aLineColor = rCol;}
     void SetLineHeight( BYTE nNew )     { nLineHeight = nNew; }
     void SetLineAdj( SwColLineAdj eNew ){ eAdj = eNew; }
