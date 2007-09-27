@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accfootnote.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:42:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ protected:
 
 public:
 
-    SwAccessibleFootnote( SwAccessibleMap *pMap,
+    SwAccessibleFootnote( SwAccessibleMap* pInitMap,
                           sal_Bool bIsEndnote,
                           sal_Int32 nFootEndNote,
                           const SwFtnFrm *pFtnFrm );
