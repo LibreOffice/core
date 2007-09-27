@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:39:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:17:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,7 +287,7 @@ public:
     void MakeVisible( const SwRect & );
 
     //Bei naechster Gelegenheit die neue Dokuemntgroesse an das UI weiterreichen.
-    void SizeChgNotify(const Size &);
+    void SizeChgNotify();
     void UISizeNotify();            //Das weiterreichen der aktuellen groesse.
 
     Point GetPagePos( sal_uInt16 nPageNum ) const;
@@ -453,9 +453,9 @@ public:
     const SwAccessibilityOptions* GetAccessibilityOptions() const { return pAccOptions;}
 
     static void           SetShellRes( ShellResource* pRes ) { pShellRes = pRes; }
-    static ShellResource* GetShellRes(); //CHINA001 { return pShellRes; }
+    static ShellResource* GetShellRes();
 
-    static void           SetCareWin( Window* pNew ); //CHINA001 { pCareWindow = pNew; }
+    static void           SetCareWin( Window* pNew );
     static Window*        GetCareWin(ViewShell& rVSh)
                           { return pCareWindow ? pCareWindow : CareChildWin(rVSh); }
     static Window*        CareChildWin(ViewShell& rVSh);
@@ -464,7 +464,7 @@ public:
     inline void           SetSfxViewShell(SfxViewShell *pNew) { pSfxViewShell = pNew; }
 
     // Selektion der Draw ::com::sun::star::script::Engine geaendert
-    virtual void DrawSelChanged(SdrView*);
+    virtual void DrawSelChanged();
 
     // OD 12.12.2002 #103492#
     SwPagePreviewLayout* PagePreviewLayout();
@@ -524,7 +524,7 @@ public:
     //wenn sich der BrowdseModus aendert, bBrowseChgd == sal_True
     //oder, im BrowseModus, wenn sich die Groessenverhaeltnisse
     //aendern (bBrowseChgd == sal_False)
-    void CheckBrowseView( FASTBOOL bBrowseChgd );
+    void CheckBrowseView( BOOL bBrowseChgd );
 
     const Size& GetBrowseBorder() const{ return aBrowseBorder; }
     void SetBrowseBorder( const Size& rNew );
