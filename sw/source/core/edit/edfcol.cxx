@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edfcol.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 10:52:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:44:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,9 @@ SwTxtFmtColl* SwEditShell::MakeTxtFmtColl(const String& rFmtCollName,
     if ( pParent == 0 )
         pParent = &GetTxtFmtColl(0);
     if (  (pColl=GetDoc()->MakeTxtFmtColl(rFmtCollName, pParent)) == 0 )
-        ASSERT( FALSE, "MakeTxtFmtColl failed" );
+    {
+        ASSERT( FALSE, "MakeTxtFmtColl failed" )
+    }
     return pColl;
 
 }
