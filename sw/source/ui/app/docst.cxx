@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:50:39 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:17:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,6 @@
 #include "charfmt.hxx"
 #include "poolfmt.hxx"
 #include "pagedesc.hxx"
-//CHINA001 #include "tmpdlg.hxx"
 #include "docstyle.hxx"
 #include "uiitems.hxx"
 #include "fmtcol.hxx"
@@ -124,8 +123,11 @@
 #include "edtwin.hxx"
 
 #include "app.hrc"
-#include <fmtui.hrc> //CHINA001
-#include "swabstdlg.hxx" //CHINA001
+#include <fmtui.hrc>
+#include "swabstdlg.hxx"
+
+using namespace ::com::sun::star;
+
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -152,7 +154,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
         SfxViewFrame* pFrame = pShell->GetView().GetViewFrame();
         const ISfxTemplateCommon* pCommon = SFX_APP()->GetCurrentTemplateCommon(pFrame->GetBindings());
         if( pCommon )
-            nActualFamily = pCommon->GetActualFamily();
+            nActualFamily = static_cast< USHORT >(pCommon->GetActualFamily());
     }
 
     while (nWhich)
@@ -355,20 +357,20 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 SFX_REQUEST_ARG( rReq, pFamilyItem, SfxStringItem, SID_STYLE_FAMILYNAME, sal_False );
                 if ( pFamilyItem && pNameItem )
                 {
-                    com::sun::star::uno::Reference< com::sun::star::style::XStyleFamiliesSupplier > xModel(GetModel(), com::sun::star::uno::UNO_QUERY);
+                    uno::Reference< style::XStyleFamiliesSupplier > xModel(GetModel(), uno::UNO_QUERY);
                     try
                     {
-                        com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xStyles;
-                        com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xCont = xModel->getStyleFamilies();
+                        uno::Reference< container::XNameAccess > xStyles;
+                        uno::Reference< container::XNameAccess > xCont = xModel->getStyleFamilies();
                         xCont->getByName(pFamilyItem->GetValue()) >>= xStyles;
-                        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xInfo;
+                        uno::Reference< beans::XPropertySet > xInfo;
                         xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
                         ::rtl::OUString aUIName;
                         xInfo->getPropertyValue( ::rtl::OUString::createFromAscii("DisplayName") ) >>= aUIName;
                         if ( aUIName.getLength() )
                             rReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aUIName ) );
                     }
-                    catch( com::sun::star::uno::Exception& )
+                    catch( uno::Exception& )
                     {
                     }
                 }
@@ -384,7 +386,8 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
         case SID_STYLE_NEW_BY_EXAMPLE:
         {
             String aParam;
-            USHORT nFamily, nMask = 0;
+            USHORT nFamily = SFX_STYLE_FAMILY_PARA;
+            USHORT nMask = 0;
 
             if( !pArgs )
             {
@@ -578,7 +581,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
                     SwTxtFmtColl* pColl = pWrtShell->FindTxtFmtCollByName( rParent );
                     if(!pColl)
                     {
-                        USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, GET_POOLID_TXTCOLL);
+                        USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
                         if(USHRT_MAX != nId)
                             pColl =  pWrtShell->GetTxtCollFromPool( nId );
                     }
@@ -601,7 +604,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
                     SwCharFmt* pCFmt = pWrtShell->FindCharFmtByName( rParent );
                     if(!pCFmt)
                     {
-                        USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, GET_POOLID_CHRFMT);
+                        USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
                         if(USHRT_MAX != nId)
                             pCFmt =  pWrtShell->GetCharFmtFromPool( nId );
                     }
@@ -625,7 +628,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
                     SwFrmFmt* pFFmt = pWrtShell->GetDoc()->FindFrmFmtByName( rParent );
                     if(!pFFmt)
                     {
-                        USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, GET_POOLID_FRMFMT);
+                        USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName(rParent, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT);
                         if(USHRT_MAX != nId)
                             pFFmt =  pWrtShell->GetFrmFmtFromPool( nId );
                     }
@@ -694,15 +697,13 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
 
         PutItem(SfxUInt16Item(SID_HTML_MODE, nHtmlMode));
         FieldUnit eMetric = ::GetDfltMetric(0 != (HTMLMODE_ON&nHtmlMode));
-        SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
-//CHINA001      SwTemplateDlg* pDlg = new SwTemplateDlg( 0, aTmp, nFamily, bColumn,
-//CHINA001      pActShell ? pActShell : pWrtShell, bNew);
+        SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
         SfxAbstractTabDialog* pDlg = pFact->CreateTemplateDialog( DLG_TEMPLATE_BASE,
                                                     0, aTmp, nFamily, bColumn,
                                                     pActShell ? pActShell : pWrtShell, bNew);
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");
         if(RET_OK == pDlg->Execute())
         {
             GetWrtShell()->StartAllAction();
@@ -772,7 +773,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
             {
                 // #116530#
                 //pBasePool->Erase( &aTmp );
-                GetWrtShell()->Undo(0, 1);
+                GetWrtShell()->Undo(UNDO_EMPTY, 1);
                 pDoc->ClearRedo();
             }
 
@@ -880,7 +881,8 @@ USHORT SwDocShell::ApplyStyles(const String &rName, USHORT nFamily,
         case SFX_STYLE_FAMILY_CHAR:
         {
             SwFmtCharFmt aFmt(pStyle->GetCharFmt());
-            pSh->SetAttr( aFmt, (nMode & KEY_SHIFT) ? SETATTR_DONTREPLACE : SETATTR_DEFAULT );
+            pSh->SetAttr( aFmt, (nMode & KEY_SHIFT) ?
+                nsSetAttrMode::SETATTR_DONTREPLACE : nsSetAttrMode::SETATTR_DEFAULT );
             break;
         }
         case SFX_STYLE_FAMILY_PARA:
@@ -976,7 +978,7 @@ USHORT SwDocShell::DoWaterCan(const String &rName, USHORT nFamily)
 
 USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* pShell)
 {
-    SwWrtShell* pWrtShell = pShell ? pShell : GetWrtShell();
+    SwWrtShell* pCurrWrtShell = pShell ? pShell : GetWrtShell();
     ASSERT(GetWrtShell(), "Keine Shell, keine Styles");
 
     SwDocStyleSheet* pStyle =
@@ -1010,31 +1012,31 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
         case SFX_STYLE_FAMILY_FRAME:
         {
             SwFrmFmt* pFrm = pStyle->GetFrmFmt();
-            if( pWrtShell->IsFrmSelected() && pFrm && !pFrm->IsDefault() )
+            if( pCurrWrtShell->IsFrmSelected() && pFrm && !pFrm->IsDefault() )
             {
                 SfxItemSet aSet( GetPool(), aFrmFmtSetRange );
-                pWrtShell->StartAllAction();
-                pWrtShell->GetFlyFrmAttr( aSet );
+                pCurrWrtShell->StartAllAction();
+                pCurrWrtShell->GetFlyFrmAttr( aSet );
 
                 // JP 10.06.98: nur automatische Orientierungen uebernehmen
 /*              #61359# jetzt auch wieder alle Orientierungen
  *              const SfxPoolItem* pItem;
                 if( SFX_ITEM_SET == aSet.GetItemState( RES_VERT_ORIENT,
                     FALSE, &pItem ) &&
-                    VERT_NONE == ((SwFmtVertOrient*)pItem)->GetVertOrient())
+                    text::VertOrientation::NONE == ((SwFmtVertOrient*)pItem)->GetVertOrient())
                     aSet.ClearItem( RES_VERT_ORIENT );
 
                 if( SFX_ITEM_SET == aSet.GetItemState( RES_HORI_ORIENT,
                     FALSE, &pItem ) &&
-                    HORI_NONE == ((SwFmtHoriOrient*)pItem)->GetHoriOrient())
+                    text::HoriOrientation::NONE == ((SwFmtHoriOrient*)pItem)->GetHoriOrient())
                     aSet.ClearItem( RES_HORI_ORIENT );*/
 
                 pFrm->SetAttr( aSet );
 
                     // Vorlage auch anwenden, um harte Attributierung
                     // zu entfernen
-                pWrtShell->SetFrmFmt( pFrm, TRUE );
-                pWrtShell->EndAllAction();
+                pCurrWrtShell->SetFrmFmt( pFrm, TRUE );
+                pCurrWrtShell->EndAllAction();
             }
         }
         break;
@@ -1043,11 +1045,11 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
             SwCharFmt* pChar = pStyle->GetCharFmt();
             if( pChar && !pChar->IsDefault() )
             {
-                pWrtShell->StartAllAction();
-                pWrtShell->FillByEx(pChar);
+                pCurrWrtShell->StartAllAction();
+                pCurrWrtShell->FillByEx(pChar);
                     // Vorlage auch anwenden, um harte Attributierung
                     // zu entfernen
-                pWrtShell->EndAllAction();
+                pCurrWrtShell->EndAllAction();
             }
 
         }
@@ -1056,11 +1058,11 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
         {
             const SwNumRule* pCurRule;
             if( pStyle->GetNumRule() &&
-                0 != ( pCurRule = pWrtShell->GetCurNumRule() ))
+                0 != ( pCurRule = pCurrWrtShell->GetCurNumRule() ))
             {
                 SwNumRule aRule( *pCurRule );
                 aRule.SetName( pStyle->GetNumRule()->GetName() );
-                pWrtShell->ChgNumRuleFmts( aRule );
+                pCurrWrtShell->ChgNumRuleFmts( aRule );
             }
         }
         break;
@@ -1076,7 +1078,7 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
 USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
                                     USHORT nMask, SwWrtShell* pShell )
 {
-    SwWrtShell* pWrtShell = pShell ? pShell : GetWrtShell();
+    SwWrtShell* pCurrWrtShell = pShell ? pShell : GetWrtShell();
     SwDocStyleSheet* pStyle = (SwDocStyleSheet*)pBasePool->Find(
                                             rName, (SfxStyleFamily)nFamily );
     if(!pStyle)
@@ -1099,11 +1101,11 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
             SwTxtFmtColl* pColl = pStyle->GetCollection();
             if(pColl && !pColl->IsDefault())
             {
-                pWrtShell->StartAllAction();
-                pWrtShell->FillByEx(pColl);
+                pCurrWrtShell->StartAllAction();
+                pCurrWrtShell->FillByEx(pColl);
                     // Vorlage auch anwenden, um harte Attributierung
                     // zu entfernen
-                pColl->SetDerivedFrom(pWrtShell->GetCurTxtFmtColl());
+                pColl->SetDerivedFrom(pCurrWrtShell->GetCurTxtFmtColl());
 
                     // setze die Maske noch an der Collection:
                 USHORT nId = pColl->GetPoolFmtId() & 0x87ff;
@@ -1130,22 +1132,22 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
                 }
                 pColl->SetPoolFmtId(nId);
 
-                pWrtShell->SetTxtFmtColl(pColl);
-                pWrtShell->EndAllAction();
+                pCurrWrtShell->SetTxtFmtColl(pColl);
+                pCurrWrtShell->EndAllAction();
             }
         }
         break;
         case SFX_STYLE_FAMILY_FRAME:
         {
             SwFrmFmt* pFrm = pStyle->GetFrmFmt();
-            if(pWrtShell->IsFrmSelected() && pFrm && !pFrm->IsDefault())
+            if(pCurrWrtShell->IsFrmSelected() && pFrm && !pFrm->IsDefault())
             {
-                pWrtShell->StartAllAction();
+                pCurrWrtShell->StartAllAction();
 
                 SfxItemSet aSet(GetPool(), aFrmFmtSetRange );
-                pWrtShell->GetFlyFrmAttr( aSet );
+                pCurrWrtShell->GetFlyFrmAttr( aSet );
 
-                SwFrmFmt* pFFmt = pWrtShell->GetCurFrmFmt();
+                SwFrmFmt* pFFmt = pCurrWrtShell->GetCurFrmFmt();
                 pFrm->SetDerivedFrom( pFFmt );
 
                 // JP 10.06.98: nur automatische Orientierungen uebernehmen
@@ -1153,20 +1155,20 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
                 const SfxPoolItem* pItem;
                 if( SFX_ITEM_SET == aSet.GetItemState( RES_VERT_ORIENT,
                     FALSE, &pItem ) &&
-                    VERT_NONE == ((SwFmtVertOrient*)pItem)->GetVertOrient())
+                    text::VertOrientation::NONE == ((SwFmtVertOrient*)pItem)->GetVertOrient())
                     aSet.ClearItem( RES_VERT_ORIENT );
 
                 if( SFX_ITEM_SET == aSet.GetItemState( RES_HORI_ORIENT,
                     FALSE, &pItem ) &&
-                    HORI_NONE == ((SwFmtHoriOrient*)pItem)->GetHoriOrient())
+                    text::HoriOrientation::NONE == ((SwFmtHoriOrient*)pItem)->GetHoriOrient())
                     aSet.ClearItem( RES_HORI_ORIENT );
  */
 
                 pFrm->SetAttr( aSet );
                     // Vorlage auch anwenden, um harte Attributierung
                     // zu entfernen
-                pWrtShell->SetFrmFmt( pFrm );
-                pWrtShell->EndAllAction();
+                pCurrWrtShell->SetFrmFmt( pFrm );
+                pCurrWrtShell->EndAllAction();
             }
         }
         break;
@@ -1175,28 +1177,28 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
             SwCharFmt* pChar = pStyle->GetCharFmt();
             if(pChar && !pChar->IsDefault())
             {
-                pWrtShell->StartAllAction();
-                pWrtShell->FillByEx( pChar );
-                pChar->SetDerivedFrom( pWrtShell->GetCurCharFmt() );
+                pCurrWrtShell->StartAllAction();
+                pCurrWrtShell->FillByEx( pChar );
+                pChar->SetDerivedFrom( pCurrWrtShell->GetCurCharFmt() );
                 SwFmtCharFmt aFmt( pChar );
-                pWrtShell->SetAttr( aFmt );
-                pWrtShell->EndAllAction();
+                pCurrWrtShell->SetAttr( aFmt );
+                pCurrWrtShell->EndAllAction();
             }
         }
         break;
 
         case SFX_STYLE_FAMILY_PAGE:
         {
-            pWrtShell->StartAllAction();
-            USHORT nPgDsc = pWrtShell->GetCurPageDesc();
-            SwPageDesc& rSrc = (SwPageDesc&)pWrtShell->GetPageDesc( nPgDsc );
+            pCurrWrtShell->StartAllAction();
+            USHORT nPgDsc = pCurrWrtShell->GetCurPageDesc();
+            SwPageDesc& rSrc = (SwPageDesc&)pCurrWrtShell->GetPageDesc( nPgDsc );
             SwPageDesc& rDest = *(SwPageDesc*)pStyle->GetPageDesc();
 
             USHORT nPoolId = rDest.GetPoolFmtId();
             USHORT nHId = rDest.GetPoolHelpId();
             BYTE nHFId = rDest.GetPoolHlpFileId();
 
-            pWrtShell->GetDoc()->CopyPageDesc( rSrc, rDest );
+            pCurrWrtShell->GetDoc()->CopyPageDesc( rSrc, rDest );
 
             // PoolId darf NIE kopiert werden!
             rDest.SetPoolFmtId( nPoolId );
@@ -1204,25 +1206,25 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
             rDest.SetPoolHlpFileId( nHFId );
 
             // werden Kopf-/Fusszeilen angelegt, so gibt es kein Undo mehr!
-            pWrtShell->GetDoc()->DelAllUndoObj();
+            pCurrWrtShell->GetDoc()->DelAllUndoObj();
 
-            pWrtShell->EndAllAction();
+            pCurrWrtShell->EndAllAction();
         }
         break;
 
         case SFX_STYLE_FAMILY_PSEUDO:
         {
-            pWrtShell->StartAllAction();
+            pCurrWrtShell->StartAllAction();
 
-            SwNumRule aRule( *pWrtShell->GetCurNumRule() );
+            SwNumRule aRule( *pCurrWrtShell->GetCurNumRule() );
             String sOrigRule( aRule.GetName() );
             aRule.SetName( pStyle->GetNumRule()->GetName() );
-            pWrtShell->ChgNumRuleFmts( aRule );
+            pCurrWrtShell->ChgNumRuleFmts( aRule );
 
-            pWrtShell->ReplaceNumRule( sOrigRule, aRule.GetName() );
+            pCurrWrtShell->ReplaceNumRule( sOrigRule, aRule.GetName() );
 
 
-            pWrtShell->EndAllAction();
+            pCurrWrtShell->EndAllAction();
         }
         break;
     }
