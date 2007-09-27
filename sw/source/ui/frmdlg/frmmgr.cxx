@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmmgr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:18:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,9 @@
 #ifndef _COM_SUN_STAR_TEXT_RELORIENTATION_HPP_
 #include <com/sun/star/text/RelOrientation.hpp>
 #endif
-using namespace ::com::sun::star::text;
+
+using namespace ::com::sun::star;
+//using namespace text;
 
 static USHORT __FAR_DATA aFrmMgrRange[] = {
                             RES_FRMATR_BEGIN, RES_FRMATR_END-1,
@@ -104,17 +106,16 @@ static USHORT __FAR_DATA aFrmMgrRange[] = {
  --------------------------------------------------------------------*/
 
 SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, BYTE nType ) :
+    aSet( (SwAttrPool&)pSh->GetAttrPool(), aFrmMgrRange ),
+    pOwnSh( pSh ),
     bAbsPos( FALSE ),
     bNewFrm( bNew ),
-    bIsInVertical( FALSE ),
-    aSet( (SwAttrPool&)pSh->GetAttrPool(), aFrmMgrRange ),
-    pOwnSh( pSh )
-
+    bIsInVertical( FALSE )
 {
     if ( bNewFrm )
     {
         // Defaults einstellen:
-        USHORT nId;
+        USHORT nId = 0;
         switch ( nType )
         {
             case FRMMGR_TYPE_TEXT:  nId = RES_POOLFRM_FRAME;    break;
@@ -124,7 +125,7 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, BYTE nType ) :
         aSet.SetParent( &pOwnSh->GetFmtFromPool( nId )->GetAttrSet());
         aSet.Put( SwFmtFrmSize( ATT_MIN_SIZE, DFLT_WIDTH, DFLT_HEIGHT ));
         if ( 0 != ::GetHtmlMode(pSh->GetView().GetDocShell()) )
-            aSet.Put( SwFmtHoriOrient( 0, HORI_LEFT, PRTAREA ) );
+            aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::PRINT_AREA ) );
     }
     else if ( nType == FRMMGR_TYPE_NONE )
     {
@@ -136,10 +137,10 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, BYTE nType ) :
 }
 
 SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, const SfxItemSet &rSet ) :
-    bAbsPos( FALSE ),
-    bNewFrm( bNew ),
     aSet( rSet ),
     pOwnSh( pSh ),
+    bAbsPos( FALSE ),
+    bNewFrm( bNew ),
     bIsInVertical(FALSE)
 {
     if(!bNew)
@@ -275,8 +276,8 @@ void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
     {
         SwFmtVertOrient aVertOrient( GetVertOrient() );
         SwFmtHoriOrient aHoriOrient( GetHoriOrient() );
-        aHoriOrient.SetRelationOrient( FRAME );
-        aVertOrient.SetRelationOrient( FRAME );
+        aHoriOrient.SetRelationOrient( text::RelOrientation::FRAME );
+        aVertOrient.SetRelationOrient( text::RelOrientation::FRAME );
         aSet.Put( aVertOrient );
         aSet.Put( aHoriOrient );
     }
@@ -301,8 +302,8 @@ void SwFlyFrmAttrMgr::SetAbsPos( const Point& rPoint )
 
     SwFmtVertOrient aVertOrient( GetVertOrient() );
     SwFmtHoriOrient aHoriOrient( GetHoriOrient() );
-    aHoriOrient.SetHoriOrient( HORI_NONE );
-    aVertOrient.SetVertOrient( VERT_NONE );
+    aHoriOrient.SetHoriOrient( text::HoriOrientation::NONE );
+    aVertOrient.SetVertOrient( text::VertOrientation::NONE );
     aSet.Put( aVertOrient );
     aSet.Put( aHoriOrient );
 }
@@ -326,8 +327,8 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     //      aligned to page for fly frame anchored to paragraph or to character.
     const RndStdIds eAnchorType = static_cast<RndStdIds >(rVal.nAnchorType);
     pOwnSh->CalcBoundRect( aBoundRect, eAnchorType,
-                           static_cast<SwRelationOrient>(rVal.nHRelOrient),
-                           static_cast<SwRelationOrient>(rVal.nVRelOrient),
+                           rVal.nHRelOrient,
+                           rVal.nVRelOrient,
                            pToCharCntntPos,
                            rVal.bFollowTextFlow,
                            rVal.bMirror, NULL, &rVal.aPercentSize);
@@ -361,7 +362,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
 
         if (rVal.nHPos + rVal.nWidth > aBoundRect.Right())
         {
-            if (rVal.nHoriOrient == HoriOrientation::NONE)
+            if (rVal.nHoriOrient == text::HoriOrientation::NONE)
             {
                 rVal.nHPos -= ((rVal.nHPos + rVal.nWidth) - aBoundRect.Right());
                 nH = rVal.nHPos;
@@ -375,7 +376,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
 
         if (rVal.nVPos + rVal.nHeight > aBoundRect.Bottom())
         {
-            if (rVal.nVertOrient == VertOrientation::NONE)
+            if (rVal.nVertOrient == text::VertOrientation::NONE)
             {
                 rVal.nVPos -= ((rVal.nVPos + rVal.nHeight) - aBoundRect.Bottom());
                 nV = rVal.nVPos;
@@ -387,10 +388,10 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         if (rVal.nVPos + rVal.nHeight > aBoundRect.Bottom())
             rVal.nHeight = aBoundRect.Bottom() - rVal.nVPos;
 
-        if ( rVal.nVertOrient != VertOrientation::NONE )
+        if ( rVal.nVertOrient != text::VertOrientation::NONE )
             nV = aBoundRect.Top();
 
-        if ( rVal.nHoriOrient != HoriOrientation::NONE )
+        if ( rVal.nHoriOrient != text::HoriOrientation::NONE )
             nH = aBoundRect.Left();
 
         rVal.nMaxHPos   = aBoundRect.Right()  - rVal.nWidth;
@@ -403,12 +404,12 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     // aligned at character or top of line in a special case
     else if ( eAnchorType == FLY_AT_CNTNT ||
                 ( eAnchorType == FLY_AUTO_CNTNT &&
-                !(rVal.nVRelOrient == RelOrientation::CHAR) &&
-                !(rVal.nVRelOrient == RelOrientation::TEXT_LINE) ) )
+                !(rVal.nVRelOrient == text::RelOrientation::CHAR) &&
+                !(rVal.nVRelOrient == text::RelOrientation::TEXT_LINE) ) )
     {
         if (rVal.nHPos + rVal.nWidth > aBoundRect.Right())
         {
-            if (rVal.nHoriOrient == HoriOrientation::NONE)
+            if (rVal.nHoriOrient == text::HoriOrientation::NONE)
             {
                 rVal.nHPos -= ((rVal.nHPos + rVal.nWidth) - aBoundRect.Right());
             }
@@ -419,8 +420,8 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         // OD 29.09.2003 #i17567#, #i18732# - consider following the text flow
         // and alignment at page areas.
         const bool bMaxVPosAtBottom = !rVal.bFollowTextFlow ||
-                                      rVal.nVRelOrient == RelOrientation::PAGE_FRAME ||
-                                      rVal.nVRelOrient == RelOrientation::PAGE_PRINT_AREA;
+                                      rVal.nVRelOrient == text::RelOrientation::PAGE_FRAME ||
+                                      rVal.nVRelOrient == text::RelOrientation::PAGE_PRINT_AREA;
         {
             SwTwips nTmpMaxVPos = ( bMaxVPosAtBottom
                                     ? aBoundRect.Bottom()
@@ -428,7 +429,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
                                   rVal.nHeight;
             if ( rVal.nVPos > nTmpMaxVPos )
             {
-                if (rVal.nVertOrient == VertOrientation::NONE)
+                if (rVal.nVertOrient == text::VertOrientation::NONE)
                 {
                     rVal.nVPos = nTmpMaxVPos;
                 }
@@ -456,10 +457,10 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         }
 
         // Maximale Breite Hoehe
-        const SwTwips nH = ( rVal.nHoriOrient != HoriOrientation::NONE )
+        const SwTwips nH = ( rVal.nHoriOrient != text::HoriOrientation::NONE )
                            ? aBoundRect.Left()
                            : rVal.nHPos;
-        const SwTwips nV = ( rVal.nVertOrient != VertOrientation::NONE )
+        const SwTwips nV = ( rVal.nVertOrient != text::VertOrientation::NONE )
                            ? aBoundRect.Top()
                            : rVal.nVPos;
         rVal.nMaxHeight  = rVal.nMaxVPos + rVal.nHeight - nV;
@@ -470,8 +471,8 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     // Note: (1) positive vertical values are positions above the top of line
     //       (2) negative vertical values are positions below the top of line
     else if ( eAnchorType == FLY_AUTO_CNTNT &&
-              ( rVal.nVRelOrient == REL_CHAR ||
-                rVal.nVRelOrient == REL_VERT_LINE ) )
+              ( rVal.nVRelOrient == text::RelOrientation::CHAR ||
+                rVal.nVRelOrient == text::RelOrientation::TEXT_LINE ) )
     {
         // determine horizontal values
         rVal.nMinHPos  = aBoundRect.Left();
@@ -479,7 +480,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         rVal.nMaxHPos  = aBoundRect.Right() - rVal.nWidth;
         if (rVal.nHPos + rVal.nWidth > aBoundRect.Right())
         {
-            if (rVal.nHoriOrient == HoriOrientation::NONE)
+            if (rVal.nHoriOrient == text::HoriOrientation::NONE)
             {
                 rVal.nHPos -= ((rVal.nHPos + rVal.nWidth) - aBoundRect.Right());
             }
@@ -487,28 +488,27 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
                 rVal.nWidth = aBoundRect.Right() - rVal.nHPos;
         }
 
-        const SwTwips nH = ( rVal.nHoriOrient != HoriOrientation::NONE )
+        const SwTwips nH = ( rVal.nHoriOrient != text::HoriOrientation::NONE )
                            ? aBoundRect.Left()
                            : rVal.nHPos;
         rVal.nMaxWidth   = rVal.nMaxHPos + rVal.nWidth - nH;
 
         // determine vertical values
-        const bool bMinVPosAtBottom = !rVal.bFollowTextFlow;
         rVal.nMinVPos = -( aBoundRect.Bottom() - rVal.nHeight );
         if ( rVal.nVPos < rVal.nMinVPos &&
-             rVal.nVertOrient == VertOrientation::NONE )
+             rVal.nVertOrient == text::VertOrientation::NONE )
         {
             rVal.nVPos = rVal.nMinVPos;
         }
 
         rVal.nMaxVPos  = -aBoundRect.Top();
         if ( rVal.nVPos > rVal.nMaxVPos &&
-             rVal.nVertOrient == VertOrientation::NONE )
+             rVal.nVertOrient == text::VertOrientation::NONE )
         {
             rVal.nVPos = rVal.nMaxVPos;
         }
 
-        if ( rVal.nVertOrient == VertOrientation::NONE )
+        if ( rVal.nVertOrient == text::VertOrientation::NONE )
         {
             rVal.nMaxHeight = aBoundRect.Bottom() + rVal.nVPos;
         }
@@ -618,26 +618,26 @@ void SwFlyFrmAttrMgr::SetPos( const Point& rPoint )
     SwFmtHoriOrient aHoriOrient( GetHoriOrient() );
 
     aHoriOrient.SetPos       ( rPoint.X() );
-    aHoriOrient.SetHoriOrient( HORI_NONE  );
+    aHoriOrient.SetHoriOrient( text::HoriOrientation::NONE  );
 
     aVertOrient.SetPos       ( rPoint.Y() );
-    aVertOrient.SetVertOrient( VERT_NONE  );
+    aVertOrient.SetVertOrient( text::VertOrientation::NONE  );
 
     aSet.Put( aVertOrient );
     aSet.Put( aHoriOrient );
 }
 
-void SwFlyFrmAttrMgr::SetHorzOrientation(SwHoriOrient eOrient)
+void SwFlyFrmAttrMgr::SetHorzOrientation( sal_Int16 eOrient )
 {
     SwFmtHoriOrient aHoriOrient( GetHoriOrient() );
     aHoriOrient.SetHoriOrient( eOrient );
     aSet.Put( aHoriOrient );
 }
 
-void SwFlyFrmAttrMgr::SetVertOrientation(SvxFrameVertOrient eOrient)
+void SwFlyFrmAttrMgr::SetVertOrientation( sal_Int16 eOrient )
 {
     SwFmtVertOrient aVertOrient( GetVertOrient() );
-    aVertOrient.SetVertOrient( (SwVertOrient)eOrient );
+    aVertOrient.SetVertOrient( eOrient );
     aSet.Put( aVertOrient );
 }
 
