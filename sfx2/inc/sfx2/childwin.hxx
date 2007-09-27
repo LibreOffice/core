@@ -4,9 +4,9 @@
  *
  *  $RCSfile: childwin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:00:44 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:03:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,13 +291,16 @@ public:
         SfxChildWindowContext* __EXPORT Class::CreateImpl( Window *pParent, \
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
         {   \
-            SfxChildWindowContext *pContext = new Class(pParent,ShellClass::GetInterfaceId(),pBindings,pInfo);\
+            SfxChildWindowContext *pContext = new Class(pParent, \
+                    /* cast is safe here! */static_cast< USHORT >(ShellClass::GetInterfaceId()), \
+                    pBindings,pInfo); \
             return pContext; \
         } \
         void    Class::RegisterChildWindowContext(SfxModule* pMod)   \
         {   \
             SfxChildWinContextFactory *pFact = new SfxChildWinContextFactory( \
-                Class::CreateImpl, ShellClass::GetInterfaceId() );   \
+                Class::CreateImpl, \
+                /* cast is safe here! */static_cast< sal_uInt16 >(ShellClass::GetInterfaceId()) );   \
             SfxChildWindowContext::RegisterChildWindowContext(pMod, MyID, pFact); \
         }
 
