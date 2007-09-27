@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simpleregistry.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:36:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:03:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,11 +87,11 @@ using namespace rtl;
 #define SERVICENAME "com.sun.star.registry.SimpleRegistry"
 #define IMPLNAME    "com.sun.star.comp.stoc.SimpleRegistry"
 
-namespace stoc_simreg {
+extern rtl_StandardModuleCount g_moduleCount;
 
-rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
-
-static Sequence< OUString > simreg_getSupportedServiceNames()
+namespace stoc_bootstrap
+{
+Sequence< OUString > simreg_getSupportedServiceNames()
 {
     static Sequence < OUString > *pNames = 0;
     if( ! pNames )
@@ -121,6 +121,9 @@ OUString simreg_getImplementationName()
     }
     return *pImplName;
 }
+}
+
+namespace stoc_simreg {
 
 //*************************************************************************
 // class RegistryKeyImpl the implenetation of interface XRegistryKey
@@ -1111,7 +1114,7 @@ SimpleRegistryImpl::~SimpleRegistryImpl()
 OUString SAL_CALL SimpleRegistryImpl::getImplementationName(  )
     throw(RuntimeException)
 {
-    return simreg_getImplementationName();
+    return stoc_bootstrap::simreg_getImplementationName();
 }
 
 //*************************************************************************
@@ -1131,7 +1134,7 @@ sal_Bool SAL_CALL SimpleRegistryImpl::supportsService( const OUString& ServiceNa
 Sequence<OUString> SAL_CALL SimpleRegistryImpl::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
-    return simreg_getSupportedServiceNames();
+    return stoc_bootstrap::simreg_getSupportedServiceNames();
 }
 
 //*************************************************************************
@@ -1308,7 +1311,10 @@ void SAL_CALL SimpleRegistryImpl::mergeKey( const OUString& aKeyName, const OUSt
         OUString( RTL_CONSTASCII_USTRINGPARAM("InvalidRegistryException") ),
         (OWeakObject *)this );
 }
+}
 
+namespace stoc_bootstrap
+{
 //*************************************************************************
 Reference<XInterface> SAL_CALL SimpleRegistry_CreateInstance( const Reference<XComponentContext>& )
 {
@@ -1319,7 +1325,7 @@ Reference<XInterface> SAL_CALL SimpleRegistry_CreateInstance( const Reference<XC
     {
         Registry reg(aLoader);
 
-        XSimpleRegistry *pRegistry = (XSimpleRegistry*) new SimpleRegistryImpl(reg);
+        XSimpleRegistry *pRegistry = (XSimpleRegistry*) new stoc_simreg::SimpleRegistryImpl(reg);
 
         if (pRegistry)
         {
@@ -1329,47 +1335,5 @@ Reference<XInterface> SAL_CALL SimpleRegistry_CreateInstance( const Reference<XC
 
     return xRet;
 }
-
 }
-
-using namespace stoc_simreg;
-static struct ImplementationEntry g_entries[] =
-{
-    {
-        SimpleRegistry_CreateInstance, simreg_getImplementationName,
-        simreg_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt , 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
-extern "C"
-{
-
-sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
-{
-    return g_moduleCount.canUnload( &g_moduleCount , pTime );
-}
-
-//==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
-}
-//==================================================================================================
-void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
-}
-}
-
-
 
