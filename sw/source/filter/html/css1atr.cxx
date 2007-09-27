@@ -4,9 +4,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 14:39:45 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:45:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,6 +253,7 @@
 #define CSS1_FRMSIZE_ANYHEIGHT  0x0e
 #define CSS1_FRMSIZE_PIXEL      0x10
 
+using namespace ::com::sun::star;
 
 //-----------------------------------------------------------------------
 
@@ -536,7 +537,7 @@ static void AddUnitPropertyValue( long nVal, FieldUnit eUnit, ByteString& rOut )
         break;
     }
 
-    long nLongVal;
+    long nLongVal = 0;
     BOOL bOutLongVal = TRUE;
     if( nVal > LONG_MAX / nMul )
     {
@@ -1404,6 +1405,8 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
         case FAMILY_SCRIPT:     pStr = sCSS1_PV_cursive;    break;
         case FAMILY_DECORATIVE: pStr = sCSS1_PV_fantasy;    break;
         case FAMILY_MODERN:     pStr = sCSS1_PV_monospace;  break;
+        default:
+            ;
         }
 
         if( pStr )
@@ -2059,7 +2062,6 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
         SfxItemSet aItemSet( *rFmtItemSet.GetPool(), rFmtItemSet.GetRanges() );
         aItemSet.Set( rFmtItemSet, TRUE );
 
-        USHORT nPoolFmtId = pSymCharFmt->GetPoolFmtId();
         // Wenn es Fuss- bzw. Endnoten gibt, dann muessen alles Attribute
         // ausgegeben werden, damit Netscape das Dokument richtig anzeigt.
         // Anderenfalls genuegt es, die Unterschiede zur Fuss-/Endnoten
@@ -2067,7 +2069,7 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
         if( nNotes == 0 && rHTMLWrt.pTemplate )
         {
             SwFmt *pRefFmt = rHTMLWrt.pTemplate->GetCharFmtFromPool(
-                        bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE );
+                        static_cast< sal_uInt16 >(bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE) );
             if( pRefFmt )
                 SwHTMLWriter::SubtractItemSet( aItemSet, pRefFmt->GetAttrSet(),
                                                TRUE );
@@ -2237,13 +2239,13 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
         {
         case FLY_AT_CNTNT:
         case FLY_AUTO_CNTNT:
-            if( FRAME == rHoriOri.GetRelationOrient() ||
-                PRTAREA == rHoriOri.GetRelationOrient() )
+            if( text::RelOrientation::FRAME == rHoriOri.GetRelationOrient() ||
+                text::RelOrientation::PRINT_AREA == rHoriOri.GetRelationOrient() )
             {
                 if( !(nFrmOpts & HTML_FRMOPT_ALIGN) )
                 {
                     // float
-                    const sal_Char *pStr = HORI_RIGHT==rHoriOri.GetHoriOrient()
+                    const sal_Char *pStr = text::HoriOrientation::RIGHT==rHoriOri.GetHoriOrient()
                             ? sCSS1_PV_right
                             : sCSS1_PV_left;
                     OutCSS1_PropertyAscii( sCSS1_P_float, pStr );
@@ -2284,13 +2286,13 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
                 }
                 else
                 {
-                    bOutXPos = REL_CHAR != rHoriOri.GetRelationOrient();
-                    nXPos = HORI_NONE == rHoriOri.GetHoriOrient()
+                    bOutXPos = text::RelOrientation::CHAR != rHoriOri.GetRelationOrient();
+                    nXPos = text::HoriOrientation::NONE == rHoriOri.GetHoriOrient()
                                 ? rHoriOri.GetPos() : 0;
 
                     const SwFmtVertOrient& rVertOri = rFrmFmt.GetVertOrient();
-                    bOutYPos = REL_CHAR != rVertOri.GetRelationOrient();
-                    nYPos = VERT_NONE == rVertOri.GetVertOrient()
+                    bOutYPos = text::RelOrientation::CHAR != rVertOri.GetRelationOrient();
+                    nYPos = text::VertOrientation::NONE == rVertOri.GetVertOrient()
                                  ? rVertOri.GetPos() : 0;
                 }
 
@@ -2326,6 +2328,9 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
                 }
             }
             break;
+
+        default:
+            ;
         }
     }
 
@@ -2678,6 +2683,8 @@ static Writer& OutCSS1_SvxCaseMap( Writer& rWrt, const SfxPoolItem& rHt )
     {
     case SVX_CASEMAP_NOT_MAPPED:    pStr = sCSS1_PV_normal;     break;
     case SVX_CASEMAP_KAPITAELCHEN:  pStr = sCSS1_PV_small_caps; break;
+    default:
+        ;
     }
 
     if( pStr )
@@ -2819,6 +2826,8 @@ static Writer& OutCSS1_SvxPosture( Writer& rWrt, const SfxPoolItem& rHt )
             pStr = sCSS1_PV_italic;
         }
         break;
+    default:
+        ;
     }
 
     if( pStr )
@@ -2939,6 +2948,8 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
         }
         break;
     case WEIGHT_ULTRABOLD:  pStr = sCSS1_PV_extra_bold;     break;
+    default:
+        ;
     }
 
     if( pStr )
@@ -2989,12 +3000,17 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
             case SVX_LINE_SPACE_AUTO:
                 nPrcHeight = 100;
                 break;
+            default:
+                ;
             }
         }
         break;
     case SVX_INTER_LINE_SPACE_PROP:
         nPrcHeight = rLSItem.GetPropLineSpace();
         break;
+
+    default:
+        ;
     }
 
     if( nHeight )
@@ -3028,6 +3044,8 @@ static Writer& OutCSS1_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
     case SVX_ADJUST_RIGHT:  pStr = sCSS1_PV_right;      break;
     case SVX_ADJUST_BLOCK:  pStr = sCSS1_PV_justify;    break;
     case SVX_ADJUST_CENTER: pStr = sCSS1_PV_center;     break;
+    default:
+        ;
     }
 
     if( pStr )
@@ -3344,6 +3362,9 @@ static Writer& OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( Writer& rWrt,
         case SVX_BREAK_PAGE_AFTER:
             pBreakAfter= sCSS1_PV_always;
             break;
+
+        default:
+            ;
         }
     }
     if( pPDescItem )
@@ -3406,10 +3427,7 @@ static Writer& OutCSS1_SvxFmtBreak_SwFmtPDesc_SvxFmtKeep( Writer& rWrt,
 // Wrapper fuer OutCSS1_SfxItemSet etc.
 static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
-
     OutCSS1_SvxBrush( rWrt, rHt, CSS1_BACKGROUND_ATTR, 0 );
-
     return rWrt;
 }
 
@@ -3523,6 +3541,9 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
             case GPOS_RB:
                 pHori = sCSS1_PV_bottom;
                 break;
+
+            default:
+                ;
             }
 
             switch( ePos )
@@ -3544,6 +3565,9 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
             case GPOS_RB:
                 pVert = sCSS1_PV_right;
                 break;
+
+            default:
+                ;
             }
 
             if( pHori || pVert )
@@ -3619,7 +3643,7 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
     }
 
     BOOL bDouble = FALSE;
-    USHORT nWidth = pLine->GetOutWidth();
+    INT32 nWidth = pLine->GetOutWidth();
     if( pLine->GetInWidth() )
     {
         nWidth += pLine->GetDistance();
