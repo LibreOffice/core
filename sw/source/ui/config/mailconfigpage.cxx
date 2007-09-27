@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailconfigpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:03:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:22:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ public:
   -----------------------------------------------------------------------*/
 SwMailConfigPage::SwMailConfigPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES(TP_MAILCONFIG), rSet),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aIdentityFL( this, SW_RES(       FL_IDENTITY)),
@@ -207,7 +207,7 @@ SwMailConfigPage::SwMailConfigPage( Window* pParent, const SfxItemSet& rSet ) :
     m_aServerAuthenticationPB( this, SW_RES( PB_AUTHENTICATION )),
     m_aSeparatorFL( this,            SW_RES( FL_SEPARATOR      )),
     m_aTestPB( this, SW_RES(           PB_TEST)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
     m_pConfigItem( new SwMailMergeConfigItem )
@@ -234,7 +234,7 @@ SfxTabPage*  SwMailConfigPage::Create( Window* pParent, const SfxItemSet& rAttrS
 /*-- 06.05.2004 10:59:41---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-BOOL SwMailConfigPage::FillItemSet( SfxItemSet& rSet )
+BOOL SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
     if(m_aDisplayNameED.GetText() != m_aDisplayNameED.GetSavedValue())
         m_pConfigItem->SetMailDisplayName(m_aDisplayNameED.GetText());
@@ -259,7 +259,7 @@ BOOL SwMailConfigPage::FillItemSet( SfxItemSet& rSet )
 /*-- 06.05.2004 10:59:41---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwMailConfigPage::Reset( const SfxItemSet& rSet )
+void SwMailConfigPage::Reset( const SfxItemSet& /*rSet*/ )
 {
     m_aDisplayNameED.SetText(m_pConfigItem->GetMailDisplayName());
     m_aAddressED.SetText(m_pConfigItem->GetMailAddress());
@@ -294,7 +294,7 @@ IMPL_LINK(SwMailConfigPage, ReplyToHdl, CheckBox*, pBox)
 /*-- 06.05.2004 10:59:41---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK(SwMailConfigPage, AuthenticationHdl, PushButton*, pButton)
+IMPL_LINK(SwMailConfigPage, AuthenticationHdl, PushButton*, EMPTYARG)
 {
     SwAuthenticationSettingsDialog aDlg(this, *m_pConfigItem);
     aDlg.Execute();
@@ -303,7 +303,7 @@ IMPL_LINK(SwMailConfigPage, AuthenticationHdl, PushButton*, pButton)
 /*-- 06.05.2004 10:59:42---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK(SwMailConfigPage, TestHdl, PushButton*, pButton)
+IMPL_LINK(SwMailConfigPage, TestHdl, PushButton*, EMPTYARG)
 {
     SwTestAccountSettingsDialog(this).Execute();
     return 0;
@@ -313,7 +313,7 @@ IMPL_LINK(SwMailConfigPage, TestHdl, PushButton*, pButton)
   -----------------------------------------------------------------------*/
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_TESTACCOUNTSETTINGS)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aInfoFI( this, SW_RES(         FI_INFO )),
@@ -325,7 +325,7 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
     m_aStopPB( this, SW_RES(         PB_STOP   )),
     m_aCancelPB( this, SW_RES(       PB_CANCEL )),
     m_aHelpPB( this, SW_RES(         PB_HELP   )),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
     m_aImageList( SW_RES( GetSettings().GetStyleSettings().GetWindowColor().IsDark() ? ILIST_HC : ILIST) ),
@@ -383,7 +383,7 @@ SwTestAccountSettingsDialog::~SwTestAccountSettingsDialog()
 /*-- 06.05.2004 12:15:43---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK(SwTestAccountSettingsDialog, StopHdl, PushButton*, pButton)
+IMPL_LINK(SwTestAccountSettingsDialog, StopHdl, PushButton*, EMPTYARG)
 {
     m_bStop = true;
     return 0;
@@ -471,7 +471,7 @@ void SwTestAccountSettingsDialog::Test()
             uno::Reference< uno::XCurrentContext> xConnectionContext =
                     new SwConnectionContext(
                         m_pParent->m_aServerED.GetText(),
-                        m_pParent->m_aPortNF.GetValue(),
+                        sal::static_int_cast< sal_Int16, sal_Int64 >(m_pParent->m_aPortNF.GetValue()),
                         ::rtl::OUString::createFromAscii(
                                 m_pParent->m_aSecureCB.IsChecked() ? "Ssl" : "Insecure"));
             xMailService->connect(xConnectionContext, xAuthenticator);
@@ -481,9 +481,8 @@ void SwTestAccountSettingsDialog::Test()
             if( xMailService->isConnected())
                 xMailService->disconnect();
         }
-        catch(uno::Exception& rEx)
+        catch(uno::Exception&)
         {
-            rEx; //prevent compiler warning
             DBG_ERROR("exception caught")
         }
     }
@@ -517,8 +516,7 @@ SwMailConfigDlg::SwMailConfigDlg(Window* pParent, SfxItemSet& rSet ) :
     SfxSingleTabDialog(pParent, rSet, 0)
 {
     // TabPage erzeugen
-    SfxTabPage* pPage = SwMailConfigPage::Create( this, rSet );
-    SetTabPage(pPage);
+    SetTabPage(SwMailConfigPage::Create( this, rSet ));
 }
 /*-- 18.08.2004 12:18:38---------------------------------------------------
 
@@ -532,7 +530,7 @@ SwMailConfigDlg::~SwMailConfigDlg()
 SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
         SwMailConfigPage* pParent, SwMailMergeConfigItem& rItem) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_SERVERAUTHENTICATION)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
         m_aAuthenticationCB( this,          SW_RES( CB_AUTHENTICATION        )),
@@ -559,7 +557,7 @@ SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
         m_aOKPB( this,                      SW_RES( PB_OK                   )),
         m_aCancelPB( this,                  SW_RES( PB_CANCEL               )),
         m_aHelpPB( this,                    SW_RES( PB_HELP                 )),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
         rConfigItem( rItem )
@@ -607,7 +605,7 @@ IMPL_LINK( SwAuthenticationSettingsDialog, OKHdl_Impl, OKButton*, EMPTYARG)
     rConfigItem.SetMailUserName(m_aUserNameED.GetText());
     rConfigItem.SetMailPassword(m_aOutPasswordED.GetText());
     rConfigItem.SetInServerName(m_aServerED.GetText());
-    rConfigItem.SetInServerPort(m_aPortNF.GetValue( ) );
+    rConfigItem.SetInServerPort(sal::static_int_cast< sal_Int16, sal_Int64 >(m_aPortNF.GetValue( ) ));
     rConfigItem.SetInServerPOP(m_aPOP3RB.IsChecked());
     rConfigItem.SetInServerUserName(m_aInUsernameED.GetText());
 
