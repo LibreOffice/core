@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftninfo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:25:01 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:03:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,8 @@ public:
 
 
     SwFtnInfo& operator=(const SwFtnInfo&);
+
+    using SwEndNoteInfo::operator ==;
     BOOL operator==( const SwFtnInfo &rInf ) const;
 
     SwFtnInfo(SwTxtFmtColl* pTxtColl = 0);
