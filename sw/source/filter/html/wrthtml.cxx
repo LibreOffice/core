@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:45:47 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:52:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,8 +321,8 @@ ULONG SwHTMLWriter::WriteStream()
     bCfgCpyLinkedGrfs = pHtmlOptions->IsSaveGraphicsLocal();
 
     // die HTML-Vorlage holen
-    sal_Bool bOldHTMLMode;
-    sal_uInt16 nOldTxtFmtCollCnt, nOldCharFmtCnt;
+    sal_Bool bOldHTMLMode = sal_False;
+    sal_uInt16 nOldTxtFmtCollCnt = 0, nOldCharFmtCnt = 0;
 
     ASSERT( !pTemplate, "Wo kommt denn die HTML-Vorlage hier her?" );
     pTemplate = ((HTMLReader*)ReadHTML)->GetTemplateDoc();
@@ -850,7 +850,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
     sal_uInt16 nSaveBkmkTabPos =  nBkmkTabPos;
 
 
-    // suche die naechste ::com::sun::star::text::Bookmark-Position aus der ::com::sun::star::text::Bookmark-Tabelle
+    // suche die naechste text::Bookmark-Position aus der text::Bookmark-Tabelle
     nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : USHRT_MAX;
 
     // gebe alle Bereiche des Pams in das HTML-File aus.
@@ -930,7 +930,7 @@ static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
     const SvxColorItem *pColorItem = 0;
 
     const SfxItemSet& rItemSet = pFmt->GetAttrSet();
-    const SfxPoolItem *pRefItem, *pItem;
+    const SfxPoolItem *pRefItem = 0, *pItem = 0;
     sal_Bool bItemSet = SFX_ITEM_SET == rItemSet.GetItemState( RES_CHRATR_COLOR,
                                                            sal_True, &pItem);
     sal_Bool bRefItemSet = pRefFmt &&
@@ -1338,14 +1338,14 @@ sal_uInt16 SwHTMLWriter::GetLangWhichIdFromScript( sal_uInt16 nScript )
     return nWhichId;
 }
 
-void SwHTMLWriter::OutLanguage( LanguageType eLang )
+void SwHTMLWriter::OutLanguage( LanguageType nLang )
 {
-    if( LANGUAGE_DONTKNOW != eLang )
+    if( LANGUAGE_DONTKNOW != nLang )
     {
         ByteString sOut( ' ' );
         (sOut += sHTML_O_lang) += "=\"";
         Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( Strm(), MsLangId::convertLanguageToIsoString(eLang),
+        HTMLOutFuncs::Out_String( Strm(), MsLangId::convertLanguageToIsoString(nLang),
                                   eDestEnc, &aNonConvertableCharacters ) << '"';
     }
 }
@@ -1444,14 +1444,16 @@ sal_uInt16 SwHTMLWriter::GetHTMLFontSize( sal_uInt32 nHeight ) const
 // einen anderen Dokument-Teil auszugeben, wie z.B. Header/Footer
 HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, ULONG nStt,
                             ULONG nEnd, sal_Bool bSaveNum,
-                                const SwFrmFmt *pFrmFmt )
-    : rWrt( rWriter ),
-    pOldPam( rWrt.pCurPam ), pOldEnd( rWrt.GetEndPaM() ),
+                                const SwFrmFmt *pFrmFmt ) :
+    rWrt( rWriter ),
+    pOldPam( rWrt.pCurPam ),
+    pOldEnd( rWrt.GetEndPaM() ),
     pOldNumRuleInfo( 0 ),
     pOldNextNumRuleInfo( 0 ),
-    nOldDirection( rWrt.nDirection ),
     nOldDefListLvl( rWrt.nDefListLvl ),
-    bOldOutHeader( rWrt.bOutHeader ), bOldOutFooter( rWrt.bOutFooter ),
+    nOldDirection( rWrt.nDirection ),
+    bOldOutHeader( rWrt.bOutHeader ),
+    bOldOutFooter( rWrt.bOutFooter ),
     bOldOutFlyFrame( rWrt.bOutFlyFrame )
 {
     bOldWriteAll = rWrt.bWriteAll;
