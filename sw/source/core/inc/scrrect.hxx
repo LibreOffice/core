@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrrect.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:21:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:58:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ public:
         { return nY == rTst.nY && nHeight == rTst.nHeight; }
 };
 
-SV_DECL_VARARR( SwStripeArr, SwStripe, 1, 4 );
+SV_DECL_VARARR( SwStripeArr, SwStripe, 1, 4 )
 
 class SwStripes : public SwStripeArr, public SwStripe
 {
@@ -125,7 +125,7 @@ public:
 };
 
 typedef SwScrollArea* SwScrollAreaPtr;
-SV_DECL_PTRARR_SORT(SScrAreas,SwScrollAreaPtr,1,2);
+SV_DECL_PTRARR_SORT(SScrAreas,SwScrollAreaPtr,1,2)
 
 class SwScrollAreas : public SScrAreas
 {
