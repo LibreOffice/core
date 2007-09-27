@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swrect.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:57:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:11:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -376,11 +376,11 @@ inline SwRect::SwRect( const Point& rLT, const Point& rRB ) :
     nHeight( rRB.Y() - rLT.Y() + 1 )
 {
 }
-inline SwRect::SwRect( long X, long Y, long Width, long Height ) :
+inline SwRect::SwRect( long X, long Y, long W, long H ) :
     nX( X ),
     nY( Y ),
-    nWidth ( Width ),
-    nHeight( Height )
+    nWidth ( W ),
+    nHeight( H )
 {
 }
 
