@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:31:55 $
+#   last change: $Author: hr $ $Date: 2007-09-27 12:54:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -100,11 +100,11 @@ $(BIN)$/$(TARGET).rdb .ERRREMOVE: $(MISC)$/$(TARGET)$/types.rdb \
         -c bridgefac.uno$(DLLPOST) -c connector.uno$(DLLPOST) \
         -c remotebridge.uno$(DLLPOST) -c uuresolver.uno$(DLLPOST) \
         -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST) \
-        -c uriproc.uno$(DLLPOST)
+        -c stocservices.uno$(DLLPOST)
     cp $(SOLARBINDIR)$/types.rdb $(MISC)$/$(TARGET)$/bootstrap.rdb
     $(REGCOMP) -register -r $(MISC)$/$(TARGET)$/bootstrap.rdb \
         -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST) \
-        -c uriproc.uno$(DLLPOST)
+        -c stocservices.uno$(DLLPOST)
 .IF "$(GUI)" == "WNT"
     ERROR -- missing platform
 .ELSE # GUI, WNT
