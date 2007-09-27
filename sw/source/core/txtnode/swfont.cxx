@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 08:07:23 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:27:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@
 SvStatistics aSvStat;
 #endif
 
-using namespace ::com::sun::star::i18n::ScriptType;
+using namespace ::com::sun::star;
 
 /************************************************************************
  * Hintergrundbrush setzen, z.B. bei Zeichenvorlagen
@@ -772,7 +772,7 @@ short SwSubFont::_CheckKerning( )
 
 USHORT SwSubFont::GetAscent( ViewShell *pSh, const OutputDevice& rOut )
 {
-    register USHORT nAscent;
+    USHORT nAscent;
     SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh );
     nAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );
     if( GetEscapement() )
@@ -833,7 +833,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
                 // #108203#
                 // If the length of the original string and the CaseMapped one
                 // are different, it is necessary to handle the given text part as
-                // a single snippet since itÄs size may differ, too.
+                // a single snippet since itï¿½s size may differ, too.
                 xub_StrLen nOldIdx(rInf.GetIdx());
                 xub_StrLen nOldLen(rInf.GetLen());
                 const XubString aSnippet(rOldStr, nOldIdx, nOldLen);
@@ -885,7 +885,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
     if( STRING_LEN == rInf.GetLen() )
         rInf.SetLen( nLn );
 
-    FontUnderline nOldUnder( UNDERLINE_NONE );
+    FontUnderline nOldUnder = UNDERLINE_NONE;
     SwUnderlineFont* pUnderFnt = 0;
 
     if( rInf.GetUnderFnt() )
@@ -925,7 +925,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
                 // #108203#
                 // If the length of the original string and the CaseMapped one
                 // are different, it is necessary to handle the given text part as
-                // a single snippet since itÄs size may differ, too.
+                // a single snippet since itï¿½s size may differ, too.
                 xub_StrLen nOldIdx(rInf.GetIdx());
                 xub_StrLen nOldLen(rInf.GetLen());
                 const XubString aSnippet(rOldStr, nOldIdx, nOldLen);
@@ -953,7 +953,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
     if( pUnderFnt && nOldUnder != UNDERLINE_NONE )
     {
 static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
-        Size aSize = _GetTxtSize( rInf );
+        Size aFontSize = _GetTxtSize( rInf );
         const XubString &rOldStr = rInf.GetText();
         XubString aStr( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
 
@@ -974,7 +974,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             {
                 if( CH_BLANK == rOldStr.GetChar( nTmp ) || bAsianFont ||
                     ( nTmp + 1 < rOldStr.Len() && pSI &&
-                      ASIAN == pSI->ScriptType( nTmp + 1 ) ) )
+                      i18n::ScriptType::ASIAN == pSI->ScriptType( nTmp + 1 ) ) )
                     ++nSpace;
             }
 
@@ -986,7 +986,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             nSpace *= rInf.GetSpace() / SPACING_PRECISION_FACTOR;
         }
 
-        rInf.SetWidth( USHORT(aSize.Width() + nSpace) );
+        rInf.SetWidth( USHORT(aFontSize.Width() + nSpace) );
         rInf.SetText( aStr );
         rInf.SetIdx( 0 );
         rInf.SetLen( 2 );
@@ -1012,7 +1012,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
     if( !rInf.GetLen() || !rInf.GetText().Len() )
         return;
 
-    FontUnderline nOldUnder;
+    FontUnderline nOldUnder = UNDERLINE_NONE;
     SwUnderlineFont* pUnderFnt = 0;
 
     if( rInf.GetUnderFnt() )
@@ -1228,7 +1228,7 @@ void SwDrawTextInfo::Shift( USHORT nDir )
  *************************************************************************/
 
 SwUnderlineFont::SwUnderlineFont( SwFont& rFnt, const Point& rPoint )
-        : pFnt( &rFnt ), aPos( rPoint )
+        : aPos( rPoint ), pFnt( &rFnt )
 {
 };
 
@@ -1247,13 +1247,13 @@ long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
     switch (nScript)
     {
         default:
-        case com::sun::star::i18n::ScriptType::LATIN:
+        case i18n::ScriptType::LATIN:
             nActual = SW_LATIN;
             break;
-        case com::sun::star::i18n::ScriptType::ASIAN:
+        case i18n::ScriptType::ASIAN:
             nActual = SW_CJK;
             break;
-        case com::sun::star::i18n::ScriptType::COMPLEX:
+        case i18n::ScriptType::COMPLEX:
             nActual = SW_CTL;
             break;
     }
