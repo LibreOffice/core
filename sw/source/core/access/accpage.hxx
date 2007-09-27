@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpage.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:53:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ class SwAccessiblePage : public SwAccessibleContext
 protected:
 
     // return the bounding box for the page in page preview mode
+    using SwAccessibleFrame::GetBounds;
     SwRect GetBounds( /* const SwFrm *pFrm =0 */ );
 
     // Set states for getAccessibleStateSet.
@@ -71,7 +72,7 @@ protected:
 public:
     // convenience constructor to avoid typecast;
     // may only be called with SwPageFrm argument
-    SwAccessiblePage( SwAccessibleMap* pMap, const SwFrm *pFrame );
+    SwAccessiblePage( SwAccessibleMap* pInitMap, const SwFrm* pFrame );
 
 
 
