@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdmgr_tdenumeration.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:37:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:05:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,8 @@
 
 using namespace com::sun::star;
 
+extern rtl_StandardModuleCount g_moduleCount;
+
 namespace stoc_tdmgr
 {
 
@@ -70,14 +72,14 @@ TypeDescriptionEnumerationImpl::TypeDescriptionEnumerationImpl(
   m_eDepth( eDepth ),
   m_aChildren( rTDEAS )
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+    ::g_moduleCount.modCnt.acquire( &::g_moduleCount.modCnt );
 }
 
 //=========================================================================
 // virtual
 TypeDescriptionEnumerationImpl::~TypeDescriptionEnumerationImpl()
 {
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+    ::g_moduleCount.modCnt.release( &::g_moduleCount.modCnt );
 }
 
 //=========================================================================
