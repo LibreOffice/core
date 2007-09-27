@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpara.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:50:50 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:19:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,8 +182,8 @@ BOOL    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
             aRestartNF.GetSavedValue() != aRestartNF.GetText() )
     {
         SwFmtLineNumber aFmt;
-        aFmt.SetStartValue( aRestartParaCountCB.GetState() == STATE_CHECK ?
-                                aRestartNF.GetValue() : 0 );
+        aFmt.SetStartValue( static_cast< ULONG >(aRestartParaCountCB.GetState() == STATE_CHECK ?
+                                aRestartNF.GetValue() : 0 ));
         aFmt.SetCountLines( aCountParaCB.IsChecked() );
         rSet.Put(aFmt);
         bModified = TRUE;
@@ -285,7 +285,7 @@ void SwParagraphNumTabPage::EnableNewStart()
 /*-----------------31.01.98 08:56-------------------
 
 --------------------------------------------------*/
-IMPL_LINK( SwParagraphNumTabPage, NewStartHdl_Impl, CheckBox*, pBox )
+IMPL_LINK( SwParagraphNumTabPage, NewStartHdl_Impl, CheckBox*, EMPTYARG )
 {
     BOOL bEnable = aNewStartCB.IsChecked();
     aNewStartNumberCB.Enable(bEnable);
