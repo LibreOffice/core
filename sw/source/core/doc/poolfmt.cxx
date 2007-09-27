@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:56:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:39:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,9 @@
 #ifndef _GETMETRICVAL_HXX
 #include <GetMetricVal.hxx>
 #endif
+
+
+using namespace ::com::sun::star;
 
 const USHORT PT_3   =  3 * 20;      //  3 pt
 const USHORT PT_6   =  6 * 20;      //  6 pt
@@ -396,7 +399,7 @@ void lcl_SetNumBul( SwDoc* pDoc, SwTxtFmtColl* pColl,
 
 SvxFrameDirection GetDefaultFrameDirection(ULONG nLanguage)
 {
-    SvxFrameDirection eResult = (MsLangId::isRightToLeft( nLanguage) ?
+    SvxFrameDirection eResult = (MsLangId::isRightToLeft( static_cast<LanguageType>(nLanguage)) ?
             FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP);
     return eResult;
 }
@@ -1153,11 +1156,14 @@ bool SwDoc::IsPoolTxtCollUsed( USHORT nId ) const
         (RES_POOLCOLL_HTML_BEGIN <= nId && nId < RES_POOLCOLL_HTML_END),
             "Falsche AutoFormat-Id" );
 
-    SwTxtFmtColl* pNewColl;
+    SwTxtFmtColl* pNewColl = 0;
     BOOL bFnd = FALSE;
     for( USHORT n = 0; !bFnd && n < pTxtFmtCollTbl->Count(); ++n )
-        if( nId == ( pNewColl = (*pTxtFmtCollTbl)[ n ] )->GetPoolFmtId() )
+    {
+        pNewColl = (*pTxtFmtCollTbl)[ n ];
+        if( nId == pNewColl->GetPoolFmtId() )
             bFnd = TRUE;
+    }
 
     if( !bFnd || !pNewColl->GetDepends() )
         return FALSE;
@@ -1171,7 +1177,8 @@ bool SwDoc::IsPoolTxtCollUsed( USHORT nId ) const
 
 SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
 {
-    SwFmt *pNewFmt, *pDeriveFmt;
+    SwFmt *pNewFmt = 0;
+    SwFmt *pDeriveFmt = 0;
 
     SvPtrarr* pArray[ 2 ];
     USHORT nArrCnt = 1, nRCId = 0;
@@ -1245,13 +1252,11 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
         switch (nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
         {
         case POOLGRP_CHARFMT:
-            pNewFmt = MakeCharFmt(aNm,
-                                  reinterpret_cast<SwCharFmt *>(pDeriveFmt));
+            pNewFmt = _MakeCharFmt( aNm, pDeriveFmt, FALSE, TRUE );
 
             break;
         case POOLGRP_FRAMEFMT:
-            pNewFmt = MakeFrmFmt(aNm,
-                                 reinterpret_cast<SwFrmFmt *>(pDeriveFmt));
+            pNewFmt = _MakeFrmFmt(aNm, pDeriveFmt, FALSE, TRUE );
 
             break;
         default:
@@ -1367,15 +1372,15 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
             if ( get(IDocumentSettingAccess::BROWSE_MODE) )
             {
                 aSet.Put( SwFmtAnchor( FLY_IN_CNTNT ));
-                aSet.Put( SwFmtVertOrient( 0, VERT_LINE_CENTER, PRTAREA ) );
+                aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::LINE_CENTER, text::RelOrientation::PRINT_AREA ) );
                 aSet.Put( SwFmtSurround( SURROUND_NONE ) );
             }
             else
             {
                 aSet.Put( SwFmtAnchor( FLY_AT_CNTNT ));
                 aSet.Put( SwFmtSurround( SURROUND_PARALLEL ) );
-                aSet.Put( SwFmtHoriOrient( 0, HORI_CENTER, PRTAREA ) );
-                aSet.Put( SwFmtVertOrient( 0, VERT_TOP, PRTAREA ) );
+                aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::PRINT_AREA ) );
+                aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::PRINT_AREA ) );
                 Color aCol( COL_BLACK );
                 SvxBorderLine aLine( &aCol, DEF_LINE_WIDTH_0 );
                 SvxBoxItem aBox( RES_BOX );
@@ -1394,23 +1399,23 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
     case RES_POOLFRM_OLE:
         {
             aSet.Put( SwFmtAnchor( FLY_AT_CNTNT ));
-            aSet.Put( SwFmtHoriOrient( 0, HORI_CENTER, FRAME ));
-            aSet.Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ));
+            aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
+            aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtSurround( SURROUND_NONE ));
         }
         break;
     case RES_POOLFRM_FORMEL:
         {
             aSet.Put( SwFmtAnchor( FLY_IN_CNTNT ) );
-            aSet.Put( SwFmtVertOrient( 0, VERT_CHAR_CENTER, FRAME ) );
+            aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::FRAME ) );
             aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
         }
         break;
     case RES_POOLFRM_MARGINAL:
         {
             aSet.Put( SwFmtAnchor( FLY_AT_CNTNT ));
-            aSet.Put( SwFmtHoriOrient( 0, HORI_LEFT, FRAME ));
-            aSet.Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ));
+            aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME ));
+            aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtSurround( SURROUND_PARALLEL ));
             // Breite 3.5 centimeter vorgegeben, als Hoehe nur den
             // min. Wert benutzen
@@ -1422,8 +1427,8 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
     case RES_POOLFRM_WATERSIGN:
         {
             aSet.Put( SwFmtAnchor( FLY_PAGE ));
-            aSet.Put( SwFmtHoriOrient( 0, HORI_CENTER, FRAME ));
-            aSet.Put( SwFmtVertOrient( 0, VERT_CENTER, FRAME ));
+            aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
+            aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SvxOpaqueItem( FALSE ));
             aSet.Put( SwFmtSurround( SURROUND_THROUGHT ));
         }
@@ -1432,7 +1437,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
     case RES_POOLFRM_LABEL:
         {
             aSet.Put( SwFmtAnchor( FLY_IN_CNTNT ) );
-            aSet.Put( SwFmtVertOrient( 0, VERT_TOP, FRAME ) );
+            aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
             aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
 
             SvxProtectItem aProtect( RES_PROTECT );
@@ -1470,7 +1475,7 @@ SwCharFmt* SwDoc::GetCharFmtFromPool( sal_uInt16 nId )
     // benutzt wird
 bool SwDoc::IsPoolFmtUsed( USHORT nId ) const
 {
-    SwFmt *pNewFmt;
+    SwFmt *pNewFmt = 0;
     const SvPtrarr* pArray[ 2 ];
     USHORT nArrCnt = 1;
     BOOL bFnd = TRUE;
@@ -1585,7 +1590,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aLR );
             aSet.Put( aUL );
             if( pNewPgDsc )
-                pNewPgDsc->SetUseOn( PD_ALL );
+                pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
         }
         break;
 
@@ -1597,7 +1602,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aUL );
             if( pNewPgDsc )
             {
-                pNewPgDsc->SetUseOn( PD_ALL );
+                pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
                 if( RES_POOLPAGE_FIRST == nId )
                     pNewPgDsc->SetFollow( GetPageDescFromPool( RES_POOLPAGE_STANDARD ));
             }
@@ -1611,7 +1616,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aUL );
             bSetLeft = FALSE;
             if( pNewPgDsc )
-                pNewPgDsc->SetUseOn( PD_LEFT );
+                pNewPgDsc->SetUseOn( nsUseOnPage::PD_LEFT );
         }
         break;
     case RES_POOLPAGE_RIGHT:                // Rechte Seite
@@ -1621,7 +1626,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aUL );
             bSetLeft = FALSE;
             if( pNewPgDsc )
-                pNewPgDsc->SetUseOn( PD_RIGHT );
+                pNewPgDsc->SetUseOn( nsUseOnPage::PD_RIGHT );
         }
         break;
 
@@ -1637,7 +1642,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
 
             if( pNewPgDsc )
             {
-                pNewPgDsc->SetUseOn( PD_ALL );
+                pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
                 pNewPgDsc->SetLandscape( TRUE );
             }
         }
@@ -1653,7 +1658,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aUL );
 
             if( pNewPgDsc )
-                pNewPgDsc->SetUseOn( PD_ALL );
+                pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
         }
         break;
     case RES_POOLPAGE_FOOTNOTE:
@@ -1663,7 +1668,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             aSet.Put( aLR );
             aSet.Put( aUL );
             if( pNewPgDsc )
-                pNewPgDsc->SetUseOn( PD_ALL );
+                pNewPgDsc->SetUseOn( nsUseOnPage::PD_ALL );
             SwPageFtnInfo aInf( pNewPgDsc->GetFtnInfo() );
             aInf.SetLineWidth( 0 );
             aInf.SetTopDist( 0 );
@@ -1800,7 +1805,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
             USHORT nSpace = 0;
             for( n = 0; n < MAXLEVEL; ++n )
             {
-                aFmt.SetAbsLSpace( nSpace += pArr[ n ] );
+                aFmt.SetAbsLSpace( nSpace = nSpace + pArr[ n ] );
                 aFmt.SetFirstLineOffset( - pArr[ n ] );
                 aFmt.SetStart( n+1 );
                 pNewRule->Set( n, aFmt );
@@ -1868,14 +1873,14 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
                     369,  624,      // 0.65, 1.10,
                     255,  879       // 0.45, 1.55
                 };
+
+#ifdef USE_MEASUREMENT
             static const USHORT aAbsSpaceInch0to2[] =
                 {
                     308,  308,
                     501,  847,
                     347, 1194
                 };
-
-#ifdef USE_MEASUREMENT
             const USHORT* pArr0to2 = MEASURE_METRIC ==
                             GetAppLocaleData().getMeasurementSystemEnum()
                                 ? aAbsSpace0to2
@@ -2120,11 +2125,14 @@ bool SwDoc::IsPoolPageDescUsed( USHORT nId ) const
 {
     ASSERT( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
             "Falsche AutoFormat-Id" );
-    SwPageDesc *pNewPgDsc;
+    SwPageDesc *pNewPgDsc = 0;
     BOOL bFnd = FALSE;
     for( USHORT n = 0; !bFnd && n < aPageDescs.Count(); ++n )
-        if( nId == ( pNewPgDsc = aPageDescs[ n ] )->GetPoolFmtId() )
+    {
+        pNewPgDsc = aPageDescs[ n ];
+        if( nId == pNewPgDsc->GetPoolFmtId() )
             bFnd = TRUE;
+    }
 
     // nicht gefunden oder keine Abhaengigen ?
     if( !bFnd || !pNewPgDsc->GetDepends() )     // ??????
