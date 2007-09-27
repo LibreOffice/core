@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcedtw.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:02:06 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:09:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,8 @@ private:
     Table           aSyntaxLineTable;
 
     void            ImpDoHighlight( const String& rSource, USHORT nLineOff );
+
+    using OutputDevice::SetFont;
     void            SetFont();
 
     DECL_LINK( SyntaxTimerHdl, Timer * );
@@ -124,6 +126,7 @@ protected:
     void            CreateTextEngine();
     void            DoSyntaxHighlight( USHORT nPara );
 
+    using Window::Notify;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     DECL_LINK(ScrollHdl, ScrollBar*);
@@ -146,7 +149,9 @@ public:
     SwSrcView*      GetSrcView() {return pSrcView;}
 
     TextViewOutWin* GetOutWin() {return pOutWin;}
-    void            Invalidate();
+
+    using Window::Invalidate;
+    virtual void    Invalidate( USHORT nFlags = 0 );
 
     void            ClearModifyFlag()
                         { pTextEngine->SetModified(FALSE); }
