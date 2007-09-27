@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtxml.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:21:44 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:09:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,10 @@
 #ifndef _WRTXML_HXX
 #define _WRTXML_HXX
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>
 #endif
@@ -42,14 +46,14 @@
 class SwPaM;
 class SfxMedium;
 
-namespace com { namespace sun { namespace start {
+namespace com { namespace sun { namespace star {
     namespace uno { template<class A> class Reference; }
     namespace uno { template<class A> class Sequence; }
     namespace uno { class Any; }
     namespace lang { class XComponent; }
     namespace lang { class XMultiServiceFactory; }
     namespace beans { struct PropertyValue; }
-} } };
+} } }
 
 
 class SwXMLWriter : public StgWriter
@@ -65,6 +69,7 @@ public:
     SwXMLWriter( const String& rBaseURL );
     virtual ~SwXMLWriter();
 
+    using StgWriter::Write;
     virtual ULONG Write( SwPaM&, SfxMedium&, const String* = 0 );
 
 private:
