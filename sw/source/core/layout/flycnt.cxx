@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:01:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:02:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,9 @@
 #include <HandleAnchorNodeChg.hxx>
 #endif
 // <--
+
+using namespace ::com::sun::star;
+
 
 /*************************************************************************
 |*
@@ -303,7 +306,7 @@ public:
     SwOszControl( const SwFlyFrm *pFrm );
     ~SwOszControl();
     bool ChkOsz();
-    static FASTBOOL IsInProgress( const SwFlyFrm *pFly );
+    static BOOL IsInProgress( const SwFlyFrm *pFly );
 };
 const SwFlyFrm *SwOszControl::pStk1 = 0;
 const SwFlyFrm *SwOszControl::pStk2 = 0;
@@ -352,7 +355,7 @@ SwOszControl::~SwOszControl()
     // <--
 }
 
-FASTBOOL SwOszControl::IsInProgress( const SwFlyFrm *pFly )
+BOOL SwOszControl::IsInProgress( const SwFlyFrm *pFly )
 {
     if ( SwOszControl::pStk1 && !pFly->IsLowerOf( SwOszControl::pStk1 ) )
         return TRUE;
@@ -414,9 +417,9 @@ void SwFlyAtCntFrm::MakeAll()
         if( !GetPageFrm() && GetAnchorFrm() && GetAnchorFrm()->IsInFly() )
         {
             SwFlyFrm* pFly = AnchorFrm()->FindFlyFrm();
-            SwPageFrm *pPage = pFly ? pFly->FindPageFrm() : NULL;
-            if( pPage )
-                pPage->AppendFlyToPage( this );
+            SwPageFrm *pTmpPage = pFly ? pFly->FindPageFrm() : NULL;
+            if( pTmpPage )
+                pTmpPage->AppendFlyToPage( this );
         }
         // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
         if( GetPageFrm() )
@@ -455,7 +458,7 @@ void SwFlyAtCntFrm::MakeAll()
             if( pFooter && !pFooter->IsFooterFrm() )
                 pFooter = NULL;
             bool bOsz = false;
-            FASTBOOL bExtra = Lower() && Lower()->IsColumnFrm();
+            BOOL bExtra = Lower() && Lower()->IsColumnFrm();
             // --> OD 2004-08-25 #i3317# - boolean, to apply temporarly the
             // 'straightforward positioning process' for the frame due to its
             // overlapping with a previous column.
@@ -520,8 +523,6 @@ void SwFlyAtCntFrm::MakeAll()
                         // --> OD 2005-09-29 #125370#,#125957# - mark anchor text frame
                         // directly, that it is moved forward by object positioning.
                         SwTxtFrm* pAnchorTxtFrm( static_cast<SwTxtFrm*>(AnchorFrm()) );
-                        const SwPageFrm* pAnchorPageFrm =
-                                                pAnchPosAnchorFrm->FindPageFrm();
                         bool bInsert( true );
                         sal_uInt32 nAnchorFrmToPageNum( 0L );
                         const SwDoc& rDoc = *(GetFrmFmt().GetDoc());
@@ -672,7 +673,7 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
         // einspaltige Bereiche muessen zu ihrem Upper durchschalten
         while( pUp->IsSctFrm() )
             pUp = pUp->GetUpper();
-        SWRECTFN( pUp )
+        const bool bVert = pUp->IsVertical();
         //Dem Textflus folgen.
         if ( pUp->Frm().IsInside( rPt ) )
         {
@@ -718,8 +719,9 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
 
             const SwFrm *pPre = pCnt;
             const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, TRUE, pCnt );
-            SwTwips nFrmTop, nPrtHeight;
-            BOOL bSct;
+            SwTwips nFrmTop = 0;
+            SwTwips nPrtHeight = 0;
+            BOOL bSct = FALSE;
             const SwSectionFrm *pSect = pUp->FindSctFrm();
             if( pSect )
             {
@@ -883,11 +885,6 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
     return 0;
 }
 
-//Bug 3985, optimierungsproblem, vergleiche auch trvlfrm.cxx lcl_FindCntnt()
-#ifdef _MSC_VER
-#pragma optimize("e",off)
-#endif
-
 ULONG MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
                           const SwCntntFrm *& rpCnt,
                           const BOOL bBody, const BOOL bFtn )
@@ -951,10 +948,6 @@ ULONG MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
     }
     return nDistance;
 }
-
-#ifdef _MSC_VER
-#pragma optimize("e",on)
-#endif
 
 const SwCntntFrm * MA_FASTCALL lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
                                   const BOOL bBody, const BOOL bFtn )
@@ -1233,12 +1226,12 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     if( pCnt->IsProtected() )
         pCnt = (SwCntntFrm*)GetAnchorFrm();
 
-    SwPageFrm *pPage = 0;
-    SWRECTFN( pCnt )
+    SwPageFrm *pTmpPage = 0;
+    const bool bVert = pCnt->IsVertical();
     const sal_Bool bRTL = pCnt->IsRightToLeft();
 
-    if( ( bVert != GetAnchorFrm()->IsVertical() ) ||
-        ( bRTL != GetAnchorFrm()->IsRightToLeft() ) )
+    if( ( !bVert != !GetAnchorFrm()->IsVertical() ) ||
+        ( !bRTL !=  !GetAnchorFrm()->IsRightToLeft() ) )
     {
         if( bVert || bRTL )
             aNew.X() += Frm().Width();
@@ -1249,11 +1242,11 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     if ( pCnt->IsInDocBody() )
     {
         //#38848 Vom Seitenrand in den Body ziehen.
-        pPage = pCnt->FindPageFrm();
-        ::lcl_PointToPrt( aNew, pPage->GetUpper() );
+        pTmpPage = pCnt->FindPageFrm();
+        ::lcl_PointToPrt( aNew, pTmpPage->GetUpper() );
         SwRect aTmp( aNew, Size( 0, 0 ) );
-        pPage = (SwPageFrm*)::FindPage( aTmp, pPage );
-        ::lcl_PointToPrt( aNew, pPage );
+        pTmpPage = (SwPageFrm*)::FindPage( aTmp, pTmpPage );
+        ::lcl_PointToPrt( aNew, pTmpPage );
     }
 
     //RelPos einstellen, nur auf Wunsch invalidieren.
@@ -1318,7 +1311,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
     const SwFmtSurround& rSurround = pFmt->GetSurround();
-    const FASTBOOL bWrapThrough =
+    const BOOL bWrapThrough =
         rSurround.GetSurround() == SURROUND_THROUGHT;
     SwTwips nBaseOfstForFly = 0;
     const SwFrm* pTmpFrm = pFrm ? pFrm : pCnt;
@@ -1368,9 +1361,9 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
                 && pPos->nNode == *pCnt->GetNode() )
             {
                 ResetLastCharRectHeight();
-                if( REL_CHAR == pFmt->GetVertOrient().GetRelationOrient() )
+                if( text::RelOrientation::CHAR == pFmt->GetVertOrient().GetRelationOrient() )
                     nY = LONG_MAX;
-                if( REL_CHAR == pFmt->GetHoriOrient().GetRelationOrient() )
+                if( text::RelOrientation::CHAR == pFmt->GetHoriOrient().GetRelationOrient() )
                     nX = LONG_MAX;
             }
             else
@@ -1397,8 +1390,8 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         // <--
     }
     // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
-    else if ( pPage && pPage != GetPageFrm() )
-        GetPageFrm()->MoveFly( this, pPage );
+    else if ( pTmpPage && pTmpPage != GetPageFrm() )
+        GetPageFrm()->MoveFly( this, pTmpPage );
 
     const Point aRelPos = bVert ? Point( -nY, nX ) : Point( nX, nY );
     ChgRelPos( aRelPos );
@@ -1422,7 +1415,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
 //    USHORT nCnt = 0;
 
-//  FASTBOOL bContinue = FALSE;
+//  BOOL bContinue = FALSE;
 //  do
 //    {
 //        if ( ++nCnt == 10 )
@@ -1431,7 +1424,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 //          break;
 //      }
 
-//      const FASTBOOL bSetComplete = !pFrm->IsValid();
+//      const BOOL bSetComplete = !pFrm->IsValid();
 //      const SwRect aOldFrm( pFrm->Frm() );
 //      const SwRect aOldPrt( pFrm->Prt() );
 
