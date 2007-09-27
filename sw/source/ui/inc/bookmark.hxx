@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bookmark.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:01:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:54:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@
 #include "swlbox.hxx"       // SwComboBox
 
 class SwWrtShell;
+class SfxRequest;
 
 /*--------------------------------------------------------------------
     Beschreibung:
