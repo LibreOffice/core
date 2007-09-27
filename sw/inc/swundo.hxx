@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swundo.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:17:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:12:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,9 @@
 #include <svtools/svarray.hxx>
 
 // die Ids fuer StdAktionen
-enum SwUndoStdId
+enum SwUndoId
 {
+    UNDO_EMPTY = 0,
     UNDO_STD_BEGIN = 1,
     UNDO_START = UNDO_STD_BEGIN,            //  1
     UNDO_END,                               //  2
@@ -160,7 +161,23 @@ enum SwUndoStdId
     UNDO_ROW_DELETE, // 109
     UNDO_RENAME_PAGEDESC, // 110
     UNDO_NUMDOWN, // 111
-    UNDO_STD_END= UNDO_NUMDOWN
+    UNDO_STD_END= UNDO_NUMDOWN,
+
+    // UI undo ID's...
+    UNDO_UI_REPLACE             =  UNDO_STD_END + 1,
+    UNDO_UI_INSERT_PAGE_BREAK,
+    UNDO_UI_INSERT_COLUMN_BREAK,
+    UNDO_UI_PLAY_MACRO,
+    UNDO_UI_INSERT_ENVELOPE,
+    UNDO_UI_DRAG_AND_COPY,
+    UNDO_UI_DRAG_AND_MOVE,
+    UNDO_UI_INSERT_RULER,
+    UNDO_UI_INSERT_CHART,
+    UNDO_UI_INSERT_FOOTNOTE,
+    UNDO_UI_INSERT_URLBTN,
+    UNDO_UI_INSERT_URLTXT,
+    UNDO_UI_DELETE_INVISIBLECNTNT,
+    UNDO_UI_REPLACE_STYLE
 };
 
 
@@ -170,39 +187,18 @@ enum SwUndoStdId
 class String;
 class SwUndoIdAndName
 {
-    USHORT nUndoId;
+    SwUndoId eUndoId;
     String* pUndoStr;
 
 public:
-    SwUndoIdAndName() : nUndoId( 0 ), pUndoStr( 0 ) {}
-    SwUndoIdAndName( USHORT nId, const String* pStr = 0 );
+    SwUndoIdAndName() : eUndoId( UNDO_EMPTY ), pUndoStr( 0 ) {}
+    SwUndoIdAndName( SwUndoId nId, const String* pStr = 0 );
     ~SwUndoIdAndName();
 
-    USHORT GetUndoId() const            { return nUndoId; }
+    SwUndoId GetUndoId() const          { return eUndoId; }
     const String* GetUndoStr() const    { return pUndoStr; }
 };
 typedef SwUndoIdAndName* SwUndoIdAndNamePtr;
 SV_DECL_PTRARR_DEL( SwUndoIds, SwUndoIdAndNamePtr, INIT_UNDOIDS, GROW_UNDOIDS )
-
-
-// Undo-Ids fuer die UI-Seite
-enum SwUIUndoIds
-{
-    UIUNDO_REPLACE             =  UNDO_STD_END + 1,
-    UIUNDO_INSERT_PAGE_BREAK,
-    UIUNDO_INSERT_COLUMN_BREAK,
-    UIUNDO_PLAY_MACRO,
-    UIUNDO_INSERT_ENVELOPE,
-    UIUNDO_DRAG_AND_COPY,
-    UIUNDO_DRAG_AND_MOVE,
-    UIUNDO_INSERT_RULER,
-    UIUNDO_INSERT_CHART,
-    UIUNDO_INSERT_FOOTNOTE,
-    UIUNDO_INSERT_URLBTN,
-    UIUNDO_INSERT_URLTXT,
-    UIUNDO_DELETE_INVISIBLECNTNT,
-    UIUNDO_REPLACE_STYLE
-};
-
 
 #endif
