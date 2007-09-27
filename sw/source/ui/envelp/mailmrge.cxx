@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 07:40:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:44:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,11 +55,8 @@
 #ifndef _MAILENUM_HXX //autogen
 #include <goodies/mailenum.hxx>
 #endif
-//CHINA001 #ifndef _SVX_MULTIFIL_HXX
-//CHINA001 #include <svx/multifil.hxx>
-//CHINA001 #endif
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 #ifndef _HELPID_H
 #include <helpid.h>
 #endif
@@ -153,23 +150,23 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #endif
 
+#include <unomid.h>
+
 using namespace rtl;
-using namespace com::sun::star::container;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::sdb;
-using namespace com::sun::star::sdbc;
-using namespace com::sun::star::sdbcx;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::util;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::frame;
-using namespace com::sun::star::form;
-using namespace com::sun::star;
-using namespace com::sun::star::view;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::ui::dialogs;
 
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
-#define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 
 /* -----------------------------05.06.01 13:54--------------------------------
 
@@ -185,7 +182,7 @@ struct SwMailMergeDlg_Impl
  ---------------------------------------------------------------------------*/
 class SwXSelChgLstnr_Impl : public cppu::WeakImplHelper1
 <
-    com::sun::star::view::XSelectionChangeListener
+    view::XSelectionChangeListener
 >
 {
     SwMailMergeDlg& rParent;
@@ -246,6 +243,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
     SvxStandardDialog(pParent, SW_RES(DLG_MAILMERGE)),
     pBeamerWin      (new Window(this, SW_RES(WIN_BEAMER))),
+
     aAllRB          (this, SW_RES(RB_ALL)),
     aMarkedRB       (this, SW_RES(RB_MARKED)),
     aFromRB         (this, SW_RES(RB_FROM)),
@@ -255,6 +253,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aRecordFL       (this, SW_RES(FL_RECORD)),
 
     aSeparatorFL    (this, SW_RES(FL_SEPARATOR)),
+
     aPrinterRB      (this, SW_RES(RB_PRINTER)),
     aMailingRB      (this, SW_RES(RB_MAILING)),
     aFileRB         (this, SW_RES(RB_FILE)),
@@ -282,9 +281,9 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aAttachFT       (this, SW_RES(FT_ATTACH)),
     aAttachED       (this, SW_RES(ED_ATTACH)),
     aAttachPB       (this, SW_RES(PB_ATTACH)),
-    aFormatSwCB     (this, SW_RES(CB_FORMAT_SW)),
     aFormatHtmlCB   (this, SW_RES(CB_FORMAT_HTML)),
     aFormatRtfCB    (this, SW_RES(CB_FORMAT_RTF)),
+    aFormatSwCB     (this, SW_RES(CB_FORMAT_SW)),
     aDestFL         (this, SW_RES(FL_DEST)),
 
     aBottomSeparatorFL(this, SW_RES(FL_BOTTOM_SEPARATOR)),
@@ -294,6 +293,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     aHelpBTN        (this, SW_RES(BTN_HELP)),
 
     pImpl           (new SwMailMergeDlg_Impl),
+
     rSh             (rShell),
     rDBName         (rSourceName),
     rTableName      (rTblName),
@@ -527,19 +527,19 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
             uno::Any aProps = xFilterFactory->getByName(sFilter);
             uno::Sequence< beans::PropertyValue > aFilterProperties;
             aProps >>= aFilterProperties;
-            ::rtl::OUString sUIName;
+            ::rtl::OUString sUIName2;
             const beans::PropertyValue* pFilterProperties = aFilterProperties.getConstArray();
             for(int nProp = 0; nProp < aFilterProperties.getLength(); nProp++)
             {
                 if(!pFilterProperties[nProp].Name.compareToAscii("UIName"))
                 {
-                    pFilterProperties[nProp].Value >>= sUIName;
+                    pFilterProperties[nProp].Value >>= sUIName2;
                     break;
                 }
             }
-            if( sUIName.getLength() )
+            if( sUIName2.getLength() )
             {
-                USHORT nFilter = aFilterLB.InsertEntry( sUIName );
+                USHORT nFilter = aFilterLB.InsertEntry( sUIName2 );
                 if( 0 == sFilter.compareToAscii("writer8") )
                     nODT = nFilter;
                 aFilterLB.SetEntryData( nFilter, new ::rtl::OUString( sFilter ) );
@@ -798,8 +798,8 @@ bool SwMailMergeDlg::ExecQryShell()
     }
     else
     {
-        nMergeType = aSaveSingleDocRB.IsChecked() ?
-                    DBMGR_MERGE_SINGLE_FILE : DBMGR_MERGE_MAILFILES;
+        nMergeType = static_cast< USHORT >( aSaveSingleDocRB.IsChecked() ?
+                    DBMGR_MERGE_SINGLE_FILE : DBMGR_MERGE_MAILFILES );
         SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
         INetURLObject aAbs;
         if( pMedium )
@@ -838,8 +838,8 @@ bool SwMailMergeDlg::ExecQryShell()
 
     if (aFromRB.IsChecked())    // Liste Einfuegen
     {
-        ULONG nStart = aFromNF.GetValue();
-        ULONG nEnd = aToNF.GetValue();
+        ULONG nStart = static_cast< ULONG >(aFromNF.GetValue());
+        ULONG nEnd   = static_cast< ULONG >(aToNF.GetValue());
 
         if (nEnd < nStart)
         {
@@ -938,12 +938,11 @@ IMPL_LINK( SwMailMergeDlg, InsertPathHdl, PushButton *, EMPTYARG )
 
 IMPL_LINK( SwMailMergeDlg, AttachFileHdl, PushButton *, EMPTYARG )
 {
-    //CHINA001 SvxMultiFileDialog* pFileDlg = new SvxMultiFileDialog(this);
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxMultiFileDialog* pFileDlg = pFact->CreateSvxMultiFileDialog( this, RID_SVXDLG_MULTIPATH );
-        DBG_ASSERT(pFileDlg, "Dialogdiet fail!");//CHINA001
+        AbstractSvxMultiFileDialog* pFileDlg = pFact->CreateSvxMultiFileDialog( this, RID_SVXDLG_MULTIPATH);
+        DBG_ASSERT(pFileDlg, "Dialogdiet fail!");
         pFileDlg->SetFiles(aAttachED.GetText());
         pFileDlg->SetHelpId(HID_FILEDLG_MAILMRGE2);
 
