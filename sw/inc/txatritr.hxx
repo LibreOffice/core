@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txatritr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:54:05 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:14:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,10 +99,10 @@ public:
 class SwLanguageIterator : public SwTxtAttrIterator
 {
 public:
-    SwLanguageIterator( const SwTxtNode& rTxtNd, xub_StrLen nStart = 0,
-                        USHORT nWhichId = RES_CHRATR_LANGUAGE,
+    SwLanguageIterator( const SwTxtNode& rTxtNode, xub_StrLen nStart = 0,
+                        USHORT nWhich = RES_CHRATR_LANGUAGE,
                         sal_Bool bUseGetWhichOfScript = sal_True )
-        : SwTxtAttrIterator( rTxtNd, nWhichId, nStart, bUseGetWhichOfScript )
+        : SwTxtAttrIterator( rTxtNode, nWhich, nStart, bUseGetWhichOfScript )
     {}
 
     sal_uInt16 GetLanguage() const
