@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:21:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:05:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -454,12 +454,12 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
             // <--
             {
                 bool bInsert( true );
-                sal_uInt32 nToPageNum( 0L );
+                sal_uInt32 nTmpToPageNum( 0L );
                 const SwDoc& rDoc = *(GetPageFrm().GetFmt()->GetDoc());
                 if ( SwLayouter::FrmMovedFwdByObjPos(
-                                        rDoc, mrAnchorTxtFrm, nToPageNum ) )
+                                        rDoc, mrAnchorTxtFrm, nTmpToPageNum ) )
                 {
-                    if ( nToPageNum < pAnchorPageFrm->GetPhyPageNum() )
+                    if ( nTmpToPageNum < pAnchorPageFrm->GetPhyPageNum() )
                         SwLayouter::RemoveMovedFwdFrm( rDoc, mrAnchorTxtFrm );
                     else
                         bInsert = false;
