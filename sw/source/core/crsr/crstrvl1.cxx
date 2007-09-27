@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crstrvl1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:45:36 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:29:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,63 +48,63 @@
 #include <callnk.hxx>
 #endif
 
-FASTBOOL SwCrsrShell::IsStartWord() const
+BOOL SwCrsrShell::IsStartWord() const
 {
     return pCurCrsr->IsStartWord();
 }
-FASTBOOL SwCrsrShell::IsEndWord() const
+BOOL SwCrsrShell::IsEndWord() const
 {
     return pCurCrsr->IsEndWord();
 }
-FASTBOOL SwCrsrShell::IsStartSentence() const
+BOOL SwCrsrShell::IsStartSentence() const
 {
     return pCurCrsr->IsStartEndSentence( false );
 }
-FASTBOOL SwCrsrShell::IsEndSentence() const
+BOOL SwCrsrShell::IsEndSentence() const
 {
     return pCurCrsr->IsStartEndSentence( true );
 }
-FASTBOOL SwCrsrShell::IsInWord() const
+BOOL SwCrsrShell::IsInWord() const
 {
     return pCurCrsr->IsInWord();
 }
 
 
-FASTBOOL SwCrsrShell::GoStartWord()
+BOOL SwCrsrShell::GoStartWord()
 {
     return CallCrsrFN( &SwCursor::GoStartWord );
 }
-FASTBOOL SwCrsrShell::GoEndWord()
+BOOL SwCrsrShell::GoEndWord()
 {
     return CallCrsrFN( &SwCursor::GoEndWord );
 }
-FASTBOOL SwCrsrShell::GoNextWord()
+BOOL SwCrsrShell::GoNextWord()
 {
     return CallCrsrFN( &SwCursor::GoNextWord );
 }
-FASTBOOL SwCrsrShell::GoPrevWord()
+BOOL SwCrsrShell::GoPrevWord()
 {
     return CallCrsrFN( &SwCursor::GoPrevWord );
 }
-FASTBOOL SwCrsrShell::GoNextSentence()
+BOOL SwCrsrShell::GoNextSentence()
 {
     return CallCrsrFN( &SwCursor::GoNextSentence );
 }
-FASTBOOL SwCrsrShell::GoEndSentence()
+BOOL SwCrsrShell::GoEndSentence()
 {
     return CallCrsrFN( &SwCursor::GoEndSentence );
 }
 
-FASTBOOL SwCrsrShell::GoPrevSentence()
+BOOL SwCrsrShell::GoPrevSentence()
 {
     return CallCrsrFN( &SwCursor::GoPrevSentence );
 }
-FASTBOOL SwCrsrShell::GoStartSentence()
+BOOL SwCrsrShell::GoStartSentence()
 {
     return CallCrsrFN( &SwCursor::GoStartSentence );
 }
 
-FASTBOOL SwCrsrShell::SelectWord( const Point* pPt )
+BOOL SwCrsrShell::SelectWord( const Point* pPt )
 {
     return pCurCrsr->SelectWord( pPt );
 }
