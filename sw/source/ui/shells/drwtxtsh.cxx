@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:22:40 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:27:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,17 +186,17 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 #include <cppuhelper/bootstrap.hxx>
 
 
 
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::i18n;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::i18n;
 
 
 
@@ -350,7 +350,7 @@ void SwDrawTextShell::ExecFontWork(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
     FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
-    SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+    SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)) );
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
     if ( rReq.GetArgs() )
     {
@@ -402,10 +402,10 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
         {
             //#111733# Sometimes SdrEndTextEdit() initiates the change in selection and
             // 'this' is not valid anymore
-            SwView& rView = GetView();
+            SwView& rTempView = GetView();
             pDrView->SdrEndTextEdit(sal_True);
             //this removes the current shell from the dispatcher stack!!
-            rView.AttrChangedNotify(&rSh);
+            rTempView.AttrChangedNotify(&rSh);
         }
 
         if ( rSet.GetItemState(XATTR_FORMTXTSTDFORM, TRUE, &pItem) ==
@@ -641,10 +641,10 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             {
                 // Shellwechsel!
                 rSh.EndTextEdit();
-                SwView& rView = rSh.GetView();
-                rView.ExitDraw();
+                SwView& rTempView = rSh.GetView();
+                rTempView.ExitDraw();
                 rSh.Edit();
-                rView.AttrChangedNotify(&rSh);
+                rTempView.AttrChangedNotify(&rSh);
                 return;
             }
             break;
@@ -710,15 +710,15 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
                     1 < (nCnt = ((SfxUInt16Item*)pItem)->GetValue()) )
                 {
                     // then we make by ourself.
-                    SfxUndoManager* pUndoMgr = GetUndoManager();
-                    if( pUndoMgr )
+                    SfxUndoManager* pUndoManager = GetUndoManager();
+                    if( pUndoManager )
                     {
                         if( SID_UNDO == nId )
                             while( nCnt-- )
-                                pUndoMgr->Undo(0);
+                                pUndoManager->Undo(0);
                         else
                             while( nCnt-- )
-                                pUndoMgr->Redo(0);
+                                pUndoManager->Redo(0);
                     }
                     bCallBase = FALSE;
                 }
@@ -754,27 +754,27 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
         case SID_GETUNDOSTRINGS:
         case SID_GETREDOSTRINGS:
             {
-                SfxUndoManager* pUndoMgr = GetUndoManager();
-                if( pUndoMgr )
+                SfxUndoManager* pUndoManager = GetUndoManager();
+                if( pUndoManager )
                 {
                     UniString (SfxUndoManager:: *fnGetComment)( USHORT ) const;
 
                     sal_uInt16 nCount;
                     if( SID_GETUNDOSTRINGS == nWhich )
                     {
-                        nCount = pUndoMgr->GetUndoActionCount();
+                        nCount = pUndoManager->GetUndoActionCount();
                         fnGetComment = &SfxUndoManager::GetUndoActionComment;
                     }
                     else
                     {
-                        nCount = pUndoMgr->GetRedoActionCount();
+                        nCount = pUndoManager->GetRedoActionCount();
                         fnGetComment = &SfxUndoManager::GetRedoActionComment;
                     }
                     if( nCount )
                     {
                         String sList;
                         for( sal_uInt16 n = 0; n < nCount; ++n )
-                            ( sList += (pUndoMgr->*fnGetComment)( n ) )
+                            ( sList += (pUndoManager->*fnGetComment)( n ) )
                                     += '\n';
 
                         SfxStringListItem aItem( nWhich );
@@ -798,7 +798,7 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
 
 void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
 {
-    using namespace ::com::sun::star::i18n;
+    using namespace i18n;
     {
         sal_uInt32 nMode = 0;
 
@@ -882,11 +882,10 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     Font aFont(sFontName, Size(1,1));
     if(!sSym.Len())
     {
-        //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap( NULL, FALSE );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pFact, "Dialogdiet fail!");
         AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( NULL, RID_SVXDLG_CHARMAP, FALSE );
-        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
         Font aDlgFont( pDlg->GetCharFont() );
         SwViewOption aOpt(*GetShell().GetViewOptions());
@@ -928,19 +927,19 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         pOLV->InsertText( sSym, TRUE );
 
         // attributieren (Font setzen)
-        SfxItemSet aSet( *aFontSet.GetPool(), aFontSet.GetRanges() );
+        SfxItemSet aFontAttribSet( *aFontSet.GetPool(), aFontSet.GetRanges() );
         SvxFontItem aFontItem (aFont.GetFamily(),    aFont.GetName(),
                                 aFont.GetStyleName(), aFont.GetPitch(),
                                 aFont.GetCharSet(),
                                 EE_CHAR_FONTINFO );
-        USHORT nScript = pBreakIt->GetAllScriptsOfText( sSym );
+        nScript = pBreakIt->GetAllScriptsOfText( sSym );
         if( SCRIPTTYPE_LATIN & nScript )
-            aSet.Put( aFontItem, EE_CHAR_FONTINFO );
+            aFontAttribSet.Put( aFontItem, EE_CHAR_FONTINFO );
         if( SCRIPTTYPE_ASIAN & nScript )
-            aSet.Put( aFontItem, EE_CHAR_FONTINFO_CJK );
+            aFontAttribSet.Put( aFontItem, EE_CHAR_FONTINFO_CJK );
         if( SCRIPTTYPE_COMPLEX & nScript )
-            aSet.Put( aFontItem, EE_CHAR_FONTINFO_CTL );
-        pOLV->SetAttribs(aSet);
+            aFontAttribSet.Put( aFontItem, EE_CHAR_FONTINFO_CTL );
+        pOLV->SetAttribs(aFontAttribSet);
 
         // Selektion loeschen
         ESelection aSel(pOLV->GetSelection());
@@ -969,7 +968,6 @@ SfxUndoManager* SwDrawTextShell::GetUndoManager()
     SwWrtShell &rSh = GetShell();
     pSdrView = rSh.GetDrawView();
     SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     pOutliner = pSdrView->GetTextEditOutliner();
     return &pOutliner->GetUndoManager();
 }
