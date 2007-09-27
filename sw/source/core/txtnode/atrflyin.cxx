@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrflyin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:44:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:23:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,8 +66,8 @@
 
 SwFmtFlyCnt::SwFmtFlyCnt( SwFrmFmt *pFrmFmt )
     : SfxPoolItem( RES_TXTATR_FLYCNT ),
-    pFmt( pFrmFmt ),
-    pTxtAttr( 0 )
+    pTxtAttr( 0 ),
+    pFmt( pFrmFmt )
 {
 }
 
@@ -84,8 +84,8 @@ SfxPoolItem* __EXPORT SwFmtFlyCnt::Clone( SfxItemPool* ) const
     return new SwFmtFlyCnt( pFmt );
 }
 
-SwTxtFlyCnt::SwTxtFlyCnt( const SwFmtFlyCnt& rAttr, xub_StrLen nStart )
-    : SwTxtAttr( rAttr, nStart )
+SwTxtFlyCnt::SwTxtFlyCnt( const SwFmtFlyCnt& rAttr, xub_StrLen nStartPos )
+    : SwTxtAttr( rAttr, nStartPos )
 {
     ((SwFmtFlyCnt&)rAttr).pTxtAttr = this;
 }
