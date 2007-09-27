@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IDocumentFieldsAccess.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:42:48 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:53:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
        @retval TRUE            putting of value was successful
        @retval FALSE           else
     */
-    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, BYTE nMId) = 0;
+    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, USHORT nWhich) = 0;
 
     // rufe das Update der Expression Felder auf; alle Ausdruecke werden
     // neu berechnet.
