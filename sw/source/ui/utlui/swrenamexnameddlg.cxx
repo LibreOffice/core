@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swrenamexnameddlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:24:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:47:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,14 +131,14 @@ SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
             uno::Reference< container::XNamed > & xN,
             uno::Reference< container::XNameAccess > & xNA ) :
     ModalDialog(pWin, SW_RES(DLG_RENAME_XNAMED)),
-   xNamed(xN),
-   xNameAccess(xNA),
    aNewNameFT(this, SW_RES(FT_NEW_NAME)),
    aNewNameED(this, SW_RES(ED_NEW_NAME)),
    aNameFL(this, SW_RES(FL_NAME)),
    aOk(this, SW_RES(PB_OK)),
    aCancel(this, SW_RES(PB_CANCEL)),
-   aHelp(this, SW_RES(PB_HELP))
+   aHelp(this, SW_RES(PB_HELP)),
+   xNamed(xN),
+   xNameAccess(xNA)
 {
     FreeResource();
     sRemoveWarning = String(SW_RES(STR_REMOVE_WARNING));
@@ -156,7 +156,7 @@ SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
 /* -----------------09.06.99 15:34-------------------
  *
  * --------------------------------------------------*/
-IMPL_LINK(SwRenameXNamedDlg, OkHdl, OKButton*, pOk)
+IMPL_LINK(SwRenameXNamedDlg, OkHdl, OKButton*, EMPTYARG)
 {
     try
     {
