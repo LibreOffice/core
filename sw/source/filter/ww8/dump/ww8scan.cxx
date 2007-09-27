@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:27:01 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:07:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1576,7 +1576,7 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
 
     WW8_FC nClxPos = pWwF->fcClx;
     INT32 nClxLen = pWwF->lcbClx;
-    register INT32 nLeft = nClxLen;
+    INT32 nLeft = nClxLen;
     INT16 nGrpprl = 0;
     BYTE clxt;
 
@@ -3868,8 +3868,8 @@ WW8PLCFx& WW8PLCFx_Book::operator ++( int )
     {
         (*pBook[nIsEnd])++;
 
-        register ULONG l0 = pBook[0]->Where();
-        register ULONG l1 = pBook[1]->Where();
+        ULONG l0 = pBook[0]->Where();
+        ULONG l1 = pBook[1]->Where();
         if( l0 < l1 )
             nIsEnd = 0;
         else if( l1 < l0 )
@@ -4247,7 +4247,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, short nType, long nStartCp,
     GetPapPLCF()->ResetAttrStartEnd();
     for( i=0; i < nPLCF; i++)
     {
-        register WW8PLCFxDesc* p = &aD[i];
+        WW8PLCFxDesc* p = &aD[i];
 
         /*
         ##516##,##517##
@@ -4271,7 +4271,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, short nType, long nStartCp,
 
     // initialisieren der Member-Vars High-Level
     for( i=0; i<nPLCF; i++){
-        register WW8PLCFxDesc* p = &aD[i];
+        WW8PLCFxDesc* p = &aD[i];
 
         if( !p->pPLCFx )
         {
@@ -4318,7 +4318,7 @@ USHORT WW8PLCFMan::WhereIdx(bool* pbStart, long* pPos) const
     USHORT nNextIdx = nPLCF;// first ending found ( CHP, PAP, ( SEP ) ),
     bool bStart = true;     // dann Anfaenge finden ( ( SEP ), PAP, CHP )
     USHORT i;
-    register const WW8PLCFxDesc* pD;
+    const WW8PLCFxDesc* pD;
     for (i=0; i < nPLCF; i++)
     {
         pD = &aD[i];
@@ -4406,7 +4406,7 @@ void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
 
     pRes->nMemLen = 0;
 
-    register const WW8PLCFxDesc* p = &aD[nIdx];
+    const WW8PLCFxDesc* p = &aD[nIdx];
 
     // first Sprm in a Group
     if( p->bFirstSprm )
@@ -4430,7 +4430,7 @@ void WW8PLCFMan::GetSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
 {
     memset( pRes, 0, sizeof( WW8PLCFManResult ) );
 
-    register const WW8PLCFxDesc* p = &aD[nIdx];
+    const WW8PLCFxDesc* p = &aD[nIdx];
 
     if (!(p->pIdStk->empty()))
         pRes->nSprmId = p->pIdStk->top();       // get end position
@@ -4443,7 +4443,7 @@ void WW8PLCFMan::GetSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
 
 void WW8PLCFMan::GetNoSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
 {
-    register const WW8PLCFxDesc* p = &aD[nIdx];
+    const WW8PLCFxDesc* p = &aD[nIdx];
 
     pRes->nCpPos = p->nStartPos;
     pRes->nMemLen = p->nSprmsLen;
@@ -4620,7 +4620,7 @@ void WW8PLCFMan::AdvNoSprm(short nIdx, bool bStart)
     structures, but act together as one logical one. The attributes only go
     to the next entry when the piece changes
     */
-    register WW8PLCFxDesc* p = &aD[nIdx];
+    WW8PLCFxDesc* p = &aD[nIdx];
 
     if( p == pPcd )
     {
@@ -4674,7 +4674,7 @@ WW8PLCFMan& WW8PLCFMan::operator ++(int)
     USHORT nIdx = WhereIdx(&bStart);
     if (nIdx < nPLCF)
     {
-        register WW8PLCFxDesc* p = &aD[nIdx];
+        WW8PLCFxDesc* p = &aD[nIdx];
 
         p->bFirstSprm = true;                       // Default
 
