@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:12:25 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:55:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,12 +195,18 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 break;
 
             case SID_CUT:               // Ausschneiden,
-            case FID_INS_ROW:           // Zeilen einfuegen
-            case FID_INS_COLUMN:        // Spalten einfuegen
             case FID_INS_CELL:          // Zellen einfuegen, nur einf. Selektion
-            case FID_INS_CELLSDOWN:
-            case FID_INS_CELLSRIGHT:
                 bDisable = (!bSimpleArea);
+                break;
+
+            case FID_INS_ROW:           // insert rows
+            case FID_INS_CELLSDOWN:
+                bDisable = (!bSimpleArea) || GetViewData()->SimpleColMarked();
+                break;
+
+            case FID_INS_COLUMN:        // insert columns
+            case FID_INS_CELLSRIGHT:
+                bDisable = (!bSimpleArea) || GetViewData()->SimpleRowMarked();
                 break;
 
             case SID_COPY:                      // Kopieren
