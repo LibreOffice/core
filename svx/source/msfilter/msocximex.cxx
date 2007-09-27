@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 16:00:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:02:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,9 @@
 
 #ifndef C2S
 #define C2S(cChar)  String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(cChar))
+#endif
+#ifndef C2U
+#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
 #endif
 
 using namespace ::com::sun::star;
