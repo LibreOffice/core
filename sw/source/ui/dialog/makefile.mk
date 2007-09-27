@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:25:43 $
+#   last change: $Author: hr $ $Date: 2007-09-27 11:37:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@ SRC1FILES =  \
         docstdlg.src \
         regionsw.src \
         wordcountdialog.src
+
+EXCEPTIONSFILES = \
+        $(SLO)$/SwSpellDialogChildWindow.obj
 
 SLOFILES =  \
         $(SLO)$/abstract.obj \
