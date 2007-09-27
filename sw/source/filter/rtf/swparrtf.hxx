@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 10:06:18 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:55:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,10 +252,10 @@ public:
     long PageStartAt() const { return maPageInfo.mnPgnStarts; }
     bool PageRestartNo() const { return maPageInfo.mbPgnrestart; }
     bool IsBiDi() const { return maPageInfo.mbRTLsection; }
-    sal_uInt16 GetPageWidth() const { return maPageInfo.mnPgwsxn; }
-    sal_uInt16 GetPageHeight() const { return maPageInfo.mnPghsxn; }
-    sal_uInt16 GetPageLeft() const { return maPageInfo.mnMarglsxn; }
-    sal_uInt16 GetPageRight() const { return maPageInfo.mnMargrsxn; }
+    long GetPageWidth() const { return maPageInfo.mnPgwsxn; }
+    long GetPageHeight() const { return maPageInfo.mnPghsxn; }
+    long GetPageLeft() const { return maPageInfo.mnMarglsxn; }
+    long GetPageRight() const { return maPageInfo.mnMargrsxn; }
     bool IsLandScape() const { return maPageInfo.mbLndscpsxn; }
 };
 
