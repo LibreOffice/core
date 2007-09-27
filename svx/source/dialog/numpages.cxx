@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-05 17:43:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:01:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@
 #ifdef SVX_DLLIMPLEMENTATION
 #undef SVX_DLLIMPLEMENTATION
 #endif
+
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 
 #include <numpages.hxx>
 #include <numpages.hrc>
@@ -159,6 +163,7 @@
 #include <svtools/stritem.hxx>//add CHINA001
 #include <svtools/slstitm.hxx> //add CHINA001
 
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -1247,7 +1252,7 @@ IMPL_LINK(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
                 if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, nIdx, &aGraphic))
                 {
                     Size aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
-                    SvxFrameVertOrient eOrient = SVX_VERT_LINE_CENTER;
+                    sal_Int16 eOrient = text::VertOrientation::LINE_CENTER;
                     aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)eCoreUnit);
                     SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH );
                     aFmt.SetGraphicBrush( &aBrush, &aSize, &eOrient );
@@ -1803,7 +1808,7 @@ void SvxNumOptionsTabPage::InitControls()
 
     const SvxNumberFormat* aNumFmtArr[SVX_MAX_NUM];
     String sFirstCharFmt;
-    SvxFrameVertOrient eFirstOrient = SVX_VERT_NONE;
+    sal_Int16 eFirstOrient = text::VertOrientation::NONE;
     Size aFirstSize(0,0);
     USHORT nMask = 1;
     USHORT nLvl = USHRT_MAX;
@@ -1855,12 +1860,12 @@ void SvxNumOptionsTabPage::InitControls()
     CheckForStartValue_Impl(aNumFmtArr[nLvl]->GetNumberingType());
     if(bShowBitmap)
     {
-        if(!bSameVOrient || eFirstOrient == SVX_VERT_NONE)
+        if(!bSameVOrient || eFirstOrient == text::VertOrientation::NONE)
             aOrientLB.SetNoSelection();
         else
             aOrientLB.SelectEntryPos(
                 sal::static_int_cast< USHORT >(eFirstOrient - 1));
-                // kein SVX_VERT_NONE
+                // kein text::VertOrientation::NONE
 
         if(bSameSize)
         {
@@ -2240,7 +2245,7 @@ IMPL_LINK( SvxNumOptionsTabPage, OrientHdl_Impl, ListBox *, pBox )
             {
                 const SvxBrushItem* pBrushItem =  aNumFmt.GetBrush();
                 const Size& rSize = aNumFmt.GetGraphicSize();
-                SvxFrameVertOrient eOrient = (SvxFrameVertOrient)nPos;
+                sal_Int16 eOrient = (sal_Int16)nPos;
                 aNumFmt.SetGraphicBrush( pBrushItem, &rSize, &eOrient );
                 pActNum->SetLevel(i, aNumFmt);
             }
@@ -2371,7 +2376,7 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
                 // Size schon mal fuer spaeteren Groessenabgleich setzen
                 const SvxBrushItem* pBrushItem = aNumFmt.GetBrush();
                 // initiate asynchronous loading
-                SvxFrameVertOrient eOrient = aNumFmt.GetVertOrient();
+                sal_Int16 eOrient = aNumFmt.GetVertOrient();
                 aNumFmt.SetGraphicBrush( pBrushItem, &aSize, &eOrient );
                 aInitSize[i] = aNumFmt.GetGraphicSize();
 
@@ -2576,7 +2581,7 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, MetricField *, pField)
                     }
                 }
                 const SvxBrushItem* pBrushItem =  aNumFmt.GetBrush();
-                SvxFrameVertOrient eOrient = aNumFmt.GetVertOrient();
+                sal_Int16 eOrient = aNumFmt.GetVertOrient();
                 if(aSize != aSaveSize)
                     bRepaint = TRUE;
                 aNumFmt.SetGraphicBrush( pBrushItem, &aSize, &eOrient );
@@ -3092,7 +3097,7 @@ void SvxNumPositionTabPage::InitControls()
     BOOL bSameAdjust    = TRUE;
 
     const SvxNumberFormat* aNumFmtArr[SVX_MAX_NUM];
-//  SvxFrameVertOrient eFirstOrient = SVX_VERT_NONE;
+//  sal_Int16 eFirstOrient = text::VertOrientation::NONE;
     USHORT nMask = 1;
     USHORT nLvl = USHRT_MAX;
 //  long nFirstLSpace = 0;
