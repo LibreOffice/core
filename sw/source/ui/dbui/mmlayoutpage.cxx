@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmlayoutpage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:06:05 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:34:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,8 @@
 
 #include <mmlayoutpage.hrc>
 #include <dbui.hrc>
+#include <unomid.h>
+
 
 using namespace osl;
 using namespace svt;
@@ -153,18 +155,17 @@ using namespace ::com::sun::star::view;
 #define DEFAULT_ADDRESS_WIDTH  (MM50*15)// 7,5 cm
 #define DEFAULT_ADDRESS_HEIGHT (MM50*7) // 3,5cm
 
-#define C2U(cChar) ::rtl::OUString::createFromAscii(cChar)
 /*-- 15.04.2004 08:16:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_LAYOUT_PAGE)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aHeaderFI( this, SW_RES(         FI_HEADER             )),
-    m_aAlignToBodyCB( this, SW_RES(      CB_ALIGN              )),
     m_aPositionFL( this, SW_RES(       FL_POSITION           )),
+    m_aAlignToBodyCB( this, SW_RES(      CB_ALIGN              )),
     m_aLeftFT( this, SW_RES(           FT_LEFT               )),
     m_aLeftMF( this, SW_RES(           MF_LEFT               )),
     m_aTopFT( this, SW_RES(            FT_TOP                )),
@@ -178,14 +179,14 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_aExampleWIN( this, 0 ),
     m_aZoomFT( this, SW_RES(           FT_ZOOM               )),
     m_aZoomLB( this, SW_RES(           LB_ZOOM               )),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
-    m_pWizard(_pParent),
-    m_pAddressBlockFormat(0),
     m_pExampleFrame(0),
     m_pExampleWrtShell(0),
-    m_bIsGreetingInserted(false)
+    m_pAddressBlockFormat(0),
+    m_bIsGreetingInserted(false),
+    m_pWizard(_pParent)
 {
     FreeResource();
     m_aExampleWIN.SetPosSizePixel(m_aExampleContainerWIN.GetPosPixel(),
@@ -306,8 +307,8 @@ void SwMailMergeLayoutPage::ActivatePage()
             }
             else
             {
-                long nLeft = m_aLeftMF.Denormalize(m_aLeftMF.GetValue(FUNIT_TWIP));
-                long nTop = m_aTopMF.Denormalize(m_aTopMF.GetValue(FUNIT_TWIP));
+                long nLeft = static_cast< long >(m_aLeftMF.Denormalize(m_aLeftMF.GetValue(FUNIT_TWIP)));
+                long nTop  = static_cast< long >(m_aTopMF.Denormalize(m_aTopMF.GetValue(FUNIT_TWIP)));
                 m_pAddressBlockFormat = InsertAddressFrame(
                         *m_pExampleWrtShell, m_pWizard->GetConfigItem(),
                         Point(nLeft, nTop),
@@ -326,8 +327,8 @@ sal_Bool SwMailMergeLayoutPage::commitPage(COMMIT_REASON _eReason)
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     if(CR_TRAVEL_NEXT == _eReason)
     {
-        long nLeft = m_aLeftMF.Denormalize(m_aLeftMF.GetValue(FUNIT_TWIP));
-        long nTop = m_aTopMF.Denormalize(m_aTopMF.GetValue(FUNIT_TWIP));
+        long nLeft = static_cast< long >(m_aLeftMF.Denormalize(m_aLeftMF.GetValue(FUNIT_TWIP)));
+        long nTop  = static_cast< long >(m_aTopMF.Denormalize(m_aTopMF.GetValue(FUNIT_TWIP)));
         InsertAddressAndGreeting(
                     m_pWizard->GetSwView(),
                     rConfigItem,
@@ -386,10 +387,10 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
                         0 );
     aSet.Put(SwFmtAnchor(FLY_PAGE, 1));
     if(bAlignLeft)
-        aSet.Put(SwFmtHoriOrient( 0, HORI_NONE, REL_PG_PRTAREA ));
+        aSet.Put(SwFmtHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
     else
-        aSet.Put(SwFmtHoriOrient( rDestination.X(), HORI_NONE, REL_PG_FRAME ));
-    aSet.Put(SwFmtVertOrient( rDestination.Y(), VERT_NONE, REL_PG_FRAME ));
+        aSet.Put(SwFmtHoriOrient( rDestination.X(), text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
+    aSet.Put(SwFmtVertOrient( rDestination.Y(), text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
     aSet.Put(SwFmtFrmSize( ATT_MIN_SIZE, DEFAULT_ADDRESS_WIDTH, DEFAULT_ADDRESS_HEIGHT ));
     // the example gets a border around the frame, the real document doesn't get one
     if(!bExample)
@@ -537,7 +538,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     {
         //there's already text at the desired position
         //go to start of the doc, directly!
-        rShell.SwCrsrShell::SttDoc();
+        rShell.SttEndDoc(TRUE);
         //and go by paragraph until the position is reached
         long nYPos = rShell.GetCharRect().Top();
         while(nYPos < GREETING_TOP_DISTANCE)
@@ -767,7 +768,7 @@ IMPL_LINK(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, void*, EMPTYARG)
     Reference< XViewSettingsSupplier >  xSettings(xModel->getCurrentController(), UNO_QUERY);
     m_xViewProperties = xSettings->getViewSettings();
     Reference< XUnoTunnel > xDocTunnel(xModel, UNO_QUERY);
-    SwXTextDocument* pXDoc = (SwXTextDocument*)xDocTunnel->getSomething(SwXTextDocument::getUnoTunnelId());
+    SwXTextDocument* pXDoc = reinterpret_cast<SwXTextDocument*>(xDocTunnel->getSomething(SwXTextDocument::getUnoTunnelId()));
     SwDocShell* pDocShell = pXDoc->GetDocShell();
     m_pExampleWrtShell = pDocShell->GetWrtShell();
     DBG_ASSERT(m_pExampleWrtShell, "No SwWrtShell found!");
@@ -830,22 +831,22 @@ IMPL_LINK(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox*, pBox)
 /*-- 10.05.2004 15:56:51---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, MetricField*, pField)
+IMPL_LINK(SwMailMergeLayoutPage, ChangeAddressHdl_Impl, MetricField*, EMPTYARG)
 {
     if(m_pExampleWrtShell && m_pAddressBlockFormat)
     {
-        long nLeft = m_aLeftMF.Denormalize(m_aLeftMF.GetValue(FUNIT_TWIP));
-        long nTop = m_aTopMF.Denormalize(m_aTopMF.GetValue(FUNIT_TWIP));
+        long nLeft = static_cast< long >(m_aLeftMF.Denormalize(m_aLeftMF.GetValue(FUNIT_TWIP)));
+        long nTop  = static_cast< long >(m_aTopMF.Denormalize(m_aTopMF.GetValue(FUNIT_TWIP)));
 
         SfxItemSet aSet(m_pExampleWrtShell->GetAttrPool(), RES_ANCHOR, RES_ANCHOR,
                             RES_VERT_ORIENT, RES_VERT_ORIENT,
                             RES_HORI_ORIENT, RES_HORI_ORIENT,
                             0 );
         if(m_aAlignToBodyCB.IsChecked())
-            aSet.Put(SwFmtHoriOrient( 0, HORI_NONE, REL_PG_PRTAREA ));
+            aSet.Put(SwFmtHoriOrient( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_PRINT_AREA ));
         else
-            aSet.Put(SwFmtHoriOrient( nLeft, HORI_NONE, REL_PG_FRAME ));
-        aSet.Put(SwFmtVertOrient( nTop, VERT_NONE, REL_PG_FRAME ));
+            aSet.Put(SwFmtHoriOrient( nLeft, text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
+        aSet.Put(SwFmtVertOrient( nTop, text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
         m_pExampleWrtShell->GetDoc()->SetFlyFrmAttr( *m_pAddressBlockFormat, aSet );
     }
     return 0;
