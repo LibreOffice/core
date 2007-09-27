@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 14:40:05 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:45:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,6 +212,8 @@
 #include <htmlfly.hxx>
 #endif
 
+using namespace ::com::sun::star;
+
 /*
  * um nicht immer wieder nach einem Update festzustellen, das irgendwelche
  * Hint-Ids dazugekommen sind, wird hier definiert, die Groesse der Tabelle
@@ -365,13 +367,13 @@ sal_uInt16 SwHTMLWriter::GetCSS1ScriptForScriptType( sal_uInt16 nScriptType )
 
     switch( nScriptType )
     {
-    case ::com::sun::star::i18n::ScriptType::LATIN:
+    case i18n::ScriptType::LATIN:
         nRet = CSS1_OUTMODE_WESTERN;
         break;
-    case ::com::sun::star::i18n::ScriptType::ASIAN:
+    case i18n::ScriptType::ASIAN:
         nRet = CSS1_OUTMODE_CJK;
         break;
-    case ::com::sun::star::i18n::ScriptType::COMPLEX:
+    case i18n::ScriptType::COMPLEX:
         nRet = CSS1_OUTMODE_CTL;
         break;
     }
@@ -489,7 +491,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
     BOOL bTxtColl = pFmt->Which() == RES_TXTFMTCOLL ||
                     pFmt->Which() == RES_CONDTXTFMTCOLL;
 
-    const SwFmt *pRefFmt = 0;   // Vergleichs-Format
+    const SwFmt *pReferenceFmt = 0; // Vergleichs-Format
     sal_Bool bSetDefaults = sal_True, bClearSame = sal_True;
     if( nDeep != 0 )
     {
@@ -505,7 +507,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
             case CSS1_FMT_CMPREF:
                 // fuer HTML-Tag-Vorlagen die Unterscheide zum Original
                 // (sofern verfuegbar)
-                pRefFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId,
+                pReferenceFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId,
                                                         pTemplate );
                 break;
 
@@ -513,10 +515,10 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
                 // sonst die zur HTML-Tag-Vorlage des Originals oder des
                 // aktuellen Doks, wenn die nicht verfuegbar ist
                 if( pTemplate )
-                    pRefFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId,
+                    pReferenceFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId,
                                                             pTemplate );
                 else
-                    pRefFmt = SwHTMLWriter::GetParentFmt( *pFmt, nDeep );
+                    pReferenceFmt = SwHTMLWriter::GetParentFmt( *pFmt, nDeep );
                 break;
             }
         }
@@ -528,12 +530,12 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         // exportiert werden. Fuer Nicht-Styles-Export sollte die der
         // HTML-Vorlage als Referenz dienen
         if( !bOutStyles && pTemplate )
-            pRefFmt = pTemplate->GetTxtCollFromPool( RES_POOLCOLL_TEXT, false );
+            pReferenceFmt = pTemplate->GetTxtCollFromPool( RES_POOLCOLL_TEXT, false );
         else
-            pRefFmt = pDoc->GetTxtCollFromPool( RES_POOLCOLL_TEXT, false );
+            pReferenceFmt = pDoc->GetTxtCollFromPool( RES_POOLCOLL_TEXT, false );
     }
 
-    if( pRefFmt || nDeep==0 )
+    if( pReferenceFmt || nDeep==0 )
     {
         pItemSet = new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
                                        pFmt->GetAttrSet().GetRanges() );
@@ -543,8 +545,8 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
 
         pItemSet->Set( pFmt->GetAttrSet(), TRUE );
 
-        if( pRefFmt )
-            SwHTMLWriter::SubtractItemSet( *pItemSet, pRefFmt->GetAttrSet(),
+        if( pReferenceFmt )
+            SwHTMLWriter::SubtractItemSet( *pItemSet, pReferenceFmt->GetAttrSet(),
                                            bSetDefaults, bClearSame );
 
         // einen leeren Item-Set gleich loeschen, das spart speater
@@ -572,7 +574,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
                     RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT }
             };
 
-            sal_uInt16 nRef;
+            sal_uInt16 nRef = 0;
             sal_uInt16 aSets[2];
             switch( nCSS1Script )
             {
@@ -619,10 +621,10 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
                 BOOL bPut = TRUE;
                 if( pTemplate )
                 {
-                    pRefFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId, pTemplate );
+                    pReferenceFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId, pTemplate );
                     const SfxPoolItem *pRefItem;
                     BOOL bRefItemSet =
-                        SFX_ITEM_SET==pRefFmt->GetAttrSet().GetItemState(
+                        SFX_ITEM_SET==pReferenceFmt->GetAttrSet().GetItemState(
                                         RES_PARATR_DROP, TRUE, &pRefItem );
                     bPut = !bRefItemSet || *pItem!=*pRefItem;
                 }
@@ -640,13 +642,13 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         // Die diversen default-Abstaende aus der Vorlage oder der
         // Vergleischs-Vorlage merken
         const SvxLRSpaceItem &rLRSpace =
-            (pRefFmt ? pRefFmt : pFmt)->GetLRSpace();
+            (pReferenceFmt ? pReferenceFmt : pFmt)->GetLRSpace();
         nLeftMargin = rLRSpace.GetTxtLeft();
         nRightMargin = rLRSpace.GetRight();
         nFirstLineIndent = rLRSpace.GetTxtFirstLineOfst();
 
         const SvxULSpaceItem &rULSpace =
-            (pRefFmt ? pRefFmt : pFmt)->GetULSpace();
+            (pReferenceFmt ? pReferenceFmt : pFmt)->GetULSpace();
         nTopMargin = rULSpace.GetUpper();
         nBottomMargin = rULSpace.GetLower();
 
@@ -671,14 +673,14 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         {
             if( aWhichIds[i] != nWhichId )
             {
-                const SvxLanguageItem& rLang =
+                const SvxLanguageItem& rTmpLang =
                     (const SvxLanguageItem&)pFmt->GetAttr(aWhichIds[i]);
-                if( rLang.GetLanguage() != eLang )
+                if( rTmpLang.GetLanguage() != eLang )
                 {
                     if( !pItemSet )
                         pItemSet = new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
                                                    pFmt->GetAttrSet().GetRanges() );
-                    pItemSet->Put( rLang );
+                    pItemSet->Put( rTmpLang );
                 }
             }
         }
@@ -716,7 +718,6 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     // Sind wir in einer Aufzaehlungs- oder Numerierungliste?
     const SwTxtNode* pTxtNd = rWrt.pCurPam->GetNode()->GetTxtNode();
-    ULONG nPos = pTxtNd->GetIndex();
 
     SwHTMLNumRuleInfo aNumInfo;
     if( rHWrt.GetNextNumInfo() )
@@ -740,7 +741,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
         ASSERT( pTxtNd->GetLevel() == nLvl,
                 "Gemerkter Num-Level ist falsch" );
-        ASSERT( bNumbered == pTxtNd->IsCounted(),
+        ASSERT( bNumbered == static_cast< BOOL >(pTxtNd->IsCounted()),
                 "Gemerkter Numerierungs-Zustand ist falsch" );
 
         if( bNumbered )
@@ -753,7 +754,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             //   indicates, that no additional restart value has to be written.
             if ( pTxtNd->IsRestart() )
             {
-                nNumStart = pTxtNd->GetStart();
+                nNumStart = static_cast< USHORT >(pTxtNd->GetStart());
             }
             // <--
             DBG_ASSERT( rHWrt.nLastParaToken == 0,
@@ -934,8 +935,8 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
         if( nLeftMargin > 0 && rHWrt.nDefListMargin > 0 )
         {
-            nNewDefListLvl = (nLeftMargin + (rHWrt.nDefListMargin/2)) /
-                             rHWrt.nDefListMargin;
+            nNewDefListLvl = static_cast< USHORT >((nLeftMargin + (rHWrt.nDefListMargin/2)) /
+                                                    rHWrt.nDefListMargin);
             if( nNewDefListLvl == 0 && bForceDL && !bDT )
                 nNewDefListLvl = 1;
         }
@@ -1111,10 +1112,10 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         for( sal_uInt16 i=0; i<3; i++ )
         {
             // export language if it differs from the default language only.
-            const SfxPoolItem *pItem;
+            const SfxPoolItem *pTmpItem;
             if( SFX_ITEM_SET == rInfo.pItemSet->GetItemState( aWhichIds[i],
-                        sal_True, &pItem ) &&
-                ((const SvxLanguageItem *)pItem)->GetLanguage() == eLang )
+                        sal_True, &pTmpItem ) &&
+                ((const SvxLanguageItem *)pTmpItem)->GetLanguage() == eLang )
                 rInfo.pItemSet->ClearItem( aWhichIds[i] );
         }
     }
@@ -1223,12 +1224,12 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // ??? Warum nicht ueber den Hint-Mechanismus ???
     if( rHWrt.IsHTMLMode(HTMLMODE_FIRSTLINE) )
     {
-        const SvxLRSpaceItem& rLRSpace =
+        const SvxLRSpaceItem& rLRSpaceTmp =
             pNodeItemSet ? ((const SvxLRSpaceItem &)pNodeItemSet->Get(RES_LR_SPACE))
                          : rFmt.GetLRSpace();
-        if( rLRSpace.GetTxtFirstLineOfst() > 0 )
+        if( rLRSpaceTmp.GetTxtFirstLineOfst() > 0 )
         {
-            OutHTML_HoriSpacer( rWrt, rLRSpace.GetTxtFirstLineOfst() );
+            OutHTML_HoriSpacer( rWrt, rLRSpaceTmp.GetTxtFirstLineOfst() );
         }
     }
 
@@ -1268,9 +1269,9 @@ void OutHTML_SwFmtOff( Writer& rWrt, const SwHTMLTxtCollOutputInfo& rInfo )
         if( rInfo.bInNumBulList )
         {
 
-            const SwHTMLNumRuleInfo& rInfo = rHWrt.GetNumInfo();
-            if( rNextInfo.GetNumRule() != rInfo.GetNumRule() ||
-                rNextInfo.GetDepth() != rInfo.GetDepth() ||
+            const SwHTMLNumRuleInfo& rNRInfo = rHWrt.GetNumInfo();
+            if( rNextInfo.GetNumRule() != rNRInfo.GetNumRule() ||
+                rNextInfo.GetDepth() != rNRInfo.GetDepth() ||
                 rNextInfo.IsNumbered() || rNextInfo.IsRestart() )
                 rHWrt.ChangeParaToken( 0 );
             OutHTML_NumBulListEnd( rHWrt, rNextInfo );
@@ -1540,6 +1541,8 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         case STRIKEOUT_NONE:
             eState = HTML_OFF_VALUE;
             break;
+        default:
+            ;
         }
         break;
 
@@ -1554,6 +1557,8 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         case SVX_ESCAPEMENT_OFF:
             eState = HTML_OFF_VALUE;
             break;
+        default:
+            ;
         }
         break;
 
@@ -1895,9 +1900,12 @@ HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
                               const Color* pDfltCol, BOOL bStyles,
                               ULONG nMode, const String& rText,
                               SvStringsSortDtor& rStyles ):
-    pDoc( pD ), pTemplate( pTempl ), pDfltColor( pDfltCol ),
-    bOutStyles( bStyles ), nHTMLMode( nMode ),
-    rScriptTxtStyles( rStyles )
+    pDoc( pD ),
+    pTemplate( pTempl ),
+    pDfltColor( pDfltCol ),
+    rScriptTxtStyles( rStyles ),
+    nHTMLMode( nMode ),
+    bOutStyles( bStyles )
 {
     xub_StrLen nEndPos = rText.Len();
     xub_StrLen nPos = 0;
@@ -2028,6 +2036,8 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
                 }
             }
             break;
+        default:
+            ;
         }
 
         if( bSet )
@@ -2042,7 +2052,7 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
                             SwHTMLFmtInfos& rFmtInfos, BOOL bParaAttrs )
 {
     sal_Bool bDependsOnScript = sal_False, bDependsOnAnyScript = sal_False;
-    sal_uInt16 nScript;
+    sal_uInt16 nScript = i18n::ScriptType::LATIN;
     switch( rItem.Which() )
     {
     case RES_CHRATR_FONT:
@@ -2051,7 +2061,7 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
     case RES_CHRATR_POSTURE:
     case RES_CHRATR_WEIGHT:
         bDependsOnScript = sal_True;
-        nScript = ::com::sun::star::i18n::ScriptType::LATIN;
+        nScript = i18n::ScriptType::LATIN;
         break;
 
     case RES_CHRATR_CJK_FONT:
@@ -2060,7 +2070,7 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
     case RES_CHRATR_CJK_POSTURE:
     case RES_CHRATR_CJK_WEIGHT:
         bDependsOnScript = sal_True;
-        nScript = ::com::sun::star::i18n::ScriptType::ASIAN;
+        nScript = i18n::ScriptType::ASIAN;
         break;
 
     case RES_CHRATR_CTL_FONT:
@@ -2069,7 +2079,7 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
     case RES_CHRATR_CTL_POSTURE:
     case RES_CHRATR_CTL_WEIGHT:
         bDependsOnScript = sal_True;
-        nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
+        nScript = i18n::ScriptType::COMPLEX;
         break;
     case RES_TXTATR_CHARFMT:
         {
@@ -2085,7 +2095,6 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
         break;
     case RES_TXTATR_INETFMT:
         {
-            const SwFmtINetFmt& rINetFmt = (const SwFmtINetFmt&)rItem;
             if( GetFmtInfo( *pDoc->GetCharFmtFromPool(
                      RES_POOLCHR_INET_NORMAL), rFmtInfos )->bScriptDependent ||
                 GetFmtInfo( *pDoc->GetCharFmtFromPool(
@@ -2192,7 +2201,7 @@ sal_uInt16 HTMLEndPosLst::GetScriptAtPos( xub_StrLen nPos ,
     ASSERT( i < nScriptChgs, "script list is to short" );
     if( i < nScriptChgs )
     {
-        if( ::com::sun::star::i18n::ScriptType::WEAK == aScriptLst[i] )
+        if( i18n::ScriptType::WEAK == aScriptLst[i] )
             nRet = nWeak;
         else
             nRet = SwHTMLWriter::GetCSS1ScriptForScriptType( aScriptLst[i] );
@@ -2463,6 +2472,8 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                     bPageBreakBefore = TRUE;
                     bPageBreakBehind = TRUE;
                     break;
+                default:
+                    ;
                 }
             }
         }
@@ -2527,14 +2538,14 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     // <--
     {
         aOutlineTxt = pNd->GetNumString();
-        nOffset += aOutlineTxt.Len();
+        nOffset = nOffset + aOutlineTxt.Len();
         aFullText = aOutlineTxt;
     }
     String aFootEndNoteSym;
     if( rHTMLWrt.pFmtFtn )
     {
         aFootEndNoteSym = rHTMLWrt.GetFootEndNoteSym( *rHTMLWrt.pFmtFtn );
-        nOffset += aFootEndNoteSym.Len();
+        nOffset = nOffset + aFootEndNoteSym.Len();
         aFullText += aFootEndNoteSym;
     }
 
@@ -2749,7 +2760,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                     xub_StrLen nWordLen = rStr.Search( ' ', nStrPos+1 );
                     if( nWordLen == STRING_NOTFOUND )
                         nWordLen = nEnde;
-                    nWordLen -= nStrPos;
+                    nWordLen = nWordLen - nStrPos;
 
                     if( nLineLen >= rHTMLWrt.nWhishLineLen ||
                         (nLineLen+nWordLen) >= rHTMLWrt.nWhishLineLen )
@@ -2784,7 +2795,6 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
     }
 
-    BOOL bEndAttrsWritten = aEndPosLst.Count() > 0;
     aEndPosLst.OutEndAttrs( rHTMLWrt, STRING_MAXLEN );
 
     // Die an der letzten Position verankerten Rahmen ausgeben
@@ -3084,6 +3094,8 @@ static Writer& OutHTML_SvxEscapement( Writer& rWrt, const SfxPoolItem& rHt )
     {
     case SVX_ESCAPEMENT_SUPERSCRIPT: pStr = sHTML_superscript; break;
     case SVX_ESCAPEMENT_SUBSCRIPT: pStr = sHTML_subscript; break;
+    default:
+        ;
     }
 
     if( pStr )
@@ -3434,6 +3446,8 @@ static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
     case SVX_ADJUST_LEFT: pStr = sHTML_AL_left; break;
     case SVX_ADJUST_RIGHT: pStr = sHTML_AL_right; break;
     case SVX_ADJUST_BLOCK: pStr = sHTML_AL_justify; break;
+    default:
+        ;
     }
     if( pStr )
     {
