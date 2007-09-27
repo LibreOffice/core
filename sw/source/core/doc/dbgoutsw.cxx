@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbgoutsw.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:27:47 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:32:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,8 @@ bool bDbgOutPrintAttrSet = false;
 
 char* db_pretty_print(const String* str, int flags, char* fmt)
 {
+    (void) fmt;
+    (void) flags;
     return const_cast<char*>(dbg_out(*str));
 }
 
@@ -337,7 +339,7 @@ const String lcl_dbg_out(const SwpHints & rHints)
 {
     String aStr("[ SwpHints\n", RTL_TEXTENCODING_ASCII_US);
 
-    for (int i = 0; i < rHints.Count(); i++)
+    for (USHORT i = 0; i < rHints.Count(); i++)
     {
         aStr += String("  ", RTL_TEXTENCODING_ASCII_US);
         aStr += lcl_dbg_out(*rHints[i]);
@@ -468,7 +470,7 @@ const String lcl_AnchoredFrames(const SwNode & rNode)
         if (pFrmFmts)
         {
             bool bFirst = true;
-            for (ULONG nI = 0; nI < pFrmFmts->Count(); nI++)
+            for (USHORT nI = 0; nI < pFrmFmts->Count(); nI++)
             {
                 const SwFmtAnchor & rAnchor = (*pFrmFmts)[nI]->GetAnchor();
                 const SwPosition * pPos = rAnchor.GetCntntAnchor();
@@ -602,7 +604,7 @@ String lcl_dbg_out(const SwNode & rNode)
             const SwNumFmt * pNumFmt = NULL;
 
             if (pTxtNode->GetLevel() > 0)
-                pNumFmt = pNumRule->GetNumFmt(pTxtNode->GetLevel());
+                pNumFmt = pNumRule->GetNumFmt( static_cast< USHORT >(pTxtNode->GetLevel()) );
 
             if (pNumFmt)
             {
@@ -735,11 +737,11 @@ String lcl_dbg_out(const SwUndo & rUndo)
     case UNDO_START:
         aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
         aStr +=
-            String::CreateFromInt32(reinterpret_cast
+            String::CreateFromInt32(dynamic_cast
                                     <const SwUndoStart &>(rUndo).
                                     GetUserId());
         aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-        aStr += String::CreateFromInt32(reinterpret_cast
+        aStr += String::CreateFromInt32(dynamic_cast
                                         <const SwUndoStart &>(rUndo).
                                         GetEndOffset());
         aStr += String(" ", RTL_TEXTENCODING_ASCII_US);
@@ -749,15 +751,18 @@ String lcl_dbg_out(const SwUndo & rUndo)
     case UNDO_END:
         aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
         aStr +=
-            String::CreateFromInt32(reinterpret_cast
+            String::CreateFromInt32(dynamic_cast
                                     <const SwUndoEnd &>(rUndo).
                                     GetId());
         aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-        aStr += String::CreateFromInt32(reinterpret_cast
+        aStr += String::CreateFromInt32(dynamic_cast
                                         <const SwUndoEnd &>(rUndo).
                                         GetSttOffset());
         aStr += String(" ", RTL_TEXTENCODING_ASCII_US);
 
+        break;
+
+    default:
         break;
     }
 
@@ -776,7 +781,7 @@ String lcl_dbg_out(SwOutlineNodes & rNodes)
 {
     String aStr("[\n", RTL_TEXTENCODING_ASCII_US);
 
-    for (ULONG i = 0; i < rNodes.Count(); i++)
+    for (USHORT i = 0; i < rNodes.Count(); i++)
     {
         aStr += lcl_dbg_out(*rNodes[i]);
         aStr += String("\n", RTL_TEXTENCODING_ASCII_US);
@@ -794,18 +799,18 @@ const char * dbg_out(SwOutlineNodes & rNodes)
 
 String lcl_dbg_out(const SwUndos & rUndos)
 {
-    int nIndent = 0;
+    USHORT nIndent = 0;
 
     String aStr("[\n", RTL_TEXTENCODING_ASCII_US);
 
-    for (ULONG n = 0; n < rUndos.Count(); n++)
+    for (USHORT n = 0; n < rUndos.Count(); n++)
     {
         SwUndo * pUndo = rUndos[n];
 
         if (pUndo->GetId() == UNDO_END)
             nIndent--;
 
-        for (int nI = 0; n < nIndent; nI++)
+        for (USHORT nI = 0; n < nIndent; nI++)
             aStr += String("  ", RTL_TEXTENCODING_ASCII_US);
 
         aStr += lcl_dbg_out(*pUndo);
@@ -827,6 +832,7 @@ const char * dbg_out(const SwUndos & rUndos)
 
 String lcl_dbg_out(const SwRewriter & rRewriter)
 {
+    (void) rRewriter;
     String aResult;
 
     //aResult = rRewriter.ToString();
@@ -905,7 +911,7 @@ String lcl_dbg_out(const SwNumRuleTbl & rTbl)
 {
     String aResult("[", RTL_TEXTENCODING_ASCII_US);
 
-    for (int n = 0; n < rTbl.Count(); n++)
+    for (USHORT n = 0; n < rTbl.Count(); n++)
     {
         if (n > 0)
             aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
