@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:21:15 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,9 +69,6 @@
 #ifndef _SVX_POSTATTR_HXX //autogen
 #include <svx/postattr.hxx>
 #endif
-//CHINA001 #ifndef _SVX_POSTDLG_HXX //autogen
-//CHINA001 #include <svx/postdlg.hxx>
-//CHINA001 #endif
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
@@ -120,51 +117,23 @@
 // <- #111827#
 
 #include <vector>
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
+
+#include <unomid.h>
+
 
 #include <IDocumentRedlineAccess.hxx>
 
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
 /*------------------------------------------------------------------------
     Beschreibung:
 ------------------------------------------------------------------------*/
 
 SFX_IMPL_MODELESSDIALOG( SwRedlineAcceptChild, FN_REDLINE_ACCEPT )
 
-//CHINA001 struct SwRedlineDataChild
-//CHINA001 {
-//CHINA001 const SwRedlineData*     pChild;     // Verweis auf originale gestackte Daten
-//CHINA001 const SwRedlineDataChild*    pNext;      // Verweis auf gestackte Daten
-//CHINA001 SvLBoxEntry*             pTLBChild;  // zugehoeriger TreeListBox-Eintrag
-//CHINA001 };
-//CHINA001
-//CHINA001 struct SwRedlineDataParent
-//CHINA001 {
-//CHINA001 const SwRedlineData*     pData;      // RedlineDataPtr
-//CHINA001 const SwRedlineDataChild*    pNext;      // Verweis auf gestackte Daten
-//CHINA001 SvLBoxEntry*             pTLBParent; // zugehoeriger TreeListBox-Eintrag
-//CHINA001 String                       sComment;   // Redline-Kommentar
-//CHINA001
-//CHINA001 inline BOOL  operator==( const SwRedlineDataParent& rObj ) const
-//CHINA001 { return (pData && pData->GetSeqNo() == rObj.pData->GetSeqNo()); }
-//CHINA001 inline BOOL  operator< ( const SwRedlineDataParent& rObj ) const
-//CHINA001 { return (pData && pData->GetSeqNo() <  rObj.pData->GetSeqNo()); }
-//CHINA001 };
-//CHINA001
-//CHINA001 typedef SwRedlineDataParent* SwRedlineDataParentPtr;
-//CHINA001 SV_DECL_PTRARR_DEL(SwRedlineDataParentArr, SwRedlineDataParentPtr, 10, 20)
 SV_IMPL_PTRARR(SwRedlineDataParentArr, SwRedlineDataParentPtr)
-//CHINA001
-//CHINA001 SV_DECL_PTRARR_SORT(SwRedlineDataParentSortArr, SwRedlineDataParentPtr, 10, 20)
 SV_IMPL_OP_PTRARR_SORT(SwRedlineDataParentSortArr, SwRedlineDataParentPtr)
-//CHINA001
-//CHINA001 typedef SwRedlineDataChild* SwRedlineDataChildPtr;
-//CHINA001 SV_DECL_PTRARR_DEL(SwRedlineDataChildArr, SwRedlineDataChildPtr, 4, 4)
 SV_IMPL_PTRARR(SwRedlineDataChildArr, SwRedlineDataChildPtr)
-//CHINA001
-//CHINA001 typedef SvLBoxEntry* SvLBoxEntryPtr;
-//CHINA001 SV_DECL_PTRARR(SvLBoxEntryArr, SvLBoxEntryPtr, 100, 100)
 SV_IMPL_PTRARR(SvLBoxEntryArr, SvLBoxEntryPtr)
 
 static USHORT nSortMode = 0xffff;
@@ -174,85 +143,13 @@ static BOOL   bSortDir = TRUE;
     Beschreibung:
 ------------------------------------------------------------------------*/
 
-//CHINA001 class SwRedlineAcceptDlg
-//CHINA001 {
-//CHINA001 Dialog*                  pParentDlg;
-//CHINA001 SwRedlineDataParentArr   aRedlineParents;
-//CHINA001 SwRedlineDataChildArr    aRedlineChilds;
-//CHINA001 SwRedlineDataParentSortArr aUsedSeqNo;
-//CHINA001 SvxAcceptChgCtr          aTabPagesCTRL;
-//CHINA001 PopupMenu                aPopup;
-//CHINA001 Timer                    aDeselectTimer;
-//CHINA001 Timer                    aSelectTimer;
-//CHINA001 String                   sInserted;
-//CHINA001 String                   sDeleted;
-//CHINA001 String                   sFormated;
-//CHINA001 String                   sTableChgd;
-//CHINA001 String                   sFmtCollSet;
-//CHINA001 String                   sFilterAction;
-//CHINA001 String                   sAutoFormat;
-//CHINA001 Size                 aBorderSz;
-//CHINA001 SvxTPView*               pTPView;
-//CHINA001 SvxRedlinTable*          pTable;
-//CHINA001 Link                 aOldSelectHdl;
-//CHINA001 Link                 aOldDeselectHdl;
-//CHINA001 BOOL                     bOnlyFormatedRedlines;
-//CHINA001 BOOL                 bHasReadonlySel;
-//CHINA001 BOOL                 bRedlnAutoFmt;
-//CHINA001
-//CHINA001 // prevent update dialog data during longer operations (cf #102657#)
-//CHINA001 bool                    bInhibitActivate;
-//CHINA001
-//CHINA001 DECL_LINK( AcceptHdl,        void* );
-//CHINA001 DECL_LINK( AcceptAllHdl, void* );
-//CHINA001 DECL_LINK( RejectHdl,        void* );
-//CHINA001 DECL_LINK( RejectAllHdl, void* );
-//CHINA001 DECL_LINK( UndoHdl,          void* );
-//CHINA001 DECL_LINK( DeselectHdl,      void* );
-//CHINA001 DECL_LINK( SelectHdl,        void* );
-//CHINA001 DECL_LINK( GotoHdl,          void* );
-//CHINA001 DECL_LINK( CommandHdl,       void* );
-//CHINA001
-//CHINA001 USHORT           CalcDiff(USHORT nStart, BOOL bChild);
-//CHINA001 void         InsertChilds(SwRedlineDataParent *pParent, const SwRedline& rRedln, const USHORT nAutoFmt);
-//CHINA001 void         InsertParents(USHORT nStart, USHORT nEnd = USHRT_MAX);
-//CHINA001 void         RemoveParents(USHORT nStart, USHORT nEnd);
-//CHINA001 void         InitAuthors();
-//CHINA001
-//CHINA001 String           GetRedlineText(const SwRedline& rRedln, DateTime &rDateTime, USHORT nStack = 0);
-//CHINA001 const String&    GetActionText(const SwRedline& rRedln, USHORT nStack = 0);
-//CHINA001 USHORT           GetRedlinePos( const SvLBoxEntry& rEntry) const;
-//CHINA001
-//CHINA001 public:
-//CHINA001 SwRedlineAcceptDlg(Dialog *pParent, BOOL bAutoFmt = FALSE);
-//CHINA001 ~SwRedlineAcceptDlg();
-//CHINA001
-//CHINA001 DECL_LINK( FilterChangedHdl, void *pDummy = 0 );
-//CHINA001
-//CHINA001 inline SvxAcceptChgCtr* GetChgCtrl()     { return &aTabPagesCTRL; }
-//CHINA001 inline BOOL      HasRedlineAutoFmt() const   { return bRedlnAutoFmt; }
-//CHINA001
-//CHINA001 void         Init(USHORT nStart = 0);
-//CHINA001 void         CallAcceptReject( BOOL bSelect, BOOL bAccept );
-//CHINA001
-//CHINA001 void         Initialize(const String &rExtraData);
-//CHINA001 void         FillInfo(String &rExtraData) const;
-//CHINA001
-//CHINA001 virtual void Activate();
-//CHINA001 virtual void Resize();
-//CHINA001 };
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-SwRedlineAcceptChild::SwRedlineAcceptChild( Window* pParent,
+SwRedlineAcceptChild::SwRedlineAcceptChild( Window* _pParent,
                                             USHORT nId,
                                             SfxBindings* pBindings,
                                             SfxChildWinInfo* pInfo ) :
-    SwChildWinWrapper( pParent, nId )
+    SwChildWinWrapper( _pParent, nId )
 {
-    pWindow = new SwModelessRedlineAcceptDlg( pBindings, this, pParent);
+    pWindow = new SwModelessRedlineAcceptDlg( pBindings, this, _pParent);
 
     ((SwModelessRedlineAcceptDlg *)pWindow)->Initialize(pInfo);
 }
@@ -275,10 +172,10 @@ BOOL SwRedlineAcceptChild::ReInitDlg(SwDocShell *pDocSh)
     Beschreibung:
 ------------------------------------------------------------------------*/
 
-SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg( SfxBindings* pBindings,
+SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg( SfxBindings* _pBindings,
                                                         SwChildWinWrapper* pChild,
-                                                        Window *pParent) :
-    SfxModelessDialog(pBindings, pChild, pParent, SW_RES(DLG_REDLINE_ACCEPT)),
+                                                        Window *_pParent) :
+    SfxModelessDialog(_pBindings, pChild, _pParent, SW_RES(DLG_REDLINE_ACCEPT)),
     pChildWin       (pChild)
 {
     pImplDlg = new SwRedlineAcceptDlg(this);
@@ -362,72 +259,6 @@ SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
     delete pImplDlg;
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-//CHINA001 SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(Window *pParent) :
-//CHINA001 SfxModalDialog(pParent, SW_RES(DLG_MOD_REDLINE_ACCEPT))
-//CHINA001 {
-//CHINA001 pImplDlg = new SwRedlineAcceptDlg(this, TRUE);
-//CHINA001
-//CHINA001 pImplDlg->Initialize(GetExtraData());
-//CHINA001 pImplDlg->Activate();    // Zur Initialisierung der Daten
-//CHINA001
-//CHINA001 FreeResource();
-//CHINA001 }
-//CHINA001
-//CHINA001 /*------------------------------------------------------------------------
-//CHINA001 Beschreibung:
-//CHINA001 ------------------------------------------------------------------------*/
-//CHINA001
-//CHINA001 SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
-//CHINA001 {
-//CHINA001 AcceptAll(FALSE);    // Alles uebriggebliebene ablehnen
-//CHINA001 pImplDlg->FillInfo(GetExtraData());
-//CHINA001
-//CHINA001 delete pImplDlg;
-//CHINA001 }
-//CHINA001
-//CHINA001 /*--------------------------------------------------------------------
-//CHINA001 Beschreibung:
-//CHINA001 --------------------------------------------------------------------*/
-//CHINA001
-//CHINA001 void SwModalRedlineAcceptDlg::Activate()
-//CHINA001 {
-//CHINA001 }
-//CHINA001
-//CHINA001 /*------------------------------------------------------------------------
-//CHINA001 Beschreibung:
-//CHINA001 ------------------------------------------------------------------------*/
-//CHINA001
-//CHINA001 void SwModalRedlineAcceptDlg::Resize()
-//CHINA001 {
-//CHINA001 pImplDlg->Resize();
-//CHINA001 SfxModalDialog::Resize();
-//CHINA001 }
-//CHINA001
-//CHINA001 /*------------------------------------------------------------------------
-//CHINA001 Beschreibung:
-//CHINA001 ------------------------------------------------------------------------*/
-//CHINA001
-//CHINA001 void SwModalRedlineAcceptDlg::AcceptAll( BOOL bAccept )
-//CHINA001 {
-//CHINA001 SvxTPFilter* pFilterTP = pImplDlg->GetChgCtrl()->GetFilterPage();
-//CHINA001
-//CHINA001 if (pFilterTP->IsDate() || pFilterTP->IsAuthor() ||
-//CHINA001 pFilterTP->IsRange() || pFilterTP->IsAction())
-//CHINA001 {
-//CHINA001 pFilterTP->CheckDate(FALSE); // Alle Filter abschalten
-//CHINA001 pFilterTP->CheckAuthor(FALSE);
-//CHINA001 pFilterTP->CheckRange(FALSE);
-//CHINA001 pFilterTP->CheckAction(FALSE);
-//CHINA001 pImplDlg->FilterChangedHdl();
-//CHINA001  }
-//CHINA001
-//CHINA001 pImplDlg->CallAcceptReject( FALSE, bAccept );
-//CHINA001 }
-//CHINA001
 /*------------------------------------------------------------------------
     Beschreibung:
 ------------------------------------------------------------------------*/
@@ -576,7 +407,6 @@ void SwRedlineAcceptDlg::InitAuthors()
 
     bOnlyFormatedRedlines = TRUE;
     bHasReadonlySel = FALSE;
-    BOOL bReadonlySel = FALSE;
     BOOL bIsNotFormated = FALSE;
     USHORT i;
 
@@ -585,7 +415,7 @@ void SwRedlineAcceptDlg::InitAuthors()
     {
         const SwRedline& rRedln = pSh->GetRedline(i);
 
-        if( bOnlyFormatedRedlines && IDocumentRedlineAccess::REDLINE_FORMAT != rRedln.GetType() )
+        if( bOnlyFormatedRedlines && nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType() )
             bOnlyFormatedRedlines = FALSE;
 
 //JP 27.9.2001: make no sense if we handle readonly sections
@@ -619,7 +449,7 @@ void SwRedlineAcceptDlg::InitAuthors()
         USHORT nPos = GetRedlinePos(*pSelEntry);
         const SwRedline& rRedln = pSh->GetRedline( nPos );
 
-        bIsNotFormated |= IDocumentRedlineAccess::REDLINE_FORMAT != rRedln.GetType();
+        bIsNotFormated |= nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType();
         pSelEntry = pTable->NextSelected(pSelEntry);
     }
 
@@ -661,11 +491,12 @@ const String &SwRedlineAcceptDlg::GetActionText(const SwRedline& rRedln, USHORT 
 {
     switch( rRedln.GetType(nStack) )
     {
-        case IDocumentRedlineAccess::REDLINE_INSERT:    return sInserted;
-        case IDocumentRedlineAccess::REDLINE_DELETE:    return sDeleted;
-        case IDocumentRedlineAccess::REDLINE_FORMAT:    return sFormated;
-        case IDocumentRedlineAccess::REDLINE_TABLE:     return sTableChgd;
-        case IDocumentRedlineAccess::REDLINE_FMTCOLL:   return sFmtCollSet;
+        case nsRedlineType_t::REDLINE_INSERT:   return sInserted;
+        case nsRedlineType_t::REDLINE_DELETE:   return sDeleted;
+        case nsRedlineType_t::REDLINE_FORMAT:   return sFormated;
+        case nsRedlineType_t::REDLINE_TABLE:    return sTableChgd;
+        case nsRedlineType_t::REDLINE_FMTCOLL:  return sFmtCollSet;
+        default:;//prevent warning
     }
 
     return aEmptyStr;
@@ -811,7 +642,7 @@ USHORT SwRedlineAcceptDlg::CalcDiff(USHORT nStart, BOOL bChild)
     pTable->SetUpdateMode(FALSE);
     SwView *pView   = ::GetActiveView();
     SwWrtShell* pSh = pView->GetWrtShellPtr();
-    USHORT nAutoFmt = HasRedlineAutoFmt() ? IDocumentRedlineAccess::REDLINE_FORM_AUTOFMT : 0;
+    USHORT nAutoFmt = HasRedlineAutoFmt() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
     SwRedlineDataParent *pParent = aRedlineParents[nStart];
     const SwRedline& rRedln = pSh->GetRedline(nStart);
 
@@ -993,9 +824,9 @@ void SwRedlineAcceptDlg::RemoveParents(USHORT nStart, USHORT nEnd)
         if (!bChildsRemoved && aRedlineParents[i]->pNext)
         {
             SwRedlineDataChildPtr pChildPtr = (SwRedlineDataChildPtr)aRedlineParents[i]->pNext;
-            USHORT nPos = aRedlineChilds.GetPos(pChildPtr);
+            USHORT nChildPos = aRedlineChilds.GetPos(pChildPtr);
 
-            if (nPos != USHRT_MAX)
+            if (nChildPos != USHRT_MAX)
             {
                 USHORT nChilds = 0;
 
@@ -1005,26 +836,26 @@ void SwRedlineAcceptDlg::RemoveParents(USHORT nStart, USHORT nEnd)
                     nChilds++;
                 }
 
-                aRedlineChilds.DeleteAndDestroy(nPos, nChilds);
+                aRedlineChilds.DeleteAndDestroy(nChildPos, nChilds);
                 bChildsRemoved = TRUE;
             }
         }
         SvLBoxEntry *pEntry = aRedlineParents[i]->pTLBParent;
         if (pEntry)
         {
-            long nIdx = (long)aLBoxArr.Count() - 1L;
+            long nIdx = aLBoxArr.Count() - 1L;
             ULONG nAbsPos = pModel->GetAbsPos(pEntry);
             while (nIdx >= 0 &&
-                    pModel->GetAbsPos(aLBoxArr[nIdx]) > nAbsPos)
+                    pModel->GetAbsPos(aLBoxArr[ static_cast< USHORT >(nIdx) ]) > nAbsPos)
                 nIdx--;
-            aLBoxArr.Insert(pEntry, ++nIdx);
+            aLBoxArr.Insert( pEntry, static_cast< USHORT >(++nIdx) );
         }
     }
 
     // TLB von hinten abraeumen
     long nIdx = (long)aLBoxArr.Count() - 1L;
     while (nIdx >= 0)
-        pTable->RemoveEntry(aLBoxArr[nIdx--]);
+        pTable->RemoveEntry(aLBoxArr[ static_cast< USHORT >(nIdx--) ]);
 
     pTable->SetSelectHdl(LINK(this, SwRedlineAcceptDlg, SelectHdl));
     pTable->SetDeselectHdl(LINK(this, SwRedlineAcceptDlg, DeselectHdl));
@@ -1042,7 +873,7 @@ void SwRedlineAcceptDlg::InsertParents(USHORT nStart, USHORT nEnd)
 {
     SwView *pView   = ::GetActiveView();
     SwWrtShell* pSh = pView->GetWrtShellPtr();
-    USHORT nAutoFmt = HasRedlineAutoFmt() ? IDocumentRedlineAccess::REDLINE_FORM_AUTOFMT : 0;
+    USHORT nAutoFmt = HasRedlineAutoFmt() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
 
     String sParent;
     USHORT nCount = pSh->GetRedlineCount();
@@ -1052,7 +883,7 @@ void SwRedlineAcceptDlg::InsertParents(USHORT nStart, USHORT nEnd)
         return;     // Keine Redlines im Dokument
 
     RedlinData *pData;
-    SvLBoxEntry *pParent, *pCurrEntry = 0;
+    SvLBoxEntry *pParent;
     SwRedlineDataParentPtr pRedlineParent;
     const SwRedline* pCurrRedline;
     if( !nStart && !pTable->FirstSelected() )
@@ -1171,9 +1002,9 @@ void SwRedlineAcceptDlg::CallAcceptReject( BOOL bSelect, BOOL bAccept )
          aIter != aEnd;
          aIter++ )
     {
-        USHORT nPos = GetRedlinePos( **aIter );
-        if( nPos != USHRT_MAX )
-            (pSh->*FnAccRej)( nPos );
+        USHORT nPosition = GetRedlinePos( **aIter );
+        if( nPosition != USHRT_MAX )
+            (pSh->*FnAccRej)( nPosition );
     }
 
     // #111827#
@@ -1322,7 +1153,7 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
 
     BOOL bIsNotFormated = FALSE;
     BOOL bSel = FALSE;
-    BOOL bReadonlySel = FALSE;
+//  BOOL bReadonlySel = FALSE;
 
     //#98883# don't select redlines while the dialog is not focussed
     //#107938# But not only ask pTable if it has the focus. To move
@@ -1361,7 +1192,7 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
             {
 
                 const SwRedline& rRedln = pSh->GetRedline( nPos );
-                bIsNotFormated |= IDocumentRedlineAccess::REDLINE_FORMAT != rRedln.GetType();
+                bIsNotFormated |= nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType();
 
 //JP 27.9.2001: make no sense if we handle readonly sections
 //          if( !bReadonlySel && rRedln.HasReadonlySel() )
@@ -1382,8 +1213,8 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
         pSh->SetCareWin(NULL);
     }
     BOOL bEnable = !pSh->getIDocumentRedlineAccess()->GetRedlinePassword().getLength();
-    pTPView->EnableAccept( bEnable && bSel && !bReadonlySel );
-    pTPView->EnableReject( bEnable && bSel && bIsNotFormated && !bReadonlySel );
+    pTPView->EnableAccept( bEnable && bSel /*&& !bReadonlySel*/ );
+    pTPView->EnableReject( bEnable && bSel && bIsNotFormated /*&& !bReadonlySel*/ );
     pTPView->EnableRejectAll( bEnable && !bOnlyFormatedRedlines && !bHasReadonlySel );
 
     return 0;
@@ -1461,11 +1292,10 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
 
                         const SwRedline &rRedline = pSh->GetRedline(nPos);
                         sComment = rRedline.GetComment();
-                        //CHINA001 SfxItemSet aSet(pSh->GetAttrPool(), SvxPostItDialog::GetRanges());
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                        DBG_ASSERT(pFact, "Dialogdiet fail!");
                         ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc( RID_SVXDLG_POSTIT );
-                        DBG_ASSERT(fnGetRange, "Dialogdiet fail! GetRanges()");//CHINA001
+                        DBG_ASSERT(fnGetRange, "Dialogdiet fail! GetRanges()");
                         SfxItemSet aSet( pSh->GetAttrPool(), fnGetRange() );
 
                         aSet.Put(SvxPostItTextItem(sComment.ConvertLineEnd(), SID_ATTR_POSTIT_TEXT));
@@ -1475,36 +1305,33 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
                                     rRedline.GetRedlineData().GetTimeStamp() ),
                                     SID_ATTR_POSTIT_DATE ));
 
-                        //CHINA001 SvxPostItDialog *pDlg = new SvxPostItDialog(pParentDlg, aSet, FALSE);
-                        //CHINA001 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                        //CHINA001 DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
                         AbstractSvxPostItDialog* pDlg = pFact->CreateSvxPostItDialog( pParentDlg, aSet, RID_SVXDLG_POSTIT, FALSE );
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
                         pDlg->HideAuthor();
 
                         USHORT nResId = 0;
                         switch( rRedline.GetType() )
                         {
-                        case IDocumentRedlineAccess::REDLINE_INSERT:
+                        case nsRedlineType_t::REDLINE_INSERT:
                             nResId = STR_REDLINE_INSERTED;
                             break;
-                        case IDocumentRedlineAccess::REDLINE_DELETE:
+                        case nsRedlineType_t::REDLINE_DELETE:
                             nResId = STR_REDLINE_DELETED;
                             break;
-                        case IDocumentRedlineAccess::REDLINE_FORMAT:
+                        case nsRedlineType_t::REDLINE_FORMAT:
                             nResId = STR_REDLINE_FORMATED;
                             break;
-                        case IDocumentRedlineAccess::REDLINE_TABLE:
+                        case nsRedlineType_t::REDLINE_TABLE:
                             nResId = STR_REDLINE_TABLECHG;
                             break;
+                        default:;//prevent warning
                         }
                         String sTitle(SW_RES(STR_REDLINE_COMMENT));
                         if( nResId )
                             sTitle += SW_RESSTR( nResId );
                         pDlg->SetText(sTitle);
 
-                        //CHINA001 pSh->SetCareWin(pDlg);
                         pSh->SetCareWin(pDlg->GetWindow());
 
                         if ( pDlg->Execute() == RET_OK )
@@ -1581,12 +1408,12 @@ void SwRedlineAcceptDlg::Initialize(const String& rExtraData)
 
                     if (aStr.Len())
                     {
-                        USHORT nCount = aStr.ToInt32();
+                        USHORT nCount = static_cast< USHORT >(aStr.ToInt32());
 
                         for (USHORT i = 0; i < nCount; i++)
                         {
-                            USHORT n1 = aStr.Search(';');
-                            aStr.Erase(0, n1 + 1);
+                            USHORT n3 = aStr.Search(';');
+                            aStr.Erase(0, n3 + 1);
                             pTable->SetTab(i, aStr.ToInt32(), MAP_PIXEL);
                         }
                     }
