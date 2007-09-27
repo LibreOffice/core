@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.73 $
+#   $Revision: 1.74 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 09:51:38 $
+#   last change: $Author: hr $ $Date: 2007-09-27 12:53:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -276,7 +276,7 @@ BEGIN
     @environmentvariables = ( "SOLARVERSION", "GUI", "WORK_STAMP", "OUTPATH", "LOCAL_OUT", "LOCAL_COMMON_OUT" );
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
     @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "jurt.jar", "juh.jar", "xmerge.jar", "commonwizards.jar" );
-    @regcompregisterlibs = ( "javavm.uno", "javaloader.uno", "uriproc.uno" );
+    @regcompregisterlibs = ( "javavm.uno", "javaloader.uno", "stocservices.uno" );
     @languagepackfeature =();
     @featurecollector =();
     $msiassemblyfiles = "";
