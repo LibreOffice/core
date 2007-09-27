@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:13:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:22:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,9 +113,9 @@
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
 #endif
-#ifndef _CTRLBOX_HXX //add CHINA001
-#include <svtools/ctrlbox.hxx> //CHINA001
-#endif //CHINA001
+#ifndef _CTRLBOX_HXX
+#include <svtools/ctrlbox.hxx>
+#endif
 #ifndef _HELPID_H
 #include <helpid.h>
 #endif
@@ -133,12 +133,15 @@
 #include <paratr.hxx>
 #endif
 
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
+#include <unomid.h>
+
+using namespace ::com::sun::star;
+
 /* -----------------------------31.01.01 10:23--------------------------------
 
  ---------------------------------------------------------------------------*/
 
-DBG_NAME(outlinehdl);
+DBG_NAME(outlinehdl)
 
 /*---------------------------------------------------------------------
 
@@ -272,16 +275,16 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
                     SwWrtShell &rSh) :
                                     //der UserString wird danach richtig gesetzt
         SfxTabDialog(pParent, SW_RES(DLG_TAB_OUTLINE), pSwItemSet, FALSE, &aEmptyStr),
-        aFormMenu(SW_RES(MN_FORM)),
-        bModified(rWrtSh.IsModified()),
         aNullStr(C2S("____")),
+        aFormMenu(SW_RES(MN_FORM)),
+        rWrtSh(rSh),
         pChapterNumRules(SW_MOD()->GetChapterNumRules()),
-        rWrtSh(rSh)
+        bModified(rWrtSh.IsModified())
 {
-    PushButton* pUserBtn = GetUserButton();
-    pUserBtn->SetText(SW_RES(ST_FORM));
-    pUserBtn->SetHelpId(HID_OUTLINE_FORM);
-    pUserBtn->SetClickHdl(LINK(this, SwOutlineTabDialog, FormHdl));
+    PushButton* pUserButton = GetUserButton();
+    pUserButton->SetText(SW_RES(ST_FORM));
+    pUserButton->SetHelpId(HID_OUTLINE_FORM);
+    pUserButton->SetClickHdl(LINK(this, SwOutlineTabDialog, FormHdl));
 
     FreeResource();
     pNumRule = new SwNumRule( *rSh.GetOutlineNumRule() );
@@ -297,8 +300,8 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
     {
         // wurde die Vorlage noch nicht angelegt, dann ist sie noch an dieserPosition
         if( !rWrtSh.GetParaStyle( sHeadline =
-            SwStyleNameMapper::GetUIName( RES_POOLCOLL_HEADLINE1 + i,
-                                                    sHeadline )) )
+            SwStyleNameMapper::GetUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
+                                          sHeadline )) )
             aCollNames[i] = sHeadline;
     }
 
@@ -343,7 +346,7 @@ void    SwOutlineTabDialog::PageCreated(USHORT nPageId, SfxTabPage& rPage)
 /* -----------------07.07.98 14:19-------------------
  *
  * --------------------------------------------------*/
-IMPL_LINK( SwOutlineTabDialog, CancelHdl, Button *, pBtn )
+IMPL_LINK( SwOutlineTabDialog, CancelHdl, Button *, EMPTYARG )
 {
     if (!bModified)
         rWrtSh.ResetModified();
@@ -447,7 +450,7 @@ USHORT  SwOutlineTabDialog::GetLevel(const String &rFmtName) const
  * --------------------------------------------------*/
 short SwOutlineTabDialog::Ok()
 {
-    short nRet = SfxTabDialog::Ok();
+    SfxTabDialog::Ok();
     // bei allen erzeugten Vorlagen die Ebenen setzen, muss
     // geschehen, um evtl. aufgehobene Zuordnungen
     // auch wieder zu loeschen
@@ -491,17 +494,18 @@ short SwOutlineTabDialog::Ok()
         }
     }
 
-    for( i = 0; i < MAXLEVEL; ++i )
+    for(i = 0; i < MAXLEVEL; ++i )
     {
         String sHeadline;
-        ::SwStyleNameMapper::FillUIName( RES_POOLCOLL_HEADLINE1 + i, sHeadline );
+        ::SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
+                                         sHeadline );
         SwTxtFmtColl* pColl = rWrtSh.FindTxtFmtCollByName( sHeadline );
         if( !pColl )
         {
             if( !aCollNames[i].Len() )
             {
                 SwTxtFmtColl* pTxtColl = rWrtSh.GetTxtCollFromPool(
-                                                    RES_POOLCOLL_HEADLINE1 + i );
+                                                    static_cast< USHORT >(RES_POOLCOLL_HEADLINE1 + i) );
                 pTxtColl->SetOutlineLevel( NO_NUMBERING );
                 pTxtColl->ResetAttr(RES_PARATR_NUMRULE);
             }
@@ -511,7 +515,7 @@ short SwOutlineTabDialog::Ok()
                                 aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
                 if(pTxtColl)
                 {
-                    pTxtColl->SetOutlineLevel( i );
+                    pTxtColl->SetOutlineLevel( static_cast< BYTE >(i) );
 
                     SwNumRuleItem aItem(pOutlineRule->GetName());
                     pTxtColl->SetAttr(aItem);
@@ -534,9 +538,8 @@ short SwOutlineTabDialog::Ok()
  * --------------------------------------------------*/
 SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_OUTLINE_NUM), rSet),
-    aLevelFL(       this, SW_RES(FL_LEVEL    )),
     aLevelLB(       this, SW_RES(LB_LEVEL   )),
-    aPreviewWIN(    this, SW_RES(WIN_PREVIEW    )),
+    aLevelFL(       this, SW_RES(FL_LEVEL    )),
     aCollLbl(this, SW_RES(FT_COLL)),
     aCollBox(this, SW_RES(LB_COLL)),
     aNumberLbl(this, SW_RES(FT_NUMBER)),
@@ -553,10 +556,12 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxIte
     aStartLbl(this, SW_RES(FT_START)),
     aStartEdit(this, SW_RES(ED_START)),
     aNumberFL(this, SW_RES(FL_NUMBER)),
+    aPreviewWIN(    this, SW_RES(WIN_PREVIEW )),
+
     aNoFmtName(SW_RES(ST_NO_COLL)),
-    nActLevel(1),
+    pSh(0),
     pCollNames(0),
-    pSh(0)
+    nActLevel(1)
 {
     FreeResource();
     SetExchangeSupport();
@@ -717,8 +722,6 @@ IMPL_LINK( SwOutlineSettingsTabPage, LevelHdl, ListBox *, pBox )
  * --------------------------------------------------*/
 IMPL_LINK( SwOutlineSettingsTabPage, ToggleComplete, NumericField *, pFld )
 {
-    USHORT nStart = 0;
-    USHORT nEnd = MAXLEVEL;
     USHORT nMask = 1;
     for(USHORT i = 0; i < MAXLEVEL; i++)
     {
@@ -743,7 +746,6 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
 
     const String aCollName(pBox->GetSelectEntry());
     //0xFFFF darf hier nicht sein (disable)
-    USHORT nTmp = nActLevel;
     USHORT nTmpLevel = lcl_BitToLevel(nActLevel);
     String sOldName( pCollNames[nTmpLevel] );
 
@@ -781,7 +783,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SwOutlineSettingsTabPage, CollSelectGetFocus, ListBox *, pBox )
+IMPL_LINK( SwOutlineSettingsTabPage, CollSelectGetFocus, ListBox *, EMPTYARG )
 {
     for( BYTE i = 0; i < MAXLEVEL; ++i)
         aSaveCollNames[i] =  pCollNames[i];
@@ -793,8 +795,6 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelectGetFocus, ListBox *, pBox )
  * --------------------------------------------------*/
 IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, SwNumberingTypeListBox *, pBox )
 {
-    USHORT nStart = 0;
-    USHORT nEnd = MAXLEVEL;
     USHORT nMask = 1;
     sal_Int16 nNumberType = pBox->GetSelectedNumberingType();//(sal_Int16)(ULONG)pBox->GetEntryData(pBox->GetSelectEntryPos());
     for(USHORT i = 0; i < MAXLEVEL; i++)
@@ -814,10 +814,8 @@ IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, SwNumberingTypeListBox *, pBo
 /* -----------------07.07.98 14:19-------------------
  *
  * --------------------------------------------------*/
-IMPL_LINK( SwOutlineSettingsTabPage, DelimModify, Edit *, pEdt )
+IMPL_LINK( SwOutlineSettingsTabPage, DelimModify, Edit *, EMPTYARG )
 {
-    USHORT nStart = 0;
-    USHORT nEnd = MAXLEVEL;
     USHORT nMask = 1;
     for(USHORT i = 0; i < MAXLEVEL; i++)
     {
@@ -838,8 +836,6 @@ IMPL_LINK( SwOutlineSettingsTabPage, DelimModify, Edit *, pEdt )
  * --------------------------------------------------*/
 IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pFld )
 {
-    USHORT nStart = 0;
-    USHORT nEnd = MAXLEVEL;
     USHORT nMask = 1;
     for(USHORT i = 0; i < MAXLEVEL; i++)
     {
@@ -934,7 +930,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     for( i = 0; i < MAXLEVEL; ++i )
     {
         aCollBox.InsertEntry( SwStyleNameMapper::GetUIName(
-                                    RES_POOLCOLL_HEADLINE1 + i, aEmptyStr ));
+                                    static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i), aEmptyStr ));
         aLevelLB.InsertEntry( String::CreateFromInt32(i + 1) );
     }
     sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "1 - " ));
@@ -948,7 +944,6 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
         SwTxtFmtColl &rTxtColl = pSh->GetTxtFmtColl(i);
         if(!rTxtColl.IsDefault())
         {
-            BYTE nOutLevel = rTxtColl.GetOutlineLevel();
             sStr = rTxtColl.GetName();
             if(LISTBOX_ENTRY_NOTFOUND == aCollBox.GetEntryPos( sStr ))
                 aCollBox.InsertEntry( sStr );
@@ -976,7 +971,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
 /* -----------------07.07.98 14:19-------------------
  *
  * --------------------------------------------------*/
-void    SwOutlineSettingsTabPage::ActivatePage(const SfxItemSet& rSet)
+void    SwOutlineSettingsTabPage::ActivatePage(const SfxItemSet& )
 {
     nActLevel = SwOutlineTabDialog::GetActNumLevel();
     if(nActLevel != USHRT_MAX)
@@ -988,7 +983,7 @@ void    SwOutlineSettingsTabPage::ActivatePage(const SfxItemSet& rSet)
 /* -----------------07.07.98 14:19-------------------
  *
  * --------------------------------------------------*/
-int     SwOutlineSettingsTabPage::DeactivatePage(SfxItemSet *pSet)
+int     SwOutlineSettingsTabPage::DeactivatePage(SfxItemSet*)
 {
     SwOutlineTabDialog::SetActNumLevel(nActLevel);
     return LEAVE_PAGE;
@@ -996,7 +991,7 @@ int     SwOutlineSettingsTabPage::DeactivatePage(SfxItemSet *pSet)
 /* -----------------07.07.98 14:19-------------------
  *
  * --------------------------------------------------*/
-BOOL    SwOutlineSettingsTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL    SwOutlineSettingsTabPage::FillItemSet( SfxItemSet&  )
 {
     return TRUE;
 }
@@ -1075,7 +1070,7 @@ USHORT lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, USHORT nXStar
 /*-----------------02.12.97 10:34-------------------
     Vorschau der Numerierung painten
 --------------------------------------------------*/
-void    NumberingPreview::Paint( const Rectangle& rRect )
+void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
 {
     Size aSize(PixelToLogic(GetOutputSizePixel()));
     Rectangle aRect(Point(0,0), aSize);
@@ -1146,7 +1141,7 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
                 USHORT nFirstLineOffset = (-rFmt.GetFirstLineOffset()) / nWidthRelation;
 
                 if(nFirstLineOffset <= nNumberXPos)
-                    nNumberXPos -= nFirstLineOffset;
+                    nNumberXPos = nNumberXPos - nFirstLineOffset;
                 else
                     nNumberXPos = 0;
 
@@ -1190,7 +1185,7 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
             SwNodeNum::tNumberVector aNumVector;
             USHORT nLineHeight = nFontHeight * 3 / 2;
             for( BYTE nLevel = 0; nLevel < MAXLEVEL;
-                            ++nLevel, nYStart += nYStep )
+                            ++nLevel, nYStart = nYStart + nYStep )
             {
                 const SwNumFmt &rFmt = pActNum->Get(nLevel);
                 aNumVector.push_back(rFmt.GetStart());
@@ -1204,7 +1199,7 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
                 else if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() )
                 {
                     nTextOffset =  lcl_DrawBullet(pVDev, rFmt, nXStart, nYStart, aStdFont.GetSize());
-                    nTextOffset += nXStep;
+                    nTextOffset = nTextOffset + nXStep;
                 }
                 else
                 {
@@ -1216,15 +1211,15 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
                     // <--
                     pVDev->DrawText( Point(nXStart, nYStart), aText );
                     nTextOffset = (USHORT)pVDev->GetTextWidth(aText);
-                    nTextOffset += nXStep;
+                    nTextOffset = nTextOffset + nXStep;
                     nPreNum++;
                 }
                 pVDev->SetFont(aStdFont);
 
                 // Changed as per BugID 79541 Branding/Configuration
-                ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
-                UNOANY MyAny = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-                UNOOUSTRING aProductName;
+                uno::Any MyAny = ::utl::ConfigManager::GetConfigManager()->
+                        GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+                ::rtl::OUString aProductName;
 
                 MyAny >>= aProductName;
                 String sMsg(C2S("%PRODUCTNAME"));
