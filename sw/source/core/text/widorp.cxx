@@ -4,9 +4,9 @@
  *
  *  $RCSfile: widorp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:52:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:22:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 
 #include "hintids.hxx"
 
-#include "frmsh.hxx"
 #include "layfrm.hxx"
 #include "ftnboss.hxx"
 #include "ndtxt.hxx"
@@ -96,8 +95,8 @@ inline sal_Bool IsNastyFollow( const SwTxtFrm *pFrm )
  *                  SwTxtFrmBreak::SwTxtFrmBreak()
  *************************************************************************/
 
-SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pFrm, const SwTwips nRst )
-    : pFrm(pFrm), nRstHeight(nRst)
+SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
+    : nRstHeight(nRst), pFrm(pNewFrm)
 {
     SWAP_IF_SWAPPED( pFrm )
     SWRECTFN( pFrm )
@@ -152,7 +151,7 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pFrm, const SwTwips nRst )
 
 const sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
 {
-    register sal_Bool bFit = sal_False;
+    sal_Bool bFit = sal_False;
 
     SWAP_IF_SWAPPED( pFrm )
     SWRECTFN( pFrm )
@@ -259,12 +258,11 @@ void SwTxtFrmBreak::SetRstHeight( const SwTxtMargin &rLine )
  *                  WidowsAndOrphans::WidowsAndOrphans()
  *************************************************************************/
 
-WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pFrm, const SwTwips nRst,
+WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pNewFrm, const SwTwips nRst,
     sal_Bool bChkKeep   )
-    : SwTxtFrmBreak( pFrm, nRst ), nOrphLines( 0 ), nWidLines( 0 )
+    : SwTxtFrmBreak( pNewFrm, nRst ), nWidLines( 0 ), nOrphLines( 0 )
 {
     SWAP_IF_SWAPPED( pFrm )
-    SWRECTFN( pFrm )
 
     if( bKeep )
     {
@@ -402,41 +400,41 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
  *  d.h. der Absatz _zusammengehalten_ werden soll !
  */
 
-sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine )
+sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
 {
-    ASSERT( ! pFrm->IsVertical() || ! pFrm->IsSwapped(),
+    ASSERT( ! pFrame->IsVertical() || ! pFrame->IsSwapped(),
             "WidowsAndOrphans::FindWidows with swapped frame" )
 
-    if( !nWidLines || !pFrm->IsFollow() )
+    if( !nWidLines || !pFrame->IsFollow() )
         return sal_False;
 
     rLine.Bottom();
 
     // Wir koennen noch was abzwacken
-    SwTxtFrm *pMaster = pFrm->FindMaster();
+    SwTxtFrm *pMaster = pFrame->FindMaster();
     ASSERT(pMaster, "+WidowsAndOrphans::FindWidows: Widows in a master?");
     if( !pMaster )
         return sal_False;
 
     // 5156: Wenn die erste Zeile des Follows nicht passt, wird der Master
     // wohl voll mit Dummies sein. In diesem Fall waere ein PREP_WIDOWS fatal.
-    if( pMaster->GetOfst() == pFrm->GetOfst() )
+    if( pMaster->GetOfst() == pFrame->GetOfst() )
         return sal_False;
 
     // Resthoehe des Masters
-    SWRECTFN( pFrm )
+    SWRECTFN( pFrame )
 
-    const SwTwips nDocPrtTop = (pFrm->*fnRect->fnGetPrtTop)();
+    const SwTwips nDocPrtTop = (pFrame->*fnRect->fnGetPrtTop)();
     SwTwips nOldHeight;
     SwTwips nTmpY = rLine.Y() + rLine.GetLineHeight();
 
     if ( bVert )
     {
-        nTmpY = pFrm->SwitchHorizontalToVertical( nTmpY );
-        nOldHeight = -(pFrm->Prt().*fnRect->fnGetHeight)();
+        nTmpY = pFrame->SwitchHorizontalToVertical( nTmpY );
+        nOldHeight = -(pFrame->Prt().*fnRect->fnGetHeight)();
     }
     else
-        nOldHeight = (pFrm->Prt().*fnRect->fnGetHeight)();
+        nOldHeight = (pFrame->Prt().*fnRect->fnGetHeight)();
 
     const SwTwips nChg = (*fnRect->fnYDiff)( nTmpY, nDocPrtTop + nOldHeight );
 
@@ -448,16 +446,16 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine )
         // Zeilen entgegenzunehmen, die er vor Kurzem gezwungen war an den
         // Follow abzugeben: Prepare(Need); diese Abfrage unterhalb von nChg!
         // (0W, 2O, 2M, 2F) + 1F = 3M, 2F
-        if( rLine.GetLineNr() > nWidLines && pFrm->IsJustWidow() )
+        if( rLine.GetLineNr() > nWidLines && pFrame->IsJustWidow() )
         {
             // Wenn der Master gelockt ist, so hat er vermutlich gerade erst
             // eine Zeile an uns abgegeben, diese geben nicht zurueck, nur
             // weil bei uns daraus mehrere geworden sind (z.B. durch Rahmen).
             if( !pMaster->IsLocked() && pMaster->GetUpper() )
             {
-                const SwTwips nRstHeight = (pMaster->Frm().*fnRect->fnBottomDist)
+                const SwTwips nTmpRstHeight = (pMaster->Frm().*fnRect->fnBottomDist)
                             ( (pMaster->GetUpper()->*fnRect->fnGetPrtBottom)() );
-                if ( nRstHeight >=
+                if ( nTmpRstHeight >=
                      SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
                 {
                     pMaster->Prepare( PREP_ADJUST_FRM );
@@ -466,7 +464,7 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine )
                 }
             }
 
-            pFrm->SetJustWidow( sal_False );
+            pFrame->SetJustWidow( sal_False );
         }
         return sal_False;
     }
@@ -479,14 +477,14 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine )
 
     if( 0 > nChg && !pMaster->IsLocked() && pMaster->GetUpper() )
     {
-        SwTwips nRstHeight = (pMaster->Frm().*fnRect->fnBottomDist)
+        SwTwips nTmpRstHeight = (pMaster->Frm().*fnRect->fnBottomDist)
                              ( (pMaster->GetUpper()->*fnRect->fnGetPrtBottom)() );
-        if( nRstHeight >= SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
+        if( nTmpRstHeight >= SwTwips(rLine.GetInfo().GetParaPortion()->Height() ) )
         {
             pMaster->Prepare( PREP_ADJUST_FRM );
             pMaster->_InvalidateSize();
             pMaster->InvalidatePage();
-            pFrm->SetJustWidow( sal_False );
+            pFrame->SetJustWidow( sal_False );
             return sal_False;
         }
     }
