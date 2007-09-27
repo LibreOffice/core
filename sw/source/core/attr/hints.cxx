@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hints.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:40:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:25:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,9 +114,9 @@ SwRefMarkFldUpdate::SwRefMarkFldUpdate( const OutputDevice* pOutput )
 }
 
 
-SwDocPosUpdate::SwDocPosUpdate( const SwTwips nDocPos )
+SwDocPosUpdate::SwDocPosUpdate( const SwTwips nDcPos )
     : SwMsgPoolItem( RES_DOCPOS_UPDATE ),
-    nDocPos(nDocPos)
+    nDocPos(nDcPos)
 {}
 
 
@@ -165,17 +165,17 @@ SwAttrSetChg::~SwAttrSetChg()
 
 #ifndef PRODUCT
 
-void SwAttrSetChg::ClearItem( USHORT nWhich )
+void SwAttrSetChg::ClearItem( USHORT nWhch )
 {
     ASSERT( bDelSet, "der Set darf nicht veraendert werden!" );
-    pChgSet->ClearItem( nWhich );
+    pChgSet->ClearItem( nWhch );
 }
 
 #endif
 
 
-SwMsgPoolItem::SwMsgPoolItem( USHORT nWhich )
-    : SfxPoolItem( nWhich )
+SwMsgPoolItem::SwMsgPoolItem( USHORT nWhch )
+    : SfxPoolItem( nWhch )
 {}
 
 
