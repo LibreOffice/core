@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:07:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:48:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,6 +204,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
+using namespace nsSwDocInfoSubType;
+
 /*--------------------------------------------------------------------
     Beschreibung: SwPageNumberFieldType
  --------------------------------------------------------------------*/
@@ -294,7 +296,7 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc, sal_uInt16 nPage,
 
 SwPageNumberField::SwPageNumberField(SwPageNumberFieldType* pTyp,
                                      sal_uInt16 nSub, sal_uInt32 nFmt, short nOff)
-    : SwField(pTyp, nFmt), nOffset(nOff), nSubType(nSub)
+    : SwField(pTyp, nFmt), nSubType(nSub), nOffset(nOff)
 {
 }
 
@@ -345,10 +347,9 @@ sal_uInt16 SwPageNumberField::GetSubType() const
 /*-----------------05.03.98 10:25-------------------
 
 --------------------------------------------------*/
-BOOL SwPageNumberField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwPageNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_FORMAT:
         rAny <<= (sal_Int16)GetFormat();
@@ -379,12 +380,11 @@ BOOL SwPageNumberField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------05.03.98 10:25-------------------
 
 --------------------------------------------------*/
-BOOL SwPageNumberField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     BOOL bRet = TRUE;
     sal_Int16 nSet;
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_FORMAT:
         rAny >>= nSet;
@@ -480,11 +480,10 @@ SwField* SwAuthorField::Copy() const
 /*-----------------05.03.98 11:15-------------------
 
 --------------------------------------------------*/
-BOOL SwAuthorField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwAuthorField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     sal_Bool bVal;
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
         bVal = (GetFormat() & 0xff) == AF_NAME;
@@ -508,10 +507,9 @@ BOOL SwAuthorField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------05.03.98 11:15-------------------
 
 --------------------------------------------------*/
-BOOL SwAuthorField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwAuthorField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
         SetFormat( *(sal_Bool*)rAny.getValue() ? AF_NAME : AF_SHORTCUT );
@@ -628,10 +626,9 @@ SwField* SwFileNameField::Copy() const
 /*-----------------05.03.98 08:59-------------------
 
 --------------------------------------------------*/
-BOOL SwFileNameField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwFileNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_FORMAT:
         {
@@ -671,10 +668,9 @@ BOOL SwFileNameField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------05.03.98 09:01-------------------
 
 --------------------------------------------------*/
-BOOL SwFileNameField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwFileNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_FORMAT:
         {
@@ -731,7 +727,7 @@ SwTemplNameFieldType::SwTemplNameFieldType(SwDoc *pDocument)
 
 String SwTemplNameFieldType::Expand(ULONG nFmt) const
 {
-    ASSERT(nFmt >= FF_BEGIN && nFmt < FF_END, "Expand: kein guelt. Fmt!" );
+    ASSERT( nFmt < FF_END, "Expand: kein guelt. Fmt!" );
 
     String aRet;
     const SfxDocumentInfo* pDInfo = pDoc->GetpInfo();
@@ -801,10 +797,9 @@ SwField* SwTemplNameField::Copy() const
 /*-----------------05.03.98 08:59-------------------
 
 --------------------------------------------------*/
-BOOL SwTemplNameField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwTemplNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch ( nMId )
+    switch ( nWhichId )
     {
     case FIELD_PROP_FORMAT:
         {
@@ -830,10 +825,9 @@ BOOL SwTemplNameField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------05.03.98 09:01-------------------
 
 --------------------------------------------------*/
-BOOL SwTemplNameField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwTemplNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch ( nMId )
+    switch ( nWhichId )
     {
     case FIELD_PROP_FORMAT:
         {
@@ -958,10 +952,9 @@ void SwDocStatField::ChangeExpansion( const SwFrm* pFrm )
 /*-----------------05.03.98 11:38-------------------
 
 --------------------------------------------------*/
-BOOL SwDocStatField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwDocStatField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch ( nMId )
+    switch ( nWhichId )
     {
     case FIELD_PROP_USHORT2:
         rAny <<= (sal_Int16)GetFormat();
@@ -974,11 +967,10 @@ BOOL SwDocStatField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------05.03.98 11:38-------------------
 
 --------------------------------------------------*/
-BOOL SwDocStatField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwDocStatField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     BOOL bRet = FALSE;
-    nMId &= ~CONVERT_TWIPS;
-    switch ( nMId )
+    switch ( nWhichId )
     {
     case FIELD_PROP_USHORT2:
         {
@@ -1014,8 +1006,8 @@ SwDocInfoFieldType::SwDocInfoFieldType(SwDoc* pDc)
  ---------------------------------------------------------------------------*/
 SwFieldType* SwDocInfoFieldType::Copy() const
 {
-    SwDocInfoFieldType* pType = new SwDocInfoFieldType(GetDoc());
-    return pType;
+    SwDocInfoFieldType* pTyp = new SwDocInfoFieldType(GetDoc());
+    return pTyp;
 }
 
 void lcl_GetLocalDataWrapper( ULONG nLang,
@@ -1027,7 +1019,7 @@ void lcl_GetLocalDataWrapper( ULONG nLang,
     if( nLang != SvxLocaleToLanguage( (*ppLocalData)->getLocale() ) )
         *ppLocalData = new LocaleDataWrapper(
                         ::comphelper::getProcessServiceFactory(),
-                        SvxCreateLocale( nLang ) );
+                        SvxCreateLocale( static_cast<LanguageType>(nLang) ) );
 }
 
 /* ---------------------------------------------------------------------------
@@ -1147,8 +1139,8 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pType, sal_uInt16 nSub, sal_uInt32 nFmt) :
-    SwValueField(pType, nFmt), nSubType(nSub)
+SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFmt) :
+    SwValueField(pTyp, nFmt), nSubType(nSub)
 {
     aContent = ((SwDocInfoFieldType*)GetTyp())->Expand(nSubType, nFmt, GetLanguage());
 }
@@ -1234,10 +1226,9 @@ void SwDocInfoField::SetLanguage(sal_uInt16 nLng)
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwDocInfoField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwDocInfoField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
         rAny <<= OUString(aContent);
@@ -1274,18 +1265,17 @@ BOOL SwDocInfoField::QueryValue( uno::Any& rAny, BYTE nMId ) const
         }
         break;
     default:
-        return SwField::QueryValue(rAny, nMId);
+        return SwField::QueryValue(rAny, nWhichId);
     }
     return sal_True;
 }
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwDocInfoField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwDocInfoField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     sal_Int32 nValue;
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
         if( nSubType & DI_SUB_FIXED )
@@ -1325,7 +1315,7 @@ BOOL SwDocInfoField::PutValue( const uno::Any& rAny, BYTE nMId )
             nSubType |= DI_SUB_TIME;
         break;
     default:
-        return SwField::PutValue(rAny, nMId);
+        return SwField::PutValue(rAny, nWhichId);
     }
     return sal_True;
 }
@@ -1362,8 +1352,8 @@ SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
                                     const   String& rStr,
                                     sal_Bool    bHidden,
                                     sal_uInt16  nSub) :
-    SwField( pFldType ), aCond(rCond), bValid(sal_False),
-    bCanToggle(bConditional), bIsHidden(bHidden), nSubType(nSub)
+    SwField( pFldType ), aCond(rCond), nSubType(nSub),
+    bCanToggle(bConditional), bIsHidden(bHidden), bValid(sal_False)
 {
     if(nSubType == TYP_CONDTXTFLD)
     {
@@ -1391,8 +1381,8 @@ SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
                                     const String& rTrue,
                                     const String& rFalse,
                                     sal_uInt16 nSub)
-    : SwField( pFldType ), aCond(rCond), bIsHidden(sal_True), nSubType(nSub),
-      aTRUETxt(rTrue), aFALSETxt(rFalse), bValid(sal_False)
+    : SwField( pFldType ), aTRUETxt(rTrue), aFALSETxt(rFalse), aCond(rCond), nSubType(nSub),
+      bIsHidden(sal_True), bValid(sal_False)
 {
     bCanToggle  = aCond.Len() > 0;
 }
@@ -1472,9 +1462,9 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
                                                 sDataTableOrQuery, sal_False))
                 {
                     double fNumber;
-                    sal_uInt32 nFormat;
+                    sal_uInt32 nTmpFormat;
                     pMgr->GetMergeColumnCnt(GetColumnName( sTmpName ),
-                                    GetLanguage(), aContent, &fNumber, &nFormat );
+                        GetLanguage(), aContent, &fNumber, &nTmpFormat );
                     bValid = sal_True;
                 }
                 else if( sDBName.Len() && sDataSource.Len() &&
@@ -1581,11 +1571,10 @@ sal_uInt16 SwHiddenTxtField::GetSubType() const
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwHiddenTxtField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwHiddenTxtField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     const String* pOut = 0;
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
         pOut = &aCond;
@@ -1615,10 +1604,9 @@ BOOL SwHiddenTxtField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwHiddenTxtField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwHiddenTxtField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
         {
@@ -1690,16 +1678,16 @@ SwHiddenParaFieldType::SwHiddenParaFieldType()
 
 SwFieldType* SwHiddenParaFieldType::Copy() const
 {
-    SwHiddenParaFieldType* pType = new SwHiddenParaFieldType();
-    return pType;
+    SwHiddenParaFieldType* pTyp = new SwHiddenParaFieldType();
+    return pTyp;
 }
 
 /*--------------------------------------------------------------------
     Beschreibung: Das Feld Zeilenhoehe 0
  --------------------------------------------------------------------*/
 
-SwHiddenParaField::SwHiddenParaField(SwHiddenParaFieldType* pType, const String& rStr)
-    : SwField(pType), aCond(rStr)
+SwHiddenParaField::SwHiddenParaField(SwHiddenParaFieldType* pTyp, const String& rStr)
+    : SwField(pTyp), aCond(rStr)
 {
     bIsHidden = sal_False;
 }
@@ -1723,10 +1711,9 @@ SwField* SwHiddenParaField::Copy() const
 /*-----------------05.03.98 13:25-------------------
 
 --------------------------------------------------*/
-BOOL SwHiddenParaField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwHiddenParaField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch ( nMId )
+    switch ( nWhichId )
     {
     case FIELD_PROP_PAR1:
         rAny <<= OUString(aCond);
@@ -1746,10 +1733,9 @@ BOOL SwHiddenParaField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------05.03.98 13:25-------------------
 
 --------------------------------------------------*/
-BOOL SwHiddenParaField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwHiddenParaField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch ( nMId )
+    switch ( nWhichId )
     {
     case FIELD_PROP_PAR1:
         ::GetString( rAny, aCond );
@@ -1799,9 +1785,9 @@ SwFieldType* SwPostItFieldType::Copy() const
     Beschreibung: SwPostItFieldType
  --------------------------------------------------------------------*/
 
-SwPostItField::SwPostItField( SwPostItFieldType* pType,
+SwPostItField::SwPostItField( SwPostItFieldType* pTyp,
         const String& rAuthor, const String& rTxt, const Date& rDate )
-    : SwField( pType ), sTxt( rTxt ), sAuthor( rAuthor ), aDate( rDate )
+    : SwField( pTyp ), sTxt( rTxt ), sAuthor( rAuthor ), aDate( rDate )
 {
 }
 /* ---------------------------------------------------------------------------
@@ -1859,10 +1845,9 @@ String SwPostItField::GetPar2() const
 /*-----------------05.03.98 13:42-------------------
 
 --------------------------------------------------*/
-BOOL SwPostItField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwPostItField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
         rAny <<= OUString(sAuthor);
@@ -1887,10 +1872,9 @@ BOOL SwPostItField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------05.03.98 13:42-------------------
 
 --------------------------------------------------*/
-BOOL SwPostItField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
         ::GetString( rAny, sAuthor );
@@ -1923,13 +1907,13 @@ SwExtUserFieldType::SwExtUserFieldType()
  ---------------------------------------------------------------------------*/
 SwFieldType* SwExtUserFieldType::Copy() const
 {
-    SwExtUserFieldType* pType = new SwExtUserFieldType;
-    return pType;
+    SwExtUserFieldType* pTyp = new SwExtUserFieldType;
+    return pTyp;
 }
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 nFormat) const
+String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 ) const
 {
     String aRet;
     sal_uInt16 nRet = USHRT_MAX;
@@ -1965,8 +1949,8 @@ String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 nFormat) const
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-SwExtUserField::SwExtUserField(SwExtUserFieldType* pType, sal_uInt16 nSubTyp, sal_uInt32 nFmt) :
-    SwField(pType, nFmt), nType(nSubTyp)
+SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, sal_uInt16 nSubTyp, sal_uInt32 nFmt) :
+    SwField(pTyp, nFmt), nType(nSubTyp)
 {
     aContent = ((SwExtUserFieldType*)GetTyp())->Expand(nType, GetFormat());
 }
@@ -2008,10 +1992,9 @@ void SwExtUserField::SetSubType(sal_uInt16 nSub)
 /*-----------------05.03.98 14:14-------------------
 
 --------------------------------------------------*/
-BOOL SwExtUserField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwExtUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
         rAny <<= OUString(aContent);
@@ -2037,10 +2020,9 @@ BOOL SwExtUserField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------05.03.98 14:14-------------------
 
 --------------------------------------------------*/
-BOOL SwExtUserField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwExtUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
         ::GetString( rAny, aContent );
@@ -2093,9 +2075,9 @@ void SwRefPageSetFieldType::Modify( SfxPoolItem *, SfxPoolItem * )
     Beschreibung: Relative Seitennummerierung
  --------------------------------------------------------------------*/
 
-SwRefPageSetField::SwRefPageSetField( SwRefPageSetFieldType* pType,
+SwRefPageSetField::SwRefPageSetField( SwRefPageSetFieldType* pTyp,
                     short nOff, sal_Bool bFlag )
-    : SwField( pType ), nOffset( nOff ), bOn( bFlag )
+    : SwField( pTyp ), nOffset( nOff ), bOn( bFlag )
 {
 }
 /* ---------------------------------------------------------------------------
@@ -2130,10 +2112,9 @@ void SwRefPageSetField::SetPar2(const String& rStr)
 /*-----------------05.03.98 14:52-------------------
 
 --------------------------------------------------*/
-BOOL SwRefPageSetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwRefPageSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
         rAny.setValue(&bOn, ::getBooleanCppuType());
@@ -2149,10 +2130,9 @@ BOOL SwRefPageSetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------05.03.98 14:52-------------------
 
 --------------------------------------------------*/
-BOOL SwRefPageSetField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwRefPageSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
         bOn = *(sal_Bool*)rAny.getValue();
@@ -2170,7 +2150,7 @@ BOOL SwRefPageSetField::PutValue( const uno::Any& rAny, BYTE nMId )
  --------------------------------------------------------------------*/
 
 SwRefPageGetFieldType::SwRefPageGetFieldType( SwDoc* pDc )
-    : SwFieldType( RES_REFPAGEGETFLD ), nNumberingType( SVX_NUM_ARABIC ), pDoc( pDc )
+    : SwFieldType( RES_REFPAGEGETFLD ), pDoc( pDc ), nNumberingType( SVX_NUM_ARABIC )
 {
 }
 /* ---------------------------------------------------------------------------
@@ -2300,10 +2280,10 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
 
                 sal_uInt32 nTmpFmt = SVX_NUM_PAGEDESC == pGetFld->GetFormat()
                         ? ( !pPgFrm
-                                ? SVX_NUM_ARABIC
+                                ? (sal_uInt32)SVX_NUM_ARABIC
                                 : pPgFrm->GetPageDesc()->GetNumType().GetNumberingType() )
                         : pGetFld->GetFormat();
-                short nPageNum = Max(0, pSetFld->GetOffset() + (short)nDiff);
+                short nPageNum = static_cast<short>(Max(0, pSetFld->GetOffset() + (short)nDiff));
                 pGetFld->SetText( FormatNumber( nPageNum, nTmpFmt ) );
             }
         }
@@ -2316,9 +2296,9 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
     Beschreibung: Relative Seitennummerierung Abfragen
  --------------------------------------------------------------------*/
 
-SwRefPageGetField::SwRefPageGetField( SwRefPageGetFieldType* pType,
+SwRefPageGetField::SwRefPageGetField( SwRefPageGetFieldType* pTyp,
                                     sal_uInt32 nFmt )
-    : SwField( pType, nFmt )
+    : SwField( pTyp, nFmt )
 {
 }
 /* ---------------------------------------------------------------------------
@@ -2396,17 +2376,16 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
         sal_uInt32 nTmpFmt = SVX_NUM_PAGEDESC == pGetFld->GetFormat()
                             ? pPgFrm->GetPageDesc()->GetNumType().GetNumberingType()
                             : pGetFld->GetFormat();
-        short nPageNum = Max(0, pSetFld->GetOffset() + (short)nDiff );
+        short nPageNum = static_cast<short>(Max(0, pSetFld->GetOffset() + (short)nDiff ));
         pGetFld->SetText( FormatNumber( nPageNum, nTmpFmt ) );
     }
 }
 /*-----------------05.03.98 14:52-------------------
 
 --------------------------------------------------*/
-BOOL SwRefPageGetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwRefPageGetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
         case FIELD_PROP_USHORT1:
             rAny <<= (sal_Int16)GetFormat();
@@ -2422,10 +2401,9 @@ BOOL SwRefPageGetField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------05.03.98 14:52-------------------
 
 --------------------------------------------------*/
-BOOL SwRefPageGetField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
         case FIELD_PROP_USHORT1:
         {
@@ -2482,9 +2460,9 @@ SwCharFmt* SwJumpEditFieldType::GetCharFmt()
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-SwJumpEditField::SwJumpEditField( SwJumpEditFieldType* pTyp, sal_uInt32 nFormat,
+SwJumpEditField::SwJumpEditField( SwJumpEditFieldType* pTyp, sal_uInt32 nForm,
                                 const String& rTxt, const String& rHelp )
-    : SwField( pTyp, nFormat ), sTxt( rTxt ), sHelp( rHelp )
+    : SwField( pTyp, nForm ), sTxt( rTxt ), sHelp( rHelp )
 {
 }
 /* ---------------------------------------------------------------------------
@@ -2540,10 +2518,9 @@ void SwJumpEditField::SetPar2(const String& rStr)
 /*-----------------05.03.98 15:00-------------------
 
 --------------------------------------------------*/
-BOOL SwJumpEditField::QueryValue( uno::Any& rAny, BYTE nMId ) const
+BOOL SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_USHORT1:
         {
@@ -2575,10 +2552,9 @@ BOOL SwJumpEditField::QueryValue( uno::Any& rAny, BYTE nMId ) const
 /*-----------------05.03.98 15:00-------------------
 
 --------------------------------------------------*/
-BOOL SwJumpEditField::PutValue( const uno::Any& rAny, BYTE nMId )
+BOOL SwJumpEditField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_USHORT1:
         {
@@ -2654,11 +2630,10 @@ void SwCombinedCharField::SetPar1(const String& rStr)
     sCharacters = rStr.Copy( 0, MAX_COMBINED_CHARACTERS );
 }
 
-BOOL SwCombinedCharField::QueryValue( com::sun::star::uno::Any& rAny,
-                                        BYTE nMId ) const
+BOOL SwCombinedCharField::QueryValue( uno::Any& rAny,
+                                        USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
         rAny <<= rtl::OUString( sCharacters );
@@ -2669,11 +2644,10 @@ BOOL SwCombinedCharField::QueryValue( com::sun::star::uno::Any& rAny,
     return sal_True;
 }
 
-BOOL SwCombinedCharField::PutValue( const com::sun::star::uno::Any& rAny,
-                                        BYTE nMId )
+BOOL SwCombinedCharField::PutValue( const uno::Any& rAny,
+                                        USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
         ::GetString( rAny, sCharacters ).Erase( MAX_COMBINED_CHARACTERS );
