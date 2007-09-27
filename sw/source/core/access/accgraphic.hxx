@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accgraphic.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:44:15 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:21:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ protected:
 
 public:
 
-    SwAccessibleGraphic( SwAccessibleMap *pMap,
+    SwAccessibleGraphic( SwAccessibleMap* pInitMap,
                          const SwFlyFrm *pFlyFrm );
 
     //=====  XServiceInfo  ====================================================
