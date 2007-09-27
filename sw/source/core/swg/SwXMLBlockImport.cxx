@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLBlockImport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:30:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:09:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ sal_Char __READONLY_DATA sXML_np__text[] = "_otext";
 
 // #110680#
 SwXMLBlockListImport::SwXMLBlockListImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SwXMLTextBlocks &rBlocks )
 :   SvXMLImport( xServiceFactory, 0 ),
     rBlockList (rBlocks)
@@ -93,7 +93,7 @@ SvXMLImportContext *SwXMLBlockListImport::CreateContext(
 
 // #110680#
 SwXMLTextBlockImport::SwXMLTextBlockImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SwXMLTextBlocks &rBlocks,
     String & rNewText,
     sal_Bool bNewTextOnly )
@@ -129,6 +129,6 @@ SvXMLImportContext *SwXMLTextBlockImport::CreateContext(
     return pContext;
 }
 void SAL_CALL SwXMLTextBlockImport::endDocument(void)
-        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+        throw( xml::sax::SAXException, uno::RuntimeException )
 {
 }
