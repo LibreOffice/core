@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globdoc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:03:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:53:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,13 +41,14 @@
 #include <sot/clsids.hxx>
 #include <svtools/moduleoptions.hxx>
 
+#include <unomid.h>
+
 #include "swtypes.hxx"
 #include "shellio.hxx"
 #include "globdoc.hxx"
 #include "globdoc.hrc"
 #include "cfgid.h"
 
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
 
 /*--------------------------------------------------------------------
     Beschreibung:   Alle Filter registrieren
@@ -69,7 +70,7 @@ SwGlobalDocShell::~SwGlobalDocShell()
 
 void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
                                    sal_uInt32 * pClipFormat,
-                                   String * pAppName,
+                                   String * /*pAppName*/,
                                    String * pLongUserName,
                                    String * pUserName,
                                    sal_Int32 nVersion ) const
