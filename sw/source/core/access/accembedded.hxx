@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accembedded.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:42:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:19:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,8 @@ protected:
 
 public:
 
-    SwAccessibleEmbeddedObject( SwAccessibleMap *pMap,
-                         const SwFlyFrm *pFlyFrm );
+    SwAccessibleEmbeddedObject( SwAccessibleMap* pInitMap,
+                                const SwFlyFrm* pFlyFrm );
 
     //=====  XServiceInfo  ====================================================
 
