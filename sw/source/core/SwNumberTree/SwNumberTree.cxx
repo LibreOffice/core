@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:58:40 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:18:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ SwNumberTreeNode::SwNumberTreeNode()
 #endif
 }
 
-SwNumberTreeNode::SwNumberTreeNode(const SwNumberTreeNode & rNode)
+SwNumberTreeNode::SwNumberTreeNode(const SwNumberTreeNode & )
     : mpParent(NULL), mnNumber(0),
       mbPhantom(false), mItLastValid(mChildren.end())
 {
@@ -86,8 +86,7 @@ SwNumberTreeNode::~SwNumberTreeNode()
         }
     }
 
-    if (! IsPhantom() && mpParent != NULL)
-        ASSERT(false, ": I'm not supposed to have a parent.");
+    ASSERT( IsPhantom() || mpParent == NULL, ": I'm not supposed to have a parent.");
 
 #ifndef PRODUCT
     nInstances--;
@@ -1016,20 +1015,10 @@ bool SwNumberTreeNode::IsSane(bool bRecursive,
 SwNumberTreeNode::tSwNumberTreeChildren::iterator
 SwNumberTreeNode::GetIterator(const SwNumberTreeNode * pChild) const
 {
-    SwNumberTreeNode * pRoot = GetRoot();
-
     tSwNumberTreeChildren::iterator aItResult =
         mChildren.find(const_cast<SwNumberTreeNode *>(pChild));
 
-    if (pChild != *aItResult)
-    {
-        String aStr = pChild->ToString();
-
-        aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-        aStr += pChild->ToString();
-
-        ASSERT(false, "something went wrong getting the iterator for a child");
-    }
+    ASSERT(pChild == *aItResult, "something went wrong getting the iterator for a child");
 
     return aItResult;
 }
@@ -1158,9 +1147,8 @@ void SwNumberTreeNode::SetLastValid
                     ( SwNumberTreeNode::tSwNumberTreeChildren::iterator aItValid,
                       bool bValidating ) const
 {
-    if (! (aItValid == mChildren.end() ||
-           GetIterator(*aItValid) != mChildren.end()))
-        ASSERT(false, "last-valid iterator");
+    ASSERT( (aItValid == mChildren.end() || GetIterator(*aItValid) != mChildren.end()),
+            "last-valid iterator");
 
     if (
         bValidating ||
