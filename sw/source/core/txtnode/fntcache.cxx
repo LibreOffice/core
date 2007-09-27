@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:02:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:24:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,8 @@
 #endif
 #endif
 
+using namespace ::com::sun::star;
+
 // globale Variablen, werden in FntCache.Hxx bekanntgegeben
 // Der FontCache wird in TxtInit.Cxx _TXTINIT erzeugt und in _TXTEXIT geloescht
 SwFntCache *pFntCache = NULL;
@@ -188,8 +190,8 @@ void SwFntCache::Flush( )
 |*
 |*************************************************************************/
 
-SwFntObj::SwFntObj( const SwSubFont &rFont, const void *pOwner, ViewShell *pSh ) :
-    SwCacheObj( (void*)pOwner ),
+SwFntObj::SwFntObj( const SwSubFont &rFont, const void *pOwn, ViewShell *pSh ) :
+    SwCacheObj( (void*)pOwn ),
     aFont( rFont ),
     pScrFont( NULL ),
     pPrtFont( &aFont ),
@@ -411,7 +413,8 @@ USHORT SwFntObj::GetFontHeight( const ViewShell* pSh, const OutputDevice& rOut )
             // Check if vcl did not change the meading of GetTextHeight
             const FontMetric aOutMet( rRefDev.GetFontMetric() );
             long nTmpPrtHeight = (USHORT)aOutMet.GetAscent() + aOutMet.GetDescent();
-            ASSERT( nTmpPrtHeight = nPrtHeight, "GetTextHeight != Ascent + Descent" )
+            (void) nTmpPrtHeight;
+            ASSERT( nTmpPrtHeight == nPrtHeight, "GetTextHeight != Ascent + Descent" )
 #endif
 
             ((OutputDevice&)rRefDev).SetFont( aOldFnt );
@@ -558,7 +561,7 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
             // Um Aerger mit dem Generic Printer aus dem Wege zu gehen.
             if( aMet.GetSize().Height() )
             {
-                BOOL bScrSymbol;
+                BOOL bScrSymbol = FALSE;
                 CharSet ePrtChSet = aMet.GetCharSet();
                 // NoSymbol bedeutet, dass der Drucker sich fuer einen
                 // Nicht-Symbol-Font entschieden hat.
@@ -651,16 +654,16 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
                             if( nPWidth > 80 )
                                 nPWidth = 80;
                             nPWidth = 100 - nPWidth/4;
-                            Size aTmp = pScrFont->GetSize();
-                            aTmp.Height() *= nPWidth;
-                            aTmp.Height() /= 100;
-                            if( aTmp.Width() )
+                            Size aTmpSize = pScrFont->GetSize();
+                            aTmpSize.Height() *= nPWidth;
+                            aTmpSize.Height() /= 100;
+                            if( aTmpSize.Width() )
                             {
-                                aTmp.Width() *= nPWidth;
-                                aTmp.Width() /= 100;
+                                aTmpSize.Width() *= nPWidth;
+                                aTmpSize.Width() /= 100;
                             }
                             Font *pNew = new Font( *pScrFont );
-                            pNew->SetSize( aTmp );
+                            pNew->SetSize( aTmpSize );
                             pOut->SetFont( *pNew );
                             nPWidth = nOWidth -
                                       pOut->GetTextWidth( aStandardStr );
@@ -727,7 +730,11 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
 }
 
 
-void SwFntObj::GuessLeading( const ViewShell& rSh, const FontMetric& rMet )
+void SwFntObj::GuessLeading( const ViewShell&
+#if defined(WNT) || defined(WIN) || defined(PM2)
+                             rSh
+#endif
+                             , const FontMetric& rMet )
 {
     // If leading >= 5, this seems to be enough leading.
     // Nothing has to be done.
@@ -778,7 +785,7 @@ void SwFntObj::GuessLeading( const ViewShell& rSh, const FontMetric& rMet )
                 {
                     ASSERT( nPrtAscent < USHRT_MAX, "GuessLeading: PrtAscent-Fault" );
                     if ( USHRT_MAX < nPrtAscent )
-                        nPrtAscent += (USHORT)(( 2 * nDiff ) / 5);
+                        nPrtAscent = nPrtAscent + (USHORT)(( 2 * nDiff ) / 5);
                 }
             }
         }
@@ -875,11 +882,9 @@ static sal_Bool lcl_IsMonoSpaceFont( const OutputDevice& rOut )
 {
     const String aStr1( xub_Unicode( 0x3008 ) );
     const String aStr2( xub_Unicode( 0x307C ) );
-#ifndef PRODUCT
     const long nWidth1 = rOut.GetTextWidth( aStr1 );
     const long nWidth2 = rOut.GetTextWidth( aStr2 );
-#endif
-    return rOut.GetTextWidth( aStr1 ) == rOut.GetTextWidth( aStr2 );
+    return nWidth1 == nWidth2;
 }
 
 // ER 09.07.95 20:34
@@ -1345,16 +1350,16 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
         else if( rInf.GetKern() )
         {
-            long nTmpWidth = GetTextSize( rInf ).Width();
+            const long nTmpWidth = GetTextSize( rInf ).Width();
 
-            Color aOldColor( pTmpFont->GetColor() );
-            sal_Bool bChgColor = rInf.ApplyAutoColor( pTmpFont );
+            const Color aSaveColor( pTmpFont->GetColor() );
+            const sal_Bool bColorChanged = rInf.ApplyAutoColor( pTmpFont );
 
-            if( bChgColor )
+            if( bColorChanged )
             {
                 if( !pTmpFont->IsSameInstance( rInf.GetOut().GetFont() ) )
                     rInf.GetOut().SetFont( *pTmpFont );
-                pTmpFont->SetColor( aOldColor );
+                pTmpFont->SetColor( aSaveColor );
             }
 
             rInf.GetOut().DrawStretchText( aPos, (USHORT)nTmpWidth,
@@ -1510,18 +1515,16 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             aStr = rInf.GetText().Copy( nCopyStart, nCopyLen );
             pStr = &aStr;
 
-            xub_Unicode cBulletChar = CH_BULLET;
-
             for( xub_StrLen i = 0; i < aStr.Len(); ++i )
                 if( CH_BLANK == aStr.GetChar( i ) )
-                    aStr.SetChar( i, cBulletChar );
+                    aStr.SetChar( i, CH_BULLET );
         }
 
         xub_StrLen nCnt = rInf.GetText().Len();
         if ( nCnt < rInf.GetIdx() )
             nCnt = 0;
         else
-            nCnt -= rInf.GetIdx();
+            nCnt = nCnt - rInf.GetIdx();
         nCnt = Min( nCnt, rInf.GetLen() );
         long nKernSum = rInf.GetKern();
         xub_Unicode cChPrev = rInf.GetText().GetChar( rInf.GetIdx() );
@@ -1682,20 +1685,20 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             break;
                         }
 
-                        Point aPos( rInf.GetPos() );
+                        Point aCurrPos( rInf.GetPos() );
 
                         if ( bSwitchL2R )
                         {
-                            rInf.GetFrm()->SwitchLTRtoRTL( aPos );
+                            rInf.GetFrm()->SwitchLTRtoRTL( aCurrPos );
                             rInf.GetFrm()->SwitchLTRtoRTL( aEnd );
                         }
 
                         if ( bSwitchH2V )
                         {
-                            rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+                            rInf.GetFrm()->SwitchHorizontalToVertical( aCurrPos );
                             rInf.GetFrm()->SwitchHorizontalToVertical( aEnd );
                         }
-                        rInf.GetOut().DrawWaveLine( aPos, aEnd, nWave );
+                        rInf.GetOut().DrawWaveLine( aCurrPos, aEnd, nWave );
 
                         if ( bColSave )
                             rInf.GetOut().SetLineColor( aCol );
@@ -1734,7 +1737,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             // --> SMARTTAGS NEW
                             do
                             {
-                                nStart -= rInf.GetIdx();
+                                nStart = nStart - rInf.GetIdx();
 
                                 //determine line pos
                                 Point aStart( rInf.GetPos() );
@@ -1780,7 +1783,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         // iterate over all ranges stored in the smarttag list
                         do
                         {
-                            nStart -= rInf.GetIdx();
+                            nStart = nStart - rInf.GetIdx();
 
                             //determine line pos
                             Point aStart( aPos );
@@ -1847,7 +1850,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 // the paragraph string. For the layout engine, the copy
                 // of the string has to be an environment of the range which
                 // is painted
-                register xub_StrLen nTmpIdx = bBullet ?
+                xub_StrLen nTmpIdx = bBullet ?
                                               ( rInf.GetIdx() ? 1 : 0 ) :
                                               rInf.GetIdx();
 
@@ -1984,7 +1987,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             if ( nCnt < rInf.GetIdx() )
                 nCnt=0;
             else
-                nCnt -= rInf.GetIdx();
+                nCnt = nCnt - rInf.GetIdx();
             nCnt = Min (nCnt, nLn);
             xub_Unicode nChPrev = rInf.GetText().GetChar( rInf.GetIdx() );
 
@@ -2176,9 +2179,9 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         }
     }
 
-    sal_uInt16 nItrMode = ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL;
+    sal_uInt16 nItrMode = i18n::CharacterIteratorMode::SKIPCELL;
     sal_Int32 nDone = 0;
-    LanguageType aLang;
+    LanguageType aLang = LANGUAGE_NONE;
     sal_Bool bSkipCell = sal_False;
     xub_StrLen nIdx = rInf.GetIdx();
     xub_StrLen nLastIdx = nIdx;
@@ -2244,7 +2247,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 |*************************************************************************/
 
 SwFntAccess::SwFntAccess( const void* &rMagic,
-                USHORT &rIndex, const void *pOwner, ViewShell *pSh,
+                USHORT &rIndex, const void *pOwn, ViewShell *pSh,
                 BOOL bCheck ) :
   SwCacheAccess( *pFntCache, rMagic, rIndex ),
   pShell( pSh )
@@ -2283,7 +2286,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
             if ( ( pFntObj->GetZoom( ) == nZoom ) &&
                  ( pFntObj->pPrinter == pOut ) &&
                    pFntObj->GetPropWidth() ==
-                           ((SwSubFont*)pOwner)->GetPropWidth() )
+                        ((SwSubFont*)pOwn)->GetPropWidth() )
                 return; // Die Ueberpruefung ergab: Drucker+Zoom okay.
             pFntObj->Unlock( ); // Vergiss dies Objekt, es wurde leider
             pObj = NULL;        // eine Drucker/Zoomaenderung festgestellt.
@@ -2292,10 +2295,10 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
         // Search by font comparison, quite expensive!
         // Look for same font and same printer
         pFntObj = pFntCache->First();
-        while ( pFntObj && !( pFntObj->aFont == *(Font *)pOwner &&
+        while ( pFntObj && !( pFntObj->aFont == *(Font *)pOwn &&
                               pFntObj->GetZoom() == nZoom &&
                               pFntObj->GetPropWidth() ==
-                              ((SwSubFont*)pOwner)->GetPropWidth() &&
+                              ((SwSubFont*)pOwn)->GetPropWidth() &&
                               ( !pFntObj->pPrinter || pFntObj->pPrinter == pOut ) ) )
             pFntObj = pFntCache->Next( pFntObj );
 
@@ -2304,10 +2307,10 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
             // Wir haben zwar einen ohne Drucker gefunden, mal sehen, ob es
             // auch noch einen mit identischem Drucker gibt.
             SwFntObj *pTmpObj = pFntObj;
-            while( pTmpObj && !( pTmpObj->aFont == *(Font *)pOwner &&
+            while( pTmpObj && !( pTmpObj->aFont == *(Font *)pOwn &&
                    pTmpObj->GetZoom()==nZoom && pTmpObj->pPrinter==pOut &&
                    pTmpObj->GetPropWidth() ==
-                           ((SwSubFont*)pOwner)->GetPropWidth() ) )
+                        ((SwSubFont*)pOwn)->GetPropWidth() ) )
                 pTmpObj = pFntCache->Next( pTmpObj );
             if( pTmpObj )
                 pFntObj = pTmpObj;
@@ -2317,7 +2320,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
         {
             // Das Objekt muss neu angelegt werden, deshalb muss der Owner ein
             // SwFont sein, spaeter wird als Owner die "MagicNumber" gehalten.
-            SwCacheAccess::pOwner = pOwner;
+            SwCacheAccess::pOwner = pOwn;
             pFntObj = Get(); // hier wird via NewObj() angelegt und gelockt.
             ASSERT(pFntObj, "No Font, no Fun.");
         }
@@ -2443,7 +2446,7 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
                 if ( !pBreakIt->xBreak->isBeginWord(
                      rInf.GetText(), rInf.GetIdx(),
                      pBreakIt->GetLocale( aSub[nActual].GetLanguage() ),
-                     ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
+                     i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
                 {
                     // In this case, the beginning of aTmpText is wrong.
                     XubString aSnippetTmp( aSnippet, 0, 1 );
@@ -2473,14 +2476,14 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
                 nTxtBreak = lcl_CalcCaseMap( *this, rInf.GetText(),
                                              rInf.GetIdx(), nLn, nTxtBreak );
             else
-                nTxtBreak += rInf.GetIdx();
+                nTxtBreak = nTxtBreak + rInf.GetIdx();
         }
     }
 
     if ( ! bCompress )
         return nTxtBreak;
 
-    nTxtBreak -= rInf.GetIdx();
+    nTxtBreak = nTxtBreak - rInf.GetIdx();
 
     if( nTxtBreak < nLn )
     {
@@ -2508,16 +2511,16 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
         }
         delete[] pKernArray;
     }
-    nTxtBreak += rInf.GetIdx();
+    nTxtBreak = nTxtBreak + rInf.GetIdx();
 
     return nTxtBreak;
 }
 
 extern Color aGlobalRetoucheColor;
 
-sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
+sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
 {
-    const Font& rFnt = pFnt ? *pFnt : GetOut().GetFont();
+    const Font& rFnt = pFont ? *pFont : GetOut().GetFont();
     sal_Bool bPrt = GetShell() && ! GetShell()->GetWin();
     ColorData nNewColor = COL_BLACK;
     sal_Bool bChgFntColor = sal_False;
@@ -2605,10 +2608,10 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
 
         if ( bChgFntColor )
         {
-            if ( pFnt && aNewColor != pFnt->GetColor() )
+            if ( pFont && aNewColor != pFont->GetColor() )
             {
                 // only set the new color at the font passed as argument
-                pFnt->SetColor( aNewColor );
+                pFont->SetColor( aNewColor );
             }
             else if ( aNewColor != GetOut().GetFont().GetColor() )
             {
@@ -2623,7 +2626,7 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
         if ( bChgUnderColor )
         {
             // get current font color or color set at output device
-            aNewColor = pFnt ? pFnt->GetColor() : GetOut().GetFont().GetColor();
+            aNewColor = pFont ? pFont->GetColor() : GetOut().GetFont().GetColor();
             if ( aNewColor != GetOut().GetTextLineColor() )
                 GetOut().SetTextLineColor( aNewColor );
         }
