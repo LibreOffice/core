@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unovwr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:49:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:32:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@
 #include <comcore.hrc> // #111827#
 #include <undo.hrc>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 
@@ -97,8 +98,8 @@ inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
-    : SwUndo(UNDO_OVERWRITE), bGroup( FALSE ),
-      pRedlSaveData( 0 )
+    : SwUndo(UNDO_OVERWRITE),
+      pRedlSaveData( 0 ), bGroup( FALSE )
 {
     if( !pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() )
     {
@@ -388,8 +389,8 @@ struct _UndoTransliterate_Data
 
     _UndoTransliterate_Data( ULONG nNd, xub_StrLen nStt, xub_StrLen nStrLen,
                                 const String& rTxt )
-        : pNext( 0 ), pOffsets( 0 ), pHistory( 0 ), sText( rTxt ),
-        nStart( nStt ), nNdIdx( nNd ), nLen( nStrLen )
+        : sText( rTxt ), pNext( 0 ), pHistory( 0 ), pOffsets( 0 ),
+        nNdIdx( nNd ), nStart( nStt ), nLen( nStrLen )
     {}
     ~_UndoTransliterate_Data() { delete pOffsets; delete pHistory; }
 
@@ -399,7 +400,7 @@ struct _UndoTransliterate_Data
 SwUndoTransliterate::SwUndoTransliterate( const SwPaM& rPam,
                             const utl::TransliterationWrapper& rTrans )
     : SwUndo( UNDO_TRANSLITERATE ), SwUndRng( rPam ),
-    nType( rTrans.getType() ), pData( 0 ), pLastData( 0 )
+    pData( 0 ), pLastData( 0 ), nType( rTrans.getType() )
 {
 }
 
@@ -449,7 +450,7 @@ void SwUndoTransliterate::Repeat( SwUndoIter& rUndoIter )
 
 void SwUndoTransliterate::AddChanges( const SwTxtNode& rTNd,
                     xub_StrLen nStart, xub_StrLen nLen,
-                     ::com::sun::star::uno::Sequence <sal_Int32>& rOffsets )
+                    uno::Sequence <sal_Int32>& rOffsets )
 {
     long nOffsLen = rOffsets.getLength();
     _UndoTransliterate_Data* pNew = new _UndoTransliterate_Data(
@@ -463,8 +464,6 @@ void SwUndoTransliterate::AddChanges( const SwTxtNode& rTNd,
 
     const sal_Int32* pOffsets = rOffsets.getConstArray();
     // where did we need less memory ?
-    // check for 1-1 mappings:
-    BOOL bOneToOne = TRUE;
     const sal_Int32* p = pOffsets;
     for( long n = 0; n < nOffsLen; ++n, ++p )
         if( *p != ( nStart + n ))
