@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glossary.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:48:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:01:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 #ifndef _GLOSSARY_HXX
 #define _GLOSSARY_HXX
+
 #ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
 #endif
@@ -90,6 +91,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
+
+#include <actctrl.hxx>
 
 class SwGlossaryHdl;
 class SwNewGlosNameDlg;
