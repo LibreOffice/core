@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swwrtshitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:50:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:38:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include "precompiled_sw.hxx"
 #include "swwrtshitem.hxx"
 TYPEINIT1(SwWrtShellItem,SfxPoolItem);
-SwWrtShellItem::SwWrtShellItem( USHORT nWhich, SwWrtShell* pSh )
-    : SfxPoolItem( nWhich ), pWrtSh( pSh )
+SwWrtShellItem::SwWrtShellItem( USHORT _nWhich, SwWrtShell* pSh )
+    : SfxPoolItem( _nWhich ), pWrtSh( pSh )
 {
 
 }
@@ -53,7 +53,7 @@ int SwWrtShellItem::operator==( const SfxPoolItem& rItem) const
     return ((SwWrtShellItem&)rItem).pWrtSh == pWrtSh;
 }
 
-SfxPoolItem* SwWrtShellItem::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* SwWrtShellItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SwWrtShellItem( *this );
 }
