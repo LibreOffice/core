@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:52:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:58:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj );
 SwContact* GetUserCall( const SdrObject* );
 
 // liefert TRUE falls das SrdObject ein Marquee-Object (Lauftext) ist
-FASTBOOL IsMarqueeTextObj( const SdrObject& rObj );
+BOOL IsMarqueeTextObj( const SdrObject& rObj );
 
 //Basisklasse fuer die folgenden KontaktObjekte (Rahmen+Zeichenobjekte)
 class SwContact : public SdrObjUserCall, public SwClient
@@ -362,6 +362,7 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual ::basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
         virtual ::basegfx::B2DPolyPolygon TakeContour() const;
         virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
+        using SdrVirtObj::GetPlusHdl;
         virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, USHORT nPlNum) const;
         virtual void NbcMove(const Size& rSiz);
         virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
