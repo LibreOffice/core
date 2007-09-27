@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expfld.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:13:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:01:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ class SwGetExpField : public SwFormulaField
 
 public:
     SwGetExpField( SwGetExpFieldType*, const String& rFormel,
-                   USHORT nSubType = GSE_EXPR, ULONG nFmt = 0);
+                   USHORT nSubType = nsSwGetSetExpType::GSE_EXPR, ULONG nFmt = 0);
 
     virtual void                SetValue( const double& rVal );
     virtual void                SetLanguage(USHORT nLng);
@@ -142,8 +142,8 @@ public:
 
     virtual USHORT              GetSubType() const;
     virtual void                SetSubType(USHORT nType);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 
     static USHORT       GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc);
 };
@@ -181,7 +181,7 @@ class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
 
 public:
     SwSetExpFieldType( SwDoc* pDoc, const String& rName,
-                        USHORT nType = GSE_EXPR );
+                        USHORT nType = nsSwGetSetExpType::GSE_EXPR );
     virtual SwFieldType*    Copy() const;
     virtual const String&   GetName() const;
 
@@ -217,14 +217,14 @@ public:
     const SwNode* GetOutlineChgNd() const   { return pOutlChgNd; }
     void SetOutlineChgNd( const SwNode* p ) { pOutlChgNd = p; }
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 inline void SwSetExpFieldType::SetType( USHORT nTyp )
 {
         nType = nTyp;
-        EnableFormat( !(nType & (GSE_SEQ|GSE_STRING)));
+        EnableFormat( !(nType & (nsSwGetSetExpType::GSE_SEQ|nsSwGetSetExpType::GSE_STRING)));
 }
 
 inline USHORT SwSetExpFieldType::GetType() const
@@ -281,8 +281,8 @@ public:
     // Die Formel
     virtual String              GetPar2()   const;
     virtual void                SetPar2(const String& rStr);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 inline const String& SwSetExpField::GetExpStr() const
@@ -304,7 +304,7 @@ inline BOOL SwSetExpField::GetInputFlag() const
     { return bInput; }
 
 inline BOOL SwSetExpField::IsSequenceFld() const
-    { return 0 != (GSE_SEQ & ((SwSetExpFieldType*)GetTyp())->GetType()); }
+    { return 0 != (nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType*)GetTyp())->GetType()); }
 
 /*--------------------------------------------------------------------
     Beschreibung: Eingabe im Text/Variable setzen
@@ -360,8 +360,8 @@ public:
 
     virtual USHORT          GetSubType() const;
     virtual void            SetSubType(USHORT nSub);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 /*--------------------------------------------------------------------
@@ -371,7 +371,7 @@ public:
 class SwInputFieldList
 {
 public:
-    SwInputFieldList( SwEditShell* pShell, FASTBOOL bBuildTmpLst = FALSE );
+    SwInputFieldList( SwEditShell* pShell, BOOL bBuildTmpLst = FALSE );
     ~SwInputFieldList();
 
     USHORT      Count() const;
@@ -441,8 +441,8 @@ public:
     // Die Formel
     virtual String      GetPar2()   const;
     virtual void        SetPar2(const String& rStr);
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMId );
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
 };
 
 
