@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colex.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:04:56 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:55:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@ public:
                                 SwPageExample(pPar, rResId ),
                                 pColMgr(0){}
 
+    using SwPageExample::UpdateExample;
     void UpdateExample( const SfxItemSet& rSet, SwColMgr* pMgr  )
         {   pColMgr = pMgr;
             SwPageExample::UpdateExample(rSet);
@@ -113,10 +114,10 @@ public:
 class SW_DLLPUBLIC SwColumnOnlyExample : public Window
 {
 private:
-    Size        aWinSize;
+    Size        m_aWinSize;
 
-    Size        aFrmSize;
-    SwFmtCol    aCols;
+    Size        m_aFrmSize;
+    SwFmtCol    m_aCols;
 
 protected:
     virtual void Paint( const Rectangle& rRect );
