@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:32:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:14:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,20 +137,20 @@ sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
 }
 
 /*************************************************************************
- *                  SwTxtPainter::CtorInit()
+ *                  SwTxtPainter::CtorInitTxtPainter()
  *************************************************************************/
-void SwTxtPainter::CtorInit( SwTxtFrm *pFrm, SwTxtPaintInfo *pNewInf )
+void SwTxtPainter::CtorInitTxtPainter( SwTxtFrm *pNewFrm, SwTxtPaintInfo *pNewInf )
 {
-    SwTxtCursor::CtorInit( pFrm, pNewInf );
+    CtorInitTxtCursor( pNewFrm, pNewInf );
     pInf = pNewInf;
-    SwFont *pFnt = GetFnt();
-    GetInfo().SetFont( pFnt );
+    SwFont *pMyFnt = GetFnt();
+    GetInfo().SetFont( pMyFnt );
 #ifndef PRODUCT
-    if( ALIGN_BASELINE != pFnt->GetAlign() )
+    if( ALIGN_BASELINE != pMyFnt->GetAlign() )
     {
-        ASSERT( ALIGN_BASELINE == pFnt->GetAlign(),
+        ASSERT( ALIGN_BASELINE == pMyFnt->GetAlign(),
                 "+SwTxtPainter::CTOR: font alignment revolution" );
-        pFnt->SetAlign( ALIGN_BASELINE );
+        pMyFnt->SetAlign( ALIGN_BASELINE );
     }
 #endif
     bPaintDrop = sal_False;
@@ -597,7 +597,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         while( nTmp < pHints->GetStartCount() )
         {
             pTxtAttr = pHints->GetStart( nTmp++ );
-            sal_Bool bUnderSelect;
+            sal_Bool bUnderSelect = sal_False;
 
             const SvxUnderlineItem* pItem =
                     static_cast<const SvxUnderlineItem*>(CharFmt::GetItem( *pTxtAttr, RES_CHRATR_UNDERLINE ));
@@ -666,7 +666,6 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         ULONG nSumWidth = 0;
         ULONG nSumHeight = 0;
         ULONG nBold = 0;
-        const ULONG nPorWidth = pPor->Width();
         USHORT nMaxBaseLineOfst = 0;
         USHORT nNumberOfPortions = 0;
 
@@ -710,7 +709,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
 
             ++nNumberOfPortions;
 
-            nTmpIdx += pPor->GetLen();
+            nTmpIdx = nTmpIdx + pPor->GetLen();
             pPor = pPor->GetPortion();
         }
 
