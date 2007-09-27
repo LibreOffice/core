@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:48:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:03:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@
 #include "frmtool.hxx"
 #include "dflyobj.hxx"
 #include "frmfmt.hxx"
-#include "frmsh.hxx"
 #include "ndindex.hxx"
 #include "hfspacingitem.hxx"
 // OD 2004-05-24 #i28701#
@@ -70,7 +69,7 @@
 #endif
 // <--
 
-extern FASTBOOL bObjsDirect;    //frmtool.cxx
+extern BOOL bObjsDirect;    //frmtool.cxx
 
 static SwTwips lcl_GetFrmMinHeight(const SwLayoutFrm & rFrm)
 {
@@ -127,7 +126,7 @@ static SwTwips lcl_CalcContentHeight(SwLayoutFrm & frm)
 }
 
 static void lcl_LayoutFrmEnsureMinHeight(SwLayoutFrm & rFrm,
-                                         const SwBorderAttrs * pAttrs)
+                                         const SwBorderAttrs * )
 {
     SwTwips nMinHeight = lcl_GetFrmMinHeight(rFrm);
 
@@ -148,7 +147,7 @@ SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, USHORT nTypeIn)
     ASSERT( rCnt.GetCntntIdx(), "Kein Inhalt fuer Header." );
 
     //Fuer Header Footer die Objekte gleich erzeugen lassen.
-    FASTBOOL bOld = bObjsDirect;
+    BOOL bOld = bObjsDirect;
     bObjsDirect = TRUE;
     ULONG nIndex = rCnt.GetCntntIdx()->GetIndex();
     ::_InsertCnt( this, pFmt->GetDoc(), ++nIndex );
@@ -730,7 +729,7 @@ void SwPageFrm::PrepareHeader()
 
     const SwFmtHeader &rH = ((SwFrmFmt*)pRegisteredIn)->GetHeader();
 
-    const FASTBOOL bOn = !((SwFrmFmt*)pRegisteredIn)->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const BOOL bOn = !((SwFrmFmt*)pRegisteredIn)->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
     if ( bOn && rH.IsActive() )
     {   //Header einsetzen, vorher entfernen falls vorhanden.
@@ -780,7 +779,7 @@ void SwPageFrm::PrepareFooter()
     while ( pLay->GetNext() )
         pLay = (SwLayoutFrm*)pLay->GetNext();
 
-    const FASTBOOL bOn = !((SwFrmFmt*)pRegisteredIn)->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const BOOL bOn = !((SwFrmFmt*)pRegisteredIn)->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
     if ( bOn && rF.IsActive() )
     {   //Footer einsetzen, vorher entfernen falls vorhanden.
