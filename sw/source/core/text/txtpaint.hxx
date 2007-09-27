@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtpaint.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:45:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,10 +70,10 @@ public:
     inline OutputDevice *GetOut() { return pOut; }
 };
 
-inline SwSaveClip::SwSaveClip( OutputDevice* pOut ) :
-    pOut(pOut),
-    bOn( pOut && pOut->IsClipRegion() ),
-    bChg( sal_False )
+inline SwSaveClip::SwSaveClip( OutputDevice* pOutDev ) :
+    bOn( pOutDev && pOutDev->IsClipRegion() ),
+    bChg( sal_False ),
+    pOut(pOutDev)
 {}
 
 inline SwSaveClip::~SwSaveClip()
