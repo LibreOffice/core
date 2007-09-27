@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 13:20:54 $
+#   last change: $Author: hr $ $Date: 2007-09-27 09:25:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,13 @@ SLOFILES =  \
         $(SLO)$/txtatr2.obj \
                 $(SLO)$/txtedt.obj \
                 $(SLO)$/txtnodenumattr.obj
+                
+        
+EXCEPTIONSFILES = \
+        $(SLO)$/ndtxt.obj \
+        $(SLO)$/thints.obj \
+                $(SLO)$/txtedt.obj
+        
 
 .IF "$(dbutil)" != ""
 OFILES+=$(SLO)$/dbchratr.$(QBJX)
