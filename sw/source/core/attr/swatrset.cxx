@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swatrset.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:54:43 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:25:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,26 +119,26 @@ SfxItemSet* SwAttrSet::Clone( BOOL bItems, SfxItemPool *pToPool ) const
     if ( pToPool && pToPool != GetPool() )
     {
         SwAttrPool* pAttrPool = dynamic_cast< SwAttrPool* >(pToPool);
-        SfxItemSet* pNewSet = 0;
+        SfxItemSet* pTmpSet = 0;
         if ( !pAttrPool )
-            pNewSet = SfxItemSet::Clone( bItems, pToPool );
+            pTmpSet = SfxItemSet::Clone( bItems, pToPool );
         else
         {
-            pNewSet = new SwAttrSet( *pAttrPool, GetRanges() );
+            pTmpSet = new SwAttrSet( *pAttrPool, GetRanges() );
             if ( bItems )
             {
-                SfxWhichIter aIter(*pNewSet);
+                SfxWhichIter aIter(*pTmpSet);
                 USHORT nWhich = aIter.FirstWhich();
                 while ( nWhich )
                 {
                     const SfxPoolItem* pItem;
                     if ( SFX_ITEM_SET == GetItemState( nWhich, FALSE, &pItem ) )
-                        pNewSet->Put( *pItem, pItem->Which() );
+                        pTmpSet->Put( *pItem, pItem->Which() );
                     nWhich = aIter.NextWhich();
                 }
             }
         }
-        return pNewSet;
+        return pTmpSet;
     }
     else
         return bItems
@@ -188,7 +188,7 @@ USHORT SwAttrSet::ClearItem_BC( USHORT nWhich1, USHORT nWhich2,
     pOldSet = pOld;
     USHORT nRet = 0;
     for( ; nWhich1 <= nWhich2; ++nWhich1 )
-        nRet += SfxItemSet::ClearItem( nWhich1 );
+        nRet = nRet + SfxItemSet::ClearItem( nWhich1 );
     pOldSet = pNewSet = 0;
     return nRet;
 }
