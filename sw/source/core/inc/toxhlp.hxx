@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toxhlp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:02:07 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:59:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,14 +50,14 @@
 #include <swunodef.hxx>
 #endif
 
-namespace drafts { namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star {
 namespace i18n {
     class XExtendedIndexEntrySupplier;
 }
 namespace lang {
     class XMultiServiceFactory;
 }
-}}}};
+}}}
 
 
 class String;
