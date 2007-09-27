@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edglss.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:42:15 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:45:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,8 +108,7 @@ void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const String& rStr )
 
 
 USHORT SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const String& rName, const String& rShortName,
-                                    BOOL bSaveRelFile, BOOL bSaveRelNet,
-                                    const String* pOnlyTxt )
+                                    BOOL bSaveRelFile, const String* pOnlyTxt )
 {
     SwDoc* pGDoc = rBlks.GetDoc();
 
@@ -130,9 +129,9 @@ USHORT SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const String& rName, cons
         rBlks.ClearDoc();
         if( rBlks.BeginPutDoc( rShortName, rName ) )
         {
-            rBlks.GetDoc()->SetRedlineMode_intern( IDocumentRedlineAccess::REDLINE_DELETE_REDLINES );
+            rBlks.GetDoc()->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_DELETE_REDLINES );
             _CopySelToDoc( pGDoc );
-            rBlks.GetDoc()->SetRedlineMode_intern( (IDocumentRedlineAccess::RedlineMode_t)0 );
+            rBlks.GetDoc()->SetRedlineMode_intern( (RedlineMode_t)0 );
             nRet = rBlks.PutDoc();
         }
         else
@@ -145,13 +144,13 @@ USHORT SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const String& rName, cons
 USHORT SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
                                     const String& rName,
                                     const String& rShortName,
-                                    BOOL bSaveRelFile, BOOL bSaveRelNet,
+                                    BOOL bSaveRelFile,
                                     BOOL bOnlyTxt )
 {
     StartAllAction();
 
     SwDoc* pGDoc = rBlock.GetDoc();
-    SwDoc* pDoc = GetDoc();
+    SwDoc* pMyDoc = GetDoc();
 
     String sBase;
     if(bSaveRelFile)
@@ -168,8 +167,8 @@ USHORT SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
 
         SwPaM* pCrsr = GetCrsr();
 
-        SwNodeIndex aStt( pDoc->GetNodes().GetEndOfExtras(), 1 );
-        SwCntntNode* pCntntNd = pDoc->GetNodes().GoNext( &aStt );
+        SwNodeIndex aStt( pMyDoc->GetNodes().GetEndOfExtras(), 1 );
+        SwCntntNode* pCntntNd = pMyDoc->GetNodes().GoNext( &aStt );
         const SwNode* pNd = pCntntNd->FindTableNode();
         if( !pNd )
             pNd = pCntntNd;
@@ -180,7 +179,7 @@ USHORT SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
         pCrsr->SetMark();
 
         // dann bis zum Ende vom Nodes Array
-        pCrsr->GetPoint()->nNode = pDoc->GetNodes().GetEndOfContent().GetIndex()-1;
+        pCrsr->GetPoint()->nNode = pMyDoc->GetNodes().GetEndOfContent().GetIndex()-1;
         pCntntNd = pCrsr->GetCntntNode();
         if( pCntntNd )
             pCrsr->GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );
@@ -194,22 +193,22 @@ USHORT SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
         rBlock.ClearDoc();
         if( rBlock.BeginPutDoc( rShortName, rName ) )
         {
-            SwNodeIndex aStt( pDoc->GetNodes().GetEndOfExtras(), 1 );
-            SwCntntNode* pCntntNd = pDoc->GetNodes().GoNext( &aStt );
+            SwNodeIndex aStt( pMyDoc->GetNodes().GetEndOfExtras(), 1 );
+            SwCntntNode* pCntntNd = pMyDoc->GetNodes().GoNext( &aStt );
             const SwNode* pNd = pCntntNd->FindTableNode();
             if( !pNd ) pNd = pCntntNd;
             SwPaM aCpyPam( *pNd );
             aCpyPam.SetMark();
 
             // dann bis zum Ende vom Nodes Array
-            aCpyPam.GetPoint()->nNode = pDoc->GetNodes().GetEndOfContent().GetIndex()-1;
+            aCpyPam.GetPoint()->nNode = pMyDoc->GetNodes().GetEndOfContent().GetIndex()-1;
             pCntntNd = aCpyPam.GetCntntNode();
             aCpyPam.GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );
 
             aStt = pGDoc->GetNodes().GetEndOfExtras();
             pCntntNd = pGDoc->GetNodes().GoNext( &aStt );
             SwPosition aInsPos( aStt, SwIndex( pCntntNd ));
-            pDoc->Copy( aCpyPam, aInsPos );
+            pMyDoc->Copy( aCpyPam, aInsPos );
 
             nRet = rBlock.PutDoc();
         }
@@ -286,13 +285,13 @@ BOOL SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
                 {
                     PCURCRSR->SetMark();
                     PCURCRSR->Move( fnMoveForward, fnGoCntnt );
-                    bRet |= GetDoc()->Copy( *PCURCRSR, aPos );
+                    bRet = GetDoc()->Copy( *PCURCRSR, aPos ) || bRet;
                     PCURCRSR->Exchange();
                     PCURCRSR->DeleteMark();
                 }
             }
             else
-                bRet |= GetDoc()->Copy( *PCURCRSR, aPos );
+                bRet = GetDoc()->Copy( *PCURCRSR, aPos ) || bRet;
 
         FOREACHPAM_END()
     }
