@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GetMetricVal.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:39:59 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:52:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 #ifndef _GETMETRICVAL_HXX
 #define _GETMETRICVAL_HXX
+
+#include <tools/solar.h>
 
 #define CM_1  0         // 1 centimeter     or 1/2 inch
 #define CM_05 1         // 0.5 centimeter   or 1/4 inch
