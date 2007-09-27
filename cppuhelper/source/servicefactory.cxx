@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:42:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:51:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createSimpleRegistry(
         return Reference< registry::XSimpleRegistry >(
             createInstance(
                 loadSharedLibComponentFactory(
-                    OUSTR("simplereg.uno" SAL_DLLEXTENSION),
+                    OUSTR("bootstrap.uno" SAL_DLLEXTENSION),
                     0 == rBootstrapPath.getLength()
                     ? get_this_libpath() : rBootstrapPath,
                     OUSTR("com.sun.star.comp.stoc.SimpleRegistry"),
@@ -157,7 +157,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
         return Reference< registry::XSimpleRegistry >(
             createInstance(
                 loadSharedLibComponentFactory(
-                    OUSTR("nestedreg.uno" SAL_DLLEXTENSION),
+                    OUSTR("bootstrap.uno" SAL_DLLEXTENSION),
                     0 == rBootstrapPath.getLength()
                     ? get_this_libpath() : rBootstrapPath,
                     OUSTR("com.sun.star.comp.stoc.NestedRegistry"),
@@ -340,7 +340,7 @@ Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
     Reference< lang::XMultiComponentFactory > xMgr(
         createInstance(
             loadSharedLibComponentFactory(
-                OUSTR("servicemgr.uno" SAL_DLLEXTENSION), bootstrap_path,
+                OUSTR("bootstrap.uno" SAL_DLLEXTENSION), bootstrap_path,
                 OUSTR("com.sun.star.comp.stoc.ORegistryServiceManager"),
                 Reference< lang::XMultiServiceFactory >(),
                 Reference< registry::XRegistryKey >() ) ),
@@ -348,21 +348,21 @@ Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
 
     // add initial bootstrap services
     static char const * ar[] = {
-        "servicemgr.uno" SAL_DLLEXTENSION,
+        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.comp.stoc.OServiceManagerWrapper",
-        "shlibloader.uno" SAL_DLLEXTENSION,
+        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.comp.stoc.DLLComponentLoader",
-        "simplereg.uno" SAL_DLLEXTENSION,
+        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.comp.stoc.SimpleRegistry",
-        "nestedreg.uno" SAL_DLLEXTENSION,
+        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.comp.stoc.NestedRegistry",
-        "typemgr.uno" SAL_DLLEXTENSION,
+        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.comp.stoc.TypeDescriptionManager",
-        "implreg.uno" SAL_DLLEXTENSION,
+        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.comp.stoc.ImplementationRegistration",
-        "security.uno" SAL_DLLEXTENSION,
+        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.security.comp.stoc.AccessController",
-        "security.uno" SAL_DLLEXTENSION,
+        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.security.comp.stoc.FilePolicy",
         0
     };
@@ -498,7 +498,7 @@ Reference< XComponentContext > bootstrapInitialContext(
             // add registry td provider factory to smgr and instance to tdmgr
             Reference< lang::XSingleComponentFactory > xFac(
                 loadSharedLibComponentFactory(
-                    OUSTR("regtypeprov.uno" SAL_DLLEXTENSION),
+                    OUSTR("bootstrap.uno" SAL_DLLEXTENSION),
                     0 == rBootstrapPath.getLength()
                     ? get_this_libpath() : rBootstrapPath,
                 OUSTR("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"),
