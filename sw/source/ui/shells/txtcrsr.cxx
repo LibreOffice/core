@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtcrsr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:18:44 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:31:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@
 #include <globals.hrc>
 #endif
 
-
+using namespace ::com::sun::star;
 
 void SwTextShell::ExecBasicMove(SfxRequest &rReq)
 {
@@ -111,7 +111,7 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
         case FN_LINE_DOWN_SEL:  rReq.SetSlot( FN_LINE_DOWN );  bSelect = TRUE; break;
     }
 
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+    uno::Reference< frame::XDispatchRecorder > xRecorder =
             GetView().GetViewFrame()->GetBindings().GetRecorder();
     if ( xRecorder.is() )
     {
@@ -149,11 +149,11 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
     switch ( nSlot )
     {
         case FN_START_OF_LINE_SEL:
-        case FN_START_OF_LINE:      bRet = rSh.LeftMargin ( FN_START_OF_LINE_SEL == nSlot );
+        case FN_START_OF_LINE:      bRet = rSh.LeftMargin ( FN_START_OF_LINE_SEL == nSlot, FALSE );
         break;
 
         case FN_END_OF_LINE_SEL:
-        case FN_END_OF_LINE:        bRet = rSh.RightMargin( FN_END_OF_LINE_SEL == nSlot );
+        case FN_END_OF_LINE:        bRet = rSh.RightMargin( FN_END_OF_LINE_SEL == nSlot, FALSE );
         break;
 
         case FN_START_OF_DOCUMENT_SEL:
@@ -166,7 +166,7 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
 
         case FN_SELECT_WORD:            bRet = rSh.SelNearestWrd(); break;
 
-        case SID_SELECTALL:             bRet = rSh.SelAll();            break;
+        case SID_SELECTALL:             bRet = 0 != rSh.SelAll();   break;
         default:                    ASSERT(FALSE, falscher Dispatcher); return;
     }
 
@@ -277,7 +277,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
     switch ( nSlot )
     {
         case FN_CNTNT_TO_NEXT_FRAME:
-            bRet = rSh.GotoObj(TRUE, GOTO_ANY);
+            bRet = rSh.GotoObj(TRUE, GOTOOBJ_GOTO_ANY);
             if(bRet)
             {
                 rSh.HideCrsr();
