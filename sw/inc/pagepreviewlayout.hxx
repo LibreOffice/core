@@ -624,7 +624,7 @@ public:
 
         @author FME
     */
-    sal_uInt16 GetNumberOfPreviewPages() { return maPrevwPages.size(); }
+    sal_uInt16 GetNumberOfPreviewPages() { return sal::static_int_cast< sal_uInt16 >(maPrevwPages.size()); }
 };
 
 #endif // _PAGEPREVIEWLAYOUT_HXX
