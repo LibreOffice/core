@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuicnttab.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:05:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@
 #ifndef _SVX_LANGBOX_HXX
 #include <svx/langbox.hxx>
 #endif
-#include <cnttab.hxx> //CHINA001
+#include <cnttab.hxx>
 class SwWrtShell;
 class SwTOXMgr;
 namespace com{namespace sun{namespace star{
@@ -94,26 +94,6 @@ namespace com{namespace sun{namespace star{
     }
 }}}
 
-//CHINA001 #define TOX_PAGE_SELECT 1
-//CHINA001 #define TOX_PAGE_ENTRY  2
-//CHINA001 #define TOX_PAGE_STYLES 3
-
-
-/* -----------------14.06.99 12:12-------------------
-
- --------------------------------------------------*/
-//CHINA001 struct CurTOXType
-//CHINA001 {
-//CHINA001 TOXTypes     eType;
-//CHINA001 USHORT       nIndex; //for TOX_USER only
-//CHINA001
-//CHINA001 BOOL operator==(const CurTOXType aCmp)
-//CHINA001 {
-//CHINA001 return eType == aCmp.eType && nIndex == aCmp.nIndex;
-//CHINA001  }
-//CHINA001 USHORT GetFlatIndex() const;
-//CHINA001
-//CHINA001 };
 //-----------------------------------------------------------------------------
 struct SwIndexSections_Impl
 {
@@ -181,25 +161,10 @@ public:
 
     SwTOXDescription&   GetTOXDescription(CurTOXType eTOXTypes);
     void                CreateOrUpdateExample(
-                            USHORT nTOXIndex, USHORT nPage = 0, USHORT nCurLevel = USHRT_MAX);
+                            TOXTypes nTOXIndex, USHORT nPage = 0, USHORT nCurLevel = USHRT_MAX);
 
     static BOOL IsNoNum(SwWrtShell& rSh, const String& rName);
 };
-
-/* -----------------14.06.99 12:17-------------------
-
- --------------------------------------------------*/
-//CHINA001 class SwOLENames : public Resource
-//CHINA001 {
-//CHINA001 ResStringArray       aNamesAry;
-//CHINA001 public:
-//CHINA001 SwOLENames(const ResId& rResId) :
-//CHINA001 Resource(rResId),
-//CHINA001 aNamesAry(ResId(1)){FreeResource();}
-//CHINA001
-//CHINA001 ResStringArray&  GetNames() { return aNamesAry;}
-//CHINA001
-//CHINA001 };
 /* -----------------14.07.99 12:17-------------------
 
  --------------------------------------------------*/
@@ -313,7 +278,10 @@ public:
 
     virtual BOOL        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
+
+    using TabPage::ActivatePage;
     virtual void        ActivatePage( const SfxItemSet& );
+    using TabPage::DeactivatePage;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
     static SfxTabPage*  Create( Window* pParent,
@@ -326,10 +294,12 @@ public:
 
  --------------------------------------------------*/
 
-DECLARE_LIST(TOXControlList, Control*);
+DECLARE_LIST(TOXControlList, Control*)
+
 class SwTOXEdit;
 class SwTOXButton;
 class SwTOXEntryTabPage;
+
 class SwTokenWindow : public Window
 {
     ImageButton     aLeftScrollWin;
@@ -370,7 +340,8 @@ public:
     USHORT      GetLastLevel()const {return nLevel;};
 
     BOOL        IsValid() const {return bValid;}
-    void        Invalidate() {bValid = FALSE;}
+
+    void        SetInvalid() {bValid = FALSE;}
 
     String      GetPattern() const;
 
@@ -481,7 +452,7 @@ class SwTOXEntryTabPage : public SfxTabPage
     String          sNoCharStyle;
     String          sNoCharSortKey;
     Point           aButtonPositions[5];
-    SwForm*         pCurrentForm;
+    SwForm*         m_pCurrentForm;
 
     Point           aRelToStylePos;
     Point           aRelToStyleIdxPos;
@@ -514,7 +485,9 @@ public:
 
     virtual BOOL        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
+    using TabPage::ActivatePage;
     virtual void        ActivatePage( const SfxItemSet& );
+    using TabPage::DeactivatePage;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
     static SfxTabPage*  Create( Window* pParent,
@@ -539,7 +512,7 @@ class SwTOXStylesTabPage : public SfxTabPage
     PushButton      aEditStyleBT;
     FixedLine       aFormatFL;
 
-    SwForm*         pCurrentForm;
+    SwForm*         m_pCurrentForm;
 //  void            UpdatePattern();
 
     DECL_LINK( EditStyleHdl, Button *);
@@ -560,7 +533,10 @@ public:
 
     virtual BOOL        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
+
+    using TabPage::ActivatePage;
     virtual void        ActivatePage( const SfxItemSet& );
+    using TabPage::DeactivatePage;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
     static SfxTabPage*  Create( Window* pParent,
