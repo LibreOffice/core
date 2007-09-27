@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:01:25 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:01:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,41 +289,43 @@ TYPEINIT1_AUTOFACTORY(SwFmtLineNumber, SfxPoolItem);
 /* -----------------19.05.98 09:26-------------------
  *  Umwandlung fuer QueryValue
  * --------------------------------------------------*/
-sal_Int16 lcl_RelToINT(SwRelationOrient eRelation)
+sal_Int16 lcl_RelToINT(sal_Int16 eRelation)
 {
     sal_Int16 nRet = text::RelOrientation::FRAME;
     switch(eRelation)
     {
-    case  PRTAREA:          nRet = text::RelOrientation::PRINT_AREA; break;
-    case  REL_CHAR:         nRet = text::RelOrientation::CHAR; break;
-    case  REL_PG_LEFT:      nRet = text::RelOrientation::PAGE_LEFT; break;
-    case  REL_PG_RIGHT:     nRet = text::RelOrientation::PAGE_RIGHT; break;
-    case  REL_FRM_LEFT:     nRet = text::RelOrientation::FRAME_LEFT; break;
-    case  REL_FRM_RIGHT:    nRet = text::RelOrientation::FRAME_RIGHT; break;
-    case  REL_PG_FRAME:     nRet = text::RelOrientation::PAGE_FRAME; break;
-    case  REL_PG_PRTAREA:   nRet = text::RelOrientation::PAGE_PRINT_AREA; break;
+    case  text::RelOrientation::PRINT_AREA:           nRet = text::RelOrientation::PRINT_AREA; break;
+    case  text::RelOrientation::CHAR:         nRet = text::RelOrientation::CHAR; break;
+    case  text::RelOrientation::PAGE_LEFT:        nRet = text::RelOrientation::PAGE_LEFT; break;
+    case  text::RelOrientation::PAGE_RIGHT:       nRet = text::RelOrientation::PAGE_RIGHT; break;
+    case  text::RelOrientation::FRAME_LEFT:       nRet = text::RelOrientation::FRAME_LEFT; break;
+    case  text::RelOrientation::FRAME_RIGHT:  nRet = text::RelOrientation::FRAME_RIGHT; break;
+    case  text::RelOrientation::PAGE_FRAME:       nRet = text::RelOrientation::PAGE_FRAME; break;
+    case  text::RelOrientation::PAGE_PRINT_AREA:  nRet = text::RelOrientation::PAGE_PRINT_AREA; break;
     // OD 13.11.2003 #i22341#
-    case  REL_VERT_LINE:    nRet = text::RelOrientation::TEXT_LINE; break;
+    case  text::RelOrientation::TEXT_LINE:    nRet = text::RelOrientation::TEXT_LINE; break;
+    default: break;
     }
     return nRet;
 }
-SwRelationOrient    lcl_IntToRelation(const uno::Any& rVal)
+
+sal_Int16 lcl_IntToRelation(const uno::Any& rVal)
 {
-    SwRelationOrient eRet = FRAME;
+    sal_Int16 eRet = text::RelOrientation::FRAME;
     sal_Int16 nVal;
     rVal >>= nVal;
     switch(nVal)
     {
-        case  text::RelOrientation::PRINT_AREA:     eRet =   PRTAREA           ; break;
-        case  text::RelOrientation::CHAR:       eRet =   REL_CHAR          ; break;
-        case  text::RelOrientation::PAGE_LEFT:    eRet =   REL_PG_LEFT       ; break;
-        case  text::RelOrientation::PAGE_RIGHT:    eRet =   REL_PG_RIGHT      ; break;
-        case  text::RelOrientation::FRAME_LEFT:    eRet =   REL_FRM_LEFT      ; break;
-        case  text::RelOrientation::FRAME_RIGHT:    eRet =   REL_FRM_RIGHT     ; break;
-        case  text::RelOrientation::PAGE_FRAME:    eRet =   REL_PG_FRAME      ; break;
-        case  text::RelOrientation::PAGE_PRINT_AREA:    eRet =   REL_PG_PRTAREA    ; break;
+        case  text::RelOrientation::PRINT_AREA:         eRet =   text::RelOrientation::PRINT_AREA           ; break;
+        case  text::RelOrientation::CHAR:               eRet =   text::RelOrientation::CHAR          ; break;
+        case  text::RelOrientation::PAGE_LEFT:          eRet =   text::RelOrientation::PAGE_LEFT       ; break;
+        case  text::RelOrientation::PAGE_RIGHT:         eRet =   text::RelOrientation::PAGE_RIGHT      ; break;
+        case  text::RelOrientation::FRAME_LEFT:         eRet =   text::RelOrientation::FRAME_LEFT      ; break;
+        case  text::RelOrientation::FRAME_RIGHT:        eRet =   text::RelOrientation::FRAME_RIGHT     ; break;
+        case  text::RelOrientation::PAGE_FRAME:         eRet =   text::RelOrientation::PAGE_FRAME      ; break;
+        case  text::RelOrientation::PAGE_PRINT_AREA:    eRet =   text::RelOrientation::PAGE_PRINT_AREA    ; break;
         // OD 13.11.2003 #i22341#
-        case  text::RelOrientation::TEXT_LINE: eRet = REL_VERT_LINE; break;
+        case  text::RelOrientation::TEXT_LINE: eRet = text::RelOrientation::TEXT_LINE; break;
     }
     return eRet;
 }
@@ -785,18 +787,18 @@ SfxPoolItem*  SwFmtCntnt::Clone( SfxItemPool* ) const
 SwFmtPageDesc::SwFmtPageDesc( const SwFmtPageDesc &rCpy )
     : SfxPoolItem( RES_PAGEDESC ),
     SwClient( (SwPageDesc*)rCpy.GetPageDesc() ),
-    pDefinedIn( 0 ),
     nNumOffset( rCpy.nNumOffset ),
-    nDescNameIdx( rCpy.nDescNameIdx )
+    nDescNameIdx( rCpy.nDescNameIdx ),
+    pDefinedIn( 0 )
 {
 }
 
 SwFmtPageDesc::SwFmtPageDesc( const SwPageDesc *pDesc )
     : SfxPoolItem( RES_PAGEDESC ),
     SwClient( (SwPageDesc*)pDesc ),
-    pDefinedIn( 0 ),
     nNumOffset( 0 ),
-    nDescNameIdx( 0xFFFF )  // IDX_NO_VALUE
+    nDescNameIdx( 0xFFFF ), // IDX_NO_VALUE
+    pDefinedIn( 0 )
 {
 }
 
@@ -820,8 +822,8 @@ void SwFmtPageDesc::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     if( !pDefinedIn )
         return;
 
-    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    switch( nWhich )
+    const sal_uInt16 nWhichId = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    switch( nWhichId )
     {
         case RES_OBJECTDYING:
                 //Der Pagedesc, bei dem ich angemeldet bin stirbt, ich trage
@@ -869,7 +871,7 @@ BOOL SwFmtPageDesc::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                 if( pDesc )
                 {
                     String aString;
-                    SwStyleNameMapper::FillProgName(pDesc->GetName(), aString, GET_POOLID_PAGEDESC, sal_True );
+                    SwStyleNameMapper::FillProgName(pDesc->GetName(), aString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True );
                     rVal <<= OUString( aString );
                 }
                 else
@@ -917,11 +919,11 @@ BOOL SwFmtPageDesc::PutValue( const uno::Any& rVal, BYTE nMemberId )
 //  Implementierung teilweise inline im hxx
 
 SwColumn::SwColumn() :
+    nWish ( 0 ),
     nUpper( 0 ),
     nLower( 0 ),
     nLeft ( 0 ),
-    nRight( 0 ),
-    nWish ( 0 )
+    nRight( 0 )
 {
 }
 
@@ -940,9 +942,9 @@ SwFmtCol::SwFmtCol( const SwFmtCol& rCpy )
     aLineColor( rCpy.aLineColor),
     nLineHeight( rCpy.GetLineHeight() ),
     eAdj( rCpy.GetLineAdj() ),
+    aColumns( (sal_Int8)rCpy.GetNumCols(), 1 ),
     nWidth( rCpy.GetWishWidth() ),
-    bOrtho( rCpy.IsOrtho() ),
-    aColumns( (sal_Int8)rCpy.GetNumCols(), 1 )
+    bOrtho( rCpy.IsOrtho() )
 {
     for ( sal_uInt16 i = 0; i < rCpy.GetNumCols(); ++i )
     {
@@ -974,11 +976,11 @@ SwFmtCol& SwFmtCol::operator=( const SwFmtCol& rCpy )
 
 SwFmtCol::SwFmtCol()
     : SfxPoolItem( RES_COL ),
+    nLineWidth(0),
     nLineHeight( 100 ),
     eAdj( COLADJ_NONE ),
     nWidth( USHRT_MAX ),
-    bOrtho( sal_True ),
-    nLineWidth(0)
+    bOrtho( sal_True )
 {
 }
 
@@ -1099,8 +1101,8 @@ sal_uInt16 SwFmtCol::CalcPrtColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) const
     ASSERT( nCol < aColumns.Count(), ":-( ColumnsArr ueberindiziert." );
     sal_uInt16 nRet = CalcColWidth( nCol, nAct );
     SwColumn *pCol = aColumns[nCol];
-    nRet -= pCol->GetLeft();
-    nRet -= pCol->GetRight();
+    nRet = nRet - pCol->GetLeft();
+    nRet = nRet - pCol->GetRight();
     return nRet;
 }
 
@@ -1122,7 +1124,7 @@ void SwFmtCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
     pCol->SetWishWidth( nLeftWidth );
     pCol->SetRight( nGutterHalf );
     pCol->SetLeft ( 0 );
-    nAvail -= nLeftWidth;
+    nAvail = nAvail - nLeftWidth;
 
     //Spalte 2 bis n-1 ist PrtBreite + Zwischenraumbreite
     const sal_uInt16 nMidWidth = nPrtWidth + nGutterWidth;
@@ -1134,7 +1136,7 @@ void SwFmtCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
         pCol->SetWishWidth( nMidWidth );
         pCol->SetLeft ( nGutterHalf );
         pCol->SetRight( nGutterHalf );
-        nAvail -= nMidWidth;
+        nAvail = nAvail - nMidWidth;
     }
 
     //Die Letzte Spalte entspricht wieder der ersten, um Rundungsfehler
@@ -1200,10 +1202,10 @@ BOOL SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 for(sal_uInt16 i = 0; i < nCount; i++)
                 {
                     SwColumn* pCol = new SwColumn;
-                    pCol->SetWishWidth( pArray[i].Width );
-                    nWidthSum += pArray[i].Width;
-                    pCol->SetLeft ( MM100_TO_TWIP(pArray[i].LeftMargin) );
-                    pCol->SetRight( MM100_TO_TWIP(pArray[i].RightMargin) );
+                    pCol->SetWishWidth( static_cast<USHORT>(pArray[i].Width) );
+                    nWidthSum = static_cast<USHORT>(nWidthSum + pArray[i].Width);
+                    pCol->SetLeft ( static_cast<USHORT>(MM100_TO_TWIP(pArray[i].LeftMargin)) );
+                    pCol->SetRight( static_cast<USHORT>(MM100_TO_TWIP(pArray[i].RightMargin)) );
                     aColumns.Insert(pCol, i);
                 }
             bRet = sal_True;
@@ -1214,8 +1216,9 @@ BOOL SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
             SwXTextColumns* pSwColums = 0;
             if(xNumTunnel.is())
             {
-                pSwColums = (SwXTextColumns*)
-                    xNumTunnel->getSomething( SwXTextColumns::getUnoTunnelId() );
+                pSwColums = reinterpret_cast< SwXTextColumns * >(
+                    sal::static_int_cast< sal_IntPtr >(
+                    xNumTunnel->getSomething( SwXTextColumns::getUnoTunnelId() )));
             }
             if(pSwColums)
             {
@@ -1322,7 +1325,7 @@ BOOL SwFmtSurround::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
             if( eVal >= 0 && eVal < (sal_Int16)SURROUND_END )
-                SetValue( eVal );
+                SetValue( static_cast<USHORT>(eVal) );
             else
                 //exception
                 ;
@@ -1348,8 +1351,8 @@ BOOL SwFmtSurround::PutValue( const uno::Any& rVal, BYTE nMemberId )
 //  class SwFmtVertOrient
 //  Implementierung teilweise inline im hxx
 
-SwFmtVertOrient::SwFmtVertOrient( SwTwips nY, SwVertOrient eVert,
-                                  SwRelationOrient eRel )
+SwFmtVertOrient::SwFmtVertOrient( SwTwips nY, sal_Int16 eVert,
+                                  sal_Int16 eRel )
     : SfxPoolItem( RES_VERT_ORIENT ),
     nYPos( nY ),
     eOrient( eVert ),
@@ -1369,7 +1372,6 @@ SfxPoolItem*  SwFmtVertOrient::Clone( SfxItemPool* ) const
     return new SwFmtVertOrient( nYPos, eOrient, eRelation );
 }
 
-
 BOOL SwFmtVertOrient::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!
@@ -1382,15 +1384,16 @@ BOOL SwFmtVertOrient::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             sal_Int16 nRet = text::VertOrientation::NONE;
             switch( eOrient )
             {
-                case VERT_TOP        :  nRet = text::VertOrientation::TOP        ;break;
-                case VERT_CENTER     :  nRet = text::VertOrientation::CENTER     ;break;
-                case VERT_BOTTOM     :  nRet = text::VertOrientation::BOTTOM     ;break;
-                case VERT_CHAR_TOP   :  nRet = text::VertOrientation::CHAR_TOP   ;break;
-                case VERT_CHAR_CENTER:  nRet = text::VertOrientation::CHAR_CENTER;break;
-                case VERT_CHAR_BOTTOM:  nRet = text::VertOrientation::CHAR_BOTTOM;break;
-                case VERT_LINE_TOP   :  nRet = text::VertOrientation::LINE_TOP   ;break;
-                case VERT_LINE_CENTER:  nRet = text::VertOrientation::LINE_CENTER;break;
-                case VERT_LINE_BOTTOM:  nRet = text::VertOrientation::LINE_BOTTOM;break;
+                case text::VertOrientation::TOP        :  nRet = text::VertOrientation::TOP        ;break;
+                case text::VertOrientation::CENTER     :  nRet = text::VertOrientation::CENTER     ;break;
+                case text::VertOrientation::BOTTOM     :  nRet = text::VertOrientation::BOTTOM     ;break;
+                case text::VertOrientation::CHAR_TOP   :  nRet = text::VertOrientation::CHAR_TOP   ;break;
+                case text::VertOrientation::CHAR_CENTER:  nRet = text::VertOrientation::CHAR_CENTER;break;
+                case text::VertOrientation::CHAR_BOTTOM:  nRet = text::VertOrientation::CHAR_BOTTOM;break;
+                case text::VertOrientation::LINE_TOP   :  nRet = text::VertOrientation::LINE_TOP   ;break;
+                case text::VertOrientation::LINE_CENTER:  nRet = text::VertOrientation::LINE_CENTER;break;
+                case text::VertOrientation::LINE_BOTTOM:  nRet = text::VertOrientation::LINE_BOTTOM;break;
+                default: break;
             }
             rVal <<= nRet;
         }
@@ -1421,16 +1424,16 @@ BOOL SwFmtVertOrient::PutValue( const uno::Any& rVal, BYTE nMemberId )
             rVal >>= nVal;
             switch( nVal )
             {
-                case text::VertOrientation::NONE:           eOrient = VERT_NONE;    break;
-                case text::VertOrientation::TOP        :    eOrient = VERT_TOP;     break;
-                case text::VertOrientation::CENTER     :    eOrient = VERT_CENTER;     break;
-                case text::VertOrientation::BOTTOM     :    eOrient = VERT_BOTTOM;     break;
-                case text::VertOrientation::CHAR_TOP   :    eOrient = VERT_CHAR_TOP;   break;
-                case text::VertOrientation::CHAR_CENTER:    eOrient = VERT_CHAR_CENTER;break;
-                case text::VertOrientation::CHAR_BOTTOM:    eOrient = VERT_CHAR_BOTTOM;break;
-                case text::VertOrientation::LINE_TOP   :    eOrient = VERT_LINE_TOP;    break;
-                case text::VertOrientation::LINE_CENTER:    eOrient = VERT_LINE_CENTER;break;
-                case text::VertOrientation::LINE_BOTTOM:    eOrient = VERT_LINE_BOTTOM;break;
+                case text::VertOrientation::NONE:           eOrient = text::VertOrientation::NONE;    break;
+                case text::VertOrientation::TOP        :    eOrient = text::VertOrientation::TOP;     break;
+                case text::VertOrientation::CENTER     :    eOrient = text::VertOrientation::CENTER;     break;
+                case text::VertOrientation::BOTTOM     :    eOrient = text::VertOrientation::BOTTOM;     break;
+                case text::VertOrientation::CHAR_TOP   :    eOrient = text::VertOrientation::CHAR_TOP;   break;
+                case text::VertOrientation::CHAR_CENTER:    eOrient = text::VertOrientation::CHAR_CENTER;break;
+                case text::VertOrientation::CHAR_BOTTOM:    eOrient = text::VertOrientation::CHAR_BOTTOM;break;
+                case text::VertOrientation::LINE_TOP   :    eOrient = text::VertOrientation::LINE_TOP;    break;
+                case text::VertOrientation::LINE_CENTER:    eOrient = text::VertOrientation::LINE_CENTER;break;
+                case text::VertOrientation::LINE_BOTTOM:    eOrient = text::VertOrientation::LINE_BOTTOM;break;
             }
         }
         break;
@@ -1460,8 +1463,8 @@ BOOL SwFmtVertOrient::PutValue( const uno::Any& rVal, BYTE nMemberId )
 //  class SwFmtHoriOrient
 //  Implementierung teilweise inline im hxx
 
-SwFmtHoriOrient::SwFmtHoriOrient( SwTwips nX, SwHoriOrient eHori,
-                              SwRelationOrient eRel, sal_Bool bPos )
+SwFmtHoriOrient::SwFmtHoriOrient( SwTwips nX, sal_Int16 eHori,
+                              sal_Int16 eRel, sal_Bool bPos )
     : SfxPoolItem( RES_HORI_ORIENT ),
     nXPos( nX ),
     eOrient( eHori ),
@@ -1483,7 +1486,6 @@ SfxPoolItem*  SwFmtHoriOrient::Clone( SfxItemPool* ) const
     return new SwFmtHoriOrient( nXPos, eOrient, eRelation, bPosToggle );
 }
 
-
 BOOL SwFmtHoriOrient::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!
@@ -1496,15 +1498,18 @@ BOOL SwFmtHoriOrient::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             sal_Int16 nRet = text::HoriOrientation::NONE;
             switch( eOrient )
             {
-                case HORI_RIGHT:    nRet = text::HoriOrientation::RIGHT; break;
-                case HORI_CENTER :  nRet = text::HoriOrientation::CENTER; break;
-                case HORI_LEFT   :  nRet = text::HoriOrientation::LEFT; break;
-                case HORI_INSIDE :  nRet = text::HoriOrientation::INSIDE; break;
-                case HORI_OUTSIDE:  nRet = text::HoriOrientation::OUTSIDE; break;
-                case HORI_FULL:     nRet = text::HoriOrientation::FULL; break;
-                case HORI_LEFT_AND_WIDTH :
+                case text::HoriOrientation::RIGHT:    nRet = text::HoriOrientation::RIGHT; break;
+                case text::HoriOrientation::CENTER :  nRet = text::HoriOrientation::CENTER; break;
+                case text::HoriOrientation::LEFT   :  nRet = text::HoriOrientation::LEFT; break;
+                case text::HoriOrientation::INSIDE :  nRet = text::HoriOrientation::INSIDE; break;
+                case text::HoriOrientation::OUTSIDE:  nRet = text::HoriOrientation::OUTSIDE; break;
+                case text::HoriOrientation::FULL:     nRet = text::HoriOrientation::FULL; break;
+                case text::HoriOrientation::LEFT_AND_WIDTH :
                     nRet = text::HoriOrientation::LEFT_AND_WIDTH;
-                break;
+                    break;
+                default:
+                    break;
+
             }
             rVal <<= nRet;
         }
@@ -1541,15 +1546,15 @@ BOOL SwFmtHoriOrient::PutValue( const uno::Any& rVal, BYTE nMemberId )
             rVal >>= nVal;
             switch( nVal )
             {
-                case text::HoriOrientation::NONE:       eOrient = HORI_NONE ;   break;
-                case text::HoriOrientation::RIGHT:  eOrient = HORI_RIGHT;   break;
-                case text::HoriOrientation::CENTER :    eOrient = HORI_CENTER;  break;
-                case text::HoriOrientation::LEFT   :    eOrient = HORI_LEFT;    break;
-                case text::HoriOrientation::INSIDE :    eOrient = HORI_INSIDE;  break;
-                case text::HoriOrientation::OUTSIDE:    eOrient = HORI_OUTSIDE; break;
-                case text::HoriOrientation::FULL:      eOrient = HORI_FULL;     break;
+                case text::HoriOrientation::NONE:       eOrient = text::HoriOrientation::NONE ;   break;
+                case text::HoriOrientation::RIGHT:  eOrient = text::HoriOrientation::RIGHT;   break;
+                case text::HoriOrientation::CENTER :    eOrient = text::HoriOrientation::CENTER;  break;
+                case text::HoriOrientation::LEFT   :    eOrient = text::HoriOrientation::LEFT;    break;
+                case text::HoriOrientation::INSIDE :    eOrient = text::HoriOrientation::INSIDE;  break;
+                case text::HoriOrientation::OUTSIDE:    eOrient = text::HoriOrientation::OUTSIDE; break;
+                case text::HoriOrientation::FULL:      eOrient = text::HoriOrientation::FULL;     break;
                 case text::HoriOrientation::LEFT_AND_WIDTH:
-                    eOrient = HORI_LEFT_AND_WIDTH;
+                    eOrient = text::HoriOrientation::LEFT_AND_WIDTH;
                 break;
             }
         }
@@ -1791,8 +1796,8 @@ SwFmtURL::SwFmtURL() :
 
 SwFmtURL::SwFmtURL( const SwFmtURL &rURL) :
     SfxPoolItem( RES_URL ),
-    sURL( rURL.GetURL() ),
     sTargetFrameName( rURL.GetTargetFrameName() ),
+    sURL( rURL.GetURL() ),
     sName( rURL.GetName() ),
     bIsServerMap( rURL.IsServerMap() )
 {
@@ -1823,7 +1828,7 @@ int SwFmtURL::operator==( const SfxPoolItem &rAttr ) const
     return bRet;
 }
 
-SfxPoolItem* SwFmtURL::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* SwFmtURL::Clone( SfxItemPool* ) const
 {
     return new SwFmtURL( *this );
 }
@@ -1949,21 +1954,21 @@ BOOL SwFmtURL::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
 // class SwNoReadOnly
 
-SfxPoolItem* SwFmtEditInReadonly::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* SwFmtEditInReadonly::Clone( SfxItemPool* ) const
 {
     return new SwFmtEditInReadonly( Which(), GetValue() );
 }
 
 // class SwFmtLayoutSplit
 
-SfxPoolItem* SwFmtLayoutSplit::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* SwFmtLayoutSplit::Clone( SfxItemPool* ) const
 {
     return new SwFmtLayoutSplit( GetValue() );
 }
 
 // class SwFmtRowSplit
 
-SfxPoolItem* SwFmtRowSplit::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* SwFmtRowSplit::Clone( SfxItemPool* ) const
 {
     return new SwFmtRowSplit( GetValue() );
 }
@@ -1971,7 +1976,7 @@ SfxPoolItem* SwFmtRowSplit::Clone( SfxItemPool* pPool ) const
 
 // class SwFmtNoBalancedColumns
 
-SfxPoolItem* SwFmtNoBalancedColumns::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* SwFmtNoBalancedColumns::Clone( SfxItemPool* ) const
 {
     return new SwFmtNoBalancedColumns( GetValue() );
 }
@@ -2112,7 +2117,7 @@ BOOL SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
 // class SwFmtFtnAtTxtEnd
 
-SfxPoolItem* SwFmtFtnAtTxtEnd::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* SwFmtFtnAtTxtEnd::Clone( SfxItemPool* ) const
 {
     SwFmtFtnAtTxtEnd* pNew = new SwFmtFtnAtTxtEnd;
     *pNew = *this;
@@ -2121,7 +2126,7 @@ SfxPoolItem* SwFmtFtnAtTxtEnd::Clone( SfxItemPool* pPool ) const
 
 // class SwFmtEndAtTxtEnd
 
-SfxPoolItem* SwFmtEndAtTxtEnd::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* SwFmtEndAtTxtEnd::Clone( SfxItemPool* ) const
 {
     SwFmtEndAtTxtEnd* pNew = new SwFmtEndAtTxtEnd;
     *pNew = *this;
@@ -2146,7 +2151,7 @@ SwFmtChain::SwFmtChain( const SwFmtChain &rCpy ) :
     SetNext( rCpy.GetNext() );
 }
 
-SfxPoolItem* SwFmtChain::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* SwFmtChain::Clone( SfxItemPool* ) const
 {
     SwFmtChain *pRet = new SwFmtChain;
     pRet->SetPrev( GetPrev() );
@@ -2218,7 +2223,7 @@ int SwFmtLineNumber::operator==( const SfxPoolItem &rAttr ) const
            bCountLines  == ((SwFmtLineNumber&)rAttr).IsCount();
 }
 
-SfxPoolItem* SwFmtLineNumber::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* SwFmtLineNumber::Clone( SfxItemPool* ) const
 {
     return new SwFmtLineNumber( *this );
 }
@@ -2300,7 +2305,7 @@ int SwTextGridItem::operator==( const SfxPoolItem& rAttr ) const
            aColor == ((SwTextGridItem&)rAttr).GetColor();
 }
 
-SfxPoolItem* SwTextGridItem::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* SwTextGridItem::Clone( SfxItemPool* ) const
 {
     return new SwTextGridItem( *this );
 }
@@ -2343,12 +2348,12 @@ BOOL SwTextGridItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_GRID_BASEHEIGHT:
             DBG_ASSERT( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
-            rVal <<= (sal_Int32) TWIP_TO_MM100(nBaseHeight);
+            rVal <<= (sal_Int32) TWIP_TO_MM100_UNSIGNED(nBaseHeight);
             break;
         case MID_GRID_RUBYHEIGHT:
             DBG_ASSERT( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
-            rVal <<= (sal_Int32)TWIP_TO_MM100(nRubyHeight);
+            rVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(nRubyHeight);
             break;
         case MID_GRID_TYPE:
             switch( GetGridType() )
@@ -2458,7 +2463,7 @@ BOOL SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
 // class SwHeaderAndFooterEatSpacingItem
 
-SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* pPool ) const
+SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
 {
     return new SwHeaderAndFooterEatSpacingItem( Which(), GetValue() );
 }
@@ -2537,7 +2542,7 @@ SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
     SwFrm *pFrm = 0;
     if( ISA( SwSectionFmt ) )
     {
-        // dann den ::com::sun::star::frame::Frame per Node2Layout besorgen
+        // dann den frame::Frame per Node2Layout besorgen
         SwSectionNode* pSectNd = ((SwSectionFmt*)this)->GetSectionNode();
         if( pSectNd )
         {
@@ -2546,10 +2551,10 @@ SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
 
             if( pFrm && pFrm->GetRegisteredIn() != this )
             {
-                // die Section hat keinen eigenen ::com::sun::star::frame::Frame, also falls
-                // jemand die tatsaechliche Groeáe braucht, so muss das
+                // die Section hat keinen eigenen frame::Frame, also falls
+                // jemand die tatsaechliche Groe?e braucht, so muss das
                 // noch implementier werden, in dem sich vom Ende noch
-                // der entsprechende ::com::sun::star::frame::Frame besorgt wird.
+                // der entsprechende frame::Frame besorgt wird.
                 // PROBLEM: was passiert bei SectionFrames, die auf unter-
                 //          schiedlichen Seiten stehen??
                 if( bPrtArea )
@@ -2668,7 +2673,7 @@ SwFrmFmt::tLayoutDir SwFrmFmt::GetLayoutDir() const
     return SwFrmFmt::HORI_L2R;
 }
 
-void SwFrmFmt::SetLayoutDir( const SwFrmFmt::tLayoutDir _nLayoutDir )
+void SwFrmFmt::SetLayoutDir( const SwFrmFmt::tLayoutDir )
 {
     // empty body, because default implementation does nothing
 }
@@ -2679,7 +2684,7 @@ sal_Int16 SwFrmFmt::GetPositionLayoutDir() const
 {
     return text::PositionLayoutDir::PositionInLayoutDirOfAnchor;
 }
-void SwFrmFmt::SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir )
+void SwFrmFmt::SetPositionLayoutDir( const sal_Int16 )
 {
     // empty body, because default implementation does nothing
 }
@@ -2741,7 +2746,7 @@ void SwFlyFrmFmt::MakeFrms()
         {
             //Erst einmal ueber den Inhalt suchen, weil konstant schnell. Kann
             //Bei verketteten Rahmen aber auch schief gehen, weil dann evtl.
-            //niemals ein ::com::sun::star::frame::Frame zu dem Inhalt existiert. Dann muss leider noch
+            //niemals ein frame::Frame zu dem Inhalt existiert. Dann muss leider noch
             //die Suche vom StartNode zum FrameFormat sein.
             SwNodeIndex aIdx( aAnchorAttr.GetCntntAnchor()->nNode );
             SwCntntNode *pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
@@ -2805,6 +2810,8 @@ void SwFlyFrmFmt::MakeFrms()
             }
         }
         break;
+    default:
+        break;
     }
 
     if( pModify )
@@ -2814,7 +2821,7 @@ void SwFlyFrmFmt::MakeFrms()
              pFrm;
              pFrm = (SwFrm*)aIter.Next() )
         {
-            FASTBOOL bAdd = !pFrm->IsCntntFrm() ||
+            BOOL bAdd = !pFrm->IsCntntFrm() ||
                             !((SwCntntFrm*)pFrm)->IsFollow();
 
             if ( FLY_AT_FLY == aAnchorAttr.GetAnchorId() && !pFrm->IsFlyFrm() )
@@ -2855,10 +2862,9 @@ void SwFlyFrmFmt::MakeFrms()
                 case FLY_IN_CNTNT:
                     pFly = new SwFlyInCntFrm( this, pFrm );
                     break;
-#ifndef PRODUCT
                 default:
-                    ASSERT( !this, "Neuer Ankertyp" );
-#endif
+                    ASSERT( !this, "Neuer Ankertyp" )
+                    break;
                 }
                 pFrm->AppendFly( pFly );
                 SwPageFrm *pPage = pFly->FindPageFrm();
@@ -3041,19 +3047,11 @@ SwHandleAnchorNodeChg::~SwHandleAnchorNodeChg()
 TYPEINIT1( SwDrawFrmFmt, SwFrmFmt );
 IMPL_FIXEDMEMPOOL_NEWDEL( SwDrawFrmFmt, 10, 10 )
 
-#ifdef _MSC_VER
-#pragma optimize( "e", off )
-#endif
-
 SwDrawFrmFmt::~SwDrawFrmFmt()
 {
     SwContact *pContact = FindContactObj();
     delete pContact;
 }
-
-#ifdef _MSC_VER
-#pragma optimize( "e", on )
-#endif
 
 void SwDrawFrmFmt::MakeFrms()
 {
@@ -3148,7 +3146,7 @@ IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
     //Orignialgroesse fuer OLE und Grafik ist die TwipSize,
     //ansonsten die Groesse vom FrmFmt des Fly.
     const SwFrm *pRef;
-    SwNoTxtNode *pNd;
+    SwNoTxtNode *pNd = 0;
     Size aOrigSz;
     if( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
     {
@@ -3178,11 +3176,11 @@ IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
         {
             const sal_uInt16 nMirror = pNd->GetSwAttrSet().
                                         GetMirrorGrf().GetValue();
-            if ( RES_MIRROR_GRF_BOTH == nMirror )
+            if ( RES_MIRROR_GRAPH_BOTH == nMirror )
                 nFlags = IMAP_MIRROR_HORZ | IMAP_MIRROR_VERT;
-            else if ( RES_MIRROR_GRF_VERT == nMirror )
+            else if ( RES_MIRROR_GRAPH_VERT == nMirror )
                 nFlags = IMAP_MIRROR_VERT;
-            else if ( RES_MIRROR_GRF_HOR == nMirror )
+            else if ( RES_MIRROR_GRAPH_HOR == nMirror )
                 nFlags = IMAP_MIRROR_HORZ;
 
         }
