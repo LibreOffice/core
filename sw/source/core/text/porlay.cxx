@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:45:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:17:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@
 #include <IDocumentContentOperations.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::i18n::ScriptType;
+using namespace i18n::ScriptType;
 
 //#ifdef BIDI
 #include <unicode/ubidi.h>
@@ -341,9 +341,9 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 {
     const KSHORT nLineWidth = rInf.RealWidth();
 
-    KSHORT nFlyAscent;
-    KSHORT nFlyHeight;
-    KSHORT nFlyDescent;
+    KSHORT nFlyAscent = 0;
+    KSHORT nFlyHeight = 0;
+    KSHORT nFlyDescent = 0;
     sal_Bool bOnlyPostIts = sal_True;
     SetHanging( sal_False );
 
@@ -408,7 +408,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 }
 
                 const xub_StrLen nPorSttIdx = rInf.GetLineStart() + nLineLength;
-                nLineLength += pPos->GetLen();
+                nLineLength = nLineLength + pPos->GetLen();
                 AddPrtWidth( pPos->Width() );
 
                 // --> FME 2006-03-01 #i3952#
@@ -608,39 +608,40 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
     _orObjAscent = 0;
     _orObjDescent = 0;
 
-    const SwLinePortion* pPortion = this;
-    if ( !pPortion->GetLen() && pPortion->GetPortion() )
+    const SwLinePortion* pTmpPortion = this;
+    if ( !pTmpPortion->GetLen() && pTmpPortion->GetPortion() )
     {
-        pPortion = pPortion->GetPortion();
+        pTmpPortion = pTmpPortion->GetPortion();
     }
 
-    while ( pPortion )
+    while ( pTmpPortion )
     {
-        if ( !pPortion->IsBreakPortion() && !pPortion->IsFlyPortion() &&
+        if ( !pTmpPortion->IsBreakPortion() && !pTmpPortion->IsFlyPortion() &&
              ( !_bNoFlyCntPorAndLinePor ||
-               ( !pPortion->IsFlyCntPortion() &&
-                 !(pPortion == this && pPortion->GetPortion() ) ) ) )
+               ( !pTmpPortion->IsFlyCntPortion() &&
+                 !(pTmpPortion == this && pTmpPortion->GetPortion() ) ) ) )
         {
-            SwTwips nPortionAsc = static_cast<SwTwips>(pPortion->GetAscent());
-            SwTwips nPortionDesc = static_cast<SwTwips>(pPortion->Height()) -
+            SwTwips nPortionAsc = static_cast<SwTwips>(pTmpPortion->GetAscent());
+            SwTwips nPortionDesc = static_cast<SwTwips>(pTmpPortion->Height()) -
                                    nPortionAsc;
 
-            sal_Bool bFlyCmp = pPortion->IsFlyCntPortion()
-                               ? static_cast<const SwFlyCntPortion*>(pPortion)->IsMax()
-                               : ( pPortion != _pDontConsiderPortion );
+            const sal_Bool bFlyCmp = pTmpPortion->IsFlyCntPortion() ?
+                                     static_cast<const SwFlyCntPortion*>(pTmpPortion)->IsMax() :
+                                     !( pTmpPortion == _pDontConsiderPortion );
+
             if ( bFlyCmp )
             {
                 _orObjAscent = Max( _orObjAscent, nPortionAsc );
                 _orObjDescent = Max( _orObjDescent, nPortionDesc );
             }
 
-            if ( !pPortion->IsFlyCntPortion() && !pPortion->IsGrfNumPortion() )
+            if ( !pTmpPortion->IsFlyCntPortion() && !pTmpPortion->IsGrfNumPortion() )
             {
                 _orAscent = Max( _orAscent, nPortionAsc );
                 _orDescent = Max( _orDescent, nPortionDesc );
             }
         }
-        pPortion = pPortion->GetPortion();
+        pTmpPortion = pTmpPortion->GetPortion();
     }
 }
 
@@ -760,7 +761,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     nInvalidityPos = STRING_LEN;
 
     // this is the default direction
-    nDefaultDir = bRTL ? UBIDI_RTL : UBIDI_LTR;
+    nDefaultDir = static_cast<BYTE>(bRTL ? UBIDI_RTL : UBIDI_LTR);
 
     // counter for script info arrays
     USHORT nCnt = 0;
@@ -769,7 +770,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // counter for kashida array
     USHORT nCntKash = 0;
 
-    BYTE nScript;
+    BYTE nScript = i18n::ScriptType::LATIN;
 
     // compression type
     const SwCharCompressType aCompEnum = rNode.getIDocumentSettingAccess()->getCharacterCompressionType();
@@ -967,9 +968,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                     eState = SPECIAL_RIGHT;
                     break;
                 default:
-                    eState = ( 0x3040 <= cChar && 0x3100 > cChar ) ?
-                               KANA :
-                               NONE;
+                    eState = static_cast<BYTE>( ( 0x3040 <= cChar && 0x3100 > cChar ) ? KANA : NONE );
                 }
 
                 // insert range of compressable characters
@@ -1014,7 +1013,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
             SwScanner aScanner( rNode,
-                                ::com::sun::star::i18n::WordType::DICTIONARY_WORD,
+                                i18n::WordType::DICTIONARY_WORD,
                                 nLastKashida, nChg );
 
             // the search has to be performed on a per word base
@@ -1178,11 +1177,10 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 while ( GetScriptChg( nScriptIdx ) <= nStart )
                     ++nScriptIdx;
 
-                xub_StrLen nEndPosOfGroup = GetScriptChg( nScriptIdx );
                 xub_StrLen nStartPosOfGroup = nScriptIdx ? GetScriptChg( nScriptIdx - 1 ) : 0;
                 BYTE nScriptTypeOfGroup = GetScriptType( nScriptIdx );
 
-                ASSERT( nStartPosOfGroup <= nStart && nEndPosOfGroup > nStart,
+                ASSERT( nStartPosOfGroup <= nStart && GetScriptChg( nScriptIdx ) > nStart,
                         "Script override with CTL font trouble" )
 
                 // Check if we have to insert a new script change at
@@ -1211,11 +1209,13 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 BYTE nLastScriptType = i18n::ScriptType::WEAK;
                 xub_StrLen nScriptChg;
                 xub_StrLen nLastScriptChg = 0;
+                (void) nLastScriptChg;
+                (void) nLastScriptType;
 
-                for ( int i = 0; i < aScriptChg.Count(); ++i )
+                for ( USHORT i2 = 0; i2 < aScriptChg.Count(); ++i2 )
                 {
-                    nScriptChg = GetScriptChg( i );
-                    nScriptType = GetScriptType( i );
+                    nScriptChg = GetScriptChg( i2 );
+                    nScriptType = GetScriptType( i2 );
                     ASSERT( nLastScriptType != nScriptType &&
                             nLastScriptChg < nScriptChg,
                             "Heavy InitScriptType() confusion" )
@@ -1607,7 +1607,7 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen 
     xub_StrLen nChg = GetCompStart( nCompIdx );
     xub_StrLen nCompLen = GetCompLen( nCompIdx );
     USHORT nI = 0;
-    nLen += nIdx;
+    nLen = nLen + nIdx;
 
     if( nChg > nIdx )
     {
@@ -1628,7 +1628,7 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen 
 #if OSL_DEBUG_LEVEL > 1
         ASSERT( nType == CompType( nIdx ), "Gimme the right type!" );
 #endif
-        nCompLen += nIdx;
+        nCompLen = nCompLen + nIdx;
         if( nCompLen > nLen )
             nCompLen = nLen;
 
@@ -1675,17 +1675,17 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen 
 
         if( nIdx < nLen )
         {
-            xub_StrLen nChg;
+            xub_StrLen nTmpChg;
             if( ++nCompIdx < nCompCount )
             {
-                nChg = GetCompStart( nCompIdx );
-                if( nChg > nLen )
-                    nChg = nLen;
+                nTmpChg = GetCompStart( nCompIdx );
+                if( nTmpChg > nLen )
+                    nTmpChg = nLen;
                 nCompLen = GetCompLen( nCompIdx );
             }
             else
-                nChg = nLen;
-            while( nIdx < nChg )
+                nTmpChg = nLen;
+            while( nIdx < nTmpChg )
             {
                 nLast = pKernArray[ nI ];
                 pKernArray[ nI++ ] -= nSub;
@@ -1883,7 +1883,7 @@ xub_StrLen SwParaPortion::GetParLen() const
     while( pLay )
     {
         DBG_LOOP;
-        nLen += pLay->GetLen();
+        nLen = nLen + pLay->GetLen();
         pLay = pLay->GetNext();
     }
     return nLen;
@@ -2000,15 +2000,15 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
         while( nTmp < pHints->GetStartCount() )
         {
             pTxtAttr = pHints->GetStart( nTmp++ );
-            const SvxCharHiddenItem* pItem = static_cast<const SvxCharHiddenItem*>( CharFmt::GetItem( *pTxtAttr, RES_CHRATR_HIDDEN ) );
-            if( pItem )
+            const SvxCharHiddenItem* pHiddenItem = static_cast<const SvxCharHiddenItem*>( CharFmt::GetItem( *pTxtAttr, RES_CHRATR_HIDDEN ) );
+            if( pHiddenItem )
             {
                 xub_StrLen nSt = *pTxtAttr->GetStart();
                 xub_StrLen nEnd = *pTxtAttr->GetEnd();
                 if( nEnd > nSt )
                 {
                     Range aTmp( nSt, nEnd - 1 );
-                    rHiddenMulti.Select( aTmp, pItem->GetValue() );
+                    rHiddenMulti.Select( aTmp, pHiddenItem->GetValue() );
                 }
             }
         }
