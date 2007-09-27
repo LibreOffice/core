@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edundo.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:08:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:47:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ void lcl_SelectSdrMarkList( SwEditShell* pShell,
                             const SdrMarkList* pSdrMarkList );
 
 
-BOOL SwEditShell::Undo( USHORT nUndoId, USHORT nCnt )
+BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
 {
     SET_CURR_SHELL( this );
 
@@ -100,7 +100,7 @@ BOOL SwEditShell::Undo( USHORT nUndoId, USHORT nCnt )
 
         // JP 02.04.98: Cursor merken - beim Auto-Format/-Korrektur
         //              soll dieser wieder an die Position
-        USHORT nLastUndoId = GetDoc()->GetUndoIds(NULL, NULL);
+        SwUndoId nLastUndoId = GetDoc()->GetUndoIds(NULL, NULL);
         BOOL bRestoreCrsr = 1 == nCnt && ( UNDO_AUTOFORMAT == nLastUndoId ||
                                            UNDO_AUTOCORRECT == nLastUndoId );
         Push();
@@ -109,14 +109,14 @@ BOOL SwEditShell::Undo( USHORT nUndoId, USHORT nCnt )
         //          Erkennung darf nur noch fuer die neue "Box" erfolgen!
         ClearTblBoxCntnt();
 
-        IDocumentRedlineAccess::RedlineMode_t eOld = GetDoc()->GetRedlineMode();
+        RedlineMode_t eOld = GetDoc()->GetRedlineMode();
 
         SwUndoIter aUndoIter( GetCrsr(), nUndoId );
         while( nCnt-- )
         {
             do {
 
-                bRet |= GetDoc()->Undo( aUndoIter );
+                bRet = GetDoc()->Undo( aUndoIter ) || bRet;
 
                 if( !aUndoIter.IsNextUndo() )
                     break;
@@ -195,14 +195,14 @@ USHORT SwEditShell::Redo( USHORT nCnt )
         //          Erkennung darf nur noch fuer die neue "Box" erfolgen!
         ClearTblBoxCntnt();
 
-        IDocumentRedlineAccess::RedlineMode_t eOld = GetDoc()->GetRedlineMode();
+        RedlineMode_t eOld = GetDoc()->GetRedlineMode();
 
-        SwUndoIter aUndoIter( GetCrsr(), 0 );
+        SwUndoIter aUndoIter( GetCrsr(), UNDO_EMPTY );
         while( nCnt-- )
         {
             do {
 
-                bRet |= GetDoc()->Redo( aUndoIter );
+                bRet = GetDoc()->Redo( aUndoIter ) || bRet;
 
                 if( !aUndoIter.IsNextUndo() )
                     break;
@@ -265,8 +265,8 @@ USHORT SwEditShell::Repeat( USHORT nCount )
     BOOL bRet = FALSE;
     StartAllAction();
 
-        SwUndoIter aUndoIter( GetCrsr(), 0 );
-        bRet |= GetDoc()->Repeat( aUndoIter, nCount );
+        SwUndoIter aUndoIter( GetCrsr(), UNDO_EMPTY );
+        bRet = GetDoc()->Repeat( aUndoIter, nCount ) || bRet;
 
     EndAllAction();
     return bRet;
