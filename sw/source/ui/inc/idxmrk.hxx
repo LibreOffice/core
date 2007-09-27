@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idxmrk.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:20:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:02:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,55 +35,12 @@
 #ifndef _IDXMRK_HXX
 #define _IDXMRK_HXX
 
-//CHINA001 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-//CHINA001 #include <com/sun/star/container/XNameAccess.hpp>
-//CHINA001 #endif
-//CHINA001 #ifndef _BASEDLGS_HXX
-//CHINA001 #include <sfx2/basedlgs.hxx>
-//CHINA001 #endif
-//CHINA001
-//CHINA001 #ifndef _FIXED_HXX //autogen
-//CHINA001 #include <vcl/fixed.hxx>
-//CHINA001 #endif
-
-//CHINA001 #ifndef _SV_LSTBOX_HXX
-//CHINA001 #include <vcl/lstbox.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _COMBOBOX_HXX //autogen
-//CHINA001 #include <vcl/combobox.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _SVX_STDDLG_HXX
-//CHINA001 #include <svx/stddlg.hxx>
-//CHINA001 #endif
-//CHINA001
-//CHINA001 #ifndef _FIELD_HXX //autogen
-//CHINA001 #include <vcl/field.hxx>
-//CHINA001 #endif
-//CHINA001
-//CHINA001 #ifndef _GROUP_HXX //autogen
-//CHINA001 #include <vcl/group.hxx>
-//CHINA001 #endif
-
-//CHINA001 #ifndef _BUTTON_HXX //autogen
-//CHINA001 #include <vcl/button.hxx>
-//CHINA001 #endif
-//CHINA001
-//CHINA001 #ifndef _IMAGEBTN_HXX //autogen
-//CHINA001 #include <vcl/imagebtn.hxx>
-//CHINA001 #endif
 #ifndef _SFX_CHILDWIN_HXX //autogen
 #include <sfx2/childwin.hxx>
 #endif
-//CHINA001 #ifndef _TOXE_HXX
-//CHINA001 #include "toxe.hxx"
-//CHINA001 #endif
-//CHINA001 #ifndef _STDCTRL_HXX
-//CHINA001 #include <svtools/stdctrl.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef  _COM_SUN_STAR_I18N_XEXTENDEDINDEXENTRYSUPPLIER_HPP_
-//CHINA001 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
-//CHINA001 #endif
-#include "swabstdlg.hxx" //CHINA001
+
+#include "swabstdlg.hxx"
+
 class SwWrtShell;
 
 /* -----------------07.09.99 08:02-------------------
@@ -91,7 +48,7 @@ class SwWrtShell;
  --------------------------------------------------*/
 class SwInsertIdxMarkWrapper : public SfxChildWindow
 {
-    AbstractMarkFloatDlg*   pAbstDlg; //CHINA001
+    AbstractMarkFloatDlg*   pAbstDlg;
 protected:
     SwInsertIdxMarkWrapper( Window *pParentWindow,
                             sal_uInt16 nId,
@@ -109,7 +66,7 @@ public:
  --------------------------------------------------*/
 class SwInsertAuthMarkWrapper : public SfxChildWindow
 {
-    AbstractMarkFloatDlg*   pAbstDlg; //CHINA001
+    AbstractMarkFloatDlg*   pAbstDlg;
 protected:
     SwInsertAuthMarkWrapper(    Window *pParentWindow,
                             sal_uInt16 nId,
