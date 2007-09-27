@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlelstnr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:27:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:41:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ void SAL_CALL SwLinguServiceEventListener::disposing(
 
 
 void SAL_CALL SwLinguServiceEventListener::queryTermination(
-            const EventObject& rEventObj )
+            const EventObject& /*rEventObj*/ )
         throw(TerminationVetoException, RuntimeException)
 {
     //vos::OGuard aGuard(Application::GetSolarMutex());
