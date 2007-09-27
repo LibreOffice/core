@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrong.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:20:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:22:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,15 @@
 #include "wrong.hxx"
 
 /*************************************************************************
+ * SwWrongList::SwWrongList()
+ *************************************************************************/
+SwWrongList::SwWrongList() :
+    nBeginInvalid( STRING_LEN )
+{
+    maList.reserve( 5 );
+}
+
+/*************************************************************************
  * sal_Bool SwWrongList::InWrongWord() gibt den Anfang und die Laenge des
  * Wortes zurueck, wenn es als falsch markiert ist.
  *************************************************************************/
@@ -72,14 +81,14 @@ sal_Bool SwWrongList::InWrongWord( xub_StrLen &rChk, xub_StrLen &rLn ) const
 sal_Bool SwWrongList::Check( xub_StrLen &rChk, xub_StrLen &rLn ) const
 {
     MSHORT nPos = GetWrongPos( rChk );
-    rLn += rChk;
+    rLn = rLn + rChk;
     xub_StrLen nWrPos;
 
     if( nPos == Count() )
         return sal_False;
 
     xub_StrLen nEnd = Len( nPos );
-    nEnd += ( nWrPos = Pos( nPos ) );
+    nEnd = nEnd + ( nWrPos = Pos( nPos ) );
     if( nEnd == rChk )
     {
         ++nPos;
@@ -88,7 +97,7 @@ sal_Bool SwWrongList::Check( xub_StrLen &rChk, xub_StrLen &rLn ) const
         else
         {
             nEnd = Len( nPos );
-            nEnd += ( nWrPos = Pos( nPos ) );
+            nEnd = nEnd + ( nWrPos = Pos( nPos ) );
         }
     }
     if( nEnd > rChk && nWrPos < rLn )
@@ -97,7 +106,7 @@ sal_Bool SwWrongList::Check( xub_StrLen &rChk, xub_StrLen &rLn ) const
             rChk = nWrPos;
         if( nEnd < rLn )
             rLn = nEnd;
-        rLn -= rChk;
+        rLn = rLn - rChk;
         return 0 != rLn;
     }
     return sal_False;
@@ -137,7 +146,7 @@ xub_StrLen SwWrongList::NextWrong( xub_StrLen nChk ) const
 
 MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
 {
-    register MSHORT nOben = Count(), nMitte, nUnten = 0;
+    MSHORT nOben = Count(), nMitte = 0, nUnten = 0;
 
     if( nOben > 0 )
     {
@@ -259,9 +268,9 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
         if( STRING_LEN != GetBeginInv() )
         {
             if( nBeginInvalid > nPos )
-                nBeginInvalid += xub_StrLen( nDiff );
+                nBeginInvalid = nBeginInvalid + xub_StrLen( nDiff );
             if( nEndInvalid >= nPos )
-                nEndInvalid += xub_StrLen( nDiff );
+                nEndInvalid = nEndInvalid + xub_StrLen( nDiff );
         }
         // Wenn wir mitten in einem falschen Wort stehen, muss vom Wortanfang
         // invalidiert werden.
@@ -270,7 +279,7 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
             Invalidate( nWrPos, nEnd );
             xub_StrLen nWrLen = Len( i ) + xub_StrLen( nDiff );
             maList[i++].mnLen = nWrLen;
-            nWrLen += nWrPos;
+            nWrLen = nWrLen + nWrPos;
             Invalidate( nWrPos, nWrLen );
         }
         else
@@ -296,7 +305,7 @@ sal_Bool SwWrongList::Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nP
     // length of word must be greater than 0 and cursor position must be outside the word
     sal_Bool bRet = nLen && ( nCursorPos > nPos + nLen || nCursorPos < nPos );
 
-    xub_StrLen nWrPos;
+    xub_StrLen nWrPos = 0;
     xub_StrLen nWrEnd = rEnd;
     MSHORT nCnt = nIndex;
     if( nCnt < Count() && ( nWrPos = Pos( nIndex ) ) < nPos )
@@ -323,7 +332,7 @@ sal_Bool SwWrongList::Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nP
         }
     }
 
-    nPos += nLen;
+    nPos = nPos + nLen;
 
     if( nCnt < Count() && ( nWrPos = Pos( nCnt ) ) < nPos )
     {
@@ -412,14 +421,14 @@ void SwWrongList::JoinList( SwWrongList* pNext, xub_StrLen nInsertPos )
             xub_StrLen nWrLen = Len( nCnt );
             if( !nWrPos )
             {
-                nWrPos += nInsertPos;
-                nWrLen -= nInsertPos;
+                nWrPos = nWrPos + nInsertPos;
+                nWrLen = nWrLen - nInsertPos;
                 maList[nCnt].mnPos = nWrPos;
                 maList[nCnt].mnLen = nWrLen;
             }
             if( nWrPos == Pos( nCnt - 1 ) + Len( nCnt - 1 ) )
             {
-                nWrLen += Len( nCnt - 1 );
+                nWrLen = nWrLen + Len( nCnt - 1 );
                 maList[nCnt - 1].mnLen = nWrLen;
                 Remove( nCnt, 1 );
 
@@ -455,7 +464,7 @@ void SwWrongList::Remove(USHORT nIdx, USHORT nLen )
     i1 += nIdx;
 
     std::vector<SwWrongArea>::iterator i2 = i1;
-    if ( nIdx + nLen >= maList.size() )
+    if ( nIdx + nLen >= static_cast<USHORT>(maList.size()) )
         i2 = maList.end(); // robust
     else
         i2 += nLen;
@@ -469,7 +478,8 @@ void SwWrongList::Remove(USHORT nIdx, USHORT nLen )
     }
 
 #if OSL_DEBUG_LEVEL > 1
-    const ULONG nOldSize = Count();
+    const int nOldSize = Count();
+    (void) nOldSize;
 #endif
 
     maList.erase(i1, i2);
