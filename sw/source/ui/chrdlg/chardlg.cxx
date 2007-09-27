@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:14:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:19:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,15 +54,9 @@
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
-//CHINA001 #ifndef _SVX_CHARDLG_HXX //autogen
-//CHINA001 #include <svx/chardlg.hxx>
-//CHINA001 #endif
-//CHINA001 #ifndef _SVX_BACKGRND_HXX //autogen
-//CHINA001 #include <svx/backgrnd.hxx>
-//CHINA001 #endif
-#ifndef _SVX_FLSTITEM_HXX //CHINA001
-#include <svx/flstitem.hxx> //CHINA001
-#endif //CHINA001
+#ifndef _SVX_FLSTITEM_HXX
+#include <svx/flstitem.hxx>
+#endif
 #ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
 #endif
@@ -133,12 +127,12 @@
 #endif
 #include <sfx2/viewfrm.hxx>
 
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/svxids.hrc> //CHINA001
-#include <svx/flagsdef.hxx> //CHINA001
-#include "svx/dialogs.hrc"
+#include <svx/svxdlg.hxx>
+#include <svx/svxids.hrc>
+#include <svx/flagsdef.hxx>
+#include <svx/dialogs.hrc>
 
-using namespace com::sun::star::ui::dialogs;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
@@ -166,15 +160,14 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
         aTmp += ')';
         SetText(aTmp);
     }
-    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create(); //CHINA001
-    DBG_ASSERT(pFact, "Dialogdiet fail!"); //CHINA001
-    //OS: Unter OS/2 darf die erste TabPage nie per RemoveTabPage entfernt werden
-    AddTabPage(TP_CHAR_STD, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );//CHINA001 AddTabPage(TP_CHAR_STD, SvxCharNamePage::Create, 0);
-    AddTabPage(TP_CHAR_EXT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 ); //CHINA001 AddTabPage(TP_CHAR_EXT, SvxCharEffectsPage::Create, 0);
-    AddTabPage(TP_CHAR_POS, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 ); //CHINA001 AddTabPage(TP_CHAR_POS, SvxCharPositionPage::Create, 0);
-    AddTabPage(TP_CHAR_TWOLN, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), 0 ); //CHINA001 AddTabPage(TP_CHAR_TWOLN, SvxCharTwoLinesPage::Create, 0);
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    AddTabPage(TP_CHAR_STD, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );
+    AddTabPage(TP_CHAR_EXT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 );
+    AddTabPage(TP_CHAR_POS, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), 0 );
+    AddTabPage(TP_CHAR_TWOLN, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), 0 );
     AddTabPage(TP_CHAR_URL, SwCharURLPage::Create, 0);
-    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 ); //CHINA001 AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,    0);
+    AddTabPage(TP_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
 
     SvtCJKOptions aCJKOptions;
     if(bIsDrwTxtMode)
@@ -203,44 +196,36 @@ SwCharDlg::~SwCharDlg()
 
 void SwCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
-    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool())); //CHINA001
+    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch( nId )
     {
         case TP_CHAR_STD:
             {
-            //CHINA001 ((SvxCharNamePage&)rPage).SetFontList( *( (SvxFontListItem*)
-               //CHINA001 ( rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) ) );
             SvxFontListItem aFontListItem( *( (SvxFontListItem*)
-               ( rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) ) );  //CHINA001
-            aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST)); //CHINA001
+               ( rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) ) );
+            aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
                 if(!bIsDrwTxtMode)
-                    aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER)); //CHINA001
-                    //CHINA001 ((SvxCharNamePage&)rPage).SetPreviewBackgroundToCharacter();
-            rPage.PageCreated(aSet); //CHINA001
+                    aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
+            rPage.PageCreated(aSet);
             }
             break;
         case TP_CHAR_EXT:
             if(bIsDrwTxtMode)
-                //CHINA001 ((SvxCharEffectsPage&)rPage).DisableControls(DISABLE_CASEMAP);
-                aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP)); //CHINA001
+                aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
 
             else
             {
-                //CHINA001 ((SvxCharEffectsPage&)rPage).SetPreviewBackgroundToCharacter();
-                //CHINA001 ((SvxCharEffectsPage&)rPage).EnableFlash();
-                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER|SVX_ENABLE_FLASH)); //CHINA001
+                aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER|SVX_ENABLE_FLASH));
             }
-            rPage.PageCreated(aSet); //CHINA001
+            rPage.PageCreated(aSet);
             break;
         case TP_CHAR_POS:
-            //CHINA001 ((SvxCharPositionPage&)rPage).SetPreviewBackgroundToCharacter();
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER)); //CHINA001
-            rPage.PageCreated(aSet); //CHINA001
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
+            rPage.PageCreated(aSet);
         break;
         case TP_CHAR_TWOLN:
-            //CHINA001 ((SvxCharTwoLinesPage&)rPage).SetPreviewBackgroundToCharacter();
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER)); //CHINA001
-            rPage.PageCreated(aSet); //CHINA001
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_PREVIEW_CHARACTER));
+            rPage.PageCreated(aSet);
         break;
     }
 }
@@ -253,6 +238,7 @@ SwCharURLPage::SwCharURLPage(   Window* pParent,
                                 const SfxItemSet& rCoreSet ) :
     SfxTabPage( pParent, SW_RES( TP_CHAR_URL ), rCoreSet ),
     aURLFL (        this, SW_RES(FL_URL)),
+
     aURLFT(         this, SW_RES(FT_URL        )),
     aURLED(         this, SW_RES(ED_URL        )),
     aTextFT(        this, SW_RES(FT_TEXT          )),
@@ -261,13 +247,13 @@ SwCharURLPage::SwCharURLPage(   Window* pParent,
     aNameED(        this, SW_RES(ED_NAME)),
     aTargetFrmFT(   this, SW_RES(FT_TARGET     )),
     aTargetFrmLB(   this, SW_RES(LB_TARGET    )),
+    aURLPB(         this, SW_RES(PB_URL        )),
+    aEventPB(       this, SW_RES(PB_EVENT      )),
     aStyleFL(       this, SW_RES(FL_STYLE      )),
     aVisitedFT(     this, SW_RES(FT_VISITED    )),
     aVisitedLB(     this, SW_RES(LB_VISITED    )),
     aNotVisitedFT(  this, SW_RES(FT_NOT_VISITED)),
     aNotVisitedLB(  this, SW_RES(LB_NOT_VISITED)),
-    aEventPB(       this, SW_RES(PB_EVENT      )),
-    aURLPB(         this, SW_RES(PB_URL        )),
     pINetItem(0),
     bModified(FALSE)
 
@@ -383,19 +369,18 @@ BOOL SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 
     SwFmtINetFmt aINetFmt(sURL, aTargetFrmLB.GetText());
     aINetFmt.SetName(aNameED.GetText());
-    SwWrtShell &rSh = ::GetActiveView()->GetWrtShell();
     bModified |= aURLED.GetText() != aURLED.GetSavedValue();
     bModified |= aNameED.IsModified();
     bModified |= aTargetFrmLB.GetSavedValue() != aTargetFrmLB.GetText();
 
     //zuerst die gueltigen Einstellungen setzen
     String sEntry = aVisitedLB.GetSelectEntry();
-    USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, GET_POOLID_CHRFMT);
+    USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
     aINetFmt.SetVisitedFmtId(nId);
     aINetFmt.SetVisitedFmt(nId == RES_POOLCHR_INET_VISIT ? aEmptyStr : sEntry);
 
     sEntry = aNotVisitedLB.GetSelectEntry();
-    nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, GET_POOLID_CHRFMT);
+    nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
     aINetFmt.SetINetFmtId( nId );
     aINetFmt.SetINetFmt(nId == RES_POOLCHR_INET_NORMAL ? aEmptyStr : sEntry);
 
@@ -433,7 +418,7 @@ SfxTabPage* SwCharURLPage::Create(  Window* pParent,
 
 --------------------------------------------------*/
 
-IMPL_LINK( SwCharURLPage, InsertFileHdl, PushButton *, pBtn )
+IMPL_LINK( SwCharURLPage, InsertFileHdl, PushButton *, EMPTYARG )
 {
     FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     if( aDlgHelper.Execute() == ERRCODE_NONE )
