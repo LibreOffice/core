@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tphfedit.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:58:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:55:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@
 #include <svx/editstat.hxx>
 #include <svx/editview.hxx>
 #include <svx/flditem.hxx>
+#include <svx/adjitem.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/msgbox.hxx>
@@ -412,6 +413,8 @@ ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLo
     eLocation(eLoc),
     pAcc(NULL)
 {
+    EnableRTL(FALSE);
+
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
 
@@ -432,6 +435,9 @@ ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLo
         //  Feldbefehle:
     pEdEngine->SetData( aData );
     pEdEngine->SetControlWord( pEdEngine->GetControlWord() | EE_CNTRL_MARKFIELDS );
+    mbRTL = ScGlobal::IsSystemRTL();
+    if (mbRTL)
+        pEdEngine->SetDefaultHorizontalTextDirection(EE_HTEXTDIR_R2L);
 
     pEdView = new EditView( pEdEngine, this );
     pEdView->SetOutputArea( Rectangle( Point(0,0), GetOutputSize() ) );
@@ -489,6 +495,8 @@ void ScEditWindow::SetFont( const ScPatternAttr& rPattern )
     pSet->Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
     pSet->Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
     pSet->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
+    if (mbRTL)
+        pSet->Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
     pEdEngine->SetDefaults( pSet );
 }
 
