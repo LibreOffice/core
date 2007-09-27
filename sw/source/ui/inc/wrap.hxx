@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:19:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:15:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ class SwWrapTabPage: public SfxTabPage
     USHORT              nOldUpperMargin;
     USHORT              nOldLowerMargin;
 
-    USHORT              nAnchorId;
+    RndStdIds           nAnchorId;
     USHORT              nHtmlMode;
 
     Size aFrmSize;
@@ -143,6 +143,10 @@ class SwWrapTabPage: public SfxTabPage
     DECL_LINK( ContourHdl, CheckBox * );
 
 public:
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
     virtual BOOL    FillItemSet(SfxItemSet &rSet);
