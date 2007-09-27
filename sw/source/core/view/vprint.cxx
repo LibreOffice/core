@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:44:19 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:43:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -692,12 +692,12 @@ void ViewShell::ChgAllPageSize( Size &rSz )
     ASSERT( nStartAction, "missing an Action" );
     SET_CURR_SHELL( this );
 
-    SwDoc* pDoc = GetDoc();
-    USHORT nAll = pDoc->GetPageDescCnt();
+    SwDoc* pMyDoc = GetDoc();
+    USHORT nAll = pMyDoc->GetPageDescCnt();
 
     for( USHORT i = 0; i < nAll; ++i )
     {
-        const SwPageDesc &rOld = const_cast<const SwDoc *>(pDoc)->GetPageDesc( i );
+        const SwPageDesc &rOld = const_cast<const SwDoc *>(pMyDoc)->GetPageDesc( i );
         SwPageDesc aNew( rOld );
         const sal_Bool bDoesUndo( GetDoc()->DoesUndo() );
         GetDoc()->DoUndo( sal_False );
@@ -717,7 +717,7 @@ void ViewShell::ChgAllPageSize( Size &rSz )
         SwFmtFrmSize aFrmSz( rPgFmt.GetFrmSize() );
         aFrmSz.SetSize( aSz );
         rPgFmt.SetAttr( aFrmSz );
-        pDoc->ChgPageDesc( i, aNew );
+        pMyDoc->ChgPageDesc( i, aNew );
     }
 }
 
@@ -864,7 +864,6 @@ SwDoc * ViewShell::CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef &rDocShellR
     while ( pPage->GetNext() && nMinY >= pPage->GetNext()->Frm().Top() )
         pPage = (SwPageFrm*)pPage->GetNext();
     // und ihren Seitendescribtor
-    SwPageDesc *pSrc = pPage->GetPageDesc();
     SwPageDesc* pPageDesc = pPrtDoc->FindPageDescByName(
                                 pPage->GetPageDesc()->GetName() );
 
@@ -952,7 +951,6 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     while ( pPage->GetNext() && nMinY >= pPage->GetNext()->Frm().Top() )
         pPage = (SwPageFrm*)pPage->GetNext();
     // und ihren Seitendescribtor
-    SwPageDesc *pSrc = pPage->GetPageDesc();
     SwPageDesc* pPageDesc = pPrtDoc->FindPageDescByName(
                                 pPage->GetPageDesc()->GetName() );
 
@@ -1228,7 +1226,8 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
 //          aMulti.Select( Range( nLastPageNo+1, SELECTION_MAX ), FALSE );
             MultiSelection aTmpMulti( Range( 1, nLastPageNo ) );
             long nTmpIdx = aMulti.FirstSelected();
-            while ( SFX_ENDOFSELECTION != nTmpIdx && nTmpIdx <= long(nLastPageNo) )
+            static long nEndOfSelection = SFX_ENDOFSELECTION;
+            while ( nEndOfSelection != nTmpIdx && nTmpIdx <= long(nLastPageNo) )
             {
                 aTmpMulti.Select( nTmpIdx );
                 nTmpIdx = aMulti.NextSelected();
@@ -1707,7 +1706,7 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
     if ( HasDrawView() )
     {
         SdrView *pDrawView = GetDrawView();
-        FASTBOOL bDraw = rOptions.bPrintDraw;
+        BOOL bDraw = rOptions.bPrintDraw;
         // OD 09.01.2003 #i6467# - consider, if view shell belongs to page preview
         if ( !IsPreView() )
         {
