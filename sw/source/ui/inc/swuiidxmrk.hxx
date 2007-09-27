@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuiidxmrk.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:05:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:11:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,23 +225,6 @@ public:
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
-/* -----------------07.09.99 08:02-------------------
-
- --------------------------------------------------*/
-//CHINA001 class SwInsertIdxMarkWrapper : public SfxChildWindow
-//CHINA001 {
-//CHINA001 protected:
-//CHINA001 SwInsertIdxMarkWrapper(  Window *pParentWindow,
-//CHINA001 sal_uInt16 nId,
-//CHINA001 SfxBindings* pBindings,
-//CHINA001 SfxChildWinInfo* pInfo );
-//CHINA001
-//CHINA001 SFX_DECL_CHILDWINDOW(SwInsertIdxMarkWrapper);
-//CHINA001
-//CHINA001 public:
-//CHINA001 void ReInitDlg(SwWrtShell& rWrtShell);
-//CHINA001 };
-
 /* -----------------15.09.99 08:39-------------------
 
  --------------------------------------------------*/
@@ -303,22 +286,6 @@ public:
 
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
-/* -----------------07.09.99 08:02-------------------
-
- --------------------------------------------------*/
-//CHINA001 class SwInsertAuthMarkWrapper : public SfxChildWindow
-//CHINA001 {
-//CHINA001 protected:
-//CHINA001 SwInsertAuthMarkWrapper( Window *pParentWindow,
-//CHINA001 sal_uInt16 nId,
-//CHINA001 SfxBindings* pBindings,
-//CHINA001 SfxChildWinInfo* pInfo );
-//CHINA001
-//CHINA001 SFX_DECL_CHILDWINDOW(SwInsertAuthMarkWrapper);
-//CHINA001
-//CHINA001 public:
-//CHINA001 void ReInitDlg(SwWrtShell& rWrtShell);
-//CHINA001 };
 /* -----------------06.10.99 10:11-------------------
 
  --------------------------------------------------*/
