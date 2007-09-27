@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:03:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -508,7 +508,7 @@ BYTE SwEditShell::GetOutlineLevel( USHORT nIdx ) const
 {
     const SwNodes& rNds = GetDoc()->GetNodes();
 
-    return rNds.GetOutLineNds()[ nIdx ]->GetTxtNode()->GetOutlineLevel();
+    return static_cast<BYTE>(rNds.GetOutLineNds()[ nIdx ]->GetTxtNode()->GetOutlineLevel());
 }
 
 
@@ -568,8 +568,8 @@ BOOL SwEditShell::IsProtectedOutlinePara() const
 
         for( ; nPos < rOutlNd.Count(); ++nPos )
         {
-            SwNodePtr pNd = rOutlNd[ nPos ];
-            BYTE nTmpLvl = GetRealLevel( pNd->GetTxtNode()->
+            SwNodePtr pTmpNd = rOutlNd[ nPos ];
+            BYTE nTmpLvl = GetRealLevel( pTmpNd->GetTxtNode()->
                                     GetTxtColl()->GetOutlineLevel() );
             if( bFirst )
             {
@@ -579,7 +579,7 @@ BOOL SwEditShell::IsProtectedOutlinePara() const
             else if( nLvl >= nTmpLvl )
                 break;
 
-            if( pNd->IsProtect() )
+            if( pTmpNd->IsProtect() )
             {
                 bRet = TRUE;
                 break;
@@ -637,7 +637,7 @@ BOOL SwEditShell::NumOrNoNum( BOOL bNumOn, BOOL bChkStart ) // #115901#
     return bRet;
 }
 
-BOOL SwEditShell::IsNoNum( BOOL bChkStart, BOOL bOutline ) const
+BOOL SwEditShell::IsNoNum( BOOL bChkStart ) const
 {
     // ein Backspace im Absatz ohne Nummer wird zum Delete
     BOOL bResult = FALSE;
@@ -680,7 +680,7 @@ BYTE SwEditShell::GetNumLevel( BOOL* pHasChilds ) const
     const SwNumRule* pRule = pTxtNd->GetNumRule();
     if(pRule)
     {
-        nLevel = pTxtNd->GetLevel();
+        nLevel = static_cast<BYTE>(pTxtNd->GetLevel());
         if( pHasChilds )
         {
             *pHasChilds = FALSE;
@@ -836,7 +836,7 @@ USHORT SwEditShell::IsNodeNumStart() const
 {
     const SwTxtNode* pTxtNd = GetCrsr()->GetNode()->GetTxtNode();
     if( pTxtNd )
-        return pTxtNd->GetStart();
+        return static_cast<USHORT>(pTxtNd->GetStart());
     return FALSE;
 }
 
