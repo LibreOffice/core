@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:22:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:26:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,8 +72,8 @@
 #include "cmdid.h"
 
 #include "drawsh.hxx"
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -85,7 +85,6 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
     SwWrtShell*     pSh     = &GetShell();
     SdrView*        pView   = pSh->GetDrawView();
     SdrModel*       pDoc    = pView->GetModel();
-    Window*         pWin    = GetView().GetWindow();
     BOOL            bChanged = pDoc->IsChanged();
     pDoc->SetChanged(FALSE);
 
@@ -124,16 +123,14 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
         {
             BOOL bHasMarked = pView->AreObjectsMarked();
 
-
-            //CHINA001 SvxAreaTabDialog* pDlg = new SvxAreaTabDialog( NULL, &aNewAttr, pDoc, pView );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
+            DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
             AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( NULL,
                                                                             &aNewAttr,
                                                                             pDoc,
                                                                             RID_SVXDLG_AREA,
                                                                             pView);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             const SvxColorTableItem* pColorItem = (const SvxColorTableItem*)
                                     GetView().GetDocShell()->GetItem(SID_COLOR_TABLE);
             if(pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
@@ -169,17 +166,15 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             if( rMarkList.GetMarkCount() == 1 )
                 pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-            //CHINA001 SvxLineTabDialog* pDlg = new SvxLineTabDialog(NULL, &aNewAttr,
-//CHINA001                                                          pDoc, pObj, bHasMarked);
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
+            DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
             SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( NULL,
                     &aNewAttr,
                 pDoc,
                 RID_SVXDLG_LINE,
                 pObj,
                 bHasMarked);
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
             if (pDlg->Execute() == RET_OK)
             {
                 pSh->StartAction();
