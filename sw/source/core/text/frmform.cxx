@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:51:23 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:12:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,9 +93,6 @@
 #ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
 #endif
-#ifndef _FRMSH_HXX
-#include <frmsh.hxx>
-#endif
 #ifndef _TXTCFG_HXX
 #include <txtcfg.hxx>
 #endif
@@ -123,6 +120,8 @@
 #ifndef _PORMULTI_HXX
 #include <pormulti.hxx>     // SwMultiPortion
 #endif
+
+#include <rootfrm.hxx>
 
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>       // SwFrmFmt
@@ -305,15 +304,15 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
 
     ASSERT( HasFollow(), "CalcFollow: missing Follow." );
 
-    SwTxtFrm *pFollow = GetFollow();
+    SwTxtFrm* pMyFollow = GetFollow();
 
     SwParaPortion *pPara = GetPara();
     sal_Bool bFollowFld = pPara ? pPara->IsFollowField() : sal_False;
 
-    if( !pFollow->GetOfst() || pFollow->GetOfst() != nTxtOfst ||
-        bFollowFld || pFollow->IsFieldFollow() ||
-        ( pFollow->IsVertical() && !pFollow->Prt().Width() ) ||
-        ( ! pFollow->IsVertical() && !pFollow->Prt().Height() ) )
+    if( !pMyFollow->GetOfst() || pMyFollow->GetOfst() != nTxtOfst ||
+        bFollowFld || pMyFollow->IsFieldFollow() ||
+        ( pMyFollow->IsVertical() && !pMyFollow->Prt().Width() ) ||
+        ( ! pMyFollow->IsVertical() && !pMyFollow->Prt().Height() ) )
     {
 #ifndef PRODUCT
         const SwFrm *pOldUp = GetUpper();
@@ -324,7 +323,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
         SwTwips nMyPos = (Frm().*fnRect->fnGetTop)();
 
         const SwPageFrm *pPage = 0;
-        sal_Bool  bOldInvaCntnt;
+        sal_Bool  bOldInvaCntnt = sal_True;
         if ( !IsInFly() && GetNext() )
         {
             pPage = FindPageFrm();
@@ -332,9 +331,9 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
             bOldInvaCntnt  = pPage->IsInvalidCntnt();
         }
 
-        pFollow->_SetOfst( nTxtOfst );
-        pFollow->SetFieldFollow( bFollowFld );
-        if( HasFtn() || pFollow->HasFtn() )
+        pMyFollow->_SetOfst( nTxtOfst );
+        pMyFollow->SetFieldFollow( bFollowFld );
+        if( HasFtn() || pMyFollow->HasFtn() )
         {
             ValidateFrm();
             ValidateBodyFrm();
@@ -348,8 +347,8 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
         //Der Fussnotenbereich darf sich keinesfalls vergrossern.
         SwSaveFtnHeight aSave( FindFtnBossFrm( sal_True ), LONG_MAX );
 
-        pFollow->CalcFtnFlag();
-        if ( !pFollow->GetNext() && !pFollow->HasFtn() )
+        pMyFollow->CalcFtnFlag();
+        if ( !pMyFollow->GetNext() && !pMyFollow->HasFtn() )
             nOldBottom = bVert ? 0 : LONG_MAX;
 
         while( sal_True )
@@ -361,7 +360,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
                 // werden, da das FormatWidthCols() nicht funktioniert, wenn
                 // es aus dem MakeAll des _gelockten_ Follows heraus gerufen
                 // wird.
-                SwSectionFrm* pSct = pFollow->FindSctFrm();
+                SwSectionFrm* pSct = pMyFollow->FindSctFrm();
                 if( pSct && !pSct->IsAnLower( this ) )
                 {
                     if( pSct->GetFollow() )
@@ -378,7 +377,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
                     // Thus, forbid intrinsic format of follow.
                     {
                         bool bIsFollowInColumn = false;
-                        SwFrm* pFollowUpper = pFollow->GetUpper();
+                        SwFrm* pFollowUpper = pMyFollow->GetUpper();
                         while ( pFollowUpper )
                         {
                             if ( pFollowUpper->IsColumnFrm() )
@@ -395,27 +394,27 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
                         }
                         if ( bIsFollowInColumn )
                         {
-                            pFollow->ForbidFollowFormat();
+                            pMyFollow->ForbidFollowFormat();
                         }
                     }
 
-                    pFollow->Calc();
+                    pMyFollow->Calc();
                     // Der Follow merkt anhand seiner Frm().Height(), dass was schief
                     // gelaufen ist.
-                    ASSERT( !pFollow->GetPrev(), "SwTxtFrm::CalcFollow: cheesy follow" );
-                    if( pFollow->GetPrev() )
+                    ASSERT( !pMyFollow->GetPrev(), "SwTxtFrm::CalcFollow: cheesy follow" );
+                    if( pMyFollow->GetPrev() )
                     {
-                        pFollow->Prepare( PREP_CLEAR );
-                        pFollow->Calc();
-                        ASSERT( !pFollow->GetPrev(), "SwTxtFrm::CalcFollow: very cheesy follow" );
+                        pMyFollow->Prepare( PREP_CLEAR );
+                        pMyFollow->Calc();
+                        ASSERT( !pMyFollow->GetPrev(), "SwTxtFrm::CalcFollow: very cheesy follow" );
                     }
 
                     // OD 14.03.2003 #i11760# - reset control flag for follow format.
-                    pFollow->AllowFollowFormat();
+                    pMyFollow->AllowFollowFormat();
                 }
 
                 //Sicherstellen, dass der Follow gepaintet wird.
-                pFollow->SetCompletePaint();
+                pMyFollow->SetCompletePaint();
             }
 
             pPara = GetPara();
@@ -427,7 +426,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
                 break;
         }
 
-        if( HasFtn() || pFollow->HasFtn() )
+        if( HasFtn() || pMyFollow->HasFtn() )
         {
             ValidateBodyFrm();
             ValidateFrm();
@@ -1152,7 +1151,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     {   // Wenn wir Zeilen abgeben, darf kein Join auf den Folows gerufen werden,
         // im Gegenteil, es muss ggf. sogar ein Follow erzeugt werden.
         // Dies muss auch geschehen, wenn die Textmasse komplett im Master
-        // bleibt, denn es könnte ja ein harter Zeilenumbruch noch eine weitere
+        // bleibt, denn es k???nnte ja ein harter Zeilenumbruch noch eine weitere
         // Zeile (ohne Textmassse) notwendig machen!
         nEnd = rLine.GetEnd();
         if( GetFollow() )
@@ -1292,7 +1291,7 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
     const SwTwips nOldWidth = pOldCur->Width() + pOldCur->GetHangingMargin();
     const sal_Bool bOldHyph = pOldCur->IsEndHyph();
     SwTwips nOldTop = 0;
-    SwTwips nOldBottom;
+    SwTwips nOldBottom = 0;
     if( rLine.GetCurr()->IsClipping() )
         rLine.CalcUnclipped( nOldTop, nOldBottom );
 
@@ -1802,12 +1801,12 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
             // 6107: Wenn was schief ging, muss noch einmal formatiert werden.
             if( !bGoOn )
             {
-                rInf.CtorInit( this );
-                rLine.CtorInit( this, &rInf );
+                rInf.CtorInitTxtFormatInfo( this );
+                rLine.CtorInitTxtFormatter( this, &rInf );
                 rLine.SetDropLines( 1 );
                 rLine.CalcDropHeight( 1 );
-                SwCharRange aRange( 0, rInf.GetTxt().Len() );
-                *(pPara->GetReformat()) = aRange;
+                SwCharRange aTmpRange( 0, rInf.GetTxt().Len() );
+                *(pPara->GetReformat()) = aTmpRange;
                 _Format( rLine, rInf, sal_True );
                 // 8047: Wir painten alles...
                 SetCompletePaint();
@@ -1902,10 +1901,13 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 #if OSL_DEBUG_LEVEL > 1
     const XubString aXXX = GetTxtNode()->GetTxt();
     const SwTwips nDbgY = Frm().Top();
+    (void)nDbgY;
     const SwPageFrm *pDbgPage = FindPageFrm();
     const MSHORT nDbgPageNr = pDbgPage->GetPhyPageNum();
+    (void)nDbgPageNr;
     // Um zu gucken, ob es einen Ftn-Bereich gibt.
     const SwFrm *pDbgFtnCont = (const SwFrm*)(FindPageFrm()->FindFtnCont());
+    (void)pDbgFtnCont;
 
 #ifndef PRODUCT
     // nStopAt laesst sich vom CV bearbeiten.
@@ -1913,6 +1915,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     if( nStopAt == GetFrmId() )
     {
         int i = GetFrmId();
+        (void)i;
     }
 #endif
 #endif
@@ -1988,7 +1991,10 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         const sal_Bool bOldFtnFlag = HasFtn();
         CalcFtnFlag();
         if ( bOldFtnFlag != HasFtn() )
-            {int bla = 5;}
+            {
+                int bla = 5;
+                (void)bla;
+            }
 #endif
 
         // 8708: Vorsicht, das Format() kann auch durch GetFormatted()
@@ -2016,7 +2022,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
         SwTxtFrmLocker aLock(this);
         SwTxtLineAccess aAccess( this );
         const sal_Bool bNew = !aAccess.SwTxtLineAccess::IsAvailable();
-        sal_Bool bSetOfst = sal_False;
+        const sal_Bool bSetOfst = ( GetOfst() && GetOfst() > GetTxtNode()->GetTxt().Len() );
 
         if( CalcPreps() )
             ; // nothing
@@ -2033,8 +2039,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             }
             SetWidow( sal_False );
         }
-        else if( ( bSetOfst = ( GetOfst() && GetOfst() > GetTxtNode()->GetTxt().Len() ) ) &&
-                 IsFollow() )
+        else if( bSetOfst && IsFollow() )
         {
             SwTxtFrm *pMaster = FindMaster();
             ASSERT( pMaster, "SwTxtFrm::Format: homeless follow" );
@@ -2054,7 +2059,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 
             const sal_Bool bOrphan = IsWidow();
             const SwFtnBossFrm* pFtnBoss = HasFtn() ? FindFtnBossFrm() : 0;
-            SwTwips nFtnHeight;
+            SwTwips nFtnHeight = 0;
             if( pFtnBoss )
             {
                 const SwFtnContFrm* pCont = pFtnBoss->FindFtnCont();
@@ -2157,12 +2162,14 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
 #if OSL_DEBUG_LEVEL > 1
     const XubString aXXX = GetTxtNode()->GetTxt();
     const SwTwips nDbgY = Frm().Top();
+    (void)nDbgY;
 #ifndef PRODUCT
     // nStopAt laesst sich vom CV bearbeiten.
     static MSHORT nStopAt = 0;
     if( nStopAt == GetFrmId() )
     {
         int i = GetFrmId();
+        (void)i;
     }
 #endif
 #endif
@@ -2199,7 +2206,11 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
                       ? GetFollow()->GetOfst() : aInf.GetTxt().Len();
     do
     {
-        DBG_LOOP;
+        //DBG_LOOP; shadows declaration above.
+        //resolved into:
+#if OSL_DEBUG_LEVEL > 1
+        DbgLoop aDbgLoop2( (const void*) this );
+#endif
         nStart = aLine.FormatLine( nStart );
         if( aInf.IsNewLine() || (!aInf.IsStop() && nStart < nEnd) )
             aLine.Insert( new SwLineLayout() );
