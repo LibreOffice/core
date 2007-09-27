@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insrule.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:42:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,12 +74,13 @@
 SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent ) :
     SfxModalDialog(pParent, SW_RES(DLG_INSERT_RULER)),
     aSelectionFL(this, SW_RES(FL_SEL     )),
-    pExampleVS  (new SwRulerValueSet(this, SW_RES(VS_EXAMPLE ))),
     aOkPB       (this, SW_RES(PB_OK     )),
     aCancelPB   (this, SW_RES(PB_CANCEL )),
     aHelpPB     (this, SW_RES(PB_HELP   )),
+
     sSimple (SW_RES(ST_SIMPLE)),
-    nSelPos(USHRT_MAX)
+    nSelPos(USHRT_MAX),
+    pExampleVS  (new SwRulerValueSet(this, SW_RES(VS_EXAMPLE )))
 {
     FreeResource();
     pExampleVS->SetLineCount(6);
@@ -232,7 +233,7 @@ void __EXPORT SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
 --------------------------------------------------*/
 
-IMPL_LINK(SwInsertGrfRulerDlg, DoubleClickHdl, ValueSet*, pVS)
+IMPL_LINK(SwInsertGrfRulerDlg, DoubleClickHdl, ValueSet*, EMPTYARG)
 {
     EndDialog(RET_OK);
     return 0;
