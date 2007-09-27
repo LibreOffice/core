@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:41:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:18:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,8 +267,11 @@ public:
  *************************************************************************/
 
 inline sal_Bool SwMultiPortion::HasBrackets() const
-    { return IsDouble() ? 0 != ((SwDoubleLinePortion*)this)->GetBrackets()
-      : sal_False; }
+{
+    return sal::static_int_cast< sal_Bool >( IsDouble() ?
+                                             0 != ((SwDoubleLinePortion*)this)->GetBrackets() :
+                                             sal_False );
+}
 
 CLASSIO( SwMultiPortion )
 
