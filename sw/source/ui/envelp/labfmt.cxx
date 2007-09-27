@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labfmt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:08:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:43:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,21 +57,23 @@
 
 #include "label.hrc"
 #include "labfmt.hrc"
+#include <unomid.h>
 
 using namespace utl;
 using namespace rtl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 
 // #define ------------------------------------------------------------------
 
 #define ROUND(x) ((USHORT) ((x) + .5))
-#define C2S(cChar) String::CreateFromAscii(cChar)
-#define C2U(cChar) OUString::createFromAscii(cChar)
+
 // --------------------------------------------------------------------------
 SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
 
     Window((Window*) pParent, rResID),
+
+    aGrayColor(COL_LIGHTGRAY),
 
     aHDistStr (SW_RES(STR_HDIST )),
     aVDistStr (SW_RES(STR_VDIST )),
@@ -80,8 +82,7 @@ SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
     aLeftStr  (SW_RES(STR_LEFT  )),
     aUpperStr (SW_RES(STR_UPPER )),
     aColsStr  (SW_RES(STR_COLS  )),
-    aRowsStr  (SW_RES(STR_ROWS  )),
-    aGrayColor(COL_LIGHTGRAY)
+    aRowsStr  (SW_RES(STR_ROWS  ))
 {
     SetMapMode(MAP_PIXEL);
 
@@ -122,7 +123,7 @@ SwLabPreview::~SwLabPreview()
 {
 }
 // --------------------------------------------------------------------------
-void SwLabPreview::Paint(const Rectangle &rRect)
+void SwLabPreview::Paint(const Rectangle &)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const Color& rWinColor = rStyleSettings.GetWindowColor();
@@ -325,7 +326,6 @@ void SwLabPreview::Update(const SwLabItem& rItem)
 SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
     SfxTabPage(pParent, SW_RES(TP_LAB_FMT), rSet),
-    aItem        ((const SwLabItem&) rSet.Get(FN_LABEL)),
     aMakeFI      (this, SW_RES(FI_MAKE)),
     aTypeFI      (this, SW_RES(FI_TYPE)),
     aPreview     (this, SW_RES(WIN_PREVIEW)),
@@ -346,8 +346,8 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aRowsText    (this, SW_RES(TXT_ROWS  )),
     aRowsField   (this, SW_RES(FLD_ROWS  )),
     aSavePB      (this, SW_RES(PB_SAVE  )),
-    bModified(FALSE)
-
+    bModified(FALSE),
+    aItem        ((const SwLabItem&) rSet.Get(FN_LABEL))
 {
     FreeResource();
     SetExchangeSupport();
@@ -444,10 +444,10 @@ void SwLabFmtPage::ChangeMinMax()
 
     // Min und Max
 
-    long lLeft  = GETFLDVAL(aLeftField ),
-         lUpper = GETFLDVAL(aUpperField),
-         lHDist = GETFLDVAL(aHDistField),
-         lVDist = GETFLDVAL(aVDistField);
+    long lLeft  = static_cast< long >(GETFLDVAL(aLeftField )),
+         lUpper = static_cast< long >(GETFLDVAL(aUpperField)),
+         lHDist = static_cast< long >(GETFLDVAL(aHDistField)),
+         lVDist = static_cast< long >(GETFLDVAL(aVDistField));
 
     long nMinSize = 10; // 0,1cm
 
@@ -522,10 +522,10 @@ void SwLabFmtPage::ActivatePage(const SfxItemSet& rSet)
 
 
 
-int SwLabFmtPage::DeactivatePage(SfxItemSet* pSet)
+int SwLabFmtPage::DeactivatePage(SfxItemSet* _pSet)
 {
-    if (pSet)
-        FillItemSet(*pSet);
+    if (_pSet)
+        FillItemSet(*_pSet);
 
     return TRUE;
 }
@@ -541,12 +541,12 @@ void SwLabFmtPage::FillItem(SwLabItem& rItem)
         rItem.aMake = rItem.aType = SW_RESSTR(STR_CUSTOM);
 
         SwLabRec& rRec = *GetParent()->Recs()[0];
-        rItem.lHDist  = rRec.lHDist  = GETFLDVAL(aHDistField );
-        rItem.lVDist  = rRec.lVDist  = GETFLDVAL(aVDistField );
-        rItem.lWidth  = rRec.lWidth  = GETFLDVAL(aWidthField );
-        rItem.lHeight = rRec.lHeight = GETFLDVAL(aHeightField);
-        rItem.lLeft   = rRec.lLeft   = GETFLDVAL(aLeftField  );
-        rItem.lUpper  = rRec.lUpper  = GETFLDVAL(aUpperField );
+        rItem.lHDist  = rRec.lHDist  = static_cast< long >(GETFLDVAL(aHDistField ));
+        rItem.lVDist  = rRec.lVDist  = static_cast< long >(GETFLDVAL(aVDistField ));
+        rItem.lWidth  = rRec.lWidth  = static_cast< long >(GETFLDVAL(aWidthField ));
+        rItem.lHeight = rRec.lHeight = static_cast< long >(GETFLDVAL(aHeightField));
+        rItem.lLeft   = rRec.lLeft   = static_cast< long >(GETFLDVAL(aLeftField  ));
+        rItem.lUpper  = rRec.lUpper  = static_cast< long >(GETFLDVAL(aUpperField ));
         rItem.nCols   = rRec.nCols   = (USHORT) aColsField.GetValue();
         rItem.nRows   = rRec.nRows   = (USHORT) aRowsField.GetValue();
     }
@@ -565,7 +565,7 @@ BOOL SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
 }
 
 // --------------------------------------------------------------------------
-void SwLabFmtPage::Reset(const SfxItemSet& rSet)
+void SwLabFmtPage::Reset(const SfxItemSet& )
 {
     // Fields initialisieren
     GetParent()->GetLabItem(aItem);
@@ -600,12 +600,12 @@ void SwLabFmtPage::Reset(const SfxItemSet& rSet)
 IMPL_LINK( SwLabFmtPage, SaveHdl, PushButton *, EMPTYARG )
 {
     SwLabRec aRec;
-    aRec.lHDist  = GETFLDVAL(aHDistField );
-    aRec.lVDist  = GETFLDVAL(aVDistField );
-    aRec.lWidth  = GETFLDVAL(aWidthField );
-    aRec.lHeight = GETFLDVAL(aHeightField);
-    aRec.lLeft   = GETFLDVAL(aLeftField  );
-    aRec.lUpper  = GETFLDVAL(aUpperField );
+    aRec.lHDist  = static_cast< long >(GETFLDVAL(aHDistField ));
+    aRec.lVDist  = static_cast< long >(GETFLDVAL(aVDistField ));
+    aRec.lWidth  = static_cast< long >(GETFLDVAL(aWidthField ));
+    aRec.lHeight = static_cast< long >(GETFLDVAL(aHeightField));
+    aRec.lLeft   = static_cast< long >(GETFLDVAL(aLeftField  ));
+    aRec.lUpper  = static_cast< long >(GETFLDVAL(aUpperField ));
     aRec.nCols   = (USHORT) aColsField.GetValue();
     aRec.nRows   = (USHORT) aRowsField.GetValue();
     aRec.bCont = aItem.bCont;
@@ -637,18 +637,21 @@ IMPL_LINK( SwLabFmtPage, SaveHdl, PushButton *, EMPTYARG )
  ---------------------------------------------------------------------------*/
 SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
     ModalDialog(pParent, SW_RES(DLG_SAVE_LABEL)),
-    rLabRec(rRec),
-    pLabPage(pParent),
     aOptionsFL(this,SW_RES(FL_OPTIONS  )),
     aMakeFT(this,   SW_RES(FT_MAKE     )),
     aMakeCB(this,   SW_RES(CB_MAKE     )),
     aTypeFT(this,   SW_RES(FT_TYPE     )),
     aTypeED(this,   SW_RES(ED_TYPE     )),
+
     aOKPB(this,     SW_RES(PB_OK     )),
     aCancelPB(this, SW_RES(PB_CANCEL )),
     aHelpPB(this,   SW_RES(PB_HELP      )),
+
     aQueryMB(this,  SW_RES(MB_QUERY )),
-    bSuccess(sal_False)
+
+    bSuccess(sal_False),
+    pLabPage(pParent),
+    rLabRec(rRec)
 {
     FreeResource();
 
@@ -666,7 +669,7 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
 /* -----------------------------23.01.01 10:40--------------------------------
 
  ---------------------------------------------------------------------------*/
-IMPL_LINK(SwSaveLabelDlg, OkHdl, OKButton*, pButton)
+IMPL_LINK(SwSaveLabelDlg, OkHdl, OKButton*, EMPTYARG)
 {
     SwLabelConfig& rCfg = pLabPage->GetParent()->GetLabelsConfig();
     String sMake(aMakeCB.GetText());
