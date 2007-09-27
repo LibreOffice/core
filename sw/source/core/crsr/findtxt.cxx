@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:00:15 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:29:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 
 
 
+#define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
 
@@ -86,8 +87,8 @@
 #include <breakit.hxx>
 #endif
 
-using namespace com::sun::star;
-using namespace com::sun::star::util;
+using namespace ::com::sun::star;
+using namespace util;
 
 
 String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
@@ -106,7 +107,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
     bool bNewHint       = true;
     bool bNewSoftHyphen = true;
     const xub_StrLen nEnd = rEnde;
-    SvULongs aReplaced;
+    SvUShorts aReplaced;
 
     do
     {
@@ -226,13 +227,13 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
 
 BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                     SwMoveFn fnMove, const SwPaM * pRegion,
-                    FASTBOOL bInReadOnly )
+                    BOOL bInReadOnly )
 {
     if( !rSearchOpt.searchString.getLength() )
         return FALSE;
 
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
-    FASTBOOL bSrchForward = fnMove == fnMoveForward;
+    BOOL bSrchForward = fnMove == fnMoveForward;
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
     SwIndex& rCntntIdx = pPam->GetPoint()->nContent;
 
@@ -261,7 +262,7 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     /*
      * StartPostion im Text oder Anfangsposition
      */
-    FASTBOOL bFirst = TRUE;
+    BOOL bFirst = TRUE;
     SwCntntNode * pNode;
     String sCleanStr;
     SvULongs aFltArr;
@@ -341,7 +342,7 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
 
                         if ( eCurrLang != eLastLang )
                         {
-                            const ::com::sun::star::lang::Locale aLocale(
+                            const lang::Locale aLocale(
                                     pBreakIt->GetLocale( eCurrLang ) );
                             rSTxt.SetLocale( rSearchOpt, aLocale );
                             eLastLang = eCurrLang;
@@ -427,15 +428,19 @@ struct SwFindParaText : public SwFindParas
     BOOL bReplace;
 
     SwFindParaText( const SearchOptions& rOpt, int bRepl, SwCursor& rCrsr )
-        : rSearchOpt( rOpt ), rCursor( rCrsr ), aSTxt( rOpt ), bReplace( bRepl )
+        : rSearchOpt( rOpt ), rCursor( rCrsr ), aSTxt( rOpt ), bReplace( 0 != bRepl )
     {}
-    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, FASTBOOL bInReadOnly );
+    virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, BOOL bInReadOnly );
     virtual int IsReplaceMode() const;
+    virtual ~SwFindParaText();
 };
 
+SwFindParaText::~SwFindParaText()
+{
+}
 
 int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
-                            const SwPaM* pRegion, FASTBOOL bInReadOnly )
+                            const SwPaM* pRegion, BOOL bInReadOnly )
 {
     if( bInReadOnly && bReplace )
         bInReadOnly = FALSE;
