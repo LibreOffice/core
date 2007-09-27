@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 15:51:41 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:06:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,8 @@ public:
                 ::com::sun::star::linguistic2::XSpellAlternatives >  &xAlt,
             const String & rParaText );
 
-    sal_uInt16  Execute( Window* pWin, const Rectangle& rPopupPos );
+    using PopupMenu::Execute;
+    sal_uInt16  Execute( const Rectangle& rPopupPos, Window* pWin );
     void Execute( USHORT nId );
 };
 
