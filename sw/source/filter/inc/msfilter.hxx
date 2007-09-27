@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msfilter.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:21:46 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:52:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -396,8 +396,8 @@ namespace sw
         public:
             explicit RedlineStack(SwDoc &rDoc) : mrDoc(rDoc) {}
             void open(const SwPosition& rPos, const SfxPoolItem& rAttr);
-            bool close(const SwPosition& rPos, IDocumentRedlineAccess::RedlineType_t eType);
-            void close(const SwPosition& rPos, IDocumentRedlineAccess::RedlineType_t eType,
+            bool close(const SwPosition& rPos, RedlineType_t eType);
+            void close(const SwPosition& rPos, RedlineType_t eType,
                 WW8TabDesc* pTabDesc );
             void closeall(const SwPosition& rPos);
             ~RedlineStack();
@@ -468,6 +468,7 @@ namespace sw
             WrtRedlineAuthor& operator=(const WrtRedlineAuthor&);
         public:
             WrtRedlineAuthor() {}
+            virtual ~WrtRedlineAuthor() {}
 
             USHORT AddName( const String& rNm );
             virtual void Write(Writer &rWrt) = 0;
