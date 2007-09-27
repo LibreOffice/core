@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 15:55:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:14:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,9 +150,8 @@ SwNoTxtNode *SwXMLTextParagraphExport::GetNoTxtNode(
 {
     Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );
-    SwXFrame *pFrame =
-                (SwXFrame *)xCrsrTunnel->getSomething(
-                                    SwXFrame::getUnoTunnelId() );
+    SwXFrame *pFrame = reinterpret_cast< SwXFrame * >(
+                sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( SwXFrame::getUnoTunnelId() )));
     ASSERT( pFrame, "SwXFrame missing" );
     SwFrmFmt *pFrmFmt = pFrame->GetFrmFmt();
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
@@ -168,8 +167,8 @@ void SwXMLTextParagraphExport::exportStyleContent(
     Reference<XUnoTunnel> xStyleTunnel( rStyle, UNO_QUERY);
     if( xStyleTunnel.is() )
     {
-        pStyle = (SwXStyle*)xStyleTunnel->getSomething(
-                                            SwXStyle::getUnoTunnelId() );
+        pStyle = reinterpret_cast< SwXStyle * >(
+                sal::static_int_cast< sal_IntPtr >( xStyleTunnel->getSomething( SwXStyle::getUnoTunnelId() )));
     }
     if( pStyle && SFX_STYLE_FAMILY_PARA == pStyle->GetFamily() )
     {
@@ -244,7 +243,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
                     SwStyleNameMapper::FillProgName(
                                     rCond.GetTxtFmtColl()->GetName(),
                                     aString,
-                                    GET_POOLID_TXTCOLL,
+                                    nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
                                     sal_True);
                     aString = GetExport().EncodeStyleName( aString );
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
@@ -259,8 +258,8 @@ void SwXMLTextParagraphExport::exportStyleContent(
 
 SwXMLTextParagraphExport::SwXMLTextParagraphExport(
         SwXMLExport& rExp,
-         SvXMLAutoStylePoolP& rAutoStylePool ) :
-    XMLTextParagraphExport( rExp, rAutoStylePool ),
+         SvXMLAutoStylePoolP& _rAutoStylePool ) :
+    XMLTextParagraphExport( rExp, _rAutoStylePool ),
     sTextTable( RTL_CONSTASCII_USTRINGPARAM( "TextTable" ) ),
     sEmbeddedObjectProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) ),
     sGraphicObjectProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) ),
@@ -419,28 +418,28 @@ void lcl_addFrameProperties(
 
     if( !bIsAutoScroll )
     {
-        Any aAny( &bIsScrollingMode, ::getBooleanCppuType() );
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_SCROLLBAR ), aAny );
+        Any aAny2( &bIsScrollingMode, ::getBooleanCppuType() );
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_SCROLLBAR ), aAny2 );
         pStates++;
     }
     if( !bIsAutoBorder )
     {
-        Any aAny( &bIsBorderSet, ::getBooleanCppuType() );
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_BORDER ), aAny );
+        Any aAny2( &bIsBorderSet, ::getBooleanCppuType() );
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_BORDER ), aAny2 );
         pStates++;
     }
     if( SIZE_NOT_SET != nWidth )
     {
-        Any aAny;
+        Any aAny2;
         aAny <<= nWidth;
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_HORI ), aAny );
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_HORI ), aAny2 );
         pStates++;
     }
     if( SIZE_NOT_SET != nHeight )
     {
-        Any aAny;
+        Any aAny2;
         aAny <<= nHeight;
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_VERT ), aAny );
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_VERT ), aAny2 );
         pStates++;
     }
 }
@@ -510,8 +509,8 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         nType = SV_EMBEDDED_OUTPLACE;
     }
 
-    enum XMLTokenEnum eElementName;
-    SvXMLExport &rExport = GetExport();
+    enum XMLTokenEnum eElementName = XML__UNKNOWN_;
+    SvXMLExport &rXMLExport = GetExport();
 
     // First the stuff common to each of Applet/Plugin/Floating Frame
     OUString sStyle;
@@ -533,6 +532,8 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         lcl_addOutplaceProperties( rObjRef, aStates,
             GetAutoFramePropMapper()->getPropertySetMapper() );
         break;
+    default:
+        ;
     }
 
     lcl_addAspect( rObjRef, aStates,
@@ -549,7 +550,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     }
 
     if( sAutoStyle.getLength() )
-        rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE_NAME, sAutoStyle );
+        rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE_NAME, sAutoStyle );
     addTextFrameAttributes( rPropSet, sal_False );
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
@@ -559,7 +560,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     {
     case SV_EMBEDDED_OUTPLACE:
     case SV_EMBEDDED_OWN:
-        if( (rExport.getExportFlags() & EXPORT_EMBEDDED) == 0 )
+        if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) == 0 )
         {
             OUString sURL;
 
@@ -587,7 +588,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             }
 
             sURL = GetExport().AddEmbeddedObject( sURL );
-            lcl_addURL( rExport, sURL, sal_False );
+            lcl_addURL( rXMLExport, sURL, sal_False );
         }
         if( SV_EMBEDDED_OWN == nType && pOLENd->GetChartTblName().Len() )
         {
@@ -621,7 +622,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 sRange = aBuffer.makeStringAndClear();
             }
 
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES,
+            rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NOTIFY_ON_UPDATE_OF_RANGES,
             sRange );
         }
         eElementName = SV_EMBEDDED_OUTPLACE==nType ? XML_OBJECT_OLE
@@ -634,39 +635,39 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             {
                 uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
                 ::rtl::OUString aStr;
-                Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase") );
-                aAny >>= aStr;
+                Any aAny2 = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase") );
+                aAny2 >>= aStr;
                 if (aStr.getLength() )
-                    lcl_addURL(rExport, aStr);
+                    lcl_addURL(rXMLExport, aStr);
 
-                aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletName") );
-                aAny >>= aStr;
+                aAny2 = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletName") );
+                aAny2 >>= aStr;
                 if (aStr.getLength())
-                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_APPLET_NAME, aStr );
+                    rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_APPLET_NAME, aStr );
 
-                aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCode") );
-                aAny >>= aStr;
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CODE, aStr );
+                aAny2 = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCode") );
+                aAny2 >>= aStr;
+                rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CODE, aStr );
 
                 sal_Bool bScript = sal_False;
-                aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletIsScript") );
-                aAny >>= bScript;
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MAY_SCRIPT, bScript ? XML_TRUE : XML_FALSE );
+                aAny2 = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletIsScript") );
+                aAny2 >>= bScript;
+                rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MAY_SCRIPT, bScript ? XML_TRUE : XML_FALSE );
 
                 uno::Sequence < beans::PropertyValue > aProps;
-                aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands") );
-                aAny >>= aProps;
+                aAny2 = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands") );
+                aAny2 >>= aProps;
 
                 sal_Int32 i = aProps.getLength();
                 while ( i > 0 )
                 {
                     beans::PropertyValue& aProp = aProps[--i];
-                    USHORT nType = SwApplet_Impl::GetOptionType( aProp.Name, TRUE );
-                    if ( nType == SWHTML_OPTTYPE_TAG)
+                    USHORT nType2 = SwApplet_Impl::GetOptionType( aProp.Name, TRUE );
+                    if ( nType2 == SWHTML_OPTTYPE_TAG)
                     {
-                        ::rtl::OUString aStr;
-                        aProp.Value >>= aStr;
-                        rExport.AddAttribute( XML_NAMESPACE_DRAW, aProp.Name, aStr);
+                        ::rtl::OUString aStr2;
+                        aProp.Value >>= aStr2;
+                        rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, aProp.Name, aStr2);
                     }
                 }
 
@@ -681,14 +682,14 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             {
                 uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
                 ::rtl::OUString aStr;
-                Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginURL") );
-                aAny >>= aStr;
-                lcl_addURL( rExport, aStr );
+                Any aAny2 = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginURL") );
+                aAny2 >>= aStr;
+                lcl_addURL( rXMLExport, aStr );
 
-                aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginMimeType") );
-                aAny >>= aStr;
+                aAny2 = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginMimeType") );
+                aAny2 >>= aStr;
                 if (aStr.getLength())
-                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, aStr );
+                    rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, aStr );
                 eElementName = XML_PLUGIN;
             }
         }
@@ -700,16 +701,16 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             {
                 uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
                 ::rtl::OUString aStr;
-                Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameURL") );
-                aAny >>= aStr;
+                Any aAny2 = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameURL") );
+                aAny2 >>= aStr;
 
-                lcl_addURL( rExport, aStr );
+                lcl_addURL( rXMLExport, aStr );
 
-                aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameName") );
-                aAny >>= aStr;
+                aAny2 = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameName") );
+                aAny2 >>= aStr;
 
                 if (aStr.getLength())
-                    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_FRAME_NAME, aStr );
+                    rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_FRAME_NAME, aStr );
                 eElementName = XML_FLOATING_FRAME;
             }
         }
@@ -719,29 +720,29 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     }
 
     {
-        SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, eElementName,
+        SvXMLElementExport aElementExport( rXMLExport, XML_NAMESPACE_DRAW, eElementName,
                                       sal_False, sal_True );
         switch( nType )
         {
         case SV_EMBEDDED_OWN:
-            if( (rExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
+            if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
             {
                 Reference < XEmbeddedObjectSupplier > xEOS( rPropSet, UNO_QUERY );
                 ASSERT( xEOS.is(), "no embedded object supplier for own object" );
                 Reference < XComponent > xComp = xEOS->getEmbeddedObject();
-                rExport.ExportEmbeddedOwnObject( xComp );
+                rXMLExport.ExportEmbeddedOwnObject( xComp );
             }
             break;
         case SV_EMBEDDED_OUTPLACE:
-            if( (rExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
+            if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
             {
                 OUString sURL( sEmbeddedObjectProtocol );
                 sURL += rOLEObj.GetCurrentPersistName();
 
-                if ( ( rExport.getExportFlags() & EXPORT_OASIS ) == 0 )
+                if ( ( rXMLExport.getExportFlags() & EXPORT_OASIS ) == 0 )
                     sURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "?oasis=false" ) );
 
-                rExport.AddEmbeddedObjectAsBase64( sURL );
+                rXMLExport.AddEmbeddedObjectAsBase64( sURL );
             }
             break;
         case SV_EMBEDDED_APPLET:
@@ -757,14 +758,14 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     while ( i > 0 )
                     {
                         beans::PropertyValue& aProp = aProps[--i];
-                        USHORT nType = SwApplet_Impl::GetOptionType( aProp.Name, TRUE );
-                        if (SWHTML_OPTTYPE_PARAM == nType || SWHTML_OPTTYPE_SIZE == nType )
+                        USHORT nType2 = SwApplet_Impl::GetOptionType( aProp.Name, TRUE );
+                        if (SWHTML_OPTTYPE_PARAM == nType2 || SWHTML_OPTTYPE_SIZE == nType2 )
                         {
                             ::rtl::OUString aStr;
                             aProp.Value >>= aStr;
-                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aProp.Name );
-                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
-                            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True );
+                            rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aProp.Name );
+                            rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
+                            SvXMLElementExport aElementExport2( rXMLExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True );
                         }
                     }
                 }
@@ -783,18 +784,20 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     while ( i > 0 )
                     {
                         beans::PropertyValue& aProp = aProps[--i];
-                        USHORT nType = SwApplet_Impl::GetOptionType( aProp.Name, FALSE );
-                        if ( nType == SWHTML_OPTTYPE_TAG)
+                        USHORT nType2 = SwApplet_Impl::GetOptionType( aProp.Name, FALSE );
+                        if ( nType2 == SWHTML_OPTTYPE_TAG)
                         {
                             ::rtl::OUString aStr;
                             aProp.Value >>= aStr;
-                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aProp.Name );
-                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
-                            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True );
+                            rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aProp.Name );
+                            rXMLExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aStr );
+                            SvXMLElementExport aElementExport2( rXMLExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True );
                         }
                     }
                 }
             }
+            break;
+        default:
             break;
         }
     }
@@ -802,16 +805,16 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     {
         OUString sURL( sGraphicObjectProtocol );
         sURL += rOLEObj.GetCurrentPersistName();
-        if( (rExport.getExportFlags() & EXPORT_EMBEDDED) == 0 )
+        if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) == 0 )
         {
             sURL = GetExport().AddEmbeddedObject( sURL );
-            lcl_addURL( rExport, sURL, sal_False );
+            lcl_addURL( rXMLExport, sURL, sal_False );
         }
 
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
+        SvXMLElementExport aElementExport( GetExport(), XML_NAMESPACE_DRAW,
                                   XML_IMAGE, sal_False, sal_True );
 
-        if( (rExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
+        if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
             GetExport().AddEmbeddedObjectAsBase64( sURL );
     }
 
