@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortedarray.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:05:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:00:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,9 @@ namespace ww
                     ++pIter;
             }
             if (bBroken)
+            {
                DBG_ERROR(rtl::OUStringToOString(sError, RTL_TEXTENCODING_ASCII_US));
+            }
 #endif
         }
     };
