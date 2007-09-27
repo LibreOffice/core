@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 11:49:23 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:03:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,6 @@
 #include "txtfrm.hxx"
 #include "notxtfrm.hxx"
 #include "flyfrms.hxx"
-#include "frmsh.hxx"
 #include "mdiexp.hxx"
 #include "fmtornt.hxx"
 #include "sectfrm.hxx"
@@ -291,7 +290,7 @@ BOOL SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *pCnt,
             }
             else
             {
-                const FASTBOOL bLowerOfSelf = pFly->IsLowerOf( pSelfFly );
+                const BOOL bLowerOfSelf = pFly->IsLowerOf( pSelfFly );
                 if ( !bLowerOfSelf && !pFly->GetFmt()->GetOpaque().GetValue() )
                     //Aus anderem Layer interessieren uns nur nicht transparente
                     //oder innenliegende
@@ -324,11 +323,11 @@ BOOL SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *pCnt,
         aTmp -= pFly->Frm();
     }
 
-    BOOL bPaint = FALSE;
+    BOOL bRetPaint = FALSE;
     const SwRect *pData = aTmp.GetData();
     for ( i = 0; i < aTmp.Count(); ++pData, ++i )
-        bPaint |= pImp->GetShell()->AddPaintRect( *pData );
-    return bPaint;
+        bRetPaint |= pImp->GetShell()->AddPaintRect( *pData );
+    return bRetPaint;
 }
 
 inline BOOL SwLayAction::_PaintCntnt( const SwCntntFrm *pCntnt,
@@ -543,12 +542,12 @@ SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
     pImp( pI ),
     pOptTab( 0 ),
     pWait( 0 ),
+    pProgress(NULL),
     nPreInvaPage( USHRT_MAX ),
-    nCheckPageNum( USHRT_MAX ),
     nStartTicks( Ticks() ),
     nInputType( 0 ),
     nEndPage( USHRT_MAX ),
-    pProgress(NULL)
+    nCheckPageNum( USHRT_MAX )
 {
     bPaintExtraData = ::IsExtraData( pImp->GetShell()->GetDoc() );
     bPaint = bComplete = bWaitAllowed = bCheckPages = TRUE;
@@ -808,7 +807,7 @@ void SwLayAction::InternalAction()
         pPage = (SwPageFrm*)pPage->GetNext();
 
     IDocumentLayoutAccess *pLayoutAccess = pRoot->GetFmt()->getIDocumentLayoutAccess();
-    BOOL bNoLoop = pPage ? SwLayouter::StartLoopControl( pRoot->GetFmt()->GetDoc(), pPage ) : NULL;
+    BOOL bNoLoop = pPage ? SwLayouter::StartLoopControl( pRoot->GetFmt()->GetDoc(), pPage ) : FALSE;
     USHORT nPercentPageNum = 0;
     while ( (pPage && !IsInterrupt()) || nCheckPageNum != USHRT_MAX )
     {
@@ -1376,7 +1375,7 @@ const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
 BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
 {
     BOOL bRet = FALSE;
-    const FASTBOOL bBrowse = pRoot->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const BOOL bBrowse = pRoot->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
     //Wenn die Seite nicht Gueltig ist wird sie schnell formatiert, sonst
     //gibts nix als Aerger.
@@ -1441,7 +1440,7 @@ BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
         }
         if ( pCntnt )
         {
-            FASTBOOL bTstCnt = TRUE;
+            BOOL bTstCnt = TRUE;
             if ( bBrowse )
             {
                 //Der Cnt davor schon nicht mehr sichtbar?
@@ -1622,7 +1621,7 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
         if ( aOldRect != pLay->Frm() )
             bChanged = TRUE;
 
-        FASTBOOL bNoPaint = FALSE;
+        BOOL bNoPaint = FALSE;
         if ( pLay->IsPageBodyFrm() &&
              pLay->Frm().Pos() == aOldRect.Pos() &&
              pLay->Lower() &&
@@ -2055,7 +2054,7 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
     pTimerAccess->BlockIdling();
 
     BOOL bChanged = FALSE;
-    FASTBOOL bPainted = FALSE;
+    BOOL bPainted = FALSE;
 
     const SwPageFrm *pOldPage = pTab->FindPageFrm();
 
@@ -2253,7 +2252,7 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
 BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
 {
     const SwCntntFrm *pCntnt = pPage->ContainsCntnt();
-    const FASTBOOL bBrowse = pRoot->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const BOOL bBrowse = pRoot->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
 
     while ( pCntnt && pPage->IsAnLower( pCntnt ) )
     {
@@ -2345,7 +2344,7 @@ BOOL SwLayAction::FormatCntnt( const SwPageFrm *pPage )
             //So werden einerseits Vorgaenger erwischt, die jetzt f?r Retouche
             //verantwortlich sind, andererseits werden die Fusszeilen
             //auch angefasst.
-            FASTBOOL bSetCntnt = TRUE;
+            BOOL bSetCntnt = TRUE;
             if ( pCntntPrev )
             {
                 if ( !pCntntPrev->IsValid() && pPage->IsAnLower( pCntntPrev ) )
@@ -2869,7 +2868,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 
         //Weitere Start-/EndActions nur auf wenn irgendwo Paints aufgelaufen
         //sind oder wenn sich die Sichtbarkeit des CharRects veraendert hat.
-        FASTBOOL bActions = FALSE;
+        BOOL bActions = FALSE;
         USHORT nBoolIdx = 0;
         do
         {
@@ -2908,7 +2907,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
             nBoolIdx = 0;
             do
             {
-                FASTBOOL bCrsrShell = pSh->IsA( TYPE(SwCrsrShell) );
+                BOOL bCrsrShell = pSh->IsA( TYPE(SwCrsrShell) );
 
                 if ( bCrsrShell )
                     ((SwCrsrShell*)pSh)->SttCrsrMove();
@@ -2919,11 +2918,11 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                 //gesamte Window zu invalidieren. Anderfalls gibt es Paintprobleme
                 //deren Loesung unverhaeltnissmaessig aufwendig waere.
                 //fix(18176):
-                SwViewImp *pImp = pSh->Imp();
-                FASTBOOL bUnlock = FALSE;
-                if ( pImp->GetRegion() || pImp->GetScrollRects() )
+                SwViewImp *pViewImp = pSh->Imp();
+                BOOL bUnlock = FALSE;
+                if ( pViewImp->GetRegion() || pViewImp->GetScrollRects() )
                 {
-                    pImp->DelRegions();
+                    pViewImp->DelRegions();
 
                     //Fuer Repaint mit virtuellem Device sorgen.
                     pSh->LockPaint();
