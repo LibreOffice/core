@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selectdbtabledialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:07:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:35:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,26 +70,27 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
 
+#include <unomid.h>
 
 #include <selectdbtabledialog.hrc>
 #include <dbui.hrc>
 #include <helpid.h>
 
-using namespace com::sun::star::sdbcx;
-using namespace com::sun::star::sdbc;
-using namespace com::sun::star::sdb;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::container;
-using namespace com::sun::star::beans;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::beans;
 
-#define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 /*-- 08.04.2004 14:33:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& rConnection) :
+        const uno::Reference< sdbc::XConnection>& rConnection) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_SELECTDBTABLEDDIALOG)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aSelectFI( this, SW_RES(       FI_SELECT     )),
@@ -100,7 +101,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
     m_aOK( this, SW_RES(             PB_OK         )),
     m_aCancel( this, SW_RES(         PB_CANCEL     )),
     m_aHelp( this, SW_RES(           PB_HELP       )),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
     m_sName( SW_RES( ST_NAME )),
