@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redline.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:24:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:08:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,15 +111,15 @@ class SwRedlineData
 
     String sComment;
     DateTime aStamp;
-    IDocumentRedlineAccess::RedlineType_t eType;
+    RedlineType_t eType;
     USHORT nAuthor, nSeqNo;
 
 public:
-    SwRedlineData( IDocumentRedlineAccess::RedlineType_t eT, USHORT nAut );
+    SwRedlineData( RedlineType_t eT, USHORT nAut );
     SwRedlineData( const SwRedlineData& rCpy, BOOL bCpyNext = TRUE );
 
     // fuer sw3io: pNext/pExtraData gehen in eigenen Besitz ueber!
-    SwRedlineData( IDocumentRedlineAccess::RedlineType_t eT, USHORT nAut, const DateTime& rDT,
+    SwRedlineData( RedlineType_t eT, USHORT nAut, const DateTime& rDT,
                    const String& rCmnt, SwRedlineData* pNxt,
                     SwRedlineExtraData* pExtraData = 0 );
 
@@ -139,9 +139,9 @@ public:
     int operator!=( const SwRedlineData& rCmp ) const
         {   return !operator==( rCmp ); }
 
-    IDocumentRedlineAccess::RedlineType_t GetType() const
-  { return ((IDocumentRedlineAccess::RedlineType_t)(eType & IDocumentRedlineAccess::REDLINE_NO_FLAG_MASK)); }
-    IDocumentRedlineAccess::RedlineType_t GetRealType() const { return eType; }
+    RedlineType_t GetType() const
+  { return ((RedlineType_t)(eType & nsRedlineType_t::REDLINE_NO_FLAG_MASK)); }
+    RedlineType_t GetRealType() const { return eType; }
     USHORT GetAuthor() const                { return nAuthor; }
     const String& GetComment() const        { return sComment; }
     const DateTime& GetTimeStamp() const    { return aStamp; }
@@ -149,7 +149,7 @@ public:
 
     void SetComment( const String& rS )     { sComment = rS; }
     void SetAutoFmtFlag()
-  { eType = (IDocumentRedlineAccess::RedlineType_t)(eType | IDocumentRedlineAccess::REDLINE_FORM_AUTOFMT); }
+  { eType = (RedlineType_t)(eType | nsRedlineType_t::REDLINE_FORM_AUTOFMT); }
     int CanCombine( const SwRedlineData& rCmp ) const
         {
             return nAuthor == rCmp.nAuthor &&
@@ -193,7 +193,7 @@ class SwRedline : public SwPaM
     void MoveFromSection();
 
 public:
-    SwRedline( IDocumentRedlineAccess::RedlineType_t eType, const SwPaM& rPam );
+    SwRedline( RedlineType_t eType, const SwPaM& rPam );
     SwRedline( const SwRedlineData& rData, const SwPaM& rPam );
     SwRedline( const SwRedlineData& rData, const SwPosition& rPos );
     // fuer sw3io: pData geht in eigenen Besitz ueber!
@@ -238,9 +238,9 @@ public:
     USHORT GetAuthor( USHORT nPos = 0) const;
     const String& GetAuthorString( USHORT nPos = 0 ) const;
     const DateTime& GetTimeStamp( USHORT nPos = 0) const;
-    IDocumentRedlineAccess::RedlineType_t GetRealType( USHORT nPos = 0 ) const;
-    IDocumentRedlineAccess::RedlineType_t GetType( USHORT nPos = 0) const
-  { return ( (IDocumentRedlineAccess::RedlineType_t)(GetRealType( nPos ) & IDocumentRedlineAccess::REDLINE_NO_FLAG_MASK)); }
+    RedlineType_t GetRealType( USHORT nPos = 0 ) const;
+    RedlineType_t GetType( USHORT nPos = 0) const
+  { return ( (RedlineType_t)(GetRealType( nPos ) & nsRedlineType_t::REDLINE_NO_FLAG_MASK)); }
     const String& GetComment( USHORT nPos = 0 ) const;
 
     void SetComment( const String& rS ) { pRedlineData->SetComment( rS ); }
