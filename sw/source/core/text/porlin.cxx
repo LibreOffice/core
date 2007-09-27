@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:38:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:17:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,9 +105,9 @@ KSHORT SwLinePortion::GetViewWidth( const SwTxtSizeInfo & ) const
  *************************************************************************/
 
 SwLinePortion::SwLinePortion( ) :
+    pPortion( NULL ),
     nLineLength( 0 ),
-    nAscent( 0 ),
-    pPortion( NULL )
+    nAscent( 0 )
 {
 }
 
@@ -130,7 +130,7 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
     USHORT nLastWidth = pLast->Width();
 
     if ( pLast->InSpaceGrp() && rInf.GetSpaceAdd() )
-        nLastWidth += (USHORT)pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
+        nLastWidth = nLastWidth + (USHORT)pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
 
     KSHORT nPos;
     SwTxtPaintInfo aInf( rInf );
@@ -235,7 +235,7 @@ SwLinePortion *SwLinePortion::Insert( SwLinePortion *pIns )
 
 SwLinePortion *SwLinePortion::FindLastPortion()
 {
-    register SwLinePortion *pPos = this;
+    SwLinePortion *pPos = this;
     // An das Ende wandern und pLinPortion an den letzten haengen ...
     while( pPos->GetPortion() )
     {
@@ -339,7 +339,7 @@ sal_Bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
         return sal_True;
     }
 
-    register const SwLinePortion *pLast = rInf.GetLast();
+    const SwLinePortion *pLast = rInf.GetLast();
     Height( pLast->Height() );
     SetAscent( pLast->GetAscent() );
     const KSHORT nNewWidth = static_cast<USHORT>(rInf.X() + PrtWidth());
@@ -362,7 +362,7 @@ sal_Bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
 
 // Format end of line
 
-void SwLinePortion::FormatEOL( SwTxtFormatInfo &rInf )
+void SwLinePortion::FormatEOL( SwTxtFormatInfo & )
 { }
 
 /*************************************************************************
@@ -410,7 +410,7 @@ void SwLinePortion::Move( SwTxtPaintInfo &rInf )
  *              virtual SwLinePortion::CalcSpacing()
  *************************************************************************/
 
-long SwLinePortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const
+long SwLinePortion::CalcSpacing( long , const SwTxtSizeInfo & ) const
 {
     return 0;
 }
@@ -419,7 +419,7 @@ long SwLinePortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) con
  *              virtual SwLinePortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwLinePortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const
+sal_Bool SwLinePortion::GetExpTxt( const SwTxtSizeInfo &, XubString & ) const
 {
     return sal_False;
 }
