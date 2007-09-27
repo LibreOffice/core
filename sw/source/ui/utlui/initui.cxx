@@ -4,9 +4,9 @@
  *
  *  $RCSfile: initui.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:28:26 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:45:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,8 @@
 #include <dbmgr.hxx>
 #endif
 
-#define C2S(cChar) UniString::CreateFromAscii(cChar)
+#include <unomid.h>
+
 /*--------------------------------------------------------------------
     Beschreibung:   globale Pointer
  --------------------------------------------------------------------*/
@@ -95,7 +96,6 @@ String* pOldFrmCat = 0;
 String* pOldDrwCat = 0;
 String* pCurrGlosGroup = 0;
 
-//CHINA001  add for swui to access global variables in sw. Begin
 String* GetOldGrfCat()
 {
     return pOldGrfCat;
@@ -120,7 +120,6 @@ void SetCurrGlosGroup(String* pStr)
 {
     pCurrGlosGroup = pStr;
 }
-//CHINA001 End for add
 
 SvStringsDtor* pDBNameList = 0;
 
@@ -171,9 +170,10 @@ void _InitUI()
 
 ShellResource::ShellResource()
     : Resource( SW_RES(RID_SW_SHELLRES) ),
-    aPostItPage( SW_RES( STR_POSTIT_PAGE ) ),
     aPostItAuthor( SW_RES( STR_POSTIT_AUTHOR ) ),
+    aPostItPage( SW_RES( STR_POSTIT_PAGE ) ),
     aPostItLine( SW_RES( STR_POSTIT_LINE ) ),
+
     aCalc_Syntax( SW_RES( STR_CALC_SYNTAX ) ),
     aCalc_ZeroDiv( SW_RES( STR_CALC_ZERODIV ) ),
     aCalc_Brack( SW_RES( STR_CALC_BRACK ) ),
@@ -183,11 +183,13 @@ ShellResource::ShellResource()
     aCalc_WrongTime( SW_RES( STR_CALC_WRONGTIME ) ),
     aCalc_Default( SW_RES( STR_CALC_DEFAULT ) ),
     aCalc_Error( SW_RES( STR_CALC_ERROR ) ),
+
     aGetRefFld_Up( SW_RES( STR_GETREFFLD_UP ) ),
     aGetRefFld_Down( SW_RES( STR_GETREFFLD_DOWN ) ),
     aStrAllPageHeadFoot( SW_RES( STR_ALLPAGE_HEADFOOT ) ),
     aStrNone( SW_RES( STR_TEMPLATE_NONE )),
     aFixedStr( SW_RES( STR_FIELD_FIXED )),
+
     aTOXIndexName(          SW_RES(STR_TOI)),
     aTOXUserName(           SW_RES(STR_TOU)),
     aTOXContentName(        SW_RES(STR_TOC)),
@@ -198,8 +200,7 @@ ShellResource::ShellResource()
     aHyperlinkClick( SW_RES( STR_HYPERLINK_CLICK)),
     sPageDescFirstName(     SW_RES(STR_PAGEDESC_FIRSTNAME)),
     sPageDescFollowName(    SW_RES(STR_PAGEDESC_FOLLOWNAME)),
-    sPageDescName(          SW_RES(STR_PAGEDESC_NAME)),
-    pAutoFmtNameLst( 0 )
+    sPageDescName(          SW_RES(STR_PAGEDESC_NAME))
 {
     const USHORT nCount = FLD_DOCINFO_END - FLD_DOCINFO_BEGIN;
 
@@ -268,12 +269,12 @@ ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( SvStringsDtor& rLst )
         String* p = new String( ResId( n + 1, *pSwResMgr) );
         if(STR_AUTOFMTREDL_TYPO == n)
         {
-            LocaleDataWrapper& rLclD = GetAppLocaleData();
 #ifdef WNT
             //fuer Windows Sonderbehandlung, da MS hier ein paar Zeichen im Dialogfont vergessen hat
             p->SearchAndReplace(C2S("%1"), C2S(",,"));
             p->SearchAndReplace(C2S("%2"), C2S("''"));
 #else
+            LocaleDataWrapper& rLclD = GetAppLocaleData();
             //unter richtigen Betriebssystemen funktioniert es auch so
             p->SearchAndReplace(C2S("%1"), rLclD.getDoubleQuotationMarkStart());
             p->SearchAndReplace(C2S("%2"), rLclD.getDoubleQuotationMarkEnd());
@@ -297,7 +298,7 @@ const String&   SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
             pAuthFieldNameList->Insert(pTmp, pAuthFieldNameList->Count());
         }
     }
-    return *pAuthFieldNameList->GetObject(eType);
+    return *pAuthFieldNameList->GetObject( static_cast< USHORT >(eType) );
 }
 /* -----------------16.09.99 12:29-------------------
 
@@ -312,7 +313,7 @@ const String&   SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
                 new String(SW_RES(STR_AUTH_TYPE_START + i)),
                                     pAuthFieldTypeList->Count());
     }
-    return *pAuthFieldTypeList->GetObject(eType);
+    return *pAuthFieldTypeList->GetObject( static_cast< USHORT >(eType) );
 }
 
 
