@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docbasic.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:49:46 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:32:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ BOOL SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
 
 
 USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
-                    BOOL bCheckPtr, SbxArray* pArgs, const Link* pCallBack )
+                    BOOL bCheckPtr, SbxArray* pArgs, const Link* )
 {
     if( !pDocShell )        // ohne DocShell geht das nicht!
         return 0;
@@ -285,7 +285,7 @@ USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
                     rMacro.GetMacName(), RTL_TEXTENCODING_UTF8).GetBuffer() );
 
                 nRet += 0 == pDocShell->CallXScript(
-                    rMacro.GetMacName(), *pUnoArgs,aRet, aOutArgsIndex, aOutArgs);
+                    rMacro.GetMacName(), *pUnoArgs,aRet, aOutArgsIndex, aOutArgs) ? 1 : 0;
 
                 //*pRet = pRetValue->GetString();
                 // use the AnyConverter to return a String if appropriate?
