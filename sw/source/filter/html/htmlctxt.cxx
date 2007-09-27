@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlctxt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:08:42 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:46:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,9 @@
 #include "css1kywd.hxx"
 #include "swcss1.hxx"
 #include "swhtml.hxx"
+
+using namespace ::com::sun::star;
+
 
 /*  */
 
@@ -471,7 +474,7 @@ BOOL SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
             Reader::ResetFrmFmtAttrs(aFrmItemSet );
 
         // Ausrichtung setzen
-        SetAnchorAndAdjustment( VERT_NONE, HORI_NONE, rItemSet, rPropInfo,
+        SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE, rItemSet, rPropInfo,
                                 aFrmItemSet );
 
         // Groesse setzen
@@ -509,7 +512,7 @@ BOOL SwHTMLParser::CreateContainer( const String& rClass,
         if( !IsNewDoc() )
             Reader::ResetFrmFmtAttrs( *pFrmItemSet );
 
-        SetAnchorAndAdjustment( VERT_NONE, HORI_NONE,
+        SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE,
                                 rItemSet, rPropInfo, *pFrmItemSet );
         Size aDummy(0,0);
         SetFixSize( aDummy, aDummy, FALSE, FALSE, rItemSet, rPropInfo,
@@ -611,7 +614,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                         -rPropInfo.nLeftMargin > nOldLeft )
                         nLeft = 0;
                     else
-                        nLeft = nOldLeft + rPropInfo.nLeftMargin;
+                        nLeft = nOldLeft + static_cast< USHORT >(rPropInfo.nLeftMargin);
                 }
                 if( rPropInfo.bRightMargin )
                 {
@@ -622,7 +625,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                         -rPropInfo.nRightMargin > nOldRight )
                         nRight = 0;
                     else
-                        nRight = nOldRight + rPropInfo.nRightMargin;
+                        nRight = nOldRight + static_cast< USHORT >(rPropInfo.nRightMargin);
                 }
                 if( rPropInfo.bTextIndent )
                     nIndent = pLRItem->GetTxtFirstLineOfst();
