@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:59:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:48:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,165 +121,6 @@
 #include <fldtdlg.hrc>
 #endif
 
-//CHINA001 #include "swabstdlg.hxx" //CHINA001
-//CHINA001
-//CHINA001 SFX_IMPL_CHILDWINDOW(SwFldDlgWrapper, FN_INSERT_FIELD)
-//CHINA001
-//CHINA001 /*--------------------------------------------------------------------
-//CHINA001 Beschreibung:
-//CHINA001 --------------------------------------------------------------------*/
-//CHINA001
-//CHINA001 SwChildWinWrapper::SwChildWinWrapper(Window *pParentWindow, USHORT nId) :
-//CHINA001 SfxChildWindow(pParentWindow, nId),
-//CHINA001 pDocSh(0)
-//CHINA001 {
-//CHINA001 // Flackern der Buttons vermeiden:
-//CHINA001 aUpdateTimer.SetTimeout(200);
-//CHINA001 aUpdateTimer.SetTimeoutHdl(LINK(this, SwChildWinWrapper, UpdateHdl));
-//CHINA001 }
-//CHINA001
-//CHINA001 /*--------------------------------------------------------------------
-//CHINA001 Beschreibung:
-//CHINA001 --------------------------------------------------------------------*/
-//CHINA001
-//CHINA001 IMPL_LINK( SwChildWinWrapper, UpdateHdl, void*, EMPTYARG )
-//CHINA001 {
-//CHINA001 GetWindow()->Activate(); // Dialog aktualisieren
-//CHINA001
-//CHINA001 return 0;
-//CHINA001 }
-//CHINA001
-//CHINA001 /*--------------------------------------------------------------------
-//CHINA001 Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
-//CHINA001 --------------------------------------------------------------------*/
-//CHINA001
-//CHINA001 BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *pDocSh)
-//CHINA001 {
-//CHINA001 BOOL bRet = FALSE;
-//CHINA001
-//CHINA001 if (pDocSh != GetOldDocShell())
-//CHINA001  {
-//CHINA001 aUpdateTimer.Stop();
-//CHINA001 bRet = TRUE;         // Sofortiges Update
-//CHINA001  }
-//CHINA001  else
-//CHINA001 aUpdateTimer.Start();
-//CHINA001
-//CHINA001 return bRet;
-//CHINA001 }
-//CHINA001
-//CHINA001 /*--------------------------------------------------------------------
-//CHINA001 Beschreibung:
-//CHINA001 --------------------------------------------------------------------*/
-//CHINA001
-//CHINA001 SfxChildWinInfo SwFldDlgWrapper::GetInfo() const
-//CHINA001 {
-//CHINA001 SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
-//CHINA001 aInfo.aPos = GetWindow()->OutputToAbsoluteScreenPixel(aInfo.aPos);
-//CHINA001 return aInfo;
-//CHINA001 }
-//CHINA001
-//CHINA001
-//CHINA001 /*--------------------------------------------------------------------
-//CHINA001 Beschreibung:
-//CHINA001 --------------------------------------------------------------------*/
-//CHINA001
-//CHINA001 SwFldDlgWrapper::SwFldDlgWrapper( Window* pParent, USHORT nId,
-//CHINA001 SfxBindings* pB,
-//CHINA001 SfxChildWinInfo* pInfo )
-//CHINA001 : SwChildWinWrapper( pParent, nId )
-//CHINA001 {
-//CHINA001 //CHINA001   SwFldDlg *pDlg = new SwFldDlg( pB, this, pParent );
-//CHINA001 //CHINA001   pWindow = pDlg;
-//CHINA001 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-//CHINA001 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-//CHINA001
-//CHINA001 AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, pParent,ResId( DLG_FLD_INSERT ));
-//CHINA001 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-//CHINA001 pDlgInterface = pDlg;
-//CHINA001 pWindow = pDlg->GetWindow();
-//CHINA001 pDlg->Start();
-//CHINA001 eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-//CHINA001 }
-//CHINA001
-//CHINA001 /*--------------------------------------------------------------------
-//CHINA001 Beschreibung: Nach Dok-Wechsel Dialog neu initialisieren
-//CHINA001 --------------------------------------------------------------------*/
-//CHINA001
-//CHINA001 BOOL SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
-//CHINA001 {
-//CHINA001 BOOL bRet;
-//CHINA001
-//CHINA001 if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)   // Sofort aktualisieren, Dok-Wechsel
-//CHINA001  {
-//CHINA001 //CHINA001 ((SwFldDlg*)GetWindow())->ReInitDlg();
-//CHINA001 pDlgInterface->ReInitDlg(); //CHINA001
-//CHINA001  }
-//CHINA001
-//CHINA001 return bRet;
-//CHINA001 }
-//CHINA001
-//CHINA001 /*--------------------------------------------------------------------
-//CHINA001 Beschreibung:
-//CHINA001 --------------------------------------------------------------------*/
-//CHINA001
-//CHINA001 void SwFldDlgWrapper::ShowPage(USHORT nPage)
-//CHINA001 {
-//CHINA001 //CHINA001 ((SwFldDlg*)GetWindow())->ShowPage(nPage ? nPage : TP_FLD_REF);
-//CHINA001 pDlgInterface->ShowPage(nPage ? nPage : TP_FLD_REF); //CHINA001
-//CHINA001 }
-//CHINA001
-//CHINA001 SFX_IMPL_CHILDWINDOW(SwFldDataOnlyDlgWrapper, FN_INSERT_FIELD_DATA_ONLY)
-//CHINA001
-//CHINA001 /* -----------------04.02.2003 14:17-----------------
-//CHINA001 *
-//CHINA001 * --------------------------------------------------*/
-//CHINA001 SfxChildWinInfo SwFldDataOnlyDlgWrapper::GetInfo() const
-//CHINA001 {
-//CHINA001 SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
-//CHINA001 // prevent instatiation of dialog other than by calling
-//CHINA001 // the mail merge dialog
-//CHINA001 aInfo.bVisible = FALSE;
-//CHINA001 return aInfo;
-//CHINA001 }
-//CHINA001 /* -----------------04.02.2003 14:17-----------------
-//CHINA001 *
-//CHINA001 * --------------------------------------------------*/
-//CHINA001 SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* pParent, USHORT nId,
-//CHINA001 SfxBindings* pB,
-//CHINA001 SfxChildWinInfo* pInfo )
-//CHINA001 : SwChildWinWrapper( pParent, nId )
-//CHINA001 {
-//CHINA001 //CHINA001     SwFldDlg *pDlg = new SwFldDlg( pB, this, pParent );
-//CHINA001 //CHINA001   pWindow = pDlg;
-//CHINA001 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-//CHINA001 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-//CHINA001
-//CHINA001 AbstractSwFldDlg* pDlg = pFact->CreateSwFldDlg(pB, this, pParent,ResId( DLG_FLD_INSERT ));
-//CHINA001 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-//CHINA001 pDlgInterface = pDlg; //CHINA001
-//CHINA001
-//CHINA001 pWindow = pDlg->GetWindow();//CHINA001
-//CHINA001 pDlg->ActivateDatabasePage();
-//CHINA001 pDlg->Start();
-//CHINA001 pDlg->Initialize( pInfo );
-//CHINA001 eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-//CHINA001 }
-//CHINA001 /* -----------------04.02.2003 14:17-----------------
-//CHINA001 * re-init after doc activation
-//CHINA001 * --------------------------------------------------*/
-//CHINA001 BOOL SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
-//CHINA001 {
-//CHINA001 BOOL bRet;
-//CHINA001 if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)) == TRUE)  // Sofort aktualisieren, Dok-Wechsel
-//CHINA001  {
-//CHINA001 //CHINA001 ((SwFldDlg*)GetWindow())->ReInitDlg();
-//CHINA001 pDlgInterface->ReInitDlg(); //CHINA001
-//CHINA001  }
-//CHINA001
-//CHINA001 return bRet;
-//CHINA001 }
-
 /*--------------------------------------------------------------------
     Beschreibung:   Der Traeger des Dialoges
  --------------------------------------------------------------------*/
@@ -287,12 +128,12 @@
 
 SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
     : SfxTabDialog( pParent, SW_RES( DLG_FLD_INSERT )),
-    pChildWin(pCW),
-    bDataBaseMode(FALSE),
-    pBindings(pB)
+    m_pChildWin(pCW),
+    m_pBindings(pB),
+    m_bDataBaseMode(FALSE)
 {
     SetStyle(GetStyle()|WB_STDMODELESS);
-    bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
+    m_bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
 
     RemoveResetButton();
 
@@ -312,7 +153,7 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
     AddTabPage(TP_FLD_VAR, SwFldVarPage::Create, 0);
     AddTabPage(TP_FLD_DOKINF, SwFldDokInfPage::Create, 0);
 
-    if (!bHtmlMode)
+    if (!m_bHtmlMode)
     {
         AddTabPage(TP_FLD_REF, SwFldRefPage::Create, 0);
         AddTabPage(TP_FLD_FUNC, SwFldFuncPage::Create, 0);
@@ -358,7 +199,7 @@ SwFldDlg::~SwFldDlg()
 BOOL SwFldDlg::Close()
 {
     SfxViewFrame::Current()->GetDispatcher()->
-        Execute(bDataBaseMode ? FN_INSERT_FIELD_DATA_ONLY : FN_INSERT_FIELD,
+        Execute(m_bDataBaseMode ? FN_INSERT_FIELD_DATA_ONLY : FN_INSERT_FIELD,
         SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
     return TRUE;
 }
@@ -417,7 +258,7 @@ void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SfxItemSet* SwFldDlg::CreateInputItemSet( USHORT nId )
+SfxItemSet* SwFldDlg::CreateInputItemSet( USHORT  )
 {
     return 0;
 }
@@ -426,7 +267,7 @@ SfxItemSet* SwFldDlg::CreateInputItemSet( USHORT nId )
      Beschreibung: Einfuegen von neuen Feldern anstossen
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwFldDlg, OKHdl, Button *, pBtn )
+IMPL_LINK( SwFldDlg, OKHdl, Button *, EMPTYARG )
 {
     if (GetOKButton().IsEnabled())
     {
@@ -448,7 +289,7 @@ void SwFldDlg::ReInitDlg()
     SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
     BOOL bNewMode = (::GetHtmlMode(pDocSh) & HTMLMODE_ON) != 0;
 
-    if (bNewMode != bHtmlMode)
+    if (bNewMode != m_bHtmlMode)
     {
         SfxViewFrame::Current()->GetDispatcher()->
             Execute(FN_INSERT_FIELD, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
@@ -466,14 +307,14 @@ void SwFldDlg::ReInitDlg()
     ReInitTabPage(TP_FLD_VAR);
     ReInitTabPage(TP_FLD_DOKINF);
 
-    if (!bHtmlMode)
+    if (!m_bHtmlMode)
     {
         ReInitTabPage(TP_FLD_REF);
         ReInitTabPage(TP_FLD_FUNC);
         ReInitTabPage(TP_FLD_DB);
     }
 
-    pChildWin->SetOldDocShell(pDocSh);
+    m_pChildWin->SetOldDocShell(pDocSh);
 }
 
 /*--------------------------------------------------------------------
@@ -543,7 +384,7 @@ void SwFldDlg::InsertHdl()
  * --------------------------------------------------*/
 void SwFldDlg::ActivateDatabasePage()
 {
-    bDataBaseMode = TRUE;
+    m_bDataBaseMode = TRUE;
     ShowPage( TP_FLD_DB );
     SfxTabPage* pDBPage =  GetTabPage( TP_FLD_DB );
     if( pDBPage )
@@ -564,7 +405,7 @@ void SwFldDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
 {
     if( TP_FLD_DB == nId)
     {
-        SfxDispatcher* pDispatch = pBindings->GetDispatcher();
+        SfxDispatcher* pDispatch = m_pBindings->GetDispatcher();
         SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
         if(pViewFrame)
         {
