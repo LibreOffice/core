@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtsh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:40:47 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:58:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 class SdrView;
 class SwView;
 class SwWrtShell;
+class SfxModule;
 
 class SwDrawTextShell: public SfxShell
 {
@@ -57,7 +58,7 @@ class SwDrawTextShell: public SfxShell
     void        InsertSymbol(SfxRequest& rReq);
     BOOL        IsTextEdit();
 public:
-    SFX_DECL_INTERFACE(SW_DRWTXTSHELL);
+    SFX_DECL_INTERFACE(SW_DRWTXTSHELL)
     TYPEINFO();
 
     SwView     &GetView() { return rView; }
