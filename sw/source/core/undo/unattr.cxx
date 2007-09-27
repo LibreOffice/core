@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unattr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-08-17 08:45:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:30:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,8 +206,8 @@ SwUndoFmtAttr::SwUndoFmtAttr( const SfxItemSet& rOldSet,
       // --> OD 2007-07-11 #i56253#
       pOldSet( 0 ),
       // <--
-      nFmtWhich( rChgFmt.Which() ),
       nNode( 0 ),
+      nFmtWhich( rChgFmt.Which() ),
       bSaveDrawPt( bSvDrwPt ),
       // --> OD 2007-07-11 #i56253#
       mpNumAttrsOfTxtNodes( 0 )
@@ -223,8 +223,8 @@ SwUndoFmtAttr::SwUndoFmtAttr( const SfxPoolItem& rItem, SwFmt& rChgFmt,
                                 BOOL bSvDrwPt )
     : SwUndo( UNDO_INSFMTATTR ),
       pFmt( &rChgFmt ),
-      nFmtWhich( rChgFmt.Which() ),
       nNode( 0 ),
+      nFmtWhich( rChgFmt.Which() ),
       bSaveDrawPt( bSvDrwPt ),
       // --> OD 2007-07-11 #i56253#
       mpNumAttrsOfTxtNodes( 0 )
@@ -735,14 +735,14 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
 /*  */
 
 SwUndoRstAttr::SwUndoRstAttr( const SwPaM& rRange, USHORT nFmt )
-    : SwUndo( UNDO_RESETATTR ), SwUndRng( rRange ), nFmtId( nFmt ),
-    pHistory( new SwHistory )
+    : SwUndo( UNDO_RESETATTR ), SwUndRng( rRange ),
+    pHistory( new SwHistory ), nFmtId( nFmt )
 {
 }
 
-SwUndoRstAttr::SwUndoRstAttr( const SwDoc& rDoc, const SwPosition& rPos,
+SwUndoRstAttr::SwUndoRstAttr( const SwDoc& , const SwPosition& rPos,
                                 USHORT nWhich )
-    : SwUndo( UNDO_RESETATTR ), nFmtId( nWhich ), pHistory( new SwHistory )
+    : SwUndo( UNDO_RESETATTR ), pHistory( new SwHistory ), nFmtId( nWhich )
 {
     nSttNode = nEndNode = rPos.nNode.GetIndex();
     nSttCntnt = nEndCntnt = rPos.nContent.GetIndex();
@@ -872,9 +872,9 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
                         USHORT nFlags )
     : SwUndo( UNDO_INSATTR ), SwUndRng( rRange ),
     aSet( rRange.GetDoc()->GetAttrPool(), rAttr.Which(), rAttr.Which() ),
-    nInsFlags( nFlags ), pHistory( new SwHistory ),
+    pHistory( new SwHistory ),
     pRedlData( 0 ), pRedlSaveData( 0 ),
-    nNdIdx( ULONG_MAX )
+    nNdIdx( ULONG_MAX ), nInsFlags( nFlags )
 {
     aSet.Put( rAttr );
 }
@@ -882,9 +882,9 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
 SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxItemSet& rSet,
                         USHORT nFlags )
     : SwUndo( UNDO_INSATTR ), SwUndRng( rRange ), aSet( rSet ),
-    nInsFlags( nFlags ), pHistory( new SwHistory ),
+    pHistory( new SwHistory ),
     pRedlData( 0 ), pRedlSaveData( 0 ),
-    nNdIdx( ULONG_MAX )
+    nNdIdx( ULONG_MAX ), nInsFlags( nFlags )
 {
 }
 
@@ -899,8 +899,8 @@ void SwUndoAttr::SaveRedlineData( const SwPaM& rPam, BOOL bIsCntnt )
 {
     SwDoc* pDoc = rPam.GetDoc();
     if( pDoc->IsRedlineOn() )
-        pRedlData = new SwRedlineData( bIsCntnt ? IDocumentRedlineAccess::REDLINE_INSERT
-                                                : IDocumentRedlineAccess::REDLINE_FORMAT,
+        pRedlData = new SwRedlineData( bIsCntnt ? nsRedlineType_t::REDLINE_INSERT
+                                                : nsRedlineType_t::REDLINE_FORMAT,
                                         pDoc->GetRedlineAuthor() );
 
     pRedlSaveData = new SwRedlineSaveDatas;
@@ -934,7 +934,7 @@ void SwUndoAttr::Undo( SwUndoIter& rUndoIter )
         {
             // alle Format-Redlines entfernen, werden ggfs. neu gesetzt
             SetPaM( rUndoIter );
-            pDoc->DeleteRedline( rPam, false, IDocumentRedlineAccess::REDLINE_FORMAT );
+            pDoc->DeleteRedline( rPam, false, nsRedlineType_t::REDLINE_FORMAT );
             if( pRedlSaveData )
                 SetSaveData( *pDoc, *pRedlSaveData );
         }
@@ -1005,8 +1005,8 @@ void SwUndoAttr::Redo( SwUndoIter& rUndoIter )
 
     if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) )
     {
-        IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
-        rDoc.SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE));
+        RedlineMode_t eOld = rDoc.GetRedlineMode();
+        rDoc.SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
         rDoc.Insert( rPam, aSet, nInsFlags );
 
         if( ULONG_MAX != nNdIdx )
@@ -1037,7 +1037,7 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
     SwNodes& rNds = rDoc.GetNodes();
     for( USHORT n = 0; n < pHistory->Count(); ++n )
     {
-        xub_StrLen nCntnt;
+        xub_StrLen nCntnt = 0;
         ULONG nNode = 0;
         switch( ( pHstHnt = (*pHistory)[ n ] )->Which() )
         {
@@ -1061,6 +1061,7 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
                     }
             }
             break;
+        default: break;
         }
 
         if( nNode )
@@ -1187,8 +1188,8 @@ void SwUndoMoveLeftMargin::Repeat( SwUndoIter& rIter )
 SwUndoChgFtn::SwUndoChgFtn( const SwPaM& rRange, const String& rTxt,
                             USHORT nNum, BOOL bIsEndNote )
     : SwUndo( UNDO_CHGFTN ), SwUndRng( rRange ),
-    sTxt( rTxt ), nNo( nNum ), bEndNote( bIsEndNote ),
-    pHistory( new SwHistory() )
+    pHistory( new SwHistory() ),
+    sTxt( rTxt ), nNo( nNum ), bEndNote( bIsEndNote )
 {
 }
 
