@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 17:23:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:12:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 #include <basesh.hxx>
 #endif
 
-//CHINA001 class Button;
 class AbstractSvxPostItDialog;
 class SwFldMgr;
 class SvxHyperlinkItem;
@@ -55,13 +54,9 @@ class SwTextShell: public SwBaseShell
     void ChangeHeaderOrFooter(const String& rStyleName, BOOL bHeader, BOOL bOn, BOOL bShowWarning);
 
 public:
-    SFX_DECL_INTERFACE(SW_TEXTSHELL);
+    SFX_DECL_INTERFACE(SW_TEXTSHELL)
     TYPEINFO();
 
-//CHINA001  DECL_LINK( PostItNextHdl, Button * );
-//CHINA001  DECL_LINK( PostItPrevHdl, Button * );
-//CHINA001  DECL_LINK( RedlineNextHdl, Button * );
-//CHINA001  DECL_LINK( RedlinePrevHdl, Button * );
     DECL_LINK( PostItNextHdl, AbstractSvxPostItDialog * );
     DECL_LINK( PostItPrevHdl, AbstractSvxPostItDialog * );
     DECL_LINK( RedlineNextHdl, AbstractSvxPostItDialog * );
