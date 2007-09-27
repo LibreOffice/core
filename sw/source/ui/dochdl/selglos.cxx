@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selglos.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:51:49 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:39:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ SwSelGlossaryDlg::~SwSelGlossaryDlg() {}
 /* -----------------25.10.99 08:33-------------------
 
  --------------------------------------------------*/
-IMPL_LINK(SwSelGlossaryDlg, DoubleClickHdl, ListBox*, pBox)
+IMPL_LINK(SwSelGlossaryDlg, DoubleClickHdl, ListBox*, /*pBox*/)
 {
     EndDialog(RET_OK);
     return 0;
