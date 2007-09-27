@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldedt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:10:00 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:46:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,6 @@
 #include <svx/optgenrl.hxx>
 #endif
 
-//CHINA001 #ifndef _ADDRDLG_HXX
-//CHINA001 #include <addrdlg.hxx>
-//CHINA001 #endif
 #ifndef _DOCUFLD_HXX
 #include <docufld.hxx>
 #endif
@@ -113,8 +110,8 @@
 #ifndef _FLDUI_HRC
 #include <fldui.hrc>
 #endif
-#include "swabstdlg.hxx" //CHINA001
-#include "dialog.hrc" //CHINA001
+#include "swabstdlg.hxx"
+#include "dialog.hrc"
 
 namespace swui
 {
@@ -128,9 +125,9 @@ namespace swui
 SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
     SfxSingleTabDialog(&rVw.GetViewFrame()->GetWindow(), 0, 0),
     pSh         (rVw.GetWrtShellPtr()),
-    aAddressBT  (this, SW_RES(PB_FLDEDT_ADDRESS)),
     aPrevBT     (this, SW_RES(BTN_FLDEDT_PREV)),
-    aNextBT     (this, SW_RES(BTN_FLDEDT_NEXT))
+    aNextBT     (this, SW_RES(BTN_FLDEDT_NEXT)),
+    aAddressBT  (this, SW_RES(PB_FLDEDT_ADDRESS))
 {
     SwFldMgr aMgr(pSh);
 
@@ -157,7 +154,7 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
     // Fontgroessen im Wald stehen, und da PB im SingleTabDlg feste Pixelgroessen
     // fuer seine Buttons und die Dialogbreite verwendet.
     aPrevBT.SetPosPixel(Point(GetOKButton()->GetPosPixel().X(), aPrevBT.GetPosPixel().Y()));
-    USHORT nWidth = GetOKButton()->GetOutputSize().Width() / 2 - 3;
+    USHORT nWidth = static_cast< USHORT >(GetOKButton()->GetOutputSize().Width() / 2 - 3);
     Size aNewSize(LogicToPixel(Size(nWidth, GetOKButton()->GetOutputSize().Height())));
     aPrevBT.SetSizePixel(aNewSize);
 
@@ -185,11 +182,11 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw) :
 
 void SwFldEditDlg::Init()
 {
-    SwFldPage* pPage = (SwFldPage*)GetTabPage();
+    SwFldPage* pTabPage = (SwFldPage*)GetTabPage();
 
-    if( pPage )
+    if( pTabPage )
     {
-        SwFldMgr& rMgr = pPage->GetFldMgr();
+        SwFldMgr& rMgr = pTabPage->GetFldMgr();
 
         SwField *pCurFld = rMgr.GetCurFld();
 
@@ -227,49 +224,49 @@ void SwFldEditDlg::Init()
 SfxTabPage* SwFldEditDlg::CreatePage(USHORT nGroup)
 {
     // TabPage erzeugen
-    SfxTabPage* pPage = 0;
+    SfxTabPage* pTabPage = 0;
     USHORT nHelpId = 0;
 
     switch (nGroup)
     {
         case GRP_DOC:
-            pPage = SwFldDokPage::Create(this, *(SfxItemSet*)0);
+            pTabPage = SwFldDokPage::Create(this, *(SfxItemSet*)0);
             nHelpId = HID_EDIT_FLD_DOK;
             break;
         case GRP_FKT:
-            pPage = SwFldFuncPage::Create(this, *(SfxItemSet*)0);
+            pTabPage = SwFldFuncPage::Create(this, *(SfxItemSet*)0);
             nHelpId = HID_EDIT_FLD_FUNC;
             break;
         case GRP_REF:
-            pPage = SwFldRefPage::Create(this, *(SfxItemSet*)0);
+            pTabPage = SwFldRefPage::Create(this, *(SfxItemSet*)0);
             nHelpId = HID_EDIT_FLD_REF;
             break;
         case GRP_REG:
-            pPage = SwFldDokInfPage::Create(this, *(SfxItemSet*)0);
+            pTabPage = SwFldDokInfPage::Create(this, *(SfxItemSet*)0);
             nHelpId = HID_EDIT_FLD_DOKINF;
             break;
         case GRP_DB:
-            pPage = SwFldDBPage::Create(this, *(SfxItemSet*)0);
-            static_cast<SwFldDBPage*>(pPage)->SetWrtShell(*pSh);
+            pTabPage = SwFldDBPage::Create(this, *(SfxItemSet*)0);
+            static_cast<SwFldDBPage*>(pTabPage)->SetWrtShell(*pSh);
             nHelpId = HID_EDIT_FLD_DB;
             break;
         case GRP_VAR:
-            pPage = SwFldVarPage::Create(this, *(SfxItemSet*)0);
+            pTabPage = SwFldVarPage::Create(this, *(SfxItemSet*)0);
             nHelpId = HID_EDIT_FLD_VAR;
             break;
 
     }
-    pPage->SetHelpId(nHelpId);
-    static_cast<SwFldPage*>(pPage)->SetWrtShell(pSh);
+    pTabPage->SetHelpId(nHelpId);
+    static_cast<SwFldPage*>(pTabPage)->SetWrtShell(pSh);
 
-    SetTabPage(pPage);
+    SetTabPage(pTabPage);
 
     String sTitle(GetText());
     sTitle.Insert(String::CreateFromAscii(": "), 0);
     sTitle.Insert(SW_RESSTR(STR_FLD_EDIT_DLG), 0);
     SetText(sTitle);
 
-    return pPage;
+    return pTabPage;
 }
 
 /*--------------------------------------------------------------------
@@ -306,14 +303,14 @@ void SwFldEditDlg::InsertHdl()
      Beschreibung: Aendern des Feldes anstossen
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwFldEditDlg, OKHdl, Button *, pBtn )
+IMPL_LINK( SwFldEditDlg, OKHdl, Button *, EMPTYARG )
 {
     if (GetOKButton()->IsEnabled())
     {
-        SfxTabPage* pPage = GetTabPage();
-        if (pPage)
+        SfxTabPage* pTabPage = GetTabPage();
+        if (pTabPage)
         {
-            pPage->FillItemSet(*(SfxItemSet*)0);
+            pTabPage->FillItemSet(*(SfxItemSet*)0);
 
         }
         EndDialog( RET_OK );
@@ -343,14 +340,14 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     pSh->EnterStdMode();
 
     SwFieldType *pOldTyp = 0;
-    SwFldPage* pPage = (SwFldPage*)GetTabPage();
+    SwFldPage* pTabPage = (SwFldPage*)GetTabPage();
 
     //#112462# FillItemSet may delete the current field
     //that's why it has to be called before accessing the current field
     if( GetOKButton()->IsEnabled() )
-        pPage->FillItemSet(*(SfxItemSet*)0);
+        pTabPage->FillItemSet(*(SfxItemSet*)0);
 
-    SwFldMgr& rMgr = pPage->GetFldMgr();
+    SwFldMgr& rMgr = pTabPage->GetFldMgr();
     SwField *pCurFld = rMgr.GetCurFld();
     if (pCurFld->GetTypeId() == TYP_DBFLD)
         pOldTyp = (SwDBFieldType*)pCurFld->GetTyp();
@@ -367,10 +364,10 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
 
     USHORT nGroup = rMgr.GetGroup(FALSE, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
-    if (nGroup != pPage->GetGroup())
-        pPage = (SwFldPage*)CreatePage(nGroup);
+    if (nGroup != pTabPage->GetGroup())
+        pTabPage = (SwFldPage*)CreatePage(nGroup);
 
-    pPage->EditNewField();
+    pTabPage->EditNewField();
 
     Init();
 
@@ -381,10 +378,10 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, pButton )
+IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, EMPTYARG )
 {
-    SwFldPage* pPage = (SwFldPage*)GetTabPage();
-    SwFldMgr& rMgr = pPage->GetFldMgr();
+    SwFldPage* pTabPage = (SwFldPage*)GetTabPage();
+    SwFldMgr& rMgr = pTabPage->GetFldMgr();
     SwField *pCurFld = rMgr.GetCurFld();
 
     SfxItemSet aSet( pSh->GetAttrPool(),
@@ -415,18 +412,16 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, pButton )
 
     }
     aSet.Put(SfxUInt16Item(SID_FIELD_GRABFOCUS, nEditPos));
-    //CHINA001 SwAddrDlg aDlg( this, aSet );
-    //CHINA001 aDlg.Execute();
-    SwAbstractDialogFactory* pFact = swui::GetFactory();//CHINA001
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+    SwAbstractDialogFactory* pFact = swui::GetFactory();
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
     AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( this, aSet, RC_DLG_ADDR );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
     if(RET_OK == pDlg->Execute())
     {
         pSh->UpdateFlds( *pCurFld );
     }
-    delete pDlg; //CHINA001
+    delete pDlg;
     return 0;
 }
 
