@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtasc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:44:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:44:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,7 +251,7 @@ ULONG SwASCWriter::WriteStream()
 }
 
 
-void GetASCWriter( const String& rFltNm, const String& rBaseURL, WriterRef& xRet )
+void GetASCWriter( const String& rFltNm, const String& /*rBaseURL*/, WriterRef& xRet )
 {
   xRet = new SwASCWriter( rFltNm );
 }
