@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdata.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:46:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:08:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,8 @@ struct SwPrintData
 
         nPrintPostIts           = 0;
     }
+
+    virtual ~SwPrintData() {}
 
     sal_Bool operator==(const SwPrintData& rData)const
     {
