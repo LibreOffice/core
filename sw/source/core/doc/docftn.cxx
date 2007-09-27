@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docftn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:52:50 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:35:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,9 +166,8 @@ SwPageDesc *SwEndNoteInfo::GetPageDesc( SwDoc &rDoc ) const
 {
     if ( !aPageDescDep.GetRegisteredIn() )
     {
-        SwPageDesc *pDesc = rDoc.GetPageDescFromPool( bEndNote
-                                            ? RES_POOLPAGE_ENDNOTE
-                                            : RES_POOLPAGE_FOOTNOTE );
+        SwPageDesc *pDesc = rDoc.GetPageDescFromPool( static_cast<sal_uInt16>(
+            bEndNote ? RES_POOLPAGE_ENDNOTE : RES_POOLPAGE_FOOTNOTE ) );
         pDesc->Add( &((SwClient&)aPageDescDep) );
     }
     return (SwPageDesc*)aPageDescDep.GetRegisteredIn();
@@ -188,9 +187,8 @@ SwCharFmt* SwEndNoteInfo::GetCharFmt(SwDoc &rDoc) const
 {
     if ( !aCharFmtDep.GetRegisteredIn() )
     {
-        SwCharFmt* pFmt = rDoc.GetCharFmtFromPool( bEndNote
-                                            ? RES_POOLCHR_ENDNOTE
-                                            : RES_POOLCHR_FOOTNOTE );
+        SwCharFmt* pFmt = rDoc.GetCharFmtFromPool( static_cast<sal_uInt16>(
+            bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE ) );
         pFmt->Add( &((SwClient&)aCharFmtDep) );
     }
     return (SwCharFmt*)aCharFmtDep.GetRegisteredIn();
@@ -206,9 +204,8 @@ SwCharFmt* SwEndNoteInfo::GetAnchorCharFmt(SwDoc &rDoc) const
 {
     if( !aAnchorCharFmtDep.GetRegisteredIn() )
     {
-        SwCharFmt* pFmt = rDoc.GetCharFmtFromPool( bEndNote
-                                            ? RES_POOLCHR_ENDNOTE_ANCHOR
-                                            : RES_POOLCHR_FOOTNOTE_ANCHOR );
+        SwCharFmt* pFmt = rDoc.GetCharFmtFromPool( static_cast<sal_uInt16>(
+            bEndNote ? RES_POOLCHR_ENDNOTE_ANCHOR : RES_POOLCHR_FOOTNOTE_ANCHOR ) );
         pFmt->Add( &((SwClient&)aAnchorCharFmtDep) );
     }
     return (SwCharFmt*)aAnchorCharFmtDep.GetRegisteredIn();
@@ -300,17 +297,17 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
             AppendUndo( new SwUndoFtnInfo( rOld ) );
         }
 
-        FASTBOOL bFtnPos  = rInfo.ePos != rOld.ePos;
-        FASTBOOL bFtnDesc = rOld.ePos == FTNPOS_CHAPTER &&
+        BOOL bFtnPos  = rInfo.ePos != rOld.ePos;
+        BOOL bFtnDesc = rOld.ePos == FTNPOS_CHAPTER &&
                             rInfo.GetPageDesc( *this ) != rOld.GetPageDesc( *this );
-        FASTBOOL bExtra   = rInfo.aQuoVadis != rOld.aQuoVadis ||
+        BOOL bExtra   = rInfo.aQuoVadis != rOld.aQuoVadis ||
                             rInfo.aErgoSum != rOld.aErgoSum ||
                             rInfo.aFmt.GetNumberingType() != rOld.aFmt.GetNumberingType() ||
                             rInfo.GetPrefix() != rOld.GetPrefix() ||
                             rInfo.GetSuffix() != rOld.GetSuffix();
         SwCharFmt *pOldChrFmt = rOld.GetCharFmt( *this ),
                   *pNewChrFmt = rInfo.GetCharFmt( *this );
-        FASTBOOL bFtnChrFmts = pOldChrFmt != pNewChrFmt;
+        BOOL bFtnChrFmts = pOldChrFmt != pNewChrFmt;
 
         *pFtnInfo = rInfo;
 
@@ -363,16 +360,16 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
             AppendUndo( new SwUndoEndNoteInfo( GetEndNoteInfo() ) );
         }
 
-        FASTBOOL bNumChg  = rInfo.nFtnOffset != GetEndNoteInfo().nFtnOffset;
-        FASTBOOL bExtra   = !bNumChg &&
+        BOOL bNumChg  = rInfo.nFtnOffset != GetEndNoteInfo().nFtnOffset;
+        BOOL bExtra   = !bNumChg &&
                             rInfo.aFmt.GetNumberingType() != GetEndNoteInfo().aFmt.GetNumberingType()||
                             rInfo.GetPrefix() != GetEndNoteInfo().GetPrefix() ||
                             rInfo.GetSuffix() != GetEndNoteInfo().GetSuffix();
-        FASTBOOL bFtnDesc = rInfo.GetPageDesc( *this ) !=
+        BOOL bFtnDesc = rInfo.GetPageDesc( *this ) !=
                             GetEndNoteInfo().GetPageDesc( *this );
         SwCharFmt *pOldChrFmt = GetEndNoteInfo().GetCharFmt( *this ),
                   *pNewChrFmt = rInfo.GetCharFmt( *this );
-        FASTBOOL bFtnChrFmts = pOldChrFmt != pNewChrFmt;
+        BOOL bFtnChrFmts = pOldChrFmt != pNewChrFmt;
 
         *pEndNoteInfo = rInfo;
 
