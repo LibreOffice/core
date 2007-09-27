@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:25:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:03:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 class SwListShell: public SwBaseShell
 {
 public:
-    SFX_DECL_INTERFACE(SW_LISTSHELL);
+    SFX_DECL_INTERFACE(SW_LISTSHELL)
     TYPEINFO();
 
             SwListShell(SwView &rView);
