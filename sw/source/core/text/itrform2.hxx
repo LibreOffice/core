@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrform2.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:39:01 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:14:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,9 +143,9 @@ public:
     // u.a. fuer DropCaps
     sal_Bool CalcOnceMore();
 
-    void CtorInit( SwTxtFrm *pFrm, SwTxtFormatInfo *pInf );
-    inline SwTxtFormatter( SwTxtFrm *pFrm, SwTxtFormatInfo *pInf )
-           { CtorInit( pFrm, pInf ); }
+    void CtorInitTxtFormatter( SwTxtFrm *pFrm, SwTxtFormatInfo *pInf );
+    inline SwTxtFormatter( SwTxtFrm *pTxtFrm, SwTxtFormatInfo *pTxtFmtInf )
+           { CtorInitTxtFormatter( pTxtFrm, pTxtFmtInf ); }
     ~SwTxtFormatter();
 
     xub_StrLen FormatLine( const xub_StrLen nStart );
