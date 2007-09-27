@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insrc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:19:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:33:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,11 +61,11 @@
 void SwInsRowColDlg::Apply()
 {
     USHORT nSlot = bColumn ? FN_TABLE_INSERT_COL : FN_TABLE_INSERT_ROW;
-    SfxUInt16Item aCount( nSlot, aCountEdit.GetValue() );
+    SfxUInt16Item aCountItem( nSlot, static_cast< UINT16 >(aCountEdit.GetValue()) );
     SfxBoolItem  aAfter( FN_PARAM_INSERT_AFTER, aAfterBtn.IsChecked() );
     rView.GetViewFrame()->GetDispatcher()->Execute( nSlot,
             SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD,
-            &aCount, &aAfter, 0L);
+            &aCountItem, &aAfter, 0L);
 }
 
 
