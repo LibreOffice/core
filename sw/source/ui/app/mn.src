@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 12:47:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:17:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -893,10 +893,6 @@ Menu MN_OLE_POPUPMENU
     };
 };
 
-#undef  MN_WRAP_CONTOUR_1
-#undef  MN_EDIT_CONTOUR_1
-#define  MN_WRAP_CONTOUR_1
-#define  MN_EDIT_CONTOUR_1
 #define MN_MOUSE_FRAME_WITHOUT_CONTOUR MN_MOUSE_FRAME_BEGIN
 
 String MN_FRM_POPUPMENU
