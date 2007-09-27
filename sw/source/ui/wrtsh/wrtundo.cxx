@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtundo.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:24:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:54:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
             DoUndo(sal_False); // #i21739#
             // Modi zuruecksetzen
             EnterStdMode();
-            SwEditShell::Undo(0, nCnt );
+            SwEditShell::Undo(UNDO_EMPTY, nCnt );
             break;
         case REDO:
             DoUndo(sal_False); // #i21739#
@@ -100,7 +100,7 @@ void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
     DoUndo(bSaveDoesUndo);
 
     BOOL bCreateXSelection = FALSE;
-    const FASTBOOL bFrmSelected = IsFrmSelected() || IsObjSelected();
+    const BOOL bFrmSelected = IsFrmSelected() || IsObjSelected();
     if ( IsSelection() )
     {
         if ( bFrmSelected )
@@ -136,7 +136,7 @@ void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
 String SwWrtShell::GetDoString( DoType eDoType ) const
 {
     String aStr, aUndoStr;
-    USHORT nResStr;
+    USHORT nResStr = STR_UNDO;
     switch( eDoType )
     {
     case UNDO:
@@ -147,6 +147,7 @@ String SwWrtShell::GetDoString( DoType eDoType ) const
         nResStr = STR_REDO;
         aUndoStr = GetRedoIdsStr();
         break;
+    default:;//prevent warning
     }
 
     aStr.Insert( String(ResId( nResStr, *SFX_APP()->GetSfxResManager())), 0 );
@@ -161,11 +162,12 @@ USHORT SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) cons
     switch( eDoType )
     {
     case UNDO:
-        GetUndoIds( 0, &aIds );
+        GetUndoIds( NULL, &aIds );
         break;
     case REDO:
-        GetRedoIds( 0, &aIds );
+        GetRedoIds( NULL, &aIds );
         break;
+    default:;//prevent warning
     }
 
     String sList;
