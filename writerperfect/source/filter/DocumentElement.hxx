@@ -27,9 +27,15 @@
 
 #ifndef _DOCUMENTELEMENT_H
 #define _DOCUMENTELEMENT_H
+#if defined _MSC_VER
+#pragma warning( push, 1 )
+#endif
 #include <libwpd/libwpd.h>
 #include <libwpd/WPXProperty.h>
 #include <libwpd/WPXString.h>
+#if defined _MSC_VER
+#pragma warning( pop )
+#endif
 #include <vector>
 
 #include "DocumentHandler.hxx"
