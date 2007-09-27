@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:37:07 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:04:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,8 +98,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::registry;
 
 
-namespace stoc_tdmgr
-{
 
 static const sal_Int32 CACHE_SIZE = 512;
 
@@ -108,9 +106,11 @@ static const sal_Int32 CACHE_SIZE = 512;
 
 //--------------------------------------------------------------------------------------------------
 // exported via tdmgr_common.hxx
-rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+extern rtl_StandardModuleCount g_moduleCount;
 
-static Sequence< OUString > SAL_CALL tdmgr_getSupportedServiceNames()
+namespace stoc_bootstrap
+{
+Sequence< OUString > SAL_CALL tdmgr_getSupportedServiceNames()
 {
     static Sequence < OUString > *pNames = 0;
     if( ! pNames )
@@ -126,7 +126,7 @@ static Sequence< OUString > SAL_CALL tdmgr_getSupportedServiceNames()
     return *pNames;
 }
 
-static OUString SAL_CALL tdmgr_getImplementationName()
+OUString SAL_CALL tdmgr_getImplementationName()
 {
     static OUString *pImplName = 0;
     if( ! pImplName )
@@ -140,7 +140,10 @@ static OUString SAL_CALL tdmgr_getImplementationName()
     }
     return *pImplName;
 }
+}
 
+namespace stoc_tdmgr
+{
 typedef vector< Reference< XHierarchicalNameAccess > > ProviderVector;
 
 class EnumerationImpl;
@@ -155,7 +158,7 @@ public:
     EventListenerImpl( ManagerImpl * pMgr )
         : _pMgr( pMgr )
         {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+            ::g_moduleCount.modCnt.acquire( &::g_moduleCount.modCnt );
         }
     virtual ~EventListenerImpl();
 
@@ -169,7 +172,7 @@ public:
 
 EventListenerImpl::~EventListenerImpl()
 {
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+    ::g_moduleCount.modCnt.release( &::g_moduleCount.modCnt );
 }
 
 //==================================================================================================
@@ -329,14 +332,14 @@ ManagerImpl::ManagerImpl(
     , _bCaching( sal_True )
     , _aElements( nCacheSize )
 {
-    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
+    ::g_moduleCount.modCnt.acquire( &::g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 ManagerImpl::~ManagerImpl()
 {
     OSL_ENSURE( _aProviders.size() == 0, "### still providers left!" );
     OSL_TRACE( "> TypeDescriptionManager shut down. <\n" );
-    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
+    ::g_moduleCount.modCnt.release( &::g_moduleCount.modCnt );
 }
 //__________________________________________________________________________________________________
 void ManagerImpl::disposing()
@@ -382,7 +385,7 @@ void ManagerImpl::initialize(
 OUString ManagerImpl::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return tdmgr_getImplementationName();
+    return stoc_bootstrap::tdmgr_getImplementationName();
 }
 //__________________________________________________________________________________________________
 sal_Bool ManagerImpl::supportsService( const OUString & rServiceName )
@@ -401,7 +404,7 @@ sal_Bool ManagerImpl::supportsService( const OUString & rServiceName )
 Sequence< OUString > ManagerImpl::getSupportedServiceNames()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return tdmgr_getSupportedServiceNames();
+    return stoc_bootstrap::tdmgr_getSupportedServiceNames();
 }
 
 // XElementAccess
@@ -1158,9 +1161,12 @@ sal_Bool ManagerImpl::hasByHierarchicalName( const OUString & rName )
     }
     return sal_False;
 }
+}
 
+namespace stoc_bootstrap
+{
 //==================================================================================================
-static Reference< XInterface > SAL_CALL ManagerImpl_create(
+Reference< XInterface > SAL_CALL ManagerImpl_create(
     Reference< XComponentContext > const & xContext )
     SAL_THROW( (::com::sun::star::uno::Exception) )
 {
@@ -1173,50 +1179,8 @@ static Reference< XInterface > SAL_CALL ManagerImpl_create(
             nCacheSize;
     }
 
-    return Reference< XInterface >( *new ManagerImpl( xContext, nCacheSize ) );
+    return Reference< XInterface >( *new stoc_tdmgr::ManagerImpl( xContext, nCacheSize ) );
 }
 
 }
 
-
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
-using namespace stoc_tdmgr;
-
-static struct ImplementationEntry g_entries[] =
-{
-    {
-        ManagerImpl_create, tdmgr_getImplementationName,
-        tdmgr_getSupportedServiceNames, createSingleComponentFactory,
-        &g_moduleCount.modCnt , 0
-    },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
-extern "C"
-{
-sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
-{
-    return g_moduleCount.canUnload( &g_moduleCount , pTime );
-}
-
-//==================================================================================================
-void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
-}
-//==================================================================================================
-void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , g_entries );
-}
-}
