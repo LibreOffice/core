@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pgfnote.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:20:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:22:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,8 +283,8 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
         aLineTypeBox.InsertEntry(nWidth);
     aLineTypeBox.SelectEntry(nWidth);
 
-        // Position
-    aLinePosBox.SelectEntryPos(pFtnInfo->GetAdj());
+    // Position
+    aLinePosBox.SelectEntryPos( static_cast< USHORT >(pFtnInfo->GetAdj()) );
 
         // Breite
     Fraction aTmp( 100, 1 );
@@ -313,15 +313,16 @@ BOOL SwFootNotePage::FillItemSet(SfxItemSet &rSet)
 
         // Hoehe Fussnotenbereich
     if(aMaxHeightBtn.IsChecked())
-        rFtnInfo.SetHeight(aMaxHeightEdit.
-            Denormalize(aMaxHeightEdit.GetValue(FUNIT_TWIP)));
+        rFtnInfo.SetHeight( static_cast< SwTwips >(
+                aMaxHeightEdit.Denormalize(aMaxHeightEdit.GetValue(FUNIT_TWIP))));
     else
         rFtnInfo.SetHeight(0);
 
         // Abstand Fussnotenbereich
-    rFtnInfo.SetTopDist(aDistEdit.Denormalize(aDistEdit.GetValue(FUNIT_TWIP)));
-    rFtnInfo.SetBottomDist(
-        aLineDistEdit.Denormalize(aLineDistEdit.GetValue(FUNIT_TWIP)));
+    rFtnInfo.SetTopDist(  static_cast< SwTwips >(
+            aDistEdit.Denormalize(aDistEdit.GetValue(FUNIT_TWIP))));
+    rFtnInfo.SetBottomDist(  static_cast< SwTwips >(
+            aLineDistEdit.Denormalize(aLineDistEdit.GetValue(FUNIT_TWIP))));
 
         // Trennlinie
     const USHORT nPos = aLineTypeBox.GetSelectEntryPos();
@@ -332,7 +333,7 @@ BOOL SwFootNotePage::FillItemSet(SfxItemSet &rSet)
     rFtnInfo.SetAdj((SwFtnAdj)aLinePosBox.GetSelectEntryPos());
 
         // Breite
-    rFtnInfo.SetWidth(Fraction(aLineWidthEdit.GetValue(), 100));
+    rFtnInfo.SetWidth(Fraction( static_cast< long >(aLineWidthEdit.GetValue()), 100));
 
     const SfxPoolItem* pOldItem;
     if(0 == (pOldItem = GetOldItem( rSet, FN_PARAM_FTN_INFO )) ||
@@ -356,9 +357,9 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
 
         if ( rHeaderOn.GetValue() )
         {
-            const SvxSizeItem& rSize =
+            const SvxSizeItem& rSizeItem =
                 (const SvxSizeItem&)rHeaderSet.Get(rSet.GetPool()->GetWhich(SID_ATTR_PAGE_SIZE));
-            lMaxHeight -= rSize.GetSize().Height();
+            lMaxHeight -= rSizeItem.GetSize().Height();
         }
     }
 
@@ -371,9 +372,9 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
 
         if ( rFooterOn.GetValue() )
         {
-            const SvxSizeItem& rSize =
+            const SvxSizeItem& rSizeItem =
                 (const SvxSizeItem&)rFooterSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_SIZE ) );
-            lMaxHeight -= rSize.GetSize().Height();
+            lMaxHeight -= rSizeItem.GetSize().Height();
         }
     }
 
@@ -390,10 +391,10 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
     HeightModify(0);
 }
 
-int SwFootNotePage::DeactivatePage( SfxItemSet* pSet)
+int SwFootNotePage::DeactivatePage( SfxItemSet* _pSet)
 {
-    if(pSet)
-        FillItemSet(*pSet);
+    if(_pSet)
+        FillItemSet(*_pSet);
 
     return TRUE;
 }
