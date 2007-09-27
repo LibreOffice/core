@@ -4,9 +4,9 @@
  *
  *  $RCSfile: maildispatcher.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:21:14 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:03:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,9 @@ public:
 
     /** returns if the thread is still running
     */
+    using osl::Thread::isRunning;
     bool isRunning() const;
+
     /** returns if shutdown has already been called
     */
     bool isShutdownRequested() const
