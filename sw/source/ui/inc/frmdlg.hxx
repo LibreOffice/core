@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:15:30 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:59:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,12 +49,12 @@ class SwWrtShell;
 
 class SwFrmDlg : public SfxTabDialog
 {
-    BOOL                bFormat;
-    BOOL                bNew;
-    BOOL                bHTMLMode;
-    const SfxItemSet&   rSet;
-    USHORT              nDlgType;
-    SwWrtShell*         pWrtShell;
+    BOOL                m_bFormat;
+    BOOL                m_bNew;
+    BOOL                m_bHTMLMode;
+    const SfxItemSet&   m_rSet;
+    USHORT              m_nDlgType;
+    SwWrtShell*         m_pWrtShell;
 
 
     virtual void PageCreated( USHORT nId, SfxTabPage &rPage );
@@ -70,7 +70,7 @@ public:
 
     ~SwFrmDlg();
 
-    inline SwWrtShell*  GetWrtShell()   { return pWrtShell; }
+    inline SwWrtShell*  GetWrtShell()   { return m_pWrtShell; }
 };
 
 
