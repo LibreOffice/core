@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bookctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:32:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:44:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,10 +101,10 @@ void BookmarkPopup_Impl::Select()
 
 // class SvxZoomStatusBarControl ------------------------------------------
 
-SwBookmarkControl::SwBookmarkControl( USHORT nSlotId,
-                                      USHORT nId,
+SwBookmarkControl::SwBookmarkControl( USHORT _nSlotId,
+                                      USHORT _nId,
                                       StatusBar& rStb ) :
-    SfxStatusBarControl( nSlotId, nId, rStb )
+    SfxStatusBarControl( _nSlotId, _nId, rStb )
 {
 }
 
@@ -117,7 +117,7 @@ SwBookmarkControl::~SwBookmarkControl()
 // -----------------------------------------------------------------------
 
 void SwBookmarkControl::StateChanged(
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( eState != SFX_ITEM_AVAILABLE || pState->ISA( SfxVoidItem ) )
         GetStatusBar().SetItemText( GetId(), String() );
@@ -159,10 +159,10 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
                 }
             }
             aPop.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
-            USHORT nId = aPop.GetCurId();
-            if( nId != USHRT_MAX)
+            USHORT nCurrId = aPop.GetCurId();
+            if( nCurrId != USHRT_MAX)
             {
-                SfxUInt16Item aBookmark( FN_STAT_BOOKMARK, aBookArr[nId-1] );
+                SfxUInt16Item aBookmark( FN_STAT_BOOKMARK, aBookArr[nCurrId-1] );
                 SfxViewFrame::Current()->GetDispatcher()->Execute(  FN_STAT_BOOKMARK,
                     SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD,
                                         &aBookmark, 0L );
