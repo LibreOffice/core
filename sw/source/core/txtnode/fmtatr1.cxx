@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtatr1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:45:15 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:24:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,13 +57,13 @@
 |*
 *************************************************************************/
 
-SwFmtHardBlank::SwFmtHardBlank( sal_Unicode cCh, BOOL bCheck )
+SwFmtHardBlank::SwFmtHardBlank( sal_Unicode cCh, BOOL )
     : SfxPoolItem( RES_TXTATR_HARDBLANK ),
     cChar( cCh )
 {
-    ASSERT( !bCheck || (' ' != cCh && '-' != cCh),
-            "Invalid character for the HardBlank attribute - "
-            "must be a normal unicode character" );
+//  ASSERT( !bCheck || (' ' != cCh && '-' != cCh),
+//          "Invalid character for the HardBlank attribute - "
+//          "must be a normal unicode character" );
 }
 
 int SwFmtHardBlank::operator==( const SfxPoolItem& rAttr ) const
@@ -92,9 +92,9 @@ SwFmtSoftHyph::SwFmtSoftHyph()
 {
 }
 
-int SwFmtSoftHyph::operator==( const SfxPoolItem& rAttr ) const
+int SwFmtSoftHyph::operator==( const SfxPoolItem& ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+//  ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return TRUE;
 }
 
