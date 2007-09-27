@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bcaslot.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:48:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:53:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,6 +202,8 @@ public:
     void                EnterBulkBroadcast();
     void                LeaveBulkBroadcast();
     bool                InsertBulkArea( const ScBroadcastArea* p );
+    /// @return: how many removed
+    size_t              RemoveBulkArea( const ScBroadcastArea* p );
     inline ScBroadcastArea* GetUpdateChain() const { return pUpdateChain; }
     inline void SetUpdateChain( ScBroadcastArea* p ) { pUpdateChain = p; }
     inline ScBroadcastArea* GetEOUpdateChain() const { return pEOUpdateChain; }
