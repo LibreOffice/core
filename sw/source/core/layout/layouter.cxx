@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layouter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 11:49:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:04:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,7 @@ void SwLayouter::InsertEndnotes( SwSectionFrm* pSect )
     pEndnoter->InsertEndnotes();
 }
 
-void SwLayouter::LoopControl( SwPageFrm* pPage, BYTE nLoop )
+void SwLayouter::LoopControl( SwPageFrm* pPage, BYTE )
 {
     ASSERT( pLooping, "Looping: Lost control" );
     pLooping->Control( pPage );
@@ -578,26 +578,6 @@ bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
 void SwLayouter::ClearMoveBwdLayoutInfo( const SwDoc& _rDoc )
 {
     if ( _rDoc.GetLayouter() )
-    {
-        // Checking content of <maMoveBwdLayoutInfo
-        {
-            sal_uInt64 nMaxSize( const_cast<SwDoc&>(_rDoc).GetLayouter()->maMoveBwdLayoutInfo.max_size() );
-            sal_uInt64 nSize( const_cast<SwDoc&>(_rDoc).GetLayouter()->maMoveBwdLayoutInfo.size() );
-            sal_uInt64 nBucketCount( const_cast<SwDoc&>(_rDoc).GetLayouter()->maMoveBwdLayoutInfo.bucket_count() );
-
-            std::hash_map< const tMoveBwdLayoutInfoKey, sal_uInt16, fMoveBwdLayoutInfoKeyHash, fMoveBwdLayoutInfoKeyEq >::const_iterator
-                aIter = const_cast<SwDoc&>(_rDoc).GetLayouter()->maMoveBwdLayoutInfo.begin();
-            std::hash_map< const tMoveBwdLayoutInfoKey, sal_uInt16, fMoveBwdLayoutInfoKeyHash, fMoveBwdLayoutInfoKeyEq >::const_iterator
-                aIterEnd = const_cast<SwDoc&>(_rDoc).GetLayouter()->maMoveBwdLayoutInfo.end();
-            sal_uInt64 nCounter( 0 );
-            for ( ; aIter != aIterEnd; ++aIter )
-            {
-                tMoveBwdLayoutInfoKey aMoveBwdLayoutInfo = (*aIter).first;
-                sal_uInt16 nCount = (*aIter).second;
-                ++nCounter;
-            }
-        }
         const_cast<SwDoc&>(_rDoc).GetLayouter()->maMoveBwdLayoutInfo.clear();
-    }
 }
 // <--
