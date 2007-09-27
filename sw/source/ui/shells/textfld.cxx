@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:24:01 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:30:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,12 +82,6 @@
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
 #endif
-//CHINA001 #ifndef _SVX_POSTDLG_HXX //autogen
-//CHINA001 #include <svx/postdlg.hxx>
-//CHINA001 #endif
-#ifndef _SVX_ADRITEM_HXX //autogen
-//#include <svx/adritem.hxx>
-#endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
@@ -116,9 +110,6 @@
 #ifndef _FLDDAT_HXX
 #include <flddat.hxx>
 #endif
-//CHINA001 #ifndef _JAVAEDIT_HXX
-//CHINA001 #include <javaedit.hxx>
-//CHINA001 #endif
 #ifndef _NUMRULE_HXX
 #include <numrule.hxx>
 #endif
@@ -140,9 +131,6 @@
 #ifndef _FLDMGR_HXX
 #include <fldmgr.hxx>
 #endif
-//CHINA001 #ifndef _FLDEDT_HXX
-//CHINA001 #include <fldedt.hxx>
-//CHINA001 #endif
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
 #endif
@@ -155,11 +143,14 @@
 #endif
 
 #include <sfx2/app.hxx>
-#include <svx/svxdlg.hxx> //CHINA001
-#include <svx/dialogs.hrc> //CHINA001
-#include "swabstdlg.hxx" //CHINA001
-#include "dialog.hrc" //CHINA001
-#include <fldui.hrc> //CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
+#include "swabstdlg.hxx"
+#include "dialog.hrc"
+#include <fldui.hrc>
+
+using namespace nsSwDocInfoSubType;
+
 
 extern BOOL bNoInterrupt;       // in mainwn.cxx
 
@@ -168,11 +159,11 @@ String& lcl_AppendRedlineStr( String& rStr, USHORT nRedlId )
     USHORT nResId = 0;
     switch( nRedlId )
     {
-    case IDocumentRedlineAccess::REDLINE_INSERT:    nResId = STR_REDLINE_INSERTED;      break;
-    case IDocumentRedlineAccess::REDLINE_DELETE:    nResId = STR_REDLINE_DELETED;       break;
-    case IDocumentRedlineAccess::REDLINE_FORMAT:    nResId = STR_REDLINE_FORMATED;      break;
-    case IDocumentRedlineAccess::REDLINE_TABLE:     nResId = STR_REDLINE_TABLECHG;      break;
-    case IDocumentRedlineAccess::REDLINE_FMTCOLL:   nResId = STR_REDLINE_FMTCOLLSET;    break;
+    case nsRedlineType_t::REDLINE_INSERT:   nResId = STR_REDLINE_INSERTED;      break;
+    case nsRedlineType_t::REDLINE_DELETE:   nResId = STR_REDLINE_DELETED;       break;
+    case nsRedlineType_t::REDLINE_FORMAT:   nResId = STR_REDLINE_FORMATED;      break;
+    case nsRedlineType_t::REDLINE_TABLE:        nResId = STR_REDLINE_TABLECHG;      break;
+    case nsRedlineType_t::REDLINE_FMTCOLL:  nResId = STR_REDLINE_FMTCOLLSET;    break;
     }
     if( nResId )
         rStr += SW_RESSTR( nResId );
@@ -184,7 +175,6 @@ String& lcl_AppendRedlineStr( String& rStr, USHORT nRedlId )
 void SwTextShell::ExecField(SfxRequest &rReq)
 {
     SwWrtShell& rSh = GetShell();
-    SfxApplication* pOffApp = SFX_APP();
     const SfxPoolItem* pItem = 0;
 
     USHORT nSlot = rReq.GetSlot();
@@ -197,7 +187,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
     BOOL bIsText = TRUE;
     USHORT nInsertType = 0;
     USHORT nInsertSubType = 0;
-    USHORT nInsertFormat = 0;
+    ULONG nInsertFormat = 0;
 
     switch(nSlot)
     {
@@ -230,17 +220,13 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     }
                     default:
                     {
-                        //CHINA001 SwFldEditDlg *pDlg = new SwFldEditDlg(GetView());
-                        // SetCareWin geht nicht, da Feld nicht selektiert wird
-                        // rSh.SetCareWin(pDlg);
-                        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
-                        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+                        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-                        AbstractSfxSingleTabDialog* pDlg = pFact->CreateSwFldEditDlg( GetView(), RC_DLG_SWFLDEDITDLG );
-                        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                        AbstractSfxSingleTabDialog* pDlg = pFact->CreateSwFldEditDlg( GetView(),RC_DLG_SWFLDEDITDLG );
+                        DBG_ASSERT(pDlg, "Dialogdiet fail!");
                         pDlg->Execute();
                         delete pDlg;
-                        //rSh.SetCareWin(NULL);
                     }
                 }
             }
@@ -406,13 +392,12 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 SwPostItField* pPostIt = (SwPostItField*)pPostItFldMgr->GetCurFld();
                 BOOL bNew = !(pPostIt && pPostIt->GetTyp()->Which() == RES_POSTITFLD);
                 BOOL bTravel = FALSE;
-                BOOL bNext, bPrev;
+                BOOL bNext = FALSE, bPrev = FALSE;
 
-                //CHINA001 SfxItemSet aSet(GetPool(), SvxPostItDialog::GetRanges());
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pFact, "Dialogdiet fail!");
                 ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc( RID_SVXDLG_POSTIT );
-                DBG_ASSERT(fnGetRange, "Dialogdiet fail! GetRanges()");//CHINA001
+                DBG_ASSERT(fnGetRange, "Dialogdiet fail! GetRanges()");
                 SfxItemSet aSet(GetPool(), fnGetRange());
 
                 if(!bNew)
@@ -453,11 +438,10 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 AbstractSvxPostItDialog *pDlg = NULL;
                 if ( !pArgs )
                 {
-                    //CHINA001 pDlg = new SvxPostItDialog( pMDI, aSet, bTravel);
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact2, "Dialogdiet fail!");//CHINA001
+                    DBG_ASSERT(pFact2, "Dialogdiet fail!");
                     pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, RID_SVXDLG_POSTIT, bTravel );
-                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                    DBG_ASSERT(pDlg, "Dialogdiet fail!");
                     pDlg->SetReadonlyPostIt(rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel());
 
                     if (bTravel)
@@ -505,7 +489,6 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
             case FN_REDLINE_COMMENT:
             {
-                BOOL bNew = TRUE;
                 String sComment;
                 const SwRedline *pRedline = rSh.GetCurrRedline();
 
@@ -516,11 +499,10 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     BOOL bTravel = FALSE;
 
-                    //CHINA001 SfxItemSet aSet(GetPool(), SvxPostItDialog::GetRanges());
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                    DBG_ASSERT(pFact, "Dialogdiet fail!");
                     ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc( RID_SVXDLG_POSTIT );
-                    DBG_ASSERT(fnGetRange, "Dialogdiet fail! GetRanges()");//CHINA001
+                    DBG_ASSERT(fnGetRange, "Dialogdiet fail! GetRanges()");
                     SfxItemSet aSet(GetPool(), fnGetRange());
                     aSet.Put(SvxPostItTextItem(sComment.ConvertLineEnd(), SID_ATTR_POSTIT_TEXT));
                     aSet.Put(SvxPostItAuthorItem(pRedline->GetAuthorString(), SID_ATTR_POSTIT_AUTHOR));
@@ -562,11 +544,10 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     bTravel |= bNext|bPrev;
 
-                    //CHINA001 SvxPostItDialog *pDlg = new SvxPostItDialog( pMDI, aSet, bTravel, TRUE);
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact2, "Dialogdiet fail!");//CHINA001
+                    DBG_ASSERT(pFact2, "Dialogdiet fail!");
                     AbstractSvxPostItDialog* pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, RID_SVXDLG_POSTIT, bTravel, TRUE );
-                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                    DBG_ASSERT(pDlg, "Dialogdiet fail!");
                     pDlg->HideAuthor();
 
                     String sTitle(SW_RES(STR_REDLINE_COMMENT));
@@ -581,7 +562,6 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         pDlg->SetNextHdl(LINK(this, SwTextShell, RedlineNextHdl));
                     }
 
-                    //CHINA001 rSh.SetCareWin(pDlg*);
                     rSh.SetCareWin(pDlg->GetWindow());
                     bNoInterrupt = TRUE;
 
@@ -625,12 +605,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 }
                 else
                 {
-                    //CHINA001 SwJavaEditDialog *pDlg = new SwJavaEditDialog( pMDI, &rSh);
                     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                    DBG_ASSERT(pFact, "Dialogdiet fail!");
                     AbstractJavaEditDialog* pDlg = pFact->CreateJavaEditDialog( DLG_JAVAEDIT,
                                                             pMDI, &rSh);
-                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                    DBG_ASSERT(pDlg, "Dialogdiet fail!");
                     if ( pDlg->Execute() )
                     {
                         aType = pDlg->GetType();
@@ -794,7 +773,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             case FN_POSTIT :
             case FN_JAVAEDIT :
                 BOOL bCurField = FALSE;
-                SwField* pField = rSh.GetCurFld();
+                pField = rSh.GetCurFld();
                 if(nWhich == FN_POSTIT)
                     bCurField = pField && pField->GetTyp()->Which() == RES_POSTITFLD;
                 else
@@ -824,7 +803,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
 
     SwWrtShell& rSh = GetShell();
 
-    if( rSh.GetSelectionType() & SwWrtShell::SEL_TXT )
+    if( rSh.GetSelectionType() & nsSelectionType::SEL_TXT )
     {
         rSh.StartAction();
         SfxItemSet aSet(GetPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
@@ -833,10 +812,8 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
         const SfxPoolItem* pItem;
         if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, FALSE, &pItem))
         {
-            const SwFmtINetFmt* pINetFmt = (const SwFmtINetFmt*)pItem;
-
             // Links selektieren
-            rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT);
+            rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT, FALSE);
         }
         switch (nType)
         {
@@ -880,10 +857,8 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
  --------------------------------------------------------------------*/
 
 
-//CHINA001 IMPL_LINK( SwTextShell, PostItNextHdl, Button *, pBtn )
 IMPL_LINK( SwTextShell, PostItNextHdl, AbstractSvxPostItDialog *, pBtn )
 {
-    //CHINA001 SvxPostItDialog *pDlg = (SvxPostItDialog*)pBtn;
     AbstractSvxPostItDialog *pDlg = (AbstractSvxPostItDialog*)pBtn;
     if( pDlg->IsOkEnabled() )
     {
@@ -920,10 +895,8 @@ IMPL_LINK( SwTextShell, PostItNextHdl, AbstractSvxPostItDialog *, pBtn )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-//CHINA001 IMPL_LINK( SwTextShell, PostItPrevHdl, Button *, pBtn )
 IMPL_LINK( SwTextShell, PostItPrevHdl, AbstractSvxPostItDialog *, pBtn )
 {
-    //CHINA001 SvxPostItDialog *pDlg = (SvxPostItDialog*)pBtn;
     AbstractSvxPostItDialog *pDlg = (AbstractSvxPostItDialog*)pBtn;
 
     if( pDlg->IsOkEnabled() )
@@ -961,11 +934,9 @@ IMPL_LINK( SwTextShell, PostItPrevHdl, AbstractSvxPostItDialog *, pBtn )
     Beschreibung: Traveling zwischen Redlines
  --------------------------------------------------------------------*/
 
-//CHINA001 IMPL_LINK( SwTextShell, RedlineNextHdl, Button *, pBtn )
 IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
 {
     SwWrtShell* pSh = GetShellPtr();
-    //CHINA001 SvxPostItDialog *pDlg = (SvxPostItDialog*)pBtn;
     AbstractSvxPostItDialog *pDlg = (AbstractSvxPostItDialog*)pBtn;
 
     // Kommentar einfuegen bzw aendern
@@ -973,7 +944,6 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
 
     const SwRedline *pRedline = pSh->GetCurrRedline();
 
-    BOOL bNew = TRUE;
     String sComment;
 
     if (pRedline)
@@ -1023,11 +993,9 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-//CHINA001 IMPL_LINK( SwTextShell, RedlinePrevHdl, Button *, pBtn )
 IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
 {
     SwWrtShell* pSh = GetShellPtr();
-    //CHINA001 SvxPostItDialog *pDlg = (SvxPostItDialog*)pBtn;
     AbstractSvxPostItDialog *pDlg = (AbstractSvxPostItDialog*)pBtn;
 
     // Kommentar einfuegen bzw aendern
@@ -1035,7 +1003,6 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
 
     const SwRedline *pRedline = pSh->GetCurrRedline();
 
-    BOOL bNew = TRUE;
     String sComment;
 
     if (pRedline)
