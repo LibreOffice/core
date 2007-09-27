@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmeta.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:22:03 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:13:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,8 +237,8 @@ void SwXMLExport::_ExportMeta()
         if( !xTextTunnel.is() )
             return;
 
-        SwXText *pText = (SwXText *)xTextTunnel->getSomething(
-                                            SwXText::getUnoTunnelId() );
+        SwXText *pText = reinterpret_cast< SwXText * >(
+                sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
         ASSERT( pText, "SwXText missing" );
         if( !pText )
             return;
