@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:42:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:21:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,8 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
     if( nTabPos < rInf.X() )
         nTabPos = rInf.X();
 
-    xub_Unicode cFill, cDec;
+    xub_Unicode cFill = 0;
+    xub_Unicode cDec = 0;
     SvxTabAdjust eAdj;
 
     KSHORT nNewTabPos;
@@ -143,13 +144,13 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
 
         const SwTwips nLinePos = GetLeftMargin();
         const SwTwips nLineTab = nLinePos + nTabPos;
-        SwTwips nRight = Right();
+        SwTwips nMyRight = Right();
 
         if ( pFrm->IsVertical() )
         {
-            Point aRightTop( nRight, pFrm->Frm().Top() );
+            Point aRightTop( nMyRight, pFrm->Frm().Top() );
             pFrm->SwitchHorizontalToVertical( aRightTop );
-            nRight = aRightTop.Y();
+            nMyRight = aRightTop.Y();
         }
 
         SwTwips nNextPos;
@@ -160,7 +161,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         // default tab stop.
         //
         const SvxTabStop* pTabStop =
-            aLineInf.GetTabStop( nLineTab, nTabLeft, nRight );
+            aLineInf.GetTabStop( nLineTab, nTabLeft, nMyRight );
         if( pTabStop )
         {
             cFill = ' ' != pTabStop->GetFill() ? pTabStop->GetFill() : 0;
@@ -273,8 +274,8 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
 // Die Basisklasse wird erstmal ohne alles initialisiert.
 
 
-SwTabPortion::SwTabPortion( const KSHORT nTabPos, const xub_Unicode cFill )
-    : SwFixPortion( 0, 0 ), nTabPos(nTabPos), cFill(cFill)
+SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const xub_Unicode cFillChar )
+    : SwFixPortion( 0, 0 ), nTabPos(nTabPosition), cFill(cFillChar)
 {
     nLineLength = 1;
 #ifndef PRODUCT
@@ -432,7 +433,7 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
     while( pPor )
     {
            DBG_LOOP;
-        nPorWidth += pPor->Width();
+        nPorWidth = nPorWidth + pPor->Width();
         pPor = pPor->GetPortion();
     }
 
@@ -506,10 +507,10 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
         !rInf.GetOpt().IsReadonly() && \
         SwViewOption::IsFieldShadings()    )
     {
-        const KSHORT nWidth = PrtWidth();
+        const KSHORT nTmpWidth = PrtWidth();
         ((SwTabPortion*)this)->PrtWidth( GetFixWidth() );
         rInf.DrawViewOpt( *this, POR_TAB );
-        ((SwTabPortion*)this)->PrtWidth( nWidth );
+        ((SwTabPortion*)this)->PrtWidth( nTmpWidth );
     }
 #endif
 
@@ -569,7 +570,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
  *                virtual SwAutoTabDecimalPortion::Paint()
  *************************************************************************/
 
-void SwAutoTabDecimalPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwAutoTabDecimalPortion::Paint( const SwTxtPaintInfo & ) const
 {
 }
 
