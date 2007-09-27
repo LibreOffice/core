@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtree.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:09:21 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:57:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,8 @@ public:
     virtual ~SwDBTreeList();
 
     String  GetDBName( String& rTableName, String& rColumnName, BOOL* pbIsTable = 0);
+
+    using SvTreeListBox::Select;
     void    Select( const String& rDBName, const String& rTableName,
                     const String& rColumnName );
 
