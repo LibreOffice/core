@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eddel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:05:01 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:44:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,6 +279,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
         ASSERT( pCmp->GetMark()->nContent.GetIdxReg()
                     == pCmp->GetCntntNode(FALSE), "Mark im falschen Node" );
         BOOL bTst = *pCmp->GetPoint() == *pCmp->GetMark();
+        (void) bTst;
     } while( pDestShell->GetCrsr() != ( pCmp = (SwPaM*)pCmp->GetNext() ) );
 }
 #endif
@@ -307,7 +308,7 @@ BOOL SwEditShell::Replace( const String& rNewStr, BOOL bRegExpRplc )
     if( !HasReadonlySel() )
     {
         StartAllAction();
-        GetDoc()->StartUndo(0, NULL);
+        GetDoc()->StartUndo(UNDO_EMPTY, NULL);
 
         FOREACHPAM_START(this)
 
@@ -330,13 +331,13 @@ BOOL SwEditShell::Replace( const String& rNewStr, BOOL bRegExpRplc )
 
             if( PCURCRSR->HasMark() && *PCURCRSR->GetMark() != *PCURCRSR->GetPoint() )
             {
-                bRet |= GetDoc()->Replace( *PCURCRSR, rNewStr, bRegExpRplc );
+                bRet = GetDoc()->Replace( *PCURCRSR, rNewStr, bRegExpRplc ) || bRet;
                 SaveTblBoxCntnt( PCURCRSR->GetPoint() );
             }
         FOREACHPAM_END()
 
         // Undo-Klammerung hier beenden
-        GetDoc()->EndUndo(0, NULL);
+        GetDoc()->EndUndo(UNDO_EMPTY, NULL);
         EndAllAction();
     }
     return bRet;
