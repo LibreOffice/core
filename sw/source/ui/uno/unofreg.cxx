@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofreg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:35:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:42:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,8 @@
 #endif
 
 using namespace rtl;
-using namespace com::sun::star;
-using namespace com::sun::star::lang;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::lang;
 
 // module
 extern uno::Sequence< OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() throw();
@@ -165,7 +165,7 @@ extern "C"
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
         const sal_Char ** ppEnvTypeName,
-        uno_Environment ** ppEnv )
+        uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -184,7 +184,7 @@ static void lcl_uno_writeInfo(
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-        void * pServiceManager,
+        void * /*pServiceManager*/,
         void * pRegistryKey )
 {
     if( pRegistryKey )
