@@ -4,9 +4,9 @@
  *
  *  $RCSfile: address.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:04:04 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:51:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,6 +327,8 @@ public:
     inline bool operator>( const ScAddress& r ) const;
     inline bool operator>=( const ScAddress& r ) const;
 
+    inline size_t hash() const;
+
     // moved from ScTripel
     /// "(1,2,3)"
     String GetText() const;
@@ -412,6 +414,20 @@ inline bool ScAddress::operator>=( const ScAddress& r ) const
     return !operator<( r );
 }
 
+
+inline size_t ScAddress::hash() const
+{
+    // Assume that there are not that many addresses with row > 2^16 AND column
+    // > 2^8 AND sheet > 2^8 so we won't have too many collisions.
+    if (nRow <= 0xffff)
+        return (static_cast<size_t>(nTab) << 24) ^
+            (static_cast<size_t>(nCol) << 16) ^ static_cast<size_t>(nRow);
+    else
+        return (static_cast<size_t>(nTab) << 28) ^
+            (static_cast<size_t>(nCol) << 24) ^ static_cast<size_t>(nRow);
+}
+
+
 // === ScRange ===============================================================
 
 class SC_DLLPUBLIC ScRange
@@ -467,6 +483,9 @@ public:
     inline bool operator<=( const ScRange& r ) const;
     inline bool operator>( const ScRange& r ) const;
     inline bool operator>=( const ScRange& r ) const;
+
+    inline size_t hash() const;
+    inline size_t hashStartColumn() const;
 };
 
 inline void ScRange::GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
@@ -522,6 +541,36 @@ inline bool ScRange::In( const ScRange& r ) const
         aStart.Row() <= r.aStart.Row() && r.aEnd.Row() <= aEnd.Row() &&
         aStart.Tab() <= r.aStart.Tab() && r.aEnd.Tab() <= aEnd.Tab();
 }
+
+
+inline size_t ScRange::hash() const
+{
+    // Assume that there are not that many ranges with identical corners so we
+    // won't have too many collisions. Also assume that more lower row and
+    // column numbers are used so that there are not too many conflicts with
+    // the columns hashed into the values, and that start row and column
+    // usually don't exceed certain values. High bits are not masked off and
+    // may overlap with lower bits of other values, e.g. if start column is
+    // greater than assumed.
+    return
+        (static_cast<size_t>(aStart.Row()) << 26) ^ // start row <= 2^6
+        (static_cast<size_t>(aStart.Col()) << 21) ^ // start column <= 2^5
+        (static_cast<size_t>(aEnd.Col()) << 15) ^   // end column <= 2^6
+        static_cast<size_t>(aEnd.Row());            // end row <= 2^15
+}
+
+
+inline size_t ScRange::hashStartColumn() const
+{
+    // Assume that for the start row more lower row numbers are used so that
+    // there are not too many conflicts with the column hashed into the higher
+    // values.
+    return
+        (static_cast<size_t>(aStart.Col()) << 24) ^ // start column <= 2^8
+        (static_cast<size_t>(aStart.Row()) << 16) ^ // start row <= 2^8
+        static_cast<size_t>(aEnd.Row());
+}
+
 
 // === ScRangePair ===========================================================
 
