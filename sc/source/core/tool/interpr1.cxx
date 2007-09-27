@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:36:31 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:53:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@
 #include "attrib.hxx"
 #include "jumpmatrix.hxx"
 #include "cellkeytranslator.hxx"
+#include "lookupcache.hxx"
 
 #define SC_DOUBLE_MAXVALUE  1.7e307
 
@@ -3849,6 +3850,7 @@ void ScInterpreter::ScMatch()
             rParam.nCol1       = nCol1;
             rParam.nRow1       = nRow1;
             rParam.nCol2       = nCol2;
+            rParam.nTab        = nTab1;
             rParam.bMixedComparison = TRUE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
@@ -3912,36 +3914,22 @@ void ScInterpreter::ScMatch()
             }
             if ( rEntry.bQueryByString )
                 rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
-            SCCOLROW nDelta;
-            SCROW nR;
-            SCCOL nC;
+            SCCOLROW nDelta = 0;
             if (nCol1 == nCol2)
             {                                           // search row in column
                 rParam.nRow2 = nRow2;
                 rEntry.nField = nCol1;
-                ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
-                if (fTyp == 0.0)
-                {                                       // EQUAL
-                    if (aCellIter.GetFirst())
-                        nR = aCellIter.GetRow();
-                    else
-                    {
-                        SetNA();
-                        return;
-                    }
+                ScAddress aResultPos( nCol1, nRow1, nTab1);
+                if (!LookupQueryWithCache( aResultPos, rParam))
+                {
+                    SetNA();
+                    return;
                 }
-                else
-                {                                       // <= or >=
-                    if ( !aCellIter.FindEqualOrSortedLastInRange( nC, nR ) )
-                    {
-                        SetNA();
-                        return;
-                    }
-                }
-                nDelta = nR - nRow1;
+                nDelta = aResultPos.Row() - nRow1;
             }
             else
             {                                           // search column in row
+                SCCOL nC;
                 rParam.bByRow = FALSE;
                 rParam.nRow2 = nRow1;
                 rEntry.nField = nCol1;
@@ -3960,6 +3948,7 @@ void ScInterpreter::ScMatch()
                 }
                 else
                 {                                       // <= or >=
+                    SCROW nR;
                     if ( !aCellIter.FindEqualOrSortedLastInRange( nC, nR ) )
                     {
                         SetNA();
@@ -5042,6 +5031,7 @@ void ScInterpreter::ScVLookup()
             rParam.nRow1       = nRow1;
             rParam.nCol2       = nCol1;     // nur in der ersten Spalte suchen
             rParam.nRow2       = nRow2;
+            rParam.nTab        = nTab1;
             rParam.bMixedComparison = TRUE;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
@@ -5111,6 +5101,9 @@ void ScInterpreter::ScVLookup()
                 rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
             if (pMat)
             {
+//!!!!!!!
+//! TODO: enable caching on matrix?
+//!!!!!!!
                 SCSIZE nMatCount = nR;
                 SCSIZE nDelta = SCSIZE_MAX;
                 if (rEntry.bQueryByString)
@@ -5199,25 +5192,13 @@ void ScInterpreter::ScVLookup()
             else
             {
                 rEntry.nField = nCol1;
-                BOOL bFound = FALSE;
-                SCROW nRow = 0;
                 if ( bSorted )
                     rEntry.eOp = SC_LESS_EQUAL;
-                ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
-                if ( bSorted )
-                {
-                    SCCOL nCol;
-                    bFound = aCellIter.FindEqualOrSortedLastInRange( nCol, nRow );
-                }
-                else if ( aCellIter.GetFirst() )
-                {
-                    bFound = TRUE;
-                    nRow = aCellIter.GetRow();
-                }
-                if ( bFound )
+                ScAddress aResultPos( nCol1, nRow1, nTab1);
+                if (LookupQueryWithCache( aResultPos, rParam))
                 {
                     ScBaseCell* pCell;
-                    ScAddress aAdr( nSpIndex, nRow, nTab1 );
+                    ScAddress aAdr( nSpIndex, aResultPos.Row(), nTab1 );
                     if ( HasCellValueData( pCell = GetCell( aAdr ) ) )
                         PushDouble(GetCellValue( aAdr, pCell ));
                     else
@@ -6651,3 +6632,97 @@ BOOL ScInterpreter::MayBeRegExp( const String& rStr, const ScDocument* pDoc  )
     return FALSE;
 }
 
+static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument * pDoc,
+        const ScQueryParam & rParam, const ScQueryEntry & rEntry )
+{
+    bool bFound = false;
+    ScQueryCellIterator aCellIter( pDoc, rParam.nTab, rParam, FALSE);
+    if (rEntry.eOp != SC_EQUAL)
+    {
+        // range lookup <= or >=
+        SCCOL nCol;
+        SCROW nRow;
+        bFound = aCellIter.FindEqualOrSortedLastInRange( nCol, nRow);
+        if (bFound)
+        {
+            o_rResultPos.SetCol( nCol);
+            o_rResultPos.SetRow( nRow);
+        }
+    }
+    else if (aCellIter.GetFirst())
+    {
+        // EQUAL
+        bFound = true;
+        o_rResultPos.SetCol( aCellIter.GetCol());
+        o_rResultPos.SetRow( aCellIter.GetRow());
+    }
+    return bFound;
+}
+
+#define erDEBUG_LOOKUPCACHE 0
+#if erDEBUG_LOOKUPCACHE
+#include <cstdio>
+using ::std::fprintf;
+using ::std::fflush;
+static struct LookupCacheDebugCounter
+{
+    unsigned long nMiss;
+    unsigned long nHit;
+    LookupCacheDebugCounter() : nMiss(0), nHit(0) {}
+    ~LookupCacheDebugCounter()
+    {
+        fprintf( stderr, "\nmiss: %lu, hit: %lu, total: %lu, hit/miss: %lu, hit/total %lu%\n",
+                nMiss, nHit, nHit+nMiss, (nMiss>0 ? nHit/nMiss : 0),
+                ((nHit+nMiss)>0 ? (100*nHit)/(nHit+nMiss) : 0));
+        fflush( stderr);
+    }
+} aLookupCacheDebugCounter;
+#endif
+
+bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
+        const ScQueryParam & rParam ) const
+{
+    bool bFound = false;
+    const ScQueryEntry& rEntry = rParam.GetEntry(0);
+    bool bColumnsMatch = (rParam.nCol1 == rEntry.nField);
+    DBG_ASSERT( bColumnsMatch, "ScInterpreter::LookupQueryWithCache: columns don't match");
+    if (!bColumnsMatch)
+        bFound = lcl_LookupQuery( o_rResultPos, pDok, rParam, rEntry);
+    else
+    {
+        ScRange aLookupRange( rParam.nCol1, rParam.nRow1, rParam.nTab,
+                rParam.nCol2, rParam.nRow2, rParam.nTab);
+        ScLookupCache& rCache = pDok->GetLookupCache( aLookupRange);
+        ScLookupCache::QueryCriteria aCriteria( rEntry);
+        ScLookupCache::Result eCacheResult = rCache.lookup( o_rResultPos,
+                aCriteria, aPos);
+        switch (eCacheResult)
+        {
+            case ScLookupCache::NOT_CACHED :
+            case ScLookupCache::CRITERIA_DIFFERENT :
+#if erDEBUG_LOOKUPCACHE
+                ++aLookupCacheDebugCounter.nMiss;
+#if erDEBUG_LOOKUPCACHE > 1
+                fprintf( stderr, "miss %d,%d,%d\n", (int)aPos.Col(), (int)aPos.Row(), (int)aPos.Tab());
+#endif
+#endif
+                bFound = lcl_LookupQuery( o_rResultPos, pDok, rParam, rEntry);
+                if (eCacheResult == ScLookupCache::NOT_CACHED)
+                    rCache.insert( o_rResultPos, aCriteria, aPos, bFound);
+                break;
+            case ScLookupCache::FOUND :
+#if erDEBUG_LOOKUPCACHE
+                ++aLookupCacheDebugCounter.nHit;
+#if erDEBUG_LOOKUPCACHE > 1
+                fprintf( stderr, "hit  %d,%d,%d\n", (int)aPos.Col(), (int)aPos.Row(), (int)aPos.Tab());
+#endif
+#endif
+                bFound = true;
+                break;
+            case ScLookupCache::NOT_AVAILABLE :
+                ;   // nothing, bFound remains FALSE
+                break;
+        }
+    }
+    return bFound;
+}
