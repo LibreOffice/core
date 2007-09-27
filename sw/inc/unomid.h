@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomid.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:27:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:15:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 #ifndef SW_UNOMID_HXX
 #define SW_UNOMID_HXX
 
+#define C2S(cChar) String::CreateFromAscii( cChar )
+#define C2U(cChar) rtl::OUString::createFromAscii( cChar )
 
 #define MID_MIRROR_VERT                         0
 #define MID_MIRROR_HORZ_EVEN_PAGES              1
