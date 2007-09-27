@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porexp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:59:55 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:15:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ xub_StrLen SwExpandPortion::GetCrsrOfst( const MSHORT nOfst ) const
  *              virtual SwExpandPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo &rInf,
+sal_Bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo&,
                                  XubString &rTxt ) const
 {
     rTxt.Erase();
@@ -258,7 +258,7 @@ void SwBlankPortion::Paint( const SwTxtPaintInfo &rInf ) const
  *              virtual SwBlankPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwBlankPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const
+sal_Bool SwBlankPortion::GetExpTxt( const SwTxtSizeInfo&, XubString &rTxt ) const
 {
     rTxt = cChar;
     return sal_True;
