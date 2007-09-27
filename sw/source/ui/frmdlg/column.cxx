@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:18:04 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:51:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,8 +148,8 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     pSelectionSet(0),
     pFrameSet(0),
     nOldSelection(0),
-    bPageChanged(FALSE),
     nSelectionWidth(0),
+    bPageChanged(FALSE),
     bSectionChanged(FALSE),
     bSelSectionChanged(FALSE),
     bFrameChanged(FALSE)
@@ -440,7 +440,7 @@ static USHORT __FAR_DATA aPageRg[] = {
 };
 
 
-DBG_NAME(columnhdl) ;
+DBG_NAME(columnhdl)
 
 
 
@@ -460,7 +460,7 @@ void SwColumnPage::ResetColWidth()
     if( nCols )
     {
         USHORT nWidth = GetMaxWidth( pColMgr, nCols );
-        nWidth /= nCols;
+        nWidth = nWidth / nCols;
 
         for(USHORT i = 0; i < nCols; ++i)
             nColWidth[i] = (long) nWidth;
@@ -480,21 +480,11 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     aClNrLbl(this,          SW_RES(FT_NUMBER  )),
     aCLNrEdt(this,          SW_RES(ED_NUMBER  )),
-    aAutoWidthBox(this,     SW_RES(CB_AUTO_WIDTH)),
     aDefaultVS(this,        SW_RES(VS_DEFAULTS)),
     aBalanceColsCB(this,    SW_RES(CB_BALANCECOLS)),
     aFLGroup(this,          SW_RES(FL_COLUMNS )),
 
-    aLineTypeLbl(this,      SW_RES(FT_STYLE)),
-    aLineTypeDLB(this,      SW_RES(LB_STYLE)),
-    aLineHeightLbl(this,    SW_RES(FT_HEIGHT)),
-    aLineHeightEdit(this,   SW_RES(ED_HEIGHT)),
-    aLinePosLbl(this,       SW_RES(FT_POSITION)),
-    aLinePosDLB(this,       SW_RES(LB_POSITION)),
-    aFLLineType(this,       SW_RES(FL_LINETYPE)),
     aBtnUp(this,            SW_RES(BTN_DOWN)),
-    aBtnDown(this,          SW_RES(BTN_UP)),
-
     aColumnFT(this,         SW_RES(FT_COLUMN)),
     aWidthFT(this,          SW_RES(FT_WIDTH)),
     aDistFT(this,           SW_RES(FT_DIST)),
@@ -506,7 +496,19 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aDistEd2(this,          SW_RES(ED_DIST2)),
     aLbl3(this,             SW_RES(FT_3)),
     aEd3(this,              SW_RES(ED_3)),
+    aBtnDown(this,          SW_RES(BTN_UP)),
+    aAutoWidthBox(this,     SW_RES(CB_AUTO_WIDTH)),
+
     aFLLayout(this,         SW_RES(FL_LAYOUT)),
+
+    aLineTypeLbl(this,      SW_RES(FT_STYLE)),
+    aLineTypeDLB(this,      SW_RES(LB_STYLE)),
+    aLineHeightLbl(this,    SW_RES(FT_HEIGHT)),
+    aLineHeightEdit(this,   SW_RES(ED_HEIGHT)),
+    aLinePosLbl(this,       SW_RES(FT_POSITION)),
+    aLinePosDLB(this,       SW_RES(LB_POSITION)),
+    aFLLineType(this,       SW_RES(FL_LINETYPE)),
+
     aVertFL(this,         SW_RES(FL_VERT)),
     aPropertiesFL(  this,    SW_RES( FL_PROPERTIES    )),
     aTextDirectionFT( this,  SW_RES( FT_TEXTDIRECTION )),
@@ -515,13 +517,14 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aPgeExampleWN(this,     SW_RES(WN_BSP)),
     aFrmExampleWN(this,     SW_RES(WN_BSP)),
 
+    pColMgr(0),
+
     nFirstVis(0),
-    bFrm(FALSE),
-    bFormat(FALSE),
-    bHtmlMode(FALSE),
     nMinWidth(MINLAY),
     pModifiedField(0),
-    pColMgr(0),
+    bFormat(FALSE),
+    bFrm(FALSE),
+    bHtmlMode(FALSE),
     bLockUpdate(FALSE)
 {
     USHORT i;
@@ -597,7 +600,7 @@ SwColumnPage::~SwColumnPage()
 
 void SwColumnPage::SetPageWidth(long nPageWidth)
 {
-    long nNewMaxWidth = aEd1.Normalize(nPageWidth);
+    long nNewMaxWidth = static_cast< long >(aEd1.NormalizePercent(nPageWidth));
 
     aDistEd1.SetMax(nNewMaxWidth, FUNIT_TWIP);
     aDistEd2.SetMax(nNewMaxWidth, FUNIT_TWIP);
@@ -719,7 +722,7 @@ BOOL SwColumnPage::FillItemSet(SfxItemSet &rSet)
 
 
 
-IMPL_LINK( SwColumnPage, UpdateColMgr, void *, pField )
+IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
 {
     long nGutterWidth = pColMgr->GetGutterWidth();
     if(nCols > 1)
@@ -751,13 +754,13 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, pField )
             if( nSum < nMaxW  )
                 nColWidth[nCols - 1] += nMaxW - nSum;
 
-            pColMgr->SetColWidth( 0, nColWidth[0] + (USHORT)nColDist[0]/2 );
+            pColMgr->SetColWidth( 0, static_cast< USHORT >(nColWidth[0] + (USHORT)nColDist[0]/2) );
             for( i = 1; i < nCols-1; ++i )
             {
                 long nActDist = (nColDist[i] + nColDist[i - 1]) / 2;
                 pColMgr->SetColWidth( i, (USHORT)nColWidth[i] + (USHORT)nActDist );
             }
-            pColMgr->SetColWidth( nCols-1, (USHORT)nColWidth[nCols-1] + nColDist[nCols -2]/2 );
+            pColMgr->SetColWidth( nCols-1, static_cast< USHORT >(nColWidth[nCols-1] + nColDist[nCols -2]/2) );
 
         }
 
@@ -839,7 +842,7 @@ void SwColumnPage::Init()
             for(i = 0; i < nCols; ++i)
                 nColWidth[i] = nColumnWidthSum;
         }
-        USHORT eAdj = pColMgr->GetAdjust();
+        SwColLineAdj eAdj = pColMgr->GetAdjust();
         if( COLADJ_NONE == eAdj )       // der Dialog kennt kein NONE!
         {
             eAdj = COLADJ_TOP;
@@ -852,7 +855,7 @@ void SwColumnPage::Init()
             aLineTypeDLB.SelectEntryPos( lcl_LineWidthToPos(( pColMgr->GetLineWidth() )) + 1);
             aLineHeightEdit.SetValue( pColMgr->GetLineHeightPercent() );
         }
-        aLinePosDLB.SelectEntryPos( eAdj - 1 );
+        aLinePosDLB.SelectEntryPos( static_cast< USHORT >(eAdj - 1) );
     }
     else
     {
@@ -965,7 +968,7 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
     {
         if(pNF)
             aDefaultVS.SetNoSelection();
-        long nDist = aDistEd1.Denormalize(aDistEd1.GetValue(FUNIT_TWIP));
+        long nDist = static_cast< long >(aDistEd1.DenormalizePercent(aDistEd1.GetValue(FUNIT_TWIP)));
         pColMgr->SetCount(nCols, (USHORT)nDist);
         for(USHORT i = 0; i < nCols; i++)
             nColDist[i] = nDist;
@@ -993,7 +996,7 @@ IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
 
 IMPL_LINK( SwColumnPage, GapModify, PercentField *, pFld )
 {
-    long nActValue = pFld->Denormalize(pFld->GetValue(FUNIT_TWIP));
+    long nActValue = static_cast< long >(pFld->DenormalizePercent(pFld->GetValue(FUNIT_TWIP)));
     if(nCols < 2)
         return 0;
     if(aAutoWidthBox.IsChecked())
@@ -1004,7 +1007,7 @@ IMPL_LINK( SwColumnPage, GapModify, PercentField *, pFld )
         if(nActValue > nMaxGap)
         {
             nActValue = nMaxGap;
-            aDistEd1.SetPrcntValue(aDistEd1.Normalize(nMaxGap), FUNIT_TWIP);
+            aDistEd1.SetPrcntValue(aDistEd1.NormalizePercent(nMaxGap), FUNIT_TWIP);
         }
         pColMgr->SetGutterWidth((USHORT)nActValue);
         for(USHORT i = 0; i < nCols; i++)
@@ -1084,7 +1087,7 @@ IMPL_LINK( SwColumnPage, EdModify, PercentField *, pField )
 
 IMPL_LINK( SwColumnPage, AutoWidthHdl, CheckBox *, pBox )
 {
-    long nDist = aDistEd1.Denormalize(aDistEd1.GetValue(FUNIT_TWIP));
+    long nDist = static_cast< long >(aDistEd1.DenormalizePercent(aDistEd1.GetValue(FUNIT_TWIP)));
     pColMgr->SetCount(nCols, (USHORT)nDist);
     for(USHORT i = 0; i < nCols; i++)
         nColDist[i] = nDist;
@@ -1148,7 +1151,7 @@ IMPL_LINK( SwColumnPage, Timeout, Timer *, EMPTYARG )
             nChanged += 3;*/
 
         long nNewWidth = (USHORT)
-            pModifiedField->Denormalize(pModifiedField->GetValue(FUNIT_TWIP));
+            pModifiedField->DenormalizePercent(pModifiedField->GetValue(FUNIT_TWIP));
         long nDiff = nNewWidth - nColWidth[nChanged];
 
         // wenn es die letzte Spalte ist
@@ -1189,13 +1192,13 @@ void SwColumnPage::Update()
     aBalanceColsCB.Enable(nCols > 1);
     if(nCols >= 2)
     {
-        aEd1.SetPrcntValue(aEd1.Normalize(nColWidth[nFirstVis]), FUNIT_TWIP);
-        aDistEd1.SetPrcntValue(aDistEd1.Normalize(nColDist[nFirstVis]), FUNIT_TWIP);
-        aEd2.SetPrcntValue(aEd2.Normalize(nColWidth[nFirstVis + 1]), FUNIT_TWIP);
+        aEd1.SetPrcntValue(aEd1.NormalizePercent(nColWidth[nFirstVis]), FUNIT_TWIP);
+        aDistEd1.SetPrcntValue(aDistEd1.NormalizePercent(nColDist[nFirstVis]), FUNIT_TWIP);
+        aEd2.SetPrcntValue(aEd2.NormalizePercent(nColWidth[nFirstVis + 1]), FUNIT_TWIP);
         if(nCols >= 3)
         {
-            aDistEd2.SetPrcntValue(aDistEd2.Normalize(nColDist[nFirstVis + 1]), FUNIT_TWIP);
-            aEd3.SetPrcntValue(aEd3.Normalize(nColWidth[nFirstVis + 2]), FUNIT_TWIP);
+            aDistEd2.SetPrcntValue(aDistEd2.NormalizePercent(nColDist[nFirstVis + 1]), FUNIT_TWIP);
+            aEd3.SetPrcntValue(aEd3.NormalizePercent(nColWidth[nFirstVis + 2]), FUNIT_TWIP);
         }
         else
         {
@@ -1231,8 +1234,8 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
             const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rSet.Get(
                                                                 RES_LR_SPACE );
             const SvxBoxItem& rBox = (const SvxBoxItem&) rSet.Get(RES_BOX);
-            USHORT nActWidth = (USHORT)rSize.GetSize().Width()
-                            - rLRSpace.GetLeft() - rLRSpace.GetRight() - rBox.GetDistance();
+            USHORT nActWidth = static_cast< USHORT >(rSize.GetSize().Width()
+                            - rLRSpace.GetLeft() - rLRSpace.GetRight() - rBox.GetDistance());
 
             if( pColMgr->GetActualSize() != nActWidth)
             {
@@ -1300,10 +1303,10 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
 
 
 
-int SwColumnPage::DeactivatePage(SfxItemSet *pSet)
+int SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
 {
-    if(pSet)
-        FillItemSet(*pSet);
+    if(_pSet)
+        FillItemSet(*_pSet);
 
     return TRUE;
 }
@@ -1342,12 +1345,12 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
         USHORT nSmall = pColMgr->GetActualSize()  / 3;
         if(nItem == 4)
         {
-            aEd2.SetPrcntValue(aEd2.Normalize(long(nSmall)), FUNIT_TWIP);
+            aEd2.SetPrcntValue(aEd2.NormalizePercent(long(nSmall)), FUNIT_TWIP);
             pModifiedField = &aEd2;
         }
         else
         {
-            aEd1.SetPrcntValue(aEd1.Normalize(long(nSmall)), FUNIT_TWIP);
+            aEd1.SetPrcntValue(aEd1.NormalizePercent(long(nSmall)), FUNIT_TWIP);
             pModifiedField = &aEd1;
         }
         bLockUpdate = FALSE;
@@ -1418,7 +1421,7 @@ void ColumnValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
     long nStep = Abs(Abs(nRectHeight * 95 /100) / 11);
     long nTop = (nRectHeight - 11 * nStep ) / 2;
-    USHORT nCols;
+    USHORT nCols = 0;
     long nStarts[3];
     long nEnds[3];
     nStarts[0] = nRectWidth * 10 / 100;
