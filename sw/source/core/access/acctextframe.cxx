@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acctextframe.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:28:54 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:24:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
@@ -91,14 +92,15 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
 using utl::AccessibleRelationSetHelper;
+using ::com::sun::star::accessibility::XAccessibleContext;
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextFrameView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleTextFrameView";
 
 SwAccessibleTextFrame::SwAccessibleTextFrame(
-        SwAccessibleMap *pMap,
-        const SwFlyFrm *pFlyFrm ) :
-    SwAccessibleFrameBase( pMap, AccessibleRole::TEXT_FRAME, pFlyFrm )
+        SwAccessibleMap* pInitMap,
+        const SwFlyFrm* pFlyFrm  ) :
+    SwAccessibleFrameBase( pInitMap, AccessibleRole::TEXT_FRAME, pFlyFrm )
 {
 }
 
