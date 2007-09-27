@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:05:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:16:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,7 +223,7 @@ class SwXDocumentPropertyHelper;
 class SfxViewFrame;
 
 typedef UnoActionContext* UnoActionContextPtr;
-SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4, 4);
+SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4, 4)
 
 /******************************************************************************
  *
@@ -293,7 +293,6 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > *          pxXTextFieldMasters;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > *          pxXTextSections;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > *          pxXBookmarks;
-//  ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > *     pxXTextShapes;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > *          pxXTextTables;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > *          pxXTextFrames;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > *          pxXGraphicObjects;
@@ -361,7 +360,9 @@ public:
 
     //XComponent
     virtual void SAL_CALL dispose(void) throw( ::com::sun::star::uno::RuntimeException );
+    using SfxBaseModel::addEventListener;
     virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
+    using SfxBaseModel::removeEventListener;
     virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
 
     //XCloseable
@@ -563,12 +564,12 @@ class SwXLinkNameAccessWrapper : public cppu::WeakImplHelper4
     ::com::sun::star::document::XLinkTargetSupplier
 >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >            xRealAccess;
-    SfxItemPropertySet      aPropSet;
-    const String            sLinkSuffix;
-    const String            sLinkDisplayName;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xRealAccess;
+    SfxItemPropertySet                                                              aPropSet;
+    const String                                                                    sLinkSuffix;
+    const String                                                                    sLinkDisplayName;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument >       xDoc;
-    SwXTextDocument*        pxDoc;
+    SwXTextDocument*                                                                pxDoc;
 
 
 public:
