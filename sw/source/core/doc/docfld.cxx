@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:40:23 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:34:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,9 +147,9 @@
 #include <poolfmt.hrc>      // fuer InitFldTypes
 #endif
 
-#include <SwUndoField.hxx> // #111840#
+#include <SwUndoField.hxx>
 
-using namespace com::sun::star::uno; // #111840#
+using namespace ::com::sun::star::uno;
 
 extern BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
                         const SwTxtNode& rBehindNd, USHORT nSttPos );
@@ -181,7 +181,7 @@ SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
             //MIB 14.03.95: Ab sofort verlaesst sich auch der SW3-Reader
             //beim Aufbau der String-Pools und beim Einlesen von SetExp-Feldern
             //hierauf
-            if( GSE_SEQ & ((SwSetExpFieldType&)rFldTyp).GetType() )
+            if( nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType&)rFldTyp).GetType() )
                 i -= INIT_SEQ_FLDTYPES;
         // kein break;
     case RES_DBFLD:
@@ -542,7 +542,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                             // setze das Value-Flag zurueck
                             // JP 17.06.96: interne Darstellung auf alle Formeln
                             //              (Referenzen auf andere Tabellen!!!)
-                            if( SUB_CMD & pFld->GetSubType() )
+                            if( nsSwExtendedSubType::SUB_CMD & pFld->GetSubType() )
                                 pFld->PtrToBoxNm( pUpdtFld->pTbl );
                             else
                                 pFld->ChgValid( FALSE );
@@ -610,7 +610,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
             do {
                 SwFmtFld* pFmtFld = (SwFmtFld*)pLast;
                 SwTblField* pFld;
-                if( !pFmtFld->GetTxtFld() || (SUB_CMD &
+                if( !pFmtFld->GetTxtFld() || (nsSwExtendedSubType::SUB_CMD &
                     (pFld = (SwTblField*)pFmtFld->GetFld())->GetSubType() ))
                     continue;
 
@@ -790,7 +790,7 @@ void SwDoc::UpdatePageFlds( SfxPoolItem* pMsgHnt )
 // ---- Loesche alle nicht referenzierten FeldTypen eines Dokumentes --
 void SwDoc::GCFieldTypes()
 {
-    for( register USHORT n = pFldTypes->Count(); n > INIT_FLDTYPES; )
+    for( USHORT n = pFldTypes->Count(); n > INIT_FLDTYPES; )
         if( !(*pFldTypes)[ --n ]->GetDepends() )
             RemoveFldType( n );
 }
@@ -1157,7 +1157,7 @@ void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
     if( RES_SETEXPFLD == nFldWhich )
     {
         SwSbxValue aValue;
-        if( GSE_EXPR & pFld->GetSubType() )
+        if( nsSwGetSetExpType::GSE_EXPR & pFld->GetSubType() )
             aValue.PutDouble( ((SwSetExpField*)pFld)->GetValue() );
         else
             // Erweiterung fuers Rechnen mit Strings
@@ -1281,7 +1281,7 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, USHORT& rTblSize,
         switch( pFld->GetTyp()->Which() )
         {
         case RES_SETEXPFLD:
-            if( GSE_STRING & pFld->GetSubType() )
+            if( nsSwGetSetExpType::GSE_STRING & pFld->GetSubType() )
             {
                 // setze in der HashTabelle den neuen Wert
                 // ist die "Formel" ein Feld ??
@@ -1369,7 +1369,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
                     // Eintrag vorhanden ?
                     USHORT nPos;
                     const String& rNm = pFldType->GetName();
-                    String sExpand(((SwUserFieldType*)pFldType)->Expand(GSE_STRING, 0, 0));
+                    String sExpand(((SwUserFieldType*)pFldType)->Expand(nsSwGetSetExpType::GSE_STRING, 0, 0));
                     SwHash* pFnd = Find( rNm, pHashStrTbl, nStrFmtCnt, &nPos );
                     if( pFnd )
                         // Eintrag in der HashTabelle aendern ??
@@ -1470,10 +1470,10 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
             // Feld Evaluieren
             ((SwDBField*)pFld)->Evaluate();
 
-                SwDBData aDBData(((SwDBField*)pFld)->GetDBData());
+            SwDBData aTmpDBData(((SwDBField*)pFld)->GetDBData());
 
-            if( pMgr->IsDataSourceOpen(aDBData.sDataSource, aDBData.sCommand, sal_False))
-                aCalc.VarChange( sDBNumNm, pMgr->GetSelectedRecordId(aDBData.sDataSource, aDBData.sCommand, aDBData.nCommandType));
+            if( pMgr->IsDataSourceOpen(aTmpDBData.sDataSource, aTmpDBData.sCommand, sal_False))
+                aCalc.VarChange( sDBNumNm, pMgr->GetSelectedRecordId(aTmpDBData.sDataSource, aTmpDBData.sCommand, aTmpDBData.nCommandType));
 
             const String& rName = pFld->GetTyp()->GetName();
 
@@ -1499,7 +1499,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         case RES_GETEXPFLD:
         case RES_SETEXPFLD:
         {
-            if( GSE_STRING & pFld->GetSubType() )       // String Ersetzung
+            if( nsSwGetSetExpType::GSE_STRING & pFld->GetSubType() )        // String Ersetzung
             {
                 if( RES_GETEXPFLD == nWhich )
                 {
@@ -1655,11 +1655,11 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
         else
             ((SwDBNumSetField&)rDBFld).Evaluate(this);
 
-        SwDBData aDBData( rDBFld.GetDBData(this) );
+        SwDBData aTmpDBData( rDBFld.GetDBData(this) );
 
-        if( pMgr->OpenDataSource( aDBData.sDataSource, aDBData.sCommand, -1, false ))
+        if( pMgr->OpenDataSource( aTmpDBData.sDataSource, aTmpDBData.sCommand, -1, false ))
             rCalc.VarChange( lcl_GetDBVarName( *this, rDBFld),
-                        pMgr->GetSelectedRecordId(aDBData.sDataSource, aDBData.sCommand, aDBData.nCommandType) );
+                        pMgr->GetSelectedRecordId(aTmpDBData.sDataSource, aTmpDBData.sCommand, aTmpDBData.nCommandType) );
     }
     else
     {
@@ -1709,13 +1709,13 @@ void SwDoc::_InitFieldTypes()       // wird vom CTOR gerufen!!
     // MIB 14.04.95: Im Sw3StringPool::Setup (sw3imp.cxx) und
     //               lcl_sw3io_InSetExpField (sw3field.cxx) jetzt auch
     pFldTypes->Insert( new SwSetExpFieldType(this,
-                SW_RESSTR(STR_POOLCOLL_LABEL_ABB), GSE_SEQ), nFldType++);
+                SW_RESSTR(STR_POOLCOLL_LABEL_ABB), nsSwGetSetExpType::GSE_SEQ), nFldType++);
     pFldTypes->Insert( new SwSetExpFieldType(this,
-                SW_RESSTR(STR_POOLCOLL_LABEL_TABLE), GSE_SEQ),nFldType++);
+                SW_RESSTR(STR_POOLCOLL_LABEL_TABLE), nsSwGetSetExpType::GSE_SEQ),nFldType++);
     pFldTypes->Insert( new SwSetExpFieldType(this,
-                SW_RESSTR(STR_POOLCOLL_LABEL_FRAME), GSE_SEQ),nFldType++);
+                SW_RESSTR(STR_POOLCOLL_LABEL_FRAME), nsSwGetSetExpType::GSE_SEQ),nFldType++);
     pFldTypes->Insert( new SwSetExpFieldType(this,
-                SW_RESSTR(STR_POOLCOLL_LABEL_DRAWING), GSE_SEQ),nFldType++);
+                SW_RESSTR(STR_POOLCOLL_LABEL_DRAWING), nsSwGetSetExpType::GSE_SEQ),nFldType++);
 
     ASSERT( nFldType == INIT_FLDTYPES, "Bad initsize: SwFldTypes" );
 }
@@ -1962,7 +1962,7 @@ void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList, const String& rDBName)
     aData.sDataSource = rDBName.GetToken(0, DB_DELIM);
     aData.sCommand = rDBName.GetToken(1, DB_DELIM);
     aData.nCommandType = -1;
-    const SwDSParam* pParam = GetNewDBMgr()->CreateDSData(aData);
+    GetNewDBMgr()->CreateDSData(aData);
     String* pNew = new String( rDBName );
     rDBNameList.Insert( pNew, rDBNameList.Count() );
 }
@@ -2111,7 +2111,7 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
                     //prevent re-searching - this is useless and provokes
                     //endless loops when names containing each other and numbers are exchanged
                     //e.g.: old ?12345.12345  new: i12345.12345
-                    nPos += sNewName.Len();
+                    nPos = nPos + sNewName.Len();
                     sFormel = rFormel;
                 }
             }
@@ -2474,12 +2474,12 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 /// and fields of other subtypes only in the modes
                 ///     (eGetMode == GETFLD_CALC||GETFLD_ALL)
                 /* "old" if construct - not deleted for history and code review
-                if( ( GSE_STRING & pFld->GetSubType()
+                if( ( nsSwGetSetExpType::GSE_STRING & pFld->GetSubType()
                         ? GETFLD_EXPAND : GETFLD_CALC )
                         & eGetMode )
                 */
                 if ( !(eGetMode == GETFLD_EXPAND) ||
-                     (GSE_STRING & pFld->GetSubType()) )
+                     (nsSwGetSetExpType::GSE_STRING & pFld->GetSubType()) )
                 {
                     pFormel = &sTrue;
                 }
@@ -2554,7 +2554,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
             pFormel = 0;
         }
     }
-    nFldLstGetMode = eGetMode;
+    nFldLstGetMode = static_cast<BYTE>( eGetMode );
     nNodes = rDoc.GetNodes().Count();
 
 #ifdef JP_DEBUG
@@ -2873,14 +2873,14 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
 }
 
 bool SwDoc::PutValueToField(const SwPosition & rPos,
-                            const Any& rVal, BYTE nMId)
+                            const Any& rVal, USHORT nWhich)
 {
     Any aOldVal;
     SwField * pField = GetField(rPos);
 
 
-    if (DoesUndo() && pField->QueryValue(aOldVal, nMId))
-        AppendUndo(new SwUndoFieldFromAPI(rPos, aOldVal, rVal, nMId));
+    if (DoesUndo() && pField->QueryValue(aOldVal, nWhich))
+        AppendUndo(new SwUndoFieldFromAPI(rPos, aOldVal, rVal, nWhich));
 
-    return pField->PutValue(rVal, nMId);
+    return pField->PutValue(rVal, nWhich);
 }
