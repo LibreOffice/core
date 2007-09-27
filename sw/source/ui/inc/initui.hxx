@@ -4,9 +4,9 @@
  *
  *  $RCSfile: initui.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:42:15 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:02:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,6 @@ extern  String*         pOldFrmCat;
 
 extern  String*         pCurrGlosGroup;
 
-//CHINA001  add for swui to access global variables in sw. Begin
 SW_DLLPUBLIC String* GetOldGrfCat();
 SW_DLLPUBLIC String* GetOldTabCat();
 SW_DLLPUBLIC String* GetOldFrmCat();
@@ -69,7 +68,6 @@ SW_DLLPUBLIC String* GetOldDrwCat();
 
 SW_DLLPUBLIC String* GetCurrGlosGroup();
 SW_DLLPUBLIC void SetCurrGlosGroup(String* pStr);
-//CHINA001 End for add
 
 extern SvStringsDtor*   pDBNameList;
 
