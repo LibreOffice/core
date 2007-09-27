@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swlinguconfig.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:41:46 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:29:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@
 #include <svtools/lingucfg.hxx>
 #endif
 
+using namespace ::com::sun::star;
+
 // init static member
 static SvtLinguConfig* mpImplLinguConfig = 0L;
 static sal_uInt32 mnImplUseCount = 0L;
@@ -73,7 +75,7 @@ SwLinguConfig::~SwLinguConfig()
     }
 }
 
-sal_Bool SwLinguConfig::SetProperty(const rtl::OUString &rPropertyName, const com::sun::star::uno::Any &rValue)
+sal_Bool SwLinguConfig::SetProperty(const rtl::OUString &rPropertyName, const uno::Any &rValue)
 {
     ImplCreateOnDemand();
     return mpImplLinguConfig->SetProperty(rPropertyName, rValue);
@@ -85,7 +87,7 @@ sal_Bool SwLinguConfig::GetOptions(SvtLinguOptions &rOptions) const
     return mpImplLinguConfig->GetOptions(rOptions);
 }
 
-com::sun::star::uno::Any SwLinguConfig::GetProperty(const rtl::OUString &rPropertyName) const
+uno::Any SwLinguConfig::GetProperty(const rtl::OUString &rPropertyName) const
 {
     ImplCreateOnDemand();
     return mpImplLinguConfig->GetProperty(rPropertyName);
