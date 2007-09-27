@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IDocumentSettingAccess.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:10:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:54:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #endif
 #ifndef _CHCMPRSE_HXX
 #include <chcmprse.hxx>
+#endif
+#ifndef _FLDUPDE_HXX
+#include <fldupde.hxx>
 #endif
 
 class SvxForbiddenCharactersTable;
@@ -188,14 +191,14 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
        @returns
        the current field update mode.
     */
-    virtual sal_uInt16 getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const = 0;
+    virtual SwFldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const = 0;
 
     /** Set the current field update mode.
 
        @param nMode
        [in] the new field update mode.
     */
-    virtual void setFieldUpdateFlags( /*[in]*/ sal_uInt16 nMode )  = 0;
+    virtual void setFieldUpdateFlags( /*[in]*/ SwFldUpdateFlags nMode )  = 0;
 
     /** Get the character compression type for Asian characters.
 
