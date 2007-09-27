@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrref.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:44:32 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:23:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,15 +64,15 @@ SwFmtRefMark::~SwFmtRefMark( )
 
 SwFmtRefMark::SwFmtRefMark( const XubString& rName )
     : SfxPoolItem( RES_TXTATR_REFMARK ),
-    aRefName( rName ),
-    pTxtAttr( 0 )
+    pTxtAttr( 0 ),
+    aRefName( rName )
 {
 }
 
 SwFmtRefMark::SwFmtRefMark( const SwFmtRefMark& rAttr )
     : SfxPoolItem( RES_TXTATR_REFMARK ),
-    aRefName( rAttr.aRefName ),
-    pTxtAttr( 0 )
+    pTxtAttr( 0 ),
+    aRefName( rAttr.aRefName )
 {
 }
 
@@ -94,10 +94,10 @@ SfxPoolItem* SwFmtRefMark::Clone( SfxItemPool* ) const
 // Attribut fuer Inhalts-/Positions-Referenzen im Text
 
 SwTxtRefMark::SwTxtRefMark( const SwFmtRefMark& rAttr,
-                    xub_StrLen nStart, xub_StrLen* pEnde )
-    : SwTxtAttrEnd( rAttr, nStart, nStart ),
-    pEnd( 0 ),
-    pMyTxtNd( 0 )
+                    xub_StrLen nStartPos, xub_StrLen* pEnde )
+    : SwTxtAttrEnd( rAttr, nStartPos, nStartPos ),
+    pMyTxtNd( 0 ),
+    pEnd( 0 )
 {
     ((SwFmtRefMark&)rAttr).pTxtAttr = this;
     if( pEnde )
