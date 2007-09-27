@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddat.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:11:51 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:49:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,8 @@ using namespace ::com::sun::star;
     Beschreibung: Datum/Zeit-Typ
  ---------------------------------------------------*/
 
-SwDateTimeFieldType::SwDateTimeFieldType(SwDoc* pDoc)
-    : SwValueFieldType( pDoc, RES_DATETIMEFLD )
+SwDateTimeFieldType::SwDateTimeFieldType(SwDoc* pInitDoc)
+    : SwValueFieldType( pInitDoc, RES_DATETIMEFLD )
 {}
 
 /*--------------------------------------------------------------------
@@ -86,8 +86,8 @@ SwFieldType* SwDateTimeFieldType::Copy() const
     Beschreibung: Datum/Zeit-Feld
  --------------------------------------------------------------------*/
 
-SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pType, USHORT nSub, ULONG nFmt, USHORT nLng)
-    : SwValueField(pType, nFmt, nLng, 0.0),
+SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, USHORT nSub, ULONG nFmt, USHORT nLng)
+    : SwValueField(pInitType, nFmt, nLng, 0.0),
     nSubType(nSub),
     nOffset(0)
 {
@@ -227,7 +227,7 @@ Date SwDateTimeField::GetDate(BOOL bUseOffset) const
     SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
     Date* pNullDate = pFormatter->GetNullDate();
 
-    long nVal = GetValue();
+    long nVal = static_cast<long>( GetValue() );
 
     if (bUseOffset && nOffset)
         nVal += nOffset / 60 / 24;
@@ -255,10 +255,9 @@ Time SwDateTimeField::GetTime(BOOL bUseOffset) const
 /*-----------------04.03.98 11:05-------------------
 
 --------------------------------------------------*/
-BOOL SwDateTimeField::QueryValue( uno::Any& rVal, BYTE nMId ) const
+BOOL SwDateTimeField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
         {
@@ -294,18 +293,17 @@ BOOL SwDateTimeField::QueryValue( uno::Any& rVal, BYTE nMId ) const
         }
         break;
     default:
-        return SwField::QueryValue(rVal, nMId);
+        return SwField::QueryValue(rVal, nWhichId);
     }
     return TRUE;
 }
 /*-----------------04.03.98 11:05-------------------
 
 --------------------------------------------------*/
-BOOL SwDateTimeField::PutValue( const uno::Any& rVal, BYTE nMId )
+BOOL SwDateTimeField::PutValue( const uno::Any& rVal, USHORT nWhichId )
 {
-    nMId &= ~CONVERT_TWIPS;
     sal_Int32 nTmp;
-    switch( nMId )
+    switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
         if(*(sal_Bool*)rVal.getValue())
@@ -342,7 +340,7 @@ BOOL SwDateTimeField::PutValue( const uno::Any& rVal, BYTE nMId )
         }
         break;
         default:
-            return SwField::PutValue(rVal, nMId);
+            return SwField::PutValue(rVal, nWhichId);
     }
     return TRUE;
 }
