@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwSpellDialogChildWindow.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:15:33 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:36:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,6 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
-
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::beans;
 
@@ -163,23 +162,23 @@ struct SpellState
     SpellState() :
         m_bInitialCall(true),
         m_bLockFocus(false),
-        m_bLostFocus(false),
-        m_eSelMode(SEL_OBJECT), //initially invalid
+        m_SpellStartPosition(SPELL_START_BODY),
+        m_bBodySpelled(false),
+        m_bOtherSpelled(false),
+        m_bStartedInOther(false),
+        m_bStartedInSelection(false),
+        pOtherCursor(0),
+        m_bDrawingsSpelled(false),
+        m_pStartDrawing(0),
+        m_bRestartDrawing(false),
+
+        m_eSelMode(SHELL_MODE_OBJECT), //initially invalid
         m_pPointNode(0),
         m_pMarkNode(0),
         m_nPointPos(0),
         m_nMarkPos(0),
         m_pOutliner(0),
-        m_SpellStartPosition(SPELL_START_BODY),
-        m_bBodySpelled(false),
-        m_bOtherSpelled(false),
-        m_bDrawingsSpelled(false),
-        m_pStartDrawing(0),
-        m_bRestartDrawing(false),
-        m_bTextObjectsCollected(false),
-        m_bStartedInOther(false),
-        m_bStartedInSelection(false),
-        pOtherCursor(0)
+        m_bTextObjectsCollected(false)
         {}
 
     ~SpellState() {delete pOtherCursor;}
@@ -217,12 +216,12 @@ void lcl_LeaveDrawText(SwWrtShell& rSh)
 
   -----------------------------------------------------------------------*/
 SwSpellDialogChildWindow::SwSpellDialogChildWindow (
-                Window*pParent,
-        USHORT nId,
-        SfxBindings* pBindings,
-        SfxChildWinInfo* pInfo) :
+            Window* _pParent,
+            USHORT nId,
+            SfxBindings* pBindings,
+            SfxChildWinInfo* pInfo) :
                 svx::SpellDialogChildWindow (
-                    pParent, nId, pBindings, pInfo),
+                    _pParent, nId, pBindings, pInfo),
                     m_pSpellState(new SpellState)
 {
 }
@@ -257,12 +256,12 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
     if(pWrtShell)
     {
         ShellModes  eSelMode = pWrtShell->GetView().GetShellMode();
-        bool bDrawText = SEL_DRAWTEXT == eSelMode;
+        bool bDrawText = SHELL_MODE_DRAWTEXT == eSelMode;
         bool bNormalText =
-            SEL_TABLE_TEXT == eSelMode ||
-            SEL_LIST_TEXT == eSelMode ||
-            SEL_TABLE_LIST_TEXT == eSelMode ||
-            SEL_TEXT == eSelMode;
+            SHELL_MODE_TABLE_TEXT == eSelMode ||
+            SHELL_MODE_LIST_TEXT == eSelMode ||
+            SHELL_MODE_TABLE_LIST_TEXT == eSelMode ||
+            SHELL_MODE_TEXT == eSelMode;
         //Writer text outside of the body
         bool bOtherText = false;
 
@@ -276,7 +275,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                 else
                 {
                     // the selection type has to be checked again - both text types are possible
-                    if(0 != (pWrtShell->GetSelectionType()& SwWrtShell::SEL_DRW_TXT))
+                    if(0 != (pWrtShell->GetSelectionType()& nsSelectionType::SEL_DRW_TXT))
                         bDrawText = true;
                     bNormalText = !bDrawText;
                 }
@@ -363,7 +362,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
             if(!pWrtShell->SpellSentence(aRet))
             {
                 //find out which text has been spelled body or other
-                bool bOtherText = !(pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
+                bOtherText = !(pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
                 if(bOtherText && m_pSpellState->m_bStartedInOther && m_pSpellState->pOtherCursor)
                 {
                     m_pSpellState->m_bStartedInOther = false;
@@ -457,8 +456,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
             {
                 LockFocusNotification( true );
                 String sInfo(SW_RES(STR_SPELLING_COMPLETED));
-        Window* pParent = GetWindow();
-        InfoBox(pParent, sInfo ).Execute();
+                InfoBox(GetWindow(), sInfo ).Execute();
                 LockFocusNotification( false );
                 //take care that the now valid selection is stored
                 LoseFocus();
@@ -481,12 +479,12 @@ void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rC
     if(pWrtShell && !m_pSpellState->m_bInitialCall)
     {
         ShellModes  eSelMode = pWrtShell->GetView().GetShellMode();
-        bool bDrawText = SEL_DRAWTEXT == eSelMode;
+        bool bDrawText = SHELL_MODE_DRAWTEXT == eSelMode;
         bool bNormalText =
-            SEL_TABLE_TEXT == eSelMode ||
-            SEL_LIST_TEXT == eSelMode ||
-            SEL_TABLE_LIST_TEXT == eSelMode ||
-            SEL_TEXT == eSelMode;
+            SHELL_MODE_TABLE_TEXT == eSelMode ||
+            SHELL_MODE_LIST_TEXT == eSelMode ||
+            SHELL_MODE_TABLE_LIST_TEXT == eSelMode ||
+            SHELL_MODE_TEXT == eSelMode;
         if(bNormalText)
             pWrtShell->ApplyChangedSentence(rChanged);
         else if(bDrawText )
@@ -535,10 +533,10 @@ void SwSpellDialogChildWindow::GetFocus()
         {
             switch(m_pSpellState->m_eSelMode)
             {
-                case SEL_TEXT:
-                case SEL_LIST_TEXT:
-                case SEL_TABLE_TEXT:
-                case SEL_TABLE_LIST_TEXT:
+                case SHELL_MODE_TEXT:
+                case SHELL_MODE_LIST_TEXT:
+                case SHELL_MODE_TABLE_TEXT:
+                case SHELL_MODE_TABLE_LIST_TEXT:
                 {
                     SwPaM* pCursor = pWrtShell->GetCrsr();
                     if(m_pSpellState->m_pPointNode != pCursor->GetNode(TRUE) ||
@@ -548,7 +546,7 @@ void SwSpellDialogChildWindow::GetFocus()
                             bInvalidate = true;
                 }
                 break;
-                case SEL_DRAWTEXT:
+                case SHELL_MODE_DRAWTEXT:
                 {
                     SdrView*     pSdrView = pWrtShell->GetDrawView();
                     SdrOutliner* pOutliner = pSdrView ? pSdrView->GetTextEditOutliner() : 0;
@@ -593,10 +591,10 @@ void SwSpellDialogChildWindow::LoseFocus()
 
         switch(m_pSpellState->m_eSelMode)
         {
-            case SEL_TEXT:
-            case SEL_LIST_TEXT:
-            case SEL_TABLE_TEXT:
-            case SEL_TABLE_LIST_TEXT:
+            case SHELL_MODE_TEXT:
+            case SHELL_MODE_LIST_TEXT:
+            case SHELL_MODE_TABLE_TEXT:
+            case SHELL_MODE_TABLE_LIST_TEXT:
             {
                 //store a node pointer and a pam-position to be able to check on next GetFocus();
                 SwPaM* pCursor = pWrtShell->GetCrsr();
@@ -607,7 +605,7 @@ void SwSpellDialogChildWindow::LoseFocus()
 
             }
             break;
-            case SEL_DRAWTEXT:
+            case SHELL_MODE_DRAWTEXT:
             {
                 SdrView*     pSdrView = pWrtShell->GetDrawView();
                 SdrOutliner* pOutliner = pSdrView->GetTextEditOutliner();
@@ -620,11 +618,11 @@ void SwSpellDialogChildWindow::LoseFocus()
                 }
             }
             break;
-//            default:
+            default:;//prevent warning
         }
     }
     else
-        m_pSpellState->m_eSelMode = SEL_OBJECT;
+        m_pSpellState->m_eSelMode = SHELL_MODE_OBJECT;
 }
 /*-- 18.09.2003 12:50:18---------------------------------------------------
 
@@ -636,7 +634,6 @@ void SwSpellDialogChildWindow::InvalidateSpellDialog()
         pWrtShell->SpellEnd(0, false);
     m_pSpellState->Reset();
     svx::SpellDialogChildWindow::InvalidateSpellDialog();
-
 }
 
 /*-- 18.09.2003 12:54:59---------------------------------------------------
@@ -669,15 +666,15 @@ bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
     SwView& rView = rShell.GetView();
     switch(eSelMode)
     {
-        case SEL_TEXT:
-        case SEL_LIST_TEXT:
-        case SEL_TABLE_TEXT:
-        case SEL_TABLE_LIST_TEXT:
-        case SEL_DRAWTEXT:
+        case SHELL_MODE_TEXT:
+        case SHELL_MODE_LIST_TEXT:
+        case SHELL_MODE_TABLE_TEXT:
+        case SHELL_MODE_TABLE_LIST_TEXT:
+        case SHELL_MODE_DRAWTEXT:
             DBG_ERROR("text already active in SwSpellDialogChildWindow::MakeTextSelection_Impl()")
         break;
 
-        case SEL_FRAME:
+        case SHELL_MODE_FRAME:
         {
             rShell.UnSelectFrm();
             rShell.LeaveSelFrmMode();
@@ -685,18 +682,18 @@ bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
         }
         break;
 
-        case SEL_DRAW:
-        case SEL_DRAW_CTRL:
-        case SEL_DRAW_FORM:
-        case SEL_BEZIER:
+        case SHELL_MODE_DRAW:
+        case SHELL_MODE_DRAW_CTRL:
+        case SHELL_MODE_DRAW_FORM:
+        case SHELL_MODE_BEZIER:
             if(FindNextDrawTextError_Impl(rShell))
             {
                 rView.AttrChangedNotify(&rShell);
                 break;
             }
         //otherwise no break to deselect the object
-        case SEL_GRAPHIC:
-        case SEL_OBJECT:
+        case SHELL_MODE_GRAPHIC:
+        case SHELL_MODE_OBJECT:
         {
             if ( rShell.IsDrawCreate() )
             {
@@ -725,6 +722,7 @@ bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
             }
         }
         break;
+        default:; //prevent warning
     }
     return true;
 }
@@ -771,12 +769,12 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                             //iterate inside of a grouped object
                             while( aListIter.IsMore() )
                             {
-                                SdrObject* pSdrO = aListIter.Next();
-                                if( pSdrO && pSdrO->IsA( TYPE(SdrTextObj) ) &&
-                                    static_cast<SdrTextObj*>( pSdrO)->HasText() &&
-                                    pCurrentTextObj != pSdrO)
+                                SdrObject* pSdrOElement = aListIter.Next();
+                                if( pSdrOElement && pSdrOElement->IsA( TYPE(SdrTextObj) ) &&
+                                    static_cast<SdrTextObj*>( pSdrOElement)->HasText() &&
+                                    pCurrentTextObj != pSdrOElement)
                                 {
-                                    m_pSpellState->m_aTextObjects.push_back((SdrTextObj*) pSdrO);
+                                    m_pSpellState->m_aTextObjects.push_back((SdrTextObj*) pSdrOElement);
                                 }
                             }
                         }
