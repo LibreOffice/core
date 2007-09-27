@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:19:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:27:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
     if(pArgs)
         pArgs->GetItemState(nSlotId, FALSE, &pItem);
 
-    BOOL bMirror = TRUE, bTopParam = TRUE, bBottomParam = TRUE;
+    BOOL bMirror = TRUE;
 
     switch (nSlotId)
     {
@@ -198,7 +198,8 @@ void SwDrawShell::Execute(SfxRequest &rReq)
                     rSh.SelectionToHell();
                 }
                 rSh.EndUndo( UNDO_END );
-                rBnd.Invalidate( SID_OBJECT_HELL, SID_OBJECT_HEAVEN, 0 );
+                rBnd.Invalidate( SID_OBJECT_HELL );
+                rBnd.Invalidate( SID_OBJECT_HEAVEN );
             }
             break;
 
@@ -212,7 +213,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         case SID_FONTWORK:
         {
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
-            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)) );
             SfxViewFrame* pVFrame = GetView().GetViewFrame();
             if (pArgs)
             {
@@ -284,7 +285,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
     BOOL bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
 
     if (!bProtected)    // Im Parent nachsehen
-        bProtected |= rSh.IsSelObjProtected( (FlyProtectType)(FLYPROTECT_CONTENT|FLYPROTECT_PARENT) ) != 0;
+        bProtected |= rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
     while( nWhich )
     {
@@ -354,8 +355,8 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
 
 
 
-SwDrawShell::SwDrawShell(SwView &rView) :
-    SwDrawBaseShell(rView)
+SwDrawShell::SwDrawShell(SwView &_rView) :
+    SwDrawBaseShell(_rView)
 {
     SetHelpId(SW_DRAWSHELL);
     SetName(String::CreateFromAscii("Draw"));
