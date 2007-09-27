@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UriSchemeParser_vndDOTsunDOTstarDOTexpand.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-16 09:37:12 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:06:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 #include "sal/config.h"
 
-#include "UriSchemeParser_vndDOTsunDOTstarDOTexpand.hxx"
+#include "stocservices.hxx"
 
 #include <new>
 
@@ -207,7 +207,7 @@ private:
 ::rtl::OUString Parser::getImplementationName()
     throw (css::uno::RuntimeException)
 {
-    return ::stoc::uriproc::UriSchemeParser_vndDOTsunDOTstarDOTexpand::
+    return ::stoc_services::UriSchemeParser_vndDOTsunDOTstarDOTexpand::
         getImplementationName();
 }
 
@@ -221,7 +221,7 @@ private:
 css::uno::Sequence< ::rtl::OUString > Parser::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
-    return ::stoc::uriproc::UriSchemeParser_vndDOTsunDOTstarDOTexpand::
+    return ::stoc_services::UriSchemeParser_vndDOTsunDOTstarDOTexpand::
         getSupportedServiceNames();
 }
 
@@ -243,8 +243,7 @@ css::uno::Reference< css::uri::XUriReference > Parser::parse(
 
 }
 
-namespace stoc { namespace uriproc {
-namespace UriSchemeParser_vndDOTsunDOTstarDOTexpand {
+namespace stoc_services { namespace UriSchemeParser_vndDOTsunDOTstarDOTexpand {
 
 css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const &)
@@ -274,4 +273,4 @@ css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames() {
     return s;
 }
 
-} } }
+} }
