@@ -4,9 +4,9 @@
  *
  *  $RCSfile: web.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:14:38 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:14:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@
 
 // ------------------------------------------------------------------------
 
-#define WEB_ACT_END                 MN_OBJECTMENU_WEBDRAWCONTROL
+#define WEB_ACT_END                                     MN_WEBWIN_PORT
 
 
 #if WEB_ACT_END > RC_WEB_END
