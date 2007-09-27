@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:25:29 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:19:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@
 #include "swtypes.hxx"
 #endif
 
+#include <com/sun/star/accessibility/XAccessible.hpp>
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATESET_HPP_
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
@@ -679,7 +680,7 @@ uno::Reference< XAccessible> SAL_CALL SwAccessibleContext::getAccessibleParent (
 
     // Remember the parent as weak ref.
     {
-        vos::OGuard aGuard( aMutex );
+        vos::OGuard aWeakParentGuard( aMutex );
         xWeakParent = xAcc;
     }
 
@@ -1034,7 +1035,7 @@ OUString SAL_CALL SwAccessibleContext::getImplementationName()
 }
 
 sal_Bool SAL_CALL
-    SwAccessibleContext::supportsService (const ::rtl::OUString& sServiceName)
+    SwAccessibleContext::supportsService (const ::rtl::OUString& )
         throw (uno::RuntimeException)
 {
     ASSERT( !this, "supports service needs to be overloaded" );
@@ -1065,7 +1066,7 @@ void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
     xAccImpl->dispose();
 }
 
-void SwAccessibleContext::ScrolledInShape( const SdrObject *pObj,
+void SwAccessibleContext::ScrolledInShape( const SdrObject* ,
                                 ::accessibility::AccessibleShape *pAccImpl )
 {
     AccessibleEventObject aEvent;
@@ -1079,12 +1080,12 @@ void SwAccessibleContext::ScrolledInShape( const SdrObject *pObj,
         Window *pWin = GetWindow();
         if( pWin && pWin->HasFocus() )
         {
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::STATE_CHANGED;
-            aEvent.NewValue <<= AccessibleStateType::FOCUSED;
-            aEvent.Source = xAcc;
+            AccessibleEventObject aStateChangedEvent;
+            aStateChangedEvent.EventId = AccessibleEventId::STATE_CHANGED;
+            aStateChangedEvent.NewValue <<= AccessibleStateType::FOCUSED;
+            aStateChangedEvent.Source = xAcc;
 
-            FireAccessibleEvent( aEvent );
+            FireAccessibleEvent( aStateChangedEvent );
         }
     }
 }
@@ -1122,7 +1123,7 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
     // set defunc state (its not required to broadcast a state changed
     // event if the object is diposed afterwards)
     {
-        vos::OGuard aGuard( aMutex );
+        vos::OGuard aDefuncStateGuard( aMutex );
         bIsDefuncState = sal_True;
     }
 
@@ -1173,7 +1174,7 @@ void SwAccessibleContext::DisposeChild( const SwFrmOrObj& rChildFrmOrObj,
         DisposeChildren( rChildFrmOrObj.GetSwFrm(), bRecursive );
 }
 
-void SwAccessibleContext::InvalidatePosOrSize( const SwRect& rOldPos )
+void SwAccessibleContext::InvalidatePosOrSize( const SwRect& )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -1182,7 +1183,7 @@ void SwAccessibleContext::InvalidatePosOrSize( const SwRect& rOldPos )
     sal_Bool bIsOldShowingState;
     sal_Bool bIsNewShowingState = IsShowing();
     {
-        vos::OGuard aGuard( aMutex );
+        vos::OGuard aShowingStateGuard( aMutex );
         bIsOldShowingState = bIsShowingState;
         bIsShowingState = bIsNewShowingState;
     }
