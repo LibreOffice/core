@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:56:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:02:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,6 @@
 #endif
 #ifndef WRT_FN_HXX
 #include <wrt_fn.hxx>
-#endif
-#ifndef _ORNTENUM_HXX
-#include <orntenum.hxx>
 #endif
 #ifndef _MSOCXIMEX_HXX
 #include <svx/msocximex.hxx>
@@ -163,12 +160,16 @@ class SvxBrushItem;
 
 #define OLE_PREVIEW_AS_EMF  //If we want to export ole2 previews as emf in ww8+
 
-enum FieldFlags // enums for InsertField- Method
+typedef BYTE FieldFlags;
+namespace nsFieldFlags // for InsertField- Method
 {
-    WRITEFIELD_START = 0x01, WRITEFIELD_CMD_START = 0x02,
-    WRITEFIELD_CMD_END = 0x04, WRITEFIELD_END = 0x10, WRITEFIELD_CLOSE = 0x20,
-    WRITEFIELD_ALL = 0xFF
-};
+    const FieldFlags WRITEFIELD_START       = 0x01;
+    const FieldFlags WRITEFIELD_CMD_START   = 0x02;
+    const FieldFlags WRITEFIELD_CMD_END     = 0x04;
+    const FieldFlags WRITEFIELD_END         = 0x10;
+    const FieldFlags WRITEFIELD_CLOSE       = 0x20;
+    const FieldFlags WRITEFIELD_ALL         = 0xFF;
+}
 
 enum TxtTypes  //enums for TextTypes
 {
@@ -585,7 +586,7 @@ public:
         bool bFlyFmt = false);
     bool GetNumberFmt(const SwField& rFld, String& rStr);
     void OutField(const SwField* pFld, ww::eField eFldType,
-        const String& rFldCmd, BYTE nMode = WRITEFIELD_ALL);
+        const String& rFldCmd, BYTE nMode = nsFieldFlags::WRITEFIELD_ALL);
     void StartCommentOutput( const String& rName );
     void EndCommentOutput(   const String& rName );
     void OutGrf(const sw::Frame &rFrame);
