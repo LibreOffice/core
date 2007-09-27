@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlsect.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:05:45 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:49:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,10 @@
 #define CONTEXT_FLAGS_HDRFTR (CONTEXT_FLAGS_MULTICOL)
 #define CONTEXT_FLAGS_FTN (CONTEXT_FLAGS_MULTICOL)
 
+
+using namespace ::com::sun::star;
+
+
 /*  */
 
 void SwHTMLParser::NewDivision( int nToken )
@@ -130,10 +134,10 @@ void SwHTMLParser::NewDivision( int nToken )
                                                : SVX_ADJUST_END;
 
     sal_Bool bHeader=sal_False, bFooter=sal_False;
-    const HTMLOptions *pOptions = GetOptions();
-    for( sal_uInt16 i = pOptions->Count(); i; )
+    const HTMLOptions *pHTMLOptions = GetOptions();
+    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
         case HTML_O_ID:
@@ -142,7 +146,7 @@ void SwHTMLParser::NewDivision( int nToken )
         case HTML_O_ALIGN:
             if( HTML_DIVISION_ON==nToken )
                 eAdjust = (SvxAdjust)pOption->GetEnum( aHTMLPAlignTable,
-                                                        eAdjust );
+                                                       static_cast< sal_uInt16 >(eAdjust) );
             break;
         case HTML_O_STYLE:
             aStyle = pOption->GetString();
@@ -178,7 +182,7 @@ void SwHTMLParser::NewDivision( int nToken )
         bAppended = sal_True;
     }
 
-    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
+    _HTMLAttrContext *pCntxt = new _HTMLAttrContext( static_cast< sal_uInt16 >(nToken) );
 
     sal_Bool bStyleParsed = sal_False, bPositioned = sal_False;
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
@@ -282,11 +286,11 @@ void SwHTMLParser::NewDivision( int nToken )
             bFootNote = sal_True;
         if( bFootNote || bEndNote )
         {
-            SwNodeIndex *pSttNdIdx = GetFootEndNoteSection( aId );
-            if( pSttNdIdx )
+            SwNodeIndex *pStartNdIdx = GetFootEndNoteSection( aId );
+            if( pStartNdIdx )
             {
                 SwCntntNode *pCNd =
-                    pDoc->GetNodes()[pSttNdIdx->GetIndex()+1]->GetCntntNode();
+                    pDoc->GetNodes()[pStartNdIdx->GetIndex()+1]->GetCntntNode();
                 SwNodeIndex aTmpSwNodeIndex = SwNodeIndex(*pCNd);
                 SwPosition aNewPos( aTmpSwNodeIndex, SwIndex( pCNd, 0 ) );
                 SaveDocContext( pCntxt, CONTEXT_FLAGS_FTN, &aNewPos );
@@ -419,7 +423,7 @@ void SwHTMLParser::NewDivision( int nToken )
 
         pCntxt->SetSpansSection( sal_True );
 
-        // keine ::com::sun::star::text::Bookmarks mit dem gleichen Namen wie Bereiche einfuegen
+        // keine text::Bookmarks mit dem gleichen Namen wie Bereiche einfuegen
         if( aPropInfo.aId.Len() && aPropInfo.aId==aName )
             aPropInfo.aId.Erase();
     }
@@ -440,7 +444,7 @@ void SwHTMLParser::NewDivision( int nToken )
     PushContext( pCntxt );
 }
 
-void SwHTMLParser::EndDivision( int nToken )
+void SwHTMLParser::EndDivision( int /*nToken*/ )
 {
     // Stack-Eintrag zu dem Token suchen (weil wir noch den Div-Stack
     // haben unterscheiden wir erst einmal nicht zwischen DIV und CENTER
@@ -604,12 +608,12 @@ void SwHTMLParser::NewMultiCol()
     sal_uInt16 nCols = 0, nGutter = 10;
     sal_Bool bPrcWidth = sal_True;
 
-    const HTMLOptions *pOptions = GetOptions();
+    const HTMLOptions *pHTMLOptions = GetOptions();
     sal_uInt16 i;
 
-    for( i = pOptions->Count(); i; )
+    for( i = pHTMLOptions->Count(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
+        const HTMLOption *pOption = (*pHTMLOptions)[--i];
         switch( pOption->GetToken() )
         {
         case HTML_O_ID:
@@ -682,7 +686,7 @@ void SwHTMLParser::NewMultiCol()
         if( !IsNewDoc() )
             Reader::ResetFrmFmtAttrs(aFrmItemSet );
 
-        SetAnchorAndAdjustment( VERT_NONE, HORI_NONE, aItemSet, aPropInfo,
+        SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE, aItemSet, aPropInfo,
                                 aFrmItemSet );
 
         // The width is either the WIDTH attribute's value or contained
@@ -888,6 +892,8 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
                 if( bFmtBreak )
                     pDestCntntNd->SetAttr( *pItem );
                 pSrcCntntNd->ResetAttr( RES_BREAK );
+            default:
+                ;
             }
         }
     }
