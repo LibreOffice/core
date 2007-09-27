@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:59:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:23:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,11 +123,11 @@
 #endif
 
 
-
+using namespace ::com::sun::star;
 
 using rtl::OUString;
 using rtl::OUStringBuffer;
-using com::sun::star::i18n::Boundary;
+using i18n::Boundary;
 
 
 // 'portion type' for terminating portions
@@ -175,7 +175,6 @@ SwAccessiblePortionData::~SwAccessiblePortionData()
 
 void SwAccessiblePortionData::Text(USHORT nLength, USHORT nType)
 {
-    DBG_ASSERT( nLength >= 0, "illegal length" );
     DBG_ASSERT( (nModelPosition + nLength) <= pTxtNode->GetTxt().Len(),
                 "portion exceeds model string!" )
 
@@ -206,7 +205,6 @@ void SwAccessiblePortionData::Text(USHORT nLength, USHORT nType)
 void SwAccessiblePortionData::Special(
     USHORT nLength, const String& rText, USHORT nType)
 {
-    DBG_ASSERT( nLength >= 0, "illegal length" );
     DBG_ASSERT( nModelPosition >= 0, "illegal position" );
     DBG_ASSERT( (nModelPosition + nLength) <= pTxtNode->GetTxt().Len(),
                 "portion exceeds model string!" )
@@ -226,10 +224,10 @@ void SwAccessiblePortionData::Special(
             break;
         case POR_NUMBER:
         {
-            OUStringBuffer aBuffer( rText.Len() + 1 );
-            aBuffer.append( rText );
-            aBuffer.append( sal_Unicode(' ') );
-            sDisplay = aBuffer.makeStringAndClear();
+            OUStringBuffer aTmpBuffer( rText.Len() + 1 );
+            aTmpBuffer.append( rText );
+            aTmpBuffer.append( sal_Unicode(' ') );
+            sDisplay = aTmpBuffer.makeStringAndClear();
             break;
         }
         default:
@@ -303,7 +301,7 @@ void SwAccessiblePortionData::Finish()
 sal_Bool SwAccessiblePortionData::IsPortionAttrSet(
     size_t nPortionNo, sal_uInt8 nAttr )
 {
-    DBG_ASSERT( (nPortionNo >= 0) && (nPortionNo < aPortionAttrs.size()),
+    DBG_ASSERT( nPortionNo < aPortionAttrs.size(),
                 "Illegal portion number" );
     return (aPortionAttrs[nPortionNo] & nAttr) != 0;
 }
@@ -713,7 +711,7 @@ void SwAccessiblePortionData::AdjustAndCheck(
     if( IsSpecialPortion( nPortionNo ) )
         bEdit &= nPos == aAccessiblePositions[nPortionNo];
     else
-        nCorePos += static_cast<USHORT>(
+        nCorePos = static_cast<USHORT>( nCorePos +
             nPos - aAccessiblePositions[nPortionNo] );
 }
 
