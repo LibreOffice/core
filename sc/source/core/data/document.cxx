@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:32:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:52:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2335,7 +2335,7 @@ void ScDocument::SetDirty()
     BOOL bOldAutoCalc = GetAutoCalc();
     bAutoCalc = FALSE;      // keine Mehrfachberechnung
     {   // scope for bulk broadcast
-        ScBulkBroadcast aBulkBroadcast( pBASM);
+        ScBulkBroadcast aBulkBroadcast( GetBASM());
         for (SCTAB i=0; i<=MAXTAB; i++)
             if (pTab[i]) pTab[i]->SetDirty();
     }
@@ -2355,7 +2355,7 @@ void ScDocument::SetDirty( const ScRange& rRange )
     BOOL bOldAutoCalc = GetAutoCalc();
     bAutoCalc = FALSE;      // keine Mehrfachberechnung
     {   // scope for bulk broadcast
-        ScBulkBroadcast aBulkBroadcast( pBASM);
+        ScBulkBroadcast aBulkBroadcast( GetBASM());
         SCTAB nTab2 = rRange.aEnd.Tab();
         for (SCTAB i=rRange.aStart.Tab(); i<=nTab2; i++)
             if (pTab[i]) pTab[i]->SetDirty( rRange );
