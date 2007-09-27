@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:14:35 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:00:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
+
+#include <com/sun/star/util/XCloseable.hpp>
 
 #include <doc.hxx>
 #ifndef SW_WRITERHELPER
@@ -132,6 +134,8 @@
 #endif
 
 using namespace com::sun::star;
+using namespace nsSwGetPoolIdFromName;
+
 
 namespace
 {
@@ -197,7 +201,7 @@ namespace
      Utility to extract flyfmts from a document, potentially from a
      selection, and with bAll off ignores the drawing objects
     */
-    sw::Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM, bool bAll)
+    sw::Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM, bool /*bAll*/)
     {
         SwPosFlyFrms aFlys;
         rDoc.GetAllFlyFmts(aFlys, pPaM, true);
@@ -366,7 +370,7 @@ namespace sw
                                                                     rName,
                                                                     ::rtl::OUString() );
 
-                //mxIPRef->changeState( com::sun::star::embed::EmbedStates::LOADED );
+                //mxIPRef->changeState( embed::EmbedStates::LOADED );
                 mxIPRef = 0;
             }
 
@@ -380,7 +384,7 @@ namespace sw
                 DBG_ASSERT( !mrPers.GetEmbeddedObjectContainer().HasEmbeddedObject( mxIPRef ), "Object in adaptor is inserted?!" );
                 try
                 {
-                    com::sun::star::uno::Reference < com::sun::star::util::XCloseable > xClose( mxIPRef, com::sun::star::uno::UNO_QUERY );
+                    uno::Reference < com::sun::star::util::XCloseable > xClose( mxIPRef, uno::UNO_QUERY );
                     if ( xClose.is() )
                         xClose->close(sal_True);
                 }
@@ -534,7 +538,7 @@ namespace sw
                 {
                     do
                         rItems[pItem->Which()] = pItem;
-                    while (!aIter.IsAtEnd() && (pItem = aIter.NextItem()));
+                    while (!aIter.IsAtEnd() && 0 != (pItem = aIter.NextItem()));
                 }
             }
         }
@@ -558,7 +562,7 @@ namespace sw
                     const SfxPoolItem *pItem = aIter.GetCurItem();
                     do
                         rSet.ClearItem(pItem->Which());
-                    while (!aIter.IsAtEnd() && (pItem = aIter.NextItem()));
+                    while (!aIter.IsAtEnd() && 0 != (pItem = aIter.NextItem()));
                 }
             }
         }
@@ -572,7 +576,7 @@ namespace sw
             mysizet nCount = pColls ? pColls->Count() : 0;
             aStyles.reserve(nCount);
             for (mysizet nI = 0; nI < nCount; ++nI)
-                aStyles.push_back((*pColls)[nI]);
+                aStyles.push_back((*pColls)[ static_cast< USHORT >(nI) ]);
             return aStyles;
         }
 
@@ -584,7 +588,7 @@ namespace sw
             {
                 // Collection not found, try in Pool ?
                 sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
-                    GET_POOLID_TXTCOLL);
+                    nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
                 if (n != SAL_MAX_UINT16)       // found or standard
                     pColl = rDoc.GetTxtCollFromPool(n, false);
             }
@@ -598,7 +602,7 @@ namespace sw
             {
                 // Collection not found, try in Pool ?
                 sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
-                    GET_POOLID_CHRFMT);
+                    nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
                 if (n != SAL_MAX_UINT16)       // found or standard
                     pFmt = rDoc.GetCharFmtFromPool(n);
             }
@@ -647,10 +651,10 @@ namespace sw
             const SwNumRule *pRule = 0;
             if (
                 rTxtNode.IsNumbered() && rTxtNode.IsCounted() &&
-                (pRule = rTxtNode.GetNumRule())
+                0 != (pRule = rTxtNode.GetNumRule())
                 )
             {
-                return &(pRule->Get(rTxtNode.GetLevel()));
+                return &(pRule->Get( static_cast< USHORT >(rTxtNode.GetLevel()) ));
             }
 
             ASSERT(rTxtNode.GetDoc(), "No document for node?, suspicious");
@@ -659,10 +663,10 @@ namespace sw
 
             if (
                 rTxtNode.IsNumbered() && rTxtNode.IsCounted() &&
-                (pRule = rTxtNode.GetDoc()->GetOutlineNumRule())
+                0 != (pRule = rTxtNode.GetDoc()->GetOutlineNumRule())
                 )
             {
-                return &(pRule->Get(rTxtNode.GetLevel()));
+                return &(pRule->Get( static_cast< USHORT >(rTxtNode.GetLevel()) ));
             }
 
             return 0;
@@ -675,12 +679,11 @@ namespace sw
 
         const SwNumRule* GetNormalNumRuleFromTxtNode(const SwTxtNode &rTxtNode)
         {
-            const SwNumRule *pRet = 0;
             const SwNumRule *pRule = 0;
 
             if (
                 rTxtNode.IsNumbered() && rTxtNode.IsCounted() &&
-                (pRule = rTxtNode.GetNumRule())
+                0 != (pRule = rTxtNode.GetNumRule())
                )
             {
                 return pRule;
@@ -819,9 +822,9 @@ namespace sw
             public std::unary_function<const SwFltStackEntry*, bool>
         {
         private:
-            IDocumentRedlineAccess::RedlineType_t meType;
+            RedlineType_t meType;
         public:
-            SameOpenRedlineType(IDocumentRedlineAccess::RedlineType_t eType) : meType(eType) {}
+            SameOpenRedlineType(RedlineType_t eType) : meType(eType) {}
             bool operator()(const SwFltStackEntry *pEntry) const
             {
                 const SwFltRedline *pTest = static_cast<const SwFltRedline *>
@@ -830,7 +833,7 @@ namespace sw
             }
         };
 
-        bool RedlineStack::close(const SwPosition& rPos, IDocumentRedlineAccess::RedlineType_t eType)
+        bool RedlineStack::close(const SwPosition& rPos, RedlineType_t eType)
         {
             //Search from end for same type
             myriter aResult = std::find_if(maStack.rbegin(), maStack.rend(),
@@ -859,8 +862,8 @@ namespace sw
                 (*aRegion.GetPoint() != *aRegion.GetMark())
             )
             {
-                mrDoc.SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_SHOW_INSERT |
-                                         IDocumentRedlineAccess::REDLINE_SHOW_DELETE));
+                mrDoc.SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT |
+                                         nsRedlineMode_t::REDLINE_SHOW_DELETE));
                 const SwFltRedline *pFltRedline = static_cast<const SwFltRedline*>
                     (pEntry->pAttr);
 
@@ -877,8 +880,8 @@ namespace sw
                         pFltRedline->aStamp, aEmptyStr, 0);
 
                 mrDoc.AppendRedline(new SwRedline(aData, aRegion), true);
-                mrDoc.SetRedlineMode((IDocumentRedlineAccess::RedlineMode_t)(IDocumentRedlineAccess::REDLINE_NONE | IDocumentRedlineAccess::REDLINE_SHOW_INSERT |
-                     IDocumentRedlineAccess::REDLINE_SHOW_DELETE ));
+                mrDoc.SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_NONE | nsRedlineMode_t::REDLINE_SHOW_INSERT |
+                     nsRedlineMode_t::REDLINE_SHOW_DELETE ));
             }
             delete pEntry;
         }
@@ -895,7 +898,7 @@ namespace sw
             //Return the earlier time, if two have the same time, prioritize
             //inserts over deletes
             if (pOne->aStamp == pTwo->aStamp)
-                return (pOne->eType == IDocumentRedlineAccess::REDLINE_INSERT && pTwo->eType != IDocumentRedlineAccess::REDLINE_INSERT);
+                return (pOne->eType == nsRedlineType_t::REDLINE_INSERT && pTwo->eType != nsRedlineType_t::REDLINE_INSERT);
             else
                 return (pOne->aStamp < pTwo->aStamp) ? true : false;
         }
@@ -913,10 +916,10 @@ namespace sw
             typedef std::vector<String>::iterator myiter;
             myiter aIter = std::find(maAuthors.begin(), maAuthors.end(), rNm);
             if (aIter != maAuthors.end())
-                nRet = aIter - maAuthors.begin();
+                nRet = static_cast< USHORT >(aIter - maAuthors.begin());
             else
             {
-                nRet = maAuthors.size();
+                nRet = static_cast< USHORT >(maAuthors.size());
                 maAuthors.push_back(rNm);
             }
             return nRet;
