@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-25 08:05:44 $
+#   last change: $Author: hr $ $Date: 2007-09-27 07:49:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -220,9 +220,7 @@ CFLAGSWERRCC=-WX
 MODULES_WITH_WARNINGS := \
     extensions \
     lingucomponent \
-    soldep \
-    sw \
-    writerperfect
+    soldep
 
 CDEFS+=-DSTLPORT_VERSION=400 -DWINVER=0x400 -D_WIN32_IE=0x400
 CDEFS+=-D_MT
