@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwUndoPageDesc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:49:59 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:55:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,11 @@
 #define _SW_UNDO_PAGE_DESC_HXX
 
 #include <undobj.hxx>
+#include <pagedesc.hxx>
 
 class SwDoc;
 class SwPageDesc;
+
 
 class SwUndoPageDesc : public SwUndo
 {
