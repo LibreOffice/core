@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untblk.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:21:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:33:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,10 +74,10 @@
 
 
 
-SwUndoInserts::SwUndoInserts( USHORT nUndoId, const SwPaM& rPam )
-    : SwUndo( nUndoId ), SwUndRng( rPam ), nSetPos( 0 ),
-    pTxtFmtColl( 0 ), pLastNdColl(0), pPos( 0 ), nNdDiff( 0 ),
-    pFrmFmts( 0 ), pFlyUndos(0), pRedlData( 0 ), bSttWasTxtNd( TRUE )
+SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
+    : SwUndo( nUndoId ), SwUndRng( rPam ),
+    pTxtFmtColl( 0 ), pLastNdColl(0), pFrmFmts( 0 ), pFlyUndos(0), pRedlData( 0 ),
+    bSttWasTxtNd( TRUE ), nNdDiff( 0 ), pPos( 0 ), nSetPos( 0 )
 {
     pHistory = new SwHistory;
     SwDoc* pDoc = (SwDoc*)rPam.GetDoc();
@@ -113,7 +113,7 @@ SwUndoInserts::SwUndoInserts( USHORT nUndoId, const SwPaM& rPam )
     // Redline beachten
     if( pDoc->IsRedlineOn() )
     {
-        pRedlData = new SwRedlineData( IDocumentRedlineAccess::REDLINE_INSERT, pDoc->GetRedlineAuthor() );
+        pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, pDoc->GetRedlineAuthor() );
         SetRedlineMode( pDoc->GetRedlineMode() );
     }
 }
@@ -123,18 +123,18 @@ SwUndoInserts::SwUndoInserts( USHORT nUndoId, const SwPaM& rPam )
 void SwUndoInserts::SetInsertRange( const SwPaM& rPam, BOOL bScanFlys,
                                     BOOL bSttIsTxtNd )
 {
-    const SwPosition* pPos = rPam.End();
-    nEndNode = pPos->nNode.GetIndex();
-    nEndCntnt = pPos->nContent.GetIndex();
+    const SwPosition* pTmpPos = rPam.End();
+    nEndNode = pTmpPos->nNode.GetIndex();
+    nEndCntnt = pTmpPos->nContent.GetIndex();
     if( rPam.HasMark() )
     {
-        if( pPos == rPam.GetPoint() )
-            pPos = rPam.GetMark();
+        if( pTmpPos == rPam.GetPoint() )
+            pTmpPos = rPam.GetMark();
         else
-            pPos = rPam.GetPoint();
+            pTmpPos = rPam.GetPoint();
 
-        nSttNode = pPos->nNode.GetIndex();
-        nSttCntnt = pPos->nContent.GetIndex();
+        nSttNode = pTmpPos->nNode.GetIndex();
+        nSttCntnt = pTmpPos->nContent.GetIndex();
 
         if( !bSttIsTxtNd )      // wird eine Tabellenselektion eingefuegt,
         {
@@ -357,12 +357,12 @@ void SwUndoInserts::Redo( SwUndoIter& rUndoIter )
 
     if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
     {
-        IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-        pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)( eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE ));
+        RedlineMode_t eOld = pDoc->GetRedlineMode();
+        pDoc->SetRedlineMode_intern((RedlineMode_t)( eOld & ~nsRedlineMode_t::REDLINE_IGNORE ));
         pDoc->AppendRedline( new SwRedline( *pRedlData, *pPam ), true);
         pDoc->SetRedlineMode_intern( eOld );
     }
-    else if( !( IDocumentRedlineAccess::REDLINE_IGNORE & GetRedlineMode() ) &&
+    else if( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
             pDoc->GetRedlineTbl().Count() )
         pDoc->SplitRedline( *pPam );
 }
