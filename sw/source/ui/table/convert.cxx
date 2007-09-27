@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:08:17 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:32:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,12 +67,11 @@
 #include "tablemgr.hxx"
 #include "wrtsh.hxx"
 #include "view.hxx"
-//CHINA001 #include "tautofmt.hxx"
 #include "tblafmt.hxx"
 
 #include "table.hrc"
 #include "convert.hrc"
-#include "swabstdlg.hxx" //CHINA001
+#include "swabstdlg.hxx"
 
 namespace swui
 {
@@ -140,19 +139,20 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
 SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
 
     : SfxModalDialog( &rView.GetViewFrame()->GetWindow(), SW_RES(DLG_CONV_TEXT_TABLE)),
-
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     aTabBtn         (this, SW_RES(CB_TAB)),
     aSemiBtn        (this, SW_RES(CB_SEMI)),
     aParaBtn        (this, SW_RES(CB_PARA)),
-    aDelimFL       (this, SW_RES(FL_DELIM)),
     aOtherBtn       (this, SW_RES(RB_OTHER)),
     aOtherEd        (this, SW_RES(ED_OTHER)),
     aKeepColumn     (this, SW_RES(CB_KEEPCOLUMN)),
+    aDelimFL       (this, SW_RES(FL_DELIM)),
+
     aHeaderCB       (this, SW_RES(CB_HEADER)),
     aRepeatHeaderCB (this, SW_RES(CB_REPEAT_HEADER)),
+
     aRepeatHeaderFT         (this, SW_RES(FT_REPEAT_HEADER)),
     aRepeatHeaderBeforeFT   (this),
     aRepeatHeaderNF         (this, SW_RES(NF_REPEAT_HEADER)),
@@ -167,13 +167,12 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     aCancelBtn(this,SW_RES(BT_CANCEL)),
     aHelpBtn(this, SW_RES(BT_HELP)),
     aAutoFmtBtn(this,SW_RES(BT_AUTOFORMAT)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
-
+    sConvertTextTable(SW_RES(STR_CONVERT_TEXT_TABLE)),
     pTAutoFmt( 0 ),
-    pShell( &rView.GetWrtShell() ),
-    sConvertTextTable(SW_RES(STR_CONVERT_TEXT_TABLE))
+    pShell( &rView.GetWrtShell() )
 {
     FreeResource();
     if(nSaveButtonState > -1)
@@ -234,10 +233,10 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTblFlags(bHTMLMode);
     USHORT nInsTblFlags = aInsOpts.mnInsMode;
 
-    aHeaderCB.Check(nInsTblFlags & tabopts::HEADLINE);
+    aHeaderCB.Check( 0 != (nInsTblFlags & tabopts::HEADLINE) );
     aRepeatHeaderCB.Check(aInsOpts.mnRowsToRepeat > 0);
-    aDontSplitCB.Check(!(nInsTblFlags & tabopts::SPLIT_LAYOUT));
-    aBorderCB.Check(nInsTblFlags & tabopts::DEFAULT_BORDER);
+    aDontSplitCB.Check( 0 == (nInsTblFlags & tabopts::SPLIT_LAYOUT));
+    aBorderCB.Check( 0!= (nInsTblFlags & tabopts::DEFAULT_BORDER) );
 
     aHeaderCB.SetClickHdl(LINK(this, SwConvertTableDlg, CheckBoxHdl));
     aRepeatHeaderCB.SetClickHdl(LINK(this, SwConvertTableDlg, ReapeatHeaderCheckBoxHdl));
@@ -252,15 +251,14 @@ SwConvertTableDlg:: ~SwConvertTableDlg()
 
 IMPL_LINK( SwConvertTableDlg, AutoFmtHdl, PushButton*, pButton )
 {
-    //CHINA001 SwAutoFormatDlg aDlg( pButton, pShell, FALSE, pTAutoFmt );
-    SwAbstractDialogFactory* pFact = swui::GetFactory();//CHINA001
-    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+    SwAbstractDialogFactory* pFact = swui::GetFactory();
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
     AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pShell, DLG_AUTOFMT_TABLE, FALSE, pTAutoFmt);
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-    if( RET_OK == pDlg->Execute()) //CHINA001  if( RET_OK == aDlg.Execute())
-        pDlg->FillAutoFmtOfIndex( pTAutoFmt ); //CHINA001  aDlg.FillAutoFmtOfIndex( pTAutoFmt );
-    delete pDlg; //CHINA001
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
+    if( RET_OK == pDlg->Execute())
+        pDlg->FillAutoFmtOfIndex( pTAutoFmt );
+    delete pDlg;
     return 0;
 }
 
