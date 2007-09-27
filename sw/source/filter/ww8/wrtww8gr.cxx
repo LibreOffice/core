@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:56:27 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:03:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,9 @@
 
 #include "docsh.hxx"
 
+using namespace ::com::sun::star;
+using namespace nsFieldFlags;
+
 // Damit KA debuggen kann, ohne sich den ganzen Writer zu holen, ist
 // temporaer dieses Debug gesetzt. Ist ausserdem noch das passende IniFlag
 // gesetzt, dann werden in d:\ Hilfsdateien erzeugt.
@@ -158,7 +161,7 @@
 // in der Graf-Klasse der GrfNode-Ptr gemerkt ( fuers spaetere Ausgeben der
 // Grafiken und Patchen der PicLocFc-Attribute )
 
-Writer& OutWW8_SwGrfNode( Writer& rWrt, SwCntntNode& rNode )
+Writer& OutWW8_SwGrfNode( Writer& rWrt, SwCntntNode& /*rNode*/ )
 {
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
     ASSERT(rWW8Wrt.mpParentFrame, "frame not set!");
@@ -222,7 +225,7 @@ bool SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
 
         ErrCode nErr = ERRCODE_NONE;
         Rectangle aVisArea;
-        sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
+        sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
         if ( pOLENd )
             nAspect = pOLENd->GetAspect();
         SdrOle2Obj *pRet = SvxMSDffManager::CreateSdrOLEFromStorage(
@@ -230,23 +233,23 @@ bool SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
 
         if (pRet)
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
+            uno::Reference< embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
             if ( xObj.is() )
             {
                 SvStream* pGraphicStream = NULL;
                 comphelper::EmbeddedObjectContainer aCnt( pDoc->GetDocStorage() );
                 try
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbedPersist > xPersist(
+                    uno::Reference< embed::XEmbedPersist > xPersist(
                             xObj,
-                            ::com::sun::star::uno::UNO_QUERY_THROW );
+                            uno::UNO_QUERY_THROW );
 
                     // it makes no sence to search the object in the container by reference since the object was created
                     // outside of the container and was not inserted there, only the name makes sence
                     pGraphicStream =
                             ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( xPersist->getEntryName() ) );
                 }
-                catch( ::com::sun::star::uno::Exception& )
+                catch( uno::Exception& )
                 {}
 
                 DBG_ASSERT( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
@@ -254,7 +257,6 @@ bool SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
                 {
                     Graphic aGr1;
                     GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-                    String aEmptyStr;
                     if( pGF->ImportGraphic( aGr1, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
                     {
                         Graphic aGr2;
@@ -317,10 +319,10 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
 
     if( xObjStg.Is()  )
     {
-        ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > xObj(pOLENd->GetOLEObj().GetOleRef());
+        uno::Reference < embed::XEmbeddedObject > xObj(pOLENd->GetOLEObj().GetOleRef());
         if( xObj.is() )
         {
-            ::com::sun::star::embed::XEmbeddedObject *pObj = xObj.get();
+            embed::XEmbeddedObject *pObj = xObj.get();
             sal_uInt32 nPictureId = (sal_uInt32)(sal_uIntPtr)pObj;
             Set_UInt32(pDataAdr, nPictureId);
 
@@ -351,7 +353,7 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                     sal_Int64 nAspect = pOLENd->GetAspect();
                     svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
                     rWW8Wrt.GetOLEExp().ExportOLEObject( aObjRef, *xOleStg );
-                    if ( nAspect == ::com::sun::star::embed::Aspects::MSOLE_ICON )
+                    if ( nAspect == embed::Aspects::MSOLE_ICON )
                     {
                         ::rtl::OUString aObjInfo( RTL_CONSTASCII_USTRINGPARAM( "\3ObjInfo" ) );
                         if ( !xOleStg->IsStream( aObjInfo ) )
@@ -470,8 +472,8 @@ void SwWW8Writer::OutGrf(const sw::Frame &rFrame)
     const RndStdIds eAn = rFlyFmt.GetAttrSet().GetAnchor(false).GetAnchorId();
     if( eAn == FLY_IN_CNTNT )
     {
-        SwVertOrient eVert = rFlyFmt.GetVertOrient().GetVertOrient();
-        if ((eVert == VERT_CHAR_CENTER) || (eVert == VERT_LINE_CENTER))
+        sal_Int16 eVert = rFlyFmt.GetVertOrient().GetVertOrient();
+        if ((eVert == text::VertOrientation::CHAR_CENTER) || (eVert == text::VertOrientation::LINE_CENTER))
         {
             bool bVert = false;
             //The default for word in vertical text mode is to center,
@@ -522,7 +524,7 @@ void SwWW8Writer::OutGrf(const sw::Frame &rFrame)
     static BYTE nAttrMagicIdx = 0;
     --pArr;
     Set_UInt8( pArr, nAttrMagicIdx++ );
-    pChpPlc->AppendFkpEntry( pStrm->Tell(), pArr - aArr, aArr );
+    pChpPlc->AppendFkpEntry( pStrm->Tell(), static_cast< short >(pArr - aArr), aArr );
 
     // --> OD 2007-04-23 #i75464#
     // Check, if graphic isn't exported as-character anchored.
@@ -566,24 +568,9 @@ GraphicDetails& GraphicDetails::operator=(const GraphicDetails &rOther)
 
 void SwWW8WrGrf::Insert(const sw::Frame &rFly)
 {
-    const SwNoTxtNode *pNd =
-        rFly.GetContent() ? rFly.GetContent()->GetNoTxtNode() : 0;
-
-    // --> OD 2007-04-19 #i43447# - use layout size
-//    UINT16 nWidth;
-//    UINT16 nHeight;
-//    if (rWrt.nFlyWidth > 0 && rWrt.nFlyHeight > 0)
-//    {
-//        nWidth = rWrt.nFlyWidth;
-//        nHeight = rWrt.nFlyHeight;
-//    }
-//    else
-//    {
     const Size aSize( rFly.GetLayoutSize() );
-    const UINT16 nWidth = aSize.Width();
-    const UINT16 nHeight = aSize.Height();
-//    }
-    // <--
+    const UINT16 nWidth = static_cast< UINT16 >(aSize.Width());
+    const UINT16 nHeight = static_cast< UINT16 >(aSize.Height());
     maDetails.push_back(GraphicDetails(rFly, nWidth, nHeight));
 }
 
@@ -603,8 +590,8 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
         nCropR = (INT16)rCr.GetRight();
         nCropT = (INT16)rCr.GetTop();
         nCropB = (INT16)rCr.GetBottom();
-        nXSizeAdd -= (INT16)( rCr.GetLeft() + rCr.GetRight() );
-        nYSizeAdd -= (INT16)( rCr.GetTop() + rCr.GetBottom() );
+        nXSizeAdd = nXSizeAdd - (INT16)( rCr.GetLeft() + rCr.GetRight() );
+        nYSizeAdd = nYSizeAdd - (INT16)( rCr.GetTop() + rCr.GetBottom() );
     }
 
     Size aGrTwipSz(rFly.GetSize());
@@ -652,13 +639,13 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
                     case BOX_LINE_TOP:
                     case BOX_LINE_BOTTOM:
                         nHeight -= bShadow ? nThick*2 : nThick;
-                        nHeight -= nSpacing;
+                        nHeight = nHeight - nSpacing;
                         break;
                     case BOX_LINE_LEFT:
                     case BOX_LINE_RIGHT:
                     default:
                         nWidth -= bShadow ? nThick*2 : nThick;
-                        nWidth -= nSpacing;
+                        nWidth = nWidth - nSpacing;
                         break;
                 }
                 memcpy( pArr, &aBrc.aBits1, 2);
@@ -832,7 +819,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
                 SwOLENode *pOleNd = const_cast<SwOLENode*>(pNd);
                 ASSERT( pOleNd, " Wer hat den OleNode versteckt ?" );
                 SwOLEObj&                   rSObj= pOleNd->GetOLEObj();
-                ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > rObj(  rSObj.GetOleRef() );
+                uno::Reference < embed::XEmbeddedObject > rObj(  rSObj.GetOleRef() );
 
                 comphelper::EmbeddedObjectContainer aCnt( pOleNd->GetDoc()->GetDocStorage() );
 
@@ -842,7 +829,6 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
                 {
                     Graphic aGr;
                     GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-                    String aEmptyStr;
                     if( pGF->ImportGraphic( aGr, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
                     {
                         //TODO/LATER: do we really want to use GDIMetafile?!
