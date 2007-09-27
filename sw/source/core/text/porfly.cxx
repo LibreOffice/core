@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:37:28 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:16:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,6 @@
 #include "porfly.hxx"
 #include "porlay.hxx"   // SetFly
 #include "inftxt.hxx"   // SwTxtPaintInfo
-#include "frmsh.hxx"
 
 // OD 2004-05-24 #i28701#
 #ifndef _SORTEDOBJS_HXX
@@ -83,7 +82,7 @@
  * Wir erwarten ein framelokales SwRect !
  *************************************************************************/
 
-void SwFlyPortion::Paint( const SwTxtPaintInfo &rInf ) const
+void SwFlyPortion::Paint( const SwTxtPaintInfo& ) const
 {
 }
 
@@ -191,7 +190,7 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd 
     SwSortedObjs *pObjs = 0L;
     if ( 0 != (pObjs = GetDrawObjs()) )
     {
-        for ( sal_uInt32 i = 0; GetDrawObjs() && i < int(pObjs->Count()); ++i )
+        for ( sal_uInt32 i = 0; GetDrawObjs() && i < pObjs->Count(); ++i )
         {
             // OD 2004-03-29 #i26791#
             // --> OD 2004-07-06 #i28701# - consider changed type of
@@ -422,14 +421,14 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
         SwTwips nRelPos = aObjPositioning.GetRelPosY();
         if ( nRelPos < 0 )
         {
-            nAscent = Abs( int( nRelPos ) );
+            nAscent = static_cast<USHORT>(-nRelPos);
             if( nAscent > Height() )
                 Height( nAscent );
         }
         else
         {
             nAscent = 0;
-            Height( Height() + int( nRelPos ) );
+            Height( Height() + static_cast<USHORT>(nRelPos) );
         }
     }
     else
