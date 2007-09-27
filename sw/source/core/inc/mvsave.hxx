@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mvsave.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:20:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:57:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,12 +60,16 @@ class SwIndex;
 class SwNodeIndex;
 class SwNodeRange;
 class SwPaM;
+class SwNode;
 struct SwPosition;
 
-enum SaveBookmarkType { BKMK_POS_NONE   = 0x00,
-                        BKMK_POS        = 0x01,
-                        BKMK_POS_OTHER  = 0x02
-                         };
+typedef USHORT SaveBookmarkType;
+namespace nsSaveBookmarkType
+{
+    const SaveBookmarkType BKMK_POS_NONE = 0;
+    const SaveBookmarkType BKMK_POS = 1;
+    const SaveBookmarkType BKMK_POS_OTHER = 2;
+}
 
 class SaveBookmark
 {
