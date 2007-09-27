@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:38:02 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:34:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,10 +144,13 @@
 
 extern USHORT GetHtmlMode( const SwDocShell* );
 
+
+using namespace ::com::sun::star;
+
 /*-----------------17.02.98 08:35-------------------
 
 --------------------------------------------------*/
-USHORT SwDoc::GetFlyCount(FlyCntType eType ) const
+USHORT SwDoc::GetFlyCount( FlyCntType eType ) const
 {
     const SwSpzFrmFmts& rFmts = *GetSpzFrmFmts();
     USHORT nSize = rFmts.Count();
@@ -381,10 +384,10 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
             BOOL bSet = TRUE;
             switch( aOldV.GetVertOrient() )
             {
-            case VERT_LINE_TOP:     aOldV.SetVertOrient( VERT_TOP );   break;
-            case VERT_LINE_CENTER:  aOldV.SetVertOrient( VERT_CENTER); break;
-            case VERT_LINE_BOTTOM:  aOldV.SetVertOrient( VERT_BOTTOM); break;
-            case VERT_NONE:         aOldV.SetVertOrient( VERT_CENTER); break;
+            case text::VertOrientation::LINE_TOP:     aOldV.SetVertOrient( text::VertOrientation::TOP );   break;
+            case text::VertOrientation::LINE_CENTER:  aOldV.SetVertOrient( text::VertOrientation::CENTER); break;
+            case text::VertOrientation::LINE_BOTTOM:  aOldV.SetVertOrient( text::VertOrientation::BOTTOM); break;
+            case text::VertOrientation::NONE:         aOldV.SetVertOrient( text::VertOrientation::CENTER); break;
             default:
                 bSet = FALSE;
             }
@@ -402,14 +405,14 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
             //die Position so, dass die Dokumentkoordinaten des Flys erhalten
             //bleiben.
             //Chg: Wenn sich in den Positionsattributen lediglich die
-            //Ausrichtung veraendert (FRAME vs. PRTAREA), dann wird die
+            //Ausrichtung veraendert (text::RelOrientation::FRAME vs. text::RelOrientation::PRTAREA), dann wird die
             //Position ebenfalls korrigiert.
             if( SFX_ITEM_SET != rSet.GetItemState( RES_HORI_ORIENT, FALSE, &pItem ))
                 pItem = 0;
 
             SwFmtHoriOrient aOldH( rFmt.GetHoriOrient() );
 
-            if( HORI_NONE == aOldH.GetHoriOrient() && ( !pItem ||
+            if( text::HoriOrientation::NONE == aOldH.GetHoriOrient() && ( !pItem ||
                 aOldH.GetPos() == ((SwFmtHoriOrient*)pItem)->GetPos() ))
             {
                 SwTwips nPos = FLY_IN_CNTNT == nOld ? 0 : aOldH.GetPos();
@@ -430,8 +433,8 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
             SwFmtVertOrient aOldV( rFmt.GetVertOrient() );
 
             // OD 2004-05-14 #i28922# - correction: compare <aOldV.GetVertOrient()
-            // with <VERT_NONE>
-            if( VERT_NONE == aOldV.GetVertOrient() && (!pItem ||
+            // with <text::VertOrientation::NONE>
+            if( text::VertOrientation::NONE == aOldV.GetVertOrient() && (!pItem ||
                 aOldV.GetPos() == ((SwFmtVertOrient*)pItem)->GetPos() ) )
             {
                 SwTwips nPos = FLY_IN_CNTNT == nOld ? 0 : aOldV.GetPos();
@@ -610,7 +613,7 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
     //wieder hineinstopfen.
     //JP 09.06.98: beim Update der RahmenVorlage sollte der Fly NICHT
     //              seine Orientierng verlieren (diese wird nicht geupdatet!)
-    //OS: #96584# HORI_NONE and VERT_NONE are allowed now
+    //OS: #96584# text::HoriOrientation::NONE and text::VertOrientation::NONE are allowed now
     if (!bKeepOrient)
     {
         rFmt.ResetAttr(RES_VERT_ORIENT);
@@ -718,7 +721,6 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             if ( _bSameOnly )
                 _eAnchorType = eOldAnchorType;
 
-            const bool bChanges = FLY_IN_CNTNT != _eAnchorType;
             SwFmtAnchor aNewAnch( _eAnchorType );
             Rectangle aObjRect( pContact->GetAnchoredObj( pObj )->GetObjRect().SVRect() );
             const Point aPt( aObjRect.TopLeft() );
@@ -839,7 +841,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     SetAttr( aNewAnch, *pContact->GetFmt() );
                     // OD 2004-04-13 #i26791# - adjust vertical positioning to
                     // 'center to baseline'
-                    SetAttr( SwFmtVertOrient( 0, VERT_CENTER, FRAME ), *pContact->GetFmt() );
+                    SetAttr( SwFmtVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ), *pContact->GetFmt() );
                     SwTxtNode *pNd = aPos.nNode.GetNode().GetTxtNode();
                     ASSERT( pNd, "Crsr steht nicht auf TxtNode." );
 
