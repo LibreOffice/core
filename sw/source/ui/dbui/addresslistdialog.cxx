@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresslistdialog.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:04:08 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:29:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,20 +137,21 @@
 #include <dbui.hrc>
 
 #include <helpid.h>
+#include <unomid.h>
 
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::container;
-using namespace com::sun::star::sdb;
-using namespace com::sun::star::sdbc;
-using namespace com::sun::star::sdbcx;
-using namespace com::sun::star::task;
-using namespace com::sun::star::beans;
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ui::dialogs;
-using namespace rtl;
+using namespace ::rtl;
 
-#define C2U(cChar) ::rtl::OUString::createFromAscii(cChar)
 #define ITEMID_NAME         1
 #define ITEMID_TABLE        2
 
@@ -223,15 +224,15 @@ struct AddressUserData_Impl
   -----------------------------------------------------------------------*/
 SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_ADDRESSLISTDIALOG)),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (disable : 4355)
 #endif
     m_aDescriptionFI( this, SW_RES(  FI_DESCRIPTION    )),
     m_aListFT( this, SW_RES(         FT_LIST           )),
-    m_aLoadListPB( this, SW_RES(     PB_LOADLIST       )),
-    m_aCreateListPB(this, SW_RES(    PB_CREATELIST     )),
     m_aListHB( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
     m_aListLB( this, SW_RES(         LB_LIST           )),
+    m_aLoadListPB( this, SW_RES(     PB_LOADLIST       )),
+    m_aCreateListPB(this, SW_RES(    PB_CREATELIST     )),
     m_aFilterPB( this, SW_RES(       PB_FILTER         )),
     m_aEditPB(this, SW_RES(          PB_EDIT           )),
     m_aTablePB(this, SW_RES(         PB_TABLE          )),
@@ -239,15 +240,15 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     m_aOK( this, SW_RES(             PB_OK             )),
     m_aCancel( this, SW_RES(         PB_CANCEL         )),
     m_aHelp( this, SW_RES(           PB_HELP           )),
-#ifdef _MSC_VER
+#ifdef MSC
 #pragma warning (default : 4355)
 #endif
     m_sName(        SW_RES( ST_NAME )),
     m_sTable(       SW_RES( ST_TABLE )),
     m_sConnecting(  SW_RES( ST_CONNECTING )),
     m_pCreatedDataSource(0),
-    m_pAddressPage(pParent),
-    m_bInSelectHdl(false)
+    m_bInSelectHdl(false),
+    m_pAddressPage(pParent)
 {
     FreeResource();
     String sTemp(m_aDescriptionFI.GetText());
@@ -334,9 +335,8 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
                     bEnableEdit = pUserData->sURL.getLength() > 0 &&
                         !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL );
                 }
-                catch(const uno::Exception& rEx)
+                catch(const uno::Exception& )
                 {
-                    rEx;
                     bEnableOK = sal_False;
                 }
                 m_aDBData = rCurrentData;
@@ -364,7 +364,7 @@ SwAddressListDialog::~SwAddressListDialog()
 /*-- 07.04.2004 16:35:44---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, pButton)
+IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, EMPTYARG)
 {
     SvLBoxEntry* pSelect = m_aListLB.FirstSelected();
     uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
@@ -421,10 +421,9 @@ IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, pButton)
                 }
                 ::comphelper::disposeComponent(xRowSet);
             }
-            catch(Exception& rEx)
+            catch(Exception& )
             {
                 DBG_ERROR("exception caught in SwAddressListDialog::FilterHdl_Impl")
-                rEx;
             }
         }
     }
@@ -433,7 +432,7 @@ IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, pButton)
 /*-- 07.04.2004 16:35:44---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK(SwAddressListDialog, LoadHdl_Impl,   PushButton*, pButton)
+IMPL_LINK(SwAddressListDialog, LoadHdl_Impl,   PushButton*, EMPTYARG)
 {
     String sNewSource = SwNewDBMgr::LoadAndRegisterDataSource();
     if(sNewSource.Len())
@@ -449,11 +448,11 @@ IMPL_LINK(SwAddressListDialog, LoadHdl_Impl,   PushButton*, pButton)
   -----------------------------------------------------------------------*/
 IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
 {
-    String sURL;
+    String sInputURL;
     SwCreateAddressListDialog* pDlg =
             new SwCreateAddressListDialog(
                     pButton,
-                    sURL,
+                    sInputURL,
                     m_pAddressPage->GetWizard()->GetConfigItem());
     if(RET_OK == pDlg->Execute())
     {
@@ -529,9 +528,8 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             m_aCreateListPB.Enable(FALSE);
 
         }
-        catch(Exception& rEx)
+        catch(Exception& )
         {
-            rEx;
         }
     }
     delete pDlg;
@@ -714,11 +712,10 @@ void SwAddressListDialog::DetectTablesAndQueries(
         m_aFilterPB.Enable( pUserData->xConnection.is() && sCommand.Len() );
         m_aTablePB.Enable( pUserData->nTableAndQueryCount > 1 );
     }
-    catch(Exception& rEx)
+    catch(Exception& )
     {
         DBG_ERROR("exception caught in SwAddressListDialog::DetectTablesAndQueries")
         m_aOK.Enable( sal_False );
-        rEx;
     }
 }
 
@@ -748,7 +745,7 @@ IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
 /*-- 08.04.2004 14:52:11---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-IMPL_LINK(SwAddressListDialog, OKHdl_Impl, PushButton*, pButton)
+IMPL_LINK(SwAddressListDialog, OKHdl_Impl, PushButton*, EMPTYARG)
 {
     EndDialog(TRUE);
     return 0;
