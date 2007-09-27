@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndhints.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:22:40 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:25:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,7 @@ static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 
 BOOL SwpHtStart::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
 {
-    register USHORT nOben = Count(), nMitte, nUnten = 0;
+    USHORT nOben = Count(), nMitte, nUnten = 0;
     if( nOben > 0 )
     {
         nOben--;
@@ -208,7 +208,7 @@ BOOL SwpHtStart::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
 
 BOOL SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
 {
-    register USHORT nOben = Count(), nMitte, nUnten = 0;
+    USHORT nOben = Count(), nMitte, nUnten = 0;
     if( nOben > 0 )
     {
         nOben--;
@@ -291,7 +291,6 @@ void SwpHintsArr::DeleteAtPos( const USHORT nPos )
         { \
             ASSERT(!this, text); \
             DumpHints(*(SwpHtStart*)this,aHtEnd); \
-            const BOOL bErr = 0 == (cond); /* fuer den CV */ \
             return !((SwpHintsArr*)this)->Resort(); \
         }
 
@@ -311,7 +310,7 @@ BOOL SwpHintsArr::Check() const
 
         // 2a) gueltiger Pointer? vgl. DELETEFF
         const SwTxtAttr *pHt = (*this)[i];
-        CHECK_ERR( 0xFF != *(char*)pHt, "HintsCheck: start ptr was deleted" );
+        CHECK_ERR( 0xFF != *(unsigned char*)pHt, "HintsCheck: start ptr was deleted" );
 
         // 3a) Stimmt die Start-Sortierung?
         xub_StrLen nIdx = *pHt->GetStart();
@@ -328,7 +327,7 @@ BOOL SwpHintsArr::Check() const
 
         // 2b) gueltiger Pointer? vgl. DELETEFF
         const SwTxtAttr *pHtEnd = aHtEnd[i];
-        CHECK_ERR( 0xFF != *(char*)pHtEnd, "HintsCheck: end ptr was deleted" );
+        CHECK_ERR( 0xFF != *(unsigned char*)pHtEnd, "HintsCheck: end ptr was deleted" );
 
         // 3b) Stimmt die End-Sortierung?
         nIdx = *pHtEnd->GetAnyEnd();
