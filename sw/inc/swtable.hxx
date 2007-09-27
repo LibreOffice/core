@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 13:59:29 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:12:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,13 +94,13 @@ struct Parm;
 SV_DECL_REF( SwServerObject )
 #endif
 
-SV_DECL_PTRARR_DEL(SwTableLines, SwTableLine*, 10, 20);
-SV_DECL_PTRARR_DEL(SwTableBoxes, SwTableBox*, 25, 50);
+SV_DECL_PTRARR_DEL(SwTableLines, SwTableLine*, 10, 20)
+SV_DECL_PTRARR_DEL(SwTableBoxes, SwTableBox*, 25, 50)
 
 // speicher die Inhaltstragenden Box-Pointer zusaetzlich in einem
 // sortierten Array (fuers rechnen in der Tabelle)
 typedef SwTableBox* SwTableBoxPtr;
-SV_DECL_PTRARR_SORT( SwTableSortBoxes, SwTableBoxPtr, 25, 50 );
+SV_DECL_PTRARR_SORT( SwTableSortBoxes, SwTableBoxPtr, 25, 50 )
 typedef SwTableLine* SwTableLinePtr;
 
 class SwTable: public SwClient           //Client vom FrmFmt
@@ -131,6 +131,7 @@ protected:
     bool bDontChangeModel;  // This is set by functions (like Merge()) to forbid a laet model change
 #endif
 
+    using SwClient::IsModifyLocked;
     BOOL IsModifyLocked(){ return bModifyLocked;}
 
 public:
@@ -198,7 +199,7 @@ public:
     virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
 
     void GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
-                     FASTBOOL bHidden = FALSE, BOOL bCurRowOnly = FALSE ) const;
+                     BOOL bHidden = FALSE, BOOL bCurRowOnly = FALSE ) const;
     void SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
                      const SwTableBox *pStart, BOOL bCurRowOnly );
 
@@ -245,6 +246,8 @@ public:
     BOOL DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
         SwUndo* pUndo, const BOOL bDelMakeFrms, const BOOL bCorrBorder );
     BOOL SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt=1 );
+    BOOL Merge( const SwSelBoxes& rBoxes,
+                SwTableBox* pMergeBox, SwUndoTblMerge* = 0 );
 
     void FindSuperfluousRows( SwSelBoxes& rBoxes )
         { _FindSuperfluousRows( rBoxes, 0, 0 ); }
