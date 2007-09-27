@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddropdown.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:15:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #include <unoprnms.hxx>
 #endif
 
-namespace css = com::sun::star;
+using namespace com::sun::star;
 
 using rtl::OUString;
 using std::vector;
@@ -137,7 +137,7 @@ void SwDropDownField::SetItems(const vector<String> & rItems)
     aSelectedItem = aEmptyString;
 }
 
-void SwDropDownField::SetItems(const css::uno::Sequence<OUString> & rItems)
+void SwDropDownField::SetItems(const uno::Sequence<OUString> & rItems)
 {
     aValues.clear();
 
@@ -148,9 +148,9 @@ void SwDropDownField::SetItems(const css::uno::Sequence<OUString> & rItems)
     aSelectedItem = aEmptyString;
 }
 
-css::uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
+uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
 {
-    css::uno::Sequence<OUString> aSeq( aValues.size() );
+    uno::Sequence<OUString> aSeq( aValues.size() );
     OUString* pSeq = aSeq.getArray();
     int i = 0;
     vector<String>::const_iterator aIt;
@@ -213,11 +213,10 @@ void SwDropDownField::SetToolTip(const String & rToolTip)
     aToolTip = rToolTip;
 }
 
-BOOL SwDropDownField::QueryValue(css::uno::Any &rVal, BYTE nMId)
-    const
+BOOL SwDropDownField::QueryValue(::uno::Any &rVal, USHORT nWhich) const
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    nWhich &= ~CONVERT_TWIPS;
+    switch( nWhich )
     {
     case FIELD_PROP_PAR1:
         rVal <<= rtl::OUString(GetSelectedItem());
@@ -242,11 +241,10 @@ BOOL SwDropDownField::QueryValue(css::uno::Any &rVal, BYTE nMId)
     return sal_True;
 }
 
-BOOL SwDropDownField::PutValue(const css::uno::Any &rVal,
-                               BYTE nMId)
+BOOL SwDropDownField::PutValue(const uno::Any &rVal,
+                               USHORT nWhich)
 {
-    nMId &= ~CONVERT_TWIPS;
-    switch( nMId )
+    switch( nWhich )
     {
     case FIELD_PROP_PAR1:
         {
@@ -286,7 +284,7 @@ BOOL SwDropDownField::PutValue(const css::uno::Any &rVal,
 
     case FIELD_PROP_STRINGS:
         {
-            css::uno::Sequence<OUString> aSeq;
+            uno::Sequence<OUString> aSeq;
             rVal >>= aSeq;
             SetItems(aSeq);
         }
