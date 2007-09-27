@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:22:52 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:28:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,9 @@
 #ifndef _SHELLS_HRC
 #include <shells.hrc>
 #endif
-#include "swabstdlg.hxx" //CHINA001
+#include "swabstdlg.hxx"
+using namespace ::com::sun::star;
+
 // Prototypen ------------------------------------------------------------
 
 void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
@@ -323,51 +325,51 @@ void SwFrameShell::Execute(SfxRequest &rReq)
     {
         case SID_OBJECT_ALIGN_MIDDLE:
         case FN_FRAME_ALIGN_VERT_CENTER:
-            aMgr.SetVertOrientation( SVX_VERT_CENTER );
+            aMgr.SetVertOrientation( text::VertOrientation::CENTER );
             break;
         case SID_OBJECT_ALIGN_DOWN :
         case FN_FRAME_ALIGN_VERT_BOTTOM:
-            aMgr.SetVertOrientation( SVX_VERT_BOTTOM );
+            aMgr.SetVertOrientation( text::VertOrientation::BOTTOM );
             break;
         case SID_OBJECT_ALIGN_UP :
         case FN_FRAME_ALIGN_VERT_TOP:
-            aMgr.SetVertOrientation( SVX_VERT_TOP );
+            aMgr.SetVertOrientation( text::VertOrientation::TOP );
             break;
 
         case FN_FRAME_ALIGN_VERT_CHAR_CENTER:
-            aMgr.SetVertOrientation( SVX_VERT_CHAR_CENTER );
+            aMgr.SetVertOrientation( text::VertOrientation::CHAR_CENTER );
             break;
 
         case FN_FRAME_ALIGN_VERT_CHAR_BOTTOM:
-            aMgr.SetVertOrientation( SVX_VERT_CHAR_BOTTOM );
+            aMgr.SetVertOrientation( text::VertOrientation::CHAR_BOTTOM );
             break;
 
         case FN_FRAME_ALIGN_VERT_CHAR_TOP:
-            aMgr.SetVertOrientation( SVX_VERT_CHAR_TOP );
+            aMgr.SetVertOrientation( text::VertOrientation::CHAR_TOP );
             break;
 
         case FN_FRAME_ALIGN_VERT_ROW_CENTER:
-            aMgr.SetVertOrientation( SVX_VERT_LINE_CENTER );
+            aMgr.SetVertOrientation( text::VertOrientation::LINE_CENTER );
             break;
 
         case FN_FRAME_ALIGN_VERT_ROW_BOTTOM:
-            aMgr.SetVertOrientation( SVX_VERT_LINE_BOTTOM );
+            aMgr.SetVertOrientation( text::VertOrientation::LINE_BOTTOM );
             break;
 
         case FN_FRAME_ALIGN_VERT_ROW_TOP:
-            aMgr.SetVertOrientation( SVX_VERT_LINE_TOP );
+            aMgr.SetVertOrientation( text::VertOrientation::LINE_TOP );
             break;
         case SID_OBJECT_ALIGN_CENTER :
         case FN_FRAME_ALIGN_HORZ_CENTER:
-            aMgr.SetHorzOrientation( HORI_CENTER );
+            aMgr.SetHorzOrientation( text::HoriOrientation::CENTER );
             break;
         case SID_OBJECT_ALIGN_RIGHT:
         case FN_FRAME_ALIGN_HORZ_RIGHT:
-            aMgr.SetHorzOrientation( HORI_RIGHT );
+            aMgr.SetHorzOrientation( text::HoriOrientation::RIGHT );
             break;
         case SID_OBJECT_ALIGN_LEFT:
         case FN_FRAME_ALIGN_HORZ_LEFT:
-            aMgr.SetHorzOrientation( HORI_LEFT );
+            aMgr.SetHorzOrientation( text::HoriOrientation::LEFT );
             break;
 
         case FN_SET_FRM_POSITION:
@@ -399,7 +401,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         case FN_FORMAT_FRAME_DLG:
         {
             const int nSel = rSh.GetSelectionType();
-            if (nSel & SwWrtShell::SEL_GRF)
+            if (nSel & nsSelectionType::SEL_GRF)
             {
                 rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(FN_FORMAT_GRAFIC_DLG);
                 bUpdateMgr = FALSE;
@@ -422,14 +424,14 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                             0);
 
                 const SwViewOption* pVOpt = rSh.GetViewOptions();
-                if(nSel & SwWrtShell::SEL_OLE)
+                if(nSel & nsSelectionType::SEL_OLE)
                 {
                     aSet.Put(SfxBoolItem(FN_KEEP_ASPECT_RATIO,
                         pVOpt->IsKeepRatio()));
                 }
                 aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
                 aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
-                if(nSel & SwWrtShell::SEL_OLE)
+                if(nSel & nsSelectionType::SEL_OLE)
                     aSet.Put(SfxStringItem(FN_SET_FRM_ALT_NAME, rSh.GetAlternateText()));
 
                 const SwRect &rPg = rSh.GetAnyCurRect(RECT_PAGE);
@@ -458,27 +460,19 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 aSet.Put(SfxFrameItem( SID_DOCFRAME, GetView().GetViewFrame()->GetTopFrame()));
                 FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
-                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
-//CHINA001                 SwFrmDlg *pDlg = new SwFrmDlg( GetView().GetViewFrame(),
-//CHINA001                                             GetView().GetWindow(),
-//CHINA001                                 aSet, FALSE,
-//CHINA001                                 nSel & SwWrtShell::SEL_GRF ? DLG_FRM_GRF :
-//CHINA001                                 nSel & SwWrtShell::SEL_OLE ? DLG_FRM_OLE :
-//CHINA001                                                              DLG_FRM_STD,
-//CHINA001                                 FALSE,
-//CHINA001                                 nDefPage);
+                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pFact, "Dialogdiet fail!");
                 SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_STD,
                                                         GetView().GetViewFrame(),
                                                         GetView().GetWindow(),
                                                         aSet, FALSE,
-                                                        nSel & SwWrtShell::SEL_GRF ? DLG_FRM_GRF :
-                                                        nSel & SwWrtShell::SEL_OLE ? DLG_FRM_OLE :
+                                                        nSel & nsSelectionType::SEL_GRF ? DLG_FRM_GRF :
+                                                        nSel & nsSelectionType::SEL_OLE ? DLG_FRM_OLE :
                                                                                         DLG_FRM_STD,
                                                         FALSE,
                                                         nDefPage);
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
                 if ( pDlg->Execute() )
                 {
@@ -486,7 +480,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     if(pOutSet)
                     {
                         rReq.Done(*pOutSet);
-                        if(nSel & SwWrtShell::SEL_OLE &&
+                        if(nSel & nsSelectionType::SEL_OLE &&
                         SFX_ITEM_SET == pOutSet->GetItemState(FN_KEEP_ASPECT_RATIO, TRUE, &pItem))
                         {
                             SwViewOption aUsrPref( *pVOpt );
@@ -502,7 +496,6 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                         if(pFmt && pFmt->IsAutoUpdateFmt())
                         {
                             rSh.AutoUpdateFrame(pFmt, *pOutSet);
-                            const SfxPoolItem* pItem;
                             // alles, dass das Format nicht kann, muss hart
                             // gesetzt werden
                             if(SFX_ITEM_SET == pOutSet->GetItemState(FN_SET_FRM_NAME, FALSE, &pItem))
@@ -649,7 +642,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
         rSh.GetFlyFrmAttr( aSet );
 
         BOOL bProtect = rSh.IsSelObjProtected(FLYPROTECT_POS);
-        BOOL bParentCntProt = rSh.IsSelObjProtected( (FlyProtectType)(FLYPROTECT_CONTENT|FLYPROTECT_PARENT) ) != 0;
+        BOOL bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
         bProtect |= bParentCntProt;
 
@@ -777,10 +770,10 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                     SvxHyperlinkItem aHLinkItem;
                     const SfxPoolItem* pItem;
 
-                    SfxItemSet aSet(GetPool(), RES_URL, RES_URL);
-                    rSh.GetFlyFrmAttr( aSet );
+                    SfxItemSet aURLSet(GetPool(), RES_URL, RES_URL);
+                    rSh.GetFlyFrmAttr( aURLSet );
 
-                    if(SFX_ITEM_SET == aSet.GetItemState(RES_URL, TRUE, &pItem))
+                    if(SFX_ITEM_SET == aURLSet.GetItemState(RES_URL, TRUE, &pItem))
                     {
                         const SwFmtURL* pFmtURL = (const SwFmtURL*)pItem;
                         aHLinkItem.SetURL(pFmtURL->GetURL());
@@ -798,7 +791,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_CHAIN:
                 {
                     const int nSel = rSh.GetSelectionType();
-                    if (nSel & SwWrtShell::SEL_GRF || nSel & SwWrtShell::SEL_OLE)
+                    if (nSel & nsSelectionType::SEL_GRF || nSel & nsSelectionType::SEL_OLE)
                         rSet.DisableItem( FN_FRAME_CHAIN );
                     else
                     {
@@ -819,7 +812,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_UNCHAIN:
                 {
                     const int nSel = rSh.GetSelectionType();
-                    if (nSel & SwWrtShell::SEL_GRF || nSel & SwWrtShell::SEL_OLE)
+                    if (nSel & nsSelectionType::SEL_GRF || nSel & nsSelectionType::SEL_OLE)
                         rSet.DisableItem( FN_FRAME_UNCHAIN );
                     else
                     {
@@ -842,7 +835,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FORMAT_FRAME_DLG:
                 {
                     const int nSel = rSh.GetSelectionType();
-                    if ( bParentCntProt || nSel & SwWrtShell::SEL_GRF)
+                    if ( bParentCntProt || nSel & nsSelectionType::SEL_GRF)
                         rSet.DisableItem( nWhich );
                 }
                 break;
@@ -860,15 +853,15 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
  --------------------------------------------------------------------*/
 
 
-SwFrameShell::SwFrameShell(SwView &rView) :
-    SwBaseShell( rView )
+SwFrameShell::SwFrameShell(SwView &_rView) :
+    SwBaseShell( _rView )
 {
     SetName(String::CreateFromAscii("Frame"));
     SetHelpId(SW_FRAMESHELL);
 
     /* #96392# Use this to announce it is the frame shell who creates the
        selection. */
-    SwTransferable::CreateSelection( rView.GetWrtShell(), (ViewShell *) this );
+    SwTransferable::CreateSelection( _rView.GetWrtShell(), (ViewShell *) this );
 }
 
 SwFrameShell::~SwFrameShell()
@@ -1080,7 +1073,7 @@ void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBo
 void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
 {
     SwWrtShell &rSh = GetShell();
-    BOOL bParentCntProt = rSh.IsSelObjProtected( (FlyProtectType)(FLYPROTECT_CONTENT|FLYPROTECT_PARENT) ) != 0;
+    BOOL bParentCntProt = rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
     if (bParentCntProt)
     {
@@ -1108,6 +1101,6 @@ void  SwFrameShell::StateInsert(SfxItemSet &rSet)
 {
     const int nSel = GetShell().GetSelectionType();
 
-    if ((nSel & SwWrtShell::SEL_GRF) || (nSel & SwWrtShell::SEL_OLE))
+    if ((nSel & nsSelectionType::SEL_GRF) || (nSel & nsSelectionType::SEL_OLE))
         rSet.DisableItem(FN_INSERT_FRAME);
 }
