@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:08:37 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:55:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -946,7 +946,8 @@ void SwRTFWriter::OutRTFFontTab()
     Strm() << SwRTFWriter::sNewLine << '{' << sRTF_FONTTBL;
     _OutFont( *this, *pFont, n++ );
 
-    if (pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem(RES_CHRATR_FONT))
+    pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem(RES_CHRATR_FONT);
+    if (pFont)
         _OutFont(*this, *pFont, n++);
 
     PutNumFmtFontsInAttrPool();
@@ -955,7 +956,8 @@ void SwRTFWriter::OutRTFFontTab()
     USHORT nMaxItem = rPool.GetItemCount(RES_CHRATR_FONT);
     for (USHORT nGet = 0; nGet < nMaxItem; ++nGet)
     {
-        if (pFont = (const SvxFontItem*)rPool.GetItem(RES_CHRATR_FONT, nGet))
+        pFont = (const SvxFontItem*)rPool.GetItem(RES_CHRATR_FONT, nGet);
+        if (pFont)
             _OutFont(*this, *pFont, n++);
     }
 
@@ -992,7 +994,7 @@ bool SwRTFWriter::OutRTFRevTab()
         return false;
 
     // pull out all the redlines and make a vector of all the author names
-    for( int i = 0; i < pDoc->GetRedlineTbl().Count(); ++i )
+    for( USHORT i = 0; i < pDoc->GetRedlineTbl().Count(); ++i )
     {
         const SwRedline* pRedl = pDoc->GetRedlineTbl()[ i ];
         const String sAuthor = SW_MOD()->GetRedlineAuthor( pRedl->GetAuthor() );
@@ -1079,11 +1081,11 @@ const rtl::OUString SwRTFWriter::XlateFmtName( const rtl::OUString &rName, SwGet
     if (idcol==USHRT_MAX) //#i40770# user defined style names get lost
         return rName;
 
-    for (int i = 0; i < sizeof( aArr ) / sizeof( *aArr ); i++)
+    for (size_t i = 0; i < sizeof( aArr ) / sizeof( *aArr ); i++)
     {
         if ( idcol == aArr[i] )
         {
-        return rtl::OUString::createFromAscii(stiName[i]);
+            return rtl::OUString::createFromAscii(stiName[i]);
         }
     }
     return ::SwStyleNameMapper::GetProgName( idcol, String() );
@@ -1147,7 +1149,7 @@ void SwRTFWriter::OutRTFStyleTab()
         }
 
         Strm() << ' ';
-        RTFOutFuncs::Out_String( Strm(), XlateFmtName( pColl->GetName(), GET_POOLID_TXTCOLL ), eDefaultEncoding,
+        RTFOutFuncs::Out_String( Strm(), XlateFmtName( pColl->GetName(), nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ), eDefaultEncoding,
                         bWriteHelpFmt ) << ";}" << SwRTFWriter::sNewLine;
     }
 
@@ -1174,7 +1176,7 @@ void SwRTFWriter::OutRTFStyleTab()
                 }
 
         Strm() << ' ';
-        RTFOutFuncs::Out_String( Strm(), XlateFmtName( pFmt->GetName(), GET_POOLID_CHRFMT ), eDefaultEncoding,
+        RTFOutFuncs::Out_String( Strm(), XlateFmtName( pFmt->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT ), eDefaultEncoding,
                     bWriteHelpFmt ) << ";}" << SwRTFWriter::sNewLine;
     }
 
@@ -1254,7 +1256,7 @@ void SwRTFWriter::OutRedline( xub_StrLen nCntntPos )
                 {
                     // We are at the start of a redline just need to find out which type
                     Strm() << '{';
-                    if(pCurRedline->GetType() == IDocumentRedlineAccess::REDLINE_INSERT)
+                    if(pCurRedline->GetType() == nsRedlineType_t::REDLINE_INSERT)
                     {
                         Strm() << sRTF_REVISED;
                         Strm() << sRTF_REVAUTH;
@@ -1264,7 +1266,7 @@ void SwRTFWriter::OutRedline( xub_StrLen nCntntPos )
                         OutLong( sw::ms::DateTime2DTTM(pCurRedline->GetTimeStamp()) );
                         Strm() << ' ';
                     }
-                    else if(pCurRedline->GetType() == IDocumentRedlineAccess::REDLINE_DELETE)
+                    else if(pCurRedline->GetType() == nsRedlineType_t::REDLINE_DELETE)
                     {
                         Strm() << sRTF_DELETED;
                         Strm() << sRTF_REVAUTHDEL;
@@ -1516,7 +1518,7 @@ void SwRTFWriter::OutPageDesc()
                 break;
         Strm() << sRTF_PGDSCNXT;
         OutULong( i ) << ' ';
-        RTFOutFuncs::Out_String( Strm(), XlateFmtName( rPageDesc.GetName(), GET_POOLID_PAGEDESC ), eDefaultEncoding,
+        RTFOutFuncs::Out_String( Strm(), XlateFmtName( rPageDesc.GetName(), nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC ), eDefaultEncoding,
                     bWriteHelpFmt ) << ";}";
     }
     Strm() << '}' << SwRTFWriter::sNewLine;
@@ -1553,26 +1555,29 @@ void SwRTFWriter::OutRTFBorder(const SvxBorderLine* aLine, const USHORT nSpace )
 
 void SwRTFWriter::OutRTFBorders(SvxBoxItem aBox)
 {
-    const SvxBorderLine *pLine;
-    if((pLine = aBox.GetTop()))
+    const SvxBorderLine *pLine = aBox.GetTop();
+    if(pLine)
     {
         Strm() << sRTF_PGBRDRT;
         OutRTFBorder(pLine, aBox.GetDistance(BOX_LINE_TOP));
     }
 
-    if((pLine = aBox.GetBottom()))
+    pLine = aBox.GetBottom();
+    if(pLine)
     {
         Strm() << sRTF_PGBRDRB;
         OutRTFBorder(pLine, aBox.GetDistance(BOX_LINE_BOTTOM));
     }
 
-    if((pLine = aBox.GetRight()))
+    pLine = aBox.GetRight();
+    if(pLine)
     {
         Strm() << sRTF_PGBRDRR;
         OutRTFBorder(pLine, aBox.GetDistance(BOX_LINE_LEFT));
     }
 
-    if((pLine = aBox.GetLeft()))
+    pLine = aBox.GetLeft();
+    if(pLine)
     {
         Strm() << sRTF_PGBRDRL;
         OutRTFBorder(pLine, aBox.GetDistance(BOX_LINE_RIGHT));
@@ -1616,7 +1621,7 @@ void SwRTFWriter::OutRTFPageDescription( const SwPageDesc& rPgDsc,
     OutRTFBorders(pFmt->GetAttrSet().GetBox());
 
     // falls es gesharte Heaer/Footer gibt, so gebe diese auch noch aus
-    if( PD_MIRROR & pAktPageDesc->GetUseOn() &&
+    if( nsUseOnPage::PD_MIRROR & pAktPageDesc->GetUseOn() &&
         !pAktPageDesc->IsFooterShared() || !pAktPageDesc->IsHeaderShared() )
     {
         bOutLeftHeadFoot = TRUE;
@@ -1836,26 +1841,26 @@ short SwRTFWriter::GetCurrentPageDirection() const
 
 short SwRTFWriter::TrueFrameDirection(const SwFrmFmt &rFlyFmt) const
 {
-    const SwFrmFmt *pFlyFmt = &rFlyFmt;
+    const SwFrmFmt *pFlyFmt2 = &rFlyFmt;
     const SvxFrameDirectionItem* pItem = 0;
-    while (pFlyFmt)
+    while (pFlyFmt2)
     {
-        pItem = &pFlyFmt->GetFrmDir();
+        pItem = &pFlyFmt2->GetFrmDir();
         if (FRMDIR_ENVIRONMENT == pItem->GetValue())
         {
             pItem = 0;
-            const SwFmtAnchor* pAnchor = &pFlyFmt->GetAnchor();
+            const SwFmtAnchor* pAnchor = &pFlyFmt2->GetAnchor();
             if( FLY_PAGE != pAnchor->GetAnchorId() &&
                 pAnchor->GetCntntAnchor() )
             {
-                pFlyFmt = pAnchor->GetCntntAnchor()->nNode.
+                pFlyFmt2 = pAnchor->GetCntntAnchor()->nNode.
                                     GetNode().GetFlyFmt();
             }
             else
-                pFlyFmt = 0;
+                pFlyFmt2 = 0;
         }
         else
-            pFlyFmt = 0;
+            pFlyFmt2 = 0;
     }
 
     short nRet;
