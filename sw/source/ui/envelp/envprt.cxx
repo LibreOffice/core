@@ -4,9 +4,9 @@
  *
  *  $RCSfile: envprt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:54:29 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:42:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,7 @@ SfxTabPage* SwEnvPrtPage::Create(Window* pParent, const SfxItemSet& rSet)
 
 
 
-void SwEnvPrtPage::ActivatePage(const SfxItemSet& rSet)
+void SwEnvPrtPage::ActivatePage(const SfxItemSet&)
 {
     if (pPrt)
         aPrinterInfo.SetText(pPrt->GetName());
@@ -207,10 +207,10 @@ void SwEnvPrtPage::ActivatePage(const SfxItemSet& rSet)
 
 
 
-int SwEnvPrtPage::DeactivatePage(SfxItemSet* pSet)
+int SwEnvPrtPage::DeactivatePage(SfxItemSet* _pSet)
 {
-    if( pSet )
-        FillItemSet(*pSet);
+    if( _pSet )
+        FillItemSet(*_pSet);
     return SfxTabPage::LEAVE_PAGE;
 }
 
@@ -227,8 +227,8 @@ void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
 
     rItem.eAlign          = (SwEnvAlign) (nID - ITM_HOR_LEFT);
     rItem.bPrintFromAbove = aTopButton.IsChecked();
-    rItem.lShiftRight     = GetFldVal(aRightField);
-    rItem.lShiftDown      = GetFldVal(aDownField );
+    rItem.lShiftRight     = static_cast< sal_Int32 >(GetFldVal(aRightField));
+    rItem.lShiftDown      = static_cast< sal_Int32 >(GetFldVal(aDownField ));
 }
 
 // --------------------------------------------------------------------------
