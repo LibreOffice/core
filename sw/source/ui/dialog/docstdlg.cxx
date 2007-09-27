@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:49:09 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 11:36:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,8 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
     aParaLbl    (this, SW_RES( FT_PARA       )),
     aWordLbl    (this, SW_RES( FT_WORD       )),
     aCharLbl    (this, SW_RES( FT_CHAR       )),
+    aLineLbl    (this, SW_RES( FT_LINE       )),
+
     aTableNo    (this, SW_RES( FT_TABLE_COUNT)),
     aGrfNo      (this, SW_RES( FT_GRF_COUNT  )),
     aOLENo      (this, SW_RES( FT_OLE_COUNT  )),
@@ -120,7 +122,6 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
     aParaNo     (this, SW_RES( FT_PARA_COUNT )),
     aWordNo     (this, SW_RES( FT_WORD_COUNT )),
     aCharNo     (this, SW_RES( FT_CHAR_COUNT )),
-    aLineLbl    (this, SW_RES( FT_LINE       )),
     aLineNo     (this, SW_RES( FT_LINE_COUNT )),
     aUpdatePB   (this, SW_RES( PB_PDATE      ))
 {
@@ -149,7 +150,7 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
  --------------------------------------------------------------------*/
 
 
-BOOL  SwDocStatPage::FillItemSet(SfxItemSet &rSet)
+BOOL  SwDocStatPage::FillItemSet(SfxItemSet & /*rSet*/)
 {
     return FALSE;
 }
@@ -159,7 +160,7 @@ BOOL  SwDocStatPage::FillItemSet(SfxItemSet &rSet)
  --------------------------------------------------------------------*/
 
 
-void  SwDocStatPage::Reset(const SfxItemSet &rSet)
+void  SwDocStatPage::Reset(const SfxItemSet &/*rSet*/)
 {
 }
 /*------------------------------------------------------------------------
@@ -206,7 +207,7 @@ void SwDocStatPage::Update()
 /*-----------------19.06.97 16.37-------------------
     Zeilennummer aktualisieren
 --------------------------------------------------*/
-IMPL_LINK( SwDocStatPage, UpdateHdl, PushButton*, pButton)
+IMPL_LINK( SwDocStatPage, UpdateHdl, PushButton*, EMPTYARG)
 {
     Update();
     SwDocShell* pDocShell = (SwDocShell*) SfxObjectShell::Current();
