@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IDocumentRedlineAccess.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:44:04 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,62 +57,62 @@
  class SwNode;
  class String;
 
- /** IDocumentRedlineAccess
- */
- class IDocumentRedlineAccess
- {
- public:
+typedef USHORT RedlineMode_t;
+namespace nsRedlineMode_t
+{
+    const RedlineMode_t REDLINE_NONE = 0; // no RedlineMode
+    const RedlineMode_t REDLINE_ON = 0x01;// RedlineMode on
+    const RedlineMode_t REDLINE_IGNORE = 0x02;// ignore Redlines
+    const RedlineMode_t REDLINE_SHOW_INSERT = 0x10;// show all inserts
+    const RedlineMode_t REDLINE_SHOW_DELETE = 0x20;// show all delets
+    const RedlineMode_t REDLINE_SHOW_MASK = REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE;
 
-   enum RedlineMode_t
-   {
-       REDLINE_NONE = 0, // no RedlineMode
-       REDLINE_ON = 0x01,// RedlineMode on
-       REDLINE_IGNORE = 0x02,// ignore Redlines
-       REDLINE_SHOW_INSERT = 0x10,// show all inserts
-       REDLINE_SHOW_DELETE = 0x20,// show all delets
-       REDLINE_SHOW_MASK = REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE,
+    // fuer die interne Verwaltung:
+    // die originalen Redlines inclusive des Contents entfernen
+    // (ClipBoard/Textbausteine)
+    const RedlineMode_t REDLINE_DELETE_REDLINES = 0x100;
+    // beim Loeschen innerhalb ein RedlineObjectes, waehrend des Appends,
+    // das DeleteRedline ignorieren
+    const RedlineMode_t REDLINE_IGNOREDELETE_REDLINES = 0x200;
+    // don't combine any readlines. This flags is may only used in the Undo.
+    const RedlineMode_t REDLINE_DONTCOMBINE_REDLINES = 0x400;
+}
 
-       // fuer die interne Verwaltung:
-       // die originalen Redlines inclusive des Contents entfernen
-       // (ClipBoard/Textbausteine)
-       REDLINE_DELETE_REDLINES = 0x100,
-       // beim Loeschen innerhalb ein RedlineObjectes, waehrend des Appends,
-       // das DeleteRedline ignorieren
-       REDLINE_IGNOREDELETE_REDLINES = 0x200,
-       // don't combine any readlines. This flags is may only used in the Undo.
-      REDLINE_DONTCOMBINE_REDLINES = 0x400
-   };
+typedef USHORT RedlineType_t;
+namespace nsRedlineType_t
+{
+    // die RedlineTypen gehen von 0 bis 127
+    const RedlineType_t REDLINE_INSERT = 0x0;// Inhalt wurde eingefuegt
+    const RedlineType_t REDLINE_DELETE = 0x1;// Inhalt wurde geloescht
+    const RedlineType_t REDLINE_FORMAT = 0x2;// Attributierung wurde angewendet
+    const RedlineType_t REDLINE_TABLE = 0x3;// TabellenStruktur wurde veraendert
+    const RedlineType_t REDLINE_FMTCOLL = 0x4;// FormatVorlage wurde veraendert (Autoformat!)
 
-   enum RedlineType_t
-   {
-     // die RedlineTypen gehen von 0 bis 127
-     REDLINE_INSERT = 0x0,// Inhalt wurde eingefuegt
-     REDLINE_DELETE = 0x1,// Inhalt wurde geloescht
-     REDLINE_FORMAT = 0x2,// Attributierung wurde angewendet
-     REDLINE_TABLE = 0x3,// TabellenStruktur wurde veraendert
-     REDLINE_FMTCOLL = 0x4,// FormatVorlage wurde veraendert (Autoformat!)
+    // ab 128 koennen Flags hineinverodert werden
+    const RedlineType_t REDLINE_NO_FLAG_MASK = 0x7F;
+    //const RedlineType_t REDLINE_FLAG_MASK = 0xFF80;
+    const RedlineType_t REDLINE_FORM_AUTOFMT = 0x80;// kann als Flag im RedlineType stehen
+}
 
-     // ab 128 koennen Flags hineinverodert werden
-     REDLINE_NO_FLAG_MASK = 0x7F,
-     REDLINE_FLAG_MASK = 0xFF80,
-     REDLINE_FORM_AUTOFMT = 0x80// kann als Flag im RedlineType stehen
-   };
-
-    // Static helper functions
+/** IDocumentRedlineAccess
+*/
+class IDocumentRedlineAccess
+{
+     // Static helper functions
 public:
-    static int IsShowChanges(const USHORT eM)
-    { return (REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE) == (eM & REDLINE_SHOW_MASK); }
+    static bool IsShowChanges(const USHORT eM)
+    { return (nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE) == (eM & nsRedlineMode_t::REDLINE_SHOW_MASK); }
 
-    static int IsHideChanges(const USHORT eM)
-    { return REDLINE_SHOW_INSERT == (eM & REDLINE_SHOW_MASK); }
+    static bool IsHideChanges(const USHORT eM)
+    { return nsRedlineMode_t::REDLINE_SHOW_INSERT == (eM & nsRedlineMode_t::REDLINE_SHOW_MASK); }
 
-    static int IsShowOriginal(const USHORT eM)
-    { return REDLINE_SHOW_DELETE == (eM & REDLINE_SHOW_MASK); }
+    static bool IsShowOriginal(const USHORT eM)
+    { return nsRedlineMode_t::REDLINE_SHOW_DELETE == (eM & nsRedlineMode_t::REDLINE_SHOW_MASK); }
 
-    static int IsRedlineOn(const USHORT eM)
-    { return REDLINE_ON == (eM & (REDLINE_ON | REDLINE_IGNORE )); }
+    static bool IsRedlineOn(const USHORT eM)
+    { return nsRedlineMode_t::REDLINE_ON == (eM & (nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE )); }
 
- public:
+public:
 
     /*************************************************
         Query
