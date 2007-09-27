@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-21 11:53:20 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1287,7 +1287,7 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
     if( bVer67 )
     {
         UINT16 aBrc1 = SVBT16ToShort(aBits1);
-        nCol = ((aBrc1 >> 6) & 0x1f);   // aBor.ico
+        nCol = static_cast< BYTE >((aBrc1 >> 6) & 0x1f);   // aBor.ico
         nSpace = (aBrc1 & 0xF800) >> 11;
 
         nMSTotalWidth = aBrc1 & 0x07;
@@ -1298,8 +1298,7 @@ short WW8_BRC::DetermineBorderProperties(bool bVer67, short *pSpace,
             nMSTotalWidth=1;
             nIdx = 1;
         }
-        nMSTotalWidth *= nIdx;
-        nMSTotalWidth *= 15;
+        nMSTotalWidth = nMSTotalWidth * nIdx * 15;
     }
     else
     {
@@ -1621,7 +1620,7 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
 
     WW8_FC nClxPos = pWwF->fcClx;
     INT32 nClxLen = pWwF->lcbClx;
-    register INT32 nLeft = nClxLen;
+    INT32 nLeft = nClxLen;
     INT16 nGrpprl = 0;
     BYTE clxt;
 
@@ -2550,9 +2549,9 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
 
                     if (aEntry.mnLen && eVersion == ww::eWW2)
                     {
-                        Word2CHPX aChpx = ReadWord2Chpx(*pSt, nFilePos + nOfs + 1, aEntry.mnLen);
+                        Word2CHPX aChpx = ReadWord2Chpx(*pSt, nFilePos + nOfs + 1, static_cast< sal_uInt8 >(aEntry.mnLen));
                         std::vector<BYTE> aSprms = ChpxToSprms(aChpx);
-                        aEntry.mnLen = aSprms.size();
+                        aEntry.mnLen = static_cast< sal_uInt16 >(aSprms.size());
                         if (aEntry.mnLen)
                         {
                             aEntry.mpData = new sal_uInt8[aEntry.mnLen];
@@ -2621,7 +2620,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                             {
                                 memcpy(aEntry.mpData + aEntry.mnLen,
                                     pOrigData, nOrigLen);
-                                aEntry.mnLen += nOrigLen;
+                                aEntry.mnLen = aEntry.mnLen + nOrigLen;
                             }
                         }
                     }
@@ -2894,7 +2893,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
             pFkp = *aIter;
             pFkp->Reset(GetStartFc());
         }
-        else if ((pFkp = new WW8Fkp(GetFIBVersion(), pFKPStrm, pDataStrm, nPo,
+        else if (0 != (pFkp = new WW8Fkp(GetFIBVersion(), pFKPStrm, pDataStrm, nPo,
             pFkpSizeTab[ ePLCF ], ePLCF, GetStartFc())))
         {
             maFkpCache.push_back(pFkp);
@@ -3535,7 +3534,7 @@ bool WW8PLCFx_SEPX::Find4Sprms(USHORT nId1,USHORT nId2,USHORT nId3,USHORT nId4,
         bFound |= bOk;
         // erhoehe Zeiger, so dass er auf naechsten Sprm zeigt
         USHORT x = maSprmParser.GetSprmSize(nAktId, pSp);
-        i += x;
+        i = i + x;
         pSp += x;
     }
     return bFound;
@@ -3561,7 +3560,7 @@ const BYTE* WW8PLCFx_SEPX::HasSprm( USHORT nId, BYTE n2nd ) const
         }
         // erhoehe Zeiger, so dass er auf naechsten Sprm zeigt
         USHORT x = maSprmParser.GetSprmSize(nAktId, pSp);
-        i += x;
+        i = i + x;
         pSp += x;
     }
 
@@ -4069,8 +4068,8 @@ WW8PLCFx& WW8PLCFx_Book::operator ++( int )
     {
         (*pBook[nIsEnd])++;
 
-        register ULONG l0 = pBook[0]->Where();
-        register ULONG l1 = pBook[1]->Where();
+        ULONG l0 = pBook[0]->Where();
+        ULONG l1 = pBook[1]->Where();
         if( l0 < l1 )
             nIsEnd = 0;
         else if( l1 < l0 )
@@ -4455,7 +4454,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, short nType, long nStartCp,
     GetPapPLCF()->ResetAttrStartEnd();
     for( i=0; i < nPLCF; i++)
     {
-        register WW8PLCFxDesc* p = &aD[i];
+        WW8PLCFxDesc* p = &aD[i];
 
         /*
         ##516##,##517##
@@ -4479,7 +4478,7 @@ WW8PLCFMan::WW8PLCFMan(WW8ScannerBase* pBase, short nType, long nStartCp,
 
     // initialisieren der Member-Vars High-Level
     for( i=0; i<nPLCF; i++){
-        register WW8PLCFxDesc* p = &aD[i];
+        WW8PLCFxDesc* p = &aD[i];
 
         if( !p->pPLCFx )
         {
@@ -4526,7 +4525,7 @@ USHORT WW8PLCFMan::WhereIdx(bool* pbStart, long* pPos) const
     USHORT nNextIdx = nPLCF;// first ending found ( CHP, PAP, ( SEP ) ),
     bool bStart = true;     // dann Anfaenge finden ( ( SEP ), PAP, CHP )
     USHORT i;
-    register const WW8PLCFxDesc* pD;
+    const WW8PLCFxDesc* pD;
     for (i=0; i < nPLCF; i++)
     {
         pD = &aD[i];
@@ -4614,7 +4613,7 @@ void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
 
     pRes->nMemLen = 0;
 
-    register const WW8PLCFxDesc* p = &aD[nIdx];
+    const WW8PLCFxDesc* p = &aD[nIdx];
 
     // first Sprm in a Group
     if( p->bFirstSprm )
@@ -4640,7 +4639,7 @@ void WW8PLCFMan::GetSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
 {
     memset( pRes, 0, sizeof( WW8PLCFManResult ) );
 
-    register const WW8PLCFxDesc* p = &aD[nIdx];
+    const WW8PLCFxDesc* p = &aD[nIdx];
 
     if (!(p->pIdStk->empty()))
         pRes->nSprmId = p->pIdStk->top();       // get end position
@@ -4653,7 +4652,7 @@ void WW8PLCFMan::GetSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
 
 void WW8PLCFMan::GetNoSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
 {
-    register const WW8PLCFxDesc* p = &aD[nIdx];
+    const WW8PLCFxDesc* p = &aD[nIdx];
 
     pRes->nCpPos = p->nStartPos;
     pRes->nMemLen = p->nSprmsLen;
@@ -4830,7 +4829,7 @@ void WW8PLCFMan::AdvNoSprm(short nIdx, bool bStart)
     structures, but act together as one logical one. The attributes only go
     to the next entry when the piece changes
     */
-    register WW8PLCFxDesc* p = &aD[nIdx];
+    WW8PLCFxDesc* p = &aD[nIdx];
 
     if( p == pPcd )
     {
@@ -4884,7 +4883,7 @@ WW8PLCFMan& WW8PLCFMan::operator ++(int)
     USHORT nIdx = WhereIdx(&bStart);
     if (nIdx < nPLCF)
     {
-        register WW8PLCFxDesc* p = &aD[nIdx];
+        WW8PLCFxDesc* p = &aD[nIdx];
 
         p->bFirstSprm = true;                       // Default
 
@@ -6915,7 +6914,7 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         //500 -> 508, Appear to be repeated here in 2000+
         pData += 8;
         Set_UInt32(pData, GetCompatabilityOptions());
-        sal_uInt32 a32Bit = 0;
+//        sal_uInt32 a32Bit = 0;
 
         // i#78591#
 //      if (bUseThaiLineBreakingRules)
@@ -7035,7 +7034,7 @@ USHORT wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
         case 23:
         case 0xC615:
             if( pSprm[1 + mnDelta] != 255 )
-                nL = pSprm[1 + mnDelta] + aSprm.nLen;
+                nL = static_cast< USHORT >(pSprm[1 + mnDelta] + aSprm.nLen);
             else
             {
                 BYTE nDel = pSprm[2 + mnDelta];
@@ -7056,12 +7055,12 @@ USHORT wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm)
                 case L_VAR:
                     // Variable 1-Byte Length?
                     // Excl. Token + Var-Lengthbyte
-                    nL = pSprm[1 + mnDelta] + aSprm.nLen;
+                    nL = static_cast< USHORT >(pSprm[1 + mnDelta] + aSprm.nLen);
                     break;
                 case L_VAR2:
                     // Variable 2-Byte Length?
                     // Excl. Token + Var-Lengthbyte
-                    nL = SVBT16ToShort( &pSprm[1 + mnDelta] ) + aSprm.nLen - 1;
+                    nL = static_cast< USHORT >(SVBT16ToShort( &pSprm[1 + mnDelta] ) + aSprm.nLen - 1);
                     break;
                 default:
                     ASSERT(!this, "Unknown sprm varient");
