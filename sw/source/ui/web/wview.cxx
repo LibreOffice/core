@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:38:53 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:52:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include "itemdef.hxx"
+#include <itemdef.hxx>
 
 #ifndef _SVX_SRCHITEM_HXX
 #include <svx/srchitem.hxx>
@@ -75,30 +75,30 @@
 #ifndef _UNOTXVW_HXX //autogen
 #include <unotxvw.hxx>
 #endif
-#include "swtypes.hxx"
-#include "cmdid.h"
-#include "globals.hrc"
-#include "wrtsh.hxx"
-#include "edtwin.hxx"
-#include "wgrfsh.hxx"
-#include "wfrmsh.hxx"
-#include "wolesh.hxx"
-#include "wtabsh.hxx"
-#include "wlistsh.hxx"
-#include "wformsh.hxx"
-#include "wtextsh.hxx"
-#include "barcfg.hxx"
-#include "doc.hxx"
+#include <swtypes.hxx>
+#include <cmdid.h>
+#include <globals.hrc>
+#include <wrtsh.hxx>
+#include <edtwin.hxx>
+#include <wgrfsh.hxx>
+#include <wfrmsh.hxx>
+#include <wolesh.hxx>
+#include <wtabsh.hxx>
+#include <wlistsh.hxx>
+#include <wformsh.hxx>
+#include <wtextsh.hxx>
+#include <barcfg.hxx>
+#include <doc.hxx>
 
 // EIGENTLICH nicht moeglich !!
-#include "beziersh.hxx"
-#include "drawsh.hxx"
-#include "drwtxtsh.hxx"
+#include <beziersh.hxx>
+#include <drawsh.hxx>
+#include <drwtxtsh.hxx>
 
-#include "wview.hxx"
-#include "wdocsh.hxx"
-#include "web.hrc"
-#include "shells.hrc"
+#include <wview.hxx>
+#include <wdocsh.hxx>
+#include <web.hrc>
+#include <shells.hrc>
 
 #define SwWebView
 #define SearchAttributes
@@ -121,7 +121,7 @@
 #define ListInTable
 #define Page
 #include <svx/svxslots.hxx>
-#include "swslots.hxx"
+#include <swslots.hxx>
 
 
 SFX_IMPL_VIEWFACTORY(SwWebView, SW_RES(STR_NONAME))
@@ -146,8 +146,8 @@ TYPEINIT1(SwWebView,SwView)
 --------------------------------------------------*/
 
 
-SwWebView::SwWebView(SfxViewFrame* pFrame, SfxViewShell* pShell) :
-    SwView(pFrame, pShell)
+SwWebView::SwWebView(SfxViewFrame* _pFrame, SfxViewShell* _pShell) :
+    SwView(_pFrame, _pShell)
 {
 }
 
@@ -177,14 +177,14 @@ void SwWebView::SelectShell()
     SetLastTblFrmFmt(pCurTableFmt);
     //SEL_TBL und SEL_TBL_CELLS koennen verodert sein!
     int nNewSelectionType = (GetWrtShell().GetSelectionType()
-                                & ~SwWrtShell::SEL_TBL_CELLS);
+                                & ~nsSelectionType::SEL_TBL_CELLS);
 
-    int nSelectionType = GetSelectionType();
-    if ( nNewSelectionType == nSelectionType )
+    int _nSelectionType = GetSelectionType();
+    if ( nNewSelectionType == _nSelectionType )
     {
         GetViewFrame()->GetBindings().InvalidateAll( FALSE );
-        if ( nSelectionType & SwWrtShell::SEL_OLE ||
-             nSelectionType & SwWrtShell::SEL_GRF )
+        if ( _nSelectionType & nsSelectionType::SEL_OLE ||
+             _nSelectionType & nsSelectionType::SEL_GRF )
             //Fuer Grafiken und OLE kann sich natuerlich das Verb aendern!
             ImpSetVerb( nNewSelectionType );
     }
@@ -200,9 +200,9 @@ void SwWebView::SelectShell()
             rDispatcher.Flush();        // alle gecachten Shells wirklich loeschen
 
             //Zur alten Selektion merken welche Toolbar sichtbar war
-            USHORT nId = rDispatcher.GetObjectBarId( SFX_OBJECTBAR_OBJECT );
+            sal_Int32 nId = rDispatcher.GetObjectBarId( SFX_OBJECTBAR_OBJECT );
             if ( nId )
-                pBarCfg->SetTopToolbar( nSelectionType, nId );
+                pBarCfg->SetTopToolbar( _nSelectionType, nId );
 
             SfxShell *pSfxShell;
             USHORT i;
@@ -218,7 +218,7 @@ void SwWebView::SelectShell()
             rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE);
         }
 
-        FASTBOOL bInitFormShell = FALSE;
+        BOOL bInitFormShell = FALSE;
         if( !GetFormShell() )
         {
             bInitFormShell = TRUE;
@@ -226,66 +226,66 @@ void SwWebView::SelectShell()
             rDispatcher.Push( *GetFormShell() );
         }
 
-        FASTBOOL bSetExtInpCntxt = FALSE;
-        nSelectionType = nNewSelectionType;
-        SetSelectionType( nSelectionType );
+        BOOL bSetExtInpCntxt = FALSE;
+        _nSelectionType = nNewSelectionType;
+        SetSelectionType( _nSelectionType );
         ShellModes eShellMode;
 
-        if ( nSelectionType & SwWrtShell::SEL_OLE )
+        if ( _nSelectionType & nsSelectionType::SEL_OLE )
         {
-            eShellMode = SEL_OBJECT;
+            eShellMode = SHELL_MODE_OBJECT;
             SetShell( new SwWebOleShell( *this ));
             rDispatcher.Push( *GetCurShell() );
         }
-        else if ( nSelectionType & SwWrtShell::SEL_FRM
-            || nSelectionType & SwWrtShell::SEL_GRF)
+        else if ( _nSelectionType & nsSelectionType::SEL_FRM
+            || _nSelectionType & nsSelectionType::SEL_GRF)
         {
-            eShellMode = SEL_FRAME;
+            eShellMode = SHELL_MODE_FRAME;
             SetShell( new SwWebFrameShell( *this ));
             rDispatcher.Push( *GetCurShell() );
-            if(nSelectionType & SwWrtShell::SEL_GRF )
+            if(_nSelectionType & nsSelectionType::SEL_GRF )
             {
-                eShellMode = SEL_GRAPHIC;
+                eShellMode = SHELL_MODE_GRAPHIC;
                 SetShell( new SwWebGrfShell( *this ));
                 rDispatcher.Push( *GetCurShell() );
             }
         }
-        else if ( nSelectionType & SwWrtShell::SEL_FRM )
+        else if ( _nSelectionType & nsSelectionType::SEL_FRM )
         {
-            eShellMode = SEL_FRAME;
+            eShellMode = SHELL_MODE_FRAME;
             SetShell( new SwWebFrameShell( *this ));
             rDispatcher.Push( *GetCurShell() );
         }
-        else if ( nSelectionType & SwWrtShell::SEL_DRW )
+        else if ( _nSelectionType & nsSelectionType::SEL_DRW )
         {
-            eShellMode = SEL_DRAW;
+            eShellMode = SHELL_MODE_DRAW;
             SetShell( new svx::ExtrusionBar( this ) );
             rDispatcher.Push( *GetCurShell() );
 
-            eShellMode = SEL_DRAW;
+            eShellMode = SHELL_MODE_DRAW;
             SetShell( new svx::FontworkBar( this ) );
             rDispatcher.Push( *GetCurShell() );
 
             SetShell( new SwDrawShell( *this ));
             rDispatcher.Push( *GetCurShell() );
-            if ( nSelectionType & SwWrtShell::SEL_BEZ )
+            if ( _nSelectionType & nsSelectionType::SEL_BEZ )
             {
-                eShellMode = SEL_BEZIER;
+                eShellMode = SHELL_MODE_BEZIER;
                 SetShell( new SwBezierShell( *this ));
                 rDispatcher.Push( *GetCurShell() );
             }
 
         }
-        else if ( nSelectionType & SwWrtShell::SEL_DRW_FORM )
+        else if ( _nSelectionType & nsSelectionType::SEL_DRW_FORM )
         {
-            eShellMode = SEL_DRAW_FORM;
+            eShellMode = SHELL_MODE_DRAW_FORM;
             SetShell( new SwWebDrawFormShell( *this ));
 
             rDispatcher.Push( *GetCurShell() );
         }
-        else if ( nSelectionType & SwWrtShell::SEL_DRW_TXT )
+        else if ( _nSelectionType & nsSelectionType::SEL_DRW_TXT )
         {
-            eShellMode = SEL_DRAWTEXT;
+            eShellMode = SHELL_MODE_DRAWTEXT;
             rDispatcher.Push( *(new SwBaseShell( *this )) );
             SetShell( new SwDrawTextShell( *this ));
             rDispatcher.Push( *GetCurShell() );
@@ -293,24 +293,24 @@ void SwWebView::SelectShell()
         else
         {
             bSetExtInpCntxt = TRUE;
-            eShellMode = SEL_TEXT;
-            if ( nSelectionType & SwWrtShell::SEL_NUM )
+            eShellMode = SHELL_MODE_TEXT;
+            if ( _nSelectionType & nsSelectionType::SEL_NUM )
             {
-                eShellMode = SEL_LIST_TEXT;
+                eShellMode = SHELL_MODE_LIST_TEXT;
                 SetShell( new SwWebListShell( *this ));
                 rDispatcher.Push( *GetCurShell() );
             }
             SetShell( new SwWebTextShell(*this));
             rDispatcher.Push( *GetCurShell() );
-            if ( nSelectionType & SwWrtShell::SEL_TBL )
+            if ( _nSelectionType & nsSelectionType::SEL_TBL )
             {
-                eShellMode = eShellMode == SEL_LIST_TEXT ? SEL_TABLE_LIST_TEXT
-                                                        : SEL_TABLE_TEXT;
+                eShellMode = eShellMode == SHELL_MODE_LIST_TEXT ? SHELL_MODE_TABLE_LIST_TEXT
+                                                        : SHELL_MODE_TABLE_TEXT;
                 SetShell( new SwWebTableShell( *this ));
                 rDispatcher.Push( *GetCurShell() );
             }
         }
-        ImpSetVerb( nSelectionType );
+        ImpSetVerb( _nSelectionType );
         GetViewImpl()->SetShellMode(eShellMode);
 
         if( !GetDocShell()->IsReadOnly() )
