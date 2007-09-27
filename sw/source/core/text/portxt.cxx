@@ -4,9 +4,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:43:24 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:18:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,7 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
     // of some complex characters in RTL environment
     const sal_Bool bDoNotAddSpace =
             LATIN == nScript && ( nEnd == nPos + 1 ) && pSI &&
-            ( ::com::sun::star::i18n::ScriptType::COMPLEX ==
+            ( i18n::ScriptType::COMPLEX ==
               pSI->ScriptType( nPos + 1 ) ) &&
             rInf.GetTxtFrm() && rInf.GetTxtFrm()->IsRightToLeft();
 
@@ -624,7 +624,7 @@ void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 
 
-sal_Bool SwTxtPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const
+sal_Bool SwTxtPortion::GetExpTxt( const SwTxtSizeInfo &, XubString & ) const
 {
     return sal_False;
 }
@@ -654,16 +654,16 @@ xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
             GetExpTxt( rInf, aStr );
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
 
-            nCnt += lcl_AddSpace( rInf, &aStr, *this );
+            nCnt = nCnt + lcl_AddSpace( rInf, &aStr, *this );
             nPos = aStr.Len();
         }
     }
     else if( !IsDropPortion() )
     {
-        nCnt += lcl_AddSpace( rInf, 0, *this );
+        nCnt = nCnt + lcl_AddSpace( rInf, 0, *this );
         nPos = GetLen();
     }
-    rCharCnt += nPos;
+    rCharCnt = rCharCnt + nPos;
     return nCnt;
 }
 
@@ -684,7 +684,7 @@ long SwTxtPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) cons
             GetExpTxt( rInf, aStr );
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
             if( nSpaceAdd > 0 )
-                nCnt += lcl_AddSpace( rInf, &aStr, *this );
+                nCnt = nCnt + lcl_AddSpace( rInf, &aStr, *this );
             else
             {
                 nSpaceAdd = -nSpaceAdd;
@@ -695,7 +695,7 @@ long SwTxtPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) cons
     else if( !IsDropPortion() )
     {
         if( nSpaceAdd > 0 )
-            nCnt += lcl_AddSpace( rInf, 0, *this );
+            nCnt = nCnt + lcl_AddSpace( rInf, 0, *this );
         else
         {
             nSpaceAdd = -nSpaceAdd;
