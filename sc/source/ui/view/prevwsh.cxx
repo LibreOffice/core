@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:35:10 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 13:56:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -915,6 +915,9 @@ void ScPreviewShell::DoScroll( USHORT nMode )
     aCurPos.Y() = pVerScroll->GetThumbPos();
     aPrevPos = aCurPos;
 
+    long nThumbPos  = pVerScroll->GetThumbPos();
+    long nRangeMax  = pVerScroll->GetRangeMax();
+
     switch( nMode )
     {
         case SID_CURSORUP:
@@ -930,10 +933,44 @@ void ScPreviewShell::DoScroll( USHORT nMode )
             aCurPos.X() += nHLine;
             break;
         case SID_CURSORPAGEUP:
-            aCurPos.Y() -= nVPage;
+            if(nThumbPos==0)
+            {
+                long nPage = pPreview->GetPageNo();
+
+                if( nPage>0 )
+                {
+                    SfxViewFrame* pSfxViewFrame = GetViewFrame();
+                    SfxRequest aSfxRequest( pSfxViewFrame, SID_PREVIEW_PREVIOUS );
+                    Execute( aSfxRequest );
+                    aCurPos.Y() = nVRange;
+                }
+            }
+            else
+                aCurPos.Y() -= nVPage;
             break;
         case SID_CURSORPAGEDOWN:
-            aCurPos.Y() += nVPage;
+            if((abs(nVPage+nThumbPos-nRangeMax)<10)||(nVPage>nRangeMax))
+            {
+                long nPage = pPreview->GetPageNo();
+                long nTotal = pPreview->GetTotalPages();
+
+                // before testing for last page, make sure all page counts are calculated
+                if ( nPage+1 == nTotal && !pPreview->AllTested() )
+                {
+                    pPreview->CalcAll();
+                    nTotal = pPreview->GetTotalPages();
+                }
+
+                if( nPage<nTotal-1 )
+                {
+                    SfxViewFrame* pSfxViewFrame = GetViewFrame();
+                    SfxRequest aSfxRequest( pSfxViewFrame, SID_PREVIEW_NEXT );
+                    Execute( aSfxRequest );
+                    aCurPos.Y() = 0;
+                }
+            }
+            else
+                aCurPos.Y() += nVPage;
             break;
         case SID_CURSORHOME:
             aCurPos.Y() = 0;
