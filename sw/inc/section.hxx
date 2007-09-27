@@ -4,9 +4,9 @@
  *
  *  $RCSfile: section.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:14:42 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:09:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,13 +120,13 @@ class SW_DLLPUBLIC SwSection : public SwClient
     BOOL bConnectFlag : 1;      // Flag: "Verbindung zum Server" vorhanden?
 
 
-    SW_DLLPRIVATE void _SetHiddenFlag( int bHidden, int bCondition );
-    SW_DLLPRIVATE void _SetProtectFlag( int bFlag ) { bProtectFlag = bFlag; }
-    /* SW_DLLPUBLIC */ int _IsProtect() const;
+    SW_DLLPRIVATE void _SetHiddenFlag( BOOL bHidden, BOOL bCondition );
+    SW_DLLPRIVATE void _SetProtectFlag( BOOL bFlag ) { bProtectFlag = bFlag; }
+    /* SW_DLLPUBLIC */ BOOL _IsProtect() const;
 
     // --> FME 2004-06-22 #114856# edit in readonly sections
-    void _SetEditInReadonlyFlag( int bFlag ) { bEditInReadonlyFlag = bFlag; }
-    int _IsEditInReadonly() const;
+    void _SetEditInReadonlyFlag( BOOL bFlag ) { bEditInReadonlyFlag = bFlag; }
+    BOOL _IsEditInReadonly() const;
     // <--
 
 public:
@@ -139,7 +139,7 @@ public:
     // kopiere nur die Daten der Section!
     // Ableitung bleibt (beim Left) erhalten.
     SwSection& operator=( const SwSection& );
-    int operator==( const SwSection& rCmp ) const;
+    BOOL operator==( const SwSection& rCmp ) const;
 
     const String& GetName() const           { return sSectionNm; }
     void SetName( const String& rName )     { sSectionNm = rName; }
@@ -153,30 +153,30 @@ public:
 
     // setze die Hidden/Protected -> gesamten Baum updaten !
     // (Attribute/Flags werden gesetzt/erfragt)
-    int IsHidden() const { return bHidden; }
-    int IsProtect() const { return GetFmt() ? _IsProtect()
+    BOOL IsHidden() const { return bHidden; }
+    BOOL IsProtect() const { return GetFmt() ? _IsProtect()
                                             : IsProtectFlag(); }
 
     // --> FME 2004-06-22 #114856# edit in readonly sections
-    int IsEditInReadonly()const { return GetFmt() ? _IsEditInReadonly() : IsEditInReadonlyFlag(); }
-    void SetEditInReadonly( int bFlag = TRUE );
+    BOOL IsEditInReadonly()const { return GetFmt() ? _IsEditInReadonly() : IsEditInReadonlyFlag(); }
+    void SetEditInReadonly( BOOL bFlag = TRUE );
     // <--
 
-    void SetHidden( int bFlag = TRUE );
-    void SetProtect( int bFlag = TRUE );
+    void SetHidden( BOOL bFlag = TRUE );
+    void SetProtect( BOOL bFlag = TRUE );
 
     // erfrage die internen Flags (Zustand inklusive Parents nicht, was
     // aktuell an der Section gesetzt ist!!)
-    int IsHiddenFlag() const { return bHiddenFlag; }
-    int IsProtectFlag() const { return bProtectFlag; }
+    BOOL IsHiddenFlag() const { return bHiddenFlag; }
+    BOOL IsProtectFlag() const { return bProtectFlag; }
     // --> FME 2004-06-22 #114856# edit in readonly sections
-    int IsEditInReadonlyFlag() const { return bEditInReadonlyFlag; }
+    BOOL IsEditInReadonlyFlag() const { return bEditInReadonlyFlag; }
     // <--
 
-    void SetCondHidden( int bFlag = TRUE );
-    int IsCondHidden() const { return bCondHiddenFlag; }
+    void SetCondHidden( BOOL bFlag = TRUE );
+    BOOL IsCondHidden() const { return bCondHiddenFlag; }
     // erfrage (auch ueber die Parents), ob diese Section versteckt sein soll.
-    int CalcHiddenFlag() const;
+    BOOL CalcHiddenFlag() const;
 
 
     inline SwSection* GetParent() const;
@@ -274,11 +274,11 @@ public:
     //  - alle oder nur die, die sich im normalten Nodes-Array befinden
     USHORT GetChildSections( SwSections& rArr,
                             SectionSort eSort = SORTSECT_NOT,
-                            int bAllSections = TRUE ) const;
+                            BOOL bAllSections = TRUE ) const;
 
     // erfrage, ob sich die Section im Nodes-Array oder UndoNodes-Array
     // befindet.
-    int IsInNodesArr() const;
+    BOOL IsInNodesArr() const;
 
           SwSectionNode* GetSectionNode( BOOL bAlways = FALSE );
     const SwSectionNode* GetSectionNode( BOOL bAlways = FALSE ) const
@@ -292,8 +292,8 @@ public:
 
 inline SwSection* SwSection::GetParent() const
 {
-    register SwSectionFmt* pFmt = GetFmt();
-    register SwSection* pRet = 0;
+    SwSectionFmt* pFmt = GetFmt();
+    SwSection* pRet = 0;
     if( pFmt )
         pRet = pFmt->GetParentSection();
     return pRet;
@@ -301,7 +301,7 @@ inline SwSection* SwSection::GetParent() const
 
 inline SwSectionFmt* SwSectionFmt::GetParent() const
 {
-    register SwSectionFmt* pRet = 0;
+    SwSectionFmt* pRet = 0;
     if( GetRegisteredIn() )
         pRet = PTR_CAST( SwSectionFmt, GetRegisteredIn() );
     return pRet;
@@ -309,8 +309,8 @@ inline SwSectionFmt* SwSectionFmt::GetParent() const
 
 inline SwSection* SwSectionFmt::GetParentSection() const
 {
-    register SwSectionFmt* pParent = GetParent();
-    register SwSection* pRet = 0;
+    SwSectionFmt* pParent = GetParent();
+    SwSection* pRet = 0;
     if( pParent )
         pRet = pParent->_GetSection();
     return pRet;
