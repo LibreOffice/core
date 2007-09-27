@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ribbar.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:59:34 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:08:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@
 #define RID_TBX_FORMULA     (RC_RIBBAR_BEGIN +6)
 #define FT_POS              (RC_RIBBAR_BEGIN +7)
 #define BT_FORMULA          (RC_RIBBAR_BEGIN +8)
-#define STR_FORMULA         (RC_RIBBAR_BEGIN +9)
+#define STR_TBL_FORMULA                  (RC_RIBBAR_BEGIN +9)
 
 #define STR_BACKGROUND_PATTERN      (RC_RIBBAR_BEGIN + 10)
 #define STR_BACKGROUND_COLOR        (RC_RIBBAR_BEGIN + 11)
