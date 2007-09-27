@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-12 10:56:06 $
+#   last change: $Author: hr $ $Date: 2007-09-27 13:07:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,31 +33,29 @@
 #
 #*************************************************************************
 
-PRJ := ..$/..
-PRJNAME := stoc
-TARGET := uriproc
-
+PRJ=..$/..
+PRJNAME=stoc
+TARGET=uriproc
 ENABLE_EXCEPTIONS := TRUE
 
+# --- openoffice.org.orig/Settings -----------------------------------------------------
+
 .INCLUDE: settings.mk
+DLLPRE = 
 
-DLLPRE = # no leading "lib" on .so files
+# ------------------------------------------------------------------
 
-SHL1TARGET = $(TARGET).uno
-SHL1OBJS = \
+.INCLUDE :  ..$/cppumaker.mk
+
+SLOFILES = \
     $(SLO)$/ExternalUriReferenceTranslator.obj \
     $(SLO)$/UriReference.obj \
     $(SLO)$/UriReferenceFactory.obj \
     $(SLO)$/UriSchemeParser_vndDOTsunDOTstarDOTexpand.obj \
     $(SLO)$/UriSchemeParser_vndDOTsunDOTstarDOTscript.obj \
     $(SLO)$/VndSunStarPkgUrlReferenceFactory.obj \
-    $(SLO)$/component.obj \
     $(SLO)$/supportsService.obj
-SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
-SHL1VERSIONMAP = version.map
-SHL1IMPLIB = i$(SHL1TARGET)
-DEF1NAME = $(SHL1TARGET)
 
-SLOFILES = $(SHL1OBJS)
+# ------------------------------------------------------------------
 
 .INCLUDE: target.mk
