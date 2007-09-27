@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfsh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:19:13 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 12:02:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 class SwGrfShell: public SwBaseShell
 {
 public:
-    SFX_DECL_INTERFACE(SW_GRFSHELL);
+    SFX_DECL_INTERFACE(SW_GRFSHELL)
 
     void    Execute(SfxRequest &);
     void    ExecAttr(SfxRequest &);
