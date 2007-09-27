@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:21:22 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 10:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,7 +233,7 @@ public:
 
 SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName,
-                const Reference< xml::sax::XAttributeList > & xAttrList ) :
+                const Reference< xml::sax::XAttributeList > & /*xAttrList*/ ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
 }
@@ -245,9 +245,9 @@ SwXMLBodyContext_Impl::~SwXMLBodyContext_Impl()
 TYPEINIT1( SwXMLBodyContext_Impl, SvXMLImportContext );
 
 SvXMLImportContext *SwXMLBodyContext_Impl::CreateChildContext(
-        sal_uInt16 nPrefix,
+        sal_uInt16 /*nPrefix*/,
         const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
+        const Reference< xml::sax::XAttributeList > & /*xAttrList*/ )
 {
     return GetSwImport().CreateBodyContentContext( rLocalName );
 }
@@ -281,7 +281,7 @@ public:
 
 SwXMLDocContext_Impl::SwXMLDocContext_Impl( SwXMLImport& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName,
-                const Reference< xml::sax::XAttributeList > & xAttrList ) :
+                const Reference< xml::sax::XAttributeList > & /*xAttrList*/ ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
 }
@@ -498,23 +498,23 @@ SvXMLImportContext *SwXMLImport::CreateContext(
 
 // #110680#
 SwXMLImport::SwXMLImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     sal_uInt16 nImportFlags)
 :   SvXMLImport( xServiceFactory, nImportFlags ),
-    bLoadDoc( sal_True ),
-    bInsert( sal_False ),
-    bBlock( sal_False ),
-    bOrganizerMode( sal_False ),
-    nStyleFamilyMask( SFX_STYLE_FAMILY_ALL ),
+    pSttNdIdx( 0 ),
+    pTableItemMapper( 0 ),
     pDocElemTokenMap( 0 ),
     pTableElemTokenMap( 0 ),
     pTableCellAttrTokenMap( 0 ),
-    pTableItemMapper( 0 ),
-    pSttNdIdx( 0 ),
-    bShowProgress( sal_True ),
-    bPreserveRedlineMode( sal_True ),
     pGraphicResolver( 0 ),
-    pEmbeddedResolver( 0 )
+    pEmbeddedResolver( 0 ),
+    nStyleFamilyMask( SFX_STYLE_FAMILY_ALL ),
+    bLoadDoc( sal_True ),
+    bInsert( sal_False ),
+    bBlock( sal_False ),
+    bShowProgress( sal_True ),
+    bOrganizerMode( sal_False ),
+    bPreserveRedlineMode( sal_True )
 {
     _InitItemImport();
 
@@ -523,14 +523,14 @@ SwXMLImport::SwXMLImport(
 #ifdef XML_CORE_API
 // #110680#
 SwXMLImport::SwXMLImport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SwDoc& rDoc,
     const SwPaM& rPaM,
     sal_Bool bLDoc,
     sal_Bool bInsertMode,
     sal_uInt16 nStyleFamMask,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > & rEGO,
+    const uno::Reference<   frame::XModel > & rModel,
+    const uno::Reference<   document::XGraphicObjectResolver > & rEGO,
     SvStorage *pPkg )
 :   SvXMLImport( xServiceFactory, rModel, rEGO ),
     bLoadDoc( bLDoc ),
@@ -606,7 +606,7 @@ sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
-            return (sal_Int64)this;
+        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
     }
     return SvXMLImport::getSomething( rId );
 }
@@ -617,9 +617,8 @@ OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCursor >& rT
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     if( !xCrsrTunnel.is() )
         return 0;
-    OTextCursorHelper *pTxtCrsr =
-        (OTextCursorHelper *)xCrsrTunnel->getSomething(
-                                            OTextCursorHelper::getUnoTunnelId() );
+    OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper *>(
+            sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething(  OTextCursorHelper::getUnoTunnelId() )));
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     return pTxtCrsr;
 }
@@ -867,9 +866,8 @@ void SwXMLImport::endDocument( void )
         Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
                                               UNO_QUERY);
         ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-        OTextCursorHelper *pTxtCrsr =
-                (OTextCursorHelper*)xCrsrTunnel->getSomething(
-                                            OTextCursorHelper::getUnoTunnelId() );
+        OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper *>(
+                sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
         ASSERT( pTxtCrsr, "SwXTextCursor missing" );
         SwPaM *pPaM = pTxtCrsr->GetPaM();
         if( IsInsertMode() && pSttNdIdx->GetIndex() )
@@ -1115,8 +1113,8 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     if( !xTextTunnel.is() )
         return;
 
-    SwXText *pText = (SwXText *)xTextTunnel->getSomething(
-                                        SwXText::getUnoTunnelId() );
+    SwXText *pText = reinterpret_cast< SwXText *>(
+            sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
     ASSERT( pText, "SwXText missing" );
     if( !pText )
         return;
@@ -1144,25 +1142,25 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaTop" ) ) )
         {
             pValue->Value >>= nTmp;
-            aRect.setY( bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp );
+            aRect.setY( static_cast< long >(bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp) );
         }
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaLeft" ) ) )
         {
             pValue->Value >>= nTmp;
-            aRect.setX( bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp );
+            aRect.setX( static_cast< long >(bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp) );
         }
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaWidth" ) ) )
         {
             pValue->Value >>= nTmp;
             Size aSize( aRect.GetSize() );
-            aSize.Width() = bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp;
+            aSize.Width() = static_cast< long >(bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp);
             aRect.SetSize( aSize );
         }
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaHeight" ) ) )
         {
             pValue->Value >>= nTmp;
             Size aSize( aRect.GetSize() );
-            aSize.Height() = bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp;
+            aSize.Height() = static_cast< long >(bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp);
             aRect.SetSize( aSize );
         }
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowRedlineChanges" ) ) )
@@ -1269,7 +1267,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     while( nCount-- )
     {
-        ULONG nHash = 0;
         if( !bIsUserSetting )
         {
             // test over the hash value if the entry is in the table.
@@ -1485,8 +1482,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
     if( xTextTunnel.is() )
     {
-        SwXText *pText = (SwXText *)xTextTunnel->getSomething(
-                                        SwXText::getUnoTunnelId() );
+        SwXText *pText = reinterpret_cast< SwXText *>(
+                sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
         ASSERT( pText, "SwXText missing" );
         if( pText )
         {
@@ -1683,32 +1680,26 @@ OUString SAL_CALL SwXMLImport::getImplementationName()
     {
         case IMPORT_ALL:
             return SwXMLImport_getImplementationName();
-            break;
         case (IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_FONTDECLS):
             return SwXMLImportStyles_getImplementationName();
-            break;
         case (IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS):
             return SwXMLImportContent_getImplementationName();
-            break;
         case IMPORT_META:
             return SwXMLImportMeta_getImplementationName();
-            break;
         case IMPORT_SETTINGS:
             return SwXMLImportSettings_getImplementationName();
-            break;
         default:
             // generic name for 'unknown' cases
             return OUString( RTL_CONSTASCII_USTRINGPARAM(
                 "com.sun.star.comp.Writer.SwXMLImport" ) );
-            break;
     }
 }
 
 SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport& rImport )
 {
     uno::Reference<lang::XUnoTunnel> xModelTunnel( rImport.GetModel(), uno::UNO_QUERY );
-    SwXTextDocument *pTxtDoc = (SwXTextDocument*)xModelTunnel->getSomething(
-                                        SwXTextDocument::getUnoTunnelId() );
+    SwXTextDocument *pTxtDoc = reinterpret_cast< SwXTextDocument *>(
+            sal::static_int_cast< sal_IntPtr >(  xModelTunnel->getSomething(SwXTextDocument::getUnoTunnelId() )));
     ASSERT( pTxtDoc, "Where is my model?" )
     ASSERT( pTxtDoc->GetDocShell(), "Where is my shell?" )
     SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
