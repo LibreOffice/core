@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viscrs.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:55:57 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 08:17:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,11 +76,11 @@ public:
     void Show();
     void Hide();
 
-    FASTBOOL IsVisible() const { return bIsVisible; }
+    BOOL IsVisible() const { return bIsVisible; }
     void SetDragCrsr( BOOL bFlag = TRUE ) { bIsDragCrsr = bFlag; }
 
 #ifdef SW_CRSR_TIMER
-    FASTBOOL ChgTimerFlag( BOOL bTimerOn = TRUE );
+    BOOL ChgTimerFlag( BOOL bTimerOn = TRUE );
 #endif
 };
 
@@ -170,17 +170,19 @@ public:
     virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
     virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
 
-    FASTBOOL UpDown( BOOL bUp, USHORT nCnt = 1 );
+    using SwCursor::UpDown;
+    BOOL UpDown( BOOL bUp, USHORT nCnt = 1 );
 
     // TRUE: an die Position kann der Cursor gesetzt werden
-    virtual FASTBOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
+    virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
 
 #ifndef PRODUCT
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor
-    virtual FASTBOOL IsSelOvr( int eFlags =
-                                ( SELOVER_CHECKNODESSECTION |
-                                  SELOVER_TOGGLE | SELOVER_CHANGEPOS ));
+    virtual BOOL IsSelOvr( int eFlags =
+                                ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
+                                  nsSwCursorSelOverFlags::SELOVER_TOGGLE |
+                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
 #endif
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwShellCrsr )
@@ -207,7 +209,7 @@ public:
     virtual void FillRects();   // fuer Table- und normalen Crsr
 
     // Pruefe, ob sich der SPoint innerhalb der Tabellen-SSelection befindet
-    FASTBOOL IsInside( const Point& rPt ) const;
+    BOOL IsInside( const Point& rPt ) const;
 
     virtual void SetMark();
     virtual SwCursor* Create( SwPaM* pRing = 0 ) const;
@@ -217,14 +219,15 @@ public:
     virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
 
     // TRUE: an die Position kann der Cursor gesetzt werden
-    virtual FASTBOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
+    virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
 
 #ifndef PRODUCT
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor
-    virtual FASTBOOL IsSelOvr( int eFlags =
-                                ( SELOVER_CHECKNODESSECTION |
-                                  SELOVER_TOGGLE | SELOVER_CHANGEPOS ));
+    virtual BOOL IsSelOvr( int eFlags =
+                                ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
+                                  nsSwCursorSelOverFlags::SELOVER_TOGGLE |
+                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
 #endif
 };
 
