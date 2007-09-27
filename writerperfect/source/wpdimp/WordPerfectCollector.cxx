@@ -26,7 +26,13 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 
+#if defined _MSC_VER
+#pragma warning( push, 1 )
+#endif
 #include "WordPerfectCollector.hxx"
+#if defined _MSC_VER
+#pragma warning( pop )
+#endif
 
 WordPerfectCollector::WordPerfectCollector(WPXInputStream *pInput, DocumentHandler *pHandler) :
     DocumentCollector(pInput, pHandler)
