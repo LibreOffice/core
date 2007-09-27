@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:24:58 $
+#   last change: $Author: hr $ $Date: 2007-09-27 12:54:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,17 +70,11 @@ REGISTERLIBS= \
 # Additional libraries
 DLLPRE_NO=
 REGISTERLIBS+= \
-    $(DLLPRE_NO)shlibloader.uno$(DLLPOST) \
     $(DLLPRE_NO)dynamicloader.uno$(DLLPOST) \
     $(DLLPRE_NO)namingservice.uno$(DLLPOST) \
-    $(DLLPRE_NO)servicemgr.uno$(DLLPOST) \
+    $(DLLPRE_NO)bootstrap.uno$(DLLPOST) \
     $(DLLPRE)xsec_fw$(DLLPOST) \
     $(DLLPRE)xsec_xmlsec$(DLLPOST)
-
-#	$(DLLPRE)implreg.uno$(DLLPOST) \
-#	$(DLLPRE)nestedreg.uno$(DLLPOST) \
-#	$(DLLPRE)simplereg.uno$(DLLPOST) \
-
 
 .IF "$(GUI)" == "UNX"
 MY_DLLDIR=$(SOLARLIBDIR)
