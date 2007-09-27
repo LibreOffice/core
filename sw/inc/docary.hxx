@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docary.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:40:59 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 07:59:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ class SwOLENode;
 
 namespace com { namespace sun { namespace star { namespace i18n {
     struct ForbiddenCharacters;    // comes from the I18N UNO interface
-}}}};
+}}}}
 
 #ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
@@ -135,11 +135,11 @@ public:
     USHORT FindPrevSeqNo( USHORT nSeqNo, USHORT nSttPos,
                             USHORT nLookahead = 20 ) const;
 
-    _SwRedlineTbl::Count;
-    _SwRedlineTbl::operator[];
-    _SwRedlineTbl::GetObject;
-    _SwRedlineTbl::Seek_Entry;
-    _SwRedlineTbl::GetPos;
+    using _SwRedlineTbl::Count;
+    using _SwRedlineTbl::operator[];
+    using _SwRedlineTbl::GetObject;
+    using _SwRedlineTbl::Seek_Entry;
+    using _SwRedlineTbl::GetPos;
 };
 
 typedef SwUnoCrsr* SwUnoCrsrPtr;
