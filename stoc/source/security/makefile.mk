@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:50:55 $
+#   last change: $Author: hr $ $Date: 2007-09-27 13:01:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,39 +35,21 @@
 PRJ=..$/..
 
 PRJNAME=stoc
-TARGET = security.uno
+TARGET = security
 ENABLE_EXCEPTIONS=TRUE
 BOOTSTRAP_SERVICE=TRUE
-COMP1TYPELIST = sec
+UNOUCROUT=$(OUT)$/inc$/bootstrap
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-DLLPRE =
 
 # ------------------------------------------------------------------
-
-.INCLUDE :  ..$/cppumaker.mk
 
 SLOFILES= \
         $(SLO)$/permissions.obj			\
         $(SLO)$/access_controller.obj		\
         $(SLO)$/file_policy.obj
-
-SHL1TARGET=$(TARGET)
-
-SHL1STDLIBS= \
-        $(CPPUHELPERLIB)	\
-        $(SALHELPERLIB)		\
-        $(CPPULIB)		\
-        $(SALLIB)
-SHL1VERSIONMAP = sec.map
-
-SHL1DEPN=
-SHL1IMPLIB=i$(TARGET)
-SHL1LIBS=$(SLB)$/$(TARGET).lib
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=$(SHL1TARGET)
 
 .IF "$(debug)" != ""
 
