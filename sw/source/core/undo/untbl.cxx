@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:21:08 $
+ *  last change: $Author: hr $ $Date: 2007-09-27 09:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,11 +191,11 @@ class _SaveTable
 {
     friend class _SaveBox;
     friend class _SaveLine;
+    SfxItemSet aTblSet;
     _SaveLine* pLine;
     const SwTable* pSwTable;
     SfxItemSets aSets;
     SwFrmFmts aFrmFmts;
-    SfxItemSet aTblSet;
     USHORT nLineCount;
     BOOL bModifyBox : 1;
     BOOL bSaveFormula : 1;
@@ -313,9 +313,9 @@ SwUndoInsTbl::SwUndoInsTbl( const SwPosition& rPos, USHORT nCl, USHORT nRw,
                             const SwTableAutoFmt* pTAFmt,
                             const SvUShorts* pColArr,
                             const String & rName)
-    : SwUndo( UNDO_INSTABLE ), nSttNode( rPos.nNode.GetIndex() ),
-    nRows( nRw ), nCols( nCl ), nAdjust( nAdj ), pDDEFldType( 0 ),
-    aInsTblOpts( rInsTblOpts ), pColWidth( 0 ), pRedlData( 0 ), pAutoFmt( 0 )
+    : SwUndo( UNDO_INSTABLE ),
+    aInsTblOpts( rInsTblOpts ), pDDEFldType( 0 ), pColWidth( 0 ), pRedlData( 0 ), pAutoFmt( 0 ),
+    nSttNode( rPos.nNode.GetIndex() ), nRows( nRw ), nCols( nCl ), nAdjust( nAdj )
 {
     if( pColArr )
     {
@@ -329,7 +329,7 @@ SwUndoInsTbl::SwUndoInsTbl( const SwPosition& rPos, USHORT nCl, USHORT nRw,
     SwDoc& rDoc = *rPos.nNode.GetNode().GetDoc();
     if( rDoc.IsRedlineOn() )
     {
-        pRedlData = new SwRedlineData( IDocumentRedlineAccess::REDLINE_INSERT, rDoc.GetRedlineAuthor() );
+        pRedlData = new SwRedlineData( nsRedlineType_t::REDLINE_INSERT, rDoc.GetRedlineAuthor() );
         SetRedlineMode( rDoc.GetRedlineMode() );
     }
 
@@ -397,7 +397,7 @@ void SwUndoInsTbl::Redo( SwUndoIter& rUndoIter )
     SwPosition aPos( *rUndoIter.pAktPam->GetPoint() );
     aPos.nNode = nSttNode;
     const SwTable* pTbl = rDoc.InsertTable( aInsTblOpts, aPos, nRows, nCols,
-                                            (SwHoriOrient)nAdjust,
+                                            nAdjust,
                                             pAutoFmt, pColWidth );
     ((SwFrmFmt*)pTbl->GetFrmFmt())->SetName( sTblNm );
     SwTableNode* pTblNode = (SwTableNode*)rDoc.GetNodes()[nSttNode]->GetTableNode();
@@ -412,7 +412,7 @@ void SwUndoInsTbl::Redo( SwUndoIter& rUndoIter )
     }
 
     if( (pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() )) ||
-        ( !( IDocumentRedlineAccess::REDLINE_IGNORE & GetRedlineMode() ) &&
+        ( !( nsRedlineMode_t::REDLINE_IGNORE & GetRedlineMode() ) &&
             rDoc.GetRedlineTbl().Count() ))
     {
         SwPaM aPam( *pTblNode->EndOfSectionNode(), *pTblNode, 1 );
@@ -422,8 +422,8 @@ void SwUndoInsTbl::Redo( SwUndoIter& rUndoIter )
 
         if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) )
         {
-            IDocumentRedlineAccess::RedlineMode_t eOld = rDoc.GetRedlineMode();
-            rDoc.SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)(eOld & ~IDocumentRedlineAccess::REDLINE_IGNORE));
+            RedlineMode_t eOld = rDoc.GetRedlineMode();
+            rDoc.SetRedlineMode_intern((RedlineMode_t)(eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
 
             rDoc.AppendRedline( new SwRedline( *pRedlData, aPam ), true);
             rDoc.SetRedlineMode_intern( eOld );
@@ -437,7 +437,7 @@ void SwUndoInsTbl::Redo( SwUndoIter& rUndoIter )
 void SwUndoInsTbl::Repeat( SwUndoIter& rUndoIter )
 {
     rUndoIter.GetDoc().InsertTable( aInsTblOpts, *rUndoIter.pAktPam->GetPoint(),
-                                        nRows, nCols, (SwHoriOrient)nAdjust,
+                                        nRows, nCols, nAdjust,
                                         pAutoFmt, pColWidth );
 }
 
@@ -480,11 +480,10 @@ SwTblToTxtSave::SwTblToTxtSave( SwDoc& rDoc, ULONG nNd, ULONG nEndIdx, xub_StrLe
 
 SwUndoTblToTxt::SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh )
     : SwUndo( UNDO_TABLETOTEXT ),
-    nSttNd( 0 ), nEndNd( 0 ), cTrenner( cCh ), pDDEFldType( 0 ),
-    nAdjust( rTbl.GetFrmFmt()->GetHoriOrient().GetHoriOrient() ),
-    sTblNm( rTbl.GetFrmFmt()->GetName() ),
-    nHdlnRpt( rTbl.GetRowsToRepeat() ),
-    pHistory( 0 )
+    sTblNm( rTbl.GetFrmFmt()->GetName() ), pDDEFldType( 0 ), pHistory( 0 ),
+    nSttNd( 0 ), nEndNd( 0 ),
+    nAdjust( static_cast<USHORT>(rTbl.GetFrmFmt()->GetHoriOrient().GetHoriOrient()) ),
+    cTrenner( cCh ), nHdlnRpt( rTbl.GetRowsToRepeat() )
 {
     pTblSave = new _SaveTable( rTbl );
     pBoxSaves = new SwTblToTxtSaves( (BYTE)rTbl.GetTabSortBoxes().Count() );
@@ -542,7 +541,6 @@ void SwUndoTblToTxt::Undo( SwUndoIter& rUndoIter )
     pPam->GetPoint()->nNode = aEndIdx;
     rDoc.DelNumRules( *pPam );
     pPam->DeleteMark();
-    SwNode2Layout* pNode2Layout = NULL;
 
     // dann sammel mal alle Uppers ein
     SwNode2Layout aNode2Layout( aFrmIdx.GetNode() );
@@ -768,8 +766,8 @@ SwUndoTxtToTbl::SwUndoTxtToTbl( const SwPaM& rRg,
                                 sal_Unicode cCh, USHORT nAdj,
                                 const SwTableAutoFmt* pAFmt )
     : SwUndo( UNDO_TEXTTOTABLE ), SwUndRng( rRg ), aInsTblOpts( rInsTblOpts ),
-      pAutoFmt( 0 ), nAdjust( nAdj ), cTrenner( cCh ), pDelBoxes( 0 ),
-      pHistory( 0 )
+      pDelBoxes( 0 ), pAutoFmt( 0 ),
+      pHistory( 0 ), cTrenner( cCh ), nAdjust( nAdj )
 {
     if( pAFmt )
         pAutoFmt = new SwTableAutoFmt( *pAFmt );
@@ -872,7 +870,7 @@ void SwUndoTxtToTbl::Redo( SwUndoIter& rUndoIter )
 
     const SwTable* pTable = rUndoIter.GetDoc().TextToTable(
                 aInsTblOpts, *rUndoIter.pAktPam, cTrenner,
-                (SwHoriOrient)nAdjust, pAutoFmt );
+                nAdjust, pAutoFmt );
     ((SwFrmFmt*)pTable->GetFrmFmt())->SetName( sTblNm );
 }
 
@@ -882,7 +880,7 @@ void SwUndoTxtToTbl::Repeat( SwUndoIter& rUndoIter )
     // keine TABLE IN TABLE
     if( !rUndoIter.pAktPam->GetNode()->FindTableNode() )
         rUndoIter.GetDoc().TextToTable( aInsTblOpts, *rUndoIter.pAktPam,
-                                        cTrenner, (SwHoriOrient)nAdjust,
+                                        cTrenner, nAdjust,
                                         pAutoFmt );
 }
 
@@ -951,7 +949,7 @@ void SwUndoTblHeadline::Repeat( SwUndoIter& rUndoIter )
 
 _SaveTable::_SaveTable( const SwTable& rTbl, USHORT nLnCnt, BOOL bSaveFml )
     : aTblSet( *rTbl.GetFrmFmt()->GetAttrSet().GetPool(), aTableSetRange ),
-    nLineCount( nLnCnt ), pSwTable( &rTbl ), bSaveFormula( bSaveFml )
+    pSwTable( &rTbl ), nLineCount( nLnCnt ), bSaveFormula( bSaveFml )
 {
     bModifyBox = FALSE;
     bNewModel = rTbl.IsNewModel();
@@ -1073,9 +1071,8 @@ void _SaveTable::CreateNew( SwTable& rTbl, BOOL bCreateFrms,
     USHORT n;
 
     _FndBox aTmpBox( 0, 0 );
-    if( bRestoreChart )
-        // ? TL_CHART2: notification or locking of controller required ?
-        ;
+    //if( bRestoreChart )
+    //    // ? TL_CHART2: notification or locking of controller required ?
     aTmpBox.DelFrms( rTbl );
 
     // zuerst die Attribute des TabellenFrmFormates zurueck holen
@@ -1293,7 +1290,7 @@ void _SaveLine::CreateNew( SwTable& rTbl, SwTableBox& rParent, _SaveTable& rSTbl
 
 
 _SaveBox::_SaveBox( _SaveBox* pPrev, const SwTableBox& rBox, _SaveTable& rSTbl )
-    : nSttNode( ULONG_MAX ), nRowSpan(0), pNext( 0 )
+    : pNext( 0 ), nSttNode( ULONG_MAX ), nRowSpan(0)
 {
     Ptrs.pLine = 0;
 
@@ -1398,7 +1395,6 @@ void _SaveBox::SaveCntntAttrs( SwDoc* pDoc )
     }
     else
     {
-        USHORT nSet = 0;
         ULONG nEnd = pDoc->GetNodes()[ nSttNode ]->EndOfSectionIndex();
         Ptrs.pCntntAttrs = new SfxItemSets( (BYTE)(nEnd - nSttNode - 1 ), 5 );
         for( ULONG n = nSttNode + 1; n < nEnd; ++n )
@@ -1521,8 +1517,8 @@ void SwUndoAttrTbl::Redo( SwUndoIter& rUndoIter )
 SwUndoTblAutoFmt::SwUndoTblAutoFmt( const SwTableNode& rTblNd,
                                     const SwTableAutoFmt& rAFmt )
     : SwUndo( UNDO_TABLE_AUTOFMT ),
-    nSttNode( rTblNd.GetIndex() ),
-    bSaveCntntAttr( FALSE ), pUndos( 0 )
+    nSttNode( rTblNd.GetIndex() ), pUndos( 0 ),
+    bSaveCntntAttr( FALSE )
 {
     pSaveTbl = new _SaveTable( rTblNd.GetTable() );
 
@@ -1587,17 +1583,17 @@ void SwUndoTblAutoFmt::Redo( SwUndoIter& rUndoIter )
 /*  */
 
 
-SwUndoTblNdsChg::SwUndoTblNdsChg( USHORT nAction,
+SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
                                     const SwSelBoxes& rBoxes,
                                     const SwTableNode& rTblNd,
                                     long nMn, long nMx,
                                     USHORT nCnt, BOOL bFlg, BOOL bSmHght )
     : SwUndo( nAction ),
-    nSttNode( rTblNd.GetIndex() ),
     aBoxes( rBoxes.Count() < 255 ? (BYTE)rBoxes.Count() : 255, 10 ),
     nMin( nMn ), nMax( nMx ),
+    nSttNode( rTblNd.GetIndex() ), nCurrBox( 0 ),
     nCount( nCnt ), nRelDiff( 0 ), nAbsDiff( 0 ),
-    nSetColType( USHRT_MAX ), nCurrBox( 0 ),
+    nSetColType( USHRT_MAX ),
     bFlag( bFlg ),
     bSameHeight( bSmHght )
 {
@@ -1612,16 +1608,17 @@ SwUndoTblNdsChg::SwUndoTblNdsChg( USHORT nAction,
 }
 
 
-SwUndoTblNdsChg::SwUndoTblNdsChg( USHORT nAction,
+SwUndoTblNdsChg::SwUndoTblNdsChg( SwUndoId nAction,
                                     const SwSelBoxes& rBoxes,
                                     const SwTableNode& rTblNd )
     : SwUndo( nAction ),
-    nSttNode( rTblNd.GetIndex() ),
     aBoxes( rBoxes.Count() < 255 ? (BYTE)rBoxes.Count() : 255, 10 ),
     nMin( 0 ), nMax( 0 ),
+    nSttNode( rTblNd.GetIndex() ), nCurrBox( 0 ),
     nCount( 0 ), nRelDiff( 0 ), nAbsDiff( 0 ),
-    nSetColType( USHRT_MAX ), nCurrBox( 0 ),
-    bFlag( FALSE )
+    nSetColType( USHRT_MAX ),
+    bFlag( FALSE ),
+    bSameHeight( FALSE )
 {
     Ptrs.pNewSttNds = 0;
 
@@ -1762,7 +1759,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
 
             // find the line number difference
             // (to help determine bNodesMoved flag below)
-            nLineDiff -= nLineNo;
+            nLineDiff = nLineDiff - nLineNo;
             ASSERT( pSourceBox, "Splitted source box not found!" );
             // find out how many nodes the source box used to have
             // (to help determine bNodesMoved flag below)
@@ -2003,17 +2000,17 @@ void SwUndoTblNdsChg::Redo( SwUndoIter& rUndoIter )
 
             switch( nSetColType & 0xff )
             {
-            case WH_COL_LEFT:
-            case WH_COL_RIGHT:
-            case WH_CELL_LEFT:
-            case WH_CELL_RIGHT:
+            case nsTblChgWidthHeightType::WH_COL_LEFT:
+            case nsTblChgWidthHeightType::WH_COL_RIGHT:
+            case nsTblChgWidthHeightType::WH_CELL_LEFT:
+            case nsTblChgWidthHeightType::WH_CELL_RIGHT:
                  rTbl.SetColWidth( *pBox, nSetColType, nAbsDiff,
                                     nRelDiff, (SwUndo**)&pUndo );
                 break;
-            case WH_ROW_TOP:
-            case WH_ROW_BOTTOM:
-            case WH_CELL_TOP:
-            case WH_CELL_BOTTOM:
+            case nsTblChgWidthHeightType::WH_ROW_TOP:
+            case nsTblChgWidthHeightType::WH_ROW_BOTTOM:
+            case nsTblChgWidthHeightType::WH_CELL_TOP:
+            case nsTblChgWidthHeightType::WH_CELL_BOTTOM:
                 rTbl.SetRowHeight( *pBox, nSetColType, nAbsDiff,
                                     nRelDiff, (SwUndo**)&pUndo );
                 break;
@@ -2032,6 +2029,8 @@ void SwUndoTblNdsChg::Redo( SwUndoIter& rUndoIter )
         }
         nSttNode = pTblNd->GetIndex();
         break;
+    default:
+        ;
     }
     ClearFEShellTabCols();
     CHECK_TABLE( pTblNd->GetTable() )
@@ -2127,7 +2126,7 @@ CHECKTABLE(pTblNd->GetTable())
             for( USHORT i = pMoves->Count(); i; )
             {
                 SwTxtNode* pTxtNd = 0;
-                USHORT nDelPos;
+                USHORT nDelPos = 0;
                 SwUndoMove* pUndo = (*pMoves)[ --i ];
                 if( !pUndo->IsMoveRange() )
                 {
@@ -2152,12 +2151,12 @@ CHECKTABLE(pTblNd->GetTable())
                 else if( pTxtNd )
                 {
                     // evt. noch ueberflussige Attribute loeschen
-                    SwIndex aIdx( pTxtNd, nDelPos );
+                    SwIndex aTmpIdx( pTxtNd, nDelPos );
                     if( pTxtNd->GetpSwpHints() && pTxtNd->GetpSwpHints()->Count() )
-                        pTxtNd->RstAttr( aIdx, pTxtNd->GetTxt().Len() -
+                        pTxtNd->RstAttr( aTmpIdx, pTxtNd->GetTxt().Len() -
                                                             nDelPos + 1 );
                     // das Trennzeichen loeschen
-                    pTxtNd->Erase( aIdx, 1 );
+                    pTxtNd->Erase( aTmpIdx, 1 );
                 }
 //              delete pUndo;
 DUMPDOC( &rDoc, String( "d:\\tmp\\tab_") + String( aNewSttNds.Count() - i ) +
@@ -2181,10 +2180,10 @@ DUMPDOC( &rDoc, String( "d:\\tmp\\tab_") + String( aNewSttNds.Count() - i ) +
 
             // Indizies aus dem Bereich loeschen
             {
-                SwNodeIndex aIdx( *pBox->GetSttNd() );
-                rDoc.CorrAbs( SwNodeIndex( aIdx, 1 ),
-                            SwNodeIndex( *aIdx.GetNode().EndOfSectionNode() ),
-                            SwPosition( aIdx, SwIndex( 0, 0 )), TRUE );
+                SwNodeIndex aTmpIdx( *pBox->GetSttNd() );
+                rDoc.CorrAbs( SwNodeIndex( aTmpIdx, 1 ),
+                            SwNodeIndex( *aTmpIdx.GetNode().EndOfSectionNode() ),
+                            SwPosition( aTmpIdx, SwIndex( 0, 0 )), TRUE );
             }
 
             delete pBox;
@@ -2468,25 +2467,25 @@ void SwUndoTblNumFmt::Undo( SwUndoIter& rIter )
 class RedlineModeInternGuard
 {
     SwDoc& mrDoc;
-    IDocumentRedlineAccess::RedlineMode_t meOldRedlineMode;
+    RedlineMode_t meOldRedlineMode;
 
 public:
     RedlineModeInternGuard(
         SwDoc& rDoc,                      /// change mode of this document
-        IDocumentRedlineAccess::RedlineMode_t eNewRedlineMode,    /// new redline mode
-        IDocumentRedlineAccess::RedlineMode_t eRedlineModeMask  = (IDocumentRedlineAccess::RedlineMode_t)(IDocumentRedlineAccess::REDLINE_ON | IDocumentRedlineAccess::REDLINE_IGNORE /*change only bits set in this mask*/));
+        RedlineMode_t eNewRedlineMode,    /// new redline mode
+        RedlineMode_t eRedlineModeMask  = (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE /*change only bits set in this mask*/));
 
     ~RedlineModeInternGuard();
 };
 
 RedlineModeInternGuard::RedlineModeInternGuard(
     SwDoc& rDoc,
-    IDocumentRedlineAccess::RedlineMode_t eNewRedlineMode,
-    IDocumentRedlineAccess::RedlineMode_t eRedlineModeMask )
+    RedlineMode_t eNewRedlineMode,
+    RedlineMode_t eRedlineModeMask )
     : mrDoc( rDoc ),
       meOldRedlineMode( rDoc.GetRedlineMode() )
 {
-    mrDoc.SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)( ( meOldRedlineMode & ~eRedlineModeMask ) |
+    mrDoc.SetRedlineMode_intern((RedlineMode_t)( ( meOldRedlineMode & ~eRedlineModeMask ) |
                                      ( eNewRedlineMode & eRedlineModeMask ) ));
 }
 
@@ -2544,7 +2543,7 @@ void SwUndoTblNumFmt::Redo( SwUndoIter& rIter )
         // dvo: When redlining is (was) enabled, setting the attribute
         // will also change the cell content. To allow this, the
         // REDLINE_IGNORE flag must be removed during Redo. #108450#
-        RedlineModeInternGuard aGuard( rDoc, IDocumentRedlineAccess::REDLINE_NONE, IDocumentRedlineAccess::REDLINE_IGNORE );
+        RedlineModeInternGuard aGuard( rDoc, nsRedlineMode_t::REDLINE_NONE, nsRedlineMode_t::REDLINE_IGNORE );
         pBoxFmt->SetAttr( aBoxSet );
     }
     else if( NUMBERFORMAT_TEXT != nFmtIdx )
@@ -2565,7 +2564,7 @@ void SwUndoTblNumFmt::Redo( SwUndoIter& rIter )
         // dvo: When redlining is (was) enabled, setting the attribute
         // will also change the cell content. To allow this, the
         // REDLINE_IGNORE flag must be removed during Redo. #108450#
-        RedlineModeInternGuard aGuard( rDoc, IDocumentRedlineAccess::REDLINE_NONE, IDocumentRedlineAccess::REDLINE_IGNORE );
+        RedlineModeInternGuard aGuard( rDoc, nsRedlineMode_t::REDLINE_NONE, nsRedlineMode_t::REDLINE_IGNORE );
         pBoxFmt->SetAttr( aBoxSet );
     }
     else
@@ -2641,8 +2640,7 @@ void SwUndoTblCpyTbl::Undo( SwUndoIter& rIter )
         SwTableBox& rBox = *pTblNd->GetTable().GetTblBox( nSttPos );
 
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
-        SwTxtNode* pNd = rDoc.GetNodes().MakeTxtNode( aInsIdx,
-                                (SwTxtFmtColl*)rDoc.GetDfltTxtFmtColl());
+        rDoc.GetNodes().MakeTxtNode( aInsIdx, (SwTxtFmtColl*)rDoc.GetDfltTxtFmtColl() );
 
         // b62341295: Redline for copying tables
         const SwNode *pEndNode = rBox.GetSttNd()->EndOfSectionNode();
@@ -2783,8 +2781,7 @@ void SwUndoTblCpyTbl::Redo( SwUndoIter& rIter )
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
 
         // b62341295: Redline for copying tables - Start.
-        SwTxtNode* pNd = rDoc.GetNodes().MakeTxtNode( aInsIdx,
-                                (SwTxtFmtColl*)rDoc.GetDfltTxtFmtColl());
+        rDoc.GetNodes().MakeTxtNode( aInsIdx, (SwTxtFmtColl*)rDoc.GetDfltTxtFmtColl() );
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode());
         SwUndo* pUndo = IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ) ? 0 : new SwUndoDelete( aPam, TRUE );
         if( pEntry->pUndo )
@@ -2854,8 +2851,7 @@ void SwUndoTblCpyTbl::AddBoxBefore( const SwTableBox& rBox, BOOL bDelCntnt )
     if( bDelCntnt )
     {
         SwNodeIndex aInsIdx( *rBox.GetSttNd(), 1 );
-        SwTxtNode* pNd = pDoc->GetNodes().MakeTxtNode( aInsIdx,
-                                (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl());
+        pDoc->GetNodes().MakeTxtNode( aInsIdx, (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
         SwPaM aPam( aInsIdx.GetNode(), *rBox.GetSttNd()->EndOfSectionNode() );
 
         if( !pDoc->IsRedlineOn() )
@@ -2910,9 +2906,9 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
     // Mark the cell content before rIdx as insertion,
     // mark the cell content behind rIdx as deletion
     // merge text nodes at rIdx if possible
-    IDocumentRedlineAccess::RedlineMode_t eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern((IDocumentRedlineAccess::RedlineMode_t)( ( eOld | IDocumentRedlineAccess::REDLINE_DONTCOMBINE_REDLINES ) &
-                                     ~IDocumentRedlineAccess::REDLINE_IGNORE ));
+    RedlineMode_t eOld = pDoc->GetRedlineMode();
+    pDoc->SetRedlineMode_intern((RedlineMode_t)( ( eOld | nsRedlineMode_t::REDLINE_DONTCOMBINE_REDLINES ) &
+                                     ~nsRedlineMode_t::REDLINE_IGNORE ));
     SwPosition aInsertEnd( rPos );
     SwTxtNode* pTxt;
     if( !rJoin )
@@ -2950,7 +2946,7 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
     {   // If the old (deleted) part is not empty, here we are...
         SwPaM aDeletePam( aDeleteStart, aCellEnd );
         pUndo = new SwUndoRedlineDelete( aDeletePam, UNDO_DELETE );
-        pDoc->AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_DELETE, aDeletePam ), true );
+        pDoc->AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_DELETE, aDeletePam ), true );
     }
     else if( !rJoin ) // If the old part is empty and joined, we are finished
     {   // if it is not joined, we have to delete this empty paragraph
@@ -2965,7 +2961,7 @@ SwUndo* SwUndoTblCpyTbl::PrepareRedline( SwDoc* pDoc, const SwTableBox& rBox,
     if( aCellStart != aInsertEnd ) // An empty insertion will not been marked
     {
         SwPaM aTmpPam( aCellStart, aInsertEnd );
-        pDoc->AppendRedline( new SwRedline( IDocumentRedlineAccess::REDLINE_INSERT, aTmpPam ), true );
+        pDoc->AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_INSERT, aTmpPam ), true );
     }
 
     pDoc->SetRedlineMode_intern( eOld );
@@ -3045,9 +3041,9 @@ void SwUndoCpyTbl::Redo( SwUndoIter& rIter )
 
 SwUndoSplitTbl::SwUndoSplitTbl( const SwTableNode& rTblNd, USHORT eMode,
                                 BOOL bNewSize )
-    : SwUndo( UNDO_SPLIT_TABLE ), pSavTbl( 0 ),
-    nTblNode( rTblNd.GetIndex() ), nMode( eMode ), nOffset( 0 ), nFmlEnd( 0 ),
-    pHistory( 0 ), bCalcNewSize( bNewSize )
+    : SwUndo( UNDO_SPLIT_TABLE ),
+    nTblNode( rTblNd.GetIndex() ), nOffset( 0 ), pSavTbl( 0 ),
+    pHistory( 0 ), nMode( eMode ), nFmlEnd( 0 ), bCalcNewSize( bNewSize )
 {
     switch( nMode )
     {
@@ -3160,7 +3156,7 @@ SwUndoMergeTbl::SwUndoMergeTbl( const SwTableNode& rTblNd,
                                 const SwTableNode& rDelTblNd,
                                 BOOL bWithPrv, USHORT nMd )
     : SwUndo( UNDO_MERGE_TABLE ), pSavTbl( 0 ),
-    pHistory( 0 ), bWithPrev( bWithPrv ), nMode( nMd )
+    pHistory( 0 ), nMode( nMd ), bWithPrev( bWithPrv )
 {
     // Endnode der letzen Tabellenzelle merken, die auf der Position verbleibt
     if( bWithPrev )
@@ -3286,7 +3282,7 @@ void SwUndoMergeTbl::SaveFormula( SwHistory& rHistory )
 
 void InsertSort( SvUShorts& rArr, USHORT nIdx, USHORT* pInsPos )
 {
-    register USHORT nO  = rArr.Count(), nM, nU = 0;
+    USHORT nO   = rArr.Count(), nM, nU = 0;
     if( nO > 0 )
     {
         nO--;
@@ -3313,7 +3309,7 @@ void InsertSort( SvUShorts& rArr, USHORT nIdx, USHORT* pInsPos )
 
 void InsertSort( SvULongs& rArr, ULONG nIdx, USHORT* pInsPos )
 {
-    register USHORT nO  = rArr.Count(), nM, nU = 0;
+    USHORT nO   = rArr.Count(), nM, nU = 0;
     if( nO > 0 )
     {
         nO--;
