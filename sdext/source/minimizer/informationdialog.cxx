@@ -4,9 +4,9 @@
  *
  *  $RCSfile: informationdialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-16 17:12:26 $
+ *  last change: $Author: sj $ $Date: 2007-09-28 15:49:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,10 +321,16 @@ void InformationDialog::InitDialog()
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ), mxMSF ), UNO_QUERY );
         if ( xURLTransformer.is() )
         {
-            util::URL aURL;
+            util::URL aURL, aPresentationURL;
             aURL.Complete = maSaveAsURL;
             xURLTransformer->parseSmart( aURL, rtl::OUString() );
-            aTitle = aURL.Name;
+
+            const OUString sFileProtocol( RTL_CONSTASCII_USTRINGPARAM( "file:///" ) );
+            aPresentationURL.Complete = sFileProtocol.concat( aURL.Name );
+            aTitle = xURLTransformer->getPresentation( aPresentationURL, sal_False );
+
+            if ( aTitle.match( sFileProtocol, 0 ) )
+                aTitle = aTitle.replaceAt( 0, sFileProtocol.getLength(), rtl::OUString() );
         }
     }
 
