@@ -248,12 +248,12 @@ Die aktuelle Präsentation enthält keine OLE-Objekte.</value>
             <value xml:lang="de">~Ja</value>
         </prop>
         <prop oor:name="STR_ABOUT">
-            <value xml:lang="en-US">About &ProductName;</value>
-            <value xml:lang="de">Info über &ProductName;</value>
+            <value xml:lang="en-US">&ProductName;</value>
+            <value xml:lang="de">&ProductName;</value>
         </prop>
         <prop oor:name="STR_ABOUT_VERSION">
-            <value xml:lang="en-US">&ProductName; &ProductVersion;</value>
-            <value xml:lang="de">&ProductName; &ProductVersion;</value>
+            <value xml:lang="en-US">About &ProductName; &ProductVersion;</value>
+            <value xml:lang="de">Info über &ProductName; &ProductVersion;</value>
         </prop>
         <prop oor:name="STR_ABOUT_PRN">
             <value xml:lang="en-US">Copyright © 2007 Sun Microsystems, Inc. All rights reserved.

@@ -277,10 +277,10 @@ The current presentation contains no OLE objects.</value>
 				<value>~Yes</value>
 			</prop>			
 			<prop oor:name="STR_ABOUT" oor:type="xs:string" oor:localized="true">
-				<value>About</value>
+				<value>Sun Presentation Minimizer</value>
 			</prop>
             <prop oor:name="STR_ABOUT_VERSION" oor:type="xs:string" oor:localized="true">
-                <value>Sun Presentation Minimizer</value>
+                <value>About Sun Presentation Minimizer</value>
            </prop>
             <prop oor:name="STR_ABOUT_PRN" oor:type="xs:string" oor:localized="true">
                 <value>Copyright © 2007 Sun Microsystems, Inc. All rights reserved.
