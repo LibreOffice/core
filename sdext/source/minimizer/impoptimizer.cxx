@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impoptimizer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2007-09-26 13:00:23 $
+ *  last change: $Author: sj $ $Date: 2007-09-28 14:54:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@
 #include <svtools/filter.hxx>
 #include <svtools/solar.hrc>
 #include <vector>
+#include "com/sun/star/util/URL.hpp"
+#include "com/sun/star/util/XURLTransformer.hpp"
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -656,6 +658,25 @@ sal_Bool ImpOptimizer::Optimize()
     return sal_True;
 }
 
+static void DispatchURL( Reference< XComponentContext > xMSF, OUString sURL, Reference< XFrame > xFrame )
+{
+    try
+    {
+        Reference< XURLTransformer > xURLTransformer( xMSF->getServiceManager()->createInstanceWithContext(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ), xMSF ), UNO_QUERY_THROW );
+        util::URL aUrl;
+        aUrl.Complete = sURL;
+        xURLTransformer->parseStrict( aUrl );
+        Sequence< PropertyValue > aArgs;
+        Reference< XDispatchProvider > xDispatchProvider( xFrame, UNO_QUERY_THROW );
+        Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aUrl, OUString(), 0 );  // "_self"
+        xDispatch->dispatch( aUrl, aArgs );
+    }
+    catch( Exception& )
+    {
+    }
+}
+
 // -----------------------------------------------------------------------------
 
 sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
@@ -758,7 +779,19 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         // check if the document is ReadOnly -> error
         Reference< XStorable > xStorable( mxModel, UNO_QUERY );
         if ( xStorable.is() && !xStorable->isReadonly() )
+        {
+            mxModel->lockControllers();
             bRet = Optimize();
+            mxModel->unlockControllers();
+
+            // clearing undo stack:
+            Reference< XFrame > xFrame( xSelf.is() ? xSelf : mxInformationDialog );
+            if ( xFrame.is() )
+            {
+                const OUString sSlot( RTL_CONSTASCII_USTRINGPARAM( "slot:27115" ) );
+                DispatchURL( mxMSF, sSlot, xFrame );
+            }
+        }
 
         if ( maSaveAsURL.getLength() )
         {
