@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 13:51:41 $
+#   last change: $Author: obo $ $Date: 2007-10-01 07:50:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@ CFLAGS+= -I..$/fontsubset
 .IF "$(ENABLE_FONTCONFIG)" != ""
 CDEFS += -DENABLE_FONTCONFIG
 .ENDIF
+.IF "$(SYSTEM_FREETYPE)"=="YES"
+CFLAGS+=$(FREETYPE_CFLAGS)
+.ENDIF # "$(SYSTEM_FREETYPE)"=="YES"
 
 # --- Files --------------------------------------------------------
 
