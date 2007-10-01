@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-26 11:36:36 $
+ *  last change: $Author: aw $ $Date: 2007-10-01 09:14:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ namespace drawinglayer
         {
             Primitive2DSequence aRetval;
 
-            if(getText().getLength())
+            if(getTextLength())
             {
                 // get integer DXArray for getTextOutlines call (ATM uses vcl)
                 ::std::vector< sal_Int32 > aNewIntegerDXArray;
@@ -187,7 +187,7 @@ namespace drawinglayer
 
                 // get the text outlines
                 basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
-                aTextLayouter.getTextOutlines( aB2DPolyPolyVector, getText(), 0L, getText().getLength(), aNewIntegerDXArray);
+                aTextLayouter.getTextOutlines(aB2DPolyPolyVector, getText(), getTextPosition(), getTextLength(), aNewIntegerDXArray);
 
                 // create primitives for the outlines
                 const sal_uInt32 nCount(aB2DPolyPolyVector.size());
@@ -214,6 +214,7 @@ namespace drawinglayer
                             aTranslate,
                             fRotate,
                             TEXTEFFECTSTYLE2D_OUTLINE));
+
                         aRetval = Primitive2DSequence(&aNewTextEffect, 1);
                     }
                 }
@@ -224,7 +225,9 @@ namespace drawinglayer
 
         TextSimplePortionPrimitive2D::TextSimplePortionPrimitive2D(
             const basegfx::B2DHomMatrix& rNewTransform,
-            const rtl::OUString& rText,
+            const String& rText,
+            xub_StrLen aTextPosition,
+            xub_StrLen aTextLength,
             const ::std::vector< double >& rDXArray,
             const FontAttributes& rFontAttributes,
             const ::com::sun::star::lang::Locale& rLocale,
@@ -232,11 +235,18 @@ namespace drawinglayer
         :   BasePrimitive2D(),
             maTextTransform(rNewTransform),
             maText(rText),
+            maTextPosition(aTextPosition),
+            maTextLength(aTextLength),
             maDXArray(rDXArray),
             maFontAttributes(rFontAttributes),
             maLocale(rLocale),
             maFontColor(rFontColor)
         {
+#ifdef DBG_UTIL
+            const xub_StrLen aStringLength(getText().Len());
+            OSL_ENSURE(aStringLength >= getTextPosition() && aStringLength >= getTextPosition() + getTextLength(),
+                "TextSimplePortionPrimitive2D with text out of range (!)");
+#endif
         }
 
         void TextSimplePortionPrimitive2D::getIntegerDXArray(::std::vector< sal_Int32 >& rDXArray) const
@@ -271,6 +281,8 @@ namespace drawinglayer
 
                 return (getTextTransform() == rCompare.getTextTransform()
                     && getText() == rCompare.getText()
+                    && getTextPosition() == rCompare.getTextPosition()
+                    && getTextLength() == rCompare.getTextLength()
                     && getDXArray() == rCompare.getDXArray()
                     && getFontAttributes() == rCompare.getFontAttributes()
                     && impLocalesAreEqual(getLocale(), rCompare.getLocale())
@@ -282,15 +294,14 @@ namespace drawinglayer
 
         basegfx::B2DRange TextSimplePortionPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            const sal_Int32 aStrLen(getText().getLength());
             basegfx::B2DRange aRetval;
 
-            if(aStrLen)
+            if(getTextLength())
             {
                 // get TextBoundRect as base size
                 TextLayouterDevice aTextLayouter;
                 aTextLayouter.setFontAttributes(getFontAttributes(), getTextTransform());
-                aRetval = aTextLayouter.getTextBoundRect(getText(), 0L, aStrLen);
+                aRetval = aTextLayouter.getTextBoundRect(getText(), getTextPosition(), getTextLength());
 
                 // apply textTransform to it, but without scaling. The scale defines the font size
                 // which is already part of the fetched textRange

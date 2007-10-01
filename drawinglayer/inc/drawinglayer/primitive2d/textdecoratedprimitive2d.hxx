@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdecoratedprimitive2d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-26 11:36:28 $
+ *  last change: $Author: aw $ $Date: 2007-10-01 09:13:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,10 @@
 namespace basegfx {
     class DecomposedB2DHomMatrixContainer;
 } // end of namespace basegfx
+
+namespace com { namespace sun { namespace star { namespace i18n {
+    struct Boundary;
+}}}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -121,9 +125,15 @@ namespace drawinglayer
             void impCreateGeometryContent(
                 std::vector< Primitive2DReference >& rTarget,
                 basegfx::DecomposedB2DHomMatrixContainer& rDecTrans,
-                const rtl::OUString& rText,
+                const String& rText,
+                xub_StrLen aTextPosition,
+                xub_StrLen aTextLength,
                 const ::std::vector< double >& rDXArray,
                 const FontAttributes& rFontAttributes) const;
+
+            void impCorrectTextBoundary(
+                ::com::sun::star::i18n::Boundary& rNextWordBoundary) const;
+
             void impSplitSingleWords(
                 std::vector< Primitive2DReference >& rTarget,
                 basegfx::DecomposedB2DHomMatrixContainer& rDecTrans) const;
@@ -137,7 +147,9 @@ namespace drawinglayer
 
                 // TextSimplePortionPrimitive2D parameters
                 const basegfx::B2DHomMatrix& rNewTransform,
-                const rtl::OUString& rText,
+                const String& rText,
+                xub_StrLen aTextPosition,
+                xub_StrLen aTextLength,
                 const ::std::vector< double >& rDXArray,
                 const FontAttributes& rFontAttributes,
                 const ::com::sun::star::lang::Locale& rLocale,

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-26 11:36:28 $
+ *  last change: $Author: aw $ $Date: 2007-10-01 09:13:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,8 +72,8 @@ namespace drawinglayer
         {
         private:
             // core data
-            rtl::OUString                               maFamilyName;
-            rtl::OUString                               maStyleName;
+            String                                      maFamilyName;
+            String                                      maStyleName;
             sal_uInt16                                  mnWeight;
 
             // bitfield
@@ -85,8 +85,8 @@ namespace drawinglayer
 
         public:
             FontAttributes(
-                const rtl::OUString& rFamilyName,
-                const rtl::OUString& rStyleName,
+                const String& rFamilyName,
+                const String& rStyleName,
                 sal_uInt16 nWeight,
                 bool bSymbol = false,
                 bool bVertical = false,
@@ -106,8 +106,8 @@ namespace drawinglayer
             bool operator==(const FontAttributes& rCompare) const;
 
             // data access
-            const rtl::OUString& getFamilyName() const { return maFamilyName; }
-            const rtl::OUString& getStyleName() const { return maStyleName; }
+            const String& getFamilyName() const { return maFamilyName; }
+            const String& getStyleName() const { return maStyleName; }
             sal_uInt16 getWeight() const { return mnWeight; }
             bool getSymbol() const { return mbSymbol; }
             bool getVertical() const { return mbVertical; }
@@ -133,7 +133,9 @@ namespace drawinglayer
         {
         private:
             basegfx::B2DHomMatrix                   maTextTransform;    // text range transformation from unit range ([0.0 .. 1.0]) to text range
-            rtl::OUString                           maText;             // the text
+            String                                  maText;             // the text, used from maTextPosition up to maTextPosition + maTextLength
+            xub_StrLen                              maTextPosition;     // the index from where on maText is used
+            xub_StrLen                              maTextLength;       // the length for maText usage, starting from maTextPosition
             ::std::vector< double >                 maDXArray;          // the DX array scale-independent in unit coordinates
             FontAttributes                          maFontAttributes;   // the font to use
             ::com::sun::star::lang::Locale          maLocale;           // the Locale for the text
@@ -146,7 +148,9 @@ namespace drawinglayer
         public:
             TextSimplePortionPrimitive2D(
                 const basegfx::B2DHomMatrix& rNewTransform,
-                const rtl::OUString& rText,
+                const String& rText,
+                xub_StrLen aTextPosition,
+                xub_StrLen aTextLength,
                 const ::std::vector< double >& rDXArray,
                 const FontAttributes& rFontAttributes,
                 const ::com::sun::star::lang::Locale& rLocale,
@@ -154,7 +158,9 @@ namespace drawinglayer
 
             // get data
             const basegfx::B2DHomMatrix& getTextTransform() const { return maTextTransform; }
-            const rtl::OUString& getText() const { return maText; }
+            const String& getText() const { return maText; }
+            xub_StrLen getTextPosition() const { return maTextPosition; }
+            xub_StrLen getTextLength() const { return maTextLength; }
             const ::std::vector< double >& getDXArray() const { return maDXArray; }
             const FontAttributes& getFontAttributes() const { return maFontAttributes; }
             const ::com::sun::star::lang::Locale& getLocale() const { return  maLocale; }

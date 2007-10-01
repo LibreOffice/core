@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdecoratedprimitive2d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-26 11:36:36 $
+ *  last change: $Author: aw $ $Date: 2007-10-01 09:14:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,9 @@ namespace drawinglayer
         void TextDecoratedPortionPrimitive2D::impCreateGeometryContent(
             std::vector< Primitive2DReference >& rTarget,
             basegfx::DecomposedB2DHomMatrixContainer& rDecTrans,
-            const rtl::OUString& rText,
+            const String& rText,
+            xub_StrLen aTextPosition,
+            xub_StrLen aTextLength,
             const ::std::vector< double >& rDXArray,
             const FontAttributes& rFontAttributes) const
         {
@@ -100,6 +102,8 @@ namespace drawinglayer
             rTarget.push_back(Primitive2DReference(new TextSimplePortionPrimitive2D(
                 rDecTrans.getB2DHomMatrix(),
                 rText,
+                aTextPosition,
+                aTextLength,
                 rDXArray,
                 rFontAttributes,
                 getLocale(),
@@ -132,7 +136,7 @@ namespace drawinglayer
 
                 if(rDXArray.empty())
                 {
-                    fTextWidth = aTextLayouter.getTextWidth(rText, 0/*TODO*/, rText.getLength()/*TODO*/ );
+                    fTextWidth = aTextLayouter.getTextWidth(rText, aTextPosition, aTextLength);
                 }
                 else
                 {
@@ -353,7 +357,7 @@ namespace drawinglayer
                     {
                         // strikeout with character
                         const sal_Unicode aStrikeoutChar(FONT_STRIKEOUT_SLASH == getFontStrikeout() ? '/' : 'X');
-                        const rtl::OUString aSingleCharString(aStrikeoutChar);
+                        const String aSingleCharString(aStrikeoutChar);
                         const double fStrikeCharWidth(aTextLayouter.getTextWidth(aSingleCharString, 0, 1));
                         const double fStrikeCharCount(fabs(fTextWidth/fStrikeCharWidth));
                         const sal_uInt32 nStrikeCharCount(static_cast< sal_uInt32 >(fStrikeCharCount + 0.9));
@@ -361,7 +365,7 @@ namespace drawinglayer
                         const double fStrikeCharWidthUnscaled(basegfx::fTools::equalZero(fScaleX) ? fStrikeCharWidth : fStrikeCharWidth/fScaleX);
 
                         std::vector<double> aDXArray(nStrikeCharCount);
-                        rtl::OUString aStrikeoutString;
+                        String aStrikeoutString;
 
                         for(sal_uInt32 a(0); a < nStrikeCharCount; a++)
                         {
@@ -372,6 +376,8 @@ namespace drawinglayer
                         rTarget.push_back(Primitive2DReference(new TextSimplePortionPrimitive2D(
                             rDecTrans.getB2DHomMatrix(),
                             aStrikeoutString,
+                            0,
+                            aStrikeoutString.Len(),
                             aDXArray,
                             rFontAttributes,
                             getLocale(),
@@ -451,6 +457,33 @@ namespace drawinglayer
             // TODO: Handle Font Emphasis Above/Below
         }
 
+        void TextDecoratedPortionPrimitive2D::impCorrectTextBoundary(::com::sun::star::i18n::Boundary& rNextWordBoundary) const
+        {
+            // truncate aNextWordBoundary to min/max possible values. This is necessary since the word start may be
+            // before/after getTextPosition() when a long string is the content and getTextPosition()
+            // is right inside a word. Same for end.
+            const sal_Int32 aMinPos(static_cast< sal_Int32 >(getTextPosition()));
+            const sal_Int32 aMaxPos(aMinPos + static_cast< sal_Int32 >(getTextLength()));
+
+            if(rNextWordBoundary.startPos < aMinPos)
+            {
+                rNextWordBoundary.startPos = aMinPos;
+            }
+            else if(rNextWordBoundary.startPos > aMaxPos)
+            {
+                rNextWordBoundary.startPos = aMaxPos;
+            }
+
+            if(rNextWordBoundary.endPos < aMinPos)
+            {
+                rNextWordBoundary.endPos = aMinPos;
+            }
+            else if(rNextWordBoundary.endPos > aMaxPos)
+            {
+                rNextWordBoundary.endPos = aMaxPos;
+            }
+        }
+
         void TextDecoratedPortionPrimitive2D::impSplitSingleWords(
             std::vector< Primitive2DReference >& rTarget,
             basegfx::DecomposedB2DHomMatrixContainer& rDecTrans) const
@@ -469,9 +502,10 @@ namespace drawinglayer
 
             if(xLocalBreakIterator.is())
             {
-                // init word iterator, get first word
+                // init word iterator, get first word and truncate to possibilities
                 ::com::sun::star::i18n::Boundary aNextWordBoundary(xLocalBreakIterator->getWordBoundary(
-                    getText(), 0, getLocale(), ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True));
+                    getText(), getTextPosition(), getLocale(), ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True));
+                impCorrectTextBoundary(aNextWordBoundary);
 
                 // prepare new font attributes WITHOUT outline
                 const FontAttributes aNewFontAttributes(
@@ -483,49 +517,62 @@ namespace drawinglayer
                     getFontAttributes().getItalic(),
                     false);             // no outline anymore, handled locally
 
-                while(aNextWordBoundary.startPos != aNextWordBoundary.endPos)
+                if(aNextWordBoundary.startPos == getTextPosition() && aNextWordBoundary.endPos == getTextLength())
                 {
-                    const sal_uInt32 nLength(aNextWordBoundary.endPos - aNextWordBoundary.startPos);
-
-                    // prepare data for the single word
-                    const rtl::OUString aNewText(getText().copy(aNextWordBoundary.startPos, nLength));
-
-                    // prepare transform for the single word
-                    basegfx::B2DHomMatrix aNewTransform;
-
-                    if(aNextWordBoundary.startPos)
+                    // it IS only a single word, handle as one word
+                    impCreateGeometryContent(rTarget, rDecTrans, getText(), getTextPosition(), getTextLength(), getDXArray(), aNewFontAttributes);
+                }
+                else
+                {
+                    // do iterate over single words
+                    while(aNextWordBoundary.startPos != aNextWordBoundary.endPos)
                     {
-                        // needs to be moved to a new start position (get from DXArray)
-                        const double fDistance(getDXArray()[aNextWordBoundary.startPos - 1]);
-                        aNewTransform.translate(fDistance, 0.0);
-                    }
+                        // prepare values for new portion
+                        const xub_StrLen nNewTextStart(static_cast< xub_StrLen >(aNextWordBoundary.startPos));
+                        const xub_StrLen nNewTextEnd(static_cast< xub_StrLen >(aNextWordBoundary.endPos));
 
-                    aNewTransform *= rDecTrans.getB2DHomMatrix();
+                        // prepare transform for the single word
+                        basegfx::B2DHomMatrix aNewTransform;
+                        double fDistance(0.0);
+                        const bool bNewStartIsNotOldStart(nNewTextStart > getTextPosition());
 
-                    // prepare new DXArray for the single word
-                    ::std::vector< double > aNewDXArray(
-                        getDXArray().begin() + aNextWordBoundary.startPos,
-                        getDXArray().begin() + aNextWordBoundary.endPos);
-
-                    if(aNextWordBoundary.startPos)
-                    {
-                        // DXArray values need to be corrected
-                        const double fDistance(getDXArray()[aNextWordBoundary.startPos - 1]);
-
-                        for(sal_uInt32 a(0); a < nLength; a++)
+                        if(bNewStartIsNotOldStart)
                         {
-                            aNewDXArray[a] -= fDistance;
+                            // needs to be moved to a new start position (get from DXArray)
+                            const sal_uInt32 nIndex(static_cast< sal_uInt32 >(nNewTextStart - getTextPosition()));
+                            fDistance = getDXArray()[nIndex - 1];
+                            aNewTransform.translate(fDistance, 0.0);
                         }
+
+                        aNewTransform *= rDecTrans.getB2DHomMatrix();
+
+                        // prepare new DXArray for the single word
+                        ::std::vector< double > aNewDXArray(
+                            getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextStart - getTextPosition()),
+                            getDXArray().begin() + static_cast< sal_uInt32 >(nNewTextEnd - getTextPosition()));
+
+                        if(bNewStartIsNotOldStart)
+                        {
+                            // DXArray values need to be corrected
+                            const sal_uInt32 nArraySize(aNewDXArray.size());
+
+                            for(sal_uInt32 a(0); a < nArraySize; a++)
+                            {
+                                aNewDXArray[a] -= fDistance;
+                            }
+                        }
+
+                        // create geometry content for the single word
+                        basegfx::DecomposedB2DHomMatrixContainer aDecTrans(aNewTransform);
+                        impCreateGeometryContent(rTarget, aDecTrans, getText(), nNewTextStart,
+                            nNewTextEnd - nNewTextStart, aNewDXArray, aNewFontAttributes);
+
+                        // prepare next word and truncate to possibilities
+                        aNextWordBoundary = xLocalBreakIterator->nextWord(
+                            getText(), aNextWordBoundary.endPos, getLocale(),
+                            ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
+                        impCorrectTextBoundary(aNextWordBoundary);
                     }
-
-                    // create geometry content for the single word
-                    basegfx::DecomposedB2DHomMatrixContainer aDecTrans(aNewTransform);
-                    impCreateGeometryContent(rTarget, aDecTrans, aNewText, aNewDXArray, aNewFontAttributes);
-
-                    // prepare next word
-                    aNextWordBoundary = xLocalBreakIterator->nextWord(
-                        getText(), aNextWordBoundary.endPos, getLocale(),
-                        ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
                 }
             }
         }
@@ -556,7 +603,7 @@ namespace drawinglayer
                     false);             // no outline anymore, handled locally
 
                 // handle as one word
-                impCreateGeometryContent(aNewPrimitives, aDecTrans, getText(), getDXArray(), aNewFontAttributes);
+                impCreateGeometryContent(aNewPrimitives, aDecTrans, getText(), getTextPosition(), getTextLength(), getDXArray(), aNewFontAttributes);
             }
 
             // convert to Primitive2DSequence
@@ -673,7 +720,9 @@ namespace drawinglayer
 
             // TextSimplePortionPrimitive2D parameters
             const basegfx::B2DHomMatrix& rNewTransform,
-            const rtl::OUString& rText,
+            const String& rText,
+            xub_StrLen aTextPosition,
+            xub_StrLen aTextLength,
             const ::std::vector< double >& rDXArray,
             const FontAttributes& rFontAttributes,
             const ::com::sun::star::lang::Locale& rLocale,
@@ -690,7 +739,7 @@ namespace drawinglayer
             bool bEmphasisMarkBelow,
             FontRelief eFontRelief,
             bool bShadow)
-        :   TextSimplePortionPrimitive2D(rNewTransform, rText, rDXArray, rFontAttributes, rLocale, rFontColor),
+        :   TextSimplePortionPrimitive2D(rNewTransform, rText, aTextPosition, aTextLength, rDXArray, rFontAttributes, rLocale, rFontColor),
             maTextlineColor(rTextlineColor),
             meFontUnderline(eFontUnderline),
             meFontStrikeout(eFontStrikeout),

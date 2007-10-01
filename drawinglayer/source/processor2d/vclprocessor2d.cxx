@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-20 09:51:38 $
+ *  last change: $Author: aw $ $Date: 2007-10-01 09:14:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,13 +300,19 @@ namespace drawinglayer
                         }
                     }
 
-                    // set parameters and paint
+                    // set parameters and paint text snippet
                     const basegfx::BColor aRGBFontColor(maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
-                    mpOutputDevice->SetTextColor(Color(aRGBFontColor));
                     const basegfx::B2DPoint aPoint(aLocalTransform * basegfx::B2DPoint(0.0, 0.0));
                     const Point aStartPoint(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
-                    mpOutputDevice->DrawTextArray(aStartPoint, rTextCandidate.getText(),
-                        aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL);
+
+                    mpOutputDevice->SetTextColor(Color(aRGBFontColor));
+                    mpOutputDevice->DrawTextArray(
+                        aStartPoint,
+                        rTextCandidate.getText(),
+                        aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL,
+                        rTextCandidate.getTextPosition(),
+                        rTextCandidate.getTextLength());
+
                     bPrimitiveAccepted = true;
                 }
             }

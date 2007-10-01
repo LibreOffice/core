@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textlayoutdevice.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-26 11:36:28 $
+ *  last change: $Author: aw $ $Date: 2007-10-01 09:13:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@
 // predefines
 class VirtualDevice;
 class Font;
-class rtl::OUString;
+class String;
 
 namespace drawinglayer { namespace primitive2d {
     class FontAttributes;
@@ -93,11 +93,22 @@ namespace drawinglayer
             double getUnderlineOffset() const;
             double getStrikeoutOffset() const;
 
-            double getTextWidth(const rtl::OUString& rText, sal_Int32 nIndex, sal_Int32 nLength) const;
-            bool getTextOutlines( basegfx::B2DPolyPolygonVector&,
-                const rtl::OUString&, sal_Int32 nIndex, sal_Int32 nLength,
-                const ::std::vector< sal_Int32 >& rDXArray );
-            basegfx::B2DRange getTextBoundRect(const rtl::OUString& rText, sal_Int32 nIndex, sal_Int32 nLength) const;
+            double getTextWidth(
+                const String& rText,
+                xub_StrLen nIndex,
+                xub_StrLen nLength) const;
+
+            bool getTextOutlines(
+                basegfx::B2DPolyPolygonVector&,
+                const String& rText,
+                xub_StrLen nIndex,
+                xub_StrLen nLength,
+                const ::std::vector< sal_Int32 >& rDXArray);
+
+            basegfx::B2DRange getTextBoundRect(
+                const String& rText,
+                xub_StrLen nIndex,
+                xub_StrLen nLength) const;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
