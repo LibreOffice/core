@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 15:04:15 $
+ *  last change: $Author: obo $ $Date: 2007-10-01 07:55:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #ifdef ENABLE_FONTCONFIG
 #include <fontconfig/fontconfig.h>
+#include <ft2build.h>
 #include <fontconfig/fcfreetype.h>
 // be compatible with fontconfig 2.2.0 release
 #ifndef FC_WEIGHT_BOOK
