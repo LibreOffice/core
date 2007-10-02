@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: checkdeliver.pl,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 15:43:18 $
+#   last change: $Author: kz $ $Date: 2007-10-02 15:19:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -148,18 +148,35 @@ sub check
     my %delivered;
     my $module;
     my $islinked = 0;
-    if ( $listname =~ quotemeta(/\/(\w+?)\/deliver.log$/o) ) {
+    # which module are we checking?
+    if ( $listname =~ /\/(\w+?)\/deliver\.log$/o) {
         $module = $1;
     } else {
         print STDERR "Error: cannot determine module name from \'$listname\'\n";
         return 1;
     }
-    # do not bother about non existing modules in in local environment
-    if ( $local_env ) {
-        if (( ! -d "$srcdir/$module" ) && ( ! -e "$srcdir/$module.lnk/prj/d.lst" )) {
-            print STDERR "Warning: local environment, module '$module' not found. Skipping.\n";
+    # is module physically accessible?
+    my $canread = is_moduledirectory( $srcdir . '/' . $module );
+    if ( ! $canread ) {
+        # do not bother about non existing modules in local environment
+        if ( $local_env ) {
+            # print STDERR "Warning: local environment, module '$module' not found. Skipping.\n";
             return $error;
         }
+        # on CWS modules not added can exist as links. For windows it may happen that these
+        # links cannot be resolved (when working with nfs mounts). This prevents checking,
+        # but is not an error.
+        if ( $ENV{CWS_WORK_STAMP} ) {
+            # print STDERR "Warning: module '$module' not found. Skipping.\n";
+            return $error;
+        }
+        print STDERR "Error: module '$module' not found.\n";
+        $error++;
+        return $error;
+    }
+    if ( $canread == 2 ) {
+        # module is linked, link can be resolved
+        $islinked = 1;
     }
 
     # read deliver log file
@@ -170,6 +187,7 @@ sub check
         # It probably is a good idea to check all files but this requires some
         # d.lst cleanup which is beyond the current scope. -> TODO
         next if ( ! / $module\/$platform\/[bl]i[nb]\// );
+        next if ( /\.html$/ );
         chomp;
         if ( /^\w+? (\S+) (\S+)\s*$/o ) {
             $delivered{$1} = $2;
@@ -178,20 +196,7 @@ sub check
         }
     }
     close( DELIVERLOG );
-    # on CWS modules not added can exist as links. For windows it may happen that these
-    # links cannot be resolved (when working with nfs mounts). This prevents checking,
-    # but is not an error.
-    if ( $ENV{CWS_WORK_STAMP} ) {
-        if ( ! -d "$srcdir/$module" ) {
-            if ( -e "$srcdir/$module.lnk/prj/d.lst") {
-                # module is linked, link can be resolved
-                $islinked = 1;
-            } else {
-                # print "Cannot find module '$module', no checking\n";
-                return $error;
-            }
-        }
-    }
+
     # compare all delivered files with their origin
     # no strict 'diff' allowed here, as deliver may alter files (hedabu, strip, ...)
     foreach my $file ( sort keys %delivered ) {
@@ -205,13 +210,12 @@ sub check
             # deliver log files do not contain milestone extension on solver
             $sfile =~ s/\/$platform\/(...)\//\/$platform\/$1$milestoneext\//;
         }
-        # compare files, not directories or links
-        next if ( -d $ofile );
-        next if ( -l $sfile );
+        my $orgfile_stats = stat($ofile);
+        next if ( -d _ );  # compare files, not directories
+        my $delivered_stats = lstat($sfile);
+        next if ( -l _ );  # compare files, not links
 
-        if ( -e $ofile && -e $sfile ) {
-            my $orgfile_stats = stat($ofile);
-            my $delivered_stats = stat($sfile);
+        if ( $orgfile_stats && $delivered_stats ) {
             # Stripping (on unix like platforms) and signing (for windows)
             # changes file size. Therefore we have to compare for file dates.
             # File modification time also can change after deliver, f.e. by
@@ -219,12 +223,12 @@ sub check
             # solver is older than it's source.
             if ( ( $orgfile_stats->mtime - $delivered_stats->mtime ) gt 1 ) {
                 print STDERR "Error: ";
-                print STDERR "delivered file is older than it's source '$ofile' $sfile\n";
+                print STDERR "delivered file is older than it's source '$ofile' '$sfile'\n";
                 $error ++;
             }
         } else {
-            print STDERR "Error: no such file '$ofile'\n" if ( ! -e $ofile );
-            print STDERR "Error: no such file '$sfile'\n" if ( ! -e $sfile );
+            print STDERR "Error: no such file '$ofile'\n" if ( ! $orgfile_stats );
+            print STDERR "Error: no such file '$sfile'\n" if ( ! $delivered_stats );
             $error ++;
         }
     }
@@ -232,6 +236,22 @@ sub check
         print STDERR "Errors found: Module '$module' not delivered correctly?\n\n";
     }
     return $error;
+}
+
+sub is_moduledirectory
+# Test whether we find a module having a d.lst file at a given path.
+# Return value: 1: path is valid directory
+#               2: path.lnk is a valid link
+#               0: module not found
+{
+    my $dirname = shift;
+    if ( -e "$dirname/prj/d.lst" ) {
+        return 1;
+    } elsif ( -e "$dirname.lnk/prj/d.lst" ) {
+        return 2
+    } else {
+        return 0;
+    }
 }
 
 sub usage
