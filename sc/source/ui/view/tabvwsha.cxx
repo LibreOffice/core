@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:48:17 $
+ *  last change: $Author: kz $ $Date: 2007-10-02 15:22:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@
 #include "tabvwsh.hxx"
 #include "dwfunctr.hxx"
 #include "scabstdlg.hxx" //CHINA001
+#include "compiler.hxx"
 
 
 BOOL ScTabViewShell::GetFunction( String& rFuncStr )
@@ -468,9 +469,38 @@ void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, USHORT nTabPage )
 //------------------------------------------------------------------
 void ScTabViewShell::ExecuteInputDirect()
 {
+    bool bRefInputMode = false;
     ScModule* pScMod = SC_MOD();
-    if( !pScMod->IsFormulaMode() )
+
+    if ( pScMod->IsFormulaMode() )
+    {
+        ScInputHandler* pHdl = pScMod->GetInputHdl();
+        String aString = pHdl->GetEditString();
+
+        if ( !pHdl->GetSelIsRef() && aString.Len() > 1 &&
+             ( aString.GetChar(0) == '+' || aString.GetChar(0) == '-' ) )
+        {
+            ScViewData* pViewData = GetViewData();
+            ScDocument* pDoc = pViewData->GetDocument();
+            ScAddress aPos( pViewData->GetCurPos() );
+            ScCompiler aComp( pDoc, aPos );
+            aComp.SetCloseBrackets( false );
+            ScTokenArray* pArr = aComp.CompileString( aString );
+            if ( pArr->MayReferenceFollow() )
+            {
+                bRefInputMode = true;
+            }
+        }
+        else
+        {
+            bRefInputMode = true;
+        }
+    }
+
+    if ( !bRefInputMode )
+    {
         pScMod->InputEnterHandler();
+    }
 }
 
 //------------------------------------------------------------------
