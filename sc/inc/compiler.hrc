@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.hrc,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:46:06 $
+ *  last change: $Author: kz $ $Date: 2007-10-02 15:20:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@
 #define SC_OPCODE_END_DIV            23
 
 /*** Binary operators ***/
+#define SC_OPCODE_START_BIN_OP       25
 #define SC_OPCODE_ADD                25
 #define SC_OPCODE_SUB                26
 #define SC_OPCODE_MUL                27
@@ -82,15 +83,17 @@
 #define SC_OPCODE_INTERSECT          39
 #define SC_OPCODE_UNION              40
 #define SC_OPCODE_RANGE              41
-#define SC_OPCODE_END_BIN_OP         44
+#define SC_OPCODE_END_BIN_OP         42
 
 /*** Unary operators ***/
+#define SC_OPCODE_START_UN_OP        45
 #define SC_OPCODE_NOT                45
 #define SC_OPCODE_NEG                46
 #define SC_OPCODE_NEG_SUB            47
 #define SC_OPCODE_END_UN_OP          48
 
 /*** Functions without parameters ***/
+#define SC_OPCODE_START_NO_PAR       50
 #define SC_OPCODE_PI                 50
 #define SC_OPCODE_RANDOM             51
 #define SC_OPCODE_TRUE               52
@@ -99,9 +102,10 @@
 #define SC_OPCODE_GET_ACT_TIME       55
 #define SC_OPCODE_NO_VALUE           56
 #define SC_OPCODE_CURRENT            57
-#define SC_OPCODE_END_NO_PAR         60
+#define SC_OPCODE_END_NO_PAR         58
 
 /*** Functions with one parameter ***/
+#define SC_OPCODE_START_1_PAR        61
 #define SC_OPCODE_DEG                61     /* trigonometric */
 #define SC_OPCODE_RAD                62
 #define SC_OPCODE_SIN                63
@@ -177,9 +181,10 @@
 #define SC_OPCODE_BAHTTEXT          133
 #define SC_OPCODE_JIS               134
 #define SC_OPCODE_ASC               135
-#define SC_OPCODE_END_1_PAR         200
+#define SC_OPCODE_END_1_PAR         136
 
-/*** Functions with more than one p[arameters ***/
+/*** Functions with more than one parameters ***/
+#define SC_OPCODE_START_2_PAR       201
 #define SC_OPCODE_ARC_TAN_2         201
 #define SC_OPCODE_CEIL              202
 #define SC_OPCODE_FLOOR             203
