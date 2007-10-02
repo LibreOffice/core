@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:04:32 $
+ *  last change: $Author: kz $ $Date: 2007-10-02 15:22:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -421,9 +421,46 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
             DBG_ASSERT( nUndoPos==nSelCount, "nUndoPos!=nSelCount" );
         }
 
+        bool bFormula = false;
+
+        // a single '=' character is handled as string (needed for special filters)
+        if ( rString.Len() > 1 )
+        {
+            if ( rString.GetChar(0) == '=' )
+            {
+                // handle as formula
+                bFormula = true;
+            }
+            else if ( rString.GetChar(0) == '+' || rString.GetChar(0) == '-' )
+            {
+                // if there is more than one leading '+' or '-' character, remove the additional ones
+                String aString( rString );
+                xub_StrLen nIndex = 1;
+                xub_StrLen nLen = aString.Len();
+                while ( nIndex < nLen && ( aString.GetChar( nIndex ) == '+' || aString.GetChar( nIndex ) == '-' ) )
+                {
+                    ++nIndex;
+                }
+                aString.Erase( 1, nIndex - 1 );
+
+                // if the remaining part without the leading '+' or '-' character
+                // is non-empty and not a number, handle as formula
+                if ( aString.Len() > 1 )
+                {
+                    sal_uInt32 nFormat = 0;
+                    pDoc->GetNumberFormat( nCol, nRow, nTab, nFormat );
+                    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                    double fNumber = 0;
+                    if ( !pFormatter->IsNumberFormat( aString, nFormat, fNumber ) )
+                    {
+                        bFormula = true;
+                    }
+                }
+            }
+        }
+
         BOOL bNumFmtChanged = FALSE;
-        // einzelnes '=' ist String (wird fuer Spezialfilter so gebraucht)
-        if ( rString.GetChar(0) == '=' && rString.Len() > 1 )
+        if ( bFormula )
         {   // Formel, compile mit AutoCorrection
             for (i=0; i<nTabCount; i++)
                 if (rMark.GetTableSelect(i))
@@ -540,7 +577,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                     aPos.SetTab( i );
                     ULONG nIndex = (ULONG) ((SfxUInt32Item*) pDoc->GetAttr(
                         nCol, nRow, i, ATTR_VALUE_FORMAT ))->GetValue();
-                    if ( pFormatter->GetType(nIndex) == NUMBERFORMAT_TEXT )
+                    if ( pFormatter->GetType( nIndex ) == NUMBERFORMAT_TEXT ||
+                         ( ( rString.GetChar(0) == '+' || rString.GetChar(0) == '-' ) && nError && rString.Equals( aFormula ) ) )
                     {
                         ScStringCell* pCell = new ScStringCell( aFormula );
                         pDoc->PutCell( aPos, pCell );
