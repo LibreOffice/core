@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:44:22 $
+ *  last change: $Author: kz $ $Date: 2007-10-02 15:21:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1606,7 +1606,8 @@ BOOL ScInputHandler::StartTable( sal_Unicode cTyped, BOOL bFromCommand )
                 if ( bAutoComplete )
                     GetColData();
 
-                if ( aStr.GetChar(0) == '=' && !cTyped && !bCreatingFuncView )
+                if ( ( aStr.GetChar(0) == '=' || aStr.GetChar(0) == '+' || aStr.GetChar(0) == '-' ) &&
+                     !cTyped && !bCreatingFuncView )
                     InitRangeFinder(aStr);              // Formel wird editiert -> RangeFinder
 
                 bNewTable = TRUE;       //  -> PostEditView-Aufruf
@@ -1800,8 +1801,11 @@ void ScInputHandler::UpdateFormulaMode()
 {
     SfxApplication* pSfxApp = SFX_APP();
 
-    if ( pEngine->GetParagraphCount()==1 && pEngine->GetText((USHORT)0).GetChar(0) == '='
-        && !bProtected )
+    if ( pEngine->GetParagraphCount() == 1 &&
+         ( pEngine->GetText((USHORT)0).GetChar(0) == '=' ||
+           pEngine->GetText((USHORT)0).GetChar(0) == '+' ||
+           pEngine->GetText((USHORT)0).GetChar(0) == '-' ) &&
+         !bProtected )
     {
         if (!bFormulaMode)
         {
