@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swlbox.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:10:54 $
+ *  last change: $Author: kz $ $Date: 2007-10-02 10:19:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ public:
 
     using ComboBox::InsertEntry;
     void                    InsertEntry(const SwBoxEntry&);
-    USHORT                  InsertEntry( const XubString& rStr, USHORT )
+    USHORT                  InsertEntry( const XubString& rStr, USHORT = 0)
                             {        InsertEntry( SwBoxEntry( rStr ) ); return 0;    }
 
     using ComboBox::RemoveEntry;
