@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokenarray.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:05:55 $
+ *  last change: $Author: kz $ $Date: 2007-10-02 15:21:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,6 +235,9 @@ public:
     /** Rewrites to Plain Old Formula, substituting missing parameters. The
         ScTokenArray* returned is new'ed. */
             ScTokenArray*   RewriteMissingToPof();
+
+    /** Determines if this formula may be followed by a reference. */
+    bool                    MayReferenceFollow();
 };
 
 inline OpCode ScTokenArray::GetOuterFuncOpCode()
