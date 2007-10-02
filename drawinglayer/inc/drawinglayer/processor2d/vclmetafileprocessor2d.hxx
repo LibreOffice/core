@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-06 14:14:46 $
+ *  last change: $Author: aw $ $Date: 2007-10-02 16:54:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,13 @@ namespace drawinglayer
         {
         private:
             // local helper(s)
-            Rectangle impDumpToMetaFile(const primitive2d::Primitive2DSequence& rContent, GDIMetaFile& o_rContentMetafile);
-            void impConvertFillGradientAttributeToVCLGradient(Gradient& o_rVCLGradient, const attribute::FillGradientAttribute& rFiGrAtt);
+            Rectangle impDumpToMetaFile(
+                const primitive2d::Primitive2DSequence& rContent,
+                GDIMetaFile& o_rContentMetafile);
+            void impConvertFillGradientAttributeToVCLGradient(
+                Gradient& o_rVCLGradient,
+                const attribute::FillGradientAttribute& rFiGrAtt,
+                bool bIsTransparenceGradient);
             void impStartSvtGraphicFill(SvtGraphicFill* pSvtGraphicFill);
             void impEndSvtGraphicFill(SvtGraphicFill* pSvtGraphicFill);
             SvtGraphicStroke* impTryToCreateSvtGraphicStroke(

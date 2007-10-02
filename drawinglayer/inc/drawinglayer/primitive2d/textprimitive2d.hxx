@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-01 09:13:53 $
+ *  last change: $Author: aw $ $Date: 2007-10-02 16:54:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,15 +72,17 @@ namespace drawinglayer
         {
         private:
             // core data
-            String                                      maFamilyName;
-            String                                      maStyleName;
-            sal_uInt16                                  mnWeight;
+            String                                      maFamilyName;       // Font Family Name
+            String                                      maStyleName;        // Font Style Name
+            sal_uInt16                                  mnWeight;           // Font weight
 
             // bitfield
-            unsigned                                    mbSymbol : 1;
-            unsigned                                    mbVertical : 1;
-            unsigned                                    mbItalic : 1;
-            unsigned                                    mbOutline : 1;
+            unsigned                                    mbSymbol : 1;       // Symbol Font Flag
+            unsigned                                    mbVertical : 1;     // Vertical Text Flag
+            unsigned                                    mbItalic : 1;       // Italic Flag
+            unsigned                                    mbOutline : 1;      // Outline Flag
+            unsigned                                    mbRTL : 1;          // RTL Flag
+            unsigned                                    mbBiDiStrong : 1;   // BiDi Flag
             // TODO: pair kerning and CJK kerning
 
         public:
@@ -91,14 +93,18 @@ namespace drawinglayer
                 bool bSymbol = false,
                 bool bVertical = false,
                 bool bItalic = false,
-                bool bOutline = false)
+                bool bOutline = false,
+                bool bRTL = false,
+                bool bBiDiStrong = false)
             :   maFamilyName(rFamilyName),
                 maStyleName(rStyleName),
                 mnWeight(nWeight),
                 mbSymbol(bSymbol),
                 mbVertical(bVertical),
                 mbItalic(bItalic),
-                mbOutline(bOutline)
+                mbOutline(bOutline),
+                mbRTL(bRTL),
+                mbBiDiStrong(bBiDiStrong)
             {
             }
 
@@ -113,12 +119,14 @@ namespace drawinglayer
             bool getVertical() const { return mbVertical; }
             bool getItalic() const { return mbItalic; }
             bool getOutline() const { return mbOutline; }
+            bool getRTL() const { return mbRTL; }
+            bool getBiDiStrong() const { return mbBiDiStrong; }
         };
 
         // helper methods for vcl font
         Font getVclFontFromFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DVector& rFontSize, double fFontRotation);
         Font getVclFontFromFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform);
-        FontAttributes getFontAttributesFromVclFont(basegfx::B2DVector& rSize, const Font& rFont);
+        FontAttributes getFontAttributesFromVclFont(basegfx::B2DVector& rSize, const Font& rFont, bool bRTL, bool bBiDiStrong);
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

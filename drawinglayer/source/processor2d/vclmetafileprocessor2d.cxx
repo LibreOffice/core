@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-27 15:59:41 $
+ *  last change: $Author: aw $ $Date: 2007-10-02 16:55:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,11 +190,17 @@ namespace drawinglayer
 {
     namespace processor2d
     {
-        Rectangle VclMetafileProcessor2D::impDumpToMetaFile(const primitive2d::Primitive2DSequence& rContent, GDIMetaFile& o_rContentMetafile)
+        Rectangle VclMetafileProcessor2D::impDumpToMetaFile(
+            const primitive2d::Primitive2DSequence& rContent,
+            GDIMetaFile& o_rContentMetafile)
         {
             // Prepare VDev, MetaFile and connections
             OutputDevice* pLastOutputDevice = mpOutputDevice;
-            const basegfx::B2DRange aPrimitiveRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rContent, getViewInformation2D()));
+            basegfx::B2DRange aPrimitiveRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rContent, getViewInformation2D()));
+
+            // transform primitive range with current transformation (e.g shadow offset)
+            aPrimitiveRange.transform(maCurrentTransformation);
+
             const Rectangle aPrimitiveRectangle(
                 basegfx::fround(aPrimitiveRange.getMinX()), basegfx::fround(aPrimitiveRange.getMinY()),
                 basegfx::fround(aPrimitiveRange.getMaxX()), basegfx::fround(aPrimitiveRange.getMaxY()));
@@ -226,10 +232,24 @@ namespace drawinglayer
             return aPrimitiveRectangle;
         }
 
-        void VclMetafileProcessor2D::impConvertFillGradientAttributeToVCLGradient(Gradient& o_rVCLGradient, const attribute::FillGradientAttribute& rFiGrAtt)
+        void VclMetafileProcessor2D::impConvertFillGradientAttributeToVCLGradient(
+            Gradient& o_rVCLGradient,
+            const attribute::FillGradientAttribute& rFiGrAtt,
+            bool bIsTransparenceGradient)
         {
-            o_rVCLGradient.SetStartColor(Color(maBColorModifierStack.getModifiedColor(rFiGrAtt.getStartColor())));
-            o_rVCLGradient.SetEndColor(Color(maBColorModifierStack.getModifiedColor(rFiGrAtt.getEndColor())));
+            if(bIsTransparenceGradient)
+            {
+                // it's about alpha channel intensities (black/white), do not use color modifier
+                o_rVCLGradient.SetStartColor(Color(rFiGrAtt.getStartColor()));
+                o_rVCLGradient.SetEndColor(Color(rFiGrAtt.getEndColor()));
+            }
+            else
+            {
+                // use color modifier to influence start/end color of gradient
+                o_rVCLGradient.SetStartColor(Color(maBColorModifierStack.getModifiedColor(rFiGrAtt.getStartColor())));
+                o_rVCLGradient.SetEndColor(Color(maBColorModifierStack.getModifiedColor(rFiGrAtt.getEndColor())));
+            }
+
             o_rVCLGradient.SetAngle(static_cast< sal_uInt16 >(rFiGrAtt.getAngle() * (1.0 / F_PI1800)));
             o_rVCLGradient.SetBorder(static_cast< sal_uInt16 >(rFiGrAtt.getBorder() * 100.0));
             o_rVCLGradient.SetOfsX(static_cast< sal_uInt16 >(rFiGrAtt.getOffsetX() * 100.0));
@@ -1146,10 +1166,16 @@ namespace drawinglayer
                     // it is safest to use the VCL OutputDevice::DrawGradient method which creates those.
                     // re-create a VCL-gradient from FillGradientPrimitive2D and the needed tools PolyPolygon
                     Gradient aVCLGradient;
-                    impConvertFillGradientAttributeToVCLGradient(aVCLGradient, rGradientCandidate.getFillGradient());
+                    impConvertFillGradientAttributeToVCLGradient(aVCLGradient, rGradientCandidate.getFillGradient(), false);
                     basegfx::B2DPolyPolygon aLocalPolyPolygon(rGradientCandidate.getB2DPolyPolygon());
                     aLocalPolyPolygon.transform(maCurrentTransformation);
-                    const PolyPolygon aToolsPolyPolygon(aLocalPolyPolygon);
+
+                    // #i82145# ATM VCL printing of gradients using curved shapes does not work,
+                    // i submitted the bug with the given ID to THB. When that task is fixed it is
+                    // necessary to again remove this subdivision since it decreases possible
+                    // printing quality (not even resolution-dependent for now). THB will tell
+                    // me when that task is fixed in the master
+                    const PolyPolygon aToolsPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon));
 
                     // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
                     SvtGraphicFill* pSvtGraphicFill = 0;
@@ -1324,7 +1350,10 @@ namespace drawinglayer
                             pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
                         }
 
-                        if(pPoPoColor)
+                        // PolyPolygonGradientPrimitive2D, PolyPolygonHatchPrimitive2D and
+                        // PolyPolygonBitmapPrimitive2D are derived from PolyPolygonColorPrimitive2D.
+                        // Check also for correct ID to exclude derived implementations
+                        if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitiveID())
                         {
                             // single transparent PolyPolygon identified, use directly
                             const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
@@ -1397,7 +1426,8 @@ namespace drawinglayer
 
                             // render it to VCL
                             mpOutputDevice->DrawTransparent(
-                                aContentMetafile, aPrimitiveRectangle.TopLeft(), aPrimitiveRectangle.GetSize(), aVCLGradient);
+                                aContentMetafile, aPrimitiveRectangle.TopLeft(),
+                                aPrimitiveRectangle.GetSize(), aVCLGradient);
                         }
                     }
 
@@ -1428,7 +1458,8 @@ namespace drawinglayer
                             pFiGradient = dynamic_cast< const primitive2d::FillGradientPrimitive2D* >(xReference.get());
                         }
 
-                        if(pFiGradient)
+                        // Check also for correct ID to exclude derived implementations
+                        if(pFiGradient && PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D == pFiGradient->getPrimitiveID())
                         {
                             // various content, create content-metafile
                             GDIMetaFile aContentMetafile;
@@ -1436,11 +1467,12 @@ namespace drawinglayer
 
                             // re-create a VCL-gradient from FillGradientPrimitive2D
                             Gradient aVCLGradient;
-                            impConvertFillGradientAttributeToVCLGradient(aVCLGradient, pFiGradient->getFillGradient());
+                            impConvertFillGradientAttributeToVCLGradient(aVCLGradient, pFiGradient->getFillGradient(), true);
 
                             // render it to VCL
                             mpOutputDevice->DrawTransparent(
-                                aContentMetafile, aPrimitiveRectangle.TopLeft(), aPrimitiveRectangle.GetSize(), aVCLGradient);
+                                aContentMetafile, aPrimitiveRectangle.TopLeft(),
+                                aPrimitiveRectangle.GetSize(), aVCLGradient);
                         }
                         else
                         {

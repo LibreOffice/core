@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-01 09:14:08 $
+ *  last change: $Author: aw $ $Date: 2007-10-02 16:55:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,9 @@ namespace drawinglayer
                 && getSymbol() == rCompare.getSymbol()
                 && getVertical() == rCompare.getVertical()
                 && getItalic() == rCompare.getItalic()
-                && getOutline() == rCompare.getOutline());
+                && getOutline() == rCompare.getOutline()
+                && getRTL() == rCompare.getRTL()
+                && getBiDiStrong() == rCompare.getBiDiStrong());
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -122,7 +124,7 @@ namespace drawinglayer
             return aRetval;
         }
 
-        FontAttributes getFontAttributesFromVclFont(basegfx::B2DVector& rSize, const Font& rFont)
+        FontAttributes getFontAttributesFromVclFont(basegfx::B2DVector& rSize, const Font& rFont, bool bRTL, bool bBiDiStrong)
         {
             FontAttributes aRetval(
                 rFont.GetName(),
@@ -131,7 +133,9 @@ namespace drawinglayer
                 RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet(),
                 rFont.IsVertical(),
                 ITALIC_NONE != rFont.GetItalic(),
-                rFont.IsOutline());
+                rFont.IsOutline(),
+                bRTL,
+                bBiDiStrong);
             // TODO: eKerning
 
             const sal_Int32 nWidth(rFont.GetSize().getWidth());

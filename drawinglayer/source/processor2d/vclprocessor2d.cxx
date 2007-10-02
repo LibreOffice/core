@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-01 09:14:08 $
+ *  last change: $Author: aw $ $Date: 2007-10-02 16:55:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,14 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_WRONGSPELLPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
+#endif
+
+#ifndef _SVTOOLS_CTLOPTIONS_HXX
+#include <svtools/ctloptions.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -283,8 +291,6 @@ namespace drawinglayer
                             aFont.SetShadow( true );
                     }
 
-                    mpOutputDevice->SetFont(aFont);
-
                     // create transformed integer DXArray in view coordinate system
                     ::std::vector< sal_Int32 > aTransformedDXArray;
 
@@ -304,14 +310,29 @@ namespace drawinglayer
                     const basegfx::BColor aRGBFontColor(maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
                     const basegfx::B2DPoint aPoint(aLocalTransform * basegfx::B2DPoint(0.0, 0.0));
                     const Point aStartPoint(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
+                    const sal_uInt32 nOldLayoutMode(mpOutputDevice->GetLayoutMode());
 
+                    if(rTextCandidate.getFontAttributes().getRTL())
+                    {
+                        sal_uInt32 nRTLLayoutMode(nOldLayoutMode & ~(TEXT_LAYOUT_COMPLEX_DISABLED|TEXT_LAYOUT_BIDI_STRONG));
+                        nRTLLayoutMode |= TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_TEXTORIGIN_LEFT;
+                        mpOutputDevice->SetLayoutMode(nRTLLayoutMode);
+                    }
+
+                    mpOutputDevice->SetFont(aFont);
                     mpOutputDevice->SetTextColor(Color(aRGBFontColor));
+
                     mpOutputDevice->DrawTextArray(
                         aStartPoint,
                         rTextCandidate.getText(),
                         aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL,
                         rTextCandidate.getTextPosition(),
                         rTextCandidate.getTextLength());
+
+                    if(rTextCandidate.getFontAttributes().getRTL())
+                    {
+                        mpOutputDevice->SetLayoutMode(nOldLayoutMode);
+                    }
 
                     bPrimitiveAccepted = true;
                 }
@@ -910,6 +931,25 @@ namespace drawinglayer
             maBColorModifierStack(),
             maCurrentTransformation()
         {
+            // set digit language, derived from SvtCTLOptions to have the correct
+            // number display for arabic/hindi numerals
+            const SvtCTLOptions aSvtCTLOptions;
+            LanguageType eLang(LANGUAGE_SYSTEM);
+
+            if(SvtCTLOptions::NUMERALS_HINDI == aSvtCTLOptions.GetCTLTextNumerals())
+            {
+                eLang = LANGUAGE_ARABIC;
+            }
+            else if(SvtCTLOptions::NUMERALS_ARABIC == aSvtCTLOptions.GetCTLTextNumerals())
+            {
+                eLang = LANGUAGE_ENGLISH;
+            }
+            else
+            {
+                eLang = (LanguageType)Application::GetSettings().GetLanguage();
+            }
+
+            rOutDev.SetDigitLanguage(eLang);
         }
 
         VclProcessor2D::~VclProcessor2D()

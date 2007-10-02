@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdecoratedprimitive2d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-01 09:14:08 $
+ *  last change: $Author: aw $ $Date: 2007-10-02 16:55:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ namespace drawinglayer
                 // is needed
                 basegfx::B2DHomMatrix aUnrotatedTransform(rDecTrans.getB2DHomMatrix());
                 aUnrotatedTransform.rotate(-rDecTrans.getRotate());
-                aTextLayouter.setFontAttributes(getFontAttributes(), aUnrotatedTransform );
+                aTextLayouter.setFontAttributes(getFontAttributes(), aUnrotatedTransform);
 
                 // get text width
                 double fTextWidth(0.0);
@@ -515,7 +515,9 @@ namespace drawinglayer
                     getFontAttributes().getSymbol(),
                     getFontAttributes().getVertical(),
                     getFontAttributes().getItalic(),
-                    false);             // no outline anymore, handled locally
+                    false,             // no outline anymore, handled locally
+                    getFontAttributes().getRTL(),
+                    getFontAttributes().getBiDiStrong());
 
                 if(aNextWordBoundary.startPos == getTextPosition() && aNextWordBoundary.endPos == getTextLength())
                 {
@@ -600,7 +602,9 @@ namespace drawinglayer
                     getFontAttributes().getSymbol(),
                     getFontAttributes().getVertical(),
                     getFontAttributes().getItalic(),
-                    false);             // no outline anymore, handled locally
+                    false,             // no outline anymore, handled locally
+                    getFontAttributes().getRTL(),
+                    getFontAttributes().getBiDiStrong());
 
                 // handle as one word
                 impCreateGeometryContent(aNewPrimitives, aDecTrans, getText(), getTextPosition(), getTextLength(), getDXArray(), aNewFontAttributes);
