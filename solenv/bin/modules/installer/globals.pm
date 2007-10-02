@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.74 $
+#   $Revision: 1.75 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-27 12:53:12 $
+#   last change: $Author: kz $ $Date: 2007-10-02 15:20:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -220,6 +220,7 @@ BEGIN
     $downloadfilename = "";
     $downloadfileextension = "";
     $oooversionstring = "";
+    $shellnewfilesadded = 0;
 
     $is_copy_only_project = 0;
     $is_simple_packager_project = 0;
