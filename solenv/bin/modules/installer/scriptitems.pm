@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 15:26:30 $
+#   last change: $Author: kz $ $Date: 2007-10-02 15:20:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -889,18 +889,19 @@ sub get_Source_Directory_For_Files_From_Includepathlist
                 my $oldname = $onefile->{'Name'};
                 my $oldlanguage = $onefile->{'specificlanguage'};
                 my $newlanguage = "en-US";
-                $onefile->{'Name'} =~ s/$oldlanguage\./$newlanguage\./; # Example: tplwizfax_it.zip -> tplwizfax_en-US.zip
+                # $onefile->{'Name'} =~ s/$oldlanguage\./$newlanguage\./;   # Example: tplwizfax_it.zip -> tplwizfax_en-US.zip
                 $onefilename = $onefile->{'Name'};
+                $onefilename =~ s/$oldlanguage\./$newlanguage\./;   # Example: tplwizfax_it.zip -> tplwizfax_en-US.zip
                 $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;     # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
                 $sourcepathref = get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 1);
                 $onefile->{'sourcepath'} = $$sourcepathref;                     # This $$sourcepathref is empty, if no source was found
 
                 if ($onefile->{'sourcepath'})   # defaulting to english was successful
                 {
-                    $infoline = "WARNING: Using $onefile->{'Name'} instead of $oldname\n";
+                    $infoline = "WARNING: Using $onefilename instead of $oldname\n";
                     push( @installer::globals::logfileinfo, $infoline);
                     print "    $infoline";
-                    if ( $onefile->{'destination'} ) { $onefile->{'destination'} =~ s/\Q$oldname\E/$onefile->{'Name'}/; }
+                    # if ( $onefile->{'destination'} ) { $onefile->{'destination'} =~ s/\Q$oldname\E/$onefile->{'Name'}/; }
 
                     # If the directory, in which the new file is installed, is not language dependent,
                     # the filename has to be changed to avoid installation conflicts
