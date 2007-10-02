@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-14 07:31:37 $
+ *  last change: $Author: kz $ $Date: 2007-10-02 15:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 #include "token.hxx"
 #include "tokenarray.hxx"
 #include "compiler.hxx"
+#include "compiler.hrc"
 #include "rechead.hxx"
 #include "parclass.hxx"
 #include "jumpmatrix.hxx"
@@ -2234,6 +2235,30 @@ ScTokenArray * ScTokenArray::RewriteMissingToPof()
         delete [] pCtx;
 
     return pNewArr;
+}
+
+bool ScTokenArray::MayReferenceFollow()
+{
+    if ( pCode && nLen > 0 )
+    {
+        // ignore trailing spaces
+        USHORT i = nLen - 1;
+        while ( i > 0 && pCode[i]->GetOpCode() == SC_OPCODE_SPACES )
+        {
+            --i;
+        }
+        if ( i > 0 || pCode[i]->GetOpCode() != SC_OPCODE_SPACES )
+        {
+            OpCode eOp = pCode[i]->GetOpCode();
+            if ( ( eOp >= SC_OPCODE_START_BIN_OP && eOp < SC_OPCODE_END_BIN_OP ) ||
+                 ( eOp >= SC_OPCODE_START_UN_OP && eOp < SC_OPCODE_END_UN_OP ) ||
+                 eOp == SC_OPCODE_OPEN || eOp == SC_OPCODE_SEP )
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 
