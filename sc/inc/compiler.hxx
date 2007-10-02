@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 09:22:32 $
+ *  last change: $Author: kz $ $Date: 2007-10-02 15:20:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,6 +280,7 @@ private:
                                             // ignore errors and create RPN nevertheless
     const Convention *pConv;
     BOOL        bImportXML;
+    bool        mbCloseBrackets;            // whether to close open brackets automatically, default TRUE
 
     BOOL   GetToken();
     BOOL   NextNewToken(bool bAllowBooleans = false);
@@ -341,6 +342,7 @@ public:
                         { bCompileForFAP = bVal; bIgnoreErrors = bVal; }
     void            SetAutoCorrection( BOOL bVal )
                         { bAutoCorrect = bVal; bIgnoreErrors = bVal; }
+    void            SetCloseBrackets( bool bVal ) { mbCloseBrackets = bVal; }
     void            SetCompileEnglish( BOOL bVal );     // use English SymbolTable
     void            SetRefConvention( const Convention *pConvP );
     void            SetRefConvention( const ScAddress::Convention eConv );
