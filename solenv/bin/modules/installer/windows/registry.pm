@@ -4,9 +4,9 @@
 #
 #   $RCSfile: registry.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-26 08:48:44 $
+#   last change: $Author: kz $ $Date: 2007-10-02 15:20:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -228,7 +228,7 @@ sub add_userregs_to_registry_table
 
         $registry{'Registry'} = $onefile->{'userregkeypath'};
         $registry{'Root'} = "1";  # always HKCU
-        $registry{'Key'} = "Software/$allvariables->{'MANUFACTURER'}/$allvariables->{'PRODUCTNAME'} $allvariables->{'PRODUCTVERSION'}/";
+        $registry{'Key'} = "Software\\$allvariables->{'MANUFACTURER'}\\$allvariables->{'PRODUCTNAME'} $allvariables->{'PRODUCTVERSION'}\\";
         if ( $onefile->{'needs_user_registry_key'} ) { $registry{'Key'} = $registry{'Key'} . "StartMenu"; }
         else { $registry{'Key'} = $registry{'Key'} . "ShellNew"; }
         $registry{'Name'} = $onefile->{'Name'};
