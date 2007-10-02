@@ -1,0 +1,31 @@
+--- misc/build/openssl-0.9.8e/ms/do_ms.bat	2005-05-17 02:07:13.000000000 +0200
++++ misc/build/openssl-0.9.8e/ms/do_ms.bat	2007-08-23 15:04:58.218750000 +0200
+@@ -1,9 +1,8 @@
++%1 util\mkfiles.pl >MINFO
++%1 util\mk1mf.pl no-asm VC-WIN32 >ms\nt.mak
++%1 util\mk1mf.pl dll no-asm VC-WIN32 >ms\ntdll.mak
++%1 util\mk1mf.pl no-asm VC-CE >ms\ce.mak
++%1 util\mk1mf.pl dll no-asm VC-CE >ms\cedll.mak
+ 
+-perl util\mkfiles.pl >MINFO
+-perl util\mk1mf.pl no-asm VC-WIN32 >ms\nt.mak
+-perl util\mk1mf.pl dll no-asm VC-WIN32 >ms\ntdll.mak
+-perl util\mk1mf.pl no-asm VC-CE >ms\ce.mak
+-perl util\mk1mf.pl dll no-asm VC-CE >ms\cedll.mak
+-
+-perl util\mkdef.pl 32 libeay > ms\libeay32.def
+-perl util\mkdef.pl 32 ssleay > ms\ssleay32.def
++%1 util\mkdef.pl 32 libeay > ms\libeay32.def
++%1 util\mkdef.pl 32 ssleay > ms\ssleay32.def
+--- misc/build/openssl-0.9.8e/util/mk1mf.pl	2006-11-30 14:04:43.000000000 +0100
++++ misc/build/openssl-0.9.8e/util/mk1mf.pl	2007-10-02 09:12:46.343750000 +0200
+@@ -115,7 +115,7 @@
+ $inc_def="outinc";
+ $tmp_def="tmp";
+ 
+-$perl="perl" unless defined $perl;
++$perl="$ENV{PERL}" unless defined $perl;
+ $mkdir="-mkdir" unless defined $mkdir;
+ 
+ ($ssl,$crypto)=("ssl","crypto");
+
