@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:34:52 $
+ *  last change: $Author: kz $ $Date: 2007-10-02 15:21:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -971,7 +971,8 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
         bCorrected( FALSE ),
         bCompileForFAP( FALSE ),
         bIgnoreErrors( FALSE ),
-        bImportXML ( FALSE )
+        bImportXML ( FALSE ),
+        mbCloseBrackets( true )
 {
     if (!nAnzStrings)
         Init();
@@ -999,7 +1000,8 @@ ScCompiler::ScCompiler(ScDocument* pDocument, const ScAddress& rPos )
         bCorrected( FALSE ),
         bCompileForFAP( FALSE ),
         bIgnoreErrors( FALSE ),
-        bImportXML ( FALSE )
+        bImportXML ( FALSE ),
+        mbCloseBrackets( true )
 {
     if (!nAnzStrings)
         Init();
@@ -2311,7 +2313,9 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula,
         if ( bAutoCorrect )
             aCorrectedFormula += aCorrectedSymbol;
     }
-    if ( eLastOp != ocBad )
+    // With ocBad the remaining formula is a string, too many parentheses would
+    // be shown when closed automatically.
+    if ( eLastOp != ocBad && mbCloseBrackets )
     {
         if( bInArray )
         {
@@ -2324,8 +2328,6 @@ ScTokenArray* ScCompiler::CompileString( const String& rFormula,
                 aCorrectedFormula += pSymbolTable[ocArrayClose];
         }
 
-        // With ocBad the remaining formula is a string, too many parentheses
-        // would be shown.
         ScByteToken aToken( ocClose );
         while( nBrackets-- )
         {
