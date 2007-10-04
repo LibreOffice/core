@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-08-30 16:00:53 $
+dnl * Date: $Date: 2007-10-04 07:48:20 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.220 $ )
+AC_REVISION( $Revision: 1.221 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2307,10 +2307,6 @@ you must use the "--with-jdk-home" configure option explicitly])
              AC_MSG_ERROR([In order to successfully build OpenOffice.org using the IBM JDK,
 you must use the "--with-jdk-home" configure option explicitly])
         fi
-        if test "$_jdk_ver" -gt 10402; then
-             AC_MSG_WARN([IBM JDK might be too recent, maximum version tested is 1.4.2])
-             echo "IBM JDK might be too recent, maximum version tested is 1.4.2" >>warn
-        fi
 
         JAVA_HOME=$with_jdk_home
 	
@@ -2458,6 +2454,7 @@ if test "$SOLAR_JAVA" != ""; then
     fi
 fi
 
+AWTLIB=
 if test "$SOLAR_JAVA" != ""; then
    AC_MSG_CHECKING([for jawt lib name])
    if test "$JDK" = "gcj"; then 
@@ -2475,6 +2472,29 @@ if test "$SOLAR_JAVA" != ""; then
       exec 6>&1 # output on again
       CFLAGS=$save_CFLAGS
       LDFLAGS=$save_LDFLAGS
+   fi
+   # IBM SDK 1.5.0-sr5 includes libjawt.so with unresolved symbols.
+   # A workaround is to link also against libpmawt.so
+   if test "$JDK" = "ibm" ; then
+      save_CFLAGS=$CFLAGS
+      save_LDFLAGS=$LDFLAGS
+      save_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+      CFLAGS="$CFLAGS -I$JAVA_HOME/include"
+      LDFLAGS="$LDFLAGS -L$JAVA_HOME/jre/bin"
+      LD_LIBRARY_PATH=$JAVA_HOME/jre/bin:$JAVA_HOME/jre/bin/classic:$JAVA_HOME/jre/bin/xawt:$LD_LIBRARY_PATH
+      export LD_LIBRARY_PATH
+      exec 6>/dev/null # no output
+      AC_CHECK_HEADER(jni.h, [],
+                    [AC_MSG_ERROR([jni.h could not be found.])], [])
+      AC_CHECK_LIB(jawt, JAWT_GetAWT, [ AWTLIB="-ljawt"] )
+      if test -z "$AWTLIB"; then
+         LDFLAGS="$LDFLAGS -L$JAVA_HOME/jre/bin/xawt -ljawt"
+         AC_CHECK_LIB(mawt, JAWT_GetAWT, [ AWTLIB="-L$JAVA_HOME/jre/bin/xawt -ljawt -lmawt"])
+      fi
+      exec 6>&1 # output on again
+      CFLAGS=$save_CFLAGS
+      LDFLAGS=$save_LDFLAGS
+      LD_LIBRARY_PATH=$save_LD_LIBRARY_PATH
    fi
    if test -z "$AWTLIB"; then
       AWTLIB=-ljawt
