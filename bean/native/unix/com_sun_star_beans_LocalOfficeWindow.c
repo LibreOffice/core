@@ -4,9 +4,9 @@
  *
  *  $RCSfile: com_sun_star_beans_LocalOfficeWindow.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:03:11 $
+ *  last change: $Author: rt $ $Date: 2007-10-04 08:13:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,10 @@
 #include <X11/Intrinsic.h>
 
 #include "jni.h"
-#include "jawt.h"
 #include "jawt_md.h"
+#include "jawt.h"
 
-//#include "../inc/com_sun_star_comp_beans_LocalOfficeWindow.h"
+/*#include "../inc/com_sun_star_comp_beans_LocalOfficeWindow.h"*/
 
 #if defined assert
 #undef assert
