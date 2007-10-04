@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.156 $
-# Date:        $Date: 2007-08-03 13:09:48 $
+# Version:     $Revision: 1.157 $
+# Date:        $Date: 2007-10-04 08:12:49 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -463,7 +463,12 @@ elsif ( $platform =~ m/linux-gnu/ )
          if ( $JDK eq "gcj" ) {
             $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
             $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."client";
-            $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
+            $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads"; }
+         elsif ($JDK =~ m/^[Ii][Bb][Mm]/)
+         {  $JRELIBDIR     = '$JAVA_HOME'.$ds."jre".$ds."bin";
+            $JRETOOLKITDIR = '$JAVA_HOME'.$ds."jre".$ds."bin".$ds."classic";
+            $JRETHREADDIR  = '$JAVA_HOME'.$ds."jre".$ds."bin";
+            $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."bin".$ds."xawt";
          }
       }
 
@@ -1700,6 +1705,8 @@ if ( $JDK ne "gcj" ) {
 }
 else {
    ToFile( "JAVACISGCJ",       '@JAVACISGCJ@',      "e" );
+}
+if ( $GUI eq "UNX" ) {
    ToFile( "AWTLIB",           '@AWTLIB@',          "e" );
 }
 if ( '@JDK@' ne '' )
