@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: checkdeliver.pl,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2007-10-02 15:19:26 $
+#   last change: $Author: rt $ $Date: 2007-10-04 15:31:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,11 @@ sub check
         my $orgfile_stats = stat($ofile);
         next if ( -d _ );  # compare files, not directories
         my $delivered_stats = lstat($sfile);
-        next if ( -l _ );  # compare files, not links
+        if ( $^O !~ /^MSWin/ ) {
+            # windows does not know about links.
+            # Therefore lstat() is not a lstat, and the following check would break
+            next if ( -l _ );  # compare files, not links
+        }
 
         if ( $orgfile_stats && $delivered_stats ) {
             # Stripping (on unix like platforms) and signing (for windows)
