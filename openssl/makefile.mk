@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: tkr $ $Date: 2007-10-02 09:00:10 $
+#   last change: $Author: tkr $ $Date: 2007-10-05 11:33:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ TARGET=so_openssl
     @echo "openssl disabled...."
 .ENDIF
 
-OPENSSL_NAME=openssl-0.9.8a
+OPENSSL_NAME=openssl-0.9.8e
 
 TARFILE_NAME=$(OPENSSL_NAME)
 
@@ -66,6 +66,7 @@ BUILD_DIR=.
 BUILD_ACTION=make
 
 .IF "$(OS)" == "SOLARIS"
+OPENSSL_NAME=openssl-0.9.8a
 CONFIGURE_DIR=. 
 CONFIGURE_ACTION=Configure solaris-sparcv9-gcc  
 .IF "$(PROCTYPE)" == "x86"
@@ -82,7 +83,6 @@ BUILD_ACTION=make
 .ENDIF
 
 .IF "$(OS)" == "WNT"
-OPENSSL_NAME=openssl-0.9.8e
 
 PATCH_FILE_NAME=openssl.patch
 
