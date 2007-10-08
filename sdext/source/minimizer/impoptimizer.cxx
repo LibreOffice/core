@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impoptimizer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2007-09-28 14:54:03 $
+ *  last change: $Author: sj $ $Date: 2007-10-08 16:17:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -670,7 +670,8 @@ static void DispatchURL( Reference< XComponentContext > xMSF, OUString sURL, Ref
         Sequence< PropertyValue > aArgs;
         Reference< XDispatchProvider > xDispatchProvider( xFrame, UNO_QUERY_THROW );
         Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aUrl, OUString(), 0 );  // "_self"
-        xDispatch->dispatch( aUrl, aArgs );
+        if ( xDispatch.is() )
+            xDispatch->dispatch( aUrl, aArgs );
     }
     catch( Exception& )
     {
