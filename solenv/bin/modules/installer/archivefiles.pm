@@ -4,9 +4,9 @@
 #
 #   $RCSfile: archivefiles.pm,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2007-10-02 15:19:45 $
+#   last change: $Author: rt $ $Date: 2007-10-08 12:42:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -373,8 +373,8 @@ sub resolving_archive_flag
 
                                 installer::systemactions::copy_one_file($oldfilename, $newfilename);
 
-                                # $newfile{'Name'} = $newzipname;
-                                # $newfile{'destination'} = $destination . $newzipname;
+                                $newfile{'Name'} = $newzipname;
+                                $newfile{'destination'} = $destination . $newzipname;
                                 $newfile{'sourcepath'} = $unzipdir . $newzipname;
 
                                 $infoline = "RENAME_TO_LANGUAGE: Using $newzipname instead of $zipname!\n";
