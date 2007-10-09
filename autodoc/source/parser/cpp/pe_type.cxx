@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_type.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:14:29 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:03:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,9 +115,9 @@ PE_Type::Setup_StatusFunctions()
                                                   &PE_Type::On_start_volatile,
                                                   &PE_Type::On_start_Bracket_Right,
                                                   &PE_Type::On_start_DoubleColon,
+                                                  &PE_Type::On_start_typename,
                                                   &PE_Type::On_start_BuiltInType,
-                                                  &PE_Type::On_start_TypeSpecializer,
-                                                  &PE_Type::On_start_typename };
+                                                  &PE_Type::On_start_TypeSpecializer };
     static INT16 stateT_start[] =               { Tid_Identifier,
                                                   Tid_class,
                                                   Tid_struct,
@@ -127,9 +127,9 @@ PE_Type::Setup_StatusFunctions()
                                                   Tid_volatile,
                                                   Tid_Bracket_Right,
                                                   Tid_DoubleColon,
+                                                  Tid_typename,
                                                   Tid_BuiltInType,
-                                                  Tid_TypeSpecializer,
-                                                  Tid_typename };
+                                                  Tid_TypeSpecializer };
 
     static F_Tok stateF_expect_namesegment[] =  { &PE_Type::On_expect_namesegment_Identifier,
                                                   &PE_Type::On_expect_namesegment_Identifier };
