@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salpixmaputils.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:15:24 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:10:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,29 +36,15 @@
 #ifndef _SV_SALPIXMAPUTILS_HXX
 #define _SV_SALPIXMAPUTILS_HXX
 
-#include <premac.h>
+#include "premac.h"
 #include <ApplicationServices/ApplicationServices.h>
-#include <postmac.h>
+#include "postmac.h"
 
-#ifndef _GEN_HXX
-    #include <tools/gen.hxx>
-#endif
-
-#ifndef _SV_SALBTYPE_HXX
-    #include <vcl/salbtype.hxx>
-#endif
-
-#ifndef _SV_SALGTYPE_HXX
-    #include <vcl/salgtype.hxx>
-#endif
-
-#ifndef _SV_SALCONST_H
-    #include <salconst.h>
-#endif
-
-#ifndef _SV_SALCOLORUTILS_HXX
-    #include <salcolorutils.hxx>
-#endif
+#include "tools/gen.hxx"
+#include "vcl/salbtype.hxx"
+#include "vcl/salgtype.hxx"
+#include "salconst.h"
+#include "salcolorutils.hxx"
 
 // ------------------------------------------------------------------
 
