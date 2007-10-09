@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:50:36 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:18:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@
 #include <sfx2/evntconf.hxx>
 #include "macropg.hxx"
 
+#include <com/sun/star/frame/XFrame.hpp>
+
 class Menu;
 class SfxMacroInfoItem;
 class SvxMacroItem;
@@ -52,9 +54,9 @@ class SvxEventConfigPage : public _SvxMacroTabPage
     FixedText                           aSaveInText;
     ListBox                             aSaveInListBox;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >   m_xEvents_app;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >   m_xEvents_doc;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable >   m_xModifiable_doc;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >   m_xAppEvents;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >   m_xDocumentEvents;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable >         m_xDocumentModifiable;
 
     BOOL            bAppConfig;
 
@@ -65,15 +67,20 @@ class SvxEventConfigPage : public _SvxMacroTabPage
     SvxEventConfigPage & operator= (const SvxEventConfigPage &);
 
 public:
-                    SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet );
+                    /// this is only to let callers know that there is a LateInit which *must* be called
+                    struct EarlyInit { };
+                    SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet, EarlyInit );
                     ~SvxEventConfigPage();
 
-    void            Init();
-    void            Apply();
+    void            LateInit( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
 
+protected:
     virtual BOOL    FillItemSet( SfxItemSet& );
     virtual void    Reset( const SfxItemSet& );
     using _SvxMacroTabPage::Reset;
+
+private:
+    void    ImplInitDocument();
 };
 
 
