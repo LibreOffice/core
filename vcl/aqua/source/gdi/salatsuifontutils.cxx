@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salatsuifontutils.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 16:31:17 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:14:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,14 +38,12 @@
 
 #include <boost/assert.hpp>
 #include <vector>
-#include <string>
-#include <numeric>
+#include <set>
 
-#ifndef _SV_SALATSUIFONTUTILS_HXX
-#include <salatsuifontutils.hxx>
-#endif
-
-#include <salgdi.h>
+#include "salatsuifontutils.hxx"
+#include "salgdi.h"
+#include "saldata.hxx"
+#include "vcl/svapp.hxx"
 
 // we have to get the font attributes from the name table
 // since neither head's macStyle nor OS/2's panose are easily available
@@ -55,6 +53,8 @@ static void UpdateAttributesFromPSName( const String& aPSName, ImplDevFontAttrib
 {
     if( (aPSName.SearchAscii("Regular") != STRING_NOTFOUND)
     ||  (aPSName.SearchAscii("Normal") != STRING_NOTFOUND)
+    ||  (aPSName.SearchAscii("Roman") != STRING_NOTFOUND)
+    ||  (aPSName.SearchAscii("Medium") != STRING_NOTFOUND)
     ||  (aPSName.SearchAscii("Plain") != STRING_NOTFOUND) )
     {
        rDFA.meWidthType = WIDTH_NORMAL;
@@ -63,9 +63,7 @@ static void UpdateAttributesFromPSName( const String& aPSName, ImplDevFontAttrib
     }
 
     // heuristics for font weight
-    if (aPSName.SearchAscii("Medium") != STRING_NOTFOUND)
-        rDFA.meWeight = WEIGHT_NORMAL;
-    else if (aPSName.SearchAscii("ExtraBlack") != STRING_NOTFOUND)
+    if (aPSName.SearchAscii("ExtraBlack") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_BLACK;
     else if (aPSName.SearchAscii("Black") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_BLACK;
@@ -85,15 +83,24 @@ static void UpdateAttributesFromPSName( const String& aPSName, ImplDevFontAttrib
         rDFA.meWeight = WEIGHT_LIGHT;
     else if (aPSName.SearchAscii("Thin") != STRING_NOTFOUND)
         rDFA.meWeight = WEIGHT_THIN;
+    else if (aPSName.SearchAscii("-W3") != STRING_NOTFOUND)
+        rDFA.meWeight = WEIGHT_LIGHT;
+    else if (aPSName.SearchAscii("-W4") != STRING_NOTFOUND)
+        rDFA.meWeight = WEIGHT_SEMILIGHT;
+    else if (aPSName.SearchAscii("-W5") != STRING_NOTFOUND)
+        rDFA.meWeight = WEIGHT_NORMAL;
+    else if (aPSName.SearchAscii("-W6") != STRING_NOTFOUND)
+        rDFA.meWeight = WEIGHT_SEMIBOLD;
+    else if (aPSName.SearchAscii("-W8") != STRING_NOTFOUND)
+        rDFA.meWeight = WEIGHT_BLACK;
 
     // heuristics for font slant
-    if (aPSName.SearchAscii("Italic") != STRING_NOTFOUND)
+    if( (aPSName.SearchAscii("Italic") != STRING_NOTFOUND)
+    ||  (aPSName.SearchAscii("Cursive") != STRING_NOTFOUND)
+    ||  (aPSName.SearchAscii("BookIt") != STRING_NOTFOUND) )
         rDFA.meItalic = ITALIC_NORMAL;
-    if (aPSName.SearchAscii("Cursive") != STRING_NOTFOUND)
-        rDFA.meItalic = ITALIC_NORMAL;
-    if (aPSName.SearchAscii("Oblique") != STRING_NOTFOUND)
-        rDFA.meItalic = ITALIC_OBLIQUE;
-    else if (aPSName.SearchAscii("Inclined") != STRING_NOTFOUND)
+    if( (aPSName.SearchAscii("Oblique") != STRING_NOTFOUND)
+    ||  (aPSName.SearchAscii("Inclined") != STRING_NOTFOUND) )
         rDFA.meItalic = ITALIC_OBLIQUE;
 
     // heuristics for font width
@@ -114,7 +121,10 @@ static void UpdateAttributesFromPSName( const String& aPSName, ImplDevFontAttrib
 
     // heuristics for font semantic
     if( (aPSName.SearchAscii("Symbol") != STRING_NOTFOUND)
-    ||  (aPSName.SearchAscii("DingBats") != STRING_NOTFOUND) )
+    ||  (aPSName.SearchAscii("dings") != STRING_NOTFOUND)
+    ||  (aPSName.SearchAscii("Dingbats") != STRING_NOTFOUND)
+    ||  (aPSName.SearchAscii("Ornaments") != STRING_NOTFOUND)
+    ||  (aPSName.SearchAscii("Embellishments") != STRING_NOTFOUND) )
         rDFA.mbSymbolFlag  = true;
 }
 
@@ -142,13 +152,18 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
     rDFA.meAntiAlias    = ANTIALIAS_DONTKNOW;
     rDFA.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
 
-    // iterate over all available name strings of the font
+    // prepare iterating over all name strings of the font
     ItemCount nFontNameCount = 0;
     OSStatus rc = ATSUCountFontNames( nFontID, &nFontNameCount );
     if( rc != noErr )
         return false;
-
     int nBestNameValue = 0;
+    FontLanguageCode eBestLangCode = 0;
+    const FontLanguageCode eUILangCode = Application::GetSettings().GetUILanguage();
+    typedef std::vector<char> NameBuffer;
+    NameBuffer aNameBuffer( 256 );
+
+    // iterate over all available name strings of the font
     for( ItemCount nNameIndex = 0; nNameIndex < nFontNameCount; ++nNameIndex )
     {
         ByteCount nNameLength = 0;
@@ -169,7 +184,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
             continue;
 
         // heuristic to find the most common font name
-        int nNameValue = (eFontNameLanguage==0x409) ? 0 : -1; // prefer English
+        int nNameValue = (eFontNameLanguage==eUILangCode) ? 0 : -1; // prefer the UI language
         const int nPlatformEncoding = ((int)eFontNamePlatform << 8) + (int)eFontNameScript;
         switch( nPlatformEncoding )
         {
@@ -181,15 +196,18 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
             case 0x100: nNameValue +=  2; break;    // TODO?: Mac Roman
             case 0x301: nNameValue += 28; break;    // Win UCS-2
             case 0x30A: nNameValue +=  0; break;    // TODO: Win-UCS-4
-            case 0x300: nNameValue +=  5;           // Win Symbol encoded name!
+            case 0x300: nNameValue +=  0;           // Win Symbol encoded name!
                         rDFA.mbSymbolFlag = true;   // (often seen for symbol fonts)
                         break;
             default:    break;
         }
 
+        // ignore name entries with no useful encoding
+        if( nNameValue <= 0 )
+            continue;
+
         // get the encoded name
-        typedef std::vector<char> NameBuffer;
-        NameBuffer aNameBuffer( nNameLength+1 ); // extra byte helps for debugging
+        aNameBuffer.reserve( nNameLength+1 ); // extra byte helps for debugging
         rc = ATSUGetIndFontName( nFontID, nNameIndex, nNameLength, &aNameBuffer[0],
            &nNameLength, &eFontNameCode, &eFontNamePlatform, &eFontNameScript, &eFontNameLanguage );
         if( rc != noErr )
@@ -201,15 +219,14 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
             aUtf16Name = UniString( (const sal_Unicode*)&aNameBuffer[0], nNameLength/2 );
         else if( nNameValue >= 1 ) // the important PSNAME often has apple-roman encoding though
             aUtf16Name = UniString( &aNameBuffer[0], nNameLength, RTL_TEXTENCODING_APPLE_ROMAN );
-        else                       // ignore other encodings
-            continue;
 
         // ignore empty strings
         if( aUtf16Name.Len() <= 0 )
             continue;
 
         // handle the name depending on its namecode
-        switch( eFontNameCode ) {
+        switch( eFontNameCode )
+        {
             case kFontFamilyName:
                 // ignore font names starting with '.'
                 if( aUtf16Name.GetChar(0) == '.' )
@@ -226,12 +243,14 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
                 {
                     // get the best family name
                     nBestNameValue = nNameValue;
+                    eBestLangCode = eFontNameLanguage;
                     rDFA.maName = aUtf16Name;
                 }
                 break;
             case kFontStyleName:
                 // get a style name matching to the family name
-                if( nBestNameValue <= nNameValue )
+                if( (nBestNameValue < nNameValue)
+                ||  (eBestLangCode == eFontNameLanguage) )
                     rDFA.maStyleName = aUtf16Name;
                 break;
             case kFontPostscriptName:
@@ -274,8 +293,11 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
 #endif
 
 #if 0 // selecting non-defaulted font features is not enabled yet
+    ByteString aFName( rDFA.maName, RTL_TEXTENCODING_UTF8 );
+    ByteString aSName( rDFA.maStyleName, RTL_TEXTENCODING_UTF8 );
     ItemCount nMaxFeatures = 0;
     rc = ATSUCountFontFeatureTypes( nFontID, &nMaxFeatures );
+    AquaLog("Font \"%s\" \"%s\" has %d features\n",aFName.GetBuffer(),aSName.GetBuffer(),rc);
     if( (rc == noErr) && (nMaxFeatures > 0) )
     {
         typedef std::vector<ATSUFontFeatureType> FeatureVector;
@@ -318,31 +340,35 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
 
 SystemFontList::SystemFontList()
 {
-   ItemCount nATSUICompatibleFontsAvailable = 0;
-   if (ATSUFontCount(&nATSUICompatibleFontsAvailable) != noErr)
-      return;
-
-   if (nATSUICompatibleFontsAvailable <= 0)
-      return;
-
-   typedef std::vector<ATSUFontID> ATSUIFontIDContainer_t;
-   ATSUIFontIDContainer_t fontIDList(nATSUICompatibleFontsAvailable);
-   ItemCount nFontItemsCount = 0;
-   if (ATSUGetFontIDs(&fontIDList[0], fontIDList.capacity(), &nFontItemsCount) != noErr)
+    // count available system fonts
+    ItemCount nATSUICompatibleFontsAvailable = 0;
+    if( ATSUFontCount(&nATSUICompatibleFontsAvailable) != noErr )
+        return;
+    if( nATSUICompatibleFontsAvailable <= 0 )
        return;
 
-   BOOST_ASSERT(nATSUICompatibleFontsAvailable == nFontItemsCount && "Strange I would expect them to be equal");
+    // enumerate available system fonts
+    typedef std::vector<ATSUFontID> AtsFontIDVector;
+    AtsFontIDVector aFontIDVector( nATSUICompatibleFontsAvailable );
+    ItemCount nFontItemsCount = 0;
+    if( ATSUGetFontIDs( &aFontIDVector[0], aFontIDVector.capacity(), &nFontItemsCount ) != noErr )
+       return;
 
-   mFontContainer.reserve( nFontItemsCount );
-   ATSUIFontIDContainer_t::const_iterator it = fontIDList.begin();
-   for(; it != fontIDList.end(); ++it )
-   {
+    BOOST_ASSERT(nATSUICompatibleFontsAvailable == nFontItemsCount && "Strange I would expect them to be equal");
+
+    // prepare use of the available fonts
+    mFontContainer.reserve( nFontItemsCount );
+    AtsFontIDVector::const_iterator it = aFontIDVector.begin();
+    for(; it != aFontIDVector.end(); ++it )
+    {
         ImplDevFontAttributes aDevFontAttr;
         if( !GetDevFontAttributes( *it, aDevFontAttr ) )
             continue;
         ImplMacFontData* pFontData = new ImplMacFontData(  aDevFontAttr, *it );
         mFontContainer.push_back(pFontData);
     }
+
+    InitGlyphFallbacks();
 }
 
 // -----------------------------------------------------------------------
@@ -352,6 +378,8 @@ SystemFontList::~SystemFontList()
     ImplFontDataContainer_t::const_iterator it = mFontContainer.begin();
     for(; it != mFontContainer.end(); ++it )
         delete *it;
+
+    ATSUDisposeFontFallbacks( maFontFallbacks );
 }
 
 // -----------------------------------------------------------------------
@@ -361,6 +389,67 @@ void SystemFontList::AnnounceFonts( ImplDevFontList& rFontList ) const
     ImplFontDataContainer_t::const_iterator it = mFontContainer.begin();
     for(; it != mFontContainer.end(); ++it )
         rFontList.Add( (*it)->Clone() );
+}
+
+// -----------------------------------------------------------------------
+
+// not all fonts are suitable for glyph fallback => sort them
+struct GfbCompare{ bool operator()(const ImplMacFontData*, const ImplMacFontData*); };
+
+inline bool GfbCompare::operator()( const ImplMacFontData* pA, const ImplMacFontData* pB )
+{
+    // use symbol fonts only as last resort
+    bool bPreferA = !pA->IsSymbolFont();
+    bool bPreferB = !pB->IsSymbolFont();
+    if( bPreferA != bPreferB )
+        return bPreferA;
+    // prefer scalable fonts
+    bPreferA = pA->IsScalable();
+    bPreferB = pB->IsScalable();
+    if( bPreferA != bPreferB )
+        return bPreferA;
+    // prefer non-slanted fonts
+    bPreferA = (pA->GetSlant() == ITALIC_NONE);
+    bPreferB = (pB->GetSlant() == ITALIC_NONE);
+    if( bPreferA != bPreferB )
+        return bPreferA;
+    // prefer normal weight fonts
+    bPreferA = (pA->GetWeight() == WEIGHT_NORMAL);
+    bPreferB = (pB->GetWeight() == WEIGHT_NORMAL);
+    if( bPreferA != bPreferB )
+        return bPreferA;
+    // prefer normal width fonts
+    bPreferA = (pA->GetWidthType() == WIDTH_NORMAL);
+    bPreferB = (pB->GetWidthType() == WIDTH_NORMAL);
+    if( bPreferA != bPreferB )
+        return bPreferA;
+    return false;
+}
+
+void SystemFontList::InitGlyphFallbacks()
+{
+    // sort fonts for "glyph fallback"
+    typedef std::multiset<const ImplMacFontData*,GfbCompare> FallbackSet;
+    FallbackSet aFallbackSet;
+    ImplFontDataContainer_t::const_iterator it = mFontContainer.begin();
+    for(; it != mFontContainer.end(); ++it )
+        aFallbackSet.insert( *it );
+
+    // tell ATSU about font preferences for "glyph fallback"
+    typedef std::vector<ATSUFontID> AtsFontIDVector;
+    AtsFontIDVector aFallbackVector;
+    aFallbackVector.reserve( mFontContainer.size() );
+    FallbackSet::const_iterator itFData = aFallbackSet.begin();
+    for(; itFData != aFallbackSet.end(); ++itFData )
+    {
+        const ImplMacFontData* pFontData = *itFData;
+        ATSUFontID nFontID = (ATSUFontID)pFontData->GetFontId();
+        aFallbackVector.push_back( nFontID );
+    }
+
+    ATSUCreateFontFallbacks( &maFontFallbacks );
+    ATSUSetObjFontFallbacks( maFontFallbacks,
+        aFallbackVector.size(), &aFallbackVector[0], kATSUSequentialFallbacksPreferred );
 }
 
 // -----------------------------------------------------------------------
