@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_docmgr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:00:20 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:26:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,26 @@ namespace tdoc_ucp {
         isOfficeDocument(
             const com::sun::star::uno::Reference<
                 com::sun::star::uno::XInterface > & xDoc );
+
+        bool
+        isDocumentPreview(
+            const com::sun::star::uno::Reference<
+                com::sun::star::frame::XModel > & xModel );
+
+        bool
+        isWithoutOrInTopLevelFrame(
+            const com::sun::star::uno::Reference<
+                com::sun::star::frame::XModel > & xModel );
+
+        bool
+        isBasicIDE(
+            const com::sun::star::uno::Reference<
+                com::sun::star::frame::XModel > & xModel );
+
+        bool
+        isHelpDocument(
+            const com::sun::star::uno::Reference<
+                com::sun::star::frame::XModel > & xModel );
 
         osl::Mutex                                          m_aMtx;
         com::sun::star::uno::Reference<
