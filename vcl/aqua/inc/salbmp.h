@@ -4,9 +4,9 @@
 *
 *  $RCSfile: salbmp.h,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: rt $ $Date: 2007-07-05 15:58:54 $
+*  last change: $Author: kz $ $Date: 2007-10-09 15:08:33 $
 *
 *  The Contents of this file are made available subject to
 *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,53 +36,18 @@
 #ifndef _SV_SALBMP_H
 #define _SV_SALBMP_H
 
-#ifndef _GEN_HXX
-#include <tools/gen.hxx>
-#endif
-
-#ifndef _SV_SV_H
-#include <vcl/sv.h>
-#endif
-
-#ifndef _SV_SALBTYPE_HXX
-#include <vcl/salbtype.hxx>
-#endif
-
-#ifndef _SV_SALDATA_HXX
-#include <saldata.hxx>
-#endif
-
-#ifndef _SV_SALINST_HXX
-#include <vcl/salinst.hxx>
-#endif
-
-#ifndef _SV_SALCONST_H
-#include <salconst.h>
-#endif
-
-#ifndef _SV_SALVD_HXX
-#include <vcl/salvd.hxx>
-#endif
-
-#ifndef _SV_SALCOLORUTILS_HXX
-#include <salcolorutils.hxx>
-#endif
-
-#ifndef _SV_SALPIXMAPUTILS_HXX
-#include <salpixmaputils.hxx>
-#endif
-
-#ifndef _SV_SALBMP_HXX
-#include <vcl/salbmp.hxx>
-#endif
-
-#ifndef _SV_SALGDI_H
-#include <salgdi.h>
-#endif
-
-#ifndef INCLUDED_BASEBMP_BITMAPDEVICE_HXX
-#include <basebmp/bitmapdevice.hxx>
-#endif
+#include "tools/gen.hxx"
+#include "vcl/sv.h"
+#include "vcl/salbtype.hxx"
+#include "saldata.hxx"
+#include "vcl/salinst.hxx"
+#include "salconst.h"
+#include "vcl/salvd.hxx"
+#include "salcolorutils.hxx"
+#include "salpixmaputils.hxx"
+#include "vcl/salbmp.hxx"
+#include "salgdi.h"
+#include "basebmp/bitmapdevice.hxx"
 
 // --------------
 // - SalBitmap  -
@@ -102,8 +67,8 @@ public:
     basebmp::RawMemorySharedArray   maUserBuffer;
     basebmp::RawMemorySharedArray   maContextBuffer;
     sal_uInt16                      mnBits;
-    sal_uInt32                      mnWidth;
-    sal_uInt32                      mnHeight;
+    int                             mnWidth;
+    int                             mnHeight;
     sal_uInt32                      mnBytesPerRow;
 
 public:
@@ -138,8 +103,9 @@ public:
                                        sal_uInt16 nSrcBits, sal_uInt32 nSrcBytesPerRow, const BitmapPalette& rSrcPalette, sal_uInt8* pSrcData );
 
     bool            Create( CGContextRef xContext, int nX, int nY, int nWidth, int nHeight, bool bMirrorVert = true );
-    bool            Create( sal_uInt32 nWidth, sal_uInt32 nHeight, sal_uInt16 nBits, sal_uInt32 nBytesPerRow, sal_uInt8* pBuffer,
-                            sal_uInt32 nX, sal_uInt32 nY, sal_uInt32 nDX, sal_uInt32 nDY,
+    bool            Create( int nSrcWidth, int nSrcHeight, int nBits,
+                            sal_uInt32 nBytesPerRow, const sal_uInt8* pSrcBuffer,
+                            int nSrcX, int nSrcY, int nBmpWidth, int nBmpHeight,
                             bool bMirrorVert = true
                             );
     bool            Create( CGImageRef& xImage );
