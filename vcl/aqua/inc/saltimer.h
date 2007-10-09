@@ -4,9 +4,9 @@
 *
 *  $RCSfile: saltimer.h,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: rt $ $Date: 2007-07-05 15:56:34 $
+*  last change: $Author: kz $ $Date: 2007-10-09 15:12:00 $
 *
 *  The Contents of this file are made available subject to
 *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,11 @@
 #ifndef _SV_SALTIMER_H
 #define _SV_SALTIMER_H
 
-#include <premac.h>
-#include <CoreServices/CoreServices.h>
-#include <Carbon/Carbon.h>
-#include <postmac.h>
+#include "premac.h"
+#include <Cocoa/Cocoa.h>
+#include "postmac.h"
 
-#ifndef _SV_SALTIMER_HXX
-#include <vcl/saltimer.hxx>
-#endif
+#include "vcl/saltimer.hxx"
 
 class AquaSalTimer : public SalTimer
 {
@@ -54,6 +51,8 @@ class AquaSalTimer : public SalTimer
 
     void Start( ULONG nMS );
     void Stop();
+
+    static void handleStartTimerEvent( NSEvent* pEvent );
 
 };
 
