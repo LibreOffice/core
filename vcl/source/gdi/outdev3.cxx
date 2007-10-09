@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.231 $
+ *  $Revision: 1.232 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 15:06:24 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:20:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5717,6 +5717,9 @@ long OutputDevice::GetTextHeight() const
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if( mbNewFont )
+        if( !ImplNewFont() )
+            return 0;
+    if( mbInitFont )
         if( !ImplNewFont() )
             return 0;
 
