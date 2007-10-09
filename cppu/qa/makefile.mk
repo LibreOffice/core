@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-10 15:55:03 $
+#   last change: $Author: kz $ $Date: 2007-10-09 15:19:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,14 @@ SHL2VERSIONMAP = version.map
 SHL2IMPLIB = i$(SHL2TARGET)
 DEF2NAME = $(SHL2TARGET)
 
-SLOFILES = $(SHL1OBJS) $(SHL2OBJS)
+SHL3TARGET = $(TARGET)_reference
+SHL3OBJS = $(SLO)$/test_reference.obj
+SHL3STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
+SHL3VERSIONMAP = version.map
+SHL3IMPLIB = i$(SHL3TARGET)
+DEF3NAME = $(SHL3TARGET)
+
+SLOFILES = $(SHL1OBJS) $(SHL2OBJS) $(SHL3OBJS)
 
 .INCLUDE: target.mk
 
@@ -81,6 +88,7 @@ $(MISC)$/$(TARGET)$/types.urd: types.idl
     - $(MKDIR) $(MISC)$/$(TARGET)
     $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
 
-test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN)
+test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN) $(SHL3TARGETN)
     testshl2 $(SHL1TARGETN)
     testshl2 $(SHL2TARGETN)
+    testshl2 $(SHL3TARGETN)
