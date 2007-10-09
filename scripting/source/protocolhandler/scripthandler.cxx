@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scripthandler.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:27:17 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:02:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,10 +187,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             // Security check
             if ( pDocShell && aURL.Complete.indexOf( ::rtl::OUString::createFromAscii("document") )!=-1 )
             {
-                pDocShell->AdjustMacroMode( String() );
-
-                if ( pDocShell->GetMacroMode() ==
-                     ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
+                if ( !pDocShell->AdjustMacroMode( String() ) )
                 {
                     return;
                 }
