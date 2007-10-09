@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 15:07:07 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:20:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,11 @@ String SV_ACCESSERROR_TURNAROUND_MSG
 String SV_STDTEXT_ABOUT
 {
     Text [ en-US ] = "About %PRODUCTNAME";
+};
+
+String SV_STDTEXT_PREFERENCES
+{
+    Text [ en-US ] = "Preferences...";
 };
 
 WarningBox  SV_EDIT_WARNING_BOX
