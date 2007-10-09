@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:04:36 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:17:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #ifndef _SVEDIT_HXX //autogen
 #include <svtools/svmedit.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 
 #ifndef  _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
 #include <com/sun/star/document/XEventsSupplier.hpp>
@@ -50,9 +53,8 @@
 #endif
 
 #include <comphelper/processfactory.hxx>
-#ifndef _UNOTOOLS_CONFIGMGR_HXX_
+#include <comphelper/documentinfo.hxx>
 #include <unotools/configmgr.hxx>
-#endif
 #include <rtl/ustring.hxx>
 
 #include "eventdlg.hxx"
@@ -86,7 +88,7 @@ using ::rtl::OUString;
 using namespace ::com::sun::star;
 // -----------------------------------------------------------------------
 
-SvxEventConfigPage::SvxEventConfigPage( Window* pParent, const SfxItemSet& rSet ) :
+SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet, SvxEventConfigPage::EarlyInit ) :
 
     _SvxMacroTabPage( pParent, SVX_RES(RID_SVXPAGE_EVENTS), rSet ),
     aSaveInText( this, SVX_RES( TXT_SAVEIN ) ),
@@ -123,11 +125,10 @@ SvxEventConfigPage::SvxEventConfigPage( Window* pParent, const SfxItemSet& rSet 
                 "com.sun.star.frame.GlobalEventBroadcaster" ) ),
         uno::UNO_QUERY );
 
-    uno::Reference< container::XNameReplace > xEvents_app, xEvents_doc;
-    USHORT nPos;
+    USHORT nPos(0);
     if ( xSupplier.is() )
     {
-        xEvents_app = xSupplier->getEvents();
+        m_xAppEvents = xSupplier->getEvents();
         OUString label;
         utl::ConfigManager::GetDirectConfigProperty(
             utl::ConfigManager::PRODUCTNAME ) >>= label;
@@ -135,71 +136,17 @@ SvxEventConfigPage::SvxEventConfigPage( Window* pParent, const SfxItemSet& rSet 
         aSaveInListBox.SetEntryData( nPos, new bool(true) );
         aSaveInListBox.SelectEntryPos( nPos, TRUE );
     }
+}
 
-    uno::Reference< frame::XFramesSupplier > xFramesSupplier(
-        ::comphelper::getProcessServiceFactory()->createInstance(
-            OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
-        uno::UNO_QUERY );
+// -----------------------------------------------------------------------
+void SvxEventConfigPage::LateInit( const uno::Reference< frame::XFrame >& _rxFrame  )
+{
+    SetFrame( _rxFrame );
+    ImplInitDocument();
 
-    uno::Reference< frame::XModel > xModel;
-    uno::Reference< frame::XFrame > xFrame =
-        xFramesSupplier->getActiveFrame();
+    InitAndSetHandler( m_xAppEvents, m_xDocumentEvents, m_xDocumentModifiable );
 
-    if ( xFrame.is() )
-    {
-        // first establish if this type of application module
-        // supports document configuration
-        uno::Reference< ::com::sun::star::frame::XModuleManager >
-            xModuleManager(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.ModuleManager" ) ) ),
-            uno::UNO_QUERY );
-
-        OUString aModuleId;
-        try{
-            aModuleId = xModuleManager->identify( xFrame );
-        } catch(const uno::Exception&)
-            { aModuleId = ::rtl::OUString(); }
-
-        if ( SvxConfigPage::CanConfig( aModuleId ) )
-        {
-            uno::Reference< frame::XController > xController =
-                xFrame->getController();
-
-            if ( xController.is() )
-            {
-                xModel = xController->getModel();
-            }
-        }
-    }
-
-    uno::Reference< util::XModifiable > xModifiable_doc;
-    if ( xModel.is() )
-    {
-        xSupplier = uno::Reference< document::XEventsSupplier >(
-            xModel, uno::UNO_QUERY );
-
-        if ( xSupplier.is() )
-        {
-            xEvents_doc = xSupplier->getEvents();
-            xModifiable_doc =
-                uno::Reference< util::XModifiable >( xModel, uno::UNO_QUERY );
-
-            OUString aTitle;
-            SvxScriptSelectorDialog::GetDocTitle( xModel, aTitle );
-            nPos = aSaveInListBox.InsertEntry( aTitle );
-
-            aSaveInListBox.SetEntryData( nPos, new bool(false) );
-            aSaveInListBox.SelectEntryPos( nPos, TRUE );
-
-            bAppConfig = false;
-        }
-    }
-
-    InitAndSetHandler( xEvents_app, xEvents_doc, xModifiable_doc );
-
-       SelectHdl_Impl( NULL );
+    SelectHdl_Impl( NULL );
 }
 
 // -----------------------------------------------------------------------
@@ -207,6 +154,54 @@ SvxEventConfigPage::SvxEventConfigPage( Window* pParent, const SfxItemSet& rSet 
 SvxEventConfigPage::~SvxEventConfigPage()
 {
     //DF Do I need to delete bools?
+}
+
+// -----------------------------------------------------------------------
+
+void SvxEventConfigPage::ImplInitDocument()
+{
+    uno::Reference< frame::XFrame > xFrame( GetFrame() );
+    OUString aModuleId = SvxConfigPage::GetFrameWithDefaultAndIdentify( xFrame );
+    if ( !xFrame.is() )
+        return;
+
+    try
+    {
+        uno::Reference< frame::XModel > xModel;
+        if ( !SvxConfigPage::CanConfig( aModuleId ) )
+            return;
+
+        uno::Reference< frame::XController > xController =
+            xFrame->getController();
+
+        if ( xController.is() )
+        {
+            xModel = xController->getModel();
+        }
+
+        if ( !xModel.is() )
+            return;
+
+        uno::Reference< document::XEventsSupplier > xSupplier( xModel, uno::UNO_QUERY );
+
+        if ( xSupplier.is() )
+        {
+            m_xDocumentEvents = xSupplier->getEvents();
+            m_xDocumentModifiable = m_xDocumentModifiable.query( xModel );
+
+            OUString aTitle = ::comphelper::DocumentInfo::getDocumentTitle( xModel );
+            USHORT nPos = aSaveInListBox.InsertEntry( aTitle );
+
+            aSaveInListBox.SetEntryData( nPos, new bool(false) );
+            aSaveInListBox.SelectEntryPos( nPos, TRUE );
+
+            bAppConfig = false;
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 // -----------------------------------------------------------------------
