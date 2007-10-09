@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Directory.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2007-08-27 13:33:54 $
+#   last change: $Author: kz $ $Date: 2007-10-09 15:02:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,7 @@ sub read_entries_file_ {
     my $entries_fh = $self->open_admin_file_("Entries", 0);
     $self->{is_leaf} = 0;
     while (my $line = <$entries_fh>) {
-        chomp($line);
+        $line=~tr/\r\n//d;
         if ( $line =~ /^D$/ ) {
             $self->{is_leaf} = 1;
             next;
@@ -285,7 +285,7 @@ sub read_root_file_ {
 
     my $root_fh = $self->open_admin_file_("Root", 0);
     my $root = <$root_fh>;
-    chomp($root);
+    $root=~tr/\r\n//d;
     $self->{root} = PCVSLib::Root->new($root);
     $root_fh->close();
 
@@ -296,7 +296,7 @@ sub read_repository_file_ {
 
     my $repository_fh = $self->open_admin_file_("Repository", 0);
     my $line = <$repository_fh>;
-    chomp($line);
+    $line=~tr/\r\n//d;
     $self->{repository} = $line;
     $repository_fh->close();
 }
@@ -308,7 +308,7 @@ sub read_tag_file_ {
     if ( -e $tag_path ) {
         my $tag_fh = $self->open_admin_file_("Tag", 0);
         $self->{tag} = <$tag_fh>;
-        chomp($self->{tag});
+        $self->{tag}=~tr/\r\n//d;
         $tag_fh->close();
     }
     else {

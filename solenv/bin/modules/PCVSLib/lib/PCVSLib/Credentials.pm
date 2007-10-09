@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Credentials.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2007-08-27 13:33:43 $
+#   last change: $Author: kz $ $Date: 2007-10-09 15:02:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,7 @@ sub parse_passfile
         croak("PCVSLIB::Credentials::parse_passfile(): can't open CVS password file: '$passfile': $!");
     }
     while(<$fh>) {
+        tr/\r\n//d;
         if ( /^\/1 (:pserver:\S+) (\S.*)$/ ) {
             # new style .cvspass entries
             $self->{passwords_}->{$1} = $2;
