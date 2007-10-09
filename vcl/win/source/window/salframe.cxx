@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 15:07:49 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:22:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,7 +275,7 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if( pFrame )
     {
-        Window *pWin = ((Window*)pFrame->GetInstance());
+        Window *pWin = pFrame->GetWindow();
         while( pWin )
         {
             WorkWindow *pWorkWin = (pWin->GetType() == WINDOW_WORKWINDOW) ? (WorkWindow *) pWin : NULL;
@@ -1267,9 +1267,9 @@ void WinSalFrame::DrawMenuBar()
 HWND ImplGetParentHwnd( HWND hWnd )
 {
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
-    if( !pFrame || !pFrame->GetInstance())
+    if( !pFrame || !pFrame->GetWindow())
         return ::GetParent( hWnd );
-    Window *pRealParent = ((Window*)pFrame->GetInstance())->ImplGetWindowImpl()->mpRealParent;
+    Window *pRealParent = pFrame->GetWindow()->ImplGetWindowImpl()->mpRealParent;
     if( pRealParent )
         return static_cast<WinSalFrame*>(pRealParent->ImplGetWindowImpl()->mpFrame)->mhWnd;
     else
@@ -1332,7 +1332,7 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible, BOOL bNoActivate )
 
         if( aDogTag.isDeleted() )
             return;
-        Window *pClientWin = ((Window*)pFrame->GetInstance())->ImplGetClientWindow();
+        Window *pClientWin = pFrame->GetWindow()->ImplGetClientWindow();
         if ( pFrame->mbFloatWin || ( pClientWin && (pClientWin->GetStyle() & WB_SYSTEMFLOATWIN) ) )
             pFrame->mnShowState = SW_SHOWNOACTIVATE;
         else
@@ -1440,7 +1440,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     BOOL bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
     if ( !bVisible )
     {
-        Window *pClientWin = ((Window*)GetInstance())->ImplGetClientWindow();
+        Window *pClientWin = GetWindow()->ImplGetClientWindow();
         if ( mbFloatWin || ( pClientWin && (pClientWin->GetStyle() & WB_SYSTEMFLOATWIN) ) )
                 mnShowState = SW_SHOWNOACTIVATE;
         else
@@ -3297,7 +3297,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
         // #103168# post again if async focus has not arrived yet
         // hopefully we will not receive the corresponding button up before this
         // button down arrives again
-        Window *pWin = (Window*) pFrame->GetInstance();
+        Window *pWin = pFrame->GetWindow();
         if( pWin && pWin->ImplGetWindowImpl()->mpFrameData->mnFocusId )
         {
             ImplPostMessage( hWnd, nMsg, wParam, lParam );
@@ -5895,7 +5895,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                 WinSalFrame* pFrame = GetWindowPtr( hWnd );
                 Window *pWin = NULL;
                 if( pFrame )
-                    pWin = ((Window*)pFrame->GetInstance());
+                    pWin = pFrame->GetWindow();
 
                 if( !wParam )
                 {
