@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-17 13:16:22 $
+#   last change: $Author: kz $ $Date: 2007-10-09 15:14:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,11 +80,12 @@ IDLFILES=\
     XDocumentInfo.idl\
     XDocumentInfoSupplier.idl\
     XDocumentInsertable.idl\
-        XDocumentProperties.idl\
+    XDocumentProperties.idl\
     XDocumentSubStorageSupplier.idl\
     XEmbeddedObjectResolver.idl\
     XEmbeddedObjectSupplier.idl\
     XEmbeddedObjectSupplier2.idl\
+    XEmbeddedScripts.idl\
     XEventBroadcaster.idl\
     XEventListener.idl\
     XEventsSupplier.idl\
