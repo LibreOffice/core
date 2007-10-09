@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastype2.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:55:20 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:22:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 #ifndef _BASTYPE2_HXX
 #define _BASTYPE2_HXX
+
+#include "doceventnotifier.hxx"
 
 #include <memory>
 
@@ -163,10 +165,12 @@ public:
 
 ******************************************/
 
-class BasicTreeListBox : public SvTreeListBox, public SfxListener
+class BasicTreeListBox  :public SvTreeListBox
+                        ,public ::basctl::DocumentEventListener
 {
 private:
-    USHORT          nMode;
+    USHORT                          nMode;
+    ::basctl::DocumentEventNotifier m_aNotifier;
 
     void            SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage, const Image& rImageHC );
 
@@ -180,8 +184,16 @@ protected:
     void                    ImpCreateLibEntries( SvLBoxEntry* pShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation );
     void                    ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const String& rLibName );
 
-    using                   Control::Notify;
-    virtual void            SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType );
+    // DocumentEventListener
+    virtual void onDocumentCreated( const ScriptDocument& _rDocument );
+    virtual void onDocumentOpened( const ScriptDocument& _rDocument );
+    virtual void onDocumentSave( const ScriptDocument& _rDocument );
+    virtual void onDocumentSaveDone( const ScriptDocument& _rDocument );
+    virtual void onDocumentSaveAs( const ScriptDocument& _rDocument );
+    virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument );
+    virtual void onDocumentClosed( const ScriptDocument& _rDocument );
+    virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument );
+    virtual void onDocumentModeChanged( const ScriptDocument& _rDocument );
 
 public:
                     BasicTreeListBox( Window* pParent, const ResId& rRes );
@@ -212,10 +224,13 @@ public:
                               SvLBoxEntry* pParent, bool bChildrenOnDemand,
                               std::auto_ptr< BasicEntry > aUserData );
 
-    String          GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation );
+    String          GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const;
     void            GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage, Image& rImageHC );
 
     void            SetCurrentEntry( BasicEntryDescriptor& rDesc );
+
+private:
+    LibraryType     GetLibraryType() const;
 };
 
 #endif  // _BASTYPE2_HXX
