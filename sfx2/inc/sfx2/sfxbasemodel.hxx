@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-07-19 15:31:22 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:30:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,10 @@
 
 #ifndef  _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
 #include <com/sun/star/document/XEventsSupplier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDSCRIPTS_HPP_
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 #endif
 
 #ifndef  _COM_SUN_STAR_DOCUMENT_EVENTOBJECT_HPP_
@@ -267,6 +271,7 @@
 #define XDOCUMENTINFOSUPPLIER   ::com::sun::star::document::XDocumentInfoSupplier
 #define XEVENTBROADCASTER       ::com::sun::star::document::XEventBroadcaster
 #define XEVENTSSUPPLIER         ::com::sun::star::document::XEventsSupplier
+#define XEMBEDDEDSCRIPTS        ::com::sun::star::document::XEmbeddedScripts
 
 #define NOSUPPORTEXCEPTION      ::com::sun::star::lang::NoSupportException
 #define RUNTIMEEXCEPTION        ::com::sun::star::uno::RuntimeException
@@ -346,6 +351,7 @@ struct IMPL_SfxBaseModel_MutexContainer
                 XStorable2
                 ::document::XEventBroadcaster
                 ::document::XEventsSupplier
+                ::document::XEmbeddedScripts
                 XCloseable
                 XCloseBroadcaster
 
@@ -359,6 +365,7 @@ class SFX2_DLLPUBLIC SfxBaseModel   :   public XTYPEPROVIDER
                     ,   public XEVENTBROADCASTER
                     ,   public XEVENTLISTENER
                     ,   public XEVENTSSUPPLIER
+                    ,   public XEMBEDDEDSCRIPTS
                     ,   public XMODEL2
                     ,   public XMODIFIABLE2
                     ,   public XPRINTABLE
@@ -1308,6 +1315,14 @@ public:
 
 
     //____________________________________________________________________________________________________
+    //  XEmbeddedScripts
+    //____________________________________________________________________________________________________
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer > SAL_CALL getBasicLibraries() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer > SAL_CALL getDialogLibraries() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getAllowMacroExecution() throw (::com::sun::star::uno::RuntimeException);
+
+    //____________________________________________________________________________________________________
     //  XEventBroadcaster
     //____________________________________________________________________________________________________
 
@@ -1477,6 +1492,8 @@ private:
 private:
 
     IMPL_SfxBaseModel_DataContainer*    m_pData ;
+    // cannot be held in m_pData, since it needs to be accessed in non-threadsafe context
+    const bool                          m_bSupportEmbeddedScripts;
 
 } ; // class SfxBaseModel
 
