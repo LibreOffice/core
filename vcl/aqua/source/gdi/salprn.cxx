@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 16:31:41 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:16:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,67 +36,100 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <salinst.h>
-#include <salprn.h>
-#include <salgdi.h>
-#include <vcl/jobset.h>
-#include <vcl/salptype.hxx>
+#include "salinst.h"
+#include "salprn.h"
+#include "salgdi.h"
+#include "saldata.hxx"
+#include "vcl/jobset.h"
+#include "vcl/salptype.hxx"
+#include "vcl/impprn.hxx"
+#include <boost/bind.hpp>
 
-#include <rtl/math.hxx>
+@interface AquaPrintView : NSView
+{
+    ImplQPrinter*       mpQPrinter;
+    AquaSalInfoPrinter* mpInfoPrinter;
+}
+-(id)initWithQPrinter: (ImplQPrinter*)pPrinter withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter;
+-(MacOSBOOL)knowsPageRange: (NSRangePointer)range;
+-(NSRect)rectForPage: (int)page;
+-(NSPoint)locationOfPrintRect: (NSRect)aRect;
+-(void)drawRect: (NSRect)rect;
+@end
+
+@implementation AquaPrintView
+-(id)initWithQPrinter: (ImplQPrinter*)pPrinter withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter
+{
+    NSRect aRect = { { 0, 0 }, [pInfoPrinter->getPrintInfo() paperSize] };
+    if( (self = [super initWithFrame: aRect]) != nil )
+    {
+        mpQPrinter = pPrinter;
+        mpInfoPrinter = pInfoPrinter;
+    }
+    return self;
+}
+
+-(MacOSBOOL)knowsPageRange: (NSRangePointer)range
+{
+    range->location = 1;
+    range->length = mpQPrinter->GetPrintPageCount();
+    return YES;
+}
+
+-(NSRect)rectForPage: (int)page
+{
+    NSRect aRect = { { 0, 0 }, [mpInfoPrinter->getPrintInfo() paperSize] };
+    return aRect;
+}
+
+-(NSPoint)locationOfPrintRect: (NSRect)aRect
+{
+    NSPoint aPoint = { 0, 0 };
+    return aPoint;
+}
+
+-(void)drawRect: (NSRect)rect
+{
+    NSPoint aPoint = [self locationOfPrintRect: rect];
+    mpQPrinter->PrintNextPage();
+}
+@end
+
 
 // =======================================================================
 
 AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
-    mrSession( 0 ),
-    mrSettings( 0 ),
-    mrPrinter( 0 ),
-    mrPageFormat( 0 ),
     mpGraphics( 0 ),
     mbGraphics( false ),
-    mbJob( false )
+    mbJob( false ),
+    mpPrinter( nil ),
+    mpPrintInfo( nil ),
+    mePageOrientation( ORIENTATION_PORTRAIT )
 {
-    DBG_ASSERT( i_rQueue.mpSysData, "no printer id in queue" );
+    NSString* pStr = CreateNSString( i_rQueue.maPrinterName );
+    mpPrinter = [NSPrinter printerWithName: pStr];
+    [pStr release];
 
-    if( PMCreateSession( &mrSession ) == noErr )
+    NSPrintInfo* pShared = [NSPrintInfo sharedPrintInfo];
+    if( pShared )
     {
-        PMCreatePrintSettings( &mrSettings );
-        PMCreatePageFormat( &mrPageFormat );
-
-        mrPrinter = PMPrinterCreateFromPrinterID( reinterpret_cast<CFStringRef>(i_rQueue.mpSysData) );
-        if( mrPrinter )
-            PMSessionSetCurrentPMPrinter( mrSession, mrPrinter );
-
-        PMSessionDefaultPrintSettings( mrSession, mrSettings );
-        PMSessionDefaultPageFormat( mrSession, mrPageFormat );
-
-        // note: kPMDestinationInvalid does not do nothing, but results
-        // in an actual print job; is this by design ?
-        CFStringRef rFile = CreateCFString( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/dev/null" ) ) );
-        CFURLRef rURL = CFURLCreateWithFileSystemPath( NULL, rFile, kCFURLPOSIXPathStyle, false );
-        if ( rFile )
-            CFRelease( rFile );
-
-        OSStatus err =
-        PMSessionSetDestination( mrSession,
-                                 mrSettings,
-                                 kPMDestinationFile,
-                                 NULL,
-                                 rURL );
-        if( rURL )
-            CFRelease( rURL );
-
-        if( err == noErr )
-            err = PMSessionBeginCGDocumentNoDialog( mrSession, mrSettings, mrPageFormat );
-        if( err == noErr )
-            err = PMSessionBeginPageNoDialog( mrSession, mrPageFormat, NULL );
-        CGContextRef rContext = 0;
-        if( err == noErr )
-            err = PMSessionGetCGGraphicsContext( mrSession, &rContext );
-        mpGraphics = new AquaSalGraphics();
-        SetupPrinterGraphics( rContext );
+        mpPrintInfo = [pShared copy];
+        [mpPrintInfo setPrinter: mpPrinter];
+        mePageOrientation = ([mpPrintInfo orientation] == NSLandscapeOrientation) ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT;
+        [mpPrintInfo setOrientation: NSPortraitOrientation];
     }
-    else
-        mrSession = 0;
+
+    mpGraphics = new AquaSalGraphics();
+
+    const int nWidth = 100, nHeight = 100;
+    maContextMemory.reset( reinterpret_cast<sal_uInt8*>( rtl_allocateMemory( nWidth * 4 * nHeight ) ),
+                           boost::bind( rtl_freeMemory, _1 ) );
+    if( maContextMemory )
+    {
+        mrContext = CGBitmapContextCreate( maContextMemory.get(), nWidth, nHeight, 8, nWidth * 4, GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst );
+        if( mrContext )
+            SetupPrinterGraphics( mrContext );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -104,14 +137,16 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
 AquaSalInfoPrinter::~AquaSalInfoPrinter()
 {
     delete mpGraphics;
-    if( mrPrinter )
-        PMRelease( mrPrinter );
-    if( mrPageFormat )
-        PMRelease( mrPageFormat );
-    if( mrSettings )
-        PMRelease( mrSettings );
-    if( mrSession )
-        PMRelease( mrSession );
+    if( mpPrintInfo )
+        [mpPrintInfo release];
+    #if 0
+    // FIXME: verify that NSPrintInfo releases the printer
+    // else we have a leak here
+    if( mpPrinter )
+        [mpPrinter release];
+    #endif
+    if( mrContext )
+        CFRelease( mrContext );
 }
 
 // -----------------------------------------------------------------------
@@ -120,48 +155,34 @@ void AquaSalInfoPrinter::SetupPrinterGraphics( CGContextRef i_rContext ) const
 {
     if( mpGraphics )
     {
-        if( mrPageFormat )
+        if( mpPrintInfo )
         {
-            PMResolution aRes;
-            if( PMGetResolution( mrPageFormat, &aRes ) != noErr )
-                aRes.hRes = aRes.vRes = 72.0;
+            // FIXME: get printer resolution
+            long nDPIX = 720, nDPIY = 720;
+            NSSize aPaperSize = [mpPrintInfo paperSize];
 
-            // a reported resolution of 72 dpi ist most likely not good for
-            // formatting and downscaling images
-            // so assume a reasonable default resolution for a printer
-            if( aRes.hRes == 72.0 )
-                aRes.hRes = 720.0;
-            if( aRes.vRes == 72.0 )
-                aRes.vRes = 720.0;
-
-            // mirror context so it fits OOo's coordinate space
-            // get page height
-            PMRect aRect;
-            if( PMGetUnadjustedPaperRect( mrPageFormat, &aRect ) == noErr )
+            if( mePageOrientation == ORIENTATION_PORTRAIT )
             {
-                PMOrientation aOrient;
-                OSStatus err = PMGetOrientation( mrPageFormat, &aOrient );
-                DBG_ASSERT( err == noErr, "error in PMGetOrientation" );
-                (void)err; // make product build happy
-                switch( aOrient )
-                {
-                case kPMLandscape:
-                    CGContextTranslateCTM( i_rContext, aRect.bottom, -aRect.left );
-                    CGContextScaleCTM( i_rContext, -72.0/aRes.vRes, 72.0/aRes.hRes );
-                    break;
-                default:
-                    DBG_ERROR( "unhandled orientation, defaulting to portrait" );
-                case kPMPortrait:
-                    CGContextTranslateCTM( i_rContext, -aRect.left, aRect.bottom );
-                    CGContextScaleCTM( i_rContext, 72.0/aRes.hRes, -72.0/aRes.vRes );
-                    break;
-                }
+                double dX = 0, dY = aPaperSize.height;
+                dX += [mpPrintInfo leftMargin];
+                dY -= [mpPrintInfo topMargin];
+                CGContextTranslateCTM( i_rContext, dX, dY );
+                CGContextScaleCTM( i_rContext, 0.1, -0.1 );
             }
+            else
+            {
+                CGContextRotateCTM( i_rContext, M_PI/2 );
+                double dX = aPaperSize.height, dY = -aPaperSize.width;
+                dY += [mpPrintInfo topMargin];
+                dX -= [mpPrintInfo rightMargin];
 
-            mpGraphics->SetPrinterGraphics( i_rContext, static_cast<long>(aRes.hRes), static_cast<long>(aRes.vRes) );
+                CGContextTranslateCTM( i_rContext, dX, dY );
+                CGContextScaleCTM( i_rContext, -0.1, 0.1 );
+            }
+            mpGraphics->SetPrinterGraphics( i_rContext, nDPIX, nDPIY, 1.0 );
         }
         else
-            DBG_ERROR( "no page format in SetupPrinterGraphics" );
+            DBG_ERROR( "no print info in SetupPrinterGraphics" );
     }
 }
 
@@ -207,6 +228,20 @@ static struct PaperSizeEntry
     { 792, 1224, PAPER_TABLOID }
 };
 
+static bool getPaperSize( double o_fWidth, double o_fHeight, const Paper i_ePaper )
+{
+    for(unsigned int i = 0; i < sizeof(aPaperSizes)/sizeof(aPaperSizes[0]); i++ )
+    {
+        if( aPaperSizes[i].nPaper == i_ePaper )
+        {
+            o_fWidth = aPaperSizes[i].fWidth;
+            o_fHeight = aPaperSizes[i].fHeight;
+            return true;
+        }
+    }
+    return false;
+}
+
 static Paper recognizePaper( double i_fWidth, double i_fHeight )
 {
     Paper aPaper = PAPER_USER;
@@ -239,52 +274,9 @@ static Paper recognizePaper( double i_fWidth, double i_fHeight )
                 break;
             }
         }
-
     }
 
     return aPaper;
-}
-
-static PMPaper findBestPaper( const ImplJobSetup& i_rSetupData, PMPrinter i_rPrinter )
-{
-    PMPaper rPaper = 0;
-    DBG_ASSERT( i_rPrinter, "no printer for findBestPaper" );
-    CFArrayRef rPaperList = 0;
-    if( PMPrinterGetPaperList( i_rPrinter, &rPaperList ) == noErr )
-    {
-        const CFIndex nPapers = CFArrayGetCount( rPaperList );
-        for( CFIndex n = 0; n < nPapers; n++ )
-        {
-            PMPaper aPaper = reinterpret_cast<PMPaper>(const_cast<void*>(CFArrayGetValueAtIndex( rPaperList, n )));
-
-            double width = 0, height = 0;
-            PMPaperGetWidth( aPaper, &width );
-            PMPaperGetHeight( aPaper, &height );
-            if( i_rSetupData.mePaperFormat == recognizePaper( width, height ) )
-            {
-                if( i_rSetupData.mePaperFormat == PAPER_USER )
-                {
-                    if( rtl::math::approxEqual( width, TenMuToPt( i_rSetupData.mnPaperWidth ) ) &&
-                        rtl::math::approxEqual( height, TenMuToPt( i_rSetupData.mnPaperHeight ) ) )
-                    {
-                        rPaper = aPaper;
-                        break;
-                    }
-                }
-                else
-                {
-                    rPaper = aPaper;
-                    break;
-                }
-            }
-        }
-        if( ! rPaper && nPapers > 0 )
-        {
-            // take the first paper as fallback
-            rPaper = reinterpret_cast<PMPaper>(const_cast<void*>(CFArrayGetValueAtIndex( rPaperList, 0 )));
-        }
-    }
-    return rPaper;
 }
 
 BOOL AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
@@ -294,48 +286,31 @@ BOOL AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
         return SetData( ~0, io_pSetupData );
 
 
-    OSStatus err = noErr;
     BOOL bSuccess = TRUE;
 
     // set system type
     io_pSetupData->mnSystem = JOBSETUP_SYSTEM_MAC;
 
     // get paper format
-    if( mrPageFormat )
+    if( mpPrintInfo )
     {
-        PMPaper rPaper = 0;
-        err = PMGetPageFormatPaper( mrPageFormat, &rPaper );
-        if( err == noErr )
+        NSSize aPaperSize = [mpPrintInfo paperSize];
+        double width = aPaperSize.width, height = aPaperSize.height;
+        // set paper
+        io_pSetupData->mePaperFormat = recognizePaper( width, height );
+        if( io_pSetupData->mePaperFormat == PAPER_USER )
         {
-            double width, height;
-            PMPaperGetWidth( rPaper, &width );
-            PMPaperGetHeight( rPaper, &height );
-            // set paper
-            io_pSetupData->mePaperFormat = recognizePaper( width, height );
-            if( io_pSetupData->mePaperFormat == PAPER_USER )
-            {
-                io_pSetupData->mnPaperWidth = PtTo10Mu( width );
-                io_pSetupData->mnPaperHeight = PtTo10Mu( height );
-            }
-            else
-            {
-                io_pSetupData->mnPaperWidth = 0;
-                io_pSetupData->mnPaperHeight = 0;
-            }
+            io_pSetupData->mnPaperWidth = PtTo10Mu( width );
+            io_pSetupData->mnPaperHeight = PtTo10Mu( height );
         }
         else
-            bSuccess = FALSE;
+        {
+            io_pSetupData->mnPaperWidth = 0;
+            io_pSetupData->mnPaperHeight = 0;
+        }
 
-        // get orientation
-        PMOrientation aOrient;
-        err = PMGetOrientation( mrPageFormat, &aOrient );
-        if( err == noErr )
-        {
-            // set orientation
-            io_pSetupData->meOrientation = (aOrient == kPMLandscape || aOrient == kPMReverseLandscape) ? ORIENTATION_LANDSCAPE : ORIENTATION_PORTRAIT;
-        }
-        else
-            bSuccess = FALSE;
+        // set orientation
+        io_pSetupData->meOrientation = mePageOrientation;
 
         io_pSetupData->mnPaperBin = 0;
         io_pSetupData->mpDriverData = reinterpret_cast<BYTE*>(rtl_allocateMemory( 4 ));
@@ -345,7 +320,7 @@ BOOL AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
         bSuccess = FALSE;
 
 
-    return (err == noErr);
+    return bSuccess;
 }
 
 // -----------------------------------------------------------------------
@@ -355,59 +330,33 @@ BOOL AquaSalInfoPrinter::SetData( ULONG i_nFlags, ImplJobSetup* io_pSetupData )
     if( ! io_pSetupData || io_pSetupData->mnSystem != JOBSETUP_SYSTEM_MAC )
         return FALSE;
 
-    OSStatus err = noErr;
 
-    if( (i_nFlags & SAL_JOBSET_PAPERSIZE) !=  0)
+    if( mpPrintInfo )
     {
-        if( mrPageFormat )
+        if( (i_nFlags & SAL_JOBSET_PAPERSIZE) !=  0)
         {
-            // check whether we need to update the paper format
-            bool bNewPaper = true;
-
-            // get paper format
-            PMPaper rPaper = 0;
-            err = PMGetPageFormatPaper( mrPageFormat, &rPaper );
-            if( err == noErr )
+            // set paper format
+            double width = 0, height = 0;
+            if( io_pSetupData->mePaperFormat == PAPER_USER )
             {
-                double width, height;
-                PMPaperGetWidth( rPaper, &width );
-                PMPaperGetHeight( rPaper, &height );
-                if( io_pSetupData->mePaperFormat == recognizePaper( width, height ) )
-                {
-                    if( io_pSetupData->mePaperFormat == PAPER_USER )
-                    {
-                        if( rtl::math::approxEqual( width, TenMuToPt( io_pSetupData->mnPaperWidth ) ) &&
-                            rtl::math::approxEqual( height, TenMuToPt( io_pSetupData->mnPaperHeight ) ) )
-                        {
-                            bNewPaper = false;
-                        }
-                    }
-                    else
-                        bNewPaper = false;
-                }
+                width = TenMuToPt( io_pSetupData->mnPaperWidth );
+                height = TenMuToPt( io_pSetupData->mnPaperHeight );
             }
-            if( bNewPaper )
+            else
+                getPaperSize( width, height, io_pSetupData->mePaperFormat );
+
+            if( width > 0 && height > 0 )
             {
-                PMRelease( mrPageFormat );
-                mrPageFormat = 0;
+                NSSize aPaperSize = { width, height };
+                [mpPrintInfo setPaperSize: aPaperSize];
             }
         }
 
-        if( ! mrPageFormat && mrPrinter )
-        {
-            PMPaper rPaper = findBestPaper( *io_pSetupData, mrPrinter );
-            if( rPaper )
-                err = PMCreatePageFormatWithPMPaper( &mrPageFormat, rPaper );
-        }
+        if( (i_nFlags & SAL_JOBSET_ORIENTATION) != 0 )
+            mePageOrientation = io_pSetupData->meOrientation;
     }
 
-    if( (i_nFlags & SAL_JOBSET_ORIENTATION) != 0 )
-    {
-        if( err == noErr && mrPageFormat )
-            err = PMSetOrientation( mrPageFormat, (io_pSetupData->meOrientation == ORIENTATION_PORTRAIT) ? kPMPortrait : kPMLandscape, false );
-    }
-
-    return err == noErr && mrPageFormat;
+    return mpPrintInfo != nil;
 }
 
 // -----------------------------------------------------------------------
@@ -456,94 +405,67 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
                                   long& o_rPageOffX, long& o_rPageOffY,
                                   long& o_rPageWidth, long& o_rPageHeight )
 {
-    if( mrPageFormat )
+    if( mpPrintInfo )
     {
-        PMRect aPageRect, aPaperRect;
-        if( PMGetAdjustedPageRect( mrPageFormat, &aPageRect ) == noErr &&
-            PMGetAdjustedPaperRect( mrPageFormat, &aPaperRect ) == noErr )
-        {
-            long nDPIX = 72, nDPIY = 72;
-            mpGraphics->GetResolution( nDPIX, nDPIY );
-            const double fXScaling = static_cast<double>(nDPIX)/72.0,
-                         fYScaling = static_cast<double>(nDPIY)/72.0;
-            o_rPageWidth  = (aPaperRect.right - aPaperRect.left) * fXScaling;
-            o_rPageHeight = (aPaperRect.bottom - aPaperRect.top ) * fYScaling;
-            o_rPageOffX   = (aPageRect.left - aPaperRect.left) * fXScaling;
-            o_rPageOffY   = (aPageRect.top - aPaperRect.top) * fYScaling;
-            o_rOutWidth   = (aPageRect.right - aPageRect.left) * fXScaling;
-            o_rOutHeight  = (aPageRect.bottom - aPageRect.top) * fYScaling;
-        }
+        long nDPIX = 72, nDPIY = 72;
+        mpGraphics->GetResolution( nDPIX, nDPIY );
+        const double fXScaling = static_cast<double>(nDPIX)/72.0,
+                     fYScaling = static_cast<double>(nDPIY)/72.0;
+
+        NSSize aPaperSize = [mpPrintInfo paperSize];
+        o_rPageWidth  = double(aPaperSize.width) * fXScaling;
+        o_rPageHeight = double(aPaperSize.height) * fYScaling;
+        o_rPageOffX   = [mpPrintInfo leftMargin] * fXScaling;
+        o_rPageOffY   = [mpPrintInfo topMargin] * fYScaling;
+        o_rOutWidth   = o_rPageWidth - double([mpPrintInfo leftMargin] + [mpPrintInfo rightMargin]) * fXScaling;
+        o_rOutHeight  = o_rPageHeight - double([mpPrintInfo topMargin] + [mpPrintInfo bottomMargin]) * fYScaling;
     }
 }
 
-BOOL AquaSalInfoPrinter::StartJob( const XubString* i_pFileName,
-                           const XubString& i_rJobName,
-                           const XubString& i_rAppName,
-                           ULONG i_nCopies, BOOL i_bCollate,
-                           ImplJobSetup* i_pSetupData )
+BOOL AquaSalInfoPrinter::StartJob( const String* pFileName,
+                                   const String& rAppName,
+                                   ImplJobSetup* pSetupData,
+                                   ImplQPrinter* pQPrinter )
 {
-    if( mbJob || ! mrPrinter )
+    if( mbJob )
         return FALSE;
 
     BOOL bSuccess = FALSE;
 
-    // end the info printer session to kPMDestinationInvalid
-    if( mrSession )
+    // create view
+    NSView* pPrintView = [[AquaPrintView alloc] initWithQPrinter: pQPrinter withInfoPrinter: this];
+
+    NSMutableDictionary* pPrintDict = [mpPrintInfo dictionary];
+
+    // set filename
+    if( pFileName )
     {
-        PMSessionEndPage( mrSession );
-        PMSessionEndDocumentNoDialog( mrSession );
-        PMRelease( mrSession );
-        mrSession = 0;
+        AquaLog( "printing to file: %s\n", rtl::OUStringToOString( *pFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        [mpPrintInfo setJobDisposition: NSPrintSaveJob];
+        NSString* pPath = CreateNSString( *pFileName );
+        [pPrintDict setObject: pPath forKey: NSPrintSavePath];
+        [pPath release];
     }
 
-    // start a real session for the job
-    if( PMCreateSession( &mrSession ) == noErr )
+    [pPrintDict setObject: [[NSNumber numberWithInt: (int)pQPrinter->GetCopyCount()] autorelease] forKey: NSPrintCopies];
+    [pPrintDict setObject: [[NSNumber numberWithBool: YES] autorelease] forKey: NSPrintDetailedErrorReporting];
+    [pPrintDict setObject: [[NSNumber numberWithInt: 1] autorelease] forKey: NSPrintFirstPage];
+    [pPrintDict setObject: [[NSNumber numberWithInt: (int)pQPrinter->GetPrintPageCount()] autorelease] forKey: NSPrintLastPage];
+
+
+    // create print operation
+    NSPrintOperation* pPrintOperation = [NSPrintOperation printOperationWithView: pPrintView printInfo: mpPrintInfo];
+
+    if( pPrintOperation )
     {
-        OSStatus err = PMSessionSetCurrentPMPrinter( mrSession, mrPrinter );
-
-        CFURLRef rURL = 0;
-        if( i_pFileName )
-        {
-            CFStringRef rFile = CreateCFString( *i_pFileName );
-            rURL = CFURLCreateWithFileSystemPath( NULL, rFile, kCFURLPOSIXPathStyle, false );
-            if ( rFile )
-                CFRelease( rFile );
-        }
-
-        err =
-        PMSessionSetDestination( mrSession,
-                                 mrSettings,
-                                 rURL ? kPMDestinationFile : kPMDestinationPrinter,
-                                 NULL,
-                                 rURL );
-        if( rURL )
-            CFRelease( rURL );
-
-        if( i_pSetupData )
-            SetPrinterData( i_pSetupData );
-
-        if( i_nCopies > 1 && err == noErr )
-        {
-            err = PMSetCopies( mrSettings, i_nCopies, false );
-
-            if( err == noErr )
-                err = PMSetCollate( mrSettings, i_bCollate );
-        }
-
-        if( i_rJobName.Len() && err == noErr )
-        {
-            CFStringRef rName = CreateCFString( i_rJobName );
-            err = PMPrintSettingsSetJobName( mrSettings, rName );
-            if ( rName )
-                CFRelease( rName );
-        }
-
-        if( err == noErr )
-            err = PMSessionBeginCGDocumentNoDialog( mrSession, mrSettings, mrPageFormat );
-        bSuccess = (err == noErr);
+        [pPrintOperation setShowsPrintPanel: NO];
+        [pPrintOperation setShowsProgressPanel: NO];
+        bSuccess = TRUE;
+        mbJob = true;
+        [pPrintOperation runOperation];
+        mbJob = false;
     }
 
-    mbJob = bSuccess;
     return bSuccess;
 }
 
@@ -551,16 +473,8 @@ BOOL AquaSalInfoPrinter::StartJob( const XubString* i_pFileName,
 
 BOOL AquaSalInfoPrinter::EndJob()
 {
-    OSStatus err = 1;
-    if( mrSession )
-    {
-        err = PMSessionEndDocumentNoDialog( mrSession );
-        PMRelease( mrSession );
-        mrSession = 0;
-    }
-
     mbJob = false;
-    return err == noErr;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -577,20 +491,10 @@ BOOL AquaSalInfoPrinter::AbortJob()
 
 SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, BOOL i_bNewJobData )
 {
-    if( ! mrSession )
-        return NULL;
-
     if( i_bNewJobData && i_pSetupData )
         SetPrinterData( i_pSetupData );
 
-    OSStatus err = PMSessionError( mrSession );
-    if( err != noErr )
-        return NULL;
-
-    CGContextRef rContext = 0;
-    err = PMSessionBeginPageNoDialog( mrSession, mrPageFormat, NULL );
-    if( err == noErr )
-        err = PMSessionGetCGGraphicsContext( mrSession, &rContext );
+    CGContextRef rContext = reinterpret_cast<CGContextRef>([[NSGraphicsContext currentContext] graphicsPort]);
 
     SetupPrinterGraphics( rContext );
 
@@ -601,8 +505,7 @@ SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, BOOL i_b
 
 BOOL AquaSalInfoPrinter::EndPage()
 {
-    OSStatus err = PMSessionEndPageNoDialog( mrSession );
-    return err == noErr;
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -627,13 +530,24 @@ AquaSalPrinter::~AquaSalPrinter()
 
 // -----------------------------------------------------------------------
 
+BOOL AquaSalPrinter::StartJob( const String* pFileName,
+                               const String& rAppName,
+                               ImplJobSetup* pSetupData,
+                               ImplQPrinter* pQPrinter )
+{
+    return mpInfoPrinter->StartJob( pFileName, rAppName, pSetupData, pQPrinter );
+}
+
+// -----------------------------------------------------------------------
+
 BOOL AquaSalPrinter::StartJob( const XubString* i_pFileName,
                            const XubString& i_rJobName,
                            const XubString& i_rAppName,
                            ULONG i_nCopies, BOOL i_bCollate,
                            ImplJobSetup* i_pSetupData )
 {
-    return mpInfoPrinter->StartJob( i_pFileName, i_rJobName, i_rAppName, i_nCopies, i_bCollate, i_pSetupData );
+    DBG_ERROR( "should never be called" );
+    return FALSE;
 }
 
 // -----------------------------------------------------------------------
