@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLEventExport.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:20:09 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:04:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,7 +357,8 @@ const XMLEventNameTranslation aStandardEventTable[] =
     { "OnSaveAsFailed",     XML_NAMESPACE_OFFICE, "save-as-failed" },
     { "OnSaveFailed",       XML_NAMESPACE_OFFICE, "save-failed" },
     { "OnCopyToFailed",     XML_NAMESPACE_OFFICE, "copy-to-failed" },
-    { "TitleChanged",       XML_NAMESPACE_OFFICE, "title-changed" },
+    { "OnTitleChanged",     XML_NAMESPACE_OFFICE, "title-changed" },
+    { "OnModeChanged",      XML_NAMESPACE_OFFICE, "mode-changed" },
 
     { NULL, 0, 0 }
 };
