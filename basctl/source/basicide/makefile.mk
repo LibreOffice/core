@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-15 15:57:46 $
+#   last change: $Author: kz $ $Date: 2007-10-09 15:24:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,10 @@ EXCEPTIONSFILES=$(SLO)$/scriptdocument.obj  \
                 $(SLO)$/register.obj	\
                 $(SLO)$/tbxctl.obj		\
                 $(SLO)$/basidectrlr.obj	\
-                $(SLO)$/localizationmgr.obj
+                $(SLO)$/localizationmgr.obj \
+                $(SLO)$/doceventnotifier.obj \
+                $(SLO)$/docsignature.obj \
+                $(SLO)$/documentenumeration.obj
 
 SLOFILES =  $(EXCEPTIONSFILES) \
             $(SLO)$/basdoc.obj	\
