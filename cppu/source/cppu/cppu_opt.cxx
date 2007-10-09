@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppu_opt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:19:04 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:20:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,20 @@ extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
 {
     OUStringBuffer buf( 64 );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("unsatisfied query for interface of type ") );
+    buf.append( OUString::unacquired( &pType->pTypeName ) );
+    buf.append( (sal_Unicode) '!' );
+    OUString ret( buf.makeStringAndClear() );
+    rtl_uString_acquire( ret.pData );
+    return ret.pData;
+}
+
+//##################################################################################################
+extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
+    typelib_TypeDescriptionReference * pType )
+    SAL_THROW_EXTERN_C()
+{
+    OUStringBuffer buf( 64 );
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("invalid attempt to assign an empty interface of type ") );
     buf.append( OUString::unacquired( &pType->pTypeName ) );
     buf.append( (sal_Unicode) '!' );
     OUString ret( buf.makeStringAndClear() );
