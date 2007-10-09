@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:23:10 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:13:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SALSYS_HXX
-#include <vcl/salsys.hxx>
-#endif
-#ifndef _SV_SALSYS_H
-#include <salsys.h>
-#endif
-#include <premac.h>
+#include "vcl/salsys.hxx"
+#include "salsys.h"
+#include "premac.h"
 #include <ApplicationServices/ApplicationServices.h>
-#include <postmac.h>
-
+#include "postmac.h"
 #include "saldata.hxx"
 
 // =======================================================================
