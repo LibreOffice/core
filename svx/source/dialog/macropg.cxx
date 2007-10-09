@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:20:23 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:17:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -679,7 +679,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     else if( bAssEnabled )
     {
         // assign pressed
-        SvxScriptSelectorDialog* pDlg = new SvxScriptSelectorDialog( pThis, FALSE );
+        SvxScriptSelectorDialog* pDlg = new SvxScriptSelectorDialog( pThis, FALSE, pThis->GetFrame() );
         if( pDlg )
         {
             short ret = pDlg->Execute();
