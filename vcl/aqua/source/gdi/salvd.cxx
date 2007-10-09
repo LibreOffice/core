@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:03:27 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:16:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SALVD_HXX
-#include <vcl/salvd.hxx>
-#endif
-#ifndef _SV_SALVD_H
-#include <salvd.h>
-#endif
-#ifndef _SV_SALINST_H
-#include <salinst.h>
-#endif
+#include "salvd.h"
+#include "salinst.h"
+#include "salgdi.h"
+#include "saldata.hxx"
+
+#include "vcl/sysdata.hxx"
 
 // -----------------------------------------------------------------------
 
