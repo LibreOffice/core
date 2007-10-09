@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:26:09 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:33:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,7 @@
 class SfxMacroInfoArr_Impl;
 class SfxMacroInfoItem;
 class SfxMacroInfo;
+class BasicManager;
 
 #define SFX_CFGGROUP_FUNCTION 1
 #define SFX_CFGGROUP_BASICMGR 2
@@ -266,6 +267,7 @@ public:
     void                SelectMacro( const SfxMacroInfoItem* );
     void                SelectMacro( const String&, const String& );
     String              GetGroup();
+    BasicManager*       GetBasicManager( const SvLBoxEntry& _rEntry );
     void                SetScriptType( const String& rScriptType );
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
