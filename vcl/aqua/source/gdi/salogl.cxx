@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:28:49 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:15:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,24 +36,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SALGDI_HXX
-#include <vcl/salgdi.hxx>
-#endif
-#ifndef _SV_SALGDI_H
-#include <salgdi.h>
-#endif
-#ifndef _SV_SALOGL_HXX
-#include <vcl/salogl.hxx>
-#endif
-#ifndef _SV_SALOGL_H
-#include <salogl.h>
-#endif
+#include "vcl/salgdi.hxx"
+#include "salgdi.h"
+#include "vcl/salogl.hxx"
+#include "salogl.h"
 
 
 // ========================================================================
 
 // Initialize static data members
-CarbonViewRef           AquaSalOpenGL::mhOGLLastDC = 0;
 ULONG               AquaSalOpenGL::mnOGLState = OGL_STATE_UNLOADED;
 
 // ========================================================================
