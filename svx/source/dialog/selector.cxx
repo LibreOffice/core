@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:38:32 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:18:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,12 +61,11 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
-#endif
+#include <comphelper/documentinfo.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
@@ -87,11 +86,13 @@ using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::frame;
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 #include <svtools/imagemgr.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 
 #define PRTSTR(x) rtl::OUStringToOString(x, RTL_TEXTENCODING_ASCII_US).pData->buffer
 
@@ -109,30 +110,6 @@ public:
 
     ~TestOUString()
     { OSL_TRACE("Destroying TestOUString: %s", PRTSTR(*this)); }
-};
-
-class ScriptInfo
-{
-private:
-
-    OUString m_sURI;
-    OUString m_sDescription;
-
-public:
-
-    ScriptInfo( const OUString& uri )
-        : m_sURI( uri ) {}
-    ~ScriptInfo() {}
-
-    void SetHelpText( const OUString& description )
-    {
-        if ( description.getLength() != 0 )
-        {
-            m_sDescription = description.copy(0);
-        }
-    };
-    const OUString& GetHelpText() const { return m_sDescription; }
-    const OUString& GetURI() const { return m_sURI; }
 };
 
 /*
@@ -201,30 +178,6 @@ void SvxConfigFunctionListBox_Impl::ClearAll()
     for ( USHORT i=0; i<nCount; i++ )
     {
         SvxGroupInfo_Impl *pData = aArr[i];
-
-        if ( pData->nKind == SVX_CFGFUNCTION_SLOT && pData->pObject != NULL )
-        {
-            delete (OUString*)pData->pObject;
-        }
-
-        if ( pData->nKind == SVX_CFGFUNCTION_SCRIPT )
-        {
-            ScriptInfo *pInfo = (ScriptInfo*) pData->pObject;
-            if ( pInfo != NULL )
-            {
-                delete pInfo;
-            }
-        }
-
-        if ( pData->nKind == SVX_CFGGROUP_SCRIPTCONTAINER )
-        {
-            XInterface* xi = static_cast<XInterface *>(pData->pObject);
-            if (xi != NULL)
-            {
-                xi->release();
-            }
-        }
-
         delete pData;
     }
 
@@ -278,17 +231,15 @@ String SvxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
     {
         if ( pInfo->nKind == SVX_CFGFUNCTION_SLOT )
         {
-            OUString* aCmdURL = (OUString*) pInfo->pObject;
+            OUString aCmdURL( pInfo->sURL );
 
-            OUString aHelpText =
-                Application::GetHelp()->GetHelpText( *aCmdURL, this );
+            OUString aHelpText = Application::GetHelp()->GetHelpText( aCmdURL, this );
 
             return aHelpText;
         }
         else if ( pInfo->nKind == SVX_CFGFUNCTION_SCRIPT )
         {
-            ScriptInfo* pScriptInfo = (ScriptInfo*) pInfo->pObject;
-            return pScriptInfo->GetHelpText();
+            return pInfo->sHelpText;
         }
     }
 
@@ -321,9 +272,9 @@ SvxConfigFunctionListBox_Impl::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 
 SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
     Window* pParent, const ResId& rResId,
-    ULONG nConfigMode, const Reference< frame::XFrame >& xFrame )
+    bool _bShowSlots, const Reference< frame::XFrame >& xFrame )
         : SvTreeListBox( pParent, rResId )
-        , nMode( nConfigMode ), bShowSF( TRUE ),
+        , m_bShowSlots( _bShowSlots ),
     m_hdImage(ResId(IMG_HARDDISK,*rResId.GetResMgr())),
     m_hdImage_hc(ResId(IMG_HARDDISK_HC,*rResId.GetResMgr())),
     m_libImage(ResId(IMG_LIB,*rResId.GetResMgr())),
@@ -369,14 +320,6 @@ void SvxConfigGroupListBox_Impl::ClearAll()
     for ( USHORT i=0; i<nCount; i++ )
     {
         SvxGroupInfo_Impl *pData = aArr[i];
-        if ( pData->nKind == SVX_CFGGROUP_SCRIPTCONTAINER )
-        {
-            XInterface* xi = static_cast<XInterface *>(pData->pObject);
-            if (xi != NULL)
-            {
-                xi->release();
-            }
-        }
         delete pData;
     }
 
@@ -384,7 +327,126 @@ void SvxConfigGroupListBox_Impl::ClearAll()
     Clear();
 }
 
-void SvxConfigGroupListBox_Impl::Init( SvStringsDtor * )
+void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrowseNode >& _rxRootNode, SvLBoxEntry* _pParentEntry, bool _bCheapChildsOnDemand )
+{
+    OSL_PRECOND( _rxRootNode.is(), "SvxConfigGroupListBox_Impl::fillScriptList: invalid root node!" );
+    if ( !_rxRootNode.is() )
+        return;
+
+    try
+    {
+        if ( _rxRootNode->hasChildNodes() )
+        {
+            Sequence< Reference< browse::XBrowseNode > > children =
+                _rxRootNode->getChildNodes();
+
+            BOOL bIsRootNode = _rxRootNode->getName().equalsAscii("Root");
+
+            OUString sDisplayTitle;
+            OUString sModelTitle;
+            Reference< XModel > xCurrentDoc( SfxObjectShell::GetWorkingDocument() );
+            if ( xCurrentDoc.is() )
+            {
+                sDisplayTitle = sModelTitle = ::comphelper::DocumentInfo::getDocumentTitle( xCurrentDoc );
+            }
+
+            for ( long n = 0; n < children.getLength(); n++ )
+            {
+                /* To mimic current starbasic behaviour we
+                need to make sure that only the current document
+                is displayed in the config tree. Tests below
+                set the bDisplay flag to FALSE if the current
+                node is a first level child of the Root and is NOT
+                either the current document, user or share */
+                Reference< browse::XBrowseNode >& theChild = children[n];
+                //#139111# some crash reports show that it might be unset
+                if ( !theChild.is() )
+                    continue;
+                ::rtl::OUString sUIName = theChild->getName();
+                BOOL bDisplay = TRUE;
+
+                if  (   bIsRootNode
+                    ||  ( m_bShowSlots && _pParentEntry && ( GetModel()->GetDepth( _pParentEntry ) == 0 ) )
+                        // if we show slots (as in the customize dialog)
+                        // then the user & share are added at depth=1
+                    )
+                {
+                    if ( sUIName.equals( sModelTitle ) )
+                    {
+                        sUIName = sDisplayTitle;
+                    }
+                    else if ( sUIName.equalsAscii( "user" ) )
+                    {
+                        sUIName = m_sMyMacros;
+                        bIsRootNode = sal_True;
+                    }
+                    else if ( sUIName.equalsAscii( "share" ) )
+                    {
+                        sUIName = m_sProdMacros;
+                        bIsRootNode = sal_True;
+                    }
+                    else
+                    {
+                        bDisplay = FALSE;
+                    }
+                }
+
+                if ( !bDisplay )
+                    continue;
+
+                if ( children[n]->getType() == browse::BrowseNodeTypes::SCRIPT )
+                    continue;
+
+                SvLBoxEntry* pNewEntry = InsertEntry( sUIName, _pParentEntry );
+
+                ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+                Image aImage = GetImage( theChild, aContext.getUNOContext(), bIsRootNode, BMP_COLOR_NORMAL );
+                SetExpandedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
+                SetCollapsedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
+
+                aImage = GetImage( theChild, aContext.getUNOContext(), bIsRootNode, BMP_COLOR_HIGHCONTRAST );
+                SetExpandedEntryBmp( pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST );
+                SetCollapsedEntryBmp( pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST );
+
+                SvxGroupInfo_Impl* pInfo =
+                    new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0, theChild );
+                pNewEntry->SetUserData( pInfo );
+                aArr.Insert( pInfo, aArr.Count() );
+
+                if ( _bCheapChildsOnDemand )
+                {
+                    /* i30923 - Would be nice if there was a better
+                    * way to determine if a basic lib had children
+                    * without having to ask for them (which forces
+                    * the library to be loaded */
+                    pNewEntry->EnableChildsOnDemand( TRUE );
+                }
+                else
+                {
+                    // if there are granchildren we're interested in, display the '+' before
+                    // the entry, but do not yet expand
+                    Sequence< Reference< browse::XBrowseNode > > grandchildren =
+                        children[n]->getChildNodes();
+
+                    for ( sal_Int32 m = 0; m < grandchildren.getLength(); m++ )
+                    {
+                        if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
+                        {
+                            pNewEntry->EnableChildsOnDemand( TRUE );
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch (const Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+void SvxConfigGroupListBox_Impl::Init()
 {
     SetUpdateMode(FALSE);
     ClearAll();
@@ -398,7 +460,7 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor * )
         UNO_QUERY );
 
     // are we showing builtin commands?
-    if ( nMode && xContext.is() && m_xFrame.is() )
+    if ( m_bShowSlots && xContext.is() && m_xFrame.is() )
     {
         Reference< lang::XMultiComponentFactory > xMCF =
             xContext->getServiceManager();
@@ -504,7 +566,7 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor * )
         }
     }
 
-    if ( bShowSF && xContext.is() )
+    if ( xContext.is() )
     {
         // Add Scripting Framework entries
         Reference< browse::XBrowseNode > rootNode;
@@ -519,144 +581,29 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor * )
                 OUString::createFromAscii( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
             rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
         }
-        catch( Exception& )
+        catch( const Exception& )
         {
-            // OSL_TRACE("Exception getting root node: %s", PRTSTR(e.Message));
-            // TODO exception handling
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         if ( rootNode.is() )
         {
-            if ( nMode )
+            if ( m_bShowSlots )
             {
-            /*
-                We call acquire on the XBrowseNode so that it does not
-                get autodestructed and become invalid when accessed later.
-            */
-            rootNode->acquire();
+                SvxGroupInfo_Impl *pInfo =
+                    new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0, rootNode );
 
-            SvxGroupInfo_Impl *pInfo =
-                new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0,
-                    static_cast<void *>(rootNode.get()));
+                String aTitle =
+                    String( SVX_RES( STR_SELECTOR_MACROS ) );
 
-            String aTitle =
-                String( SVX_RES( STR_SELECTOR_MACROS ) );
-
-            SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
-            pNewEntry->SetUserData( pInfo );
-            pNewEntry->EnableChildsOnDemand( TRUE );
-            aArr.Insert( pInfo, aArr.Count() );
+                SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
+                pNewEntry->SetUserData( pInfo );
+                pNewEntry->EnableChildsOnDemand( TRUE );
+                aArr.Insert( pInfo, aArr.Count() );
             }
             else
             {
-                try {
-                    if ( rootNode->hasChildNodes() )
-                    {
-                        Sequence< Reference< browse::XBrowseNode > > children =
-                            rootNode->getChildNodes();
-                        BOOL bIsRootNode = FALSE;
-
-                        OUString user = OUString::createFromAscii("user");
-                        OUString share = OUString::createFromAscii("share");
-                        if ( rootNode->getName().equals(OUString::createFromAscii("Root") ))
-                        {
-                            bIsRootNode = TRUE;
-                        }
-
-                        OUString sDisplayTitle;
-                        OUString sModelTitle;
-                        SfxObjectShell* pCurrentDoc = SfxObjectShell::GetWorkingDocument();
-                        if ( pCurrentDoc )
-                        {
-                            sDisplayTitle = pCurrentDoc->GetTitle();
-                            //sModelTitle = xModelToDocTitle( pCurrentDoc->GetModel() );
-                            SvxScriptSelectorDialog::GetDocTitle( pCurrentDoc->GetModel(), sModelTitle );
-                        }
-
-                        if ( sDisplayTitle.getLength() == 0 && sModelTitle.getLength() != 0 )
-                        {
-                            sDisplayTitle = sModelTitle;
-                        }
-
-                        for ( long n = 0; n < children.getLength(); n++ )
-                        {
-                            /* To mimic current starbasic behaviour we
-                            need to make sure that only the current document
-                            is displayed in the config tree. Tests below
-                            set the bDisplay flag to FALSE if the current
-                            node is a first level child of the Root and is NOT
-                            either the current document, user or share */
-                            Reference< browse::XBrowseNode >& theChild = children[n];
-                            if ( !theChild.is() )
-                                continue;
-                            ::rtl::OUString uiName = theChild->getName();
-                            BOOL bDisplay = TRUE;
-
-                            if ( bIsRootNode )
-                            {
-                                if ( uiName.equals( sModelTitle ) )
-                                {
-                                    uiName = sDisplayTitle;
-                                }
-                                else if ( uiName.equals( user ) )
-                                {
-                                    uiName = m_sMyMacros;
-                                }
-                                else if ( uiName.equals( share ) )
-                                {
-                                    uiName = m_sProdMacros;
-                                }
-                                else
-                                {
-                                    bDisplay = FALSE;
-                                }
-                            }
-                            if (children[n]->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
-                            {
-
-                                /*
-                                    We call acquire on the XBrowseNode so that it does not
-                                    get autodestructed and become invalid when accessed later.
-                                */
-                                theChild->acquire();
-
-                                SvxGroupInfo_Impl* pInfo =
-                                    new SvxGroupInfo_Impl(SVX_CFGGROUP_SCRIPTCONTAINER,
-                                        0, static_cast<void *>( theChild.get()));
-
-                                Image aImage = GetImage( theChild, xContext, bIsRootNode,BMP_COLOR_NORMAL );
-                                SvLBoxEntry* pNewEntry =
-                                    InsertEntry( uiName, NULL);
-                                SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                                SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                                aImage = GetImage( theChild, xContext, bIsRootNode,BMP_COLOR_HIGHCONTRAST );
-                                SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
-                                SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
-
-                                pNewEntry->SetUserData( pInfo );
-                                aArr.Insert( pInfo, aArr.Count() );
-
-                                if ( children[n]->hasChildNodes() )
-                                {
-                                    Sequence< Reference< browse::XBrowseNode > > grandchildren =
-                                        children[n]->getChildNodes();
-
-                                    for ( long m = 0; m < grandchildren.getLength(); m++ )
-                                    {
-                                        if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
-                                        {
-                                            pNewEntry->EnableChildsOnDemand( TRUE );
-                                            m = grandchildren.getLength();
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (RuntimeException &) {
-                    // do nothing, the entry will not be displayed in the UI
-                }
+                fillScriptList( rootNode, NULL, false );
             }
         }
     }
@@ -669,9 +616,7 @@ Image SvxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > nod
     Image aImage;
     if ( bIsRootNode )
     {
-        OUString user = OUString::createFromAscii("user");
-        OUString share = OUString::createFromAscii("share");
-        if (node->getName().equals( user ) || node->getName().equals(share ) )
+        if ( node->getName().equalsAscii( "user" ) || node->getName().equalsAscii( "share" ) )
         {
             if( bHighContrast == BMP_COLOR_NORMAL )
                 aImage = m_hdImage;
@@ -778,9 +723,7 @@ SvxConfigGroupListBox_Impl::getDocumentModel(
             components->nextElement(), UNO_QUERY );
         if ( model.is() )
         {
-            OUString sTdocUrl;
-            SvxScriptSelectorDialog::GetDocTitle( model, sTdocUrl );
-
+            OUString sTdocUrl = ::comphelper::DocumentInfo::getDocumentTitle( model );
             if( sTdocUrl.equals( docName ) )
             {
                 xModel = model;
@@ -836,17 +779,17 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
 
                     Image aImage;
 
-                    OUString* aCmdURL = new OUString( commands[i].Command );
+                    OUString aCmdURL( commands[i].Command );
 
                     if ( m_pImageProvider )
                     {
-                        aImage = m_pImageProvider->GetImage( *aCmdURL );
+                        aImage = m_pImageProvider->GetImage( aCmdURL );
                     }
 
                     OUString aLabel;
                     try
                     {
-                        Any a = m_xModuleCommands->getByName( *aCmdURL );
+                        Any a = m_xModuleCommands->getByName( aCmdURL );
                         Sequence< beans::PropertyValue > aPropSeq;
 
                         if ( a >>= aPropSeq )
@@ -883,7 +826,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                     }
 
                     SvxGroupInfo_Impl *_pGroupInfo = new SvxGroupInfo_Impl(
-                        SVX_CFGFUNCTION_SLOT, 123, aCmdURL );
+                        SVX_CFGFUNCTION_SLOT, 123, aCmdURL, ::rtl::OUString() );
 
                     pFunctionListBox->aArr.Insert(
                         _pGroupInfo, pFunctionListBox->aArr.Count() );
@@ -896,8 +839,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
 
         case SVX_CFGGROUP_SCRIPTCONTAINER:
         {
-            Reference< browse::XBrowseNode > rootNode(
-                reinterpret_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
+            Reference< browse::XBrowseNode > rootNode( pInfo->xBrowseNode );
 
             try {
                 if ( rootNode->hasChildNodes() )
@@ -934,12 +876,9 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                                 // do nothing, the description will be empty
                             }
 
-                            ScriptInfo* aInfo = new ScriptInfo( uri );
-                            aInfo->SetHelpText( description );
-
                             SvxGroupInfo_Impl* _pGroupInfo =
                                 new SvxGroupInfo_Impl(
-                                    SVX_CFGFUNCTION_SCRIPT, 123, aInfo );
+                                    SVX_CFGFUNCTION_SCRIPT, 123, uri, description );
 
                             Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_NORMAL );
                             SvLBoxEntry* pNewEntry =
@@ -959,8 +898,9 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                     }
                 }
             }
-            catch (RuntimeException &) {
-                // do nothing, the entry will not be displayed in the UI
+            catch (const Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION();
             }
             break;
         }
@@ -1024,126 +964,8 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
         {
             if ( !GetChildCount( pEntry ) )
             {
-                Reference< browse::XBrowseNode > rootNode(
-                    reinterpret_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
-                try {
-                    if ( rootNode->hasChildNodes() )
-                    {
-                        Sequence< Reference< browse::XBrowseNode > > children =
-                            rootNode->getChildNodes();
-                        BOOL bIsRootNode = FALSE;
-
-                        OUString user = OUString::createFromAscii("user");
-                        OUString share = OUString::createFromAscii("share");
-                        if ( rootNode->getName().equals(OUString::createFromAscii("Root") ))
-                        {
-                            bIsRootNode = TRUE;
-                        }
-
-                        OUString sDisplayTitle;
-                        OUString sModelTitle;
-                        SfxObjectShell* pCurrentDoc = SfxObjectShell::GetWorkingDocument();
-                        if ( pCurrentDoc )
-                        {
-                            sDisplayTitle = pCurrentDoc->GetTitle();
-                            //sModelTitle = xModelToDocTitle( pCurrentDoc->GetModel() );
-                            SvxScriptSelectorDialog::GetDocTitle( pCurrentDoc->GetModel(), sModelTitle );
-                        }
-
-                        if ( sDisplayTitle.getLength() == 0 && sModelTitle.getLength() != 0 )
-                        {
-                            sDisplayTitle = sModelTitle;
-                        }
-
-                        for ( long n = 0; n < children.getLength(); n++ )
-                        {
-                            /* To mimic current starbasic behaviour we
-                            need to make sure that only the current document
-                            is displayed in the config tree. Tests below
-                            set the bDisplay flag to FALSE if the current
-                            node is a first level child of the Root and is NOT
-                            either the current document, user or share */
-                            Reference< browse::XBrowseNode >& theChild = children[n];
-
-                            //#139111# some crash reports show that it might be unset
-                            if ( !theChild.is() )
-                                continue;
-                            ::rtl::OUString uiName = theChild->getName();
-                            BOOL bDisplay = TRUE;
-
-                            if ( bIsRootNode )
-                            {
-                                if ( uiName.equals( sModelTitle ) )
-                                {
-                                    uiName = sDisplayTitle;
-                                }
-                                else if ( uiName.equals( user ) )
-                                {
-                                    uiName = m_sMyMacros;
-                                }
-                                else if ( uiName.equals( share ) )
-                                {
-                                    uiName = m_sProdMacros;
-                                }
-                                else
-                                {
-                                    bDisplay = FALSE;
-                                }
-                            }
-                            if (children[n]->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
-                            {
-
-                                /*
-                                    We call acquire on the XBrowseNode so that it does not
-                                    get autodestructed and become invalid when accessed later.
-                                */
-                                theChild->acquire();
-
-                                SvxGroupInfo_Impl* _pGroupInfo =
-                                    new SvxGroupInfo_Impl(SVX_CFGGROUP_SCRIPTCONTAINER,
-                                        0, static_cast<void *>( theChild.get()));
-
-                                OUString _uiName = theChild->getName();
-                                sal_Bool isRootNode = sal_False;
-                                //if we show slots (as in the customize dialog)
-                                //then the user & share are added at depth=1
-                                if(nMode && GetModel()->GetDepth(pEntry) == 0)
-                                {
-                                    if ( _uiName.equals( user ) )
-                                    {
-                                        _uiName = m_sMyMacros;
-                                        isRootNode = sal_True;
-                                    }
-                                    else if ( _uiName.equals( share ) )
-                                    {
-                                        _uiName = m_sProdMacros;
-                                        isRootNode = sal_True;
-                                    }
-                                }
-                                Image aImage = GetImage( theChild, Reference< XComponentContext >(), isRootNode, BMP_COLOR_NORMAL );
-                                SvLBoxEntry* pNewEntry =
-                                    InsertEntry( _uiName, pEntry );
-                                SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                                SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
-                                aImage = GetImage( theChild, Reference< XComponentContext >(), isRootNode, BMP_COLOR_HIGHCONTRAST );
-                                SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
-                                SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
-
-                                pNewEntry->SetUserData( _pGroupInfo );
-                                aArr.Insert( _pGroupInfo, aArr.Count() );
-
-                                /* i30923 - Would be nice if there was a better
-                                 * way to determine if a basic lib had children
-                                 * without having to ask for them (which forces
-                                 * the library to be loaded */
-                                pNewEntry->EnableChildsOnDemand( TRUE );
-                            }
-                        }
-                    }
-                }
-                catch (RuntimeException &) {
-                    // do nothing, the entry will not be displayed in the UI
-                }
+                Reference< browse::XBrowseNode > rootNode( pInfo->xBrowseNode ) ;
+                fillScriptList( rootNode, pEntry, true /* i30923 */ );
             }
             break;
         }
@@ -1152,70 +974,6 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
             DBG_ERROR( "Falscher Gruppentyp!" );
             break;
     }
-}
-
-void
-SvxScriptSelectorDialog::GetDocTitle(
-    const Reference< frame::XModel >& xModel,
-    OUString& rTitle )
-{
-    OUString aResult = OUString::createFromAscii("Unknown");
-
-    if ( !xModel.is() )
-    {
-        rTitle = aResult;
-        return;
-    }
-
-    try
-    {
-        Reference< frame::XController > xCurrentController = xModel->getCurrentController();
-        if ( xCurrentController.is() )
-        {
-            Reference< beans::XPropertySet > xProps( xCurrentController->getFrame(), UNO_QUERY_THROW );
-
-            OUString prop = OUString::createFromAscii( "Title" );
-            OUString tmp;
-
-            if ( sal_True == ( xProps->getPropertyValue( prop ) >>= tmp ) )
-            {
-                if ( xModel->getURL().getLength() == 0 )
-                {
-                    // process "UntitledX - YYYYYYYY" // to get UntitledX
-                    sal_Int32 pos = 0;
-                    aResult = tmp.getToken(0, ' ', pos);
-                }
-                else
-                {
-                    Reference< document::XDocumentInfoSupplier > xDIS(
-                        xModel, UNO_QUERY );
-
-                    if ( xDIS.is() )
-                    {
-                        Reference< beans::XPropertySet > xProp (
-                            xDIS->getDocumentInfo(), UNO_QUERY );
-                        xProp->getPropertyValue( prop ) >>= tmp;
-                    }
-
-                    if ( tmp.getLength() == 0 )
-                    {
-                        // strip out the last leaf of location name
-                        // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
-                        tmp = xModel->getURL();
-                        INetURLObject aURLObj( tmp );
-                        if ( !aURLObj.HasError() )
-                            tmp = aURLObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-                    }
-                    aResult = tmp;
-                }
-            }
-        }
-    }
-    catch ( Exception& )
-    {
-        // OSL_TRACE("GetDocTitle() exception: %s", PRTSTR(e.Message));
-    }
-    rTitle = aResult;
 }
 
 /*
@@ -1231,8 +989,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     ModelessDialog( pParent, SVX_RES( RID_DLG_SCRIPTSELECTOR ) ),
     aDialogDescription( this, SVX_RES( TXT_SELECTOR_DIALOG_DESCRIPTION ) ),
     aGroupText( this, SVX_RES( TXT_SELECTOR_CATEGORIES ) ),
-    aCategories( this, SVX_RES( BOX_SELECTOR_CATEGORIES ),
-        bShowSlots ? SFX_SLOT_MENUCONFIG : 0, xFrame ),
+    aCategories( this, SVX_RES( BOX_SELECTOR_CATEGORIES ), bShowSlots, xFrame ),
     aFunctionText( this, SVX_RES( TXT_SELECTOR_COMMANDS ) ),
     aCommands( this, SVX_RES( BOX_SELECTOR_COMMANDS ) ),
     aOKButton( this, SVX_RES( BTN_SELECTOR_OK ) ),
@@ -1445,21 +1202,11 @@ SvxScriptSelectorDialog::GetScriptURL()
     if ( pEntry )
     {
         SvxGroupInfo_Impl *pData = (SvxGroupInfo_Impl*) pEntry->GetUserData();
-        if ( pData->nKind == SVX_CFGFUNCTION_SLOT )
+        if  (   ( pData->nKind == SVX_CFGFUNCTION_SLOT )
+            ||  ( pData->nKind == SVX_CFGFUNCTION_SCRIPT )
+            )
         {
-            if ( pData->pObject != NULL )
-            {
-                OUString* tmp = (OUString*) pData->pObject;
-                result = OUString( *tmp );
-            }
-        }
-        else if ( pData->nKind == SVX_CFGFUNCTION_SCRIPT )
-        {
-            ScriptInfo* pInfo = (ScriptInfo*) pData->pObject;
-            if ( pInfo != NULL )
-            {
-                result = pInfo->GetURI();
-            }
+            result = pData->sURL;
         }
     }
 
