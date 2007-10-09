@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:03:47 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:21:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -696,7 +696,7 @@ GtkSalFrame::GetAtkRole( GtkWindow* window )
     {
         role = aDefaultRole;
 
-        Window *pWindow = static_cast <Window *> (pFrame->GetInstance());
+        Window *pWindow = pFrame->GetWindow();
         if( pWindow )
         {
             // Determine the appropriate role for the GtkWindow
@@ -754,7 +754,7 @@ uno::Reference< accessibility::XAccessible >
 GtkSalFrame::getAccessible( bool bCreate )
 {
     // Yes - this is a hack - but: this abstraction seems totally useless to me
-    Window *pWindow = static_cast<Window *>(GetInstance());
+    Window *pWindow = GetWindow();
 
     g_return_val_if_fail( pWindow != NULL, NULL );
 
