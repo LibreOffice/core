@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptdocument.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 16:03:22 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:25:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,24 +37,15 @@
 #define SCRIPTDOCUMENT_HXX
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HPP_
 #include <com/sun/star/io/XInputStreamProvider.hpp>
-#endif
 /** === end UNO includes === **/
 
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-class SfxObjectShell;
 class BasicManager;
 class SfxListener;
 
@@ -124,11 +115,6 @@ namespace basctl
         explicit    ScriptDocument( SpecialDocument _eType );
 
         /** creates a ScriptDocument instance which refers to a document given as
-            SfxObjectShell
-        */
-        explicit    ScriptDocument( SfxObjectShell& _rShell );
-
-        /** creates a ScriptDocument instance which refers to a document given as
             XModel
 
             @param _rxDocument
@@ -160,7 +146,7 @@ namespace basctl
                     getDocumentForBasicManager( const BasicManager* _pManager );
 
         /** returns a (newly created) ScriptDocument instance for the document
-            with a given caption
+            with a given caption or URL
 
             If there is no document with the given caption, then the (shared)
             ScriptDocument instance which is responsible for the application is returned.
@@ -168,7 +154,24 @@ namespace basctl
             @see getApplicationScriptDocument
         */
         static ScriptDocument
-                    getDocumentWithCaption( const ::rtl::OUString& _rCaption );
+                    getDocumentWithURLOrCaption( const ::rtl::OUString& _rUrlOrCaption );
+
+        /** operation mode for getAllScriptDocuments
+        */
+        enum ScriptDocumentList
+        {
+            /** all ScriptDocuments, including the dedicated one which represents
+                the application-wide scripts/dialogs.
+            */
+            AllWithApplication,
+            /** real documents only
+            */
+            DocumentsOnly,
+            /** real documents only, sorted lexicographically by their title (using the sys locale's default
+                collator)
+            */
+            DocumentsSorted
+        };
 
         /** returns the set of ScriptDocument instances, one for each open document which
             contains Basic/Dialog containers; plus an additional instance for
@@ -181,7 +184,7 @@ namespace basctl
                 by a ScriptDocument
         */
         static ScriptDocuments
-                    getAllScriptDocuments( bool _bIncludingApplication );
+                    getAllScriptDocuments( ScriptDocumentList _eListType );
 
         // comparison
                 bool operator==( const ScriptDocument& _rhs ) const;
@@ -190,14 +193,32 @@ namespace basctl
         /// retrieves a (pretty simple) hash code for the document
         sal_Int32   hashCode() const;
 
-        /** determines whether the document is actually able to contain
-            Basic/Dialog libraries
+        /** determines whether the document is actually able to contain Basic/Dialog libraries
+
+            Note that validity does not automatically imply the document can be used for active
+            work. Instead, it is possible the document is closed already (or being closed currently).
+            In this case, isValid will return <TRUE/>, but isAlive will return <FALSE/>.
 
             @return
                 <TRUE/> if the instance refers to a document which contains Basic/Dialog libraries,
                 or the application as a whole, <FALSE/> otherwise.
+
+            @see isAlive
         */
         bool        isValid() const;
+
+        /** determines whether the document instance is alive
+
+            If the instance is not valid, <FALSE/> is returned.
+
+            If the instance refers to a real document, which is already closed, or just being closed,
+            the method returns <FALSE/>.
+
+            If the instance refers to the application, <TRUE/> is returned.
+
+            @see isValid
+        */
+        bool        isAlive() const;
 
         /// returns the BasicManager associated with this instance
         BasicManager*
@@ -222,7 +243,6 @@ namespace basctl
         /** returns the Basic or Dialog library container of the document
 
             If the document is not valid, <NULL/> is returned.
-            @see isValid
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >
                     getLibraryContainer( LibraryContainerType _eType ) const;
@@ -443,7 +463,7 @@ namespace basctl
         /** determines whether the ScriptDocument instance operates on a real document,
             as opposed to the whole application
         */
-        bool        isDocument() const { return !isApplication(); }
+        bool        isDocument() const { return isValid() && !isApplication(); }
 
         /** marks the document as modified
             @precond
@@ -475,31 +495,29 @@ namespace basctl
         ::rtl::OUString
                     getTitle( LibraryLocation _eLocation, LibraryType _eType = LIBRARY_TYPE_ALL ) const;
 
-        /// determines whether the document is currently being closed
-        bool        isClosing() const;
+        /** returns the title of the document
+
+            to be used for valid documents only
+        */
+        ::rtl::OUString
+                    getTitle() const;
+
+        /** returns the URL of the document
+
+            to be used for valid documents only
+        */
+        ::rtl::OUString
+                    getURL() const;
 
         /** determines whether the document is currently the one-and-only application-wide active document
         */
         bool        isActive() const;
 
-        /// signs the scripting content inside the document
-        void        signScriptingContent() const;
-        /// retrieves the state of the signature of the scripting content inside the document
-        sal_uInt16  getScriptingSignatureState() const;
-        /// ???
-        void        adjustMacroMode( const ::rtl::OUString& _rScriptType ) const;
-        /** retrives the current macro execution mode
+        /** determines whether macro execution for this document is allowed
+
             only to be called for real documents (->isDocument)
         */
-        sal_Int16   getMacroMode() const;
-
-        // legacy functionality, to be removed when the whole thing has been
-        // migrated to XModel instead of SfxObjectShell
-               void LEGACY_startDocumentListening( SfxListener& _rListener ) const;
-        static void LEGACY_setWorkingDocument( const ScriptDocument& _rxDocument );
-        static void LEGACY_resetWorkingDocument();
-        static ScriptDocument
-                    LEGACY_getWorkingDocument();
+        bool    allowMacros() const;
     };
 
 //........................................................................
