@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:37:42 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:18:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,10 +66,10 @@
 #include <com/sun/star/script/provider/ScriptExceptionRaisedException.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
-
 #include <com/sun/star/script/XInvocation.hpp>
 
 #include <cppuhelper/implbase1.hxx>
+#include <comphelper/documentinfo.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -305,8 +305,7 @@ SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OU
             components->nextElement(), UNO_QUERY );
         if ( model.is() )
         {
-            ::rtl::OUString sTdocUrl;
-            SvxScriptSelectorDialog::GetDocTitle( model, sTdocUrl );
+            ::rtl::OUString sTdocUrl = ::comphelper::DocumentInfo::getDocumentTitle( model );
             if( sTdocUrl.equals( docName ) )
             {
                 xModel = model;
