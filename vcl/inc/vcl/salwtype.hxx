@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salwtype.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:04:59 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 #ifndef _SV_SALWTYPE_HXX
 #define _SV_SALWTYPE_HXX
 
-#ifdef __cplusplus
-
 #ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
 #endif
@@ -46,25 +44,14 @@
 #include <tools/string.hxx>
 #endif
 
-#endif // __cplusplus
-
 #ifndef _SV_SV_H
 #include <vcl/sv.h>
 #endif
 
-#ifdef __cplusplus
-
 class SalGraphics;
 class SalFrame;
 class SalObject;
-
-#else // __cplusplus
-
-#define SalGraphics void
-#define SalFrame void
-#define SalObject void
-
-#endif // __cplusplus
+class Window;
 
 class ImplFontSelectData;
 
@@ -251,7 +238,7 @@ struct SalInputContextChangeEvent
 // - SalFrame-Types -
 // ------------------
 
-typedef long (*SALFRAMEPROC)( void* pInst, SalFrame* pFrame,
+typedef long (*SALFRAMEPROC)( Window* pInst, SalFrame* pFrame,
                               USHORT nEvent, const void* pEvent );
 
 // --------------------
