@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:59:04 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:24:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -692,13 +692,12 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
 {
     if ( pButton == &aEditButton )
     {
-        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
         SfxAllItemSet aArgs( SFX_APP()->GetPool() );
         SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
         SFX_APP()->ExecuteSlot( aRequest );
 
         BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-        pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
         DBG_ASSERT( pCurEntry, "Entry?!" );
@@ -756,8 +755,8 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, String& rLibName )
     if ( !rLibName.Len() )
         rLibName = String::CreateFromAscii( "Standard" );
 
-    DBG_ASSERT( rDocument.isValid(), "ObjectPage::GetSelection: no ScriptDocument in the selection!" );
-    if ( !rDocument.isValid() )
+    DBG_ASSERT( rDocument.isAlive(), "ObjectPage::GetSelection: no or dead ScriptDocument in the selection!" );
+    if ( !rDocument.isAlive() )
         return false;
 
     // check if the module library is loaded
@@ -884,8 +883,8 @@ void ObjectPage::DeleteCurrent()
     DBG_ASSERT( pCurEntry, "Kein aktueller Eintrag!" );
     BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
     ScriptDocument aDocument( aDesc.GetDocument() );
-    DBG_ASSERT( aDocument.isValid(), "ObjectPage::DeleteCurrent: no document!" );
-    if ( !aDocument.isValid() )
+    DBG_ASSERT( aDocument.isAlive(), "ObjectPage::DeleteCurrent: no document!" );
+    if ( !aDocument.isAlive() )
         return;
     String aLibName( aDesc.GetLibName() );
     String aName( aDesc.GetName() );
@@ -965,8 +964,8 @@ void LibDialog::SetStorageName( const String& rName )
 SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
     BasicTreeListBox& rBasicBox, const String& rLibName, String aModName, bool bMain )
 {
-    OSL_ENSURE( rDocument.isValid(), "createModImpl: invalid document!" );
-    if ( !rDocument.isValid() )
+    OSL_ENSURE( rDocument.isAlive(), "createModImpl: invalid document!" );
+    if ( !rDocument.isAlive() )
         return NULL;
 
     SbModule* pModule = NULL;
