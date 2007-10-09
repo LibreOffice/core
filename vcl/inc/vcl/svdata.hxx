@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:05:22 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:18:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,6 +225,7 @@ struct ImplSVGDIData
     BOOL                    mbFontSubChanged;   // TRUE: FontSubstitution wurde zwischen Begin/End geaendert
     vcl::DefaultFontConfiguration* mpDefaultFontConfiguration;
     vcl::FontSubstConfiguration* mpFontSubstConfiguration;
+    bool                    mbPrinterPullModel; // true: use pull model instead of normal push model when printing
 };
 
 
