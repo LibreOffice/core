@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impprn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:00:31 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:17:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,16 +53,39 @@ struct QueuePage;
 // - ImplQPrinter -
 // ----------------
 
+/*
+    ImplQPrinter is on most systems a simple buffer that allows a potential
+    lengthy print job to be printed in the background. For this it saves all
+    normal drawing operations for each printed page to a metafile, then spooling
+    the metafiles timer based to a normal printer. The application can act in the meantime
+    including changing the original document without influencing the print job.
+
+    On some systems (currently Mac/Aqua Cocoa) ImplQPrinter has the additional
+    purpose of adapting to the print system: here theprint systems starts a
+    job and will not return from that function until it has ended; to do so
+    it queries for each consecutive page to be printed. Also the Cocoa print system
+    needs to know the number of pages BEFORE starting a print job. Since our Printer
+    does not know that, we need to do the completing spooling to ImplQPrinter before
+    we can actually print to the real print system. Let's call this the pull model
+    instead of the push model (because the systems pulls the pages).
+*/
+
 class ImplQPrinter : public Printer, public vcl::DeletionNotifier
 {
 private:
     Printer*    mpParent;
     Queue*      mpQueue;
     AutoTimer   maTimer;
-    BOOL        mbAborted;
-    BOOL        mbUserCopy;
-    BOOL        mbDestroyAllowed;
-    BOOL        mbDestroyed;
+    bool        mbAborted;
+    bool        mbUserCopy;
+    bool        mbDestroyAllowed;
+    bool        mbDestroyed;
+
+    GDIMetaFile maCurPageMetaFile;
+    long        mnMaxBmpDPIX;
+    long        mnMaxBmpDPIY;
+    ULONG       mnRestoreDrawMode;
+    int         mnCurCopyCount;
 
                 DECL_LINK( ImplPrintHdl, Timer* );
 
@@ -72,6 +95,9 @@ private:
 
                 ImplQPrinter( const ImplQPrinter& rPrinter );
     Printer&    operator =( const ImplQPrinter& rPrinter );
+
+    void        PrePrintPage( QueuePage* );
+    void        PostPrintPage();
 
 public:
 
@@ -83,8 +109,18 @@ public:
     void        AbortQueuePrint();
     void        AddQueuePage( GDIMetaFile* pPage, USHORT nPage, BOOL bNewJobSetup );
 
-    BOOL        IsUserCopy() const { return mbUserCopy; }
-    void        SetUserCopy( BOOL bSet ) { mbUserCopy = bSet; }
+    bool        IsUserCopy() const { return mbUserCopy; }
+    void        SetUserCopy( bool bSet ) { mbUserCopy = bSet; }
+
+    /**
+    used by pull implementation to emit the next page
+    */
+    void        PrintNextPage();
+    /**
+    used by pull implementation to get the number of physical pages
+    (that is how often PrintNextPage should be called)
+    */
+    ULONG       GetPrintPageCount();
 };
 
 #endif  // _SV_IMPPRN_HXX
