@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:11:13 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:19:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,9 @@ inline XInterface * Reference< interface_type >::iquery(
 extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
+extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
+    typelib_TypeDescriptionReference * pType )
+    SAL_THROW_EXTERN_C();
 //__________________________________________________________________________________________________
 inline XInterface * BaseReference::iquery_throw(
     XInterface * pInterface, const Type & rType )
@@ -104,6 +107,20 @@ inline XInterface * Reference< interface_type >::iquery_throw(
 {
     return BaseReference::iquery_throw(
         pInterface, interface_type::static_type());
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline interface_type * Reference< interface_type >::iset_throw(
+    interface_type * pInterface ) SAL_THROW( (RuntimeException) )
+{
+    if (pInterface)
+    {
+        pInterface->acquire();
+        return pInterface;
+    }
+    throw RuntimeException(
+        ::rtl::OUString( cppu_unsatisfied_iset_msg( interface_type::static_type().getTypeLibType() ), SAL_NO_ACQUIRE ),
+        NULL );
 }
 #endif
 
@@ -186,6 +203,18 @@ inline Reference< interface_type >::Reference( const Any & rAny, UnoReference_Qu
 {
     _pInterface = iquery_throw( typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass
                                 ? static_cast< XInterface * >( rAny.pReserved ) : 0 );
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline Reference< interface_type >::Reference( const Reference< interface_type > & rRef, UnoReference_SetThrow ) SAL_THROW( (RuntimeException) )
+{
+    _pInterface = iset_throw( rRef.get() );
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline Reference< interface_type >::Reference( interface_type * pInterface, UnoReference_SetThrow ) SAL_THROW( (RuntimeException) )
+{
+    _pInterface = iset_throw( pInterface );
 }
 #endif
 
@@ -293,6 +322,20 @@ inline void Reference< interface_type >::set(
                  rAny.pType->eTypeClass == typelib_TypeClass_INTERFACE
                  ? static_cast< XInterface * >( rAny.pReserved ) : 0 )),
          SAL_NO_ACQUIRE );
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline void Reference< interface_type >::set(
+    interface_type * pInterface, UnoReference_SetThrow ) SAL_THROW( (RuntimeException) )
+{
+    set( iset_throw( pInterface ), SAL_NO_ACQUIRE );
+}
+//__________________________________________________________________________________________________
+template< class interface_type >
+inline void Reference< interface_type >::set(
+    const Reference< interface_type > & rRef, UnoReference_SetThrow ) SAL_THROW( (RuntimeException) )
+{
+    set( rRef.get(), UNO_SET_THROW );
 }
 
 #endif
