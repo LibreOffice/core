@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeDocument.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:06:04 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:14:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@
 #include <com/sun/star/document/XEventBroadcaster.idl>
 #endif
 
-#ifndef __com_sun_star_document_XEventSupplier_idl__
+#ifndef __com_sun_star_document_XEventsSupplier_idl__
 #include <com/sun/star/document/XEventsSupplier.idl>
 #endif
 
@@ -74,6 +74,8 @@
 //=============================================================================
 
 module com {   module sun {   module star {   module document {
+
+published interface XEmbeddedScripts;
 
 //=============================================================================
 /** abstract service which specifies a storable and printable document
@@ -166,6 +168,12 @@ published service OfficeDocument
         @since OOo 1.1.2
      */
     [optional] interface com::sun::star::view::XPrintJobBroadcaster;
+
+    /** is supported when the document can contain scripts and dialogs
+
+        @since OOo 2.4
+    */
+    [optional] interface XEmbeddedScripts;
 
     //-------------------------------------------------------------------------
     /** controls the focus behaviour of the form controls in the document
