@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:24:55 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:17:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/miscopt.hxx>
+#include <tools/diagnose_ex.h>
 #include <toolkit/unohlp.hxx>
 
 #include <algorithm>
@@ -78,6 +79,8 @@
 #include "eventdlg.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/svxdlg.hxx>
+
+#include <comphelper/documentinfo.hxx>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -844,7 +847,7 @@ SfxTabPage *CreateSvxToolbarConfigPage( Window *pParent, const SfxItemSet& rSet 
 
 SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet& rSet )
 {
-    return new SvxEventConfigPage( pParent, rSet );
+    return new SvxEventConfigPage( pParent, rSet, SvxEventConfigPage::EarlyInit() );
 }
 
 sal_Bool impl_showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFrame )
@@ -940,6 +943,11 @@ void SvxConfigDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
             {
                 rPage.SetFrame(m_xFrame);
             }
+            break;
+        case RID_SVXPAGE_EVENTS:
+            {
+                dynamic_cast< SvxEventConfigPage& >( rPage ).LateInit( m_xFrame );
+            };
             break;
         default:
             break;
@@ -1741,49 +1749,15 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         uno::Reference< lang::XMultiServiceFactory > xServiceManager(
             ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
 
-        uno::Reference< frame::XFramesSupplier > xFramesSupplier(
-            xServiceManager->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.Desktop" ) ) ),
-            uno::UNO_QUERY );
-
         m_xFrame = GetFrame();
+        OUString aModuleId = GetFrameWithDefaultAndIdentify( m_xFrame );
 
-        if ( !m_xFrame.is() )
-            m_xFrame = xFramesSupplier->getActiveFrame();
-
-        if ( !m_xFrame.is() )
-        {
-            uno::Reference< frame::XDesktop > xDesktop( xFramesSupplier, uno::UNO_QUERY );
-            m_xFrame = xDesktop->getCurrentFrame();
-        }
-
-        if ( !m_xFrame.is() && SfxViewFrame::Current() )
-            m_xFrame = SfxViewFrame::Current()->GetFrame()->GetFrameInterface();
-
-        if ( !m_xFrame.is() )
-        {
-            DBG_ERRORFILE( "SvxConfigPage::Reset(): no active frame" );
-            return;
-        }
-
+        // replace %MODULENAME in the label with the correct module name
         uno::Reference< css::frame::XModuleManager > xModuleManager(
             xServiceManager->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.frame.ModuleManager" ) ) ),
-            uno::UNO_QUERY );
-
-        OUString aModuleId;
-        try
-        {
-            aModuleId = xModuleManager->identify( m_xFrame );
-        }
-        catch ( const uno::Exception& )
-        {
-            aModuleId = ::rtl::OUString();
-        }
-
-        // replace %MODULENAME in the label with the correct module name
+            uno::UNO_QUERY_THROW );
         OUString aModuleName = GetUIModuleName( aModuleId, xModuleManager );
 
         OUString title = aTopLevelSeparator.GetText();
@@ -1848,7 +1822,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
                 {
                     xDocCfgMgr = xCfgSupplier->getUIConfigurationManager();
                 }
-                SvxScriptSelectorDialog::GetDocTitle( xModel, aTitle );
+                aTitle = ::comphelper::DocumentInfo::getDocumentTitle( xModel );
             }
         }
 
@@ -1907,17 +1881,31 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         {
             // Load configuration for other open documents which have
             // same module type
-            uno::Reference< frame::XFrames > xFrames =
-                xFramesSupplier->getFrames();
+            uno::Sequence< uno::Reference< frame::XFrame > > aFrameList;
+            try
+            {
+                uno::Reference< frame::XFramesSupplier > xFramesSupplier(
+                    xServiceManager->createInstance(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.frame.Desktop" ) ) ),
+                    uno::UNO_QUERY_THROW );
 
-            uno::Sequence< uno::Reference< frame::XFrame > >
-                xFrameList = xFrames->queryFrames(
+                uno::Reference< frame::XFrames > xFrames =
+                    xFramesSupplier->getFrames();
+
+                aFrameList = xFrames->queryFrames(
                     frame::FrameSearchFlag::ALL & ~frame::FrameSearchFlag::SELF );
 
-            for ( sal_Int32 i = 0; i < xFrameList.getLength(); i++ )
+            }
+            catch( const uno::Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+
+            for ( sal_Int32 i = 0; i < aFrameList.getLength(); i++ )
             {
                 SaveInData* pData = NULL;
-                uno::Reference < frame::XFrame > xf = xFrameList[i];
+                uno::Reference < frame::XFrame > xf = aFrameList[i];
 
                 if ( xf.is() && xf != m_xFrame )
                 {
@@ -1950,8 +1938,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
                                     xDocCfgMgr =
                                         xCfgSupplier->getUIConfigurationManager();
                                 }
-                                SvxScriptSelectorDialog::GetDocTitle(
-                                    xModel, aTitle2 );
+                                aTitle2 = ::comphelper::DocumentInfo::getDocumentTitle( xModel );
                             }
                         }
 
@@ -1987,6 +1974,61 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             Init();
         }
     }
+}
+
+::rtl::OUString SvxConfigPage::GetFrameWithDefaultAndIdentify( uno::Reference< frame::XFrame >& _inout_rxFrame )
+{
+    ::rtl::OUString sModuleID;
+    try
+    {
+        uno::Reference< lang::XMultiServiceFactory > xServiceManager(
+            ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+
+        uno::Reference< frame::XFramesSupplier > xFramesSupplier(
+            xServiceManager->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.frame.Desktop" ) ) ),
+            uno::UNO_QUERY_THROW );
+
+        if ( !_inout_rxFrame.is() )
+            _inout_rxFrame = xFramesSupplier->getActiveFrame();
+
+        if ( !_inout_rxFrame.is() )
+        {
+            uno::Reference< frame::XDesktop > xDesktop( xFramesSupplier, uno::UNO_QUERY_THROW );
+            _inout_rxFrame = xDesktop->getCurrentFrame();
+        }
+
+        if ( !_inout_rxFrame.is() && SfxViewFrame::Current() )
+            _inout_rxFrame = SfxViewFrame::Current()->GetFrame()->GetFrameInterface();
+
+        if ( !_inout_rxFrame.is() )
+        {
+            DBG_ERRORFILE( "SvxConfigPage::GetFrameWithDefaultAndIdentify(): no frame found!" );
+            return sModuleID;
+        }
+
+        uno::Reference< css::frame::XModuleManager > xModuleManager(
+            xServiceManager->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.frame.ModuleManager" ) ) ),
+            uno::UNO_QUERY_THROW );
+
+        try
+        {
+            sModuleID = xModuleManager->identify( _inout_rxFrame );
+        }
+        catch ( const frame::UnknownModuleException& )
+        {
+        }
+
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return sModuleID;
 }
 
 BOOL SvxConfigPage::FillItemSet( SfxItemSet& )
