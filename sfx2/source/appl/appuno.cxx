@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:40:42 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:31:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1765,10 +1765,9 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
             if ( pSh && pDoc )
             {
                 // security check for macros from document basic if an SFX context (pSh) is given
-                pDoc->AdjustMacroMode( String() );
-                if( pDoc->Get_Impl()->nMacroMode == ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
+                if ( !pDoc->AdjustMacroMode( String() ) )
                     // check forbids execution
-                    return ERRCODE_IO_ACCESSDENIED;;
+                    return ERRCODE_IO_ACCESSDENIED;
             }
             else if ( pSh && pSh->GetMedium() )
             {
@@ -1778,7 +1777,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 if ( pUpdateDocItem && pMacroExecModeItem
                   && pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE
                   && pMacroExecModeItem->GetValue() == document::MacroExecMode::NEVER_EXECUTE )
-                    return ERRCODE_IO_ACCESSDENIED;;
+                    return ERRCODE_IO_ACCESSDENIED;
             }
 
             // find BASIC method
