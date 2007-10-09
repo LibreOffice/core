@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:24:13 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:32:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -397,6 +397,7 @@ DBG_NAME(sfx2_SfxBaseModel)
 SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
 : IMPL_SfxBaseModel_MutexContainer()
 , m_pData( new IMPL_SfxBaseModel_DataContainer( m_aMutex, pObjectShell ) )
+, m_bSupportEmbeddedScripts( pObjectShell && pObjectShell->pImp ? !pObjectShell->pImp->m_bNoBasicCapabilities : false )
 {
     DBG_CTOR(sfx2_SfxBaseModel,NULL);
     if ( pObjectShell != NULL )
@@ -463,6 +464,13 @@ uno::Any SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( un
                                             static_cast< XMODEL2*               > ( this )  ,
                                                static_cast< XSTORAGEBASEDDOCUMENT* > ( this )   ,
                                                static_cast< XMODIFIABLE2*          > ( this )   );
+
+    }
+
+    if ( ( aReturn.hasValue() == sal_False ) && m_bSupportEmbeddedScripts )
+    {
+        aReturn = ::cppu::queryInterface(   rType                                           ,
+                                            static_cast< XEMBEDDEDSCRIPTS*      > ( this )  );
     }
 
     // If searched interface supported by this class ...
@@ -552,6 +560,7 @@ uno::Sequence< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( uno::RuntimeEx
 
             static ::cppu::OTypeCollection aTypeCollection2     ( ::getCppuType(( const REFERENCE< XMODULE      >*)NULL ) ,
                                                           ::getCppuType(( const REFERENCE< XMODEL2      >*)NULL ) ,
+                                                          ::getCppuType(( const REFERENCE< XEMBEDDEDSCRIPTS >*)NULL ) ,
                                                          aTypeCollection.getTypes()                                   );
 
             // ... and set his address to static pointer!
@@ -2280,6 +2289,45 @@ uno::Reference< container::XNameReplace > SAL_CALL SfxBaseModel::getEvents() thr
 }
 
 //--------------------------------------------------------------------------------------------------------
+//  XEmbeddedScripts
+//--------------------------------------------------------------------------------------------------------
+
+uno::Reference< script::XStorageBasedLibraryContainer > SAL_CALL SfxBaseModel::getBasicLibraries() throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw lang::DisposedException();
+
+    uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries;
+    if ( m_pData->m_pObjectShell )
+        xBasicLibraries.set( m_pData->m_pObjectShell->GetBasicContainer(), UNO_QUERY_THROW );
+    return xBasicLibraries;
+}
+
+uno::Reference< script::XStorageBasedLibraryContainer > SAL_CALL SfxBaseModel::getDialogLibraries() throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw lang::DisposedException();
+
+    uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries;
+    if ( m_pData->m_pObjectShell )
+        xDialogLibraries.set( m_pData->m_pObjectShell->GetDialogContainer(), UNO_QUERY_THROW );
+    return xDialogLibraries;
+}
+
+::sal_Bool SAL_CALL SfxBaseModel::getAllowMacroExecution() throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        throw lang::DisposedException();
+
+    if ( m_pData->m_pObjectShell )
+        return m_pData->m_pObjectShell->AdjustMacroMode( String(), true );
+    return sal_False;
+}
+
+//--------------------------------------------------------------------------------------------------------
 //  XEventBroadcaster
 //--------------------------------------------------------------------------------------------------------
 
@@ -2435,6 +2483,10 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             {
                 ::rtl::OUString aTitle = m_pData->m_pObjectShell->GetTitle();
                 addTitle_Impl( m_pData->m_seqArguments, aTitle );
+                postEvent_Impl( pSimpleHint->GetId() );
+            }
+            if ( pSimpleHint->GetId() == SFX_HINT_MODECHANGED )
+            {
                 postEvent_Impl( pSimpleHint->GetId() );
             }
 /*
