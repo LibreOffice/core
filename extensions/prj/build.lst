@@ -1,4 +1,4 @@
-ex	extensions	:	rdbmaker svx SANE:sane TWAIN:twain np_sdk offuh stoc uui officecfg NULL
+ex	extensions	:	rdbmaker svx SANE:sane TWAIN:twain np_sdk offuh stoc uui officecfg ZLIB:zlib NULL
 ex	extensions					usr1	-	all	ex_mkout NULL
 ex	extensions\inc					nmake		-	all	ex_inc NULL
 ex	extensions\inc\ucbhelper			get		-	all	ex_incucbh ex_inc NULL
@@ -14,6 +14,7 @@ ex	extensions\source\plugin\base			nmake	-	all	ex_plbase ex_inc NULL
 ex	extensions\source\plugin\win			nmake	-	w	ex_plwin ex_plbase ex_inc NULL
 ex	extensions\source\plugin\unx			nmake	-	u	ex_plunx ex_inc NULL
 ex	extensions\source\plugin\util			nmake	-	all	ex_plutil ex_plbase ex_plunx.u ex_plwin.w ex_plaqua.u ex_inc NULL
+ex	extensions\source\macosx\spotlight			nmake	-	u	ex_mxspotlight NULL
 ex	extensions\source\scanner			nmake	-	all	ex_scan ex_resrc ex_inc NULL
 ex	extensions\source\svg				nmake	-	all	ex_svg ex_scan ex_inc NULL
 ex	extensions\source\bibliography			nmake	-	all	ex_bib ex_inc NULL
