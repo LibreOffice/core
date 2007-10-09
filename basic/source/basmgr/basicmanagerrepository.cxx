@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicmanagerrepository.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 09:58:36 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:03:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XSTORAGEBASEDDOCUMENT_HPP_
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDSCRIPTS_HPP_
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 #endif
 /** === end UNO includes === **/
 
@@ -131,6 +134,7 @@ namespace basic
     using ::com::sun::star::document::XDocumentInfoSupplier;
     using ::com::sun::star::document::XStorageBasedDocument;
     using ::com::sun::star::lang::XComponent;
+    using ::com::sun::star::document::XEmbeddedScripts;
     /** === end UNO using === **/
 
     typedef BasicManager*   BasicManagerPointer;
@@ -576,15 +580,9 @@ namespace basic
         _out_rxDialogLibraries.clear();
         try
         {
-            Reference< XPropertySet > xDocumentProperties( _rxDocument, UNO_QUERY_THROW );
-            _out_rxBasicLibraries.set(
-                xDocumentProperties->getPropertyValue(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ),
-                    UNO_QUERY_THROW );
-            _out_rxDialogLibraries.set(
-                xDocumentProperties->getPropertyValue(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogLibraries" ) ) ),
-                    UNO_QUERY_THROW );
+            Reference< XEmbeddedScripts > xScripts( _rxDocument, UNO_QUERY_THROW );
+            _out_rxBasicLibraries.set( xScripts->getBasicLibraries(), UNO_QUERY_THROW );
+            _out_rxDialogLibraries.set(xScripts->getDialogLibraries(), UNO_QUERY_THROW );
         }
         catch( const Exception& )
         {
