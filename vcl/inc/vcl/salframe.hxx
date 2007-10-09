@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:06:15 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:17:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,19 +82,11 @@
 #include <vcl/keycod.hxx>
 #endif
 
-#ifdef __cplusplus
-
 class AllSettings;
 class SalGraphics;
 class SalBitmap;
 class SalMenu;
-
-#else
-
-#define AllSettings void
-#define SalGraphics void
-
-#endif // __cplusplus
+class Window;
 
 struct SalFrameState;
 struct SalInputContext;
@@ -178,10 +170,11 @@ struct SystemParentData;
 
 class VCL_DLLPUBLIC SalFrame : public vcl::DeletionNotifier
 {
-    void*                   m_pInst;
+    // the VCL window corresponding to this frame
+    Window*                 m_pWindow;
     SALFRAMEPROC            m_pProc;
 public:                     // public for Sal Implementation
-    SalFrame() : m_pInst( NULL ), m_pProc( NULL ) {}
+    SalFrame() : m_pWindow( NULL ), m_pProc( NULL ) {}
     virtual ~SalFrame();
 
 public:                     // public for Sal Implementation
@@ -298,17 +291,17 @@ public:
 
     // Callbacks (indepent part in vcl/source/window/winproc.cxx)
     // for default message handling return 0
-    void                        SetCallback( void* pInst, SALFRAMEPROC pProc )
-    { m_pInst = pInst; m_pProc = pProc; }
+    void                        SetCallback( Window* pWindow, SALFRAMEPROC pProc )
+    { m_pWindow = pWindow; m_pProc = pProc; }
 
     // returns the instance set
-    void*                       GetInstance() const { return m_pInst; }
+    Window*                       GetWindow() const { return m_pWindow; }
 
     // Call the callback set; this sometimes necessary for implementation classes
     // that should not now more than necessary about the SalFrame implementation
     // (e.g. input methods, printer update handlers).
     long                        CallCallback( USHORT nEvent, const void* pEvent ) const
-    { return m_pProc ? m_pProc( m_pInst, const_cast<SalFrame*>(this), nEvent, pEvent ) : 0; }
+    { return m_pProc ? m_pProc( m_pWindow, const_cast<SalFrame*>(this), nEvent, pEvent ) : 0; }
 };
 
 #endif // __cplusplus
