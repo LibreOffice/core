@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:07:16 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:32:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #endif
 #ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
+#endif
+#ifndef BASICMANAGERREPOSITORY_HXX
+#include <basic/basicmanagerrepository.hxx>
 #endif
 #ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
@@ -89,9 +92,8 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/request.hxx>
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
-#endif
+#include <comphelper/documentinfo.hxx>
 
 #ifndef _UNOTOOLS_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
@@ -144,6 +146,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::frame;
 namespace css = ::com::sun::star;
 
 #define _SVSTDARR_STRINGSDTOR
@@ -432,7 +435,9 @@ void SfxConfigFunctionListBox_Impl::ClearAll()
             delete pInfo;
         }
 
-        if ( pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER )
+        if  (   pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER
+            ||  pData->nKind == SFX_CFGGROUP_DOCBASICMGR
+            )
         {
             XInterface* xi = static_cast<XInterface *>(pData->pObject);
             if (xi != NULL)
@@ -661,7 +666,9 @@ void SfxConfigGroupListBox_Impl::ClearAll()
     for ( USHORT i=0; i<nCount; i++ )
     {
         SfxGroupInfo_Impl *pData = aArr[i];
-        if ( pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER )
+        if  (   pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER
+            ||  pData->nKind == SFX_CFGGROUP_DOCBASICMGR
+            )
         {
             XInterface* xi = static_cast<XInterface *>(pData->pObject);
             if (xi != NULL)
@@ -716,7 +723,7 @@ String SfxConfigGroupListBox_Impl::GetGroup()
     while ( pEntry )
     {
         SfxGroupInfo_Impl *pInfo = (SfxGroupInfo_Impl*) pEntry->GetUserData();
-    if ( pInfo->nKind == SFX_CFGGROUP_FUNCTION )
+        if ( pInfo->nKind == SFX_CFGGROUP_FUNCTION )
             return GetEntryText( pEntry );
 
         if ( pInfo->nKind == SFX_CFGGROUP_BASICMGR )
@@ -727,8 +734,8 @@ String SfxConfigGroupListBox_Impl::GetGroup()
 
         if ( pInfo->nKind == SFX_CFGGROUP_DOCBASICMGR )
         {
-            SfxObjectShell *pDoc = (SfxObjectShell*) pInfo->pObject;
-            return pDoc->GetTitle();
+            Reference< XModel > xDoc( static_cast< XModel* >( pInfo->pObject ) );
+            return ::comphelper::DocumentInfo::getDocumentTitle( xDoc );
         }
 
         pEntry = GetParent( pEntry );
@@ -736,6 +743,28 @@ String SfxConfigGroupListBox_Impl::GetGroup()
 
     return String();
 }
+
+//-----------------------------------------------
+BasicManager* SfxConfigGroupListBox_Impl::GetBasicManager( const SvLBoxEntry& _rEntry )
+{
+    BasicManager* pBasMgr = NULL;
+
+    SfxGroupInfo_Impl* pInfo = (SfxGroupInfo_Impl*) _rEntry.GetUserData();
+    switch ( pInfo->nKind )
+    {
+        case SFX_CFGGROUP_BASICMGR :
+            pBasMgr = (BasicManager*) pInfo->pObject;
+            break;
+        case SFX_CFGGROUP_DOCBASICMGR :
+        {
+            Reference< XModel > xDoc( static_cast< XModel* >( pInfo->pObject ) );
+            pBasMgr = ::basic::BasicManagerRepository::getDocumentBasicManager( xDoc );
+        }
+        break;
+    }
+    return pBasMgr;
+}
+
 //-----------------------------------------------
 void SfxConfigGroupListBox_Impl::InitModule()
 {
@@ -888,52 +917,28 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
             }
         }
 
-        //SfxObjectShell *pDoc = SfxObjectShell::GetFirst();
-        SfxObjectShell *pDoc = SfxObjectShell::GetWorkingDocument();
-        //while ( pDoc )
-        if ( pDoc )
+        Reference< XModel > xDoc( SfxObjectShell::GetWorkingDocument() );
+        if ( xDoc.is() )
         {
-/*
-            BOOL bInsert = TRUE;
-            if ( pArr )
+            BasicManager* pBasicMgr = ::basic::BasicManagerRepository::getDocumentBasicManager( xDoc );
+            if ( pBasicMgr != pAppBasicMgr && pBasicMgr->GetLibCount() )
             {
-                bInsert = FALSE;
-                for ( USHORT n=0; n<pArr->Count(); n++ )
-                {
-                    if ( *(*pArr)[n] == pDoc->GetTitle() )
-                    {
-                        bInsert = TRUE;
-                        break;
-                    }
-                }
+                String sDocTitle( ::comphelper::DocumentInfo::getDocumentTitle( xDoc ) );
+                pBasicMgr->SetName( sDocTitle );
+
+                // Nur einf"ugen, wenn eigenes Basic mit Bibliotheken
+                SvLBoxEntry *pEntry = InsertEntry( sDocTitle.Append( aMacroName ), NULL );
+                xDoc->acquire();
+                SfxGroupInfo_Impl *pInfo =
+                    new SfxGroupInfo_Impl( SFX_CFGGROUP_DOCBASICMGR, 0, xDoc.get() );
+                pEntry->SetUserData( pInfo );
+                pEntry->EnableChildsOnDemand( TRUE );
             }
-*/
-
-//          if ( bInsert )
-            {
-                BasicManager *pBasicMgr = pDoc->GetBasicManager();
-                if ( pBasicMgr != pAppBasicMgr && pBasicMgr->GetLibCount() )
-                {
-                    pBasicMgr->SetName( pDoc->GetTitle() );
-
-                    // Nur einf"ugen, wenn eigenes Basic mit Bibliotheken
-                    SvLBoxEntry *pEntry = InsertEntry( pDoc->GetTitle().Append(aMacroName), NULL );
-                    SfxGroupInfo_Impl *pInfo =
-                        new SfxGroupInfo_Impl( SFX_CFGGROUP_DOCBASICMGR, 0, pDoc );
-    //              aArr.Insert( pInfo, aArr.Count() );
-                    pEntry->SetUserData( pInfo );
-                    pEntry->EnableChildsOnDemand( TRUE );
-    //              Expand( pEntry );
-                }
-            }
-
-            //pDoc = SfxObjectShell::GetNext(*pDoc);
         }
 
         pSfxApp->LeaveBasicCall();
     }
 
-//  SfxObjectShell *tmp = SfxObjectShell::GetWorkingDocument();
     OSL_TRACE("** ** About to initialise SF Scripts");
     if ( bShowSF )
     {
@@ -1006,9 +1011,10 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                             //node is a first level child of the Root and is NOT
                             //either the current document, user or share
                             ::rtl::OUString currentDocTitle;
-                               if ( SfxObjectShell::GetWorkingDocument() )
+                            Reference< XModel > xDocument( SfxObjectShell::GetWorkingDocument() );
+                            if ( xDocument.is() )
                             {
-                                currentDocTitle = SfxObjectShell::GetWorkingDocument()->GetTitle();
+                                currentDocTitle = ::comphelper::DocumentInfo::getDocumentTitle( xDocument );
                             }
                             ::rtl::OUString uiName = theChild->getName();
 
@@ -1386,15 +1392,15 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                 (SfxGroupInfo_Impl*) pBasEntry->GetUserData();
 
             StarBASIC *pLib = (StarBASIC*) pLibInfo->pObject;
-            SfxObjectShell *pDoc = NULL;
+            Reference< XModel > xDoc;
             if ( pBasInfo->nKind == SFX_CFGGROUP_DOCBASICMGR )
-                pDoc = (SfxObjectShell*) pBasInfo->pObject;
+                xDoc = static_cast< XModel* >( pBasInfo->pObject );
 
             SbModule *pMod = (SbModule*) pInfo->pObject;
             for ( USHORT nMeth=0; nMeth < pMod->GetMethods()->Count(); nMeth++ )
             {
                 SbxMethod *pMeth = (SbxMethod*)pMod->GetMethods()->Get(nMeth);
-                SfxMacroInfoPtr pInf = new SfxMacroInfo( pDoc,
+                SfxMacroInfoPtr pInf = new SfxMacroInfo( !xDoc.is(),
                                                          pLib->GetName(),
                                                          pMod->GetName(),
                                                          pMeth->GetName());
@@ -1444,7 +1450,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                                     xPropSet->getPropertyValue( String::CreateFromAscii( "URI" ) );
                                 value >>= uri;
 
-                                SfxMacroInfo* aInfo = new SfxMacroInfo( uri );
+                                SfxMacroInfo* aInfo = new SfxMacroInfo( (String)uri );
                                 aInfo->SetHelpText( uri );
                                 SFX_APP()->GetMacroConfig()->GetSlotId( aInfo );
 
@@ -1564,11 +1570,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
             if ( !GetChildCount( pEntry ) )
             {
                 // Erstmaliges "Offnen
-                BasicManager *pMgr;
-                if ( pInfo->nKind == SFX_CFGGROUP_DOCBASICMGR )
-                    pMgr = ((SfxObjectShell*)pInfo->pObject)->GetBasicManager();
-                else
-                    pMgr = (BasicManager*) pInfo->pObject;
+                BasicManager* pMgr( GetBasicManager( *pEntry ) );
 
                 SvLBoxEntry *pLibEntry = 0;
                 for ( USHORT nLib=0; nLib<pMgr->GetLibCount(); nLib++)
@@ -1595,13 +1597,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                 {
                     // Lib mu\s nachgeladen werden
                     SvLBoxEntry *pParent = GetParent( pEntry );
-                    SfxGroupInfo_Impl *pInf =
-                        (SfxGroupInfo_Impl*) pParent->GetUserData();
-                    BasicManager *pMgr;
-                    if ( pInf->nKind == SFX_CFGGROUP_DOCBASICMGR )
-                        pMgr = ((SfxObjectShell*)pInf->pObject)->GetBasicManager();
-                    else
-                        pMgr = (BasicManager*) pInf->pObject;
+                    BasicManager *pMgr( GetBasicManager( *pParent ) );
 
                     if ( pMgr->LoadLib( pInfo->nOrd ) )
                         pInfo->pObject = pLib = pMgr->GetLib( pInfo->nOrd );
@@ -1662,9 +1658,11 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                             node is a first level child of the Root and is NOT
                             either the current document, user or share */
                             ::rtl::OUString currentDocTitle;
-                               if ( SfxObjectShell::GetWorkingDocument() )
-                                currentDocTitle = SfxObjectShell::GetWorkingDocument()->GetTitle(SFX_TITLE_FILENAME);
-
+                            Reference< XModel > xDocument( SfxObjectShell::GetWorkingDocument() );
+                            if ( xDocument.is() )
+                            {
+                                currentDocTitle = ::comphelper::DocumentInfo::getDocumentTitle( xDocument );
+                            }
                             if ( bIsRootNode )
                             {
                                 if ( !( (aName.equals(user) || aName.equals(share) || aName.equals(currentDocTitle) ) ) )
