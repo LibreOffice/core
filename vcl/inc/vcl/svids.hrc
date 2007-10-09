@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svids.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 15:05:54 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:18:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,8 @@
 #define SV_STDTEXT_DONTASKAGAIN             10202
 #define SV_STDTEXT_DONTWARNAGAIN            10203
 #define SV_STDTEXT_ABOUT                    10204
-#define SV_STDTEXT_LAST                     SV_STDTEXT_ABOUT
+#define SV_STDTEXT_PREFERENCES              10205
+#define SV_STDTEXT_LAST                     SV_STDTEXT_PREFERENCES
 
 #define SV_ACCESSERROR_FIRST                SV_ACCESSERROR_WRONG_VERSION
 #define SV_ACCESSERROR_WRONG_VERSION        10500
