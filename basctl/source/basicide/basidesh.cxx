@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:58:04 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:22:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,8 @@ BasicIDEShell::BasicIDEShell( SfxViewFrame *pFrame_, Window * ):
         aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
         aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
         aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) ),
-        m_bAppBasicModified( FALSE )
+        m_bAppBasicModified( FALSE ),
+        m_aNotifier( *this )
 {
     Init();
     GnBasicIDEShellCount++;
@@ -151,7 +152,8 @@ BasicIDEShell::BasicIDEShell( SfxViewFrame *pFrame_, const BasicIDEShell& ):
         aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
         aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
         aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) ),
-        m_bAppBasicModified( FALSE )
+        m_bAppBasicModified( FALSE ),
+        m_aNotifier( *this )
 {
     DBG_ERROR( "Zweite Ansicht auf Debugger nicht moeglich!" );
     GnBasicIDEShellCount++;
@@ -164,7 +166,8 @@ BasicIDEShell::BasicIDEShell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell 
         aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
         aVScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_VSCROLL | WB_DRAG ) ),
         aScrollBarBox( &GetViewFrame()->GetWindow(), WinBits( WB_SIZEABLE ) ),
-        m_bAppBasicModified( FALSE )
+        m_bAppBasicModified( FALSE ),
+        m_aNotifier( *this )
 {
     Init();
     GnBasicIDEShellCount++;
@@ -194,8 +197,6 @@ void BasicIDEShell::Init()
     LanguageBoxControl::RegisterControl( SID_BASICIDE_CURRENT_LANG );
 
     CreateModulWindowLayout();
-
-    StartListening( *SFX_APP(), TRUE /* Nur einmal anmelden */ );
 
     GetViewFrame()->GetWindow().SetBackground();
 
@@ -229,6 +230,8 @@ void BasicIDEShell::Init()
 
 __EXPORT BasicIDEShell::~BasicIDEShell()
 {
+    m_aNotifier.dispose();
+
     if ( IDE_DLL() && IDE_DLL()->pShell == this )
         IDE_DLL()->pShell = NULL;
 
@@ -238,7 +241,8 @@ __EXPORT BasicIDEShell::~BasicIDEShell()
 
     SetWindow( 0 );
     SetCurWindow( 0 );
-    SfxObjectShell::SetWorkingDocument( SfxObjectShell::Current() );
+    SfxObjectShell* pCurrentShell( SfxObjectShell::Current() );
+    SfxObjectShell::SetWorkingDocument( pCurrentShell ? pCurrentShell->GetModel() : Reference< frame::XModel >() );
 
     // Alle Fenster zerstoeren:
     IDEBaseWindow* pWin = aIDEWindowTable.First();
@@ -266,6 +270,111 @@ __EXPORT BasicIDEShell::~BasicIDEShell()
 sal_Bool BasicIDEShell::HasBasic() const
 {
     return FALSE;
+}
+
+void BasicIDEShell::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
+{
+    UpdateWindows();
+}
+
+void BasicIDEShell::onDocumentOpened( const ScriptDocument& /*_rDocument*/ )
+{
+    UpdateWindows();
+}
+
+void BasicIDEShell::onDocumentSave( const ScriptDocument& /*_rDocument*/ )
+{
+    StoreAllWindowData();
+}
+
+void BasicIDEShell::onDocumentSaveDone( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+void BasicIDEShell::onDocumentSaveAs( const ScriptDocument& /*_rDocument*/ )
+{
+    StoreAllWindowData();
+}
+
+void BasicIDEShell::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+void BasicIDEShell::onDocumentClosed( const ScriptDocument& _rDocument )
+{
+    if ( !_rDocument.isValid() )
+        return;
+
+    bool bSetCurWindow = false;
+    bool bSetCurLib = false;
+
+    Sequence< ::rtl::OUString > aLibNames = _rDocument.getLibraryNames();;
+    sal_Int32 nLibCount = aLibNames.getLength();
+    const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
+
+    for ( sal_Int32 i = 0 ; i < nLibCount ; ++i )
+    {
+        String aLibName = pLibNames[ i ];
+        if ( !aLibName.Len() )
+            continue;
+
+        // remove all windows which belong to this library
+        for ( ULONG nWin = aIDEWindowTable.Count(); nWin; )
+        {
+            IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
+            if ( pWin->IsDocument( _rDocument ) && pWin->GetLibName() == aLibName )
+            {
+                if ( pWin->GetStatus() & (BASWIN_RUNNINGBASIC|BASWIN_INRESCHEDULE) )
+                {
+                    pWin->AddStatus( BASWIN_TOBEKILLED );
+                    pWin->Hide();
+                    StarBASIC::Stop();
+                    // there's no notify
+                    pWin->BasicStopped();
+                }
+                else
+                {
+                    pWin->StoreData();
+                    if ( pWin == pCurWin )
+                        bSetCurWindow = true;
+                    RemoveWindow( pWin, TRUE, FALSE );
+                }
+            }
+        }
+
+        // remove lib info
+        BasicIDEData* pData = IDE_DLL()->GetExtraData();
+        if ( pData )
+            pData->GetLibInfos().RemoveInfo( LibInfoKey( _rDocument, aLibName ) );
+
+        if ( _rDocument == m_aCurDocument && aLibName == m_aCurLibName )
+            bSetCurLib = true;
+    }
+
+    if ( bSetCurLib )
+        SetCurLib( ScriptDocument::getApplicationScriptDocument(), String::CreateFromAscii( "Standard" ), true, false );
+    else if ( bSetCurWindow )
+        SetCurWindow( FindApplicationWindow(), TRUE );
+}
+
+void BasicIDEShell::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
+{
+    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+    if ( pBindings )
+        pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR, TRUE, FALSE );
+    SetMDITitle();
+}
+
+void BasicIDEShell::onDocumentModeChanged( const ScriptDocument& _rDocument )
+{
+    for ( ULONG nWin = aIDEWindowTable.Count(); nWin; )
+    {
+        IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
+        if ( pWin->IsDocument( _rDocument ) && _rDocument.isDocument() )
+            pWin->SetReadOnly( _rDocument.isReadOnly() );
+    }
 }
 
 void BasicIDEShell::StoreAllWindowData( BOOL bPersistent )
@@ -496,129 +605,10 @@ void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
 {
     if ( IDE_DLL()->GetShell() )
     {
-        if ( rHint.IsA( TYPE( SfxEventHint ) ) )
-        {
-            switch ( ((SfxEventHint&)rHint).GetEventId() )
-            {
-                case SFX_EVENT_CREATEDOC:
-                case SFX_EVENT_OPENDOC:
-                {
-                    UpdateWindows();
-                }
-                break;
-                case SFX_EVENT_SAVEDOC:
-                case SFX_EVENT_SAVEASDOC:
-                {
-                    StoreAllWindowData();
-                }
-                break;
-                case SFX_EVENT_CLOSEDOC:
-                {
-                    if ( rBC.IsA( TYPE( SfxObjectShell ) ) )
-                    {
-                        bool bSetCurWindow = false;
-                        bool bSetCurLib = false;
-                        ScriptDocument aDocument( dynamic_cast< SfxObjectShell& >( rBC ) );
-                        if ( aDocument.isValid() )
-                        {
-                            Sequence< ::rtl::OUString > aLibNames = aDocument.getLibraryNames();;
-                            sal_Int32 nLibCount = aLibNames.getLength();
-                            const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
-
-                            for ( sal_Int32 i = 0 ; i < nLibCount ; ++i )
-                            {
-                                String aLibName = pLibNames[ i ];
-                                if ( !aLibName.Len() )
-                                    continue;
-
-                                // remove all windows which belong to this library
-                                for ( ULONG nWin = aIDEWindowTable.Count(); nWin; )
-                                {
-                                    IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
-                                    if ( pWin->IsDocument( aDocument ) && pWin->GetLibName() == aLibName )
-                                    {
-                                        if ( pWin->GetStatus() & (BASWIN_RUNNINGBASIC|BASWIN_INRESCHEDULE) )
-                                        {
-                                            pWin->AddStatus( BASWIN_TOBEKILLED );
-                                            pWin->Hide();
-                                            StarBASIC::Stop();
-                                            // there's no notify
-                                            pWin->BasicStopped();
-                                        }
-                                        else
-                                        {
-                                            pWin->StoreData();
-                                            if ( pWin == pCurWin )
-                                                bSetCurWindow = true;
-                                            RemoveWindow( pWin, TRUE, FALSE );
-                                        }
-                                    }
-                                }
-
-                                // remove lib info
-                                BasicIDEData* pData = IDE_DLL()->GetExtraData();
-                                if ( pData )
-                                    pData->GetLibInfos().RemoveInfo( LibInfoKey( aDocument, aLibName ) );
-
-                                if ( aDocument == m_aCurDocument && aLibName == m_aCurLibName )
-                                    bSetCurLib = true;
-                            }
-
-                            if ( bSetCurLib )
-                                SetCurLib( ScriptDocument::getApplicationScriptDocument(), String::CreateFromAscii( "Standard" ), true, false );
-                            else if ( bSetCurWindow )
-                                SetCurWindow( FindApplicationWindow(), TRUE );
-                        }
-
-                        EndListening( rBC, TRUE );
-                    }
-                }
-                break;
-            }
-        }
-
         if ( rHint.IsA( TYPE( SfxSimpleHint ) ) )
         {
             switch ( ((SfxSimpleHint&)rHint).GetId() )
             {
-                case SFX_HINT_DOCCHANGED:
-                {
-                    // If a document is modified, there's no need for any action
-                    // within the BasicIDE.
-                    //
-                    // If a document is reloaded, the old document is destroyed
-                    // and a new document is loaded. The BasicIDE is first notified
-                    // with a SFX_HINT_DYING and then with a SFX_EVENT_OPENDOC.
-                    // The BasicIDE windows are destroyed after the SFX_HINT_DYING
-                    // notification and new windows are created after the
-                    // SFX_EVENT_OPENDOC notification.
-
-                    //UpdateWindows();
-                }
-                break;
-                case SFX_HINT_MODECHANGED:
-                {
-                    // ReadOnly toggled...
-                    if ( rBC.IsA( TYPE( SfxObjectShell ) ) )
-                    {
-                        ScriptDocument aDocument( dynamic_cast< SfxObjectShell& >( rBC ) );
-                        for ( ULONG nWin = aIDEWindowTable.Count(); nWin; )
-                        {
-                            IDEBaseWindow* pWin = aIDEWindowTable.GetObject( --nWin );
-                            if ( pWin->IsDocument( aDocument ) )
-                                pWin->SetReadOnly( aDocument.isReadOnly() );
-                        }
-                    }
-                }
-                break;
-                case SFX_HINT_TITLECHANGED:
-                {
-                    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-                    if ( pBindings )
-                        pBindings->Invalidate( SID_BASICIDE_LIBSELECTOR, TRUE, FALSE );
-                    SetMDITitle();
-                }
-                break;
                 case SFX_HINT_DYING:
                 {
                     EndListening( rBC, TRUE /* Alle abmelden */ );
@@ -766,15 +756,13 @@ void BasicIDEShell::UpdateWindows()
     IDEBaseWindow* pNextActiveWindow = 0;
 
     // Alle anzuzeigenden Fenster anzeigen
-    ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( true ) );
+    ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( ScriptDocument::AllWithApplication ) );
     for (   ScriptDocuments::const_iterator doc = aDocuments.begin();
             doc != aDocuments.end();
             ++doc
         )
     {
         StartListening( *doc->getBasicManager(), TRUE /* Nur einmal anmelden */ );
-        if ( !doc->isApplication() )
-            doc->LEGACY_startDocumentListening( *this );
 
         // libraries
         Sequence< ::rtl::OUString > aLibNames( doc->getLibraryNames() );
