@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptdocument.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:19:26 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:24:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,26 +42,25 @@
 #include "iderid.hxx"
 #include "dlgeddef.hxx"
 #include "localizationmgr.hxx"
+#include "doceventnotifier.hxx"
+#include "documentenumeration.hxx"
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP_
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMACROEXPANDER_HPP_
 #include <com/sun/star/util/XMacroExpander.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
 #include <com/sun/star/document/MacroExecMode.hpp>
-#endif
+#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XModel2.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 /** === end UNO includes === **/
 
 #include <sfx2/objsh.hxx>
@@ -70,13 +69,26 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 
+#include <vcl/svapp.hxx>
+
+#include <basic/basicmanagerrepository.hxx>
+
 #include <xmlscript/xmldlg_imexp.hxx>
+
+#include <svtools/syslocale.hxx>
+
+#include <unotools/collatorwrapper.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
+
+#include <vos/mutex.hxx>
+
+#include <cppuhelper/implbase1.hxx>
 
 #include <rtl/uri.hxx>
 
@@ -84,6 +96,7 @@
 #include <osl/file.hxx>
 
 #include <algorithm>
+#include <functional>
 #include <set>
 
 //........................................................................
@@ -98,6 +111,7 @@ namespace basctl
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::script::XLibraryContainer;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::container::XNameContainer;
@@ -114,63 +128,139 @@ namespace basctl
     using ::com::sun::star::io::XInputStreamProvider;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::io::XInputStream;
+    using ::com::sun::star::frame::XStorable;
+    using ::com::sun::star::util::XModifiable;
+    using ::com::sun::star::frame::XController;
+    using ::com::sun::star::frame::XFrame;
+    using ::com::sun::star::util::URL;
+    using ::com::sun::star::frame::XDispatchProvider;
+    using ::com::sun::star::frame::XDispatch;
+    using ::com::sun::star::beans::PropertyValue;
+    using ::com::sun::star::frame::XDesktop;
+    using ::com::sun::star::container::XEnumerationAccess;
+    using ::com::sun::star::container::XEnumeration;
+    using ::com::sun::star::frame::XModel2;
+    using ::com::sun::star::awt::XWindow2;
+    using ::com::sun::star::document::XEventListener;
+    using ::com::sun::star::lang::EventObject;
+    using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::document::XEventBroadcaster;
+    using ::com::sun::star::document::XEmbeddedScripts;
     /** === end UNO using === **/
     namespace MacroExecMode = ::com::sun::star::document::MacroExecMode;
+    namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
 
     //====================================================================
     //= helper
     //====================================================================
     namespace
     {
-        //----------------------------------------------------------------
-        static const ::rtl::OUString&   lcl_getScriptLibrariesPropertyName()
-        {
-            static ::rtl::OUString s_sBasicLibraries( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) );
-            return s_sBasicLibraries;
-        }
-
-        //----------------------------------------------------------------
-        static const ::rtl::OUString&   lcl_getDialogLibrariesPropertyName()
-        {
-            static ::rtl::OUString s_sBasicLibraries( RTL_CONSTASCII_USTRINGPARAM( "DialogLibraries" ) );
-            return s_sBasicLibraries;
-        }
-
-        //----------------------------------------------------------------
+        //................................................................
         static bool StringCompareLessThan( const String& lhs, const String& rhs )
         {
             return ( lhs.CompareIgnoreCaseToAscii( rhs ) == COMPARE_LESS );
         }
+
+        //................................................................
+        class FilterDocuments : public docs::IDocumentDescriptorFilter
+        {
+        public:
+            FilterDocuments( bool _bFilterInvisible ) : m_bFilterInvisible( _bFilterInvisible ) { }
+
+            virtual bool    includeDocument( const docs::DocumentDescriptor& _rDocument ) const;
+
+        private:
+            bool    impl_isDocumentVisible_nothrow( const docs::DocumentDescriptor& _rDocument ) const;
+
+        private:
+            bool    m_bFilterInvisible;
+        };
+
+        //................................................................
+        bool FilterDocuments::impl_isDocumentVisible_nothrow( const docs::DocumentDescriptor& _rDocument ) const
+        {
+            try
+            {
+                for (   docs::Controllers::const_iterator controller = _rDocument.aControllers.begin();
+                        controller != _rDocument.aControllers.end();
+                        ++controller
+                    )
+                {
+                    Reference< XFrame > xFrame( (*controller)->getFrame(), UNO_SET_THROW );
+                    Reference< XWindow2 > xContainer( xFrame->getContainerWindow(), UNO_QUERY_THROW );
+                    if ( xContainer->isVisible() )
+                        return true;
+                }
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            return false;
+        }
+
+        //................................................................
+        bool FilterDocuments::includeDocument( const docs::DocumentDescriptor& _rDocument ) const
+        {
+            Reference< XEmbeddedScripts > xScripts( _rDocument.xModel, UNO_QUERY );
+            if ( !xScripts.is() )
+                return false;
+            if ( !m_bFilterInvisible || impl_isDocumentVisible_nothrow( _rDocument ) )
+                return true;
+            return false;
+        }
+
+        //................................................................
+        void lcl_getAllModels_throw( docs::Documents& _out_rModels, bool _bVisibleOnly )
+        {
+            _out_rModels.clear();
+
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            FilterDocuments aFilter( _bVisibleOnly );
+            docs::DocumentEnumeration aEnum( aContext, &aFilter );
+
+            aEnum.getDocuments( _out_rModels );
+        }
     }
 
     //====================================================================
-    //= ScriptDocument_Impl
+    //= ScriptDocument_Impl - declaration
     //====================================================================
-    class ScriptDocument_Impl
+    class ScriptDocument_Impl : public DocumentEventListener
     {
     private:
-        SfxObjectShell*             m_pShell;
-        bool                        m_bIsApplication;
-        bool                        m_bValid;
-        Reference< XModel >         m_aDocument;
-        Reference< XPropertySet >   m_xDocProperties;
+        bool                            m_bIsApplication;
+        bool                            m_bValid;
+        bool                            m_bDocumentClosed;
+        Reference< XModel >             m_xDocument;
+        Reference< XModifiable >        m_xDocModify;
+        Reference< XEmbeddedScripts >   m_xScriptAccess;
+        ::std::auto_ptr< DocumentEventNotifier >
+                                        m_pDocListener;
 
     public:
         ScriptDocument_Impl( );
-        ScriptDocument_Impl( SfxObjectShell& _rShell );
         ScriptDocument_Impl( const Reference< XModel >& _rxDocument );
+        ~ScriptDocument_Impl();
 
         /** determines whether the instance refers to a valid "document" with script and
             dialog libraries
         */
         inline  bool    isValid()       const   { return m_bValid; }
+        /** determines whether the instance refers to a non-closed document
+        */
+        inline  bool    isAlive()       const   { return m_bValid ? ( m_bIsApplication ? true : !m_bDocumentClosed ) : false; }
         /// determines whether the "document" refers to the application in real
         inline  bool    isApplication() const   { return m_bValid && m_bIsApplication; }
         /// determines whether the document refers to a real document (instead of the application)
         inline  bool    isDocument()    const   { return m_bValid && !m_bIsApplication; }
 
-        /// returns the SfxObjectShell the document is based on
-        SfxObjectShell* getObjectShell() const { return m_pShell; }
+        /** invalidates the instance
+        */
+        void    invalidate();
+
+        const Reference< XModel >&
+                        getDocumentRef() const { return m_xDocument; }
 
         /// returns a library container belonging to the document
         Reference< XLibraryContainer >
@@ -178,6 +268,14 @@ namespace basctl
 
         /// determines whether a given library is part of the shared installation
         bool        isLibraryShared( const ::rtl::OUString& _rLibName, LibraryContainerType _eType );
+
+        /** returns the current frame of the document
+
+            To be called for documents only, not for the application.
+
+            If <FALSE/> is returned, an assertion will be raised in non-product builds.
+        */
+        bool        getCurrentFrame( Reference< XFrame >& _out_rxFrame ) const;
 
         // versions with the same signature/semantics as in ScriptDocument itself
         bool        isReadOnly() const;
@@ -188,6 +286,13 @@ namespace basctl
         void        setDocumentModified() const;
         bool        isDocumentModified() const;
         bool        saveDocument( const Reference< XStatusIndicator >& _rxStatusIndicator ) const;
+
+        ::rtl::OUString
+                    getTitle() const;
+        ::rtl::OUString
+                    getURL() const;
+
+        bool        allowMacros() const;
 
         Reference< XNameContainer >
                     getLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, bool _bLoadLibrary ) const
@@ -207,68 +312,81 @@ namespace basctl
         bool        updateModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName, const ::rtl::OUString& _rModuleCode ) const;
         bool        createDialog( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rDialogName, Reference< XInputStreamProvider >& _out_rDialogProvider ) const;
 
+    protected:
+        // DocumentEventListener
+        virtual void onDocumentCreated( const ScriptDocument& _rDocument );
+        virtual void onDocumentOpened( const ScriptDocument& _rDocument );
+        virtual void onDocumentSave( const ScriptDocument& _rDocument );
+        virtual void onDocumentSaveDone( const ScriptDocument& _rDocument );
+        virtual void onDocumentSaveAs( const ScriptDocument& _rDocument );
+        virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument );
+        virtual void onDocumentClosed( const ScriptDocument& _rDocument );
+        virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument );
+        virtual void onDocumentModeChanged( const ScriptDocument& _rDocument );
+
     private:
-        void    impl_initDocument_nothrow( SfxObjectShell& _rShell );
+        bool        impl_initDocument_nothrow( const Reference< XModel >& _rxModel );
     };
 
+    //====================================================================
+    //= ScriptDocument_Impl - implementation
+    //====================================================================
     //--------------------------------------------------------------------
     ScriptDocument_Impl::ScriptDocument_Impl()
-        :m_pShell( NULL )
-        ,m_bIsApplication( true )
+        :m_bIsApplication( true )
         ,m_bValid( true )
+        ,m_bDocumentClosed( false )
     {
-    }
-
-    //--------------------------------------------------------------------
-    ScriptDocument_Impl::ScriptDocument_Impl( SfxObjectShell& _rShell )
-        :m_pShell( NULL )
-        ,m_bIsApplication( false )
-        ,m_bValid( false )
-    {
-        impl_initDocument_nothrow( _rShell );
     }
 
     //--------------------------------------------------------------------
     ScriptDocument_Impl::ScriptDocument_Impl( const Reference< XModel >& _rxDocument )
-        :m_pShell( NULL )
-        ,m_bIsApplication( false )
+        :m_bIsApplication( false )
         ,m_bValid( false )
+        ,m_bDocumentClosed( false )
     {
         if ( _rxDocument.is() )
         {
-            SfxObjectShell* pShell = SfxObjectShell::GetFirst();
-            while ( pShell )
+            if ( impl_initDocument_nothrow( _rxDocument ) )
             {
-                if ( pShell->GetModel() == _rxDocument )
-                    break;
-                pShell = SfxObjectShell::GetNext( *pShell );
             }
-
-            OSL_ENSURE( pShell, "ScriptDocument_Impl::ScriptDocument_Impl: did not find the shell for the given model!" );
-            if ( pShell )
-                impl_initDocument_nothrow( *pShell );
         }
     }
 
     //--------------------------------------------------------------------
-    void ScriptDocument_Impl::impl_initDocument_nothrow( SfxObjectShell& _rShell )
+    ScriptDocument_Impl::~ScriptDocument_Impl()
     {
-        m_pShell = &_rShell;
+        invalidate();
+    }
 
+    //--------------------------------------------------------------------
+    void ScriptDocument_Impl::invalidate()
+    {
+        m_bIsApplication = false;
+        m_bValid = false;
+        m_bDocumentClosed = false;
+
+        m_xDocument.clear();
+        m_xDocModify.clear();
+        m_xScriptAccess.clear();
+
+        if ( m_pDocListener.get() )
+            m_pDocListener->dispose();
+    }
+
+    //--------------------------------------------------------------------
+    bool ScriptDocument_Impl::impl_initDocument_nothrow( const Reference< XModel >& _rxModel )
+    {
         try
         {
-            m_aDocument.set     ( m_pShell->GetModel(), UNO_QUERY_THROW );
-            m_xDocProperties.set( m_pShell->GetModel(), UNO_QUERY );
-            if ( m_xDocProperties.is() )
-            {
+            m_xDocument.set     ( _rxModel, UNO_SET_THROW );
+            m_xDocModify.set    ( _rxModel, UNO_QUERY_THROW );
+            m_xScriptAccess.set ( _rxModel, UNO_QUERY );
 
-                Reference< XPropertySetInfo >   xPSI( m_xDocProperties->getPropertySetInfo(), UNO_QUERY_THROW );
-                m_bValid =
-                        xPSI->hasPropertyByName( lcl_getScriptLibrariesPropertyName() )
-                    &&  xPSI->hasPropertyByName( lcl_getDialogLibrariesPropertyName() );
-            }
-            else
-                m_bValid = false;
+            m_bValid = m_xScriptAccess.is();
+
+            if ( m_bValid )
+                m_pDocListener.reset( new DocumentEventNotifier( *this, _rxModel ) );
         }
         catch( const Exception& )
         {
@@ -278,9 +396,10 @@ namespace basctl
 
         if ( !m_bValid )
         {
-            m_aDocument.clear();
-            m_xDocProperties.clear();
+            invalidate();
         }
+
+        return m_bValid;
     }
     //--------------------------------------------------------------------
     Reference< XLibraryContainer > ScriptDocument_Impl::getLibraryContainer( LibraryContainerType _eType ) const
@@ -297,8 +416,8 @@ namespace basctl
                 xContainer.set( _eType == E_SCRIPTS ? SFX_APP()->GetBasicContainer() : SFX_APP()->GetDialogContainer(), UNO_QUERY_THROW );
             else
             {
-                xContainer.set( m_xDocProperties->getPropertyValue(
-                    _eType == E_SCRIPTS ? lcl_getScriptLibrariesPropertyName() : lcl_getDialogLibrariesPropertyName() ),
+                xContainer.set(
+                    _eType == E_SCRIPTS ? m_xScriptAccess->getBasicLibraries() : m_xScriptAccess->getDialogLibraries(),
                     UNO_QUERY_THROW );
             }
         }
@@ -314,9 +433,22 @@ namespace basctl
     {
         OSL_ENSURE( isValid(), "ScriptDocument_Impl::isReadOnly: invalid state!" );
         OSL_ENSURE( !isApplication(), "ScriptDocument_Impl::isReadOnly: not allowed to be called for the application!" );
-        if ( !isValid() || isApplication() )
-            return true;
-        return m_pShell->IsReadOnly();
+
+        bool bIsReadOnly = true;
+        if ( isValid() && !isApplication() )
+        {
+            try
+            {
+                // note that XStorable is required by the OfficeDocument service
+                Reference< XStorable > xDocStorable( m_xDocument, UNO_QUERY_THROW );
+                bIsReadOnly = xDocStorable->isReadonly();
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+        return bIsReadOnly;
     }
 
     //--------------------------------------------------------------------
@@ -329,7 +461,7 @@ namespace basctl
         if ( isApplication() )
             return SFX_APP()->GetBasicManager();
 
-        return m_pShell->GetBasicManager();
+        return ::basic::BasicManagerRepository::getDocumentBasicManager( m_xDocument );
     }
 
     //--------------------------------------------------------------------
@@ -340,7 +472,7 @@ namespace basctl
         if ( !isValid() || !isDocument() )
             return NULL;
 
-        return m_aDocument;
+        return m_xDocument;
     }
 
     //--------------------------------------------------------------------
@@ -662,40 +794,171 @@ namespace basctl
     {
         OSL_ENSURE( isValid() && isDocument(), "ScriptDocument_Impl::setDocumentModified: only to be called for real documents!" );
         if ( isValid() && isDocument() )
-            getObjectShell()->SetModified();
+        {
+            try
+            {
+                m_xDocModify->setModified( sal_True );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
     }
 
     //--------------------------------------------------------------------
     bool ScriptDocument_Impl::isDocumentModified() const
     {
         OSL_ENSURE( isValid() && isDocument(), "ScriptDocument_Impl::isDocumentModified: only to be called for real documents!" );
+        bool bIsModified = false;
         if ( isValid() && isDocument() )
-            return getObjectShell()->IsModified();
-        return false;
+        {
+            try
+            {
+                bIsModified = m_xDocModify->isModified();
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+        return bIsModified;
     }
 
     //--------------------------------------------------------------------
     bool ScriptDocument_Impl::saveDocument( const Reference< XStatusIndicator >& _rxStatusIndicator ) const
     {
-        OSL_ENSURE( isValid() && isDocument(), "ScriptDocument_Impl::saveDocument: only to be called for real documents!" );
+        Reference< XFrame > xFrame;
+        if ( !getCurrentFrame( xFrame ) )
+            return false;
+
+        Sequence< PropertyValue > aArgs;
+        if ( _rxStatusIndicator.is() )
+        {
+            aArgs.realloc(1);
+            aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StatusIndicator" ) );
+            aArgs[0].Value <<= _rxStatusIndicator;
+        }
+
+        try
+        {
+            URL aURL;
+            aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Save" ) );
+            aURL.Main = aURL.Complete;
+            aURL.Protocol = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ) );
+            aURL.Path = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Save" ) );
+
+            Reference< XDispatchProvider > xDispProv( xFrame, UNO_QUERY_THROW );
+            Reference< XDispatch > xDispatch(
+                xDispProv->queryDispatch( aURL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_self" ) ), FrameSearchFlag::AUTO ),
+                UNO_SET_THROW );
+
+            xDispatch->dispatch( aURL, aArgs );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+            return false;
+        }
+
+        return true;
+    }
+
+    //--------------------------------------------------------------------
+    ::rtl::OUString ScriptDocument_Impl::getTitle() const
+    {
+        OSL_PRECOND( isValid() && isDocument(), "ScriptDocument_Impl::getTitle: for documents only!" );
+
+        ::rtl::OUString sTitle;
+        if ( isValid() && isDocument() )
+        {
+            INetURLObject aURL( getURL() );
+            sTitle = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+            if ( sTitle.getLength() == 0 )
+            {
+                // this is a hack. There is no UNO equivalent to retrieve the title of an unsaved
+                // document (which is something like "Untitled<no>"). Until AS finishes his document
+                // title framework, we need to use the below workaround
+                try
+                {
+                    Reference< XFrame > xFrame;
+                    getCurrentFrame( xFrame );
+                    Reference< XPropertySet > xFrameProps( xFrame, UNO_QUERY_THROW );
+                    OSL_VERIFY( xFrameProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) ) >>= sTitle );
+
+                    sal_Int32 nWhiteSpacePos = sTitle.indexOf( ' ' );
+                    OSL_ENSURE( nWhiteSpacePos >= 0, "ScriptDocument_Impl::getTitle: Title hack doesn't work anymore! (FS)" );
+                    if ( nWhiteSpacePos >= 0 )
+                        sTitle = sTitle.copy( 0, nWhiteSpacePos );
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
+            }
+        }
+        return sTitle;
+    }
+
+    //--------------------------------------------------------------------
+    ::rtl::OUString ScriptDocument_Impl::getURL() const
+    {
+        OSL_PRECOND( isValid() && isDocument(), "ScriptDocument_Impl::getURL: for documents only!" );
+
+        ::rtl::OUString sURL;
+        if ( isValid() && isDocument() )
+        {
+            try
+            {
+                sURL = m_xDocument->getURL();
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+        return sURL;
+    }
+
+    //--------------------------------------------------------------------
+    bool ScriptDocument_Impl::allowMacros() const
+    {
+        OSL_ENSURE( isValid() && isDocument(), "ScriptDocument_Impl::allowMacros: for documents only!" );
+        bool bAllow = false;
+        if ( isValid() && isDocument() )
+        {
+            try
+            {
+                bAllow = m_xScriptAccess->getAllowMacroExecution();
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+        return bAllow;
+    }
+
+    //--------------------------------------------------------------------
+    bool ScriptDocument_Impl::getCurrentFrame( Reference< XFrame >& _out_rxFrame ) const
+    {
+        _out_rxFrame.clear();
+        OSL_PRECOND( isValid() && isDocument(), "ScriptDocument_Impl::getCurrentFrame: documents only!" );
         if ( !isValid() || !isDocument() )
             return false;
 
-        const SfxPoolItem* aArgs[2];
-        aArgs[0] = aArgs[1] = NULL;
+        try
+        {
+            Reference< XModel > xDocument( m_xDocument, UNO_SET_THROW );
+            Reference< XController > xController( xDocument->getCurrentController(), UNO_SET_THROW );
+            _out_rxFrame.set( xController->getFrame(), UNO_SET_THROW );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
 
-        ::std::auto_ptr< SfxUnoAnyItem > pStatusIndicatorItem;
-        OSL_ENSURE( _rxStatusIndicator.is(), "ScriptDocument_Impl::saveDocument: no status indicator!" );
-        if ( _rxStatusIndicator.is() )
-            pStatusIndicatorItem.reset( new SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, makeAny( _rxStatusIndicator ) ) );
-        aArgs[0] = pStatusIndicatorItem.get();
-
-        SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst( getObjectShell() );
-        if ( !pViewFrame )
-            return false;
-
-        pViewFrame->GetBindings().Execute( SID_SAVEDOC, aArgs, 0, SFX_CALLMODE_SYNCHRON );
-        return true;
+        return _out_rxFrame.is();
     }
 
     //--------------------------------------------------------------------
@@ -783,6 +1046,68 @@ namespace basctl
         return bIsShared;
     }
 
+    //--------------------------------------------------------------------
+    void ScriptDocument_Impl::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
+    {
+        // not interested in
+    }
+
+    //--------------------------------------------------------------------
+    void ScriptDocument_Impl::onDocumentOpened( const ScriptDocument& /*_rDocument*/ )
+    {
+        // not interested in
+    }
+
+    //--------------------------------------------------------------------
+    void ScriptDocument_Impl::onDocumentSave( const ScriptDocument& /*_rDocument*/ )
+    {
+        // not interested in
+    }
+
+    //--------------------------------------------------------------------
+    void ScriptDocument_Impl::onDocumentSaveDone( const ScriptDocument& /*_rDocument*/ )
+    {
+        // not interested in
+    }
+
+    //--------------------------------------------------------------------
+    void ScriptDocument_Impl::onDocumentSaveAs( const ScriptDocument& /*_rDocument*/ )
+    {
+        // not interested in
+    }
+
+    //--------------------------------------------------------------------
+    void ScriptDocument_Impl::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*/ )
+    {
+        // not interested in
+    }
+
+    //--------------------------------------------------------------------
+    void ScriptDocument_Impl::onDocumentClosed( const ScriptDocument& _rDocument )
+    {
+        DBG_TESTSOLARMUTEX();
+        OSL_PRECOND( isValid(), "ScriptDocument_Impl::onDocumentClosed: should not be listening if I'm not valid!" );
+
+        bool bMyDocument = m_xDocument == _rDocument.getDocument();
+        OSL_PRECOND( bMyDocument, "ScriptDocument_Impl::onDocumentClosed: didn't want to know *this*!" );
+        if ( bMyDocument )
+        {
+            m_bDocumentClosed = true;
+        }
+    }
+
+    //--------------------------------------------------------------------
+    void ScriptDocument_Impl::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
+    {
+        // not interested in
+    }
+
+    //--------------------------------------------------------------------
+    void ScriptDocument_Impl::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/ )
+    {
+        // not interested in
+    }
+
     //====================================================================
     //= ScriptDocument
     //====================================================================
@@ -801,16 +1126,10 @@ namespace basctl
     }
 
     //--------------------------------------------------------------------
-    ScriptDocument::ScriptDocument( SfxObjectShell& _rShell )
-        :m_pImpl( new ScriptDocument_Impl( _rShell ) )
-    {
-    }
-
-    //--------------------------------------------------------------------
     ScriptDocument::ScriptDocument( const Reference< XModel >& _rxDocument )
         :m_pImpl( new ScriptDocument_Impl( _rxDocument ) )
     {
-        OSL_ENSURE( _rxDocument.is(), "ScriptDocument_Impl::ScriptDocument: document must not be NULL!" );
+        OSL_ENSURE( _rxDocument.is(), "ScriptDocument::ScriptDocument: document must not be NULL!" );
             // a NULL document results in an uninitialized instance, and for this
             // purpose, there is a dedicated constructor
     }
@@ -839,16 +1158,21 @@ namespace basctl
         if ( _pManager == SFX_APP()->GetBasicManager() )
             return getApplicationScriptDocument();
 
-        SfxObjectShell* pDocShell = SfxObjectShell::GetFirst();
-        while ( pDocShell )
+        docs::Documents aDocuments;
+        lcl_getAllModels_throw( aDocuments, false );
+
+        for (   docs::Documents::const_iterator doc = aDocuments.begin();
+                doc != aDocuments.end();
+                ++doc
+            )
         {
-            if  (   ( pDocShell->GetBasicManager() != SFX_APP()->GetBasicManager() )
-                &&  ( pDocShell->GetBasicManager() == _pManager )
+            const BasicManager* pDocBasicManager = ::basic::BasicManagerRepository::getDocumentBasicManager( doc->xModel );
+            if  (   ( pDocBasicManager != SFX_APP()->GetBasicManager() )
+                &&  ( pDocBasicManager == _pManager )
                 )
             {
-                return ScriptDocument( *pDocShell );
+                return ScriptDocument( doc->xModel );
             }
-            pDocShell = SfxObjectShell::GetNext( *pDocShell );
         }
 
         OSL_ENSURE( false, "ScriptDocument::getDocumentForBasicManager: did not find a document for this manager!" );
@@ -856,78 +1180,118 @@ namespace basctl
     }
 
     //--------------------------------------------------------------------
-    ScriptDocument ScriptDocument::getDocumentWithCaption( const ::rtl::OUString& _rCaption )
+    ScriptDocument ScriptDocument::getDocumentWithURLOrCaption( const ::rtl::OUString& _rUrlOrCaption )
     {
         ScriptDocument aDocument( getApplicationScriptDocument() );
-        if ( _rCaption.getLength() != 0 )
+        if ( _rUrlOrCaption.getLength() == 0 )
+            return aDocument;
+
+        docs::Documents aDocuments;
+        lcl_getAllModels_throw( aDocuments, false );
+
+        for (   docs::Documents::const_iterator doc = aDocuments.begin();
+                doc != aDocuments.end();
+                ++doc
+            )
         {
-            SfxViewFrame* pView = SfxViewFrame::GetFirst();
-            while ( pView )
+            const ScriptDocument aCheck = ScriptDocument( doc->xModel );
+            if  (   _rUrlOrCaption == aCheck.getTitle()
+                ||  _rUrlOrCaption == aCheck.getURL()
+                )
             {
-                SfxObjectShell* pObjShell = pView->GetObjectShell();
-                if ( pObjShell )
-                {
-                    SfxMedium* pMedium = pObjShell->GetMedium();
-                    if  (   (   pMedium
-                            &&  _rCaption == pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE )
-                            )
-                        ||  ( _rCaption == ::rtl::OUString( pObjShell->GetTitle( SFX_TITLE_CAPTION ) ) )
-                        )
-                    {
-                        aDocument = ScriptDocument( *pObjShell );
-                        break;
-                    }
-                }
-                pView = SfxViewFrame::GetNext( *pView );
+                aDocument = aCheck;
+                break;
             }
         }
+
         return aDocument;
     }
 
     //--------------------------------------------------------------------
-    ScriptDocuments ScriptDocument::getAllScriptDocuments( bool _bIncludingApplication )
+    namespace
     {
-        ScriptDocuments aDocuments;
-        if ( _bIncludingApplication )
-            aDocuments.push_back( getApplicationScriptDocument() );
-
-        SfxObjectShell* pDocShell = SfxObjectShell::GetFirst();
-        while ( pDocShell )
+        struct DocumentTitleLess : public ::std::binary_function< ScriptDocument, ScriptDocument, bool >
         {
-            // exclude invisible docs, and docs without own scripts/dialogs
-            if  (   SfxViewFrame::GetFirst( pDocShell )
-                &&  pDocShell->GetBasicManager() != SFX_APP()->GetBasicManager()
-                )
+            DocumentTitleLess( const CollatorWrapper& _rCollator )
+                :m_aCollator( _rCollator )
             {
-                ScriptDocument aDoc( *pDocShell );
-                OSL_ENSURE( aDoc.isValid(),
-                    "ScriptDocument::getAllScriptDocuments: an SfxObjectShell with own BasicManager, but without library containers?" );
-                if ( aDoc.isValid() )
-                    aDocuments.push_back( aDoc );
             }
 
-            pDocShell = SfxObjectShell::GetNext( *pDocShell );
+            bool operator()( const ScriptDocument& _lhs, const ScriptDocument& _rhs ) const
+            {
+                return m_aCollator.compareString( _lhs.getTitle(), _rhs.getTitle() ) < 0;
+            }
+        private:
+            const CollatorWrapper   m_aCollator;
+        };
+    }
+
+    //--------------------------------------------------------------------
+    ScriptDocuments ScriptDocument::getAllScriptDocuments( ScriptDocument::ScriptDocumentList _eListType )
+    {
+        ScriptDocuments aScriptDocs;
+
+        // include application?
+        if ( _eListType == AllWithApplication )
+            aScriptDocs.push_back( getApplicationScriptDocument() );
+
+        // obtain documents
+        try
+        {
+            docs::Documents aDocuments;
+            lcl_getAllModels_throw( aDocuments, true /* exclude invisible */ );
+
+            for (   docs::Documents::const_iterator doc = aDocuments.begin();
+                    doc != aDocuments.end();
+                    ++doc
+                )
+            {
+                // exclude documents without script/library containers
+                ScriptDocument aDoc( doc->xModel );
+                if ( !aDoc.isValid() )
+                    continue;
+
+                aScriptDocs.push_back( aDoc );
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
 
-        return aDocuments;
+        // sort document list by doc title?
+        if ( _eListType == DocumentsSorted )
+        {
+            CollatorWrapper aCollator( ::comphelper::getProcessServiceFactory() );
+            aCollator.loadDefaultCollator( SvtSysLocale().GetLocaleData().getLocale(), 0 );
+            ::std::sort( aScriptDocs.begin(), aScriptDocs.end(), DocumentTitleLess( aCollator ) );
+        }
+
+        return aScriptDocs;
     }
 
     //--------------------------------------------------------------------
     bool ScriptDocument::operator==( const ScriptDocument& _rhs ) const
     {
-        return m_pImpl->getObjectShell() == _rhs.m_pImpl->getObjectShell();
+        return m_pImpl->getDocumentRef() == _rhs.m_pImpl->getDocumentRef();
     }
 
     //--------------------------------------------------------------------
     sal_Int32 ScriptDocument::hashCode() const
     {
-        return sal::static_int_cast<sal_Int32>(reinterpret_cast< sal_IntPtr >( m_pImpl->getObjectShell() ));
+        return sal::static_int_cast<sal_Int32>(reinterpret_cast< sal_IntPtr >( m_pImpl->getDocumentRef().get() ));
     }
 
     //--------------------------------------------------------------------
     bool ScriptDocument::isValid() const
     {
         return m_pImpl->isValid();
+    }
+
+    //--------------------------------------------------------------------
+    bool ScriptDocument::isAlive() const
+    {
+        return m_pImpl->isAlive();
     }
 
     //--------------------------------------------------------------------
@@ -1049,39 +1413,6 @@ namespace basctl
         if ( isDocument() )
             return m_pImpl->getDocument();
         return NULL;
-    }
-
-    //--------------------------------------------------------------------
-    void ScriptDocument::LEGACY_startDocumentListening( SfxListener& _rListener ) const
-    {
-        OSL_ENSURE( isValid(), "ScriptDocument::LEGACY_startDocumentListening: invalid, this will crash!" );
-        OSL_ENSURE( !isApplication(), "ScriptDocument::LEGACY_startDocumentListening: not allowed for the application!" );
-        if ( isValid() && !isApplication() )
-            _rListener.StartListening( *m_pImpl->getObjectShell(), TRUE );
-    }
-
-    //--------------------------------------------------------------------
-    void ScriptDocument::LEGACY_resetWorkingDocument()
-    {
-        SfxObjectShell::SetWorkingDocument( NULL );
-    }
-
-    //--------------------------------------------------------------------
-    void ScriptDocument::LEGACY_setWorkingDocument( const ScriptDocument& _rDocument )
-    {
-        if ( _rDocument.isApplication() )
-            LEGACY_resetWorkingDocument();
-        else
-            SfxObjectShell::SetWorkingDocument( _rDocument.m_pImpl->getObjectShell() );
-    }
-
-    //--------------------------------------------------------------------
-    ScriptDocument ScriptDocument::LEGACY_getWorkingDocument()
-    {
-        SfxObjectShell* pWorkingDocument( SfxObjectShell::GetWorkingDocument() );
-        if ( pWorkingDocument )
-            return ScriptDocument( *pWorkingDocument );
-        return getApplicationScriptDocument();
     }
 
     //--------------------------------------------------------------------
@@ -1256,11 +1587,8 @@ namespace basctl
             }
             break;
             case LIBRARY_LOCATION_DOCUMENT:
-            {
-                if ( isDocument() )
-                    aTitle = m_pImpl->getObjectShell()->GetTitle( SFX_TITLE_CAPTION );
-            }
-            break;
+                aTitle = getTitle();
+                break;
             default:
                 break;
             }
@@ -1270,55 +1598,38 @@ namespace basctl
     }
 
     //--------------------------------------------------------------------
-    bool ScriptDocument::isClosing() const
+    ::rtl::OUString ScriptDocument::getTitle() const
     {
-        OSL_ENSURE( isDocument(), "ScriptDocument::isClosing: for documents only!" );
-        if ( isDocument() )
-            return m_pImpl->getObjectShell()->IsInPrepareClose();
-        return false;
+        return m_pImpl->getTitle();
+    }
+
+    //--------------------------------------------------------------------
+    ::rtl::OUString ScriptDocument::getURL() const
+    {
+        return m_pImpl->getURL();
     }
 
     //--------------------------------------------------------------------
     bool ScriptDocument::isActive() const
     {
-        OSL_ENSURE( isDocument(), "ScriptDocument::isActive: for documents only!" );
-        if ( isDocument() )
-            return m_pImpl->getObjectShell() == SfxObjectShell::Current();
-        return false;
+        bool bIsActive( false );
+        try
+        {
+            Reference< XFrame > xFrame;
+            if ( m_pImpl->getCurrentFrame( xFrame ) )
+                bIsActive = xFrame->isActive();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return bIsActive;
     }
 
     //--------------------------------------------------------------------
-    void ScriptDocument::signScriptingContent() const
+    bool ScriptDocument::allowMacros() const
     {
-        OSL_ENSURE( isDocument(), "ScriptDocument::signScriptingContent: for documents only!" );
-        if ( isDocument() )
-            m_pImpl->getObjectShell()->SignScriptingContent();
-    }
-
-    //--------------------------------------------------------------------
-    sal_uInt16 ScriptDocument::getScriptingSignatureState() const
-    {
-        OSL_ENSURE( isDocument(), "ScriptDocument::getScriptingSignatureState: for documents only!" );
-        if ( isDocument() )
-            return m_pImpl->getObjectShell()->GetScriptingSignatureState();
-        return SIGNATURESTATE_NOSIGNATURES;
-    }
-
-    //--------------------------------------------------------------------
-    void ScriptDocument::adjustMacroMode( const ::rtl::OUString& _rScriptType ) const
-    {
-        OSL_ENSURE( isDocument(), "ScriptDocument::adjustMacroMode: for documents only!" );
-        if ( isDocument() )
-            m_pImpl->getObjectShell()->AdjustMacroMode( _rScriptType );
-    }
-
-    //--------------------------------------------------------------------
-    sal_Int16 ScriptDocument::getMacroMode() const
-    {
-        OSL_ENSURE( isDocument(), "ScriptDocument::getMacroMode: for documents only!" );
-        if ( isDocument() )
-            return m_pImpl->getObjectShell()->GetMacroMode();
-        return MacroExecMode::NEVER_EXECUTE;
+        return m_pImpl->allowMacros();
     }
 
 //........................................................................
