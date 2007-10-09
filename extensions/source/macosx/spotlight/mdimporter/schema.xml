@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema version="1.0" xmlns="http://www.apple.com/metadata"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:schemaLocation="http://www.apple.com/metadata file:///System/Library/Frameworks/CoreServices.framework/Frameworks/Metadata.framework/Resources/MetadataSchema.xsd">
+    <note>
+        OpenOffice.org allows the user to enter 4 pieces of custom information in the document's metadata.
+        These metadata fields are described here for Spotlight's use.
+    </note>
+    <attributes>
+        <attribute name="org_openoffice_opendocument_custominfo1" type="CFString"/>
+        <attribute name="org_openoffice_opendocument_custominfo2" type="CFString"/>
+        <attribute name="org_openoffice_opendocument_custominfo3" type="CFString"/>
+        <attribute name="org_openoffice_opendocument_custominfo4" type="CFString"/>
+    </attributes>
+
+    <types>
+        <type name="org.openoffice.text">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.oasis.opendocument.text">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.openoffice.spreadsheet">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.oasis.opendocument.spreadsheet">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.openoffice.presentation">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.oasis.opendocument.presentation">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.openoffice.graphics">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.oasis.opendocument.graphics">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.openoffice.text-master">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.oasis.opendocument.text-master">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.openoffice.formula">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.oasis.opendocument.formula">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.openoffice.text-template">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.oasis.opendocument.text-template">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.openoffice.spreadsheet-template">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.oasis.opendocument.spreadsheet-template">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.openoffice.presentation-template">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.oasis.opendocument.presentation-template">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.openoffice.graphics-template">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.oasis.opendocument.graphics-template">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+
+        <type name="org.oasis.opendocument.chart">
+            <note>
+        The custom metadata info.
+            </note>
+            <allattrs id="attrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </allattrs>
+            <displayattrs id="dattrs">
+        org_openoffice_opendocument_custominfo1
+        org_openoffice_opendocument_custominfo2
+        org_openoffice_opendocument_custominfo3
+        org_openoffice_opendocument_custominfo4
+            </displayattrs>
+        </type>
+    </types>
+</schema>
+
