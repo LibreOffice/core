@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:14:12 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:20:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1459,21 +1459,26 @@ BOOL Printer::StartJob( const XubString& rJobName )
         mnCurPrintPage          = 1;
         mbPrinting              = TRUE;
 
-        if ( !mpPrinter->StartJob( pPrintFile, rJobName, Application::GetDisplayName(),
-                                   nCopies, bCollateCopy,
-                                   maJobSetup.ImplGetConstData() ) )
+        if( ! ImplGetSVData()->maGDIData.mbPrinterPullModel )
         {
-            mnError = ImplSalPrinterErrorCodeToVCL( mpPrinter->GetErrorCode() );
-            if ( !mnError )
-                mnError = PRINTER_GENERALERROR;
-            pSVData->mpDefInst->DestroyPrinter( mpPrinter );
-            mbNewJobSetup       = bSaveNewJobSetup;
-            maJobName           = aSaveJobName;
-            mnCurPage           = 0;
-            mnCurPrintPage      = 0;
-            mbPrinting          = FALSE;
-            mpPrinter = NULL;
-            return FALSE;
+            // in the pull model the job can only be started when
+            // we have collected all pages to be printed
+            if ( !mpPrinter->StartJob( pPrintFile, rJobName, Application::GetDisplayName(),
+                                       nCopies, bCollateCopy,
+                                       maJobSetup.ImplGetConstData() ) )
+            {
+                mnError = ImplSalPrinterErrorCodeToVCL( mpPrinter->GetErrorCode() );
+                if ( !mnError )
+                    mnError = PRINTER_GENERALERROR;
+                pSVData->mpDefInst->DestroyPrinter( mpPrinter );
+                mbNewJobSetup       = bSaveNewJobSetup;
+                maJobName           = aSaveJobName;
+                mnCurPage           = 0;
+                mnCurPrintPage      = 0;
+                mbPrinting          = FALSE;
+                mpPrinter = NULL;
+                return FALSE;
+            }
         }
 
         mbJobActive             = TRUE;
