@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:48:45 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:24:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -721,8 +721,6 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
 {
     if ( pButton == &aEditButton )
     {
-        SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-
         SfxAllItemSet aArgs( SFX_APP()->GetPool() );
         SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
         SFX_APP()->ExecuteSlot( aRequest );
@@ -733,7 +731,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
         String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-        pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         if ( pDispatcher )
         {
@@ -1580,7 +1578,7 @@ void LibPage::FillListBox()
     InsertListBoxEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER );
     InsertListBoxEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_SHARE );
 
-    ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( false ) );
+    ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( ScriptDocument::DocumentsSorted ) );
     for (   ScriptDocuments::const_iterator doc = aDocuments.begin();
             doc != aDocuments.end();
             ++doc
@@ -1608,8 +1606,8 @@ void LibPage::SetCurLib()
     if ( pEntry )
     {
         ScriptDocument aDocument( pEntry->GetDocument() );
-        DBG_ASSERT( aDocument.isValid(), "LibPage::SetCurLib: no document!" );
-        if ( !aDocument.isValid() )
+        DBG_ASSERT( aDocument.isAlive(), "LibPage::SetCurLib: no document, or document is dead!" );
+        if ( !aDocument.isAlive() )
             return;
         LibraryLocation eLocation = pEntry->GetLocation();
         if ( aDocument != m_aCurDocument || eLocation != m_eCurLocation )
@@ -1687,8 +1685,8 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, ULONG nPos )
 void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                     BasicCheckBox* pLibBox, BasicTreeListBox* pBasicBox )
 {
-    OSL_ENSURE( rDocument.isValid(), "createLibImpl: invalid document!" );
-    if ( !rDocument.isValid() )
+    OSL_ENSURE( rDocument.isAlive(), "createLibImpl: invalid document!" );
+    if ( !rDocument.isAlive() )
         return;
 
     // create library name
