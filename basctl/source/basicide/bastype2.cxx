@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:55:03 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:22:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,18 +174,20 @@ bool BasicEntryDescriptor::operator==( const BasicEntryDescriptor& rDesc ) const
 }
 
 BasicTreeListBox::BasicTreeListBox( Window* pParent, const ResId& rRes ) :
-    SvTreeListBox( pParent, IDEResId( sal::static_int_cast<USHORT>( rRes.GetId() ) ) )
+    SvTreeListBox( pParent, IDEResId( sal::static_int_cast<USHORT>( rRes.GetId() ) ) ),
+    m_aNotifier( *this )
 {
     SetNodeDefaultImages();
     SetSelectionMode( SINGLE_SELECTION );
     nMode = 0xFF;   // Alles
-    StartListening( *SFX_APP(), TRUE /* register only once */ );
 }
 
 
 
 BasicTreeListBox::~BasicTreeListBox()
 {
+    m_aNotifier.dispose();
+
     // UserDaten zerstoeren
     SvLBoxEntry* pEntry = First();
     while ( pEntry )
@@ -197,8 +199,8 @@ BasicTreeListBox::~BasicTreeListBox()
 
 void BasicTreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
-    OSL_ENSURE( rDocument.isValid(), "BasicTreeListBox::ScanEntry: illegal document!" );
-    if ( !rDocument.isValid() )
+    OSL_ENSURE( rDocument.isAlive(), "BasicTreeListBox::ScanEntry: illegal document!" );
+    if ( !rDocument.isAlive() )
         return;
 
     // can be called multiple times for updating!
@@ -391,22 +393,49 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
     }
 }
 
-void __EXPORT BasicTreeListBox::SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& )
+void BasicTreeListBox::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
 {
-    if ( rHint.IsA( TYPE( SfxEventHint ) ) )
-    {
-        switch ( ((SfxEventHint&)rHint).GetEventId() )
-        {
-            case SFX_EVENT_CREATEDOC:
-            case SFX_EVENT_OPENDOC:
-            case SFX_EVENT_SAVEASDOCDONE:
-            case SFX_EVENT_PREPARECLOSEDOC:
-            {
-                UpdateEntries();
-            }
-            break;
-        }
-    }
+    UpdateEntries();
+}
+
+void BasicTreeListBox::onDocumentOpened( const ScriptDocument& /*_rDocument*/ )
+{
+    UpdateEntries();
+}
+
+void BasicTreeListBox::onDocumentSave( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+void BasicTreeListBox::onDocumentSaveDone( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+void BasicTreeListBox::onDocumentSaveAs( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+void BasicTreeListBox::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*/ )
+{
+    UpdateEntries();
+}
+
+void BasicTreeListBox::onDocumentClosed( const ScriptDocument& /*_rDocument*/ )
+{
+    UpdateEntries();
+}
+
+void BasicTreeListBox::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+void BasicTreeListBox::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
 }
 
 void BasicTreeListBox::UpdateEntries()
@@ -472,8 +501,8 @@ long BasicTreeListBox::ExpandingHdl()
         SvLBoxEntry* pCurEntry = GetCurEntry();
         BasicEntryDescriptor aDesc( GetEntryDescriptor( pCurEntry ) );
         ScriptDocument aDocument( aDesc.GetDocument() );
-        OSL_ENSURE( aDocument.isValid(), "BasicTreeListBox::ExpandingHdl: no document at all!" );
-        if ( aDocument.isValid() )
+        OSL_ENSURE( aDocument.isAlive(), "BasicTreeListBox::ExpandingHdl: no document, or document is dead!" );
+        if ( aDocument.isAlive() )
         {
             String aLibName( aDesc.GetLibName() );
             String aName( aDesc.GetName() );
@@ -506,8 +535,8 @@ BOOL BasicTreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
     {
         BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
         ScriptDocument aDocument( aDesc.GetDocument() );
-        OSL_ENSURE( aDocument.isValid(), "BasicTreeListBox::IsEntryProtected: no document at all!" );
-        if ( aDocument.isValid() )
+        OSL_ENSURE( aDocument.isAlive(), "BasicTreeListBox::IsEntryProtected: no document, or document is dead!" );
+        if ( aDocument.isAlive() )
         {
             ::rtl::OUString aOULibName( aDesc.GetLibName() );
             Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
@@ -544,15 +573,19 @@ void BasicTreeListBox::SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImag
     SetCollapsedEntryBmp( pEntry, rImageHC, BMP_COLOR_HIGHCONTRAST );
 }
 
-String BasicTreeListBox::GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation )
+LibraryType BasicTreeListBox::GetLibraryType() const
 {
     LibraryType eType = LIBRARY_TYPE_ALL;
     if ( ( nMode & BROWSEMODE_MODULES ) && !( nMode & BROWSEMODE_DIALOGS ) )
         eType = LIBRARY_TYPE_MODULE;
     else if ( !( nMode & BROWSEMODE_MODULES ) && ( nMode & BROWSEMODE_DIALOGS ) )
         eType = LIBRARY_TYPE_DIALOG;
+    return eType;
+}
 
-    return rDocument.getTitle( eLocation, eType );
+String BasicTreeListBox::GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const
+{
+    return rDocument.getTitle( eLocation, GetLibraryType() );
 }
 
 void BasicTreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage, Image& rImageHC )
