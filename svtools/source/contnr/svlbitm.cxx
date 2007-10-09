@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svlbitm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:21:05 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:04:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,11 @@
 #ifndef _SV_SOUND_HXX
 #include <vcl/sound.hxx>
 #endif
+#ifndef _SV_NATIVEWIDGETS_HXX
+#include <vcl/salnativewidgets.hxx>
+#endif
 
 #define TABOFFS_NOT_VALID -2000000
-
 
 struct SvLBoxButtonData_Impl
 {
@@ -214,6 +216,10 @@ void SvLBoxButtonData::SetDefaultImages( const Control* pCtrl )
 BOOL SvLBoxButtonData::HasDefaultImages( void ) const
 {
     return pImpl->bDefaultImages;
+}
+
+BOOL SvLBoxButtonData::IsRadio() {
+    return pImpl->bShowRadioButton;
 }
 
 // ***************************************************************
@@ -424,7 +430,38 @@ void SvLBoxButton::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
         ? SV_BMP_STATICIMAGE : pData->GetIndex( nItemFlags );
     USHORT nStyle = eKind != SvLBoxButtonKind_disabledCheckbox &&
         rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
-    rDev.DrawImage( rPos, pData->aBmps[nIndex + nBaseOffs] ,nStyle);
+
+///
+//Native drawing
+///
+    BOOL bNativeOK = FALSE;
+    Window *pWin = NULL;
+    if( rDev.GetOutDevType() == OUTDEV_WINDOW )
+        pWin = (Window*) &rDev;
+
+    if ( nIndex != SV_BMP_STATICIMAGE && pWin && pWin->IsNativeControlSupported( (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX, PART_ENTIRE_CONTROL) )
+    {
+        ImplControlValue    aControlValue;
+        Region              aCtrlRegion( Rectangle(rPos, Size(pData->Width(), pData->Height())) );
+        ControlState        nState = 0;
+
+        //states CTRL_STATE_DEFAULT, CTRL_STATE_PRESSED and CTRL_STATE_ROLLOVER are not implemented
+        if ( IsStateHilighted() )                   nState |= CTRL_STATE_FOCUSED;
+        if ( nStyle != IMAGE_DRAW_DISABLE )         nState |= CTRL_STATE_ENABLED;
+
+        if ( IsStateChecked() )
+            aControlValue.setTristateVal( BUTTONVALUE_ON );
+        else if ( IsStateUnchecked() )
+            aControlValue.setTristateVal( BUTTONVALUE_OFF );
+        else if ( IsStateTristate() )
+            aControlValue.setTristateVal( BUTTONVALUE_MIXED );
+
+        bNativeOK = pWin->DrawNativeControl( (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX, PART_ENTIRE_CONTROL,
+                                aCtrlRegion, nState, aControlValue, rtl::OUString() );
+    }
+
+    if( !bNativeOK)
+        rDev.DrawImage( rPos, pData->aBmps[nIndex + nBaseOffs] ,nStyle);
 }
 
 SvLBoxItem* SvLBoxButton::Create() const
