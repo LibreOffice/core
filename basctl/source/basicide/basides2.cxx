@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:22:10 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
+
+#include "docsignature.hxx"
 
 #define SI_NOCONTROL
 #define SI_NOSBXCONTROLS
@@ -176,8 +178,8 @@ void BasicIDEShell::SetMDITitle()
         aTitle = String( IDEResId( RID_STR_ALL ) );
     }
 
-    if ( m_aCurDocument.isDocument() &&
-         m_aCurDocument.getScriptingSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
+    ::basctl::DocumentSignature aCurSignature( m_aCurDocument );
+    if ( aCurSignature.getScriptingSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
     {
         aTitle += String::CreateFromAscii( " " );
         aTitle += String( IDEResId( RID_STR_SIGNED ) );
