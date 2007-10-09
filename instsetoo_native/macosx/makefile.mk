@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-08-28 09:18:12 $
+#   last change: $Author: kz $ $Date: 2007-10-09 15:05:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,12 @@ scriptfiles = \
     $(CONTENTS)$/Resources$/Scripts$/PostInstall.scpt
 .ENDIF
 
-plistfiles  = $(CONTENTS)$/Info.plist 
+plistfiles  = $(CONTENTS)$/Info.plist
+
+nibfiles = \
+    $(CONTENTS)$/Resources$/MainMenu.nib$/classes.nib   \
+    $(CONTENTS)$/Resources$/MainMenu.nib$/info.nib   \
+    $(CONTENTS)$/Resources$/MainMenu.nib$/keyedobjects.nib
 
 ZIPFLAGS = -r
 ZIP1TARGET = osxbundle
@@ -78,7 +83,7 @@ BUNDLEEXECUTABLE=soffice.bin
 
 .INCLUDE : target.mk
 
-$(ZIP1TARGETN) : $(scriptfiles) $(plistfiles)
+$(ZIP1TARGETN) : $(scriptfiles) $(plistfiles) $(nibfiles)
 
 $(plistfiles) : $(scriptfiles)
 
@@ -102,6 +107,11 @@ $(CONTENTS)$/Resources$/Scripts$/%.scpt : application/%.applescript
 $(CONTENTS)$/%.plist : application/%.plist
     make_versioned.sh "$<" "$(VERSIONED)/$<"
         sed "s|\%BUNDLEEXECUTABLE|${BUNDLEEXECUTABLE}|g" "$(VERSIONED)/$<" > "$@"
+
+# nibs are just copied
+$(CONTENTS)$/Resources$/MainMenu.nib$/%.nib: application/MainMenu.nib$/%.nib
+    $(MKDIRHIER) $(@:d)
+    $(COPY) "$<" "$@"
 
 # The InfoPlist.strings file has to be in UTF-16, thus a back-and-forth conversion
 # is needed for versioning
