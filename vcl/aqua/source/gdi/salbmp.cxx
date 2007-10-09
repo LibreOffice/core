@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:01:55 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:14:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,25 +36,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _TOOLS_COLOR_HXX
-#include <tools/color.hxx>
-#endif
-
-#ifndef _SV_SALBMP_H
+#include "tools/color.hxx"
 #include "salbmp.h"
-#endif
-
-#ifndef _SV_BITMAP_HXX
-#include <vcl/bitmap.hxx> // for BitmapSystemData
-#endif
-
-#ifndef _SV_SALBTYPE_HXX
+#include "vcl/bitmap.hxx" // for BitmapSystemData
 #include "vcl/salbtype.hxx"
-#endif
 
-#include <basebmp/scanlineformats.hxx>
-#include <basebmp/color.hxx>
-#include <basegfx/vector/b2ivector.hxx>
+#include "basebmp/scanlineformats.hxx"
+#include "basebmp/color.hxx"
+#include "basegfx/vector/b2ivector.hxx"
 
 #include <boost/bind.hpp>
 
@@ -98,45 +87,56 @@ bool AquaSalBitmap::Create( CGContextRef xContext, int nX, int nY, int nWidth, i
 /** creates an AquaSalBitmap from a rectangle inside a memory bitmap (only 16 und 32 bit supported!)
     NOTE: This code flips the data upside down so sources must come from AQUA directly
 */
-bool AquaSalBitmap::Create( sal_uInt32 nWidth, sal_uInt32 nHeight, sal_uInt16 nBits, sal_uInt32 nBytesPerRow, sal_uInt8* pBuffer, sal_uInt32 nX, sal_uInt32 nY, sal_uInt32 nDX, sal_uInt32 nDY, bool bMirrorVert )
+bool AquaSalBitmap::Create( int nSrcWidth, int nSrcHeight, int nBits,
+    sal_uInt32 nBytesPerRow, const sal_uInt8* pSrcBuffer,
+    int nSrcX, int nSrcY, int nDstWidth, int nDstHeight, bool bMirrorVert )
 {
-    if( (nBits != 16) && (nBits != 32) || !nWidth || !nHeight )
+    if( (nBits != 16) && (nBits != 32) )
+        return false;
+
+    if( nSrcX < 0 )
+        nSrcX = 0;
+    if( nSrcY < 0 )
+        nSrcY = 0;
+    if( nDstWidth > nSrcWidth - nSrcX )
+        nDstWidth = nSrcWidth - nSrcX;
+    if( nDstHeight > nSrcHeight - nSrcY )
+        nDstHeight = nSrcHeight - nSrcY;
+    if( (nDstWidth <= 0) || (nDstHeight <= 0) )
         return false;
 
     mnBits = nBits;
-    mnWidth = nDX;
-    mnHeight = nDY;
+    mnWidth  = nDstWidth;
+    mnHeight = nDstHeight;
 
     if( AllocateUserData() )
     {
         sal_uInt8* pDest = maUserBuffer.get();
-
-        sal_uInt8* pSource = pBuffer;
-        if( nX )
-            pSource += nX << (( nBits == 32 ) ? 2 : 1);
+        const sal_uInt8* pSource = pSrcBuffer + nSrcX * (nBits / 8);
+        const int nByteCopyWidth = nDstWidth * (nBits / 8);
 
         if( bMirrorVert )
         {
-            nY = nHeight - nY - nDY;
-            pSource += nBytesPerRow * nY;
+            nSrcY = (nSrcHeight - nSrcY) - nDstHeight;
+            pSource += nBytesPerRow * nSrcY;
 
-            sal_uInt32 y = nDY;
+            int y = nDstHeight;
             while( y-- )
             {
-                memcpy( pDest, pSource, mnBytesPerRow );
+                memcpy( pDest, pSource, nByteCopyWidth );
                 pDest += mnBytesPerRow;
                 pSource += nBytesPerRow;
             }
         }
         else
         {
-            pSource += nBytesPerRow * nY;
-            pDest += mnBytesPerRow * (nDY-1);
+            pSource += nBytesPerRow * nSrcY;
+            pDest += mnBytesPerRow * (nDstHeight-1);
 
-            sal_uInt32 y = nDY;
+            int y = nDstHeight;
             while( y-- )
             {
-                memcpy( pDest, pSource, mnBytesPerRow );
+                memcpy( pDest, pSource, nByteCopyWidth );
                 pDest -= mnBytesPerRow;
                 pSource += nBytesPerRow;
             }
@@ -737,7 +737,7 @@ CGImageRef AquaSalBitmap::CreateWithMask( const AquaSalBitmap& rMask, sal_uInt32
 CGImageRef AquaSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHeight, SalColor nMaskColor ) const
 {
     CGImageRef xMask = 0;
-    if( maUserBuffer.get() && (static_cast<unsigned int>(nX + nWidth) <= mnWidth) && (static_cast<unsigned int>(nY + nHeight) <= mnHeight)  )
+    if( maUserBuffer.get() && (nX + nWidth <= mnWidth) && (nY + nHeight <= mnHeight) )
     {
         const sal_uInt32 nDestBytesPerRow = nWidth << 2;
         sal_uInt32* pMaskBuffer = static_cast<sal_uInt32*>( rtl_allocateMemory( nHeight * nDestBytesPerRow ) );
@@ -757,7 +757,7 @@ CGImageRef AquaSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHeig
             if( nY )
                 pSource += nY * mnBytesPerRow;
 
-            sal_uInt32 y = nHeight;
+            int y = nHeight;
             while( y-- )
             {
                 pSourcePixels->StartLine( pSource );
@@ -789,7 +789,7 @@ CGImageRef AquaSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHeig
 CGImageRef AquaSalBitmap::CreateMask( int nX, int nY, int nWidth, int nHeight ) const
 {
     CGImageRef xMask = 0;
-    if( (maUserBuffer.get()) && (static_cast<unsigned int>(nX + nWidth) <= mnWidth) && (static_cast<unsigned int>(nY + nHeight) <= mnHeight)  )
+    if( (maUserBuffer.get()) && (nX + nWidth <= mnWidth) && (nY + nHeight <= mnHeight) )
     {
         if( mnBits == 1 )
         {
@@ -813,10 +813,10 @@ CGImageRef AquaSalBitmap::CreateMask( int nX, int nY, int nWidth, int nHeight ) 
                         pSource += nX;
 
                     // simple convert alpha
-                    sal_uInt32 y = nHeight;
+                    int y = nHeight;
                     while( y-- )
                     {
-                        sal_uInt32 x = nWidth;
+                        int x = nWidth;
                         while( x-- )
                             *pDest++ = 0xff - *pSource++;
                         pSource += mnBytesPerRow;
@@ -827,12 +827,12 @@ CGImageRef AquaSalBitmap::CreateMask( int nX, int nY, int nWidth, int nHeight ) 
                     ImplPixelFormat* pSourcePixels = ImplPixelFormat::GetFormat( mnBits, maPalette );
                     if( pSourcePixels )
                     {
-                        sal_uInt32 y = nHeight;
+                        int y = nHeight;
                         while( y-- )
                         {
                             pSourcePixels->StartLine(pSource);
                             pSourcePixels->SkipPixel(nX);
-                            sal_uInt32 x = nWidth;
+                            int x = nWidth;
                             while( x-- )
                                 *pDest++ = (pSourcePixels->ReadPixel() == 0) ? 0x00 : 0xff;
 
