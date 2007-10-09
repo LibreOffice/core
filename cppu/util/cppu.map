@@ -121,3 +121,7 @@ UDK_3.2 {
         uno_Environment_isValid;
 } UDK_3.1;
 
+UDK_3.3 {   # OOo 2.4
+    global:
+        cppu_unsatisfied_iset_msg;
+} UDK_3.2;
