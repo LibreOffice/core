@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:21:32 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:04:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1309,7 +1309,7 @@ void ScTabView::MoveCursorEnter( BOOL bShift )          // bShift -> hoch/runter
     }
     else
     {
-        if ( nMoveY != 0 && !nMoveX && rOpt.GetUseTabCol() )
+        if ( nMoveY != 0 && !nMoveX )
         {
             //  nach Tab und Enter wieder zur Ausgangsspalte
             SCCOL nTabCol = aViewData.GetTabStartCol();
