@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salatsuifontutils.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:10:19 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:08:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,14 @@
 #ifndef _SV_SALATSUIFONTUTILS_HXX
 #define _SV_SALATSUIFONTUTILS_HXX
 
-class ImplFontData;
+class ImplMacFontData;
 class ImplDevFontList;
 
 #include <vector>
+
+#include <premac.h>
+#include <ApplicationServices/ApplicationServices.h>
+#include <postmac.h>
 
 /* This class has the responsibility of assembling a list
    of atsui compatible fonts available on the system and
@@ -52,11 +56,15 @@ public:
     SystemFontList();
     ~SystemFontList();
 
-    void    AnnounceFonts( ImplDevFontList& ) const;
+    void AnnounceFonts( ImplDevFontList& ) const;
+
+    ATSUFontFallbacks maFontFallbacks;
 
 private:
-  typedef std::vector<ImplFontData*> ImplFontDataContainer_t;
+  typedef std::vector<ImplMacFontData*> ImplFontDataContainer_t;
   ImplFontDataContainer_t mFontContainer;
+
+    void InitGlyphFallbacks();
 };
 
 #endif  // _SV_SALATSUIFONTUTILS_HXX
