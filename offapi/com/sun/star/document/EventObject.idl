@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventObject.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:02:01 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:13:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ module com {   module sun {   module star {   module document {
 published struct EventObject: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
-    /** specifies the type of the event handler
+    /** specifies the name of the occured event
 
         <p>
         For a list of possible event names see <type>Events</type>.
