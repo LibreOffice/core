@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Reference.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:10:59 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:19:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,15 @@ enum UnoReference_QueryThrow
     */
     UNO_REF_QUERY_THROW
 };
+/** Enum defining UNO_SET_THROW for throwing if attempts are made to assign a <NULL/>
+    interface
+
+    @since UDK 3.2.8
+*/
+enum UnoReference_SetThrow
+{
+    UNO_SET_THROW
+};
 #endif
 
 /** Template reference class for interface type derived from BaseReference.
@@ -197,6 +206,13 @@ class Reference : public BaseReference
         @return interface of demanded type
     */
     inline static XInterface * SAL_CALL iquery_throw( XInterface * pInterface )
+        SAL_THROW( (RuntimeException) );
+    /** Returns the given interface if it is not <NULL/>, throws a RuntimeException otherwise.
+
+        @param pInterface interface pointer
+        @return pInterface
+    */
+    inline static interface_type * SAL_CALL iset_throw( interface_type * pInterface )
         SAL_THROW( (RuntimeException) );
 #endif
 
@@ -322,6 +338,24 @@ public:
                      to other constructors
     */
     inline Reference( const Any & rAny, UnoReference_QueryThrow ) SAL_THROW( (RuntimeException) );
+    /** Constructor: assigns from the given interface of the same type. Throws a RuntimeException
+        if the source interface is <NULL/>.
+
+        @param rRef another interface reference of the same type
+        @param dummy UNO_SET_THROW to distinguish from default copy constructor
+
+        @since UDK 3.2.8
+    */
+    inline Reference( const Reference< interface_type > & rRef, UnoReference_SetThrow ) SAL_THROW( (RuntimeException) );
+    /** Constructor: assigns from the given interface of the same type. Throws a RuntimeException
+        if the source interface is <NULL/>.
+
+        @param pInterface an interface pointer
+        @param dummy UNO_SET_THROW to distinguish from default assignment constructor
+
+        @since UDK 3.2.8
+    */
+    inline Reference( interface_type * pInterface, UnoReference_SetThrow ) SAL_THROW( (RuntimeException) );
 #endif
 
     /** Cast operator to Reference< XInterface >: Reference objects are binary compatible and
@@ -440,6 +474,26 @@ public:
                distinction to set methods
     */
     inline void set( Any const & rAny, UnoReference_QueryThrow );
+    /** sets the given interface
+        An interface already set will be released.
+        Throws a RuntimeException if the source interface is <NULL/>.
+
+        @param pInterface an interface pointer
+        @param dummy UNO_SET_THROW to force obvious distinction to other set methods
+
+        @since UDK 3.2.8
+    */
+    inline void SAL_CALL set( interface_type * pInterface, UnoReference_SetThrow ) SAL_THROW( (RuntimeException) );
+    /** sets the given interface
+        An interface already set will be released.
+        Throws a RuntimeException if the source interface is <NULL/>.
+
+        @param rRef an interface reference
+        @param dummy UNO_SET_THROW to force obvious distinction to other set methods
+
+        @since UDK 3.2.8
+    */
+    inline void SAL_CALL set( const Reference< interface_type > & rRef, UnoReference_SetThrow ) SAL_THROW( (RuntimeException) );
 
 #endif
 
