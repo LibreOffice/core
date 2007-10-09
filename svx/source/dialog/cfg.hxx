@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:06:25 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:17:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -548,6 +548,19 @@ public:
         return (SvxConfigEntry*) aTopLevelListBox.GetEntryData(
             aTopLevelListBox.GetSelectEntryPos() );
     }
+
+    /** identifies the module in the given frame. If the frame is <NULL/>, a default
+        frame will be determined beforehand.
+
+        If the given frame is <NULL/>, a default frame will be used: The method the active
+        frame of the desktop, then the current frame. If both are <NULL/>,
+        the SfxViewFrame::Current's XFrame is used. If this is <NULL/>, too, an empty string is returned.
+
+        If the given frame is not <NULL/>, or an default frame could be successfully determined, then
+        the ModuleManager is asked for the module ID of the component in the frame.
+    */
+    static ::rtl::OUString
+        GetFrameWithDefaultAndIdentify( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _inout_rxFrame );
 };
 
 class SvxMenuConfigPage : public SvxConfigPage
