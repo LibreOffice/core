@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.218 $
+ *  $Revision: 1.219 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 10:09:05 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:02:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3339,6 +3339,15 @@ File gid_File_Icns_Bundle
     Dir = gid_Dir_Bundle_Contents_Resources;
     Name = "osxicons.zip";
     Styles = (ARCHIVE);
+End
+#endif
+
+#ifdef MACOSX
+File gid_File_Spotlight_Bundle
+    ARCHIVE_TXT_FILE_BODY;
+    Dir = gid_Dir_Bundle_Contents_Library_Spotlight_Bundle_Contents;
+    Name = "mdibundle.zip";
+    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
 End
 #endif
 
