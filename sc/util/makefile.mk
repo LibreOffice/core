@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: hjs $ $Date: 2007-09-07 10:34:18 $
+#   last change: $Author: kz $ $Date: 2007-10-09 15:29:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -278,6 +278,8 @@ SHL9STDLIBS= \
         $(SVTOOLLIB)    \
         $(SVLLIB) \
         $(ISCLIB) \
+        $(VCLLIB) \
+        $(TKLIB) \
 
 
 SHL9DEPN=$(SHL1TARGETN) $(SHL8TARGETN)
