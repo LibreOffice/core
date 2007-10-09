@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:08:57 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,10 @@ throw (::com::sun::star::uno::RuntimeException)
     if ( m_pClient && nOldState != embed::EmbedStates::LOADED && nNewState == embed::EmbedStates::RUNNING )
     {
         // deactivation of object
-        SfxObjectShell::SetWorkingDocument( m_pClient->GetViewShell()->GetObjectShell() );
+        uno::Reference< frame::XModel > xDocument;
+        if ( m_pClient->GetViewShell()->GetObjectShell() )
+            xDocument = m_pClient->GetViewShell()->GetObjectShell()->GetModel();
+        SfxObjectShell::SetWorkingDocument( xDocument );
     }
     else if ( m_pClient && nNewState == embed::EmbedStates::UI_ACTIVE )
     {
