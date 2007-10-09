@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-24 10:43:56 $
+#   last change: $Author: kz $ $Date: 2007-10-09 15:22:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ APP2STDLIBS=$(TOOLSLIB) 		\
 APP3NOSAL=TRUE
 APP3TARGET=vcldemo
 APP3OBJS= \
-    $(OBJ)$/svdem.obj
+    $(OBJ)$/vcldemo.obj
 
 APP3STDLIBS=	$(CPPULIB)			\
                 $(UNOTOOLSLIB)	\
