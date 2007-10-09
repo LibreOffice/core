@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicbox.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:51:26 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:20:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,8 +113,73 @@ Window* LibBoxControl::CreateItemWindow( Window *pParent )
     return new BasicLibBox( pParent, m_xFrame );
 }
 
+//=============================================================================
+//= DocListenerBox
+//=============================================================================
+
+DocListenerBox::DocListenerBox( Window* pParent )
+    :ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) )
+    ,m_aNotifier( *this )
+{
+}
+
+DocListenerBox::~DocListenerBox()
+{
+    m_aNotifier.dispose();
+}
+
+void DocListenerBox::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
+{
+    FillBox();
+}
+
+void DocListenerBox::onDocumentOpened( const ScriptDocument& /*_rDocument*/ )
+{
+    FillBox();
+}
+
+void DocListenerBox::onDocumentSave( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+void DocListenerBox::onDocumentSaveDone( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+void DocListenerBox::onDocumentSaveAs( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+void DocListenerBox::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*/ )
+{
+    FillBox();
+}
+
+void DocListenerBox::onDocumentClosed( const ScriptDocument& /*_rDocument*/ )
+{
+    if ( SFX_APP()->IsInBasicCall() )
+        // Nicht wenn Office beendet
+        FillBox();
+}
+
+void DocListenerBox::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+void DocListenerBox::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/ )
+{
+    // not interested in
+}
+
+//=============================================================================
+//= BasicLibBox
+//=============================================================================
 BasicLibBox::BasicLibBox( Window* pParent, const uno::Reference< frame::XFrame >& rFrame ) :
-    ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) ),
+    DocListenerBox( pParent ),
     m_xFrame( rFrame )
 {
     FillBox();
@@ -124,7 +189,6 @@ BasicLibBox::BasicLibBox( Window* pParent, const uno::Reference< frame::XFrame >
     aCurText = GetEntry( 0 );
     SetSizePixel( Size( 250, 200 ) );
     bIgnoreSelect = FALSE;
-    StartListening( *SFX_APP(), TRUE /* Nur einmal anmelden */ );
 }
 
 
@@ -166,37 +230,7 @@ void __EXPORT BasicLibBox::ReleaseFocus()
     }
 }
 
-
-
-void __EXPORT BasicLibBox::SFX_NOTIFY(  SfxBroadcaster&, const TypeId&,
-                                        const SfxHint& rHint, const TypeId& )
-{
-    if ( rHint.IsA( TYPE( SfxEventHint ) ) )
-    {
-        switch ( ((SfxEventHint&)rHint).GetEventId() )
-        {
-            case SFX_EVENT_CREATEDOC:
-            case SFX_EVENT_OPENDOC:
-            {
-                FillBox();  // IDE reagiert selbst, wenn == aktuelle Lib
-            }
-            break;
-            case SFX_EVENT_SAVEASDOC:
-            {
-                FillBox( TRUE );
-            }
-            break;
-            case SFX_EVENT_CLOSEDOC:
-            {
-                if ( SFX_APP()->IsInBasicCall() )   // Nicht wenn Office beendet
-                    FillBox();
-            }
-            break;
-        }
-    }
-}
-
-void BasicLibBox::FillBox( BOOL bSelect )
+void BasicLibBox::FillBox()
 {
     SetUpdateMode( FALSE );
     bIgnoreSelect = TRUE;
@@ -212,7 +246,7 @@ void BasicLibBox::FillBox( BOOL bSelect )
     InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER );
     InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_SHARE );
 
-    ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( false ) );
+    ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( ScriptDocument::DocumentsSorted ) );
     for (   ScriptDocuments::const_iterator doc = aDocuments.begin();
             doc != aDocuments.end();
             ++doc
@@ -223,14 +257,11 @@ void BasicLibBox::FillBox( BOOL bSelect )
 
     SetUpdateMode( TRUE );
 
-    if ( bSelect )
+    SelectEntry( aCurText );
+    if ( !GetSelectEntryCount() )
     {
-        SelectEntry( aCurText );
-        if ( !GetSelectEntryCount() )
-        {
-            SelectEntryPos( GetEntryCount() );  // gibst es nicht => leer?
-            aCurText = GetSelectEntry();
-        }
+        SelectEntryPos( GetEntryCount() );  // gibst es nicht => leer?
+        aCurText = GetSelectEntry();
     }
     bIgnoreSelect = FALSE;
 }
@@ -387,7 +418,7 @@ Window* LanguageBoxControl::CreateItemWindow( Window *pParent )
 
 BasicLanguageBox::BasicLanguageBox( Window* pParent ) :
 
-    ListBox( pParent, WinBits( WB_BORDER | WB_DROPDOWN ) ),
+    DocListenerBox( pParent ),
 
     m_sNotLocalizedStr( IDEResId( RID_STR_TRANSLATION_NOTLOCALIZED ) ),
     m_sDefaultLanguageStr( IDEResId( RID_STR_TRANSLATION_DEFAULT ) ),
@@ -398,7 +429,6 @@ BasicLanguageBox::BasicLanguageBox( Window* pParent ) :
     SetSizePixel( Size( 210, 200 ) );
 
     FillBox();
-    StartListening( *SFX_APP(), TRUE /* Nur einmal anmelden */ );
 }
 
 BasicLanguageBox::~BasicLanguageBox()
@@ -516,26 +546,6 @@ long BasicLanguageBox::PreNotify( NotifyEvent& rNEvt )
     }
 
     return nDone ? nDone : ListBox::PreNotify( rNEvt );
-}
-
-void BasicLanguageBox::SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& )
-{
-    if ( rHint.IsA( TYPE( SfxEventHint ) ) )
-    {
-        USHORT nEventId = ( (SfxEventHint&)rHint ).GetEventId();
-        switch ( nEventId )
-        {
-            case SFX_EVENT_CREATEDOC:
-            case SFX_EVENT_OPENDOC:
-            case SFX_EVENT_SAVEASDOC:
-            case SFX_EVENT_CLOSEDOC:
-            {
-                if ( nEventId != SFX_EVENT_CLOSEDOC || SFX_APP()->IsInBasicCall() )
-                    FillBox();
-            }
-            break;
-        }
-    }
 }
 
 void BasicLanguageBox::Update( const SfxStringItem* pItem )
