@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 16:00:00 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:13:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,133 +36,123 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SALTIMER_H
-#include <saltimer.h>
-#endif
-#ifndef _SV_SALDATA_HXX
-#include <saldata.hxx>
-#endif
-#ifndef _SV_SALFRAME_H
-#include <salframe.h>
-#endif
+#include "saltimer.h"
+#include "saldata.hxx"
+#include "salframe.h"
+#include "salinst.h"
 
 // =======================================================================
 
+static NSTimer* pRunningTimer = nil;
+static bool bDispatchTimer = false;
+static bool bTimerInDispatch = false;
 
-#define USEMAINTHREAD 1
-
-void ImplSalStartTimer ( ULONG nMS, BOOL bMutex)
+@interface TimerCallbackCaller : NSObject
 {
-    AquaLog( "ImplSalStartTimer\n");
+}
+-(void)timerElapsed:(NSTimer*)pTimer;
+@end
 
-    SalData* pSalData = GetSalData();
-
-    // Store the new timeout
-    pSalData->mnTimerMS = nMS;
-
-    if ( !bMutex )
-        pSalData->mnTimerOrgMS = nMS;
-
-    // Cancel current timer
-    if( pSalData->mbTimerInstalled )
-        RemoveEventLoopTimer( pSalData->mrTimerRef );
-
-    // Install the timer task
-    if( InstallEventLoopTimer( GetMainEventLoop(),
-                               kEventDurationMillisecond * nMS,
-                               kEventDurationForever,
-                               pSalData->mrTimerUPP,
-                               NULL,
-                               &pSalData->mrTimerRef) == noErr )
+@implementation TimerCallbackCaller
+-(void)timerElapsed:(NSTimer*)pTimer
+{
+    if( bDispatchTimer && ! bTimerInDispatch )
     {
-        pSalData->mbTimerInstalled = TRUE;
+        ImplSVData* pSVData = ImplGetSVData();
+        if( pSVData->mpSalTimer )
+        {
+            YIELD_GUARD;
+            bTimerInDispatch = true;
+            pSVData->mpSalTimer->CallCallback();
+            bTimerInDispatch = false;
+        }
+    }
+}
+@end
+
+void ImplSalStartTimer( ULONG nMS )
+{
+    SalData* pSalData = GetSalData();
+    if( pSalData->mpFirstInstance->isNSAppThread() )
+    {
+        bDispatchTimer = true;
+        NSTimeInterval aTI = double(nMS)/1000.0;
+        if( pRunningTimer != nil )
+        {
+            if( [pRunningTimer timeInterval] == aTI )
+                // set new fire date
+                [pRunningTimer setFireDate: [NSDate dateWithTimeIntervalSinceNow: aTI]];
+            else
+            {
+                [pRunningTimer invalidate];
+                pRunningTimer = nil;
+            }
+        }
+        if( pRunningTimer == nil )
+        {
+            pRunningTimer = [NSTimer scheduledTimerWithTimeInterval: aTI
+                                     target: [[[TimerCallbackCaller alloc] init] autorelease]
+                                     selector: @selector(timerElapsed:)
+                                     userInfo: nil
+                                     repeats: YES];
+        }
     }
     else
     {
-        AquaLog( "Could not install timer task!\n");
-        pSalData->mbTimerInstalled = FALSE;
+        // post an event so we can get into the main thread
+        NSPoint aPt = { 0, 0 };
+        NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
+                                   location: aPt
+                                   modifierFlags: 0
+                                   timestamp: [NSDate timeIntervalSinceReferenceDate]
+                                   windowNumber: 0
+                                   context: nil
+                                   subtype: AquaSalInstance::AppStartTimerEvent
+                                   data1: (int)nMS
+                                   data2: 0 ];
+        if( pEvent )
+            [NSApp postEvent: pEvent atStart: YES];
     }
 }
 
-void AquaSalTimerProc ( EventLoopTimerRef theTimer, void * /* userData */)
+void ImplSalStopTimer()
 {
-    AquaLog( "...AquaSalTimerProc...\n");
-
-    SalData* pSalData = GetSalData();
-     ImplSVData* pSVData = ImplGetSVData();
-    AquaSalTimer *pSalTimer = (AquaSalTimer*) pSVData->mpSalTimer;
-
-    if( pSalTimer && !pSalData->mbInTimerProc )
-     {
-        #ifdef USEMAINTHREAD
-        // Send event to the main thread
-        if( ! pSalData->maFrames.empty() )
-            pSalData->maFrames.front()->PostTimerEvent( pSalTimer );
-
-        // FIXME?
-        // fire again using current timeout as this is a single shot timer
-        ImplSalStartTimer( pSalData->mnTimerOrgMS, FALSE );
-        #else
-        // call back directly from timer thread
-         if( ImplSalYieldMutexTryToAcquire() )
-         {
-            pSalData->mbInTimerProc = TRUE;
-             pSalTimer->CallCallback();
-            pSalData->mbInTimerProc = FALSE;
-             ImplSalYieldMutexRelease();
-
-             // fire again using current timeout as this is a single shot timer
-            ImplSalStartTimer( pSalData->mnTimerOrgMS, FALSE );
-         }
-         else
-         {
-             // could not acquire solar mutex, so
-             // fire again with a short delay (10ms)
-            AquaLog( "SHOULD NOT HAPPEN! TIMER: solar mutex not free\n");
-            ImplSalStartTimer( 10, TRUE );
-         }
-        #endif
-    }
+    bDispatchTimer = false;
 }
 
+void AquaSalTimer::handleStartTimerEvent( NSEvent* pEvent )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( pSVData->mpSalTimer )
+    {
+        NSTimeInterval posted = [pEvent timestamp] + NSTimeInterval([pEvent data1])/1000.0;
+        NSTimeInterval current = [NSDate timeIntervalSinceReferenceDate];
+        if( current - posted <= 0.0 )
+            // timer already elapsed since event posted
+            pSVData->mpSalTimer->CallCallback();
+        else
+            ImplSalStartTimer( ULONG( (posted - current) * 1000.0 ) );
+    }
+
+}
 
 AquaSalTimer::AquaSalTimer( )
 {
-    AquaLog( "AquaSalTimer::AquaSalTimer\n");
-    SalData* pSalData = GetSalData();
-
-    pSalData->mbTimerInstalled = FALSE;
-    pSalData->mnTimerMS = 0;
-    pSalData->mnTimerOrgMS = 0;
-    pSalData->mrTimerUPP = NewEventLoopTimerUPP( AquaSalTimerProc );
 }
 
 AquaSalTimer::~AquaSalTimer()
 {
-    AquaLog( "AquaSalTimer::~AquaSalTimer\n");
-
-    SalData* pSalData = GetSalData();
-    if( pSalData->mbTimerInstalled )
-        RemoveEventLoopTimer( pSalData->mrTimerRef );
-
-    DisposeEventLoopTimerUPP( pSalData->mrTimerUPP );
+    ImplSalStopTimer();
 }
 
 void AquaSalTimer::Start( ULONG nMS )
 {
-    ImplSalStartTimer(nMS, FALSE);
+    ImplSalStartTimer( nMS );
 }
 
 void AquaSalTimer::Stop()
 {
-    AquaLog( "AquaSalTimer::Stop\n");
-
-    SalData* pSalData = GetSalData();
-    if( pSalData->mbTimerInstalled )
-     {
-        RemoveEventLoopTimer( pSalData->mrTimerRef );
-        pSalData->mbTimerInstalled = FALSE;
-     }
+    ImplSalStopTimer();
 }
 
 
