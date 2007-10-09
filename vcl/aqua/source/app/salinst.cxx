@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 16:31:03 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:12:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,69 +38,240 @@
 
 #include <stdio.h>
 
-#ifndef _SV_SALDATA_HXX
-#include <saldata.hxx>
-#endif
-#ifndef _SV_SALINST_HXX
-#include <vcl/salinst.hxx>
-#endif
-#ifndef _SV_SALINST_H
-#include <salinst.h>
-#endif
-#ifndef _SV_SALFRAME_H
-#include <salframe.h>
-#endif
-#ifndef _SV_SALOBJ_HXX
-#include <vcl/salobj.hxx>
-#endif
-#ifndef _SV_SALOBJ_H
-#include <salobj.h>
-#endif
-#ifndef _SV_SALSYS_HXX
-#include <vcl/salsys.hxx>
-#endif
-#ifndef _SV_SALSYS_H
-#include <salsys.h>
-#endif
-#ifndef _SV_SALVD_HXX
-#include <vcl/salvd.hxx>
-#endif
-#ifndef _SV_SALVD_H
-#include <salvd.h>
-#endif
-#ifndef _SV_DIALOG_HXX
-#include <vcl/dialog.hxx>
-#endif
-#ifndef _FSYS_HXX
-#include <tools/fsys.hxx>
-#endif
-#ifndef _SV_SALIMESTATUS_HXX
-#include <vcl/salimestatus.hxx>
-#endif
+#include "tools/fsys.hxx"
+#include "osl/process.h"
+#include "rtl/ustrbuf.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/print.h"
+#include "vcl/salimestatus.hxx"
+#include "vcl/window.hxx"
 
-#include <vcl/svapp.hxx>
+#include "saldata.hxx"
+#include "salinst.h"
+#include "salframe.h"
+#include "salobj.h"
+#include "salsys.h"
+#include "salvd.h"
+#include "salsound.h"
+#include "salbmp.h"
+#include "salprn.h"
+#include "salogl.h"
+#include "saltimer.h"
 
-#include <salprn.h>
-#include <vcl/print.h>
-
-#include <salogl.h>
-#include <saltimer.h>
-
-#include <osl/process.h>
-
-#include <aquavclevents.hxx>
-
-#include <premac.h>
+#include "premac.h"
 #include <ApplicationServices/ApplicationServices.h>
-#include <postmac.h>
+#include "postmac.h"
 
 using namespace std;
+
+extern BOOL ImplSVMain();
+
+static BOOL* gpbInit = 0;
+static NSMenu* pDockMenu = nil;
+static bool bNoSVMain = true;
+static bool bLeftMain = false;
 
 // -----------------------------------------------------------------------
 
 // the AppEventList must be available before any SalData/SalInst/etc. objects are ready
 typedef std::list<const ApplicationEvent*> AppEventList;
 static AppEventList aAppEventList;
+
+
+NSMenu* AquaSalInstance::GetDynamicDockMenu()
+{
+    if( ! pDockMenu && ! bLeftMain )
+        pDockMenu = [[NSMenu alloc] initWithTitle: @""];
+    return pDockMenu;
+}
+
+@interface CocoaThreadEnabler : NSObject
+{
+}
+-(void)enableCocoaThreads:(id)param;
+@end
+
+@implementation CocoaThreadEnabler
+-(void)enableCocoaThreads:(id)param
+{
+    // do nothing, this is just to start an NSThread and therefore put
+    // Cocoa into multithread mode
+}
+@end
+
+// our very own application
+@interface VCL_NSApplication : NSApplication
+{
+}
+-(void)sendEvent:(NSEvent*)pEvent;
+-(NSMenu*)applicationDockMenu:(NSApplication *)sender;
+-(MacOSBOOL)application: (NSApplication*) app openFile: (NSString*)file;
+-(void)application: (NSApplication*) app openFiles: (NSArray*)files;
+-(MacOSBOOL)application: (NSApplication*) app printFile: (NSString*)file;
+-(NSApplicationPrintReply)application: (NSApplication *) app printFiles:(NSArray *)files withSettings: (NSDictionary *)printSettings showPrintPanels:(BOOL)bShowPrintPanels;
+-(NSApplicationTerminateReply)applicationShouldTerminate: (NSApplication *) app;
+@end
+
+@implementation VCL_NSApplication
+-(void)sendEvent:(NSEvent*)pEvent
+{
+    NSEventType eType = [pEvent type];
+    if( eType == NSApplicationDefined )
+        GetSalData()->mpFirstInstance->handleAppDefinedEvent( pEvent );
+    else if( eType == NSKeyDown && ([pEvent modifierFlags] & NSCommandKeyMask) != 0 )
+    {
+        NSWindow* pKeyWin = [NSApp keyWindow];
+        if( pKeyWin && [pKeyWin isKindOfClass: [SalFrameWindow class]] )
+        {
+            AquaSalFrame* pFrame = [(SalFrameWindow*)pKeyWin getSalFrame];
+            if( pFrame->mpParent && pFrame->mpParent->GetWindow()->IsInModalMode() )
+            {
+                // dispatch to view directly to avoid the key event being consumed by the menubar
+                [[pKeyWin contentView] keyDown: pEvent];
+                return;
+            }
+        }
+
+    }
+    [super sendEvent: pEvent];
+}
+
+-(NSMenu*)applicationDockMenu:(NSApplication *)sender
+{
+    return AquaSalInstance::GetDynamicDockMenu();
+}
+-(MacOSBOOL)application: (NSApplication*)app openFile: (NSString*)pFile
+{
+    const rtl::OUString aFile( GetOUString( pFile ) );
+    const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
+                                                APPEVENT_OPEN_STRING, aFile );
+    aAppEventList.push_back( pAppEvent );
+    return YES;
+}
+
+-(void)application: (NSApplication*) app openFiles: (NSArray*)files
+{
+    rtl::OUStringBuffer aFileList( 256 );
+
+    NSEnumerator* it = [files objectEnumerator];
+    NSString* pFile = nil;
+
+    while( (pFile = [it nextObject]) != nil )
+    {
+        if( aFileList.getLength() > 0 )
+            aFileList.append( sal_Unicode( APPEVENT_PARAM_DELIMITER ) );
+        aFileList.append( GetOUString( pFile ) );
+    }
+    // we have no back channel here, we have to assume success, in which case
+    // replyToOpenOrPrint does not need to be called according to documentation
+    // [app replyToOpenOrPrint: NSApplicationDelegateReplySuccess];
+    const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
+                                                APPEVENT_OPEN_STRING, aFileList.makeStringAndClear() );
+    aAppEventList.push_back( pAppEvent );
+}
+
+-(MacOSBOOL)application: (NSApplication*)app printFile: (NSString*)pFile
+{
+    const rtl::OUString aFile( GetOUString( pFile ) );
+    const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
+                                                APPEVENT_PRINT_STRING, aFile );
+    aAppEventList.push_back( pAppEvent );
+    return YES;
+}
+-(NSApplicationPrintReply)application: (NSApplication *) app printFiles:(NSArray *)files withSettings: (NSDictionary *)printSettings showPrintPanels:(BOOL)bShowPrintPanels
+{
+    // currently ignores print settings an bShowPrintPanels
+    rtl::OUStringBuffer aFileList( 256 );
+
+    NSEnumerator* it = [files objectEnumerator];
+    NSString* pFile = nil;
+
+    while( (pFile = [it nextObject]) != nil )
+    {
+        if( aFileList.getLength() > 0 )
+            aFileList.append( sal_Unicode( APPEVENT_PARAM_DELIMITER ) );
+        aFileList.append( GetOUString( pFile ) );
+    }
+    const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
+                                                APPEVENT_PRINT_STRING, aFileList.makeStringAndClear() );
+    aAppEventList.push_back( pAppEvent );
+    // we have no back channel here, we have to assume success
+    // correct handling would be NSPrintingReplyLater and then send [app replyToOpenOrPrint]
+    return NSPrintingSuccess;
+}
+
+-(NSApplicationTerminateReply)applicationShouldTerminate: (NSApplication *) app
+{
+    const SalData* pSalData = GetSalData();
+    if( !pSalData->maFrames.empty() )
+    {
+        // we forward the signal; alas we have no answer
+        // we cancel the request; OOo will decide whether is shuts down or not
+        pSalData->maFrames.front()->CallCallback( SALEVENT_SHUTDOWN, NULL );
+        return NSTerminateCancel;
+    }
+    else
+        // no frame left to talk to -> we really should terminate
+        return NSTerminateNow;
+}
+@end
+
+// initialize the cocoa VCL_NSApplication object
+// returns an NSAutoreleasePool that must be released when the event loop begins
+static NSAutoreleasePool* initNSApp()
+{
+    // create our cocoa NSApplication
+    [VCL_NSApplication sharedApplication];
+
+    // put cocoa into multithreaded mode
+    [NSThread detachNewThreadSelector:@selector(enableCocoaThreads:) toTarget:[[CocoaThreadEnabler alloc] init] withObject:nil];
+
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+
+    // activate our delegate methods
+    [NSApp setDelegate: NSApp];
+
+    return pool;
+}
+
+BOOL ImplSVMainHook( BOOL * pbInit )
+{
+    gpbInit = pbInit;
+
+    bNoSVMain = false;
+    NSAutoreleasePool* pool = initNSApp();
+
+    NSPoint aPt = { 0, 0 };
+    NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
+                               location: aPt
+                               modifierFlags: 0
+                               timestamp: 0
+                               windowNumber: 0
+                               context: nil
+                               subtype: AquaSalInstance::AppExecuteSVMain
+                               data1: 0
+                               data2: 0 ];
+    if( pEvent )
+    {
+        [NSApp postEvent: pEvent atStart: NO];
+        [pool release];
+
+        rtl::OUString aExeURL, aExe;
+        osl_getExecutableFile( &aExeURL.pData );
+        osl_getSystemPathFromFileURL( aExeURL.pData, &aExe.pData );
+        rtl::OString aByteExe( rtl::OUStringToOString( aExe, osl_getThreadTextEncoding() ) );
+
+        const char* pArgv[] = { aByteExe.getStr(), NULL };
+        NSApplicationMain( 1, pArgv );
+    }
+    else
+    {
+        [pool release];
+        DBG_ERROR( "NSApplication initialization could not be done" );
+    }
+
+    return TRUE;   // indicate that ImplSVMainHook is implemented
+}
 
 // -----------------------------------------------------------------------
 
@@ -223,18 +394,6 @@ void InitSalMain()
 
 void DeInitSalMain()
 {
-    // Release autorelease pool
-    //VCLAutoreleasePool_Release( hMainAutoreleasePool );
-
-}
-
-// -----------------------------------------------------------------------
-
-void SetFilterCallback( void* pCallback, void* pInst )
-{
-    // SalData *pSalData = GetSalData();
-    //[fheckl]pSalData->mpFirstInstance->mpFilterCallback = pCallback;
-    //[fheckl]pSalData->mpFirstInstance->mpFilterInst = pInst;
 }
 
 // =======================================================================
@@ -299,10 +458,7 @@ void ImplSalYieldMutexRelease()
 {
     AquaSalInstance* pInst = (AquaSalInstance*) GetSalData()->mpFirstInstance;
     if ( pInst )
-    {
-        //GdiFlush();
         pInst->mpSalYieldMutex->release();
-    }
 }
 
 // =======================================================================
@@ -318,18 +474,28 @@ SalInstance* CreateSalInstance()
     else
         SalData::s_pLog = fopen( pLogEnv, "w" );
 
+    // this is the case for not using SVMain
+    // not so good
+    if( bNoSVMain )
+    {
+        NSAutoreleasePool* pool = initNSApp();
+        [pool release];
+    }
+
+    SalData* pSalData = GetSalData();
+    DBG_ASSERT( pSalData->mpFirstInstance == NULL, "more than one instance created" );
     AquaSalInstance* pInst = new AquaSalInstance;
 
-    EventLoopTimerUPP eventLoopTimer = NewEventLoopTimerUPP(AquaSalInstance::TimerEventHandler);
-    InstallEventLoopTimer(GetMainEventLoop(), 1, 0, eventLoopTimer, pInst, &pInst->mEventLoopTimerRef);
-
     // init instance (only one instance in this version !!!)
-    SalData* pSalData = GetSalData();
     pSalData->mpFirstInstance = pInst;
+    // this one is for outside AquaSalInstance::Yield
+    pInst->mpAutoreleasePool = [[NSAutoreleasePool alloc] init];
+    // no focus rects on NWF aqua
     ImplGetSVData()->maNWFData.mbNoFocusRects = true;
     ImplGetSVData()->maNWFData.mbNoBoldTabFocus = true;
     ImplGetSVData()->maNWFData.mbCenteredTabs = true;
     ImplGetSVData()->maNWFData.mbProgressNeedsErase = true;
+    ImplGetSVData()->maGDIData.mbPrinterPullModel = true;
 
     return pInst;
 }
@@ -348,18 +514,12 @@ void DestroySalInstance( SalInstance* pInst )
 
 AquaSalInstance::AquaSalInstance()
 {
-    mpFilterCallback = NULL;
-    mpFilterInst    = NULL;
     mpSalYieldMutex = new SalYieldMutex;
-    mEventLoopTimerRef = NULL;
-    mbForceDispatchPaintEvents = false;
     mpSalYieldMutex->acquire();
-
-    // In order to receive events, we put the application in foreground
-    ProcessSerialNumber psn;
-    GetCurrentProcess(&psn);
-    TransformProcessType(&psn, kProcessTransformToForegroundApplication);
-    SetFrontProcess(&psn);
+    maMainThread = vos::OThread::getCurrentIdentifier();
+    mnMainThreadLevel = 0;
+    mpAutoreleasePool = nil;
+    maUserEventListMutex = osl_createMutex();
 }
 
 // -----------------------------------------------------------------------
@@ -368,36 +528,30 @@ AquaSalInstance::~AquaSalInstance()
 {
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
+    osl_destroyMutex( maUserEventListMutex );
 }
 
 // -----------------------------------------------------------------------
 
-void AquaSalInstance::TimerEventHandler(EventLoopTimerRef inTimer, void* pData)
+void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, USHORT nType, void* pData )
 {
-  AquaSalInstance* pInst = reinterpret_cast<AquaSalInstance*>(pData);
+    osl_acquireMutex( maUserEventListMutex );
+    maUserEvents.push_back( SalUserEvent( pFrame, pData, nType ) );
+    osl_releaseMutex( maUserEventListMutex );
+    // wakeup :Yield
+    NSPoint aPt = { 0, 0 };
+    NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
+                               location: aPt
+                               modifierFlags: 0
+                               timestamp: 0
+                               windowNumber: 0
+                               context: nil
+                               subtype: AquaSalInstance::YieldWakeupEvent
+                               data1: 0
+                               data2: 0 ];
+    if( pEvent )
+        [NSApp postEvent: pEvent atStart: NO];
 
-  if (pInst->mbForceDispatchPaintEvents)
-    {
-      ULONG nCount = 0;
-
-      // Release all locks so that we don't deadlock when we pull pending
-      // events from the event queue
-      nCount = pInst->ReleaseYieldMutex();
-
-      EventRef theEvent;
-      EventTargetRef theTarget = GetEventDispatcherTarget();
-
-      if (ReceiveNextEvent(1, &cOOoSalTimerEvent, 0, true, &theEvent) == noErr)
-    {
-      SendEventToEventTarget(theEvent, theTarget);
-      ReleaseEvent(theEvent);
-    }
-
-      // Reset all locks
-      pInst->AcquireYieldMutex(nCount);
-
-      SetEventLoopTimerNextFireTime(inTimer, 1); // restart timer
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -443,65 +597,129 @@ void AquaSalInstance::AcquireYieldMutex( ULONG nCount )
 
 // -----------------------------------------------------------------------
 
-void AquaSalInstance::StartForceDispatchingPaintEvents()
+bool AquaSalInstance::isNSAppThread() const
 {
-  SetEventLoopTimerNextFireTime(mEventLoopTimerRef, 1);
-  mbForceDispatchPaintEvents = true;
+    return vos::OThread::getCurrentIdentifier() == maMainThread;
 }
 
-void AquaSalInstance::StopForceDispatchingPaintEvents()
+// -----------------------------------------------------------------------
+
+void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
 {
-  mbForceDispatchPaintEvents = false;
+    switch( [pEvent subtype] )
+    {
+    case AppStartTimerEvent:
+        AquaSalTimer::handleStartTimerEvent( pEvent );
+        break;
+    case AppEndLoopEvent:
+        [NSApp stop: NSApp];
+        break;
+    case AppExecuteSVMain:
+    {
+        BOOL bResult = ImplSVMain();
+        if( gpbInit )
+            *gpbInit = bResult;
+        [NSApp stop: NSApp];
+        bLeftMain = true;
+        if( pDockMenu )
+        {
+            [pDockMenu release];
+            pDockMenu = nil;
+        }
+    }
+    break;
+    case YieldWakeupEvent:
+        // do nothing, fall out of Yield
+    break;
+    default:
+        DBG_ERROR( "unhandled NSApplicationDefined event" );
+        break;
+    };
 }
+
+// -----------------------------------------------------------------------
 
 void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
-    ULONG nCount = 0;
     // Release all locks so that we don't deadlock when we pull pending
     // events from the event queue
-    nCount = ReleaseYieldMutex();
-
-    EventTargetRef theTarget = GetEventDispatcherTarget();
-    EventTimeout timeout = bWait ? kEventDurationForever : 0;
-
-    EventRef aLastTimerEvent = NULL;
-    for(;;)
+    bool bDispatchUser = true;
+    while( bDispatchUser )
     {
-        EventRef theEvent;
-        OSStatus eStatus = ReceiveNextEvent( 0, NULL, timeout, kEventRemoveFromQueue, &theEvent );
-        if( eStatus != noErr)
-            break;
-        if( bHandleAllCurrentEvents
-        &&  GetEventClass(theEvent) == cOOoSalUserEventClass
-        &&  GetEventKind(theEvent) == cOOoSalEventTimer )
+        ULONG nCount = ReleaseYieldMutex();
+
+        // get one user event
+        osl_acquireMutex( maUserEventListMutex );
+        SalUserEvent aEvent( NULL, 0, NULL );
+        if( ! maUserEvents.empty() )
         {
-            // ignore any timer event except the last one
-            if( aLastTimerEvent )
-                ReleaseEvent( aLastTimerEvent );
-            aLastTimerEvent = theEvent;
+            aEvent = maUserEvents.front();
+            maUserEvents.pop_front();
         }
         else
-        {
-            //ImplSalYieldMutexAcquire();
-            eStatus = SendEventToEventTarget(theEvent, theTarget);
-            //ImplSalYieldMutexRelease();
+            bDispatchUser = false;
+        osl_releaseMutex( maUserEventListMutex );
 
-            ReleaseEvent(theEvent);
+        AcquireYieldMutex( nCount );
+
+        // dispatch it
+        if( aEvent.mpFrame && AquaSalFrame::isAlive( aEvent.mpFrame ) )
+        {
+            aEvent.mpFrame->CallCallback( aEvent.mnType, aEvent.mpData );
+            // return if only one event is asked for
+            if( ! bHandleAllCurrentEvents )
+                return;
+        }
+    }
+
+    // handle cocoa event queue
+    // cocoa events mye be only handled in the thread the NSApp was created
+    if( isNSAppThread() )
+    {
+        mnMainThreadLevel++;
+
+        // handle available events
+        NSEvent* pEvent = nil;
+        bool bHadEvent = false;
+        do
+        {
+            ULONG nCount = ReleaseYieldMutex();
+
+            pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask untilDate: nil
+                            inMode: NSDefaultRunLoopMode dequeue: YES];
+            if( pEvent )
+            {
+                [NSApp sendEvent: pEvent];
+                bHadEvent = true;
+            }
+            [NSApp updateWindows];
+
+            AcquireYieldMutex( nCount );
+        } while( bHandleAllCurrentEvents && pEvent );
+
+        // if we had no event yet, wait for one if requested
+        if( bWait && ! bHadEvent )
+        {
+            ULONG nCount = ReleaseYieldMutex();
+
+            pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask untilDate: [NSDate distantFuture]
+                            inMode: NSDefaultRunLoopMode dequeue: YES];
+            if( pEvent )
+                [NSApp sendEvent: pEvent];
+            [NSApp updateWindows];
+
+            AcquireYieldMutex( nCount );
         }
 
-        if( !bHandleAllCurrentEvents )
-            break;
-    }
+        mnMainThreadLevel--;
 
-    // send only the latest timer event if any
-    if( aLastTimerEvent )
-    {
-        SendEventToEventTarget( aLastTimerEvent, theTarget );
-        ReleaseEvent( aLastTimerEvent );
+        if( mnMainThreadLevel == 0 )
+        {
+            // flush the autorelease pool
+            [mpAutoreleasePool release];
+            mpAutoreleasePool = [[NSAutoreleasePool alloc] init];
+        }
     }
-
-    // Reset all locks
-    AcquireYieldMutex( nCount );
 
     // we get some apple events way too early
     // before the application is ready to handle them,
@@ -548,14 +766,7 @@ SalFrame* AquaSalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle 
 {
     SalFrame* pFrame = NULL;
 
-    try
-    {
-        pFrame = new AquaSalFrame(pParent, nSalFrameStyle, this);
-    }
-    catch(runtime_error&)
-    {
-        // frame creation failed
-    }
+    pFrame = new AquaSalFrame( pParent, nSalFrameStyle );
     return pFrame;
 }
 
@@ -607,31 +818,27 @@ void AquaSalInstance::DestroyPrinter( SalPrinter* pPrinter )
 
 void AquaSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
-    CFArrayRef  rPrinterList(0);
-    if( PMServerCreatePrinterList( kPMServerLocal, &rPrinterList ) == noErr )
+    NSArray* pNames = [NSPrinter printerNames];
+    NSArray* pTypes = [NSPrinter printerTypes];
+    unsigned int nNameCount = pNames ? [pNames count] : 0;
+    unsigned int nTypeCount = pTypes ? [pTypes count] : 0;
+    DBG_ASSERT( nTypeCount == nNameCount, "type count not equal to printer count" );
+    for( unsigned int i = 0; i < nNameCount; i++ )
     {
-        CFIndex nPrinters = CFArrayGetCount( rPrinterList );
-        for( CFIndex n = 0; n < nPrinters; n++ )
+        NSString* pName = [pNames objectAtIndex: i];
+        NSString* pType = i < nTypeCount ? [pTypes objectAtIndex: i] : nil;
+        if( pName )
         {
-            PMPrinter aPrinter = reinterpret_cast<PMPrinter>(const_cast<void*>(CFArrayGetValueAtIndex( rPrinterList, n )));
+            SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
+            pInfo->maPrinterName    = GetOUString( pName );
+            if( pType )
+                pInfo->maDriver     = GetOUString( pType );
+            pInfo->mnStatus         = 0;
+            pInfo->mnJobs           = 0;
+            pInfo->mpSysData        = NULL;
 
-            SalPrinterQueueInfo* pNewPrinter = new SalPrinterQueueInfo();
-            pNewPrinter->maPrinterName  = GetOUString( PMPrinterGetName( aPrinter ) );
-            pNewPrinter->mnStatus       = 0;
-            pNewPrinter->mnJobs         = 0;
-            // note CFStringRef is a const __CFString *
-            // so void* is appropriate to hold it
-            // however we need a little casting to convince the compiler
-            CFStringRef rID = CFStringCreateCopy( NULL, PMPrinterGetID( aPrinter ) );
-            pNewPrinter->mpSysData =
-                const_cast<void*>(reinterpret_cast<const void*>( rID ));
-
-            pList->Add( pNewPrinter );
-            if( PMPrinterIsDefault( aPrinter ) )
-                maDefaultPrinter = pNewPrinter->maPrinterName;
+            pList->Add( pInfo );
         }
-        if ( rPrinterList )
-            CFRelease( rPrinterList );
     }
 }
 
@@ -645,8 +852,6 @@ void AquaSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
 
 void AquaSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 {
-    if( pInfo->mpSysData )
-        CFRelease( reinterpret_cast<CFStringRef>(pInfo->mpSysData) );
     delete pInfo;
 }
 
@@ -656,18 +861,18 @@ XubString AquaSalInstance::GetDefaultPrinter()
 {
     if( ! maDefaultPrinter.getLength() )
     {
-        CFArrayRef  rPrinterList(0);
-        if( PMServerCreatePrinterList( kPMServerLocal, &rPrinterList ) == noErr )
+        NSPrintInfo* pPI = [NSPrintInfo sharedPrintInfo];
+        DBG_ASSERT( pPI, "no print info" );
+        if( pPI )
         {
-            CFIndex nPrinters = CFArrayGetCount( rPrinterList );
-            for( CFIndex n = 0; n < nPrinters; n++ )
+            NSPrinter* pPr = [pPI printer];
+            DBG_ASSERT( pPr, "no printer in default info" );
+            if( pPr )
             {
-                PMPrinter aPrinter = reinterpret_cast<PMPrinter>(const_cast<void*>(CFArrayGetValueAtIndex( rPrinterList, n )));
-                if( PMPrinterIsDefault( aPrinter ) )
-                    maDefaultPrinter = GetOUString( PMPrinterGetName( aPrinter ) );
+                NSString* pDefName = [pPr name];
+                DBG_ASSERT( pDefName, "printer has no name" );
+                maDefaultPrinter = GetOUString( pDefName );
             }
-            if ( rPrinterList )
-                CFRelease( rPrinterList );
         }
     }
     return maDefaultPrinter;
@@ -794,129 +999,7 @@ SalI18NImeStatus* AquaSalInstance::CreateI18NImeStatus()
     return new MacImeStatus();
 }
 
-// =======================================================================
-
-static OSErr OpenOrPrintDoc( const AppleEvent* pAEvent, bool bPrint )
-{
-    // get the list of document URLs
-    AEDescList aAEDocList;
-    OSErr eErr = AEGetParamDesc( pAEvent, keyDirectObject, typeAEList, &aAEDocList );
-    if( eErr != noErr )
-        return errAEEventNotHandled;
-
-    // prepare the URL-names string for the ApplicationEvent parameter
-    long nFullLength = 0;
-    std::vector<char> aNameBuffer;
-    for( int i = 1;; ++i )
-    {
-        AEKeyword aAEKeyword;
-        DescType aDescType;
-        // get the URL's encoded name length
-        long nNeedLength = 0;
-        if( AEGetNthPtr( &aAEDocList, i, typeFileURL, &aAEKeyword, &aDescType,
-            NULL, 0, &nNeedLength ) != noErr )
-            break;
-        // resize the name buffer for the new URL+delimiter
-        if( nFullLength )
-            aNameBuffer[ nFullLength++ ] = APPEVENT_PARAM_DELIMITER;
-        aNameBuffer.resize( nFullLength + nNeedLength + 1 );
-        // get the URL's encoded name data
-        long nNewLength = 0;
-        if( AEGetNthPtr( &aAEDocList, i, typeFileURL, &aAEKeyword, &aDescType,
-            (void*)&aNameBuffer[nFullLength], nNeedLength, &nNewLength ) != noErr )
-            break;
-        nFullLength += nNewLength;
-        aNameBuffer[ nFullLength ] = '\0';
-    }
-
-    // the AEdescriptor is no longer needed
-    AEDisposeDesc( &aAEDocList );
-
-    // convert the URL names to unicode
-    // TODO: is the original encoding always UTF8?
-    const String aUrlNames( (sal_Char*)&aNameBuffer[0], RTL_TEXTENCODING_UTF8 );
-    // create and send the event to the application
-    // send an open or print event to the application
-    const String aEmptySender;
-    const ApplicationAddress aEmptyAddr;
-    const char* pEvtType = bPrint ? APPEVENT_PRINT_STRING : APPEVENT_OPEN_STRING;
-    const ApplicationEvent* pAppEvent = new ApplicationEvent( aEmptySender, aEmptyAddr, pEvtType, aUrlNames );
-    aAppEventList.push_back( pAppEvent );
-
-    return noErr;
-}
-
-// -----------------------------------------------------------------------
-
-OSErr HandleAEventOpenDoc( const AppleEvent* pAEvent,
-    AppleEvent* /*pAEReply*/, long /*nHandlerRefConstant*/ )
-{
-    return OpenOrPrintDoc( pAEvent, false );
-}
-
-// -----------------------------------------------------------------------
-
-OSErr HandleAEventPrintDoc( const AppleEvent* pAEvent,
-    AppleEvent* /*pAEReply*/, long /*nHandlerRefConstant*/ )
-{
-    return OpenOrPrintDoc( pAEvent, true );
-}
-
-// -----------------------------------------------------------------------
-
-OSErr HandleAEventOpenApp( const AppleEvent* /*pAEvent*/,
-    AppleEvent* /*pAEReply*/, long /*nHandlerRefConstant*/ )
-{
-    const SalData* pSalData = GetSalData();
-    if( !pSalData->maFrames.empty() )
-        pSalData->maFrames.front()->CallCallback( SALEVENT_SHUTDOWN, NULL );
-    return noErr;
-}
-
-// -----------------------------------------------------------------------
-
-OSErr HandleAEventQuitApp( const AppleEvent* pAEvent,
-    AppleEvent* /*pAEReply*/, long /*nHandlerRefConstant*/ )
-{
-    const SalData* pSalData = GetSalData();
-    if( !pSalData->maFrames.empty() )
-        pSalData->maFrames.front()->CallCallback( SALEVENT_SHUTDOWN, NULL );
-    return noErr;
-}
-
-// -----------------------------------------------------------------------
-
-extern void InstallAEHandlers()
-{
-    // check if it is possible to install AppleEvent handlers
-    long nGestaltAttrs;
-    OSStatus eStatus = Gestalt( gestaltAppleEventsAttr, &nGestaltAttrs );
-    if( eStatus != noErr )
-        return;
-    if( ((nGestaltAttrs >> gestaltAppleEventsPresent) & 1) == 0 )
-        return;
-
-    // prepare to handle "open document" events
-    AEEventHandlerUPP aAEHandler = NewAEEventHandlerUPP( HandleAEventOpenDoc );
-    AEInstallEventHandler( kCoreEventClass, kAEOpenDocuments, aAEHandler, 0L, false );
-
-    // prepare to handle "print document" events
-    aAEHandler = NewAEEventHandlerUPP( HandleAEventPrintDoc );
-    AEInstallEventHandler( kCoreEventClass, kAEPrintDocuments, aAEHandler, 0L, false );
-
-    // prepare to handle "open application" events
-    aAEHandler = NewAEEventHandlerUPP( HandleAEventOpenApp );
-    AEInstallEventHandler( kCoreEventClass, kAEOpenApplication, aAEHandler, 0L, false );
-
-    // prepare to handle "quit application" events
-    aAEHandler = NewAEEventHandlerUPP( HandleAEventQuitApp );
-    AEInstallEventHandler( kCoreEventClass, kAEQuitApplication, aAEHandler, 0L, false );
-
-    // TODO: handle other events from the AppleEventManager too
-}
-
 //////////////////////////////////////////////////////////////
-// TODO: are these debug-convenience functions still needed?
 rtl::OUString GetOUString( CFStringRef rStr )
 {
     if( rStr == 0 )
@@ -935,8 +1018,26 @@ rtl::OUString GetOUString( CFStringRef rStr )
     return aRet;
 }
 
+rtl::OUString GetOUString( NSString* pStr )
+{
+    if( ! pStr )
+        return rtl::OUString();
+    int nLen = [pStr length];
+    if( nLen == 0 )
+        return rtl::OUString();
+
+    rtl::OUStringBuffer aBuf( nLen+1 );
+    aBuf.setLength( nLen );
+    [pStr getCharacters: const_cast<sal_Unicode*>(aBuf.getStr())];
+    return aBuf.makeStringAndClear();
+}
+
 CFStringRef CreateCFString( const rtl::OUString& rStr )
 {
     return CFStringCreateWithCharacters(kCFAllocatorDefault, rStr.getStr(), rStr.getLength() );
 }
 
+NSString* CreateNSString( const rtl::OUString& rStr )
+{
+    return [[NSString alloc] initWithCharacters: rStr.getStr() length: rStr.getLength()];
+}
