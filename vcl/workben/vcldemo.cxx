@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vcldemo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 15:56:47 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:22:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,6 +177,11 @@ void MyWin::Paint( const Rectangle& rRect )
         DrawLine( Point(r.nLeft, r.nTop+i), Point(r.nRight, r.nBottom-i) );
     for(int i=0; i<aSz.Width(); i+=15)
         DrawLine( Point(r.nLeft+i, r.nBottom), Point(r.nRight-i, r.nTop) );
+
+    SetTextColor( Color( COL_WHITE ) );
+    Font aFont( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ), Size( 0, 25 ) );
+    SetFont( aFont );
+    DrawText( Point( 20, 30 ), String( RTL_CONSTASCII_USTRINGPARAM( "Just a simple test text" ) ) );
 }
 
 // -----------------------------------------------------------------------
