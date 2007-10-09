@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 16:32:17 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:17:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,14 @@ typedef sal_uInt32      ControlType;
 
 //to draw border of frames natively
 #define CTRL_FRAME              160
+
+// for nodes in listviews
+// used in svtools/source/contnr/svtreebx.cxx
+#define CTRL_LISTNODE           170
+// nets between elements of listviews
+// with nodes
+#define CTRL_LISTNET            171
+
 
 /* Control Parts:
  *
