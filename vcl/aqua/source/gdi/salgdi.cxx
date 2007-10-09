@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:02:18 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:14:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,47 +36,27 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SALCONST_H
-#include <salconst.h>
-#endif
-#ifndef _SV_SALGDI_H
-#include <salgdi.h>
-#endif
-#ifndef _SV_SALBMP_H
-#include <salbmp.h>
-#endif
-#ifndef _SV_SALCOLORUTILS_HXX
-#include <salcolorutils.hxx>
-#endif
-#ifndef _SV_IMPFONT_HXX
-#include <vcl/impfont.hxx>
-#endif
-#ifndef __SUBFONT_H
-#include <psprint/list.h>
-#include <psprint/sft.h>
-#endif
-#ifndef _OSL_FILE_HXX
-#include <osl/file.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX
-#include <vos/mutex.hxx>
-#endif
-#ifndef _OSL_PROCESS_HXX
-#include <osl/process.h>
-#endif
+#include "salconst.h"
+#include "salgdi.h"
+#include "salbmp.h"
+#include "salcolorutils.hxx"
+#include "vcl/impfont.hxx"
+#include "psprint/list.h"
+#include "psprint/sft.h"
+#include "osl/file.hxx"
+#include "vos/mutex.hxx"
+#include "osl/process.h"
 
-#include <vcl/sallayout.hxx>
+#include "vcl/sallayout.hxx"
+#include "salatsuifontutils.hxx"
+#include "vcl/svapp.hxx"
 
-#include <salatsuifontutils.hxx>
+#include "basegfx/range/b2drectangle.hxx"
+#include "basegfx/range/b2irange.hxx"
+#include "basegfx/polygon/b2dpolygon.hxx"
+#include "basegfx/polygon/b2dpolygontools.hxx"
 
-#include <vcl/svapp.hxx>
-
-#include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/range/b2irange.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
-
-#include <basebmp/color.hxx>
+#include "basebmp/color.hxx"
 
 #include <boost/assert.hpp>
 #include <algorithm>
@@ -178,7 +158,7 @@ ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
     if( !ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
         return mpCharMap;
 
-    mpCharMap = new ImplFontCharMap( aCmapResult.mnPairCount, aCmapResult.mpPairCodes );
+    mpCharMap = new ImplFontCharMap( aCmapResult.mnPairCount, aCmapResult.mpPairCodes, aCmapResult.mpStartGlyphs );
     return mpCharMap;
 }
 
@@ -291,11 +271,11 @@ bool ImplMacFontData::HasCJKSupport( void ) const
 // =======================================================================
 
 AquaSalGraphics::AquaSalGraphics()
-    : mrView( 0 )
+    : mpFrame( NULL )
     , mrContext( 0 )
-    , mrWindow( 0 )
-    , mnDPIX( 72 )          // since Quartz only knows point units instead of pixel units
-    , mnDPIY( 72 )          // faking the resolution to point==pixel is beneficial
+    , mnRealDPIX( 0 )
+    , mnRealDPIY( 0 )
+    , mfFakeDPIScale( 1.0 )
     , mrClippingPath( 0 )
     , mbXORMode( false )
     , mpMacFontData( NULL )
@@ -305,8 +285,10 @@ AquaSalGraphics::AquaSalGraphics()
     , mbPrinter( false )
     , mbVirDev( false )
     , mbWindow( false )
-    , mbScreen( false )
 {
+    long nDummyX, nDummyY;
+    GetResolution( nDummyX, nDummyY );
+
     // init colors
     for(int i=0; i<3; i++)
     {
@@ -332,7 +314,7 @@ AquaSalGraphics::~AquaSalGraphics()
     CGPathRelease( mrClippingPath );
     ATSUDisposeStyle( maATSUStyle );
 
-    if( mrContext && mrWindow != 0 )
+    if( mrContext && mbWindow )
     {
         // destroy backbuffer bitmap context that we created ourself
         CFRelease( mrContext );
@@ -350,12 +332,36 @@ CGDirectDisplayID AquaSalGraphics::GetWindowDisplayID() const
     return CGMainDisplayID();
 }
 
-// -----------------------------------------------------------------------
+// ----------------------------------------------
+
+static void GetDisplayResolution( long& rDPIX, long& rDPIY )
+{
+    // calculate resolution from physical size and pixel count
+    const CGDirectDisplayID nDisplayID = CGMainDisplayID();
+    const CGSize aSize = CGDisplayScreenSize( nDisplayID ); // => result is in millimeters
+    rDPIX = static_cast<long>((CGDisplayPixelsWide( nDisplayID ) * 25.4) / aSize.width);
+    rDPIY = static_cast<long>((CGDisplayPixelsHigh( nDisplayID ) * 25.4) / aSize.height);
+
+    // equalize x- and y-resolution if they are close enough to prevent unneeded font stretching
+    if( (rDPIX != rDPIY)
+    &&  (10*rDPIX < 13*rDPIY) && (13*rDPIX > 10*rDPIY) )
+    {
+        // also adjust to the next common resolution 72,96,120,144,...
+        const long nCommonDPI = (rDPIX >= rDPIY) ? rDPIX : rDPIY;
+        rDPIX = rDPIY = ((nCommonDPI + 12) / 24) * 24;
+    }
+}
 
 void AquaSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 {
-    rDPIX = mnDPIX;
-    rDPIY = mnDPIY;
+    if( !mnRealDPIY )
+    {
+        GetDisplayResolution( mnRealDPIX, mnRealDPIY );
+        mfFakeDPIScale = 1.0;
+    }
+
+    rDPIX = static_cast<long>(mfFakeDPIScale * mnRealDPIX);
+    rDPIY = static_cast<long>(mfFakeDPIScale * mnRealDPIY);
 }
 
 // -----------------------------------------------------------------------
@@ -590,8 +596,8 @@ void AquaSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
         else
         {
             CGContextBeginPath( mrContext );
-            CGContextMoveToPoint( mrContext, nX1, nY1 );
-            CGContextAddLineToPoint( mrContext, nX2, nY2 );
+            CGContextMoveToPoint( mrContext, static_cast<float>(nX1)+0.5, static_cast<float>(nY1)+0.5 );
+            CGContextAddLineToPoint( mrContext, static_cast<float>(nX2)+0.5, static_cast<float>(nY2)+0.5 );
             CGContextDrawPath( mrContext, kCGPathStroke );
         }
     }
@@ -635,6 +641,13 @@ void AquaSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
         else
         {
             CGRect aRect( CGRectMake(nX, nY, nWidth, nHeight) );
+            if( ! IsPenTransparent() )
+            {
+                aRect.origin.x      += 0.5;
+                aRect.origin.y      += 0.5;
+                aRect.size.width    -= 1;
+                aRect.size.height -= 1;
+            }
 
             if( ! IsBrushTransparent() )
                 CGContextFillRect( mrContext, aRect );
@@ -673,6 +686,12 @@ static void getBoundRect( ULONG nPoints, const SalPoint *pPtAry, long &rX, long&
     rHeight = nY2 - nY1 + 1;
 }
 
+static inline void alignLinePoint( const SalPoint* i_pIn, float& o_fX, float& o_fY )
+{
+    o_fX = static_cast<float>(i_pIn->mnX ) + 0.5;
+    o_fY = static_cast<float>(i_pIn->mnY ) + 0.5;
+}
+
 void AquaSalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 {
     if( (nPoints > 1) && CheckContext() )
@@ -696,11 +715,17 @@ void AquaSalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
         }
         else
         {
+            float fX, fY;
+
             CGContextBeginPath( mrContext );
-            CGContextMoveToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
+            alignLinePoint( pPtAry, fX, fY );
+            CGContextMoveToPoint( mrContext, fX, fY );
             pPtAry++;
             for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
-                CGContextAddLineToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
+            {
+                alignLinePoint( pPtAry, fX, fY );
+                CGContextAddLineToPoint( mrContext, fX, fY );
+            }
             CGContextDrawPath( mrContext, kCGPathStroke );
         }
 
@@ -712,20 +737,39 @@ void AquaSalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 
 static void ImplDrawPolygon( CGContextRef& xContext, ULONG nPoints, const SalPoint *pPtAry, float* pFillColor, float* pLineColor )
 {
-    CGContextBeginPath( xContext );
-    CGContextMoveToPoint( xContext, pPtAry->mnX, pPtAry->mnY );
-    pPtAry++;
-    for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
-        CGContextAddLineToPoint( xContext, pPtAry->mnX, pPtAry->mnY );
+    CGPathDrawingMode eMode;
+    if( pFillColor[3] > 0.0 && pLineColor[3] > 0.0 )
+        eMode = kCGPathEOFillStroke;
+    else if( pLineColor[3] > 0.0 )
+        eMode = kCGPathStroke;
+    else if( pFillColor[3] > 0.0 )
+        eMode = kCGPathEOFill;
+    else
+        return;
 
-    if( pFillColor[3] > 0.0 )
-    {
-        CGContextClosePath(xContext);
-        CGContextDrawPath( xContext, kCGPathEOFill );
-    }
+    CGContextBeginPath( xContext );
 
     if( pLineColor[3] > 0.0 )
-        CGContextDrawPath( xContext, kCGPathStroke );
+    {
+        float fX, fY;
+        alignLinePoint( pPtAry, fX, fY );
+        CGContextMoveToPoint( xContext, fX, fY );
+        pPtAry++;
+        for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
+        {
+            alignLinePoint( pPtAry, fX, fY );
+            CGContextAddLineToPoint( xContext, fX, fY );
+        }
+    }
+    else
+    {
+        CGContextMoveToPoint( xContext, pPtAry->mnX, pPtAry->mnY );
+        pPtAry++;
+        for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
+            CGContextAddLineToPoint( xContext, pPtAry->mnX, pPtAry->mnY );
+    }
+
+    CGContextDrawPath( xContext, eMode );
 }
 
 void AquaSalGraphics::drawPolygon( ULONG nPoints, const SalPoint *pPtAry )
@@ -853,17 +897,41 @@ void AquaSalGraphics::drawPolyPolygon( ULONG nPolyCount, const ULONG *pPoints, P
                 return;
 
             CGContextBeginPath( mrContext );
-            for( ULONG nPoly = 0; nPoly < nPolyCount; nPoly++ )
+            if( mpLineColor[ 3 ] > 0.0 )
             {
-                const ULONG nPoints = pPoints[nPoly];
-                if( nPoints > 1 )
+                for( ULONG nPoly = 0; nPoly < nPolyCount; nPoly++ )
                 {
-                    const SalPoint *pPtAry = ppPtAry[nPoly];
-                    CGContextMoveToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
-                    pPtAry++;
-                    for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
-                        CGContextAddLineToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
-                    CGContextClosePath(mrContext);
+                    const ULONG nPoints = pPoints[nPoly];
+                    if( nPoints > 1 )
+                    {
+                        const SalPoint *pPtAry = ppPtAry[nPoly];
+                        float fX, fY;
+                        alignLinePoint( pPtAry, fX, fY );
+                        CGContextMoveToPoint( mrContext, fX, fY );
+                        pPtAry++;
+                        for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
+                        {
+                            alignLinePoint( pPtAry, fX, fY );
+                            CGContextAddLineToPoint( mrContext, fX, fY );
+                        }
+                        CGContextClosePath(mrContext);
+                    }
+                }
+            }
+            else
+            {
+                for( ULONG nPoly = 0; nPoly < nPolyCount; nPoly++ )
+                {
+                    const ULONG nPoints = pPoints[nPoly];
+                    if( nPoints > 1 )
+                    {
+                        const SalPoint *pPtAry = ppPtAry[nPoly];
+                        CGContextMoveToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
+                        pPtAry++;
+                        for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
+                            CGContextAddLineToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
+                        CGContextClosePath(mrContext);
+                    }
                 }
             }
 
@@ -1042,17 +1110,12 @@ void AquaSalGraphics::drawMask( const SalTwoRect* pPosAry, const SalBitmap& rSal
 
 SalBitmap* AquaSalGraphics::getBitmap( long  nX, long  nY, long  nDX, long  nDY )
 {
-    AquaSalBitmap* pBitmap = 0;
-    //from the win32 implementation in salgdi2.cxx
-    //prevent OOo from crashing when width and height are negative
-    //[FIXME] find a better way to prevent calc from crashing when width and height are negative
-    nDX = labs( nDX );
-    nDY = labs( nDY );
+    AquaSalBitmap* pBitmap = NULL;
 
     if( mrContext )
     {
         pBitmap = new AquaSalBitmap;
-        if( !pBitmap->Create( mrContext, nX, nY, nDX, nDY, mrWindow == 0 ) )
+        if( !pBitmap->Create( mrContext, nX, nY, nDX, nDY, ! mbWindow ) )
         {
             delete pBitmap;
             pBitmap = 0;
@@ -1221,6 +1284,12 @@ bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
         else
             return false;
 
+        CGRect aRect;
+        aRect.origin.x    = static_cast<float>(nX);
+        aRect.origin.y    = static_cast<float>(nY);
+        aRect.size.width  = nWidth-1;
+        aRect.size.height = nHeight-1;
+
         // save the current state
         CGContextSaveGState(mrContext);
 
@@ -1240,15 +1309,12 @@ bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
             mpLineColor[3] = ((float)255-nTransparency) / 255;
             CGContextSetStrokeColor( mrContext, mpLineColor );
             mpLineColor[3] = fOldLineAlpha;
+
+            aRect.origin.x += 0.5;
+            aRect.origin.y += 0.5;
         }
 
-
         CGContextBeginPath( mrContext );
-        CGRect aRect;
-        aRect.origin.x    = nX;
-        aRect.origin.y    = nY+1;
-        aRect.size.width  = nWidth-1;
-        aRect.size.height = nHeight-1;
         CGContextAddRect( mrContext, aRect );
         CGContextDrawPath( mrContext, eMode );
 
@@ -1315,7 +1381,7 @@ void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
 
     // convert quartz units to pixel units
     // please see the comment in AquaSalGraphics::SetFont() for details
-    const double fPixelSize = (mfFontScale * fPointSize); // * (mnDpiY / 72.0);
+    const double fPixelSize = (mfFontScale * mfFakeDPIScale * fPointSize);
     pMetric->mnAscent       = +(aMetrics.ascent  * fPixelSize + 0.5);
     pMetric->mnDescent      = -(aMetrics.descent * fPixelSize + 0.5);
     pMetric->mnExtLeading   = +(aMetrics.leading * fPixelSize + 0.5);
@@ -1468,13 +1534,7 @@ BOOL AquaSalGraphics::GetGlyphOutline( long nIndex, basegfx::B2DPolyPolygon& )
 
 long AquaSalGraphics::GetGraphicsWidth() const
 {
-    if( mrWindow )
-    {
-        Rect windowBounds;
-        GetWindowPortBounds ( mrWindow, &windowBounds);
-        return windowBounds.right - windowBounds.left;
-    }
-    else if( mrContext )
+    if( mrContext && (mbWindow || mbVirDev) )
     {
         return CGBitmapContextGetWidth( mrContext );
     }
@@ -1519,24 +1579,18 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
     ImplMacFontData* pMacFont = static_cast<ImplMacFontData*>( pReqFont->mpFontData );
     mpMacFontData = pMacFont;
 
-    // Set Style Attributes (i.e. font parameters)
-
-    // convert pixel units to typographic point
-    // for the display's forced-72dpi display this is 1:1
-    // the printer reports >>72dpi to OOo's independent layer though
-    // and sets to transformation matrix scale to (72/dpi)
-    // but Quartz wants the size in points, so 1:1 is also appropriate here
-    double fPointHeight = pReqFont->mnHeight; // * (72 / mnDPIY);
-    // watch out for Fixed16.16 overflows
-    static const double fMaxHeight = 144.0;
-    if( fPointHeight <= fMaxHeight )
+    // convert pixel units (as seen by upper layers) to typographic point units
+    double fScaledAtsHeight = pReqFont->mnHeight;
+    // avoid Fixed16.16 overflows by limiting the ATS font size
+    static const double fMaxAtsHeight = 144.0;
+    if( fScaledAtsHeight <= fMaxAtsHeight )
         mfFontScale = 1.0;
     else
     {
-        mfFontScale = fPointHeight / fMaxHeight;
-        fPointHeight = fMaxHeight;
+        mfFontScale = fScaledAtsHeight / fMaxAtsHeight;
+        fScaledAtsHeight = fMaxAtsHeight;
     }
-    Fixed fSize = FloatToFixed( fPointHeight );
+    Fixed fFixedSize = FloatToFixed( fScaledAtsHeight );
     // enable bold-emulation if needed
     Boolean bFakeBold = FALSE;
     if( (pReqFont->GetWeight() >= WEIGHT_BOLD)
@@ -1554,7 +1608,10 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
     if( pReqFont->mbNonAntialiased )
         nStyleRenderingOptions |= kATSStyleNoAntiAliasing;
 
+    // prepare ATS-fontid as type matching to the kATSUFontTag request
     ATSUFontID nFontID = static_cast<ATSUFontID>(pMacFont->GetFontId());
+
+    // update ATSU style attributes with requested font parameters
 
     const ATSUAttributeTag aTag[] =
     {
@@ -1568,7 +1625,7 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
     const ByteCount aValueSize[] =
     {
         sizeof(ATSUFontID),
-        sizeof(fSize),
+        sizeof(fFixedSize),
         sizeof(bFakeBold),
         sizeof(bFakeItalic),
         sizeof(nStyleRenderingOptions)
@@ -1576,17 +1633,17 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
 
     const ATSUAttributeValuePtr aValue[] =
     {
-        &nFontID,       // the original font id
-        &fSize,         // the requested attributes
+        &nFontID,
+        &fFixedSize,
         &bFakeBold,
         &bFakeItalic,
         &nStyleRenderingOptions
     };
 
-    OSStatus err = ATSUSetAttributes( maATSUStyle,
+    OSStatus eStatus = ATSUSetAttributes( maATSUStyle,
                              sizeof(aTag) / sizeof(ATSUAttributeTag),
                              aTag, aValueSize, aValue );
-    DBG_ASSERT( (err==noErr), "AquaSalGraphics::SetFont() : Could not set font attributes!\n");
+    DBG_ASSERT( (eStatus==noErr), "AquaSalGraphics::SetFont() : Could not set font attributes!\n");
 
     // prepare font stretching
     const ATSUAttributeTag aMatrixTag = kATSUFontMatrixTag;
@@ -1599,8 +1656,8 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
         CGAffineTransform aMatrix = CGAffineTransformMakeScale( fStretch, 1.0F );
         const ATSUAttributeValuePtr aAttr = &aMatrix;
         const ByteCount aMatrixBytes = sizeof(aMatrix);
-        err = ATSUSetAttributes( maATSUStyle, 1, &aMatrixTag, &aMatrixBytes, &aAttr );
-        DBG_ASSERT( (err==noErr), "AquaSalGraphics::SetFont() : Could not set font matrix\n");
+        eStatus = ATSUSetAttributes( maATSUStyle, 1, &aMatrixTag, &aMatrixBytes, &aAttr );
+        DBG_ASSERT( (eStatus==noErr), "AquaSalGraphics::SetFont() : Could not set font matrix\n");
     }
 
     // prepare font rotation
