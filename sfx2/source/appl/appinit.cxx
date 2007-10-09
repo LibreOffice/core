@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:39:40 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:31:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,6 +373,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVEDOCFAILED,       String(), SfxObjectShell::GetEventNames_Impl()[23] );
     SfxEventConfiguration::RegisterEvent(SFX_EVENT_SAVETODOCFAILED,     String(), SfxObjectShell::GetEventNames_Impl()[24] );
     SfxEventConfiguration::RegisterEvent(SFX_HINT_TITLECHANGED,         String(), SfxObjectShell::GetEventNames_Impl()[25] );
+    SfxEventConfiguration::RegisterEvent(SFX_HINT_MODECHANGED,          String(), SfxObjectShell::GetEventNames_Impl()[26] );
 
     // Subklasse initialisieren
     pAppData_Impl->bDowning = sal_False;
