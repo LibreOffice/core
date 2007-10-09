@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>English</string>
+    <key>CFBundleDocumentTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>MDImporter</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>org.openoffice.text</string>
+                <string>org.oasis.opendocument.text</string>
+                <string>org.openoffice.spreadsheet</string>
+                <string>org.oasis.opendocument.spreadsheet</string>
+                <string>org.openoffice.presentation</string>
+                <string>org.oasis.opendocument.presentation</string>
+                <string>org.openoffice.graphics</string>
+                <string>org.oasis.opendocument.graphics</string>
+                <string>org.openoffice.text-master</string>
+                <string>org.oasis.opendocument.text-master</string>
+                <string>org.openoffice.formula</string>
+                <string>org.oasis.opendocument.formula</string>
+                <string>org.openoffice.text-template</string>
+                <string>org.oasis.opendocument.text-template</string>
+                <string>org.openoffice.spreadsheet-template</string>
+                <string>org.oasis.opendocument.spreadsheet-template</string>
+                <string>org.openoffice.presentation-template</string>
+                <string>org.oasis.opendocument.presentation-template</string>
+                <string>org.openoffice.graphics-template</string>
+                <string>org.oasis.opendocument.graphics-template</string>
+                <string>org.oasis.opendocument.database</string>
+                <string>org.oasis.opendocument.chart</string>
+            </array>
+        </dict>
+    </array>
+    <key>CFBundleExecutable</key>
+    <string>OOoSpotlightImporter</string>
+    <key>CFBundleName</key>
+    <string>OOoSpotlightImporter</string>
+    <key>CFBundleIconFile</key>
+    <string></string>
+    <key>CFBundleIdentifier</key>
+    <string>org.openoffice.mdimporter</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+    <key>CFPlugInDynamicRegisterFunction</key>
+    <string></string>
+    <key>CFPlugInDynamicRegistration</key>
+    <string>NO</string>
+    <key>CFPlugInFactories</key>
+    <dict>
+        <key>A3FCC88D-B9A6-4364-8B93-92123C8A2D18</key>
+        <string>MetadataImporterPluginFactory</string>
+    </dict>
+    <key>CFPlugInTypes</key>
+    <dict>
+        <key>8B08C4BF-415B-11D8-B3F9-0003936726FC</key>
+        <array>
+            <string>A3FCC88D-B9A6-4364-8B93-92123C8A2D18</string>
+        </array>
+    </dict>
+    <key>CFPlugInUnloadFunction</key>
+    <string></string>
+    
+    <!-- Type declarations -->
+    <key>UTExportedTypeDeclarations</key>
+    <array>
+        <!-- Writer documents -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.openoffice.text</string>
+            <key>UTTypeDescription</key>
+            <string>OpenOffice.org 1.0 Text</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>sxw</string>
+                    <string>sdw</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.oasis.opendocument.text</string>
+            <key>UTTypeDescription</key>
+            <string>OpenDocument Text</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>odt</string>
+                </array>
+            </dict>
+        </dict>
+        
+        <!-- Calc documents -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.openoffice.spreadsheet</string>
+            <key>UTTypeDescription</key>
+            <string>OpenOffice.org 1.0 Spreadsheet</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>sxc</string>
+                    <string>sdc</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.oasis.opendocument.spreadsheet</string>
+            <key>UTTypeDescription</key>
+            <string>OpenDocument Spreadsheet</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>ods</string>
+                </array>
+            </dict>
+        </dict>
+
+        <!-- Impress documents -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.openoffice.presentation</string>
+            <key>UTTypeDescription</key>
+            <string>OpenOffice.org 1.0 Presentation</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>sxi</string>
+                    <string>sdd</string>
+                    <string>sdp</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.oasis.opendocument.presentation</string>
+            <key>UTTypeDescription</key>
+            <string>OpenDocument Presentation</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>odp</string>
+                </array>
+            </dict>
+        </dict>
+
+        <!-- Draw documents -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.openoffice.graphics</string>
+            <key>UTTypeDescription</key>
+            <string>OpenOffice.org 1.0 Drawing</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>sxd</string>
+                    <string>sda</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.oasis.opendocument.graphics</string>
+            <key>UTTypeDescription</key>
+            <string>OpenDocument Drawing</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>odg</string>
+                </array>
+            </dict>
+        </dict>
+
+        <!-- Text master documents -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.openoffice.text-master</string>
+            <key>UTTypeDescription</key>
+            <string>OpenOffice.org 1.0 Master</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>sxg</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.oasis.opendocument.text-master</string>
+            <key>UTTypeDescription</key>
+            <string>OpenDocument Master</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>odm</string>
+                </array>
+            </dict>
+        </dict>
+
+        <!-- Math documents -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.openoffice.formula</string>
+            <key>UTTypeDescription</key>
+            <string>OpenOffice.org 1.0 Formula</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>sxm</string>
+                    <string>smf</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.oasis.opendocument.formula</string>
+            <key>UTTypeDescription</key>
+            <string>OpenDocument Formula</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>odf</string>
+                </array>
+            </dict>
+        </dict>
+
+        <!-- Text template documents -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.openoffice.text-template</string>
+            <key>UTTypeDescription</key>
+            <string>OpenOffice.org 1.0 Text Template</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>stw</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.oasis.opendocument.text-template</string>
+            <key>UTTypeDescription</key>
+            <string>OpenDocument Text Template</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>ott</string>
+                </array>
+            </dict>
+        </dict>
+
+        <!-- Spreadsheet template documents -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.openoffice.spreadsheet-template</string>
+            <key>UTTypeDescription</key>
+            <string>OpenOffice.org 1.0 Spreadsheet Template</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>stc</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.oasis.opendocument.spreadsheet-template</string>
+            <key>UTTypeDescription</key>
+            <string>OpenDocument Spreadsheet Template</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>ots</string>
+                </array>
+            </dict>
+        </dict>
+
+        <!-- Presentation template documents -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.openoffice.presentation-template</string>
+            <key>UTTypeDescription</key>
+            <string>OpenOffice.org 1.0 Presentation Template</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>sti</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.oasis.opendocument.presentation-template</string>
+            <key>UTTypeDescription</key>
+            <string>OpenDocument Presentation Template</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>otp</string>
+                </array>
+            </dict>
+        </dict>
+
+        <!-- Drawing template documents -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.openoffice.graphics-template</string>
+            <key>UTTypeDescription</key>
+            <string>OpenOffice.org 1.0 Drawing Template</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>std</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.oasis.opendocument.graphics-template</string>
+            <key>UTTypeDescription</key>
+            <string>OpenDocument Drawing Template</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>otg</string>
+                </array>
+            </dict>
+        </dict>
+
+        <!-- Base documents -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.oasis.opendocument.database</string>
+            <key>UTTypeDescription</key>
+            <string>OpenDocument Database</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>odb</string>
+                </array>
+            </dict>
+        </dict>
+
+        <!-- Chart documents -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>org.oasis.opendocument.chart</string>
+            <key>UTTypeDescription</key>
+            <string>OpenDocument Chart</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+                <string>public.content</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>odc</string>
+                </array>
+            </dict>
+        </dict>
+
+    </array>
+    
+</dict>
+</plist>
