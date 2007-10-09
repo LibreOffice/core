@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:21:40 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:04:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1824,7 +1824,37 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
                 USHORT nStyle = 0;
                 if ( !IsEnabled() )
                     nStyle |= IMAGE_DRAW_DISABLE;
-                DrawImage( aPos, *pImg ,nStyle);
+
+                //native
+                BOOL bNativeOK = FALSE;
+                if ( IsNativeControlSupported( CTRL_LISTNODE, PART_ENTIRE_CONTROL) )
+                {
+                    ImplControlValue    aControlValue;
+                    Region            aCtrlRegion( Rectangle(aPos,  pImg->GetSizePixel() ) );
+                    ControlState        nState = 0;
+
+                    if ( IsEnabled() )  nState |= CTRL_STATE_ENABLED;
+
+                    if ( IsExpanded(pEntry) )
+                        aControlValue.setTristateVal( BUTTONVALUE_ON );//expanded node
+                    else
+                    {
+                        if( (!pEntry->HasChilds()) && pEntry->HasChildsOnDemand() &&
+                            (!(pEntry->GetFlags() & SV_ENTRYFLAG_HAD_CHILDREN)) &&
+                            pImp->GetDontKnowNodeBmp().GetSizePixel().Width() )
+                            aControlValue.setTristateVal( BUTTONVALUE_DONTKNOW );//dont know
+                        else
+                            aControlValue.setTristateVal( BUTTONVALUE_OFF );//collapsed node
+                    }
+
+                    bNativeOK = DrawNativeControl( CTRL_LISTNODE, PART_ENTIRE_CONTROL,
+                                            aCtrlRegion, nState, aControlValue, rtl::OUString() );
+                }
+
+                if( !bNativeOK) {
+                //non native
+                    DrawImage( aPos, *pImg ,nStyle);
+                }
             }
         }
     }
