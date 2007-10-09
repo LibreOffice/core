@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:58:36 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:09:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,31 +36,20 @@
 #ifndef _SV_SALGDI_H
 #define _SV_SALGDI_H
 
-#include <premac.h>
+#include "premac.h"
 #include <ApplicationServices/ApplicationServices.h>
-#include <postmac.h>
+#include "postmac.h"
 
-#ifndef _SV_SV_H
-#include <vcl/sv.h>
-#endif
+#include "vcl/sv.h"
+#include "vcl/outfont.hxx"
+#include "vcl/salgdi.hxx"
+#include "aquavcltypes.h"
 
-#ifndef _SV_OUTFONT_HXX
-#include <vcl/outfont.hxx>
-#endif
-
-#ifndef _SV_SALGDI_HXX
-#include <vcl/salgdi.hxx>
-#endif
-
-#ifndef _AQUAVCLTYPES_H
-#include <aquavcltypes.h>
-#endif
+#include "basebmp/bitmapdevice.hxx"
 
 #include <vector>
 
-#include <basebmp/bitmapdevice.hxx>
-
-#include <salsys.h>
+class AquaSalFrame;
 class AquaSalBitmap;
 class ImplDevFontAttributes;
 
@@ -96,20 +85,21 @@ private:
 // -------------------
 // - AquaSalGraphics -
 // -------------------
-
 class AquaSalGraphics : public SalGraphics
 {
     friend class ATSLayout;
 protected:
-    /// VCLVIEW
-    CarbonViewRef                           mrView;
+    AquaSalFrame*                           mpFrame;
     /// graphics context for Quartz 2D
     CGContextRef                            mrContext;
-    /// Window if this is a Window graphics
-    CarbonWindowRef                         mrWindow;
-    /// resolution of this graphics (72 on window and virdev, device dependent on printer)
-    long                                    mnDPIX;
-    long                                    mnDPIY;
+    /// device resolution of this graphics
+    long                                    mnRealDPIX;
+    long                                    mnRealDPIY;
+    /// some graphics implementations (e.g. AquaSalInfoPrinter) scale
+    /// everything down by a factor (see SetupPrinterGraphics for details)
+    /// so we have to compensate for it with the inverse factor
+    double                                  mfFakeDPIScale;
+
     /// memory for graphics bitmap context (window or virdev)
     boost::shared_array< sal_uInt8 >        maContextMemory;
     /// basebmp::BitmapDevice used for XOR rendering
@@ -129,12 +119,12 @@ protected:
     bool                                    mbXORMode;
 
     // Device Font settings
-    const ImplMacFontData* mpMacFontData;
-    /// style object which carries all font attributes
+     const ImplMacFontData*                  mpMacFontData;
+    /// ATSU style object which carries all font attributes
     ATSUStyle                               maATSUStyle;
     /// text rotation as ATSU angle
     Fixed                                   mnATSUIRotation;
-    /// allows text measurements for huge font sizes
+    /// workaround to prevent ATSU overflows for huge font sizes
     float                                   mfFontScale;
     /// allows text to be rendered without antialiasing
     bool                                    mbNonAntialiasedText;
@@ -147,8 +137,7 @@ protected:
     bool                                    mbVirDev;
     /// is this a window graphics
     bool                                    mbWindow;
-    /// is this graphics screen compatible
-    bool                                    mbScreen;
+
 private:
     /** returns the display id this window is mostly visible on */
     CGDirectDisplayID   GetWindowDisplayID() const;
@@ -159,20 +148,18 @@ public:
     bool                IsPenTransparent() const        { return (mpLineColor[3] == 0.0); }
     bool                IsBrushTransparent() const      { return (mpFillColor[3] == 0.0); }
 
-    void                SetWindowGraphics( CarbonViewRef rView, CarbonWindowRef rWindow, bool bScreenCompatible );
-    void                SetPrinterGraphics( CGContextRef xContext, long nDPIX, long nDPIY );
+    void                SetWindowGraphics( AquaSalFrame* pFrame );
+    void                SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY, double fFakeScale );
     void                SetVirDevGraphics( CGContextRef xContext, bool bSCreenCompatible );
 
     bool                IsWindowGraphics()      const   { return mbWindow; }
     bool                IsPrinterGraphics()     const   { return mbPrinter; }
     bool                IsVirDevGraphics()      const   { return mbVirDev; }
-    bool                IsScreenCompatible()    const   { return mbScreen; }
 
     void                ImplDrawPixel( long nX, long nY, float pColor[] ); // helper to draw single pixels
 
-    void                Flush();
     bool                CheckContext();
-    void                UpdateWindow();
+    void                UpdateWindow( NSGraphicsContext* pContext );
     void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
     void                SetState();
