@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impprn.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:11:14 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:19:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,9 @@
 #include <vcl/impprn.hxx>
 #endif
 
+#include <vcl/svdata.hxx>
+#include <vcl/salprn.hxx>
+
 // -----------
 // - Defines -
 // -----------
@@ -81,19 +84,22 @@ struct QueuePage
 // =======================================================================
 
 ImplQPrinter::ImplQPrinter( Printer* pParent ) :
-    Printer( pParent->GetName() )
+    Printer( pParent->GetName() ),
+    mpParent( pParent ),
+    mpQueue( new Queue( mpParent->GetPageQueueSize() ) ),
+    mbAborted( false ),
+    mbUserCopy( false ),
+    mbDestroyAllowed( true ),
+    mbDestroyed( false ),
+    mnMaxBmpDPIX( mnDPIX ),
+    mnMaxBmpDPIY( mnDPIY ),
+    mnCurCopyCount( 0 )
 {
     SetSelfAsQueuePrinter( TRUE );
     SetPrinterProps( pParent );
     SetPageQueueSize( 0 );
-    mpParent        = pParent;
     mnCopyCount     = pParent->mnCopyCount;
     mbCollateCopy   = pParent->mbCollateCopy;
-    mpQueue         = new Queue( mpParent->GetPageQueueSize() );
-    mbAborted       = FALSE;
-    mbUserCopy      = FALSE;
-    mbDestroyAllowed= TRUE;
-    mbDestroyed     = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -301,8 +307,94 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rPrtMtf, long nMaxBmpDPIX, long nM
         if( !bExecuted && pAct )
             pAct->Execute( this );
 
-        Application::Reschedule();
+        if( ! ImplGetSVData()->maGDIData.mbPrinterPullModel )
+            Application::Reschedule();
     }
+}
+
+// -----------------------------------------------------------------------
+
+void ImplQPrinter::PrePrintPage( QueuePage* pPage )
+{
+    mnRestoreDrawMode = GetDrawMode();
+    mnMaxBmpDPIX = mnDPIX;
+    mnMaxBmpDPIY = mnDPIY;
+
+    const PrinterOptions&   rPrinterOptions = GetPrinterOptions();
+
+    if( rPrinterOptions.IsReduceBitmaps() )
+    {
+        // calculate maximum resolution for bitmap graphics
+        if( PRINTER_BITMAP_OPTIMAL == rPrinterOptions.GetReducedBitmapMode() )
+        {
+            mnMaxBmpDPIX = Min( (long) OPTIMAL_BMP_RESOLUTION, mnMaxBmpDPIX );
+            mnMaxBmpDPIY = Min( (long) OPTIMAL_BMP_RESOLUTION, mnMaxBmpDPIY );
+        }
+        else if( PRINTER_BITMAP_NORMAL == rPrinterOptions.GetReducedBitmapMode() )
+        {
+            mnMaxBmpDPIX = Min( (long) NORMAL_BMP_RESOLUTION, mnMaxBmpDPIX );
+            mnMaxBmpDPIY = Min( (long) NORMAL_BMP_RESOLUTION, mnMaxBmpDPIY );
+        }
+        else
+        {
+            mnMaxBmpDPIX = Min( (long) rPrinterOptions.GetReducedBitmapResolution(), mnMaxBmpDPIX );
+            mnMaxBmpDPIY = Min( (long) rPrinterOptions.GetReducedBitmapResolution(), mnMaxBmpDPIY );
+        }
+    }
+
+    // convert to greysacles
+    if( rPrinterOptions.IsConvertToGreyscales() )
+    {
+        SetDrawMode( GetDrawMode() | ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
+                                       DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
+    }
+
+    // disable transparency output
+    if( rPrinterOptions.IsReduceTransparency() && ( PRINTER_TRANSPARENCY_NONE == rPrinterOptions.GetReducedTransparencyMode() ) )
+    {
+        SetDrawMode( GetDrawMode() | DRAWMODE_NOTRANSPARENCY );
+    }
+
+    maCurPageMetaFile = GDIMetaFile();
+    GetPreparedMetaFile( *pPage->mpMtf, maCurPageMetaFile, mnMaxBmpDPIX, mnMaxBmpDPIY );
+}
+
+void ImplQPrinter::PostPrintPage()
+{
+    SetDrawMode( mnRestoreDrawMode );
+}
+
+// -----------------------------------------------------------------------
+
+void ImplQPrinter::PrintNextPage()
+{
+    if( mnCurCopyCount < 1 )
+    {
+        if( mpQueue->Count() == 0 )
+            return;
+        mnCurCopyCount = (mbUserCopy && !mbCollateCopy) ? mnCopyCount : 1;
+        QueuePage* pActPage = reinterpret_cast<QueuePage*>(mpQueue->Get());
+        PrePrintPage( pActPage );
+        if ( pActPage->mpSetup )
+            SetJobSetup( *pActPage->mpSetup );
+        delete pActPage;
+    }
+
+    StartPage();
+    ImplPrintMtf( maCurPageMetaFile, mnMaxBmpDPIX, mnMaxBmpDPIY );
+    EndPage();
+
+    mnCurCopyCount--;
+    if( mnCurCopyCount == 0 )
+        PostPrintPage();
+}
+
+// -----------------------------------------------------------------------
+
+ULONG ImplQPrinter::GetPrintPageCount()
+{
+    ULONG nPageCount = mpQueue->Count() * ((mbUserCopy && !mbCollateCopy) ? mnCopyCount : 1);
+    return nPageCount;
 }
 
 // -----------------------------------------------------------------------
@@ -314,7 +406,7 @@ IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
         return 0;
 
     // Druck-Job zuende?
-    QueuePage* pActPage = (QueuePage*) mpQueue->Get();
+    QueuePage* pActPage = reinterpret_cast<QueuePage*>(mpQueue->Get());
 
 
     vcl::DeletionListener aDel( this );
@@ -329,49 +421,11 @@ IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
     }
     else
     {
-        GDIMetaFile             aMtf;
-        const PrinterOptions&   rPrinterOptions = GetPrinterOptions();
-        const ULONG             nOldDrawMode = GetDrawMode();
-        long                    nMaxBmpDPIX = mnDPIX;
-        long                    nMaxBmpDPIY = mnDPIY;
-        USHORT                  nCopyCount = 1;
-
-        if( rPrinterOptions.IsReduceBitmaps() )
-        {
-            // calculate maximum resolution for bitmap graphics
-            if( PRINTER_BITMAP_OPTIMAL == rPrinterOptions.GetReducedBitmapMode() )
-            {
-                nMaxBmpDPIX = Min( (long) OPTIMAL_BMP_RESOLUTION, nMaxBmpDPIX );
-                nMaxBmpDPIY = Min( (long) OPTIMAL_BMP_RESOLUTION, nMaxBmpDPIY );
-            }
-            else if( PRINTER_BITMAP_NORMAL == rPrinterOptions.GetReducedBitmapMode() )
-            {
-                nMaxBmpDPIX = Min( (long) NORMAL_BMP_RESOLUTION, nMaxBmpDPIX );
-                nMaxBmpDPIY = Min( (long) NORMAL_BMP_RESOLUTION, nMaxBmpDPIY );
-            }
-            else
-            {
-                nMaxBmpDPIX = Min( (long) rPrinterOptions.GetReducedBitmapResolution(), nMaxBmpDPIX );
-                nMaxBmpDPIY = Min( (long) rPrinterOptions.GetReducedBitmapResolution(), nMaxBmpDPIY );
-            }
-        }
-
-        // convert to greysacles
-        if( rPrinterOptions.IsConvertToGreyscales() )
-        {
-            SetDrawMode( GetDrawMode() | ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
-                                           DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
-        }
-
-        // disable transparency output
-        if( rPrinterOptions.IsReduceTransparency() && ( PRINTER_TRANSPARENCY_NONE == rPrinterOptions.GetReducedTransparencyMode() ) )
-        {
-            SetDrawMode( GetDrawMode() | DRAWMODE_NOTRANSPARENCY );
-        }
-
         mbDestroyAllowed = FALSE;
-        GetPreparedMetaFile( *pActPage->mpMtf, aMtf, nMaxBmpDPIX, nMaxBmpDPIY );
 
+        PrePrintPage( pActPage );
+
+        USHORT nCopyCount = 1;
         if( mbUserCopy && !mbCollateCopy )
             nCopyCount = mnCopyCount;
 
@@ -389,7 +443,7 @@ IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
             if ( mbAborted )
                 break;
 
-            ImplPrintMtf( aMtf, nMaxBmpDPIX, nMaxBmpDPIY );
+            ImplPrintMtf( maCurPageMetaFile, mnMaxBmpDPIX, mnMaxBmpDPIY );
 
             if( !mbAborted )
                 EndPage();
@@ -397,7 +451,7 @@ IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
                 break;
         }
 
-        SetDrawMode( nOldDrawMode );
+        PostPrintPage();
 
         delete pActPage;
         mbDestroyAllowed = TRUE;
@@ -413,18 +467,37 @@ IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
 
 void ImplQPrinter::StartQueuePrint()
 {
-    maTimer.SetTimeout( 50 );
-    maTimer.SetTimeoutHdl( LINK( this, ImplQPrinter, ImplPrintHdl ) );
-    maTimer.Start();
+    if( ! ImplGetSVData()->maGDIData.mbPrinterPullModel )
+    {
+        maTimer.SetTimeout( 50 );
+        maTimer.SetTimeoutHdl( LINK( this, ImplQPrinter, ImplPrintHdl ) );
+        maTimer.Start();
+    }
 }
 
 // -----------------------------------------------------------------------
 
 void ImplQPrinter::EndQueuePrint()
 {
-    QueuePage* pQueuePage   = new QueuePage;
-    pQueuePage->mbEndJob    = TRUE;
-    mpQueue->Put( pQueuePage );
+    if( ImplGetSVData()->maGDIData.mbPrinterPullModel )
+    {
+        DBG_ASSERT( mpPrinter, "no SalPrinter in ImplQPrinter" );
+        if( mpPrinter )
+        {
+            mpPrinter->StartJob( mbPrintFile ? &maPrintFile : NULL,
+                                 Application::GetDisplayName(),
+                                 maJobSetup.ImplGetConstData(),
+                                 this );
+            mpPrinter->EndJob();
+            mpParent->ImplEndPrint();
+        }
+    }
+    else
+    {
+        QueuePage* pQueuePage   = new QueuePage;
+        pQueuePage->mbEndJob    = TRUE;
+        mpQueue->Put( pQueuePage );
+    }
 }
 
 // -----------------------------------------------------------------------
