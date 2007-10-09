@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:05:58 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:31:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,34 +232,35 @@ SfxMacroInfo::SfxMacroInfo( const String& rURL ) :
         aMethodName = rURL;
 }
 
-SfxMacroInfo::SfxMacroInfo( SfxObjectShell *pDoc ) :
+SfxMacroInfo::SfxMacroInfo( bool _bAppBasic ) :
     pHelpText(0),
     nRefCnt(0),
-    bAppBasic(pDoc == NULL),
+    bAppBasic(_bAppBasic),
     nSlotId(0),
     pSlot(0)
 {}
 
 //==========================================================================
 
-SfxMacroInfo::SfxMacroInfo(SfxObjectShell *pDoc, const String& rLibName,
+SfxMacroInfo::SfxMacroInfo(bool _bAppBasic, const String& rLibName,
         const String& rModuleName, const String& rMethodName) :
     pHelpText(0),
     nRefCnt(0),
+    bAppBasic(_bAppBasic),
     aLibName(rLibName),
     aModuleName(rModuleName),
     aMethodName(rMethodName),
     nSlotId(0),
     pSlot(0)
 {
-    bAppBasic = (pDoc == 0);
 }
 
 //==========================================================================
 
-SfxMacroInfo::SfxMacroInfo(SfxObjectShell *pDoc, const String& rQualifiedName )
+SfxMacroInfo::SfxMacroInfo(bool _bAppBasic, const String& rQualifiedName )
 :   pHelpText(0),
     nRefCnt(0),
+    bAppBasic(_bAppBasic),
     nSlotId(0),
     pSlot(0)
 {
@@ -269,7 +270,6 @@ SfxMacroInfo::SfxMacroInfo(SfxObjectShell *pDoc, const String& rQualifiedName )
         aModuleName = rQualifiedName.GetToken( nCount-2, '.' );
     if ( nCount > 2 )
         aLibName = rQualifiedName.GetToken( 0, '.' );
-    bAppBasic = (pDoc == 0);
 }
 
 //==========================================================================
@@ -754,8 +754,7 @@ sal_Bool SfxMacroConfig::ExecuteMacro( SfxObjectShell *pSh, const SvxMacro* pMac
 
             if ( pSh && pMgr && pMgr != pAppMgr )
             {
-                pSh->AdjustMacroMode( String() );
-                if( pSh->Get_Impl()->nMacroMode == ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
+                if ( !pSh->AdjustMacroMode( String() ) )
                     return sal_False;
             }
 
