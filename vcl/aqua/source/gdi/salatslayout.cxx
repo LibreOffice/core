@@ -4,9 +4,9 @@
 *
 *  $RCSfile: salatslayout.cxx,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: hr $ $Date: 2007-08-03 14:01:34 $
+*  last change: $Author: kz $ $Date: 2007-10-09 15:14:08 $
 *
 *  The Contents of this file are made available subject to
 *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,33 +33,19 @@
 *
 ************************************************************************/
 
-#ifndef _SV_SALGDI_HXX
-#include <vcl/salgdi.hxx>
-#endif
-#ifndef _SV_SALDATA_HXX
-#include <saldata.hxx>
-#endif
-#ifndef _SV_SALGDI_H
-#include <salgdi.h>
-#endif
-#ifndef _SV_SALLAYOUT_HXX
-#include <vcl/sallayout.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-
-#include <premac.h>
-#include <ApplicationServices/ApplicationServices.h>
-#include <Carbon/Carbon.h>
-#include <postmac.h>
+#include "vcl/salgdi.hxx"
+#include "saldata.hxx"
+#include "salgdi.h"
+#include "vcl/sallayout.hxx"
+#include "salatsuifontutils.hxx"
+#include "tools/debug.hxx"
 
 // =======================================================================
 
 class ATSLayout : public SalLayout
 {
 public:
-                    ATSLayout( AquaSalGraphics*, double fFontScale );
+                    ATSLayout( ATSUStyle&, double fFontScale );
     virtual         ~ATSLayout();
 
     virtual bool    LayoutText( ImplLayoutArgs& );
@@ -83,10 +69,13 @@ public:
     virtual void    Simplify( bool bIsBase );
 
 private:
-    AquaSalGraphics*    mpGraphics;
-    double              mfFontScale;        // allows metrics emulation of huge font sizes
+    ATSUStyle&          mrATSUStyle;
     ATSUTextLayout      maATSULayout;
     int                 mnCharCount;        // ==mnEndCharPos-mnMinCharPos
+    // to prevent ATS overflowing the Fixed16.16 values
+    // ATS font requests get size limited by downscaling huge fonts
+    // in these cases the font scale becomes something bigger than 1.0
+    double              mfFontScale;
 
 private:
     mutable Fixed       mnCachedWidth;      // cached value of resulting typographical width
@@ -115,11 +104,11 @@ private:
 
 // =======================================================================
 
-ATSLayout::ATSLayout( AquaSalGraphics* pGraphics, double fFontScale )
-:   mpGraphics( pGraphics ),
-    mfFontScale( fFontScale ),
+ATSLayout::ATSLayout( ATSUStyle& rATSUStyle, double fFontScale )
+:   mrATSUStyle( rATSUStyle ),
     maATSULayout( NULL ),
     mnCharCount( 0 ),
+    mfFontScale( fFontScale ),
     mnCachedWidth( 0 ),
     mnGlyphCount( -1 ),
     mnNotdefWidth( 0 ),
@@ -164,7 +153,7 @@ ATSLayout::~ATSLayout()
  *
  * @param rArgs: contains array of char to be layouted, starting and ending position of the text to layout
  *
- * Manage text layouting : choose glyph to represent characters using the style maATSUStyle
+ * Typographic layout of text by using the style maATSUStyle
  *
  * @return : true if everything is ok
 **/
@@ -178,7 +167,7 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
     // Layout text
     // set up our locals, verify parameters...
     DBG_ASSERT( (rArgs.mpStr!=NULL), "ATSLayout::LayoutText() with rArgs.mpStr==NULL !!!");
-    DBG_ASSERT( (mpGraphics->maATSUStyle!=NULL), "ATSLayout::LayoutText() with maATSUStyle==NULL !!!");
+    DBG_ASSERT( (mrATSUStyle!=NULL), "ATSLayout::LayoutText() with ATSUStyle==NULL !!!");
 
     SalLayout::AdjustLayout( rArgs );
     mnCharCount = mnEndCharPos - mnMinCharPos;
@@ -190,7 +179,7 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
 #if (OSL_DEBUG_LEVEL > 3)
     Fixed fFontSize = 0;
     ByteCount nDummy;
-    ATSUGetAttribute( mpGraphics->maATSUStyle, kATSUSizeTag, sizeof(fFontSize), &fFontSize, &nDummy);
+    ATSUGetAttribute( mrATSUStyle, kATSUSizeTag, sizeof(fFontSize), &fFontSize, &nDummy);
     String aUniName( &rArgs.mpStr[rArgs.mnMinCharPos], mnCharCount );
     ByteString aCName( aUniName, RTL_TEXTENCODING_UTF8 );
     AquaLog( "ATSLayout( \"%s\" %d..%d of %d) with h=%4.1f\n",
@@ -202,12 +191,26 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
     const int nRunCount = sizeof(nRunLengths)/sizeof(*nRunLengths);
     OSStatus eStatus = ATSUCreateTextLayoutWithTextPtr( rArgs.mpStr,
         rArgs.mnMinCharPos, mnCharCount, rArgs.mnLength,
-        nRunCount, &nRunLengths[0], &mpGraphics->maATSUStyle,
+        nRunCount, &nRunLengths[0], &mrATSUStyle,
         &maATSULayout);
 
     DBG_ASSERT( (eStatus==noErr), "ATSUCreateTextLayoutWithTextPtr failed\n");
     if( eStatus != noErr )
         return false;
+
+    // enable "glyph fallback"
+    ATSUAttributeTag theTags[1];
+    ByteCount theSizes[1];
+    ATSUAttributeValuePtr theValues[1];
+
+    SalData* pSalData = GetSalData();
+    ATSUFontFallbacks theFontFallbacks = pSalData->mpFontList->maFontFallbacks;
+    theTags[0] = kATSULineFontFallbacksTag;
+    theSizes[0] = sizeof( ATSUFontFallbacks );
+    theValues[0] = &theFontFallbacks;
+
+    ATSUSetLayoutControls( maATSULayout, 1, theTags, theSizes, theValues );
+    ATSUSetTransientFontMatching( maATSULayout, true );
 
     return true;
 }
@@ -218,7 +221,7 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
  *
  * @param rArgs: contains attributes relevant to do a text specific layout
  *
- * Adjust text layouting : move glyphs to match the requested logical widths
+ * Adjust text layout by moving glyphs to match the requested logical widths
  *
  * @return : none
 **/
@@ -271,23 +274,25 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
  *
  * @param rGraphics: device to draw to
  *
- * Draw the layouted text to screen and offscreen copy
+ * Draw the layouted text to the CGContext
  *
  * @return : none
 **/
 void ATSLayout::DrawText( SalGraphics& rGraphics ) const
 {
+    AquaSalGraphics& rAquaGraphics = static_cast<AquaSalGraphics&>(rGraphics);
+
     // short circuit if there is nothing to do
     if( (mnCharCount <= 0)
-    ||  !mpGraphics->CheckContext() )
+    ||  !rAquaGraphics.CheckContext() )
         return;
 
     // the view is vertically flipped => flipped glyphs
     // so apply a temporary transformation that it flips back
     // also compensate if the font was size limited
-    CGContextSaveGState( mpGraphics->mrContext );
-    CGContextScaleCTM( mpGraphics->mrContext, +mfFontScale, -mfFontScale );
-    CGContextSetShouldAntialias( mpGraphics->mrContext, !mpGraphics->mbNonAntialiasedText );
+    CGContextSaveGState( rAquaGraphics.mrContext );
+    CGContextScaleCTM( rAquaGraphics.mrContext, +mfFontScale, -mfFontScale );
+    CGContextSetShouldAntialias( rAquaGraphics.mrContext, !rAquaGraphics.mbNonAntialiasedText );
 
     // prepare ATSUI drawing attributes
     static const ItemCount nMaxControls = 8;
@@ -299,12 +304,12 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
     // Tell ATSUI to use CoreGraphics
     theTags[numcontrols] = kATSUCGContextTag;
     theSizes[numcontrols] = sizeof( CGContextRef );
-    theValues[numcontrols++] = &(mpGraphics->mrContext);
+    theValues[numcontrols++] = &rAquaGraphics.mrContext;
 
     // Rotate if necessary
-    if( mpGraphics->mnATSUIRotation != 0 )
+    if( rAquaGraphics.mnATSUIRotation != 0 )
     {
-        Fixed theAngle = mpGraphics->mnATSUIRotation;
+        Fixed theAngle = rAquaGraphics.mnATSUIRotation;
         theTags[numcontrols] = kATSULineRotationTag;
         theSizes[numcontrols] = sizeof( Fixed );
         theValues[numcontrols++] = &theAngle;
@@ -315,14 +320,15 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
     DBG_ASSERT( (theErr==noErr), "ATSLayout::DrawText ATSUSetLayoutControls failed!\n" );
 
     // Draw the text
-    const Point aPos = GetDrawPosition( Point(mnBaseAdv, 0) );
+    DBG_ASSERT( mnBaseAdv==0, "ATSLayout::DrawText() not yet implemented for glyph fallback layouts" );
+    const Point aPos = GetDrawPosition( Point(mnBaseAdv,0) );
     const Fixed nFixedX = FloatToFixed( +aPos.X() / mfFontScale );
     const Fixed nFixedY = FloatToFixed( -aPos.Y() / mfFontScale ); // adjusted for y-mirroring
     theErr = ATSUDrawText( maATSULayout, mnMinCharPos, mnCharCount, nFixedX, nFixedY );
     DBG_ASSERT( (theErr==noErr), "ATSLayout::DrawText ATSUDrawText failed!\n" );
 
     // request an update of the changed window area
-    if( mpGraphics->IsWindowGraphics() )
+    if( rAquaGraphics.IsWindowGraphics() )
     {
         Rect drawRect; // rectangle of the changed area
         theErr = ATSUMeasureTextImage( maATSULayout,
@@ -330,25 +336,25 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
         if( theErr == noErr )
         {
             // FIXME: transformation from baseline to top left
-            // with the simple apporach below we invalidate too much
+            // with the simple approach below we invalidate too much
             short d = drawRect.bottom - drawRect.top;
             drawRect.top -= d;
             drawRect.bottom += d;
             CGRect aRect = CGRectMake( drawRect.left, drawRect.top,
                                        drawRect.right - drawRect.left,
                                        drawRect.bottom - drawRect.top );
-            aRect = CGContextConvertRectToDeviceSpace( mpGraphics->mrContext, aRect );
-            mpGraphics->RefreshRect( aRect.origin.x, aRect.origin.y, aRect.size.width+1, aRect.size.height+1 );
+            aRect = CGContextConvertRectToDeviceSpace( rAquaGraphics.mrContext, aRect );
+            rAquaGraphics.RefreshRect( aRect.origin.x, aRect.origin.y, aRect.size.width+1, aRect.size.height+1 );
         }
     }
 
     // restore the original graphic context transformations
-    CGContextRestoreGState( mpGraphics->mrContext );
+    CGContextRestoreGState( rAquaGraphics.mrContext );
 }
 
 // -----------------------------------------------------------------------
 /**
- * ATSLayout::GetNextGlyphs : Get next glyphs informations
+ * ATSLayout::GetNextGlyphs : Get info about next glyphs in the layout
  *
  * @param nLen: max number of char
  * @param pGlyphs: returned array of glyph ids
@@ -357,9 +363,9 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
  * @param pGlyphAdvances: returned array of glyphs advances
  * @param pCharIndexes: returned array of char indexes
  *
- * Returns infos about the next requested glyphs
+ * Returns infos about the next glyphs in the text layout
  *
- * @return : index of next glyph
+ * @return : number of glyph details that were provided
 **/
 int ATSLayout::GetNextGlyphs( int nLen, long* pGlyphIDs, Point& rPos, int& nStart,
     long* pGlyphAdvances, int* pCharIndexes ) const
@@ -488,7 +494,7 @@ long ATSLayout::GetTextWidth() const
         mnCachedWidth = nRightBound - nLeftBound;
     }
 
-    const long nScaledWidth = static_cast<long>( mfFontScale * FixedToFloat(mnCachedWidth) );
+    const long nScaledWidth = static_cast<long>(mfFontScale * FixedToFloat(mnCachedWidth));
     return nScaledWidth;
 }
 
@@ -555,11 +561,11 @@ int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) cons
 
     if( (nStatus != noErr) && (nStatus != kATSULineBreakInWord) )
     {
-        AquaLog("ATSUBreakLine => %d\n", nStatus);
-        return( STRING_LEN );
+        AquaLog( "ATSUBreakLine => %d\n", nStatus);
+        return STRING_LEN;
     }
 
-    return( nBreakPos );
+    return nBreakPos;
 }
 
 // -----------------------------------------------------------------------
@@ -812,12 +818,12 @@ bool ATSLayout::GetIdealX() const
         return true;
 
     DBG_ASSERT( (mpGlyphIds!=NULL), "GetIdealX() called with mpGlyphIds==NULL !" );
-    DBG_ASSERT( (mpGraphics->maATSUStyle!=NULL), "GetIdealX called with maATSUStyle==NULL !" );
+    DBG_ASSERT( (mrATSUStyle!=NULL), "GetIdealX called with mrATSUStyle==NULL !" );
 
     // TODO: cache ideal metrics per glyph?
     std::vector<ATSGlyphIdealMetrics> aIdealMetrics;
     aIdealMetrics.resize( mnGlyphCount );
-    OSStatus theErr = ATSUGlyphGetIdealMetrics( mpGraphics->maATSUStyle,
+    OSStatus theErr = ATSUGlyphGetIdealMetrics( mrATSUStyle,
         mnGlyphCount, &mpGlyphIds[0], sizeof(*mpGlyphIds), &aIdealMetrics[0] );
     DBG_ASSERT( (theErr==noErr), "ATSUGlyphGetIdealMetrics failed!");
     if( theErr != noErr )
@@ -1031,7 +1037,7 @@ bool ATSLayout::GetGlyphOutlines( SalGraphics&, PolyPolyVector& rPPV ) const
         aPolyArgs.Init( &rPPV[i], pG->screenX, nDeltaY );
         OSStatus nStatus, nCBStatus;
         nStatus = ATSUGlyphGetCubicPaths(
-            mpGraphics->maATSUStyle, nGlyphId,
+            mrATSUStyle, nGlyphId,
             MyATSCubicMoveToCallback, MyATSCubicLineToCallback,
             MyATSCubicCurveToCallback, MyATSCubicClosePathCallback,
             &aPolyArgs, &nCBStatus );
@@ -1182,7 +1188,7 @@ void ATSLayout::Simplify( bool bIsBase )
 
 SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
-    ATSLayout* pATSLayout = new ATSLayout( this, mfFontScale );
+    ATSLayout* pATSLayout = new ATSLayout( maATSUStyle, mfFontScale );
     return pATSLayout;
 }
 
