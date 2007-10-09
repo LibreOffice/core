@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:13:10 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:09:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,32 +36,16 @@
 #ifndef _SV_SALINST_H
 #define _SV_SALINST_H
 
-#ifndef _SV_SV_H
-#include <vcl/sv.h>
-#endif
-#ifndef _VOS_MUTEX_HXX
-#include <vos/mutex.hxx>
-#endif
-#ifndef _VOS_THREAD_HXX
-#include <vos/thread.hxx>
-#endif
+#include "vcl/sv.h"
+#include "vos/mutex.hxx"
+#include "vos/thread.hxx"
+#include "vcl/salinst.hxx"
 
-#include <salsys.h>
-#include <salobj.h>
-#include <salvd.h>
-#include <salsound.h>
-#include <saltimer.h>
-#include <salbmp.h>
+#include "aquavcltypes.h"
 
-#ifdef __cplusplus
+#include <list>
 
-class SalYieldMutex;
-
-#else // __cplusplus
-
-#define SalYieldMutex void
-
-#endif // __cplusplus
+class AquaSalFrame;
 
 // -----------------
 // - SalYieldMutex -
@@ -70,7 +54,7 @@ class SalYieldMutex;
 class SalYieldMutex : public vos::OMutex
 {
     ULONG                                       mnCount;
-    NAMESPACE_VOS(OThread)::TThreadIdentifier   mnThreadId;
+    vos::OThread::TThreadIdentifier             mnThreadId;
 
 public:
                                                 SalYieldMutex();
@@ -78,7 +62,7 @@ public:
     virtual void                                release();
     virtual sal_Bool                            tryToAcquire();
     ULONG                                       GetAcquireCount() const { return mnCount; }
-    NAMESPACE_VOS(OThread)::TThreadIdentifier   GetThreadId() const { return mnThreadId; }
+    vos::OThread::TThreadIdentifier             GetThreadId() const { return mnThreadId; }
 };
 
 #define YIELD_GUARD vos::OGuard aGuard( GetSalData()->mpFirstInstance->GetYieldMutex() )
@@ -98,11 +82,25 @@ public:
 
 class AquaSalInstance : public SalInstance
 {
+    struct SalUserEvent
+    {
+        AquaSalFrame*   mpFrame;
+        void*           mpData;
+        USHORT          mnType;
+
+        SalUserEvent( AquaSalFrame* pFrame, void* pData, USHORT nType ) :
+            mpFrame( pFrame ), mpData( pData ), mnType( nType )
+        {}
+    };
+
 public:
-    void*               mpFilterInst;
-    void*               mpFilterCallback;
-    SalYieldMutex*      mpSalYieldMutex;        // Sal-Yield-Mutex
-    rtl::OUString       maDefaultPrinter;
+    SalYieldMutex*                          mpSalYieldMutex;        // Sal-Yield-Mutex
+    rtl::OUString                           maDefaultPrinter;
+    vos::OThread::TThreadIdentifier         maMainThread;
+    int                                     mnMainThreadLevel;
+    NSAutoreleasePool*                      mpAutoreleasePool;
+    std::list< SalUserEvent >               maUserEvents;
+    oslMutex                                maUserEventListMutex;
 public:
     AquaSalInstance();
     virtual ~AquaSalInstance();
@@ -148,31 +146,29 @@ public:
     virtual void            SetEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) );
     virtual void            SetErrorEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) );
 
-    static void TimerEventHandler(EventLoopTimerRef inTimer, void* pData);
+    static void handleAppDefinedEvent( NSEvent* pEvent );
 
  public:
-    /* During window resizing the standard event handler does
-       not dispatch VCL timer messages which (for some strange
-       reasons) trigger VCL painting. So when live resizing of
-       windows is enabled the window content will not be painted
-       at all especially when the user doesn't move the mouse
-       anymore but still holds the left mouse button pressed on
-       the resize area.
-       So to get timer messages delivered nevertheless we setup
-       a message loop timer. Events fired by this timer will also
-       be delivered during window resizing.
-    */
-    void StartForceDispatchingPaintEvents();
-    void StopForceDispatchingPaintEvents();
-    EventLoopTimerRef mEventLoopTimerRef;
-    bool mbForceDispatchPaintEvents;
-
     friend class AquaSalFrame;
+
+    void PostUserEvent( AquaSalFrame* pFrame, USHORT nType, void* pData );
+
+    bool isNSAppThread() const;
+
+    // event subtypes for NSApplicationDefined events
+    static const short AppExecuteSVMain   = 0x7fff;
+    static const short AppEndLoopEvent    = 1;
+    static const short AppStartTimerEvent = 10;
+    static const short YieldWakeupEvent   = 20;
+
+    static NSMenu* GetDynamicDockMenu();
 };
 
 
 // helper class
 rtl::OUString GetOUString( CFStringRef );
+rtl::OUString GetOUString( NSString* );
 CFStringRef CreateCFString( const rtl::OUString& );
+NSString* CreateNSString( const rtl::OUString& );
 
 #endif // _SV_SALINST_H
