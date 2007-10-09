@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-06 10:34:37 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:33:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -818,7 +818,7 @@ void SfxViewShell::Activate( BOOL bMDI )
         if ( pSh->GetModel().is() )
             pSh->GetModel()->setCurrentController( GetViewFrame()->GetFrame()->GetController() );
 
-        SfxObjectShell::SetWorkingDocument( pSh );
+        SfxObjectShell::SetWorkingDocument( pSh->GetModel() );
     }
 }
 
@@ -830,8 +830,11 @@ void SfxViewShell::Deactivate(BOOL bMDI)
     if ( bMDI )
     {
         SfxObjectShell *pSh = GetViewFrame()->GetObjectShell();
-        if ( pSh == SfxObjectShell::GetWorkingDocument() )
-            SfxObjectShell::SetWorkingDocument( 0 );
+        Reference< XModel > xDoc;
+        if ( pSh )
+            xDoc = pSh->GetModel();
+        if ( xDoc.is() && ( xDoc == SfxObjectShell::GetWorkingDocument() ) )
+            SfxObjectShell::SetWorkingDocument( Reference< XModel >() );
     }
 }
 
