@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svsys.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:37:20 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:12:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 #ifndef _SV_SVSYS_H
 #define _SV_SVSYS_H
 
-#ifndef _SVWIN_H
-#include <tools/svwin.h>
-#endif
+#include "tools/svwin.h"
 
 #endif // _SV_SVSYS_H
