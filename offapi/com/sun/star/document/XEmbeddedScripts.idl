@@ -1,0 +1,80 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XEmbeddedScripts.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:14:14 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_document_XEmbeddedScripts_idl__
+#define __com_sun_star_document_XEmbeddedScripts_idl__
+
+#ifndef __com_sun_star_script_XStorageBasedLibraryContainer_idl__
+#include <com/sun/star/script/XStorageBasedLibraryContainer.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module document {
+
+//=============================================================================
+
+/** is suppoerted by <type>OfficeDocument</type>s which allow to embed scripts
+
+    @since OOo 2.4
+ */
+interface XEmbeddedScripts
+{
+    /** is the container of <code>StarBasic</code> macro libraries contained in the document
+    */
+    [attribute, readonly]   ::com::sun::star::script::XStorageBasedLibraryContainer BasicLibraries;
+
+    /** is the container of dialogs libraries contained in the document
+    */
+    [attribute, readonly]   ::com::sun::star::script::XStorageBasedLibraryContainer DialogLibraries;
+
+    /** determines whether executing macros from this document is allowed.
+
+        <p>Effectively, this attribute is an evaluation of the document's <type>MacroExecMode</type>
+        against possibly applicable configuration settings, the document location in relation to the
+        trusted location, and the like.</p>
+
+        @see MacroExecMode
+    */
+    [attribute, readonly]   boolean AllowMacroExecution;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
