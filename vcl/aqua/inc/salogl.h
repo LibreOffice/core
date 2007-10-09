@@ -4,9 +4,9 @@
 *
 *  $RCSfile: salogl.h,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: rt $ $Date: 2007-07-05 15:58:44 $
+*  last change: $Author: kz $ $Date: 2007-10-09 15:10:29 $
 *
 *  The Contents of this file are made available subject to
 *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,26 +36,8 @@
 #ifndef _SV_SALOGL_H
 #define _SV_SALOGL_H
 
-//#if defined EXPLICITLY_INCLUDE_GLX_H
-//#include <prex.h>
-//#define GL_H
-//#include <GL/glx.h>
-//#include <postx.h>
-//#else
-//typedef void* GLXContext;
-//typedef XID   GLXDrawable;
-//// needed GLX_ constants
-//#define GLX_USE_GL            1
-//#define GLX_DOUBLEBUFFER  5
-//#endif
-
-#ifndef _SV_SALOGL_HXX
-#include <vcl/salogl.hxx>
-#endif
-
-#ifndef _OSL_MODULE_H
-#include <osl/module.h>
-#endif
+#include "vcl/salogl.hxx"
+#include "osl/module.h"
 
 // -------------
 // - SalOpenGL -
@@ -66,7 +48,6 @@ class SalGraphics;
 class AquaSalOpenGL : public SalOpenGL
 {
 private:
-    static CarbonViewRef        mhOGLLastDC;
     static ULONG        mnOGLState;
 
     //  static oslModule        mpGLLib;
