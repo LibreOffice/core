@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmenu.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 07:43:42 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:10:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,26 +36,22 @@
 #ifndef _SV_SALMENU_H
 #define _SV_SALMENU_H
 
-#include <premac.h>
-#include <Carbon/Carbon.h>
-#include <postmac.h>
+#include "premac.h"
+#include <Cocoa/Cocoa.h>
+#include "postmac.h"
 
-#ifndef _SV_SV_H
-#include <vcl/sv.h>
-#endif
-#ifndef _SV_BITMAP_HXX
-#include <vcl/bitmap.hxx>
-#endif
+#include "vcl/sv.h"
+#include "vcl/salmenu.hxx"
 
-#ifndef _SV_SALMENU_HXX
-#include <vcl/salmenu.hxx>
-#endif
+#include <vector>
 
+class AquaSalFrame;
+class AquaSalMenuItem;
 
 class AquaSalMenu : public SalMenu
 {
 public:
-    AquaSalMenu() {}
+    AquaSalMenu( bool bMenuBar );
     virtual ~AquaSalMenu();
 
     virtual BOOL VisibleMenuBar();  // must return TRUE to actually DISPLAY native menu bars
@@ -72,30 +68,51 @@ public:
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName );
     virtual void GetSystemMenuData( SystemMenuData* pData );
 
-    XubString mText;   // Title of this menu
-    MenuRef mrMenuRef; // The Carbon reference to this menu
-    BOOL mbMenuBar;    // TRUE - Menubar, FALSE - Menu
+    int getItemIndexByPos( USHORT nPos ) const;
+    const AquaSalFrame* getFrame() const;
+
+    void setMainMenu();
+    static void enableMainMenu( bool bEnable );
+
+    bool                    mbMenuBar;          // true - Menubar, false - Menu
+    NSMenu*                 mpMenu;             // The Carbon reference to this menu
+    Menu*                   mpVCLMenu;          // the corresponding vcl Menu object
+    const AquaSalFrame*     mpFrame;            // the frame to dispatch the menu events to
+    AquaSalMenu*            mpParentSalMenu;    // the parent menu that contains us (and perhaps has a frame)
+
+    static const AquaSalMenu* pCurrentMenuBar;
+
+    std::vector< AquaSalMenuItem* > maItems;
 };
 
 class AquaSalMenuItem : public SalMenuItem
 {
 public:
-    AquaSalMenuItem() {}
+    AquaSalMenuItem( const SalItemParams* );
     virtual ~AquaSalMenuItem();
 
-    USHORT mnId;                        // Item ID
-    Menu *mpMenu;                       // Menu into which this MenuItem is inserted
-    SalMenu *mpSubMenu;                 // Sub menu of this item (if defined)
-    XubString mText;                    // Title of this menu item
-    MenuRef mrParentMenuRef;            // The menu in which this menu item is inserted
-
-    MenuItemIndex mnMenuItemIndex;      // The menu index of this menu item in mpMenu
-                                        // It is 1 based, so the first menu
-                                        // item's MenuItemIndex in the menu has value 1
-
-    MenuItemAttributes maMenuAttributes;
-
-    Bitmap maBitmap;            // item image
+    USHORT              mnId;                 // Item ID
+    Menu*               mpVCLMenu;            // VCL Menu into which this MenuItem is inserted
+    AquaSalMenu*        mpParentMenu;         // The menu in which this menu item is inserted
+    AquaSalMenu*        mpSubMenu;            // Sub menu of this item (if defined)
+    NSMenuItem*         mpMenuItem;           // The NSMenuItem
 };
+
+@interface SalNSMenu : NSMenu
+{
+    AquaSalMenu*        mpMenu;
+}
+-(id)initWithMenu: (AquaSalMenu*)pMenu;
+-(void)menuNeedsUpdate: (NSMenu*)pMenu;
+-(void)setSalMenu: (AquaSalMenu*)pMenu;
+@end
+
+@interface SalNSMenuItem : NSMenuItem
+{
+    AquaSalMenuItem*    mpMenuItem;
+}
+-(id)initWithMenuItem: (AquaSalMenuItem*)pMenuItem;
+-(void)menuItemTriggered: (id)aSender;
+@end
 
 #endif // _SV_SALMENU_H
