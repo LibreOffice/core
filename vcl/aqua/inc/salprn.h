@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 15:57:56 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:11:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,12 @@
 #ifndef _SV_SALPRN_H
 #define _SV_SALPRN_H
 
-#ifndef _SV_SV_H
-#include <vcl/sv.h>
-#endif
+#include "vcl/sv.h"
+#include "aquavcltypes.h"
+#include "vcl/salprn.hxx"
 
-#ifndef _AQUAVCLTYPES_H
-#include <aquavcltypes.h>
-#endif
+#include <boost/shared_array.hpp>
 
-#include <vcl/salprn.hxx>
 
 // ---------------------
 // - AquaSalInfoPrinter -
@@ -54,16 +51,30 @@ class AquaSalGraphics;
 
 class AquaSalInfoPrinter : public SalInfoPrinter
 {
-    PMPrintSession          mrSession;
-    PMPrintSettings         mrSettings;
-    PMPrinter               mrPrinter;
-    PMPageFormat            mrPageFormat;
     /// Printer graphics
     AquaSalGraphics*        mpGraphics;
     /// is Graphics used
     bool                    mbGraphics;
     /// job active ?
     bool                    mbJob;
+
+    /// cocoa printer object
+    NSPrinter*              mpPrinter;
+    /// cocoa print info object
+    NSPrintInfo*            mpPrintInfo;
+
+    /// FIXME: get real printer context for infoprinter if possible
+    /// fake context for info printer
+    /// graphics context for Quartz 2D
+    CGContextRef                            mrContext;
+    /// memory for graphics bitmap context for querying metrics
+    boost::shared_array< sal_uInt8 >        maContextMemory;
+
+    // since changes to NSPrintInfo during a job are ignored
+    // we have to care for some settings ourselves
+    // currently we do this for orientation;
+    // really needed however is a solution for paper formats
+    Orientation               mePageOrientation;
 
     public:
     AquaSalInfoPrinter( const SalPrinterQueueInfo& pInfo );
@@ -92,16 +103,19 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     // is not really useful for us
     // so let's make AquaSalPrinter just a forwarder to AquaSalInfoPrinter
     // and concentrate the real work in one class
-    BOOL                        StartJob( const XubString* i_pFileName,
-                                          const XubString& i_rJobName,
-                                          const XubString& i_rAppName,
-                                          ULONG i_nCopies, BOOL i_bCollate,
-                                          ImplJobSetup* i_pSetupData );
+    // implement pull model print system
+    BOOL                        StartJob( const String* pFileName,
+                                          const String& rAppName,
+                                          ImplJobSetup* pSetupData,
+                                          ImplQPrinter* pQPrinter );
     BOOL                        EndJob();
     BOOL                        AbortJob();
     SalGraphics*                StartPage( ImplJobSetup* i_pSetupData, BOOL i_bNewJobData );
     BOOL                        EndPage();
     ULONG                       GetErrorCode() const;
+
+    NSPrintInfo* getPrintInfo() const { return mpPrintInfo; }
+
     private:
     AquaSalInfoPrinter( const AquaSalInfoPrinter& );
     AquaSalInfoPrinter& operator=(const AquaSalInfoPrinter&);
@@ -123,6 +137,12 @@ class AquaSalPrinter : public SalPrinter
                                               const XubString& i_rAppName,
                                               ULONG i_nCopies, BOOL i_bCollate,
                                               ImplJobSetup* i_pSetupData );
+    // implement pull model print system
+    virtual BOOL                    StartJob( const String* pFileName,
+                                              const String& rAppName,
+                                              ImplJobSetup* pSetupData,
+                                              ImplQPrinter* pQPrinter );
+
     virtual BOOL                    EndJob();
     virtual BOOL                    AbortJob();
     virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, BOOL i_bNewJobData );
