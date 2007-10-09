@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdiutils.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:02:31 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:15:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,48 +36,42 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SALGDI_H
-#include <salgdi.h>
-#endif
+#include "salgdi.h"
+#include "salframe.h"
 
-#include <basebmp/scanlineformats.hxx>
-#include <basebmp/color.hxx>
-#include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/range/b2irange.hxx>
-#include <basegfx/vector/b2ivector.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
+#include "basebmp/scanlineformats.hxx"
+#include "basebmp/color.hxx"
+#include "basegfx/range/b2drectangle.hxx"
+#include "basegfx/range/b2irange.hxx"
+#include "basegfx/vector/b2ivector.hxx"
+#include "basegfx/polygon/b2dpolygon.hxx"
+#include "basegfx/polygon/b2dpolygontools.hxx"
 #include <boost/bind.hpp>
 
-#include <vcl/svapp.hxx>
-
+#include "vcl/svapp.hxx"
 #include "saldata.hxx"
 
 // ----------------------------------------------------------------------
 
-void AquaSalGraphics::SetWindowGraphics( CarbonViewRef rView, CarbonWindowRef rWindow, bool bScreenCompatible )
+void AquaSalGraphics::SetWindowGraphics( AquaSalFrame* pFrame )
 {
-    mrView      = rView;
-    mrWindow    = rWindow;
-    mbScreen    = bScreenCompatible;
+    mpFrame     = pFrame;
 
     mbWindow    = true;
     mbPrinter   = false;
     mbVirDev    = false;
 }
 
-void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, long nDPIY )
+void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, long nDPIY, double fScale )
 {
-    mrView      = 0;
-    mbScreen    = false;
-
     mbWindow    = false;
     mbPrinter   = true;
     mbVirDev    = false;
 
     mrContext   = xContext;
-    mnDPIX      = nDPIX;
-    mnDPIY      = nDPIY;
+    mfFakeDPIScale = fScale;
+    mnRealDPIX  = nDPIX;
+    mnRealDPIY  = nDPIY;
 
     if( mrContext )
     {
@@ -94,9 +88,6 @@ static void nil_free( void* )
 
 void AquaSalGraphics::SetVirDevGraphics( CGContextRef xContext, bool bScreenCompatible )
 {
-    mrView      = 0;
-    mbScreen    = bScreenCompatible;
-
     mbWindow    = false;
     mbPrinter   = false;
     mbVirDev    = true;
@@ -183,19 +174,16 @@ void AquaSalGraphics::SetState()
     }
 
     CGContextSetShouldAntialias( mrContext, false );
-
 }
 
 // ----------------------------------------------------------------------
 
 bool AquaSalGraphics::CheckContext()
 {
-    if( mrWindow != NULL )
+    if( mpFrame != NULL )
     {
-        Rect windowBounds;
-        GetWindowPortBounds( mrWindow, &windowBounds );
-        const unsigned int nWidth = windowBounds.right - windowBounds.left;
-        const unsigned int nHeight = windowBounds.bottom - windowBounds.top;
+        const unsigned int nWidth = mpFrame->maGeometry.nWidth;
+        const unsigned int nHeight = mpFrame->maGeometry.nHeight;
 
         CGContextRef rReleaseContext = 0;
         unsigned int nReleaseContextWidth = 0;
@@ -278,31 +266,13 @@ void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeigh
     if( ! mbWindow ) // view only on Window graphics
         return;
 
-    AquaLog("-->%s refresh %d - %d - %d - %d\n", __func__, static_cast<int>(lX), static_cast<int>(lY), static_cast<int>(lWidth), static_cast<int>(lHeight));
-
-    // Refresh windows rect content
-    HIRect aHIRect;
-    aHIRect.origin.x = static_cast<int>(lX);
-    aHIRect.origin.y = static_cast<int>(lY);
-    aHIRect.size.width = static_cast<int>(lWidth);
-    aHIRect.size.height = static_cast<int>(lHeight);
-    OSStatus retVal = HIViewSetNeedsDisplayInRect(mrView,&aHIRect,true);
-    if (retVal)
-        AquaLog( "FIXME: HIViewSetNeedsDisplayInRect returned %d (mrView is %p)\n", (int) retVal, mrView);
-
-    Rect aRect;
-    aRect.left   = (short)lX;
-    aRect.top    = (short)lY;
-    aRect.right  = (short)(lX + lWidth );
-    aRect.bottom = (short)(lY + lHeight );
-    InvalWindowRect(mrWindow, &aRect);
-}
-
-void AquaSalGraphics::Flush()
-{
-    if( mbWindow )
+    if( mpFrame )
     {
-        UpdateWindow();
+        // update a little more around the designated rectangle
+        // this helps with antialiased rendering
+        NSRect aRect = { { lX-1, lY-1 }, { lWidth+2, lHeight+2 } };
+        mpFrame->VCLToCocoa( aRect, false );
+        [mpFrame->getView() setNeedsDisplayInRect: aRect];
     }
 }
 
@@ -324,22 +294,20 @@ CGPoint* AquaSalGraphics::makeCGptArray(ULONG nPoints, const SalPoint*  pPtAry)
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::UpdateWindow()
+void AquaSalGraphics::UpdateWindow( NSGraphicsContext* pContext )
 {
-    if( mrContext != NULL && mrWindow != NULL )
+    if( mrContext != NULL && mpFrame != NULL && pContext != nil )
     {
-        SetPortWindowPort(mrWindow);
-        CGContextRef xWindowContext = 0;
-        if( noErr == QDBeginCGContext (GetWindowPort (mrWindow), &xWindowContext))
-        {
-            Rect windowBounds;
-            GetWindowPortBounds( mrWindow, &windowBounds);
-            CGImageRef xImage = CGBitmapContextCreateImage( mrContext );
-            CGContextDrawImage(xWindowContext, CGRectMake(windowBounds.left, windowBounds.top, windowBounds.right - windowBounds.left, windowBounds.bottom - windowBounds.top ), xImage);
-            CGImageRelease(xImage);
-            CGContextFlush( xWindowContext );
-            QDEndCGContext (GetWindowPort(mrWindow), &xWindowContext);
-        }
+        CGContextRef rCGContext = reinterpret_cast<CGContextRef>([pContext graphicsPort]);
+        CGRect aBitmapRect = {
+            { 0, 0 },
+            { CGBitmapContextGetWidth(mrContext), CGBitmapContextGetHeight(mrContext) }
+        };
+
+        CGImageRef xImage = CGBitmapContextCreateImage( mrContext );
+        CGContextDrawImage( rCGContext, aBitmapRect, xImage );
+        CGImageRelease( xImage );
+        CGContextFlush( rCGContext );
     }
 }
 
