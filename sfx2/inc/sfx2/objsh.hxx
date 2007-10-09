@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objsh.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:37:42 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:30:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,9 +319,10 @@ public:
                                          const TypeId* pType = 0,
                                          sal_Bool bOnlyVisible = sal_True );
     static SfxObjectShell*      Current();
-    static sal_uInt16               Count();
-    static SfxObjectShell*      GetWorkingDocument();
-    static void                 SetWorkingDocument( SfxObjectShell* pDoc );
+    static sal_uInt16           Count();
+    static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+                                GetWorkingDocument();
+    static void                 SetWorkingDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument );
 
     virtual void                Invalidate(USHORT nId = 0);
 
@@ -346,7 +347,6 @@ public:
     void                        SetNoName();
     sal_Bool                    IsInModalMode() const;
     sal_Bool                    HasModalViews() const;
-    sal_Bool                    IsInPrepareClose() const;
     sal_Bool                    IsHelpDocument() const;
 
 //#if 0 // _SOLAR__PRIVATE
@@ -442,9 +442,14 @@ public:
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam
     );
 
-    BOOL                        DoMacroQuery( const String& rScriptType );
-    void                        AdjustMacroMode( const String& rScriptType );
-    sal_Int16                   GetMacroMode();
+    /** adjusts the internal macro mode, according to the current security settings
+
+        Finally, the macro mode is either NEVER_EXECUTE or ALWAYS_EXECUTE_NO_WARN.
+
+        @return
+            whether macros from this document should be executed
+    */
+    bool                        AdjustMacroMode( const String& rScriptType, bool _bSuppressUI = false );
 
     SvKeyValueIterator*         GetHeaderAttributes();
     void                        ClearHeaderAttributesForSourceViewHack();
