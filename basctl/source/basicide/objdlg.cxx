@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:58:57 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:24:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,6 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
     {
         case TBITEM_SHOW:
         {
-            SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             SfxAllItemSet aArgs( SFX_APP()->GetPool() );
             SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
             SFX_APP()->ExecuteSlot( aRequest );
@@ -210,7 +209,7 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
             DBG_ASSERT( pCurEntry, "Entry?!" );
             BasicEntryDescriptor aDesc( aMacroTreeList.GetEntryDescriptor( pCurEntry ) );
             BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-            pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+            SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
             SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if ( aDesc.GetType() == OBJ_TYPE_MODULE ||
                  aDesc.GetType() == OBJ_TYPE_DIALOG ||
