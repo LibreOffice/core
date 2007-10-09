@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-18 11:15:22 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:15:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,31 +33,63 @@
  *
  ************************************************************************/
 
-#ifndef _SV_SALCONST_H
-#include <salconst.h>
-#endif
-
-#ifndef _SV_SALGDI_H
-#include <salgdi.h>
-#endif
-
-#ifndef _SV_NATIVEWIDGETS_HXX
-#include <salnativewidgets.hxx>
-#endif
-
-#ifndef _SV_NATIVEWIDGETS_H
-#include <salnativewidgets.h>
-#endif
-
-#ifndef _SV_DECOVIEW_HXX
-#include <vcl/decoview.hxx>
-#endif
-
-#include <vcl/svapp.hxx>
-
+#include "salconst.h"
+#include "salgdi.h"
+#include "salnativewidgets.h"
 #include "saldata.hxx"
+#include "salframe.h"
+
+#include "vcl/salnativewidgets.hxx"
+#include "vcl/decoview.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/timer.hxx"
+
+#include "premac.h"
+#include <Carbon/Carbon.h>
+#include "postmac.h"
 
 //using ::rtl::OUString;
+
+class AquaBlinker : public Timer
+{
+    AquaSalFrame*       mpFrame;
+    Rectangle           maInvalidateRect;
+    public:
+    AquaBlinker( AquaSalFrame* pFrame, const Rectangle& rRect )
+    : mpFrame( pFrame ), maInvalidateRect( rRect )
+    {
+    }
+
+    virtual void Timeout()
+    {
+        if( AquaSalFrame::isAlive( mpFrame ) && mpFrame->mbShown )
+            mpFrame->SendPaintEvent( &maInvalidateRect );
+        Stop();
+        delete this;
+    }
+};
+
+ControlPart ImplgetCounterPart( ControlPart nPart )
+{
+    ControlPart nCounterPart = 0;
+    switch (nPart)
+    {
+        case PART_BUTTON_UP:
+            nCounterPart = PART_BUTTON_DOWN;
+            break;
+        case PART_BUTTON_DOWN:
+            nCounterPart = PART_BUTTON_UP;
+            break;
+        case PART_BUTTON_LEFT:
+            nCounterPart = PART_BUTTON_RIGHT;
+            break;
+        case PART_BUTTON_RIGHT:
+            nCounterPart = PART_BUTTON_LEFT;
+            break;
+    }
+    return nCounterPart;
+}
+
 
 // Helper returns an HIRect
 
@@ -66,35 +98,11 @@ static HIRect ImplGetHIRectFromRectangle(Rectangle aRect)
     HIRect aHIRect;
     aHIRect.origin.x = static_cast<float>(aRect.Left());
     aHIRect.origin.y = static_cast<float>(aRect.Top());
-    aHIRect.size.width = static_cast<float>(aRect.Right()) - static_cast<float>(aRect.Left() +1);
-    aHIRect.size.height = static_cast<float>(aRect.Bottom()) - static_cast<float>(aRect.Top() +1);
+    aHIRect.size.width = static_cast<float>(aRect.GetWidth());
+    aHIRect.size.height = static_cast<float>(aRect.GetHeight());
     return aHIRect;
 }
 
-// Helper returns a Rectangle
-#if 0
-static Rectangle ImplGetRectangleFromHIRect( HIRect aHIRect )
-{
-    Rectangle aRect;
-    aRect.Top() = static_cast<int>(aHIRect.origin.y);
-    aRect.Left() = static_cast<int>(aHIRect.origin.x);
-    aRect.Bottom() = static_cast<int>(aHIRect.size.height) + static_cast<short>(aHIRect.origin.y);
-    aRect.Right() = static_cast<int>(aHIRect.origin.x) + static_cast<short>(aHIRect.size.width);
-    return aRect;
-}
-
-// Helper returns a QD Rect
-
-static Rect ImplGetRectFromHIRect(HIRect aHIRect)
-{
-    Rect aRect;
-    aRect.top = static_cast<short>(aHIRect.origin.y);
-    aRect.left = static_cast<short>(aHIRect.origin.x);
-    aRect.right= static_cast<short>(aHIRect.origin.x) + static_cast<short>(aHIRect.size.width);
-    aRect.bottom = static_cast<short>(aHIRect.size.height) + static_cast<short>(aHIRect.origin.y);
-    return aRect;
-}
-#endif
 static ThemeButtonValue ImplGetButtonValue( ButtonValue aButtonValue )
 {
     switch( aButtonValue )
@@ -261,6 +269,7 @@ BOOL AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
         case CTRL_PUSHBUTTON:
         case CTRL_RADIOBUTTON:
         case CTRL_CHECKBOX:
+        case CTRL_LISTNODE:
             if( nPart == PART_ENTIRE_CONTROL )
                 return true;
             break;
@@ -292,19 +301,19 @@ BOOL AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
                 return true;
             break;
 
-        case CTRL_SPINBUTTONS: // ** TO DO **
+        case CTRL_SPINBUTTONS:
             if( nPart == PART_ENTIRE_CONTROL ||
                 nPart == PART_ALL_BUTTONS )
                 return false;
             break;
 
-        case CTRL_COMBOBOX: // ** TO DO **
+        case CTRL_COMBOBOX:
             if( nPart == PART_ENTIRE_CONTROL ||
                 nPart == HAS_BACKGROUND_TEXTURE )
                 return true;
             break;
 
-        case CTRL_LISTBOX: // ** TO DO **
+        case CTRL_LISTBOX:
             if( nPart == PART_ENTIRE_CONTROL    ||
                 nPart == PART_WINDOW            ||
                 nPart == HAS_BACKGROUND_TEXTURE ||
@@ -338,12 +347,12 @@ BOOL AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
                  return true;
             break;
 
-        case CTRL_MENUBAR: // ** TO DO + CHECK IF NEEDED **
+        case CTRL_MENUBAR:
             if( nPart == PART_ENTIRE_CONTROL )
                 return true;
             break;
 
-        case CTRL_TOOLTIP: // ** TO DO + CHECK IF NEEDED **
+        case CTRL_TOOLTIP: // ** TO DO
             #if 0
             if( nPart == PART_ENTIRE_CONTROL ) // we don't currently support the tooltip
                 return true;
@@ -364,6 +373,10 @@ BOOL AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
             break;
         case CTRL_FRAME:
             if( nPart == PART_BORDER )
+                return true;
+            break;
+        case CTRL_LISTNET:
+            if( nPart == PART_ENTIRE_CONTROL )
                 return true;
             break;
     }
@@ -647,6 +660,13 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
 
                     HIThemeDrawButton( &rc, &aPushInfo, mrContext, kHIThemeOrientationNormal, NULL );
                     bOK = true;
+
+                    if( (nState & CTRL_STATE_DEFAULT) != 0 )
+                    {
+                        AquaBlinker* pNewBlinker = new AquaBlinker( mpFrame, buttonRect );
+                        pNewBlinker->SetTimeout( 50 );
+                        pNewBlinker->Start();
+                    }
                 }
             }
         }
@@ -659,9 +679,11 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
             aInfo.version = 0;
             switch( nType )
             {
-            case CTRL_RADIOBUTTON: aInfo.kind = kThemeRadioButton;
+            case CTRL_RADIOBUTTON: if(rc.size.width >= BUTTON_HEIGHT) aInfo.kind = kThemeRadioButton;
+                                    else aInfo.kind = kThemeSmallRadioButton;
                 break;
-            case CTRL_CHECKBOX:    aInfo.kind = kThemeCheckBox;
+            case CTRL_CHECKBOX:   if(rc.size.width >= BUTTON_HEIGHT) aInfo.kind = kThemeCheckBox;
+                                    else aInfo.kind = kThemeSmallCheckBox;
                 break;
             }
 
@@ -679,6 +701,33 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
             bOK = true;
         }
         break;
+
+    case CTRL_LISTNODE:
+        {
+            HIThemeButtonDrawInfo aInfo;
+            aInfo.version = 0;
+            aInfo.kind = kThemeDisclosureButton;
+            aInfo.state = getState( nState );
+
+            aInfo.adornment = kThemeAdornmentNone;
+
+            ButtonValue aButtonValue = aValue.getTristateVal();
+
+            switch( aButtonValue ) {
+                case BUTTONVALUE_ON: aInfo.value = kThemeDisclosureDown;//expanded
+                    break;
+                case BUTTONVALUE_OFF: aInfo.value = kThemeDisclosureRight;//collapsed
+                    break;
+                case BUTTONVALUE_DONTKNOW: //what to do?
+                default:
+                    break;
+            }
+
+            HIThemeDrawButton( &rc, &aInfo, mrContext, kHIThemeOrientationNormal, NULL );
+            bOK = true;
+        }
+        break;
+
     case CTRL_PROGRESS:
     case CTRL_INTROPROGRESS:
         {
@@ -1040,6 +1089,13 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                     bOK=true;
                 }
             }
+        }
+        break;
+
+    case CTRL_LISTNET:
+        {
+           //do nothing as there isn't net for listviews on macos
+            bOK=true;
         }
         break;
 
