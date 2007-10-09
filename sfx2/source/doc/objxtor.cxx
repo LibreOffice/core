@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2007-07-19 14:50:30 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:32:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ DBG_NAME(SfxObjectShell)
 #include "sfxslots.hxx"
 
 extern svtools::AsynchronLink* pPendingCloser;
-static SfxObjectShell* pWorkingDoc = NULL;
+static WeakReference< XModel > xWorkingDoc;
 
 //=========================================================================
 class SfxModelListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
@@ -190,14 +190,14 @@ void SAL_CALL SfxModelListener_Impl::notifyClosing( const com::sun::star::lang::
     mpDoc->Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
 }
 
-void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::EventObject& ) throw ( com::sun::star::uno::RuntimeException )
+void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::EventObject& _rEvent ) throw ( com::sun::star::uno::RuntimeException )
 {
     // am I "ThisComponent" in AppBasic?
     StarBASIC* pBas = SFX_APP()->GetBasic_Impl();
-    if ( pBas && SFX_APP()->Get_Impl()->pThisDocument == mpDoc )
+    if ( pBas && SFX_APP()->Get_Impl()->m_xThisDocument == _rEvent.Source )
     {
         // remove "ThisComponent" reference from AppBasic
-        SFX_APP()->Get_Impl()->pThisDocument = NULL;
+        SFX_APP()->Get_Impl()->m_xThisDocument = NULL;
         SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_OBJECT );
         if ( pCompVar )
         {
@@ -569,19 +569,6 @@ SfxObjectShell* SfxObjectShell::Current()
     return pFrame ? pFrame->GetObjectShell() : 0;
 }
 
-//-------------------------------------------------------------------------
-
-sal_Bool SfxObjectShell::IsInPrepareClose() const
-
-/*  [Beschreibung]
-
-    Diese Methode liefert sal_True, falls gerade ein PrepareClose laeuft.
-*/
-
-{
-    return pImp->bInPrepareClose;
-}
-
 //------------------------------------------------------------------------
 
 struct BoolEnv_Impl
@@ -881,7 +868,7 @@ SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames_Impl()
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
         if ( !pEventNameContainer )
         {
-            static uno::Sequence< ::rtl::OUString > aEventNameContainer( 26 );
+            static uno::Sequence< ::rtl::OUString > aEventNameContainer( 27 );
             // SFX_EVENT_STARTAPP
             aEventNameContainer[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnStartApp" ) );
 
@@ -958,7 +945,10 @@ SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames_Impl()
             aEventNameContainer[24] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnCopyToFailed" ) );
 
             // SFX_HINT_TITLECHANGED
-            aEventNameContainer[25] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TitleChanged" ) );
+            aEventNameContainer[25] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnTitleChanged" ) );
+
+            // SFX_HINT_MODECHANGED
+            aEventNameContainer[26] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnModeChanged" ) );
 
             pEventNameContainer = &aEventNameContainer;
         }
@@ -1003,16 +993,15 @@ void SfxObjectShell::SetAutoStyleFilterIndex(sal_uInt16 nSet)
     pImp->nStyleFilter = nSet;
 }
 
-void SfxObjectShell::SetWorkingDocument( SfxObjectShell* pDoc )
+void SfxObjectShell::SetWorkingDocument( const Reference< XModel >& _rxDocument )
 {
-    pWorkingDoc = pDoc;
+    xWorkingDoc = _rxDocument;
     StarBASIC* pBas = SFX_APP()->GetBasic_Impl();
-    if ( pDoc && pBas )
+    if ( pBas )
     {
-        SFX_APP()->Get_Impl()->pThisDocument = pDoc;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xInterface ( pDoc->GetModel() , ::com::sun::star::uno::UNO_QUERY );
-        ::com::sun::star::uno::Any aComponent;
-        aComponent <<= xInterface;
+        SFX_APP()->Get_Impl()->m_xThisDocument = _rxDocument;
+        Any aComponent;
+        aComponent <<= _rxDocument;
         SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
         if ( pCompVar )
         {
@@ -1027,9 +1016,9 @@ void SfxObjectShell::SetWorkingDocument( SfxObjectShell* pDoc )
     }
 }
 
-SfxObjectShell* SfxObjectShell::GetWorkingDocument()
+Reference< XModel > SfxObjectShell::GetWorkingDocument()
 {
-    return pWorkingDoc;
+    return xWorkingDoc;
 }
 
 
