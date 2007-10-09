@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 07:44:22 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:10:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,9 @@
 #ifndef _SV_SALOBJ_H
 #define _SV_SALOBJ_H
 
-#ifndef _SV_SV_H
-#include <vcl/sv.h>
-#endif
-
-#ifndef _SV_SYSDATA_HXX
-#include <vcl/sysdata.hxx>
-#endif
-
-#include <vcl/salobj.hxx>
+#include "vcl/sv.h"
+#include "vcl/sysdata.hxx"
+#include "vcl/salobj.hxx"
 
 class AquaSalFrame;
 class AquaSalObject;
