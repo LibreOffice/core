@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MiscUtils.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:28:30 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:02:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,79 +92,6 @@ public:
     return result;
 }
 
-    static ::rtl::OUString xModelToDocTitle( const css::uno::Reference< css::frame::XModel >& xModel )
-{
-    // Set a default name, this should never be seen.
-    ::rtl::OUString docNameOrURL =
-        ::rtl::OUString::createFromAscii("Unknown");
-    if ( xModel.is() )
-    {
-        ::rtl::OUString tempName;
-        try
-        {
-            css::uno::Reference< css::frame::XController > xCurrentController = xModel->getCurrentController();
-            if( xCurrentController.is() )
-            {
-                css::uno::Reference< css::beans::XPropertySet > propSet( xCurrentController->getFrame(), css::uno::UNO_QUERY );
-                if ( propSet.is() )
-                {
-                    if ( sal_True == ( propSet->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) ) >>= tempName ) )
-                    {
-                        docNameOrURL = tempName;
-                        if ( xModel->getURL().getLength() == 0 )
-                        {
-                            // process "UntitledX - YYYYYYYY"
-                            // to get UntitledX
-                            sal_Int32 pos = 0;
-                            docNameOrURL = tempName.getToken(0,' ',pos);
-                        }
-                        else
-                        {
-                            css::uno::Reference< css::document::XDocumentInfoSupplier >  xDIS( xModel, css::uno::UNO_QUERY_THROW );
-                            css::uno::Reference< css::beans::XPropertySet > xProp (xDIS->getDocumentInfo(),  css::uno::UNO_QUERY_THROW );
-                            css::uno::Any aTitle = xProp->getPropertyValue(::rtl::OUString::createFromAscii( "Title" ) );
-
-                            aTitle >>= docNameOrURL;
-                            if ( docNameOrURL.getLength() == 0 )
-                            {
-                                docNameOrURL =  parseLocationName( xModel->getURL() );
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch ( css::uno::Exception& e )
-        {
-            OSL_TRACE("MiscUtils::xModelToDocTitle() exception thrown: !!! %s",
-                ::rtl::OUStringToOString( e.Message,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        }
-    }
-    return docNameOrURL;
-}
-    static ::rtl::OUString tDocUrlToTitle( const ::rtl::OUString& url )
-{
-    ::rtl::OUString title;
-
-    try
-    {
-        ::ucbhelper::Content root( url, NULL );
-        ::rtl::OUString propName =  OUSTR("Title");
-        getUCBProperty( root, propName ) >>= title;
-    }
-    catch ( css::ucb::ContentCreationException& )
-    {
-        // carry on, empty value will be returned
-    }
-    catch ( css::uno::RuntimeException& )
-    {
-        // carry on, empty value will be returned
-    }
-
-    OSL_ENSURE( title.getLength() > 0, "Unable to obtain title!" );
-    return title;
-}
     static ::rtl::OUString xModelToTdocUrl( const css::uno::Reference< css::frame::XModel >& xModel,
                                             const css::uno::Reference< css::uno::XComponentContext >& xContext )
 {
