@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdata.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 11:59:43 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:33:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,8 @@
 #include <vcl/timer.hxx>
 #include <tools/string.hxx>
 #include "rtl/ref.hxx"
+
+#include <com/sun/star/frame/XModel.hpp>
 
 #include "bitset.hxx"
 
@@ -132,7 +134,8 @@ public:
     SvtHelpOptions*                     pHelpOptions;
 
     // "current" functionality
-    SfxObjectShell*                     pThisDocument;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+                                        m_xThisDocument;
     SfxProgress*                        pProgress;
     ISfxTemplateCommon*                 pTemplateCommon;
 
