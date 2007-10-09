@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:08:29 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:32:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -745,7 +745,7 @@ String SfxObjectShell::GetTitle
     // Picklist/Caption wird gemappt
     if ( pMed && ( nMaxLength == SFX_TITLE_CAPTION || nMaxLength == SFX_TITLE_PICKLIST ) )
     {
-        // Wenn ein spezieller Titel beim "Offnen mitgegebent wurde;
+        // Wenn ein spezieller Titel beim "Offnen mitgegeben wurde;
         // wichtig bei URLs, die INET_PROT_FILE verwenden, denn bei denen
         // wird der gesetzte Titel nicht beachtet.
         // (s.u., Auswertung von aTitleMap_Impl)
@@ -1050,9 +1050,9 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
 
         if ( bHasMacros )
         {
-            AdjustMacroMode( String() ); // if macros are disabled the message will be shown here
+            bool bAllowMacros = AdjustMacroMode( String() ); // if macros are disabled the message will be shown here
             if ( SvtSecurityOptions().GetMacroSecurityLevel() > 2
-                && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode && pMedium )
+                && !bAllowMacros && pMedium )
             {
                   UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_DOCUMENT_MACRO_DISABLED );
             }
@@ -1069,7 +1069,6 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
 
     // xmlsec05, check with SFX team
     // Check if there is a broken signature...
-    // After EA change to interaction handler...
     if ( !pImp->bSignatureErrorIsShown
     && GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
     {
@@ -1324,8 +1323,7 @@ ErrCode SfxObjectShell::CallBasic( const String& rMacro,
     SfxApplication* pApp = SFX_APP();
     if( pApp->GetName() != rBasic )
     {
-        AdjustMacroMode( String() );
-        if( pImp->nMacroMode == MacroExecMode::NEVER_EXECUTE )
+        if ( !AdjustMacroMode( String() ) )
             return ERRCODE_IO_ACCESSDENIED;
     }
 
@@ -1367,8 +1365,7 @@ ErrCode SfxObjectShell::CallXScript( const String& rScriptURL,
     if( rScriptURL.Search( UniString::CreateFromAscii( "location=document" ) )
             > 0 )
     {
-        AdjustMacroMode( String() );
-        if( pImp->nMacroMode == MacroExecMode::NEVER_EXECUTE ) {
+        if ( !AdjustMacroMode( String() ) ) {
             return ERRCODE_IO_ACCESSDENIED;
         }
     }
@@ -1819,7 +1816,7 @@ void SfxObjectShell::Invalidate( USHORT nId )
 // nMacroMode == -1 : uninitialized
 // other values as in /com/sun/star/document/MacroExecMode.hxx
 
-void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
+bool SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/, bool _bSuppressUI )
 {
     if( pImp->nMacroMode < 0 )
     {
@@ -1829,13 +1826,14 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
 
     // --> PB 2004-11-09 #i35190#
     // xmlsec05, check with SFX team
-    // After EA change to interaction handler...
     if ( !pImp->bSignatureErrorIsShown && GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
     {
         // if the signature is broken, show here the warning before
         // the macro warning
-        if ( pMedium
-          && UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_BROKENSIGNATURE ) )
+        if  (   !_bSuppressUI
+            &&  pMedium != NULL
+            &&  UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_BROKENSIGNATURE )
+            )
             pImp->bSignatureErrorIsShown = sal_True;
 
         pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
@@ -1848,13 +1846,16 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
         pImp->bMacroDisabled = sal_True;
         pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
 
-        if ( !pImp->bMacroDisabledMessageIsShown && pMedium
-          && UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_MACROS_SUPPORT_DISABLED ) )
+        if  (   !_bSuppressUI
+            &&  !pImp->bMacroDisabledMessageIsShown
+            &&  pMedium != NULL
+            && UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_MACROS_SUPPORT_DISABLED )
+            )
         {
             pImp->bMacroDisabledMessageIsShown = sal_True;
         }
 
-        return;
+        return false;
     }
 
     // get setting from configuration if required
@@ -1889,9 +1890,10 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
             nAutoConformation = 1;
     }
 
-    if ( pImp->nMacroMode == MacroExecMode::NEVER_EXECUTE
-      || pImp->nMacroMode == MacroExecMode::ALWAYS_EXECUTE_NO_WARN )
-        return;
+    if ( pImp->nMacroMode == MacroExecMode::NEVER_EXECUTE )
+        return false;
+    if ( pImp->nMacroMode == MacroExecMode::ALWAYS_EXECUTE_NO_WARN )
+        return true;
 
     try
     {
@@ -1918,7 +1920,7 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
             if ( aLocation.getLength() && xSignatures->isLocationTrusted( aLocation ) )
             {
                 pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-                return;
+                return true;
             }
         }
 
@@ -1926,7 +1928,7 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
         if ( pImp->nMacroMode == MacroExecMode::FROM_LIST_NO_WARN )
         {
             pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-            return;
+            return false;
         }
 
         // check whether the document is signed with trusted certificate
@@ -1946,12 +1948,14 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
             {
                 if ( pImp->nMacroMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
                 {
-                    if ( pMedium
-                      && UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_BROKENSIGNATURE ) )
+                    if  (   !_bSuppressUI
+                        &&  pMedium != NULL
+                        &&  UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_BROKENSIGNATURE )
+                        )
                         pImp->bSignatureErrorIsShown = sal_True;
 
                     pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-                    return;
+                    return false;
                 }
             }
             else if ( (    nSignatureState == SIGNATURESTATE_SIGNATURES_OK
@@ -1974,41 +1978,52 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
                     if ( xSignatures->isAuthorTrusted( aScriptingSignatureInformations[nInd].Signer ) )
                     {
                         pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-                        return;
+                        return true;
                     }
 
                 if ( pImp->nMacroMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
                 {
-                    MacroWarning aDlg( GetDialogParent(), true );
-                    aDlg.SetDocumentURL( aReferer );
-                    if( nNumOfInfos > 1 )
-                        aDlg.SetStorage( xStore, aScriptingSignatureInformations );
-                    else
-                        aDlg.SetCertificate( aScriptingSignatureInformations[ 0 ].Signer );
-                    USHORT nRet = aDlg.Execute();
-                    pImp->nMacroMode = ( nRet == RET_OK ) ? MacroExecMode::ALWAYS_EXECUTE_NO_WARN : MacroExecMode::NEVER_EXECUTE;
-                    return;
+                    bool bAllowMacros = false;
+                    if ( !_bSuppressUI )
+                    {
+                        MacroWarning aDlg( GetDialogParent(), true );
+                        aDlg.SetDocumentURL( aReferer );
+                        if( nNumOfInfos > 1 )
+                            aDlg.SetStorage( xStore, aScriptingSignatureInformations );
+                        else
+                            aDlg.SetCertificate( aScriptingSignatureInformations[ 0 ].Signer );
+                        USHORT nRet = aDlg.Execute();
+                        bAllowMacros = ( nRet == RET_OK );
+                    }
+
+                    pImp->nMacroMode = bAllowMacros ? MacroExecMode::ALWAYS_EXECUTE_NO_WARN : MacroExecMode::NEVER_EXECUTE;
+                    return bAllowMacros;
                 }
             }
+/*          this is an impossible case - above, USE_CONFIG has already been translated to something else
             else if( pImp->nMacroMode == MacroExecMode::USE_CONFIG )
             {
                 MacroWarning aWarning( GetDialogParent(), false );
                 aWarning.SetDocumentURL( aReferer );
                 if( aWarning.Execute() != RET_OK )
-                    return;
+                    return pImp->nMacroMode;
             }
+*/
         }
 
         // at this point it is clear that the document is neither in secure location nor signed with trusted certificate
         if ( pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
           || pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
         {
-            if ( pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN && pMedium )
+            if  (   !_bSuppressUI
+                &&  pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN
+                &&  pMedium != NULL
+                )
             {
                   UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_DOCUMENT_MACRO_DISABLED );
             }
                pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-            return;
+            return false;
         }
     }
     catch ( uno::Exception& )
@@ -2018,7 +2033,7 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
           || pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
         {
             pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-            return;
+            return false;
         }
     }
 
@@ -2033,19 +2048,18 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
         if ( osl::FileBase::getSystemPathFromFileURL( aReferer, aSystemFileURL ) == osl::FileBase::E_None )
             aReferer = aSystemFileURL;
 
-        MacroWarning aWarning( GetDialogParent(), false );
-        aWarning.SetDocumentURL( aReferer );
-        bSecure = ( aWarning.Execute() == RET_OK );
+        if ( !_bSuppressUI )
+        {
+            MacroWarning aWarning( GetDialogParent(), false );
+            aWarning.SetDocumentURL( aReferer );
+            bSecure = ( aWarning.Execute() == RET_OK );
+        }
     }
     else
         bSecure = ( nAutoConformation > 0 );
 
     pImp->nMacroMode = bSecure ? MacroExecMode::ALWAYS_EXECUTE_NO_WARN : MacroExecMode::NEVER_EXECUTE;
-}
-
-sal_Int16 SfxObjectShell::GetMacroMode()
-{
-    return pImp->nMacroMode;
+    return bSecure;
 }
 
 Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
