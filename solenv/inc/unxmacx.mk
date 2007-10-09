@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2007-08-03 13:55:43 $
+#   last change: $Author: kz $ $Date: 2007-10-09 15:05:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,7 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 # Normal C++ compilation flags
 CFLAGSCXX=-pipe -malign-natural -fsigned-char -Wno-long-double $(ARCH_FLAGS)
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
+
 PICSWITCH:=-fPIC
 # Other flags
 CFLAGSOBJGUIMT=$(PICSWITCH) -fno-common
@@ -231,9 +232,9 @@ STDSLOCUI=
 
 .IF "$(GUIBASE)" == "aqua"
     STDLIBCUIMT=CPPRUNTIME -lm
-    STDLIBGUIMT=-framework Carbon -lpthread CPPRUNTIME -lm
+    STDLIBGUIMT=-framework Carbon -framework Cocoa -lpthread CPPRUNTIME -lm
     STDSHLCUIMT=-lpthread CPPRUNTIME -lm
-    STDSHLGUIMT=-framework Carbon -framework CoreFoundation -lpthread CPPRUNTIME -lm
+    STDSHLGUIMT=-framework Carbon -framework CoreFoundation -framework Cocoa -lpthread CPPRUNTIME -lm
     PSPLIB=-lpsp
 .ELSE
     STDLIBCUIMT= CPPRUNTIME -lm
