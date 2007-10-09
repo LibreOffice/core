@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:55:35 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:22:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,8 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 {
     BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
     ScriptDocument aDocument( aDesc.GetDocument() );
-    OSL_ENSURE( aDocument.isValid(), "BasicTreeListBox::RequestingChilds: invalid document!" );
-    if ( !aDocument.isValid() )
+    OSL_ENSURE( aDocument.isAlive(), "BasicTreeListBox::RequestingChilds: invalid document!" );
+    if ( !aDocument.isAlive() )
         return;
 
     LibraryLocation eLocation( aDesc.GetLocation() );
@@ -170,13 +170,13 @@ void BasicTreeListBox::ScanAllEntries()
     ScanEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER );
     ScanEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_SHARE );
 
-    ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( false ) );
+    ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( ScriptDocument::DocumentsSorted ) );
     for (   ScriptDocuments::const_iterator doc = aDocuments.begin();
             doc != aDocuments.end();
             ++doc
         )
     {
-        if ( !doc->isClosing() )
+        if ( doc->isAlive() )
             ScanEntry( *doc, LIBRARY_LOCATION_DOCUMENT );
     }
 }
@@ -438,10 +438,9 @@ bool BasicTreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
     {
         case OBJ_TYPE_DOCUMENT:
         {
-            bIsValid =  (   aDocument.isApplication()
-                        ||  (   GetRootEntryName( aDocument, eLocation ) == GetEntryText( pEntry )
-                            &&  !aDocument.isClosing()
-                            )
+            bIsValid =  aDocument.isAlive()
+                    &&  (   aDocument.isApplication()
+                        ||  GetRootEntryName( aDocument, eLocation ) == GetEntryText( pEntry )
                         );
         }
         break;
