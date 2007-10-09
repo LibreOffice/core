@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salcolorutils.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 15:59:28 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:14:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SALCOLORUTILS_HXX
-    #include <salcolorutils.hxx>
-#endif
-#include <vcl/salbtype.hxx>
+#include "salcolorutils.hxx"
+#include "vcl/salbtype.hxx"
 
 // =======================================================================
 
