@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 16:01:33 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:12:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,28 +36,16 @@
 #ifndef _SV_SALVD_H
 #define _SV_SALVD_H
 
-#include <premac.h>
+#include "premac.h"
 #include <ApplicationServices/ApplicationServices.h>
-#include <postmac.h>
+#include "postmac.h"
 
-#ifndef _SV_SV_H
-    #include <vcl/sv.h>
-#endif
-
-#ifndef _SV_SALGDI_HXX
-    #include <vcl/salgdi.hxx>
-#endif
-
-#ifndef _SV_SALCONST_H
-    #include <salconst.h>
-#endif
-
-#ifndef _SV_SALCOLORUTILS_HXX
-    #include <salcolorutils.hxx>
-#endif
-
-#include <vcl/salvd.hxx>
-#include <salgdi.h>
+#include "vcl/sv.h"
+#include "vcl/salgdi.hxx"
+#include "salconst.h"
+#include "salcolorutils.hxx"
+#include "vcl/salvd.hxx"
+#include "salgdi.h"
 
 #if PRAGMA_ONCE
     #pragma once
