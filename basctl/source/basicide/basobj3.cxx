@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:58:33 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:22:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ SbMethod* BasicIDE::CreateMacro( SbModule* pModule, const String& rMacroName )
         pDispatcher->Execute( SID_BASICIDE_UPDATEALLMODULESOURCES );
     }
 
-    if ( aDocument.isValid() )
+    if ( aDocument.isAlive() )
         BasicIDE::MarkDocumentModified( aDocument );
 
     return pMethod;
@@ -299,7 +299,7 @@ StarBASIC* BasicIDE::FindBasic( const SbxVariable* pVar )
 
 BasicManager* BasicIDE::FindBasicManager( StarBASIC* pLib )
 {
-    ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( true ) );
+    ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( ScriptDocument::AllWithApplication ) );
     for (   ScriptDocuments::const_iterator doc = aDocuments.begin();
             doc != aDocuments.end();
             ++doc
