@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selector.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:26:21 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:18:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,13 +72,43 @@
 
 struct SvxGroupInfo_Impl
 {
-    USHORT      nKind;
-    USHORT      nOrd;
-    void*       pObject;
-    BOOL        bWasOpened;
+    USHORT          nKind;
+    USHORT          nOrd;
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
+                    xBrowseNode;
+    ::rtl::OUString sURL;
+    ::rtl::OUString sHelpText;
+    BOOL            bWasOpened;
 
-    SvxGroupInfo_Impl( USHORT n, USHORT nr, void* pObj = 0 ) :
-        nKind( n ), nOrd( nr ), pObject( pObj ), bWasOpened(FALSE) {}
+    SvxGroupInfo_Impl( USHORT n, USHORT nr )
+        :nKind( n )
+        ,nOrd( nr )
+        ,xBrowseNode()
+        ,sURL()
+        ,sHelpText()
+        ,bWasOpened(FALSE)
+    {
+    }
+
+    SvxGroupInfo_Impl( USHORT n, USHORT nr, const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& _rxNode )
+        :nKind( n )
+        ,nOrd( nr )
+        ,xBrowseNode( _rxNode )
+        ,sURL()
+        ,sHelpText()
+        ,bWasOpened(FALSE)
+    {
+    }
+
+    SvxGroupInfo_Impl( USHORT n, USHORT nr, const ::rtl::OUString& _rURL, const ::rtl::OUString& _rHelpText )
+        :nKind( n )
+        ,nOrd( nr )
+        ,xBrowseNode()
+        ,sURL( _rURL )
+        ,sHelpText( _rHelpText )
+        ,bWasOpened(FALSE)
+    {
+    }
 };
 
 typedef SvxGroupInfo_Impl* SvxGroupInfoPtr;
@@ -130,7 +160,7 @@ public:
 class SvxConfigGroupListBox_Impl : public SvTreeListBox
 {
     SvxGroupInfoArr_Impl            aArr;
-    ULONG                           nMode;
+    bool                            m_bShowSlots;
 
     SvxConfigFunctionListBox_Impl*  pFunctionListBox;
     ImageProvider*                  m_pImageProvider;
@@ -140,9 +170,6 @@ class SvxConfigGroupListBox_Impl : public SvTreeListBox
 
     ::com::sun::star::uno::Reference
         < ::com::sun::star::container::XNameAccess > m_xModuleCommands;
-
-    // show Scripting Framework scripts?
-    BOOL    bShowSF;
 
     Image m_hdImage;
     Image m_hdImage_hc;
@@ -157,6 +184,13 @@ class SvxConfigGroupListBox_Impl : public SvTreeListBox
     Image GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast );
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
 
+private:
+    void    fillScriptList(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& _rxRootNode,
+        SvLBoxEntry* _pParentEntry,
+        bool _bCheapChildsOnDemand
+    );
+
 protected:
     virtual void    RequestingChilds( SvLBoxEntry *pEntry);
     virtual BOOL    Expand( SvLBoxEntry* pParent );
@@ -165,14 +199,14 @@ protected:
 public:
             SvxConfigGroupListBox_Impl (
                 Window* pParent, const ResId&,
-                ULONG nConfigMode = 0,
+                bool _bShowSlots,
                 const ::com::sun::star::uno::Reference
-                    < ::com::sun::star::frame::XFrame >& xFrame = 0
+                    < ::com::sun::star::frame::XFrame >& xFrame
             );
 
             ~SvxConfigGroupListBox_Impl();
 
-    void    Init( SvStringsDtor *pArr = 0 );
+    void    Init();
     void    Open( SvLBoxEntry*, BOOL );
     void    ClearAll();
     void    GroupSelected();
@@ -217,11 +251,6 @@ public:
     );
 
     ~SvxScriptSelectorDialog ( );
-
-    static void GetDocTitle(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel>& xModel,
-        ::rtl::OUString& rTitle );
 
     void        SetAddHdl( const Link& rLink ) { m_aAddHdl = rLink; }
     const Link& GetAddHdl() const { return m_aAddHdl; }
