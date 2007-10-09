@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:07:39 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:04:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,8 +306,21 @@ X11SalData::X11SalData()
     m_pSalDisplay   = NULL;
     m_pInstance     = NULL;
     m_pPlugin       = NULL;
+    m_bIsTesttool   = false;
 
     hMainThread_    = pthread_self();
+
+    sal_uInt32 nArgs = osl_getCommandArgCount();
+    for( sal_uInt32 i = 0; i < nArgs; i++ )
+    {
+        rtl::OUString aArg;
+        osl_getCommandArg( i, &aArg.pData );
+        if( aArg.equalsAscii( "-enableautomation" ) )
+        {
+            m_bIsTesttool = true;
+            break;
+        }
+    }
 }
 
 X11SalData::~X11SalData()
