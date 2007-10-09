@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:28:15 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:02:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_scripting.hxx"
+
+#include <comphelper/documentinfo.hxx>
 
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
@@ -422,18 +424,13 @@ MasterScriptProvider::getName()
         ::rtl::OUString sCtx = getContextString();
         if ( sCtx.indexOf( OUSTR( "vnd.sun.star.tdoc" ) ) == 0 )
         {
-            // @@@ cannot be used because title returned is not the same
-            //     as returned by MiscUtils::xModelToDocTitle(). And this
-            //     would break code in SVX (source/dialog/selector.cxx).
-            //m_sNodeName = MiscUtils::tDocUrlToTitle( sCtx );
-
             Reference< frame::XModel > xModel = m_xModel;
             if ( !xModel.is() )
             {
                 xModel = MiscUtils::tDocUrlToModel( sCtx );
             }
 
-            m_sNodeName = MiscUtils::xModelToDocTitle( xModel );
+            m_sNodeName = ::comphelper::DocumentInfo::getDocumentTitle( xModel );
         }
         else
         {
