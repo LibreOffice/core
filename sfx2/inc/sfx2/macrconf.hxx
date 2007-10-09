@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrconf.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:22:51 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:30:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,6 @@ friend class SfxEventConfiguration;
 friend SvStream& operator >> (SvStream& rStream, SfxMacroInfo& rInfo);
 friend SvStream& operator << (SvStream& rStream, const SfxMacroInfo& rInfo);
 
-    SfxObjectShell*         pDocShell;          // nur noch wg. Kompatib. drin
     String*                 pHelpText;
     sal_uInt16                  nRefCnt;
     sal_Bool                    bAppBasic;
@@ -92,10 +91,10 @@ friend SvStream& operator << (SvStream& rStream, const SfxMacroInfo& rInfo);
 
 public:
     SfxMacroInfo( const String& rURL );
-    SfxMacroInfo(SfxObjectShell *pDoc=NULL);
-    SfxMacroInfo( SfxObjectShell* pDoc, const String& rQualifiedName );
+    SfxMacroInfo( bool _bAppBasic = true );
+    SfxMacroInfo( bool _bAppBasic, const String& rQualifiedName );
     SfxMacroInfo(SfxMacroInfo& rOther);
-    SfxMacroInfo(SfxObjectShell* pMgr, const String& rLibName,
+    SfxMacroInfo(bool _bAppBasic, const String& rLibName,
                     const String& rModuleName, const String& rMethodName);
     ~SfxMacroInfo();
     sal_Bool operator==(const SfxMacroInfo& rOther) const;
