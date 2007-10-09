@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 15:07:34 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2666,6 +2666,21 @@ gboolean GtkSalFrame::signalMap( GtkWidget*, GdkEvent*, gpointer frame )
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
     GTK_YIELD_GRAB();
+
+    if( GetX11SalData()->isTestTool() )
+    {
+        /* #i76541# testtool needs the focus to be in a new document
+        *  however e.g. metacity does not necessarily put the focus into
+        *  a newly shown window. An extra little hint seems to help here.
+        *  however we don't want to interfere with the normal user experience
+        *  so this is done when running in testtool only
+        */
+        if( ! pThis->m_pParent && (pThis->m_nStyle & SAL_FRAME_STYLE_MOVEABLE) != 0 )
+            XSetInputFocus( pThis->getDisplay()->GetDisplay(),
+                            GDK_WINDOW_XWINDOW( GTK_WIDGET(pThis->m_pWindow)->window),
+                            RevertToParent, CurrentTime );
+    }
+
     pThis->CallCallback( SALEVENT_RESIZE, NULL );
 
     return FALSE;
