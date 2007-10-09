@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-05 17:37:29 $
+#   last change: $Author: kz $ $Date: 2007-10-09 15:02:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ use CvsModule; # to be removed ASAP
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.32 $ ';
+my $id_str = ' $Revision: 1.33 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -504,13 +504,23 @@ sub resync_module_action
     }
     else {
         print_message("nothing to do for module '$module'");
+        # still create a directory even if nothing is to be done, for the benefit of the
+        # commit operation
+        if ( !mkdir("$dir/$module") ) {
+            print_error("Can't mkdir() '$dir/$module': $!", 6);
+        }
+        if ( !open(README, ">$dir/$module/readme") ) {
+            print_error("can't open file '$dir/$module/readme': $!", 7);
+        }
+        print README "Nothing to be resynced here\n";
+        close(README);
         return;
     }
 
     my $save_dir = cwd();
     # chdir into module
     if ( !chdir("$dir/$module") ) {
-        print_error("Can't chdir() to '$dir/$module'", 6);
+        print_error("Can't chdir() to '$dir/$module': $!", 6);
     }
 
     my $stats_ref = merge_files($cws_anchor_tag, $milestone_tag, $changes_ref, $cvs_handle, $module);
@@ -629,17 +639,19 @@ sub commit_dir_action
     local @main::changed_files;
     find(\&wanted, '.');
 
-    my $stats_ref = commit_files($cws, \@main::changed_files, $cvs_dir);
+    if ( @main::changed_files ) {
+        my $stats_ref = commit_files($cws, \@main::changed_files, $cvs_dir);
+
+        $global_stats{'merged'} += $stats_ref->{'merged'};
+        $global_stats{'moved'} += $stats_ref->{'moved'};
+        $global_stats{'anchor'} += $stats_ref->{'anchor'};
+        print_message(" ========== '$cvs_dir' stats: ==========") if scalar(%{$stats_ref});
+        print_message("Commit file(s)     : $stats_ref->{'merged'}") if $stats_ref->{'merged'};
+        print_message("Move branch tag(s) : $stats_ref->{'moved'}") if $stats_ref->{'moved'};
+        print_message("Move anchor tags(s): $stats_ref->{'anchor'}") if $stats_ref->{'anchor'};
+    }
+
     chdir($save_dir);
-
-    $global_stats{'merged'} += $stats_ref->{'merged'};
-    $global_stats{'moved'} += $stats_ref->{'moved'};
-    $global_stats{'anchor'} += $stats_ref->{'anchor'};
-    print_message(" ========== '$cvs_dir' stats: ==========") if scalar(%{$stats_ref});
-    print_message("Commit file(s)     : $stats_ref->{'merged'}") if $stats_ref->{'merged'};
-    print_message("Move branch tag(s) : $stats_ref->{'moved'}") if $stats_ref->{'moved'};
-    print_message("Move anchor tags(s): $stats_ref->{'anchor'}") if $stats_ref->{'anchor'};
-
     return;
 }
 
