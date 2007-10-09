@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svlbitm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:36:48 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:03:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,7 @@ public:
     inline long             Height();
     void                    SetLink( const Link& rLink) { aLink=rLink; }
     const Link&             GetLink() const { return aLink; }
+     BOOL                   IsRadio();
     // weil Buttons nicht von LinkHdl abgeleitet sind
     void                    CallLink();
 
