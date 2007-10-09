@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:57:30 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,8 +345,7 @@ BOOL ModulWindow::BasicExecute()
     ScriptDocument aDocument( GetDocument() );
     if ( aDocument.isDocument() )
     {
-        aDocument.adjustMacroMode( ::rtl::OUString() );
-        if ( aDocument.getMacroMode() == ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
+        if ( !aDocument.allowMacros() )
         {
             WarningBox( this, WB_OK, String( IDEResId( RID_STR_CANNOTRUNMACRO ) ) ).Execute();
             return FALSE;
