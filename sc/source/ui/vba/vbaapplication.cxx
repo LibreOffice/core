@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaapplication.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 10:03:47 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:28:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,8 @@
 
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+
+#include <tools/diagnose_ex.h>
 
 #include <docuno.hxx>
 
@@ -520,11 +522,24 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
 sal_Int32 SAL_CALL
 ScVbaApplication::getCursor() throw (uno::RuntimeException)
 {
-    SfxObjectShell* pObject = SfxObjectShell::GetWorkingDocument();//Current();
-    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pObject );
-    sal_Int32 result = pFrame->GetFrame()->GetWindow().GetSystemWindow()->GetPointer().GetStyle();
+    sal_Int32 nPointerStyle( POINTER_ARROW );
+    try
+    {
+        const uno::Reference< frame::XModel >      xWorkingDoc( SfxObjectShell::GetWorkingDocument(), uno::UNO_SET_THROW );
+        const uno::Reference< frame::XController > xController( xWorkingDoc->getCurrentController(),  uno::UNO_SET_THROW );
+        const uno::Reference< frame::XFrame >      xFrame     ( xController->getFrame(),              uno::UNO_SET_THROW );
+        const uno::Reference< awt::XWindow >       xWindow    ( xFrame->getContainerWindow(),         uno::UNO_SET_THROW );
+        // why the heck isn't there an XWindowPeer::getPointer, but a setPointer only?
+        const Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        if ( pWindow )
+            nPointerStyle = pWindow->GetSystemWindow()->GetPointer().GetStyle();
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 
-    switch( result )
+    switch( nPointerStyle )
     {
         case POINTER_ARROW:
             return excel::XlMousePointer::xlNorthwestArrow;
@@ -542,41 +557,60 @@ ScVbaApplication::getCursor() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaApplication::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
 {
-    SfxObjectShell* pObject = SfxObjectShell::GetWorkingDocument();
-    for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pObject ); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pObject ) )
+    try
     {
-        switch( _cursor )
+        const uno::Reference< frame::XModel2 >          xWorkingDoc     ( SfxObjectShell::GetWorkingDocument(), uno::UNO_QUERY_THROW );
+        const uno::Reference< container::XEnumeration > xEnumControllers( xWorkingDoc->getControllers(),        uno::UNO_SET_THROW   );
+        while ( xEnumControllers->hasMoreElements() )
         {
-            case excel::XlMousePointer::xlNorthwestArrow:
+            const uno::Reference< frame::XController > xController( xEnumControllers->nextElement(), uno::UNO_QUERY_THROW );
+            const uno::Reference< frame::XFrame >      xFrame     ( xController->getFrame(),         uno::UNO_SET_THROW   );
+            const uno::Reference< awt::XWindow >       xWindow    ( xFrame->getContainerWindow(),    uno::UNO_SET_THROW   );
+
+            Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+            OSL_ENSURE( pWindow, "ScVbaApplication::setCursor: no window!" );
+            if ( !pWindow )
+                continue;
+
+            switch( _cursor )
             {
-                const Pointer& rPointer( POINTER_ARROW );
-                pFrame->GetFrame()->GetWindow().GetSystemWindow()->SetPointer( rPointer );
-                pFrame->GetFrame()->GetWindow().GetSystemWindow()->EnableChildPointerOverwrite( sal_False );
-                break;
+                case excel::XlMousePointer::xlNorthwestArrow:
+                {
+                    const Pointer& rPointer( POINTER_ARROW );
+                    pWindow->GetSystemWindow()->SetPointer( rPointer );
+                    pWindow->GetSystemWindow()->EnableChildPointerOverwrite( sal_False );
+                    break;
+                }
+                case excel::XlMousePointer::xlWait:
+                case excel::XlMousePointer::xlIBeam:
+                {
+                    const Pointer& rPointer( static_cast< PointerStyle >( _cursor ) );
+                    //It will set the edit window, toobar and statusbar's mouse pointer.
+                    pWindow->GetSystemWindow()->SetPointer( rPointer );
+                    pWindow->GetSystemWindow()->EnableChildPointerOverwrite( sal_True );
+                    //It only set the edit window's mouse pointer
+                    //pWindow->.SetPointer( rPointer );
+                    //pWindow->.EnableChildPointerOverwrite( sal_True );
+                    //printf("\nset Cursor...%d\n", pWindow->.GetType());
+                    break;
+                }
+                case excel::XlMousePointer::xlDefault:
+                {
+                    const Pointer& rPointer( POINTER_NULL );
+                    pWindow->GetSystemWindow()->SetPointer( rPointer );
+                    pWindow->GetSystemWindow()->EnableChildPointerOverwrite( sal_False );
+                    break;
+                }
+                default:
+                    throw uno::RuntimeException( rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM("Unknown value for Cursor pointer")), uno::Reference< uno::XInterface >() );
+                    // TODO: isn't this a flaw in the API? It should be allowed to throw an
+                    // IllegalArgumentException, or so
             }
-            case excel::XlMousePointer::xlWait:
-            case excel::XlMousePointer::xlIBeam:
-            {
-                const Pointer& rPointer( static_cast< PointerStyle >( _cursor ) );
-                //It will set the edit window, toobar and statusbar's mouse pointer.
-                pFrame->GetFrame()->GetWindow().GetSystemWindow()->SetPointer( rPointer );
-                pFrame->GetFrame()->GetWindow().GetSystemWindow()->EnableChildPointerOverwrite( sal_True );
-                //It only set the edit window's mouse pointer
-                //pFrame->GetFrame()->GetWindow().SetPointer( rPointer );
-                //pFrame->GetFrame()->GetWindow().EnableChildPointerOverwrite( sal_True );
-                //printf("\nset Cursor...%d\n", pFrame->GetFrame()->GetWindow().GetType());
-                break;
-            }
-            case excel::XlMousePointer::xlDefault:
-            {
-                const Pointer& rPointer( POINTER_NULL );
-                pFrame->GetFrame()->GetWindow().GetSystemWindow()->SetPointer( rPointer );
-                pFrame->GetFrame()->GetWindow().GetSystemWindow()->EnableChildPointerOverwrite( sal_False );
-                break;
-            }
-            default:
-                throw uno::RuntimeException( rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM("Unknown value for Cursor pointer")), uno::Reference< uno::XInterface >() );
         }
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
