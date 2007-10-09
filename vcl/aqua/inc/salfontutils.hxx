@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salfontutils.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:11:51 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:09:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,7 @@
 #ifndef _SV_SALFONTUTILS_HXX
 #define _SV_SALFONTUTILS_HXX
 
-#ifndef _SV_OUTFONT_HXX
-    #include <vcl/outfont.hxx>
-#endif
-
+#include "vcl/outfont.hxx"
 
 static const char *kFontWeightThin1 = "Thin";
 static const char *kFontWeightThin2 = "thin";

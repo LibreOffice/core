@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 15:58:15 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:11:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,8 @@
 #ifndef _SV_SALSYS_H
 #define _SV_SALSYS_H
 
-#ifndef _SV_SV_H
-#include <vcl/sv.h>
-#endif
-
-#include <vcl/salsys.hxx>
+#include "vcl/sv.h"
+#include "vcl/salsys.hxx"
 
 #include <list>
 
