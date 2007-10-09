@@ -5,9 +5,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 16:30:39 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:09:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,22 +37,13 @@
 #ifndef _SV_SALDATA_HXX
 #define _SV_SALDATA_HXX
 
-#include <premac.h>
-#include <Carbon/Carbon.h>
-#include <postmac.h>
+#include "premac.h"
+#include <Cocoa/Cocoa.h>
+#include "postmac.h"
 
-
-#ifndef _SV_SV_H
-#include <vcl/sv.h>
-#endif
-
-#ifndef _SV_SVDATA_HXX
-#include <vcl/svdata.hxx>
-#endif
-
-#ifndef _SV_SALWTYPE_HXX
-#include <vcl/salwtype.hxx>
-#endif
+#include "vcl/sv.h"
+#include "vcl/svdata.hxx"
+#include "vcl/salwtype.hxx"
 
 #include <list>
 #include <hash_set>
@@ -61,7 +52,7 @@
 #include <cstdarg>
 
 
-class SalInstance;
+class AquaSalInstance;
 class SalObject;
 class SalFrame;
 class SalVirtualDevice;
@@ -89,7 +80,7 @@ struct SalData
 {
 
     SALTIMERPROC                                  mpTimerProc;      // timer callback proc
-    SalInstance                                  *mpFirstInstance;  // pointer of first instance
+    AquaSalInstance                              *mpFirstInstance;  // pointer of first instance
     std::list<AquaSalFrame*>                      maFrames;         // pointer of first frame
     std::hash_set<const AquaSalFrame*,FrameHash>  maFrameCheck;     // for fast check of frame existance
     SalObject                                    *mpFirstObject;    // pointer of first object window
@@ -100,16 +91,6 @@ struct SalData
     CGColorSpaceRef                               mxRGBSpace;
     CGColorSpaceRef                               mxGraySpace;
 
-    /*
-     * SalTimer related members
-     */
-    BOOL              mbInTimerProc;     // timer event is currently being dispatched
-    BOOL              mbTimerInstalled;  // timer is in the event loop
-    ULONG             mnTimerMS;         // Current Time (in MS) of the Timer
-    ULONG             mnTimerOrgMS;      // Current Original Time (in MS)
-
-    EventLoopTimerRef mrTimerRef;
-    EventLoopTimerUPP mrTimerUPP;
     static FILE                                  *s_pLog;
 
     bool              mbIsScrollbarDoubleMax;   // TODO: support DoubleMin and DoubleBoth too
@@ -122,13 +103,7 @@ struct SalData
         mpFirstPrinter( NULL ),
         mpFontList( NULL ),
         mxRGBSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) ),
-        mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGray) ),
-        mbInTimerProc( FALSE ),
-        mbTimerInstalled( FALSE ),
-        mnTimerMS( 0 ),
-        mnTimerOrgMS( 0 ),
-        mrTimerRef( 0 ),
-        mrTimerUPP( 0 )
+        mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGray) )
     {}
 
     ~SalData()
