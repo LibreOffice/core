@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:55:31 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:31:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
         pSaveOptions( 0 ),
         pUndoOptions( 0 ),
         pHelpOptions( 0 ),
-        pThisDocument(0),
+        m_xThisDocument( ),
         pProgress(0),
         pTemplateCommon( 0 ),
         nDocModalMode(0),
@@ -216,10 +216,10 @@ void SfxAppData_Impl::OnApplicationBasicManagerCreated( BasicManager& _rBasicMan
 
     // global constants, additionally to the ones already added by createApplicationBasicManager:
     // ThisComponent
-    Reference< XModel > xThisComponent;
+    Reference< XModel > xCurrentDoc;
     SfxObjectShell* pDoc = SfxObjectShell::Current();
     if ( pDoc )
-        xThisComponent = pDoc->GetModel();
-    _rBasicManager.InsertGlobalUNOConstant( "ThisComponent", makeAny( xThisComponent ) );
-    pThisDocument = pDoc;
+        xCurrentDoc = pDoc->GetModel();
+    _rBasicManager.InsertGlobalUNOConstant( "ThisComponent", makeAny( xCurrentDoc ) );
+    m_xThisDocument = xCurrentDoc;
 }
