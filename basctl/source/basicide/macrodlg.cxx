@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:56:58 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:23:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,31 +239,28 @@ short __EXPORT MacroChooser::Execute()
     const ScriptDocument& rSelectedDoc( aDesc.GetDocument() );
 
     // App Basic is always ok, so only check if shell was found
-    if( rSelectedDoc.isDocument() )
+    if( rSelectedDoc.isDocument() && !rSelectedDoc.isActive() )
     {
-        if ( !rSelectedDoc.isActive() )
+        // Search for the right entry
+        ULONG nRootPos = 0;
+        SvLBoxEntry* pRootEntry = aBasicBox.GetEntry( nRootPos );
+        while( pRootEntry )
         {
-            // Search for the right entry
-            ULONG nRootPos = 0;
-            SvLBoxEntry* pRootEntry = aBasicBox.GetEntry( nRootPos );
-            while( pRootEntry )
+            BasicEntryDescriptor aCmpDesc( aBasicBox.GetEntryDescriptor( pRootEntry ) );
+            const ScriptDocument& rCmpDoc( aCmpDesc.GetDocument() );
+            if ( rCmpDoc.isDocument() && rCmpDoc.isActive() )
             {
-                BasicEntryDescriptor aCmpDesc( aBasicBox.GetEntryDescriptor( pRootEntry ) );
-                const ScriptDocument rCmpDoc( aCmpDesc.GetDocument() );
-                if ( rCmpDoc.isDocument() && rCmpDoc.isActive() )
+                SvLBoxEntry* pEntry = pRootEntry;
+                SvLBoxEntry* pLastValid = pEntry;
+                while ( pEntry )
                 {
-                    SvLBoxEntry* pEntry = pRootEntry;
-                    SvLBoxEntry* pLastValid = pEntry;
-                    while ( pEntry )
-                    {
-                        pLastValid = pEntry;
-                        pEntry = aBasicBox.FirstChild( pEntry );
-                    }
-                    if( pLastValid )
-                        aBasicBox.SetCurEntry( pLastValid );
+                    pLastValid = pEntry;
+                    pEntry = aBasicBox.FirstChild( pEntry );
                 }
-                pRootEntry = aBasicBox.GetEntry( ++nRootPos );
+                if( pLastValid )
+                    aBasicBox.SetCurEntry( pLastValid );
             }
+            pRootEntry = aBasicBox.GetEntry( ++nRootPos );
         }
     }
 
@@ -378,8 +375,8 @@ SbMethod* MacroChooser::CreateMacro()
     SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
     BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
     ScriptDocument aDocument( aDesc.GetDocument() );
-    OSL_ENSURE( aDocument.isValid(), "MacroChooser::CreateMacro: no document!" );
-    if ( !aDocument.isValid() )
+    OSL_ENSURE( aDocument.isAlive(), "MacroChooser::CreateMacro: no document!" );
+    if ( !aDocument.isAlive() )
         return NULL;
 
     String aLibName( aDesc.GetLibName() );
@@ -677,8 +674,6 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
 IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 {
     // ausser bei New/Record wird die Description durch LoseFocus uebernommen.
-    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-
     if ( pButton == &aRunButton )
     {
         StoreMacroDescription();
@@ -687,29 +682,16 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         if ( nMode == MACROCHOOSER_ALL )
         {
             SbMethod* pMethod = GetMacro();
-            if ( pMethod )
+            SbModule* pModule = pMethod ? pMethod->GetModule() : NULL;
+            StarBASIC* pBasic = pModule ? (StarBASIC*)pModule->GetParent() : NULL;
+            BasicManager* pBasMgr = pBasic ? BasicIDE::FindBasicManager( pBasic ) : NULL;
+            if ( pBasMgr )
             {
-                SbModule* pModule = pMethod->GetModule();
-                if ( pModule )
+                ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
+                if ( aDocument.isDocument() && !aDocument.allowMacros() )
                 {
-                    StarBASIC* pBasic = (StarBASIC*)pModule->GetParent();
-                    if ( pBasic )
-                    {
-                        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
-                        if ( pBasMgr )
-                        {
-                            ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
-                            if ( aDocument.isDocument() )
-                            {
-                                aDocument.adjustMacroMode( String() );
-                                if ( aDocument.getMacroMode() == ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
-                                {
-                                    WarningBox( this, WB_OK, String( IDEResId( RID_STR_CANNOTRUNMACRO ) ) ).Execute();
-                                    return 0;
-                                }
-                            }
-                        }
-                    }
+                    WarningBox( this, WB_OK, String( IDEResId( RID_STR_CANNOTRUNMACRO ) ) ).Execute();
+                    return 0;
                 }
             }
         }
@@ -741,8 +723,8 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
         BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
         ScriptDocument aDocument( aDesc.GetDocument() );
-        DBG_ASSERT( aDocument.isValid(), "MacroChooser::ButtonHdl: no document!" );
-        if ( !aDocument.isValid() )
+        DBG_ASSERT( aDocument.isAlive(), "MacroChooser::ButtonHdl: no document, or document is dead!" );
+        if ( !aDocument.isAlive() )
             return 0;
         BasicManager* pBasMgr = aDocument.getBasicManager();
         String aLib( aDesc.GetLibName() );
@@ -760,7 +742,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             SFX_APP()->ExecuteSlot( aRequest );
 
             BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-            pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+            SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
             SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if( pDispatcher )
                 pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
@@ -772,7 +754,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             {
                 DeleteMacro();
                 BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-                pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+                SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
                 SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                 if( pDispatcher )
                 {
@@ -805,7 +787,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                     SFX_APP()->ExecuteSlot( aRequest );
 
                     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-                    pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
+                    SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
                     SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
                     if ( pDispatcher )
                         pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
@@ -821,8 +803,8 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
         BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
         ScriptDocument aDocument( aDesc.GetDocument() );
-        DBG_ASSERT( aDocument.isValid(), "MacroChooser::ButtonHdl: no document!" );
-        if ( !aDocument.isValid() )
+        DBG_ASSERT( aDocument.isAlive(), "MacroChooser::ButtonHdl: no document, or document is dead!" );
+        if ( !aDocument.isAlive() )
             return 0;
         BasicManager* pBasMgr = aDocument.getBasicManager();
         String aLib( aDesc.GetLibName() );
