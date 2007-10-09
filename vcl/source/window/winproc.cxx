@@ -2311,14 +2311,13 @@ static long ImplHandleShowDialog( Window* pWindow, int nDialogId )
 
 // -----------------------------------------------------------------------
 
-long ImplWindowFrameProc( void* pInst, SalFrame* /*pFrame*/,
+long ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
                           USHORT nEvent, const void* pEvent )
 {
     DBG_TESTSOLARMUTEX();
 
     long nRet = 0;
 
-    Window* pWindow = reinterpret_cast<Window*>( pInst );
     // #119709# for some unknown reason it is possible to receive events (in this case key events)
     // although the corresponding VCL window must have been destroyed already
     // at least ImplGetWindowImpl() was NULL in these cases, so check this here
@@ -2438,8 +2437,7 @@ long ImplWindowFrameProc( void* pInst, SalFrame* /*pFrame*/,
             if( Application::GetSettings().GetLayoutRTL() )
             {
                 // --- RTL --- (mirror paint rect)
-                Window* pWin = (Window*)pInst;
-                SalFrame* pSalFrame = pWin->ImplGetWindowImpl()->mpFrame;
+                SalFrame* pSalFrame = pWindow->ImplGetWindowImpl()->mpFrame;
                 pPaintEvt->mnBoundX = pSalFrame->maGeometry.nWidth-pPaintEvt->mnBoundWidth-pPaintEvt->mnBoundX;
             }
 
