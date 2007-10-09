@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 08:52:26 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:04:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,10 @@
 
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
+#endif
+
+#ifndef _SV_NATIVEWIDGETS_HXX
+#include <vcl/salnativewidgets.hxx>
 #endif
 
 #ifndef _HELP_HXX
@@ -1094,6 +1098,21 @@ void SvImpLBox::DrawNet()
     if( pView->GetVisibleCount() < 2 && !pStartEntry->HasChildsOnDemand() &&
         !pStartEntry->HasChilds() )
         return;
+
+    //for platforms who don't have nets, DrawNativeControl does nothing and return true
+    //so that SvImpLBox::DrawNet() doesn't draw anything too
+     if(pView->IsNativeControlSupported( CTRL_LISTNET, PART_ENTIRE_CONTROL)) {
+        ImplControlValue    aControlValue;
+        Region            aCtrlRegion( Rectangle(Point( 0, 0 ), Size( 0, 0 )) );
+        ControlState        nState = CTRL_STATE_ENABLED;
+            if( pView->DrawNativeControl( CTRL_LISTNET, PART_ENTIRE_CONTROL,
+                    aCtrlRegion, nState, aControlValue, rtl::OUString() ) )
+            {
+                return;
+            }
+
+    }
+
     long nEntryHeight = pView->GetEntryHeight();
     long nEntryHeightDIV2 = nEntryHeight / 2;
     if( nEntryHeightDIV2 && !(nEntryHeight & 0x0001))
