@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:13:31 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:18:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 class SalGraphics;
 class SalFrame;
 struct ImplJobSetup;
+class ImplQPrinter;
 
 // -----------------------
 // - SalPrinterQueueInfo -
@@ -133,11 +134,20 @@ public:                     // public for Sal Implementation
                                               const XubString& rAppName,
                                               ULONG nCopies, BOOL bCollate,
                                               ImplJobSetup* pSetupData ) = 0;
+
+    // implement for pull model print systems only,
+    // default implementations (see salvtables.cxx) just returns FALSE
+    virtual BOOL                    StartJob( const String* pFileName,
+                                              const String& rAppName,
+                                              ImplJobSetup* pSetupData,
+                                              ImplQPrinter* pQPrinter );
+
     virtual BOOL                    EndJob() = 0;
     virtual BOOL                    AbortJob() = 0;
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, BOOL bNewJobData ) = 0;
     virtual BOOL                    EndPage() = 0;
     virtual ULONG                   GetErrorCode() = 0;
+
 };
 
 #endif // _SV_SALPRN_HXX
