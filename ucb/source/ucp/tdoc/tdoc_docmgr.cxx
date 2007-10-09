@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_docmgr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:17:02 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:26:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,16 +49,21 @@
 #include "rtl/ref.hxx"
 #include "cppuhelper/weak.hxx"
 
+#include "comphelper/namedvaluecollection.hxx"
+#include "comphelper/documentinfo.hxx"
+
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/container/XEnumerationAccess.hpp"
 #include "com/sun/star/frame/XStorable.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/document/XStorageBasedDocument.hpp"
+#include "com/sun/star/awt/XTopWindow.hpp"
 
 #include "tdoc_docmgr.hxx"
 
 using namespace com::sun::star;
 using namespace tdoc_ucp;
+using ::comphelper::DocumentInfo;
 
 //=========================================================================
 //=========================================================================
@@ -136,83 +141,6 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
 }
 
 //=========================================================================
-static rtl::OUString
-getDocumentTitle( const uno::Reference< uno::XInterface > & xDoc )
-{
-    rtl::OUString aTitle;
-
-    uno::Reference< frame::XStorable > xStorable( xDoc, uno::UNO_QUERY );
-
-    OSL_ENSURE( xStorable.is(),
-                "getDocumentTitle - Got no frame::XStorable interface!" );
-
-    if ( xStorable.is() )
-    {
-        // Note: frame::XModel::getURL() is not what I need; URL never gets
-        //       updated, for instance after saving a document with different
-        //       name.
-
-        rtl::OUString aURL = xStorable->getLocation();
-
-        if ( aURL.getLength() > 0 )
-        {
-            sal_Int32 nLastSlash = aURL.lastIndexOf( '/' );
-            bool bTrailingSlash = false;
-            if ( nLastSlash == aURL.getLength() - 1 )
-            {
-                // ignore trailing slash
-                bTrailingSlash = true;
-                nLastSlash = aURL.lastIndexOf( '/', nLastSlash );
-            }
-
-            if ( nLastSlash == -1 )
-            {
-                aTitle = aURL; // what else?
-            }
-            else
-            {
-                if ( bTrailingSlash )
-                    aTitle = aURL.copy( nLastSlash + 1,
-                                        aURL.getLength() - nLastSlash - 2 );
-                else
-                    aTitle = aURL.copy( nLastSlash + 1 );
-            }
-        }
-        else
-        {
-            uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
-
-            OSL_ENSURE( xStorable.is(),
-                "getDocumentTitle - Got no frame::XModel interface!" );
-
-            if ( xModel.is() )
-            {
-                // Newly created documents that have not yet been saved
-                // have no URL. Try to get Title property from document model,
-                // which, btw, must not match the title shown in the Office's
-                // title bar. So, it has just limited value. But this is better
-                // than nothing.
-
-                uno::Sequence< beans::PropertyValue > aProps
-                    = xModel->getArgs();
-                for ( sal_Int32 n = 0; n < aProps.getLength(); ++n )
-                {
-                    if ( aProps[ n ].Name.equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
-                    {
-                        aProps[ n ].Value >>= aTitle;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    OSL_ENSURE( aTitle.getLength() > 0, "getDocumentTitle - Empty title!" );
-    return aTitle;
-}
-
-//=========================================================================
 //
 // document::XEventListener
 //
@@ -264,7 +192,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                 OSL_ENSURE( xDoc.is(), "Got no document storage!" );
 
                 rtl:: OUString aDocId = getDocumentId( Event.Source );
-                rtl:: OUString aTitle = getDocumentTitle( Event.Source );
+                rtl:: OUString aTitle = DocumentInfo::getDocumentTitle( uno::Reference< frame::XModel >( Event.Source, uno::UNO_QUERY ) );
 
                 m_aDocs[ aDocId ] = StorageInfo( aTitle, xStorage, xModel );
 
@@ -383,7 +311,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                     (*it).second.xStorage = xStorage;
 
                     // Adjust title.
-                    (*it).second.aTitle = getDocumentTitle( Event.Source );
+                    (*it).second.aTitle = DocumentInfo::getDocumentTitle( uno::Reference< frame::XModel >( Event.Source, uno::UNO_QUERY ) );
                     break;
                 }
                 ++it;
@@ -394,7 +322,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
         }
     }
     else if ( Event.EventName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "TitleChanged" ) ) )
+                RTL_CONSTASCII_STRINGPARAM( "OnTitleChanged" ) ) )
     {
         if ( isOfficeDocument( Event.Source ) )
         {
@@ -410,7 +338,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
                 if ( (*it).second.xModel == xModel )
                 {
                     // Adjust title.
-                    rtl:: OUString aTitle = getDocumentTitle( Event.Source );
+                    rtl:: OUString aTitle = DocumentInfo::getDocumentTitle( uno::Reference< frame::XModel >( Event.Source, uno::UNO_QUERY ) );
                     (*it).second.aTitle = aTitle;
 
                     // Adjust storage.
@@ -538,7 +466,7 @@ void OfficeDocumentsManager::buildDocumentsList()
                     {
                         // new document
                         rtl::OUString aDocId = getDocumentId( xModel );
-                        rtl::OUString aTitle = getDocumentTitle( xModel );
+                        rtl::OUString aTitle = DocumentInfo::getDocumentTitle( xModel );
 
                         uno::Reference< document::XStorageBasedDocument >
                                 xDoc( xModel, uno::UNO_QUERY );
@@ -628,33 +556,63 @@ OfficeDocumentsManager::queryStorageTitle( const rtl::OUString & rDocId )
 }
 
 //=========================================================================
-bool OfficeDocumentsManager::isOfficeDocument(
-        const uno::Reference< uno::XInterface > & xDoc )
+bool OfficeDocumentsManager::isDocumentPreview(
+        const uno::Reference< frame::XModel > & xModel )
 {
-    uno::Reference< document::XStorageBasedDocument >
-        xStorageBasedDoc( xDoc, uno::UNO_QUERY );
-    if ( !xStorageBasedDoc.is() )
+    if ( !xModel.is() )
         return false;
 
-    uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
-    if ( xModel.is() )
+    ::comphelper::NamedValueCollection aArgs(
+        xModel->getArgs() );
+    sal_Bool bIsPreview = aArgs.getOrDefault( "Preview", sal_False );
+    return bIsPreview;
+}
+
+//=========================================================================
+bool OfficeDocumentsManager::isHelpDocument(
+        const uno::Reference< frame::XModel > & xModel )
+{
+    if ( !xModel.is() )
+        return false;
+
+    ::rtl::OUString sURL( xModel->getURL() );
+    if ( sURL.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.help://" ) ) )
+        return true;
+
+    return false;
+}
+
+//=========================================================================
+bool OfficeDocumentsManager::isWithoutOrInTopLevelFrame(
+        const uno::Reference< frame::XModel > & xModel )
+{
+    if ( !xModel.is() )
+        return false;
+
+    uno::Reference< frame::XController > xController
+        = xModel->getCurrentController();
+    if ( xController.is() )
     {
-        uno::Reference< frame::XController > xController
-            = xModel->getCurrentController();
-        if ( xController.is() )
+        uno::Reference< frame::XFrame > xFrame
+            = xController->getFrame();
+        if ( xFrame.is() )
         {
-            uno::Reference< frame::XFrame > xFrame
-                = xController->getFrame();
-            if ( xFrame.is() )
-            {
-                // isTop returns true for all frames without a parent
-                // or for the desktop itself.
-                if ( !xFrame->isTop() )
-                    return false;
-            }
+            // don't use XFrame::isTop here. This nowadays excludes
+            // "sub documents" such as forms embedded in database documents
+            uno::Reference< awt::XTopWindow > xFrameContainer(
+                xFrame->getContainerWindow(), uno::UNO_QUERY );
+            if ( !xFrameContainer.is() )
+                return false;
         }
     }
 
+    return true;
+}
+
+//=========================================================================
+bool OfficeDocumentsManager::isBasicIDE(
+        const uno::Reference< frame::XModel > & xModel )
+{
     if ( !m_xModuleMgr.is() )
     {
         osl::MutexGuard aGuard( m_aMtx );
@@ -686,7 +644,7 @@ bool OfficeDocumentsManager::isOfficeDocument(
         rtl::OUString aModule;
         try
         {
-            aModule = m_xModuleMgr->identify( xDoc );
+            aModule = m_xModuleMgr->identify( xModel );
         }
         catch ( lang::IllegalArgumentException const & )
         {
@@ -703,20 +661,35 @@ bool OfficeDocumentsManager::isOfficeDocument(
             if ( aModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
                     "com.sun.star.script.BasicIDE" ) ) )
             {
-                // Basic-IDE
-                return false;
+                return true;
             }
-            /*
-            else if ( aModule.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(
-                    "com.sun.star.text.WebDocument" ) ) )
-            {
-                // Office Help (embedded Writer doc)
-
-                @@@ help docs cannot be safely distinguished from normal
-                    writer web docs
-            }
-            */
         }
     }
+
+    return false;
+}
+
+//=========================================================================
+bool OfficeDocumentsManager::isOfficeDocument(
+        const uno::Reference< uno::XInterface > & xDoc )
+{
+    uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
+    uno::Reference< document::XStorageBasedDocument >
+        xStorageBasedDoc( xModel, uno::UNO_QUERY );
+    if ( !xStorageBasedDoc.is() )
+        return false;
+
+    if ( !isWithoutOrInTopLevelFrame( xModel ) )
+        return false;
+
+    if ( isDocumentPreview( xModel ) )
+        return false;
+
+    if ( isHelpDocument( xModel ) )
+        return false;
+
+    if ( isBasicIDE( xModel ) )
+        return false;
+
     return true;
 }
