@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_class.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:11:49 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:02:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,10 +194,10 @@ PE_Class::Setup_StatusFunctions()
                                               Tid_using,
                                               Tid_SwBracket_Right,
                                               Tid_DoubleColon,
+                                              Tid_typename,
                                               Tid_BuiltInType,
-                                              Tid_TypeSpecializer,
 
-                                              Tid_typename };
+                                              Tid_TypeSpecializer };
 
     static F_Tok stateF_inProtection[] =    { &PE_Class::On_inProtection_Colon };
     static INT16 stateT_inProtection[] =    { Tid_Colon };
