@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmathutils.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:27:45 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:15:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SALMATHUTILS_HXX
-    #include <salmathutils.hxx>
-#endif
+#include "salmathutils.hxx"
 
 #include <stdlib.h>
 
