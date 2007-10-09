@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salpixmaputils.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:29:13 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:16:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SALPIXMAPUTILS_HXX
-    #include <salpixmaputils.hxx>
-#endif
+#include "salpixmaputils.hxx"
 
 // =======================================================================
 
