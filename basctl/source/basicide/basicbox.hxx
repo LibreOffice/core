@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicbox.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:51:43 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:21:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 //
 #ifndef _BASICBOX_HXX
 #define _BASICBOX_HXX
+
+#include "doceventnotifier.hxx"
 
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
@@ -65,9 +67,38 @@ public:
     virtual Window*     CreateItemWindow( Window *pParent );
 };
 
+/** base class for list boxes which need to update their content according to the list
+    of open documents
+*/
+class DocListenerBox    :public ListBox
+                        ,public ::basctl::DocumentEventListener
+{
+protected:
+    DocListenerBox( Window* pParent );
+    ~DocListenerBox();
+
+protected:
+    virtual void    FillBox() = 0;
+
+private:
+    // DocumentEventListener
+    virtual void onDocumentCreated( const ScriptDocument& _rDocument );
+    virtual void onDocumentOpened( const ScriptDocument& _rDocument );
+    virtual void onDocumentSave( const ScriptDocument& _rDocument );
+    virtual void onDocumentSaveDone( const ScriptDocument& _rDocument );
+    virtual void onDocumentSaveAs( const ScriptDocument& _rDocument );
+    virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument );
+    virtual void onDocumentClosed( const ScriptDocument& _rDocument );
+    virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument );
+    virtual void onDocumentModeChanged( const ScriptDocument& _rDocument );
+
+private:
+    ::basctl::DocumentEventNotifier m_aNotifier;
+};
+
 //
 
-class BasicLibBox : public ListBox, public SfxListener
+class BasicLibBox : public DocListenerBox
 {
 private:
     String          aCurText;
@@ -78,18 +109,15 @@ private:
     void            ReleaseFocus();
     void            InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLocation );
 
-    void            FillBox( BOOL bSelect = TRUE );
     void            ClearBox();
     void            NotifyIDE();
+
+    // DocListenerBox
+    virtual void    FillBox();
 
 protected:
     virtual void    Select();
     virtual long    PreNotify( NotifyEvent& rNEvt );
-
-    using           Control::Notify;
-    virtual void    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                            const SfxHint& rHint, const TypeId& rHintType );
-
 
 public:
                     BasicLibBox( Window* pParent,
@@ -112,7 +140,7 @@ public:
     virtual Window*     CreateItemWindow( Window *pParent );
 };
 
-class BasicLanguageBox : public ListBox, public SfxListener
+class BasicLanguageBox : public DocListenerBox
 {
 private:
     String          m_sNotLocalizedStr;
@@ -121,17 +149,15 @@ private:
 
     bool            m_bIgnoreSelect;
 
-    void            FillBox();
     void            ClearBox();
     void            SetLanguage();
+
+    // DocListenerBox
+    virtual void    FillBox();
 
 protected:
     virtual void    Select();
     virtual long    PreNotify( NotifyEvent& rNEvt );
-
-    using           Control::Notify;
-    virtual void    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                                const SfxHint& rHint, const TypeId& rHintType );
 
 public:
     BasicLanguageBox( Window* pParent );
