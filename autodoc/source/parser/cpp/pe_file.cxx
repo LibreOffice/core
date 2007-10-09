@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_file.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:12:56 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:02:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,9 +135,9 @@ PE_File::Setup_StatusFunctions()
 
                                               &PE_File::On_std_SwBracketRight,
                                               &PE_File::On_std_VarFunc,
+                                              &PE_File::On_std_VarFunc,
                                               &PE_File::On_std_DefineName,
                                               &PE_File::On_std_MacroName,
-                                              &PE_File::On_std_VarFunc,
 
                                               &PE_File::On_std_VarFunc,
                                               &PE_File::On_std_VarFunc };
@@ -162,12 +162,12 @@ PE_File::Setup_StatusFunctions()
 
                                               Tid_SwBracket_Right,
                                               Tid_DoubleColon,
+                                              Tid_typename,
                                               Tid_DefineName,
                                               Tid_MacroName,
-                                              Tid_BuiltInType,
 
-                                              Tid_TypeSpecializer,
-                                              Tid_typename };
+                                              Tid_BuiltInType,
+                                              Tid_TypeSpecializer };
 
     static F_Tok stateF_in_extern[] =       { &PE_File::On_in_extern_Constant };
     static INT16 stateT_in_extern[] =       { Tid_Constant };

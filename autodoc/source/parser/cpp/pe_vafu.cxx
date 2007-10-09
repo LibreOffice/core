@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_vafu.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:14:43 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:03:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,9 +140,9 @@ PE_VarFunc::Setup_StatusFunctions()
                                               &PE_VarFunc::On_start_explicit,
                                               &PE_VarFunc::On_start_Bracket_Right,
                                               &PE_VarFunc::On_start_Identifier,
+                                              &PE_VarFunc::On_start_typename,
                                               &PE_VarFunc::On_start_Identifier,
-                                              &PE_VarFunc::On_start_Identifier,
-                                              &PE_VarFunc::On_start_typename };
+                                              &PE_VarFunc::On_start_Identifier };
     static INT16 stateT_start[] =           { Tid_Identifier,
                                               Tid_operator,
                                               Tid_class,
@@ -161,9 +161,9 @@ PE_VarFunc::Setup_StatusFunctions()
                                               Tid_explicit,
                                               Tid_Bracket_Right,
                                               Tid_DoubleColon,
+                                              Tid_typename,
                                               Tid_BuiltInType,
-                                              Tid_TypeSpecializer,
-                                              Tid_typename };
+                                              Tid_TypeSpecializer };
 
     static F_Tok stateF_expectCtor[] =      { &PE_VarFunc::On_expectCtor_Bracket_Left };
     static INT16 stateT_expectCtor[] =      { Tid_Bracket_Left };
