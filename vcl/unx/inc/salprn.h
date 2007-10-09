@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:42:29 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:21:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ public:
     virtual ~PspSalPrinter();
 
     // overload all pure virtual methods
+    using SalPrinter::StartJob;
     virtual BOOL                    StartJob( const XubString* pFileName,
                                               const XubString& rJobName,
                                               const XubString& rAppName,
