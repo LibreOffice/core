@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 07:42:47 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:09:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,15 @@
 #ifndef _SV_SALFRAME_H
 #define _SV_SALFRAME_H
 
-#include <vcl/salframe.hxx>
 
-#include <salmenu.h>
+#include "vcl/sv.h"
+#include "vcl/salframe.hxx"
+#include "vcl/sysdata.hxx"
 
-#ifndef _SV_SV_H
-#include <vcl/sv.h>
-#endif
+#include "salmenu.h"
+#include "saldata.hxx"
+#include "aquavcltypes.h"
 
-#ifndef _SV_SYSDATA_HXX
-#include <vcl/sysdata.hxx>
-#endif
-
-#include <aquavcltypes.h>
 #include <vector>
 #include <utility>
 #include <stdexcept>
@@ -57,6 +53,7 @@ class AquaSalGraphics;
 class AquaSalFrame;
 class AquaSalTimer;
 class AquaSalInstance;
+class AquaSalMenu;
 
 typedef struct SalFrame::SalPointerState SalPointerState;
 
@@ -67,31 +64,37 @@ typedef struct SalFrame::SalPointerState SalPointerState;
 class AquaSalFrame : public SalFrame
 {
 public:
-    CarbonWindowRef         mrWindow;               // Window handle
+    NSWindow*               mpWindow;               // Cocoa window
+    NSView*                 mpView;                 // Cocoa view (actually a custom view, see below
+    NSMenuItem*             mpDockMenuEntry;        // entry in the dynamic dock menu
+    NSRect                  maScreenRect;           // for mirroring purposes
     AquaSalGraphics*        mpGraphics;             // current frame graphics
     AquaSalFrame*           mpParent;               // pointer to parent frame
-    void*                   mpInst;                 // instance handle for callback
      SystemEnvData          maSysData;              // system data
-    long                    mnWidth;                // client width in pixels
-    long                    mnHeight;               // client height in pixels
     int                     mnMinWidth;             // min. client width in pixels
     int                     mnMinHeight;            // min. client height in pixels
     int                     mnMaxWidth;             // max. client width in pixels
     int                     mnMaxHeight;            // max. client height in pixels
-    Rect                    maFullScreenRect;       // old window size when in FullScreen
-    WindowAttributes        maFullScreenAttr;       // old window attributes when in FullScreen
+    NSRect                  maFullScreenRect;       // old window size when in FullScreen
     BOOL                    mbGraphics;             // is Graphics used?
     BOOL                    mbFullScreen;           // is Window in FullScreen?
-    AquaSalInstance*        mpSalInstance;
     bool                    mbShown;
     bool                    mbInitShow;
     bool                    mbPositioned;
     bool                    mbSized;
 
     ULONG                   mnStyle;
+    unsigned int            mnStyleMask;            // our style mask from NSWindow creation
 
-    TSMDocumentID       maTsmDocumentId;
-    SalExtTextInputEvent    maInputEvent;       // preedit text
+    ULONG                   mnLastEventTime;
+    unsigned int            mnLastModifierFlags;
+    AquaSalMenu*            mpMenu;
+
+    SalExtStyle             mnExtStyle;             // currently document frames are marked this way
+
+    PointerStyle            mePointerStyle;         // currently active pointer style
+
+    NSTrackingRectTag       mnTrackingRectTag;      // used to get enter/leave messages
 public:
     /** Constructor
 
@@ -99,14 +102,13 @@ public:
 
         @throws std::runtime_error in case window creation fails
     */
-    AquaSalFrame(SalFrame* pParent, ULONG salFrameStyle, AquaSalInstance* pSalInstance);
+    AquaSalFrame( SalFrame* pParent, ULONG salFrameStyle );
 
     virtual ~AquaSalFrame();
 
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
     virtual BOOL                PostEvent( void* pData );
-    BOOL                        PostTimerEvent( AquaSalTimer *pTimer );
     virtual void                SetTitle( const XubString& rTitle );
     virtual void                SetIcon( USHORT nIcon );
     virtual void                SetMenu( SalMenu* pSalMenu );
@@ -161,73 +163,110 @@ public:
     void UpdateFrameGeometry();
 
     // trigger painting of the window
-    void SendPaintEvent();
-
-    void ActivateTSM();
-    void DeactivateTSM();
+    void SendPaintEvent( const Rectangle* pRect = NULL );
 
     static bool isAlive( const AquaSalFrame* pFrame )
     { return GetSalData()->maFrameCheck.find( pFrame ) != GetSalData()->maFrameCheck.end(); }
 
     static AquaSalFrame* GetCaptureFrame() { return s_pCaptureFrame; }
 
+    NSWindow* getWindow() const { return mpWindow; }
+    NSView* getView() const { return mpView; }
+    unsigned int getStyleMask() const { return mnStyleMask; }
+
+    // actually the follwing methods do the same thing: flipping y coordinates
+    // but having two of them makes clearer what the coordinate system
+    // is supposed to be before and after
+    void VCLToCocoa( NSRect& io_rRect, bool bRelativeToScreen = true );
+    void CocoaToVCL( NSRect& io_rRect, bool bRelativeToScreen = true );
+
+    void VCLToCocoa( NSPoint& io_rPoint, bool bRelativeToScreen = true );
+    void CocoaToVCL( NSPoint& io_Point, bool bRelativeToScreen = true );
+
+    NSCursor* getCurrentCursor() const;
+
  private: // methods
-
-    /** Create a new system window.
-        The newly create window will be associated whith this frame.
-
-        @param pParent
-        the parent of the window may be NULL
-
-        @param nSalFrameStyle
-        the style of the new window
-
-        @throws std::runtime_error in case window creation fails
-     */
-    void CreateNewSystemWindow(CarbonWindowRef pParent, ULONG nSalFrameStyle);
-
-    BOOL ImplPostUserEvent( UInt32 eventKind, void *pData );
-
-    /** Install a window event handler
-
-        The window event handler and the corresponding Universal Procedure Pointer (UPP) pointer
-        need to be save during destruction of the frame instance we have to unregister all installed
-        event handlers and dispose the UPP.
-
-        @param upp
-        a universal procedure pointer
-
-        @param nEvents
-        number of events to register
-
-        @param eventSpec
-        the event specification
-
-        @return the status of the registration see Carbon Event Manager reference for details
-     */
-    OSStatus InstallAndRegisterEventHandler(EventHandlerUPP upp, size_t nEvents, const EventTypeSpec* eventSpec);
-    void DeinstallAndUnregisterAllEventHandler();
-
     /** do things on initial show (like centering on parent or on screen)
     */
     void initShow();
 
+    void initWindowAndView();
+
  private: // data
-
-    typedef std::pair<EventHandlerUPP, EventHandlerRef> SysWindowEventHandlerData_t;
-    typedef std::vector<SysWindowEventHandlerData_t> SysWindowEventHandlerDataContainer_t;
-    SysWindowEventHandlerDataContainer_t mSysWindowEventHandlerDataContainer;
-
-    // Menu associated with this SalFrame
-    SalMenu *mpMenu;
-
-    static SysWindowEventHandlerData_t     s_aOverlayEvtHandler;
     static AquaSalFrame*                   s_pCaptureFrame;
-    static CarbonWindowRef                 s_rOverlay; // window handle for overlay (needed in CaptureMouse)
 
     // make AquaSalFrame non copyable
     AquaSalFrame( const AquaSalFrame& );
     AquaSalFrame& operator=(const AquaSalFrame&);
 };
+
+@interface SalFrameWindow : NSWindow
+{
+    AquaSalFrame*       mpFrame;
+}
+-(id)initWithSalFrame: (AquaSalFrame*)pFrame;
+-(void)windowDidBecomeKey: (NSNotification*)pNotification;
+-(void)windowDidResignKey: (NSNotification*)pNotification;
+-(void)windowDidChangeScreen: (NSNotification*)pNotification;
+-(void)windowDidMove: (NSNotification*)pNotification;
+-(void)windowDidResize: (NSNotification*)pNotification;
+-(void)windowDidMiniaturize: (NSNotification*)pNotification;
+-(void)windowDidDeminiaturize: (NSNotification*)pNotification;
+-(MacOSBOOL)windowShouldClose: (NSNotification*)pNotification;
+-(void)dockMenuItemTriggered: (id)sender;
+-(AquaSalFrame*)getSalFrame;
+@end
+
+@interface SalFrameView : NSView <NSTextInput>
+{
+    AquaSalFrame*       mpFrame;
+
+    // for NSTextInput
+    id mpLastEvent;
+    BOOL mbNeedSpecialKeyHandle;
+    BOOL mbInKeyInput;
+    BOOL mbKeyHandled;
+    NSRange mMarkedRange;
+    NSRange mSelectedRange;
+}
+-(id)initWithSalFrame: (AquaSalFrame*)pFrame;
+-(MacOSBOOL)acceptsFirstResponder;
+-(MacOSBOOL)acceptsFirstMouse: (NSEvent *)pEvent;
+-(MacOSBOOL)isOpaque;
+-(void)drawRect: (NSRect)aRect;
+-(void)mouseDown: (NSEvent*)pEvent;
+-(void)mouseDragged: (NSEvent*)pEvent;
+-(void)mouseUp: (NSEvent*)pEvent;
+-(void)mouseMoved: (NSEvent*)pEvent;
+-(void)mouseEntered: (NSEvent*)pEvent;
+-(void)mouseExited: (NSEvent*)pEvent;
+-(void)rightMouseDown: (NSEvent*)pEvent;
+-(void)rightMouseDragged: (NSEvent*)pEvent;
+-(void)rightMouseUp: (NSEvent*)pEvent;
+-(void)otherMouseDown: (NSEvent*)pEvent;
+-(void)otherMouseDragged: (NSEvent*)pEvent;
+-(void)otherMouseUp: (NSEvent*)pEvent;
+-(void)scrollWheel: (NSEvent*)pEvent;
+-(void)keyDown: (NSEvent*)pEvent;
+-(void)flagsChanged: (NSEvent*)pEvent;
+-(void)sendMouseEventToFrame:(NSEvent*)pEvent button:(USHORT)nButton eventtype:(USHORT)nEvent;
+-(void)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar;
+-(MacOSBOOL)checkSpecialCharacters:(NSEvent*)pEvent;
+/*
+    text action methods
+*/
+-(void)insertText:(id)aString;
+-(void)insertTab: (id)aSender;
+-(void)moveLeft: (id)aSender;
+-(void)moveRight: (id)aSender;
+-(void)moveUp: (id)aSender;
+-(void)moveDown: (id)aSender;
+-(void)insertNewline: (id)aSender;
+-(void)deleteBackward: (id)aSender;
+-(void)deleteForward: (id)aSender;
+-(void)cancelOperation: (id)aSender;
+/* set the correct pointer for our view */
+-(void)resetCursorRects;
+@end
 
 #endif // _SV_SALFRAME_H
