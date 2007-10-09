@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:00:00 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:25:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #endif
 
 #include "scriptdocument.hxx"
+#include "doceventnotifier.hxx"
 
 #ifndef _VIEWFAC_HXX //autogen
 #include <sfx2/viewfac.hxx>
@@ -89,7 +90,8 @@ DECLARE_TABLE( IDEWindowTable, IDEBaseWindow* )
 typedef Table IDEWindowTable;
 #endif
 
-class BasicIDEShell: public SfxViewShell
+class BasicIDEShell :public SfxViewShell
+                    ,public ::basctl::DocumentEventListener
 {
 friend class JavaDebuggingListenerImpl;
 friend class LocalizationMgr;
@@ -112,6 +114,8 @@ friend class BasicIDE;
     BOOL                bCreatingWindow;
     ModulWindowLayout*  pModulLayout;
     BOOL                m_bAppBasicModified;
+    ::basctl::DocumentEventNotifier
+                        m_aNotifier;
 
 #if _SOLAR__PRIVATE
     void                Init();
@@ -169,6 +173,17 @@ protected:
     void                UpdateModulWindowLayout( bool bBasicStopped );
 
     sal_Bool            HasBasic() const;
+
+    // DocumentEventListener
+    virtual void onDocumentCreated( const ScriptDocument& _rDocument );
+    virtual void onDocumentOpened( const ScriptDocument& _rDocument );
+    virtual void onDocumentSave( const ScriptDocument& _rDocument );
+    virtual void onDocumentSaveDone( const ScriptDocument& _rDocument );
+    virtual void onDocumentSaveAs( const ScriptDocument& _rDocument );
+    virtual void onDocumentSaveAsDone( const ScriptDocument& _rDocument );
+    virtual void onDocumentClosed( const ScriptDocument& _rDocument );
+    virtual void onDocumentTitleChanged( const ScriptDocument& _rDocument );
+    virtual void onDocumentModeChanged( const ScriptDocument& _rDocument );
 
 public:
                         TYPEINFO();
