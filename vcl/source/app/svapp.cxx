@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:05:08 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:19:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1067,7 +1067,7 @@ IMPL_STATIC_LINK_NOINSTANCE( Application, PostEventHandler, void*, pCallData )
     };
 
     if( pData->mpWin && pData->mpWin->mpWindowImpl->mpFrameWindow && pEventData )
-        ImplWindowFrameProc( (void*) pData->mpWin->mpWindowImpl->mpFrameWindow, NULL, (USHORT) nEvent, pEventData );
+        ImplWindowFrameProc( pData->mpWin->mpWindowImpl->mpFrameWindow, NULL, (USHORT) nEvent, pEventData );
 
     // remove this event from list of posted events, watch for destruction of internal data
     ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
