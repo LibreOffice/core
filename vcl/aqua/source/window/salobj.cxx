@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 10:25:18 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:17:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,8 @@
 
 #include <string.h>
 
-#ifndef _SV_SALDATA_HXX
-#include <saldata.hxx>
-#endif
-#ifndef _SV_SALOBJ_H
-#include <salobj.h>
-#endif
+#include "saldata.hxx"
+#include "salobj.h"
 
 // =======================================================================
 
