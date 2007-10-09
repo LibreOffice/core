@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvtables.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:04:17 $
+ *  last change: $Author: kz $ $Date: 2007-10-09 15:19:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,12 @@ SalSystem::~SalSystem()
 
 SalPrinter::~SalPrinter()
 {
+}
+
+BOOL SalPrinter::StartJob( const String*, const String&,
+                           ImplJobSetup*, ImplQPrinter* )
+{
+    return FALSE;
 }
 
 SalInfoPrinter::~SalInfoPrinter()
