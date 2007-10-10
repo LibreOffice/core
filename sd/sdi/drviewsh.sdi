@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsh.sdi,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:19:31 $
+ *  last change: $Author: kz $ $Date: 2007-10-10 15:32:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,11 @@ interface ImpressEditView : DrawView
         StateMethod = GetMenuState ;
     ]
     SID_PRESENTATION_END // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_CLEAR_UNDO_STACK // ole : no, status : ?
     [
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
