@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: tkr $ $Date: 2007-10-05 11:33:55 $
+#   last change: $Author: tkr $ $Date: 2007-10-10 11:29:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,10 +60,6 @@ TARFILE_NAME=$(OPENSSL_NAME)
 
 CONFIGURE_DIR=.
 CONFIGURE_ACTION=config
-CONFIGURE_FLAGS=shared
-
-BUILD_DIR=.
-BUILD_ACTION=make
 
 .IF "$(OS)" == "SOLARIS"
 OPENSSL_NAME=openssl-0.9.8a
@@ -75,12 +71,13 @@ CONFIGURE_ACTION=Configure solaris-x86-gcc
 .IF "$(PROCTYPE)" == "x86_64"
 CONFIGURE_ACTION=Configure solaris-x86_64-gcc  
 .ENDIF
-CONFIGURE_FLAGS=shared
+
+.ENDIF
+
+CONFIGURE_FLAGS=shared -I$(SYSBASE)$/usr$/include -L$(SYSBASE)$/usr$/lib
 
 BUILD_DIR=.
 BUILD_ACTION=make
-
-.ENDIF
 
 .IF "$(OS)" == "WNT"
 
