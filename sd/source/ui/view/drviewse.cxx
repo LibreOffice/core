@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:56:42 $
+ *  last change: $Author: kz $ $Date: 2007-10-10 15:32:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HDL_
 #include <com/sun/star/i18n/TransliterationModules.hdl>
 #endif
-
+#include "undo/undomanager.hxx"
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
 #endif
@@ -761,6 +761,15 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
     switch ( nSId )
     {
+        case SID_CLEAR_UNDO_STACK:
+        {
+            sd::UndoManager* pUndoManager = GetDoc()->GetUndoManager();
+            if ( pUndoManager )
+                pUndoManager->Clear();
+            rReq.Ignore ();
+        }
+        break;
+
         // Slots der ToolboxController gemapped ausfuehren
         case SID_OBJECT_CHOOSE_MODE:
         case SID_POSITION:
