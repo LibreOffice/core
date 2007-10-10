@@ -5415,6 +5415,31 @@ SfxVoidItem PresentationEnd SID_PRESENTATION_END
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem ClearUndoStack SID_CLEAR_UNDO_STACK
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_VIEW;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem PresentationLayout SID_PRESENTATION_LAYOUT
 ()
 [
