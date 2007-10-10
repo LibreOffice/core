@@ -9,10 +9,13 @@ mkdir: %_DEST%\inc%_EXT%\external\openssl
 ..\%__SRC%\misc\build\openssl-0.9.8e\out32dll\libeay32.lib %_DEST%\lib%_EXT%\libeay32.lib
 ..\%__SRC%\misc\build\openssl-0.9.8e\out32dll\libeay32.lib %_DEST%\lib%_EXT%\libeay32.exp
 ..\%__SRC%\misc\build\openssl-0.9.8e\out32dll\libeay32.dll %_DEST%\bin%_EXT%\libeay32.dll
-..\%__SRC%\misc\build\openssl-0.9.8a\out32dll\ssleay32.so %_DEST%\bin%_EXT%\ssleay32.so
-..\%__SRC%\misc\build\openssl-0.9.8a\out32dll\libeay32.so %_DEST%\bin%_EXT%\libeay32.so
+..\%__SRC%\misc\build\openssl-0.9.8e\libcrypto.a %_DEST%\lib%_EXT%\libcrypto.a
+..\%__SRC%\misc\build\openssl-0.9.8e\libcrypto.so.0.9.8 %_DEST%\lib%_EXT%\libcrypto.so
+..\%__SRC%\misc\build\openssl-0.9.8e\libssl.a %_DEST%\lib%_EXT%\libssl.a
+..\%__SRC%\misc\build\openssl-0.9.8e\libssl.so.0.9.8 %_DEST%\lib%_EXT%\libssl.so
 ..\%__SRC%\misc\build\openssl-0.9.8a\libcrypto.a %_DEST%\lib%_EXT%\libcrypto.a
 ..\%__SRC%\misc\build\openssl-0.9.8a\libcrypto.so.0.9.8 %_DEST%\lib%_EXT%\libcrypto.so
 ..\%__SRC%\misc\build\openssl-0.9.8a\libssl.a %_DEST%\lib%_EXT%\libssl.a
 ..\%__SRC%\misc\build\openssl-0.9.8a\libssl.so.0.9.8 %_DEST%\lib%_EXT%\libssl.so
+
  
