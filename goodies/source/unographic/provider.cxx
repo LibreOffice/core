@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 14:05:20 $
+ *  last change: $Author: kz $ $Date: 2007-10-10 15:33:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 #endif
 #ifndef _SV_METAACT_HXX
 #include <vcl/metaact.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
 #endif
 #ifndef VCL_IMAGEREPOSITORY_HXX
 #include <vcl/imagerepository.hxx>
@@ -218,6 +221,37 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( 
     return xRet;
 }
 
+
+// ------------------------------------------------------------------------------
+
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( const ::rtl::OUString& rResourceURL ) const
+{
+    uno::Reference< ::graphic::XGraphic >   xRet;
+    sal_Int32                               nIndex = 0;
+
+    if( ( 0 == rResourceURL.getToken( 0, '/', nIndex ).compareToAscii( "private:standardimage" ) ) )
+    {
+        rtl::OUString sImageName( rResourceURL.copy( nIndex ) );
+        if ( sImageName.compareToAscii( "info" ) )
+        {
+            xRet = InfoBox::GetStandardImage().GetXGraphic();
+        }
+        else if ( sImageName.compareToAscii( "warning" ) )
+        {
+            xRet = WarningBox::GetStandardImage().GetXGraphic();
+        }
+        else if ( sImageName.compareToAscii( "error" ) )
+        {
+            xRet = ErrorBox::GetStandardImage().GetXGraphic();
+        }
+        else if ( sImageName.compareToAscii( "query" ) )
+        {
+            xRet = QueryBox::GetStandardImage().GetXGraphic();
+        }
+    }
+    return xRet;
+}
+
 // ------------------------------------------------------------------------------
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const ::rtl::OUString& rResourceURL ) const
@@ -339,6 +373,9 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
         if ( !xGraphic.is() )
             xGraphic = implLoadRepositoryImage( aURL );
 
+        if ( !xGraphic.is() )
+            xGraphic = implLoadStandardImage( aURL );
+
         if( xGraphic.is() )
         {
             xRet = uno::Reference< beans::XPropertySet >( xGraphic, uno::UNO_QUERY );
@@ -395,6 +432,9 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
         if ( !xRet.is() )
             xRet = implLoadRepositoryImage( aPath );
+
+        if ( !xRet.is() )
+            xRet = implLoadStandardImage( aPath );
 
         if( !xRet.is() )
             pIStm = ::utl::UcbStreamHelper::CreateStream( aPath, STREAM_READ );
