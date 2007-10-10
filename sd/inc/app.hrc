@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:09:31 $
+ *  last change: $Author: kz $ $Date: 2007-10-10 15:32:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,8 @@
 #define SID_ANIMATOR_STATE                  (SID_SD_START+112)
 #define SID_PRESENTATIONOBJECT              (SID_SD_START+113)
 #define SID_SIZE_VISAREA                    (SID_SD_START+114)
+
+#define SID_CLEAR_UNDO_STACK                (SID_SD_START+115)
 
 #define SID_BEHIND_OBJ                      (SID_SD_START+116)
 #define SID_REVERSE_ORDER                   (SID_SD_START+117)
