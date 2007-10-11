@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 18:21:24 $
+ *  last change: $Author: kz $ $Date: 2007-10-11 11:52:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,10 @@ PyObject *PyUNO_str( PyObject * self );
 void PyUNO_del (PyObject* self)
 {
     PyUNO* me = reinterpret_cast< PyUNO* > (self);
-    delete me->members;
+    {
+        PyThreadDetach antiguard;
+        delete me->members;
+    }
     PyObject_Del (self);
 }
 
