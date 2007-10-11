@@ -2,6 +2,7 @@
 import uno
 import unohelper
 import sys
+import os
 import imp
 import time
 
@@ -11,11 +12,19 @@ class LogLevel:
     DEBUG = 2
 
 # Configuration ----------------------------------------------------
-LogLevel.use = LogLevel.NONE                # alternatively ERROR or DEBUG
+LogLevel.use = LogLevel.NONE                # production level
+#LogLevel.use = LogLevel.ERROR               # for script developers
+#LogLevel.use = LogLevel.DEBUG               # for script framework developers
 LOG_STDOUT = True                           # True, writes to stdout (difficult on windows)
                                             # False, writes to user/Scripts/python/log.txt
 ENABLE_EDIT_DIALOG=False                    # offers a minimal editor for editing.
 #-------------------------------------------------------------------
+
+def lastException2String():
+    (excType,excInstance,excTraceback) = sys.exc_info()
+    ret = str(excType) + ": "+str(excInstance) + "\n" + \
+          uno._uno_extract_printable_stacktrace( excTraceback )
+    return ret
 
 def logLevel2String( level ):
     ret = " NONE"
@@ -28,14 +37,17 @@ def logLevel2String( level ):
 def getLogTarget():
     ret = sys.stdout
     if not LOG_STDOUT:
-        pathSubst = uno.getComponentContext().ServiceManager.createInstance(
-            "com.sun.star.util.PathSubstitution" )
-        userInstallation =  pathSubst.getSubstituteVariableValue( "user" )
-        if len( userInstallation ) > 0:
-            systemPath = uno.fileUrlToSystemPath( userInstallation + "/Scripts/python/log.txt" )
-            ret = file( systemPath , "a" )
+        try:
+            pathSubst = uno.getComponentContext().ServiceManager.createInstance(
+                "com.sun.star.util.PathSubstitution" )
+            userInstallation =  pathSubst.getSubstituteVariableValue( "user" )
+            if len( userInstallation ) > 0:
+                systemPath = uno.fileUrlToSystemPath( userInstallation + "/Scripts/python/log.txt" )
+                ret = file( systemPath , "a" )
+        except Exception,e:
+            print "Exception during creation of pythonscript logfile: "+ lastException2String() + "\n, delagating log to stdout\n"
     return ret
-
+  
 class Logger(LogLevel):
     def __init__(self , target ):
         self.target = target
@@ -55,14 +67,18 @@ class Logger(LogLevel):
             self.log( self.ERROR, msg )
 
     def log( self, level, msg ):
-        self.target.write(
-            time.asctime() +
-            " [" +
-            logLevel2String( level ) +
-            "] " +
-            msg +
-            "\n" )
-        self.target.flush()
+        if self.use >= level:
+            try:
+                self.target.write(
+                    time.asctime() +
+                    " [" +
+                    logLevel2String( level ) +
+                    "] " +
+                    msg +
+                    "\n" )
+                self.target.flush()
+            except Exception,e:
+                print "Error during writing to stdout: " +lastException2String() + "\n"
 
 log = Logger( getLogTarget() )
 
@@ -120,11 +136,27 @@ def hasChanged( oldDate, newDate ):
            newDate.Seconds > oldDate.Seconds or \
            newDate.HundredthSeconds > oldDate.HundredthSeconds
 
-def ensureCodeEndsWithLinefeed( code ):
+def ensureSourceState( code ):
     if not code.endswith( "\n" ):
         code = code + "\n"
+    code = code.replace( "\r", "" )
     return code
 
+def checkForPythonPathBesideScript( url ):
+    if url.startswith( "file:" ):
+        path = unohelper.fileUrlToSystemPath( url+"/pythonpath.zip" );
+        log.log( LogLevel.DEBUG,  "checking for existence of " + path )
+        if 1 == os.access( path, os.F_OK) and not path in sys.path:
+            log.log( LogLevel.DEBUG, "adding " + path + " to sys.path" )
+            sys.path.append( path )
+
+        path = unohelper.fileUrlToSystemPath( url+"/pythonpath" );
+        log.log( LogLevel.DEBUG,  "checking for existence of " + path )
+        if 1 == os.access( path, os.F_OK) and not path in sys.path:
+            log.log( LogLevel.DEBUG, "adding " + path + " to sys.path" )
+            sys.path.append( path )
+        
+    
 class ScriptContext(unohelper.Base):
     def __init__( self, ctx, doc ):
         self.ctx = ctx
@@ -253,12 +285,19 @@ class ProviderContext:
         if load:
             log.isDebugLevel() and log.debug( "opening >" + url + "<" )
             
-            code = readTextFromStream( self.sfa.openFileRead( url ) )
-            code = ensureCodeEndsWithLinefeed( code )
+            src = readTextFromStream( self.sfa.openFileRead( url ) )
+            checkForPythonPathBesideScript( url[0:url.rfind('/')] )
+            src = ensureSourceState( src )            
             
             # execute the module
             entry = ModuleEntry( lastRead, imp.new_module("ooo_script_framework") )
             entry.module.__dict__[GLOBAL_SCRIPTCONTEXT_NAME] = self.scriptContext
+
+            code = None
+            if url.startswith( "file:" ):
+                code = compile( src, uno.fileUrlToSystemPath( url ), "exec" )
+            else:
+                code = compile( src, url, "exec" )
             exec code in entry.module.__dict__
             entry.module.__file__ = url
             self.modules[ url ] = entry
@@ -326,7 +365,7 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
                 "ScriptBindingLibrary.MacroEditor?location=application")
 
             code = readTextFromStream(self.provCtx.sfa.openFileRead(self.uri))
-            code = ensureCodeEndsWithLinefeed( code )
+            code = ensureSourceState( code )
             self.editor.getControl("EditorTextField").setText(code)
 
             self.editor.getControl("RunButton").setActionCommand("Run")
@@ -342,7 +381,7 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
         try:
             if event.ActionCommand == "Run":
                 code = self.editor.getControl("EditorTextField").getText()
-                code = ensureCodeEndsWithLinefeed( code )
+                code = ensureSourceState( code )
                 mod = imp.new_module("ooo_script_framework")
                 mod.__dict__[GLOBAL_SCRIPTCONTEXT_NAME] = self.provCtx.scriptContext
                 exec code in mod.__dict__
@@ -371,7 +410,7 @@ class ScriptBrowseNode( unohelper.Base, XBrowseNode , XPropertySet, XInvocation,
 #                log.isDebugLevel() and log.debug("Would save: " + text)
         except Exception,e:
             # TODO: add an error box here !
-            log.error( str( e) )
+            log.error( lastException2String() )
             
 
     def setValue( self, name, value ):
@@ -418,9 +457,9 @@ class FileBrowseNode( unohelper.Base, XBrowseNode ):
             # must compile  !
             log.isDebugLevel() and log.debug( "returning " +str(len(ret)) + " ScriptChildNodes on " + self.uri )
         except Exception, e:
-            log.error( "Error " + str(e) + " while evaluating " + self.uri )
-            raise e
-                   # ret = ()
+            text = lastException2String()
+            log.error( "Error while evaluating " + self.uri + ":" + text )
+            raise
         return ret
 
     def hasChildNodes(self):
@@ -453,12 +492,14 @@ class DirBrowseNode( unohelper.Base, XBrowseNode ):
                     log.isDebugLevel() and log.debug( "adding filenode " + i )
                     browseNodeList.append(
                         FileBrowseNode( self.provCtx, i, i[i.rfind("/")+1:len(i)-3] ) )
-                elif self.provCtx.sfa.isFolder( i ):
+                elif self.provCtx.sfa.isFolder( i ) and not i.endswith("/pythonpath"):
                     log.isDebugLevel() and log.debug( "adding DirBrowseNode " + i )
                     browseNodeList.append( DirBrowseNode( self.provCtx, i[i.rfind("/")+1:len(i)],i))
             return tuple( browseNodeList )
         except Exception, e:
+            text = lastException2String()
             log.error( "DirBrowseNode error: " + str(e) + " while evaluating " + self.rootUrl)
+            log.error( text)
             return ()
 
     def hasChildNodes( self ):
@@ -513,7 +554,8 @@ def getPathesFromPackage( rootUrl, sfa ):
         parser.parseStream( InputSource( inputStream , "", fileUrl, fileUrl ) )
         ret = tuple( handler.urlList )
     except UnoException, e:
-        log.debug( "getPathesFromPackage " + fileUrl + " Exception: " +str( e) )
+        text = lastException2String()
+        log.debug( "getPathesFromPackage " + fileUrl + " Exception: " +text )
         pass
     return ret
     
@@ -537,7 +579,7 @@ def getPackageName2PathMap( sfa, rootUrl ):
                     pathes = getPathesFromPackage( j, sfa )
                     if len( pathes ) > 0:
                         # map package name to url, we need this later
-                        log.isDebugLevel() and log.debug( "adding Package " + transientPathElement + " " + str( pathes ) )
+                        log.isErrorLevel() and log.error( "adding Package " + transientPathElement + " " + str( pathes ) )
                         ret[ lastElement( j ) ] = Package( pathes, transientPathElement )
     return ret
 
@@ -585,11 +627,29 @@ class PythonScript( unohelper.Base, XScript ):
         self.mod = mod
     def invoke(self, args, out, outindex ):
         log.isDebugLevel() and log.debug( "PythonScript.invoke " + str( args ) )
-#        try:
-        ret = self.func( *args )
-#        except Exception,e:
-#            raise RuntimeException( "Error during invoking function " + str(self.func.__name__) + " in module " +
-#                                    self.mod.__file__ + " (" + str( e ) + ")", self )
+        try:
+            ret = self.func( *args )
+        except UnoException,e:
+            # UNO Exception continue to fly ...
+            text = lastException2String()
+            complete = "Error during invoking function " + \
+                str(self.func.__name__) + " in module " + \
+                self.mod.__file__ + " (" + text + ")"
+            log.isDebugLevel() and log.debug( complete )
+            # some people may beat me up for modifying the exception text,
+            # but otherwise office just shows
+            # the type name and message text with no more information,
+            # this is really bad for most users. 
+            e.Message = e.Message + " (" + complete + ")"
+            raise
+        except Exception,e:
+            # General python exception are converted to uno RuntimeException
+            text = lastException2String()
+            complete = "Error during invoking function " + \
+                str(self.func.__name__) + " in module " + \
+                self.mod.__file__ + " (" + text + ")"
+            log.isDebugLevel() and log.debug( complete )
+            raise RuntimeException( complete , self )
         log.isDebugLevel() and log.debug( "PythonScript.invoke ret = " + str( ret ) )
         return ret, (), ()
 
@@ -643,7 +703,8 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
                 self.dirBrowseNode = DirBrowseNode( self.provCtx, LANGUAGENAME, rootUrl )
             
         except Exception, e:
-            log.debug( "PythonScriptProvider could not be instantiated because of : " + str( e ) )
+            text = lastException2String()
+            log.debug( "PythonScriptProvider could not be instantiated because of : " + text )
             raise e
 
     def getName( self ):
@@ -681,8 +742,9 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
             log.isDebugLevel() and log.debug( "got func " + str( func ) )
             return PythonScript( func, mod )
         except Exception, e:
-            log.error( str( e ) )
-            raise ScriptFrameworkErrorException( str(e), self, scriptUri, LANGUAGENAME, 0 )
+            text = lastException2String()
+            log.error( text )
+            raise ScriptFrameworkErrorException( text, self, scriptUri, LANGUAGENAME, 0 )
         
 
     # XServiceInfo
@@ -712,7 +774,8 @@ class PythonScriptProvider( unohelper.Base, XBrowseNode, XScriptProvider, XNameC
             log.debug( "hasByName " + uri + " " +str( ret ) )
             return ret
         except Exception, e:
-            log.debug( "Error in hasByName:" +  str(e) )
+            text = lastException2String()
+            log.debug( "Error in hasByName:" +  text )
             return False
 
     def removeByName( self, name ):
