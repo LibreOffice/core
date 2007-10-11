@@ -4,9 +4,9 @@
 #
 #   $RCSfile: uno.py,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-22 10:52:57 $
+#   last change: $Author: kz $ $Date: 2007-10-11 11:52:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -340,7 +340,8 @@ def _uno_struct__eq__(self,cmp):
     if hasattr(cmp,"value"):
        return self.__dict__["value"] == cmp.__dict__["value"]
     return False
-     
+
+# referenced from pyuno shared lib and pythonscript.py
 def _uno_extract_printable_stacktrace( trace ):
     mod = None
     try:
@@ -349,9 +350,13 @@ def _uno_extract_printable_stacktrace( trace ):
         pass
     ret = ""
     if mod:
-        lst = mod.format_tb( trace )
-        for i in lst:
-            ret = ret + i
+        lst = mod.extract_tb( trace )
+        max = len(lst)
+        for j in range(max):
+            i = lst[max-j-1]
+            ret = ret + "  " + str(i[0]) + ":" + \
+                  str(i[1]) + " in function " + \
+                  str(i[2])  + "() [" + str(i[3]) + "]\n"
     else:
-        ret = "Coludn't import traceback module"
+        ret = "Couldn't import traceback module"
     return ret
