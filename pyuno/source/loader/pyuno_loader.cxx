@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_loader.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-11 11:52:16 $
+ *  last change: $Author: vg $ $Date: 2007-10-11 15:52:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,33 +142,6 @@ static OUString getLibDir()
     return *pLibDir;
 }
 
-static PyRef myOUString2PyString( const OUString &str )
-{
-    OString o = OUStringToOString( str, osl_getThreadTextEncoding() );
-    return PyRef( PyString_FromString( o.getStr() ), SAL_NO_ACQUIRE );
-}
-
-static PyRef getSysModuleDict()
-{
-    PyRef module(
-        PyImport_ImportModule( const_cast< char * >("sys") ),
-        SAL_NO_ACQUIRE );
-    raiseRuntimeExceptionWhenNeeded();
-    if( !module.is() )
-    {
-        throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "pythonloader: Couldn't load module sys" ) ),
-            Reference< XInterface > () );
-    }
-    PyRef dict( PyModule_GetDict( module.get() ));
-    if( !dict.is() )
-    {
-        throw RuntimeException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "pythonloader: Couldn't get dictionary of module sys" ) ),
-            Reference< XInterface > () );
-    }
-    return dict;
-}
 static void setPythonHome ( const OUString & pythonHome )
 {
     OUString systemPythonHome;
