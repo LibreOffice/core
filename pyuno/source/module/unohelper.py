@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unohelper.py,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2006-03-22 10:53:27 $
+#   last change: $Author: kz $ $Date: 2007-10-11 11:52:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,15 @@ def _propertymode_to_str( mode ):
     return ret.rstrip()
     
 def inspect( obj , out ):
+    if isinstance( obj, uno.Type ) or \
+       isinstance( obj, uno.Char ) or \
+       isinstance( obj, uno.Bool ) or \
+       isinstance( obj, uno.ByteSequence ) or \
+       isinstance( obj, uno.Enum ) or \
+       isinstance( obj, uno.Any ):
+        out.write( str(obj) + "\n")
+        return
+
     ctx = uno.getComponentContext()
     introspection = \
          ctx.ServiceManager.createInstanceWithContext( "com.sun.star.beans.Introspection", ctx )
@@ -290,7 +299,7 @@ class _FactoryHelper_( XSingleComponentFactory, XServiceInfo, Base ):
 	  return self.implementationName
 
       def supportsService( self, ServiceName ):
-	  return ServiceName in serviceNames
+	  return ServiceName in self.serviceNames
 
       def getSupportedServiceNames( self ):
 	  return self.serviceNames
