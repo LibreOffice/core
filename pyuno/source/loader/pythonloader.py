@@ -4,9 +4,9 @@
 #
 #   $RCSfile: pythonloader.py,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:50:23 $
+#   last change: $Author: kz $ $Date: 2007-10-11 11:52:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
 #*************************************************************************
 import uno
 import unohelper
+import sys
 import imp
 import os
 from com.sun.star.uno import Exception,RuntimeException
@@ -49,10 +50,24 @@ g_implementationName = "org.openoffice.comp.pyuno.Loader" # referenced by the na
 def splitUrl( url ):
       nColon = url.find( ":" )
       if -1 == nColon:
-            raise RuntimeException( "PythonLoader: No protocol in url " + url )
+            raise RuntimeException( "PythonLoader: No protocol in url " + url, None )
       return url[0:nColon], url[nColon+1:len(url)]
 
 g_loadedComponents = {}
+def checkForPythonPathBesideComponent( url ):
+      path = unohelper.fileUrlToSystemPath( url+"/pythonpath.zip" );
+      if DEBUG == 1:
+            print "checking for existence of " + path  
+      if 1 == os.access( path, os.F_OK) and not path in sys.path:
+            if DEBUG == 1:
+                  print "adding " + path + " to sys.path"
+            sys.path.append( path )
+
+      path = unohelper.fileUrlToSystemPath( url+"/pythonpath" );
+      if 1 == os.access( path, os.F_OK) and not path in sys.path:
+            if DEBUG == 1:
+                  print "adding " + path + " to sys.path"
+            sys.path.append( path )
 
 class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
       def __init__(self, ctx ):
@@ -82,12 +97,20 @@ class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
                       if not mod:
                             mod = imp.new_module("uno_component")
 
+                            # check for pythonpath.zip beside .py files
+                            checkForPythonPathBesideComponent( url[0:url.rfind('/')] )
+                            
                             # read the file
-                            fileHandle = file( unohelper.fileUrlToSystemPath( url ) )
-                            src = fileHandle.read()
+                            filename = unohelper.fileUrlToSystemPath( url )
+                            fileHandle = file( filename )
+                            src = fileHandle.read().replace("\r","")
+                            if not src.endswith( "\n" ):
+                                  src = src + "\n"
 
-                            # execute the module
-                            exec src in mod.__dict__
+                            # compile and execute the module
+                            codeobject = compile( src, filename, "exec" )
+                            exec codeobject in mod.__dict__
+                            mod.__file__ = filename
                             g_loadedComponents[url] = mod
                       return mod
                 elif "vnd.openoffice.pymodule" == protocol:
