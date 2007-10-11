@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impoptimizer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2007-10-08 16:17:34 $
+ *  last change: $Author: vg $ $Date: 2007-10-11 14:41:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,12 +46,8 @@
 #endif
 #include "informationdialog.hxx"
 
-#include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/processfactory.hxx>
-#include <svtools/FilterConfigItem.hxx>
-#include <svtools/filter.hxx>
-#include <svtools/solar.hrc>
 #include <vector>
 #include "com/sun/star/util/URL.hpp"
 #include "com/sun/star/util/XURLTransformer.hpp"
@@ -161,7 +157,6 @@
 
 using namespace ::std;
 using namespace ::rtl;
-using namespace ::vcl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::awt;
