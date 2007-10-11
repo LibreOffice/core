@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: sj $ $Date: 2007-05-16 15:07:46 $
+#   last change: $Author: kz $ $Date: 2007-10-11 15:44:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 DESCRIPTION:=$(MISC)$/SunPresentationMinimizer$/description.xml
-
-PACKLICS:=$(foreach,i,$(alllangiso) $(MISC)$/SunPresentationMinimizer$/registry$/LICENSE_$i)
-
 
 DLLPRE=
 common_build_zip=
@@ -114,7 +111,7 @@ COMPONENT_MANIFEST= \
 COMPONENT_LIBRARY= \
     $(MISC)$/SunPresentationMinimizer$/SunPresentationMinimizer.uno$(DLLPOST)
 
-ZIP1DEPS=		$(PACKLICS) $(DESCRIPTION) $(COMPONENT_MANIFEST) $(COMPONENT_FILES) $(COMPONENT_BITMAPS) $(COMPONENT_HELP) $(COMPONENT_LIBRARY) $(COMPONENT_MERGED_XCU)
+ZIP1DEPS=		$(DESCRIPTION) $(COMPONENT_MANIFEST) $(COMPONENT_FILES) $(COMPONENT_BITMAPS) $(COMPONENT_HELP) $(COMPONENT_LIBRARY) $(COMPONENT_MERGED_XCU)
 ZIP1TARGET=		sun-presentation-minimizer
 ZIP1DIR=		$(MISC)$/SunPresentationMinimizer
 ZIP1EXT=		.oxt
@@ -141,10 +138,6 @@ $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
     
-$(PACKLICS) : $(SOLARBINDIR)$/oxt_templatepack01$/LICENSE$$(@:b:s/_/./:e:s/./_/)$$(@:e)
-    @@-$(MKDIRHIER) $(@:d)
-    $(GNUCOPY) $< $@
-
 $(MISC)$/SunPresentationMinimizer$/registry$/data$/%.xcu : $(MISC)$/$(EXTNAME)$/merge$/%.xcu
     @@-$(MKDIRHIER) $(@:d)
     $(GNUCOPY) $< $@
