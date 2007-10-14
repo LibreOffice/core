@@ -14,8 +14,8 @@ mkdir: %_DEST%\inc%_EXT%\external\openssl
 ..\%__SRC%\misc\build\openssl-0.9.8e\libssl.a %_DEST%\lib%_EXT%\libssl.a
 ..\%__SRC%\misc\build\openssl-0.9.8e\libssl.so.0.9.8 %_DEST%\lib%_EXT%\libssl.so
 ..\%__SRC%\misc\build\openssl-0.9.8a\libcrypto.a %_DEST%\lib%_EXT%\libcrypto.a
-..\%__SRC%\misc\build\openssl-0.9.8a\libcrypto.so.0.9.8 %_DEST%\lib%_EXT%\libcrypto.so
+..\%__SRC%\misc\build\openssl-0.9.8a\libcrypto.so.0.9.8 %_DEST%\lib%_EXT%\libcrypto.so.0.9.8
 ..\%__SRC%\misc\build\openssl-0.9.8a\libssl.a %_DEST%\lib%_EXT%\libssl.a
-..\%__SRC%\misc\build\openssl-0.9.8a\libssl.so.0.9.8 %_DEST%\lib%_EXT%\libssl.so
+..\%__SRC%\misc\build\openssl-0.9.8a\libssl.so.0.9.8 %_DEST%\lib%_EXT%\libssl.so.0.9.8
 
  
