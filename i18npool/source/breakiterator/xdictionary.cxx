@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xdictionary.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 14:58:36 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:53:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,8 @@ using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
 xdictionary::xdictionary(const sal_Char *lang)
 {
 #ifdef SAL_DLLPREFIX
@@ -68,7 +70,7 @@ xdictionary::xdictionary(const sal_Char *lang)
     OUStringBuffer aBuf( strlen(lang) + 7 + 4 );    // mostly "*.dll" (with * == dict_zh)
 #endif
     aBuf.appendAscii( "dict_" ).appendAscii( lang ).appendAscii( SAL_DLLEXTENSION );
-        hModule = osl_loadModule( aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
+        hModule = osl_loadModuleRelative( &thisModule, aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
         if( hModule ) {
             sal_IntPtr (*func)();
             func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getExistMark").pData );
