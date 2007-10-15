@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:15:49 $
+#   last change: $Author: vg $ $Date: 2007-10-15 13:06:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,7 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES = \
     $(SLO)$/xml_impctx.obj		\
     $(SLO)$/xml_element.obj		\
-    $(SLO)$/xml_byteseq.obj		\
-    $(SLO)$/dynload.obj
+    $(SLO)$/xml_byteseq.obj
 
 # --- Targets ------------------------------------------------------
 
