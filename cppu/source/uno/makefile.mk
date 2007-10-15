@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-09 13:39:37 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:20:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,8 @@ SLOFILES= \
     $(SLO)$/EnvDcp.obj \
     $(SLO)$/cascade_mapping.obj \
     $(SLO)$/EnvStack.obj \
-    $(SLO)$/env_subst.obj
+    $(SLO)$/env_subst.obj \
+        $(SLO)$/loadmodule.obj
 
 # --- Targets ------------------------------------------------------
 
