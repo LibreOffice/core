@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.117 $
+#   $Revision: 1.118 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:06:06 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:39:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.117 $$"
+LIBSMKREV!:="$$Revision: 1.118 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -158,7 +158,11 @@ XMLSECLIB-NSS=-lxmlsec1-nss
 .IF "$(GUI)$(COM)"=="WNTGCC"
 LIBXML2LIB=-lxml2-2
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
+.IF "$(SYSTEM_LIBXML)"=="YES"
+LIBXML2LIB=$(LIBXML_LIBS)
+.ELSE
 LIBXML2LIB=-lxml2
+.ENDIF
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 NSS3LIB=-lnss3
 NSPR4LIB=-lnspr4
@@ -263,19 +267,13 @@ JVMACCESSLIB = -ljvmaccess$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
-XML2LIB=-lxml2-2
-XSLTLIB=-lxslt-1 $(ZLIB3RD) $(XML2LIB)
+XSLTLIB=-lxslt-1 $(ZLIB3RD) $(LIBXML2LIB)
 JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
-.IF "$(SYSTEM_LIBXML)"=="YES"
-XML2LIB=$(LIBXML_LIBS)
-.ELSE
-XML2LIB=-lxml2
-.ENDIF
 .IF "$(SYSTEM_LIBXSLT)"=="YES"
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
-XSLTLIB=-lxslt $(ZLIB3RD) $(XML2LIB)
+XSLTLIB=-lxslt $(ZLIB3RD) $(LIBXML2LIB)
 .ENDIF
 JVMFWKLIB = -ljvmfwk
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
@@ -447,8 +445,7 @@ PKGCHKLIB=ipkgchk.lib
 SYSSHELLLIB=sysshell.lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
-XML2LIB = libxml2.lib
-XSLTLIB = libxslt.lib $(ZLIB3RD) $(XML2LIB)
+XSLTLIB = libxslt.lib $(ZLIB3RD) $(LIBXML2LIB)
 
 JVMFWKLIB = ijvmfwk.lib
 
