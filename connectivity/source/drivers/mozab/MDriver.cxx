@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MDriver.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:56:39 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:30:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,6 +294,8 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
+extern "C" { static void SAL_CALL thisModule() {} }
+
 bool MozabDriver::ensureInit()
 {
     if ( m_hModule )
@@ -304,7 +306,7 @@ bool MozabDriver::ensureInit()
     const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(SAL_MODULENAME( "mozabdrv2" ));
 
     // load the dbtools library
-    m_hModule = osl_loadModule(sModuleName.pData, 0);
+    m_hModule = osl_loadModuleRelative(&thisModule, sModuleName.pData, 0);
     OSL_ENSURE(NULL != m_hModule, "MozabDriver::ensureInit: could not load the dbtools library!");
     if ( !m_hModule )
         return false;
