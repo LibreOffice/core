@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.114 $
+#   $Revision: 1.115 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 13:40:25 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:39:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,10 @@ SHL$(TNR)LINKER=$(LINK)
 SHL$(TNR)STDSHL=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDSHL))
 SHL$(TNR)LINKFLAGS+=$(LINKFLAGS)
 .ENDIF			# "$(SHL$(TNR)CODETYPE)"=="C"
+
+SHL$(TNR)RPATH*=OOO
+LINKFLAGSRUNPATH_$(SHL$(TNR)RPATH)*=/ERROR:/Bad_SHL$(TNR)RPATH_value
+SHL$(TNR)LINKFLAGS+=$(LINKFLAGSRUNPATH_$(SHL$(TNR)RPATH))
 
 .IF "$(SHL$(TNR)USE_EXPORTS)"==""
 SHL$(TNR)DEF*=$(MISC)$/$(SHL$(TNR)TARGET).def
