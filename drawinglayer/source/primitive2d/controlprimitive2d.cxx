@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlprimitive2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:28 $
+ *  last change: $Author: aw $ $Date: 2007-10-15 16:11:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,6 +241,8 @@ namespace drawinglayer
 
         Primitive2DSequence ControlPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
+            // try to create a bitmap decomposition. If that fails for some reason,
+            // at least create a replacement decomposition.
             Primitive2DReference xReference(createBitmapDecomposition(rViewInformation));
 
             if(!xReference.is())
@@ -262,6 +264,18 @@ namespace drawinglayer
         {
         }
 
+        ControlPrimitive2D::ControlPrimitive2D(
+            const basegfx::B2DHomMatrix& rTransform,
+            const uno::Reference< awt::XControlModel >& rxControlModel,
+            const uno::Reference< awt::XControl >& rxXControl)
+        :   BasePrimitive2D(),
+            maTransform(rTransform),
+            mxControlModel(rxControlModel),
+            mxXControl(rxXControl),
+            maLastViewScaling()
+        {
+        }
+
         const uno::Reference< awt::XControl >& ControlPrimitive2D::getXControl() const
         {
             if(!mxXControl.is())
@@ -274,12 +288,16 @@ namespace drawinglayer
 
         bool ControlPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
+            // use base class compare operator
             if(BasePrimitive2D::operator==(rPrimitive))
             {
                 const ControlPrimitive2D& rCompare = (ControlPrimitive2D&)rPrimitive;
 
                 if(getTransform() == rCompare.getTransform())
                 {
+                    // annotation: It is not necessary to compare mxXControl since
+                    // it's creation completely relies on mxControlModel ad just
+                    // is there to buffer it and/or to avoid multiple creations.
                     if(getControlModel().is() == rCompare.getControlModel().is())
                     {
                         if(getControlModel().is())
@@ -301,6 +319,7 @@ namespace drawinglayer
 
         basegfx::B2DRange ControlPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
+            // simply derivate from unit range
             basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
             aRetval.transform(getTransform());
             return aRetval;
@@ -308,6 +327,8 @@ namespace drawinglayer
 
         Primitive2DSequence ControlPrimitive2D::get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
+            // this primitive is view-dependent related to the scaling. If scaling has changed,
+            // destroy existing decomposition
             ::osl::MutexGuard aGuard( m_aMutex );
             const basegfx::B2DVector aNewScaling(rViewInformation.getViewTransformation() * basegfx::B2DVector(1.0, 1.0));
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-02 16:55:00 $
+ *  last change: $Author: aw $ $Date: 2007-10-15 16:11:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,11 +185,31 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
+// for Control printing
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
     namespace processor2d
     {
+        //////////////////////////////////////////////////////////////////////////////
+        // UNO usings
+        using ::com::sun::star::uno::Reference;
+        using ::com::sun::star::uno::UNO_QUERY;
+        using ::com::sun::star::uno::UNO_QUERY_THROW;
+        using ::com::sun::star::uno::Exception;
+        using ::com::sun::star::beans::XPropertySet;
+        using ::com::sun::star::beans::XPropertySetInfo;
+        using ::com::sun::star::awt::XView;
+        //using ::com::sun::star::awt::XGraphics;
+        //using ::com::sun::star::awt::XWindow;
+        //using ::com::sun::star::awt::PosSize::POSSIZE;
+
         Rectangle VclMetafileProcessor2D::impDumpToMetaFile(
             const primitive2d::Primitive2DSequence& rContent,
             GDIMetaFile& o_rContentMetafile)
@@ -446,7 +466,7 @@ namespace drawinglayer
         }
 
         // init static break iterator
-        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > VclMetafileProcessor2D::mxBreakIterator;
+        Reference< ::com::sun::star::i18n::XBreakIterator > VclMetafileProcessor2D::mxBreakIterator;
 
         VclMetafileProcessor2D::VclMetafileProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev)
         :   VclProcessor2D(rViewInformation, rOutDev),
@@ -751,6 +771,7 @@ namespace drawinglayer
                     const primitive2d::ControlPrimitive2D& rControlPrimitive = static_cast< const primitive2d::ControlPrimitive2D& >(rCandidate);
                     bool bDoProcessRecursively(true);
                     static bool bSuppressPDFExtOutDevDataSupport(false);
+                    static bool bSuppressPrinterOutput(false);
 
                     if(mpPDFExtOutDevData && !bSuppressPDFExtOutDevDataSupport && mpPDFExtOutDevData->GetIsExportFormFields())
                     {
@@ -780,6 +801,54 @@ namespace drawinglayer
                             // no normal paint needed (see original UnoControlPDFExportContact::doPaintObject);
                             // do not process recursively
                             bDoProcessRecursively = false;
+                        }
+                    }
+
+                    // printer output preparation
+                    if(bDoProcessRecursively && !bSuppressPrinterOutput)
+                    {
+                        // this needs to do the same as UnoControlPrintOrPreviewContact::doPaintObject
+                        // does ATM. This means preparePrintOrPrintPreview and paintControl
+                        bool bIsPrintableControl(false);
+
+                        if(rControlPrimitive.getXControl().is())
+                        {
+                            try
+                            {
+                                // find out if control is printable
+                                Reference< XPropertySet > xModelProperties(rControlPrimitive.getXControl()->getModel(), UNO_QUERY);
+                                Reference< XPropertySetInfo > xPropertyInfo(xModelProperties.is()
+                                    ? xModelProperties->getPropertySetInfo()
+                                    : Reference< XPropertySetInfo >());
+                                const ::rtl::OUString sPrintablePropertyName(RTL_CONSTASCII_USTRINGPARAM("Printable"));
+
+                                if(xPropertyInfo.is() && xPropertyInfo->hasPropertyByName(sPrintablePropertyName))
+                                {
+                                    OSL_VERIFY(xModelProperties->getPropertyValue(sPrintablePropertyName) >>= bIsPrintableControl);
+                                }
+                            }
+                            catch(const Exception&)
+                            {
+                                OSL_ENSURE(false, "VclMetafileProcessor2D: No access to printable flag of Control, caught an exception!");
+                            }
+                        }
+
+                        if(bIsPrintableControl)
+                        {
+                            try
+                            {
+                                // update position and size
+                                const basegfx::B2DPoint aTopLeftPixel(PositionAndSizeControl(rControlPrimitive));
+
+                                // output to given device
+                                Reference< XView > xControlView(rControlPrimitive.getXControl(), UNO_QUERY_THROW);
+                                xControlView->draw(basegfx::fround(aTopLeftPixel.getX()), basegfx::fround(aTopLeftPixel.getY()));
+                                bDoProcessRecursively = false;
+                            }
+                            catch( const Exception& )
+                            {
+                                OSL_ENSURE(false, "VclMetafileProcessor2D: Printing of Control failed, caught an exception!");
+                            }
                         }
                     }
 
@@ -919,8 +988,8 @@ namespace drawinglayer
                         // support for TEXT_ MetaFile actions only for decorated texts
                         if(!mxBreakIterator.is())
                         {
-                            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
-                            mxBreakIterator.set(xMSF->createInstance(rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator")), ::com::sun::star::uno::UNO_QUERY);
+                            Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
+                            mxBreakIterator.set(xMSF->createInstance(rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator")), UNO_QUERY);
                         }
 
                         if(mxBreakIterator.is())

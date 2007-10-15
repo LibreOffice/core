@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-02 16:55:00 $
+ *  last change: $Author: aw $ $Date: 2007-10-15 16:11:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,8 +146,23 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
+// control support
 
-using namespace com::sun::star;
+#ifndef _COM_SUN_STAR_AWT_XWINDOW2_HPP_
+#include <com/sun/star/awt/XWindow2.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
+#include <com/sun/star/awt/PosSize.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_XVIEW_HPP_
+#include <com/sun/star/awt/XView.hpp>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_CONTROLPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/controlprimitive2d.hxx>
+#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -155,6 +170,16 @@ namespace drawinglayer
 {
     namespace processor2d
     {
+        //////////////////////////////////////////////////////////////////////////////
+        // UNO usings
+        using ::com::sun::star::uno::Reference;
+        using ::com::sun::star::uno::UNO_QUERY;
+        using ::com::sun::star::uno::UNO_QUERY_THROW;
+        using ::com::sun::star::awt::XView;
+        using ::com::sun::star::awt::XGraphics;
+        using ::com::sun::star::awt::XWindow;
+        using ::com::sun::star::awt::PosSize::POSSIZE;
+
         //////////////////////////////////////////////////////////////////////////////
         // rendering support
 
@@ -881,6 +906,32 @@ namespace drawinglayer
                 mpOutputDevice->SetFillColor();
                 mpOutputDevice->DrawWaveLine(aVclStart, aVclStop, nWaveStyle);
             }
+        }
+
+        basegfx::B2DPoint VclProcessor2D::PositionAndSizeControl(const primitive2d::ControlPrimitive2D& rControlPrimitive2D)
+        {
+            // prepare output for given device
+            Reference< XGraphics > xGraphics(mpOutputDevice->CreateUnoGraphics());
+            Reference< XView > xControlView(rControlPrimitive2D.getXControl(), UNO_QUERY_THROW);
+            xControlView->setGraphics(xGraphics);
+
+            // set position and size (in pixel)
+            const basegfx::B2DHomMatrix aObjectToPixel(mpOutputDevice->GetViewTransformation() * rControlPrimitive2D.getTransform());
+            const basegfx::B2DPoint aTopLeftPixel(aObjectToPixel * basegfx::B2DPoint(0.0, 0.0));
+            Reference< XWindow > xControlWindow(rControlPrimitive2D.getXControl(), UNO_QUERY);
+
+            if(xControlWindow.is())
+            {
+                const basegfx::B2DPoint aBottomRightPixel(aObjectToPixel * basegfx::B2DPoint(1.0, 1.0));
+
+                xControlWindow->setPosSize(
+                    basegfx::fround(aTopLeftPixel.getX()), basegfx::fround(aTopLeftPixel.getY()),
+                    basegfx::fround(aBottomRightPixel.getX() - aTopLeftPixel.getX()),
+                    basegfx::fround(aBottomRightPixel.getY() - aTopLeftPixel.getY()),
+                    POSSIZE);
+            }
+
+            return aTopLeftPixel;
         }
 
         //////////////////////////////////////////////////////////////////////////////

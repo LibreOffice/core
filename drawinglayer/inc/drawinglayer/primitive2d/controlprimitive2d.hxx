@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlprimitive2d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:30:46 $
+ *  last change: $Author: aw $ $Date: 2007-10-15 16:10:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,11 +88,21 @@ namespace drawinglayer
                 const basegfx::B2DHomMatrix& rTransform,
                 const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& rxControlModel);
 
+            // constructor with an additional XControl as parameter to allow to hand it over at incarnation time
+            // if it exists. This will avoid to create a 2nd one on demand in createXControl()
+            // and thus double the XControls.
+            ControlPrimitive2D(
+                const basegfx::B2DHomMatrix& rTransform,
+                const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& rxControlModel,
+                const com::sun::star::uno::Reference< com::sun::star::awt::XControl >& rxXControl);
+
             // get data
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& getControlModel() const { return mxControlModel; }
 
             // mxControl access. This will on demand create the awt::XControl using createXControl()
+            // if it does not exist. It may already have been created or even handed over at
+            // incarnation
             const com::sun::star::uno::Reference< com::sun::star::awt::XControl >& getXControl() const;
 
             // compare operator

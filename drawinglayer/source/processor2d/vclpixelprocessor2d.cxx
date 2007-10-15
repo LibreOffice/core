@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclpixelprocessor2d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-26 11:36:36 $
+ *  last change: $Author: aw $ $Date: 2007-10-15 16:11:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,14 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_WRONGSPELLPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_CONTROLPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/controlprimitive2d.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_XWINDOW2_HPP_
+#include <com/sun/star/awt/XWindow2.hpp>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -240,6 +248,43 @@ namespace drawinglayer
                     // point array
                     RenderPointArrayPrimitive2D(static_cast< const primitive2d::PointArrayPrimitive2D& >(rCandidate));
                     break;
+                }
+                case PRIMITIVE2D_ID_CONTROLPRIMITIVE2D :
+                {
+                    // control primitive
+                    const primitive2d::ControlPrimitive2D& rControlPrimitive = static_cast< const primitive2d::ControlPrimitive2D& >(rCandidate);
+
+                    // if control primitive is a xWindow2 and visible, it oes not need to be painted
+                    bool bControlIsVisibleAsChildWindow(false);
+
+                    if(rControlPrimitive.getXControl().is())
+                    {
+                        com::sun::star::uno::Reference< com::sun::star::awt::XWindow2 > xControlWindow(rControlPrimitive.getXControl(), com::sun::star::uno::UNO_QUERY_THROW);
+
+                        if(xControlWindow.is())
+                        {
+                            if(xControlWindow->isVisible())
+                            {
+                                bControlIsVisibleAsChildWindow = true;
+                            }
+                        }
+                    }
+
+                    if(bControlIsVisibleAsChildWindow)
+                    {
+                        // update position and size as VCL Child Window
+                        static bool bDoSizeAndPositionControlsB(false);
+
+                        if(bDoSizeAndPositionControlsB)
+                        {
+                            PositionAndSizeControl(rControlPrimitive);
+                        }
+                    }
+                    else
+                    {
+                        // process recursively and use the decomposition as Bitmap
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
                 }
                 default :
                 {
