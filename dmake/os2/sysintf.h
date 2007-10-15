@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.h,v 1.3 2007-09-20 14:34:39 vg Exp $
+/* RCS  $Id: sysintf.h,v 1.4 2007-10-15 15:45:33 ihi Exp $
 --
 -- SYNOPSIS
 --      Interfaces for sysintf.c
@@ -27,8 +27,9 @@
 #define VOID_LCACHE(l,m)
 #define Hook_std_writes(A)
 #define GETPID getpid()
-//#define S_IFMT (S_IFDIR|S_IFCHR|S_IFREG)
-
+/* Disabled for CWS os2port01
+ *#define S_IFMT (S_IFDIR|S_IFCHR|S_IFREG)
+ */
 extern char * tempnam();
 extern char * getcwd();
 
@@ -42,7 +43,9 @@ extern char * getcwd();
 /*
 ** DOS interface standard items
 */
-//#define   chdir(p) _dchdir(p)
+/* Disabled for CWS os2port01
+ *#define   chdir(p) _dchdir(p)
+ */
 #define CacheStat(A,B) really_dostat(A,&buf)
 
 /*
