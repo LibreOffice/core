@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-18 12:15:37 $
+#   last change: $Author: vg $ $Date: 2007-10-15 11:58:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@ SHL1TARGET= $(TARGET)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=i$(TARGET)
 SHL1VERSIONMAP=..$/..$/bridge_exports.map
+SHL1RPATH=URELIB
 
 SHL1OBJS = $(SLOFILES)
 SHL1LIBS = $(SLB)$/cpp_uno_shared.lib
