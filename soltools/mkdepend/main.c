@@ -623,6 +623,14 @@ char *base_name(file)
 
     if (*p == '.')
         *p = '\0';
+
+    while (p > file) {
+        if ( *p == '/' ||  *p == '\\') {
+            file = p + 1;
+            break;
+        };
+        p--;
+    };
     return(file);
 }
 
