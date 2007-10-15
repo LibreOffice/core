@@ -261,3 +261,8 @@ UDK_3.3 {
     global:
         ?getTypes@OPropertySetHelper@cppu@@QAE?AV?$Sequence@VType@uno@star@sun@com@@@uno@star@sun@com@@XZ;
 } UDK_3.2;
+
+UDK_3.4 { # OOo 2.4
+    global:
+        ?bootstrap_expandUri@cppu@@YA?AVOUString@rtl@@ABV23@@Z; # rtl::OUString cppu::bootstrap_expandUri(rtl::OUString const &)
+} UDK_3.3;
