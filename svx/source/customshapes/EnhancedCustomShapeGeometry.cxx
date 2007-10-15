@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:02:48 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 17:16:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5592,6 +5592,8 @@ const sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
             case mso_sptFlowChartInternalStorage :
             case mso_sptTextPlainText :
             case mso_sptTextBox :
+            case mso_sptVerticalScroll :
+            case mso_sptHorizontalScroll :
                 nGluePointType = com::sun::star::drawing::EnhancedCustomShapeGluePointType::RECT;
             default: break;
         }
