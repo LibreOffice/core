@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:14:59 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:59:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,8 @@ static Reference<XInterface> getComponentContext( const Reference<XMultiServiceF
 Mutex Acceptor::m_aMutex;
 
 Acceptor::Acceptor( const Reference< XMultiServiceFactory >& rFactory )
-    : m_aAcceptString()
+    : m_thread(NULL)
+    , m_aAcceptString()
     , m_aConnectString()
     , m_aProtocol()
     , m_bInit(sal_False)
@@ -102,11 +103,28 @@ Acceptor::Acceptor( const Reference< XMultiServiceFactory >& rFactory )
 
 Acceptor::~Acceptor()
 {
-    // at destruction time, m_rAcceptor will be destoyed, aborting any
-    // pending accept calls in the accept thread thus leaving the run method
-    // and ending the accept thread. Hence no expicit join here.
     m_rAcceptor->stopAccepting();
-
+    oslThread t;
+    {
+        osl::MutexGuard g(m_aMutex);
+        t = m_thread;
+    }
+    osl_joinWithThread(t);
+    {
+        // Make the final state of m_bridges visible to this thread (since
+        // m_thread is joined, the code that follows is the only one left
+        // accessing m_bridges):
+        osl::MutexGuard g(m_aMutex);
+    }
+    for (;;) {
+        com::sun::star::uno::Reference< com::sun::star::bridge::XBridge > b(
+            m_bridges.remove());
+        if (!b.is()) {
+            break;
+        }
+        com::sun::star::uno::Reference< com::sun::star::lang::XComponent >(
+            b, com::sun::star::uno::UNO_QUERY_THROW)->dispose();
+    }
 }
 
 void SAL_CALL Acceptor::run()
@@ -140,7 +158,8 @@ void SAL_CALL Acceptor::run()
             // the bridge, it will be destructed.
             Reference< XBridge > rBridge = m_rBridgeFactory->createBridge(
                 rtl::OUString() ,m_aProtocol ,rConnection ,rInstanceProvider );
-
+            osl::MutexGuard g(m_aMutex);
+            m_bridges.add(rBridge);
         } catch (Exception&) {
             // connection failed...
             // something went wrong during connection setup.
@@ -180,7 +199,7 @@ void SAL_CALL Acceptor::initialize( const Sequence<Any>& aArguments )
         m_aProtocol = m_aAcceptString.copy( nIndex1, nIndex2 - nIndex1 );
 
         // start accepting in new thread...
-        osl_createThread(workerfunc, this);
+        m_thread = osl_createThread(workerfunc, this);
         m_bInit = sal_True;
         bOk = sal_True;
     }
