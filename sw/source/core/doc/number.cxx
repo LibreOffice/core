@@ -4,9 +4,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:39:02 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 17:32:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1082,7 +1082,7 @@ namespace numfunc
         public:
             static SwDefBulletConfig* getInstance()
             {
-                if ( mpInstance == 0L )
+                if ( mpInstance == 0 )
                 {
                     mpInstance = new SwDefBulletConfig;
                 }
@@ -1162,14 +1162,14 @@ namespace numfunc
             Font* mpFont;
     };
 
-    SwDefBulletConfig* SwDefBulletConfig::mpInstance = 0L;
+    SwDefBulletConfig* SwDefBulletConfig::mpInstance = 0;
 
     SwDefBulletConfig::SwDefBulletConfig()
         : ConfigItem( rtl::OUString::createFromAscii("Office.Writer/Numbering/DefaultBulletList") ),
           msFontname( String::CreateFromAscii("StarSymbol") ),
           meFontWeight( WEIGHT_DONTKNOW ),
           meFontItalic( ITALIC_NONE ),
-          mpFont( 0L )
+          mpFont( 0 )
     {
         SetToDefault();
         LoadConfig();
@@ -1304,5 +1304,135 @@ namespace numfunc
     const sal_Unicode GetBulletChar( BYTE nLevel )
     {
         return SwDefBulletConfig::getInstance()->GetChar( nLevel );
+    }
+
+    /** class containing configuration data about user interface behavior
+        regarding lists and list items.
+
+        OD 2007-10-01 #b660435#
+        configuration item about behavior of <TAB>/<SHIFT-TAB>-key at first
+        position of first list item
+
+        @author OD
+    */
+    class SwNumberingUIBehaviorConfig : private utl::ConfigItem
+    {
+        public:
+            static SwNumberingUIBehaviorConfig* getInstance()
+            {
+                if ( mpInstance == 0 )
+                {
+                    mpInstance = new SwNumberingUIBehaviorConfig();
+                }
+
+                return mpInstance;
+            }
+
+            inline const sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem() const
+            {
+                return mbChangeIndentOnTabAtFirstPosOfFirstListItem;
+            }
+
+        private:
+            SwNumberingUIBehaviorConfig();
+
+            /** sets internal configuration data to default values
+
+                @author OD
+            */
+            void SetToDefault();
+
+            /** returns sequence of configuration property names
+
+                @author OD
+            */
+            com::sun::star::uno::Sequence<rtl::OUString> GetPropNames() const;
+
+            /** loads configuration properties and applies values to internal data
+
+                @author OD
+            */
+            void LoadConfig();
+
+            /** catches notification about changed configuration data
+
+                @author OD
+            */
+            virtual void Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
+
+            static SwNumberingUIBehaviorConfig* mpInstance;
+
+            // configuration data
+            sal_Bool mbChangeIndentOnTabAtFirstPosOfFirstListItem;
+    };
+
+    SwNumberingUIBehaviorConfig* SwNumberingUIBehaviorConfig::mpInstance = 0;
+
+    SwNumberingUIBehaviorConfig::SwNumberingUIBehaviorConfig()
+        : ConfigItem( rtl::OUString::createFromAscii("Office.Writer/Numbering/UserInterfaceBehavior") ),
+          mbChangeIndentOnTabAtFirstPosOfFirstListItem( sal_True )
+    {
+        SetToDefault();
+        LoadConfig();
+
+        // enable notification for changes on configuration change
+        EnableNotification( GetPropNames() );
+    }
+
+    void SwNumberingUIBehaviorConfig::SetToDefault()
+    {
+        mbChangeIndentOnTabAtFirstPosOfFirstListItem = sal_True;
+    }
+
+    com::sun::star::uno::Sequence<rtl::OUString> SwNumberingUIBehaviorConfig::GetPropNames() const
+    {
+        com::sun::star::uno::Sequence<rtl::OUString> aPropNames(1);
+        rtl::OUString* pNames = aPropNames.getArray();
+        pNames[0] = rtl::OUString::createFromAscii("ChangeIndentOnTabAtFirstPosOfFirstListItem");
+
+        return aPropNames;
+    }
+
+    void SwNumberingUIBehaviorConfig::LoadConfig()
+    {
+        com::sun::star::uno::Sequence<rtl::OUString> aPropNames = GetPropNames();
+        com::sun::star::uno::Sequence<com::sun::star::uno::Any> aValues =
+                                                    GetProperties( aPropNames );
+        const com::sun::star::uno::Any* pValues = aValues.getConstArray();
+        ASSERT( aValues.getLength() == aPropNames.getLength(),
+                "<SwNumberingUIBehaviorConfig::LoadConfig()> - GetProperties failed")
+        if ( aValues.getLength() == aPropNames.getLength() )
+        {
+            for ( int nProp = 0; nProp < aPropNames.getLength(); ++nProp )
+            {
+                if ( pValues[nProp].hasValue() )
+                {
+                    switch ( nProp )
+                    {
+                        case 0:
+                        {
+                            pValues[nProp] >>= mbChangeIndentOnTabAtFirstPosOfFirstListItem;
+                        }
+                        break;
+                        default:
+                        {
+                            ASSERT( false,
+                                    "<SwNumberingUIBehaviorConfig::LoadConfig()> - unknown configuration property")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void SwNumberingUIBehaviorConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames )
+    {
+        SetToDefault();
+        LoadConfig();
+    }
+
+    const sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem()
+    {
+        return SwNumberingUIBehaviorConfig::getInstance()->ChangeIndentOnTabAtFirstPosOfFirstListItem();
     }
 }
