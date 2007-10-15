@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reflread.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 14:02:48 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:27:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,6 @@
 #include "reflcnst.hxx"
 
 #include <cstddef>
-
-using namespace salhelper;
 
 static sal_Char NULL_STRING[1] = { 0 };
 static sal_Unicode NULL_WSTRING[1] = { 0 };
