@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:11:46 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 16:34:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,20 +288,30 @@ void PlottingPositionHelper::setCoordinateSystemResolution( const ::com::sun::st
 }
 
 bool PlottingPositionHelper::isSameForGivenResolution( double fX, double fY, double fZ
-                                , double fX2, double fY2, double fZ2 )
+                                , double fX2, double fY2, double fZ2 /*these values are all expected tp be scaled already*/ )
 {
     if( !::rtl::math::isFinite(fX) || !::rtl::math::isFinite(fY) || !::rtl::math::isFinite(fZ)
         || !::rtl::math::isFinite(fX2) || !::rtl::math::isFinite(fY2) || !::rtl::math::isFinite(fZ2) )
         return false;
 
-    bool bSameX = ( static_cast<sal_Int32>(m_nXResolution*(fX - getLogicMinX())/(getLogicMaxX()-getLogicMinX()))
-                == static_cast<sal_Int32>(m_nXResolution*(fX2 - getLogicMinX())/(getLogicMaxX()-getLogicMinX())) );
+    double fScaledMinX = getLogicMinX();
+    double fScaledMinY = getLogicMinY();
+    double fScaledMinZ = getLogicMinZ();
+    double fScaledMaxX = getLogicMaxX();
+    double fScaledMaxY = getLogicMaxY();
+    double fScaledMaxZ = getLogicMaxZ();
 
-    bool bSameY = ( static_cast<sal_Int32>(m_nYResolution*(fY - getLogicMinY())/(getLogicMaxY()-getLogicMinY()))
-                == static_cast<sal_Int32>(m_nYResolution*(fY2 - getLogicMinY())/(getLogicMaxY()-getLogicMinY())) );
+    doLogicScaling( &fScaledMinX, &fScaledMinY, &fScaledMinZ );
+    doLogicScaling( &fScaledMaxX, &fScaledMaxY, &fScaledMaxZ);
 
-    bool bSameZ = ( static_cast<sal_Int32>(m_nZResolution*(fZ - getLogicMinZ())/(getLogicMaxZ()-getLogicMinZ()))
-                == static_cast<sal_Int32>(m_nZResolution*(fZ2 - getLogicMinZ())/(getLogicMaxZ()-getLogicMinZ())) );
+    bool bSameX = ( static_cast<sal_Int32>(m_nXResolution*(fX - fScaledMinX)/(fScaledMaxX-fScaledMinX))
+                == static_cast<sal_Int32>(m_nXResolution*(fX2 - fScaledMinX)/(fScaledMaxX-fScaledMinX)) );
+
+    bool bSameY = ( static_cast<sal_Int32>(m_nYResolution*(fY - fScaledMinY)/(fScaledMaxY-fScaledMinY))
+                == static_cast<sal_Int32>(m_nYResolution*(fY2 - fScaledMinY)/(fScaledMaxY-fScaledMinY)) );
+
+    bool bSameZ = ( static_cast<sal_Int32>(m_nZResolution*(fZ - fScaledMinZ)/(fScaledMaxZ-fScaledMinZ))
+                == static_cast<sal_Int32>(m_nZResolution*(fZ2 - fScaledMinZ)/(fScaledMaxZ-fScaledMinZ)) );
 
     return (bSameX && bSameY && bSameZ);
 }
