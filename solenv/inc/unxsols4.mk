@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-27 07:49:42 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:42:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -137,9 +137,12 @@ CFLAGSCC+=$(C_RESTRICTIONFLAGS)
 
 # -z combreloc combines multiple relocation sections. Reduces overhead on startup
 # -norunpath prevents the compiler from recording his own libs in the runpath
-LINKFLAGSRUNPATH*=-R\''$$ORIGIN'\'
-LINKFLAGS=-w -mt -z combreloc -PIC -temp=/tmp $(LINKFLAGSRUNPATH) -norunpath -library=no%Cstd
-LINKCFLAGS=-w -mt -z combreloc $(LINKFLAGSRUNPATH) -norunpath
+LINKFLAGSRUNPATH_URELIB=-R\''$$ORIGIN'\'
+LINKFLAGSRUNPATH_UREBIN=-R\''$$ORIGIN/../lib:$$ORIGIN'\'
+    #TODO: drop $ORIGIN once no URE executable is also shipped in OOo
+LINKFLAGSRUNPATH_OOO=-R\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
+LINKFLAGS=-w -mt -z combreloc -PIC -temp=/tmp -norunpath -library=no%Cstd
+LINKCFLAGS=-w -mt -z combreloc -norunpath
 
 # -z text force fatal error if non PIC code is linked into shared library. Such code
 #    would be expensive on startup
