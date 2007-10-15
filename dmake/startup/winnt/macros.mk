@@ -33,9 +33,20 @@ V *:= 		# RCS suffix
 # are going to use.  COMSPEC (assumed to be command.com) or
 # MKS Korn shell.
 .IF $(SHELL) == $(COMSPEC)
+.IF $(COMSPEC:lf) == cmd.exe
+   SHELLFLAGS       *:= $(SWITCHAR)S $(SWITCHAR)c
+   SHELLCMDQUOTE    *:= "
+# " fix syntax highlighting
+.ELIF $(COMSPEC:lf) == command.com
    SHELLFLAGS       *:= $(SWITCHAR)c
-   GROUPFLAGS       *:= $(SHELLFLAGS)
+   SHELLCMDQUOTE    *:= "
+# " fix syntax highlighting
+.ELSE
+   SHELLFLAGS       *:= $(SWITCHAR)c
+.END
+   GROUPFLAGS       *:= $(SWITCHAR)c
    SHELLMETAS       *:= "<>|
+# " fix syntax highlighting
    GROUPSUFFIX      *:= .cmd
    DIVFILE          *=  $(TMPFILE:s,/,\,)
    RM               *=  del
