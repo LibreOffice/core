@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeblop.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:10:51 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:45:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,10 +329,6 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
         if ( !aTypeAny.hasValue() )
             return length;
 
-        RegistryTypeWriterLoader rtwLoader;
-        if ( !rtwLoader.isLoaded() )
-            return length;
-
         Reference< XTypeDescription > xType;
         aTypeAny >>= xType;
 
@@ -351,7 +347,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                   Sequence< Reference< XConstantTypeDescription > > constTypes( xCFace->getConstants());
                     sal_uInt16 constCount = (sal_uInt16)constTypes.getLength();
 
-                    RegistryTypeWriter writer(rtwLoader, RT_TYPE_MODULE, uTypeName.replace('.', '/'),
+                    RegistryTypeWriter writer(RT_TYPE_MODULE, uTypeName.replace('.', '/'),
                                               OUString(), constCount, 0, 0);
 
                   for (sal_uInt16 i=0; i < constCount; i++)
@@ -381,7 +377,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                             constCount++;
                     }
 
-                    RegistryTypeWriter writer(rtwLoader, RT_TYPE_MODULE, uTypeName.replace('.', '/'),
+                    RegistryTypeWriter writer(RT_TYPE_MODULE, uTypeName.replace('.', '/'),
                                               OUString(), constCount, 0, 0);
 
                     if ( 0 < constCount )
@@ -436,7 +432,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                         inheritedMemberCount = (sal_uInt16)getInheritedMemberCount( xSuperType );
                     }
 
-                    RegistryTypeWriter writer(rtwLoader, RT_TYPE_INTERFACE, uTypeName.replace('.', '/'),
+                    RegistryTypeWriter writer(RT_TYPE_INTERFACE, uTypeName.replace('.', '/'),
                                               uSuperType, attrCount, memberCount-attrCount, 0);
 
                     Uik   uik = xIFace->getUik();
@@ -507,7 +503,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                         uSuperType = xSuperType->getName().replace('.','/');
                     }
 
-                    RegistryTypeWriter writer(rtwLoader, rtTypeClass, uTypeName.replace('.', '/'),
+                    RegistryTypeWriter writer(rtTypeClass, uTypeName.replace('.', '/'),
                                               uSuperType, memberCount, 0, 0);
 
                     for (sal_Int16 i=0; i < memberCount; i++)
@@ -532,7 +528,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                     Sequence< sal_Int32 > enumValues( xEnum->getEnumValues());
                     sal_uInt16 enumCount = (sal_uInt16)enumNames.getLength();
 
-                    RegistryTypeWriter writer(rtwLoader, RT_TYPE_ENUM, uTypeName.replace('.', '/'),
+                    RegistryTypeWriter writer(RT_TYPE_ENUM, uTypeName.replace('.', '/'),
                                               OUString(), enumCount, 0, 0);
 
                     RTConstValue constValue;
@@ -557,7 +553,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                     if ( !xTD.is() )
                         return length;
 
-                    RegistryTypeWriter writer(rtwLoader, RT_TYPE_TYPEDEF, uTypeName.replace('.', '/'),
+                    RegistryTypeWriter writer(RT_TYPE_TYPEDEF, uTypeName.replace('.', '/'),
                                               xTD->getReferencedType()->getName().replace('.', '/'),
                                               0, 0, 0);
                     length = writer.getBlopSize();
