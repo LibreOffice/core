@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 19:01:46 $
+#   last change: $Author: vg $ $Date: 2007-10-15 13:02:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,8 @@ OBJFILES = \
         $(OBJ)$/lwrapw.obj \
         $(OBJ)$/rwrapa.obj \
         $(OBJ)$/rwrapw.obj \
-        $(OBJ)$/sowrapper.obj
+        $(OBJ)$/sowrapper.obj \
+        $(OBJ)$/extendloaderenvironment.obj
 
 # --- Targets ------------------------------------------------------
 
