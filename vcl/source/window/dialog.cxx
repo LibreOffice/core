@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:18:51 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 16:27:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -508,7 +508,7 @@ long Dialog::Notify( NotifyEvent& rNEvt )
             // make sure the dialog is still modal
             // changing focus between application frames may
             // have re-enabled input for our parent
-            if( mbInExecute )
+            if( mbInExecute && mbModalMode )
             {
                 // do not change modal counter (pSVData->maAppData.mnModalDialog)
                 SetModalInputMode( FALSE );
