@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 12:14:19 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:50:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_sal.hxx"
 
 #include "rtl/bootstrap.h"
+#include "rtl/bootstrap.hxx"
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -87,6 +88,33 @@ using osl::FileStatus;
 using rtl::OString;
 using rtl::OUString;
 using rtl::OUStringToOString;
+
+namespace {
+
+static char const URE_BOOTSTRAP[] = "URE_BOOTSTRAP";
+
+struct FundamentalIniData {
+    rtlBootstrapHandle ini;
+
+    FundamentalIniData() {
+        OUString uri;
+        ini =
+            rtl::Bootstrap::get(
+                OUString(RTL_CONSTASCII_USTRINGPARAM(URE_BOOTSTRAP)), uri)
+            ? rtl_bootstrap_args_open(uri.pData) : NULL;
+    }
+
+    ~FundamentalIniData() { rtl_bootstrap_args_close(ini); }
+
+private:
+    FundamentalIniData(FundamentalIniData &); // not defined
+    void operator =(FundamentalIniData &); // not defined
+};
+
+struct FundamentalIni: public rtl::Static< FundamentalIniData, FundamentalIni >
+{};
+
+}
 
 //----------------------------------------------------------------------------
 
@@ -320,7 +348,7 @@ struct Bootstrap_Impl
     static void operator delete (void * p , std::size_t) SAL_THROW(())
         { rtl_freeMemory (p); }
 
-    sal_Bool getValue( rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault ) const;
+    sal_Bool getValue( rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault, bool recursive ) const;
 };
 
 //----------------------------------------------------------------------------
@@ -401,7 +429,8 @@ Bootstrap_Impl::~Bootstrap_Impl()
 //----------------------------------------------------------------------------
 
 sal_Bool Bootstrap_Impl::getValue(
-    rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault ) const
+    rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault,
+    bool recursive ) const
 {
     // lookup this ini
     sal_Bool result = sal_True;
@@ -476,7 +505,7 @@ sal_Bool Bootstrap_Impl::getValue(
                         EnsureNoFinalSlash(ppValue);
                         further_macro_expansion = false;
                     }
-                    else if (_base_ini && (_base_ini->getValue(pName, ppValue, NULL)))
+                    else if (!recursive && _base_ini && (_base_ini->getValue(pName, ppValue, NULL, true)))
                     {
                         further_macro_expansion = false;
                     }
@@ -490,6 +519,22 @@ sal_Bool Bootstrap_Impl::getValue(
                         }
 
                         getFromList( &_nameValueList, ppValue, pName );
+                        if (*ppValue == NULL && !recursive &&
+                            !name.equalsAsciiL(
+                                RTL_CONSTASCII_STRINGPARAM(URE_BOOTSTRAP)))
+                        {
+                            FundamentalIniData & d = FundamentalIni::get();
+                            if (d.ini != NULL && d.ini != this) {
+                                if (static_cast< Bootstrap_Impl * >(d.ini)->
+                                    getValue(pName, ppValue, NULL, true))
+                                {
+                                    further_macro_expansion = false;
+                                } else {
+                                    rtl_uString_release(*ppValue);
+                                    *ppValue = NULL;
+                                }
+                            }
+                        }
                         if( ! *ppValue )
                         {
                             if(pDefault) {
@@ -533,17 +578,42 @@ sal_Bool Bootstrap_Impl::getValue(
 
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
-// map<> may be preferred here, but hash_map<> is implemented fully inline,
-// thus there is no need to link against the stlport.
-
-typedef std::hash_map<
-    rtl::OUString, Bootstrap_Impl *,
-    rtl::OUStringHash, std::equal_to< rtl::OUString >,
-    rtl::Allocator< OUString > > t_bootstrap_map;
 
 namespace {
-    struct bootstrap_map :
-        public rtl::Static< t_bootstrap_map, bootstrap_map > {};
+
+struct bootstrap_map {
+    // map<> may be preferred here, but hash_map<> is implemented fully inline,
+    // thus there is no need to link against the stlport:
+    typedef std::hash_map<
+        rtl::OUString, Bootstrap_Impl *,
+        rtl::OUStringHash, std::equal_to< rtl::OUString >,
+        rtl::Allocator< OUString > > t;
+
+    // get and release must only be called properly synchronized via some mutex
+    // (e.g., osl::Mutex::getGlobalMutex()):
+
+    static t * get() {
+        if (m_map == NULL) {
+            m_map = new t;
+        }
+        return m_map;
+    }
+
+    static void release() {
+        if (m_map != NULL && m_map->empty()) {
+            delete m_map;
+            m_map = NULL;
+        }
+    }
+
+private:
+    bootstrap_map(); // not defined
+
+    static t * m_map;
+};
+
+bootstrap_map::t * bootstrap_map::m_map = NULL;
+
 }
 
 //----------------------------------------------------------------------------
@@ -570,20 +640,22 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
 
     Bootstrap_Impl * that;
     osl::ResettableMutexGuard guard( osl::Mutex::getGlobalMutex() );
-    t_bootstrap_map& r_bootstrap_map = bootstrap_map::get();
-    t_bootstrap_map::const_iterator iFind( r_bootstrap_map.find( iniName ) );
-    if (iFind == r_bootstrap_map.end())
+    bootstrap_map::t* p_bootstrap_map = bootstrap_map::get();
+    bootstrap_map::t::const_iterator iFind( p_bootstrap_map->find( iniName ) );
+    if (iFind == p_bootstrap_map->end())
     {
+        bootstrap_map::release();
         guard.clear();
         that = new Bootstrap_Impl( iniName );
         guard.reset();
-        iFind = r_bootstrap_map.find( iniName );
-        if (iFind == r_bootstrap_map.end())
+        p_bootstrap_map = bootstrap_map::get();
+        iFind = p_bootstrap_map->find( iniName );
+        if (iFind == p_bootstrap_map->end())
         {
             ++that->_nRefCount;
-            ::std::pair< t_bootstrap_map::iterator, bool > insertion(
-                r_bootstrap_map.insert(
-                    t_bootstrap_map::value_type( iniName, that ) ) );
+            ::std::pair< bootstrap_map::t::iterator, bool > insertion(
+                p_bootstrap_map->insert(
+                    bootstrap_map::t::value_type( iniName, that ) ) );
             OSL_ASSERT( insertion.second );
         }
         else
@@ -614,9 +686,9 @@ void SAL_CALL rtl_bootstrap_args_close (
     Bootstrap_Impl * that = static_cast< Bootstrap_Impl * >( handle );
 
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
-    t_bootstrap_map& r_bootstrap_map = bootstrap_map::get();
+    bootstrap_map::t* p_bootstrap_map = bootstrap_map::get();
     OSL_ASSERT(
-        r_bootstrap_map.find( that->_iniName )->second == that );
+        p_bootstrap_map->find( that->_iniName )->second == that );
     --that->_nRefCount;
     if (that->_nRefCount == 0)
     {
@@ -628,14 +700,15 @@ void SAL_CALL rtl_bootstrap_args_close (
         nLeaking = 1;
 #endif /* OSL_DEBUG_LEVEL */
 
-        if (r_bootstrap_map.size() > nLeaking)
+        if (p_bootstrap_map->size() > nLeaking)
         {
-            ::std::size_t erased = r_bootstrap_map.erase( that->_iniName );
+            ::std::size_t erased = p_bootstrap_map->erase( that->_iniName );
             if (erased != 1) {
                 OSL_ASSERT( false );
             }
             delete that;
         }
+        bootstrap_map::release();
     }
 }
 
@@ -676,7 +749,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle (
         if (handle == 0)
             handle = get_static_bootstrap_handle();
         found = static_cast< Bootstrap_Impl * >( handle )->getValue(
-            pName, ppValue, pDefault );
+            pName, ppValue, pDefault, false );
     }
 
     return found;
