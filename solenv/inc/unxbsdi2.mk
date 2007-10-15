@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxbsdi2.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:07:33 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:40:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -123,8 +123,11 @@ LINK*=$(CC)
 
 # default linker flags
 LINKFLAGSDEFS*=-z defs
-LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
-LINKFLAGS=-z combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
+LINKFLAGSRUNPATH_URELIB=-Wl,-rpath,\''$$ORIGIN'\'
+LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
+    #TODO: drop $ORIGIN once no URE executable is also shipped in OOo
+LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
+LINKFLAGS=-z combreloc $(LINKFLAGSDEFS)
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic 
