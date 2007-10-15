@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:24:47 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:20:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ DEPOBJFILES= \
     $(OBJ)$/pass2.obj
 
 APP1OBJS = $(OBJ)$/pass1.obj
-APP1STDLIBS += $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB)
+APP1STDLIBS += $(CPPUHELPERLIB) $(CPPULIB) $(REGLIB) $(SALHELPERLIB) $(SALLIB)
 APP1TARGET = pass1
 
 APP2OBJS = $(OBJ)$/pass2.obj
