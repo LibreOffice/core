@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_ChartType.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:36:45 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 16:24:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -472,6 +472,8 @@ public:
     SplinePropertiesDialog( Window* pParent );
     virtual ~SplinePropertiesDialog();
 
+    void adjustSize();
+
     void fillControls( const ChartTypeParameter& rParameter );
     void fillParameter( ChartTypeParameter& rParameter, bool bSmoothLines );
 
@@ -546,7 +548,21 @@ SplinePropertiesDialog::SplinePropertiesDialog( Window* pParent )
 SplinePropertiesDialog::~SplinePropertiesDialog()
 {
 }
+void SplinePropertiesDialog::adjustSize()
+{
+    Size aDlgSize( this->GetSizePixel() );
+    long nBorder = m_aRB_Splines_Cubic.GetPosPixel().X();
+    long nX = m_aMF_SplineOrder.GetPosPixel().X() + m_aMF_SplineOrder.GetSizePixel().Width();
+    if(aDlgSize.Width()< (nX+nBorder) )
+    {
+        aDlgSize.Width() = (nX+nBorder);
+        this->SetSizePixel(aDlgSize);
 
+        Size aLineSize( m_aFL_DialogButtons.GetSizePixel() );
+        aLineSize.Width() = aDlgSize.Width();
+        m_aFL_DialogButtons.SetSizePixel(aLineSize);
+    }
+}
 void SplinePropertiesDialog::fillControls( const ChartTypeParameter& rParameter )
 {
     switch(rParameter.eCurveStyle)
@@ -642,6 +658,7 @@ SplinePropertiesDialog& SplineResourceGroup::getSplinePropertiesDialog()
     if( !m_pSplinePropertiesDialog.get() )
     {
         m_pSplinePropertiesDialog = ::std::auto_ptr< SplinePropertiesDialog >( new SplinePropertiesDialog( m_aPB_DetailsDialog.GetParent() ) );
+        m_pSplinePropertiesDialog->adjustSize();
     }
     return *m_pSplinePropertiesDialog;
 }
