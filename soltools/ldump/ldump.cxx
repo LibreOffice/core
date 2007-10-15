@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ldump.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:59:43 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:30:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,10 +340,23 @@ bool LibDump::PrintSym(char *pName, bool bName )
     return true;
 }
 
+bool LibDump::IsFromAnonymousNamespace (char *pExportName) {
+    char* pattern1 = "@?A0x";
+
+    if (strstr(pExportName, pattern1)) {
+        return true;
+    };
+    return false;
+};
+
 bool LibDump::Filter(char *pExportName)
 {
     unsigned long i;
     char pTest[256];
+
+    // filter out symbols from anonymous namespaces
+    if (IsFromAnonymousNamespace (pExportName))
+        return false;
 
     // Kein Filter gesetzt
     if ( ::bFilter == 0 )
