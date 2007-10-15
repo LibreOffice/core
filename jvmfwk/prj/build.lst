@@ -5,4 +5,3 @@ jvmf jvmfwk\plugins\sunmajor\pluginlib nmake - all jvmf_sunmajorlib jvmf_inc NUL
 jvmf jvmfwk\plugins\sunmajor\javaenvsetup nmake - u jvmf_sunjavaldx jvmf_framework jvmf_inc NULL
 jvmf jvmfwk\distributions\StarOffice nmake - all jvmf_staroffice jvmf_framework jvmf_inc NULL
 jvmf jvmfwk\distributions\OpenOfficeorg nmake - all jvmf_openoffice jvmf_framework jvmf_inc NULL
-jvmf jvmfwk\distributions\ure nmake - all jvmf_ure jvmf_inc NULL
