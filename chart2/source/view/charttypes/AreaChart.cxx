@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AreaChart.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:16:06 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 16:33:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -714,26 +714,26 @@ void AreaChart::createShapes()
                             rfMaxX=fLogicX;
                     }
 
-                    //better performance for big data
-                    FormerPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
-                    pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
-                    if( !pSeries->isAttributedDataPoint(nIndex)
-                            &&
-                        pPosHelper->isSameForGivenResolution( aFormerPoint.m_fX, aFormerPoint.m_fY, aFormerPoint.m_fZ
-                                                            , fLogicX, fLogicY, fLogicZ ) )
-                    {
-                        nSkippedPoints++;
-                        continue;
-                    }
-                    aSeriesFormerPointMap[pSeries] = FormerPoint(fLogicX,fLogicY,fLogicZ);
-                    //
-
                     drawing::Position3D aUnscaledLogicPosition( fLogicX, fLogicY, fLogicZ );
                     drawing::Position3D aScaledLogicPosition(aUnscaledLogicPosition);
                     pPosHelper->doLogicScaling( aScaledLogicPosition );
 
                     //transformation 3) -> 4)
                     drawing::Position3D aScenePosition( pPosHelper->transformLogicToScene( fLogicX,fLogicY,fLogicZ, false ) );
+
+                    //better performance for big data
+                    FormerPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
+                    pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
+                    if( !pSeries->isAttributedDataPoint(nIndex)
+                            &&
+                        pPosHelper->isSameForGivenResolution( aFormerPoint.m_fX, aFormerPoint.m_fY, aFormerPoint.m_fZ
+                                                            , aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ ) )
+                    {
+                        nSkippedPoints++;
+                        continue;
+                    }
+                    aSeriesFormerPointMap[pSeries] = FormerPoint(aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ);
+                    //
 
                     //store point information for series polygon
                     //for area and/or line (symbols only do not need this)
