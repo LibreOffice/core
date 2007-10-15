@@ -4,9 +4,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 09:53:18 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:38:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -133,79 +133,52 @@ sub get_all_sourcepathes
 
 sub register_unocomponents
 {
-    my ($unocomponents, $regcompfileref, $servicesfile) = @_;
+    my ($allvariableshashref, $unocomponents, $regcompfileref, $servicesfile) = @_;
 
     installer::logger::include_header_into_logfile("Registering UNO components:");
 
     my $error_occured = 0;
-    my $counter = 0;
-
-    my $systemcall = "";
-
-    my $allsourcepathes = get_all_sourcepathes($unocomponents);
-
-    for ( my $j = 0; $j <= $#{$allsourcepathes}; $j++ )
+    my $filestring = "";
+    for ( my $i = 0; $i <= $#{$unocomponents}; )
     {
-        my $filestring = "";
-        my $onesourcepath = ${$allsourcepathes}[$j];
-        my $to = "";
-        my $from = cwd();
-        if ( $installer::globals::iswin ) { $from =~ s/\//\\/g; }
+        my $sourcepath = ${$unocomponents}[$i++]->{'sourcepath'};
 
-        for ( my $i = 0; $i <= $#{$unocomponents}; $i++ )
+        $filestring = $filestring . make_file_url($sourcepath);
+
+        if ( $i % $installer::globals::unomaxservices == 0 || $i > $#{$unocomponents} )    # limiting to $installer::globals::maxservices files
         {
-            my $doinclude = 1;
-            my $sourcepath = ${$unocomponents}[$i]->{'sourcepath'};
+            my @regcompoutput = ();
 
-            $to = $sourcepath;
-            installer::pathanalyzer::get_path_from_fullqualifiedname(\$to);
+            my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -r $servicesfile -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " -wop=" . $installer::globals::quote . $allvariableshashref->{'NATIVESERVICESURLPREFIX'} . $installer::globals::quote . " 2\>\&1 |";
 
-            if (!($to eq $onesourcepath)) { $doinclude = 0; }
+            open (REG, "$systemcall");
+            while (<REG>) {push(@regcompoutput, $_); }
+            close (REG);
 
-            if ( $doinclude )
+            my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+            my $infoline = "Systemcall: $systemcall\n";
+            push( @installer::globals::logfileinfo, $infoline);
+
+            for ( my $j = 0; $j <= $#regcompoutput; $j++ ) { push( @installer::globals::logfileinfo, "$regcompoutput[$j]"); }
+
+            if ($returnvalue)
             {
-                my $filename = ${$unocomponents}[$i]->{'Name'};
-                $filestring = $filestring . $filename . "\;";
-                $counter++;
-            }
-
-            if ((( $counter > 0 ) && ( $counter%$installer::globals::unomaxservices == 0 )) || (( $counter > 0 ) && ( $i == $#{$unocomponents} )))  # limiting to $installer::globals::maxservices files
-            {
-                $filestring =~ s/\;\s*$//;
-                chdir($onesourcepath);
-
-                my @regcompoutput = ();
-
-                $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -r $servicesfile -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " 2\>\&1 |";
-
-                open (REG, "$systemcall");
-                while (<REG>) {push(@regcompoutput, $_); }
-                close (REG);
-
-                my $returnvalue = $?;   # $? contains the return value of the systemcall
-
-                my $infoline = "Systemcall: $systemcall\n";
+                $infoline = "ERROR: $systemcall\n";
                 push( @installer::globals::logfileinfo, $infoline);
-
-                for ( my $j = 0; $j <= $#regcompoutput; $j++ ) { push( @installer::globals::logfileinfo, "$regcompoutput[$j]"); }
-
-                if ($returnvalue)
-                {
-                    $infoline = "ERROR: $systemcall\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-                    $error_occured = 1;
-                }
-                else
-                {
-                    $infoline = "SUCCESS: $systemcall\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-                }
-
-                chdir($from);
-
-                $counter = 0;
-                $filestring = "";
+                $error_occured = 1;
             }
+            else
+            {
+                $infoline = "SUCCESS: $systemcall\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+
+            $filestring = "";
+        }
+        else
+        {
+            $filestring = $filestring . ";";
         }
     }
 
@@ -218,85 +191,64 @@ sub register_unocomponents
 
 sub register_javacomponents
 {
-    my ($javacomponents, $regcompfileref, $servicesfile, $regcomprdb) = @_;
+    my ($allvariableshashref, $javacomponents, $regcompfileref, $servicesfile, $regcomprdb) = @_;
 
     installer::logger::include_header_into_logfile("Registering Java components:");
 
+    my $ridljar_ref = "ridl.jar";
+    my $ure_internal_java_dir_ref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$ridljar_ref, "", 1);
+    installer::pathanalyzer::get_path_from_fullqualifiedname($ure_internal_java_dir_ref);
+    if ( $$ure_internal_java_dir_ref eq "" ) { installer::exiter::exit_program("Could not determine URE_INTERNAL_JAVA_DIR when registering Java components!", "register_javacomponents"); }
+
     my $error_occured = 0;
-    my $systemcall;
 
     my $do_register = 1;
     if (!( $installer::globals::solarjava )) { $do_register = 0; }
 
     if ( $do_register )
     {
-        my $allsourcepathes = get_all_sourcepathes($javacomponents);
+        my $filestring = "";
 
-        for ( my $j = 0; $j <= $#{$allsourcepathes}; $j++ )
+        for ( my $i = 0; $i <= $#{$javacomponents}; )
         {
-            my $filestring = "";
-            my $onesourcepath = ${$allsourcepathes}[$j];
-            my $to = "";
-            my $from = cwd();
-            if ( $installer::globals::iswin ) { $from =~ s/\//\\/g; }
+            my $sourcepath = ${$javacomponents}[$i++]->{'sourcepath'};
 
-            for ( my $i = 0; $i <= $#{$javacomponents}; $i++ )
+            $filestring = $filestring . make_file_url($sourcepath);
+
+            if ( $i % $installer::globals::javamaxservices == 0 || $i > $#{$javacomponents} )   # limiting to $installer::globals::maxservices files
             {
-                my $doinclude = 1;
-                my $sourcepath = ${$javacomponents}[$i]->{'sourcepath'};
+                my @regcompoutput = ();
 
-                $to = $sourcepath;
-                installer::pathanalyzer::get_path_from_fullqualifiedname(\$to);
+                my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -br $regcomprdb -r $servicesfile -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -wop=" . $installer::globals::quote . $allvariableshashref->{'JAVASERVICESURLPREFIX'} . $installer::globals::quote ." -env:URE_INTERNAL_JAVA_DIR=" . $installer::globals::quote . make_file_url($$ure_internal_java_dir_ref) . $installer::globals::quote . " 2\>\&1 |";
 
-                if (!($to eq $onesourcepath)) { $doinclude = 0; }
+                open (REG, "$systemcall");
+                while (<REG>) {push(@regcompoutput, $_); }
+                close (REG);
 
-                if ( $doinclude )
+                my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+                my $infoline = "Systemcall: $systemcall\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                for ( my $k = 0; $k <= $#regcompoutput; $k++ ) { push( @installer::globals::logfileinfo, "$regcompoutput[$k]"); }
+
+                if ($returnvalue)
                 {
-                    my $filename = ${$javacomponents}[$i]->{'Name'};
-                    $filename = "vnd.sun.star.expand\:\$UNO_JAVA_COMPONENT_PATH\/$filename";
-                    $filestring = $filestring . $filename . "\;";
-                    $counter++;
+                    $infoline = "ERROR: $systemcall\n";
+                    $error_occured = 1;
+                }
+                else
+                {
+                    $infoline = "SUCCESS: $systemcall\n";
                 }
 
-                if ((( $counter > 0 ) && ( $counter%$installer::globals::javamaxservices == 0 )) || (( $counter > 0 ) && ( $i == $#{$javacomponents} )))    # limiting to $installer::globals::maxservices files
-                {
-                    $filestring =~ s/\;\s*$//;
-                    chdir($onesourcepath);
+                push( @installer::globals::logfileinfo, $infoline);
 
-                    my $fileurl = make_file_url($onesourcepath);
-
-                    my @regcompoutput = ();
-
-                    $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -br $regcomprdb -r $servicesfile -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -env:UNO_JAVA_COMPONENT_PATH=" . $installer::globals::quote . $fileurl . $installer::globals::quote . " -env:URE_INTERNAL_JAVA_DIR=" . $installer::globals::quote . $fileurl . $installer::globals::quote . " 2\>\&1 |";
-
-                    open (REG, "$systemcall");
-                    while (<REG>) {push(@regcompoutput, $_); }
-                    close (REG);
-
-                    my $returnvalue = $?;   # $? contains the return value of the systemcall
-
-                    my $infoline = "Systemcall: $systemcall\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-
-                    for ( my $k = 0; $k <= $#regcompoutput; $k++ ) { push( @installer::globals::logfileinfo, "$regcompoutput[$k]"); }
-
-                    if ($returnvalue)
-                    {
-                        $infoline = "ERROR: $systemcall\n";
-                        $error_occured = 1;
-                    }
-                    else
-                    {
-                        $infoline = "SUCCESS: $systemcall\n";
-                    }
-
-                    push( @installer::globals::logfileinfo, $infoline);
-
-                    chdir($from);
-
-                    $counter = 0;
-                    $filestring = "";
-                }
+                $filestring = "";
+            }
+            else
+            {
+                $filestring = $filestring . ";";
             }
         }
     }
@@ -429,7 +381,7 @@ sub register_pythoncomponents
 
 sub register_all_components
 {
-    my ( $servicesgid, $filesarrayref, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref ) = @_;
+    my ( $allvariableshashref, $servicesgid, $filesarrayref, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref ) = @_;
 
     my $registererrorflag = 0;
 
@@ -475,8 +427,8 @@ sub register_all_components
     $java_error_occured = 0;
     $python_error_occured = 0;
 
-    if ( $#unocomponents > -1 ) { $uno_error_occured = register_unocomponents(\@unocomponents, $regcompfileref, $servicesfile); }
-    if ( $#javacomponents > -1 ) { $java_error_occured = register_javacomponents(\@javacomponents, $regcompfileref, $servicesfile, $regcomprdb); }
+    if ( $#unocomponents > -1 ) { $uno_error_occured = register_unocomponents($allvariableshashref, \@unocomponents, $regcompfileref, $servicesfile); }
+    if ( $#javacomponents > -1 ) { $java_error_occured = register_javacomponents($allvariableshashref, \@javacomponents, $regcompfileref, $servicesfile, $regcomprdb); }
     if ( $#pythoncomponents > -1 ) { $python_error_occured = register_pythoncomponents(\@pythoncomponents, $regcompfileref, $servicesfile, $includepatharrayref); }
 
     if ( $uno_error_occured || $java_error_occured || $python_error_occured ) { $registererrorflag = 1; }
@@ -889,7 +841,7 @@ sub filter_regmergefiles
 
 sub create_services_rdb
 {
-    my ($filesarrayref, $includepatharrayref, $languagestringref) = @_;
+    my ($allvariableshashref, $filesarrayref, $includepatharrayref, $languagestringref) = @_;
 
     # collecting all services files
     my $unocomponentfiles = installer::worker::collect_all_items_with_special_flag($filesarrayref, "UNO_COMPONENT");
@@ -986,7 +938,7 @@ sub create_services_rdb
                 # and now iteration over all files
 
                 # my $error_during_registration = register_all_components($filesarrayref, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref);
-                my $error_during_registration = register_all_components($servicesgid, $unocomponentfiles, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref);
+                my $error_during_registration = register_all_components($allvariableshashref, $servicesgid, $unocomponentfiles, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref);
 
                 # Dependent from the success, the registration directory can be renamed.
 
@@ -1036,6 +988,18 @@ sub create_services_rdb
     # Setting the global variable $installer::globals::services_rdb_created
 
     $installer::globals::services_rdb_created = 1;
+}
+
+sub set_defaults_in_allvariableshashref
+{
+    my $allvariableshashref = shift;
+
+    $allvariableshashref->{'NATIVESERVICESURLPREFIX'} =
+        "vnd.sun.star.expand:\$ORIGIN/"
+        unless exists $allvariableshashref->{'NATIVESERVICESURLPREFIX'};
+    $allvariableshashref->{'JAVASERVICESURLPREFIX'} =
+        "vnd.sun.star.expand:\$UNO_JAVA_COMPONENT_PATH/"
+        unless exists $allvariableshashref->{'JAVASERVICESURLPREFIX'};
 }
 
 1;
