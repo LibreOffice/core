@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TickmarkHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 15:02:56 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 16:33:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -475,9 +475,15 @@ double* TickmarkHelper::getMajorTick( sal_Int32 nTick ) const
     m_pfCurrentValues[0] = m_fOuterMajorTickBorderMin + nTick*m_rIncrement.Distance;
 
     if(m_pfCurrentValues[0]>m_fOuterMajorTickBorderMax)
-        return NULL;
+    {
+        if( !approxEqual(m_pfCurrentValues[0],m_fOuterMajorTickBorderMax) )
+            return NULL;
+    }
     if(m_pfCurrentValues[0]<m_fOuterMajorTickBorderMin)
-        return NULL;
+    {
+        if( !approxEqual(m_pfCurrentValues[0],m_fOuterMajorTickBorderMin) )
+            return NULL;
+    }
 
     //return always the value after scaling
     if(!m_rIncrement.PostEquidistant && m_xInverseScaling.is() )
@@ -548,8 +554,10 @@ bool TickmarkHelper::isVisible( double fScaledValue ) const
             return false;
     }
     if(fScaledValue<m_fScaledVisibleMin)
-        return false;
-
+    {
+        if( !approxEqual(fScaledValue,m_fScaledVisibleMin) )
+            return false;
+    }
     return true;
 }
 
