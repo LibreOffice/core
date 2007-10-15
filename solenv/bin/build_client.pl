@@ -7,9 +7,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build_client.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-09 13:25:50 $
+#   last change: $Author: ihi $ $Date: 2007-10-15 14:29:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,6 @@ my $paddr;
 my $host = hostname();
 my $current_server = '';
 my $got_job = 0;
-my %setsolar_scripts = ();
-my @temp_files = ();
 my %job_temp_files = ();
 my %environments = (); # hash containing all environments
 my $env_alias;
@@ -421,7 +419,6 @@ sub get_setsolar_environment {
         my $setsolar = $ENV{ENV_ROOT} . '/etools/setsolar.pl';
         $setsolar_string =~ s/^(\S+\s)\S+/$1$setsolar/; #replace the use of the local script with generic setsolar
         $cmd_file .= '.btm';
-        push(@temp_files, $cmd_file);
         my $setsolar_tmp_file = File::Temp::tmpnam($ENV_BACKUP{TMP});
         $setsolar_tmp_file .= '.btm';
         open (COMMAND_FILE, ">$setsolar_tmp_file") or return $?;
