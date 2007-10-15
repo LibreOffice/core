@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeloader.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:31:47 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:02:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 #include <systools/win32/uwinapi.h>
 
 #include "../../../source/inc/exithelper.hxx"
+#include "../extendloaderenvironment.hxx"
 
 #define PIPE_PREFIX                 TEXT("\\\\.\\pipe\\OSL_PIPE_")
 #define PIPE_POSTFIX                TEXT("_SingleOfficeIPC_")
@@ -175,6 +176,8 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
         _tcsncpy( szPerfTuneIniFile, szModuleFileName, len );
         _tcsncpy( szPerfTuneIniFile + len, _T("perftune.ini"), sizeof(szPerfTuneIniFile)/sizeof(szPerfTuneIniFile[0]) - len );
     }
+
+    desktop_win32::extendLoaderEnvironment();
 
     // Create process with same command line, environment and stdio handles which
     // are directed to the created pipes
