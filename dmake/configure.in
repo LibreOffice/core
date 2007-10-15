@@ -6,7 +6,7 @@ dnl Set the package version
 dnl Don't forget to update the PACKAGE, VERSION and BUILDINFO macros in
 dnl dmake/win95/microsft/config.h to keep the native Microsoft C++
 dnl compiler build happy. 
-AC_INIT(dmake, 4.9)
+AC_INIT(dmake, 4.11)
 AC_CANONICAL_BUILD
 BUILDINFO="$build"
 
@@ -62,6 +62,10 @@ OS_TYPE=unix
 ## The following allows like systems to share settings this is not meant to
 ## Imply that these OS are the same thing.
 case "$_os" in
+	"OS/2")
+	  OS_VERSION=os2
+	  CASE_INSENSITIVE_FS=true
+	  ;;
 	"SunOS")
 	  OS_VERSION=solaris  
 	  ;;
@@ -83,9 +87,6 @@ case "$_os" in
 	  OS_TYPE=winnt
 	  BUILDINFO="Windows / MS Visual C++"
 	  CASE_INSENSITIVE_FS=true
-	  ;;
-	"OS/2")
-	  OS_VERSION=linux
 	  ;;
 	"Darwin")
 	  OS_VERSION=macosx
@@ -160,7 +161,7 @@ else
 fi
 
 dnl Predefine the DMAKEROOT macro for unix targets.
-eval dmakerootprefix="$datadir"
+eval dmakerootprefix="$datarootdir"
 # $datadir is ${prefix}/share if not overridden
 test "x$dmakerootprefix" != "x${dmakerootprefix##NONE}" && dmakerootprefix=${ac_default_prefix}/share
 
@@ -175,6 +176,7 @@ AC_CONFIG_FILES(dmakeroot.h Makefile startup/config.mk \
 		startup/unix/linux/Makefile startup/unix/solaris/Makefile \
 		startup/unix/macosx/Makefile startup/unix/sysvr4/Makefile \
 		startup/unix/cygwin/Makefile \
+		startup/unix/os2/Makefile \
 		startup/winnt/Makefile startup/winnt/mingw/Makefile \
 		startup/winnt/msvc6/Makefile \
 		tests/Makefile)
