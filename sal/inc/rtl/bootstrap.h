@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:13:51 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:47:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ extern "C" {
    minimum bootstrap settings for every application by excplitly or
    implicitly passing the values to the application.<p>
 
-   5-LEVEL STRATEGY FOR RETRIEVAL OF BOOTSTRAP VALUES :<p>
+   MULTI-LEVEL STRATEGY FOR RETRIEVAL OF BOOTSTRAP VALUES :<p>
 
    The 1st level is tried first. On failure,
    the next level is tried. Every query starts at the first level again, so
@@ -65,18 +65,21 @@ extern "C" {
    3rd level: environment variables. The application tries to get the
    setting from the environment.<p>
 
-   4th level: ini-files. Every application looks for an ini-file.
+   4th level: executable ini-file. Every application looks for an ini-file.
    The filename defaults to /absoulte/path/to/executable[rc|.ini]
    (without .bin or .exe suffix). The ini-filename can be
    set by the special command line parameter
    '-env:INIFILENAME=/absolute/path/to/inifile' at runtime or it may
    be set at compiletime by an API-call.<p>
 
-   5th level: default. An application can have some default settings decided
+   5th level: URE_BOOTSTRAP ini-file. If the bootstrap variable URE_BOOTSTRAP
+   expands to the URL of an ini-file, that ini-file is searched.<p>
+
+   6th level: default. An application can have some default settings decided
    at compile time, which allow the application to run even with no
    deployment settings. <p>
 
-   If neither of the 5 levels leads to an successful retrieval of the value
+   If neither of the above levels leads to an successful retrieval of the value
    (no default possible), the application may  fail to start.<p>
 
    NAMING CONVENTIONS <p>
@@ -86,7 +89,7 @@ extern "C" {
    environment variables. This excludes '.', ' ', ';', ':' and any non-ascii
    character. Names are case insensitive.<p>
 
-   The ini-file is only allowed to have one section, which must be named '[Bootstrap]'.
+   An ini-file is only allowed to have one section, which must be named '[Bootstrap]'.
    The section may be omitted.
    The section name does not appear in the name of the corresponding
    environment variable or commandline arg.
