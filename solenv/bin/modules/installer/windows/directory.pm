@@ -4,9 +4,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 15:27:37 $
+#   last change: $Author: ihi $ $Date: 2007-10-15 17:37:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -220,9 +220,21 @@ sub add_root_directories
         my $realproductkey = $productname . " " . $productversion;
         my $productkey = $productname . " " . $baseproductversion;
 
-        if (( $allvariableshashref->{'POSTVERSIONEXTENSION'} ) && ( ! $allvariableshashref->{'DONTUSEEXTENSIONINDEFAULTDIR'} )) { $productkey = $productkey . " " . $allvariableshashref->{'POSTVERSIONEXTENSION'}; }
-        if ( $allvariableshashref->{'NOVERSIONINDIRNAME'} ) { $productkey = $productname; }
-        if ( $allvariableshashref->{'NOSPACEINDIRECTORYNAME'} ) { $productkey =~ s/\ /\_/g; }
+        if (( $allvariableshashref->{'POSTVERSIONEXTENSION'} ) && ( ! $allvariableshashref->{'DONTUSEEXTENSIONINDEFAULTDIR'} ))
+        {
+            $productkey = $productkey . " " . $allvariableshashref->{'POSTVERSIONEXTENSION'};
+            $realproductkey = $realproductkey . " " . $allvariableshashref->{'POSTVERSIONEXTENSION'};
+        }
+        if ( $allvariableshashref->{'NOVERSIONINDIRNAME'} )
+        {
+            $productkey = $productname;
+            $realproductkey = $realproductname;
+        }
+        if ( $allvariableshashref->{'NOSPACEINDIRECTORYNAME'} )
+        {
+            $productkey =~ s/\ /\_/g;
+            $realproductkey =~ s/\ /\_/g;
+        }
 
         my $shortproductkey = installer::windows::idtglobal::make_eight_three_conform($productkey, "dir");      # third parameter not used
         $shortproductkey =~ s/\s/\_/g;                                  # changing empty space to underline
