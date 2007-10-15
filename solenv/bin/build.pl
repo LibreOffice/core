@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.157 $
+#   $Revision: 1.158 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 17:47:49 $
+#   last change: $Author: ihi $ $Date: 2007-10-15 14:28:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.157 $ ';
+    $id_str = ' $Revision: 1.158 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -95,15 +95,15 @@
     };
     $modules_number++;
     $perl = "";
-    $remove_commando = "";
+    $remove_command = "";
     if ( $^O eq 'MSWin32' ) {
         $perl = "$ENV{PERL}";
-        $remove_commando = "rmdir /S /Q";
+        $remove_command = "rmdir /S /Q";
         $nul = '> NULL';
     } else {
         use Cwd 'chdir';
         $perl = 'perl';
-        $remove_commando = 'rm -rf';
+        $remove_command = 'rm -rf';
         $nul = '> /dev/null';
     };
 
@@ -219,8 +219,8 @@
     $StandDir = get_stand_dir();   # This also sets $CurrentPrj
     provide_consistency() if (defined $ENV{CWS_WORK_STAMP} && defined($ENV{COMMON_ENV_TOOLS}));
 
-    $deliver_commando = $ENV{DELIVER};
-    $deliver_commando .= ' '. $dlv_switch if ($dlv_switch);
+    $deliver_command = $ENV{DELIVER};
+    $deliver_command .= ' '. $dlv_switch if ($dlv_switch);
     $ENV{mk_tmp}++;
     %prj_platform = ();
     $check_error_string = '';
@@ -843,22 +843,22 @@ sub get_commands {
 #
 # Procedure prooves if current dir is a root dir of the drive
 #
-sub IsRootDir {
-    my ($Dir);
-    $Dir = shift;
-    if (        (($ENV{GUI} eq 'UNX') ||
-                 ($ENV{GUI} eq 'MACOSX')) &&
-                ($Dir eq '/')) {
-        return 1;
-    } elsif (    (($ENV{GUI} eq 'WNT') ||
-                 ($ENV{GUI} eq 'WIN') ||
-                 ($ENV{GUI} eq 'OS2')) &&
-                ($Dir =~ /\S:\/$/)) {
-        return 1;
-    } else {
-        return 0;
-    };
-};
+#sub IsRootDir {
+#    my ($Dir);
+#    $Dir = shift;
+#    if (        (($ENV{GUI} eq 'UNX') ||
+#                 ($ENV{GUI} eq 'MACOSX')) &&
+#                ($Dir eq '/')) {
+#        return 1;
+#    } elsif (    (($ENV{GUI} eq 'WNT') ||
+#                 ($ENV{GUI} eq 'WIN') ||
+#                 ($ENV{GUI} eq 'OS2')) &&
+#                ($Dir =~ /\S:\/$/)) {
+#        return 1;
+#    } else {
+#        return 0;
+#    };
+#};
 
 #
 # Procedure retrieves list of projects to be built from build.lst
@@ -869,19 +869,21 @@ sub get_stand_dir {
         die "No environment set\n";
     };
     my $StandDir;
+    my $root_dir = File::Spec->rootdir();
+    $StandDir = getcwd();
     do {
-        $StandDir = getcwd();
         foreach (@possible_build_lists) {# ('build.lst', 'build.xlist');
-            if (-e 'prj/'.$_) {
+            if (-e $StandDir . '/prj/'.$_) {
                 $StandDir =~ /([\.\w]+$)/;
                 $StandDir = $`;
                 $CurrentPrj = $1;
                 return $StandDir;
-            } elsif (&IsRootDir($StandDir)) {
+            } elsif ($StandDir eq $root_dir) {
                 $ENV{mk_tmp} = '';
                 print_error('Found no project to build');
             };
-        }
+        };
+        $StandDir = Cwd::realpath($StandDir . '/..');
     }
     while (chdir '..');
 };
@@ -891,7 +893,7 @@ sub get_stand_dir {
 #
 sub PickPrjToBuild {
     my $DepsHash = shift;
-    handle_dead_children() if ($QuantityToBuild);
+    handle_dead_children(0) if ($QuantityToBuild);
     my $Prj = FindIndepPrj($DepsHash);
     delete $$DepsHash{$Prj};
     generate_html_file();
@@ -1338,8 +1340,8 @@ sub cancel_build {
     } else {
 #        if ($ENV{GUI} eq 'WNT') {
             while (children_number()) {
-                handle_dead_children();
-                sleep 1;
+                handle_dead_children(1);
+#                sleep 1;
             }
             foreach (keys %broken_build) {
                 print "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
@@ -1373,7 +1375,9 @@ sub store_error {
 # child handler (clears (or stores info about) the terminated child)
 #
 sub handle_dead_children {
-    return if (!children_number());
+    my $running_children = children_number();
+    return if (!$running_children);
+    my $force_wait = shift;
     do {
         my $pid = 0;
         if ($ENV{GUI} eq 'WNT' && !$cygwin) {
@@ -1396,14 +1400,20 @@ sub handle_dead_children {
                         clear_from_child($pid);
                     };
                 };
-            }
+            };
+            sleep 1 if (children_number() >= $QuantityToBuild || ($force_wait && ($running_children == children_number())));
         } else {
-            if (($pid = waitpid( -1, &WNOHANG)) > 0) {
+            if (children_number() >= $QuantityToBuild ||
+                    ($force_wait && ($running_children == children_number()))) {
+                $pid = wait();
+            } else {
+                $pid = waitpid( -1, &WNOHANG);
+            };
+            if ($pid > 0) {
                 store_error($pid, $?) if ($?);
                 clear_from_child($pid);
             };
         };
-        sleep 1 if (children_number() >= $QuantityToBuild);
     } while(children_number() >= $QuantityToBuild);
 };
 
@@ -1422,6 +1432,7 @@ sub clear_from_child {
     $running_children{$folders_hashes{$child_nick}}--;
     delete $processes_hash{$pid};
     $only_dependent = 0;
+    print 'Running processes: ' . children_number() . "\n";
 };
 
 #
@@ -1435,7 +1446,7 @@ sub BuildDependent {
     while ($child_nick = PickPrjToBuild($dependencies_hash)) {
         if (($QuantityToBuild)) { # multiprocessing not for $BuildAllParents (-all etc)!!
             do {
-                handle_dead_children();
+                handle_dead_children(0);
                 if (defined $broken_modules_hashes{$dependencies_hash} && !$ignore) {
                     return if ($BuildAllParents);
                     last;
@@ -1451,8 +1462,8 @@ sub BuildDependent {
             } while (!$no_projects);
             return if ($BuildAllParents);
             while (children_number()) {
-                handle_dead_children();
-                sleep 1;
+                handle_dead_children(1);
+#                sleep 1;
             };
 #            if (defined $last_module) {
 #                $build_is_finished{$last_module}++ if (!defined $modules_with_errors{$last_module});
@@ -1559,13 +1570,13 @@ sub build_multiprocessing {
     # Let the last module be built till the end
     while (scalar @build_queue) {
         build_actual_queue(\@build_queue);
-        handle_dead_children();
-        sleep 1;
+        handle_dead_children(1);
+#        sleep 1;
     };
     # Let all children finish their work
     while (children_number()) {
-        handle_dead_children();
-        sleep 1;
+        handle_dead_children(1);
+#        sleep 1;
     };
     cancel_build() if (scalar keys %broken_build);
     mp_success_exit();
@@ -1595,7 +1606,7 @@ sub build_actual_queue {
             $only_dependent = 0;
             $no_projects = 0;
             BuildDependent($projects_deps_hash{$Prj});
-            handle_dead_children();
+            handle_dead_children(0);
             if ($no_projects &&
                 !$running_children{$projects_deps_hash{$Prj}}) {
                 if (!defined $broken_modules_hashes{$projects_deps_hash{$Prj}} || $ignore)
@@ -2261,7 +2272,7 @@ sub clear_delivered {
             };
             $ENV{$_} = $solar_vars{$_};
         };
-        my $undeliver = "$deliver_commando $deliver_delete_switches $nul";
+        my $undeliver = "$deliver_command $deliver_delete_switches $nul";
         foreach my $module (sort @modules_built) {
             my $module_path = CorrectPath($StandDir.$module);
             print "Removing delivered from module $module\n";
@@ -2306,11 +2317,11 @@ sub read_ssolar_vars {
     $cws_name = "-cwsname $ENV{CWS_WORK_STAMP}" if (defined $ENV{CWS_WORK_STAMP});
 
     my $param = "-$ENV{WORK_STAMP} $verswitch $source_root $cws_name $pro $platform";
-    my $ss_comando = "$perl $setsolar -file $tmp_file $param $nul";
+    my $ss_command = "$perl $setsolar -file $tmp_file $param $nul";
     $entries_file = '/CVS/Entries';
-    if (system($ss_comando)) {
+    if (system($ss_command)) {
         unlink $tmp_file;
-        print_error("Cannot run commando:\n$ss_comando");
+        print_error("Cannot run command:\n$ss_command");
     };
     get_solar_vars($solar_vars, $tmp_file);
 };
@@ -2437,7 +2448,7 @@ sub do_exit {
 };
 
 sub get_post_job {
-    my $job = $deliver_commando;
+    my $job = $deliver_command;
     $job = $custom_job if ($custom_job);
     return $job;
 };
@@ -2873,6 +2884,7 @@ sub get_dirs_info_line {
             $log_path_string = $jobs_hash{$job}->{LOG_PATH};
         };
         $log_path_string =~ s/\\/\//g;
+        $dirs_info_line .= 'file:///' if (($ENV{GUI} eq 'WNT') && (!$cygwin));
         $dirs_info_line .= $log_path_string;
     };
     $dirs_info_line .= '<br>';
@@ -3102,7 +3114,7 @@ sub run_server {
                 next;
             };
         } else {
-#            handle_dead_children();
+#            handle_dead_children(0);
             if ($client_hash{result} eq "0") {
 #                print "$clients_jobs{$pid} succedded on $pid\n";
             } else {
