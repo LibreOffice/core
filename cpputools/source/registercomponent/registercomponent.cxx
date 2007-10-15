@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jsc $ $Date: 2007-01-02 14:28:56 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:15:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,20 @@ using com::sun::star::container::XEnumeration;
 #define putenv _putenv
 #endif
 
+namespace {
+
+OUString replacePrefix(OUString const & url, OUString const & prefix) {
+    sal_Int32 i = url.lastIndexOf('/');
+    // Backward compatibility with stoc/source/implementationregistration/
+    // implreg.cxx:1.27 l. 1892:
+    if (i == -1) {
+        i = url.lastIndexOf('\\');
+    }
+    return prefix + url.copy(i + 1);
+}
+
+}
+
 sal_Bool isFileUrl(const OUString& fileName)
 {
     if (fileName.indexOf(OUString::createFromAscii("file://")) == 0 )
@@ -159,6 +173,9 @@ static void usingRegisterImpl()
                     "        silent, regcomp prints messages only on error.\n"
                     "  -wop\n"
                     "        register the component name only without path\n"
+                    "  -wop=prefix\n"
+                    "        register the component name with path replaced\n"
+                    "        by given prefix\n"
                     "  -classpath path\n"
                     "        sets the java classpath to path (overwriting the\n"
                     "        current classpath environment variable). Note that\n"
@@ -184,13 +201,14 @@ struct Options
         : bRegister(sal_False)
         , bRevoke(sal_False)
         , bSilent( sal_False )
-        , bStripPath( sal_False )
+        , bPrefix( sal_False )
         {}
 
     sal_Bool bRegister;
     sal_Bool bRevoke;
     sal_Bool bSilent;
-    sal_Bool bStripPath;
+    sal_Bool bPrefix;
+    OUString sPrefix;
     OUString sProgramName;
     OUString sBootRegName;
     OUString sBootRegName2;
@@ -390,7 +408,19 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                 {
                     if (strcmp(av[i], "-wop") == 0)
                     {
-                        rOptions.bStripPath = sal_True;
+                        rOptions.bPrefix = sal_True;
+                        rOptions.sPrefix = OUString();
+                            // in case there are multiple -wops
+                        break;
+                    }
+                    else if (
+                        strncmp(av[i], "-wop=", RTL_CONSTASCII_LENGTH("-wop="))
+                        == 0)
+                    {
+                        rOptions.bPrefix = sal_True;
+                        rOptions.sPrefix = OStringToOUString(
+                            av[i] + RTL_CONSTASCII_LENGTH("-wop="),
+                            osl_getThreadTextEncoding());
                         break;
                     }
                 }
@@ -508,7 +538,8 @@ struct DoIt
     sal_Bool                                _bRegister;
     sal_Bool                                _bRevoke;
     sal_Bool                                _bSilent;
-    sal_Bool                                _bStripPath;
+    sal_Bool                                _bPrefix;
+    OUString                                _sPrefix;
     OString                                 _sRegName;
     OUString                                _sLoaderName;
     Reference<XImplementationRegistration2> _xImplRegistration;
@@ -518,7 +549,8 @@ struct DoIt
     DoIt(sal_Bool bRegister,
          sal_Bool bRevoke,
          sal_Bool bSilent,
-         sal_Bool bStripPath,
+         sal_Bool bPrefix,
+         const OUString & sPrefix,
          const Reference<XSimpleRegistry> & xReg,
          const OString & sRegName,
          const Reference<XImplementationRegistration2> & xImplRegistration,
@@ -532,7 +564,8 @@ struct DoIt
 DoIt::DoIt(sal_Bool bRegister,
            sal_Bool bRevoke,
            sal_Bool bSilent,
-           sal_Bool bStripPath,
+           sal_Bool bPrefix,
+           const OUString & sPrefix,
            const Reference<XSimpleRegistry> & xReg,
            const OString & sRegName,
            const Reference<XImplementationRegistration2> & xImplRegistration,
@@ -541,7 +574,8 @@ DoIt::DoIt(sal_Bool bRegister,
     : _bRegister(bRegister),
       _bRevoke(bRevoke),
       _bSilent( bSilent ),
-      _bStripPath( bStripPath ),
+      _bPrefix( bPrefix ),
+      _sPrefix( sPrefix ),
       _sRegName(sRegName),
       _sLoaderName(sLoaderName),
       _xImplRegistration(xImplRegistration),
@@ -558,9 +592,9 @@ void DoIt::operator() (const OUString & url) throw()
         try
         {
             Reference<XImplementationRegistration2> _xImplRegistration2(_xImplRegistration, UNO_QUERY);
-            if ( _bStripPath ) {
-                _xImplRegistration->registerImplementationWithStrippedPath(
-                    _sLoaderName, url, _xReg);
+            if ( _bPrefix ) {
+                _xImplRegistration->registerImplementationWithLocation(
+                    _sLoaderName, url, replacePrefix(url, _sPrefix), _xReg);
             } else {
                 _xImplRegistration->registerImplementation(_sLoaderName, url, _xReg);
             }
@@ -809,7 +843,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         {
             for_each(urls.begin(), urls.end(),
                      DoIt(aOptions.bRegister, aOptions.bRevoke, aOptions.bSilent,
-                          aOptions.bStripPath, xReg, sRegName, xImplRegistration,
+                          aOptions.bPrefix, aOptions.sPrefix,
+                          xReg, sRegName, xImplRegistration,
                           aOptions.sLoaderName, &exitCode));
         }
         else
