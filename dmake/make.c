@@ -1,6 +1,6 @@
 /* $RCSfile: make.c,v $
--- $Revision: 1.10 $
--- last change: $Author: vg $ $Date: 2007-09-20 14:33:30 $
+-- $Revision: 1.11 $
+-- last change: $Author: ihi $ $Date: 2007-10-15 15:40:19 $
 --
 -- SYNOPSIS
 --      Perform the update of all outdated targets.
@@ -259,7 +259,9 @@ Make_targets()/*
 
 PUBLIC int
 Make( cp, setdirroot )/*
-========================  Make a specified target */
+========================
+   Make target cp. Make() is also called on prerequisites that have no rule
+   associated (F_TARGET is not set) to verify that they exist. */
 CELLPTR cp;
 CELLPTR setdirroot;
 {
@@ -277,8 +279,7 @@ CELLPTR setdirroot;
    int          push    = 0;
    int          made    = F_MADE;
    int          ignore;
-   time_t           otime   = (time_t) 1L;
-   time_t       ttime   = (time_t) 1L;
+   time_t           otime   = (time_t) 1L; /* Hold time of newest prerequisite. */
    int          mark_made = FALSE;
 
 #if defined(__CYGWIN__)
@@ -372,8 +373,6 @@ CELLPTR setdirroot;
    DB_PRINT( "mem", ("%s:-A mem %ld", cp->CE_NAME, (long) coreleft()) );
    /* If we have not yet statted the target then do so. */
    if( !(cp->ce_flag & F_STAT) && !(cp->ce_attr&A_PHONY) ) {
-      time_t itime = cp->ce_time;
-
       if (cp->ce_parent && (cp->ce_parent->ce_flag & F_MULTI)) {
      /* Inherit the stat info from the F_MULTI parent. */
      cp->ce_time  = cp->ce_parent->ce_time;
@@ -387,11 +386,7 @@ CELLPTR setdirroot;
         /* Check if target already exists. */
         Stat_target( tcp, 1, FALSE );
 
-        if( tcp->ce_time == (time_t)0L ) {
-           if( tcp->ce_flag & F_INFER )
-          tcp->ce_time = itime;
-        }
-        else {
+        if( tcp->ce_time != (time_t)0L ) {
            /* File exists so don't remove it later. */
            tcp->ce_attr |= A_PRECIOUS;
         }
@@ -406,6 +401,7 @@ CELLPTR setdirroot;
    DB_PRINT( "make", ("(%s, %ld, 0x%08x, 0x%04x)", cp->CE_NAME,
             cp->ce_time, cp->ce_attr, cp->ce_flag) );
 
+   /* Handle targets without rule and without existing file. */
    if( !(cp->ce_flag & F_TARGET) && (cp->ce_time == (time_t) 0L) ) {
       if( Makemkf ) {
      rval = -1;
@@ -492,19 +488,29 @@ CELLPTR setdirroot;
       next = dp->cl_next;
 
       tcp = dp->cl_prq;
+      if( Verbose & V_MAKE )
+     printf("Checking prerequisite [%s]\n", tcp->CE_NAME);
+
       seq = (((cp->ce_attr | Glob_attr) & A_SEQ) != 0);
 
+      /* This checks if this prerequisite is still in the making, if yes
+       * come back later. */
       if( tcp->ce_flag & F_VISITED ) {
+     /* Check if this currently or fully made target has the same
+      * .SETDIR setting. If yes, continue if it was made or come
+      * back later otherwise. */
      if( _explode_graph(tcp, dp, setdirroot) == 0 ) {
         /* didn't blow it up so see if we need to wait for it. */
         if( tcp->ce_flag & F_MADE ) {
-           if( tcp->ce_time > ttime ) ttime = tcp->ce_time;
+           /* Target was made. */
            continue;
         }
         else
+           /* Target is still in the making ... */
            goto stop_making_it;
      }
      else
+        /* Use the new prerequisite with the new .SETDIR value. */
         tcp = dp->cl_prq;
       }
 
@@ -555,20 +561,15 @@ CELLPTR setdirroot;
       }
 
       /* Clear F_MARK flag that could have been set by _expand_dynamic_prq(). */
-      tcp->ce_attr &= ~(F_MARK);
+      tcp->ce_flag &= ~(F_MARK);
 
       if( cp->ce_attr & A_LIBRARY ) {
          tcp->ce_attr |= A_LIBRARYM;
      tcp->ce_lib   = cp->ce_fname;
       }
 
-      if( (tcp->ce_flag & (F_INFER|F_STAT))==F_INFER && cp->ce_time >= ttime )
-     tcp->ce_time = cp->ce_time;
-
-      /* Propagate the parent's F_REMOVE and F_INFER flags to the children.
-       * Make certain to do this AFTER propagating the time, since the
-       * time propagation test above uses the F_INFER flag to decide if
-       * it should do so. */
+      /* Propagate the parent's F_REMOVE and F_INFER flags to the
+       * prerequisites. */
       tcp->ce_flag |= cp->ce_flag & (F_REMOVE|F_INFER);
 
       /* Propagate parents A_ROOT attribute to a child if the parent is a
@@ -585,8 +586,6 @@ CELLPTR setdirroot;
       /* Return on error or if Make() is still running and A_SEQ is set. */
       if( rval == -1 || (seq && (rval==1)) )
      goto stop_making_it;
-
-      if( tcp->ce_time > ttime ) ttime = tcp->ce_time;
 
       /* If tcp is ready, set made = F_MADE. */
       made &= tcp->ce_flag & F_MADE;
@@ -618,6 +617,8 @@ CELLPTR setdirroot;
         if( mtime < tcp->ce_time ) tcp->ce_time = cp->ce_time+1L;
      }
 
+      /* Set otime to the newest time stamp of all prereqs or 1 if there
+       * are no prerequisites. */
       if( tcp->ce_time > otime ) otime = tcp->ce_time;
 
       list_add(&all_list, name);
@@ -630,6 +631,8 @@ CELLPTR setdirroot;
             list_add(&imm_list, name);
       }
    }
+
+   /* All prerequisites are made, now make the current target. */
 
    /* Restore UseWinpath and $@ if needed, see above for an explanation. */
    if (m_at->ht_value == NIL(char)) {
@@ -721,6 +724,22 @@ CELLPTR setdirroot;
      printf( "%s:  Updating [%s], (%ld > %ld)\n", Pname,
          cp->CE_NAME, otime, cp->ce_time );
 
+      /* In order to check if a targets time stamp was properly updated
+       * after the target was made and to keep the dependency chain valid
+       * for targets without recipes we store the minimum required file
+       * time. If the target time stamp is older than the newest
+       * prerequisite use that time, otherwise the current time. (This
+       * avoids the call to Do_time() for every target, still checks
+       * if the target time is new enough for the given prerequisite and
+       * mintime is also the newest time of the given prerequisites and
+       * can be used for targets without recipes.)
+       * We reuse the ce_time member to store this minimum time until
+       * the target is finished by Update_time_stamp(). This function
+       * checks if the file time was updated properly and warns if it was
+       * not. (While making a target this value does not change.) */
+      cp->ce_time = ( cp->ce_time < otime ? otime : Do_time() );
+      DB_PRINT( "make", ("Set ce_time (mintime) to: %ld", cp->ce_time) );
+
       if( Touch ) {
      name = cp->ce_fname;
      lib  = cp->ce_lib;
@@ -781,6 +800,8 @@ CELLPTR setdirroot;
           m_q->ht_value = name;
 
           rval = Exec_commands( cp );
+          /* Thanks to Wait_for_completion = TRUE we are allowed
+           * to remove the temp files here. */
           Unlink_temp_files(cp);
            }
            while( *(name = Get_token( &tk, "", FALSE )) != '\0' );
@@ -809,13 +830,22 @@ CELLPTR setdirroot;
       }
    }
    else {
+      if( Verbose & V_MAKE )
+     printf( "%s:  Up to date [%s], prq time = %ld , target time = %ld)\n", Pname,
+         cp->CE_NAME, otime, cp->ce_time );
       mark_made = TRUE;
    }
 
-   /* Make sure everyone gets remade if Force is set */
+   /* If mark_made == TRUE the target is up-to-date otherwise it is
+    * currently in the making. */
+
+   /* Update all targets in .UPDATEALL rule / only target cp. */
    for(dp=CeMeToo(cp); dp; dp=dp->cl_next) {
       tcp=dp->cl_prq;
 
+      /* Set the time stamp of those prerequisites without rule to the current
+       * time if Force is TRUE to make sure that targets depending on those
+       * prerequisites get remade. */
       if( !(tcp->ce_flag & F_TARGET) && Force ) tcp->ce_time = Do_time();
       if( mark_made ) {
      tcp->ce_flag |= F_MADE;
@@ -826,6 +856,7 @@ CELLPTR setdirroot;
      }
       }
 
+      /* Note that the target is in the making. */
       tcp->ce_flag |= F_VISITED;
 
       /* Note:  If the prerequisite was made using a .SETDIR= attribute
@@ -1373,7 +1404,7 @@ CELLPTR cp;
         /* Print command and remove continuation sequence from cmnd. */
         Print_cmnd(cmnd, !(do_it && (l_attr & A_SILENT)), 0);
      }
-     rval=Do_cmnd(cmnd,FALSE,do_it,cp,l_attr,
+     rval=Do_cmnd(&cmnd,FALSE,do_it,cp,l_attr,
               rp->st_next == NIL(STRING) );
       }
 
@@ -1397,7 +1428,7 @@ CELLPTR cp;
          chmod(groupfile,0700);
 #endif
     }
-      rval = Do_cmnd(groupfile, TRUE, do_it, cp, attr | A_SHELL, TRUE);
+      rval = Do_cmnd(&groupfile, TRUE, do_it, cp, attr | A_SHELL, TRUE);
    }
 
    _recipes[ RP_RECIPE ] = orp;
@@ -1615,39 +1646,7 @@ int  map;
 
    if( Trace ) return;
 
-#ifdef __EMX__
-   // YD libc06 response files requires one argument per line
-   // write each argument on a new line
-   {
-      char* quote;
-      int   quote_flag = 0;
-      char* tok = strtok( cmnd, " \t\n\r");
-      while( tok) {
-         if (strlen(tok)>0) {
-            fputs(tok, tmpfile);
-            // check for a single quote ": if found, do not write newline until next quote
-            // but add a white space.
-            // double quotes in token doesn't need special handling.
-            quote = strchr( tok, '\"');
-            if (quote) {
-                // check if single
-                if (!strchr( quote+1, '\"'))
-                    quote_flag = 1 - quote_flag;
-            }
-            if (quote_flag == 0)
-                fputc('\n', tmpfile);
-            else
-                fputc(' ', tmpfile);
-         }
-         tok = strtok( NULL, " \t\n\r");
-      }
-      // remove newline, otherwise we get two of them!
-      newline = 0;
-   }
-#else
    fputs(cmnd, tmpfile);
-#endif
-
    if( newline ) fputc('\n', tmpfile);
    fflush(tmpfile);
 
@@ -1726,4 +1725,35 @@ char    *str;
    }
 
    DB_RETURN( string );
+}
+
+
+void
+Unmake( cp )/*
+==============
+   Remove flags indicating that a target was previously made.  This
+   is used for infered makefiles. */
+CELLPTR cp;
+{
+   LINKPTR dp, ep;
+   CELLPTR tcp, pcp;
+
+   DB_ENTER( "Unmake" );
+
+   for(dp=CeMeToo(cp); dp; dp=dp->cl_next) {
+      tcp = dp->cl_prq;
+
+      /* Unmake the prerequisites. */
+      for( ep = tcp->ce_prq; ep != NIL(LINK); ep = ep->cl_next ) {
+     pcp  = ep->cl_prq;
+
+     Unmake(pcp);
+      }
+      DB_PRINT( "unmake", ("Unmake [%s]", tcp->CE_NAME) );
+
+      tcp->ce_flag &= ~(F_MADE|F_VISITED|F_STAT);
+      tcp->ce_time  = (time_t)0L;
+   }
+
+   DB_VOID_RETURN;
 }
