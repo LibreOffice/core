@@ -1,6 +1,6 @@
 /* $RCSfile: rulparse.c,v $
--- $Revision: 1.11 $
--- last change: $Author: obo $ $Date: 2007-06-12 06:06:50 $
+-- $Revision: 1.12 $
+-- last change: $Author: ihi $ $Date: 2007-10-15 15:41:24 $
 --
 -- SYNOPSIS
 --      Perform semantic analysis on input
@@ -230,13 +230,13 @@ int *state;
         }
      }
      else {
-        /* found an operator so empty out break list
-         * and clear mark bits on target list, setting them all to F_USED*/
+        /* found an operator so empty out break list and clear mark
+         * bits on target list, setting them all to F_VISITED*/
 
         brk  = "";
         for( cp=targets; cp != NIL(CELL); cp=cp->ce_link ) {
            cp->ce_flag ^= F_MARK;
-           cp->ce_flag |= F_USED;
+           cp->ce_flag |= F_VISITED;
         }
 
         Def_targets = FALSE;
@@ -258,7 +258,7 @@ int *state;
            Fatal( "Syntax error in %% rule, missing %% target");
      }
 
-     if( cp->ce_flag & F_USED ) {
+     if( cp->ce_flag & F_VISITED ) {
         if( cp->ce_attr & A_COMPOSITE )
            continue;
         else
@@ -321,7 +321,7 @@ int *state;
     * so I bit the bullit and added these two loops. */
 
    for( cp=prereq;  cp != NIL(CELL); cp=cp->ce_link ) cp->ce_flag &= ~F_MARK;
-   for( cp=targets; cp != NIL(CELL); cp=cp->ce_link ) cp->ce_flag &= ~F_USED;
+   for( cp=targets; cp != NIL(CELL); cp=cp->ce_link ) cp->ce_flag &= ~F_VISITED;
 
    /* Check to see if the previous recipe was bound, if not the call
     * Bind_rules_to_targets() to bind the recipe (_sv_rules) to the
@@ -334,15 +334,6 @@ int *state;
     * if this never occurs.  */
    if( _sv_rules != NIL(STRING) )
       Fatal( "Internal Error: _sv_rules not empty." );
-
-   /* The target can be already build, e.g. as infered makefile for
-    * the .INCLUDE directive. Clean F_MADE and F_STAT when recipes
-    * or prerequisites are changed. */
-    if( (prereq != NIL(CELL)) || (_sv_rules != NIL(STRING)) )
-      for( cp=targets; cp != NIL(CELL); cp=cp->ce_link ) {
-     DB_PRINT( "par", ("Cleaning %s flags %04x", cp->CE_NAME, cp->ce_flag) );
-     cp->ce_flag &= ~(F_STAT|F_MADE);
-      }
 
    /* Add the first recipe line to the list */
    if( firstrcp != NIL( char ) )
@@ -505,10 +496,10 @@ int flag;
         /* Bind the current set of prerequisites as belonging to the
          * original recipe given for the target */
         for( lp=tg->ce_prq; lp != NIL(LINK); lp = lp->cl_next )
-          if( !(lp->cl_flag & F_USED) ) lp->cl_flag |= F_TARGET;
+          if( !(lp->cl_flag & F_VISITED) ) lp->cl_flag |= F_TARGET;
          }
      else for( lp=tg->ce_prq; lp != NIL(LINK); lp = lp->cl_next )
-        lp->cl_flag |= F_USED;
+        lp->cl_flag |= F_VISITED;
       }
 
       tflag |= _add_root(tg);
@@ -540,10 +531,20 @@ Set_group_attributes( list )/*
 char *list;
 {
    int res = FALSE;
+   char *s;
 
    if ( !((_sv_attr|Glob_attr)&A_IGNOREGROUP) ) {
-      res = (*DmStrSpn(list,"@-%+ \t") == '[');
-      if( res ) _sv_attr |= Rcp_attribute(list);
+      s = DmStrSpn(list,"@-%+ \t");
+      res = (*s == '[');
+      if( res ) {
+     /* Check for non-white space characters after the [. */
+     for( s++; *s && iswhite(*s) ; s++ )
+        ;
+     if( *s )
+        Warning("Found non-white space character after '[' in [%s].", list);
+
+     _sv_attr |= Rcp_attribute(list);
+      }
    }
 
    return(res);
@@ -724,6 +725,9 @@ int     *state;
            Glob_attr |= (attr&A_IGNORE);
            prqlst->cl_prq->ce_attr &= ~A_FRINGE;
 
+           if( Verbose & V_FILE_IO )
+          printf( "%s:  Inferring include file [%s].\n",
+              Pname, name );
            fil = TryFiles(prqlst);
 
            Glob_attr = glob;
@@ -731,11 +735,17 @@ int     *state;
         }
 
         if( fil != NIL(FILE) ) {
+           if( Verbose & V_FILE_IO )
+          printf( "%s:  Parsing include file [%s].\n",
+              Pname, name );
            Parse( fil );
            found = TRUE;
         }
         else if( !(ignore || first) )
            Fatal( "Include file %s, not found", name );
+        else if( Verbose & V_FILE_IO )
+           printf( "%s:  Include file [%s] was not found.\n",
+              Pname, name );
      }
 
      if ( !ignore && first && !found )
@@ -943,14 +953,12 @@ CELLPTR prereq;     /* list of prerequisites                   */
         }
      }
      else {
-        /* Multiple prerequisits require all of them match for this
-         * %-target to be chosen. */
-        /* FIXME: There seem to be problems in the target inference
-         * if multiple prerequisites are provided. */
+        /* The inference mechanism for %-targets limits the number of
+         * (non-indirect) prerequisite to one, but an unlimited number
+         * of indirect prerequisites is possible. */
         if ( nprq && nprq->ce_link && !(op & R_OP_OR))
            Warning("More than one prerequisite\n"
-           "for %%-target without :| as ruleop. Only the first is currently used.\n"
-           "Check your makefiles!.\n");
+           "for %%-target. Use :| ruleop or indirect prerequisites.");
 
         _build_graph(op,tg1,nprq);
      }
