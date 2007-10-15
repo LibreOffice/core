@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofgraphic.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:44:55 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 17:34:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,10 +174,15 @@ namespace sdr
                         }
                         else
                         {
-                            // SwapIn direct
-                            rGrafObj.mbInsidePaint = sal_True;
-                            rGrafObj.ForceSwapIn();
-                            rGrafObj.mbInsidePaint = sal_False;
+                            if ( rDisplayInfo.OutputToPrinter() )   // #i76395# preview mechanism is only active if
+                                rGrafObj.ForceSwapIn();             // swapin is called from inside paint, so mbInsidePaint
+                            else                                    // has to be false to be able to print with high resolution
+                            {
+                                // SwapIn direct
+                                rGrafObj.mbInsidePaint = sal_True;
+                                rGrafObj.ForceSwapIn();
+                                rGrafObj.mbInsidePaint = sal_False;
+                            }
                             bRetval = sal_True;
                         }
                     }
