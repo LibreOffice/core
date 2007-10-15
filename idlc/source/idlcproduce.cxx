@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlcproduce.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:01:32 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:44:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,18 +162,7 @@ sal_Int32 SAL_CALL produceFile(const OString& regFileName)
         return 1;
     }
 
-    RegistryLoader regLoader;
-
-    if ( !regLoader.isLoaded() )
-    {
-        fprintf(stderr, "%s: could not load registry dll.\n",
-                pOptions->getProgramName().getStr());
-        removeIfExists(regFileName);
-        cleanPath();
-        return 1;
-    }
-
-    Registry regFile(regLoader);
+    Registry regFile;
 
     removeIfExists(regTmpName);
     OString urlRegTmpName = convertToFileUrl(regTmpName);
