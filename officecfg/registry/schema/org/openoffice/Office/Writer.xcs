@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:42:23 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 17:30:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6080,6 +6080,18 @@
                                         <info>
                                                 <author>OD</author>
                                                 <desc>Unicode value of default bullet character for list level 10.</desc>
+                                        </info>
+                                </prop>
+                        </group>
+                        <group oor:name="UserInterfaceBehavior">
+                                <info>
+                                        <author>OD</author>
+                                        <desc>Contains switches for the behavior of the user interface regarding lists and list items.</desc>
+                                </info>
+                                <prop oor:name="ChangeIndentOnTabAtFirstPosOfFirstListItem" oor:type="xs:boolean">
+                                        <info>
+                                                <author>OD</author>
+                                                <desc>Behavior of &gt;TAB&lt;-key and &gt;SHIFT-TAB&lt;-key at the first position of the first list item of a list. &gt;TRUE&lt;: complete list indent is increased/decreased. &gt;FALSE&lt;: default behavior of &gt;TAB&lt; resp. &gt;SHIFT-TAB&lt;-key at first position of a list item.</desc>
                                         </info>
                                 </prop>
                         </group>
