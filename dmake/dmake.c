@@ -1,6 +1,6 @@
 /* $RCSfile: dmake.c,v $
--- $Revision: 1.11 $
--- last change: $Author: vg $ $Date: 2007-09-20 14:33:05 $
+-- $Revision: 1.12 $
+-- last change: $Author: ihi $ $Date: 2007-10-15 15:38:21 $
 --
 -- SYNOPSIS
 --      The main program.
@@ -131,6 +131,8 @@ char **argv;
    char*   whatif = NIL(char);
    char*   cmdmacs;
    char*   targets;
+   STRINGPTR cltarget = NIL(STRING); /* list of targets from command line. */
+   STRINGPTR cltarget_first = NIL(STRING); /* Pointer to first element. */
    FILE*   mkfil;
    int     ex_val;
    int     m_export;
@@ -338,13 +340,21 @@ char **argv;
      Parse_macro( p, (q[-1]!='+')?M_PRECIOUS:M_DEFAULT );
       }
       else {
-     /* Register the following parameter as the to be build target. */
-     register CELLPTR cp;
+     /* Remember the targets from the command line. */
+     register STRINGPTR nsp;
+
      targets = DmStrAdd( targets, DmStrDup(p), TRUE );
-     Add_prerequisite(Targets, cp = Def_cell(p), FALSE, FALSE);
-     cp->ce_flag |= F_TARGET;
-     cp->ce_attr |= A_FRINGE;
-     Target = TRUE;
+
+     TALLOC(nsp, 1, STRING);
+     nsp->st_string = DmStrDup( p );
+     nsp->st_next = NIL(STRING);
+
+     if(cltarget != NIL(STRING) )
+        cltarget->st_next = nsp;
+     else
+        cltarget_first = nsp;
+
+     cltarget = nsp;
       }
    }
 
@@ -358,10 +368,10 @@ char **argv;
 
    if( *Buffer ) Def_macro( "MAKEFLAGS", Buffer+1, M_PRECIOUS|M_NOEXPORT );
 
-   _warn  = FALSE;      /* disable warnings for builtin rules */
-   ex_val = Target;     /* make sure we don't mark any        */
-   Target = TRUE;       /* of the default rules as            */
-   Make_rules();        /* potential targets                  */
+   _warn  = FALSE;  /* disable warnings for builtin rules */
+   Target = TRUE;   /* make sure we don't mark any of the default rules as
+             * potential targets. */
+   Make_rules();    /* Parse the strings stored in Rule_tab. */
    _warn = TRUE;
 
    /* If -r was not given find and parse startup-makefile. */
@@ -377,7 +387,22 @@ char **argv;
          Fatal( "Configuration file `%s' not found", fname );
    }
 
-   Target = ex_val;
+   /* Define the targets set on the command line now. */
+   Target = FALSE;  /* Will be set to TRUE when the default targets are set. */
+   for( cltarget = cltarget_first; cltarget != NIL(STRING); ) {
+      CELLPTR cp;
+      STRINGPTR nta = cltarget->st_next;
+
+      Add_prerequisite(Targets, cp = Def_cell(cltarget->st_string),
+               FALSE, FALSE);
+      cp->ce_flag |= F_TARGET;
+      cp->ce_attr |= A_FRINGE;
+      Target = TRUE;
+
+      FREE(cltarget->st_string);
+      FREE(cltarget);
+      cltarget = nta;
+   }
 
    if( Get_env == 'E' ) _do_ReadEnvironment();
 
@@ -555,11 +580,7 @@ int  err;
       fil = stdin;
    }
    else
-#ifdef __EMX__ // YD libc06 default is binary mode
-      fil = fopen( name, mode ? "wt":"rt" );
-#else
       fil = fopen( name, mode ? "w":"r" );
-#endif
 
    if( Verbose & V_FILE_IO )
       printf( "%s:  Openning [%s] for %s", Pname, name, mode?"write":"read" );
@@ -691,6 +712,7 @@ LINKPTR lp;
       s_q = Check;
 
       Trace = Touch = Check = FALSE;
+      /* We are making a makefile. Wait for it. */
       Makemkf = Wait_for_completion = TRUE;
       mkfil = NIL(FILE);
 
@@ -704,10 +726,11 @@ LINKPTR lp;
       * errors both return -1. */
      if( mkfil == NIL(FILE) && Make(lp->cl_prq, NIL(CELL)) != -1 ) {
         mkfil = Openfile( lp->cl_prq->CE_NAME, FALSE, FALSE );
-        /* Clean the F_VISITED flag after making the target as this
-         * can conflict with the circular dependency check in rulparse(),
-         * see issue 62118 for details. */
-        lp->cl_prq->ce_flag &= ~(F_VISITED);
+        /* Remove flags that indicate that the target was already made.
+         * This is also needed to avoid conflicts with the circular
+         * dependency check in rulparse(), see issues 62118 and 81296
+         * for details. */
+        Unmake(lp->cl_prq);
      }
       }
 
