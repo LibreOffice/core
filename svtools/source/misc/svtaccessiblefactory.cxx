@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtaccessiblefactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:04:42 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:10:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,6 +253,8 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
+    extern "C" { static void SAL_CALL thisModule() {} }
+
     void AccessibleFactoryAccess::ensureInitialized()
     {
         if ( m_bInitialized )
@@ -270,7 +272,7 @@ namespace svt
                 const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(
                     SVLIBRARY( "acc" )
                 );
-                s_hAccessibleImplementationModule = osl_loadModule( sModuleName.pData, 0 );
+                s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
                 if ( s_hAccessibleImplementationModule != NULL )
                 {
                     const ::rtl::OUString sFactoryCreationFunc =
