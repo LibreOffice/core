@@ -1,6 +1,6 @@
 Blake sent me the wrong one.
 
-/* RCS  $Id: runargv.c,v 1.1.1.1 2000-09-22 15:33:37 hr Exp $
+/* RCS  $Id: runargv.c,v 1.2 2007-10-15 16:00:01 ihi Exp $
 --
 -- SYNOPSIS
 --      Invoke a sub process.
@@ -206,7 +206,6 @@ int status;
       Current_target = NIL(CELL);
 
       if ( _procs[i].pr_target->ce_attr & A_ERROR ) {
-     Unlink_temp_files( _procs[i].pr_target );
      _procs[i].pr_last = TRUE;
      goto ABORT_REMAINDER_OF_RECIPE;
       }
@@ -224,7 +223,6 @@ int status;
       if( _proc_cnt == Max_proc ) Wait_for_child( FALSE, -1 );
    }
    else {
-      Unlink_temp_files( _procs[i].pr_target );
       Handle_result(status,_procs[i].pr_ignore,_abort_flg,_procs[i].pr_target);
 
  ABORT_REMAINDER_OF_RECIPE:
