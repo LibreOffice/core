@@ -1,6 +1,6 @@
 /* $RCSfile: function.c,v $
--- $Revision: 1.10 $
--- last change: $Author: vg $ $Date: 2007-01-18 09:30:04 $
+-- $Revision: 1.11 $
+-- last change: $Author: ihi $ $Date: 2007-10-15 15:39:11 $
 --
 -- SYNOPSIS
 --      GNU style functions for dmake.
@@ -35,7 +35,7 @@ static char *_exec_iseq   ANSI((char *, char *, char *, int));
 static char *_exec_sort   ANSI((char *));
 static char *_exec_echo   ANSI((char *));
 static char *_exec_uniq   ANSI((char *));
-static char *_exec_shell  ANSI((char *, char *));
+static char *_exec_shell  ANSI((char *, int));
 static char *_exec_call   ANSI((char *, char *));
 static char *_exec_assign ANSI((char *));
 static char *_exec_foreach ANSI((char *, char *, char *));
@@ -151,6 +151,30 @@ char *buf;
      }
      else if (strncmp(fname,"not",3) == 0 )
         res = _exec_not(args);
+     else if (strncmp(fname,"normpath",8) == 0 ) {
+        char *eargs = Expand(args);
+
+        if( mod_count == 0 ) {
+           res = exec_normpath(eargs);
+        }
+        else if( mod_count == 1 ) {
+           char *para = Expand(mod1);
+           int tmpUseWinpath = UseWinpath;
+
+           if( !*para || strcmp(para, "\"\"") == 0 ) {
+          UseWinpath = FALSE;
+           } else {
+          UseWinpath = TRUE;
+           }
+           res = exec_normpath(eargs);
+           UseWinpath = tmpUseWinpath;
+           FREE(para);
+        }
+        else
+           Fatal( "One or no comma-seperated arguments expected in [%s].\n", buf );
+
+        FREE(eargs);
+     }
          else
             res = _exec_call(fname,args);
      break;
@@ -178,7 +202,19 @@ char *buf;
      if(strncmp(fname,"sort",4) == 0)
         res = _exec_sort(args);
      else if(strncmp(fname,"shell",5)==0)
-        res = _exec_shell(args,mod1);
+        if( mod_count == 0 ) {
+           res = _exec_shell(args, FALSE);
+        }
+        else if( mod_count == 1 ) {
+           char *emod = Expand(mod1);
+           if(strncmp(emod,"expand",7)==0)
+          res = _exec_shell(args, TRUE);
+           else
+          Fatal( "Unknown argument [%s] to shell in [%s].\n", emod, buf );
+           FREE(emod);
+        }
+        else
+           Fatal( "One or no comma-seperated arguments expected in [%s].\n", buf );
      else if(strncmp(fname,"strip",5)==0)
         res = Tokenize(Expand(args)," ",'t',TRUE);
      else if(strncmp(fname,"subst",5)==0) {
@@ -297,7 +333,6 @@ char *file;
 char *text;
 char *data;
 {
-   register char *p;
    char *tmpname;
    char *name;
    FILE *tmpfile = NIL(FILE);
@@ -309,13 +344,7 @@ char *data;
    name = Current_target ? Current_target->CE_NAME:"makefile text";
 
    if( file && *file ) {
-      /* This call to Get_temp sets TMPFILE for subsequent expansion of file.
-       * The contents file variable passed may include TMPFILE to be expanded. */
-      /* Using TMPFILE as an argument to mktmp is no longer supported because it is not
-       * safe to create a random filename and assume the file does not exist.  Howver,
-       * we still allow Expand() to do its job for fixed filenames */
-      /* char *newtmp;
-       * Get_temp( &newtmp, FALSE ); FREE(newtmp); */
+      /* Expand the file parameter to mktmp if present. */
       tmpname = Expand(file);
 
       if( *tmpname ) {
@@ -336,6 +365,9 @@ char *data;
 
      Def_macro("TMPFILE", tmpname, M_EXPANDED|M_MULTI);
      Link_temp( Current_target, tmpfile, tmpname );
+
+     /* Don't free tmpname if it is used. It is stored in a FILELIST
+      * member in Link_temp(). */
       }
       else
      FREE(tmpname);
@@ -344,16 +376,12 @@ char *data;
    if( !tmpfile )
       tmpfile = Start_temp( "", Current_target, &tmpname );
 
+   /* If the text parameter is given return its expanded value
+    * instead of the used filename. */
    if( !text || !*text ) text = tmpname;
-   data = Expand(DmStrSpn(data, " \t\n"));
 
-   for(p=strchr(data,'\n'); p; p=strchr(p,'\n')) {
-      char *q = DmStrSpn(++p," \t");
-      strcpy(p,q);
-   }
+   data = Expand(data);
 
-/* do not map escape sequences while writing a tmpfile */
-/*  Append_line( data, FALSE, tmpfile, name, FALSE, TRUE ); */
    Append_line( data, TRUE, tmpfile, name, FALSE, FALSE );
    Close_temp( Current_target, tmpfile );
    FREE(data);
@@ -500,11 +528,12 @@ char *data;
 
 
 static char *
-_exec_shell( data, mod1 )/*
-===========================
-   Capture the stdout of an execuded command. */
+_exec_shell( data, expand )/*
+=============================
+   Capture the stdout of an execuded command.
+   If expand is TRUE expand the result. */
 char *data;
-char *mod1;
+int expand;
 {
    extern char *tempnam();
    int  bsize;
@@ -608,10 +637,11 @@ char *mod1;
 
    stdout_redir = old_stdout_redir;
 
-   if ( mod1 ) {
-      mod1 = Expand(res);
+   if ( expand ) {
+      char *exp_res;
+      exp_res = Expand(res);
       FREE(res);
-      res = mod1;
+      res = exp_res;
    }
 
    return(res);
@@ -656,4 +686,33 @@ char *args;
 
    FREE(p);
    return(res ? DmStrDup("t") : DmStrDup(""));
+}
+
+
+char *
+exec_normpath( args )/*
+=======================
+   Normalize token-wise. The normalised filenames are returned in a new
+   string, the original string is not freed. Quoted tokens remain quoted
+   after the normalizaton. */
+char *args;
+{
+   TKSTR str;
+   char  *s, *res;
+
+   /* This honors .WINPATH . */
+   SET_TOKEN( &str, args );
+   res = NIL(char);
+   while( *(s = Get_token( &str, "", FALSE )) != '\0' ) {
+      if(str.tk_quote == 0) {
+     /* Add leading quote. */
+     res = DmStrApp(res, "\"");
+     res = DmStrJoin(res, DO_WINPATH(normalize_path(s)), -1, TRUE);
+     /* Append the trailing quote. */
+     res = DmStrJoin(res, "\"", 1, TRUE);
+      } else {
+     res = DmStrApp(res, DO_WINPATH(normalize_path(s)));
+      }
+   }
+   return res;
 }
