@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:05:55 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:47:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,26 @@ typedef void ( SAL_CALL *oslGenericFunction )( void );
     @return NULL if the module could not be loaded, otherwise a handle to the module.
 */
 oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMode);
+
+/** Load a module located relative to some other module.
+
+    @param baseModule
+    must point to a function that is part of the code of some loaded module;
+    must not be NULL.
+
+    @param relativePath
+    a relative URL; must not be NULL.
+
+    @param mode
+    the SAL_LOADMODULE_xxx flags.
+
+    @return
+    a non-NULL handle to the loaded module, or NULL if an error occurred.
+
+    @since UDK 3.2.8
+*/
+oslModule SAL_CALL osl_loadModuleRelative(
+    oslGenericFunction baseModule, rtl_uString * relativePath, sal_Int32 mode);
 
 /** Retrieve the handle of an already loaded module.
 
