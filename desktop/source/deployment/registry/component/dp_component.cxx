@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_component.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 11:52:05 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/uri.hxx"
-#include "osl/module.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "ucbhelper/content.hxx"
 #include "comphelper/anytostring.hxx"
@@ -60,6 +59,7 @@
 #include "com/sun/star/loader/XImplementationLoader.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/ucb/NameClash.hpp"
+#include "com/sun/star/util/XMacroExpander.hpp"
 #include <list>
 #include <hash_map>
 #include <vector>
@@ -861,20 +861,20 @@ Reference<XInterface> BackendImpl::insertObject(
     return insertion.first->second;
 }
 
-void dummy() {}
-struct ProgramDir : public rtl::StaticWithInit<const OUString, ProgramDir> {
-    const OUString operator () () {
-        OUString exeURL;
-        ::osl::Module::getUrlFromAddress( (oslGenericFunction) dummy, exeURL );
-        return exeURL.copy( 0, exeURL.lastIndexOf('/') );
-    }
-};
-
 //------------------------------------------------------------------------------
 Reference<XComponentContext> raise_uno_process(
     Reference<XComponentContext> const & xContext,
     ::rtl::Reference<AbortChannel> const & abortChannel )
 {
+    OSL_ASSERT( xContext.is() );
+
+    ::rtl::OUString url(
+        Reference<util::XMacroExpander>(
+            xContext->getValueByName(
+                OUSTR("/singletons/com.sun.star.util.theMacroExpander") ),
+            UNO_QUERY_THROW )->
+        expandMacros( OUSTR("$URE_BIN_DIR/uno") ) );
+
     ::rtl::OUStringBuffer buf;
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("uno:pipe,name=") );
     OUString pipeId( generateRandomPipeId() );
@@ -894,12 +894,6 @@ Reference<XComponentContext> raise_uno_process(
     args.push_back( OUSTR("--singleaccept") );
     args.push_back( OUSTR("-u") );
     args.push_back( connectStr );
-    OSL_ASSERT( buf.getLength() == 0 );
-    // use only preinstalled services:
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("-env:UNO_SERVICES=") );
-    buf.append( ProgramDir::get() );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/services.rdb") );
-    args.push_back( buf.makeStringAndClear() );
     // don't inherit from unorc:
     args.push_back( OUSTR("-env:INIFILENAME=") );
 
@@ -908,8 +902,7 @@ Reference<XComponentContext> raise_uno_process(
     args.insert(args.end(), bootvars.begin(), bootvars.end());
 
     oslProcess hProcess = raiseProcess(
-        ProgramDir::get() + OUSTR("/uno"),
-        comphelper::containerToSequence(args) );
+        url, comphelper::containerToSequence(args) );
     try {
         return Reference<XComponentContext>(
             resolveUnoURL( connectStr, xContext, abortChannel.get() ),
