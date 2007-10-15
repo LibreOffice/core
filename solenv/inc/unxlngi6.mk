@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-27 07:49:16 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:41:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -152,9 +152,12 @@ LINKC*=$(CC)
 
 # default linker flags
 LINKFLAGSDEFS*=-Wl,-z,defs
-LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
+LINKFLAGSRUNPATH_URELIB=-Wl,-rpath,\''$$ORIGIN'\'
+LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
+    #TODO: drop $ORIGIN once no URE executable is also shipped in OOo
+LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
 # flag -Wl,-z,noexecstack sets the NX bit on the stack
-LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
+LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS)
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
