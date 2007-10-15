@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macro_expander.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:25:36 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 11:53:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,14 +41,14 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/component_context.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
+
+#include "macro_expander.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SERVICE_NAME_A "com.sun.star.lang.MacroExpander"
@@ -66,6 +66,17 @@ namespace cppu
 //---- private forward -----------------------------------------------------------------------------
 Bootstrap const & get_unorc() SAL_THROW( () );
 }
+
+namespace cppuhelper { namespace detail {
+
+rtl::OUString expandMacros(rtl::OUString const & text) {
+    rtl::OUString t(text);
+    rtl_bootstrap_expandMacros_from_handle(
+        cppu::get_unorc().getHandle(), &t.pData);
+    return t;
+}
+
+} }
 
 namespace
 {
@@ -87,8 +98,8 @@ static Sequence< OUString > const & s_get_service_names()
     return *s_pnames;
 }
 
-typedef ::cppu::WeakComponentImplHelper3<
-    util::XMacroExpander, lang::XServiceInfo, lang::XInitialization > t_uno_impl;
+typedef ::cppu::WeakComponentImplHelper2<
+    util::XMacroExpander, lang::XServiceInfo > t_uno_impl;
 
 struct mutex_holder
 {
@@ -96,16 +107,12 @@ struct mutex_holder
 };
 class Bootstrap_MacroExpander : public mutex_holder, public t_uno_impl
 {
-    rtlBootstrapHandle m_bstrap;
-    OUString m_rc_path;
-
 protected:
     virtual void SAL_CALL disposing();
 
 public:
     inline Bootstrap_MacroExpander( Reference< XComponentContext > const & ) SAL_THROW( () )
-        : t_uno_impl( m_mutex ),
-          m_bstrap( 0 )
+        : t_uno_impl( m_mutex )
         {}
     virtual ~Bootstrap_MacroExpander()
         SAL_THROW( () );
@@ -113,10 +120,6 @@ public:
     // XMacroExpander impl
     virtual OUString SAL_CALL expandMacros( OUString const & exp )
         throw (lang::IllegalArgumentException);
-    //  XInitialization impl
-    virtual void SAL_CALL initialize(
-        Sequence< Any > const & arguments )
-        throw (Exception);
     // XServiceInfo impl
     virtual OUString SAL_CALL getImplementationName()
         throw (RuntimeException);
@@ -128,22 +131,10 @@ public:
 
 //__________________________________________________________________________________________________
 void Bootstrap_MacroExpander::disposing()
-{
-    rtlBootstrapHandle h;
-    {
-        osl::MutexGuard g(m_mutex);
-        h = m_bstrap;
-        m_bstrap = 0;
-    }
-    if (h) {
-        rtl_bootstrap_args_close(h);
-    }
-}
+{}
 //__________________________________________________________________________________________________
 Bootstrap_MacroExpander::~Bootstrap_MacroExpander() SAL_THROW( () )
-{
-    disposing();
-}
+{}
 
 // XServiceInfo impl
 //__________________________________________________________________________________________________
@@ -171,52 +162,13 @@ Sequence< OUString > Bootstrap_MacroExpander::getSupportedServiceNames()
 {
     return s_get_service_names();
 }
-//  XInitialization impl
-//__________________________________________________________________________________________________
-void SAL_CALL Bootstrap_MacroExpander::initialize(
-    Sequence< Any > const & arguments )
-    throw (Exception)
-{
-    if (m_bstrap)
-    {
-        throw RuntimeException(
-            OUSTR("already initialized!"),
-            Reference< XInterface >() );
-    }
-    if (1 != arguments.getLength())
-    {
-        throw lang::IllegalArgumentException(
-            OUSTR("invalid number of args given!  give single file url!"),
-            Reference< XInterface >(),
-            0 );
-    }
-    if (! (arguments[ 0 ] >>= m_rc_path))
-    {
-        throw lang::IllegalArgumentException(
-            OUSTR("give file url!"),
-            Reference< XInterface >(),
-            0 );
-    }
-}
 
 // XMacroExpander impl
 //__________________________________________________________________________________________________
 OUString Bootstrap_MacroExpander::expandMacros( OUString const & exp )
     throw (lang::IllegalArgumentException)
 {
-    rtlBootstrapHandle h;
-    if (m_rc_path.getLength() != 0) {
-        osl::MutexGuard g(m_mutex);
-        if (!m_bstrap) {
-            m_bstrap = rtl_bootstrap_args_open(m_rc_path.pData);
-        }
-        h = m_bstrap;
-    } else {
-        h = cppu::get_unorc().getHandle();
-    }
-    OUString ret( exp );
-    rtl_bootstrap_expandMacros_from_handle( h, &ret.pData );
-    return ret;
+    return cppuhelper::detail::expandMacros( exp );
 }
 
 //==================================================================================================
