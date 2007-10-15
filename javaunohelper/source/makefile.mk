@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:29:47 $
+#   last change: $Author: vg $ $Date: 2007-10-15 13:14:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,7 @@ SHL1DEPN=
 SHL1IMPLIB=i$(SHL1TARGET)
 SHL1LIBS=$(LIB1TARGET)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+SHL1RPATH=URELIB
 
 DEF1NAME=$(SHL1TARGET)
 
@@ -131,6 +132,7 @@ SHL2DEPN=
 SHL2IMPLIB=i$(SHL2TARGET)
 SHL2LIBS=$(LIB2TARGET)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
+SHL2RPATH=URELIB
 
 DEF2NAME=$(SHL2TARGET)
 
