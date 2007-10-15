@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:31:22 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:17:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,6 +252,8 @@ typedef bool ( *PFunc_getSpecialCharsForEdit)( Window* i_pParent, const Font& i_
 // a library above us.
 //====================================================================
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
 String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
 {
     static bool bDetermineFunction = false;
@@ -266,7 +268,8 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
         sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "svx" ) ) );
 
         rtl::OUString aLibName( sLibName );
-        oslModule handleMod = osl_loadModule( aLibName.pData, 0 );
+        oslModule handleMod = osl_loadModuleRelative(
+            &thisModule, aLibName.pData, 0 );
 
         // get symbol
         ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "GetSpecialCharsForEdit" ) );
