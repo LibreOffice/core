@@ -1,6 +1,6 @@
 /* $RCSfile: parse.c,v $
--- $Revision: 1.7 $
--- last change: $Author: vg $ $Date: 2007-01-18 09:31:46 $
+-- $Revision: 1.8 $
+-- last change: $Author: ihi $ $Date: 2007-10-15 15:40:45 $
 --
 -- SYNOPSIS
 --      Parse the input, and perform semantic analysis
@@ -84,10 +84,12 @@ FILE *fil;
 
            p = DmStrSpn( Buffer, " \t\r\n" );
                if( Set_group_attributes( p ) ) {
-                  if( rule && Group )
-                     Fatal( "Cannot mix single and group recipe lines" );
-                  else
-                     Group = TRUE;
+          if( Group )
+             Fatal( "New group recipe begin found within group recipe." );
+          else if( rule )
+             Fatal( "Cannot mix single and group recipe lines." );
+          else
+             Group = TRUE;
 
                   rule = TRUE;
 
