@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdbtoolsclient.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:35:49 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:15:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,8 @@ SwDbtoolsClient::~SwDbtoolsClient()
 }
 
 //--------------------------------------------------------------------
+extern "C" { static void SAL_CALL thisModule() {} }
+
 void SwDbtoolsClient::registerClient()
 {
     ::osl::MutexGuard aGuard(getDbtoolsClientMutex());
@@ -135,7 +137,8 @@ void SwDbtoolsClient::registerClient()
         );
 
         // load the dbtools library
-        getDbToolsClientModule() = osl_loadModule(sModuleName.pData, 0);
+        getDbToolsClientModule() = osl_loadModuleRelative(
+            &thisModule, sModuleName.pData, 0);
         OSL_ENSURE(NULL != getDbToolsClientModule(), "SwDbtoolsClient::registerClient: could not load the dbtools library!");
         if (NULL != getDbToolsClientModule())
         {
