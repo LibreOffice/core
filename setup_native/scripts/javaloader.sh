@@ -108,6 +108,26 @@ EOF
     exit $errorcode
 }
 
+set_jre_for_uninstall()
+{
+    # if "uninstalldata" exists, this is not required
+    if [ ! -d "uninstalldata" ]; then
+        packagepath="RPMS"
+        jrefile=`find $packagepath -type f -name "jre*.rpm" -print`
+        jrefile=`basename $jrefile`
+        if [ -z "$jrefile" ]; then
+            jrefile="notfound"
+        fi
+
+        # check existence of jre rpm
+        if [ ! -f $packagepath/$jrefile ]; then
+            errortext="Error: Java Runtime Environment (JRE) not found in directory: $packagepath"
+            errorcode="4"
+            do_exit
+        fi
+    fi
+}
+
 install_linux_rpm()
 {
     # Linux requires usage of rpm2cpio to install JRE with user privileges
@@ -431,6 +451,14 @@ if [ "$java_runtime_set" != "yes" ]; then
         errortext="Error: Platform $platform not supported for Java Runtime Environment (JRE) installation."
         errorcode="1"
         do_exit
+    fi
+fi
+
+# jre for Linux is also required, if java runtime is set (for uninstallation mode)
+if [ "$java_runtime_set" = "yes" ]; then
+    platform=`uname -s`
+    if [ "`uname -s`" = "Linux" ]; then
+        set_jre_for_uninstall
     fi
 fi
 
