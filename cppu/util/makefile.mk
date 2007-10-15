@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 14:44:33 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:21:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 .ENDIF
 
 SHL1VERSIONMAP=$(TARGET).map
+SHL1RPATH=URELIB
 
 DEF1NAME=$(SHL1TARGET)
 
@@ -91,6 +92,7 @@ SHL2VERSIONMAP:=$(SHL2TARGET).map
 SHL2DEF     := $(MISC)$/$(SHL2TARGET).def
 SHL2IMPLIB  := i$(SHL2TARGET)
 SHL2STDLIBS := $(CPPULIB) $(SALHELPERLIB) $(SALLIB)
+SHL2RPATH   := URELIB
 SHL2OBJS    := \
     $(SLO)$/helper_purpenv_Environment.obj 	\
     $(SLO)$/helper_purpenv_Mapping.obj      \
