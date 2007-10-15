@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MServices.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:57:41 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:31:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,9 @@ typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Refere
         const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(SAL_MODULENAME( "mozabdrv2" ));
 
         // load the dbtools library
-        oslModule s_hModule = osl_loadModule(sModuleName.pData, 0);
+        oslModule s_hModule = osl_loadModuleRelative(
+            reinterpret_cast< oslGenericFunction >(&createMozillaBootstrap),
+            sModuleName.pData, 0);
         OSL_ENSURE(NULL != s_hModule, "MozabDriver::registerClient: could not load the dbtools library!");
         if (NULL != s_hModule)
         {
