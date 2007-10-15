@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.93 $
+#   $Revision: 1.94 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 09:50:44 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:37:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -234,6 +234,7 @@ installer::ziplist::set_default_productversion_if_required($allvariableshashref)
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3a.log", $allvariableshashref); }
 
 installer::ziplist::add_variables_to_allvariableshashref($allvariableshashref);
+installer::servicesfile::set_defaults_in_allvariableshashref($allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3b.log", $allvariableshashref); }
 
 ########################################################
@@ -832,7 +833,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             {
                 installer::logger::print_message( "... creating preregistered services.rdb ...\n" );
 
-                installer::servicesfile::create_services_rdb($filesinproductlanguageresolvedarrayref, $includepatharrayref, $languagestringref);
+                installer::servicesfile::create_services_rdb($allvariableshashref, $filesinproductlanguageresolvedarrayref, $includepatharrayref, $languagestringref);
                 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles14.log", $filesinproductlanguageresolvedarrayref); }
             }
         }
@@ -848,7 +849,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         {
             installer::logger::print_message( "... merging files into registry database ...\n" );
 
-            installer::regmerge::merge_registration_files($filesinproductlanguageresolvedarrayref, $includepatharrayref, $languagestringref);
+            installer::regmerge::merge_registration_files($filesinproductlanguageresolvedarrayref, $includepatharrayref, $languagestringref, $allvariableshashref);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles14b.log", $filesinproductlanguageresolvedarrayref); }
         }
     }
@@ -1428,7 +1429,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Simple installation mechanism
             ###########################################
 
-            if ( $installer::globals::simple ) { installer::worker::install_simple($onepackagename, $$languagestringref, $dirsinpackage, $filesinpackage, $linksinpackage); }
+            if ( $installer::globals::simple ) { installer::worker::install_simple($onepackagename, $$languagestringref, $dirsinpackage, $filesinpackage, $linksinpackage, $unixlinksinpackage); }
 
             ###########################################
             # Creating epm list file
