@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-03 12:48:28 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:48:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,8 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/file_path_helper.obj\
             $(SLO)$/uunxapi.obj\
             $(SLO)$/process_impl.obj\
-            $(SLO)$/file_stat.obj
+            $(SLO)$/file_stat.obj \
+            $(SLO)$/salinit.obj
 
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=   $(OBJ)$/conditn.obj  \
@@ -110,7 +111,9 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/file_path_helper.obj\
             $(OBJ)$/uunxapi.obj\
             $(OBJ)$/process_impl.obj\
-            $(OBJ)$/file_stat.obj
+            $(OBJ)$/file_stat.obj \
+            $(OBJ)$/salinit.obj
+            
 #.ENDIF
 
 .IF "$(OS)"=="MACOSX"
