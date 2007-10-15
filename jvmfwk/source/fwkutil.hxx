@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fwkutil.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 07:58:34 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:07:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,8 @@ rtl::OUString getFileFromURL(const rtl::OUString& sFileURL);
 rtl::OUString getExecutableDirectory();
 /** Locates the plugin library and returns the file URL.
 
-    First tries to locate plugin relative to baseUrl.  If that fails, tries to
+    First tries to locate plugin relative to baseUrl (if relative);
+    vnd.sun.star.expand URLs are supported.  If that fails, tries to
     locate plugin relative to the executable.  If that fails, and plugin
     contains no slashes, tries to locate plugin in a platform-specific way
     (e.g., LD_LIBRARY_PATH).
@@ -103,8 +104,7 @@ rtl::OUString getExecutableDirectory();
     The base file URL relative to which the plugin argument is interpreted.
 
     @param plugin
-    The argument is just the name of the plugin or a relative path
-    from the directory of the executable.
+    The argument is an absolute or relative URL or just the name of the plugin.
  */
 rtl::OUString findPlugin(
     const rtl::OUString & baseUrl, const rtl::OUString & plugin);
