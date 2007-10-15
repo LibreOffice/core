@@ -1,4 +1,4 @@
-/* RCS  $Id: dmake.h,v 1.7 2007-06-12 06:04:58 obo Exp $
+/* RCS  $Id: dmake.h,v 1.8 2007-10-15 15:38:34 ihi Exp $
 --
 -- SYNOPSIS
 --      Global defines for dmake.
@@ -122,15 +122,21 @@
 #define F_MULTI          0x0002         /* multiple rules for target    */
 #define F_SINGLE         0x0004         /* exec recipes for each out of
                      * date prerequisite (! ruleop) */
-#define F_TARGET         0x0008         /* marks a target               */
+#define F_TARGET     0x0008     /* is set if a rule for a target exists.
+                     * Prerequisites do not necessarily need
+                     * to have a rule, in which case F_TARGET
+                     * is not set. */
 #define F_RULES          0x0010         /* indicates target has rules   */
 #define F_GROUP          0x0020         /* indicates that rules are to  */
                                         /* fed to the shell as a group  */
 
 #define F_TRANS          0x0040         /* same as F_STAT not used tgthr*/
 #define F_STAT           0x0040         /* target already stated        */
-#define F_VISITED        0x0080         /* target scheduled for make    */
-#define F_USED           0x0080         /* used in rulparse.c           */
+#define F_VISITED        0x0080  /* Used for two different purposes:
+                    make.c: Mark that a target is scheduled
+                    to be made.
+                    rulparse.c: Detect circular
+                    dependencies. */
 #define F_SPECIAL        0x0100         /* marks a special target       */
 #define F_DFA            0x0200         /* bit for marking added DFA    */
 #define F_EXPLICIT       0x0400         /* explicit target in makefile  */
@@ -172,6 +178,7 @@
 #define TOUPPER_FLAG     16
 #define INFNAME_FLAG     32
 #define JUST_FIRST_FLAG  64
+#define NORMPATH_FLAG   128
 
 /* special target definitions for use inside dmake */
 #define ST_IF           1
