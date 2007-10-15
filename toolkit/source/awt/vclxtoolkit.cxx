@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 14:03:00 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 11:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1100,6 +1100,8 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     return pNewWindow;
 }
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
 css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     const css::awt::WindowDescriptor& rDescriptor,
     WinBits nForceWinBits )
@@ -1136,7 +1138,8 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     if ( !fnSvtCreateWindow && !hSvToolsLib )
     {
         ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "svt", TRUE );
-        hSvToolsLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
+        hSvToolsLib = osl_loadModuleRelative(
+            &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( hSvToolsLib )
         {
             ::rtl::OUString aFunctionName( RTL_CONSTASCII_USTRINGPARAM( "CreateWindow" ) );
