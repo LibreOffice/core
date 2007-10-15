@@ -1,4 +1,4 @@
-/* RCS  $Id: stat.c,v 1.2 2007-01-18 09:32:36 vg Exp $
+/* RCS  $Id: stat.c,v 1.3 2007-10-15 15:41:38 ihi Exp $
 --
 -- SYNOPSIS
 --      Bind a target name to a file.
@@ -97,6 +97,8 @@ int     force;
    DB_ENTER( "Stat_target" );
 
    name = cp->CE_NAME;
+   DB_PRINT( "stat", ("called on [%s]", name) );
+
    if( srchp == NIL(HASH) ) srchp = Get_name(".SOURCE",Defs,FALSE);
 
    /* Look for a symbol of the form lib((symbol)) the name of the symbol
