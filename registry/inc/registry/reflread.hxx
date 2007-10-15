@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reflread.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:12:06 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:27:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@
 #ifndef _REGISTRY_REGTYPE_H_
 #include <registry/regtype.h>
 #endif
-#ifndef _SALHELPER_DYNLOAD_HXX_
-#include <salhelper/dynload.hxx>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 /// Implememetation handle
@@ -51,7 +51,7 @@ typedef void* TypeReaderImpl;
 
 /****************************************************************************
 
-    C-Api for load on call
+    C-Api
 
 *****************************************************************************/
 
@@ -61,9 +61,7 @@ extern "C" {
 
 /** specifies a collection of function pointers which represents the complete registry type reader C-API.
 
-    The function pointers of this struct will be initialized when the library is loaded over
-    the load on call mechanism specified in 'salhelper/dynload.hxx'. This funtions pointers are
-    used by the C++ wrapper to call the C-API.
+    This funtions pointers are used by the C++ wrapper to call the C-API.
 */
 struct RegistryTypeReader_Api
 {
@@ -104,54 +102,19 @@ struct RegistryTypeReader_Api
     RTFieldAccess       (TYPEREG_CALLTYPE *getReferenceAccess)  (TypeReaderImpl, sal_uInt16);
 };
 
-/** specifies a function pointer of the initialization function which is called to initialize
-    the RegistryTypeReader_Api struct.
-
- */
-typedef RegistryTypeReader_Api* (TYPEREG_CALLTYPE *InitRegistryTypeReader_Api)(void);
-
-/** spedifies the name of the API initialization function.
-
-    This function will be searched by the load on call mechanism specified
-    in 'salhelper/dynload.hxx'.
+/** the API initialization function.
 */
-#define REGISTRY_TYPE_READER_INIT_FUNCTION_NAME "initRegistryTypeReader_Api"
+RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-
-/** The RegistryTypeReaderLoader provides a load on call mechanism for the library
-    used for the registry type reader api.
-
-    Furthermore it provides a reference counter for the library. When the last reference will be
-    destroyed the RegisteryTypeReaderLoader will unload the library. If the library is loaded the loader
-    provides a valid Api for the type reader.
-    @see salhelper::ODynamicLoader<>
-*/
-class RegistryTypeReaderLoader
-    : public ::salhelper::ODynamicLoader<RegistryTypeReader_Api>
-{
-public:
-    /// Default constructor, try to load the registry library and initialize the needed Api.
-    RegistryTypeReaderLoader()
-        : ::salhelper::ODynamicLoader<RegistryTypeReader_Api>
-            (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME_WITH_VERSION( "reg", LIBRARY_VERSION ) ) ),
-             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(REGISTRY_TYPE_READER_INIT_FUNCTION_NAME) ))
-        {}
-
-    /// Destructor, decrease the refcount and unload the library if the refcount is 0.
-    ~RegistryTypeReaderLoader()
-        {}
-};
-
-
 /** RegistryTypeReades reads a binary type blob.
 
     This class provides the necessary functions to read type informations
     for all kinds of types of a type blob.
-    The class is inline and use a load on call C-Api.
+    The class is inline and use a C-Api.
 
     @deprecated
     use typereg::Reader instead
@@ -160,35 +123,15 @@ class RegistryTypeReader
 {
 public:
 
-    /** Constructor using the registry Api directly.
+    /** Constructor.
 
-        The constructor is used if the api is known.
-        @param pApi points to an initialized RegistryTypeReader_Api.
         @param buffer points to the binary data block.
         @param bufferlen specifies the size of the binary data block.
         @param copyData specifies if the data block should be copied.
                         The block can be copied to ensure that the data
                         is valid for the lifetime of this instance.
      */
-    inline RegistryTypeReader(const RegistryTypeReader_Api* pApi,
-                              const sal_uInt8* buffer,
-                              sal_uInt32 bufferLen,
-                              sal_Bool copyData);
-
-    /** Constructor using the loader mechanism.
-
-        This constructor is called with a RegistryTypeReaderLoader.
-        The RegistryTypeReaderLoader loads the needed DLL and provides the needed
-        Api for the registry type reader.
-        @param rLoader references a valid RegistryTypeReaderLoader.
-        @param buffer points to the binary data block.
-        @param bufferlen specifies the size of the binary data block.
-        @param copyData specifies if the data block should be copied.
-                        The block can be copied to ensure that the data
-                        is valid for the lifetime of this instance.
-     */
-    inline RegistryTypeReader(const RegistryTypeReaderLoader& rLoader,
-                              const sal_uInt8* buffer,
+    inline RegistryTypeReader(const sal_uInt8* buffer,
                               sal_uInt32 bufferLen,
                               sal_Bool copyData);
 
@@ -386,42 +329,24 @@ protected:
 
     /// stores the registry type reader Api.
     const RegistryTypeReader_Api*                               m_pApi;
-    /// stores the dynamic loader which is used to hold the library.
-    const ::salhelper::ODynamicLoader< RegistryTypeReader_Api > m_Api;
     /// stores the handle of an implementation class
     TypeReaderImpl                                              m_hImpl;
 };
 
 
 
-inline RegistryTypeReader::RegistryTypeReader(const RegistryTypeReader_Api* pApi,
-                                                const sal_uInt8* buffer,
+inline RegistryTypeReader::RegistryTypeReader(const sal_uInt8* buffer,
                                               sal_uInt32 bufferLen,
                                               sal_Bool copyData)
-    : m_pApi(pApi)
-    , m_Api()
+    : m_pApi(initRegistryTypeReader_Api())
     , m_hImpl(NULL)
     {
-        m_hImpl = m_pApi->createEntry(buffer, bufferLen, copyData);
-    }
-
-
-inline RegistryTypeReader::RegistryTypeReader(const RegistryTypeReaderLoader& rLoader,
-                                                const sal_uInt8* buffer,
-                                              sal_uInt32 bufferLen,
-                                              sal_Bool copyData)
-    : m_pApi(NULL)
-    , m_Api(rLoader)
-    , m_hImpl(NULL)
-    {
-        m_pApi = m_Api.getApi();
         m_hImpl = m_pApi->createEntry(buffer, bufferLen, copyData);
     }
 
 
 inline RegistryTypeReader::RegistryTypeReader(const RegistryTypeReader& toCopy)
     : m_pApi(toCopy.m_pApi)
-    , m_Api(toCopy.m_Api)
     , m_hImpl(toCopy.m_hImpl)
     { m_pApi->acquire(m_hImpl); }
 
