@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.219 $
+#   $Revision: 1.220 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-24 13:31:15 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:39:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1203,6 +1203,10 @@ RSCDEFS+= $(ENVRSCDEFS)
 # RSCLINKFLAGS+= $(ENVRSCLINKFLAGS)
 RCFLAGS+= $(ENVRCFLAGS)
 RCLINKFLAGS+= $(ENVRCLINKFLAGS)
+
+LINKFLAGSRUNPATH_URELIB*=
+LINKFLAGSRUNPATH_UREBIN*=
+LINKFLAGSRUNPATH_OOO*=
 
 # make sure both linker variables are set
 LINKC*=$(LINK)
