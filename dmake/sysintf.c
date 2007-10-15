@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.c,v 1.11 2007-09-20 14:34:06 vg Exp $
+/* RCS  $Id: sysintf.c,v 1.12 2007-10-15 15:41:51 ihi Exp $
 --
 -- SYNOPSIS
 --      System independent interface
@@ -261,7 +261,7 @@ Do_cmnd(cmd, group, do_it, target, cmnd_attr, last)/*
   If Wait_for_completion is TRUE add the A_WFC attribute to the new
   process.
 */
-char   *cmd;
+char  **cmd; /* Simulate a reference to *cmd. */
 int     group;  /* if set cmd contains the filename of a (group-)shell
          * script. */
 int     do_it;  /* Only execute cmd if not set to null. */
@@ -271,13 +271,15 @@ int     last;   /* Last recipe line in target. */
 {
    int  i;
 
+   DB_ENTER( "Do_cmnd" );
+
    if( !do_it ) {
       if( last && !Doing_bang ) {
      /* Don't execute, just update the target when using '-t'
       * switch. */
          Update_time_stamp( target );
       }
-      return(0);
+      DB_RETURN( 0 );
    }
 
    /* Stop making the rest of the recipies for this target if an error occured
@@ -286,7 +288,7 @@ int     last;   /* Last recipe line in target. */
       if ( last ) {
      Update_time_stamp( target );
       }
-      return(0);
+      DB_RETURN( 0 );
    }
 
    if( Max_proc == 1 ) Wait_for_completion = TRUE;
@@ -294,8 +296,15 @@ int     last;   /* Last recipe line in target. */
    /* Tell runargv() to wait if needed. */
    if( Wait_for_completion ) cmnd_attr |= A_WFC;
 
+   /* remove leading whitespace - This should never trigger! */
+   if( iswhite(**cmd) ) {
+      char *p;
+      if( (p = DmStrSpn(*cmd," \t") ) != *cmd )
+     strcpy(*cmd,p);
+   }
+
    /* set shell if shell metas are found */
-   if( (cmnd_attr & A_SHELL) || group || (*DmStrPbrk(cmd, Shell_metas)!='\0') )
+   if( (cmnd_attr & A_SHELL) || group || (*DmStrPbrk(*cmd, Shell_metas)!='\0') )
       cmnd_attr |= A_SHELL; /* If group is TRUE this doesn't hurt. */
 
    /* runargv() returns either 0 or 1, 0 ==> command executed, and
@@ -303,7 +312,7 @@ int     last;   /* Last recipe line in target. */
     * running. */
    i = runargv(target, group, last, cmnd_attr, cmd);
 
-   return(i);
+   DB_RETURN( i );
 }
 
 
@@ -317,7 +326,7 @@ Pack_argv( group, shell, cmd )/*
 */
 int    group;
 int    shell;
-char  *cmd;
+char **cmd; /* Simulate a reference to *cmd. */
 {
    static char **av = NIL(char *);
    static int   avs = 0;
@@ -329,36 +338,45 @@ char  *cmd;
    }
    av[0] = NIL(char);
 
-   if (*cmd) {
-      if( shell||group ){
+   if (**cmd) {
+      if( shell||group ) {
      char* sh = group ? GShell : Shell;
 
      if( sh != NIL(char) ) {
         av[i++] = sh;
         if( (av[i] = (group?GShell_flags:Shell_flags)) != NIL(char) ) i++;
 
-        av[i++] = cmd;
+        if( shell && Shell_quote && *Shell_quote ) {
+           /* Enclose the shell command with SHELLCMDQUOTE. */
+           char *s;
+           s = DmStrJoin(Shell_quote, *cmd, -1, FALSE);
+           FREE(*cmd);
+           *cmd = DmStrJoin(s, Shell_quote, -1, TRUE);
+        }
+        av[i++] = *cmd;
         av[i]   = NIL(char);
      }
      else
         Fatal("%sSHELL macro not defined", group?"GROUP":"");
       }
       else {
+     char *tcmd = *cmd;
+
      do {
         /* Fill *cmd into av[]. Whitespace is converted into '\0' to
          * terminate each av[] member. */
-        while( iswhite(*cmd) ) ++cmd;
-        if( *cmd ) av[i++] = cmd;
+        while( iswhite(*tcmd) ) ++tcmd;
+        if( *tcmd ) av[i++] = tcmd;
 
-        while( *cmd != '\0' && !iswhite(*cmd) ) ++cmd;
-        if( *cmd ) *cmd++ = '\0';
+        while( *tcmd != '\0' && !iswhite(*tcmd) ) ++tcmd;
+        if( *tcmd ) *tcmd++ = '\0';
 
         /* dynamically increase av size. */
         if( i == avs ) {
            avs += MINARGV;
            av = (char **) realloc( av, avs*sizeof(char *) );
         }
-     } while( *cmd );
+     } while( *tcmd );
 
      av[i] = NIL(char);
       }
@@ -554,7 +572,18 @@ PUBLIC char *
 Get_current_dir()
 {
    static char buf[PATH_MAX+2];
-   return(getcwd(buf, sizeof(buf)));
+
+   if( !getcwd(buf, sizeof(buf)) )
+      Fatal("Internal Error: Error when calling getcwd()!");
+
+#ifdef __EMX__
+   char *slash;
+   slash = buf;
+   while( (slash=strchr(slash,'/')) )
+      *slash = '\\';
+#endif
+
+   return buf;
 }
 
 
@@ -596,20 +625,11 @@ char **path;
 #if defined(HAVE_MKSTEMP)
    mode_t       mask;
 
-#ifdef __EMX__
-   // YD use \ since temporary names with / can be interpreted as options
-   // e.g. 4os2 'del /y e:\tmp/mkW4mmkS._.zip' will fail
-   *path = DmStrJoin( tmpdir, "\\", -1, FALSE);
-#else
-   *path = DmStrJoin( tmpdir, "/", -1, FALSE);
-#endif
+   *path = DmStrJoin( tmpdir, DirSepStr, -1, FALSE);
    *path = DmStrJoin( *path, "mkXXXXXX", -1, TRUE );
 
    mask = umask(0066);
    fd = mkstemp( *path );
-#ifdef __EMX__
-   _setmode( fd, O_TEXT);
-#endif
    umask(mask);
 
 #elif defined(HAVE_TEMPNAM)
@@ -672,9 +692,6 @@ char *mode;
       Def_macro( "TMPFILE", *path, M_MULTI|M_EXPANDED );
       /* associate stream with file descriptor */
       fp = fdopen(fd, mode);
-#ifdef __EMX__
-      _setmode( fd, O_TEXT);
-#endif
    }
    else
       fp = NIL(FILE);
@@ -903,23 +920,26 @@ CELLPTR cp;
    HASHPTR hp;
    LINKPTR dp;
    CELLPTR tcp;
-   time_t  phonytime = (time_t)0L;
+   time_t  mintime;
    int     phony = ((cp->ce_attr&A_PHONY) != 0);
-
-   /* Use the current time as phony timestamp for phony targets. */
-   /* This was changed with issue 34746.                         */
-   phonytime = Do_time();
 
    for(dp=CeMeToo(cp); dp; dp=dp->cl_next) {
       tcp=dp->cl_prq;
+      /* When calling Make() on this target ce_time was set to the minimal
+       * required time the target should have after building, i.e. the time
+       * stamp of the newest prerequisite or 1L if there is no
+       * prerequisite. */
+      mintime = tcp->ce_time;
 
       if( tcp->ce_attr & A_LIBRARY )
      Void_lib_cache( tcp->ce_fname, NIL(char) );
       else if( !Touch && (tcp->ce_attr & A_LIBRARYM) )
      Void_lib_cache( tcp->ce_lib, tcp->ce_fname );
 
+      /* phony targets are treated as if they were recently made
+       * and get the current time assigned. */
       if( phony ) {
-     tcp->ce_time = phonytime;
+     tcp->ce_time = Do_time();
       }
       else if (Trace) {
      tcp->ce_time = Do_time();
@@ -927,8 +947,37 @@ CELLPTR cp;
       else {
      Stat_target(tcp, -1, TRUE);
 
-     if( tcp->ce_time == (time_t) 0L )
-        tcp->ce_time = Do_time();
+     if( tcp->ce_time == (time_t) 0L ) {
+        /* If the target does not exist after building set its
+         * time stamp depending if it has recipes or not. Virtual
+         * Targets (without recipes) get the newest time stamp of
+         * its prerequisites assigned. (This was conveniently stored
+         * in mintime.)
+         * Targets with recipes are treated as if they were recently
+         * made and get the current time assigned. */
+        if( cp->ce_recipe == NIL(STRING) && mintime > 1 ) {
+           tcp->ce_time = mintime;
+        }
+        else {
+           tcp->ce_time = Do_time();
+        }
+     }
+     else {
+        /* The target exist. If the target does not have recipe
+         * lines use the newest time stamp of either the target or
+         * the newest time stamp of its prerequisites and issue
+         * a warning. */
+        if( cp->ce_recipe == NIL(STRING) ) {
+           time_t  newtime = ( mintime > 1 ? mintime : Do_time() );
+
+           if( !(tcp->ce_attr & A_SILENT) )
+          Warning( "Found file corresponding to virtual target [%s].",
+               tcp->CE_NAME );
+
+           if( newtime > tcp->ce_time )
+          tcp->ce_time = mintime;
+        }
+     }
       }
 
       if( Trace ) {
@@ -942,6 +991,16 @@ CELLPTR cp;
       if( Measure & M_TARGET )
      Do_profile_output( "e", M_TARGET, tcp );
 
+      /* At this point cp->ce_time is updated to either the actual file
+       * time or the current time. */
+      DB_PRINT( "make", ("time stamp: %ld, required mintime: %ld",
+             cp->ce_time, mintime) );
+      if( tcp->ce_time < mintime && !(tcp->ce_attr & A_SILENT) ) {
+     Warning( "Target [%s] was made but the time stamp has not been updated.",
+          tcp->CE_NAME );
+      }
+
+      /* The target was made, remove the temp files now. */
       Unlink_temp_files( tcp );
       tcp->ce_flag |= F_MADE;
       tcp->ce_attr |= A_UPDATED;
