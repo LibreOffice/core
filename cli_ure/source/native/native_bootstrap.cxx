@@ -4,9 +4,9 @@
  *
  *  $RCSfile: native_bootstrap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:27:24 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 #include "native_share.h"
 
 #include "rtl/bootstrap.hxx"
+#include "com/sun/star/uno/XComponentContext.hpp"
 #include "cppuhelper/bootstrap.hxx"
 
 #include <delayimp.h>
