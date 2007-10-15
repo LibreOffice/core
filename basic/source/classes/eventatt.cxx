@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:17:52 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:03:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@
 
 //==================================================================================================
 
-#include <xmlscript/dynload.hxx>
+#include <xmlscript/xmldlg_imexp.hxx>
 #include <sbunoobj.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmeth.hxx>
@@ -790,10 +790,6 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     (void)pBasic;
     (void)bWrite;
 
-    static ::xmlscript::XML_script * s_xmlscript = 0;
-    if (0 == s_xmlscript)
-        s_xmlscript = ::xmlscript::getXmlScript();
-
     Reference< XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory() );
     if( !xMSF.is() )
         return;
@@ -841,7 +837,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 
     // Import the DialogModel
     Reference< XInputStream > xInput( xISP->createInputStream() );
-    s_xmlscript->importDialogModel( xInput, xDialogModel, xContext );
+    xmlscript::importDialogModel( xInput, xDialogModel, xContext );
 
     // Find dialog library for dialog, direct access is not possible here
     StarBASIC* pStartedBasic = pINST->GetBasic();
