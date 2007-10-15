@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KDriver.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:52:25 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:30:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,8 @@ namespace
 }
 
 // --------------------------------------------------------------------------------
+extern "C" { void SAL_CALL thisModule() {} }
+
 bool KabImplModule::impl_loadModule()
 {
     if ( m_bAttemptedLoadModule )
@@ -146,7 +148,7 @@ bool KabImplModule::impl_loadModule()
         "KabImplModule::impl_loadModule: inconsistence: inconsistency (never attempted load before, but some values already set)!");
 
     const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii( SAL_MODULENAME( "kabdrv1" ) );
-    m_hConnectorModule = osl_loadModule( sModuleName.pData, SAL_LOADMODULE_NOW );   // LAZY! #i61335#
+    m_hConnectorModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_NOW );   // LAZY! #i61335#
     OSL_ENSURE( m_hConnectorModule, "KabImplModule::impl_loadModule: could not load the implementation library!" );
     if ( !m_hConnectorModule )
         return false;
