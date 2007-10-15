@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:40:19 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 17:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1989,7 +1989,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
                         !rSh.HasReadonlySel() )
                     {
-                        if (rSh.IsFirstOfNumRule()) // #i23725#
+                        // --> OD 2007-10-02 #b660435#
+//                        if (rSh.IsFirstOfNumRule()) // #i23725#
+                        if ( rSh.IsFirstOfNumRule() &&
+                             numfunc::ChangeIndentOnTabAtFirstPosOfFirstListItem() )
+                        // <--
                             eKeyState = KS_NumIndentInc;
                         else
                             eKeyState = KS_NumDown;
@@ -2034,7 +2038,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
                         !rSh.HasReadonlySel() )
                     {
-                        if (rSh.IsFirstOfNumRule()) // #i23725#
+                        // --> OD 2007-10-02 #b660435#
+//                        if (rSh.IsFirstOfNumRule()) // #i23725#
+                        if ( rSh.IsFirstOfNumRule() &&
+                             numfunc::ChangeIndentOnTabAtFirstPosOfFirstListItem() )
+                        // <--
                             eKeyState = KS_NumIndentDec;
                         else
                             eKeyState = KS_NumUp;
