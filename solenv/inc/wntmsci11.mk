@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci11.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 14:03:25 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:42:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -403,7 +403,6 @@ MPRLIB=mpr.lib
 WS2_32LIB=ws2_32.lib
 KERNEL32LIB=kernel32.lib
 USER32LIB=user32.lib
-MSVCRTLIB=msvcrt.lib
 COMDLG32LIB=comdlg32.lib
 COMCTL32LIB=comctl32.lib
 CRYPT32LIB=crypt32.lib
