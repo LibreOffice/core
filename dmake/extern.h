@@ -1,6 +1,6 @@
 /* $RCSfile: extern.h,v $
--- $Revision: 1.11 $
--- last change: $Author: obo $ $Date: 2007-06-12 06:05:25 $
+-- $Revision: 1.12 $
+-- last change: $Author: ihi $ $Date: 2007-10-15 15:39:00 $
 --
 -- SYNOPSIS
 --      External declarations for dmake functions.
@@ -105,8 +105,15 @@
 char *strlwr(char *p);
 #endif
 
+/* from function.c */
+char *exec_normpath(char *args);
+
+/* from make.c */
+void Unmake(CELLPTR cp);
+
 /* from path.c */
 void Clean_path(char *path);
+char *normalize_path(char *path);
 
 /* from sysintf.c */
 /* cygdospath()/DO_WINPATH() are only needed for the .WINPATH attribute
@@ -122,7 +129,7 @@ char *cygdospath(char *src, int winpath);
 /* Define some usefull macros. This is done here and not in config.h
  * to keep this changes usefull even when not using the autotools based
  * build, i.e. using config.h files that are local to the architecture. */
-#if defined(_WIN32) || defined(__CYGWIN__) || defined(MSDOS) || defined(OS2)
+#if defined(_WIN32) || defined(__CYGWIN__) || defined(MSDOS) || defined(OS2) || defined(__EMX__)
 #  define HAVE_DRIVE_LETTERS 1
 #endif
 
