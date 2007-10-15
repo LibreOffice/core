@@ -2,6 +2,43 @@ News file for the dmake version that is hosted on the OpenOffice.org
 cvs. #i<number># denote issues tracked by the OpenOffice.org issue tracking
 system, see <http://qa.openoffice.org/issue_handling/project_issues.html>.
 
+Version 4.11
+============
+
+Yuri Dario (ydario@openoffice.org)
+#i81855, CWS os2port01# Port dmake to OS/2.
+
+Volker Quetschke (vq@openoffice.org)
+#i81252# Add a new control macro SHELLCMDQUOTE that can be used to add
+additional characters before and after the command string if the recipe is
+executed using a shell. This macro is used to avoid problems with quoting
+when using cmd.exe or command.com.
+
+Volker Quetschke (vq@openoffice.org)
+#i81296, i64572# Improve dependency handling of prerequisites.
+
+Volker Quetschke (vq@openoffice.org)
+#i80687, i66751# Allow the use of .PHONY for %-targets.
+
+Volker Quetschke (vq@openoffice.org)
+#i80010, i80009# Fix handling of quoted filenames for :1 :b :d :e :f
+and :i macro expansions.
+
+Volker Quetschke (vq@openoffice.org)
+#i78776# Add a new function macro $(normpath[,para] data) and a new macro
+extension to normalise the given data or macro content. The normalization
+is done element-wise (whitespace separated) on the given data. Quotes can
+be used to normalize filenames that contain whitespace characters.
+On cygwin the result honors the setting of .WINPATH to determine the output
+format. If the optional parameter para is given for the function macro its
+expanded value is used to override the .WINPATH setting for the output.
+
+Version 4.10 (skipped)
+======================
+
+This number was skipped to avoid confusion with Version 4.1, patch level 0
+which identified itself as "Version 4.10, PL 0".
+
 Version 4.9
 ===========
 
