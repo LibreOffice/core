@@ -1,4 +1,4 @@
-/* RCS  $Id: spawn.c,v 1.2 2006-09-25 09:42:07 vg Exp $
+/* RCS  $Id: spawn.c,v 1.3 2007-10-15 15:43:28 ihi Exp $
 --
 -- SYNOPSIS
 --      Spawnvpe code to emulate spawnvpe call common to DOS compilers.
@@ -93,7 +93,7 @@ static char   dot_com[] = ".COM",
 #define FP_SEG(fp)  ((unsigned)((unsigned long)(fp) >> 16))
 #endif
 
-
+iz81252 changed the parameters for Pack_argv() but this file did not get fixed!
 PUBLIC int
 spawnvpe(mode, program, av, ep)/*
 =================================
