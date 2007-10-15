@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 14:48:15 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:28:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,9 +106,6 @@
 sal_helper::ORealDynamicLoader* sal_helper::ODynamicLoader<RegistryTypeReader_Api>::m_pLoader = NULL;
 #endif
 
-
-extern "C" RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api();
-extern "C" RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api();
 namespace {
 
 void printString(rtl::OUString const & s) {
@@ -1394,11 +1391,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
                               sal_uInt8* pSrcBuffer,
                               sal_Bool bReport)
 {
-    RegistryTypeReader_Api* pReaderApi;
-
-    pReaderApi = initRegistryTypeReader_Api();
-
-    RegistryTypeReader reader(pReaderApi, pSrcBuffer, srcValueSize, sal_False);
+    RegistryTypeReader reader(pSrcBuffer, srcValueSize, sal_False);
 
     if (reader.getTypeClass() == RT_TYPE_INVALID)
     {
@@ -1425,7 +1418,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
             if (!rValue.readAt(VALUE_HEADEROFFSET, pBuffer, valueSize, rwBytes) &&
                 (rwBytes == valueSize))
             {
-                RegistryTypeReader reader2(pReaderApi, pBuffer, valueSize, sal_False);
+                RegistryTypeReader reader2(pBuffer, valueSize, sal_False);
 
                 if ((reader.getTypeClass() != reader2.getTypeClass())
                     || reader2.getTypeClass() == RT_TYPE_INVALID)
@@ -1527,17 +1520,13 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
                                      RegistryTypeReader& reader2)
 {
     sal_uInt16                  index = 0;
-    RegistryTypeWriter_Api*     pWriterApi;
 
     StringSet nameSet;
     sal_uInt32 count = checkTypeReaders(reader, reader2, nameSet);
 
     if (count != reader.getFieldCount())
     {
-        pWriterApi = initRegistryTypeWriter_Api();
-
-        RegistryTypeWriter writer(pWriterApi,
-                                  reader.getTypeClass(),
+        RegistryTypeWriter writer(reader.getTypeClass(),
                                   reader.getTypeName(),
                                   reader.getSuperTypeName(),
                                   (sal_uInt16)count,
