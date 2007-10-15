@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:18:16 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 17:32:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -905,6 +905,18 @@ bool SwNumberTreeNode::IsFirst() const
 
                 pNode = pNode->GetParent();
             }
+
+            // --> OD 2007-10-02 #b6600435#
+            // If node isn't the first child, it is the second child and the
+            // first child is a phanton. In this case check, if the first phantom
+            // child have only phanton childs
+            if ( bResult &&
+                 this != *(GetParent()->mChildren.begin()) &&
+                 !(*(GetParent()->mChildren.begin()))->HasOnlyPhantoms() )
+            {
+                bResult = false;
+            }
+            // <--
         }
         else
             bResult = false;
