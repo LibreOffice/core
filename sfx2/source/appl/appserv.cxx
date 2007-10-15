@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-21 09:28:17 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:17:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -779,6 +779,8 @@ typedef void (SAL_CALL *basicide_macro_organizer)( INT16 );
 #define DOSTRING( x )                       #x
 #define STRING( x )                         DOSTRING( x )
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
 ::rtl::OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc = ::rtl::OUString() )
 {
     // get basctl dllname
@@ -787,7 +789,8 @@ typedef void (SAL_CALL *basicide_macro_organizer)( INT16 );
     ::rtl::OUString aLibName( sLibName );
 
     // load module
-    oslModule handleMod = osl_loadModule( aLibName.pData, 0 );
+    oslModule handleMod = osl_loadModuleRelative(
+        &thisModule, aLibName.pData, 0 );
 
     // get symbol
     ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_choose_macro" ) );
@@ -808,7 +811,8 @@ void MacroOrganizer( INT16 nTabId )
     ::rtl::OUString aLibName( sLibName );
 
     // load module
-    oslModule handleMod = osl_loadModule( aLibName.pData, 0 );
+    oslModule handleMod = osl_loadModuleRelative(
+        &thisModule, aLibName.pData, 0 );
 
     // get symbol
     ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_macro_organizer" ) );
