@@ -1,4 +1,4 @@
-/* RCS  $Id: path.c,v 1.4 2007-07-03 11:29:59 rt Exp $
+/* RCS  $Id: path.c,v 1.5 2007-10-15 15:40:58 ihi Exp $
 --
 -- SYNOPSIS
 --      Pathname manipulation code
@@ -25,6 +25,10 @@
 */
 
 #include "extern.h"
+#if __CYGWIN__
+#include <sys/cygwin.h>
+#include <errno.h>
+#endif
 
 
 /*
@@ -175,15 +179,17 @@ char *path;
 
 #ifdef HAVE_DRIVE_LETTERS
 
-   /* Change all occurences from DirBrkStr to *DirSepStr. */
-#if __CYGWIN__
-   for( q = tpath; (q = strchr(q, '\\')) != NIL(char); )
-      *q = *DirSepStr;
-#else
-   for( q = tpath; (q = strchr(q, '/')) != NIL(char); )
-      *q = *DirSepStr;
-#endif
-   /* The following dosn't trigger often because _normalize_path() uses
+   /* Change all occurences from DirBrkStr to *DirSepStr. This assumes
+    * that when HAVE_DRIVE_LETTERS is set the directory separator is
+    * either '\' or '/'. */
+   if (*DirSepStr == '/')
+      for( q = tpath; (q = strchr(q, '\\')) != NIL(char); )
+         *q = *DirSepStr;
+   else
+      for( q = tpath; (q = strchr(q, '/')) != NIL(char); )
+         *q = *DirSepStr;
+
+   /* The following dosn't trigger often because normalize_path() uses
     * a cygwin function and bypasses Clean_path() if it encounters a path
     * with a drive letter. */
    if( *tpath && tpath[1] == ':' && isalpha(*tpath) ) {
@@ -257,4 +263,56 @@ char *path;
    DB_PRINT( "path", ("Cleaned path: %s", path ));
 
    DB_VOID_RETURN;
+}
+
+
+char *
+normalize_path(path)/*
+=======================
+   Normalize the given path unless it contains a $ indicating a dynamic
+   prerequisite.
+   Special case: For absolute DOSish paths under cygwin a cygwin API
+   function is used to normalize the path optherwise Clean_path() is used.
+
+   Note, the returned path is built in a static buffer, if it is to be used
+   later a copy should be created. */
+
+char *path;
+{
+   static char *cpath = NIL(char);
+
+   DB_ENTER( "normalize_path" );
+
+   if ( !cpath && ( (cpath = MALLOC( PATH_MAX, char)) == NIL(char) ) )
+      No_ram();
+
+   /* If there is a $ in the path this can either mean a '$' character in
+    * a target definition or a dynamic macro expression in a prerequisite
+    * list. As dynamic macro expression must not be normalized and is
+    * indistinguishable from a literal $ characters at this point we skip
+    * the normalization if a $ is found.  */
+   if( strchr(path, '$') ) {
+      DB_RETURN( path );
+   }
+
+#if __CYGWIN__
+   /* Use cygwin function to convert a DOS path to a POSIX path. */
+   if( *path && path[1] == ':' && isalpha(*path) ) {
+      int err = cygwin_conv_to_posix_path(path, cpath);
+      if (err)
+     Fatal( "error converting \"%s\" - %s\n",
+        path, strerror (errno));
+      if( path[2] != '/' && path[2] != '\\' )
+     Warning("Malformed DOS path %s converted to %s", path, cpath);
+   }
+   else
+#endif
+   {
+      strcpy( cpath, path );
+      Clean_path( cpath );
+   }
+
+   DB_PRINT( "path", ("normalized: %s", cpath ));
+
+   DB_RETURN( cpath );
 }
