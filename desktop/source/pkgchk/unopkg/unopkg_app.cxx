@@ -5,9 +5,9 @@
  *
  *  $RCSfile: unopkg_app.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 11:52:20 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:00:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,9 +249,7 @@ SAL_IMPLEMENT_MAIN()
             return 0;
         }
         else {
-            oslProcessError rc = osl_getCommandArg( 0, &subCommand.pData );
-            if (rc != osl_Process_E_None )
-                OSL_ASSERT(0);
+            osl_getCommandArg( 0, &subCommand.pData );
             ++nPos;
             subCommand = subCommand.trim();
             subcmd_add = subCommand.equalsAsciiL(
@@ -273,9 +271,7 @@ SAL_IMPLEMENT_MAIN()
                      !readArgument( &deploymentContext, info_context, &nPos ) &&
                      !isBootstrapVariable(&nPos))
             {
-                oslProcessError rc = osl_getCommandArg( nPos, &cmdArg.pData );
-                if (rc != osl_Process_E_None )
-                    OSL_ASSERT(0);
+                osl_getCommandArg( nPos, &cmdArg.pData );
                 ++nPos;
                 cmdArg = cmdArg.trim();
                 if (cmdArg.getLength() > 0)
