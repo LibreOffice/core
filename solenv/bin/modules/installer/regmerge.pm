@@ -4,9 +4,9 @@
 #
 #   $RCSfile: regmerge.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 15:26:18 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:38:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ sub get_all_source_pathes
 
 sub merge_files
 {
-    my ($regmergefile, $databasefile, $registerfiles, $databasedir) = @_;
+    my ($regmergefile, $databasefile, $registerfiles, $databasedir, $allvariableshashref) = @_;
 
     my $databasesource = $databasefile->{'sourcepath'};
     my $databasename = $databasefile->{'Name'};
@@ -224,11 +224,25 @@ sub merge_files
 
     # One call for every merge particle. This is only possible, if there are only a few merge particles.
 
+    my $prefix = $allvariableshashref->{'NATIVESERVICESURLPREFIX'};
+        # TODO: NATIVESERVICESURLPREFIX or JAVASERVICESURLPREFIX
+
     my $error_occured = 0;
 
     for ( my $i = 0; $i <= $#{$registerfiles}; $i++ )
     {
-        my $systemcall = $regmergefile . " -v " . $databasedest . " " . ${$registerfiles}[$i] . " 2\>\&1 |";
+        my $registerfile = $databasedir . $installer::globals::separator . $i . ".tmp";
+        open (IN, '<', $registerfiles->[$i]) or $error_occured = 1;
+        open (OUT, '>', $registerfile) or $error_occured = 1;
+        while (<IN>)
+        {
+            s/^ComponentName=/ComponentName=$prefix/;
+            print OUT $_ or $error_occured = 1;
+        }
+        close IN or $error_occured = 1;
+        close OUT or $error_occured = 1;
+
+        my $systemcall = $regmergefile . " -v " . $databasedest . " " . $registerfile . " 2\>\&1 |";
 
         my @regmergeoutput = ();
 
@@ -266,7 +280,7 @@ sub merge_files
 
 sub merge_registration_files
 {
-    my ($filesarrayref, $includepatharrayref, $languagestringref) = @_;
+    my ($filesarrayref, $includepatharrayref, $languagestringref, $allvariableshashref) = @_;
 
     installer::logger::include_header_into_logfile("Creating starregistry databases:");
 
@@ -303,7 +317,7 @@ sub merge_registration_files
             {
                 my $regmergeparticles = collect_all_regmerge_particles($databaseregisterfiles);
                 $regmergeparticles = get_all_source_pathes($regmergeparticles, $includepatharrayref);
-                my $oneregmergeerror = merge_files($regmergefile, $databasefile, $regmergeparticles, $databasedir);
+                my $oneregmergeerror = merge_files($regmergefile, $databasefile, $regmergeparticles, $databasedir, $allvariableshashref);
                 if ($oneregmergeerror) { $regmergeerror = 1; }
             }
         }
