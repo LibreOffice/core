@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-15 09:17:45 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:24:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,6 @@
 #ifndef INCLUDED_UNODEVTOOLS_TYPEMANAGER_HXX
 #define INCLUDED_UNODEVTOOLS_TYPEMANAGER_HXX
 
-#ifndef _REGISTRY_REGISTRY_HXX_
-#include <registry/registry.hxx>
-#endif
 #ifndef INCLUDED_CODEMAKER_TYPEMANAGER_HXX
 #include <codemaker/typemanager.hxx>
 #endif
@@ -48,6 +45,8 @@
 
 #include <hash_map>
 #include <vector>
+
+class RegistryKey;
 
 namespace typereg { class Reader; }
 
