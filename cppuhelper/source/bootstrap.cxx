@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:50:59 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 11:52:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,8 @@
 #include "com/sun/star/io/IOException.hpp"
 #include "com/sun/star/bridge/UnoUrlResolver.hpp"
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
+
+#include "macro_expander.hxx"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define ARLEN(x) sizeof (x) / sizeof *(x)
@@ -623,6 +625,16 @@ Reference< XComponentContext > SAL_CALL bootstrap()
     }
 
     return xRemoteContext;
+}
+
+OUString bootstrap_expandUri(OUString const & uri) {
+    static char const PREFIX[] = "vnd.sun.star.expand:";
+    return uri.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(PREFIX))
+        ? cppuhelper::detail::expandMacros(
+            rtl::Uri::decode(
+                uri.copy(RTL_CONSTASCII_LENGTH(PREFIX)),
+                rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8))
+        : uri;
 }
 
 } // namespace cppu
