@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 15:24:49 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:51:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,13 @@ OBJFILES=   \
             $(OBJ)$/logfile.obj     \
             $(OBJ)$/tres.obj        \
             $(OBJ)$/math.obj
-            
+
+.IF "$(OS)" == "WNT"
+#Link against delayload.obj from local output tree
+DELAYLOADOBJ:=$(OBJ)$/delayload.obj
+APP1DEPN=$(DELAYLOADOBJ)
+.ENDIF
+
 APP1TARGET=gen_makefile
 APP1OBJS=$(SLO)$/gen_makefile.obj
 APP1LIBSALCPPRT=
