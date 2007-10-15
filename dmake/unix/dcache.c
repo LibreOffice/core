@@ -1,6 +1,6 @@
 /* $RCSfile: dcache.c,v $
--- $Revision: 1.8 $
--- last change: $Author: vg $ $Date: 2007-09-20 14:34:51 $
+-- $Revision: 1.9 $
+-- last change: $Author: ihi $ $Date: 2007-10-15 15:52:47 $
 --
 -- SYNOPSIS
 --      Directory cache management routines.
@@ -83,8 +83,6 @@ static DirEntryPtr dtab[HASH_TABLE_SIZE];
  * Optionally, if force is TRUE, and we did NOT read the directory to provide
  * the result then stat the file anyway and update the internal cache.
  */
-
-#ifndef __EMX__
 
 PUBLIC time_t
 CacheStat(path, force)
@@ -223,5 +221,3 @@ int          force;
    FREE(fpath);
    return(!ep ? (time_t)0L : ((STOBOOL(Augmake) && ep->isdir)?0L:ep->mtime));
 }
-
-#endif // __EMX__
