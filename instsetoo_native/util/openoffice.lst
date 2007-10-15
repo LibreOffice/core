@@ -182,11 +182,14 @@ URE
             DOWNLOADBITMAP urebitmap.bmp
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
+            SERVICESPROJEKT 1
+            NATIVESERVICESURLPREFIX vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/
+            JAVASERVICESURLPREFIX vnd.sun.star.expand:$URE_INTERNAL_JAVA_DIR/
         }
         active 1
         compression 5
         script ure
-        include {localpath}/misc/ure,{solarenvpath}/{os}/gcc3.4.1_glibc2.2.4_bits,{solarpath}/bin.{minor}/ure,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
+        include {solarenvpath}/{os}/gcc3.4.1_glibc2.2.4_bits,{solarpath}/bin.{minor}/ure,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarenvpath}/{os}/MS
         fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
         mailinfo ms-eham02-01,packager,packager
     }
@@ -402,6 +405,57 @@ BrOffice_SDK
         compression 5
         script sdkoo
         include {solarpath}/bin.{minor}/sdkoo,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarcommonpath}/bin.{minor},{solarenvpath}/{os}/MS
+        fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
+        mailinfo ms-eham02-01,packager,packager
+    }
+}
+
+OpenOffice_woURE
+{
+    Settings
+    {
+        variables
+        {
+            PRODUCTNAME OpenOffice.org
+            PRODUCTVERSION 2.3
+            PRODUCTEXTENSION
+            LONG_PRODUCTEXTENSION
+            USERDIRPRODUCTVERSION 2
+            ABOUTBOXPRODUCTVERSION 2.3.0
+            REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
+            UPDATEURL http://update23.services.openoffice.org/ProductUpdateService/check.Update
+            ADD_INCLUDE_FILES cliureversion.mk
+            EVAL
+            FILEFORMATNAME OpenOffice.org
+            FILEFORMATVERSION 1.0
+            WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
+            PACKAGEVERSION 2.3.0
+            PACKAGEREVISION {milestone}
+            LICENSENAME LGPL
+            SERVICESPROJEKT 1
+            GLOBALFILEGID gid_File_Lib_Vcl
+            GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
+            OPENSOURCE 1
+            OOODOWNLOADNAME 1
+            SUNDIR 0
+            XPDINSTALLER 0
+            BETAUPGRADECODE {8BC2B4E7-74CA-4A3A-B431-585A1ABEFA66}
+            CHANGETARGETDIR 1
+            USE_FILEVERSION 1
+            LIBRARYVERSION 8.3.0
+            PATCHCODEFILE ooo_patchcodes.txt
+            DOWNLOADBANNER  ooobanner.bmp
+            DOWNLOADBITMAP  ooobitmap.bmp
+            DOWNLOADSETUPICO    ooosetup.ico
+            NATIVESERVICESURLPREFIX vnd.sun.star.expand:$OOO_BASE_DIR/program/
+            JAVASERVICESURLPREFIX vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/
+        }
+        active          1
+        compression     5
+        script          ooo_wo_ure
+        downloadname    OOo_woURE_{productversion}_{os}_install_{languages}
+        langpackdownloadname    OOo_woURE_{productversion}_languagepack_{os}_install_{languages}
+        include         .,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
         fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
         mailinfo ms-eham02-01,packager,packager
     }
