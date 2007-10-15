@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_misc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 13:50:55 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:01:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,12 +48,11 @@
 #include "osl/process.h"
 #include "osl/file.h"
 #include "osl/thread.hxx"
-#include "cppuhelper/servicefactory.hxx"
 #include "ucbhelper/contentbroker.hxx"
 #include "ucbhelper/configurationkeys.hxx"
 #include "unotools/processfactory.hxx"
 #include "unotools/configmgr.hxx"
-#include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "cppuhelper/bootstrap.hxx"
 #include <stdio.h>
 
