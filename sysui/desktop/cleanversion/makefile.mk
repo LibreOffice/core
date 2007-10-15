@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 10:55:40 $
+#   last change: $Author: ihi $ $Date: 2007-10-15 14:28:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,7 @@ ALLTAR: $(MISC)$/cleanup.flag
 
 # version changed - bin previous trees
 $(MISC)$/cleanup.flag : ..$/productversion.mk
-    $(TOUCH) $(MISC)$/dummy
-    rm -rf $(MISC)$/* && $(TOUCH) $@
+    rm -rf `ls $(MISC) | grep -v -x $(MISC)$/logs` && $(TOUCH) $@
     
 .ENDIF			# "$(MISC)"!=""
     
