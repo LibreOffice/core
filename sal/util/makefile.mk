@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 15:25:03 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:52:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,9 @@ CXXFLAGS+= $(LFS_CFLAGS)
 # hand coded assembler
 CHECKFORPIC=
 
+#Link against delayload.obj from local output tree
+DELAYLOADOBJ=$(OBJ)$/delayload.obj
+
 .IF "$(header)" == ""
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
@@ -101,6 +104,7 @@ SHL1TARGET= uno_$(TARGET)
 SHL1IMPLIB= i$(TARGET)
 
 SHL1VERSIONMAP=	$(TARGET).map
+SHL1RPATH=URELIB
 
 .IF "$(GUI)"=="WNT"
 UWINAPILIB=     $(LB)$/uwinapi.lib
@@ -188,7 +192,8 @@ SHL1OBJS= \
 .ENDIF # lincinc
 
 .IF "$(GUI)"=="WNT"
-SHL1DEPN=	$(UWINAPILIB)
+SHL1DEPN=   $(UWINAPILIB) $(DELAYLOADOBJ)
+SHL1OBJS += $(DELAYLOADOBJ)
 .ELSE
 SHL1DEPN=
 .ENDIF
