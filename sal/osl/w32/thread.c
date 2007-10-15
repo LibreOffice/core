@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:13:03 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:49:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,11 +59,6 @@ typedef struct _osl_TThreadImpl
 
 static unsigned __stdcall oslWorkerWrapperFunction(void* pData);
 static oslThread oslCreateThread(oslWorkerFunction pWorker, void* pThreadData, sal_uInt32 nFlags);
-static HRESULT WINAPI osl_CoInitializeEx(LPVOID pvReserved, DWORD dwCoInit);
-
-typedef HRESULT (WINAPI *CoInitializeEx_PROC)(LPVOID pvReserved, DWORD dwCoInit);
-
-CoInitializeEx_PROC _CoInitializeEx = osl_CoInitializeEx;
 
 /*****************************************************************************/
 /* oslWorkerWrapperFunction */
@@ -74,7 +69,7 @@ static unsigned __stdcall oslWorkerWrapperFunction(void* pData)
 
     /* Initialize COM */
 
-    _CoInitializeEx(NULL, COINIT_MULTITHREADED);
+    CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
     /* call worker-function with data */
 
@@ -124,16 +119,6 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
     }
 
     return (oslThread)pThreadImpl;
-}
-
-/*****************************************************************************/
-/* osl_ CoInitializeEx */
-/*****************************************************************************/
-
-static HRESULT WINAPI osl_CoInitializeEx(LPVOID pvReserved, DWORD dwCoInit)
-{
-    dwCoInit = dwCoInit; /* avoid warnigns */
-    return CoInitialize( pvReserved );
 }
 
 /*****************************************************************************/
