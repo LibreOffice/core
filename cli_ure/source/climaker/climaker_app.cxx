@@ -4,9 +4,9 @@
  *
  *  $RCSfile: climaker_app.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:09:54 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:26:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,10 @@
 #include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
+#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
 #include "com/sun/star/container/XSet.hpp"
 #include "com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp"
-
+#include "com/sun/star/registry/XSimpleRegistry.hpp"
 
 using namespace ::std;
 using namespace ::System::Reflection;
