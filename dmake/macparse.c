@@ -1,4 +1,4 @@
-/* RCS  $Id: macparse.c,v 1.2 2006-09-25 09:40:09 vg Exp $
+/* RCS  $Id: macparse.c,v 1.3 2007-10-15 15:40:02 ihi Exp $
 --
 -- SYNOPSIS
 --      Parse a macro definition
@@ -45,6 +45,7 @@ int  flag;
    int        operator; /* what macro operator do we have  */
    char *tok1;          /* temporary place to keep a token */
    char *tok2;          /* temporary place to keep a token */
+   int  toklen;         /* length of a token               */
 
    DB_ENTER( "Parse_macro" );
 
@@ -53,8 +54,8 @@ int  flag;
 
    operator=Macro_op(tok1);
    if( operator ) {
-      Error( "No macro name" );
       CLEAR_TOKEN( &input );
+      Error( "Assignment without macro name: [%s].", buffer );
       DB_RETURN( 1 );
    }
 
@@ -67,6 +68,22 @@ int  flag;
    }
 
    tok2 = Expand(tok1); FREE(tok1); tok1 = tok2;
+   if ( !(toklen = strlen(tok1)) ) {
+      Warning( "Empty macro name after expansion: [%s].", buffer );
+   }
+
+   /* Catch illegal single character macro names. */
+   if ( toklen == 1 && strchr("{()}", tok1[0]) ) {
+      CLEAR_TOKEN( &input );
+      Fatal( "Syntax error in macro assignment [%s]. The following characters cannot be used as single letter macro names: '{()}'.", buffer );
+   }
+
+   /* Catch ':' in macro names. */
+   if ( strchr(tok1, ':') ) {
+      CLEAR_TOKEN( &input );
+      Fatal( "Syntax error in macro assignment [%s]. The character ':' is not allowed in macro names.", buffer );
+   }
+
    tok2 = Get_token(&input, NIL( char ), FALSE);
 
    /* Make sure we can force the assignment. */
