@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 16:28:09 $
+#   last change: $Author: vg $ $Date: 2007-10-15 13:08:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ SHL1STDLIBS=\
         $(UCBHELPERLIB)         \
         $(COMPHELPERLIB)		\
         $(NEON3RDLIB)           \
-        $(XML2LIB)
+        $(LIBXML2LIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= $(WSOCK32LIB)
