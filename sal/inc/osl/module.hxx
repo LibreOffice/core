@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:28:53 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:47:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,16 @@ public:
     {
         unload();
         m_Module= osl_loadModule( strModuleName.pData, nRtldMode );
+        return is();
+    }
+
+    /// @since UDK 3.2.8
+    sal_Bool SAL_CALL loadRelative(
+        ::oslGenericFunction baseModule, ::rtl::OUString const & relativePath,
+        ::sal_Int32 mode = SAL_LOADMODULE_DEFAULT)
+    {
+        unload();
+        m_Module = osl_loadModuleRelative(baseModule, relativePath.pData, mode);
         return is();
     }
 
