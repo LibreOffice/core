@@ -1,6 +1,6 @@
 /* $RCSfile: runargv.c,v $
--- $Revision: 1.12 $
--- last change: $Author: vg $ $Date: 2007-09-20 14:35:30 $
+-- $Revision: 1.13 $
+-- last change: $Author: ihi $ $Date: 2007-10-15 15:53:26 $
 --
 -- SYNOPSIS
 --      Invoke a sub process.
@@ -103,9 +103,9 @@ Wait_for_child(abort_flg, pqid) [unix/runargv] waits either for the current
   is reached or gone (might have been handled while finishing another process
   queue).
 
-_finished_child(pid, ?) [unix/runargv] handles the finished child. If there
-  are more commands in the corresponding process queue start the next with
-  runargv().
+_finished_child(pid, status) [unix/runargv] handles the finished child. If
+  there are more commands in the corresponding process queue start the next
+  with runargv().
 */
 
 #include <signal.h>
@@ -208,20 +208,23 @@ CELLPTR target;
 int group;
 int last;
 t_attr  cmnd_attr; /* Attributes for current cmnd. */
-char    *cmd;
+char  **cmd; /* Simulate a reference to *cmd. */
 {
    int  ignore = (cmnd_attr & A_IGNORE)!= 0; /* Ignore errors ('-'). */
    int  shell  = (cmnd_attr & A_SHELL) != 0; /* Use shell ('+'). */
    int  mute = (cmnd_attr & A_MUTE) != 0; /* Mute output ('@@'). */
    int  wfc = (cmnd_attr & A_WFC) != 0; /* Wait for completion. */
 
-   int          pid;
-   int          st_pq = 0; /* Current _exec_shell target process index */
+   int  pid;
+   int  st_pq = 0; /* Current _exec_shell target process index */
+   char *tcmd = *cmd; /* For saver/easier string arithmetic on *cmd. */
    char         **argv;
 
    int old_stdout = -1; /* For shell escapes and */
    int old_stderr = -1; /* @@-recipe silencing.  */
    int internal = 0; /* Used to indicate internal command. */
+
+   DB_ENTER( "runargv" );
 
    /* Special handling for the shell function macro is required. If the
     * currend command is called as part of a shell escape in a recipe make
@@ -241,8 +244,8 @@ char    *cmd;
       if( _running(target) != -1 /*&& Max_proc != 1*/ ) {
      /* The command will be executed when the previous recipe
       * line completes. */
-     _attach_cmd( cmd, group, target, cmnd_attr, last );
-     return(1);
+     _attach_cmd( *cmd, group, target, cmnd_attr, last );
+     DB_RETURN( 1 );
       }
    }
 
@@ -252,26 +255,23 @@ char    *cmd;
       Wait_for_child(FALSE, -1);
    }
 
-   /* remove leading whitespace */
-   while( iswhite(*cmd) ) ++cmd;
-
    /* Return immediately for empty line or noop command. */
-   if ( !*cmd ||                /* empty line */
-    ( strncmp(cmd, "noop", 4) == 0 &&   /* noop command */
-      (iswhite(cmd[4]) || cmd[4] == '\0')) ) {
+   if ( !*tcmd ||               /* empty line */
+    ( strncmp(tcmd, "noop", 4) == 0 &&  /* noop command */
+      (iswhite(tcmd[4]) || tcmd[4] == '\0')) ) {
       internal = 1;
    }
    else if( !shell &&  /* internal echo only if not in shell */
-        strncmp(cmd, "echo", 4) == 0 &&
-        (iswhite(cmd[4]) || cmd[4] == '\0') ) {
+        strncmp(tcmd, "echo", 4) == 0 &&
+        (iswhite(tcmd[4]) || tcmd[4] == '\0') ) {
       int nl = 1;
 
-      cmd = cmd+4;
-      while( iswhite(*cmd) ) ++cmd;
-      if ( strncmp(cmd,"-n",2 ) == 0) {
+      tcmd = tcmd+4;
+      while( iswhite(*tcmd) ) ++tcmd;
+      if ( strncmp(tcmd,"-n",2 ) == 0) {
      nl = 0;
-     cmd = cmd+2;
-     while( iswhite(*cmd) ) ++cmd;
+     tcmd = tcmd+2;
+     while( iswhite(*tcmd) ) ++tcmd;
       }
 
       /* redirect output for _exec_shell / @@-recipes. */
@@ -290,7 +290,7 @@ char    *cmd;
      }
       }
 
-      printf("%s%s", cmd, nl ? "\n" : "");
+      printf("%s%s", tcmd, nl ? "\n" : "");
       fflush(stdout);
 
       /* Restore stdout/stderr if needed. */
@@ -305,8 +305,8 @@ char    *cmd;
    if ( internal ) {
       /* Use _add_child() / _finished_child() with internal command. */
       int cur_proc = _add_child(-1, target, ignore, last, FALSE);
-      _finished_child(-1, cur_proc);
-      return 0;
+      _finished_child(-cur_proc, 0);
+      DB_RETURN( 0 );
    }
 
    /* Pack cmd in argument vector. */
@@ -343,17 +343,25 @@ char    *cmd;
    }
    if(pid == -1) {
       /* spawn failed */
-      int continue_status = Continue;
-      Continue = TRUE;   /* survive error message */
-      Error("%s: %s", argv[0], strerror(errno));
-      Continue = continue_status;
+      int cur_proc;
 
-      Handle_result(-1, ignore, _abort_flg, target);
-      /* Handle_result() aborts dmake if we are not told to
+      fprintf(stderr, "%s:  Error executing '%s': %s",
+          Pname, argv[0], strerror(errno) );
+      if( ignore||Continue ) {
+     fprintf(stderr, " (Ignored)" );
+      }
+      fprintf(stderr, "\n");
+
+      /* Use _add_child() / _finished_child() to treat the failure
+       * gracefully, if so requested. */
+      cur_proc = _add_child(-1, target, ignore, last, FALSE);
+      _finished_child(cur_proc, SIGTERM);
+
+      /* _finished_child() aborts dmake if we are not told to
        * ignore errors. If we reach the this point return 0 as
        * errors are obviously ignored and indicate that the process
        * finished. */
-      return 0;
+      DB_RETURN( 0 );
    } else {
       _add_child(pid, target, ignore, last, wfc);
    }
@@ -389,8 +397,13 @@ char    *cmd;
      if( old_stderr != -1 )
         dup2(old_stderr, 2);
       }
-      Continue = TRUE;   /* survive error message */
-      Error("%s: %s", argv[0], strerror( errno ));
+      fprintf(stderr, "%s:  Error executing '%s': %s",
+          Pname, argv[0], strerror(errno) );
+      if( ignore||Continue ) {
+     fprintf(stderr, " (Ignored)" );
+      }
+      fprintf(stderr, "\n");
+
       kill(getpid(), SIGTERM);
       /*NOTREACHED*/
       Fatal("\nInternal Error - kill could't kill child %d.\n", getpid());
@@ -401,7 +414,7 @@ char    *cmd;
 
 #endif  /* ENABLE_SPAWN && ... */
 
-   return(1);
+   DB_RETURN( 1 );
 }
 
 
@@ -640,31 +653,33 @@ int     wfc;
 
 
 static void
-_finished_child(pid, status)/*
+_finished_child(cid, status)/*
 ==============================
-  Handle process array entry for finished process pid. If pid == -1 we handle
-  an internal command and status contains the process array index.
+  Handle process array entry for finished child. This can be a finished
+  process or a finished internal command depending on the content of cid.
+  For cid >= 1 the value of cid is used as the pid to of the finished
+  process and for cid < 1 -cid is used as the process array index of the
+  internal command.
 */
-int pid;
+int cid;
 int status;
 {
    register int i;
    char     *dir;
 
-   if(pid == -1) {
+   if(cid < 1) {
       /* internal command */
-      i = status;
-      status = 0;
+      i = -cid;
    }
    else {
       for( i=0; i<Max_proc; i++ )
-     if( _procs[i].pr_valid && _procs[i].pr_pid == pid )
+     if( _procs[i].pr_valid && _procs[i].pr_pid == cid )
         break;
 
       /* Some children we didn't make esp true if using /bin/sh to execute a
        * a pipe and feed the output as a makefile into dmake. */
       if( i == Max_proc ) {
-     Warning("Internal Warning: finished pid %d is not in pq!?", pid);
+     Warning("Internal Warning: finished pid %d is not in pq!?", cid);
      return;
       }
    }
@@ -689,7 +704,6 @@ int status;
       Current_target = NIL(CELL);
 
       if ( _procs[i].pr_target->ce_attr & A_ERROR ) {
-     Unlink_temp_files( _procs[i].pr_target );
      _procs[i].pr_last = TRUE;
      goto ABORT_REMAINDER_OF_RECIPE;
       }
@@ -700,7 +714,7 @@ int status;
       /* Run next recipe line. The rp->prp_attr propagates a possible
        * wfc condition. */
       runargv( _procs[i].pr_target, rp->prp_group,
-           rp->prp_last, rp->prp_attr, rp->prp_cmd );
+           rp->prp_last, rp->prp_attr, &rp->prp_cmd );
       _use_i = -1;
 
       FREE( rp->prp_cmd );
@@ -715,14 +729,22 @@ int status;
       if( _abort_flg )
      _procs[i].pr_recipe = NIL(RCP);
 
-      Unlink_temp_files( _procs[i].pr_target );
       Handle_result(status,_procs[i].pr_ignore,_abort_flg,_procs[i].pr_target);
 
  ABORT_REMAINDER_OF_RECIPE:
       if( _procs[i].pr_last ) {
      FREE(_procs[i].pr_dir ); /* Set in _add_child() */
 
-     if( !Doing_bang ) Update_time_stamp( _procs[i].pr_target );
+     if( !Doing_bang ) {
+        /* Update_time_stamp() triggers the deletion of intermediate
+         * targets.  This starts a new process queue, so we have to
+         * clear the _use_i variable. */
+        int my_use_i = _use_i;
+
+        _use_i = -1;
+        Update_time_stamp( _procs[i].pr_target );
+        _use_i =  my_use_i;
+     }
       }
    }
 
