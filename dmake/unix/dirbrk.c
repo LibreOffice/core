@@ -1,4 +1,4 @@
-/* RCS  $Id: dirbrk.c,v 1.3 2007-09-20 14:35:04 vg Exp $
+/* RCS  $Id: dirbrk.c,v 1.4 2007-10-15 15:52:59 ihi Exp $
 --
 -- SYNOPSIS
 --      Define the directory separator string.
@@ -29,6 +29,8 @@
 
 #ifdef __EMX__
 /* os2 uses /, \, and : */
+/* FIXME: The OS/2 port most probably wants to use the HAVE_DRIVE_LETTERS
+ * macro, see extern.h. */
 char*   DirBrkStr = "/\\:";
 #else
 /* Unix only uses / */
