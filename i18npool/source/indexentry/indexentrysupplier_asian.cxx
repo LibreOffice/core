@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexentrysupplier_asian.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 12:47:10 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:54:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,8 @@ using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
 IndexEntrySupplier_asian::IndexEntrySupplier_asian(
     const Reference < XMultiServiceFactory >& rxMSF ) : IndexEntrySupplier_Common(rxMSF)
 {
@@ -55,7 +57,8 @@ IndexEntrySupplier_asian::IndexEntrySupplier_asian(
 #else
     OUString lib=OUString::createFromAscii("index_data"SAL_DLLEXTENSION);
 #endif
-    hModule = osl_loadModule( lib.pData, SAL_LOADMODULE_DEFAULT );
+    hModule = osl_loadModuleRelative(
+        &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );
 }
 
 IndexEntrySupplier_asian::~IndexEntrySupplier_asian()
