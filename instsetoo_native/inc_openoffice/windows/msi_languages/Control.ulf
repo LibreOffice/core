@@ -668,7 +668,7 @@ en-US = "Microsoft Po&werPoint Presentations"
 en-US = "&[ProductName] Writer/Web"
 
 [OOO_CONTROL_274]
-en-US = "Select the file types for which you want [ProductName] to be the default application."
+en-US = "Set [DEFINEDPRODUCT] to be the default application for these file types."
 
 [OOO_CONTROL_275]
 en-US = "[ProductName] can be set as the default application to open the following file types. This means, for instance, that if you double click on one of these files, [ProductName] will open it, not the progam that opens it now."
