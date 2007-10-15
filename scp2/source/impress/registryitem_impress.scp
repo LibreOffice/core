@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_impress.scp,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:57:27 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:36:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1149,4 +1149,19 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Name = ".pot";
     Value = "opendocument.ImpressDocument.1";
     Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Simpress_Exe
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\simpress.exe";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "<progpath>\program\simpress.exe";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Simpress_Exepath
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\simpress.exe";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Name = "Path";
+    Value = "<progpath>";
 End

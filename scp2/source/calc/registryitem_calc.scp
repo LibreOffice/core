@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_calc.scp,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:57:01 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:36:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1212,4 +1212,19 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Name = ".123";
     Value = "opendocument.CalcDocument.1";
     Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Scalc_Exe
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\scalc.exe";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "<progpath>\program\scalc.exe";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Scalc_Exepath
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\scalc.exe";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "Path";
+    Value = "<progpath>";
 End
