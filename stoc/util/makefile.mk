@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-27 13:09:18 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:03:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+SHL1RPATH=  URELIB
 
 DEF1NAME=	$(SHL1TARGET)
 
@@ -93,6 +94,7 @@ SHL2DEPN=
 SHL2IMPLIB=	istocservices.uno
 SHL2LIBS=	$(SLB)$/stocservices.uno.lib
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
+SHL2RPATH=  URELIB
 
 DEF2NAME=	$(SHL2TARGET)
 
