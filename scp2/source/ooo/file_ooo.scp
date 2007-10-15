@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.219 $
+ *  $Revision: 1.220 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:02:06 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:56:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,11 +202,7 @@ File gid_File_Bin_Unopkg
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH);
-  #ifdef UNX
     Name = "unopkg.bin";
-  #else
-    Name = "unopkg.exe";
-  #endif
 End
 
 #ifdef WNT
@@ -216,6 +212,13 @@ File gid_File_Bin_Unopkgcom
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH);
     Name = "unopkg.com";
+End
+
+File gid_File_Bin_Unopkgexe
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED,PATCH);
+    Name = "unopkg.exe";
 End
 
 #endif
