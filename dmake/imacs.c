@@ -1,4 +1,4 @@
-/* RCS  $Id: imacs.c,v 1.7 2007-07-03 11:29:46 rt Exp $
+/* RCS  $Id: imacs.c,v 1.8 2007-10-15 15:39:37 ihi Exp $
 --
 -- SYNOPSIS
 --      Define default internal macros.
@@ -68,6 +68,9 @@ Create_macro_vars()
    else
 #if (_MPW)
          DirSepStr = ":";
+#elif defined( __EMX__)
+   /* Use '\' for OS/2 port. */
+         DirSepStr = "\\";
 #else
          DirSepStr = "/";
 #endif
@@ -96,6 +99,7 @@ Create_macro_vars()
 
    _set_string_var("SHELL",        "",  M_DEFAULT, &Shell       );
    _set_string_var("SHELLFLAGS",   " ", M_DEFAULT, &Shell_flags );
+   _set_string_var("SHELLCMDQUOTE","",  M_DEFAULT, &Shell_quote );
    _set_string_var("GROUPSHELL",   "",  M_DEFAULT, &GShell      );
    _set_string_var("GROUPFLAGS",   " ", M_DEFAULT, &GShell_flags);
    _set_string_var("SHELLMETAS",   "",  M_DEFAULT, &Shell_metas );
