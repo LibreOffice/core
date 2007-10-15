@@ -5,9 +5,9 @@
 #
 #   $RCSfile: unopkg.sh,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-24 16:46:34 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:59:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -104,28 +104,35 @@ do
   esac
 done
 
+# set URE_BOOTSTRAP (if not yet set):
+: ${URE_BOOTSTRAP="file://$sd_prog/fundamentalrc"}
+export URE_BOOTSTRAP
+
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
+unset java_ld_library_path
 if [ -x "$sd_prog/javaldx" ] ; then
     java_ld_library_path=`"$sd_prog/javaldx" $BOOTSTRAPVARS`
-    if [ "$java_ld_library_path" != "" ] ; then
-        case $sd_platform in
-            AIX)
-                LIBPATH=${java_ld_library_path}:${LIBPATH}
-                ;;
-            Darwin)
-                DYLD_LIBRARY_PATH=${java_ld_library_path}:${DYLD_LIBRARY_PATH}
-                ;;
-            HP-UX)
-                SHLIB_PATH=${java_ld_library_path}:${SHLIB_PATH}
-                ;;
-            IRIX*)
-                LD_LIBRARYN32_PATH=${java_ld_library_path}:${LD_LIBRARYN32_PATH}
-                ;;
-            *)
-                LD_LIBRARY_PATH=${java_ld_library_path}:${LD_LIBRARY_PATH}
-                ;;
-        esac
-    fi
+elif [ -x "$sd_prog/../ure-link/javaldx" ] ; then
+    java_ld_library_path=`"$sd_prog/../ure-link/javaldx" $BOOTSTRAPVARS`
+fi
+if [ "$java_ld_library_path" != "" ] ; then
+    case $sd_platform in
+        AIX)
+            LIBPATH=${java_ld_library_path}:${LIBPATH}
+            ;;
+        Darwin)
+            DYLD_LIBRARY_PATH=${java_ld_library_path}:${DYLD_LIBRARY_PATH}
+            ;;
+        HP-UX)
+            SHLIB_PATH=${java_ld_library_path}:${SHLIB_PATH}
+            ;;
+        IRIX*)
+            LD_LIBRARYN32_PATH=${java_ld_library_path}:${LD_LIBRARYN32_PATH}
+            ;;
+        *)
+            LD_LIBRARY_PATH=${java_ld_library_path}:${LD_LIBRARY_PATH}
+            ;;
+    esac
 fi
 
 # misc. environment variables
