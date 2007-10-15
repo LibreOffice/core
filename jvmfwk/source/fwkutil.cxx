@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 07:58:23 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:07:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,8 @@
 #include "rtl/instance.hxx"
 #include "rtl/uri.hxx"
 #include "osl/getglobalmutex.hxx"
+#include "com/sun/star/lang/IllegalArgumentException.hpp"
+#include "cppuhelper/bootstrap.hxx"
 
 #include "framework.hxx"
 #include "fwkutil.hxx"
@@ -228,10 +230,25 @@ rtl::OUString getExecutableDirectory()
 rtl::OUString findPlugin(
     const rtl::OUString & baseUrl, const rtl::OUString & plugin)
 {
+    rtl::OUString expandedPlugin;
+    try
+    {
+        expandedPlugin = cppu::bootstrap_expandUri(plugin);
+    }
+    catch (com::sun::star::lang::IllegalArgumentException & e)
+    {
+        throw FrameworkException(
+            JFW_E_ERROR,
+            (rtl::OString(
+                RTL_CONSTASCII_STRINGPARAM(
+                    "[Java framework] IllegalArgumentException in"
+                    " findPlugin: "))
+             + rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding())));
+    }
     rtl::OUString sUrl;
     try
     {
-        sUrl = rtl::Uri::convertRelToAbs(baseUrl, plugin);
+        sUrl = rtl::Uri::convertRelToAbs(baseUrl, expandedPlugin);
     }
     catch (rtl::MalformedUriException & e)
     {
