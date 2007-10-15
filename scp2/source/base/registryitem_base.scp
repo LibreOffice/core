@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_base.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:56:47 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:36:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,4 +141,19 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Name = ".odb";
     Value = "opendocument.ImpressDocument.1";
     Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Sbase_Exe
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\sbase.exe";
+    ModuleID = gid_Module_Prg_Base_Bin;
+    Value = "<progpath>\program\sbase.exe";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Sbase_Exepath
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\sbase.exe";
+    ModuleID = gid_Module_Prg_Base_Bin;
+    Name = "Path";
+    Value = "<progpath>";
 End
