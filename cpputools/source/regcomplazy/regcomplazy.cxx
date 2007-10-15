@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regcomplazy.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:49:55 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:14:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,15 +198,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     // insert the last descriptor
     vDescr.push_back(descr);
 
-    RegistryLoader* pLoader = new RegistryLoader();
-    if (!pLoader->isLoaded())
-    {
-        delete pLoader;
-        return 1;
-    }
-
-    Registry *pReg = new Registry(*pLoader);
-    delete pLoader;
+    Registry *pReg = new Registry;
 
     RegistryKey rootKey, key, subKey, serviceKey;
 
