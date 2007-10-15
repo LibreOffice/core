@@ -19,7 +19,7 @@
 .IP "\\$1" \\n[dmake-indent]u
 .it 1 PD
 ..
-.TH DMAKE 1  "2007-06-25" "Dmake Version 4.9"
+.TH DMAKE 1  "2007-10-13" "Dmake Version 4.11"
 .SH NAME
 \fBdmake\fR \- maintain program groups, or interdependent files
 .SH SYNOPSIS
@@ -266,6 +266,8 @@ How to tell \fBdmake\fP how to make a target.
 Internal dmake commands.
 .IP "\fBTEXT DIVERSIONS\fP" 1.9i
 How to use text diversions in recipes and macro expansions.
+.IP "\fBVIRTUAL TARGETS\fP" 1.9i
+Targets that only enforce dependencies, but which can not create a target file.
 .IP "\fBSPECIAL TARGETS\fP" 1.9i
 Some targets are special.
 .IP "\fBSPECIAL MACROS\fP" 1.9i
@@ -276,7 +278,7 @@ Itemized list of special control macros.
 .IP "\fBRUNTIME MACROS\fP" 1.9i
 Discussion of special run-time macros such as $@ and $<.
 .IP "\fBFUNCTION MACROS\fP" 1.9i
-GNU style function macros, only $(mktmp ...) for now.
+Description of functional macros.
 .IP "\fBCONDITIONAL MACROS\fP" 1.9i
 Target specific conditional macros.
 .IP "\fBDYNAMIC PREREQUISITES\fP" 1.9i
@@ -881,6 +883,8 @@ may be a combination of:
 \- file (including suffix) portion of path names
 .Ii "i or I"
 \- inferred names of targets
+.Ii "n or N"
+\- normalized path names
 .Ii "l or L"
 \- macro value in lower case
 .Ii "u or U"
@@ -935,6 +939,19 @@ expansion.
 .RE
 .fi
 .PP
+For this macro
+.RS
+test = d1/d2/../a.out "d1/file name.ext"
+.RE
+the following results are returned:
+.RS
+.sp
+.Is "$(test:s/out/in/:f)   "
+.Ii "$(test:n)"
+\(-> d1/a.out "d1/file name.ext"
+.RE
+.fi
+.PP
 If a token ends in a string composed from the value of the macro DIRBRKSTR
 (ie. ends in a directory separator string, e.g. '/' in UNIX) and you use the
 \fB:d\fP modifier then the expansion returns the directory name less the
@@ -957,6 +974,9 @@ has the following effect:
 \(-> /tmp/aprog bprog
 .RE
 .fi
+.PP
+The normalized path names \fB:n\fP modifier honors the setting of .WINPATH to
+determine the output format of the result.
 .PP
 The map escape codes modifier changes the following escape codes \ea => <bel>,
 \&\eb => <backspace>, \ef => <formfeed>, \en => <nl>, \er => <cr>,
@@ -1281,17 +1301,8 @@ It is taken to be the first recipe line in a larger recipe
 if additional lines follow the rule definition.
 If the semi-colon is present but the recipe line is empty (ie. null string)
 then it is taken
-to be an empty rule.  Any target so defined causes the
-.I "Don't know how to make ..."
-error message to be suppressed when
-.B dmake
-tries to make the target and fails.
-This silence is maintained for rules that are terminated
-by a semicolon and have no following recipe lines, for targets listed on the
-command line, for the first target found in the makefile, and for any target
-having no recipe but containing a list of prerequisites (see the COMPATIBILITY
-section for an exception to this rule if the AUGMAKE (\fB\-A\fP) flag
-was specified).
+to be an empty rule.  Any target so defined causes target to be treated
+as a virtual target, see VIRTUAL TARGETS below.
 .SH "RECIPES"
 The traditional format used by most versions of Make defines the recipe
 lines as arbitrary strings that may contain macro expansions.  They
@@ -1416,7 +1427,10 @@ $(mktmp[,[\fIfile\fP][,\fItext\fP]] \fIdata\fP)
 .RE
 then all text contained in the \fIdata\fP expression is expanded and
 is written to a temporary file.  The \fIdata\fP in the file will always
-be terminated from a new line character.  The return
+be terminated from a new line character.  The \fIfile\fP parameter can
+be used to override the name of the temporary file. If its expanded value
+is not empty it will be used instead of the unique and thread safe file
+name that otherwise would be generated internally.  The return
 value of the macro is the name of the temporary file unless the \fItext\fP
 parameter is defined. In this case the return value is the expanded value
 of \fItext\fP.
@@ -1499,8 +1513,8 @@ joe.obj
 The last line of the file is terminated by a new-line which is always
 inserted at the end of the \fIdata\fP string.
 .PP
-If the optional \fIfile\fP specifier is present then its expanded value
-is the name of the temporary file to create.  An example that would be useful
+If the optional \fIfile\fP specifier is present it can be used to specify
+the name of the temporary file to create.  An example that would be useful
 for MSDOS users with a Turbo-C compiler
 .RS
 .sp
@@ -1550,6 +1564,27 @@ temporary file is placed into the directory specified by that variable.
 A makefile can modify the location of temporary files by
 defining a macro named TMPDIR and exporting it using the .EXPORT special
 target.
+.SH "VIRTUAL TARGETS"
+.B Dmake
+allows to define targets with the sole purpose to enforce a dependency
+chain that are unable to create the target, hence virtual targets.
+When \fBdmake\fP tries to make a target, but only finds a target definition
+without recipe lines, it would normally issues
+a \fB"Don't know how to make ..."\fP error message, but if a target rule is
+terminated by a semicolon and has no following recipe lines,
+or if it has no recipe lines, but defines prerequisites,
+or if the AUGMAKE mode is enabled (see the COMPATIBILITY section for details),
+the target is treated as a virtual target and the error is suppressed. In
+addition to this, if the default target does not have recipe lines it is also
+treated as a virtual target.
+.PP
+Virtual targets should not have a corresponding file therefore
+they inherit the time of their newest prerequisite if they have prerequisites,
+otherwise they get the current time assigned when being made.
+If the virtual target has a corresponding file a warning is issued, but the
+time stamp of that file is taken into account. The virtual target uses the
+time stamp of the corresponding file if it is newer than the one determined
+by the previous rule.
 .SH "SPECIAL TARGETS"
 This section describes the special targets that are recognized by \fBdmake\fP.
 Some are affected by attributes and others are not.
@@ -1886,7 +1921,9 @@ This macro enables a special compatibility mode needed by the OpenOffice.org
 build system. If set, the switch disables the removal of leading './' path
 elements during target filename normalization (See BINDING TARGETS). If './'
 appear in the pathname, but not at the beginning of it, they are still
-removed by the normalization.
+removed by the normalization. Please note that targets that are given on the
+command line are going to be registered as default targets \fBafter\fP the
+startup file is read.
 .IP \fBPREP\fP 1.6i
 This macro defines the number of iterations to be expanded
 automatically when processing % rule definitions of the form:
@@ -1901,6 +1938,11 @@ processing single line recipes.  This macro must be defined if recipes
 requiring the shell for execution are to be used.
 It is assigned a default value in the startup makefile.
 Under UNIX this value is /bin/sh.
+.IP \fBSHELLCMDQUOTE\fP 1.6i
+This macro can be used to add additional characters before and after the
+command string that is passed to the shell defined by the SHELL macro.
+If needed, like for \fIcmd.exe\fP and \fIcommand.com\fP, it is assigned
+a value in the startup file.
 .IP \fBSHELLFLAGS\fP 1.6i
 This macro gives the set of flags to pass to the shell when
 invoking it to execute a single line recipe.  The value of the macro is the
@@ -2141,6 +2183,14 @@ when evaluated.
 Always returns the value of $(NULL) regardless of what \fIexpression\fP is.
 This function macro can be used to discard results of expanding
 macro expressions.
+.IP "$(\fBnormpath\fP \fBlist\fP)"
+Will return the normalized path names of all white-space separated tokens
+in \fBlist\fP. Quotes can be used to normalize path names that contain
+white-space characters. On cygwin the result honors the setting of .WINPATH
+to determine the output format of the returned path names.
+.IP "$(\fBnormpath,para\fP \fBlist\fP)"
+Same as above except that the expanded value of \fBpara\fP is used to
+override the .WINPATH setting.
 .IP "$(\fBnot\fP \fBmacroterm\fP)"
 expands \fBmacroterm\fP and returs the string "t" if the result of the
 expansion is the empty string; otherwise, it returns the empty string.
@@ -2525,8 +2575,10 @@ when the rule is selected during inference and
 constructs the new dependency.
 .PP
 .B Please note,
-that currently only the first, non-indirect, prerequisite of the
-list is used and all other non-indirect prerequisites are ignored.
+that only the first, non-indirect, prerequisite of the list is used for the
+inference mechanism. If more than one non-indirect prerequisite is given
+a warning is issued and all but the first non-indirect prerequisites are
+ignored. See below for a description of indirect prerequisites.
 .PP
 As an example the following %-meta rules describe the following:
 .RS
@@ -2551,11 +2603,11 @@ describes how to make a file whose suffix is .a without inferring any
 prerequisites.
 .RS
 .sp
-%.c : %.y yaccsrc/%.y ; recipe...
+%.c : %.y 'yaccsrc/%.y' ; recipe...
 .sp
 .RE
-should match the corresponding .y file and another .y file in the yaccsrc
-subdirectory. (Currently only the first prerequisite is used.)
+matches the corresponding .y file as prerequisite and additionally another .y
+file in the yaccsrc subdirectory as indirect prerequisite.
 Another interesting example is:
 .RS
 .sp
@@ -2658,20 +2710,6 @@ algorithm.
 The construct:
 .RS
 .sp
-%.o : %.c %.f 'local.h'; recipe
-.sp
-.RE
-is (currently) equivalent to:
-.RS
-.sp
-.nf
-%.o : %.c 'local.h' ; recipe
-.fi
-.sp
-.RE
-because the second prerequisite is ignored, while:
-.RS
-.sp
 %.o :| %.c %.f 'local.h'; recipe
 .sp
 .RE
@@ -2685,8 +2723,8 @@ is equivalent to:
 .sp
 .RE
 .PP
-If any of the attributes .SETDIR, .EPILOG, .PROLOG, .SILENT,
-\&.USESHELL, .SWAP, .PRECIOUS, .LIBRARY, .NOSTATE and .IGNORE
+If any of the attributes .EPILOG, .IGNORE, .LIBRARY, .NOSTATE, .PHONY, .PRECIOUS,
+\&.PROLOG, .SETDIR, .SILENT, .SWAP, .USESHELL and .WINPATH
 are given for a %-rule then when that rule is bound to a target
 as the result of an inference, the target's set of attributes is augmented by
 the attributes from the above set that are specified in the bound %-rule.
@@ -2870,6 +2908,9 @@ The flags that are passed to the shell are given by the value of SHELLFLAGS.
 Thus \fBdmake\fP constructs the command line:
 .sp
 \t$(SHELL) $(SHELLFLAGS) $(expanded_recipe_command)
+.sp
+If the $(SHELLCMDQUOTE) macro is set its value is inserted before and after
+the $(expanded_recipe_command) string.
 .sp
 Normally
 .B dmake
