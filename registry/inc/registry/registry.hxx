@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registry.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:51:34 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:27:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@
 #ifndef _REGISTRY_REGTYPE_H_
 #include <registry/regtype.h>
 #endif
-#ifndef _SALHELPER_DYNLOAD_HXX_
-#include <salhelper/dynload.hxx>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 #ifdef __cplusplus
@@ -49,9 +49,7 @@ extern "C" {
 
 /** specifies a collection of function pointers which represents the complete registry C-API.
 
-    The function pointers of this struct will be initialized when the library is loaded over
-    the load on call mechanism specified in 'salhelper/dynload.hxx'. This funtions pointers are
-    used by the C++ wrapper to call the C-API.
+    This funtions pointers are used by the C++ wrapper to call the C-API.
 */
 struct Registry_Api
 {
@@ -97,18 +95,9 @@ struct Registry_Api
     RegError    (REGISTRY_CALLTYPE *freeKeyNames)       (rtl_uString**, sal_uInt32);
 };
 
-/** specifies a function pointer of the initialization function which is called to initialize
-    the Registry_Api struct.
-
- */
-typedef Registry_Api* (REGISTRY_CALLTYPE *InitRegistry_Api)(void);
-
-/** spedifies the name of the API initialization function.
-
-    This function will be searched by the load on call mechanism specified
-    in 'salhelper/dynload.hxx'.
+/** the API initialization function.
 */
-#define REGISTRY_INIT_FUNCTION_NAME "initRegistry_Api"
+Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void);
 
 #ifdef __cplusplus
 }
@@ -119,51 +108,16 @@ class RegistryKey;
 
 //-----------------------------------------------------------------------------
 
-/** The RegistryLoader provides a load on call mechanism for the registry library.
-
-    Furthermore it provides a reference counter for the library. When the last reference will be
-    destroyed the RegisteryLoader will unload the library. If the library is loaded the loader
-    provides a valid Api for the registry.
-    @see salhelper::ODynamicLoader<>
-*/
-class RegistryLoader : public ::salhelper::ODynamicLoader<Registry_Api>
-{
-public:
-    /// Default constructor, try to load the registry library and initialize the needed Api.
-    RegistryLoader()
-        : ::salhelper::ODynamicLoader<Registry_Api>
-              (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME_WITH_VERSION( "reg",  LIBRARY_VERSION ) ) ),
-             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(REGISTRY_INIT_FUNCTION_NAME) ))
-        {}
-
-    /// Destructor, decrease the refcount and unload the library if the refcount is 0.
-    ~RegistryLoader()
-        {}
-};
-
 /** The Registry provides the functionality to read and write information in a registry file.
 
-    The class is implemented inline and use a load on call C-Api.
+    The class is implemented inline and use a C-Api.
 */
 class Registry
 {
 public:
-    /** Constructor using the registry Api directly.
-
-        This constructor is called with a valid Api for the registry.
-        The constructor is used if the Api is known. Use open() or create()
-        to initialize the registry with a valid registry data file.
+    /** Default constructor.
      */
-    inline Registry(const Registry_Api* pApi);
-
-    /** Constructor using the loader mechanism.
-
-        This constructor is called with a RegisterLoader for the registry.
-        The RegistryLoader loads the needed DLL and provides the needed Api for
-        the registry. Use open() or create() to initialize the registry with a
-        valid registry data file.
-     */
-    inline Registry(const RegistryLoader& rLoader);
+    inline Registry();
 
     /// Copy constructcor
     inline Registry(const Registry& toCopy);
@@ -291,8 +245,6 @@ protected:
 
     /// stores the used and initialized registry Api.
     const Registry_Api*                          m_pApi;
-    /// stores the dynamic loader which is used to hold the library.
-    ::salhelper::ODynamicLoader< Registry_Api >  m_Api;
     /// stores the handle of the underlying registry file on which most of the functions work.
     RegHandle                                    m_hImpl;
 };
@@ -394,7 +346,6 @@ public:
         : m_length(0)
         , m_pValueList(NULL)
         , m_valueType(RG_VALUETYPE_NOT_DEFINED)
-        , m_registry(NULL)
         {}
 
     /// Destructor, the internal value list will be freed.
@@ -742,7 +693,6 @@ protected:
 inline RegistryKeyArray::RegistryKeyArray()
     : m_length(0)
     , m_phKeys(NULL)
-    , m_registry(NULL)
 {
 }
 
@@ -780,7 +730,7 @@ inline RegError RegistryKeyArray::closeKeyHandles()
     {
         RegError ret;
         ret = m_registry.m_pApi->closeSubKeys(m_phKeys, m_length);
-        m_registry = Registry(m_registry.m_pApi);
+        m_registry = Registry();
         m_length = 0;
         m_phKeys = NULL;
         return ret;
@@ -793,7 +743,6 @@ inline RegError RegistryKeyArray::closeKeyHandles()
 inline RegistryKeyNames::RegistryKeyNames()
     : m_length(0)
     , m_pKeyNames(NULL)
-    , m_registry(NULL)
 {
 }
 
@@ -832,7 +781,7 @@ inline RegError RegistryKeyNames::freeKeyNames()
     {
         RegError ret = REG_NO_ERROR;
         ret = m_registry.m_pApi->freeKeyNames(m_pKeyNames, m_length);
-        m_registry = Registry(m_registry.m_pApi);
+        m_registry = Registry();
         m_length = 0;
         m_pKeyNames = NULL;
         return ret;
@@ -843,8 +792,7 @@ inline RegError RegistryKeyNames::freeKeyNames()
 //-----------------------------------------------------------------------------
 
 inline RegistryKey::RegistryKey()
-    : m_registry(NULL)
-    , m_hImpl(NULL)
+    : m_hImpl(NULL)
     { }
 
 inline RegistryKey::RegistryKey(Registry& registry, RegKeyHandle hKey)
@@ -1002,7 +950,7 @@ inline RegError RegistryKey::closeKey()
             if (!ret)
             {
                 m_hImpl = NULL;
-                m_registry = Registry(m_registry.m_pApi);
+                m_registry = Registry();
             }
             return ret;
         } else
@@ -1205,23 +1153,13 @@ inline ::rtl::OUString RegistryKey::getRegistryName()
 
 //-----------------------------------------------------------------------------
 
-inline Registry::Registry(const Registry_Api* pApi)
-    : m_pApi(pApi)
-    , m_Api()
+inline Registry::Registry()
+    : m_pApi(initRegistry_Api())
     , m_hImpl(NULL)
     { }
 
-inline Registry::Registry(const RegistryLoader& rLoader)
-    : m_pApi(NULL)
-    , m_Api(rLoader)
-    , m_hImpl(NULL)
-    {
-        m_pApi = m_Api.getApi();
-    }
-
 inline Registry::Registry(const Registry& toCopy)
     : m_pApi(toCopy.m_pApi)
-    , m_Api(toCopy.m_Api)
     , m_hImpl(toCopy.m_hImpl)
     {
         if (m_hImpl)
@@ -1231,7 +1169,7 @@ inline Registry::Registry(const Registry& toCopy)
 
 inline Registry::~Registry()
     {
-        if (m_pApi && m_hImpl)
+        if (m_hImpl)
             m_pApi->release(m_hImpl);
     }
 
@@ -1240,19 +1178,18 @@ inline Registry& Registry::operator = (const Registry& toAssign)
 
     if (m_hImpl != toAssign.m_hImpl)
     {
-        if (m_pApi) m_pApi->release(m_hImpl);
+        m_pApi->release(m_hImpl);
         m_pApi = toAssign.m_pApi;
-        m_Api = toAssign.m_Api;
         m_hImpl = toAssign.m_hImpl;
     }
-    if (m_hImpl && m_pApi)
+    if (m_hImpl)
         m_pApi->acquire(m_hImpl);
 
     return *this;
 }
 
 inline sal_Bool Registry::isValid() const
-    {  return ( m_hImpl != NULL && m_pApi != NULL ); }
+    {  return ( m_hImpl != NULL ); }
 
 inline sal_Bool Registry::isReadOnly() const
     {  return m_pApi->isReadOnly(m_hImpl); }
