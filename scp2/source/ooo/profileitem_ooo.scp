@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_ooo.scp,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-27 16:06:05 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -774,11 +774,20 @@ ProfileItem gid_Profileitem_Uno_Uno_Java_Component_Path
     Value = "$ORIGIN/classes";
 End
 
-ProfileItem gid_Profileitem_Uno_Ure_Internal_Java_Dir
+ProfileItem gid_Profileitem_Uno_Ure_Internal_Lib_Dir
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
     Order = 10;
+    Key = "URE_INTERNAL_LIB_DIR";
+    Value = "$ORIGIN";
+End
+
+ProfileItem gid_Profileitem_Uno_Ure_Internal_Java_Dir
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 11;
     Key = "URE_INTERNAL_JAVA_DIR";
     Value = "$ORIGIN/classes";
 End
@@ -787,9 +796,18 @@ ProfileItem gid_Profileitem_Uno_Ure_Internal_Java_Classpath
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 11;
+    Order = 12;
     Key = "URE_INTERNAL_JAVA_CLASSPATH";
     Value = "$ORIGIN/classes/unoil.jar ${PKG_UserUnoFile:UNO_JAVA_CLASSPATH} ${PKG_SharedUnoFile:UNO_JAVA_CLASSPATH}";
+End
+
+ProfileItem gid_Profileitem_Uno_Ure_Bin_Dir
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 13;
+    Key = "URE_BIN_DIR";
+    Value = "$ORIGIN";
 End
 
 
@@ -846,26 +864,13 @@ ProfileItem gid_Profileitem_Jvmfwk_Uno_Java_Jfw_Vendor_Settings
     Value = "$BaseInstallation/share/config/javavendors.xml";
 End
 
-ProfileItem gid_Profileitem_Jvmfwk_UnoSettings
-    ProfileID = gid_Profile_Jvmfwk_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 6;
-    Key = "UNO_SETTINGS";
-  #ifdef UNX
-    Value = "unorc";
-  #else
-    Value = "uno.ini";
-  #endif
-End
-
 #if defined SYSTEM_BSH || defined SYSTEM_XML_APIS || \
     defined SYSTEM_XERCES || defined SYSTEM_XALAN || defined SYSTEM_SERIALIZER
 ProfileItem gid_Profileitem_Jvmfwk_Uno_Java_Jfw_Classpath_Urls
     ProfileID = gid_Profile_Jvmfwk_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 7;
+    Order = 6;
     Key = "UNO_JAVA_JFW_CLASSPATH_URLS";
     Value = "";
 #ifdef SYSTEM_BSH
