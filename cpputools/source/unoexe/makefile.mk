@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:30:40 $
+#   last change: $Author: vg $ $Date: 2007-10-15 13:15:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,6 @@ PRJNAME=cpputools
 TARGET=uno
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
-
-.IF "$(OS)" == "LINUX"
-LINKFLAGSRUNPATH = -Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
-.ELIF "$(OS)" == "SOLARIS"
-LINKFLAGSRUNPATH = -R\''$$ORIGIN/../lib:$$ORIGIN'\'
-.ENDIF
 
 # --- Settings -----------------------------------------------------
 
@@ -84,15 +78,22 @@ DEPOBJFILES=$(OBJ)$/unoexe.obj
 
 APP1TARGET=$(TARGET)
 APP1OBJS=$(DEPOBJFILES)  
+APP1RPATH=UREBIN
 
-# Include all four UNO runtime libraries, so that C++ UNO components running in
-# the uno executable have a defined environment (stlport is already included via
-# APP1STDLIB):
+# Include all relevant (see ure/source/README) dynamic libraries, so that C++
+# UNO components running in the uno executable have a defined environment
+# (stlport, unxlngi6 libstdc++.so.6, and wntmsci10 uwinapi.dll are already
+# included via APP1STDLIB, unxlngi6 libgcc_s.so.1 and wntmsci10 msvcr71.dll and
+# msvcp71.dll are magic---TODO):
 APP1STDLIBS= \
     $(SALLIB)		\
     $(SALHELPERLIB) \
     $(CPPULIB)		\
-    $(CPPUHELPERLIB)
+    $(CPPUHELPERLIB)\
+    $(LIBXML2LIB)
+.IF "$(OS)" == "WNT"
+APP1STDLIBS += $(UNICOWSLIB)
+.ENDIF
 
 .INCLUDE :  target.mk
 
