@@ -1,6 +1,6 @@
 /* $RCSfile: expand.c,v $
--- $Revision: 1.7 $
--- last change: $Author: vg $ $Date: 2007-09-20 14:33:17 $
+-- $Revision: 1.8 $
+-- last change: $Author: ihi $ $Date: 2007-10-15 15:38:46 $
 --
 -- SYNOPSIS
 --      Macro expansion code.
@@ -41,6 +41,7 @@
 --               L or l      - translate to lower case
 --               U or u      - translate to upper case
 --               I or i      - return inferred names
+--               N or n      - return normalized paths
 --               1           - return the first white space separated token
 --
 --    or a single one of:
@@ -121,7 +122,7 @@ char *src;                    /* pointer to source string  */
       /* Here we find the next non white space token in the string
        * and find it's end, with respect to non-significant white space. */
 
-#ifndef _MPW
+#if !defined( _MPW) && !defined(__EMX__)
       start = DmStrSpn( src, " \t\n" );
 #else
       start = DmStrSpn( src, " \t\r\n" );
@@ -267,6 +268,7 @@ char *src;
 {
    char    *s;
    char    *e;
+   char    *res;
    TKSTR   str;
 
    DB_ENTER( "Apply_modifiers" );
@@ -278,19 +280,38 @@ char *src;
       while( *(s = Get_token( &str, "", FALSE )) != '\0' ) {
      HASHPTR hp;
 
-     if ( (hp = Get_name(s, Defs, FALSE)) != NIL(HASH)
+     if ( (hp = Get_name(normalize_path(s), Defs, FALSE)) != NIL(HASH)
        && hp->CP_OWNR
        && hp->CP_OWNR->ce_fname
      ) {
-        e = DmStrApp(e,hp->CP_OWNR->ce_fname);
+        res = hp->CP_OWNR->ce_fname;
      }
      else
-        e = DmStrApp(e,s);
+        res = s;
+
+     if(str.tk_quote == 0) {
+        /* Add leading quote. */
+        e = DmStrApp(e, "\"");
+        e = DmStrJoin(e, res, -1, TRUE);
+        /* Append the trailing quote. */
+        e = DmStrJoin(e, "\"", 1, TRUE);
+     } else {
+        e = DmStrApp(e, res);
+     }
+
       }
 
       FREE(src);
       src = e;
       mod &= ~INFNAME_FLAG;
+   }
+
+   if ( mod & NORMPATH_FLAG ) {
+      e = exec_normpath(src);
+
+      FREE(src);
+      src = e;
+      mod &= ~NORMPATH_FLAG;
    }
 
    if(mod & (TOLOWER_FLAG|TOUPPER_FLAG) ) {
@@ -307,7 +328,16 @@ char *src;
    if (mod & JUST_FIRST_FLAG) {
       SET_TOKEN(&str, src);
       if ((s = Get_token(&str,"",FALSE)) != '\0') {
+     /* Recycle the quote at the beginning. */
+     if(str.tk_quote == 0) {
+        s--;
+     }
          e = DmStrDup(s);
+     /* Add trailing quote. */
+     if(str.tk_quote == 0) {
+        e = DmStrJoin(e, "\"", 1, TRUE);
+     }
+
          CLEAR_TOKEN(&str);
          FREE(src);
          src = e;
@@ -323,22 +353,25 @@ char *src;
 
    SET_TOKEN( &str, src );
    DB_PRINT( "mod", ("Source string [%s]", src) );
+   res = DmStrDup("");
 
    while( *(s = Get_token( &str, "", FALSE )) != '\0' ) {
+      char *tokstart = s;
+
       /* search for the directory portion of the filename.  If the
        * DIRECTORY_FLAG is set, then we want to keep the directory portion
        * othewise throw it away and blank out to the end of the token */
 
       if( (e = Basename(s)) != s) {
      if( !(mod & DIRECTORY_FLAG) ) {
+        /* Move the basename to the start. */
         strcpy(s, e);
-        e = s+(str.tk_str-e);
-        for(; e != str.tk_str; e++)
-               *e = ' ';
      }
      else
         s = e;
       }
+      /* s now points to the start of the basename. */
+
 
       /* search for the suffix, if there is none, treat it as a NULL suffix.
        * if no file name treat it as a NULL file name.  same copy op as
@@ -348,41 +381,41 @@ char *src;
       if( e == NIL(char) ) e = s+strlen(s);
 
       if( !(mod & FILE_FLAG) ) {
+     /* Move the suffix to the start. */
      strcpy( s, e );
-     e = s+(str.tk_str-e);
-     for( ; e != str.tk_str; e++ ) *e = ' ';
       }
       else
      s = e;
 
+      /* s now points to the start of the suffix. */
+
+
       /* The last and final part.  This is the suffix case, if we don't want
-       * it then just erase to the end of the token. */
+       * it then just erase it. */
 
       if( s != NIL(char) )
-     if( !(mod & SUFFIX_FLAG) )
-        for( ; s != str.tk_str; s++ ) *s = ' ';
-   }
+     if( !(mod & SUFFIX_FLAG) && s != str.tk_str )
+        *s = '\0';
 
-   /* delete the extra white space, it looks ugly */
-   for( s = src, e = NIL(char); *s; s++ )
-      if( *s == ' ' || *s == '\t' || *s == '\n' || *s == '\r' ) {
-     if( e == NIL(char) )
-        e = s;
-      }
-      else {
-     if( e != NIL(char) ) {
-        if( e+1 < s ) {
-           strcpy( e+1, s );
-           s = e+1;
-           *e = ' ';
-        }
-        e = NIL(char);
+
+      /* only keep non-empty tokens. (This also discards empty quoted ""
+       * tokens.) */
+      if( strlen(tokstart) ) {
+     /* Recycle the quote at the beginning. */
+     if(str.tk_quote == 0) {
+        tokstart--;
+     }
+     res = DmStrApp(res, tokstart);
+     /* Add trailing quote. */
+     if(str.tk_quote == 0) {
+        res = DmStrJoin(res, "\"", 1, TRUE);
      }
       }
+   }
 
-   if( e != NIL(char) )
-      if( e < s )
-     strcpy( e, s );
+   FREE(src);
+   src = res;
+
 
    DB_PRINT( "mod", ("Result string [%s]", src) );
    DB_RETURN( src );
@@ -887,6 +920,9 @@ int  doexpand;          /* If TRUE enables macro expansion  */
              Fatal( "Syntax error in macro. [$%s].\n", start );
           if( *s == ':' ) s++;
           break;
+
+           case 'n':
+           case 'N': modifier_list |= NORMPATH_FLAG; break;
 
            case 'S':
            case 's':
