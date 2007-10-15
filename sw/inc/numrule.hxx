@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:07:09 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 17:32:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,6 +365,17 @@ namespace numfunc
         @author OD
     */
     const sal_Unicode GetBulletChar( BYTE nLevel );
+
+    /** configuration, if at first position of the first list item the <TAB>-key
+        increased the indent of the complete list or only demotes this list item.
+        The same for <SHIFT-TAB>-key at the same position for decreasing the
+        indent of the complete list or only promotes this list item.
+
+        OD 2007-10-01 #b6600435#
+
+        @author OD
+    */
+    const sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem();
 }
 
 #endif  // _NUMRULE_HXX
