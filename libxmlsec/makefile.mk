@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 13:58:24 $
+#   last change: $Author: vg $ $Date: 2007-10-15 13:04:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,10 +112,10 @@ xmlsec_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
-xmlsec_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN'
+xmlsec_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF			# "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
-xmlsec_LDFLAGS+=-Wl,-R'$$$$ORIGIN'
+xmlsec_LDFLAGS+=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF			# "$(OS)$(COM)"=="SOLARISC52"
 
 .IF "$(OS)$(COM)"=="LINUXGCC"
