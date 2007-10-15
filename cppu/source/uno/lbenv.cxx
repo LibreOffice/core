@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:22:45 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:19:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@
 #include "uno/lbnames.h"
 #include "prim.hxx"
 #include "destr.hxx"
+#include "loadmodule.hxx"
 
 #include <hash_map>
 #include <vector>
@@ -1070,18 +1071,8 @@ static bool loadEnv(OUString const  & cLibStem,
                     void            * /*pContext*/)
 {
     // late init with some code from matching uno language binding
-    ::rtl::OUStringBuffer aLibName( 16 );
-#if defined SAL_DLLPREFIX
-    aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLPREFIX) );
-#endif
-    aLibName.append(cLibStem);
-    aLibName.appendAscii(RTL_CONSTASCII_STRINGPARAM(SAL_DLLEXTENSION));
-
-    OUString aStr( aLibName.makeStringAndClear() );
-
     // will be unloaded by environment
-    oslModule hMod = ::osl_loadModule(
-        aStr.pData, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
+    oslModule hMod = cppu::detail::loadModule( cLibStem );
 
     if (!hMod)
         return false;
