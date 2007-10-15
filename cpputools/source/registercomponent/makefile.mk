@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-20 12:21:23 $
+#   last change: $Author: vg $ $Date: 2007-10-15 13:14:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,6 @@ LIBTARGET=NO
 
 ENABLE_EXCEPTIONS=TRUE
 
-.IF "$(OS)" == "LINUX"
-LINKFLAGSRUNPATH = -Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
-.ELIF "$(OS)" == "SOLARIS"
-LINKFLAGSRUNPATH = -R\''$$ORIGIN/../lib:$$ORIGIN'\'
-.ENDIF
-
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
 
@@ -75,6 +69,7 @@ DEPOBJFILES=   $(OBJ)$/registercomponent.obj
 
 APP1TARGET= $(TARGET)
 APP1OBJS=$(DEPOBJFILES)  
+APP1RPATH=UREBIN
 
 APP1STDLIBS=\
             $(SALLIB) \
