@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntgcci6.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 10:52:28 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:42:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ MPRLIB=-lmpr
 WS2_32LIB=-lws2_32
 KERNEL32LIB=-lkernel32
 USER32LIB=-luser32
-MSVCRTLIB=-lmsvcrt
+LIBCMT=-lmsvcrt
 COMDLG32LIB=-lcomdlg32
 COMCTL32LIB=-lcomctl32
 CRYPT32LIB=$(PSDK_HOME)$/lib$/crypt32.lib
