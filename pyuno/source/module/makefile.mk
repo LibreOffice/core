@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:35:42 $
+#   last change: $Author: vg $ $Date: 2007-10-15 13:03:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ $(DLLDEST)$/%.py: %.py
 .IF "$(GUI)" == "UNX"
 $(PYUNO_MODULE) : $(SLO)$/pyuno_dlopenwrapper.obj
 .IF "$(OS)" == "LINUX"
-    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHLCUI) -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSRUNPATH_OOO) $(LINKFLAGSSHLCUI) -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
 .ELIF "$(OS)" == "SOLARIS"
     @echo ld -G -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
 .ELIF "$(OS)" == "FREEBSD"
