@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abstdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:27:32 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:07:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,13 @@
 
 typedef VclAbstractDialogFactory* (__LOADONCALLAPI *FuncPtrCreateDialogFactory)();
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
 VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
 {
     FuncPtrCreateDialogFactory fp = 0;
     static ::osl::Module aDialogLibrary;
-    if ( aDialogLibrary.is() || aDialogLibrary.load( String( RTL_CONSTASCII_USTRINGPARAM( DLL_NAME ) ) ) )
+    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( RTL_CONSTASCII_USTRINGPARAM( DLL_NAME ) ) ) )
         fp = ( VclAbstractDialogFactory* (__LOADONCALLAPI*)() )
             aDialogLibrary.getFunctionSymbol( ::rtl::OUString::createFromAscii("CreateDialogFactory") );
     if ( fp )
