@@ -28,6 +28,7 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\bin\socomp.dll %_DEST%\bin%_EXT%\socomp.dll
 ..\%__SRC%\slb\soffice.lib %_DEST%\lib%_EXT%\soffice.lib
 ..\%__SRC%\obj\officeloader.obj %_DEST%\lib%_EXT%\officeloader.obj
+..\%__SRC%\obj\extendloaderenvironment.obj %_DEST%\lib%_EXT%\extendloaderenvironment.obj
 ..\%__SRC%\lib\libwrp*.so %_DEST%\lib%_EXT%\libwrp*.so
 ..\%__SRC%\lib\libwrp*.dylib %_DEST%\lib%_EXT%\libwrp*.dylib
 ..\%__SRC%\lib\libspl*.so %_DEST%\lib%_EXT%\libspl*.so
@@ -51,9 +52,11 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\bin\deploymentmisc*.dll %_DEST%\bin%_EXT%\deploymentmisc*.dll
 ..\%__SRC%\lib\libdeploymentmisc*.so %_DEST%\lib%_EXT%\libdeploymentmisc*.so
 ..\%__SRC%\lib\libdeploymentmisc*.dylib %_DEST%\lib%_EXT%\libdeploymentmisc*.dylib
-..\%__SRC%\bin\unopkg.exe %_DEST%\bin%_EXT%\unopkg.exe
-..\%__SRC%\bin\so\unopkg.exe %_DEST%\bin%_EXT%\so\unopkg.exe
+..\%__SRC%\bin\guiloader.exe %_DEST%\bin%_EXT%\unopkg.exe
+..\%__SRC%\bin\so\guiloader.exe %_DEST%\bin%_EXT%\so\unopkg.exe
 ..\%__SRC%\bin\unopkg %_DEST%\bin%_EXT%\unopkg.bin
+..\%__SRC%\bin\unopkg.bin %_DEST%\bin%_EXT%\unopkg.bin
+..\%__SRC%\bin\so\unopkg.bin %_DEST%\bin%_EXT%\so\unopkg.bin
 ..\%__SRC%\misc\unopkg.sh %_DEST%\bin%_EXT%\unopkg
 ..\%__SRC%\bin\pkgchk.exe %_DEST%\bin%_EXT%\pkgchk.exe
 ..\%__SRC%\bin\msi-pkgchk.exe %_DEST%\bin%_EXT%\msi-pkgchk.exe
@@ -103,3 +106,4 @@ mkdir: %COMMON_DEST%\pck%_EXT%\broffice_nologo
 ..\%__SRC%\bin\nologo_dev_broffice\intro.zip %COMMON_DEST%\pck%_EXT%\broffice_dev_nologo\intro.zip
 ..\%__SRC%\bin\nologo_broffice\intro.zip %COMMON_DEST%\pck%_EXT%\broffice_nologo\intro.zip
 
+..\scripts\ure-link %_DEST%\bin%_EXT%\ure-link
