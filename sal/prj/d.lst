@@ -18,6 +18,10 @@ mkdir: %_DEST%\inc%_EXT%\systools\unx
 ..\inc\systools\win32\*.hxx %_DEST%\inc%_EXT%\systools\win32\*.hxx
 ..\inc\systools\unx\*.h %_DEST%\inc%_EXT%\systools\unx\*.h
 
+..\%__SRC%\obj\delayload.obj %_DEST%\lib%_EXT%\delayload.obj
+..\%__SRC%\obj\delayloadinit.obj %_DEST%\lib%_EXT%\delayloadinit.obj
+..\systools\win32\delayload\delayload.hxx %_DEST%\inc%_EXT%\sal\delayload.hxx
+
 ..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
