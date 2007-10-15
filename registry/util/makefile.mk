@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:39:20 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:29:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@ SHL1DEPN= $(LIB1TARGET)
 SHL1DEF= $(MISC)$/$(SHL1TARGET).def
 DEF1NAME= $(SHL1TARGET)
 DEF1DES	= RegistryRuntime
+SHL1RPATH=URELIB
 
 # --- Targets ------------------------------------------------------
 
