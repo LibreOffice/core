@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.73 $
+#   $Revision: 1.74 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 15:38:13 $
+#   last change: $Author: vg $ $Date: 2007-10-15 13:01:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -214,8 +214,8 @@ APP6VERINFO=verinfo.rc
 APP6LINKRES=$(MISC)$/soffice6.res
 APP6ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
 APP6OBJS = \
-        $(OBJ)$/officeloader.obj
-STDLIB6=$(ADVAPI32LIB)
+        $(OBJ)$/officeloader.obj $(OBJ)$/extendloaderenvironment.obj
+STDLIB6=$(ADVAPI32LIB) $(SHLWAPILIB)
 
 APP7TARGET=officeloader
 APP7RES=$(RES)$/ooloader.res
@@ -225,8 +225,14 @@ APP7VERINFO=ooverinfo.rc
 APP7LINKRES=$(MISC)$/ooffice7.res
 APP7ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
 APP7OBJS = \
-        $(OBJ)$/officeloader.obj
-STDLIB7=$(ADVAPI32LIB)
+        $(OBJ)$/officeloader.obj $(OBJ)$/extendloaderenvironment.obj
+STDLIB7=$(ADVAPI32LIB) $(SHLWAPILIB)
+
+# Until every DLL is linked against $(DELAYLOADOBJ) just as on wntmsci10:
+.IF "$(OS)$(COM)$(CPU)$(COMEX)" == "WNTMSCI11"
+APP6OBJS+=$(L)$/delayload.obj
+APP7OBJS+=$(L)$/delayload.obj
+.ENDIF
 .ENDIF # WNT
 
 # --- Targets -------------------------------------------------------------
