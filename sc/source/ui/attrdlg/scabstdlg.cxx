@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scabstdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:59:38 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@ using ::rtl::OUStringBuffer;
 
 typedef ScAbstractDialogFactory* (__LOADONCALLAPI *ScFuncPtrCreateDialogFactory)();
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
 ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
 {
     ScFuncPtrCreateDialogFactory fp = 0;
@@ -53,7 +55,7 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
     OUStringBuffer aStrBuf;
     aStrBuf.appendAscii( SVLIBRARY("scui") );
 
-    if ( aDialogLibrary.is() || aDialogLibrary.load( aStrBuf.makeStringAndClear() ) )
+    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, aStrBuf.makeStringAndClear() ) )
         fp = ( ScAbstractDialogFactory* (__LOADONCALLAPI*)() )
             aDialogLibrary.getFunctionSymbol( ::rtl::OUString::createFromAscii("CreateDialogFactory") );
     if ( fp )
