@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collator_unicode.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:15:02 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,8 @@ Collator_Unicode::compareString( const OUString& str1, const OUString& str2) thr
     return collator->compare(str1.getStr(), str2.getStr());
 }
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
 sal_Int32 SAL_CALL
 Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::Locale& rLocale, sal_Int32 options)
     throw(RuntimeException)
@@ -99,7 +101,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             aBuf.appendAscii(SAL_DLLPREFIX);
 #endif
             aBuf.appendAscii( "collator_data" ).appendAscii( SAL_DLLEXTENSION );
-            hModule = osl_loadModule( aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
+            hModule = osl_loadModuleRelative( &thisModule, aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
             if (hModule) {
                 const sal_uInt8* (*func)() = NULL;
                 aBuf.appendAscii("get_").append(rLocale.Language).appendAscii("_");
