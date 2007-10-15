@@ -1,4 +1,4 @@
-/* RCS  $Id: runargv.c,v 1.4 2007-01-18 09:34:27 vg Exp $
+/* RCS  $Id: runargv.c,v 1.5 2007-10-15 15:43:15 ihi Exp $
 --
 -- SYNOPSIS
 --      Run a sub process.
@@ -38,7 +38,7 @@ CELLPTR target;
 int group;
 int last;
 t_attr  cmnd_attr; /* Attributes for current cmnd. */
-char    *cmd;
+char  **cmd; /* Simulate a reference to *cmd. */
 {
    int  ignore = (cmnd_attr & A_IGNORE)!= 0; /* Ignore errors ('-'). */
    int  shell  = (cmnd_attr & A_SHELL) != 0; /* Use shell ('+'). */
@@ -54,14 +54,12 @@ char    *cmd;
    char **argv;
    int old_stdout = -1; /* For redirecting shell escapes */
    int old_stderr = -1; /* and silencing @@-recipes      */
+   char *tcmd = *cmd; /* For saver/easier string arithmetic on *cmd. */
 
    if( Measure & M_RECIPE )
       Do_profile_output( "s", M_RECIPE, target );
 
    _add_child(target, ignore);
-
-   /* remove leading whitespace */
-   while( iswhite(*cmd) ) ++cmd;
 
    /* redirect output for _exec_shell / @@-recipes. */
    if( Is_exec_shell ) {
@@ -80,24 +78,25 @@ char    *cmd;
    }
 
    /* Return immediately for empty line or noop command. */
-   if ( !*cmd ||                /* empty line */
-    ( strncmp(cmd, "noop", 4) == 0 &&   /* noop command */
-      (iswhite(cmd[4]) || cmd[4] == '\0')) ) {
+   if ( !*tcmd ||               /* empty line */
+    ( strncmp(tcmd, "noop", 4) == 0 &&  /* noop command */
+      (iswhite(tcmd[4]) || tcmd[4] == '\0')) ) {
       status = 0;
    }
    else if( !shell &&  /* internal echo only if not in shell */
-        strncmp(cmd, "echo", 4) == 0 &&
-        (iswhite(cmd[4]) || cmd[4] == '\0') ) {
-      char *tstr = cmd+4;
+        strncmp(tcmd, "echo", 4) == 0 &&
+        (iswhite(tcmd[4]) || tcmd[4] == '\0') ) {
       int nl = 1;
 
-      while( iswhite(*tstr) ) ++tstr;
-      if ( strncmp(tstr,"-n",2 ) == 0) {
+      tcmd = tcmd + 4;
+
+      while( iswhite(*tcmd) ) ++tcmd;
+      if ( strncmp(tcmd,"-n",2 ) == 0) {
      nl = 0;
-     tstr = tstr+2;
-     while( iswhite(*tstr) ) ++tstr;
+     tcmd = tcmd+2;
+     while( iswhite(*tcmd) ) ++tcmd;
       }
-      printf("%s%s", tstr, nl ? "\n" : "");
+      printf("%s%s", tcmd, nl ? "\n" : "");
       fflush(stdout);
       status = 0;
    }
@@ -117,7 +116,15 @@ char    *cmd;
      dup2(old_stderr, 2);
    }
 
-   if( status == -1 ) Error("%s: %s", argv[0], strerror(errno));
+   if( status == -1 ) {
+      /* spawnvpe failed */
+      fprintf(stderr, "%s:  Error executing '%s': %s",
+          Pname, argv[0], strerror(errno) );
+      if( ignore||Continue ) {
+     fprintf(stderr, " (Ignored)" );
+      }
+      fprintf(stderr, "\n");
+   }
 
    if( Measure & M_RECIPE )
       Do_profile_output( "e", M_RECIPE, target );
@@ -170,7 +177,6 @@ _finished_child(status)
 int status;
 {
    if( _valid == -1 ) return;
-   Unlink_temp_files( _tg );
    _valid = -1;
    Handle_result( status, _ignore, _abort_flg, _tg );
 }
