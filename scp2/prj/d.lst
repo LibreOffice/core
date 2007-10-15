@@ -6,6 +6,8 @@
 ..\%__SRC%\bin\sdk\sdkoo.ins %_DEST%\bin%_EXT%\sdkoo.ins
 ..\%__SRC%\bin\osl\setup_osljre.inf %_DEST%\bin%_EXT%\setup_osljre.inf
 ..\%__SRC%\bin\osl\setup_osljre.ins %_DEST%\bin%_EXT%\setup_osljre.ins
+..\%__SRC%\bin\osl\ooo_wo_ure.inf %_DEST%\bin%_EXT%\ooo_wo_ure.inf
+..\%__SRC%\bin\osl\ooo_wo_ure.ins %_DEST%\bin%_EXT%\ooo_wo_ure.ins
 
 mkdir: %_DEST%\par%_EXT%
 
