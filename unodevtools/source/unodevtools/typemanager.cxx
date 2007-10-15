@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:51:44 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:24:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,8 @@
 
 #include "com/sun/star/container/XSet.hpp"
 #include "com/sun/star/reflection/XTypeDescription.hpp"
+#include "com/sun/star/registry/XSimpleRegistry.hpp"
+#include "com/sun/star/uno/XComponentContext.hpp"
 
 using namespace ::rtl;
 using namespace ::cppu;
