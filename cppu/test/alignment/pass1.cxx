@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pass1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:24:36 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:20:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,8 @@
 #include <cppuhelper/bootstrap.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/registry/XSimpleRegistry.hpp>
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define OSTR(x) ::rtl::OUStringToOString( x, RTL_TEXTENCODING_ASCII_US )
@@ -71,16 +73,13 @@ static void find_all_structs(
     Reference< registry::XRegistryKey > const & xKey,
     ::std::vector< OUString > * pNames )
 {
-    static RegistryTypeReaderLoader s_loader;
-    OSL_VERIFY( s_loader.isLoaded() );
-
     if (xKey.is() && xKey->isValid())
     {
         if (xKey->getValueType() == registry::RegistryValueType_BINARY)
         {
             Sequence< sal_Int8 > aBytes( xKey->getBinaryValue() );
             RegistryTypeReader aReader(
-                s_loader, (const sal_uInt8 *)aBytes.getConstArray(),
+                (const sal_uInt8 *)aBytes.getConstArray(),
                 aBytes.getLength(), sal_False );
 
             switch (aReader.getTypeClass())
@@ -205,18 +204,19 @@ SAL_IMPLEMENT_MAIN()
 
                 OString cppName( makeCppName( name ) );
                 fprintf(
-                    hPass2, "\tBINTEST_VERIFYSIZE( %s, %d );\n",
-                    cppName.getStr(), pTD->nSize );
+                    hPass2, "\tBINTEST_VERIFYSIZE( %s, %ld );\n",
+                    cppName.getStr(), static_cast< long >(pTD->nSize) );
                 fprintf(
-                    hPass2, "\tBINTEST_VERIFYALIGNMENT( %s, %d );\n",
-                    cppName.getStr(), pTD->nAlignment );
+                    hPass2, "\tBINTEST_VERIFYALIGNMENT( %s, %ld );\n",
+                    cppName.getStr(), static_cast< long >(pTD->nAlignment) );
                 // offset checks
                 for ( sal_Int32 nPos2 = pCTD->nMembers; nPos2--; )
                 {
                     OString memberName( OSTR(pCTD->ppMemberNames[ nPos2 ]) );
                     fprintf(
-                        hPass2, "\tBINTEST_VERIFYOFFSET( %s, %s, %d );\n",
-                        cppName.getStr(), memberName.getStr(), pCTD->pMemberOffsets[ nPos2 ] );
+                        hPass2, "\tBINTEST_VERIFYOFFSET( %s, %s, %ld );\n",
+                        cppName.getStr(), memberName.getStr(),
+                        static_cast< long >(pCTD->pMemberOffsets[ nPos2 ]) );
                 }
                 typelib_typedescription_release( pTD );
             }
