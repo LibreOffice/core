@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.99 $
+#   $Revision: 1.100 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 16:25:28 $
+#   last change: $Author: vg $ $Date: 2007-10-15 13:07:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,10 +41,6 @@ TARGETTYPE=GUI
 VERSION=$(UPD)
 USE_DEFFILE=TRUE
 
-.IF "$(OS)" == "SOLARIS"
-LINKFLAGSRUNPATH=-R/usr/sfw/lib -R\''$$ORIGIN'\'
-.ENDIF
-
 .IF "$(SNDFILE_LIBS)"!=""
 SNDFILELIB=$(SNDFILE_LIBS)
 .ENDIF
@@ -55,6 +51,9 @@ SNDFILELIB=$(SNDFILE_LIBS)
 .INCLUDE :  makefile.pmk
 .INCLUDE :  makefile2.pmk
 
+.IF "$(OS)" == "SOLARIS"
+LINKFLAGSRUNPATH_OOO := -R/usr/sfw/lib $(LINKFLAGSRUNPATH_OOO)
+.ENDIF
 
 # --- Allgemein ----------------------------------------------------------
 
