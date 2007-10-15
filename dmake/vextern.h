@@ -1,4 +1,4 @@
-/* RCS  $Id: vextern.h,v 1.6 2007-07-03 11:30:13 rt Exp $
+/* RCS  $Id: vextern.h,v 1.7 2007-10-15 15:42:04 ihi Exp $
 --
 -- SYNOPSIS
 --      Global variable declarations.
@@ -43,6 +43,7 @@ EXTERN  char*   Makedir;    /* pointer to macro value for MAKEDIR     */
 EXTERN  char*   Makedir_macval; /* value of MAKEDIR (for .WINPATH)        */
 EXTERN  char*   Shell;      /* pointer to macro value for SHELL       */
 EXTERN  char*   Shell_flags;    /* pointer to macro value for SHELLFLAGS  */
+EXTERN  char*   Shell_quote;    /* pointer to macro value for SHELLCMDQUOTE */
 EXTERN  char*   GShell;     /* pointer to macro value for GROUPSHELL  */
 EXTERN  char*   GShell_flags;   /* pointer to macro value for GROUPFLAGS  */
 EXTERN  char*   Shell_metas;    /* pointer to macro value for SHELLMETAS  */
