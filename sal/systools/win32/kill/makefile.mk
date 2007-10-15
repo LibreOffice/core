@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 15:46:34 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:52:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ CXXFLAGS+= $(LFS_CFLAGS)
 # --- Files --------------------------------------------------------
 
 UWINAPILIB=
+DELAYLOADOBJ=
 
 OBJFILES=\
     $(OBJ)$/kill.obj
