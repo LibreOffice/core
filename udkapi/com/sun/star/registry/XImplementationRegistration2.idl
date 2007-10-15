@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XImplementationRegistration2.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 12:21:53 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:25:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,26 +46,27 @@
 
 /** extends the functionality of <type scope="com::sun::star::registry">XImplementationRegistration</type>. It can be useful to specify a complete Url to a component but register the components name only (library or jar name).
 
-    @since OOo 2.2
+    @since OOo 2.4
  */
 interface XImplementationRegistration2: com::sun::star::registry::XImplementationRegistration
 {
     //-------------------------------------------------------------------------
 
     /** registers a component which provides one or more implementations.
-        The path portion of the URL is stripped of and only the component
-        name is registered.
 
         @param aLocation
             specifies the location of the component with the URL.
+
+        @param aRegisteredLocation
+            the URL with which the component is actually registered.
 
         @param xReg
             specifies the registry where the component should be installed.
             If it is a NULL interface, then the component will be installed
             in the system registry (if this feature is supported).
      */
-    void registerImplementationWithStrippedPath( [in] string aImplementationLoader,
-             [in] string aLocation,
+    void registerImplementationWithLocation( [in] string aImplementationLoader,
+             [in] string aLocation, [in] string aRegisteredLocation,
              [in] com::sun::star::registry::XSimpleRegistry xReg )
             raises( com::sun::star::registry::CannotRegisterImplementationException );
 
