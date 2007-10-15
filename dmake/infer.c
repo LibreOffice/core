@@ -1,6 +1,6 @@
 /* $RCSfile: infer.c,v $
--- $Revision: 1.7 $
--- last change: $Author: obo $ $Date: 2007-06-12 06:06:11 $
+-- $Revision: 1.8 $
+-- last change: $Author: ihi $ $Date: 2007-10-15 15:39:49 $
 --
 -- SYNOPSIS
 --      Infer how to make a target.
@@ -37,7 +37,7 @@
 
 #define A_TRANSFER  (A_EPILOG | A_PRECIOUS | A_SILENT | A_SHELL | A_SETDIR |\
              A_SEQ | A_LIBRARY | A_IGNORE | A_PROLOG | A_SWAP |\
-             A_NOSTATE )
+             A_PHONY | A_NOSTATE )
 
 
 /* Define local static functions */
@@ -72,6 +72,8 @@ CELLPTR setdirroot;
 
    if( cp->ce_attr & A_NOINFER ) {DB_VOID_RETURN;}
 
+   DB_PRINT("inf", ("Inferring rule for [%s]", cp->CE_NAME));
+
    match = NIL(ICELL);
    nomatch = add_iset( NIL(ICELL), NIL(ICELL), NIL(CELL), NIL(DFALINK),
             setdirroot, Prep+count_dots(cp->CE_NAME), 0,
@@ -83,11 +85,12 @@ CELLPTR setdirroot;
 
    DB_EXECUTE( "inf", _dump_iset("nomatch",nomatch); );
 
+   /* If nomatch is non-empty there was no match with an existing
+    * prerrequisite, try to derive one. */
    while( nomatch != NIL(ICELL) ) {
       ICELLPTR new_nomatch = NIL(ICELL);
       ICELLPTR ic, pmatch, mmatch;
       CELLPTR  prereq;
-      int      first;
 
       for( ic=nomatch; ic != NIL(ICELL); ic=ic->ic_next ) {
      int ipush = FALSE;
@@ -112,7 +115,10 @@ CELLPTR setdirroot;
        */
       if( match == NIL(ICELL) ) {
      nomatch = new_nomatch;
+
+     /* Skip the rest and try one level deeper. */
      if( Transitive ) continue;
+
      goto all_done;
       }
 
@@ -133,6 +139,10 @@ CELLPTR setdirroot;
        * prerequisites that already exist. */
       pmatch = mmatch = NIL(ICELL);
       for(; match; match = ic ) {
+     /* This loop checks all possible matches. */
+     DB_PRINT("inf", ("Target [%s] : prerequisite [%s]",
+              match->ic_meta->CE_NAME, match->ic_name));
+
      ic = match->ic_next;
      match->ic_next = NIL(ICELL);
 
@@ -142,33 +152,23 @@ CELLPTR setdirroot;
         mmatch = union_iset(mmatch, match);
       }
 
+      /* Prefer %-targets with existing prerequisites. */
       if( pmatch )
      match = pmatch;
       else
      match = mmatch;
 
-      /* Make sure it is unique */
+      /* Make sure it is unique. It would be easy to check
+       * match->ic_meta->ce_prq for existence and prefer no prerequisites
+       * over prerequisites that are present, but we are currently not
+       * doing it. */
       if( match->ic_next != NIL(ICELL) ) {
-     int dump = (match->ic_next->ic_next != NIL(ICELL));
+     int count = 1;
 
-     /* Check for definite ambiguity */
-     if( !dump ) {
-        if( (match->ic_meta->ce_prq && match->ic_next->ic_meta->ce_prq) ||
-            (!match->ic_meta->ce_prq && !match->ic_next->ic_meta->ce_prq)  )
-           dump = TRUE;
-        else if(!match->ic_meta->ce_prq && match->ic_next->ic_meta->ce_prq )
-           match = match->ic_next;
-     }
-     else {
-        int count = 1;
-
-        Continue = TRUE;
-        Error( "Ambiguous inference chains for target '%s'", cp->CE_NAME );
-        for( ic=match; ic; ic=ic->ic_next )
-           (void) dump_inf_chain(ic, TRUE, count++);
-        Fatal( "resolve ambiguity before proceeding.");
-        /*NOTREACHED*/
-     }
+     Warning( "Ambiguous inference chains for target '%s'", cp->CE_NAME );
+     for( ic=match; ic; ic=ic->ic_next )
+        (void) dump_inf_chain(ic, TRUE, count++);
+     Warning( "First matching rule is chosen.");
       }
 
       /* MATCH now points at the derived prerequisite chain(s).  We must now
@@ -185,8 +185,8 @@ CELLPTR setdirroot;
 
       pmatch = NIL(ICELL);
       prereq = NIL(CELL);
-      first  = TRUE;
 
+      /* This loop treats the inferred targets last to first. */
       while( match ) {
          CELLPTR infcell=NIL(CELL);
 
@@ -200,14 +200,13 @@ CELLPTR setdirroot;
         infcell->ce_flag |= F_TARGET;
 
         if( infcell != cp ) {
-           infcell->ce_flag |= F_INFER;
-           if( !first ) infcell->ce_flag |= F_REMOVE;
+           infcell->ce_flag |= F_INFER|F_REMOVE;
+           DB_PRINT("remove", ("Mark for deletion [%s]",
+                   infcell->CE_NAME));
         }
 
         if( !match->ic_flag )
            infcell->ce_attr |= A_NOINFER;
-
-        first = FALSE;
      }
 
      /* Add global prerequisites from previous rule if there are any and
@@ -216,8 +215,20 @@ CELLPTR setdirroot;
         CELLPTR imeta = pmatch->ic_meta;
         LINKPTR lp;
 
+        DB_PRINT("inf", ("%%-target [%s] - infered target [%s]\n",
+                 imeta->CE_NAME, infcell->CE_NAME));
+
         infcell->ce_per   = pmatch->ic_dfa->dl_per;
         infcell->ce_attr |= (imeta->ce_attr & A_TRANSFER);
+
+        /* The .PHONY mechanism relies on having phony targets not
+         * being STATed and having a zero time stamp. While inferring
+         * the this target it might have been created and stated
+         * therefore these values need to be reset. */
+        if( infcell->ce_attr & A_PHONY ){
+           infcell->ce_time =  0L;
+           infcell->ce_flag &= ~F_STAT;
+        }
 
         if( !(infcell->ce_flag & F_RULES) ) {
            infcell->ce_flag |= (imeta->ce_flag&(F_SINGLE|F_GROUP))|F_RULES;
@@ -289,8 +300,10 @@ CELLPTR setdirroot;
      if( prereq )
         (Add_prerequisite(infcell,prereq,FALSE,FALSE))->cl_flag |=F_TARGET;
 
-     pmatch = match;
-     prereq = infcell;
+     pmatch = match;   /* Previous member in inference chain ... */
+     prereq = infcell; /* is a prerequisite to the next match.   */
+     /* ip->ic_parent is the next target in the inference chain to be
+      * build. If it is empty we are done. */
      match  = match->ic_parent;
       }
 
@@ -325,6 +338,8 @@ ICELLPTR *nnmp;
    DFALINKPTR dfas;
 
    DB_ENTER("derive_prerequisites");
+
+   DB_PRINT("inf", ("for [%s]\n", ic->ic_name));
 
    /* If none of the inference nodes match then forget about the inference.
     * The user did not tell us how to make such a target.  We also stop the
@@ -386,6 +401,7 @@ ICELLPTR *nnmp;
      int      noinf;
      int      exists;
 
+     /* Name of the prerequisite, can be empty. */
      if( meta->ce_prq )
         name = meta->ce_prq->cl_prq->CE_NAME;
 
@@ -480,6 +496,7 @@ ICELLPTR *nnmp;
            printf( "%s:  Trying prerequisite [%s] for [%s]\n", Pname,
                iprqh.ht_name, ic->ic_name );
 
+        /* irpq is a temporary target cell, a stat will not be remembered. */
         if( !(iprq.ce_flag & F_STAT) ) Stat_target(&iprq, FALSE, FALSE);
      }
 
@@ -494,7 +511,9 @@ ICELLPTR *nnmp;
      if( meta->ce_prq )
         noinf |= ((meta->ce_prq->cl_prq->ce_attr)&A_NOINFER);
      trans = Transitive || !noinf;
-     exists = (iprq.ce_time != (time_t)0L);
+
+     /* If no prereq is given treat it as if it is existing. */
+     exists = (iprq.ce_time != (time_t)0L) || (name == NIL(char));
 
      if( exists || (ircp != NIL(STRING)) || !name ) {
         match = add_iset( match, ic, meta, pdfa, idirroot, ic->ic_dmax,
@@ -774,6 +793,7 @@ int  print;
 
    if( ip == NIL(ICELL) ) return(NIL(char));
 
+   /* ip->ic_parent is the target to be build after ip. */
    tmp = dump_inf_chain(ip->ic_parent, FALSE, FALSE);
 
    if( ip->ic_meta ) {
