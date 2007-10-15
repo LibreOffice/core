@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 13:36:11 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:52:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ SHL1STDLIBS+=\
         $(USER32LIB)\
         $(ADVAPI32LIB)\
         $(VERSIONLIB)\
-        $(MSVCRTLIB)\
+        $(LIBCMT)\
         $(SHLWAPILIB)
 
         
