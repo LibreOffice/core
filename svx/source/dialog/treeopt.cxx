@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2007-08-21 15:25:19 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:34:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1561,6 +1561,8 @@ BOOL EnableSSO( void )
     return bSSOEnabled;
 }
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
 CreateTabPage GetSSOCreator( void )
 {
     static CreateTabPage theSymbol = 0;
@@ -1568,7 +1570,8 @@ CreateTabPage GetSSOCreator( void )
     {
         osl::Module aModule;
         rtl::OUString theModuleName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "ssoopt" ) ) );
-        if( aModule.load( theModuleName, SAL_LOADMODULE_DEFAULT ) )
+        if( aModule.loadRelative(
+                &thisModule, theModuleName, SAL_LOADMODULE_DEFAULT ) )
         {
             rtl::OUString theSymbolName( rtl::OUString::createFromAscii( "CreateSSOTabPage" ) );
             theSymbol = reinterpret_cast<CreateTabPage>(aModule.getFunctionSymbol( theSymbolName ));
