@@ -111,16 +111,17 @@
 --- misc/build/icu/source/config/mh-linux	Mon Apr 30 17:32:58 2007
 ***************
 *** 20,25 ****
---- 20,32 ----
+--- 20,33 ----
   LD_RPATH=	
   LD_RPATH_PRE = -Wl,-rpath,
   
 + ## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
++ ## (incl. the C++ runtime libs potentially found in the URE lib dir):
 + ENABLE_RPATH=YES
-+ RPATHLDFLAGS=${LD_RPATH_PRE}'$$ORIGIN'
++ RPATHLDFLAGS=${LD_RPATH_PRE}'$$ORIGIN:$$ORIGIN/../ure-link/lib'
 + 
 + #SH#  ENABLE_RPATH=YES
-+ #SH#  RPATHLDFLAGS="${LD_RPATH_PRE}'$$ORIGIN'"
++ #SH#  RPATHLDFLAGS="${LD_RPATH_PRE}'$$ORIGIN:$$ORIGIN/../ure-link/lib'"
 + 
   ## These are the library specific LDFLAGS
   LDFLAGSICUDT=-nodefaultlibs -nostdlib
