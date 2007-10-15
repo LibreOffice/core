@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directory_ooo.scp,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:01:51 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:55:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,16 @@ Directory gid_Dir_Program
     DosName = "MacOS";
 #endif
 End
+
+#if defined MACOSX
+Unixlink gid_Unixlink_Program
+    BIN_FILE_BODY;
+    Styles = (PATCH);
+    Dir = gid_Dir_Bundle_Contents;
+    Name = "program";
+    Target = "MacOS";
+End
+#endif
 
 Directory gid_Dir_Program_Remote
     ParentID = gid_Dir_Program;
