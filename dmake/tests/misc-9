@@ -22,6 +22,7 @@ SHELL*:=/bin/sh
 SHELLFLAGS*:=-ce
 
 %.dpcc :
+	@sleep 1
 # The following line adds a dependency to %.obj when the %.dpcc is included
 	@+echo \$@ : \$(@:b).obj > \$@
 
