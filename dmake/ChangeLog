@@ -1,3 +1,618 @@
+2007-10-13 19:43  vq
+
+	* Makefile.in, NEWS, configure, configure.in, man/dmake.nc,
+	  man/dmake.tf, win95/microsft/config.h, winnt/microsft/config.h:
+
+	#i79272# Release dmake 4.11.
+
+2007-10-13 18:27  vq
+
+	* tests/misc-20:
+
+	#i10000# Fix typo.
+
+2007-10-13 18:21  vq
+
+	* tests/: Makefile.am, Makefile.in, misc-21:
+
+	#i81252# Add testcase.
+
+2007-10-11 16:57  vq
+
+	* tests/: function_macros-9, misc-9, targets-21, targets-26,
+	  targets-27:
+
+	#i50092# Work around Solaris and nfs timing issues.
+	Patch from hjs@openoffice.org.
+
+2007-10-11 16:36  vq
+
+	* make.cmd:
+
+	#i81855# Add a comment about building dmake on OS/2.
+
+2007-10-06 10:33  vq
+
+	* msdos/runargv.c, tests/recipes-9, unix/runargv.c:
+
+	#i80598# Always issue a warning if the actual execution of a recipe line
+	(this does not include sucessfully executed, but failing programs) fails.
+
+2007-09-24 17:45  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-29:
+
+	#i80012# Add testcase.
+
+2007-09-24 13:51  vq
+
+	* unix/runargv.c:
+
+	#i80012# Fix crash when deleting intermediate targets.
+
+2007-09-23 18:12  vq
+
+	* Makefile.in, configure:
+
+	#i81855# Regenerate configure and friends.
+
+2007-09-23 18:05  vq
+
+	* configure.in, dmake.c, expand.c, extern.h, make.cmd, path.c,
+	  sysintf.c, startup/unix/os2/Makefile.am,
+	  startup/unix/os2/Makefile.in, startup/unix/os2/macros.mk,
+	  unix/os2/public.h:
+
+	#i81855# More changes for the OS/2 port.
+	Patch provided by Yuri Dario.
+
+2007-09-22 19:11  vq
+
+	* configure:
+
+	#i81855# Regenerate configure and friends.
+
+2007-09-22 19:05  vq
+
+	* NEWS, imacs.c, os2/sysintf.h, unix/dcache.c, unix/dirbrk.c,
+	  unix/sysintf.h:
+
+	#i81855# Clean-up merge from CWS os2port01.
+
+2007-09-22 18:27  vq
+
+	* make.cmd:
+
+	#i81855# Revert change to make.cmd as it refers to a non-existing script
+	in dmake\os2\gcc\emx\mk.cmd.
+
+2007-09-22 18:08  vq
+
+	* unix/runargv.c:
+
+	RESYNC: (1.11-1.12); FILE MERGED
+
+2007-09-22 18:08  vq
+
+	* os2/ruletab.c:
+
+	RESYNC: (1.2-1.3); FILE MERGED
+
+2007-09-22 18:08  vq
+
+	* expand.c:
+
+	RESYNC: (1.6-1.7); FILE MERGED
+
+2007-09-22 18:08  vq
+
+	* dmake.c, sysintf.c:
+
+	RESYNC: (1.10-1.11); FILE MERGED
+
+2007-09-22 18:08  vq
+
+	* configure.in:
+
+	RESYNC: (1.29-1.30); FILE MERGED
+
+2007-09-21 20:46  vq
+
+	* NEWS:
+
+	#i79271# Update NEWS file.
+
+2007-09-21 19:14  vq
+
+	* dmake.c:
+
+	#i81296# Change comment.
+
+2007-09-19 21:50  vq
+
+	* man/: dmake.nc, dmake.tf:
+
+	#i81252# Restore alphabetical order.
+
+2007-09-18 21:03  vq
+
+	* man/: dmake.nc, dmake.tf:
+
+	#i81252# Add documentation for the SHELLCMDQUOTE macro.
+
+2007-09-18 20:34  vq
+
+	* getinp.c, imacs.c, make.c, sysintf.c, vextern.h, mac/public.h,
+	  msdos/runargv.c, msdos/spawn.c, msdos/borland/bcc30/public.h,
+	  msdos/borland/bcc40/public.h, msdos/borland/bcc45/public.h,
+	  msdos/borland/bcc50/public.h, msdos/borland/tcc20/public.h,
+	  msdos/microsft/msc51/public.h, msdos/microsft/msc60/public.h,
+	  msdos/zortech/public.h, os2/ibm/icc/public.h,
+	  os2/ibm/icc3/public.h, qssl/public.h, qssl/runargv.c,
+	  startup/win95/macros.mk, startup/winnt/macros.mk, tos/public.h,
+	  unix/runargv.c, unix/386ix/public.h, unix/bsd43/public.h,
+	  unix/bsd43/uw/public.h, unix/bsd43/vf/public.h,
+	  unix/bsdarm32/public.h, unix/coherent/ver40/public.h,
+	  unix/coherent/ver42/public.h, unix/cygwin/public.h,
+	  unix/linux/gnu/public.h, unix/macosx/gnu/public.h,
+	  unix/solaris/public.h, unix/solaris/gnu/public.h,
+	  unix/sysvr1/public.h, unix/sysvr3/public.h,
+	  unix/sysvr3/gnu/public.h, unix/sysvr3/pwd/public.h,
+	  unix/sysvr4/public.h, unix/xenix/public.h,
+	  unix/xenix/pwd/public.h, win95/borland/bcc50/public.h,
+	  win95/microsft/vpp40/public.h, winnt/borland/bcc50/public.h,
+	  winnt/microsft/vpp40/public.h, winnt/mingw/public.h,
+	  winnt/msvc6/public.h:
+
+	#i81252# Add a new SHELLCMDQUOTE control macro.
+
+2007-09-17 18:24  vq
+
+	* tests/: function_macros-8, macros-7:
+
+	#i78776# Fix testcases for non-cygwin OS.
+
+2007-09-16 12:35  vq
+
+	* tests/: Makefile.am, Makefile.in, misc-20:
+
+	#i81296# Add testcases.
+
+2007-09-16 00:10  vq
+
+	* tests/macros-11:
+
+	#i74007# Change testcase.
+
+2007-09-15 23:57  vq
+
+	* dmake.c, mac/ruletab.c, man/dmake.nc, man/dmake.tf,
+	  msdos/ruletab.c, os2/ruletab.c, unix/ruletab.c,
+	  win95/borland/ruletab.c, win95/microsft/ruletab.c,
+	  winnt/borland/ruletab.c, winnt/microsft/ruletab.c:
+
+	#i74007# Revert the part of the previous patch that lets OOODMAKEMODE
+	always be imported from the environment. Instead move the definition
+	of targets from the command line after the evaluation of the startup
+	makefile.
+
+2007-09-15 23:16  vq
+
+	* tests/macros-11:
+
+	#i74007# Add testcase.
+
+2007-09-15 23:06  vq
+
+	* man/dmake.nc:
+
+	#i74007# Update text version of the man page.
+
+2007-09-15 23:03  vq
+
+	* dmake.c, mac/ruletab.c, man/dmake.tf, msdos/ruletab.c,
+	  os2/ruletab.c, unix/ruletab.c, win95/borland/ruletab.c,
+	  win95/microsft/ruletab.c, winnt/borland/ruletab.c,
+	  winnt/microsft/ruletab.c:
+
+	#i74007# Always import OOODMAKEMODE from the environment. Define targets from
+	the command line after the macros from the command line and OOODMAKEMODE
+	from the environment are set.
+
+2007-09-13 23:40  vq
+
+	* dmake.c, extern.h, make.c, rulparse.c:
+
+	#i81296# Clear flags indicating that targets that infered makefiles (and
+	their prerequisites) were previously build.
+
+2007-09-13 20:08  vq
+
+	* dmake.h, rulparse.c:
+
+	#i81296# Remove bit recycling for F_VISITED/F_USED. Use only F_VISITED.
+
+2007-09-09 15:11  vq
+
+	* quit.c:
+
+	#i81273# Fixed another MinGW build problem.
+
+2007-09-08 14:20  vq
+
+	* make.c, rulparse.c:
+
+	#i10000# Add some output for .INCLUDE operations when the -vf verbose
+	flag is given.
+
+2007-09-06 10:53  vq
+
+	* quit.c:
+
+	#i81273# Fix MinGW build problem.
+
+2007-09-02 06:57  vq
+
+	* tests/: Makefile.am, Makefile.in, misc-19:
+
+	#i67911# Add testcase.
+
+2007-09-02 06:44  vq
+
+	* make.c, sysintf.c, msdos/runargv.c, qssl/runargv.c,
+	  unix/runargv.c, win95/microsft/vpp40/runargv.c,
+	  winnt/microsft/vpp40/runargv.c:
+
+	#i67911# Wait with the deletion of temporary files until the target is
+	completely made.
+
+2007-08-31 01:24  vq
+
+	* sysintf.c, man/dmake.nc, man/dmake.tf, tests/targets-21,
+	  tests/targets-28:
+
+	#i64572# Issue a warning for virtual targets with corresponding files.
+	Update testcases.
+
+2007-08-30 05:13  vq
+
+	* man/: dmake.nc, dmake.tf:
+
+	#i64572# Add documentation.
+
+2007-08-28 22:27  vq
+
+	* tests/Makefile.am:
+
+	#i64234# Also change Makefile.am.
+
+2007-08-28 22:25  vq
+
+	* tests/: Makefile.in, function_macros-10:
+
+	#i64234# Add testcase.
+
+2007-08-28 14:28  vq
+
+	* function.c, man/dmake.nc, man/dmake.tf:
+
+	#i64234# Fix $(mktmp ..) handling of leading spaces.
+
+2007-08-26 18:22  vq
+
+	* tests/: Makefile.am, Makefile.in, macros-11:
+
+	#i74007# Add testcase.
+
+2007-08-25 16:50  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-28:
+
+	#i64572# Add testcases.
+
+2007-08-25 15:34  vq
+
+	* make.c, sysintf.c:
+
+	#i64572# If a target without recipes has an existing file use its time
+	stamp only if the time is newer than the one of the its newest prerequisite.
+
+2007-08-22 10:02  vq
+
+	* sysintf.c:
+
+	#i64572# Fix the F_RULES problem mentioned before.
+
+2007-08-21 11:09  vq
+
+	* make.c, sysintf.c:
+
+	#i64572# To keep the dependency chains intact targets without recipes inherit
+	the time of their newest prerequisite. (Additional patches are needed as
+	currently the F_RULES flag is not always set correctly.)
+
+2007-08-19 20:05  vq
+
+	* sysintf.c:
+
+	#i64572# Assumes that targets without recipe lines have a current time
+	stamp after they were made (independent of the actual time stamp of the
+	file.
+
+2007-08-18 18:23  vq
+
+	* make.c, sysintf.c:
+
+	#i64572# Make dmake warn if the time stamp of a target is not updated
+	after making the target. This warning can be silenced using the
+	.SILENT attribute.
+
+2007-08-17 23:21  vq
+
+	* make.c:
+
+	#i10000# Remove unused variable.
+
+2007-08-17 23:16  vq
+
+	* dmake.h, make.c, sysintf.c:
+
+	#i10000# Add some comments.
+
+2007-08-15 17:46  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-27:
+
+	#i80687# Add testcase.
+
+2007-08-15 17:25  vq
+
+	* make.c:
+
+	#i80687# Fix building of inferred phony prerequisites.
+
+2007-08-14 13:55  vq
+
+	* make.c:
+
+	#i64572# Revert previous patch.
+
+2007-08-13 11:33  vq
+
+	* make.c:
+
+	#i64572# Make dmake warn if the time stamp of a target is not updated
+	after making the target.
+
+2007-08-11 17:23  vq
+
+	* tests/: Makefile.am, Makefile.in, recipes-9:
+
+	#i80598# Add testcase.
+
+2007-08-11 16:52  vq
+
+	* unix/runargv.c:
+
+	#i80598# Fix handling of ignored errors in the spawn enabled version
+	of dmake.
+
+2007-08-10 13:59  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-26:
+
+	#i66751# Add testcase.
+
+2007-08-10 13:39  vq
+
+	* infer.c:
+
+	#i66751# Make sure that infered phony %-targets do not have a time stamp.
+
+2007-08-10 11:42  vq
+
+	* infer.c, man/dmake.nc, man/dmake.tf:
+
+	#i66751# Accept .PHONY attribute in %-targets.
+
+2007-08-09 15:46  vq
+
+	* macparse.c:
+
+
+	#i69510# Change error on assignment to an empty macro name to a warning.
+
+2007-08-08 22:00  vq
+
+	* tests/: Makefile.am, Makefile.in, recipes-8:
+
+	#i67709# Add testcase.
+
+2007-08-08 21:43  vq
+
+	* parse.c, rulparse.c:
+
+	#i67709# Improve parsing of group recipes.
+
+2007-08-08 13:49  vq
+
+	* tests/: Makefile.am, Makefile.in, macros-10:
+
+	#i69510# Add testcase.
+
+2007-08-08 12:54  vq
+
+	* macparse.c:
+
+	#i69510# Improve error message.
+
+2007-08-08 12:52  vq
+
+	* macparse.c:
+
+	#i69510# Improve macro name syntax check during assignment.
+
+2007-08-06 21:54  vq
+
+	* rulparse.c, man/dmake.nc, man/dmake.tf:
+
+	#i66448# Clarify prerequisites for %-targets.
+
+2007-08-05 17:10  vq
+
+	* function.c, tests/Makefile.am, tests/Makefile.in,
+	  tests/function_macros-9:
+
+	#i50092# Enhance $(shell,expand .. ) parsing. Add testcase.
+
+2007-08-05 14:55  vq
+
+	* make.c:
+
+	#i70168# Clear F_MARK flag after dynamic prerequisite expansion is done.
+
+2007-08-05 13:51  vq
+
+	* infer.c:
+
+	#i80144# Clean-up.
+
+2007-08-05 13:03  vq
+
+	* infer.c, tests/targets-24:
+
+	#i80144# Change error about ambigous inference targets to warning.
+
+2007-08-04 14:56  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-25:
+
+	#i80352# Add testcase.
+
+2007-08-04 14:42  vq
+
+	* make.c:
+
+	#i80352# Fix .PRECIOUS attribute.
+
+2007-08-04 00:15  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-23, targets-24:
+
+	#i80144# Add testcases.
+
+2007-07-31 20:45  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-22:
+
+	#i80143# Add testcase.
+
+2007-07-31 20:29  vq
+
+	* infer.c:
+
+	#i80143# Fix problem marking some intermediate targets removable.
+
+2007-07-30 22:23  vq
+
+	* expand.c:
+
+	#i80009# Add missing string initialization.
+
+2007-07-29 22:28  vq
+
+	* infer.c:
+
+	#i80144# Improve check for ambiguous inference chains.
+
+2007-07-29 12:10  vq
+
+	* infer.c, stat.c:
+
+	#i10000# Add comments to documents aspects of the inference mechanism.
+
+2007-07-28 13:12  vq
+
+	* configure, configure.in:
+
+	#i79815# Fix default DMAKEROOT macro value.
+
+2007-07-27 22:03  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-21:
+
+	#i78837# Add testcase.
+
+2007-07-27 21:37  vq
+
+	* tests/: Makefile.am, Makefile.in, macros-9:
+
+	#i80010# Add testcase.
+
+2007-07-27 15:47  vq
+
+	* expand.c:
+
+	#i80010# Keep quotes for :1 and :i macro extensions.
+
+2007-07-27 15:16  vq
+
+	* tests/: Makefile.am, Makefile.in, macros-8:
+
+	#i80009# Add testcase.
+
+2007-07-27 13:06  vq
+
+	* NEWS, man/dmake.nc, man/dmake.tf:
+
+	#i78776# Document new normalizing function macro and macro extension.
+
+2007-07-26 18:27  vq
+
+	* expand.c:
+
+	#i80009# Fix handling of quoted filenames for :b :d :e :f macro expansions.
+
+2007-07-24 20:31  vq
+
+	* tests/: Makefile.am, Makefile.in, function_macros-8, macros-7:
+
+	#i78776# Add testcases.
+
+2007-07-24 19:00  vq
+
+	* dag.c, dmake.h, expand.c, extern.h, function.c, path.c:
+
+	#i78776# New function macro $(normpath[,para] list) to normalise the
+	elements of list and a macro extension $(macro_name:n) to normalise
+	the content of macro_name. The normalization is done token-wise and
+	quotes are preserved.
+	On cygwin the result honors the setting of .WINPATH to determine the
+	output format.  If the optional parameter para is given in the
+	$(normpath ...) case its expanded value is used to override the
+	.WINPATH setting for the output of the function macro.
+
+2007-07-12 18:59  vq
+
+	* make.c, tests/Makefile.am, tests/Makefile.in, tests/targets-20:
+
+	#i69462# Do not assume that non-existing prerequisites for %-targets have
+	the same time stamp as the parent target. Testcase added.
+
+2007-07-05 17:17  vq
+
+	* getinp.c:
+
+	#i79200# Remove unneeded error on defined or DEFINED after .IF expression.
+
+2007-07-05 11:58  vq
+
+	* Makefile.in, NEWS, configure, configure.in, man/dmake.nc,
+	  man/dmake.tf, readme/read1st.txt, win95/microsft/config.h,
+	  winnt/microsft/config.h:
+
+	#i79271# Bump version to 4.11-cvs.
+
 2007-06-25 18:11  vq
 
 	* Makefile.in, NEWS, configure, configure.in, man/dmake.nc,
