@@ -61,7 +61,7 @@ OPTIONS
 
 
 
-Dmake Version 4.9                 2007-06-25                                 1
+Dmake Version 4.11                2007-10-13                                 1
 
 
 
@@ -127,7 +127,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Dmake Version 4.9                 2007-06-25                                 2
+Dmake Version 4.11                2007-10-13                                 2
 
 
 
@@ -194,7 +194,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Dmake Version 4.9                 2007-06-25                                 3
+Dmake Version 4.11                2007-10-13                                 3
 
 
 
@@ -261,7 +261,7 @@ INDEX
 
 
 
-Dmake Version 4.9                 2007-06-25                                 4
+Dmake Version 4.11                2007-10-13                                 4
 
 
 
@@ -284,9 +284,12 @@ DMAKE(1)                                                              DMAKE(1)
        TEXT DIVERSIONS    How  to  use  text  diversions  in recipes and macro
                           expansions.
 
+       VIRTUAL TARGETS    Targets that only enforce  dependencies,  but  which
+                          can not create a target file.
+
        SPECIAL TARGETS    Some targets are special.
 
-       SPECIAL MACROS     Macros used by dmake to alter the processing of  the
+       SPECIAL MACROS     Macros  used by dmake to alter the processing of the
                           makefile, and those defined by dmake for the user.
 
        CONTROL MACROS     Itemized list of special control macros.
@@ -294,8 +297,7 @@ DMAKE(1)                                                              DMAKE(1)
        RUNTIME MACROS     Discussion of special run-time macros such as $@ and
                           $<.
 
-       FUNCTION MACROS    GNU style function macros,  only  $(mktmp  ...)  for
-                          now.
+       FUNCTION MACROS    Description of functional macros.
 
        CONDITIONAL MACROS Target specific conditional macros.
 
@@ -327,8 +329,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-
-Dmake Version 4.9                 2007-06-25                                 5
+Dmake Version 4.11                2007-10-13                                 5
 
 
 
@@ -392,10 +393,11 @@ STARTUP
        -r  option  was  not specified.  A user may substitute a custom startup
        file by defining the MAKESTARTUP environment variable or by  redefining
        the  MAKESTARTUP  macro  on the command line.  To determine where dmake
+       looks for the default startup file, check your environment or issue the
 
 
 
-Dmake Version 4.9                 2007-06-25                                 6
+Dmake Version 4.11                2007-10-13                                 6
 
 
 
@@ -404,7 +406,6 @@ Dmake Version 4.9                 2007-06-25                                 6
 DMAKE(1)                                                              DMAKE(1)
 
 
-       looks for the default startup file, check your environment or issue the
        command "dmake -V".
 
        A similar search is performed to locate a default user makefile when no
@@ -459,10 +460,12 @@ DMAKE(1)                                                              DMAKE(1)
        Please note that even though .INIT and .DONE  are  special  exceptions,
        see  section  SPECIAL TARGETS, the use of self defined targets starting
        with `.' should be avoided as they would be handled as  .<suffix>  meta
+       targets.  The  target  names  _INIT  and  _DONE  for example would work
+       equally well without the .<suffix> drawback.
 
 
 
-Dmake Version 4.9                 2007-06-25                                 7
+Dmake Version 4.11                2007-10-13                                 7
 
 
 
@@ -470,9 +473,6 @@ Dmake Version 4.9                 2007-06-25                                 7
 
 DMAKE(1)                                                              DMAKE(1)
 
-
-       targets.  The  target  names  _INIT  and  _DONE  for example would work
-       equally well without the .<suffix> drawback.
 
 SYNTAX
        This section is a summary of the syntax of  makefile  statements.   The
@@ -526,22 +526,20 @@ SYNTAX
                          -> expression && expression
 
 
+              Rule-Definition ->  target-definition
+                                     [ recipe ]
+
+              target-definition -> targets [attrs] op { PREREQUISITE } [; rcp-line]
 
 
 
-Dmake Version 4.9                 2007-06-25                                 8
+Dmake Version 4.11                2007-10-13                                 8
 
 
 
 
 
 DMAKE(1)                                                              DMAKE(1)
-
-
-              Rule-Definition ->  target-definition
-                                     [ recipe ]
-
-              target-definition -> targets [attrs] op { PREREQUISITE } [; rcp-line]
 
 
               targets -> target { targets }
@@ -593,24 +591,23 @@ DMAKE(1)                                                              DMAKE(1)
                         -> .PROLOG
                         -> .SETDIR=path
                         -> .SILENT
-
-
-
-Dmake Version 4.9                 2007-06-25                                 9
-
-
-
-
-
-DMAKE(1)                                                              DMAKE(1)
-
-
                         -> .SEQUENTIAL
                         -> .SWAP
                         -> .USESHELL
                         -> .SYMBOL
                         -> .UPDATEALL
                         -> .WINPATH
+
+
+
+
+Dmake Version 4.11                2007-10-13                                 9
+
+
+
+
+
+DMAKE(1)                                                              DMAKE(1)
 
 
               special-target -> .ERROR
@@ -660,18 +657,6 @@ DMAKE(1)                                                              DMAKE(1)
        either side of the macro operator and white space is stripped from both
        before  and  after  the macro value string. A \<nl> sequence in a macro
        definition is deleted from the macro value before assigning this value.
-
-
-
-Dmake Version 4.9                 2007-06-25                                10
-
-
-
-
-
-DMAKE(1)                                                              DMAKE(1)
-
-
        During  recipe  expansion  the sequence \<nl> is treated as white space
        but is deleted from the final recipe string.  You must escape the \<nl>
        with another \ in order to get a \ at the end of a recipe or macro def-
@@ -681,6 +666,18 @@ DMAKE(1)                                                              DMAKE(1)
        in  general,  follow  the first definition of the target (See the RULES
        AND TARGETS section for an exception), and  the  recipe  may  not  span
        across  multiple  makefiles.   Any targets and prerequisites found on a
+
+
+
+Dmake Version 4.11                2007-10-13                                10
+
+
+
+
+
+DMAKE(1)                                                              DMAKE(1)
+
+
        target definition line are taken to be white  space  separated  tokens.
        The  rule  operator  (op  in SYNTAX section) is also considered to be a
        token but does not require white space to precede or follow it.   Since
@@ -730,17 +727,6 @@ ATTRIBUTES
                    Disable  the  special  meaning  of  '[' to initiate a group
                    recipe.
 
-
-
-Dmake Version 4.9                 2007-06-25                                11
-
-
-
-
-
-DMAKE(1)                                                              DMAKE(1)
-
-
        .LIBRARY    Target is a library.
 
        .MKSARGS    If running in an MSDOS environment then  use  MKS  extended
@@ -749,6 +735,18 @@ DMAKE(1)                                                              DMAKE(1)
 
        .NOINFER    Any target with this attribute set will not be subjected to
                    transitive closure if it is inferred as a prerequisite of a
+
+
+
+Dmake Version 4.11                2007-10-13                                11
+
+
+
+
+
+DMAKE(1)                                                              DMAKE(1)
+
+
                    target whose recipe and prerequisites are  being  inferred.
                    (i.e. the inference algorithm will not use any prerequisite
                    with this attribute set,  as  a  target)  If  specified  as
@@ -798,18 +796,6 @@ DMAKE(1)                                                              DMAKE(1)
        .SWAP       Under  MSDOS  when  making a target with this attribute set
                    swap the dmake executable to disk prior  to  executing  the
                    recipe  line.  Also see the '%' recipe line flag defined in
-
-
-
-Dmake Version 4.9                 2007-06-25                                12
-
-
-
-
-
-DMAKE(1)                                                              DMAKE(1)
-
-
                    the RECIPES section.
 
        .SYMBOL     Target is a library member and is an  entry  point  into  a
@@ -818,9 +804,21 @@ DMAKE(1)                                                              DMAKE(1)
                    lib((entry)) have this attribute set automatically.
 
        .USESHELL   Force  each  recipe line of a target to be executed using a
-                   shell.  Specifying this attribute is equivalent to specify-
-                   ing  the  '+' character at the start of each line of a non-
-                   group recipe.
+                   shell.   Specifying  this  attribute   is   equivalent   to
+
+
+
+Dmake Version 4.11                2007-10-13                                12
+
+
+
+
+
+DMAKE(1)                                                              DMAKE(1)
+
+
+                   specifying the '+' character at the start of each line of a
+                   non-group recipe.
 
        .UPDATEALL  Indicates that all the targets  listed  in  this  rule  are
                    updated  by  the  execution  of the accompanying recipe.  A
@@ -867,18 +865,6 @@ DMAKE(1)                                                              DMAKE(1)
        All attributes are user setable and except for .UPDATEALL and  .MKSARGS
        may  be used in one of two forms.  The .MKSARGS attribute is restricted
        to use as a global attribute, and the use of the  .UPDATEALL  attribute
-
-
-
-Dmake Version 4.9                 2007-06-25                                13
-
-
-
-
-
-DMAKE(1)                                                              DMAKE(1)
-
-
        is restricted to rules of the second form only.
 
        ATTRIBUTE_LIST : targets
@@ -889,6 +875,18 @@ DMAKE(1)                                                              DMAKE(1)
        targets ATTRIBUTE_LIST : ...
 
        assigns the attributes specified by ATTRIBUTE_LIST to  each  target  in
+
+
+
+Dmake Version 4.11                2007-10-13                                13
+
+
+
+
+
+DMAKE(1)                                                              DMAKE(1)
+
+
        targets.  In the first form if targets is empty (ie. a NULL list), then
        the list of attributes will apply to all targets in the makefile  (this
        is  equivalent to the common Make construct of ".IGNORE :" but has been
@@ -937,17 +935,6 @@ MACROS
                        value of LINE is expanded prior to being added  to  the
                        value of MACRO.
 
-
-
-Dmake Version 4.9                 2007-06-25                                14
-
-
-
-
-
-DMAKE(1)                                                              DMAKE(1)
-
-
        Macro  expressions  specified on the command line allow the macro value
        to be redefined within the makefile only if the macro is defined  using
        the '+=' and '+:=' operators.  Other operators will define a macro that
@@ -957,6 +944,18 @@ DMAKE(1)                                                              DMAKE(1)
        to  indicate  that the assignment should be forced and that no warnings
        should be issued.  Thus, specifying ! has the effect of silently  forc-
        ing the specified macro assignment.
+
+
+
+
+Dmake Version 4.11                2007-10-13                                14
+
+
+
+
+
+DMAKE(1)                                                              DMAKE(1)
+
 
        When dmake defines a non-environment macro it strips leading and trail-
        ing white space from the macro value.  Macros imported from  the  envi-
@@ -1006,9 +1005,20 @@ DMAKE(1)                                                              DMAKE(1)
 
        where modifier_list may be a combination of:
 
+              b or B - file (not including suffix) portion of path names
+              d or D - directory portion of all path names
+              e or E - suffix portion of path names
+              f or F - file (including suffix) portion of path names
+              i or I - inferred names of targets
+              n or N - normalized path names
+              l or L - macro value in lower case
+              u or U - macro value in upper case
+              1      - return the first white space separated token from value
 
 
-Dmake Version 4.9                 2007-06-25                                15
+
+
+Dmake Version 4.11                2007-10-13                                15
 
 
 
@@ -1016,15 +1026,6 @@ Dmake Version 4.9                 2007-06-25                                15
 
 DMAKE(1)                                                              DMAKE(1)
 
-
-              b or B - file (not including suffix) portion of path names
-              d or D - directory portion of all path names
-              e or E - suffix portion of path names
-              f or F - file (including suffix) portion of path names
-              i or I - inferred names of targets
-              l or L - macro value in lower case
-              u or U - macro value in upper case
-              1      - return the first white space separated token from value
 
        or a single one of:
 
@@ -1049,6 +1050,12 @@ DMAKE(1)                                                              DMAKE(1)
               $(test:u)             -> D1/D2/D3/A.OUT F.OUT D1/K.OUT
               $(test:1)             -> d1/d2/d3/a.out
 
+       For this macro
+              test = d1/d2/../a.out "d1/file name.ext"
+       the following results are returned:
+
+              $(test:n)             -> d1/a.out "d1/file name.ext"
+
        If a token ends in a string  composed  from  the  value  of  the  macro
        DIRBRKSTR  (ie. ends in a directory separator string, e.g. '/' in UNIX)
        and you use the :d modifier then the expansion  returns  the  directory
@@ -1066,18 +1073,22 @@ DMAKE(1)                                                              DMAKE(1)
 
               $(test:i)             -> /tmp/aprog bprog
 
-       The  map escape codes modifier changes the following escape codes \a =>
-       <bel>, \b => <backspace>, \f => <formfeed>, \n => <nl>, \r => <cr>,  \t
+       The normalized path names :n modifier honors the setting of .WINPATH to
+       determine the output format of the result.
+
+       The map escape codes modifier changes the following escape codes \a  =>
+       <bel>,  \b => <backspace>, \f => <formfeed>, \n => <nl>, \r => <cr>, \t
        => <tab>, \v => <vertical tab>, \" => ", and \xxx => <xxx> where xxx is
-       the octal representation of a character into  the  corresponding  ASCII
+       the  octal  representation  of a character into the corresponding ASCII
        value.
 
-       The  tokenization,  prepend and append modifier may use the same escape
+       The tokenization, prepend and append modifier may use the  same  escape
        codes that are supported by the map escape codes modifier in the string
+       that is inserted, prepended or added by the respective macro  modifier.
 
 
 
-Dmake Version 4.9                 2007-06-25                                16
+Dmake Version 4.11                2007-10-13                                16
 
 
 
@@ -1086,12 +1097,11 @@ Dmake Version 4.9                 2007-06-25                                16
 DMAKE(1)                                                              DMAKE(1)
 
 
-       that  is inserted, prepended or added by the respective macro modifier.
-       These modifiers may quote this string to include otherwise  problematic
+       These  modifiers may quote this string to include otherwise problematic
        characters.  E.g. spaces, colons and parentheses.
 
-       The  tokenization  modifier takes all white space separated tokens from
-       the macro value and separates them by the separator string.   Thus  the
+       The tokenization modifier takes all white space separated  tokens  from
+       the  macro  value and separates them by the separator string.  Thus the
        expansion:
 
               $(test:f:t"+\n")
@@ -1100,31 +1110,31 @@ DMAKE(1)                                                              DMAKE(1)
               f.out+
               k.out
 
-       The  prefix  operator ^ takes all white space separated tokens from the
+       The prefix operator ^ takes all white space separated tokens  from  the
        macro value and prepends string to each.
 
               $(test:f:^mydir/)
        produces:
               mydir/a.out mydir/f.out mydir/k.out
 
-       The suffix operator + takes all white space separated tokens  from  the
+       The  suffix  operator + takes all white space separated tokens from the
        macro value and appends string to each.
 
               $(test:b:+.c)
        produces:
               a.c f.c k.c
 
-       The  next  non-standard  form  of  macro expansion allows for recursive
-       macros.  It is possible to specify  a  $(macro_name)  or  ${macro_name}
-       expansion  where  macro_name  contains  more $( ... ) or ${ ... } macro
+       The next non-standard form of  macro  expansion  allows  for  recursive
+       macros.   It  is  possible  to specify a $(macro_name) or ${macro_name}
+       expansion where macro_name contains more $( ... ) or  ${  ...  }  macro
        expansions itself.
 
-       For    example    $(CC$(_HOST)$(_COMPILER))    will    first     expand
-       CC$(_HOST)$(_COMPILER)  to get a result and use that result as the name
+       For     example    $(CC$(_HOST)$(_COMPILER))    will    first    expand
+       CC$(_HOST)$(_COMPILER) to get a result and use that result as the  name
        of the macro to expand.  This is useful for writing a makefile for more
-       than  one  target  environment.   As  an example consider the following
-       hypothetical case.  Suppose that _HOST and _COMPILER are imported  from
-       the  environment and are set to represent the host machine type and the
+       than one target environment.  As  an  example  consider  the  following
+       hypothetical  case.  Suppose that _HOST and _COMPILER are imported from
+       the environment and are set to represent the host machine type and  the
        host compiler respectively.
 
               CFLAGS_VAX_CC = -c -O  # _HOST == "_VAX", _COMPILER == "_CC"
@@ -1134,19 +1144,21 @@ DMAKE(1)                                                              DMAKE(1)
 
               CFLAGS := $(CFLAGS$(_HOST)$(_COMPILER))
 
-       This causes CFLAGS to take on a value that corresponds to the  environ-
+       This  causes CFLAGS to take on a value that corresponds to the environ-
        ment in which the make is being invoked.
 
        The final non-standard macro expansion is of the form:
 
               string1{token_list}string2
 
-       where  string1,  string2 and token_list are expanded.  After expansion,
-       string1 is prepended to each token found in token_list and  string2  is
+       where string1, string2 and token_list are expanded.   After  expansion,
+       string1  is  prepended to each token found in token_list and string2 is
+       appended to each resulting token from the  previous  prepend.   string1
+       and  string2  are  not  delimited  by white space whereas the tokens in
 
 
 
-Dmake Version 4.9                 2007-06-25                                17
+Dmake Version 4.11                2007-10-13                                17
 
 
 
@@ -1155,9 +1167,7 @@ Dmake Version 4.9                 2007-06-25                                17
 DMAKE(1)                                                              DMAKE(1)
 
 
-       appended  to  each  resulting token from the previous prepend.  string1
-       and string2 are not delimited by white  space  whereas  the  tokens  in
-       token_list  are.  A null token in the token list is specified using "".
+       token_list are.  A null token in the token list is specified using  "".
        Thus using another example we have:
 
               test/{f1 f2}.o     --> test/f1.o test/f2.o
@@ -1170,9 +1180,9 @@ DMAKE(1)                                                              DMAKE(1)
               test/{d1 d2}/{f1 f2}.o --> test/d1/f1.o test/d1/f2.o
                                          test/d2/f1.o test/d2/f2.o
 
-       This last expansion is activated only  when  the  first  characters  of
+       This  last  expansion  is  activated  only when the first characters of
        token_list appear immediately after the opening '{' with no intervening
-       white space.  The reason for this restriction is the  following  incom-
+       white  space.   The reason for this restriction is the following incom-
        patibility with Bourne Shell recipes.  The line
 
               { echo hello;}
@@ -1181,41 +1191,45 @@ DMAKE(1)                                                              DMAKE(1)
 
               {echo hello;}
 
-       is  not.  Hence  the latter triggers the enhanced macro expansion while
-       the former causes it to be suppressed.  See the SPECIAL MACROS  section
-       for  a  description of the special macros that dmake defines and under-
+       is not. Hence the latter triggers the enhanced  macro  expansion  while
+       the  former causes it to be suppressed.  See the SPECIAL MACROS section
+       for a description of the special macros that dmake defines  and  under-
        stands.
 
 RULES AND TARGETS
-       A makefile contains a series  of  entries  that  specify  dependencies.
-       Such  entries are called target/prerequisite or rule definitions.  Each
+       A  makefile  contains  a  series  of entries that specify dependencies.
+       Such entries are called target/prerequisite or rule definitions.   Each
        rule definition is optionally followed by a set of lines that provide a
-       recipe  for  updating  any targets defined by the rule.  Whenever dmake
-       attempts to bring a target up to date and an explicit  recipe  is  pro-
-       vided  with  a  rule defining the target, that recipe is used to update
-       the target.  A rule definition begins with a line having the  following
+       recipe for updating any targets defined by the  rule.   Whenever  dmake
+       attempts  to  bring  a target up to date and an explicit recipe is pro-
+       vided with a rule defining the target, that recipe is  used  to  update
+       the  target.  A rule definition begins with a line having the following
        syntax:
 
               <targets> [<attributes>] <ruleop> [<prerequisites>] [;<recipe>]
 
-       targets  is  a  non-empty  list of targets.  If the target is a special
+       targets is a non-empty list of targets.  If the  target  is  a  special
        target (see SPECIAL TARGETS section below) then it must appear alone on
        the rule line.  For example:
 
               .IMPORT .ERROR : ...
 
        is not allowed since both .IMPORT and .ERROR are special targets.  Spe-
-       cial targets are not used in the construction of the  dependency  graph
+       cial  targets  are not used in the construction of the dependency graph
        and will not be made.
 
-       attributes  is  a  possibly  empty  list  of attributes.  Any attribute
+       attributes is a possibly  empty  list  of  attributes.   Any  attribute
        defined  in  the  ATTRIBUTES  section  above  may  be  specified.   All
-       attributes  will  be  applied  to the list of named targets in the rule
+       attributes will be applied to the list of named  targets  in  the  rule
        definition.  No other targets will be affected.
 
 
+        NOTE:  As  stated  earlier,  if  both the target list and prerequisite
+               list are empty  but  the  attributes  list  is  not,  then  the
 
-Dmake Version 4.9                 2007-06-25                                18
+
+
+Dmake Version 4.11                2007-10-13                                18
 
 
 
@@ -1224,31 +1238,29 @@ Dmake Version 4.9                 2007-06-25                                18
 DMAKE(1)                                                              DMAKE(1)
 
 
-        NOTE:  As stated earlier, if both the  target  list  and  prerequisite
-               list  are empty but the attributes list is not, then the speci-
-               fied attributes affect all targets in the makefile.
+               specified attributes affect all targets in the makefile.
 
 
-       ruleop is a separator which is used to identify the  targets  from  the
-       prerequisites.   Optionally  it  also provides a facility for modifying
-       the way in which dmake handles the making of  the  associated  targets.
+       ruleop  is  a  separator which is used to identify the targets from the
+       prerequisites.  Optionally it also provides a  facility  for  modifying
+       the  way  in  which dmake handles the making of the associated targets.
        In its simplest form the operator is a single ':', and need not be sep-
        arated by white space from its neighboring tokens.  It may additionally
        be followed by any of the modifiers { !, ^, -, :, | }, where:
 
 
        !      says execute the recipe for the associated targets once for each
-              out of date prerequisite.  (The meaning of the runtime macro  $?
+              out  of date prerequisite.  (The meaning of the runtime macro $?
               is changed, see below in the RUNTIME MACROS section.) Ordinarily
               the recipe is executed once for all out of date prerequisites at
               the same time.
 
-       ^      says  to  insert the specified prerequisites, if any, before any
-              other prerequisites already associated with the  specified  tar-
-              gets.   In  general, it is not useful to specify ^ with an empty
+       ^      says to insert the specified prerequisites, if any,  before  any
+              other  prerequisites  already associated with the specified tar-
+              gets.  In general, it is not useful to specify ^ with  an  empty
               list of prerequisites.
 
-       -      says to clear the previous list of prerequisites  before  adding
+       -      says  to  clear the previous list of prerequisites before adding
               the new prerequisites.  Thus,
 
               foo :
@@ -1260,31 +1272,35 @@ DMAKE(1)                                                              DMAKE(1)
 
               however the old form still works as expected.
 
-       :      When  the rule operator is not modified by a second ':' only one
-              set of rules may be specified for  making  a  target.   Multiple
+       :      When the rule operator is not modified by a second ':' only  one
+              set  of  rules  may  be specified for making a target.  Multiple
               definitions may be used to add to the list of prerequisites that
-              a target depends on.  However, if a target is  multiply  defined
-              only  one definition may specify a recipe for making the target.
+              a  target  depends on.  However, if a target is multiply defined
+              only one definition may specify a recipe for making the  target.
 
-              When a target's rule operator is modified by a  second  ':'  (::
+              When  a  target's  rule operator is modified by a second ':' (::
               for example) then this definition may not be the only definition
               with a recipe for the target.  There may be other :: target def-
               inition lines that specify a different set of prerequisites with
-              a different recipe for updating the target.  Any such target  is
-              made  if  any  of the definitions find it to be out of date with
-              respect to  the  related  prerequisites  and  the  corresponding
-              recipe  is  used  to  update the target.  By definition all '::'
+              a  different recipe for updating the target.  Any such target is
+              made if any of the definitions find it to be out  of  date  with
+              respect  to  the  related  prerequisites  and  the corresponding
+              recipe is used to update the target.   By  definition  all  '::'
               recipes that are found to be out of date for are executed.
 
-              In the following simple example, each rule has  a  `::'  ruleop.
-              In  such an operator we call the first `:' the operator, and the
+              In  the  following  simple example, each rule has a `::' ruleop.
+              In such an operator we call the first `:' the operator, and  the
               second `:' the modifier.
 
               a.o :: a.c b.h
+                 first recipe for making a.o
+
+              a.o :: a.y b.h
+                 second recipe for making a.o
 
 
 
-Dmake Version 4.9                 2007-06-25                                19
+Dmake Version 4.11                2007-10-13                                19
 
 
 
@@ -1293,17 +1309,12 @@ Dmake Version 4.9                 2007-06-25                                19
 DMAKE(1)                                                              DMAKE(1)
 
 
-                 first recipe for making a.o
-
-              a.o :: a.y b.h
-                 second recipe for making a.o
-
-              If a.o is found to be out of date with respect to a.c  then  the
-              first  recipe  is  used to make a.o.  If it is found out of date
-              with respect to a.y then the second recipe is used.  If  a.o  is
+              If  a.o  is found to be out of date with respect to a.c then the
+              first recipe is used to make a.o.  If it is found  out  of  date
+              with  respect  to a.y then the second recipe is used.  If a.o is
               out of date with respect to b.h then both recipes are invoked to
-              make a.o.  In the last case the order of invocation  corresponds
-              to  the  order in which the rule definitions appear in the make-
+              make  a.o.  In the last case the order of invocation corresponds
+              to the order in which the rule definitions appear in  the  make-
               file.
 
        |      Is defined only for PERCENT rule target definitions.  When spec-
@@ -1318,13 +1329,13 @@ DMAKE(1)                                                              DMAKE(1)
               %.o : %.r ; some rule
               %.o : %.f ; some rule
 
-       Targets defined using a single `:' operator with a recipe may be  rede-
-       fined  again with a new recipe by using a `:' operator with a `:' modi-
-       fier.  This is equivalent to a target  having  been  initially  defined
+       Targets  defined using a single `:' operator with a recipe may be rede-
+       fined again with a new recipe by using a `:' operator with a `:'  modi-
+       fier.   This  is  equivalent  to a target having been initially defined
        with a rule using a `:' modifier.  Once a target is defined using a `:'
-       modifier it may not be defined again with a recipe using only  the  `:'
+       modifier  it  may not be defined again with a recipe using only the `:'
        operator with no `:' modifier.  In both cases the use of a `:' modifier
-       creates a new list of prerequisites and makes it the current  prerequi-
+       creates  a new list of prerequisites and makes it the current prerequi-
        site list for the target.  The `:' operator with no recipe always modi-
        fies the current list of prerequisites.  Thus assuming each of the fol-
        lowing definitions has a recipe attached, then:
@@ -1337,8 +1348,8 @@ DMAKE(1)                                                              DMAKE(1)
               joe :: fred ...     (3)
               joe :: more ...     (4)
 
-       are  legal and mean:  add the recipe associated with (2), or (4) to the
-       set of recipes for joe, placing them after existing recipes for  making
+       are legal and mean:  add the recipe associated with (2), or (4) to  the
+       set  of recipes for joe, placing them after existing recipes for making
        joe.  The constructs:
 
               joe :: fred ...     (5)
@@ -1349,11 +1360,18 @@ DMAKE(1)                                                              DMAKE(1)
               joe : fred ... (7)
               joe : more ... (8)
 
-       are  errors since we have two sets of perfectly good recipes for making
+       are errors since we have two sets of perfectly good recipes for  making
+       the target.
+
+       prerequisites  is a possibly empty list of targets that must be brought
+       up to date before making the current target.
+
+       recipe is a short form and allows the user to specify short rule  defi-
+       nitions on a single line.  It is taken to be the first recipe line in a
 
 
 
-Dmake Version 4.9                 2007-06-25                                20
+Dmake Version 4.11                2007-10-13                                20
 
 
 
@@ -1362,55 +1380,42 @@ Dmake Version 4.9                 2007-06-25                                20
 DMAKE(1)                                                              DMAKE(1)
 
 
-       the target.
-
-       prerequisites is a possibly empty list of targets that must be  brought
-       up to date before making the current target.
-
-       recipe  is a short form and allows the user to specify short rule defi-
-       nitions on a single line.  It is taken to be the first recipe line in a
-       larger  recipe  if additional lines follow the rule definition.  If the
-       semi-colon is present but the recipe line is empty  (ie.  null  string)
-       then it is taken to be an empty rule.  Any target so defined causes the
-       Don't know how to make ...  error message to be suppressed  when  dmake
-       tries  to  make  the  target and fails.  This silence is maintained for
-       rules that are terminated by a semicolon and have no  following  recipe
-       lines,  for  targets  listed  on the command line, for the first target
-       found in the makefile, and for any target having no recipe but contain-
-       ing  a  list  of  prerequisites  (see  the COMPATIBILITY section for an
-       exception to this rule if the AUGMAKE (-A) flag was specified).
+       larger recipe if additional lines follow the rule definition.   If  the
+       semi-colon  is  present  but the recipe line is empty (ie. null string)
+       then it is taken to be an empty rule.  Any  target  so  defined  causes
+       target to be treated as a virtual target, see VIRTUAL TARGETS below.
 
 RECIPES
        The traditional format used by most versions of Make defines the recipe
-       lines  as  arbitrary  strings  that may contain macro expansions.  They
-       follow a rule definition line and may be spaced  apart  by  comment  or
-       blank  lines.   The  list of recipe lines defining the recipe is termi-
-       nated by a new target definition, a macro definition,  or  end-of-file.
-       Each  recipe  line  MUST  begin  with a <TAB> character (or spaces, see
+       lines as arbitrary strings that may  contain  macro  expansions.   They
+       follow  a  rule  definition  line and may be spaced apart by comment or
+       blank lines.  The list of recipe lines defining the  recipe  is  termi-
+       nated  by  a new target definition, a macro definition, or end-of-file.
+       Each recipe line MUST begin with a  <TAB>  character  (or  spaces,  see
        .NOTABS) which may optionally be followed with one or all the following
        recipe property characters '@%+-' which affect the recipe execution:
 
-       '-'    indicates  that  non-zero  exit  values  (ie.  errors) are to be
+       '-'    indicates that non-zero exit  values  (ie.  errors)  are  to  be
               ignored when this recipe line is executed.
 
-       '+'    indicates that the current recipe line is to be  executed  using
+       '+'    indicates  that  the current recipe line is to be executed using
               the shell. Group recipes implicitely ignore this property.
 
        '%'    indicates that dmake should swap itself out to secondary storage
               (MSDOS only) before running the recipe.
 
-       '@'    indicates that the recipe line should NOT be echoed to the  ter-
+       '@'    indicates  that the recipe line should NOT be echoed to the ter-
               minal prior to being executed.
 
-       '@@'   is  a stronger version of the previous property. The recipe line
-              and the output (stdout and stderr) of the  executed  recipe  are
+       '@@'   is a stronger version of the previous property. The recipe  line
+              and  the  output  (stdout and stderr) of the executed recipe are
               NOT shown on the terminal.
 
-       Each  property  is  off by default (ie. by default, errors are signifi-
+       Each property is off by default (ie. by default,  errors  are  signifi-
        cant, commands are echoed, no swapping is done and a shell is used only
-       if  the  recipe  line  contains  a  character found in the value of the
-       SHELLMETAS macro).  Global settings activated via command line  options
-       or  special  attribute  or target names may also affect these settings.
+       if the recipe line contains a character  found  in  the  value  of  the
+       SHELLMETAS  macro).  Global settings activated via command line options
+       or special attribute or target names may also  affect  these  settings.
        An example recipe:
 
               target :
@@ -1419,10 +1424,25 @@ RECIPES
                      @a recipe line that is not echoed
                      -and one that has errors ignored
                      %and one that causes dmake to swap out
+                     +and one that is executed using a shell.
+
+       The second and new format of the recipe block begins the block with the
+       character '[' (the open group character) in the  last  non-white  space
+       position  of  a  line,  and terminates the block with the character ']'
+       (the close group character) in the first non-white space position of  a
+       line.  In this form each recipe line need not have a leading TAB.  This
+       is called a recipe group.  Groups so defined are fed intact as a single
+       unit  to  a shell for execution whenever the corresponding target needs
+       to be updated.  If the open group character '[' is preceded by  one  or
+       all  of  the  recipe properties (-, %, @ and @@) then they apply to the
+       entire group in the same way that they apply to  single  recipe  lines.
+       You  may  also  specify  '+'  but it is redundant as a shell is already
+       being used to run the recipe.  See the MAKING  TARGETS  section  for  a
+       description  of  how  dmake  invokes  recipes.  Here is an example of a
 
 
 
-Dmake Version 4.9                 2007-06-25                                21
+Dmake Version 4.11                2007-10-13                                21
 
 
 
@@ -1431,21 +1451,6 @@ Dmake Version 4.9                 2007-06-25                                21
 DMAKE(1)                                                              DMAKE(1)
 
 
-                     +and one that is executed using a shell.
-
-       The second and new format of the recipe block begins the block with the
-       character  '['  (the  open group character) in the last non-white space
-       position of a line, and terminates the block  with  the  character  ']'
-       (the  close group character) in the first non-white space position of a
-       line.  In this form each recipe line need not have a leading TAB.  This
-       is called a recipe group.  Groups so defined are fed intact as a single
-       unit to a shell for execution whenever the corresponding  target  needs
-       to  be  updated.  If the open group character '[' is preceded by one or
-       all of the recipe properties (-, %, @ and @@) then they  apply  to  the
-       entire  group  in  the same way that they apply to single recipe lines.
-       You may also specify '+' but it is redundant  as  a  shell  is  already
-       being  used  to  run  the recipe.  See the MAKING TARGETS section for a
-       description of how dmake invokes recipes.  Here  is  an  example  of  a
        group recipe:
 
               target :
@@ -1460,8 +1465,8 @@ DMAKE(1)                                                              DMAKE(1)
 BUILTIN COMMANDS
        dmake supports some builtin commands. An optional leading '+' describes
        that the builtin can be used also when being executed in a shell other-
-       wise  it  is  only  implemented  when used directly. Remember that if a
-       character of the recipe is found in the SHELLMETAS macro the  execution
+       wise it is only implemented when used  directly.  Remember  that  if  a
+       character  of the recipe is found in the SHELLMETAS macro the execution
        of the recipe in a shell is forced.
 
        [+]noop [something]
@@ -1471,28 +1476,44 @@ BUILTIN COMMANDS
               the runtime of the recipe without starting a real commmand.
 
        [+]<empty recipe>
-              If an empty recipe line is encountered it is not executed.  This
-              sounds  more  trivial than it really is because the recipe could
-              consist of macros that evaluated to  empty  or  whitespace  only
+              If  an empty recipe line is encountered it is not executed. This
+              sounds more trivial than it really is because the  recipe  could
+              consist  of  macros  that  evaluated to empty or whitespace only
               strings.
 
        echo [-n] data
-              This  internal  command prints data (with all leading whitespace
-              removed, but otherwise literally) to stdout. If the '-n'  switch
+              This internal command prints data (with all  leading  whitespace
+              removed,  but otherwise literally) to stdout. If the '-n' switch
               is given no trailing newline is printed. Note that no quoting is
               removed nor that escape sequences are handled.
 
-       No special treatment of buildin commands for group  recipes  is  imple-
-       mented  even  though  the <empty recipe> will most propably also not be
-       evaluated by most shells that can be used to handle the recipe  groups.
+       No  special  treatment  of buildin commands for group recipes is imple-
+       mented even though the <empty recipe> will most propably  also  not  be
+       evaluated  by most shells that can be used to handle the recipe groups.
 
 TEXT DIVERSIONS
-       dmake  supports  the  notion of text diversions.  If a recipe line con-
+       dmake supports the notion of text diversions.  If a  recipe  line  con-
        tains the macro expression
 
+              $(mktmp[,[file][,text]] data)
+
+       then all text contained in the data expression is expanded and is writ-
+       ten to a temporary file.  The data in the file will  always  be  termi-
+       nated  from  a  new  line character.  The file parameter can be used to
+       override the name of the temporary file. If its expanded value  is  not
+       empty  it  will be used instead of the unique and thread safe file name
+       that otherwise would be generated internally.  The return value of  the
+       macro  is  the  name of the temporary file unless the text parameter is
+       defined. In this case the return value is the expanded value of text.
+
+       data can be any text and must be separated from the 'mktmp' portion  of
+       the  macro  name by white-space.  The only restriction on the data text
+       is that it must contain a balanced number of parentheses  of  the  same
+       kind as are used to initiate the $(mktmp ...) expression.  For example:
 
 
-Dmake Version 4.9                 2007-06-25                                22
+
+Dmake Version 4.11                2007-10-13                                22
 
 
 
@@ -1500,19 +1521,6 @@ Dmake Version 4.9                 2007-06-25                                22
 
 DMAKE(1)                                                              DMAKE(1)
 
-
-              $(mktmp[,[file][,text]] data)
-
-       then all text contained in the data expression is expanded and is writ-
-       ten  to  a  temporary file.  The data in the file will always be termi-
-       nated from a new line character.  The return value of the macro is  the
-       name  of  the  temporary  file unless the text parameter is defined. In
-       this case the return value is the expanded value of text.
-
-       data can be any text and must be separated from the 'mktmp' portion  of
-       the  macro  name by white-space.  The only restriction on the data text
-       is that it must contain a balanced number of parentheses  of  the  same
-       kind as are used to initiate the $(mktmp ...) expression.  For example:
 
               $(mktmp $(XXX))
 
@@ -1559,23 +1567,11 @@ DMAKE(1)                                                              DMAKE(1)
               joe.obj
 
        The last line of the file is terminated by a new-line which  is  always
-
-
-
-Dmake Version 4.9                 2007-06-25                                23
-
-
-
-
-
-DMAKE(1)                                                              DMAKE(1)
-
-
        inserted at the end of the data string.
 
-       If  the  optional  file specifier is present then its expanded value is
-       the name of the temporary file to create.  An  example  that  would  be
-       useful for MSDOS users with a Turbo-C compiler
+       If the optional file specifier is present it can be used to specify the
+       name of the temporary file to create.  An example that would be  useful
+       for MSDOS users with a Turbo-C compiler
 
               $(mktmp,turboc.cfg $(CFLAGS))
 
@@ -1585,6 +1581,18 @@ DMAKE(1)                                                              DMAKE(1)
 
        Under  MS-DOS text diversions may be a problem.  Many DOS tools require
        that path names which  contain  directories  use  the  \  character  to
+
+
+
+Dmake Version 4.11                2007-10-13                                23
+
+
+
+
+
+DMAKE(1)                                                              DMAKE(1)
+
+
        delimit  the  directories.   Some  users however wish to use the '/' to
        delimit pathnames and use environments that allow them to do  so.   The
        macro USESHELL is set to "yes" if the current recipe is forced to use a
@@ -1615,6 +1623,27 @@ DMAKE(1)                                                              DMAKE(1)
        can modify the location of temporary files by defining  a  macro  named
        TMPDIR and exporting it using the .EXPORT special target.
 
+VIRTUAL TARGETS
+       Dmake  allows  to  define  targets  with  the sole purpose to enforce a
+       dependency chain that are unable to create the  target,  hence  virtual
+       targets.   When  dmake  tries to make a target, but only finds a target
+       definition without recipe lines, it would normally issues a "Don't know
+       how to make ..." error message, but if a target rule is terminated by a
+       semicolon and has no following recipe lines, or if  it  has  no  recipe
+       lines,  but  defines  prerequisites,  or if the AUGMAKE mode is enabled
+       (see the COMPATIBILITY section for details), the target is treated as a
+       virtual target and the error is suppressed. In addition to this, if the
+       default target does not have recipe lines it is also treated as a  vir-
+       tual target.
+
+       Virtual  targets  should  not  have a corresponding file therefore they
+       inherit the time of their newest prerequisite if  they  have  prerequi-
+       sites,  otherwise  they  get the current time assigned when being made.
+       If the virtual target has a corresponding file a warning is issued, but
+       the  time  stamp of that file is taken into account. The virtual target
+       uses the time stamp of the corresponding file if it is newer  than  the
+       one determined by the previous rule.
+
 SPECIAL TARGETS
        This  section  describes  the  special  targets  that are recognized by
        dmake.  Some are affected by attributes and others are not.
@@ -1623,16 +1652,10 @@ SPECIAL TARGETS
                      executed  whenever  an  error  condition  is  detected by
                      dmake.  All attributes that can be used  with  any  other
                      target  may  be used with this target.  Any prerequisites
-                     of this target will be brought up to date during its pro-
-                     cessing.  NOTE:  errors will be ignored while making this
-                     target, in extreme cases this may cause some problems.
-
-       .EXIT         If this target is encountered while  parsing  a  makefile
-                     then   the   parsing   of  the  makefile  is  immediately
 
 
 
-Dmake Version 4.9                 2007-06-25                                24
+Dmake Version 4.11                2007-10-13                                24
 
 
 
@@ -1641,7 +1664,13 @@ Dmake Version 4.9                 2007-06-25                                24
 DMAKE(1)                                                              DMAKE(1)
 
 
-                     terminated at that point.
+                     of this target will be brought up to date during its pro-
+                     cessing.  NOTE:  errors will be ignored while making this
+                     target, in extreme cases this may cause some problems.
+
+       .EXIT         If this target is encountered while  parsing  a  makefile
+                     then  the  parsing  of the makefile is immediately termi-
+                     nated at that point.
 
        .EXPORT       All prerequisites associated with this target are assumed
                      to  correspond  to  macro names and they and their values
@@ -1694,15 +1723,10 @@ DMAKE(1)                                                              DMAKE(1)
                      included.  In this way the file can be checked out of  an
                      RCS   repository   for  example.   .INCLUDE  accepts  the
                      .IGNORE,  .SETDIR,  and  .NOINFER  attributes.   If   the
-                     .IGNORE  attribute  is given and the file cannot be found
-                     then dmake continues processing, otherwise an error  mes-
-                     sage  is  generated.   If the .NOINFER attribute is given
-                     and the file cannot be found then dmake will not  attempt
-                     to infer and make the file.  The .SETDIR attribute causes
 
 
 
-Dmake Version 4.9                 2007-06-25                                25
+Dmake Version 4.11                2007-10-13                                25
 
 
 
@@ -1711,6 +1735,11 @@ Dmake Version 4.9                 2007-06-25                                25
 DMAKE(1)                                                              DMAKE(1)
 
 
+                     .IGNORE  attribute  is given and the file cannot be found
+                     then dmake continues processing, otherwise an error  mes-
+                     sage  is  generated.   If the .NOINFER attribute is given
+                     and the file cannot be found then dmake will not  attempt
+                     to infer and make the file.  The .SETDIR attribute causes
                      dmake to change directories to  the  specified  directory
                      prior  to attempting the include operation.  If all fails
                      dmake attempts to make the file to be included.  If  mak-
@@ -1765,14 +1794,10 @@ DMAKE(1)                                                              DMAKE(1)
 
        There are a few targets that are "slightly" special:
 
-              .INIT
-              .DONE
-
-       These targets exist because of historical reasons,  see  the  usage  of
 
 
 
-Dmake Version 4.9                 2007-06-25                                26
+Dmake Version 4.11                2007-10-13                                26
 
 
 
@@ -1781,6 +1806,10 @@ Dmake Version 4.9                 2007-06-25                                26
 DMAKE(1)                                                              DMAKE(1)
 
 
+              .INIT
+              .DONE
+
+       These targets exist because of historical reasons,  see  the  usage  of
        .INIT  and  .DONE in section "STARTUP", they can be used and defined as
        ordinary targets but are special in the sense  that  even  though  they
        start  with a `.'  they are not treated as a .<suffix> meta target (See
@@ -1837,12 +1866,9 @@ CONTROL MACROS
        MAKEDIR         Is the full path to  the  initial  directory  in  which
                        dmake was invoked.
 
-       MAKEFILE        Contains  the  string  "-f makefile" where, makefile is
-                       the name of initial user makefile that was first  read.
 
 
-
-Dmake Version 4.9                 2007-06-25                                27
+Dmake Version 4.11                2007-10-13                                27
 
 
 
@@ -1850,6 +1876,9 @@ Dmake Version 4.9                 2007-06-25                                27
 
 DMAKE(1)                                                              DMAKE(1)
 
+
+       MAKEFILE        Contains  the  string  "-f makefile" where, makefile is
+                       the name of initial user makefile that was first  read.
 
        MAKEFLAGS       Is  the  same  as  $(MFLAGS)  but has no leading switch
                        character. (ie. MFLAGS = -$(MAKEFLAGS))
@@ -1907,12 +1936,10 @@ DMAKE(1)                                                              DMAKE(1)
        The second group of string valued macros control dmake behavior and may
        be set by the user.
 
-       .DIRCACHE       If set to "yes" enables the directory  cache  (this  is
-                       the  default).   If  set to "no" disables the directory
 
 
 
-Dmake Version 4.9                 2007-06-25                                28
+Dmake Version 4.11                2007-10-13                                28
 
 
 
@@ -1921,6 +1948,8 @@ Dmake Version 4.9                 2007-06-25                                28
 DMAKE(1)                                                              DMAKE(1)
 
 
+       .DIRCACHE       If set to "yes" enables the directory  cache  (this  is
+                       the  default).   If  set to "no" disables the directory
                        cache (equivalent to -d command-line flag).
 
        .DIRCACHERESPCASE
@@ -1978,11 +2007,10 @@ DMAKE(1)                                                              DMAKE(1)
 
        .KEEP_STATE     Assigning  this  macro  a value tells dmake the name of
                        the state file to use and turns on the keeping of state
-                       information for any targets that are brought up to date
 
 
 
-Dmake Version 4.9                 2007-06-25                                29
+Dmake Version 4.11                2007-10-13                                29
 
 
 
@@ -1991,6 +2019,7 @@ Dmake Version 4.9                 2007-06-25                                29
 DMAKE(1)                                                              DMAKE(1)
 
 
+                       information for any targets that are brought up to date
                        by the make.
 
        GROUPFLAGS      This macro gives the set of flags to pass to the  shell
@@ -2052,7 +2081,7 @@ DMAKE(1)                                                              DMAKE(1)
 
 
 
-Dmake Version 4.9                 2007-06-25                                30
+Dmake Version 4.11                2007-10-13                                30
 
 
 
@@ -2063,7 +2092,9 @@ DMAKE(1)                                                              DMAKE(1)
 
                        TARGETS). If './' appear in the pathname,  but  not  at
                        the beginning of it, they are still removed by the nor-
-                       malization.
+                       malization. Please note that targets that are given  on
+                       the  command line are going to be registered as default
+                       targets after the startup file is read.
 
        PREP            This macro defines  the  number  of  iterations  to  be
                        expanded  automatically  when processing % rule defini-
@@ -2080,6 +2111,12 @@ DMAKE(1)                                                              DMAKE(1)
                        requiring the shell for execution are to be  used.   It
                        is  assigned  a  default value in the startup makefile.
                        Under UNIX this value is /bin/sh.
+
+       SHELLCMDQUOTE   This macro can be used  to  add  additional  characters
+                       before  and  after the command string that is passed to
+                       the shell defined by the SHELL macro.  If needed,  like
+                       for  cmd.exe and command.com, it is assigned a value in
+                       the startup file.
 
        SHELLFLAGS      This macro gives the set of flags to pass to the  shell
                        when  invoking it to execute a single line recipe.  The
@@ -2111,18 +2148,11 @@ DMAKE(1)                                                              DMAKE(1)
        to apply global attributes, and represent the preferred method of doing
        so.   They  are  used by assigning them a value.  If the value is not a
        NULL string then the boolean condition is set to on.  If the value is a
-       NULL  string  then  the condition is set to off.  There are five condi-
-       tions defined and they correspond directly to  the  attributes  of  the
-       same name.  Their meanings are defined in the ATTRIBUTES section above.
-       The macros are: .EPILOG, .IGNORE, .MKSARGS, .NOINFER, .PRECIOUS,  .PRO-
-       LOG,  .SEQUENTIAL,  .SILENT,  .SWAP,  and  .USESHELL.  Assigning any of
-       these a non NULL value will globally set the corresponding attribute to
-       on.
+       NULL  string  then  the  condition  is  set  to  off.   There  are five
 
 
 
-
-Dmake Version 4.9                 2007-06-25                                31
+Dmake Version 4.11                2007-10-13                                31
 
 
 
@@ -2130,6 +2160,13 @@ Dmake Version 4.9                 2007-06-25                                31
 
 DMAKE(1)                                                              DMAKE(1)
 
+
+       conditions defined and they correspond directly to  the  attributes  of
+       the  same  name.   Their meanings are defined in the ATTRIBUTES section
+       above.  The macros are: .EPILOG,  .IGNORE,  .MKSARGS,  .NOINFER,  .PRE-
+       CIOUS,  .PROLOG, .SEQUENTIAL, .SILENT, .SWAP, and .USESHELL.  Assigning
+       any of these a non NULL  value  will  globally  set  the  corresponding
+       attribute to on.
 
 RUNTIME MACROS
        These  macros are defined when dmake is making targets, and may take on
@@ -2183,17 +2220,10 @@ FUNCTION MACROS
        are the result of a recursive expansion.
 
        Note that some of these macros take comma separated parameters but that
-       these parameters must not contain literal whitespaces.  Whitespaces  in
-       macros used in these parameters are allowed.
-
-
-              $(and macroterm ...)
-                     expands each macroterm in turn until there are no more or
-                     one of them returns an empty string.  If  all  expand  to
 
 
 
-Dmake Version 4.9                 2007-06-25                                32
+Dmake Version 4.11                2007-10-13                                32
 
 
 
@@ -2202,6 +2232,13 @@ Dmake Version 4.9                 2007-06-25                                32
 DMAKE(1)                                                              DMAKE(1)
 
 
+       these parameters must not contain literal whitespaces.  Whitespaces  in
+       macros used in these parameters are allowed.
+
+
+              $(and macroterm ...)
+                     expands each macroterm in turn until there are no more or
+                     one of them returns an empty string.  If  all  expand  to
                      non-empty  strings the macro returs the string "t" other-
                      wise it returns an empty string.
 
@@ -2255,16 +2292,9 @@ DMAKE(1)                                                              DMAKE(1)
 
                              $(foreach,i,$(foreach,i,$(sort c a b) root/$i) [$i/f.h])
 
-                     when evaluated the result is:
-
-                             [root/a/f.h] [root/b/f.h] [root/c/f.h]
-
-                     The specification of list must be a valid  macro  expres-
-                     sion, such as:
 
 
-
-Dmake Version 4.9                 2007-06-25                                33
+Dmake Version 4.11                2007-10-13                                33
 
 
 
@@ -2272,6 +2302,13 @@ Dmake Version 4.9                 2007-06-25                                33
 
 DMAKE(1)                                                              DMAKE(1)
 
+
+                     when evaluated the result is:
+
+                             [root/a/f.h] [root/b/f.h] [root/c/f.h]
+
+                     The specification of list must be a valid  macro  expres-
+                     sion, such as:
 
                              $($(assign list=a b c))
                              $(sort d a b c)
@@ -2293,49 +2330,42 @@ DMAKE(1)                                                              DMAKE(1)
                      expression  is.   This function macro can be used to dis-
                      card results of expanding macro expressions.
 
+              $(normpath list)
+                     Will return the normalized path names of all  white-space
+                     separated tokens in list. Quotes can be used to normalize
+                     path names that contain white-space characters. On cygwin
+                     the  result  honors  the setting of .WINPATH to determine
+                     the output format of the returned path names.
+
+              $(normpath,para list)
+                     Same as above except that the expanded value of  para  is
+                     used to override the .WINPATH setting.
+
               $(not macroterm)
                      expands macroterm and returs the string "t" if the result
-                     of  the  expansion  is  the  empty  string; otherwise, it
+                     of the expansion  is  the  empty  string;  otherwise,  it
                      returns the empty string.
 
               $(null,text true false)
-                     expands the value of text.  If it is NULL then the  macro
+                     expands  the value of text.  If it is NULL then the macro
                      returns the value of the expansion of true and the expan-
-                     sion of false otherwise.  The terms true, and false  must
+                     sion  of false otherwise.  The terms true, and false must
                      be strings containing no white-space.
 
               $(!null,text true false)
                      Behaves identically to the previous macro except that the
-                     true string is chosen if the expansion  of  text  is  not
+                     true  string  is  chosen  if the expansion of text is not
                      NULL.
 
               $(or macroterm ...)
-                     expands  each  macroterm  in  turn  and  returs the empty
-                     string if each term expands to the empty  string;  other-
+                     expands each macroterm  in  turn  and  returs  the  empty
+                     string  if  each term expands to the empty string; other-
                      wise, it returs the string "t".
 
-              $(shell command)
-                     is  a  shell  escape macro. It runs command as if it were
-                     part of a recipe  and  returns,  separated  by  a  single
-                     space, all the non-white space terms written to stdout by
-                     the command.  For example:
-
-                             $(shell ls *.c)
-
-                     will return "a.c b.c c.c d.c" if the files exist  in  the
-                     current  directory.  The recipe modification flags [+@%-]
-                     are honored if they appear as the first characters in the
-                     command.  For example:
-
-                             $(shell +ls *.c)
-
-                     will run the command using the current shell.
-
-                     Note  that  if  the  macro is part of a recipe it will be
 
 
 
-Dmake Version 4.9                 2007-06-25                                34
+Dmake Version 4.11                2007-10-13                                34
 
 
 
@@ -2344,16 +2374,34 @@ Dmake Version 4.9                 2007-06-25                                34
 DMAKE(1)                                                              DMAKE(1)
 
 
-                     evaluated after all previous recipe lines have been  exe-
-                     cuted.  For  obvious  reasons it will be evaluated before
+              $(shell command)
+                     is a shell escape macro. It runs command as  if  it  were
+                     part  of  a  recipe  and  returns,  separated by a single
+                     space, all the non-white space terms written to stdout by
+                     the command.  For example:
+
+                             $(shell ls *.c)
+
+                     will  return  "a.c b.c c.c d.c" if the files exist in the
+                     current directory.  The recipe modification flags  [+@%-]
+                     are honored if they appear as the first characters in the
+                     command.  For example:
+
+                             $(shell +ls *.c)
+
+                     will run the command using the current shell.
+
+                     Note that if the macro is part of a  recipe  it  will  be
+                     evaluated  after all previous recipe lines have been exe-
+                     cuted. For obvious reasons it will  be  evaluated  before
                      the current recipe line or group recipe is executed.
 
               $(shell,expand command)
-                     Is an extension to the $(shell  command)  function  macro
+                     Is  an  extension  to the $(shell command) function macro
                      that expands the result of running command.
 
               $(sort list)
-                     Will  take  all  white-space separated tokens in list and
+                     Will take all white-space separated tokens  in  list  and
                      will return their sorted equivalent list.
 
               $(strip data)
@@ -2361,7 +2409,7 @@ DMAKE(1)                                                              DMAKE(1)
                      gle space.
 
               $(subst,pat,replacement data)
-                     Will  search  for pat in data and will replace any occur-
+                     Will search for pat in data and will replace  any  occur-
                      rence of pat with the replacement string.  The expansion
 
                      $(subst,.o,.c $(OBJECTS))
@@ -2372,41 +2420,23 @@ DMAKE(1)                                                              DMAKE(1)
 
 
               $(uniq list)
-                     Will take all white-space separated tokens  in  list  and
-                     will  return  their  sorted equivalent list containing no
+                     Will  take  all  white-space separated tokens in list and
+                     will return their sorted equivalent  list  containing  no
                      duplicates.
 
        For historic reasons dmake treats the following case slightly special:
 
               $(name something)
 
-       If it encounters a macro with a whitespace after name and name  is  not
-       literally  one  of  the above mentioned function macro identifiers then
-       dmake will return the  recursively  expanded  value  of  $(name).   The
-       remaining  something  part will be expanded but the result will be dis-
+       If  it  encounters a macro with a whitespace after name and name is not
+       literally one of the above mentioned function  macro  identifiers  then
+       dmake  will  return  the  recursively  expanded  value of $(name).  The
+       remaining something part will be expanded but the result will  be  dis-
        carded. The use of this special feature is deprecated and should not be
-       used.
-
-
-CONDITIONAL MACROS
-       dmake  supports conditional macros.  These allow the definition of tar-
-       get specific macro values.  You can now say the following:
-
-              target ?= MacroName MacroOp Value
-
-       This creates a definition for MacroName whose value is Value only  when
-       target  is being made.  You may use a conditional macro assignment any-
-       where that a regular macro assignment  may  appear,  including  as  the
-       value of a $(assign ...) macro.
-
-       The  new  definition is associated with the most recent cell definition
-       for target.  If no prior definition exists then one  is  created.   The
-       implications of this are immediately evident in the following example:
 
 
 
-
-Dmake Version 4.9                 2007-06-25                                35
+Dmake Version 4.11                2007-10-13                                35
 
 
 
@@ -2414,6 +2444,24 @@ Dmake Version 4.9                 2007-06-25                                35
 
 DMAKE(1)                                                              DMAKE(1)
 
+
+       used.
+
+
+CONDITIONAL MACROS
+       dmake supports conditional macros.  These allow the definition of  tar-
+       get specific macro values.  You can now say the following:
+
+              target ?= MacroName MacroOp Value
+
+       This  creates a definition for MacroName whose value is Value only when
+       target is being made.  You may use a conditional macro assignment  any-
+       where  that  a  regular  macro  assignment may appear, including as the
+       value of a $(assign ...) macro.
+
+       The new definition is associated with the most recent  cell  definition
+       for  target.   If  no prior definition exists then one is created.  The
+       implications of this are immediately evident in the following example:
 
               foo := hello
 
@@ -2427,16 +2475,16 @@ DMAKE(1)                                                              DMAKE(1)
               cond .SETDIR=msdos::;@echo $(foo) $(bar)
                    cond ?= foo := hihi
 
-       The  first  conditional  assignment creates a binding for 'bar' that is
-       activated when 'cond' is made.  The bindings following the  ::  defini-
-       tions  are activated when their respective recipe rules are used.  Thus
-       the first binding serves to provide a global value for 'bar' while  any
-       of  the  cond  :: rules are processed, and the local bindings for 'foo'
+       The first conditional assignment creates a binding for  'bar'  that  is
+       activated  when  'cond' is made.  The bindings following the :: defini-
+       tions are activated when their respective recipe rules are used.   Thus
+       the  first binding serves to provide a global value for 'bar' while any
+       of the cond :: rules are processed, and the local  bindings  for  'foo'
        come into effect when their associated :: rule is processed.
 
-       Conditionals for targets of .UPDATEALL are  all  activated  before  the
-       target  group  is made.  Assignments are processed in order.  Note that
-       the value of a conditional macro assignment is NOT AVAILABLE until  the
+       Conditionals  for  targets  of  .UPDATEALL are all activated before the
+       target group is made.  Assignments are processed in order.   Note  that
+       the  value of a conditional macro assignment is NOT AVAILABLE until the
        associated target is made, thus the construct
 
               mytarget ?= bar := hello
@@ -2450,106 +2498,88 @@ DMAKE(1)                                                              DMAKE(1)
 
        Once a target is made any associated conditional macros are deactivated
        and their values are no longer available.  Activation occurrs after all
-       inference, and .SETDIR directives have been processed and after  $@  is
-       assigned,  but  before  prerequisites are processed; thereby making the
-       values of conditional macro definitions available  during  construction
+       inference,  and  .SETDIR directives have been processed and after $@ is
+       assigned, but before prerequisites are processed;  thereby  making  the
+       values  of  conditional macro definitions available during construction
        of prerequisites.
 
-       If  a  %-meta rule target has associated conditional macro assignments,
-       and the rule is chosen by the inference algorithm then the  conditional
+       If a %-meta rule target has associated conditional  macro  assignments,
+
+
+
+Dmake Version 4.11                2007-10-13                                36
+
+
+
+
+
+DMAKE(1)                                                              DMAKE(1)
+
+
+       and  the rule is chosen by the inference algorithm then the conditional
        macro assignments are inferred together with the associated recipe.
 
 DYNAMIC PREREQUISITES
        dmake looks for prerequisites whose names contain macro expansions dur-
-       ing target processing.  Any such prerequisites  are  expanded  and  the
-       result  of the expansion is used as the prerequisite name.  As an exam-
+       ing  target  processing.   Any  such prerequisites are expanded and the
+       result of the expansion is used as the prerequisite name.  As an  exam-
        ple the line:
 
        fred : $$@.c
 
-       causes the $$@ to be  expanded  when  dmake  is  making  fred,  and  it
-       resolves  to the target fred.  This enables dynamic prerequisites to be
-       generated.  The value of @ may be modified by any of  the  valid  macro
+       causes  the  $$@  to  be  expanded  when  dmake  is making fred, and it
+       resolves to the target fred.  This enables dynamic prerequisites to  be
+       generated.   The  value  of @ may be modified by any of the valid macro
        modifiers.  So you can say for example:
 
        fred.out : $$(@:b).c
 
-
-
-
-Dmake Version 4.9                 2007-06-25                                36
-
-
-
-
-
-DMAKE(1)                                                              DMAKE(1)
-
-
-       where  the $$(@:b) expands to fred.  Note the use of $$ instead of $ to
-       indicate the dynamic expansion, this is due to the fact that  the  rule
-       line  is  expanded  when  it is initially parsed, and $$ then returns $
+       where the $$(@:b) expands to fred.  Note the use of $$ instead of $  to
+       indicate  the  dynamic expansion, this is due to the fact that the rule
+       line is expanded when it is initially parsed, and  $$  then  returns  $
        which later triggers the dynamic prerequisite expansion.  Dynamic macro
-       expansion  is performed in all user defined rules, and the special tar-
+       expansion is performed in all user defined rules, and the special  tar-
        gets .SOURCE*, and .INCLUDEDIRS.
 
-       NOTE: The use of a $ as part  of  a  prerequisite  or  target  name  is
-       strongly  discouraged as the runtime macros (like $@) are expanded when
-       used in a recipe line so that the $ is interpreted as a  macro  identi-
-       fier  and not as a character of the filename leading to invalid runtime
+       NOTE:  The  use  of  a  $  as  part of a prerequisite or target name is
+       strongly discouraged as the runtime macros (like $@) are expanded  when
+       used  in  a recipe line so that the $ is interpreted as a macro identi-
+       fier and not as a character of the filename leading to invalid  runtime
        macros.  In addition to this no filename normalization is done for pre-
-       requisites  and  targets that contain $ characters.  Nevertheless it is
+       requisites and targets that contain $ characters.  Nevertheless  it  is
        possible to use $ in prerequisites by using $$$$ but this is not recom-
        mended and can lead to surprising results.
 
-       If  dynamic  macro  expansion results in multiple white space separated
-       tokens then these are inserted into the prerequisite  list  inplace  of
-       the  dynamic prerequisite.  Due to the recursive nature of macro expan-
-       sion the prerequisite list is fully expanded even if the  dynamic  pre-
+       If dynamic macro expansion results in multiple  white  space  separated
+       tokens  then  these  are inserted into the prerequisite list inplace of
+       the dynamic prerequisite.  Due to the recursive nature of macro  expan-
+       sion  the  prerequisite list is fully expanded even if the dynamic pre-
        requisite contained other runtime macros.
 
 BINDING TARGETS
        This operation takes a target name and binds it to an existing file, if
-       possible.  dmake makes a distinction between the internal  target  name
+       possible.   dmake  makes a distinction between the internal target name
        of a target and its associated external file name.  Thus it is possible
-       for a target's internal name and its external file name to differ.   To
-       perform  the  binding, the following set of rules is used.  Assume that
-       we are trying to bind a target whose name is of the form X.suff,  where
+       for  a target's internal name and its external file name to differ.  To
+       perform the binding, the following set of rules is used.   Assume  that
+       we  are trying to bind a target whose name is of the form X.suff, where
        .suff is the suffix and X is the stem portion (ie. that part which con-
-       tains the directory and the basename).  dmake takes  this  target  name
-       and  performs a series of search operations that try to find a suitably
-       named file in the external file system.  The search operation  is  user
+       tains  the  directory  and the basename).  dmake takes this target name
+       and performs a series of search operations that try to find a  suitably
+       named  file  in the external file system.  The search operation is user
        controlled via the settings of the various .SOURCE targets.
 
-              1.     If  target has the .SYMBOL attribute set then look for it
-                     in the library.  If found, replace the target  name  with
+              1.     If target has the .SYMBOL attribute set then look for  it
+                     in  the  library.  If found, replace the target name with
                      the library member name and continue with step 2.  If the
                      name is not found then return.
 
-              2.     Extract the suffix portion (that following  the  `.')  of
-                     the  target name.  If the suffix is not null, look up the
-                     special target .SOURCE.<suff> (<suff> is the suffix).  If
-                     the  special  target  exists  then  search each directory
-                     given in the .SOURCE.<suff>  prerequisite  list  for  the
-                     target.   If  the target's suffix was null (ie. .suff was
-                     empty) then perform the above search but use the  special
-                     target  .SOURCE.NULL instead.  If at any point a match is
-                     found then terminate the search.  If a directory  in  the
-                     prerequisite  list is the special name `.NULL ' perform a
-                     search for the full target name  without  prepending  any
-                     directory portion (ie. prepend the NULL directory).
-
-              3.     The search in step 2. failed.  Repeat the same search but
-                     this time use the special  target  .SOURCE.   (a  default
-                     target  of  '.SOURCE  :  .NULL'  is  defined  by dmake at
-                     startup, and is user redefinable)
-
-              4.     The search in step 3. failed.   If  the  target  has  the
-                     library  member  attribute  (.LIBMEMBER)  set then try to
+              2.     Extract  the  suffix  portion (that following the `.') of
+                     the target name.  If the suffix is not null, look up  the
 
 
 
-Dmake Version 4.9                 2007-06-25                                37
+Dmake Version 4.11                2007-10-13                                37
 
 
 
@@ -2558,48 +2588,77 @@ Dmake Version 4.9                 2007-06-25                                37
 DMAKE(1)                                                              DMAKE(1)
 
 
-                     find the target in the library  which  was  passed  along
-                     with  the  .LIBMEMBER attribute (see the MAKING LIBRARIES
+                     special target .SOURCE.<suff> (<suff> is the suffix).  If
+                     the special target  exists  then  search  each  directory
+                     given  in  the  .SOURCE.<suff>  prerequisite list for the
+                     target.  If the target's suffix was null (ie.  .suff  was
+                     empty)  then perform the above search but use the special
+                     target .SOURCE.NULL instead.  If at any point a match  is
+                     found  then  terminate the search.  If a directory in the
+                     prerequisite list is the special name `.NULL ' perform  a
+                     search  for  the  full target name without prepending any
+                     directory portion (ie. prepend the NULL directory).
+
+              3.     The search in step 2. failed.  Repeat the same search but
+                     this  time  use  the  special target .SOURCE.  (a default
+                     target of '.SOURCE  :  .NULL'  is  defined  by  dmake  at
+                     startup, and is user redefinable)
+
+              4.     The  search  in  step  3.  failed.  If the target has the
+                     library member attribute (.LIBMEMBER)  set  then  try  to
+                     find  the  target  in  the library which was passed along
+                     with the .LIBMEMBER attribute (see the  MAKING  LIBRARIES
                      section).  The bound file name assigned to a target which
-                     is  successfully  located  in  a library is the same name
+                     is successfully located in a library  is  the  same  name
                      that would be assigned had the search failed (see 5.).
 
-              5.     The search failed.  Either the target was  not  found  in
-                     any  of  the  search directories or no applicable .SOURCE
-                     special targets exist.   If  applicable  .SOURCE  special
-                     targets  exist,  but the target was not found, then dmake
-                     assigns the first name searched as the bound  file  name.
-                     If  no applicable .SOURCE special targets exist, then the
+              5.     The  search  failed.   Either the target was not found in
+                     any of the search directories or  no  applicable  .SOURCE
+                     special  targets  exist.   If  applicable .SOURCE special
+                     targets exist, but the target was not found,  then  dmake
+                     assigns  the  first name searched as the bound file name.
+                     If no applicable .SOURCE special targets exist, then  the
                      full original target name becomes the bound file name.
 
-       There is potential here for a lot of search operations.  The  trick  is
-       to  define  .SOURCE.x special targets with short search lists and leave
-       .SOURCE as short as possible.  The search algorithm has  the  following
-       useful  side effect.  When a target having the .LIBMEMBER (library mem-
+       There  is  potential here for a lot of search operations.  The trick is
+       to define .SOURCE.x special targets with short search lists  and  leave
+       .SOURCE  as  short as possible.  The search algorithm has the following
+       useful side effect.  When a target having the .LIBMEMBER (library  mem-
        ber) attribute is searched for, it is first searched for as an ordinary
-       file.   When  a number of library members require updating it is desir-
-       able to compile all of them first and to update the library at the  end
-       in  a  single  operation.   If  one of the members does not compile and
-       dmake stops, then the user may fix the error  and  make  again.   dmake
+       file.  When a number of library members require updating it  is  desir-
+       able  to compile all of them first and to update the library at the end
+       in a single operation.  If one of the  members  does  not  compile  and
+       dmake  stops,  then  the  user may fix the error and make again.  dmake
        will not remake any of the targets whose object files have already been
-       generated as long as none of their prerequisite files have  been  modi-
+       generated  as  long as none of their prerequisite files have been modi-
        fied as a result of the fix.
 
        When dmake constructs target (and prerequisite) pathnames they are nor-
-       malized  to the shortest (or most natural, see  below  for  the  cygwin
+       malized   to  the  shortest  (or most natural, see below for the cygwin
        case) representation.  Substrings like './' or of the form 'baz/..' are
-       removed and multiple slashes are collapsed to one unless  they  are  at
+       removed  and  multiple  slashes are collapsed to one unless they are at
        the beginning of the pathname. Leading slashes are normalized according
-       to POSIX rules, i.e. more than two leading slashes are reduced  to  one
-       slash  and  a  leading '//' is kept as it might have a special meaning.
-       For example "./foo", "bar/../foo" and foo are recognized  as  the  same
-       file.   This  may  result  in  somewhat  unexpected values of the macro
+       to  POSIX  rules, i.e. more than two leading slashes are reduced to one
+       slash and a leading '//' is kept as it might have  a  special  meaning.
+       For  example  "./foo",  "bar/../foo" and foo are recognized as the same
+       file.  This may result in  somewhat  unexpected  values  of  the  macro
        expansion of runtime macros like $@, but is infact the corect result.
 
-       NOTE:  A cygwin dmake executable will accept DOS  like  pathnames  with
-       drive  letters  and  cygwin POSIX pathnames and normalize them into its
-       natural POSIX representation.  This might result in even more  surpris-
+       NOTE:   A  cygwin  dmake executable will accept DOS like pathnames with
+       drive letters and cygwin POSIX pathnames and normalize  them  into  its
+       natural  POSIX representation.  This might result in even more surpris-
        ing values of runtime macros.
+
+
+
+Dmake Version 4.11                2007-10-13                                38
+
+
+
+
+
+DMAKE(1)                                                              DMAKE(1)
+
 
        When defining .SOURCE and .SOURCE.x targets the construct
 
@@ -2610,65 +2669,54 @@ DMAKE(1)                                                              DMAKE(1)
 
               .SOURCE :- fred gery
 
-       dmake  correctly  handles  the UNIX Make variable VPATH.  By definition
+       dmake correctly handles the UNIX Make variable  VPATH.   By  definition
        VPATH contains a list of ':' separated directories to search when look-
        ing for a target.  dmake maps VPATH to the following special rule:
 
               .SOURCE :^ $(VPATH:s/:/ /)
 
-       Which  takes  the  value  of  VPATH and sets .SOURCE to the same set of
+       Which takes the value of VPATH and sets .SOURCE  to  the  same  set  of
        directories as specified in VPATH.
 
-
-
-Dmake Version 4.9                 2007-06-25                                38
-
-
-
-
-
-DMAKE(1)                                                              DMAKE(1)
-
-
 PERCENT(%) RULES AND MAKING INFERENCES
-       When dmake makes a target, the target's set of prerequisites  (if  any)
-       must  exist  and  the  target must have a recipe which dmake can use to
-       make it.  If the makefile does not specify an explicit recipe  for  the
-       target  then dmake uses special rules to try to infer a recipe which it
-       can use to make the target.  Previous versions  of  Make  perform  this
-       task  by  using  rules  that  are defined by targets of the form .<suf-
+       When  dmake  makes a target, the target's set of prerequisites (if any)
+       must exist and the target must have a recipe which  dmake  can  use  to
+       make  it.   If the makefile does not specify an explicit recipe for the
+       target then dmake uses special rules to try to infer a recipe which  it
+       can  use  to  make  the target.  Previous versions of Make perform this
+       task by using rules that are defined by  targets  of  the  form  .<suf-
        fix>.<suffix> (this is still supported, see "AUGMAKE META RULES") or by
-       using  the not supported by dmake .SUFFIXES list of suffixes (see "SPE-
+       using the not supported by dmake .SUFFIXES list of suffixes (see  "SPE-
        CIAL TARGETS" for more details about .SUFFIXES).  The exact workings of
-       this  mechanism were sometimes difficult to understand and often limit-
+       this mechanism were sometimes difficult to understand and often  limit-
        ing in their usefulness.  Instead, dmake supports the concept of %-meta
-       rules.   The  syntax  and semantics of these rules differ from standard
+       rules.  The syntax and semantics of these rules  differ  from  standard
        rule lines as follows:
 
               <%-targets> [<attributes>] <ruleop> [<%-prereqs>] [;<recipe>]
 
        where %-targets are one or more targets containing exactly a single `%'
-       sign,  attributes  is  a list (possibly empty) of attributes, ruleop is
-       the standard set of rule operators, %-prereqs , if present, is  a  list
-       of  prerequisites  containing  zero  or  more `%' signs, and recipe, if
+       sign, attributes is a list (possibly empty) of  attributes,  ruleop  is
+       the  standard  set of rule operators, %-prereqs , if present, is a list
+       of prerequisites containing zero or more  `%'  signs,  and  recipe,  if
        present, is the first line of the recipe.
 
        If more than one %-target is present this line is equivalent to a repe-
-       tition  of  the whole [<attributes>] <ruleop> [<%-prereqs>] [;<recipe>]
-       sequence for each %-target, i.e. it is possible  to  specify  the  same
-       rule  for  multiple  %-targets.  Because  of this following only speaks
-       about <%-target> as %-targets are  divided  into  multiple  definitions
+       tition of the whole [<attributes>] <ruleop>  [<%-prereqs>]  [;<recipe>]
+       sequence  for  each  %-target,  i.e. it is possible to specify the same
+       rule for multiple %-targets. Because  of  this  following  only  speaks
+       about  <%-target>  as  %-targets  are divided into multiple definitions
        with a single %-target.
 
-       NOTE:   As  multiple %-targets didn't work reliably with dmake versions
-       prior to 4.5 unless the rule operator `|:' was used we currently  issue
+       NOTE:  As multiple %-targets didn't work reliably with  dmake  versions
+       prior  to 4.5 unless the rule operator `|:' was used we currently issue
        a warning stating that it now works.
 
-       The  %-target  defines a pattern against which a target whose recipe is
-       being inferred gets matched.  The pattern match goes as  follows:   all
-       chars  are  matched  exactly from left to right up to but not including
-       the % sign in the pattern, % then matches the longest string  from  the
-       actual  target  name not ending in the suffix given after the % sign in
+       The %-target defines a pattern against which a target whose  recipe  is
+       being  inferred  gets matched.  The pattern match goes as follows:  all
+       chars are matched exactly from left to right up to  but  not  including
+       the  %  sign in the pattern, % then matches the longest string from the
+       actual target name not ending in the suffix given after the %  sign  in
        the pattern.  Consider the following examples:
 
               %.c       matches fred.c but not joe.c.Z
@@ -2676,24 +2724,10 @@ PERCENT(%) RULES AND MAKING INFERENCES
               fred/%    matches fred/joe.c but not f/joe.c
               %         matches anything
 
-       In each case the part of the target name that matched  the  %  sign  is
-       retained and is substituted for any % signs in the prerequisite list of
-       the %-meta rule when the rule is selected during  inference  and  dmake
-       constructs the new dependency.
-
-       Please  note, that currently only the first, non-indirect, prerequisite
-       of the list is  used  and  all  other  non-indirect  prerequisites  are
-       ignored.
-
-       As an example the following %-meta rules describe the following:
-
-              %.c : %.y ; recipe...
-
-       describes  how  to  make  any file ending in .c if a corresponding file
 
 
 
-Dmake Version 4.9                 2007-06-25                                39
+Dmake Version 4.11                2007-10-13                                39
 
 
 
@@ -2702,6 +2736,22 @@ Dmake Version 4.9                 2007-06-25                                39
 DMAKE(1)                                                              DMAKE(1)
 
 
+       In  each  case  the  part of the target name that matched the % sign is
+       retained and is substituted for any % signs in the prerequisite list of
+       the  %-meta  rule  when the rule is selected during inference and dmake
+       constructs the new dependency.
+
+       Please note, that only the first,  non-indirect,  prerequisite  of  the
+       list is used for the inference mechanism. If more than one non-indirect
+       prerequisite is given a warning is issued and all but  the  first  non-
+       indirect  prerequisites  are  ignored.  See  below for a description of
+       indirect prerequisites.
+
+       As an example the following %-meta rules describe the following:
+
+              %.c : %.y ; recipe...
+
+       describes how to make any file ending in .c  if  a  corresponding  file
        ending in .y can be found.
 
               foo%.o : fee%.k ; recipe...
@@ -2710,62 +2760,50 @@ DMAKE(1)                                                              DMAKE(1)
 
               %.a :; recipe...
 
-       describes how to make a file whose suffix is .a without  inferring  any
+       describes  how  to make a file whose suffix is .a without inferring any
        prerequisites.
 
-              %.c : %.y yaccsrc/%.y ; recipe...
+              %.c : %.y 'yaccsrc/%.y' ; recipe...
 
-       should match the corresponding .y file and another .y file in the yacc-
-       src subdirectory. (Currently only  the  first  prerequisite  is  used.)
+       matches the corresponding .y  file  as  prerequisite  and  additionally
+       another  .y  file in the yaccsrc subdirectory as indirect prerequisite.
        Another interesting example is:
 
               % : RCS/%,v ; co $<
 
-       which  describes  how  to  take  any target and check it out of the RCS
-       directory if the corresponding file exists in the RCS  directory.   The
+       which describes how to take any target and check  it  out  of  the  RCS
+       directory  if  the corresponding file exists in the RCS directory.  The
        equivalent SCCS rule would be:
 
               % : s.% ; get $<
 
 
-       The  previous RCS example defines an infinite rule, because it says how
+       The previous RCS example defines an infinite rule, because it says  how
        to make anything from RCS/%,v, and anything also includes RCS/fred.c,v.
-       To  limit the size of the graph that results from such rules dmake uses
-       the macro variable PREP (stands for  %  repetition).   By  default  the
+       To limit the size of the graph that results from such rules dmake  uses
+       the  macro  variable  PREP  (stands  for % repetition).  By default the
        value of this variable is 0, which says that no repetitions of a %-rule
-       are to be generated.  If it is set to something greater  than  0,  then
-       that  many  repetitions  of any infinite %-rule are allowed.  If in the
-       above example PREP was set to 1, then dmake would generate  the  depen-
+       are  to  be  generated.  If it is set to something greater than 0, then
+       that many repetitions of any infinite %-rule are allowed.   If  in  the
+       above  example  PREP was set to 1, then dmake would generate the depen-
        dency graph:
 
               % --> RCS/%,v --> RCS/RCS/%,v,v
 
-       Where  each  link  is assigned the same recipe as the first link.  PREP
-       should be used only in special cases, since it may result  in  a  large
+       Where each link is assigned the same recipe as the  first  link.   PREP
+       should  be  used  only in special cases, since it may result in a large
        increase in the number of possible prerequisites tested.  dmake further
        assumes that any target that has no suffix can be made from a prerequi-
        site that has at least one suffix.
 
-       dmake  supports  dynamic  prerequisite  generation for prerequisites of
-       %-meta rules.  This is best illustrated by an example.   The  RCS  rule
-       shown  above can infer how to check out a file from a corresponding RCS
-       file only if the target is a simple file name with no directory  infor-
-       mation.   That  is,  the  above rule can infer how to find RCS/fred.c,v
-       from   the   target   fred.c,   but   cannot   infer   how   to    find
-       srcdir/RCS/fred.c,v  from  srcdir/fred.c  because  the  above rule will
-       cause dmake to look  for  RCS/srcdir/fred.c,v;  which  does  not  exist
-       (assume that srcdir has its own RCS directory as is the common case).
-
-       A  more  versatile  formulation  of the above RCS check out rule is the
-       following:
-
-              % :  $$(@:d)RCS/$$(@:f),v : co $@
-
-       This rule uses the dynamic macro $@ to specify the prerequisite to  try
+       dmake supports dynamic prerequisite  generation  for  prerequisites  of
+       %-meta  rules.   This  is best illustrated by an example.  The RCS rule
+       shown above can infer how to check out a file from a corresponding  RCS
+       file  only  if  the  target  is  a  simple  file name with no directory
 
 
 
-Dmake Version 4.9                 2007-06-25                                40
+Dmake Version 4.11                2007-10-13                                40
 
 
 
@@ -2774,16 +2812,28 @@ Dmake Version 4.9                 2007-06-25                                40
 DMAKE(1)                                                              DMAKE(1)
 
 
-       to  infer.   During  inference  of this rule the macro $@ is set to the
+       information.   That  is,  the  above  rule  can  infer  how   to   find
+       RCS/fred.c,v  from  the  target  fred.c,  but  cannot infer how to find
+       srcdir/RCS/fred.c,v from srcdir/fred.c  because  the  above  rule  will
+       cause  dmake  to  look  for  RCS/srcdir/fred.c,v;  which does not exist
+       (assume that srcdir has its own RCS directory as is the common case).
+
+       A more versatile formulation of the above RCS check  out  rule  is  the
+       following:
+
+              % :  $$(@:d)RCS/$$(@:f),v : co $@
+
+       This  rule uses the dynamic macro $@ to specify the prerequisite to try
+       to infer.  During inference of this rule the macro $@  is  set  to  the
        value of the target of the %-meta rule and the appropriate prerequisite
        is generated by extracting the directory portion of the target name (if
-       any), appending the string RCS/ to it, and appending  the  target  file
+       any),  appending  the  string RCS/ to it, and appending the target file
        name with a trailing ,v attached to the previous result.
 
-       dmake  can  also  infer indirect prerequisites.  An inferred target can
-       have a list of prerequisites added that will not show up in  the  value
-       of  $<  but will show up in the value of $? and $&.  Indirect prerequi-
-       sites are specified in an inference rule by  quoting  the  prerequisite
+       dmake can also infer indirect prerequisites.  An  inferred  target  can
+       have  a  list of prerequisites added that will not show up in the value
+       of $< but will show up in the value of $? and $&.   Indirect  prerequi-
+       sites  are  specified  in an inference rule by quoting the prerequisite
        with single quotes.  For example, if you had the explicit dependency:
 
               fred.o : fred.c ; rule to make fred.o
@@ -2793,26 +2843,18 @@ DMAKE(1)                                                              DMAKE(1)
 
               %.o : %.c 'local.h' ; makes a .o from a .c
 
-       You may infer indirect prerequisites that are a function of  the  value
+       You  may  infer indirect prerequisites that are a function of the value
        of '%' in the current rule.  The meta-rule:
 
               %.o : %.c '$(INC)/%.h' ; rule to make a .o from a .c
 
-       infers  an  indirect prerequisite found in the INC directory whose name
-       is the same as the expansion  of  $(INC),  and  the  prerequisite  name
-       depends  on  the  base name of the current target.  The set of indirect
-       prerequisites is attached to the meta rule in which they are  specified
-       and  are inferred only if the rule is used to infer a recipe for a tar-
-       get.  They do not play an active role in driving  the  inference  algo-
+       infers an indirect prerequisite found in the INC directory  whose  name
+       is  the  same  as  the  expansion  of $(INC), and the prerequisite name
+       depends on the base name of the current target.  The  set  of  indirect
+       prerequisites  is attached to the meta rule in which they are specified
+       and are inferred only if the rule is used to infer a recipe for a  tar-
+       get.   They  do  not play an active role in driving the inference algo-
        rithm.  The construct:
-
-              %.o : %.c %.f 'local.h'; recipe
-
-       is (currently) equivalent to:
-
-              %.o : %.c 'local.h' ; recipe
-
-       because the second prerequisite is ignored, while:
 
               %.o :| %.c %.f 'local.h'; recipe
 
@@ -2822,22 +2864,22 @@ DMAKE(1)                                                              DMAKE(1)
               %.o : %.f 'local.h' ; recipe
 
 
-       If any of the attributes .SETDIR, .EPILOG, .PROLOG, .SILENT, .USESHELL,
-       .SWAP, .PRECIOUS, .LIBRARY, .NOSTATE and .IGNORE are given for a %-rule
-       then when that rule is bound to a target as the result of an inference,
-       the target's set of attributes is augmented by the attributes from  the
-       above  set  that  are  specified in the bound %-rule.  Other attributes
-       specified for %-meta rules are not inherited by the target.  The  .SET-
-       DIR attribute is treated in a special way.  If the target already had a
-       .SETDIR attribute set then dmake changes to  that  directory  prior  to
-       performing  the inference.  During inference any .SETDIR attributes for
-       the inferred prerequisite are honored.  The directories must exist  for
-       a  %-meta  rule  to  be  selected as a possible inference path.  If the
-       directories do not exist  no  error  message  is  issued,  instead  the
+       If any of the attributes .EPILOG, .IGNORE, .LIBRARY, .NOSTATE,  .PHONY,
+       .PRECIOUS, .PROLOG, .SETDIR, .SILENT, .SWAP, .USESHELL and .WINPATH are
+       given for a %-rule then when that rule is bound  to  a  target  as  the
+       result  of an inference, the target's set of attributes is augmented by
+       the attributes from the above set  that  are  specified  in  the  bound
+       %-rule.   Other attributes specified for %-meta rules are not inherited
+       by the target.  The .SETDIR attribute is treated in a special way.   If
+       the  target  already  had a .SETDIR attribute set then dmake changes to
+       that directory prior to performing the inference.  During inference any
+       .SETDIR  attributes  for  the  inferred  prerequisite are honored.  The
+       directories must exist for a %-meta rule to be selected as  a  possible
+       inference  path.   If  the directories do not exist no error message is
 
 
 
-Dmake Version 4.9                 2007-06-25                                41
+Dmake Version 4.11                2007-10-13                                41
 
 
 
@@ -2846,7 +2888,8 @@ Dmake Version 4.9                 2007-06-25                                41
 DMAKE(1)                                                              DMAKE(1)
 
 
-       corresponding path in the inference graph is rejected.
+       issued, instead the  corresponding  path  in  the  inference  graph  is
+       rejected.
 
        dmake  bases  all  of its inferences on the inference graph constructed
        from the %-rules defined in the makefile.  It knows exactly which  tar-
@@ -2906,10 +2949,13 @@ DMAKE(1)                                                              DMAKE(1)
        made are never removed.  This is in keeping with  the  philosophy  that
        dmake  should  never remove things from the file system that it did not
        add.  If the special target .REMOVE is defined and has  a  recipe  then
+       dmake  constructs  a  list  of the intermediate files to be removed and
+       makes them prerequisites of .REMOVE.  It  then  makes  .REMOVE  thereby
+       removing the prerequisites if the recipe of .REMOVE says to.  Typically
 
 
 
-Dmake Version 4.9                 2007-06-25                                42
+Dmake Version 4.11                2007-10-13                                42
 
 
 
@@ -2918,9 +2964,6 @@ Dmake Version 4.9                 2007-06-25                                42
 DMAKE(1)                                                              DMAKE(1)
 
 
-       dmake  constructs  a  list  of the intermediate files to be removed and
-       makes them prerequisites of .REMOVE.  It  then  makes  .REMOVE  thereby
-       removing the prerequisites if the recipe of .REMOVE says to.  Typically
        .REMOVE is defined in the startup file as:
 
               .REMOVE :; $(RM) $<
@@ -2979,9 +3022,16 @@ MAKING TARGETS
        internally sets the current working director to match the directory  it
        was in before the command was executed.
 
+       The  decision  on  whether  a shell is required to execute a command is
+       based on the value of the macro SHELLMETAS or on the  specification  of
+       '+' or .USESHELL for the current recipe or target respectively.  If any
+       character in the value of SHELLMETAS is found in  the  expanded  recipe
+       text-line  or  the  use  of  a shell is requested explicitly via '+' or
+       .USESHELL then the command is executed using  a  shell,  otherwise  the
 
 
-Dmake Version 4.9                 2007-06-25                                43
+
+Dmake Version 4.11                2007-10-13                                43
 
 
 
@@ -2990,12 +3040,6 @@ Dmake Version 4.9                 2007-06-25                                43
 DMAKE(1)                                                              DMAKE(1)
 
 
-       The  decision  on  whether  a shell is required to execute a command is
-       based on the value of the macro SHELLMETAS or on the  specification  of
-       '+' or .USESHELL for the current recipe or target respectively.  If any
-       character in the value of SHELLMETAS is found in  the  expanded  recipe
-       text-line  or  the  use  of  a shell is requested explicitly via '+' or
-       .USESHELL then the command is executed using  a  shell,  otherwise  the
        command  is executed directly.  The shell that is used for execution is
        given by the value of the macro SHELL.  The flags that  are  passed  to
        the  shell are given by the value of SHELLFLAGS.  Thus dmake constructs
@@ -3003,20 +3047,23 @@ DMAKE(1)                                                              DMAKE(1)
 
        $(SHELL) $(SHELLFLAGS) $(expanded_recipe_command)
 
-       Normally dmake writes the command line that it is about  to  invoke  to
+       If the $(SHELLCMDQUOTE) macro is set its value is inserted  before  and
+       after the $(expanded_recipe_command) string.
+
+       Normally  dmake  writes  the command line that it is about to invoke to
        standard output.  If the .SILENT attribute is set for the target or for
        the recipe line (via @), then the recipe line is not echoed.
 
-       Group recipe processing is similar to that of regular  recipes,  except
-       that  a shell is always invoked.  The shell that is invoked is given by
-       the value of the macro GROUPSHELL, and its flags  are  taken  from  the
-       value  of  the macro GROUPFLAGS.  If a target has the .PROLOG attribute
-       set then dmake prepends to the shell script the recipe associated  with
+       Group  recipe  processing is similar to that of regular recipes, except
+       that a shell is always invoked.  The shell that is invoked is given  by
+       the  value  of  the  macro GROUPSHELL, and its flags are taken from the
+       value of the macro GROUPFLAGS.  If a target has the  .PROLOG  attribute
+       set  then dmake prepends to the shell script the recipe associated with
        the special target .GROUPPROLOG, and if the attribute .EPILOG is set as
-       well, then the recipe associated with the special  target  .GROUPEPILOG
-       is  appended  to  the script file.  This facility can be used to always
-       prepend a common header and common trailer  to  group  recipes.   Group
-       recipes  are  echoed to standard output just like standard recipes, but
+       well,  then  the recipe associated with the special target .GROUPEPILOG
+       is appended to the script file.  This facility can be  used  to  always
+       prepend  a  common  header  and common trailer to group recipes.  Group
+       recipes are echoed to standard output just like standard  recipes,  but
        are enclosed by lines beginning with [ and ].
 
        The recipe flags [+,-,%,@] are recognized at the start of a recipe line
@@ -3033,16 +3080,16 @@ DMAKE(1)                                                              DMAKE(1)
               +echo hi
 
 
-       The  last  step  performed by dmake prior to running a recipe is to set
+       The last step performed by dmake prior to running a recipe  is  to  set
        the macro CMNDNAME to the name of the command to execute (determined by
-       finding  the  first  white-space ending token in the command line).  It
-       then sets the macro CMNDARGS to be the remainder of  the  line.   dmake
+       finding the first white-space ending token in the  command  line).   It
+       then  sets  the  macro CMNDARGS to be the remainder of the line.  dmake
        then expands the macro COMMAND which by default is set to
 
               COMMAND = $(CMNDNAME) $(CMNDARGS)
 
-       The  result  of  this  final expansion is the command that will be exe-
-       cuted.  The reason for this expansion  is  to  allow  for  a  different
+       The result of this final expansion is the command  that  will  be  exe-
+       cuted.   The  reason  for  this  expansion  is to allow for a different
        interface to the argument passing facilities (esp. under DOS) than that
        provided by dmake.  You can for example define COMMAND to be
 
@@ -3050,10 +3097,17 @@ DMAKE(1)                                                              DMAKE(1)
 
        which dumps the arguments into a temporary file and runs the command
 
+              $(CMNDNAME) @/tmp/ASAD23043
+
+       which has a much shorter argument list.  It is now up to the command to
+       use the supplied argument as the source for all other arguments.  As an
+       optimization,  if  COMMAND  is  not  defined dmake does not perform the
+       above expansion.  On systems, such as UNIX, that  handle  long  command
+       lines this provides a slight saving in processing the makefiles.
 
 
 
-Dmake Version 4.9                 2007-06-25                                44
+Dmake Version 4.11                2007-10-13                                44
 
 
 
@@ -3062,24 +3116,16 @@ Dmake Version 4.9                 2007-06-25                                44
 DMAKE(1)                                                              DMAKE(1)
 
 
-              $(CMNDNAME) @/tmp/ASAD23043
-
-       which has a much shorter argument list.  It is now up to the command to
-       use the supplied argument as the source for all other arguments.  As an
-       optimization, if COMMAND is not defined  dmake  does  not  perform  the
-       above  expansion.   On  systems, such as UNIX, that handle long command
-       lines this provides a slight saving in processing the makefiles.
-
 MAKING LIBRARIES
-       Libraries are easy to maintain using dmake.  A library is a  file  con-
-       taining  a collection of object files.  Thus to make a library you sim-
-       ply specify it as a target with the .LIBRARY attribute set and  specify
+       Libraries  are  easy to maintain using dmake.  A library is a file con-
+       taining a collection of object files.  Thus to make a library you  sim-
+       ply  specify it as a target with the .LIBRARY attribute set and specify
        its list of prerequisites.  The prerequisites should be the object mem-
-       bers that are to go into the library.  When  dmake  makes  the  library
-       target  it uses the .LIBRARY attribute to pass to the prerequisites the
-       .LIBMEMBER attribute and the name of the  library.   This  enables  the
-       file  binding  mechanism  to  look  for the member in the library if an
-       appropriate object file  cannot  be  found.   dmake  now  supports  Elf
+       bers  that  are  to  go into the library.  When dmake makes the library
+       target it uses the .LIBRARY attribute to pass to the prerequisites  the
+       .LIBMEMBER  attribute  and  the  name of the library.  This enables the
+       file binding mechanism to look for the member  in  the  library  if  an
+       appropriate  object  file  cannot  be  found.   dmake  now supports Elf
        libraries on systems that support Elf and hence supports, on those sys-
        tems, long member file names.  A small example best illustrates this.
 
@@ -3090,18 +3136,18 @@ MAKING LIBRARIES
               # equivalent to:  '%.o : %.c ; ...'
               .c.o :; rules for making .o from .c say
 
-       dmake will use the .c.o rule for making the library members  if  appro-
-       priate  .c  files  can be found using the search rules.  NOTE:  this is
+       dmake  will  use the .c.o rule for making the library members if appro-
+       priate .c files can be found using the search rules.   NOTE:   this  is
        not specific in any way to C programs, they are simply used as an exam-
        ple.
 
-       dmake  tries  to  handle the old library construct format in a sensible
-       way.  The construct lib(member.o) is separated and the lib  portion  is
-       declared  as  a  library  target.   The  new target is defined with the
-       .LIBRARY attribute set and the member.o portion  of  the  construct  is
-       declared  as  a  prerequisite  of  the  lib  target.   If the construct
-       lib(member.o) appears as a prerequisite of a target  in  the  makefile,
-       that  target  has the new name of the lib assigned as its prerequisite.
+       dmake tries to handle the old library construct format  in  a  sensible
+       way.   The  construct lib(member.o) is separated and the lib portion is
+       declared as a library target.  The  new  target  is  defined  with  the
+       .LIBRARY  attribute  set  and  the member.o portion of the construct is
+       declared as a  prerequisite  of  the  lib  target.   If  the  construct
+       lib(member.o)  appears  as  a prerequisite of a target in the makefile,
+       that target has the new name of the lib assigned as  its  prerequisite.
        Thus the following example:
 
               a.out : ml.a(a.o) ml.a(b.o); $(CC) -o $@  $<
@@ -3123,9 +3169,21 @@ MAKING LIBRARIES
                      ranlib $@
                      rm -rf $?
 
+       and making a.out then works as expected.
+
+       The  same thing happens for any target of the form lib((entry)).  These
+       targets have an additional feature in that the  entry  target  has  the
+       .SYMBOL attribute set automatically.
+
+       NOTE:  If the notion of entry points is supported by the archive and by
+       dmake (currently not the case) then dmake will search the  archive  for
+       the entry point and return not only the modification time of the member
+       which defines the entry but also the name of  the  member  file.   This
+       name  will  then  replace  entry and will be used for making the member
 
 
-Dmake Version 4.9                 2007-06-25                                45
+
+Dmake Version 4.11                2007-10-13                                45
 
 
 
@@ -3134,70 +3192,74 @@ Dmake Version 4.9                 2007-06-25                                45
 DMAKE(1)                                                              DMAKE(1)
 
 
-       and making a.out then works as expected.
-
-       The same thing happens for any target of the form lib((entry)).   These
-       targets  have  an  additional  feature in that the entry target has the
-       .SYMBOL attribute set automatically.
-
-       NOTE:  If the notion of entry points is supported by the archive and by
-       dmake  (currently  not the case) then dmake will search the archive for
-       the entry point and return not only the modification time of the member
-       which  defines  the  entry  but also the name of the member file.  This
-       name will then replace entry and will be used  for  making  the  member
        file.  Once bound to an archive member the .SYMBOL attribute is removed
        from the target.  This feature is presently disabled as there is little
-       standardization  among archive formats, and we have yet to find a make-
-       file utilizing this feature (possibly due to the fact that it is  unim-
+       standardization among archive formats, and we have yet to find a  make-
+       file  utilizing this feature (possibly due to the fact that it is unim-
        plemented in most versions of UNIX Make).
 
        Finally, when dmake looks for a library member it must first locate the
-       library file.  It does so by first looking for the library relative  to
-       the  current directory and if it is not found it then looks relative to
+       library  file.  It does so by first looking for the library relative to
+       the current directory and if it is not found it then looks relative  to
        the current value of $(TMD).  This allows commonly used libraries to be
        kept near the root of a source tree and to be easily found by dmake.
 
 KEEP STATE
-       dmake  supports  the  keeping  of state information for targets that it
+       dmake supports the keeping of state information  for  targets  that  it
        makes whenever the macro .KEEP_STATE is assigned a value.  The value of
-       the  macro  should  be  the  name of a state file that will contain the
-       state information.  If state keeping is enabled then each  target  that
-       does  not  poses the .NOSTATE attribute will have a record written into
+       the macro should be the name of a state  file  that  will  contain  the
+       state  information.   If state keeping is enabled then each target that
+       does not poses the .NOSTATE attribute will have a record  written  into
        the state file indicating the target's name, the current directory, the
-       command  used to update the target, and which, if any, :: rule is being
-       used.  When you make this target again if any of this information  does
+       command used to update the target, and which, if any, :: rule is  being
+       used.   When you make this target again if any of this information does
        not match the previous settings and the target is not out dated it will
-       still be re-made.  The assumption is that one of the  conditions  above
-       has  changed and that we wish to remake the target.  For example, state
-       keeping is used in the maintenance of dmake to test  compile  different
-       versions  of  the  source using different compilers.  Changing the com-
+       still  be  re-made.  The assumption is that one of the conditions above
+       has changed and that we wish to remake the target.  For example,  state
+       keeping  is  used in the maintenance of dmake to test compile different
+       versions of the source using different compilers.   Changing  the  com-
        piler causes the compilation flags to be modified and hence all sources
        to be recompiled.
 
-       The  state  file is an ascii file and is portable, however it is not in
-       human readable form as the entries represent hash  keys  of  the  above
+       The state file is an ascii file and is portable, however it is  not  in
+       human  readable  form  as  the entries represent hash keys of the above
        information.
 
        The Sun Microsystem's Make construct
 
               .KEEP_STATE :
 
-       is  recognized and is mapped to .KEEP_STATE:=_state.mk.  The dmake ver-
-       sion of state keeping does not include  scanning  C  source  files  for
-       dependencies  like Sun Make.  This is specific to C programs and it was
+       is recognized and is mapped to .KEEP_STATE:=_state.mk.  The dmake  ver-
+       sion  of  state  keeping  does  not include scanning C source files for
+       dependencies like Sun Make.  This is specific to C programs and it  was
        felt that it does not belong in make.  dmake instead provides the tool,
-       cdepend,  to  scan C source files and to produce depedency information.
-       Users are free to modify cdepend to  produce  other  dependency  files.
-       (NOTE:  cdepend  does  not come with the distribution at this time, but
+       cdepend, to scan C source files and to produce  depedency  information.
+       Users  are  free  to  modify cdepend to produce other dependency files.
+       (NOTE: cdepend does not come with the distribution at  this  time,  but
        will be available in a patch in the near future)
 
 MULTI PROCESSING
-       If the architecture supports it then dmake is capable of making a  tar-
-       get's  prerequisites  in parallel.  dmake will make as much in parallel
+       If  the architecture supports it then dmake is capable of making a tar-
+       get's prerequisites in parallel.  dmake will make as much  in  parallel
+       as  it can and use a number of child processes up to the maximum speci-
+       fied by MAXPROCESS or by the value supplied  to  the  -P  command  line
+       flag.   A  parallel  make is enabled by setting the value of MAXPROCESS
+       (either directly or via -P option) to a value  which  is  >  1.   dmake
+       guarantees  that all dependencies as specified in the makefile are hon-
+       ored.  A target will not be made until all of  its  prerequisites  have
+       been  made.   Note that when you specify -P 4 then four child processes
+       are run concurrently but dmake actually displays the fifth  command  it
+       will  run  immediately upon a child process becomming free.  This is an
+       artifact of the method used to traverse the dependency graph and cannot
+       be  removed.   If a parallel make is being performed then the following
+       restrictions on parallelism are enforced.
+
+              1.     Individual recipe lines in a non-group  recipe  are  per-
+                     formed  sequentially  in  the  order  in  which  they are
 
 
 
-Dmake Version 4.9                 2007-06-25                                46
+Dmake Version 4.11                2007-10-13                                46
 
 
 
@@ -3206,49 +3268,34 @@ Dmake Version 4.9                 2007-06-25                                46
 DMAKE(1)                                                              DMAKE(1)
 
 
-       as it can and use a number of child processes up to the maximum  speci-
-       fied  by  MAXPROCESS  or  by  the value supplied to the -P command line
-       flag.  A parallel make is enabled by setting the  value  of  MAXPROCESS
-       (either  directly  or  via  -P  option) to a value which is > 1.  dmake
-       guarantees that all dependencies as specified in the makefile are  hon-
-       ored.   A  target  will not be made until all of its prerequisites have
-       been made.  Note that when you specify -P 4 then four  child  processes
-       are  run  concurrently but dmake actually displays the fifth command it
-       will run immediately upon a child process becomming free.  This  is  an
-       artifact of the method used to traverse the dependency graph and cannot
-       be removed.  If a parallel make is being performed then  the  following
-       restrictions on parallelism are enforced.
+                     specified within the makefile and in  parallel  with  the
+                     recipes of other targets.
 
-              1.     Individual  recipe  lines  in a non-group recipe are per-
-                     formed sequentially in the order in which they are speci-
-                     fied within the makefile and in parallel with the recipes
-                     of other targets.
-
-              2.     If a target contains multiple recipe definitions (cf.  ::
+              2.     If  a target contains multiple recipe definitions (cf. ::
                      rules) then these are performed sequentially in the order
-                     in which the :: rules are specified within  the  makefile
+                     in  which  the :: rules are specified within the makefile
                      and in parallel with the recipes of other targets.
 
-              3.     If  a  target  rule  contains  the `!' modifier, then the
+              3.     If a target rule contains  the  `!'  modifier,  then  the
                      recipe is performed sequentially for the list of outdated
-                     prerequisites  and  in parallel with the recipes of other
+                     prerequisites and in parallel with the recipes  of  other
                      targets.
 
               4.     If a target has the .SEQUENTIAL attribute set then all of
-                     its  prerequisites  are made sequentially relative to one
-                     another (as if MAXPROCESS=1), but in parallel with  other
+                     its prerequisites are made sequentially relative  to  one
+                     another  (as if MAXPROCESS=1), but in parallel with other
                      targets in the makefile.
 
-       Note:   If  you specify a parallel make then the order of target update
+       Note:  If you specify a parallel make then the order of  target  update
        and the order in which the associated recipes are invoked will not cor-
        respond to that displayed by the -n flag.
 
 CONDITIONALS
-       dmake  supports  a  makefile construct called a conditional.  It allows
-       the user to conditionally select portions of makefile  text  for  input
-       processing  and  to  discard  other  portions.  This becomes useful for
-       writing makefiles that are intended to function for more than one  tar-
-       get  host  and environment.  The conditional expression is specified as
+       dmake supports a makefile construct called a  conditional.   It  allows
+       the  user  to  conditionally select portions of makefile text for input
+       processing and to discard other  portions.   This  becomes  useful  for
+       writing  makefiles that are intended to function for more than one tar-
+       get host and environment.  The conditional expression is  specified  as
        follows:
 
               .IF  expression
@@ -3259,24 +3306,12 @@ CONDITIONALS
                  ... else text ...
               .END
 
-       The .ELSE and .ELIF portions are optional, and the conditionals may  be
-       nested  (ie.   the  text may contain another conditional).  .IF, .ELSE,
-       and .END may appear anywhere in the makefile, but a single  conditional
+       The  .ELSE and .ELIF portions are optional, and the conditionals may be
+       nested (ie.  the text may contain another  conditional).   .IF,  .ELSE,
+       and  .END may appear anywhere in the makefile, but a single conditional
        expression may not span multiple makefiles.
 
        expression can be one of the following forms:
-
-
-
-
-Dmake Version 4.9                 2007-06-25                                47
-
-
-
-
-
-DMAKE(1)                                                              DMAKE(1)
-
 
        String evaluation
        <text> | <text> == <text> | <text> != <text>
@@ -3287,21 +3322,33 @@ DMAKE(1)                                                              DMAKE(1)
        Boolean evaluation
        ( <text> ) | <text> || <text> | <text> && <text>
 
-       where  text  is either text or a macro expression.  In any case, before
-       the comparison is made, the expression is expanded.  The text  portions
+       where text is either text or a macro expression.  In any  case,  before
+       the  comparison is made, the expression is expanded.  The text portions
        are then selected and compared.  In the case of the numeric comparisons
-       enclosing quotes are removed after expanding the  expressions  and  the
-       leading  numerical  parts  are  converted  to  an integer number. If no
+       enclosing  quotes  are  removed after expanding the expressions and the
+       leading numerical parts are converted  to  an  integer  number.  If  no
        numerical part is found this results to 0 (zero). The string "12ab" for
-       example  evaluates to the number 12.  Expressions can be nested with ()
-       and the use of || or &&.  White space at the start and end of the  text
-       portion  is  discarded  before the comparison.  This means that a macro
-       that evaluates to nothing but white space is considered  a  NULL  value
-       for  the  purpose  of the comparison.  In the first case the expression
-       evaluates TRUE if the text is not NULL otherwise  it  evaluates  FALSE.
-       The  remaining two cases both evaluate the expression on the basis of a
+       example evaluates to the number 12.  Expressions can be nested with  ()
+       and  the use of || or &&.  White space at the start and end of the text
+       portion is discarded before the comparison.  This means  that  a  macro
+       that  evaluates  to  nothing but white space is considered a NULL value
+
+
+
+Dmake Version 4.11                2007-10-13                                47
+
+
+
+
+
+DMAKE(1)                                                              DMAKE(1)
+
+
+       for the purpose of the comparison.  In the first  case  the  expression
+       evaluates  TRUE  if  the text is not NULL otherwise it evaluates FALSE.
+       The remaining two cases both evaluate the expression on the basis of  a
        string comparison.  If a macro expression needs to be equated to a NULL
-       string  then compare it to the value of the macro $(NULL).  You can use
+       string then compare it to the value of the macro $(NULL).  You can  use
        the $(shell ...) macro to construct more complex test expressions.
 
 EXAMPLES
@@ -3315,9 +3362,9 @@ EXAMPLES
                    cc b.c -o $@
 
        In the previous example prgm is remade only if a.o and/or b.o is out of
-       date  with respect to prgm.  These dependencies can be stated more con-
-       cisely by using the inference rules defined  in  the  standard  startup
-       file.   The default rule for making .o's from .c's looks something like
+       date with respect to prgm.  These dependencies can be stated more  con-
+       cisely  by  using  the  inference rules defined in the standard startup
+       file.  The default rule for making .o's from .c's looks something  like
        this:
 
        %.o : %.c; cc -c $(CFLAGS) -o $@ $<
@@ -3330,7 +3377,7 @@ EXAMPLES
                    cc -o prgm $<
               a.o b.o : g.h
 
-       A more general way to say the above  using  the  new  macro  expansions
+       A  more  general  way  to  say the above using the new macro expansions
        would be:
 
               SRC = a b
@@ -3339,20 +3386,9 @@ EXAMPLES
               prgm : $(OBJ)
                    cc -o $@ $<
 
-
-
-Dmake Version 4.9                 2007-06-25                                48
-
-
-
-
-
-DMAKE(1)                                                              DMAKE(1)
-
-
               $(OBJ) : g.h
 
-       If  we want to keep the objects in a separate directory, called objdir,
+       If we want to keep the objects in a separate directory, called  objdir,
        then we would write something like this.
 
               SRC = a b
@@ -3368,10 +3404,22 @@ DMAKE(1)                                                              DMAKE(1)
 
               .SOURCE.o : objdir   # tell dmake to look here for .o's
 
-       An example of building library members would go  something  like  this:
+       An  example  of  building library members would go something like this:
        (NOTE:  The same rules as above will be used to produce .o's from .c's)
 
               SRC= a b
+
+
+
+Dmake Version 4.11                2007-10-13                                48
+
+
+
+
+
+DMAKE(1)                                                              DMAKE(1)
+
+
               LIB= lib
               LIBm= { $(SRC) }.o
 
@@ -3382,8 +3430,8 @@ DMAKE(1)                                                              DMAKE(1)
                    ar rv $@ $<
                    rm $<
 
-       Finally, suppose that each of the source files in the previous  example
-       had  the  `:'  character in their target name.  Then we would write the
+       Finally,  suppose that each of the source files in the previous example
+       had the `:' character in their target name.  Then we  would  write  the
        above example as:
 
               SRC= f:a f:b
@@ -3398,22 +3446,48 @@ DMAKE(1)                                                              DMAKE(1)
                    rm $<
 
 COMPATIBILITY
-       There are two notable differences between dmake and the  standard  ver-
+       There  are  two notable differences between dmake and the standard ver-
        sion of BSD UNIX 4.2/4.3 Make.
 
-              1. BSD  UNIX  4.2/4.3 Make supports wild card filename expansion
-                 for prerequisite names.  Thus if a  directory  contains  a.h,
+              1. BSD UNIX 4.2/4.3 Make supports wild card  filename  expansion
+                 for  prerequisite  names.   Thus if a directory contains a.h,
                  b.h and c.h, then a line like
 
                  target: *.h
 
-                 will  cause  UNIX  make to expand the *.h into "a.h b.h c.h".
+                 will cause UNIX make to expand the *.h into  "a.h  b.h  c.h".
                  dmake does not support this type of filename expansion.
 
+              2. Unlike  UNIX  make, touching a library member causes dmake to
+                 search the library for the member  name  and  to  update  the
+                 library  time  stamp.   This  is only implemented in the UNIX
+                 version.  MSDOS and other versions may  not  have  librarians
+                 that  keep  file  time  stamps, as a result dmake touches the
+                 library file itself, and prints a warning.
+
+       dmake is not compatible with GNU  Make.   In  particular  it  does  not
+       understand GNU Make's macro expansions that query the file system.
+
+       dmake is fully compatible with SYSV AUGMAKE, and supports the following
+       AUGMAKE features:
+
+              1. GNU Make style  include,  and  if/else/endif  directives  are
+                 allowed in non-group recipes.  Thus, the word include appear-
+                 ing at the start of a line that is not part of a gruop recipe
+                 will  be  mapped to the ".INCLUDE" directive that damke uses.
+                 Similarly, the  words  ifeq,ifneq,elif,else,  and  endif  are
+                 mapped to their corresponding dmake equivalents.
+
+              2. The  macro modifier expression $(macro:str=sub) is understood
+                 and is equivalent to the expression $(macro:s/str/sub),  with
+                 the  restriction  that  str  must match the following regular
+                 expression:
+
+                 str[ |\t][ |\t]*
 
 
 
-Dmake Version 4.9                 2007-06-25                                49
+Dmake Version 4.11                2007-10-13                                49
 
 
 
@@ -3422,47 +3496,20 @@ Dmake Version 4.9                 2007-06-25                                49
 DMAKE(1)                                                              DMAKE(1)
 
 
-              2. Unlike UNIX make, touching a library member causes  dmake  to
-                 search  the  library  for  the  member name and to update the
-                 library time stamp.  This is only  implemented  in  the  UNIX
-                 version.   MSDOS  and  other versions may not have librarians
-                 that keep file time stamps, as a  result  dmake  touches  the
-                 library file itself, and prints a warning.
+                 (ie. str only matches at the end of a token where  str  is  a
+                 suffix  and  is terminated by a space, a tab, or end of line)
+                 Normally sub is expanded before the substitution is made,  if
+                 you  specify -A on the command line then sub is not expanded.
 
-       dmake  is  not  compatible  with  GNU  Make.  In particular it does not
-       understand GNU Make's macro expansions that query the file system.
-
-       dmake is fully compatible with SYSV AUGMAKE, and supports the following
-       AUGMAKE features:
-
-              1. GNU  Make  style  include,  and  if/else/endif directives are
-                 allowed in non-group recipes.  Thus, the word include appear-
-                 ing at the start of a line that is not part of a gruop recipe
-                 will be mapped to the ".INCLUDE" directive that  damke  uses.
-                 Similarly,  the  words  ifeq,ifneq,elif,else,  and  endif are
-                 mapped to their corresponding dmake equivalents.
-
-              2. The macro modifier expression $(macro:str=sub) is  understood
-                 and  is equivalent to the expression $(macro:s/str/sub), with
-                 the restriction that str must  match  the  following  regular
-                 expression:
-
-                 str[ |\t][ |\t]*
-
-                 (ie.  str  only  matches at the end of a token where str is a
-                 suffix and is terminated by a space, a tab, or end  of  line)
-                 Normally  sub is expanded before the substitution is made, if
-                 you specify -A on the command line then sub is not  expanded.
-
-              3. The  macro  % is defined to be $@ (ie. $% expands to the same
+              3. The macro % is defined to be $@ (ie. $% expands to  the  same
                  value as $@).
 
               4. The AUGMAKE notion of libraries is handled correctly.
 
-              5. Directories are always made if you specify -A.  This is  con-
+              5. Directories  are always made if you specify -A.  This is con-
                  sistent with other UNIX versions of Make.
 
-              6. Makefiles  that  utilize  virtual  targets to force making of
+              6. Makefiles that utilize virtual targets  to  force  making  of
                  other targets work as expected if AUGMAKE special target han-
                  dling is enabled.  For example:
 
@@ -3473,47 +3520,36 @@ DMAKE(1)                                                              DMAKE(1)
 
                  'dmake -A FRC=FRC'
 
-                 but  fails  with a 'don't know how to make FRC' error message
+                 but fails with a 'don't know how to make FRC'  error  message
                  if you do not specify AUGMAKE special target handling via the
                  -A flag (or by setting AUGMAKE:=yes internally).
 
 LIMITS
-       In  some  environments  the length of an argument string is restricted.
-       (e.g. MSDOS command line arguments cannot be longer than 128  bytes  if
-       you  are  using  the  standard  command.com command interpreter as your
+       In some environments the length of an argument  string  is  restricted.
+       (e.g.  MSDOS  command line arguments cannot be longer than 128 bytes if
+       you are using the standard  command.com  command  interpreter  as  your
        shell, dmake text diversions may help in these situations.)
 
-
-
-Dmake Version 4.9                 2007-06-25                                50
-
-
-
-
-
-DMAKE(1)                                                              DMAKE(1)
-
-
 PORTABILITY
-       To write makefiles that can be moved from one  environment  to  another
+       To  write  makefiles  that can be moved from one environment to another
        requires some forethought.  In particular you must define as macros all
-       those things that may be different in the new environment.   dmake  has
-       two  facilities that help to support writing portable makefiles, recur-
-       sive macros and conditional expressions.  The recursive  macros,  allow
-       one  to define environment configurations that allow different environ-
-       ments for similar types of operating systems.   For  example  the  same
+       those  things  that may be different in the new environment.  dmake has
+       two facilities that help to support writing portable makefiles,  recur-
+       sive  macros  and conditional expressions.  The recursive macros, allow
+       one to define environment configurations that allow different  environ-
+       ments  for  similar  types  of operating systems.  For example the same
        make script can be used for SYSV and BSD but with different macro defi-
        nitions.
 
-       To write a makefile that is portable between UNIX  and  MSDOS  requires
-       both  features  since  in  almost all cases you will need to define new
+       To  write  a  makefile that is portable between UNIX and MSDOS requires
+       both features since in almost all cases you will  need  to  define  new
        recipes for making targets.  The recipes will probably be quite differ-
-       ent  since the capabilities of the tools on each machine are different.
-       Different macros will be needed to help handle the smaller  differences
+       ent since the capabilities of the tools on each machine are  different.
+       Different  macros will be needed to help handle the smaller differences
        in the two environments.
 
 FILES
-       Makefile,  makefile,  startup.mk  (use  dmake  -V to tell you where the
+       Makefile, makefile, startup.mk (use dmake -V  to  tell  you  where  the
        startup file is)
 
 SEE ALSO
@@ -3522,20 +3558,32 @@ SEE ALSO
 
 AUTHOR
        Dennis Vadura, dvadura@wticorp.com
-       Many thanks to Carl Seger for his helpful suggestions,  and  to  Trevor
+       Many  thanks  to  Carl Seger for his helpful suggestions, and to Trevor
        John Thompson for his many excellent ideas and informative bug reports.
-       Many thanks also go to those on the NET  that  have  helped  in  making
+
+
+
+Dmake Version 4.11                2007-10-13                                50
+
+
+
+
+
+DMAKE(1)                                                              DMAKE(1)
+
+
+       Many  thanks  also  go  to  those on the NET that have helped in making
        dmake one of the best Make tools available.
 
 BUGS
-       Some  system  commands  return non-zero status inappropriately.  Use -i
+       Some system commands return non-zero status  inappropriately.   Use  -i
        (`-' within the makefile) to overcome the difficulty.
 
        Some systems do not have easily accessible time stamps for library mem-
-       bers  (MSDOS,  AMIGA,  etc)  for these dmake uses the time stamp of the
-       library instead and prints a warning the first time it does  so.   This
-       is  almost  always  ok,  except when multiple makefiles update a single
-       library file.  In these instances it is possible to miss an  update  if
+       bers (MSDOS, AMIGA, etc) for these dmake uses the  time  stamp  of  the
+       library  instead  and prints a warning the first time it does so.  This
+       is almost always ok, except when multiple  makefiles  update  a  single
+       library  file.   In these instances it is possible to miss an update if
        one is not careful.
 
        This man page is way too long.
@@ -3547,7 +3595,7 @@ WARNINGS
        PWD from csh/ksh will cause problems if a cd operation is performed and
        -e or -E option is used.
 
-       Using  internal  macros  such  as COMMAND, may wreak havoc if you don't
+       Using internal macros such as COMMAND, may wreak  havoc  if  you  don't
        understand their functionality.
 
 
@@ -3557,6 +3605,40 @@ WARNINGS
 
 
 
-Dmake Version 4.9                 2007-06-25                                51
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Dmake Version 4.11                2007-10-13                                51
 
 
