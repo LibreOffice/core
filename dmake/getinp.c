@@ -1,4 +1,4 @@
-/* RCS  $Id: getinp.c,v 1.9 2007-06-12 06:05:42 obo Exp $
+/* RCS  $Id: getinp.c,v 1.10 2007-10-15 15:39:23 ihi Exp $
 --
 -- SYNOPSIS
 --      Handle reading of input.
@@ -309,7 +309,7 @@ int  keep;
            Swap_on_exec = TRUE;
 #endif
            Wait_for_completion = TRUE;
-           Do_cmnd(cmnd, FALSE, TRUE, Current_target, A_DEFAULT, TRUE);
+           Do_cmnd(&cmnd, FALSE, TRUE, Current_target, A_DEFAULT, TRUE);
 #if defined(MSDOS)
            Swap_on_exec = FALSE;
 #endif
@@ -540,17 +540,9 @@ _handle_conditional( opcode, tg )
         else
            cst++;
 
-     lhs = DmStrSpn( expr, " \t" );
-     if( !*lhs ) lhs = NIL(char);
-
-      /* Don't support C-style define keyword */
-     if ( (lop = DmStrStr(lhs, "defined" )) !=  NIL(char) )
-        Fatal( ".IF do not support defined " );
-     if ( (lop = DmStrStr(lhs, "DEFINED" )) !=  NIL(char) )
-        Fatal( ".IF do not support defined " );
-
      lhs = expr;
-      SCAN_WHITE( lhs );
+     SCAN_WHITE( lhs );
+
      /* Parse the expression and get its logical result */
      if ( ((lop = DmStrStr(lhs, "||" )) !=  NIL(char)) || ((lop = DmStrStr(lhs, "&&" )) !=  NIL(char)) )
         result = parse_complex_expression( lhs, &expr_end, opcode );
