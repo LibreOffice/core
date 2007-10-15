@@ -4,9 +4,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:13:56 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:49:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,8 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/util.obj     \
             $(SLO)$/file.obj\
             $(SLO)$/path_helper.obj\
-            $(SLO)$/procimpl.obj
+            $(SLO)$/procimpl.obj \
+            $(SLO)$/salinit.obj
 
 OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/diagnose.obj \
@@ -105,7 +106,8 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/util.obj     \
             $(OBJ)$/file.obj\
             $(OBJ)$/path_helper.obj\
-            $(OBJ)$/procimpl.obj
+            $(OBJ)$/procimpl.obj \
+            $(OBJ)$/salinit.obj
 
 .ENDIF
 
