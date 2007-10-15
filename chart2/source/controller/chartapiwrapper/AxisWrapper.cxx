@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AxisWrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:26:11 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 16:24:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -452,11 +452,9 @@ void AxisWrapper::setCurrentSizeAsReference()
 Any AxisWrapper::getReferenceSize()
 {
     Any aRet;
-    /*
     Reference< beans::XPropertySet > xProp( this->getAxis(), uno::UNO_QUERY );
     if( xProp.is() )
         aRet = xProp->getPropertyValue( C2U("ReferenceDiagramSize") );
-    */
     return aRet;
 }
 awt::Size AxisWrapper::getCurrentSizeForReference()
