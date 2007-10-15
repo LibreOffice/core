@@ -1,441 +1,444 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE Readme SYSTEM "../readme.dtd">
+<!DOCTYPE Readme SYSTEM "../../../docs/readme.dtd">
 <Readme name="ooo_readme" col-span="0">
-	<Section id="Welcome">
-		<Paragraph id="A1" style="H1">
-			<Text id="a" xml:lang="en-US">Welcome</Text>
-					</Paragraph>
-		<Paragraph id="A3" style="H1">
-            <Text id="a" xml:lang="en-US">${PRODUCTNAME} ${PRODUCTVERSION} ReadMe</Text>
-					</Paragraph>
-		<Paragraph id="A4">
-			<Text id="a" xml:lang="en-US" url="ahead">For latest updates to this readme file, see </Text>
-			            <Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org/welcome/readme.html</Text>
-        		</Paragraph>
-        <Paragraph/>
+<Section id="Welcome">
+	<Paragraph id="Welcome" style="H1">
+		<Text id="a" xml:lang="en-US">Welcome</Text>
+		</Paragraph>
+	<Paragraph id="ReadMeTitle" style="H1">
+      		<Text id="a" xml:lang="en-US">${PRODUCTNAME} ${PRODUCTVERSION} ReadMe</Text>
+		</Paragraph>
+	<Paragraph id="LaterstUpdates">
+		<Text id="a" xml:lang="en-US" url="ahead">For latest updates to this readme file, see </Text>
+		<Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org/welcome/readme.html</Text>
+		</Paragraph>
         <Paragraph id="A5">
-          <Text id="empty" xml:lang="en-US"/><Text id="c" xml:lang="en-US">Dear User</Text>
-        				</Paragraph>
+        	<Text id="c" xml:lang="en-US">Dear User</Text>
+        	</Paragraph>
         <Paragraph id="A6">
-		  <Text id="d" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</Text>
-						</Paragraph>
-		<Paragraph id="A7">
-            <Text id="a" xml:lang="en-US" url="ahead">The OpenOffice.org Community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the ${PRODUCTNAME} site with helpful user information at </Text>
-        				</Paragraph>
+		<Text id="d" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</Text>
+		</Paragraph>
+	<Paragraph id="A7">
+            	<Text id="a" xml:lang="en-US" url="ahead">The OpenOffice.org Community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the ${PRODUCTNAME} site with helpful user information at </Text>
+        	</Paragraph>
         <Paragraph id="A8">
-            <Text id="empty" xml:lang="en-US"/><Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org/about_us/introduction.html </Text>
-            			</Paragraph>
+        	<Text id="empty" xml:lang="en-US"/>
+		<Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org/about_us/introduction.html </Text>
+            	</Paragraph>
          <Paragraph id="A9">
-             <Text id="empty" xml:lang="en-US"/><Text id="c" xml:lang="en-US">Also read the sections below about getting involved in the OpenOffice.org project. </Text>
-						</Paragraph>
-	</Section>
-	<Section id="Error">
-		<Paragraph id="B1" style="H2" os="none">
-						<Text id="sdfsd432re342r" xml:lang="en-US">Error Report Tool</Text>
+         	<Text id="empty" xml:lang="en-US"/>
+		<Text id="c" xml:lang="en-US">Also read the sections below about getting involved in the OpenOffice.org project. </Text>
 		</Paragraph>
-		<Paragraph id="B2" os="none">
-						<Text id="ertert3434534" xml:lang="en-US">The Error Report Tool starts automatically when a program crash occurs. If the program enters into an endless loop, so that it does not respond to mouse-clicks or keypresses, you can also start the Error Report Tool manually.</Text>
+	<Paragraph id="A10" style="H3">
+		<Text id="c" xml:lang="en-US">Is ${PRODUCTNAME} really free for any user? </Text>
 		</Paragraph>
-		<Paragraph id="B2b" os="none">
-						<Text id="ertert3434534" xml:lang="en-US">The Error Report Tool gathers all necessary information that can help the program developers to improve the code, so that in later versions this error can possibly be avoided. Please help us to improve the software and send the generated error report by e-mail.</Text>
-		</Paragraph>
-		<Paragraph id="B2c" os="none">
-						<Text id="ertert3434534" xml:lang="en-US">Sun Microsystems is committed to respecting your online privacy and recognizes your need for appropriate protection and management of any personally identifiable information you share with us. See the statement at http://www.sun.com/privacy/ on your online data privacy at Sun Microsystems.</Text>
-		</Paragraph>
-		<Paragraph id="B3" style="H3" os="none">
-						<Text id="sdf3e3" xml:lang="en-US">Known Limitations of the Error Report Tool for ${PRODUCTNAME}</Text>
-		</Paragraph>
-		<Paragraph id="B4" os="none">
-						<Text id="sdf3sd2" xml:lang="en-US">The following limitations are only valid for ${PRODUCTNAME}. Please read this information very carefully.</Text>
-		</Paragraph>
-		<Paragraph id="B5Win" os="none" gui="WNT">
-						<Text id="sdf3sd24" xml:lang="en-US">You need Microsoft Outlook Express or Microsoft Outlook installed and configured as your default (MAPI) e-mail client to send these error messages. Mozilla 1.0, 1.2, 1.3 and Netscape 6.x do not send the created error message correctly and will not display any error message.</Text>
-		</Paragraph>
-		<Paragraph id="B5Unix" os="none" gui="UNX">
-						<Text id="sdf3sd24" xml:lang="en-US">You need to have SendMail installed and configured on your system.</Text>
-		</Paragraph>
-		<Paragraph id="B6u" style="H3" os="none">
-						<Text id="sdf3sd24" xml:lang="en-US">Starting the Error Report Tool</Text>
-		</Paragraph>
-		<Paragraph id="B6" os="none">
-						<Text id="sdf3sd24" xml:lang="en-US">With most program crashes, the Error Report Tool will start automatically. However, if the program seems to be stuck and the tool does not start automatically, you can start the tool manually: Go to the ${PRODUCTNAME} program folder and start the &apos;crashrep.exe&apos; file.</Text>
-		</Paragraph>
-		<Paragraph id="B7u" style="H3" os="none">
-						<Text id="sdf3sd24" xml:lang="en-US">Completing the Report</Text>
-		</Paragraph>
-		<Paragraph id="B7" os="none">
-						<Text id="sdf3sd24" xml:lang="en-US">On the main Error Report Tool dialog, you can enter some additional information that may help our developers to localize the error. For example, if the error only appears after a change in your hardware or software environment, or if you clicked on a button, please include that information.</Text>
-		</Paragraph>
-		<Paragraph id="B8u" style="H3" os="none">
-						<Text id="sdf3sd24" xml:lang="en-US">Sending the Error Report by E-mail</Text>
-		</Paragraph>
-		<Paragraph id="B8" os="none">
-						<Text id="sdf3sd24" xml:lang="en-US">The Error Report Tool uses your system&apos;s e-mail application to send the report data. You may optionally enter some descriptive text that will help us to identify the context of the program crash. Then click the Send button.</Text>
-		</Paragraph>
-		<Paragraph id="B8b" os="none">
-						<Text id="sdf3sd24" xml:lang="en-US">You may choose to respond to questions that our developers may have about the reported error. Mark the check box if you will allow us to contact you by e-mail, should additional information be required. By default this box is not marked, so you will not get any e-mail from us. </Text>
-		</Paragraph>
-		<Paragraph id="B8c" os="none">
-						<Text id="sdf3sd24" xml:lang="en-US">Please note: You will not get an answer to your error report. If you need support, please visit our Support Portal on the Internet.</Text>
-		</Paragraph>
-		<Paragraph id="B9u" style="H3" os="none">
-						<Text id="sdf3sd24" xml:lang="en-US">What Data is Sent?</Text>
-		</Paragraph>
-		<Paragraph id="B9" os="none">
-						<Text id="sdf3sd24" xml:lang="en-US">The error report consists of several files. The main file is an XML file with information about the error type, operating system name and version, memory usage, and the description that you entered. You can view the contents of this file in your e-mail client before you send the e-mail, and you can click the Show Report button on the main dialog of the Error Report Tool.</Text>
-		</Paragraph>
-		<Paragraph id="B9b" os="none">
-						<Text id="sdf3sd24" xml:lang="en-US">In addition, relevant memory contents and stack traces are gathered by some system standard tools (&apos;dbhhelp.dll&apos; on Windows systems, &apos;pstack&apos; on UNIX systems). The resulting binary file is attached to the e-mail. You can view the contents with a hexadecimal editor, for example.</Text>
+	<Paragraph id="A11">
+        	<Text id="empty" xml:lang="en-US"/>
+		<Text id="a" xml:lang="en-US" url="ahead">${PRODUCTNAME} is free for use by everybody (this includes Government, business, educational and private use). For further details see the license text delivered together with ${PRODUCTNAME} or </Text>
+		<Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org/license.html </Text>
+		<Text id="d" xml:lang="en-US"> </Text>
 		</Paragraph>
 	</Section>
-	<Section id="Installation">
-		<Paragraph id="Header" style="H2">
-						<Text id="rr3fgf42r" xml:lang="en-US">Notes on Installation</Text>
+	
+<Section id="Error">
+	<Paragraph id="B1" style="H2" os="none">
+		<Text id="sdfsd432re342r" xml:lang="en-US">Error Report Tool</Text>
 		</Paragraph>
-		<Paragraph id="All">
-						<Text id="sdfsdfgf42r" xml:lang="en-US">System Requirements:</Text>
+	<Paragraph id="B2" os="none">
+		<Text id="ertert3434534" xml:lang="en-US">The Error Report Tool starts automatically when a program crash occurs. If the program enters into an endless loop, so that it does not respond to mouse-clicks or keypresses, you can also start the Error Report Tool manually.</Text>
 		</Paragraph>
-		<Paragraph id="WNT2" os="WNT">
-			<List>
-				<Text id="a" xml:lang="en-US">Microsoft Windows 98, ME, 2000 or XP</Text>
-									<Text id="utzu6" xml:lang="en-US">Pentium compatible PC</Text>
-						<Text id="ghuj67" xml:lang="en-US">128 MB RAM (256 MB RAM recommended)</Text>
-						<Text id="jzjtzu6" xml:lang="en-US">320 MB (Chinese, Japanese, and Korean versions: 350 MB, multi-language version: 500 MB) available hard disk space</Text>
-						<Text id="jtzu56" xml:lang="en-US">800x600 resolution or higher, at least 256 colors</Text>
-		</List>
+	<Paragraph id="B2b" os="none">
+		<Text id="ertert3434534" xml:lang="en-US">The Error Report Tool gathers all necessary information that can help the program developers to improve the code, so that in later versions this error can possibly be avoided. Please help us to improve the software and send the generated error report by e-mail.</Text>
 		</Paragraph>
-		<Paragraph id="Sols2" os="SOLARIS" cpuname="SPARC">
-			<List>
-								<Text id="s2335" xml:lang="en-US">Solaris 8 operating system (SPARC platform) or higher (Solaris 10 recommended)</Text>
-						<Text id="s253" xml:lang="en-US">128 MB RAM (256 MB RAM recommended)</Text>
-						<Text id="s23seg" xml:lang="en-US">450 MB (Chinese, Japanese and Korean versions: 550 MB, multi-language version: 950 MB) available hard disk space</Text>
-						<Text id="s2s43gfe" xml:lang="en-US">X Server with 800x600 or higher resolution, with at least 256 colors</Text>
-						<Text id="wd2dff" xml:lang="en-US">Gnome 2.6 or higher required for support of assistive technology tools (AT tools) via Java accessibility support</Text>
-						<Text id="n4234rw" xml:lang="en-US">Window Manager</Text>
-		</List>
+	<Paragraph id="B2c" os="none">
+		<Text id="ertert3434534" xml:lang="en-US">Sun Microsystems is committed to respecting your online privacy and recognizes your need for appropriate protection and management of any personally identifiable information you share with us. See the statement at http://www.sun.com/privacy/ on your online data privacy at Sun Microsystems.</Text>
 		</Paragraph>
-		<Paragraph id="Solia2" os="SOLARIS" cpuname="INTEL">
-			<List>
-								<Text id="s23h" xml:lang="en-US">Solaris 8 operating system (Intel platform) or higher (Solaris 10 recommended)</Text>
-						<Text id="s24f" xml:lang="en-US">128 MB RAM (256 MB RAM recommended)</Text>
-						<Text id="fgheg" xml:lang="en-US">400 MB (Chinese, Japanese and Korean versions: 600 MB, multi-language version: 950 MB) available hard disk space</Text>
-						<Text id="fghfgh" xml:lang="en-US">X Server with 800x600 or higher resolution, with at least 256 colors</Text>
-						<Text id="wd2dff" xml:lang="en-US">Gnome 2.6 or higher required for Assistive Technology Tools</Text>
-						<Text id="mgjfg" xml:lang="en-US">Window Manager</Text>
-		</List>
+	<Paragraph id="B3" style="H3" os="none">
+		<Text id="sdf3e3" xml:lang="en-US">Known Limitations of the Error Report Tool for ${PRODUCTNAME}</Text>
 		</Paragraph>
-		<Paragraph id="Linuxi2" os="LINUX" cpuname="INTEL">
-			<List>
-								<Text id="s2we35" xml:lang="en-US">Linux Kernel version 2.4 or higher</Text>
-		        				<Text id="s253we" xml:lang="en-US">glibc2 version 2.2.4 or higher</Text>
-		                				<Text id="s2etfseg" xml:lang="en-US">Pentium compatible PC</Text>
-								<Text id="s2ssdfe" xml:lang="en-US">128 MB RAM (256 MB RAM recommended)</Text>
-						<Text id="n42dfgf" xml:lang="en-US">400 MB (Chinese, Japanese and Korean versions: 550 MB, multi-language version: 900 MB) available hard disk space</Text>
-						<Text id="ghjhhr" xml:lang="en-US">X Server with 800x600 or higher resolution, with at least 256 colors</Text>
-						<Text id="wd2dff" xml:lang="en-US">Gnome 2.6 or higher required for Assistive Technology Tools</Text>
-						<Text id="fhrtz5" xml:lang="en-US">Window Manager</Text>
-		</List>
+	<Paragraph id="B4" os="none">
+		<Text id="sdf3sd2" xml:lang="en-US">The following limitations are only valid for ${PRODUCTNAME}. Please read this information very carefully.</Text>
 		</Paragraph>
-				<Paragraph id="Linuxp2" os="LINUX" cpuname="POWERPC">
-			<List>
-								<Text id="ppcs2we35" xml:lang="en-US">Linux Kernel version 2.4 or higher</Text>
-		        				<Text id="ppcs253we" xml:lang="en-US">glibc2 version 2.2.4 or higher</Text>
-		                				<Text id="ppcs2etfseg" xml:lang="en-US">PowerPC compatible G3</Text>
-								<Text id="ppcs2ssdfe" xml:lang="en-US">128 MB RAM</Text>
-						<Text id="ppcn42dfgf" xml:lang="en-US">400 MB (Chinese, Japanese and Korean versions: 550 MB, multi-language version: 900 MB) available hard disk space</Text>
-						<Text id="ppcghjhhr" xml:lang="en-US">X Server with 800x600 or higher resolution, with at least 256 colors</Text>
-						<Text id="ppcwd2dff" xml:lang="en-US">Gnome 2.6 or higher required for Assistive Technology Tools</Text>
-						<Text id="ppcfhrtz5" xml:lang="en-US">Window Manager</Text>
-		</List>
+	<Paragraph id="B5Win" os="none" gui="WNT">
+		<Text id="sdf3sd24" xml:lang="en-US">You need Microsoft Outlook Express or Microsoft Outlook installed and configured as your default (MAPI) e-mail client to send these error messages. Mozilla 1.0, 1.2, 1.3 and Netscape 6.x do not send the created error message correctly and will not display any error message.</Text>
 		</Paragraph>
-						<Paragraph id="Macxp" os="MACOSX" cpuname="POWERPC">
-			<List>
-								<Text id="macxp2we35" xml:lang="en-US">Mac OS X 10.3.4 or higher</Text>
-		                				<Text id="macxps2etfseg" xml:lang="en-US">PowerPC compatible G3</Text>
-								<Text id="macxps2ssdfe" xml:lang="en-US">128 MB RAM</Text>
-		        				<Text id="macxpn42dfgf" xml:lang="en-US">400 MB (Chinese, Japanese and Korean versions: 550 MB, multi-language version: 900 MB) available hard disk space</Text>
-		        				<Text id="macxpghjhhr" xml:lang="en-US">X-Server (Apple's X11 or XDarwin 1.0) with 800x600 or higher resolution, with at least 256 colors</Text>
-		        				<Text id="macxpwd2dff" xml:lang="en-US">Gnome 2.6 or higher required for Assistive Technology Tools</Text>
-		        				<Text id="macxpfhrtz5" xml:lang="en-US">Aquawm or third part Window Manager</Text>
-		</List>
+	<Paragraph id="B5Unix" os="none" gui="UNX">
+		<Text id="sdf3sd24" xml:lang="en-US">You need to have SendMail installed and configured on your system.</Text>
 		</Paragraph>
-		<Paragraph id="B763ef" os="WNT">
-						<Text id="edssc3d" xml:lang="en-US">Note: Please be aware that administrator rights are needed for the installation process.</Text>
-					<Text id="dsdsdf33" xml:lang="en-US" Wrap="true">Note for Windows 98 users only: If you choose to install Java during the ${PRODUCTNAME} installation program, the installer will ask you to reboot your system. You should either ignore this message or open the ${PRODUCTNAME} installation program again after the reboot.</Text>
+	<Paragraph id="B6u" style="H3" os="none">
+		<Text id="sdf3sd24" xml:lang="en-US">Starting the Error Report Tool</Text>
 		</Paragraph>
-		<Paragraph id="Grafik" os="all">
-						<Text id="abcdef" xml:lang="en-US">Difficulties starting ${PRODUCTNAME} (e.g. applications hang) as well as problems with the screen display are often caused by the graphics card driver. If these problems occur, please update your graphics card driver or try using the graphics driver delivered with your operating system. Difficulties displaying 3D objects can often be solved by deactivating the option &quot;Use OpenGL&quot; under &apos;Tools - Options - View - 3D view&apos;.</Text>
+	<Paragraph id="B6" os="none">
+		<Text id="sdf3sd24" xml:lang="en-US">With most program crashes, the Error Report Tool will start automatically. However, if the program seems to be stuck and the tool does not start automatically, you can start the tool manually: Go to the ${PRODUCTNAME} program folder and start the &apos;crashrep.exe&apos; file.</Text>
 		</Paragraph>
-		<Paragraph id="b4tz" os="SOLARIS">
-						<Text id="ghtz5" xml:lang="en-US">Before installing ${PRODUCTNAME}, one or more operating system patches from SUN Microsystems must be installed. You can find them on the program CD in the following directories or download them at http://sunsolve.sun.com</Text>
+	<Paragraph id="B7u" style="H3" os="none">
+		<Text id="sdf3sd24" xml:lang="en-US">Completing the Report</Text>
 		</Paragraph>
-		<Paragraph id="Sols3" os="SOLARIS">
-						<Text id="dfg4tr" xml:lang="en-US">Operating system patches required:</Text>
+	<Paragraph id="B7" os="none">
+		<Text id="sdf3sd24" xml:lang="en-US">On the main Error Report Tool dialog, you can enter some additional information that may help our developers to localize the error. For example, if the error only appears after a change in your hardware or software environment, or if you clicked on a button, please include that information.</Text>
 		</Paragraph>
-        
-        <Paragraph id="Sols_Patch" os="SOLARIS" cpuname="SPARC">
-           <List>
-                            <Text id="xch3" xml:lang="en-US">for Solaris 8: 108434-11, 109147-28, 108993-33, 108435-16 (64 bit), 109148-28 (64 bit), 110934-12, 110380-04</Text>
-                            <Text id="xch4" xml:lang="en-US">for Solaris 9: 111711-04, 111712-10 (64 bit), and 113713-03</Text>
-           </List>
-        </Paragraph>
-                                                                                        
-        <Paragraph id="Soli_Patch" os="SOLARIS" cpuname="INTEL">
-          <List>
-                        <Text id="fg4" xml:lang="en-US">for Solaris 8: 108436-10, 108994-32, 109148-28, 110935-12, 110403-04</Text>
-                        <Text id="fg5" xml:lang="en-US">for Solaris 9: 111713-02, 114568-02</Text>
-          </List>
-        </Paragraph>
-                                                                                                            
-		<Paragraph id="P_Note" os="SOLARIS">
-						<Text id="dfgferd34" xml:lang="en-US">The versions mentioned above are the minimum requirements, newer (higher) version numbers are also allowed.</Text>
+	<Paragraph id="B8u" style="H3" os="none">
+		<Text id="sdf3sd24" xml:lang="en-US">Sending the Error Report by E-mail</Text>
 		</Paragraph>
-		<Paragraph id="B2l3">
-						<Text id="erter343534" xml:lang="en-US">You can install ${PRODUCTNAME} ${PRODUCTVERSION} alongside of an older version of ${PRODUCTNAME}. If you later choose to deinstall the older version of ${PRODUCTNAME}, you must call the installation program of the newer version and choose &apos;Repair&apos;. This ensures that the new version is correctly registered in your system.</Text>
-					<Text id="erter34353ew4" xml:lang="en-US" Wrap="true">Please note that copy and paste via clipboard between ${PRODUCTNAME} 1.x and ${PRODUCTNAME} ${PRODUCTVERSION} might not work in OpenOffice.org format. If that happens, choose &apos;Edit - Paste Special&apos; and choose a format other than ${PRODUCTNAME}, or open the document in ${PRODUCTNAME} ${PRODUCTVERSION} directly.</Text>
+	<Paragraph id="B8" os="none">
+		<Text id="sdf3sd24" xml:lang="en-US">The Error Report Tool uses your system&apos;s e-mail application to send the report data. You may optionally enter some descriptive text that will help us to identify the context of the program crash. Then click the Send button.</Text>
 		</Paragraph>
-		<Paragraph id="B3">
-						<Text id="erte53t434534" xml:lang="en-US">Please make sure you have enough free memory in the temporary directory on your system and that read, write and run access rights have been granted. Close all other programs before starting the installation.</Text>
+	<Paragraph id="B8b" os="none">
+		<Text id="sdf3sd24" xml:lang="en-US">You may choose to respond to questions that our developers may have about the reported error. Mark the check box if you will allow us to contact you by e-mail, should additional information be required. By default this box is not marked, so you will not get any e-mail from us. </Text>
+		</Paragraph>
+	<Paragraph id="B8c" os="none">
+		<Text id="sdf3sd24" xml:lang="en-US">Please note: You will not get an answer to your error report. If you need support, please visit our Support Portal on the Internet.</Text>
+		</Paragraph>
+	<Paragraph id="B9u" style="H3" os="none">
+		<Text id="sdf3sd24" xml:lang="en-US">What Data is Sent?</Text>
+		</Paragraph>
+	<Paragraph id="B9" os="none">
+		<Text id="sdf3sd24" xml:lang="en-US">The error report consists of several files. The main file is an XML file with information about the error type, operating system name and version, memory usage, and the description that you entered. You can view the contents of this file in your e-mail client before you send the e-mail, and you can click the Show Report button on the main dialog of the Error Report Tool.</Text>
+		</Paragraph>
+	<Paragraph id="B9b" os="none">
+		<Text id="sdf3sd24" xml:lang="en-US">In addition, relevant memory contents and stack traces are gathered by some system standard tools (&apos;dbhhelp.dll&apos; on Windows systems, &apos;pstack&apos; on UNIX systems). The resulting binary file is attached to the e-mail. You can view the contents with a hexadecimal editor, for example.</Text>
 		</Paragraph>
 	</Section>
-	<Section id="Networkinstallation">
-		<Paragraph id="a2" style="H2" os="WNT">
-						<Text id="sddf3f" xml:lang="en-US">Network Installation: Error When Calling the ${PRODUCTNAME} Quickstarter</Text>
+		
+<Section id="Installation">
+	<Paragraph id="Header" style="H2">
+		<Text id="rr3fgf42r" xml:lang="en-US">Notes on Installation</Text>
 		</Paragraph>
-		<Paragraph id="s2" os="WNT">
-						<Text id="dew32f" xml:lang="en-US">If, when starting the system, problems should occur in calling the OpenOffice.org Quickstarter (e.g. invalid link), this is probably due to the fact that the network drive on which the network installation is installed is not yet available.</Text>
+	<Paragraph id="All">
+		<Text id="sdfsdfgf42r" xml:lang="en-US">System Requirements:</Text>
 		</Paragraph>
-		<Paragraph id="d2" os="WNT">
-						<Text id="df3df" xml:lang="en-US">In most cases, this happens when the network drives are logged in via a login script, thereby establishing the connection for the network drives parallel to running the programs of the autostart group from which the Quickstarter is also started.</Text>
+	<Paragraph id="WNT2" os="WNT">
+		<List>
+			<Text id="a" xml:lang="en-US">Microsoft Windows 98, ME, 2000, XP or Vista</Text>
+			<Text id="utzu6" xml:lang="en-US">Pentium compatible PC</Text>
+			<Text id="ghuj67" xml:lang="en-US">128 MB RAM (256 MB RAM recommended)</Text>
+			<Text id="jzjtzu6" xml:lang="en-US">650 MB including Sun JRE (Chinese, Japanese, and Korean versions: 700 MB, multi-language version: 750 MB) available hard disk space during installation</Text>
+			<Text id="jzjtzu7" xml:lang="en-US">500 MB Disk space needed after installation is complete when deleting temporary installer files.</Text>
+			<Text id="jtzu56" xml:lang="en-US">800x600 resolution or higher, at least 256 colors</Text>
+			</List>
+			</Paragraph>
+	<Paragraph id="Sols2" os="SOLARIS" cpuname="SPARC">
+		<List>
+			<Text id="s2335" xml:lang="en-US">Solaris 8 operating system (SPARC platform) or higher (Solaris 10 recommended)</Text>
+			<Text id="s253" xml:lang="en-US">128 MB RAM (256 MB RAM recommended)</Text>
+			<Text id="s23seg" xml:lang="en-US">450 MB (Chinese, Japanese and Korean versions: 550 MB, multi-language version: 950 MB) available hard disk space</Text>
+			<Text id="s2s43gfe" xml:lang="en-US">X Server with 800x600 or higher resolution, with at least 256 colors</Text>
+			<Text id="wd2dff" xml:lang="en-US">Gnome 2.6 or higher required for support of assistive technology tools (AT tools) via Java accessibility support</Text>
+			<Text id="n4234rw" xml:lang="en-US">Window Manager</Text>
+			</List>
+			</Paragraph>
+	<Paragraph id="Solia2" os="SOLARIS" cpuname="INTEL">
+		<List>
+			<Text id="s23h" xml:lang="en-US">Solaris 8 operating system (Intel platform) or higher (Solaris 10 recommended)</Text>
+			<Text id="s24f" xml:lang="en-US">128 MB RAM (256 MB RAM recommended)</Text>
+			<Text id="fgheg" xml:lang="en-US">400 MB (Chinese, Japanese and Korean versions: 600 MB, multi-language version: 950 MB) available hard disk space</Text>
+			<Text id="fghfgh" xml:lang="en-US">X Server with 800x600 or higher resolution, with at least 256 colors</Text>
+			<Text id="wd2dff" xml:lang="en-US">Gnome 2.6 or higher required for Assistive Technology Tools</Text>
+			<Text id="mgjfg" xml:lang="en-US">Window Manager</Text>
+			</List>
+			</Paragraph>
+	<Paragraph id="Linuxi2" os="LINUX" cpuname="INTEL">
+		<List>
+			<Text id="s2we35" xml:lang="en-US">Linux Kernel version 2.4 or higher</Text>
+		        <Text id="s253we" xml:lang="en-US">glibc2 version 2.2.4 or higher</Text>
+		        <Text id="s2etfseg" xml:lang="en-US">Pentium compatible PC</Text>
+			<Text id="s2ssdfe" xml:lang="en-US">128 MB RAM (256 MB RAM recommended)</Text>
+			<Text id="n42dfgf" xml:lang="en-US">400 MB (Chinese, Japanese and Korean versions: 550 MB, multi-language version: 900 MB) available hard disk space</Text>
+			<Text id="ghjhhr" xml:lang="en-US">X Server with 800x600 or higher resolution, with at least 256 colors</Text>
+			<Text id="wd2dff" xml:lang="en-US">Gnome 2.6 or higher required for Assistive Technology Tools</Text>
+			<Text id="fhrtz5" xml:lang="en-US">Window Manager</Text>
+			</List>
+			</Paragraph>
+	<Paragraph id="Linuxp2" os="LINUX" cpuname="POWERPC">
+		<List>
+			<Text id="ppcs2we35" xml:lang="en-US">Linux Kernel version 2.4 or higher</Text>
+		        <Text id="ppcs253we" xml:lang="en-US">glibc2 version 2.2.4 or higher</Text>
+		        <Text id="ppcs2etfseg" xml:lang="en-US">PowerPC compatible G3</Text>
+			<Text id="ppcs2ssdfe" xml:lang="en-US">128 MB RAM</Text>
+			<Text id="ppcn42dfgf" xml:lang="en-US">400 MB (Chinese, Japanese and Korean versions: 550 MB, multi-language version: 900 MB) available hard disk space</Text>
+			<Text id="ppcghjhhr" xml:lang="en-US">X Server with 800x600 or higher resolution, with at least 256 colors</Text>
+			<Text id="ppcwd2dff" xml:lang="en-US">Gnome 2.6 or higher required for Assistive Technology Tools</Text>
+			<Text id="ppcfhrtz5" xml:lang="en-US">Window Manager</Text>
+			</List>
+			</Paragraph>
+	<Paragraph id="MacX_PPC" os="MACOSX" cpuname="POWERPC">
+		<List>
+			<Text id="macxp2we35" xml:lang="en-US">Mac OS X 10.3.9 or higher (which demands a Power Mac G3 Machine and at least 256 MB RAM)</Text>
+		        <Text id="macxHardDiksSpace" xml:lang="en-US">500 MB (Chinese, Japanese and Korean versions: 600 MB, multi-language version: 800 MB) available hard disk space</Text>
+		        <Text id="macxpghjhhr" xml:lang="en-US">Apples X11 must be installed</Text>
+			</List>
+		        <Text id="macxpfhrtz5" xml:lang="en-US">If your machine doesn't meet these minimal requirements, look out for an older Version of OpenOffice.org</Text>
+			</Paragraph>
+	<Paragraph id="MacX_INTEL" os="MACOSX" cpuname="INTEL">
+		<List>
+			<Text id="macxi2we35" xml:lang="en-US">OpenOffice.org will run on all Intel-based Macs</Text>
+			<Text id="macxHardDiksSpace" xml:lang="en-US">500 MB (Chinese, Japanese and Korean versions: 600 MB, multi-language version: 800 MB) available hard disk space</Text>
+			<Text id="macxighjhhr" xml:lang="en-US">Apples X11 must be installed</Text>
+			</List>
+			</Paragraph>
+	<Paragraph id="StartupProblemsHeader" style="H3" os="all">
+		<Text id="naso" xml:lang="en-US">Problems During Program Startup</Text>
 		</Paragraph>
-		<Paragraph id="d3" os="WNT">
-						<Text id="sd23f" xml:lang="en-US">To avoid this problem, the network drive should be connected via the system&apos;s services. If this is not possible, the link used to call the Quickstarter can be removed from the autostart group of the system, or the Quickstarter can already be disabled when installing the workstation installation. If the system administrator already disabled the Quickstarter during installation of the network installation, then the Quickstarter cannot be selected by the user in a later workstation installation.</Text>
+	<Paragraph id="StartupProblemsMac" os="MACOSX">
+		<Text id="MissingX11" xml:lang="en-US">If you experience OpenOffice.org startup problems the reason is in most cases due to a missing X11 installation. </Text>
+		<Text id="MacPortingFAQ" xml:lang="en-US" url="ahead">Please refer to the MAC Porting FAQ </Text>
+		<Text id="MacPortingFAQLink" xml:lang="en-US" url="true">http://porting.openoffice.org/mac/faq/index.html</Text>
+		</Paragraph>
+	<Paragraph id="GnomeStartupProblems" os="LINUX">
+		<Text id="naso2" xml:lang="en-US">If you experience ${PRODUCTNAME} startup problems (most notably while using Gnome) please &apos;unset&apos; the SESSION_MANAGER environment variable inside the shell you use to start ${PRODUCTNAME}. This can be done by adding the line &quot;unset SESSION_MANAGER&quot; to the beginning of the soffice shell script found in the &quot;[office folder]/program&quot; directory.</Text>
+		</Paragraph>			
+	<Paragraph id="GraphicsCardDriverWIN" os="WNT">
+		<Text id="abcdef" xml:lang="en-US">Difficulties starting ${PRODUCTNAME} (e.g. applications hang) as well as problems with the screen display are often caused by the graphics card driver. If these problems occur, please update your graphics card driver or try using the graphics driver delivered with your operating system. Difficulties displaying 3D objects can often be solved by deactivating the option &quot;Use OpenGL&quot; under &apos;Tools - Options - ${PRODUCTNAME} - View - 3D view&apos;.</Text>
+		</Paragraph>
+	<Paragraph id="GraphicsCardDriver" os="LINUX">
+		<Text id="abcdef" xml:lang="en-US">Difficulties starting ${PRODUCTNAME} (e.g. applications hang) as well as problems with the screen display are often caused by the graphics card driver. If these problems occur, please update your graphics card driver or try using the graphics driver delivered with your operating system. Difficulties displaying 3D objects can often be solved by deactivating the option &quot;Use OpenGL&quot; under &apos;Tools - Options - ${PRODUCTNAME} - View - 3D view&apos;.</Text>
+		</Paragraph>
+	<Paragraph id="PatchSolaris" os="SOLARIS">
+		<Text id="ghtz5" xml:lang="en-US">Before installing ${PRODUCTNAME}, one or more operating system patches from SUN Microsystems must be installed. You can find them on the program CD in the following directories or download them at http://sunsolve.sun.com</Text>
+		</Paragraph>
+	<Paragraph id="ListOfPatchesSolaris" os="SOLARIS">
+		<Text id="dfg4tr" xml:lang="en-US">Operating system patches required:</Text>
+		</Paragraph>
+        <Paragraph id="SolS_PatchList" os="SOLARIS" cpuname="SPARC">
+         	<List>
+                        <Text id="SPatches1" xml:lang="en-US">for Solaris 8: 108434-11, 109147-28, 108993-33, 108435-16 (64 bit), 109148-28 (64 bit), 110934-12, 110380-04</Text>
+                        <Text id="SPatches2" xml:lang="en-US">for Solaris 9: 111711-04, 111712-10 (64 bit), and 113713-03</Text>
+			</List>
+			</Paragraph>                                                                         
+        <Paragraph id="SolI_PatchList" os="SOLARIS" cpuname="INTEL">
+         	 <List>
+                        <Text id="IPatches1" xml:lang="en-US">for Solaris 8: 108436-10, 108994-32, 109148-28, 110935-12, 110403-04</Text>
+                        <Text id="IPatches2" xml:lang="en-US">for Solaris 9: 111713-02, 114568-02</Text>
+			</List>
+			</Paragraph>                                                                                                    
+	<Paragraph id="SOLPatch_Note" os="SOLARIS">
+		<Text id="Note" xml:lang="en-US">The versions mentioned above are the minimum requirements, newer (higher) version numbers are also allowed.</Text>
+		</Paragraph>	
+	<Paragraph id="ParallelInstall" os="WNT">
+		<Text id="Parallel" xml:lang="en-US">You can install ${PRODUCTNAME} ${PRODUCTVERSION} alongside of an older version of ${PRODUCTNAME}. If you later choose to deinstall the older version of ${PRODUCTNAME}, you must call the installation program of the newer version and choose &apos;Repair&apos;. This ensures that the new version is correctly registered in your system.</Text>
+		</Paragraph>	
+	<Paragraph id="CopyProblem">
+		<Text id="CopyProblemsV1toV2" xml:lang="en-US">Please note that copy and paste via clipboard between ${PRODUCTNAME} 1.x and ${PRODUCTNAME} ${PRODUCTVERSION} might not work in OpenOffice.org format. If that happens, choose &apos;Edit - Paste Special&apos; and choose a format other than ${PRODUCTNAME}, or open the document in ${PRODUCTNAME} ${PRODUCTVERSION} directly.</Text>
+		</Paragraph>
+	<Paragraph id="GlobalPrecautions">
+		<Text id="Precautions" xml:lang="en-US">Please make sure you have enough free memory in the temporary directory on your system and that read, write and run access rights have been granted. Close all other programs before starting the installation.</Text>
+		</Paragraph>
+	<Paragraph id="AdminNeededWIN" os="WNT">
+		<Text id="AdminNeeded" xml:lang="en-US">Note: Please be aware that administrator rights are needed for the installation process.</Text>
+		<Text id="WIn98JavaReboot" xml:lang="en-US" Wrap="true">Note for Windows 98 users only: If you choose to install Java during the ${PRODUCTNAME} installation program, the installer will ask you to reboot your system. You should either ignore this message or open the ${PRODUCTNAME} installation program again after the reboot.</Text>
 		</Paragraph>
 	</Section>
-	<Section id="CDE">
-		<Paragraph id="dxy" style="H2" os="SOLARIS">
-						<Text id="asas" xml:lang="en-US">Deinstalling a Network Installation Under Common Desktop Environment (CDE)</Text>
+			
+<Section id="CDE">
+	<Paragraph id="dxy" style="H2" os="SOLARIS">
+		<Text id="asas" xml:lang="en-US">Deinstalling a Network Installation Under Common Desktop Environment (CDE)</Text>
 		</Paragraph>
-		<Paragraph id="saw" os="SOLARIS">
-						<Text id="asd3" xml:lang="en-US">The shortcuts set in the CDE in a network installation are not automatically removed during deinstallation. Before deinstallation, enter as Administrator (root) the following command line to remove the shortcuts from the CDE: /usr/dt/bin/dtappintegrate -u -s [path to ${PRODUCTNAME}].</Text>
+	<Paragraph id="saw" os="SOLARIS">
+		<Text id="asd3" xml:lang="en-US">The shortcuts set in the CDE in a network installation are not automatically removed during deinstallation. Before deinstallation, enter as Administrator (root) the following command line to remove the shortcuts from the CDE: /usr/dt/bin/dtappintegrate -u -s [path to ${PRODUCTNAME}].</Text>
 		</Paragraph>
-		<Paragraph id="df3d" os="SOLARIS">
-            <Text id="ef3s" xml:lang="en-US">Example: /usr/dt/bin/dtappintegrate -u -s /usr/local/${PRODUCTNAME}${PRODUCTVERSION}</Text>
-		</Paragraph>
-	</Section>
-	<Section id="SessionManager">
-		<Paragraph id="F1a" style="H2" gui="UNX">
-						<Text id="naso" xml:lang="en-US">Problems During Program Startup on Gnome</Text>
-		</Paragraph>
-		<Paragraph id="F1b" gui="UNX">
-						<Text id="naso2" xml:lang="en-US">If you experience ${PRODUCTNAME} startup problems (most notably while using Gnome) please &apos;unset&apos; the SESSION_MANAGER environment variable inside the shell you use to start ${PRODUCTNAME}. This can be done by adding the line &quot;unset SESSION_MANAGER&quot; to the beginning of the soffice shell script found in the &quot;[office folder]/program&quot; directory.</Text>
+	<Paragraph id="df3d" os="SOLARIS">
+    		<Text id="ef3s" xml:lang="en-US">Example: /usr/dt/bin/dtappintegrate -u -s /usr/local/${PRODUCTNAME}${PRODUCTVERSION}</Text>
 		</Paragraph>
 	</Section>
-	<Section id="Scroll">
-		<Paragraph id="F1a" style="H2" gui="WNT">
-                        <Text id="naso" xml:lang="en-US">ALPS/Synaptics notebook touchpads in Windows</Text>
+			
+<Section id="Scroll">
+	<Paragraph id="F1a" style="H3" gui="WNT">
+		<Text id="naso" xml:lang="en-US">ALPS/Synaptics notebook touchpads in Windows</Text>
 		</Paragraph>
-		<Paragraph id="F1b" gui="WNT">
-                        <Text id="naso2" xml:lang="en-US">Due to a Windows driver issue, you cannot scroll through ${PRODUCTNAME} documents when you slide your finger across an ALPS/Synaptics touchpad.</Text>
-        </Paragraph>
-    		<Paragraph id="F1c" gui="WNT">
-                <Text id="naso2" xml:lang="en-US">To enable touchpad scrolling, add the following lines to the &quot;C:\Program Files\Synaptics\SynTP\SynTPEnh.ini&quot; configuration file, and restart your computer:</Text>
-                            </Paragraph>
-    		<Paragraph id="F1d" gui="WNT">
-                <Text id="naso2" xml:lang="en-US">[${PRODUCTNAME}]</Text>
-                                <Text id="naso3" xml:lang="en-US">FC = &quot;SALFRAME&quot;</Text>
-                                <Text id="naso4" xml:lang="en-US">SF = 0x10000000</Text>
-                                <Text id="naso5" xml:lang="en-US">SF |= 0x00004000</Text>
-                             </Paragraph>
-    		<Paragraph id="F1e" gui="WNT">
-                                <Text id="naso2" xml:lang="en-US">Note: The location of the configuration file might vary on different versions of Windows.</Text>
-             </Paragraph>
-  
+	<Paragraph id="F1b" gui="WNT">
+		<Text id="naso2" xml:lang="en-US">Due to a Windows driver issue, you cannot scroll through ${PRODUCTNAME} documents when you slide your finger across an ALPS/Synaptics touchpad.</Text>
+		</Paragraph>
+    	<Paragraph id="F1c" gui="WNT">
+		<Text id="naso2" xml:lang="en-US">To enable touchpad scrolling, add the following lines to the &quot;C:\Program Files\Synaptics\SynTP\SynTPEnh.ini&quot; configuration file, and restart your computer:</Text>
+		</Paragraph>
+    	<Paragraph id="F1d" gui="WNT">
+               	<Text id="naso2" xml:lang="en-US">[${PRODUCTNAME}]</Text>
+		<Text id="naso3" xml:lang="en-US">FC = &quot;SALFRAME&quot;</Text>
+		<Text id="naso4" xml:lang="en-US">SF = 0x10000000</Text>
+		<Text id="naso5" xml:lang="en-US">SF |= 0x00004000</Text>
+		</Paragraph>
+    	<Paragraph id="F1e" gui="WNT">
+		<Text id="naso2" xml:lang="en-US">Note: The location of the configuration file might vary on different versions of Windows.</Text>
+		</Paragraph>
 	</Section>
 
-    <Section id="ArabicFont">
-		<Paragraph id="F2a" style="H2" os="none" gui="UNX">
-						<Text id="abdfe" xml:lang="en-US">Important Information for Arabic and Hebrew Versions</Text>
+<Section id="ArabicFont">
+	<Paragraph id="F2a" style="H3" os="none" gui="UNX">
+		<Text id="abdfe" xml:lang="en-US">Important Information for Arabic and Hebrew Versions</Text>
 		</Paragraph>
-		<Paragraph id="F2b" os="none" gui="UNX">
-						<Text id="abdfe2" xml:lang="en-US">If the user interface of the Arabic or Hebrew versions shows blanks or squares instead of text, please install the most recent Java Runtime Environment (JRE 1.4.1) before running the ${PRODUCTNAME} Installation Program. The JRE will install the fonts required for Arabic and Hebrew versions.</Text>
-		</Paragraph>
-	</Section>
-	<Section id="Zoomtext">
-		<Paragraph id="aw" style="H2" os="WNT">
-						<Text id="aw2" xml:lang="en-US">Ai Squared ZoomText 7.11</Text>
-		</Paragraph>
-		<Paragraph id="aw3" os="WNT">
-						<Text id="aw4" xml:lang="en-US">If you want to use Ai Squared ZoomText with ${PRODUCTNAME} ${PRODUCTVERSION} , you need version 7.11 or higher. The date of the Ai Squared ZoomText download must be after June 12, 2002 for it to contain all the necessary program enhancements.</Text>
+	<Paragraph id="F2b" os="none" gui="UNX">
+		<Text id="abdfe2" xml:lang="en-US">If the user interface of the Arabic or Hebrew versions shows blanks or squares instead of text, please install the most recent Java Runtime Environment (JRE 1.4.1) before running the ${PRODUCTNAME} Installation Program. The JRE will install the fonts required for Arabic and Hebrew versions.</Text>
 		</Paragraph>
 	</Section>
-	<Section id="Netscape">
-		<Paragraph id="xcv" style="H2" os="SOLARIS">
-						<Text id="sdfsd32asrc" xml:lang="en-US">Mozilla Address Book Driver</Text>
+	
+<Section id="Zoomtext">
+	<Paragraph id="aw" style="H3" os="WNT">
+		<Text id="aw2" xml:lang="en-US">Ai Squared ZoomText 7.11</Text>
 		</Paragraph>
-		<Paragraph id="E33" os="SOLARIS">
-						<Text id="sdcc32asrc" xml:lang="en-US">The Mozilla address book driver requires the SUNWzlib package. This package is not part of the minimum Solaris operating system  installation. If you require access to the Mozilla address book, then add this package to your Solaris operating system using the command &quot;pkgadd&quot; from the installation CD.</Text>
-		</Paragraph>
-	</Section>
-	<Section id="UI_Font">
-		<Paragraph id="abc" style="H2">
-						<Text id="awe" xml:lang="en-US">Changing the User Interface Font</Text>
-		</Paragraph>
-		<Paragraph id="abc1">
-						<Text id="w32e" xml:lang="en-US">In ${PRODUCTNAME} you can change the font used for screen display and printing by replacing it with a different font installed on your system. This can be done using the font replacement function. Choose &apos;Tools - Options - ${PRODUCTNAME} - Fonts&apos; to access the font replacement table.</Text>
-		</Paragraph>
-		<Paragraph id="abc2">
-						<Text id="asw3" xml:lang="en-US">To change the font of the ${PRODUCTNAME} user interface, you have to replace the default font &quot;Andale Sans UI&quot; with another font and mark the &quot;always&quot; setting for this replacement.</Text>
-		</Paragraph>
-		<Paragraph id="abc3">
-						<Text id="sdf3" xml:lang="en-US">Refer to the ${PRODUCTNAME} Help for a detailed explanation of the dialog.</Text>
+	<Paragraph id="aw3" os="WNT">
+		<Text id="aw4" xml:lang="en-US">If you want to use Ai Squared ZoomText with ${PRODUCTNAME} ${PRODUCTVERSION} , you need version 7.11 or higher. The date of the Ai Squared ZoomText download must be after June 12, 2002 for it to contain all the necessary program enhancements.</Text>
 		</Paragraph>
 	</Section>
-	<Section id="Keyboard">
-		<Paragraph id="abc2" style="H2">
-						<Text id="awe1" xml:lang="en-US">Shortcut Keys</Text>
+	
+<Section id="NetscapeAdressBook">
+	<Paragraph id="AdressBookHeader" style="H3" os="SOLARIS">
+		<Text id="sdfsd32asrc" xml:lang="en-US">Mozilla Address Book Driver</Text>
 		</Paragraph>
-		<Paragraph id="abc12">
-						<Text id="w32e1" xml:lang="en-US">Only shortcut keys (key combinations) not used by the operating system can be used in ${PRODUCTNAME}. If a key combination in ${PRODUCTNAME} does not work as described in the ${PRODUCTNAME} Help, check if that shortcut is already used by the operating system. To rectify such conflicts, you can change the keys assigned by your operating system. Alternatively, you can change almost any key assignment in ${PRODUCTNAME}. For more information on this topic, refer to the ${PRODUCTNAME} Help or the Help documentation of your operating system.</Text>
-		</Paragraph>
-	</Section>
-	<Section id="FileLocking">
-		<Paragraph id="G1" style="H2" gui="UNX">
-						<Text id="gfh6w" xml:lang="en-US">File Locking</Text>
-		</Paragraph>
-		<Paragraph id="G2" gui="UNX">
-						<Text id="pji76w" xml:lang="en-US">In the default setting, file locking is turned on in ${PRODUCTNAME}. To deactivate it, you have to set the appropriate environment variables SAL_ENABLE_FILE_LOCKING=0 and export SAL_ENABLE_FILE_LOCKING. These entries are already in enabled form in the soffice script file.</Text>
-		</Paragraph>
-		<Paragraph id="G3" gui="UNX">
-						<Text id="pji76wsdf" xml:lang="en-US">Warning: The activated file locking feature can cause problems with Solaris 2.5.1 and 2.7 used in conjunction with Linux NFS 2.0. If your system environment has these parameters, we strongly recommend that you avoid using the file locking feature. Otherwise, ${PRODUCTNAME} will hang when you try to open a file from a NFS mounted directory from a Linux computer.</Text>
+	<Paragraph id="AdressBookDriver" os="SOLARIS">
+		<Text id="sdcc32asrc" xml:lang="en-US">The Mozilla address book driver requires the SUNWzlib package. This package is not part of the minimum Solaris operating system  installation. If you require access to the Mozilla address book, then add this package to your Solaris operating system using the command &quot;pkgadd&quot; from the installation CD.</Text>
 		</Paragraph>
 	</Section>
-	<Section id="Mapi">
-		<Paragraph id="G1a" style="H2" gui="WNT">
-						<Text id="gfh6w" xml:lang="en-US">Problems When Sending Documents as E-mails From ${PRODUCTNAME}</Text>
+
+<Section id="Keyboard">
+	<Paragraph id="abc2" style="H3">
+		<Text id="awe1" xml:lang="en-US">Shortcut Keys</Text>
 		</Paragraph>
-		<Paragraph id="G2a" gui="WNT">
-						<Text id="pji76w" xml:lang="en-US">When sending a document via &apos;File - Send - Document as E-mail&apos; or &apos;Document as PDF Attachment&apos; problems might occur (program crashes or hangs). This is due to the Windows system file &quot;Mapi&quot; (Messaging Application Programming Interface) which causes problems in some file versions. Unfortunately, the problem cannot be narrowed down to a certain version number. For more information visit http://www.microsoft.com to search the Microsoft Knowledge Base for &quot;mapi dll&quot;.</Text>
-		</Paragraph>
-	</Section>
-	<Section id="ModifiedSourceCode">
-		<Paragraph id="HH1" style="H2">
-						<Text id="sdffd23r3cefwefew" xml:lang="en-US">Used / Modified Source Code</Text>
-		</Paragraph>
-		<Paragraph id="HH2">
-						<Text id="sdffd23red32efew" xml:lang="en-US">Portions Copyright 1998, 1999 James Clark. Portions Copyright 1996, 1998 Netscape Communications Corporation.</Text>
+	<Paragraph id="abc12">
+		<Text id="w32e1" xml:lang="en-US">Only shortcut keys (key combinations) not used by the operating system can be used in ${PRODUCTNAME}. If a key combination in ${PRODUCTNAME} does not work as described in the ${PRODUCTNAME} Help, check if that shortcut is already used by the operating system. To rectify such conflicts, you can change the keys assigned by your operating system. Alternatively, you can change almost any key assignment in ${PRODUCTNAME}. For more information on this topic, refer to the ${PRODUCTNAME} Help or the Help documentation of your operating system.</Text>
 		</Paragraph>
 	</Section>
-	<Section id="GettingInvolved">
-		<Paragraph id="A1" style="H2">
-			<Text id="a" xml:lang="en-US">Getting Involved </Text>
-					</Paragraph>
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">The OpenOffice.org Community would very much benefit from your active participation in the development of this important open source project.</Text>
-					</Paragraph>
-		<Paragraph id="A3">
-			<Text id="a" xml:lang="en-US" url="ahead">As a user, you are already a valuable part of the suite&apos;s development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the community. Please join and check out the user page at: </Text>
-			            <Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org </Text>
-            		</Paragraph>
-		<Paragraph id="A4"/>
-	</Section>
-	<Section id="Registration">
-		<Paragraph id="A1" style="H2">
-			<Text id="a" xml:lang="en-US">Registration </Text>
-					</Paragraph>
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the community to make an even better software suite and address user needs directly. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at </Text>
-			            <Text id="b" xml:lang="en-US" url="true" >http://www.openoffice.org/welcome/registration20.html </Text>
-            		</Paragraph>
-	</Section>
-	<Section id="UserSurvey">
-		<Paragraph id="A1" style="H2">
-			<Text id="a" xml:lang="en-US">User Survey </Text>
-					</Paragraph>
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">There is also a User Survey located online which we encourage you to fill out. The User Survey results will help OpenOffice.org move more rapidly in setting new standards for the creation of the next-generation office suite. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data.</Text>
-					</Paragraph>
-	</Section>
-	<Section id="ReportBugsIssues">
-		<Paragraph id="A1" style="H2">
-			<Text id="a" xml:lang="en-US">Report Bugs &amp; Issues </Text>
-					</Paragraph>
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">The OpenOffice.org Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the user community can make to the ongoing development and improvement of the suite. </Text>
-					</Paragraph>
-	</Section>
-	<Section id="Subscribe">
-		<Paragraph id="A1" style="H2">
-			<Text id="a" xml:lang="en-US">Subscribe </Text>
-					</Paragraph>
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US" url="ahead">Here are a few of the Project mailing lists to which you can subscribe at </Text>
-			            <Text id="b" xml:lang="en-US" url="true" >http://www.openoffice.org/mail_list.html</Text>
-            		</Paragraph>
-		<Paragraph id="A3">
-			<List>
-				<Text id="a" xml:lang="en-US">News: announce@openoffice.org *recommended to all users* (light traffic) </Text>
-					<Text id="b" xml:lang="en-US">User support: users@openoffice.org *recommended to new users* (heavy traffic) </Text>
-					<Text id="c" xml:lang="en-US">Main user forum: discuss@openoffice.org *easy way to lurk on discussions* (heavy) </Text>
-					<Text id="d" xml:lang="en-US">Marketing project: dev@marketing.openoffice.org *beyond development* (getting heavy) </Text>
-					<Text id="e" xml:lang="en-US">General code contributor list: dev@openoffice.org (moderate/heavy) </Text>
-					</List>
+			
+<Section id="FileLocking">
+	<Paragraph id="G1" style="H3" gui="UNX">
+		<Text id="gfh6w" xml:lang="en-US">File Locking</Text>
+		</Paragraph>
+	<Paragraph id="G2" gui="UNX">
+		<Text id="pji76w" xml:lang="en-US">In the default setting, file locking is turned on in ${PRODUCTNAME}. To deactivate it, you have to set the appropriate environment variables SAL_ENABLE_FILE_LOCKING=0 and export SAL_ENABLE_FILE_LOCKING. These entries are already in enabled form in the soffice script file.</Text>
+		</Paragraph>
+	<Paragraph id="G3" gui="UNX">
+		<Text id="pji76wsdf" xml:lang="en-US">Warning: The activated file locking feature can cause problems with Solaris 2.5.1 and 2.7 used in conjunction with Linux NFS 2.0. If your system environment has these parameters, we strongly recommend that you avoid using the file locking feature. Otherwise, ${PRODUCTNAME} will hang when you try to open a file from a NFS mounted directory from a Linux computer.</Text>
 		</Paragraph>
 	</Section>
-	<Section id="JoinProjects">
-		<Paragraph id="A1" style="H2">
-			<Text id="a" xml:lang="en-US">Join one or more Projects</Text>
-					</Paragraph>
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">You can make major contributions to this important open source project even if you have limited software design or coding experience. Yes, you!</Text>
-					</Paragraph>
-		<Paragraph id="A3">
-			<Text id="a" xml:lang="en-US" url="ahead">At </Text>
-						<Text id="b" xml:lang="en-US" url="true">http://projects.openoffice.org/index.html</Text>
-						<Text id="c" xml:lang="en-US"> you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just by spreading the word and telling a friend about this office suite.</Text>
-					</Paragraph>
-		<Paragraph id="A4">
-			<Text id="a" xml:lang="en-US" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here: </Text>
-					<Text id="b" xml:lang="en-US" url="true">http://marketing.openoffice.org/contacts.html </Text>
-					<Text id="c" xml:lang="en-US"> where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</Text>
-					</Paragraph>
+	
+<Section id="Mapi">
+	<Paragraph id="G1a" style="H3" gui="WNT">
+		<Text id="gfh6w" xml:lang="en-US">Problems When Sending Documents as E-mails From ${PRODUCTNAME}</Text>
+		</Paragraph>
+	<Paragraph id="G2a" gui="WNT">
+		<Text id="pji76w" xml:lang="en-US">When sending a document via &apos;File - Send - Document as E-mail&apos; or &apos;Document as PDF Attachment&apos; problems might occur (program crashes or hangs). This is due to the Windows system file &quot;Mapi&quot; (Messaging Application Programming Interface) which causes problems in some file versions. Unfortunately, the problem cannot be narrowed down to a certain version number. For more information visit http://www.microsoft.com to search the Microsoft Knowledge Base for &quot;mapi dll&quot;.</Text>
+		</Paragraph>
+		</Section>
+	
+<Section id="Registration">
+	<Paragraph id="A1" style="H2">
+		<Text id="a" xml:lang="en-US">Registration </Text>
+		</Paragraph>
+	<Paragraph id="A2">
+		<Text id="a" xml:lang="en-US" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the community to make an even better software suite and address user needs directly. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at </Text>
+		<Text id="b" xml:lang="en-US" url="true" >http://www.openoffice.org/welcome/registration20.html </Text>
+            	</Paragraph>
 	</Section>
-	<Section id="UserSupport">
-		<Paragraph id="A1" style="H2">
-			<Text id="a" xml:lang="en-US">User Support</Text>
-					</Paragraph>
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US" url="ahead">For help with the ${PRODUCTNAME} ${PRODUCTVERSION} office suite, take a look at the archives to find questions already answered on the &apos;users@openoffice.org&apos; mailing list at </Text>
-			            <Text id="b" xml:lang="en-US" url="true" >http://www.openoffice.org/mail_list.html</Text>
-					<Text id="c" xml:lang="en-US">. Alternatively, you can send in your questions to users@openoffice.org. Remember to subscribe to the list to get an email response.</Text>
-					</Paragraph>
-		<Paragraph id="A3">
-			<Text id="a" xml:lang="en-US" url="ahead">Also check the FAQ section at </Text>
-						<Text id="b" xml:lang="en-US" url="true">http://user-faq.openoffice.org/</Text>
-			<Text id="c" xml:lang="en-US">.</Text>
+	
+<Section id="UserSurvey">
+	<Paragraph id="A1" style="H2">
+		<Text id="a" xml:lang="en-US">User Survey </Text>
+		</Paragraph>
+	<Paragraph id="A2">
+		<Text id="a" xml:lang="en-US">There is also a User Survey located online which we encourage you to fill out. The User Survey results will help OpenOffice.org move more rapidly in setting new standards for the creation of the next-generation office suite. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data.</Text>
 		</Paragraph>
 	</Section>
-	<Section id="WayToStart">
-		<Paragraph id="A1" style="H2">
-			<Text id="a" xml:lang="en-US">Way to Start</Text>
-					</Paragraph>
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the ${PRODUCTNAME} source code was released back in October 2000. When you&apos;re comfortable, all you need to do is send an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at </Text>
-            			<Text id="b" xml:lang="en-US" url="true" >http://development.openoffice.org/todo.html</Text>
-					<Text id="c" xml:lang="en-US">.</Text>
-					</Paragraph>
+				
+<Section id="UserSupport">
+	<Paragraph id="A1" style="H2">
+		<Text id="a" xml:lang="en-US">User Support</Text>
+		</Paragraph>
+	<Paragraph id="A2">
+		<Text id="a" xml:lang="en-US" url="ahead">For help with the ${PRODUCTNAME} ${PRODUCTVERSION} office suite, take a look at the archives to find questions already answered on the &apos;users@openoffice.org&apos; mailing list at </Text>
+		<Text id="b" xml:lang="en-US" url="true" >http://www.openoffice.org/mail_list.html</Text>
+		<Text id="c" xml:lang="en-US">. Alternatively, you can send in your questions to users@openoffice.org. Remember to subscribe to the list to get an email response.</Text>
+		</Paragraph>
+	<Paragraph id="A3">
+		<Text id="a" xml:lang="en-US" url="ahead">Also check the FAQ section at </Text>
+		<Text id="b" xml:lang="en-US" url="true">http://user-faq.openoffice.org/</Text>
+		<Text id="c" xml:lang="en-US">.</Text>
+		</Paragraph>
 	</Section>
-	<Section id="Credits">
-		<Paragraph id="emptyparagraph" localized="false"/>
-		<Paragraph id="A1">
-			<Text id="a" xml:lang="en-US">We hope you enjoy working with the new ${PRODUCTNAME} ${PRODUCTVERSION} and will join us online.</Text>
-							</Paragraph>
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">The ${PRODUCTNAME} Community</Text>
-							</Paragraph>
-		<Paragraph id="A3" localized="false">
-			<Text id="a" xml:lang="en-US"/>
-			<Text id="b" xml:lang="en-US"/>
+			
+<Section id="ReportBugsIssues">
+	<Paragraph id="A1" style="H2">
+		<Text id="a" xml:lang="en-US">Report Bugs &amp; Issues </Text>
+		</Paragraph>
+	<Paragraph id="A2">
+		<Text id="a" xml:lang="en-US">The OpenOffice.org Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the user community can make to the ongoing development and improvement of the suite. </Text>
+		</Paragraph>
+		</Section>
+			
+<Section id="GettingInvolved">
+	<Paragraph id="A1" style="H2">
+		<Text id="a" xml:lang="en-US">Getting Involved </Text>
+		</Paragraph>
+	<Paragraph id="A2">
+		<Text id="a" xml:lang="en-US">The OpenOffice.org Community would very much benefit from your active participation in the development of this important open source project.</Text>
+		</Paragraph>
+	<Paragraph id="A3">
+		<Text id="a" xml:lang="en-US" url="ahead">As a user, you are already a valuable part of the suite&apos;s development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the community. Please join and check out the user page at: </Text>
+		<Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org </Text>
+            	</Paragraph>
+	<Paragraph id="emptyparagraph" localized="false"/>
+	<Paragraph id="A1" style="H3">
+		<Text id="a" xml:lang="en-US">Way to Start</Text>
+		</Paragraph>
+	<Paragraph id="A2">
+		<Text id="a" xml:lang="en-US" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the ${PRODUCTNAME} source code was released back in October 2000. When you&apos;re comfortable, all you need to do is send an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at </Text>
+            	<Text id="b" xml:lang="en-US" url="true" >http://development.openoffice.org/todo.html</Text>
+		<Text id="c" xml:lang="en-US">.</Text>
+		</Paragraph>
+
+	<Paragraph id="A1" style="H3">
+		<Text id="a" xml:lang="en-US">Subscribe </Text>
+		</Paragraph>
+	<Paragraph id="A2">
+		<Text id="a" xml:lang="en-US" url="ahead">Here are a few of the Project mailing lists to which you can subscribe at </Text>
+		<Text id="b" xml:lang="en-US" url="true" >http://www.openoffice.org/mail_list.html</Text>
+            	</Paragraph>
+	<Paragraph id="A3">
+		<List>
+			<Text id="a" xml:lang="en-US">News: announce@openoffice.org *recommended to all users* (light traffic) </Text>
+			<Text id="c" xml:lang="en-US">Main user forum: discuss@openoffice.org *easy way to lurk on discussions* (heavy) </Text>
+			<Text id="d" xml:lang="en-US">Marketing project: dev@marketing.openoffice.org *beyond development* (getting heavy) </Text>
+			<Text id="e" xml:lang="en-US">General code contributor list: dev@openoffice.org (moderate/heavy) </Text>
+			</List>
+			</Paragraph>
+
+	<Paragraph id="A1" style="H3">
+		<Text id="a" xml:lang="en-US">Join one or more Projects</Text>
+		</Paragraph>
+	<Paragraph id="A2">
+		<Text id="a" xml:lang="en-US">You can make major contributions to this important open source project even if you have limited software design or coding experience. Yes, you!</Text>
+		</Paragraph>
+	<Paragraph id="A3">
+		<Text id="a" xml:lang="en-US" url="ahead">At </Text>
+		<Text id="b" xml:lang="en-US" url="true">http://projects.openoffice.org/index.html</Text>
+		<Text id="c" xml:lang="en-US"> you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just by spreading the word and telling a friend about this office suite.</Text>
+		</Paragraph>
+	<Paragraph id="A4">
+		<Text id="a" xml:lang="en-US" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here: </Text>
+		<Text id="b" xml:lang="en-US" url="true">http://marketing.openoffice.org/contacts.html </Text>
+		<Text id="c" xml:lang="en-US"> where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</Text>
+		</Paragraph>
+	</Section>
+
+	
+<Section id="Credits">
+	<Paragraph id="emptyparagraph" localized="false"/>
+	<Paragraph id="A1">
+		<Text id="a" xml:lang="en-US">We hope you enjoy working with the new ${PRODUCTNAME} ${PRODUCTVERSION} and will join us online.</Text>
+		</Paragraph>
+	<Paragraph id="A2">
+		<Text id="a" xml:lang="en-US">The OpenOffice.org Community</Text>
+		</Paragraph>
+	<Paragraph id="A3" localized="false">
+		<Text id="a" xml:lang="en-US"/>
+		<Text id="b" xml:lang="en-US"/>
+		</Paragraph>
+	</Section>
+	
+<Section id="ModifiedSourceCode">
+	<Paragraph id="HH1" style="H2">
+		<Text id="sdffd23r3cefwefew" xml:lang="en-US">Used / Modified Source Code</Text>
+		</Paragraph>
+	<Paragraph id="HH2">
+		<Text id="sdffd23red32efew" xml:lang="en-US">Portions Copyright 1998, 1999 James Clark. Portions Copyright 1996, 1998 Netscape Communications Corporation.</Text>
 		</Paragraph>
 	</Section>
 </Readme>
