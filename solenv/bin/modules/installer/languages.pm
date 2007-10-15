@@ -4,9 +4,9 @@
 #
 #   $RCSfile: languages.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 09:52:19 $
+#   last change: $Author: vg $ $Date: 2007-10-15 13:34:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -286,16 +286,13 @@ sub get_default_language
     return ${$languagesref}[0];     # ToDo, only returning the first language
 }
 
-##########################################################
-# Contains the installation set one of the languages
-# ja, ko, zh-CH, or zh-TW ?
-##########################################################
+#############################################################
+# Contains the installation set one of the asian languages?
+#############################################################
 
 sub detect_asian_language
 {
     my ($languagesref) = @_;
-
-    my @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
 
     my $containsasia = 0;
 
@@ -304,9 +301,9 @@ sub detect_asian_language
         my $onelang = ${$languagesref}[$i];
         $onelang =~ s/\s*$//;
 
-        for ( my $j = 0; $j <= $#asianlanguages; $j++ )
+        for ( my $j = 0; $j <= $#installer::globals::asianlanguages; $j++ )
         {
-            my $asialang = $asianlanguages[$j];
+            my $asialang = $installer::globals::asianlanguages[$j];
             $asialang =~ s/\s*$//;
 
             if ( $onelang eq $asialang )
@@ -322,38 +319,42 @@ sub detect_asian_language
     return $containsasia;
 }
 
-################################################################
-# Contains the installation set one of the western languages
-# ja, ko, zh-CH, or zh-TW ?
-################################################################
+#############################################################
+# Contains the installation set only asian languages?
+#############################################################
 
-sub detect_western_language
+sub contains_only_asian_languages
 {
     my ($languagesref) = @_;
 
-    my @westernlanguages = ("en-US","pt","ru","el","nl","fr","es","fi","hu","ca","sl","it","cs","sk","en-GB","da","sv","no","pl","de","pt-BR","th","et","tr","hi-IN","ar","he");
-
-    my $containswestern = 0;
+    my $onlyasian = 1;
 
     for ( my $i = 0; $i <= $#{$languagesref}; $i++ )
     {
         my $onelang = ${$languagesref}[$i];
         $onelang =~ s/\s*$//;
 
-        for ( my $j = 0; $j <= $#westernlanguages; $j++ )
+        if (! installer::existence::exists_in_array($onelang, \@installer::globals::asianlanguages))
         {
-            my $westernlang = $westernlanguages[$j];
-            $westernlang =~ s/\s*$//;
-
-            if ( $onelang eq $westernlang )
-            {
-                $containswestern = 1;
-                last;
-            }
+            $onlyasian = 0;
+            last;
         }
-
-        if ( $containswestern ) { last; }
     }
+
+    return $onlyasian;
+}
+
+################################################################
+# Contains the installation set one of the western languages
+################################################################
+
+sub detect_western_language
+{
+    my ($languagesref) = @_;
+
+    my $containswestern = 1;
+
+    if ( contains_only_asian_languages($languagesref) ) { $containswestern = 0; }
 
     return $containswestern;
 }
