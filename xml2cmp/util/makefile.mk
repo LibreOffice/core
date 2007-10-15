@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:27:44 $
+#   last change: $Author: vg $ $Date: 2007-10-15 13:08:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@ PRJNAME=xml2cmp
 TARGET=xml2cmp
 TARGETTYPE=CUI
 
+# Windows /DELAYLOAD depends on objects delivered from sal, but is not needed
+# for this internal tool, anyway:
+DELAYLOADOBJ=
 
 # --- Settings -----------------------------------------------------
 ENABLE_EXCEPTIONS=TRUE
