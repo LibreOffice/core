@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:01:45 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 17:33:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1657,10 +1657,23 @@ const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurren
         if ( bCurrentTableOnly )
         {
             const SwFrm* pCurrentRow = GetUpper();
+
+            // check how many rows we are allowed to go up or down until we reach the end of
+            // the current table frame:
             nMax = 0;
             while ( bStart ? pCurrentRow->GetPrev() : pCurrentRow->GetNext() )
             {
-                pCurrentRow = bStart ? pCurrentRow->GetPrev() : pCurrentRow->GetNext();
+                if ( bStart )
+                {
+                    // do not accept a repeated headline:
+                    if ( pTableFrm->IsFollow() && pTableFrm->IsInHeadline( *pCurrentRow->GetPrev() ) )
+                        break;
+
+                    pCurrentRow = pCurrentRow->GetPrev();
+                }
+                else
+                    pCurrentRow = pCurrentRow->GetNext();
+
                 ++nMax;
             }
         }
