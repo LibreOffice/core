@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:47:18 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:00:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@ SHL1VERSIONMAP = inv.map
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
+SHL1RPATH=URELIB
 
 DEF1NAME=	$(SHL1TARGET)
 
