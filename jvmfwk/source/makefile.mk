@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 14:32:20 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:08:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,8 @@ SHL1TARGET = $(FRAMEWORKLIB)
 SHL1DEPN=
 SHL1IMPLIB = i$(FRAMEWORKLIB)
 SHL1LIBS = $(SLB)$/$(TARGET).lib
-SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(SALHELPERLIB) $(XML2LIB)
+SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(SALHELPERLIB) $(LIBXML2LIB)
+SHL1RPATH = URELIB
 
 .IF "$(OS)" == "WNT"
 SHL1STDLIBS += $(ADVAPI32LIB)
