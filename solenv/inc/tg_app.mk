@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-02 09:23:33 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:39:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,10 @@ APP$(TNR)LINKER=$(LINK)
 APP$(TNR)STDLIB=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDLIB))
 APP$(TNR)LINKFLAGS+=$(LINKFLAGS)
 .ENDIF			# "$(APP$(TNR)CODETYPE)"=="C"
+
+APP$(TNR)RPATH*=OOO
+LINKFLAGSRUNPATH_$(APP$(TNR)RPATH)*=/ERROR:/Bad_APP$(TNR)RPATH_value
+APP$(TNR)LINKFLAGS+=$(LINKFLAGSRUNPATH_$(APP$(TNR)RPATH))
 
 .IF "$(APP$(TNR)STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
