@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: kz $ $Date: 2007-10-02 15:20:01 $
+#   last change: $Author: vg $ $Date: 2007-10-15 13:34:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@ BEGIN
     $prog="make_installer.pl";
 
     @noMSLocaleLangs = ( "br", "dz", "km", "nr", "ns", "rw", "ss", "st", "tg", "ts", "tn", "ve", "xh", "zu" , "ne" , "bn", "bn-BD", "bn-IN", "lo", "cy" , "ku" , "as-IN" , "te-IN" , "ml-IN" , "mr-IN", "ur-IN", "ta-IN", "or-IN" , "ti-ER" , "eo" , "ka" ,"ga" , "uk"  );
+    @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
 
     $ziplistname = "";
     $pathfilename = "";
