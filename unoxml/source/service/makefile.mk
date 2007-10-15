@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 13:54:28 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:23:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ SHL1LIBS= \
     $(SLB)$/fastsax.lib
 
 SHL1STDLIBS= \
-    $(XML2LIB) \
+    $(LIBXML2LIB) \
     $(TOOLSLIB)	\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
