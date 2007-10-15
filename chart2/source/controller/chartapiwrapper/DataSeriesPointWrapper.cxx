@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesPointWrapper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:11:25 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 16:24:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -592,11 +592,9 @@ void DataSeriesPointWrapper::setCurrentSizeAsReference()
 Any DataSeriesPointWrapper::getReferenceSize()
 {
     Any aRet;
-    /*
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet(), uno::UNO_QUERY );
     if( xProp.is() )
         aRet = xProp->getPropertyValue( C2U("ReferenceDiagramSize") );
-    */
     return aRet;
 }
 awt::Size DataSeriesPointWrapper::getCurrentSizeForReference()
