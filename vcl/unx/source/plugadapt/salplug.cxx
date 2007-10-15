@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:32:48 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:07:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,9 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
     aModName.appendAscii( SAL_DLLEXTENSION );
     OUString aModule = aModName.makeStringAndClear();
 
-    oslModule aMod = osl_loadModule( aModule.pData, SAL_LOADMODULE_DEFAULT );
+    oslModule aMod = osl_loadModuleRelative(
+        reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
+        SAL_LOADMODULE_DEFAULT );
     if( aMod )
     {
         OUString aSym( RTL_CONSTASCII_USTRINGPARAM( "create_SalInstance" ) );
