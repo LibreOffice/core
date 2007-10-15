@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.61 $
+#   $Revision: 1.62 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 16:41:25 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:15:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ SHL1STDLIBS+= \
     $(ICUUCLIB) \
     $(I18NUTILLIB)	\
         $(AVMEDIALIB) \
-        $(XML2LIB)
+        $(LIBXML2LIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= $(ADVAPI32LIB)
