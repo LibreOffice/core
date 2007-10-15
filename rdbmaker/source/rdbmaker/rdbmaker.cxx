@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rdbmaker.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:03:55 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:45:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,7 @@ using namespace osl;
 
 FileStream          listFile;
 RegistryKey         rootKey;
-RegistryLoader      loader;
-Registry            regFile(loader);
+Registry            regFile;
 sal_Bool            useSpecial;
 TypeManager*        pTypeMgr = NULL;
 StringList          dirEntries;
