@@ -1,4 +1,4 @@
-/* RCS  $Id: runargv.c,v 1.2 2007-01-18 09:37:39 vg Exp $
+/* RCS  $Id: runargv.c,v 1.3 2007-10-15 15:46:20 ihi Exp $
 --
 -- SYNOPSIS
 --      Invoke a sub process.
@@ -60,6 +60,8 @@ static  int     _running ANSI((CELLPTR));
 
 /* iz71422 changed the parameters for runargv but it (and the rest of
  * qssl) got *NOT* fixed. */
+iz81252 changed the parameters for Pack_argv() and runargv()  but this file
+did not get fixed!
 PUBLIC int
 runargv(target, ignore, group, last, shell, cmd)
 CELLPTR target;
@@ -214,7 +216,6 @@ int status;
       Current_target = NIL(CELL);
 
       if ( _procs[i].pr_target->ce_attr & A_ERROR ) {
-     Unlink_temp_files( _procs[i].pr_target );
      _procs[i].pr_last = TRUE;
      goto ABORT_REMAINDER_OF_RECIPE;
       }
@@ -232,7 +233,6 @@ int status;
       if( _proc_cnt == Max_proc ) Wait_for_child( FALSE, -1 );
    }
    else {
-      Unlink_temp_files( _procs[i].pr_target );
       Handle_result(status,_procs[i].pr_ignore,_abort_flg,_procs[i].pr_target);
 
  ABORT_REMAINDER_OF_RECIPE:
