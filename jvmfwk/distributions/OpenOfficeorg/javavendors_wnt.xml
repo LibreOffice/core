@@ -15,7 +15,7 @@
  </vendorInfos>
 
  <plugins>
-  <library vendor="Sun Microsystems Inc.">sunjavaplugin.dll</library>
-  <library vendor="IBM Corporation">sunjavaplugin.dll</library>
+  <library vendor="Sun Microsystems Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.dll</library>
+  <library vendor="IBM Corporation">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.dll</library>
  </plugins>
 </javaSelection>
