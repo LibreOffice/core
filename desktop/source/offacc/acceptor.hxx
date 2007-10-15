@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceptor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:15:13 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:00:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@
 #endif
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <comphelper/weakbag.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <osl/thread.hxx>
@@ -100,6 +101,9 @@ private:
     static const sal_Char *supportedServiceNames[];
 
     static Mutex m_aMutex;
+
+    oslThread m_thread;
+    comphelper::WeakBag< com::sun::star::bridge::XBridge > m_bridges;
 
     Condition m_cEnable;
 
