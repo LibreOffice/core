@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pyuno_module.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:04:11 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:04:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
+#include <com/sun/star/registry/InvalidRegistryException.hpp>
 
 using osl::Module;
 
