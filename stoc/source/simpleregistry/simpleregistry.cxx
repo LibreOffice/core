@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simpleregistry.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:03:17 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:03:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1319,18 +1319,14 @@ namespace stoc_bootstrap
 Reference<XInterface> SAL_CALL SimpleRegistry_CreateInstance( const Reference<XComponentContext>& )
 {
     Reference<XInterface>   xRet;
-    RegistryLoader          aLoader;
 
-    if ( aLoader.isLoaded() )
+    Registry reg;
+
+    XSimpleRegistry *pRegistry = (XSimpleRegistry*) new stoc_simreg::SimpleRegistryImpl(reg);
+
+    if (pRegistry)
     {
-        Registry reg(aLoader);
-
-        XSimpleRegistry *pRegistry = (XSimpleRegistry*) new stoc_simreg::SimpleRegistryImpl(reg);
-
-        if (pRegistry)
-        {
-            xRet = Reference<XInterface>::query(pRegistry);
-        }
+        xRet = Reference<XInterface>::query(pRegistry);
     }
 
     return xRet;
