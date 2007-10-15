@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:34:39 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:06:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ SHL1IMPLIB=	i$(UNOCOMPONENT1)
 SHL1LIBS=	$(LIB1TARGET) 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
-
+SHL1RPATH=  URELIB
 
 JAVACLASSFILES= \
     $(CLASSDIR)$/JREProperties.class					
