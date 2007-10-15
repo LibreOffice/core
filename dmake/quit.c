@@ -1,6 +1,6 @@
 /* $RCSfile: quit.c,v $
--- $Revision: 1.6 $
--- last change: $Author: vg $ $Date: 2007-01-18 09:32:09 $
+-- $Revision: 1.7 $
+-- last change: $Author: ihi $ $Date: 2007-10-15 15:41:12 $
 --
 -- SYNOPSIS
 --      End the dmake session.
@@ -39,9 +39,14 @@ int sig;
 {
    if( sig == SIGINT )
       fprintf(stderr, "Caught SIGINT. Trying to quit ...\n");
-   else if( sig == SIGQUIT )
+   else
+#ifdef SIGQUIT
+   /* MinGW, maybe others also, does not have SIGQUIT. */
+   if( sig == SIGQUIT )
       fprintf(stderr, "Caught SIGQUIT. Trying to quit ...\n");
-   else if( sig == 0 )
+   else
+#endif
+   if( sig == 0 )
       /* Don't be verbose during regular program termination. */
       ;
    else
@@ -53,7 +58,12 @@ int sig;
 
    /* CTRL-c sends SIGINT and CTRL-\ sends SIGQUIT to the parent and to all
     * children. No need to kill them. */
-   if( sig != SIGINT && sig != SIGQUIT )
+   if( sig != SIGINT
+#ifdef SIGQUIT
+       /* MinGW, maybe others also, does not have SIGQUIT. */
+       && sig != SIGQUIT
+#endif
+       )
       /* This should be called Kill_all_processes(). */
       Clean_up_processes();
 
