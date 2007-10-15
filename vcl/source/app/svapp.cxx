@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:19:26 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:07:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1737,6 +1737,8 @@ UniqueItemId Application::CreateUniqueId()
 
 // -----------------------------------------------------------------------
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
 UnoWrapperBase* Application::GetUnoWrapper( BOOL bCreateIfNotExist )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -1744,7 +1746,8 @@ UnoWrapperBase* Application::GetUnoWrapper( BOOL bCreateIfNotExist )
     if ( !pSVData->mpUnoWrapper && bCreateIfNotExist && !bAlreadyTriedToCreate )
     {
         ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "tk", TRUE );
-        oslModule hTkLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
+        oslModule hTkLib = osl_loadModuleRelative(
+            &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( hTkLib )
         {
             ::rtl::OUString aFunctionName( RTL_CONSTASCII_USTRINGPARAM( "CreateUnoWrapper" ) );
