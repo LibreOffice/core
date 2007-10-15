@@ -4,9 +4,9 @@
  *
  *  $RCSfile: main.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:08:10 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:47:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,21 +44,27 @@
 extern "C" {
 #endif
 
-/* Prototype needed below */
-void SAL_CALL osl_setCommandArgs(int argc, char ** argv);
+void SAL_CALL sal_detail_initialize(int argc, char ** argv);
+void SAL_CALL sal_detail_deinitialize();
 
 #define SAL_MAIN_WITH_ARGS_IMPL \
 int SAL_CALL main(int argc, char ** argv) \
 { \
-    osl_setCommandArgs(argc, argv); \
-    return sal_main_with_args(argc, argv); \
+    int ret; \
+    sal_detail_initialize(argc, argv);   \
+    ret = sal_main_with_args(argc, argv); \
+    sal_detail_deinitialize(); \
+    return ret; \
 }
 
 #define SAL_MAIN_IMPL \
 int SAL_CALL main(int argc, char ** argv) \
 { \
-    osl_setCommandArgs(argc, argv); \
-    return sal_main(); \
+    int ret; \
+    sal_detail_initialize(argc, argv); \
+    ret = sal_main(); \
+    sal_detail_deinitialize(); \
+    return ret; \
 }
 
 
