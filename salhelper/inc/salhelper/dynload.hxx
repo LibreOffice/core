@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dynload.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:58:03 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:45:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,9 @@ protected:
     to initialize the function pointers with the real functions. Furthermore provides the
     loader a reference counter for the library. When the last instance of the laoder will
     be destroyed the loader will unload the library.
+
+    @deprecated
+    Do not use.
  */
 template<class API>
 class ODynamicLoader
