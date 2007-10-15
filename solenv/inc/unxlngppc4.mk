@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-24 09:14:04 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:41:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -133,8 +133,11 @@ LINKC*=$(CC)
 # default linker flags
 
 LINKFLAGSDEFS*=
-LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
-LINKFLAGS= $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
+LINKFLAGSRUNPATH_URELIB=-Wl,-rpath,\''$$ORIGIN'\'
+LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
+    #TODO: drop $ORIGIN once no URE executable is also shipped in OOo
+LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
+LINKFLAGS= $(LINKFLAGSDEFS)
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
