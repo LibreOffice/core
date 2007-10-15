@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversion.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:23:49 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:54:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,8 @@ using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
 TextConversion::TextConversion()
 {
 #ifdef SAL_DLLPREFIX
@@ -51,7 +53,8 @@ TextConversion::TextConversion()
 #else
     OUString lib=OUString::createFromAscii("textconv_dict"SAL_DLLEXTENSION);
 #endif
-    hModule = osl_loadModule( lib.pData, SAL_LOADMODULE_DEFAULT );
+    hModule = osl_loadModuleRelative(
+        &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );
 }
 
 TextConversion::~TextConversion()
