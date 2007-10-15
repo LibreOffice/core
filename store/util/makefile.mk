@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-05 08:57:12 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:23:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,8 @@ SHL1STDLIBS+= 	-lsupc++ -lgcc_s
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=	$(SLB)$/store.lib
+SHL1RPATH=  URELIB
+
 
 # --- Def-File ---
 
