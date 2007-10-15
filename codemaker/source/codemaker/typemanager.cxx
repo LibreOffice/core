@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:35:18 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:31:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,8 +140,7 @@ sal_Bool RegistryTypeManager::init(
 
     StringVector::const_iterator iter = regFiles.begin();
 
-    RegistryLoader loader;
-    Registry tmpReg(loader);
+    Registry tmpReg;
     while (iter != regFiles.end())
     {
         if (!tmpReg.open( convertToFileUrl(*iter), REG_READONLY))
