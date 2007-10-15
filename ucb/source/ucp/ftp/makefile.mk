@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 16:27:58 $
+#   last change: $Author: ihi $ $Date: 2007-10-15 17:39:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,6 @@ UCPFTP_MAJOR=1
 # --- Settings ---------------------------------------------------------
 
 .INCLUDE: settings.mk
-
-.IF "$(SYSTEM_CURL)" == "YES"
-CFLAGS+=-DCURL_NO_OLDIES
-.ENDIF
 
 # --- General -----------------------------------------------------
 
