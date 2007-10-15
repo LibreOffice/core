@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 15:56:31 $
+#   last change: $Author: vg $ $Date: 2007-10-15 13:03:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ SHL1STDLIBS = $(CPPULIB) $(SALLIB) $(SALHELPERLIB)
 .IF "$(OS)" == "WNT"
 SHL1STDLIBS += $(ADVAPI32LIB)
 .ENDIF # WNT
+SHL1RPATH = URELIB
 
 .IF "$(COMNAME)" == "msci"
 SHL1VERSIONMAP = msvc_win32_intel.map
