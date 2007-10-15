@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:41:54 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:35:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,8 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
+    extern "C" { static void SAL_CALL thisModule() {} }
+
     void ODbtoolsClient::registerClient()
     {
         ::osl::MutexGuard aGuard(s_aMutex);
@@ -132,7 +134,8 @@ namespace svxform
             );
 
             // load the dbtools library
-            s_hDbtoolsModule = osl_loadModule(sModuleName.pData, 0);
+            s_hDbtoolsModule = osl_loadModuleRelative(
+                &thisModule, sModuleName.pData, 0);
             OSL_ENSURE(NULL != s_hDbtoolsModule, "ODbtoolsClient::registerClient: could not load the dbtools library!");
             if (NULL != s_hDbtoolsModule)
             {
