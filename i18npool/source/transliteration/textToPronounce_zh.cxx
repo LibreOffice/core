@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textToPronounce_zh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:31:15 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:54:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,6 +151,8 @@ TextToChuyin_zh_TW::TextToChuyin_zh_TW() : TextToPronounce_zh("get_zh_zhuyin")
         implementationName = "com.sun.star.i18n.Transliteration.TextToChuyin_zh_TW";
 }
 
+extern "C" { static void SAL_CALL thisModule() {} }
+
 TextToPronounce_zh::TextToPronounce_zh(const sal_Char* func_name)
 {
 #ifdef SAL_DLLPREFIX
@@ -158,7 +160,8 @@ TextToPronounce_zh::TextToPronounce_zh(const sal_Char* func_name)
 #else
     OUString lib=OUString::createFromAscii("index_data"SAL_DLLEXTENSION);
 #endif
-    hModule = osl_loadModule( lib.pData, SAL_LOADMODULE_DEFAULT );
+    hModule = osl_loadModuleRelative(
+        &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );
     idx=NULL;
     if (hModule) {
         sal_uInt16** (*function)() = (sal_uInt16** (*)()) osl_getFunctionSymbol(hModule, OUString::createFromAscii(func_name).pData);
