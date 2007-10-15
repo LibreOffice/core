@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MacabDriver.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 17:52:04 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:30:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,8 @@ namespace
 }
 
 // --------------------------------------------------------------------------------
+extern "C" { static void SAL_CALL thisModule() {} }
+
 bool MacabImplModule::impl_loadModule()
 {
     if ( m_bAttemptedLoadModule )
@@ -123,7 +125,7 @@ bool MacabImplModule::impl_loadModule()
         "MacabImplModule::impl_loadModule: inconsistence: inconsistency (never attempted load before, but some values already set)!");
 
     const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii( SAL_MODULENAME( "macabdrv1" ) );
-    m_hConnectorModule = osl_loadModule( sModuleName.pData, SAL_LOADMODULE_NOW );   // LAZY! #i61335#
+    m_hConnectorModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_NOW );   // LAZY! #i61335#
     OSL_ENSURE( m_hConnectorModule, "MacabImplModule::impl_loadModule: could not load the implementation library!" );
     if ( !m_hConnectorModule )
         return false;
