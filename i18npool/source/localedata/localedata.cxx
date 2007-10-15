@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:33:51 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:54:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1148,6 +1148,7 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale
         throw RuntimeException();
 }
 
+extern "C" { static void SAL_CALL thisModule() {} }
 
 oslGenericFunction SAL_CALL LocaleData::getFunctionSymbolByName( const OUString& localeName, const sal_Char* pFunction )
 {
@@ -1192,7 +1193,7 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbolByName( const OUString&
             aBuf.appendAscii(aLibTable[i].pLib).appendAscii( SAL_DLLEXTENSION );
 #endif
             osl::Module *module = new osl::Module();
-            if ( module->load(aBuf.makeStringAndClear()) )
+            if ( module->loadRelative(&thisModule, aBuf.makeStringAndClear()) )
             {
                 lookupTable.push_back(cachedItem = new lookupTableItem(aLibTable[i].pLib, module));
                 cachedItem->localeName = aLibTable[i].pLocale;
