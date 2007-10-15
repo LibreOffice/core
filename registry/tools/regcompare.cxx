@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:54:28 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:28:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2321,9 +2321,8 @@ int _cdecl main( int argc, char * argv[] )
     OUString regName1( convertToFileUrl(options.getRegName1()) );
     OUString regName2( convertToFileUrl(options.getRegName2()) );
 
-    RegistryLoader regLoader;
-    Registry reg1(regLoader);
-    Registry reg2(regLoader);
+    Registry reg1;
+    Registry reg2;
 
     if ( reg1.open(regName1, REG_READONLY) )
     {
