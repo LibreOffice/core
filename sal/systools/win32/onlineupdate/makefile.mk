@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 10:58:15 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:52:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 # --- Targets ----------------------------------
 
+DELAYLOADOBJ=
 
 .IF "$(GUI)"=="WNT"
 
@@ -81,7 +82,7 @@ SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
         $(UNICOWSLIB)\
         $(KERNEL32LIB)\
-        $(MSVCRTLIB)\
+        $(LIBCMT)\
         $(WININETLIB)
 
         
