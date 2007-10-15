@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checksingleton.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:54:18 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:28:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,12 +347,6 @@ OString Options::prepareVersion()
 
 static Options options;
 
-static const RegistryTypeReaderLoader & getRegistryTypeReaderLoader()
-{
-    static RegistryTypeReaderLoader aLoader;
-    return aLoader;
-}
-
 static sal_Bool checkSingletons(RegistryKey& singletonKey, RegistryKey& typeKey)
 {
     RegValueType valueType = RG_VALUETYPE_NOT_DEFINED;
@@ -369,8 +363,7 @@ static sal_Bool checkSingletons(RegistryKey& singletonKey, RegistryKey& typeKey)
 
         typeKey.getValue(tmpName, value);
 
-        RegistryTypeReader reader(getRegistryTypeReaderLoader(),
-                                  (sal_uInt8*)value, size, sal_False);
+        RegistryTypeReader reader((sal_uInt8*)value, size, sal_False);
 
         if ( reader.isValid() && reader.getTypeClass() == RT_TYPE_SINGLETON )
         {
@@ -433,9 +426,8 @@ int _cdecl main( int argc, char * argv[] )
     OUString indexRegName( convertToFileUrl(options.getIndexReg()) );
     OUString typeRegName( convertToFileUrl(options.getTypeReg()) );
 
-    RegistryLoader regLoader;
-    Registry indexReg(regLoader);
-    Registry typeReg(regLoader);
+    Registry indexReg;
+    Registry typeReg;
 
     if ( indexReg.open(indexRegName, REG_READWRITE) )
     {
