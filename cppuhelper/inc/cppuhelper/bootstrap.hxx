@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:03:32 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 11:51:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,28 @@
 #ifndef _CPPUHELPER_BOOTSTRAP_HXX_
 #define _CPPUHELPER_BOOTSTRAP_HXX_
 
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
+#include "com/sun/star/uno/Exception.hpp"
+#endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include "com/sun/star/uno/Reference.hxx"
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include "rtl/ustring.hxx"
+#endif
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+
+namespace com { namespace sun { namespace star {
+    namespace container { class XHierarchicalNameAccess; }
+    namespace registry { class XSimpleRegistry; }
+    namespace uno { class XComponentContext; }
+} } }
 
 namespace cppu
 {
@@ -195,6 +214,28 @@ private:
  */
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
 SAL_CALL bootstrap();
+
+/**
+ * Helper function to expand vnd.sun.star.expand URLs in contexts where no
+ * properly bootstrapped UNO is (yet) available.
+ *
+ * @internal
+ *
+ * @param uri
+ * Some URI (but not a URI reference).
+ *
+ * @return
+ * If uri is a vnd.sun.star.expand URL, then the expansion of that URL is
+ * returned; expansion may lead to a string that is not a legal URI. Otherwise,
+ * the uri is returned unchanged.
+ *
+ * @exception com::sun::star::lang::IllegalArgumentException
+ * If uri is a vnd.sun.star.expand URL that contains unknown macros.
+ *
+ * @since UDK 3.2.8
+ */
+::rtl::OUString
+SAL_CALL bootstrap_expandUri(::rtl::OUString const & uri);
 
 } // end namespace cppu
 
