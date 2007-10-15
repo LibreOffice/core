@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:36:18 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:28:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,13 +56,9 @@ LINKFLAGSRUNPATH = -R\''$$ORIGIN/../lib:$$ORIGIN'\'
 # --- Files --------------------------------------------------------
 CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
 
-CXXFILES=	regview.cxx	  	\
-            regmerge.cxx	\
-            regcompare.cxx
-
-
 APP1TARGET= $(TARGET)
 APP1OBJS=   $(OBJ)$/regmerge.obj 
+APP1RPATH=  UREBIN
 
 APP1STDLIBS=\
             $(SALLIB) \
@@ -71,6 +67,7 @@ APP1STDLIBS=\
 
 APP2TARGET= regview
 APP2OBJS=   $(OBJ)$/regview.obj
+APP2RPATH=  UREBIN
 
 APP2STDLIBS=\
             $(SALLIB) \
@@ -92,5 +89,7 @@ APP4STDLIBS=\
             $(SALLIB) \
             $(SALHELPERLIB) \
             $(REGLIB)
+
+OBJFILES = $(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS)
 
 .INCLUDE :  target.mk
