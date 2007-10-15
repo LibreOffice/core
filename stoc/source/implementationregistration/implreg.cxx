@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:57:51 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:00:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1343,9 +1343,10 @@ public:
         throw( RuntimeException );
 
     // XImplementationRegistration2
-    virtual void SAL_CALL registerImplementationWithStrippedPath(
+    virtual void SAL_CALL registerImplementationWithLocation(
         const OUString& implementationLoader,
         const OUString& location,
+        const OUString& registeredLocation,
         const Reference < XSimpleRegistry > & xReg)
         throw(  CannotRegisterImplementationException, RuntimeException );
 
@@ -1358,7 +1359,7 @@ private: // helper methods
     void prepareRegister(
         const OUString& implementationLoader,
         const OUString& location,
-        bool stripPath,
+        const OUString& registeredLocation,
         const Reference < XSimpleRegistry > & xReg);
     // throw( CannotRegisterImplementationException, RuntimeException )
 
@@ -1368,7 +1369,7 @@ private: // helper methods
                             const Reference < XSimpleRegistry >& xDest,
                             const OUString& implementationLoaderUrl,
                             const OUString& locationUrl,
-                            bool stripPath);
+                            const OUString& registeredLocationUrl);
         /* throw ( InvalidRegistryException,
                    MergeConflictException,
                    CannotRegisterImplementationException, RuntimeException ) */
@@ -1544,28 +1545,30 @@ void ImplementationRegistration::initialize(
         }
     }
 
-    doRegister(m_xSMgr, m_xCtx, rLoader , rReg, loaderServiceName , locationUrl, false);
+    doRegister(m_xSMgr, m_xCtx, rLoader , rReg, loaderServiceName , locationUrl, locationUrl);
 }
 
 
 
 //*************************************************************************
-// virtual function registerImplementationWithStrippedPath of XImplementationRegistration2
+// virtual function registerImplementationWithLocation of XImplementationRegistration2
 //
-void ImplementationRegistration::registerImplementationWithStrippedPath(
+void ImplementationRegistration::registerImplementationWithLocation(
     const OUString& implementationLoaderUrl,
     const OUString& locationUrl,
+    const OUString& registeredLocationUrl,
     const Reference < XSimpleRegistry > & xReg)
     throw( CannotRegisterImplementationException, RuntimeException )
 {
-    prepareRegister(implementationLoaderUrl, locationUrl, true, xReg);
+    prepareRegister(
+        implementationLoaderUrl, locationUrl, registeredLocationUrl, xReg);
 }
 
 // helper function
 void ImplementationRegistration::prepareRegister(
     const OUString& implementationLoaderUrl,
     const OUString& locationUrl,
-    bool stripPath,
+    const OUString& registeredLocationUrl,
     const Reference < XSimpleRegistry > & xReg)
     // throw( CannotRegisterImplementationException, RuntimeException )
 {
@@ -1605,7 +1608,7 @@ void ImplementationRegistration::prepareRegister(
                 if ( xRegistry.is())
                 {
                     doRegister(m_xSMgr, m_xCtx, xAct, xRegistry, implLoaderUrl,
-                               locationUrl, stripPath);
+                               locationUrl, registeredLocationUrl);
                 }
             }
             else
@@ -1664,7 +1667,7 @@ void ImplementationRegistration::registerImplementation(
     const Reference < XSimpleRegistry > & xReg)
     throw( CannotRegisterImplementationException, RuntimeException )
 {
-    prepareRegister(implementationLoaderUrl, locationUrl, false, xReg);
+    prepareRegister(implementationLoaderUrl, locationUrl, locationUrl, xReg);
 }
 
 
@@ -1865,7 +1868,7 @@ void ImplementationRegistration::doRegister(
     const Reference < XSimpleRegistry >& xDest,
     const OUString& implementationLoaderUrl,
     const OUString& locationUrl,
-    bool stripPath)
+    const OUString& registeredLocationUrl)
     /* throw ( InvalidRegistryException,
                MergeConflictException,
                CannotRegisterImplementationException, RuntimeException ) */
@@ -1888,18 +1891,7 @@ void ImplementationRegistration::doRegister(
                 xAct->writeRegistryInfo(xSourceKey, implementationLoaderUrl, locationUrl);
             if ( bSuccess )
             {
-                if (stripPath) {
-                    OUString strippedUrl;
-                    sal_Int32 index=-1;
-                    if ((index=locationUrl.lastIndexOf('/')) != -1)
-                        strippedUrl = locationUrl.copy(index+1);
-                    else if ((index=locationUrl.lastIndexOf('\\')) != -1)
-                        strippedUrl = locationUrl.copy(index+1);
-
-                    prepareRegistry(xDest, xSourceKey, implementationLoaderUrl, strippedUrl, xCtx);
-                } else {
-                    prepareRegistry(xDest, xSourceKey, implementationLoaderUrl, locationUrl, xCtx);
-                }
+                prepareRegistry(xDest, xSourceKey, implementationLoaderUrl, registeredLocationUrl, xCtx);
 
                 xSourceKey->closeKey();
 
