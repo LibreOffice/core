@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_ooo.scp,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 12:56:42 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 16:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -798,7 +798,7 @@ ProfileItem gid_Profileitem_Uno_Ure_Internal_Java_Classpath
     Section = "Bootstrap";
     Order = 12;
     Key = "URE_INTERNAL_JAVA_CLASSPATH";
-    Value = "$ORIGIN/classes/unoil.jar ${PKG_UserUnoFile:UNO_JAVA_CLASSPATH} ${PKG_SharedUnoFile:UNO_JAVA_CLASSPATH}";
+    Value = "$ORIGIN/classes/unoil.jar $ORIGIN/classes/ScriptFramework.jar ${PKG_UserUnoFile:UNO_JAVA_CLASSPATH} ${PKG_SharedUnoFile:UNO_JAVA_CLASSPATH}";
 End
 
 ProfileItem gid_Profileitem_Uno_Ure_Bin_Dir
