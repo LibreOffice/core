@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-18 08:03:27 $
+#   last change: $Author: vg $ $Date: 2007-10-15 13:00:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -114,3 +114,12 @@ $(APP1TARGETN) : $(MISC)$/binso_created.flg
 $(MISC)$/binso_created.flg:
     @@-$(MKDIRHIER) $(BIN)$/so && $(TOUCH) $@
 
+.IF "$(GUI)" == "WNT"
+ALLTAR: $(BIN)$/unopkg.bin $(BIN)$/so$/unopkg.bin
+
+$(BIN)$/unopkg.bin: $(BIN)$/unopkg$(EXECPOST)
+    $(COPY) $< $@
+
+$(BIN)$/so$/unopkg.bin: $(BIN)$/so$/unopkg$(EXECPOST)
+    $(COPY) $< $@
+.ENDIF
