@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModuleCtrl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:02:36 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 13:35:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,10 +52,10 @@ public class ModuleCtrl {
     }
 
     static public void setModuleSize(PackageDescription packageData) {
-        // Setting the package size for node modules, that have hidden children
+        // Setting the package size for visible node modules, that have hidden children
         // -> Java module has three hidden children and 0 byte size
 
-        if ( ! packageData.isLeaf() ) {
+        if (( ! packageData.isLeaf() ) && ( ! packageData.isHidden() )) {
             boolean setNewSize = false;
             int size = packageData.getSize();
 
@@ -70,7 +70,6 @@ public class ModuleCtrl {
 
             if ( setNewSize ) {
                 packageData.setSize(size);
-                // System.err.println("Setting size " + size + " for node module: " + packageData.getName());
             }
         }
 
