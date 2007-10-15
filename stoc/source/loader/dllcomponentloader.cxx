@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllcomponentloader.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:59:12 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:01:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,10 +41,6 @@
 #include <vector>
 #include <osl/mutex.hxx>
 
-#ifdef MACOSX
-#include <rtl/ustrbuf.hxx>
-#endif
-
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -53,15 +49,6 @@
 #endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef _RTL_STRBUF_HXX_
-#include <rtl/strbuf.hxx>
-#endif
-#ifndef _RTL_URI_HXX_
-#include <rtl/uri.hxx>
-#endif
-#if OSL_DEBUG_LEVEL > 0
-#include <rtl/ustrbuf.hxx>
 #endif
 
 #ifndef _UNO_ENVIRONMENT_H_
@@ -89,20 +76,18 @@
 #ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX__
 #include <cppuhelper/implementationentry.hxx>
 #endif
+#include <cppuhelper/bootstrap.hxx>
 
-#include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
 
 #define SERVICENAME "com.sun.star.loader.SharedLibrary"
 #define IMPLNAME    "com.sun.star.comp.stoc.DLLComponentLoader"
 
-#define EXPAND_PROTOCOL "vnd.sun.star.expand"
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
@@ -178,20 +163,17 @@ public:
     virtual sal_Bool SAL_CALL writeRegistryInfo( const Reference<XRegistryKey>& xKey, const OUString& implementationLoaderUrl, const OUString& locationUrl ) throw(CannotRegisterImplementationException, RuntimeException);
 
 private:
-    Reference< util::XMacroExpander > m_xMacroExpander;
     OUString expand_url( OUString const & url )
         SAL_THROW( (RuntimeException) );
 
-    Reference< XComponentContext > m_xContext;
     Reference<XMultiServiceFactory> m_xSMgr;
 };
 
 //*************************************************************************
 DllComponentLoader::DllComponentLoader( const Reference<XComponentContext> & xCtx )
-    : m_xContext( xCtx )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-    m_xSMgr.set( m_xContext->getServiceManager(), UNO_QUERY );
+    m_xSMgr.set( xCtx->getServiceManager(), UNO_QUERY );
 }
 
 //*************************************************************************
@@ -255,47 +237,13 @@ void DllComponentLoader::initialize( const ::com::sun::star::uno::Sequence< ::co
 OUString DllComponentLoader::expand_url( OUString const & url )
     SAL_THROW( (RuntimeException) )
 {
-    if (0 == url.compareToAscii( RTL_CONSTASCII_STRINGPARAM(EXPAND_PROTOCOL ":") ))
+    try
     {
-        if (! m_xMacroExpander.is())
-        {
-            Reference< util::XMacroExpander > xExpander;
-            m_xContext->getValueByName(
-                OUSTR("/singletons/com.sun.star.util.theMacroExpander") ) >>= xExpander;
-            if (! xExpander.is())
-            {
-                throw DeploymentException(
-                    OUSTR("no macro expander singleton available!"), Reference< XInterface >() );
-            }
-            MutexGuard guard( Mutex::getGlobalMutex() );
-            if (! m_xMacroExpander.is())
-            {
-                m_xMacroExpander = xExpander;
-            }
-        }
-
-        // cut protocol
-        OUString macro( url.copy( sizeof (EXPAND_PROTOCOL ":") -1 ) );
-        // decode uric class chars
-        macro = Uri::decode( macro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-        // expand macro string
-        OUString ret( m_xMacroExpander->expandMacros( macro ) );
-#if OSL_DEBUG_LEVEL > 0
-        OUStringBuffer buf( 128 );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("DllComponentLoader::expand_url(): ") );
-        buf.append( url );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" => ") );
-        buf.append( macro );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" => ") );
-        buf.append( ret );
-        OString str( OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "%s", str.getStr() );
-#endif
-        return ret;
+        return cppu::bootstrap_expandUri( url );
     }
-    else
+    catch ( IllegalArgumentException & e )
     {
-        return url;
+        throw RuntimeException( e.Message, e.Context );
     }
 }
 
