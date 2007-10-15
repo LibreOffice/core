@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:28:27 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:18:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -273,13 +273,13 @@ if (-d "$StartDir") {
              "_typelib_Union_Init","_sal_Sequence","_typelib_Parameter_Init",
              "_typelib_TypeDescription","_uno_Environment",
              "_typelib_InterfaceAttributeTypeDescription","uno_Context",
-             "RegistryTypeReaderLoader","_rtl_ModuleCount","_uno_ExtEnvironment",
+             "_rtl_ModuleCount","_uno_ExtEnvironment",
              "_typelib_IndirectTypeDescription","remote_DisposingListener",
              "remote_Interface","Registry_Api","_oslFileStatus",
              "_typelib_InterfaceMemberTypeDescription","RegistryValueList",
              "RegistryTypeWriter_Api","_rtl_TextEncodingInfo",
-             "namespace_anonymous_1","remote_Connection","RegistryLoader",
-             "_oslVolumeInfo","_uno_Interface","RegistryTypeWriterLoader",
+             "namespace_anonymous_1","remote_Connection",
+             "_oslVolumeInfo","_uno_Interface",
              "_typelib_InterfaceTypeDescription","_uno_Mapping","Registry",
              "RegistryTypeReader_Api","remote_Context","_typelib_Uik",
              "remote_InstanceProvider","_typelib_ArrayTypeDescription",
