@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-27 15:31:38 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:57:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -320,6 +320,13 @@ SCP3FILES = ure.par
 SCP4LINK_PRODUCT_TYPE = sdk
 SCP4TARGET = sdkoo
 SCP4FILES = sdkoo.par
+
+# ------------------------------------------------------------------------
+# OOo w/o URE
+
+SCP5LINK_PRODUCT_TYPE = osl
+SCP5TARGET = ooo_wo_ure
+SCP5FILES = $(SCP1FILES) ooo_wo_ure.par
 
 # --- target -------------------------------------------------------------
 .INCLUDE :  target.mk
