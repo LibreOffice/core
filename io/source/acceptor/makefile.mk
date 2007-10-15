@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:19:34 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:16:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ SLOFILES= \
 
 SHL1TARGET= $(TARGET)
 SHL1VERSIONMAP = acceptor.map
+SHL1RPATH=URELIB
 
 SHL1STDLIBS= \
         $(SALLIB)	\
