@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: kz $ $Date: 2007-10-02 15:20:30 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:38:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -739,9 +739,9 @@ sub remove_all_items_with_special_flag
 # Mechanism for simple installation without packing
 ###########################################################
 
-sub install_simple ($$$$$)
+sub install_simple ($$$$$$)
 {
-    my ($packagename, $languagestring, $directoriesarray, $filesarray, $linksarray) = @_;
+    my ($packagename, $languagestring, $directoriesarray, $filesarray, $linksarray, $unixlinksarray) = @_;
 
         # locate GNU cp on the system
         my $gnucp = 'cp';
@@ -806,6 +806,17 @@ sub install_simple ($$$$$)
 
         # print "link $destinationfile -> $destdir$destination\n";
         symlink ("$destinationfile", "$destdir$destination") || die "Can't create symlink: $!";
+        push @lines, "$destination\n";
+    }
+
+    for ( my $i = 0; $i <= $#{$unixlinksarray}; $i++ )
+    {
+        my $onelink = ${$unixlinksarray}[$i];
+        my $target = $onelink->{'Target'};
+        my $destination = $onelink->{'destination'};
+
+        # print "Unix link $target -> $destdir$destination\n";
+        `ln -sf '$target' '$destdir$destination'`;
         push @lines, "$destination\n";
     }
 
