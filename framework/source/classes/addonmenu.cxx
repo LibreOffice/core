@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonmenu.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:34:34 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 17:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,7 +263,11 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
 
         if ( pHelpMenu )
         {
+            static const char REFERENCECOMMAND_AFTER[]  = ".uno:OnlineRegistrationDlg";
+            static const char REFERENCECOMMAND_BEFORE[] = ".uno:About";
+
             // Add-Ons help menu items should be inserted after the "registration" menu item
+            bool   bAddAfter        = true;
             USHORT nItemCount       = pHelpMenu->GetItemCount();
             USHORT nRegPos          = pHelpMenu->GetItemPos( SID_ONLINE_REGISTRATION );
             USHORT nInsPos          = nRegPos;
@@ -274,15 +278,25 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
             if ( nRegPos == USHRT_MAX )
             {
                 // try to detect the online registration dialog menu item with the command URL
-                USHORT nId = FindMenuId( pHelpMenu, String::CreateFromAscii( ".uno:OnlineRegistrationDlg" ));
-                nRegPos = pHelpMenu->GetItemPos( nId );
-                nInsPos = nRegPos;
+                USHORT nId = FindMenuId( pHelpMenu, String::CreateFromAscii( REFERENCECOMMAND_AFTER ));
+                nRegPos    = pHelpMenu->GetItemPos( nId );
+                nInsPos    = nRegPos;
+            }
+
+            if ( nRegPos == USHRT_MAX )
+            {
+                // second try:
+                // try to detect the about menu item with the command URL
+                USHORT nId = FindMenuId( pHelpMenu, String::CreateFromAscii( REFERENCECOMMAND_BEFORE ));
+                nRegPos    = pHelpMenu->GetItemPos( nId );
+                nInsPos    = nRegPos;
+                bAddAfter  = false;
             }
 
             Sequence< Sequence< PropertyValue > > aAddonSubMenu;
             const Sequence< Sequence< PropertyValue > >& rAddonHelpMenuEntries = aOptions.GetAddonsHelpMenu();
 
-            nInsPos = AddonMenuManager::GetNextPos( nInsPos );
+            nInsPos = bAddAfter ? AddonMenuManager::GetNextPos( nInsPos ) : nInsPos;
             if ( nInsPos < nItemCount && pHelpMenu->GetItemType( nInsPos ) != MENUITEM_SEPARATOR )
                 nInsSepAfterPos = nInsPos;
 
