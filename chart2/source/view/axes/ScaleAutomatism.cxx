@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScaleAutomatism.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:11:31 $
+ *  last change: $Author: ihi $ $Date: 2007-10-15 16:33:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,8 +118,8 @@ void ScaleAutomatism::setAutoScalingOptions(
 
 void ScaleAutomatism::setMaximumAutoMainIncrementCount( sal_Int32 nMaximumAutoMainIncrementCount )
 {
-    if( nMaximumAutoMainIncrementCount < 1 )
-        m_nMaximumAutoMainIncrementCount = 1;
+    if( nMaximumAutoMainIncrementCount < 2 )
+        m_nMaximumAutoMainIncrementCount = 2; //#i82006
     else if( nMaximumAutoMainIncrementCount > MAXIMUM_AUTO_INCREMENT_COUNT )
         m_nMaximumAutoMainIncrementCount = MAXIMUM_AUTO_INCREMENT_COUNT;
     else
