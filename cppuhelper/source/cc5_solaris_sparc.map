@@ -344,3 +344,7 @@ UDK_3.4 { # OOo 2.3
         __1cEcppuSOPropertySetHelperIgetTypes6M_nDcomDsunEstarDunoISequence4n0FEType____;
 } UDK_3.3;
 
+UDK_3.5 { # OOo 2.4
+    global:
+        __1cEcppuTbootstrap_expandUri6FrknDrtlIOUString__2_; # rtl::OUString cppu::bootstrap_expandUri(rtl::OUString const &)
+} UDK_3.4;
