@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 15:08:48 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:48:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,15 +63,16 @@ SLOFILES=	\
             $(SLO)$/utility.obj\
             $(SLO)$/readline.obj\
             $(SLO)$/filepath.obj\
-            $(SLO)$/debugbase.obj
-
+            $(SLO)$/debugbase.obj\
+            $(SLO)$/loadmodulerelative.obj
 
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=	\
             $(OBJ)$/utility.obj\
             $(OBJ)$/readline.obj\
             $(OBJ)$/filepath.obj\
-            $(OBJ)$/debugbase.obj
+            $(OBJ)$/debugbase.obj\
+            $(OBJ)$/loadmodulerelative.obj
 #.ENDIF
 
 # --- Targets ------------------------------------------------------
