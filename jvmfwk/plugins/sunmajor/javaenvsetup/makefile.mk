@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:29:10 $
+#   last change: $Author: vg $ $Date: 2007-10-15 12:06:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,12 +44,6 @@ NO_DEFAULT_STL=TRUE
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=true
 
-.IF "$(OS)" == "LINUX"
-LINKFLAGSRUNPATH = -Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
-.ELIF "$(OS)" == "SOLARIS"
-LINKFLAGSRUNPATH = -R\''$$ORIGIN/../lib:$$ORIGIN'\'
-.ENDIF
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -70,7 +64,7 @@ OBJFILES=$(OBJ)$/javaldx.obj
 APP1TARGET=javaldx
 APP1OBJS=$(OBJFILES)
 APP1STDLIBS=$(SALLIB) $(CPPULIB) $(CPPUHELPERLIB) $(JVMFWKLIB)
-
+APP1RPATH=UREBIN
 
 # --- Targets ------------------------------------------------------
 
