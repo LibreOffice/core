@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:39:24 $
+ *  last change: $Author: vg $ $Date: 2007-10-15 12:19:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@
 #include "cppu/EnvDcp.hxx"
 #include "cascade_mapping.hxx"
 #include "IdentityMapping.hxx"
-
+#include "loadmodule.hxx"
 
 using namespace std;
 using namespace osl;
@@ -373,16 +373,7 @@ static inline oslModule loadModule( const OUString & rBridgeName )
 
     if (! bNeg)
     {
-        OUStringBuffer aLibName( rBridgeName.getLength() + 12 );
-#if defined SAL_DLLPREFIX
-        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLPREFIX) );
-#endif
-        aLibName.append( rBridgeName );
-        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM(SAL_DLLEXTENSION) );
-        OUString aModule( aLibName.makeStringAndClear() );
-
-        oslModule hModule = ::osl_loadModule(
-            aModule.pData, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY );
+        oslModule hModule = cppu::detail::loadModule( rBridgeName );
 
         if (hModule)
             return hModule;
