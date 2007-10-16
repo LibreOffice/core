@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:56:19 $
+ *  last change: $Author: vg $ $Date: 2007-10-16 11:42:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -356,7 +356,6 @@ class SwFrm: public SwClient
 
 
     void _UpdateAttrFrm( SfxPoolItem*, SfxPoolItem*, BYTE & );
-    SwFrm* _GetIndPrev();
     SwFrm* _GetIndNext();
     void SetDirFlags( BOOL bVert );
 
@@ -700,9 +699,12 @@ public:
             return const_cast<SwFrm*>(this)->_FindPrevCnt( _bInSameFtn );
     }
 
-    SwFrm* GetIndPrev()
+    // --> OD 2007-09-04 #i79774#, #b6596954#
+    SwFrm* _GetIndPrev() const;
+    SwFrm* GetIndPrev() const
         { return ( pPrev || !IsInSct() ) ? pPrev : _GetIndPrev(); }
-    const SwFrm* GetIndPrev() const { return ((SwFrm*)this)->GetIndPrev(); }
+//    const SwFrm* GetIndPrev() const { return ((SwFrm*)this)->GetIndPrev(); }
+    // <--
     SwFrm* GetIndNext()
         { return ( pNext || !IsInSct() ) ? pNext : _GetIndNext(); }
     const SwFrm* GetIndNext() const { return ((SwFrm*)this)->GetIndNext(); }
