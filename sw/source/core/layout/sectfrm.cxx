@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:06:08 $
+ *  last change: $Author: vg $ $Date: 2007-10-16 11:41:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2272,19 +2272,33 @@ BOOL SwSectionFrm::MoveAllowed( const SwFrm* pFrm) const
     return TRUE;
 }
 
-SwFrm* SwFrm::_GetIndPrev()
+/** Called for a frame inside a section with no direct previous frame (or only
+    previous empty section frames) the previous frame of the outer section is
+    returned, if the frame is the first flowing content of this section.
+
+    Note: For a frame inside a table frame, which is inside a section frame,
+          NULL is returned.
+*/
+SwFrm* SwFrm::_GetIndPrev() const
 {
     SwFrm *pRet = NULL;
-    ASSERT( !pPrev && IsInSct(), "Why?" );
-    SwFrm* pSct = GetUpper();
+    // --> OD 2007-09-04 #i79774#, #b659654#
+    // Do not assert, if the frame has a direct previous frame, because it
+    // could be an empty section frame. The caller has to assure, that the
+    // frame has no direct previous frame or only empty section frames as
+    // previous frames.
+    ASSERT( /*!pPrev &&*/ IsInSct(), "Why?" );
+    // <--
+    const SwFrm* pSct = GetUpper();
     if( !pSct )
         return NULL;
     if( pSct->IsSctFrm() )
         pRet = pSct->GetIndPrev();
     else if( pSct->IsColBodyFrm() && (pSct = pSct->GetUpper()->GetUpper())->IsSctFrm() )
-    {   // Wir duerfen nur den Vorgaenger des SectionFrms zurueckliefern,
-        // wenn in keiner vorhergehenden Spalte mehr Inhalt ist
-        SwFrm* pCol = GetUpper()->GetUpper()->GetPrev();
+    {
+        // Do not return the previous frame of the outer section, if in one
+        // of the previous columns is content.
+        const SwFrm* pCol = GetUpper()->GetUpper()->GetPrev();
         while( pCol )
         {
             ASSERT( pCol->IsColumnFrm(), "GetIndPrev(): ColumnFrm expected" );
@@ -2296,7 +2310,8 @@ SwFrm* SwFrm::_GetIndPrev()
         }
         pRet = pSct->GetIndPrev();
     }
-    // Scheintote SectionFrames ueberspringen wir lieber
+
+    // skip empty section frames
     while( pRet && pRet->IsSctFrm() && !((SwSectionFrm*)pRet)->GetSection() )
         pRet = pRet->GetIndPrev();
     return pRet;
