@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-15 16:11:08 $
+ *  last change: $Author: aw $ $Date: 2007-10-16 15:46:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -916,7 +916,7 @@ namespace drawinglayer
             xControlView->setGraphics(xGraphics);
 
             // set position and size (in pixel)
-            const basegfx::B2DHomMatrix aObjectToPixel(mpOutputDevice->GetViewTransformation() * rControlPrimitive2D.getTransform());
+            const basegfx::B2DHomMatrix aObjectToPixel(maCurrentTransformation * rControlPrimitive2D.getTransform());
             const basegfx::B2DPoint aTopLeftPixel(aObjectToPixel * basegfx::B2DPoint(0.0, 0.0));
             Reference< XWindow > xControlWindow(rControlPrimitive2D.getXControl(), UNO_QUERY);
 

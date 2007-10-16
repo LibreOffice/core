@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlprimitive2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-15 16:11:08 $
+ *  last change: $Author: aw $ $Date: 2007-10-16 15:46:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,10 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #endif
 
+#ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
+#include <svtools/optionsdrawinglayer.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
@@ -165,13 +169,17 @@ namespace drawinglayer
                     static double fZoomScale(26.0); // do not ask for this constant factor, but it gets the zoom right
                     aScreenZoom *= fZoomScale;
 
-                    // limit to a maximum square size, e.g. 500x250 pixels (125000)
+                    // limit to a maximum square size, e.g. 300x150 pixels (45000)
+                    const SvtOptionsDrawinglayer aDrawinglayerOpt;
+                    const double fDiscreteMax(aDrawinglayerOpt.GetQuadraticFormControlRenderLimit());
                     const double fDiscreteQuadratic(aDiscreteSize.getX() * aDiscreteSize.getY());
-                    static double fDiscreteMax(125000.0);
+                    const bool bScaleUsed(fDiscreteQuadratic > fDiscreteMax);
+                    double fFactor(1.0);
 
-                    if(fDiscreteQuadratic > fDiscreteMax)
+                    if(bScaleUsed)
                     {
-                        const double fFactor(sqrt(fDiscreteMax / fDiscreteQuadratic));
+                        // get factor and adapt to scaled size
+                        fFactor = sqrt(fDiscreteMax / fDiscreteQuadratic);
                         aDiscreteSize *= fFactor;
                         aScreenZoom *= fFactor;
                     }
@@ -180,7 +188,7 @@ namespace drawinglayer
                     const sal_Int32 nSizeX(basegfx::fround(aDiscreteSize.getX()));
                     const sal_Int32 nSizeY(basegfx::fround(aDiscreteSize.getY()));
 
-                    if(nSizeX && nSizeY)
+                    if(nSizeX > 0 && nSizeY > 0)
                     {
                         // prepare VirtualDevice
                         VirtualDevice aVirtualDevice(*Application::GetDefaultDevice());
@@ -210,8 +218,28 @@ namespace drawinglayer
                                 // get bitmap
                                 const Bitmap aContent(aVirtualDevice.GetBitmap(Point(), aSizePixel));
 
+                                // to avoid scaling, use the Bitmap pixel size as primitive size
+                                const Size aBitmapSize(aContent.GetSizePixel());
+                                basegfx::B2DVector aBitmapSizeLogic(
+                                    rViewInformation.getInverseViewTransformation() *
+                                    basegfx::B2DVector(aBitmapSize.getWidth() - 1, aBitmapSize.getHeight() - 1));
+
+                                if(bScaleUsed)
+                                {
+                                    // if scaled adapt to scaled size
+                                    aBitmapSizeLogic /= fFactor;
+                                }
+
+                                // short form for scale and translate transformation
+                                basegfx::B2DHomMatrix aBitmapTransform;
+
+                                aBitmapTransform.set(0L, 0L, aBitmapSizeLogic.getX());
+                                aBitmapTransform.set(1L, 1L, aBitmapSizeLogic.getY());
+                                aBitmapTransform.set(0L, 2L, aTranslate.getX());
+                                aBitmapTransform.set(1L, 2L, aTranslate.getY());
+
                                 // create primitive
-                                xRetval = new BitmapPrimitive2D(BitmapEx(aContent), getTransform());
+                                xRetval = new BitmapPrimitive2D(BitmapEx(aContent), aBitmapTransform);
                             }
                             catch( const uno::Exception& )
                             {
@@ -295,22 +323,28 @@ namespace drawinglayer
 
                 if(getTransform() == rCompare.getTransform())
                 {
-                    // annotation: It is not necessary to compare mxXControl since
-                    // it's creation completely relies on mxControlModel ad just
-                    // is there to buffer it and/or to avoid multiple creations.
-                    if(getControlModel().is() == rCompare.getControlModel().is())
+                    // check if ControlModel references both are/are not
+                    bool bRetval(getControlModel().is() == rCompare.getControlModel().is());
+
+                    if(bRetval && getControlModel().is())
                     {
-                        if(getControlModel().is())
-                        {
-                            // both exist, check for equality
-                            return (getControlModel() == rCompare.getControlModel());
-                        }
-                        else
-                        {
-                            // none exists -> same
-                            return true;
-                        }
+                        // both exist, check for equality
+                        bRetval = (getControlModel() == rCompare.getControlModel());
                     }
+
+                    if(bRetval)
+                    {
+                        // check if XControl references both are/are not
+                        bRetval = (getXControl().is() == rCompare.getXControl().is());
+                    }
+
+                    if(bRetval && getXControl().is())
+                    {
+                        // both exist, check for equality
+                        bRetval = (getXControl() == rCompare.getXControl());
+                    }
+
+                    return bRetval;
                 }
             }
 

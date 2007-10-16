@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:30 $
+ *  last change: $Author: aw $ $Date: 2007-10-16 15:46:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,10 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #endif
 
+#ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
+#include <svtools/optionsdrawinglayer.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
@@ -143,7 +147,8 @@ namespace drawinglayer
                 const double fViewSizeX(fLogicSizeX * (rViewInformation.getViewTransformation() * basegfx::B2DVector(aUnitVisiblePart.getWidth(), 0.0)).getLength());
                 const double fViewSizeY(fLogicSizeY * (rViewInformation.getViewTransformation() * basegfx::B2DVector(0.0, aUnitVisiblePart.getHeight())).getLength());
                 const double fViewVisibleArea(fViewSizeX * fViewSizeY);
-                const double fMaximumVisibleArea(1000000.0);
+                const SvtOptionsDrawinglayer aDrawinglayerOpt;
+                const double fMaximumVisibleArea(aDrawinglayerOpt.GetQuadratic3DRenderLimit());
                 double fReduceFactor(1.0);
 
                 if(fViewVisibleArea > fMaximumVisibleArea)

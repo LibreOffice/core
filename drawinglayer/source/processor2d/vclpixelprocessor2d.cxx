@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclpixelprocessor2d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-15 16:11:08 $
+ *  last change: $Author: aw $ $Date: 2007-10-16 15:46:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,10 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 #endif
 
+#ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
+#include <svtools/optionsdrawinglayer.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
@@ -120,12 +124,27 @@ namespace drawinglayer
             // prepare output directly to pixels
                mpOutputDevice->Push(PUSH_MAPMODE);
             mpOutputDevice->SetMapMode();
+
+            // set AntiAliasing
+            const SvtOptionsDrawinglayer aDrawinglayerOpt;
+
+            if(aDrawinglayerOpt.IsAntiAliasing())
+            {
+                mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() & ~ANTIALIASING_DISABLE_POLYGONS);
+            }
+            else
+            {
+                mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() | ANTIALIASING_DISABLE_POLYGONS);
+            }
         }
 
         VclPixelProcessor2D::~VclPixelProcessor2D()
         {
             // restore MapMode
                mpOutputDevice->Pop();
+
+            // restore AntiAliasing
+            mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() | ANTIALIASING_DISABLE_POLYGONS);
         }
 
         void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
@@ -285,6 +304,8 @@ namespace drawinglayer
                         // process recursively and use the decomposition as Bitmap
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     }
+
+                    break;
                 }
                 default :
                 {
