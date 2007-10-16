@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:01:58 $
+ *  last change: $Author: vg $ $Date: 2007-10-16 11:38:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2428,19 +2428,43 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
     //(6677)Wenn allerdings leere Blaetter uebersprungen wurden wird doch gemoved.
     if ( pNewUpper && IsFollow() && pNewUpper->Lower() )
     {
-        if ( SwFlowFrm::IsMoveBwdJump() )
+        // --> OD 2007-09-05 #i79774#, #b6596954#
+        // neglect empty sections in proposed new upper frame
+        bool bProposedNewUpperContainsOnlyEmptySections( true );
         {
-            //Nicht hinter den Master sondern in das naechstfolgende leere
-            //Blatt moven.
-            SwFrm *pFrm = pNewUpper->Lower();
-            while ( pFrm->GetNext() )
-                pFrm = pFrm->GetNext();
-            pNewUpper = pFrm->GetLeaf( MAKEPAGE_INSERT, TRUE );
-            if( pNewUpper == rThis.GetUpper() ) //Landen wir wieder an der gleichen Stelle?
-                pNewUpper = NULL;           //dann eruebrigt sich das Moven
+            const SwFrm* pLower( pNewUpper->Lower() );
+            while ( pLower )
+            {
+                if ( pLower->IsSctFrm() &&
+                     !dynamic_cast<const SwSectionFrm*>(pLower)->GetSection() )
+                {
+                    pLower = pLower->GetNext();
+                    continue;
+                }
+                else
+                {
+                    bProposedNewUpperContainsOnlyEmptySections = false;
+                    break;
+                }
+            }
         }
-        else
-            pNewUpper = 0;
+        if ( !bProposedNewUpperContainsOnlyEmptySections )
+        {
+            if ( SwFlowFrm::IsMoveBwdJump() )
+            {
+                //Nicht hinter den Master sondern in das naechstfolgende leere
+                //Blatt moven.
+                SwFrm *pFrm = pNewUpper->Lower();
+                while ( pFrm->GetNext() )
+                    pFrm = pFrm->GetNext();
+                pNewUpper = pFrm->GetLeaf( MAKEPAGE_INSERT, TRUE );
+                if( pNewUpper == rThis.GetUpper() ) //Landen wir wieder an der gleichen Stelle?
+                    pNewUpper = NULL;           //dann eruebrigt sich das Moven
+            }
+            else
+                pNewUpper = 0;
+        }
+        // <--
     }
     if ( pNewUpper && !ShouldBwdMoved( pNewUpper, TRUE, rbReformat ) )
     {
