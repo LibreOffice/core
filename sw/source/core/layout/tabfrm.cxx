@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:06:51 $
+ *  last change: $Author: vg $ $Date: 2007-10-16 11:41:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1893,11 +1893,33 @@ void MA_FASTCALL lcl_RecalcTable( SwTabFrm& rTab,
 // GetIndPrev(), which did not work correctly for #i5947#
 bool lcl_NoPrev( const SwFrm& rFrm )
 {
+    // --> OD 2007-09-04 #i79774#, #b6596954#
+    // skip empty sections on investigation of direct previous frame.
+    // use information, that at least one empty section is skipped in the following code.
+    bool bSkippedDirectPrevEmptySection( false );
     if ( rFrm.GetPrev() )
-        return false;
+    {
+        const SwFrm* pPrev( rFrm.GetPrev() );
+        while ( pPrev &&
+                pPrev->IsSctFrm() &&
+                !dynamic_cast<const SwSectionFrm*>(pPrev)->GetSection() )
+        {
+            pPrev = pPrev->GetPrev();
+            bSkippedDirectPrevEmptySection = true;
+        }
+        if ( pPrev )
+        {
+            return false;
+        }
+    }
 
-    if ( !rFrm.GetIndPrev() )
+    if ( ( !bSkippedDirectPrevEmptySection && !rFrm.GetIndPrev() ) ||
+         ( bSkippedDirectPrevEmptySection &&
+           ( !rFrm.IsInSct() || !rFrm._GetIndPrev() ) ) )
+    {
         return true;
+    }
+    // <--
 
     // I do not have a direct prev, but I have an indirect prev.
     // In section frames I have to check if I'm located inside
