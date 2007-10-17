@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2007-10-11 15:44:20 $
+#   last change: $Author: vg $ $Date: 2007-10-17 12:13:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,12 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 DESCRIPTION:=$(MISC)$/SunPresentationMinimizer$/description.xml
+
+.IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT"
+PACKLICS:=$(foreach,i,$(alllangiso) $(MISC)$/SunPresentationMinimizer$/registry$/license_$i)
+.ELSE
+PACKLICS:=$(foreach,i,$(alllangiso) $(MISC)$/SunPresentationMinimizer$/registry$/LICENSE_$i)
+.ENDIF
 
 DLLPRE=
 common_build_zip=
@@ -111,7 +117,7 @@ COMPONENT_MANIFEST= \
 COMPONENT_LIBRARY= \
     $(MISC)$/SunPresentationMinimizer$/SunPresentationMinimizer.uno$(DLLPOST)
 
-ZIP1DEPS=		$(DESCRIPTION) $(COMPONENT_MANIFEST) $(COMPONENT_FILES) $(COMPONENT_BITMAPS) $(COMPONENT_HELP) $(COMPONENT_LIBRARY) $(COMPONENT_MERGED_XCU)
+ZIP1DEPS=		$(PACKLICS) $(DESCRIPTION) $(COMPONENT_MANIFEST) $(COMPONENT_FILES) $(COMPONENT_BITMAPS) $(COMPONENT_HELP) $(COMPONENT_LIBRARY) $(COMPONENT_MERGED_XCU)
 ZIP1TARGET=		sun-presentation-minimizer
 ZIP1DIR=		$(MISC)$/SunPresentationMinimizer
 ZIP1EXT=		.oxt
@@ -133,11 +139,21 @@ $(COMPONENT_BITMAPS) : bitmaps$/$$(@:f)
 $(COMPONENT_HELP) : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
- 
+
 $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
-    
+
+.IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT"
+$(PACKLICS) : $(SOLARBINDIR)$/osl$/license$$(@:b:s/_/./:e:s/./_/)$$(@:e).txt
+    @@-$(MKDIRHIER) $(@:d)
+    $(GNUCOPY) $< $@
+.ELSE
+$(PACKLICS) : $(SOLARBINDIR)$/osl$/LICENSE$$(@:b:s/_/./:e:s/./_/)$$(@:e)
+    @@-$(MKDIRHIER) $(@:d)
+    $(GNUCOPY) $< $@
+.ENDIF
+
 $(MISC)$/SunPresentationMinimizer$/registry$/data$/%.xcu : $(MISC)$/$(EXTNAME)$/merge$/%.xcu
     @@-$(MKDIRHIER) $(@:d)
     $(GNUCOPY) $< $@
