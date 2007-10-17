@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: tkr $ $Date: 2007-10-10 12:36:38 $
+#   last change: $Author: tkr $ $Date: 2007-10-17 16:03:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,16 @@ CONFIGURE_DIR=.
 CONFIGURE_ACTION=config
 CONFIGURE_FLAGS=shared -I$(SYSBASE)$/usr$/include -L$(SYSBASE)$/usr$/lib
 
+BUILD_DIR=.
+BUILD_ACTION=make
+
+.IF "$(OS)" == "LINUX"
+
+PATCH_FILE_NAME=openssllnx.patch
+
+BUILD_ACTION=make 'SHARED_LDFLAGS=-Wl,--version-script=./lib$$(SHLIBDIRS)_OOo_0_9_8e.map'
+.ENDIF
+
 .IF "$(OS)" == "SOLARIS"
 OPENSSL_NAME=openssl-0.9.8a
 CONFIGURE_DIR=. 
@@ -77,8 +87,7 @@ CONFIGURE_FLAGS=shared
 
 .ENDIF
 
-BUILD_DIR=.
-BUILD_ACTION=make
+
 
 .IF "$(OS)" == "WNT"
 
