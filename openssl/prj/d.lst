@@ -3,6 +3,7 @@ mkdir: %_DEST%\inc%_EXT%\external\openssl
 ..\version.mk %_DEST%\inc%_EXT%\external\openssl\version.mk
 ..\%__SRC%\misc\build\openssl-0.9.8e\inc32\openssl\* %_DEST%\inc%_EXT%\external\openssl\*
 ..\%__SRC%\misc\build\openssl-0.9.8a\include\openssl\* %_DEST%\inc%_EXT%\external\openssl\*
+..\%__SRC%\misc\build\openssl-0.9.8e\include\openssl\* %_DEST%\inc%_EXT%\external\openssl\*
 ..\%__SRC%\misc\build\openssl-0.9.8e\out32dll\ssleay32.lib %_DEST%\lib%_EXT%\ssleay32.lib
 ..\%__SRC%\misc\build\openssl-0.9.8e\out32dll\ssleay32.lib %_DEST%\lib%_EXT%\ssleay32.exp
 ..\%__SRC%\misc\build\openssl-0.9.8e\out32dll\ssleay32.dll %_DEST%\bin%_EXT%\ssleay32.dll
