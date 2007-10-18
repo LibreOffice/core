@@ -4,9 +4,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2007-10-15 17:32:53 $
+ *  last change: $Author: ihi $ $Date: 2007-10-18 10:47:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1427,6 +1427,7 @@ namespace numfunc
 
     void SwNumberingUIBehaviorConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames )
     {
+        (void) aPropertyNames;
         SetToDefault();
         LoadConfig();
     }
