@@ -10,6 +10,10 @@
     </prop>
 
     <prop oor:name="HelpFile" oor:type="xs:string">
+        <info>
+            <desc>Specifies the filename of the help document after installation,
+            the help can be found in sdext/source/minimizer/help</desc>
+        </info>
         <value xml:lang="en-US">%origin%/../../../../../../help/help_en-us.odt</value>
         <value xml:lang="de">%origin%/../../../../../../help/help_de.odt</value>
     </prop>
@@ -256,20 +260,11 @@ Die aktuelle Präsentation enthält keine OLE-Objekte.</value>
             <value xml:lang="de">Info über &ProductName; &ProductVersion;</value>
         </prop>
         <prop oor:name="STR_ABOUT_PRN">
-            <value xml:lang="en-US">Copyright © 2007 Sun Microsystems, Inc. All rights reserved.
+            <value xml:lang="en-US">Copyright 2000-2007 Sun Microsystems, Inc.
 
-U.S. Government Rights - Commercial software. Government users are subject to the Sun Microsystems, Inc. standard license agreement and applicable provisions of the FAR and its supplements.
-
-Use is subject to license terms.
-
-This distribution may include materials developed by third parties. Sun, Sun Microsystems, the Sun logo, Java and StarOffice are trademarks or registered trademarks of Sun Microsystems, Inc. in the U.S. and other countries.</value>
-            <value xml:lang="fr">Copyright © 2007 Sun Microsystems, Inc. Tous droits réservés.
-
-L'utilisation est soumise aux termes du contrat de licence.
-
-Cette distribution peut comprendre des composants développés par des tierces parties.
-
-Sun, Sun Microsystems, le logo Sun, Java et StarOffice sont des marques de fabrique ou des marques déposées de Sun Microsystems, Inc. aux Etats-Unis et dans d'autres pays.</value>
+This product has been created by Sun Microsystems, Inc. based on OpenOffice.org.
+OpenOffice.org acknowledges all community members, especially those
+mentioned on http://www.openoffice.org/welcome/credits.html</value>
         </prop>
         <prop oor:name="STR_OK">
             <value xml:lang="en-US">OK</value>

@@ -250,6 +250,9 @@ The current presentation contains no OLE objects.</value>
 				<value>Delete %SLIDES slides</value>
 			</prop>
 			<prop oor:name="STR_OPTIMIZE_IMAGES" oor:type="xs:string" oor:localized="true">
+				<info>
+					<desc>The following string is only used in plural.</desc>
+				</info>
 				<value>Optimize %IMAGES graphics to %QUALITY% JPEG quality at %RESOLUTION DPI.</value>
 			</prop>
 			<prop oor:name="STR_CREATE_REPLACEMENT" oor:type="xs:string" oor:localized="true">
@@ -283,13 +286,11 @@ The current presentation contains no OLE objects.</value>
                 <value>About Sun Presentation Minimizer</value>
            </prop>
             <prop oor:name="STR_ABOUT_PRN" oor:type="xs:string" oor:localized="true">
-                <value>Copyright © 2007 Sun Microsystems, Inc. All rights reserved.
+                <value>Copyright 2000-2007 Sun Microsystems, Inc.
 
-U.S. Government Rights - Commercial software. Government users are subject to the Sun Microsystems, Inc. standard license agreement and applicable provisions of the FAR and its supplements.
-
-Use is subject to license terms.
-
-This distribution may include materials developed by third parties. Sun, Sun Microsystems, the Sun logo, Java and StarOffice are trademarks or registered trademarks of Sun Microsystems, Inc. in the U.S. and other countries.</value>
+This product has been created by Sun Microsystems, Inc. based on OpenOffice.org.
+OpenOffice.org acknowledges all community members, especially those
+mentioned on http://www.openoffice.org/welcome/credits.html</value>
            </prop>
             <prop oor:name="STR_OK" oor:type="xs:string" oor:localized="true">
                 <value>OK</value>
