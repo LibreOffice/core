@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 13:04:22 $
+#   last change: $Author: rt $ $Date: 2007-10-19 10:32:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ CRYPTOLIB=nss
 .IF "$(COM)"=="GCC"
 CONFIGURE_DIR=
 CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure
-CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozilla_ver=1.7.5 --with-mscrypto --build=i586-pc-mingw32 --host=i586-pc-mingw32 CFLAGS="-D_MT" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="-lmingwthrd" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozilla_ver=1.7.5 --with-mscrypto --build=i586-pc-mingw32 --host=i586-pc-mingw32 CFLAGS="-D_MT" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="-lmingwthrd" LIBXML2LIB="$(LIBXML2LIB)" ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
 .IF "$(SYSTEM_MOZILLA)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
@@ -136,7 +136,7 @@ LDFLAGS:=$(xmlsec_LDFLAGS)
 CONFIGURE_DIR=
 #CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure CFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)" LDFLAGS="$(xmlsec_LDFLAGS)"
 CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
-CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB)
+CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no LIBXML2LIB="$(LIBXML2LIB)" ZLIB3RDLIB=$(ZLIB3RDLIB)
 # system-mozilla needs pkgconfig to get the information about nss
 # FIXME: This also will enable pkg-config usage for libxml2. It *seems*
 # that the internal headers still are used when they are there but....
