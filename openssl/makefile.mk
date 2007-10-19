@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: tkr $ $Date: 2007-10-19 12:52:27 $
+#   last change: $Author: tkr $ $Date: 2007-10-19 13:45:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,13 +89,13 @@ CONFIGURE_FLAGS=VC-WIN32
 BUILD_DIR=.
 BUILD_ACTION=cmd /c "ms\do_ms $(PERL)" && nmake -f ms/ntdll.mak
 
-OUT2LIB = out32dll/ssleay32.lib
-OUT2LIB += out32dll/libeay32.lib
-OUT2LIB += out32dll/ssleay32.lib
-OUT2LIB += out32dll/libeay32.lib
-OUT2BIN = out32dll/ssleay32.dll
-OUT2BIN += out32dll/libeay32.dll
-OUT2INC = inc32/openssl/*
+OUT2LIB = out32dll\ssleay32.lib
+OUT2LIB += out32dll\libeay32.lib
+OUT2LIB += out32dll\ssleay32.lib
+OUT2LIB += out32dll\libeay32.lib
+OUT2BIN = out32dll\ssleay32.dll
+OUT2BIN += out32dll\libeay32.dll
+OUT2INC = inc32\openssl\*
 .ENDIF
 
 #set INCLUDE=D:\sol_temp\n\msvc7net3\PlatformSDK\include;D:\sol_temp\n\msvc7net3\include\ && set path=%path%;D:\sol_temp\r\btw\SRC680\perl\bin &&
