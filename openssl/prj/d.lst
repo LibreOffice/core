@@ -1,22 +1,15 @@
 mkdir: %_DEST%\inc%_EXT%\external
 mkdir: %_DEST%\inc%_EXT%\external\openssl
 ..\version.mk %_DEST%\inc%_EXT%\external\openssl\version.mk
-..\%__SRC%\misc\build\openssl-0.9.8e\inc32\openssl\* %_DEST%\inc%_EXT%\external\openssl\*
-..\%__SRC%\misc\build\openssl-0.9.8a\include\openssl\* %_DEST%\inc%_EXT%\external\openssl\*
-..\%__SRC%\misc\build\openssl-0.9.8e\include\openssl\* %_DEST%\inc%_EXT%\external\openssl\*
-..\%__SRC%\misc\build\openssl-0.9.8e\out32dll\ssleay32.lib %_DEST%\lib%_EXT%\ssleay32.lib
-..\%__SRC%\misc\build\openssl-0.9.8e\out32dll\ssleay32.lib %_DEST%\lib%_EXT%\ssleay32.exp
-..\%__SRC%\misc\build\openssl-0.9.8e\out32dll\ssleay32.dll %_DEST%\bin%_EXT%\ssleay32.dll
-..\%__SRC%\misc\build\openssl-0.9.8e\out32dll\libeay32.lib %_DEST%\lib%_EXT%\libeay32.lib
-..\%__SRC%\misc\build\openssl-0.9.8e\out32dll\libeay32.lib %_DEST%\lib%_EXT%\libeay32.exp
-..\%__SRC%\misc\build\openssl-0.9.8e\out32dll\libeay32.dll %_DEST%\bin%_EXT%\libeay32.dll
-..\%__SRC%\misc\build\openssl-0.9.8e\libcrypto.a %_DEST%\lib%_EXT%\libcrypto.a
-..\%__SRC%\misc\build\openssl-0.9.8e\libcrypto.so.0.9.8 %_DEST%\lib%_EXT%\libcrypto.so.0.9.8
-..\%__SRC%\misc\build\openssl-0.9.8e\libssl.a %_DEST%\lib%_EXT%\libssl.a
-..\%__SRC%\misc\build\openssl-0.9.8e\libssl.so.0.9.8 %_DEST%\lib%_EXT%\libssl.so.0.9.8
-..\%__SRC%\misc\build\openssl-0.9.8a\libcrypto.a %_DEST%\lib%_EXT%\libcrypto.a
-..\%__SRC%\misc\build\openssl-0.9.8a\libcrypto.so.0.9.8 %_DEST%\lib%_EXT%\libcrypto.so.0.9.8
-..\%__SRC%\misc\build\openssl-0.9.8a\libssl.a %_DEST%\lib%_EXT%\libssl.a
-..\%__SRC%\misc\build\openssl-0.9.8a\libssl.so.0.9.8 %_DEST%\lib%_EXT%\libssl.so.0.9.8
-
+..\%__SRC%\inc\* %_DEST%\inc%_EXT%\external\openssl\*
+..\%__SRC%\lib\ssleay32.lib %_DEST%\lib%_EXT%\ssleay32.lib
+..\%__SRC%\lib\ssleay32.lib %_DEST%\lib%_EXT%\ssleay32.exp
+..\%__SRC%\bin\ssleay32.dll %_DEST%\bin%_EXT%\ssleay32.dll
+..\%__SRC%\lib\libeay32.lib %_DEST%\lib%_EXT%\libeay32.lib
+..\%__SRC%\lib\libeay32.lib %_DEST%\lib%_EXT%\libeay32.exp
+..\%__SRC%\bin\libeay32.dll %_DEST%\bin%_EXT%\libeay32.dll
+..\%__SRC%\lib\libcrypto.a %_DEST%\lib%_EXT%\libcrypto.a
+..\%__SRC%\lib\libcrypto.so.0.9.8 %_DEST%\lib%_EXT%\libcrypto.so.0.9.8
+..\%__SRC%\lib\libssl.a %_DEST%\lib%_EXT%\libssl.a
+..\%__SRC%\lib\libssl.so.0.9.8 %_DEST%\lib%_EXT%\libssl.so.0.9.8
  
