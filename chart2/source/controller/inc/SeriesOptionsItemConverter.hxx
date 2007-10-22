@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SeriesOptionsItemConverter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:56:18 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:50:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,9 +82,15 @@ private:
     bool m_bAttachToMainAxis;
     bool m_bSupportingOverlapAndGapWidthProperties;
     bool m_bSupportingBarConnectors;
+
     sal_Int32 m_nBarOverlap;
     sal_Int32 m_nGapWidth;
     sal_Bool  m_bConnectBars;
+
+    bool m_bSupportingAxisSideBySide;
+    bool m_bGroupBarsPerAxis;
+    bool m_bAllSeriesAttachedToSameAxis;
+    sal_Int32 m_nAllSeriesAxisIndex;
 };
 
 } //  namespace wrapper
