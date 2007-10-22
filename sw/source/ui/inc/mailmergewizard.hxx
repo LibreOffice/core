@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergewizard.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:04:31 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:20:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,8 @@ class SwMailMergeWizard : public ::svt::RoadmapWizard
 
     sal_uInt16              m_nRestartPage;
 
+    using svt::OWizardMachine::skipUntil;
+
 protected:
     virtual svt::OWizardPage*       createPage(WizardState _nState);
     virtual void                    enterState( WizardState _nState );
@@ -94,7 +96,6 @@ public:
     sal_uInt16              GetRestartPage() const {return m_nRestartPage;}
     void                    SetRestartPage(sal_uInt16 nPage) { m_nRestartPage = nPage;}
 
-    using svt::OWizardMachine::skipUntil;
     sal_Bool                skipUntil( sal_uInt16 nPage)
                                 {return ::svt::RoadmapWizard::skipUntil(WizardState(nPage));}
 

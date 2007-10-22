@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:03:03 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:19:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,8 @@ friend class InputEdit;
     void DelBoxCntnt();
     DECL_LINK( ModifyHdl, InputEdit* );
 
+    using Window::IsActive;
+
 protected:
     virtual void    Resize();
     virtual void    Click();
@@ -103,6 +105,7 @@ protected:
     DECL_LINK( DropdownClickHdl, ToolBox* );
     void            ApplyFormula();
     void            CancelFormula();
+
 public:
                     SwInputWindow( Window* pParent, SfxBindings* pBindings );
     virtual         ~SwInputWindow();
@@ -113,7 +116,6 @@ public:
 
     void            ShowWin();
 
-    using Window::IsActive;
     BOOL            IsActive(){ return bActive; };
 
     DECL_LINK( SelTblCellsNotify, SwWrtShell * );

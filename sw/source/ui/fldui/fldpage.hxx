@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldpage.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:47:47 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:16:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,8 @@ protected:
                                     sal_Unicode cDelim = ' ',
                                     BOOL bIsAutomaticLanguage = TRUE);
 
+    using SfxTabPage::ActivatePage;
+
 public:
                         SwFldPage(  Window *pParent,
                                     const ResId &rId,
@@ -105,7 +107,6 @@ public:
 
                         virtual ~SwFldPage();
 
-    using SfxTabPage::ActivatePage;
     virtual void        ActivatePage();
 
     inline SwFldMgr&    GetFldMgr()         { return m_aMgr; }
