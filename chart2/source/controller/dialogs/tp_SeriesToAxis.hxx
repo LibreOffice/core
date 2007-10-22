@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_SeriesToAxis.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:18:26 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:49:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,11 @@ private:
     FixedText   aFTOverlap;
     MetricField aMTOverlap;
     CheckBox    aCBConnect;
+    CheckBox    aCBAxisSideBySide;
+
+    DECL_LINK(EnableHdl, RadioButton * );
+
+    sal_Int32   m_nAllSeriesAxisIndex;
 
 public:
     SchOptionTabPage(Window* pParent, const SfxItemSet& rInAttrs);
@@ -85,4 +90,3 @@ public:
 //.............................................................................
 
 #endif
-
