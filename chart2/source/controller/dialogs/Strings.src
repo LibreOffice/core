@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:38:07 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:43:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,11 @@ String STR_DLG_CHART_WIZARD
 String STR_DLG_SMOOTH_LINE_PROPERTIES
 {
     Text [ en-US ] = "Smooth Lines" ;
+};
+
+String STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE
+{
+    Text [ en-US ] = "Number Format for Percentage Value" ;
 };
 
 String STR_PAGE_CHARTTYPE
@@ -265,11 +270,15 @@ String STR_OBJECT_CURVE
 };
 String STR_OBJECT_CURVE_WITH_PARAMETERS
 {
-    Text [ en-US ] = "Regression Curve %FORMULA with accuracy R² = %RSQUARED";
+    Text [ en-US ] = "Regression curve %FORMULA with accuracy R² = %RSQUARED";
 };
 String STR_OBJECT_AVERAGE_LINE
 {
     Text [ en-US ] = "Average Value Line";
+};
+String STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS
+{
+    Text [ en-US ] = "Average value line with value %AVERAGE_VALUE and standard deviation %STD_DEVIATION";
 };
 String STR_OBJECT_ERROR_INDICATOR
 {
