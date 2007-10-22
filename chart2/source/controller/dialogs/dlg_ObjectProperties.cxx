@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:53:52 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:45:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,7 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const rtl::OUS
         , m_bHasSymbolProperties(false)
         , m_bHasScaleProperties(false)
         , m_bCanAxisLabelsBeStaggered(false)
+        , m_bHasNumberProperties(false)
 {
     rtl::OUString aParticleID = ObjectIdentifier::getParticleID( m_aObjectCID );
     m_bAffectsMultipleObjects = aParticleID.equals(C2U("ALLELEMENTS"));
@@ -184,15 +185,17 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
         //show scale properties only for a single axis not for multiselection
         m_bHasScaleProperties = !m_bAffectsMultipleObjects;
 
-        //no scale page for category axis
+        //no scale page for series axis
         if( m_bHasScaleProperties )
         {
             uno::Reference< XAxis > xAxis( ObjectIdentifier::getAxisForCID( m_aObjectCID, xChartModel ) );
             if( xAxis.is() )
             {
                 ScaleData aData( xAxis->getScaleData() );
-                if( aData.AxisType == chart2::AxisType::CATEGORY || aData.AxisType == chart2::AxisType::SERIES )
+                if( chart2::AxisType::SERIES == aData.AxisType )
                     m_bHasScaleProperties = false;
+                if( chart2::AxisType::REALNUMBER == aData.AxisType || chart2::AxisType::PERCENT == aData.AxisType )
+                    m_bHasNumberProperties = true;
             }
         }
 
@@ -257,6 +260,10 @@ bool ObjectPropertiesDialogParameter::HasScaleProperties() const
 bool ObjectPropertiesDialogParameter::CanAxisLabelsBeStaggered() const
 {
     return m_bCanAxisLabelsBeStaggered;
+}
+bool ObjectPropertiesDialogParameter::HasNumberProperties() const
+{
+    return m_bHasNumberProperties;
 }
 
 //const USHORT nNoArrowDlg          = 1100;
@@ -350,46 +357,12 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
             AddTabPage(TP_AXIS_LABEL, String(SchResId(STR_OBJECT_LABEL)), SchAxisLabelTabPage::Create, NULL);
             if( m_pParameter->HasScaleProperties() )
-            {
-                AddTabPage(TP_SCALE_Y, String(SchResId(STR_PAGE_SCALE)), SchScaleYAxisTabPage::Create, NULL);
+                AddTabPage(TP_SCALE_Y, String(SchResId(STR_PAGE_SCALE)), ScaleTabPage::Create, NULL);
+            if( m_pParameter->HasNumberProperties() )
                 AddTabPage(RID_SVXPAGE_NUMBERFORMAT, String(SchResId(STR_PAGE_NUMBERS)));
-            }
             break;
         }
 
-
-        /*
-        case OBJECTTYPE_AXIS:
-            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)), SvxCharNamePage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)), SvxCharEffectsPage::Create, NULL);
-            AddTabPage(TP_AXIS_LABEL, String(SchResId(STR_OBJECT_LABEL)), SchAxisLabelTabPage::Create, NULL);
-            break;
-        case ATTR_Y_AXIS_2D:
-        case ATTR_Y_AXIS_3D:
-            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)), SvxCharNamePage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)), SvxCharEffectsPage::Create, NULL);
-            AddTabPage(TP_SCALE_Y, String(SchResId(STR_PAGE_SCALE)), SchScaleYAxisTabPage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_NUMBERFORMAT, String(SchResId(STR_PAGE_NUMBERS)), SvxNumberFormatTabPage::Create, NULL);
-            AddTabPage(TP_AXIS_LABEL, String(SchResId(STR_OBJECT_LABEL)), SchAxisLabelTabPage::Create, NULL);
-////            ((SfxItemSet * const) pAttr)->ClearItem (SCHATTR_AXISTYPE);
-////            ((SfxItemSet *) pAttr)->Put (SfxInt32Item (SCHATTR_AXISTYPE, CHART_AXIS_Y));
-
-////            nAxisType = 2;
-            break;
-
-        case ATTR_Z_AXIS:
-            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
-            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)), SvxCharNamePage::Create, NULL);
-            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)), SvxCharEffectsPage::Create, NULL);
-            AddTabPage(TP_AXIS_LABEL, String(SchResId(STR_OBJECT_LABEL)), SchAxisLabelTabPage::Create, NULL);
-////            ((SfxItemSet * const) pAttr)->ClearItem (SCHATTR_AXISTYPE);
-////            ((SfxItemSet *) pAttr)->Put (SfxInt32Item (SCHATTR_AXISTYPE, CHART_AXIS_Z));
-
-////            nAxisType = 3;
-            break;
-        */
         case OBJECTTYPE_GRID:
         case OBJECTTYPE_SUBGRID:
         case OBJECTTYPE_DATA_ERRORS:
@@ -496,7 +469,7 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
 
         case TP_SCALE_Y:
             {
-                SchScaleYAxisTabPage & rAxisTabPage = static_cast< SchScaleYAxisTabPage & >( rPage );
+                ScaleTabPage & rAxisTabPage = static_cast< ScaleTabPage & >( rPage );
 
                 // #i81259# fix for #101318# undone.  The numberformatter passed
                 // here must contain the actually used number format.  Showing
@@ -511,6 +484,13 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
 //DLNF                 rLabelPage.SetNumberFormatter( m_pNumberFormatter );
 //DLNF             }
 //DLNF             break;
+
+        case TP_DATA_DESCR:
+            {
+                DataLabelsTabPage & rLabelPage = static_cast< DataLabelsTabPage & >( rPage );
+                rLabelPage.SetNumberFormatter( m_pNumberFormatter );
+            }
+            break;
 
         case RID_SVXPAGE_NUMBERFORMAT:
                aSet.Put (SvxNumberInfoItem( m_pNumberFormatter, (const USHORT)SID_ATTR_NUMBERFORMAT_INFO));
