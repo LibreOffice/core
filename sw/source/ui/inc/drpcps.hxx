@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drpcps.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:58:25 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:18:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,10 +120,10 @@ friend class SwDropCapsPict;
     DECL_LINK( SelectHdl, ListBox * );
     DECL_LINK( WholeWordHdl, CheckBox * );
 
-public:
-
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+
+public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
     static USHORT* GetRanges();

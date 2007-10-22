@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:57:24 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:17:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
