@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1class.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:57:54 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:12:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -542,9 +542,11 @@ protected:
 //  SvxBorderLine* SetBorder(SvxBorderLine*, W1_BRC*);
     // spezielle start-routine, je nach sprm verschieden versorgt
     // mit einem BoxItem.
-    using Ww1SingleSprm::Start;
     void Start(Ww1Shell&, BYTE, W1_BRC10*, USHORT, Ww1Manager&, SvxBoxItem&);
     void Start(Ww1Shell&, BYTE, W1_BRC*, USHORT, Ww1Manager&, SvxBoxItem&);
+
+    using Ww1SingleSprm::Start;
+
 public:
     Ww1SingleSprmPBrc(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
@@ -568,7 +570,6 @@ class Ww1SingleSprmPBrc10 : public Ww1SingleSprmPBrc
 {
     USHORT nLine;   // BRC_TOP, BRC_LEFT, ...
 
-protected:
     using Ww1SingleSprmPBrc::Start;
 
 public:
