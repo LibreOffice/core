@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:04:36 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:12:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -500,10 +500,12 @@ private:
     //No copying
     WW8FormulaCheckBox(const WW8FormulaCheckBox&);
     WW8FormulaCheckBox& operator=(const WW8FormulaCheckBox&);
+
+    using OCX_Control::Import;
+
 public:
     WW8FormulaCheckBox(SwWW8ImplReader &rR);
 
-    using OCX_Control::Import;
     virtual sal_Bool Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
         com::sun::star::uno::Reference <
@@ -517,10 +519,12 @@ private:
     //No copying
     WW8FormulaListBox(const WW8FormulaListBox&);
     WW8FormulaListBox& operator=(const WW8FormulaListBox&);
+
+    using OCX_Control::Import;
+
 public:
     WW8FormulaListBox(SwWW8ImplReader &rR);
 
-    using OCX_Control::Import;
     virtual sal_Bool Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
         com::sun::star::uno::Reference <
@@ -539,7 +543,6 @@ public:
 #if 0
     //#i3029# we are no longer importing editboxes as uno textboxes, using
     //input fields instead for superior layout.
-    using OCX_Control::Import;
     virtual sal_Bool Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
         com::sun::star::uno::Reference <
