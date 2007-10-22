@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedScaleProperty.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:22:52 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:42:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ public:
         , SCALE_PROP_AUTO_STEPMAIN
         , SCALE_PROP_AUTO_STEPHELP
         , SCALE_PROP_LOGARITHMIC
+        , SCALE_PROP_REVERSEDIRECTION
     };
 
 public:
