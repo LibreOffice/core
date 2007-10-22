@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:14:01 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:24:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,13 +424,14 @@ protected:
     // form letter execution
     void    GenerateFormLetter(BOOL bUseCurrentDocument);
 
+    using SfxShell::GetDispatcher;
+
 public:
 
     SFX_DECL_VIEWFACTORY(SwView);
     SFX_DECL_INTERFACE(SW_VIEWSHELL)
     TYPEINFO();
 
-    using SfxShell::GetDispatcher;
     SfxDispatcher   &GetDispatcher();
 
     void                    GotFocus() const;
