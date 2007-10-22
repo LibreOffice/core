@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeHelper.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:57:19 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:52:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,8 @@ public:
     static sal_Bool isSupportingSymbolProperties(    const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
     static sal_Bool isSupportingOverlapAndGapWidthProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
     static sal_Bool isSupportingBarConnectors(       const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
-    static sal_Bool isSupportingRightAngledAxes(       const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
+    static sal_Bool isSupportingRightAngledAxes(     const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
+    static bool     isSupportingAxisSideBySide(      const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
 
     static ::com::sun::star::drawing::Direction3D getDefaultSimpleLightDirection( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
     static ::com::sun::star::drawing::Direction3D getDefaultRealisticLightDirection( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
@@ -80,6 +81,17 @@ public:
     static sal_Int32 //one of ::com::sun::star::chart2::AxisType
                     getAxisType( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType
                                 , sal_Int32 nDimensionIndex );
+
+    /** Determines if all data series of a chart type are attached to the same
+        axis.
+
+        @param rOutAxisIndex If, and only if, </TRUE> is returned this
+               out-parameter is filled with the index (0 or 1) of the axis to
+               which all series are attached.
+     */
+    static bool allSeriesAttachedToSameAxis(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType,
+        sal_Int32 & rOutAxisIndex );
 };
 
 //.............................................................................
