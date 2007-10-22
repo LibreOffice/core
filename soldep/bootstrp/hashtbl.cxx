@@ -9,8 +9,8 @@
 #*                      Beschreibung des Moduls
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: hr $ $Date: 2007-06-27 23:37:39 $
-#*    $Revision: 1.2 $
+#*    Letzte Aenderung  $Author: vg $ $Date: 2007-10-22 14:41:55 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile:$
 #*
@@ -20,11 +20,18 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/soldep/bootstrp/hashtbl.cxx,v 1.2 2007-06-27 23:37:39 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/soldep/bootstrp/hashtbl.cxx,v 1.3 2007-10-22 14:41:55 vg Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2.6.1  2007/10/18 07:45:52  obo
+      #150903# unxmacxi support
+
+      Revision 1.2  2007/06/27 23:37:39  hr
+      INTEGRATION: CWS vgbugs07 (1.1.22); FILE MERGED
+      2007/06/04 13:35:21 vg 1.1.22.1: #i76605# Remove -I .../inc/module hack introduced by hedaburemove01
+
       Revision 1.1.22.1  2007/06/04 13:35:21  vg
       #i76605# Remove -I .../inc/module hack introduced by hedaburemove01
 
@@ -102,7 +109,7 @@ HashTable::HashTable(ULONG lSize, BOOL bOwner, double dMaxLoadFactor, double dGr
     m_bOwner         = bOwner;
     m_lElem          = 0;
     m_dMaxLoadFactor = MAX(0.5,MIN(1.0,dMaxLoadFactor));  // 0.5 ... 1.0
-    m_dGrowFactor    = MAX(1.3,(5.0,dGrowFactor));     // 1.3 ... 5.0
+    m_dGrowFactor    = MAX(1.3,MIN(5.0,dGrowFactor));     // 1.3 ... 5.0
     m_pData          = new HashItem [lSize];
 
 // Statistik
