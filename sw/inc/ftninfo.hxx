@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftninfo.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:03:59 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:05:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,8 @@ enum SwFtnNum
 
 class SW_DLLPUBLIC SwFtnInfo: public SwEndNoteInfo
 {
+    using SwEndNoteInfo::operator ==;
+
 public:
     String    aQuoVadis;
     String    aErgoSum;
@@ -114,7 +116,6 @@ public:
 
     SwFtnInfo& operator=(const SwFtnInfo&);
 
-    using SwEndNoteInfo::operator ==;
     BOOL operator==( const SwFtnInfo &rInf ) const;
 
     SwFtnInfo(SwTxtFmtColl* pTxtColl = 0);

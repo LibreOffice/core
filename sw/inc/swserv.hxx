@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swserv.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:12:04 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:07:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,8 @@ class SwPaM;
 
 class SwServerObject : public ::sfx2::SvLinkSource
 {
+    using sfx2::SvLinkSource::SendDataChanged;
+
 protected:
     enum ServerModes { BOOKMARK_SERVER, TABLE_SERVER, SECTION_SERVER, NONE_SERVER } eType;
     union {
@@ -83,7 +85,6 @@ public:
     BOOL SetData( const String & rMimeType,
                     const ::com::sun::star::uno::Any& rData );
 
-    using sfx2::SvLinkSource::SendDataChanged;
     virtual void SendDataChanged( const SwPosition& rPos );
     virtual void SendDataChanged( const SwPaM& rRange );
 
