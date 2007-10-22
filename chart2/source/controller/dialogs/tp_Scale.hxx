@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Scale.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:37:44 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:48:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ namespace chart
 {
 //.............................................................................
 
-class SchScaleYAxisTabPage : public SfxTabPage
+class ScaleTabPage : public SfxTabPage
 {
 private:
     FixedLine           aFlScale;
@@ -87,6 +87,7 @@ private:
     FormattedField      aFmtFldOrigin;
     CheckBox            aCbxAutoOrigin;
     CheckBox            aCbxLogarithm;
+    CheckBox            aCbxReverse;
 
     FixedLine aFlTicks;
     CheckBox aCbxTicksInner;
@@ -103,6 +104,8 @@ private:
     double              fOrigin;
     int                 nAxisType;
     SvNumberFormatter*  pNumFormatter;
+
+    void EnableControls();
 
     DECL_LINK( EnableValueHdl, CheckBox* );
 
@@ -122,7 +125,7 @@ private:
     bool ShowWarning( USHORT nResIdMessage, Edit * pControl = NULL );
 
 public:
-    SchScaleYAxisTabPage( Window* pParent, const SfxItemSet& rInAttrs );
+    ScaleTabPage( Window* pParent, const SfxItemSet& rInAttrs );
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
     virtual BOOL FillItemSet( SfxItemSet& rOutAttrs );
