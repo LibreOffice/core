@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ItemConverter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:41:02 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:51:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,8 +264,12 @@ void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItem
     {
         if ((rSourceSet.GetItemState(nWhich, TRUE, &pPoolItem) == SFX_ITEM_SET) &&
             (rDestSet.GetItemState(nWhich, TRUE, &pPoolItem) == SFX_ITEM_SET))
+        {
             if (rSourceSet.Get(nWhich) != rDestSet.Get(nWhich))
                 rDestSet.InvalidateItem(nWhich);
+        }
+        else if( rSourceSet.GetItemState(nWhich, TRUE, &pPoolItem) == SFX_ITEM_DONTCARE )
+            rDestSet.InvalidateItem(nWhich);
 
         nWhich = aIter.NextWhich ();
     }
