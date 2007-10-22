@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeHelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:07:49 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:54:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,26 +38,40 @@
 
 #include "ChartTypeHelper.hxx"
 #include "DiagramHelper.hxx"
+#include "DataSeriesHelper.hxx"
 #include "macros.hxx"
 #include "servicenames_charttypes.hxx"
 
-// header for define DBG_ASSERT
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-
 //.............................................................................
 namespace chart
 {
+
+bool ChartTypeHelper::isSupportingAxisSideBySide(
+    const uno::Reference< chart2::XChartType >& xChartType, sal_Int32 nDimensionCount )
+{
+    bool bResult = false;
+
+    if( xChartType.is() &&
+        nDimensionCount < 3 )
+    {
+        StackMode eStackMode = DiagramHelper::getStackModeFromChartType( xChartType, 0 );
+        if( eStackMode == StackMode_NONE )
+        {
+            rtl::OUString aChartTypeName = xChartType->getChartType();
+            bResult = ( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||
+                        aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) );
+        }
+    }
+
+    return bResult;
+}
 
 sal_Bool ChartTypeHelper::isSupportingGeometryProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
@@ -370,6 +384,48 @@ sal_Int32 ChartTypeHelper::getNumberOfDisplayedSeries(
     }
     return nNumberOfSeries;
 }
+
+bool ChartTypeHelper::allSeriesAttachedToSameAxis(
+    const uno::Reference< XChartType >& xChartType,
+    sal_Int32 & rOutAxisIndex )
+{
+    try
+    {
+        uno::Reference< chart2::XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY_THROW );
+        uno::Sequence< uno::Reference< chart2::XDataSeries > > aSeriesSeq( xDataSeriesContainer->getDataSeries());
+
+        const sal_Int32 nSeriesCount( aSeriesSeq.getLength());
+        // AxisIndex can only be 0 or 1
+        sal_Int32 nSeriesAtFirstAxis = 0;
+        sal_Int32 nSeriesAtSecondAxis = 0;
+
+        for( sal_Int32 nI = 0; nI < nSeriesCount; ++nI )
+        {
+            uno::Reference< chart2::XDataSeries > xSeries( aSeriesSeq[nI], uno::UNO_QUERY );
+            sal_Int32 nAxisIndex = DataSeriesHelper::getAttachedAxisIndex( xSeries );
+            if( nAxisIndex == 0 )
+                ++nSeriesAtFirstAxis;
+            else if( nAxisIndex == 1 )
+                ++nSeriesAtSecondAxis;
+        }
+        OSL_ENSURE( nSeriesAtFirstAxis + nSeriesAtSecondAxis == nSeriesCount, "Invalid axis index found" );
+
+        if( nSeriesAtFirstAxis == nSeriesCount )
+            rOutAxisIndex = 0;
+        else if( nSeriesAtSecondAxis == nSeriesCount )
+            rOutAxisIndex = 1;
+
+        return ( nSeriesAtFirstAxis == nSeriesCount ||
+                 nSeriesAtSecondAxis == nSeriesCount );
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+        return false;
+    }
+}
+
+
 //.............................................................................
 } //namespace chart
 //.............................................................................
