@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtxml.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:09:16 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:13:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,8 @@ class SwXMLWriter : public StgWriter
 {
     sal_uInt32 _Write( SfxMedium* pTargetMedium = NULL );
 
+    using StgWriter::Write;
+
 protected:
     virtual ULONG WriteStorage();
     virtual ULONG WriteMedium( SfxMedium& aTargetMedium );
@@ -69,7 +71,6 @@ public:
     SwXMLWriter( const String& rBaseURL );
     virtual ~SwXMLWriter();
 
-    using StgWriter::Write;
     virtual ULONG Write( SwPaM&, SfxMedium&, const String* = 0 );
 
 private:
