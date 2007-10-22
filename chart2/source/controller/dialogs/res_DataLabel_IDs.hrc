@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_DataLabel_IDs.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:34:25 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:46:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,10 @@
  *
  ************************************************************************/
 
-#define CB_VALUE 1
-#define CB_TEXT 2
-#define CB_SYMBOL 3
-#define RB_NUMBER 1
-#define RB_PERCENT 2
+#define CB_VALUE_AS_NUMBER 1
+#define CB_VALUE_AS_PERCENTAGE 2
+#define CB_CATEGORY 3
+#define CB_SYMBOL 4
 
-//DLNF #define PB_NUMBERFORMAT 20
-//DLNF #define PB_PERCENT_NUMBERFORMAT 21
+#define PB_NUMBERFORMAT 20
+#define PB_PERCENT_NUMBERFORMAT 21
