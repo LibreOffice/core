@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:34:08 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:34:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2950,6 +2950,11 @@ namespace xmloff { namespace token {
         TOKEN( "right-angled-axes",      XML_RIGHT_ANGLED_AXES ),
         TOKEN( "soft-page-break",                 XML_SOFT_PAGE_BREAK ),
         TOKEN( "use-soft-page-breaks",            XML_USE_SOFT_PAGE_BREAKS ),
+        TOKEN( "percentage-data-style-name",      XML_PERCENTAGE_DATA_STYLE_NAME ),
+        TOKEN( "value-and-percentage",            XML_VALUE_AND_PERCENTAGE ),
+        TOKEN( "group-bars-per-axis",             XML_GROUP_BARS_PER_AXIS ),
+        TOKEN( "reverse-direction",               XML_REVERSE_DIRECTION ),
+        TOKEN( "label-separator",                 XML_LABEL_SEPARATOR ),
 
         TOKEN( "dependency",             XML_DEPENDENCY ),
 
