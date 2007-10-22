@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarDiagram.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:02:18 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:39:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,22 @@ published service BarDiagram
     [optional, property] boolean StackedBarsConnected;
 
     //-------------------------------------------------------------------------
+
+    /** If bars of a bar or column chart are attached to different
+        axis, this property determines how to display those.  If
+        <TRUE/>, the bars are grouped together in one block for each
+        axis, thus they are painted one group over the other.
+
+        <p>If <FALSE/>, the bars are displayed side-by-side, as if
+        they were all attached to the same axis.</p>
+
+        <p>If all data series of a bar or column chart are attached to
+        only one axis, this property has no effect.</p>
+    */
+    [optional, property] boolean GroupBarsPerAxis;
+
+    //-------------------------------------------------------------------------
+
 
     /** Determines how many data rows are displayed as lines rather than
         bars.
