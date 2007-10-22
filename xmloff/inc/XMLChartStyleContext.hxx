@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChartStyleContext.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:38:30 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:31:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@ class XMLChartStyleContext : public XMLShapeStyleContext
 {
 private:
     ::rtl::OUString msDataStyleName;
+    ::rtl::OUString msPercentageDataStyleName;
     SvXMLStylesContext& mrStyles;
 
 protected:
