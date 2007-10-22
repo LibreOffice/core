@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectNameProvider.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:34:30 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:43:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -564,8 +564,7 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
             Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
             if( xCurveCnt.is())
             {
-                Reference< chart2::XRegressionCurve > xCurve(
-                    RegressionCurveHelper::getFirstCurveNotMeanValueLine( xCurveCnt ));
+                Reference< chart2::XRegressionCurve > xCurve( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xCurveCnt ));
                 if( xCurve.is())
                 {
                     try
@@ -597,6 +596,68 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
                                 nIndex, aWildcard.getLength(),
                                 ::rtl::math::doubleToUString(
                                     fR*fR, rtl_math_StringFormat_G, 4, aDecimalSep, true ));
+                        }
+                    }
+                    catch( const uno::Exception & ex )
+                    {
+                        ASSERT_EXCEPTION( ex );
+                    }
+                }
+            }
+        }
+        else
+        {
+            // non-verbose
+            aRet = ObjectNameProvider::getName( eObjectType, false );
+        }
+    }
+    else if( OBJECTTYPE_DATA_AVERAGE_LINE == eObjectType )
+    {
+        if( bVerbose )
+        {
+            aRet = String( SchResId( STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS ));
+            Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel ));
+            Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
+            if( xCurveCnt.is())
+            {
+                Reference< chart2::XRegressionCurve > xCurve( RegressionCurveHelper::getMeanValueLine( xCurveCnt ));
+                if( xCurve.is())
+                {
+                    try
+                    {
+                        Reference< chart2::XRegressionCurveCalculator > xCalculator( xCurve->getCalculator(), uno::UNO_QUERY_THROW );
+                        RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
+
+                        sal_Unicode aDecimalSep( '.' );
+                        // replace average value
+//                             SvtSysLocale aSysLocale;
+//                             OUString aSep( aSysLocale.GetLocaleData().getNumDecimalSep());
+//                             if( aSep.getLength() == 1 )
+//                                 aDecimalSep = aSep.toChar();
+
+                        sal_Int32 nIndex = -1;
+                        OUString aWildcard( C2U("%AVERAGE_VALUE") );
+                        nIndex = aRet.indexOf( aWildcard );
+                        // as the curve is constant, the value at any x-value is ok
+                        if( nIndex != -1 )
+                        {
+                            const double fMeanValue( xCalculator->getCurveValue( 0.0 ));
+                            aRet = aRet.replaceAt(
+                                nIndex, aWildcard.getLength(),
+                                ::rtl::math::doubleToUString(
+                                    fMeanValue, rtl_math_StringFormat_G, 4, aDecimalSep, true ));
+                        }
+
+                        // replace standard deviation
+                        aWildcard = C2U("%STD_DEVIATION");
+                        nIndex = aRet.indexOf( aWildcard );
+                        if( nIndex != -1 )
+                        {
+                            const double fStdDev( xCalculator->getCorrelationCoefficient());
+                            aRet = aRet.replaceAt(
+                                nIndex, aWildcard.getLength(),
+                                ::rtl::math::doubleToUString(
+                                    fStdDev, rtl_math_StringFormat_G, 4, aDecimalSep, true ));
                         }
                     }
                     catch( const uno::Exception & ex )
@@ -660,8 +721,8 @@ rtl::OUString ObjectNameProvider::getSelectedObjectText( const rtl::OUString & r
     else
     {
         // use the verbose text including the formula for trend lines
-        bool bVerbose( OBJECTTYPE_DATA_CURVE == eObjectType );
-        OUString aHelpText( getHelpText( rObjectCID, xChartModel, bVerbose ));
+        const bool bVerbose( OBJECTTYPE_DATA_CURVE == eObjectType || OBJECTTYPE_DATA_AVERAGE_LINE == eObjectType );
+        const OUString aHelpText( getHelpText( rObjectCID, xChartModel, bVerbose ));
         if( aHelpText.getLength())
         {
             aRet = String( SchResId( STR_STATUS_OBJECT_MARKED ));
