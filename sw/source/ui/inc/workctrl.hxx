@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workctrl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:15:31 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:25:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,15 +160,17 @@ class SwScrollNaviPopup : public SfxPopupWindow
     USHORT          nBackId;
 
     void            ApplyImageList();
-    protected:
+
+    using Window::GetQuickHelpText;
+
+protected:
         DECL_LINK(SelectHdl, ToolBox*);
         virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
-    public:
+public:
         SwScrollNaviPopup( USHORT nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
         ~SwScrollNaviPopup();
 
-    using Window::GetQuickHelpText;
     static String           GetQuickHelpText(BOOL bNext);
 
     virtual SfxPopupWindow* Clone() const;
