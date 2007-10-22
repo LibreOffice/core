@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:39:48 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:14:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,6 +369,8 @@ class SwTrnsfrDdeLink : public ::sfx2::SvBaseLink
 
     BOOL FindDocShell();
 
+    using sfx2::SvBaseLink::Disconnect;
+
 protected:
     virtual ~SwTrnsfrDdeLink();
 
@@ -381,7 +383,6 @@ public:
 
     BOOL WriteData( SvStream& rStrm );
 
-    using sfx2::SvBaseLink::Disconnect;
     void Disconnect( BOOL bRemoveDataAdvise );
 };
 
