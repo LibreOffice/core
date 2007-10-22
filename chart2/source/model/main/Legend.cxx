@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Legend.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:02:07 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:54:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,12 +314,16 @@ void Legend::fireModifyEvent()
 
 Sequence< OUString > Legend::getSupportedServiceNames_Static()
 {
-    Sequence< OUString > aServices( 5 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.Legend" );
-    aServices[ 1 ] = C2U( "com.sun.star.beans.PropertySet" );
-    aServices[ 2 ] = C2U( "com.sun.star.drawing.FillProperties" );
-    aServices[ 3 ] = C2U( "com.sun.star.drawing.LineProperties" );
-    aServices[ 4 ] = C2U( "com.sun.star.layout.LayoutElement" );
+    const sal_Int32 nNumServices( 6 );
+    sal_Int32 nI = 0;
+    Sequence< OUString > aServices( nNumServices );
+    aServices[ nI++ ] = C2U( "com.sun.star.chart2.Legend" );
+    aServices[ nI++ ] = C2U( "com.sun.star.beans.PropertySet" );
+    aServices[ nI++ ] = C2U( "com.sun.star.drawing.FillProperties" );
+    aServices[ nI++ ] = C2U( "com.sun.star.drawing.LineProperties" );
+    aServices[ nI++ ] = C2U( "com.sun.star.style.CharacterProperties" );
+    aServices[ nI++ ] = C2U( "com.sun.star.layout.LayoutElement" );
+    OSL_ASSERT( nNumServices == nI );
     return aServices;
 }
 
