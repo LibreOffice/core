@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:09:45 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:06:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -594,12 +594,13 @@ protected:
     virtual ULONG WriteStorage() = 0;
     virtual ULONG WriteMedium( SfxMedium& ) = 0;
 
+    using Writer::Write;
+
 public:
     StgWriter() : Writer() {}
 
     virtual BOOL IsStgWriter() const;
 
-    using Writer::Write;
     virtual ULONG Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0, SfxMedium* = 0 );
     virtual ULONG Write( SwPaM&, SotStorage&, const String* = 0 );
 
