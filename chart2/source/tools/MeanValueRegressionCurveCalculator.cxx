@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MeanValueRegressionCurveCalculator.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:58:13 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:54:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,11 +71,12 @@ void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(
     const uno::Sequence< double >& aYValues )
     throw (uno::RuntimeException)
 {
-    sal_Int32 nMax = aYValues.getLength();
+    const sal_Int32 nDataLength = aYValues.getLength();
+    sal_Int32 nMax = nDataLength;
     double fSumY = 0.0;
     const double * pY = aYValues.getConstArray();
 
-    for( sal_Int32 i = 0; i < nMax; ++i )
+    for( sal_Int32 i = 0; i < nDataLength; ++i )
     {
         if( ::rtl::math::isNan( pY[i] ) ||
             ::rtl::math::isInf( pY[i] ))
@@ -84,13 +85,33 @@ void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(
             fSumY += pY[i];
     }
 
+    m_fCorrelationCoeffitient = 0.0;
+
     if( nMax == 0 )
+    {
         ::rtl::math::setNan( & m_fMeanValue );
+    }
     else
+    {
         m_fMeanValue = fSumY / static_cast< double >( nMax );
 
-    // todo: calculate r for constant regression (== standard deviation?)
-//     m_fCorrelationCoeffitient = ?;
+        // correlation coefficient: standard deviation
+        if( nMax > 1 )
+        {
+            double fErrorSum = 0.0;
+            for( sal_Int32 i = 0; i < nDataLength; ++i )
+            {
+                if( !::rtl::math::isNan( pY[i] ) &&
+                    !::rtl::math::isInf( pY[i] ))
+                {
+                    double v = m_fMeanValue - pY[i];
+                    fErrorSum += (v*v);
+                }
+            }
+            OSL_ASSERT( fErrorSum >= 0.0 );
+            m_fCorrelationCoeffitient = sqrt( fErrorSum / (nMax - 1 ));
+        }
+    }
 }
 
 double SAL_CALL MeanValueRegressionCurveCalculator::getCurveValue( double /*x*/ )
