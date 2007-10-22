@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:06:19 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:33:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ namespace com { namespace sun { namespace star {
 
 class XMLPropStyleContext;
 class SvXMLStylesContext;
+class SvXMLExport;
 
 namespace SchXMLTools
 {
@@ -97,6 +98,8 @@ namespace SchXMLTools
         tSchXMLLSequencesPerIndex * pLSequencesPerIndex = 0 );
 
     ::com::sun::star::uno::Any getPropertyFromContext( const ::rtl::OUString& rPropertyName, const XMLPropStyleContext * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
+
+    void exportText( SvXMLExport& rExport, const ::rtl::OUString& rText, bool bConvertTabsLFs );
 }
 
 #endif  // SCH_XML_TOOLS_HXX_
