@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:06:45 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:06:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,8 @@ class SwOLENode: public SwNoTxtNode
     // aOLEObj besitzt einen privaten Copy-CTOR, wir brauchen auch einen:
     SwOLENode( const SwOLENode & );
 
+    using SwNoTxtNode::GetGraphic;
+
 public:
     const SwOLEObj& GetOLEObj() const { return aOLEObj; }
           SwOLEObj& GetOLEObj()       { return aOLEObj; }
@@ -127,7 +129,6 @@ public:
 
     virtual Size GetTwipSize() const;
 
-    using SwNoTxtNode::GetGraphic;
     Graphic* GetGraphic();
 
     Graphic* GetHCGraphic(); // tries to retrieve HighContrast representation if possible
