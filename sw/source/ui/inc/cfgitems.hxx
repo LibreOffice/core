@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgitems.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:54:45 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:16:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,6 +151,8 @@ class SW_DLLPUBLIC SwAddPrinterItem : public SfxPoolItem, public SwPrintData
 {
     friend class SwAddPrinterTabPage;
 
+    using  SwPrintData::operator ==;
+
 public:
     TYPEINFO();
     SwAddPrinterItem( USHORT nWhich = FN_PARAM_ADDPRINTER );
@@ -159,7 +161,6 @@ public:
 
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
 
-    using  SwPrintData::operator ==;
     virtual int          operator==( const SfxPoolItem& ) const;
 
     const rtl::OUString &GetFax() const              { return sFaxName; }
