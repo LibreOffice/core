@@ -19,6 +19,7 @@
 #endif
 
 static PerlInterpreter *my_perl;  /***    The Perl interpreter    ***/
+static const char * DEP_MD_SIMPLE_STR = "md-simple";
 
 EXTERN_C void boot_DynaLoader (pTHX_ CV* cv);
 static void xs_init (pTHX);
@@ -44,6 +45,8 @@ static void dl_init(pTHX)
         targ=sv_newmortal();
         FREETMPS;
 /* end Dynamic bootstrapping code */
+    *file=0;
+    sp=0;
 }
 
 FullByteStringList::FullByteStringList()
