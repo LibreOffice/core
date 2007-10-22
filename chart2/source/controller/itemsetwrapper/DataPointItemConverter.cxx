@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointItemConverter.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:34:53 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:51:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,10 @@
 #ifndef _SVX_SIZEITEM_HXX
 #include <svx/sizeitem.hxx>
 #endif
-
+// header for class SfxStringItem
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
+#endif
 #ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
 #endif
@@ -127,6 +130,102 @@ sal_Int32 lcl_getSymbolStyleForSymbol( const chart2::Symbol & rSymbol )
     }
     return nStyle;
 }
+
+bool lcl_NumberFormatFromItemToPropertySet( USHORT nWhichId, const SfxItemSet & rItemSet, const uno::Reference< beans::XPropertySet > & xPropertySet, bool bOverwriteAttributedDataPointsAlso  )
+{
+    bool bChanged = false;
+    if( !xPropertySet.is() )
+        return bChanged;
+    rtl::OUString aPropertyName = (SID_ATTR_NUMBERFORMAT_VALUE==nWhichId) ? C2U( "NumberFormat" ) : C2U( "PercentageNumberFormat" );
+    USHORT nSourceWhich = (SID_ATTR_NUMBERFORMAT_VALUE==nWhichId) ? SID_ATTR_NUMBERFORMAT_SOURCE : SCHATTR_PERCENT_NUMBERFORMAT_SOURCE;
+
+    if( SFX_ITEM_SET != rItemSet.GetItemState( nSourceWhich ) )
+        return bChanged;
+
+    uno::Any aValue;
+    bool bUseSourceFormat = (static_cast< const SfxBoolItem & >(
+                rItemSet.Get( nSourceWhich )).GetValue() );
+    if( !bUseSourceFormat )
+    {
+        SfxItemState aState = rItemSet.GetItemState( nWhichId );
+        if( aState == SFX_ITEM_SET )
+        {
+            sal_Int32 nFmt = static_cast< sal_Int32 >(
+                static_cast< const SfxUInt32Item & >(
+                    rItemSet.Get( nWhichId )).GetValue());
+            aValue = uno::makeAny(nFmt);
+        }
+        else
+            return bChanged;
+    }
+
+    uno::Any aOldValue( xPropertySet->getPropertyValue(aPropertyName) );
+    if( bOverwriteAttributedDataPointsAlso )
+    {
+        Reference< chart2::XDataSeries > xSeries( xPropertySet, uno::UNO_QUERY);
+        if( aValue != aOldValue ||
+            ::chart::DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, aPropertyName, aOldValue ) )
+        {
+            ::chart::DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, aPropertyName, aValue );
+            bChanged = true;
+        }
+    }
+    else if( aOldValue != aValue )
+    {
+        xPropertySet->setPropertyValue(aPropertyName, aValue );
+        bChanged = true;
+    }
+    return bChanged;
+}
+
+bool lcl_UseSourceFormatFromItemToPropertySet( USHORT nWhichId, const SfxItemSet & rItemSet, const uno::Reference< beans::XPropertySet > & xPropertySet, bool bOverwriteAttributedDataPointsAlso  )
+{
+    bool bChanged = false;
+    if( !xPropertySet.is() )
+        return bChanged;
+    rtl::OUString aPropertyName = (SID_ATTR_NUMBERFORMAT_SOURCE==nWhichId) ? C2U( "NumberFormat" ) : C2U( "PercentageNumberFormat" );
+    USHORT nFormatWhich = (SID_ATTR_NUMBERFORMAT_SOURCE==nWhichId) ? SID_ATTR_NUMBERFORMAT_VALUE : SCHATTR_PERCENT_NUMBERFORMAT_VALUE;
+
+    if( SFX_ITEM_SET != rItemSet.GetItemState( nWhichId ) )
+        return bChanged;
+
+    uno::Any aNewValue;
+    bool bUseSourceFormat = (static_cast< const SfxBoolItem & >(
+                rItemSet.Get( nWhichId )).GetValue() );
+    if( !bUseSourceFormat )
+    {
+        SfxItemState aState = rItemSet.GetItemState( nFormatWhich );
+        if( aState == SFX_ITEM_SET )
+        {
+            sal_Int32 nFormatKey = static_cast< sal_Int32 >(
+            static_cast< const SfxUInt32Item & >(
+                rItemSet.Get( nFormatWhich )).GetValue());
+            aNewValue <<= nFormatKey;
+        }
+        else
+            return bChanged;
+    }
+
+    uno::Any aOldValue( xPropertySet->getPropertyValue(aPropertyName) );
+    if( bOverwriteAttributedDataPointsAlso )
+    {
+        Reference< chart2::XDataSeries > xSeries( xPropertySet, uno::UNO_QUERY);
+        if( aNewValue != aOldValue ||
+            ::chart::DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, aPropertyName, aOldValue ) )
+        {
+            ::chart::DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, aPropertyName, aNewValue );
+            bChanged = true;
+        }
+    }
+    else if( aOldValue != aNewValue )
+    {
+        xPropertySet->setPropertyValue( aPropertyName, aNewValue );
+        bChanged = true;
+    }
+
+    return bChanged;
+}
+
 } // anonymous namespace
 
 namespace chart
@@ -147,14 +246,18 @@ DataPointItemConverter::DataPointItemConverter(
     bool bDataSeries /* = false */,
     bool bUseSpecialFillColor /* = false */,
     sal_Int32 nSpecialFillColor /* =0 */,
-    bool bOverwriteLabelsForAttributedDataPointsAlso /*false*/
+    bool bOverwriteLabelsForAttributedDataPointsAlso /*false*/,
+    sal_Int32 nNumberFormat,
+    sal_Int32 nPercentNumberFormat
     ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_pNumberFormatterWrapper( pNumFormatter ),
         m_bDataSeries( bDataSeries ),
         m_bOverwriteLabelsForAttributedDataPointsAlso(m_bDataSeries && bOverwriteLabelsForAttributedDataPointsAlso),
         m_bUseSpecialFillColor(bUseSpecialFillColor),
-        m_nSpecialFillColor(nSpecialFillColor)
+        m_nSpecialFillColor(nSpecialFillColor),
+        m_nNumberFormat(nNumberFormat),
+        m_nPercentNumberFormat(nPercentNumberFormat)
 {
     m_aConverters.push_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel, xNamedPropertyContainerFactory, eMapTo ));
@@ -229,96 +332,33 @@ bool DataPointItemConverter::ApplySpecialItem(
 
     switch( nWhichId )
     {
-        case SCHATTR_DATADESCR_DESCR:
+        case SCHATTR_DATADESCR_SHOW_NUMBER:
+        case SCHATTR_DATADESCR_SHOW_PERCENTAGE:
+        case SCHATTR_DATADESCR_SHOW_CATEGORY:
+        case SCHATTR_DATADESCR_SHOW_SYMBOL:
         {
-            const SvxChartDataDescrItem & rItem =
-                static_cast< const SvxChartDataDescrItem & >(
-                    rItemSet.Get( nWhichId ));
-
-            chart2::DataPointLabel aLabel;
-            if( GetPropertySet()->getPropertyValue( C2U( "Label" )) >>= aLabel )
-            {
-                switch( rItem.GetValue())
-                {
-                    case CHDESCR_NONE:
-                        aLabel.ShowNumber = sal_False;
-                        aLabel.ShowNumberInPercent = sal_False;
-                        aLabel.ShowCategoryName = sal_False;
-                        break;
-                    case CHDESCR_VALUE:
-                        aLabel.ShowNumber = sal_True;
-                        aLabel.ShowNumberInPercent = sal_False;
-                        aLabel.ShowCategoryName = sal_False;
-                        break;
-                    case CHDESCR_PERCENT:
-                        aLabel.ShowNumber = sal_False;
-                        aLabel.ShowNumberInPercent = sal_True;
-                        aLabel.ShowCategoryName = sal_False;
-                        break;
-                    case CHDESCR_TEXT:
-                        aLabel.ShowNumber = sal_False;
-                        aLabel.ShowNumberInPercent = sal_False;
-                        aLabel.ShowCategoryName = sal_True;
-                        break;
-                    case CHDESCR_TEXTANDPERCENT:
-                        aLabel.ShowNumber = sal_False;
-                        aLabel.ShowNumberInPercent = sal_True;
-                        aLabel.ShowCategoryName = sal_True;
-                        break;
-                    case CHDESCR_TEXTANDVALUE:
-                        aLabel.ShowNumber = sal_True;
-                        aLabel.ShowNumberInPercent = sal_False;
-                        aLabel.ShowCategoryName = sal_True;
-                        break;
-                    default:
-                        break;
-                }
-
-                aValue <<= aLabel;
-
-                uno::Any aOldValue( GetPropertySet()->getPropertyValue( C2U( "Label" ) ));
-                if( m_bOverwriteLabelsForAttributedDataPointsAlso )
-                {
-                    Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
-                    if( aValue != aOldValue ||
-                        DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, C2U( "Label" ), aOldValue ) )
-                    {
-                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "Label" ), aValue );
-                        bChanged = true;
-                    }
-                }
-                else if( aValue != aOldValue )
-                {
-                    GetPropertySet()->setPropertyValue( C2U( "Label" ), aValue );
-                    bChanged = true;
-                }
-            }
-        }
-        break;
-
-        case SCHATTR_DATADESCR_SHOW_SYM:
-        {
-            const SvxChartDataDescrItem & rItem =
-                static_cast< const SvxChartDataDescrItem & >(
-                    rItemSet.Get( nWhichId ));
+            const SfxBoolItem & rItem = static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId ));
 
             uno::Any aOldValue( GetPropertySet()->getPropertyValue( C2U( "Label" ) ));
             chart2::DataPointLabel aLabel;
             if( aOldValue >>= aLabel )
             {
-                sal_Bool bOldValue = aLabel.ShowLegendSymbol;
-                aLabel.ShowLegendSymbol = static_cast< sal_Bool >( rItem.GetValue() );
+                sal_Bool& rValue = (SCHATTR_DATADESCR_SHOW_NUMBER==nWhichId) ? aLabel.ShowNumber : (
+                    (SCHATTR_DATADESCR_SHOW_PERCENTAGE==nWhichId) ? aLabel.ShowNumberInPercent : (
+                    (SCHATTR_DATADESCR_SHOW_CATEGORY==nWhichId) ? aLabel.ShowCategoryName : aLabel.ShowLegendSymbol ));
+                sal_Bool bOldValue = rValue;
+                rValue = static_cast< sal_Bool >( rItem.GetValue() );
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
                 {
                     Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
-                    if( bOldValue != aLabel.ShowLegendSymbol ||
+                    if( bOldValue != rValue ||
                         DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, C2U( "Label" ), aOldValue ) )
                     {
                         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "Label" ), uno::makeAny( aLabel ) );
                         bChanged = true;
                     }
                 }
-                else if( bOldValue != aLabel.ShowLegendSymbol )
+                else if( bOldValue != rValue )
                 {
                     GetPropertySet()->setPropertyValue( C2U( "Label" ), uno::makeAny( aLabel ));
                     bChanged = true;
@@ -328,23 +368,35 @@ bool DataPointItemConverter::ApplySpecialItem(
         break;
 
         case SID_ATTR_NUMBERFORMAT_VALUE:
+        case SCHATTR_PERCENT_NUMBERFORMAT_VALUE:  //fall through intended
         {
-            if( m_pNumberFormatterWrapper )
-            {
-                sal_Int32 nFmt = static_cast< sal_Int32 >(
-                    static_cast< const SfxUInt32Item & >(
-                        rItemSet.Get( nWhichId )).GetValue());
+            bChanged = lcl_NumberFormatFromItemToPropertySet( nWhichId, rItemSet, GetPropertySet(), m_bOverwriteLabelsForAttributedDataPointsAlso );
+        }
+        break;
 
-                aValue = uno::makeAny(nFmt);
-                if( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )) != aValue )
+        case SID_ATTR_NUMBERFORMAT_SOURCE:
+        case SCHATTR_PERCENT_NUMBERFORMAT_SOURCE: //fall through intended
+        {
+            bChanged = lcl_UseSourceFormatFromItemToPropertySet( nWhichId, rItemSet, GetPropertySet(), m_bOverwriteLabelsForAttributedDataPointsAlso );
+        }
+        break;
+
+        case SCHATTR_DATADESCR_SEPARATOR:
+        {
+            rtl::OUString aNewValue = static_cast< const SfxStringItem & >( rItemSet.Get( nWhichId )).GetValue();
+            rtl::OUString aOldValue;
+            try
+            {
+                GetPropertySet()->getPropertyValue( C2U( "LabelSeparator" ) ) >>= aOldValue;
+                if( !aOldValue.equals(aNewValue) )
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "NumberFormat" ), aValue );
+                    GetPropertySet()->setPropertyValue( C2U( "LabelSeparator" ), uno::makeAny( aNewValue ));
                     bChanged = true;
                 }
             }
-            else
+            catch( uno::Exception& e )
             {
-                OSL_ENSURE( false, "No NumberFormatterWrapper !" );
+                ASSERT_EXCEPTION( e );
             }
         }
         break;
@@ -446,46 +498,26 @@ void DataPointItemConverter::FillSpecialItem(
 {
     switch( nWhichId )
     {
-        case SCHATTR_DATADESCR_DESCR:
-        case SCHATTR_DATADESCR_SHOW_SYM:
+        case SCHATTR_DATADESCR_SHOW_NUMBER:
+        case SCHATTR_DATADESCR_SHOW_PERCENTAGE:
+        case SCHATTR_DATADESCR_SHOW_CATEGORY:
+        case SCHATTR_DATADESCR_SHOW_SYMBOL:
         {
             chart2::DataPointLabel aLabel;
             if( GetPropertySet()->getPropertyValue( C2U( "Label" )) >>= aLabel )
             {
-                SvxChartDataDescr aDescr;
+                sal_Bool bValue = (SCHATTR_DATADESCR_SHOW_NUMBER==nWhichId) ? aLabel.ShowNumber : (
+                    (SCHATTR_DATADESCR_SHOW_PERCENTAGE==nWhichId) ? aLabel.ShowNumberInPercent : (
+                    (SCHATTR_DATADESCR_SHOW_CATEGORY==nWhichId) ? aLabel.ShowCategoryName : aLabel.ShowLegendSymbol ));
 
-                if( aLabel.ShowNumber )
-                {
-                    if( aLabel.ShowCategoryName )
-                        aDescr = CHDESCR_TEXTANDVALUE;
-                    else
-                        aDescr = CHDESCR_VALUE;
-                }
-                else if( aLabel.ShowNumberInPercent )
-                {
-                    if( aLabel.ShowCategoryName )
-                        aDescr = CHDESCR_TEXTANDPERCENT;
-                    else
-                        aDescr = CHDESCR_PERCENT;
-                }
-                else
-                {
-                    if( aLabel.ShowCategoryName )
-                        aDescr = CHDESCR_TEXT;
-                    else
-                        aDescr = CHDESCR_NONE;
-                }
-
-                rOutItemSet.Put( SvxChartDataDescrItem( aDescr, SCHATTR_DATADESCR_DESCR ));
-                rOutItemSet.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYM, aLabel.ShowLegendSymbol ));
+                rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
 
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
                 {
                     if( DataSeriesHelper::hasAttributedDataPointDifferentValue(
                         Reference< chart2::XDataSeries >( GetPropertySet(), uno::UNO_QUERY), C2U( "Label" ), uno::makeAny(aLabel) ) )
                     {
-                        rOutItemSet.InvalidateItem(SCHATTR_DATADESCR_DESCR);
-                        rOutItemSet.InvalidateItem(SCHATTR_DATADESCR_SHOW_SYM);
+                        rOutItemSet.InvalidateItem(nWhichId);
                     }
                 }
             }
@@ -494,17 +526,46 @@ void DataPointItemConverter::FillSpecialItem(
 
         case SID_ATTR_NUMBERFORMAT_VALUE:
         {
-            if( m_pNumberFormatterWrapper )
+            sal_Int32 nKey = 0;
+            if( !(GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )) >>= nKey) )
+                nKey = m_nNumberFormat;
+            rOutItemSet.Put( SfxUInt32Item( nWhichId, nKey ));
+        }
+        break;
+
+        case SCHATTR_PERCENT_NUMBERFORMAT_VALUE:
+        {
+            sal_Int32 nKey = 0;
+            if( !(GetPropertySet()->getPropertyValue( C2U( "PercentageNumberFormat" )) >>= nKey) )
+                nKey = m_nPercentNumberFormat;
+            rOutItemSet.Put( SfxUInt32Item( nWhichId, nKey ));
+        }
+        break;
+
+        case SID_ATTR_NUMBERFORMAT_SOURCE:
+        {
+            bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )).hasValue());
+            rOutItemSet.Put( SfxBoolItem( nWhichId, ! bNumberFormatIsSet ));
+        }
+        break;
+        case SCHATTR_PERCENT_NUMBERFORMAT_SOURCE:
+        {
+            bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue( C2U( "PercentageNumberFormat" )).hasValue());
+            rOutItemSet.Put( SfxBoolItem( nWhichId, ! bNumberFormatIsSet ));
+        }
+        break;
+
+        case SCHATTR_DATADESCR_SEPARATOR:
+        {
+            rtl::OUString aValue;
+            try
             {
-                sal_Int32 nKey = 0;
-                if( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )) >>= nKey )
-                {
-                    rOutItemSet.Put( SfxUInt32Item( nWhichId, nKey ));
-                }
+                GetPropertySet()->getPropertyValue( C2U( "LabelSeparator" ) ) >>= aValue;
+                rOutItemSet.Put( SfxStringItem( nWhichId, aValue ));
             }
-            else
+            catch( uno::Exception& e )
             {
-                OSL_ENSURE( false, "No NumberFormatterWrapper !" );
+                ASSERT_EXCEPTION( e );
             }
         }
         break;
