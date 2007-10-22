@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:46:37 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:32:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #endif
 
 #include "XMLChartPropertySetMapper.hxx"
+#include "SchXMLTools.hxx"
 
 #ifndef _XMLOFF_ENUMPROPERTYHANDLER_HXX
 #include <xmloff/EnumPropertyHdl.hxx>
@@ -379,6 +380,24 @@ void XMLChartExportPropertyMapper::handleElementItem(
             }
             break;
 
+        case XML_SCH_CONTEXT_SPECIAL_LABEL_SEPARATOR:
+            {
+                ::rtl::OUString aSeparator;
+                rProperty.maValue >>= aSeparator;
+
+                if( aSeparator.getLength() )
+                {
+                    sal_uInt32 nPropIndex = rProperty.mnIndex;
+                    SvXMLElementExport aElem( mrExport,
+                                              getPropertySetMapper()->GetEntryNameSpace( nPropIndex ),
+                                              getPropertySetMapper()->GetEntryXMLName( nPropIndex ),
+                                              sal_True, sal_True );
+
+                    SchXMLTools::exportText( mrExport, aSeparator, true );
+                }
+            }
+            break;
+
         default:
             // call parent
             SvXMLExportPropertyMapper::handleElementItem( rExport, rProperty,
@@ -436,7 +455,12 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 {
                     rProperty.maValue >>= nValue;
                     if((( nValue & chart::ChartDataCaption::VALUE ) == chart::ChartDataCaption::VALUE ))
-                        sValueBuffer.append( GetXMLToken( XML_VALUE ));
+                    {
+                        if(( nValue & chart::ChartDataCaption::PERCENT ) == chart::ChartDataCaption::PERCENT )
+                            sValueBuffer.append( GetXMLToken( XML_VALUE_AND_PERCENTAGE ));
+                        else
+                            sValueBuffer.append( GetXMLToken( XML_VALUE ));
+                    }
                     else if(( nValue & chart::ChartDataCaption::PERCENT ) == chart::ChartDataCaption::PERCENT )
                         sValueBuffer.append( GetXMLToken( XML_PERCENTAGE ));
                     else
@@ -576,6 +600,8 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                     rProperty.maValue >>= nValue;
                     if( IsXMLToken( rValue, XML_NONE ))
                         SCH_XML_UNSETFLAG( nValue, chart::ChartDataCaption::VALUE | chart::ChartDataCaption::PERCENT );
+                    else if( IsXMLToken( rValue, XML_VALUE_AND_PERCENTAGE ) )
+                        SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::VALUE | chart::ChartDataCaption::PERCENT );
                     else if( IsXMLToken( rValue, XML_VALUE ) )
                         SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::VALUE );
                     else // must be XML_PERCENTAGE
