@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-18 14:54:05 $
+#   last change: $Author: vg $ $Date: 2007-10-22 16:46:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ SLOFILES=   	\
                 $(SLO)$/DialogModel.obj \
                 $(SLO)$/TitleDialogData.obj \
                 $(SLO)$/res_Titles.obj \
+                $(SLO)$/res_TextSeparator.obj \
                 $(SLO)$/res_ErrorBar.obj \
                 $(SLO)$/res_BarGeometry.obj \
                 $(SLO)$/res_LegendPosition.obj \
@@ -97,6 +98,7 @@ SLOFILES=   	\
                 $(SLO)$/dlg_CreationWizard.obj \
                 $(SLO)$/dlg_CreationWizard_UNO.obj \
                 $(SLO)$/dlg_ChartType.obj \
+                $(SLO)$/dlg_NumberFormat.obj \
                 $(SLO)$/RangeSelectionButton.obj \
                 $(SLO)$/RangeSelectionHelper.obj \
                 $(SLO)$/RangeSelectionListener.obj \
@@ -109,6 +111,7 @@ SLOFILES=   	\
 
 
 SRC1FILES=		\
+                res_TextSeparator.src \
                 res_BarGeometry.src \
                 tp_ChartType.src \
                 tp_RangeChooser.src \
