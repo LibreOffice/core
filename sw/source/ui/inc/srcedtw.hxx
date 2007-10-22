@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcedtw.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:09:48 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:23:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,9 @@ private:
     DECL_LINK( SyntaxTimerHdl, Timer * );
     DECL_LINK( TimeoutHdl, Timer * );
 
+    using Window::Notify;
+    using Window::Invalidate;
+
 protected:
 
     virtual void    Resize();
@@ -126,7 +129,6 @@ protected:
     void            CreateTextEngine();
     void            DoSyntaxHighlight( USHORT nPara );
 
-    using Window::Notify;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     DECL_LINK(ScrollHdl, ScrollBar*);
@@ -150,7 +152,6 @@ public:
 
     TextViewOutWin* GetOutWin() {return pOutWin;}
 
-    using Window::Invalidate;
     virtual void    Invalidate( USHORT nFlags = 0 );
 
     void            ClearModifyFlag()

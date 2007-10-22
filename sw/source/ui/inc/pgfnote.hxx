@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pgfnote.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:07:21 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:21:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,8 @@ private:
     long            lMaxHeight;
 
     using TabPage::ActivatePage;
-    virtual void    ActivatePage( const SfxItemSet& rSet );
     using TabPage::DeactivatePage;
+    virtual void    ActivatePage( const SfxItemSet& rSet );
     virtual int     DeactivatePage( SfxItemSet* pSet = 0 );
 
 };
