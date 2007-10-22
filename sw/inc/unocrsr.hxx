@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:15:10 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:08:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,8 @@ class SwUnoTableCrsr : public virtual SwUnoCrsr, public virtual SwTableCursor
     // etwas geloescht, dann muss es auch im anderen erfolgen!!
     SwCursor aTblSel;
 
+    using SwTableCursor::MakeBoxSels;
+
 public:
     SwUnoTableCrsr( const SwPosition& rPos );
     virtual ~SwUnoTableCrsr();
@@ -116,7 +118,6 @@ public:
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
 
-    using SwTableCursor::MakeBoxSels;
     void MakeBoxSels();
 
           SwCursor& GetSelRing()            { return aTblSel; }
