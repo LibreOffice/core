@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointProperties.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 14:51:24 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:40:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,7 +270,17 @@ service DataPointProperties
 
     [property] DataPointLabel                         Label;
 
-    [optional, property] long                         NumberFormat;
+    /** specifies a string that is used to separate the parts of a data label (caption)
+     */
+    [optional, property] string LabelSeparator;
+
+    /** specifies a number format for the display of the value in the data label
+     */
+    [optional, property] long NumberFormat;
+
+    /** specifies a number format for the display of the percentage value in the data label
+     */
+    [optional, property] long PercentageNumberFormat;
 
     /** The size of the diagram at the moment when the font size for
         data labels was set.
