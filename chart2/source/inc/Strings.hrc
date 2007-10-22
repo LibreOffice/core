@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:41:49 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:52:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 // this includes no link dependency
 #include <svtools/solar.hrc>
 
-//free 87, 88, 89, 20, 21
-//next is 265
+//free 87, 88, 89, 21
+//next is 267
 
 //#define RID_APP_START 30000
 ////#define STR_NULL                            (RID_APP_START +  1)
@@ -149,6 +149,9 @@
 
 #define STR_WIZARD_ROADMAP_TITLE             (RID_APP_START + 261)
 
+//additional strings
+#define STR_TEXT_SEPARATOR                   (RID_APP_START + 20)
+
 //-----------------------------------------------------------------------------
 //SchStatisticTabPage and SchDataStatisticsDlg
 //see Strings_Statistic.src
@@ -250,7 +253,7 @@
 #define STR_OBJECT_GRID_MINOR_Z             (RID_APP_START + 42)
 
 #define STR_OBJECT_CURVE_WITH_PARAMETERS    (RID_APP_START + 264)
-
+#define STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS (RID_APP_START + 265)
 #define STR_STATISTICS_IN_LEGEND            (RID_APP_START + 180)
 
 //-----------------------------------------------------------------------------
@@ -277,7 +280,8 @@
 #define STR_PAGE_CHART_ELEMENTS              (RID_APP_START + 229)
 #define STR_PAGE_CHART_LOCATION              (RID_APP_START + 230)
 
-#define STR_DLG_SMOOTH_LINE_PROPERTIES    (RID_APP_START + 239)
+#define STR_DLG_SMOOTH_LINE_PROPERTIES              (RID_APP_START + 239)
+#define STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE   (RID_APP_START + 266)
 
 //-----------------------------------------------------------------------------
 //strings used as description for actions on toolbar icons, as tip help or for undo
