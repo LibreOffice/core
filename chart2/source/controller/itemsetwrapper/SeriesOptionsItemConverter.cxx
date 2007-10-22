@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SeriesOptionsItemConverter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:41:51 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:52:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,10 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         , m_nBarOverlap(0)
         , m_nGapWidth(100)
         , m_bConnectBars(false)
+        , m_bSupportingAxisSideBySide(false)
+        , m_bGroupBarsPerAxis(true)
+        , m_bAllSeriesAttachedToSameAxis(true)
+        , m_nAllSeriesAxisIndex(-1)
 {
     try
     {
@@ -130,6 +134,13 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         if( m_bSupportingBarConnectors && xDiagramProperties.is() )
         {
             xDiagramProperties->getPropertyValue( C2U("ConnectBars")) >>= m_bConnectBars;
+        }
+
+        m_bSupportingAxisSideBySide = ChartTypeHelper::isSupportingAxisSideBySide( xChartType, nDimensionCount );
+        if( m_bSupportingAxisSideBySide && xDiagramProperties.is() )
+        {
+            xDiagramProperties->getPropertyValue( C2U("GroupBarsPerAxis")) >>= m_bGroupBarsPerAxis;
+            m_bAllSeriesAttachedToSameAxis = ChartTypeHelper::allSeriesAttachedToSameAxis( xChartType, m_nAllSeriesAxisIndex );
         }
     }
     catch( uno::Exception ex )
@@ -199,11 +210,17 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxIte
                     {
                         if( xChartTypeProps->getPropertyValue( aPropName ) >>= m_aBarPositionSequence )
                         {
-                            if( nAxisIndex >= 0 && nAxisIndex < m_aBarPositionSequence.getLength() )
+                            bool bGroupBarsPerAxis =  static_cast< const SfxBoolItem & >(rItemSet.Get( SCHATTR_GROUP_BARS_PER_AXIS )).GetValue();
+                            if(!bGroupBarsPerAxis)
                             {
-                                m_aBarPositionSequence[nAxisIndex] = rBarPosition;
-                                xChartTypeProps->setPropertyValue( aPropName, uno::makeAny(m_aBarPositionSequence) );
+                                //set the same value for all axes
+                                for( sal_Int32 nN = 0; nN < m_aBarPositionSequence.getLength(); nN++ )
+                                    m_aBarPositionSequence[nN] = rBarPosition;
                             }
+                            else if( nAxisIndex >= 0 && nAxisIndex < m_aBarPositionSequence.getLength() )
+                                m_aBarPositionSequence[nAxisIndex] = rBarPosition;
+
+                            xChartTypeProps->setPropertyValue( aPropName, uno::makeAny(m_aBarPositionSequence) );
                         }
                     }
                 }
@@ -228,6 +245,24 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxIte
             }
         }
         break;
+
+        case SCHATTR_GROUP_BARS_PER_AXIS:
+        {
+            bool bOldGroupBarsPerAxis = true;
+            m_bGroupBarsPerAxis = static_cast< const SfxBoolItem & >(
+                rItemSet.Get( nWhichId )).GetValue();
+            if( m_bSupportingAxisSideBySide )
+            {
+                uno::Reference< beans::XPropertySet > xDiagramProperties( ChartModelHelper::findDiagram(m_xChartModel), uno::UNO_QUERY );
+                if( xDiagramProperties.is() &&
+                    (xDiagramProperties->getPropertyValue( C2U("GroupBarsPerAxis")) >>= bOldGroupBarsPerAxis) &&
+                    bOldGroupBarsPerAxis != m_bGroupBarsPerAxis )
+                {
+                    xDiagramProperties->setPropertyValue( C2U("GroupBarsPerAxis"), uno::makeAny(m_bGroupBarsPerAxis) );
+                }
+            }
+         }
+         break;
     }
     return bChanged;
 }
@@ -262,6 +297,20 @@ void SeriesOptionsItemConverter::FillSpecialItem(
                 rOutItemSet.Put( SfxBoolItem(nWhichId,m_bConnectBars));
             break;
         }
+        case SCHATTR_GROUP_BARS_PER_AXIS:
+        {
+            if( m_bSupportingAxisSideBySide )
+                rOutItemSet.Put( SfxBoolItem(nWhichId,m_bGroupBarsPerAxis) );
+            break;
+        }
+        case SCHATTR_AXIS_FOR_ALL_SERIES:
+        {
+            if( m_nAllSeriesAxisIndex != - 1)
+                rOutItemSet.Put( SfxInt32Item(nWhichId, m_nAllSeriesAxisIndex));
+            break;
+        }
+        default:
+            break;
    }
 }
 
