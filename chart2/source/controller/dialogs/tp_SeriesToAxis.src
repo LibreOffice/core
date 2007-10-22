@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_SeriesToAxis.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:49:30 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ TabPage TP_OPTIONS
         Pos = MAP_APPFONT ( 12 , 28  ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "2nd Y axis";
+        Text [ en-US ] = "Secondary Y axis";
     };
 
     FixedLine GB_BAR
@@ -128,4 +128,11 @@ TabPage TP_OPTIONS
         Text [ en-US ] = "Connection Lines";
     };
 
+    CheckBox CB_BARS_SIDE_BY_SIDE
+    {
+        Pos = MAP_APPFONT ( 12 , 90 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Show ~bars side by side";
+    };
 };
