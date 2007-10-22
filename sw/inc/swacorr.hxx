@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swacorr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:10:31 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,8 @@
 
 class SwAutoCorrect : public SvxAutoCorrect
 {
+    using  SvxAutoCorrect::PutText;
+
 protected:
     //  - return den Ersetzungstext (nur fuer SWG-Format, alle anderen
     //      koennen aus der Wortliste herausgeholt werden!)
@@ -55,7 +57,6 @@ protected:
 
     //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
     //      rShort ist der Stream-Name - gecryptet!
-    using  SvxAutoCorrect::PutText;
     virtual BOOL PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rFileName, const String& rShort, SfxObjectShell& ,
                             String& );
 

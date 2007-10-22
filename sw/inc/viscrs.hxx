@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viscrs.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:17:42 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:09:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,8 @@ class SwShellCrsr : public virtual SwCursor, public SwSelPaintRects
 
     virtual void FillRects();   // fuer Table- und normalen Crsr
 
+    using SwCursor::UpDown;
+
 public:
     SwShellCrsr( const SwCrsrShell& rCrsrSh, const SwPosition &rPos );
     SwShellCrsr( const SwCrsrShell& rCrsrSh, const SwPosition &rPos,
@@ -170,7 +172,6 @@ public:
     virtual short MaxReplaceArived(); //returns RET_YES/RET_CANCEL/RET_NO
     virtual void SaveTblBoxCntnt( const SwPosition* pPos = 0 );
 
-    using SwCursor::UpDown;
     BOOL UpDown( BOOL bUp, USHORT nCnt = 1 );
 
     // TRUE: an die Position kann der Cursor gesetzt werden
