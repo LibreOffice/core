@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outline.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:06:55 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:21:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,15 +165,16 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     void    SetModified(){aPreviewWIN.Invalidate();}
     void    CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 public:
     SwOutlineSettingsTabPage(Window* pParent, const SfxItemSet& rSet);
     ~SwOutlineSettingsTabPage();
 
     void SetWrtShell(SwWrtShell* pShell);
 
-    using TabPage::ActivatePage;
     virtual void        ActivatePage(const SfxItemSet& rSet);
-    using TabPage::DeactivatePage;
     virtual int         DeactivatePage(SfxItemSet *pSet);
 
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
