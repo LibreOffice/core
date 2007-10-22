@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:33:09 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:13:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,8 @@ class SwSelectAddressBlockDialog : public SfxModalDialog
     DECL_LINK(DeleteHdl_Impl, PushButton*);
     DECL_LINK(IncludeHdl_Impl, RadioButton*);
 
+    using Window::SetSettings;
+
 public:
     SwSelectAddressBlockDialog(Window* pParent, SwMailMergeConfigItem& rConfig);
     ~SwSelectAddressBlockDialog();
@@ -175,7 +177,6 @@ public:
                                 sal_uInt16 nSelected);
     const com::sun::star::uno::Sequence< ::rtl::OUString>&    GetAddressBlocks();
 
-    using Window::SetSettings;
     void                SetSettings(sal_Bool bIsCountry, ::rtl::OUString sCountry);
     sal_Bool            IsIncludeCountry() const {return !m_aNeverRB.IsChecked();}
     ::rtl::OUString     GetCountry() const;
@@ -207,18 +208,21 @@ class AddressMultiLineEdit : public MultiLineEdit, public SfxListener
 {
     Link                            m_aSelectionLink;
     SwCustomizeAddressBlockDialog*  m_pParentDialog;
+
+    using Window::Notify;
+
+    using MultiLineEdit::SetText;
+
 protected:
     long            PreNotify( NotifyEvent& rNEvt );
 public:
     AddressMultiLineEdit(SwCustomizeAddressBlockDialog* pParent, const ResId& rResId);
     ~AddressMultiLineEdit();
 
-    using Window::Notify;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     void            SetSelectionChangedHdl( const Link& rLink ) {m_aSelectionLink = rLink;}
 
-    using MultiLineEdit::SetText;
     void            SetText( const String& rStr );
     String          GetAddress();
 
