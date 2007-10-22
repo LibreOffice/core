@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortedobjsimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:08:54 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:11:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,9 @@
 
 typedef std::vector< SwAnchoredObject* >::iterator tIter;
 typedef std::vector< SwAnchoredObject* >::const_iterator tConstIter;
+
+using namespace ::com::sun::star;
+
 
 SwSortedObjsImpl::SwSortedObjsImpl()
 {
