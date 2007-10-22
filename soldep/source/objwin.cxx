@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:39:13 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 14:43:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,17 +82,17 @@ UINT32 aColorMap[] = {
 ObjectWin::ObjectWin( Window* pParent, WinBits nWinStyle )
 /*****************************************************************************/
                 : Window( pParent, nWinStyle ),
-                mnObjectId( 0 ),
                 msBodyText( "" ),
                 msTipText( "" ),
-                mnRootDist( 0 ),
-                mnHeadDist( 0 ),
-                mbVisited( FALSE ),
-                mbFixed( FALSE ),
+                mnObjectId( 0 ),
                 mnMarkMode( 0 ),
                 mnViewMask( 0 ),
                 mbVisible( FALSE ),
-                mbMenuExecute( FALSE )
+                mbMenuExecute( FALSE ),
+                mbVisited( FALSE ),
+                mnRootDist( 0 ),
+                mnHeadDist( 0 ),
+                mbFixed( FALSE )
 {
     SetBackground( Wallpaper( Color( COL_WHITE )));
 
@@ -206,8 +206,9 @@ Point ObjectWin::GetFixPoint( const Point& rRefPoint, BOOL bUseRealPos )
     USHORT nRefX = aLocalPoint.X() + aLocalSize.Width() / 2 ;
     USHORT nRefY = aLocalPoint.Y() + aLocalSize.Height() / 2 ;
 
-    if ( nRefX < 0 ) nRefX = 0;
-    if ( nRefY < 0 ) nRefY = 0;
+    // always false...
+    //if ( nRefX < 0 ) nRefX = 0;
+    //if ( nRefY < 0 ) nRefY = 0;
 
     if ( rRefPoint.X() > nRefX )
     {
@@ -332,7 +333,7 @@ void ObjectWin::SetAllConnectorsUnvisible()
 {
     Connector* pCon;
     ULONG nConCount = mConnections.Count();
-    for ( int i = 0; i < nConCount; i++ )
+    for ( ULONG i = 0; i < nConCount; i++ )
     {
         pCon = mConnections.GetObject( i );
         if (pCon) pCon->SetVisibility( FALSE );
@@ -563,7 +564,7 @@ void ObjectWin::MouseMove( const MouseEvent& rMEvt )
         aNewWinPos.X() = Max( 0L, aNewWinPos.X());
         aNewWinPos.Y() = Max( 0L, aNewWinPos.Y());
         SetPosPixel( aNewWinPos );
-        int t = mConnections.Count();
+        //int t = mConnections.Count();
 
         for ( i=0; i < mConnections.Count();i++)
         {
@@ -623,9 +624,9 @@ void ObjectWin::UpdateConnectors()
     }
 }
 
-IMPL_LINK( ObjectWin, PopupSelected, PopupMenu*, mpPopup )
+IMPL_LINK( ObjectWin, PopupSelected, PopupMenu*, mpPopup_l )
 {
-    USHORT nItemId = mpPopup->GetCurItemId();
+    USHORT nItemId = mpPopup_l->GetCurItemId();
 
     switch( nItemId )
     {
@@ -649,6 +650,7 @@ IMPL_LINK( ObjectWin, PopupSelected, PopupMenu*, mpPopup )
         default :
 //          DBG_ASSERT( FALSE, String (nItemId) );
             Connector* pCon = mConnections.GetObject( nItemId - mnPopupStaticItems );
+            pCon = 0;
 //          delete pCon;
 //          mpDepperDontuseme->RemoveConnector( pCon->GetStartId(), pCon->GetEndId());
 //          TBD: CallEventListener
@@ -695,7 +697,7 @@ void ObjectWin::LoseFocus()
 }
 
 /*****************************************************************************/
-IMPL_LINK( ObjectWin, PopupDeactivated, PopupMenu*, mpPopup )
+IMPL_LINK( ObjectWin, PopupDeactivated, PopupMenu*, mpPopup_l )
 /*****************************************************************************/
 {
     mbMenuExecute = FALSE;
@@ -733,10 +735,9 @@ void ObjectList::ResetSelectedObject()
 {
 //    return;
 
-    ULONG i = 0;
-    ULONG nCount = Count();
+    ULONG nCount_l = Count();
     ObjectWin* pObjectWin = NULL;
-    for (ULONG i=0; i < nCount; i++ )
+    for (ULONG i=0; i < nCount_l; i++ )
     {
         pObjectWin = GetObject( i );
         pObjectWin->UnsetMarkMode( MARKMODE_SELECTED );
@@ -753,9 +754,9 @@ ObjectWin* ObjectList::GetPtrByName( const ByteString& rText )
 /*****************************************************************************/
 {
     ULONG i = 0;
-    ULONG nCount = Count();
+    ULONG nCount_l = Count();
     ObjectWin* pObjectWin = NULL;
-    while ( i < nCount )
+    while ( i < nCount_l )
     {
        pObjectWin = GetObject( i );
        ByteString sPrj = pObjectWin->GetBodyText();

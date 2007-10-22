@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connctr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:38:02 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 14:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,8 @@ mpStartWin( 0L ),
 mpEndWin( 0L ),
 mnStartId( 0 ),
 mnEndId( 0 ),
-len( 70 ),
-bVisible( FALSE )
+bVisible( FALSE ),
+len( 70 )
 {
     mpParent = pParent;
     if ( mpParent )

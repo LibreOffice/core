@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soldlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:39:48 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 14:44:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,12 +235,12 @@ SolAutoarrangeDlg::SolAutoarrangeDlg( Window *pParent )
                 maOverallBar( this )
 {
     FreeResource();
-
+/* Mac Porting..... taking address of temporary (warning)
     maModuleBar.SetPosPixel( POS( 8, 28 ));
     maOverallBar.SetPosPixel( POS( 8, 60 ));
     maModuleBar.SetSizePixel( SIZE( 208,12 ));
     maOverallBar.SetSizePixel( SIZE( 208,12 ));
-
+*/
     maModuleBar.Show();
     maOverallBar.Show();
 
