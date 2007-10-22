@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wdocsh.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:17:54 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:09:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 class SW_DLLPUBLIC SwWebDocShell: public SwDocShell
 {
     USHORT      nSourcePara;    // aktive Zeile in der SourceView
+
 public:
 
     using SotObject::GetInterface;
