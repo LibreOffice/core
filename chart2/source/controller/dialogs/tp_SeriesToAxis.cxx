@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_SeriesToAxis.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:38:24 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,10 +67,13 @@ SchOptionTabPage::SchOptionTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     aMTGap(this,SchResId(MT_GAP)),
     aFTOverlap(this,SchResId(FT_OVERLAP)),
     aMTOverlap(this,SchResId(MT_OVERLAP)),
-    aCBConnect(this,SchResId(CB_CONNECTOR))
+    aCBConnect(this,SchResId(CB_CONNECTOR)),
+    aCBAxisSideBySide(this,SchResId(CB_BARS_SIDE_BY_SIDE))
 {
     FreeResource();
 
+    aRbtAxis1.SetClickHdl( LINK( this, SchOptionTabPage, EnableHdl ));
+    aRbtAxis2.SetClickHdl( LINK( this, SchOptionTabPage, EnableHdl ));
 }
 /*************************************************************************
 |*
@@ -82,6 +85,15 @@ SchOptionTabPage::~SchOptionTabPage()
 {
 }
 
+IMPL_LINK( SchOptionTabPage, EnableHdl, RadioButton *, EMPTYARG )
+{
+    if( m_nAllSeriesAxisIndex == 0 )
+        aCBAxisSideBySide.Enable( aRbtAxis2.IsChecked());
+    else if( m_nAllSeriesAxisIndex == 1 )
+        aCBAxisSideBySide.Enable( aRbtAxis1.IsChecked());
+
+    return 0;
+}
 /*************************************************************************
 |*
 |* Erzeugung
@@ -113,6 +125,11 @@ BOOL SchOptionTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 
     if(aCBConnect.IsVisible())
         rOutAttrs.Put(SfxBoolItem(SCHATTR_BAR_CONNECT,aCBConnect.IsChecked()));
+
+    // model property is "group bars per axis", UI feature is the other way
+    // round: "show bars side by side"
+    if(aCBAxisSideBySide.IsVisible())
+        rOutAttrs.Put(SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, ! aCBAxisSideBySide.IsChecked()));
 
     return TRUE;
 }
@@ -169,10 +186,24 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
     {
         aCBConnect.Show(FALSE);
     }
-
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_FOR_ALL_SERIES, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    {
+        m_nAllSeriesAxisIndex = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        aCBAxisSideBySide.Disable();
+    }
+    if (rInAttrs.GetItemState(SCHATTR_GROUP_BARS_PER_AXIS, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    {
+        // model property is "group bars per axis", UI feature is the other way
+        // round: "show bars side by side"
+        BOOL bCheck = ! static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+        aCBAxisSideBySide.Check( bCheck );
+    }
+    else
+    {
+        aCBAxisSideBySide.Show(FALSE);
+    }
 
 }
-
 //.............................................................................
 } //namespace chart
 //.............................................................................
