@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxcss1.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:51:19 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:11:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,7 +275,11 @@ class SvxCSS1Parser : public CSS1Parser
 
     SvUShorts aWhichMap;        // Which-Map des Parser
 
+    using CSS1Parser::ParseStyleOption;
+
 protected:
+
+    using CSS1Parser::ParseStyleSheet;
 
     // Diese Methode wird fuer jeden Selektor mit dem zugehoerigen
     // Item-Set aufgerufen. Fuer einen Selektor koennen mehrere
@@ -301,9 +305,6 @@ protected:
     // Sie sollte in abgeleiteten Parsern nicht mehr ueberladen werden!
     virtual sal_Bool DeclarationParsed( const String& rProperty,
                                     const CSS1Expression *pExpr );
-
-    using CSS1Parser::ParseStyleOption;
-    using CSS1Parser::ParseStyleSheet;
 
 public:
 
