@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_DataLabel_tmpl.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:34:37 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:47:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,45 +39,53 @@
 #include "res_DataLabel_IDs.hrc"
 
 #define RESOURCE_DATALABEL( xpos, ypos ) \
-CheckBox CB_VALUE \
+CheckBox CB_VALUE_AS_NUMBER \
 { \
     HelpID = HID_SCH_DATALABEL_VALUE; \
     Pos = MAP_APPFONT ( xpos , ypos  ) ; \
     Size = MAP_APPFONT ( 120 , 10 ) ; \
     TabStop = TRUE ; \
-    Text [ en-US ] = "Show ~value" ; \
+    Text [ en-US ] = "Show value as ~number" ; \
 };   \
-RadioButton RB_NUMBER \
+PushButton PB_NUMBERFORMAT \
 { \
-    HelpID = HID_SCH_DATALABEL_NUMBER; \
-    Pos = MAP_APPFONT ( xpos+9 , ypos+14  ) ; \
-    Size = MAP_APPFONT ( 110 , 10 ) ; \
+    HelpID = HID_SCH_PB_NUMBERFORMAT; \
     TabStop = TRUE ; \
-    Text [ en-US ] = "as ~number"; \
+    Pos = MAP_APPFONT ( xpos+8 , ypos+12  ) ; \
+    Size = MAP_APPFONT ( 100 , 14 ) ; \
+    Text [ en-US ] = "Number ~format..." ; \
 }; \
-RadioButton RB_PERCENT \
+CheckBox CB_VALUE_AS_PERCENTAGE \
 { \
     HelpID = HID_SCH_DATALABEL_PERCENT; \
-    Pos = MAP_APPFONT ( xpos+9 , ypos+28  ) ; \
-    Size = MAP_APPFONT ( 110 , 10 ) ; \
+    Pos = MAP_APPFONT ( xpos , ypos+30  ) ; \
+    Size = MAP_APPFONT ( 120 , 10 ) ; \
     TabStop = TRUE ; \
-    Text [ en-US ] = "as ~percentage"; \
+    Text [ en-US ] = "Show value as ~percentage" ; \
+};   \
+PushButton PB_PERCENT_NUMBERFORMAT \
+{ \
+    HelpID = HID_SCH_PB_PERCENT_NUMBERFORMAT; \
+    TabStop = TRUE ; \
+    Pos = MAP_APPFONT ( xpos+8 , ypos+42  ) ; \
+    Size = MAP_APPFONT ( 100 , 14 ) ; \
+    Text [ en-US ] = "Percentage f~ormat..." ; \
 }; \
-CheckBox CB_TEXT \
+CheckBox CB_CATEGORY \
 { \
     HelpID = HID_SCH_DATALABEL_TEXT; \
-    Pos  = MAP_APPFONT ( xpos , ypos+42  ); \
+    Pos  = MAP_APPFONT ( xpos , ypos+62  ); \
     Size = MAP_APPFONT ( 120 , 10 ); \
     TabStop = TRUE; \
-    Text [ en-US ] = "Sho~w label text"; \
+    Text [ en-US ] = "Show ~category"; \
 }; \
 CheckBox CB_SYMBOL \
 { \
     HelpID = HID_SCH_DATALABEL_SYMBOL; \
-    Pos  = MAP_APPFONT ( xpos , ypos+56  ) ; \
+    Pos  = MAP_APPFONT ( xpos , ypos+76  ) ; \
     Size = MAP_APPFONT ( 182 , 10 ) ; \
     TabStop = TRUE ; \
-    Text [ en-US ] = "~Show legend icon with label" ; \
+    Text [ en-US ] = "Show ~legend key" ; \
 };
 
 #endif
