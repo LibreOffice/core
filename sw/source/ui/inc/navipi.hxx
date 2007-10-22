@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:05:26 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:20:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,9 @@ class SwNavigationPI : public Window,
                     CheckAlignment(SfxChildAlignment,SfxChildAlignment);
     void SetPopupWindow( SfxPopupWindow* );
 
+    using Window::Notify;
+    using Window::StateChanged;
+
 protected:
 
     virtual         BOOL Close();
@@ -177,8 +180,6 @@ protected:
 
 public:
 
-    using Window::Notify;
-
     SwNavigationPI(SfxBindings*, SfxChildWindowContext*, Window*);
     ~SwNavigationPI();
 
@@ -188,7 +189,6 @@ public:
     void            UpdateListBox();
     void            MoveOutline(USHORT nSource, USHORT nTarget, BOOL bWithCilds);
 
-    using Window::StateChanged;
     virtual void    StateChanged( USHORT nSID, SfxItemState eState,
                                             const SfxPoolItem* pState );
 
