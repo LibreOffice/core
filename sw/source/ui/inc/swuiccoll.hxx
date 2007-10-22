@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuiccoll.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:11:06 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:24:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ class SwCondCollPage : public SfxTabPage
     BOOL                bNewTemplate;
 
 
-            SwCondCollPage(Window *pParent, const SfxItemSet &rSet);
+    SwCondCollPage(Window *pParent, const SfxItemSet &rSet);
     virtual ~SwCondCollPage();
 
     virtual int     DeactivatePage(SfxItemSet *pSet);
@@ -77,10 +77,10 @@ class SwCondCollPage : public SfxTabPage
     DECL_LINK( AssignRemoveHdl, PushButton*);
     DECL_LINK( SelectHdl, ListBox* );
 
-public:
-
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+
+public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
     static USHORT* GetRanges();

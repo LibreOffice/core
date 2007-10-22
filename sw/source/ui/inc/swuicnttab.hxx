@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuicnttab.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:11:18 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:24:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,6 +272,10 @@ class SwTOXSelectTabPage : public SfxTabPage
 
       void  ApplyTOXDescription();
     void    FillTOXDescription();
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 public:
     SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrSet);
     ~SwTOXSelectTabPage();
@@ -279,9 +283,7 @@ public:
     virtual BOOL        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
-    using TabPage::ActivatePage;
     virtual void        ActivatePage( const SfxItemSet& );
-    using TabPage::DeactivatePage;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
     static SfxTabPage*  Create( Window* pParent,
@@ -479,15 +481,16 @@ class SwTOXEntryTabPage : public SfxTabPage
     void            UpdateDescriptor();
     DECL_LINK(ModifyHdl, void*);
 
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 public:
     SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet);
     ~SwTOXEntryTabPage();
 
     virtual BOOL        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
-    using TabPage::ActivatePage;
     virtual void        ActivatePage( const SfxItemSet& );
-    using TabPage::DeactivatePage;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
     static SfxTabPage*  Create( Window* pParent,
@@ -527,6 +530,10 @@ class SwTOXStylesTabPage : public SfxTabPage
             SwMultiTOXTabDialog* pDlg = (SwMultiTOXTabDialog*)GetTabDialog();
             return *pDlg->GetForm(pDlg->GetCurrentTOXType());
         }
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 public:
     SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrSet);
     ~SwTOXStylesTabPage();
@@ -534,9 +541,7 @@ public:
     virtual BOOL        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
-    using TabPage::ActivatePage;
     virtual void        ActivatePage( const SfxItemSet& );
-    using TabPage::DeactivatePage;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
     static SfxTabPage*  Create( Window* pParent,
