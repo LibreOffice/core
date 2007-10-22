@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:12:16 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:07:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,8 @@ typedef SwTableLine* SwTableLinePtr;
 
 class SwTable: public SwClient           //Client vom FrmFmt
 {
+    using SwClient::IsModifyLocked;
+
 protected:
     SwTableLines aLines;
     SwTableSortBoxes aSortCntBoxes;
@@ -131,7 +133,6 @@ protected:
     bool bDontChangeModel;  // This is set by functions (like Merge()) to forbid a laet model change
 #endif
 
-    using SwClient::IsModifyLocked;
     BOOL IsModifyLocked(){ return bModifyLocked;}
 
 public:
