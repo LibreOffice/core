@@ -4,9 +4,9 @@
  *
  *  $RCSfile: depper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:38:25 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 14:43:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,18 +60,18 @@ ByteString sDelimiterLine("#====================================================
 
 Depper::Depper( Window* pBaseWindow ):
     Window( pBaseWindow ),
-    mpPrjIdMapper( NULL ),
+    mbIsPrjView(FALSE),
     maDefPos( 50, 50 ),
     maDefSize( 60, 25 ),
     mnViewMask( 1 ),
-    maArrangeDlg( pBaseWindow ),
-    mbIsPrjView(FALSE),
-    pMainBar( NULL ),
     pSubBar( NULL ),
-    pMainText( NULL ),
+    pMainBar( NULL ),
     pSubText( NULL ),
-    maTaskBarFrame( pBaseWindow, 0),
-    maToolBox( pBaseWindow, DtSodResId(TID_SOLDEP_MAIN) )
+    pMainText( NULL ),
+    maArrangeDlg( pBaseWindow ),
+    mpPrjIdMapper( NULL ),
+    maToolBox( pBaseWindow, DtSodResId(TID_SOLDEP_MAIN) ),
+    maTaskBarFrame( pBaseWindow, 0)
 {
     maArrangeDlg.Hide();
 
@@ -467,15 +467,15 @@ ULONG Depper::HandleNewPrjDialog( ByteString &rBodyText )
             {
                 USHORT i;
                 ByteString sDepName;
-                ULONG nObjectId, nHashedId;
-                MyHashObject* pHObject;
+                ULONG nObjectId_l, nHashedId;
+                MyHashObject* pHObject_l;
                 USHORT nToken = sDeps.GetTokenCount(' ');
                 for ( i = 0 ; i < nToken ; i++)
                 {
                     sDepName =  sDeps.GetToken( i, ' ' );
 
-                    pHObject = mpSolIdMapper->Find( sDepName );
-                    if ( !pHObject )
+                    pHObject_l = mpSolIdMapper->Find( sDepName );
+                    if ( !pHObject_l )
                     {
                         String sMessage;
                         sMessage += String::CreateFromAscii("can't find ");
@@ -486,10 +486,10 @@ ULONG Depper::HandleNewPrjDialog( ByteString &rBodyText )
                     }
                     else
                     {
-                        nHashedId = pHObject->GetId();
-                        pHObject = mpSolIdMapper->Find( rBodyText );
-                        nObjectId = pHObject->GetId();
-                        AddConnectorToObjects( mpObjectList, nHashedId, nObjectId );
+                        nHashedId = pHObject_l->GetId();
+                        pHObject_l = mpSolIdMapper->Find( rBodyText );
+                        nObjectId_l = pHObject_l->GetId();
+                        AddConnectorToObjects( mpObjectList, nHashedId, nObjectId_l );
                     }
                 }
             }
@@ -542,15 +542,15 @@ ULONG Depper::HandleNewDirectoryDialog(ByteString &rBodyText)
                 USHORT i;
                 ByteString sDeps = ByteString( aNewDirectoryDlg.maEDeps.GetText(), RTL_TEXTENCODING_UTF8 );
                 ByteString sDepName;
-                ULONG nObjectId, nHashedId;
-                MyHashObject* pHObject;
+                ULONG nObjectId_l, nHashedId;
+                MyHashObject* pHObject_l;
                 USHORT nToken = sDeps.GetTokenCount(' ');
                 for ( i = 0 ; i < nToken ; i++)
                 {
                     sDepName =  sDeps.GetToken( i, ' ' );
 
-                    pHObject = mpPrjIdMapper->Find( sDepName ); // mpPrjIdMapper
-                    if ( !pHObject )
+                    pHObject_l = mpPrjIdMapper->Find( sDepName ); // mpPrjIdMapper
+                    if ( !pHObject_l )
                     {
                         String sMessage;
                         sMessage += String::CreateFromAscii("can't find ");
@@ -563,10 +563,10 @@ ULONG Depper::HandleNewDirectoryDialog(ByteString &rBodyText)
                     {
                         sTokenLine += String( sDepName, RTL_TEXTENCODING_UTF8 );
                         sTokenLine +='\t';
-                        nHashedId = pHObject->GetId();
-                        pHObject = mpPrjIdMapper->Find( rBodyText ); // mpPrjIdMapper
-                        nObjectId = pHObject->GetId();
-                        AddConnectorToObjects( mpObjectPrjList, nHashedId, nObjectId );
+                        nHashedId = pHObject_l->GetId();
+                        pHObject_l = mpPrjIdMapper->Find( rBodyText ); // mpPrjIdMapper
+                        nObjectId_l = pHObject_l->GetId();
+                        AddConnectorToObjects( mpObjectPrjList, nHashedId, nObjectId_l );
                     }
                 }
             }

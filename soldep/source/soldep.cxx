@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soldep.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 07:34:23 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 14:44:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,10 +67,10 @@ IMPLEMENT_HASHTABLE_OWNER( SolIdMapper, ByteString, ULONG* );
 SolDep::SolDep( Window* pBaseWindow )
 /*****************************************************************************/
                 : Depper( pBaseWindow ),
-                mpXmlBuildList (NULL),
-                mbIsHide( FALSE ),
+                mbBServer(FALSE),
                 mpTravellerList( NULL ),
-                mbBServer(FALSE)
+                mbIsHide( FALSE ),
+                mpXmlBuildList (NULL)
 {
     /*
     ByteString sModulPath ("."); // wo soll das Perlmodul stehen???
@@ -163,7 +163,7 @@ void SolDep::ProcessChildWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 /*****************************************************************************/
 {
     Window* pChildWin = _rVclWindowEvent.GetWindow();
-    Window* pParentWin = pChildWin->GetParent();
+//    Window* pParentWin = pChildWin->GetParent();
 //Resize();
     if ( isAlive() )
         {
@@ -343,7 +343,7 @@ ObjectWin *SolDep::RemoveObject( USHORT nId, BOOL bDelete )
     if ( pWin )
     {
         ByteString aBodyText( pWin->GetBodyText() );
-        if( pPrj = mpStarWriter->GetPrj( aBodyText ))
+        if( (pPrj = mpStarWriter->GetPrj( aBodyText )) )
         {
             mpStarWriter->Remove( pPrj );
 //cleanup ist teuer...
@@ -647,7 +647,7 @@ USHORT SolDep::WriteSource()
         }
     }
     else if ( nMode == STAR_MODE_MULTIPLE_PARSE ) {
-    //*OBO*
+    // *OBO*
     //String sRoot = mpStarWriter->GetSourceRoot();
     //nicht mehr unterstützt mpStarWriter->GetSourceRoot()
         ByteString sFileName = mpStarWriter->GetName();
@@ -846,8 +846,8 @@ BOOL SolDep::InitPrj( ByteString& rListName )
     pWin->SetViewMask( 0x0001 );
     mpGraphPrjWin->EnablePaint( TRUE );
     //debug
-    int test = GetStartPrj(mpPrjIdMapper, mpObjectPrjList);
-    ObjectWin *pTestWin = ObjIdToPtr( mpObjectPrjList, test );
+//    int test_l = GetStartPrj(mpPrjIdMapper, mpObjectPrjList);
+//    ObjectWin *pTestWin = ObjIdToPtr( mpObjectPrjList, test_l );
     AutoArrange( mpPrjIdMapper, mpObjectPrjList, GetStartPrj(mpPrjIdMapper, mpObjectPrjList), 0, GetStartPrj(mpPrjIdMapper, mpObjectPrjList) );
     mpGraphWin->Hide();
     mpGraphPrjWin->Show();
@@ -946,7 +946,7 @@ void SolDep::Resize()
     ULONG nTaskWidth  = maToolBox.CalcWindowSizePixel().Width();
     Size aSize( aOutSize.Width(), nTaskHeight );
 
-    ULONG nMenuHeight = 0;
+//  ULONG nMenuHeight = 0;
     Point aGraphWinPos = Point(0,0);
     Size  aGraphWinSize = Size(0,0);
 
@@ -1118,7 +1118,7 @@ ULONG SolDep::CalcXOffset( ULONG nObjectsToFit )
     nDynXOffs = ( GetDefSize().Width() + OBJWIN_X_SPACING ) * nTrigger;
     ULONG nXOffs = nXMiddle - nDynXOffs;
 
-    if ( nXMiddle - nDynXOffs < mnMinDynXOffs )
+    if ( ULONG(nXMiddle - nDynXOffs) < mnMinDynXOffs )
         mnMinDynXOffs = nXMiddle - nDynXOffs;
 
     return nXOffs;
@@ -1143,7 +1143,7 @@ double SolDep::CalcDistSum( ObjWinList* pObjList, DistType eDistType )
         {
             j = 0;
             dWinVal = 0;
-            while ( pCon = pWin->GetConnector( j ) )
+            while ( (pCon = pWin->GetConnector( j )) )
             {
                 if ( pCon->IsVisible()) {
                     bIsStart = pCon->IsStart( pWin );
@@ -1204,7 +1204,7 @@ USHORT SolDep::Impl_Traveller( ObjectWin* pWin, USHORT nDepth )
         return DEP_ENDLES_RECURSION_FOUND;
     }
 
-    while ( pCon = pWin->GetConnector( i ) )
+    while ( (pCon = pWin->GetConnector( i )) )
     {
         if ( pCon->IsStart( pWin )&& pCon->IsVisible() ) //removed: don't show null_project
         {
@@ -1368,7 +1368,7 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
             j = 0;
             USHORT nStartCount = 0;
             USHORT nEndCount = 0;
-            while ( pCon = pWin->GetConnector( j ) )
+            while ( (pCon = pWin->GetConnector( j )) )
             {
                 if ( pCon->IsVisible()) {                   //null_project
                     if( pCon->IsStart( pWin ))
