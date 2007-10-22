@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xechart.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:07:50 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:36:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2064,14 +2064,12 @@ void XclExpChLabelRange::Convert( const ScaleData& rScaleData )
     if( !lclIsAutoAnyOrGetValue( fOrigin, rScaleData.Origin ) )
         maData.mnCross = limit_cast< sal_uInt16 >( fOrigin, 1, 32767 );
 
-#if EXC_CHART2_REVERSE_AXIS
     // reverse order
     if( rScaleData.Orientation == ::com::sun::star::chart2::AxisOrientation_REVERSE )
     {
         ::set_flag( maData.mnFlags, EXC_CHLABELRANGE_REVERSE );
         SwapAxisMaxCross();
     }
-#endif
 }
 
 void XclExpChLabelRange::WriteBody( XclExpStream& rStrm )
@@ -2119,11 +2117,9 @@ void XclExpChValueRange::Convert( const ScaleData& rScaleData )
         maData.mfMinorStep = maData.mfMajorStep / nCount;
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOMINOR, bAutoMinor );
 
-#if EXC_CHART2_REVERSE_AXIS
     // reverse order
     namespace cssc = ::com::sun::star::chart2;
     ::set_flag( maData.mnFlags, EXC_CHVALUERANGE_REVERSE, rScaleData.Orientation == cssc::AxisOrientation_REVERSE );
-#endif
 }
 
 void XclExpChValueRange::WriteBody( XclExpStream& rStrm )
