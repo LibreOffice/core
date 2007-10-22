@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:05:20 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:11:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,11 @@
 #ifndef _LAYACT_HXX
 #include <layact.hxx>
 #endif
+
+
+using namespace ::com::sun::star;
+
+// =============================================================================
 
 // --> OD 2004-12-03 #115759# - little helper class to forbid follow formatting
 // for the given text frame
