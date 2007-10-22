@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textcontrolcombo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:12:32 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:24:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,12 +48,17 @@
 
 class SW_DLLPUBLIC TextControlCombo : public Window
 {
-private:
 protected:
+
     Control&    mrCtrl;
     FixedText&  mrFTbefore;
     FixedText&  mrFTafter;
+
 public:
+
+    using Window::Enable;
+    using Window::Disable;
+
                 TextControlCombo( Window* _pParent, const ResId& _rResId,
                             Control& _rCtrl, FixedText& _rFTbefore, FixedText& _rFTafter );
     virtual     ~TextControlCombo();
@@ -64,10 +69,7 @@ public:
     void        Show( BOOL bVisible = TRUE, USHORT nFlags = 0 );
     void        Hide( USHORT nFlags = 0 ) { Show( FALSE, nFlags ); }
 
-    using Window::Enable;
     void        Enable( BOOL bEnable = TRUE, BOOL bChild = TRUE );
-
-    using Window::Disable;
     void        Disable( BOOL bChild = TRUE ) { Enable( FALSE, bChild ); }
 };
 
