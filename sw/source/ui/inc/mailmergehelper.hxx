@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergehelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:04:18 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:19:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,6 +251,8 @@ class SW_DLLPUBLIC SwConnectionListener :
         public SwMutexBase,
         public cppu::WeakComponentImplHelper1< ::com::sun::star::mail::XConnectionListener >
 {
+    using cppu::WeakComponentImplHelperBase::disposing;
+
 public:
     SwConnectionListener() :
         cppu::WeakComponentImplHelper1< ::com::sun::star::mail::XConnectionListener>(m_aMutex)
@@ -263,7 +265,6 @@ public:
     virtual void SAL_CALL disconnected(const ::com::sun::star::lang::EventObject& aEvent)
         throw (::com::sun::star::uno::RuntimeException);
 
-    using cppu::WeakComponentImplHelperBase::disposing;
     virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& aEvent)
         throw(com::sun::star::uno::RuntimeException);
 };

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaedit.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:03:27 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:19:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,14 +107,15 @@ private:
     void            CheckTravel();
     void            SetFld();
 
+    using Window::GetText;
+    using Window::GetType;
+
 public:
     SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh);
     ~SwJavaEditDialog();
 
-    using Window::GetText;
     String              GetText() { return aText; }
 
-    using Window::GetType;
     String              GetType() { return aType; }
 
     BOOL                IsUrl() { return bIsUrl; }

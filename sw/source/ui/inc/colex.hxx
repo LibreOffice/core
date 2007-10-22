@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colex.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:55:11 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:16:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,9 @@ public:
 class SW_DLLPUBLIC SwColExample : public SwPageExample
 {
     SwColMgr*   pColMgr;
+
+    using SwPageExample::UpdateExample;
+
 protected:
     virtual void DrawPage( const Point& rPoint,
                            const BOOL bSecond,
@@ -101,7 +104,6 @@ public:
                                 SwPageExample(pPar, rResId ),
                                 pColMgr(0){}
 
-    using SwPageExample::UpdateExample;
     void UpdateExample( const SfxItemSet& rSet, SwColMgr* pMgr  )
         {   pColMgr = pMgr;
             SwPageExample::UpdateExample(rSet);
