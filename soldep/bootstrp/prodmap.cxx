@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prodmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:32:56 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 14:42:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,18 +133,18 @@ void ProductMapper::CreateProductList( GenericInformationList *pVerList )
                         pProductList->InsertInfo( sProduct, *pVersion, TRUE, TRUE );
 
                         for ( USHORT y = 0; y < sDependsOn.GetTokenCount( ';' ); y++ ) {
-                            ByteString sDependsOnKey = sProduct;
-                            sDependsOnKey += "/DependsOn/";
-                            sDependsOnKey += sDependsOn.GetToken( y, ';' );
+                            ByteString sDependsOnKey_l = sProduct;
+                            sDependsOnKey_l += "/DependsOn/";
+                            sDependsOnKey_l += sDependsOn.GetToken( y, ';' );
 
-                            pProductList->InsertInfo( sDependsOnKey, "", TRUE, TRUE );
+                            pProductList->InsertInfo( sDependsOnKey_l, "", TRUE, TRUE );
                         }
                         for ( USHORT z = 0; z < sBasedOn.GetTokenCount( ';' ); z++ ) {
-                            ByteString sBasedOnKey = sProduct;
-                            sBasedOnKey += "/BasedOn/";
-                            sBasedOnKey += sBasedOn.GetToken( z, ';' );
+                            ByteString sBasedOnKey_l = sProduct;
+                            sBasedOnKey_l += "/BasedOn/";
+                            sBasedOnKey_l += sBasedOn.GetToken( z, ';' );
 
-                            pProductList->InsertInfo( sBasedOnKey, "", TRUE, TRUE );
+                            pProductList->InsertInfo( sBasedOnKey_l, "", TRUE, TRUE );
                         }
                     }
                 }
@@ -390,8 +390,7 @@ USHORT ProductMapper::PrintMinorList(
         return PRODUCT_MAPPER_NO_PRODUCT;
 
     GenericInformation *pProductInfo;
-    USHORT nReturn = GetProductInformation( rProduct, pProductInfo );
-
+    GetProductInformation( rProduct, pProductInfo );
     if ( !pProductInfo )
         return PRODUCT_MAPPER_NO_PRODUCT;
 
@@ -520,7 +519,6 @@ USHORT ProductMapper::PrintSingleMinorList(
 
     return PRODUCT_MAPPER_OK;
 }
-
 
 
 
