@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChart.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:14:54 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,8 @@ private: //methods
                         , BarPositionHelper* pPosHelper ) const;
 
     virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const;//nAxisIndex indicates wether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
+
+    void adaptOverlapAndGapwidthForGroupBarsPerAxis();
 
 private: //member
     BarPositionHelper*                   m_pMainPosHelper;
