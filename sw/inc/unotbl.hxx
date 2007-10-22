@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:16:46 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:08:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,11 +121,12 @@ class SwXCell : public SwXCellBaseClass,
     // table position where pBox was found last
     sal_uInt16              nFndPos;
 
+    using SwXText::IsValid;
+
 protected:
     virtual const SwStartNode *GetStartNode() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
 
-    using SwXText::IsValid;
     sal_Bool    IsValid();
 
     virtual ~SwXCell();

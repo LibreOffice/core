@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txatbase.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:14:10 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:08:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,13 +188,14 @@ private:
 
 class SwTxtAttrEnd : public SwTxtAttr
 {
+    using SwTxtAttr::GetEnd;
+
 protected:
     xub_StrLen nEnd;
 
 public:
     SwTxtAttrEnd( const SfxPoolItem& rAttr, USHORT nStart, USHORT nEnd );
 
-    using SwTxtAttr::GetEnd;
     virtual xub_StrLen* GetEnd();
 };
 
