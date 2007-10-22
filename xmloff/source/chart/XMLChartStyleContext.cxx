@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChartStyleContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:51:11 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:33:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@
 using namespace com::sun::star;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_DATA_STYLE_NAME;
+using ::xmloff::token::XML_PERCENTAGE_DATA_STYLE_NAME;
 using ::xmloff::token::XML_TEXT_PROPERTIES;
 using ::xmloff::token::XML_PARAGRAPH_PROPERTIES;
 using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
@@ -73,6 +74,10 @@ void XMLChartStyleContext::SetAttribute(
     if( IsXMLToken( rLocalName, XML_DATA_STYLE_NAME ) )
     {
         msDataStyleName =rValue;
+    }
+    if( IsXMLToken( rLocalName, XML_PERCENTAGE_DATA_STYLE_NAME ) )
+    {
+        msPercentageDataStyleName =rValue;
     }
     else
     {
@@ -97,6 +102,29 @@ XMLChartStyleContext::XMLChartStyleContext(
 XMLChartStyleContext::~XMLChartStyleContext()
 {}
 
+namespace
+{
+
+    void lcl_NumberFormatStyleToProperty( const ::rtl::OUString& rStyleName, const ::rtl::OUString& rPropertyName,
+                                      const SvXMLStylesContext& rStylesContext,
+                                      const uno::Reference< beans::XPropertySet >& rPropSet )
+{
+    if( rStyleName.getLength())
+    {
+        SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)rStylesContext.FindStyleChildContext(
+            XML_STYLE_FAMILY_DATA_STYLE, rStyleName, sal_True );
+        if( pStyle )
+        {
+            uno::Any aNumberFormat;
+            sal_Int32 nNumberFormat = pStyle->GetKey();
+            aNumberFormat <<= nNumberFormat;
+            rPropSet->setPropertyValue( rPropertyName, aNumberFormat );
+        }
+    }
+}
+
+}// anonymous namespace
+
 void XMLChartStyleContext::FillPropertySet(
     const uno::Reference< beans::XPropertySet > & rPropSet )
 {
@@ -108,19 +136,9 @@ void XMLChartStyleContext::FillPropertySet(
     {
         DBG_ASSERT( false, "unknown property exception -> shape style not completly imported for chart style" );
     }
-    if( msDataStyleName.getLength())
-    {
-        SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)mrStyles.FindStyleChildContext(
-            XML_STYLE_FAMILY_DATA_STYLE, msDataStyleName, sal_True );
-        if( pStyle )
-        {
-            uno::Any aNumberFormat;
-            sal_Int32 nNumberFormat = pStyle->GetKey();
-            aNumberFormat <<= nNumberFormat;
-            rPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NumberFormat" )),
-                                        aNumberFormat );
-        }
-    }
+
+    lcl_NumberFormatStyleToProperty( msDataStyleName, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NumberFormat" )), mrStyles, rPropSet );
+    lcl_NumberFormatStyleToProperty( msPercentageDataStyleName, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PercentageNumberFormat" )), mrStyles, rPropSet );
 }
 
 SvXMLImportContext *XMLChartStyleContext::CreateChildContext(
