@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrap.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:15:44 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:25:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,10 +142,10 @@ class SwWrapTabPage: public SfxTabPage
     DECL_LINK( WrapTypeHdl, ImageRadioButton * );
     DECL_LINK( ContourHdl, CheckBox * );
 
-public:
-
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+
+public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
