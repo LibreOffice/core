@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:16:57 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:09:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,6 +321,9 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
 
     rtl::OUString           maBuildId;
 
+    using SfxBaseModel::addEventListener;
+    using SfxBaseModel::removeEventListener;
+
 protected:
     virtual ~SwXTextDocument();
 public:
@@ -360,9 +363,7 @@ public:
 
     //XComponent
     virtual void SAL_CALL dispose(void) throw( ::com::sun::star::uno::RuntimeException );
-    using SfxBaseModel::addEventListener;
     virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
-    using SfxBaseModel::removeEventListener;
     virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
 
     //XCloseable
