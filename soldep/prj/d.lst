@@ -7,8 +7,8 @@ mkdir: %COMMON_DEST%\res%_EXT%\img\additional
 ..\%__SRC%\bin\soldepl.exe %_DEST%\bin%_EXT%\soldepl.exe
 ..\%__SRC%\bin\bootstrpdt?????.dll %_DEST%\bin%_EXT%\bootstrpdt?????.dll
 ..\%__SRC%\bin\soldep?????.dll %_DEST%\bin%_EXT%\soldep?????.dll
-..\%__SRC%\lib\libbootstrpdt?????.so %_DEST%\lib%_EXT%\libbootstrpdt?????.so
-..\%__SRC%\lib\libsoldep?????.so %_DEST%\lib%_EXT%\libsoldep?????.so
+..\%__SRC%\lib\libbootstrpdt*.* %_DEST%\lib%_EXT%
+..\%__SRC%\lib\libsoldep*.* %_DEST%\lib%_EXT%
 ..\%__SRC%\slb\*.a %_DEST%\lib%_EXT%\*.a
 
 ..\util\perl.mk  %_DEST%\inc%_EXT%\soldep\perl.mk
