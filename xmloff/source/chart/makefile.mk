@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 16:08:44 $
+#   last change: $Author: vg $ $Date: 2007-10-22 16:34:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ SLOFILES =	$(SLO)$/ColorPropertySet.obj \
             $(SLO)$/SchXMLAutoStylePoolP.obj \
             $(SLO)$/XMLChartPropertyContext.obj \
             $(SLO)$/XMLSymbolImageContext.obj \
+            $(SLO)$/XMLLabelSeparatorContext.obj \
             $(SLO)$/XMLTextOrientationHdl.obj \
             $(SLO)$/XMLSymbolTypePropertyHdl.obj \
             $(SLO)$/transporttypes.obj
