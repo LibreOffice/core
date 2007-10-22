@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_DataLabel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:34:04 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:46:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include "ResId.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
 #include "NoWarningThisInCTOR.hxx"
-//DLNF #include "dlg_NumberFormat.hxx"
+#include "dlg_NumberFormat.hxx"
 
 // header for class SvxNumberInfoItem
 #ifndef _SVX_NUMINF_HXX
@@ -52,12 +52,13 @@
 #ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
 #endif
-#ifndef _SVX_CHRTITEM_HXX
-#include <svx/chrtitem.hxx>
-#endif
-// for SfxInt32Item
+// for SfxUInt32Item
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
+#endif
+// header for class SfxStringItem
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
 #endif
 // header for define RET_OK
 #ifndef _SV_MSGBOX_HXX
@@ -79,58 +80,92 @@ namespace chart
 namespace
 {
 
-void lcl_ReadNumberFormatFromItemSet( const SfxItemSet& rSet, USHORT nValueWhich, USHORT nSourceFormatWhich, ULONG& rnFormatKeyOut, bool& rbSourceFormatOut )
+bool lcl_ReadNumberFormatFromItemSet( const SfxItemSet& rSet, USHORT nValueWhich, USHORT nSourceFormatWhich, ULONG& rnFormatKeyOut, bool& rbSourceFormatOut, bool& rbSourceFormatMixedStateOut )
 {
+    bool bSet = false;
     const SfxPoolItem *pItem1 = NULL;
     if( rSet.GetItemState( nValueWhich, TRUE, &pItem1 ) == SFX_ITEM_SET )
     {
         const SfxUInt32Item * pNumItem = dynamic_cast< const SfxUInt32Item * >( pItem1 );
         if( pNumItem )
+        {
             rnFormatKeyOut = pNumItem->GetValue();
+            bSet = true;
+        }
     }
 
+    rbSourceFormatMixedStateOut=true;
     const SfxPoolItem *pItem2 = NULL;
     if( rSet.GetItemState( nSourceFormatWhich, TRUE, &pItem2 ) == SFX_ITEM_SET )
     {
         const SfxBoolItem * pBoolItem = dynamic_cast< const SfxBoolItem * >( pItem2 );
         if( pBoolItem )
+        {
             rbSourceFormatOut = pBoolItem->GetValue();
+            rbSourceFormatMixedStateOut=false;
+        }
+    }
+    return bSet;
+}
+
+void lcl_setBoolItemToCheckBox( const SfxItemSet& rInAttrs, USHORT nWhichId, CheckBox& rCheckbox )
+{
+    rCheckbox.EnableTriState( FALSE );
+
+    const SfxPoolItem *pPoolItem = NULL;
+    if( rInAttrs.GetItemState(nWhichId, TRUE, &pPoolItem) == SFX_ITEM_SET )
+        rCheckbox.Check( ((const SfxBoolItem*)pPoolItem)->GetValue() );
+    else
+    {
+        rCheckbox.EnableTriState( TRUE );
+        rCheckbox.SetState( STATE_DONTKNOW );
     }
 }
 
 }//end anonymous namespace
 
 DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAttrs )
-    : m_aCbValue(pWindow, SchResId(CB_VALUE)),
-    m_aRbNumber(pWindow, SchResId(RB_NUMBER)),
-    m_aRbPercent(pWindow, SchResId(RB_PERCENT)),
-//DLNF    m_aPB_NumberFormatForValue(pWindow, SchResId(PB_NUMBERFORMAT)),
-//DLNF    m_aPB_NumberFormatForPercent(pWindow, SchResId(PB_PERCENT_NUMBERFORMAT)),
-    m_aCbText(pWindow, SchResId(CB_TEXT)),
-    m_aCbSymbol(pWindow, SchResId(CB_SYMBOL)),
+    : m_aCBNumber(pWindow, SchResId(CB_VALUE_AS_NUMBER)),
+    m_aPB_NumberFormatForValue(pWindow, SchResId(PB_NUMBERFORMAT)),
+    m_aCBPercent(pWindow, SchResId(CB_VALUE_AS_PERCENTAGE)),
+    m_aPB_NumberFormatForPercent(pWindow, SchResId(PB_PERCENT_NUMBERFORMAT)),
+    m_aCBCategory(pWindow, SchResId(CB_CATEGORY)),
+    m_aCBSymbol(pWindow, SchResId(CB_SYMBOL)),
+    m_aSeparatorResources(pWindow),
     m_pNumberFormatter(0),
+    m_bNumberFormatMixedState(true),
+    m_bPercentFormatMixedState(true),
     m_nNumberFormatForValue(0),
     m_nNumberFormatForPercent(11),
+    m_bSourceFormatMixedState(true),
+    m_bPercentSourceMixedState(true),
     m_bSourceFormatForValue(true),
     m_bSourceFormatForPercent(true),
     m_pWindow(pWindow),
     m_pPool(rInAttrs.GetPool())
 {
-//DLNF    Size aPBSize( m_aPB_NumberFormatForPercent.GetSizePixel() );
-//DLNF    long nMinWidth = ::std::max( m_aPB_NumberFormatForPercent.CalcMinimumSize().getWidth(), m_aPB_NumberFormatForValue.CalcMinimumSize().getWidth() );
-//DLNF    aPBSize.setWidth( nMinWidth+20 );//the min with is to small to fit, hm... so add alittle
+    Size aPBSize( m_aPB_NumberFormatForPercent.GetSizePixel() );
+    long nMinWidth = ::std::max( m_aPB_NumberFormatForPercent.CalcMinimumSize().getWidth(), m_aPB_NumberFormatForValue.CalcMinimumSize().getWidth() );
+    aPBSize.setWidth( nMinWidth+20 );//the min with is to small to fit, hm... so add alittle
 
-//DLNF    m_aPB_NumberFormatForValue.SetSizePixel( aPBSize );
-//DLNF    m_aPB_NumberFormatForPercent.SetSizePixel( aPBSize );
+    m_aPB_NumberFormatForValue.SetSizePixel( aPBSize );
+    m_aPB_NumberFormatForPercent.SetSizePixel( aPBSize );
 
-//DLNF    m_aPB_NumberFormatForValue.SetClickHdl( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
-//DLNF    m_aPB_NumberFormatForPercent.SetClickHdl( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
-    m_aCbValue.SetClickHdl( LINK( this, DataLabelResources, CheckHdl ));
-    m_aCbText.SetClickHdl(  LINK( this, DataLabelResources, CheckHdl ));
-    m_aCbSymbol.SetClickHdl(  LINK( this, DataLabelResources, CheckHdl ));
+    long nWantedMinRightBorder = m_aPB_NumberFormatForPercent.GetPosPixel().X() +  m_aPB_NumberFormatForPercent.GetSizePixel().Width() - 1;
 
-//DLNF    lcl_ReadNumberFormatFromItemSet( rInAttrs, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, m_nNumberFormatForValue, m_bSourceFormatForValue );
-//DLNF    lcl_ReadNumberFormatFromItemSet( rInAttrs, SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_nNumberFormatForPercent, m_bSourceFormatForPercent );
+    m_aSeparatorResources.PositionBelowControl(m_aCBSymbol);
+    m_aSeparatorResources.AlignListBoxWidthAndXPos( -1, nWantedMinRightBorder );
+    m_aSeparatorResources.Show(true);
+
+    m_aPB_NumberFormatForValue.SetClickHdl( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
+    m_aPB_NumberFormatForPercent.SetClickHdl( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
+    m_aCBNumber.SetClickHdl( LINK( this, DataLabelResources, CheckHdl ));
+    m_aCBPercent.SetClickHdl( LINK( this, DataLabelResources, CheckHdl ));
+    m_aCBCategory.SetClickHdl(  LINK( this, DataLabelResources, CheckHdl ));
+    m_aCBSymbol.SetClickHdl(  LINK( this, DataLabelResources, CheckHdl ));
+
+    m_bNumberFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, m_nNumberFormatForValue, m_bSourceFormatForValue, m_bSourceFormatMixedState );
+    m_bPercentFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_nNumberFormatForPercent, m_bSourceFormatForPercent , m_bPercentSourceMixedState);
 }
 
 DataLabelResources::~DataLabelResources()
@@ -141,8 +176,7 @@ void DataLabelResources::SetNumberFormatter( SvNumberFormatter* pFormatter )
 {
     m_pNumberFormatter = pFormatter;
 }
-//DLNF
-/*
+
 IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, PushButton *, pButton )
 {
     if( !m_pPool || !m_pNumberFormatter )
@@ -151,10 +185,10 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, PushButton *, pButton )
         return 1;
     }
 
-    if( pButton == &m_aPB_NumberFormatForValue && !m_aRbNumber.IsChecked())
-        m_aRbNumber.Check();
-    else if( pButton == &m_aPB_NumberFormatForPercent && !m_aRbPercent.IsChecked())
-        m_aRbPercent.Check();
+    if( pButton == &m_aPB_NumberFormatForValue && !m_aCBNumber.IsChecked())
+        m_aCBNumber.Check();
+    else if( pButton == &m_aPB_NumberFormatForPercent && !m_aCBPercent.IsChecked())
+        m_aCBPercent.Check();
 
     SfxItemSet aNumberSet = NumberFormatDialog::CreateEmptyItemSetForNumberFormatDialog( *m_pPool );
     aNumberSet.Put (SvxNumberInfoItem( m_pNumberFormatter, (const USHORT)SID_ATTR_NUMBERFORMAT_INFO));
@@ -163,8 +197,11 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, PushButton *, pButton )
 
     ULONG& rnFormatKey = bPercent ? m_nNumberFormatForPercent : m_nNumberFormatForValue;
     bool& rUseSourceFormat = bPercent ? m_bSourceFormatForPercent : m_bSourceFormatForValue;
+    bool& rbMixedState = bPercent ? m_bPercentFormatMixedState : m_bNumberFormatMixedState;
+    bool& rbSourceMixedState = bPercent ? m_bPercentSourceMixedState : m_bSourceFormatMixedState;
 
-    aNumberSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, rnFormatKey ));
+    if(!rbMixedState)
+        aNumberSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, rnFormatKey ));
     aNumberSet.Put( SfxBoolItem( SID_ATTR_NUMBERFORMAT_SOURCE, rUseSourceFormat ));
 
     NumberFormatDialog aDlg(m_pWindow, aNumberSet);
@@ -174,140 +211,98 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, PushButton *, pButton )
     {
         const SfxItemSet* pResult = aDlg.GetOutputItemSet();
         if( pResult )
-            lcl_ReadNumberFormatFromItemSet( *pResult, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, rnFormatKey, rUseSourceFormat );
+        {
+            bool bOldSource = rUseSourceFormat;
+            ULONG nOldFormat = rnFormatKey;
+            bool bOldMixedState = rbMixedState || rbSourceMixedState;
+
+            rbMixedState = !lcl_ReadNumberFormatFromItemSet( *pResult, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, rnFormatKey, rUseSourceFormat, rbSourceMixedState );
+
+            //todo this maybe can be removed when the numberformatter dialog does handle mixed state for source format correctly
+            if( bOldMixedState && bOldSource == rUseSourceFormat && nOldFormat == rnFormatKey )
+                rbMixedState = rbSourceMixedState = true;
+        }
     }
     return 0;
 }
-*/
+
 IMPL_LINK( DataLabelResources, CheckHdl, CheckBox*, pBox )
 {
-    if( pBox == &m_aCbValue || pBox == &m_aCbText )
-    {
-        m_aCbValue.EnableTriState( FALSE );
-        m_aCbText.EnableTriState( FALSE );
-        m_aCbSymbol.EnableTriState( FALSE );
-    }
-    else if( pBox == &m_aCbSymbol )
-        m_aCbSymbol.EnableTriState( FALSE );
-
+    if( pBox )
+        pBox->EnableTriState( FALSE );
     EnableControls();
-
     return 0;
 }
 
 void DataLabelResources::EnableControls()
 {
-    m_aCbSymbol.Enable( m_aCbValue.IsChecked() || m_aCbText.IsChecked() );
+    m_aCBSymbol.Enable( m_aCBNumber.IsChecked() || m_aCBPercent.IsChecked() || m_aCBCategory.IsChecked() );
 
-    m_aRbPercent.Enable( m_aCbValue.IsChecked() );
-    m_aRbNumber.Enable( m_aCbValue.IsChecked() );
+    //enable separator
+    {
+        long nNumberOfCheckedLabelParts = 0;
+        if( m_aCBNumber.IsChecked() )
+            ++nNumberOfCheckedLabelParts;
+        if( m_aCBPercent.IsChecked() )
+            ++nNumberOfCheckedLabelParts;
+        if( m_aCBCategory.IsChecked() )
+            ++nNumberOfCheckedLabelParts;
+        m_aSeparatorResources.Enable( nNumberOfCheckedLabelParts > 1 );
+    }
 
-//DLNF    m_aPB_NumberFormatForValue.Enable( m_pNumberFormatter && m_aCbValue.IsChecked() );
-//DLNF    m_aPB_NumberFormatForPercent.Enable( m_pNumberFormatter && m_aCbValue.IsChecked() );
+    m_aPB_NumberFormatForValue.Enable( m_pNumberFormatter && m_aCBNumber.IsChecked() );
+    m_aPB_NumberFormatForPercent.Enable( m_pNumberFormatter && m_aCBPercent.IsChecked() );
 }
 
 BOOL DataLabelResources::FillItemSet( SfxItemSet& rOutAttrs ) const
 {
-    BOOL bText = m_aCbText.IsChecked();
-    SvxChartDataDescr eDescr;
-
-    if( m_aCbValue.IsChecked() )
+    if( m_aCBNumber.IsChecked() )
     {
-        if( m_aRbNumber.IsChecked() )
-        {
-            eDescr = (bText? CHDESCR_TEXTANDVALUE : CHDESCR_VALUE);
-//DLNF            rOutAttrs.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, m_nNumberFormatForValue ));
-//DLNF            rOutAttrs.Put( SfxBoolItem( SID_ATTR_NUMBERFORMAT_SOURCE, m_bSourceFormatForValue ));
-        }
-        else
-        {
-            eDescr = (bText? CHDESCR_TEXTANDPERCENT : CHDESCR_PERCENT);
-//DLNF            rOutAttrs.Put( SfxUInt32Item( SCHATTR_PERCENT_NUMBERFORMAT_VALUE, m_nNumberFormatForPercent ));
-//DLNF            rOutAttrs.Put( SfxBoolItem( SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_bSourceFormatForPercent ));
-        }
+        if( !m_bNumberFormatMixedState )
+            rOutAttrs.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, m_nNumberFormatForValue ));
+        if( !m_bSourceFormatMixedState )
+            rOutAttrs.Put( SfxBoolItem( SID_ATTR_NUMBERFORMAT_SOURCE, m_bSourceFormatForValue ));
     }
-    else if( m_aCbText.IsChecked() )
-        eDescr = CHDESCR_TEXT;
-    else
-        eDescr = CHDESCR_NONE;
-
-    if( m_aCbValue.GetState()!= STATE_DONTKNOW || m_aCbText.GetState()!= STATE_DONTKNOW )
+    if( m_aCBPercent.IsChecked() )
     {
-        rOutAttrs.Put(SvxChartDataDescrItem(eDescr, SCHATTR_DATADESCR_DESCR));
-        rOutAttrs.Put(SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYM, m_aCbSymbol.IsChecked()) );
+        if( !m_bPercentFormatMixedState )
+            rOutAttrs.Put( SfxUInt32Item( SCHATTR_PERCENT_NUMBERFORMAT_VALUE, m_nNumberFormatForPercent ));
+        if( !m_bPercentSourceMixedState )
+            rOutAttrs.Put( SfxBoolItem( SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_bSourceFormatForPercent ));
     }
+
+    if( m_aCBNumber.GetState()!= STATE_DONTKNOW )
+        rOutAttrs.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_NUMBER, m_aCBNumber.IsChecked() ) );
+    if( m_aCBPercent.GetState()!= STATE_DONTKNOW )
+        rOutAttrs.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_PERCENTAGE, m_aCBPercent.IsChecked() ) );
+    if( m_aCBCategory.GetState()!= STATE_DONTKNOW )
+        rOutAttrs.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_CATEGORY, m_aCBCategory.IsChecked() ) );
+    if( m_aCBSymbol.GetState()!= STATE_DONTKNOW )
+        rOutAttrs.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYMBOL, m_aCBSymbol.IsChecked()) );
+
+    rOutAttrs.Put( SfxStringItem( SCHATTR_DATADESCR_SEPARATOR, m_aSeparatorResources.GetValue() ) );
+
     return TRUE;
 }
 
 void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
 {
-    const SfxPoolItem *pPoolItem = NULL;
-
     // default state
-    m_aRbNumber.Enable( FALSE );
-    m_aRbPercent.Enable( FALSE );
-    m_aCbSymbol.Enable( FALSE );
+    m_aCBSymbol.Enable( FALSE );
 
-    m_aCbValue.EnableTriState( FALSE );
-    m_aCbText.EnableTriState( FALSE );
-    m_aCbSymbol.EnableTriState( FALSE );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_NUMBER, m_aCBNumber );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_PERCENTAGE, m_aCBPercent );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_CATEGORY, m_aCBCategory );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_SYMBOL, m_aCBSymbol );
 
-    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_SHOW_SYM, TRUE, &pPoolItem) == SFX_ITEM_SET )
-        m_aCbSymbol.Check( ((const SfxBoolItem*)pPoolItem)->GetValue() );
+    m_bNumberFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, m_nNumberFormatForValue, m_bSourceFormatForValue, m_bSourceFormatMixedState );
+    m_bPercentFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_nNumberFormatForPercent, m_bSourceFormatForPercent ,  m_bPercentSourceMixedState);
+
+    const SfxPoolItem *pPoolItem = NULL;
+    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_SEPARATOR, TRUE, &pPoolItem) == SFX_ITEM_SET )
+        m_aSeparatorResources.SetValue( ((const SfxStringItem*)pPoolItem)->GetValue() );
     else
-    {
-        m_aCbSymbol.EnableTriState( TRUE );
-        m_aCbSymbol.SetState( STATE_DONTKNOW );
-    }
-
-    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_DESCR,
-                              TRUE, &pPoolItem) == SFX_ITEM_SET )
-    {
-        switch( ((const SvxChartDataDescrItem*)pPoolItem)->GetValue() )
-        {
-            case CHDESCR_VALUE:
-                m_aCbValue.Check();
-                m_aRbNumber.Check();
-                break;
-
-            case CHDESCR_PERCENT:
-                m_aCbValue.Check();
-                m_aRbPercent.Check();
-                break;
-
-            case CHDESCR_TEXT:
-                m_aCbText.Check();
-                break;
-
-            case CHDESCR_TEXTANDPERCENT:
-                m_aCbText.Check();
-                m_aCbValue.Check();
-                m_aRbPercent.Check();
-                break;
-
-            case CHDESCR_TEXTANDVALUE:
-                m_aCbText.Check();
-                m_aCbValue.Check();
-                m_aRbNumber.Check();
-                break;
-
-            default:
-                break;
-        }
-    }
-    else
-    {
-        m_aCbText.EnableTriState( TRUE );
-        m_aCbText.SetState( STATE_DONTKNOW );
-
-        m_aCbValue.EnableTriState( TRUE );
-        m_aCbValue.SetState( STATE_DONTKNOW );
-    }
-    if( !m_aRbNumber.IsChecked() && !m_aRbPercent.IsChecked() )
-        m_aRbNumber.Check();
-
-//DLNF    lcl_ReadNumberFormatFromItemSet( rInAttrs, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, m_nNumberFormatForValue, m_bSourceFormatForValue );
-//DLNF    lcl_ReadNumberFormatFromItemSet( rInAttrs, SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_nNumberFormatForPercent, m_bSourceFormatForPercent );
+        m_aSeparatorResources.SetDefault();
 
     EnableControls();
 }
