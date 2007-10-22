@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:40:02 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:50:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@ public:
     bool HasSymbolProperties() const;
     bool HasScaleProperties() const;
     bool CanAxisLabelsBeStaggered() const;
+    bool HasNumberProperties() const;
 
 private:
     rtl::OUString   m_aObjectCID;
@@ -92,6 +93,7 @@ private:
     bool m_bHasSymbolProperties;
     bool m_bHasScaleProperties;
     bool m_bCanAxisLabelsBeStaggered;
+    bool m_bHasNumberProperties;
 };
 
 /*************************************************************************
