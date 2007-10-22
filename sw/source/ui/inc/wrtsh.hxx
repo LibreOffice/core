@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:15:57 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:25:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,23 @@ namespace nsSelectionType
 
 class SW_DLLPUBLIC SwWrtShell: public SwFEShell
 {
+private:
+    using SwCrsrShell::Left;
+    using SwCrsrShell::Right;
+    using SwCrsrShell::Up;
+    using SwCrsrShell::Down;
+    using SwCrsrShell::LeftMargin;
+    using SwCrsrShell::RightMargin;
+    using SwCrsrShell::SelectTxtAttr;
+    using SwCrsrShell::GotoPage;
+    using SwFEShell::InsertObject;
+    using SwEditShell::AutoCorrect;
+    using SwCrsrShell::GotoBookmark;
+
 public:
+
+    using SwEditShell::Insert;
+
     typedef long (SwWrtShell::*SELECTFUNC)(const Point *, BOOL bProp );
 
     SELECTFUNC  fnDrag;
@@ -191,24 +207,18 @@ public:
 typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     BOOL SimpleMove( FNSimpleMove, BOOL bSelect );
 
-    using SwCrsrShell::Left;
     BOOL Left       ( USHORT nMode, BOOL bSelect,
                             USHORT nCount, BOOL bBasicCall, BOOL bVisual = FALSE );
-    using SwCrsrShell::Right;
     BOOL Right      ( USHORT nMode, BOOL bSelect,
                             USHORT nCount, BOOL bBasicCall, BOOL bVisual = FALSE );
-    using SwCrsrShell::Up;
     BOOL Up         ( BOOL bSelect = FALSE, USHORT nCount = 1,
                             BOOL bBasicCall = FALSE );
-    using SwCrsrShell::Down;
     BOOL Down       ( BOOL bSelect = FALSE, USHORT nCount = 1,
                             BOOL bBasicCall = FALSE );
     BOOL NxtWrd     ( BOOL bSelect = FALSE ) { return SimpleMove( &SwWrtShell::_NxtWrd, bSelect ); }
     BOOL PrvWrd     ( BOOL bSelect = FALSE ) { return SimpleMove( &SwWrtShell::_PrvWrd, bSelect ); }
 
-    using SwCrsrShell::LeftMargin;
     BOOL LeftMargin ( BOOL bSelect, BOOL bBasicCall );
-    using SwCrsrShell::RightMargin;
     BOOL RightMargin( BOOL bSelect, BOOL bBasicCall );
 
     BOOL SttDoc     ( BOOL bSelect = FALSE );
@@ -238,7 +248,6 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     BOOL SelectTableCol();
     BOOL SelectTableCell();
 
-    using SwCrsrShell::SelectTxtAttr;
     BOOL SelectTxtAttr( USHORT nWhich, const SwTxtAttr* pAttr = 0 );
 
     // Spaltenweise Spruenge
@@ -253,7 +262,6 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     // zusaetzlich zu der gleichnamigen Implementierung in crsrsh.hxx
     // werden hier alle bestehenden Selektionen vor dem Setzen des
     // Cursors aufgehoben
-    using SwCrsrShell::GotoPage;
     BOOL    GotoPage( USHORT nPage, BOOL bRecord );
 
     //setzen des Cursors; merken der alten Position fuer Zurueckblaettern.
@@ -300,7 +308,6 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     int     IntelligentCut(int nSelectionType, BOOL bCut = TRUE);
 
     // Editieren
-    using SwEditShell::Insert;
     void    Insert(SwField &);
     void    Insert(const String &);
     // Graphic
@@ -333,7 +340,6 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     void    BulletOn();
 
     //OLE
-    using SwFEShell::InsertObject;
     void    InsertObject(     /*SvInPlaceObjectRef *pObj, */       // != 0 fuer Clipboard
                           const svt::EmbeddedObjectRef&,
                           SvGlobalName *pName = 0,      // != 0 entspr. Object erzeugen.
@@ -394,7 +400,6 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
                          const com::sun::star::util::SearchOptions* pSearchOpt = 0,
                          const SfxItemSet* pReplaceSet = 0);
 
-    using SwEditShell::AutoCorrect;
     void AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar = ' ' );
 
     // Aktion vor Cursorbewegung
@@ -410,7 +415,6 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     virtual void DrawSelChanged( );
 
     // springe zum Bookmark und setze die "Selections-Flags" wieder richtig
-    using SwCrsrShell::GotoBookmark;
     BOOL GotoBookmark( USHORT nPos );
     BOOL GotoBookmark( USHORT nPos, BOOL bSelect, BOOL bStart );
     BOOL GotoBookmark( const String& rName );
