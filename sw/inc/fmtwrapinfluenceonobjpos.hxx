@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtwrapinfluenceonobjpos.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:54:05 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:05:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@
 #ifndef _COM_SUN_STAR_TEXT_WRAPINFLUENCEONPOSITION_HPP_
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 #endif
-using namespace com::sun::star;
 
 class SwFmtWrapInfluenceOnObjPos: public SfxPoolItem
 {
@@ -60,7 +59,7 @@ public:
     // --> OD 2004-10-18 #i35017# - constant name has changed
     SwFmtWrapInfluenceOnObjPos(
             sal_Int16 _nWrapInfluenceOnPosition =
-                text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
+                com::sun::star::text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
     // <--
     SwFmtWrapInfluenceOnObjPos(
             const SwFmtWrapInfluenceOnObjPos& _rCpy );
