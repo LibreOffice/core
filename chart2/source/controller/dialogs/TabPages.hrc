@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TabPages.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:32:02 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:44:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,7 @@
 #define FT_OVERLAP                  7
 #define GB_BAR                      8
 #define CB_CONNECTOR                9
+#define CB_BARS_SIDE_BY_SIDE       10
 
 //------------
 //from old chart tplabel.hrc
@@ -145,6 +146,7 @@
 #define CBX_HELPTICKS_INNER 8
 #define CBX_TICKS_OUTER     9
 #define CBX_HELPTICKS_OUTER 10
+#define CBX_REVERSE         11
 
 #define EDT_STEP_MAIN       1
 #define EDT_MAX             2
