@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ExplicitValueProvider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:26:35 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:53:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEM_HPP_
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
@@ -114,6 +117,16 @@ public:
 
     static sal_Int32 getPercentNumberFormat( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+
+    static sal_Int32 getExplicitNumberFormatKeyForLabel(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesOrPointProp
+            , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries
+            , sal_Int32 nPointIndex /*-1 for whole series*/
+            , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAttachedAxisProps );
+
+    static sal_Int32 getExplicitPercentageNumberFormatKeyForLabel(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesOrPointProp
+            , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 };
 
 //.............................................................................
