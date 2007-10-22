@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:06:43 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:57:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,9 +113,9 @@ double VDataSequence::getValue( sal_Int32 index ) const
     }
 }
 
-sal_Int32 VDataSequence::getNumberFormatKey( sal_Int32 index ) const
+sal_Int32 VDataSequence::detectNumberFormatKey( sal_Int32 index ) const
 {
-    sal_Int32 nNumberFormatKey = 0;
+    sal_Int32 nNumberFormatKey = -1;
 
     // -1 is allowed and means a key for the whole sequence
     if( -1<=index && index<Doubles.getLength() &&
@@ -180,6 +180,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_eStackingDirection(StackingDirection_NO_STACKING)
     , m_nAxisIndex(0)
     , m_bConnectBars(sal_False)
+    , m_bGroupBarsPerAxis(sal_True)
 
     , m_aSeriesParticle()
     , m_aCID()
@@ -410,6 +411,14 @@ sal_Bool VDataSeries::getConnectBars() const
 {
     return m_bConnectBars;
 }
+void VDataSeries::setGroupBarsPerAxis( sal_Bool bGroupBarsPerAxis )
+{
+    m_bGroupBarsPerAxis = bGroupBarsPerAxis;
+}
+sal_Bool VDataSeries::getGroupBarsPerAxis() const
+{
+    return m_bGroupBarsPerAxis;
+}
 
 void VDataSeries::setAttachedAxisIndex( sal_Int32 nAttachedAxisIndex )
 {
@@ -463,9 +472,28 @@ double VDataSeries::getY_Last( sal_Int32 index ) const
     return m_aValues_Y_Last.getValue( index );
 }
 
-sal_Int32 VDataSeries::getNumberFormatKey( sal_Int32 index ) const
+bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const
 {
-    return m_aValues_Y.getNumberFormatKey( index );
+    rtl::OUString aPropName( bForPercentage ? C2U( "PercentageNumberFormat" ) : C2U( "NumberFormat" ) );
+    bool bHasNumberFormat = false;
+    uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( nPointIndex ));
+    sal_Int32 nNumberFormat = -1;
+    if( xPointProp.is() && (xPointProp->getPropertyValue(aPropName) >>= nNumberFormat) )
+        bHasNumberFormat = true;
+    return bHasNumberFormat;
+}
+sal_Int32 VDataSeries::getExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const
+{
+    rtl::OUString aPropName( bForPercentage ? C2U( "PercentageNumberFormat" ) : C2U( "NumberFormat" ) );
+    sal_Int32 nNumberFormat = -1;
+    uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( nPointIndex ));
+    if( xPointProp.is() )
+        xPointProp->getPropertyValue(aPropName) >>= nNumberFormat;
+    return nNumberFormat;
+}
+sal_Int32 VDataSeries::detectNumberFormatKey( sal_Int32 index ) const
+{
+    return m_aValues_Y.detectNumberFormatKey( index );
 }
 
 double VDataSeries::getMinimumofAllDifferentYValues( sal_Int32 index ) const
