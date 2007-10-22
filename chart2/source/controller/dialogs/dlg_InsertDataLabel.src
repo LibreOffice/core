@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertDataLabel.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:34:53 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:45:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,13 +43,8 @@ ModalDialog DLG_DATA_DESCR
     HelpID = SID_INSERT_DESCRIPTION ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 200 , 86 ) ;
+    Size = MAP_APPFONT ( 200 , 120 ) ;
     Moveable = TRUE ;
     BUTTONS_OK_CANCEL_HELP_STACKED(144)
-    RESOURCE_DATALABEL( 12, 14 )
-    FixedLine FL_DESCR
-    {
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 132 , 8 ) ;
-    };
+    RESOURCE_DATALABEL( 6, 7 )
 };
