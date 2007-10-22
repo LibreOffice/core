@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pggrid.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:07:34 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:21:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,10 @@ class SwTextGridPage: public SfxTabPage
     DECL_LINK(CharSizeChangedHdl, SpinField*);
     DECL_LINK(GridModifyHdl, void*);
     DECL_LINK(DisplayGridHdl, CheckBox*);
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
     static USHORT* GetRanges();
@@ -110,9 +114,7 @@ public:
     virtual BOOL    FillItemSet(SfxItemSet &rSet);
     virtual void    Reset(const SfxItemSet &rSet);
 
-    using TabPage::ActivatePage;
     virtual void    ActivatePage( const SfxItemSet& rSet );
-    using TabPage::DeactivatePage;
     virtual int     DeactivatePage( SfxItemSet* pSet = 0 );
 };
 

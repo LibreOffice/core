@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prcntfld.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:08:01 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,34 +59,34 @@ class SW_DLLPUBLIC PercentField : public MetricField
 
     SW_DLLPRIVATE sal_Int64      ImpPower10(USHORT n);
 
+    using MetricField::SetValue;
+    using MetricField::GetValue;
+    using MetricFormatter::SetUserValue;
+    using MetricFormatter::SetBaseValue;
+    using MetricFormatter::SetMax;
+    using MetricFormatter::SetMin;
+    using NumericFormatter::IsValueModified;
+
 public:
 
-    using MetricField::SetValue;
     virtual void  SetValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
 
     PercentField( Window* pWin, const ResId& rResId );
 
     void        SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
 
-    //using NumericFormatter::SetUserValue;
-    using MetricFormatter::SetUserValue;
     void        SetUserValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
 
-    using MetricFormatter::SetBaseValue;
     void        SetBaseValue(sal_Int64 nNewValue, FieldUnit eInUnit = FUNIT_NONE);
 
-    using MetricField::GetValue;
     sal_Int64        GetValue(FieldUnit eOutUnit = FUNIT_NONE);
 
-    using NumericFormatter::IsValueModified;
     BOOL        IsValueModified();
 
     //using NumericFormatter::SetMax;
-    using MetricFormatter::SetMax;
     void        SetMax(sal_Int64 nNewMax, FieldUnit eInUnit = FUNIT_NONE);
 
     //using NumericFormatter::SetMin;
-    using MetricFormatter::SetMin;
     void        SetMin(sal_Int64 nNewMin, FieldUnit eInUnit = FUNIT_NONE);
 
     sal_Int64        NormalizePercent(sal_Int64 nValue);
