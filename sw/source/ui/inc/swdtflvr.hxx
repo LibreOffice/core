@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:10:41 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:23:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,6 +171,8 @@ protected:
     virtual void        DragFinished( sal_Int8 nDropAction );
     virtual void        ObjectReleased();
 
+    using TransferableHelper::StartDrag;
+
 public:
     SwTransferable( SwWrtShell& );
     virtual ~SwTransferable();
@@ -212,7 +214,6 @@ public:
                                 SvxClipboardFmtItem & rToFill );
 
     // Interfaces for Drag & Drop
-    using TransferableHelper::StartDrag;
     void StartDrag( Window* pWin, const Point& rPos );
 
     SwWrtShell* GetShell()              { return pWrtShell; }
