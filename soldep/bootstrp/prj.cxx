@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-05 17:39:13 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 14:42:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,9 @@
 #include <soldep/XmlBuildList.hxx>
 #include "XmlBuildListDef.hxx"
 
+#ifndef MACOSX
 #pragma hdrstop
+#endif
 
 //#define TEST  1
 
@@ -76,6 +78,8 @@
 #endif
 #endif
 #endif
+
+static const char * XML_ALL  =  "all";
 
 //
 //  class SimpleConfig
@@ -131,7 +135,7 @@ ByteString  SimpleConfig::GetNextLine()
 {
     ByteString aSecStr;
     sal_Bool bStreamOk;
-    USHORT iret = 0;
+//  USHORT iret = 0;
     nLine++;
 
     bStreamOk = aFileStream.ReadLine ( aTmpStr );
@@ -143,7 +147,7 @@ ByteString  SimpleConfig::GetNextLine()
     int nLength = aTmpStr.Len();
     if ( bStreamOk && (nLength == 0) )
         return "\t";
-    USHORT nPos = 0;
+//  USHORT nPos = 0;
     BOOL bFound = FALSE;
     ByteString aEraseString;
     for ( USHORT i = 0; i<= nLength; i++)
@@ -181,7 +185,7 @@ ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
     aTmpStr = aTmpStr.EraseTrailingChars();
 //  while ( aTmpStr.SearchAndReplace(String(' '),String('\t') ) != (USHORT)-1 );
     int nLength = aTmpStr.Len();
-    USHORT nPos = 0;
+//  USHORT nPos = 0;
     ByteString aEraseString;
     BOOL bFirstTab = TRUE;
     for ( USHORT i = 0; i<= nLength; i++)
@@ -505,8 +509,8 @@ ULONG SDepInfoList::GetPrevString( ByteString* pStr )
 {
     ULONG nRet = 0;
     BOOL bFound = FALSE;
-    ULONG nCount = Count();
-    ULONG nUpper = nCount;
+    ULONG nCount_l = Count();
+    ULONG nUpper = nCount_l;
     ULONG nLower = 0;
     ULONG nCurrent = nUpper / 2;
     ULONG nRem = 0;
@@ -517,7 +521,7 @@ ULONG SDepInfoList::GetPrevString( ByteString* pStr )
         if ( (nCurrent == nLower) || (nCurrent == nUpper) )
             return nLower;
         pString = GetObject( nCurrent )->GetProject();
-        ULONG nResult =  pStr->CompareTo( *pString );
+        int nResult =  pStr->CompareTo( *pString );
         if ( nResult == COMPARE_LESS )
         {
             nUpper = nCurrent;
@@ -718,9 +722,9 @@ SByteStringList* SDepInfoList::GetAllDepModes()
 SDepInfoList& SDepInfoList::operator<< ( SvStream& rStream )
 /*****************************************************************************/
 {
-    ULONG nCount;
-    rStream >> nCount;
-    for ( USHORT i = 0; i < nCount; i++ ) {
+    ULONG nCount_l;
+    rStream >> nCount_l;
+    for ( USHORT i = 0; i < nCount_l; i++ ) {
         DepInfo* pDepInfo = new DepInfo();
         *pDepInfo << rStream;
         Insert (pDepInfo, LIST_APPEND);
@@ -732,8 +736,8 @@ SDepInfoList& SDepInfoList::operator<< ( SvStream& rStream )
 SDepInfoList& SDepInfoList::operator>> ( SvStream& rStream )
 /*****************************************************************************/
 {
-    ULONG nCount = Count();
-    rStream << nCount;
+    ULONG nCount_l = Count();
+    rStream << nCount_l;
     DepInfo* pDepInfo = First();
     while (pDepInfo) {
         *pDepInfo >> rStream;
@@ -755,8 +759,8 @@ CommandData* Prj::GetDirectoryData( ByteString aLogFileName )
 /*****************************************************************************/
 {
     CommandData *pData = NULL;
-    ULONG nCount = Count();
-    for ( ULONG i=0; i<nCount; i++ )
+    ULONG nCount_l = Count();
+    for ( ULONG i=0; i<nCount_l; i++ )
     {
         pData = GetObject(i);
         if ( pData->GetLogFile() == aLogFileName )
@@ -771,8 +775,8 @@ CommandData* Prj::GetDirectoryData( ByteString aLogFileName )
 
 /*****************************************************************************/
 Prj::Prj() :
-    pPrjDepList(0),
     pPrjInitialDepList(0),
+    pPrjDepList(0),
     pPrjDepInfoList(0),
     bSorted( FALSE ),
     bHardDependencies( FALSE ),
@@ -786,8 +790,8 @@ Prj::Prj() :
 /*****************************************************************************/
 Prj::Prj( ByteString aName ) :
     aProjectName( aName ),
-    pPrjDepList(0),
     pPrjInitialDepList(0),
+    pPrjDepList(0),
     pPrjDepInfoList(0),
     bSorted( FALSE ),
     bHardDependencies( FALSE ),
@@ -969,12 +973,12 @@ BOOL Prj::InsertDirectory ( ByteString aDirName, USHORT aWhat,
 CommandData* Prj::RemoveDirectory ( ByteString aLogFileName )
 /*****************************************************************************/
 {
-    ULONG nCount = Count();
+    ULONG nCount_l = Count();
     CommandData* pData;
     CommandData* pDataFound = NULL;
     SByteStringList* pDataDeps;
 
-    for ( USHORT i = 0; i < nCount; i++ )
+    for ( USHORT i = 0; i < nCount_l; i++ )
     {
         pData = GetObject( i );
         if ( pData->GetLogFile() == aLogFileName )
@@ -1055,8 +1059,8 @@ Prj& Prj::operator>>  ( SvStream& rStream )
     else
         rStream << sal_False;
 
-    ULONG nCount = Count();
-    rStream << nCount;
+    ULONG nCount_l = Count();
+    rStream << nCount_l;
 
     CommandData* pData = First();
     while (pData) {
@@ -1088,10 +1092,10 @@ Prj& Prj::operator<<  ( SvStream& rStream )
         *pPrjDepInfoList << rStream;
     }
 
-    ULONG nCount;
-    rStream >> nCount;
+    ULONG nCount_l;
+    rStream >> nCount_l;
 
-    for ( USHORT i = 0; i < nCount; i++ ) {
+    for ( USHORT i = 0; i < nCount_l; i++ ) {
         CommandData* pData = new CommandData();
         *pData << rStream;
         Insert (pData, LIST_APPEND);
@@ -1173,10 +1177,10 @@ void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersi
             IniManager aIniManager;
             aIniManager.ToLocal( sFile );
         }
-        String sFileName( sFile, RTL_TEXTENCODING_ASCII_US );
+        String sFileName_l( sFile, RTL_TEXTENCODING_ASCII_US );
         nStarMode = STAR_MODE_SINGLE_PARSE;
         if (bRead)
-            Read( sFileName );
+            Read( sFileName_l );
     }
     else {
         SolarFileList *pFileList = new SolarFileList();
@@ -1184,9 +1188,9 @@ void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersi
         sPath = rVersion;
         sPath += "/drives";
 
-        GenericInformation *pInfo = pStandLst->GetInfo( sPath, TRUE );
-        if ( pInfo && pInfo->GetSubList())  {
-            GenericInformationList *pDrives = pInfo->GetSubList();
+        GenericInformation *pInfo_l = pStandLst->GetInfo( sPath, TRUE );
+        if ( pInfo_l && pInfo_l->GetSubList())  {
+            GenericInformationList *pDrives = pInfo_l->GetSubList();
             for ( ULONG i = 0; i < pDrives->Count(); i++ ) {
                 GenericInformation *pDrive = pDrives->GetObject( i );
                 if ( pDrive ) {
@@ -1234,8 +1238,8 @@ void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersi
                             sSourceRoot = aEntry.GetFull();
                             GenericInformationList *pProjects = pProjectsKey->GetSubList();
                             if ( pProjects ) {
-                                for ( ULONG i = 0; i < pProjects->Count(); i++ ) {
-                                    ByteString sProject( *pProjects->GetObject( i ));
+                                for ( ULONG k = 0; k < pProjects->Count(); k++ ) {
+                                    ByteString sProject( *pProjects->GetObject( k ));
                                     String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
 
                                     String aBuildListPath = CreateFileName(ssProject);
@@ -1380,12 +1384,12 @@ void Star::Read( String &rFileName )
 
     while( aFileList.Count()) {
         String ssFileName = *aFileList.GetObject(( ULONG ) 0 );
-        ByteString sFileName (ssFileName, RTL_TEXTENCODING_ASCII_US);
+        ByteString sFileName_l(ssFileName, RTL_TEXTENCODING_ASCII_US);
         StarFile *pFile = new StarFile( ssFileName );
         if ( pFile->Exists()) {
-            if (sFileName.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
+            if (sFileName_l.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName_l.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
             {
-                ReadXmlBuildList(sFileName);
+                ReadXmlBuildList(sFileName_l);
             } else {
                 SimpleConfig aSolarConfig( ssFileName );
                 while (( aString = aSolarConfig.GetNext()) != "" )
@@ -1407,11 +1411,11 @@ ULONG Star::SearchFileEntry( StarFileList *pStarFiles, StarFile* pFile )
 /*****************************************************************************/
 {
     StarFile *pSearchFile;
-    ULONG nCount;
+    ULONG nCount_l;
 
-    nCount = pStarFiles->Count();
+    nCount_l = pStarFiles->Count();
 
-    for ( ULONG i=0; i<nCount; i++)
+    for ( ULONG i=0; i<nCount_l; i++)
     {
         pSearchFile = pStarFiles->GetObject(i);
         if ( pSearchFile->GetName() == pFile->GetName() )
@@ -1446,13 +1450,13 @@ void Star::Read( SolarFileList *pSolarFiles )
         ByteString aString;
 
         String ssFileName = *pSolarFiles->GetObject(( ULONG ) 0 );
-        ByteString sFileName (ssFileName, RTL_TEXTENCODING_ASCII_US);
+        ByteString sFileName_l(ssFileName, RTL_TEXTENCODING_ASCII_US);
         StarFile *pFile = new StarFile( ssFileName );
 
         if ( pFile->Exists()) {
-            if (sFileName.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
+            if (sFileName_l.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName_l.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
             {
-                ReadXmlBuildList(sFileName);
+                ReadXmlBuildList(sFileName_l);
             } else {
                 SimpleConfig aSolarConfig( ssFileName );
                 while (( aString = aSolarConfig.GetNext()) != "" )
@@ -1521,10 +1525,10 @@ void Star::InsertSolarList( String sProject )
 /*****************************************************************************/
 {
     // inserts a new solarlist part of another project
-    String sFileName( CreateFileName( sProject ));
+    String sFileName_l( CreateFileName( sProject ));
 
     for ( ULONG i = 0; i < aFileList.Count(); i++ ) {
-        if (( *aFileList.GetObject( i )) == sFileName )
+        if (( *aFileList.GetObject( i )) == sFileName_l )
             return;
     }
 
@@ -1532,7 +1536,7 @@ void Star::InsertSolarList( String sProject )
     if ( HasProject( ssProject ))
         return;
 
-    aFileList.Insert( new String( sFileName ), LIST_APPEND );
+    aFileList.Insert( new String( sFileName_l ), LIST_APPEND );
 }
 
 /*****************************************************************************/
@@ -1790,11 +1794,11 @@ BOOL Star::HasProject ( ByteString aProjectName )
 /*****************************************************************************/
 {
     Prj *pPrj;
-    int nCount;
+    int nCount_l;
 
-    nCount = Count();
+    nCount_l = Count();
 
-    for ( int i=0; i<nCount; i++)
+    for ( int i=0; i<nCount_l; i++)
     {
         pPrj = GetObject(i);
         if ( pPrj->GetProjectName().ToLowerAscii() == aProjectName.ToLowerAscii() )
@@ -1808,8 +1812,8 @@ Prj* Star::GetPrj ( ByteString aProjectName )
 /*****************************************************************************/
 {
     Prj* pPrj;
-    int nCount = Count();
-    for ( int i=0;i<nCount;i++)
+    int nCount_l = Count();
+    for ( int i=0;i<nCount_l;i++)
     {
         pPrj = GetObject(i);
         if ( pPrj->GetProjectName().ToLowerAscii() == aProjectName.ToLowerAscii() )
@@ -2168,8 +2172,8 @@ void Star::PutPrjIntoStream (SByteStringList* pPrjNameList, SvStream* pStream)
     aMutex.acquire();
     *pStream << sal_False; // not full Star / only some Projects
 
-    ULONG nCount = pPrjNameList->Count();
-    *pStream << nCount;
+    ULONG nCount_l = pPrjNameList->Count();
+    *pStream << nCount_l;
     ByteString* pStr = pPrjNameList->First();
     while (pStr) {
         Prj* pPrj = GetPrj (*pStr);
@@ -2194,8 +2198,8 @@ Star& Star::operator>>  ( SvStream& rStream )
     else
         rStream << sal_False;
 
-    ULONG nCount = Count();
-    rStream << nCount;
+    ULONG nCount_l = Count();
+    rStream << nCount_l;
     Prj* pPrj = First();
     while (pPrj) {
         *pPrj >> rStream;
@@ -2230,9 +2234,9 @@ Star& Star::operator<<  ( SvStream& rStream )
             DELETEZ (pDepMode);
 
     }
-    ULONG nCount;
-    rStream >> nCount;
-    for ( USHORT i = 0; i < nCount; i++ ) {
+    ULONG nCount_l;
+    rStream >> nCount_l;
+    for ( USHORT i = 0; i < nCount_l; i++ ) {
         Prj* pPrj = new Prj();
         *pPrj << rStream;
         pPrj->SetMode(pDepMode);
@@ -2287,17 +2291,17 @@ StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *
 #else
     sPath += "/settings/SOLARLIST";
 #endif
-    GenericInformation *pInfo = pStandLst->GetInfo( sPath, TRUE );
+    GenericInformation *pInfo_l = pStandLst->GetInfo( sPath, TRUE );
 
-    if( pInfo && pInfo->GetValue().Len()) {
-        ByteString sFile( pInfo->GetValue());
+    if( pInfo_l && pInfo_l->GetValue().Len()) {
+        ByteString sFile( pInfo_l->GetValue());
         if ( bLocal ) {
             IniManager aIniManager;
             aIniManager.ToLocal( sFile );
         }
-        String sFileName( sFile, RTL_TEXTENCODING_ASCII_US );
+        String sFileName_l( sFile, RTL_TEXTENCODING_ASCII_US );
         nStarMode = STAR_MODE_SINGLE_PARSE;
-        Read( sFileName, bReadComments );
+        Read( sFileName_l, bReadComments );
     }
     else {
         SolarFileList *pFileList = new SolarFileList();
@@ -2305,9 +2309,9 @@ StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *
         sPath = rVersion;
         sPath += "/drives";
 
-        GenericInformation *pInfo = pStandLst->GetInfo( sPath, TRUE );
-        if ( pInfo && pInfo->GetSubList())  {
-            GenericInformationList *pDrives = pInfo->GetSubList();
+        GenericInformation *pInfo_k = pStandLst->GetInfo( sPath, TRUE );
+        if ( pInfo_k && pInfo_k->GetSubList())  {
+            GenericInformationList *pDrives = pInfo_k->GetSubList();
             for ( ULONG i = 0; i < pDrives->Count(); i++ ) {
                 GenericInformation *pDrive = pDrives->GetObject( i );
                 if ( pDrive ) {
@@ -2364,8 +2368,8 @@ StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *
                                 String sPrjDir( String::CreateFromAscii( "prj" ));
                                 String sSolarFile( String::CreateFromAscii( "build.lst" ));
 
-                                for ( ULONG i = 0; i < pProjects->Count(); i++ ) {
-                                    ByteString sProject( *pProjects->GetObject( i ));
+                                for ( ULONG k = 0; k < pProjects->Count(); k++ ) {
+                                    ByteString sProject( *pProjects->GetObject( k ));
                                     String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
 
                                     DirEntry aPrjEntry( aEntry );
@@ -2414,12 +2418,12 @@ USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
 
     while( aFileList.Count()) {
         String ssFileName = *aFileList.GetObject(( ULONG ) 0 );
-        ByteString sFileName (ssFileName, RTL_TEXTENCODING_ASCII_US);
+        ByteString sFileName_l(ssFileName, RTL_TEXTENCODING_ASCII_US);
         StarFile *pFile = new StarFile( ssFileName );
         if ( pFile->Exists()) {
-            if (sFileName.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
+            if (sFileName_l.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName_l.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
             {
-                ReadXmlBuildList(sFileName);
+                ReadXmlBuildList(sFileName_l);
             } else {
                 SimpleConfig aSolarConfig( ssFileName );
                 while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
@@ -2450,12 +2454,12 @@ USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
     while(  pSolarFiles->Count()) {
         ByteString aString;
         String ssFileName = *pSolarFiles->GetObject(( ULONG ) 0 );
-        ByteString sFileName (ssFileName, RTL_TEXTENCODING_ASCII_US);
+        ByteString sFileName_l(ssFileName, RTL_TEXTENCODING_ASCII_US);
         StarFile *pFile = new StarFile( ssFileName);
         if ( pFile->Exists()) {
-            if (sFileName.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
+            if (sFileName_l.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName_l.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
             {
-                ReadXmlBuildList(sFileName);
+                ReadXmlBuildList(sFileName_l);
             }
             else
             {
@@ -2491,7 +2495,7 @@ USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
     if ( pPrj->Count() > 0 )
     {
         pCmdData = pPrj->First();
-        if ( pPrjDepList = pPrj->GetDependencies( FALSE ))
+        if ( (pPrjDepList = pPrj->GetDependencies( FALSE )) )
         {
             aDataString = pPrj->GetPreFix();
             aDataString += aTab;
@@ -2655,7 +2659,7 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
     BOOL bPrjDep = FALSE;
     BOOL bHardDep = FALSE;
     BOOL bFixedDep = FALSE;
-    int nCommandType, nOSType;
+    int nCommandType=0, nOSType=0;
     CommandData* pCmdData;
     SByteStringList *pDepList2 = NULL;
     Prj* pPrj;
@@ -2869,12 +2873,12 @@ BOOL StarWriter::InsertProject ( Prj* pNewPrj )
 Prj* StarWriter::RemoveProject ( ByteString aProjectName )
 /*****************************************************************************/
 {
-    ULONG nCount = Count();
+    ULONG nCount_l = Count();
     Prj* pPrj;
     Prj* pPrjFound = NULL;
     SByteStringList* pPrjDeps;
 
-    for ( USHORT i = 0; i < nCount; i++ )
+    for ( USHORT i = 0; i < nCount_l; i++ )
     {
         pPrj = GetObject( i );
         if ( pPrj->GetProjectName() == aProjectName )
@@ -2940,4 +2944,3 @@ BOOL StarFile::NeedsUpdate()
     }
     return FALSE;
 }
-
