@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChart.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:16:18 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:55:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,7 +308,9 @@ void BarChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot
 
         sal_Int32 nAxisIndex = pSeries->getAttachedAxisIndex();
         zSlot = nAxisIndex;
-        ////if( bars side by side ) zSlot = 0; //@todo uncomment this later on dependent on new flag
+
+        if( !pSeries->getGroupBarsPerAxis() )
+            zSlot = 0;
         if(zSlot>=static_cast<sal_Int32>(m_aZSlots.size()))
             m_aZSlots.resize(zSlot+1);
     }
@@ -334,6 +336,36 @@ struct FormerBarPoint
     double m_fLowerY;
     double m_fZ;
 };
+
+void BarChart::adaptOverlapAndGapwidthForGroupBarsPerAxis()
+{
+    //adapt m_aOverlapSequence and m_aGapwidthSequence for the groupBarsPerAxis feature
+    //thus the different series use the same settings
+
+    VDataSeries* pFirstSeries = getFirstSeries();
+    if(pFirstSeries && !pFirstSeries->getGroupBarsPerAxis() )
+    {
+        sal_Int32 nAxisIndex = pFirstSeries->getAttachedAxisIndex();
+        sal_Int32 nN = 0;
+        sal_Int32 nUseThisIndex = nAxisIndex;
+        if( nUseThisIndex < 0 || nUseThisIndex >= m_aOverlapSequence.getLength() )
+            nUseThisIndex = 0;
+        for( nN = 0; nN < m_aOverlapSequence.getLength(); nN++ )
+        {
+            if(nN!=nUseThisIndex)
+                m_aOverlapSequence[nN] = m_aOverlapSequence[nUseThisIndex];
+        }
+
+        nUseThisIndex = nAxisIndex;
+        if( nUseThisIndex < 0 || nUseThisIndex >= m_aGapwidthSequence.getLength() )
+            nUseThisIndex = 0;
+        for( nN = 0; nN < m_aGapwidthSequence.getLength(); nN++ )
+        {
+            if(nN!=nUseThisIndex)
+                m_aGapwidthSequence[nN] = m_aGapwidthSequence[nUseThisIndex];
+        }
+    }
+}
 
 void BarChart::createShapes()
 {
@@ -367,6 +399,8 @@ void BarChart::createShapes()
     bool bDrawConnectionLines = false;
     bool bDrawConnectionLinesInited = false;
     bool bOnlyConnectionLinesForThisPoint = false;
+
+    adaptOverlapAndGapwidthForGroupBarsPerAxis();
 
     //better performance for big data
     std::map< VDataSeries*, FormerBarPoint > aSeriesFormerPointMap;
