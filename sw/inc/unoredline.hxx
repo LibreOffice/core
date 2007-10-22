@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoredline.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:16:23 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:08:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,9 @@ class SwXRedlinePortion : public SwXTextPortion
     const SwRedline*    pRedline;
 
     void Validate() throw( ::com::sun::star::uno::RuntimeException );
+
+    using SwXTextPortion::GetPropertyValue;
+
 public:
     SwXRedlinePortion(  const SwRedline* pRed,
                         const SwUnoCrsr* pPortionCrsr,
@@ -102,7 +105,6 @@ public:
     //XPropertySet
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    using SwXTextPortion::GetPropertyValue;
     static ::com::sun::star::uno::Any  GetPropertyValue( const ::rtl::OUString& PropertyName, const SwRedline& rRedline ) throw();
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > CreateRedlineProperties( const SwRedline& rRedline, sal_Bool bIsStart ) throw();
 
