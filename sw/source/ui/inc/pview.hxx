@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:08:14 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:22:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,8 @@ class SwPagePreViewWin : public Window
 
     void SetPagePreview( BYTE nRow, BYTE nCol );
 
+    using Window::Scroll;
+
 public:
     SwPagePreViewWin( Window* pParent, SwPagePreView& rView );
     ~SwPagePreViewWin();
@@ -172,7 +174,6 @@ public:
         return maPaintedPreviewDocRect;
     }
 
-    using Window::Scroll;
     void Scroll(long nXMove, long nYMove, USHORT nFlags = 0);
 
     /** method to enable/disable book preview
