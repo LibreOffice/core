@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Diagram.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:01:12 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:54:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,8 @@ enum
     PROP_DIAGRAM_REL_SIZE,
     PROP_DIAGRAM_SORT_BY_X_VALUES,
     PROP_DIAGRAM_CONNECT_BARS,
-    PROP_DIAGRMA_RIGHT_ANGLED_AXES
+    PROP_DIAGRMA_RIGHT_ANGLED_AXES,
+    PROP_DIAGRAM_GROUP_BARS_PER_AXIS
 };
 
 void lcl_AddPropertiesToVector(
@@ -129,6 +130,12 @@ void lcl_AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U("GroupBarsPerAxis"),
+                  PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void lcl_AddDefaultsToMap(
@@ -137,6 +144,7 @@ void lcl_AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_SORT_BY_X_VALUES, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_CONNECT_BARS, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRMA_RIGHT_ANGLED_AXES, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_GROUP_BARS_PER_AXIS, true );
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()
