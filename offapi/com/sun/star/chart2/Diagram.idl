@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Diagram.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 14:52:32 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:40:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,19 @@ service Diagram
     /** Draw connection lines for stacked bar charts.
      */
     [optional, property] boolean                    ConnectBars;
+
+    /** If bars of a bar or column chart are attached to different
+        axis, this property determines how to display those.  If
+        <TRUE/>, the bars are grouped together in one block for each
+        axis, thus they are painted one group over the other.
+
+        <p>If <FALSE/>, the bars are displayed side-by-side, as if
+        they were all attached to the same axis.</p>
+
+        <p>If all data series of a bar or column chart are attached to
+        only one axis, this property has no effect.</p>
+    */
+    [optional, property] boolean                    GroupBarsPerAxis;
 };
 
 } ; // chart2
