@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glshell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:01:58 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:19:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,12 +42,13 @@ class SwGlosDocShell : public SwDocShell
     String          aShortName;
     String          aGroupName;
     sal_Bool        bShow;
+
+    using SotObject::GetInterface;
+
 protected:
     virtual BOOL Save();
 
 public:
-
-    using SotObject::GetInterface;
 
     TYPEINFO();
     SFX_DECL_INTERFACE(SW_GLOSDOCSHELL)
@@ -72,12 +73,13 @@ class SwWebGlosDocShell : public SwWebDocShell
     String          aLongName;
     String          aShortName;
     String          aGroupName;
+
+    using SotObject::GetInterface;
+
 protected:
     virtual BOOL Save();
 
 public:
-
-    using SotObject::GetInterface;
 
     TYPEINFO();
     SFX_DECL_INTERFACE(SW_WEBGLOSDOCSHELL)
