@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramWrapper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:11:52 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:42:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,8 @@ enum
     PROP_DIAGRAM_STACKED_BARS_CONNECTED,
     PROP_DIAGRAM_DATAROW_SOURCE,
 
+    PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
+
     PROP_DIAGRAM_SORT_BY_X_VALUES,
 
     PROP_DIAGRMA_RIGHT_ANGLED_AXES,
@@ -228,6 +230,13 @@ void lcl_AddPropertiesToVector(
         Property( C2U( "DataRowSource" ),
                   PROP_DIAGRAM_DATAROW_SOURCE,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartDataRowSource * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "GroupBarsPerAxis" ),
+                  PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
+                  ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
