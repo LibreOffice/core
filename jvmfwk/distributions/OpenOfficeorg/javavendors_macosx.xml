@@ -8,11 +8,13 @@
  <vendorInfos>
   <vendor name="Apple Computer, Inc.">
     <minVersion>1.3.1</minVersion>
-    <maxVersion>1.5.0</maxVersion>
   </vendor>
+ <vendor name="Apple Inc.">
+  <minVersion>1.3.1</minVersion>
+ </vendor>
  </vendorInfos>
-
  <plugins>
+  <library vendor="Apple Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.dylib</library>
   <library vendor="Apple Computer, Inc.">vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/sunjavaplugin.dylib</library>
  </plugins>
 </javaSelection>
