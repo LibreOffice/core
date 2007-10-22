@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchWhichPairs.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:01:55 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:51:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,10 @@ const USHORT nLegendWhichPairs[] =
 const USHORT nDataLabelWhichPairs[] =
 {
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END,
+    SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,    /* 10585 - 10585  svx/svxids.hrc */ \
+    SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */ \
+    SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_VALUE,   /*      40          sch/schattr.hxx*/ \
+    SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, /*      41          sch/schattr.hxx*/ \
     0
 };
 
@@ -140,8 +144,10 @@ const USHORT nDataLabelWhichPairs[] =
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              /*  1018 -  1046  svx/xdef.hxx   */ \
     EE_ITEMS_START, EE_ITEMS_END,                   /*  3994 -  4037  svx/eeitem.hxx */ \
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END, /*     1 -     2  sch/schattr.hxx*/ \
-    SCHATTR_DUMMY0, SCHATTR_DUMMY0,                 /*    40          sch/schattr.hxx*/ \
-    SCHATTR_DUMMY1, SCHATTR_DUMMY1,                 /*    41          sch/schattr.hxx*/ \
+    SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,    /* 10585 - 10585  svx/svxids.hrc */ \
+    SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */ \
+    SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_VALUE,   /*      40          sch/schattr.hxx*/ \
+    SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, /*      41          sch/schattr.hxx*/ \
     SCHATTR_STYLE_START,SCHATTR_STYLE_END,          /*    59 -    68  sch/schattr.hxx*/ \
     SCHATTR_SYMBOL_BRUSH,SCHATTR_SYMBOL_BRUSH,      /*    94          sch/schattr.hxx*/ \
     SCHATTR_SYMBOL_SIZE,SCHATTR_SYMBOL_SIZE,        /*    97          sch/schattr.hxx*/ \
@@ -155,7 +161,8 @@ const USHORT nDataPointWhichPairs[] =
 
 #define CHART_SERIES_OPTIONS_WHICHPAIRS \
     SCHATTR_AXIS,SCHATTR_AXIS,                      /*    69          sch/schattr.hxx*/ \
-    SCHATTR_BAR_OVERLAP,SCHATTR_BAR_CONNECT         /*    98 - 100 (incl. SCHATTR_GAPWIDTH) */  \
+    SCHATTR_BAR_OVERLAP,SCHATTR_BAR_CONNECT,         /*    98 - 100 (incl. SCHATTR_GAPWIDTH) */  \
+    SCHATTR_GROUP_BARS_PER_AXIS,SCHATTR_AXIS_FOR_ALL_SERIES \
 
 
 const USHORT nSeriesOptionsWhichPairs[] =
@@ -238,6 +245,24 @@ const USHORT nChartStyleWhichPairs[] =
     SCHATTR_NUM_OF_LINES_FOR_BAR,         SCHATTR_NUM_OF_LINES_FOR_BAR,
     SCHATTR_SPLINE_ORDER,                 SCHATTR_SPLINE_ORDER,
     SCHATTR_SPLINE_RESOLUTION,            SCHATTR_SPLINE_RESOLUTION,
+    0
+};
+
+const USHORT nRegressionCurveWhichPairs[] =
+{
+    SCHATTR_REGRESSION_START, SCHATTR_REGRESSION_END, // 108 -   109
+    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
+    0
+};
+
+const USHORT nRegEquationWhichPairs[] =
+{
+//  SCHATTR_TEXT_STACKED, SCHATTR_TEXT_STACKED,     //     4          sch/schattr.hxx
+//  SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
+    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
+    XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
+    SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
+    EE_ITEMS_START, EE_ITEMS_END,                   //  3994 -  4037  svx/eeitem.hxx
     0
 };
 
