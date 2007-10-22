@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:12:28 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:56:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -694,11 +694,13 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
 
     sal_Bool bSortByXValues = sal_False;
     sal_Bool bConnectBars = sal_False;
+    sal_Bool bGroupBarsPerAxis = sal_True;
     try
     {
         uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY_THROW );
         xDiaProp->getPropertyValue( C2U( "SortByXValues" ) ) >>= bSortByXValues;
         xDiaProp->getPropertyValue( C2U( "ConnectBars" ) ) >>= bConnectBars;
+        xDiaProp->getPropertyValue( C2U( "GroupBarsPerAxis" ) ) >>= bGroupBarsPerAxis;
     }
     catch( const uno::Exception & ex )
     {
@@ -768,6 +770,8 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                     pSeries->doSortByXValues();
 
                 pSeries->setConnectBars( bConnectBars );
+
+                pSeries->setGroupBarsPerAxis( bGroupBarsPerAxis );
 
                 rtl::OUString aSeriesParticle( ObjectIdentifier::createParticleForSeries( nDiagramIndex, nCS, nT, nS ) );
                 pSeries->setParticle(aSeriesParticle);
@@ -1576,6 +1580,54 @@ sal_Int32 ExplicitValueProvider::getPercentNumberFormat( const Reference< util::
         }
     }
     return nRet;
+}
+
+
+sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForLabel(
+        const uno::Reference< beans::XPropertySet >& xSeriesOrPointProp,
+        const uno::Reference< XDataSeries >& xSeries,
+        sal_Int32 nPointIndex /*-1 for whole series*/,
+        const uno::Reference< beans::XPropertySet >& xAttachedAxisProps
+        )
+{
+    sal_Int32 nFormat=0;
+    if( !xSeriesOrPointProp.is() )
+        return nFormat;
+    rtl::OUString aPropName( C2U( "NumberFormat" ) );
+    if( !(xSeriesOrPointProp->getPropertyValue(aPropName) >>= nFormat) )
+    {
+        if( xAttachedAxisProps.is() && !( xAttachedAxisProps->getPropertyValue( aPropName ) >>= nFormat ) )
+        {
+            Reference< chart2::data::XDataSource > xSeriesSource( xSeries, uno::UNO_QUERY );
+            Reference< data::XLabeledDataSequence > xLabeledSequence(
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, C2U("values-y"), false ));
+            if( xLabeledSequence.is() )
+            {
+                Reference< data::XDataSequence > xValues( xLabeledSequence->getValues() );
+                if( xValues.is() )
+                    nFormat = xValues->getNumberFormatKeyByIndex( nPointIndex );
+            }
+        }
+    }
+    if(nFormat<0)
+        nFormat=0;
+    return nFormat;
+}
+
+sal_Int32 ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForLabel(
+        const uno::Reference< beans::XPropertySet >& xSeriesOrPointProp,
+        const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
+{
+    sal_Int32 nFormat=0;
+    if( !xSeriesOrPointProp.is() )
+        return nFormat;
+    if( !(xSeriesOrPointProp->getPropertyValue(C2U( "PercentageNumberFormat" )) >>= nFormat) )
+    {
+        nFormat = ExplicitValueProvider::getPercentNumberFormat( xNumberFormatsSupplier );
+    }
+    if(nFormat<0)
+        nFormat=0;
+    return nFormat;
 }
 
 //static
