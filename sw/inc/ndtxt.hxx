@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:06:57 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:06:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,9 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     SW_DLLPRIVATE ULONG GetParaNumberOfChars() const;
     SW_DLLPRIVATE void InitSwParaStatistics( bool bNew );
 
+    using SwCntntNode::SetAttr;
+    using SwCntntNode::GetAttr;
+
 public:
     bool IsWordCountDirty() const;
     bool IsWrongDirty() const;
@@ -252,11 +255,9 @@ public:
 
     // setze diese Attribute am TextNode. Wird der gesamte Bereich umspannt,
     // dann setze sie nur im AutoAttrSet (SwCntntNode:: SetAttr)
-    using SwCntntNode::SetAttr;
     BOOL SetAttr( const SfxItemSet& rSet,
                   xub_StrLen nStt, xub_StrLen nEnd, USHORT nMode = 0 );
     // erfrage die Attribute vom TextNode ueber den Bereich
-    using SwCntntNode::GetAttr;
     BOOL GetAttr( SfxItemSet& rSet, xub_StrLen nStt, xub_StrLen nEnd,
                     BOOL bOnlyTxtAttr  = FALSE,
                     BOOL bGetFromChrFmt = TRUE ) const;
