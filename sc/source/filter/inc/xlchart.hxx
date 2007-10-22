@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlchart.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:25:59 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:37:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 #ifndef SC_XLCHART_HXX
 #define SC_XLCHART_HXX
 
-// disable/enable support for reversed axes
-#define EXC_CHART2_REVERSE_AXIS 0
 // disable/enable support for varied point colors property
 #define EXC_CHART2_VARYCOLORSBY_PROP 0
 
