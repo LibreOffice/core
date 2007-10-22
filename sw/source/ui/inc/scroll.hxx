@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scroll.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:09:10 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:22:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,14 +48,16 @@ class SwScrollbar: public ScrollBar
     BOOL    bSizeSet    :1;     // wurde die Groesse bereits gesetzt?
 
     void    AutoShow();
+
+    using Window::Hide;
+    using Window::SetPosSizePixel;
+    using Window::IsVisible;
+
 public:
 
     void    ExtendedShow( BOOL bVisible = TRUE );
-    using Window::Hide;
     void    Hide() { Show( FALSE ); }
-    using Window::SetPosSizePixel;
     void    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
-    using Window::IsVisible;
     BOOL    IsVisible(BOOL bReal) const { return bReal ? ScrollBar::IsVisible() : bVisible; }
 
         // Aenderung der Dokumentgroesse
