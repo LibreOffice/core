@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 07:58:37 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:04:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,6 +320,8 @@ class SwDrawVirtObj : public SdrVirtObj
         // inserted into the drawing layer.
         SwDrawContact&  mrDrawContact;
 
+        using SdrVirtObj::GetPlusHdl;
+
     public:
         TYPEINFO();
 
@@ -362,7 +364,6 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual ::basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
         virtual ::basegfx::B2DPolyPolygon TakeContour() const;
         virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
-        using SdrVirtObj::GetPlusHdl;
         virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, USHORT nPlNum) const;
         virtual void NbcMove(const Size& rSiz);
         virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
