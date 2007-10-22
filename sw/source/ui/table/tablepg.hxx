@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablepg.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:34:35 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:25:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,15 +110,16 @@ class SwFormatTablePage : public SfxTabPage
     DECL_LINK( RightModifyHdl, MetricField * );
     DECL_LINK( UpDownLoseFocusHdl, MetricField * );
 
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 public:
     SwFormatTablePage( Window* pParent, const SfxItemSet& rSet );
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
-    using TabPage::ActivatePage;
     virtual void        ActivatePage( const SfxItemSet& rSet );
-    using TabPage::DeactivatePage;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 };
 
@@ -173,6 +174,10 @@ class SwTableColumnPage : public SfxTabPage
     void        UpdateCols( USHORT nAktPos );
     SwTwips     GetVisibleWidth(USHORT nPos);
     void        SetVisibleWidth(USHORT nPos, SwTwips nNewWidth);
+
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
 public:
     SwTableColumnPage( Window* pParent, const SfxItemSet& rSet );
     ~SwTableColumnPage();
@@ -180,9 +185,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
-    using TabPage::ActivatePage;
     virtual void        ActivatePage( const SfxItemSet& rSet );
-    using TabPage::DeactivatePage;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
 };
