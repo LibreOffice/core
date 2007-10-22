@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesPointWrapper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-10-15 16:24:37 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:42:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,9 @@ enum
     PROP_SERIES_DATAPOINT_SOLIDTYPE,
     PROP_SERIES_DATAPOINT_SEGMENT_OFFSET,
     PROP_SERIES_DATAPOINT_PERCENT_DIAGONAL,
+    PROP_SERIES_DATAPOINT_LABEL_SEPARATOR,
+    PROP_SERIES_NUMBERFORMAT,
+    PROP_SERIES_PERCENTAGE_NUMBERFORMAT,
     //other series properties
     PROP_SERIES_ATTACHED_AXIS
 };
@@ -140,6 +143,27 @@ void lcl_AddPropertiesToVector_PointProperties(
         Property( C2U( "D3DPercentDiagonal" ),
                   PROP_SERIES_DATAPOINT_PERCENT_DIAGONAL,
                   ::getCppuType( reinterpret_cast< sal_Int16 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "LabelSeparator" ),
+                  PROP_SERIES_DATAPOINT_LABEL_SEPARATOR,
+                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "NumberFormat" ),
+                  PROP_SERIES_NUMBERFORMAT,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "PercentageNumberFormat" ),
+                  PROP_SERIES_PERCENTAGE_NUMBERFORMAT,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 }
