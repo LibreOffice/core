@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:10:55 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:07:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,8 @@ class SwCursor : public SwPaM
 
     ULONG FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges, BOOL& bCancel );
 
+    using SwPaM::Find;
+
 protected:
     virtual _SwCursor_SavePos* CreateNewSavePos() const;
     void SaveState();
@@ -136,7 +138,6 @@ public:
                                         SwPaM* ) const;
 
 
-    using SwPaM::Find;
     ULONG Find( const com::sun::star::util::SearchOptions& rSearchOpt,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 BOOL& bCancel,
