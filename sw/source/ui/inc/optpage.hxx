@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:06:42 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:21:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -406,8 +406,10 @@ class SwMarkPreview : public Window
     void            Paint(const Rectangle&);
     void            PaintPage(const Rectangle &rRect);
     void            InitColors( void );
+
 protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+
 public:
                     SwMarkPreview(Window* pParent, const ResId& rResID);
     virtual         ~SwMarkPreview();
