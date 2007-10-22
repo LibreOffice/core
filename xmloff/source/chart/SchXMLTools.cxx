@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:06:06 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:32:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,12 @@
 // header for class XMLPropertySetMapper
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
 #include <xmloff/xmlprmap.hxx>
+#endif
+#ifndef _XMLOFF_XMLEXP_HXX
+#include <xmloff/xmlexp.hxx>
+#endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include "xmlnmspe.hxx"
 #endif
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -405,6 +411,62 @@ uno::Any getPropertyFromContext( const rtl::OUString& rPropertyName, const XMLPr
             return aPropIter->maValue;
     }
     return aRet;
+}
+
+void exportText( SvXMLExport& rExport, const OUString& rText, bool bConvertTabsLFs )
+{
+    SvXMLElementExport aPara( rExport, XML_NAMESPACE_TEXT,
+                              ::xmloff::token::GetXMLToken( ::xmloff::token::XML_P ),
+                              sal_True, sal_False );
+
+    if( bConvertTabsLFs )
+    {
+        sal_Int32 nStartPos = 0;
+        sal_Int32 nEndPos = rText.getLength();
+        sal_Unicode cChar;
+
+        for( sal_Int32 nPos = 0; nPos < nEndPos; nPos++ )
+        {
+            cChar = rText[ nPos ];
+            switch( cChar )
+            {
+                case 0x0009:        // tabulator
+                    {
+                        if( nPos > nStartPos )
+                            rExport.GetDocHandler()->characters( rText.copy( nStartPos, (nPos - nStartPos)) );
+                        nStartPos = nPos + 1;
+
+                        SvXMLElementExport aElem( rExport, XML_NAMESPACE_TEXT,
+                                                  ::xmloff::token::GetXMLToken( ::xmloff::token::XML_TAB_STOP ),
+                                                  sal_False, sal_False );
+                    }
+                    break;
+
+                case 0x000A:        // linefeed
+                    {
+                        if( nPos > nStartPos )
+                            rExport.GetDocHandler()->characters( rText.copy( nStartPos, (nPos - nStartPos)) );
+                        nStartPos = nPos + 1;
+
+                        SvXMLElementExport aElem( rExport, XML_NAMESPACE_TEXT,
+                                                  ::xmloff::token::GetXMLToken( ::xmloff::token::XML_LINE_BREAK ),
+                                                  sal_False, sal_False );
+                    }
+                    break;
+            }
+        }
+        if( nEndPos > nStartPos )
+        {
+            if( nStartPos == 0 )
+                rExport.GetDocHandler()->characters( rText );
+            else
+                rExport.GetDocHandler()->characters( rText.copy( nStartPos, (nEndPos - nStartPos)) );
+        }
+    }
+    else // do not convert tabs and linefeeds (eg for numbers coming from unit converter)
+    {
+        rExport.GetDocHandler()->characters( rText );
+    }
 }
 
 }
