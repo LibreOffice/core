@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpage.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:23:07 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:10:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,10 +53,11 @@ class SwAccessiblePage : public SwAccessibleContext
 
     sal_Bool    IsSelected();
 
+    using SwAccessibleFrame::GetBounds;
+
 protected:
 
     // return the bounding box for the page in page preview mode
-    using SwAccessibleFrame::GetBounds;
     SwRect GetBounds( /* const SwFrm *pFrm =0 */ );
 
     // Set states for getAccessibleStateSet.
