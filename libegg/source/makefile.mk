@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-09 16:02:20 $
+#   last change: $Author: vg $ $Date: 2007-10-22 14:38:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@ C_RESTRICTIONFLAGS*=-xc99=no_lib
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
+
+.IF "$(ENABLE_GTK)"!=""
+
 PKGCONFIG_MODULES=gtk+-2.0 gdk-2.0
 .INCLUDE: pkg_config.mk
 CFLAGS+=$(PKGCONFIG_CFLAGS)
@@ -63,6 +66,8 @@ SHL1NOCHECK=TRUE
 
 SHL1TARGET= 	eggtray$(UPD)$(DLLPOSTFIX)
 SHL1LIBS=       $(SLB)$/eggtray.lib
+
+.ENDIF #	"$(ENABLE_GTK)"!=""
 
 # --- Targets ----------------------------------
 
