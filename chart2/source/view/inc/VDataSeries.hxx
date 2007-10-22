@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 15:03:30 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:56:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ public:
     bool is() const;
     void clear();
     double getValue( sal_Int32 index ) const;
-    sal_Int32 getNumberFormatKey( sal_Int32 index ) const;
+    sal_Int32 detectNumberFormatKey( sal_Int32 index ) const;
     sal_Int32 getLength() const;
 
 
@@ -129,7 +129,9 @@ public:
     ::com::sun::star::uno::Sequence< double > getAllX() const;
     ::com::sun::star::uno::Sequence< double > getAllY() const;
 
-    sal_Int32           getNumberFormatKey( sal_Int32 index ) const;
+    bool        hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const;
+    sal_Int32   getExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const;
+    sal_Int32   detectNumberFormatKey( sal_Int32 nPointIndex ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         getPropertiesOfPoint( sal_Int32 index ) const;
@@ -153,6 +155,9 @@ public:
 
     void setConnectBars( sal_Bool bConnectBars );
     sal_Bool getConnectBars() const;
+
+    void setGroupBarsPerAxis( sal_Bool bGroupBarsPerAxis );
+    sal_Bool getGroupBarsPerAxis() const;
 
     //this is only temporarily here for area chart:
     ::com::sun::star::drawing::PolyPolygonShape3D       m_aPolyPolygonShape3D;
@@ -224,6 +229,8 @@ private: //member
     sal_Int32               m_nAxisIndex;//indicates wether this is attached to a main or secondary axis
 
     sal_Bool                m_bConnectBars;
+
+    sal_Bool                m_bGroupBarsPerAxis;
 
     rtl::OUString           m_aSeriesParticle;
     rtl::OUString           m_aCID;
