@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AxisItemConverter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:55:41 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:50:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 
 #ifndef _COM_SUN_STAR_CHART2_XAXIS_HPP_
 #include <com/sun/star/chart2/XAxis.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_AXISORIENTATION_HPP_
+#include <com/sun/star/chart2/AxisOrientation.hpp>
 #endif
 
 // #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -243,6 +246,10 @@ void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemS
         }
         break;
 
+        case SCHATTR_AXIS_REVERSE:
+            rOutItemSet.Put( SfxBoolItem( nWhichId, (AxisOrientation_REVERSE == aScale.Orientation) ));
+            break;
+
         // Increment
         case SCHATTR_AXIS_AUTO_STEP_MAIN:
             // if the any has no value => auto is on
@@ -357,6 +364,10 @@ void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemS
             rOutItemSet.Put( SfxBoolItem( nWhichId, ! bNumberFormatIsSet ));
         }
         break;
+
+        case SCHATTR_AXISTYPE:
+        rOutItemSet.Put( SfxInt32Item( nWhichId, aScale.AxisType ));
+        break;
     }
 }
 
@@ -447,6 +458,19 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
                     aScale.Scaling = new LinearScaling( 1.0, 0.0 );
                     bSetScale = true;
                 }
+            }
+        }
+        break;
+
+        case SCHATTR_AXIS_REVERSE:
+        {
+            bool bWasReverse = ( AxisOrientation_REVERSE == aScale.Orientation );
+            bool bNewReverse = (static_cast< const SfxBoolItem & >(
+                     rItemSet.Get( nWhichId )).GetValue() );
+            if( bWasReverse != bNewReverse )
+            {
+                aScale.Orientation = bNewReverse ? AxisOrientation_REVERSE : AxisOrientation_MATHEMATICAL;
+                bSetScale = true;
             }
         }
         break;
@@ -617,6 +641,10 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
                 GetPropertySet()->setPropertyValue( C2U( "NumberFormat" ), aValue );
             }
         }
+        break;
+
+        case SCHATTR_AXISTYPE:
+        //don't allow to change the axis type so far
         break;
     }
 
