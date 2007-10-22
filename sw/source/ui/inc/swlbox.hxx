@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swlbox.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-02 10:19:36 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:23:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,22 +106,26 @@ class SW_DLLPUBLIC SwComboBox : public ComboBox
     SW_DLLPRIVATE void                  InitComboBox();
     SW_DLLPRIVATE void                  InsertSorted(SwBoxEntry* pEntry);
 
+    using ComboBox::InsertEntry;
+    using ComboBox::RemoveEntry;
+    using Window::SetStyle;
+
 public:
+
+    using ComboBox::GetEntryPos;
+
     SwComboBox(Window* pParent, const ResId& rId,
                USHORT nStyleBits = nsSwComboBoxStyle::CBS_ALL);
     ~SwComboBox();
 
     virtual void            KeyInput( const KeyEvent& rKEvt );
 
-    using ComboBox::InsertEntry;
     void                    InsertEntry(const SwBoxEntry&);
     USHORT                  InsertEntry( const XubString& rStr, USHORT = 0)
                             {        InsertEntry( SwBoxEntry( rStr ) ); return 0;    }
 
-    using ComboBox::RemoveEntry;
     void                    RemoveEntry(USHORT nPos);
 
-    using ComboBox::GetEntryPos;
     USHORT                  GetEntryPos(const SwBoxEntry& rEntry) const;
     const SwBoxEntry&       GetEntry(USHORT) const;
 
@@ -129,7 +133,6 @@ public:
     const SwBoxEntry&       GetRemovedEntry(USHORT nPos) const;
 
     USHORT                  GetStyle() const            { return nStyle;    }
-    using Window::SetStyle;
     void                    SetStyle(const USHORT nSt)  { nStyle = nSt;     }
 
     String                  GetText() const;
