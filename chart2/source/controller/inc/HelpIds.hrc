@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpIds.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:53:52 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:49:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #define CHART_HELPIDS_HRC
 
 #include <svtools/solar.hrc>
+//next is 91
 
 //see old chart: schhids.h
 
@@ -141,6 +142,9 @@
 #define HID_SCH_DATALABEL_PERCENT   (HID_SCH_START + 77)
 #define HID_SCH_DATALABEL_TEXT      (HID_SCH_START + 78)
 #define HID_SCH_DATALABEL_SYMBOL    (HID_SCH_START + 79)
+#define HID_SCH_PB_NUMBERFORMAT     (HID_SCH_START + 88)
+#define HID_SCH_PB_PERCENT_NUMBERFORMAT     (HID_SCH_START + 89)
+#define HID_SCH_DATALABEL_SEPARATOR         (HID_SCH_START + 90)
 
 #define HID_SCH_TITLE_MAIN  (HID_SCH_START + 80)
 #define HID_SCH_TITLE_SUB   (HID_SCH_START + 81)
