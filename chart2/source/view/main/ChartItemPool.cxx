@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartItemPool.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:12:14 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:56:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_chart2.hxx"
 
 #include "ChartItemPool.hxx"
+#include "macros.hxx"
 
 #include "chartview/ChartSfxItemIds.hxx"
 #ifndef _SVX_CHRTITEM_HXX
@@ -45,12 +46,15 @@
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
-
 #ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
 #endif
 #ifndef _SVX_SIZEITEM_HXX
 #include <svx/sizeitem.hxx>
+#endif
+// header for class SfxStringItem
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
 #endif
 
 // for Singleton GetChartItemPool() function
@@ -93,8 +97,11 @@ ChartItemPool::ChartItemPool():
     **************************************************************************/
     ppPoolDefaults = new SfxPoolItem*[SCHATTR_END - SCHATTR_START + 1];
 
-    ppPoolDefaults[SCHATTR_DATADESCR_DESCR          - SCHATTR_START] = new SvxChartDataDescrItem( CHDESCR_NONE, SCHATTR_DATADESCR_DESCR );
-    ppPoolDefaults[SCHATTR_DATADESCR_SHOW_SYM       - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_SHOW_SYM);
+    ppPoolDefaults[SCHATTR_DATADESCR_SHOW_NUMBER    - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_SHOW_NUMBER);
+    ppPoolDefaults[SCHATTR_DATADESCR_SHOW_PERCENTAGE- SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_SHOW_PERCENTAGE);
+    ppPoolDefaults[SCHATTR_DATADESCR_SHOW_CATEGORY  - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_SHOW_CATEGORY);
+    ppPoolDefaults[SCHATTR_DATADESCR_SHOW_SYMBOL    - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_SHOW_SYMBOL);
+    ppPoolDefaults[SCHATTR_DATADESCR_SEPARATOR      - SCHATTR_START] = new SfxStringItem(SCHATTR_DATADESCR_SEPARATOR,C2U(" "));
     ppPoolDefaults[SCHATTR_LEGEND_POS               - SCHATTR_START] = new SvxChartLegendPosItem( CHLEGEND_RIGHT, SCHATTR_LEGEND_POS );
 //  ppPoolDefaults[SCHATTR_TEXT_ORIENT              - SCHATTR_START] = new SvxChartTextOrientItem;
      ppPoolDefaults[SCHATTR_TEXT_STACKED                - SCHATTR_START] = new SfxBoolItem(SCHATTR_TEXT_STACKED,FALSE);
@@ -137,8 +144,8 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_Z_AXIS_ORIGIN            - SCHATTR_START] = new SvxDoubleItem(0.0, SCHATTR_Z_AXIS_ORIGIN);
 
     ppPoolDefaults[SCHATTR_AXISTYPE                 - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXISTYPE, CHART_AXIS_X);
-    ppPoolDefaults[SCHATTR_DUMMY0                   - SCHATTR_START] = new SfxInt32Item(SCHATTR_DUMMY0, 0);
-    ppPoolDefaults[SCHATTR_DUMMY1                   - SCHATTR_START] = new SfxInt32Item(SCHATTR_DUMMY1, 0);
+    ppPoolDefaults[SCHATTR_PERCENT_NUMBERFORMAT_VALUE  - SCHATTR_START] = new SfxInt32Item(SCHATTR_PERCENT_NUMBERFORMAT_VALUE, 0);
+    ppPoolDefaults[SCHATTR_PERCENT_NUMBERFORMAT_SOURCE - SCHATTR_START] = new SfxBoolItem(SCHATTR_PERCENT_NUMBERFORMAT_SOURCE);
     ppPoolDefaults[SCHATTR_DUMMY2                   - SCHATTR_START] = new SfxInt32Item(SCHATTR_DUMMY2, 0);
     ppPoolDefaults[SCHATTR_DUMMY3                   - SCHATTR_START] = new SfxInt32Item(SCHATTR_DUMMY3, 0);
     ppPoolDefaults[SCHATTR_DUMMY_END                - SCHATTR_START] = new SfxInt32Item(SCHATTR_DUMMY_END, 0);
@@ -196,11 +203,7 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_AXIS_SHOWMAINGRID    - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_SHOWMAINGRID,0);
     ppPoolDefaults[SCHATTR_AXIS_SHOWHELPGRID    - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_SHOWHELPGRID,0);
     ppPoolDefaults[SCHATTR_AXIS_TOPDOWN         - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_TOPDOWN,0);
-
-    ppPoolDefaults[SCHATTR_AXIS_DUMMY0          - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_DUMMY0,0);
-    ppPoolDefaults[SCHATTR_AXIS_DUMMY1          - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_DUMMY1,0);
-    ppPoolDefaults[SCHATTR_AXIS_DUMMY2          - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_DUMMY2,0);
-    ppPoolDefaults[SCHATTR_AXIS_DUMMY3          - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_DUMMY3,0);
+    ppPoolDefaults[SCHATTR_AXIS_REVERSE         - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_REVERSE,0);
 
     ppPoolDefaults[SCHATTR_SYMBOL_BRUSH         - SCHATTR_START] = new SvxBrushItem(SCHATTR_SYMBOL_BRUSH);
 
@@ -212,12 +215,17 @@ ChartItemPool::ChartItemPool():
     // new for New Chart
     ppPoolDefaults[SCHATTR_BAR_OVERLAP          - SCHATTR_START] = new SfxInt32Item(SCHATTR_BAR_OVERLAP,0);
     ppPoolDefaults[SCHATTR_BAR_GAPWIDTH         - SCHATTR_START] = new SfxInt32Item(SCHATTR_BAR_GAPWIDTH,0);
-    ppPoolDefaults[SCHATTR_BAR_CONNECT          - SCHATTR_START] = new SfxBoolItem(SCHATTR_BAR_CONNECT,0);
+    ppPoolDefaults[SCHATTR_BAR_CONNECT          - SCHATTR_START] = new SfxBoolItem(SCHATTR_BAR_CONNECT, FALSE);
+    ppPoolDefaults[SCHATTR_GROUP_BARS_PER_AXIS  - SCHATTR_START] = new SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, FALSE);
     ppPoolDefaults[SCHATTR_NUM_OF_LINES_FOR_BAR - SCHATTR_START] = new SfxInt32Item( SCHATTR_NUM_OF_LINES_FOR_BAR, 0 );
     ppPoolDefaults[SCHATTR_SPLINE_ORDER         - SCHATTR_START] = new SfxInt32Item( SCHATTR_SPLINE_ORDER, 3 );
     ppPoolDefaults[SCHATTR_SPLINE_RESOLUTION    - SCHATTR_START] = new SfxInt32Item( SCHATTR_SPLINE_RESOLUTION, 20 );
     ppPoolDefaults[SCHATTR_DIAGRAM_STYLE        - SCHATTR_START] = new SvxChartStyleItem( CHSTYLE_2D_COLUMN, SCHATTR_DIAGRAM_STYLE );
     ppPoolDefaults[SCHATTR_TEXTBREAK            - SCHATTR_START] = new SfxBoolItem( SCHATTR_TEXTBREAK, FALSE );
+
+    ppPoolDefaults[SCHATTR_AXIS_FOR_ALL_SERIES  - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_FOR_ALL_SERIES, 0);
+    ppPoolDefaults[SCHATTR_REGRESSION_SHOW_EQUATION -SCHATTR_START] = new SfxBoolItem(SCHATTR_REGRESSION_SHOW_EQUATION, 0);
+    ppPoolDefaults[SCHATTR_REGRESSION_SHOW_COEFF -SCHATTR_START] = new SfxBoolItem(SCHATTR_REGRESSION_SHOW_COEFF, 0);
 
     /**************************************************************************
     * ItemInfos
@@ -253,10 +261,16 @@ ChartItemPool::~ChartItemPool()
 
     delete[] pItemInfos;
 
-    SetRefCount(*ppPoolDefaults[SCHATTR_DATADESCR_DESCR          - SCHATTR_START], 0);
-    delete  ppPoolDefaults[SCHATTR_DATADESCR_DESCR          - SCHATTR_START];
-    SetRefCount(*ppPoolDefaults[SCHATTR_DATADESCR_SHOW_SYM      - SCHATTR_START], 0);
-    delete  ppPoolDefaults[SCHATTR_DATADESCR_SHOW_SYM       - SCHATTR_START];
+    SetRefCount(*ppPoolDefaults[SCHATTR_DATADESCR_SHOW_NUMBER - SCHATTR_START], 0);
+    delete  ppPoolDefaults[SCHATTR_DATADESCR_SHOW_NUMBER    - SCHATTR_START];
+    SetRefCount(*ppPoolDefaults[SCHATTR_DATADESCR_SHOW_PERCENTAGE   - SCHATTR_START], 0);
+    delete  ppPoolDefaults[SCHATTR_DATADESCR_SHOW_PERCENTAGE - SCHATTR_START];
+    SetRefCount(*ppPoolDefaults[SCHATTR_DATADESCR_SHOW_CATEGORY - SCHATTR_START], 0);
+    delete  ppPoolDefaults[SCHATTR_DATADESCR_SHOW_CATEGORY  - SCHATTR_START];
+    SetRefCount(*ppPoolDefaults[SCHATTR_DATADESCR_SHOW_SYMBOL   - SCHATTR_START], 0);
+    delete  ppPoolDefaults[SCHATTR_DATADESCR_SHOW_SYMBOL    - SCHATTR_START];
+    SetRefCount(*ppPoolDefaults[SCHATTR_DATADESCR_SEPARATOR     - SCHATTR_START], 0);
+    delete  ppPoolDefaults[SCHATTR_DATADESCR_SEPARATOR      - SCHATTR_START];
     SetRefCount(*ppPoolDefaults[SCHATTR_LEGEND_POS              - SCHATTR_START], 0);
     delete  ppPoolDefaults[SCHATTR_LEGEND_POS               - SCHATTR_START];
 //  SetRefCount(*ppPoolDefaults[SCHATTR_TEXT_ORIENT             - SCHATTR_START], 0);
@@ -341,10 +355,10 @@ ChartItemPool::~ChartItemPool()
 
     SetRefCount(*ppPoolDefaults[SCHATTR_AXISTYPE                - SCHATTR_START], 0);
     delete  ppPoolDefaults[SCHATTR_AXISTYPE                 - SCHATTR_START];
-    SetRefCount(*ppPoolDefaults[SCHATTR_DUMMY0                  - SCHATTR_START], 0);
-    delete  ppPoolDefaults[SCHATTR_DUMMY0                   - SCHATTR_START];
-    SetRefCount(*ppPoolDefaults[SCHATTR_DUMMY1                  - SCHATTR_START], 0);
-    delete  ppPoolDefaults[SCHATTR_DUMMY1                   - SCHATTR_START];
+    SetRefCount(*ppPoolDefaults[SCHATTR_PERCENT_NUMBERFORMAT_VALUE - SCHATTR_START], 0);
+    delete  ppPoolDefaults[SCHATTR_PERCENT_NUMBERFORMAT_VALUE   - SCHATTR_START];
+    SetRefCount(*ppPoolDefaults[SCHATTR_PERCENT_NUMBERFORMAT_SOURCE - SCHATTR_START], 0);
+    delete  ppPoolDefaults[SCHATTR_PERCENT_NUMBERFORMAT_SOURCE      - SCHATTR_START];
     SetRefCount(*ppPoolDefaults[SCHATTR_DUMMY2                  - SCHATTR_START], 0);
     delete  ppPoolDefaults[SCHATTR_DUMMY2                   - SCHATTR_START];
     SetRefCount(*ppPoolDefaults[SCHATTR_DUMMY3                  - SCHATTR_START], 0);
@@ -446,15 +460,8 @@ ChartItemPool::~ChartItemPool()
     delete  ppPoolDefaults[SCHATTR_AXIS_SHOWHELPGRID    - SCHATTR_START];
     SetRefCount(*ppPoolDefaults[SCHATTR_AXIS_TOPDOWN            - SCHATTR_START], 0);
     delete  ppPoolDefaults[SCHATTR_AXIS_TOPDOWN         - SCHATTR_START];
-
-    SetRefCount(*ppPoolDefaults[SCHATTR_AXIS_DUMMY0         - SCHATTR_START], 0);
-    delete  ppPoolDefaults[SCHATTR_AXIS_DUMMY0          - SCHATTR_START];
-    SetRefCount(*ppPoolDefaults[SCHATTR_AXIS_DUMMY1         - SCHATTR_START], 0);
-    delete  ppPoolDefaults[SCHATTR_AXIS_DUMMY1          - SCHATTR_START];
-    SetRefCount(*ppPoolDefaults[SCHATTR_AXIS_DUMMY2         - SCHATTR_START], 0);
-    delete  ppPoolDefaults[SCHATTR_AXIS_DUMMY2          - SCHATTR_START];
-    SetRefCount(*ppPoolDefaults[SCHATTR_AXIS_DUMMY3         - SCHATTR_START], 0);
-    delete  ppPoolDefaults[SCHATTR_AXIS_DUMMY3          - SCHATTR_START];
+    SetRefCount(*ppPoolDefaults[SCHATTR_AXIS_REVERSE        - SCHATTR_START], 0);
+    delete  ppPoolDefaults[SCHATTR_AXIS_REVERSE         - SCHATTR_START];
 
     SetRefCount(*ppPoolDefaults[SCHATTR_SYMBOL_BRUSH            - SCHATTR_START], 0);
     delete  ppPoolDefaults[SCHATTR_SYMBOL_BRUSH         - SCHATTR_START];
@@ -474,8 +481,17 @@ ChartItemPool::~ChartItemPool()
     delete  ppPoolDefaults[SCHATTR_BAR_GAPWIDTH         - SCHATTR_START];
     SetRefCount(*ppPoolDefaults[SCHATTR_BAR_CONNECT         - SCHATTR_START], 0);
     delete  ppPoolDefaults[SCHATTR_BAR_CONNECT          - SCHATTR_START];
+    SetRefCount(*ppPoolDefaults[SCHATTR_GROUP_BARS_PER_AXIS - SCHATTR_START], 0);
+    delete  ppPoolDefaults[SCHATTR_GROUP_BARS_PER_AXIS      - SCHATTR_START];
     SetRefCount(*ppPoolDefaults[SCHATTR_NUM_OF_LINES_FOR_BAR - SCHATTR_START], 0);
     delete ppPoolDefaults[SCHATTR_NUM_OF_LINES_FOR_BAR  - SCHATTR_START];
+
+    SetRefCount(*ppPoolDefaults[SCHATTR_AXIS_FOR_ALL_SERIES - SCHATTR_START], 0);
+    delete  ppPoolDefaults[SCHATTR_AXIS_FOR_ALL_SERIES      - SCHATTR_START];
+    SetRefCount(*ppPoolDefaults[SCHATTR_REGRESSION_SHOW_EQUATION - SCHATTR_START], 0);
+    delete  ppPoolDefaults[SCHATTR_REGRESSION_SHOW_EQUATION     - SCHATTR_START];
+    SetRefCount(*ppPoolDefaults[SCHATTR_REGRESSION_SHOW_COEFF - SCHATTR_START], 0);
+    delete  ppPoolDefaults[SCHATTR_REGRESSION_SHOW_COEFF        - SCHATTR_START];
 
     SetRefCount(*ppPoolDefaults[SCHATTR_SPLINE_ORDER    - SCHATTR_START], 0);
     delete ppPoolDefaults[SCHATTR_SPLINE_ORDER          - SCHATTR_START];
