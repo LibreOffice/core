@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:56:07 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:10:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,8 @@ class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
     void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
+    using SwLayoutFrm::CalcRel;
+
 protected:
 
     SwFlyFrm *pPrevLink,        // Vorgaenger/Nachfolger fuer Verkettung mit
@@ -136,7 +138,6 @@ protected:
     void SetMinHeight()  { bMinHeight = TRUE; }
     void ResetMinHeight(){ bMinHeight = FALSE; }
 
-    using SwLayoutFrm::CalcRel;
     Size CalcRel( const SwFmtFrmSize &rSz ) const;
     SwTwips CalcAutoWidth() const;
 
