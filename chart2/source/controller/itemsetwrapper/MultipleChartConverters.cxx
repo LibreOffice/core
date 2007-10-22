@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MultipleChartConverters.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:56:09 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:51:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,8 @@
 #include "TitleHelper.hxx"
 #include "TitleItemConverter.hxx"
 #include "AxisHelper.hxx"
+#include "chartview/ExplicitValueProvider.hxx"
+#include "DiagramHelper.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -143,6 +145,12 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
     {
         uno::Reference< beans::XPropertySet > xObjectProperties( *aIt, uno::UNO_QUERY);
         uno::Reference< uno::XComponentContext> xContext(0);//do not need Context for label properties
+
+        sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForLabel( xObjectProperties, *aIt, -1/*nPointIndex*/,
+                uno::Reference< beans::XPropertySet >( DiagramHelper::getAttachedAxis( *aIt, ChartModelHelper::findDiagram( xChartModel ) ), uno::UNO_QUERY ) );
+        sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForLabel(
+                xObjectProperties,uno::Reference< util::XNumberFormatsSupplier >(xChartModel, uno::UNO_QUERY));
+
         m_aConverters.push_back( new ::chart::wrapper::DataPointItemConverter(
                                          xChartModel, xContext,
                                          xObjectProperties, rItemPool, rDrawModel, NULL,
@@ -152,7 +160,8 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
                                          true, /*bDataSeries*/
                                          false, /*bUseSpecialFillColor*/
                                          0, /*nSpecialFillColor*/
-                                         true /*bOverwriteLabelsForAttributedDataPointsAlso*/
+                                         true /*bOverwriteLabelsForAttributedDataPointsAlso*/,
+                                         nNumberFormat, nPercentNumberFormat
                                          ));
     }
 }
