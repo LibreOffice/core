@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:08:05 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:36:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2383,11 +2383,9 @@ void XclImpChLabelRange::Convert( ScfPropertySet& rPropSet, ScaleData& rScaleDat
     bool bMaxCross = ::get_flag( maData.mnFlags, EXC_CHLABELRANGE_MAXCROSS );
     lclSetValueOrClearAny( rScaleData.Origin, static_cast< double >( maData.mnCross ), bMaxCross );
 
-#if EXC_CHART2_REVERSE_AXIS
     // reverse order
     bool bReverse = ::get_flag( maData.mnFlags, EXC_CHLABELRANGE_REVERSE );
     rScaleData.Orientation = bReverse ? cssc::AxisOrientation_REVERSE : cssc::AxisOrientation_MATHEMATICAL;
-#endif
 
     //! TODO #i58731# show n-th category
 }
@@ -2449,12 +2447,10 @@ void XclImpChValueRange::Convert( ScaleData& rScaleData ) const
     }
     lclSetValueOrClearAny( rSubIncrementSeq[ 0 ].IntervalCount, nCount, nCount == 0 );
 
-#if EXC_CHART2_REVERSE_AXIS
     // reverse order
     namespace cssc = ::com::sun::star::chart2;
     bool bReverse = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_REVERSE );
     rScaleData.Orientation = bReverse ? cssc::AxisOrientation_REVERSE : cssc::AxisOrientation_MATHEMATICAL;
-#endif
 }
 
 // ----------------------------------------------------------------------------
