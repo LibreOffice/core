@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accdoc.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:19:35 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:09:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,8 @@ class SwAccessibleDocumentBase : public SwAccessibleContext
 
     Window* mpChildWin; // protected by solar mutext
 
+    using SwAccessibleFrame::SetVisArea;
+
 protected:
 
     virtual ~SwAccessibleDocumentBase();
@@ -66,7 +68,6 @@ public:
 
     SwAccessibleDocumentBase( SwAccessibleMap* pInitMap );
 
-    using SwAccessibleFrame::SetVisArea;
     void SetVisArea();
 
     virtual void AddChild( Window *pWin, sal_Bool bFireEvent = sal_True );
