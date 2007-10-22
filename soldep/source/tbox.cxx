@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:40:15 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 14:44:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,9 @@ SoldepToolBox::SoldepToolBox( Window* pParent, const ResId& aId, BOOL bDAble ) :
                 bDockable( bDAble ),
                 bCloseMode( FALSE ),
                 bBoxIsVisible( TRUE ),
+                bPinable( TRUE ),
                 aPinedBitmap( DtSodResId( TID_SMALL_PIN_PINED )),     // BMP_SMALL_PIN_PINED
-                aUnpinedBitmap( DtSodResId( TID_SMALL_PIN_UNPINED )),   // BMP_SMALL_PIN_UNPINED
-                bPinable( TRUE )
+                aUnpinedBitmap( DtSodResId( TID_SMALL_PIN_UNPINED ))   // BMP_SMALL_PIN_UNPINED
 {
     bPinable = TRUE;
 
@@ -76,7 +76,7 @@ SoldepToolBox::SoldepToolBox( Window* pParent, const ResId& aId, BOOL bDAble ) :
 //  if ( sToolBoxInfo.GetToken( 3, ',' ) == "Visible" ) {
         for ( USHORT i = 0; i < GetItemCount() && !bBoxIsVisible; i++ )
         {
-            USHORT nItemId = GetItemId( i );
+//          USHORT nItemId = GetItemId( i );
 
             switch ( GetItemType( i ))
             {
@@ -570,7 +570,7 @@ BOOL SoldepToolBox::GetPin()
 
 void SoldepToolBox::TogglePin()
 {
-     bPin != bPin;
+     bPin = !bPin;
 }
 
 void SoldepToolBox::SetPin( BOOL bP )
