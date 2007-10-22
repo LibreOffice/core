@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:51:50 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:32:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -739,6 +739,18 @@ lcl_TableData lcl_getDataForLocalTable(
     }
 
     return aResult;
+}
+
+void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< beans::XPropertySet >& xPropSet,
+                                        SvXMLExport& rExport )
+{
+    if( xPropSet.is())
+    {
+        sal_Int32 nNumberFormat = 0;
+        Any aNumAny = xPropSet->getPropertyValue( rPropertyName );
+        if( (aNumAny >>= nNumberFormat) && (nNumberFormat != -1) )
+            rExport.addDataStyle( nNumberFormat );
+    }
 }
 
 } // anonymous namespace
@@ -1686,7 +1698,6 @@ void SchXMLExportHelper::exportAxes(
 
     // variables for autostyles
     const OUString sNumFormat( OUString::createFromAscii( "NumberFormat" ));
-    sal_Int32 nNumberFormat = 0;
     Reference< beans::XPropertySet > xPropSet;
     std::vector< XMLPropertyState > aPropertyStates;
 
@@ -1795,11 +1806,7 @@ void SchXMLExportHelper::exportAxes(
             if( xPropSet.is())
             {
                 bHasAxisProperties = true;
-                Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
-                aNumAny >>= nNumberFormat;
-                if( nNumberFormat != -1 )
-                    mrExport.addDataStyle( nNumberFormat );
-
+                lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
                 aPropertyStates = mxExpPropMapper->Filter( xPropSet );
             }
         }
@@ -1935,15 +1942,9 @@ void SchXMLExportHelper::exportAxes(
             if( mxExpPropMapper.is())
             {
                 xPropSet = xAxisTwoXSupp->getSecondaryXAxis();
+                lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
                 if( xPropSet.is())
-                {
-                    Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
-                    aNumAny >>= nNumberFormat;
-                    if( nNumberFormat != -1 )
-                        mrExport.addDataStyle( nNumberFormat );
-
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-                }
             }
             if( bExportContent )
             {
@@ -1982,11 +1983,7 @@ void SchXMLExportHelper::exportAxes(
             if( xPropSet.is())
             {
                 bHasAxisProperties = true;
-                Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
-                aNumAny >>= nNumberFormat;
-                if( nNumberFormat != -1 )
-                    mrExport.addDataStyle( nNumberFormat );
-
+                lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
                 aPropertyStates = mxExpPropMapper->Filter( xPropSet );
             }
         }
@@ -2092,15 +2089,9 @@ void SchXMLExportHelper::exportAxes(
             if( mxExpPropMapper.is())
             {
                 xPropSet = xAxisTwoYSupp->getSecondaryYAxis();
+                lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
                 if( xPropSet.is())
-                {
-                    Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
-                    aNumAny >>= nNumberFormat;
-                    if( nNumberFormat != -1 )
-                        mrExport.addDataStyle( nNumberFormat );
-
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-                }
             }
             if( bExportContent )
             {
@@ -2135,15 +2126,9 @@ void SchXMLExportHelper::exportAxes(
             if( mxExpPropMapper.is())
             {
                 xPropSet = xAxisZSupp->getZAxis();
+                lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
                 if( xPropSet.is())
-                {
-                    Any aNumAny = xPropSet->getPropertyValue( sNumFormat );
-                    aNumAny >>= nNumberFormat;
-                    if( nNumberFormat != -1 )
-                        mrExport.addDataStyle( nNumberFormat );
-
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-                }
             }
             if( bExportContent )
             {
@@ -2249,6 +2234,9 @@ void SchXMLExportHelper::exportSeries(
     OUString aFirstXRange;
 
     std::vector< XMLPropertyState > aPropertyStates;
+
+    const OUString sNumFormat( OUString::createFromAscii( "NumberFormat" ));
+    const OUString sPercentageNumFormat( OUString::createFromAscii( "PercentageNumberFormat" ));
 
     Sequence< Reference< chart2::XCoordinateSystem > >
         aCooSysSeq( xBCooSysCnt->getCoordinateSystems());
@@ -2375,11 +2363,12 @@ void SchXMLExportHelper::exportSeries(
                                             rEx.Message,
                                             RTL_TEXTENCODING_ASCII_US ).getStr());
                                 }
+
+                                lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
+                                lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
+
                                 if( mxExpPropMapper.is())
-                                {
-                                    if( mxExpPropMapper.is())
-                                        aPropertyStates = mxExpPropMapper->Filter( xPropSet );
-                                }
+                                    aPropertyStates = mxExpPropMapper->Filter( xPropSet );
                             }
 
                             if( bExportContent )
@@ -2759,6 +2748,9 @@ void SchXMLExportHelper::exportDataPoints(
 
         std::vector< XMLPropertyState > aPropertyStates;
 
+        const OUString sNumFormat( OUString::createFromAscii( "NumberFormat" ));
+        const OUString sPercentageNumFormat( OUString::createFromAscii( "PercentageNumberFormat" ));
+
         bool bVaryColorsByPoint = false;
         Sequence< sal_Int32 > aDataPointSeq;
         if( xSeriesProperties.is())
@@ -2820,6 +2812,9 @@ void SchXMLExportHelper::exportDataPoints(
                 DBG_ASSERT( xPropSet.is(), "Pie Segments should have properties" );
                 if( xPropSet.is())
                 {
+                    lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
+                    lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
+
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
                     if( aPropertyStates.size() > 0 )
                     {
@@ -2876,6 +2871,9 @@ void SchXMLExportHelper::exportDataPoints(
                 }
                 if( xPropSet.is())
                 {
+                    lcl_exportNumberFormat( sNumFormat, xPropSet, mrExport );
+                    lcl_exportNumberFormat( sPercentageNumFormat, xPropSet, mrExport );
+
                     aPropertyStates = mxExpPropMapper->Filter( xPropSet );
                     if( aPropertyStates.size() > 0 )
                     {
@@ -3051,58 +3049,7 @@ void SchXMLExportHelper::AddAutoStyleAttribute( const std::vector< XMLPropertySt
 
 void SchXMLExportHelper::exportText( const OUString& rText, bool bConvertTabsLFs )
 {
-    SvXMLElementExport aPara( mrExport, XML_NAMESPACE_TEXT,
-                              ::xmloff::token::GetXMLToken( ::xmloff::token::XML_P ),
-                              sal_True, sal_False );
-
-    if( bConvertTabsLFs )
-    {
-        sal_Int32 nStartPos = 0;
-        sal_Int32 nEndPos = rText.getLength();
-        sal_Unicode cChar;
-
-        for( sal_Int32 nPos = 0; nPos < nEndPos; nPos++ )
-        {
-            cChar = rText[ nPos ];
-            switch( cChar )
-            {
-                case 0x0009:        // tabulator
-                    {
-                        if( nPos > nStartPos )
-                            mrExport.GetDocHandler()->characters( rText.copy( nStartPos, (nPos - nStartPos)) );
-                        nStartPos = nPos + 1;
-
-                        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_TEXT,
-                                                  ::xmloff::token::GetXMLToken( ::xmloff::token::XML_TAB_STOP ),
-                                                  sal_False, sal_False );
-                    }
-                    break;
-
-                case 0x000A:        // linefeed
-                    {
-                        if( nPos > nStartPos )
-                            mrExport.GetDocHandler()->characters( rText.copy( nStartPos, (nPos - nStartPos)) );
-                        nStartPos = nPos + 1;
-
-                        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_TEXT,
-                                                  ::xmloff::token::GetXMLToken( ::xmloff::token::XML_LINE_BREAK ),
-                                                  sal_False, sal_False );
-                    }
-                    break;
-            }
-        }
-        if( nEndPos > nStartPos )
-        {
-            if( nStartPos == 0 )
-                mrExport.GetDocHandler()->characters( rText );
-            else
-                mrExport.GetDocHandler()->characters( rText.copy( nStartPos, (nEndPos - nStartPos)) );
-        }
-    }
-    else // do not convert tabs and linefeeds (eg for numbers coming from unit converter)
-    {
-        mrExport.GetDocHandler()->characters( rText );
-    }
+    SchXMLTools::exportText( mrExport, rText, bConvertTabsLFs );
 }
 
 // ========================================
