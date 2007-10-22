@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 07:33:53 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 14:42:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,7 +276,6 @@ class Prj : public PrjList
 {
 friend class Star;
 private:
-    BOOL            bVisited;
 
     ByteString          aPrjPath;
     ByteString          aProjectName;
@@ -284,9 +283,10 @@ private:
     SByteStringList*    pPrjInitialDepList;
     SByteStringList*    pPrjDepList;
     SDepInfoList*       pPrjDepInfoList;
+    BOOL            bSorted;
     BOOL            bHardDependencies;
     BOOL            bFixedDependencies;
-    BOOL            bSorted;
+    BOOL            bVisited;
     BOOL            bIsAvailable;
     SByteStringList* RemoveStringList(SByteStringList* pStringList );
     SDepInfoList*   RemoveDepInfoList(SDepInfoList* pInfoList );
@@ -470,3 +470,5 @@ public:
 };
 
 #endif
+
+
