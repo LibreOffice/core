@@ -4,9 +4,9 @@
 #
 #   $RCSfile: perl.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 16:36:14 $
+#   last change: $Author: vg $ $Date: 2007-10-22 14:44:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,4 +62,11 @@ PERL_LIB=	-lsocket \
             $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/CORE$/shared$/libperl.so \
             $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/i86pc-solaris$/CORE$/shared$/DynaLoader.a 
 .ENDIF 
+
+.IF "$(OS)$(CPU)" == "MACOSXI"
+SOLARINC+=-I$(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/darwin-2level$/CORE
+PERL_LIB=	\
+            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/darwin-2level$/CORE$/libperl.a \
+            $(BUILD_TOOLS)$/..$/..$/lib$/perl5$/5.8.3$/darwin-2level$/auto/DynaLoader/DynaLoader.a
+.ENDIF
 
