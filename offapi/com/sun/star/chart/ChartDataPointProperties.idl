@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartDataPointProperties.idl,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 14:47:15 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:40:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,25 @@ published service ChartDataPointProperties
     /** specifies how the captions of data points are displayed.@see ChartDataCaption
      */
     [property] long DataCaption;
+
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a string that is used to separate the parts of a data label (caption)
+     */
+    [optional, property] string LabelSeparator;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a number format for the display of the value in the data label
+     */
+    [optional, property] long NumberFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a number format for the display of the percentage value in the data label
+     */
+    [optional, property] long PercentageNumberFormat;
 
     //-------------------------------------------------------------------------
 
