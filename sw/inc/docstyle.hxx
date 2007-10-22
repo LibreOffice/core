@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstyle.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 07:59:57 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,6 +203,9 @@ class SwDocStyleSheetPool : public SfxStyleSheetBasePool
 
     virtual SfxStyleSheetBase* Create( const String&, SfxStyleFamily, USHORT nMask);
     virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& );
+
+    using SfxStyleSheetBasePool::Find;
+
 public:
     SwDocStyleSheetPool( SwDoc&, BOOL bOrganizer = FALSE );
     virtual ~SwDocStyleSheetPool();
@@ -211,7 +214,6 @@ public:
                           SfxStyleSheetBase& rTarget );
     virtual SfxStyleSheetBase& Make(const String&, SfxStyleFamily, USHORT nMask, USHORT nPos = 0xffff);
 
-    using SfxStyleSheetBasePool::Find;
     virtual SfxStyleSheetBase* Find( const String&, SfxStyleFamily eFam,
                                     USHORT n=0xFFFF );
 
