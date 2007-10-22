@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:43:35 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:52:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,15 +238,16 @@ namespace
                 //special color for pie chart:
                 bool bUseSpecialFillColor = false;
                 sal_Int32 nSpecialFillColor =0;
+                sal_Int32 nPointIndex = -1; /*-1 for whole series*/
                 if(!bDataSeries)
                 {
+                    nPointIndex = aParticleID.toInt32();
                     uno::Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
                     bool bVaryColorsByPoint = false;
                     if( xSeriesProp.is() &&
                         (xSeriesProp->getPropertyValue(C2U("VaryColorsByPoint")) >>= bVaryColorsByPoint) &&
                         bVaryColorsByPoint )
                     {
-                        sal_Int32 nPointIndex = aParticleID.toInt32();
                         if( !ColorPerPointHelper::hasPointOwnColor( xSeriesProp, nPointIndex, xObjectProperties ) )
                         {
                             bUseSpecialFillColor = true;
@@ -257,11 +258,17 @@ namespace
                         }
                     }
                 }
+                sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForLabel( xObjectProperties, xSeries, nPointIndex,
+                        uno::Reference< beans::XPropertySet >( DiagramHelper::getAttachedAxis( xSeries, xDiagram ), uno::UNO_QUERY ) );
+                sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForLabel(
+                        xObjectProperties,uno::Reference< util::XNumberFormatsSupplier >(xChartModel, uno::UNO_QUERY));
+
                 pItemConverter =  new wrapper::DataPointItemConverter( xChartModel, xContext,
                                         xObjectProperties, rDrawModel.GetItemPool(), rDrawModel,
                                         pNumberFormatterWrapper,
                                         uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
-                                        eMapTo, pRefSize, bDataSeries, bUseSpecialFillColor, nSpecialFillColor );
+                                        eMapTo, pRefSize, bDataSeries, bUseSpecialFillColor, nSpecialFillColor, false,
+                                        nNumberFormat, nPercentNumberFormat );
                     break;
             }
             case OBJECTTYPE_GRID:
