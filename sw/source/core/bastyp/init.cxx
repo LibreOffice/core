@@ -4,9 +4,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:27:14 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:10:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -351,6 +351,8 @@
 #include <fmtwrapinfluenceonobjpos.hxx>
 #endif
 
+
+using namespace ::com::sun::star;
 
 extern void _FrmFinit();
 extern void ClearFEShellTabCols();
