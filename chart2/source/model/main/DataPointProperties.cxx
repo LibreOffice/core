@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointProperties.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:00:23 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:53:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,11 +324,26 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
+        Property( C2U( "LabelSeparator" ),
+                  PROP_DATAPOINT_LABEL_SEPARATOR,
+                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
         Property( C2U( "NumberFormat" ),
                   PROP_DATAPOINT_NUMBER_FORMAT,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    //additional 'PercentageNumberFormat'
+    rOutProperties.push_back(
+        Property( C2U( "PercentageNumberFormat" ),
+                  PROP_DATAPOINT_PERCENTAGE_NUMBER_FORMAT,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
         Property( C2U( "ReferenceDiagramSize" ),
@@ -427,8 +442,9 @@ void DataPointProperties::AddDefaultsToMap(
             sal_False  // ShowLegendSymbol
             ));
 
+    PropertyHelper::setPropertyValueDefault< rtl::OUString >( rOutMap, PROP_DATAPOINT_LABEL_SEPARATOR, C2U(" ") );
+
     //@todo maybe choose a different one here -> should be dynamically that of the attached axis
-    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATAPOINT_NUMBER_FORMAT, 0 );
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_ERROR_BAR_X, uno::Reference< beans::XPropertySet >());
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_ERROR_BAR_Y, uno::Reference< beans::XPropertySet >());
     PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_DATAPOINT_PERCENT_DIAGONAL, 0 );
