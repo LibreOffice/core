@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:12:00 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:56:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,6 +360,12 @@ protected: //methods
                 , LabelAlignment eAlignment=LABEL_ALIGN_CENTER
                 , sal_Int32 nOffset=0 );
 
+    ::rtl::OUString getLabelTextForValue( VDataSeries& rDataSeries
+                , sal_Int32 nPointIndex
+                , double fValue
+                , double fSumValue
+                , bool bAsPercentage );
+
     /** creates two T-shaped error bars in both directions (up/down or
         left/right depending on the bVertical parameter)
 
@@ -406,6 +412,8 @@ protected: //methods
         , tPropertyNameValueMap* pOverwriteMap=0 );
 
     virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const;//nAxisIndex indicates wether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
+
+    VDataSeries* getFirstSeries() const;
 
 protected: //member
     PlottingPositionHelper*    m_pMainPosHelper;
