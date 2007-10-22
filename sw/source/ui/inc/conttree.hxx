@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conttree.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:56:18 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:17:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,12 @@ class SwContentTree : public SvTreeListBox
 
     void                FindActiveTypeAndRemoveUserData();
 
+    using SvLBox::ExecuteDrop;
+    using SvTreeListBox::EditEntry;
+    using SvListView::Expand;
+    using SvListView::Collapse;
+    using SvListView::Select;
+
 protected:
 //  virtual void    Command( const CommandEvent& rCEvt );
     virtual void    RequestHelp( const HelpEvent& rHEvt );
@@ -119,7 +125,6 @@ protected:
     virtual void    DragFinished( sal_Int8 );
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
 
-    using SvLBox::ExecuteDrop;
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     sal_Bool        FillTransferData( TransferDataContainer& rTransfer,
@@ -142,7 +147,6 @@ protected:
                                 );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
 
-    using SvTreeListBox::EditEntry;
     void            EditEntry( SvLBoxEntry* pEntry, BYTE nMode );
 
     void            GotoContent(SwContent* pCnt);
@@ -180,10 +184,8 @@ public:
     BYTE            GetOutlineLevel()const {return nOutlineLevel;}
     void            SetOutlineLevel(BYTE nSet);
 
-    using SvListView::Expand;
     BOOL            Expand( SvLBoxEntry* pParent );
 
-    using SvListView::Collapse;
     BOOL            Collapse( SvLBoxEntry* pParent );
 
     void            ExecCommand(USHORT nCmd, BOOL bModifier);
@@ -207,7 +209,6 @@ public:
     virtual void    GetFocus();
     virtual void    KeyInput(const KeyEvent& rKEvt);
 
-    using SvListView::Select;
     virtual BOOL    Select( SvLBoxEntry* pEntry, BOOL bSelect=TRUE );
 };
 
@@ -260,13 +261,14 @@ private:
 
     DECL_LINK(  DialogClosedHdl, sfx2::FileDialogHelper* );
 
-protected:
-
     using SvLBox::DoubleClickHdl;
+    using SvLBox::ExecuteDrop;
+    using Window::Update;
+
+protected:
 
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
 
-    using SvLBox::ExecuteDrop;
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -335,7 +337,6 @@ public:
 
     void                Display(BOOL bOnlyUpdateUserData = FALSE);
 
-    using Window::Update;
     BOOL                Update(BOOL bHard);
 };
 

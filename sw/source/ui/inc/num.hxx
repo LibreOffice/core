@@ -4,9 +4,9 @@
  *
  *  $RCSfile: num.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:05:39 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:20:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,10 +136,10 @@ class SwNumPositionTabPage : public SfxTabPage
     DECL_LINK( RelativeHdl, CheckBox * );
     DECL_LINK( StandardHdl, PushButton * );
 
-    public:
-
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+
+public:
 
     SwNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet);

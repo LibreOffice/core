@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:55:38 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:17:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,15 +220,15 @@ class SwColumnPage : public SfxTabPage
     void            ResetColWidth();
     void            SetLabels( USHORT nVis );
 
+    using TabPage::ActivatePage;
+    using TabPage::DeactivatePage;
+
     virtual void    ActivatePage(const SfxItemSet& rSet);
     virtual int     DeactivatePage(SfxItemSet *pSet);
 
     SwColumnPage(Window *pParent, const SfxItemSet &rSet);
 
 public:
-    using TabPage::ActivatePage;
-    using TabPage::DeactivatePage;
-
     virtual ~SwColumnPage();
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
