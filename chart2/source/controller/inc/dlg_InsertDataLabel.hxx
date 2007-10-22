@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertDataLabel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:39:38 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:50:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,6 @@
 #ifndef _SV_DIALOG_HXX
 #include <vcl/dialog.hxx>
 #endif
-// header for class FixedLine
-#ifndef _SV_FIXED_HXX
-#include <vcl/fixed.hxx>
-#endif
 // header for class CheckBox
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
@@ -69,7 +65,6 @@ private:
     CancelButton        m_aBtnCancel;
     HelpButton          m_aBtnHelp;
     ::std::auto_ptr< DataLabelResources >    m_apDataLabelResources;
-    FixedLine           m_aFlDescr;
 
     const SfxItemSet&   m_rInAttrs;
 
@@ -87,4 +82,3 @@ public:
 //.............................................................................
 
 #endif
-
