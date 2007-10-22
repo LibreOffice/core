@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Scale.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:55:12 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:48:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,12 +76,16 @@
 #include <svtools/zformat.hxx>
 #endif
 
+#include <com/sun/star/chart2/AxisType.hpp>
+
+using namespace ::com::sun::star;
+
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
-SchScaleYAxisTabPage::SchScaleYAxisTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
+ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     SfxTabPage(pWindow, SchResId(TP_SCALE_Y), rInAttrs),
 
     aFlScale(this, SchResId(FL_SCALE_Y)),
@@ -101,6 +105,7 @@ SchScaleYAxisTabPage::SchScaleYAxisTabPage(Window* pWindow,const SfxItemSet& rIn
     aFmtFldOrigin(this, SchResId(EDT_ORIGIN)),
     aCbxAutoOrigin(this, SchResId(CBX_AUTO_ORIGIN)),
     aCbxLogarithm(this, SchResId(CBX_LOGARITHM)),
+    aCbxReverse(this, SchResId(CBX_REVERSE)),
 
     aFlTicks(this,SchResId(FL_TICKS)),
     aCbxTicksInner(this, SchResId(CBX_TICKS_INNER)),
@@ -115,23 +120,42 @@ SchScaleYAxisTabPage::SchScaleYAxisTabPage(Window* pWindow,const SfxItemSet& rIn
     fStepMain(0.0),
     nStepHelp(0),
     fOrigin(0.0),
-    nAxisType(0),
+    nAxisType(chart2::AxisType::REALNUMBER),
     pNumFormatter(NULL)
 {
     FreeResource();
     SetExchangeSupport();
 
-    aCbxAutoMin.SetClickHdl(LINK(this, SchScaleYAxisTabPage, EnableValueHdl));
-    aCbxAutoMax.SetClickHdl(LINK(this, SchScaleYAxisTabPage, EnableValueHdl));
-    aCbxAutoStepMain.SetClickHdl(LINK(this, SchScaleYAxisTabPage, EnableValueHdl));
-    aCbxAutoStepHelp.SetClickHdl(LINK(this, SchScaleYAxisTabPage, EnableValueHdl));
-    aCbxAutoOrigin.SetClickHdl(LINK(this, SchScaleYAxisTabPage, EnableValueHdl));
-    const SfxPoolItem *pPoolItem = NULL;
-    if (rInAttrs.GetItemState(SCHATTR_AXISTYPE, TRUE, &pPoolItem) == SFX_ITEM_SET)
-        nAxisType = (int) ((const SfxInt32Item*)pPoolItem)->GetValue();
+    aCbxAutoMin.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
+    aCbxAutoMax.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
+    aCbxAutoStepMain.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
+    aCbxAutoStepHelp.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
+    aCbxAutoOrigin.SetClickHdl(LINK(this, ScaleTabPage, EnableValueHdl));
 }
 
-IMPL_LINK( SchScaleYAxisTabPage, EnableValueHdl, CheckBox *, pCbx )
+void ScaleTabPage::EnableControls()
+{
+    bool bEnableForValueOrPercentAxis = chart2::AxisType::REALNUMBER == nAxisType || chart2::AxisType::PERCENT == nAxisType;
+    aFlScale.Enable( bEnableForValueOrPercentAxis );
+    aTxtMin.Enable( bEnableForValueOrPercentAxis );
+    aFmtFldMin.Enable( bEnableForValueOrPercentAxis );
+    aCbxAutoMin.Enable( bEnableForValueOrPercentAxis );
+    aTxtMax.Enable( bEnableForValueOrPercentAxis );
+    aFmtFldMax.Enable( bEnableForValueOrPercentAxis );
+    aCbxAutoMax.Enable( bEnableForValueOrPercentAxis );
+    aTxtMain.Enable( bEnableForValueOrPercentAxis );
+    aFmtFldStepMain.Enable( bEnableForValueOrPercentAxis );
+    aCbxAutoStepMain.Enable( bEnableForValueOrPercentAxis );
+    aTxtHelp.Enable( bEnableForValueOrPercentAxis );
+    aMtStepHelp.Enable( bEnableForValueOrPercentAxis );
+    aCbxAutoStepHelp.Enable( bEnableForValueOrPercentAxis );
+    aTxtOrigin.Enable( bEnableForValueOrPercentAxis );
+    aFmtFldOrigin.Enable( bEnableForValueOrPercentAxis );
+    aCbxAutoOrigin.Enable( bEnableForValueOrPercentAxis );
+    aCbxLogarithm.Enable( bEnableForValueOrPercentAxis );
+}
+
+IMPL_LINK( ScaleTabPage, EnableValueHdl, CheckBox *, pCbx )
 {
     if (pCbx == &aCbxAutoMin)
     {
@@ -157,12 +181,12 @@ IMPL_LINK( SchScaleYAxisTabPage, EnableValueHdl, CheckBox *, pCbx )
     return 0;
 }
 
-SfxTabPage* SchScaleYAxisTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs)
+SfxTabPage* ScaleTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs)
 {
-    return new SchScaleYAxisTabPage(pWindow, rOutAttrs);
+    return new ScaleTabPage(pWindow, rOutAttrs);
 }
 
-BOOL SchScaleYAxisTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+BOOL ScaleTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     DBG_ASSERT( pNumFormatter, "No NumberFormatter available" );
 
@@ -186,6 +210,7 @@ BOOL SchScaleYAxisTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_HELP,aCbxAutoStepHelp.IsChecked()));
     rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_ORIGIN   ,aCbxAutoOrigin.IsChecked()));
     rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_LOGARITHM     ,aCbxLogarithm.IsChecked()));
+    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_REVERSE       ,aCbxReverse.IsChecked()));
     rOutAttrs.Put(SvxDoubleItem(fMax     , SCHATTR_AXIS_MAX));
     rOutAttrs.Put(SvxDoubleItem(fMin     , SCHATTR_AXIS_MIN));
     rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_STEP_HELP, nStepHelp));
@@ -197,13 +222,19 @@ BOOL SchScaleYAxisTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     return TRUE;
 }
 
-void SchScaleYAxisTabPage::Reset(const SfxItemSet& rInAttrs)
+void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
 {
     DBG_ASSERT( pNumFormatter, "No NumberFormatter available" );
     if(!pNumFormatter)
         return;
 
     const SfxPoolItem *pPoolItem = NULL;
+    nAxisType=chart2::AxisType::REALNUMBER;
+    if (rInAttrs.GetItemState(SCHATTR_AXISTYPE, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    {
+        nAxisType = (int) ((const SfxInt32Item*)pPoolItem)->GetValue();
+        EnableControls();
+    }
 
     long nTicks=0,nHelpTicks=0;
     if(rInAttrs.GetItemState(SCHATTR_AXIS_TICKS,TRUE, &pPoolItem)== SFX_ITEM_SET)
@@ -246,6 +277,8 @@ void SchScaleYAxisTabPage::Reset(const SfxItemSet& rInAttrs)
         aCbxAutoStepHelp.Check(((const SfxBoolItem*)pPoolItem)->GetValue());
     if (rInAttrs.GetItemState(SCHATTR_AXIS_LOGARITHM,TRUE, &pPoolItem) == SFX_ITEM_SET)
         aCbxLogarithm.Check(((const SfxBoolItem*)pPoolItem)->GetValue());
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_REVERSE,TRUE, &pPoolItem) == SFX_ITEM_SET)
+        aCbxReverse.Check(((const SfxBoolItem*)pPoolItem)->GetValue());
     if (rInAttrs.GetItemState(SCHATTR_AXIS_STEP_HELP,TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
         nStepHelp = ((const SfxInt32Item*)pPoolItem)->GetValue();
@@ -266,7 +299,7 @@ void SchScaleYAxisTabPage::Reset(const SfxItemSet& rInAttrs)
     EnableValueHdl(&aCbxAutoOrigin);
 }
 
-int SchScaleYAxisTabPage::DeactivatePage(SfxItemSet* pItemSet)
+int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
 {
     if( !pNumFormatter )
     {
@@ -371,7 +404,7 @@ int SchScaleYAxisTabPage::DeactivatePage(SfxItemSet* pItemSet)
     return LEAVE_PAGE;
 }
 
-void SchScaleYAxisTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
+void ScaleTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
 {
     pNumFormatter = pFormatter;
     aFmtFldMax.SetFormatter( pNumFormatter );
@@ -391,7 +424,7 @@ void SchScaleYAxisTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
     SetNumFormat();
 }
 
-void SchScaleYAxisTabPage::SetNumFormat()
+void ScaleTabPage::SetNumFormat()
 {
     const SfxPoolItem *pPoolItem = NULL;
 
@@ -421,7 +454,7 @@ void SchScaleYAxisTabPage::SetNumFormat()
     }
 }
 
-bool SchScaleYAxisTabPage::ShowWarning( USHORT nResIdMessage, Edit * pControl /* = NULL */ )
+bool ScaleTabPage::ShowWarning( USHORT nResIdMessage, Edit * pControl /* = NULL */ )
 {
     if( nResIdMessage == 0 )
         return false;
