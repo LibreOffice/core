@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChartPropertyContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:16:21 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:33:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,8 @@
 #include "XMLChartPropertyContext.hxx"
 #include "PropertyMap.hxx"
 
-#ifndef _XMLOFF_SYMBOLIMAGECONTEXT_HXX_
 #include "XMLSymbolImageContext.hxx"
-#endif
+#include "XMLLabelSeparatorContext.hxx"
 
 TYPEINIT1( XMLChartPropertyContext, SvXMLImportContext );
 
@@ -74,6 +73,9 @@ SvXMLImportContext* XMLChartPropertyContext::CreateChildContext(
     {
         case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE:
             pContext = new XMLSymbolImageContext( GetImport(), nPrefix, rLocalName, rProp, rProperties );
+            break;
+        case XML_SCH_CONTEXT_SPECIAL_LABEL_SEPARATOR:
+            pContext = new XMLLabelSeparatorContext( GetImport(), nPrefix, rLocalName, rProp, rProperties );
             break;
     }
 
