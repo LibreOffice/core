@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:38:42 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:45:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,9 @@ hidspecial HID_SCH_DATALABEL_NUMBER {HelpId= HID_SCH_DATALABEL_NUMBER; };
 hidspecial HID_SCH_DATALABEL_PERCENT {HelpId= HID_SCH_DATALABEL_PERCENT; };
 hidspecial HID_SCH_DATALABEL_TEXT {HelpId= HID_SCH_DATALABEL_TEXT; };
 hidspecial HID_SCH_DATALABEL_SYMBOL {HelpId= HID_SCH_DATALABEL_SYMBOL; };
+hidspecial HID_SCH_PB_NUMBERFORMAT {HelpId= HID_SCH_PB_NUMBERFORMAT; };
+hidspecial HID_SCH_PB_PERCENT_NUMBERFORMAT {HelpId= HID_SCH_PB_PERCENT_NUMBERFORMAT; };
+hidspecial HID_SCH_DATALABEL_SEPARATOR {HelpId= HID_SCH_DATALABEL_SEPARATOR; };
 
 hidspecial HID_SCH_TITLE_MAIN {HelpId= HID_SCH_TITLE_MAIN; };
 hidspecial HID_SCH_TITLE_SUB {HelpId= HID_SCH_TITLE_SUB; };
