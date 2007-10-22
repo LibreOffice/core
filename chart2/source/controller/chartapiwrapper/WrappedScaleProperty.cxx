@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedScaleProperty.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:53:00 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:42:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,13 @@
 #ifndef _COM_SUN_STAR_CHART2_EXPLICITSCALEDATA_HPP_
 #include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART2_AXISORIENTATION_HPP_
+#include <com/sun/star/chart2/AxisOrientation.hpp>
+#endif
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
+using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
@@ -105,6 +109,9 @@ WrappedScaleProperty::WrappedScaleProperty( tScaleProperty eScaleProperty
         case SCALE_PROP_LOGARITHMIC:
             m_aOuterName = C2U("Logarithmic");
             break;
+        case SCALE_PROP_REVERSEDIRECTION:
+            m_aOuterName = C2U("ReverseDirection");
+            break;
         default:
             OSL_ENSURE(false,"unknown scale property");
             break;
@@ -130,6 +137,7 @@ void WrappedScaleProperty::addWrappedProperties( std::vector< WrappedProperty* >
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_AUTO_STEPMAIN, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_AUTO_STEPHELP, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_LOGARITHMIC, spChart2ModelContact ) );
+    rList.push_back( new WrappedScaleProperty( SCALE_PROP_REVERSEDIRECTION, spChart2ModelContact ) );
 }
 
 void WrappedScaleProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
@@ -272,6 +280,19 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
                         aScaleData.Scaling = new LogarithmicScaling( 10.0 );
                     else
                         aScaleData.Scaling = 0;
+                    bSetScaleData = true;
+                }
+            }
+            break;
+        }
+        case SCALE_PROP_REVERSEDIRECTION:
+        {
+            if( rOuterValue >>= bBool )
+            {
+                bool bWasReverse = ( AxisOrientation_REVERSE == aScaleData.Orientation );
+                if( (!bBool) != (!bWasReverse) ) // safe comparison between sal_Bool and bool
+                {
+                    aScaleData.Orientation = bBool ? AxisOrientation_REVERSE : AxisOrientation_MATHEMATICAL;
                     bSetScaleData = true;
                 }
             }
@@ -423,6 +444,11 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
         case SCALE_PROP_LOGARITHMIC:
         {
             aRet <<= static_cast< sal_Bool >( AxisHelper::isLogarithmic(aScaleData.Scaling) );
+            break;
+        }
+        case SCALE_PROP_REVERSEDIRECTION:
+        {
+            aRet <<= static_cast< sal_Bool >( AxisOrientation_REVERSE == aScaleData.Orientation );
             break;
         }
         default:
