@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointItemConverter.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:39:12 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:49:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,9 @@ public:
         bool bDataSeries = false,
         bool bUseSpecialFillColor = false,
         sal_Int32 nSpecialFillColor = 0,
-        bool bOverwriteLabelsForAttributedDataPointsAlso=false );
+        bool bOverwriteLabelsForAttributedDataPointsAlso=false,
+        sal_Int32 nNumberFormat=0,
+        sal_Int32 nPercentNumberFormat=0);
 
     virtual ~DataPointItemConverter();
 
@@ -106,6 +108,8 @@ private:
     bool                                m_bColorPerPoint;
     bool                                m_bUseSpecialFillColor;
     sal_Int32                           m_nSpecialFillColor;
+    sal_Int32                           m_nNumberFormat;
+    sal_Int32                           m_nPercentNumberFormat;
 };
 
 } //  namespace wrapper
