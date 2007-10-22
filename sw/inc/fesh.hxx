@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:01:28 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:05:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,12 @@ class SW_DLLPUBLIC SwFEShell : public SwEditShell
 
     SW_DLLPRIVATE BOOL CheckHeadline( bool bRepeat ) const;
 
+    using SwEditShell::Copy;
+
 public:
+
+    using SwEditShell::Insert;
+
     TYPEINFO();
     SwFEShell( SwDoc& rDoc, Window *pWin, const SwViewOption *pOpt = 0 );
     SwFEShell( SwEditShell& rShell, Window *pWin );
@@ -250,7 +255,6 @@ public:
     //paste some pages into another doc - used in mailmerge
     BOOL PastePages( SwFEShell& rToFill, USHORT nStartPage, USHORT nEndPage);
     // Copy-Methode fuer Drag&Drop
-    using SwEditShell::Copy;
     BOOL Copy( SwFEShell*, const Point& rSttPt, const Point& rInsPt,
                 BOOL bIsMove = FALSE, BOOL bSelectInsert = TRUE );
 
@@ -534,7 +538,6 @@ public:
     BOOL IsAlignPossible() const;
     void SetCalcFieldValueHdl(Outliner* pOutliner);
 
-    using SwEditShell::Insert;
     void Insert(const String& rGrfName,
                 const String& rFltName,
                 const Graphic* pGraphic = 0,
