@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertDataLabel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:32:53 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:44:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,12 +53,10 @@ DataLabelsDialog::DataLabelsDialog(Window* pWindow, const SfxItemSet& rInAttrs, 
     m_aBtnCancel(this, SchResId(BTN_CANCEL)),
     m_aBtnHelp(this, SchResId(BTN_HELP)),
     m_apDataLabelResources( new DataLabelResources(this,rInAttrs) ),
-    m_aFlDescr(this, SchResId(FL_DESCR)),
     m_rInAttrs(rInAttrs)
 {
     FreeResource();
     SetText( ObjectNameProvider::getName(OBJECTTYPE_DATA_LABELS) );
-    m_aFlDescr.SetText( ObjectNameProvider::getName(OBJECTTYPE_DATA_LABELS) );
     m_apDataLabelResources->SetNumberFormatter( pFormatter );
     Reset();
 }
