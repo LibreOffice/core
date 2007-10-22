@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:00:27 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:18:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,10 +211,10 @@ class SwFrmPage: public SfxTabPage
     SwFrmPage(Window *pParent, const SfxItemSet &rSet);
     ~SwFrmPage();
 
-public:
-
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+
+public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
     static USHORT* GetRanges();
@@ -259,10 +259,10 @@ class SwGrfExtPage: public SfxTabPage
     SwGrfExtPage(Window *pParent, const SfxItemSet &rSet);
     ~SwGrfExtPage();
 
-public:
-
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+
+public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
@@ -294,10 +294,11 @@ class SwFrmURLPage : public SfxTabPage
 
     SwFrmURLPage(Window *pParent, const SfxItemSet &rSet);
     ~SwFrmURLPage();
-public:
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+
+public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
