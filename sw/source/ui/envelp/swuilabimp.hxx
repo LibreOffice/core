@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuilabimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:45:06 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:15:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,10 +81,11 @@ class SwLabPage : public SfxTabPage
     void DisplayFormat  ();
     SwLabRec* GetSelectedEntryPos();
 
-public:
-
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+    using Window::GetParent;
+
+public:
 
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
 
@@ -94,7 +95,6 @@ public:
     virtual sal_Bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 
-    using Window::GetParent;
     SwLabDlg* GetParent() {return (SwLabDlg*) SfxTabPage::GetParent()->GetParent();}
 
     void    SetToBusinessCard();
@@ -143,10 +143,10 @@ class SwVisitingCardPage : public SfxTabPage
     SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet);
     ~SwVisitingCardPage();
 
-public:
-
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+
+public:
 
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
 
@@ -195,10 +195,10 @@ class SwPrivateDataPage : public SfxTabPage
     SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet);
     ~SwPrivateDataPage();
 
-public:
-
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+
+public:
 
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
 
@@ -245,10 +245,10 @@ class SwBusinessDataPage : public SfxTabPage
     SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet);
     ~SwBusinessDataPage();
 
-public:
-
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+
+public:
 
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labprt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:44:41 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:15:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,10 +82,10 @@ class SwLabPrtPage : public SfxTabPage
     using Window::GetParent;
     SwLabDlg* GetParent() {return (SwLabDlg*) SfxTabPage::GetParent()->GetParent();}
 
-public:
-
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+
+public:
 
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rSet);
 
