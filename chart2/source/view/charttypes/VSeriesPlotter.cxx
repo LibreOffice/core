@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VSeriesPlotter.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:37:12 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:55:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -401,6 +401,53 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getErrorBarsGroupShape( VData
 
 }
 
+OUString VSeriesPlotter::getLabelTextForValue( VDataSeries& rDataSeries
+                , sal_Int32 nPointIndex
+                , double fValue
+                , double fSumValue
+                , bool bAsPercentage )
+{
+    OUString aNumber;
+
+    if( m_pPosHelper->isPercentY() )
+        fValue *= fSumValue;
+
+    if( m_apNumberFormatterWrapper.get())
+    {
+        sal_Int32 nNumberFormatKey = 0;
+        if( rDataSeries.hasExplicitNumberFormat(nPointIndex,bAsPercentage) )
+            nNumberFormatKey = rDataSeries.getExplicitNumberFormat(nPointIndex,bAsPercentage);
+        else if( bAsPercentage )
+        {
+            sal_Int32 nPercentFormat = ExplicitValueProvider::getPercentNumberFormat( m_apNumberFormatterWrapper->getNumberFormatsSupplier() );
+            if( nPercentFormat != -1 )
+                nNumberFormatKey = nPercentFormat;
+        }
+        else
+        {
+            if( m_aAxesNumberFormats.hasFormat(1,rDataSeries.getAttachedAxisIndex()) ) //y-axis
+                nNumberFormatKey = m_aAxesNumberFormats.getFormat(1,rDataSeries.getAttachedAxisIndex());
+            else
+                nNumberFormatKey = rDataSeries.detectNumberFormatKey( nPointIndex );
+        }
+        if(nNumberFormatKey<0)
+            nNumberFormatKey=0;
+
+        sal_Int32 nLabelCol = 0;
+        bool bColChanged;
+        aNumber = m_apNumberFormatterWrapper->getFormattedString(
+                nNumberFormatKey, fValue, nLabelCol, bColChanged );
+        //@todo: change color of label if bColChanged is true
+    }
+    else
+    {
+        sal_Unicode cDecSeparator = '.';//@todo get this locale dependent
+        aNumber = ::rtl::math::doubleToUString( fValue, rtl_math_StringFormat_G /*rtl_math_StringFormat*/
+            , 3/*DecPlaces*/ , cDecSeparator /*,sal_Int32 const * pGroups*/ /*,sal_Unicode cGroupSeparator*/ ,false /*bEraseTrailingDecZeros*/ );
+    }
+    return aNumber;
+}
+
 void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& xTarget
                     , VDataSeries& rDataSeries
                     , sal_Int32 nPointIndex
@@ -446,7 +493,46 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
         }
         //prepare text
         ::rtl::OUStringBuffer aText;
+        ::rtl::OUString aSeparator(sal_Unicode(' '));
+        try
         {
+            uno::Reference< beans::XPropertySet > xPointProps( rDataSeries.getPropertiesOfPoint( nPointIndex ) );
+            if(xPointProps.is())
+                xPointProps->getPropertyValue( C2U( "LabelSeparator" ) ) >>= aSeparator;
+        }
+        catch( uno::Exception& e )
+        {
+            ASSERT_EXCEPTION( e );
+        }
+        bool bMultiLineLabel = aSeparator.equals(C2U("\n"));;
+        sal_Int32 nLineCountForSymbolsize = 0;
+        {
+            if(pLabel->ShowCategoryName)
+            {
+                if( m_xExplicitCategoriesProvider.is() )
+                {
+                    Sequence< OUString > aCategories( m_xExplicitCategoriesProvider->getTextualData() );
+                    if( nPointIndex >= 0 && nPointIndex < aCategories.getLength() )
+                    {
+                        aText.append( aCategories[nPointIndex] );
+                        ++nLineCountForSymbolsize;
+                    }
+                }
+            }
+
+            if(pLabel->ShowNumber)
+            {
+                OUString aNumber( this->getLabelTextForValue( rDataSeries
+                    , nPointIndex, fValue, fSumValue, false /*bAsPercentage*/ ) );
+                if( aNumber.getLength() )
+                {
+                    if(aText.getLength())
+                        aText.append(aSeparator);
+                    aText.append(aNumber);
+                    ++nLineCountForSymbolsize;
+                }
+            }
+
             if(pLabel->ShowNumberInPercent)
             {
                 if(fSumValue==0.0)
@@ -454,57 +540,15 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
                 fValue /= fSumValue;
                 if( fValue < 0 )
                     fValue*=-1.0;
-            }
-            if(pLabel->ShowCategoryName)
-            {
-                if( m_xExplicitCategoriesProvider.is() )
+
+                OUString aPercentage( this->getLabelTextForValue( rDataSeries
+                    , nPointIndex, fValue, fSumValue, true /*bAsPercentage*/ ) );
+                if( aPercentage.getLength() )
                 {
-                    Sequence< OUString > aCategories( m_xExplicitCategoriesProvider->getTextualData() );
-                    if( nPointIndex >= 0 && nPointIndex < aCategories.getLength() )
-                        aText.append( aCategories[nPointIndex] );
-                }
-            }
-
-            if(pLabel->ShowNumber || pLabel->ShowNumberInPercent)
-            {
-                if( m_pPosHelper->isPercentY() )
-                    fValue *= fSumValue;
-
-                if(aText.getLength())
-                    aText.append(sal_Unicode(' '));
-
-                if( m_apNumberFormatterWrapper.get())
-                {
-                    sal_Int32 nNumberFormatKey = 0;
-                    if( pLabel->ShowNumberInPercent )
-                    {
-                        sal_Int32 nPercentFormat = ExplicitValueProvider::getPercentNumberFormat( m_apNumberFormatterWrapper->getNumberFormatsSupplier() );
-                        if( nPercentFormat != -1 )
-                            nNumberFormatKey = nPercentFormat;
-                    }
-                    else if( m_aAxesNumberFormats.hasFormat(1,rDataSeries.getAttachedAxisIndex()) ) //y-axis
-                        nNumberFormatKey = m_aAxesNumberFormats.getFormat(1,rDataSeries.getAttachedAxisIndex());
-                    else
-                        nNumberFormatKey = rDataSeries.getNumberFormatKey( nPointIndex );
-
-                    sal_Int32 nLabelCol = 0;
-                    bool bColChanged;
-                    aText.append(
-                        m_apNumberFormatterWrapper->getFormattedString(
-                            nNumberFormatKey, fValue, nLabelCol, bColChanged ));
-                    //@todo: change color of label if bColChanged is true
-                }
-                else
-                {
-                    sal_Unicode cDecSeparator = '.';//@todo get this locale dependent
-                    aText.append( ::rtl::math::doubleToUString( fValue
-                                    , rtl_math_StringFormat_G //rtl_math_StringFormat
-                                    , 3// DecPlaces
-                                    , cDecSeparator
-                                    //,sal_Int32 const * pGroups
-                                    //,sal_Unicode cGroupSeparator
-                                    ,false //bEraseTrailingDecZeros
-                                        ) );
+                    if(aText.getLength())
+                        aText.append(aSeparator);
+                    aText.append(aPercentage);
+                    ++nLineCountForSymbolsize;
                 }
             }
         }
@@ -527,8 +571,10 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
             awt::Size aSymbolSize( xSymbol->getSize() );
             awt::Size aTextSize( xTextShape->getSize() );
 
-            sal_Int32 nXDiff = aSymbolSize.Width * aTextSize.Height/aSymbolSize.Height;
-            sal_Int32 nYDiff = aTextSize.Height;
+            if( !bMultiLineLabel || nLineCountForSymbolsize <= 0 )
+                nLineCountForSymbolsize = 1;
+            sal_Int32 nYDiff = aTextSize.Height/nLineCountForSymbolsize;
+            sal_Int32 nXDiff = aSymbolSize.Width * nYDiff/aSymbolSize.Height;
 
             aSymbolSize.Width =  nXDiff * 75/100;
             aSymbolSize.Height = nYDiff * 75/100;
@@ -1443,6 +1489,29 @@ PlottingPositionHelper& VSeriesPlotter::getPlottingPositionHelper( sal_Int32 nAx
         pRet = m_pMainPosHelper;
     }
     return *pRet;
+}
+
+VDataSeries* VSeriesPlotter::getFirstSeries() const
+{
+    ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotIter( m_aZSlots.begin() );
+    ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd( m_aZSlots.end() );
+    for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
+    {
+        ::std::vector< VDataSeriesGroup >::const_iterator       aXSlotIter = aZSlotIter->begin();
+        const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd  = aZSlotIter->end();
+
+        if( aXSlotIter != aXSlotEnd )
+        {
+            VDataSeriesGroup aSeriesGroup( *aXSlotIter );
+            if( aSeriesGroup.m_aSeriesVector.size() )
+            {
+                VDataSeries* pSeries = aSeriesGroup.m_aSeriesVector[0];
+                if(pSeries)
+                    return pSeries;
+            }
+        }
+    }
+    return 0;
 }
 
 uno::Sequence< rtl::OUString > VSeriesPlotter::getSeriesNames() const
