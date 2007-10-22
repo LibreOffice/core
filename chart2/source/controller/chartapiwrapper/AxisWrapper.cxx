@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AxisWrapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-10-15 16:24:26 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 16:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,7 @@ enum
     PROP_AXIS_AUTO_STEPMAIN,
     PROP_AXIS_AUTO_STEPHELP,
     PROP_AXIS_LOGARITHMIC,
+    PROP_AXIS_REVERSEDIRECTION,
     PROP_AXIS_DISPLAY_LABELS,
     PROP_AXIS_TEXT_ROTATION,
     PROP_AXIS_MARKS,
@@ -195,6 +196,13 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "Logarithmic" ),
                   PROP_AXIS_LOGARITHMIC,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "ReverseDirection" ),
+                  PROP_AXIS_REVERSEDIRECTION,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
