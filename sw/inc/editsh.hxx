@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:00:53 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:05:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,9 @@ class SW_DLLPUBLIC SwEditShell: public SwCrsrShell
 
     SW_DLLPRIVATE void _SetSectionAttr( SwSectionFmt& rSectFmt, const SfxItemSet& rSet );
 
+    using ViewShell::UpdateFlds;
+    using SwModify::GetInfo;
+
 public:
     // Editieren (immer auf allen selektierten Bereichen)
     void Insert( sal_Unicode, BOOL bOnlyCurrCrsr = FALSE );
@@ -350,7 +353,6 @@ public:
     void Insert(SwField&);
     SwField* GetCurFld() const;
 
-    using ViewShell::UpdateFlds;
     void UpdateFlds( SwField & );       // ein einzelnes Feld
 
     USHORT GetFldTypeCount(USHORT nResId = USHRT_MAX, BOOL bUsed = FALSE) const;
@@ -400,7 +402,6 @@ public:
     void UpdateDocStat( SwDocStat& rStat );
 
     // Dokument - Info
-    using SwModify::GetInfo;
     const SfxDocumentInfo* GetInfo() const;
 
     // Verzeichnismarke einfuegen loeschen
