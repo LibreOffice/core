@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlitemi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:12:17 $
+ *  last change: $Author: vg $ $Date: 2007-10-22 15:13:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,6 +185,8 @@ class SwXMLItemSetContext_Impl : public SvXMLItemSetContext
 {
     SvXMLImportContextRef xBackground;
 
+    using SvXMLItemSetContext::CreateChildContext;
+
 public:
     SwXMLItemSetContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
                   const OUString& rLName,
@@ -194,7 +196,6 @@ public:
                   const SvXMLUnitConverter& rUnitConv );
     virtual ~SwXMLItemSetContext_Impl();
 
-    using SvXMLItemSetContext::CreateChildContext;
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                    const ::rtl::OUString& rLocalName,
                    const ::uno::Reference< xml::sax::XAttributeList > & xAttrList,
