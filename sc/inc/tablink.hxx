@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablink.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:44:24 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:42:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,10 +43,6 @@
 #ifndef SC_REFRESHTIMER_HXX
 #include "refreshtimer.hxx"
 #endif
-
-//REMOVE    #ifndef _EMBOBJ_HXX
-//REMOVE    #include <so3/embobj.hxx>
-//REMOVE    #endif
 
 #ifndef _LNKBASE_HXX //autogen
 #include <sfx2/lnkbase.hxx>
