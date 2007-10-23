@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:08:10 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:45:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,6 @@
 #include <svx/srchitem.hxx>
 #include <svx/svxmsbas.hxx>
 #include <svtools/fltrcfg.hxx>
-//REMOVE    #include <so3/clsids.hxx>
 #include <unotools/charclass.hxx>
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
