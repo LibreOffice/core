@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transobj.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:29:00 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:46:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,6 @@
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
-
-//REMOVE    #ifndef _EMBOBJ_HXX
-//REMOVE    #include <so3/embobj.hxx>
-//REMOVE    #endif
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
