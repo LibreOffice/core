@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edittest.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:37:23 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:36:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,6 @@
 
 #include <dialdll.hxx>
 
-
-#include <so3/factory.hxx>
 
 #define SERVICE_SIMPLEREGISTRY             "com.sun.star.registry.SimpleRegistry"
 
