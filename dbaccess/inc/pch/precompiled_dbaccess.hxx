@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precompiled_dbaccess.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:05:21 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:37:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,7 +456,7 @@
 #include "sfx2/sfxsids.hrc"
 #include "sfx2/sfxuno.hxx"
 
-#include "so3/clsids.hxx"
+#include "comphelper/classids.hxx"
 
 
 #include "svtools/cjkoptions.hxx"
