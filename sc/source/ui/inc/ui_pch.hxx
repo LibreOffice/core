@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ui_pch.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:57:19 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:46:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,21 +134,13 @@
 #include <tools/pstm.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/itempool.hxx>
-#include <so3/iface.hxx>
-#include <so3/factory.hxx>
-#include <so3/so2ref.hxx>
-#include <so3/so2dll.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <shellids.hxx>
 #include <vcl/event.hxx>
-#include <so3/advise.hxx>
-#include <so3/protocol.hxx>
 #include <svtools/intitem.hxx>
-#include <so3/ipclient.hxx>
-#include <so3/client.hxx>
 #include <svtools/confitem.hxx>
 #include <markdata.hxx>
 #include <svx/optgrid.hxx>
@@ -182,8 +174,6 @@
 #include <sfx2/viewfac.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/objsh.hxx>
-#include <so3/so2defs.hxx>
-#include <so3/persist.hxx>
 #include <target.hxx>
 #include <tabvwsh.hxx>
 #include <svtools/inethist.hxx>
@@ -197,17 +187,11 @@
 #include <scdll.hxx>
 #include <sfx2/msg.hxx>
 #include <svtools/ownlist.hxx>
-#include <so3/persist.hxx>
-#include <so3/pseudo.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/frame.hxx>
-#include <so3/ipobj.hxx>
-#include <so3/embobj.hxx>
-#include <so3/ipobj.hxx>
 #include <scresid.hxx>
 #include <sfx2/ipfrm.hxx>
-#include <so3/factory.hxx>
 #include <docsh.hxx>
 //REMOVE    #include <sfx2/interno.hxx>
 #include <vcl/wintypes.hxx>
@@ -340,8 +324,6 @@
 #include <undobase.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/virdev.hxx>
-#include <so3/so2defs.hxx>
-#include <so3/svstor.hxx>
 #include <rangeutl.hxx>
 #include <vcl/toolbox.hxx>
 #include <fupoor.hxx>
