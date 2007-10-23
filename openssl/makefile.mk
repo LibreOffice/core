@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: tkr $ $Date: 2007-10-19 13:45:53 $
+#   last change: $Author: rt $ $Date: 2007-10-23 13:41:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,8 @@
 
 PRJ=.
 
-PRJNAME=so_openssl
-TARGET=so_openssl
+PRJNAME=openssl
+TARGET=openssl
 
 # --- Settings -----------------------------------------------------
 
