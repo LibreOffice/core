@@ -4,9 +4,9 @@
  *
  *  $RCSfile: core_pch.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:46:23 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:43:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,15 +138,9 @@
 #include <tools/ownlist.hxx>
 #include <svtools/itempool.hxx>
 #include <tools/datetime.hxx>
-#include <so3/factory.hxx>
-#include <so3/so2dll.hxx>
-#include <so3/iface.hxx>
 #include <attrib.hxx>
-#include <so3/so2ref.hxx>
-#include <so3/persist.hxx>
 #include <docpool.hxx>
 #include <sot/storage.hxx>
-#include <so3/so2defs.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/window.hxx>
 #include <svtools/confitem.hxx>
@@ -211,7 +205,6 @@
 #include <scresid.hxx>
 #include <vcl/print.hxx>
 #include <attarray.hxx>
-#include <so3/pseudo.hxx>
 #include <svtools/ownlist.hxx>
 #include <interpre.hxx>
 #include <subtotal.hxx>
@@ -230,9 +223,7 @@
 #include <svx/eeitem.hxx>
 #include <callform.hxx>
 #include <validat.hxx>
-#include <so3/linkmgr.hxx>
 #include <svx/brshitem.hxx>
-#include <so3/lnkbase.hxx>
 #include <sot/exchange.hxx>
 #include <svx/editeng.hxx>
 #include <vcl/fonttype.hxx>
@@ -249,7 +240,6 @@
 #include <vcl/font.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/postitem.hxx>
-#include <so3/protocol.hxx>
 #include <svx/svditer.hxx>
 #include <svx/udlnitem.hxx>
 #include <adiasync.hxx>
