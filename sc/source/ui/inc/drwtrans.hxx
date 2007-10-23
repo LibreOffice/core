@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtrans.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:28:33 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:45:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,6 @@
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
-
-//REMOVE    #ifndef _IPOBJ_HXX
-//REMOVE    #include <so3/ipobj.hxx>
-//REMOVE    #endif
 
 #include <sfx2/objsh.hxx>
 
