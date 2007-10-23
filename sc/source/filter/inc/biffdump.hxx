@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:52:27 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,6 @@
 #endif
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
-#endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
 #endif
 
 #ifndef _EXCFORM_HXX
