@@ -1,3 +1,3 @@
 -o lng.DicList
 -o lng.LinguProps
--o lng.LngSvcMgr
+#-o lng.LngSvcMgr
