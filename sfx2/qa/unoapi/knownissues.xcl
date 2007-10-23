@@ -1,14 +1,5 @@
-### 112249 ###
-sfx.StandaloneDocumentInfo::com::sun::star::document::DocumentInfo
-
-### i23235 ###
-sfx.FrameLoader::com::sun::star::document::XExtendedFilterDetection
-
 ### i23244 ###
 sfx.FrameLoader::com::sun::star::frame::XSynchronousFrameLoader
 
-### i26075 ###
-sfx.AppDispatchProvider::com::sun::star::frame::XDispatchProvider
-
-### i26074 ###
-sfx.DocumentTemplates::com::sun::star::frame::XDocumentTemplates
+### i26672 ###
+sfx.StandaloneDocumentInfo::com::sun::star::document::DocumentInfo
