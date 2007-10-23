@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precompiled_svx.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:21:44 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:36:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -748,7 +748,6 @@
 #include "sfx2/srchdefs.hxx"
 #include "sfx2/tplpitem.hxx"
 #include "sfx2/viewfrm.hxx"
-#include "so3/factory.hxx"
 #include "sot/clsids.hxx"
 #include "sot/exchange.hxx"
 #include "sot/factory.hxx"
