@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:53:39 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:37:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,9 +77,6 @@
 #endif
 #ifndef _COMPHELPER_MIMECONFIGHELPER_HXX_
 #include <comphelper/mimeconfighelper.hxx>
-#endif
-#ifndef _SO_CLSIDS_HXX
-#include <so3/clsids.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
