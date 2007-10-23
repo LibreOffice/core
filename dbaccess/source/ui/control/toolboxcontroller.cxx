@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:08:29 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:38:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,9 +88,6 @@
 #endif
 #ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
-#endif
-#ifndef _PASTEDLG_HXX
-#include <so3/pastedlg.hxx>
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
