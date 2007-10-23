@@ -1,25 +1,22 @@
-# test works on windows with cws tl12 except swXMailMerge and SwXMLImporter
-# but this could be a problem of the NONPRO-Version
-
--o sw.CharacterStyle
--o sw.ConditionalParagraphStyle
--o sw.PageStyle
--o sw.ParagraphStyle
--o sw.SwAccessibleDocumentPageView
--o sw.SwAccessibleDocumentView
--o sw.SwAccessibleEndnoteView
--o sw.SwAccessibleFooterView
--o sw.SwAccessibleFootnoteView
--o sw.SwAccessibleHeaderView
--o sw.SwAccessiblePageView
--o sw.SwAccessibleParagraphView
--o sw.SwAccessibleTableCellView
--o sw.SwAccessibleTableView
--o sw.SwAccessibleTextEmbeddedObject
--o sw.SwAccessibleTextFrameView
--o sw.SwAccessibleTextGraphicObject
+# -o sw.CharacterStyle
+# -o sw.ConditionalParagraphStyle
+# -o sw.PageStyle
+# -o sw.ParagraphStyle
+# -o sw.SwAccessibleDocumentPageView
+# -o sw.SwAccessibleDocumentView
+# -o sw.SwAccessibleEndnoteView
+# -o sw.SwAccessibleFooterView
+# -o sw.SwAccessibleFootnoteView
+# -o sw.SwAccessibleHeaderView
+# -o sw.SwAccessiblePageView
+# -o sw.SwAccessibleParagraphView
+# -o sw.SwAccessibleTableCellView
+# -o sw.SwAccessibleTableView
+# -o sw.SwAccessibleTextEmbeddedObject
+# -o sw.SwAccessibleTextFrameView
+# -o sw.SwAccessibleTextGraphicObject
 -o sw.SwXAutoTextContainer
-# i41735#-o sw.SwXAutoTextEntry
+-o sw.SwXAutoTextEntry
 -o sw.SwXAutoTextGroup
 -o sw.SwXBodyText
 -o sw.SwXBookmark
@@ -41,7 +38,7 @@
 -o sw.SwXFrames
 -o sw.SwXHeadFootText
 -o sw.SwXLineNumberingProperties
--o sw.SwXMailMerge
+#-o sw.SwXMailMerge
 -o sw.SwXModule
 -o sw.SwXNumberingRules
 -o sw.SwXParagraph
