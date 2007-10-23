@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:18:08 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
-//REMOVE    #include <so3/ipobj.hxx>
 
 //REMOVE    #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 //REMOVE    #define SO2_DECL_SVINPLACEOBJECT_DEFINED
