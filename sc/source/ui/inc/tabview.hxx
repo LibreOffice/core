@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:08:37 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:46:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,10 +42,6 @@
 #ifndef _SVX_ZOOMITEM_HXX //autogen
 #include <svx/zoomitem.hxx>
 #endif
-
-//REMOVE    #ifndef _IPCLIENT_HXX //autogen
-//REMOVE    #include <so3/ipclient.hxx>
-//REMOVE    #endif
 
 //REMOVE    #ifndef SO2_DECL_SVINPLACECLIENT_DEFINED
 //REMOVE    #define SO2_DECL_SVINPLACECLIENT_DEFINED
