@@ -1,11 +1,9 @@
-### #i30697 ###
-svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleExtendedComponent
-
-### #i30702 ###
-svtools.AccessibleTreeListBox::com::sun::star::accessibility::XAccessibleEventBroadcaster
-
 ### 108309 ###
+svtools.AccessibleBrowseBox::com::sun::star::accessibility::XAccessibleEventBroadcaster
 svtools.AccessibleBrowseBox::com::sun::star::accessibility::XAccessibleContext
+
+### 115092 ###
+svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleEventBroadcaster
 
 ### i26674 ###
 svtools.AccessibleIconChoiceCtrl::com::sun::star::accessibility::XAccessibleSelection
@@ -20,3 +18,27 @@ svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleExtended
 ### i30702 ###
 svtools.AccessibleTreeListBox::com::sun::star::accessibility::XAccessibleEventBroadcaster
 
+### i36127 ###
+svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleExtendedComponent
+svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleComponent
+svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleEventBroadcaster
+svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleContext
+
+### i68760 ###
+svtools.AccessibleBrowseBoxHeaderBar::com::sun::star::accessibility::XAccessibleEventBroadcaster
+svtools.AccessibleBrowseBoxHeaderBar::com::sun::star::accessibility::XAccessibleContext
+svtools.AccessibleBrowseBoxTable::com::sun::star::accessibility::XAccessibleEventBroadcaster
+svtools.AccessibleBrowseBoxTable::com::sun::star::accessibility::XAccessibleContext
+
+### i68762 ###
+svtools.AccessibleBrowseBoxHeaderCell::com::sun::star::accessibility::XAccessibleEventBroadcaster
+svtools.AccessibleBrowseBoxHeaderCell::com::sun::star::accessibility::XAccessibleContext
+svtools.AccessibleBrowseBoxTableCell::com::sun::star::accessibility::XAccessibleEventBroadcaster
+svtools.AccessibleBrowseBoxTableCell::com::sun::star::accessibility::XAccessibleContext
+svtools.AccessibleTreeListBoxEntry::com::sun::star::accessibility::XAccessibleComponent
+
+### failures wirhout issue ###
+# svtools.AccessibleTabBarPage -> disabled in svtools.sce
+# svtools.AccessibleBrowseBoxTableCell -> disabled in svtools.sce
+# svtools.AccessibleTabBarPageList -> disabled in svtools.sce
+svtools.AccessibleTabBar::com::sun::star::accessibility::XAccessibleEventBroadcaster
