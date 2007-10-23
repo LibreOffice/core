@@ -371,7 +371,7 @@ $IScm $ALcm;
 #
 ($ALcm | $NUcm) $OPcm;
 $CM+ $OPcm;
-($CLcm | $SYcm) ($ALcm | $NUcm);
+$CLcm ($ALcm | $NUcm);
 
 
 
@@ -560,7 +560,7 @@ $CM* $ID $CM* $PR;
 $CM* $ALPlus $CM* $PR;
 $CM* $ALPlus $CM* $PO;
 
-$CM* $ALPlus $CM* $HY / $SP;
+$CM* $ALPlus $CM* ($IS | $SY | $HY)+ / $SP;
 
 # LB 25
 ($CM* ($PR | $PO))? ($CM* $CL)? ($CM* ($NU | $IS | $SY))* $CM* $NU ($CM* ($OP | $HY))? ($CM* ($PR | $PO))?;
@@ -580,11 +580,11 @@ $CM* $ALPlus $CM* $ALPlus;
 
 
 # LB 29
-$CM* $ALPlus $CM* $IS;
+$CM* $ALPlus $CM* $IS+ [^$SP];
 
 # LB 30
 $CM* $OP $CM* ($NU | $ALPlus);
-$CM* ($NU | $ALPlus) $CM* ($CL | $SY);
+$CM* ($NU | $ALPlus) $CM* ($CL | $SY)+ [^$SP];
 
 
 ## -------------------------------------------------
