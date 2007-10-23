@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 12:54:36 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 09:09:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1161,8 +1161,10 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbolByName( const OUString&
         Locale aFbLocale = MsLangId::getFallbackLocale( aLocale);
         if (aFbLocale == aLocale)
             bFallback = false;  // may be a "language-only-locale" like Interlingua (ia)
-        else if (aFbLocale.Country.getLength())
-            aFallback = aFbLocale.Language + under + aFbLocale.Country;
+        else if (aFbLocale.Country.getLength()) {
+            OUStringBuffer aBuf(5);
+            aFallback = aBuf.append(aFbLocale.Language).append( under).append(aFbLocale.Country).makeStringAndClear();
+        }
         else
             aFallback = aFbLocale.Language;
     }
