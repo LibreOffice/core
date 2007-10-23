@@ -8,5 +8,5 @@
         <prop oor:name="UIName">
             <value>DocBook</value>
         </prop>
-        <prop oor:name="ClipboardFormat"><value>doctype:-//OASIS//DTD DocBook XML V4.1.2//EN</value></prop>
+        <prop oor:name="ClipboardFormat"><value>doctype:-//OASIS//DTD DocBook XML V4</value></prop>
     </node>
