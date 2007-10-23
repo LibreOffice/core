@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:40:19 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:38:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,8 @@
 #ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
 #include <comphelper/mediadescriptor.hxx>
 #endif
-#ifndef _SO_CLSIDS_HXX
-#include <so3/clsids.hxx>
+#ifndef _COMPHELPER_CLASSIDS_HXX
+#include <comphelper/classids.hxx>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
