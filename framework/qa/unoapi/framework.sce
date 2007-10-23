@@ -3,7 +3,7 @@
 -o fwl.FrameLoaderFactory
 -o fwl.SubstituteVariables
 -o fwl.TypeDetection
--o fwl.PathSettings
+# -o fwl.PathSettings
 -o fwk.DispatchRecorder
 -o fwk.DispatchRecorderSupplier
 -o fwk.FooterMenuController
@@ -11,8 +11,8 @@
 -o fwk.StatusBarControllerFactory
 -o fwk.ToolBarsMenuController
 -o fwk.UICategoryDescription
--o fwk.JobExecutor
--o fwk.JobHandler
+#-o fwk.JobExecutor
+#-o fwk.JobHandler
 -o fwk.MailToDispatcher
 -o fwk.ServiceHandler
 -o fwk.SoundHandler
