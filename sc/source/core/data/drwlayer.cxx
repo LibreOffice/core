@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:33:05 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:43:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,8 +98,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docinf.hxx>
 #include <sfx2/docfile.hxx>
-//REMOVE    #include <so3/ipobj.hxx>
-//REMOVE    #include <so3/svstor.hxx>
 #include <sot/storage.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/itempool.hxx>
