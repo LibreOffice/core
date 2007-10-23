@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filt_pch.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:50:13 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:45:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,10 +166,6 @@
 #include <namebuff.hxx>
 #include <tools/shl.hxx>
 #include <tools/pstm.hxx>
-#include <so3/iface.hxx>
-#include <so3/factory.hxx>
-#include <so3/so2ref.hxx>
-#include <so3/so2dll.hxx>
 #include <svx/fhgtitem.hxx>
 #include <vos/types.hxx>
 #include <vos/object.hxx>
@@ -228,7 +224,6 @@
 #include <com/sun/star/registry/RegistryKeyType.hpp>
 #include <com/sun/star/registry/RegistryValueType.hpp>
 #include <sot/storage.hxx>
-#include <so3/so2defs.hxx>
 #include <tools/datetime.hxx>
 #include <osl/thread.h>
 #include <imp_op.hxx>
@@ -251,7 +246,6 @@
 #include <com/sun/star/lang/XComponent.hdl>
 #include <svx/svxenum.hxx>
 #include <formel.hxx>
-#include <so3/svstor.hxx>
 #include <com/sun/star/container/XElementAccess.hdl>
 #include <com/sun/star/container/XElementAccess.hpp>
 #include <svtools/itempool.hxx>
@@ -304,7 +298,6 @@
 #include <com/sun/star/frame/XModel.hdl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hdl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <so3/persist.hxx>
 #include <com/sun/star/container/XIndexAccess.hdl>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <excrecds.hxx>
