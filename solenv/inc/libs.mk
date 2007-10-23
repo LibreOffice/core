@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.118 $
+#   $Revision: 1.119 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:39:14 $
+#   last change: $Author: vg $ $Date: 2007-10-23 14:40:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.118 $$"
+LIBSMKREV!:="$$Revision: 1.119 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -178,7 +178,6 @@ COMMUNILIB=-lcommuni$(OFFICEUPD)$(DLLPOSTFIX)
 BTCOMMUNILIB=-lbtcommuni$(OFFICEUPD)$(DLLPOSTFIX)
 AUTOMATIONLIB=-lsts$(OFFICEUPD)$(DLLPOSTFIX)
 SVLLIB=-lsvl$(OFFICEUPD)$(DLLPOSTFIX)
-SO2LIB=-lso$(OFFICEUPD)$(DLLPOSTFIX)
 TKTLIB=-ltkt$(OFFICEUPD)$(DLLPOSTFIX)
 SJLIB=-lj$(OFFICEUPD)$(DLLPOSTFIX)_g
 GOODIESLIB=-lgo$(OFFICEUPD)$(DLLPOSTFIX)
@@ -293,6 +292,7 @@ LEGACYSMGRLIB=-llegacy_binfilters$(OFFICEUPD)$(DLLPOSTFIX)
 BFXMLOFFLIB=-lbf_xo$(OFFICEUPD)$(DLLPOSTFIX)
 BFGOODIESLIB=-lbf_go$(OFFICEUPD)$(DLLPOSTFIX)
 BFBASICLIB=-lbf_sb$(OFFICEUPD)$(DLLPOSTFIX)
+BFSO3LIB=-lbf_so$(OFFICEUPD)$(DLLPOSTFIX)
 
 
 #
@@ -397,7 +397,6 @@ GOODIESLIB=igo.lib
 MAILLIB=mail.lib
 DOCMGRLIB=docmgr.lib
 BASICLIB=basic.lib
-SO2LIB=so2.lib
 TKTLIB=tkt.lib
 SJLIB=sj.lib
 SVXLIB=isvx.lib
@@ -463,6 +462,7 @@ BFOFALIB=bf_ofa.lib
 BFXMLOFFLIB=ibf_xo.lib
 BFGOODIESLIB=bf_go.lib
 BFBASICLIB=bf_sb.lib
+BFSO3LIB=bf_so.lib
 LEGACYSMGRLIB=ilegacy_binfilters.lib
 
 SABLOT3RDLIB= $(LIBPRE) sablot.lib
