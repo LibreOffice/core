@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkarea.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:47:58 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:45:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,10 +62,6 @@
 #ifndef _SVTOOLS_INETTBC_HXX
 #include <svtools/inettbc.hxx>
 #endif
-
-//REMOVE    #ifndef _EMBOBJ_HXX //autogen
-//REMOVE    #include <so3/embobj.hxx>
-//REMOVE    #endif
 
 //REMOVE    #ifndef SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
 //REMOVE    #define SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
