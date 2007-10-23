@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:42:17 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:43:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,6 @@
 #include <sfx2/printer.hxx>
 #include <svtools/saveopt.hxx>
 #include <svtools/pathoptions.hxx>
-//REMOVE    #include <so3/ipobj.hxx>
 
 #include "document.hxx"
 #include "docoptio.hxx"
