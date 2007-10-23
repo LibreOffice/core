@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:03:22 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:38:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,9 +87,6 @@
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _PASTEDLG_HXX
-#include <so3/pastedlg.hxx>
 #endif
 #ifndef _SBASLTID_HRC
 #include <svx/svxids.hrc>
