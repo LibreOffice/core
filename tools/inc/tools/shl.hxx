@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:17:26 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:41:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@
 #define SHL_SI          15
 #define SHL_SFC         16
 #define SHL_SFX         17
-#define SHL_SO2         18
+//#define SHL_SO2       18
 #define SHL_IDL         19
 #define SHL_IDE         20
 #define SHL_EDIT        21
