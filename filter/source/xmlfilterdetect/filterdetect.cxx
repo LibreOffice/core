@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filterdetect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:44:30 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 11:40:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,13 +222,11 @@ Reference< com::sun::star::frame::XModel > xModel;
         com::sun::star::uno::Sequence< sal_Int8 > aData;
             /* long nBytesToRead= */ xInStream->available();
             xInStream->skipBytes (0);
-            long bytestRead =xInStream->readBytes (aData,  1000);
+            long bytestRead =xInStream->readBytes (aData,  4000);
             resultString=::rtl::OString((const sal_Char *)aData.getConstArray(),bytestRead) ;
 
 
              // test typedetect code
-
-
             Reference <XNameAccess> xTypeCont(mxMSF->createInstance(OUString::createFromAscii("com.sun.star.document.TypeDetection")),UNO_QUERY);
             Sequence < ::rtl::OUString > myTypes= xTypeCont->getElementNames();
             nLength = myTypes.getLength();
@@ -262,7 +260,6 @@ Reference< com::sun::star::frame::XModel > xModel;
         {
                  OSL_ENSURE( sal_False, "An Exception occured while opening File stream" );
         }
-
         if(sTypeName.equalsAscii(""))
         {
             //sTypeName=::rtl::OUString::createFromAscii("writer_Flat_XML_File");
@@ -274,7 +271,6 @@ Reference< com::sun::star::frame::XModel > xModel;
                 aArguments.realloc(nLength+1);
                 aArguments[location].Name = ::rtl::OUString::createFromAscii( "TypeName" );
             }
-
             aArguments[location].Value <<=sTypeName;
         }
        // OSL_ENSURE( sal_False, ::rtl::OUStringToOString(sTypeName,RTL_TEXTENCODING_ASCII_US).getStr() );
@@ -287,20 +283,15 @@ Reference< com::sun::star::frame::XModel > xModel;
 
 ::rtl::OUString SAL_CALL supportedByType( const ::rtl::OUString clipBoardFormat ,  const ::rtl::OString resultString, const ::rtl::OUString checkType)
 {
-    sal_Int32 checked =0;
+
     ::rtl::OUString sTypeName= OUString::createFromAscii("");
     if((clipBoardFormat.match(OUString::createFromAscii("doctype:"))))
     {
             ::rtl::OString tryStr = ::rtl::OUStringToOString(clipBoardFormat.copy(8),RTL_TEXTENCODING_ASCII_US).getStr();
             // OSL_ENSURE( sal_False, tryStr);
-            while((checked <=resultString.getLength())&& (sTypeName.equalsAscii("")))
+            if (resultString.indexOf(tryStr) >= 0)
             {
-                if( resultString.match(tryStr,checked))
-                {
                     sTypeName = checkType;
-                    break;
-                }
-                checked++;
             }
     }
     return sTypeName;
