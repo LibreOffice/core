@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mgrtest.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:34:24 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:33:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,6 @@
 #endif
 #ifndef _BASMGR_HXX //autogen
 #include <basic/basmgr.hxx>
-#endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
