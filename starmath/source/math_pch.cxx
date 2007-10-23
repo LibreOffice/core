@@ -4,9 +4,9 @@
  *
  *  $RCSfile: math_pch.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:53:17 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:39:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,6 @@
 #include <svx/xpoly.hxx>
 #include <rect.hxx>
 #include <vcl/outdev.hxx>
-#include <so3/so2ref.hxx>
 #ifndef _SMART_COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTOR_HXX_
 #include <smart/com/sun/star/frame/XDispatchProviderInterceptor.hxx>
 #endif
@@ -747,9 +746,7 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/window.hxx>
-#include <so3/protocol.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <so3/factory.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/objface.hxx>
 #include <vcl/event.hxx>
@@ -759,33 +756,25 @@
 #include <svtools/itempool.hxx>
 #include <vcl/image.hxx>
 #include <vcl/metric.hxx>
-#include <so3/iface.hxx>
 #include <sfx2/inimgr.hxx>
 #include <node.hxx>
-#include <so3/so2dll.hxx>
 #include <tools/pstm.hxx>
 #include <tools/table.hxx>
-#include <so3/ipobj.hxx>
-#include <so3/embobj.hxx>
 #include <sfx2/docfac.hxx>
-#include <so3/pseudo.hxx>
 #include <svtools/ownlist.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/stritem.hxx>
 #include <vcl/mapmod.hxx>
 #include <sfx2/ipfrm.hxx>
 #include <vcl/dialog.hxx>
-#include <so3/svstor.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svtools/svstdarr.hxx>
 #include <sfx2/bindings.hxx>
-#include <so3/persist.hxx>
 #include <dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/symbol.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vcl/button.hxx>
-#include <so3/so2defs.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
@@ -795,7 +784,6 @@
 #include <vcl/edit.hxx>
 #include <vcl/group.hxx>
 #include <document.hxx>
-#include <so3/binding.hxx>
 #include <vcl/field.hxx>
 #include <vcl/spinfld.hxx>
 #include <vcl/menubtn.hxx>
@@ -829,8 +817,6 @@
 #include <vcl/dockwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/clientsh.hxx>
-#include <so3/ipclient.hxx>
-#include <so3/client.hxx>
 #include <svtools/scrwin.hxx>
 #include <vcl/scrbar.hxx>
 #include <sfx2/ctrlitem.hxx>
