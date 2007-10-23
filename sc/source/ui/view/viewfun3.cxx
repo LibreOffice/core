@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:30:02 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 14:46:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,7 @@ using namespace com::sun::star;
 
 //============================================================================
 
-//  GlobalName der Writer-DocShell kommt jetzt aus so3/clsids.hxx
+//  GlobalName der Writer-DocShell kommt jetzt aus comphelper/classids.hxx
 
 //----------------------------------------------------------------------------
 //      C U T
