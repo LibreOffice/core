@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:43:37 $
+#   last change: $Author: vg $ $Date: 2007-10-23 14:36:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@ RES1FILELIST=\
     $(SRS)$/app.srs \
     $(SOLARCOMMONRESDIR)$/svtools.srs \
     $(SOLARCOMMONRESDIR)$/sfx.srs 	\
-    $(SOLARCOMMONRESDIR)$/so2.srs 	\
     $(SOLARCOMMONRESDIR)$/basic.srs
 
 RESLIB1NAME=$(TARGET)
