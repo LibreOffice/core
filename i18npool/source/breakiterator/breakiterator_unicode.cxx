@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 14:58:23 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 09:08:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,8 +118,10 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
             udata_setAppData("OpenOffice", OpenOffice_dat, &status);
             if ( !U_SUCCESS(status) ) throw ERROR;
 
+            RuleBasedBreakIterator *rbi = NULL;
+
             if (breakRules.getLength() > 0 && breakRules[breakType].getLength() > 0) {
-                icuBI->aBreakIterator = new RuleBasedBreakIterator(udata_open("OpenOffice", "brk",
+                rbi = new RuleBasedBreakIterator(udata_open("OpenOffice", "brk",
                     OUStringToOString(breakRules[breakType], RTL_TEXTENCODING_ASCII_US).getStr(), &status), status);
             } else {
                 status = U_ZERO_ERROR;
@@ -129,14 +131,23 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
                 aUDName.append( OUStringToOString(rLocale.Language, RTL_TEXTENCODING_ASCII_US));
                 UDataMemory* pUData = udata_open("OpenOffice", "brk", aUDName.getStr(), &status);
                 if( U_SUCCESS(status) )
-                    icuBI->aBreakIterator = new RuleBasedBreakIterator( pUData, status);
+                    rbi = new RuleBasedBreakIterator( pUData, status);
                 if (!U_SUCCESS(status) ) {
                     status = U_ZERO_ERROR;
                     pUData = udata_open("OpenOffice", "brk", rule, &status);
                     if( U_SUCCESS(status) )
-                        icuBI->aBreakIterator = new RuleBasedBreakIterator( pUData, status);
+                        rbi = new RuleBasedBreakIterator( pUData, status);
                     if (!U_SUCCESS(status) ) icuBI->aBreakIterator=NULL;
                 }
+            }
+            if (rbi) {
+                switch (rBreakType) {
+                    case LOAD_CHARACTER_BREAKITERATOR: rbi->setBreakType(UBRK_CHARACTER); break;
+                    case LOAD_WORD_BREAKITERATOR: rbi->setBreakType(UBRK_WORD); break;
+                    case LOAD_SENTENCE_BREAKITERATOR: rbi->setBreakType(UBRK_SENTENCE); break;
+                    case LOAD_LINE_BREAKITERATOR: rbi->setBreakType(UBRK_LINE); break;
+                }
+                icuBI->aBreakIterator = rbi;
             }
         }
 
