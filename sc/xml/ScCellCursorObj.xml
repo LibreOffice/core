@@ -187,7 +187,6 @@
     <project-build-dependency>rtl</project-build-dependency>
     <project-build-dependency>sal</project-build-dependency>
     <project-build-dependency>sfx2</project-build-dependency>
-    <project-build-dependency>so3</project-build-dependency>
     <project-build-dependency>sot</project-build-dependency>
     <project-build-dependency>stl</project-build-dependency>
     <project-build-dependency>svtools</project-build-dependency>
