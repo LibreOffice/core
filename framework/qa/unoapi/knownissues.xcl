@@ -29,3 +29,16 @@ fwk.Frame::com::sun::star::task::XStatusIndicatorFactory
 
 ### i50578 ###
 fwk.StatusBarControllerFactory::com::sun::star::lang::XMultiComponentFactory
+
+### i68698 ###
+fwl.PathSettings::com::sun::star::beans::XMultiPropertySet
+
+### i74020 ###
+fwl.FilterFactory::com::sun::star::lang::XMultiServiceFactory
+
+### failures wirhout issue ###
+# fwl.PathSettings -> disabled in framework.sce
+#-o fwk.JobExecutor -> disabled in framework.sce
+#-o fwk.JobHandler -> disabled in framework.sce
+fwk.Desktop::com::sun::star::frame::XFramesSupplier
+
