@@ -20,10 +20,10 @@ svx.AccessibleEditableTextPara::com::sun::star::accessibility::XAccessibleEditab
 svx.SvxUnoTextCursor::com::sun::star::beans::XMultiPropertyStates
 
 ### i23461 ###
-svx.SvxDrawPage::com::sun::star::drawing::XMasterPageTarget
+#svx.SvxDrawPage::com::sun::star::drawing::XMasterPageTarget
 
 ### i42513 ###
-svx.SvxGraphicObject::com::sun::star::drawing::GraphicObjectShape
+#svx.SvxGraphicObject::com::sun::star::drawing::GraphicObjectShape
 
 ### i38575 ###
 #svx.GraphicExporter::com::sun::star::document::XFilter
@@ -35,7 +35,35 @@ svx.SvxUnoText::com::sun::star::text::XTextRangeCompare
 svx.SvxUnoTextCursor::com::sun::star::text::XTextRange
 
 ### i58062 ###
-svx.AccessibleEditableTextPara::com::sun::star::accessibility::XAccessibleComponent
+#svx.AccessibleEditableTextPara::com::sun::star::accessibility::XAccessibleComponent
 
 ### i57892 ###
-svx.AccessiblePresentationShape::com::sun::star::accessibility::XAccessibleExtendedComponent
+#svx.AccessiblePresentationShape::com::sun::star::accessibility::XAccessibleExtendedComponent
+
+### i73993 ###
+svx.SvxUnoTextContent::com::sun::star::style::ParagraphProperties
+svx.SvxUnoTextCursor::com::sun::star::style::ParagraphProperties
+svx.SvxUnoTextRange::com::sun::star::style::ParagraphProperties
+svx.SvxGraphicObject::com::sun::star::style::ParagraphProperties
+svx.SvxShape::com::sun::star::style::ParagraphProperties
+svx.SvxShapeCircle::com::sun::star::style::ParagraphProperties
+svx.SvxShapeConnector::com::sun::star::style::ParagraphProperties
+svx.SvxShapeDimensioning::com::sun::star::style::ParagraphProperties
+svx.SvxShapePolyPolygon::com::sun::star::style::ParagraphProperties
+svx.SvxShapePolyPolygonBezier::com::sun::star::style::ParagraphProperties
+
+
+### failures wirhout issue ###
+#svx.SvxShape disabled in svx.sce
+#svx.SvxShapeConnector
+#svx.GraphicExporter
+#svx.AccessibleShape
+#svx.AccessiblePageShape
+#svx.SvxShapePolyPolygon
+#svx.SvxShapePolyPolygonBezier
+svx.SvxDrawPage::com::sun::star::drawing::XMasterPageTarget
+svx.SvxShapeDimensioning::com::sun::star::drawing::XShape
+svx.SvxGraphicObject::com::sun::star::drawing::GraphicObjectShape
+svx.SvxShapeCircle::com::sun::star::drawing::FillProperties
+svx.SvxShapePolyPolygon::com::sun::star::drawing::FillProperties
+svx.SvxShapePolyPolygonBezier::com::sun::star::drawing::FillProperties
