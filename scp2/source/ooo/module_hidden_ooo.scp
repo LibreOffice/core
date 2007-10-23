@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 12:56:29 $
+ *  last change: $Author: vg $ $Date: 2007-10-23 15:11:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,7 +240,6 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Sdd,
 	gid_File_Lib_Sdui,
 	gid_File_Lib_Sfx,
-	gid_File_Lib_So,
 	gid_File_Lib_Sot,
 	gid_File_Lib_Spa,
 	gid_File_Lib_Spell,
@@ -380,6 +379,8 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Bf_Frm,
 	gid_File_Lib_Bf_Ofa,
 	gid_File_Lib_Bf_Sd,
+	gid_File_Lib_Bf_Sb,
+	gid_File_Lib_Bf_So,
 	gid_File_Lib_Bf_Sm,
 	gid_File_Lib_Bf_Sw,
 	gid_File_Lib_Bf_Wrapper,
