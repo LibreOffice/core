@@ -1,7 +1,7 @@
 mkdir: %_DEST%\inc%_EXT%\external
 mkdir: %_DEST%\inc%_EXT%\external\openssl
 ..\version.mk %_DEST%\inc%_EXT%\external\openssl\version.mk
-..\%__SRC%\inc\* %_DEST%\inc%_EXT%\external\openssl\*
+..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\external\openssl
 ..\%__SRC%\lib\ssleay32.lib %_DEST%\lib%_EXT%\ssleay32.lib
 ..\%__SRC%\lib\ssleay32.lib %_DEST%\lib%_EXT%\ssleay32.exp
 ..\%__SRC%\bin\ssleay32.dll %_DEST%\bin%_EXT%\ssleay32.dll
