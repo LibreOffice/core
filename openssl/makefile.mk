@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2007-10-23 13:41:31 $
+#   last change: $Author: tkr $ $Date: 2007-10-24 15:07:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,11 +81,16 @@ PATCH_FILE_NAME=opensslsol.patch
 .ENDIF
 
 .IF "$(OS)" == "WNT"
+
+#CYGWIN
+OUT2BIN = cygcrypto-0.9.8.dll
+OUT2BIN += cygssl-0.9.8.dll
+# 4NT
+.IF "$(USE_SHELL)== "4nt"
 PATCH_FILE_NAME=openssl.patch
 CONFIGURE_DIR=. 
 CONFIGURE_ACTION=$(PERL) configure
 CONFIGURE_FLAGS=VC-WIN32
-
 BUILD_DIR=.
 BUILD_ACTION=cmd /c "ms\do_ms $(PERL)" && nmake -f ms/ntdll.mak
 
@@ -96,6 +101,7 @@ OUT2LIB += out32dll\libeay32.lib
 OUT2BIN = out32dll\ssleay32.dll
 OUT2BIN += out32dll\libeay32.dll
 OUT2INC = inc32\openssl\*
+.ENDIF
 .ENDIF
 
 #set INCLUDE=D:\sol_temp\n\msvc7net3\PlatformSDK\include;D:\sol_temp\n\msvc7net3\include\ && set path=%path%;D:\sol_temp\r\btw\SRC680\perl\bin &&
