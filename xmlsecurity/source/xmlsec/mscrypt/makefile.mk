@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:03:56 $
+#   last change: $Author: obo $ $Date: 2007-10-25 10:59:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,11 @@ LIBTARGET=NO
 
 .IF "$(CRYPTO_ENGINE)" == "mscrypto"
 
+.IF "$(WITH_MOZILLA)" == "NO"
+@all:
+    @echo "No mozilla -> no nss -> no libxmlsec -> no xmlsecurity/nss"
+.ENDIF
+
 CDEFS += -DXMLSEC_CRYPTO_MSCRYPTO -DXMLSEC_NO_XSLT
 
 # --- Files --------------------------------------------------------
@@ -71,3 +76,4 @@ SLOFILES = \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
