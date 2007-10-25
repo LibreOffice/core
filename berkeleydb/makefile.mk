@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 17:46:49 $
+#   last change: $Author: vg $ $Date: 2007-10-25 16:04:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ ADDITIONAL_FILES=    \
     hmac$/makefile.mk hsearch$/makefile.mk libdb_java$/makefile.mk lock$/makefile.mk  \
     log$/makefile.mk mp$/makefile.mk mutex$/makefile.mk os$/makefile.mk  \
     os_win32$/makefile.mk qam$/makefile.mk rep$/makefile.mk txn$/makefile.mk  \
-    xa$/makefile.mk libdb42.dxp libdb_java42.dxp
+    xa$/makefile.mk libdb42.dxp libdb_java42.dxp db_4_2_gcc3.map
 
 
 
@@ -86,6 +86,10 @@ CXXFLAGS:=-fno-strict-aliasing
 .IF "$(OS)$(COM)"=="LINUXGCC"
 LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN' -Wl,-z,noexecstack
 .EXPORT: LDFLAGS
+#The current dir when linking is unxlngi6.pro/misc/build/db-4.2.52.NC/out
+# the map file is in  unxlngi6.pro/misc/build/db-4.2.52.NC
+LDFLAGSVERSION:= -Wl,--version-script=../db_4_2_gcc3.map
+.EXPORT: LDFLAGSVERSION
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
 #.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
