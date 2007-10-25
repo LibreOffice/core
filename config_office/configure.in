@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-10-04 07:48:20 $
+dnl * Date: $Date: 2007-10-25 15:45:19 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.221 $ )
+AC_REVISION( $Revision: 1.222 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2466,9 +2466,6 @@ if test "$SOLAR_JAVA" != ""; then
       AC_CHECK_HEADER(jni.h, [],
                     [AC_MSG_ERROR([jni.h could not be found. Mismatch between gcc and libgcj or libgcj-devel missing?])], [])
       AC_CHECK_LIB(gcjawt, JAWT_GetAWT, [ AWTLIB="-lgcjawt -lgcj"] )
-      if test -z "$AWTLIB"; then
-          AC_CHECK_LIB(jawt, JAWT_GetAWT, [ AWTLIB="-ljawt -lgcj"] )
-      fi
       exec 6>&1 # output on again
       CFLAGS=$save_CFLAGS
       LDFLAGS=$save_LDFLAGS
