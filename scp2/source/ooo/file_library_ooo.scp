@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.261 $
+ *  $Revision: 1.262 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-23 15:10:57 $
+ *  last change: $Author: vg $ $Date: 2007-10-25 16:05:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -555,7 +555,7 @@ End
 
 File gid_File_Lib_Db
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
   #ifdef UNX
     Name = STRING(CONCAT2(libdb-4.2,UNXSUFFIX));
