@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:15:08 $
+ *  last change: $Author: vg $ $Date: 2007-10-25 16:04:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,6 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     mnOutWidth      = nDX;
     mnOutHeight     = nDY;
     mbScreenComp    = TRUE;
-    mbScreenComp    = FALSE;
     mnAlphaDepth    = -1;
 
     // #i59315# init vdev size from system object, when passed a
