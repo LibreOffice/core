@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.182 $
+ *  $Revision: 1.183 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:04:22 $
+ *  last change: $Author: vg $ $Date: 2007-10-26 11:52:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -881,6 +881,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                                                 mso_lineSimple )
                             : (MSO_LineStyle)USHRT_MAX;
         pTextImpRec->eLineStyle = pImpRec->eLineStyle;
+
+        pImpRec->nFlags = rObjData.nSpFlags;
 
         if( pImpRec->nShapeId )
         {
@@ -3387,10 +3389,16 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
         SdrObject* pObject = 0;
         if (mrReader.pMSDffManager->GetShape(0x401, pObject, aData))
         {
-            SfxItemSet aSet(rFmt.GetAttrSet());
-            mrReader.MatchSdrItemsIntoFlySet(pObject, aSet, mso_lineSimple,
-                mso_sptRectangle, aRect);
-            rFmt.SetAttr(aSet.Get(RES_BACKGROUND));
+            SvxMSDffImportRec * pRec = aData.GetRecord(0);
+
+            // Only handle shape if it is a background shape
+            if ((pRec->nFlags & 0x400) != 0)
+            {
+                SfxItemSet aSet(rFmt.GetAttrSet());
+                mrReader.MatchSdrItemsIntoFlySet(pObject, aSet, mso_lineSimple,
+                                                 mso_sptRectangle, aRect);
+                rFmt.SetAttr(aSet.Get(RES_BACKGROUND));
+            }
         }
     }
     wwULSpaceData aULData;
