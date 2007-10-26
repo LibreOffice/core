@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:00:36 $
+ *  last change: $Author: vg $ $Date: 2007-10-26 11:54:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,6 +215,7 @@ struct SVX_DLLPUBLIC SvxMSDffImportRec
     UINT32      nYAlign;
     UINT32      nYRelTo;
     UINT32      nLayoutInTableCell;
+    UINT32      nFlags;
     long        nTextRotationAngle;
     long        nDxTextLeft;    // Abstand der Textbox vom umgebenden Shape
     long        nDyTextTop;
