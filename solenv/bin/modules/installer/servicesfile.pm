@@ -4,9 +4,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:38:20 $
+#   last change: $Author: vg $ $Date: 2007-10-26 11:26:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -872,12 +872,21 @@ sub create_services_rdb
             # my $servicesdir = installer::systemactions::create_directories($servicesname, $languagestringref);
             my $servicesdir = installer::systemactions::create_directories($uniquedirname, $languagestringref);
 
-            if ( $^O =~ /cygwin/i && $ENV{'USE_SHELL'} eq "4nt" )
-            {   # $servicesdir is used as a parameter for regcomp and has to be DOS style
-                $servicesdir = qx{guw.pl echo "$servicesdir"};
-                chomp($servicesdir);
-                $servicesdir =~ s/\\/\//g;
-            }
+            if ( $^O =~ /cygwin/i) {
+                if (($ENV{'USE_SHELL'} eq '4nt') || ($ENV{'USE_SHELL'} eq 'bash')) {
+                    # $servicesdir is used as a parameter for regcomp and has to be DOS style
+                    $servicesdir =~ s/\//\\/g;
+                    $servicesdir = qx{guw.pl echo "$servicesdir"};
+                    chomp($servicesdir);
+                    if ($ENV{'USE_SHELL'} eq "bash" ) {
+                        if ($servicesdir =~ /^\w\:/) {
+                            $servicesdir =~ s/\://;
+                            $servicesdir = '/cygdrive/' . $servicesdir;
+                        };
+                        $servicesdir =~ s/\\/\//g;
+                    };
+                };
+            };
 
             push(@installer::globals::removedirs, $servicesdir);
 
@@ -905,7 +914,7 @@ sub create_services_rdb
                 if ($installer::globals::isunix) { $searchname = "regcomp"; }
                 else { $searchname = "regcomp.exe"; }
 
-                $regcompfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$searchname, $includepatharrayref, 1);
+                $regcompfileref = get_source_path_cygwin_safe($searchname, $includepatharrayref, 1);
                 if ( $$regcompfileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $searchname for registering uno components!", "create_services_rdb"); }
 
                 # For Windows the libraries included into the mozruntime.zip have to be added to the path
