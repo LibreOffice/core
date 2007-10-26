@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE Readme SYSTEM "../../../docs/readme.dtd">
+<!DOCTYPE Readme SYSTEM "../readme.dtd">
+<!-- A paragraph id has to be unique within one section -->
 <Readme name="ooo_readme" col-span="0">
 <Section id="Welcome">
 	<Paragraph id="Welcome" style="H1">
@@ -374,24 +375,24 @@
 		<Text id="a" xml:lang="en-US" url="ahead">As a user, you are already a valuable part of the suite&apos;s development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the community. Please join and check out the user page at: </Text>
 		<Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org </Text>
             	</Paragraph>
-	<Paragraph id="emptyparagraph" localized="false"/>
-	<Paragraph id="A1" style="H3">
+	<Paragraph id="emptyparagraph" localized="false" />
+	<Paragraph id="A4" style="H3">
 		<Text id="a" xml:lang="en-US">Way to Start</Text>
 		</Paragraph>
-	<Paragraph id="A2">
+	<Paragraph id="A5">
 		<Text id="a" xml:lang="en-US" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the ${PRODUCTNAME} source code was released back in October 2000. When you&apos;re comfortable, all you need to do is send an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at </Text>
             	<Text id="b" xml:lang="en-US" url="true" >http://development.openoffice.org/todo.html</Text>
 		<Text id="c" xml:lang="en-US">.</Text>
 		</Paragraph>
 
-	<Paragraph id="A1" style="H3">
+	<Paragraph id="A6" style="H3">
 		<Text id="a" xml:lang="en-US">Subscribe </Text>
 		</Paragraph>
-	<Paragraph id="A2">
+	<Paragraph id="A7">
 		<Text id="a" xml:lang="en-US" url="ahead">Here are a few of the Project mailing lists to which you can subscribe at </Text>
 		<Text id="b" xml:lang="en-US" url="true" >http://www.openoffice.org/mail_list.html</Text>
             	</Paragraph>
-	<Paragraph id="A3">
+	<Paragraph id="A8">
 		<List>
 			<Text id="a" xml:lang="en-US">News: announce@openoffice.org *recommended to all users* (light traffic) </Text>
 			<Text id="c" xml:lang="en-US">Main user forum: discuss@openoffice.org *easy way to lurk on discussions* (heavy) </Text>
@@ -400,18 +401,18 @@
 			</List>
 			</Paragraph>
 
-	<Paragraph id="A1" style="H3">
+	<Paragraph id="A9" style="H3">
 		<Text id="a" xml:lang="en-US">Join one or more Projects</Text>
 		</Paragraph>
-	<Paragraph id="A2">
+	<Paragraph id="A10">
 		<Text id="a" xml:lang="en-US">You can make major contributions to this important open source project even if you have limited software design or coding experience. Yes, you!</Text>
 		</Paragraph>
-	<Paragraph id="A3">
+	<Paragraph id="A11">
 		<Text id="a" xml:lang="en-US" url="ahead">At </Text>
 		<Text id="b" xml:lang="en-US" url="true">http://projects.openoffice.org/index.html</Text>
 		<Text id="c" xml:lang="en-US"> you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just by spreading the word and telling a friend about this office suite.</Text>
 		</Paragraph>
-	<Paragraph id="A4">
+	<Paragraph id="A12">
 		<Text id="a" xml:lang="en-US" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here: </Text>
 		<Text id="b" xml:lang="en-US" url="true">http://marketing.openoffice.org/contacts.html </Text>
 		<Text id="c" xml:lang="en-US"> where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</Text>
@@ -420,7 +421,7 @@
 
 	
 <Section id="Credits">
-	<Paragraph id="emptyparagraph" localized="false"/>
+	<Paragraph id="emptyparagraph" localized="false" />
 	<Paragraph id="A1">
 		<Text id="a" xml:lang="en-US">We hope you enjoy working with the new ${PRODUCTNAME} ${PRODUCTVERSION} and will join us online.</Text>
 		</Paragraph>
@@ -428,8 +429,8 @@
 		<Text id="a" xml:lang="en-US">The OpenOffice.org Community</Text>
 		</Paragraph>
 	<Paragraph id="A3" localized="false">
-		<Text id="a" xml:lang="en-US"/>
-		<Text id="b" xml:lang="en-US"/>
+		<Text id="a" xml:lang="en-US" />
+		<Text id="b" xml:lang="en-US" />
 		</Paragraph>
 	</Section>
 	
