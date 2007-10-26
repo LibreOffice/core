@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 13:00:45 $
+#   last change: $Author: vg $ $Date: 2007-10-26 11:56:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,9 @@ CFLAGS += -Ob0
 
 .INCLUDE : target.mk
 
+.IF "$(APP1TARGETN)" != "" # not set during depend=x
 $(APP1TARGETN) : $(MISC)$/binso_created.flg
+.ENDIF
 
 $(MISC)$/binso_created.flg:
     @@-$(MKDIRHIER) $(BIN)$/so && $(TOUCH) $@
