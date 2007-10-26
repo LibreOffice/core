@@ -1,43 +1,92 @@
---- misc/build/db-4.2.52.NC/dist/configure.orig	2003-12-04 06:10:02.000000000 +0900
-+++ misc/build/db-4.2.52.NC/dist/configure	2005-04-17 09:35:28.000000000 +0900
-@@ -8301,7 +8301,7 @@
-       export_symbols_cmds='$NM $libobjs $convenience | $global_symbol_pipe | $SED -e '\''/^[BCDGS] /s/.* \([^ ]*\)/\1 DATA/'\'' | $SED -e '\''/^[AITW] /s/.* //'\'' | sort | uniq > $export_symbols'
- 
-       if $LD --help 2>&1 | grep 'auto-import' > /dev/null; then
--        archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000 ${wl}--out-implib,$lib'
-+        archive_cmds='$DLLTOOL $add_underscore --export-all-symbols --dllname $soname --output-lib $lib --output-exp $output_objdir/$soname.exp $libobjs; $CC -shared $output_objdir/$soname.exp $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000'
- 	# If the export-symbols file already is a .def file (1st line
- 	# is EXPORTS), use it as is; otherwise, prepend...
- 	archive_expsym_cmds='if test "x`$SED 1q $export_symbols`" = xEXPORTS; then
-@@ -8310,7 +8310,7 @@
- 	  echo EXPORTS > $output_objdir/$soname.def;
- 	  cat $export_symbols >> $output_objdir/$soname.def;
- 	fi~
--	$CC -shared $output_objdir/$soname.def $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000  ${wl}--out-implib,$lib'
-+	$DLLTOOL $add_underscore --dllname $soname --output-lib $lib --output-exp $output_objdir/$soname.exp --input-def $output_objdir/$soname.def; $CC -shared $output_objdir/$soname.exp $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000'
-       else
- 	ld_shlibs=no
-       fi
-@@ -12077,15 +12077,15 @@
- 
-        if test "$pre_test_object_deps_done" = no; then
- 	 if test -z "$predep_objects_CXX"; then
--	   predep_objects_CXX="$p"
-+	   predep_objects_CXX=`cygpath "$p"`
- 	 else
--	   predep_objects_CXX="$predep_objects_CXX $p"
-+	   predep_objects_CXX="$predep_objects_CXX "`cygpath "$p"`
- 	 fi
+*** misc/db-4.2.52.NC/dist/configure	2003-12-04 06:10:02.000000000 +0900
+--- misc/build/db-4.2.52.NC/dist/configure	Mon Oct  8 21:11:47 2007
+***************
+*** 8301,8307 ****
+        export_symbols_cmds='$NM $libobjs $convenience | $global_symbol_pipe | $SED -e '\''/^[BCDGS] /s/.* \([^ ]*\)/\1 DATA/'\'' | $SED -e '\''/^[AITW] /s/.* //'\'' | sort | uniq > $export_symbols'
+  
+        if $LD --help 2>&1 | grep 'auto-import' > /dev/null; then
+!         archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000 ${wl}--out-implib,$lib'
+  	# If the export-symbols file already is a .def file (1st line
+  	# is EXPORTS), use it as is; otherwise, prepend...
+  	archive_expsym_cmds='if test "x`$SED 1q $export_symbols`" = xEXPORTS; then
+--- 8301,8307 ----
+        export_symbols_cmds='$NM $libobjs $convenience | $global_symbol_pipe | $SED -e '\''/^[BCDGS] /s/.* \([^ ]*\)/\1 DATA/'\'' | $SED -e '\''/^[AITW] /s/.* //'\'' | sort | uniq > $export_symbols'
+  
+        if $LD --help 2>&1 | grep 'auto-import' > /dev/null; then
+!         archive_cmds='$DLLTOOL $add_underscore --export-all-symbols --dllname $soname --output-lib $lib --output-exp $output_objdir/$soname.exp $libobjs; $CC -shared $output_objdir/$soname.exp $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000'
+  	# If the export-symbols file already is a .def file (1st line
+  	# is EXPORTS), use it as is; otherwise, prepend...
+  	archive_expsym_cmds='if test "x`$SED 1q $export_symbols`" = xEXPORTS; then
+***************
+*** 8310,8316 ****
+  	  echo EXPORTS > $output_objdir/$soname.def;
+  	  cat $export_symbols >> $output_objdir/$soname.def;
+  	fi~
+! 	$CC -shared $output_objdir/$soname.def $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000  ${wl}--out-implib,$lib'
         else
- 	 if test -z "$postdep_objects_CXX"; then
--	   postdep_objects_CXX="$p"
-+	   postdep_objects_CXX=`cygpath "$p"`
- 	 else
--	   postdep_objects_CXX="$postdep_objects_CXX $p"
-+	   postdep_objects_CXX="$postdep_objects_CXX "`cygpath "$p"`
- 	 fi
+  	ld_shlibs=no
         fi
-        ;;
+--- 8310,8316 ----
+  	  echo EXPORTS > $output_objdir/$soname.def;
+  	  cat $export_symbols >> $output_objdir/$soname.def;
+  	fi~
+! 	$DLLTOOL $add_underscore --dllname $soname --output-lib $lib --output-exp $output_objdir/$soname.exp --input-def $output_objdir/$soname.def; $CC -shared $output_objdir/$soname.exp $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000'
+        else
+  	ld_shlibs=no
+        fi
+***************
+*** 12077,12091 ****
+  
+         if test "$pre_test_object_deps_done" = no; then
+  	 if test -z "$predep_objects_CXX"; then
+! 	   predep_objects_CXX="$p"
+  	 else
+! 	   predep_objects_CXX="$predep_objects_CXX $p"
+  	 fi
+         else
+  	 if test -z "$postdep_objects_CXX"; then
+! 	   postdep_objects_CXX="$p"
+  	 else
+! 	   postdep_objects_CXX="$postdep_objects_CXX $p"
+  	 fi
+         fi
+         ;;
+--- 12077,12091 ----
+  
+         if test "$pre_test_object_deps_done" = no; then
+  	 if test -z "$predep_objects_CXX"; then
+! 	   predep_objects_CXX=`cygpath "$p"`
+  	 else
+! 	   predep_objects_CXX="$predep_objects_CXX "`cygpath "$p"`
+  	 fi
+         else
+  	 if test -z "$postdep_objects_CXX"; then
+! 	   postdep_objects_CXX=`cygpath "$p"`
+  	 else
+! 	   postdep_objects_CXX="$postdep_objects_CXX "`cygpath "$p"`
+  	 fi
+         fi
+         ;;
+***************
+*** 26252,26257 ****
+--- 26252,26268 ----
+  
+  
+  
++ ac_cv_sizeof_char_p=`echo $ac_cv_sizeof_char_p | tr -d '\015'`
++ ac_cv_sizeof_unsigned_int=`echo $ac_cv_sizeof_unsigned_int | tr -d '\015'`
++ ac_cv_sizeof_unsigned_char=`echo $ac_cv_sizeof_unsigned_char | tr -d '\015'`
++ ac_cv_sizeof_unsigned_short=`echo $ac_cv_sizeof_unsigned_short | tr -d '\015'`
++ ac_cv_sizeof_unsigned_long=`echo $ac_cv_sizeof_unsigned_long | tr -d '\015'`
++ ac_cv_sizeof_size_t=`echo $ac_cv_sizeof_size_t | tr -d '\015'`
++ ac_cv_sizeof_int=`echo $ac_cv_sizeof_int | tr -d '\015'`
++ ac_cv_sizeof_char=`echo $ac_cv_sizeof_char | tr -d '\015'`
++ ac_cv_sizeof_short=`echo $ac_cv_sizeof_short | tr -d '\015'`
++ ac_cv_sizeof_long=`echo $ac_cv_sizeof_long | tr -d '\015'`
++ 
+  echo "$as_me:$LINENO: checking for u_int8_t" >&5
+  echo $ECHO_N "checking for u_int8_t... $ECHO_C" >&6
+  if test "${ac_cv_type_u_int8_t+set}" = set; then
 --- misc/build/db-4.2.52.NC/dist/ltmain.sh.orig	2003-04-27 02:45:38.000000000 +0900
 +++ misc/build/db-4.2.52.NC/dist/ltmain.sh	2005-04-08 00:03:16.000000000 +0900
 @@ -853,6 +853,7 @@
