@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:04:50 $
+ *  last change: $Author: vg $ $Date: 2007-10-26 11:56:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,9 +113,23 @@ class CommandLineArgs
             CMD_GRPID_COUNT
         };
 
+        struct Supplier {
+            // Thrown from constructors and next:
+            class Exception {
+            public:
+                Exception();
+                Exception(Exception const &);
+                virtual ~Exception();
+                Exception & operator =(Exception const &);
+            };
+
+            virtual ~Supplier();
+            virtual bool next(rtl::OUString * argument) = 0;
+        };
+
         CommandLineArgs();
         CommandLineArgs( ::vos::OExtCommandLine& aExtCmdLine );
-        CommandLineArgs( const ::rtl::OUString& aIPCThreadCmdLine );
+        CommandLineArgs( Supplier& supplier );
 
         // generic methods to access parameter
         sal_Bool                GetBoolParam( BoolParam eParam ) const;
@@ -179,6 +193,8 @@ class CommandLineArgs
         sal_Bool                IsEmptyOrAcceptOnly() const;
 
     private:
+        enum Count { NONE, ONE, MANY };
+
         struct GroupDefinition
         {
             sal_Int32   nCount;
@@ -190,8 +206,7 @@ class CommandLineArgs
         CommandLineArgs operator=( const CommandLineArgs& );
 
         sal_Bool                InterpretCommandLineParameter( const ::rtl::OUString& );
-        void                    ParseCommandLine_Impl( ::vos::OExtCommandLine& );
-        void                    ParseCommandLine_String( const ::rtl::OUString& );
+        void                    ParseCommandLine_Impl( Supplier& supplier, bool convert );
         void                    ResetParamValues();
         sal_Bool                CheckGroupMembers( GroupParamId nGroup, BoolParam nExcludeMember ) const;
 
@@ -201,8 +216,7 @@ class CommandLineArgs
         sal_Bool                m_aBoolParams[ CMD_BOOLPARAM_COUNT ];       // Stores boolean parameters
         rtl::OUString           m_aStrParams[ CMD_STRINGPARAM_COUNT ];      // Stores string parameters
         sal_Bool                m_aStrSetParams[ CMD_STRINGPARAM_COUNT ];   // Stores if string parameters are provided on cmdline
-        sal_Bool                m_bEmpty;                                   // indicates an empty command line
-        sal_Int16               m_nArgumentCount;                           // Number of Args
+        Count                   m_eArgumentCount;                           // Number of Args
         mutable ::osl::Mutex    m_aMutex;
 
         // static definition for groups where only one member can be true
