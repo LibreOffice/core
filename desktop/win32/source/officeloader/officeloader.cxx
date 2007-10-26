@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeloader.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:02:45 $
+ *  last change: $Author: vg $ $Date: 2007-10-26 11:57:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <systools/win32/uwinapi.h>
+
+#include "rtl/string.h"
 
 #include "../../../source/inc/exithelper.hxx"
 #include "../extendloaderenvironment.hxx"
@@ -247,15 +249,36 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
                     int argc = 0;
                     LPWSTR  *argv = CommandLineToArgvW( GetCommandLine(), &argc );
 
-                    fSuccess = TRUE;
+                    fSuccess = WriteFile( hPipe, RTL_CONSTASCII_STRINGPARAM("InternalIPC::Arguments"), &dwBytesWritten, NULL );
                     for ( int argn = 1; fSuccess && argn < argc; argn++ )
                     {
                         CHAR    szBuffer[4096];
 
-                        WideCharToMultiByte( CP_ACP, 0, argv[argn], -1, szBuffer, sizeof(szBuffer), NULL, NULL );
-                        if ( argn + 1 < argc )
-                            strcat( szBuffer, "|" );
-                        fSuccess = WriteFile(  hPipe, szBuffer, strlen(szBuffer), &dwBytesWritten, NULL );
+                        int n = WideCharToMultiByte( CP_UTF8, 0, argv[argn], -1, szBuffer, sizeof(szBuffer), NULL, NULL );
+                        char b[RTL_CONSTASCII_LENGTH(",") + 2 * ((sizeof szBuffer) - 1)] = ","; // hopefully does not overflow
+                        char * p = b + RTL_CONSTASCII_LENGTH(",");
+                        for (int i = 0; i < n - 1; ++i) // cannot underflow (n >= 0)
+                        {
+                            char c = szBuffer[i];
+                            switch (c) {
+                            case '\0':
+                                *p++ = '\\';
+                                *p++ = '0';
+                                break;
+                            case ',':
+                                *p++ = '\\';
+                                *p++ = ',';
+                                break;
+                            case '\\':
+                                *p++ = '\\';
+                                *p++ = '\\';
+                                break;
+                            default:
+                                *p++ = c;
+                                break;
+                            }
+                        }
+                        fSuccess = WriteFile(  hPipe, b, p - b, &dwBytesWritten, NULL );
                     }
 
                     if ( fSuccess )
