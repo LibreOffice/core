@@ -4,9 +4,9 @@
  *
  *  $RCSfile: onlinecheck.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:49:21 $
+ *  last change: $Author: vg $ $Date: 2007-10-26 11:29:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,8 @@
 
 #define elementsof(a) (sizeof(a)/sizeof((a)[0]))
 
-sal_Bool SAL_CALL hasInternetConnection()
+// #i71984
+extern "C" sal_Bool SAL_CALL hasInternetConnection()
 {
     DWORD   dwFlags;
     TCHAR   szConnectionName[1024];
