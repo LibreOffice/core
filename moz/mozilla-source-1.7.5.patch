@@ -264,7 +264,7 @@
   	@if test -n "$(findstring $*.h, $(EXPORTS) $(SDK_HEADERS))"; \
   	  then echo "*** WARNING: file $*.h generated from $*.idl overrides $(srcdir)/$*.h"; else true; fi
 *** misc/mozilla/configure	Tue Oct 12 00:13:29 2004
---- misc/build/mozilla/configure	Thu Mar 29 14:27:08 2007
+--- misc/build/mozilla/configure	Sat Oct 13 15:10:52 2007
 ***************
 *** 5228,5234 ****
       ;;
@@ -283,6 +283,17 @@
   	DSO_LDOPTS="-shared"
       fi
 ***************
+*** 5476,5483 ****
+      case "$host" in
+      *-mingw*|*-cygwin*|*-msvc*|*-mks*)
+  
+-         MOZ_BUILD_ROOT=`cygpath -w $MOZ_BUILD_ROOT | sed -e 's|\\\\|/|g'`
+- 
+      if test -z "$MOZ_TOOLS"; then
+          { echo "configure: error: MOZ_TOOLS is not set" 1>&2; exit 1; }
+      fi
+--- 5476,5481 ----
+***************
 *** 5895,5901 ****
          MKCSHLIB='$(CC) $(CFLAGS) $(DSO_PIC_FLAGS) -G -Wl,-z -Wl,muldefs -o $@'
          MKSHLIB_FORCE_ALL='-Qoption ld -z,allextract'
@@ -291,7 +302,7 @@
          AR_LIST="$AR t"
          AR_EXTRACT="$AR x"
          AR_DELETE="$AR d"
---- 5895,5901 ----
+--- 5893,5899 ----
          MKCSHLIB='$(CC) $(CFLAGS) $(DSO_PIC_FLAGS) -G -Wl,-z -Wl,muldefs -o $@'
          MKSHLIB_FORCE_ALL='-Qoption ld -z,allextract'
          MKSHLIB_UNFORCE_ALL=''
@@ -301,7 +312,7 @@
          AR_DELETE="$AR d"
 ***************
 *** 7504,7509 ****
---- 7504,7511 ----
+--- 7502,7509 ----
   case $target in
   *-hpux11.*)
   	;;
@@ -8203,6 +8214,70 @@
   endif
   
   # -KPIC generates position independent code for use in shared libraries.
+*** misc/mozilla/security/coreconf/WIN32.mk	Wed Sep 15 07:14:39 2004
+--- misc/build/mozilla/security/coreconf/WIN32.mk	Sat Oct 13 13:47:05 2007
+***************
+*** 39,52 ****
+  DEFAULT_COMPILER = cl
+  
+  ifdef NS_USE_GCC
+! 	CC           = gcc
+  	CCC          = g++
+  	LINK         = ld
+  	AR           = ar
+  	AR          += cr $@
+  	RANLIB       = ranlib
+  	BSDECHO      = echo
+! 	RC           = windres.exe -O coff --use-temp-file
+  	LINK_DLL      = $(CC) $(OS_DLLFLAGS) $(DLLFLAGS)
+  else
+  	CC           = cl
+--- 39,52 ----
+  DEFAULT_COMPILER = cl
+  
+  ifdef NS_USE_GCC
+! 	CC           = $(CYGWIN_WRAPPER) gcc
+  	CCC          = g++
+  	LINK         = ld
+  	AR           = ar
+  	AR          += cr $@
+  	RANLIB       = ranlib
+  	BSDECHO      = echo
+! 	RC           = $(CYGWIN_WRAPPER) windres.exe -O coff --use-temp-file
+  	LINK_DLL      = $(CC) $(OS_DLLFLAGS) $(DLLFLAGS)
+  else
+  	CC           = cl
+***************
+*** 64,70 ****
+--- 64,74 ----
+  else
+  NSINSTALL_DIR  = $(CORE_DEPTH)/coreconf/nsinstall
+  endif
++ ifdef NS_USE_GCC
++ NSINSTALL      = $(CYGWIN_WRAPPER) nsinstall
++ else
+  NSINSTALL      = nsinstall
++ endif
+  
+  MKDEPEND_DIR    = $(CORE_DEPTH)/coreconf/mkdepend
+  MKDEPEND        = $(MKDEPEND_DIR)/$(OBJDIR_NAME)/mkdepend.exe
+***************
+*** 87,93 ****
+  ifdef NS_USE_GCC
+      OS_CFLAGS += -mno-cygwin -mms-bitfields
+      _GEN_IMPORT_LIB=-Wl,--out-implib,$(IMPORT_LIBRARY)
+!     DLLFLAGS  += -mno-cygwin -o $@ -shared -Wl,--export-all-symbols $(if $(IMPORT_LIBRARY),$(_GEN_IMPORT_LIB))
+      ifdef BUILD_OPT
+  	OPTIMIZER  += -O2
+  	DEFINES    += -UDEBUG -U_DEBUG -DNDEBUG
+--- 91,97 ----
+  ifdef NS_USE_GCC
+      OS_CFLAGS += -mno-cygwin -mms-bitfields
+      _GEN_IMPORT_LIB=-Wl,--out-implib,$(IMPORT_LIBRARY)
+!     DLLFLAGS  += -mno-cygwin -o $@ -shared -Wl,--enable-runtime-pseudo-reloc,--export-all-symbols $(if $(IMPORT_LIBRARY),$(_GEN_IMPORT_LIB))
+      ifdef BUILD_OPT
+  	OPTIMIZER  += -O2
+  	DEFINES    += -UDEBUG -U_DEBUG -DNDEBUG
 *** misc/mozilla/security/coreconf/WIN954.0.mk	Fri Oct 15 19:52:29 2004
 --- misc/build/mozilla/security/coreconf/WIN954.0.mk	Thu Mar 29 14:27:09 2007
 ***************
@@ -8363,6 +8438,39 @@
   else
   	$(CCC) -o $@ -c $(CFLAGS) $<
   endif
+*** misc/mozilla/security/manager/Makefile.in	Tue Mar 23 13:15:56 2004
+--- misc/build/mozilla/security/manager/Makefile.in	Sat Oct 13 13:32:17 2007
+***************
+*** 89,94 ****
+--- 89,95 ----
+  endif
+  ifeq ($(OS_ARCH),WINNT)
+  DEFAULT_GMAKE_FLAGS += OS_TARGET=WIN95
++ DEFAULT_GMAKE_FLAGS += CYGWIN_WRAPPER=@CYGWIN_WRAPPER@
+  ifdef MOZ_DEBUG
+  ifndef MOZ_NO_DEBUG_RTL
+  DEFAULT_GMAKE_FLAGS += USE_DEBUG_RTL=1
+*** misc/mozilla/security/nss/cmd/shlibsign/Makefile	Wed Apr 16 07:42:09 2003
+--- misc/build/mozilla/security/nss/cmd/shlibsign/Makefile	Sat Oct 13 13:49:21 2007
+***************
+*** 103,110 ****
+--- 103,118 ----
+  ifeq ($(OS_TARGET), OS2)
+  	@cmd.exe /c sign.cmd $(DIST) $(OBJDIR) $(OS_TARGET) $<
+  else
++ ifeq ($(OS_TARGET), WIN95)
++ ifdef NS_USE_GCC
++ 	@sh $(CYGWIN_WRAPPER) ./sign.sh $(DIST) $(OBJDIR) $(OS_TARGET) $<
++ else
+  	@sh ./sign.sh $(DIST) $(OBJDIR) $(OS_TARGET) $<
+  endif
++ else
++ 	@sh ./sign.sh $(DIST) $(OBJDIR) $(OS_TARGET) $<
++ endif
++ endif
+  
+  libs install :: $(CHECKLOC)
+  
 *** misc/mozilla/security/nss/lib/ckfw/builtins/config.mk	Fri Oct 15 19:52:32 2004
 --- misc/build/mozilla/security/nss/lib/ckfw/builtins/config.mk	Thu Mar 29 14:27:09 2007
 ***************
