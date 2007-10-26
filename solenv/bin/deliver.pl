@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.120 $
+#   $Revision: 1.121 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-05 09:01:17 $
+#   last change: $Author: vg $ $Date: 2007-10-26 11:26:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.120 $ ';
+$id_str = ' $Revision: 1.121 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -77,6 +77,7 @@ print "$script_name -- version: $script_rev\n";
 @copy_filter_patterns = (
                         );
 
+$strip              = '';
 $is_debug           = 0;
 
 $error              = 0;
@@ -141,7 +142,10 @@ parse_options();
 
 if ( ! $opt_delete ) {
     if ( $ENV{GUI} eq 'WNT' ) {
-        initialize_strip() if ($ENV{COM} eq 'GCC');
+        if ($ENV{COM} eq 'GCC') {
+            $strip .= 'guw ' if ($^O eq 'cygwin');
+            initialize_strip() ;
+        };
     } else {
         initialize_strip();
     }
@@ -753,7 +757,7 @@ sub is_unstripped {
 
 sub initialize_strip {
     if ((!defined $ENV{DISABLE_STRIP}) || ($ENV{DISABLE_STRIP} eq "")) {
-        $strip = 'strip';
+        $strip .= 'strip';
         $strip .= " -x" if ($ENV{OS} eq 'MACOSX');
         $strip .= " -R '.comment' -s" if ($ENV{OS} eq 'LINUX');
     };
@@ -779,6 +783,7 @@ sub execute_system {
 sub strip_target {
     my $file = shift;
     my $temp_file = shift;
+    $temp_file =~ s/\/{2,}/\//g;
     my $rc = copy($file, $temp_file);
     execute_system("$strip $temp_file");
     return $rc;
@@ -828,7 +833,7 @@ sub copy_if_newer
     # to minimize the possibility for race conditions
     local $temp_file = sprintf('%s.%d-%d', $to, $$, time());
     my $rc = '';
-    if ((defined $strip) && (defined $ENV{PROEXT}) && (is_unstripped($from))) {
+    if (($strip ne '') && (defined $ENV{PROEXT}) && (is_unstripped($from))) {
         $rc = strip_target($from, $temp_file);
     } else {
         $rc = copy($from, $temp_file);
