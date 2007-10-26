@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:35:43 $
+ *  last change: $Author: vg $ $Date: 2007-10-26 11:55:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,36 @@ using namespace com::sun::star::uno;
 namespace desktop
 {
 
+namespace {
+
+class ExtCommandLineSupplier: public CommandLineArgs::Supplier {
+public:
+    explicit ExtCommandLineSupplier(vos::OExtCommandLine & commandLine):
+        m_commandLine(commandLine), m_count(commandLine.getCommandArgCount()),
+        m_index(0) {}
+
+    virtual ~ExtCommandLineSupplier() {}
+
+    virtual bool next(rtl::OUString * argument) {
+        OSL_ASSERT(argument != NULL);
+        if (m_index < m_count) {
+            if (!m_commandLine.getCommandArg(m_index++, *argument)) {
+                OSL_ASSERT(false);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+private:
+    vos::OExtCommandLine & m_commandLine;
+    sal_uInt32 m_count;
+    sal_uInt32 m_index;
+};
+
+}
+
 static CommandLineArgs::BoolParam aModuleGroupDefinition[] =
 {
     CommandLineArgs::CMD_BOOLPARAM_WRITER,
@@ -76,6 +106,18 @@ CommandLineArgs::GroupDefinition CommandLineArgs::m_pGroupDefinitions[ CommandLi
     { 8, aModuleGroupDefinition }
 };
 
+CommandLineArgs::Supplier::Exception::Exception() {}
+
+CommandLineArgs::Supplier::Exception::Exception(Exception const &) {}
+
+CommandLineArgs::Supplier::Exception::~Exception() {}
+
+CommandLineArgs::Supplier::Exception &
+CommandLineArgs::Supplier::Exception::operator =(Exception const &)
+{ return *this; }
+
+CommandLineArgs::Supplier::~Supplier() {}
+
 CommandLineArgs::CommandLineArgs()
 {
     ResetParamValues();
@@ -85,24 +127,20 @@ CommandLineArgs::CommandLineArgs()
 CommandLineArgs::CommandLineArgs( ::vos::OExtCommandLine& aExtCmdLine )
 {
     ResetParamValues();
-    ParseCommandLine_Impl( aExtCmdLine );
+    ExtCommandLineSupplier s( aExtCmdLine );
+    ParseCommandLine_Impl( s, true );
 }
 
-// intialize class with command line parameters from interprocess communication (officeipcthread)
-CommandLineArgs::CommandLineArgs( const ::rtl::OUString& aCmdLineArgs )
+CommandLineArgs::CommandLineArgs( Supplier& supplier )
 {
     ResetParamValues();
-    ParseCommandLine_String( aCmdLineArgs );
+    ParseCommandLine_Impl( supplier, false );
 }
 
 // ----------------------------------------------------------------------------
 
-void CommandLineArgs::ParseCommandLine_Impl( ::vos::OExtCommandLine& aCmdLine )
+void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier, bool convert )
 {
-    sal_uInt32      nCount = aCmdLine.getCommandArgCount();
-    ::rtl::OUString aDummy;
-    String          aArguments;
-
     Reference<XMultiServiceFactory> xMS(comphelper::getProcessServiceFactory(), UNO_QUERY);
     OSL_ENSURE(xMS.is(), "CommandLineArgs: no ProcessServiceFactory.");
 
@@ -112,46 +150,6 @@ void CommandLineArgs::ParseCommandLine_Impl( ::vos::OExtCommandLine& aCmdLine )
         "com.sun.star.uri.ExternalUriReferenceTranslator")),
         UNO_QUERY);
 
-
-    // Extract cmdline parameters and concat them to the cmdline string format
-    for( sal_uInt32 i=0; i < nCount; i++ )
-    {
-        aCmdLine.getCommandArg( i, aDummy );
-
-        // convert file URLs to internal form #112849#
-        if (aDummy.indexOf(OUString::createFromAscii("file:"))==0 &&
-            xTranslator.is())
-        {
-            OUString tmp(xTranslator->translateToInternal(aDummy));
-            if (tmp.getLength() > 0)
-                aDummy = tmp;
-        }
-
-        aArguments += String( aDummy );
-        aArguments += '|';
-    }
-
-    // Parse string as a cmdline string
-    ParseCommandLine_String( ::rtl::OUString( aArguments ));
-}
-
-void CommandLineArgs::AddStringListParam_Impl( StringParam eParam, const rtl::OUString& aParam )
-{
-    OSL_ASSERT( eParam >= 0 && eParam < CMD_STRINGPARAM_COUNT );
-    if ( m_aStrParams[eParam].getLength() )
-        m_aStrParams[eParam] += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
-    m_aStrParams[eParam] += aParam;
-    m_aStrSetParams[eParam] = sal_True;
-}
-
-void CommandLineArgs::SetBoolParam_Impl( BoolParam eParam, sal_Bool bValue )
-{
-    OSL_ASSERT( eParam >= 0 && eParam < CMD_BOOLPARAM_COUNT );
-    m_aBoolParams[eParam] = bValue;
-}
-
-void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineString )
-{
     // parse command line arguments
     sal_Bool    bPrintEvent     = sal_False;
     sal_Bool    bOpenEvent      = sal_True;
@@ -163,18 +161,31 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
     sal_Bool    bForceNewEvent  = sal_False;
     sal_Bool    bDisplaySpec    = sal_False;
 
-    m_nArgumentCount = 0;
-    m_bEmpty = (aCmdLineString.getLength()<1);
+    m_eArgumentCount = NONE;
 
-    sal_Int32 nIndex = 0;
-    do
+    for (;;)
     {
-        ::rtl::OUString aArg    = aCmdLineString.getToken( 0, '|', nIndex );
+        ::rtl::OUString aArg;
+        if ( !supplier.next( &aArg ) )
+        {
+            break;
+        }
+        if ( convert )
+        {
+            // convert file URLs to internal form #112849#
+            if (aArg.indexOf(OUString::createFromAscii("file:"))==0 &&
+                xTranslator.is())
+            {
+                OUString tmp(xTranslator->translateToInternal(aArg));
+                if (tmp.getLength() > 0)
+                    aArg = tmp;
+            }
+        }
         String          aArgStr = aArg;
 
         if ( aArg.getLength() > 0 )
         {
-            m_nArgumentCount++;
+            m_eArgumentCount = m_eArgumentCount == NONE ? ONE : MANY;
             if ( !InterpretCommandLineParameter( aArg ))
             {
                 if ( aArgStr.GetChar(0) == '-' )
@@ -302,7 +313,21 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
             }
         }
     }
-    while ( nIndex >= 0 );
+}
+
+void CommandLineArgs::AddStringListParam_Impl( StringParam eParam, const rtl::OUString& aParam )
+{
+    OSL_ASSERT( eParam >= 0 && eParam < CMD_STRINGPARAM_COUNT );
+    if ( m_aStrParams[eParam].getLength() )
+        m_aStrParams[eParam] += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
+    m_aStrParams[eParam] += aParam;
+    m_aStrSetParams[eParam] = sal_True;
+}
+
+void CommandLineArgs::SetBoolParam_Impl( BoolParam eParam, sal_Bool bValue )
+{
+    OSL_ASSERT( eParam >= 0 && eParam < CMD_BOOLPARAM_COUNT );
+    m_aBoolParams[eParam] = bValue;
 }
 
 sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg )
@@ -540,8 +565,7 @@ void CommandLineArgs::ResetParamValues()
         m_aBoolParams[i] = sal_False;
     for ( i = 0; i < CMD_STRINGPARAM_COUNT; i++ )
         m_aStrSetParams[i] = sal_False;
-    m_bEmpty = sal_True;
-    m_nArgumentCount = 0;
+    m_eArgumentCount = NONE;
 }
 
 sal_Bool CommandLineArgs::GetBoolParam( BoolParam eParam ) const
@@ -868,14 +892,14 @@ sal_Bool CommandLineArgs::IsPrinting() const
 sal_Bool CommandLineArgs::IsEmpty() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
-    return m_bEmpty;
+    return m_eArgumentCount == NONE;
 }
 
 sal_Bool CommandLineArgs::IsEmptyOrAcceptOnly() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
 
-    return m_bEmpty || ( ( m_nArgumentCount == 1 ) && ( m_aStrParams[ CMD_STRINGPARAM_ACCEPT ].getLength() ) );
+    return m_eArgumentCount == NONE || ( ( m_eArgumentCount == ONE ) && ( m_aStrParams[ CMD_STRINGPARAM_ACCEPT ].getLength() ) );
 }
 
 } // namespace desktop
