@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:36:08 $
+ *  last change: $Author: vg $ $Date: 2007-10-26 11:56:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include "officeipcthread.hxx"
 #include "cmdlineargs.hxx"
 #include "dispatchwatcher.hxx"
+#include <memory>
 #include <stdio.h>
 
 #ifndef _VOS_PROCESS_HXX_
@@ -78,6 +79,9 @@
 #ifndef _RTL_BOOTSTRAP_HXX_
 #include <rtl/bootstrap.hxx>
 #endif
+#ifndef _RTL_STRBUF_HXX_
+#include <rtl/strbuf.hxx>
+#endif
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
 
@@ -97,6 +101,8 @@ const int OfficeIPCThread::sc_nShSeqLength = 5;
 const char  *OfficeIPCThread::sc_aConfirmationSequence = "InternalIPC::ProcessingDone";
 const int OfficeIPCThread::sc_nCSeqLength = 27;
 
+namespace { static char const ARGUMENT_PREFIX[] = "InternalIPC::Arguments"; }
+
 // Type of pipe we use
 enum PipeMode
 {
@@ -107,6 +113,70 @@ enum PipeMode
 
 namespace desktop
 {
+
+namespace {
+
+class Parser: public CommandLineArgs::Supplier {
+public:
+    explicit Parser(rtl::OString const & input): m_input(input) {
+        if (m_input.match(ARGUMENT_PREFIX) &&
+            (m_input.getLength() == RTL_CONSTASCII_LENGTH(ARGUMENT_PREFIX) ||
+             m_input[RTL_CONSTASCII_LENGTH(ARGUMENT_PREFIX)] == ','))
+        {
+            m_index = RTL_CONSTASCII_LENGTH(ARGUMENT_PREFIX);
+        } else {
+            throw CommandLineArgs::Supplier::Exception();
+        }
+    }
+
+    virtual ~Parser() {}
+
+    virtual bool next(rtl::OUString * argument) {
+        OSL_ASSERT(argument != NULL);
+        if (m_index < m_input.getLength()) {
+            OSL_ASSERT(m_input[m_index] == ',');
+            ++m_index;
+            rtl::OStringBuffer b;
+            while (m_index < m_input.getLength()) {
+                char c = m_input[m_index];
+                if (c == ',') {
+                    break;
+                }
+                ++m_index;
+                if (c == '\\') {
+                    if (m_index < m_input.getLength()) {
+                        c = m_input[m_index++];
+                        switch (c) {
+                        case '0':
+                            c = '\0';
+                            break;
+                        case ',':
+                        case '\\':
+                            break;
+                        default:
+                            throw CommandLineArgs::Supplier::Exception();
+                        }
+                    } else {
+                        throw CommandLineArgs::Supplier::Exception();
+                    }
+                }
+                b.append(c);
+            }
+            *argument = rtl::OStringToOUString(
+                b.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
+                //TODO: Signal error on malformed UTF-8.
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+private:
+    rtl::OString m_input;
+    sal_Int32 m_index;
+};
+
+}
 
 String GetURL_Impl( const String& rName );
 
@@ -415,62 +485,76 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         pThread->maStreamPipe = pThread->maPipe;
 
         sal_Bool bWaitBeforeClose = sal_False;
-        ByteString aArguments;
+        ByteString aArguments(RTL_CONSTASCII_STRINGPARAM(ARGUMENT_PREFIX));
         ULONG nCount = aInfo.getCommandArgCount();
 
-        if ( nCount == 0 )
+        sal_Bool    bPrintTo = sal_False;
+        OUString    aPrintToCmd( RTL_CONSTASCII_USTRINGPARAM( "-pt" ));
+
+        Reference< XExternalUriReferenceTranslator > xTranslator(
+            comphelper::getProcessServiceFactory()->createInstance(
+            OUString::createFromAscii(
+            "com.sun.star.uri.ExternalUriReferenceTranslator")),
+            UNO_QUERY);
+
+        for( ULONG i=0; i < nCount; i++ )
         {
-            // Use default argument so the first office can distinguish between a real second
-            // office and another program that check the existence of the the pipe!!
-
-            aArguments += ByteString( sc_aShowSequence );
-        }
-        else
-        {
-            sal_Bool    bPrintTo = sal_False;
-            OUString    aPrintToCmd( RTL_CONSTASCII_USTRINGPARAM( "-pt" ));
-
-            Reference< XExternalUriReferenceTranslator > xTranslator(
-                comphelper::getProcessServiceFactory()->createInstance(
-                OUString::createFromAscii(
-                "com.sun.star.uri.ExternalUriReferenceTranslator")),
-                UNO_QUERY);
-
-            for( ULONG i=0; i < nCount; i++ )
+            aInfo.getCommandArg( i, aDummy );
+            // Make absolute pathes from relative ones!
+            // It's neccessary to use current working directory of THESE office instance and not of
+            // currently running once, which get these information by using pipe.
+            // Otherwhise relativ pathes are not right for his environment ...
+            if( aDummy.indexOf('-',0) != 0 )
             {
-                aInfo.getCommandArg( i, aDummy );
-                // Make absolute pathes from relative ones!
-                // It's neccessary to use current working directory of THESE office instance and not of
-                // currently running once, which get these information by using pipe.
-                // Otherwhise relativ pathes are not right for his environment ...
-                if( aDummy.indexOf('-',0) != 0 )
+                bWaitBeforeClose = sal_True;
+                // convert to an absolut url, but don't touch extrnal file URLs here
+                if ( !bPrintTo)
                 {
-                    bWaitBeforeClose = sal_True;
-                    // convert to an absolut url, but don't touch extrnal file URLs here
-                    if ( !bPrintTo)
+                    // convert file URLs to internal form #112849#
+                    if (aDummy.indexOf(OUString::createFromAscii("file:"))==0 &&
+                        xTranslator.is())
                     {
-                        // convert file URLs to internal form #112849#
-                        if (aDummy.indexOf(OUString::createFromAscii("file:"))==0 &&
-                            xTranslator.is())
-                        {
-                            OUString tmp(xTranslator->translateToInternal(aDummy));
-                            if (tmp.getLength() > 0)
-                                aDummy = tmp;
-                        }
-                        aDummy = GetURL_Impl( aDummy );
+                        OUString tmp(xTranslator->translateToInternal(aDummy));
+                        if (tmp.getLength() > 0)
+                            aDummy = tmp;
                     }
-                    bPrintTo = sal_False;
+                    aDummy = GetURL_Impl( aDummy );
                 }
+                bPrintTo = sal_False;
+            }
+            else
+            {
+                if ( aDummy.equalsIgnoreAsciiCase( aPrintToCmd ))
+                    bPrintTo = sal_True;
                 else
-                {
-                    if ( aDummy.equalsIgnoreAsciiCase( aPrintToCmd ))
-                        bPrintTo = sal_True;
-                    else
-                        bPrintTo = sal_False;
-                }
+                    bPrintTo = sal_False;
+            }
 
-                aArguments += ByteString( String( aDummy ), osl_getThreadTextEncoding() );
-                aArguments += '|';
+            aArguments += ',';
+            rtl::OString utf8;
+            if (!aDummy.convertToString(
+                    &utf8, RTL_TEXTENCODING_UTF8,
+                    RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+                    | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
+            {
+                return IPC_STATUS_BOOTSTRAP_ERROR;
+            }
+            for (sal_Int32 j = 0; j < utf8.getLength(); ++j) {
+                char c = utf8[j];
+                switch (c) {
+                case '\0':
+                    aArguments += "\\0";
+                    break;
+                case ',':
+                    aArguments += "\\,";
+                    break;
+                case '\\':
+                    aArguments += "\\\\";
+                    break;
+                default:
+                    aArguments += c;
+                    break;
+                }
             }
         }
         // finaly, write the string onto the pipe
@@ -616,11 +700,22 @@ void SAL_CALL OfficeIPCThread::run()
             if(( aArguments.CompareTo( sc_aTerminationSequence, sc_nTSeqLength ) == COMPARE_EQUAL ) ||
                     mbBlockRequests ) return;
             String           aEmpty;
-            CommandLineArgs  aCmdLineArgs( OUString( aArguments.GetBuffer(),
-                aArguments.Len(), gsl_getSystemTextEncoding() ));
+            std::auto_ptr< CommandLineArgs > aCmdLineArgs;
+            try
+            {
+                Parser p( aArguments );
+                aCmdLineArgs.reset( new CommandLineArgs( p ) );
+            }
+            catch ( CommandLineArgs::Supplier::Exception & )
+            {
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
+                fprintf( stderr, "Error in received command line arguments\n" );
+#endif
+                continue;
+            }
             CommandLineArgs *pCurrentCmdLineArgs = Desktop::GetCommandLineArgs();
 
-            if ( aCmdLineArgs.IsQuickstart() )
+            if ( aCmdLineArgs->IsQuickstart() )
             {
                 // we have to use application event, because we have to start quickstart service in main thread!!
                 ApplicationEvent* pAppEvent =
@@ -632,7 +727,7 @@ void SAL_CALL OfficeIPCThread::run()
             // handle request for acceptor
             sal_Bool bAcceptorRequest = sal_False;
             OUString aAcceptString;
-            if ( aCmdLineArgs.GetAcceptString(aAcceptString) && Desktop::CheckOEM()) {
+            if ( aCmdLineArgs->GetAcceptString(aAcceptString) && Desktop::CheckOEM()) {
                 ApplicationEvent* pAppEvent =
                     new ApplicationEvent( aEmpty, aEmpty,
                                           "ACCEPT", aAcceptString );
@@ -641,7 +736,7 @@ void SAL_CALL OfficeIPCThread::run()
             }
             // handle acceptor removal
             OUString aUnAcceptString;
-            if ( aCmdLineArgs.GetUnAcceptString(aUnAcceptString) ) {
+            if ( aCmdLineArgs->GetUnAcceptString(aUnAcceptString) ) {
                 ApplicationEvent* pAppEvent =
                     new ApplicationEvent( aEmpty, aEmpty,
                                          "UNACCEPT", aUnAcceptString );
@@ -652,7 +747,7 @@ void SAL_CALL OfficeIPCThread::run()
 #ifndef UNX
             // only in non-unix version, we need to handle a -help request
             // in a running instance in order to display  the command line help
-            if ( aCmdLineArgs.IsHelp() ) {
+            if ( aCmdLineArgs->IsHelp() ) {
                 ApplicationEvent* pAppEvent =
                     new ApplicationEvent( aEmpty, aEmpty, "HELP", aEmpty );
                 ImplPostForeignAppEvent( pAppEvent );
@@ -666,19 +761,19 @@ void SAL_CALL OfficeIPCThread::run()
 
             // Print requests are not dependent on the -invisible cmdline argument as they are
             // loaded with the "hidden" flag! So they are always checked.
-            bDocRequestSent |= aCmdLineArgs.GetPrintList( pRequest->aPrintList );
-            bDocRequestSent |= ( aCmdLineArgs.GetPrintToList( pRequest->aPrintToList ) &&
-                                    aCmdLineArgs.GetPrinterName( pRequest->aPrinterName )       );
+            bDocRequestSent |= aCmdLineArgs->GetPrintList( pRequest->aPrintList );
+            bDocRequestSent |= ( aCmdLineArgs->GetPrintToList( pRequest->aPrintToList ) &&
+                                    aCmdLineArgs->GetPrinterName( pRequest->aPrinterName )      );
 
             if ( !pCurrentCmdLineArgs->IsInvisible() )
             {
                 // Read cmdline args that can open/create documents. As they would open a window
                 // they are only allowed if the "-invisible" is currently not used!
-                bDocRequestSent |= aCmdLineArgs.GetOpenList( pRequest->aOpenList );
-                bDocRequestSent |= aCmdLineArgs.GetViewList( pRequest->aViewList );
-                bDocRequestSent |= aCmdLineArgs.GetStartList( pRequest->aStartList );
-                bDocRequestSent |= aCmdLineArgs.GetForceOpenList( pRequest->aForceOpenList );
-                bDocRequestSent |= aCmdLineArgs.GetForceNewList( pRequest->aForceNewList );
+                bDocRequestSent |= aCmdLineArgs->GetOpenList( pRequest->aOpenList );
+                bDocRequestSent |= aCmdLineArgs->GetViewList( pRequest->aViewList );
+                bDocRequestSent |= aCmdLineArgs->GetStartList( pRequest->aStartList );
+                bDocRequestSent |= aCmdLineArgs->GetForceOpenList( pRequest->aForceOpenList );
+                bDocRequestSent |= aCmdLineArgs->GetForceNewList( pRequest->aForceNewList );
 
                 // Special command line args to create an empty document for a given module
 
@@ -686,25 +781,25 @@ void SAL_CALL OfficeIPCThread::run()
                 // we only do this if no document was specified on the command line,
                 // since this would be inconsistent with the the behaviour of
                 // the first process, see OpenClients() (call to OpenDefault()) in app.cxx
-                if ( aCmdLineArgs.HasModuleParam() && Desktop::CheckOEM() && (!bDocRequestSent))
+                if ( aCmdLineArgs->HasModuleParam() && Desktop::CheckOEM() && (!bDocRequestSent))
                 {
                     SvtModuleOptions aOpt;
                     SvtModuleOptions::EFactory eFactory = SvtModuleOptions::E_WRITER;
-                    if ( aCmdLineArgs.IsWriter() )
+                    if ( aCmdLineArgs->IsWriter() )
                         eFactory = SvtModuleOptions::E_WRITER;
-                    else if ( aCmdLineArgs.IsCalc() )
+                    else if ( aCmdLineArgs->IsCalc() )
                         eFactory = SvtModuleOptions::E_CALC;
-                    else if ( aCmdLineArgs.IsDraw() )
+                    else if ( aCmdLineArgs->IsDraw() )
                         eFactory = SvtModuleOptions::E_DRAW;
-                    else if ( aCmdLineArgs.IsImpress() )
+                    else if ( aCmdLineArgs->IsImpress() )
                         eFactory = SvtModuleOptions::E_IMPRESS;
-                    else if ( aCmdLineArgs.IsBase() )
+                    else if ( aCmdLineArgs->IsBase() )
                         eFactory = SvtModuleOptions::E_DATABASE;
-                    else if ( aCmdLineArgs.IsMath() )
+                    else if ( aCmdLineArgs->IsMath() )
                         eFactory = SvtModuleOptions::E_MATH;
-                    else if ( aCmdLineArgs.IsGlobal() )
+                    else if ( aCmdLineArgs->IsGlobal() )
                         eFactory = SvtModuleOptions::E_WRITERGLOBAL;
-                    else if ( aCmdLineArgs.IsWeb() )
+                    else if ( aCmdLineArgs->IsWeb() )
                         eFactory = SvtModuleOptions::E_WRITERWEB;
 
                     if ( pRequest->aOpenList.getLength() )
@@ -715,28 +810,28 @@ void SAL_CALL OfficeIPCThread::run()
                 }
             }
 
-            if (!aCmdLineArgs.IsQuickstart() && Desktop::CheckOEM()) {
+            if (!aCmdLineArgs->IsQuickstart() && Desktop::CheckOEM()) {
                 sal_Bool bShowHelp = sal_False;
                 rtl::OUStringBuffer aHelpURLBuffer;
-                if (aCmdLineArgs.IsHelpWriter()) {
+                if (aCmdLineArgs->IsHelpWriter()) {
                     bShowHelp = sal_True;
                     aHelpURLBuffer.appendAscii("vnd.sun.star.help://swriter/start");
-                } else if (aCmdLineArgs.IsHelpCalc()) {
+                } else if (aCmdLineArgs->IsHelpCalc()) {
                     bShowHelp = sal_True;
                     aHelpURLBuffer.appendAscii("vnd.sun.star.help://scalc/start");
-                } else if (aCmdLineArgs.IsHelpDraw()) {
+                } else if (aCmdLineArgs->IsHelpDraw()) {
                     bShowHelp = sal_True;
                     aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdraw/start");
-                } else if (aCmdLineArgs.IsHelpImpress()) {
+                } else if (aCmdLineArgs->IsHelpImpress()) {
                     bShowHelp = sal_True;
                     aHelpURLBuffer.appendAscii("vnd.sun.star.help://simpress/start");
-                } else if (aCmdLineArgs.IsHelpBase()) {
+                } else if (aCmdLineArgs->IsHelpBase()) {
                     bShowHelp = sal_True;
                     aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdatabase/start");
-                } else if (aCmdLineArgs.IsHelpBasic()) {
+                } else if (aCmdLineArgs->IsHelpBasic()) {
                     bShowHelp = sal_True;
                     aHelpURLBuffer.appendAscii("vnd.sun.star.help://sbasic/start");
-                } else if (aCmdLineArgs.IsHelpMath()) {
+                } else if (aCmdLineArgs->IsHelpMath()) {
                     bShowHelp = sal_True;
                     aHelpURLBuffer.appendAscii("vnd.sun.star.help://smath/start");
                 }
@@ -766,18 +861,18 @@ void SAL_CALL OfficeIPCThread::run()
              {
                 // Send requests to dispatch watcher if we have at least one. The receiver
                 // is responsible to delete the request after processing it.
-                if ( aCmdLineArgs.HasModuleParam() )
+                if ( aCmdLineArgs->HasModuleParam() )
                 {
                     SvtModuleOptions    aOpt;
 
                     // Support command line parameters to start a module (as preselection)
-                    if ( aCmdLineArgs.IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+                    if ( aCmdLineArgs->IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
                         pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::E_WRITER );
-                    else if ( aCmdLineArgs.IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+                    else if ( aCmdLineArgs->IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
                         pRequest->aModule = aOpt.GetFactoryName( SvtModuleOptions::E_CALC );
-                    else if ( aCmdLineArgs.IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+                    else if ( aCmdLineArgs->IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
                         pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::E_IMPRESS );
-                    else if ( aCmdLineArgs.IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+                    else if ( aCmdLineArgs->IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
                         pRequest->aModule= aOpt.GetFactoryName( SvtModuleOptions::E_DRAW );
                 }
 
@@ -791,7 +886,7 @@ void SAL_CALL OfficeIPCThread::run()
                 pRequest = NULL;
             }
             if (( aArguments.CompareTo( sc_aShowSequence, sc_nShSeqLength ) == COMPARE_EQUAL ) ||
-                aArguments.Len() == 0 )
+                aCmdLineArgs->IsEmpty() )
             {
                 // no document was sent, just bring Office to front
                 ApplicationEvent* pAppEvent =
