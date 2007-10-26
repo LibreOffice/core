@@ -1,5 +1,5 @@
 *** misc/icu/source/common/putil.c	Mon Jul 31 20:14:28 2006
---- misc/build/icu/source/common/putil.c	Tue Sep 18 19:30:30 2007
+--- misc/build/icu/source/common/putil.c	Fri Oct 26 13:27:25 2007
 ***************
 *** 48,54 ****
   #endif
@@ -19,7 +19,7 @@
   #endif
   
 *** misc/icu/source/common/unicode/pwin32.h	Tue Aug 29 23:34:38 2006
---- misc/build/icu/source/common/unicode/pwin32.h	Tue Sep 18 19:30:30 2007
+--- misc/build/icu/source/common/unicode/pwin32.h	Fri Oct 26 13:27:25 2007
 ***************
 *** 266,273 ****
 --- 266,278 ----
@@ -37,10 +37,10 @@
   /*===========================================================================*/
   /* Code alignment and C function inlining                                    */
 *** misc/icu/source/common/unicode/rbbi.h	Fri Aug 11 07:46:40 2006
---- misc/build/icu/source/common/unicode/rbbi.h	Tue Sep 18 19:35:01 2007
+--- misc/build/icu/source/common/unicode/rbbi.h	Fri Oct 26 13:27:25 2007
 ***************
-*** 611,616 ****
---- 611,617 ----
+*** 611,622 ****
+--- 611,624 ----
       virtual int32_t getBreakType() const;
   #endif
   
@@ -48,9 +48,6 @@
       /**
         * Set the type of the break iterator.
         * @internal
-***************
-*** 617,622 ****
---- 618,624 ----
         */
       virtual void setBreakType(int32_t type);
   
@@ -59,7 +56,7 @@
         * Common initialization function, used by constructors and bufferClone.
         *   (Also used by DictionaryBasedBreakIterator::createBufferClone().)
 *** misc/icu/source/common/unicode/umachine.h	Tue Feb  7 02:54:16 2006
---- misc/build/icu/source/common/unicode/umachine.h	Tue Sep 18 19:30:30 2007
+--- misc/build/icu/source/common/unicode/umachine.h	Fri Oct 26 13:27:25 2007
 ***************
 *** 322,328 ****
    */
@@ -78,7 +75,7 @@
   #else
       typedef uint16_t UChar;
 *** misc/icu/source/common/unicode/unistr.h	Tue Aug 29 23:52:50 2006
---- misc/build/icu/source/common/unicode/unistr.h	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/common/unicode/unistr.h	Fri Oct 26 13:27:25 2007
 ***************
 *** 3280,3286 ****
   //========================================
@@ -182,7 +179,7 @@
   }
   
 *** misc/icu/source/common/unicode/ustring.h	Tue Aug 29 23:52:50 2006
---- misc/build/icu/source/common/unicode/ustring.h	Tue Sep 18 19:30:30 2007
+--- misc/build/icu/source/common/unicode/ustring.h	Fri Oct 26 13:27:26 2007
 ***************
 *** 918,924 ****
    * </pre>
@@ -201,7 +198,7 @@
       /**@stable ICU 2.0 */
   #   define U_STRING_INIT(var, cs, length)
 *** misc/icu/source/config/mh-darwin	Wed Feb  1 08:52:42 2006
---- misc/build/icu/source/config/mh-darwin	Tue Sep 18 19:30:30 2007
+--- misc/build/icu/source/config/mh-darwin	Fri Oct 26 13:27:26 2007
 ***************
 *** 25,31 ****
   SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS)
@@ -220,7 +217,7 @@
   ## Compiler switch to embed a runtime search path
   LD_RPATH=
 *** misc/icu/source/config/mh-irix	Thu Mar 23 19:51:52 2006
---- misc/build/icu/source/config/mh-irix	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/config/mh-irix	Fri Oct 26 13:27:26 2007
 ***************
 *** 23,28 ****
 --- 23,31 ----
@@ -234,7 +231,7 @@
   THREADSCPPFLAGS = -D_REENTRANT -D_PTHREADS
   LIBCPPFLAGS =
 *** misc/icu/source/config/mh-linux	Thu Mar 23 19:51:52 2006
---- misc/build/icu/source/config/mh-linux	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/config/mh-linux	Fri Oct 26 13:27:26 2007
 ***************
 *** 20,25 ****
 --- 20,33 ----
@@ -253,7 +250,7 @@
   LDFLAGSICUDT=-nodefaultlibs -nostdlib
   
 *** misc/icu/source/config/mh-mingw	Tue Aug 15 10:24:14 2006
---- misc/build/icu/source/config/mh-mingw	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/config/mh-mingw	Fri Oct 26 13:27:26 2007
 ***************
 *** 54,59 ****
 --- 54,62 ----
@@ -284,9 +281,9 @@
   CURR_SRCCODE_FULL_DIR=$(subst /,\\\\,$(shell pwd -W))#M#
   
 *** misc/icu/source/config/mh-solaris	Fri Feb 24 20:31:14 2006
---- misc/build/icu/source/config/mh-solaris	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/config/mh-solaris	Fri Oct 26 13:27:26 2007
 ***************
-*** 18,34 ****
+*** 18,33 ****
   
   ## Commands to link
   ## For Sun Workshop, use CC to link to bring in C++ runtime
@@ -303,8 +300,7 @@
   
   #LIBRARY_PATH_PREFIX=/usr/lib/lwp:
   
-  ## Compiler switch to embed a library name
---- 18,42 ----
+--- 18,41 ----
   
   ## Commands to link
   ## For Sun Workshop, use CC to link to bring in C++ runtime
@@ -319,19 +315,18 @@
   ## Compiler switch to embed a runtime search path
   LD_RPATH=	-R
   LD_RPATH_PRE=	
-  
++ 
 + ## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
 + ENABLE_RPATH=YES
 + RPATHLDFLAGS=${LD_RPATH}'$$ORIGIN'
 + 
 + #SH#  ENABLE_RPATH=YES
 + #SH#  RPATHLDFLAGS="${LD_RPATH}'$$ORIGIN'"
-+ 
+  
   #LIBRARY_PATH_PREFIX=/usr/lib/lwp:
   
-  ## Compiler switch to embed a library name
 *** misc/icu/source/data/Makefile.in	Sat Aug 12 00:22:24 2006
---- misc/build/icu/source/data/Makefile.in	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/data/Makefile.in	Fri Oct 26 13:27:26 2007
 ***************
 *** 344,350 ****
   ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
@@ -350,9 +345,9 @@
   	@echo "$@" > $@
   endif
 *** misc/icu/source/i18n/windtfmt.cpp	Tue Aug 15 08:48:02 2006
---- misc/build/icu/source/i18n/windtfmt.cpp	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/i18n/windtfmt.cpp	Fri Oct 26 13:27:26 2007
 ***************
-*** 232,238 ****
+*** 232,249 ****
       UChar stackBuffer[STACK_BUFFER_SIZE];
       UChar *buffer = stackBuffer;
   
@@ -360,16 +355,6 @@
   
       if (result == 0) {
           if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
---- 232,238 ----
-      UChar stackBuffer[STACK_BUFFER_SIZE];
-      UChar *buffer = stackBuffer;
-  
-!     result = GetDateFormatW(fLCID, dfFlags[fDateStyle - kDateOffset], st, NULL, reinterpret_cast<LPWSTR>(buffer), STACK_BUFFER_SIZE);
-  
-      if (result == 0) {
-          if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-***************
-*** 239,249 ****
               int newLength = GetDateFormatW(fLCID, dfFlags[fDateStyle - kDateOffset], st, NULL, NULL, 0);
   
               buffer = NEW_ARRAY(UChar, newLength);
@@ -381,7 +366,14 @@
   
       if (buffer != stackBuffer) {
           DELETE_ARRAY(buffer);
---- 239,249 ----
+--- 232,249 ----
+      UChar stackBuffer[STACK_BUFFER_SIZE];
+      UChar *buffer = stackBuffer;
+  
+!     result = GetDateFormatW(fLCID, dfFlags[fDateStyle - kDateOffset], st, NULL, reinterpret_cast<LPWSTR>(buffer), STACK_BUFFER_SIZE);
+  
+      if (result == 0) {
+          if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
               int newLength = GetDateFormatW(fLCID, dfFlags[fDateStyle - kDateOffset], st, NULL, NULL, 0);
   
               buffer = NEW_ARRAY(UChar, newLength);
@@ -394,7 +386,7 @@
       if (buffer != stackBuffer) {
           DELETE_ARRAY(buffer);
 ***************
-*** 258,264 ****
+*** 258,275 ****
       UChar stackBuffer[STACK_BUFFER_SIZE];
       UChar *buffer = stackBuffer;
   
@@ -402,16 +394,6 @@
   
       if (result == 0) {
           if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
---- 258,264 ----
-      UChar stackBuffer[STACK_BUFFER_SIZE];
-      UChar *buffer = stackBuffer;
-  
-!     result = GetTimeFormatW(fLCID, tfFlags[fTimeStyle], st, NULL, reinterpret_cast<LPWSTR>(buffer), STACK_BUFFER_SIZE);
-  
-      if (result == 0) {
-          if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-***************
-*** 265,275 ****
               int newLength = GetTimeFormatW(fLCID, tfFlags[fTimeStyle], st, NULL, NULL, 0);
   
               buffer = NEW_ARRAY(UChar, newLength);
@@ -423,7 +405,14 @@
   
       if (buffer != stackBuffer) {
           DELETE_ARRAY(buffer);
---- 265,275 ----
+--- 258,275 ----
+      UChar stackBuffer[STACK_BUFFER_SIZE];
+      UChar *buffer = stackBuffer;
+  
+!     result = GetTimeFormatW(fLCID, tfFlags[fTimeStyle], st, NULL, reinterpret_cast<LPWSTR>(buffer), STACK_BUFFER_SIZE);
+  
+      if (result == 0) {
+          if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
               int newLength = GetTimeFormatW(fLCID, tfFlags[fTimeStyle], st, NULL, NULL, 0);
   
               buffer = NEW_ARRAY(UChar, newLength);
@@ -436,7 +425,7 @@
       if (buffer != stackBuffer) {
           DELETE_ARRAY(buffer);
 *** misc/icu/source/i18n/winnmfmt.cpp	Thu Aug 17 07:21:06 2006
---- misc/build/icu/source/i18n/winnmfmt.cpp	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/i18n/winnmfmt.cpp	Fri Oct 26 13:27:26 2007
 ***************
 *** 86,95 ****
       GetLocaleInfoA(lcid, LOCALE_SGROUPING, buf, 10);
@@ -574,7 +563,7 @@
       if (buffer != stackBuffer) {
           DELETE_ARRAY(buffer);
 *** misc/icu/source/layout/CoverageTables.cpp	Sat May  8 01:28:42 2004
---- misc/build/icu/source/layout/CoverageTables.cpp	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/layout/CoverageTables.cpp	Fri Oct 26 13:27:26 2007
 ***************
 *** 44,49 ****
 --- 44,53 ----
@@ -589,7 +578,7 @@
       le_uint16 probe = power;
       le_uint16 index = 0;
 *** misc/icu/source/layout/DeviceTables.cpp	Fri Jan 14 18:25:12 2005
---- misc/build/icu/source/layout/DeviceTables.cpp	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/layout/DeviceTables.cpp	Fri Oct 26 13:27:26 2007
 ***************
 *** 22,28 ****
       le_uint16 format = SWAPW(deltaFormat) - 1;
@@ -609,7 +598,7 @@
           le_uint16 bits = fieldBits[format];
           le_uint16 count = 16 / bits;
 *** misc/icu/source/layout/GXLayoutEngine.cpp	Fri Sep  2 20:22:10 2005
---- misc/build/icu/source/layout/GXLayoutEngine.cpp	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/layout/GXLayoutEngine.cpp	Fri Oct 26 13:27:26 2007
 ***************
 *** 39,45 ****
           return 0;
@@ -628,7 +617,7 @@
       if (LE_FAILURE(success)) {
           return 0;
 *** misc/icu/source/layout/IndicClassTables.cpp	Wed Aug 23 02:12:40 2006
---- misc/build/icu/source/layout/IndicClassTables.cpp	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/layout/IndicClassTables.cpp	Fri Oct 26 13:27:26 2007
 ***************
 *** 94,100 ****
       _dr, _db, _db, _db, _db, _xx, _xx, _l1, _dl, _xx, _xx, _s1, _s2, _vr, _xx, _xx, // 09C0 - 09CF
@@ -647,14 +636,14 @@
   
   static const IndicClassTable::CharClass punjCharClasses[] =
 ***************
-*** 120,127 ****
---- 120,140 ----
+*** 120,125 ****
+--- 120,138 ----
       _iv, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx, _xx  // 0AE0 - 0AEF
   };
   
 + #if 1
-  static const IndicClassTable::CharClass oryaCharClasses[] =
-  {
++ static const IndicClassTable::CharClass oryaCharClasses[] =
++ {
 +     _xx, _ma, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _iv, /* 0B00 - 0B0F */
 +     _iv, _xx, _xx, _iv, _iv, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _ct, _bb, /* 0B10 - 0B1F */
 +     _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _bb, _xx, _bb, _bb, _bb, _bb, _bb, _pb, /* 0B20 - 0B2F */
@@ -665,11 +654,9 @@
 +     _xx, _bb                                                                        /* 0B70 - 0B71 */
 + };
 + #else
-+ static const IndicClassTable::CharClass oryaCharClasses[] =
-+ {
+  static const IndicClassTable::CharClass oryaCharClasses[] =
+  {
       _xx, _ma, _mp, _mp, _xx, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _iv, _xx, _xx, _iv, // 0B00 - 0B0F
-      _iv, _xx, _xx, _iv, _iv, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, _ct, // 0B10 - 0B1F
-      _ct, _ct, _ct, _ct, _bb, _ct, _ct, _ct, _bb, _xx, _ct, _ct, _bb, _bb, _bb, _pb, // 0B20 - 0B2F
 ***************
 *** 131,136 ****
 --- 144,150 ----
@@ -764,7 +751,7 @@
   //
   // IndicClassTable addresses
 *** misc/icu/source/layout/IndicReordering.cpp	Tue Apr 25 21:08:12 2006
---- misc/build/icu/source/layout/IndicReordering.cpp	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/layout/IndicReordering.cpp	Fri Oct 26 13:27:26 2007
 ***************
 *** 50,55 ****
 --- 50,63 ----
@@ -846,11 +833,13 @@
       {-1, -1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1, -1}, //  7 - consonant virama ZWJ, consonant ZWJ virama
       {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  4, -1}, //  8 - independent vowels that can take a virama
 ***************
-*** 629,634 ****
---- 651,670 ----
+*** 627,632 ****
+--- 649,668 ----
+              // write base consonant
+              for (i = baseConsonant; i < bcSpan; i += 1) {
                   output.writeChar(chars[i], i, tagArray4);
-              }
-  
++             }
++ 
 +             /* for the special conjuction of Cons+0x0d4d+0x0d31 or Cons+0x0d4d+0x0d30 of Malayalam */
 +             if ((baseConsonant - 2 >= 0) &&
 +                 (chars[baseConsonant - 1] == 0x0d4d) &&
@@ -863,13 +852,11 @@
 + 
 + 		if (mpreFixups)
 + 			mpreFixups->reduce();
-+             }
-+ 
+              }
+  
               if ((classTable->scriptFlags & SF_MATRAS_AFTER_BASE) != 0) {
-                  output.writeMbelow();
-                  output.writeSMbelow(); // FIXME: there are no SMs in these scripts...
 *** misc/icu/source/layout/LESwaps.h	Thu Jun 23 00:39:36 2005
---- misc/build/icu/source/layout/LESwaps.h	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/layout/LESwaps.h	Fri Oct 26 13:27:26 2007
 ***************
 *** 2,7 ****
 --- 2,8 ----
@@ -917,11 +904,12 @@
       #if U_IS_BIG_ENDIAN
           #define SWAPW(value) (value)
 ***************
-*** 49,54 ****
---- 59,83 ----
+*** 48,53 ****
+--- 58,82 ----
+  #else
       #define SWAPL(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapLong(value))
   #endif
-  
++ 
 + #else // ALLOW_UNALIGNED_HACK
 + 
 + #define SWAPW(rValue) loadBigEndianWord(reinterpret_cast<const le_uint16&>(rValue))
@@ -940,12 +928,11 @@
 + }
 + 
 + #endif // ALLOW_UNALIGNED_HACK
-+ 
+  
   /**
    * This class is used to access data which stored in big endian order
-   * regardless of the conventions of the platform. It has been designed
 *** misc/icu/source/layout/MPreFixups.cpp	Sat May  8 01:28:44 2004
---- misc/build/icu/source/layout/MPreFixups.cpp	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/layout/MPreFixups.cpp	Fri Oct 26 13:27:26 2007
 ***************
 *** 40,45 ****
 --- 40,51 ----
@@ -962,7 +949,7 @@
   {
       for (le_int32 fixup = 0; fixup < fFixupCount; fixup += 1) {
 *** misc/icu/source/layout/MPreFixups.h	Mon Apr 12 20:51:32 2004
---- misc/build/icu/source/layout/MPreFixups.h	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/layout/MPreFixups.h	Fri Oct 26 13:27:26 2007
 ***************
 *** 31,36 ****
 --- 31,38 ----
@@ -975,10 +962,10 @@
       FixupData *fFixupData;
       le_int32   fFixupCount;
 *** misc/icu/source/stubdata/Makefile.in	Fri Dec  2 11:21:34 2005
---- misc/build/icu/source/stubdata/Makefile.in	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/stubdata/Makefile.in	Fri Oct 26 13:27:26 2007
 ***************
-*** 25,31 ****
---- 25,37 ----
+*** 25,30 ****
+--- 25,36 ----
   ## Target information
   
   TARGET_STUBNAME=$(DATA_STUBNAME)
@@ -986,14 +973,13 @@
 + FINAL_SO_TARGET=$(STUBDATA_LIBDIR)$(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)$(STUB_SUFFIX).$(SO)
 + %$(STUB_SUFFIX).$(SO): %$(SO_TARGET_VERSION_MAJOR)$(STUB_SUFFIX).$(SO)
 + 	$(RM) $@ && ln $< $@
-  
-+ endif
 + 
++ endif
+  
   ifneq ($(ENABLE_STATIC),)
   TARGET = $(STUBDATA_LIBDIR)$(LIBSICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).$(A)
-  endif
 *** misc/icu/source/test/intltest/loctest.cpp	Thu Jul  6 03:50:04 2006
---- misc/build/icu/source/test/intltest/loctest.cpp	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/test/intltest/loctest.cpp	Fri Oct 26 13:27:26 2007
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -1005,7 +991,7 @@
   #include "unicode/decimfmt.h"
   #include "unicode/ucurr.h"
 *** misc/icu/source/test/intltest/tsputil.cpp	Wed Jul 19 00:18:10 2006
---- misc/build/icu/source/test/intltest/tsputil.cpp	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/test/intltest/tsputil.cpp	Fri Oct 26 13:27:26 2007
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -1017,7 +1003,7 @@
   
   #include <float.h> // DBL_MAX, DBL_MIN
 *** misc/icu/source/test/intltest/uobjtest.cpp	Thu Mar 23 01:54:12 2006
---- misc/build/icu/source/test/intltest/uobjtest.cpp	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/test/intltest/uobjtest.cpp	Fri Oct 26 13:27:26 2007
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -1029,7 +1015,7 @@
   #include "cmemory.h" // UAlignedMemory
   #include <string.h>
 *** misc/icu/source/test/intltest/ustrtest.cpp	Tue Dec 28 22:13:54 2004
---- misc/build/icu/source/test/intltest/ustrtest.cpp	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/test/intltest/ustrtest.cpp	Fri Oct 26 13:27:26 2007
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -1041,7 +1027,7 @@
   #include "unicode/unistr.h"
   #include "unicode/uchar.h"
 *** misc/icu/source/tools/icupkg/icupkg.cpp	Fri Jul 21 23:17:52 2006
---- misc/build/icu/source/tools/icupkg/icupkg.cpp	Tue Sep 18 19:30:31 2007
+--- misc/build/icu/source/tools/icupkg/icupkg.cpp	Fri Oct 26 13:27:26 2007
 ***************
 *** 332,337 ****
 --- 332,341 ----
