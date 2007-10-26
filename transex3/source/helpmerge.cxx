@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:19:04 $
+ *  last change: $Author: vg $ $Date: 2007-10-26 10:28:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include <osl/file.hxx>
 // local includes
 #include <stdio.h>
+#include <stdlib.h>
 #include "helpmerge.hxx"
 #include "utf8conv.hxx"
 #include <algorithm>
@@ -48,6 +49,10 @@
 #include <fstream>
 #include <vector>
 #include "rtl/strbuf.hxx"
+#ifdef WNT
+#include <direct.h>
+#endif
+
 /*****************************************************************************/
 void HelpParser::FillInFallbacks( LangHashMap& rElem_out, ByteString sLangIdx_in ){
 /*****************************************************************************/
@@ -468,14 +473,20 @@ ByteString HelpParser::GetOutpath( const ByteString& rPathX , const ByteString& 
     return testpath;
 }
 void HelpParser::MakeDir( const ByteString& sPath ){
-    String sPathtmp( sPath , RTL_TEXTENCODING_ASCII_US );
-    String sDir( sPathtmp.Copy( 0 , sPathtmp.SearchCharBackward( DirEntry::GetAccessDelimiter().GetBuffer() ) ) );
-    DirEntry aDirEntry( sDir );
-
-    ByteString sTDir( sDir , sDir.Len() , RTL_TEXTENCODING_ASCII_US );
-    if( aDirEntry.MakeDir() ){  // Errorhandling ?
-    //    printf("ERROR: Could NOT create Directory %s\n",sTDir.GetBuffer() );
-    //    exit( -1 );
+    ByteString sTPath( sPath );
+    ByteString sDelimiter( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
+    sTPath.SearchAndReplaceAll( sDelimiter , '/' );
+    USHORT cnt = sTPath.GetTokenCount( '/' );
+    ByteString sCreateDir;
+    for( USHORT i = 0 ; i < cnt ; i++ )
+    {
+        sCreateDir += sTPath.GetToken( i , '/' );
+        sCreateDir += sDelimiter;
+#ifdef WNT
+        _mkdir( sCreateDir.GetBuffer() );
+#else
+        mkdir( sCreateDir.GetBuffer() , S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH );
+#endif
     }
 }
 
