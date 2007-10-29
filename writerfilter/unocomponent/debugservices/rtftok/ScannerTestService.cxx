@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScannerTestService.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2007-06-19 05:39:13 $
+ *  last change: $Author: obo $ $Date: 2007-10-29 14:04:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
             o+=4; // dummy1
             o+=4; // dummy2
             unsigned int binLen=((unsigned int)binBuffer[o]) | ((unsigned int)binBuffer[o+1])<<8 | ((unsigned int)binBuffer[o+2])<<16 | ((unsigned int)binBuffer[o+3]<<24); o+=4;
-            printf("OLE%i \"%s\" type=%i recType=%i binBuffer.size()=%u len=%u\n", numOfOLEs, str, type, recType, binBuffer.size(), o+binLen);
+            printf("OLE%i \"%s\" type=%i recType=%i binBuffer.size()=%u len=%u\n", numOfOLEs, str, type, recType, (unsigned int)(binBuffer.size()), o+binLen);
             //assert(binBuffer.size()==o+binLen);
             char buf[100];
             sprintf(buf, "ole%02i.ole", numOfOLEs);
