@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-06 11:38:51 $
+ *  last change: $Author: obo $ $Date: 2007-10-29 13:55:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -734,7 +734,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             PropertyMap::iterator aElement_ = pEntry->pProperties->find(PropertyDefinition( PROP_CHAR_HEIGHT_ASIAN, false ));
             if( aElement_ != pEntry->pProperties->end())
             {
-                double fHeight;
+                double fHeight = 0;
                 if( aElement_->second >>= fHeight )
                     nCharWidth = ConversionHelper::convertToMM100( (long)( fHeight * 20.0 + 0.5 ));
             }
