@@ -4,9 +4,9 @@
  *
  *  $RCSfile: informationdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2007-09-28 15:49:57 $
+ *  last change: $Author: vg $ $Date: 2007-10-29 12:29:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,7 +403,7 @@ sal_Bool InformationDialog::execute()
 
     if ( maSaveAsURL.getLength() )
     {
-        sal_Int16 nInt16;
+        sal_Int16 nInt16 = 0;
         Any aAny( getControlProperty( TKGet( TK_OpenNewDocument ), TKGet( TK_State ) ) );
         if ( aAny >>= nInt16 )
         {

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2007-07-10 16:16:25 $
+ *  last change: $Author: vg $ $Date: 2007-10-29 12:29:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ sal_Bool UnoDialog::isHighContrast()
     sal_Bool bHighContrast = sal_False;
     try
     {
-        sal_Int32 nBackgroundColor;
+        sal_Int32 nBackgroundColor = sal_False;
         if ( mxDialogModelPropertySet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "BackgroundColor" ) ) ) >>= nBackgroundColor )
         {
             sal_uInt8 nLum( static_cast< sal_uInt8 >( ( static_cast< sal_uInt8 >( nBackgroundColor >> 16 ) * 28 +

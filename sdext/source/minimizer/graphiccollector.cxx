@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphiccollector.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-16 15:07:46 $
+ *  last change: $Author: vg $ $Date: 2007-10-29 12:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const 
                                 {
                                     if ( ( eBitmapMode == BitmapMode_REPEAT ) || ( eBitmapMode == BitmapMode_NO_REPEAT ) )
                                     {
-                                        sal_Bool bLogicalSize;
+                                        sal_Bool bLogicalSize = sal_False;
                                         awt::Size aSize( 0, 0 );
                                         if ( ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapLogicalSize ) ) >>= bLogicalSize )
                                           && ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapSizeX ) ) >>= aSize.Width )

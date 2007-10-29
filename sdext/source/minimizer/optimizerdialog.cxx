@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-17 09:38:07 $
+ *  last change: $Author: vg $ $Date: 2007-10-29 12:30:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,7 +190,7 @@ void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool 
 
 void OptimizerDialog::UpdateConfiguration()
 {
-    sal_Int16   nInt16;
+    sal_Int16   nInt16 = 0;
     OUString    aString;
     Any         aAny;
 
@@ -440,7 +440,7 @@ void ItemListener::itemStateChanged( const ItemEvent& Event )
                 break;
                 case TK_RadioButton0Pg1 :
                 {
-                    sal_Int16 nInt16;
+                    sal_Int16 nInt16 = 0;
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nInt16 )
                     {
                         nInt16 ^= 1;
@@ -752,7 +752,7 @@ void ActionListenerListBox0Pg0::disposing( const ::com::sun::star::lang::EventOb
 void TextListenerFormattedField0Pg1::textChanged( const TextEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
 {
-    double fDouble;
+    double fDouble = 0;
     Any aAny = mrOptimizerDialog.getControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ) );
     if ( aAny >>= fDouble )
         mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
