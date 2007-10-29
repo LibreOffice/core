@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: os $ $Date: 2007-06-29 12:45:23 $
+ *  last change: $Author: obo $ $Date: 2007-10-29 13:52:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2271,7 +2271,7 @@ void DomainMapper::sprm( doctok::Sprm& rSprm, PropertyMapPtr rContext, SprmType 
                 if( nIntValue == 129) //inverted style sheet value
                 {
                     //get value from style sheet and invert it
-                    sal_Int16 nStyleValue;
+                    sal_Int16 nStyleValue = 0;
                     double fDoubleValue;
                     uno::Any aStyleVal = m_pImpl->GetPropertyFromStyleSheet(ePropertyId);
                     if( !aStyleVal.hasValue() )
@@ -3349,7 +3349,6 @@ void DomainMapper::PopStyleSheetProperties()
 /*-- 09.06.2006 09:52:14---------------------------------------------------
 
 -----------------------------------------------------------------------*/
-
 void DomainMapper::startCharacterGroup()
 {
     m_pImpl->PushProperties(CONTEXT_CHARACTER);
@@ -3357,7 +3356,17 @@ void DomainMapper::startCharacterGroup()
     if( rTableManager.getTableStyleName().getLength() )
     {
         PropertyMapPtr pTopContext = m_pImpl->GetTopContext();
-        rTableManager.CopyTextProperties(pTopContext, m_pImpl->GetStyleSheetTable());
+        const StyleSheetEntry* pStyleSheetEntry = m_pImpl->GetStyleSheetTable()->FindStyleSheetByISTD(
+                                                        rTableManager.getTableStyleName());
+        OSL_ENSURE( pStyleSheetEntry, "table style not found" );
+        PropertyMap::const_iterator aPropIter = pStyleSheetEntry->pProperties->begin();
+        while(aPropIter != pStyleSheetEntry->pProperties->end())
+        {
+            //copy all text properties form the table style to the current run attributes
+            if( aPropIter->first.bIsTextProperty )
+                pTopContext->insert(*aPropIter);
+            ++aPropIter;
+        }
     }
 }
 /*-- 09.06.2006 09:52:14---------------------------------------------------
@@ -3449,18 +3458,17 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
         {
 
             PropertyMapPtr pContext = m_pImpl->GetTopContext();
-            if( pContext->GetFootnote().is() )
+
+            //-->debug
+            uno::Reference<text::XFootnote> xTest = pContext->GetFootnote();
+            //<--debug
+            if( xTest.is() )
+//            if( pContext->GetFootnote().is() )
             {
                 if( !pContext->GetFootnoteSymbol() )
                     pContext->GetFootnote()->setLabel( sText );
                 //otherwise ignore sText
             }
-            else if( m_pImpl->IsOpenFieldCommand() )
-                m_pImpl->AppendFieldCommand(sText);
-            else if( m_pImpl->IsOpenField() && m_pImpl->IsFieldResultAsString())
-                /*depending on the success of the field insert operation this result will be
-                  set at the field or directly inserted into the text*/
-                m_pImpl->SetFieldResult( sText );
             else
                 m_pImpl->appendTextPortion( sText, pContext );
         }
