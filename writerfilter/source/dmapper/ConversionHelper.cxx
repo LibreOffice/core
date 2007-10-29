@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConversionHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2007-06-29 11:22:30 $
+ *  last change: $Author: vg $ $Date: 2007-10-29 15:28:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,12 @@
 #ifndef INCLUDED_DMAPPER_CONVERSIONHELPER_HXX
 #include <ConversionHelper.hxx>
 #endif
+#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/text/HoriOrientation.hpp>
+#endif
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
@@ -525,22 +528,6 @@ sal_Int32 SnapPageDimension( sal_Int32 nVal )
 
     return nVal;
 }
-/*-- 27.06.2007 13:42:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-sal_Int16 convertTableJustification( sal_Int32 nIntValue )
-{
-    sal_Int16 nOrient = text::HoriOrientation::LEFT_AND_WIDTH;
-    switch( nIntValue )
-    {
-        case 1 : nOrient = text::HoriOrientation::CENTER; break;
-        case 2 : nOrient = text::HoriOrientation::RIGHT; break;
-        case 0 :
-        //no break
-        default:;
-
-    }
-    return nOrient;
-}
 } // namespace ConversionHelper
 } //namespace dmapper

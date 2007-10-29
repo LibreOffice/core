@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConversionHelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2007-06-29 11:22:31 $
+ *  last change: $Author: vg $ $Date: 2007-10-29 15:27:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,6 @@ namespace ConversionHelper{
     sal_Int32 convertToMM100(sal_Int32 _t);
     sal_Int32 ConvertColor(sal_Int32 nWordColor );
     sal_Int32 SnapPageDimension( sal_Int32 nVal );
-    sal_Int16 convertTableJustification( sal_Int32 nIntValue );
 
 } // namespace ConversionHelper
 } //namespace dmapper

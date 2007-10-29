@@ -4395,9 +4395,7 @@
       <define name="CT_Text">
         <ref name="ST_String"/>
         <optional>
-          <attribute name="xml:space">
-            <text/>
-          </attribute>
+          <attribute name="xml:space"/>
         </optional>
       </define>
       <define name="CT_R">
@@ -9222,9 +9220,7 @@
       <define name="CT_Text">
         <ref name="ST_String"/>
         <optional>
-          <attribute name="xml:space">
-            <text/>
-          </attribute>
+          <attribute name="xml:space"/>
         </optional>
       </define>
       <define name="CT_FtnEdnRefChar">
@@ -14665,18 +14661,6 @@
     <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Rel" resource="Properties">
       <attribute name="r:id" tokenid="ooxml:CT_Rel_id"/>
     </resource>
-    <resource name="CT_SimpleField" resource="Stream">
-      <sprm name="fldData" tokenid="ooxml:CT_SimpleField_fldData"/>
-      <attribute name="instr" tokenid="ooxml:CT_SimpleField_instr"/>
-      <attribute name="fldLock" tokenid="ooxml:CT_SimpleField_fldLock"/>
-      <attribute name="dirty" tokenid="ooxml:CT_SimpleField_dirty"/>
-      <action name="start" action="fieldstart"/>
-      <action name="start" action="startCharacterGroup"/>
-      <action name="start" action="printproperty" tokenid="ooxml:CT_SimpleField_instr"/>
-      <action name="start" action="endCharacterGroup"/>
-      <action name="start" action="fieldsep"/>
-      <action name="end" action="fieldend"/>
-    </resource>
     <resource name="CT_FFTextType" resource="StringValue" generated="yes"/>
     <resource name="CT_FFName" resource="StringValue" generated="yes"/>
     <resource name="CT_FFHelpText" resource="StringValue" generated="yes"/>
@@ -14893,7 +14877,6 @@
       <attribute name="char" tokenid="ooxml:CT_Sym_char"/>
     </resource>
     <resource name="CT_Text" resource="Stream">
-      <attribute name="xml:space" tokenid="ooxml:CT_Text_space"/>
       <action name="characters" action="text"/>
     </resource>
     <resource name="CT_FtnEdnRefChar" resource="Stream">
@@ -15001,6 +14984,7 @@
     <resource name="CT_P" resource="Stream">
       <action name="start" action="startParagraphGroup"/>
       <action name="start" action="sendTableDepth"/>
+      <action name="end" action="endOfCharacterGroup"/>
       <action name="end" action="endOfParagraph"/>
     </resource>
     <resource name="ST_TblWidth" resource="List">
@@ -15067,6 +15051,7 @@
     <resource name="CT_TcPr" resource="Properties"/>
     <resource name="CT_TcPrInner" resource="Properties"/>
     <resource name="CT_Tc" resource="TextTableCell">
+      <action name="start" action="startParagraphGroup"/>
       <action name="start" action="startCell"/>
       <action name="end" action="endCell"/>
       <action name="end" action="endParagraphGroup"/>

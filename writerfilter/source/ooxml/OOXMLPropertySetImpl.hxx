@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-29 08:00:05 $
+ *  last change: $Author: vg $ $Date: 2007-10-29 15:27:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,21 +210,6 @@ public:
     virtual void add(ValuePointer_t pPropertySet);
     virtual string getType() const;
     virtual OOXMLTable * clone() const;
-};
-
-class OOXMLPropertySetEntryToString : public Properties
-{
-    Id mnId;
-    ::rtl::OUString mStr;
-
-public:
-    OOXMLPropertySetEntryToString(Id nId);
-    virtual ~OOXMLPropertySetEntryToString();
-
-    virtual void sprm(Sprm & rSprm);
-    virtual void attribute(Id nId, Value & rValue);
-
-    const ::rtl::OUString & getString() const;
 };
 
 Sprm::Kind SprmKind(sal_uInt32 nSprmCode);

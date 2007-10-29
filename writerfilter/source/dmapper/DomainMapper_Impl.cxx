@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2007-06-29 12:54:24 $
+ *  last change: $Author: vg $ $Date: 2007-10-29 15:28:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,15 +314,6 @@ enum FieldId
      example: TOC "EntryText \f \l 2 \n
      */
     ,FIELD_TC
-    /* document statistic - number of characters
-     */
-    ,FIELD_NUMCHARS
-    /* document statistic - number of words
-     */
-    ,FIELD_NUMWORDS
-    /* document statistic - number of pages
-     */
-    ,FIELD_NUMPAGES
 };
 struct FieldConversion
 {
@@ -2008,9 +1999,6 @@ void DomainMapper_Impl::CloseFieldCommand()
     //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERNAME")),      "ExtendedUser",             "", FIELD_USERNAME     }
                 {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TOC")), "com.sun.star.text.ContentIndex", "", FIELD_TOC},
                 {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TC")), "com.sun.star.text.ContentIndexMark", "", FIELD_TC},
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMCHARS")), "CharacterCount", "", FIELD_NUMCHARS},
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMWORDS")), "WordCount", "", FIELD_NUMWORDS},
-                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMPAGES")), "PageCount", "", FIELD_NUMPAGES},
 
     //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")), "", "", FIELD_},
 
@@ -2577,14 +2565,6 @@ void DomainMapper_Impl::CloseFieldCommand()
                         pContext->SetTC( xTC );
                     }
                     break;
-                    case  FIELD_NUMCHARS:
-                    case  FIELD_NUMWORDS:
-                    case  FIELD_NUMPAGES:
-                        xFieldProperties->setPropertyValue(
-                            rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
-                            uno::makeAny( lcl_ParseNumberingType(pContext->GetCommand()) ));
-                        break;
-
                 }
             }
             //set the text field if there is any

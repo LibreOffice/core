@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2007-06-29 12:44:07 $
+ *  last change: $Author: vg $ $Date: 2007-10-29 15:30:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,16 @@
 #ifndef INCLUDED_DOMAIN_MAPPER_TABLE_MANAGER_HXX
 #define INCLUDED_DOMAIN_MAPPER_TABLE_MANAGER_HXX
 
+#ifndef INCLUDED_TABLE_MANAGER_HXX
 #include <doctok/TableManager.hxx>
-#include <PropertyMap.hxx>
-#include <StyleSheetTable.hxx>
+#endif
+#ifndef INCLUDED_DMAPPER_PROPERTYMAP_HXX
+#include "PropertyMap.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
+#endif
 #include <vector>
 
 namespace dmapper {
@@ -55,8 +61,6 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
     bool            m_bFullWidth; //width is set to full, disable setting of different orientation values
     ::rtl::OUString m_sTableStyleName;
-    PropertyMapPtr  m_pTableStyleTextProperies;
-
     ::std::vector<sal_Int32>  m_aCellWidths;
 
     virtual void clearData();
@@ -72,9 +76,6 @@ public:
     virtual void endOfRowAction();
 
     const ::rtl::OUString& getTableStyleName() const { return m_sTableStyleName; }
-    /// copy the text properties of the table style and its parent into pContext
-    void    CopyTextProperties(PropertyMapPtr pContext, StyleSheetTablePtr pStyleSheetTable);
-
 };
 
 }
