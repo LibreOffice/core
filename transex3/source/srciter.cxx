@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srciter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:19:37 $
+ *  last change: $Author: obo $ $Date: 2007-10-30 12:29:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,13 +75,23 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
         static rtl::OUString WCARD3 ( rtl::OUString::createFromAscii( "wntmsci" ) );
         static rtl::OUString WCARD4 ( rtl::OUString::createFromAscii( "unxsols" ) );
         static rtl::OUString WCARD5 ( rtl::OUString::createFromAscii( "common" ) );
+        static rtl::OUString WCARD6 ( rtl::OUString::createFromAscii( "unxmacx" ) );
+        static rtl::OUString WCARD7 ( rtl::OUString::createFromAscii( "unxlngx" ) );
+        static rtl::OUString WCARD8 ( rtl::OUString::createFromAscii( "unxsolsx" ) );
+        static rtl::OUString WCARD9 ( rtl::OUString::createFromAscii( "unxsolsu" ) );
+        static rtl::OUString WCARD10 ( rtl::OUString::createFromAscii( "wntmscx" ) );
 
 
         if( sDirName.indexOf( WCARD1 , 0 ) > -1 ||
             sDirName.indexOf( WCARD2 , 0 ) > -1 ||
             sDirName.indexOf( WCARD3 , 0 ) > -1 ||
             sDirName.indexOf( WCARD4 , 0 ) > -1 ||
-            sDirName.indexOf( WCARD5 , 0 ) > -1
+            sDirName.indexOf( WCARD5 , 0 ) > -1 ||
+            sDirName.indexOf( WCARD6 , 0 ) > -1 ||
+            sDirName.indexOf( WCARD7 , 0 ) > -1 ||
+            sDirName.indexOf( WCARD8 , 0 ) > -1 ||
+            sDirName.indexOf( WCARD9 , 0 ) > -1 ||
+            sDirName.indexOf( WCARD10 , 0 ) > -1
            )    return;
         //printf("**** %s \n", OUStringToOString( sDirName , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
         aDirectory.setSkipLinks( bSkipLinks );
