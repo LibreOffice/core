@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.121 $
+#   $Revision: 1.122 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-26 11:26:38 $
+#   last change: $Author: rt $ $Date: 2007-10-30 10:37:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.121 $ ';
+$id_str = ' $Revision: 1.122 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -797,6 +797,7 @@ sub copy_if_newer
     my $to = shift;
     my $touch = shift;
     my $from_stat_ref;
+    my $rc = 0;
 
     print "testing $from, $to\n" if $is_debug;
     push_on_ziplist($to) if $opt_zip;
@@ -805,10 +806,14 @@ sub copy_if_newer
 
     if ( $opt_delete ) {
         print "REMOVE: $to\n";
+        $rc = unlink($to) unless $opt_check;
+        # handle special packaging of *.dylib files for Mac OS X
+        if ( $to =~ s/\.dylib$/.jnilib/ ) {
+            print "REMOVE: $to\n";
+            $rc += unlink "$to" unless $opt_check;
+        }
         return 1 if $opt_check;
-        my $rc = unlink($to);
-        return 1 if $rc;
-        return 0;
+        return $rc;
     }
 
     if( !$opt_check && $opt_link ) {
@@ -852,7 +857,19 @@ sub copy_if_newer
             # handle special packaging of *.dylib files for Mac OS X
             if ( $^O eq 'darwin' )
             {
-                system("macosx-create-bundle", $to) if ( $to =~ /\.dylib/ );
+                if ( $to =~ /\.dylib/ ) {
+                    system("macosx-create-bundle", $to);
+                    my $bundlelib = $to;
+                    $bundlelib =~ s/\.dylib$//;
+                    $bundlelib .= ".jnilib";
+                    if ( $opt_delete ) {
+                        print "REMOVE: $bundlelib\n";
+                        unlink "$bundlelib" unless $opt_check;
+                    } else {
+                        push_on_ziplist($bundlelib) if $opt_zip;
+                        push_on_loglist("LINK", basename($to), "$bundlelib") if $opt_log;
+                    }
+                }
                 system("macosx-create-bundle", "$to=$from.app") if ( -d "$from.app" );
                 system("ranlib", "$to" ) if ( $to =~ /\.a/ );
             }
