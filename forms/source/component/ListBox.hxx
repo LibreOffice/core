@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-19 12:27:25 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:55:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,55 +36,29 @@
 #ifndef _FORMS_LISTBOX_HXX_
 #define _FORMS_LISTBOX_HXX_
 
-#ifndef _FORMS_FORMCOMPONENT_HXX_
 #include "FormComponent.hxx"
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
-#include <cppuhelper/interfacecontainer.hxx>
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
-#include <cppuhelper/interfacecontainer.hxx>
-#endif
-#ifndef _SV_TIMER_HXX
-#include <vcl/timer.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
-#include <com/sun/star/util/XRefreshable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLERRORBROADCASTER_HPP_
-#include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_LISTSOURCETYPE_HPP_
-#include <com/sun/star/form/ListSourceType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XITEMLISTENER_HPP_
-#include <com/sun/star/awt/XItemListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
-#include <com/sun/star/awt/XFocusListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XLISTBOX_HPP_
-#include <com/sun/star/awt/XListBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XCHANGEBROADCASTER_HPP_
-#include <com/sun/star/form/XChangeBroadcaster.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef FORMS_ERRORBROADCASTER_HXX
+#include "cachedrowset.hxx"
 #include "errorbroadcaster.hxx"
-#endif
-#ifndef FORMS_ENTRYLISTHELPER_HXX
 #include "entrylisthelper.hxx"
-#endif
-#ifndef COMPHELPER_ASYNCNOTIFICATION_HXX
+
+/** === begin UNO includes === **/
+#include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
+#include <com/sun/star/form/ListSourceType.hpp>
+#include <com/sun/star/awt/XItemListener.hpp>
+#include <com/sun/star/awt/XFocusListener.hpp>
+#include <com/sun/star/awt/XListBox.hpp>
+#include <com/sun/star/form/XChangeBroadcaster.hpp>
+/** === end UNO includes === **/
+
+#include <vcl/timer.hxx>
+
 #include <comphelper/asyncnotification.hxx>
-#endif
+
+#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 #include <memory>
 
@@ -103,6 +77,8 @@ class OListBoxModel :public OBoundControlModel
                     ,public OEntryListHelper
                     ,public OErrorBroadcaster
 {
+    CachedRowSet                                m_aListRowSet;          // the row set to fill the list
+
     ::com::sun::star::uno::Any                  m_aSaveValue;
 
     // <properties>
