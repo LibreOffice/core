@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:05:11 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:50:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,10 +336,6 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
     uno::Reference< util::XCloseable > xDocument( m_xFactory->createInstance( GetDocumentServiceName() ),
                                                 uno::UNO_QUERY );
 
-    uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
-       if ( xChild.is() )
-           xChild->setParent( m_xParent );
-
     uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY );
     uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY );
     if ( !xLoadable.is() )
@@ -347,8 +343,19 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
 
     try
     {
-        // set the document mode to embedded
+        // set the document mode to embedded as the first action on document!!!
         SetDocToEmbedded( xModel, m_aModuleName );
+
+        try
+        {
+            uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
+            if ( xChild.is() )
+                xChild->setParent( m_xParent );
+        }
+        catch( const lang::NoSupportException & )
+        {
+            OSL_ENSURE( false, "Cannot set parent at document" );
+        }
 
         // init document as a new
         xLoadable->initNew();
@@ -380,10 +387,6 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
     uno::Reference< util::XCloseable > xDocument( m_xFactory->createInstance( GetDocumentServiceName() ),
                                                 uno::UNO_QUERY );
 
-    uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
-    if ( xChild.is() )
-        xChild->setParent( m_xParent );
-
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     if ( !xLoadable.is() )
         throw uno::RuntimeException();
@@ -412,6 +415,17 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
     {
         // the document is not really an embedded one, it is a link
         SetDocToEmbedded( uno::Reference < frame::XModel >( xDocument, uno::UNO_QUERY ), m_aModuleName );
+
+        try
+        {
+            uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
+            if ( xChild.is() )
+                xChild->setParent( m_xParent );
+        }
+        catch( const lang::NoSupportException & )
+        {
+            OSL_ENSURE( false, "Cannot set parent at document" );
+        }
 
         // load the document
         xLoadable->load( aArgs );
@@ -458,17 +472,6 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     OSL_ENSURE( xStorage.is(), "The storage can not be empty!" );
 
     uno::Reference< util::XCloseable >  xDocument( m_xFactory->createInstance( GetDocumentServiceName() ), uno::UNO_QUERY );
-
-    try
-    {
-        uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
-        if ( xChild.is() )
-            xChild->setParent( m_xParent );
-    }
-    catch( const lang::NoSupportException & )
-    {
-        OSL_ENSURE( false, "Cannot set parent at document" );
-    }
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     uno::Reference< document::XStorageBasedDocument > xDoc
@@ -543,8 +546,20 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
 
     try
     {
-        // set the document mode to embedded
+        // set the document mode to embedded as the first step!!!
         SetDocToEmbedded( uno::Reference < frame::XModel >( xDocument, uno::UNO_QUERY ), m_aModuleName );
+
+        try
+        {
+            uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
+            if ( xChild.is() )
+                xChild->setParent( m_xParent );
+        }
+        catch( const lang::NoSupportException & )
+        {
+            OSL_ENSURE( false, "Cannot set parent at document" );
+        }
+
         if ( xDoc.is() )
             xDoc->loadFromStorage( xStorage, aArgs );
         else
@@ -816,18 +831,25 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDesc
     uno::Reference< util::XCloseable > xDocument( m_xFactory->createInstance( GetDocumentServiceName() ),
                                                 uno::UNO_QUERY );
 
-    uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
-       if ( xChild.is() )
-           xChild->setParent( m_xParent );
-
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     if ( !xLoadable.is() )
         throw uno::RuntimeException();
 
     try
     {
-        // set the document mode to embedded
+        // set the document mode to embedded as the first action on the document!!!
         SetDocToEmbedded( uno::Reference < frame::XModel >( xDocument, uno::UNO_QUERY ), m_aModuleName );
+
+        try
+        {
+            uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
+            if ( xChild.is() )
+                xChild->setParent( m_xParent );
+        }
+        catch( const lang::NoSupportException & )
+        {
+            OSL_ENSURE( false, "Cannot set parent at document" );
+        }
 
         xLoadable->load( addAsTemplate( aMedDescr ) );
     }
