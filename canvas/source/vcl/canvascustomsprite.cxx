@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvascustomsprite.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:25:27 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:41:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,6 +189,8 @@ namespace vclcanvas
     }
 
     bool CanvasCustomSprite::repaint( const GraphicObjectSharedPtr& rGrf,
+                                      const rendering::ViewState&   viewState,
+                                      const rendering::RenderState& renderState,
                                       const ::Point&                rPt,
                                       const ::Size&                 rSz,
                                       const GraphicAttr&            rAttr ) const
@@ -197,7 +199,7 @@ namespace vclcanvas
 
         mbSurfaceDirty = true;
 
-        return maCanvasHelper.repaint( rGrf, rPt, rSz, rAttr );
+        return maCanvasHelper.repaint( rGrf, viewState, renderState, rPt, rSz, rAttr );
     }
 
 }
