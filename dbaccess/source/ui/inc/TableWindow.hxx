@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindow.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:29:27 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:19:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,14 +74,10 @@ namespace dbaui
     class OJoinTableView;
     class OTableWindowAccess;
 
-    class OTableWindow : public Window,
-                         public ::utl::OEventListenerAdapter
+    class OTableWindow : public Window
     {
         friend class OTableWindowTitle;
         friend class OTableWindowListBox;
-
-        mutable ::osl::Mutex    m_aMutex;
-
     protected:
         // und die Tabelle selber (brauche ich, da ich sie locken will, solange das Fenster lebt)
         FixedImage              m_aTypeImage;
@@ -90,17 +86,12 @@ namespace dbaui
         OTableWindowAccess*     m_pAccessible;
 
     private:
-        // the columns of the table
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTableOrQuery;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns;
-
-        OTableWindowData*       m_pData;
-        ::rtl::OUString         m_strInitialWinName;
+        TTableWindowData::value_type
+                                m_pData;
         sal_Int32               m_nMoveCount;           // how often the arrow keys was pressed
         sal_Int32               m_nMoveIncrement;       // how many pixel we should move
         UINT16                  m_nSizingFlags;
         BOOL                    m_bActive;
-        bool                    m_bIsQuery;
 
         void Draw3DBorder( const Rectangle& rRect );
 
@@ -146,24 +137,13 @@ namespace dbaui
                                     ::com::sun::star::beans::XPropertySet>& _xColumn,
                                     bool _bPrimaryKey);
 
-        /** determines whether the classes Init method should accept a query name, or only table names
-        */
-        virtual bool    allowQueries() const = 0;
-
-        /** called when Init fails because the m_xTableOrQuery object could not provide columns, but no
-            exception was thrown. Expected to throw.
-        */
-        virtual void    onNoColumns_throw();
-
         /** updates m_aTypeImage
         */
         void    impl_updateImage();
 
-        OTableWindow( Window* pParent, OTableWindowData* pTabWinData );
+        OTableWindow( Window* pParent, const TTableWindowData::value_type& pTabWinData );
 
     public:
-        TYPEINFO();
-
         virtual ~OTableWindow();
 
         // spaeter Constructor, siehe auch CreateListbox und FillListbox
@@ -187,7 +167,7 @@ namespace dbaui
         ::rtl::OUString             GetWinName() const { return m_pData->GetWinName(); }
         ::rtl::OUString             GetComposedName() const { return m_pData->GetComposedName(); }
         OTableWindowListBox*        GetListBox() const { return m_pListBox; }
-        OTableWindowData*           GetData() const { return m_pData; }
+        TTableWindowData::value_type GetData() const { return m_pData; }
         OTableWindowTitle*          GetTitleCtrl() { return &m_aTitle; }
 
         /** returns the name which should be used when displaying join or relations
@@ -196,18 +176,8 @@ namespace dbaui
         */
         virtual ::rtl::OUString     GetName() const = 0;
 
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-            GetOriginalColumns() const
-        { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xColumns; }
-
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-            GetTableOrQuery() const
-        { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xTableOrQuery; }
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-            GetTable() const;
-
-        inline bool isQuery() const { return m_bIsQuery; }
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetOriginalColumns() const { return m_pData->getColumns(); }
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >    GetTable() const { return m_pData->getTable(); }
 
         UINT16                      GetSizingFlags() const { return m_nSizingFlags; }
         /** set the sizing flag to the direction
@@ -236,9 +206,6 @@ namespace dbaui
         BOOL ExistsAConn() const;
 
         void EnumValidFields(::std::vector< ::rtl::OUString>& arrstrFields);
-
-        // OEventListenerAdapter
-        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
 
         /** clears the listbox inside. Must be called be the dtor is called.
         */
