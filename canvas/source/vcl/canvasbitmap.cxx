@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasbitmap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:29:24 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:40:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,15 +134,17 @@ namespace vclcanvas
         return maCanvasHelper.getBitmap();
     }
 
-    bool CanvasBitmap::repaint( const GraphicObjectSharedPtr&   rGrf,
-                                const ::Point&                  rPt,
-                                const ::Size&                   rSz,
-                                const GraphicAttr&              rAttr ) const
+    bool CanvasBitmap::repaint( const GraphicObjectSharedPtr& rGrf,
+                                const rendering::ViewState&   viewState,
+                                const rendering::RenderState& renderState,
+                                const ::Point&                rPt,
+                                const ::Size&                 rSz,
+                                const GraphicAttr&            rAttr ) const
     {
         tools::LocalGuard aGuard;
 
         mbSurfaceDirty = true;
 
-        return maCanvasHelper.repaint( rGrf, rPt, rSz, rAttr );
+        return maCanvasHelper.repaint( rGrf, viewState, renderState, rPt, rSz, rAttr );
     }
 }
