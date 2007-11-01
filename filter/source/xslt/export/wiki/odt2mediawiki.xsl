@@ -42,42 +42,52 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 >
-	<output 
-		method="text" 
-		media-type="text/plain" 
-		encoding="UTF-8"
-	/>
-
+	
 	<!-- 
-		== Reference resolution == 
+		== Customization options ==
 	-->
 
-	<key
-		name="style-ref"
-		match="//style:style"
-		use="@style:name"
-	/>
+	<!-- Constant defining the newline token. -->
+	<param name="NL" select="'&#10;'"/>
 
-	<key
-		name="list-style-ref"
-		match="//text:list-style"
-		use="@style:name"
-	/>
+	<!-- String that a tabulator is expanded with in preformatted paragraphs. -->
+	<param name="CODE_TAB_REPLACEMENT">
+		<variable name="document-value"
+			select="/office:document/office:meta/meta:user-defined[@meta:name='CODE_TAB_REPLACEMENT']"/>
+		<choose>
+			<when test="boolean($document-value)">
+				<value-of select="$document-value"/>
+			</when>
+			
+			<otherwise>
+				<value-of select="'    '"/>
+			</otherwise>
+		</choose>
+	</param>
 	
-	<key
-		name="font-face-ref"
-		match="//style:font-face"
-		use="@style:name"
-	/>
+	<!-- 
+		Switch that suppresses separation of paragraphs with empty lines. 
+		(Set to 1 to activate) -->
+	<param name="CODE_JOIN_PARAGRAPHS" 
+		select="boolean(string(/office:document/office:meta/meta:user-defined[@meta:name='CODE_JOIN_PARAGRAPHS']) != 'false')"/>
 	
-	<key
-		name="reference-resolution"
-		match="//text:reference-mark | //text:reference-mark-start"
-		use="@text:name"
-	/>
-	
+	<param name="CODE_STYLES">
+		<variable name="document-value"
+			select="/office:document/office:meta/meta:user-defined[@meta:name='CODE_STYLES']"/>
+		<choose>
+			<when test="boolean($document-value)">
+				<value-of select="$document-value"/>
+			</when>
+			
+			<otherwise>
+				<value-of select="''"/>
+			</otherwise>
+		</choose>
+	</param>
 
-	<!-- Wiki style constants. -->
+	<!-- 
+		== Wiki style constants == 
+	-->
 	
 	<!-- Bold character style. -->
 	<variable name="BOLD_BIT" select="1"/>
@@ -106,8 +116,43 @@
 	<!-- Constant defining the empty style. -->
 	<variable name="NO_STYLE" select="0"/>
 
-	<!-- Constant defining the newline token. -->
-	<variable name="NL" select="'&#10;'"/>
+
+
+	<output 
+		method="text" 
+		media-type="text/plain" 
+		encoding="UTF-8"
+	/>
+
+
+	<!-- 
+		== Reference resolution == 
+	-->
+
+	<key
+		name="style-ref"
+		match="//style:style"
+		use="@style:name"
+	/>
+
+	<key
+		name="list-style-ref"
+		match="//text:list-style"
+		use="@style:name"
+	/>
+	
+	<key
+		name="font-face-ref"
+		match="//style:font-face"
+		use="@style:name"
+	/>
+	
+	<key
+		name="reference-resolution"
+		match="//text:reference-mark | //text:reference-mark-start"
+		use="@text:name"
+	/>
+
 
 	<!-- 
 		Multiple pages (draw only)
@@ -124,6 +169,29 @@
 		== Lists == 
 	-->
 
+	<template match="text:list">
+		<!-- 
+			Check, whether this list is used to implement the outline numbering 
+			for headings. Such list must not be exported since within the wiki, 
+			autimatic outline numbering is performed. An outline list has a single 
+			text:h element as its single leaf grandchild. 
+			
+			This method of section numbering seems not to be used when creating new
+			documents with OpenOffice.org 2.2, but the document containing the 
+			OpenDocument specification version 1.1 uses such numbering by nested 
+			lists.
+			-->
+		<choose>
+			<when test="boolean(./descendant::node()[not(./self::text:list) and not(./self::text:list-item) and not(./ancestor-or-self::text:h)])">
+				<apply-templates/>
+			</when>
+			
+			<otherwise>
+				<apply-templates select=".//text:h"/>
+			</otherwise>
+		</choose>
+	</template>
+	
 	<template match="text:list-item">
 		<if test="position() &gt; 1 or boolean(ancestor::text:list-item)">
 			<value-of select="$NL"/>
@@ -408,11 +476,25 @@
 					<variable name="code-right" 
 						select="($style-right mod (2 * $CODE_BIT)) - ($style-right mod ($CODE_BIT)) != 0"/>
 				
-					<value-of select="$NL"/>
-					<if test="$code-right">
-						<value-of select="' '"/>
-					</if>
-					<value-of select="$NL"/>
+					<choose>
+						<when test="$code-right">
+							<choose>
+								<when test="$CODE_JOIN_PARAGRAPHS">
+									<value-of select="$NL"/>
+								</when>
+								
+								<otherwise>
+									<value-of select="$NL"/>
+									<value-of select="' '"/>
+									<value-of select="$NL"/>
+								</otherwise>
+							</choose>
+						</when>
+						<otherwise>
+							<value-of select="$NL"/>
+							<value-of select="$NL"/>
+						</otherwise>
+					</choose>
 				</when>
 				<otherwise>
 					<value-of select="$NL"/>
@@ -453,6 +535,21 @@
 					<value-of select="' '"/>
 				</otherwise>
 			</choose>
+		</if>
+	</template>
+	
+	<template match="text:tab">
+		<variable name="style">
+			<call-template name="mk-style-set">
+				<with-param name="node" select="."/>
+			</call-template>
+		</variable>
+
+		<variable name="code" 
+			select="($style mod (2 * $CODE_BIT)) - ($style mod ($CODE_BIT)) != 0"/>
+		
+		<if test="$code">
+			<value-of select="$CODE_TAB_REPLACEMENT"/>
 		</if>
 	</template>
 	
@@ -867,13 +964,17 @@
 						</call-template>
 					</when>
 					<otherwise>
-						<value-of select="$text"/>
+						<call-template name="render-encoded-text">
+							<with-param name="text" select="$text"/>
+						</call-template>
 					</otherwise>
 				</choose>
 				<text>&lt;/nowiki&gt;</text>			
 			</when>
 			<otherwise>
-				<value-of select="$text"/>
+				<call-template name="render-encoded-text">
+					<with-param name="text" select="$text"/>
+				</call-template>
 			</otherwise>
 		</choose>
 	</template>
@@ -883,10 +984,32 @@
 		
 		<choose>
 			<when test="contains($text, '&lt;')">
-				<value-of select="substring-before($text, '&lt;')"/>
-				<value-of select="'&amp;'"/>
-				<value-of select="'lt;'"/>
-				<value-of select="substring-after($text, '&lt;')"/>
+				<call-template name="render-encoded-text">
+					<with-param name="text" select="substring-before($text, '&lt;')"/>
+				</call-template>
+				<value-of select="'&amp;lt;'"/>
+				<call-template name="render-escaped-text">
+					<with-param name="text" select="substring-after($text, '&lt;')"/>
+				</call-template>
+			</when>
+			<otherwise>
+				<call-template name="render-encoded-text">
+					<with-param name="text" select="$text"/>
+				</call-template>
+			</otherwise>
+		</choose>
+	</template>
+
+	<template name="render-encoded-text">
+		<param name="text"/>
+		
+		<choose>
+			<when test="contains($text, '&#160;')">
+				<value-of select="substring-before($text, '&#160;')"/>
+				<value-of select="'&amp;nbsp;'"/>
+				<call-template name="render-encoded-text">
+					<with-param name="text" select="substring-after($text, '&#160;')"/>
+				</call-template>
 			</when>
 			<otherwise>
 				<value-of select="$text"/>
@@ -1112,7 +1235,7 @@
 					<variable name="font-face" 
 						select="key('font-face-ref', $text-properties/@style:font-name)"/>
 					<choose>
-						<when test="$font-face/@style:font-pitch='fixed'">
+						<when test="$font-face/@style:font-pitch='fixed' or (boolean(@style:display-name) and contains($CODE_STYLES, $style/@style:display-name))">
 							<value-of select="$CODE_BIT"/>
 						</when>
 						<otherwise>
