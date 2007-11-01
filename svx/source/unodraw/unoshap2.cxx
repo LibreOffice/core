@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:58:28 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XENHANCEDCUSTOMSHAPEDEFAULTER_HPP_
+#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
 #include <com/sun/star/awt/TextAlign.hpp>  //added by BerryJia for fixing Bug102407 2002-11-4
@@ -1997,6 +2000,33 @@ void SvxCustomShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw()
 
 //----------------------------------------------------------------------
 
+uno::Any SAL_CALL SvxCustomShape::queryInterface( const uno::Type & rType )
+    throw(uno::RuntimeException)
+{
+    return SvxShapeText::queryInterface( rType );
+}
+
+uno::Any SAL_CALL SvxCustomShape::queryAggregation( const uno::Type & rType )
+    throw(uno::RuntimeException)
+{
+    ::com::sun::star::uno::Any aReturn = SvxShapeText::queryAggregation( rType );
+    if ( !aReturn.hasValue() )
+        aReturn = ::cppu::queryInterface(rType, static_cast<drawing::XEnhancedCustomShapeDefaulter*>(this) );
+    return aReturn;
+}
+
+void SAL_CALL SvxCustomShape::acquire() throw ( )
+{
+    SvxShapeText::acquire();
+}
+
+void SAL_CALL SvxCustomShape::release() throw ( )
+{
+    SvxShapeText::release();
+}
+
+//----------------------------------------------------------------------
+
 uno::Sequence< uno::Type > SAL_CALL SvxCustomShape::getTypes()
     throw (uno::RuntimeException)
 {
@@ -2217,3 +2247,9 @@ uno::Any SAL_CALL SvxCustomShape::getPropertyValue( const OUString& aPropertyNam
 
 }
 
+//----------------------------------------------------------------------
+
+void SvxCustomShape::createCustomShapeDefaults( const rtl::OUString& rValueType ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ((SdrObjCustomShape*)mpObj.get())->MergeDefaultAttributes( &rValueType );
+}
