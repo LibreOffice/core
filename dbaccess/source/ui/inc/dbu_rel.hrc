@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_rel.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:50:08 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:21:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,8 @@
 #define STR_RELATIONDESIGN                  RID_STR_REL_START + 1
 #define STR_RELATIONDESIGN_NOT_AVAILABLE    RID_STR_REL_START + 2
 #define STR_QUERY_REL_DELETE_WINDOW         RID_STR_REL_START + 3
+#define STR_QUERY_REL_EDIT                  RID_STR_REL_START + 4
+#define STR_QUERY_REL_CREATE                RID_STR_REL_START + 5
 // please adjust checking before insert new strings
 
 #if STR_QUERY_REL_DELETE_WINDOW > RID_STR_REL_END
