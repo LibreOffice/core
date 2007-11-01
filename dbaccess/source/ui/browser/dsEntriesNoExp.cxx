@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsEntriesNoExp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:19:00 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:03:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,18 +234,26 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
 
             // the images for this entry
             Image aImage, aImageHC;
-            bool bIsFolder = !isObject( pData->eType );
-            if ( bIsFolder )
+            if ( pData->eType == etDatasource )
             {
-                sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                aImage = pImageProvider->getFolderImage( nObjectType, false );
-                aImageHC = pImageProvider->getFolderImage( nObjectType, true );
+                aImage = pImageProvider->getDatabaseImage( false );
+                aImageHC = pImageProvider->getDatabaseImage( true );
             }
             else
             {
-                sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                aImage = pImageProvider->getImage( GetEntryText( pEntryLoop ), nObjectType, false );
-                aImageHC = pImageProvider->getImage( GetEntryText( pEntryLoop ), nObjectType, true );
+                bool bIsFolder = !isObject( pData->eType );
+                if ( bIsFolder )
+                {
+                    sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
+                    aImage = pImageProvider->getFolderImage( nObjectType, false );
+                    aImageHC = pImageProvider->getFolderImage( nObjectType, true );
+                }
+                else
+                {
+                    sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
+                    aImage = pImageProvider->getImage( GetEntryText( pEntryLoop ), nObjectType, false );
+                    aImageHC = pImageProvider->getImage( GetEntryText( pEntryLoop ), nObjectType, true );
+                }
             }
 
             // find the proper item, and set its icons
