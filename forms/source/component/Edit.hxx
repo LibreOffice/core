@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Edit.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:23:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:54:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,11 @@
 #ifndef _FORMS_EDIT_HXX_
 #define _FORMS_EDIT_HXX_
 
-#ifndef _FORMS_EDITBASE_HXX_
 #include "EditBase.hxx"
-#endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+
 #include <cppuhelper/implbase3.hxx>
-#endif
+
+namespace dbtools { class FormattedColumnValue; }
 
 //.........................................................................
 namespace frm
@@ -53,18 +52,13 @@ namespace frm
 class OEditModel
                 :public OEditBaseModel
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>         m_xFormatter;
-    ::rtl::OUString                 m_aSaveValue;
-    sal_Int32                   m_nFormatKey;
-    ::com::sun::star::util::Date                m_aNullDate;
-    sal_Int32                   m_nFieldType;
-    sal_Int16                   m_nKeyType;
+    ::rtl::OUString             m_aSaveValue;
+    ::std::auto_ptr< ::dbtools::FormattedColumnValue >
+                                m_pValueFormatter;
     sal_Bool                    m_bMaxTextLenModified : 1;  // set to <TRUE/> when we change the MaxTextLen of the aggregate
 
     sal_Bool                    m_bWritingFormattedFake : 1;
         // are we writing something which should be interpreted as formatted upon reading?
-    sal_Bool                    m_bNumericField : 1;
-        // are we bound to some kind of numeric field?
 
 protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
