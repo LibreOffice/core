@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:56:45 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 16:24:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
                 aAttr.Put( SvxWritingModeItem(
                     nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
                         com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
-                        ATTR_WRITINGDIR ) );
+                        SDRATTR_TEXTDIRECTION ) );
                 pView->SetAttributes( aAttr );
                 pViewData->GetScDrawView()->InvalidateDrawTextAttrs();  // Bidi slots may be disabled
                 rReq.Done( aAttr );
