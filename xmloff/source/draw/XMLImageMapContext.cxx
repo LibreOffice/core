@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLImageMapContext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:59:11 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:21:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,7 +388,7 @@ void XMLImageMapObjectContext::Prepare(
     rPropertySet->setPropertyValue( sURL, Any( sUrl ) );
     rPropertySet->setPropertyValue( sTitle, Any( sTitleBuffer.makeStringAndClear() ) );
     rPropertySet->setPropertyValue( sDescription, Any( sDescriptionBuffer.makeStringAndClear() ) );
-    rPropertySet->setPropertyValue( sTarget, Any( sTarget ) );
+    rPropertySet->setPropertyValue( sTarget, Any( sTargt ) );
     rPropertySet->setPropertyValue( sIsActive, Any( bIsActive ) );
     rPropertySet->setPropertyValue( sName, Any( sNam ) );
 }
