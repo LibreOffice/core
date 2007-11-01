@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableConnection.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:24:20 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:33:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,6 @@ using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
-TYPEINIT0(OTableConnection);
 //========================================================================
 // class OTableConnection
 //========================================================================
@@ -69,7 +68,7 @@ namespace dbaui
 {
     DBG_NAME(OTableConnection)
     //------------------------------------------------------------------------
-    OTableConnection::OTableConnection( OJoinTableView* _pContainer, OTableConnectionData* _pTabConnData )
+    OTableConnection::OTableConnection( OJoinTableView* _pContainer,const TTableConnectionData::value_type& _pTabConnData )
         :Window(_pContainer)
         ,m_pData( _pTabConnData )
         ,m_pParent( _pContainer )
@@ -82,9 +81,9 @@ namespace dbaui
 
     //------------------------------------------------------------------------
     OTableConnection::OTableConnection( const OTableConnection& _rConn ) : Window(_rConn.m_pParent)
+        ,m_pData(_rConn.GetData()->NewInstance())
     {
         DBG_CTOR(OTableConnection,NULL);
-        m_pData = _rConn.GetData()->NewInstance();
         *this = _rConn;
     }
 
@@ -162,12 +161,12 @@ namespace dbaui
     //------------------------------------------------------------------------
     OTableWindow* OTableConnection::GetSourceWin() const
     {
-        return m_pParent->GetTabWindow( GetData()->GetSourceWinName() );
+        return m_pParent->GetTabWindow( GetData()->getReferencingTable()->GetWinName() );
     }
     //------------------------------------------------------------------------
     OTableWindow* OTableConnection::GetDestWin() const
     {
-        return m_pParent->GetTabWindow( GetData()->GetDestWinName() );
+        return m_pParent->GetTabWindow( GetData()->getReferencedTable()->GetWinName() );
     }
 
     //------------------------------------------------------------------------
