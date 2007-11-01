@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:15:11 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:12:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBAUI_DETAILPAGES_HXX_
 #include "detailpages.hxx"
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
-#endif
-#ifndef _DBU_DLG_HRC_
+#include "dsmeta.hxx"
+#include "advancedsettings.hxx"
+#include "DbAdminImpl.hxx"
+#include "dsitems.hxx"
+#include "dbfindex.hxx"
+#include "localresaccess.hxx"
+
+#include "dbaccess_helpid.hrc"
 #include "dbu_dlg.hrc"
-#endif
-#ifndef _DBAUI_DBADMIN_HRC_
 #include "dbadmin.hrc"
-#endif
+
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
@@ -59,18 +60,6 @@
 #endif
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
-#endif
-#ifndef _DBAUI_DATASOURCEITEMS_HXX_
-#include "dsitems.hxx"
-#endif
-#ifndef _DBAUI_DBFINDEX_HXX_
-#include "dbfindex.hxx"
-#endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
-#include "dbaccess_helpid.hrc"
-#endif
-#ifndef _DBAUI_LOCALRESACCESS_HXX_
-#include "localresaccess.hxx"
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -114,8 +103,9 @@ namespace dbaui
 
     //========================================================================
     //= OCommonBehaviourTabPage
-DBG_NAME(OCommonBehaviourTabPage)
-//========================================================================
+    //========================================================================
+    DBG_NAME(OCommonBehaviourTabPage)
+    //------------------------------------------------------------------------
     OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, USHORT nResId, const SfxItemSet& _rCoreAttrs,
         sal_uInt32 nControlFlags,bool _bFreeResource)
 
@@ -125,20 +115,6 @@ DBG_NAME(OCommonBehaviourTabPage)
         ,m_pDataConvertFixedLine(NULL)
         ,m_pCharsetLabel(NULL)
         ,m_pCharset(NULL)
-        ,m_pDSFixedLine(NULL)
-        ,m_pIsSQL92Check(NULL)
-        ,m_pAppendTableAlias(NULL)
-        ,m_pAsBeforeCorrelationName(NULL)
-        ,m_pParameterSubstitution(NULL)
-        ,m_pIgnoreDriverPrivileges(NULL)
-        ,m_pSuppressVersionColumn(NULL)
-        ,m_pEnableOuterJoin(NULL)
-        ,m_pCatalog(NULL)
-        ,m_pSchema(NULL)
-        ,m_pIndexAppendix(NULL)
-        ,m_pDosLineEnds(NULL)
-        ,m_pBooleanComprisonModeLabel(NULL)
-        ,m_pBooleanComprisonMode(NULL)
         ,m_pAutoFixedLine(NULL)
         ,m_pAutoRetrievingEnabled(NULL)
         ,m_pAutoIncrementLabel(NULL)
@@ -172,116 +148,9 @@ DBG_NAME(OCommonBehaviourTabPage)
             }
         }
 
-        if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
-        {
-            m_pAutoFixedLine = new FixedLine(this, ModuleRes(FL_SEPARATORAUTO));
-            m_pAutoRetrievingEnabled = new CheckBox(this, ModuleRes(CB_RETRIEVE_AUTO));
-            m_pAutoRetrievingEnabled->SetClickHdl(LINK(this, OCommonBehaviourTabPage,OnCheckBoxClick));
-
-            m_pAutoIncrementLabel = new FixedText(this, ModuleRes(FT_AUTOINCREMENTVALUE));
-            m_pAutoIncrement = new Edit(this, ModuleRes(ET_AUTOINCREMENTVALUE));
-            m_pAutoIncrement->SetModifyHdl(getControlModifiedLink());
-
-            m_pAutoRetrievingLabel = new FixedText(this, ModuleRes(FT_RETRIEVE_AUTO));
-            m_pAutoRetrieving = new Edit(this, ModuleRes(ET_RETRIEVE_AUTO));
-            m_pAutoRetrieving->SetModifyHdl(getControlModifiedLink());
-        }
-
-        if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
-        {
-            createBehaviourFixedLine();
-            m_pIsSQL92Check = new CheckBox(this, ModuleRes(CB_SQL92CHECK));
-            m_pIsSQL92Check->SetClickHdl(getControlModifiedLink());
-        }
-
-        if ( ( m_nControlFlags & CBTP_USE_APPENDTABLEALIAS ) == CBTP_USE_APPENDTABLEALIAS )
-        {
-            createBehaviourFixedLine();
-            m_pAppendTableAlias = new CheckBox(this, ModuleRes( CB_APPENDTABLEALIAS ) );
-            m_pAppendTableAlias->SetClickHdl(getControlModifiedLink());
-        }
-
-        if ( ( m_nControlFlags & CBTP_AS_BEFORE_CORRELATION_NAME ) == CBTP_AS_BEFORE_CORRELATION_NAME )
-        {
-            createBehaviourFixedLine();
-            m_pAsBeforeCorrelationName = new CheckBox( this, ModuleRes( CB_AS_BEFORE_CORR_NAME ) );
-            m_pAsBeforeCorrelationName->SetClickHdl(getControlModifiedLink());
-
-            if ( m_pAppendTableAlias )
-                // make m_pAsBeforeCorrelationName depend on m_pAppendTableAlias
-                m_aControlDependencies.enableOnCheckMark( *m_pAppendTableAlias, *m_pAsBeforeCorrelationName );
-        }
-
-        if ( (m_nControlFlags & CBTP_USE_PARAMETERNAMESUBST) == CBTP_USE_PARAMETERNAMESUBST )
-        {
-            createBehaviourFixedLine();
-            m_pParameterSubstitution = new CheckBox(this, ModuleRes(CB_PARAMETERNAMESUBST));
-            m_pParameterSubstitution->SetClickHdl(getControlModifiedLink());
-        }
-        if ( (m_nControlFlags & CBTP_USE_IGNOREDRIVER_PRIV) == CBTP_USE_IGNOREDRIVER_PRIV )
-        {
-            createBehaviourFixedLine();
-            m_pIgnoreDriverPrivileges = new CheckBox(this, ModuleRes(CB_IGNOREDRIVER_PRIV));
-            m_pIgnoreDriverPrivileges->SetClickHdl(getControlModifiedLink());
-        }
-
-        if ( (m_nControlFlags & CBTP_USE_SUPPRESS_VERSION_COLUMN) == CBTP_USE_SUPPRESS_VERSION_COLUMN )
-        {
-            createBehaviourFixedLine();
-            m_pSuppressVersionColumn = new CheckBox(this, ModuleRes(CB_SUPPRESVERSIONCL));
-            m_pSuppressVersionColumn->SetClickHdl(getControlModifiedLink());
-        }
-
-        if ( (m_nControlFlags & CBTP_USE_ENABLEOUTERJOIN) == CBTP_USE_ENABLEOUTERJOIN )
-        {
-            createBehaviourFixedLine();
-            m_pEnableOuterJoin = new CheckBox(this, ModuleRes(CB_ENABLEOUTERJOIN));
-            m_pEnableOuterJoin->SetClickHdl(getControlModifiedLink());
-        }
-
-        if ( (m_nControlFlags & CBTP_USE_CATALOG) == CBTP_USE_CATALOG )
-        {
-            createBehaviourFixedLine();
-            m_pCatalog = new CheckBox(this, ModuleRes(CB_CATALOG));
-            m_pCatalog->SetClickHdl(getControlModifiedLink());
-        }
-
-        if ( (m_nControlFlags & CBTP_USE_SCHEMA) == CBTP_USE_SCHEMA )
-        {
-            createBehaviourFixedLine();
-            m_pSchema = new CheckBox(this, ModuleRes(CB_SCHEMA));
-            m_pSchema->SetClickHdl(getControlModifiedLink());
-        }
-
-        if ( (m_nControlFlags & CBTP_USE_INDEXAPPENDIX) == CBTP_USE_INDEXAPPENDIX )
-        {
-            createBehaviourFixedLine();
-            m_pIndexAppendix = new CheckBox(this, ModuleRes(CB_IGNOREINDEXAPPENDIX));
-            m_pIndexAppendix->SetClickHdl(getControlModifiedLink());
-        }
-
-        if ( (m_nControlFlags & CBTP_USE_DOSLINEENDS) == CBTP_USE_DOSLINEENDS )
-        {
-            createBehaviourFixedLine();
-            m_pDosLineEnds = new CheckBox(this, ModuleRes(CB_DOSLINEENDS));
-            m_pDosLineEnds->SetClickHdl(getControlModifiedLink());
-        }
-
-        if ( (m_nControlFlags & CBTP_USE_BOOLEANCOMPARISON) == CBTP_USE_BOOLEANCOMPARISON )
-        {
-            m_pBooleanComprisonModeLabel = new FixedText(this, ModuleRes(FT_BOOLEANCOMPARISON));
-            m_pBooleanComprisonMode = new ListBox(this, ModuleRes(LB_BOOLEANCOMPARISON));
-            m_pBooleanComprisonMode->SetDropDownLineCount(4);
-            m_pBooleanComprisonMode->SetSelectHdl(getControlModifiedLink());
-        }
-
         Window* pWindows[] = {  m_pAutoRetrievingEnabled, m_pAutoFixedLine,
                                 m_pAutoIncrementLabel, m_pAutoIncrement,
-                                m_pAutoRetrievingLabel, m_pAutoRetrieving,
-                                m_pIsSQL92Check,m_pAppendTableAlias,m_pAsBeforeCorrelationName,
-                                m_pIgnoreDriverPrivileges,m_pParameterSubstitution ,m_pSuppressVersionColumn
-                                ,m_pEnableOuterJoin,m_pBooleanComprisonModeLabel,m_pBooleanComprisonMode
-                                ,m_pCatalog,m_pSchema,m_pIndexAppendix,m_pDosLineEnds};
+                                m_pAutoRetrievingLabel, m_pAutoRetrieving };
 
         sal_Int32 nCount = sizeof(pWindows) / sizeof(pWindows[0]);
         for (sal_Int32 i=1; i < nCount; ++i)
@@ -305,30 +174,12 @@ DBG_NAME(OCommonBehaviourTabPage)
     // -----------------------------------------------------------------------
     OCommonBehaviourTabPage::~OCommonBehaviourTabPage()
     {
-        m_aControlDependencies.clear();
-
         DELETEZ(m_pOptionsLabel);
         DELETEZ(m_pOptions);
 
         DELETEZ(m_pDataConvertFixedLine);
         DELETEZ(m_pCharsetLabel);
         DELETEZ(m_pCharset);
-
-        DELETEZ(m_pDSFixedLine);
-        DELETEZ(m_pIsSQL92Check);
-        DELETEZ(m_pAppendTableAlias);
-        DELETEZ(m_pAsBeforeCorrelationName);
-        DELETEZ(m_pParameterSubstitution);
-        DELETEZ(m_pIgnoreDriverPrivileges);
-        DELETEZ(m_pSuppressVersionColumn);
-        DELETEZ(m_pEnableOuterJoin);
-        DELETEZ(m_pCatalog);
-        DELETEZ(m_pSchema);
-        DELETEZ(m_pIndexAppendix);
-        DELETEZ(m_pDosLineEnds);
-
-        DELETEZ(m_pBooleanComprisonModeLabel);
-        DELETEZ(m_pBooleanComprisonMode);
 
         DELETEZ(m_pAutoFixedLine);
         DELETEZ(m_pAutoIncrementLabel);
@@ -340,27 +191,6 @@ DBG_NAME(OCommonBehaviourTabPage)
 
         DBG_DTOR(OCommonBehaviourTabPage,NULL);
     }
-    //------------------------------------------------------------------------
-    IMPL_LINK( OCommonBehaviourTabPage, OnCheckBoxClick, CheckBox*, pCheckBox )
-    {
-        callModifiedHdl();
-        if ( pCheckBox == m_pAutoRetrievingEnabled )
-        {
-            m_pAutoRetrievingLabel->Enable(m_pAutoRetrievingEnabled->IsChecked());
-            m_pAutoRetrieving->Enable(m_pAutoRetrievingEnabled->IsChecked());
-            m_pAutoIncrementLabel->Enable(m_pAutoRetrievingEnabled->IsChecked());
-            m_pAutoIncrement->Enable(m_pAutoRetrievingEnabled->IsChecked());
-        }
-
-        return 0;
-    }
-
-    // -----------------------------------------------------------------------
-    void OCommonBehaviourTabPage::createBehaviourFixedLine()
-    {
-        if ( !m_pDSFixedLine )
-            m_pDSFixedLine = new FixedLine(this, ModuleRes(FL_DATAHANDLING));
-    }
 
     // -----------------------------------------------------------------------
     void OCommonBehaviourTabPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -370,22 +200,10 @@ DBG_NAME(OCommonBehaviourTabPage)
             _rControlList.push_back(new ODisableWrapper<FixedText>(m_pOptionsLabel));
         }
 
-        if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
-        {
-            _rControlList.push_back(new ODisableWrapper<FixedLine>(m_pAutoFixedLine));
-            _rControlList.push_back(new ODisableWrapper<FixedText>(m_pAutoIncrementLabel));
-            _rControlList.push_back(new ODisableWrapper<FixedText>(m_pAutoRetrievingLabel));
-        }
-
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
         {
             _rControlList.push_back(new ODisableWrapper<FixedLine>(m_pDataConvertFixedLine));
             _rControlList.push_back(new ODisableWrapper<FixedText>(m_pCharsetLabel));
-        }
-
-        if ( (m_nControlFlags & CBTP_USE_BOOLEANCOMPARISON) == CBTP_USE_BOOLEANCOMPARISON )
-        {
-            _rControlList.push_back(new ODisableWrapper<FixedText>(m_pBooleanComprisonModeLabel));
         }
     }
     // -----------------------------------------------------------------------
@@ -394,50 +212,8 @@ DBG_NAME(OCommonBehaviourTabPage)
         if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
             _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pOptions));
 
-        if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
-        {
-            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pAutoRetrievingEnabled));
-            _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pAutoIncrement));
-            _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pAutoRetrieving));
-        }
-        if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
-            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pIsSQL92Check));
-
-        if ( (m_nControlFlags & CBTP_USE_APPENDTABLEALIAS) == CBTP_USE_APPENDTABLEALIAS )
-            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pAppendTableAlias));
-
-        if ( (m_nControlFlags & CBTP_AS_BEFORE_CORRELATION_NAME) == CBTP_AS_BEFORE_CORRELATION_NAME )
-            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pAsBeforeCorrelationName));
-
-        if ((m_nControlFlags & CBTP_USE_IGNOREDRIVER_PRIV) == CBTP_USE_IGNOREDRIVER_PRIV)
-            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pIgnoreDriverPrivileges));
-
-        if ((m_nControlFlags & CBTP_USE_PARAMETERNAMESUBST) == CBTP_USE_PARAMETERNAMESUBST)
-            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pParameterSubstitution));
-
-        if ( (m_nControlFlags & CBTP_USE_SUPPRESS_VERSION_COLUMN) == CBTP_USE_SUPPRESS_VERSION_COLUMN )
-            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pSuppressVersionColumn));
-
-        if ( (m_nControlFlags & CBTP_USE_ENABLEOUTERJOIN) == CBTP_USE_ENABLEOUTERJOIN )
-            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pEnableOuterJoin));
-
-        if ( (m_nControlFlags & CBTP_USE_CATALOG) == CBTP_USE_CATALOG )
-            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pCatalog));
-
-        if ( (m_nControlFlags & CBTP_USE_SCHEMA) == CBTP_USE_SCHEMA )
-            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pSchema));
-
-        if ( (m_nControlFlags & CBTP_USE_INDEXAPPENDIX) == CBTP_USE_INDEXAPPENDIX )
-            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pIndexAppendix));
-
-        if ( (m_nControlFlags & CBTP_USE_DOSLINEENDS) == CBTP_USE_DOSLINEENDS )
-            _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pDosLineEnds));
-
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
             _rControlList.push_back(new OSaveValueWrapper<ListBox>(m_pCharset));
-
-        if ( (m_nControlFlags & CBTP_USE_BOOLEANCOMPARISON) == CBTP_USE_BOOLEANCOMPARISON )
-            _rControlList.push_back(new OSaveValueWrapper<ListBox>(m_pBooleanComprisonMode));
     }
 
     // -----------------------------------------------------------------------
@@ -450,21 +226,6 @@ DBG_NAME(OCommonBehaviourTabPage)
         // collect the items
         SFX_ITEMSET_GET(_rSet, pOptionsItem, SfxStringItem, DSID_ADDITIONALOPTIONS, sal_True);
         SFX_ITEMSET_GET(_rSet, pCharsetItem, SfxStringItem, DSID_CHARSET, sal_True);
-        SFX_ITEMSET_GET(_rSet, pSQL92Check, SfxBoolItem, DSID_SQL92CHECK, sal_True);
-        SFX_ITEMSET_GET(_rSet, pAppendTableAlias, SfxBoolItem, DSID_APPEND_TABLE_ALIAS, sal_True);
-        SFX_ITEMSET_GET(_rSet, pAsBeforeCorrelationName, SfxBoolItem, DSID_AS_BEFORE_CORRNAME, sal_True);
-        SFX_ITEMSET_GET(_rSet, pAutoIncrementItem, SfxStringItem, DSID_AUTOINCREMENTVALUE, sal_True);
-        SFX_ITEMSET_GET(_rSet, pAutoRetrieveValueItem, SfxStringItem, DSID_AUTORETRIEVEVALUE, sal_True);
-        SFX_ITEMSET_GET(_rSet, pAutoRetrieveEnabledItem, SfxBoolItem, DSID_AUTORETRIEVEENABLED, sal_True);
-        SFX_ITEMSET_GET(_rSet, pParameterSubstitution, SfxBoolItem, DSID_PARAMETERNAMESUBST, sal_True);
-        SFX_ITEMSET_GET(_rSet, pSuppressVersionColumn, SfxBoolItem, DSID_SUPPRESSVERSIONCL, sal_True);
-        SFX_ITEMSET_GET(_rSet, pIgnoreDriverPrivileges, SfxBoolItem, DSID_IGNOREDRIVER_PRIV, sal_True);
-        SFX_ITEMSET_GET(_rSet, pEnableOuterJoin, SfxBoolItem, DSID_ENABLEOUTERJOIN, sal_True);
-        SFX_ITEMSET_GET(_rSet, pBooleanComparison, SfxInt32Item, DSID_BOOLEANCOMPARISON, sal_True);
-        SFX_ITEMSET_GET(_rSet, pSchema, SfxBoolItem, DSID_SCHEMA, sal_True);
-        SFX_ITEMSET_GET(_rSet, pCatalog, SfxBoolItem, DSID_CATALOG, sal_True);
-        SFX_ITEMSET_GET(_rSet, pIndexAppendix, SfxBoolItem, DSID_INDEXAPPENDIX, sal_True);
-        SFX_ITEMSET_GET(_rSet, pDosLineEnds, SfxBoolItem, DSID_DOSLINEENDS, sal_True);
 
         // forward the values to the controls
         if (bValid)
@@ -475,68 +236,6 @@ DBG_NAME(OCommonBehaviourTabPage)
                 m_pOptions->ClearModifyFlag();
             }
 
-            if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
-            {
-                sal_Bool bEnabled = pAutoRetrieveEnabledItem->GetValue();
-                m_pAutoRetrievingEnabled->Check(bEnabled);
-
-                m_pAutoIncrement->Enable(bEnabled);
-                m_pAutoIncrementLabel->Enable(bEnabled);
-                m_pAutoRetrieving->Enable(bEnabled);
-                m_pAutoRetrievingLabel->Enable(bEnabled);
-
-                m_pAutoIncrement->SetText(pAutoIncrementItem->GetValue());
-                m_pAutoIncrement->ClearModifyFlag();
-                m_pAutoRetrieving->SetText(pAutoRetrieveValueItem->GetValue());
-                m_pAutoRetrieving->ClearModifyFlag();
-            }
-
-            if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
-            {
-                m_pIsSQL92Check->Check(pSQL92Check->GetValue());
-            }
-
-            if ( (m_nControlFlags & CBTP_USE_APPENDTABLEALIAS) == CBTP_USE_APPENDTABLEALIAS )
-            {
-                m_pAppendTableAlias->Check(pAppendTableAlias->GetValue());
-            }
-
-            if ( ( m_nControlFlags & CBTP_AS_BEFORE_CORRELATION_NAME ) == CBTP_AS_BEFORE_CORRELATION_NAME )
-            {
-                m_pAsBeforeCorrelationName->Check( pAsBeforeCorrelationName->GetValue() );
-            }
-
-            if ( (m_nControlFlags & CBTP_USE_PARAMETERNAMESUBST) == CBTP_USE_PARAMETERNAMESUBST )
-            {
-                m_pParameterSubstitution->Check(pParameterSubstitution->GetValue());
-            }
-
-            if ( (m_nControlFlags & CBTP_USE_IGNOREDRIVER_PRIV) == CBTP_USE_IGNOREDRIVER_PRIV )
-            {
-                m_pIgnoreDriverPrivileges->Check(pIgnoreDriverPrivileges->GetValue());
-            }
-
-            if ( (m_nControlFlags & CBTP_USE_SUPPRESS_VERSION_COLUMN) == CBTP_USE_SUPPRESS_VERSION_COLUMN )
-                m_pSuppressVersionColumn->Check( !pSuppressVersionColumn->GetValue() );
-
-            if ( (m_nControlFlags & CBTP_USE_ENABLEOUTERJOIN) == CBTP_USE_ENABLEOUTERJOIN )
-                m_pEnableOuterJoin->Check(pEnableOuterJoin->GetValue());
-
-            if ( (m_nControlFlags & CBTP_USE_CATALOG) == CBTP_USE_CATALOG )
-                m_pCatalog->Check(pCatalog->GetValue());
-
-            if ( (m_nControlFlags & CBTP_USE_SCHEMA) == CBTP_USE_SCHEMA )
-                m_pSchema->Check(pSchema->GetValue());
-
-            if ( (m_nControlFlags & CBTP_USE_INDEXAPPENDIX) == CBTP_USE_INDEXAPPENDIX )
-                m_pIndexAppendix->Check(pIndexAppendix->GetValue());
-
-            if ( (m_nControlFlags & CBTP_USE_DOSLINEENDS) == CBTP_USE_DOSLINEENDS )
-                m_pDosLineEnds->Check(pDosLineEnds->GetValue());
-
-            if ( (m_nControlFlags & CBTP_USE_BOOLEANCOMPARISON) == CBTP_USE_BOOLEANCOMPARISON )
-                m_pBooleanComprisonMode->SelectEntryPos(static_cast<USHORT>(pBooleanComparison->GetValue()));
-
             if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
             {
                 OCharsetDisplay::const_iterator aFind = m_aCharsets.findIanaName( pCharsetItem->GetValue() );
@@ -546,7 +245,6 @@ DBG_NAME(OCommonBehaviourTabPage)
                     aFind = m_aCharsets.findEncoding( RTL_TEXTENCODING_DONTKNOW );
                     // fallback: system language
                 }
-
 
                 if (aFind == m_aCharsets.end())
                 {
@@ -580,61 +278,6 @@ DBG_NAME(OCommonBehaviourTabPage)
             fillString(_rSet,m_pOptions,DSID_ADDITIONALOPTIONS,bChangedSomething);
         }
 
-        if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
-        {
-            fillString(_rSet,m_pAutoIncrement,DSID_AUTOINCREMENTVALUE,bChangedSomething);
-            fillBool(_rSet,m_pAutoRetrievingEnabled,DSID_AUTORETRIEVEENABLED,bChangedSomething);
-            fillString(_rSet,m_pAutoRetrieving,DSID_AUTORETRIEVEVALUE,bChangedSomething);
-        }
-
-        if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
-            fillBool(_rSet,m_pIsSQL92Check,DSID_SQL92CHECK,bChangedSomething);
-
-        if ( (m_nControlFlags & CBTP_USE_APPENDTABLEALIAS) == CBTP_USE_APPENDTABLEALIAS )
-            fillBool(_rSet,m_pAppendTableAlias,DSID_APPEND_TABLE_ALIAS,bChangedSomething);
-
-        if ( ( m_nControlFlags & CBTP_AS_BEFORE_CORRELATION_NAME ) == CBTP_AS_BEFORE_CORRELATION_NAME )
-            fillBool( _rSet, m_pAsBeforeCorrelationName, DSID_AS_BEFORE_CORRNAME, bChangedSomething );
-
-        if ( (m_nControlFlags & CBTP_USE_PARAMETERNAMESUBST) == CBTP_USE_PARAMETERNAMESUBST )
-            fillBool(_rSet,m_pParameterSubstitution,DSID_PARAMETERNAMESUBST,bChangedSomething);
-
-        if ( (m_nControlFlags & CBTP_USE_IGNOREDRIVER_PRIV) == CBTP_USE_IGNOREDRIVER_PRIV )
-            fillBool(_rSet,m_pIgnoreDriverPrivileges,DSID_IGNOREDRIVER_PRIV,bChangedSomething);
-
-        if ( (m_nControlFlags & CBTP_USE_SUPPRESS_VERSION_COLUMN) == CBTP_USE_SUPPRESS_VERSION_COLUMN )
-        {
-            if( (m_pSuppressVersionColumn != NULL) && (m_pSuppressVersionColumn->GetState() != m_pSuppressVersionColumn->GetSavedValue()) )
-            {
-                _rSet.Put(SfxBoolItem(DSID_SUPPRESSVERSIONCL, !m_pSuppressVersionColumn->IsChecked()));
-                bChangedSomething = sal_True;
-            }
-        }
-
-        if ( (m_nControlFlags & CBTP_USE_ENABLEOUTERJOIN) == CBTP_USE_ENABLEOUTERJOIN )
-            fillBool(_rSet,m_pEnableOuterJoin,DSID_ENABLEOUTERJOIN,bChangedSomething);
-
-        if ( (m_nControlFlags & CBTP_USE_CATALOG) == CBTP_USE_CATALOG )
-            fillBool(_rSet,m_pCatalog,DSID_CATALOG,bChangedSomething);
-
-        if ( (m_nControlFlags & CBTP_USE_SCHEMA) == CBTP_USE_SCHEMA )
-            fillBool(_rSet,m_pSchema,DSID_SCHEMA,bChangedSomething);
-
-        if ( (m_nControlFlags & CBTP_USE_INDEXAPPENDIX) == CBTP_USE_INDEXAPPENDIX )
-            fillBool(_rSet,m_pIndexAppendix,DSID_INDEXAPPENDIX,bChangedSomething);
-
-        if ( (m_nControlFlags & CBTP_USE_DOSLINEENDS) == CBTP_USE_DOSLINEENDS )
-            fillBool(_rSet,m_pDosLineEnds,DSID_DOSLINEENDS,bChangedSomething);
-
-        if ( (m_nControlFlags & CBTP_USE_BOOLEANCOMPARISON) == CBTP_USE_BOOLEANCOMPARISON )
-        {
-            if ( m_pBooleanComprisonMode->GetSelectEntryPos() != m_pBooleanComprisonMode->GetSavedValue() )
-            {
-                _rSet.Put(SfxInt32Item(DSID_BOOLEANCOMPARISON, m_pBooleanComprisonMode->GetSelectEntryPos()));
-                bChangedSomething = sal_True;
-            }
-        }
-
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
         {
             if (m_pCharset->GetSelectEntryPos() != m_pCharset->GetSavedValue())
@@ -653,8 +296,8 @@ DBG_NAME(OCommonBehaviourTabPage)
     //========================================================================
     //= ODbaseDetailsPage
     //========================================================================
-DBG_NAME(ODbaseDetailsPage)
-//------------------------------------------------------------------------
+    DBG_NAME(ODbaseDetailsPage)
+    //------------------------------------------------------------------------
     ODbaseDetailsPage::ODbaseDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_DBASE, _rCoreAttrs, CBTP_USE_CHARSET ,false)
         ,m_aShowDeleted     (this, ModuleRes(CB_SHOWDELETEDROWS))
@@ -755,8 +398,9 @@ DBG_NAME(ODbaseDetailsPage)
 
     //========================================================================
     //= OAdoDetailsPage
-DBG_NAME(OAdoDetailsPage)
-//========================================================================
+    //========================================================================
+    DBG_NAME(OAdoDetailsPage)
+    // -----------------------------------------------------------------------
     OAdoDetailsPage::OAdoDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_ADO, _rCoreAttrs, CBTP_USE_CHARSET )
     {
@@ -846,7 +490,6 @@ DBG_NAME(OAdoDetailsPage)
         ,m_aEDHostname      (this, ModuleRes(ET_HOSTNAME))
         ,m_aPortNumber      (this, ModuleRes(FT_PORTNUMBER))
         ,m_aNFPortNumber    (this, ModuleRes(NF_PORTNUMBER))
-        ,m_aSeparator2      (this, ModuleRes(FL_DATAHANDLING))
         ,m_aUseCatalog      (this, ModuleRes(CB_USECATALOG))
     {
         m_aUseCatalog.SetToggleHdl(getControlModifiedLink());
@@ -884,7 +527,6 @@ DBG_NAME(OAdoDetailsPage)
         OCommonBehaviourTabPage::fillWindows(_rControlList);
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTHostname));
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aPortNumber));
-        _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aSeparator2));
     }
     // -----------------------------------------------------------------------
     void OUserDriverDetailsPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
@@ -1353,8 +995,8 @@ DBG_NAME(OAdoDetailsPage)
     //========================================================================
     //= OTextDetailsPage
     //========================================================================
-DBG_NAME(OTextDetailsPage)
-//------------------------------------------------------------------------
+    DBG_NAME(OTextDetailsPage)
+    //------------------------------------------------------------------------
     OTextDetailsPage::OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_TEXT, _rCoreAttrs, CBTP_USE_CHARSET ,false)
     {
@@ -1420,89 +1062,16 @@ DBG_NAME(OTextDetailsPage)
     //------------------------------------------------------------------------
     SfxTabPage* ODriversSettings::CreateGeneratedValuesPage( Window* _pParent, const SfxItemSet& _rAttrSet )
     {
-        return new OCommonBehaviourTabPage(_pParent, PAGE_GENERATED_VALUES,_rAttrSet,CBTP_USE_AUTOINCREMENT);
+        return new GeneratedValuesPage( _pParent, _rAttrSet );
     }
+
     //------------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateMySQLSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateSpecialSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet )
     {
-        return new OCommonBehaviourTabPage(   _pParent
-                                            , PAGE_DS_MYSQL_SETTINGS
-                                            , _rAttrSet
-                                            , CBTP_USE_APPENDTABLEALIAS
-                                            | CBTP_USE_SUPPRESS_VERSION_COLUMN
-                                            | CBTP_USE_ENABLEOUTERJOIN
-                                            | CBTP_USE_PARAMETERNAMESUBST
-                                            | CBTP_USE_IGNOREDRIVER_PRIV
-                                            | CBTP_USE_DOSLINEENDS
-                                            | CBTP_USE_BOOLEANCOMPARISON);
+        DATASOURCE_TYPE eType = ODbDataSourceAdministrationHelper::getDatasourceType( _rAttrSet );
+        DataSourceMetaData aMetaData( eType );
+        return new SpecialSettingsPage( _pParent, _rAttrSet, aMetaData );
     }
-    //------------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateAdabasSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet )
-    {
-        return new OCommonBehaviourTabPage( _pParent
-                                            , PAGE_DS_ADABAS_SETTINGS
-                                            , _rAttrSet
-                                            , CBTP_USE_SQL92CHECK
-                                            | CBTP_USE_APPENDTABLEALIAS
-                                            | CBTP_USE_SUPPRESS_VERSION_COLUMN
-                                            | CBTP_USE_DOSLINEENDS
-                                            | CBTP_USE_BOOLEANCOMPARISON);
-    }
-    //------------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateADOSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet )
-    {
-        return new OCommonBehaviourTabPage( _pParent
-                                            , PAGE_DS_ADO_SETTINGS
-                                            , _rAttrSet
-                                            , CBTP_USE_SQL92CHECK
-                                            | CBTP_USE_APPENDTABLEALIAS
-                                            | CBTP_AS_BEFORE_CORRELATION_NAME
-                                            | CBTP_USE_SUPPRESS_VERSION_COLUMN
-                                            | CBTP_USE_ENABLEOUTERJOIN
-                                            | CBTP_USE_DOSLINEENDS
-                                            | CBTP_USE_BOOLEANCOMPARISON);
-    }
-    //------------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateFileSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet )
-    {
-        return new OCommonBehaviourTabPage( _pParent
-                                            , PAGE_DS_PROPERTIES_FILE
-                                            , _rAttrSet
-                                            , CBTP_USE_SQL92CHECK
-                                            | CBTP_USE_DOSLINEENDS);
-    }
-    //------------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateAccessSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet )
-    {
-        return new OCommonBehaviourTabPage( _pParent
-                                            , PAGE_DS_PROPERTIES_ACCESS
-                                            , _rAttrSet
-                                            , CBTP_USE_SQL92CHECK
-                                            | CBTP_USE_APPENDTABLEALIAS
-                                            | CBTP_USE_ENABLEOUTERJOIN
-                                            | CBTP_USE_DOSLINEENDS
-                                            | CBTP_USE_BOOLEANCOMPARISON);
-    }
-    //------------------------------------------------------------------------
-    SfxTabPage* ODriversSettings::CreateFullSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet )
-    {
-        return new OCommonBehaviourTabPage(_pParent
-                                            , PAGE_DS_FULL_ADVANCED_SETTINGS
-                                            , _rAttrSet
-                                            , CBTP_USE_SQL92CHECK
-                                            | CBTP_USE_APPENDTABLEALIAS
-                                            | CBTP_AS_BEFORE_CORRELATION_NAME
-                                            | CBTP_USE_ENABLEOUTERJOIN
-                                            | CBTP_USE_PARAMETERNAMESUBST
-                                            | CBTP_USE_IGNOREDRIVER_PRIV
-                                            | CBTP_USE_SUPPRESS_VERSION_COLUMN
-                                            | CBTP_USE_BOOLEANCOMPARISON
-                                            | CBTP_USE_CATALOG
-                                            | CBTP_USE_SCHEMA
-                                            | CBTP_USE_DOSLINEENDS
-                                            | CBTP_USE_INDEXAPPENDIX);
-    }
-    //------------------------------------------------------------------------
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
