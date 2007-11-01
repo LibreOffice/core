@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<oor:component-data oor:name="Canvas" oor:package="org.openoffice.Office" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <node oor:name="DXCanvas">
+  <prop oor:name="MaxTextureSize" oor:type="xs:int">
+   <!-- Nvidia GeForce Go 6800 crashes with a bluescreen if we take the maximum texture size, which would be twice as large -->
+   <!-- NVidia Quadro NVS 285 simply refuses rendering (failing silently) if we take the maximum texture size -->
+   <value>2048</value>
+  </prop>
+  <prop oor:name="BlacklistCurrentDevice" oor:type="xs:boolean">
+   <value>false</value>
+  </prop>
+  <prop oor:name="DeviceBlacklist" oor:type="oor:int-list">
+   <value>
+    <!-- Matrox G550 - blank display on 2nd head -->
+    4139 9511 260313131 1 5 13 1 1320
+    <!-- Matrox G400 - random crashes -->
+    4139 1317 54005803 4 5 12 1 1200
+   </value>
+  </prop>
+ </node>
+</oor:component-data>
+
