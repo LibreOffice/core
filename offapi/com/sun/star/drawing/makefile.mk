@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:03:50 $
+#   last change: $Author: hr $ $Date: 2007-11-01 15:32:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,6 @@ IDLFILES=\
     DrawPage.idl\
     DrawPages.idl\
     DrawViewMode.idl\
-    EllipseShape.idl\
     EnhancedCustomShapeAdjustmentValue.idl\
     EnhancedCustomShapeExtrusion.idl\
     EnhancedCustomShapeGeometry.idl\
@@ -105,6 +104,7 @@ IDLFILES=\
     EnhancedCustomShapeTextFrame.idl\
     EnhancedCustomShapeTextPath.idl\
     EnhancedCustomShapeTextPathMode.idl\
+    EllipseShape.idl\
     EscapeDirection.idl\
     FillProperties.idl\
     FillStyle.idl\
@@ -202,6 +202,7 @@ IDLFILES=\
     XDrawPageSummarizer.idl\
     XDrawPageSupplier.idl\
     XDrawView.idl\
+    XEnhancedCustomShapeDefaulter.idl\
     XGluePointsSupplier.idl\
     XLayer.idl\
     XLayerManager.idl\
@@ -219,25 +220,6 @@ IDLFILES=\
     XShapeMirror.idl\
     XShapes.idl\
     XUniversalShapeDescriptor.idl\
-\
-    XCustomShapeHandle.idl                          \
-    XCustomShapeEngine.idl                          \
-    CustomShapeEngine.idl                           \
-    CustomShape.idl                                 \
-    EnhancedCustomShapeTextPathMode.idl             \
-    EnhancedCustomShapeGluePointType.idl            \
-    EnhancedCustomShapeParameterType.idl            \
-    EnhancedCustomShapeParameter.idl                \
-    EnhancedCustomShapeSegmentCommand.idl           \
-    EnhancedCustomShapeSegment.idl                  \
-    EnhancedCustomShapeParameterPair.idl            \
-    EnhancedCustomShapeTextFrame.idl                \
-    EnhancedCustomShapeAdjustmentValue.idl          \
-    EnhancedCustomShapeGeometry.idl                 \
-    EnhancedCustomShapeExtrusion.idl                \
-    EnhancedCustomShapePath.idl                     \
-    EnhancedCustomShapeTextPath.idl                 \
-    EnhancedCustomShapeHandle.idl
 
 # ------------------------------------------------------------------
 
