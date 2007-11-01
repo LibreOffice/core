@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:26:51 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:23:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -285,9 +285,6 @@
 #endif
 #ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
-#endif
-#ifndef _DBAUI_DSNTYPES_HXX_
-#include "dsntypes.hxx"
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
