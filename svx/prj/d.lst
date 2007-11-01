@@ -23,18 +23,6 @@ mkdir: %COMMON_DEST%\pck%_EXT%\openoffice
 mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_dev
 mkdir: %COMMON_DEST%\pck%_EXT%\broffice
 mkdir: %COMMON_DEST%\pck%_EXT%\broffice_dev
-..\res\cjkabout.bmp %COMMON_DEST%\pck%_EXT%\starsuite_bitmap\about.bmp
-..\res\cjkintro.bmp %COMMON_DEST%\pck%_EXT%\starsuite_bitmap\intro.bmp
-..\res\ofaabout.bmp %COMMON_DEST%\pck%_EXT%\staroffice_bitmap\about.bmp
-..\res\soffice.bmp %COMMON_DEST%\pck%_EXT%\staroffice_bitmap\intro.bmp
-..\res\ooointro.bmp %COMMON_DEST%\pck%_EXT%\openoffice\intro.bmp
-..\res\oooabout.bmp %COMMON_DEST%\pck%_EXT%\openoffice\about.bmp
-..\res\ooonologointro.bmp %COMMON_DEST%\pck%_EXT%\openoffice\nologointro.bmp
-..\res\ooodevintro.bmp %COMMON_DEST%\pck%_EXT%\openoffice_dev\intro.bmp
-..\res\ooodevnologointro.bmp %COMMON_DEST%\pck%_EXT%\openoffice_dev\nologointro.bmp
-..\res\brabout.bmp %COMMON_DEST%\pck%_EXT%\broffice\about.bmp
-..\res\brintro.bmp %COMMON_DEST%\pck%_EXT%\broffice\intro.bmp
-..\res\brdevintro.bmp %COMMON_DEST%\pck%_EXT%\broffice_dev\intro.bmp
 
 mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\flagsdef.hxx %_DEST%\inc%_EXT%\svx\flagsdef.hxx
@@ -353,7 +341,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\verttexttbxctrl.hxx %_DEST%\inc%_EXT%\svx\verttexttbxctrl.hxx
 ..\inc\svx\view3d.hxx %_DEST%\inc%_EXT%\svx\view3d.hxx
 ..\inc\svx\viewpt3d.hxx %_DEST%\inc%_EXT%\svx\viewpt3d.hxx
-..\inc\volmrk3d.hxx %_DEST%\inc%_EXT%\svx\volmrk3d.hxx
 ..\inc\svx\wghtitem.hxx %_DEST%\inc%_EXT%\svx\wghtitem.hxx
 ..\inc\svx\widwitem.hxx %_DEST%\inc%_EXT%\svx\widwitem.hxx
 ..\inc\orienthelper.hxx %_DEST%\inc%_EXT%\svx\orienthelper.hxx
@@ -361,7 +348,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\xbitmap.hxx %_DEST%\inc%_EXT%\svx\xbitmap.hxx
 ..\inc\svx\xbtmpit.hxx %_DEST%\inc%_EXT%\svx\xbtmpit.hxx
 ..\inc\svx\xcolit.hxx %_DEST%\inc%_EXT%\svx\xcolit.hxx
-..\inc\xcolit.hxx %_DEST%\inc%_EXT%\svx\xcolit.hxx
 ..\inc\svx\xdef.hxx %_DEST%\inc%_EXT%\svx\xdef.hxx
 ..\inc\svx\xdash.hxx %_DEST%\inc%_EXT%\svx\xdash.hxx
 ..\inc\svx\xfillit.hxx %_DEST%\inc%_EXT%\svx\xfillit.hxx
@@ -395,7 +381,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\xgrscit.hxx %_DEST%\inc%_EXT%\svx\xgrscit.hxx
 ..\inc\svx\xhatch.hxx %_DEST%\inc%_EXT%\svx\xhatch.hxx
 ..\inc\svx\xit.hxx %_DEST%\inc%_EXT%\svx\xit.hxx
-..\inc\xit.hxx %_DEST%\inc%_EXT%\svx\xit.hxx
 ..\inc\svx\xlineit.hxx %_DEST%\inc%_EXT%\svx\xlineit.hxx
 ..\inc\svx\xlineit.hxx %_DEST%\inc%_EXT%\xlineit.hxx
 ..\inc\svx\xlineit0.hxx %_DEST%\inc%_EXT%\svx\xlineit0.hxx
@@ -560,7 +545,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\htmlcfg.hxx %_DEST%\inc%_EXT%\svx\htmlcfg.hxx
 ..\inc\ofaitem.hxx %_DEST%\inc%_EXT%\svx\ofaitem.hxx
 ..\inc\xmlsecctrl.hxx %_DEST%\inc%_EXT%\svx\xmlsecctrl.hxx
-..\inc\framelink.hxx %_DEST%\inc%_EXT%\svx\framelink.hxx
 ..\inc\xmlexchg.hxx %_DEST%\inc%_EXT%\svx\xmlexchg.hxx
 ..\inc\tbxcolor.hxx %_DEST%\inc%_EXT%\svx\tbxcolor.hxx
 ..\inc\svx\tbxcolorupdate.hxx %_DEST%\inc%_EXT%\svx\tbxcolorupdate.hxx
@@ -594,7 +578,6 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\contact
 ..\inc\svx\sdr\contact\viewcontactofe3dscene.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofe3dscene.hxx
 ..\inc\svx\sdr\contact\viewcontactofgraphic.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofgraphic.hxx
 ..\inc\svx\sdr\contact\viewcontactofgroup.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofgroup.hxx
-..\inc\svx\sdr\contact\viewcontactofmasterpage.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofmasterpage.hxx
 ..\inc\svx\sdr\contact\viewcontactofmasterpagedescriptor.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofmasterpagedescriptor.hxx
 ..\inc\svx\sdr\contact\viewcontactofpageobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofpageobj.hxx
 ..\inc\svx\sdr\contact\viewcontactofsdrobj.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontactofsdrobj.hxx
