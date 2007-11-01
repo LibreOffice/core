@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:53:23 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 16:24:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1862,7 +1862,8 @@ IMPL_LINK( ScAcceptChgDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
         pEntry = pTheView->NextSelected( pEntry );
     }
 
-    BOOL bEnable = pDoc->IsDocEditable() && !pDoc->GetChangeTrack()->IsProtected();
+    ScChangeTrack* pChanges = pDoc->GetChangeTrack();
+    BOOL bEnable = pDoc->IsDocEditable() && pChanges && !pChanges->IsProtected();
     pTPView->EnableAccept( bAcceptFlag && bEnable );
     pTPView->EnableReject( bRejectFlag && bEnable );
 
