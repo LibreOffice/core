@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvascommons.scp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:31:10 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 18:03:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,12 +35,27 @@
 
 #include "macros.inc"
 
+File gid_File_Oo_Office_Canvas_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Canvas.xcs";
+End 
+File gid_File_Oo_Office_Canvas_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Canvas.xcu";
+End 
+
 STD_LIB_FILE_PATCH(gid_File_Lib_CppCanvas, cppcanvas)
 STD_LIB_FILE_PATCH(gid_File_Lib_CanvasTools, canvastools)
+
 #ifdef ENABLE_AGG
 #ifndef SYSTEM_AGG
 STD_LIB_FILE_PATCH(gid_File_Lib_Agg, agg)
 #endif
 #endif
+
 SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH(gid_File_CanvasFactory, canvasfactory.uno)
 SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH(gid_File_SimpleCanvas, simplecanvas.uno)
