@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:31:41 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XACTIONLOCKABLE_HPP_
 #include <com/sun/star/document/XActionLockable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XENHANCEDCUSTOMSHAPEDEFAULTER_HPP_
+#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XGLUEPOINTSSUPPLIER_HPP_
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
@@ -124,6 +127,7 @@
 
 #include <unotools/servicehelper.hxx>
 
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase12.hxx>
 
 #include <svx/unoprov.hxx>
@@ -156,7 +160,7 @@ typedef ::cppu::WeakAggImplHelper12<
     ::com::sun::star::container::XChild,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::document::XActionLockable,
-    ::com::sun::star::beans::XMultiPropertyStates > SvxShape_UnoImplHelper;
+    ::com::sun::star::beans::XMultiPropertyStates> SvxShape_UnoImplHelper;
 
 class SVX_DLLPUBLIC SvxShape : public SvxShape_UnoImplHelper,
                  public SfxListener,
@@ -842,7 +846,11 @@ public:
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SvxCustomShape : public SvxShapeText
+typedef ::cppu::WeakAggImplHelper1<
+    ::com::sun::star::drawing::XEnhancedCustomShapeDefaulter
+    > SvxShape_UnoImplHelper1;
+
+class SvxCustomShape : public SvxShapeText, public SvxShape_UnoImplHelper1
 {
 private:
     rtl::Reference< SvxDrawPage > mxPage;
@@ -856,6 +864,12 @@ public:
     virtual ~SvxCustomShape() throw ();
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL ) throw();
+
+    // XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire() throw();
+    virtual void SAL_CALL release() throw();
 
     // XShapeDescriptor
     virtual ::rtl::OUString SAL_CALL getShapeType() throw(::com::sun::star::uno::RuntimeException);
@@ -876,6 +890,9 @@ public:
     //XPropertySet
     virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    //XEnhancedCustomShapeDefaulter
+    virtual void SAL_CALL createCustomShapeDefaults( const rtl::OUString& rShapeType ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 /***********************************************************************
