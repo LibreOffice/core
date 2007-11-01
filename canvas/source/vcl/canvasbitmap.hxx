@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasbitmap.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:58:32 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:40:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,10 +99,12 @@ namespace vclcanvas
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // RepaintTarget interface
-        virtual bool repaint( const GraphicObjectSharedPtr& rGrf,
-                              const ::Point&                rPt,
-                              const ::Size&                 rSz,
-                              const GraphicAttr&            rAttr ) const;
+        virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
+                              const ::com::sun::star::rendering::ViewState&   viewState,
+                              const ::com::sun::star::rendering::RenderState& renderState,
+                              const ::Point&                                  rPt,
+                              const ::Size&                                   rSz,
+                              const GraphicAttr&                              rAttr ) const;
 
         /// Not threadsafe! Returned object is shared!
         BitmapEx getBitmap() const;
