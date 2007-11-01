@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itiff.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-01 12:39:29 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:03:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,10 +360,16 @@ void TIFFReader::ReadTagData( USHORT nTagType, sal_uInt32 nDataLen)
             if ( ( nDataLen > nOldNumSO ) && ( nDataLen < SAL_MAX_UINT32 / sizeof( sal_uInt32 ) ) )
             {
                 nNumStripOffsets = nDataLen;
-                pStripOffsets = new ULONG[ nNumStripOffsets ];
-                if ( !pStripOffsets )
+                try
+                {
+                    pStripOffsets = new ULONG[ nNumStripOffsets ];
+                }
+                    catch (std::bad_alloc)
+                {
+                    pStripOffsets = NULL;
                     nNumStripOffsets = 0;
-                else
+                }
+                if ( pStripOffsets )
                 {
                     for ( i = 0; i < nOldNumSO; i++ )
                         pStripOffsets[ i ] = pOldSO[ i ] + nOrigPos;
@@ -400,10 +406,16 @@ void TIFFReader::ReadTagData( USHORT nTagType, sal_uInt32 nDataLen)
             if ( ( nDataLen > nOldNumSBC ) && ( nDataLen < SAL_MAX_UINT32 / sizeof( sal_uInt32 ) ) )
             {
                 nNumStripByteCounts = nDataLen;
-                pStripByteCounts = new ULONG[ nNumStripByteCounts ];
-                if ( !nNumStripByteCounts )
+                try
+                {
+                    pStripByteCounts = new ULONG[ nNumStripByteCounts ];
+                }
+                    catch (std::bad_alloc)
+                {
+                    pStripByteCounts = NULL;
                     nNumStripByteCounts = 0;
-                else
+                }
+                if ( pStripByteCounts )
                 {
                     for ( i = 0; i < nOldNumSBC; i++ )
                         pStripByteCounts[ i ] = pOldSBC[ i ];
@@ -1240,9 +1252,20 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                     nBytesPerRow = ( nImageWidth * nSamplesPerPixel / nPlanes * nBitsPerSample + 7 ) >> 3;
 
                     for ( ULONG j = 0; j < 4; j++ )
-                        pMap[ j ] = new BYTE[ nBytesPerRow ];
+                    {
+                        try
+                        {
+                            pMap[ j ] = new BYTE[ nBytesPerRow ];
+                        }
+                            catch (std::bad_alloc)
+                        {
+                            pMap[ j ] = NULL;
+                            bStatus = FALSE;
+                            break;
+                        }
+                    }
 
-                    if ( ReadMap( 10, 60 ) )
+                    if ( bStatus && ReadMap( 10, 60 ) )
                     {
                         nMaxPos = Max( pTIFF->Tell(), nMaxPos );
                         MakePalCol();
