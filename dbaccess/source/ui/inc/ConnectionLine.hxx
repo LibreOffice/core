@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionLine.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:27:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:14:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
 #endif
 #include <functional>
 
-class SvLBoxEntry;
 class OutputDevice;
 namespace dbaui
 {
@@ -68,9 +67,6 @@ namespace dbaui
     {
         OTableConnection*       m_pTabConn;
         OConnectionLineDataRef  m_pData;
-
-        SvLBoxEntry*            m_pSourceEntry;
-        SvLBoxEntry*            m_pDestEntry;
 
         Point                   m_aSourceConnPos,
                                 m_aDestConnPos;
@@ -119,7 +115,7 @@ namespace dbaui
     {
         inline bool operator()(const OConnectionLine* lhs,const Point& rhs) const
         {
-            return lhs->IsValid() && lhs->CheckHit(rhs);
+            return lhs->CheckHit(rhs);
         }
     };
 
