@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:24:06 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:00:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,64 +36,31 @@
 #ifndef _SVX_GRIDCELL_HXX
 #define _SVX_GRIDCELL_HXX
 
-#ifndef _SVX_GRIDCTRL_HXX
 #include <svx/gridctrl.hxx>
-#endif
 
-#ifndef _SVX_FMTOOLS_HXX
-#include "fmtools.hxx"
-#endif
-
-#ifndef _CPPUHELPER_COMPONENT_HXX_
-#include <cppuhelper/component.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
-#include <com/sun/star/sdb/XColumn.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XBOUNDCONTROL_HPP_
-#include <com/sun/star/form/XBoundControl.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTEXTCOMPONENT_HPP_
-#include <com/sun/star/awt/XTextComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XLISTBOX_HPP_
-#include <com/sun/star/awt/XListBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
-#include <com/sun/star/awt/TextAlign.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCONTROLMODEL_HPP_
-#include <com/sun/star/awt/XControlModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
-#include <com/sun/star/awt/XControl.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCHECKBOX_HPP_
-#include <com/sun/star/awt/XCheckBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
-#include <com/sun/star/beans/XFastPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-#ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
-#include <comphelper/propmultiplex.hxx>
-#endif
-#ifndef SVX_SQLPARSERCLIENT_HXX
 #include "sqlparserclient.hxx"
-#endif
-#ifndef SVX_TYPECONVERSION_CLIENT_HXX
 #include "typeconversionclient.hxx"
-#endif
-#ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
-#include <comphelper/propmultiplex.hxx>
-#endif
+#include "fmtools.hxx"
 
-#ifndef _RTTI_HXX
+/** === begin UNO includes === **/
+#include <com/sun/star/sdb/XColumn.hpp>
+#include <com/sun/star/form/XBoundControl.hpp>
+#include <com/sun/star/awt/XTextComponent.hpp>
+#include <com/sun/star/awt/XListBox.hpp>
+#include <com/sun/star/awt/TextAlign.hpp>
+#include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XCheckBox.hpp>
+#include <com/sun/star/beans/XFastPropertySet.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+/** === end UNO includes === **/
+
 #include <tools/rtti.hxx>
-#endif
+
+#include <comphelper/propmultiplex.hxx>
+#include <comphelper/componentcontext.hxx>
+
+#include <cppuhelper/component.hxx>
 
 class DbCellControl;
 class Edit;
@@ -261,12 +228,18 @@ private:
     sal_Bool                    m_bAlignedController : 1;
     sal_Bool                    m_bAccessingValueProperty : 1;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >
+                                m_xCursor;
+
 protected:
     DbGridColumn&               m_rColumn;
     Window*                     m_pPainter;
     Window*                     m_pWindow;
 
 protected:
+    // attribute access
+    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& getCursor() const { return m_xCursor; }
+
     // control transparency
     inline  sal_Bool    isTransparent( ) const { return m_bTransparent; }
     inline  void        setTransparent( sal_Bool _bSet ) { m_bTransparent = _bSet; }
@@ -567,7 +540,7 @@ class DbPatternField : public DbCellControl
 {
 public:
     TYPEINFO();
-    DbPatternField(DbGridColumn& _rColumn);
+    DbPatternField( DbGridColumn& _rColumn, const ::comphelper::ComponentContext& _rContext );
     virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
@@ -582,6 +555,11 @@ protected:
 
 private:
     String  impl_formatText( const String& _rText );
+
+private:
+    ::std::auto_ptr< ::dbtools::FormattedColumnValue >  m_pValueFormatter;
+    ::std::auto_ptr< ::dbtools::FormattedColumnValue >  m_pPaintFormatter;
+    ::comphelper::ComponentContext                      m_aContext;
 };
 
 //==================================================================
