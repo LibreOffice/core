@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindowData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:38:38 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:19:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,52 +38,72 @@
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
 #endif
-#ifndef _RTTI_HXX
-#include <tools/rtti.hxx>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XObjectOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTINPUTSTREAM_HPP_
-#include <com/sun/star/io/XObjectInputStream.hpp>
-#endif
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
+#include <unotools/eventlisteneradapter.hxx>
+#include <boost/shared_ptr.hpp>
+#include <vector>
 
 namespace dbaui
 {
-    class OTableWindowData
+    class OTableWindowData : public ::utl::OEventListenerAdapter
     {
+        mutable ::osl::Mutex    m_aMutex;
+
+        void listen();
     protected:
+        // the columns of the table
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable; // can either be a table or a query
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns;
+
         ::rtl::OUString m_aTableName;
         ::rtl::OUString m_aWinName;
         ::rtl::OUString m_sComposedName;
         Point           m_aPosition;
         Size            m_aSize;
         sal_Bool        m_bShowAll;
+        bool            m_bIsQuery;
 
     public:
-        TYPEINFO();
-        OTableWindowData();
-        OTableWindowData( const ::rtl::OUString& _rComposedName, const ::rtl::OUString& strTableName, const ::rtl::OUString& rWinName = ::rtl::OUString() );
+        explicit OTableWindowData(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable
+                                   ,const ::rtl::OUString& _rComposedName
+                                   ,const ::rtl::OUString& strTableName
+                                   ,const ::rtl::OUString& rWinName = ::rtl::OUString() );
         virtual ~OTableWindowData();
 
-        virtual void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxIn);
-        virtual void Save(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOut);
+        /** late constructor
+        *
+        * \param _xConnection
+        * \param _bAllowQueries when true, queries are allowed
+        * \return false if the table was unaccessible otherwise true
+        */
+        bool init(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection  >& _xConnection
+                 ,bool _bAllowQueries);
 
-        ::rtl::OUString GetComposedName()   const { return m_sComposedName; }
-        ::rtl::OUString GetTableName()      const { return m_aTableName; }
-        ::rtl::OUString GetWinName()        const { return m_aWinName; }
-        Point GetPosition()                 const { return m_aPosition; }
-        Size GetSize()                      const { return m_aSize; }
-        BOOL IsShowAll()                    const { return m_bShowAll; }
+        inline ::rtl::OUString GetComposedName()    const { return m_sComposedName; }
+        inline ::rtl::OUString GetTableName()       const { return m_aTableName; }
+        inline ::rtl::OUString GetWinName()         const { return m_aWinName; }
+        inline Point GetPosition()                  const { return m_aPosition; }
+        inline Size GetSize()                       const { return m_aSize; }
+        inline BOOL IsShowAll()                     const { return m_bShowAll; }
+        inline bool isQuery()                       const { return m_bIsQuery; }
         BOOL HasPosition()  const;
         BOOL HasSize()      const;
 
-        void SetTableName( const ::rtl::OUString& rTableName )  { m_aTableName = rTableName; }
-        void SetWinName( const ::rtl::OUString& rWinName )      { m_aWinName = rWinName; }
-        void SetPosition( const Point& rPos )                   { m_aPosition=rPos; }
-        void SetSize( const Size& rSize )                       { m_aSize = rSize; }
-        void ShowAll( BOOL bAll )                               { m_bShowAll = bAll; }
+        inline void SetWinName( const ::rtl::OUString& rWinName )       { m_aWinName = rWinName; }
+        inline void SetPosition( const Point& rPos )                    { m_aPosition=rPos; }
+        inline void SetSize( const Size& rSize )                        { m_aSize = rSize; }
+        inline void ShowAll( BOOL bAll )                                { m_bShowAll = bAll; }
+
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getTable() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xTable; }
+        inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getColumns() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xColumns; }
+
+        // OEventListenerAdapter
+        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
     };
+
+    typedef ::std::vector< ::boost::shared_ptr<OTableWindowData> >      TTableWindowData;
 }
 #endif // DBAUI_TABLEWINDOWDATA_HXX
 
