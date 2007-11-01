@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:12:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:49:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -485,6 +485,19 @@ MenuBarManager::MenuBarManager(
                 }
 
                 pMenuItemHandler->aMenuItemURL = aItemCommand;
+
+                // Check if we have to create a popup menu for a uno based popup menu controller.
+                // We have to set an empty popup menu into our menu structure so the controller also
+                // works with inplace OLE.
+                if ( m_xPopupMenuControllerRegistration.is() &&
+                     m_xPopupMenuControllerRegistration->hasController( aItemCommand, rtl::OUString() ))
+                {
+                    VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
+                    PopupMenu* pCtlPopupMenu = (PopupMenu *)pVCLXPopupMenu->GetMenu();
+                    pAddonPopupMenu->SetPopupMenu( pMenuItemHandler->nItemId, pCtlPopupMenu );
+                    pMenuItemHandler->xPopupMenu = Reference< com::sun::star::awt::XPopupMenu >( (OWeakObject *)pVCLXPopupMenu, UNO_QUERY );
+
+                }
                 m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
             }
         }
@@ -1330,7 +1343,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                                     xMenuItemDispatch->removeStatusListener( static_cast< XStatusListener* >( this ), aTargetURL );
                                 }
                             }
-                            else
+                            else if ( !bPopupMenu )
                                 pMenu->EnableItem( pMenuItemHandler->nItemId, sal_False );
                         }
                     }
