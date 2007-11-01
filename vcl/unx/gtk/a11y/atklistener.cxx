@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atklistener.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:18:23 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 13:02:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ void AtkListener::updateChildList(accessibility::XAccessibleContext* pContext)
          for(sal_Int32 n = 0; n < nChildren; n++)
          {
              m_aChildList[n] = pContext->getAccessibleChild(n);
+             OSL_ASSERT(m_aChildList[n].is());
          }
      }
 }
@@ -195,11 +196,14 @@ void AtkListener::handleInvalidateChildren(
     size_t n = m_aChildList.size();
     while( n-- > 0 )
     {
-        AtkObject * pChild = atk_object_wrapper_ref( m_aChildList[n], false );
-        if( pChild )
+        if( m_aChildList[n].is() )
         {
-            g_signal_emit_by_name( mpAccessible, "children_changed::remove", n, pChild, NULL );
-            g_object_unref( pChild );
+            AtkObject * pChild = atk_object_wrapper_ref( m_aChildList[n], false );
+            if( pChild )
+            {
+                g_signal_emit_by_name( mpAccessible, "children_changed::remove", n, pChild, NULL );
+                g_object_unref( pChild );
+            }
         }
     }
 
@@ -209,12 +213,15 @@ void AtkListener::handleInvalidateChildren(
     size_t nmax = m_aChildList.size();
     for( n = 0; n < nmax; ++n )
     {
-        AtkObject * pChild = atk_object_wrapper_ref( m_aChildList[n] );
-
-        if( pChild )
+        if( m_aChildList[n].is() )
         {
-            g_signal_emit_by_name( mpAccessible, "children_changed::add", n, pChild, NULL );
-            g_object_unref( pChild );
+            AtkObject * pChild = atk_object_wrapper_ref( m_aChildList[n] );
+
+            if( pChild )
+            {
+                g_signal_emit_by_name( mpAccessible, "children_changed::add", n, pChild, NULL );
+                g_object_unref( pChild );
+            }
         }
     }
 }
