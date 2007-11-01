@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:53:22 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:37:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,9 +137,7 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef DBAUI_TABLEWINDOWDATA_HXX
 #include "TableWindowData.hxx"
-#endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
@@ -438,14 +436,14 @@ void ORelationController::loadData()
 void ORelationController::loadTableData(const Any& _aTable)
 {
     Reference<XIndexAccess> xKeys;
-    Reference<XKeysSupplier> xKeySup;
-    _aTable >>= xKeySup;
+    Reference<XKeysSupplier> xKeySup(_aTable,UNO_QUERY);
 
     if ( xKeySup.is() )
     {
         xKeys = xKeySup->getKeys();
         if ( xKeys.is() )
         {
+            Reference<XPropertySet> xTableProp(xKeySup,UNO_QUERY);
             Reference<XPropertySet> xKey;
             for(sal_Int32 i=0;i< xKeys->getCount();++i)
             {
@@ -455,32 +453,39 @@ void ORelationController::loadTableData(const Any& _aTable)
                 if ( KeyType::FOREIGN == nKeyType )
                 {
                     ::rtl::OUString sSourceName,sReferencedTable;
-                    Reference<XPropertySet> xTableProp(xKeySup,UNO_QUERY);
 
                     sSourceName = ::dbtools::composeTableName( getConnection()->getMetaData(), xTableProp, ::dbtools::eInTableDefinitions, false, false, false );
                     xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
                     //////////////////////////////////////////////////////////////////////
                     // insert windows
-                    if ( !existsTable(sSourceName) )
+                    TTableWindowData::value_type pReferencingTable = existsTable(sSourceName);
+                    if ( !pReferencingTable )
                     {
-                        OTableWindowData* pData = new OTableWindowData(sSourceName, sSourceName);
-                        pData->ShowAll(FALSE);
-                        m_vTableData.push_back(pData);
+                        pReferencingTable.reset(new OTableWindowData(xTableProp,sSourceName, sSourceName));
+                        pReferencingTable->ShowAll(FALSE);
+                        m_vTableData.push_back(pReferencingTable);
                     }
 
-                    if ( !existsTable(sReferencedTable) )
+                    TTableWindowData::value_type pReferencedTable = existsTable(sReferencedTable);
+                    if ( !pReferencedTable )
                     {
-                        OTableWindowData* pData = new OTableWindowData(sReferencedTable, sReferencedTable);
-                        pData->ShowAll(FALSE);
-                        m_vTableData.push_back(pData);
+                        if ( m_xTables->hasByName(sReferencedTable) )
+                        {
+                            Reference<XPropertySet>  xReferencedTable(m_xTables->getByName(sReferencedTable),UNO_QUERY);
+                            pReferencedTable.reset(new OTableWindowData(xReferencedTable,sReferencedTable, sReferencedTable));
+                            pReferencedTable->ShowAll(FALSE);
+                            m_vTableData.push_back(pReferencedTable);
+                        }
+                        else
+                            continue; // table name could not be found so we do not show this table releation
                     }
 
                     ::rtl::OUString sKeyName;
                     xKey->getPropertyValue(PROPERTY_NAME) >>= sKeyName;
                     //////////////////////////////////////////////////////////////////////
                     // insert connection
-                    ORelationTableConnectionData* pTabConnData = new ORelationTableConnectionData( m_xTables, sSourceName, sReferencedTable, sKeyName );
-                    m_vTableConnectionData.push_back(pTabConnData);
+                    ORelationTableConnectionData* pTabConnData = new ORelationTableConnectionData( pReferencingTable, pReferencedTable, sKeyName );
+                    m_vTableConnectionData.push_back(TTableConnectionData::value_type(pTabConnData));
                     //////////////////////////////////////////////////////////////////////
                     // insert columns
                     Reference<XColumnsSupplier> xColsSup(xKey,UNO_QUERY);
@@ -521,23 +526,17 @@ void ORelationController::loadTableData(const Any& _aTable)
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool ORelationController::existsTable(const ::rtl::OUString& _rComposedTableName)  const
+TTableWindowData::value_type ORelationController::existsTable(const ::rtl::OUString& _rComposedTableName)  const
 {
     Reference<XDatabaseMetaData> xMeta = getConnection()->getMetaData();
     ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
-    ::std::vector<OTableWindowData*>::const_iterator aIter = m_vTableData.begin();
+    TTableWindowData::const_iterator aIter = m_vTableData.begin();
     for(;aIter != m_vTableData.end();++aIter)
     {
         if(bCase((*aIter)->GetComposedName(),_rComposedTableName))
             break;
     }
-    return aIter != m_vTableData.end();
-}
-
-// -----------------------------------------------------------------------------
-OTableWindowData* ORelationController::createTableWindowData()
-{
-    return new OTableWindowData();
+    return ( aIter != m_vTableData.end()) ? *aIter : TTableWindowData::value_type();
 }
 // -----------------------------------------------------------------------------
 void ORelationController::loadLayoutInformation()
