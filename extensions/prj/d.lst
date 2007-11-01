@@ -4,6 +4,7 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography\menubar
 mkdir: %_DEST%\bin%_EXT%\odf4ms
+mkdir: %_DEST%\bin%_EXT%\so
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
