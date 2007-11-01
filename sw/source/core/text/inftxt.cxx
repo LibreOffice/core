@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:13:09 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 13:58:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -717,7 +717,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     const sal_Bool bBullet = OnWin() && GetOpt().IsBlank() && IsNoSymbol();
     const sal_Bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell() &&
                                !GetOpt().IsHideSpell();
-    const sal_Bool bTmpSmart = bSmartTag && OnWin() && SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
+    const sal_Bool bTmpSmart = bSmartTag && OnWin() && !GetOpt().IsPagePreview() && SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
 
     ASSERT( GetParaPortion(), "No paragraph!");
     SwDrawTextInfo aDrawInf( pFrm->GetShell(), *pOut, pSI, rText, nStart, nLength,
