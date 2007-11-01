@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendarwrapper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:24:13 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 16:25:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,19 +281,27 @@ void CalendarWrapper::setLocalDateTime( double nTimeInDays )
     {
         if ( xC.is() )
         {
-            sal_Int16 nZone = xC->getValue( CalendarFieldIndex::ZONE_OFFSET );
-            sal_Int16 nDST1 = xC->getValue( CalendarFieldIndex::DST_OFFSET );
-            double nLoc = nTimeInDays - (double)(nZone + nDST1) / 60.0 / 24.0;
+            // First set a nearby value to obtain the timezone and DST offset.
+            // This is necessary to let ICU choose the corresponding
+            // OlsonTimeZone transitions. Since ICU incorporates also
+            // historical data even the timezone may differ for different
+            // dates! (Which was the cause for #i76623# when the timezone of a
+            // previously set date was used.)
+            xC->setDateTime( nTimeInDays );
+            sal_Int16 nZone1 = xC->getValue( CalendarFieldIndex::ZONE_OFFSET );
+            sal_Int16 nDST1  = xC->getValue( CalendarFieldIndex::DST_OFFSET );
+            double nLoc = nTimeInDays - (double)(nZone1 + nDST1) / 60.0 / 24.0;
             xC->setDateTime( nLoc );
-            sal_Int16 nDST2 = xC->getValue( i18n::CalendarFieldIndex::DST_OFFSET );
+            sal_Int16 nZone2 = xC->getValue( CalendarFieldIndex::ZONE_OFFSET );
+            sal_Int16 nDST2  = xC->getValue( CalendarFieldIndex::DST_OFFSET );
             // If DSTs differ after calculation, we crossed boundaries. Do it
             // again, this time using the DST corrected initial value for the
             // real local time.
             // See also localtime/gmtime conversion pitfalls at
             // http://www.erack.de/download/timetest.c
-            if ( nDST1 != nDST2 )
+            if ( nZone1 != nZone2 || nDST1 != nDST2 )
             {
-                nLoc = nTimeInDays - (double)(nZone + nDST2) / 60.0 / 24.0;
+                nLoc = nTimeInDays - (double)(nZone2 + nDST2) / 60.0 / 24.0;
                 xC->setDateTime( nLoc );
                 // #i17222# If the DST onset rule says to switch from 00:00 to
                 // 01:00 and we tried to set onsetDay 00:00 with DST, the
@@ -301,11 +309,10 @@ void CalendarWrapper::setLocalDateTime( double nTimeInDays )
                 // want. So once again without DST, resulting in onsetDay
                 // 01:00 and DST. Yes, this seems to be weird, but logically
                 // correct.
-                sal_Int16 nDST3 = xC->getValue(
-                        i18n::CalendarFieldIndex::DST_OFFSET );
+                sal_Int16 nDST3 = xC->getValue( CalendarFieldIndex::DST_OFFSET );
                 if ( nDST2 != nDST3 && !nDST3 )
                 {
-                    nLoc = nTimeInDays - (double)(nZone + nDST3) / 60.0 / 24.0;
+                    nLoc = nTimeInDays - (double)(nZone2 + nDST3) / 60.0 / 24.0;
                     xC->setDateTime( nLoc );
                 }
             }
