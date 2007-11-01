@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DbAdminImpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:22:58 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:06:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ namespace dbaui
         /** extracts the connection type from the given set<p/>
             The connection type is determined by the value of the DSN item, analyzed by the TypeCollection item.
         */
-        DATASOURCE_TYPE     getDatasourceType(const SfxItemSet& _rSet) const;
+        static DATASOURCE_TYPE  getDatasourceType( const SfxItemSet& _rSet );
 
         /** returns the connection URL
             @return
