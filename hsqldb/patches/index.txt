@@ -66,3 +66,18 @@ Issue
 
 
 ====================================================================================
+File name
+---------
+  select_into.patch
+
+Description
+-----------
+  Fixes the problem that quoted table names which are created with SELECT INTO command get the correct
+  table type when asking the database meta data for it.
+Issue
+-----
+  http://www.openoffice.org/issues/show_bug.cgi?id=70160
+  Table created with SELECT INTO TABLE command is not visible
+
+
+====================================================================================
