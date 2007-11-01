@@ -2,16 +2,20 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\bin%_EXT%\local
 mkdir: %_DEST%\bin%_EXT%\remote
 mkdir: %_DEST%\bin%_EXT%\remote2
+mkdir: %_DEST%\bin%_EXT%\so
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\soffice.bin %_DEST%\bin%_EXT%\soffice.bin
 ..\%__SRC%\bin\officeloader.exe %_DEST%\bin%_EXT%\soffice.exe
 ..\%__SRC%\bin\soffice %_DEST%\bin%_EXT%\soffice.bin
+..\%__SRC%\bin\so\soffice.bin %_DEST%\bin%_EXT%\so\soffice.bin
+..\%__SRC%\bin\so\officeloader.exe %_DEST%\bin%_EXT%\so\soffice.exe
+..\%__SRC%\bin\so\soffice %_DEST%\bin%_EXT%\so\soffice.bin
 
 ..\%__SRC%\bin\soffice_oo.exe %_DEST%\bin%_EXT%\soffice_oo.exe
-..\%__SRC%\bin\soffice_so.exe %_DEST%\bin%_EXT%\soffice_so.exe
 ..\%__SRC%\bin\soffice_oo %_DEST%\bin%_EXT%\soffice_oo.bin
-..\%__SRC%\bin\soffice_so %_DEST%\bin%_EXT%\soffice_so.bin
+..\%__SRC%\bin\so\soffice_so.exe %_DEST%\bin%_EXT%\so\soffice_so.exe
+..\%__SRC%\bin\so\soffice_so %_DEST%\bin%_EXT%\so\soffice_so.bin
 
 ..\%__SRC%\bin\scalc.exe %_DEST%\bin%_EXT%\scalc.exe
 ..\%__SRC%\bin\sdraw.exe %_DEST%\bin%_EXT%\sdraw.exe
@@ -20,6 +24,12 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\bin\swriter.exe %_DEST%\bin%_EXT%\swriter.exe
 ..\%__SRC%\bin\sbase.exe %_DEST%\bin%_EXT%\sbase.exe
 ..\%__SRC%\bin\quickstart.exe %_DEST%\bin%_EXT%\quickstart.exe
+..\%__SRC%\bin\so\scalc.exe %_DEST%\bin%_EXT%\so\scalc.exe
+..\%__SRC%\bin\so\sdraw.exe %_DEST%\bin%_EXT%\so\sdraw.exe
+..\%__SRC%\bin\so\simpress.exe %_DEST%\bin%_EXT%\so\simpress.exe
+..\%__SRC%\bin\so\smath.exe %_DEST%\bin%_EXT%\so\smath.exe
+..\%__SRC%\bin\so\swriter.exe %_DEST%\bin%_EXT%\so\swriter.exe
+..\%__SRC%\bin\so\sbase.exe %_DEST%\bin%_EXT%\so\sbase.exe
 
 ..\%__SRC%\misc\soffice.exe.manifest %_DEST%\bin%_EXT%\soffice.exe.manifest
 ..\%__SRC%\misc\soffice.bin.manifest %_DEST%\bin%_EXT%\so\soffice.bin.manifest
@@ -55,6 +65,7 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\bin\guiloader.exe %_DEST%\bin%_EXT%\unopkg.exe
 ..\%__SRC%\bin\so\guiloader.exe %_DEST%\bin%_EXT%\so\unopkg.exe
 ..\%__SRC%\bin\unopkg %_DEST%\bin%_EXT%\unopkg.bin
+..\%__SRC%\bin\so\unopkg %_DEST%\bin%_EXT%\so\unopkg.bin
 ..\%__SRC%\bin\unopkg.bin %_DEST%\bin%_EXT%\unopkg.bin
 ..\%__SRC%\bin\so\unopkg.bin %_DEST%\bin%_EXT%\so\unopkg.bin
 ..\%__SRC%\misc\unopkg.sh %_DEST%\bin%_EXT%\unopkg
@@ -82,13 +93,6 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 
 ..\%COMMON_OUTDIR%\bin\osx*.zip %_DEST%\bin%_EXT%\osx*.zip
 ..\%__SRC%\misc\macosxrc.txt %_DEST%\bin%_EXT%\macosxrc.txt
-
-# source is gone...
-#mkdir: %COMMON_DEST%\pck%_EXT%\starsuite_bitmap
-#mkdir: %COMMON_DEST%\pck%_EXT%\staroffice_bitmap
-#..\res\so_login_image.bmp %COMMON_DEST%\pck%_EXT%\staroffice_bitmap\ssologin.bmp
-#..\res\ssu_login_image.bmp %COMMON_DEST%\pck%_EXT%\starsuite_bitmap\ssologin.bmp
-#..\res\open_login_image.bmp %COMMON_DEST%\pck%_EXT%\ssologin.bmp
 
 mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_dev
 mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_dev_nologo
