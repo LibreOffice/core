@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:27:59 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:35:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -767,7 +767,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const rtl::OUString* pType )
     rtl::OUString sShapeType;
     const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
     SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-    if ( pType )
+    if ( pType && pType->getLength() )
     {
         aPropVal.Name = sType;
         aPropVal.Value <<= *pType;
