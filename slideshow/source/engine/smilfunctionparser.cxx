@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smilfunctionparser.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:41:21 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:47:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -625,7 +625,7 @@ namespace slideshow
             const ::boost::spirit::parse_info<StringIteratorT> aParseInfo(
                   ::boost::spirit::parse( aStart,
                                           aEnd,
-                                          aExpressionGrammer,
+                                          aExpressionGrammer >> ::boost::spirit::end_p,
                                           ::boost::spirit::space_p ) );
             OSL_DEBUG_ONLY(::std::cout.flush()); // needed to keep stdout and cout in sync
 
