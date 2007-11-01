@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:15:06 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:56:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,7 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#include <com/sun/star/frame/XModuleManager.hpp>
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -820,12 +821,30 @@ void SvxSearchDialog::CalculateDelta_Impl()
 {
     DBG_ASSERT( pSearchItem, "no search item" );
 
+    bool bDrawApp = false;
+    bool bCalcApp = false;
+    const uno::Reference< frame::XFrame > xFrame = rBindings.GetActiveFrame();
+    uno::Reference< frame::XModuleManager > xModuleManager(
+        ::comphelper::getProcessServiceFactory()->createInstance(
+            DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), uno::UNO_QUERY );
+    if ( xModuleManager.is() )
+    {
+        try
+        {
+            ::rtl::OUString aModuleIdentifier = xModuleManager->identify( xFrame );
+            bCalcApp = aModuleIdentifier.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" );
+            bDrawApp = aModuleIdentifier.equalsAscii( "com.sun.star.drawing.DrawingDocument" );
+        }
+        catch ( uno::Exception& )
+        {
+        }
+    }
+
     if ( pImpl->bDeltaCalculated )
         return;
     else
         pImpl->bDeltaCalculated = TRUE;
 
-    bool bDrawApp = ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_DRAW );
     pMoreBtn->AddWindow( &aOptionsFL );
     if ( !bDrawApp )
         pMoreBtn->AddWindow( &aLayoutBtn );
@@ -889,7 +908,7 @@ void SvxSearchDialog::CalculateDelta_Impl()
         }
     }
 
-    if ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_CALC )
+    if ( bCalcApp )
     {
         Window* pWins[] =
         {
