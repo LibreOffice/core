@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:30:21 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:35:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,36 +65,39 @@ namespace dbaui
 {
     class OQueryTableConnectionData;
     class OTableListBoxControl;
+    class OQueryTableView;
+    class OJoinControl;
     class DlgQryJoin :  public ModalDialog
                         ,public IRelationControlInterface
     {
     protected:
-        FixedLine               aFL_Join;
-        FixedText               aFT_Title;
-        ListBox                 aLB_JoinType;
         FixedText               aML_HelpText;
         OKButton                aPB_OK;
         CancelButton            aPB_CANCEL;
         HelpButton              aPB_HELP;
 
+        OJoinControl*                       m_pJoinControl;
         OTableListBoxControl*               m_pTableControl;
         OJoinTableView::OTableWindowMap*    m_pTableMap;
+        OQueryTableView*                    m_pTableView;
 
-        EJoinType                   eJoinType;
-        OQueryTableConnectionData*  m_pConnData; // enth"alt linke und rechte Tabelle
-        OQueryTableConnectionData*  m_pOrigConnData;
+        EJoinType                           eJoinType;
+        TTableConnectionData::value_type    m_pConnData; // enth"alt linke und rechte Tabelle
+        TTableConnectionData::value_type    m_pOrigConnData;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
+
 
         DECL_LINK( OKClickHdl, Button* );
         DECL_LINK( LBChangeHdl, ListBox* );
+        DECL_LINK( NaturalToggleHdl, CheckBox* );
 
         /** setJoinType enables and set the new join type
             @param  _eNewJoinType   the new jointype
         */
         void setJoinType(EJoinType _eNewJoinType);
     public:
-        DlgQryJoin( Window * pParent,
-                    OQueryTableConnectionData* pData,
+        DlgQryJoin( OQueryTableView * pParent,
+                    const TTableConnectionData::value_type& pData,
                     OJoinTableView::OTableWindowMap*    _pTableMap,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                     BOOL _bAllowTableSelect);
@@ -104,7 +107,7 @@ namespace dbaui
         /** getConnectionData returns the current connection data
             @return the current connectiondata
         */
-        virtual OTableConnectionData* getConnectionData() const;
+        virtual TTableConnectionData::value_type getConnectionData() const;
 
         /** setValid set the valid inside, can be used for OK buttons
             @param  _bValid true when the using control allows an update
