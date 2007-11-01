@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 17:58:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:12:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,23 +36,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBAUI_DBWIZ2_HXX
 #include "dbwizsetup.hxx"
-#endif
-#ifndef DBAUI_DBSETUPCONNECTIONPAGES_HXX
+#include "dsmeta.hxx"
 #include "DBSetupConnectionPages.hxx"
-#endif
-#ifndef _DBAUI_DBADMINSETUP_HRC_
 #include "dbadminsetup.hrc"
-#endif
-#ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
+#include "dsitems.hxx"
+
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-#ifndef _DBAUI_DATASOURCEITEMS_HXX_
-#include "dsitems.hxx"
 #endif
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
@@ -166,6 +158,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
+#include <com/sun/star/sdbc/XDriverAccess.hpp>
 #endif
 /** === end UNO includes === **/
 
@@ -336,119 +331,30 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     defaultButton(WZB_NEXT);
     enableButtons(WZB_FINISH, sal_True);
 
-    if ( m_pCollection->hasAuthentication(DST_ADO))
-        declarePath( ADO_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ADO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( ADO_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ADO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_DBASE))
-        declarePath( DBASE_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_DBASE, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( DBASE_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_DBASE, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_FLAT))
-        declarePath( TEXT_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_TEXT, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( TEXT_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_TEXT, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    declarePath( SPREADSHEET_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_SPREADSHEET, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_ODBC))
-        declarePath( ODBC_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ODBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( ODBC_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ODBC, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_JDBC))
-        declarePath( JDBC_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_JDBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( JDBC_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_JDBC, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_MYSQL_ODBC))
-        declarePath( MYSQL_ODBC_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MYSQL_INTRO, PAGE_DBSETUPWIZARD_MYSQL_ODBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( MYSQL_ODBC_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MYSQL_INTRO, PAGE_DBSETUPWIZARD_MYSQL_ODBC, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_MYSQL_JDBC))
-        declarePath( MYSQL_JDBC_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MYSQL_INTRO, PAGE_DBSETUPWIZARD_MYSQL_JDBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( MYSQL_JDBC_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MYSQL_INTRO, PAGE_DBSETUPWIZARD_MYSQL_JDBC, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_MYSQL_ODBC))
-        declarePath( ORACLE_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ORACLE, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( ORACLE_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ORACLE, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_ADABAS))
-        declarePath( ADABAS_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ADABAS, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( ADABAS_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ADABAS, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_LDAP))
-        declarePath( LDAP_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_LDAP, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( LDAP_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_LDAP, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_MSACCESS))
-        declarePath( MSACCESS_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MSACCESS, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( MSACCESS_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MSACCESS, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_OUTLOOKEXP))
-        declarePath( OUTLOOKEXP_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( OUTLOOKEXP_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_OUTLOOK))
-        declarePath( OUTLOOK_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( OUTLOOK_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_MOZILLA))
-        declarePath( MOZILLA_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( MOZILLA_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_THUNDERBIRD))
-        declarePath( THUNDERBIRD_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( THUNDERBIRD_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_EVOLUTION))
-        declarePath( EVOLUTION_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( EVOLUTION_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_EVOLUTION_GROUPWISE))
-        declarePath( EVOLUTION_PATH_GROUPWISE, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( EVOLUTION_PATH_GROUPWISE, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_EVOLUTION_LDAP))
-        declarePath( EVOLUTION_PATH_LDAP, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( EVOLUTION_PATH_LDAP, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_KAB))
-        declarePath( KAB_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( KAB_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_MACAB))
-        declarePath( MACAB_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( MACAB_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(m_pCollection->getEmbeddedDatabaseType(getORB())))
-        declarePath( CREATENEW_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( CREATENEW_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    if ( m_pCollection->hasAuthentication(DST_USERDEFINE1))
-        declarePath( USERDEFINED_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_USERDEFINED,PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-    else
-        declarePath( USERDEFINED_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_USERDEFINED,PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
-
-    declarePath( OPEN_DOC_PATH, PAGE_DBSETUPWIZARD_INTRO, WZS_INVALID_STATE );
+    declareAuthDepPath( DST_ADO,                ADO_PATH,               PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ADO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_DBASE,              DBASE_PATH,             PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_DBASE, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_FLAT,               TEXT_PATH,              PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_TEXT, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declarePath       (                         SPREADSHEET_PATH,       PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_SPREADSHEET, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_ODBC,               ODBC_PATH,              PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ODBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_JDBC,               JDBC_PATH,              PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_JDBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_MYSQL_ODBC,         MYSQL_ODBC_PATH,        PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MYSQL_INTRO, PAGE_DBSETUPWIZARD_MYSQL_ODBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_MYSQL_JDBC,         MYSQL_JDBC_PATH,        PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MYSQL_INTRO, PAGE_DBSETUPWIZARD_MYSQL_JDBC, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_ORACLE_JDBC,        ORACLE_PATH,            PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ORACLE, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_ADABAS,             ADABAS_PATH,            PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ADABAS, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_LDAP,               LDAP_PATH,              PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_LDAP, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_MSACCESS,           MSACCESS_PATH,          PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MSACCESS, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_OUTLOOKEXP,         OUTLOOKEXP_PATH,        PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_OUTLOOK,            OUTLOOK_PATH,           PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_MOZILLA,            MOZILLA_PATH,           PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_THUNDERBIRD,        THUNDERBIRD_PATH,       PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_EVOLUTION,          EVOLUTION_PATH,         PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_EVOLUTION_GROUPWISE,EVOLUTION_PATH_GROUPWISE, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_EVOLUTION_LDAP,     EVOLUTION_PATH_LDAP,    PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_KAB,                KAB_PATH,               PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_MACAB,              MACAB_PATH,             PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1);
+    declareAuthDepPath( getDefaultDatabaseType(),CREATENEW_PATH,        PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_USERDEFINE1,        USERDEFINED_PATH,       PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_USERDEFINED,PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declarePath       (                         OPEN_DOC_PATH,          PAGE_DBSETUPWIZARD_INTRO, -1 );
 
     m_pPrevPage->SetHelpId(HID_DBWIZ_PREVIOUS);
     m_pNextPage->SetHelpId(HID_DBWIZ_NEXT);
@@ -459,6 +365,29 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     ActivatePage();
 }
 
+void ODbTypeWizDialogSetup::declareAuthDepPath( DATASOURCE_TYPE _eType, PathId _nPathId, WizardState _nFirstState, ... )
+{
+    bool bHasAuthentication = DataSourceMetaData::getAuthentication( _eType ) != AuthNone;
+
+    // collect the elements of the path
+    Path aPath;
+
+    va_list aStateList;
+    va_start( aStateList, _nFirstState );
+
+    WizardState nState = _nFirstState;
+    while ( nState != WZS_INVALID_STATE )
+    {
+        if ( bHasAuthentication || ( nState != PAGE_DBSETUPWIZARD_AUTHENTIFICATION ) )
+            aPath.push_back( nState );
+
+        nState = ::sal::static_int_cast< WizardState >( va_arg( aStateList, int ) );
+    }
+    va_end( aStateList );
+
+    // call base method
+    ::svt::RoadmapWizard::declarePath( _nPathId, aPath );
+}
 
 String ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ){
     String sRoadmapItem;
@@ -582,7 +511,6 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
             { DST_EVOLUTION_GROUPWISE, EVOLUTION_PATH_GROUPWISE },
             { DST_EVOLUTION_LDAP, EVOLUTION_PATH_LDAP },
             { DST_KAB,          KAB_PATH            },
-            { DST_MACAB,        MACAB_PATH          },
             { DST_USERDEFINE1,  USERDEFINED_PATH    },
             { DST_USERDEFINE2,  USERDEFINED_PATH    },
             { DST_USERDEFINE3,  USERDEFINED_PATH    },
@@ -653,7 +581,6 @@ sal_Bool ODbTypeWizDialogSetup::IsConnectionUrlRequired()
     switch ( m_eType )
     {
         case DST_KAB:
-        case DST_MACAB:
         case DST_EVOLUTION:
         case DST_EVOLUTION_GROUPWISE:
         case DST_EVOLUTION_LDAP:
@@ -700,7 +627,7 @@ SfxItemSet* ODbTypeWizDialogSetup::getWriteOutputSet()
     return m_pImpl->createConnection();
 }
 // -----------------------------------------------------------------------------
-Reference< XMultiServiceFactory > ODbTypeWizDialogSetup::getORB()
+Reference< XMultiServiceFactory > ODbTypeWizDialogSetup::getORB() const
 {
     return m_pImpl->getORB();
 }
@@ -1064,17 +991,30 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     }
 
     //-------------------------------------------------------------------------
+    DATASOURCE_TYPE ODbTypeWizDialogSetup::getDefaultDatabaseType() const
+    {
+        DATASOURCE_TYPE eRet = DST_DBASE;
+
+        ::rtl::OUString sURL = m_pCollection->getDatasourcePrefix( DST_EMBEDDED_HSQLDB );
+        Reference< XDriverAccess > xDriverManager( getORB()->createInstance( SERVICE_SDBC_DRIVERMANAGER ), UNO_QUERY );
+        if ( xDriverManager.is() && xDriverManager->getDriverByURL( sURL ).is() )
+            eRet = DST_EMBEDDED_HSQLDB;
+
+        return eRet;
+    }
+
+    //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::CreateDatabase()
     {
         ::rtl::OUString sUrl;
-        DATASOURCE_TYPE eType = m_pCollection->getEmbeddedDatabaseType(getORB());
-        if ( eType == DST_EMBEDDED )
+        DATASOURCE_TYPE eType = getDefaultDatabaseType();
+        if ( eType == DST_EMBEDDED_HSQLDB )
         {
-            sUrl = m_pCollection->getEmbeddedDatabaseURL(getORB());
+            sUrl = m_pCollection->getDatasourcePrefix( DST_EMBEDDED_HSQLDB );
             Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
             OSL_ENSURE(xDatasource.is(),"DataSource is null!");
             if ( xDatasource.is() )
-                xDatasource->setPropertyValue(PROPERTY_INFO,makeAny(m_pCollection->getEmbeddedDatabaseProperties(getORB())));
+                xDatasource->setPropertyValue( PROPERTY_INFO, makeAny( m_pCollection->getDefaultDBSettings( DST_EMBEDDED_HSQLDB ) ) );
             m_pImpl->translateProperties(xDatasource,*m_pOutSet);
         }
         if ( eType == DST_DBASE )
@@ -1174,13 +1114,13 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         sal_Bool bElementExists = sal_True;
 
         INetURLObject aExistenceCheck( _rURL );
-        for ( sal_Int32 i = 1; bElementExists; ++i )
+        for ( sal_Int32 i = 1; bElementExists; )
         {
             bElementExists = xSimpleFileAccess->exists( aExistenceCheck.GetMainURL( INetURLObject::NO_DECODE ) );
             if ( bElementExists )
             {
-                ++i;
                 aExistenceCheck.setBase( BaseName.concat( ::rtl::OUString::valueOf( i ) ) );
+                ++i;
             }
         }
         return aExistenceCheck.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
