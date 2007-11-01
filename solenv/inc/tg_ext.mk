@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-18 08:01:29 $
+#   last change: $Author: hr $ $Date: 2007-11-01 17:11:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,7 @@ $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.zip
     @-$(RM) $@
-    noop $(assign UNPACKCMD := unzip $(BACK_PATH)download$/$(TARFILE_NAME).zip)
+    noop $(assign UNPACKCMD := unzip -o $(BACK_PATH)download$/$(TARFILE_NAME).zip)
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
