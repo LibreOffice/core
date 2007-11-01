@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 09:06:28 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:15:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -375,7 +375,7 @@ int macxp_resolveAlias(char *path, int buflen);
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
     !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && !defined(SCO)  && \
     !defined(AIX)     && !defined(HPUX)   && \
-    !defined(SOLARIS) && !defined(IRIX)   && !defined(MAC) && \
+    !defined(SOLARIS) && !defined(IRIX)   && \
     !defined(MACOSX)
 #   error "Target platform not specified!"
 #endif
