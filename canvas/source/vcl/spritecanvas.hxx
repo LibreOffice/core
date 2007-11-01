@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritecanvas.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:48:53 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:43:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,10 +154,12 @@ namespace vclcanvas
         virtual ::rtl::OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // RepaintTarget
-        virtual bool repaint( const GraphicObjectSharedPtr& rGrf,
-                              const ::Point&                rPt,
-                              const ::Size&                 rSz,
-                              const GraphicAttr&            rAttr ) const;
+        virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
+                              const ::com::sun::star::rendering::ViewState&   viewState,
+                              const ::com::sun::star::rendering::RenderState& renderState,
+                              const ::Point&                                  rPt,
+                              const ::Size&                                   rSz,
+                              const GraphicAttr&                              rAttr ) const;
 
         /// Retrieve real output device for this Canvas
         OutputDevice* getOutDev() const;
