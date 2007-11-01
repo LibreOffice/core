@@ -5,9 +5,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:48:39 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:34:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -513,7 +513,7 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         pWindow = pWindow->GetParent();
     }
 
-    ResMgr rMgr = DIALOG_MGR();
+    ResMgr& rMgr = DIALOG_MGR();
     String aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
     String aName( aEdtName.GetText() );
     XColorEntry* pEntry;
