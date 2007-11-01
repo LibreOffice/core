@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:31:39 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,6 @@ namespace dbaui
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
-        virtual OTableWindowData* createTableWindowData();
         virtual OJoinDesignView*  getJoinView();
         // ask the user if the design should be saved when it is modified
         virtual short saveModified();
