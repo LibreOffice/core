@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtfactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:13:30 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
+#include <connectivity/virtualdbtools.hxx>
+#include <connectivity/formattedcolumnvalue.hxx>
+
 #ifndef CONNECTIVITY_DBTOOLS_DBTFACTORY_HXX
 #include "dbtfactory.hxx"
-#endif
-#ifndef CONNECTIVITY_VIRTUAL_DBTOOLS_HXX
-#include <connectivity/virtualdbtools.hxx>
 #endif
 #ifndef CONNECTIVITY_DBTOOLS_PARSER_SIMPLE_HXX
 #include "parser_s.hxx"
@@ -108,6 +108,14 @@ namespace connectivity
     ::rtl::Reference< simple::IDataAccessTools > ODataAccessToolsFactory::getDataAccessTools()
     {
         return m_xToolsHelper;
+    }
+
+    //----------------------------------------------------------------
+    ::std::auto_ptr< ::dbtools::FormattedColumnValue > ODataAccessToolsFactory::createFormattedColumnValue( const ::comphelper::ComponentContext& _rContext,
+        const Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet, const Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn )
+    {
+        ::std::auto_ptr< ::dbtools::FormattedColumnValue > pValue( new ::dbtools::FormattedColumnValue( _rContext, _rxRowSet, _rxColumn ) );
+        return pValue;
     }
 
     //----------------------------------------------------------------
