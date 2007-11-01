@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OPreparedStatement.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:30:59 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:51:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ namespace connectivity
                                                                         //  for each row returned by
                                                                         //  DatabaseMetaData.getTypeInfo.
 
-            int             numParams;      // Number of parameter markers
+            SQLSMALLINT     numParams;      // Number of parameter markers
                                             //  for the prepared statement
 
             OBoundParam*    boundParams;
