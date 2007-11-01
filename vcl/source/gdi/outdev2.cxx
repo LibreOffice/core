@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:12:08 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:48:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -712,7 +712,7 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
             if ( nMirrFlags )
                 aBmp.Mirror( nMirrFlags );
 
-            /* #i75264#
+            /* #i75264# (corrected with #i81576#)
             * sometimes a bitmap is scaled to a ridiculous size and drawn
             * to a quite normal VDev, so only a very small part of
             * the scaled bitmap will be visible. However actually scaling
@@ -729,33 +729,40 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
                      (meOutDevType == OUTDEV_VIRDEV && mpPDFWriter == 0 ) )
                 {
                     // reduce scaling to something reasonable taking into account the output size
-                    if( aPosAry.mnDestWidth > 3*mnOutWidth )
+                    if( aPosAry.mnDestWidth > 3*mnOutWidth && aPosAry.mnSrcWidth )
                     {
-                        int nFactor = aPosAry.mnDestWidth/(mnOutWidth*2);
-                        long nNewDestWidth = aPosAry.mnDestWidth/nFactor;
-                        long nNewSrcWidth = aPosAry.mnSrcWidth/nFactor;
-                        if( aPosAry.mnDestX + nNewDestWidth < (mnOutWidth*3/2) )
+                        const double nScaleX = aPosAry.mnDestWidth/double(aPosAry.mnSrcWidth);
+
+                        if( aPosAry.mnDestX + aPosAry.mnDestWidth > mnOutWidth )
                         {
-                            int nMoveTile = -aPosAry.mnDestX / nNewDestWidth;
-                            aPosAry.mnDestX += nMoveTile * nNewDestWidth;
-                            aPosAry.mnSrcX += nMoveTile * nNewSrcWidth;
+                            aPosAry.mnDestWidth = Max(long(0),mnOutWidth-aPosAry.mnDestX);
                         }
-                        aPosAry.mnDestWidth = nNewDestWidth;
-                        aPosAry.mnSrcWidth = nNewSrcWidth;
+                        if( aPosAry.mnDestX < 0 )
+                        {
+                            aPosAry.mnDestWidth += aPosAry.mnDestX;
+                            aPosAry.mnSrcX -= sal::static_int_cast<long>(aPosAry.mnDestX / nScaleX);
+                            aPosAry.mnDestX = 0;
+                        }
+
+                        aPosAry.mnSrcWidth = sal::static_int_cast<long>(aPosAry.mnDestWidth / nScaleX);
                     }
-                    if( aPosAry.mnDestHeight > 3*mnOutHeight )
+
+                    if( aPosAry.mnDestHeight > 3*mnOutHeight && aPosAry.mnSrcHeight != 0 )
                     {
-                        int nFactor = aPosAry.mnDestHeight/(mnOutHeight*2);
-                        long nNewDestHeight = aPosAry.mnDestHeight/nFactor;
-                        long nNewSrcHeight = aPosAry.mnSrcHeight/nFactor;
-                        if( aPosAry.mnDestY + nNewDestHeight < (mnOutHeight*3/2) )
+                        const double nScaleY = aPosAry.mnDestHeight/double(aPosAry.mnSrcHeight);
+
+                        if( aPosAry.mnDestY + aPosAry.mnDestHeight > mnOutHeight )
                         {
-                            int nMoveTile = -aPosAry.mnDestY / nNewDestHeight;
-                            aPosAry.mnDestY += nMoveTile * nNewDestHeight;
-                            aPosAry.mnSrcY += nMoveTile * nNewSrcHeight;
+                            aPosAry.mnDestHeight = Max(long(0),mnOutHeight-aPosAry.mnDestY);
                         }
-                        aPosAry.mnDestHeight = nNewDestHeight;
-                        aPosAry.mnSrcHeight = nNewSrcHeight;
+                        if( aPosAry.mnDestY < 0 )
+                        {
+                            aPosAry.mnDestHeight += aPosAry.mnDestY;
+                            aPosAry.mnSrcY -= sal::static_int_cast<long>(aPosAry.mnDestY / nScaleY);
+                            aPosAry.mnDestY = 0;
+                        }
+
+                        aPosAry.mnSrcHeight = sal::static_int_cast<long>(aPosAry.mnDestHeight / nScaleY);
                     }
                 }
             }
