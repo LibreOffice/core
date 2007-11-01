@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlparserclient.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:13:37 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:59:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,13 +58,12 @@ namespace svxform
         m_xORB = _rxORB;
     }
     //--------------------------------------------------------------------
-    //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
-    void OSQLParserClient::create() const
+    bool OSQLParserClient::ensureLoaded() const
     {
-        if (!getFactory().is())
-            ODbtoolsClient::create();
-        if (getFactory().is())
-             m_xParser = getFactory()->createSQLParser(m_xORB,getParseContext());
+        if ( !ODbtoolsClient::ensureLoaded() )
+            return false;
+         m_xParser = getFactory()->createSQLParser(m_xORB,getParseContext());
+        return m_xParser.is();
     }
 
 //........................................................................
