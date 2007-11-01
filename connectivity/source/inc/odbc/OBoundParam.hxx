@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OBoundParam.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:34:29 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:51:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,8 @@ namespace connectivity
             //--------------------------------------------------------------------
             sal_Int8* allocBindDataBuffer (sal_Int32 bufLen)
             {
+                if ( binaryData )
+                    delete [] binaryData;
                 binaryData = new sal_Int8[bufLen];
 
                 // Reset the input stream, we are doing a new bind
