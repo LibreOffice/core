@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:32:06 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -524,7 +524,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUString& rString, const
 
             m_aChilds[0]->impl_parseNodeToString_throw( rString, aNewParam );
             aNewParam.bQuote = rParam.bQuote;
-            aNewParam.bPredicate = sal_False; // disable [ ] around names
+            //aNewParam.bPredicate = sal_False; // disable [ ] around names // look at i73215
             ::rtl::OUString aStringPara;
             for (sal_uInt32 i=1; i<nCount; i++)
             {
@@ -764,7 +764,7 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUString& rString, 
     const OSQLParseNode* pParaNode = NULL;
 
     SQLParseNodeParameter aNewParam(rParam);
-    aNewParam.bQuote = sal_True;
+    //aNewParam.bQuote = sal_True; // why setting this to true? @see http://www.openoffice.org/issues/show_bug.cgi?id=75557
 
     // if there is a field given we don't display the fieldname, if there are any
     sal_Bool bAddName = sal_True;
@@ -1617,7 +1617,7 @@ OSQLParseNode::OSQLParseNode(const sal_Char * pNewValue,
         ,m_nNodeID(nNewNodeID)
 {
 
-    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
+    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_CONCAT,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
 }
 //-----------------------------------------------------------------------------
 OSQLParseNode::OSQLParseNode(const ::rtl::OString &_rNewValue,
@@ -1629,7 +1629,7 @@ OSQLParseNode::OSQLParseNode(const ::rtl::OString &_rNewValue,
         ,m_nNodeID(nNewNodeID)
 {
 
-    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
+    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_CONCAT,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
 }
 //-----------------------------------------------------------------------------
 OSQLParseNode::OSQLParseNode(const sal_Unicode * pNewValue,
@@ -1641,7 +1641,7 @@ OSQLParseNode::OSQLParseNode(const sal_Unicode * pNewValue,
         ,m_nNodeID(nNewNodeID)
 {
 
-    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
+    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_CONCAT,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
 }
 //-----------------------------------------------------------------------------
 OSQLParseNode::OSQLParseNode(const ::rtl::OUString &_rNewValue,
@@ -1653,7 +1653,7 @@ OSQLParseNode::OSQLParseNode(const ::rtl::OUString &_rNewValue,
         ,m_nNodeID(nNewNodeID)
 {
 
-    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_ACCESS_DATE,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
+    OSL_ENSURE(m_eNodeType >= SQL_NODE_RULE && m_eNodeType <= SQL_NODE_CONCAT,"OSQLParseNode: mit unzulaessigem NodeType konstruiert");
 }
 //-----------------------------------------------------------------------------
 OSQLParseNode::OSQLParseNode(const OSQLParseNode& rParseNode)
@@ -1877,20 +1877,23 @@ void OSQLParseNode::disjunctiveNormalForm(OSQLParseNode*& pSearchCondition)
         else if(pRight->count() == 3 && SQL_ISRULE(pRight,boolean_primary) && SQL_ISRULE(pRight->getChild(1),search_condition))
         {
             // and-or tree  on right side
-            OSQLParseNode* pOr = pRight->getChild(1);
-            OSQLParseNode* pNewLeft = NULL;
-            OSQLParseNode* pNewRight = NULL;
+            if ( pRight->getChild(1)->getByRule(OSQLParseNode::boolean_term) )
+            {
+                OSQLParseNode* pOr = pRight->getChild(1);
+                OSQLParseNode* pNewLeft = NULL;
+                OSQLParseNode* pNewRight = NULL;
 
-            // cut left from parent
-            pSearchCondition->removeAt((sal_uInt32)0);
+                // cut left from parent
+                pSearchCondition->removeAt((sal_uInt32)0);
 
-            pNewRight   = MakeANDNode(pLeft,pOr->removeAt(2));
-            pNewLeft    = MakeANDNode(new OSQLParseNode(*pLeft),pOr->removeAt((sal_uInt32)0));
-            pNewNode    = MakeORNode(pNewLeft,pNewRight);
+                pNewRight   = MakeANDNode(pLeft,pOr->removeAt(2));
+                pNewLeft    = MakeANDNode(new OSQLParseNode(*pLeft),pOr->removeAt((sal_uInt32)0));
+                pNewNode    = MakeORNode(pNewLeft,pNewRight);
 
-            // and append new Node
-            replaceAndReset(pSearchCondition,pNewNode);
-            disjunctiveNormalForm(pSearchCondition);
+                // and append new Node
+                replaceAndReset(pSearchCondition,pNewNode);
+                disjunctiveNormalForm(pSearchCondition);
+            }
         }
         else if(SQL_ISRULE(pLeft,boolean_primary) && (!SQL_ISRULE(pLeft->getChild(1),search_condition) || !SQL_ISRULE(pLeft->getChild(1),boolean_term)))
             pSearchCondition->replace(pLeft, pLeft->removeAt(1));
@@ -1954,7 +1957,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_B
     {
         OSQLParseNode *pNot = pSearchCondition->removeAt((sal_uInt32)0);
         delete pNot;
-        OSQLParseNode *pBooleanTest = pSearchCondition->removeAt((sal_uInt32)1);
+        OSQLParseNode *pBooleanTest = pSearchCondition->removeAt((sal_uInt32)0);
         pBooleanTest->setParent(NULL);
         replaceAndReset(pSearchCondition,pBooleanTest);
 
@@ -2092,7 +2095,7 @@ void OSQLParseNode::absorptions(OSQLParseNode*& pSearchCondition)
             pNewNode = pSearchCondition->removeAt((sal_uInt32)2);
             replaceAndReset(pSearchCondition,pNewNode);
         }
-        else
+        else if ( p2ndSearch->getByRule(OSQLParseNode::boolean_term) )
         {
             // a and ( b or c ) -> ( a and b ) or ( a and c )
             // ( b or c ) and a -> ( a and b ) or ( a and c )
