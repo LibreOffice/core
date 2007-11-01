@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DateConversion.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:57:56 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                 // einfache Nummer dar -> anpassen
                 ::rtl::OUString sExpanded(rString);
                 static ::rtl::OUString s_sPercentSymbol = ::rtl::OUString::createFromAscii("%");
-                    // need a method to add a sal_Unicode to a string, 'til then we use a static string const Exception&
+                    // need a method to add a sal_Unicode to a string, 'til then we use a static string
                 sExpanded += s_sPercentSymbol;
                 fValue = xFormatter->convertStringToNumber(nKeyToUse, sExpanded);
             }
