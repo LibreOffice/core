@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:40:02 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:27:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -968,6 +968,8 @@ bool SlotManager::RenameSlideFromDrawViewShell( USHORT nPageId, const String & r
     SdPage* pPageToRename = NULL;
     PageKind ePageKind = mrController.GetModel().GetPageType();
 
+    SfxUndoManager* pManager = pDocument->GetDocSh()->GetUndoManager();
+
     if( mrController.GetModel().GetEditMode() == EM_PAGE )
     {
         pPageToRename = mrController.GetActualPage();
@@ -980,7 +982,6 @@ bool SlotManager::RenameSlideFromDrawViewShell( USHORT nPageId, const String & r
         SetOfByte aVisibleLayers = mrController.GetActualPage()->TRG_GetMasterPageVisibleLayers();
 
         // (#67720#)
-        SfxUndoManager* pManager = pDocument->GetDocSh()->GetUndoManager();
         ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
             pManager, pDocument, pUndoPage, rName, pUndoPage->GetAutoLayout(),
             aVisibleLayers.IsSet( nBackground ),
@@ -1003,8 +1004,11 @@ bool SlotManager::RenameSlideFromDrawViewShell( USHORT nPageId, const String & r
         // rename MasterPage -> rename LayoutTemplate
         pPageToRename = pDocument->GetMasterSdPage( nPageId, ePageKind );
         if (pPageToRename != NULL)
-            pDocument->RenameLayoutTemplate(
-                pPageToRename->GetLayoutName(), rName );
+        {
+            const String aOldLayoutName( pPageToRename->GetLayoutName() );
+            pManager->AddUndoAction( new RenameLayoutTemplateUndoAction( pDocument, aOldLayoutName, rName ) );
+            pDocument->RenameLayoutTemplate( aOldLayoutName, rName );
+        }
     }
 
     bool bSuccess = ( FALSE != rName.Equals( pPageToRename->GetName()));
