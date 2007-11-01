@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:57:36 $
+#   last change: $Author: hr $ $Date: 2007-11-01 18:05:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,10 @@ SCP1FILES +=                           \
              module_quickstart.par     \
              file_quickstart.par       \
              registryitem_quickstart.par
+
+.IF "$(ENABLE_DIRECTX)"!=""
+SCP1FILES += directxcanvas.par
+.ENDIF
 
 .IF "$(DISABLE_ACTIVEX)"==""
 SCP1FILES +=                           \
