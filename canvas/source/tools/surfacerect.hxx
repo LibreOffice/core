@@ -4,9 +4,9 @@
  *
  *  $RCSfile: surfacerect.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:24:45 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 18:01:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ namespace canvas
         ::basegfx::B2IPoint maBackup;
         bool                bEnabled;
 
-        SurfaceRect( const ::basegfx::B2ISize &rSize ) :
+        explicit SurfaceRect( const ::basegfx::B2ISize &rSize ) :
             maPos(),
             maSize(rSize),
             maBackup(),
@@ -64,19 +64,16 @@ namespace canvas
         {
         }
 
-        void enable( bool flag ) { bEnabled=flag; }
-        bool isEnabled() const { return bEnabled; }
-
         // coordinates contained in this rectangle are
         // constrained to the following rules:
         // 1) p.x >= pos.x
-        // 2) p.x < pos.x+size.x
+        // 2) p.x <= pos.x+size.x
         // 3) p.y >= pos.y
-        // 4) p.y < pos.y+size.y
+        // 4) p.y <= pos.y+size.y
         // in other words, 'size' means the number of pixels
-        // this rectangle encloses. for example with pos[0,0]
-        // and size[512,512], p[512,512] would return *not* inside.
-        // a size of [0,0] therefore denotes an empty rectangle.
+        // this rectangle encloses plus one. for example with pos[0,0]
+        // and size[512,512], p[512,512] would return inside.
+        // a size of [0,0] therefore denotes a one-by-one rectangle.
         bool pointInside( sal_Int32 px, sal_Int32 py ) const
         {
             const sal_Int32 x1(maPos.getX());
@@ -125,10 +122,10 @@ namespace canvas
             const sal_Int32 y1(maPos.getY());
             const sal_Int32 x2(maPos.getX()+maSize.getX());
             const sal_Int32 y2(maPos.getY()+maSize.getY());
-            if(r.hLineIntersect(x1,x2-1,y1)) return true;
-            if(r.hLineIntersect(x1,x2-1,y2-1)) return true;
-            if(r.vLineIntersect(x1,y1,y2-1)) return true;
-            if(r.vLineIntersect(x2-1,y1,y2-1)) return true;
+            if(r.hLineIntersect(x1,x2,y1)) return true;
+            if(r.hLineIntersect(x1,x2,y2)) return true;
+            if(r.vLineIntersect(x1,y1,y2)) return true;
+            if(r.vLineIntersect(x2,y1,y2)) return true;
             return false;
         }
 
@@ -136,18 +133,13 @@ namespace canvas
         {
             const sal_Int32 x1(maPos.getX());
             const sal_Int32 y1(maPos.getY());
-            const sal_Int32 x2(maPos.getX()+maSize.getX()-1);
-            const sal_Int32 y2(maPos.getY()+maSize.getY()-1);
+            const sal_Int32 x2(maPos.getX()+maSize.getX());
+            const sal_Int32 y2(maPos.getY()+maSize.getY());
             if(!(r.pointInside(x1,y1))) return false;
             if(!(r.pointInside(x2,y1))) return false;
             if(!(r.pointInside(x2,y2))) return false;
             if(!(r.pointInside(x1,y2))) return false;
             return true;
-        }
-
-        sal_uInt64 getArea() const
-        {
-            return sal::static_int_cast<sal_uInt64>(maSize.getX()*maSize.getY());
         }
     };
 }
