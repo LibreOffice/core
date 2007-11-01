@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:41:03 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 11:51:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,9 +223,12 @@ using namespace ::rtl;
 BOOL lcl_IsNumeric(const String&);
 
 //-----------------------------------------------------------------------------
-//aus unoobj.cxx
+// from unoobj.cxx
 extern void lcl_SetTxtFmtColl(const uno::Any& rAny, SwPaM& rPaM)    throw (lang::IllegalArgumentException);
 extern void lcl_setCharStyle(SwDoc* pDoc, const uno::Any aValue, SfxItemSet& rSet) throw (lang::IllegalArgumentException);
+
+// from swtable.cxx
+extern void lcl_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
 
 #define UNO_TABLE_COLUMN_SUM    10000
 
@@ -477,13 +480,17 @@ void lcl_GetCellPosition( const String &rCellName,
             if (aColTxt.Len() && aRowTxt.Len())
             {
                 sal_Int32 nColIdx = 0;
-                for (xub_StrLen i = 0;  i < aColTxt.Len();  ++i)
+                sal_Int32 nLen = aColTxt.Len();
+                for (xub_StrLen i = 0;  i < nLen;  ++i)
                 {
+                    nColIdx = 52 * nColIdx;
+                    if (i < nLen - 1)
+                        ++nColIdx;
                     sal_Unicode cChar = aColTxt.GetBuffer()[i];
                     if ('A' <= cChar && cChar <= 'Z')
-                        nColIdx = 52 * nColIdx + (cChar - 'A');
+                        nColIdx = nColIdx + (cChar - 'A');
                     else if ('a' <= cChar && cChar <= 'z')
-                        nColIdx = 52 * nColIdx + (26 + cChar - 'a');
+                        nColIdx = nColIdx + (26 + cChar - 'a');
                     else
                     {
                         nColIdx = -1;   // sth failed
@@ -585,22 +592,25 @@ int lcl_CompareCellRanges(
 // (note that the indices nColumn and nRow are 0 based here)
 String lcl_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
 {
+#if OSL_DEBUG_LEVEL > 1
+    {
+        sal_Int32 nCol, nRow;
+        lcl_GetCellPosition( String::CreateFromAscii("z1"), nCol, nRow);
+        DBG_ASSERT( nCol == 51, "lcl_GetCellPosition failed" );
+        lcl_GetCellPosition( String::CreateFromAscii("AA1"), nCol, nRow);
+        DBG_ASSERT( nCol == 52, "lcl_GetCellPosition failed" );
+        lcl_GetCellPosition( String::CreateFromAscii("AB1"), nCol, nRow);
+        DBG_ASSERT( nCol == 53, "lcl_GetCellPosition failed" );
+        lcl_GetCellPosition( String::CreateFromAscii("BB1"), nCol, nRow);
+        DBG_ASSERT( nCol == 105, "lcl_GetCellPosition failed" );
+    }
+#endif
+
     String sCellName;
     if (nColumn < 0 || nRow < 0)
         return sCellName;
-    sal_Int32 nDiv = nColumn;
-    sal_Int32 nMod = 0;
-    sal_Bool bFirst = sal_True;
-    while( 0 != (nDiv = nDiv - nMod) || bFirst )
-    {
-        nMod = nDiv % 52;
-        sal_Int32 nMod2 = nDiv % 26;
-        char cCol = nMod < 26 ? 'A' : 'a';
-        cCol = cCol + static_cast< char >(nMod2);
-        sCellName.Insert(cCol, 0);
-        bFirst = sal_False;
-    }
-    sCellName += String::CreateFromInt32(++nRow);
+    lcl_GetTblBoxColStr( static_cast< USHORT >(nColumn), sCellName );
+    sCellName += String::CreateFromInt32( nRow + 1 );
     return sCellName;
 }
 
