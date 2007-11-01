@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:42:27 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 16:24:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,21 +353,21 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
             rtl::OUString sMacro;
             SvxMacro* pMacro = ((SvxMacroItem*)pItem)->GetMacroTable().Get( SFX_EVENT_MOUSECLICK_OBJECT );
             if ( pMacro )
+        sMacro = pMacro->GetMacName();
+
+            if ( pObj->IsGroupObject() )
             {
-                if ( pObj->IsGroupObject() )
+                SdrObjList* pOL = pObj->GetSubList();
+                ULONG nObj = pOL->GetObjCount();
+                for ( ULONG index=0; index<nObj; ++index )
                 {
-                    SdrObjList* pOL = pObj->GetSubList();
-                    ULONG nObj = pOL->GetObjCount();
-                    for ( ULONG index=0; index<nObj; ++index )
-                    {
-                        pInfo = ScDrawLayer::GetMacroInfo( pOL->GetObj(index), TRUE );
-                        pInfo->SetMacro( pMacro->GetMacName() );
-                    }
+                    pInfo = ScDrawLayer::GetMacroInfo( pOL->GetObj(index), TRUE );
+                    pInfo->SetMacro( sMacro );
                 }
-                else
-                    pInfo->SetMacro( pMacro->GetMacName() );
-                lcl_setModified( GetObjectShell() );
             }
+            else
+                pInfo->SetMacro( sMacro );
+            lcl_setModified( GetObjectShell() );
         }
     }
 
