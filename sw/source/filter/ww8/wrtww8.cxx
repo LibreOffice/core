@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:02:31 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 13:45:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2219,6 +2219,14 @@ ULONG SwWW8Writer::StoreDoc()
 
     PrepareStorage();
 
+    // --> OD 2007-10-08 #i81405#
+    // Collect anchored objects before changing the redline mode.
+    if (bWrtWW8)
+        maFrames = GetAllFrames(*pDoc, bWriteAll ? 0 : pOrigPam);
+    else
+        maFrames = GetNonDrawingFrames(*pDoc, bWriteAll ? 0 : pOrigPam);
+    // <--
+
     USHORT nRedlineMode = pDoc->GetRedlineMode();
     if (pDoc->GetRedlineTbl().Count())
     {
@@ -2335,13 +2343,6 @@ ULONG SwWW8Writer::StoreDoc()
     pDop->fRevMarking = 0 != (nsRedlineMode_t::REDLINE_ON & nRedlineMode);
     pDop->fRMView = 0 != ( nsRedlineMode_t::REDLINE_SHOW_DELETE & nRedlineMode );
     pDop->fRMPrint = pDop->fRMView;
-
-    // Tabelle fuer die freifliegenden Rahmen erzeugen, aber nur wenn
-    // das gesamte Dokument geschrieben wird
-    if (bWrtWW8)
-        maFrames = GetAllFrames(*pDoc, bWriteAll ? 0 : pOrigPam);
-    else
-        maFrames = GetNonDrawingFrames(*pDoc, bWriteAll ? 0 : pOrigPam);
 
     CollectOutlineBookmarks(*pDoc);
 
