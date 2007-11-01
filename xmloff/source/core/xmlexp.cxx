@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:53:22 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 13:39:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,7 +229,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
-sal_Char __READONLY_DATA sXML_1_0[] = "1.0";
+sal_Char __READONLY_DATA sXML_1_1[] = "1.1";
 
 #define LOGFILE_AUTHOR "mb93740"
 
@@ -1325,7 +1325,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     // office:version = ...
     if( !mbExtended )
         AddAttribute( XML_NAMESPACE_OFFICE, XML_VERSION,
-                      OUString::createFromAscii(sXML_1_0) );
+                      OUString::createFromAscii(sXML_1_1) );
 
     {
         enum XMLTokenEnum eRootService = XML_TOKEN_INVALID;
