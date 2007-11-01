@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtfactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:46:39 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,12 @@ namespace connectivity
         virtual ::rtl::Reference< simple::IDataAccessTypeConversion > getTypeConversionHelper();
 
         virtual ::rtl::Reference< simple::IDataAccessTools > getDataAccessTools();
+
+        virtual ::std::auto_ptr< ::dbtools::FormattedColumnValue >  createFormattedColumnValue(
+            const ::comphelper::ComponentContext& _rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn
+        );
 
         // IReference
         virtual oslInterlockedCount SAL_CALL acquire();
