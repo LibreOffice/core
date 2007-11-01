@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:53:34 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:37:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,8 +141,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::accessibility;
 
-TYPEINIT1(ORelationTableWindow, OTableWindow);
-
 //==================================================================
 // class ORelationTableView
 //==================================================================
@@ -151,7 +149,6 @@ DBG_NAME(ORelationTableView);
 ORelationTableView::ORelationTableView( Window* pParent, ORelationDesignView* pView )
     : OJoinTableView( pParent, pView )
     ,m_pExistingConnection(NULL)
-    ,m_pCurrentlyTabConnData(NULL)
 {
     DBG_CTOR(ORelationTableView,NULL);
     SetHelpId(HID_CTL_RELATIONTAB);
@@ -161,7 +158,6 @@ ORelationTableView::ORelationTableView( Window* pParent, ORelationDesignView* pV
 ORelationTableView::~ORelationTableView()
 {
     DBG_DTOR(ORelationTableView,NULL);
-
 }
 
 //------------------------------------------------------------------------
@@ -175,11 +171,11 @@ void ORelationTableView::ReSync()
 
     //////////////////////////////////////////////////////////////////////
     // create and insert windows
-    ::std::vector< OTableWindowData*>* pTabWinDataList = m_pView->getController()->getTableWindowData();
-    ::std::vector< OTableWindowData*>::reverse_iterator aIter = pTabWinDataList->rbegin();
+    TTableWindowData* pTabWinDataList = m_pView->getController()->getTableWindowData();
+    TTableWindowData::reverse_iterator aIter = pTabWinDataList->rbegin();
     for(;aIter != pTabWinDataList->rend();++aIter)
     {
-        OTableWindowData* pData = *aIter;
+        TTableWindowData::value_type pData = *aIter;
         OTableWindow* pTabWin = createWindow(pData);
 
         if (!pTabWin->Init())
@@ -191,7 +187,6 @@ void ORelationTableView::ReSync()
             arrInvalidTables.push_back(pData->GetTableName());
 
             pTabWinDataList->erase( ::std::remove(pTabWinDataList->begin(),pTabWinDataList->end(),*aIter) ,pTabWinDataList->end());
-            delete pData;
             continue;
         }
 
@@ -204,29 +199,28 @@ void ORelationTableView::ReSync()
     }
 
     // Verbindungen einfuegen
-    ::std::vector< OTableConnectionData*>* pTabConnDataList = m_pView->getController()->getTableConnectionData();
-    ::std::vector< OTableConnectionData*>::reverse_iterator aConIter = pTabConnDataList->rbegin();
+    TTableConnectionData* pTabConnDataList = m_pView->getController()->getTableConnectionData();
+    TTableConnectionData::reverse_iterator aConIter = pTabConnDataList->rbegin();
 
     for(;aConIter != pTabConnDataList->rend();++aConIter)
     {
-        ORelationTableConnectionData* pTabConnData = static_cast<ORelationTableConnectionData*>(*aConIter);
+        ORelationTableConnectionData* pTabConnData = static_cast<ORelationTableConnectionData*>(aConIter->get());
         if ( !arrInvalidTables.empty() )
         {
             // gibt es die beiden Tabellen zur Connection ?
-            ::rtl::OUString strTabExistenceTest = pTabConnData->GetSourceWinName();
+            ::rtl::OUString strTabExistenceTest = pTabConnData->getReferencingTable()->GetTableName();
             sal_Bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
-            strTabExistenceTest = pTabConnData->GetDestWinName();
+            strTabExistenceTest = pTabConnData->getReferencedTable()->GetTableName();
             bInvalid = bInvalid || ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
 
             if (bInvalid)
             {   // nein -> Pech gehabt, die Connection faellt weg
                 pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter),pTabConnDataList->end() );
-                delete pTabConnData;
                 continue;
             }
         }
 
-        addConnection( new ORelationTableConnection(this, pTabConnData), sal_False ); // don't add the data again
+        addConnection( new ORelationTableConnection(this, *aConIter), sal_False ); // don't add the data again
     }
 
     if ( !GetTabWinMap()->empty() )
@@ -245,8 +239,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     DBG_CHKTHIS(ORelationTableView,NULL);
     // Aus selektierten Feldnamen LineDataObject setzen
     // check if relation already exists
-    OTableWindow* pSourceWin = (OTableWindow*)jxdSource.pListBox->GetTabWin();
-    OTableWindow* pDestWin = (OTableWindow*)jxdDest.pListBox->GetTabWin();
+    OTableWindow* pSourceWin = jxdSource.pListBox->GetTabWin();
+    OTableWindow* pDestWin = jxdDest.pListBox->GetTabWin();
 
     ::std::vector<OTableConnection*>::const_iterator aIter = getTableConnections()->begin();
     for(;aIter != getTableConnections()->end();++aIter)
@@ -256,51 +250,29 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
            (pFirst->GetSourceWin() == pDestWin  && pFirst->GetDestWin() == pSourceWin))
         {
             m_pExistingConnection = pFirst;
-            return;
+            break;
         }
     }
     // insert table connection into view
 
-
-    Reference<XTablesSupplier> xTablesSup(getDesignView()->getController()->getConnection(),UNO_QUERY);
-    ORelationTableConnectionData* pTabConnData = NULL;
-    OSL_ENSURE(xTablesSup.is(),"ORelationTableView::AddConnection no TablesSupplier");
-    if(xTablesSup.is())
-        pTabConnData = new ORelationTableConnectionData(xTablesSup->getTables(),
-                                                        jxdSource.pListBox->GetTabWin()->GetComposedName(),
-                                                        jxdDest.pListBox->GetTabWin()->GetComposedName());
+    TTableConnectionData::value_type pTabConnData(new ORelationTableConnectionData(pSourceWin->GetData(),
+                                                                                   pDestWin->GetData()));
 
     // die Namen der betroffenen Felder
-    String aSourceFieldName = jxdSource.pListBox->GetEntryText(jxdSource.pEntry);
-    String aDestFieldName = jxdDest.pListBox->GetEntryText(jxdDest.pEntry);
+    ::rtl::OUString sSourceFieldName = jxdSource.pListBox->GetEntryText(jxdSource.pEntry);
+    ::rtl::OUString sDestFieldName = jxdDest.pListBox->GetEntryText(jxdDest.pEntry);
 
     // die Anzahl der PKey-Felder in der Quelle
 
-    UINT16 nSourceKeys(0);
     ::std::vector< Reference< XNameAccess> > aPkeys = ::dbaui::getKeyColumns(pSourceWin->GetTable(),KeyType::PRIMARY);
-    if ( aPkeys.size() == 1 ) // there can be only one. But we can not assert here, that would freeze our office
-    {
-        Reference< XNameAccess> xColumns = pSourceWin->GetOriginalColumns();
-        if(xColumns.is())
-        {
-            Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-            const ::rtl::OUString* pBegin = aNames.getConstArray();
-            const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
-            for(;pBegin != pEnd;++pBegin)
-            {
-                if((*aPkeys.begin())->hasByName(*pBegin))
-                    pTabConnData->SetConnLine( nSourceKeys++, *pBegin, String() );
-            }
-        }
-    }
+    bool bAskUser = aPkeys.size() == 1 && Reference< XIndexAccess>(aPkeys[0],UNO_QUERY)->getCount() > 1;
 
-    if ( nSourceKeys > 1 )
-        m_pCurrentlyTabConnData = pTabConnData;
+    pTabConnData->SetConnLine( 0, sSourceFieldName, sDestFieldName );
+
+    if ( bAskUser || m_pExistingConnection )
+        m_pCurrentlyTabConnData = pTabConnData; // this implies that we ask the user what to do
     else
     {
-        pTabConnData->ResetConnLines();
-        pTabConnData->SetConnLine( 0, aSourceFieldName, aDestFieldName );
-
         try
         {
             //////////////////////////////////////////////////////////////////////
@@ -311,17 +283,13 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
                 // UI-Object in ConnListe eintragen
                 addConnection( new ORelationTableConnection( this, pTabConnData ) );
             }
-            else
-                delete pTabConnData;
         }
         catch(const SQLException&)
         {
-            delete pTabConnData;
             throw;
         }
         catch(const Exception&)
         {
-            delete pTabConnData;
             OSL_ENSURE(0,"ORelationTableView::AddConnection: Exception oocured!");
         }
     }
@@ -332,33 +300,28 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
 void ORelationTableView::ConnDoubleClicked( OTableConnection* pConnection )
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
-    Reference<XConnection> xConnection = getDesignView()->getController()->getConnection();
-    if(xConnection.is())
+    ORelationDialog aRelDlg( this, pConnection->GetData() );
+    switch (aRelDlg.Execute())
     {
-        ORelationTableConnectionData* pRelTabConnData = (ORelationTableConnectionData*)((ORelationTableConnection*)pConnection)->GetData();
-        ORelationDialog aRelDlg( this, pRelTabConnData );
-        switch (aRelDlg.Execute())
-        {
-            case RET_OK:
-                // successfully updated
-                pConnection->UpdateLineList();
-                // The connection references 1 ConnData and n ConnLines, each ConnData references n LineDatas, each Line exactly 1 LineData
-                // As the Dialog and the ConnData->Update may have changed the LineDatas we have to restore the consistent state
-                break;
+        case RET_OK:
+            // successfully updated
+            pConnection->UpdateLineList();
+            // The connection references 1 ConnData and n ConnLines, each ConnData references n LineDatas, each Line exactly 1 LineData
+            // As the Dialog and the ConnData->Update may have changed the LineDatas we have to restore the consistent state
+            break;
 
-            case RET_NO:
-                // tried at least one update, but did not succeed -> the original connection is lost
-                RemoveConnection( pConnection ,sal_True);
-                break;
+        case RET_NO:
+            // tried at least one update, but did not succeed -> the original connection is lost
+            RemoveConnection( pConnection ,sal_True);
+            break;
 
-            case RET_CANCEL:
-                // no break, as nothing happened and we don't need the code below
-                return;
+        case RET_CANCEL:
+            // no break, as nothing happened and we don't need the code below
+            return;
 
-        }
-
-        Invalidate(INVALIDATE_NOCHILDREN);
     }
+
+    Invalidate(INVALIDATE_NOCHILDREN);
 }
 
 //------------------------------------------------------------------------------
@@ -366,23 +329,15 @@ void ORelationTableView::AddNewRelation()
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
 
-    Reference<XTablesSupplier> xTablesSup(getDesignView()->getController()->getConnection(),UNO_QUERY);
-    if(xTablesSup.is())
-    {
-        ORelationTableConnectionData* pNewConnData = new ORelationTableConnectionData(xTablesSup->getTables());
-        ORelationDialog aRelDlg(this, pNewConnData, TRUE);
+    TTableConnectionData::value_type pNewConnData( new ORelationTableConnectionData() );
+    ORelationDialog aRelDlg(this, pNewConnData, TRUE);
 
-        BOOL bSuccess = (aRelDlg.Execute() == RET_OK);
-        if (bSuccess)
-        {
-            // already updated by the dialog
-            // dem Dokument bekanntgeben
-            addConnection( new ORelationTableConnection(this, pNewConnData) );
-            // neu zeichnen
-            //  Invalidate(INVALIDATE_NOCHILDREN);
-        }
-        else
-            delete pNewConnData;
+    BOOL bSuccess = (aRelDlg.Execute() == RET_OK);
+    if (bSuccess)
+    {
+        // already updated by the dialog
+        // dem Dokument bekanntgeben
+        addConnection( new ORelationTableConnection(this, pNewConnData) );
     }
 }
 
@@ -391,7 +346,7 @@ void ORelationTableView::AddNewRelation()
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
     ::std::vector<OTableConnection*>::const_iterator aNextPos = getTableConnections()->end();
-    ORelationTableConnectionData* pTabConnData = (ORelationTableConnectionData*)pConn->GetData();
+    ORelationTableConnectionData* pTabConnData = (ORelationTableConnectionData*)pConn->GetData().get();
     try
     {
         if (pTabConnData->DropRelation())
@@ -426,7 +381,7 @@ void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const 
 
     //////////////////////////////////////////////////////////////////
     // Neue Datenstruktur in DocShell eintragen
-    OTableWindowData* pNewTabWinData = CreateImpl( _rComposedName, rWinName );
+    TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
     pNewTabWinData->ShowAll(FALSE);
 
     //////////////////////////////////////////////////////////////////
@@ -450,7 +405,6 @@ void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const 
     }
     else
     {
-        delete pNewTabWinData;
         pNewTabWin->clearListBox();
         delete pNewTabWin;
     }
@@ -470,38 +424,74 @@ void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
     }
 }
 // -----------------------------------------------------------------------------
+//namespace
+//{
+//    class OReleationAskDialog : public ButtonDialog
+//    {
+//        FixedImage        m_aInfoImage;
+//        FixedText     m_aTitle;
+//      FixedText       m_aMessage;
+//    public:
+//        OReleationDialog(Window* _pParent) : ButtonDialog(_pParent,WB_HORZ | WB_STDDIALOG)
+//            ,m_aInfoImage(this)
+//            ,m_aTitle(this,WB_WORDBREAK | WB_LEFT)
+//          ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
+//        {
+//            m_aMessage.SetText(ModuleRes(STR_QUERY_REL_EDIT_RELATION));
+//            m_aMessage.Show();
+//
+//            // Changed as per BugID 79541 Branding/Configuration
+//            String sDialogTitle( lcl_getProductName() );
+//            SetText( sDialogTitle.AppendAscii( " Base" ) );
+//            m_aTitle.Show();
+//        }
+//    };
+//}
+// -----------------------------------------------------------------------------
 void ORelationTableView::lookForUiActivities()
 {
     if(m_pExistingConnection)
     {
-        OSQLMessageBox aDlg(this,ModuleRes(STR_QUERY_REL_EDIT_RELATION),String(),WB_YES_NO|WB_DEF_YES);
-        if(aDlg.Execute() == RET_YES)
+        String sTitle(ModuleRes(STR_RELATIONDESIGN));
+        sTitle.Erase(0,3);
+        OSQLMessageBox aDlg(this,ModuleRes(STR_QUERY_REL_EDIT_RELATION),String(),0);
+        aDlg.SetText(sTitle);
+        aDlg.RemoveButton(aDlg.GetButtonId(0));
+        aDlg.AddButton( ModuleRes(STR_QUERY_REL_EDIT), BUTTONID_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
+        aDlg.AddButton( ModuleRes(STR_QUERY_REL_CREATE), BUTTONID_YES, 0);
+        aDlg.AddButton(BUTTON_CANCEL,BUTTONID_CANCEL,0);
+        UINT16 nRet = aDlg.Execute();
+        if( nRet == RET_CANCEL)
+        {
+            m_pCurrentlyTabConnData.reset();
+        }
+        else if ( nRet == RET_OK ) // EDIT
+        {
             ConnDoubleClicked(m_pExistingConnection);
+            m_pCurrentlyTabConnData.reset();
+        }
         m_pExistingConnection = NULL;
     }
-    else if(m_pCurrentlyTabConnData)
+    if(m_pCurrentlyTabConnData)
     {
         ORelationDialog aRelDlg( this, m_pCurrentlyTabConnData );
         if (aRelDlg.Execute() == RET_OK)
         {
             // already updated by the dialog
             addConnection( new ORelationTableConnection( this, m_pCurrentlyTabConnData ) );
-            //  Invalidate(INVALIDATE_NOCHILDREN);
         }
-        else
-            delete m_pCurrentlyTabConnData;
-        m_pCurrentlyTabConnData = NULL;
+        m_pCurrentlyTabConnData.reset();
     }
 }
 
 // -----------------------------------------------------------------------------
-OTableWindow* ORelationTableView::createWindow(OTableWindowData* _pData)
+OTableWindow* ORelationTableView::createWindow(const TTableWindowData::value_type& _pData)
 {
     return new ORelationTableWindow(this,_pData);
 }
-
 // -----------------------------------------------------------------------------
-bool ORelationTableWindow::allowQueries() const
+bool ORelationTableView::allowQueries() const
 {
     return false;
 }
+
