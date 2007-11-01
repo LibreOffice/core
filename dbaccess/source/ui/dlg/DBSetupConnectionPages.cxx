@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBSetupConnectionPages.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:10:46 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:05:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,7 +264,7 @@ DBG_NAME(OTextConnectionPageSetup)
         ,m_aFTPortNumber        (this, ModuleRes(FT_AUTOPORTNUMBER))
         ,m_aNFPortNumber        (this, ModuleRes(NF_AUTOPORTNUMBER))
         ,m_aFTDefaultPortNumber (this, ModuleRes(FT_AUTOPORTNUMBERDEFAULT))
-        ,m_aCBUseSSL            (this, ModuleRes(CB_USESSL))
+        ,m_aCBUseSSL            (this, ModuleRes(CB_WIZ_USESSL))
 
     {
         SetControlFontWeight(&m_aFTHeaderText);
