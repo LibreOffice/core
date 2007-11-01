@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:01:11 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:18:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,8 +72,7 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
     mpSprite( NULL ),
     mnNextId( 1 ),
     mnGlobalTransparency(0),
-    mnJPEGCompressMode(nJPEGcompressMode),
-    mbWrittenJPEGTables(false)
+    mnJPEGCompressMode(nJPEGcompressMode)
 {
     mpVDev = new VirtualDevice;
     mpVDev->EnableOutput( sal_False );
