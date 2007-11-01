@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:20:17 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:27:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,18 +287,8 @@ void OJoinController::disposing()
 
     m_pView             = NULL;
 
-    {
-        ::std::vector< OTableConnectionData*>::iterator aIter = m_vTableConnectionData.begin();
-        for(;aIter != m_vTableConnectionData.end();++aIter)
-            delete *aIter;
-        m_vTableConnectionData.clear();
-    }
-    {
-        ::std::vector< OTableWindowData*>::iterator aIter = m_vTableData.begin();
-        for(;aIter != m_vTableData.end();++aIter)
-            delete *aIter;
-        m_vTableData.clear();
-    }
+    m_vTableConnectionData.clear();
+    m_vTableData.clear();
 }
 // -----------------------------------------------------------------------------
 void OJoinController::reconnect( sal_Bool _bUI )
@@ -318,7 +308,7 @@ void OJoinController::setModified(sal_Bool _bModified)
 void OJoinController::SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY)
 {
     // die Daten zum Fenster
-    OTableWindowData* pData = pTabWin->GetData();
+    TTableWindowData::value_type pData = pTabWin->GetData();
     OSL_ENSURE(pData != NULL, "SaveTabWinPosSize : TabWin hat keine Daten !");
 
     // Position & Size der Daten neu setzen (aus den aktuellen Fenster-Parametern)
@@ -434,7 +424,7 @@ void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabW
         SaveTabWinPosSize(aIter->second, nOffsetX, nOffsetY);
 }
 // -----------------------------------------------------------------------------
-void OJoinController::removeConnectionData(OTableConnectionData* _pData)
+void OJoinController::removeConnectionData(const TTableConnectionData::value_type& _pData)
 {
     m_vTableConnectionData.erase( ::std::remove(m_vTableConnectionData.begin(),m_vTableConnectionData.end(),_pData),m_vTableConnectionData.end());
 }
@@ -470,9 +460,6 @@ sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend) throw( RuntimeExc
 // -----------------------------------------------------------------------------
 void OJoinController::loadTableWindows(const Sequence<PropertyValue>& aViewProps)
 {
-    ::std::vector< OTableWindowData*>::iterator aIter = m_vTableData.begin();
-    for(;aIter != m_vTableData.end();++aIter)
-        delete *aIter;
     m_vTableData.clear();
 
     const PropertyValue *pIter = aViewProps.getConstArray();
@@ -481,6 +468,7 @@ void OJoinController::loadTableWindows(const Sequence<PropertyValue>& aViewProps
     {
         if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Tables" ) ) )
         {
+            m_aMinimumTableViewSize = Point();
             Sequence<PropertyValue> aWindow;
             pIter->Value >>= aWindow;
             const PropertyValue *pTablesIter = aWindow.getConstArray();
@@ -491,38 +479,31 @@ void OJoinController::loadTableWindows(const Sequence<PropertyValue>& aViewProps
                 pTablesIter->Value >>= aTable;
                 loadTableWindow(aTable);
             }
+            if ( m_aMinimumTableViewSize != Point() )
+            {
+                getJoinView()->getScrollHelper()->resetRange(m_aMinimumTableViewSize);
+            }
+            break;
         }
     }
 }
 // -----------------------------------------------------------------------------
 void OJoinController::loadTableWindow(const Sequence<PropertyValue>& _rTable)
 {
-    OTableWindowData* pData = createTableWindowData();
-
     sal_Int32 nX = -1, nY = -1, nHeight = -1, nWidth = -1;
 
+    ::rtl::OUString sComposedName,sTableName,sWindowName;
+    sal_Bool bShowAll = false;
     const PropertyValue *pIter = _rTable.getConstArray();
     const PropertyValue *pEnd = pIter + _rTable.getLength();
     for (; pIter != pEnd; ++pIter)
     {
         if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ComposedName" ) ) )
-        {
-            ::rtl::OUString sName;
-            pIter->Value >>= sName;
-            pData->SetComposedName(sName);
-        }
+            pIter->Value >>= sComposedName;
         else if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "TableName" ) ) )
-        {
-            ::rtl::OUString sName;
-            pIter->Value >>= sName;
-            pData->SetTableName(sName);
-        }
+            pIter->Value >>= sTableName;
         else if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "WindowName" ) ) )
-        {
-            ::rtl::OUString sName;
-            pIter->Value >>= sName;
-            pData->SetWinName(sName);
-        }
+            pIter->Value >>= sWindowName;
         else if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "WindowTop" ) ) )
         {
             pIter->Value >>= nY;
@@ -541,14 +522,18 @@ void OJoinController::loadTableWindow(const Sequence<PropertyValue>& _rTable)
         }
         else if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowAll" ) ) )
         {
-            sal_Bool bShowAll = false;
             pIter->Value >>= bShowAll;
-            pData->ShowAll(bShowAll);
         }
     }
+    TTableWindowData::value_type pData = createTableWindowData(sComposedName,sTableName,sWindowName);
     pData->SetPosition(Point(nX,nY));
     pData->SetSize( Size( nWidth, nHeight ) );
+    pData->ShowAll(bShowAll);
     m_vTableData.push_back(pData);
+    if ( m_aMinimumTableViewSize.X() < (nX+nWidth) )
+        m_aMinimumTableViewSize.X() = (nX+nWidth);
+    if ( m_aMinimumTableViewSize.Y() < (nY+nHeight) )
+        m_aMinimumTableViewSize.Y() = (nY+nHeight);
 }
 // -----------------------------------------------------------------------------
 void OJoinController::saveTableWindows(Sequence<PropertyValue>& _rViewProps)
@@ -574,8 +559,8 @@ void OJoinController::saveTableWindows(Sequence<PropertyValue>& _rViewProps)
 
         Sequence<PropertyValue> aWindow(8);
 
-        ::std::vector< OTableWindowData*>::iterator aIter = m_vTableData.begin();
-        ::std::vector< OTableWindowData*>::iterator aEnd = m_vTableData.end();
+        TTableWindowData::iterator aIter = m_vTableData.begin();
+        TTableWindowData::iterator aEnd = m_vTableData.end();
         for(sal_Int32 i = 1;aIter != aEnd;++aIter,++pIter,++i)
         {
             pIter->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Table")) + ::rtl::OUString::valueOf(i);
@@ -603,7 +588,16 @@ void OJoinController::saveTableWindows(Sequence<PropertyValue>& _rViewProps)
         pViewIter->Value <<= aTables;
     }
 }
+// -----------------------------------------------------------------------------
+TTableWindowData::value_type OJoinController::createTableWindowData(const ::rtl::OUString& _sComposedName,const ::rtl::OUString& _sTableName,const ::rtl::OUString& _sWindowName)
+{
+    OJoinDesignView* pView = getJoinView();
+    if( pView )
+        return pView->getTableView()->createTableWindowData(_sComposedName,_sTableName,_sWindowName);
+    OSL_ENSURE(0,"We should never ever reach this point!");
 
+    return TTableWindowData::value_type();
+}
 // .............................................................................
 }   // namespace dbaui
 // .............................................................................
