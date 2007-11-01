@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:58:00 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:50:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -842,6 +842,8 @@ void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
             rValue <<= getFetchSize();
             break;
         case PROPERTY_ID_ESCAPEPROCESSING:
+            rValue <<= sal_True;
+            break;
         case PROPERTY_ID_USEBOOKMARKS:
         default:
             ;
