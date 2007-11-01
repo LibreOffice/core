@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RTableConnection.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:40:52 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:36:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ namespace dbaui
     class ORelationTableConnection : public OTableConnection
     {
     public:
-        ORelationTableConnection( ORelationTableView* pContainer, ORelationTableConnectionData* pTabConnData );
+        ORelationTableConnection( ORelationTableView* pContainer, const TTableConnectionData::value_type& pTabConnData );
         ORelationTableConnection( const ORelationTableConnection& rConn );
             // wichtiger Kommentar zum CopyConstructor siehe OTableConnection(const OTableConnection&)
         virtual ~ORelationTableConnection();
