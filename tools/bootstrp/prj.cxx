@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:07:06 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:12:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ ByteString CommandData::GetOSTypeString()
 
     switch (nOSType)
     {
-        case OS_WIN16 | OS_WIN32 | OS_OS2 | OS_UNX | OS_MAC :
+        case OS_WIN16 | OS_WIN32 | OS_OS2 | OS_UNX :
             aRetStr = "all";
             break;
         case OS_WIN32 | OS_WIN16 :
@@ -230,9 +230,6 @@ ByteString CommandData::GetOSTypeString()
             break;
         case OS_WIN32 :
             aRetStr = "n";
-            break;
-        case OS_MAC :
-            aRetStr = "m";
             break;
         default :
             aRetStr = "none";
@@ -800,7 +797,7 @@ void Star::InsertToken ( char *yytext )
                         aWhatOS = aWhatOS.GetToken( 0, ',' );
                     }
                     if ( aWhatOS == "all" )
-                        nOSType = ( OS_WIN16 | OS_WIN32 | OS_OS2 | OS_UNX | OS_MAC );
+                        nOSType = ( OS_WIN16 | OS_WIN32 | OS_OS2 | OS_UNX );
                     else if ( aWhatOS == "w" )
                         nOSType = ( OS_WIN16 | OS_WIN32 );
                     else if ( aWhatOS == "p" )
@@ -811,8 +808,6 @@ void Star::InsertToken ( char *yytext )
                         nOSType = OS_WIN16;
                     else if ( aWhatOS == "n" )
                         nOSType = OS_WIN32;
-                    else if ( aWhatOS == "m" )
-                        nOSType = OS_MAC;
                     else
                         nOSType = OS_NONE;
                 }
@@ -1412,7 +1407,7 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
                         }
                         aWhatOS = aWhatOS.GetToken( 0, ',' );
                         if ( aWhatOS == "all" )
-                            nOSType = ( OS_WIN16 | OS_WIN32 | OS_OS2 | OS_UNX | OS_MAC );
+                            nOSType = ( OS_WIN16 | OS_WIN32 | OS_OS2 | OS_UNX );
                         else if ( aWhatOS == "w" )
                             nOSType = ( OS_WIN16 | OS_WIN32 );
                         else if ( aWhatOS == "p" )
@@ -1423,8 +1418,6 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
                             nOSType = OS_WIN16;
                         else if ( aWhatOS == "n" )
                             nOSType = OS_WIN32;
-                        else if ( aWhatOS == "m" )
-                            nOSType = OS_MAC;
                         else
                             nOSType = OS_NONE;
                     }
