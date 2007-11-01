@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DriverSettings.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:49:04 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,96 +49,55 @@ namespace dbaui
     {
     public:
 
-        /** fills the DetailIds for the given type
+        /** filles the IDs of the settings which are reflected in indirect data source properties
+            (aka properties in the css.sdb.DataSource.Info sequence)
+
             @param  _eType
                 The Type of the data source.
-            @param  _rDetailsIds
+            @param  _out_rDetailsIds
                 Will be filled.
         */
-        static void fillDetailIds(DATASOURCE_TYPE _eType,::std::vector< sal_Int32>& _rDetailsIds);
+        static void getSupportedIndirectSettings( DATASOURCE_TYPE _eType,::std::vector< sal_Int32>& _out_rDetailsIds );
 
         /** Creates the detail page for Dbase
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
         */
         static  SfxTabPage* CreateDbase2( Window* _pParent, const SfxItemSet& _rAttrSet );
 
         /** Creates the detail page for ado
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
         */
-
-
         static  SfxTabPage* CreateDbase( Window* _pParent, const SfxItemSet& _rAttrSet );
 
         /** Creates the detail page for ado
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
         */
         static  SfxTabPage* CreateAdo( Window* _pParent, const SfxItemSet& _rAttrSet );
 
         /** Creates the detail page for ODBC
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
         */
         static  SfxTabPage* CreateODBC( Window* _pParent, const SfxItemSet& _rAttrSet );
 
         /** Creates the detail page for user
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
         */
         static  SfxTabPage* CreateUser( Window* _pParent, const SfxItemSet& _rAttrSet );
 
         /** Creates the detail page for MySQLODBC
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
         */
         static  SfxTabPage* CreateMySQLODBC( Window* _pParent, const SfxItemSet& _rAttrSet );
 
         /** Creates the detail page for MySQLJDBC
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
         */
         static  SfxTabPage* CreateMySQLJDBC( Window* _pParent, const SfxItemSet& _rAttrSet );
 
         /** Creates the detail page for Oracle JDBC
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
         */
         static SfxTabPage*  CreateOracleJDBC( Window* pParent, const SfxItemSet& _rAttrSet );
 
         /** Creates the detail page for Adabas
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
         */
         static  SfxTabPage* CreateAdabas( Window* _pParent, const SfxItemSet& _rAttrSet );
 
         /** Creates the detail page for LDAP
-            @param  _pParent
-            @param  _rAttrSet
-
-            @return SfxTabPage*
         */
         static  SfxTabPage* CreateLDAP( Window* _pParent, const SfxItemSet& _rAttrSet );
-
 
         /// Creates the detail page for Text
         static  SfxTabPage* CreateText( Window* _pParent, const SfxItemSet& _rAttrSet );
@@ -147,23 +106,8 @@ namespace dbaui
         /// creates the GeneratedValues page
         static  SfxTabPage* CreateGeneratedValuesPage( Window* _pParent, const SfxItemSet& _rAttrSet );
 
-        /// creates a common page with the attributes needed for MySQL advanced settings.
-        static  SfxTabPage* CreateMySQLSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
-
-        /// creates a common page with the attributes needed for Adabas advanced settings.
-        static  SfxTabPage* CreateAdabasSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
-
-        /// creates a common page with the attributes needed for ADO advanced settings.
-        static  SfxTabPage* CreateADOSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
-
-        /// creates a common page with the attributes needed for file-based (dBase, CSV) advanced settings.
-        static  SfxTabPage* CreateFileSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
-
-        /// creates a common page with the attributes needed for MSA advanced settings.
-        static  SfxTabPage* CreateAccessSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
-
-        /// creates a common page with all supported advanced attributes
-        static  SfxTabPage* CreateFullSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
+        /// creates the "Special Settings" page of the "Advanced Settings" dialog
+        static  SfxTabPage* CreateSpecialSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
     };
 }
 
