@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableConnectionData.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:37:45 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:29:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
 #endif
 
 using namespace dbaui;
-TYPEINIT1(OQueryTableConnectionData, OTableConnectionData);
 
 //========================================================================
 // class OQueryTableConnectionData
@@ -59,6 +58,7 @@ DBG_NAME(OQueryTableConnectionData);
 OQueryTableConnectionData::OQueryTableConnectionData()
     :OTableConnectionData()
     ,m_eJoinType (INNER_JOIN)
+    ,m_bNatural(false)
 {
     DBG_CTOR(OQueryTableConnectionData,NULL);
 }
@@ -74,19 +74,20 @@ OQueryTableConnectionData::OQueryTableConnectionData( const OQueryTableConnectio
     m_eFromType = rConnData.m_eFromType;
     m_eDestType = rConnData.m_eDestType;
     m_eJoinType = rConnData.m_eJoinType;
+    m_bNatural  = rConnData.m_bNatural;
 }
 
 //------------------------------------------------------------------------
-OQueryTableConnectionData::OQueryTableConnectionData(const ::rtl::OUString& strSourceTable, const ::rtl::OUString& strDestTable,
-        const ::rtl::OUString& strSourceAlias, const ::rtl::OUString& strDestAlias, const ::rtl::OUString& rConnName)
-    :OTableConnectionData( strSourceAlias, strDestAlias, rConnName )
+OQueryTableConnectionData::OQueryTableConnectionData(const TTableWindowData::value_type& _pReferencingTable
+                                                    ,const TTableWindowData::value_type& _pReferencedTable
+                                                    ,const ::rtl::OUString& rConnName)
+    :OTableConnectionData( _pReferencingTable,_pReferencedTable, rConnName )
     ,m_nFromEntryIndex(0)
     ,m_nDestEntryIndex(0)
     ,m_eJoinType (INNER_JOIN)
+    ,m_bNatural(false)
     ,m_eFromType(TAB_NORMAL_FIELD)
     ,m_eDestType(TAB_NORMAL_FIELD)
-    ,m_strSourceTableName(strSourceTable)
-    ,m_strDestTableName(strDestTable)
 {
     DBG_CTOR(OQueryTableConnectionData,NULL);
 }
@@ -116,7 +117,6 @@ OConnectionLineDataRef OQueryTableConnectionData::CreateLineDataObj( const OConn
 void OQueryTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
     DBG_CHKTHIS(OQueryTableConnectionData,NULL);
-    DBG_ASSERT(rSource.ISA(OQueryTableConnectionData), "QueryTabConn::CopyFrom : ungueltiger Parameter !");
     // wie in der Basisklasse zurueckziehen auf das (nicht-virtuelle) operator=
     *this = (const OQueryTableConnectionData&)rSource;
 }
@@ -136,6 +136,7 @@ OQueryTableConnectionData& OQueryTableConnectionData::operator=(const OQueryTabl
     m_eFromType = rConnData.m_eFromType;
     m_eDestType = rConnData.m_eDestType;
     m_eJoinType = rConnData.m_eJoinType;
+    m_bNatural  = rConnData.m_bNatural;
 
     return *this;
 }
@@ -144,7 +145,7 @@ OQueryTableConnectionData& OQueryTableConnectionData::operator=(const OQueryTabl
 ::rtl::OUString OQueryTableConnectionData::GetAliasName(EConnectionSide nWhich) const
 {
     DBG_CHKTHIS(OQueryTableConnectionData,NULL);
-    return nWhich == JTCS_FROM ? GetSourceWinName() : GetDestWinName();
+    return nWhich == JTCS_FROM ? m_pReferencingTable->GetWinName() : m_pReferencedTable->GetWinName();
 }
 
 //------------------------------------------------------------------------------
@@ -156,8 +157,8 @@ void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft
     OQueryTableWindow* pDestWin = static_cast<OQueryTableWindow*>(rDragRight->GetTabWindow());
     OSL_ENSURE(pSourceWin,"NO Source window found!");
     OSL_ENSURE(pDestWin,"NO Dest window found!");
-
-    Init(pSourceWin->GetWinName(), pDestWin->GetWinName());
+    m_pReferencingTable = pSourceWin->GetData();
+    m_pReferencedTable  = pDestWin->GetData();
 
     // und dann meine Members setzen
     SetFieldIndex(JTCS_FROM, rDragLeft->GetFieldIndex());
@@ -165,12 +166,6 @@ void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft
 
     SetFieldType(JTCS_FROM, rDragLeft->GetFieldType());
     SetFieldType(JTCS_TO, rDragRight->GetFieldType());
-
-    m_strSourceTableName = pSourceWin->GetTableName();
-    m_aSourceWinName = pSourceWin->GetWinName();
-
-    m_strDestTableName = pDestWin->GetTableName();
-    m_aDestWinName = pDestWin->GetWinName();
 
     AppendConnLine((::rtl::OUString)rDragLeft->GetField(),(::rtl::OUString)rDragRight->GetField());
 }
