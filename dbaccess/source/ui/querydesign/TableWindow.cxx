@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:40:01 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:33:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,12 +65,7 @@
 #ifndef _SV_WALL_HXX
 #include <vcl/wall.hxx>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
+
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
@@ -116,9 +111,6 @@
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
-#ifndef _CPPUHELPER_EXC_HLP_HXX_
-#include <cppuhelper/exc_hlp.hxx>
-#endif
 
 using namespace dbaui;
 using namespace ::utl;
@@ -138,14 +130,12 @@ using namespace ::com::sun::star::accessibility;
 #define TABWIN_WIDTH_MIN    90
 #define TABWIN_HEIGHT_MIN   80
 
-
-TYPEINIT0(OTableWindow);
 //========================================================================
 // class OTableWindow
 //========================================================================
 DBG_NAME(OTableWindow);
 //------------------------------------------------------------------------------
-OTableWindow::OTableWindow( Window* pParent, OTableWindowData* pTabWinData )
+OTableWindow::OTableWindow( Window* pParent, const TTableWindowData::value_type& pTabWinData )
           :Window( pParent, WB_3DLOOK|WB_MOVEABLE )
           ,m_aTypeImage( this )
           ,m_aTitle( this )
@@ -156,7 +146,6 @@ OTableWindow::OTableWindow( Window* pParent, OTableWindowData* pTabWinData )
           ,m_nMoveIncrement(1)
           ,m_nSizingFlags( SIZING_NONE )
           ,m_bActive( FALSE )
-          ,m_bIsQuery( false )
 {
     DBG_CTOR(OTableWindow,NULL);
 
@@ -181,10 +170,6 @@ OTableWindow::OTableWindow( Window* pParent, OTableWindowData* pTabWinData )
 OTableWindow::~OTableWindow()
 {
     DBG_DTOR(OTableWindow,NULL);
-
-    Reference<XComponent> xComponent( m_xTableOrQuery, UNO_QUERY );
-    if ( xComponent.is() )
-        stopComponentListening( xComponent );
 
     if (m_pListBox)
     {
@@ -258,12 +243,11 @@ BOOL OTableWindow::FillListBox()
         pEntry->SetUserData( createUserData(NULL,false) );
     }
 
-    ::osl::MutexGuard aGuard( m_aMutex  );
     Reference<XNameAccess> xPKeyColumns;
     try
     {
         // first we need the keys from the table
-        Reference< XKeysSupplier > xKeys( m_xTableOrQuery, UNO_QUERY );
+        Reference< XKeysSupplier > xKeys( m_pData->getTable(), UNO_QUERY );
         if ( xKeys.is() )
         {
             Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
@@ -297,24 +281,24 @@ BOOL OTableWindow::FillListBox()
     }
     try
     {
-        if(m_xColumns.is())
+        Reference< XNameAccess > xColumns = m_pData->getColumns();
+        if( xColumns.is() )
         {
-            Sequence< ::rtl::OUString> aColumns = m_xColumns->getElementNames();
-            const ::rtl::OUString* pBegin = aColumns.getConstArray();
-            const ::rtl::OUString* pEnd = pBegin + aColumns.getLength();
+            Sequence< ::rtl::OUString> aColumns = xColumns->getElementNames();
+            const ::rtl::OUString* pIter = aColumns.getConstArray();
+            const ::rtl::OUString* pEnd = pIter + aColumns.getLength();
 
             SvLBoxEntry* pEntry = NULL;
-            for (; pBegin != pEnd; ++pBegin)
+            for (; pIter != pEnd; ++pIter)
             {
-                bool bPrimaryKeyColumn = xPKeyColumns.is() && xPKeyColumns->hasByName( *pBegin );
+                bool bPrimaryKeyColumn = xPKeyColumns.is() && xPKeyColumns->hasByName( *pIter );
                 // is this column in the primary key
                 if ( bPrimaryKeyColumn )
-                    pEntry = m_pListBox->InsertEntry(*pBegin, aPrimKeyImage, aPrimKeyImage);
+                    pEntry = m_pListBox->InsertEntry(*pIter, aPrimKeyImage, aPrimKeyImage);
                 else
-                    pEntry = m_pListBox->InsertEntry(*pBegin);
+                    pEntry = m_pListBox->InsertEntry(*pIter);
 
-                Reference<XPropertySet> xColumn;
-                m_xColumns->getByName(*pBegin) >>= xColumn;
+                Reference<XPropertySet> xColumn(xColumns->getByName(*pIter),UNO_QUERY);
                 if ( xColumn.is() )
                     pEntry->SetUserData( createUserData(xColumn,bPrimaryKeyColumn) );
             }
@@ -339,12 +323,6 @@ void OTableWindow::deleteUserData(void*& _pUserData)
     _pUserData = NULL;
 }
 //------------------------------------------------------------------------------
-void OTableWindow::onNoColumns_throw()
-{
-    OSL_ENSURE( false, "OTableWindow::onNoColumns_throw: cannot really handle this!" );
-    throw SQLException();
-}
-//------------------------------------------------------------------------------
 void OTableWindow::clearListBox()
 {
     if ( m_pListBox )
@@ -367,8 +345,8 @@ void OTableWindow::impl_updateImage()
 {
     ImageProvider aImageProvider( getDesignView()->getController()->getConnection() );
 
-    Image aImage( aImageProvider.getImage( GetComposedName(), isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, false ) );
-    Image aImageHC( aImageProvider.getImage( GetComposedName(), isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, true ) );
+    Image aImage( aImageProvider.getImage( GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, false ) );
+    Image aImageHC( aImageProvider.getImage( GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, true ) );
 
     if ( !aImage || !aImageHC )
     {
@@ -384,105 +362,30 @@ void OTableWindow::impl_updateImage()
 //------------------------------------------------------------------------------
 BOOL OTableWindow::Init()
 {
-    bool bSuccess = false;
-
-    // get the from the connection
-    OJoinDesignView* pParent = getDesignView();
-    try
+    // create list box if necessary
+    if ( !m_pListBox )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
-        Reference< XConnection  > xConnection = pParent->getController()->getConnection();
-        ::rtl::OUString sObjectName = GetComposedName();
-
-        Reference< XQueriesSupplier > xSupQueries( xConnection, UNO_QUERY_THROW );
-        Reference< XNameAccess > xQueries( xSupQueries->getQueries(), UNO_QUERY_THROW );
-        bool bIsKnownQuery = allowQueries() && xQueries->hasByName( sObjectName );
-
-        Reference< XTablesSupplier > xSupTables( xConnection, UNO_QUERY_THROW );
-        Reference< XNameAccess > xTables( xSupTables->getTables(), UNO_QUERY_THROW );
-        bool bIsKnownTable = xTables->hasByName( sObjectName );
-
-        if ( bIsKnownQuery )
-            m_xTableOrQuery = Reference< XPropertySet >( xQueries->getByName( sObjectName ), UNO_QUERY_THROW );
-        else if ( bIsKnownTable )
-            m_xTableOrQuery = Reference< XPropertySet >( xTables->getByName( sObjectName ), UNO_QUERY_THROW );
-        else
-            DBG_ERROR( "OTableWindow::Init: this is neither a query (or no queries are allowed) nor a table!" );
-
-        // if we survived so far, we know whether it's a query
-        m_bIsQuery = bIsKnownQuery;
-
-        // listen for the object being disposed
-        Reference<XComponent> xComponent( m_xTableOrQuery, UNO_QUERY );
-        if ( xComponent.is() )
-            startComponentListening( xComponent );
-
-        // obtain the columns
-        Reference< XColumnsSupplier > xColumnsSups( m_xTableOrQuery, UNO_QUERY_THROW );
-        m_xColumns = xColumnsSups->getColumns();
-
-        Reference< XIndexAccess > xColumnsAsIndex( m_xColumns,UNO_QUERY );
-        if ( !m_xColumns.is() || ( xColumnsAsIndex->getCount() == 0 ) )
-        {
-            onNoColumns_throw();
-            DBG_ERROR( "OTableWindow::Init: onNoColumns_throw is expected to throw!" );
-            bSuccess = false;
-        }
-        else
-            bSuccess = true;
-    }
-    catch ( const SQLException& )
-    {
-        ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ),
-            pParent, pParent->getController()->getORB() );
-    }
-    catch( const WrappedTargetException& e )
-    {
-        SQLException aSql;
-        if ( e.TargetException >>= aSql )
-            ::dbaui::showError( ::dbtools::SQLExceptionInfo( aSql ), pParent, pParent->getController()->getORB() );
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
+        m_pListBox = CreateListBox();
+        DBG_ASSERT( m_pListBox != NULL, "OTableWindow::Init() : CreateListBox hat NULL geliefert !" );
+        m_pListBox->SetSelectionMode( MULTIPLE_SELECTION );
     }
 
+    // Titel setzen
+    m_aTitle.SetText( m_pData->GetWinName() );
+    m_aTitle.Show();
+
+    m_pListBox->Show();
+
+    // die Felder in die ListBox eintragen
+    clearListBox();
+    BOOL bSuccess = FillListBox();
     if ( bSuccess )
-    {
-        // create list box if necessary
-        if ( !m_pListBox )
-        {
-            m_pListBox = CreateListBox();
-            DBG_ASSERT( m_pListBox != NULL, "OTableWindow::Init() : CreateListBox hat NULL geliefert !" );
-            m_pListBox->SetSelectionMode( MULTIPLE_SELECTION );
-        }
-
-        // Titel setzen
-        m_aTitle.SetText( m_pData->GetWinName() );
-        m_aTitle.Show();
-
-        m_pListBox->Show();
-
-        // die Felder in die ListBox eintragen
-        clearListBox();
-        bSuccess = FillListBox();
-        if ( bSuccess )
-            m_pListBox->SelectAll( FALSE );
-    }
+        m_pListBox->SelectAll( FALSE );
 
     impl_updateImage();
 
     return bSuccess;
 }
-
-//------------------------------------------------------------------------------
-Reference< XPropertySet > OTableWindow::GetTable() const
-{
-    DBG_ASSERT( !isQuery(), "OTableWindow::GetTable: you should only call this if you're *sure* this is a table!" );
-    return m_xTableOrQuery;
-}
-
 //------------------------------------------------------------------------------
 void OTableWindow::DataChanged(const DataChangedEvent& rDCEvt)
 {
@@ -771,13 +674,6 @@ void OTableWindow::StateChanged( StateChangedType nType )
         Resize();
         Invalidate();
     }
-}
-// -----------------------------------------------------------------------------
-void OTableWindow::_disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ )
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    m_xTableOrQuery = NULL;
-    m_xColumns      = NULL;
 }
 // -----------------------------------------------------------------------------
 Reference< XAccessible > OTableWindow::CreateAccessible()
