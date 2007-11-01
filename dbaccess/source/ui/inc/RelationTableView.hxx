@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationTableView.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:29:07 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:18:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,16 +42,19 @@
 namespace dbaui
 {
     class ORelationDesignView;
-    class ORelationTableConnectionData;
     class ORelationTableView : public OJoinTableView
     {
-        OTableConnection*               m_pExistingConnection; // is set when a connection was draged on an existing connection
-        ORelationTableConnectionData*   m_pCurrentlyTabConnData; // set when we creating a connection with more than one keycolumn
+        OTableConnection*                m_pExistingConnection; // is set when a connection was draged on an existing connection
+        TTableConnectionData::value_type m_pCurrentlyTabConnData; // set when we creating a connection with more than one keycolumn
     protected:
         virtual void ConnDoubleClicked( OTableConnection* pConnection );
         virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL bNewTable = FALSE);
 
-        virtual OTableWindow* createWindow(OTableWindowData* _pData);
+        virtual OTableWindow* createWindow(const TTableWindowData::value_type& _pData);
+
+        /** determines whether the classes Init method should accept a query name, or only table names
+        */
+        virtual bool    allowQueries() const;
 
     public:
         ORelationTableView( Window* pParent, ORelationDesignView* pView );
