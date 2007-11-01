@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritecanvas.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:48:40 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:43:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,13 +178,15 @@ namespace vclcanvas
     }
 
     bool SpriteCanvas::repaint( const GraphicObjectSharedPtr&   rGrf,
+                                const rendering::ViewState&     viewState,
+                                const rendering::RenderState&   renderState,
                                 const ::Point&                  rPt,
                                 const ::Size&                   rSz,
                                 const GraphicAttr&              rAttr ) const
     {
         tools::LocalGuard aGuard;
 
-        return maCanvasHelper.repaint( rGrf, rPt, rSz, rAttr );
+        return maCanvasHelper.repaint( rGrf, viewState, renderState, rPt, rSz, rAttr );
     }
 
     OutputDevice* SpriteCanvas::getOutDev() const
