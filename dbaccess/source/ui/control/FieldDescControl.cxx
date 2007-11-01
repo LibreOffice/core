@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:06:00 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1251,6 +1251,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
 void OFieldDescControl::DeactivateAggregate( EControlType eType )
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
+    pLastFocusWindow = NULL;
     //////////////////////////////////////////////////////////////////////
     // Controls zerstoeren
     switch( eType )
@@ -1586,7 +1587,8 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
             ActivateAggregate( tpScale );
             pScale->SetMax(::std::max<sal_Int32>(pFieldType->nMaximumScale,pFieldDescr->GetScale()));
             pScale->SetMin(pFieldType->nMinimumScale);
-            pScale->SetSpecialReadOnly(pFieldType->aCreateParams.getLength()==0);
+            static const ::rtl::OUString s_sPRECISION(RTL_CONSTASCII_USTRINGPARAM("PRECISION"));
+            pScale->SetSpecialReadOnly(pFieldType->aCreateParams.getLength() == 0 || pFieldType->aCreateParams == s_sPRECISION);
         }
         else
             DeactivateAggregate( tpScale );
