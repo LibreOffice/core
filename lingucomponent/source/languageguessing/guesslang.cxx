@@ -5,9 +5,9 @@
  *
  *  $RCSfile: guesslang.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-06-22 08:32:42 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 10:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,11 +165,11 @@ LangGuess_Impl::LangGuess_Impl(css::uno::Reference< css::uno::XComponentContext 
     };
     LangCountry aDisable[] =
     {
-        {"gv", ""}, {"sco", ""}, {"tl", ""},            // not lang-id available yet...
-        {"hy", ""}, {"drt", ""},                        // 0 bytes fingerprints...
-        {"zh", "CN"}, {"zh", "TW"}, {"ja", ""}, {"ko", ""},   // not yet correct functional...
+        {"gv", ""}, {"sco", ""},                            // no lang-id available yet...
+//        {"hy", ""}, {"drt", ""},                          // 0 bytes fingerprints...
+        {"zh", "CN"}, {"zh", "TW"}, {"ja", ""}, {"ko", ""}, // not yet correct functional...
         {"ka", ""}, {"hi", ""}, {"mr", ""}, {"ne", ""},
-        {"sa", ""}, {"ta", ""}, {"tl", ""}, {"th", ""},
+        {"sa", ""}, {"ta", ""}, {"th", ""},
         {"qu", ""}, {"yi", ""}
     };
     sal_Int32 nNum = sizeof(aDisable) / sizeof(aDisable[0]);
