@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:21:38 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:54:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,79 +36,40 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 
-#ifndef _FORMS_COMBOBOX_HXX_
 #include "ComboBox.hxx"
-#endif
-#ifndef _FRM_PROPERTY_HXX_
 #include "property.hxx"
-#endif
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
-#ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
-#include <tools/diagnose_ex.h>
-#endif
-#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
-#include <cppuhelper/queryinterface.hxx>
-#endif
-#ifndef _FRM_RESOURCE_HXX_
-#include "frm_resource.hxx"
-#endif
-#ifndef _FRM_RESOURCE_HRC_
-#include "frm_resource.hrc"
-#endif
-#ifndef _FORMS_BASELISTBOX_HXX_
-#include "BaseListBox.hxx"
-#endif
-#ifndef _COMPHELPER_NUMBERS_HXX_
-#include <comphelper/numbers.hxx>
-#endif
-#ifndef _COMPHELPER_BASIC_IO_HXX_
-#include <comphelper/basicio.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
-#include <connectivity/dbconversion.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_SDB_SQLERROREVENT_HPP_
+#include "frm_resource.hxx"
+#include "frm_resource.hrc"
+#include "BaseListBox.hxx"
+
+/** === begin UNO includes === **/
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XLISTBOX_HPP_
-#include <com/sun/star/awt/XListBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
-#endif
+#include <com/sun/star/sdb/CommandType.hpp>
+/** === end UNO includes === **/
+
+#include <connectivity/dbtools.hxx>
+#include <connectivity/dbconversion.hxx>
+
+#include <unotools/sharedunocomponent.hxx>
+
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+
+#include <comphelper/numbers.hxx>
+#include <comphelper/basicio.hxx>
+
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace dbtools;
 
@@ -190,11 +151,8 @@ OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory
                     // use the old control name for compytibility reasons
     ,OEntryListHelper( m_aMutex )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
+    ,m_aListRowSet( getContext() )
     ,m_eListSourceType(ListSourceType_TABLE)
-    ,m_aNullDate(DBTypeConversion::getStandardDate())
-    ,m_nFormatKey(0)
-    ,m_nFieldType(DataType::OTHER)
-    ,m_nKeyType(NumberFormat::UNDEFINED)
     ,m_bEmptyIsNull(sal_True)
 {
     DBG_CTOR( OComboBoxModel, NULL );
@@ -208,13 +166,10 @@ OComboBoxModel::OComboBoxModel( const OComboBoxModel* _pOriginal, const Referenc
     :OBoundControlModel( _pOriginal, _rxFactory )
     ,OEntryListHelper( *_pOriginal, m_aMutex )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
+    ,m_aListRowSet( getContext() )
     ,m_aListSource( _pOriginal->m_aListSource )
     ,m_aDefaultText( _pOriginal->m_aDefaultText )
     ,m_eListSourceType( _pOriginal->m_eListSourceType )
-    ,m_aNullDate(DBTypeConversion::getStandardDate())
-    ,m_nFormatKey(0)
-    ,m_nFieldType(DataType::OTHER)
-    ,m_nKeyType(NumberFormat::UNDEFINED)
     ,m_bEmptyIsNull( _pOriginal->m_bEmptyIsNull )
 {
     DBG_CTOR( OComboBoxModel, NULL );
@@ -541,7 +496,6 @@ void OComboBoxModel::loadData()
     if (!xConnection.is())
         return;
 
-    // we need a com::sun::star::sdb::Connection for some of the code below ...
     Reference<XServiceInfo> xServiceInfo(xConnection, UNO_QUERY);
     if (!xServiceInfo.is() || !xServiceInfo->supportsService(SRV_SDB_CONNECTION))
     {
@@ -549,14 +503,14 @@ void OComboBoxModel::loadData()
         return;
     }
 
-    Reference<XStatement> xStmt;
-    Reference<XResultSet> xListCursor;
-
     if (!m_aListSource.getLength() || m_eListSourceType == ListSourceType_VALUELIST)
         return;
 
     try
     {
+        m_aListRowSet.setConnection( xConnection );
+
+        bool bExecuteRowSet( false );
         switch (m_eListSourceType)
         {
             case ListSourceType_TABLEFIELDS:
@@ -630,57 +584,67 @@ void OComboBoxModel::loadData()
                     qualifiedNameComponents( xMeta, m_aListSource, sCatalog, sSchema, sTable, eInDataManipulation );
                     aStatement += composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable );
 
-                    xStmt = xConnection->createStatement();
-                    xListCursor = xStmt->executeQuery(aStatement);
+                    m_aListRowSet.setEscapeProcessing( false );
+                    m_aListRowSet.setCommandType( CommandType::COMMAND );
+                    m_aListRowSet.setCommand( aStatement );
+                    bExecuteRowSet = true;
                 }
             }   break;
             case ListSourceType_QUERY:
             {
-                Reference<XQueriesSupplier> xSupplyQueries(xConnection, UNO_QUERY);
-                Reference< XPropertySet > xQuery;
-                xSupplyQueries->getQueries()->getByName( m_aListSource ) >>= xQuery;
-                xStmt = xConnection->createStatement();
-                Reference<XPropertySet>(xStmt, UNO_QUERY)->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING));
+                m_aListRowSet.setCommand( m_aListSource );
+                m_aListRowSet.setCommandType( CommandType::QUERY );
+                bExecuteRowSet = true;
+            }
+            break;
 
-                ::rtl::OUString sStatement;
-                xQuery->getPropertyValue(PROPERTY_COMMAND) >>= sStatement;
-                xListCursor = xStmt->executeQuery(sStatement);
-            }   break;
             default:
             {
-                xStmt = xConnection->createStatement();
                 if (ListSourceType_SQLPASSTHROUGH == m_eListSourceType)
-                {
-                    Reference<XPropertySet> xStatementProps(xStmt, UNO_QUERY);
-                    xStatementProps->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, makeAny(sal_Bool(sal_False)));
-                }
-                xListCursor = xStmt->executeQuery(m_aListSource);
+                    m_aListRowSet.setEscapeProcessing( false );
+                m_aListRowSet.setCommand( m_aListSource );
+                m_aListRowSet.setCommandType( CommandType::COMMAND );
+                bExecuteRowSet = true;
             }
+        }
+
+        if ( bExecuteRowSet )
+        {
+            Reference< XPropertySet > xFormProps(xForm, UNO_QUERY);
+
+            m_aListRowSet.setDataSource( xFormProps->getPropertyValue( PROPERTY_DATASOURCE ) );
+            m_aListRowSet.setConnection( xFormProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) );
+
+            if ( !m_aListRowSet.isDirty() )
+            {
+                // if none of the settings of the row set changed, compared to the last
+                // invocation of loadData, then don't re-fill the list. Instead, assume
+                // the list entries are the same.
+                return;
+            }
+            m_aListRowSet.execute();
         }
     }
     catch(SQLException& eSQL)
     {
         onError(eSQL, FRM_RES_STRING(RID_BASELISTBOX_ERROR_FILLLIST));
-        disposeComponent(xListCursor);
-        disposeComponent(xStmt);
         return;
     }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
-        disposeComponent(xListCursor);
-        disposeComponent(xStmt);
         return;
     }
-
-    if (ListSourceType_TABLEFIELDS != m_eListSourceType && !xListCursor.is())
-        // something went wrong ...
-        return;
 
     vector< ::rtl::OUString >   aStringList;
     aStringList.reserve(16);
     try
     {
+        ::utl::SharedUNOComponent< XResultSet > xListCursor( Reference< XResultSet >( m_aListRowSet.getRowSet(), UNO_QUERY ) );
+        if (ListSourceType_TABLEFIELDS != m_eListSourceType && !xListCursor.is())
+            // something went wrong ...
+            return;
+
         switch (m_eListSourceType)
         {
             case ListSourceType_SQL:
@@ -697,26 +661,20 @@ void OComboBoxModel::loadData()
                     xColumns = Reference<XIndexAccess>(xSupplyCols->getColumns(), UNO_QUERY);
                     DBG_ASSERT(xColumns.is(), "OComboBoxModel::loadData : no columns supplied by the row set !");
                 }
-                Reference<XColumn> xDataField;
-                if (xColumns.is())
+                Reference< XPropertySet > xDataField;
+                if ( xColumns.is() )
                     xColumns->getByIndex(0) >>= xDataField;
-                if (!xDataField.is())
-                {
-                    disposeComponent(xListCursor);
+                if ( !xDataField.is() )
                     return;
-                }
+
+                ::dbtools::FormattedColumnValue aValueFormatter( getContext(), xForm, xDataField );
 
                 // Listen fuellen
                 sal_Int16 i = 0;
                 // per definitionem the list cursor is positioned _before_ the first row at the moment
                 while (xListCursor->next() && (i++<SHRT_MAX)) // max anzahl eintraege
                 {
-
-                    aStringList.push_back(DBTypeConversion::getValue(xDataField,
-                                            m_xFormatter,
-                                            m_aNullDate,
-                                            m_nFormatKey,
-                                            m_nKeyType));
+                    aStringList.push_back( aValueFormatter.getFormattedValue() );
                 }
             }
             break;
@@ -742,15 +700,11 @@ void OComboBoxModel::loadData()
     catch(SQLException& eSQL)
     {
         onError(eSQL, FRM_RES_STRING(RID_BASELISTBOX_ERROR_FILLLIST));
-        disposeComponent(xListCursor);
-        disposeComponent(xStmt);
         return;
     }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
-        disposeComponent(xListCursor);
-        disposeComponent(xStmt);
         return;
     }
 
@@ -762,39 +716,14 @@ void OComboBoxModel::loadData()
 
     // String-Sequence an ListBox setzen
     setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( aStringSeq ) );
-
-    // destroy cursor & statement
-    disposeComponent(xListCursor);
-    disposeComponent(xStmt);
 }
 
 //------------------------------------------------------------------------------
 void OComboBoxModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
     Reference<XPropertySet> xField = getField();
-    if (xField.is())
-    {
-        // jetzt den Key und typ ermitteln
-        xField->getPropertyValue(PROPERTY_FIELDTYPE) >>= m_nFieldType;
-        xField->getPropertyValue(PROPERTY_FORMATKEY) >>= m_nFormatKey;
-
-        // XNumberFormatter besorgen
-        Reference< XRowSet > xRowSet( _rxForm, UNO_QUERY );
-        DBG_ASSERT(xRowSet.is(), "OComboBoxModel::onConnectedDbColumn : invalid event source !");
-                Reference<XNumberFormatsSupplier> xSupplier = getNumberFormats(getConnection(xRowSet), sal_False, m_xServiceFactory);
-        if (xSupplier.is())
-        {
-            m_xFormatter =  Reference<XNumberFormatter>(
-                m_xServiceFactory->createInstance(FRM_NUMBER_FORMATTER), UNO_QUERY
-            );
-            if (m_xFormatter.is())
-                m_xFormatter->attachNumberFormatsSupplier(xSupplier);
-
-            m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), m_nFormatKey);
-            xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString::createFromAscii("NullDate")) >>= m_aNullDate;
-        }
-    }
-
+    if ( xField.is() )
+        m_pValueFormatter.reset( new ::dbtools::FormattedColumnValue( getContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
     getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= m_aDesignModeStringItems;
 
     // Daten nur laden, wenn eine Listenquelle angegeben wurde
@@ -805,14 +734,7 @@ void OComboBoxModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm
 //------------------------------------------------------------------------------
 void OComboBoxModel::onDisconnectedDbColumn()
 {
-    if (hasField())
-    {
-        m_xFormatter = 0;
-        m_nFieldType = DataType::OTHER;
-        m_nFormatKey = 0;
-        m_nKeyType   = NumberFormat::UNDEFINED;
-        m_aNullDate  = DBTypeConversion::getStandardDate();
-    }
+    m_pValueFormatter.reset();
 
     // reset the string item list
     if ( !hasExternalListSource() )
@@ -844,10 +766,16 @@ sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
         {
             try
             {
-                DBTypeConversion::setValue(m_xColumnUpdate, m_xFormatter, m_aNullDate, aNewValue,
-                                           m_nFormatKey, m_nFieldType, m_nKeyType);
+                OSL_PRECOND( m_pValueFormatter.get(), "OComboBoxModel::commitControlValueToDbColumn: no value formatter!" );
+                if ( m_pValueFormatter.get() )
+                {
+                    if ( !m_pValueFormatter->setFormattedValue( aNewValue ) )
+                        return sal_False;
+                }
+                else
+                    m_xColumnUpdate->updateString( aNewValue );
             }
-            catch(Exception&)
+            catch ( const Exception& )
             {
                 return sal_False;
             }
@@ -891,13 +819,11 @@ sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
 //------------------------------------------------------------------------------
 Any OComboBoxModel::translateDbColumnToControlValue()
 {
-    DBG_ASSERT( m_xColumn.is(), "OComboBoxModel::translateDbColumnToControlValue: have no column!" );
-    m_aSaveValue = DBTypeConversion::getValue(m_xColumn,
-                                              m_xFormatter,
-                                              m_aNullDate,
-                                              m_nFormatKey,
-                                              m_nKeyType);
-
+    OSL_PRECOND( m_pValueFormatter.get(), "OComboBoxModel::translateDbColumnToControlValue: no value formatter!" );
+    if ( m_pValueFormatter.get() )
+        m_aSaveValue = m_pValueFormatter->getFormattedValue();
+    else
+        m_aSaveValue = ::rtl::OUString();
     return makeAny( m_aSaveValue );
 }
 
