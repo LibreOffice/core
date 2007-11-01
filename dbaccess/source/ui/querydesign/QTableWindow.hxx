@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableWindow.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:40:58 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:30:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,23 +56,22 @@ namespace dbaui
         sal_Int32           m_nAliasNum;
         ::rtl::OUString     m_strInitialAlias;
     public:
-        TYPEINFO();
-        OQueryTableWindow( Window* pParent, OQueryTableWindowData* pTabWinData, sal_Unicode* pszInitialAlias = NULL );
+        OQueryTableWindow( Window* pParent, const TTableWindowData::value_type& pTabWinData, sal_Unicode* pszInitialAlias = NULL );
         virtual ~OQueryTableWindow();
 
         ::rtl::OUString GetAliasName() const
         {
-            return static_cast<OQueryTableWindowData*>(GetData())->GetAliasName();
+            return static_cast<OQueryTableWindowData*>(GetData().get())->GetAliasName();
         }
         void            SetAliasName(const ::rtl::OUString& strNewAlias)
         {
-            static_cast<OQueryTableWindowData*>(GetData())->SetAliasName(strNewAlias);
+            static_cast<OQueryTableWindowData*>(GetData().get())->SetAliasName(strNewAlias);
         }
 
         // spaeter Constructor, die Basisklasse ERZEUGT beim ersten Aufruf die Listbox
         virtual BOOL    Init();
 
-        sal_Int32       GetAliasNum() const { return m_nAliasNum; }
+        inline sal_Int32        GetAliasNum() const { return m_nAliasNum; }
 
         BOOL            ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDescRef& rInfo);
         BOOL            ExistsAVisitedConn() const;
@@ -102,9 +101,6 @@ namespace dbaui
         virtual void* createUserData(const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::beans::XPropertySet>& _xColumn,
                                     bool _bPrimaryKey);
-
-        virtual bool    allowQueries() const;
-        virtual void    onNoColumns_throw();
     };
 }
 #endif // DBAUI_QUERY_TABLEWINDOW_HXX
