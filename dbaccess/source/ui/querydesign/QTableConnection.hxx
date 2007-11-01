@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableConnection.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:37:32 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:29:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,18 +53,17 @@ namespace dbaui
     {
         sal_Bool m_bVisited;    // is true if the conn was already visited through the join algorithm
     public:
-        TYPEINFO();
-        OQueryTableConnection(OQueryTableView* pContainer, OQueryTableConnectionData* pTabConnData);
+        OQueryTableConnection(OQueryTableView* pContainer, const TTableConnectionData::value_type& pTabConnData);
         OQueryTableConnection(const OQueryTableConnection& rConn);
         virtual ~OQueryTableConnection();
 
         OQueryTableConnection& operator=(const OQueryTableConnection& rConn);
         sal_Bool operator==(const OQueryTableConnection& rCompare);
 
-        ::rtl::OUString GetAliasName(EConnectionSide nWhich) const { return static_cast<OQueryTableConnectionData*>(GetData())->GetAliasName(nWhich); }
+        inline ::rtl::OUString  GetAliasName(EConnectionSide nWhich) const { return static_cast<OQueryTableConnectionData*>(GetData().get())->GetAliasName(nWhich); }
 
-        sal_Bool    IsVisited() const               { return m_bVisited; }
-        void        SetVisited(sal_Bool bVisited)   { m_bVisited = bVisited; }
+        inline sal_Bool IsVisited() const               { return m_bVisited; }
+        inline void     SetVisited(sal_Bool bVisited)   { m_bVisited = bVisited; }
 
     };
 }
