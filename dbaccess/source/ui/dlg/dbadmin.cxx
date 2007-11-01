@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:13:45 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:10:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,9 +80,6 @@
 #endif
 #ifndef DBAUI_CONNECTIONPAGE_HXX
 #include "ConnectionPage.hxx"
-#endif
-#ifndef DBAUI_ADVANCEDPAGEDLG_HXX
-#include "AdvancedPageDlg.hxx"
 #endif
 #ifndef DBAUI_DRIVERSETTINGS_HXX
 #include "DriverSettings.hxx"
@@ -380,7 +377,7 @@ SfxItemSet* ODbAdminDialog::getWriteOutputSet()
     return m_pImpl->createConnection();
 }
 // -----------------------------------------------------------------------------
-Reference< XMultiServiceFactory > ODbAdminDialog::getORB()
+Reference< XMultiServiceFactory > ODbAdminDialog::getORB() const
 {
     return m_pImpl->getORB();
 }
@@ -426,10 +423,10 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_SHOWDELETEDROWS, sal_False);
     *pCounter++ = new SfxBoolItem(DSID_ALLOWLONGTABLENAMES, sal_False);
     *pCounter++ = new SfxStringItem(DSID_JDBCDRIVERCLASS, String());
-    *pCounter++ = new SfxStringItem(DSID_FIELDDELIMITER, ';');
+    *pCounter++ = new SfxStringItem(DSID_FIELDDELIMITER, ',');
     *pCounter++ = new SfxStringItem(DSID_TEXTDELIMITER, '"');
     *pCounter++ = new SfxStringItem(DSID_DECIMALDELIMITER, '.');
-    *pCounter++ = new SfxStringItem(DSID_THOUSANDSDELIMITER, ',');
+    *pCounter++ = new SfxStringItem(DSID_THOUSANDSDELIMITER, String());
     *pCounter++ = new SfxStringItem(DSID_TEXTFILEEXTENSION, String::CreateFromAscii("txt"));
     *pCounter++ = new SfxBoolItem(DSID_TEXTFILEHEADER, sal_True);
     *pCounter++ = new SfxBoolItem(DSID_PARAMETERNAMESUBST, sal_True);
@@ -464,10 +461,12 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_DOSLINEENDS, sal_False);
     *pCounter++ = new SfxStringItem(DSID_DATABASENAME, String());
     *pCounter++ = new SfxBoolItem(DSID_AS_BEFORE_CORRNAME, sal_True);
+    *pCounter++ = new SfxBoolItem(DSID_CHECK_REQUIRED_FIELDS, sal_True);
 
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
+        {0,0},
         {0,0},
         {0,0},
         {0,0},
