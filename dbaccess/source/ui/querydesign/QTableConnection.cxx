@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableConnection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:37:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:29:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,18 +48,15 @@
 #include "ConnectionLine.hxx"
 #endif
 using namespace dbaui;
-
-
-TYPEINIT1(OQueryTableConnection, OTableConnection);
-
 //========================================================================
 // class OQueryTableConnection
 //========================================================================
 DBG_NAME(OQueryTableConnection);
 
 //------------------------------------------------------------------------
-OQueryTableConnection::OQueryTableConnection(OQueryTableView* pContainer, OQueryTableConnectionData* pTabConnData)
+OQueryTableConnection::OQueryTableConnection(OQueryTableView* pContainer, const TTableConnectionData::value_type& pTabConnData)
     :OTableConnection(pContainer, pTabConnData)
+    ,m_bVisited(sal_False)
 {
     DBG_CTOR(OQueryTableConnection,NULL);
 }
@@ -72,8 +69,6 @@ OQueryTableConnection::OQueryTableConnection(const OQueryTableConnection& rConn)
     DBG_CTOR(OQueryTableConnection,NULL);
     // keine eigenen Members, also reicht die Basisklassenfunktionalitaet
 }
-
-
 //------------------------------------------------------------------------
 OQueryTableConnection::~OQueryTableConnection()
 {
@@ -98,18 +93,18 @@ sal_Bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare
 
     // allzuviel brauche ich nicht vergleichen (schon gar nicht alle Member) : lediglich die Fenster, an denen wir haengen, und
     // die Indizies in der entsprechenden Tabelle muessen uebereinstimmen
-    OQueryTableConnectionData* pMyData = (OQueryTableConnectionData*)GetData();
-    OQueryTableConnectionData* pCompData = (OQueryTableConnectionData*)rCompare.GetData();
+    OQueryTableConnectionData* pMyData = static_cast<OQueryTableConnectionData*>(GetData().get());
+    OQueryTableConnectionData* pCompData = static_cast<OQueryTableConnectionData*>(rCompare.GetData().get());
 
     // Connections werden als gleich angesehen, wenn sie in Source-/Dest-Fenstername und Source-/Dest-FieldIndex uebereinstimmen ...
-    return  (   (   (pMyData->GetSourceWinName() == pCompData->GetSourceWinName()) &&
-                    (pMyData->GetDestWinName() == pCompData->GetDestWinName()) &&
+    return  (   (   (pMyData->getReferencedTable() == pCompData->getReferencedTable()) &&
+                    (pMyData->getReferencingTable() == pCompData->getReferencingTable()) &&
                     (pMyData->GetFieldIndex(JTCS_TO) == pCompData->GetFieldIndex(JTCS_TO)) &&
                     (pMyData->GetFieldIndex(JTCS_FROM) == pCompData->GetFieldIndex(JTCS_FROM))
                 )
                 ||  // ... oder diese Uebereinstimmung ueber Kreuz besteht
-                (   (pMyData->GetSourceWinName() == pCompData->GetDestWinName()) &&
-                    (pMyData->GetDestWinName() == pCompData->GetSourceWinName()) &&
+                (   (pMyData->getReferencingTable() == pCompData->getReferencedTable()) &&
+                    (pMyData->getReferencedTable() == pCompData->getReferencingTable()) &&
                     (pMyData->GetFieldIndex(JTCS_TO) == pCompData->GetFieldIndex(JTCS_FROM)) &&
                     (pMyData->GetFieldIndex(JTCS_FROM) == pCompData->GetFieldIndex(JTCS_TO))
                 )
