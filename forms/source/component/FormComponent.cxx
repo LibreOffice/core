@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:53:23 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:55:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,7 @@ DBG_NAME(frm_OControl)
 //------------------------------------------------------------------------------
 OControl::OControl( const Reference< XMultiServiceFactory>& _rxFactory, const rtl::OUString& _rAggregateService, const sal_Bool _bSetDelegator )
             :OComponentHelper(m_aMutex)
+            ,m_aContext( _rxFactory )
             ,m_xServiceFactory(_rxFactory)
 {
     DBG_CTOR(frm_OControl, NULL);
@@ -598,6 +599,7 @@ OControlModel::OControlModel(
             const ::rtl::OUString& rDefault, const sal_Bool _bSetDelegator)
     :OComponentHelper(m_aMutex)
     ,OPropertySetAggregationHelper(OComponentHelper::rBHelper)
+    ,m_aContext( _rxFactory )
     ,m_xServiceFactory(_rxFactory)
     ,m_aPropertyBagHelper( *this )
     ,m_nTabIndex(FRM_DEFAULT_TABINDEX)
@@ -642,6 +644,7 @@ OControlModel::OControlModel(
 OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< XMultiServiceFactory>& _rxFactory, const sal_Bool _bCloneAggregate, const sal_Bool _bSetDelegator )
     :OComponentHelper( m_aMutex )
     ,OPropertySetAggregationHelper( OComponentHelper::rBHelper )
+    ,m_aContext( _rxFactory )
     ,m_xServiceFactory( _rxFactory )
     ,m_aPropertyBagHelper( *this )
     ,m_nTabIndex( FRM_DEFAULT_TABINDEX )
