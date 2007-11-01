@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtoolsclient.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:42:45 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:00:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,14 +80,14 @@ namespace svxform
         mutable ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory > m_xDataAccessFactory;
 
     protected:
-        const ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory >&
-            getFactory() const { return m_xDataAccessFactory; }
+        ODbtoolsClient();
+        virtual ~ODbtoolsClient();
+
+        virtual bool ensureLoaded() const;
 
     protected:
-        ODbtoolsClient();
-        ~ODbtoolsClient();
-        //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
-        void create() const;
+        const ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory >&
+            getFactory() const { return m_xDataAccessFactory; }
 
     private:
         static void registerClient();
@@ -101,10 +101,9 @@ namespace svxform
     {
     protected:
         mutable ::rtl::Reference< ::connectivity::simple::IDataAccessTools >    m_xDataAccessTools;
-        //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
-        void create() const;
 
-        void checkIfLoaded() const;
+    protected:
+        virtual bool ensureLoaded() const;
 
     public:
         OStaticDataAccessTools();
@@ -226,6 +225,24 @@ namespace svxform
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent
         );
     };
+
+    //====================================================================
+    //= DBToolsObjectFactory
+    //====================================================================
+    class DBToolsObjectFactory : public ODbtoolsClient
+    {
+    public:
+        DBToolsObjectFactory();
+        ~DBToolsObjectFactory();
+
+        // ------------------------------------------------
+        ::std::auto_ptr< ::dbtools::FormattedColumnValue >  createFormattedColumnValue(
+            const ::comphelper::ComponentContext& _rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn
+        );
+    };
+
 //........................................................................
 }   // namespace svxform
 //........................................................................
