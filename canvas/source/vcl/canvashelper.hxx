@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvashelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:25:53 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:42:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,10 +282,12 @@ namespace vclcanvas
         ::com::sun::star::rendering::IntegerBitmapLayout getMemoryLayout();
 
         /// Repaint a cached bitmap
-        bool repaint( const GraphicObjectSharedPtr& rGrf,
-                      const ::Point&                rPt,
-                      const ::Size&                 rSz,
-                      const GraphicAttr&            rAttr ) const;
+        bool repaint( const GraphicObjectSharedPtr&                   rGrf,
+                      const ::com::sun::star::rendering::ViewState&   viewState,
+                      const ::com::sun::star::rendering::RenderState& renderState,
+                      const ::Point&                                  rPt,
+                      const ::Size&                                   rSz,
+                      const GraphicAttr&                              rAttr ) const;
 
         /** Flush drawing queue.
 
@@ -303,7 +305,7 @@ namespace vclcanvas
         // returns transparency of color
         int setupOutDevState( const ::com::sun::star::rendering::ViewState&     viewState,
                               const ::com::sun::star::rendering::RenderState&   renderState,
-                              ColorType                                         eColorType );
+                              ColorType                                         eColorType ) const;
 
         /** Called from XCanvas base classes, to notify that content
             is _about_ to change
@@ -341,10 +343,10 @@ namespace vclcanvas
                             const ::com::sun::star::rendering::RenderState& renderState,
                             bool                                            bModulateColors );
 
-        bool setupTextOutput( ::Point&                                                                                      o_rOutPos,
+        bool setupTextOutput( ::Point&                                                                              o_rOutPos,
                               const ::com::sun::star::rendering::ViewState&                                         viewState,
                               const ::com::sun::star::rendering::RenderState&                                       renderState,
-                              const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont >&   xFont );
+                              const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont >&   xFont ) const;
 
     };
 }
