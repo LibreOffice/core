@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Pattern.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:30:52 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:55:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,29 +36,30 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 
-#ifndef _FORMS_PATTERN_HXX_
 #include "Pattern.hxx"
-#endif
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
+/** === begin UNO includes === **/
+/** === end UNO includes === **/
 
 //.........................................................................
 namespace frm
 {
 //.........................................................................
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::form;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
+
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::lang::XMultiServiceFactory;
+    using ::com::sun::star::uno::Sequence;
+    using ::com::sun::star::uno::Type;
+    using ::com::sun::star::beans::Property;
+    using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::sdbc::XRowSet;
+    using ::com::sun::star::uno::UNO_QUERY;
+    /** === end UNO using === **/
+    namespace FormComponentType = ::com::sun::star::form::FormComponentType;
 
 //==================================================================
 // OPatternControl
@@ -180,25 +181,46 @@ sal_Bool OPatternModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             m_xColumnUpdate->updateNull();
         else
         {
-            try
-            {
-                m_xColumnUpdate->updateString( sNewValue );
-            }
-            catch(Exception&)
-            {
+            OSL_ENSURE( m_pFormattedValue.get(), "OPatternModel::commitControlValueToDbColumn: no value helper!" );
+            if ( !m_pFormattedValue.get() )
                 return sal_False;
-            }
+
+            if ( !m_pFormattedValue->setFormattedValue( sNewValue ) )
+                return sal_False;
         }
         m_aSaveValue = sNewValue;
     }
     return sal_True;
 }
 
+//------------------------------------------------------------------------------
+void OPatternModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
+{
+    OEditBaseModel::onConnectedDbColumn( _rxForm );
+
+    Reference< XPropertySet > xField( getField() );
+    if ( !xField.is() )
+        return;
+
+    m_pFormattedValue.reset( new ::dbtools::FormattedColumnValue( getContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
+}
+
+//------------------------------------------------------------------------------
+void OPatternModel::onDisconnectedDbColumn()
+{
+    OEditBaseModel::onDisconnectedDbColumn();
+    m_pFormattedValue.reset();
+}
+
 // XPropertyChangeListener
 //------------------------------------------------------------------------------
 Any OPatternModel::translateDbColumnToControlValue()
 {
-    m_aSaveValue = m_xColumn->getString();
+    OSL_PRECOND( m_pFormattedValue.get(), "OPatternModel::translateDbColumnToControlValue: no value helper!" );
+    if ( m_pFormattedValue.get() )
+        m_aSaveValue = m_pFormattedValue->getFormattedValue();
+    else
+        m_aSaveValue = ::rtl::OUString();
     return makeAny( m_aSaveValue );
 }
 
