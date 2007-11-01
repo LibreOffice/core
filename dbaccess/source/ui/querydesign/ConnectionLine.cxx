@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionLine.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:36:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ namespace
         Rectangle aReturn;
         if ( pListBox )
         {
-            long nRowHeight = pListBox->GetEntryHeight();
+            const long nRowHeight = pListBox->GetEntryHeight();
             aReturn.Top() = _aConnPos.Y() - nRowHeight;
             aReturn.Bottom() = aReturn.Top() + nRowHeight;
             if (_aDescrLinePos.X() < _aConnPos.X())
@@ -116,25 +116,29 @@ namespace
     void calcPointsYValue(const OTableWindow* _pWin,SvLBoxEntry* _pEntry,Point& _rNewConPos,Point& _rNewDescrPos)
     {
         const OTableWindowListBox* pListBox = _pWin->GetListBox();
-        long nRowHeight = pListBox->GetEntryHeight();
-
         _rNewConPos.Y() = _pWin->GetPosPixel().Y();
-        _rNewConPos.Y() += pListBox->GetPosPixel().Y();
-        long nEntryPos = pListBox->GetEntryPosition( _pEntry ).Y();
-
-        if( nEntryPos >= 0 )
+        if ( _pEntry )
         {
-            _rNewConPos.Y() += nEntryPos;
-            _rNewConPos.Y() += (long)( 0.5 * nRowHeight );
+            const long nRowHeight = pListBox->GetEntryHeight();
+            _rNewConPos.Y() += pListBox->GetPosPixel().Y();
+            long nEntryPos = pListBox->GetEntryPosition( _pEntry ).Y();
+
+            if( nEntryPos >= 0 )
+            {
+                _rNewConPos.Y() += nEntryPos;
+                _rNewConPos.Y() += (long)( 0.5 * nRowHeight );
+            }
+            else
+                _rNewConPos.Y() -= (long)( 0.5 * nRowHeight );
+
+            long nListBoxBottom = _pWin->GetPosPixel().Y()
+                                    + pListBox->GetPosPixel().Y()
+                                    + pListBox->GetSizePixel().Height();
+            if( _rNewConPos.Y() > nListBoxBottom )
+                _rNewConPos.Y() = nListBoxBottom + 2;
         }
         else
-            _rNewConPos.Y() -= (long)( 0.5 * nRowHeight );
-
-        long nListBoxBottom = _pWin->GetPosPixel().Y()
-                                + pListBox->GetPosPixel().Y()
-                                + pListBox->GetSizePixel().Height();
-        if( _rNewConPos.Y() > nListBoxBottom )
-            _rNewConPos.Y() = nListBoxBottom + 2;
+            _rNewConPos.Y() += static_cast<sal_Int32>(pListBox->GetPosPixel().Y()*0.5);
 
         _rNewDescrPos.Y() = _rNewConPos.Y();
     }
@@ -149,8 +153,6 @@ DBG_NAME(OConnectionLine)
 OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineDataRef _pLineData )
     : m_pTabConn( _pConn )
      ,m_pData( _pLineData )
-     ,m_pSourceEntry( NULL )
-     ,m_pDestEntry( NULL )
 {
     DBG_CTOR(OConnectionLine,NULL);
 }
@@ -179,8 +181,6 @@ OConnectionLine& OConnectionLine::operator=( const OConnectionLine& rLine )
             // CopyFrom ist virtuell, damit ist es kein Problem, wenn m_pData von einem von OTableConnectionData abgeleiteten Typ ist
 
         m_pTabConn = rLine.m_pTabConn;
-        m_pSourceEntry = rLine.m_pSourceEntry;
-        m_pDestEntry = rLine.m_pDestEntry;
         m_aSourceConnPos = rLine.m_aSourceConnPos;
         m_aDestConnPos = rLine.m_aDestConnPos;
         m_aSourceDescrLinePos = rLine.m_aSourceDescrLinePos;
@@ -261,11 +261,8 @@ BOOL OConnectionLine::RecalcLine()
     if( !pSourceWin || !pDestWin )
         return FALSE;
 
-    m_pSourceEntry = pSourceWin->GetListBox()->GetEntryFromText( GetData()->GetSourceFieldName() );
-    m_pDestEntry = pDestWin->GetListBox()->GetEntryFromText( GetData()->GetDestFieldName() );
-
-    if( !m_pSourceEntry || !m_pDestEntry )
-        return FALSE;
+    SvLBoxEntry* pSourceEntry = pSourceWin->GetListBox()->GetEntryFromText( GetData()->GetSourceFieldName() );
+    SvLBoxEntry* pDestEntry = pDestWin->GetListBox()->GetEntryFromText( GetData()->GetDestFieldName() );
 
     //////////////////////////////////////////////////////////////////////
     // X-Koordinaten bestimmen
@@ -296,11 +293,11 @@ BOOL OConnectionLine::RecalcLine()
 
     //////////////////////////////////////////////////////////////////////
     // aSourceConnPosY bestimmen
-    calcPointsYValue(pSourceWin,m_pSourceEntry,m_aSourceConnPos,m_aSourceDescrLinePos);
+    calcPointsYValue(pSourceWin,pSourceEntry,m_aSourceConnPos,m_aSourceDescrLinePos);
 
     //////////////////////////////////////////////////////////////////////
     // aDestConnPosY bestimmen
-    calcPointsYValue(pDestWin,m_pDestEntry,m_aDestConnPos,m_aDestDescrLinePos);
+    calcPointsYValue(pDestWin,pDestEntry,m_aDestConnPos,m_aDestDescrLinePos);
 
     return TRUE;
 }
@@ -360,7 +357,7 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
 // -----------------------------------------------------------------------------
 BOOL OConnectionLine::IsValid() const
 {
-    return m_pData.isValid() && m_pData->IsValid();
+    return m_pData.isValid();
 }
 //------------------------------------------------------------------------
 double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)
