@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:58:43 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:56:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,18 +142,11 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #endif
 
-#ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
 #include <comphelper/propagg.hxx>
-#endif
-#ifndef COMPHELPER_PROPERTYBAG_HXX
 #include <comphelper/propertybag.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
-#endif
+#include <comphelper/componentcontext.hxx>
 
 #ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
@@ -222,8 +215,9 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>
                                                 m_xAggregate;
 
+    ::comphelper::ComponentContext              m_aContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                                m_xServiceFactory;
+                                                m_xServiceFactory;  // legacy only, use m_aContext instead
     WindowStateGuard                            m_aWindowStateGuard;
 
 public:
@@ -392,7 +386,9 @@ class OControlModel :public ::cppu::OComponentHelper
 {
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xServiceFactory;
+    ::comphelper::ComponentContext  m_aContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                                    m_xServiceFactory;  // legacy only, use m_aContext instead
 
     ::osl::Mutex    m_aMutex;
 
@@ -402,6 +398,10 @@ protected:
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
         getORB( ) const { return m_xServiceFactory; }
+        // legacy only, use getContext instead!
+
+    const ::comphelper::ComponentContext&
+        getContext() const { return m_aContext; }
 
 // <properties>
     ::rtl::OUString                 m_aName;                    // name of the control
