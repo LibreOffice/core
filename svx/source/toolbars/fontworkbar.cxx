@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkbar.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:20:56 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:35:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,15 @@
 #ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
 #endif
-
+#ifndef _SVX_UNOAPI_HXX_
+#include "unoapi.hxx"
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XENHANCEDCUSTOMSHAPEDEFAULTER_HPP_
+#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
+#endif
 #ifndef _SVX_DIALMGR_HXX
 #include <svx/dialmgr.hxx>
 #endif
@@ -97,6 +105,7 @@
 using namespace ::svx;
 using namespace ::rtl;
 using namespace ::cppu;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
@@ -392,7 +401,6 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 #include <svx/fmpage.hxx>
 #include <svtools/itempool.hxx>
 
-
 void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const rtl::OUString rCustomShape )
 {
     const rtl::OUString sType( RTL_CONSTASCII_USTRINGPARAM ( "Type" ) );
@@ -534,6 +542,15 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                         SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                         GetGeometryForCustomShape( aGeometryItem, aCustomShape );
                         pObj->SetMergedItem( aGeometryItem );
+
+                        Reference< drawing::XShape > aXShape = GetXShapeForSdrObject( (SdrObjCustomShape*)pObj );
+                        if ( aXShape.is() )
+                        {
+                            Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( aXShape, UNO_QUERY );
+                            if( xDefaulter.is() )
+                                xDefaulter->createCustomShapeDefaults( aCustomShape );
+                        }
+
                         pObj->BroadcastObjectChange();
                         pSdrView->EndUndo();
                         pSdrView->AdjustMarkHdl(); //HMH sal_True );
