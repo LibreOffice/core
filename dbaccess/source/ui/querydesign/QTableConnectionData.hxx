@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableConnectionData.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:37:57 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:30:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,16 +58,10 @@ namespace dbaui
         sal_Int32       m_nFromEntryIndex;
         sal_Int32       m_nDestEntryIndex;
         EJoinType       m_eJoinType;
+        bool            m_bNatural;
 
         ETableFieldType m_eFromType;
         ETableFieldType m_eDestType;
-
-        // meine Basisklasse merkt sich leider nur die Fensternamen (was hier das selbe wie die Aliasnamen ist), ich aber brauche
-        // auch Zugriff auf die realen Tabellennamen. Damit ich mir nicht die Fenster dazu merken muss (das waere schmutzig, da die
-        // TabConDatas normalerweise vom Dokument verwaltet werden und voellig losgeloest von der Repraesentation der Tabellen als
-        // Fenster sein sollten), habe ich zwei ::rtl::OUString-Member
-        ::rtl::OUString m_strSourceTableName;
-        ::rtl::OUString m_strDestTableName;
 
     protected:
         // fuer das Anlegen und Duplizieren von Lines vom eigenen Typ
@@ -76,11 +70,10 @@ namespace dbaui
 
         OQueryTableConnectionData& operator=( const OQueryTableConnectionData& rConnData );
     public:
-        TYPEINFO();
         OQueryTableConnectionData();
         OQueryTableConnectionData( const OQueryTableConnectionData& rConnData );
-        OQueryTableConnectionData( const ::rtl::OUString& strSourceTable, const ::rtl::OUString& strDestTable,
-            const ::rtl::OUString& strSourceAlias, const ::rtl::OUString& strDestAlias, const ::rtl::OUString& rConnName=::rtl::OUString());
+        OQueryTableConnectionData( const TTableWindowData::value_type& _pReferencingTable,const TTableWindowData::value_type& _pReferencedTable,
+            const ::rtl::OUString& rConnName=::rtl::OUString());
         virtual ~OQueryTableConnectionData();
 
         virtual void CopyFrom(const OTableConnectionData& rSource);
@@ -106,6 +99,8 @@ namespace dbaui
         EJoinType       GetJoinType() const { return m_eJoinType; };
         void            SetJoinType(const EJoinType& eJT) { m_eJoinType = eJT; };
 
+        inline void setNatural(bool _bNatural) { m_bNatural = _bNatural; }
+        inline bool isNatural() const { return m_bNatural; }
     };
 
 }
