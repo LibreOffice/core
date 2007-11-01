@@ -4,9 +4,9 @@
  *
  *  $RCSfile: endian.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:05:42 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:14:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,27 +168,14 @@ extern "C" {
 #   endif
 #endif
 
-#ifdef MACOS
-#   include <premac.h>
-#   include <TextUtils.h>
-#   include <Endian.h>
-#   include <postmac.h>
-#   if TARGET_RT_LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#   elif TARGET_RT_BIG_ENDIAN
-#       define _BIG_ENDIAN
-#   endif
-#endif
-
-
 /** Check supported platform.
  */
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)   && \
     !defined(LINUX)   && !defined(NETBSD) && !defined(SCO)   && \
     !defined(AIX)     && !defined(HPUX)   && \
-    !defined(SOLARIS) && !defined(IRIX)   && !defined(MACOS) && \
+    !defined(SOLARIS) && !defined(IRIX)   && \
     !defined(MACOSX) && !defined(FREEBSD)
-#   error "Target plattform not specified !"
+#   error "Target platform not specified !"
 #endif
 
 
