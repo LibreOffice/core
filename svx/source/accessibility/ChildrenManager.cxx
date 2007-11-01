@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChildrenManager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:40:39 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 13:01:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,8 @@ long ChildrenManager::GetChildCount (void) const throw ()
 
 
 Reference<XAccessible> ChildrenManager::GetChild (long nIndex)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException,
+           ::com::sun::star::lang::IndexOutOfBoundsException)
 {
     OSL_ASSERT (mpImpl != NULL);
     return mpImpl->GetChild (nIndex);
