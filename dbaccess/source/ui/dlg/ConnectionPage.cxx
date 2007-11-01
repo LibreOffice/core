@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 17:58:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:05:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #endif
 #ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
+#endif
+#ifndef DBACCESS_DSMETA_HXX
+#include "dsmeta.hxx"
 #endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
@@ -244,7 +247,6 @@ namespace dbaui
         m_eType = m_pAdminDialog->getDatasourceType(_rSet);
         OConnectionHelper::implInitControls( _rSet, _bSaveValue);
 
-        sal_Bool bShowUser = sal_True;
         LocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
         switch( m_eType )
         {
@@ -259,7 +261,6 @@ namespace dbaui
             case DST_CALC:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_CALC_PATH_OR_FILE)));
                 m_aET_Connection.SetHelpId(HID_DSADMIN_CALC_PATH);
-                bShowUser = sal_False;
                 break;
             case DST_ADABAS:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_ADABAS_DATABASE_NAME)));
@@ -320,12 +321,16 @@ namespace dbaui
                 break;
         }
 
+        ;
+        AuthenticationMode eAuthMode( DataSourceMetaData::getAuthentication( m_eType ) );
+        bool bShowUserAuthenfication = ( eAuthMode != AuthNone );
+        bool bShowUser = ( eAuthMode == AuthUserPwd );
+
         m_aPB_Connection.SetHelpId(HID_DSADMIN_BROWSECONN);
-        BOOL bShowUserAuthenfication = m_pCollection->hasAuthentication(m_eType);
-        m_aFL2.Show(bShowUserAuthenfication);
-        m_aUserNameLabel.Show(bShowUser && bShowUserAuthenfication);
-        m_aUserName.Show(bShowUser && bShowUserAuthenfication);
-        m_aPasswordRequired.Show(bShowUserAuthenfication);
+        m_aFL2.Show( bShowUserAuthenfication );
+        m_aUserNameLabel.Show( bShowUser && bShowUserAuthenfication );
+        m_aUserName.Show( bShowUser && bShowUserAuthenfication );
+        m_aPasswordRequired.Show( bShowUserAuthenfication );
         if ( !bShowUser && bShowUserAuthenfication )
             m_aPasswordRequired.SetPosPixel(m_aUserNameLabel.GetPosPixel());
 
