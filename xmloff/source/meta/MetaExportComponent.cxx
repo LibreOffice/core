@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MetaExportComponent.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:18:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 13:39:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
         }
 #endif
 
-        AddAttribute( XML_NAMESPACE_OFFICE, XML_VERSION, ::rtl::OUString::createFromAscii( "1.0" ) );
+        AddAttribute( XML_NAMESPACE_OFFICE, XML_VERSION, ::rtl::OUString::createFromAscii( "1.1" ) );
 
         SvXMLElementExport aDocElem( *this, XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,
                         sal_True, sal_True );
