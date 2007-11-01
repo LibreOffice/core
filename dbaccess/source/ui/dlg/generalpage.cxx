@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:17:12 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:13:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,20 +245,6 @@ namespace dbaui
 
 
     //-------------------------------------------------------------------------
-    void OGeneralPage::initializeHistory()
-    {
-        m_aSelectionHistory.clear();
-        if (m_pCollection)
-        {
-            for (   ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
-                    aTypeLoop != m_pCollection->end();
-                    ++aTypeLoop
-                )
-                m_aSelectionHistory[aTypeLoop.getType()] = m_pCollection->getDatasourcePrefix(aTypeLoop.getType());
-        }
-
-    }
-    //-------------------------------------------------------------------------
     void OGeneralPage::setParentTitle(DATASOURCE_TYPE _eSelectedType)
     {
         if (!m_DBWizardMode)
@@ -336,7 +322,6 @@ namespace dbaui
     //-------------------------------------------------------------------------
     void OGeneralPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
-        initializeHistory();
         initializeTypeList();
 
         // first check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
@@ -499,8 +484,6 @@ namespace dbaui
             return;
 
         m_eCurrentSelection = _eType;
-        ::std::vector< sal_Int32> aDetailIds;
-        ODriversSettings::fillDetailIds(m_eCurrentSelection,aDetailIds);
     }
 
     //-------------------------------------------------------------------------
