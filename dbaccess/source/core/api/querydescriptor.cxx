@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-23 14:19:48 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:02:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,11 @@ OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor_Base& _rSource)
     DBG_CTOR(OQueryDescriptor,NULL);
     registerProperties();
     ODataSettings::registerPropertiesFor(this);
+}
+// -----------------------------------------------------------------------------
+OQueryDescriptor::~OQueryDescriptor()
+{
+    DBG_DTOR(OQueryDescriptor,NULL);
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_TYPEPROVIDER2(OQueryDescriptor,OQueryDescriptor_Base,ODataSettings);
