@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableConnection.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:13:24 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:18:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
+#include "TableConnectionData.hxx"
 
 class Point;
 class Rectangle;
@@ -69,7 +70,8 @@ namespace dbaui
     class OTableConnection : public Window
     {
         ::std::vector<OConnectionLine*> m_vConnLine;
-        OTableConnectionData*           m_pData;
+        TTableConnectionData::value_type
+                                        m_pData;
         OJoinTableView*                 m_pParent;
 
         BOOL                            m_bSelected;
@@ -83,8 +85,7 @@ namespace dbaui
         OConnectionLine* CreateConnLine( const OConnectionLine& rConnLine );
 
     public:
-        TYPEINFO();
-        OTableConnection( OJoinTableView* pContainer, OTableConnectionData* pTabConnData );
+        OTableConnection( OJoinTableView* pContainer, const TTableConnectionData::value_type& pTabConnData );
         OTableConnection( const OTableConnection& rConn );
             // WICHTIG : normalerweise bekomme ich von aussen einen Zeiger auf OTableConnectionData mitgegeben, hier aber muss ich
             // mir (ueber OTableConnectionData::NewInstance) selber eine INstanz anlegen, die ich aber - wie in allen anderen Faellen auch -
@@ -118,9 +119,9 @@ namespace dbaui
 
         Rectangle   GetBoundingRect() const;
 
-        OTableConnectionData*           GetData() const { return m_pData; }
-        const ::std::vector<OConnectionLine*>* GetConnLineList() const { return &m_vConnLine; }
-        OJoinTableView*                 GetParent() const { return m_pParent; }
+        inline TTableConnectionData::value_type GetData() const { return m_pData; }
+        const ::std::vector<OConnectionLine*>*  GetConnLineList() const { return &m_vConnLine; }
+        inline OJoinTableView*                  GetParent() const { return m_pParent; }
         virtual void                    Draw( const Rectangle& rRect );
         using Window::Draw;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
