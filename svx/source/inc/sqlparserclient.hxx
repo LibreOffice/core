@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlparserclient.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:26:22 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:00:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,24 +67,21 @@ namespace svxform
     protected:
         OSQLParserClient(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
-        //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
-        void create() const;
+        virtual bool ensureLoaded() const;
 
     protected:
-            inline ::rtl::Reference< ::connectivity::simple::ISQLParseNode > predicateTree(
-                    ::rtl::OUString& _rErrorMessage,
-                    const ::rtl::OUString& _rStatement,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField
-                ) const
-            {
-                ::rtl::Reference< ::connectivity::simple::ISQLParseNode > xReturn;
-                if (!m_xParser.is())
-                    create();
-                if (m_xParser.is())
-                    xReturn = m_xParser->predicateTree(_rErrorMessage, _rStatement, _rxFormatter, _rxField);
-                return xReturn;
-            }
+        inline ::rtl::Reference< ::connectivity::simple::ISQLParseNode > predicateTree(
+                ::rtl::OUString& _rErrorMessage,
+                const ::rtl::OUString& _rStatement,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField
+            ) const
+        {
+            ::rtl::Reference< ::connectivity::simple::ISQLParseNode > xReturn;
+            if ( ensureLoaded() )
+                xReturn = m_xParser->predicateTree(_rErrorMessage, _rStatement, _rxFormatter, _rxField);
+            return xReturn;
+        }
     };
 
 //........................................................................
