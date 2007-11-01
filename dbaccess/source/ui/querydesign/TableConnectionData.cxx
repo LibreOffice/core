@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableConnectionData.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:24:33 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:33:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,24 +51,23 @@ using namespace comphelper;
 // class OTableConnectionData
 //==================================================================
 DBG_NAME(OTableConnectionData)
-TYPEINIT0(OTableConnectionData);
 //------------------------------------------------------------------------
 OTableConnectionData::OTableConnectionData()
 {
     DBG_CTOR(OTableConnectionData,NULL);
     Init();
 }
-
-//------------------------------------------------------------------------
-OTableConnectionData::OTableConnectionData( const String& rSourceWinName, const String& rDestWinName, const String& rConnName )
-    :m_aSourceWinName( rSourceWinName )
-    ,m_aDestWinName( rDestWinName )
-    ,m_aConnName( rConnName )
+// -----------------------------------------------------------------------------
+OTableConnectionData::OTableConnectionData(const TTableWindowData::value_type& _pReferencingTable
+                                          ,const TTableWindowData::value_type& _pReferencedTable
+                                          ,const String& rConnName )
+ :m_pReferencingTable(_pReferencingTable)
+ ,m_pReferencedTable(_pReferencedTable)
+ ,m_aConnName( rConnName )
 {
     DBG_CTOR(OTableConnectionData,NULL);
     Init();
 }
-
 //------------------------------------------------------------------------
 void OTableConnectionData::Init()
 {
@@ -78,28 +77,12 @@ void OTableConnectionData::Init()
     ResetConnLines(TRUE);
         // das legt Defaults an
 }
-
-//------------------------------------------------------------------------
-void OTableConnectionData::Init(const String& rSourceWinName, const String& rDestWinName, const String& rConnName)
-{
-    // erst mal alle LineDatas loeschen
-    OConnectionLineDataVec().swap(m_vConnLineData);
-    // dann die Strings
-    m_aSourceWinName = rSourceWinName;
-    m_aDestWinName = rDestWinName;
-    m_aConnName = rConnName;
-
-    // den Rest erledigt das andere Init
-    Init();
-}
-
 //------------------------------------------------------------------------
 OTableConnectionData::OTableConnectionData( const OTableConnectionData& rConnData )
 {
     DBG_CTOR(OTableConnectionData,NULL);
     *this = rConnData;
 }
-
 //------------------------------------------------------------------------
 void OTableConnectionData::CopyFrom(const OTableConnectionData& rSource)
 {
@@ -122,8 +105,8 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
     if (&rConnData == this)
         return *this;
 
-    m_aSourceWinName = rConnData.GetSourceWinName();
-    m_aDestWinName = rConnData.GetDestWinName();
+    m_pReferencingTable = rConnData.m_pReferencingTable;
+    m_pReferencedTable = rConnData.m_pReferencedTable;
     m_aConnName = rConnData.GetConnName();
 
     // clear line list
@@ -179,15 +162,9 @@ BOOL OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFieldNa
 }
 
 //------------------------------------------------------------------------
-void OTableConnectionData::ResetConnLines( BOOL bUseDefaults )
+void OTableConnectionData::ResetConnLines( BOOL /*bUseDefaults*/ )
 {
     OConnectionLineDataVec().swap(m_vConnLineData);
-
-    if (bUseDefaults)
-    {
-        for (USHORT i=0; i<MAX_CONN_COUNT; i++)
-            m_vConnLineData.push_back( new OConnectionLineData());
-    }
 }
 
 //------------------------------------------------------------------------
@@ -213,7 +190,7 @@ void OTableConnectionData::normalizeLines()
     sal_Int32 nCount = m_vConnLineData.size();
     for(sal_Int32 i=0;i<nCount;)
     {
-        if(!m_vConnLineData[i]->GetSourceFieldName().getLength() && !m_vConnLineData[i]->GetDestFieldName().getLength())
+        if(!m_vConnLineData[i]->GetSourceFieldName().getLength() || !m_vConnLineData[i]->GetDestFieldName().getLength())
         {
             OConnectionLineDataRef pData = m_vConnLineData[i];
             m_vConnLineData.erase(m_vConnLineData.begin()+i);
