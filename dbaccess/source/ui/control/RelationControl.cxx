@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:48:46 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:04:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,8 +104,8 @@ namespace dbaui
     {
         friend class OTableListBoxControl;
 
-        ::svt::ListBoxControl*                  m_pListCell;
-        OTableConnectionData*                   m_pConnData;
+        ::std::auto_ptr< ::svt::ListBoxControl> m_pListCell;
+        TTableConnectionData::value_type        m_pConnData;
         const OJoinTableView::OTableWindowMap*  m_pTableMap;
         OTableListBoxControl*                   m_pBoxControl;
         long                                    m_nDataPos;
@@ -137,7 +137,7 @@ namespace dbaui
 
             @return rthe connection data
         */
-        inline OTableConnectionData* getData() const { return m_pConnData; }
+        inline TTableConnectionData::value_type getData() const { return m_pConnData; }
 
         void lateInit();
 
@@ -148,7 +148,7 @@ namespace dbaui
 
         virtual BOOL IsTabAllowed(BOOL bForward) const;
 
-        virtual void Init(OTableConnectionData* _pConnData);
+        virtual void Init(const TTableConnectionData::value_type& _pConnData);
         virtual void Init() { ORelationControl_Base::Init(); }
         virtual void InitController( ::svt::CellControllerRef& rController, long nRow, USHORT nCol );
         virtual ::svt::CellController* GetController( long nRow, USHORT nCol );
@@ -159,10 +159,11 @@ namespace dbaui
 
         virtual void CellModified();
 
+        DECL_LINK( AsynchDeactivate, void* );
     private:
 
         DECL_LINK( AsynchActivate, void* );
-        DECL_LINK( AsynchDeactivate, void* );
+
     };
 
     //========================================================================
@@ -171,9 +172,7 @@ namespace dbaui
     DBG_NAME(ORelationControl)
     //------------------------------------------------------------------------
     ORelationControl::ORelationControl( OTableListBoxControl* pParent ,const OJoinTableView::OTableWindowMap* _pTableMap)
-        :EditBrowseBox( pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | WB_3DLOOK | WB_BORDER )
-        ,m_pListCell( NULL )
-        ,m_pConnData( NULL )
+        :EditBrowseBox( pParent, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE, WB_TABSTOP | /*WB_3DLOOK | */WB_BORDER | BROWSER_AUTOSIZE_LASTCOL)
         ,m_pTableMap(_pTableMap)
         ,m_pBoxControl(pParent)
         ,m_xSourceDef( NULL )
@@ -186,12 +185,10 @@ namespace dbaui
     ORelationControl::~ORelationControl()
     {
         DBG_DTOR(ORelationControl,NULL);
-
-        delete m_pListCell;
     }
 
     //------------------------------------------------------------------------
-    void ORelationControl::Init(OTableConnectionData* _pConnData)
+    void ORelationControl::Init(const TTableConnectionData::value_type& _pConnData)
     {
         DBG_CHKTHIS(ORelationControl,NULL);
 
@@ -203,21 +200,18 @@ namespace dbaui
     //------------------------------------------------------------------------------
     void ORelationControl::lateInit()
     {
-        OJoinTableView::OTableWindowMap::const_iterator aFind = m_pTableMap->find(m_pConnData->GetSourceWinName());
-        if( aFind != m_pTableMap->end() )
-            m_xSourceDef = aFind->second->GetTableOrQuery();
-
-        aFind = m_pTableMap->find(m_pConnData->GetDestWinName());
-        if( aFind != m_pTableMap->end() )
-            m_xDestDef = aFind->second->GetTableOrQuery();
+        if ( !m_pConnData.get() )
+            return;
+        m_xSourceDef = m_pConnData->getReferencingTable()->getTable();
+        m_xDestDef = m_pConnData->getReferencedTable()->getTable();
 
         if ( ColCount() == 0 )
         {
-            InsertDataColumn( SOURCE_COLUMN, m_pConnData->GetSourceWinName(), 100);
-            InsertDataColumn( DEST_COLUMN, m_pConnData->GetDestWinName(), 100);
+            InsertDataColumn( SOURCE_COLUMN, m_pConnData->getReferencingTable()->GetWinName(), 100);
+            InsertDataColumn( DEST_COLUMN, m_pConnData->getReferencedTable()->GetWinName(), 100);
                 // wenn es die Defs noch nicht gibt, dann muessen sie noch mit SetSource-/-DestDef gesetzt werden !
 
-            m_pListCell = new ListBoxControl( &GetDataWindow() );
+            m_pListCell.reset( new ListBoxControl( &GetDataWindow() ) );
 
             //////////////////////////////////////////////////////////////////////
             // set browse mode
@@ -233,7 +227,7 @@ namespace dbaui
             // not the first call
             RowRemoved(0, GetRowCount());
 
-        RowInserted(0, m_pConnData->GetConnLineDataList()->size(), TRUE);
+        RowInserted(0, m_pConnData->GetConnLineDataList()->size() + 1, TRUE); // add one extra row
     }
     //------------------------------------------------------------------------------
     void ORelationControl::Resize()
@@ -288,13 +282,19 @@ namespace dbaui
     BOOL ORelationControl::SaveModified()
     {
         DBG_CHKTHIS(ORelationControl,NULL);
-        if ( GetCurRow() != BROWSER_ENDOFSELECTION )
+        sal_Int32 nRow = GetCurRow();
+        if ( nRow != BROWSER_ENDOFSELECTION )
         {
-            OSL_ENSURE((sal_Int32)m_pConnData->GetConnLineDataList()->size() > GetCurRow(),"Invalid Index!");
-
             String sFieldName(m_pListCell->GetSelectEntry());
+            OConnectionLineDataVec* pLines = m_pConnData->GetConnLineDataList();
+            if ( pLines->size() <= static_cast<sal_uInt32>(nRow) )
+            {
+                pLines->push_back(new OConnectionLineData());
+                nRow = pLines->size() - 1;
+            }
 
-            OConnectionLineDataRef pConnLineData = (*m_pConnData->GetConnLineDataList())[GetCurRow()];
+            OConnectionLineDataRef pConnLineData = (*pLines)[nRow];
+
             switch( getColumnIdent( GetCurColumnId() ) )
             {
             case SOURCE_COLUMN:
@@ -312,7 +312,7 @@ namespace dbaui
     USHORT ORelationControl::getColumnIdent( USHORT _nColId ) const
     {
         USHORT nId = _nColId;
-        if ( m_pConnData->GetSourceWinName() != m_pBoxControl->getSourceWinName())
+        if ( m_pConnData->getReferencingTable() != m_pBoxControl->getReferencingTable() )
             nId = ( _nColId == SOURCE_COLUMN) ? DEST_COLUMN : SOURCE_COLUMN;
         return nId;
     }
@@ -325,17 +325,14 @@ namespace dbaui
         if ( m_pConnData->GetConnLineDataList()->size() > static_cast<size_t>(nRow) )
         {
             OConnectionLineDataRef pConnLineData = (*m_pConnData->GetConnLineDataList())[nRow];
-            if( pConnLineData.isValid() )
+            switch( getColumnIdent( nColId ) )
             {
-                switch( getColumnIdent( nColId ) )
-                {
-                case SOURCE_COLUMN:
-                    sText  =pConnLineData->GetSourceFieldName();
-                    break;
-                case DEST_COLUMN:
-                    sText  =pConnLineData->GetDestFieldName();
-                    break;
-                }
+            case SOURCE_COLUMN:
+                sText  = pConnLineData->GetSourceFieldName();
+                break;
+            case DEST_COLUMN:
+                sText  = pConnLineData->GetDestFieldName();
+                break;
             }
         }
         return sText;
@@ -383,7 +380,7 @@ namespace dbaui
     CellController* ORelationControl::GetController( long /*nRow*/, USHORT /*nColumnId*/ )
     {
         DBG_CHKTHIS(ORelationControl,NULL);
-        return new ListBoxCellController( m_pListCell );
+        return new ListBoxCellController( m_pListCell.get() );
     }
 
     //------------------------------------------------------------------------------
@@ -424,12 +421,11 @@ namespace dbaui
                 Reference<XColumnsSupplier> xSup(_xDest,UNO_QUERY);
                 Reference<XNameAccess> xColumns = xSup->getColumns();
                 Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-                const ::rtl::OUString* pBegin = aNames.getConstArray();
-                const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
-                for(;pBegin != pEnd;++pBegin)
+                const ::rtl::OUString* pIter = aNames.getConstArray();
+                const ::rtl::OUString* pEnd = pIter + aNames.getLength();
+                for(;pIter != pEnd;++pIter)
                 {
-                    String sName = *pBegin;
-                    m_pListCell->InsertEntry( *pBegin );
+                    m_pListCell->InsertEntry( *pIter );
                 }
                 m_pListCell->InsertEntry(String(), 0);
             }
@@ -472,8 +468,8 @@ namespace dbaui
                                 OUnaryRefFunctor<OConnectionLineData>( ::std::mem_fun(&OConnectionLineData::Reset))
                                 );
 
-                m_pConnData->SetSourceWinName(_pSource->GetName());
-                m_pConnData->SetDestWinName(_pDest->GetName());
+                m_pConnData->setReferencingTable(_pSource->GetData());
+                m_pConnData->setReferencedTable(_pDest->GetData());
             }
             m_pConnData->normalizeLines();
 
@@ -501,10 +497,10 @@ DBG_NAME(OTableListBoxControl)
 
 //========================================================================
 
-OTableListBoxControl::OTableListBoxControl(Window* _pParent,
-                                               const ResId& _rResId,
-                                               const OJoinTableView::OTableWindowMap* _pTableMap,
-                                               IRelationControlInterface* _pParentDialog)
+OTableListBoxControl::OTableListBoxControl(  Window* _pParent
+                                            ,const ResId& _rResId
+                                            ,const OJoinTableView::OTableWindowMap* _pTableMap
+                                            ,IRelationControlInterface* _pParentDialog)
      : Window(_pParent,_rResId)
      , m_aFL_InvolvedTables(    this, ResId(FL_INVOLVED_TABLES,*_rResId.GetResMgr()))
      , m_lmbLeftTable(          this, ResId(LB_LEFT_TABLE,*_rResId.GetResMgr()))
@@ -518,16 +514,7 @@ OTableListBoxControl::OTableListBoxControl(Window* _pParent,
         m_pRC_Tables->Init( );
         m_pRC_Tables->SetZOrder(&m_lmbRightTable, WINDOW_ZORDER_BEHIND);
 
-        //////////////////////////////////////////////////////////////////////
-        // positing BrowseBox control
-
-        Point aDlgPoint = LogicToPixel( Point(12,43), MAP_APPFONT );
-        Size aCurrentSize = GetSizePixel();
-        Size aDlgSize = LogicToPixel( Size(24,60), MAP_APPFONT );
-        aDlgSize.Width() = aCurrentSize.Width() - aDlgSize.Width();
-
-        m_pRC_Tables->SetPosSizePixel( aDlgPoint, aDlgSize );
-        m_pRC_Tables->Show();
+        lateUIInit();
 
         Link aLink(LINK(this, OTableListBoxControl, OnTableChanged));
         m_lmbLeftTable.SetSelectHdl(aLink);
@@ -542,7 +529,6 @@ OTableListBoxControl::OTableListBoxControl(Window* _pParent,
         ORelationControl* pTemp = m_pRC_Tables;
         m_pRC_Tables = NULL;
         delete pTemp;
-
         DBG_DTOR(OTableListBoxControl,NULL);
     }
     // -----------------------------------------------------------------------------
@@ -675,29 +661,14 @@ OTableListBoxControl::OTableListBoxControl(Window* _pParent,
     void OTableListBoxControl::NotifyCellChange()
     {
         // den Ok-Button en- oder disablen, je nachdem, ob ich eine gueltige Situation habe
-        BOOL bValid = TRUE;
-        USHORT nEmptyRows = 0;
-        OTableConnectionData* pConnData = m_pRC_Tables->getData();
-        OConnectionLineDataVec* pLines = pConnData->GetConnLineDataList();
-        OConnectionLineDataVec::iterator aIter = pLines->begin();
-        for(;aIter != pLines->end();++aIter)
-        {
-            sal_Int32 nDestLen  = (*aIter)->GetDestFieldName().getLength();
-            sal_Int32 nSrcLen   = (*aIter)->GetSourceFieldName().getLength();
-            if ( (nDestLen != 0) != (nSrcLen != 0) )
-                bValid = FALSE;
-                // wenn nich beide leer oder beide voll sind -> ungueltig
-            if ((nDestLen == 0) && (nSrcLen == 0))
-                ++nEmptyRows;
-        }
-        m_pParentDialog->setValid(bValid && (nEmptyRows != pLines->size()));
-            // nur leere Zeilen -> ungueltig
+        TTableConnectionData::value_type pConnData = m_pRC_Tables->getData();
+        const OConnectionLineDataVec* pLines = pConnData->GetConnLineDataList();
+        m_pParentDialog->setValid(!pLines->empty());
 
-        if (nEmptyRows == 0)
+        if ( pLines->size() >= static_cast<sal_uInt32>(m_pRC_Tables->GetRowCount()) )
         {
-            pConnData->AppendConnLine(String(), String());
             m_pRC_Tables->DeactivateCell();
-            m_pRC_Tables->RowInserted(m_pRC_Tables->GetRowCount(), 1, TRUE);
+            m_pRC_Tables->RowInserted(m_pRC_Tables->GetRowCount(), pLines->size() - static_cast<sal_uInt32>(m_pRC_Tables->GetRowCount()) + 1, TRUE);
             m_pRC_Tables->ActivateCell();
         }
     }
@@ -709,15 +680,43 @@ OTableListBoxControl::OTableListBoxControl(Window* _pParent,
         _rListBox.Disable();
     }
     // -----------------------------------------------------------------------------
-    void OTableListBoxControl::fillAndDisable(OTableConnectionData* _pConnectionData)
+    void OTableListBoxControl::fillAndDisable(const TTableConnectionData::value_type& _pConnectionData)
     {
-        fillEntryAndDisable(m_lmbLeftTable,_pConnectionData->GetSourceWinName());
-        fillEntryAndDisable(m_lmbRightTable,_pConnectionData->GetDestWinName());
+        fillEntryAndDisable(m_lmbLeftTable,_pConnectionData->getReferencingTable()->GetWinName());
+        fillEntryAndDisable(m_lmbRightTable,_pConnectionData->getReferencedTable()->GetWinName());
     }
     // -----------------------------------------------------------------------------
-    void OTableListBoxControl::Init(OTableConnectionData* _pConnData)
+    void OTableListBoxControl::Init(const TTableConnectionData::value_type& _pConnData)
     {
         m_pRC_Tables->Init(_pConnData);
+    }
+    // -----------------------------------------------------------------------------
+    void OTableListBoxControl::lateUIInit(Window* _pTableSeparator)
+    {
+        const sal_Int32 nDiff = LogicToPixel( Point(0,6), MAP_APPFONT ).Y();
+        Point aDlgPoint = LogicToPixel( Point(12,43), MAP_APPFONT );
+        if ( _pTableSeparator )
+        {
+            _pTableSeparator->SetZOrder(&m_lmbRightTable, WINDOW_ZORDER_BEHIND);
+            m_pRC_Tables->SetZOrder(_pTableSeparator, WINDOW_ZORDER_BEHIND);
+            //aDlgPoint = m_pTableSeparator->GetPosPixel() + Point(0,aSize.Height()) + LogicToPixel( Point(0,6), MAP_APPFONT );
+            _pTableSeparator->SetPosPixel(Point(0,m_aFL_InvolvedFields.GetPosPixel().Y()));
+            const Size aSize = _pTableSeparator->GetSizePixel();
+            aDlgPoint.Y() = _pTableSeparator->GetPosPixel().Y() + aSize.Height();
+            m_aFL_InvolvedFields.SetPosPixel(Point(m_aFL_InvolvedFields.GetPosPixel().X(),aDlgPoint.Y()));
+            aDlgPoint.Y() += nDiff + m_aFL_InvolvedFields.GetSizePixel().Height();
+        }
+        //////////////////////////////////////////////////////////////////////
+        // positing BrowseBox control
+        const Size aCurrentSize = GetSizePixel();
+        Size aDlgSize = LogicToPixel( Size(24,0), MAP_APPFONT );
+        aDlgSize.Width() = aCurrentSize.Width() - aDlgSize.Width();
+        aDlgSize.Height() = aCurrentSize.Height() - aDlgPoint.Y() - nDiff;
+
+        m_pRC_Tables->SetPosSizePixel( aDlgPoint, aDlgSize );
+        m_pRC_Tables->Show();
+
+        lateInit();
     }
     // -----------------------------------------------------------------------------
     void OTableListBoxControl::lateInit()
@@ -732,16 +731,23 @@ OTableListBoxControl::OTableListBoxControl(Window* _pParent,
         return bRet;
     }
     // -----------------------------------------------------------------------------
-    String OTableListBoxControl::getSourceWinName() const
+    TTableWindowData::value_type OTableListBoxControl::getReferencingTable()    const
     {
-        return m_lmbLeftTable.GetSelectEntryCount() ? m_lmbLeftTable.GetSelectEntry() : m_lmbLeftTable.GetEntry(0);
+        return m_pRC_Tables->getData()->getReferencingTable();
     }
     // -----------------------------------------------------------------------------
-    String OTableListBoxControl::getDestWinName() const
+    TTableWindowData::value_type OTableListBoxControl::getReferencedTable() const
     {
-        return m_lmbRightTable.GetSelectEntryCount() ? m_lmbRightTable.GetSelectEntry() : m_lmbRightTable.GetEntry(0);
+        return m_pRC_Tables->getData()->getReferencedTable();
     }
     // -----------------------------------------------------------------------------
+    void OTableListBoxControl::enableRelation(bool _bEnable)
+    {
+        if ( !_bEnable )
+            PostUserEvent(LINK(m_pRC_Tables, ORelationControl, AsynchDeactivate));
+        m_pRC_Tables->Enable(_bEnable);
+
+    }
     // -----------------------------------------------------------------------------
 }
 // -----------------------------------------------------------------------------
