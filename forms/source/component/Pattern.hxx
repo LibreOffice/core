@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Pattern.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:31:07 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:55:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,10 @@
 #include "EditBase.hxx"
 #endif
 
+#include <connectivity/formattedcolumnvalue.hxx>
+
+#include <memory>
+
 //.........................................................................
 namespace frm
 {
@@ -52,7 +56,10 @@ class OPatternModel
                 :public OEditBaseModel
 {
 private:
-    ::rtl::OUString         m_aSaveValue;
+    ::rtl::OUString     m_aSaveValue;
+    ::std::auto_ptr< ::dbtools::FormattedColumnValue >
+                        m_pFormattedValue;
+
 protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
@@ -76,6 +83,8 @@ protected:
     virtual ::com::sun::star::uno::Any
                             translateDbColumnToControlValue( );
     virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
+    virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
+    virtual void            onDisconnectedDbColumn();
 
     virtual ::com::sun::star::uno::Any
                             getDefaultForReset() const;
