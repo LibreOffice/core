@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:33:12 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:28:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,7 +253,7 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
     if ( mpDrawViewShell && mpDrawViewShell->GetEditMode() == EM_MASTERPAGE )
     {
         SfxStyleSheetBasePool* pStShPool = mpDoc->GetStyleSheetPool();
-        SdPage& rPage = (SdPage&)mpDrawViewShell->GetActualPage()->TRG_GetMasterPage();
+        SdPage& rPage = *mpDrawViewShell->getCurrentPage();
         String aLayoutName = rPage.GetName();
         SdrTextObj* pEditObject = static_cast< SdrTextObj* >( GetTextEditObject() );
 
