@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:41:43 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 13:44:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3563,6 +3563,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, BOOL bAfter,
         SwNodeIndex aIdx( *pBox->GetSttNd() );
         new SwEndNode( aIdx, *pTNd );
         pNewTblNd = new SwTableNode( aIdx );
+        pNewTblNd->GetTable().SetTableModel( rTbl.IsNewModel() );
 
         pOldTblEndNd->pStartOfSection = pNewTblNd;
         pNewTblNd->pEndOfSection = pOldTblEndNd;
