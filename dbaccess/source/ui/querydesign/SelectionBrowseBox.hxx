@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:39:09 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,8 @@ namespace dbaui
         void                        AddGroupBy( const OTableFieldDescRef& rInfo,sal_uInt32 _nCurrentPos);
         void                        AddCondition( const OTableFieldDescRef& rInfo,
                                                   const String& rValue,
-                                                  const sal_uInt16 nLevel );
+                                                  const sal_uInt16 nLevel,
+                                                  bool _bAddOrOnOneLine  );
         void                        AddOrder(const OTableFieldDescRef& rInfo, const EOrderDir eDir, sal_uInt32 _nCurrentPos);
         void                        ClearAll();
         OTableFieldDescRef          AppendNewCol( sal_uInt16 nCnt=1 );
