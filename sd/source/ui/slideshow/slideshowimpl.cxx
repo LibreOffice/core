@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:23:37 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:27:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,8 +290,10 @@ sal_Int32 AnimationSlideController::getCurrentSlideNumber() const
 {
     if( mnHiddenSlideNumber != -1 )
         return mnHiddenSlideNumber;
-    else
+    else if( !maSlideNumbers.empty() )
         return maSlideNumbers[mnCurrentSlideIndex];
+    else
+        return 0;
 }
 
 sal_Int32 AnimationSlideController::getCurrentSlideIndex() const
