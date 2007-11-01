@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:24:24 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:08:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,8 +230,10 @@ namespace dbaui
                 The id in the itemset to set whith the new value.
             @param  _bChangedSomething
                 <TRUE/> if something changed otherwise <FALSE/>
+            @param _bRevertValue
+                set to <TRUE/> if the display value should be reverted before putting it into the set
         */
-        void fillBool(SfxItemSet& _rSet,CheckBox* _pCheckBox,USHORT _nID,sal_Bool& _bChangedSomething);
+        void fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, USHORT _nID, sal_Bool& _bChangedSomething, bool _bRevertValue = false);
 
         /** fills the int value into the item set when the value changed.
             @param  _rSet
