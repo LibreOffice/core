@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:08:44 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:58:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,9 +144,7 @@
 #ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
 #endif
-#ifndef _CONNECTIVITY_SQLNODE_HXX
-#include <connectivity/sqlnode.hxx>
-#endif
+#include <connectivity/formattedcolumnvalue.hxx>
 
 #include <math.h>
 
@@ -272,7 +270,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
             case TYPE_DATEFIELD: pCellControl = new DbDateField(*this); break;
             case TYPE_LISTBOX: pCellControl = new DbListBox(*this); break;
             case TYPE_NUMERICFIELD: pCellControl = new DbNumericField(*this); break;
-            case TYPE_PATTERNFIELD: pCellControl = new DbPatternField(*this); break;
+            case TYPE_PATTERNFIELD: pCellControl = new DbPatternField( *this, ::comphelper::ComponentContext( m_rParent.getServiceManager() ) ); break;
             case TYPE_TEXTFIELD: pCellControl = new DbTextField(*this); break;
             case TYPE_TIMEFIELD: pCellControl = new DbTimeField(*this); break;
             case TYPE_FORMATTEDFIELD: pCellControl = new DbFormattedField(*this); break;
@@ -870,7 +868,7 @@ void DbCellControl::implAdjustEnabled( const Reference< XPropertySet >& _rxModel
 }
 
 //------------------------------------------------------------------------------
-void DbCellControl::Init(Window* pParent, const Reference< XRowSet >& /*xCursor*/)
+void DbCellControl::Init( Window* pParent, const Reference< XRowSet >& _rxCursor )
 {
     ImplInitSettings(pParent, sal_True ,sal_True, sal_True);
     if ( m_pWindow )
@@ -899,12 +897,12 @@ void DbCellControl::Init(Window* pParent, const Reference< XRowSet >& /*xCursor*
                 implAdjustEnabled( xModel );
             }
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-            (void)e;  // make compiler happy
-            DBG_ERROR( "DbCellControl::Init: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
+    m_xCursor = _rxCursor;
 }
 
 //------------------------------------------------------------------------------
@@ -1748,8 +1746,9 @@ XubString DbCheckBox::GetFormatText(const Reference< XColumn >& /*_rxField*/, co
 //==============================================================================
 //= DbPatternField
 //------------------------------------------------------------------------------
-DbPatternField::DbPatternField( DbGridColumn& _rColumn )
+DbPatternField::DbPatternField( DbGridColumn& _rColumn, const ::comphelper::ComponentContext& _rContext )
     :DbCellControl( _rColumn )
+    ,m_aContext( _rContext )
 {
     doPropertyListening( FM_PROP_LITERALMASK );
     doPropertyListening( FM_PROP_EDITMASK );
@@ -1811,22 +1810,32 @@ String DbPatternField::impl_formatText( const String& _rText )
 //------------------------------------------------------------------------------
 String DbPatternField::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& /*xFormatter*/, Color** /*ppColor*/)
 {
-    String aPureText;
-    if ( _rxField.is() )
-    {
-        try { aPureText = _rxField->getString(); }
-        catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
-    }
+    bool bIsForPaint = _rxField != m_rColumn.GetField();
+    ::std::auto_ptr< ::dbtools::FormattedColumnValue >& rpFormatter = bIsForPaint ? m_pPaintFormatter : m_pValueFormatter;
 
-    return impl_formatText( aPureText );
+    if ( !rpFormatter.get() )
+    {
+        DBToolsObjectFactory aFactory;
+        rpFormatter = aFactory.createFormattedColumnValue(
+            m_aContext, getCursor(), Reference< XPropertySet >( _rxField, UNO_QUERY ) );
+        OSL_ENSURE( rpFormatter.get(), "DbPatternField::Init: no value formatter!" );
+    }
+    else
+        OSL_ENSURE( rpFormatter->getColumn() == _rxField, "DbPatternField::GetFormatText: my value formatter is working for another field ...!" );
+        // re-creating the value formatter here everytime would be quite expensive ...
+
+    String sText;
+    if ( rpFormatter.get() )
+        sText = rpFormatter->getFormattedValue();
+
+    return impl_formatText( sText );
 }
 
 //------------------------------------------------------------------------------
-void DbPatternField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter)
+void DbPatternField::UpdateFromField( const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& _rxFormatter )
 {
-    Edit* pEdit = (Edit*)m_pWindow;
-    pEdit->SetText(GetFormatText(_rxField, xFormatter));
-    pEdit->SetSelection(Selection(SELECTION_MAX,SELECTION_MIN));
+    static_cast< Edit* >( m_pWindow )->SetText( GetFormatText( _rxField, _rxFormatter ) );
+    static_cast< Edit* >( m_pWindow )->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
 }
 
 //------------------------------------------------------------------------------
