@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:35:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:50:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
                 }
                 else if ( ( SQL_ISRULE(pColumnRef,general_set_fct) && pColumnRef->count() != 4 ) )
                 {
-                    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Statement to complex. Only \"COUNT(*)\" is supported.")),NULL);
+                    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Statement too complex. Only \"COUNT(*)\" is supported.")),NULL);
                 }
                 else
                     m_aSelectionEvaluations.push_back( TPredicates() );
