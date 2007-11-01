@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:22:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,7 +357,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
             pBase->GetMainViewShell().get());
         if (pDrawViewShell != NULL && pDrawViewShell->GetDoc() == pDoc)
         {
-            SdPage* pPage = pDrawViewShell->GetActualPage();
+            SdPage* pPage = pDrawViewShell->getCurrentPage();
             DBG_ASSERT(pPage, "aktuelle Seite nicht gefunden");
             aRealStyle = pPage->GetLayoutName();
             // hinter dem Separator abschneiden
