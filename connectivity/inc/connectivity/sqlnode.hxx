@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:12:16 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:48:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ namespace connectivity
                          SQL_NODE_KEYWORD, SQL_NODE_COMPARISON, SQL_NODE_NAME,
                          SQL_NODE_STRING,   SQL_NODE_INTNUM, SQL_NODE_APPROXNUM,
                          SQL_NODE_EQUAL,SQL_NODE_LESS,SQL_NODE_GREAT,SQL_NODE_LESSEQ,SQL_NODE_GREATEQ,SQL_NODE_NOTEQUAL,
-                         SQL_NODE_PUNCTUATION, SQL_NODE_AMMSC, SQL_NODE_ACCESS_DATE,SQL_NODE_DATE};
+                         SQL_NODE_PUNCTUATION, SQL_NODE_AMMSC, SQL_NODE_ACCESS_DATE,SQL_NODE_DATE,SQL_NODE_CONCAT};
 
     typedef ::std::set< ::rtl::OUString >   QueryNameSet;
     //==================================================================
