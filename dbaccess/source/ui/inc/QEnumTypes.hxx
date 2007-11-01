@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QEnumTypes.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:30:05 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:16:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,6 @@ namespace dbaui
         FULL_JOIN=0,
         LEFT_JOIN,
         RIGHT_JOIN,
-        NATURAL_JOIN,
         UNION_JOIN,
         CROSS_JOIN,
         INNER_JOIN
