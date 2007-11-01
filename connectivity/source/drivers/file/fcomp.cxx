@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:29:12 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:50:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
                 OSQLParseNode *pColumnRef = pSelection->getChild(i)->getChild(0);
                 if ( SQL_ISRULE(pColumnRef,general_set_fct) && pColumnRef->count() != 4 )
                 {
-                    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Statement to complex. Only \"COUNT(*)\" is supported.")),NULL);
+                    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Statement too complex. Only \"COUNT(*)\" is supported.")),NULL);
                 }
             }
         }
@@ -287,7 +287,7 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
           // upper, lower etc.
           SQL_ISRULE(pPredicateNode->getChild(2),fold)) )
     {
-        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Statement to complex"),NULL);
+        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Statement too complex"),NULL);
         return NULL;
     }
 
@@ -614,7 +614,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
             }
         }
         else
-            ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Statement to complex"),NULL);
+            ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Statement too complex"),NULL);
 
     }
     else if( SQL_ISRULE(pPredicateNode,fold) )
@@ -634,7 +634,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
     }
     else
     {
-        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Statement to complex"),NULL);
+        ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Statement too complex"),NULL);
     }
     if (pOperand)
         m_aCodeList.push_back(pOperand);
