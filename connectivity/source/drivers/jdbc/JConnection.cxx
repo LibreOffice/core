@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JConnection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:29:37 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:50:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -867,6 +867,7 @@ void java_sql_Connection::loadDriverFromProperties(
             if ( !aStr.getLength() )
             {
                 m_aLogger.log( LogLevel::SEVERE, STR_LOG_NO_DRIVER_CLASS );
+                throw SQLException(::rtl::OUString::createFromAscii("The specified driver was empty!"),*this,::rtl::OUString(),1000,Any());
             }
             else
             {
