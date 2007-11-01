@@ -4,9 +4,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:26:19 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 18:01:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,10 @@ namespace canvas
             const SurfaceRect &rect = (*it)->getRect();
             const sal_Int32 x = rect.maPos.getX();
             const sal_Int32 y = rect.maPos.getY();
-            const sal_Int32 w = rect.maSize.getX();
-            const sal_Int32 h = rect.maSize.getY();
+            // to avoid interpolation artifacts from other textures,
+            // one pixel gap between them
+            const sal_Int32 w = rect.maSize.getX()+1;
+            const sal_Int32 h = rect.maSize.getY()+1;
 
             // probe location to the right
             r.maPos.setX(x+w);
@@ -139,7 +141,7 @@ namespace canvas
         // the rectangle passed as argument has a valid
         // location if and only if there's no intersection
         // with existing areas.
-        SurfaceRect aBoundary(mpRenderModule->getPageSize());
+        SurfaceRect aBoundary(mpRenderModule->getPageSize()-basegfx::B2IVector(1,1));
         if( !r.inside(aBoundary) )
             return false;
 
