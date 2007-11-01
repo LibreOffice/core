@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UserAdminDlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:12:59 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:07:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,7 +223,7 @@ DBG_NAME(OUserAdminDlg)
         return ::std::pair< Reference<XConnection>,sal_Bool> (m_xConnection,sal_False);
     }
     // -----------------------------------------------------------------------------
-    Reference< XMultiServiceFactory > OUserAdminDlg::getORB()
+    Reference< XMultiServiceFactory > OUserAdminDlg::getORB() const
     {
         return m_pImpl->getORB();
     }
