@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:41:10 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:35:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,26 +71,49 @@
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbc;
 
+namespace dbaui
+{
+class OJoinControl  : public Window
+{
+public:
+    FixedLine               aFL_Join;
+    FixedText               aFT_Title;
+    ListBox                 aLB_JoinType;
+    CheckBox                m_aCBNatural;
+
+    OJoinControl(Window* _pParent,const ResId& _rResId);
+};
+OJoinControl::OJoinControl(Window* _pParent,const ResId& _rResId)
+    : Window(_pParent,_rResId)
+    ,aFL_Join( this, ResId( FL_JOIN,*_rResId.GetResMgr() ) )
+    ,aFT_Title( this, ResId(FT_LISTBOXTITLE,*_rResId.GetResMgr()) )
+    ,aLB_JoinType( this, ResId(LB_JOINTYPE,*_rResId.GetResMgr()) )
+    ,m_aCBNatural( this, ResId(CB_NATURAL,*_rResId.GetResMgr()) )
+{
+    FreeResource();
+}
+// -----------------------------------------------------------------------------
+} // dbaui
+// -----------------------------------------------------------------------------
 DBG_NAME(DlgQryJoin)
-DlgQryJoin::DlgQryJoin( Window * pParent,
-                       OQueryTableConnectionData* _pData,
+DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
+                       const TTableConnectionData::value_type& _pData,
                        OJoinTableView::OTableWindowMap* _pTableMap,
                        const Reference< XConnection >& _xConnection,
                        BOOL _bAllowTableSelect)
     :ModalDialog( pParent, ModuleRes(DLG_QRY_JOIN) )
-    ,aFL_Join( this, ModuleRes( FL_JOIN ) )
-    ,aFT_Title( this, ModuleRes(FT_LISTBOXTITLE) )
-    ,aLB_JoinType( this, ModuleRes(LB_JOINTYPE) )
     ,aML_HelpText( this, ModuleRes(ML_HELPTEXT) )
     ,aPB_OK( this, ModuleRes( PB_OK ) )
     ,aPB_CANCEL( this, ModuleRes( PB_CANCEL ) )
     ,aPB_HELP( this, ModuleRes( PB_HELP ) )
+    ,m_pJoinControl( NULL )
     ,m_pTableControl( NULL )
     ,m_pTableMap(_pTableMap)
-    ,eJoinType(_pData->GetJoinType())
-    ,m_pConnData(NULL)
+    ,m_pTableView(pParent)
+    ,eJoinType(static_cast<OQueryTableConnectionData*>(_pData.get())->GetJoinType())
     ,m_pOrigConnData(_pData)
     ,m_xConnection(_xConnection)
 {
@@ -99,10 +122,16 @@ DlgQryJoin::DlgQryJoin( Window * pParent,
     aML_HelpText.SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
     //////////////////////////////////////////////////////////////////////
     // Connection kopieren
-    m_pConnData = static_cast<OQueryTableConnectionData*>(_pData->NewInstance());
+    m_pConnData.reset(_pData->NewInstance());
     m_pConnData->CopyFrom(*_pData);
 
     m_pTableControl = new OTableListBoxControl(this,ModuleRes(WND_CONTROL),m_pTableMap,this);
+
+    m_pJoinControl = new OJoinControl(m_pTableControl,ModuleRes(WND_JOIN_CONTROL));
+
+    m_pJoinControl->Show();
+    m_pJoinControl->m_aCBNatural.Check(static_cast<OQueryTableConnectionData*>(m_pConnData.get())->isNatural());
+    m_pTableControl->Show();
 
     if( _bAllowTableSelect )
     {
@@ -115,24 +144,24 @@ DlgQryJoin::DlgQryJoin( Window * pParent,
         m_pTableControl->Init( m_pConnData );
     }
 
-    m_pTableControl->lateInit();
+    m_pTableControl->lateUIInit(m_pJoinControl);
 
-    sal_Bool bFull = sal_False;
-    sal_Bool bOuter = sal_False;
+    sal_Bool bSupportFullJoin = sal_False;
     Reference<XDatabaseMetaData> xMeta;
     try
     {
         xMeta = m_xConnection->getMetaData();
         if ( xMeta.is() )
-            bFull = xMeta->supportsFullOuterJoins();
+            bSupportFullJoin = xMeta->supportsFullOuterJoins();
     }
     catch(SQLException&)
     {
     }
+    sal_Bool bSupportOuterJoin = sal_False;
     try
     {
         if ( xMeta.is() )
-            bOuter= xMeta->supportsOuterJoins();
+            bSupportOuterJoin= xMeta->supportsOuterJoins();
     }
     catch(SQLException&)
     {
@@ -142,28 +171,29 @@ DlgQryJoin::DlgQryJoin( Window * pParent,
 
     aPB_OK.SetClickHdl( LINK(this, DlgQryJoin, OKClickHdl) );
 
-    aLB_JoinType.SetSelectHdl(LINK(this,DlgQryJoin,LBChangeHdl));
+    m_pJoinControl->aLB_JoinType.SetSelectHdl(LINK(this,DlgQryJoin,LBChangeHdl));
+    m_pJoinControl->m_aCBNatural.SetToggleHdl(LINK(this,DlgQryJoin,NaturalToggleHdl));
 
     if ( static_cast<OQueryTableView*>(pParent)->getDesignView()->getController()->isReadOnly() )
     {
-        aLB_JoinType.Disable();
+        m_pJoinControl->aLB_JoinType.Disable();
+        m_pJoinControl->m_aCBNatural.Disable();
         m_pTableControl->Disable();
     }
-    else if ( !bFull && !bOuter )
-        aLB_JoinType.Disable();
     else
     {
-        if ( !bFull )
-            aLB_JoinType.RemoveEntry(3);
-
-        if ( !bOuter )
+        const USHORT nCount = m_pJoinControl->aLB_JoinType.GetEntryCount();
+        for (USHORT i = 0; i < nCount; ++i)
         {
-            aLB_JoinType.RemoveEntry(0);
-            aLB_JoinType.RemoveEntry(0);
-            aLB_JoinType.RemoveEntry(0);
+            const long nJoinTyp = reinterpret_cast<long>(m_pJoinControl->aLB_JoinType.GetEntryData(i));
+            if ( !bSupportFullJoin && nJoinTyp == ID_FULL_JOIN )
+                m_pJoinControl->aLB_JoinType.RemoveEntry(i);
+            else if ( !bSupportOuterJoin && (nJoinTyp == ID_LEFT_JOIN || nJoinTyp == ID_RIGHT_JOIN) )
+                m_pJoinControl->aLB_JoinType.RemoveEntry(i);
         }
 
         m_pTableControl->NotifyCellChange();
+        m_pTableControl->enableRelation(!static_cast<OQueryTableConnectionData*>(m_pConnData.get())->isNatural() && eJoinType != CROSS_JOIN );
     }
 
     FreeResource();
@@ -173,42 +203,80 @@ DlgQryJoin::DlgQryJoin( Window * pParent,
 DlgQryJoin::~DlgQryJoin()
 {
     DBG_DTOR(DlgQryJoin,NULL);
+    delete m_pJoinControl;
     delete m_pTableControl;
-    delete m_pConnData;
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
 {
     DBG_CHKTHIS(DlgQryJoin,NULL);
+    if (m_pJoinControl->aLB_JoinType.GetSelectEntryPos() == m_pJoinControl->aLB_JoinType.GetSavedValue() )
+        return 1;
+
+    m_pJoinControl->aLB_JoinType.SaveValue();
     aML_HelpText.SetText(String());
 
-    String sFirstWinName,sSecondWinName;
+    m_pTableControl->enableRelation(true);
+
+    const String sFirstWinName  = m_pConnData->getReferencingTable()->GetWinName();
+    const String sSecondWinName = m_pConnData->getReferencedTable()->GetWinName();
+    const EJoinType eOldJoinType = eJoinType;
     USHORT nResId = 0;
-    USHORT nPos = aLB_JoinType.GetSelectEntryPos();
+    const USHORT nPos = m_pJoinControl->aLB_JoinType.GetSelectEntryPos();
+    const long nJoinType = reinterpret_cast<long>(m_pJoinControl->aLB_JoinType.GetEntryData(nPos));
     sal_Bool bAddHint = sal_True;
-    switch ( nPos )
+    switch ( nJoinType )
     {
         default:
-        case 0:
+        case ID_INNER_JOIN:
             nResId = STR_QUERY_INNER_JOIN;
             bAddHint = sal_False;
+            eJoinType = INNER_JOIN;
             break;
-        case 1:
+        case ID_LEFT_JOIN:
             nResId = STR_QUERY_LEFTRIGHT_JOIN;
-            sFirstWinName   = m_pConnData->GetSourceWinName();
-            sSecondWinName  = m_pConnData->GetDestWinName();
+            eJoinType = LEFT_JOIN;
             break;
-        case 2:
-        case 3:
-            nResId = (nPos == 2) ? STR_QUERY_LEFTRIGHT_JOIN : STR_QUERY_FULL_JOIN;
+        case ID_RIGHT_JOIN:
+            nResId = STR_QUERY_LEFTRIGHT_JOIN;
+            eJoinType = RIGHT_JOIN;
+            break;
+        case ID_FULL_JOIN:
+            nResId = STR_QUERY_FULL_JOIN;
+            eJoinType = FULL_JOIN;
+            break;
+        case ID_CROSS_JOIN:
+            {
+                nResId = STR_QUERY_CROSS_JOIN;
+                eJoinType = CROSS_JOIN;
 
-            sFirstWinName   = m_pConnData->GetDestWinName();
-            sSecondWinName  = m_pConnData->GetSourceWinName();
+                m_pConnData->ResetConnLines();
+                m_pTableControl->lateInit();
+                m_pJoinControl->m_aCBNatural.Check(FALSE);
+                m_pTableControl->enableRelation(false);
+                ::rtl::OUString sEmpty;
+                m_pConnData->AppendConnLine(sEmpty,sEmpty);
+                aPB_OK.Enable(TRUE);
+            }
             break;
     }
 
+    m_pJoinControl->m_aCBNatural.Enable(eJoinType != CROSS_JOIN);
+
+    if ( eJoinType != eOldJoinType && eOldJoinType == CROSS_JOIN )
+    {
+        m_pConnData->ResetConnLines();
+    }
+    if ( eJoinType != CROSS_JOIN )
+    {
+        m_pTableControl->NotifyCellChange();
+        NaturalToggleHdl(&m_pJoinControl->m_aCBNatural);
+    }
+
+    m_pTableControl->Invalidate();
+
     String sHelpText = String( ModuleRes( nResId ) );
-    if( sFirstWinName.Len() )
+    if( nPos )
     {
         sHelpText.SearchAndReplace( String( RTL_CONSTASCII_STRINGPARAM( "%1" ) ), sFirstWinName );
         sHelpText.SearchAndReplace( String( RTL_CONSTASCII_STRINGPARAM( "%2" ) ), sSecondWinName );
@@ -227,22 +295,6 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
 IMPL_LINK( DlgQryJoin, OKClickHdl, Button*, /*pButton*/ )
 {
     DBG_CHKTHIS(DlgQryJoin,NULL);
-    USHORT nPos = aLB_JoinType.GetSelectEntryPos();
-    switch ( nPos )
-    {
-        case 0:
-            eJoinType = INNER_JOIN;
-            break;
-        case 1:
-            eJoinType = LEFT_JOIN;
-            break;
-        case 2:
-            eJoinType = RIGHT_JOIN;
-            break;
-        case 3:
-            eJoinType = FULL_JOIN;
-            break;
-    }
 
     m_pConnData->Update();
     m_pOrigConnData->CopyFrom( *m_pConnData );
@@ -251,45 +303,95 @@ IMPL_LINK( DlgQryJoin, OKClickHdl, Button*, /*pButton*/ )
     return 1;
 }
 // -----------------------------------------------------------------------------
-OTableConnectionData* DlgQryJoin::getConnectionData() const
+
+IMPL_LINK( DlgQryJoin, NaturalToggleHdl, CheckBox*, /*pButton*/ )
+{
+    DBG_CHKTHIS(DlgQryJoin,NULL);
+    BOOL bChecked = m_pJoinControl->m_aCBNatural.IsChecked();
+    static_cast<OQueryTableConnectionData*>(m_pConnData.get())->setNatural(bChecked);
+    m_pTableControl->enableRelation(!bChecked);
+    if ( bChecked )
+    {
+        m_pConnData->ResetConnLines();
+        try
+        {
+            Reference<XNameAccess> xReferencedTableColumns(m_pConnData->getReferencedTable()->getColumns());
+            Sequence< ::rtl::OUString> aSeq = m_pConnData->getReferencingTable()->getColumns()->getElementNames();
+            const ::rtl::OUString* pIter = aSeq.getConstArray();
+            const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+            for(;pIter != pEnd;++pIter)
+            {
+                if ( xReferencedTableColumns->hasByName(*pIter) )
+                    m_pConnData->AppendConnLine(*pIter,*pIter);
+            }
+        }
+        catch(const Exception&)
+        {
+            OSL_ENSURE(0,"Exception caught while asking for column names in case of a natural join.");
+        }
+        m_pTableControl->NotifyCellChange();
+        m_pTableControl->Invalidate();
+    }
+
+    return 1;
+}
+// -----------------------------------------------------------------------------
+TTableConnectionData::value_type DlgQryJoin::getConnectionData() const
 {
     return m_pConnData;
 }
 // -----------------------------------------------------------------------------
 void DlgQryJoin::setValid(sal_Bool _bValid)
 {
-    LBChangeHdl(&aLB_JoinType);
+    //LBChangeHdl(&aLB_JoinType);
 
-    aPB_OK.Enable(_bValid);
+    aPB_OK.Enable(_bValid || eJoinType == CROSS_JOIN );
 }
 // -----------------------------------------------------------------------------
 void DlgQryJoin::notifyConnectionChange( )
 {
-    setJoinType( m_pConnData->GetJoinType() );
+    setJoinType( static_cast<OQueryTableConnectionData*>(m_pConnData.get())->GetJoinType() );
+    m_pJoinControl->m_aCBNatural.Check(static_cast<OQueryTableConnectionData*>(m_pConnData.get())->isNatural());
+    NaturalToggleHdl(&m_pJoinControl->m_aCBNatural);
 }
 // -----------------------------------------------------------------------------
 void DlgQryJoin::setJoinType(EJoinType _eNewJoinType)
 {
     eJoinType = _eNewJoinType;
-    USHORT nPos = 0;
-    switch(eJoinType)
+    m_pJoinControl->m_aCBNatural.Enable(eJoinType != CROSS_JOIN);
+
+    long nJoinType = 0;
+    switch ( eJoinType )
     {
+        default:
         case INNER_JOIN:
+            nJoinType = ID_INNER_JOIN;
             break;
         case LEFT_JOIN:
-            nPos = 1;
+            nJoinType = ID_LEFT_JOIN;
             break;
         case RIGHT_JOIN:
-            nPos = 2;
+            nJoinType = ID_RIGHT_JOIN;
             break;
         case FULL_JOIN:
-            nPos = 3;
+            nJoinType = ID_FULL_JOIN;
             break;
-        default:
+        case CROSS_JOIN:
+            nJoinType = ID_CROSS_JOIN;
             break;
     }
-    aLB_JoinType.SelectEntryPos(nPos);
-    LBChangeHdl(&aLB_JoinType);
+
+    const USHORT nCount = m_pJoinControl->aLB_JoinType.GetEntryCount();
+    for (USHORT i = 0; i < nCount; ++i)
+    {
+        if ( nJoinType == reinterpret_cast<long>(m_pJoinControl->aLB_JoinType.GetEntryData(i)) )
+        {
+            m_pJoinControl->aLB_JoinType.SelectEntryPos(i);
+            break;
+        }
+    }
+
+    LBChangeHdl(&m_pJoinControl->aLB_JoinType);
 }
 // -----------------------------------------------------------------------------
 
