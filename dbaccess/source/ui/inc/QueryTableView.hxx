@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryTableView.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:28:36 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:16:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,9 +71,15 @@ namespace dbaui
         virtual void ConnDoubleClicked(OTableConnection* pConnection);
         virtual void KeyInput(const KeyEvent& rEvt);
 
-        virtual OTableWindow* createWindow(OTableWindowData* _pData);
+        virtual OTableWindow* createWindow(const TTableWindowData::value_type& _pData);
+
+        /** called when init fails at the tablewindowdata because the m_xTable object could not provide columns, but no
+            exception was thrown. Expected to throw.
+        */
+        virtual void    onNoColumns_throw();
+
+        virtual bool supressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const;
     public:
-        TYPEINFO();
         OQueryTableView(Window* pParent,OQueryDesignView* pView);
         virtual ~OQueryTableView();
 
@@ -131,8 +137,9 @@ namespace dbaui
 
         BOOL ExistsAVisitedConn(const OQueryTableWindow* pFrom) const;
 
-        virtual OTableWindowData* CreateImpl(const ::rtl::OUString& _rComposedName,
-                                             const ::rtl::OUString& _rWinName);
+        virtual OTableWindowData* CreateImpl(const ::rtl::OUString& _rComposedName
+                                            ,const ::rtl::OUString& _sTableName
+                                            ,const ::rtl::OUString& _rWinName);
 
         /** createNewConnection opens the join dialog and allows to create a new join connection
         */
