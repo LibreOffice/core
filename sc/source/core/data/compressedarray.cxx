@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compressedarray.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:50:30 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 16:22:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,7 +325,7 @@ void ScCompressedArray<A,D>::Remove( A nStart, size_t nAccessCount )
         // make the algorithm used in SetValue() work correctly, it relies on
         // the fact that consecutive values actually differ.
         size_t nRemove;
-        if (pData[nIndex-1].aValue == pData[nIndex+1].aValue)
+        if (nIndex > 0 && pData[nIndex-1].aValue == pData[nIndex+1].aValue)
         {
             nRemove = 2;
             --nIndex;
