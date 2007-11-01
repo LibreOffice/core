@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:12:48 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:02:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1648,6 +1648,33 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
             }
         }
     }
+
+    if( nStatus == GRFILTER_OK && bCreateNativeLink && ( eLinkType != GFX_LINK_TYPE_NONE ) && !rGraphic.GetContext() && !bLinkSet )
+    {
+        const ULONG nStmEnd = rIStream.Tell();
+        const ULONG nBufSize = nStmEnd - nStmBegin;
+
+        if( nBufSize )
+        {
+            BYTE*   pBuf;
+            try
+            {
+                pBuf = new BYTE[ nBufSize ];
+            }
+                catch (std::bad_alloc)
+            {
+                nStatus = GRFILTER_TOOBIG;
+            }
+
+            if( nStatus == GRFILTER_OK )
+            {
+                rIStream.Seek( nStmBegin );
+                rIStream.Read( pBuf, nBufSize );
+                rGraphic.SetLink( GfxLink( pBuf, nBufSize, eLinkType, TRUE ) );
+            }
+        }
+    }
+
     // Set error code or try to set native buffer
     if( nStatus != GRFILTER_OK )
     {
@@ -1658,21 +1685,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
         rIStream.Seek( nStmBegin );
         rGraphic.Clear();
     }
-    else if( bCreateNativeLink && ( eLinkType != GFX_LINK_TYPE_NONE ) && !rGraphic.GetContext() && !bLinkSet )
-    {
-        const ULONG nStmEnd = rIStream.Tell();
-        const ULONG nBufSize = nStmEnd - nStmBegin;
 
-        if( nBufSize )
-        {
-            BYTE*           pBuf = new BYTE[ nBufSize ];
-            //GraphicReader*    pOldContext = rGraphic.GetContext();
-
-            rIStream.Seek( nStmBegin );
-            rIStream.Read( pBuf, nBufSize );
-            rGraphic.SetLink( GfxLink( pBuf, nBufSize, eLinkType, TRUE ) );
-        }
-    }
     delete pFilterConfigItem;
     return nStatus;
 }
