@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:52:59 $
+#   last change: $Author: hr $ $Date: 2007-11-01 17:15:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -120,13 +120,6 @@ SHL1STDLIBS=	\
                 $(OLE32LIB)
 .ENDIF # WNT
 
-.IF "$(GUI)"=="MAC"
-SHL1STDLIBS=-L$(shell $(UNIX2MACPATH) $(MW_HOME)$/Metrowerks\ CodeWarrior$/MacOS\ Support$/OpenTransport$/Open\ Tpt\ Client\ Developer$/PPC\ Libraries) \
-  -weakimport -lOpenTransportLib -weakimport -lOpenTptInternetLib \
-  -lOpenTransportExtnPPC.o -lOpenTptInetPPC.o
-SHL1STDLIBS+=-init InitLibrary -term ExitLibrary
-.ENDIF # MAC
-
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="SOLARIS"
 # libposix4.so (SunOS 5.6) <-> librt.so (SunOS >= 5.7)
@@ -179,15 +172,10 @@ SHL11FILE=$(MISC)$/sal.slo
 .IF "$(GUI)"=="UNX"
 SHL1OBJS=
 .ELSE
-.IF "$(GUI)"=="MAC"
-SHL1OBJS= \
-    $(OBJ)$/dllentry.obj
-.ELSE
 .IF "$(GUI)$(COM)"!="WNTGCC"
 SHL1OBJS= \
     $(SLO)$/dllentry.obj
 .ENDIF # WNTGCC
-.ENDIF # MAC
 .ENDIF # UNX
 .ENDIF # lincinc
 
