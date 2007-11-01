@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:07:57 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:15:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,11 +105,6 @@ extern "C" {
 #define SAL_PATHDELIMITER '\\'
 #define SAL_CONFIGFILE( name ) name ".ini"
 #define SAL_SYSCONFIGFILE( name ) name ".ini"
-#endif
-
-#ifdef MAC
-#define SAL_MAC
-/* don't know what to put in here */
 #endif
 
 #if defined(SOLARIS) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(SCO) || defined(IRIX)
