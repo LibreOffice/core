@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadminsetup.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:00:01 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:11:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -482,15 +482,13 @@ TabPage PAGE_DBWIZARD_LDAP
         Text[ en-US ] = "Default: 389" ;
     };
 
-
-    CheckBox CB_USESSL
+    CheckBox CB_WIZ_USESSL
     {
         HelpId = HID_PAGE_DBWIZARD_LDAP_CB_USESSL ;
         Pos = MAP_APPFONT (START_X , INIT_Y + 7 * FIXEDTEXT_HEIGHT +        UNRELATED_CONTROLS + 3 * EDIT_HEIGHT + 4 * RELATED_CONTROLS )  ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
         Text[ en-US ] = "Use ~secure connection (SSL)" ;
     };
-
 };
 
 
