@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComboBox.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:22:08 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:54:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,43 +36,27 @@
 #ifndef _FORMS_COMBOBOX_HXX_
 #define _FORMS_COMBOBOX_HXX_
 
-#ifndef _FORMS_FORMCOMPONENT_HXX_
 #include "FormComponent.hxx"
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
-#include <cppuhelper/interfacecontainer.hxx>
-#endif
-#ifndef _DATE_HXX
-#include <tools/date.hxx>
-#endif
-#ifndef _SV_TIMER_HXX
-#include <vcl/timer.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
-#include <com/sun/star/util/XRefreshable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLERRORBROADCASTER_HPP_
-#include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_LISTSOURCETYPE_HPP_
-#include <com/sun/star/form/ListSourceType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XITEMLISTENER_HPP_
-#include <com/sun/star/awt/XItemListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
-#include <com/sun/star/awt/XFocusListener.hpp>
-#endif
-#ifndef FORMS_ERRORBROADCASTER_HXX
 #include "errorbroadcaster.hxx"
-#endif
-#ifndef FORMS_ENTRYLISTHELPER_HXX
 #include "entrylisthelper.hxx"
-#endif
+#include "cachedrowset.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
+#include <com/sun/star/form/ListSourceType.hpp>
+#include <com/sun/star/awt/XItemListener.hpp>
+#include <com/sun/star/awt/XFocusListener.hpp>
+/** === end UNO includes === **/
+
+#include <connectivity/formattedcolumnvalue.hxx>
+
+#include <cppuhelper/interfacecontainer.hxx>
+
+#include <vcl/timer.hxx>
+
+#include <tools/date.hxx>
 
 //.........................................................................
 namespace frm
@@ -86,6 +70,7 @@ class OComboBoxModel
             ,public OEntryListHelper
             ,public OErrorBroadcaster
 {
+    CachedRowSet                            m_aListRowSet;          // the row set to fill the list
     ::com::sun::star::uno::Any              m_aBoundColumn;         // obsolet
     ::rtl::OUString                         m_aListSource;          //
     ::rtl::OUString                         m_aDefaultText;         // DefaultText
@@ -99,11 +84,10 @@ class OComboBoxModel
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter> m_xFormatter;
 
     ::com::sun::star::form::ListSourceType  m_eListSourceType;      // type der list source
-    ::com::sun::star::util::Date            m_aNullDate;
-    sal_Int32                               m_nFormatKey;
-    sal_Int16                               m_nFieldType;
-    sal_Int16                               m_nKeyType;
     sal_Bool                                m_bEmptyIsNull;         // LeerString wird als NULL interpretiert
+
+    ::std::auto_ptr< ::dbtools::FormattedColumnValue >
+                                            m_pValueFormatter;
 
 
 
