@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadminsetup.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:37:53 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:11:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,39 +108,34 @@
 #define STR_LDAP_DEFAULT                86
 
 
-#define FT_PORTNUMBERDEFAULT    29
-#define FT_LDAP_HELPTEXT        30
-#define FT_MYSQL_HELPTEXT       31
-#define FT_MYSQL_HEADERTEXT     32
-#define FT_MYSQLCONNECTIONMODE  33
-//#define FT_WIZARDHELPTEXT     34
-#define FT_BROWSEURL            35
-#define FT_AUTHENTIFICATIONHELPTEXT     36
-#define FT_AUTHENTIFICATIONHEADERTEXT   37
-#define FT_LDAP_HEADERTEXT      38
-#define FT_GENERALUSERNAME      39
-//#define FT_WIZARDHEADER         40
+#define FT_PORTNUMBERDEFAULT            1
+#define FT_LDAP_HELPTEXT                2
+#define FT_MYSQL_HELPTEXT               3
+#define FT_MYSQL_HEADERTEXT             4
+#define FT_MYSQLCONNECTIONMODE          5
+#define FT_BROWSEURL                    6
+#define FT_AUTHENTIFICATIONHELPTEXT     7
+#define FT_AUTHENTIFICATIONHEADERTEXT   8
+#define FT_LDAP_HEADERTEXT              9
+#define FT_GENERALUSERNAME              10
+#define FT_FINALHEADER                  11
+#define FT_FINALTEXT                    12
+#define FT_FINALHELPTEXT                13
+#define FT_ADDITIONALSETTINGS           14
 
+#define ET_GENERALUSERNAME          1
 
+#define PB_TESTCONNECTION           1
 
-#define FT_FINALHEADER          45
-#define FT_FINALTEXT            46
-#define FT_FINALHELPTEXT        47
-#define FT_ADDITIONALSETTINGS   48
+#define RB_CONNECTVIAODBC           1
+#define RB_CONNECTVIAJDBC           2
+#define RB_REGISTERDATASOURCE       3
+#define RB_DONTREGISTERDATASOURCE   4
 
-#define ET_GENERALUSERNAME      17
-
-#define PB_TESTCONNECTION       13
-
-#define RB_CONNECTVIAODBC       5
-#define RB_CONNECTVIAJDBC       6
-#define RB_REGISTERDATASOURCE   7
-#define RB_DONTREGISTERDATASOURCE   8
-
-#define CB_USESSL               16
-#define CB_STARTTABLEWIZARD                 19
-#define CB_OPENAFTERWARDS                   20
-#define CB_SPREADSHEETPASSWORDREQUIRED      21
-#define CB_GENERALPASSWORDREQUIRED          22
+#define CB_WIZ_USESSL                       1
+#define CB_STARTTABLEWIZARD                 2
+#define CB_OPENAFTERWARDS                   3
+#define CB_SPREADSHEETPASSWORDREQUIRED      4
+#define CB_GENERALPASSWORDREQUIRED          5
 
 #endif
