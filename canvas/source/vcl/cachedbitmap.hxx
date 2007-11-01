@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachedbitmap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:58:02 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:40:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,13 +55,14 @@ namespace vclcanvas
 
         /** Create an XCachedPrimitive for given GraphicObject
          */
-        CachedBitmap( const GraphicObjectSharedPtr&                 rGraphicObject,
-                      const ::Point&                                rPoint,
-                      const ::Size&                                 rSize,
-                      const GraphicAttr&                            rAttr,
-                      const ::com::sun::star::rendering::ViewState& rUsedViewState,
+        CachedBitmap( const GraphicObjectSharedPtr&                   rGraphicObject,
+                      const ::Point&                                  rPoint,
+                      const ::Size&                                   rSize,
+                      const GraphicAttr&                              rAttr,
+                      const ::com::sun::star::rendering::ViewState&   rUsedViewState,
+                      const ::com::sun::star::rendering::RenderState& rUsedRenderState,
                       const ::com::sun::star::uno::Reference<
-                              ::com::sun::star::rendering::XCanvas >& rTarget   );
+                              ::com::sun::star::rendering::XCanvas >&   rTarget );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
@@ -75,6 +76,7 @@ namespace vclcanvas
 
 
         GraphicObjectSharedPtr                                                      mpGraphicObject;
+        const ::com::sun::star::rendering::RenderState                              maRenderState;
         const ::Point                                                               maPoint;
         const ::Size                                                                maSize;
         const GraphicAttr                                                           maAttributes;
