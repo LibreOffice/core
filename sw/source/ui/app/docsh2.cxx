@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:16:14 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:25:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1623,21 +1623,24 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
 void SwDocShell::SetModified( BOOL bSet )
 {
     SfxObjectShell::SetModified( bSet );
-    if( IsEnableSetModified() && !pDoc->IsInCallModified() )
+    if( IsEnableSetModified() )
     {
-        EnableSetModified( FALSE );
-
-        if( bSet )
+        if ( !pDoc->IsInCallModified() )
         {
-            BOOL bOld = pDoc->IsModified();
-            pDoc->SetModified();
-            if( !bOld )
-                pDoc->SetUndoNoResetModified();
-        }
-        else
-            pDoc->ResetModified();
+            EnableSetModified( FALSE );
 
-        EnableSetModified( TRUE );
+            if( bSet )
+            {
+                BOOL bOld = pDoc->IsModified();
+                pDoc->SetModified();
+                if( !bOld )
+                    pDoc->SetUndoNoResetModified();
+            }
+            else
+                pDoc->ResetModified();
+
+            EnableSetModified( TRUE );
+        }
 
         UpdateChildWindows();
         Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
