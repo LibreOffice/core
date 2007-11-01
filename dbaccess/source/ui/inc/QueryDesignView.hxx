@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:28:25 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:16:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ namespace dbaui
         ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   OTableFieldDescRef pEntry,
                                                                     const String& _sCriteria,
                                                                     ::rtl::OUString& _rsErrorMessage,
-                                                                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn);
+                                                                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn) const;
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect);
