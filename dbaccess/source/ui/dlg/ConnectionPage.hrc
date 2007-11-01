@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPage.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:44:51 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:05:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,34 +40,29 @@
 // control ids
 
 #define FT_USERNAME                 1
-#define FT_CONNECTURL               2
-#define FT_JDBCDRIVERCLASS          3
-#define FT_DBASE_PATH_OR_FILE       4
-#define FT_NAME_OF_ODBC_DATASOURCE  5
-#define FT_MYSQL_DATABASE_NAME      6
-#define FT_MSACCESS_MDB_FILE        7
-#define FT_FLAT_PATH_OR_FILE        8
-#define FT_CALC_PATH_OR_FILE        9
-#define FT_ADABAS_DATABASE_NAME     10
-#define FT_NO_ADDITIONAL_SETTINGS   11
-#define FT_HOSTNAME                 12
-#define FT_ORACLE_DATABASE_NAME     13
+#define FT_JDBCDRIVERCLASS          2
+#define FT_DBASE_PATH_OR_FILE       3
+#define FT_NAME_OF_ODBC_DATASOURCE  4
+#define FT_MYSQL_DATABASE_NAME      5
+#define FT_MSACCESS_MDB_FILE        6
+#define FT_FLAT_PATH_OR_FILE        7
+#define FT_CALC_PATH_OR_FILE        8
+#define FT_ADABAS_DATABASE_NAME     9
+#define FT_NO_ADDITIONAL_SETTINGS   10
+#define FT_HOSTNAME                 11
+#define FT_ORACLE_DATABASE_NAME     12
 
 #define ET_USERNAME             1
-#define ET_PASSWORD             2
-#define ET_CONNECTURL           3
-#define ET_JDBCDRIVERCLASS      4
+#define ET_JDBCDRIVERCLASS      2
 
-#define PB_BROWSECONNECTION     1
-#define PB_TESTDRIVERCLASS      2
-#define PB_TESTCONNECTION       3
+#define PB_TESTDRIVERCLASS      1
+#define PB_TESTCONNECTION       2
 
 #define CB_PASSWORD_REQUIRED    1
 
 #define FL_SEPARATOR1           1
 #define FL_SEPARATOR2           2
 #define FL_SEPARATOR3           3
-
 
 #endif // DBAUI_CONNECTIONPAGE_HRC
 
