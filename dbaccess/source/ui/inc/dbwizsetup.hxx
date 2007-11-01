@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:28:45 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:21:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ public:
     virtual SfxItemSet* getWriteOutputSet();
 
     // forwards to ODbDataSourceAdministrationHelper
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
     virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
     virtual DATASOURCE_TYPE     getDatasourceType(const SfxItemSet& _rSet) const;
@@ -176,6 +176,20 @@ protected:
     };
 
 private:
+    /** declares a path with or without authentication, as indicated by the database type
+
+        @param _eType
+            the data source type for which the path is declared. If this
+            data source type does not support authentication, the PAGE_DBSETUPWIZARD_AUTHENTIFICATION
+            state will be stripped from the sequence of states.
+        @param _nPathId
+            the ID of the path
+        @path
+            the first state in this path, following by an arbitrary number of others, as in
+            RoadmapWizard::declarePath.
+    */
+    void declareAuthDepPath( DATASOURCE_TYPE _eType, PathId _nPathId, WizardState _nFirstState, ... );
+
     void RegisterDataSourceByLocation(const ::rtl::OUString& sPath);
     sal_Bool SaveDatabaseDocument();
     void activateDatabasePath();
@@ -183,6 +197,8 @@ private:
     void CreateDatabase();
     void createUniqueFolderName(INetURLObject* pURL);
     DATASOURCE_TYPE VerifyDataSourceType(const DATASOURCE_TYPE _DatabaseType) const;
+
+    DATASOURCE_TYPE getDefaultDatabaseType() const;
 
     void updateTypeDependentStates();
     sal_Bool callSaveAsDialog();
