@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uuid.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:07:32 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:14:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,8 +205,6 @@ void SAL_CALL rtl_createNamedUuid(
 #elif SOLARIS
 #define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
 #elif MACOSX
-#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 100000
-#elif MACOS
 #define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 100000
 #elif IRIX
 #define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
