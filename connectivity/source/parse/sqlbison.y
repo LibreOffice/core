@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.58 2007-09-26 14:31:27 hr Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.59 2007-11-01 14:52:06 hr Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: hr $ $Date: 2007-09-26 14:31:27 $ $Revision: 1.58 $
+//	$Author: hr $ $Date: 2007-11-01 14:52:06 $ $Revision: 1.59 $
 //
 // Description:
 //
@@ -204,7 +204,7 @@ using namespace connectivity;
 %left <pParseNode> SQL_TOKEN_AND
 
 %left <pParseNode> SQL_LESSEQ SQL_GREATEQ SQL_NOTEQUAL SQL_LESS SQL_GREAT SQL_EQUAL /* '<' '>' = <> < > <= >= != */
-%left <pParseNode> '+' '-'
+%left <pParseNode> '+' '-' SQL_CONCAT
 %left <pParseNode> '*' '/'
 %left SQL_TOKEN_NATURAL SQL_TOKEN_CROSS SQL_TOKEN_FULL SQL_TOKEN_LEFT SQL_TOKEN_RIGHT
 %left ')'
@@ -1002,7 +1002,7 @@ where_clause:
 
 opt_group_by_clause:
 		/* empty */      {$$ = SQL_NEW_RULE;}
-	|       SQL_TOKEN_GROUP SQL_TOKEN_BY column_ref_commalist
+	|   SQL_TOKEN_GROUP SQL_TOKEN_BY column_ref_commalist
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
@@ -1013,7 +1013,13 @@ column_ref_commalist:
 		column_ref
 			{$$ = SQL_NEW_COMMALISTRULE;
 			$$->append($1);}
-	|       column_ref_commalist ',' column_ref
+	|	set_fct_spec
+		{$$ = SQL_NEW_COMMALISTRULE;
+			$$->append($1);}
+	|   column_ref_commalist ',' column_ref
+			{$1->append($3);
+			$$ = $1;}
+	|   column_ref_commalist ',' set_fct_spec
 			{$1->append($3);
 			$$ = $1;}
 	;
@@ -1045,14 +1051,7 @@ boolean_primary:
 
 boolean_test:
 		boolean_primary
-	|	boolean_primary SQL_TOKEN_IS truth_value
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2);
-			$$->append($3);
-		}
-	|	boolean_primary SQL_TOKEN_IS SQL_TOKEN_NOT truth_value %prec SQL_TOKEN_IS
+	|	boolean_primary SQL_TOKEN_IS sql_not truth_value
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1060,39 +1059,14 @@ boolean_test:
 			$$->append($3);
 			$$->append($4);
 		}
-/*	|	sql_not SQL_TOKEN_LIKE string_value_exp opt_escape
-		{
-			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
-			{
-				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
-				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
-
-				$$ = SQL_NEW_RULE;
-				$$->append(pColumnRef);
-				$$->append($1);
-				$$->append($2);
-				if (xxx_pGLOBAL_SQLPARSER->buildLikeRule($$,$3,$4))
-					$$->append($4);
-				else
-				{
-					delete $$;
-					YYABORT;
-				}
-			}
-			else
-				YYERROR;
-		}
-*/
 	;
 boolean_factor:
 		boolean_test
-	|	SQL_TOKEN_NOT '(' boolean_test ')'
+	|	SQL_TOKEN_NOT boolean_test
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append($2);
 		}
 	;
 boolean_term:
@@ -1409,6 +1383,7 @@ in_predicate:
 				$$->append($1);
 				$$->append($2);
 				$$->append($3);
+				// hello
 			}
 			else
 				YYERROR;
@@ -2639,11 +2614,18 @@ char_value_exp:
 	|	concatenation
 	;
 concatenation:
-	  char_value_exp '+' char_factor
+		char_value_exp '+' char_factor
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2 = newNode("+", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+		}
+	|	value_exp SQL_CONCAT value_exp
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
 			$$->append($3);
 		}
 	;
@@ -3076,7 +3058,7 @@ parameter:
 			$$->append($1 = newNode(":", SQL_NODE_PUNCTUATION));
 			$$->append($2);}
 	|	'?'
-			{$$ = SQL_NEW_RULE;
+			{$$ = SQL_NEW_RULE; // test
 			$$->append($1 = newNode("?", SQL_NODE_PUNCTUATION));}
 	|	'['	SQL_TOKEN_NAME ']'
 			{$$ = SQL_NEW_RULE;
@@ -3105,6 +3087,11 @@ sql:
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
 				$$ = $1;
+				if ( SQL_ISRULE($$,search_condition) )
+				{
+					$$->insert(0,newNode("(", SQL_NODE_PUNCTUATION));
+					$$->append(newNode(")", SQL_NODE_PUNCTUATION));
+				}
 			}
 			else
 				YYERROR;
