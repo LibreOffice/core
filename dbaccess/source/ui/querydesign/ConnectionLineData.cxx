@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionLineData.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:52:27 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:26:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,12 +81,6 @@ void OConnectionLineData::CopyFrom(const OConnectionLineData& rSource)
 {
     *this = rSource;
     // hier ziehe ich mich auf das (nicht-virtuelle) operator= zurueck, das nur meine Members kopiert
-}
-
-//------------------------------------------------------------------------
-bool OConnectionLineData::IsValid() const
-{
-    return (GetSourceFieldName().getLength() && GetDestFieldName().getLength());
 }
 
 //------------------------------------------------------------------------
