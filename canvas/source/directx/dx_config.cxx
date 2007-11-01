@@ -1,0 +1,178 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: dx_config.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:54:21 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "dx_config.hxx"
+
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/anytostring.hxx>
+#include <basegfx/vector/b2ivector.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+
+using namespace com::sun::star;
+
+namespace dxcanvas
+{
+    DXCanvasItem::DXCanvasItem() :
+        ConfigItem(
+            ::rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM( "Office.Canvas/DXCanvas" )),
+            CONFIG_MODE_IMMEDIATE_UPDATE ),
+        maValues(),
+        maMaxTextureSize(),
+        mbBlacklistCurrentDevice(false),
+        mbValuesDirty(false)
+    {
+        try
+        {
+            uno::Sequence< ::rtl::OUString > aName(1);
+            aName[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DeviceBlacklist" ));
+
+            uno::Sequence< uno::Any > aProps( GetProperties( aName ));
+            uno::Sequence< sal_Int32 > aValues;
+
+            if( aProps.getLength() > 0 &&
+                (aProps[0] >>= aValues) )
+            {
+                const sal_Int32* pValues = aValues.getConstArray();
+                const sal_Int32 nNumEntries( aValues.getLength()*sizeof(sal_Int32)/sizeof(DeviceInfo) );
+                for( sal_Int32 i=0; i<nNumEntries; ++i )
+                {
+                    DeviceInfo aInfo;
+                    aInfo.nVendorId         = *pValues++;
+                    aInfo.nDeviceId         = *pValues++;
+                    aInfo.nDeviceSubSysId   = *pValues++;
+                    aInfo.nDeviceRevision   = *pValues++;
+                    aInfo.nDriverId         = *pValues++;
+                    aInfo.nDriverVersion    = *pValues++;
+                    aInfo.nDriverSubVersion = *pValues++;
+                    aInfo.nDriverBuildId    = *pValues++;
+                    maValues.insert(aInfo);
+                }
+            }
+
+            aName[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BlacklistCurrentDevice" ));
+            aProps = GetProperties( aName );
+            if( aProps.getLength() > 0 )
+                aProps[0] >>= mbBlacklistCurrentDevice;
+
+            aName[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxTextureSize" ));
+            aProps = GetProperties( aName );
+            if( aProps.getLength() > 0 )
+                maMaxTextureSize.reset( aProps[0].get<sal_Int32>() );
+            else
+                maMaxTextureSize.reset();
+        }
+        catch( uno::Exception& )
+        {
+            OSL_ENSURE( false,
+                        rtl::OUStringToOString(
+                            comphelper::anyToString( cppu::getCaughtException() ),
+                            RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+    }
+
+    DXCanvasItem::~DXCanvasItem()
+    {
+        if( !mbValuesDirty )
+            return;
+
+        try
+        {
+            uno::Sequence< ::rtl::OUString > aName(1);
+            aName[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DeviceBlacklist" ));
+
+            uno::Sequence< sal_Int32 > aValues( sizeof(DeviceInfo)/sizeof(sal_Int32)*maValues.size() );
+
+            sal_Int32* pValues = aValues.getArray();
+            ValueSet::const_iterator aIter( maValues.begin() );
+            const ValueSet::const_iterator aEnd( maValues.end() );
+            while( aIter != aEnd )
+            {
+                const DeviceInfo& rInfo( *aIter );
+                *pValues++ = rInfo.nVendorId;
+                *pValues++ = rInfo.nDeviceId;
+                *pValues++ = rInfo.nDeviceSubSysId;
+                *pValues++ = rInfo.nDeviceRevision;
+                *pValues++ = rInfo.nDriverId;
+                *pValues++ = rInfo.nDriverVersion;
+                *pValues++ = rInfo.nDriverSubVersion;
+                *pValues++ = rInfo.nDriverBuildId;
+                ++aIter;
+            }
+
+            uno::Sequence< uno::Any > aValue(1);
+            aValue[0] <<= aValues;
+            PutProperties( aName, aValue );
+        }
+        catch( uno::Exception& )
+        {
+            OSL_ENSURE( false,
+                        rtl::OUStringToOString(
+                            comphelper::anyToString( cppu::getCaughtException() ),
+                            RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
+    }
+
+    bool DXCanvasItem::isDeviceUsable( const DeviceInfo& rDeviceInfo ) const
+    {
+        return maValues.find(rDeviceInfo) == maValues.end();
+    }
+
+    bool DXCanvasItem::isBlacklistCurrentDevice() const
+    {
+        return mbBlacklistCurrentDevice;
+    }
+
+    void DXCanvasItem::blacklistDevice( const DeviceInfo& rDeviceInfo )
+    {
+        mbValuesDirty = true;
+        maValues.insert(rDeviceInfo);
+    }
+
+    void DXCanvasItem::adaptMaxTextureSize( basegfx::B2IVector& io_maxTextureSize ) const
+    {
+        if( maMaxTextureSize )
+        {
+            io_maxTextureSize.setX(
+                std::min( *maMaxTextureSize,
+                          io_maxTextureSize.getX() ));
+            io_maxTextureSize.setY(
+                std::min( *maMaxTextureSize,
+                          io_maxTextureSize.getY() ));
+        }
+    }
+
+}
