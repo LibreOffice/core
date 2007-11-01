@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2007-07-19 14:41:58 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -749,7 +749,7 @@ void SfxDocumentInfo::SetTime(sal_Int32 nTime)
     SET_PROP( MID_DOCINFO_EDITTIME, aAny );
 }
 
-void SfxDocumentInfo::SetReloadDelay( sal_uInt32 nSec )
+void SfxDocumentInfo::SetReloadDelay( sal_Int32 nSec )
 {
     uno::Any aAny;
     aAny <<= nSec;
