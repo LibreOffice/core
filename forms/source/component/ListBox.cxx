@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 13:48:10 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:55:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,99 +36,48 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 
-#ifndef _FORMS_LISTBOX_HXX_
 #include "ListBox.hxx"
-#endif
-
-#ifndef _FRM_PROPERTY_HXX_
 #include "property.hxx"
-#endif
-#ifndef _FRM_PROPERTY_HRC_
 #include "property.hrc"
-#endif
-#ifndef _FRM_SERVICES_HXX_
 #include "services.hxx"
-#endif
-#ifndef _FRM_RESOURCE_HXX_
 #include "frm_resource.hxx"
-#endif
-#ifndef _FRM_RESOURCE_HRC_
 #include "frm_resource.hrc"
-#endif
-#ifndef _FORMS_BASELISTBOX_HXX_
 #include "BaseListBox.hxx"
-#endif
-#ifndef FORMS_SOURCE_MISC_LISTENERCONTAINERS_HXX
 #include "listenercontainers.hxx"
-#endif
-#ifndef FORMS_SOURCE_INC_COMPONENTTOOLS_HXX
 #include "componenttools.hxx"
-#endif
 
-#ifndef _COMPHELPER_BASIC_IO_HXX_
-#include <comphelper/basicio.hxx>
-#endif
-#ifndef _COMPHELPER_CONTAINER_HXX_
-#include <comphelper/container.hxx>
-#endif
-#ifndef _COMPHELPER_NUMBERS_HXX_
-#include <comphelper/numbers.hxx>
-#endif
-#ifndef COMPHELPER_INC_COMPHELPER_LISTENERNOTIFICATION_HXX
-#include <comphelper/listenernotification.hxx>
-#endif
-
-#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
-#include <cppuhelper/queryinterface.hxx>
-#endif
-
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
-#include <connectivity/dbconversion.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
+/** === begin UNO includes === **/
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
+/** === end UNO includes === **/
 
-#ifndef _SV_SVAPP_HXX
+#include <connectivity/dbtools.hxx>
+#include <connectivity/formattedcolumnvalue.hxx>
+#include <connectivity/dbconversion.hxx>
+
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
+
+#include <unotools/sharedunocomponent.hxx>
+
 #include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
+
+#include <comphelper/basicio.hxx>
+#include <comphelper/container.hxx>
+#include <comphelper/numbers.hxx>
+#include <comphelper/listenernotification.hxx>
+
+#include <cppuhelper/queryinterface.hxx>
+
+#include <rtl/logfile.hxx>
 
 #include <algorithm>
 
@@ -183,6 +132,7 @@ namespace frm
         // use the old control name for compytibility reasons
         ,OEntryListHelper( m_aMutex )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
+        ,m_aListRowSet( getContext() )
         ,m_aRefreshListeners(m_aMutex)
         ,m_nNULLPos(-1)
         ,m_bBoundComponent(sal_False)
@@ -201,6 +151,7 @@ namespace frm
         :OBoundControlModel( _pOriginal, _rxFactory )
         ,OEntryListHelper( *_pOriginal, m_aMutex )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
+        ,m_aListRowSet( getContext() )
         ,m_eListSourceType( _pOriginal->m_eListSourceType )
         ,m_aBoundColumn( _pOriginal->m_aBoundColumn )
         ,m_aListSourceSeq( _pOriginal->m_aListSourceSeq )
@@ -655,6 +606,7 @@ namespace frm
     //------------------------------------------------------------------------------
     void OListBoxModel::loadData()
     {
+        RTL_LOGFILE_CONTEXT( aLogContext, "OListBoxModel::loadData" );
         DBG_ASSERT( m_eListSourceType != ListSourceType_VALUELIST, "OListBoxModel::loadData: cannot load value list from DB!" );
         DBG_ASSERT( !hasExternalListSource(), "OListBoxModel::loadData: cannot load from DB when I have an external list source!" );
 
@@ -674,15 +626,6 @@ namespace frm
         if (!xServiceInfo.is() || !xServiceInfo->supportsService(SRV_SDB_CONNECTION))
         {
             DBG_ERROR("OListBoxModel::loadData : invalid connection !");
-            return;
-        }
-
-        Reference< XRowSet > xContentRowSet(m_xServiceFactory->createInstance(SRV_SDB_ROWSET), UNO_QUERY);
-        Reference< XPropertySet > xContentSetProperties(xContentRowSet, UNO_QUERY);
-        Reference<XResultSet> xListCursor(xContentSetProperties, UNO_QUERY);
-        if (!xListCursor.is())
-        {
-            DBG_ERROR("OListBoxModel::loadData: could not instantiate a RowSet!");
             return;
         }
 
@@ -792,27 +735,30 @@ namespace frm
                     qualifiedNameComponents( xMeta, sListSource, sCatalog, sSchema, sTable, eInDataManipulation );
                     aStatement += composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable );
 
-                    xContentSetProperties->setPropertyValue(PROPERTY_COMMAND, makeAny(aStatement));
+                    m_aListRowSet.setCommand( aStatement );
                     bExecute = sal_True;
                 }
                 break;
 
             case ListSourceType_QUERY:
                 {
-                    Reference<XQueriesSupplier> xSupplyQueries(xConnection, UNO_QUERY);
-                    Reference<XPropertySet> xQuery(*(InterfaceRef*)xSupplyQueries->getQueries()->getByName(sListSource).getValue(), UNO_QUERY);
-                    xContentSetProperties->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING));
-
-                    xContentSetProperties->setPropertyValue(PROPERTY_COMMAND, xQuery->getPropertyValue(PROPERTY_COMMAND));
-                    bExecute = sal_True;
+                    Reference< XQueriesSupplier > xSupplyQueries( xConnection, UNO_QUERY_THROW );
+                    Reference< XNameAccess >      xQueries      ( xSupplyQueries->getQueries(), UNO_QUERY_THROW );
+                    Reference< XPropertySet >     xQuery        ( xQueries->getByName( sListSource ), UNO_QUERY );
+                    if ( xQuery.is() )
+                    {
+                        m_aListRowSet.setEscapeProcessing( xQuery->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) );
+                        m_aListRowSet.setCommand( xQuery->getPropertyValue( PROPERTY_COMMAND ) );
+                        bExecute = sal_True;
+                    }
                 }
                 break;
 
             default:
                 {
                     if (ListSourceType_SQLPASSTHROUGH == m_eListSourceType)
-                        xContentSetProperties->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, ::cppu::bool2any((sal_False)));
-                    xContentSetProperties->setPropertyValue(PROPERTY_COMMAND, makeAny(sListSource));
+                        m_aListRowSet.setEscapeProcessing( sal_False );
+                    m_aListRowSet.setCommand( sListSource );
                     bExecute = sal_True;
                 }
             }
@@ -821,39 +767,46 @@ namespace frm
             {
                 Reference< XPropertySet > xFormProps(xForm, UNO_QUERY);
 
-                xContentSetProperties->setPropertyValue( PROPERTY_COMMANDTYPE, makeAny( CommandType::COMMAND ) );
-                xContentSetProperties->setPropertyValue( PROPERTY_DATASOURCE, xFormProps->getPropertyValue( PROPERTY_DATASOURCE ) );
+                m_aListRowSet.setCommandType( CommandType::COMMAND );
+                m_aListRowSet.setDataSource( xFormProps->getPropertyValue( PROPERTY_DATASOURCE ) );
 
                 // try to give the row set the connection of our form - this saves the rowset from creating an own one
-                xContentSetProperties->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, xFormProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) );
+                m_aListRowSet.setConnection( xFormProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) );
 
-                xContentRowSet->execute();
+                if ( !m_aListRowSet.isDirty() )
+                {
+                    // if none of the settings of the row set changed, compared to the last
+                    // invocation of loadData, then don't re-fill the list. Instead, assume
+                    // the list entries are the same.
+                    return;
+                }
+                m_aListRowSet.execute();
             }
         }
         catch(SQLException& eSQL)
         {
             onError(eSQL, FRM_RES_STRING(RID_BASELISTBOX_ERROR_FILLLIST));
-            disposeComponent(xListCursor);
             return;
         }
         catch(const Exception& eUnknown)
         {
             (void)eUnknown;
-            disposeComponent(xListCursor);
             return;
         }
-
-        if (ListSourceType_TABLEFIELDS != m_eListSourceType && !xListCursor.is())
-            // something went wrong ...
-            return;
 
         // Anzeige- und Werteliste fuellen
         vector< ::rtl::OUString >   aValueList, aStringList;
         aValueList.reserve(16);
         aStringList.reserve(16);
         sal_Bool bUseNULL = hasField() && !isRequired();
+
         try
         {
+            ::utl::SharedUNOComponent< XResultSet > xListCursor( Reference< XResultSet >( m_aListRowSet.getRowSet(), UNO_QUERY ) );
+            if ( ListSourceType_TABLEFIELDS != m_eListSourceType && !xListCursor.is() )
+                // something went wrong ...
+                return;
+
             switch (m_eListSourceType)
             {
             case ListSourceType_SQL:
@@ -870,59 +823,14 @@ namespace frm
                         xColumns = Reference<XIndexAccess>(xSupplyCols->getColumns(), UNO_QUERY);
                         DBG_ASSERT(xColumns.is(), "OListBoxModel::loadData : no columns supplied by the row set !");
                     }
-                    Reference<XColumn> xDataField;
-                    if (xColumns.is())
+
+                    Reference< XPropertySet > xDataField;
+                    if ( xColumns.is() )
                         xColumns->getByIndex(0) >>= xDataField;
-                    if (!xDataField.is())
-                    {
-                        disposeComponent(xListCursor);
+                    if ( !xDataField.is() )
                         return;
-                    }
 
-                    Reference<XNumberFormatsSupplier> xSupplier = getNumberFormats(xConnection, sal_False, m_xServiceFactory);
-
-                    ::com::sun::star::util::Date aNullDate(DBTypeConversion::getStandardDate());
-                    sal_Int32 nFormatKey = 0;
-                    sal_Int32 nFieldType = DataType::OTHER;
-                    sal_Int16 nKeyType   = NumberFormat::UNDEFINED;
-                    sal_Bool bHaveFormat = sal_False;
-                    Reference<XPropertySet> xFieldAsSet(xDataField, UNO_QUERY);
-                    try
-                    {
-                        xFieldAsSet->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
-                        bHaveFormat = (xFieldAsSet->getPropertyValue(PROPERTY_FORMATKEY) >>= nFormatKey);
-                    }
-                    catch(Exception&)
-                    {
-                        DBG_ERROR("OListBoxModel::loadData: could not obtain the field type and/or format key of the bound column!");
-                    }
-
-                    if (!bHaveFormat)
-                    {
-                        Locale aAppLanguage = Application::GetSettings().GetUILocale();
-                        if (xSupplier.is())
-                        {
-                            Reference< XNumberFormatTypes > xNumTypes(xSupplier->getNumberFormats(), UNO_QUERY);
-                            if (xNumTypes.is())
-                                nFormatKey = getDefaultNumberFormat(xFieldAsSet, xNumTypes, aAppLanguage);
-                        }
-                    }
-
-                    Reference<XNumberFormatter> xFormatter;
-                    if (xSupplier.is())
-                    {
-                        xFormatter = Reference<XNumberFormatter>(
-                            m_xServiceFactory->createInstance(FRM_NUMBER_FORMATTER),
-                            UNO_QUERY
-                            );
-                        if (xFormatter.is())
-                        {
-                            xFormatter->attachNumberFormatsSupplier(xSupplier);
-                            xFormatter->getNumberFormatsSupplier()->getNumberFormatSettings()->getPropertyValue(
-                                ::rtl::OUString::createFromAscii("NullDate")) >>= aNullDate;
-                            nKeyType = getNumberFormatType(xFormatter->getNumberFormatsSupplier()->getNumberFormats(), nFormatKey);
-                        }
-                    }
+                    ::dbtools::FormattedColumnValue aValueFormatter( getContext(), xForm, xDataField );
 
                     // Feld der BoundColumn des ResultSets holen
                     Reference<XColumn> xBoundField;
@@ -934,17 +842,13 @@ namespace frm
                     //  Ist die LB an ein Feld gebunden und sind Leereintraege zulaessig
                     //  dann wird die Position fuer einen Leereintrag gemerkt
 
+                    RTL_LOGFILE_CONTEXT( aLogContext, "OListBoxModel::loadData: string collection" );
                     ::rtl::OUString aStr;
                     sal_Int16 entryPos = 0;
                     // per definitionem the list cursor is positioned _before_ the first row at the moment
-                    while (xListCursor->next() && (entryPos++<SHRT_MAX)) // SHRT_MAX is the maximum number of entries
+                    while ( xListCursor->next() && ( entryPos++ < SHRT_MAX ) ) // SHRT_MAX is the maximum number of entries
                     {
-                        aStr = DBTypeConversion::getValue(xDataField,
-                            xFormatter,
-                            aNullDate,
-                            nFormatKey,
-                            nKeyType);
-
+                        aStr = aValueFormatter.getFormattedValue();
                         aStringList.push_back(aStr);
 
                         if (m_bBoundComponent)
@@ -981,13 +885,11 @@ namespace frm
         catch(SQLException& eSQL)
         {
             onError(eSQL, FRM_RES_STRING(RID_BASELISTBOX_ERROR_FILLLIST));
-            disposeComponent(xListCursor);
             return;
         }
         catch( const Exception& eUnknown )
         {
             (void)eUnknown;
-            disposeComponent(xListCursor);
             return;
         }
 
@@ -1015,9 +917,6 @@ namespace frm
             pustrStrings[i] = aStringList[i];
 
         setFastPropertyValue(PROPERTY_ID_STRINGITEMLIST, makeAny(aStringSeq));
-
-        // Statement + Cursor zerstoeren
-        disposeComponent(xListCursor);
     }
 
     //------------------------------------------------------------------------------
@@ -1060,6 +959,8 @@ namespace frm
 
             if ( !hasExternalListSource() )
                 setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( StringSequence() ) );
+
+            m_aListRowSet.dispose();
         }
     }
 
