@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlscan.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:58:58 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,7 @@ namespace connectivity
         sal_Int32   GetSQLRule() const;
         sal_Int32   GetDATERule() const;
         sal_Int32   GetSTRINGRule() const;
+        inline sal_Int32 GetCurrentPos() const { return m_nCurrentPos; }
     };
 }
 
