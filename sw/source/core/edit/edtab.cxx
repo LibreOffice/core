@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:46:42 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 13:44:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -498,11 +498,13 @@ BOOL SwEditShell::CanMergeTable( BOOL bWithPrev, BOOL* pChkNxtPrv ) const
     const SwTableNode* pTblNd = pCrsr->GetNode()->FindTableNode();
     if( pTblNd && !pTblNd->GetTable().ISA( SwDDETable ))
     {
+        bool bNew = pTblNd->GetTable().IsNewModel();
         const SwNodes& rNds = GetDoc()->GetNodes();
         if( pChkNxtPrv )
         {
             const SwTableNode* pChkNd = rNds[ pTblNd->GetIndex() - 1 ]->FindTableNode();
             if( pChkNd && !pChkNd->GetTable().ISA( SwDDETable ) &&
+                bNew == pChkNd->GetTable().IsNewModel() &&
                 // --> FME 2004-09-17 #117418# Consider table in table case
                 pChkNd->EndOfSectionIndex() == pTblNd->GetIndex() - 1 )
                 // <--
@@ -510,7 +512,8 @@ BOOL SwEditShell::CanMergeTable( BOOL bWithPrev, BOOL* pChkNxtPrv ) const
             else
             {
                 pChkNd = rNds[ pTblNd->EndOfSectionIndex() + 1 ]->GetTableNode();
-                if( pChkNd && !pChkNd->GetTable().ISA( SwDDETable ) )
+                if( pChkNd && !pChkNd->GetTable().ISA( SwDDETable ) &&
+                    bNew == pChkNd->GetTable().IsNewModel() )
                     *pChkNxtPrv = FALSE, bRet = TRUE;       // mit Next ist moeglich
             }
         }
@@ -529,7 +532,8 @@ BOOL SwEditShell::CanMergeTable( BOOL bWithPrev, BOOL* pChkNxtPrv ) const
             else
                 pTmpTblNd = rNds[ pTblNd->EndOfSectionIndex() + 1 ]->GetTableNode();
 
-            bRet = pTmpTblNd && !pTmpTblNd->GetTable().ISA( SwDDETable );
+            bRet = pTmpTblNd && !pTmpTblNd->GetTable().ISA( SwDDETable ) &&
+                   bNew == pTmpTblNd->GetTable().IsNewModel();
         }
     }
     return bRet;
