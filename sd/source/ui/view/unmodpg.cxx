@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unmodpg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:23:04 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:29:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 
 
 #include "strings.hrc"
+#include "glob.hxx"
 #include "glob.hrc"         // STR_BCKGRND, STR_BCKGRNDOBJ
 #include "app.hrc"          // SID_SWITCHPAGE
 
@@ -227,4 +228,39 @@ String ModifyPageUndoAction::GetComment() const
     return maComment;
 }
 
+// --------------------------------------------------------------------
+
+RenameLayoutTemplateUndoAction::RenameLayoutTemplateUndoAction( SdDrawDocument* pDocument, const String& rOldLayoutName, const String& rNewLayoutName )
+: SdUndoAction(pDocument)
+, maOldName( rOldLayoutName )
+, maNewName( rNewLayoutName )
+, maComment(SdResId(STR_TITLE_RENAMESLIDE))
+{
+    USHORT nPos = maOldName.SearchAscii( SD_LT_SEPARATOR );
+    if( nPos != (USHORT)-1 )
+        maOldName.Erase(nPos);
+}
+
+void RenameLayoutTemplateUndoAction::Undo()
+{
+    String aLayoutName( maNewName );
+    aLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
+    aLayoutName.Append( String(SdResId(STR_LAYOUT_OUTLINE))) ;
+
+    mpDoc->RenameLayoutTemplate( aLayoutName, maOldName );
+}
+
+void RenameLayoutTemplateUndoAction::Redo()
+{
+    String aLayoutName( maOldName );
+    aLayoutName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SD_LT_SEPARATOR ));
+    aLayoutName.Append( String(SdResId(STR_LAYOUT_OUTLINE))) ;
+
+    mpDoc->RenameLayoutTemplate( aLayoutName, maNewName );
+}
+
+String RenameLayoutTemplateUndoAction::GetComment() const
+{
+    return  maComment;
+}
 
