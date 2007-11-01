@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DriverSettings.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 17:58:30 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:06:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,208 +36,120 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBAUI_DRIVERSETTINGS_HXX
 #include "DriverSettings.hxx"
-#endif
-#ifndef _DBAUI_DATASOURCEITEMS_HXX_
 #include "dsitems.hxx"
-#endif
+#include "datasourceui.hxx"
 
 
 using namespace dbaui;
-void ODriversSettings::fillDetailIds(DATASOURCE_TYPE _eType,::std::vector< sal_Int32>& _rDetailsIds)
+void ODriversSettings::getSupportedIndirectSettings( DATASOURCE_TYPE _eType, ::std::vector< sal_Int32>& _out_rDetailsIds )
 {
+    // for a number of settings, we do not need to use hard-coded here, but can ask a
+    // central DataSourceUI instance.
+    DataSourceUI aDSUI( _eType );
+    const USHORT nGenericKnownSettings[] =
+    {
+         DSID_SQL92CHECK,
+         DSID_APPEND_TABLE_ALIAS,
+         DSID_AS_BEFORE_CORRNAME,
+         DSID_ENABLEOUTERJOIN,
+         DSID_IGNOREDRIVER_PRIV,
+         DSID_PARAMETERNAMESUBST,
+         DSID_SUPPRESSVERSIONCL,
+         DSID_CATALOG,
+         DSID_SCHEMA,
+         DSID_INDEXAPPENDIX,
+         DSID_DOSLINEENDS,
+         DSID_CHECK_REQUIRED_FIELDS,
+         DSID_AUTORETRIEVEENABLED,
+         DSID_AUTOINCREMENTVALUE,
+         DSID_AUTORETRIEVEVALUE,
+         0
+    };
+    for ( const USHORT* pGenericKnowSetting = nGenericKnownSettings; *pGenericKnowSetting; ++pGenericKnowSetting )
+        if ( aDSUI.hasSetting( *pGenericKnowSetting ) )
+            _out_rDetailsIds.push_back( *pGenericKnowSetting );
+
+    // the rest is hard-coded. On the long run, all of this should be done via DataSourceUI::hasSetting
     switch ( _eType )
     {
         case DST_DBASE:
-            _rDetailsIds.push_back(DSID_SHOWDELETEDROWS);
-            _rDetailsIds.push_back(DSID_CHARSET);
-            _rDetailsIds.push_back(DSID_SQL92CHECK);
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
-            break;
-        case DST_FLAT:
-            _rDetailsIds.push_back(DSID_FIELDDELIMITER);
-            _rDetailsIds.push_back(DSID_TEXTDELIMITER);
-            _rDetailsIds.push_back(DSID_DECIMALDELIMITER);
-            _rDetailsIds.push_back(DSID_THOUSANDSDELIMITER);
-            _rDetailsIds.push_back(DSID_TEXTFILEEXTENSION);
-            _rDetailsIds.push_back(DSID_TEXTFILEHEADER);
-            _rDetailsIds.push_back(DSID_CHARSET);
-            _rDetailsIds.push_back(DSID_SQL92CHECK);
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+            _out_rDetailsIds.push_back(DSID_SHOWDELETEDROWS);
+            _out_rDetailsIds.push_back(DSID_CHARSET);
             break;
 
-        case DST_MSACCESS:
-            _rDetailsIds.push_back(DSID_SQL92CHECK);
-            _rDetailsIds.push_back(DSID_ENABLEOUTERJOIN);
-            _rDetailsIds.push_back(DSID_APPEND_TABLE_ALIAS);
-            _rDetailsIds.push_back(DSID_BOOLEANCOMPARISON);
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+        case DST_FLAT:
+            _out_rDetailsIds.push_back(DSID_FIELDDELIMITER);
+            _out_rDetailsIds.push_back(DSID_TEXTDELIMITER);
+            _out_rDetailsIds.push_back(DSID_DECIMALDELIMITER);
+            _out_rDetailsIds.push_back(DSID_THOUSANDSDELIMITER);
+            _out_rDetailsIds.push_back(DSID_TEXTFILEEXTENSION);
+            _out_rDetailsIds.push_back(DSID_TEXTFILEHEADER);
+            _out_rDetailsIds.push_back(DSID_CHARSET);
             break;
 
         case DST_ADABAS:
-            _rDetailsIds.push_back(DSID_CHARSET);
-            _rDetailsIds.push_back(DSID_SQL92CHECK);
-            _rDetailsIds.push_back(DSID_CONN_SHUTSERVICE);
-            _rDetailsIds.push_back(DSID_CONN_DATAINC);
-            _rDetailsIds.push_back(DSID_CONN_CACHESIZE);
-            _rDetailsIds.push_back(DSID_CONN_CTRLUSER);
-            _rDetailsIds.push_back(DSID_CONN_CTRLPWD);
-            _rDetailsIds.push_back(DSID_APPEND_TABLE_ALIAS);
-            _rDetailsIds.push_back(DSID_BOOLEANCOMPARISON);
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+            _out_rDetailsIds.push_back(DSID_CHARSET);
+            _out_rDetailsIds.push_back(DSID_CONN_SHUTSERVICE);
+            _out_rDetailsIds.push_back(DSID_CONN_DATAINC);
+            _out_rDetailsIds.push_back(DSID_CONN_CACHESIZE);
+            _out_rDetailsIds.push_back(DSID_CONN_CTRLUSER);
+            _out_rDetailsIds.push_back(DSID_CONN_CTRLPWD);
             break;
 
         case DST_ADO:
-            _rDetailsIds.push_back(DSID_SQL92CHECK);
-            _rDetailsIds.push_back(DSID_PARAMETERNAMESUBST);
-            _rDetailsIds.push_back(DSID_CHARSET);
-            _rDetailsIds.push_back(DSID_SUPPRESSVERSIONCL);
-            _rDetailsIds.push_back(DSID_ENABLEOUTERJOIN);
-            _rDetailsIds.push_back(DSID_APPEND_TABLE_ALIAS);
-            _rDetailsIds.push_back(DSID_AS_BEFORE_CORRNAME);
-            _rDetailsIds.push_back(DSID_BOOLEANCOMPARISON);
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+            _out_rDetailsIds.push_back(DSID_CHARSET);
             break;
+
         case DST_ODBC:
-            _rDetailsIds.push_back(DSID_ADDITIONALOPTIONS);
-            _rDetailsIds.push_back(DSID_CHARSET);
-            _rDetailsIds.push_back(DSID_SQL92CHECK);
-            _rDetailsIds.push_back(DSID_USECATALOG);
-            _rDetailsIds.push_back(DSID_AUTOINCREMENTVALUE);
-            _rDetailsIds.push_back(DSID_AUTORETRIEVEVALUE);
-            _rDetailsIds.push_back(DSID_AUTORETRIEVEENABLED);
-            _rDetailsIds.push_back(DSID_PARAMETERNAMESUBST);
-            _rDetailsIds.push_back(DSID_SUPPRESSVERSIONCL);
-            _rDetailsIds.push_back(DSID_ENABLEOUTERJOIN);
-            _rDetailsIds.push_back(DSID_CATALOG);
-            _rDetailsIds.push_back(DSID_SCHEMA);
-            _rDetailsIds.push_back(DSID_APPEND_TABLE_ALIAS);
-            _rDetailsIds.push_back(DSID_AS_BEFORE_CORRNAME);
-            _rDetailsIds.push_back(DSID_BOOLEANCOMPARISON);
-            _rDetailsIds.push_back(DSID_IGNOREDRIVER_PRIV);
-            _rDetailsIds.push_back(DSID_INDEXAPPENDIX);
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+            _out_rDetailsIds.push_back(DSID_ADDITIONALOPTIONS);
+            _out_rDetailsIds.push_back(DSID_CHARSET);
+            _out_rDetailsIds.push_back(DSID_USECATALOG);
             break;
 
         case DST_MYSQL_JDBC:
-            _rDetailsIds.push_back(DSID_CHARSET);
-            _rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
-            _rDetailsIds.push_back(DSID_SUPPRESSVERSIONCL);
-            _rDetailsIds.push_back(DSID_ENABLEOUTERJOIN);
-            _rDetailsIds.push_back(DSID_APPEND_TABLE_ALIAS);
-            _rDetailsIds.push_back(DSID_BOOLEANCOMPARISON);
-            _rDetailsIds.push_back(DSID_PARAMETERNAMESUBST);
-            _rDetailsIds.push_back(DSID_IGNOREDRIVER_PRIV);
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+            _out_rDetailsIds.push_back(DSID_CHARSET);
+            _out_rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
             break;
 
         case DST_MYSQL_ODBC:
-            _rDetailsIds.push_back(DSID_CHARSET);
-            _rDetailsIds.push_back(DSID_SUPPRESSVERSIONCL);
-            _rDetailsIds.push_back(DSID_ENABLEOUTERJOIN);
-            _rDetailsIds.push_back(DSID_APPEND_TABLE_ALIAS);
-            _rDetailsIds.push_back(DSID_BOOLEANCOMPARISON);
-            _rDetailsIds.push_back(DSID_PARAMETERNAMESUBST);
-            _rDetailsIds.push_back(DSID_IGNOREDRIVER_PRIV);
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+            _out_rDetailsIds.push_back(DSID_CHARSET);
             break;
 
         case DST_LDAP:
-            _rDetailsIds.push_back(DSID_CONN_LDAP_BASEDN);
-            _rDetailsIds.push_back(DSID_CONN_LDAP_ROWCOUNT);
-            _rDetailsIds.push_back(DSID_CONN_LDAP_USESSL);
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+            _out_rDetailsIds.push_back(DSID_CONN_LDAP_BASEDN);
+            _out_rDetailsIds.push_back(DSID_CONN_LDAP_ROWCOUNT);
+            _out_rDetailsIds.push_back(DSID_CONN_LDAP_USESSL);
+            _out_rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
 
         case DST_MOZILLA:
         case DST_THUNDERBIRD:
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+            _out_rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
         case DST_EVOLUTION:
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+            _out_rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
         case DST_KAB:
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+            _out_rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
         case DST_MACAB:
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+            _out_rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
         case DST_OUTLOOK:
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+            _out_rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
 
         case DST_OUTLOOKEXP:
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+            _out_rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
 
         case DST_JDBC:
-            _rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
-            _rDetailsIds.push_back(DSID_SQL92CHECK);
-            _rDetailsIds.push_back(DSID_AUTOINCREMENTVALUE);
-            _rDetailsIds.push_back(DSID_AUTORETRIEVEVALUE);
-            _rDetailsIds.push_back(DSID_AUTORETRIEVEENABLED);
-            _rDetailsIds.push_back(DSID_IGNOREDRIVER_PRIV);
-            _rDetailsIds.push_back(DSID_PARAMETERNAMESUBST);
-            _rDetailsIds.push_back(DSID_SUPPRESSVERSIONCL);
-            _rDetailsIds.push_back(DSID_ENABLEOUTERJOIN);
-            _rDetailsIds.push_back(DSID_CATALOG);
-            _rDetailsIds.push_back(DSID_SCHEMA);
-            _rDetailsIds.push_back(DSID_APPEND_TABLE_ALIAS);
-            _rDetailsIds.push_back(DSID_AS_BEFORE_CORRNAME);
-            _rDetailsIds.push_back(DSID_BOOLEANCOMPARISON);
-            _rDetailsIds.push_back(DSID_INDEXAPPENDIX);
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
-            break;
-
         case DST_ORACLE_JDBC:
-            _rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
-            _rDetailsIds.push_back(DSID_SQL92CHECK);
-            _rDetailsIds.push_back(DSID_AUTOINCREMENTVALUE);
-            _rDetailsIds.push_back(DSID_AUTORETRIEVEVALUE);
-            _rDetailsIds.push_back(DSID_AUTORETRIEVEENABLED);
-            _rDetailsIds.push_back(DSID_IGNOREDRIVER_PRIV);
-            _rDetailsIds.push_back(DSID_PARAMETERNAMESUBST);
-            _rDetailsIds.push_back(DSID_SUPPRESSVERSIONCL);
-            _rDetailsIds.push_back(DSID_ENABLEOUTERJOIN);
-            _rDetailsIds.push_back(DSID_CATALOG);
-            _rDetailsIds.push_back(DSID_SCHEMA);
-            _rDetailsIds.push_back(DSID_APPEND_TABLE_ALIAS);
-            _rDetailsIds.push_back(DSID_AS_BEFORE_CORRNAME);
-            _rDetailsIds.push_back(DSID_BOOLEANCOMPARISON);
-            _rDetailsIds.push_back(DSID_INDEXAPPENDIX);
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
+            _out_rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
             break;
 
-        case DST_USERDEFINE1:   /// first user defined driver
-        case DST_USERDEFINE2:
-        case DST_USERDEFINE3:
-        case DST_USERDEFINE4:
-        case DST_USERDEFINE5:
-        case DST_USERDEFINE6:
-        case DST_USERDEFINE7:
-        case DST_USERDEFINE8:
-        case DST_USERDEFINE9:
-        case DST_USERDEFINE10:
         default:
-            _rDetailsIds.push_back(DSID_ADDITIONALOPTIONS);
-            _rDetailsIds.push_back(DSID_CHARSET);
-            _rDetailsIds.push_back(DSID_SQL92CHECK);
-            _rDetailsIds.push_back(DSID_USECATALOG);
-            _rDetailsIds.push_back(DSID_AUTOINCREMENTVALUE);
-            _rDetailsIds.push_back(DSID_AUTORETRIEVEVALUE);
-            _rDetailsIds.push_back(DSID_AUTORETRIEVEENABLED);
-            _rDetailsIds.push_back(DSID_PARAMETERNAMESUBST);
-            _rDetailsIds.push_back(DSID_SUPPRESSVERSIONCL);
-            _rDetailsIds.push_back(DSID_ENABLEOUTERJOIN);
-            _rDetailsIds.push_back(DSID_CATALOG);
-            _rDetailsIds.push_back(DSID_SCHEMA);
-            _rDetailsIds.push_back(DSID_APPEND_TABLE_ALIAS);
-            _rDetailsIds.push_back(DSID_AS_BEFORE_CORRNAME);
-            _rDetailsIds.push_back(DSID_BOOLEANCOMPARISON);
-            _rDetailsIds.push_back(DSID_INDEXAPPENDIX);
-            _rDetailsIds.push_back(DSID_IGNOREDRIVER_PRIV);
-            _rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
     }
 }
