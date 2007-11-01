@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:46:26 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:03:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBAUI_APPCONTROLLER_HXX
 #include "AppController.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
+#include "advancedsettingsdlg.hxx"
+
 /** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -791,9 +789,8 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 break;
             case SID_DB_APP_DSUSERADMIN:
             {
-                ODsnTypeCollection aTypeCollection;
-                DATASOURCE_TYPE eType = aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                aReturn.bEnabled = DST_EMBEDDED != eType;
+                DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                aReturn.bEnabled = DST_EMBEDDED_HSQLDB != eType;
             }
             break;
             case SID_DB_APP_DSRELDESIGN:
@@ -810,7 +807,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 if ( aReturn.bEnabled )
                 {
                     DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    aReturn.bEnabled = DST_EMBEDDED != eType && DST_MOZILLA != eType && DST_EVOLUTION != eType && DST_KAB != eType && DST_MACAB != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
+                    aReturn.bEnabled = DST_EMBEDDED_HSQLDB != eType && DST_MOZILLA != eType && DST_EVOLUTION != eType && DST_KAB != eType && DST_MACAB != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
                 }
                 break;
             case SID_DB_APP_DSCONNECTION_TYPE:
@@ -818,15 +815,15 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 if ( aReturn.bEnabled )
                 {
                     DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    aReturn.bEnabled = DST_EMBEDDED != eType;
+                    aReturn.bEnabled = DST_EMBEDDED_HSQLDB != eType;
                 }
                 break;
             case SID_DB_APP_DSADVANCED_SETTINGS:
                 aReturn.bEnabled = m_xDataSource.is();
                 if ( aReturn.bEnabled )
                 {
-                    DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    aReturn.bEnabled = DST_EMBEDDED != eType && DST_LDAP != eType && DST_CALC != eType && DST_MOZILLA != eType && DST_THUNDERBIRD != eType && DST_EVOLUTION != eType && DST_KAB != eType && DST_MACAB != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
+                    DATASOURCE_TYPE eType = m_aTypeCollection.getType( ::comphelper::getString( m_xDataSource->getPropertyValue( PROPERTY_URL ) ) );
+                    aReturn.bEnabled = AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( eType );
                 }
                 break;
             case SID_DB_APP_CONVERTTOVIEW:
@@ -886,36 +883,33 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = m_xDataSource.is();
                 if ( aReturn.bEnabled )
                 {
-                    ::rtl::OUString sTemp;
-                    m_xDataSource->getPropertyValue(PROPERTY_URL) >>= sTemp;
-                    DATASOURCE_TYPE eType = m_aTypeCollection.getType(sTemp);
+                    ::rtl::OUString sURL;
+                    m_xDataSource->getPropertyValue(PROPERTY_URL) >>= sURL;
+                    DATASOURCE_TYPE eType = m_aTypeCollection.getType( sURL );
+
                     String sDatabaseName;
-                    if ( eType != DST_EMBEDDED )
+                    String sHostName;
+                    sal_Int32 nPortNumber( -1 );
+
+                    m_aTypeCollection.extractHostNamePort( sURL, sDatabaseName, sHostName, nPortNumber );
+
+                    if ( !sDatabaseName.Len() )
+                        sDatabaseName = m_aTypeCollection.cutPrefix( sURL );
+
+                    if ( m_aTypeCollection.isFileSystemBased(eType) )
                     {
-                        String sUser,sHostName,ssTemp;
-                        ssTemp = sTemp;
-                        sal_Int32 nPortNumber = -1;
-
-                        m_aTypeCollection.extractHostNamePort(ssTemp
-                                                            ,sDatabaseName
-                                                            ,sHostName
-                                                            ,nPortNumber);
-                        if ( !sDatabaseName.Len() )
-                            sDatabaseName = m_aTypeCollection.cutPrefix(sTemp);
-
-                        if ( m_aTypeCollection.isFileSystemBased(eType) )
+                        sDatabaseName = SvtPathOptions().SubstituteVariable( sDatabaseName );
+                        if ( sDatabaseName.Len() )
                         {
-                            sDatabaseName = SvtPathOptions().SubstituteVariable( sDatabaseName );
-                            if ( sDatabaseName.Len() )
-                            {
-                                ::svt::OFileNotation aFileNotation(sDatabaseName);
-                                // set this decoded URL as text
-                                sDatabaseName = aFileNotation.get(::svt::OFileNotation::N_SYSTEM);
-                            }
+                            ::svt::OFileNotation aFileNotation(sDatabaseName);
+                            // set this decoded URL as text
+                            sDatabaseName = aFileNotation.get(::svt::OFileNotation::N_SYSTEM);
                         }
                     }
-                    else
-                        sDatabaseName = m_aTypeCollection.getEmbeddedDatabaseUIName(getORB());
+
+                    if ( sDatabaseName.Len() == 0 )
+                        sDatabaseName = m_aTypeCollection.getTypeDisplayName( eType );
+
                     aReturn.sTitle = sDatabaseName;
                 }
                 break;
@@ -928,20 +922,13 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = m_xDataSource.is();
                 if ( aReturn.bEnabled )
                 {
-                    ::rtl::OUString sTemp;
-                    m_xDataSource->getPropertyValue(PROPERTY_URL) >>= sTemp;
-                    DATASOURCE_TYPE eType = m_aTypeCollection.getType(sTemp);
-                    if ( eType != DST_EMBEDDED )
-                    {
-                        String sUser,sHostName,sDatabaseName,ssTemp;
-                        ssTemp = sTemp;
-                        sal_Int32 nPortNumber = -1;
-                        m_aTypeCollection.extractHostNamePort(ssTemp
-                                                            ,sDatabaseName
-                                                            ,sHostName
-                                                            ,nPortNumber);
-                        aReturn.sTitle = sHostName;
-                    }
+                    ::rtl::OUString sURL;
+                    m_xDataSource->getPropertyValue( PROPERTY_URL ) >>= sURL;
+
+                    String sHostName, sDatabaseName;
+                    sal_Int32 nPortNumber = -1;
+                    m_aTypeCollection.extractHostNamePort( sURL, sDatabaseName, sHostName, nPortNumber );
+                    aReturn.sTitle = sHostName;
                 }
                 break;
             default:
