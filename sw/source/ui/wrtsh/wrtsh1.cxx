@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:53:15 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #endif
 
 #if STLPORT_VERSION>=321
@@ -776,59 +779,82 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         return; // the replacement image is completely controlled by container in this case
 
-    sal_Int64 nMisc = xObj->getStatus( nAspect );
+    sal_Int64 nMisc = 0;
+    sal_Bool bLinkingChart = sal_False;
 
-    //Das kann ja wohl nur ein nicht aktives Objekt sein. Diese bekommen
-    //auf Wunsch die neue Groesse als VisArea gesetzt (StarChart)
-    if( embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE & nMisc )
+    try
     {
-        // TODO/MBA: testing
-        SwRect aRect( pFlyPrtRect ? *pFlyPrtRect
-                    : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ));
-        if( !aRect.IsEmpty() )
+        nMisc = xObj->getStatus( nAspect );
+
+        //Das kann ja wohl nur ein nicht aktives Objekt sein. Diese bekommen
+        //auf Wunsch die neue Groesse als VisArea gesetzt (StarChart)
+        if( embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE & nMisc )
         {
-            // TODO/LEAN: getMapUnit can switch object to running state
-            // xObj.TryRunningState();
-
-            MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-
-            // TODO/LATER: needs complete VisArea?!
-            Size aSize( OutputDevice::LogicToLogic( aRect.SVRect(), MAP_TWIP, aUnit ).GetSize() );
-            awt::Size aSz;
-            aSz.Width = aSize.Width();
-            aSz.Height = aSize.Height();
-            xObj->setVisualAreaSize( nAspect, aSz );
-            // --> OD 2005-05-02 #i48419# - action 'UpdateReplacement' doesn't
-            // have to change the modified state of the document.
-            // This is only a workaround for the defect, that this action
-            // modifies a document after load, because unnecessarily the
-            // replacement graphic is updated, in spite of the fact that
-            // nothing has been changed.
-            // If the replacement graphic changes by this action, the document
-            // will be already modified via other mechanisms.
+            // TODO/MBA: testing
+            SwRect aRect( pFlyPrtRect ? *pFlyPrtRect
+                        : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ));
+            if( !aRect.IsEmpty() )
             {
-                bool bResetEnableSetModified(false);
-                if ( GetDoc()->GetDocShell()->IsEnableSetModified() )
-                {
-                    GetDoc()->GetDocShell()->EnableSetModified( FALSE );
-                    bResetEnableSetModified = true;
-                }
+                // TODO/LEAN: getMapUnit can switch object to running state
+                // xObj.TryRunningState();
 
-                xObj.UpdateReplacement();
+                MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
 
-                if ( bResetEnableSetModified )
+                // TODO/LATER: needs complete VisArea?!
+                Size aSize( OutputDevice::LogicToLogic( aRect.SVRect(), MAP_TWIP, aUnit ).GetSize() );
+                awt::Size aSz;
+                aSz.Width = aSize.Width();
+                aSz.Height = aSize.Height();
+                xObj->setVisualAreaSize( nAspect, aSz );
+                // --> OD 2005-05-02 #i48419# - action 'UpdateReplacement' doesn't
+                // have to change the modified state of the document.
+                // This is only a workaround for the defect, that this action
+                // modifies a document after load, because unnecessarily the
+                // replacement graphic is updated, in spite of the fact that
+                // nothing has been changed.
+                // If the replacement graphic changes by this action, the document
+                // will be already modified via other mechanisms.
                 {
-                    GetDoc()->GetDocShell()->EnableSetModified( TRUE );
+                    bool bResetEnableSetModified(false);
+                    if ( GetDoc()->GetDocShell()->IsEnableSetModified() )
+                    {
+                        GetDoc()->GetDocShell()->EnableSetModified( FALSE );
+                        bResetEnableSetModified = true;
+                    }
+
+                    xObj.UpdateReplacement();
+
+                    if ( bResetEnableSetModified )
+                    {
+                        GetDoc()->GetDocShell()->EnableSetModified( TRUE );
+                    }
                 }
+                // <--
             }
-            // <--
+
+            // TODO/LATER: this is only a workaround,
+            uno::Reference< chart2::XChartDocument > xChartDocument( xObj->getComponent(), uno::UNO_QUERY );
+            bLinkingChart = ( xChartDocument.is() && !xChartDocument->hasInternalDataProvider() );
         }
+    }
+    catch ( uno::Exception& )
+    {
+        // TODO/LATER: handle the error
+        return;
     }
 
     SfxInPlaceClient* pCli = GetView().FindIPClient( xObj.GetObject(), &GetView().GetEditWin() );
     if ( !pCli )
     {
-        pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
+        if ( (embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY & nMisc) || bLinkingChart
+            // TODO/LATER: ResizeOnPrinterChange
+             //|| SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->GetMiscStatus()
+             )
+        {
+            pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
+        }
+        else
+            return;
     }
 
     // TODO/LEAN: getMapUnit can switch object to running state
@@ -843,6 +869,12 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     {
         DBG_ERROR( "Can't get visual area size!\n" );
         // the scaling will not be done
+    }
+    catch( uno::Exception& )
+    {
+        // TODO/LATER: handle the error
+        DBG_ERROR( "Can't get visual area size!\n" );
+        return;
     }
 
     Size _aVisArea( aSize.Width, aSize.Height );
