@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RTableConnectionData.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:49:51 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:17:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,6 @@
 #ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
 #endif
-#ifndef _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
-#include <unotools/eventlisteneradapter.hxx>
-#endif
 
 namespace dbaui
 {
@@ -60,17 +57,13 @@ namespace dbaui
 
     class OConnectionLineData;
     //==================================================================
-    class ORelationTableConnectionData :    public OTableConnectionData,
-                                            public ::utl::OEventListenerAdapter
+    class ORelationTableConnectionData :    public OTableConnectionData
     {
         friend bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs);
         friend bool operator!=(const ORelationTableConnectionData& lhs, const ORelationTableConnectionData& rhs) { return !(lhs == rhs); }
 
         ::osl::Mutex    m_aMutex;
         ::rtl::OUString m_sDatabaseName;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xTables;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xSource;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xDest;
 
         // @see com.sun.star.sdbc.KeyRule
         sal_Int32 m_nUpdateRules;
@@ -78,10 +71,8 @@ namespace dbaui
         sal_Int32 m_nCardinality;
 
         BOOL checkPrimaryKey(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,EConnectionSide _eEConnectionSide) const;
-        BOOL IsSourcePrimKey()  const { return checkPrimaryKey(m_xSource,JTCS_FROM);    }
-        BOOL IsDestPrimKey()    const { return checkPrimaryKey(m_xDest,JTCS_TO);        }
-        void addListening(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxComponent);
-        void removeListening(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxComponent);
+        BOOL IsSourcePrimKey()  const { return checkPrimaryKey(getReferencingTable()->getTable(),JTCS_FROM);    }
+        BOOL IsDestPrimKey()    const { return checkPrimaryKey(getReferencedTable()->getTable(),JTCS_TO);       }
 
     protected:
         virtual OConnectionLineDataRef CreateLineDataObj();
@@ -90,27 +81,17 @@ namespace dbaui
         ORelationTableConnectionData& operator=( const ORelationTableConnectionData& rConnData );
     public:
         ORelationTableConnectionData();
-        ORelationTableConnectionData( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTables);
         ORelationTableConnectionData( const ORelationTableConnectionData& rConnData );
-        ORelationTableConnectionData( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTables,
-                                      const ::rtl::OUString& rSourceWinName,
-                                      const ::rtl::OUString& rDestWinName,
+        ORelationTableConnectionData( const TTableWindowData::value_type& _pReferencingTable,
+                                      const TTableWindowData::value_type& _pReferencedTable,
                                       const ::rtl::OUString& rConnName = ::rtl::OUString() );
         virtual ~ORelationTableConnectionData();
 
         virtual void CopyFrom(const OTableConnectionData& rSource);
         virtual OTableConnectionData* NewInstance() const { return new ORelationTableConnectionData(); }
 
+        inline ::rtl::OUString GetDatabaseName() const { return m_sDatabaseName; }
 
-
-        ::rtl::OUString GetDatabaseName() const { return m_sDatabaseName; }
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getTables() const { return m_xTables;}
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    getSource() const { return m_xSource;}
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    getDest() const { return m_xDest; }
-
-        virtual void SetSourceWinName( const String& rSourceWinName );
-        virtual void SetDestWinName( const String& rDestWinName );
         /** Update create a new relation
 
             @return true if successful
@@ -119,19 +100,16 @@ namespace dbaui
 
 
         void        SetCardinality();
-        void        SetUpdateRules( sal_Int32 nAttr ){ m_nUpdateRules = nAttr; }
-        void        SetDeleteRules( sal_Int32 nAttr ){ m_nDeleteRules = nAttr; }
+        inline void SetUpdateRules( sal_Int32 nAttr ){ m_nUpdateRules = nAttr; }
+        inline void SetDeleteRules( sal_Int32 nAttr ){ m_nDeleteRules = nAttr; }
 
-        sal_Int32   GetUpdateRules() const { return m_nUpdateRules; }
-        sal_Int32   GetDeleteRules() const { return m_nDeleteRules; }
-        sal_Int32   GetCardinality() const { return m_nCardinality; }
+        inline sal_Int32    GetUpdateRules() const { return m_nUpdateRules; }
+        inline sal_Int32    GetDeleteRules() const { return m_nDeleteRules; }
+        inline sal_Int32    GetCardinality() const { return m_nCardinality; }
 
         BOOL        IsConnectionPossible();
         void        ChangeOrientation();
         BOOL        DropRelation();
-
-        // OEventListenerAdapter
-        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
     };
 }
 
