@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 09:23:32 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:22:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3977,7 +3977,7 @@ void ScInterpreter::ScInfo()
 {
     if( MustHaveParamCount( GetByte(), 1 ) )
     {
-        String aStr = String( GetString() ).ToUpperAscii();
+        String aStr = GetString();
         ScCellKeywordTranslator::transKeyword(aStr, ScGlobal::pLocale, ocInfo);
         if( aStr.EqualsAscii( "SYSTEM" ) )
             PushString( String( RTL_CONSTASCII_USTRINGPARAM( SC_INFO_OSVERSION ) ) );
