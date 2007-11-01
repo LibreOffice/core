@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:38:41 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:28:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,8 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#include <cppuhelper/exc_hlp.hxx>
+#include <tools/diagnose_ex.h>
 #include <algorithm>
 #include <functional>
 
@@ -112,6 +114,8 @@ using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::accessibility;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
 
 #define LINE_SIZE           50
 ////////////////////////////////////////////////////////////////
@@ -166,6 +170,13 @@ void OScrollWindowHelper::setTableView(OJoinTableView* _pTableView)
     GetHScrollBar()->SetScrollHdl( LINK(m_pTableView, OJoinTableView, ScrollHdl) );
     GetVScrollBar()->SetScrollHdl( LINK(m_pTableView, OJoinTableView, ScrollHdl) );
 }
+// -----------------------------------------------------------------------------
+void OScrollWindowHelper::resetRange(const Point& _aSize)
+{
+    Point aPos = PixelToLogic(_aSize);
+    GetHScrollBar()->SetRange( Range(0, aPos.X() + TABWIN_SPACING_X) );
+    GetVScrollBar()->SetRange( Range(0, aPos.Y() + TABWIN_SPACING_Y) );
+}
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::Resize()
 {
@@ -209,7 +220,6 @@ void OScrollWindowHelper::Resize()
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-TYPEINIT0(OJoinTableView);
 //==================================================================
 // class OJoinTableView
 //==================================================================
@@ -321,7 +331,6 @@ ULONG OJoinTableView::GetTabWinCount()
                                                 Any());
     if ( _bDelete )
     {
-        delete _pConn->GetData();
         delete _pConn;
     }
 
@@ -337,10 +346,40 @@ OTableWindow* OJoinTableView::GetTabWindow( const String& rName )
     return aIter == m_aTableMap.end() ? NULL : aIter->second;
 }
 // -----------------------------------------------------------------------------
-OTableWindowData* OJoinTableView::CreateImpl(const ::rtl::OUString& _rComposedName,
-                                             const ::rtl::OUString& _rWinName)
+TTableWindowData::value_type OJoinTableView::createTableWindowData(const ::rtl::OUString& _rComposedName
+                                                                  ,const ::rtl::OUString& _sTableName
+                                                                  ,const ::rtl::OUString& _rWinName)
 {
-    return new OTableWindowData( _rComposedName, _rWinName );
+    TTableWindowData::value_type pData( CreateImpl(_rComposedName, _sTableName,_rWinName) );
+    OJoinDesignView* pParent = getDesignView();
+    try
+    {
+        if ( !pData->init(pParent->getController()->getConnection(),allowQueries()) )
+            onNoColumns_throw();
+    }
+    catch ( const SQLException& )
+    {
+        ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ),
+            pParent, pParent->getController()->getORB() );
+    }
+    catch( const WrappedTargetException& e )
+    {
+        SQLException aSql;
+        if ( e.TargetException >>= aSql )
+            ::dbaui::showError( ::dbtools::SQLExceptionInfo( aSql ), pParent, pParent->getController()->getORB() );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return pData;
+}
+// -----------------------------------------------------------------------------
+OTableWindowData* OJoinTableView::CreateImpl(const ::rtl::OUString& _rComposedName
+                                             ,const ::rtl::OUString& _sTableName
+                                             ,const ::rtl::OUString& _rWinName)
+{
+    return new OTableWindowData( NULL,_rComposedName,_sTableName, _rWinName );
 }
 //------------------------------------------------------------------------------
 void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL /*bNewTable*/)
@@ -348,10 +387,7 @@ void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rt
     DBG_CHKTHIS(OJoinTableView,NULL);
     OSL_ENSURE(_rComposedName.getLength(),"There must be a table name supplied!");
 
-    //////////////////////////////////////////////////////////////////
-    // Neue Datenstruktur in DocShell eintragen
-    OTableWindowData* pNewTabWinData = CreateImpl( _rComposedName, rWinName );
-
+    TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
 
     //////////////////////////////////////////////////////////////////
     // Neues Fenster in Fensterliste eintragen
@@ -376,7 +412,6 @@ void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rt
     }
     else
     {
-        delete pNewTabWinData;
         pNewTabWin->clearListBox();
         delete pNewTabWin;
     }
@@ -388,22 +423,19 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
     DBG_CHKTHIS(OJoinTableView,NULL);
     //////////////////////////////////////////////////////////////////////
     // first delete all connections of this window to others
-    String aWinName = pTabWin->GetWinName();
-    String sComposedName = pTabWin->GetComposedName();
     BOOL bRemove = TRUE;
 
+    TTableWindowData::value_type pData = pTabWin->GetData();
     sal_Int32 nCount = m_vTableConnection.size();
     ::std::vector<OTableConnection*>::reverse_iterator aIter = m_vTableConnection.rbegin();
-    for(;aIter != m_vTableConnection.rend();++aIter)
+    for(;aIter != m_vTableConnection.rend() && bRemove;++aIter)
     {
         OTableConnection* pTabConn = (*aIter);
         if(
-            ( aWinName == pTabConn->GetData()->GetSourceWinName())      ||
-            ( aWinName == pTabConn->GetData()->GetDestWinName())        ||
-            ( sComposedName == pTabConn->GetData()->GetSourceWinName()) ||
-            ( sComposedName == pTabConn->GetData()->GetDestWinName())
+            ( pData == pTabConn->GetData()->getReferencingTable())      ||
+            ( pData == pTabConn->GetData()->getReferencedTable())
           )
-          bRemove = RemoveConnection( pTabConn ,sal_True) != m_vTableConnection.end();
+          bRemove = RemoveConnection( pTabConn ,sal_True) != m_vTableConnection.end(); // every remove must work
     }
 
     //////////////////////////////////////////////////////////////////////
@@ -416,18 +448,18 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
                                                     );
 
         pTabWin->Hide();
-        ::std::vector< OTableWindowData*>::iterator aFind = ::std::find(m_pView->getController()->getTableWindowData()->begin(),m_pView->getController()->getTableWindowData()->end(),pTabWin->GetData());
+        TTableWindowData::iterator aFind = ::std::find(m_pView->getController()->getTableWindowData()->begin(),m_pView->getController()->getTableWindowData()->end(),pData);
         if(aFind != m_pView->getController()->getTableWindowData()->end())
         {
-            delete *aFind;
             m_pView->getController()->getTableWindowData()->erase(aFind);
             m_pView->getController()->setModified(sal_True);
         }
 
+        String aWinName = pTabWin->GetWinName();
         if(m_aTableMap.find(aWinName) != m_aTableMap.end())
             m_aTableMap.erase( aWinName );
         else
-            m_aTableMap.erase( sComposedName );
+            m_aTableMap.erase( pTabWin->GetComposedName() );
 
         if (pTabWin == m_pLastFocusTabWin)
             m_pLastFocusTabWin = NULL;
@@ -543,7 +575,7 @@ BOOL OJoinTableView::isMovementAllowed(const Point& _rPoint,const Size& _rSize)
 void OJoinTableView::EnsureVisible(const OTableWindow* _pWin)
 {
     // data about the tab win
-    OTableWindowData* pData = _pWin->GetData();
+    TTableWindowData::value_type pData = _pWin->GetData();
     //  Point aUpperLeft = pData->GetPosition();
     EnsureVisible( pData->GetPosition() , pData->GetSize());
     Invalidate(INVALIDATE_NOCHILDREN);
@@ -834,7 +866,7 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
             m_pDragWin->SetZOrder(NULL, WINDOW_ZORDER_FIRST);
             // erst mal testen, ob ich mich ueberhaupt bewegt habe
             // (das verhindert das Setzen des modified-Flags, wenn sich eigentlich gar nichts getan hat)
-            OTableWindowData* pData = m_pDragWin->GetData();
+            TTableWindowData::value_type pData = m_pDragWin->GetData();
             if ( ! (pData && pData->HasPosition() && (pData->GetPosition() == aDragWinPos)))
             {
                 // die alten logischen Koordinaten
@@ -1002,7 +1034,6 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
                 if ((*aIter)->IsValid())
                 {
                     SvLBoxEntry* pSourceEntry = pSourceBox->GetEntryFromText((*aIter)->GetData()->GetSourceFieldName());
-                    OSL_ENSURE(pSourceEntry,"Could not find column in Source ListBox!");
                     if (pSourceEntry)
                     {
                         pSourceBox->Select(pSourceEntry, TRUE);
@@ -1010,7 +1041,6 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
                     }
 
                     SvLBoxEntry* pDestEntry = pDestBox->GetEntryFromText((*aIter)->GetData()->GetDestFieldName());
-                    OSL_ENSURE(pDestEntry,"Could not find column in Dest ListBox!");
                     if (pDestEntry)
                     {
                         pDestBox->Select(pDestEntry, TRUE);
@@ -1309,7 +1339,7 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
 }
 
 //------------------------------------------------------------------------------
-OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,const OTableConnection* _rpFirstAfter) const
+OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSupressCrossOrNaturalJoin,const OTableConnection* _rpFirstAfter) const
 {
     OTableConnection* pConn = NULL;
     DBG_ASSERT(pRhs || pLhs, "OJoinTableView::GetTabConn : invalid args !");
@@ -1336,6 +1366,11 @@ OTableConnection* OJoinTableView::GetTabConn(const OTableWindow* pLhs,const OTab
                     )
                 )
             {
+                if ( _bSupressCrossOrNaturalJoin )
+                {
+                    if ( supressCrossNaturalJoin(pData->GetData()) )
+                        continue;
+                }
                 if (bFoundStart)
                 {
                     pConn = pData;
@@ -1701,7 +1736,7 @@ void OJoinTableView::addConnection(OTableConnection* _pConnection,sal_Bool _bAdd
     if ( _bAddData )
     {
 #if OSL_DEBUG_LEVEL > 0
-        ::std::vector< OTableConnectionData*>* pTabConnDataList = m_pView->getController()->getTableConnectionData();
+        TTableConnectionData* pTabConnDataList = m_pView->getController()->getTableConnectionData();
         OSL_ENSURE( ::std::find(pTabConnDataList->begin(),pTabConnDataList->end(),_pConnection->GetData()) == pTabConnDataList->end(),"Data already in vector!");
 #endif
         m_pView->getController()->getTableConnectionData()->push_back(_pConnection->GetData());
@@ -1717,6 +1752,18 @@ void OJoinTableView::addConnection(OTableConnection* _pConnection,sal_Bool _bAdd
                                                 makeAny(_pConnection->GetAccessible()));
 }
 // -----------------------------------------------------------------------------
-
-
-
+bool OJoinTableView::allowQueries() const
+{
+    return true;
+}
+// -----------------------------------------------------------------------------
+void OJoinTableView::onNoColumns_throw()
+{
+    OSL_ENSURE( false, "OTableWindow::onNoColumns_throw: cannot really handle this!" );
+    throw SQLException();
+}
+//------------------------------------------------------------------------------
+bool OJoinTableView::supressCrossNaturalJoin(const TTableConnectionData::value_type& ) const
+{
+    return false;
+}
