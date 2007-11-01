@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.122 $
+#   $Revision: 1.123 $
 #
-#   last change: $Author: rt $ $Date: 2007-10-30 10:37:49 $
+#   last change: $Author: hr $ $Date: 2007-11-01 18:40:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.122 $ ';
+$id_str = ' $Revision: 1.123 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -169,12 +169,9 @@ exit($error);
 
 sub do_copy
 {
-    # We need to copy up to four times:
-    # from the platform dependent output tree,
-    # from the SO platform dependent tree,
-    # from the common output tree,
-    # and from the SO common output tree
-    # in this order.
+    # We need to copy two times:
+    # from the platform dependent output tree
+    # and from the common output tree
     my ($dependent, $common, $from, $to, $file_list);
     my $line = shift;
     my $touch = 0;
@@ -184,14 +181,6 @@ sub do_copy
     print "copy dependent: from: $from, to: $to\n" if $is_debug;
     glob_and_copy($from, $to, $touch);
 
-    my $line_so = mod_so($line);
-    if ( $line_so ) {
-        my $dependent = expand_macros($line_so);
-        ($from, $to) = split(' ', $dependent);
-        print "copy dependent: from: $from, to: $to\n" if $is_debug;
-        glob_and_copy($from, $to, $touch);
-    }
-
     if ($delete_common && $common_build && ( $line !~ /%COMMON_OUTDIR%/ ) ) {
         $line =~ s/%__SRC%/%COMMON_OUTDIR%/ig;
         if ( $line =~ /%COMMON_OUTDIR%/ ) {
@@ -200,14 +189,6 @@ sub do_copy
             ($from, $to) = split(' ', $common);
             print "copy common: from: $from, to: $to\n" if $is_debug;
             glob_and_copy($from, $to, $touch);
-
-            my $line_so = mod_so($line);
-            if ( $line_so ) {
-                $common = expand_macros($line_so);
-                ($from, $to) = split(' ', $common);
-                print "copy common: from: $from, to: $to\n" if $is_debug;
-                glob_and_copy($from, $to, $touch);
-            }
         }
     }
 }
@@ -641,25 +622,6 @@ sub expand_macros
     return $line;
 }
 
-sub mod_so
-{
-    my $line = shift;
-
-    if ( $line =~ s/(%__SRC%[\\|\/]bin)/$1\\so/i ) {
-        if ( $line =~ s/(%_DEST%[\\|\/]\w+%_EXT%)/$1\\so/i ) {
-            return $line;
-        }
-    }
-    elsif ( $line =~ s/(%COMMON_OUTDIR%[\\|\/]bin)/$1\\so/i ) {
-        if ( $line =~ s/(%COMMON_DEST%[\\|\/]\w+%_EXT%)/$1\\so/i ) {
-            return $line;
-        }
-    }
-    else {
-        return undef;
-    }
-}
-
 sub walk_action_data
 {
     # all actions have to be excuted relative to the prj directory
@@ -837,7 +799,7 @@ sub copy_if_newer
     # copy to temporary file first and rename later
     # to minimize the possibility for race conditions
     local $temp_file = sprintf('%s.%d-%d', $to, $$, time());
-    my $rc = '';
+    $rc = '';
     if (($strip ne '') && (defined $ENV{PROEXT}) && (is_unstripped($from))) {
         $rc = strip_target($from, $temp_file);
     } else {
@@ -1045,10 +1007,8 @@ sub push_default_actions
             push(@action_data, ['mkdir', "%COMMON_DEST%/inc%_EXT%/$module"]);
         }
     }
-    push(@action_data, ['mkdir', "%_DEST%/bin%_EXT%/so"]);
     push(@action_data, ['mkdir', "%_DEST%/res%_EXT%/img"]);
     if ( $common_build ) {
-        push(@action_data, ['mkdir', "%COMMON_DEST%/bin%_EXT%/so"]);
         push(@action_data, ['mkdir', "%COMMON_DEST%/res%_EXT%/img"]);
     }
 
