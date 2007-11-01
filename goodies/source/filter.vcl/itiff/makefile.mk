@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:59:53 $
+#   last change: $Author: hr $ $Date: 2007-11-01 15:03:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,8 @@ CDEFS+= -DEDITDEBUG
 SLOFILES =  $(SLO)$/itiff.obj    \
             $(SLO)$/lzwdecom.obj \
             $(SLO)$/ccidecom.obj
+
+EXCEPTIONSNOOPTFILES=	$(SLO)$/itiff.obj
 
 # ==========================================================================
 
