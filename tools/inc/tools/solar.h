@@ -4,9 +4,9 @@
  *
  *  $RCSfile: solar.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 11:08:02 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:12:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,7 +328,7 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #define SYSTEM_UNXSNIM      16
 #define SYSTEM_UNXMVSG      17
 #define SYSTEM_UNXIRXM      18
-#define SYSTEM_MACOSP       19
+// #define SYSTEM_MACOSP        19
 #define SYSTEM_UNXFBSDI     20
 #define SYSTEM_UNXSOLI      21
 #define SYSTEM_WINBLCI      22
