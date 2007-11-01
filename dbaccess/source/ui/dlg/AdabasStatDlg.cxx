@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AdabasStatDlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:09:01 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:04:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,7 @@ DBG_NAME(OAdabasStatPageDlg)
         return m_pImpl->createConnection();
     }
     // -----------------------------------------------------------------------------
-    Reference< XMultiServiceFactory > OAdabasStatPageDlg::getORB()
+    Reference< XMultiServiceFactory > OAdabasStatPageDlg::getORB() const
     {
         return m_pImpl->getORB();
     }
