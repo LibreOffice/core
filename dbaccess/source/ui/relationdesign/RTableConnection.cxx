@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RTableConnection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:40:40 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:36:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ using namespace dbaui;
 DBG_NAME(ORelationTableConnection)
 //------------------------------------------------------------------------
 ORelationTableConnection::ORelationTableConnection( ORelationTableView* pContainer,
-                                                   ORelationTableConnectionData* pTabConnData )
+                                                   const TTableConnectionData::value_type& pTabConnData )
     :OTableConnection( pContainer, pTabConnData )
 {
     DBG_CTOR(ORelationTableConnection,NULL);
@@ -97,7 +97,7 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
     DBG_CHKTHIS(ORelationTableConnection,NULL);
     OTableConnection::Draw( rRect );
     ORelationTableConnectionData* pData =
-        static_cast< ORelationTableConnectionData* >(GetData());
+        static_cast< ORelationTableConnectionData* >(GetData().get());
     if ( pData && (pData->GetCardinality() == CARDINAL_UNDEFINED) )
         return;
 
@@ -135,7 +135,7 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
     String aSourceText;
     String aDestText;
 
-    switch( ((ORelationTableConnectionData*)GetData())->GetCardinality() )
+    switch( pData->GetCardinality() )
     {
     case CARDINAL_ONE_MANY:
         aSourceText  ='1';
@@ -163,6 +163,3 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
     GetParent()->DrawText( aDestPos, aDestText, TEXT_DRAW_CLIP | TEXT_DRAW_CENTER | TEXT_DRAW_BOTTOM);
 }
 // -----------------------------------------------------------------------------
-
-
-
