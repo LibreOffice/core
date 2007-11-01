@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treecontrolpeer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-02 09:29:44 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:20:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,7 +284,7 @@ void TreeControlPeer::SetWindow( Window* pWindow )
 
 // --------------------------------------------------------------------
 
-UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uInt32 nPos /* = LIST_APPEND */ )
+UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xNode, UnoTreeListEntry* pParent, ULONG nPos /* = LIST_APPEND */ )
 {
     UnoTreeListEntry* pEntry = 0;
     if( mpTreeImpl )
