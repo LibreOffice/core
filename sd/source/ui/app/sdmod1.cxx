@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:01:04 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:23:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,8 @@
 #endif
 #include "sdabstdlg.hxx"
 #include <memory>
+#include <boost/shared_ptr.hpp>
+#include <boost/scoped_array.hpp>
 
 using ::sd::framework::FrameworkHelper;
 
@@ -136,11 +138,12 @@ public:
         ::sd::ViewShellBase& rBase,
         SdDrawDocument& rDocument,
         SvLockBytes& rBytes);
+    virtual ~OutlineToImpressFinalizer (void) {};
     void operator() (bool bEventSeen);
 private:
     ::sd::ViewShellBase& mrBase;
     SdDrawDocument& mrDocument;
-    SvLockBytes& mrBytes;
+    ::boost::shared_ptr<SvMemoryStream> mpStream;
 };
 
 
@@ -973,8 +976,62 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
     SvLockBytes& rBytes)
     : mrBase(rBase),
       mrDocument(rDocument),
-      mrBytes(rBytes)
+      mpStream()
 {
+    // The given stream has a lifetime shorter than this new
+    // OutlineToImpressFinalizer object.  Therefore a local copy of the
+    // stream is created.
+    const SvStream* pStream (rBytes.GetStream());
+    if (pStream != NULL)
+    {
+        // Create a memory stream and prepare to fill it with the content of
+        // the original stream.
+        mpStream.reset(new SvMemoryStream());
+        static const sal_Size nBufferSize = 4096;
+        ::boost::scoped_array<sal_Int8> pBuffer (new sal_Int8[nBufferSize]);
+
+        sal_Size nReadPosition (0);
+        bool bLoop (true);
+        while (bLoop)
+        {
+            // Read the next part of the original stream.
+            sal_Size nReadByteCount (0);
+            const ErrCode nErrorCode (
+                rBytes.ReadAt(
+                    nReadPosition,
+                    reinterpret_cast<void*>(pBuffer.get()),
+                    nBufferSize,
+                    &nReadByteCount));
+
+            // Check the error code and stop copying the stream data when an
+            // error has occured.
+            switch (nErrorCode)
+            {
+                case ERRCODE_NONE:
+                    if (nReadByteCount == 0)
+                        bLoop = false;
+                    break;
+                case ERRCODE_IO_PENDING:
+                    break;
+
+                default:
+                    bLoop = false;
+                    nReadByteCount = 0;
+                    break;
+            }
+
+            // Append the read bytes to the end of the memory stream.
+            if (nReadByteCount > 0)
+            {
+                mpStream->Write(reinterpret_cast<void*>(pBuffer.get()), nReadByteCount);
+                nReadPosition += nReadByteCount;
+            }
+        }
+
+        // Rewind the memory stream so that in the operator() method its
+        // content is properly read.
+        mpStream->Seek(STREAM_SEEK_TO_BEGIN);
+    }
 }
 
 
@@ -987,13 +1044,12 @@ void OutlineToImpressFinalizer::operator() (bool)
         = dynamic_cast<sd::OutlineViewShell*>(
             FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
 
-    if (pOutlineShell != NULL)
+    if (pOutlineShell != NULL && mpStream.get() != NULL)
     {
         sd::OutlineView* pView = static_cast<sd::OutlineView*>(pOutlineShell->GetView());
-        SvStream* pStream = const_cast<SvStream*>(mrBytes.GetStream());
         // mba: the stream can't contain any relative URLs, because we don't
         // have any information about a BaseURL!
-        if ( pOutlineShell->Read(*pStream, String(), EE_FORMAT_RTF) == 0 )
+        if ( pOutlineShell->Read(*mpStream, String(), EE_FORMAT_RTF) == 0 )
         {
             sd::OutlineViewPageChangesGuard aGuard( pView );
 
