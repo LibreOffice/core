@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationControl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:32:26 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:17:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,13 @@ namespace dbaui
             @param  _pConnectionData
                     contains the data which should be filled into the listboxes
         */
-        void fillAndDisable(OTableConnectionData* _pConnectionData);
+        void fillAndDisable(const TTableConnectionData::value_type& _pConnectionData);
+
+        /** enables the relation control
+        *
+        * \param _bEnable when TRUE enables it, otherwise disable it.
+        */
+        void enableRelation(bool _bEnable);
 
         /** NotifyCellChange notifies the browse control that the conenction data has changed
         */
@@ -93,13 +99,14 @@ namespace dbaui
             @param  _pConnData
                     the connection data which is used to init the control
         */
-        void Init(OTableConnectionData* _pConnData);
+        void Init(const TTableConnectionData::value_type& _pConnData);
+        void lateUIInit(Window* _pTableSeparator = NULL);
         void lateInit();
 
         BOOL SaveModified();
 
-        String getSourceWinName()   const;
-        String getDestWinName()     const;
+        TTableWindowData::value_type getReferencingTable()  const;
+        TTableWindowData::value_type getReferencedTable()   const;
 
         /** getContainer returns the container interface
             @return the interface of the container
