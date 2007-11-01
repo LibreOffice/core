@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionLineData.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:49:25 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:14:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,6 @@ namespace dbaui
         ::rtl::OUString GetSourceFieldName() const { return GetFieldName(JTCS_FROM); }
         ::rtl::OUString GetDestFieldName() const { return GetFieldName(JTCS_TO); }
 
-        bool IsValid() const;
         bool Reset();
         OConnectionLineData& operator=( const OConnectionLineData& rConnLineData );
     };
