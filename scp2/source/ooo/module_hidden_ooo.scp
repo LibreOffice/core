@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-23 15:11:12 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 18:04:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -447,6 +447,8 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Cmdmail,
 	gid_File_Lib_I18n,
 	gid_File_Lib_VCLCanvas,
+	gid_File_Lib_DirectXCanvas,
+	gid_File_Lib_DirectX9Canvas,
 	gid_File_Lib_Hhc_Word,
 	gid_File_Lib_Policybe,
 	gid_File_Lib_Socomp,
@@ -503,8 +505,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Gdiplus,
 	gid_File_Lib_Stlport_Vc6,
 	gid_File_Lib_Stlport_Vc7,
-	gid_File_Lib_DirectXCanvas,
-	gid_File_Lib_DirectX9Canvas,
 	gid_File_Tabaction,
 	gid_File_Lib_Fps_Office,
 	gid_File_Lib_Fpicker,
