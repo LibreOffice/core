@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:37:29 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:57:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ public:
 
     void EnableReload( BOOL bEnable );
     void SetDocumentNumber(sal_Int16 nNo);
-    void SetReloadDelay( sal_uInt32 nDelay );
+    void SetReloadDelay( sal_Int32 nDelay );
     void SetTime(sal_Int32 l);
     void SetDefaultTarget( const String& rString );
     void SetReloadURL( const String& rString );
