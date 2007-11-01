@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macspellimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 18:05:25 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:13:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -431,7 +431,6 @@ Reference< XSpellAlternatives >
         // note: mutex is held by higher up by spell which covers both
 
     INT16 nLang = LocaleToLanguage( rLocale );
-    rtl_TextEncoding aEnc = RTL_TEXTENCODING_UTF8;
     int count;
     Sequence< OUString > aStr( 0 );
 
@@ -470,7 +469,7 @@ Reference< XSpellAlternatives >
                {
                   // if needed add: if (suglst[ii] == NULL) continue;
                   NSString* guess = [guesses objectAtIndex:ii];
-                  OUString cvtwrd([guess cStringUsingEncoding: NSUTF8StringEncoding], [guess length], aEnc);
+                  OUString cvtwrd((const sal_Unicode*)[guess cStringUsingEncoding:NSUnicodeStringEncoding], (sal_Int32)[guess length]);
                   pStr[ii] = cvtwrd;
                }
         }
