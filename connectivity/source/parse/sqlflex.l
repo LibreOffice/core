@@ -6,9 +6,9 @@
 //
 //  $RCSfile: sqlflex.l,v $
 //
-//  $Revision: 1.31 $
+//  $Revision: 1.32 $
 //
-//  last change: $Author: hr $ $Date: 2007-09-26 14:31:39 $
+//  last change: $Author: hr $ $Date: 2007-11-01 14:52:20 $
 //
 //  The Contents of this file are made available subject to
 //  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,14 +243,13 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Ll][Ee][Ff][Tt]								{SQL_NEW_KEYWORD(SQL_TOKEN_LEFT); return SQL_TOKEN_LEFT; }
 [Ll][Ee][Nn][Gg][Tt][Hh]						{SQL_NEW_KEYWORD(SQL_TOKEN_LENGTH); return SQL_TOKEN_LENGTH; }
 [Ll][Ii][Kk][Ee]								{SQL_NEW_KEYWORD(SQL_TOKEN_LIKE); return SQL_TOKEN_LIKE; }
-[Ll][Nn]								{SQL_NEW_KEYWORD(SQL_TOKEN_LN); return SQL_TOKEN_LN; }
+[Ll][Nn]										{SQL_NEW_KEYWORD(SQL_TOKEN_LN); return SQL_TOKEN_LN; }
 [Ll][Oo][Cc][Aa][Ll]							{SQL_NEW_KEYWORD(SQL_TOKEN_LOCAL); return SQL_TOKEN_LOCAL; }
 [Ll][Oo][Cc][Aa][Tt][Ee]						{SQL_NEW_KEYWORD(SQL_TOKEN_LOCATE); return SQL_TOKEN_LOCATE; }
 [Ll][Oo][Gg]									{SQL_NEW_KEYWORD(SQL_TOKEN_LOG); return SQL_TOKEN_LOG; }
 [Ll][Oo][Gg][Ff]								{SQL_NEW_KEYWORD(SQL_TOKEN_LOGF); return SQL_TOKEN_LOGF; }
 [Ll][Oo][Gg]10									{SQL_NEW_KEYWORD(SQL_TOKEN_LOG10); return SQL_TOKEN_LOG10; }
 [Ll][Oo][Ww][Ee][Rr]							{SQL_NEW_KEYWORD(SQL_TOKEN_LOWER); return SQL_TOKEN_LOWER; }
-[Ll][Nn]										{SQL_NEW_KEYWORD(SQL_TOKEN_LN); return SQL_TOKEN_LN; }
 [Ll][Tt][Rr][Ii][Mm]							{SQL_NEW_KEYWORD(SQL_TOKEN_LTRIM); return SQL_TOKEN_LTRIM; }
 
 [Mm][Aa][Xx]									{SQL_NEW_KEYWORD(SQL_TOKEN_MAX); return SQL_TOKEN_MAX; }
@@ -361,10 +360,10 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 ">="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_GREATEQ);return SQL_GREATEQ;}
 "<>"				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return SQL_NOTEQUAL;}
 "!="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return SQL_NOTEQUAL;}
+"||"				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_CONCAT);return SQL_CONCAT;}
 
 
 [-+*/:(),.;?{}]    { return SQLyytext[0]; }
-
 
 
 <SQL>[A-Za-z\200-\277\300-\337\340-\357\360-\367\370-\373\374-\375][A-Za-z\200-\277\300-\337\340-\357\360-\367\370-\373\374-\375_0-9]*		{return gatherName( SQLyytext);}
@@ -621,7 +620,7 @@ sal_Int32 gatherNamePre(const sal_Char* text)
 		{
 			::rtl::OString sStmt = xxx_pGLOBAL_SQLSCAN->getStatement();
 			sal_Int32 nLength = strlen(text);
-			sal_Int32 nPos = sStmt.getLength() - nLength - 1;
+			sal_Int32 nPos = xxx_pGLOBAL_SQLSCAN->GetCurrentPos() - nLength - 2;
 			if (sStmt.getStr()[nPos] == ':')
 			{
 				SQL_NEW_NODE(::rtl::OUString(text,nLength,RTL_TEXTENCODING_UTF8), SQL_NODE_NAME); 
