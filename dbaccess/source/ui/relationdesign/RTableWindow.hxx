@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RTableWindow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:45:20 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:37:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,17 +44,14 @@ namespace dbaui
     class ORelationTableWindow : public OTableWindow
     {
     public:
-        ORelationTableWindow( Window* pParent, OTableWindowData* pTabWinData)
+        ORelationTableWindow( Window* pParent,const TTableWindowData::value_type& pTabWinData)
             : OTableWindow(pParent, pTabWinData) {}
-        TYPEINFO();
 
         /** returns the name which should be used when displaying join or relations
             @return
                 The composed name or the window name.
         */
         virtual ::rtl::OUString GetName() const { return GetComposedName(); }
-
-        virtual bool    allowQueries() const;
     };
 }
 #endif //DBAUI_RELTABLEWINDOW_HXX
