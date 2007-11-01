@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableConnectionData.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:35:10 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:18:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #include "ConnectionLineData.hxx"
 #endif
+#include "TableWindowData.hxx"
 #include <vector>
 #ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
@@ -45,6 +46,7 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
+#include <boost/shared_ptr.hpp>
 
 namespace dbaui
 {
@@ -65,25 +67,21 @@ namespace dbaui
     {
 
     protected:
-        String m_aSourceWinName;
-        String m_aDestWinName;
+        TTableWindowData::value_type m_pReferencingTable;
+        TTableWindowData::value_type m_pReferencedTable;
         String m_aConnName;
 
         OConnectionLineDataVec m_vConnLineData;
 
         void    Init();
-        void    Init(const String& rSourceWinName, const String& rDestWinName, const String& rConnName = String() );
-            // Das erste Init baut darauf, dass die 3 String-Members schon korrekt gesetzt sind und aConnLineDataList leer ist.
-            // Das zweite stellt genau diesen Zustand her
 
         virtual OConnectionLineDataRef CreateLineDataObj();
         virtual OConnectionLineDataRef CreateLineDataObj( const OConnectionLineData& rConnLineData );
 
         OTableConnectionData& operator=( const OTableConnectionData& rConnData );
     public:
-        TYPEINFO();
         OTableConnectionData();
-        OTableConnectionData( const String& rSourceWinName, const String& rDestWinName, const String& rConnName = String() );
+        OTableConnectionData(const TTableWindowData::value_type& _pReferencingTable,const TTableWindowData::value_type& _pReferencedTable, const String& rConnName = String() );
         OTableConnectionData( const OTableConnectionData& rConnData );
         virtual ~OTableConnectionData();
 
@@ -93,8 +91,6 @@ namespace dbaui
         // eine neue Instanz meines eigenen Typs liefern (braucht NICHT initialisiert sein)
         virtual OTableConnectionData* NewInstance() const;
             // (von OTableConnectionData abgeleitete Klasse muessen entsprechend eine Instanz ihrer Klasse liefern)
-
-
 
         BOOL SetConnLine( USHORT nIndex, const String& rSourceFieldName, const String& rDestFieldName );
         BOOL AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
@@ -107,12 +103,14 @@ namespace dbaui
 
         OConnectionLineDataVec* GetConnLineDataList(){ return &m_vConnLineData; }
 
-        String GetSourceWinName() const { return m_aSourceWinName; }
-        String GetDestWinName() const { return m_aDestWinName; }
+        inline TTableWindowData::value_type getReferencingTable() const { return m_pReferencingTable; }
+        inline TTableWindowData::value_type getReferencedTable()  const { return m_pReferencedTable;  }
+
+        inline void setReferencingTable(const TTableWindowData::value_type& _pTable) { m_pReferencingTable = _pTable; }
+        inline void setReferencedTable(const TTableWindowData::value_type& _pTable)  { m_pReferencedTable  = _pTable; }
+
         String GetConnName() const { return m_aConnName; }
 
-        virtual void SetSourceWinName( const String& rSourceWinName ){ m_aSourceWinName = rSourceWinName; }
-        virtual void SetDestWinName( const String& rDestWinName ){ m_aDestWinName = rDestWinName; }
         virtual void SetConnName( const String& rConnName ){ m_aConnName = rConnName; }
         /** Update create a new connection
 
@@ -120,6 +118,8 @@ namespace dbaui
         */
         virtual BOOL Update(){ return TRUE; }
     };
+
+    typedef ::std::vector< ::boost::shared_ptr<OTableConnectionData> >  TTableConnectionData;
 
 }
 #endif // DBAUI_TABLECONNECTIONDATA_HXX
