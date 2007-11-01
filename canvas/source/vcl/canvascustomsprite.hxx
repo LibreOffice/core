@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvascustomsprite.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:59:27 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:41:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,10 +126,12 @@ namespace vclcanvas
                              bool                       bBufferedUpdate ) const;
 
         // RepaintTarget
-        virtual bool repaint( const GraphicObjectSharedPtr& rGrf,
-                              const ::Point&                rPt,
-                              const ::Size&                 rSz,
-                              const GraphicAttr&            rAttr ) const;
+        virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
+                              const ::com::sun::star::rendering::ViewState&   viewState,
+                              const ::com::sun::star::rendering::RenderState& renderState,
+                              const ::Point&                                  rPt,
+                              const ::Size&                                   rSz,
+                              const GraphicAttr&                              rAttr ) const;
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a
