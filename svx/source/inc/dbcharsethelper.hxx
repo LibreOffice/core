@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbcharsethelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:12:34 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:59:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,16 +52,16 @@ namespace svxform
     {
     protected:
         mutable ::rtl::Reference< ::connectivity::simple::IDataAccessCharSet >  m_xCharsetHelper;
-        //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
-        void create() const;
+
+    protected:
+        virtual bool ensureLoaded() const;
+
     public:
         ODataAccessCharsetHelper( );
 
         inline sal_Int32    getSupportedTextEncodings( ::std::vector< rtl_TextEncoding >& _rEncs ) const
         {
-            if ( !m_xCharsetHelper.is() )
-                create();
-            if ( m_xCharsetHelper.is() )
+            if ( ensureLoaded() )
                 return m_xCharsetHelper->getSupportedTextEncodings( _rEncs );
             return 0;
         }

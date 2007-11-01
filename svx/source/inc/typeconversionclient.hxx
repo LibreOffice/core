@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeconversionclient.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:27:59 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:01:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,7 @@ namespace svxform
     protected:
         mutable ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion >
                 m_xTypeConversion;
-        //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
-        void create() const;
+        virtual bool ensureLoaded() const;
 
     public:
         OTypeConversionClient();
@@ -63,9 +62,7 @@ namespace svxform
         inline ::com::sun::star::util::Date getStandardDate() const
         {
             ::com::sun::star::util::Date aReturn;
-            if (!m_xTypeConversion.is())
-                create();
-            if (m_xTypeConversion.is())
+            if ( ensureLoaded() )
                 aReturn = m_xTypeConversion->getStandardDate();
             return aReturn;
         }
@@ -77,9 +74,7 @@ namespace svxform
             sal_Int16 _nKeyType) const
         {
             double nReturn(0);
-            if (!m_xTypeConversion.is())
-                create();
-            if (m_xTypeConversion.is())
+            if ( ensureLoaded() )
                 nReturn = m_xTypeConversion->getValue(_rxVariant, _rNullDate, _nKeyType);
             return nReturn;
         }
@@ -93,9 +88,7 @@ namespace svxform
             sal_Int16 _nKeyType) const
         {
             ::rtl::OUString sReturn;
-            if (!m_xTypeConversion.is())
-                create();
-            if (m_xTypeConversion.is())
+            if ( ensureLoaded() )
                 sReturn = m_xTypeConversion->getValue(_rxColumn, _rxFormatter, _rNullDate, _nKey, _nKeyType);
             return sReturn;
         }
