@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popupmenucontrollerfactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:02:29 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:49:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,7 @@ class ConfigurationAccess_PopupMenuControllerFactory : // interfaces
         virtual       ~ConfigurationAccess_PopupMenuControllerFactory();
 
         void          readConfigurationData();
+        void          updateConfigurationData();
 
         rtl::OUString getServiceFromCommandModule( const rtl::OUString& rCommandURL, const rtl::OUString& rModule ) const;
         void          addServiceToCommandModule( const rtl::OUString& rCommandURL, const rtl::OUString& rModule, const rtl::OUString& rServiceSpecifier );
@@ -260,59 +261,19 @@ void ConfigurationAccess_PopupMenuControllerFactory::removeServiceFromCommandMod
 }
 
 // container.XContainerListener
-void SAL_CALL ConfigurationAccess_PopupMenuControllerFactory::elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_PopupMenuControllerFactory::elementInserted( const ContainerEvent& /*aEvent*/ ) throw(RuntimeException)
 {
-    rtl::OUString   aCommand;
-    rtl::OUString   aModule;
-    rtl::OUString   aService;
-
-    // SAFE
-    ResetableGuard aLock( m_aLock );
-
-    if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService ))
-    {
-        // Create hash key from command and module as they are together a primary key to
-        // the UNO service that implements the popup menu controller.
-        rtl::OUString aHashKey( getHashKeyFromStrings( aCommand, aModule ));
-        m_aPopupMenuControllerMap.insert( PopupMenuControllerMap::value_type( aHashKey, aService ));
-    }
+    updateConfigurationData();
 }
 
-void SAL_CALL ConfigurationAccess_PopupMenuControllerFactory::elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_PopupMenuControllerFactory::elementRemoved ( const ContainerEvent& /*aEvent*/ ) throw(RuntimeException)
 {
-    rtl::OUString   aCommand;
-    rtl::OUString   aModule;
-    rtl::OUString   aService;
-
-    // SAFE
-    ResetableGuard aLock( m_aLock );
-
-    if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService ))
-    {
-        // Create hash key from command and module as they are together a primary key to
-        // the UNO service that implements the popup menu controller.
-        rtl::OUString aHashKey( getHashKeyFromStrings( aCommand, aModule ));
-        m_aPopupMenuControllerMap.erase( aHashKey );
-    }
+    updateConfigurationData();
 }
 
-void SAL_CALL ConfigurationAccess_PopupMenuControllerFactory::elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException)
+void SAL_CALL ConfigurationAccess_PopupMenuControllerFactory::elementReplaced( const ContainerEvent& /*aEvent*/ ) throw(RuntimeException)
 {
-    rtl::OUString   aCommand;
-    rtl::OUString   aModule;
-    rtl::OUString   aService;
-
-    // SAFE
-    ResetableGuard aLock( m_aLock );
-
-    if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService ))
-    {
-        // Create hash key from command and module as they are together a primary key to
-        // the UNO service that implements the popup menu controller.
-        rtl::OUString aHashKey( getHashKeyFromStrings( aCommand, aModule ));
-        m_aPopupMenuControllerMap.erase( aHashKey );
-        m_aPopupMenuControllerMap.insert( PopupMenuControllerMap::value_type( aHashKey, aService ));
-    }
+    updateConfigurationData();
 }
 
 // lang.XEventListener
@@ -355,31 +316,48 @@ void ConfigurationAccess_PopupMenuControllerFactory::readConfigurationData()
 
     if ( m_xConfigAccess.is() )
     {
-        Sequence< rtl::OUString >   aPopupMenuControllers = m_xConfigAccess->getElementNames();
-
-        Any a;
-        rtl::OUString             aCommand;
-        rtl::OUString             aModule;
-        rtl::OUString             aService;
-        rtl::OUString             aHashKey;
-        Reference< XPropertySet > xPropertySet;
-        for ( sal_Int32 i = 0; i < aPopupMenuControllers.getLength(); i++ )
-        {
-            if ( impl_getElementProps( m_xConfigAccess->getByName( aPopupMenuControllers[i] ), aCommand, aModule, aService ))
-            {
-                // Create hash key from command and module as they are together a primary key to
-                // the UNO service that implements the popup menu controller.
-                aHashKey = getHashKeyFromStrings( aCommand, aModule );
-                m_aPopupMenuControllerMap.insert( PopupMenuControllerMap::value_type( aHashKey, aService ));
-            }
-        }
-
-        // UNSAFE
-        aLock.unlock();
+        // Read and update configuration data
+        updateConfigurationData();
 
         Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
         if ( xContainer.is() )
             xContainer->addContainerListener( this );
+    }
+}
+
+void ConfigurationAccess_PopupMenuControllerFactory::updateConfigurationData()
+{
+    // SAFE
+    ResetableGuard aLock( m_aLock );
+    if ( m_xConfigAccess.is() )
+    {
+        Sequence< rtl::OUString >   aPopupMenuControllers = m_xConfigAccess->getElementNames();
+
+        rtl::OUString aCommand;
+        rtl::OUString aModule;
+        rtl::OUString aService;
+        rtl::OUString aHashKey;
+
+        m_aPopupMenuControllerMap.clear();
+        for ( sal_Int32 i = 0; i < aPopupMenuControllers.getLength(); i++ )
+        {
+            try
+            {
+                if ( impl_getElementProps( m_xConfigAccess->getByName( aPopupMenuControllers[i] ), aCommand, aModule, aService ))
+                {
+                    // Create hash key from command and module as they are together a primary key to
+                    // the UNO service that implements the popup menu controller.
+                    aHashKey = getHashKeyFromStrings( aCommand, aModule );
+                    m_aPopupMenuControllerMap.insert( PopupMenuControllerMap::value_type( aHashKey, aService ));
+                }
+            }
+            catch ( NoSuchElementException& )
+            {
+            }
+            catch ( WrappedTargetException& )
+            {
+            }
+        }
     }
 }
 
