@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableWindowData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:21:59 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:30:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,27 +47,15 @@ using namespace dbaui;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
-TYPEINIT1(OQueryTableWindowData, OTableWindowData);
-
 DBG_NAME(OQueryTableWindowData)
 //==================================================================
 // class OQueryTableWindowData
 //==================================================================
-
-//------------------------------------------------------------------------------
-OQueryTableWindowData::OQueryTableWindowData()
-    :OTableWindowData()
-{
-    DBG_CTOR(OQueryTableWindowData,NULL);
-    m_bShowAll = sal_True;
-}
-
 //------------------------------------------------------------------------------
 OQueryTableWindowData::OQueryTableWindowData(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rTableName, const ::rtl::OUString& rTableAlias )
-    :OTableWindowData(_rComposedName, rTableName, rTableAlias)
+    :OTableWindowData(NULL,_rComposedName, rTableName, rTableAlias)
 {
     DBG_CTOR(OQueryTableWindowData,NULL);
-    m_bShowAll = sal_True;
 }
 
 //------------------------------------------------------------------------------
