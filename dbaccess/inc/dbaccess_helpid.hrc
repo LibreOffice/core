@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:49:15 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:02:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,6 +359,7 @@
 #define HID_BROWSER_ADMINISTRATE                    (HID_DBACCESS_START + 296)
 
 #define HID_DSADMIN_AS_BEFORE_CORRELATION_NAME      (HID_DBACCESS_START + 297)
+#define HID_DSADMIN_CHECK_REQUIRED_FIELDS           (HID_DBACCESS_START + 298)
 
 #define HID_PAGE_DBWIZARD_GENERALPAGE                           (HID_DBACCESS_START + 300)
 #define HID_PAGE_DBWIZARD_GENERAL_RB_CREATEDBDATABASE           (HID_DBACCESS_START + 301)
@@ -439,9 +440,10 @@
 #define HID_PAGE_DBWIZARD_USERDEFINED_BROWSE                    (HID_DBACCESS_START + 378)
 #define HID_INDEX_DIALOG_ACTION_TB                              (HID_DBACCESS_START + 379)
 
-#define HID_DLG_DATABASE_WIZARD                 (HID_DBACCESS_START + 380)
+#define HID_DLG_DATABASE_WIZARD                                 (HID_DBACCESS_START + 380)
 
-#define HID_EXTENSION_NOT_PRESENT_DLG                       ( HID_DBACCESS_START +  381)
+#define HID_EXTENSION_NOT_PRESENT_DLG                           ( HID_DBACCESS_START +  381)
+#define HID_DLG_QRY_JOIN_CONTROL                                ( HID_DBACCESS_START +  382)
 
 // don't forget to update the file util/hidother.src
 
