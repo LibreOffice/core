@@ -4,9 +4,9 @@
  *
  *  $RCSfile: altstrfunc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-06-22 08:32:42 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 10:54:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,11 +50,15 @@ std::string upperCase(const std::string &s) {
 }
 
 
-int start(const std::string &s1, const std::string &s2){
-    int i;
+int start( const std::string &s1, const std::string &s2 ){
+    size_t i;
     int ret = 0;
 
-    for(i = 0; s2[i] && s1[i] && !ret; i++){
+    size_t min = s1.length();
+    if (min > s2.length())
+        min = s2.length();
+
+    for(i = 0; i < min && s2[i] && s1[i] && !ret; i++){
         ret = toupper(s1[i]) - toupper(s2[i]);
         if(s1[i] == '.' || s2[i] == '.'){ret = 0;}//. is a neutral character
     }
