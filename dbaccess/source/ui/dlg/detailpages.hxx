@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detailpages.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:25:36 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:12:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,21 +72,8 @@ namespace dbaui
     //= OCommonBehaviourTabPage
     //=========================================================================
     #define     CBTP_NONE                           0x00000000
-    #define     CBTP_USE_APPENDTABLEALIAS           0x00000001
     #define     CBTP_USE_CHARSET                    0x00000002
     #define     CBTP_USE_OPTIONS                    0x00000004
-    #define     CBTP_USE_SQL92CHECK                 0x00000010
-    #define     CBTP_USE_AUTOINCREMENT              0x00000020
-    #define     CBTP_USE_PARAMETERNAMESUBST         0x00000040
-    #define     CBTP_USE_IGNOREDRIVER_PRIV          0x00000100
-    #define     CBTP_USE_SUPPRESS_VERSION_COLUMN    0x00000200
-    #define     CBTP_USE_BOOLEANCOMPARISON          0x00000400
-    #define     CBTP_USE_ENABLEOUTERJOIN            0x00001000
-    #define     CBTP_USE_CATALOG                    0x00002000
-    #define     CBTP_USE_SCHEMA                     0x00004000
-    #define     CBTP_USE_INDEXAPPENDIX              0x00010000
-    #define     CBTP_USE_DOSLINEENDS                0x00020000
-    #define     CBTP_AS_BEFORE_CORRELATION_NAME     0x00040000
 
     /** eases the implementation of tab pages handling user/password and/or character
         set and/or generic options input
@@ -105,22 +92,6 @@ namespace dbaui
         FixedText*          m_pCharsetLabel;
         ListBox*            m_pCharset;
 
-        FixedLine*          m_pDSFixedLine;
-        CheckBox*           m_pIsSQL92Check;
-        CheckBox*           m_pAppendTableAlias;
-        CheckBox*           m_pAsBeforeCorrelationName;
-        CheckBox*           m_pParameterSubstitution;
-        CheckBox*           m_pIgnoreDriverPrivileges;
-        CheckBox*           m_pSuppressVersionColumn;
-        CheckBox*           m_pEnableOuterJoin;
-        CheckBox*           m_pCatalog;
-        CheckBox*           m_pSchema;
-        CheckBox*           m_pIndexAppendix;
-        CheckBox*           m_pDosLineEnds;
-
-        FixedText*          m_pBooleanComprisonModeLabel;
-        ListBox*            m_pBooleanComprisonMode;
-
         FixedLine*          m_pAutoFixedLine;
         CheckBox*           m_pAutoRetrievingEnabled;
         FixedText*          m_pAutoIncrementLabel;
@@ -131,10 +102,6 @@ namespace dbaui
         OCharsetDisplay     m_aCharsets;
 
         sal_uInt32          m_nControlFlags;
-        ::svt::ControlDependencyManager
-                            m_aControlDependencies;
-
-        DECL_LINK( OnCheckBoxClick, CheckBox * );
 
     public:
         virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
@@ -153,9 +120,6 @@ namespace dbaui
 
         // <method>OGenericAdministrationPage::fillWindows</method>
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
-    private:
-        /// creates the fixed line before the autoincrement controls
-        void createBehaviourFixedLine();
     };
 
     //========================================================================
@@ -238,7 +202,6 @@ namespace dbaui
         Edit                m_aEDHostname;
         FixedText           m_aPortNumber;
         NumericField        m_aNFPortNumber;
-        FixedLine           m_aSeparator2;
         CheckBox            m_aUseCatalog;
     };
 
