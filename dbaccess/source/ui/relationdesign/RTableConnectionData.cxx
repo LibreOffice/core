@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RTableConnectionData.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:53:09 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:37:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,6 @@ DBG_NAME(ORelationTableConnectionData)
 //========================================================================
 // class ORelationTableConnectionData
 //========================================================================
-
 //------------------------------------------------------------------------
 ORelationTableConnectionData::ORelationTableConnectionData()
     :OTableConnectionData()
@@ -93,53 +92,25 @@ ORelationTableConnectionData::ORelationTableConnectionData()
 {
     DBG_CTOR(ORelationTableConnectionData,NULL);
 }
-
 //------------------------------------------------------------------------
-ORelationTableConnectionData::ORelationTableConnectionData( const Reference< XNameAccess>& _xTables)
-    :OTableConnectionData()
-    ,m_xTables(_xTables)
-    ,m_nUpdateRules(KeyRule::NO_ACTION)
-    ,m_nDeleteRules(KeyRule::NO_ACTION)
-    ,m_nCardinality(CARDINAL_UNDEFINED)
-{
-    DBG_CTOR(ORelationTableConnectionData,NULL);
-    Reference<XComponent> xComponent(m_xTables,UNO_QUERY);
-    if(xComponent.is())
-        startComponentListening(xComponent);
-}
-
-//------------------------------------------------------------------------
-ORelationTableConnectionData::ORelationTableConnectionData( const Reference< XNameAccess>& _xTables,
-                                                            const ::rtl::OUString& rSourceWinName,
-                                                            const ::rtl::OUString& rDestWinName,
+ORelationTableConnectionData::ORelationTableConnectionData( const TTableWindowData::value_type& _pReferencingTable,
+                                                            const TTableWindowData::value_type& _pReferencedTable,
                                                             const ::rtl::OUString& rConnName )
-    :OTableConnectionData( rSourceWinName, rDestWinName, rConnName )
-    ,m_xTables(_xTables)
+    :OTableConnectionData( _pReferencingTable, _pReferencedTable )
     ,m_nUpdateRules(KeyRule::NO_ACTION)
     ,m_nDeleteRules(KeyRule::NO_ACTION)
     ,m_nCardinality(CARDINAL_UNDEFINED)
 {
     DBG_CTOR(ORelationTableConnectionData,NULL);
+    m_aConnName = rConnName;
 
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    OSL_ENSURE(m_xTables.is(),"ORelationTableConnectionData::ORelationTableConnectionData No Tables!");
-    addListening(m_xTables);
-
-    SetCardinality();
-    if(m_xTables.is() && m_xTables->hasByName(rSourceWinName))
-        m_xTables->getByName(rSourceWinName) >>= m_xSource;
-    if(m_xTables.is() && m_xTables->hasByName(rDestWinName))
-        m_xTables->getByName(rDestWinName) >>= m_xDest;
-
-    addListening(m_xSource);
-    addListening(m_xDest);
+    if ( m_aConnName.Len() )
+        SetCardinality();
 }
 
 //------------------------------------------------------------------------
 ORelationTableConnectionData::ORelationTableConnectionData( const ORelationTableConnectionData& rConnData )
     :OTableConnectionData( rConnData )
-    , ::utl::OEventListenerAdapter()
 {
     DBG_CTOR(ORelationTableConnectionData,NULL);
     *this = rConnData;
@@ -149,10 +120,6 @@ ORelationTableConnectionData::ORelationTableConnectionData( const ORelationTable
 ORelationTableConnectionData::~ORelationTableConnectionData()
 {
     DBG_DTOR(ORelationTableConnectionData,NULL);
-
-    removeListening(m_xDest);
-    removeListening(m_xSource);
-    removeListening(m_xTables);
 }
 
 //------------------------------------------------------------------------
@@ -162,7 +129,7 @@ BOOL ORelationTableConnectionData::DropRelation()
     ::osl::MutexGuard aGuard( m_aMutex );
     ////////////////////////////////////////////////////////////
     // Relation loeschen
-    Reference<XKeysSupplier> xSup(m_xSource,UNO_QUERY);
+    Reference<XKeysSupplier> xSup(getReferencingTable()->getTable(),UNO_QUERY);
     Reference< XIndexAccess> xKeys;
     if(xSup.is() )
         xKeys = xSup->getKeys();
@@ -171,10 +138,10 @@ BOOL ORelationTableConnectionData::DropRelation()
 
     if( m_aConnName.Len() && xKeys.is() )
     {
-        for(sal_Int32 i=0;i<xKeys->getCount();++i)
+        const sal_Int32 nCount = xKeys->getCount();
+        for(sal_Int32 i = 0;i < nCount;++i)
         {
-            Reference< XPropertySet> xKey;
-            xKeys->getByIndex(i) >>= xKey;
+            Reference< XPropertySet> xKey(xKeys->getByIndex(i),UNO_QUERY);
             OSL_ENSURE(xKey.is(),"Key is not valid!");
             if(xKey.is())
             {
@@ -211,45 +178,9 @@ void ORelationTableConnectionData::ChangeOrientation()
 
     //////////////////////////////////////////////////////////////////////
     // Member anpassen
-    sTempString         = m_aSourceWinName;
-    m_aSourceWinName    = m_aDestWinName;
-    m_aDestWinName      = sTempString;
-
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    Reference<XPropertySet> xTemp;
-    xTemp       = m_xSource;
-    m_xSource   = m_xDest;
-    m_xDest     = xTemp;
-}
-
-//------------------------------------------------------------------------
-void ORelationTableConnectionData::SetSourceWinName( const String& rSourceWinName )
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    OTableConnectionData::SetSourceWinName(rSourceWinName);
-    if(m_xTables->hasByName(rSourceWinName))
-    {
-        removeListening(m_xDest);
-        m_xTables->getByName(rSourceWinName) >>= m_xSource;
-        addListening(m_xDest);
-    }
-}
-
-//------------------------------------------------------------------------
-void ORelationTableConnectionData::SetDestWinName( const String& rDestWinName )
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    OTableConnectionData::SetDestWinName(rDestWinName);
-
-    if(m_xTables->hasByName(rDestWinName))
-    {
-        removeListening(m_xDest);
-        m_xTables->getByName(rDestWinName) >>= m_xDest;
-        addListening(m_xDest);
-    }
+    TTableWindowData::value_type pTemp = m_pReferencingTable;
+    m_pReferencingTable = m_pReferencedTable;
+    m_pReferencedTable = pTemp;
 }
 
 //------------------------------------------------------------------------
@@ -297,8 +228,7 @@ BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet
                 OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
                 for(;aIter != m_vConnLineData.end();++aIter)
                 {
-                    if( (*aIter)->IsValid() )
-                        ++nValidLinesCount;
+                    ++nValidLinesCount;
                     if ( (*aIter)->GetFieldName(_eEConnectionSide) == *pKeyBegin )
                     {
                         ++nPrimKeysCount;
@@ -320,12 +250,6 @@ BOOL ORelationTableConnectionData::IsConnectionPossible()
 {
     DBG_CHKTHIS(ORelationTableConnectionData,NULL);
     ::osl::MutexGuard aGuard( m_aMutex );
-
-    if( !m_xSource.is() || !m_xDest.is() )
-        return FALSE;
-
-    if( !m_aSourceWinName.Len() || !m_aDestWinName.Len() )
-        return FALSE;
 
     //////////////////////////////////////////////////////////////////////
     // Wenn die SourceFelder ein PrimKey sind, ist nur die Orientierung falsch
@@ -365,21 +289,6 @@ ORelationTableConnectionData& ORelationTableConnectionData::operator=( const ORe
     m_nDeleteRules = rConnData.GetDeleteRules();
     m_nCardinality = rConnData.GetCardinality();
 
-
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    removeListening(m_xDest);
-    removeListening(m_xSource);
-    removeListening(m_xTables);
-
-    m_xTables   = rConnData.getTables();
-    m_xSource   = rConnData.getSource();
-    m_xDest     = rConnData.getDest();
-
-    addListening(m_xDest);
-    addListening(m_xSource);
-    addListening(m_xTables);
-
     return *this;
 }
 namespace dbaui
@@ -390,8 +299,8 @@ bool operator==(const ORelationTableConnectionData& lhs, const ORelationTableCon
     bool bEqual = (lhs.m_nUpdateRules == rhs.m_nUpdateRules)
         && (lhs.m_nDeleteRules == rhs.m_nDeleteRules)
         && (lhs.m_nCardinality == rhs.m_nCardinality)
-        && (lhs.m_aSourceWinName == rhs.m_aSourceWinName)
-        && (lhs.m_aDestWinName == rhs.m_aDestWinName)
+        && (lhs.getReferencingTable() == rhs.getReferencingTable())
+        && (lhs.getReferencedTable() == rhs.getReferencedTable())
         && (lhs.m_aConnName == rhs.m_aConnName)
         && (lhs.m_vConnLineData.size() == rhs.m_vConnLineData.size());
 
@@ -416,7 +325,7 @@ BOOL ORelationTableConnectionData::Update()
     ////////////////////////////////////////////////////////////
     // Alte Relation loeschen
     {
-        Reference<XKeysSupplier> xSup(m_xSource,UNO_QUERY);
+        Reference<XKeysSupplier> xSup(getReferencingTable()->getTable(),UNO_QUERY);
         Reference< XIndexAccess> xKeys;
         if ( xSup.is() )
             xKeys = xSup->getKeys();
@@ -429,7 +338,7 @@ BOOL ORelationTableConnectionData::Update()
     }
 
     // reassign the keys because the orientaion could be changed
-    Reference<XKeysSupplier> xSup(m_xSource,UNO_QUERY);
+    Reference<XKeysSupplier> xSup(getReferencingTable()->getTable(),UNO_QUERY);
     Reference< XIndexAccess> xKeys;
     if ( xSup.is() )
         xKeys = xSup->getKeys();
@@ -449,13 +358,14 @@ BOOL ORelationTableConnectionData::Update()
     {
         // build a foreign key name
         ::rtl::OUString sSourceName;
-        m_xSource->getPropertyValue(PROPERTY_NAME) >>= sSourceName;
+        Reference<XPropertySet> xProp(xSup,UNO_QUERY_THROW);
+        xProp->getPropertyValue(PROPERTY_NAME) >>= sSourceName;
         ::rtl::OUString sKeyName = sSourceName;
-        sKeyName += m_aDestWinName;
+        sKeyName += getReferencedTable()->GetTableName();
 
         xKey->setPropertyValue(PROPERTY_NAME,makeAny(sKeyName));
         xKey->setPropertyValue(PROPERTY_TYPE,makeAny(KeyType::FOREIGN));
-        xKey->setPropertyValue(PROPERTY_REFERENCEDTABLE,makeAny(::rtl::OUString(m_aDestWinName)));
+        xKey->setPropertyValue(PROPERTY_REFERENCEDTABLE,makeAny(::rtl::OUString(getReferencedTable()->GetTableName())));
         xKey->setPropertyValue(PROPERTY_UPDATERULE, makeAny(GetUpdateRules()));
         xKey->setPropertyValue(PROPERTY_DELETERULE, makeAny(GetDeleteRules()));
     }
@@ -501,15 +411,49 @@ BOOL ORelationTableConnectionData::Update()
         {
             sal_Int32 nType = 0;
             xKey->getPropertyValue(PROPERTY_TYPE) >>= nType;
-            //  if ( nType == KeyType::FOREIGN )
+            ::rtl::OUString sReferencedTable;
+            xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
+            if ( sReferencedTable == ::rtl::OUString(getReferencedTable()->GetTableName()) )
             {
-                ::rtl::OUString sName;
-                xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sName;
-                if ( sName == ::rtl::OUString(m_aDestWinName) )
+                xColSup.set(xKey,UNO_QUERY_THROW);
+                try
                 {
-                    xKey->getPropertyValue(PROPERTY_NAME) >>= sName;
-                    m_aConnName = sName;
-                    break;
+                    Reference<XNameAccess> xColumns = xColSup->getColumns();
+                    Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
+                    const ::rtl::OUString* pIter = aNames.getConstArray();
+                    const ::rtl::OUString* pEnd = pIter + aNames.getLength();
+
+                    Reference<XPropertySet> xColumn;
+                    ::rtl::OUString sName,sRelatedColumn;
+                    for ( ; pIter != pEnd ; ++pIter )
+                    {
+                        xColumn.set(xColumns->getByName(*pIter),UNO_QUERY_THROW);
+                        xColumn->getPropertyValue(PROPERTY_NAME)            >>= sName;
+                        xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN)   >>= sRelatedColumn;
+
+                        OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
+                        for(;aIter != m_vConnLineData.end();++aIter)
+                        {
+                            if(    (*aIter)->GetSourceFieldName() == sName
+                                && (*aIter)->GetDestFieldName() == sRelatedColumn )
+                            {
+                                break;
+                            }
+                        }
+                        if ( aIter == m_vConnLineData.end() )
+                            break;
+                    }
+                    if ( pIter == pEnd )
+                    {
+                        xKey->getPropertyValue(PROPERTY_NAME) >>= sName;
+                        m_aConnName = sName;
+                        //here we already know our column structure so we don't have to recreate the table connection data
+                        xColSup.clear();
+                        break;
+                    }
+                }
+                catch(Exception&)
+                {
                 }
             }
         }
@@ -518,7 +462,6 @@ BOOL ORelationTableConnectionData::Update()
 
 //  OSL_ENSURE(xKey.is(),"No key found have insertion!");
 
-    xColSup.set(xKey,UNO_QUERY);
     if ( xColSup.is() )
     {
         // The fields the relation marks may not be the same as our LineDatas mark after the relation has been updated
@@ -526,16 +469,16 @@ BOOL ORelationTableConnectionData::Update()
 
         Reference<XNameAccess> xColumns = xColSup->getColumns();
         Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-        const ::rtl::OUString* pBegin = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
+        const ::rtl::OUString* pIter = aNames.getConstArray();
+        const ::rtl::OUString* pEnd = pIter + aNames.getLength();
 
         m_vConnLineData.reserve( aNames.getLength() );
         Reference<XPropertySet> xColumn;
         ::rtl::OUString sName,sRelatedColumn;
 
-        for(;pBegin != pEnd;++pBegin)
+        for(;pIter != pEnd;++pIter)
         {
-            xColumns->getByName(*pBegin) >>= xColumn;
+            xColumns->getByName(*pIter) >>= xColumn;
             if ( xColumn.is() )
             {
                 OConnectionLineDataRef pNewData = CreateLineDataObj();
@@ -556,29 +499,6 @@ BOOL ORelationTableConnectionData::Update()
     SetCardinality();
 
     return TRUE;
-}
-// -----------------------------------------------------------------------------
-void ORelationTableConnectionData::addListening(const Reference<XInterface>& _rxComponent)
-{
-    Reference<XComponent> xComponent(_rxComponent,UNO_QUERY);
-    if(xComponent.is())
-        startComponentListening(xComponent);
-}
-// -----------------------------------------------------------------------------
-void ORelationTableConnectionData::removeListening(const Reference<XInterface>& _rxComponent)
-{
-    Reference<XComponent> xComponent(_rxComponent,UNO_QUERY);
-    if(xComponent.is())
-        stopComponentListening(xComponent);
-}
-// -----------------------------------------------------------------------------
-void ORelationTableConnectionData::_disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ )
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    // it doesn't matter which one was disposed
-    m_xTables   = NULL;
-    m_xSource   = NULL;
-    m_xDest     = NULL;
 }
 // -----------------------------------------------------------------------------
 
