@@ -21,7 +21,26 @@
 #include <assert.h>
 #ifdef _MSC_VER
 #pragma warning(disable: 4350 4482)
+#include "strsafe.h"
 #endif
+
+//----------------------------------------------------------
+#ifdef DEBUG
+inline void OutputDebugStringFormat( LPCTSTR pFormat, ... )
+{
+    TCHAR    buffer[1024];
+    va_list  args;
+
+    va_start( args, pFormat );
+    StringCchVPrintf( buffer, sizeof(buffer), pFormat, args );
+    OutputDebugString( buffer );
+}
+#else
+static inline void OutputDebugStringFormat( LPCTSTR, ... )
+{
+}
+#endif
+//----------------------------------------------------------
 
 const int MSWORD                     = 0x1;
 const int MSEXCEL                    = 0x2;
@@ -132,6 +151,7 @@ bool Registrar::QueryPreselectForMsApplication(const std::wstring& file_extensio
     if (!root_key->HasSubKey(file_extension))
     {
         preselect = true;
+        OutputDebugStringFormat( TEXT("QueryPreselect: No SubKey found for (%s), preselected!\n"), file_extension );
     }
     else
     {
@@ -143,7 +163,20 @@ bool Registrar::QueryPreselectForMsApplication(const std::wstring& file_extensio
 
             if (REG_SZ == RegVal->GetType() &&
                 IsOpenOfficeRegisteredForMsApplication(RegVal->GetDataAsUniString()))
+            {
                 preselect = true;
+                OutputDebugStringFormat( TEXT("QueryPreselect: (%s) registered to Office, preselected!\n"), file_extension );
+            }
+            else if ( (REG_SZ == RegVal->GetType()) && ! root_key->HasSubKey( RegVal->GetDataAsUniString() ) )
+            {
+                preselect = true;
+                OutputDebugStringFormat( TEXT("QueryPreselect: (%s) registered but destination is empty, preselected!\n"), file_extension );
+            }
+        }
+        else
+        {
+            preselect = true;
+            OutputDebugStringFormat( TEXT("QueryPreselect: No default found for SubKey (%s), preselected!\n"), file_extension );
         }
     }
     return preselect;
