@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unmodpg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:51:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:26:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,24 @@ public:
     virtual void Redo();
 
     virtual String GetComment() const;
+};
+
+// --------------------------------------------------------------------
+
+class RenameLayoutTemplateUndoAction : public SdUndoAction
+{
+public:
+    RenameLayoutTemplateUndoAction( SdDrawDocument* pDocument, const String& rOldLayoutName, const String& rNewLayoutName );
+
+    virtual void Undo();
+    virtual void Redo();
+
+    virtual String GetComment() const;
+
+private:
+    String maOldName;
+    String maNewName;
+    const String maComment;
 };
 
 #endif      // _SD_UNMODPG_HXX
