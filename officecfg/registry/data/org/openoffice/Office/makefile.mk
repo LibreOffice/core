@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 06:50:32 $
+#   last change: $Author: hr $ $Date: 2007-11-01 18:02:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@ PACKAGE=org.openoffice.Office
 
 XCUFILES= \
     Calc.xcu \
+    Canvas.xcu \
     Common.xcu \
     Compatibility.xcu \
     DataAccess.xcu \
