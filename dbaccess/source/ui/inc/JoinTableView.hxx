@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:12:15 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:16:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,8 @@
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
 #endif
-
+#include "TableConnectionData.hxx"
+#include "TableWindowData.hxx"
 #include <memory>
 #include <vector>
 
@@ -89,6 +90,8 @@ namespace dbaui
         ~OScrollWindowHelper();
 
         void setTableView(OJoinTableView* _pTableView);
+
+        void resetRange(const Point& _aSize);
 
         // own methods
         ScrollBar* GetHScrollBar() { return &m_aHScrollBar; }
@@ -131,7 +134,6 @@ namespace dbaui
         OJoinDesignViewAccess*      m_pAccessible;
 
     public:
-        TYPEINFO();
         OJoinTableView( Window* pParent, OJoinDesignView* pView );
         virtual ~OJoinTableView();
 
@@ -219,7 +221,7 @@ namespace dbaui
         */
         sal_Int32 getConnectionCount(const OTableWindow* _pFromWin) const;
 
-        OTableConnection*           GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,const OTableConnection* _rpFirstAfter = NULL) const;
+        OTableConnection* GetTabConn(const OTableWindow* pLhs,const OTableWindow* pRhs,bool _bSupressCrossOrNaturalJoin = false,const OTableConnection* _rpFirstAfter = NULL) const;
 
         // clears the window map and connection vector without destroying it
         // that means teh data of the windows and connection will be untouched
@@ -278,6 +280,10 @@ namespace dbaui
         virtual void EnsureVisible(const OTableWindow* _pWin);
         virtual void EnsureVisible(const Point& _rPoint,const Size& _rSize);
 
+        TTableWindowData::value_type createTableWindowData(const ::rtl::OUString& _rComposedName
+                                            ,const ::rtl::OUString& _sTableName
+                                            ,const ::rtl::OUString& _rWinName);
+
     protected:
         virtual void MouseButtonUp( const MouseEvent& rEvt );
         virtual void MouseButtonDown( const MouseEvent& rEvt );
@@ -293,8 +299,9 @@ namespace dbaui
         // hier ist die Position (die sich waehrend des Sizings aendern kann) physisch, da waehrend des Sizens nicht gescrollt wird
         virtual void Command(const CommandEvent& rEvt);
 
-        virtual OTableWindowData* CreateImpl(const ::rtl::OUString& _rComposedName,
-                                             const ::rtl::OUString& _rWinName);
+        virtual OTableWindowData* CreateImpl(const ::rtl::OUString& _rComposedName
+                                            ,const ::rtl::OUString& _sTableName
+                                            ,const ::rtl::OUString& _rWinName);
 
         /** factory method to create table windows
             @param  _pData
@@ -302,7 +309,18 @@ namespace dbaui
             @return
                 The new TableWindow
         */
-        virtual OTableWindow* createWindow(OTableWindowData* _pData) = 0;
+        virtual OTableWindow* createWindow(const TTableWindowData::value_type& _pData) = 0;
+
+        /** determines whether the classes Init method should accept a query name, or only table names
+        */
+        virtual bool    allowQueries() const;
+
+        /** called when init fails at the tablewindowdata because the m_xTable object could not provide columns, but no
+            exception was thrown. Expected to throw.
+        */
+        virtual void    onNoColumns_throw();
+
+        virtual bool supressCrossNaturalJoin(const TTableConnectionData::value_type& _pData) const;
 
     private:
         void    InitColors();
