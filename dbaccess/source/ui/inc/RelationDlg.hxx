@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationDlg.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:24:24 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:17:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,9 +71,9 @@ namespace dbaui
     class ORelationDialog : public ModalDialog
                             ,public IRelationControlInterface
     {
-        OModuleClient                m_aModuleClient;
-        OTableListBoxControl*               m_pTableControl;
-        OJoinTableView::OTableWindowMap*    m_pTableMap;
+        OModuleClient                           m_aModuleClient;
+        ::std::auto_ptr<OTableListBoxControl>   m_pTableControl;
+        OJoinTableView::OTableWindowMap*        m_pTableMap;
 
         FixedLine   aFL_CascUpd;
         RadioButton aRB_NoCascUpd,
@@ -91,15 +91,15 @@ namespace dbaui
         HelpButton  aPB_HELP;
 
 
-        ORelationTableConnectionData*                                           m_pConnData;
-        ORelationTableConnectionData*                                           m_pOrigConnData;
+        TTableConnectionData::value_type                                        m_pConnData;
+        TTableConnectionData::value_type                                        m_pOrigConnData;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
 
         BOOL                                                                    m_bTriedOneUpdate;
 
     public:
         ORelationDialog(OJoinTableView* pParent,
-                        ORelationTableConnectionData* pConnectionData,
+                        const TTableConnectionData::value_type& pConnectionData,
                         BOOL bAllowTableSelect = FALSE );
         virtual ~ORelationDialog();
 
@@ -115,7 +115,7 @@ namespace dbaui
         /** getConnectionData returns the current connection data
             @return the current connectiondata
         */
-        virtual OTableConnectionData* getConnectionData() const;
+        virtual TTableConnectionData::value_type getConnectionData() const;
 
         /** setValid set the valid inside, can be used for OK buttons
             @param  _bValid true when the using control allows an update
@@ -127,7 +127,7 @@ namespace dbaui
         */
         virtual void notifyConnectionChange();
     protected:
-        void Init(ORelationTableConnectionData* _pConnData);
+        void Init(const TTableConnectionData::value_type& _pConnectionData);
 
     private:
         DECL_LINK( OKClickHdl, Button* );
