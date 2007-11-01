@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinDesignView.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:28:13 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:15:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,7 @@ namespace dbaui
         // called when fields are deleted
 
         OJoinTableView* getTableView() const { return m_pTableView; }
+        OScrollWindowHelper* getScrollHelper() const { return m_pScrollWindow; }
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect);
