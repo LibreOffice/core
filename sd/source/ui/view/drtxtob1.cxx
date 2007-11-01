@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:42:55 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,7 +362,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             aAttr.Put( SvxWritingModeItem(
                 nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
                     com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
-                    EE_PARA_WRITINGDIR ) );
+                    SDRATTR_TEXTDIRECTION ) );
             rReq.Done( aAttr );
             mpView->SetAttributes( aAttr );
             Invalidate();
