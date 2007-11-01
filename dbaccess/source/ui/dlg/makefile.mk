@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 08:18:17 $
+#   last change: $Author: hr $ $Date: 2007-11-01 15:13:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ SRC1FILES =	\
         dlgsize.src			\
         CollectionView.src	\
         dlgattr.src			\
-        AdvancedPageDlg.src \
+        advancedsettings.src\
         AdabasStatDlg.src	\
         UserAdminDlg.src	\
         sqlmessage.src      \
@@ -112,7 +112,6 @@ EXCEPTIONSFILES=						\
         $(SLO)$/TextConnectionHelper.obj	\
         $(SLO)$/ConnectionPageSetup.obj	\
         $(SLO)$/DBSetupConnectionPages.obj 	\
-        $(SLO)$/AdvancedPageDlg.obj		\
         $(SLO)$/AdabasStatDlg.obj		\
         $(SLO)$/UserAdminDlg.obj		\
         $(SLO)$/UserAdmin.obj			\
@@ -125,7 +124,9 @@ EXCEPTIONSFILES=						\
         $(SLO)$/dbfindex.obj            \
         $(SLO)$/DriverSettings.obj      \
         $(SLO)$/odbcconfig.obj          \
-        $(SLO)$/ExtensionNotPresent.obj
+        $(SLO)$/ExtensionNotPresent.obj \
+        $(SLO)$/advancedsettings.obj    \
+        $(SLO)$/datasourceui.obj
 
 SLOFILES=								\
         $(EXCEPTIONSFILES)				\
