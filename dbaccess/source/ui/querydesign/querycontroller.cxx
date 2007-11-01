@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:40:51 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:34:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -643,6 +643,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                                 pNode->parseNodeToStr( sNewStatement, getConnection() );
                                 setStatement_fireEvent( sNewStatement );
                                 getContainer()->SaveUIConfig();
+                                m_vTableConnectionData.clear();
                                 switchDesignModeImpl(this,getContainer(),m_bDesign);
                             }
                         }
@@ -1100,12 +1101,6 @@ void OQueryController::loadViewSettings(const Sequence<PropertyValue>& _rViewPro
             }
         }
     }
-}
-
-// -----------------------------------------------------------------------------
-OTableWindowData* OQueryController::createTableWindowData()
-{
-    return new OQueryTableWindowData();
 }
 // -----------------------------------------------------------------------------
 Reference<XNameAccess> OQueryController::getElements()  const
