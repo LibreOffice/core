@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbcharsethelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:04:02 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:58:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,14 +54,14 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
-    void ODataAccessCharsetHelper::create() const
+    bool ODataAccessCharsetHelper::ensureLoaded() const
     {
-        if (!getFactory().is())
-            ODbtoolsClient::create();
-        if (getFactory().is())
-             m_xCharsetHelper = getFactory()->createCharsetHelper( );
+        if ( !ODbtoolsClient::ensureLoaded() )
+            return false;
+         m_xCharsetHelper = getFactory()->createCharsetHelper( );
+        return m_xCharsetHelper.is();
     }
+
 //........................................................................
 }   // namespace svxform
 //........................................................................

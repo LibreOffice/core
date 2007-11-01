@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeconversionclient.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:14:20 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:59:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,13 +54,12 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    //add by BerryJia for fixing Bug97420 Time:2002-9-12-11:00(PRC time)
-    void OTypeConversionClient::create() const
+    bool OTypeConversionClient::ensureLoaded() const
     {
-        if (!getFactory().is())
-            ODbtoolsClient::create();
-        if (getFactory().is())
-             m_xTypeConversion = getFactory()->getTypeConversionHelper();
+        if ( !ODbtoolsClient::ensureLoaded() )
+            return false;
+         m_xTypeConversion = getFactory()->getTypeConversionHelper();
+        return m_xTypeConversion.is();
     }
 
 //........................................................................
