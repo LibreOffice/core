@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:06:58 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,15 +45,62 @@ ModalDialog DLG_QRY_JOIN
     OutputSize = TRUE ;
     SVLook = TRUE ;
     HelpId = HID_DLG_QRY_JOIN ;
-    Size = MAP_APPFONT ( 265, 205 ) ;
+    Size = MAP_APPFONT ( 265, 219 ) ;
 
     Moveable = TRUE ;
     Closeable = TRUE ;
 
+    Window WND_JOIN_CONTROL
+    {
+        Pos = MAP_APPFONT( 0, 0 );
+        Size = MAP_APPFONT( 203, 44 );
+        DialogControl = TRUE;
+        HelpId        = HID_DLG_QRY_JOIN_CONTROL ;
+        FixedLine FL_JOIN
+        {
+            Pos = MAP_APPFONT ( 6 , 3 ) ;
+            Size = MAP_APPFONT ( 191 , 8 ) ;
+            Text [ en-US ] = "Options";
+        };
+
+        FixedText FT_LISTBOXTITLE
+        {
+            Pos = MAP_APPFONT ( 12 , 16 ) ;
+            Size = MAP_APPFONT ( 89 , 8 ) ;
+
+            Text [ en-US ] = "~Type";
+        };
+
+        ListBox LB_JOINTYPE
+        {
+            Pos             = MAP_APPFONT ( 101 , 15 ) ;
+            Size            = MAP_APPFONT ( 90 , 60 ) ;
+            HelpId          = HID_DLG_QRY_JOINTYPE ;
+
+            DropDown        = TRUE;
+            DDExtraWidth    = TRUE;
+            StringList [ en-US ] =
+            {
+                < "Inner join"          ; ID_INNER_JOIN;    > ;
+                < "Left join"           ; ID_LEFT_JOIN;     > ;
+                < "Right join"          ; ID_RIGHT_JOIN;    > ;
+                < "Full (outer) join"   ; ID_FULL_JOIN;     > ;
+                < "Cross join"          ; ID_CROSS_JOIN;    > ;
+            };
+        };
+        CheckBox CB_NATURAL
+        {
+            Pos = MAP_APPFONT ( 101 , 31 ) ;
+            Size = MAP_APPFONT ( 89 , 8 ) ;
+
+            Text [ en-US ] = "Natural";
+        };
+    };
+
     Window WND_CONTROL
     {
         Pos = MAP_APPFONT( 0, 0 );
-        Size = MAP_APPFONT( 203, 113 );
+        Size = MAP_APPFONT( 203, 153 );
         DialogControl = TRUE;
         HelpId        = HID_DLG_QRY_WINDOW_CONTROL ;
 
@@ -92,41 +139,9 @@ ModalDialog DLG_QRY_JOIN
         };
     };
 
-    FixedLine FL_JOIN
-    {
-        Pos = MAP_APPFONT ( 6 , 114 ) ;
-        Size = MAP_APPFONT ( 191 , 8 ) ;
-        Text [ en-US ] = "Options";
-    };
-
-    FixedText FT_LISTBOXTITLE
-    {
-        Pos = MAP_APPFONT ( 12 , 127 ) ;
-        Size = MAP_APPFONT ( 89 , 8 ) ;
-
-        Text [ en-US ] = "~Type";
-    };
-
-    ListBox LB_JOINTYPE
-    {
-        Pos             = MAP_APPFONT ( 101 , 125 ) ;
-        Size            = MAP_APPFONT ( 90 , 60 ) ;
-        HelpId          = HID_DLG_QRY_JOINTYPE ;
-
-        DropDown        = TRUE;
-        DDExtraWidth    = TRUE;
-    StringList [ en-US ] =
-    {
-         < "Inner join" ; Default; > ;
-        < "Left join" ; Default; > ;
-        < "Right join" ; Default; > ;
-        < "Full (outer) join"  ; Default; > ;
-    };
-    };
-
     FixedText ML_HELPTEXT
     {
-        Pos             = MAP_APPFONT ( 12 , 145 ) ;
+        Pos             = MAP_APPFONT ( 12 , 159 ) ;
         Size            = MAP_APPFONT ( 179 , 49 ) ;
         UniqueId        = HID_DLG_QRY_HELPTEXT ;
         SVLook          = TRUE;
@@ -174,6 +189,14 @@ String STR_QUERY_LEFTRIGHT_JOIN
 String STR_QUERY_FULL_JOIN
 {
     Text [ en-US ] = "Contains ALL records from '%1' and from '%2'.";
+};
+String STR_QUERY_CROSS_JOIN
+{
+    Text [ en-US ] = "Contains the cartesian product of ALL records from '%1' and from '%2'.";
+};
+String STR_QUERY_NATURAL_JOIN
+{
+    Text [ en-US ] = "Contains only one column for each pair of equally-named columns from '%1' and from '%2'.";
 };
 
 
