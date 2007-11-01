@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:27:24 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 13:45:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -548,7 +548,8 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint, USHORT nMod
                 aNewSet.Put( *pNewStyle );
 
                 // --> FME 2007-4-11 #i75750# Remove attributes already set at whole paragraph
-                if ( rNode.HasSwAttrSet() && aNewSet.Count() )
+                // --> FME 2007-09-24 #i81764# This should not be applied for no length attributes!!! <--
+                if ( !bNoLengthAttribute && rNode.HasSwAttrSet() && aNewSet.Count() )
                 {
                     SfxItemIter aIter2( aNewSet );
                     const SfxPoolItem* pItem = aIter2.GetCurItem();
@@ -584,7 +585,8 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint, USHORT nMod
 
                 SfxItemSet* pNewSet = 0;
                 // --> FME 2007-4-11 #i75750# Remove attributes already set at whole paragraph
-                if ( rNode.HasSwAttrSet() && pNewStyle->Count() )
+                // --> FME 2007-09-24 #i81764# This should not be applied for no length attributes!!! <--
+                if ( !bNoLengthAttribute && rNode.HasSwAttrSet() && pNewStyle->Count() )
                 {
                     SfxItemIter aIter2( *pNewStyle );
                     const SfxPoolItem* pItem = aIter2.GetCurItem();
