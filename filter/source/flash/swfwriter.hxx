@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:46:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:18:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,7 +400,7 @@ private:
 
     void Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 height, sal_uInt8 *pCompressed, sal_uInt32 compressed_size );
     void Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const Rectangle& rClipRect, bool bMap );
-    void Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pCompressed, sal_uInt32 compressed_size, sal_Bool bStandardCompression );
+    void Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pCompressed, sal_uInt32 compressed_size );
     void Impl_writeActions( const GDIMetaFile& rMtf );
     void Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled );
     void Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled, const Color& rFillColor, const Color& rLineColor );
@@ -489,7 +489,6 @@ private:
 
     sal_uInt8 mnGlobalTransparency;
     sal_Int32 mnJPEGCompressMode;
-    sal_Bool mbWrittenJPEGTables;
 };
 
 ///////////////////////////////////////////////////////////////////////
