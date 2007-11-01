@@ -14,7 +14,7 @@
             <desc>Specifies the filename of the help document after installation,
             the help can be found in sdext/source/minimizer/help</desc>
         </info>
-        <value xml:lang="en-US">%origin%/../../../../../../help/help_en-us.odt</value>
+        <value xml:lang="en-US">%origin%/../../../../../../help/help_en-US.odt</value>
         <value xml:lang="de">%origin%/../../../../../../help/help_de.odt</value>
     </prop>
 
