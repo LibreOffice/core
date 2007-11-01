@@ -4,9 +4,9 @@
  *
  *  $RCSfile: repainttarget.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:22:47 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:42:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,10 +61,12 @@ namespace vclcanvas
         virtual ~RepaintTarget() {}
 
         // call this when a bitmap is repainted
-        virtual bool repaint( const GraphicObjectSharedPtr& rGrf,
-                              const ::Point&                rPt,
-                              const ::Size&                 rSz,
-                              const GraphicAttr&            rAttr ) const = 0;
+        virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
+                              const ::com::sun::star::rendering::ViewState&   viewState,
+                              const ::com::sun::star::rendering::RenderState& renderState,
+                              const ::Point&                                  rPt,
+                              const ::Size&                                   rSz,
+                              const GraphicAttr&                              rAttr ) const = 0;
     };
 }
 
