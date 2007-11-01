@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 15:07:20 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:06:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2898,9 +2898,9 @@ static Rectangle NWGetListBoxButtonRect( int nScreen,
     aPartRect = Rectangle( aPartPos, aPartSize );
 
     if ( pIndicatorSize )
-        g_free( pIndicatorSize );
+        gtk_requisition_free( pIndicatorSize );
     if ( pIndicatorSpacing )
-        g_free( pIndicatorSpacing );
+        gtk_border_free( pIndicatorSpacing );
 
     return( aPartRect );
 }
@@ -2947,9 +2947,9 @@ static Rectangle NWGetListBoxIndicatorRect( int nScreen,
         aIndicatorRect.Move( 0, 1 );
 
     if ( pIndicatorSize )
-        g_free( pIndicatorSize );
+        gtk_requisition_free( pIndicatorSize );
     if ( pIndicatorSpacing )
-        g_free( pIndicatorSpacing );
+        gtk_border_free( pIndicatorSpacing );
 
     return( aIndicatorRect );
 }
