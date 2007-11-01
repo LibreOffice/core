@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvashelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 15:21:07 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:41:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -818,6 +818,7 @@ namespace vclcanvas
                                       aSz,
                                       aGrfAttr,
                                       viewState,
+                                      renderState,
                                       // cast away const, need to
                                       // change refcount (as this is
                                       // ~invisible to client code,
@@ -1161,7 +1162,7 @@ namespace vclcanvas
 
     int CanvasHelper::setupOutDevState( const rendering::ViewState&     viewState,
                                         const rendering::RenderState&   renderState,
-                                        ColorType                       eColorType )
+                                        ColorType                       eColorType ) const
     {
         ENSURE_AND_THROW( mpOutDev.get(),
                           "CanvasHelper::setupOutDevState(): outdev null. Are we disposed?" );
@@ -1316,7 +1317,7 @@ namespace vclcanvas
     bool CanvasHelper::setupTextOutput( ::Point&                                        o_rOutPos,
                                         const rendering::ViewState&                     viewState,
                                         const rendering::RenderState&                   renderState,
-                                        const uno::Reference< rendering::XCanvasFont >& xFont   )
+                                        const uno::Reference< rendering::XCanvasFont >& xFont   ) const
     {
         ENSURE_AND_THROW( mpOutDev.get(),
                           "CanvasHelper::setupTextOutput(): outdev null. Are we disposed?" );
@@ -1359,6 +1360,8 @@ namespace vclcanvas
     }
 
     bool CanvasHelper::repaint( const GraphicObjectSharedPtr&   rGrf,
+                                const rendering::ViewState&     viewState,
+                                const rendering::RenderState&   renderState,
                                 const ::Point&                  rPt,
                                 const ::Size&                   rSz,
                                 const GraphicAttr&              rAttr ) const
@@ -1370,6 +1373,8 @@ namespace vclcanvas
             return false; // disposed
         else
         {
+            setupOutDevState( viewState, renderState, IGNORE_COLOR );
+
             if( !rGrf->Draw( &mpOutDev->getOutDev(), rPt, rSz, &rAttr ) )
                 return false;
 
