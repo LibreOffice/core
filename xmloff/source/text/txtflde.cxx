@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:55:10 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 13:40:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1236,12 +1236,14 @@ void XMLTextFieldExport::ExportFieldHelper(
                       GetStringProperty(sPropertyContent, rPropSet));
         sal_Bool bCmd = GetBoolProperty(sPropertyIsShowFormula, rPropSet);
         ProcessDisplay(sal_True, bCmd);
+        // #i81766# for older versions export of the value-type
+        sal_Bool bExportValueType = !bCmd && ( GetExport().getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE );
         // show style, unless name will be shown
         ProcessValueAndType(IsStringField(nToken, rPropSet),
                             GetIntProperty(sPropertyNumberFormat, rPropSet),
                             sEmpty, sEmpty, 0.0, // values not used
                             sal_False,
-                            sal_False, //#148500# value_type not exported anymore
+                            bExportValueType,
                             !bCmd,
                             ! GetOptionalBoolProperty(
                                  sPropertyIsFixedLanguage,
