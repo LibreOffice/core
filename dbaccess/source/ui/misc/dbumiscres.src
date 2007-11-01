@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 17:59:31 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:23:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,10 +91,6 @@ Resource RSC_DATASOURCE_TYPES
     {
         Text  ="sdbc:address:mozilla:";
     };
-    String STR_THUNDERBIRD
-    {
-        Text  ="sdbc:address:thunderbird:";
-    };
     String STR_LDAP
     {
         Text  ="sdbc:address:ldap:";
@@ -123,15 +119,18 @@ Resource RSC_DATASOURCE_TYPES
     {
         Text  ="sdbc:address:kab";
     };
+    String STR_EMBEDDED_HSQLDB
+    {
+        Text = "sdbc:embedded:hsqldb";
+    };
     String STR_MACAB
     {
         Text  ="sdbc:address:macab";
     };
-    String STR_EMBEDDED
+    String STR_THUNDERBIRD
     {
-        Text = "sdbc:embedded:";
+        Text  ="sdbc:address:thunderbird:";
     };
-
 };
 Resource RSC_DATASOURCE_TYPE_UINAMES
 {
@@ -216,9 +215,9 @@ Resource RSC_DATASOURCE_TYPE_UINAMES
     {
         Text[ en-US ] = "Mac OS X Address Book";
     };
-    String STR_EMBEDDED
+    String STR_EMBEDDED_HSQLDB
     {
-        Text[ en-US ] = "Embedded database";
+        Text[ en-US ] = "HSQL database engine";
      };
      String STR_THUNDERBIRD
      {
@@ -289,3 +288,4 @@ String STR_NAMED_OBJECT_ALREADY_EXISTS
 {
     Text [ en-US ] = "The name '$#$' already exists.\nPlease enter another name." ;
 };
+
