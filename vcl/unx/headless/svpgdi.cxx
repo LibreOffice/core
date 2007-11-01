@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svpgdi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:27:28 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,8 +461,8 @@ void SvpSalGraphics::drawBitmap( const SalTwoRect*,
 }
 
 void SvpSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
-                                        const SalBitmap& rSalBitmap,
-                                        const SalBitmap& rTransparentBitmap )
+                                 const SalBitmap& rSalBitmap,
+                                 const SalBitmap& rTransparentBitmap )
 {
     const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSalBitmap);
     const SvpSalBitmap& rSrcTrans = static_cast<const SvpSalBitmap&>(rTransparentBitmap);
@@ -477,28 +477,41 @@ void SvpSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
 }
 
 void SvpSalGraphics::drawMask( const SalTwoRect* pPosAry,
-                                      const SalBitmap& rSalBitmap,
-                                      SalColor nMaskColor )
+                               const SalBitmap& rSalBitmap,
+                               SalColor nMaskColor )
 {
     const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSalBitmap);
     B2IRange aSrcRect( pPosAry->mnSrcX, pPosAry->mnSrcY,
                        pPosAry->mnSrcX+pPosAry->mnSrcWidth,
                        pPosAry->mnSrcY+pPosAry->mnSrcHeight );
     B2IPoint aDestPoint( pPosAry->mnDestX, pPosAry->mnDestY );
+
+    // BitmapDevice::drawMaskedColor works with 0==transparent,
+    // 255==opaque. drawMask() semantic is the other way
+    // around. Therefore, invert mask.
+    BitmapDeviceSharedPtr aCopy =
+        cloneBitmapDevice( B2IVector( pPosAry->mnSrcWidth, pPosAry->mnSrcHeight ),
+                           rSrc.getBitmap() );
+    basebmp::Color aBgColor( COL_WHITE );
+    aCopy->clear(aBgColor);
+    basebmp::Color aFgColor( COL_BLACK );
+    aCopy->drawMaskedColor( aFgColor, rSrc.getBitmap(), aSrcRect, B2IPoint() );
+
     basebmp::Color aColor( nMaskColor );
-    m_aDevice->drawMaskedColor( aColor, rSrc.getBitmap(), aSrcRect, aDestPoint, m_aClipMap );
+    B2IRange aSrcRect2( 0, 0, pPosAry->mnSrcWidth, pPosAry->mnSrcHeight );
+    m_aDevice->drawMaskedColor( aColor, aCopy, aSrcRect, aDestPoint, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
 SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
     BitmapDeviceSharedPtr aCopy =
-        createBitmapDevice( B2IVector( nWidth, nHeight ),
-                            m_aDevice->isTopDown(),
-                            m_aDevice->getScanlineFormat() );
+        cloneBitmapDevice( B2IVector( nWidth, nHeight ),
+                           m_aDevice );
     B2IRange aSrcRect( nX, nY, nX+nWidth, nY+nHeight );
     B2IRange aDestRect( 0, 0, nWidth, nHeight );
     aCopy->drawBitmap( m_aDevice, aSrcRect, aDestRect, DrawMode_PAINT );
+
     SvpSalBitmap* pBitmap = new SvpSalBitmap();
     pBitmap->setBitmap( aCopy );
     return pBitmap;

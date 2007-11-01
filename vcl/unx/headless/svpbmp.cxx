@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svpbmp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:25:56 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:48:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,6 +216,9 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
                 pBuf->mnFormat = BMP_FORMAT_1BIT_MSB_PAL;
                 break;
         }
+        if( m_aBitmap->isTopDown() )
+            pBuf->mnFormat |= BMP_FORMAT_TOP_DOWN;
+
         B2IVector aSize = m_aBitmap->getSize();
         pBuf->mnWidth           = aSize.getX();
         pBuf->mnHeight          = aSize.getY();
