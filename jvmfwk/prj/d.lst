@@ -1,4 +1,5 @@
 mkdir: %_DEST%\inc%_EXT%\jvmfwk
+mkdir: %_DEST%\bin%_EXT%\so
 ..\inc\jvmfwk\framework.h %_DEST%\inc%_EXT%\jvmfwk\framework.h
 ..\inc\jvmfwk\vendorplugin.h %_DEST%\inc%_EXT%\jvmfwk\vendorplugin.h
 ..\%__SRC%\lib\ijvmfwk.lib %_DEST%\lib%_EXT%\ijvmfwk.lib
@@ -10,7 +11,6 @@ mkdir: %_DEST%\inc%_EXT%\jvmfwk
 ..\%__SRC%\class\JREProperties.class  %_DEST%\bin%_EXT%\JREProperties.class
 ..\%__SRC%\class\JREProperties.class  %_DEST%\lib%_EXT%\JREProperties.class
 ..\%__SRC%\bin\javaldx %_DEST%\bin%_EXT%\javaldx
-..\source\javasettings.xml %_DEST%\bin%_EXT%\javasettings.xml
 ..\source\javasettingsunopkginstall.xml %_DEST%\bin%_EXT%\javasettingsunopkginstall.xml
 ..\%__SRC%\bin\javavendors_so.xml %_DEST%\bin%_EXT%\so\javavendors.xml
 ..\%__SRC%\bin\javavendors_ooo.xml %_DEST%\bin%_EXT%\javavendors.xml
