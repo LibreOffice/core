@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:07:28 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:12:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,7 @@
 #define OS_WIN32            0x0002
 #define OS_OS2              0x0004
 #define OS_UNX              0x0008
-#define OS_MAC              0x0010
-#define OS_ALL              ( OS_WIN16 | OS_WIN32 | OS_OS2 | OS_UNX | OS_MAC )
+#define OS_ALL              ( OS_WIN16 | OS_WIN32 | OS_OS2 | OS_UNX )
 
 #define COMMAND_PROJECTROOT 0x0000
 #define COMMAND_NMAKE       0x0001
