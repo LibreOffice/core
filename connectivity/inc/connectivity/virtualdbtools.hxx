@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virtualdbtools.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:12:30 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:48:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,9 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+
 #include <vector>
+#include <memory>
 
 //========================================================================
 //= forward declarations
@@ -95,6 +97,11 @@ namespace com {
 
 namespace dbtools {
     class SQLExceptionInfo;
+    class FormattedColumnValue;
+}
+
+namespace comphelper {
+    class ComponentContext;
 }
 
 //========================================================================
@@ -347,6 +354,12 @@ namespace connectivity
 
             /// creates a helper which can be used to access the static methods in dbtools.hxx
             virtual ::rtl::Reference< IDataAccessTools > getDataAccessTools() = 0;
+
+            virtual ::std::auto_ptr< ::dbtools::FormattedColumnValue >  createFormattedColumnValue(
+                const ::comphelper::ComponentContext& _rContext,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn
+            ) = 0;
         };
 
     //....................................................................
