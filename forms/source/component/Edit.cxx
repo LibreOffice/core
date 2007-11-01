@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:23:37 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:54:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,60 +36,28 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 
-#ifndef _FORMS_EDIT_HXX_
 #include "Edit.hxx"
-#endif
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_UNO_TYPE_HXX_
 #include <com/sun/star/uno/Type.hxx>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XSUBMIT_HPP_
 #include <com/sun/star/form/XSubmit.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XVCLWINDOWPEER_HPP_
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
-#endif
 
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_WINTYPES_HXX
 #include <vcl/wintypes.hxx>
-#endif
 
-#ifndef _COMPHELPER_CONTAINER_HXX_
-#include <comphelper/container.hxx>
-#endif
-#ifndef _COMPHELPER_NUMBERS_HXX_
-#include <comphelper/numbers.hxx>
-#endif
-
-#ifndef TOOLS_DIAGNOSE_EX_H
-#include <tools/diagnose_ex.h>
-#endif
-
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include <connectivity/formattedcolumnvalue.hxx>
 #include <connectivity/dbconversion.hxx>
-#endif
+
+#include <tools/diagnose_ex.h>
+#include <tools/debug.hxx>
+
+#include <comphelper/container.hxx>
+#include <comphelper/numbers.hxx>
 
 using namespace dbtools;
 
@@ -343,14 +311,9 @@ Sequence<Type> OEditModel::_getTypes()
 DBG_NAME(OEditModel);
 //------------------------------------------------------------------
 OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
-             :OEditBaseModel( _rxFactory, FRM_SUN_COMPONENT_RICHTEXTCONTROL, FRM_SUN_CONTROL_TEXTFIELD, sal_True, sal_True )
-    ,m_nFormatKey(0)
-    ,m_aNullDate(DBTypeConversion::getStandardDate())
-    ,m_nFieldType(DataType::OTHER)
-    ,m_nKeyType(NumberFormat::UNDEFINED)
+    :OEditBaseModel( _rxFactory, FRM_SUN_COMPONENT_RICHTEXTCONTROL, FRM_SUN_CONTROL_TEXTFIELD, sal_True, sal_True )
     ,m_bMaxTextLenModified(sal_False)
     ,m_bWritingFormattedFake(sal_False)
-    ,m_bNumericField(sal_False)
 {
     DBG_CTOR(OEditModel,NULL);
 
@@ -360,14 +323,9 @@ OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
 
 //------------------------------------------------------------------
 OEditModel::OEditModel( const OEditModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
-        :OEditBaseModel( _pOriginal, _rxFactory )
-    ,m_nFormatKey(0)
-    ,m_aNullDate(DBTypeConversion::getStandardDate())
-    ,m_nFieldType(DataType::OTHER)
-    ,m_nKeyType(NumberFormat::UNDEFINED)
+    :OEditBaseModel( _pOriginal, _rxFactory )
     ,m_bMaxTextLenModified(sal_False)
     ,m_bWritingFormattedFake(sal_False)
-    ,m_bNumericField(sal_False)
 {
     DBG_CTOR( OEditModel, NULL );
 
@@ -397,7 +355,7 @@ IMPLEMENT_DEFAULT_CLONING( OEditModel )
 void OEditModel::disposing()
 {
     OEditBaseModel::disposing();
-    m_xFormatter = NULL;
+    m_pValueFormatter.reset();
 }
 
 // XPersistObject
@@ -669,53 +627,12 @@ sal_uInt16 OEditModel::getPersistenceFlags() const
 //------------------------------------------------------------------------------
 void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
-    m_bNumericField = sal_False;
-    Reference<XPropertySet> xField = getField();
-    if (xField.is())
+    Reference< XPropertySet > xField = getField();
+    if ( xField.is() )
     {
-        // jetzt den Key und typ ermitteln
-        m_nFieldType  = getINT32(xField->getPropertyValue(PROPERTY_FIELDTYPE));
-        m_nFormatKey = getINT32(xField->getPropertyValue(PROPERTY_FORMATKEY));
+        m_pValueFormatter.reset( new ::dbtools::FormattedColumnValue( getContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
 
-        switch (m_nFieldType)
-        {
-            case ::com::sun::star::sdbc::DataType::DATE:
-            case ::com::sun::star::sdbc::DataType::TIME:
-            case ::com::sun::star::sdbc::DataType::TIMESTAMP:
-            case ::com::sun::star::sdbc::DataType::BIT:
-            case ::com::sun::star::sdbc::DataType::BOOLEAN:
-            case ::com::sun::star::sdbc::DataType::TINYINT:
-            case ::com::sun::star::sdbc::DataType::SMALLINT:
-            case ::com::sun::star::sdbc::DataType::INTEGER:
-            case ::com::sun::star::sdbc::DataType::REAL:
-            case ::com::sun::star::sdbc::DataType::BIGINT:
-            case ::com::sun::star::sdbc::DataType::DOUBLE:
-            case ::com::sun::star::sdbc::DataType::NUMERIC:
-            case ::com::sun::star::sdbc::DataType::DECIMAL:
-                m_bNumericField = sal_True;
-                break;
-            default:
-                m_bNumericField = sal_False;
-                break;
-        }
-
-        // XNumberFormatter besorgen
-        Reference< XRowSet >  xRowSet( _rxForm, UNO_QUERY );
-        DBG_ASSERT(xRowSet.is(), "OEditModel::onConnectedDbColumn : source is not a row set ?");
-        Reference<XNumberFormatsSupplier>  xSupplier = getNumberFormats(getConnection(xRowSet), sal_False, m_xServiceFactory);
-        if (xSupplier.is())
-        {
-            m_xFormatter =  Reference<XNumberFormatter>(m_xServiceFactory
-                                ->createInstance(FRM_NUMBER_FORMATTER), UNO_QUERY);
-            if (m_xFormatter.is())
-                m_xFormatter->attachNumberFormatsSupplier(xSupplier);
-
-            m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), m_nFormatKey);
-            xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString::createFromAscii("NullDate"))
-                >>= m_aNullDate;
-        }
-
-        if (m_nKeyType != NumberFormat::SCIENTIFIC)
+        if ( m_pValueFormatter->getKeyType() != NumberFormat::SCIENTIFIC )
         {
             m_bMaxTextLenModified = getINT16(m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN)) != 0;
             if ( !m_bMaxTextLenModified )
@@ -742,21 +659,15 @@ void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 void OEditModel::onDisconnectedDbColumn()
 {
     OEditBaseModel::onDisconnectedDbColumn();
-    if (hasField())
-    {
-        if ( m_bMaxTextLenModified )
-        {
-            Any aVal;
-            aVal <<= (sal_Int16)0;  // nur wenn es 0 war, habe ich es in onConnectedDbColumn umgesetzt
-            m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
-            m_bMaxTextLenModified = sal_False;
-        }
 
-        m_xFormatter = 0;
-        m_nFieldType = DataType::OTHER;
-        m_nFormatKey = 0;
-        m_nKeyType   = NumberFormat::UNDEFINED;
-        m_aNullDate  = DBTypeConversion::getStandardDate();
+    m_pValueFormatter.reset();
+
+    if ( hasField() && m_bMaxTextLenModified )
+    {
+        Any aVal;
+        aVal <<= (sal_Int16)0;  // nur wenn es 0 war, habe ich es in onConnectedDbColumn umgesetzt
+        m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
+        m_bMaxTextLenModified = sal_False;
     }
 }
 
@@ -791,14 +702,18 @@ sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             m_xColumnUpdate->updateNull();
         else
         {
+            OSL_PRECOND( m_pValueFormatter.get(), "OEditModel::commitControlValueToDbColumn: no value formatter!" );
             try
             {
-                if ( m_bNumericField )
-                    DBTypeConversion::setValue(m_xColumnUpdate, m_xFormatter, m_aNullDate, sNewValue, m_nFormatKey, sal::static_int_cast< sal_Int16 >(m_nFieldType), m_nKeyType);
+                if ( m_pValueFormatter.get() )
+                {
+                    if ( !m_pValueFormatter->setFormattedValue( sNewValue ) )
+                        return sal_False;
+                }
                 else
-                    m_xColumnUpdate->updateString(sNewValue);
+                    m_xColumnUpdate->updateString( sNewValue );
             }
-            catch(Exception&)
+            catch ( const Exception& )
             {
                 return sal_False;
             }
@@ -811,9 +726,11 @@ sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 //------------------------------------------------------------------------------
 Any OEditModel::translateDbColumnToControlValue()
 {
-    m_aSaveValue = DBTypeConversion::getValue(
-        m_xColumn, m_xFormatter, m_aNullDate, m_nFormatKey, m_nKeyType
-    );
+    OSL_PRECOND( m_pValueFormatter.get(), "OEditModel::translateDbColumnToControlValue: no value formatter!" );
+    if ( m_pValueFormatter.get() )
+        m_aSaveValue = m_pValueFormatter->getFormattedValue();
+    else
+        m_aSaveValue = ::rtl::OUString();
 
     // #i2817# OJ
     sal_uInt16 nMaxTextLen = getINT16( m_xAggregateSet->getPropertyValue( PROPERTY_MAXTEXTLEN ) );
