@@ -1,5 +1,7 @@
 ..\%__SRC%\bin\canvasto*.dll %_DEST%\bin%_EXT%\canvasto*.dll
 ..\%__SRC%\bin\cairocan*.dll %_DEST%\bin%_EXT%\cairocan*.dll
+..\%__SRC%\bin\directxc*.dll %_DEST%\bin%_EXT%\directxc*.dll
+..\%__SRC%\bin\directx9*.dll %_DEST%\bin%_EXT%\directx9*.dll
 ..\%__SRC%\bin\vclcanva*.dll %_DEST%\bin%_EXT%\vclcanva*.dll
 ..\%__SRC%\bin\nullcanv*.dll %_DEST%\bin%_EXT%\nullcanv*.dll
 ..\%__SRC%\bin\simpleca*.dll %_DEST%\bin%_EXT%\simpleca*.dll
