@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:23:57 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:15:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,12 @@
 #ifndef DBAUI_JOINDESIGNVIEW_HXX
 #include "JoinDesignView.hxx"
 #endif
+#include "TableConnectionData.hxx"
+#include "TableWindowData.hxx"
 #ifndef _MEMORY_
 #include <memory>
 #endif
+#include <boost/shared_ptr.hpp>
 
 class VCLXWindow;
 namespace dbaui
@@ -63,18 +66,20 @@ namespace dbaui
     class OTableWindowData;
     class OTableWindow;
     typedef OSingleDocumentController OJoinController_BASE;
+
     class OJoinController : public OJoinController_BASE
     {
         OModuleClient                    m_aModuleClient;
     protected:
-        ::std::vector<OTableConnectionData*>    m_vTableConnectionData;
-        ::std::vector<OTableWindowData*>        m_vTableData;
+        TTableConnectionData m_vTableConnectionData;
+        TTableWindowData     m_vTableData;
 
         Fraction                                m_aZoom;
         ::dbtools::SQLExceptionInfo             m_aExceptionInfo;
 
         OAddTableDlg*                               m_pAddTableDialog;
         ::std::auto_ptr< AddTableDialogContext >    m_pDialogContext;
+        Point                                   m_aMinimumTableViewSize;
 
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const;
@@ -105,10 +110,9 @@ namespace dbaui
 
         // ---------------------------------------------------------------
         // attribute access
-        ::std::vector< OTableWindowData*>*      getTableWindowData()        { return &m_vTableData; }
-        ::std::vector< OTableConnectionData*>*  getTableConnectionData()    { return &m_vTableConnectionData;}
-
-        OAddTableDlg*   getAddTableDialog() const { return m_pAddTableDialog; }
+        inline TTableWindowData*        getTableWindowData()     { return &m_vTableData; }
+        inline TTableConnectionData*    getTableConnectionData() { return &m_vTableConnectionData;}
+        inline OAddTableDlg*            getAddTableDialog()const { return m_pAddTableDialog; }
 
         // ---------------------------------------------------------------
         // OSingleDocumentController overridables
@@ -136,7 +140,7 @@ namespace dbaui
             @param  _pData
                     the data whioch should be erased
         */
-        void    removeConnectionData(OTableConnectionData* _pData);
+        void    removeConnectionData(const TTableConnectionData::value_type& _pData);
 
         void    SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY );
 
@@ -173,7 +177,7 @@ namespace dbaui
         }
 
     protected:
-        virtual OTableWindowData* createTableWindowData() = 0;
+        TTableWindowData::value_type createTableWindowData(const ::rtl::OUString& _sComposedName,const ::rtl::OUString& _sTableName,const ::rtl::OUString& _sWindowName);
         // ask the user if the design should be saved when it is modified
         virtual short saveModified() = 0;
         // called when the orignal state should be reseted (first time load)
