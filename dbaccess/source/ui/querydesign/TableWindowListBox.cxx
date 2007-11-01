@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:26:11 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:34:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
     ,m_aMousePos( Point(0,0) )
     ,m_pTabWin( pParent )
     ,m_nDropEvent(0)
+    ,m_nUiEvent(0)
     ,m_bReallyScrolled( sal_False )
     ,m_bDragSource( sal_False )
 {
@@ -107,7 +108,9 @@ void OTableWindowListBox::dragFinished( )
     // first show the error msg when existing
     m_pTabWin->getDesignView()->getController()->showError(m_pTabWin->getDesignView()->getController()->clearOccuredError());
     // second look for ui activities which should happen after d&d
-    m_pTabWin->getTableView()->lookForUiActivities();
+    if (m_nUiEvent)
+        Application::RemoveUserEvent(m_nUiEvent);
+    m_nUiEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, LookForUiHdl));
 }
 
 //------------------------------------------------------------------------------
@@ -116,6 +119,8 @@ OTableWindowListBox::~OTableWindowListBox()
     DBG_DTOR(OTableWindowListBox,NULL);
     if (m_nDropEvent)
         Application::RemoveUserEvent(m_nDropEvent);
+    if (m_nUiEvent)
+        Application::RemoveUserEvent(m_nUiEvent);
     if( m_aScrollTimer.IsActive() )
         m_aScrollTimer.Stop();
     m_pTabWin = NULL;
@@ -331,6 +336,13 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 // -----------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
+IMPL_LINK( OTableWindowListBox, LookForUiHdl, void *, /*EMPTY_ARG*/)
+{
+    m_nUiEvent = 0;
+    m_pTabWin->getTableView()->lookForUiActivities();
+    return 0L;
+}
+//------------------------------------------------------------------------------
 IMPL_LINK( OTableWindowListBox, DropHdl, void *, /*EMPTY_ARG*/)
 {
     // create the connection
@@ -355,7 +367,6 @@ sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     TransferableDataHelper aDropped(_rEvt.maDropEvent.Transferable);
     if (!m_bDragSource && OJoinExchObj::isFormatAvailable(aDropped.GetDataFlavorExVector()))
     {   // don't drop into the window if it's the drag source itself
-
         m_aDropInfo.aSource = OJoinExchangeData(this);
         m_aDropInfo.aDest   = OJoinExchObj::GetSourceDescription(_rEvt.maDropEvent.Transferable);
 
