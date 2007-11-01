@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mathconf.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:08:22 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:15:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,6 @@ extern "C" {
 /* SAL_MATH_FINITE(d): test double d on INFINITY, NaN et al. */
 #if defined( WNT)
 #define SAL_MATH_FINITE(d) _finite(d)
-#elif defined MAC
-#define SAL_MATH_FINITE(d) isfinite(d)
 #elif defined OS2
 #define SAL_MATH_FINITE(x)              \
     ((sizeof (x) == sizeof (float)) ? __isfinitef(x)    \
@@ -77,9 +75,9 @@ extern "C" {
     : __isfinitel(x))
 #elif defined LINUX || defined UNX
 #define SAL_MATH_FINITE(d) finite(d)
-#else /* WNT, MAC, LINUX, UNX */
+#else /* WNT, LINUX, UNX */
 #error "SAL_MATH_FINITE not defined"
-#endif /* WNT, MAC, LINUX, UNX */
+#endif /* WNT, LINUX, UNX */
 
 
 /* This needs to be fixed for non--IEEE-754 platforms: */
