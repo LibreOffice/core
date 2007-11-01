@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frm_strings.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:55:11 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:57:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,8 @@ namespace frm
         const sal_Char* ascii;
         sal_Int32       length;
 
-        inline  operator const ::rtl::OUString () const;
-        inline  operator const sal_Char* () const { return ascii; }
+        inline  operator       ::rtl::OUString () const;
+        inline  operator const sal_Char*       () const { return ascii; }
 
         inline ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength);
         inline ~ConstAsciiString();
@@ -79,7 +79,7 @@ namespace frm
     }
 
     //------------------------------------------------------------
-    inline ConstAsciiString::operator const ::rtl::OUString () const
+    inline ConstAsciiString::operator ::rtl::OUString () const
     {
         if ( !ustring )
             ustring = new ::rtl::OUString( ascii, length, RTL_TEXTENCODING_ASCII_US );
