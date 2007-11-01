@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleprops.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:44:56 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 16:26:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -644,7 +644,7 @@ void SfxOleDictionaryProperty::ImplLoad( SvStream& rStrm )
     sal_Int32 nNameCount = GetPropType();
     // read property ID/name pairs
     maPropNameMap.clear();
-    for( sal_Int32 nIdx = 0; (nIdx < nNameCount) && (rStrm.GetErrorCode() == SVSTREAM_OK); ++nIdx )
+    for( sal_Int32 nIdx = 0; (nIdx < nNameCount) && (rStrm.GetErrorCode() == SVSTREAM_OK) && !rStrm.IsEof(); ++nIdx )
     {
         sal_Int32 nPropId;
         rStrm >> nPropId;
@@ -882,7 +882,7 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
     // read property ID/position pairs
     typedef ::std::map< sal_Int32, sal_uInt32 > SfxOlePropPosMap;
     SfxOlePropPosMap aPropPosMap;
-    for( sal_Int32 nPropIdx = 0; (nPropIdx < nPropCount) && (rStrm.GetErrorCode() == SVSTREAM_OK); ++nPropIdx )
+    for( sal_Int32 nPropIdx = 0; (nPropIdx < nPropCount) && (rStrm.GetErrorCode() == SVSTREAM_OK) && !rStrm.IsEof(); ++nPropIdx )
     {
         sal_Int32 nPropId;
         sal_uInt32 nPropPos;
@@ -1099,7 +1099,7 @@ void SfxOlePropertySet::ImplLoad( SvStream& rStrm )
 
     // read sections
     sal_Size nSectPosPos = rStrm.Tell();
-    for( sal_Int32 nSectIdx = 0; (nSectIdx < nSectCount) && (rStrm.GetErrorCode() == SVSTREAM_OK); ++nSectIdx )
+    for( sal_Int32 nSectIdx = 0; (nSectIdx < nSectCount) && (rStrm.GetErrorCode() == SVSTREAM_OK) && !rStrm.IsEof(); ++nSectIdx )
     {
         // read section guid/position pair
         rStrm.Seek( nSectPosPos );
