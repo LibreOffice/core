@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DbAdminImpl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:11:06 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:06:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBAUI_DBADMINIMPL_HXX_
 #include "DbAdminImpl.hxx"
-#endif
+#include "dsmeta.hxx"
+
 #ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
 #endif
@@ -232,6 +232,7 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_AUTORETRIEVEENABLED, INFO_AUTORETRIEVEENABLED));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_APPEND_TABLE_ALIAS, INFO_APPEND_TABLE_ALIAS));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_AS_BEFORE_CORRNAME, INFO_AS_BEFORE_CORRELATION_NAME ) );
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CHECK_REQUIRED_FIELDS, INFO_FORMS_CHECK_REQUIRED_FIELDS ) );
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_PARAMETERNAMESUBST, INFO_PARAMETERNAMESUBST));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_IGNOREDRIVER_PRIV, INFO_IGNOREDRIVER_PRIV));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_BOOLEANCOMPARISON, PROPERTY_BOOLEANCOMPARISONMODE));
@@ -470,23 +471,27 @@ Reference< XPropertySet > ODbDataSourceAdministrationHelper::getCurrentDataSourc
     return m_xDatasource;
 }
 //-------------------------------------------------------------------------
-DATASOURCE_TYPE ODbDataSourceAdministrationHelper::getDatasourceType(const SfxItemSet& _rSet) const
+DATASOURCE_TYPE ODbDataSourceAdministrationHelper::getDatasourceType( const SfxItemSet& _rSet )
 {
-    SFX_ITEMSET_GET(_rSet, pConnectURL, SfxStringItem, DSID_CONNECTURL, sal_True);
-    SFX_ITEMSET_GET(_rSet, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
-    DBG_ASSERT(pConnectURL && pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!");
+    SFX_ITEMSET_GET( _rSet, pConnectURL, SfxStringItem, DSID_CONNECTURL, sal_True );
+    SFX_ITEMSET_GET( _rSet, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True );
+    DBG_ASSERT( pConnectURL && pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!" );
+    if ( !pConnectURL || !pTypeCollection )
+        return DST_UNKNOWN;
+
     String sConnectURL = pConnectURL->GetValue();
     ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
-    DBG_ASSERT(pCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid type collection!");
-    return pCollection->getType(sConnectURL);
+    DBG_ASSERT( pCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid type collection!" );
+    if ( !pCollection )
+        return DST_UNKNOWN;
+
+    return pCollection->getType( sConnectURL );
 }
 
 //-------------------------------------------------------------------------
 sal_Bool ODbDataSourceAdministrationHelper::hasAuthentication(const SfxItemSet& _rSet) const
 {
-    DATASOURCE_TYPE eType = getDatasourceType(_rSet);
-    SFX_ITEMSET_GET(_rSet, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
-    return pTypeCollection->getCollection()->hasAuthentication(eType);
+    return DataSourceMetaData::getAuthentication( getDatasourceType( _rSet ) ) != AuthNone;
 }
 // -----------------------------------------------------------------------------
 String ODbDataSourceAdministrationHelper::getConnectionURL() const
@@ -764,9 +769,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     // first determine which of all the items are relevant for the data source (depends on the connection url)
     DATASOURCE_TYPE eType = getDatasourceType(_rSource);
     ::std::vector< sal_Int32> aDetailIds;
-    ODriversSettings::fillDetailIds(eType,aDetailIds);
-
-    DBG_ASSERT(!aDetailIds.empty(), "ODbDataSourceAdministrationHelper::fillDatasourceInfo: invalid item ids got from the page!");
+    ODriversSettings::getSupportedIndirectSettings(eType,aDetailIds);
 
     // collect the translated property values for the relevant items
     PropertyValueSet aRelevantSettings;
