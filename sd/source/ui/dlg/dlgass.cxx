@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:00:33 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:24:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1180,7 +1180,9 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
         }
     }
     else
-        DBG_ERROR("Keine Vorlage fuer den Autopiloten? [CL]");
+    {
+        DBG_ERROR("sd::AssistentDlgImpl::GetDocument(), no template?");
+    }
 
     SfxObjectShellLock xRet = xDocShell;
     xDocShell = NULL;
@@ -1724,9 +1726,14 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
         SdDrawDocument* pLayoutDoc = pDocShell?pDocShell->GetDoc():NULL;
 
         if( pDoc && pLayoutDoc )
+        {
             pDoc->SetMasterPage(0, aEmptyStr, pLayoutDoc, TRUE,  FALSE );
+        }
         else
-            DBG_ERROR("Keine gueltigen Impress Documente fuer die Preview? [CL]");
+        {
+            DBG_ERROR("sd::AssistentDlgImpl::UpdatePreview(), no document for preview?");
+        }
+
         mbUserDataDirty = TRUE;
     }
     maLayoutFile = aLayoutFile;
