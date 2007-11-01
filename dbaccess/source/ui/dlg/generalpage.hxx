@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:26:00 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:13:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,10 +112,8 @@ namespace dbaui
 
 
         ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
-        DECLARE_STL_MAP(DATASOURCE_TYPE, String, ::std::less< DATASOURCE_TYPE >, SelectionHistory);
         DATASOURCE_TYPE     m_eCurrentSelection;    /// currently selected type
         DATASOURCE_TYPE     m_eNotSupportedKnownType;   /// if a data source of an unsupported, but known type is encountered ....
-        SelectionHistory    m_aSelectionHistory;    /// last selected ConnectURLs for all types
 
         enum SPECIAL_MESSAGE
         {
@@ -165,7 +163,6 @@ namespace dbaui
     protected:
 
         void onTypeSelected(const DATASOURCE_TYPE _eType);
-        void initializeHistory();
         void initializeTypeList();
 
         void implSetCurrentType( const DATASOURCE_TYPE _eType );
