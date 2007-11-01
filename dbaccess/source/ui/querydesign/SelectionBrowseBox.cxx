@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:52:56 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1819,7 +1819,7 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt
     }
 }
 //------------------------------------------------------------------------------
-void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const String& rValue, const sal_uInt16 nLevel )
+void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const String& rValue, const sal_uInt16 nLevel,bool _bAddOrOnOneLine )
 {
     Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
     if(!xConnection.is())
@@ -1850,15 +1850,29 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
                 if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
                     pEntry->SetVisible(sal_True);
             }
-            if (!pEntry->GetCriteria(nLevel).getLength())
+            if (!pEntry->GetCriteria(nLevel).getLength() || _bAddOrOnOneLine )
             {
-                pEntry->SetCriteria( nLevel, rValue);
+                String sCriteria = rValue;
+                if ( _bAddOrOnOneLine )
+                {
+                    String sOldCriteria = pEntry->GetCriteria( nLevel );
+                    if ( sOldCriteria.Len() )
+                    {
+                        sCriteria = String(RTL_CONSTASCII_USTRINGPARAM("("));
+                        sCriteria += sOldCriteria;
+                        sCriteria += String(RTL_CONSTASCII_USTRINGPARAM(" OR "));
+                        sCriteria += rValue;
+                        sCriteria += String(RTL_CONSTASCII_USTRINGPARAM(")"));
+                    }
+                }
+                pEntry->SetCriteria( nLevel, sCriteria);
                 if(nLevel == (m_nVisibleCount-BROW_CRIT1_ROW-1))
                 {
                     RowInserted( GetRowCount()-1, 1, TRUE );
                     m_bVisibleRow.push_back(sal_True);
                     ++m_nVisibleCount;
                 }
+                m_bVisibleRow[BROW_CRIT1_ROW + nLevel] = sal_True;
                 break;
             }
         }
@@ -2150,7 +2164,7 @@ long OSelectionBrowseBox::GetRealRow(long nRowId) const
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     long nErg=0,i;
-    long nCount = m_bVisibleRow.size();
+    const long nCount = m_bVisibleRow.size();
     for(i=0;i < nCount; ++i)
     {
         if(m_bVisibleRow[i])
