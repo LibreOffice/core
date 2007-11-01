@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableWindowData.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:23:05 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,12 +54,8 @@ namespace dbaui
 {
     class OQueryTableWindowData : public OTableWindowData
     {
-    protected:
-        //  ::std::vector< ::rtl::OUString> m_vField;
     public:
-        TYPEINFO();
-        OQueryTableWindowData();
-        OQueryTableWindowData(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rTableName, const ::rtl::OUString& rTableAlias);
+        explicit OQueryTableWindowData(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rTableName, const ::rtl::OUString& rTableAlias);
         virtual ~OQueryTableWindowData();
 
         ::rtl::OUString GetAliasName() { return GetWinName(); }
