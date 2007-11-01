@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 13:54:17 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 17:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -613,11 +613,14 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     OUString sPrinterName;
                     if (*pValues >>= sPrinterName )
                     {
-                        SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
-                        if (pNewPrinter->IsKnown())
-                            pDocSh->SetPrinter ( pNewPrinter );
-                        else
-                            delete pNewPrinter;
+                        if ( sPrinterName.getLength() )
+                        {
+                            SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
+                            if (pNewPrinter->IsKnown())
+                                pDocSh->SetPrinter ( pNewPrinter );
+                            else
+                                delete pNewPrinter;
+                        }
                     }
                     else
                         throw IllegalArgumentException();
