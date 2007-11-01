@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 16:32:02 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,17 +466,29 @@ namespace cairocanvas
                                 bIsAlpha = true;
 
                         for( nX = 0; nX < nWidth; nX++ ) {
+#ifdef OSL_BIGENDIAN
+                            if( pAlphaReadAcc )
+                                nAlpha = data[ nOff++ ];
+                            else
+                                nAlpha = data[ nOff++ ] = 255;
+#else
                             if( pAlphaReadAcc )
                                 nAlpha = data[ nOff + 3 ];
                             else
                                 nAlpha = data[ nOff + 3 ] = 255;
+#endif
                             aColor = pBitmapReadAcc->GetPaletteColor( *pReadScan++ );
 
+#ifdef OSL_BIGENDIAN
+                            data[ nOff++ ] = ( nAlpha*( aColor.GetRed() ) )/255;
+                            data[ nOff++ ] = ( nAlpha*( aColor.GetGreen() ) )/255;
+                            data[ nOff++ ] = ( nAlpha*( aColor.GetBlue() ) )/255;
+#else
                             data[ nOff++ ] = ( nAlpha*( aColor.GetBlue() ) )/255;
                             data[ nOff++ ] = ( nAlpha*( aColor.GetGreen() ) )/255;
                             data[ nOff++ ] = ( nAlpha*( aColor.GetRed() ) )/255;
-
                             nOff++;
+#endif
                         }
                         break;
                     case BMP_FORMAT_24BIT_TC_BGR:
@@ -486,6 +498,16 @@ namespace cairocanvas
                                 bIsAlpha = true;
 
                         for( nX = 0; nX < nWidth; nX++ ) {
+#ifdef OSL_BIGENDIAN
+                            if( pAlphaReadAcc )
+                                nAlpha = data[ nOff ];
+                            else
+                                nAlpha = data[ nOff ] = 255;
+                            data[ nOff + 3 ] = ( nAlpha*( *pReadScan++ ) )/255;
+                            data[ nOff + 2 ] = ( nAlpha*( *pReadScan++ ) )/255;
+                            data[ nOff + 1 ] = ( nAlpha*( *pReadScan++ ) )/255;
+                            nOff += 4;
+#else
                             if( pAlphaReadAcc )
                                 nAlpha = data[ nOff + 3 ];
                             else
@@ -493,8 +515,8 @@ namespace cairocanvas
                             data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
                             data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
                             data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
-
                             nOff++;
+#endif
                         }
                         break;
                     case BMP_FORMAT_24BIT_TC_RGB:
@@ -504,6 +526,15 @@ namespace cairocanvas
                                 bIsAlpha = true;
 
                         for( nX = 0; nX < nWidth; nX++ ) {
+#ifdef OSL_BIGENDIAN
+                            if( pAlphaReadAcc )
+                                nAlpha = data[ nOff++ ];
+                            else
+                                nAlpha = data[ nOff++ ] = 255;
+                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
+                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
+                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
+#else
                             if( pAlphaReadAcc )
                                 nAlpha = data[ nOff + 3 ];
                             else
@@ -511,9 +542,9 @@ namespace cairocanvas
                             data[ nOff++ ] = ( nAlpha*( pReadScan[ 2 ] ) )/255;
                             data[ nOff++ ] = ( nAlpha*( pReadScan[ 1 ] ) )/255;
                             data[ nOff++ ] = ( nAlpha*( pReadScan[ 0 ] ) )/255;
-
-                            nOff++;
                             pReadScan += 3;
+                            nOff++;
+#endif
                         }
                         break;
                     case BMP_FORMAT_32BIT_TC_BGRA:
@@ -523,6 +554,16 @@ namespace cairocanvas
                                 bIsAlpha = true;
 
                         for( nX = 0; nX < nWidth; nX++ ) {
+#ifdef OSL_BIGENDIAN
+                            if( pAlphaReadAcc )
+                                nAlpha = data[ nOff++ ];
+                            else
+                                nAlpha = data[ nOff++ ] = pReadScan[ 3 ];
+                            data[ nOff++ ] = ( nAlpha*( pReadScan[ 2 ] ) )/255;
+                            data[ nOff++ ] = ( nAlpha*( pReadScan[ 1 ] ) )/255;
+                            data[ nOff++ ] = ( nAlpha*( pReadScan[ 0 ] ) )/255;
+                            pReadScan += 4;
+#else
                             if( pAlphaReadAcc )
                                 nAlpha = data[ nOff + 3 ];
                             else
@@ -530,9 +571,9 @@ namespace cairocanvas
                             data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
                             data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
                             data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
-
-                            nOff++;
                             pReadScan++;
+                            nOff++;
+#endif
                         }
                         break;
                     case BMP_FORMAT_32BIT_TC_RGBA:
@@ -542,6 +583,16 @@ namespace cairocanvas
                                 bIsAlpha = true;
 
                         for( nX = 0; nX < nWidth; nX++ ) {
+#ifdef OSL_BIGENDIAN
+                            if( pAlphaReadAcc )
+                                nAlpha = data[ nOff ++ ];
+                            else
+                                nAlpha = data[ nOff ++ ] = 255;
+                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
+                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
+                            data[ nOff++ ] = ( nAlpha*( *pReadScan++ ) )/255;
+                            pReadScan++;
+#else
                             if( pAlphaReadAcc )
                                 nAlpha = data[ nOff + 3 ];
                             else
@@ -549,9 +600,9 @@ namespace cairocanvas
                             data[ nOff++ ] = ( nAlpha*( pReadScan[ 2 ] ) )/255;
                             data[ nOff++ ] = ( nAlpha*( pReadScan[ 1 ] ) )/255;
                             data[ nOff++ ] = ( nAlpha*( pReadScan[ 0 ] ) )/255;
-
-                            nOff++;
                             pReadScan += 4;
+                            nOff++;
+#endif
                         }
                         break;
                     default:
@@ -566,16 +617,24 @@ namespace cairocanvas
 
                             // cairo need premultiplied color values
                             // TODO(rodo) handle endianess
+#ifdef OSL_BIGENDIAN
+                            if( pAlphaReadAcc )
+                                nAlpha = data[ nOff++ ];
+                            else
+                                nAlpha = data[ nOff++ ] = 255;
+                            data[ nOff++ ] = ( nAlpha*aColor.GetRed() )/255;
+                            data[ nOff++ ] = ( nAlpha*aColor.GetGreen() )/255;
+                            data[ nOff++ ] = ( nAlpha*aColor.GetBlue() )/255;
+#else
                             if( pAlphaReadAcc )
                                 nAlpha = data[ nOff + 3 ];
                             else
                                 nAlpha = data[ nOff + 3 ] = 255;
-
                             data[ nOff++ ] = ( nAlpha*aColor.GetBlue() )/255;
                             data[ nOff++ ] = ( nAlpha*aColor.GetGreen() )/255;
                             data[ nOff++ ] = ( nAlpha*aColor.GetRed() )/255;
-
                             nOff ++;
+#endif
                         }
                     }
                 }
