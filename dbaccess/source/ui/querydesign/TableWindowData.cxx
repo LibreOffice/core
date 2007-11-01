@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindowData.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:25:56 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:33:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,52 +41,53 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _COMPHELPER_STREAMSECTION_HXX_
-#include <comphelper/streamsection.hxx>
-#endif
-#ifndef _COMPHELPER_BASIC_IO_HXX_
-#include <comphelper/basicio.hxx>
-#endif
-
+#include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 
 using namespace dbaui;
-using namespace comphelper;
-using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-
-TYPEINIT0(OTableWindowData);
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
 
 //==================================================================
 // class OTableWindowData
 //==================================================================
 DBG_NAME(OTableWindowData);
 //------------------------------------------------------------------------------
-OTableWindowData::OTableWindowData()
-    :m_aPosition( Point(-1,-1) )
-    ,m_aSize( Size(-1,-1) )
-    ,m_bShowAll( TRUE )
-{
-    DBG_CTOR(OTableWindowData,NULL);
-}
-
-//------------------------------------------------------------------------------
-OTableWindowData::OTableWindowData( const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rTableName, const ::rtl::OUString& rWinName )
-    :m_aTableName( rTableName )
+OTableWindowData::OTableWindowData( const Reference< XPropertySet>& _xTable
+                                   ,const ::rtl::OUString& _rComposedName
+                                   ,const ::rtl::OUString& rTableName
+                                   ,const ::rtl::OUString& rWinName )
+    :m_xTable(_xTable)
+    ,m_aTableName( rTableName )
     ,m_aWinName( rWinName )
     ,m_sComposedName(_rComposedName)
     ,m_aPosition( Point(-1,-1) )
     ,m_aSize( Size(-1,-1) )
     ,m_bShowAll( TRUE )
+    ,m_bIsQuery(false)
 {
     DBG_CTOR(OTableWindowData,NULL);
     if( !m_aWinName.getLength() )
         m_aWinName = m_aTableName;
+
+    listen();
 }
 
 //------------------------------------------------------------------------------
 OTableWindowData::~OTableWindowData()
 {
     DBG_DTOR(OTableWindowData,NULL);
+    Reference<XComponent> xComponent( m_xTable, UNO_QUERY );
+    if ( xComponent.is() )
+        stopComponentListening( xComponent );
 }
 
 //------------------------------------------------------------------------------
@@ -100,37 +101,61 @@ BOOL OTableWindowData::HasSize() const
 {
     return ( (m_aSize.Width() != -1) && (m_aSize.Height() !=-1) );
 }
-
-//------------------------------------------------------------------------------
-void OTableWindowData::Load(const Reference<XObjectInputStream>& _rxIn)
+// -----------------------------------------------------------------------------
+void OTableWindowData::_disposing( const ::com::sun::star::lang::EventObject& /*_rSource*/ )
 {
-    OStreamSection aSection(_rxIn.get());
-    _rxIn >> m_sComposedName;
-    _rxIn >> m_aTableName;
-    _rxIn >> m_aWinName;
-    sal_Int32 ns32Temp;
-    _rxIn >> ns32Temp;
-    m_aPosition.X() = ns32Temp;
-    _rxIn >> ns32Temp;
-    m_aPosition.Y() = ns32Temp;
-    _rxIn >> ns32Temp;
-    m_aSize.Width() = ns32Temp;
-    _rxIn >> ns32Temp;
-    m_aSize.Height() = ns32Temp;
-    _rxIn >> m_bShowAll;
-}
-//------------------------------------------------------------------------------
-void OTableWindowData::Save(const Reference<XObjectOutputStream>& _rxOut)
-{
-    OStreamSection aSection(_rxOut.get());
-    _rxOut << m_sComposedName;
-    _rxOut << m_aTableName;
-    _rxOut << m_aWinName;
-    _rxOut << static_cast<sal_Int32>(m_aPosition.X());
-    _rxOut << static_cast<sal_Int32>(m_aPosition.Y());
-    _rxOut << static_cast<sal_Int32>(m_aSize.Width());
-    _rxOut << static_cast<sal_Int32>(m_aSize.Height());
-    _rxOut << m_bShowAll;
+    ::osl::MutexGuard aGuard( m_aMutex );
+    // it doesn't matter which one was disposed
+    m_xTable.clear();
+    m_xColumns.clear();;
 }
 // -----------------------------------------------------------------------------
+bool OTableWindowData::init(const Reference< XConnection  >& _xConnection,bool _bAllowQueries)
+{
+    OSL_ENSURE(!m_xTable.is(),"We are already connected to a table!");
 
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    Reference< XQueriesSupplier > xSupQueries( _xConnection, UNO_QUERY_THROW );
+    Reference< XNameAccess > xQueries( xSupQueries->getQueries(), UNO_QUERY_THROW );
+    bool bIsKnownQuery = _bAllowQueries && xQueries->hasByName( m_sComposedName );
+
+    Reference< XTablesSupplier > xSupTables( _xConnection, UNO_QUERY_THROW );
+    Reference< XNameAccess > xTables( xSupTables->getTables(), UNO_QUERY_THROW );
+    bool bIsKnownTable = xTables->hasByName( m_sComposedName );
+
+    if ( bIsKnownQuery )
+        m_xTable.set( xQueries->getByName( m_sComposedName ), UNO_QUERY_THROW );
+    else if ( bIsKnownTable )
+        m_xTable.set( xTables->getByName( m_sComposedName ), UNO_QUERY_THROW );
+    else
+        DBG_ERROR( "OTableWindow::Init: this is neither a query (or no queries are allowed) nor a table!" );
+
+    // if we survived so far, we know whether it's a query
+    m_bIsQuery = bIsKnownQuery;
+
+    listen();
+
+
+    Reference< XIndexAccess > xColumnsAsIndex( m_xColumns,UNO_QUERY );
+    return xColumnsAsIndex.is() && ( xColumnsAsIndex->getCount() > 0 );
+}
+// -----------------------------------------------------------------------------
+void OTableWindowData::listen()
+{
+    if ( m_xTable.is() )
+    {
+        // listen for the object being disposed
+        Reference<XComponent> xComponent( m_xTable, UNO_QUERY );
+        if ( xComponent.is() )
+            startComponentListening( xComponent );
+
+        // obtain the columns
+        Reference< XColumnsSupplier > xColumnsSups( m_xTable, UNO_QUERY_THROW );
+        m_xColumns = xColumnsSups->getColumns();
+        xComponent.set( m_xColumns, UNO_QUERY );
+        if ( xComponent.is() )
+            startComponentListening( xComponent );
+    }
+}
+// -----------------------------------------------------------------------------
