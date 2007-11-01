@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:56:57 $
+#   last change: $Author: hr $ $Date: 2007-11-01 14:49:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,9 @@ SHL1STDLIBS=\
     $(VOSLIB)					\
     $(SALLIB)					\
     $(JVMACCESSLIB)				\
-    $(UNOTOOLSLIB)	\
-    $(COMPHELPERLIB)
+    $(UNOTOOLSLIB)              \
+    $(COMPHELPERLIB)            \
+    $(I18NISOLANGLIB)
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
