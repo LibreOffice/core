@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:53:45 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1649,7 +1649,6 @@ void ScInterpreter::ScCell()
             String          aFuncResult;
             ScBaseCell*     pCell = GetCell( aCellPos );
 
-            aInfoType.ToUpperAscii();
             ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::pLocale, ocCell);
 
 // *** ADDRESS INFO ***
