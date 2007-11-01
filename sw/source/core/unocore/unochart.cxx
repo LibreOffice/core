@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unochart.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:34:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 10:56:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1121,9 +1121,11 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     const uno::Reference< chart2::data::XLabeledDataSequence > *pDS_LDS = aDS_LDS.getConstArray();
     sal_Int32 nNumDS_LDS = aDS_LDS.getLength();
 
-    DBG_ASSERT( nNumDS_LDS != 0, "data source contains no XLabeledDataSequence" );
     if (nNumDS_LDS == 0)
+    {
+        DBG_WARNING( "XLabeledDataSequence in data source contains 0 entries" );
         return aResult;
+    }
 
     SwFrmFmt *pTableFmt = 0;
     SwTable  *pTable    = 0;
