@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:40:53 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 13:01:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,8 @@ long ChildrenManagerImpl::GetChildCount (void) const throw ()
 */
 uno::Reference<XAccessible>
     ChildrenManagerImpl::GetChild (long nIndex)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException,
+           ::com::sun::star::lang::IndexOutOfBoundsException)
 {
     // Check wether the given index is valid.
     if (nIndex < 0 || (unsigned long)nIndex >= maVisibleChildren.size())
