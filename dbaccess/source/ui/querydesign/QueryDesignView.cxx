@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:52:43 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:31:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,8 @@ namespace
                                     OSelectionBrowseBox* _pSelectionBrw,
                                     const ::connectivity::OSQLParseNode * pCondition,
                                     const sal_uInt16 nLevel,
-                                    sal_Bool bHaving);
+                                    sal_Bool bHaving,
+                                    bool _bAddOrOnOneLine);
 
     void fillFunctionInfo(          OQueryDesignView* _pView
                                     ,const ::connectivity::OSQLParseNode* pNode
@@ -203,6 +204,105 @@ namespace
             sRet += sTableSeparater;
         }
         return sRet;
+    }
+    //------------------------------------------------------------------------------
+    ::rtl::OUString getTableRange(const OQueryDesignView* _pView,const ::connectivity::OSQLParseNode* _pTableRef)
+    {
+        Reference< XConnection> xConnection = static_cast<OQueryController*>(_pView->getController())->getConnection();
+        ::rtl::OUString sTableRange;
+        if ( _pTableRef )
+        {
+            if ( SQL_ISRULE( _pTableRef, joined_table ) )
+            {
+                OSL_ENSURE(0,"joined_table NYI");
+            }
+            else
+            {
+                switch( _pTableRef->count() )
+                {
+                    case 1:
+                        _pTableRef->parseNodeToStr(sTableRange,xConnection,NULL,sal_False,sal_False);
+                        break;
+                    case 3:
+                        sTableRange = _pTableRef->getChild(2)->getTokenValue();
+                        break;
+                    case 4:
+                        if ( !SQL_ISRULE( _pTableRef->getChild(2), joined_table ))
+                            sTableRange = _pTableRef->getChild(2)->getTokenValue();
+                        else
+                            OSL_ENSURE(0,"Outer join is not implemented here!");
+                        break;
+                    case 6:
+                        sTableRange = _pTableRef->getChild(4)->getTokenValue();
+                        break;
+                    default:
+                        OSL_ENSURE(0,"Unhandled child count");
+                }
+            }
+        }
+        return sTableRange;
+    }
+    //------------------------------------------------------------------------------
+    void insertConnection(const OQueryDesignView* _pView,const EJoinType& _eJoinType,OTableFieldDescRef _aDragLeft,OTableFieldDescRef _aDragRight,bool _bNatural = false)
+    {
+        OQueryTableView* pTableView = static_cast<OQueryTableView*>(_pView->getTableView());
+        OQueryTableConnection* pConn = static_cast<OQueryTableConnection*>( pTableView->GetTabConn(static_cast<OTableWindow*>(_aDragLeft->GetTabWindow()),static_cast<OTableWindow*>(_aDragRight->GetTabWindow()),true));
+
+        if ( !pConn )
+        {
+            OQueryTableConnectionData* pInfoData = new OQueryTableConnectionData();
+            TTableConnectionData::value_type aInfoData(pInfoData);
+            pInfoData->InitFromDrag(_aDragLeft, _aDragRight);
+            pInfoData->SetJoinType(_eJoinType);
+
+            if ( _bNatural )
+            {
+                aInfoData->ResetConnLines();
+                pInfoData->setNatural(_bNatural);
+                try
+                {
+                    Reference<XNameAccess> xReferencedTableColumns(aInfoData->getReferencedTable()->getColumns());
+                    Sequence< ::rtl::OUString> aSeq = aInfoData->getReferencingTable()->getColumns()->getElementNames();
+                    const ::rtl::OUString* pIter = aSeq.getConstArray();
+                    const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+                    for(;pIter != pEnd;++pIter)
+                    {
+                        if ( xReferencedTableColumns->hasByName(*pIter) )
+                            aInfoData->AppendConnLine(*pIter,*pIter);
+                    }
+                }
+                catch(const Exception&)
+                {
+                    OSL_ENSURE(0,"Exception caught while asking for column names in case of a natural join.");
+                }
+            }
+
+            OQueryTableConnection aInfo(pTableView, aInfoData);
+            // da ein OQueryTableConnection-Objekt nie den Besitz der uebergebenen Daten uebernimmt, sondern sich nur den Zeiger merkt,
+            // ist dieser Zeiger auf eine lokale Variable hier unkritisch, denn aInfoData und aInfo haben die selbe Lebensdauer
+            pTableView->NotifyTabConnection( aInfo );
+        }
+        else
+        {
+            ::rtl::OUString aSourceFieldName(_aDragLeft->GetField());
+            ::rtl::OUString aDestFieldName(_aDragRight->GetField());
+            // the connection could point on the other side
+            if(pConn->GetSourceWin() == _aDragRight->GetTabWindow())
+            {
+                ::rtl::OUString aTmp(aSourceFieldName);
+                aSourceFieldName = aDestFieldName;
+                aDestFieldName = aTmp;
+            }
+            pConn->GetData()->AppendConnLine( aSourceFieldName,aDestFieldName);
+            pConn->UpdateLineList();
+            // Modified-Flag
+            //  SetModified();
+            // und neu zeichnen
+            pConn->RecalcLines();
+                // fuer das unten folgende Invalidate muss ich dieser neuen Connection erst mal die Moeglichkeit geben,
+                // ihr BoundingRect zu ermitteln
+            pConn->InvalidateConnection();
+        }
     }
     //------------------------------------------------------------------------------
     ::rtl::OUString ParseCondition( OQueryController* pController
@@ -400,16 +500,13 @@ namespace
             for(;aIter != pLineDataList->end();++aIter)
             {
                 OConnectionLineDataRef pLineData = *aIter;
-                if(pLineData->IsValid())
-                {
-                    if(aCondition.getLength())
-                        aCondition += C_AND;
-                    aCondition += quoteTableAlias(sal_True,pData->GetAliasName(JTCS_FROM),aQuote);
-                    aCondition += ::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_FROM) );
-                    aCondition += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = "));
-                    aCondition += quoteTableAlias(sal_True,pData->GetAliasName(JTCS_TO),aQuote);
-                    aCondition += ::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_TO) );
-                }
+                if(aCondition.getLength())
+                    aCondition += C_AND;
+                aCondition += quoteTableAlias(sal_True,pData->GetAliasName(JTCS_FROM),aQuote);
+                aCondition += ::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_FROM) );
+                aCondition += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = "));
+                aCondition += quoteTableAlias(sal_True,pData->GetAliasName(JTCS_TO),aQuote);
+                aCondition += ::dbtools::quoteName(aQuote, pLineData->GetFieldName(JTCS_TO) );
             }
         }
         catch(SQLException&)
@@ -433,7 +530,7 @@ namespace
     {
         OSL_ENSURE(_pEntryConn,"TableConnection can not be null!");
 
-        OQueryTableConnectionData* pData = static_cast< OQueryTableConnectionData*>(_pEntryConn->GetData());
+        OQueryTableConnectionData* pData = static_cast< OQueryTableConnectionData*>(_pEntryConn->GetData().get());
         if ( pData->GetJoinType() != INNER_JOIN && _pEntryTabTo->ExistsAVisitedConn() )
         {
             sal_Bool bBrace = sal_False;
@@ -450,7 +547,8 @@ namespace
     }
     //------------------------------------------------------------------------------
     ::rtl::OUString BuildTable( const Reference< XConnection>& _xConnection,
-                                const OQueryTableWindow* pEntryTab
+                                const OQueryTableWindow* pEntryTab,
+                                bool _bForce = false
                                 )
     {
         ::rtl::OUString aDBName(pEntryTab->GetComposedName());
@@ -467,7 +565,7 @@ namespace
                 ::rtl::OUString aTableListStr = ::dbtools::composeTableNameForSelect( _xConnection, sCatalog, sSchema, sTable );
 
                 ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
-                if ( isAppendTableAliasEnabled( _xConnection ) )
+                if ( _bForce || isAppendTableAliasEnabled( _xConnection ) || pEntryTab->GetAliasName() != aDBName )
                 {
                     aTableListStr += ::rtl::OUString::createFromAscii(" ");
                     if ( generateAsBeforeTableAlias( _xConnection ) )
@@ -491,6 +589,8 @@ namespace
     {
 
         String aErg(rLh);
+        if ( pData->isNatural() && pData->GetJoinType() != CROSS_JOIN )
+            aErg.AppendAscii(" NATURAL ");
         switch(pData->GetJoinType())
         {
             case LEFT_JOIN:
@@ -499,9 +599,13 @@ namespace
             case RIGHT_JOIN:
                 aErg.AppendAscii(" RIGHT OUTER ");
                 break;
+            case CROSS_JOIN:
+                OSL_ENSURE(!pData->isNatural(),"OQueryDesignView::BuildJoin: This should not happen!");
+                aErg.AppendAscii(" CROSS ");
+                break;
             case INNER_JOIN:
-                DBG_ERROR("OQueryDesignView::BuildJoin: This should not happen!");
-                //aErg.AppendAscii(" INNER ");
+                OSL_ENSURE(pData->isNatural(),"OQueryDesignView::BuildJoin: This should not happen!");
+                aErg.AppendAscii(" INNER ");
                 break;
             default:
                 aErg.AppendAscii(" FULL OUTER ");
@@ -509,8 +613,11 @@ namespace
         }
         aErg.AppendAscii("JOIN ");
         aErg += String(rRh);
-        aErg.AppendAscii(" ON ");
-        aErg += String(BuildJoinCriteria(_xConnection,pData->GetConnLineDataList(),pData));
+        if ( CROSS_JOIN != pData->GetJoinType() && !pData->isNatural() )
+        {
+            aErg.AppendAscii(" ON ");
+            aErg += String(BuildJoinCriteria(_xConnection,pData->GetConnLineDataList(),pData));
+        }
 
         return aErg;
     }
@@ -521,7 +628,8 @@ namespace
                                 OQueryTableConnectionData* pData
                                 )
     {
-        return BuildJoin(_xConnection,BuildTable(_xConnection,pLh),BuildTable(_xConnection,pRh),pData);
+        bool bForce = pData->GetJoinType() == CROSS_JOIN || pData->isNatural();
+        return BuildJoin(_xConnection,BuildTable(_xConnection,pLh,bForce),BuildTable(_xConnection,pRh,bForce),pData);
     }
     //------------------------------------------------------------------------------
     ::rtl::OUString BuildJoin(  const Reference< XConnection>& _xConnection,
@@ -547,8 +655,8 @@ namespace
                         OQueryTableWindow* pEntryTabTo,
                         ::rtl::OUString &aJoin)
     {
-        OQueryTableConnectionData* pEntryConnData = static_cast<OQueryTableConnectionData*>(pEntryConn->GetData());
-        if(pEntryConnData->GetJoinType() == INNER_JOIN)
+        OQueryTableConnectionData* pEntryConnData = static_cast<OQueryTableConnectionData*>(pEntryConn->GetData().get());
+        if ( pEntryConnData->GetJoinType() == INNER_JOIN && !pEntryConnData->isNatural() )
             return;
 
         //  Reference< XConnection> xConnection = static_cast<OQueryController*>(_pView->getController())->getConnection();
@@ -648,41 +756,7 @@ namespace
                 eOk != ( eErrorCode = FillDragInfo(_pView,pNode->getChild(2),aDragRight)))
                 return eErrorCode;
 
-            OQueryTableView* pTableView = static_cast<OQueryTableView*>(_pView->getTableView());
-            OQueryTableConnection* pConn = static_cast<OQueryTableConnection*>( pTableView->GetTabConn(static_cast<OQueryTableWindow*>(aDragLeft->GetTabWindow()),static_cast<OQueryTableWindow*>(aDragRight->GetTabWindow())));
-            if(!pConn)
-            {
-                OQueryTableConnectionData aInfoData;
-                aInfoData.InitFromDrag(aDragLeft, aDragRight);
-                aInfoData.SetJoinType(_eJoinType);
-
-                OQueryTableConnection aInfo(pTableView, &aInfoData);
-                // da ein OQueryTableConnection-Objekt nie den Besitz der uebergebenen Daten uebernimmt, sondern sich nur den Zeiger merkt,
-                // ist dieser Zeiger auf eine lokale Variable hier unkritisch, denn aInfoData und aInfo haben die selbe Lebensdauer
-                pTableView->NotifyTabConnection( aInfo );
-            }
-            else
-            {
-                ::rtl::OUString aSourceFieldName(aDragLeft->GetField());
-                ::rtl::OUString aDestFieldName(aDragRight->GetField());
-                // the connection could point on the other side
-                if(pConn->GetSourceWin() == aDragRight->GetTabWindow())
-                {
-                    ::rtl::OUString aTmp(aSourceFieldName);
-                    aSourceFieldName = aDestFieldName;
-                    aDestFieldName = aTmp;
-                }
-                pConn->GetData()->AppendConnLine( aSourceFieldName,aDestFieldName);
-                pConn->UpdateLineList();
-                // Modified-Flag
-                //  SetModified();
-                // und neu zeichnen
-                pConn->RecalcLines();
-                    // fuer das unten folgende Invalidate muss ich dieser neuen Connection erst mal die Moeglichkeit geben,
-                    // ihr BoundingRect zu ermitteln
-                pConn->InvalidateConnection();
-            }
-
+            insertConnection(_pView,_eJoinType,aDragLeft,aDragRight);
         }
         else
             eErrorCode = eIllegalJoin;
@@ -1088,8 +1162,8 @@ namespace
         for(;aIter != _pConnList->end();++aIter)
         {
             const OQueryTableConnection* pEntryConn = static_cast<const OQueryTableConnection*>(*aIter);
-            OQueryTableConnectionData* pEntryConnData = static_cast<OQueryTableConnectionData*>(pEntryConn->GetData());
-            if(pEntryConnData->GetJoinType() == INNER_JOIN)
+            OQueryTableConnectionData* pEntryConnData = static_cast<OQueryTableConnectionData*>(pEntryConn->GetData().get());
+            if ( pEntryConnData->GetJoinType() == INNER_JOIN && !pEntryConnData->isNatural() )
             {
                 if(_rJoinCrit.getLength())
                     _rJoinCrit += C_AND;
@@ -1132,6 +1206,7 @@ namespace
                 static_cast<OQueryTableConnection*>(*aIter)->SetVisited(sal_False);
 
             aIter = pConnList->begin();
+            sal_Bool bUseEscape = ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_OUTERJOINESCAPE );
             for(;aIter != pConnList->end();++aIter)
             {
                 OQueryTableConnection* pEntryConn = static_cast<OQueryTableConnection*>(*aIter);
@@ -1153,14 +1228,25 @@ namespace
                         if(aTableNames.find(sTabName) == aTableNames.end())
                             aTableNames[sTabName] = sal_True;
 
-                        // create join
-                        sal_Bool bUseEscape = ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_OUTERJOINESCAPE );
                         ::rtl::OUString aStr;
-                        if ( bUseEscape )
-                            aStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("{ OJ "));
-                        aStr += aJoin;
-                        if ( bUseEscape )
-                            aStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" }"));
+                        switch(static_cast<OQueryTableConnectionData*>(pEntryConn->GetData().get())->GetJoinType())
+                        {
+                            case LEFT_JOIN:
+                            case RIGHT_JOIN:
+                            case FULL_JOIN:
+                                {
+                                    // create outer join
+                                    if ( bUseEscape )
+                                        aStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("{ OJ "));
+                                    aStr += aJoin;
+                                    if ( bUseEscape )
+                                        aStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" }"));
+                                }
+                                break;
+                            default:
+                                aStr += aJoin;
+                                break;
+                        }
                         aStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
                         aTableListStr += aStr;
                     }
@@ -1206,7 +1292,8 @@ namespace
     ::rtl::OUString GenerateGroupBy(const OQueryDesignView* _pView,OTableFields& _rFieldList, sal_Bool bMulti )
     {
 
-        Reference< XConnection> xConnection = static_cast<OQueryController*>(_pView->getController())->getConnection();
+        OQueryController* pController = static_cast<OQueryController*>(_pView->getController());
+        Reference< XConnection> xConnection = pController->getConnection();
         if(!xConnection.is())
             return ::rtl::OUString();
 
@@ -1229,7 +1316,25 @@ namespace
                     if ( pEntryField->isNoneFunction() )
                         aGroupByStr += ::dbtools::quoteName(aQuote, pEntryField->GetField());
                     else
-                        aGroupByStr += pEntryField->GetField();
+                    {
+                        ::rtl::OUString aTmp = pEntryField->GetField();
+                        ::rtl::OUString aErrorMsg;
+                        Reference<XPropertySet> xColumn;
+                        ::connectivity::OSQLParseNode* pParseNode = _pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn);
+                        if (pParseNode)
+                        {
+                            ::rtl::OUString sGroupBy;
+                            pParseNode->parseNodeToStr( sGroupBy,
+                                                        xConnection,
+                                                        &pController->getParser().getContext(),
+                                                        sal_False,
+                                                        !pEntryField->isOtherFunction());
+                            aGroupByStr += sGroupBy;
+                            delete pParseNode;
+                        }
+                        else
+                            aGroupByStr += pEntryField->GetField();
+                    }
                     aGroupByStr += ::rtl::OUString(',');
                 }
             }
@@ -1252,7 +1357,8 @@ namespace
                                 OSelectionBrowseBox* _pSelectionBrw,
                                 const ::connectivity::OSQLParseNode * pCondition,
                                 sal_uInt16& nLevel ,
-                                sal_Bool bHaving = sal_False);
+                                sal_Bool bHaving = sal_False,
+                                bool bAddOrOnOneLine = false);
     // -----------------------------------------------------------------------------
     SqlParseError GetSelectionCriteria( OQueryDesignView* _pView,
                                         OSelectionBrowseBox* _pSelectionBrw,
@@ -1296,19 +1402,22 @@ namespace
                                     OSelectionBrowseBox* _pSelectionBrw,
                                     const  ::connectivity::OSQLParseNode * pCondition,
                                     const sal_uInt16 nLevel,
-                                    sal_Bool bHaving );
+                                    sal_Bool bHaving,
+                                    bool bAddOrOnOneLine);
     //------------------------------------------------------------------------------
     SqlParseError ComparisonPredicate(OQueryDesignView* _pView,
                             OSelectionBrowseBox* _pSelectionBrw,
                             const ::connectivity::OSQLParseNode * pCondition,
                             const sal_uInt16 nLevel,
-                            sal_Bool bHaving );
+                            sal_Bool bHaving,
+                            bool bAddOrOnOneLine);
     //------------------------------------------------------------------------------
     SqlParseError GetORCriteria(OQueryDesignView* _pView,
                                 OSelectionBrowseBox* _pSelectionBrw,
                                 const ::connectivity::OSQLParseNode * pCondition,
                                 sal_uInt16& nLevel ,
-                                sal_Bool bHaving)
+                                sal_Bool bHaving,
+                                bool bAddOrOnOneLine)
     {
         SqlParseError eErrorCode = eOk;
 
@@ -1317,7 +1426,7 @@ namespace
             SQL_ISPUNCTUATION(pCondition->getChild(0),"(") &&
             SQL_ISPUNCTUATION(pCondition->getChild(2),")"))
         {
-            eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pCondition->getChild(1),nLevel,bHaving);
+            eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pCondition->getChild(1),nLevel,bHaving,bAddOrOnOneLine);
         }
         // oder Verknuepfung
         // a searchcondition can only look like this: search_condition SQL_TOKEN_OR boolean_term
@@ -1326,13 +1435,13 @@ namespace
             for (int i = 0; i < 3 && eErrorCode == eOk ; i+=2)
             {
                 if ( SQL_ISRULE(pCondition->getChild(i),search_condition) )
-                    eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pCondition->getChild(i),nLevel,bHaving);
+                    eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pCondition->getChild(i),nLevel,bHaving,bAddOrOnOneLine);
                 else
-                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pCondition->getChild(i), nLevel++,bHaving);
+                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pCondition->getChild(i), bAddOrOnOneLine ? nLevel : nLevel++,bHaving,bAddOrOnOneLine);
             }
         }
         else
-            eErrorCode = GetANDCriteria( _pView,_pSelectionBrw,pCondition, nLevel, bHaving );
+            eErrorCode = GetANDCriteria( _pView,_pSelectionBrw,pCondition, nLevel, bHaving,bAddOrOnOneLine );
 
         return eErrorCode;
     }
@@ -1341,7 +1450,8 @@ namespace
                                     OSelectionBrowseBox* _pSelectionBrw,
                                     const  ::connectivity::OSQLParseNode * pCondition,
                                     const sal_uInt16 nLevel,
-                                    sal_Bool bHaving )
+                                    sal_Bool bHaving,
+                                    bool bAddOrOnOneLine)
     {
         ::com::sun::star::lang::Locale  aLocale = _pView->getLocale();
         ::rtl::OUString sDecimal = _pView->getDecimalSeparator();
@@ -1354,22 +1464,23 @@ namespace
         if (SQL_ISRULE(pCondition,boolean_primary))
         {
             sal_uInt16 nLevel2 = nLevel;
-            eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pCondition->getChild(1), nLevel2,bHaving );
+            eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pCondition->getChild(1), nLevel2,bHaving,true );
         }
         // Das erste Element ist (wieder) eine AND-Verknuepfung
         else if ( SQL_ISRULE(pCondition,boolean_term) && pCondition->count() == 3 )
         {
-            eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pCondition->getChild(0), nLevel,bHaving );
+            eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pCondition->getChild(0), nLevel,bHaving,bAddOrOnOneLine );
             if ( eErrorCode == eOk )
-                eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pCondition->getChild(2), nLevel,bHaving );
+                eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pCondition->getChild(2), nLevel,bHaving,bAddOrOnOneLine );
         }
         else if (SQL_ISRULE( pCondition, comparison_predicate))
         {
-            eErrorCode = ComparisonPredicate(_pView,_pSelectionBrw,pCondition,nLevel,bHaving);
+            eErrorCode = ComparisonPredicate(_pView,_pSelectionBrw,pCondition,nLevel,bHaving,bAddOrOnOneLine);
         }
         else if( SQL_ISRULE(pCondition,like_predicate) )
         {
-            if (SQL_ISRULE(pCondition->getChild(0), column_ref ) )
+            const  ::connectivity::OSQLParseNode* pValueExp = pCondition->getChild(0);
+            if (SQL_ISRULE(pValueExp, column_ref ) )
             {
                 ::rtl::OUString aColumnName;
                 ::rtl::OUString aCondition;
@@ -1385,12 +1496,12 @@ namespace
                                                         static_cast<sal_Char>(sDecimal.toChar()),
                                                         &pController->getParser().getContext());
 
-                    pCondition->getChild(0)->parseNodeToPredicateStr(   aColumnName,
-                                                                        xConnection,
-                                                                        pController->getNumberFormatter(),
-                                                                        aLocale,
-                                                                        static_cast<sal_Char>(sDecimal.toChar()),
-                                                                        &pController->getParser().getContext());
+                    pValueExp->parseNodeToPredicateStr( aColumnName,
+                                                        xConnection,
+                                                        pController->getNumberFormatter(),
+                                                        aLocale,
+                                                        static_cast<sal_Char>(sDecimal.toChar()),
+                                                        &pController->getParser().getContext());
 
                     // don't display the column name
                     aCondition = aCondition.copy(aColumnName.getLength());
@@ -1398,8 +1509,20 @@ namespace
                 }
 
                 OTableFieldDescRef aDragLeft = new OTableFieldDesc();
-                if ( eOk == ( eErrorCode = FillDragInfo(_pView,pCondition->getChild(0),aDragLeft) ))
-                    _pSelectionBrw->AddCondition(aDragLeft, aCondition, nLevel);
+                if ( eOk == ( eErrorCode = FillDragInfo(_pView,pValueExp,aDragLeft) ))
+                    _pSelectionBrw->AddCondition(aDragLeft, aCondition, nLevel,bAddOrOnOneLine);
+            }
+            else if(SQL_ISRULEOR2(pValueExp,general_set_fct ,set_fct_spec)          ||
+                            SQL_ISRULEOR2(pValueExp,position_exp,extract_exp)   ||
+                            SQL_ISRULEOR2(pValueExp,fold,char_substring_fct)    ||
+                            SQL_ISRULEOR2(pValueExp,length_exp,char_value_fct))
+            {
+                AddFunctionCondition(   _pView,
+                                        _pSelectionBrw,
+                                        pCondition,
+                                        nLevel,
+                                        bHaving,
+                                        bAddOrOnOneLine);
             }
             else
             {
@@ -1417,7 +1540,8 @@ namespace
                                         _pSelectionBrw,
                                         pCondition,
                                         nLevel,
-                                        bHaving);
+                                        bHaving,
+                                        bAddOrOnOneLine);
             }
             else if ( SQL_ISRULE(pCondition->getChild(0), column_ref ) )
             {
@@ -1425,7 +1549,7 @@ namespace
                 ::rtl::OUString sCondition = ParseCondition(pController,pCondition,sDecimal,aLocale,1);
                 OTableFieldDescRef  aDragLeft = new OTableFieldDesc();
                 if ( eOk == ( eErrorCode = FillDragInfo(_pView,pCondition->getChild(0),aDragLeft)) )
-                    _pSelectionBrw->AddCondition(aDragLeft, sCondition, nLevel);
+                    _pSelectionBrw->AddCondition(aDragLeft, sCondition, nLevel,bAddOrOnOneLine);
             }
         }
         else if( SQL_ISRULEOR2(pCondition,existence_test,unique_test) )
@@ -1450,15 +1574,20 @@ namespace
                             OSelectionBrowseBox* _pSelectionBrw,
                             const ::connectivity::OSQLParseNode * pCondition,
                             const sal_uInt16 nLevel,
-                            sal_Bool bHaving)
+                            sal_Bool bHaving,
+                            bool bAddOrOnOneLine)
     {
         SqlParseError eErrorCode = eOk;
         OQueryController* pController = static_cast<OQueryController*>(_pView->getController());
-        OSL_ENSURE(SQL_ISRULEOR2(pCondition->getChild(0), set_fct_spec , general_set_fct ),"Illegal call!");
-        ::rtl::OUString aCondition;
-        OTableFieldDescRef aDragLeft = new OTableFieldDesc();
 
         OSQLParseNode* pFunction = pCondition->getChild(0);
+
+        OSL_ENSURE(SQL_ISRULEOR2(pFunction,general_set_fct ,set_fct_spec)           ||
+                            SQL_ISRULEOR2(pFunction,position_exp,extract_exp)   ||
+                            SQL_ISRULEOR2(pFunction,fold,char_substring_fct)    ||
+                            SQL_ISRULEOR2(pFunction,length_exp,char_value_fct),"Illegal call!");
+        ::rtl::OUString aCondition;
+        OTableFieldDescRef aDragLeft = new OTableFieldDesc();
 
         ::rtl::OUString aColumnName;
         Reference< XConnection> xConnection = pController->getConnection();
@@ -1472,12 +1601,18 @@ namespace
                                                 static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
                                                 &pController->getParser().getContext());
 
-            pFunction->parseNodeToPredicateStr(aColumnName,
-                                                xConnection,
-                                                pController->getNumberFormatter(),
-                                                _pView->getLocale(),
-                                                static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
-                                                &pController->getParser().getContext());
+            pFunction->parseNodeToStr(  aColumnName,
+                                        xConnection,
+                                        &pController->getParser().getContext(),
+                                        sal_True,
+                                        sal_True); // quote is to true because we need quoted elements inside the function
+            // i75557
+            //pFunction->parseNodeToPredicateStr(aColumnName,
+            //                                  xConnection,
+            //                                  pController->getNumberFormatter(),
+            //                                  _pView->getLocale(),
+            //                                  static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
+            //                                  &pController->getParser().getContext());
             // don't display the column name
             aCondition = aCondition.copy(aColumnName.getLength());
             aCondition = aCondition.trim();
@@ -1529,7 +1664,7 @@ namespace
                     aDragLeft->SetGroupBy(sal_True);
                 aDragLeft->SetFunctionType(FKT_OTHER|FKT_NUMERIC);
             }
-            _pSelectionBrw->AddCondition(aDragLeft, aCondition, nLevel);
+            _pSelectionBrw->AddCondition(aDragLeft, aCondition, nLevel,bAddOrOnOneLine);
         }
 
         return eErrorCode;
@@ -1539,7 +1674,8 @@ namespace
                             OSelectionBrowseBox* _pSelectionBrw,
                             const ::connectivity::OSQLParseNode * pCondition,
                             const sal_uInt16 nLevel,
-                            sal_Bool bHaving )
+                            sal_Bool bHaving
+                            ,bool bAddOrOnOneLine)
     {
         SqlParseError eErrorCode = eOk;
         OQueryController* pController = static_cast<OQueryController*>(_pView->getController());
@@ -1558,9 +1694,11 @@ namespace
                     eOk != ( eErrorCode = FillDragInfo(_pView,pCondition->getChild(2),aDragRight)))
                     return eErrorCode;
 
-                OQueryTableConnection* pConn = static_cast<OQueryTableConnection*>(_pView->getTableView()->GetTabConn(static_cast<OQueryTableWindow*>(aDragLeft->GetTabWindow()),
-                                                                                                            static_cast<OQueryTableWindow*>(aDragRight->GetTabWindow())));
-                if(pConn)
+                OQueryTableConnection* pConn = static_cast<OQueryTableConnection*>(
+                                                    _pView->getTableView()->GetTabConn(static_cast<OQueryTableWindow*>(aDragLeft->GetTabWindow()),
+                                                                                       static_cast<OQueryTableWindow*>(aDragRight->GetTabWindow()),
+                                                                                       true));
+                if ( pConn )
                 {
                     OConnectionLineDataVec* pLineDataList = pConn->GetData()->GetConnLineDataList();
                     OConnectionLineDataVec::iterator aIter = pLineDataList->begin();
@@ -1648,7 +1786,7 @@ namespace
             {
                 if(bHaving)
                     aDragLeft->SetGroupBy(sal_True);
-                _pSelectionBrw->AddCondition(aDragLeft, aCondition, nLevel);
+                _pSelectionBrw->AddCondition(aDragLeft, aCondition, nLevel,bAddOrOnOneLine);
             }
         }
         else if( SQL_ISRULEOR2(pCondition->getChild(0), set_fct_spec , general_set_fct ) )
@@ -1657,7 +1795,8 @@ namespace
                                     _pSelectionBrw,
                                     pCondition,
                                     nLevel,
-                                    bHaving);
+                                    bHaving,
+                                    bAddOrOnOneLine);
         }
         else // kann sich nur um einen Expr. Ausdruck handeln
         {
@@ -1687,7 +1826,7 @@ namespace
             aDragLeft->SetField(aName);
             aDragLeft->SetFunctionType(FKT_OTHER|FKT_NUMERIC);
             // und anh"angen
-            _pSelectionBrw->AddCondition(aDragLeft, aCondition, nLevel);
+            _pSelectionBrw->AddCondition(aDragLeft, aCondition, nLevel,bAddOrOnOneLine);
         }
         return eErrorCode;
     }
@@ -1775,22 +1914,33 @@ namespace
     sal_Bool InsertJoin(const OQueryDesignView* _pView,
                         const ::connectivity::OSQLParseNode *pNode)
     {
-        DBG_ASSERT(SQL_ISRULE(pNode, qualified_join) || SQL_ISRULE(pNode, joined_table),
+        DBG_ASSERT(SQL_ISRULE(pNode, qualified_join) || SQL_ISRULE(pNode, joined_table) || SQL_ISRULE(pNode, cross_union),
             "OQueryDesignView::InsertJoin: Fehler im Parse Tree");
 
         if (SQL_ISRULE(pNode,joined_table))
             return InsertJoin(_pView,pNode->getChild(1));
 
         // first check the left and right side
-        if ( !checkJoinConditions(_pView,pNode->getChild(0)) || !checkJoinConditions(_pView,pNode->getChild(3)))
+        ::connectivity::OSQLParseNode* pRightTableRef = pNode->getChild(3); // table_ref
+        if ( SQL_ISRULE(pNode, qualified_join) && SQL_ISTOKEN(pNode->getChild(1),NATURAL) )
+            pRightTableRef = pNode->getChild(4); // table_ref
+
+        if ( !checkJoinConditions(_pView,pNode->getChild(0)) || !checkJoinConditions(_pView,pRightTableRef))
             return sal_False;
 
         // named column join wird später vieleicht noch implementiert
         // SQL_ISRULE(pNode->getChild(4),named_columns_join)
-        if (SQL_ISRULE(pNode->getChild(4),join_condition))
+        EJoinType eJoinType = INNER_JOIN;
+        bool bNatural = false;
+        if ( SQL_ISRULE(pNode, qualified_join) )
         {
-            EJoinType eJoinType;
             ::connectivity::OSQLParseNode* pJoinType = pNode->getChild(1); // join_type
+            if ( SQL_ISTOKEN(pJoinType,NATURAL) )
+            {
+                bNatural = true;
+                pJoinType = pNode->getChild(2);
+            }
+
             if (SQL_ISRULE(pJoinType,join_type) && SQL_ISTOKEN(pJoinType->getChild(0),INNER))
             {
                 eJoinType = INNER_JOIN;
@@ -1807,11 +1957,42 @@ namespace
                 else
                     eJoinType = FULL_JOIN;
             }
-            if ( InsertJoinConnection(_pView,pNode->getChild(4)->getChild(1), eJoinType) != eOk )
-                return sal_False;
+            if ( SQL_ISRULE(pNode->getChild(4),join_condition) )
+            {
+                if ( InsertJoinConnection(_pView,pNode->getChild(4)->getChild(1), eJoinType) != eOk )
+                    return sal_False;
+            }
+        }
+        else if ( SQL_ISRULE(pNode, cross_union) )
+        {
+            eJoinType = CROSS_JOIN;
+            pRightTableRef = pNode->getChild(pNode->count() - 1);
         }
         else
             return sal_False;
+
+        if ( eJoinType == CROSS_JOIN || bNatural )
+        {
+
+            OQueryTableWindow*  pLeftWindow = static_cast<OQueryTableView*>(_pView->getTableView())->FindTable( getTableRange(_pView,pNode->getChild(0)) );
+            OQueryTableWindow*  pRightWindow = static_cast<OQueryTableView*>(_pView->getTableView())->FindTable( getTableRange(_pView,pRightTableRef) );
+            OSL_ENSURE(pLeftWindow && pRightWindow,"Table Windows could not be found!");
+            if ( !pLeftWindow || !pRightWindow )
+                return sal_False;
+
+            OTableFieldDescRef aDragLeft  = new OTableFieldDesc();
+            aDragLeft->SetTabWindow(pLeftWindow);
+            aDragLeft->SetTable(pLeftWindow->GetTableName());
+            aDragLeft->SetAlias(pLeftWindow->GetAliasName());
+
+            OTableFieldDescRef aDragRight = new OTableFieldDesc();
+            aDragRight->SetTabWindow(pRightWindow);
+            aDragRight->SetTable(pRightWindow->GetTableName());
+            aDragRight->SetAlias(pRightWindow->GetAliasName());
+
+            insertConnection(_pView,eJoinType,aDragLeft,aDragRight,bNatural);
+        }
+
 
         return sal_True;
     }
@@ -1888,6 +2069,7 @@ namespace
                 ::rtl::OUString sAlias;
 
                 OQueryTableView* pTableView = static_cast<OQueryTableView*>(_pView->getTableView());
+                pTableView->clearLayoutInformation();
                 OSQLTables::const_iterator aIter = aMap.begin();
                 for(;aIter != aMap.end();++aIter)
                 {
@@ -2309,18 +2491,47 @@ namespace
         SqlParseError eErrorCode = eOk;
         if (!pSelectRoot->getChild(3)->getChild(2)->isLeaf())
         {
+            OQueryController* pController = static_cast<OQueryController*>(_pView->getController());
             ::connectivity::OSQLParseNode* pGroupBy = pSelectRoot->getChild(3)->getChild(2)->getChild(2);
             OTableFieldDescRef aDragInfo = new OTableFieldDesc();
             for( sal_uInt32 i=0 ; i < pGroupBy->count() && eOk == eErrorCode; ++i )
             {
-                ::connectivity::OSQLParseNode* pColumnRef = pGroupBy->getChild( i );
-                if(SQL_ISRULE(pColumnRef,column_ref))
+                ::connectivity::OSQLParseNode* pParamRef = NULL;
+                ::connectivity::OSQLParseNode* pArgument = pGroupBy->getChild( i );
+                if(SQL_ISRULE(pArgument,column_ref))
                 {
-                    if ( eOk == (eErrorCode = FillDragInfo(_pView,pColumnRef,aDragInfo)) )
+                    if ( eOk == (eErrorCode = FillDragInfo(_pView,pArgument,aDragInfo)) )
                     {
                         aDragInfo->SetGroupBy(sal_True);
                         _pSelectionBrw->AddGroupBy(aDragInfo,i);
                     }
+                }
+                else if(SQL_ISRULE(pArgument, general_set_fct ) &&
+                        SQL_ISRULE(pParamRef = pArgument->getChild(pArgument->count()-2),column_ref) &&
+                        eOk == FillDragInfo(_pView,pParamRef,aDragInfo))
+                {
+                    aDragInfo->SetGroupBy(sal_True);
+                    _pSelectionBrw->AddGroupBy( aDragInfo, i );
+                }
+                else if( SQL_ISRULE(pArgument, set_fct_spec ) )
+                {
+                    Reference< XConnection> xConnection = pController->getConnection();
+                    if(xConnection.is())
+                    {
+                        ::rtl::OUString sGroupByExpression;
+                        pArgument->parseNodeToStr(  sGroupByExpression,
+                                                    xConnection,
+                                                    &pController->getParser().getContext(),
+                                                    sal_True,
+                                                    sal_True); // quote is to true because we need quoted elements inside the function
+                        fillFunctionInfo(_pView,pArgument,sGroupByExpression,aDragInfo);
+                        aDragInfo->SetFunctionType(FKT_OTHER);
+                        aDragInfo->SetGroupBy(sal_True);
+                        aDragInfo->SetVisible(sal_False);
+                        _pSelectionBrw->AddGroupBy( aDragInfo, i );
+                    }
+                    else
+                        eErrorCode = eColumnNotFound;
                 }
             }
         }
@@ -2381,7 +2592,8 @@ namespace
 
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-} // end of anonymouse namespace
+}
+// end of anonymouse namespace
 DBG_NAME(OQueryDesignView)
 
 OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
@@ -2882,7 +3094,7 @@ void OQueryDesignView::SaveUIConfig()
 OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pEntry,
                                                            const String& _sCriteria,
                                                            ::rtl::OUString& _rsErrorMessage,
-                                                           Reference<XPropertySet>& _rxColumn)
+                                                           Reference<XPropertySet>& _rxColumn) const
 {
     OSL_ENSURE(pEntry.isValid(),"Entry is null!");
     if(!pEntry.isValid())
@@ -2902,6 +3114,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
         String sFunction;
         if ( pEntry->isNumericOrAggreateFunction() )
             sFunction = pEntry->GetFunction();
+
         if ( !sFunction.Len() )
             sFunction = pEntry->GetField();
 
@@ -2991,16 +3204,23 @@ void OQueryDesignView::setNoneVisbleRow(sal_Int32 _nRows)
 // -----------------------------------------------------------------------------
 sal_Bool OQueryDesignView::InitFromParseNode()
 {
-    SqlParseError eErrorCode;
+    SqlParseError eErrorCode = eNativeMode;
     m_pController->clearError();
-    if ( (eErrorCode = InitFromParseNodeImpl(this,m_pSelectionBox)) != eOk )
+    try
     {
-        if ( !m_pController->hasError() ) // fill generell error string
-            showParseError(m_pController,eErrorCode);
+        if ( (eErrorCode = InitFromParseNodeImpl(this,m_pSelectionBox)) != eOk )
+        {
+            if ( !m_pController->hasError() ) // fill generell error string
+                showParseError(m_pController,eErrorCode);
 
-        SQLException aError;
-        m_pController->getError(aError);
-        m_pController->showError(aError);
+            SQLException aError;
+            m_pController->getError(aError);
+            m_pController->showError(aError);
+        }
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(0,"Can not fill query view!");
     }
     return eErrorCode == eOk;
 }
