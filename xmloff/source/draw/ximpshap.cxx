@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:33:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:21:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,6 +222,10 @@
 
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_XENHANCEDCUSTOMSHAPEDEFAULTER_HPP_
+#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #endif
 
 // --> OD 2006-02-22 #b6382898#
@@ -3541,6 +3545,20 @@ void SdXMLCustomShapeContext::EndElement()
         catch( uno::Exception& )
         {
             DBG_ERROR( "could not set enhanced customshape geometry" );
+        }
+
+        sal_Int32 nUPD( 0 );
+        sal_Int32 nBuild( 0 );
+        GetImport().getBuildIds( nUPD, nBuild );
+        if ( nUPD < 680 ||
+             ( nUPD == 680 && nBuild <= 9221 ) )
+        {
+            Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( mxShape, UNO_QUERY );
+            if( xDefaulter.is() )
+            {
+                rtl::OUString aEmptyType;
+                xDefaulter->createCustomShapeDefaults( aEmptyType );
+            }
         }
     }
 
