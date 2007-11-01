@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:30:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:51:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,9 +104,9 @@ IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.OPreparedStatement
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInfoVector& _TypeInfo,const ::rtl::OUString& sql)
     :OStatement_BASE2(_pConnection)
     ,m_aTypeInfo(_TypeInfo)
+    ,numParams(0)
     ,boundParams(NULL)
     ,m_bPrepared(sal_False)
-
 {
     m_sSqlStatement = sql;
     try
@@ -661,7 +661,7 @@ void OPreparedStatement::initBoundParam () throw(SQLException)
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     // Get the number of parameters
     numParams = 0;
-    N3SQLNumParams (m_aStatementHandle,(short*)&numParams);
+    N3SQLNumParams (m_aStatementHandle,&numParams);
 
     // There are parameter markers, allocate the bound
     // parameter objects
@@ -696,7 +696,7 @@ sal_Int8* OPreparedStatement::allocBindBuf( sal_Int32 index,sal_Int32 bufLen)
     // Sanity check the parameter number
 
     if ((index >= 1) &&
-        (index <= numParams))
+        (index <= numParams) && bufLen > 0 )
     {
         b = boundParams[index - 1].allocBindDataBuffer(bufLen);
     }
@@ -979,6 +979,7 @@ void OPreparedStatement::setStream (
 
 void OPreparedStatement::FreeParams()
 {
+    numParams = 0;
     delete [] boundParams;
     boundParams = NULL;
 }
@@ -1019,11 +1020,11 @@ void OPreparedStatement::prepareStatement()
 {
     if(!isPrepared())
     {
-        m_bPrepared = sal_True;
         OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
         ::rtl::OString aSql(::rtl::OUStringToOString(m_sSqlStatement,getOwnConnection()->getTextEncoding()));
         SQLRETURN nReturn = N3SQLPrepare(m_aStatementHandle,(SDB_ODBC_CHAR *) aSql.getStr(),aSql.getLength());
         OTools::ThrowException(m_pConnection,nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+        m_bPrepared = sal_True;
         initBoundParam();
     }
 }
