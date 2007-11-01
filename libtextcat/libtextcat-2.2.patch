@@ -1,5 +1,5 @@
 *** misc/libtextcat-2.2/configure	Thu May 22 13:39:55 2003
---- misc/build/libtextcat-2.2/configure	Tue Aug 28 14:42:16 2007
+--- misc/build/libtextcat-2.2/configure	Thu Nov  1 12:53:31 2007
 ***************
 *** 5391,5397 ****
   allow_undefined_flag=
@@ -36,7 +36,7 @@
     case $version_type in
       freebsd-elf*)
 *** misc/libtextcat-2.2/src/Makefile.in	Thu May 22 13:39:52 2003
---- misc/build/libtextcat-2.2/src/Makefile.in	Tue Aug 28 14:41:12 2007
+--- misc/build/libtextcat-2.2/src/Makefile.in	Thu Nov  1 12:53:31 2007
 ***************
 *** 124,143 ****
   target_vendor = @target_vendor@
@@ -185,7 +185,7 @@
   distclean-depend:
   	-rm -rf ./$(DEPDIR)
 *** misc/libtextcat-2.2/src/common.c	Thu May 22 13:32:43 2003
---- misc/build/libtextcat-2.2/src/common.c	Tue Aug 28 14:41:12 2007
+--- misc/build/libtextcat-2.2/src/common.c	Thu Nov  1 13:06:37 2007
 ***************
 *** 3,25 ****
    *
@@ -386,7 +386,12 @@
    * The number of segments found.
    */
 ***************
-*** 223,229 ****
+*** 218,229 ****
+  		switch (state) {
+  		case 0:
+  			/*** Skip spaces ***/
+! 			while ( isspace((int) *p) ) {
+  				p++;
   			}
   			state = 1;
   
@@ -394,7 +399,12 @@
   			/*** Start segment ***/
   			result[cnt] = w;
   			cnt++;
---- 223,229 ----
+--- 218,229 ----
+  		switch (state) {
+  		case 0:
+  			/*** Skip spaces ***/
+! 			while ( isspace((unsigned char) *p) ) {
+  				p++;
   			}
   			state = 1;
   
@@ -403,7 +413,12 @@
   			result[cnt] = w;
   			cnt++;
 ***************
-*** 237,243 ****
+*** 232,243 ****
+  		case 2:
+  			/*** Unquoted segment ***/
+  			while (*p) {
+! 				if ( isspace((int) *p) ) {
+  					*w++ = '\0';
   					p++;
   					state = 0;
   					break;
@@ -411,7 +426,12 @@
   				else if ( *p == '\'' ) {
   					/*** Start quotation ***/
   					p++;
---- 237,243 ----
+--- 232,243 ----
+  		case 2:
+  			/*** Unquoted segment ***/
+  			while (*p) {
+! 				if ( isspace((unsigned char) *p) ) {
+  					*w++ = '\0';
   					p++;
   					state = 0;
   					break;
@@ -525,24 +545,34 @@
    * Example: "   bla   bla   bla   " becomes "bla   bla   bla" after trimming.
    *
 ***************
-*** 373,379 ****
+*** 373,384 ****
   	char *lastnonspace = &dest[-1];
   	const char *p = src;
   	char *w = dest;
 ! 	
-  	while ( isspace((int)*p) ) {
+! 	while ( isspace((int)*p) ) {
   		p++;
   	}
---- 371,377 ----
+  	while (*p) {
+! 		if ( !isspace((int)*p) ) {
+  			lastnonspace = w;
+  		}
+  		*w++ = *p++;
+--- 371,382 ----
   	char *lastnonspace = &dest[-1];
   	const char *p = src;
   	char *w = dest;
 ! 
-  	while ( isspace((int)*p) ) {
+! 	while ( isspace((unsigned char)*p) ) {
   		p++;
   	}
+  	while (*p) {
+! 		if ( !isspace((unsigned char)*p) ) {
+  			lastnonspace = w;
+  		}
+  		*w++ = *p++;
 *** misc/libtextcat-2.2/src/common.h	Thu May 22 15:02:29 2003
---- misc/build/libtextcat-2.2/src/common.h	Tue Aug 28 14:41:12 2007
+--- misc/build/libtextcat-2.2/src/common.h	Thu Nov  1 12:53:31 2007
 ***************
 *** 1,28 ****
   #ifndef _COMMON_H_
@@ -649,7 +679,7 @@
   #endif
   
 *** misc/libtextcat-2.2/src/constants.h	Thu May 22 13:32:43 2003
---- misc/build/libtextcat-2.2/src/constants.h	Tue Aug 28 14:41:12 2007
+--- misc/build/libtextcat-2.2/src/constants.h	Thu Nov  1 13:05:24 2007
 ***************
 *** 39,44 ****
 --- 39,46 ----
@@ -670,7 +700,7 @@
 ! #define MAXNGRAMSIZE 5
   
   /* Which characters are not acceptable in n-grams? */
-  #define INVALID(c) (isspace((int)c) || isdigit((int)c)) 
+! #define INVALID(c) (isspace((int)c) || isdigit((int)c)) 
   
   /* Minimum size (in characters) for accepting a document */
 ! #define MINDOCSIZE  25
@@ -692,7 +722,7 @@
 ! #endif
   
   /* Which characters are not acceptable in n-grams? */
-  #define INVALID(c) (isspace((int)c) || isdigit((int)c)) 
+! #define INVALID(c) (isspace((unsigend char)c) || isdigit((unsigned char)c)) 
   
   /* Minimum size (in characters) for accepting a document */
 ! #define MINDOCSIZE  6
@@ -710,7 +740,7 @@
 + 
   #endif
 *** misc/libtextcat-2.2/src/fingerprint.c	Thu May 22 13:32:43 2003
---- misc/build/libtextcat-2.2/src/fingerprint.c	Tue Aug 28 14:41:12 2007
+--- misc/build/libtextcat-2.2/src/fingerprint.c	Thu Nov  1 12:53:31 2007
 ***************
 *** 6,28 ****
    * All rights reserved.
@@ -1397,7 +1427,7 @@
   
   
 *** misc/libtextcat-2.2/src/fingerprint.h	Mon May 19 14:16:31 2003
---- misc/build/libtextcat-2.2/src/fingerprint.h	Tue Aug 28 14:41:12 2007
+--- misc/build/libtextcat-2.2/src/fingerprint.h	Thu Nov  1 12:53:31 2007
 ***************
 *** 41,47 ****
 --- 41,53 ----
@@ -1414,8 +1444,8 @@
   extern void fp_Print( void *handle, FILE *fp );
   
   #endif
-*** misc/libtextcat-2.2/src/libtextcat.map	Tue Aug 28 14:43:02 2007
---- misc/build/libtextcat-2.2/src/libtextcat.map	Tue Aug 28 14:41:12 2007
+*** misc/libtextcat-2.2/src/libtextcat.map	Thu Nov  1 13:07:33 2007
+--- misc/build/libtextcat-2.2/src/libtextcat.map	Thu Nov  1 12:53:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -1460,8 +1490,8 @@
 ! 	local:
 ! 		*;
 ! }
-*** misc/libtextcat-2.2/src/makefile.mk	Tue Aug 28 14:43:02 2007
---- misc/build/libtextcat-2.2/src/makefile.mk	Tue Aug 28 14:41:13 2007
+*** misc/libtextcat-2.2/src/makefile.mk	Thu Nov  1 13:07:33 2007
+--- misc/build/libtextcat-2.2/src/makefile.mk	Thu Nov  1 12:53:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -1470,9 +1500,9 @@
 ! #
 ! #   $RCSfile: libtextcat-2.2.patch,v $
 ! #
-! #   $Revision: 1.4 $
+! #   $Revision: 1.5 $
 ! #
-! #   last change: $Author: vg $ $Date: 2007-08-30 15:07:52 $
+! #   last change: $Author: hr $ $Date: 2007-11-01 12:09:41 $
 ! #
 ! #*  The Contents of this file are made available subject to
 ! #*  the terms of GNU Lesser General Public License Version 2.1.
@@ -1559,7 +1589,7 @@
 !     @echo _real>>$@
 !     @echo unnamed>>$@
 *** misc/libtextcat-2.2/src/textcat.c	Thu May 22 13:32:43 2003
---- misc/build/libtextcat-2.2/src/textcat.c	Tue Aug 28 14:41:13 2007
+--- misc/build/libtextcat-2.2/src/textcat.c	Thu Nov  1 12:53:31 2007
 ***************
 *** 4,26 ****
    * Copyright (C) 2003 WiseGuys Internet B.V.
@@ -1801,7 +1831,7 @@
   #undef SHOULD_FREE
   #endif
 *** misc/libtextcat-2.2/src/textcat.h	Mon May 19 14:16:31 2003
---- misc/build/libtextcat-2.2/src/textcat.h	Tue Aug 28 14:41:13 2007
+--- misc/build/libtextcat-2.2/src/textcat.h	Thu Nov  1 12:53:31 2007
 ***************
 *** 40,45 ****
 --- 40,48 ----
@@ -1847,8 +1877,8 @@
 + }
 + #endif
   #endif
-*** misc/libtextcat-2.2/src/utf8misc.c	Tue Aug 28 14:43:02 2007
---- misc/build/libtextcat-2.2/src/utf8misc.c	Tue Aug 28 14:41:13 2007
+*** misc/libtextcat-2.2/src/utf8misc.c	Thu Nov  1 13:07:33 2007
+--- misc/build/libtextcat-2.2/src/utf8misc.c	Thu Nov  1 12:53:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -1985,8 +2015,8 @@
 !     return char_counter;
 ! }
 ! 
-*** misc/libtextcat-2.2/src/utf8misc.h	Tue Aug 28 14:43:02 2007
---- misc/build/libtextcat-2.2/src/utf8misc.h	Tue Aug 28 14:41:13 2007
+*** misc/libtextcat-2.2/src/utf8misc.h	Thu Nov  1 13:07:33 2007
+--- misc/build/libtextcat-2.2/src/utf8misc.h	Thu Nov  1 12:53:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2079,8 +2109,8 @@
 ! 
 ! #endif
 ! 
-*** misc/libtextcat-2.2/src/win32_config.h	Tue Aug 28 14:43:02 2007
---- misc/build/libtextcat-2.2/src/win32_config.h	Tue Aug 28 14:41:13 2007
+*** misc/libtextcat-2.2/src/win32_config.h	Thu Nov  1 13:07:33 2007
+--- misc/build/libtextcat-2.2/src/win32_config.h	Thu Nov  1 12:53:31 2007
 ***************
 *** 1 ****
 ! dummy
