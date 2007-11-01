@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:13:14 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:08:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,11 +256,15 @@ namespace dbaui
         return sal_True;
     }
     // -----------------------------------------------------------------------
-    void OGenericAdministrationPage::fillBool(SfxItemSet& _rSet,CheckBox* _pCheckBox,USHORT _nID,sal_Bool& _bChangedSomething)
+    void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, USHORT _nID, sal_Bool& _bChangedSomething, bool _bRevertValue )
     {
-        if( (_pCheckBox != NULL) && (_pCheckBox->GetState() != _pCheckBox->GetSavedValue()) )
+        if ( (_pCheckBox != NULL ) && ( _pCheckBox->GetState() != _pCheckBox->GetSavedValue() ) )
         {
-            _rSet.Put(SfxBoolItem(_nID, _pCheckBox->IsChecked()));
+            sal_Bool bValue = _pCheckBox->IsChecked();
+            if ( _bRevertValue )
+                bValue = !bValue;
+
+            _rSet.Put( SfxBoolItem( _nID, bValue ) );
             _bChangedSomething = sal_True;
         }
     }
