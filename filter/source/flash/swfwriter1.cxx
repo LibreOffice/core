@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:47:08 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:19:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -885,7 +885,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     uLongf compressed_size = raw_size + (sal_uInt32)(raw_size/100) + 12;
     sal_uInt8 *pCompressed = new sal_uInt8[ compressed_size ];
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
     if(compress2(pCompressed, &compressed_size, pImageData, raw_size, Z_BEST_COMPRESSION) != Z_OK)
         DBG_ASSERT( false, "compress2 failed!" );
 #else
@@ -901,7 +901,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
         alpha_compressed_size = uLongf(width * height + (sal_uInt32)(raw_size/100) + 12);
         pAlphaCompressed = new sal_uInt8[ compressed_size ];
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
         if(compress2(pAlphaCompressed, &alpha_compressed_size, pAlphaData, width * height, Z_BEST_COMPRESSION) != Z_OK)
             DBG_ASSERT( false, "compress2 failed!" );
 #else
@@ -928,9 +928,9 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 #if 0
     // Debug code to see what we export to swf
     {
-        SvFileStream aDstStm( String( RTL_CONSTASCII_USTRINGPARAM("e:\\test.png") ), STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
+        SvFileStream aDstStm( String( RTL_CONSTASCII_USTRINGPARAM("e:\\test.jpg") ), STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
         aFilter.ExportGraphic( aGraphic, String(), aDstStm,
-                                    aFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( PNG_SHORTNAME ) ) ), &aFilterData );
+                                aFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( JPG_SHORTNAME ) ) ), &aFilterData );
     }
 #endif
 
@@ -945,7 +945,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     //  we have to export as TAG_DEFINEBITSJPEG3 in the case that there is alpha
     //  channel data.
     if ( pJpgData && ( nJpgDataLength + alpha_compressed_size < compressed_size) )
-        Impl_writeJPEG(nBitmapId, pJpgData, nJpgDataLength, pAlphaCompressed, alpha_compressed_size, nJPEGQualityLevel == mnJPEGCompressMode);
+        Impl_writeJPEG(nBitmapId, pJpgData, nJpgDataLength, pAlphaCompressed, alpha_compressed_size );
     else
         Impl_writeBmp( nBitmapId, width, height, pCompressed, compressed_size );
 
@@ -1072,7 +1072,7 @@ void Writer::Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 h
 
 // -----------------------------------------------------------------------------
 
-void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pAlphaCompressed, sal_uInt32 alpha_compressed_size, sal_Bool bStandardCompression )
+void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pAlphaCompressed, sal_uInt32 alpha_compressed_size )
 {
     // AS: Go through the actuall JPEG bits, seperating out the
     //  header fields from the actual image fields.  Fields are
@@ -1092,7 +1092,7 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
     for (;pJpgSearch < pJpgData + nJpgDataLength; pJpgSearch += nLength)
     {
 
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
         if (0xFF != *pJpgSearch)
             DBG_ERROR( "Expected JPEG marker." );
 #endif
@@ -1192,32 +1192,13 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
 
         endTag();
     }
-    else if (!bStandardCompression)
+    else
     {
         startTag( TAG_DEFINEBITSJPEG2 );
 
         mpTag->addUI16( nBitmapId );
 
         mpTag->Write(EncodingTableStream.GetData(), nEncodingTableSize);
-        mpTag->Write(ImageBitsStream.GetData(), nImageBitsSize);
-
-        endTag();
-    }
-    else
-    {
-        if (!mbWrittenJPEGTables)
-        {
-            mbWrittenJPEGTables = true;
-            startTag( TAG_JPEGTABLES );
-
-            mpTag->Write(EncodingTableStream.GetData(), nEncodingTableSize);
-
-            endTag();
-        }
-
-        startTag( TAG_DEFINEBITS );
-
-        mpTag->addUI16( nBitmapId );
         mpTag->Write(ImageBitsStream.GetData(), nImageBitsSize);
 
         endTag();
