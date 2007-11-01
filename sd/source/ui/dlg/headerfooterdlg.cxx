@@ -4,9 +4,9 @@
  *
  *  $RCSfile: headerfooterdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:27:11 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:25:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -791,7 +791,9 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
 
             EditEngine* pEdit = const_cast< EditEngine* >(&pOutl->GetEditEngine());
 
-            pOutl->SetText( *pObj->GetOutlinerParaObject() );
+            OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+            if( pOPO )
+                pOutl->SetText( *pOPO );
 
             EFieldInfo aFieldInfo;
             aFieldInfo.pFieldItem = NULL;
