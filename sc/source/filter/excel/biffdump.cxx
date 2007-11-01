@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:50:04 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 16:23:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3326,7 +3326,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 AddUNICODEString( t, rIn );
                 PRINT();
                 LINESTART();
-                __AddDec( t, rIn.GetRecLeft() );
+                __AddDec( t, (sal_uInt32)rIn.GetRecLeft() );
                 ADDTEXT( " bytes of unknown data:" );
                 PRINT();
                 ContDump( rIn.GetRecLeft() );
@@ -3400,7 +3400,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     AddUNICODEString( t, rIn );
                 PRINT();
                 LINESTART();
-                __AddDec( t, rIn.GetRecLeft() );
+                __AddDec( t, (sal_uInt32)rIn.GetRecLeft() );
                 ADDTEXT( " bytes of unknown data:" );
                 PRINT();
                 ContDump( rIn.GetRecLeft() );
@@ -3428,7 +3428,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 LINESTART();
                 ADDTEXT( "count of changes: " );    ADDDEC( 2 );
                 ADDTEXT( "   " );
-                __AddDec( t, rIn.GetRecLeft() );
+                __AddDec( t, (sal_uInt32)rIn.GetRecLeft() );
                 ADDTEXT( " bytes of unknown data:" );
                 PRINT();
                 ContDump( rIn.GetRecLeft() );
