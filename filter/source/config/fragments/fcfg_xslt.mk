@@ -4,8 +4,7 @@ all_fragments+=xslt
 # count = 3
 T4_XSLT = \
     writer_DocBook_File \
-    XHTML_File \
-    MediaWiki_File
+    XHTML_File
 
 # -----------------------------------------------
 # count = 7
@@ -14,9 +13,7 @@ F4_XSLT = \
     XHTML_Calc_File \
     XHTML_Draw_File \
     XHTML_Impress_File \
-    XHTML_Writer_File \
-    writer_MediaWiki_File \
-    writer_web_MediaWiki_File
+    XHTML_Writer_File
 
 # -----------------------------------------------
 # count = 0
