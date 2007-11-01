@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachedbitmap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:29:10 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:40:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,11 @@ namespace vclcanvas
                                 const ::Size&                               rSize,
                                 const GraphicAttr&                          rAttr,
                                 const rendering::ViewState&                 rUsedViewState,
+                                const rendering::RenderState&               rUsedRenderState,
                                 const uno::Reference< rendering::XCanvas >& rTarget ) :
         CachedPrimitiveBase( rUsedViewState, rTarget, true ),
         mpGraphicObject( rGraphicObject ),
+        maRenderState(rUsedRenderState),
         maPoint( rPoint ),
         maSize( rSize ),
         maAttributes( rAttr )
@@ -80,12 +82,13 @@ namespace vclcanvas
                                        const uno::Reference< rendering::XCanvas >&  rTargetCanvas,
                                        bool                                         bSameViewTransform )
     {
-        (void)rNewState;
-        (void)rOldState;
-
         ENSURE_AND_THROW( bSameViewTransform,
                           "CachedBitmap::doRedraw(): base called with changed view transform "
                           "(told otherwise during construction)" );
+
+        // TODO(P1): Could adapt to modified clips as well
+        if( rNewState.Clip != rOldState.Clip )
+            return rendering::RepaintResult::FAILED;
 
         RepaintTarget* pTarget = dynamic_cast< RepaintTarget* >(rTargetCanvas.get());
 
@@ -93,6 +96,8 @@ namespace vclcanvas
                           "CachedBitmap::redraw(): cannot cast target to RepaintTarget" );
 
         if( !pTarget->repaint( mpGraphicObject,
+                               rNewState,
+                               maRenderState,
                                maPoint,
                                maSize,
                                maAttributes ) )
