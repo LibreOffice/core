@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFunctionParser.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:42:15 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:46:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1201,7 +1201,7 @@ ExpressionNodeSharedPtr FunctionParser::parseFunction( const ::rtl::OUString& rF
     const ::boost::spirit::parse_info<StringIteratorT> aParseInfo(
             ::boost::spirit::parse( aStart,
                                     aEnd,
-                                    aExpressionGrammer,
+                                    aExpressionGrammer >> ::boost::spirit::end_p,
                                     ::boost::spirit::space_p ) );
     OSL_DEBUG_ONLY(::std::cout.flush()); // needed to keep stdout and cout in sync
 
