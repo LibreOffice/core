@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableWindow.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:39:02 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:30:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,13 +107,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace dbaui;
-TYPEINIT1(OQueryTableWindow, OTableWindow);
 //========================================================================
 // class OQueryTableWindow
 //========================================================================
 DBG_NAME(OQueryTableWindow);
 //------------------------------------------------------------------------------
-OQueryTableWindow::OQueryTableWindow( Window* pParent, OQueryTableWindowData* pTabWinData, sal_Unicode* pszInitialAlias)
+OQueryTableWindow::OQueryTableWindow( Window* pParent, const TTableWindowData::value_type& pTabWinData, sal_Unicode* pszInitialAlias)
     :OTableWindow( pParent, pTabWinData )
     ,m_nAliasNum(0)
 {
@@ -121,7 +120,7 @@ OQueryTableWindow::OQueryTableWindow( Window* pParent, OQueryTableWindowData* pT
     if (pszInitialAlias != NULL)
         m_strInitialAlias = ::rtl::OUString(pszInitialAlias);
     else
-        m_strInitialAlias = pTabWinData->GetAliasName();
+        m_strInitialAlias = GetAliasName();
 
     // wenn der Tabellen- gleich dem Aliasnamen ist, dann darf ich das nicht an InitialAlias weiterreichen, denn das Anhaengen
     // eines eventuelle Tokens nicht klappen ...
@@ -149,14 +148,13 @@ sal_Bool OQueryTableWindow::Init()
     // zuerst Alias bestimmen
     ::rtl::OUString sAliasName;
 
-    OTableWindowData* pWinData = GetData();
-    DBG_ASSERT(pWinData->ISA(OQueryTableWindowData), "OQueryTableWindow::Init() : habe keine OQueryTableWindowData");
+    TTableWindowData::value_type pWinData = GetData();
 
     if (m_strInitialAlias.getLength() )
         // Der Alias wurde explizit mit angegeben
         sAliasName = m_strInitialAlias;
     else
-        GetTableOrQuery()->getPropertyValue( PROPERTY_NAME ) >>= sAliasName;
+        GetTable()->getPropertyValue( PROPERTY_NAME ) >>= sAliasName;
 
     // Alias mit fortlaufender Nummer versehen
     if (pContainer->CountTableAlias(sAliasName, m_nAliasNum))
@@ -203,22 +201,6 @@ void* OQueryTableWindow::createUserData(const Reference< XPropertySet>& _xColumn
     if ( _xColumn.is() )
         pInfo->SetDataType(::comphelper::getINT32(_xColumn->getPropertyValue(PROPERTY_TYPE)));
     return pInfo;
-}
-// -----------------------------------------------------------------------------
-void OQueryTableWindow::onNoColumns_throw()
-{
-    if ( isQuery() )
-    {
-        String sError( ModuleRes( STR_STATEMENT_WITHOUT_RESULT_SET ) );
-        ::dbtools::throwSQLException( sError, ::dbtools::SQL_GENERAL_ERROR, NULL );
-    }
-    OTableWindow::onNoColumns_throw();
-}
-
-// -----------------------------------------------------------------------------
-bool OQueryTableWindow::allowQueries() const
-{
-    return true;
 }
 // -----------------------------------------------------------------------------
 void OQueryTableWindow::deleteUserData(void*& _pUserData)
