@@ -57,6 +57,7 @@ T4_WRITER = \
     writer8_template\
     writer8 \
     writer_MS_Word_2003_XML \
+    MediaWiki_File \
     LaTeX \
     BibTeX
 
@@ -89,6 +90,8 @@ F4_WRITER = \
     writer_pdf_Export\
     writer8\
     writer8_template \
+    writer_MediaWiki_File \
+    writer_web_MediaWiki_File \
     MS_Word_2003_XML \
     LaTeX_Writer \
     BibTeX_Writer
