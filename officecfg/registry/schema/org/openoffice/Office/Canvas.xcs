@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<oor:component-schema oor:name="Canvas" oor:package="org.openoffice.Office" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<info>
+		<desc>Contains configuration items related to the Impress application.</desc>
+	</info>
+	<import oor:component="org.openoffice.Office.Common"/>
+	<component>
+		<group oor:name="DXCanvas">
+			<info>
+				<desc>Contains config entries for the DirectX-based implementation of the XCanvas interface.</desc>
+			</info>
+			<prop oor:name="DeviceBlacklist" oor:type="oor:int-list">
+				<info>
+					<desc>Sequence of 8 integers per device/driver
+					   combination, that uniquely mark them as not being compatible with the
+					   DirectX9 canvas implementation. If you have
+					   trouble with your graphic adapter, and want to
+					   add it to the blacklisting, set
+					   BlacklistCurrentDevice below to false. After
+					   running the Impress slideshow once, your card
+					   identification has been added to the list.
+					</desc>
+					<label>Sequence of blacklisted devices</label>
+				</info>
+				<value>0</value>
+			</prop>
+ 			<prop oor:name="BlacklistCurrentDevice" oor:type="xs:boolean">
+				<info>
+					<desc>Indicates whether the current DirectX device
+                          ids should get blacklisted. When true, a
+						  running DXCanvas will write a DeviceBlacklist entry, and refuse to run
+						  on that device subsequently.
+					</desc> 
+					<label>Blacklist current DirectX device</label>
+				</info>
+				<value>false</value>
+			</prop>
+ 			<prop oor:name="MaxTextureSize" oor:type="xs:int">
+				<info>
+					<desc>If present, limits the size of the textures
+						  that get requested from the DX runtime. If
+						  not present, textures of the maximal size
+						  that is advertised by the driver are
+						  used. This value has absolutely nothing to
+						  do with the size of primitives that can be
+						  rendered, both concepts are independent from
+						  each other. The underlying reason for this
+						  config item is the fact that several
+						  card/driver combinations expose bugs, when
+						  running them with their maximum texture
+						  size.
+					</desc> 
+					<label>Maximum texture size requested from the DirectX runtime</label>
+				</info>
+				<value>2048</value>
+			</prop>
+		</group>
+	</component>
+</oor:component-schema>
+
