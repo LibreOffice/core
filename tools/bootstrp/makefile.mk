@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 13:30:26 $
+#   last change: $Author: hr $ $Date: 2007-11-01 17:12:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,11 +47,6 @@ LIBTARGET=NO
 CDEFS+=-D_TOOLS_STRINGLIST
 
 # --- Files --------------------------------------------------------
-
-.IF "$(OS)"=="MACOS"
-dummy:
-    @echo No bootstrp for Mac OS
-.ELSE	# "$(OS)"=="MACOS"
 
 OBJFILES= \
           $(OBJ)$/appdef.obj \
@@ -103,8 +98,6 @@ APP3OBJS=    $(OBJ)$/md5.obj \
 APP3STDLIBS= $(TOOLSLIB) $(SALLIB)
 
 DEPOBJFILES	= $(APP1OBJS) $(APP2OBJS) $(APP3OBJS)
-
-.ENDIF	# "$(OS)"=="MACOS"
 
 # --- Targets ------------------------------------------------------
 
