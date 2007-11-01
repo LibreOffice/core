@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:15:58 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 13:45:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1356,23 +1356,31 @@ void SwDocShell::PrepareReload()
 // the load of document being finished.
 void SwDocShell::LoadingFinished()
 {
-    // --> OD 2005-02-11 #i38810# - disable method <SetModified(..)>, if document
-    // has stay in modified state, due to the update of its links during load.
-    bool bResetEnableSetModified(false);
-    if ( IsEnableSetModified() &&
-         pDoc->IsModified() && pDoc->LinksUpdated() )
-    {
-        EnableSetModified( FALSE );
-        bResetEnableSetModified = true;
-    }
+    // --> OD 2007-10-08 #i38810#
+    // Original fix fails after integration of cws xmlsec11:
+    // interface <SfxObjectShell::EnableSetModified(..)> no longer works, because
+    // <SfxObjectShell::FinishedLoading(..)> doesn't care about its status and
+    // enables the document modification again.
+    // Thus, manuell modify the document, if its modified and its links are updated
+    // before <FinishedLoading(..)> is called.
+    const bool bHasDocToStayModified( pDoc->IsModified() && pDoc->LinksUpdated() );
+//    // --> OD 2005-02-11 #i38810# - disable method <SetModified(..)>, if document
+//    // has stay in modified state, due to the update of its links during load.
+//    bool bResetEnableSetModified(false);
+//    if ( IsEnableSetModified() &&
+//         pDoc->IsModified() && pDoc->LinksUpdated() )
+//    {
+//        EnableSetModified( FALSE );
+//        bResetEnableSetModified = true;
+//    }
     // <--
     FinishedLoading( SFX_LOADED_ALL );
-    // --> OD 2005-02-11 #i38810#
-    if ( bResetEnableSetModified )
-    {
-        EnableSetModified( TRUE );
-    }
-    // <--
+//    // --> OD 2005-02-11 #i38810#
+//    if ( bResetEnableSetModified )
+//    {
+//        EnableSetModified( TRUE );
+//    }
+//    // <--
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst(this);
     if(pVFrame)
     {
@@ -1380,6 +1388,13 @@ void SwDocShell::LoadingFinished()
         if(PTR_CAST(SwSrcView, pShell))
             ((SwSrcView*)pShell)->Load(this);
     }
+
+    // --> OD 2007-10-08 #i38810#
+    if ( bHasDocToStayModified && !pDoc->IsModified() )
+    {
+        pDoc->SetModified();
+    }
+    // <--
 }
 
 // eine Uebertragung wird abgebrochen (wird aus dem SFX gerufen)
@@ -1457,7 +1472,12 @@ void SwDocShell::UpdateLinks()
 uno::Reference< frame::XController >
                                 SwDocShell::GetController()
 {
-    return GetView()->GetController();
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > aRet;
+    // --> FME 2007-10-15 #i82346# No view in page preview
+    if ( GetView() )
+    // <--
+        aRet = GetView()->GetController();
+    return aRet;
 }
 
 /* -----------------------------12.02.01 12:08--------------------------------
