@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:49:00 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:07:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ using namespace ::dbtools;
 DBG_NAME(ORelationDialog)
 //========================================================================
 ORelationDialog::ORelationDialog( OJoinTableView* pParent,
-                                 ORelationTableConnectionData* pConnectionData,
+                                 const TTableConnectionData::value_type& pConnectionData,
                                  BOOL bAllowTableSelect )
     :ModalDialog( pParent, ModuleRes(DLG_REL_PROPERTIES) )
     ,m_pTableMap(pParent->GetTabWinMap())
@@ -118,7 +118,6 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
     ,aPB_CANCEL( this, ModuleRes( PB_CANCEL ) )
     ,aPB_HELP( this, ModuleRes( PB_HELP ) )
 
-    ,m_pConnData(NULL)
     ,m_pOrigConnData( pConnectionData )
     ,m_bTriedOneUpdate(FALSE)
 {
@@ -128,11 +127,11 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
 
     //////////////////////////////////////////////////////////////////////
     // Connection kopieren
-    m_pConnData = static_cast<ORelationTableConnectionData*>(pConnectionData->NewInstance());
+    m_pConnData.reset( static_cast<ORelationTableConnectionData*>(pConnectionData->NewInstance()) );
     m_pConnData->CopyFrom( *pConnectionData );
 
     Init(m_pConnData);
-    m_pTableControl = new OTableListBoxControl(this,ModuleRes(WND_CONTROL),m_pTableMap,this);
+    m_pTableControl.reset( new OTableListBoxControl(this,ModuleRes(WND_CONTROL),m_pTableMap,this) );
 
     aPB_OK.SetClickHdl( LINK(this, ORelationDialog, OKClickHdl) );
 
@@ -150,10 +149,11 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
 }
 
 //------------------------------------------------------------------------
-void ORelationDialog::Init(ORelationTableConnectionData* _m_pConnData)
+void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionData)
 {
+    ORelationTableConnectionData* pConnData = static_cast<ORelationTableConnectionData*>(_pConnectionData.get());
     // Update Rules
-    switch (_m_pConnData->GetUpdateRules())
+    switch (pConnData->GetUpdateRules())
     {
     case KeyRule::NO_ACTION:
     case KeyRule::RESTRICT:
@@ -173,7 +173,7 @@ void ORelationDialog::Init(ORelationTableConnectionData* _m_pConnData)
     }
 
     // Delete Rules
-    switch (_m_pConnData->GetDeleteRules())
+    switch (pConnData->GetDeleteRules())
     {
     case KeyRule::NO_ACTION:
     case KeyRule::RESTRICT:
@@ -196,9 +196,6 @@ void ORelationDialog::Init(ORelationTableConnectionData* _m_pConnData)
 //------------------------------------------------------------------------
 ORelationDialog::~ORelationDialog()
 {
-    delete m_pTableControl;
-    delete m_pConnData;
-
     DBG_DTOR(ORelationDialog,NULL);
 }
 
@@ -222,8 +219,8 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
     if( aRB_CascDelDefault.IsChecked() )
         nAttrib |= KeyRule::SET_DEFAULT;
 
-    m_pConnData->SetDeleteRules( nAttrib );
-
+    ORelationTableConnectionData* pConnData = static_cast<ORelationTableConnectionData*>(m_pConnData.get());
+    pConnData->SetDeleteRules( nAttrib );
 
     // Update Rules
     nAttrib = 0;
@@ -235,19 +232,20 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
         nAttrib |= KeyRule::SET_NULL;
     if( aRB_CascUpdDefault.IsChecked() )
         nAttrib |= KeyRule::SET_DEFAULT;
-    m_pConnData->SetUpdateRules( nAttrib );
+    pConnData->SetUpdateRules( nAttrib );
 
     m_pTableControl->SaveModified();
 
-    // wenn die ComboBoxen fuer die Tabellenauswahl enabled sind (Constructor mit bAllowTableSelect==TRUE), dann muss ich in die
-    // Connection auch die Tabellennamen stecken
-    m_pConnData->SetSourceWinName(m_pTableControl->getSourceWinName());
-    m_pConnData->SetDestWinName(m_pTableControl->getDestWinName());
+    //// wenn die ComboBoxen fuer die Tabellenauswahl enabled sind (Constructor mit bAllowTableSelect==TRUE), dann muss ich in die
+    //// Connection auch die Tabellennamen stecken
+    //m_pConnData->SetSourceWinName(m_pTableControl->getSourceWinName());
+    //m_pConnData->SetDestWinName(m_pTableControl->getDestWinName());
 
     // try to create the relation
     try
     {
-        if (*m_pConnData != *m_pOrigConnData || m_pConnData->Update())
+        ORelationTableConnectionData* pOrigConnData = static_cast<ORelationTableConnectionData*>(m_pOrigConnData.get());
+        if (*pConnData != *pOrigConnData || pConnData->Update())
         {
             m_pOrigConnData->CopyFrom( *m_pConnData );
             EndDialog( RET_OK );
@@ -288,7 +286,7 @@ short ORelationDialog::Execute()
     return nResult;
 }
 // -----------------------------------------------------------------------------
-OTableConnectionData* ORelationDialog::getConnectionData() const
+TTableConnectionData::value_type ORelationDialog::getConnectionData() const
 {
     return m_pConnData;
 }
