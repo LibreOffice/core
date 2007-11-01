@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-07-20 05:28:30 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:46:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1058,10 +1058,16 @@ void SlideView::modified( const lang::EventObject& /*aEvent*/ )
         canvas::tools::setIdentityAffineMatrix2D(aViewTransform);
     }
 
-    // view transformation changed. Modify canvas matrix, then
+    // view transformation really changed?
+    basegfx::B2DHomMatrix aNewTransform;
     basegfx::unotools::homMatrixFromAffineMatrix(
-        maViewTransform,
+        aNewTransform,
         aViewTransform );
+
+    if( aNewTransform == maViewTransform )
+        return; // No change, nothing to do
+
+    maViewTransform = aNewTransform;
 
     updateCanvas();
 
