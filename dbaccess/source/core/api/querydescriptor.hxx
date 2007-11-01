@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydescriptor.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:06:56 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:02:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,8 @@ class OQueryDescriptor : public comphelper::OMutexAndBroadcastHelper
                         ,public ::comphelper::OPropertyArrayUsageHelper< OQueryDescriptor_Base >
                         ,public ODataSettings
 {
+    OQueryDescriptor(const OQueryDescriptor&);
+    void operator =(const OQueryDescriptor&);
     // helper
     void registerProperties();
 protected:
@@ -165,6 +167,7 @@ protected:
     // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
+    virtual ~OQueryDescriptor();
 public:
     OQueryDescriptor();
     /** constructs the object with a UNO QueryDescriptor. If you use this ctor, the resulting object
