@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-17 12:13:59 $
+#   last change: $Author: hr $ $Date: 2007-11-01 14:10:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ COMPONENT_BITMAPS= \
 
 COMPONENT_HELP= \
     $(MISC)$/SunPresentationMinimizer$/help$/help_de.odt \
-    $(MISC)$/SunPresentationMinimizer$/help$/help_en-us.odt
+    $(MISC)$/SunPresentationMinimizer$/help$/help_en-US.odt
     
 COMPONENT_MANIFEST= \
     $(MISC)$/SunPresentationMinimizer$/META-INF$/manifest.xml
@@ -132,7 +132,7 @@ $(COMPONENT_MANIFEST) : $$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(TYPE) $< | $(SED) "s/SHARED_EXTENSION/$(DLLPOST)/" > $@
 
-$(COMPONENT_BITMAPS) : bitmaps$/$$(@:f)
+$(COMPONENT_BITMAPS) : $(SOLARSRC)$/$(RSCDEFIMG)$/minimizer$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
