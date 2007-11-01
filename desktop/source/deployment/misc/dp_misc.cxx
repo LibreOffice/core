@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_misc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:54:46 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 14:27:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,15 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
+
+
+#define SOFFICE1 "soffice.exe"
+#define SOFFICE2 "soffice.bin"
+#define SBASE "sbase.exe"
+#define SCALC "scalc.exe"
+#define SDRAW "sdraw.exe"
+#define SIMPRESS "simpress.exe"
+#define SWRITER "swriter.exe"
 
 namespace dp_misc {
 namespace {
@@ -137,6 +146,16 @@ const OUString OfficePipeId::operator () ()
         buf.append( static_cast<sal_Int32>(md5_buf[ i ]), 0x10 );
     }
     return buf.makeStringAndClear();
+}
+
+bool existsOfficePipe()
+{
+    OUString const & pipeId = OfficePipeId::get();
+    if (pipeId.getLength() == 0)
+        return false;
+    ::osl::Security sec;
+    ::osl::Pipe pipe( pipeId, osl_Pipe_OPEN, sec );
+    return pipe.is();
 }
 
 } // anon namespace
@@ -252,12 +271,44 @@ OUString expandUnoRcUrl( OUString const & url )
 //==============================================================================
 bool office_is_running()
 {
-    OUString const & pipeId = OfficePipeId::get();
-    if (pipeId.getLength() == 0)
-        return false;
-    ::osl::Security sec;
-    ::osl::Pipe pipe( pipeId, osl_Pipe_OPEN, sec );
-    return pipe.is();
+    //We need to check if we run within the office process. Then we must not use the pipe, because
+    //this could cause a deadlock. This is actually a workaround for i82778
+    OUString sFile;
+    oslProcessError err = osl_getExecutableFile(& sFile.pData);
+    bool ret = false;
+    if (osl_Process_E_None == err)
+    {
+        sFile = sFile.copy(sFile.lastIndexOf('/') + 1);
+        if (
+#if defined UNIX
+            sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SOFFICE2)))
+#elif defined WNT
+            //osl_getExecutableFile should deliver "soffice.bin" on windows
+            //even if swriter.exe, scalc.exe etc. was started. This is a bug
+            //in osl_getExecutableFile
+            sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SOFFICE1)))
+            || sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SOFFICE2)))
+            || sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SBASE)))
+            || sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SCALC)))
+            || sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SDRAW)))
+            || sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SIMPRESS)))
+            || sFile.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(SWRITER)))
+#else
+#error "Unsupported platform"
+#endif
+
+            )
+            ret = true;
+        else
+            ret = existsOfficePipe();
+    }
+    else
+    {
+        OSL_ENSURE(0, "NOT osl_Process_E_None ");
+        //if osl_getExecutable file than we take the risk of creating a pipe
+        ret =  existsOfficePipe();
+    }
+    return ret;
 }
 
 //==============================================================================
