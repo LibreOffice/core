@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:36:59 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,9 +64,6 @@
 #include <osl/file.hxx>
 #endif
 // ---
-#ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
-#endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
@@ -254,50 +251,6 @@ String ODsnTypeCollection::cutPrefix(const String& _rDsn) const
     return _rDsn.Copy(sPrefix.Len());
 }
 // -----------------------------------------------------------------------------
-namespace
-{
-    ::rtl::OUString lcl_getEmbeddedDatabases()
-    {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/EmbeddedDatabases"));
-        return s_sNodeName;
-    }
-    // -----------------------------------------------------------------------------
-    ::rtl::OUString lcl_getDefaultEmbeddedDatabase()
-    {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DefaultEmbeddedDatabase"));
-        return s_sNodeName;
-    }
-    // -----------------------------------------------------------------------------
-    ::rtl::OUString lcl_getEmbeddedDatabaseNames()
-    {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("EmbeddedDatabaseNames"));
-        return s_sNodeName;
-    }
-    // -----------------------------------------------------------------------------
-    ::utl::OConfigurationNode lcl_getEmbeddedDatabase(const Reference< XMultiServiceFactory >& _rxORB)
-    {
-        ::utl::OConfigurationTreeRoot aEmbeddedDatabases = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
-            _rxORB, ::dbaui::lcl_getEmbeddedDatabases(), -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
-
-        if ( aEmbeddedDatabases.isValid() )
-        {
-            ::rtl::OUString sDefaultEmbededDatabaseName;
-            aEmbeddedDatabases.getNodeValue(::dbaui::lcl_getDefaultEmbeddedDatabase()) >>= sDefaultEmbededDatabaseName;
-
-            ::utl::OConfigurationNode aEmbddedDatabaseNames = aEmbeddedDatabases.openNode(::dbaui::lcl_getEmbeddedDatabaseNames());
-            if ( aEmbddedDatabaseNames.isValid() )
-            {
-                ::utl::OConfigurationNode aEmbeddedDatabase = aEmbddedDatabaseNames.openNode(sDefaultEmbededDatabaseName);
-                if ( aEmbeddedDatabase.isValid() )
-                {
-                    return aEmbeddedDatabase;
-                }
-            }
-        }
-        return ::utl::OConfigurationNode();
-    }
-}
-// -----------------------------------------------------------------------------
 void ODsnTypeCollection::extractHostNamePort(const String& _rDsn,String& _sDatabaseName,String& _rsHostname,sal_Int32& _nPortNumber) const
 {
     DATASOURCE_TYPE eType = getType(_rDsn);
@@ -449,48 +402,6 @@ sal_Bool ODsnTypeCollection::supportsBrowsing(DATASOURCE_TYPE _eType)
 
 
 //-------------------------------------------------------------------------
-sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType) const
-{
-    switch (_eType)
-    {
-        case DST_USERDEFINE1:   /// first user defined driver
-        case DST_USERDEFINE2:
-        case DST_USERDEFINE3:
-        case DST_USERDEFINE4:
-        case DST_USERDEFINE5:
-        case DST_USERDEFINE6:
-        case DST_USERDEFINE7:
-        case DST_USERDEFINE8:
-        case DST_USERDEFINE9:
-        case DST_USERDEFINE10:
-        case DST_ADABAS:
-        case DST_JDBC:
-        case DST_MYSQL_ODBC:
-        case DST_ORACLE_JDBC:
-        case DST_MYSQL_JDBC:
-        case DST_ODBC:
-        case DST_ADO:
-        case DST_LDAP:
-        case DST_CALC:
-            return sal_True;
-        case DST_MSACCESS:
-        case DST_MOZILLA:
-        case DST_THUNDERBIRD:
-        case DST_EVOLUTION:
-        case DST_EVOLUTION_GROUPWISE:
-        case DST_EVOLUTION_LDAP:
-        case DST_KAB:
-        case DST_OUTLOOK:
-        case DST_OUTLOOKEXP: //????
-        case DST_DBASE:
-        case DST_FLAT:
-        case DST_EMBEDDED:
-        default:
-            return sal_False;
-    }
-}
-
-//-------------------------------------------------------------------------
 DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn) const
 {
     sal_uInt16 nSeparator = _rDsn.Search((sal_Unicode)':');
@@ -540,8 +451,8 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn) const
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:calc:", 0, nSeparator))
         return DST_CALC;
 
-    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:embedded:", 0, nSeparator))
-        return DST_EMBEDDED;
+    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:embedded:hsqldb", 0, _rDsn.Len()))
+        return DST_EMBEDDED_HSQLDB;
 
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:address:", 0, nSeparator))
     {
@@ -610,74 +521,33 @@ sal_Int32 ODsnTypeCollection::implDetermineTypeIndex(DATASOURCE_TYPE _eType) con
     return -1;
 }
 // -----------------------------------------------------------------------------
-DATASOURCE_TYPE ODsnTypeCollection::getEmbeddedDatabaseType(const Reference< XMultiServiceFactory >& _rxORB) const
+Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( DATASOURCE_TYPE _eType ) const
 {
-    DATASOURCE_TYPE eRet = DST_DBASE;
-    ::utl::OConfigurationNode aEmbeddedDatabase = lcl_getEmbeddedDatabase(_rxORB);
-    if ( aEmbeddedDatabase.isValid() )
-    {
-        ::rtl::OUString sURLPrefix = getEmbeddedDatabaseURL(_rxORB);
-        Reference< XDriverAccess > xDriverManager(_rxORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-        if ( xDriverManager.is() && xDriverManager->getDriverByURL(sURLPrefix).is() )
-        {
-            eRet = DST_EMBEDDED;
-        }
-    }
-    return eRet;
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString ODsnTypeCollection::getEmbeddedDatabaseURL(const Reference< XMultiServiceFactory >& _rxORB) const
-{
-    ::rtl::OUString sRet;
-    ::utl::OConfigurationNode aEmbeddedDatabase = lcl_getEmbeddedDatabase(_rxORB);
-    if ( aEmbeddedDatabase.isValid() )
-    {
-        static ::rtl::OUString s_sURL(RTL_CONSTASCII_USTRINGPARAM("URL"));
-        aEmbeddedDatabase.getNodeValue(s_sURL) >>= sRet;
-    }
-    return sRet;
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString ODsnTypeCollection::getEmbeddedDatabaseUIName(const Reference< XMultiServiceFactory >& _rxORB) const
-{
-    ::rtl::OUString sRet;
-    ::utl::OConfigurationNode aEmbeddedDatabase = lcl_getEmbeddedDatabase(_rxORB);
-    if ( aEmbeddedDatabase.isValid() )
-    {
-        // read the needed information
-        static ::rtl::OUString s_sUIName(RTL_CONSTASCII_USTRINGPARAM("UIName"));
-        aEmbeddedDatabase.getNodeValue(s_sUIName) >>= sRet;
-    }
-    return sRet;
-}
-// -----------------------------------------------------------------------------
-Sequence<PropertyValue> ODsnTypeCollection::getEmbeddedDatabaseProperties(const Reference< XMultiServiceFactory >& _rxORB) const
-{
-    Sequence<PropertyValue> aRet;
-    ::utl::OConfigurationNode aEmbeddedDatabase = lcl_getEmbeddedDatabase(_rxORB);
-    if ( aEmbeddedDatabase.isValid() )
-    {
-        static ::rtl::OUString s_sEmbeddedDatabaseSettings(RTL_CONSTASCII_USTRINGPARAM("EmbeddedDatabaseSettings"));
-        ::utl::OConfigurationNode aSettings = aEmbeddedDatabase.openNode(s_sEmbeddedDatabaseSettings);
-        if ( aSettings.isValid() )
-        {
-            Sequence< ::rtl::OUString > aNodeNames = aSettings.getNodeNames();
-            aRet.realloc(aNodeNames.getLength());
-            PropertyValue* pInfos = aRet.getArray();
+    Sequence< PropertyValue > aSettings;
 
-            for (   const ::rtl::OUString* pNodeNames = aNodeNames.getConstArray() + aNodeNames.getLength() - 1;
-                    pNodeNames >= aNodeNames.getConstArray();
-                    --pNodeNames, ++pInfos
-                )
-            {
-                ::utl::OConfigurationNode aItemSubNode = aSettings.openNode(*pNodeNames);
-                pInfos->Name = *pNodeNames;
-                pInfos->Value = aItemSubNode.getNodeValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")));
-            }
-        }
+    switch ( _eType )
+    {
+    case DST_EMBEDDED_HSQLDB:
+        aSettings.realloc( 3 );
+
+        aSettings[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AutoIncrementCreation" ) );
+        aSettings[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IDENTITY" ) );
+
+        aSettings[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AutoRetrievingStatement" ) );
+        aSettings[1].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CALL IDENTITY()" ) );
+
+        aSettings[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAutoRetrievingEnabled" ) );
+        aSettings[2].Value <<= (sal_Bool)sal_True;
+        break;
+
+    default:
+        DBG_ERROR( "ODsnTypeCollection::getDefaultDBSettings: type is unsupported by this method!" );
+        break;
     }
-    return aRet;
+
+    return aSettings;
 }
+
 // -----------------------------------------------------------------------------
 String ODsnTypeCollection::getTypeExtension(DATASOURCE_TYPE _eType) const
 {
