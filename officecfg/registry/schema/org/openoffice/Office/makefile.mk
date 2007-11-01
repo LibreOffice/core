@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 06:52:05 $
+#   last change: $Author: hr $ $Date: 2007-11-01 18:03:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ XCSFILES= \
     Addons.xcs \
     Calc.xcs \
     CalcAddIns.xcs \
+    Canvas.xcs \
     Chart.xcs \
     Commands.xcs \
     Common.xcs \
