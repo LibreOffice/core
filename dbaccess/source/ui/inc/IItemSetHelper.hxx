@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IItemSetHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:27:57 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:15:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ namespace dbaui
     class SAL_NO_VTABLE IDatabaseSettingsDialog
     {
     public:
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() = 0;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const = 0;
         virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection() = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver() = 0;
         virtual DATASOURCE_TYPE getDatasourceType(const SfxItemSet& _rSet) const = 0;
