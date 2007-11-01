@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 15:00:04 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 11:02:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5496,13 +5496,13 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
             }
 
             pGlyphWidths[ i ] = 0;
-            pMappedGlyphs[ i ] = (sal_Int8)pUnicodes[i];
+            pMappedGlyphs[ i ] = sal::static_int_cast<sal_Int8>( pGlyphs[i] );
             pMappedFontObjects[ i ] = nFontID;
             const ImplPdfBuiltinFontData* pFD = GetPdfFontData( pCurrentFont );
             if( pFD )
             {
                 const BuiltinFont* pBuiltinFont = pFD->GetBuiltinFont();
-                pGlyphWidths[i] = pBuiltinFont->m_aWidths[ pUnicodes[i] & 0x00ff ];
+                pGlyphWidths[i] = pBuiltinFont->m_aWidths[ pGlyphs[i] & 0x00ff ];
             }
         }
         else if( pCurrentFont->mbSubsettable )
