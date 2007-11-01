@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryTabWinUndoAct.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:23:08 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:31:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,6 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
         OSL_ENSURE(m_pTabWin != NULL, "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : m_pTabWin sollte nicht NULL sein");
         OSL_ENSURE(!m_pTabWin->IsVisible(), "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : *m_pTabWin sollte nicht sichtbar sein");
 
-        delete m_pTabWin->GetData();
         if ( m_pTabWin )
             m_pTabWin->clearListBox();
         delete m_pTabWin;
@@ -105,7 +104,6 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
         for(;aIter != m_vTableConnection.end();++aIter)
         {
             m_pOwner->DeselectConn(*aIter);
-            delete (*aIter)->GetData();
             delete (*aIter);
         }
         m_vTableConnection.clear();
