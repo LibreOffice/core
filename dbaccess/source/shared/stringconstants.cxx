@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:05:46 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 15:03:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,6 +259,7 @@ IMPLEMENT_CONSTASCII_USTRING(INFO_AUTORETRIEVEVALUE,"AutoRetrievingStatement");
 IMPLEMENT_CONSTASCII_USTRING(INFO_AUTORETRIEVEENABLED,"IsAutoRetrievingEnabled");
 IMPLEMENT_CONSTASCII_USTRING(INFO_APPEND_TABLE_ALIAS,"AppendTableAliasName");
 IMPLEMENT_CONSTASCII_USTRING(INFO_AS_BEFORE_CORRELATION_NAME, "GenerateASBeforeCorrelationName" );
+IMPLEMENT_CONSTASCII_USTRING(INFO_FORMS_CHECK_REQUIRED_FIELDS, "FormsCheckRequiredFields" );
 IMPLEMENT_CONSTASCII_USTRING(INFO_PARAMETERNAMESUBST,"ParameterNameSubstitution");
 IMPLEMENT_CONSTASCII_USTRING(INFO_IGNOREDRIVER_PRIV,"IgnoreDriverPrivileges");
 IMPLEMENT_CONSTASCII_USTRING(INFO_USECATALOG,"UseCatalog");
