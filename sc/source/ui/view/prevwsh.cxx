@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:56:24 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 16:25:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -476,7 +476,7 @@ void __EXPORT ScPreviewShell::PreparePrint( PrintDialog* pPrintDialog )
     SfxViewShell::PreparePrint( pPrintDialog );
 
     ScMarkData aMarkData;
-    aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetPageNo() ), TRUE );
+    aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetTab() ), TRUE );
     pDocShell->PreparePrint( pPrintDialog, &aMarkData );
 }
 
@@ -486,7 +486,7 @@ ErrCode ScPreviewShell::DoPrint( SfxPrinter *pPrinter,
     ErrCode nRet = ERRCODE_IO_ABORT;
 
     ScMarkData aMarkData;
-    aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetPageNo() ), TRUE );
+    aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetTab() ), TRUE );
 
     if ( pDocShell->CheckPrint( pPrintDialog, &aMarkData, false, bIsAPI ) )
     {
@@ -518,7 +518,7 @@ USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, BOOL bIsAPI, Prin
     bool bAllTabs = aOptions.GetAllSheets();
 
     ScMarkData aMarkData;
-    aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetPageNo() ), TRUE );
+    aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetTab() ), TRUE );
 
     uno::Sequence< sal_Int32 > aSheets;
     SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
