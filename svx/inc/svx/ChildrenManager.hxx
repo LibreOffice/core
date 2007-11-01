@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChildrenManager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:36:00 $
+ *  last change: $Author: hr $ $Date: 2007-11-01 13:00:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,8 @@ public:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>
         GetChild (long nIndex)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /** Update the child manager.  Take care of a modified set of children
         and modified visible area.  This method can optimize the update
