@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comdep.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:10:11 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:01:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,4 +54,6 @@ DBG_NAMEEX( DirEntry )
 #include "unx.cxx"
 #elif defined WNT
 #include "wntmsc.cxx"
+#elif defined OS2
+#include "os2.cxx"
 #endif
