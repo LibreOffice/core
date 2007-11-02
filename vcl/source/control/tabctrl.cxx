@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:07:27 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:52:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,7 +420,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
     pItem->maFormatText = pItem->maText;
     Size aSize( GetCtrlTextWidth( pItem->maFormatText ), GetTextHeight() );
 
-    Region aCtrlRegion(  Rectangle( Point( 0, 0 ), aSize ) );
+    Region aCtrlRegion(  Rectangle( (const Point&)Point( 0, 0 ), aSize ) );
     Region aBoundingRgn, aContentRgn;
     const ImplControlValue aControlValue( BUTTONVALUE_DONTKNOW, rtl::OUString(), 0 );
     if(GetNativeControlRegion( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, aCtrlRegion,
