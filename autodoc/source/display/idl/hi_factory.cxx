@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hi_factory.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:01:26 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:39:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ HtmlFactory_Idl::produce_ShortDoc( Xml::Element &   o_screen,
     rDetailsRowCell << new Xml::XmlCode("&nbsp;");
 }
 
-// KORR MI: Does not belong here (implementation inheritance)!
+// KORR_FUTURE: Does not belong here (implementation inheritance)!
 void
 HtmlFactory_Idl::produce_Bases( Xml::Element &   o_screen,
                                 const client &   i_ce,
@@ -186,20 +186,27 @@ void
 HtmlFactory_Idl::get_Annotations( StreamStr &         o_out,
                                   const client &      i_ce ) const
 {
-    if (i_ce.Docu() != 0)
+    const ary::doc::OldIdlDocu *
+        doc = Get_IdlDocu(i_ce.Docu());
+    if (doc != 0)
     {
-        if (i_ce.Docu()->IsDeprecated())
+        if (doc->IsDeprecated())
             o_out << "deprecated ";
-        if (NOT i_ce.Docu()->IsPublished())
+        if (NOT doc->IsPublished())
             o_out << "unpublished ";
     }
+
+    // KORR
+    //  Need to display "unpublished", if there is no docu.
 }
 
 void
 HtmlFactory_Idl::write_Docu( Xml::Element &     o_screen,
                              const client &     i_ce ) const
 {
-    if (i_ce.Docu() != 0)
+    const ary::doc::OldIdlDocu *
+        doc = Get_IdlDocu(i_ce.Docu());
+    if (doc != 0)
     {
         HF_DocEntryList
             aDocuList( o_screen );
