@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_tydef.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:01:23 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,10 @@
 
 // USED SERVICES
     // BASE CLASSES
-#include <ary/ce.hxx>
-    // COMPONENTS
+#include <ary/cpp/c_ce.hxx>
+    // OTHER
 #include <ary/cessentl.hxx>
-#include <ary/cpp/c_etypes.hxx>
-    // PARAMETERS
+#include <ary/cpp/c_types4cpp.hxx>
 
 
 
@@ -54,61 +53,57 @@ namespace cpp
 {
 
 
+/** A C++ typedef declaration.
+*/
 class Typedef : public CodeEntity
 {
   public:
     // LIFECYCLE
+    enum E_ClassId { class_id = 1003 };
+
                         Typedef();
                         Typedef(
-                            Cid                 i_nId,
-                            const udmstri &     i_sLocalName,
-                            Cid                 i_nOwner,
+                            const String  &     i_sLocalName,
+                            Ce_id               i_nOwner,
                             E_Protection        i_eProtection,
                             Lid                 i_nFile,
-                            Tid                 i_nDescribingType );
+                            Type_id             i_nDescribingType );
                         ~Typedef();
     // INQUIRY
-    static RCid         RC_()                   { return 0x1004; }
-
-    Tid                 DescribingType() const;
+    Type_id             DescribingType() const;
     E_Protection        Protection() const      { return eProtection; }
 
   private:
-    // Interface ary::CodeEntity
-    virtual Cid         inq_Id() const;
-    virtual const udmstri &
+    // Interface csv::ConstProcessorClient
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+
+    // Interface ary::cpp::CodeEntity
+    virtual const String  &
                         inq_LocalName() const;
     virtual Cid         inq_Owner() const;
     virtual Lid         inq_Location() const;
 
-    // Interface ary::RepositoryEntity
-    virtual void        do_StoreAt(
-                            ary::Display &      o_rOut ) const;
-    virtual RCid        inq_RC() const;
-    virtual const Documentation &
-                        inq_Info() const;
-    virtual void        do_Add_Documentation(
-                            DYN Documentation & let_drInfo );
+    // Interface ary::cpp::CppEntity
+    virtual ClassId     get_AryClass() const;
 
     // DATA
     CeEssentials        aEssentials;
-    Tid                 nDescribingType;
+    Type_id             nDescribingType;
     E_Protection        eProtection;
 };
 
 
 
 // IMPLEMENTATION
-
-inline Tid
+inline Type_id
 Typedef::DescribingType() const
-    { return nDescribingType; }
+{
+    return nDescribingType;
+}
 
 
 
 }   //  namespace cpp
 }   //  namespace ary
-
-
 #endif
-

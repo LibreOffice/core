@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_slntry.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:01:07 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:51:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,11 @@
 
 #ifndef ARY_CPP_C_SLNTRY_HXX
 #define ARY_CPP_C_SLNTRY_HXX
+//  KORR_DEPRECATED_3.0
 
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-    // PARAMETERS
-#include <ary/ids.hxx>
-#include <ary/cpp/c_etypes.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
+#include <ary/namesort.hxx>
 
 
 namespace ary
@@ -49,6 +47,7 @@ namespace ary
 namespace cpp
 {
     class Namespace;
+
 
 
 typedef Namespace * NamespacePtr;
@@ -64,10 +63,10 @@ struct Less_NamespacePtr
 
 struct S_Classes_Base
 {
-    Tid                 nId;
+    Type_id             nId;
     E_Protection        eProtection;
     E_Virtuality        eVirtuality;
-    udmstri             sComment;
+    String              sComment;
 
                         S_Classes_Base()
                             :   nId(0),
@@ -79,23 +78,41 @@ struct S_Classes_Base
 
 struct S_TplParam
 {
-    udmstri             sName;
-    Tid                 nId;
+    String              sName;
+    Type_id             nId;
 
                         S_TplParam(
-                            udmstri             i_sName,
-                            Tid                 i_nId )
+                            String              i_sName,
+                            Type_id             i_nId )
                             :   sName(i_sName), nId(i_nId) {}
-    const udmstri &     Name() const            { return sName; }
-
+    const String  &     Name() const            { return sName; }
 };
+
+
+struct S_LocalCe
+{
+    String              sLocalName;
+    Ce_id               nId;
+
+                        S_LocalCe()             : nId(0) {}
+                        S_LocalCe(
+                            const String  &     i_sLocalName,
+                            Cid                 i_nId )
+                                                : sLocalName(i_sLocalName), nId(i_nId) {}
+    bool                operator<(
+                            const S_LocalCe &   i_rCe ) const
+                                                { return LesserName()(sLocalName,i_rCe.sLocalName); }
+};
+
+typedef std::vector< S_LocalCe >        List_LocalCe;
+
+
+typedef std::map<String, NamespacePtr>          Map_NamespacePtr;
+typedef std::vector< S_Classes_Base >           List_Bases;
+typedef std::vector< S_TplParam >               List_TplParam;
 
 
 
 }   // namespace cpp
 }   // namespace ary
-
-
-
 #endif
-

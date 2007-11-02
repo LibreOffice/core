@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_namesp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:00:09 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:50:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,14 +40,22 @@
 
 // USED SERVICES
     // BASE CLASSES
-#include <ary/ce.hxx>
+#include <ary/cpp/c_ce.hxx>
 #include <ary/arygroup.hxx>
-    // COMPONENTS
+    // OTHER
+#include <ary/symtreenode.hxx>
 #include <ary/cessentl.hxx>
-#include <ary/opertype.hxx>
-#include <ary/cpp/c_idlist.hxx>
-    // PARAMETERS
-#include <ary/idlists.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
+#include <ary/cpp/c_slntry.hxx>
+
+namespace ary
+{
+namespace cpp
+{
+    class Gate;
+    class OperationSignature;
+}
+}
 
 
 
@@ -57,10 +65,15 @@ namespace cpp
 {
 
 
+
+/** A C++ namespace.
+*/
 class Namespace : public CodeEntity,
                   public AryGroup
 {
   public:
+    enum E_ClassId { class_id = 1000 };
+
     enum E_Slots
     {
         SLOT_SubNamespaces = 1,
@@ -71,88 +84,94 @@ class Namespace : public CodeEntity,
         SLOT_Variables,
         SLOT_Constants
     };
+
+    typedef ::ary::symtree::Node<CeNode_Traits>    node_t;
+
                         Namespace();
-                        Namespace(              /// Used only for the global namespace.
-                            Rid                 i_nId );
                         Namespace(
-                            Cid                 i_nId,
-                            const udmstri &     i_sName,
+                            const String  &     i_sName,
                             Namespace &         i_rParent );
                         ~Namespace();
     // OPERATIONS
     void                Add_LocalNamespace(
                             Namespace &         io_rLocalNamespace );
     void                Add_LocalClass(
-                            const udmstri &     i_sLocalName,
+                            const String  &     i_sLocalName,
                             Cid                 i_nId );
     void                Add_LocalEnum(
-                            const udmstri &     i_sLocalName,
+                            const String  &     i_sLocalName,
                             Cid                 i_nId );
     void                Add_LocalTypedef(
-                            const udmstri &     i_sLocalName,
+                            const String  &     i_sLocalName,
                             Cid                 i_nId );
     void                Add_LocalOperation(
-                            const udmstri &     i_sLocalName,
-                            OSid                i_nOS,
+                            const String  &     i_sLocalName,
                             Cid                 i_nId );
     void                Add_LocalVariable(
-                            const udmstri &     i_sLocalName,
+                            const String  &     i_sLocalName,
                             Cid                 i_nId );
     void                Add_LocalConstant(
-                            const udmstri &     i_sLocalName,
+                            const String  &     i_sLocalName,
                             Cid                 i_nId );
 
     // INQUIRY
-    static RCid         RC_()                   { return 0x1001; }
     virtual uintt       Depth() const;
     Namespace *         Parent() const;
 
+    Ce_id               Search_Child(
+                            const String &      i_key ) const;
     Namespace *         Search_LocalNamespace(
-                            const udmstri &     i_sLocalName ) const;
+                            const String  &     i_sLocalName ) const;
     uintt               Get_SubNamespaces(
                             std::vector< const Namespace* > &
                                                 o_rResultList ) const;
-    Rid                 Search_LocalClass(
+    Ce_id               Search_LocalClass(
                             const String &      i_sName ) const;
-    Rid                 Search_LocalOperation(
-                            const String &      i_sName,
-                            OSid                i_nSignature ) const;
+    void                Search_LocalOperations(
+                            std::vector<Ce_id> &
+                                                o_result,
+                            const String &      i_sName ) const;
+    const node_t &      AsNode() const;
+
+    // ACCESS
+    node_t &            AsNode();
+
   private:
+    NON_COPYABLE(Namespace);
+
+    // Interface csv::ConstProcessorClient
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+
     // Interface CodeEntity
-    virtual Cid         inq_Id() const;
-    virtual const udmstri &
+    virtual const String  &
                         inq_LocalName() const;
     virtual Cid         inq_Owner() const;
     virtual Lid         inq_Location() const;
 
-    // Interface ary::RepositoryEntity
-    virtual void        do_StoreAt(
-                            ary::Display &      o_rOut ) const;
-    virtual RCid        inq_RC() const;
-    virtual const ary::Documentation &
-                        inq_Info() const;
-    virtual void        do_Add_Documentation(
-                            DYN ary::Documentation &
-                                                let_drInfo );
+    // Interface ary::cpp::CppEntity
+    virtual ClassId     get_AryClass() const;
+
         // Interface AryGroup
     virtual Gid         inq_Id_Group() const;
-    virtual const RepositoryEntity &
+    virtual const cpp::CppEntity &
                         inq_RE_Group() const;
     virtual const ary::group::SlotList &
                         inq_Slots() const;
     virtual DYN Slot *  inq_Create_Slot(
                             SlotAccessId        i_nSlot ) const;
-
     // Local
+    typedef std::multimap<String, Ce_id>  Map_Operations;
 
     // DATA
     CeEssentials        aEssentials;
+    node_t              aAssignedNode;
 
     Map_NamespacePtr    aLocalNamespaces;
     Map_LocalCe         aLocalClasses;
     Map_LocalCe         aLocalEnums;
     Map_LocalCe         aLocalTypedefs;
-    Set_LocalOperation  aLocalOperations;
+    Map_Operations      aLocalOperations;
     Map_LocalCe         aLocalVariables;
     Map_LocalCe         aLocalConstants;
 
@@ -161,9 +180,23 @@ class Namespace : public CodeEntity,
 };
 
 
+
+// IMPLEMENTATION
+inline const Namespace::node_t &
+Namespace::AsNode() const
+{
+    return aAssignedNode;
+}
+
+inline Namespace::node_t &
+Namespace::AsNode()
+{
+    return aAssignedNode;
+}
+
+
+
+
 }   // namespace cpp
 }   // ary
-
-
 #endif
-

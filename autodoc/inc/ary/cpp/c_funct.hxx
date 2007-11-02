@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_funct.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:58:47 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:48:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,15 +40,14 @@
 
 // USED SERVICES
     // BASE CLASSES
-#include <ary/ce.hxx>
-    // COMPONENTS
-#include <ary/ids.hxx>
+#include <ary/cpp/c_ce.hxx>
+    // OTHER
 #include <ary/cessentl.hxx>
-#include <ary/cpp/c_etypes.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
+#include <ary/cpp/c_slntry.hxx>
 #include <ary/cpp/c_vfflag.hxx>
 #include <ary/cpp/c_osigna.hxx>
-#include <ary/cpp/c_idlist.hxx>
-    // PARAMETERS
+
 
 
 
@@ -58,78 +57,79 @@ namespace cpp
 {
 
 
+
+/** A C++ function declaration.
+*/
 class Function : public CodeEntity
 {
   public:
+    enum E_ClassId { class_id = 1004 };
+
                         Function();
                         Function(
-                            Cid                 i_nId,
-                            const udmstri &     i_sLocalName,
-                            Cid                 i_nOwner,
+                            const String  &     i_sLocalName,
+                            Ce_id               i_nOwner,
                             E_Protection        i_eProtection,
-                            Lid                 i_nFile,
-                            Tid                 i_nReturnType,
-                            OSid                i_nSignature,
-                            StringVector &
-                                                i_rNonType_ParameterInfos,      /// Is non const, because the contents are swap'ped with aParameterInfos.
+                            loc::Le_id          i_nFile,
+                            Type_id             i_nReturnType,
+                            const std::vector<S_Parameter> &
+                                                i_parameters,
+                            E_ConVol            i_conVol,
                             E_Virtuality        i_eVirtuality,
                             FunctionFlags       i_aFlags,
                             bool                i_bThrowExists,
-                            const std::vector<Tid> &
+                            const std::vector<Type_id> &
                                                 i_rExceptions );
                         ~Function();
 
+
     // OPERATIONS
     void                Add_TemplateParameterType(
-                            const udmstri &     i_sLocalName,
-                            Tid                 i_nIdAsType );
+                            const String  &     i_sLocalName,
+                            Type_id             i_nIdAsType );
 
     // INQUIRY
-    static RCid         RC_()                   { return 0x1005; }
-
-    OSid                Signature() const;
-    Tid                 ReturnType() const;
+    const OperationSignature &
+                        Signature() const;
+    Type_id             ReturnType() const;
     E_Protection        Protection() const      { return eProtection; }
     E_Virtuality        Virtuality() const      { return eVirtuality; }
     const FunctionFlags &
                         Flags() const           { return aFlags; }
     const StringVector &
                         ParamInfos() const      { return aParameterInfos; }
-    const std::vector<Tid> *
+    const std::vector<Type_id> *
                         Exceptions() const      { return pExceptions.Ptr(); }
 
     const List_TplParam &
                         TemplateParameters() const
                                                 { return aTemplateParameterTypes; }
+    bool                IsIdentical(
+                            const Function &    i_f ) const;
 
   private:
-    // Interface ary::CodeEntity
-    virtual Cid         inq_Id() const;
-    virtual const udmstri &
+    // Interface csv::ConstProcessorClient
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+
+    // Interface ary::cpp::CodeEntity
+    virtual const String  &
                         inq_LocalName() const;
     virtual Cid         inq_Owner() const;
     virtual Lid         inq_Location() const;
 
-    // Interface ary::RepositoryEntity
-    virtual void        do_StoreAt(
-                            ary::Display &      o_rOut ) const;
-    virtual RCid        inq_RC() const;
-    virtual const Documentation &
-                        inq_Info() const;
-    virtual void        do_Add_Documentation(
-                            DYN Documentation & let_drInfo );
+    // Interface ary::cpp::CppEntity
+    virtual ClassId     get_AryClass() const;
 
     // Local Types
     typedef StringVector                ParameterInfoList;
-    typedef std::vector<Tid>                    ExceptionTypeList;
+    typedef std::vector<Type_id>        ExceptionTypeList;
 
     // DATA
     CeEssentials        aEssentials;
-
     List_TplParam       aTemplateParameterTypes;
-
-    OSid                nSignature;
-    Tid                 nReturnType;
+    OperationSignature  aSignature;
+    Type_id             nReturnType;
     E_Protection        eProtection;
     E_Virtuality        eVirtuality;
     FunctionFlags       aFlags;
@@ -141,18 +141,18 @@ class Function : public CodeEntity
 
 
 
+
 // IMPLEMENTATION
-inline OSid
+inline const OperationSignature &
 Function::Signature() const
-    { return nSignature; }
-inline Tid
+    { return aSignature; }
+inline Type_id
 Function::ReturnType() const
     { return nReturnType; }
 
 
+
+
 }   // namespace cpp
 }   // namespace ary
-
-
 #endif
-

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inpcontx.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:05:11 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:56:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,27 @@
 
 // USED SERVICES
     // BASE CLASSES
-    // COMPONENTS
-    // PARAMETERS
-#include <ary/ids.hxx>
-#include <ary/cpp/c_etypes.hxx>
+    // OTHER
+#include <ary/cpp/c_types4cpp.hxx>
+
+
+
+namespace ary
+{
+namespace loc
+{
+    class File;
+}
+namespace cpp
+{
+    class Gate;
+    class Namespace;
+    class Class;
+    class Enum;
+
+    class OperationSignature;
+}
+}
 
 
 
@@ -51,16 +68,10 @@ namespace ary
 {
 namespace cpp
 {
-    class Namespace;
-    class Class;
-    class Enum;
 
-    class ProjectGroup;
-    class FileGroup;
 
-/** This class provides information about the context of an
-    CodeEntity, which is going to be stored in the repository.
-    The information is used mainly by class ary::cpp::Gate.
+/** The context of a CodeEntity, which is going to be stored in the
+    repository. The information is used mainly by ->ary::cpp::CeAdmin.
 */
 class InputContext
 {
@@ -74,64 +85,55 @@ class InputContext
         // OPERATIONS
         /// Adds Class data to current inner scope (Namespace or Class).
         void                Add_Class(
-                                const udmstri &     i_sLocalName,
+                                const String  &     i_sLocalName,
                                 Cid                 i_nId );
         /// Adds Enum data to current inner scope (Namespace or Class).
         void                Add_Enum(
-                                const udmstri &     i_sLocalName,
+                                const String  &     i_sLocalName,
                                 Cid                 i_nId );
         /// Adds Typedef data to current inner scope (Namespace or Class).
         void                Add_Typedef(
-                                const udmstri &     i_sLocalName,
+                                const String  &     i_sLocalName,
                                 Cid                 i_nId );
         /// Adds Operation data to current inner scope (Namespace or Class).
         void                Add_Operation(
-                                const udmstri &     i_sLocalName,
-                                OSid                i_nSignature,
+                                const String  &     i_sLocalName,
                                 Cid                 i_nId,
                                 bool                i_bIsStaticMember );    /// True only for static class members.
         /// Adds Variable data to current inner scope (Namespace or Class).
         void                Add_Variable(
-                                const udmstri &     i_sLocalName,
+                                const String  &     i_sLocalName,
                                 Cid                 i_nId,
                                 bool                i_bIsConst,
                                 bool                i_bIsStaticMember );    /// True only for static class members.
         // INQUIRY
-        Cid                 Id() const;
+        Ce_id               CeId() const;
 
-        /** @attention Must only be used by ary::cpp::Gate!
-            Will work nerver else!
+        /** @attention Must only be used by ary::cpp::GatePilot!
+            Will work nowhere else!
         */
         virtual bool        HasClass(
-                                const udmstri &     i_sLocalName ) = 0;
-        /** @attention Must only be used by ary::cpp::Gate!
-            Will work nerver else!
-        */
-        virtual bool        HasOperation(
-                                const udmstri &     i_sLocalName,
-                                OSid                i_nSignature ) = 0;
-
+                                const String  &     i_sLocalName ) = 0;
       private:
         virtual void        do_Add_Class(
-                                const udmstri &     i_sLocalName,
+                                const String  &     i_sLocalName,
                                 Cid                 i_nId ) = 0;
         virtual void        do_Add_Enum(
-                                const udmstri &     i_sLocalName,
+                                const String  &     i_sLocalName,
                                 Cid                 i_nId ) = 0;
         virtual void        do_Add_Typedef(
-                                const udmstri &     i_sLocalName,
+                                const String  &     i_sLocalName,
                                 Cid                 i_nId ) = 0;
         virtual void        do_Add_Operation(
-                                const udmstri &     i_sLocalName,
-                                OSid                i_nSignature,
+                                const String  &     i_sLocalName,
                                 Cid                 i_nId,
                                 bool                i_bIsStatic ) = 0;
         virtual void        do_Add_Variable(
-                                const udmstri &     i_sLocalName,
+                                const String  &     i_sLocalName,
                                 Cid                 i_nId,
                                 bool                i_bIsConst,
                                 bool                i_bIsStatic ) = 0;
-        virtual Cid         inq_Id() const = 0;
+        virtual Ce_id       inq_CeId() const = 0;
     };
 
     // LIFECYCLE
@@ -140,8 +142,7 @@ class InputContext
     // OPERATIONS
 
     // INQUIRY
-    ProjectGroup &      CurProjectGroup() const;
-    FileGroup &         CurFileGroup() const;
+    loc::File &         CurFile() const;
 
     Namespace &         CurNamespace() const;
     Class *             CurClass() const;
@@ -151,9 +152,7 @@ class InputContext
     E_Protection        CurProtection() const;
 
   private:
-    virtual ProjectGroup &
-                        inq_CurProjectGroup() const = 0;
-    virtual FileGroup & inq_CurFileGroup() const = 0;
+    virtual loc::File & inq_CurFile() const = 0;
 
     virtual Namespace & inq_CurNamespace() const = 0;
     virtual Class *     inq_CurClass() const = 0;
@@ -166,14 +165,11 @@ class InputContext
 
 
 
-// IMPLEMENTATION
 
-inline ProjectGroup &
-InputContext::CurProjectGroup() const
-    { return inq_CurProjectGroup(); }
-inline FileGroup &
-InputContext::CurFileGroup() const
-    { return inq_CurFileGroup(); }
+// IMPLEMENTATION
+inline loc::File &
+InputContext::CurFile() const
+    { return inq_CurFile(); }
 
 inline Namespace &
 InputContext::CurNamespace() const
@@ -193,39 +189,36 @@ InputContext::CurProtection() const
 
 
 inline void
-InputContext::Owner::Add_Class( const udmstri &     i_sLocalName,
+InputContext::Owner::Add_Class( const String  &     i_sLocalName,
                                 Cid                 i_nId )
     { do_Add_Class(i_sLocalName, i_nId); }
 inline void
-InputContext::Owner::Add_Enum( const udmstri &     i_sLocalName,
+InputContext::Owner::Add_Enum( const String  &     i_sLocalName,
                                Cid                 i_nId )
     { do_Add_Enum(i_sLocalName, i_nId); }
 inline void
-InputContext::Owner::Add_Typedef( const udmstri &     i_sLocalName,
+InputContext::Owner::Add_Typedef( const String  &     i_sLocalName,
                                   Cid                 i_nId )
     { do_Add_Typedef(i_sLocalName, i_nId); }
 inline void
-InputContext::Owner::Add_Operation( const udmstri &     i_sLocalName,
-                                    OSid                i_nSignature,
-                                    Cid                 i_nId,
-                                    bool                i_bIsStatic )
-    { do_Add_Operation( i_sLocalName, i_nSignature, i_nId, i_bIsStatic ); }
+InputContext::Owner::Add_Operation( const String  &             i_sLocalName,
+                                    Cid                         i_nId,
+                                    bool                        i_bIsStatic )
+    { do_Add_Operation( i_sLocalName, i_nId, i_bIsStatic ); }
 inline void
-InputContext::Owner::Add_Variable( const udmstri &     i_sLocalName,
+InputContext::Owner::Add_Variable( const String  &     i_sLocalName,
                                    Cid                 i_nId,
                                    bool                i_bIsConst,
                                    bool                i_bIsStatic )
     { do_Add_Variable( i_sLocalName, i_nId, i_bIsConst, i_bIsStatic ); }
-inline Cid
-InputContext::Owner::Id() const
-    { return inq_Id(); }
+inline Ce_id
+InputContext::Owner::CeId() const
+    { return inq_CeId(); }
+
 
 
 
 
 }   // namespace cpp
 }   // namespace ary
-
-
 #endif
-
