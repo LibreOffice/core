@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_tydef.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:14:16 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:57:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,9 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/cpp/c_rwgate.hxx>
-#include <ary/cpp/ca_type.hxx>
+#include <ary/cpp/c_gate.hxx>
+#include <ary/cpp/c_type.hxx>
+#include <ary/cpp/cp_ce.hxx>
 #include <all_toks.hxx>
 #include "pe_type.hxx"
 
@@ -104,7 +105,7 @@ PE_Typedef::TransferData()
     pStati->SetCur(size_of_states);
 
     ary::cpp::Typedef &
-    rTypedef = Env().AryGate().Store_Typedef(
+    rTypedef = Env().AryGate().Ces().Store_Typedef(
                         Env().Context(), sName, nType );
     Env().Event_Store_Typedef(rTypedef);
 }
