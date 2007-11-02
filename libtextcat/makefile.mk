@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-01 11:00:03 $
+#   last change: $Author: hr $ $Date: 2007-11-02 14:13:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,10 +71,10 @@ OUT2LIB=$(BUILD_DIR)$/src$/.libs$/libtextcat*$(DLLPOST)
 .ENDIF # "$(GUI)"=="UNX"
 
 
-.IF "$(GUI)"=="WNT"
+.IF "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 BUILD_ACTION=cd src && dmake $(MAKEMACROS)
 
-.ENDIF # "$(GUI)"=="WNT"
+.ENDIF # "$(GUI)"=="WNT" || "$(GUI)"=="OS2"
 
 
 OUT2INC= \
