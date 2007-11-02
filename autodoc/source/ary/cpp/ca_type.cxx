@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ca_type.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:27:21 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:29:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,10 +34,21 @@
  ************************************************************************/
 
 #include <precomp.h>
-#include <ary/cpp/ca_type.hxx>
+#include "ca_type.hxx"
 
 
 // NOT FULLY DEFINED SERVICES
+#include <ary/cpp/c_builtintype.hxx>
+#include <ary/cpp/c_class.hxx>
+#include <ary/cpp/c_namesp.hxx>
+#include <ary/cpp/cp_ce.hxx>
+#include <ary/cpp/inpcontx.hxx>
+#include <ary/cpp/usedtype.hxx>
+#include <ary/getncast.hxx>
+#include "c_reposypart.hxx"
+#include "cs_type.hxx"
+
+
 
 
 namespace ary
@@ -46,242 +57,88 @@ namespace cpp
 {
 
 
-
-
-//**********************        Type        **************************//
-Rid
-Type::inq_RelatedCe() const
-{
-     return 0;
-}
-
-
-//**********************        BuiltInType        **************************//
-
-BuiltInType::BuiltInType( Tid                   i_nId,
-                          const udmstri &       i_sName,
-                          E_TypeSpecialisation  i_eSpecialisation )
-    :   nId( i_nId ),
-        sName( i_sName ),
-        eSpecialisation( i_eSpecialisation )
+TypeAdmin::TypeAdmin(RepositoryPartition & io_myReposyPartition)
+    :   aStorage(),
+        pCppRepositoryPartition(&io_myReposyPartition)
 {
 }
 
-Tid
-BuiltInType::inq_Id_Type() const
+TypeAdmin::~TypeAdmin()
 {
-    return nId;
 }
 
-bool
-BuiltInType::inq_IsConst() const
-{
-    return false;
-}
 
-void
-BuiltInType::inq_Get_Text( StreamStr &          ,
-                           StreamStr &          o_rName,
-                           StreamStr &          ,
-                           const DisplayGate &  ) const
+// KORR_FUTURE
+//  Remove unused parameter.
+
+const Type &
+TypeAdmin::CheckIn_UsedType( const InputContext &   ,
+                             DYN UsedType &         pass_type )
 {
-    switch (eSpecialisation)
+    Dyn<UsedType>
+        pNewType(&pass_type);  // Ensure clean up of heap object.
+
+    Type_id
+        tid(0);
+    if (pass_type.IsBuiltInType())
     {
-        case TYSP_unsigned: o_rName << "unsigned "; break;
-        case TYSP_signed:   o_rName << "signed ";   break;
-
-        default:            // Does nothing.
-                            ;
+        tid = aStorage.Search_BuiltInType(
+                        BuiltInType::SpecializedName_( pass_type.LocalName().c_str(),
+                                                       pass_type.TypeSpecialisation() ));
+        csv_assert(tid.IsValid());
+        return aStorage[tid];
     }
-    o_rName << sName;
+
+    tid = aStorage.UsedTypeIndex().Search(pass_type);
+    if (tid.IsValid())
+    {
+        return aStorage[tid];
+    }
+
+    // Type does not yet exist:
+        // Transfer ownership from pNewTypeand assign id:
+    aStorage.Store_Entity(*pNewType.Release());
+
+    aStorage.UsedTypeIndex().Add(pass_type.TypeId());
+    return pass_type;
 }
 
-
-//**********************        NullType        **************************//
-
-Tid
-NullType::inq_Id_Type() const
+const Type &
+TypeAdmin::Find_Type(Type_id i_type) const
 {
-    return 0;
+    return aStorage[i_type];
 }
 
 bool
-NullType::inq_IsConst() const
+TypeAdmin::Get_TypeText( StreamStr &         o_result,
+                         Type_id             i_type ) const
 {
-    return false;
-}
-
-void
-NullType::inq_Get_Text( StreamStr &          ,
-                        StreamStr &          ,
-                        StreamStr &          ,
-                        const DisplayGate &  ) const
-{
-}
-
-
-
-
-#if 0
-void
-NamedType::GetText( StreamStr &     o_rOut,
-                    const Gate &    i_rGate ) const
-{
-    i_rGate.Get_QualifiedName(o_rOut, Name(), "::");
-}
-
-
-BuiltInType::BuiltInType( const S_InitData &  i_rData )
-    :   nId(i_rData.nId),
-        aName(i_rData.aName)
-{
-}
-
-Tid
-BuiltInType::IdAsType() const
-{
-    return nId;
-}
-
-const QName &
-BuiltInType::Name() const
-{
-    return aName;
-}
-
-#if 0
-PredeclaredType::PredeclaredType( Tid                 i_nId,
-                                  const char *        i_sName,
-                                  Cid                 i_nOwner )
-    :   nId(i_nId),
-        aName(i_sName,i_nOwner)
-{
-}
-
-Tid
-PredeclaredType::IdAsType() const
-{
-    return nId;
-}
-
-const QName &
-PredeclaredType::Name() const
-{
-    return aName;
-}
-#endif // 0
-
-Tid
-ReferingType::IdAsType() const
-{
-    return nId;
-}
-
-Tid
-ReferingType::ReferedType() const
-{
-    return nReferedType;
-}
-
-ReferingType::ReferingType( Tid i_nId,
-                            Tid i_nReferedType )
-    :   nId(i_nId),
-        nReferedType(i_nReferedType)
-{
-}
-
-ConstType::ConstType( Tid                 nId,
-                      Tid                 nReferedType )
-    :   ReferingType(nId, nReferedType)
-{
-}
-
-void
-ConstType::GetText( ostream &           o_rOut,
-                    const Gate &        i_rGate ) const
-{
-    i_rGate.Get_TypeText(o_rOut,ReferedType());
-    o_rOut << " const";
-}
-
-VolatileType::VolatileType( Tid                 nId,
-                            Tid                 nReferedType )
-    :   ReferingType(nId, nReferedType)
-{
-}
-
-void
-VolatileType::GetText( ostream &           o_rOut,
-                       const Gate &        i_rGate ) const
-{
-    i_rGate.Get_TypeText(o_rOut,ReferedType());
-    o_rOut << " volatile";
-}
-
-PtrType::PtrType( Tid                 nId,
-                  Tid                 nReferedType )
-    :   ReferingType(nId, nReferedType)
-{
-}
-
-void
-PtrType::GetText( ostream &           o_rOut,
-                    const Gate &      i_rGate ) const
-{
-    i_rGate.Get_TypeText(o_rOut,ReferedType());
-    o_rOut << " *";
-}
-
-RefType::RefType( Tid                 nId,
-                  Tid                 nReferedType )
-    :   ReferingType(nId, nReferedType)
-{
-}
-
-void
-RefType::GetText( ostream &           o_rOut,
-                  const Gate &        i_rGate ) const
-{
-    i_rGate.Get_TypeText(o_rOut,ReferedType());
-    o_rOut << " &";
-}
-
-TemplateInstance::TemplateInstance( Tid                 i_nId,
-                                    Cid                 i_nReferedClass,
-                                    const char *        i_sInstantiation )
-    :   nId(i_nId),
-        nReferedClass(i_nReferedClass),
-        sInstantiation(i_sInstantiation)
-{
+    if (NOT i_type.IsValid())
+        return false;
+    aStorage[i_type].Get_Text(o_result, *pCppRepositoryPartition);
+    return true;
 }
 
 bool
-TemplateInstance::operator<( const TemplateInstance & i_r ) const
+TypeAdmin::Get_TypeText( StreamStr &         o_preName,
+                         StreamStr &         o_name,
+                         StreamStr &         o_postName,
+                         Type_id             i_type ) const
 {
-    if ( nReferedClass < i_r.nReferedClass )
-        return true;
-    if ( nReferedClass == i_r.nReferedClass
-         AND sInstantiation < i_r.sInstantiation )
-        return true;
-    return false;
+    if (NOT i_type.IsValid())
+        return false;
+    aStorage[i_type].Get_Text(o_preName, o_name, o_postName, *pCppRepositoryPartition);
+    return true;
 }
 
-Tid
-TemplateInstance::IdAsType() const
+Type_id
+TypeAdmin::Tid_Ellipse() const
 {
-    return nId;
+    return Type_id(predefined::t_ellipse);
 }
 
-void
-TemplateInstance::GetText( ostream &        o_rOut,
-                           const Gate &     i_rGate ) const
-{
-    i_rGate.Get_TypeText(o_rOut,nReferedClass);
-    o_rOut << "< " << sInstantiation << " >";
-}
-#endif // 0
+
 
 
 }   // namespace cpp
 }   // namespace ary
-
