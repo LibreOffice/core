@@ -4,9 +4,9 @@
  *
  *  $RCSfile: out_node.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:04:03 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:42:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,8 @@ Node::~Node()
 Node &
 Node::Provide_Child( const String & i_name )
 {
-    Node * ret = find_Child(i_name);
+    Node *
+        ret = find_Child(i_name);
     if (ret != 0)
         return *ret;
     return add_Child(i_name);
@@ -147,54 +148,16 @@ Node::Get_Chain( StringVector & o_result,
 Node *
 Node::find_Child( const String & i_name )
 {
-    // Trying to optimise search in a vector:
+    Node aSearch;
+    aSearch.sName = i_name;
 
-    uintt nSize = aChildren.size();
-    if ( nSize > 0 AND nSize < 20 )
-    {
-        List::const_iterator it = aChildren.begin();
-        List::const_iterator itMiddle = it + nSize/2;
-        int comp = 0;
-
-        if ( i_name < (*itMiddle)->Name() )
-        {
-            for ( ;
-                  it != itMiddle
-                        ? (comp = csv::compare(i_name, (*it)->Name())) <= 0
-                        : false;
-                  ++it )
-            {
-                if ( comp == 0 )
-                    return *it;
-            }   // end for
-        }
-        else
-        {
-            List::const_iterator itEnd = aChildren.end();
-            for ( it = itMiddle;
-                  it != itEnd
-                        ? (comp = csv::compare(i_name, (*it)->Name())) <= 0
-                        : false;
-                  ++it )
-            {
-                if ( comp == 0 )
-                    return *it;
-            }   // end for
-        }
-    }
-    else if (nSize > 0)
-    {
-        Node aSearch;
-        aSearch.sName = i_name;
-
-        List::const_iterator
-            ret = std::lower_bound( aChildren.begin(),
-                                    aChildren.end(),
-                                    &aSearch,
-                                    C_Less_NodePtr );
-        if ( ret != aChildren.end() ? (*ret)->Name() == i_name : false )
-            return *ret;
-    }
+    List::const_iterator
+        ret = std::lower_bound( aChildren.begin(),
+                                aChildren.end(),
+                                &aSearch,
+                                C_Less_NodePtr );
+    if ( ret != aChildren.end() ? (*ret)->Name() == i_name : false )
+        return *ret;
 
     return 0;
 }
@@ -202,8 +165,9 @@ Node::find_Child( const String & i_name )
 Node &
 Node::add_Child( const String & i_name )
 {
-    DYN Node * pNew = new Node(i_name,*this);
-    aChildren.insert( std::upper_bound( aChildren.begin(),
+    DYN Node *
+        pNew = new Node(i_name,*this);
+    aChildren.insert( std::lower_bound( aChildren.begin(),
                                         aChildren.end(),
                                         pNew,
                                         C_Less_NodePtr ),
