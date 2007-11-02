@@ -4,9 +4,9 @@
  *
  *  $RCSfile: out_position.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:04:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:42:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,8 +86,8 @@ Position::Position( Node &              i_directory,
 {
 }
 
-Position::Position( Position &      i_directory,
-                    const String &  i_sDifferentFile )
+Position::Position( const Position &    i_directory,
+                    const String &      i_sDifferentFile )
     :   sFile(i_sDifferentFile),
         pDirectory(i_directory.pDirectory)
 {
@@ -138,7 +138,7 @@ Position::operator-=( intt i_levels )
 }
 
 String
-Position::LinkTo( Position &        i_destination,
+Position::LinkTo( const Position &  i_destination,
                   const String &    i_localLabel ) const
 {
     StreamLock  aLink(C_nAssumedMaxLinkLength);
@@ -156,11 +156,12 @@ Position::LinkToRoot( const String & ) const
 
 void
 Position::Get_LinkTo( StreamStr &         o_result,
-                      Position &          i_destination,
+                      const Position &    i_destination,
                       const String &      i_localLabel ) const
 {
     Node * p1 = pDirectory;
     Node * p2 = i_destination.pDirectory;
+
     intt diff = Depth() - i_destination.Depth();
     intt pathLength1 = 0;
     intt pathLength2 = 0;
@@ -249,6 +250,7 @@ get_UpLink(uintt i_depth)
         return &aRet[aRet.size() - 1 - 3*i_depth];
     }
 }
+
 
 
 
