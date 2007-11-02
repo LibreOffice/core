@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_slots.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:33:13 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,11 @@
 #ifndef ARY_CPP_C_SLOTS_HXX
 #define ARY_CPP_C_SLOTS_HXX
 
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <ary/ceslot.hxx>
-    // COMPONENTS
-#include <ary/cpp/c_idlist.hxx>
-    // PARAMETERS
+// USED SERVICES
+#include <ary/cpp/c_slntry.hxx>
+
 
 
 
@@ -50,6 +48,7 @@ namespace ary
 {
 namespace cpp
 {
+
 
 class Slot_SubNamespaces : public ary::Slot
 {
@@ -86,11 +85,8 @@ class Slot_BaseClass : public ary::Slot
 };
 
 
+
+
 }   // namespace cpp
 }   // namespace ary
-
-
 #endif
-
-
-
