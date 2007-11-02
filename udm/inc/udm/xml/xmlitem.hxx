@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlitem.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:09:01 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:31:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@
 // USED SERVICES
     // BASE CLASSES
     // COMPONENTS
-#include <cosv/template/swelist.hxx>
-#include <cosv/template/dyn.hxx>
+#include <cosv/tpl/swelist.hxx>
+#include <cosv/tpl/dyn.hxx>
     // PARAMETERS
 
 namespace csv
