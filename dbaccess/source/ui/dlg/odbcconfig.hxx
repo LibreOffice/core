@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odbcconfig.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 14:58:51 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:22:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,11 @@
 
 #include "commontypes.hxx"
 
-#if defined(WIN) || defined(WNT) || defined (UNX)
+#if defined(WIN) || defined(WNT) || defined (UNX) || defined (OS2)
 #define HAVE_ODBC_SUPPORT
 #endif
 
-#if ( defined(WIN) || defined(WNT) ) && defined(HAVE_ODBC_SUPPORT)
+#if ( defined(WIN) || defined(WNT) || defined (OS2) ) && defined(HAVE_ODBC_SUPPORT)
 #define HAVE_ODBC_ADMINISTRATION
 #endif
 
