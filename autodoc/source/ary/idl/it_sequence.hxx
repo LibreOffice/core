@@ -4,9 +4,9 @@
  *
  *  $RCSfile: it_sequence.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:55:23 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:57:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,10 @@
 #ifndef ARY_IDL_IT_SEQUENCE_HXX
 #define ARY_IDL_IT_SEQUENCE_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <ary/idl/i_type.hxx>
-    // COMPONENTS
-    // PARAMETERS
+
+
 
 
 namespace ary
@@ -67,9 +64,11 @@ class Sequence : public Type
     Type_id             RelatedType() const     { return nRelatedType; }
 
   private:
-    // Interface RepositoryEntity:
-    virtual void        do_Visit( Host & io_rHost ) const;
-    virtual RCid        inq_ClassId() const;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface Object:
+    virtual ClassId     get_AryClass() const;
 
     // Interface Type:
     virtual void        inq_Get_Text(
@@ -83,9 +82,8 @@ class Sequence : public Type
 };
 
 
+
+
 }   // namespace idl
 }   // namespace ary
-
-
 #endif
-
