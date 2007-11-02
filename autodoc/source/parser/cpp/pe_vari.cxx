@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_vari.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:14:56 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:59:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
+#include <cosv/tpl/tpltools.hxx>
 #include "pe_expr.hxx"
 
 
