@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 16:33:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:51:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
             IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
         {
                 ImplControlValue aControlValue;
-                Region aCtrlRegion( Rectangle( Point(), Size( 20, mnDDHeight ) ) );
+                Region aCtrlRegion( Rectangle( (const Point&)Point(), Size( 20, mnDDHeight ) ) );
                 Region aBoundingRgn( aCtrlRegion );
                 Region aContentRgn( aCtrlRegion );
                 if( GetNativeControlRegion( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
