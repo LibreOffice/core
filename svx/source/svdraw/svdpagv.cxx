@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:11:13 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:19:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -626,17 +626,6 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
        COLORREF aWinColRef=PALETTERGB(aColor.GetRed()>>8,aColor.GetGreen()>>8,aColor.GetBlue()>>8);
        HDC aWinhDC=Sysdepen::GethDC(rOut);
 #endif
-#ifdef OS2 // SetPixel-Profiling fuer OS/2
-        HPS aOS2hPS=Sysdepen::GethPS(rOut);
-        LINEBUNDLE aOS2BundleMerker;
-        memset(&aOS2BundleMerker,0,sizeof(aOS2BundleMerker));
-        GpiQueryAttrs(aOS2hPS,PRIM_LINE,LBB_COLOR,&aOS2BundleMerker);
-        LINEBUNDLE aOS2Bundle;
-        memset(&aOS2Bundle,0,sizeof(aOS2Bundle));
-        aOS2Bundle.lColor=RGBCOLOR(aColor.GetRed()>>8,aColor.GetGreen()>>8,aColor.GetBlue()>>8);
-        GpiSetAttrs(aOS2hPS,PRIM_LINE,LBB_COLOR,0,&aOS2Bundle);
-        long nOS2MaxYPix=rOut.GetOutputSizePixel().Height()-1;
-#endif
 
         long nWrX=0;//aWriterPageOffset.X();
         long nWrY=0;//aWriterPageOffset.Y();
@@ -745,10 +734,6 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
 
         rOut.EnableMapMode(bMap0);
         rOut.SetLineColor(aColorMerk);
-#ifdef OS2 // SetPixel-Profiling fuer OS/2
-        // OS2-LineAttribute restaurieren
-        GpiSetAttrs(aOS2hPS,PRIM_LINE,LBB_COLOR,0,&aOS2BundleMerker);
-#endif
     }
 }
 
