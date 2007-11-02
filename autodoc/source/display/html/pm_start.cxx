@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pm_start.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:55:22 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:33:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ void
 PageMaker_Overview::Write_TopArea()
 {
     adcdisp::PageTitle_Std fTitle;
-    fTitle( CurOut(), ary::Repository::The_().Name().c_str(), "" );
+    fTitle( CurOut(), Env().RepositoryTitle(), "" );
 
     CurOut()
         >> *new Paragraph
@@ -100,7 +100,8 @@ PageMaker_Overview::Write_TopArea()
             << new LineBreak
             << "Points to start:";
 
-    html::SimpleList & rList = *new html::SimpleList;
+    html::SimpleList &
+        rList = *new html::SimpleList;
     CurOut() >> rList;
 
     html::ListItem & rNamedObjsItem =
