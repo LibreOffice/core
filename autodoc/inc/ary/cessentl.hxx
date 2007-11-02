@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cessentl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:50:24 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,24 +35,21 @@
 
 #ifndef ARY_CESSENTL_HXX
 #define ARY_CESSENTL_HXX
+//  KORR_DEPRECATED_3.0
 
 
 // USED SERVICES
     // BASE CLASSES
     // COMPONENTS
     // PARAMETERS
-#include <ary/ids.hxx>
-#include <ary/docu.hxx>
-
-namespace udm
-{
-class Agent;
-}
-
+#include <ary/cpp/c_types4cpp.hxx>
+#include <ary/loc/loc_types4loc.hxx>
 
 
 
 namespace ary
+{
+namespace cpp
 {
 
 
@@ -62,55 +59,38 @@ class CeEssentials
     // LIFECYCLE
                         CeEssentials();
                         CeEssentials(
-                            Cid                 i_nId,
-                            const udmstri &     i_sLocalName,
-                            Cid                 i_nOwner,
-                            Lid                 i_nLocation );
+                            const String  &     i_sLocalName,
+                            Ce_id               i_nOwner,
+                            loc::Le_id          i_nLocation );
                         ~CeEssentials();
     // INQUIRY
-    Cid                 Id() const;
-    const udmstri &     LocalName() const;
-    Cid                 Owner() const;
-    Lid                 Location() const;
-    const ary::Documentation &
-                        Info() const;
+    const String  &     LocalName() const;
+    Ce_id               Owner() const;
+    loc::Le_id          Location() const;
 
     // ACCESS
-    void                SetInfo(
-                            DYN ary::Documentation &
-                                                let_drInfo )
-                                                { pInfo = &let_drInfo; }
   private:
     String              sLocalName;
-    Cid                 nId;
-    Cid                 nOwner;
-    Lid                 nLocation;
-    Dyn<ary::Documentation>
-                        pInfo;
+    Ce_id               nOwner;
+    loc::Le_id          nLocation;
 };
 
 
 
-inline Cid
-CeEssentials::Id() const
-    { return nId; }
-inline const udmstri    &
+// IMPLEMENTATION
+inline const String     &
 CeEssentials::LocalName() const
     { return sLocalName; }
-inline Cid
+inline Ce_id
 CeEssentials::Owner() const
     { return nOwner; }
-inline Lid
+inline loc::Le_id
 CeEssentials::Location() const
     { return nLocation; }
-inline const ary::Documentation &
-CeEssentials::Info() const
-    { return pInfo ? *pInfo : ary::Documentation::Null_(); }
 
 
+
+
+}   // namespace cpp
 }   // namespace ary
-
-
 #endif
-
-

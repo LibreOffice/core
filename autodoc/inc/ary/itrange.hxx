@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrange.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:53:58 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:41:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #ifndef ARY_ITRANGE_HXX
 #define ARY_ITRANGE_HXX
+//  KORR_DEPRECATED_3.0
 
 
 // USED SERVICES
@@ -42,6 +43,9 @@
     // COMPONENTS
     // PARAMETERS
 #include <utility>
+
+
+
 
 namespace ary
 {
@@ -81,6 +85,4 @@ class IteratorRange
 
 
 }   // namespace ary
-
-
 #endif
