@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outfile.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:53:33 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:29:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,8 +236,9 @@ const char * const
 HtmlDocuFile::HtmlDocuFile()
     :   sFilePath(),
         sTitle(),
+        sLocation(),
         sCopyright(),
-        nDepth(0),
+        nDepthInOutputTree(0),
         aBodyData(),
         aBuffer(60000)  // Grows dynamically when necessary.
 {
@@ -252,7 +253,7 @@ HtmlDocuFile::SetLocation( const csv::ploc::Path &  i_rFilePath,
     i_rFilePath.Get( sPath_ );
 
     sFilePath = sPath_.c_str();
-    nDepth = i_depthInOutputTree;
+    nDepthInOutputTree = i_depthInOutputTree;
 }
 
 void
@@ -358,7 +359,7 @@ HtmlDocuFile::WriteHeader( csv::File & io_aFile )
     aBuffer.write( s1 );
     aBuffer.write( sTitle );
     aBuffer.write( s2 );
-    aBuffer.write( output::get_UpLink(nDepth) );
+    aBuffer.write( output::get_UpLink(nDepthInOutputTree) );
     aBuffer.write( C_sHFN_Css );
     aBuffer.write( s3 );
 
