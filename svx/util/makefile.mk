@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 13:42:19 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:20:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,9 @@ LIB1FILES=\
     $(SLB)$/svdraw.lib \
     $(SLB)$/form.lib
 
-.IF "$(GUI)" == "OS2" || "(GUIBASE)" == "WIN"
+.IF "(GUIBASE)" == "WIN"
 LIB1FILES+=$(SLB)$/ibrwimp.lib
-.ENDIF # (OS2 || WIN)
+.ENDIF # (WIN)
 
 LIB2TARGET= $(SLB)$/$(TARGET)_2.lib
 LIB2FILES=\
