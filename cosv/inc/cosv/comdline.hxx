@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comdline.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:53:04 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:37:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,8 @@
 
 #ifndef CSV_COMDLINE_HXX
 #define CSV_COMDLINE_HXX
-
+//  KORR_DEPRECATED_3.0
+//      Replace by cosv/commandline.hxx.
 
 
 namespace csv
