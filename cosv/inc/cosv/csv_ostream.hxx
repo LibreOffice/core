@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csv_ostream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:53:57 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:38:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ typedef std::ostream    ostream;
 
 #else
 
-#include <cosv/template/dyn.hxx>
+#include <cosv/tpl/dyn.hxx>
 
 namespace csv
 {
