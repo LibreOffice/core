@@ -5,7 +5,7 @@ mkdir: %_DEST%\bin%_EXT%\so
 ..\%__SRC%\lib\ijvmfwk.lib %_DEST%\lib%_EXT%\ijvmfwk.lib
 ..\%__SRC%\lib\libjvmfwk.*.* %_DEST%\lib%_EXT%\*
 ..\%__SRC%\bin\jvmfwk*.dll %_DEST%\bin%_EXT%\*
-..\%__SRC%\bin\sunjavaplugin*.dll %_DEST%\bin%_EXT%\*
+..\%__SRC%\bin\sunjavap*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\lib\sunjavaplugin*.so %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\sunjavaplugin*.dylib %_DEST%\lib%_EXT%\*
 ..\%__SRC%\class\JREProperties.class  %_DEST%\bin%_EXT%\JREProperties.class
