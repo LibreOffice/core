@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:01:19 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:26:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,7 @@ OString makeTempName(const OString& prefix)
     {
         if ( osl_getEnvironment(TEMP.pData, &uTmpPath.pData) != osl_Process_E_None )
         {
-#if defined(SAL_W32) || defined(SAL_OS2)
+#if defined(SAL_W32)
             tmpPath = OString("c:\\temp");
 #else
             tmpPath = OString("/tmp");
@@ -318,7 +318,7 @@ sal_Int32 compileFile(const OString * pathname)
             idlc()->getOptions()->getProgramName().getStr(), cmdFileName.getStr());
           exit(99);
     }
-#ifdef SAL_OS2
+#ifdef SAL_OS2_00
       char* tok = strtok( (char*)cppArgs.getStr(), " \t\n\r");
       while( tok) {
          if (tok[strlen(tok)-1] == '\"')
