@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_evalu.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:19:58 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:06:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <ary/idl/i_enumvalue.hxx>
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/ip_ce.hxx>
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_punct.hxx>
 #include <s2_luidl/tk_const.hxx>
@@ -77,8 +77,8 @@ PE_Value::CallHandler( const char *     i_sTokenText,
 
 
 
-PE_Value::PE_Value( udmstri &   o_rName,
-                    udmstri &   o_rAssignment,
+PE_Value::PE_Value( String  &   o_rName,
+                    String  &   o_rAssignment,
                     bool        i_bIsConst )
     :   eState(e_none),
         pName(&o_rName),
@@ -89,7 +89,7 @@ PE_Value::PE_Value( udmstri &   o_rName,
 
 void
 PE_Value::EstablishContacts( UnoIDL_PE *                io_pParentPE,
-                             ary::n22::Repository &         io_rRepository,
+                             ary::Repository &          io_rRepository,
                              TokenProcessing_Result &   o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
