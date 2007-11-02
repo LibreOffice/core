@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tkp_cpp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:15:38 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:01:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,11 +69,10 @@ TokenParser_Cpp::AssignPartners( CharacterSource &   io_rCharacterSource,
 }
 
 void
-TokenParser_Cpp::StartNewFile( const udmstri &                   i_sFileName,
-                               const csv::ploc::DirectoryChain & i_rFileSubPath )
+TokenParser_Cpp::StartNewFile( const csv::ploc::Path & i_file )
 {
     csv_assert(pDealer != 0);
-    pDealer->StartNewFile(i_sFileName, i_rFileSubPath);
+    pDealer->StartNewFile(i_file);
 
     csv_assert(pCharacterSource != 0);
     Start(*pCharacterSource);
