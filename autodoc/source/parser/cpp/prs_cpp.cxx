@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prs_cpp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:15:24 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:00:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 // NOT FULLY DEFINED SERVICES
 #include <cosv/file.hxx>
 #include <ary/ary.hxx>
-#include <ary/cpp/c_rwgate.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <autodoc/prs_docu.hxx>
 #include <autodoc/filecoli.hxx>
 #include <autodoc/x_parsing.hxx>
@@ -54,7 +54,7 @@
 // Helper function
 static bool         Local_LoadFile(
                         CharacterSource &       o_rTextBuffer,
-                        const udmstri &         i_rFullFilePath );
+                        const String  &         i_rFullFilePath );
 
 
 
@@ -68,7 +68,7 @@ namespace cpp
 class Udk_MacroMap
 {
   public:
-    typedef std::map< udmstri, DefineDescription* > Data;
+    typedef std::map< String , DefineDescription* > Data;
 
                         Udk_MacroMap();
                         ~Udk_MacroMap();
@@ -82,7 +82,7 @@ class Udk_MacroMap
 struct S_RunningData
 {
     CharacterSource     aFileContent;
-    ary::cpp::RwGate &  rCppGate;
+    ary::cpp::Gate &    rCppGate;
     Udk_MacroMap        aMacros;
     Distributor         aDealer;
     TokenParser_Cpp     aTkp;
@@ -113,25 +113,20 @@ Cpluplus_Parser::Setup( ary::Repository &                        o_rRepository,
 }
 
 void
-Cpluplus_Parser::Run( const udmstri &                       i_sProjectName,
-                      const csv::ploc::Path &               i_rProjectRootDirectory,
-                      const autodoc::FileCollector_Ifc &    i_rFiles )
+Cpluplus_Parser::Run( const autodoc::FileCollector_Ifc &    i_rFiles )
 {
-    pRunningData->aDealer.StartNewProject( i_sProjectName, i_rProjectRootDirectory );
-    uintt nProjectSubPathLength = i_rProjectRootDirectory.DirChain().Size();
-
     for ( autodoc::FileCollector_Ifc::const_iterator iter = i_rFiles.Begin();
           iter != i_rFiles.End();
           ++iter )
     {
-        csv::ploc::Path aFilePath(*iter);
-        aFilePath.DirChain().PopFront(nProjectSubPathLength);
+        csv::ploc::Path
+            aFilePath(*iter);
 
         try
         {
             if ( NOT Local_LoadFile(pRunningData->aFileContent, *iter) )
                 continue;
-            for ( pRunningData->aTkp.StartNewFile(aFilePath.File(), aFilePath.DirChain());
+            for ( pRunningData->aTkp.StartNewFile(aFilePath);
                   pRunningData->aTkp.HasMore();
                   pRunningData->aTkp.GetNextToken() )
                 ;
@@ -151,10 +146,10 @@ Cpluplus_Parser::Run( const udmstri &                       i_sProjectName,
 
 S_RunningData::S_RunningData( ary::Repository &                        o_rRepository,
                               const autodoc::DocumentationParser_Ifc & i_rDocumentationInterpreter )
-    :   // aFileContent,
-        rCppGate( o_rRepository.RwGate_Cpp() ),
-        // aMacros,
-        aDealer(o_rRepository.RwGate_Cpp()),
+    :   aFileContent(),
+        rCppGate( o_rRepository.Gate_Cpp() ),
+        aMacros(),
+        aDealer(o_rRepository.Gate_Cpp()),
         aTkp( * i_rDocumentationInterpreter.Create_DocuContext() )
 {
     aDealer.AssignPartners( aFileContent,
@@ -165,32 +160,32 @@ S_RunningData::S_RunningData( ary::Repository &                        o_rReposi
 
 Udk_MacroMap::Udk_MacroMap()
 {
-    udmstri sSAL_CALL("SAL_CALL");
-    udmstri sSAL_CALL_ELLIPSE("SAL_CALL_ELLIPSE");
-    udmstri sSAL_NO_VTABLE("SAL_NO_VTABLE");
-    udmstri sREGISTRY_CALLTYPE("REGISTRY_CALLTYPE");
-    udmstri sSAL_THROW("SAL_THROW");
-    udmstri sSAL_THROW_EXTERN_C("SAL_THROW_EXTERN_C");
+    String  sSAL_CALL("SAL_CALL");
+    String  sSAL_CALL_ELLIPSE("SAL_CALL_ELLIPSE");
+    String  sSAL_NO_VTABLE("SAL_NO_VTABLE");
+    String  sREGISTRY_CALLTYPE("REGISTRY_CALLTYPE");
+    String  sSAL_THROW("SAL_THROW");
+    String  sSAL_THROW_EXTERN_C("SAL_THROW_EXTERN_C");
 
-    udmstri s__DEF_COMPIMPLHELPER_A("__DEF_COMPIMPLHELPER_A");
-    udmstri s__DEF_COMPIMPLHELPER_B("__DEF_COMPIMPLHELPER_B");
-    udmstri s__DEF_COMPIMPLHELPER("__DEF_COMPIMPLHELPER");
+    String  s__DEF_COMPIMPLHELPER_A("__DEF_COMPIMPLHELPER_A");
+    String  s__DEF_COMPIMPLHELPER_B("__DEF_COMPIMPLHELPER_B");
+    String  s__DEF_COMPIMPLHELPER("__DEF_COMPIMPLHELPER");
 
-    udmstri s__DEF_IMPLHELPER_PRE("__DEF_IMPLHELPER_PRE");
-    udmstri s__IFC_WRITEOFFSET("__IFC_WRITEOFFSET");
-    udmstri s__DEF_IMPLHELPER_POST("__DEF_IMPLHELPER_POST");
+    String  s__DEF_IMPLHELPER_PRE("__DEF_IMPLHELPER_PRE");
+    String  s__IFC_WRITEOFFSET("__IFC_WRITEOFFSET");
+    String  s__DEF_IMPLHELPER_POST("__DEF_IMPLHELPER_POST");
 
 
     StringVector aEmpty;
 
     StringVector aParamsSAL_THROW;
-    aParamsSAL_THROW.push_back( udmstri("exc") );
+    aParamsSAL_THROW.push_back( String ("exc") );
     StringVector aDefSAL_THROW;
-    aDefSAL_THROW.push_back( udmstri("throw") );
-    aDefSAL_THROW.push_back( udmstri("exc") );
+    aDefSAL_THROW.push_back( String ("throw") );
+    aDefSAL_THROW.push_back( String ("exc") );
 
     StringVector aCompImplHelperParams;
-    aCompImplHelperParams.push_back(udmstri("N"));
+    aCompImplHelperParams.push_back(String ("N"));
 
 
     // filling up the list
@@ -235,7 +230,7 @@ Udk_MacroMap::~Udk_MacroMap()
 
 bool
 Local_LoadFile( CharacterSource &       o_rTextBuffer,
-                const udmstri &         i_rFullFilePath )
+                const String  &         i_rFullFilePath )
 {
     Cout() << "Parse " << i_rFullFilePath << " ..." << Endl();
 
