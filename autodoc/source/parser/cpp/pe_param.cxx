@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_param.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:03:02 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:56:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,9 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
-#include <ary/cpp/c_rwgate.hxx>
+#include <cosv/tpl/tpltools.hxx>
+#include <ary/cpp/c_gate.hxx>
+#include <ary/cpp/cp_type.hxx>
 #include "pe_type.hxx"
 #include "pe_vari.hxx"
 
@@ -208,7 +209,7 @@ PE_Parameter::On_start_Ellipse(const char *)
 {
     SetTokenResult(done, pop_success);
 
-    aResultParamInfo.nType = Env().AryGate().Tid_Ellipse();
+    aResultParamInfo.nType = Env().AryGate().Types().Tid_Ellipse();
 }
 
 void
