@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 16:40:15 $
+#   last change: $Author: hr $ $Date: 2007-11-02 13:15:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -174,7 +174,8 @@ SHL3LIBS=$(SLB)$/sysdtrans.lib
 SHL3STDLIBS= \
         $(SALLIB)	\
         $(CPPULIB) 	\
-        $(CPPUHELPERLIB)
+        $(CPPUHELPERLIB) \
+        UClip.lib
         
 SHL3IMPLIB=i$(SHL3TARGET) 
 
