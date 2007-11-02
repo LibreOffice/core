@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ik_attribute.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:13:43 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:13:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #ifndef ARY_IDL_IK_ATTRIBUTE_HXX
 #define ARY_IDL_IK_ATTRIBUTE_HXX
+//  KORR_DEPRECATED_3.0
 
 
 // USED SERVICES

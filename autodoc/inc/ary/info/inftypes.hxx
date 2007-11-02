@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftypes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:22:12 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:16:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,6 @@ enum E_AtTagId
     atid_todo,
     atid_version,
 
-    atid_since,
     atid_MAX
 };
 

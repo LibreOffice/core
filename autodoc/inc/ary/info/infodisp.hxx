@@ -4,9 +4,9 @@
  *
  *  $RCSfile: infodisp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:21:55 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:16:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,38 +35,37 @@
 
 #ifndef ARY_INFO_INFODISP_HXX
 #define ARY_INFO_INFODISP_HXX
+//  KORR_DEPRECATED_3.0
 
+// BASE CLASSES
 // USED SERVICES
-    // BASE CLASSES
-// #include <udm/display.hxx>
-    // COMPONENTS
-    // PARAMETERS
+
+
+
 
 namespace ary
 {
 namespace info
 {
-
-class CodeInfo;
-class StdTag;
-class BaseTag;
-class ExceptionTag;
-class ImplementsTag;
-class KeywordTag;
-class ParameterTag;
-class SeeTag;
-class TemplateTag;
-class LabelTag;
-class SinceTag;
-class DT_Text;
-class DT_MaybeLink;
-class DT_Whitespace;
-class DT_Eol;
-class DT_Xml;
+    class StdTag;
+    class BaseTag;
+    class ExceptionTag;
+    class ImplementsTag;
+    class KeywordTag;
+    class ParameterTag;
+    class SeeTag;
+    class TemplateTag;
+    class LabelTag;
+    class SinceTag;
+    class DT_Text;
+    class DT_MaybeLink;
+    class DT_Whitespace;
+    class DT_Eol;
+    class DT_Xml;
 
 
 
-/** Displaying an ary::info::CodeInfo.
+/** Displaying an ary::doc::OldCppDocu.
 
     @descr
     This class is an interface, but the functions are defaulted,
@@ -77,51 +76,47 @@ class DocuDisplay
   public:
     virtual             ~DocuDisplay() {}
 
-    virtual void        Display_CodeInfo(
-                            const CodeInfo &    i_rData );
-
     virtual void        Display_StdTag(
-                            const StdTag &      i_rData );
+                            const StdTag &      i_rData ) = 0;
     virtual void        Display_BaseTag(
-                            const BaseTag &     i_rData );
+                            const BaseTag &     i_rData ) = 0;
     virtual void        Display_ExceptionTag(
                             const ExceptionTag &
-                                                i_rData );
+                                                i_rData ) = 0;
     virtual void        Display_ImplementsTag(
                             const ImplementsTag &
-                                                i_rData );
+                                                i_rData ) = 0;
     virtual void        Display_KeywordTag(
-                            const KeywordTag &  i_rData );
+                            const KeywordTag &  i_rData ) = 0;
     virtual void        Display_ParameterTag(
                             const ParameterTag &
-                                                i_rData );
+                                                i_rData ) = 0;
     virtual void        Display_SeeTag(
-                            const SeeTag &      i_rData );
+                            const SeeTag &      i_rData ) = 0;
     virtual void        Display_TemplateTag(
-                            const TemplateTag & i_rData );
+                            const TemplateTag & i_rData ) = 0;
     virtual void        Display_LabelTag(
-                            const LabelTag &    i_rData );
+                            const LabelTag &    i_rData ) = 0;
     virtual void        Display_SinceTag(
                             const ary::info::SinceTag &
-                                                i_rData );
+                                                i_rData ) = 0;
     virtual void        Display_DT_Text(
-                            const DT_Text &     i_rData );
+                            const DT_Text &     i_rData ) = 0;
     virtual void        Display_DT_MaybeLink(
-                            const DT_MaybeLink& i_rData );
+                            const DT_MaybeLink& i_rData ) = 0;
     virtual void        Display_DT_Whitespace(
                             const DT_Whitespace &
-                                                i_rData );
+                                                i_rData ) = 0;
     virtual void        Display_DT_Eol(
-                            const DT_Eol &      i_rData );
+                            const DT_Eol &      i_rData ) = 0;
     virtual void        Display_DT_Xml(
                             const ary::info::DT_Xml &
-                                                i_rData );
+                                                i_rData ) = 0;
 };
 
 
-}
-}
 
+
+}
+}
 #endif
-
-
