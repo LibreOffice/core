@@ -4,9 +4,9 @@
  *
  *  $RCSfile: preproc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:15:10 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:00:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
+#include <cosv/tpl/tpltools.hxx>
 #include "all_toks.hxx"
 #include "defdescr.hxx"
 #include <tools/tkpchars.hxx>
@@ -147,12 +147,12 @@ PreProcessor::On_expect_macro_param( cpp::Token & let_drToken )
     }
     else if ( let_drToken.TypeId() == Tid_Comma AND nBracketInParameterCounter == 0 )
     {
-        aCurMacroParams.push_back( udmstri(aCurParamText.c_str()) );
+        aCurMacroParams.push_back( String (aCurParamText.c_str()) );
         aCurParamText.seekp(0);
         return;
     }
 
-    // KORR FUTURE:
+    // KORR_FUTURE:
     //  If in future whitespace is parsed also, that should match exactly and the
     //  safety spaces, " ", here should be removed.
     aCurParamText << let_drToken.Text() << " ";
@@ -161,7 +161,7 @@ PreProcessor::On_expect_macro_param( cpp::Token & let_drToken )
 bool
 PreProcessor::CheckForDefine( cpp::Token & let_drToken )
 {
-    udmstri sTokenText(let_drToken.Text());
+    String  sTokenText(let_drToken.Text());
      pCurMacro = csv::value_from_map( *pCurValidDefines, sTokenText );
     if (pCurMacro == 0 )
         return false;
@@ -222,7 +222,7 @@ PreProcessor::InterpretMacro()
         aCurParamText << " #unblock-" << dpCurMacroName->Text() << " ";
 
         pSourceText->InsertTextAtCurPos(aCurParamText.c_str());
-        udmstri sCurMacroName(dpCurMacroName->Text());
+        String  sCurMacroName(dpCurMacroName->Text());
         aBlockedMacroNames.insert( aBlockedMacroNames.begin(), sCurMacroName );
     }
 
