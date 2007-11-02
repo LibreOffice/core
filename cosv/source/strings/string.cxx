@@ -4,9 +4,9 @@
  *
  *  $RCSfile: string.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:09:11 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:47:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,16 @@
 #include <precomp.h>
 #include <cosv/string.hxx>
 
-
 // NOT FULLY DECLARED SERVICES
 #include <string.h>
 #include <cosv/comfunc.hxx>
 
 
+
+
 namespace csv
 {
+
 
 inline const char *
 str_from_StringOffset( const String &     i_rStr,
@@ -262,6 +264,35 @@ String::substr( position_type       i_nStartPosition,
     return Null_();
 }
 
+String::position_type
+String::find( const char *        i_strToSearch,
+              position_type       i_nSearchStartPosition ) const
+{
+    csv_assert(i_strToSearch != 0);
+
+    if ( i_nSearchStartPosition < length()
+         AND
+         *i_strToSearch != '\0' )
+    {
+        const char * p = strstr(c_str() + i_nSearchStartPosition, i_strToSearch);
+        if (p != 0)
+            return static_cast<position_type>(p - c_str());
+    }
+    return str::position(str::npos);
+}
+
+String::position_type
+String::find( char                i_charToSearch,
+              position_type       i_nSearchStartPosition ) const
+{
+    if (i_nSearchStartPosition <= length())
+    {
+        const char * p = strchr(c_str() + i_nSearchStartPosition, i_charToSearch);
+        if (p != 0)
+            return static_cast<position_type>(p - c_str());
+    }
+    return str::position(str::npos);
+}
 
 const String &
 String::Null_()
@@ -386,11 +417,6 @@ compare( const CharOrder_Table &            i_rOrder,
 }
 
 
+
+
 }   // namespace csv
-
-
-
-
-
-
-
