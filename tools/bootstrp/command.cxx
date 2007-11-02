@@ -4,9 +4,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:13:49 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:58:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@
 
 //#define MH_TEST2  1           // fuers direkte Testen
 
-#if defined WNT
+#if defined(WNT) || defined(OS2)
 #ifdef _MSC_VER
 #pragma warning (push,1)
 #endif
@@ -92,7 +92,7 @@
 #include <tools/svwin.h>
 #endif
 
-#if defined WNT
+#if defined(WNT) || defined(OS2)
 #define     cPathSeperator ';'
 #endif
 #ifdef UNX
@@ -451,6 +451,8 @@ CCommand::operator const int()
     int nRet;
 #if defined WNT
     nRet = _spawnv( P_WAIT, ppArgv[0], (const char **) ppArgv );
+#elif defined OS2
+    nRet = _spawnv( P_WAIT, ppArgv[0], ppArgv );
 #elif defined UNX
     //fprintf( stderr, "CComand : operator (int) not implemented\n");
     // **** Unix Implementierung ***************
