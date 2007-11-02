@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_hierarchy.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:56:43 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:35:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,7 +263,7 @@ Write_Bases( csi::xml::Element &            o_out,
             nCe = i_env.Gate().Types().Search_CeRelatedTo(nType);
         if (nCe.IsValid())
         {
-            // KORR FUTURE
+            // KORR_FUTURE
             //   Rather check for id(!) of com::sun::star::uno::XInterface.
             if (i_env.Gate().Ces().Find_Ce(nCe).LocalName() == "XInterface")
                 continue;
