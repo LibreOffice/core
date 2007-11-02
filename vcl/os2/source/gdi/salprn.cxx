@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 10:07:57 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:50:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,17 +70,17 @@
 #include <salframe.h>
 #endif
 #ifndef _SV_SALPTYPE_HXX
-#include <salptype.hxx>
+#include <vcl/salptype.hxx>
 #endif
 #ifndef _SV_SALPRN_H
 #include <salprn.h>
 #endif
 
 #ifndef _SV_PRINT_H
-#include <print.h>
+#include <vcl/print.h>
 #endif
 #ifndef _SV_JOBSET_H
-#include <jobset.h>
+#include <vcl/jobset.h>
 #endif
 
 #ifndef __H_FT2LIB
@@ -215,9 +215,9 @@ void Os2SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 
         ByteString aOrgDriverName( pPrqInfo->pszDriverName);
         ByteString aName( pPrqInfo->pszName);
-        pInfo->maDriver      = ::rtl::OStringToOUString (aOrgDriverName, RTL_TEXTENCODING_ASCII_US);
-        pInfo->maPrinterName = ::rtl::OStringToOUString (pPrqInfo->pszComment, RTL_TEXTENCODING_ASCII_US);
-        pInfo->maLocation    = ::rtl::OStringToOUString (aName, RTL_TEXTENCODING_ASCII_US);
+        pInfo->maDriver      = ::rtl::OStringToOUString (aOrgDriverName, gsl_getSystemTextEncoding());
+        pInfo->maPrinterName = ::rtl::OStringToOUString (pPrqInfo->pszComment, gsl_getSystemTextEncoding());
+        pInfo->maLocation    = ::rtl::OStringToOUString (aName, gsl_getSystemTextEncoding());
         pInfo->mnStatus      = ImplPMQueueStatusToSal( pPrqInfo->fsStatus );
         pInfo->mnJobs        = pPrqInfo->cJobs;
         // pInfo->maComment = !!!
@@ -364,7 +364,7 @@ XubString Os2SalInstance::GetDefaultPrinter()
     {
         if ( strcmp( pPrqInfo->pszName, szQueueName ) == 0 )
         {
-            aDefaultName = ::rtl::OStringToOUString (pPrqInfo->pszComment, RTL_TEXTENCODING_ASCII_US);
+            aDefaultName = ::rtl::OStringToOUString (pPrqInfo->pszComment, gsl_getSystemTextEncoding());
 
             // Feststellen, ob Name doppelt
             PPRQINFO3 pTempPrqInfo = (PPRQINFO3)pQueueData;
@@ -374,7 +374,7 @@ XubString Os2SalInstance::GetDefaultPrinter()
                 if ( (j != i) &&
                      (strcmp( pPrqInfo->pszComment, pTempPrqInfo->pszComment ) == 0) )
                 {
-                    String pszName( ::rtl::OStringToOUString (pPrqInfo->pszName, RTL_TEXTENCODING_ASCII_US));
+                    String pszName( ::rtl::OStringToOUString (pPrqInfo->pszName, gsl_getSystemTextEncoding()));
                     aDefaultName += ';';
                     aDefaultName += pszName;
                 }
@@ -1443,7 +1443,7 @@ XubString Os2SalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup,
             ImplGetFormAndTrayList( this, pJobSetup );
 
         if ( nPaperBin < mnTrayCount )
-            aPaperBinName = ::rtl::OStringToOUString (mpTrayArray[nPaperBin]->maDisplayName, RTL_TEXTENCODING_ASCII_US);
+            aPaperBinName = ::rtl::OStringToOUString (mpTrayArray[nPaperBin]->maDisplayName, gsl_getSystemTextEncoding());
     }
 
     return aPaperBinName;
@@ -1630,7 +1630,8 @@ BOOL Os2SalPrinter::StartJob( const XubString* pFileName,
     }
     aDevOpenStruc.pszComment = (PSZ)maCommentBuf;
 #endif
-    aDevOpenStruc.pszComment = (PSZ)rAppName.GetBuffer();
+    ByteString jobName( rJobName, gsl_getSystemTextEncoding());
+    aDevOpenStruc.pszComment = (PSZ)jobName.GetBuffer();
 
     // Kopien
     if ( nCopies > 1 )
@@ -1680,10 +1681,10 @@ BOOL Os2SalPrinter::StartJob( const XubString* pFileName,
     // JobName ermitteln und Job starten
     PSZ pszJobName = NULL;
     int nJobNameLen = 0;
-    if ( rJobName.Len() > 0 )
+    if ( jobName.Len() > 0 )
     {
-        pszJobName = (PSZ)rJobName.GetBuffer();
-        nJobNameLen = rJobName.Len();
+        pszJobName = (PSZ)jobName.GetBuffer();
+        nJobNameLen = jobName.Len();
     }
     rc = DevEscape( mhDC,
                     DEVESC_STARTDOC,
