@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adc_msg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:05:39 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:43:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <cosv/file.hxx>
-#include <cosv/template/tpltools.hxx>
+#include <cosv/tpl/tpltools.hxx>
 
 
 namespace autodoc
