@@ -4,9 +4,9 @@
  *
  *  $RCSfile: solar.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:12:56 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:00:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,6 +342,7 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #define SYSTEM_UNXSOGS      31
 #define SYSTEM_UNXSOGI      32
 #define SYSTEM_UNXMACXI     33
+#define SYSTEM_OS2GCCI      34
 #define SYSTEM_WNTGCCI      99
 
 #if defined WNT
@@ -350,6 +351,8 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #else
   #define __DLLEXTENSION "mi"
 #endif
+#elif defined OS2
+  #define __DLLEXTENSION "go"
 #elif defined UNX
 #ifdef AIX
   #define __DLLEXTENSION "ap.so"
@@ -429,7 +432,7 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #define LIBRARY_CONCAT4( s1, s2, s3, s4 ) \
     s1 s2 s3 s4
 
-#if defined WIN || defined WNT
+#if defined WIN || defined WNT || defined OS2
 #define SVLIBRARY( Base ) \
     LIBRARY_CONCAT4( Base, LIBRARY_SOLARUPD(), __DLLEXTENSION, ".DLL" )
 #define SVLIBRARYLANG( Base, Lang ) \
