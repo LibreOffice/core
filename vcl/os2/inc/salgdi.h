@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 10:08:34 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:44:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,20 +37,20 @@
 #define _SV_SALGDI_H
 
 #ifndef _SV_SV_H
-#include <sv.h>
+#include <vcl/sv.h>
 #endif
 
 #ifndef _SV_SALLAYOUT_HXX
-#include <sallayout.hxx>
+#include <vcl/sallayout.hxx>
 #endif
 #ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#include <vcl/salgdi.hxx>
 #endif
 #ifndef _SV_OUTFONT_HXX
-#include <outfont.hxx>
+#include <vcl/outfont.hxx>
 #endif
 #ifndef _SV_IMPFONT_HXX
-#include <impfont.hxx>
+#include <vcl/impfont.hxx>
 #endif
 
 #include <hash_set>
@@ -78,6 +78,8 @@ public:
 
     virtual ImplFontData*   Clone() const;
     virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
+    virtual sal_IntPtr      GetFontId() const;
+    void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
     void                    UpdateFromHPS( HPS );
 
     bool                    HasChar( sal_uInt32 cChar ) const;
@@ -94,6 +96,7 @@ public:
     ImplFontCharMap*        GetImplFontCharMap();
 
 private:
+    sal_IntPtr              mnId;
     bool                    mbDisableGlyphApi;
     bool                    mbHasKoreanRange;
     bool                    mbHasCJKSupport;
@@ -160,6 +163,8 @@ public:
     KERNINGPAIRS*               mpFontKernPairs;    // Kerning Pairs of the current Font
     ULONG                   mnFontKernPairCount;// Number of Kerning Pairs of the current Font
 
+    USHORT                  ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFontScale, int );
+
 public:
     Os2SalGraphics();
     virtual ~Os2SalGraphics();
@@ -219,6 +224,11 @@ protected:
                                                 const ImplControlValue& aValue, SalControlHandle& rControlHandle, rtl::OUString aCaption,
                                                 Region &rNativeBoundingRegion, Region &rNativeContentRegion );
 #endif
+
+    virtual bool        drawAlphaBitmap( const SalTwoRect&,
+                                         const SalBitmap& rSourceBitmap,
+                                         const SalBitmap& rAlphaBitmap );
+    virtual bool        drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency );
 
 public:
     // public SalGraphics methods, the interface to teh independent vcl part
@@ -317,6 +327,11 @@ public:
                                           long* pDataLen );
     // frees the font data again
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen );
+
+    virtual void            GetGlyphWidths( ImplFontData* pFont,
+                                            bool bVertical,
+                                            std::vector< sal_Int32 >& rWidths,
+                                            std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc );
 
     virtual BOOL                    GetGlyphBoundRect( long nIndex, Rectangle& );
     virtual BOOL                    GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
