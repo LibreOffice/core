@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_interface.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:42:03 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:35:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@
 #include "hi_factory.hxx"
     // COMPONENTS
     // PARAMETERS
-#include <ary/idl/i_language.hxx>
-#include <ary_i/codeinf2.hxx>
+#include <ary/idl/i_types4idl.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 
 
 class HF_NaviSubRow;

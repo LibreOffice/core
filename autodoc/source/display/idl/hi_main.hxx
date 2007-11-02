@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hi_main.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:53:29 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:40:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 
 // USED SERVICES
     // BASE CLASSES
-#include <ary/idl/ihost_ce.hxx>
+#include <cosv/tpl/processor.hxx>
     // COMPONENTS
 #include "hi_factory.hxx"
     // PARAMETERS
@@ -50,8 +50,39 @@ class HtmlEnvironment_Idl;
 class HtmlFactory_Idl;
 class DocuFile_Html;
 
+namespace ary
+{
+namespace idl
+{
 
-class MainDisplay_Idl : public ary::idl::CeHost
+    class Module;
+    class Service;
+    class SglIfcService;
+    class Interface;
+    class Struct;
+    class Exception;
+    class Enum;
+    class Typedef;
+    class ConstantsGroup;
+    class Singleton;
+    class SglIfcSingleton;
+
+}   // namespace idl
+}   // namespace ary
+
+
+class MainDisplay_Idl : public csv::ProcessorIfc,
+                        public csv::ConstProcessor<ary::idl::Module>,
+                        public csv::ConstProcessor<ary::idl::Service>,
+                        public csv::ConstProcessor<ary::idl::SglIfcService>,
+                        public csv::ConstProcessor<ary::idl::Interface>,
+                        public csv::ConstProcessor<ary::idl::Struct>,
+                        public csv::ConstProcessor<ary::idl::Exception>,
+                        public csv::ConstProcessor<ary::idl::Enum>,
+                        public csv::ConstProcessor<ary::idl::Typedef>,
+                        public csv::ConstProcessor<ary::idl::ConstantsGroup>,
+                        public csv::ConstProcessor<ary::idl::Singleton>,
+                        public csv::ConstProcessor<ary::idl::SglIfcSingleton>
 {
   public:
                         MainDisplay_Idl(
@@ -61,41 +92,35 @@ class MainDisplay_Idl : public ary::idl::CeHost
 
     void                WriteGlobalIndices();
 
+    void                Display_NamedEntityHierarchy();
+
   private:
-    // Interface ary::idl::CeHost:
-    virtual void        do_Module(
-                            const ary::idl::CodeEntity &
-                                                i_rData );
-    virtual void        do_Service(
-                            const ary::idl::CodeEntity &
-                                                i_rData );
-    virtual void        do_SglIfcService(
-                            const ary::idl::CodeEntity &
-                                                i_rData );
-    virtual void        do_Interface(
-                            const ary::idl::CodeEntity &
-                                                i_rData );
-    virtual void        do_Struct(
-                            const ary::idl::CodeEntity &
-                                                i_rData );
-    virtual void        do_Exception(
-                            const ary::idl::CodeEntity &
-                                                i_rData );
-    virtual void        do_Enum(
-                            const ary::idl::CodeEntity &
-                                                i_rData );
-    virtual void        do_Typedef(
-                            const ary::idl::CodeEntity &
-                                                i_rData );
-    virtual void        do_ConstantsGroup(
-                            const ary::idl::CodeEntity &
-                                                i_rData );
-    virtual void        do_Singleton(
-                            const ary::idl::CodeEntity &
-                                                i_rData );
-    virtual void        do_SglIfcSingleton(
-                            const ary::idl::CodeEntity &
-                                                i_rData );
+    // Interface csv::ProcessorIfc:
+    virtual void        do_Process(
+                            const ary::idl::Module  &     i_client );
+    virtual void        do_Process(
+                            const ary::idl::Service &     i_client );
+    virtual void        do_Process(
+                            const ary::idl::SglIfcService &
+                                                          i_client );
+    virtual void        do_Process(
+                            const ary::idl::Interface &   i_client );
+    virtual void        do_Process(
+                            const ary::idl::Struct  &     i_client );
+    virtual void        do_Process(
+                            const ary::idl::Exception &   i_client );
+    virtual void        do_Process(
+                            const ary::idl::Enum &        i_client );
+    virtual void        do_Process(
+                            const ary::idl::Typedef &     i_client );
+    virtual void        do_Process(
+                            const ary::idl::ConstantsGroup &
+                                                i_client );
+    virtual void        do_Process(
+                            const ary::idl::Singleton &   i_client );
+    virtual void        do_Process(
+                            const ary::idl::SglIfcSingleton &
+                                                i_client );
     // Locals
     void                do_ServiceDescr(
                             const ary::idl::CodeEntity &

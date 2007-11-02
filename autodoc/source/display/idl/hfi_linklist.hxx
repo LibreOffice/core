@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_linklist.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:42:38 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:36:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
     // PARAMETERS
 #include <ary/idl/i_comrela.hxx>
 #include <ary_i/ci_text2.hxx>
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 
 
 
