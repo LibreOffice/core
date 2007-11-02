@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-18 14:55:26 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:39:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,10 @@ TARGET = deployment_misc
 USE_DEFFILE = TRUE
 ENABLE_EXCEPTIONS = TRUE
 
+.IF "$(GUI)"=="OS2"
+TARGET = deplmisc
+.ENDIF
+
 .INCLUDE : settings.mk
 
 # Reduction of exported symbols:
@@ -58,7 +62,11 @@ SRS1NAME = $(TARGET)
 SRC1FILES = \
     dp_misc.src
 
+.IF "$(GUI)"=="OS2"
+SHL1TARGET = $(TARGET)
+.ELSE
 SHL1TARGET = deploymentmisc$(UPD)$(DLLPOSTFIX)
+.ENDIF
 SHL1OBJS = \
         $(SLO)$/dp_misc.obj \
         $(SLO)$/dp_resource.obj \
@@ -78,7 +86,14 @@ SHL1STDLIBS = \
     $(UCBHELPERLIB) \
     $(UNOTOOLSLIB) \
     $(XMLSCRIPTLIB)
+.IF "$(GUI)"=="OS2"
+SHL1IMPLIB = ideploymentmisc$(UPD)$(DLLPOSTFIX)
+LIB1TARGET = $(SLB)$/_deplmisc.lib
+LIB1OBJFILES = $(SHL1OBJS)
+DEFLIB1NAME = _deplmisc
+.ELSE
 SHL1IMPLIB = i$(SHL1TARGET)
+.ENDIF
 DEF1NAME = $(SHL1TARGET)
 
 SLOFILES = $(SHL1OBJS)
