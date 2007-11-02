@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cr_index.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:05:10 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:56:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ Index::CreateHtmlFileName(  char *                      o_sOutputHtml,
     }
 
     strcpy( o_sOutputHtml, sOutputDirectory.str() );        // STRCPY SAFE HERE
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     strcat(o_sOutputHtml, "\\");                            // STRCAT SAFE HERE
 #elif defined(UNX)
     strcat(o_sOutputHtml, "/");                             // STRCAT SAFE HERE
