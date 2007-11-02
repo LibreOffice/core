@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Os2Transferable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 16:39:31 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:15:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@
 
 #define CHAR_POINTER(THE_OUSTRING) ::rtl::OUStringToOString (THE_OUSTRING, RTL_TEXTENCODING_UTF8).pData->buffer
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL>1
 extern "C" int debug_printf(const char *f, ...);
 #else
 #define debug_printf( ...) { 1; }
