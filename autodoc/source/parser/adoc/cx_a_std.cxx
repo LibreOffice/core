@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cx_a_std.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:07:19 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:46:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,7 @@ Context_AdocStd::PerformStatusFunction( uintt               i_nStatusSignal,
         {
             char cCC = io_rText.CurChar();
             String sChar( &cCC, 1 );
-            throw X_Parser(X_Parser::x_InvalidChar, sChar, udmstri::Null_(), 0);
+            throw X_Parser(X_Parser::x_InvalidChar, sChar, String ::Null_(), 0);
         }   // no break, because of throw
         case nF_fin_Ignore:
             io_rText.CutToken();
@@ -248,8 +248,8 @@ Context_AdocStd::PerformStatusFunction( uintt               i_nStatusSignal,
         default:
         {
             char cCC = io_rText.CurChar();
-            udmstri sChar( &cCC, 1 );
-            throw X_Parser(X_Parser::x_InvalidChar, sChar, udmstri::Null_(), 0);
+            String  sChar( &cCC, 1 );
+            throw X_Parser(X_Parser::x_InvalidChar, sChar, String::Null_(), 0);
         }
     }   // end switch (i_nStatusSignal)
 }
