@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cxt2ary.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:10:41 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:50:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,22 +38,23 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <ary/re.hxx>
-#include <ary/docu.hxx>
+#include <ary/entity.hxx>
 #include <ary/cpp/c_class.hxx>
 #include <ary/cpp/c_define.hxx>
 #include <ary/cpp/c_enum.hxx>
 #include <ary/cpp/c_enuval.hxx>
 #include <ary/cpp/c_funct.hxx>
 #include <ary/cpp/c_macro.hxx>
-#include <ary/cpp/c_rwgate.hxx>
 #include <ary/cpp/c_tydef.hxx>
 #include <ary/cpp/c_vari.hxx>
-#include <ary/info/codeinfo.hxx>
+#include <ary/cpp/c_gate.hxx>
+#include <ary/cpp/cp_ce.hxx>
+#include <ary/loc/loc_file.hxx>
+#include <ary/doc/d_oldcppdocu.hxx>
 #include <ary/info/docstore.hxx>
 #include "icprivow.hxx"
 
-// Implementationheader, only to be used in this file!
+// Implementationheaders, only to be used in this file!
 #include "sfscope.hxx"
 #include "sownstck.hxx"
 #include "sdocdist.hxx"
@@ -68,31 +69,23 @@ namespace cpp
 
 using ary::cpp::E_Protection;
 
-ContextForAry::ContextForAry( ary::cpp::RwGate &  io_rAryGate )
+ContextForAry::ContextForAry( ary::cpp::Gate &  io_rAryGate )
     :   pGate(&io_rAryGate),
-        // aTokenResult,
+        aTokenResult(),
         pFileScopeInfo( new S_FileScopeInfo ),
         pOwnerStack( new S_OwnerStack ),
         pDocuDistributor( new S_DocuDistributor ),
         pRecoveryGuard( new S_RecoveryGuard )
 {
-    OpenNamespace( pGate->GlobalNamespace() );
+    OpenNamespace( pGate->Ces().GlobalNamespace() );
 }
 
 ContextForAry::~ContextForAry()
 {
 }
 
-ary::cpp::ProjectGroup &
-ContextForAry::inq_CurProjectGroup() const
-{
-    csv_assert(pFileScopeInfo->pCurProject != 0);
-
-    return *pFileScopeInfo->pCurProject;
-}
-
-ary::cpp::FileGroup &
-ContextForAry::inq_CurFileGroup() const
+ary::loc::File &
+ContextForAry::inq_CurFile() const
 {
     csv_assert(pFileScopeInfo->pCurFile != 0);
 
@@ -150,7 +143,7 @@ void
 ContextForAry::do_OpenExternC( bool )
 {
     pOwnerStack->OpenExternC();
-    // KORR
+    // KORR_FUTURE
     // use i_bOnlyForOneDeclaration
 }
 
@@ -230,7 +223,7 @@ ContextForAry::do_Event_Store_EnumValue( ary::cpp::EnumValue & io_rEnumValue )
 }
 
 void
-ContextForAry::do_Event_Store_CppDefinition( ary::cpp::CppDefinition & io_rDefinition )
+ContextForAry::do_Event_Store_CppDefinition( ary::cpp::DefineEntity & io_rDefinition )
 {
     pDocuDistributor->SetCurrentlyStoredRe(io_rDefinition);
 }
@@ -280,7 +273,7 @@ ContextForAry::do_Event_Store_Variable( ary::cpp::Variable & io_rVariable )
 }
 
 void
-ContextForAry::do_TakeDocu( DYN ary::Documentation & let_drInfo )
+ContextForAry::do_TakeDocu( DYN ary::doc::OldCppDocu & let_drInfo )
 {
     let_drInfo.Store2(*pDocuDistributor);
 }
@@ -291,10 +284,10 @@ ContextForAry::do_StartWaitingFor_Recovery()
     pRecoveryGuard->StartWaitingFor_Recovery();
 }
 
-ary::cpp::RwGate &
+ary::cpp::Gate &
 ContextForAry::inq_AryGate() const
 {
-     return * const_cast< ary::cpp::RwGate* >(pGate);
+     return * const_cast< ary::cpp::Gate* >(pGate);
 }
 
 const ary::cpp::InputContext &
@@ -303,10 +296,12 @@ ContextForAry::inq_Context() const
     return *this;
 }
 
-udmstri
+String
 ContextForAry::inq_CurFileName() const
 {
-    return pFileScopeInfo->sCurFileName;
+    return pFileScopeInfo->pCurFile != 0
+            ?   pFileScopeInfo->pCurFile->LocalName()
+            :   String::Null_();
 }
 
 uintt
@@ -328,17 +323,9 @@ ContextForAry::inq_IsExternC() const
 }
 
 void
-ContextForAry::do_SetCurProject( ary::cpp::ProjectGroup & io_rCurProject )
-{
-    pFileScopeInfo->pCurProject = &io_rCurProject;
-}
-
-void
-ContextForAry::do_SetCurFile( ary::cpp::FileGroup & io_rCurFile,
-                              const udmstri &       i_sFileName )
+ContextForAry::do_SetCurFile( ary::loc::File &  io_rCurFile )
 {
     pFileScopeInfo->pCurFile = &io_rCurFile;
-    pFileScopeInfo->sCurFileName = i_sFileName;
     pFileScopeInfo->nLineCount = 0;
     pFileScopeInfo->pCurTemplateParameters = 0;
 
@@ -372,15 +359,7 @@ ContextForAry::do_Event_Semicolon()
     pRecoveryGuard->Hdl_Semicolon();
 }
 
-ary::cpp::ProjectGroup &
-ContextForAry::inq_CurProject() const
-{
-    csv_assert( pFileScopeInfo->pCurProject != 0 );
 
-    return *pFileScopeInfo->pCurProject;
-}
 
 
 }   // namespace cpp
-
-
