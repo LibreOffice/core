@@ -4,9 +4,9 @@
  *
  *  $RCSfile: otherjre.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:45:42 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:27:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ Reference<VendorBase> OtherInfo::createInstance()
 char const* const* OtherInfo::getJavaExePaths(int * size)
 {
     static char const * ar[] = {
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
         "bin/java.exe",
         "jre/bin/java.exe"
 #elif UNX
@@ -70,7 +70,7 @@ char const* const* OtherInfo::getJavaExePaths(int * size)
 char const* const* OtherInfo::getRuntimePaths(int * size)
 {
     static char const* ar[]= {
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
         "/bin/client/jvm.dll",
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll",
