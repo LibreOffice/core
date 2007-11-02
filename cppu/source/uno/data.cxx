@@ -4,9 +4,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 14:44:20 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:53:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -356,7 +356,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 //##################################################################################################
 
 
-#if OSL_DEBUG_LEVEL > 10
+#if OSL_DEBUG_LEVEL > 1
 
 #include <stdio.h>
 
