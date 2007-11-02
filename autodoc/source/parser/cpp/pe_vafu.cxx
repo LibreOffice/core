@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_vafu.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:03:34 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:58:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,13 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
-#include <ary/cpp/c_rwgate.hxx>
-#include <ary/cpp/inpcontx.hxx>
+#include <cosv/tpl/tpltools.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_class.hxx>
 #include <ary/cpp/c_vari.hxx>
 #include <ary/cpp/c_vfflag.hxx>
+#include <ary/cpp/cp_ce.hxx>
+#include <ary/cpp/inpcontx.hxx>
 #include "pe_type.hxx"
 #include "pe_vari.hxx"
 #include "pe_funct.hxx"
@@ -259,7 +260,7 @@ PE_VarFunc::Hdl_UnknownToken( const char *)
 void
 PE_VarFunc::SpInit_FunctionStd()
 {
-    if ( nResultFrontType != 0 AND sName.length() > 0 )
+    if ( nResultFrontType.IsValid() AND sName.length() > 0 )
     {
         pSpuFunctionStd->Child().Init_Std(
                                        sName,
@@ -351,14 +352,14 @@ PE_VarFunc::SpReturn_Variable()
 
 //      ary::S_InitData aData( 0, Env().CurCeSpace().Id(), i_sName, 0 );
         ary::cpp::Variable & rCurParsedVariable
-                = Env().AryGate().Store_Variable(   Env().Context(),
+                = Env().AryGate().Ces().Store_Variable( Env().Context(),
                                                     sName,
                                                     nResultFrontType,
                                                     aFlags,
                                                     pSpuVariable->Child().Result_SizeExpression(),
                                                     pSpuVariable->Child().Result_InitExpression() );
         Env().Event_Store_Variable(rCurParsedVariable);
-        aResultIds.push_back( rCurParsedVariable.Id() );
+        aResultIds.push_back( rCurParsedVariable.CeId() );
         eResultType = result_variable;
     }
     else if (bExtern)
