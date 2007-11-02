@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:00:26 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:23:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ DOLLAR_SIGN=$$
 REGCOMP=$(WRAPCMD) regcomp
 PYTHON=$(WRAPCMD) python
 
-.IF "$(GUI)"!="WNT"
+.IF "$(GUI)"!="WNT" && "$(GUI)"!="OS2"
 TEST_ENV=\
     setenv FOO file://$(shell pwd)$/$(DLLDEST) && \
         setenv UNO_TYPES pyuno_regcomp.rdb && setenv UNO_SERVICES pyuno_regcomp.rdb
