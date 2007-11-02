@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:08:36 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ typedef char                     sal_Char;
 typedef signed char              sal_sChar;
 typedef unsigned char            sal_uChar;
 
-#if ( defined(SAL_W32) && !defined(__MINGW32__) ) || defined(SAL_OS2__YD)
+#if ( defined(SAL_W32) && !defined(__MINGW32__) )
     typedef wchar_t             sal_Unicode;
 #else
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
@@ -216,8 +216,9 @@ typedef void *                   sal_Handle;
 #   define SAL_CALL_ELLIPSE
 #endif
 #elif defined SAL_OS2 // YD
-#   define SAL_DLLPUBLIC_EXPORT    __declspec(dllexport)
-#   define SAL_DLLPUBLIC_IMPORT    __declspec(dllimport)
+/* YD 25/09/2007 gcc doesn't like imports inside class members */
+#   define SAL_DLLPUBLIC_EXPORT
+#   define SAL_DLLPUBLIC_IMPORT
 #   define SAL_DLLPRIVATE
 #   define SAL_CALL
 #   define SAL_CALL_ELLIPSE
