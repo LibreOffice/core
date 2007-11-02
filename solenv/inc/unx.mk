@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: kz $ $Date: 2007-06-18 16:33:35 $
+#   last change: $Author: hr $ $Date: 2007-11-02 15:20:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -181,6 +181,10 @@
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXI"
 .INCLUDE : unxmacxi.mk
+.ENDIF
+
+.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXM"
+.INCLUDE : unxlngmips.mk
 .ENDIF
 
 # --- general *ix settings ---
