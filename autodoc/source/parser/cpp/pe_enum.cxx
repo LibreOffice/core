@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_enum.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:12:16 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:53:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,9 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/cpp/c_rwgate.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_enum.hxx>
+#include <ary/cpp/cp_ce.hxx>
 #include <all_toks.hxx>
 #include "pe_enval.hxx"
 
@@ -129,7 +130,7 @@ PE_Enum::On_expectName_Identifier( const char * i_sText )
     pStati->SetCur(gotName);
 
     sLocalName = i_sText;
-    pCurObject = & Env().AryGate().Store_Enum( Env().Context(), sLocalName );
+    pCurObject = & Env().AryGate().Ces().Store_Enum( Env().Context(), sLocalName );
 }
 
 void
@@ -139,7 +140,7 @@ PE_Enum::On_expectName_SwBracket_Left( const char * )
     pStati->SetCur(bodyStd);
 
     sLocalName = "";
-    pCurObject = & Env().AryGate().Store_Enum( Env().Context(), sLocalName );
+    pCurObject = & Env().AryGate().Ces().Store_Enum( Env().Context(), sLocalName );
     sLocalName = pCurObject->LocalName();
 
     Env().OpenEnum(*pCurObject);
