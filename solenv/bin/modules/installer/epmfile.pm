@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.69 $
+#   $Revision: 1.70 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 09:51:23 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:55:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ use installer::packagelist;
 use installer::pathanalyzer;
 use installer::remover;
 use installer::scriptitems;
+use installer::systemactions;
 use installer::worker;
 
 ############################################################################
@@ -1203,6 +1204,29 @@ sub set_packager_in_specfile
 }
 
 #####################################################################
+# Setting the requirements in the spec file (i81494)
+# Syntax: PreReq: "requirements" (only for shared extensions)
+#####################################################################
+
+sub set_prereq_in_specfile
+{
+    my ($changefile) = @_;
+
+    my $prereq = "PreReq:";
+
+    for ( my $i = 0; $i <= $#{$changefile}; $i++ )
+    {
+        if ( ${$changefile}[$i] =~ /^\s*Requires:\s*(.+?)\s*$/ )
+        {
+            my $oldstring = ${$changefile}[$i];
+            ${$changefile}[$i] =~ s/Requires:/$prereq/;
+            my $infoline = "Info: Changed requirements in spec file from $oldstring to ${$changefile}[$i]!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
+}
+
+#####################################################################
 # Setting the Auto[Req]Prov line and __find_requires
 #####################################################################
 
@@ -1481,13 +1505,65 @@ sub include_classes_into_pkginfo
     }
 }
 
+##########################################################################################
+# Checking, if an extension is included into the package (Linux).
+# All extension files have to be installed into directory
+# share/extension/install
+# %attr(0444,root,root) "/opt/staroffice8/share/extension/install/SunSearchToolbar.oxt"
+##########################################################################################
+
+sub is_extension_package
+{
+    my ($specfile) = @_;
+
+    my $is_extension_package = 0;
+
+    for ( my $i = 0; $i <= $#{$specfile}; $i++ )
+    {
+        my $line = ${$specfile}[$i];
+        if ( $line =~ /share\/extension\/install\/(\w+?)\.oxt\"\s*$/ )
+        {
+            $is_extension_package = 1;
+            last;
+        }
+    }
+
+    return $is_extension_package;
+}
+
+######################################################################
+# Checking, if an extension is included into the package (Solaris).
+# All extension files have to be installed into directory
+# share/extension/install
+######################################################################
+
+sub get_extension_name
+{
+    my ($prototypefile) = @_;
+
+    my $extensionName = "";
+
+    for ( my $i = 0; $i <= $#{$prototypefile}; $i++ )
+    {
+        my $line = ${$prototypefile}[$i];
+        if ( $line =~ /^\s*f\s+none\s+share\/extension\/install\/(\w+?\.oxt)\s*\=/ )
+        {
+            $extensionName = $1;
+            last;
+        }
+    }
+
+    return $extensionName;
+}
+
+
 ############################################################
 # A Solaris patch contains 7 specific scripts
 ############################################################
 
 sub add_scripts_into_prototypefile
 {
-    my ($prototypefile) = @_;
+    my ($prototypefile, $prototypefilename, $languagestringref, $staticpath) = @_;
 
     # The files are stored in the directory $installer::globals::patchincludepath
     # The file names are available via @installer::globals::solarispatchscripts
@@ -1497,11 +1573,52 @@ sub add_scripts_into_prototypefile
     $path = $path . $installer::globals::separator;
 
     my @newlines = ();
+    my $extensionname = get_extension_name($prototypefile);
 
-    for ( my $i = 0; $i <= $#installer::globals::solarispatchscripts; $i++ )
+    if ( $extensionname ne "" )
     {
-        my $line = "i $installer::globals::solarispatchscripts[$i]=" . $path . $installer::globals::solarispatchscripts[$i] . "\n";
-        push(@newlines, $line);
+        for ( my $i = 0; $i <= $#installer::globals::solarispatchscriptsforextensions; $i++ )
+        {
+            my $sourcefilename = $path . $installer::globals::solarispatchscriptsforextensions[$i];
+            my $destfile = $installer::globals::solarispatchscriptsforextensions[$i];
+
+            # If the sourcepath has "_extension" in its name, this has to be removed
+            $destfile =~ s/_extensions\s*$//;  # hard coded renaming of script name
+
+            # Creating unique directory name with $prototypefilename
+            my $extensiondir = installer::systemactions::create_directories("extensionscripts", $languagestringref);
+
+            if ( $prototypefilename =~ /\/(\S*?)\s*$/ ) { $prototypefilename = $1; }
+            $prototypefilename =~ s/\./_/g;
+            my $destdir = $extensiondir . $installer::globals::separator . $prototypefilename;
+            if ( ! -d $destdir ) { installer::systemactions::create_directory($destdir); }
+            my $destpath = $destdir . $installer::globals::separator . $destfile;
+            if ( -f $destpath ) { unlink($destpath); }
+
+            # Reading file
+            my $scriptfile = installer::files::read_file($sourcefilename);
+
+            # Replacing variables
+            my $oldstring = "\$\{OXTFILENAME\}";
+            replace_variables_in_shellscripts($scriptfile, $destpath, $oldstring, $extensionname);
+            $oldstring = "PRODUCTDIRECTORYNAME";
+            replace_variables_in_shellscripts($scriptfile, $destpath, $oldstring, $staticpath);
+
+            # Saving file
+            installer::files::save_file($destpath, $scriptfile);
+
+            # Writing file destination into prototype file
+            my $line = "i $destfile=" . $destpath . "\n";
+            push(@newlines, $line);
+        }
+    }
+    else
+    {
+        for ( my $i = 0; $i <= $#installer::globals::solarispatchscripts; $i++ )
+        {
+            my $line = "i $installer::globals::solarispatchscripts[$i]=" . $path . $installer::globals::solarispatchscripts[$i] . "\n";
+            push(@newlines, $line);
+        }
     }
 
     # Including the new lines after the last line starting with "i"
@@ -1742,6 +1859,7 @@ sub prepare_packages
         set_topdir_in_specfile($changefile, $filename, $newepmdir);
         set_autoprovreq_in_specfile($changefile, $onepackage->{'findrequires'}, "$installer::globals::unpackpath" . "/bin");
         set_packager_in_specfile($changefile);
+        if ( is_extension_package($changefile) ) { set_prereq_in_specfile($changefile); }
         set_license_in_specfile($changefile, $variableshashref);
         set_tab_into_datafile($changefile, $filesref);
         # check_requirements_in_specfile($changefile);
@@ -1775,7 +1893,7 @@ sub prepare_packages
             installer::files::save_file($completefilename, $changefile);
         }
 
-        if ( $installer::globals::patch ) { add_scripts_into_prototypefile($prototypefile); }
+        if ( $installer::globals::patch ) { add_scripts_into_prototypefile($prototypefile, $prototypefilename, $languagestringref, $staticpath); }
 
         installer::files::save_file($prototypefilename, $prototypefile);
         if ( $installer::globals::patch ) { collect_patch_files($prototypefile, $packagename, ""); }
