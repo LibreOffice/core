@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:07:17 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:59:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ void RscHrcDep::Execute()
 
 /* poor man's getopt() */
 int     simple_getopt(char *argv[], const char *optstring);
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
 static char *optarg = NULL;
 static int  optind = 1;
 static int  optopt = 0;
