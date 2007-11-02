@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hi_main.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:01:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:39:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,12 +44,22 @@
 #include <ary/idl/i_ce.hxx>
 #include <ary/idl/ik_ce.hxx>
 #include <ary/idl/ik_enum.hxx>
-#include <ary/idl/ik_exception.hxx>
-#include <ary/idl/ik_interface.hxx>
-#include <ary/idl/ik_service.hxx>
-#include <ary/idl/ik_siservice.hxx>
-#include <ary/idl/ik_struct.hxx>
 #include <ary/idl/ik_typedef.hxx>
+#include <ary/idl/ik_interface.hxx>
+#include <ary/idl/ik_struct.hxx>
+#include <ary/idl/ik_exception.hxx>
+#include <ary/idl/i_constant.hxx>
+#include <ary/idl/i_constgroup.hxx>
+#include <ary/idl/i_enum.hxx>
+#include <ary/idl/i_singleton.hxx>
+#include <ary/idl/i_sisingleton.hxx>
+#include <ary/idl/i_exception.hxx>
+#include <ary/idl/i_interface.hxx>
+#include <ary/idl/i_service.hxx>
+#include <ary/idl/i_siservice.hxx>
+#include <ary/idl/i_struct.hxx>
+#include <ary/idl/i_typedef.hxx>
+#include <ary/idl/i_module.hxx>
 #include <cfrstd.hxx>
 #include <toolkit/htmlfile.hxx>
 #include <toolkit/out_position.hxx>
@@ -169,7 +179,9 @@ Guard_CurFile::Guard_CurFile( DocuFile_Html &               io_client,
     io_env.Get_CurFilePath(aCurFilePath());
 
     rClient.EmptyBody();
-    rClient.SetLocation( aCurFilePath().c_str() );
+    csv::ploc::Path
+        aLocation(aCurFilePath().c_str());
+    rClient.SetLocation(aLocation);
     sl().reset();
     rClient.SetTitle( sl()  << i_titlePrefix
                             << " "
@@ -197,9 +209,11 @@ Guard_CurFile::Guard_CurFile( DocuFile_Html &       io_client,
                                 << c_str );
     StreamLock aCurFilePath(700);
     io_env.Get_CurFilePath(aCurFilePath());
+    csv::ploc::Path
+        aLocation(aCurFilePath().c_str());
 
     rClient.EmptyBody();
-    rClient.SetLocation( aCurFilePath().c_str() );
+    rClient.SetLocation(aLocation);
     sl().reset();
     rClient.SetTitle( sl() << i_titlePrefix << " " << i_fileName << c_str );
     sl().reset();
@@ -220,9 +234,11 @@ Guard_CurFile::Guard_CurFile( DocuFile_Html &               io_client,
     io_env.Set_CurFile( output::ModuleFileName() );
     StreamLock aCurFilePath(700);
     io_env.Get_CurFilePath(aCurFilePath());
+    csv::ploc::Path
+        aLocation(aCurFilePath().c_str());
 
     rClient.EmptyBody();
-    rClient.SetLocation( aCurFilePath().c_str() );
+    rClient.SetLocation(aLocation);
     StreamLock sl(300);
     rClient.SetTitle( sl() << "Module " << io_env.CurPosition().Name() << c_str );
     sl().reset();
@@ -249,9 +265,11 @@ Guard_CurFile::Guard_CurFile( DocuFile_Html &       io_client,
                                 << c_str );
     StreamLock aCurFilePath(700);
     io_env.Get_CurFilePath(aCurFilePath());
+    csv::ploc::Path
+        aLocation(aCurFilePath().c_str());
 
     rClient.EmptyBody();
-    rClient.SetLocation( aCurFilePath().c_str() );
+    rClient.SetLocation(aLocation);
     sl().reset();
     rClient.SetTitle( sl() << "Global Index "
                            << ( i_letter != '_'
@@ -307,7 +325,7 @@ MainDisplay_Idl::WriteGlobalIndices()
 
 
 void
-MainDisplay_Idl::do_Module( const ary::idl::CodeEntity & i_ce )
+MainDisplay_Idl::do_Process( const ary::idl::Module & i_ce )
 {
     Guard_CurFile    gFile( *pMyFile,
                             Env(),
@@ -319,55 +337,55 @@ MainDisplay_Idl::do_Module( const ary::idl::CodeEntity & i_ce )
 }
 
 void
-MainDisplay_Idl::do_Interface( const ary::idl::CodeEntity & i_ce )
+MainDisplay_Idl::do_Process( const ary::idl::Interface & i_ce )
 {
     do_InterfaceDescr(i_ce);
     do_Interface2s(i_ce);
 }
 
 void
-MainDisplay_Idl::do_Service( const ary::idl::CodeEntity & i_ce )
+MainDisplay_Idl::do_Process( const ary::idl::Service & i_ce )
 {
     do_ServiceDescr(i_ce);
     do_Service2s(i_ce);
 }
 
 void
-MainDisplay_Idl::do_SglIfcService( const ary::idl::CodeEntity & i_ce )
+MainDisplay_Idl::do_Process( const ary::idl::SglIfcService & i_ce )
 {
     do_SglIfcServiceDescr(i_ce);
 }
 
 void
-MainDisplay_Idl::do_Struct( const ary::idl::CodeEntity & i_ce )
+MainDisplay_Idl::do_Process( const ary::idl::Struct & i_ce )
 {
     do_StructDescr(i_ce);
     do_Struct2s(i_ce);
 }
 
 void
-MainDisplay_Idl::do_Exception( const ary::idl::CodeEntity & i_ce )
+MainDisplay_Idl::do_Process( const ary::idl::Exception & i_ce )
 {
     do_ExceptionDescr(i_ce);
     do_Exception2s(i_ce);
 }
 
 void
-MainDisplay_Idl::do_Enum( const ary::idl::CodeEntity & i_ce )
+MainDisplay_Idl::do_Process( const ary::idl::Enum & i_ce )
 {
     do_EnumDescr(i_ce);
     do_Enum2s(i_ce);
 }
 
 void
-MainDisplay_Idl::do_Typedef( const ary::idl::CodeEntity & i_ce )
+MainDisplay_Idl::do_Process( const ary::idl::Typedef & i_ce )
 {
     do_TypedefDescr(i_ce);
     do_Typedef2s(i_ce);
 }
 
 void
-MainDisplay_Idl::do_ConstantsGroup( const ary::idl::CodeEntity & i_ce )
+MainDisplay_Idl::do_Process( const ary::idl::ConstantsGroup & i_ce )
 {
     Guard_CurFile       gFile( *pMyFile,
                                Env(),
@@ -380,7 +398,7 @@ MainDisplay_Idl::do_ConstantsGroup( const ary::idl::CodeEntity & i_ce )
 }
 
 void
-MainDisplay_Idl::do_Singleton( const ary::idl::CodeEntity & i_ce )
+MainDisplay_Idl::do_Process( const ary::idl::Singleton & i_ce )
 {
     Guard_CurFile       gFile( *pMyFile,
                                Env(),
@@ -393,7 +411,7 @@ MainDisplay_Idl::do_Singleton( const ary::idl::CodeEntity & i_ce )
 }
 
 void
-MainDisplay_Idl::do_SglIfcSingleton( const ary::idl::CodeEntity & i_ce )
+MainDisplay_Idl::do_Process( const ary::idl::SglIfcSingleton & i_ce )
 {
     Guard_CurFile       gFile( *pMyFile,
                                Env(),
