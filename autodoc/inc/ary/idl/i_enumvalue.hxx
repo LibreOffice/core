@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_enumvalue.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:48:44 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:07:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,20 +36,16 @@
 #ifndef ARY_IDL_I_ENUMVALUE_HXX
 #define ARY_IDL_I_ENUMVALUE_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <ary/idl/i_ce.hxx>
-    // COMPONENTS
-    // PARAMETERS
+
+
 
 
 namespace ary
 {
 namespace idl
 {
-
 namespace ifc_enumvalue
 {
     struct attr;
@@ -71,16 +67,17 @@ class EnumValue : public CodeEntity
                             Ce_id               i_nNameRoom,
                             const String &      i_sInitValue );
                         ~EnumValue();
-
     // INQUIRY
     const String &      Value() const;
 
   private:
-    // Interface ary::RepositoryEntity
-    virtual RCid        inq_ClassId() const;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface ary::Object
+    virtual ClassId     get_AryClass() const;
 
     // Interface CodeEntity
-    virtual void            do_Visit_CeHost(CeHost & o_rHost) const;
     virtual const String &  inq_LocalName() const;
     virtual Ce_id           inq_NameRoom() const;
     virtual Ce_id           inq_Owner() const;
@@ -98,16 +95,17 @@ class EnumValue : public CodeEntity
 
 
 
-// IMPLEMENTATION
 
+// IMPLEMENTATION
 inline const String &
 EnumValue::Value() const
-    { return sValue; }
+{
+    return sValue;
+}
+
 
 
 
 }   // namespace idl
 }   // namespace ary
-
-
 #endif
