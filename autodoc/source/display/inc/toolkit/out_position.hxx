@@ -4,9 +4,9 @@
  *
  *  $RCSfile: out_position.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:57:57 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:41:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ class Position
                             Node &              i_directory,
                             const String &      i_file = String::Null_() );
                         Position(
-                            Position &          i_directory,
+                            const Position &    i_directory,
                             const String &      i_rDifferentFile );
                         ~Position();
 
@@ -81,14 +81,14 @@ class Position
                             StringVector &      o_result ) const
                                                 { pDirectory->Get_Chain(o_result); }
     String              LinkTo(
-                            Position &          i_destination,
+                            const Position &    i_destination,
                             const String &      i_localLabel = String::Null_() ) const;
     String              LinkToRoot(
                             const String &      i_localLabel = String::Null_() ) const;
 
     void                Get_LinkTo(
                             StreamStr &         o_result,
-                            Position &          i_destination,
+                            const Position &    i_destination,
                             const String &      i_localLabel = String::Null_() ) const;
     void                Get_LinkToRoot(
                             StreamStr &         o_result,
@@ -97,7 +97,7 @@ class Position
     static char         Delimiter()             { return '/'; }
 
     // ACCESS
-    Node &              RelatedNode()           { return *pDirectory; }
+    Node &              RelatedNode() const     { return *pDirectory; }
 
     void                Set(
                             Node &              i_node,
