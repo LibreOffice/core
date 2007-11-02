@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-11-01 14:44:12 $
+dnl * Date: $Date: 2007-11-02 08:42:50 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.224 $ )
+AC_REVISION( $Revision: 1.225 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -3780,6 +3780,20 @@ int main(int argc, char **argv) {
       else return 1;
 }
       ], [AC_MSG_RESULT(OK)], [AC_MSG_RESULT([not suitable, only 3.6 supported currently])])
+     AC_MSG_CHECKING(whether setBreakType is public)
+     save_LDFLAGS="$LDFLAGS"
+     LDFLAGS="$LDFLAGS -licuuc"
+	   AC_TRY_LINK([#include <unicode/rbbi.h>], [
+	   RuleBasedBreakIterator *rbi = NULL;
+	   rbi = new RuleBasedBreakIterator();
+	   rbi->setBreakType(UBRK_CHARACTER);
+	   ], [SBT_PUBLIC=YES], [SBT_PUBLIC=NO])
+      if test "$SBT_PUBLIC" = "NO"; then
+      	AC_MSG_ERROR(no. You need a patched ICU with this function public:)
+      else
+        AC_MSG_RESULT(yes)
+      fi
+      LDFLAGS="$save_LDFLAGS"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU=NO
