@@ -4,9 +4,9 @@
  *
  *  $RCSfile: x_parsing.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:27:57 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:22:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,9 @@
 #define AUTODOC_X_PARSING_HXX
 
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-    // PARAMETERS
-
 #include <iostream>
+
+
 
 
 namespace autodoc
@@ -66,18 +64,18 @@ class X_Parser_Ifc
     // INQUIRY
     virtual E_Event     GetEvent() const = 0;
     virtual void        GetInfo(
-                            ostream &           o_rOutputMedium ) const = 0;
+                            std::ostream &      o_rOutputMedium ) const = 0;
 };
 
 
 }   // namespace autodoc
 
-ostream &           operator<<(
-                        ostream &           o_rOut,
+std::ostream &      operator<<(
+                        std::ostream &      o_rOut,
                         const autodoc::X_Parser_Ifc &
                                             i_rException );
 
 
 
-#endif
 
+#endif
