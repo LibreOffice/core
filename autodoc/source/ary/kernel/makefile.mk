@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 17:13:05 $
+#   last change: $Author: hr $ $Date: 2007-11-02 16:13:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,18 +55,13 @@ PRJINC=$(PRJ)$/source
 
 OBJFILES= \
     $(OBJ)$/ary_disp.obj        \
-    $(OBJ)$/ce_null.obj         \
     $(OBJ)$/cessentl.obj        \
-    $(OBJ)$/id_gener.obj        \
-    $(OBJ)$/inheritgraph.obj    \
-    $(OBJ)$/inheritnode.obj     \
     $(OBJ)$/instlist.obj        \
     $(OBJ)$/namesort.obj        \
     $(OBJ)$/nametree.obj        \
-    $(OBJ)$/opertype.obj        \
-    $(OBJ)$/project.obj         \
     $(OBJ)$/qualiname.obj       \
     $(OBJ)$/reposy.obj          \
+    $(OBJ)$/segmentedname.obj   \
     $(OBJ)$/slots.obj           \
     $(OBJ)$/x_ary.obj
 
