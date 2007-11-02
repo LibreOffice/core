@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_process.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:51:16 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:36:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@
 #include <iterator>
 #include <string>
 
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     const rtl::OUString EXECUTABLE_NAME = rtl::OUString::createFromAscii("osl_process_child.exe");
 #else
     const rtl::OUString EXECUTABLE_NAME = rtl::OUString::createFromAscii("osl_process_child");
