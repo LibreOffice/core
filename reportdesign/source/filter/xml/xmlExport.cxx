@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-06 10:47:23 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 11:25:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -994,6 +994,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                         {
                             Reference<XReportControlModel> xReportElement(xElement,uno::UNO_QUERY);
                             Reference<XReportDefinition> xReportDefinition(xElement,uno::UNO_QUERY);
+                            Reference< XImageControl > xImage(xElement,uno::UNO_QUERY);
                             Reference<XSection> xSection(xElement,uno::UNO_QUERY);
 
                             XMLTokenEnum eToken = XML_SECTION;
@@ -1010,15 +1011,14 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                             else if ( xElement->supportsService(SERVICE_IMAGECONTROL) )
                             {
                                 eToken = XML_IMAGE;
-                                Reference< XImageControl > xProp(xElement,uno::UNO_QUERY);
-                                ::rtl::OUString sTargetLocation = xProp->getImageURL();
+                                ::rtl::OUString sTargetLocation = xImage->getImageURL();
                                 if ( sTargetLocation.getLength() )
                                 {
                                     sTargetLocation = GetRelativeReference(sTargetLocation);
                                     AddAttribute(XML_NAMESPACE_FORM, XML_IMAGE_DATA,sTargetLocation);
                                 }
                                 bExportData = sal_True;
-                                if ( xProp->getScaleImage() )
+                                if ( xImage->getScaleImage() )
                                     AddAttribute(XML_NAMESPACE_REPORT, XML_SCALE, XML_TRUE );
                             }
                             else if ( xReportDefinition.is() )
@@ -1078,7 +1078,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                                     }
                                 }
                                 else if ( eToken == XML_IMAGE )
-                                    AddAttribute(XML_NAMESPACE_REPORT, XML_PRESERVE_IRI, XML_TRUE );
+                                    AddAttribute(XML_NAMESPACE_REPORT, XML_PRESERVE_IRI, xImage->getPreserveIRI() ? XML_TRUE : XML_FALSE );
                             }
 
                             if ( !bPageSet )
@@ -1095,6 +1095,12 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                                 else if ( eToken == XML_SUB_DOCUMENT )
                                 {
                                     exportMasterDetailFields(xReportDefinition);
+                                    SvXMLElementExport aOfficeElement( *this, XML_NAMESPACE_OFFICE, XML_BODY,sal_True, sal_True );
+                                    SvXMLElementExport aElem( *this, sal_True,
+                                                            XML_NAMESPACE_OFFICE, XML_REPORT,
+                                                              sal_True, sal_True );
+
+                                    exportReportAttributes(xReportDefinition);
                                     exportReport(xReportDefinition);
                                 }
                                 else if ( xSection.is() )
@@ -1160,6 +1166,8 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
 ::rtl::OUString ORptExport::convertFormula(const ::rtl::OUString& _sFormula)
 {
     ::rtl::OUString sFormula = _sFormula;
+    if ( _sFormula.equalsAsciiL("rpt:",4) )
+        sFormula = ::rtl::OUString();
     //sal_Int32 nLength = _sFormula.getLength();
     //if ( nLength )
     //{
@@ -1180,7 +1188,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
 // -----------------------------------------------------------------------------
 bool ORptExport::exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const ::rtl::OUString& _sFormula)
 {
-    ::rtl::OUString sFieldData = convertFormula(_sFormula);
+    const ::rtl::OUString sFieldData = convertFormula(_sFormula);
     static const ::rtl::OUString s_sPageNumber(RTL_CONSTASCII_USTRINGPARAM("PageNumber()"));
     static const ::rtl::OUString s_sPageCount(RTL_CONSTASCII_USTRINGPARAM("PageCount()"));
     sal_Int32 nPageNumberIndex = sFieldData.indexOf(s_sPageNumber);
@@ -1434,30 +1442,38 @@ void ORptExport::exportAutoStyle(const Reference<XSection>& _xProp)
 void ORptExport::SetBodyAttributes()
 {
     Reference<XReportDefinition> xProp(getReportDefinition());
-    if ( xProp.is() )
+    exportReportAttributes(xProp);
+}
+// -----------------------------------------------------------------------------
+void ORptExport::exportReportAttributes(const Reference<XReportDefinition>& _xReport)
+{
+    if ( _xReport.is() )
     {
         ::rtl::OUStringBuffer sValue;
         const SvXMLEnumMapEntry* aXML_CommnadTypeEnumMap = OXMLHelper::GetCommandTypeOptions();
-        if ( SvXMLUnitConverter::convertEnum( sValue, static_cast<sal_uInt16>(xProp->getCommandType()),aXML_CommnadTypeEnumMap ) )
+        if ( SvXMLUnitConverter::convertEnum( sValue, static_cast<sal_uInt16>(_xReport->getCommandType()),aXML_CommnadTypeEnumMap ) )
             AddAttribute(XML_NAMESPACE_REPORT, XML_COMMAND_TYPE,sValue.makeStringAndClear());
 
-        ::rtl::OUString sComamnd = xProp->getCommand();
+        ::rtl::OUString sComamnd = _xReport->getCommand();
         if ( sComamnd.getLength() )
             AddAttribute(XML_NAMESPACE_REPORT, XML_COMMAND, sComamnd);
 
-        ::rtl::OUString sFilter( xProp->getFilter() );
+        ::rtl::OUString sFilter( _xReport->getFilter() );
         if ( sFilter.getLength() )
             AddAttribute( XML_NAMESPACE_REPORT, XML_FILTER, sFilter );
 
-        AddAttribute(XML_NAMESPACE_OFFICE, XML_MIMETYPE,xProp->getMimeType());
+        AddAttribute(XML_NAMESPACE_OFFICE, XML_MIMETYPE,_xReport->getMimeType());
 
-        sal_Bool bEscapeProcessing( xProp->getEscapeProcessing() );
+        sal_Bool bEscapeProcessing( _xReport->getEscapeProcessing() );
         if ( !bEscapeProcessing )
             AddAttribute( XML_NAMESPACE_REPORT, XML_ESCAPE_PROCESSING, ::xmloff::token::GetXMLToken( XML_FALSE ) );
 
-        ::rtl::OUString sName = xProp->getCaption();
+        ::rtl::OUString sName = _xReport->getCaption();
         if ( sName.getLength() )
             AddAttribute(XML_NAMESPACE_OFFICE, XML_CAPTION,sName);
+        sName = _xReport->getName();
+        if ( sName.getLength() )
+            AddAttribute(XML_NAMESPACE_DRAW, XML_NAME,sName);
     }
 }
 // -----------------------------------------------------------------------------
@@ -1665,6 +1681,7 @@ XMLShapeExport* ORptExport::CreateShapeExport()
 void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddParagraph)
 {
     UniReference< XMLShapeExport > xShapeExport = GetShapeExport();
+    xShapeExport->seekShapes(_xSection.get());
     const sal_Int32 nCount = _xSection->getCount();
     awt::Point aRefPoint;
     aRefPoint.X = rptui::getStyleProperty<sal_Int32>(_xSection->getReportDefinition(),PROPERTY_LEFTMARGIN);
