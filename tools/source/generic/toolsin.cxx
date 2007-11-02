@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolsin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:14:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:02:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 #include <toolsin.hxx>
 #endif
 
-#if defined WNT
+#if defined WNT || defined OS2
 #include <dll.hxx>
 #endif
 
@@ -104,5 +104,8 @@ void GlobalDeInitTools()
 
 #if defined WNT
     ImpDeInitWinTools();
+#endif
+#ifdef OS2
+    ImpDeInitOS2Tools();
 #endif
 }
