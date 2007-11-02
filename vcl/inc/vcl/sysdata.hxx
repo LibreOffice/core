@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sysdata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 14:35:02 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:43:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 struct SystemEnvData
 {
     unsigned long       nSize;          // size in bytes of this structure
-#if defined( WNT )
+#if defined( WNT ) || defined( OS2 )
     HWND                hWnd;           // the window hwnd
 #elif defined( QUARTZ )
     WindowRef           rWindow;        // Window reference
@@ -78,7 +78,7 @@ struct SystemEnvData
 struct SystemParentData
 {
     unsigned long   nSize;            // size in bytes of this structure
-#if defined( WNT )
+#if defined( WNT ) || defined( OS2 )
     HWND            hWnd;             // the window hwnd
 #elif defined( QUARTZ )
     WindowRef       rWindow;        // Window reference
