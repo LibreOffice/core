@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_defs.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:12:03 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,11 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <cosv/template/tpltools.hxx>
-#include <ary/cpp/c_rwgate.hxx>
+#include <cosv/tpl/tpltools.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_define.hxx>
 #include <ary/cpp/c_macro.hxx>
-#include <ary/cpp/crwg_def.hxx>
+#include <ary/cpp/cp_def.hxx>
 #include "all_toks.hxx"
 
 
@@ -116,15 +116,18 @@ PE_Defines::TransferData()
 {
     if (NOT bIsMacro)
     {
+        if (aDefinition.empty() OR aDefinition.front().empty())
+            return;
+
         ary::cpp::Define &
-            rNew = Env().AryGate().Defines().Store_Define(
+            rNew = Env().AryGate().Defs().Store_Define(
                             Env().Context(), sName, aDefinition );
         Env().Event_Store_CppDefinition(rNew);
     }
     else
     {
         ary::cpp::Macro &
-            rNew = Env().AryGate().Defines().Store_Macro(
+            rNew = Env().AryGate().Defs().Store_Macro(
                             Env().Context(), sName, aParameters, aDefinition );
         Env().Event_Store_CppDefinition(rNew);
     }
@@ -162,14 +165,14 @@ PE_Defines::On_gotDefineName_PreProDefinition( const char * i_sText )
 {
     SetTokenResult(done, pop_success);
 
-    aDefinition.push_back( udmstri(i_sText) );
+    aDefinition.push_back( String (i_sText) );
 }
 
 void
 PE_Defines::On_expectMacroParameters_MacroParameter( const char * i_sText )
 {
     SetTokenResult(done, stay);
-    aParameters.push_back( udmstri(i_sText) );
+    aParameters.push_back( String (i_sText) );
 }
 
 void
@@ -177,7 +180,7 @@ PE_Defines::On_expectMacroParameters_PreProDefinition( const char * i_sText )
 {
     SetTokenResult(done, pop_success);
 
-    aDefinition.push_back( udmstri(i_sText) );
+    aDefinition.push_back( String (i_sText) );
 }
 
 
