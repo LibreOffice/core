@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prs_code.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:27:21 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,10 @@ namespace ary
 
 namespace autodoc
 {
+    class FileCollector_Ifc;
+    class DocumentationParser_Ifc;
 
-class FileCollector_Ifc;
-class DocumentationParser_Ifc;
+
 
 
 /** Interface for parsing code of a programming language and
@@ -72,17 +73,12 @@ class CodeParser_Ifc
                                                 i_rDocumentationInterpreter ) = 0;
 
     virtual void        Run(
-                            const udmstri &     i_sProjectName,
-                            const csv::ploc::Path &
-                                                i_rProjectRootDirectory,
                             const autodoc::FileCollector_Ifc &
                                                 i_rFiles ) = 0;
 };
 
 
+
+
 } // namespace autodoc
-
-
-
 #endif
-
