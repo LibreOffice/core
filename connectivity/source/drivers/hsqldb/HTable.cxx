@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HTable.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:38:15 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 11:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,36 +257,6 @@ void SAL_CALL OHSQLTable::alterColumnByName( const ::rtl::OUString& colName, con
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))      >>= bOldAutoIncrement;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
 
-        if  (   nOldType != nNewType
-            ||  sOldTypeName != sNewTypeName
-            ||  nOldPrec != nNewPrec
-            ||  nOldScale != nNewScale
-            ||  nNewNullable != nOldNullable
-            ||  bOldAutoIncrement != bAutoIncrement )
-        {
-            // special handling because they change the type names to distinguish
-            // if a column should be an auto_incmrement one
-            if ( bOldAutoIncrement != bAutoIncrement )
-            {
-                /// TODO: insert special handling for auto increment "IDENTITY" and primary key
-            }
-            alterColumnType(nNewType,colName,descriptor);
-        }
-
-        // third: check the default values
-        ::rtl::OUString sNewDefault,sOldDefault;
-        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE))     >>= sOldDefault;
-        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)) >>= sNewDefault;
-
-        if(sOldDefault.getLength())
-        {
-            dropDefaultValue(colName);
-            if(sNewDefault.getLength() && sOldDefault != sNewDefault)
-                alterDefaultValue(sNewDefault,colName);
-        }
-        else if(!sOldDefault.getLength() && sNewDefault.getLength())
-            alterDefaultValue(sNewDefault,colName);
-
         // now we should look if the name of the column changed
         ::rtl::OUString sNewColumnName;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_NAME)) >>= sNewColumnName;
@@ -303,6 +273,37 @@ void SAL_CALL OHSQLTable::alterColumnByName( const ::rtl::OUString& colName, con
 
             executeStatement(sSql);
         }
+
+        if  (   nOldType != nNewType
+            ||  sOldTypeName != sNewTypeName
+            ||  nOldPrec != nNewPrec
+            ||  nOldScale != nNewScale
+            ||  nNewNullable != nOldNullable
+            ||  bOldAutoIncrement != bAutoIncrement )
+        {
+            // special handling because they change the type names to distinguish
+            // if a column should be an auto_incmrement one
+            if ( bOldAutoIncrement != bAutoIncrement )
+            {
+                /// TODO: insert special handling for auto increment "IDENTITY" and primary key
+            }
+            alterColumnType(nNewType,sNewColumnName,descriptor);
+        }
+
+        // third: check the default values
+        ::rtl::OUString sNewDefault,sOldDefault;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE))     >>= sOldDefault;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)) >>= sNewDefault;
+
+        if(sOldDefault.getLength())
+        {
+            dropDefaultValue(colName);
+            if(sNewDefault.getLength() && sOldDefault != sNewDefault)
+                alterDefaultValue(sNewDefault,sNewColumnName);
+        }
+        else if(!sOldDefault.getLength() && sNewDefault.getLength())
+            alterDefaultValue(sNewDefault,sNewColumnName);
+
         m_pColumns->refresh();
     }
     else
