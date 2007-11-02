@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Object.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:37:56 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:13:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,6 @@
 #include <cstdarg>
 #endif
 
-#ifdef OS2
-#include <typedefs.h>
-#endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
@@ -67,13 +64,9 @@
 #error "no 64 bit pointer"
 #else
 #ifdef OS2
-#define INT64_TO_PVOID(x) (void *)x.lo
-inline jlong Make_Os2_Int64( sal_Int32 hi, sal_Int32 lo ) {jlong x = CONST64( hi, lo ); return x; }
-#define PVOID_TO_INT64(x) Make_Os2_Int64( 0, (sal_Int32)x )
-#else //OS2
 #define PVOID_TO_INT64(x) (jlong)(sal_Int32)x
 #define INT64_TO_PVOID(x) (void *)x
-#endif //Os2
+#endif // OS2
 #endif //HAVE_64BIT_POINTERS
 
 namespace comphelper
