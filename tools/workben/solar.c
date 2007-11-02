@@ -4,9 +4,9 @@
  *
  *  $RCSfile: solar.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:10:09 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:03:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ int GetStackAlignment(void);
 void PrintArgs( int p, ... );
 int check( TestFunc func, Type eT, void* p );
 
-#if defined (UNX) || defined (WNT)
+#if defined (UNX) || defined (WNT) || defined (OS2)
 
 #ifdef UNX
 #include <unistd.h>
@@ -130,7 +130,7 @@ int GetStackAlignment()
 
 
 
-#if defined (UNX) || defined (WNT)
+#if defined (UNX) || defined (WNT) || defined (OS2)
 
 #ifdef I_STDARG
 void PrintArgs( int p, ... )
@@ -161,7 +161,7 @@ va_dcl
 #ifndef USE_FORK_TO_CHECK
 static jmp_buf check_env;
 static int bSignal;
-#ifdef UNX
+#if defined (UNX) || defined (OS2)
 void SignalHandler( int sig )
 #else
 void __cdecl SignalHandler( int sig )
