@@ -4,9 +4,9 @@
  *
  *  $RCSfile: easywri.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:51:41 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:26:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,90 +84,6 @@ csi::xml::Element &
 EasyWriter::Out()
 {
     csv_assert( aCurDestination.size() > 0);
-//    if ( aCurDestination.size() <= 0 )
-//        csv_assert( false );
-
     return *aCurDestination.top();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#if 0
-/*
-class Html_Inverse : public Html::Piece
-{
-  public:
-                        Html_Inverse(
-                            DYN Html::Piece &   let_drInhalt,
-                            const udmstri       i_sBgColor );
-                        ~Html_Inverse();
-    virtual void        WriteOut(
-                            csv::AnyWrite &     io_aFile );
-  private:
-    DYN Html::Piece *   dpInhalt;
-    udmstri             sBgColor;
-    udmstri             sColor;
-};
-
-Html_Inverse::Html_Inverse( DYN Html::Piece &       let_drInhalt,
-                            const udmstri       i_sBgColor )
-    :   dpInhalt(&let_drInhalt),
-        sBgColor(i_sBgColor)
-{
-}
-
-Html_Inverse::~Html_Inverse()
-{
-    Delete_dyn(dpInhalt);
-}
-
-
-void
-Html_Inverse::WriteOut( csv::File & io_aFile )
-{
-    io_aFile.WriteStr( "<TABLE WIDTH=100% BORDER=0 CELLPADDING=4 CELLSPACING=0>"
-                       " <TR> <TD BGCOLOR=\"");
-    io_aFile.WriteStr( sBgColor );
-    io_aFile.WriteStr( "\" VALIGN=\"MIDDLE\">\r\n");
-    dpInhalt->WriteOut(io_aFile);
-    io_aFile.WriteStr( "\r\n</TD></TR></TABLE>\r\n" );
-}
-
-
-
-
-*/
-#endif // 0
-
-
-
 
