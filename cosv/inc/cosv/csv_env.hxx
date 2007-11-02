@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csv_env.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:53:35 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:38:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,33 +38,6 @@
 
 
 
-// BEGIN Compiler dependent defines regarding standard compliance,
-//   subject to changes:
-// #define CSV_NO_BOOL_TYPE       // States that no system type 'bool' exists
-// #define CSV_NO_MUTABLE         // No keyword mutable
-// #define CSV_NO_EXPLICIT        // No keyword explicit
-// #define CSV_NO_IOSTREAMS       // No iostreams
-// END Compiler dependent defines, subject to changes
-
-
-// BEGIN Compiler dependant defines, controlled by above defines
-#ifdef CSV_NO_BOOL_TYPE
-typedef int     bool_int;
-#define bool    bool_int
-#define false   0
-#define true    1
-#endif // CSV_NO_BOOL_TYPE
-
-#ifdef CSV_NO_MUTABLE
-#define mutable
-#endif // CSV_NO_MUTABLE
-
-#ifdef CSV_NO_EXPLICIT
-#define explicit
-#endif  // CSV_NO_EXPLICIT
-// END Compiler dependent defines, controlled by above defines
-
-
 //*******       Include c-language-types        ************//
 // size_t, wchar_t
 #include <stdlib.h>
@@ -85,9 +58,9 @@ typedef double          REAL64;
 
 
 // Additional builtin types
-typedef INT32        intt;      // Um ein exakt definiertes Standard-int zu haben.
-typedef UINT32       uintt;     // Das dazu passende Standard-unsigned-int.
-typedef REAL64       real;
+typedef INT32        intt;      // standard sized integer.
+typedef UINT32       uintt;     // standard sized unsigned integer.
+typedef REAL64       real;      // standard sized real.
 
 //  Constants
 //  ---------
@@ -135,14 +108,9 @@ void                PerformAssertion(
 
 // Programming by contract
 #ifndef CSV_NO_ASSERTIONS
-//   Subject to change to more sophisticated handling
-#define precond(x)      csv_assert(x)
-#define postcond(x)     csv_assert(x)
 
 #ifdef CSV_USE_CSV_ASSERTIONS
 #define csv_assert(x)       ( (x) ? (void)(0) : ::csv::PerformAssertion( #x, __FILE__, __LINE__) )
-#define csv_noimpl(x)       ::csv::PerformAssertion( "Functon " #x " is not yet implemented.", __FILE__, __LINE__)
-#define csv_exception       ::csv::PerformAssertion( "Exception to be raised.", __FILE__, __LINE__)
 #else
 
 // Save NDEBUG state
@@ -157,8 +125,6 @@ void                PerformAssertion(
 #include <assert.h>
 
 #define csv_assert(x)       assert(x);
-#define csv_noimpl(x)       assert(x);
-#define csv_exception       assert(x);
 
 // Restore NDEBUG state
 #ifdef CSV_CSV_ENV_HXX_HAD_NDEBUG
@@ -171,31 +137,26 @@ void                PerformAssertion(
 
 #else // #ifndef CSV_NO_ASSERTIONS else
 
-#define precond(x)
-#define postcond(x)
 #define csv_assert(x)
-#define csv_noimpl(x)
-#define csv_exception
 
 #endif  // end ifndef CSV_NO_ASSERTIONS else
 
 
 
 /* Additional Programming Conventions
+
 1. see above at "#define DYN"
 2. function parameters get one of these prefixes:
     - i_     := Function uses only the value, but must not change a referenced variable.
     - o_     := Parameter is undefined until function has set it.
                 Parametere must be set by the function.
     - io_    := Function may use and change the referenced variable.
-    - let_   := Funktion may use and change the referenced variable and HAS TO free the
+    - pass_  := Funktion may use and change the referenced variable and HAS TO free the
                 associated memory.
-3. Global constants get the prefix 'C_', global variables the prefix
-   'G_', local constants the prefix 'c_' .
+3. Global constants get the prefix 'C_', global variables the prefix 'G_'.
 4. Static members end with an underscore '_'.
 
 */
 
 
 #endif
-
