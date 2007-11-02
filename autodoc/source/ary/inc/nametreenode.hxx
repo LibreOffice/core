@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nametreenode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:59:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:02:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,22 +35,20 @@
 
 #ifndef ARY_NAMETREENODE_HXX
 #define ARY_NAMETREENODE_HXX
-
+//  KORR_DEPRECATED_3.0
+//      Replace by ::ary::symtree::Node.
 
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-    // PARAMETERS
-#include <cosv/template/tpltools.hxx>
+#include <cosv/tpl/tpltools.hxx>
 #include <sci_impl.hxx>
 // HACK because of SunPro 5.2 compiler bug with templates:
 #include <ary/idl/i_module.hxx>
 
 
 
+
 namespace ary
 {
-
 
 
 /** Implementation of a node in a namespace-tree.
@@ -105,25 +103,9 @@ class NameTreeNode
 };
 
 
-#if 0
-//  Prototypes have to be left out, because of a VC++ 6 compiler bug
-//     ( compiler reports ambiguous overload ).
-
-template <class FIND_NODE>
-typename FIND_NODE::id_type
-Search_SubTree( const typename FIND_NODE::node_type &   i_rStart,
-                const FIND_NODE &                       i_rNodeFinder );
-
-template <class  FIND_NODE>
-typename FIND_NODE::id_type
-Search_SubTree_UpTillRoot( const typename FIND_NODE::node_type &    i_rStart,
-                           const FIND_NODE &                        i_rNodeFinder );
-#endif // 0
-
 
 
 // IMPLEMENTATION
-
 template<class ITEM_ID>
 NameTreeNode<ITEM_ID>::NameTreeNode()
     :   aLocalNames(),
@@ -176,7 +158,7 @@ template<class ITEM_ID>
 inline ITEM_ID
 NameTreeNode<ITEM_ID>::Search_Name( const String & i_sName ) const
 {
-    return csv::value_from_map(LocalNames(),i_sName);
+    return csv::value_from_map(LocalNames(),i_sName, ITEM_ID(0));
 }
 
 template<class ITEM_ID>
@@ -195,7 +177,7 @@ typename FIND_NODE::id_type
 Search_SubTree( const ary::idl::Module &    i_rStart,
                 const FIND_NODE &           i_rNodeFinder )
 {
-    const typename FIND_NODE::node_type *
+    const ary::idl::Module *
         ret = &i_rStart;
 
     for ( StringVector::const_iterator  it = i_rNodeFinder.Begin();
@@ -218,7 +200,7 @@ Search_SubTree_UpTillRoot( const ary::idl::Module &    i_rStart,
 {
     typename FIND_NODE::id_type
         ret(0);
-    for ( const typename FIND_NODE::node_type * start = &i_rStart;
+    for ( const ary::idl::Module * start = &i_rStart;
           start != 0 AND NOT ret.IsValid();
           start = i_rNodeFinder(start->Owner()) )
     {
@@ -230,7 +212,7 @@ Search_SubTree_UpTillRoot( const ary::idl::Module &    i_rStart,
 // END Hack for SunPro 5.2 compiler bug.
 
 
+
+
 }   // namespace ary
-
-
 #endif
