@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salogl.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 10:09:15 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:45:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,14 +42,14 @@
 #include <tools/gen.hxx>
 #endif
 #ifndef _SV_SV_H
-#include <sv.h>
+#include <vcl/sv.h>
 #endif
 //#ifndef _SV_SALOTYPE_HXX
 //#include <salotype.hxx>
 //#endif
 
 #ifndef _SV_SALOGL_HXX
-#include <salogl.hxx>
+#include <vcl/salogl.hxx>
 #endif
 
 // ------------------
