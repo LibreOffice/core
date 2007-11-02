@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<javaSelection xmlns="http://openoffice.org/2004/java/framework/1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+ <updated>2004-01-30</updated>
+
+ <vendorInfos>
+  <vendor name="Sun Microsystems Inc.">
+    <minVersion>1.3.1</minVersion>
+  </vendor>
+  <vendor name="IBM Corporation">
+    <minVersion>1.3.1</minVersion>
+  </vendor>
+ </vendorInfos>
+
+ <plugins>
+  <library vendor="Sun Microsystems Inc.">sunjavap.dll</library>
+  <library vendor="IBM Corporation">sunjavap.dll</library>
+ </plugins>
+</javaSelection>
