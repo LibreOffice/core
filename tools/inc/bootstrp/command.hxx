@@ -4,9 +4,9 @@
  *
  *  $RCSfile: command.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:06:36 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,9 @@ enum ExeType
 
 #ifdef WNT
 #define COMMAND_SHELL   "4nt.exe"
+#endif
+#ifdef OS2
+#define COMMAND_SHELL  "4os2.exe"
 #endif
 #ifdef UNX
 #define COMMAND_SHELL   "csh"
