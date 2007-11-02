@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precomp.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:10:03 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:32:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,25 +32,16 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef __ADC_PRECOMP_H_06071998__
-#define __ADC_PRECOMP_H_06071998__
-
+#ifndef UDM_PRECOMP_H
+#define UDM_PRECOMP_H
 
 // For en/disabling csv_assertions:
-#if OSL_DEBUG_LEVEL == 0
+#ifndef DEBUG
 #define CSV_NO_ASSERTIONS
-#else
-#define CSV_USE_CSV_ASSERTIONS
 #endif
 
-#ifdef NP_LOCALBUILD
-#ifdef _MSC_VER
-#pragma warning( disable : 4786 )
-#endif
-#endif
 
 #include <cosv/csv_precomp.h>
-
 #include <vector>
 #include <map>
 
@@ -60,18 +51,16 @@
 using csv::String;
 using csv::StringVector;
 using csv::StreamStr;
-using csv::ios;
-using csv::ostream;
 using csv::c_str;
 typedef csv::StreamStrLock  StreamLock;
 
 
 
-inline ostream &
-Cout() { return csv::Cout(); }
+inline std::ostream &
+Cout() { return std::cout; }
 
-inline ostream &
-Cerr() { return csv::Cerr(); }
+inline std::ostream &
+Cerr() { return std::cerr; }
 
 
 inline csv::F_FLUSHING_FUNC
@@ -81,6 +70,5 @@ Flush() { return csv::Flush; }
 
 
 
+
 #endif
-
-
