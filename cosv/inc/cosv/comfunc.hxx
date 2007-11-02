@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comfunc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:53:19 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:37:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,13 @@
 
 #include <stdlib.h>
 
+
+
+
 namespace csv
 {
+    class String;
 
-class String;
 
 // min, max and range functions
 template <class E>
@@ -70,7 +73,21 @@ void  date2str(String       & out_Str, int day, int month, int year);
 bool  str2time(const char * str, int & out_hour, int & out_min, int & out_sec);
 void  time2str(String       & out_Str, int hour, int min, int sec);
 
+class noncopyable
+{
+  protected:
+                        noncopyable() {}
+                        ~noncopyable() {}
+  private:
+    // Private to make copying impossible:
+                        noncopyable(const noncopyable&);
+    noncopyable &       operator=(const noncopyable&);
+};
 
+
+
+
+// IMPLEMENTATION
 template <class E>
 inline E
 max(E in1, E in2)   { return in1 < in2 ? in2 : in1; }
@@ -102,12 +119,15 @@ switch_endian( NUMTYPE &       o_rNumber,
 }
 
 
-
 }   // namespace csv
 
 
 
 
+#define NON_COPYABLE(xy) \
+    private: xy(const xy &); xy & operator=(const xy &)
+
+
+
+
 #endif
-
-
