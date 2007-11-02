@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adc_cmd_parse.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:05:12 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:43:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,8 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
+#include <cosv/tpl/tpltools.hxx>
+#include <adc_cl.hxx>
 #include "adc_cmds.hxx"
 #include "cmd_run.hxx"
 
@@ -99,8 +100,10 @@ S_LanguageInfo::do_Init( opt_iter &          it,
     {
         case cpp:   aExtensions.push_back( C_FileEnding_hxx );
                     aExtensions.push_back( C_FileEnding_h );
+                    CommandLine::Get_().Set_CppUsed();
                     break;
         case idl:   aExtensions.push_back( C_FileEnding_idl );
+                    CommandLine::Get_().Set_IdlUsed();
                     break;
         case java:  aExtensions.push_back( C_FileEnding_java );
                     break;
