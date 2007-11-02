@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_globalindex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:56:29 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:34:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,9 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
+#include <cosv/tpl/tpltools.hxx>
 #include <ary/idl/i_ce.hxx>
-#include <ary/idl/i_language.hxx>
+#include <ary/idl/i_types4idl.hxx>
 #include <ary/idl/i_module.hxx>
 #include <toolkit/hf_title.hxx>
 #include "hfi_navibar.hxx"
@@ -250,7 +250,7 @@ HF_IdlGlobalIndex::write_OwnerOfEntry( Xml::Element &               o_destinatio
     const client &
         rOwner = Env().Data().Find_Ce(i_ce.Owner());
 
-    int nIx = int(i_ce.ClassId() - C_nNamesArrayOffset);
+    int nIx = int(i_ce.AryClass() - C_nNamesArrayOffset);
     csv_assert(csv::in_range(0,nIx,C_nNumberOfIdlTypes));
 
     o_destination << C_sTypeNames[nIx]
@@ -261,7 +261,8 @@ HF_IdlGlobalIndex::write_OwnerOfEntry( Xml::Element &               o_destinatio
     }
     else
     {
-        uintt nOwnerIx = rOwner.ClassId() - C_nNamesArrayOffset;
+        uintt
+            nOwnerIx = rOwner.AryClass() - C_nNamesArrayOffset;
         csv_assert(
             nOwnerIx < static_cast< unsigned int >(C_nNumberOfIdlTypes));
         o_destination << C_sTypeNames[nOwnerIx];
@@ -274,7 +275,7 @@ HF_IdlGlobalIndex::write_EntrySecondTime( Xml::Element &                o_destin
                                           const ary::idl::CodeEntity &  i_ce,
                                           const HF_IdlTypeText &        i_typeLinkWriter ) const
 {
-    int nIx = int(i_ce.ClassId() - C_nNamesArrayOffset);
+    int nIx = int(i_ce.AryClass() - C_nNamesArrayOffset);
     csv_assert(csv::in_range(0,nIx,C_nNumberOfIdlTypes));
 
     o_destination << C_sTypeNames[nIx]
