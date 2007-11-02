@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cr_html.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:26:08 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:56:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ HtmlCreator::HtmlCreator( const char *              i_pOutputFileName,
                           const XmlElement &        i_rDocument,
                           const Simstr &            i_sIDL_BaseDirectory )
     :   aFile(i_pOutputFileName, std::ios::out
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
                                                | std::ios::binary
 #endif
                                                              ),
