@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstore.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:21:38 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:15:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,12 @@
 
 namespace ary
 {
-    class Documentation;
+namespace doc
+{
+    class Node;
+}
+
+
 
 namespace info
 {
@@ -56,72 +61,64 @@ class DocuStore
   public:
     virtual             ~DocuStore() {}
 
-    void                Store2CurProject(
-                            DYN Documentation & let_drDocu );
     void                Store2CurFile(
-                            DYN Documentation & let_drDocu );
+                            DYN doc::Node     & let_drDocu );
     void                Store2CurNamespace(
-                            DYN Documentation & let_drDocu );
+                            DYN doc::Node     & let_drDocu );
 
     void                Store2ConnectedDeclaration(
-                            DYN Documentation & let_drDocu );
+                            DYN doc::Node     & let_drDocu );
 
     void                Store2Glossary(
-                            DYN Documentation & let_drDocu,
-                            const udmstri &     i_sExplainedTerm );
+                            DYN doc::Node     & let_drDocu,
+                            const String  &     i_sExplainedTerm );
     void                Store2GlobalTexts(
-                            DYN Documentation & let_drDocu,
+                            DYN doc::Node     & let_drDocu,
                             ary::info::GlobalTextId
                                                 i_nId );
   private:
-    virtual void        do_Store2CurProject(
-                            DYN Documentation & let_drDocu ) = 0;
     virtual void        do_Store2CurFile(
-                            DYN Documentation & let_drDocu ) = 0;
+                            DYN doc::Node     & let_drDocu ) = 0;
     virtual void        do_Store2CurNamespace(
-                            DYN Documentation & let_drDocu ) = 0;
+                            DYN doc::Node     & let_drDocu ) = 0;
 
     virtual void        do_Store2ConnectedDeclaration(
-                            DYN Documentation & let_drDocu ) = 0;
+                            DYN doc::Node     & let_drDocu ) = 0;
 
     virtual void        do_Store2Glossary(
-                            DYN Documentation & let_drDocu,
-                            const udmstri &     i_sExplainedTerm ) = 0;
+                            DYN doc::Node     & let_drDocu,
+                            const String  &     i_sExplainedTerm ) = 0;
     virtual void        do_Store2GlobalTexts(
-                            DYN Documentation & let_drDocu,
+                            DYN doc::Node     & let_drDocu,
                             ary::info::GlobalTextId
                                                 i_nId ) = 0;
 };
 
 
+
+
 // IMPLEMENTATION
-
-
 inline void
-DocuStore::Store2CurProject( DYN Documentation & let_drDocu )
-    { do_Store2CurProject(let_drDocu);  }
-inline void
-DocuStore::Store2CurFile( DYN Documentation & let_drDocu )
+DocuStore::Store2CurFile( DYN doc::Node     & let_drDocu )
     { do_Store2CurFile(let_drDocu);  }
 inline void
-DocuStore::Store2CurNamespace( DYN Documentation & let_drDocu )
+DocuStore::Store2CurNamespace( DYN doc::Node     & let_drDocu )
     { do_Store2CurNamespace(let_drDocu);  }
 inline void
-DocuStore::Store2ConnectedDeclaration( DYN Documentation & let_drDocu )
+DocuStore::Store2ConnectedDeclaration( DYN doc::Node     & let_drDocu )
     { do_Store2ConnectedDeclaration(let_drDocu);  }
 inline void
-DocuStore::Store2Glossary( DYN Documentation &  let_drDocu,
-                           const udmstri &      i_sExplainedTerm )
+DocuStore::Store2Glossary( DYN doc::Node     &  let_drDocu,
+                           const String  &      i_sExplainedTerm )
     { do_Store2Glossary(let_drDocu, i_sExplainedTerm);  }
 inline void
-DocuStore::Store2GlobalTexts( DYN Documentation &       let_drDocu,
+DocuStore::Store2GlobalTexts( DYN doc::Node     &       let_drDocu,
                               ary::info::GlobalTextId   i_nId )
     { do_Store2GlobalTexts(let_drDocu, i_nId);  }
 
 
+
+
 }   // namespace info
 }   // namespace ary
-
-
 #endif
-
