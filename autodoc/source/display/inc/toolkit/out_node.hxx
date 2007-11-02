@@ -4,9 +4,9 @@
  *
  *  $RCSfile: out_node.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:57:39 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:41:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,6 @@
 #define ADC_DISPLAY_OUT_NODE_HXX
 
 
-// USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-    // PARAMETERS
-
 
 
 namespace output
@@ -49,8 +44,11 @@ namespace output
 
 
 /** @resp
+    Represents a tree of names where each node can have only one parent,
+    but a list of children.
 
-    @descr
+    @see    Position
+    @see    Tree
 */
 class Node
 {
@@ -64,9 +62,6 @@ class Node
                           Node();
       explicit            Node(
                               E_NullObject        );
-                          Node(
-                              const String &      i_name,
-                              Node &              i_parent );
                           ~Node();
 
       // OPERATORS
@@ -78,8 +73,10 @@ class Node
                                                   { return NOT operator==(i_node); }
 
       // OPERATIONS
+      /// Seek, and if not existent, create.
       Node &              Provide_Child(
                               const String &      i_name );
+      /// Seek, and if not existent, create.
       Node &              Provide_Child(
                               const StringVector &
                                                   i_path )
@@ -88,6 +85,7 @@ class Node
       intt                Depth() const           { return nDepth; }
 
     const String &      Name() const            { return sName; }
+    /// @return Id of a namespace or class etc. this directory represents.
     relative_id         RelatedNameRoom() const { return nNameRoomId; }
     /// @return No delimiter at start, with delimiter at end.
     void                Get_Path(
@@ -96,7 +94,6 @@ class Node
     void                Get_Chain(
                             StringVector &      o_result,
                             intt                i_maxDepth = -1 ) const;
-
     // ACCESS
     void                Set_RelatedNameRoom(
                             relative_id         i_nNameRoomId )
@@ -112,6 +109,10 @@ class Node
 
   private:
       // Local
+                          Node(
+                              const String &      i_name,
+                              Node &              i_parent );
+
       Node *              find_Child(
                               const String &      i_name );
       Node &              add_Child(
@@ -131,6 +132,6 @@ class Node
 
 
 
-}   // namespace output
 
+}   // namespace output
 #endif

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hf_linachain.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:55:37 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:40:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,11 @@
 #ifndef ADC_DISPLAY_HF_LINACHAIN_HXX
 #define ADC_DISPLAY_HF_LINACHAIN_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include "htmlfactory.hxx"
 #include "out_position.hxx"
-    // COMPONENTS
-    // PARAMETERS
+
+
 
 
 class HF_LinkedNameChain : public HtmlMaker
@@ -62,17 +59,22 @@ class HF_LinkedNameChain : public HtmlMaker
     virtual             ~HF_LinkedNameChain();
 
     void                Produce_CompleteChain(
-                            output::Position &  i_curPosition,
+                            const output::Position &
+                                                i_curPosition,
                             F_LinkMaker         i_linkMaker ) const;
     void                Produce_CompleteChain_forModule(
-                            output::Position &  i_curPosition,  /// current Module's node
+                            const output::Position &
+                                                i_curPosition,  /// current Module's node
                             F_LinkMaker         i_linkMaker ) const;
   private:
     void                produce_Level(
                             output::Node &      i_levelNode,
-                            output::Position &  i_startPosition,
+                            const output::Position &
+                                                i_startPosition,
                             F_LinkMaker         i_linkMaker ) const;
 };
 
-#endif
 
+
+
+#endif

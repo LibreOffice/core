@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adc_cmd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:04:01 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:43:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ class X_CommandLine
                             :   sExplanation(i_sExplanation) {}
 
     void                Report(
-                            ostream &           o_rOut )
+                            std::ostream &      o_rOut )
                             { o_rOut << "Error in command line: "
                                      << sExplanation << Endl(); }
   private:
@@ -134,10 +134,6 @@ class X_CommandLine
 
 
 
-
 }   // namespace command
 }   // namespace autodoc
-
-
 #endif
-
