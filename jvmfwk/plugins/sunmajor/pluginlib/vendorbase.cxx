@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vendorbase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:47:02 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:27:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ VendorBase::VendorBase(): m_bAccessibility(false)
 char const* const * VendorBase::getJavaExePaths(int* size)
 {
     static char const * ar[] = {
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
         "java.exe",
         "bin/java.exe"
 #elif UNX
