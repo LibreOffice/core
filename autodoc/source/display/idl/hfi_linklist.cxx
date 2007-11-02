@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_linklist.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:57:11 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/ip_ce.hxx>
 #include <ary/idl/ip_type.hxx>
-#include <ary_i/codeinf2.hxx>
 #include <toolkit/hf_docentry.hxx>
 #include <toolkit/hf_title.hxx>
 #include "hfi_doc.hxx"
@@ -375,7 +374,7 @@ HF_IdlLinkList::Get_EntryData_NamespaceMembers(
     o_pDocu = rCe.Docu();
 }
 
-const ary::info::CodeInformation *
+const ary::doc::OldIdlDocu *
 HF_IdlLinkList::Get_EntryDocu(ce_id i_nMemberId) const
 {
     if (i_nMemberId.IsValid())

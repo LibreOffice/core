@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_siservice.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:58:51 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:37:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <ary/idl/i_ce.hxx>
 #include <ary/idl/ik_function.hxx>
 #include <ary/idl/ik_siservice.hxx>
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 #include <toolkit/hf_docentry.hxx>
 #include <toolkit/hf_linachain.hxx>
 #include <toolkit/hf_navi_sub.hxx>
