@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 16:33:18 $
+#   last change: $Author: hr $ $Date: 2007-11-02 13:07:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -137,9 +137,10 @@ $(MISC)$/$(SHL1TARGET).def: makefile.mk
     @echo     StartInvader    @22                    >>$@
 
 .ENDIF
+
 .IF "$(GUI)"=="OS2"
 
-$(MISC)$/$(SHL1TARGET).def: makefile.mk $(MISC)$/$(SHL1TARGET).flt
+$(MISC)$/$(SHL1TARGET).def: makefile.mk
     @+echo -------------------------------------------
     @+echo DEF-File erstellen $@
         @+echo LIBRARY     $(DLLNAME) INITINSTANCE TERMINSTANCE   >$@
