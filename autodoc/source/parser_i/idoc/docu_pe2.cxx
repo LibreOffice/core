@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docu_pe2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:25:24 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 #include <ary_i/d_token.hxx>
 #include <parser/parserinfo.hxx>
 #include <adc_cl.hxx>
@@ -91,7 +91,7 @@ SapiDocu_PE::ProcessToken( DYN csi::dsapi::Token & let_drToken )
 
     if ( eState == e_none )
     {
-        pDocu = new ary::info::CodeInformation;
+        pDocu = new ary::doc::OldIdlDocu;
         eState = st_short;
         fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2Short;
     }
@@ -333,7 +333,7 @@ SapiDocu_PE::Process_White()
     (this->*fCurTokenAddFunction)(*new DT_White);
 }
 
-DYN ary::info::CodeInformation *
+DYN ary::doc::OldIdlDocu *
 SapiDocu_PE::ReleaseJustParsedDocu()
 {
     if (IsComplete())
@@ -352,41 +352,41 @@ SapiDocu_PE::IsComplete() const
 }
 
 void
-SapiDocu_PE::AddDocuToken2Void( DYN ary::info::DocuToken & let_drNewToken )
+SapiDocu_PE::AddDocuToken2Void( DYN ary::inf::DocuToken & let_drNewToken )
 {
     delete &let_drNewToken;
 }
 
 void
-SapiDocu_PE::AddDocuToken2Short( DYN ary::info::DocuToken & let_drNewToken )
+SapiDocu_PE::AddDocuToken2Short( DYN ary::inf::DocuToken & let_drNewToken )
 {
     csv_assert(pDocu);
     pDocu->AddToken2Short(let_drNewToken);
 }
 
 void
-SapiDocu_PE::AddDocuToken2Description( DYN ary::info::DocuToken & let_drNewToken )
+SapiDocu_PE::AddDocuToken2Description( DYN ary::inf::DocuToken & let_drNewToken )
 {
     csv_assert(pDocu);
     pDocu->AddToken2Description(let_drNewToken);
 }
 
 void
-SapiDocu_PE::AddDocuToken2Deprecated( DYN ary::info::DocuToken & let_drNewToken )
+SapiDocu_PE::AddDocuToken2Deprecated( DYN ary::inf::DocuToken & let_drNewToken )
 {
     csv_assert(pDocu);
     pDocu->AddToken2DeprecatedText(let_drNewToken);
 }
 
 void
-SapiDocu_PE::AddDocuToken2CurAtTag( DYN ary::info::DocuToken & let_drNewToken )
+SapiDocu_PE::AddDocuToken2CurAtTag( DYN ary::inf::DocuToken & let_drNewToken )
 {
     csv_assert(pCurAtTag);
     pCurAtTag->AddToken(let_drNewToken);
 }
 
 void
-SapiDocu_PE::SetCurParameterAtTagName( DYN ary::info::DocuToken & let_drNewToken )
+SapiDocu_PE::SetCurParameterAtTagName( DYN ary::inf::DocuToken & let_drNewToken )
 {
     if (let_drNewToken.IsWhiteOnly())
     {
@@ -405,7 +405,7 @@ SapiDocu_PE::SetCurParameterAtTagName( DYN ary::info::DocuToken & let_drNewToken
 }
 
 void
-SapiDocu_PE::SetCurSeeAlsoAtTagLinkText( DYN ary::info::DocuToken & let_drNewToken )
+SapiDocu_PE::SetCurSeeAlsoAtTagLinkText( DYN ary::inf::DocuToken & let_drNewToken )
 {
     csv_assert(pCurAtTag);
 
@@ -452,7 +452,7 @@ SapiDocu_PE::SetCurSeeAlsoAtTagLinkText( DYN ary::info::DocuToken & let_drNewTok
 }
 
 void
-SapiDocu_PE::SetCurSeeAlsoAtTagLinkText_2( DYN ary::info::DocuToken & let_drNewToken )
+SapiDocu_PE::SetCurSeeAlsoAtTagLinkText_2( DYN ary::inf::DocuToken & let_drNewToken )
 {
     csv_assert(pCurAtTag);
 
@@ -480,7 +480,7 @@ SapiDocu_PE::SetCurSeeAlsoAtTagLinkText_2( DYN ary::info::DocuToken & let_drNewT
 }
 
 void
-SapiDocu_PE::SetCurSeeAlsoAtTagLinkText_3( DYN ary::info::DocuToken & let_drNewToken )
+SapiDocu_PE::SetCurSeeAlsoAtTagLinkText_3( DYN ary::inf::DocuToken & let_drNewToken )
 {
     csv_assert(pCurAtTag);
 
@@ -505,7 +505,7 @@ SapiDocu_PE::SetCurSeeAlsoAtTagLinkText_3( DYN ary::info::DocuToken & let_drNewT
 
 
 void
-SapiDocu_PE::SetCurSinceAtTagVersion( DYN ary::info::DocuToken & let_drNewToken )
+SapiDocu_PE::SetCurSinceAtTagVersion( DYN ary::inf::DocuToken & let_drNewToken )
 {
     csv_assert(pCurAtTag);
 
@@ -530,24 +530,24 @@ SapiDocu_PE::SetCurSinceAtTagVersion( DYN ary::info::DocuToken & let_drNewToken 
 }
 
 void
-SapiDocu_PE::AddDocuToken2SinceAtTag( DYN ary::info::DocuToken & let_drNewToken )
+SapiDocu_PE::AddDocuToken2SinceAtTag( DYN ary::inf::DocuToken & let_drNewToken )
 {
     csv_assert(pCurAtTag);
+    String &
+        sValue = pCurAtTag->Access_Text().Access_TextOfFirstToken();
+    StreamLock
+        sHelp(1000);
 
-    DT_TextToken * pToken = dynamic_cast< DT_TextToken* >(&let_drNewToken);
+    DT_TextToken *
+        pToken = dynamic_cast< DT_TextToken* >(&let_drNewToken);
     if (pToken != 0)
     {
-        String & sValue = pCurAtTag->Access_Text().Access_TextOfFirstToken();
-        StreamLock sHelp(1000);
         sValue = sHelp() << sValue << pToken->GetText() << c_str;
     }
     else if (dynamic_cast< DT_White* >(&let_drNewToken) != 0)
     {
-        String & sValue = pCurAtTag->Access_Text().Access_TextOfFirstToken();
-        StreamLock sHelp(1000);
         sValue = sHelp() << sValue << " " << c_str;
     }
-
       delete &let_drNewToken;
 }
 
