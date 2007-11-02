@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:21:22 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:54:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,11 +101,6 @@
 
 #include <unotools/textsearch.hxx>
 #include <tools/diagnose_ex.h>
-
-//#ifdef OS2
-//#define INCL_DOSPROCESS
-//#include <sysdep.hxx>
-//#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
