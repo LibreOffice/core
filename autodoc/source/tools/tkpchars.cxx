@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tkpchars.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:29:01 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:20:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ void
 CharacterSource::LoadText(csv::bstream & io_rSource)
 {
     if (dpSource != 0)
-        delete dpSource;
+        delete [] dpSource;
 
     io_rSource.seek(0, csv::end);
     nSourceSize = intt(io_rSource.position());
@@ -84,7 +84,7 @@ void
 CharacterSource::LoadText( const char * i_sSourceText )
 {
     if (dpSource != 0)
-        delete dpSource;
+        delete [] dpSource;
 
     nSourceSize = strlen(i_sSourceText);
 
@@ -94,7 +94,7 @@ CharacterSource::LoadText( const char * i_sSourceText )
     BeginSource();
 }
 
-///  KORR:  So far, this works only when tokens do not cross inserted text boundaries.
+///  KORR_FUTURE:  So far, this works only when tokens do not cross inserted text boundaries.
 void
 CharacterSource::InsertTextAtCurPos( const char * i_sText2Insert )
 {
@@ -138,14 +138,14 @@ CharacterSource::BeginSource()
     dpSource[nLastCut] = NULCH;
 }
 
-///  KORR:  So far, this works only when tokens do not cross inserted text boundaries.
+//  KORR_FUTURE:  So far, this works only when tokens do not cross inserted text boundaries.
 char
 CharacterSource::MoveOn_OverStack()
 {
     while ( aSourcesStack.size() > 0 AND nCurPos >= nSourceSize-1 )
     {
         S_SourceState & aState = aSourcesStack.top();
-        delete dpSource;
+        delete [] dpSource;
 
         dpSource = aState.dpSource;
         nSourceSize = aState.nSourceSize;
