@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoidl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:24:42 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <cosv/file.hxx>
 #include <ary/ary.hxx>
 #include <ary/idl/i_gate.hxx>
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 #include <parser/parserinfo.hxx>
 #include <tools/filecoll.hxx>
 #include <tools/tkpchars.hxx>
@@ -63,7 +63,7 @@ class FileParsePerformers
 {
   public:
                         FileParsePerformers(
-                            ary::n22::Repository &
+                            ary::Repository &
                                                 io_rRepository,
                             ParserInfo &        io_rParserInfo );
 
@@ -80,13 +80,13 @@ class FileParsePerformers
                         aDistributor;
     Dyn<csi::uidl::PE_File>
                         pFileParseEnvironment;
-    ary::n22::Repository &
+    ary::Repository &
                         rRepository;
     ParserInfo &        rParserInfo;
 };
 
 
-IdlParser::IdlParser( ary::n22::Repository & io_rRepository )
+IdlParser::IdlParser( ary::Repository & io_rRepository )
     :   pRepository(&io_rRepository)
 {
 }
@@ -129,7 +129,7 @@ IdlParser::Run( const autodoc::FileCollector_Ifc & i_rFiles )
     pFileParsePerformers->ConnectLinks();
 }
 
-FileParsePerformers::FileParsePerformers( ary::n22::Repository & io_rRepository,
+FileParsePerformers::FileParsePerformers( ary::Repository & io_rRepository,
                                           ParserInfo &           io_rParserInfo )
     :   pTokens(0),
         aDistributor(io_rRepository, io_rParserInfo),
@@ -169,7 +169,7 @@ FileParsePerformers::ParseFile( const char * i_sFullPath )
 void
 FileParsePerformers::ConnectLinks()
 {
-    // KORR
+    // KORR_FUTURE ?
 //  rRepository.RwGate_Idl().ConnectAdditionalLinks();
 }
 
