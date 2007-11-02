@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-27 12:52:19 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:23:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,11 @@ DLLPRE = # no leading "lib" on .so files
 
 .IF "$(GUI)"=="WNT"
 BATCH_SUFFIX=.bat
+GIVE_EXEC_RIGHTS=@echo
+MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(SOLARBINDIR))))
+MY_LOCAL_CLASSDIR=$(subst,\,/ file:///$(PWD)$/$(CLASSDIR))
+.ELIF "$(GUI)"=="OS2"
+BATCH_SUFFIX=.cmd
 GIVE_EXEC_RIGHTS=@echo
 MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(SOLARBINDIR))))
 MY_LOCAL_CLASSDIR=$(subst,\,/ file:///$(PWD)$/$(CLASSDIR))
