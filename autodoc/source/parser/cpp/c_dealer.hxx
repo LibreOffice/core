@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_dealer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:14:56 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:48:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,24 +73,19 @@ class Distributor : public cpp::TokenDealer,        /// Handle C++ code tokens.
                     public adoc::TokenDealer        /// Handle Autodoc documentation tokens.
 {
   public:
-    typedef std::map< udmstri, DefineDescription* >     MacroMap;
+    typedef std::map< String, DefineDescription* >     MacroMap;
 
     // LIFECYCLE
                         Distributor(
-                            ary::cpp::RwGate &  io_rGate );
+                            ary::cpp::Gate &    io_rGate );
                         ~Distributor();
     // OPERATIONS
     void                AssignPartners(
                             CharacterSource &   io_rSourceText,
                             const MacroMap &    i_rValidMacros );
-    void                StartNewProject(
-                            const udmstri &     i_sProjectName,
-                            const csv::ploc::Path &
-                                                i_rProjectRootDirectory );
     void                StartNewFile(
-                            const udmstri &     i_sFileName,
-                            const csv::ploc::DirectoryChain &
-                                                i_rFileSubPath );
+                            const csv::ploc::Path &
+                                                i_file );
     virtual void        Deal_Eol();
     virtual void        Deal_Eof();
 
@@ -108,7 +103,7 @@ class Distributor : public cpp::TokenDealer,        /// Handle C++ code tokens.
     PreProcessor        aCppPreProcessor;
     CodeExplorer        aCodeExplorer;
     adoc::DocuExplorer  aDocuExplorer;
-    ary::cpp::RwGate *  pGate;
+    ary::cpp::Gate *    pGate;
     FileScope_EventHandler *
                         pFileEventHandler;
     DocuDealer *        pDocuDistributor;
@@ -116,13 +111,6 @@ class Distributor : public cpp::TokenDealer,        /// Handle C++ code tokens.
 
 
 
-// IMPLEMENTATION
-
-
-
 }   // namespace cpp
-
-
-
 #endif
 
