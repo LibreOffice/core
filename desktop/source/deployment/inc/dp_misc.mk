@@ -4,9 +4,9 @@
 #
 #   $RCSfile: dp_misc.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 11:00:29 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:38:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@ DEPLOYMENTMISCLIB = -ldeploymentmisc$(UPD)$(DLLPOSTFIX)
 .ELSE
 DEPLOYMENTMISCLIB = ideploymentmisc$(UPD)$(DLLPOSTFIX).lib
 .ENDIF
+.ELIF "$(OS)" == "OS2"
+DEPLOYMENTMISCLIB = ideploymentmisc$(UPD)$(DLLPOSTFIX).lib
 .ELSE
 DEPLOYMENTMISCLIB = -ldeploymentmisc$(UPD)$(DLLPOSTFIX)
 .ENDIF
