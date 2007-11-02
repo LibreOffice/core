@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: Jobs.xcu,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:51:10 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************ -->
+<oor:component-data oor:name="Jobs" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <node oor:name="Jobs">
+    <node oor:name="com.sun.star.jobs.stclient" oor:op="fuse">
+      <prop oor:name="Service">
+        <value>com.sun.star.comp.framework.ShellJob</value>
+      </prop>
+      <node oor:name="Arguments">
+        <prop oor:name="Command" oor:op="replace" oor:type="xs:string">
+          <value>$(prog)/stclient_wrapper</value>
+        </prop>
+        <prop oor:name="Arguments" oor:op="replace" oor:type="xs:string">
+          <value>-p "${SERVICETAG_PRODUCTNAME}" -e "${SERVICETAG_PRODUCTVERSION}" -t "${SERVICETAG_URN}" -S "${SERVICETAG_SOURCE}" -P "${SERVICETAG_PARENTNAME}"</value>
+        </prop>
+        <prop oor:name="NeedsSystemPathConversion" oor:op="replace" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="DeactivateJobIfDone" oor:op="replace" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
+    </node>
+  </node>
+  <node oor:name="Events">
+    <node oor:name="OnStartApp" oor:op="fuse">
+      <node oor:name="JobList">
+        <node oor:name="com.sun.star.jobs.stclient" oor:op="fuse" />
+      </node>
+    </node>
+  </node>
+</oor:component-data>
