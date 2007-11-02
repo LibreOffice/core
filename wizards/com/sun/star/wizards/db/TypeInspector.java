@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TypeInspector.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:53:42 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 11:26:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,8 +382,7 @@ public class TypeInspector{
                     if (this.bisAutoIncrementableInfos[i] )
                         return new TypeInfo(nDataType, this.sDataTypeNames[i], true);
                 }
-                else
-                    startindex = i+1;
+                startindex = i+1;
             }
         }
         // As Autoincrementation is not supported for any numeric datatype we take the first available numeric Type;
