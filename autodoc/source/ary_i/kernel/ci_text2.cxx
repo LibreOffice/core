@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ci_text2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:49:09 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 
 namespace ary
 {
-namespace info
+namespace inf
 {
 
 DocuTex2::DocuTex2()
@@ -64,7 +64,7 @@ DocuTex2::~DocuTex2()
 void
 DocuTex2::DisplayAt( DocumentationDisplay & o_rDisplay ) const
 {
-    for ( ary::info::DocuTex2::TokenList::const_iterator
+    for ( ary::inf::DocuTex2::TokenList::const_iterator
                 iter = aTokens.begin();
           iter != aTokens.end();
           ++iter )
@@ -87,7 +87,7 @@ DocuTex2::AddToken( DYN DocuToken & let_drToken )
 bool
 DocuTex2::IsEmpty() const
 {
-    for ( ary::info::DocuTex2::TokenList::const_iterator
+    for ( ary::inf::DocuTex2::TokenList::const_iterator
                 iter = aTokens.begin();
           iter != aTokens.end();
           ++iter )
@@ -142,6 +142,6 @@ void    DocuText_Display::Display_SinceAtTag(
 
 
 
-}   // namespace info
+}   // namespace inf
 }   // namespace ary
 
