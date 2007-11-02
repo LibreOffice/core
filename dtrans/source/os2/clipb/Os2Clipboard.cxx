@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Os2Clipboard.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 09:39:44 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:14:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,10 @@ Os2Clipboard::Os2Clipboard() :
 
     debug_printf("Os2Clipboard::Os2Clipboard\n");
     hAB = WinQueryAnchorBlock( HWND_DESKTOP );
+    hText = 0;
+    hBitmap = 0;
 
+#if 0
     // register object class
     if ( WinRegisterClass( hAB, (PSZ)DTRANS_OBJ_CLASSNAME,
                             (PFNWP)DtransObjWndProc, 0, sizeof(ULONG) ))
@@ -134,6 +137,8 @@ Os2Clipboard::Os2Clipboard() :
         rc = WinSetClipbrdViewer(hAB, hObjWnd);
         rc = WinCloseClipbrd(hAB);
     }
+#endif
+
 }
 
 Os2Clipboard::~Os2Clipboard()
@@ -183,6 +188,34 @@ Reference< XTransferable > SAL_CALL Os2Clipboard::getContents() throw( RuntimeEx
 {
     debug_printf("Os2Clipboard::getContents\n");
     MutexGuard aGuard(m_aMutex);
+
+    // os2 can have only one viewer at time, and we don't get a notification
+    // when the viewer changes. So we need to check handles of clipboard
+    // data and compare with previous handles
+    if (UWinOpenClipbrd(hAB)) {
+        sal_Bool    fireChanged = sal_False;
+        ULONG handle = UWinQueryClipbrdData( hAB, UCLIP_CF_UNICODETEXT);
+        if (handle) {
+            if (handle != hText) {
+                hText = handle;
+                fireChanged = sal_True;
+            }
+        }
+        handle = UWinQueryClipbrdData( hAB, UCLIP_CF_BITMAP);
+        if (handle) {
+            if (handle != hBitmap) {
+                hBitmap = handle;
+                fireChanged = sal_True;
+            }
+        }
+        UWinCloseClipbrd( hAB);
+        if (fireChanged)
+        {
+            // notify listener for clipboard change
+            debug_printf("Os2Clipboard::getContents notify change\n");
+            notifyAllClipboardListener();
+        }
+    }
 
     if( ! m_aContents.is() )
         m_aContents = new Os2Transferable( static_cast< OWeakObject* >(this) );
@@ -239,32 +272,25 @@ void SAL_CALL Os2Clipboard::setContents( const Reference< XTransferable >& xTran
                         OUString::createFromAscii( "Bitmap" ), CPPUTYPE_DEFAULT);
 
     // try text transfer data (if any)
+    PSZ pSharedText = NULL;
+    HBITMAP hbm = NULL;
     try
     {
         Any aAny = m_aContents->getTransferData( nFlavorText );
         if (aAny.hasValue())
         {
+            APIRET rc;
             // copy unicode text to clipboard
             OUString aString;
             aAny >>= aString;
             // share text
-            if ( UWinOpenClipbrd( hAB) )
-            {
-                PSZ pSharedText;
-                // set the flag, so we will ignore the next WM_DRAWCLIPBOARD
-                // since we generate it with following code.
-                m_bInSetClipboardData = sal_True;
-                DosAllocSharedMem( (PPVOID) &pSharedText, NULL,
-                    aString.getLength() + 1,
-                    PAG_WRITE | PAG_COMMIT | OBJ_GIVEABLE | OBJ_ANY);
+            rc = DosAllocSharedMem( (PPVOID) &pSharedText, NULL,
+                aString.getLength() * 2 + 2,
+                PAG_WRITE | PAG_COMMIT | OBJ_GIVEABLE | OBJ_ANY);
+            if (!rc)
                 memcpy( pSharedText, aString.getStr(), aString.getLength() * 2 + 2 );
-                UWinEmptyClipbrd( hAB);
-                // give pointer to clipboard (it will become owner of pSharedText!)
-                UWinSetClipbrdData( hAB, (ULONG) pSharedText, UCLIP_CF_UNICODETEXT, CFI_POINTER);
-                UWinCloseClipbrd( hAB);
-                // reset the flag, so we will not ignore next WM_DRAWCLIPBOARD
-                m_bInSetClipboardData = sal_False;
-            }
+            else
+                pSharedText = NULL;
             debug_printf("Os2Clipboard::setContents SetClipbrdData text done\n");
         }
     } catch ( UnsupportedFlavorException&) {
@@ -277,25 +303,37 @@ void SAL_CALL Os2Clipboard::setContents( const Reference< XTransferable >& xTran
         Any aAnyB = m_aContents->getTransferData( nFlavorBitmap );
         if (aAnyB.hasValue())
         {
-            HBITMAP hbm = OOoBmpToOS2Handle( aAnyB);
-            // share bitmap handle
-            if ( hbm && UWinOpenClipbrd( hAB) )
-            {
-                // set the flag, so we will ignore the next WM_DRAWCLIPBOARD
-                // since we generate it with following code.
-                m_bInSetClipboardData = sal_True;
-                UWinEmptyClipbrd( hAB);
-                // give pointer to clipboard (it will become owner of pSharedText!)
-                UWinSetClipbrdData( hAB, (ULONG) hbm, UCLIP_CF_BITMAP, CFI_HANDLE);
-                UWinCloseClipbrd( hAB);
-                // reset the flag, so we will not ignore next WM_DRAWCLIPBOARD
-                m_bInSetClipboardData = sal_False;
-            }
+            hbm = OOoBmpToOS2Handle( aAnyB);
             debug_printf("Os2Clipboard::setContents SetClipbrdData bitmap done\n");
         }
     } catch ( UnsupportedFlavorException&) {
         debug_printf("Os2Clipboard::setContents UnsupportedFlavorException (no bitmap)\n");
     }
+
+    // copy to clipboard
+    if ( UWinOpenClipbrd( hAB) && (pSharedText || hbm))
+    {
+        // set the flag, so we will ignore the next WM_DRAWCLIPBOARD
+        // since we generate it with following code.
+        m_bInSetClipboardData = sal_True;
+        UWinEmptyClipbrd( hAB);
+        // give pointer to clipboard (it will become owner of pSharedText!)
+        if (pSharedText) {
+            UWinSetClipbrdData( hAB, (ULONG) pSharedText, UCLIP_CF_UNICODETEXT, CFI_POINTER);
+            // update internal handle to avoid detection of this text as new data
+            hText = (ULONG)pSharedText;
+        }
+        // give bitmap to clipboard
+        if (hbm) {
+            UWinSetClipbrdData( hAB, (ULONG) hbm, UCLIP_CF_BITMAP, CFI_HANDLE);
+            // update internal handle to avoid detection of this bitmap as new data
+            hBitmap = hbm;
+        }
+        // reset the flag, so we will not ignore next WM_DRAWCLIPBOARD
+        m_bInSetClipboardData = sal_False;
+        UWinCloseClipbrd( hAB);
+    }
+
 }
 
 OUString SAL_CALL Os2Clipboard::getName() throw( RuntimeException )
