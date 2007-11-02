@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 16:56:51 $
+#   last change: $Author: hr $ $Date: 2007-11-02 15:58:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,16 +75,13 @@ OBJFILES= \
     $(OBJ)$/i_strconst.obj      \
     $(OBJ)$/i_struct.obj        \
     $(OBJ)$/i_structelem.obj    \
+    $(OBJ)$/i_traits.obj        \
     $(OBJ)$/i_typedef.obj       \
-    $(OBJ)$/ihost_ce.obj        \
-    $(OBJ)$/ii_gate.obj         \
-    $(OBJ)$/ipi_ce.obj          \
-    $(OBJ)$/ipi_type.obj        \
-    $(OBJ)$/ipi_2s.obj          \
+    $(OBJ)$/i2s_calculator.obj  \
+    $(OBJ)$/ia_ce.obj           \
+    $(OBJ)$/ia_type.obj         \
     $(OBJ)$/is_ce.obj           \
-    $(OBJ)$/is_ce_indices.obj   \
     $(OBJ)$/is_type.obj         \
-    $(OBJ)$/is_type_indices.obj \
     $(OBJ)$/it_builtin.obj      \
     $(OBJ)$/it_ce.obj           \
     $(OBJ)$/it_explicit.obj     \
