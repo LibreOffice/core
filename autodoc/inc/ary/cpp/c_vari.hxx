@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_vari.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:01:40 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:52:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,95 +39,85 @@
 
 // USED SERVICES
     // BASE CLASSES
-#include <ary/ce.hxx>
-    // COMPONENTS
+#include <ary/cpp/c_ce.hxx>
+    // OTHER
 #include <ary/cessentl.hxx>
-#include <ary/cpp/c_etypes.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
 #include <ary/cpp/c_vfflag.hxx>
-    // PARAMETERS
 
 
 
 namespace ary
 {
-
 namespace cpp
 {
 
 
+/** A C++ variable or constant declaration.
+*/
 class Variable : public CodeEntity
 {
   public:
     // LIFECYCLE
+    enum E_ClassId { class_id = 1005 };
+
                         Variable();
                         Variable(
-                            Cid                 i_nId,
-                            const udmstri &     i_sLocalName,
-                            Cid                 i_nOwner,
+                            const String  &     i_sLocalName,
+                            Ce_id               i_nOwner,
                             E_Protection        i_eProtection,
-                            Lid                 i_nFile,
-                            Tid                 i_nType,
+                            loc::Le_id          i_nFile,
+                            Type_id             i_nType,
                             VariableFlags       i_aFlags,
-                            const udmstri &     i_sArraySize,
-                            const udmstri &     i_sInitValue );
+                            const String  &     i_sArraySize,
+                            const String  &     i_sInitValue );
                         ~Variable();
 
 
     // INQUIRY
-    static RCid         RC_()                   { return 0x1006; }
-
-    Tid                 Type() const;
-    const udmstri &     ArraySize() const;
-    const udmstri &     Initialisation() const;
+    Type_id             Type() const;
+    const String  &     ArraySize() const;
+    const String  &     Initialisation() const;
     E_Protection        Protection() const      { return eProtection; }
 
-    // ACCESS
-
   private:
-    // Interface ary::CodeEntity
-    virtual Cid         inq_Id() const;
-    virtual const udmstri &
+    // Interface csv::ConstProcessorClient
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+
+    // Interface ary::cpp::CodeEntity
+    virtual const String  &
                         inq_LocalName() const;
     virtual Cid         inq_Owner() const;
     virtual Lid         inq_Location() const;
 
-    // Interface ary::RepositoryEntity
-    virtual void        do_StoreAt(
-                            ary::Display &      o_rOut ) const;
-    virtual RCid        inq_RC() const;
-    virtual const ary::Documentation &
-                        inq_Info() const;
-    virtual void        do_Add_Documentation(
-                            DYN ary::Documentation &
-                                                let_drInfo );
+    // Interface ary::cpp::CppEntity
+    virtual ClassId     get_AryClass() const;
 
     // DATA
     CeEssentials        aEssentials;
-    Tid                 nType;
+    Type_id             nType;
     E_Protection        eProtection;
     VariableFlags       aFlags;
-    udmstri             sArraySize;
-    udmstri             sInitialisation;
+    String              sArraySize;
+    String              sInitialisation;
 };
 
 
 
 // IMPLEMENTATION
-
-inline Tid
+inline Type_id
 Variable::Type() const
     { return nType; }
-inline const udmstri &
+inline const String  &
 Variable::ArraySize() const
     { return sArraySize; }
-inline const udmstri &
+inline const String  &
 Variable::Initialisation() const
     { return sInitialisation; }
 
 
+
 }   // namespace cpp
 }   // namespace ary
-
-
 #endif
-

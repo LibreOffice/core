@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_osigna.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:00:26 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:50:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,33 +36,43 @@
 #ifndef ARY_CPP_C_OSIGNA_HXX
 #define ARY_CPP_C_OSIGNA_HXX
 
-
-
 // USED SERVICES
     // BASE CLASSES
-    // COMPONENTS
-#include <ary/ids.hxx>
-#include <ary/cpp/c_etypes.hxx>
-    // PARAMETERS
+    // OTHER
+#include <ary/cpp/c_types4cpp.hxx>
+
+namespace ary
+{
+namespace cpp
+{
+    class Gate;
+}
+}
 
 
 
 namespace ary
 {
-
 namespace cpp
 {
 
+
+/** The signature of a C++ function. That is: parameter types and
+    const/volatile modifiers.
+*/
 class OperationSignature
 {
   public:
-    typedef std::vector<Tid>    ParameterTypeList;
+    typedef std::vector<Type_id>    ParameterTypeList;
 
                         OperationSignature();
                         OperationSignature(
-                            std::vector<Tid> &  i_rParameterTypes,  // Non const, because it will be swapped with aParameterTypes.
-                            E_ConVol            i_eConVol );
+                            ParameterTypeList   i_parameterTypes,  // Non const, because it will be swapped with aParameterTypes.
+                            E_ConVol            i_conVol );
 
+    bool                operator==(
+                            const OperationSignature &
+                                                i_rSig ) const;
     bool                operator<(
                             const OperationSignature &
                                                 i_rSig ) const;
@@ -81,43 +91,41 @@ class OperationSignature
                             const OperationSignature &
                                                 i_rSig ) const;
   private:
-
     // DATA
     ParameterTypeList   aParameterTypes;
     E_ConVol            eConVol;
 };
 
-#if 0 // Vielleicht noch gebraucht, vielleicht auch nicht. DO NOT delete!
-struct S_VariableInfo
-{
-    udmstri             sName;
-    udmstri             sSizeExpression;
-    udmstri             sInitExpression;
 
-    void                Empty()
-                        { sName.clear();
-                          sSizeExpression.clear();
-                          sInitExpression.clear(); }
-};
-#endif
 
 
 // IMPLEMENTATION
+inline bool
+OperationSignature::operator==( const OperationSignature & i_rSign ) const
+{
+    return Compare(i_rSign) == 0;
+}
 
 inline bool
 OperationSignature::operator<( const OperationSignature & i_rSign ) const
-    { return Compare(i_rSign) < 0; }
+{
+    return Compare(i_rSign) < 0;
+}
+
 inline const OperationSignature::ParameterTypeList &
 OperationSignature::Parameters() const
-    { return aParameterTypes; }
+{
+    return aParameterTypes;
+}
+
 inline E_ConVol
 OperationSignature::ConVol() const
-    { return eConVol; }
+{
+    return eConVol;
+}
+
 
 
 } // namespace cpp
 } // namespace ary
-
-
 #endif
-

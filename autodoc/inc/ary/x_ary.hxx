@@ -4,9 +4,9 @@
  *
  *  $RCSfile: x_ary.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:56:27 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:44:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,15 @@
 #ifndef ARY_X_ARY_HXX
 #define ARY_X_ARY_HXX
 
-//  VERSION:            Autodoc 2.2
+
 
 
 // USED SERVICES
     // BASE CLASSES
 #include <cosv/x.hxx>
-    // COMPONENTS
-    // PARAMETERS
+    // OTHER
+
+
 
 namespace ary
 {
@@ -70,7 +71,7 @@ class X_Ary : public csv::Exception
     // INQUIRY
     E_Event             GetEvent() const;
     virtual void        GetInfo(
-                            ostream &           o_rOutputMedium ) const;
+                            std::ostream &      o_rOutputMedium ) const;
   private:
     E_Event             eEvent;
 };
@@ -81,8 +82,7 @@ X_Ary::GetEvent() const
     { return eEvent; }
 
 
+
+
 }   // namespace ary
-
-
 #endif
-

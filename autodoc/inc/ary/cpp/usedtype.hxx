@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usedtype.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:05:43 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:57:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,25 +36,33 @@
 #ifndef ARY_CPP_USEDTYPE_HXX
 #define ARY_CPP_USEDTYPE_HXX
 
-
 // USED SERVICES
     // BASE CLASSES
-#include <ary/cpp/ca_type.hxx>
-    // COMPONENTS
-    // PARAMETERS
+#include <ary/cpp/c_type.hxx>
+    // OTHER
+#include <ary/cpp/namechain.hxx>
+
+namespace ary
+{
+namespace cpp
+{
+    class CePilot;
+
+namespace ut
+{
+    class List_TplParameter;
+}
+}
+}
+
+
 
 
 namespace ary
 {
 namespace cpp
 {
-    namespace ut
-    {
-        class List_TplParameter;
-    }
 
-    class DisplayGate;
-    class Gate;
 
 /** This class represents a type in textual form, like it is parsed out of
     source code as a variable type or function return type.
@@ -62,7 +70,10 @@ namespace cpp
 class UsedType : public Type
 {
   public:
-                        UsedType();
+    enum E_ClassId { class_id = 1203 };
+
+    explicit            UsedType(
+                            Ce_id               i_scope );
                         ~UsedType();
     // OPERATORS
     bool                operator<(
@@ -70,8 +81,6 @@ class UsedType : public Type
     // OPERATIONS
 
         // Operations to build up the used type from parsing:
-    void                Set_Id(
-                            Tid                 i_nId );
     void                Set_Absolute();         /// "::" is in front.
     void                Add_NameSegment(
                             const char *        i_sSeg );
@@ -91,9 +100,22 @@ class UsedType : public Type
         // Operations to find the relating CodeEntity:
     /** This needs to be called only one time. After that
         RelatedCe() will return the value.
+
+        When connectiing all parsed types, there are three steps:
+            1. Find related types in the same scope and namespaces above.
+            2. Then all classes can be connected to their base classes.
+            3. Lastly types can be connected to Ces only known via their base
+               classes. This is not possible at step 1.
+
+        @see Connect2CeOnlyKnownViaBaseClass()
     */
-    Rid                 Connect2Ce(
-                            const Gate &        i_rGate );
+    void                Connect2Ce(
+                            const CePilot &     i_ces );
+
+    /** @see Connect2Ce()
+    */
+    void                Connect2CeOnlyKnownViaBaseClass(
+                            const Gate &        i_gate );
 
     // INQUIRY
     /** @return True, if type consists of one built-in typename and
@@ -103,36 +125,60 @@ class UsedType : public Type
     /** @return the full local name, including template instantiation, but without
         '*','&' or modifiers.
     */
-    const udmstri &     LocalName() const;
+    const String  &     LocalName() const;
     E_TypeSpecialisation
                         TypeSpecialisation() const;
 
   private:
-    // Forbidden functions
-                        UsedType(
-                            const UsedType &    i_rType );
-    bool                operator=(
-                            const UsedType &    i_rType );
+    // Interface csv::ConstProcessorClient
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
 
-    // Interface ary::cpp::Type
-    virtual Tid         inq_Id_Type() const;
+    // Interface ary::Object:
+    virtual ClassId     get_AryClass() const;
+
+    // Interface ary::cpp::Type:
     virtual Rid         inq_RelatedCe() const;
     virtual bool        inq_IsConst() const;
     virtual void        inq_Get_Text(
                             StreamStr &         o_rPreName,
                             StreamStr &         o_rName,
                             StreamStr &         o_rPostName,
-                            const ary::cpp::DisplayGate &
+                            const ary::cpp::Gate &
                                                 i_rGate ) const;
     // Local
-    struct CheshireCat;
+    typedef std::vector< ary::cpp::E_ConVol >   PtrLevelVector;
 
-    bool                DoesMatch_Ce(
-                            Rid                 i_nId,
-                            const Gate &        i_rGate ) const;
+    uintt               PtrLevel() const        { return uintt(aPtrLevels.size()); }
+    Ce_id               RecursiveSearchCe_InBaseClassesOf(
+                            const CodeEntity &  i_mayBeClass,
+                            const StringVector &
+                                                i_myQualification,
+                            const String &      i_myName,
+                            const Gate &        i_gate ) const;
+    void                Get_NameParts(
+                            StringVector &      o_qualification,
+                            String &            o_name );
+
+    // Forbidden functions
+                        UsedType(
+                            const UsedType &    i_rType );
+    bool                operator=(
+                            const UsedType &    i_rType );
 
     // DATA
-    Dyn<CheshireCat>    pi;
+    ut::NameChain       aPath;
+    PtrLevelVector      aPtrLevels;
+    ary::cpp::E_ConVol  eConVol_Type;
+    bool                bIsReference;
+    bool                bIsAbsolute;
+    bool                bRefers2BuiltInType;
+    E_TypeSpecialisation
+                        eTypeSpecialisation;
+    Ce_id               nRelatedCe;
+
+    /// Namespace or class scope where the type occurred.
+    Ce_id               nScope;
 };
 
 
@@ -149,9 +195,9 @@ class List_TplParameter
                         ~List_TplParameter();
 
     void                AddParam_Type(
-                            Tid                 i_nType );
+                            Type_id             i_nType );
     void                AddParam_Constant(
-                            const udmstri &     i_sConst );
+                            const String  &     i_sConst );
 
     const_iterator      Begin() const;
     const_iterator      End() const;
@@ -159,7 +205,7 @@ class List_TplParameter
     /// puts "< " TemplateArgumentList " >" to o_rOut.
     void                Get_Text(
                             StreamStr &         o_rOut,
-                            const ary::cpp::DisplayGate &
+                            const ary::cpp::Gate &
                                                 i_rGate ) const;
     /// @return as strcmp().
     intt                Compare(
@@ -172,15 +218,11 @@ class List_TplParameter
     Vector_TplArgument  aTplParameters;
 };
 
-
 }   // namespace ut
+
 
 
 
 }   // namespace cpp
 }   // namespace ary
-
-
-
 #endif
-

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_macro.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:59:49 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:50:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,53 +39,54 @@
 
 // USED SERVICES
     // BASE CLASSES
-#include <ary/cpp/cpp_defs.hxx>
-    // COMPONENTS
-    // PARAMETERS
+#include <ary/cpp/c_de.hxx>
 
 
 
 namespace ary
 {
-
 namespace cpp
 {
 
 
+/** A C/C++ macro ("#define ABC(a,b)") statement, but no simple define.
 
-/** Describes a C/C++ #define MACRO(a,b, ...) statement.
+    @see Define
 */
-class Macro : public CppDefinition
+class Macro : public DefineEntity
 {
   public:
+    enum E_ClassId { class_id = 1602 };
+
                         Macro();
                         Macro(      /// Used for: #define DEFINE xyz
-                            Did                 i_nId,
-                            const udmstri &     i_sName,
-                            const str_vector &  i_rParams,
-                            const str_vector &  i_rDefinition,
-                            Lid                 i_nDeclaringFile );
+                            const String  &     i_name,
+                            const StringVector &
+                                                i_params,
+                            const StringVector &
+                                                i_definition,
+                            loc::Le_id          i_declaringFile );
                         ~Macro();
     // INQUIRY
     void                GetText(
                             csv::StreamStr &    o_rText,
                             const StringVector &
                                                 i_rGivenArguments ) const;
-    const str_vector &  Params() const          { return aParams; }
+    const StringVector &  Params() const          { return aParams; }
 
   private:
-    // Interface RepositoryEntity:
-    virtual void        do_StoreAt(
-                            ary::Display &      o_rOut ) const;
-    virtual RCid        inq_RC() const;
+    // Interface csv::ConstProcessorClient
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface ary::Object
+    virtual ClassId     get_AryClass() const;
 
-    // Interface CppDefinition:
-    virtual const str_vector &
+    // Interface DefineEntity:
+    virtual const StringVector &
                         inq_DefinitionText() const;
-
     // DATA
-    str_vector          aParams;
-    str_vector          aDefinition;
+    StringVector          aParams;
+    StringVector          aDefinition;
 };
 
 
@@ -93,7 +94,4 @@ class Macro : public CppDefinition
 
 }   // namespace cpp
 }   // namespace ary
-
-
 #endif
-

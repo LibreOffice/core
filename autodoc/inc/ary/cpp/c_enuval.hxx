@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_enuval.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:58:16 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,11 +39,10 @@
 
 // USED SERVICES
     // BASE CLASSES
-#include <ary/ce.hxx>
-    // COMPONENTS
+#include <ary/cpp/c_ce.hxx>
+    // OTHER
 #include <ary/cessentl.hxx>
-#include <ary/cpp/c_etypes.hxx>
-    // PARAMETERS
+#include <ary/cpp/c_types4cpp.hxx>
 
 
 
@@ -53,58 +52,54 @@ namespace cpp
 {
 
 
+
+/** A C++ enum value declaration and definition.
+*/
 class EnumValue : public CodeEntity
 {
   public:
+    enum E_ClassId { class_id = 1006 };
+
     // LIFECYCLE
                         EnumValue();
                         EnumValue(
-                            Cid                 i_nId,
-                            const udmstri &     i_sLocalName,
-                            Cid                 i_nOwner,
-                            udmstri             i_sInitialisation );
+                            const String  &     i_sLocalName,
+                            Ce_id               i_nOwner,
+                            String              i_sInitialisation );
                         ~EnumValue();
     // INQUIRY
-    static RCid         RC_()                   { return 0x1007; }
-
-    const udmstri &     Initialisation() const;
-
+    const String  &     Initialisation() const;
 
   private:
-    // Interface ary::CodeEntity
-    virtual Cid         inq_Id() const;
-    virtual const udmstri &
+    // Interface csv::ConstProcessorClient
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+
+    // Interface ary::cpp::CodeEntity
+    virtual const String  &
                         inq_LocalName() const;
     virtual Cid         inq_Owner() const;
     virtual Lid         inq_Location() const;
 
-    // Interface ary::RepositoryEntity
-    virtual void        do_StoreAt(
-                            ary::Display &      o_rOut ) const;
-    virtual RCid        inq_RC() const;
-    virtual const ary::Documentation &
-                        inq_Info() const;
-    virtual void        do_Add_Documentation(
-                            DYN ary::Documentation &
-                                                let_drInfo );
+    // Interface ary::cpp::CppEntity
+    virtual ClassId     get_AryClass() const;
 
     // DATA
     CeEssentials        aEssentials;
-    udmstri             sInitialisation;
+    String              sInitialisation;
 };
 
 
 
-// IMPLEMENTATION
 
-inline const udmstri &
+// IMPLEMENTATION
+inline const String  &
 EnumValue::Initialisation() const
     { return sInitialisation; }
 
 
+
+
 }   // namespace cpp
 }   // namespace ary
-
-
 #endif
-

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_vfflag.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:01:58 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,7 @@
 #ifndef ARY_CPP_C_VFFLAG_HXX
 #define ARY_CPP_C_VFFLAG_HXX
 
-
-
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-    // PARAMETERS
-
 
 
 namespace ary
@@ -51,6 +45,8 @@ namespace cpp
 {
 
 
+/** Properties of C++ variables.
+*/
 struct VariableFlags
 {
   public:
@@ -83,6 +79,8 @@ struct VariableFlags
 };
 
 
+/** Properties of C++ functions.
+*/
 struct FunctionFlags
 {
   public:
@@ -101,6 +99,15 @@ struct FunctionFlags
                         FunctionFlags(
                             UINT16              i_nFlags = 0 )
                                                 :   nFlags(i_nFlags) {}
+
+    bool                operator==(
+                            const FunctionFlags &
+                                                i_ff ) const
+                                                { return nFlags == i_ff.nFlags; }
+    bool                operator!=(
+                            const FunctionFlags &
+                                                i_ff ) const
+                                                { return NOT operator==(i_ff); }
 
     void                Reset()                 { nFlags = 0; }
 
@@ -126,16 +133,19 @@ struct FunctionFlags
     UINT16              nFlags;
 };
 
+
+/** A C++ function parameter.
+*/
 struct S_Parameter
 {
-    udmstri             sName;
-    udmstri             sSizeExpression;
-    udmstri             sInitExpression;
-    Tid                 nType;
+    String              sName;
+    String              sSizeExpression;
+    String              sInitExpression;
+    Type_id             nType;
 
                         S_Parameter()           : nType(0) {}
                         ~S_Parameter()          {}
-    void                Empty()                 { nType = 0;
+    void                Empty()                 { nType = Type_id(0);
                                                   sName.clear();
                                                   sSizeExpression.clear();
                                                   sInitExpression.clear(); }
@@ -143,9 +153,7 @@ struct S_Parameter
 
 
 
+
 }   // namespace cpp
 }   // namespace ary
-
-
 #endif
-

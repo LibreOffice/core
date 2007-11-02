@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_define.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:57:17 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:47:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,9 @@
 
 // USED SERVICES
     // BASE CLASSES
-#include <ary/cpp/cpp_defs.hxx>
-    // COMPONENTS
-    // PARAMETERS
+#include <ary/cpp/c_de.hxx>
+    // OTHER
+
 
 
 
@@ -51,46 +51,44 @@ namespace cpp
 {
 
 
-/** Describes a C/C++ #define <DEFINE_BUT_NO_MACRO> statement.
+/** A C/C++ #define ("#define DEF") statement, but no macro.
+
+    @see Macro
 */
-class Define : public CppDefinition
+class Define : public DefineEntity
 {
   public:
+    enum E_ClassId { class_id = 1601 };
+
                         Define(      /// Used for: #define DEFINE xyz
-                            Did                 i_nId,
-                            const udmstri &     i_sName,
-                            const str_vector &  i_rDefinition,
-                            Lid                 i_nDeclaringFile );
-                        ~Define();
+                            const String  &     i_name,
+                            const StringVector &
+                                                i_definition,
+                            loc::Le_id          i_declaringFile );
+    virtual             ~Define();
 
     // INQUIRY
     void                GetText(
                             csv::StreamStr &    o_rText ) const;
-
   private:
-    // Interface RepositoryEntity:
-    virtual void        do_StoreAt(
-                            ary::Display &      o_rOut ) const;
-    virtual RCid        inq_RC() const;
+    // Interface csv::ConstProcessorClient
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
 
-    // Interface CppDefinition:
-    virtual const str_vector &
+    // Interface ary::Object:
+    virtual ClassId     get_AryClass() const;
+
+    // Interface DefineEntity:
+    virtual const StringVector &
                         inq_DefinitionText() const;
-
     // DATA
-    str_vector          aDefinition;
+    StringVector        aDefinition;
 };
 
 
-
-// IMPLEMENTATION
 
 
 
 }   // namespace cpp
 }   // namespace ary
-
-
-
 #endif
-

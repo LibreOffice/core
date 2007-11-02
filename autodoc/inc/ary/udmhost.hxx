@@ -4,9 +4,9 @@
  *
  *  $RCSfile: udmhost.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:56:05 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:44:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #ifndef ARY_UDMHOST_HXX
 #define ARY_UDMHOST_HXX
+//  KORR_DEPRECATED_3.0
 
 
 
@@ -46,6 +47,7 @@
 
 namespace ary
 {
+
 
 
 class UdmHost : public Host
@@ -62,8 +64,7 @@ class UdmHost : public Host
 };
 
 
+
+
 }   // namespace ary
-
-
 #endif
-
