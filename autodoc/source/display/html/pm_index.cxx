@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pm_index.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:54:55 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:32:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,17 +38,17 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <ary/cpp/c_disply.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_class.hxx>
 #include <ary/cpp/c_define.hxx>
 #include <ary/cpp/c_enum.hxx>
-#include <ary/cpp/c_tydef.hxx>
+#include <ary/cpp/c_enuval.hxx>
 #include <ary/cpp/c_funct.hxx>
 #include <ary/cpp/c_macro.hxx>
 #include <ary/cpp/c_namesp.hxx>
+#include <ary/cpp/c_tydef.hxx>
 #include <ary/cpp/c_vari.hxx>
-#include <ary/cpp/c_enuval.hxx>
-#include <ary/info/codeinfo.hxx>
+#include <ary/cpp/cp_ce.hxx>
 #include "aryattrs.hxx"
 #include "hd_chlst.hxx"
 #include "hd_docu.hxx"
@@ -58,8 +58,10 @@
 #include "pagemake.hxx"
 #include "strconst.hxx"
 
-
 using namespace csi;
+using ary::GlobalId;
+
+
 
 
 namespace
@@ -79,14 +81,14 @@ F_CK_Text( ary::cpp::E_ClassKey i_eCK )
 
 template <class CE>
 inline const char *
-F_OwnerType( const CE & i_rData, const ary::cpp::DisplayGate & i_rGate )
+F_OwnerType( const CE & i_rData, const ary::cpp::Gate & i_rGate )
 {
      if ( i_rData.Protection() == ary::cpp::PROTECT_global )
         return "namespace ";
 
     const ary::cpp::Class *
         pClass = dynamic_cast< const ary::cpp::Class* >(
-                    i_rGate.Find_Ce(i_rData.Owner()) );
+                    i_rGate.Ces().Search_Ce(i_rData.Owner()) );
     if (pClass != 0)
         return F_CK_Text(pClass->ClassKey());
     return "";
@@ -118,13 +120,13 @@ PageMaker_Index::MakePage()
 }
 
 void
-PageMaker_Index::Display_Namespace( const ary::cpp::Namespace & i_rData )
+PageMaker_Index::do_Process( const ary::cpp::Namespace & i_rData )
 {
     Write_CeIndexEntry( i_rData, "namespace", "namespace" );
 }
 
 void
-PageMaker_Index::Display_Class( const ary::cpp::Class & i_rData )
+PageMaker_Index::do_Process( const ary::cpp::Class & i_rData )
 {
     // KORR_FUTURE
     //  Really throw out all anonymous classes from index?
@@ -138,75 +140,70 @@ PageMaker_Index::Display_Class( const ary::cpp::Class & i_rData )
 }
 
 void
-PageMaker_Index::Display_Enum( const ary::cpp::Enum & i_rData )
+PageMaker_Index::do_Process( const ary::cpp::Enum & i_rData )
 {
     Write_CeIndexEntry( i_rData, "enum", F_OwnerType(i_rData, Env().Gate()) );
 }
 
 void
-PageMaker_Index::Display_Typedef( const ary::cpp::Typedef & i_rData )
+PageMaker_Index::do_Process( const ary::cpp::Typedef & i_rData )
 {
     Write_CeIndexEntry( i_rData, "typedef", F_OwnerType(i_rData, Env().Gate()) );
 }
 
 void
-PageMaker_Index::Display_Function( const ary::cpp::Function & i_rData )
+PageMaker_Index::do_Process( const ary::cpp::Function & i_rData )
 {
     Write_CeIndexEntry( i_rData, "function", F_OwnerType(i_rData, Env().Gate()) );
 }
 
 void
-PageMaker_Index::Display_Variable( const ary::cpp::Variable & i_rData )
+PageMaker_Index::do_Process( const ary::cpp::Variable & i_rData )
 {
     Write_CeIndexEntry( i_rData, "variable", F_OwnerType(i_rData, Env().Gate()) );
 }
 
 void
-PageMaker_Index::Display_EnumValue( const ary::cpp::EnumValue & i_rData )
+PageMaker_Index::do_Process( const ary::cpp::EnumValue & i_rData )
 {
     Write_CeIndexEntry( i_rData, "enum value", "" );
 }
 
 void
-PageMaker_Index::Display_Define( const ary::cpp::Define & i_rData )
+PageMaker_Index::do_Process( const ary::cpp::Define & i_rData )
 {
-    udmstri sFileName;
+    String  sFileName;
 
     pCurIndex->AddEntry();
     pCurIndex->Term()
         >> *new html::Link( Link2CppDefinition(Env(), i_rData) )
             >> *new html::Bold
-                <<  i_rData.DefinedName()
-                << " - define";
-
-    // KORR FUTURE
-//    pCurIndex->Term()
-//                <<  " - "
-//                <<  " define in file "
-//                << sFileName;
-
+                <<  i_rData.LocalName();
+    pCurIndex->Term()
+        << " - define";
     pCurIndex->Def() << " ";
 }
 
 void
-PageMaker_Index::Display_Macro( const ary::cpp::Macro & i_rData )
+PageMaker_Index::do_Process( const ary::cpp::Macro & i_rData )
 {
-    udmstri sFileName;
+    String  sFileName;
 
     pCurIndex->AddEntry();
     pCurIndex->Term()
         >> *new html::Link( Link2CppDefinition(Env(), i_rData) )
             >> *new html::Bold
-                <<  i_rData.DefinedName()
-                << " - macro";
-
-    // KORR FUTURE
-//    pCurIndex->Term()
-//                <<  " - "
-//                <<  " macro in file "
-//                << sFileName;
+                <<  i_rData.LocalName();
+    pCurIndex->Term()
+        << " - macro";
 
     pCurIndex->Def() << " ";
+}
+
+const ary::cpp::Gate *
+PageMaker_Index::inq_Get_ReFinder() const
+{
+     return &Env().Gate();
 }
 
 void
@@ -217,7 +214,7 @@ PageMaker_Index::Write_NavBar()
 }
 
 
-const udmstri  C_sAlphabet(
+const String   C_sAlphabet(
 "<a href=\"index-1.html\"><B>A</B></a> <a href=\"index-2.html\"><B>B</B></a> <a href=\"index-3.html\"><B>C</B></a> <a href=\"index-4.html\"><B>D</B></a> <a href=\"index-5.html\"><B>E</B></a> "
 "<a href=\"index-6.html\"><B>F</B></a> <a href=\"index-7.html\"><B>G</B></a> <a href=\"index-8.html\"><B>H</B></a> <a href=\"index-9.html\"><B>I</B></a> <a href=\"index-10.html\"><B>J</B></a> "
 "<a href=\"index-11.html\"><B>K</B></a> <a href=\"index-12.html\"><B>L</B></a> <a href=\"index-13.html\"><B>M</B></a> <a href=\"index-14.html\"><B>N</B></a> <a href=\"index-15.html\"><B>O</B></a> "
@@ -228,7 +225,7 @@ const udmstri  C_sAlphabet(
 void
 PageMaker_Index::Write_TopArea()
 {
-    udmstri sLetter(&c, 1);
+    String  sLetter(&c, 1);
 
     adcdisp::PageTitle_Std fTitle;
     fTitle( CurOut(), "Global Index", sLetter );
@@ -243,9 +240,9 @@ PageMaker_Index::Write_TopArea()
 void
 PageMaker_Index::Write_CompleteAlphabeticalList()
 {
-    std::vector<ary::Rid>
+    std::vector<GlobalId>
         aThisPagesItems;
-    const ary::cpp::DisplayGate &
+    const ary::cpp::Gate &
         rGate = Env().Gate();
 
     static char sBegin[] = "X";
@@ -264,22 +261,23 @@ PageMaker_Index::Write_CompleteAlphabeticalList()
                     break;
     }
 
-    uintt nCount = rGate.Get_AlphabeticalList( aThisPagesItems, sBegin, sEnd );
+    uintt
+        nCount = rGate.Get_AlphabeticalList( aThisPagesItems, sBegin, sEnd );
     if (nCount > 0 )
     {
         adcdisp::IndexList
             aIndex(CurOut());
         pCurIndex = &aIndex;
 
-        std::vector<ary::Rid>::const_iterator itEnd = aThisPagesItems.end();
-        for ( std::vector<ary::Rid>::const_iterator it = aThisPagesItems.begin();
+        std::vector<GlobalId>::const_iterator itEnd = aThisPagesItems.end();
+        for ( std::vector<GlobalId>::const_iterator it = aThisPagesItems.begin();
               it != itEnd;
               ++it )
         {
-            const ary::RepositoryEntity *
-                pRe = rGate.Find_Re( *it );
+            const ary::Entity *
+                pRe = rGate.Search_Entity( *it );
             if ( pRe != 0 )
-                pRe->StoreAt(*this);
+                pRe->Accept(*this);
         }   // end for
 
         pCurIndex = 0;
@@ -287,16 +285,18 @@ PageMaker_Index::Write_CompleteAlphabeticalList()
 }
 
 void
-PageMaker_Index::Write_CeIndexEntry( const ary::CodeEntity & i_rCe,
-                                     const char *            i_sType,
-                                     const char *            i_sOwnerType )
+PageMaker_Index::Write_CeIndexEntry( const ary::cpp::CodeEntity &
+                                                            i_rCe,
+                                     const char *           i_sType,
+                                     const char *           i_sOwnerType )
 {
     if ( Ce_IsInternal(i_rCe) )
         return;
 
     static csv::StreamStr aQualification(500);
 
-    const ary::CodeEntity & rOwner = Env().Gate().Ref_Ce(i_rCe.Owner());
+    const ary::cpp::CodeEntity &
+        rOwner = Env().Gate().Ces().Find_Ce(i_rCe.Owner());
 
     pCurIndex->AddEntry();
     pCurIndex->Term()
@@ -307,12 +307,12 @@ PageMaker_Index::Write_CeIndexEntry( const ary::CodeEntity & i_rCe,
         <<  " - "
         <<  i_sType;
 
-    if ( rOwner.Owner() != 0 )
+    if ( rOwner.Owner().IsValid() )
     {
         aQualification.seekp(0);
-        Env().Gate().Get_QualifiedName( aQualification,
-                                        rOwner.LocalName(),
-                                        rOwner.Owner() );
+        Env().Gate().Ces().Get_QualifiedName( aQualification,
+                                              rOwner.LocalName(),
+                                              rOwner.Owner() );
 
         pCurIndex->Term()
             <<  " in "
@@ -323,6 +323,3 @@ PageMaker_Index::Write_CeIndexEntry( const ary::CodeEntity & i_rCe,
 
     pCurIndex->Def() << " ";
 }
-
-
-

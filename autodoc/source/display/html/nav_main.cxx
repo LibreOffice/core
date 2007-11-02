@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nav_main.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:52:53 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:28:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,14 +38,12 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
-#include <ary/ce.hxx>
-#include <ary/cpp/c_disply.hxx>
-#include <ary/cpp/crog_grp.hxx>
+#include <cosv/tpl/tpltools.hxx>
+#include <ary/cpp/c_ce.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_namesp.hxx>
 #include <ary/cpp/c_class.hxx>
-#include <ary/cpp/cg_proj.hxx>
-#include <ary/cpp/cg_file.hxx>
+#include <ary/loc/loc_file.hxx>
 #include <udm/html/htmlitem.hxx>
 #include "hdimpl.hxx"
 #include "opageenv.hxx"
@@ -56,14 +54,14 @@ using namespace ::csi::html;
 using namespace ::csi::xml;
 
 
-const udmstri sOverview("Overview");
-const udmstri sNamespace("Namespace");
-const udmstri sClass("Class");
-const udmstri sTree("Tree");
-const udmstri sProject("Project");
-const udmstri sFile("File");
-const udmstri sIndex("Index");
-const udmstri sHelp("Help");
+const String  sOverview("Overview");
+const String  sNamespace("Namespace");
+const String  sClass("Class");
+const String  sTree("Tree");
+const String  sProject("Project");
+const String  sFile("File");
+const String  sIndex("Index");
+const String  sHelp("Help");
 
 
 
@@ -91,7 +89,7 @@ class MainRowItem : public MainItem
 {
   public:
                         MainRowItem(
-                            const udmstri &     i_sText,
+                            const String  &     i_sText,
                             const char *        i_sLink,
                             const char *        i_sTip );
                         ~MainRowItem();
@@ -100,12 +98,12 @@ class MainRowItem : public MainItem
 
     virtual void        do_Write2(
                             TableRow &          o_rOut );
-    udmstri             sText;
-    udmstri             sLink;
-    udmstri             sTip;
+    String              sText;
+    String              sLink;
+    String              sTip;
 };
 
-MainRowItem::MainRowItem( const udmstri &     i_sText,
+MainRowItem::MainRowItem( const String  &     i_sText,
                           const char *        i_sLink,
                           const char *        i_sTip )
     :   sText(i_sText),
@@ -137,12 +135,12 @@ class SelectedItem : public MainItem
 {
   public:
                         SelectedItem(
-                            const udmstri &     i_sText )
+                            const String  &     i_sText )
                                                 :   sText(i_sText) {}
   private:
     virtual void        do_Write2(
                             TableRow &          o_rOut );
-    udmstri             sText;
+    String              sText;
 };
 
 void
@@ -161,12 +159,12 @@ class UnavailableItem : public MainItem
 {
   public:
                         UnavailableItem(
-                            const udmstri &     i_sText )
+                            const String  &     i_sText )
                                                 :   sText(i_sText) {}
   private:
     virtual void        do_Write2(
                             TableRow &          o_rOut );
-    udmstri             sText;
+    String              sText;
 };
 
 void
@@ -221,62 +219,26 @@ MainRow::SetupItems_Help()
 }
 
 void
-MainRow::SetupItems_Ce( const ary::CodeEntity & i_rCe )
+MainRow::SetupItems_Ce( const ary::cpp::CodeEntity & i_rCe )
 {
     csv_assert( pEnv->CurNamespace() != 0 );
     bool bIsNamespace = i_rCe.Id() == pEnv->CurNamespace()->Id();
     bool bHasClass = pEnv->CurClass() != 0;
     bool bIsClass = dynamic_cast< const ary::cpp::Class * >(&i_rCe) != 0;
-    const ary::cpp::FileGroup *
-         pFile = bIsNamespace
-                    ?   0
-                    :   pEnv->Gate().RoGroups().Search_FileGroup( i_rCe.Location() );
-    const ary::cpp::ProjectGroup *
-          pProj = pFile == 0
-                    ?   0
-                    :   pEnv->Gate().RoGroups().Find_ProjectGroup( pFile->OwningProject() );
 
     Create_ItemList_InDirTree_Cpp(
                 ( bIsNamespace ? eSelf : eStd ),
                 ( bIsClass ? eSelf : bHasClass ? eStd : eNo ),
-                eNo, 0,
-                ( pProj != 0 ? eStd : eNo ), pProj,
-                ( pFile != 0 ? eStd : eNo ), pFile );
+                eNo, 0 );
 }
 
 void
 MainRow::SetupItems_FunctionGroup()
 {
-    csv_assert( pEnv->CurClass() != 0 );
-    const ary::cpp::FileGroup *
-        pFile = pEnv->Gate().RoGroups().Search_FileGroup( pEnv->CurClass()->Location() );
-    csv_assert( pFile != 0 );
-    const ary::cpp::ProjectGroup *
-         pProj = pEnv->Gate().RoGroups().Find_ProjectGroup( pFile->OwningProject() );
-    csv_assert( pProj != 0 );
-
     Create_ItemList_InDirTree_Cpp(
                 eStd,
-                eStd,
-                eNo, 0,
-                eStd, pProj,
-                eStd, pFile );
-}
-
-void
-MainRow::SetupItems_FunctionGroup( const ary::cpp::FileGroup & i_rFile )
-{
-    csv_assert( pEnv->CurClass() == 0 );
-    const ary::cpp::ProjectGroup *
-         pProj = pEnv->Gate().RoGroups().Find_ProjectGroup( i_rFile.OwningProject() );
-    csv_assert( pProj != 0 );
-
-    Create_ItemList_InDirTree_Cpp(
-                eStd,
-                eNo,
-                eNo, 0,
-                eStd, pProj,
-                eStd, &i_rFile );
+                (pEnv->CurClass() != 0 ? eStd : eNo),
+                eNo, 0 );
 }
 
 void
@@ -284,32 +246,6 @@ MainRow::SetupItems_DataGroup()
 {
     SetupItems_FunctionGroup();
 }
-
-void
-MainRow::SetupItems_DataGroup( const ary::cpp::FileGroup & i_rFile )
-{
-    SetupItems_FunctionGroup(i_rFile);
-}
-
-void
-MainRow::SetupItems_Project()
-{
-    Create_ItemList_InDirTree_Prj( eSelf, 0, eNo, 0 );
-}
-
-void
-MainRow::SetupItems_File( const ary::cpp::ProjectGroup & i_rProj )
-{
-    Create_ItemList_InDirTree_Prj( eStd, &i_rProj, eSelf, 0 );
-}
-
-void
-MainRow::SetupItems_DefinitionsGroup( const ary::cpp::ProjectGroup & i_rProj,
-                                      const ary::cpp::FileGroup &    i_rFile )
-{
-    Create_ItemList_InDirTree_Prj( eStd, &i_rProj, eStd, &i_rFile );
-}
-
 
 void
 MainRow::Write2( csi::xml::Element & o_rOut ) const
@@ -340,7 +276,7 @@ MainRow::Create_ItemList_Global( E_Style             i_eOverview,
 {
     if ( i_eOverview == eStd )
     {
-        udmstri sLinkOverview = ( i_eIndex == eSelf
+        String  sLinkOverview = ( i_eIndex == eSelf
                                         ?   dshelp::PathPerLevelsUp(
                                                 1,
                                                 C_sHFN_Overview )
@@ -358,11 +294,6 @@ MainRow::Create_ItemList_Global( E_Style             i_eOverview,
         Add_Item( eStd, sNamespace, "names/index.html", "" );
 
     Add_Item( eNo, sClass, "", "" );
-#if 0   // Will be implemented later
-    Add_Item( eNo, sTree, "", "" );
-    Add_Item( eNo, sProject, "", "" );
-    Add_Item( eNo, sFile, "", "" );
-#endif  // Will be implemented later
 
     if ( i_eIndex == eStd )
     {
@@ -375,7 +306,7 @@ MainRow::Create_ItemList_Global( E_Style             i_eOverview,
 
     if ( i_eHelp == eStd )
     {
-        udmstri sLinkHelp = ( i_eIndex == eSelf
+        String  sLinkHelp = ( i_eIndex == eSelf
                                     ?   PathPerLevelsUp(1,C_sHFN_Help)
                                     :   C_sHFN_Help );
         Add_Item( i_eHelp, sHelp, sLinkHelp.c_str(), "" );
@@ -390,18 +321,15 @@ void
 MainRow::Create_ItemList_InDirTree_Cpp( E_Style i_eNsp,
                                         E_Style i_eClass,
                                         E_Style ,
-                                        const char *  ,
-                                        E_Style ,
-                                        const ary::cpp::ProjectGroup * ,
-                                        E_Style ,
-                                        const ary::cpp::FileGroup * )
+                                        const char *  )
 {
-    udmstri sLinkOverview = PathPerRoot(*pEnv, C_sHFN_Overview);
+    String
+        sLinkOverview = PathPerRoot(*pEnv, C_sHFN_Overview);
     Add_Item( eStd, sOverview, sLinkOverview.c_str(), "" );
 
-    if ( i_eNsp == eStd )
+    if (i_eNsp == eStd)
     {
-        udmstri sLinkNamespace = PathPerNamespace(*pEnv, "index.html");
+        String  sLinkNamespace = PathPerNamespace(*pEnv, "index.html");
         Add_Item( i_eNsp, sNamespace, sLinkNamespace.c_str(), "" );
     }
     else
@@ -409,7 +337,7 @@ MainRow::Create_ItemList_InDirTree_Cpp( E_Style i_eNsp,
         Add_Item( i_eNsp, sNamespace, "", "" );
     }
 
-    if ( i_eClass == eStd )
+    if (i_eClass == eStd)
     {
         csv_assert( pEnv->CurClass() != 0 );
 
@@ -427,91 +355,16 @@ MainRow::Create_ItemList_InDirTree_Cpp( E_Style i_eNsp,
         Add_Item( i_eClass, sClass, "", "" );
     }
 
-#if 0  // Will be implemented later
-    if ( i_eTree == eStd )
-    {
-         csv_assert( i_sTreeLink != 0 );
-        Add_Item( i_eTree, sTree, i_sTreeLink, "" );
-    }
-    else
-    {
-        Add_Item( i_eTree, sTree, "", "" );
-    }
-
-    if ( i_eProj == eStd )
-    {
-         csv_assert( i_pProj != 0 );
-        udmstri sProjectLink = PathPerRoot(*pEnv, "prj/");
-        sProjectLink = csv::StringSum( sProjectLink.c_str(),
-                                       i_pProj->Name().c_str(),
-                                       "/index.html",
-                                       NIL );
-        udmstri sProjectTip = csv::StringSum( "Project ",
-                                              i_pProj->Name().c_str(),
-                                              NIL );
-        Add_Item( i_eProj, sProject, sProjectLink, sProjectTip.c_str() );
-    }
-    else
-    {
-        Add_Item( i_eProj, sProject, "", "" );
-    }
-    if ( i_eProj == eStd )
-    {
-         csv_assert( i_pProj != 0 );
-         csv_assert( i_pFile != 0 );
-
-        udmstri sFileLink = PathPerRoot(*pEnv, "prj/");
-        sFileLink = csv::StringSum( sFileLink.c_str(),
-                                       i_pProj->Name().c_str(),
-                                       "/f-",
-                                       i_pFile->FileName().c_str(),
-                                       ".html",
-                                       NIL );
-        udmstri sFileTip = csv::StringSum( "File ",
-                                            i_pFile->FileName().c_str(),
-                                            NIL );
-        Add_Item( i_eFile, sFile, sFileLink, sFileTip.c_str() );
-    }
-    else
-    {
-        Add_Item( i_eFile, sFile, "", "" );
-    }
-#endif // Will be implemented later
-
 
     Add_Item( eStd, sIndex, PathPerRoot(*pEnv, C_sPath_Index), "" );
-    udmstri sLinkHelp = PathPerRoot(*pEnv, "help.html");
+    String
+        sLinkHelp = PathPerRoot(*pEnv, "help.html");
     Add_Item( eStd, sHelp, sLinkHelp.c_str(), "" );
 }
 
 void
-MainRow::Create_ItemList_InDirTree_Prj( E_Style                         i_eProj,
-                                        const ary::cpp::ProjectGroup *  i_pProj,
-                                        E_Style                         i_eFile,
-                                        const ary::cpp::FileGroup *     i_pFile )
-{
-    Add_Item( eStd, sOverview, "../../index.html", "" );
-    Add_Item( eNo, sNamespace, "", "" );
-    Add_Item( eNo, sClass, "", "" );
-    Add_Item( eNo, sTree, "", "" );
-
-    udmstri sLinkProject = i_pProj != 0
-                                ?   "index.html"
-                                :   "";
-    Add_Item( i_eProj, sProject, sLinkProject.c_str(), "" );
-    StreamLock sLinkFile(120);
-    if ( i_pFile != 0 )
-        sLinkFile() << "f-" << i_pFile->FileName();
-
-    Add_Item( i_eFile, sFile, sLinkFile().c_str(), "" );
-
-    Add_Item( eStd, sIndex, "../../index-files/index-1.html", "" );
-    Add_Item( eStd, sHelp, "../../help.html", "" );
-}
-
-void
 MainRow::Add_Item( E_Style             i_eStyle,
-                   const udmstri &     i_sText,
+                   const String  &     i_sText,
                    const char *        i_sLink,
                    const char *        i_sTip )
 {
