@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:10:36 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:01:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <process.h>
 #endif
 
-#if defined UNX
+#if defined(UNX) || defined(OS2)
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -1071,7 +1071,7 @@ BOOL DirEntry::Exists( FSysAccess nAccess ) const
         if ( !IsValid() )
                 return FALSE;
 
-#if defined WNT
+#if defined WNT || defined OS2
     // spezielle Filenamen sind vom System da
     if ( ( aName.CompareIgnoreCaseToAscii("CLOCK$") == COMPARE_EQUAL ||
            aName.CompareIgnoreCaseToAscii("CON") == COMPARE_EQUAL ||
@@ -1095,7 +1095,7 @@ BOOL DirEntry::Exists( FSysAccess nAccess ) const
                 return TRUE;
         }
 
-#if defined WNT
+#if defined WNT || defined OS2
         if ( 0 != ( eKind & FSYS_KIND_DEV ) )
         {
                 return DRIVE_EXISTS( ImpGetTopPtr()->aName.GetChar(0) );
@@ -1501,8 +1501,14 @@ BOOL DirEntry::operator==( const DirEntry& rEntry ) const
          ( rEntry.eFlag == FSYS_FLAG_INVALID ) )
         return FALSE;
 
-    const DirEntry *pThis = this;
-    const DirEntry *pWith = &rEntry;
+#ifndef OS2
+    const
+#endif
+    DirEntry *pThis = (DirEntry *)this;
+#ifndef OS2
+    const
+#endif
+    DirEntry *pWith = (DirEntry *)&rEntry;
     while( pThis && pWith && (pThis->eFlag == pWith->eFlag) )
     {
         if ( CMP_LOWER(pThis->aName) != CMP_LOWER(pWith->aName) )
@@ -2175,7 +2181,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
             strcpy(ret_val,dir);
 
             /* Make sure directory ends with a separator    */
-#if defined WNT
+#if defined(WNT) || defined(OS2)
             if ( i>0 && ret_val[i-1] != '\\' && ret_val[i-1] != '/' &&
                  ret_val[i-1] != ':')
                 ret_val[i++] = '\\';
@@ -2243,7 +2249,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
                                 }
                                 else
                                 {
-#if defined UNX
+#if defined(UNX) || defined(OS2)
                                         if( access( ByteString(aRedirected, osl_getThreadTextEncoding()).GetBuffer(), F_OK ) )
                                         {
                                                 aRet = DirEntry( aRetVal );
@@ -2768,7 +2774,7 @@ FSysError DirEntry::CopyTo( const DirEntry& rDest, FSysAction nActions ) const
 |*
 *************************************************************************/
 
-#if defined WNT || defined UNX
+#if defined WNT || defined UNX || defined OS2
 
 FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
 {
@@ -2790,6 +2796,13 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
     {
         return FSYS_ERR_ALREADYEXISTS;
     }
+
+#if defined(OS2)
+    if ( FileStat(*this).IsKind(FSYS_KIND_DIR) && aDest.GetPath() != GetPath() )
+    {
+        return FSYS_ERR_NOTSUPPORTED;
+    }
+#endif
 
         FSysFailOnErrorImpl();
         String aFrom( GetFull() );
@@ -2865,7 +2878,7 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
         // on some nfs connections rename with from == to
         // leads to destruction of file
         if ( ( aFrom != aTo ) && ( 0 != rename( bFrom.GetBuffer(), bTo.GetBuffer() ) ) )
-#ifndef UNX
+#if !defined(UNX) && !defined(OS2)
             return Sys2SolarError_Impl( GetLastError() );
 #else
         {
@@ -3008,7 +3021,9 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
         {
                 if ( FSYS_ACTION_USERECYCLEBIN == (nActions & FSYS_ACTION_USERECYCLEBIN) )
                 {
-#ifdef WNT
+#ifdef OS2
+                        eError = ApiRet2ToSolarError_Impl( DosDelete( (PSZ) pName ) );
+#elif defined(WNT)
                         SHFILEOPSTRUCT aOp;
                         aOp.hwnd = 0;
                         aOp.wFunc = FO_DELETE;
