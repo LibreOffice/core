@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inetdef.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:12:28 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:59:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 //============================================================================
 #if defined WNT
 #define TOOLS_INETDEF_OS "Win32"
+#elif defined OS2
+#define TOOLS_INETDEF_OS "OS/2"
 #elif defined UNX
 #if defined AIX
 #define TOOLS_INETDEF_OS "AIX"
