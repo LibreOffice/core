@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_type.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:12:58 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:12:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,22 +36,18 @@
 #ifndef ARY_IDL_I_TYPE_HXX
 #define ARY_IDL_I_TYPE_HXX
 
-
-
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-#include <ary/re.hxx>
-    // PARAMETERS
-#include <ary/idl/i_language.hxx>
+#include <ary/entity.hxx>
+#include <ary/idl/i_types4idl.hxx>
+
+
 
 
 namespace ary
 {
 namespace idl
 {
-
-class Gate;
+    class Gate;
 
 
 /** Abstract base for all secondary productions of types
@@ -63,22 +59,22 @@ class Type_2s
 
     static DYN Type_2s *
                         Create_(
-                            RCid                i_nCeId );
+                            ClassId             i_nCeId );
 };
 
 
-/** @resp Base of all IDL types.
+/** Base of all IDL types.
 
-    @->Type represents the occurence of a type as base,
+    Type represents the occurence of a type as base,
     parameter, return type or element type in UNO IDL code.
-    Some of them relate to a @->CodeEntity, but
-    the @->Type "MyInterface" is something different than
-    the @->CodeEntity "MyInterface".
+    Some of them relate to a ->CodeEntity, but
+    the ->Type "MyInterface" is something different than
+    the ->CodeEntity "MyInterface".
 
     This is a storage base class, where more special
     classes are derived from.
 */
-class Type : public n22::RepositoryEntity
+class Type : public ary::Entity
 {
   public:
     typedef Type_2s secondary_productions;
@@ -108,6 +104,10 @@ class Type : public n22::RepositoryEntity
     virtual Type_id     inq_TemplateParameterType() const;
 };
 
+
+
+
+// IMPLEMENTATION
 inline void
 Type::Get_Text( StringVector &      o_module,
                 String &            o_name,
@@ -125,8 +125,8 @@ Type::TemplateParameterType() const
 }
 
 
+
+
 }   // namespace idl
 }   // namespace ary
-
-
 #endif
