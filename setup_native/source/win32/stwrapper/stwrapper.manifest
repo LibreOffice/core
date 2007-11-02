@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Copyright © 1981-2001 Microsoft Corporation -->
+<assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
+	<assemblyIdentity
+        type="win32"
+        name="Service Tags Wrapper"
+        version="1.0.0.0"
+        processorArchitecture="x86"
+    />
+	<description>OpenOffice.org Installer</description>
+    <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+        <security>
+            <requestedPrivileges>
+                <requestedExecutionLevel level="asInvoker" />
+            </requestedPrivileges>
+        </security>
+    </trustInfo>
+    <dependency>
+	</dependency>
+</assembly>
