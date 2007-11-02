@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 10:06:43 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:49:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <rtl/alloc.h>
 #endif
 #ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 #endif
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
@@ -53,7 +53,7 @@
 #include <salbmp.h>
 #endif
 #ifndef _SV_BITMAP_HXX
-#include <bitmap.hxx> // for BitmapSystemData
+#include <vcl/bitmap.hxx> // for BitmapSystemData
 #endif
 #include <string.h>
 
