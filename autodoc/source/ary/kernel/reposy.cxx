@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reposy.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:44:36 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:14:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,191 +38,91 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/x_ary.hxx>
-#include <ary/actions.hxx>
-#include <idl/i_reposypart.hxx>
-
-    // S P L I T //
-
-#include <store/storage.hxx>
-#include <store/strg_ifc.hxx>
-#include <id_gener.hxx>
-#include <cpp/c_gate.hxx>
-#include <loc/l_gate.hxx>
-
+#include <cpp_internalgate.hxx>
+#include <idl_internalgate.hxx>
 
 
 namespace ary
 {
 
-namespace
-{
-    static Dyn<RepositoryCenter> pTheOldInstance_(0);
-}
-
-
-namespace n22
-{
-
-using ::ary::Command;
-using ::ary::X_Ary;
 
 //*****************     Repository          ************//
 
-namespace
-{
-    static Dyn<RepositoryCenter> pTheInstance_(0);
-}
-
-Repository &
+DYN Repository &
 Repository::Create_()
 {
-    if ( pTheInstance_ )
-        throw X_Ary(X_Ary::x_MultipleRepository);
-
-    pTheInstance_ = new RepositoryCenter;
-
-    // KORR_FUTURE
-    //   Create the Cpp repository:
-    ::ary::Repository::Create_(0);
-
-    return *pTheInstance_;
-}
-
-Repository &
-Repository::The_()
-{
-    if ( NOT pTheInstance_ )
-        throw X_Ary(X_Ary::x_MissingRepository);
-
-    return *pTheInstance_;
-}
-
-void
-Repository::Destroy_()
-{
-    pTheInstance_ = 0;
-
-    // KORR_FUTURE
-    //   Destroythe Cpp repository:
-    ::ary::Repository::Destroy_();
+    return *new RepositoryCenter;
 }
 
 
-//*****************     RepositoryCenter          ************//
 
 
 RepositoryCenter::RepositoryCenter()
     :   sDisplayedName(),
         aLocation(),
-#if 0       // Version 2.2
-        pCppPartition(),
-#endif // Version 2.2
-        pIdlPartition()
+        pCppPartition(0),
+        pIdlPartition(0)
 {
+    pCppPartition = & cpp::InternalGate::Create_Partition_(*this);
+    pIdlPartition = & idl::InternalGate::Create_Partition_(*this);
 }
 
 RepositoryCenter::~RepositoryCenter()
 {
 }
 
-void
-RepositoryCenter::RunCommand_ProduceAllSecondaries()
+const ::ary::cpp::Gate &
+RepositoryCenter::Gate_Cpp() const
 {
-    // KORR_FUTURE
+    csv_assert(pCppPartition);
+    return *pCppPartition;
 }
 
-void
-RepositoryCenter::RunCommand_Statistic( ::ary::action::Statistic & )
+const ::ary::idl::Gate &
+RepositoryCenter::Gate_Idl() const
 {
-    // KORR_FUTURE
-}
-
-void
-RepositoryCenter::do_Perform( Command & io_rCommand )
-{
-    io_rCommand.Run(*this);
+    csv_assert(pIdlPartition);
+    return *pIdlPartition;
 }
 
 const String &
-RepositoryCenter::inq_Name() const
+RepositoryCenter::Title() const
 {
     return sDisplayedName;
 }
 
-bool
-RepositoryCenter::inq_HasIdl() const
-{
-    return bool(pIdlPartition);
-}
 
-bool
-RepositoryCenter::inq_HasCpp() const
+::ary::cpp::Gate &
+RepositoryCenter::Gate_Cpp()
 {
-    return pTheOldInstance_->HasCpp();
-}
-
-const ::ary::idl::Gate &
-RepositoryCenter::inq_Gate_Idl() const
-{
-    return const_cast< RepositoryCenter& >(*this).access_Gate_Idl();
-}
-
-const ::ary::cpp::DisplayGate &
-RepositoryCenter::inq_Gate_Cpp() const
-{
-    return pTheOldInstance_->DisplayGate_Cpp();
+    csv_assert(pCppPartition);
+    return *pCppPartition;
 }
 
 ::ary::idl::Gate &
-RepositoryCenter::access_Gate_Idl()
+RepositoryCenter::Gate_Idl()
 {
-    if (NOT pIdlPartition)
-        pIdlPartition = new idl::RepositoryPartition(*this);
-
-    return pIdlPartition->TheGate();
-}
-
-::ary::cpp::RwGate &
-RepositoryCenter::access_Gate_Cpp()
-{
-    return pTheOldInstance_->RwGate_Cpp();
+    csv_assert(pIdlPartition);
+    return *pIdlPartition;
 }
 
 void
-RepositoryCenter::do_Set_Name(const String & i_sName)
+RepositoryCenter::Set_Title(const String & i_sName)
 {
     sDisplayedName = i_sName;
-    pTheOldInstance_->Set_Name(i_sName);
 }
 
 
 
-#if 0       // Version 2.2
-/*
-cpp::Gate &
-RepositoryCenter::access_Gate_Cpp()
-{
-    csv_assert( pCppPartition );
-    return pCppPartition->TheGate();
-}
-const cpp::Gate &
-RepositoryCenter::inq_Gate_Cpp() const
-{
-    csv_assert( pCppPartition );
-    return pCppPartition->TheGate();
-}
-*/
-#endif    // Version 2.2
 
+//*********************     Repository Type Info Data       ****************//
 
-}   // namespace n22
+// !!! IMPORTANT - NEVER DELETE OR CHANGE - ADDING ALLOWED
 
 
 
 /*  ClassType-Ids
     -------------
-
 
     cpp                 1000
     idl                 2000
@@ -248,6 +148,7 @@ RepositoryCenter::inq_Gate_Cpp() const
     BuiltInType         1200
     CeType_Final        1201
     CeType_Extern       1202
+    UsedType            1203
     PtrType             1211
     RefType             1212
     ConstType           1221
@@ -265,6 +166,12 @@ RepositoryCenter::inq_Gate_Cpp() const
 
     Define              1601
     Macro               1602
+
+    ProjectGroup        1901
+    FileGroup           1902
+
+    TopProject          1921
+
 
 
     idl
@@ -302,7 +209,11 @@ RepositoryCenter::inq_Gate_Cpp() const
     Interface           4001
     Class               4002
 
-
+    physical location
+    -----------------
+    Root                7000
+    Directory           7030
+    File                7100
 
 
     info
@@ -312,133 +223,4 @@ RepositoryCenter::inq_Gate_Cpp() const
 */
 
 
-
-
-
-
-
-
-
-
-
-                        //      S P L I T           //
-
-
-
-
-
-struct RepositoryCenter::CheshireCat
-{
-    //  DATA
-    String              sName;
-    Dyn<store::Storage> pStorage;
-    Dyn<Storage_Ifc>    pStorage_Ifc;
-    Dyn<IdGenerator>    pIdGenerator;
-
-    Dyn<cpp::Gate>      pGate_Cpp;
-    Dyn<loc::Gate>      pGate_Locations;
-    bool                bHasCppContent;
-
-                        CheshireCat(
-                            DYN IdGenerator &   let_drIds );
-                        ~CheshireCat();
-};
-
-
-Repository &
-Repository::Create_( DYN IdGenerator *   let_dpIds )
-{
-    csv_assert( NOT pTheOldInstance_ );
-
-    DYN IdGenerator * dpIds =
-            let_dpIds != 0
-                ?   let_dpIds
-                :   new Std_IdGenerator;
-    pTheOldInstance_ = new RepositoryCenter( *dpIds );
-    return *pTheOldInstance_;
-}
-
-Repository &
-Repository::The_()
-{
-    csv_assert( pTheOldInstance_ );
-    return *pTheOldInstance_;
-}
-
-void
-Repository::Destroy_()
-{
-    pTheOldInstance_ = 0;
-}
-
-RepositoryCenter::RepositoryCenter( DYN IdGenerator &   let_drIds )
-    :   pi( new CheshireCat(let_drIds) )
-{
-}
-
-RepositoryCenter::~RepositoryCenter()
-{
-}
-
-bool
-RepositoryCenter::HasCpp() const
-{
-    return pi->bHasCppContent;
-}
-
-void
-RepositoryCenter::Set_Name( const String & i_name )
-{
-     pi->sName = i_name;
-}
-
-const cpp::DisplayGate &
-RepositoryCenter::inq_DisplayGate_Cpp() const
-{
-    return *pi->pGate_Cpp;
-}
-
-const udmstri &
-RepositoryCenter::inq_Name() const
-{
-    return pi->sName;
-}
-
-cpp::RwGate &
-RepositoryCenter::access_RwGate_Cpp()
-{
-    pi->bHasCppContent = true;
-    return *pi->pGate_Cpp;
-}
-
-
-RepositoryCenter::
-CheshireCat::CheshireCat( DYN IdGenerator &   let_drIds )
-    :   sName(),
-        pStorage(0),
-        pStorage_Ifc(0),
-        pIdGenerator( &let_drIds ),
-        pGate_Cpp(0),
-        pGate_Locations(0),
-        bHasCppContent(false)
-{
-    pStorage                = new store::Storage;
-    pStorage_Ifc            = new Storage_Ifc( *pStorage );
-    pGate_Locations         = new loc::Gate(
-                                        pStorage_Ifc->Ifc_Locations(),
-                                        *pIdGenerator );
-    pGate_Cpp               = new cpp::Gate(
-                                        *pStorage_Ifc,
-                                        *pIdGenerator,
-                                        *pGate_Locations );
-}
-
-RepositoryCenter::
-CheshireCat::~CheshireCat()
-{
-}
-
-
 }   // namespace ary
-
-
