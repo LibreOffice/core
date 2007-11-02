@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.159 $
-# Date:        $Date: 2007-11-02 13:05:24 $
+# Version:     $Revision: 1.160 $
+# Date:        $Date: 2007-11-02 15:23:26 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -57,7 +57,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
      $BUILD_SOSL_RELEASE, $RSC_ONCE );
 #
 # Platform dependent constant values.
-my ( $BIG_SVX, $COM, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE, $GUIENV,
+my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE, $GUIENV,
       $GVER, $GVERDIR, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR, $XPVERSION,
       $DYNAMIC_CRT, $SET_EXCEPTIONS, $use_shl_versions, $CDPATHx, $JRELIBDIR,
       $JREEXTRALIBDIR, $JRETOOLKITDIR, $JRETHREADDIR, $EXCEPTIONS, $WRAPCMD );
@@ -86,7 +86,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $SHELL,
      $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB,
 	 $PROEXT,
-     $SYSTEM_PYTHON, $PYTHONPATH, $PYTHONHOME, $SYSTEM_MOZILLA);
+     $SYSTEM_PYTHON, $PYTHONPATH, $PYTHONHOME, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -130,6 +130,7 @@ $MOZILLA_TOOLKIT	= '@MOZILLA_TOOLKIT@'; # GUI toolkit to use to build mozilla
 $WRAPCMD        = "";               # Wrapper (only for winnt)
 $GLIBC          = "";               # Whether the platform uses glibc
 $PROEXT         = "@PROEXT@";
+$EPM_FLAGS	= "";
 
 #
 #--------------------------------------------------------------------
@@ -512,6 +513,45 @@ elsif ( $platform =~ m/linux-gnu/ )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."native_threads";
    }
+   elsif ($platform =~ m/^mips/)
+   {  print "Setting Linux MIPS specific values... ";
+      $outfile        = "LinuxMIPSEnv.Set"; 
+      $CPU            = "M";
+      $CPUNAME        = "GODSON";
+      $OUTPATH        = "unxlngmips";
+
+      if ('@SIZEOF_LONG@' eq '8') {
+        if ('@WORDS_BIGENDIAN@' ne 'yes') {
+          $EPM_FLAGS = "-a mips64el";
+          if ( $JDK eq "gcj" ) {
+	    $ARCH = "mips64el";
+          }
+        }
+        else {
+          $ARCH = "mips64";
+        }
+      }
+      else {
+        if ('@WORDS_BIGENDIAN@' ne 'yes') {
+          $EPM_FLAGS = "-a mipsel";
+          if ( $JDK eq "gcj" ) {
+	    $ARCH = "mipsel";
+          }
+          else {
+	    $ARCH = "mips32";
+          }
+        }
+        else {
+          $ARCH = "mips";
+        }
+      }
+
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."lib".$ds.$ARCH;
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."native_threads";
+      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."lib".$ds.$ARCH.$ds."xawt";
+   }
+
 
    $INPATH         = $OUTPATH.$PROEXT;
    $GVERDIR        = $INPATH;
@@ -1834,6 +1874,7 @@ if ( '@ENABLE_RPATH@' eq "no" ) {
   ToFile( "LINKFLAGSRUNPATH",'',                   "e" );
 }
 ToFile( "EPM",               "@EPM@",              "e" );
+ToFile( "EPM_FLAGS",         $EPM_FLAGS,           "e" );
 ToFile( "BUILD_EPM",         "@BUILD_EPM@",        "e" );
 ToFile( "PKGFORMAT",         "@PKGFORMAT@",        "e" );
 ToFile( "SYSTEM_STDLIBS",    "@SYSTEM_STDLIBS@",   "e" );
