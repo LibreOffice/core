@@ -1,7 +1,7 @@
-..\%__SRC%\bin\bridgefac.uno.dll %_DEST%\bin%_EXT%\bridgefac.uno.dll
-..\%__SRC%\bin\remotebridge.uno.dll %_DEST%\bin%_EXT%\remotebridge.uno.dll
-..\%__SRC%\bin\dynamicloader.uno.dll %_DEST%\bin%_EXT%\dynamicloader.uno.dll
-..\%__SRC%\bin\uuresolver.uno.dll %_DEST%\bin%_EXT%\uuresolver.uno.dll
+..\%__SRC%\bin\bridgefa*.dll %_DEST%\bin%_EXT%\bridgefa*.dll
+..\%__SRC%\bin\remotebr*.dll %_DEST%\bin%_EXT%\remotebr*.dll
+..\%__SRC%\bin\dynamicl*.dll %_DEST%\bin%_EXT%\dynamicl*.dll
+..\%__SRC%\bin\uuresolv*.dll %_DEST%\bin%_EXT%\uuresolv*.dll
 ..\%__SRC%\bin\brdgfctr.rdb %_DEST%\rdb%_EXT%\brdgfctr.rdb
 ..\%__SRC%\bin\remotebridge.rdb %_DEST%\rdb%_EXT%\remotebridge.rdb
 ..\%__SRC%\bin\dynamicloader.rdb %_DEST%\rdb%_EXT%\dynamicloader.rdb
