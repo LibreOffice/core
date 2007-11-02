@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 10:04:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:43:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,11 @@
 #endif
 
 #ifndef _SV_SV_H
-#include <sv.h>
+#include <vcl/sv.h>
 #endif
 
 #ifndef _SV_SALBMP_HXX
-#include <salbmp.hxx>
+#include <vcl/salbmp.hxx>
 #endif
 
 // --------------
