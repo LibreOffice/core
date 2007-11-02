@@ -4,9 +4,9 @@
  *
  *  $RCSfile: streamstr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:31:06 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:46:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,12 +43,13 @@
 #include <cstdarg>  // std::va_list and friends
 
 #include <cosv/comfunc.hxx>
-#include <cosv/template/swelist.hxx>
+#include <cosv/tpl/swelist.hxx>
 
 
 
 namespace csv
 {
+
 
 // Maximal sizes of resulting integers in text form:
 const uintt C_short_max_size    = sizeof(short) * 3;
@@ -63,7 +64,8 @@ StreamStr::Advance(size_type i_nAddedSize)
 
 
 StreamStr::StreamStr( size_type     i_nCapacity )
-    :   nCapacity1( i_nCapacity + 1 ),
+    :   bostream(),
+        nCapacity1( i_nCapacity + 1 ),
         dpData( new char [i_nCapacity + 1] ),
         pEnd(dpData),
         pCur(dpData),
@@ -74,7 +76,8 @@ StreamStr::StreamStr( size_type     i_nCapacity )
 
 StreamStr::StreamStr( const char *  i_sInitStr,
                       size_type     i_nCapacity )
-    :   nCapacity1(0),
+    :   bostream(),
+        nCapacity1(0),
         dpData(0),
         pEnd(0),
         pCur(0),
@@ -92,7 +95,8 @@ StreamStr::StreamStr( size_type         i_nGuessedCapacity,
                       const char *      str1,
                       const char *      str2,
                                         ... )
-    :   nCapacity1( i_nGuessedCapacity + 1 ),
+    :   bostream(),
+        nCapacity1( i_nGuessedCapacity + 1 ),
         dpData( new char [i_nGuessedCapacity + 1] ),
         pEnd(dpData),
         pCur(dpData),
@@ -127,6 +131,25 @@ StreamStr::StreamStr( const self & i_rOther )
         eMode(i_rOther.eMode)
 {
     strcpy( dpData, i_rOther.dpData );      // SAFE STRCPY (#100211# - checked)
+}
+
+StreamStr::StreamStr(csv::bstream & i_source)
+    :   bostream(),
+        nCapacity1(0),
+        dpData(0),
+        pEnd(0),
+        pCur(0),
+        eMode(str::overwrite)
+{
+    i_source.seek(0, csv::end);
+    nCapacity1 = static_cast<size_type>(i_source.position()) + 1;
+    i_source.seek(0);
+
+    dpData = new char[nCapacity1];
+    i_source.read(dpData, nCapacity1 - 1);
+    pCur = dpData + nCapacity1 - 1;
+    pEnd = pCur;
+    *pCur = '\0';
 }
 
 StreamStr::~StreamStr()
@@ -339,9 +362,36 @@ StreamStr::resize( size_type i_nMinimumCapacity )
     Resize(i_nMinimumCapacity);
 }
 
+void
+StreamStr::swap( StreamStr & io_swap )
+{
+    size_type
+        n = io_swap.nCapacity1;
+    io_swap.nCapacity1 = nCapacity1;
+    nCapacity1 = n;
+
+    char *
+        p = io_swap.dpData;
+    io_swap.dpData = dpData;
+    dpData = p;
+
+    p = io_swap.pEnd;
+    io_swap.pEnd = pEnd;
+    pEnd = p;
+
+    p = io_swap.pCur;
+    io_swap.pCur = pCur;
+    pCur = p;
+
+    insert_mode
+        m = io_swap.eMode;
+    io_swap.eMode = eMode;
+    eMode = m;
+}
+
 StreamStr &
 StreamStr::seekp( seek_type           i_nCount,
-                      seek_dir            i_eDirection )
+                  seek_dir            i_eDirection )
 {
     seek_type nLength = seek_type( length() );
     seek_type nNewPos = tellp();
@@ -572,25 +622,36 @@ StreamStr::strip_frontback_whitespace()
 }
 
 void
+StreamStr::remove(  iterator            i_begin,
+                    iterator            i_end )
+{
+    csv_assert(i_begin >= dpData AND i_begin <= pEnd);
+    csv_assert(i_end >= dpData AND i_end <= pEnd);
+    csv_assert(i_end >= i_begin);
+    MoveData(i_end, pEnd, i_begin - i_end);
+    pCur = pEnd;
+}
+
+void
 StreamStr::replace( position_type       i_nStart,
                     size_type           i_nSize,
                     Area                i_aReplacement )
 {
-   if (i_nStart >= length() OR i_nSize < 1)
+    if (i_nStart >= length() OR i_nSize < 1)
       return;
 
-   insert_mode eOldMode = eMode;
-   eMode = str::insert;
-   pCur = dpData + i_nStart;
+    insert_mode eOldMode = eMode;
+    eMode = str::insert;
+    pCur = dpData + i_nStart;
 
-   size_type anz = min( length() - i_nStart, i_nSize );
+    size_type anz = min( length() - i_nStart, i_nSize );
 
-   if ( anz < i_aReplacement.nLength )
-   {
+    if ( anz < i_aReplacement.nLength )
+    {
         ProvideAddingSize( i_aReplacement.nLength - anz );
-   }
-   else if ( anz > i_aReplacement.nLength )
-   {
+    }
+    else if ( anz > i_aReplacement.nLength )
+    {
         seek_type nMove = seek_type(anz - i_aReplacement.nLength);
 
         MoveData( dpData + i_nStart + anz,
@@ -598,12 +659,16 @@ StreamStr::replace( position_type       i_nStart,
                   -nMove );
         pEnd -= nMove;
         *pEnd = '\0';
-   }
+    }
 
-   memcpy( dpData + i_nStart, i_aReplacement.sStr, i_aReplacement.nLength );
-   Advance(i_aReplacement.nLength);
+    if (i_aReplacement.nLength > 0)
+    {
+        memcpy( dpData + i_nStart, i_aReplacement.sStr, i_aReplacement.nLength );
+        Advance(i_aReplacement.nLength);
+    }
 
-   eMode = eOldMode;
+    eMode = eOldMode;
+    pCur = pEnd;
 }
 
 void
@@ -738,6 +803,7 @@ class StreamStrPool
                         StreamStrPool();
                         ~StreamStrPool();
   private:
+    // Non-copyable
     StreamStrPool(StreamStrPool &); // not defined
     void operator =(StreamStrPool &); // not defined
 
@@ -808,7 +874,7 @@ StreamStrLock::~StreamStrLock()
 
 UINT32
 StreamStr::do_write( const void *    i_pSrc,
-                         UINT32          i_nNrofBytes )
+                     UINT32          i_nNrofBytes )
 {
     ProvideAddingSize( i_nNrofBytes );
     memcpy( pCur, i_pSrc, i_nNrofBytes );
@@ -852,8 +918,8 @@ StreamStr::Resize( size_type i_nMinimumCapacity )
 
 void
 StreamStr::MoveData( char *        i_pStart,
-                         char *        i_pEnd,
-                         seek_type     i_nDiff )
+                     char *        i_pEnd,
+                     seek_type     i_nDiff )
 {
     if (i_nDiff > 0)
     {
@@ -867,8 +933,8 @@ StreamStr::MoveData( char *        i_pStart,
     }
     else if (i_nDiff < 0)
     {
-        register const char * pSrc  = i_pStart;
-        register char * pDest = i_pStart + i_nDiff;
+        const char * pSrc  = i_pStart;
+        char * pDest = i_pStart + i_nDiff;
         for ( ; pSrc != i_pEnd; ++pSrc, ++pDest )
         {
             *pDest = *pSrc;
@@ -876,7 +942,7 @@ StreamStr::MoveData( char *        i_pStart,
     }
 }
 
-// Dummy, needed for debug-versions of some compilers.
+// Does nothing, only the name of this function is needed.
 void
 c_str()
 {
@@ -884,5 +950,40 @@ c_str()
 }
 
 
-}   // namespace csv
 
+void
+Split( std::vector<String> &    o_list,
+       const char *             i_text )
+{
+    const char *
+        pCurrentToken = 0;
+    bool
+        white = false;
+    for (const char * p = i_text; *p != '\0'; ++p)
+    {
+        white = UINT8(*p) > 32;
+        if (pCurrentToken != 0)
+        {
+            if (white)
+            {
+                o_list.push_back(String(pCurrentToken, p));
+                pCurrentToken = 0;
+            }
+        }
+        else
+        {
+            if ( NOT white)
+                pCurrentToken = p;
+        }   // endif (bInToken) else
+    }   // end for
+
+    if (pCurrentToken != 0)
+    {
+        o_list.push_back(String(pCurrentToken));
+    }
+}
+
+
+
+
+}   // namespace csv
