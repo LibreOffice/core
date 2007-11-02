@@ -14,6 +14,7 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\%__SRC%\bin\deregister_extensions %_DEST%\bin%_EXT%\deregister_extensions
 ..\%__SRC%\bin\javaloader.sh %_DEST%\bin%_EXT%\javaloader.sh
 ..\%__SRC%\bin\stclient_wrapper.sh %_DEST%\bin%_EXT%\stclient_wrapper
+..\%__SRC%\bin\stclient_wrapper.exe %_DEST%\bin%_EXT%\stclient_wrapper.exe
 ..\source\win32\msi-encodinglist.txt %_DEST%\bin%_EXT%\msi-encodinglist.txt
 ..\source\win32\patchlist.txt %_DEST%\bin%_EXT%\patchlist.txt
 ..\source\win32\get_retval.bat %_DEST%\bin%_EXT%\get_retval.bat
@@ -29,3 +30,11 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\%__SRC%\lib\getuid.so %_DEST%\bin%_EXT%\getuid.so
 
 ..\inc\setup_native\qswin32.h %_DEST%\inc%_EXT%\setup_native\qswin32.h
+
+mkdir: %_DEST%\xml%_EXT%\registry\spool
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office
+mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
+
+..\%__SRC%\misc\registry\spool\org\openoffice\Office\Jobs\*.xcu %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Jobs
