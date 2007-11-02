@@ -4,9 +4,9 @@
  *
  *  $RCSfile: instlist.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:59:00 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,17 +36,15 @@
 #ifndef ARY_INSTLIST_HXX
 #define ARY_INSTLIST_HXX
 
-
-
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-#include <ary/ids.hxx>
-    // PARAMETERS
+#include <ary/types.hxx>
+
+
 
 
 namespace ary
 {
+
 
 class InstanceList : public std::vector< ary::Rid >
 {
@@ -56,11 +54,7 @@ class InstanceList : public std::vector< ary::Rid >
 };
 
 
-// IMPLEMENTATION
 
 
 }   // namespace ary
-
-
 #endif
-
