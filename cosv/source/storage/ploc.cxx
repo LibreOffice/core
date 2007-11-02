@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ploc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:07:09 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:46:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,8 @@
 
 // NOT FULLY DECLARED SERVICES
 #include <cosv/bstream.hxx>
-// #include <ctype.h>
+
+
 
 
 namespace csv
@@ -86,21 +87,23 @@ Path::Set( const char *        i_sPath,
     if ( *i_sDelimiter != '\\' AND *i_sDelimiter != '/' )
         return;
 
-    const char * pRestPath = 0;
-    pRoot = Root::Create_( pRestPath, i_sPath, i_sDelimiter );
-    if (pRestPath == 0)
+    const char *
+        restPath = 0;
+    pRoot = Root::Create_( restPath, i_sPath, i_sDelimiter );
+    if (restPath == 0)
         return;
 
-    aPath.Set(pRestPath, i_bPathIsAlwaysDir, i_sDelimiter);
+    aPath.Set(restPath, i_bPathIsAlwaysDir, i_sDelimiter);
 
     if (NOT i_bPathIsAlwaysDir)
     {
-        const char * pFile = strrchr( pRestPath, *i_sDelimiter );
-        if (pFile == 0)
-            pFile = pRestPath;
+        const char *
+            file = strrchr( restPath, *i_sDelimiter );
+        if (file == 0)
+            file = restPath;
         else
-            pFile++;
-        sFile = pFile;
+            file++;
+        sFile = file;
     }
 }
 
@@ -111,18 +114,22 @@ Path::SetFile( const String & i_sName )
 }
 
 const char *
-Path::FileEnding() const
+Path::FileExtension() const
 {
-    const char * pEnd = strrchr(sFile, '.');
-    if (pEnd != 0)
-        ++pEnd;
+    const char *
+        ext = strrchr(sFile, '.');
+    if (ext != 0)
+        ++ext;
     else
-        pEnd = "";
-    return pEnd;
+        ext = "";
+    return ext;
 }
 
 bool
-Path::IsValid() const         { return RootDir().OwnDelimiter() != 0; }
+Path::IsValid() const
+{
+    return RootDir().OwnDelimiter() != 0;
+}
 
 void
 Path::Get( ostream & o_rPath ) const
@@ -153,8 +160,6 @@ Path::Get( bostream & o_rPath ) const
 
 
 
+
 } // namespace ploc
 } // namespace csv
-
-
-
