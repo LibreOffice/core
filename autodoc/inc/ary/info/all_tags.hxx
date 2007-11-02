@@ -4,9 +4,9 @@
  *
  *  $RCSfile: all_tags.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:20:09 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:14:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
 #include <ary/info/ci_text.hxx>
 #include <ary/qualiname.hxx>
     // PARAMETERS
-#include <ary/ids.hxx>
 
 
 
@@ -174,7 +173,7 @@ class ParameterTag : public AtTag
                             const char *        i_sText,
                             intt                i_nNr );
 
-    const udmstri &     ParamName() const       { return sName; }
+    const String  &     ParamName() const       { return sName; }
     const DocuText &    CText() const           { return aText; }
     virtual UINT8       NrOfSpecialMeaningTokens() const;
     virtual const ParameterTag *
@@ -186,8 +185,8 @@ class ParameterTag : public AtTag
                             DocuDisplay &       o_rDisplay ) const;
     virtual DocuText *  Text();
 
-    udmstri             sName;
-    udmstri             sValidRange;
+    String              sName;
+    String              sValidRange;
     DocuText            aText;
     AtTag *             pNext;
 };
@@ -227,7 +226,7 @@ class TemplateTag : public AtTag
     const DocuText &    CText() const           { return aText; }
     virtual const char *
                         Title() const;
-    const udmstri &     TplParamName() const    { return sName; }
+    const String  &     TplParamName() const    { return sName; }
     virtual UINT8       NrOfSpecialMeaningTokens() const;
     virtual const TemplateTag *
                         GetNext() const         { return dynamic_cast< TemplateTag* >(pNext); }
@@ -238,7 +237,7 @@ class TemplateTag : public AtTag
                             DocuDisplay &       o_rDisplay ) const;
     virtual DocuText *  Text();
 
-    udmstri             sName;
+    String              sName;
     DocuText            aText;
     AtTag *             pNext;
 };
