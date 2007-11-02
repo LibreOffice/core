@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 13:05:39 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:42:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ dot=.
 LIBSALCPPRT=$(0)
 UWINAPILIB=$(0)
 
-CDEFS+=-DNO_X11 -DXP_PC -DHW_THREADS -DINCLUDEDIR=\".\"
+CDEFS+=-DNO_X11 -DXP_PC -DHW_THREADS -DINCLUDEDIR=$(EMQ)".$(EMQ)"
 
 OBJFILES=  \
         $(OBJ)$/cppsetup.obj \
@@ -70,6 +70,7 @@ OBJFILES=  \
 
 APP1TARGET=makedepend
 APP1OBJS=$(OBJFILES)
+
 
 .INCLUDE : target.mk
 
