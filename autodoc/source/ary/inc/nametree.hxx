@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nametree.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:59:35 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:02:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,12 @@
 #ifndef ARY_NAMETREE_HXX
 #define ARY_NAMETREE_HXX
 
-
-
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-#include <ary/ids.hxx>
+#include <ary/types.hxx>
+#include <ary/namesort.hxx>
 #include "instlist.hxx"
-#include "namesort.hxx"
-    // PARAMETERS
+
+
 
 
 namespace ary
@@ -54,17 +51,9 @@ namespace ary
 class NameTree
 {
   public:
-#if 0 // Test new comparison
-    struct Less_Name
-    {
-        bool                operator()(
-                                const udmstri &     i_r1,
-                                const udmstri &     i_r2 ) const;
-    };
-#endif // 0
-    typedef std::map<  udmstri,
+    typedef std::map<  String ,
                        InstanceList,
-                       CompareCeNames >         Map_Name2Inst;
+                       LesserName >             Map_Name2Inst;
 
     typedef Map_Name2Inst::const_iterator       const_iterator;
     typedef Map_Name2Inst::iterator             iterator;
@@ -75,16 +64,16 @@ class NameTree
 
     const InstanceList &
                         operator[](
-                            const udmstri &     i_rName ) const;
+                            const String  &     i_rName ) const;
 
     void                insert(
-                            const udmstri &     i_rName,
+                            const String  &     i_rName,
                             ary::Rid            i_nId );
 
     const_iterator      find(
-                            const udmstri &     i_rName );
+                            const String  &     i_rName );
     const_iterator      lower_bound(
-                            const udmstri &     i_rName ) const;
+                            const String  &     i_rName ) const;
     const_iterator      begin() const;
     const_iterator      end() const;
 
@@ -98,11 +87,6 @@ class NameTree
 
 
 
-// IMPLEMENTATION
-
 
 }   // namespace ary
-
-
 #endif
-
