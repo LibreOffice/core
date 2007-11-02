@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_hierarchy.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:52:25 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:35:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
     // COMPONENTS
     // PARAMETERS
 #include <ary/idl/i_comrela.hxx>
-#include <ary/idl/i_language.hxx>
+#include <ary/idl/i_types4idl.hxx>
 
 
 namespace csi
