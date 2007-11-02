@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_doc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:56:02 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:34:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,11 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <ary/idl/i_ce.hxx>
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 #include <ary_i/d_token.hxx>
 #include <toolkit/hf_docentry.hxx>
 #include "hfi_tag.hxx"
+#include "hi_ary.hxx"
 
 
 
@@ -58,7 +59,7 @@ HF_IdlDocu::~HF_IdlDocu()
 {
 }
 
-// KORR
+// KORR_FUTURE
 //   Should not be used any longer.
 //   Use Produce_byCesOwnDocu() or Produce_byDocu4Reference()
 //   instead.
@@ -68,7 +69,7 @@ HF_IdlDocu::Produce_byData( const client &  i_ce,
 {
     const ce_info * i_pDocu = i_doc != 0
                                 ?   i_doc
-                                :   i_ce.Docu();
+                                :   Get_IdlDocu(i_ce.Docu());
     if (i_pDocu == 0)
         return;
 
@@ -90,7 +91,7 @@ HF_IdlDocu::Produce_byData( const client &  i_ce,
 
     if ( i_pDocu->IsDeprecated()
          AND
-         // KORR
+         // KORR_FUTURE
          // Workaround, because DocuTex2::IsEmpty() does not
          //   calculate whitespace tokens only as empty.
          i_pDocu->DeprecatedText().Tokens().size() > 1 )
@@ -128,7 +129,7 @@ HF_IdlDocu::Produce_byData( const client &  i_ce,
     std::vector< csi::dsapi::DT_SeeAlsoAtTag* >
         aSeeAlsosWithText;
 
-    for ( std::vector< ary::info::AtTag2* >::const_iterator
+    for ( std::vector< ary::inf::AtTag2* >::const_iterator
                 iter = i_pDocu->Tags().begin();
           iter != i_pDocu->Tags().end();
           ++iter )
@@ -189,7 +190,8 @@ HF_IdlDocu::Produce_byData( const client &  i_ce,
 void
 HF_IdlDocu::Produce_byCesOwnDocu( const client & i_ce ) const
 {
-    const ce_info * i_pDocu = i_ce.Docu();
+    const ce_info *
+        i_pDocu = Get_IdlDocu(i_ce.Docu());
     if (i_pDocu != 0)
         Produce_byDocuAndScope(*i_pDocu, &i_ce, i_ce);
 }
@@ -225,7 +227,7 @@ HF_IdlDocu::Produce_byDocuAndScope( const ce_info &     i_rDocu,
             rOut.Produce_Definition() >> *new Html::Italic << "optional";
 
         if ( i_rDocu.IsDeprecated() AND
-             // KORR
+             // KORR_FUTURE
              // Workaround, because DocuTex2::IsEmpty() does not
              //   calculate whitespace tokens only as empty.
              i_rDocu.DeprecatedText().Tokens().size() > 1 )
@@ -259,7 +261,7 @@ HF_IdlDocu::Produce_byDocuAndScope( const ce_info &     i_rDocu,
         }
     }
 
-    for ( std::vector< ary::info::AtTag2* >::const_iterator
+    for ( std::vector< ary::inf::AtTag2* >::const_iterator
                 iter = i_rDocu.Tags().begin();
           iter != i_rDocu.Tags().end();
           ++iter )
