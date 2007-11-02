@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxsystemdependentwindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:03:28 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:14:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-#ifndef UNX
+#if !defined(UNX) && !defined(OS2)
 #include <tools/prewin.h>
 #include <windows.h>
 #include <tools/postwin.h>
