@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_property.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:34:04 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:46:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/idl/ihost_ce.hxx>
+#include <cosv/tpl/processor.hxx>
 
 
 namespace ary
@@ -67,13 +67,13 @@ Property::~Property()
 
 
 void
-Property::do_Visit_CeHost( CeHost & o_rHost ) const
+Property::do_Accept( csv::ProcessorIfc & io_processor ) const
 {
-    o_rHost.Do_Property(*this);
+    csv::CheckedCall(io_processor, *this);
 }
 
-RCid
-Property::inq_ClassId() const
+ClassId
+Property::get_AryClass() const
 {
     return class_id;
 }
@@ -108,7 +108,7 @@ namespace ifc_property
 inline const Property &
 property_cast( const CodeEntity &  i_ce )
 {
-    csv_assert( i_ce.ClassId() == Property::class_id );
+    csv_assert( i_ce.AryClass() == Property::class_id );
     return static_cast< const Property& >(i_ce);
 }
 

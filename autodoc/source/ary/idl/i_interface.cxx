@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_interface.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:33:05 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:45:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,11 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/idl/ihost_ce.hxx>
+#include <cosv/tpl/processor.hxx>
 #include <ary/idl/ik_interface.hxx>
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 #include <sci_impl.hxx>
-#include "ipi_2s.hxx"
+#include "i2s_calculator.hxx"
 
 
 namespace ary
@@ -78,13 +78,13 @@ Interface::~Interface()
 }
 
 void
-Interface::do_Visit_CeHost( CeHost & o_rHost ) const
+Interface::do_Accept( csv::ProcessorIfc & io_processor ) const
 {
-    o_rHost.Do_Interface(*this);
+    csv::CheckedCall(io_processor, *this);
 }
 
-RCid
-Interface::inq_ClassId() const
+ClassId
+Interface::get_AryClass() const
 {
     return class_id;
 }
@@ -120,7 +120,7 @@ namespace ifc_interface
 inline const Interface &
 interface_cast( const CodeEntity &  i_ce )
 {
-    csv_assert( i_ce.ClassId() == Interface::class_id );
+    csv_assert( i_ce.AryClass() == Interface::class_id );
     return static_cast< const Interface& >(i_ce);
 }
 
@@ -196,23 +196,9 @@ xref::Get_AsDataTypes( Dyn_CeIterator &    o_result,
 
 
 
-#if 0
-    static void         Get_UsingTypedefs(    /// like: typedef sequence<i_ce.LocalName()> newNameSeq;
-                            Dyn_CeIterator &    o_result,
-                            const CodeEntity &  i_ce );
-    static void         Get_AsIndirectReturns(
-                            Dyn_CeIterator &    o_result,
-                            const CodeEntity &  i_ce );
-    static void         Get_AsIndirectParameters(
-                            Dyn_CeIterator &    o_result,
-                            const CodeEntity &  i_ce );
-#endif // 0
-
-
 
 }   // namespace ifc_interface
 
 
 }   //  namespace   idl
 }   //  namespace   ary
-
