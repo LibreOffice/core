@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pm_aldef.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:54:00 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,14 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
-#include <ary/cpp/c_disply.hxx>
+#include <cosv/tpl/tpltools.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_define.hxx>
 #include <ary/cpp/c_macro.hxx>
-#include <ary/loc/l_rogate.hxx>
+#include <ary/cpp/cp_def.hxx>
 #include <ary/loc/loc_file.hxx>
+#include <ary/loc/locp_le.hxx>
+#include <ary/getncast.hxx>
 #include "hd_docu.hxx"
 #include "html_kit.hxx"
 #include "navibar.hxx"
@@ -122,14 +124,19 @@ PageMaker_AllDefs::Write_DefinesList()
                 >> *new html::Headline(3)
                     << "Defines";
 
-    List_Ids aAllDefines;
-    uintt nCount = Env().Gate().RoDefines().Get_AllDefines(aAllDefines);
+    ary::cpp::DefsResultList
+        aAllDefines =  Env().Gate().Defs().AllDefines();
+    ary::cpp::DefsConstIterator
+        itEnd = aAllDefines.end();
 
-    if (nCount > 0)
+    if (aAllDefines.begin() != itEnd)
     {
-        csv::call_for_each( aAllDefines,
-                            this,
-                            &PageMaker_AllDefs::Write_Define );
+        for ( ary::cpp::DefsConstIterator it = aAllDefines.begin();
+              it != itEnd;
+              ++it )
+        {
+            Write_Define(*it);
+        }
     }
     else
     {
@@ -152,14 +159,19 @@ PageMaker_AllDefs::Write_MacrosList()
                 >> *new html::Headline(3)
                     << "Macros";
 
-    List_Ids aAllMacros;
-    uintt nCount = Env().Gate().RoDefines().Get_AllMacros(aAllMacros);
+    ary::cpp::DefsResultList
+        aAllMacros =  Env().Gate().Defs().AllMacros();
+    ary::cpp::DefsConstIterator
+        itEnd = aAllMacros.end();
 
-    if (nCount > 0)
+    if (aAllMacros.begin() != itEnd)
     {
-        csv::call_for_each(  aAllMacros,
-                             this,
-                             &PageMaker_AllDefs::Write_Macro );
+        for ( ary::cpp::DefsConstIterator it = aAllMacros.begin();
+              it != itEnd;
+              ++it )
+        {
+            Write_Macro(*it);
+        }
     }
     else
     {
@@ -170,12 +182,11 @@ PageMaker_AllDefs::Write_MacrosList()
 }
 
 void
-PageMaker_AllDefs::Write_Define( const ary::Rid & i_nId )
+PageMaker_AllDefs::Write_Define(De_id  i_nId)
 {
-    const ary::cpp::Define *
-        pDef = Env().Gate().RoDefines().Find_Define(i_nId);
-    if (pDef == 0)
-        return;
+    csv_assert( ary::is_type<ary::cpp::Define>( Env().Gate().Defs().Find_Def(i_nId)) );
+    const ary::cpp::Define &
+        rDef = static_cast< const ary::cpp::Define& >( Env().Gate().Defs().Find_Def(i_nId) );
 
     CurOut() << new html::HorizontalLine;
 
@@ -183,21 +194,20 @@ PageMaker_AllDefs::Write_Define( const ary::Rid & i_nId )
     aDocu.AddEntry();
 
     aDocu.Term()
-        >> *new html::Label( pDef->DefinedName() )
+        >> *new html::Label( rDef.LocalName() )
             << " ";
     aDocu.Term()
-        << pDef->DefinedName();
+        << rDef.LocalName();
 
-    Write_DefsDocu( aDocu.Def(), *pDef );
+    Write_DefsDocu( aDocu.Def(), rDef );
 }
 
 void
-PageMaker_AllDefs::Write_Macro( const ary::Rid & i_nId )
+PageMaker_AllDefs::Write_Macro(De_id  i_nId)
 {
-    const ary::cpp::Macro *
-        pDef = Env().Gate().RoDefines().Find_Macro(i_nId);
-    if (pDef == 0)
-        return;
+    csv_assert( Env().Gate().Defs().Find_Def(i_nId).AryClass() == ary::cpp::Macro::class_id );
+    const ary::cpp::Macro &
+        rDef = static_cast< const ary::cpp::Macro& >( Env().Gate().Defs().Find_Def(i_nId) );
 
     CurOut() << new html::HorizontalLine;
 
@@ -205,26 +215,26 @@ PageMaker_AllDefs::Write_Macro( const ary::Rid & i_nId )
     aDocu.AddEntry();
 
     aDocu.Term()
-        >> *new html::Label( pDef->DefinedName() )
+        >> *new html::Label( rDef.LocalName() )
             << " ";
     aDocu.Term()
-        << pDef->DefinedName()
+        << rDef.LocalName()
         << "(";
-    WriteOut_TokenList( aDocu.Term(), pDef->Params(), ", " );
+    WriteOut_TokenList( aDocu.Term(), rDef.Params(), ", " );
     aDocu.Term()
         << ")";
 
-    Write_DefsDocu( aDocu.Def(), *pDef );
+    Write_DefsDocu( aDocu.Def(), rDef );
 }
 
 
 void
 PageMaker_AllDefs::Write_DefsDocu( csi::xml::Element &              o_rOut,
-                                   const ary::cpp::CppDefinition &  i_rTextReplacement )
+                                   const ary::cpp::DefineEntity &  i_rTextReplacement )
 {
     if ( i_rTextReplacement.DefinitionText().size() > 0 )
     {
-        EraseLeadingSpace( *const_cast< udmstri* >(
+        EraseLeadingSpace( *const_cast< String * >(
                                 &(*i_rTextReplacement.DefinitionText().begin())
                          ) );
     }
@@ -234,15 +244,10 @@ PageMaker_AllDefs::Write_DefsDocu( csi::xml::Element &              o_rOut,
     rList.AddEntry( "Defined As" );
     WriteOut_TokenList( rList.Def(), i_rTextReplacement.DefinitionText(), " " );
 
-    ary::loc::SourceCodeFile *
-        pFile = Env().Gate().RoLocations().Find_File( i_rTextReplacement.Location() );
-    if (pFile != 0 )
-    {
-        rList.AddEntry( "In File" );
-        rList.Def() << pFile->Name();
-    }
+    const ary::loc::File &
+        rFile = Env().Gate().Locations().Find_File( i_rTextReplacement.Location() );
+    rList.AddEntry( "In File" );
+    rList.Def() << rFile.LocalName();
 
     ShowDocu_On( o_rOut, *pDocuDisplay, i_rTextReplacement );
 }
-
-
