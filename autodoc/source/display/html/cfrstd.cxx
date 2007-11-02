@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfrstd.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:50:14 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:23:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <ctime>
 
 
 /*                      CSS Styles
@@ -275,13 +276,14 @@ StdFrame::LogoLink() const
 //  return "http://www.openoffice.org";
 }
 
+
+String              MakeCopyRight();
+
 const char *
 StdFrame::CopyrightText() const
 {
-    return "Copyright &copy; 2003 Sun Microsystems, Inc.";
-
-//  return "Copyright &copy; 2002 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.";
-//  return "Copyright 2001 OpenOffice.org Foundation. All Rights Reserved.";
+    static String sCopyRight_( MakeCopyRight() );
+    return sCopyRight_.c_str();
 }
 
 const char *
@@ -329,4 +331,25 @@ void
 StdFrame::Set_SimpleLinks()
 {
     bSimpleLinks = true;
+}
+
+String
+MakeCopyRight()
+{
+    StreamStr cr(700);
+    time_t
+        gt;
+    time(&gt);
+    tm *
+        plt = localtime(&gt);
+    int year = 1900 + plt->tm_year;
+
+    cr  << "Copyright &copy; "
+        << year
+        << " Sun Microsystems, Inc.";
+    return String(cr.c_str());
+
+//  return "Copyright &copy; 2003 Sun Microsystems, Inc.";
+//  return "Copyright &copy; 2002 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.";
+//  return "Copyright 2001 OpenOffice.org Foundation. All Rights Reserved.";
 }
