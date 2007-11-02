@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stmstarr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:16:49 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:04:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,9 @@ StmArrayStatus::SetBranches( intt                in_nStartBranchIx,
                              StmStatus::Branch * in_aBranchValues,
                              intt                in_nNrofValues )
 {
-    precond(in_nStartBranchIx >= 0);
-    precond(in_aBranchValues != 0);
-    precond( in_nNrofValues > 0
+    csv_assert(in_nStartBranchIx >= 0);
+    csv_assert(in_aBranchValues != 0);
+    csv_assert( in_nNrofValues > 0
              AND in_nStartBranchIx + in_nNrofValues <= nNrOfBranches );
 
     memcpy(&dpBranches[in_nStartBranchIx],in_aBranchValues,in_nNrofValues);
@@ -100,7 +100,7 @@ StmStatus::Branch
 StmArrayStatus::NextBy(intt in_nIndex) const
 {
     if (in_nIndex < 0)
-        throw X_Parser(X_Parser::x_InvalidChar, "", udmstri::Null_(), 0);
+        throw X_Parser(X_Parser::x_InvalidChar, "", String::Null_(), 0);
 
     return in_nIndex < nNrOfBranches
                 ?   dpBranches[in_nIndex]
