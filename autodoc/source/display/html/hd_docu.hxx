@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hd_docu.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:29:08 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:27:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,69 +36,59 @@
 #ifndef ADC_DISPLAY_HTML_HD_DOCU_HXX
 #define ADC_DISPLAY_HTML_HD_DOCU_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
-#include <ary/cpp/cpp_disp.hxx>
+// BASE CLASSES
+#include <ary/ary_disp.hxx>
 #include <ary/info/infodisp.hxx>
+#include <cosv/tpl/processor.hxx>
 #include "hdimpl.hxx"
-    // COMPONENTS
-    // PARAMETERS
 
 namespace ary
 {
+    namespace cpp
+    {
+        class Namespace;
+        class Class;
+        class Enum;
+        class Typedef;
+        class Function;
+        class Variable;
+    }
+
+    namespace doc
+    {
+         class Documentation;
+    }
     namespace info
     {
-         class DocuText;
+        class DocuText;
     }
 
     class QualifiedName;
 }
 
+class OuputPage_Environment;
 
-class OuputPage_Environmen;
 
-
-class Docu_Display : public ary::cpp::Display,
+class Docu_Display : public ary::Display,
+                     public csv::ConstProcessor<ary::cpp::Namespace>,
+                     public csv::ConstProcessor<ary::cpp::Class>,
+                     public csv::ConstProcessor<ary::cpp::Enum>,
+                     public csv::ConstProcessor<ary::cpp::Typedef>,
+                     public csv::ConstProcessor<ary::cpp::Function>,
+                     public csv::ConstProcessor<ary::cpp::Variable>,
+                     public csv::ConstProcessor<ary::doc::Documentation>,
                      public ary::info::DocuDisplay,
                      private HtmlDisplay_Impl
 {
   public:
                         Docu_Display(
                             OuputPage_Environment &
-                                                io_rEnv
-                                                 );
+                                                io_rEnv );
     virtual             ~Docu_Display();
 
     void                Assign_Out(
                             csi::xml::Element & o_rOut );
     void                Unassign_Out();
-
-    // Interface ary::cpp::Display
-    virtual void        Display_Namespace(
-                            const ary::cpp::Namespace &
-                                                i_rData );
-    virtual void        Display_Class(
-                            const ary::cpp::Class &
-                                                i_rData );
-    virtual void        Display_Enum(
-                            const ary::cpp::Enum &
-                                                i_rData );
-    virtual void        Display_Typedef(
-                            const ary::cpp::Typedef &
-                                                i_rData );
-    virtual void        Display_Function(
-                            const ary::cpp::Function &
-                                                i_rData );
-    virtual void        Display_Variable(
-                            const ary::cpp::Variable &
-                                                i_rData );
-
-    // Interface ary::info::DocuDisplay:
-    virtual void        Display_CodeInfo(
-                            const ary::info::CodeInfo &
-                                                i_rData );
 
     virtual void        Display_StdTag(
                             const ary::info::StdTag &
@@ -146,9 +136,39 @@ class Docu_Display : public ary::cpp::Display,
     virtual void        Display_DT_Xml(
                             const ary::info::DT_Xml &
                                                 i_rData );
+
+    using csv::ConstProcessor<ary::doc::Documentation>::Process;
+
   private:
+    // Interface csv::ConstProcessor<>:
+    virtual void        do_Process(
+                            const ary::cpp::Namespace &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::cpp::Class &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::cpp::Enum &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::cpp::Typedef &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::cpp::Function &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::cpp::Variable &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::doc::Documentation &
+                                                i_rData );
+    // Interface ary::Display:
+    virtual const ary::cpp::Gate *
+                        inq_Get_ReFinder() const;
+    // Locals
     void                Start_DocuBlock();
     void                Finish_DocuBlock();
+
     void                Write_TagTitle(
                             const char *        i_sText,
                             const char *        i_nFontSize = "+0" );
@@ -159,7 +179,7 @@ class Docu_Display : public ary::cpp::Display,
                             const ary::info::DocuText &
                                                 i_rDocuText );
     void                Write_TextToken(
-                            const udmstri &     i_sText );
+                            const String  &     i_sText );
     void                Write_LinkableText(
                             const ary::QualifiedName &
                                                 i_sQuName );
@@ -180,5 +200,5 @@ class Docu_Display : public ary::cpp::Display,
 
 
 
-#endif
 
+#endif
