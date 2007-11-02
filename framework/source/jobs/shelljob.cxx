@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shelljob.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 15:02:35 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:54:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,11 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
     try
     {
         css::uno::Reference< css::system::XSystemShellExecute > xExecute(xSMGR->createInstance(SERVICENAME_SYSTEMSHELLEXECUTE), css::uno::UNO_QUERY_THROW);
+#ifdef UNX
         xExecute->execute(sCommand, sArguments, ANSWER_TO_ALL_QUESTIONS);
+#elif defined( WNT )
+        xExecute->execute(sCommand, sArguments, css::system::SystemShellExecuteFlags::NO_SYSTEM_ERROR_MESSAGE);
+#endif
     }
     catch(const css::uno::Exception&)
     {
