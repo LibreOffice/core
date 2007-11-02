@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syshelp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:58:53 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:55:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ class Simstr;
 template <class XY> class List;
 
 
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
 const char   C_sSLASH[] = "\\";
 const char   C_cSLASH = '\\';
 #elif defined(UNX)
