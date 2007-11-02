@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplparam.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:29:58 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:35:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,8 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cpp/c_gate.hxx>
+#include <ary/cpp/c_gate.hxx>
+#include <ary/cpp/cp_type.hxx>
 
 
 namespace ary
@@ -65,17 +66,18 @@ TplParameter_Type::Compare( const TemplateParameter & i_rOther ) const
     if (pOther == 0)
         return -1;
 
-    return nType - pOther->nType;
+    return static_cast<long>(nType.Value())
+           - static_cast<long>(pOther->nType.Value());
 }
 
 void
 TplParameter_Type::Get_Text( StreamStr &                    o_rOut,
-                             const ary::cpp::DisplayGate &  i_rGate ) const
+                             const ary::cpp::Gate & i_rGate ) const
 {
-    i_rGate.Get_TypeText( o_rOut, nType );
+    i_rGate.Types().Get_TypeText( o_rOut, nType );
 }
 
-TplParameter_Const::TplParameter_Const( const udmstri & i_sConst )
+TplParameter_Const::TplParameter_Const( const String  & i_sConst )
     :   sConstant(i_sConst)
 {
 }
@@ -96,10 +98,10 @@ TplParameter_Const::Compare( const TemplateParameter & i_rOther ) const
 }
 
 void
-TplParameter_Const::Get_Text( StreamStr &                   o_rOut,
-                              const ary::cpp::DisplayGate &  ) const
+TplParameter_Const::Get_Text( StreamStr &               o_out,
+                              const ary::cpp::Gate &    ) const
 {
-    o_rOut << sConstant;
+    o_out << sConstant;
 }
 
 
@@ -107,5 +109,3 @@ TplParameter_Const::Get_Text( StreamStr &                   o_rOut,
 }   // namespace ut
 }   // namespace cpp
 }   // namespace ary
-
-
