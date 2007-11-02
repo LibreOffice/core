@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsp_html_std.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:26:08 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:21:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@ namespace ary
 {
     namespace cpp
     {
-        class DisplayGate;
+        class Gate;
     }
     namespace idl
     {
@@ -155,32 +155,27 @@ class HtmlDisplay_UdkStd
     */
     void                Run(
                             const char *        i_sOutputDirectory,
-                            const ary::cpp::DisplayGate &
+                            const ary::cpp::Gate &
                                                 i_rAryGate,
                             const display::CorporateFrame &
-                                                i_rLayout,
-                            const StringVector *
-                                                i_pProjectList = 0 );
+                                                i_rLayout );
   private:
     virtual void        do_Run(
                             const char *        i_sOutputDirectory,
-                            const ary::cpp::DisplayGate &
+                            const ary::cpp::Gate &
                                                 i_rAryGate,
                             const display::CorporateFrame &
-                                                i_rLayout,
-                            const StringVector *
-                                                i_pProjectList ) = 0;
+                                                i_rLayout ) = 0;
 };
 
 // IMPLEMENTATION
 
 inline void
 HtmlDisplay_UdkStd::Run( const char *                    i_sOutputDirectory,
-                         const ary::cpp::DisplayGate &   i_rAryGate,
-                         const display::CorporateFrame & i_rLayout,
-                         const StringVector *  i_pProjectList )
+                         const ary::cpp::Gate &          i_rAryGate,
+                         const display::CorporateFrame & i_rLayout )
 {
-    do_Run( i_sOutputDirectory, i_rAryGate, i_rLayout, i_pProjectList );
+    do_Run( i_sOutputDirectory, i_rAryGate, i_rLayout );
 }
 
 
@@ -207,8 +202,10 @@ class HtmlDisplay_Idl_Ifc
                                                 i_rLayout ) = 0;
 };
 
-// IMPLEMENTATION
 
+
+
+// IMPLEMENTATION
 inline void
 HtmlDisplay_Idl_Ifc::Run( const char *                    i_sOutputDirectory,
                           const ary::idl::Gate &          i_rAryGate,
@@ -218,9 +215,7 @@ HtmlDisplay_Idl_Ifc::Run( const char *                    i_sOutputDirectory,
 }
 
 
+
+
 } // namespace autodoc
-
-
 #endif
-
-
