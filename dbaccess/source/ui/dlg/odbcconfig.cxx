@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 12:36:53 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:22:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@
 
 #ifdef HAVE_ODBC_SUPPORT
 
-#ifdef WIN
+#if defined(WIN) || defined(OS2)
 #define ODBC_LIBRARY    "ODBC.DLL"
 #define ODBC_UI_LIBRARY "ODBCINST.DLL"
 #endif
@@ -97,6 +97,11 @@
 #endif
 #endif // defined(WIN) || defined(WNT)
 
+#if defined(OS2)
+#define ALLREADY_HAVE_OS2_TYPES
+#define DONT_TD_VOID
+#endif
+
 #ifdef SYSTEM_ODBC_HEADERS
 #include <sqlext.h>
 #else
@@ -114,6 +119,9 @@
 #endif // defined(WIN) || defined(WNT)
 // from here on you can do what you want to
 
+#if defined(OS2)
+#define SQL_API _System
+#endif // defined(OS2)
 
 #else
 
