@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parsenv2.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:09:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:13:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,15 +43,9 @@
     // COMPONENTS
 #include <s2_luidl/semnode.hxx>
     // PARAMETERS
-#include <ary/idl/i_language.hxx>
+#include <ary/idl/i_types4idl.hxx>
 #include <ary/idl/i_module.hxx>
 
-// [ed] 6/15/02 The OS X compilers require full class definitions at the time
-// of template instantiation
-// np:  Is this really so?
-#ifdef MACOSX
-#include <ary_i/codeinf2.hxx>
-#endif
 
 
 class ParserInfo;
@@ -59,22 +53,17 @@ class ParserInfo;
 namespace ary
 {
     class QualifiedName;
+    class Repository;
 
-    namespace n22
-    {
-        class Repository;
-    }
+namespace doc
+{
+    class OldIdlDocu;
+}
 
-
-    namespace idl
-    {
-        class CodeEntity;
-    }
-
-    namespace info
-    {
-        class CodeInformation;
-    }
+namespace idl
+{
+    class CodeEntity;
+}
 }
 
 
@@ -96,7 +85,7 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
 
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::n22::Repository &
+                            ary::Repository &
                                                 io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
@@ -114,7 +103,7 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
                             const Token &       i_rToken ) = 0;
 
     void                SetDocu(
-                            DYN ary::info::CodeInformation *
+                            DYN ary::doc::OldIdlDocu *
                                                 let_dpDocu );
     void                SetPublished();
     void                SetOptional();
@@ -136,12 +125,11 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
     ary::idl::Gate &    Gate() const            { return aMyNode.AryGate(); }
     TokenProcessing_Result &
                         TokenResult() const     { return aMyNode.TokenResult(); }
-    DYN ary::info::CodeInformation *
+    DYN ary::doc::OldIdlDocu *
                         ReleaseDocu()           { return pDocu.Release(); }
   protected:
                         UnoIDL_PE();
-    ary::n22::Repository &
-                        MyRepository()          { csv_assert(pRepository != 0);
+    ary::Repository &   MyRepository()          { csv_assert(pRepository != 0);
                                                   return *pRepository;  }
   private:
     virtual void        InitData();
@@ -149,19 +137,14 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
     virtual void        ReceiveData();
 
     SemanticNode        aMyNode;
-    Dyn<ary::info::CodeInformation>
+    Dyn<ary::doc::OldIdlDocu>
                         pDocu;
-    ary::n22::Repository *
-                        pRepository;
+    ary::Repository *   pRepository;
 };
 
-
-// IMPLEMENTATION
 
 
 
 }   // namespace uidl
 }   // namespace csi
-
 #endif
-
