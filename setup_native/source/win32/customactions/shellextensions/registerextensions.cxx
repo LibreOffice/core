@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerextensions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:35:34 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,13 @@ static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sPro
     return result;
 }
 
-static BOOL ExecuteCommand( LPCTSTR lpCommand, BOOL bSync )
+/* creates a child process which is specified in lpCommand.
+
+  out_exitCode is the exit code of the child process
+
+
+**/
+static BOOL ExecuteCommand( LPCTSTR lpCommand, DWORD * out_exitCode)
 {
     BOOL                fSuccess = FALSE;
     STARTUPINFO         si;
@@ -217,8 +223,10 @@ static BOOL ExecuteCommand( LPCTSTR lpCommand, BOOL bSync )
 
     if ( fSuccess )
     {
-        if ( bSync )
-            WaitForSingleObject( pi.hProcess, INFINITE );
+        WaitForSingleObject( pi.hProcess, INFINITE );
+
+        if (!GetExitCodeProcess( pi.hProcess, out_exitCode))
+            fSuccess = FALSE;
 
         CloseHandle( pi.hProcess );
         CloseHandle( pi.hThread );
@@ -345,15 +353,24 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
             {
                 const std::_tstring sTempFolder(createTempFolder());
                 std::_tstring sOxtFile = sShareInstallDir + aFindFileData.cFileName;
-                std::_tstring sCommand = sUnoPkgFile + " add --shared " + "\"" + sOxtFile + "\"" +
-                    TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$ORIGIN/../share/config/javasettingsunopkginstall.xml") +
-                    TEXT(" -env:UserInstallation=") + sTempFolder;
-
-
+                std::_tstring sCommandPart1 = sUnoPkgFile + " add --shared " + "\"" + sOxtFile + "\"";
+                std::_tstring sCommand = sCommandPart1
+                    + TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$ORIGIN/../share/config/javasettingsunopkginstall.xml")
+                    + TEXT(" -env:UserInstallation=") + sTempFolder;
                 mystr = "Command: " + sCommand;
-                //MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+//                MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
 
-                bool fSuccess = ExecuteCommand( sCommand.c_str(), TRUE );
+                DWORD exitCode = 0;
+                bool fSuccess = ExecuteCommand( sCommand.c_str(), & exitCode);
+                // unopkg in OOo 2.2.1 and early had a bug that it failed when receiving
+                // a bootstrap parameter (-env:...) then it exited with a value != 0.
+                if (fSuccess && exitCode != 0)
+                {
+                    std::_tstring sCommand = sCommandPart1;
+                    mystr = "Command: " + sCommand;
+//                    MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+                    fSuccess = ExecuteCommand( sCommand.c_str(), & exitCode);
+                }
                 deleteTempFolder(sTempFolder);
 
                 if ( fSuccess )
@@ -452,14 +469,26 @@ extern "C" UINT __stdcall DeregisterExtensions(MSIHANDLE handle)
                 // Therefore no quoting is required
                 // std::_tstring sOxtFile = sShareInstallDir + aFindFileData.cFileName;
                 std::_tstring sOxtFile = aFindFileData.cFileName;
-                std::_tstring sCommand = sUnoPkgFile + " remove --shared " + "\"" + sOxtFile + "\"" +
-                    TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$ORIGIN/../share/config/javasettingsunopkginstall.xml") +
-                    TEXT(" -env:UserInstallation=") + sTempFolder;
+                std::_tstring sCommandPart1 = sUnoPkgFile + " remove --shared " + "\""
+                    + sOxtFile + "\"";
+                std::_tstring sCommand = sCommandPart1
+                    + TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$ORIGIN/../share/config/javasettingsunopkginstall.xml")
+                    + TEXT(" -env:UserInstallation=") + sTempFolder;
 
                 mystr = "Command: " + sCommand;
                 //MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+                DWORD exitCode = 0;
+                bool fSuccess = ExecuteCommand( sCommand.c_str(), & exitCode);
+                // unopkg in OOo 2.2.1 and early had a bug that it failed when receiving
+                // a bootstrap parameter (-env:...) then it exited with a value != 0.
+                if (fSuccess && exitCode != 0)
+                {
+                    std::_tstring sCommand = sCommandPart1;
+                    mystr = "Command: " + sCommand;
+                    //MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+                    fSuccess = ExecuteCommand( sCommand.c_str(), & exitCode);
+                }
 
-                bool fSuccess = ExecuteCommand( sCommand.c_str(), TRUE );
                 deleteTempFolder(sTempFolder);
 
                 if ( fSuccess )
