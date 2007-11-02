@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tkp_cpp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:34:03 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:02:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ class Distributor;
 class TokenParser_Cpp : public TokenParser
 {
   public:
-    typedef std::map< udmstri, DefineDescription* >     MacroMap;
+    typedef std::map< String, DefineDescription* >     MacroMap;
 
     // LIFECYCLE
                         TokenParser_Cpp(
@@ -83,9 +83,8 @@ class TokenParser_Cpp : public TokenParser
                             CharacterSource &   io_rCharacterSource,
                             cpp::Distributor &  o_rDealer );
     void                StartNewFile(
-                            const udmstri &     i_sFileName,
-                            const csv::ploc::DirectoryChain &
-                                                i_rFileSubPath );
+                            const csv::ploc::Path &
+                                                i_file );
   private:
     virtual void        SetStartContext();
     virtual void        SetCurrentContext(

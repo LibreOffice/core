@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_vari.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:31:15 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:59:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
     // COMPONENTS
 #include <semantic/callf.hxx>
 #include <semantic/sub_peu.hxx>
-#include <ary/cpp/c_etypes.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
 #include <ary/cpp/c_vfflag.hxx>
     // PARAMETERS
 
@@ -73,8 +73,8 @@ class PE_Variable : public Cpp_PE
         bit 0x0002 != 0, if there is an initialisation.
     */
     UINT16              Result_Pattern() const;
-    const udmstri &     Result_SizeExpression() const;
-    const udmstri &     Result_InitExpression() const;
+    const String  &     Result_SizeExpression() const;
+    const String  &     Result_InitExpression() const;
 
     virtual void        Call_Handler(
                             const cpp::Token &  i_rTok );
@@ -110,8 +110,8 @@ class PE_Variable : public Cpp_PE
     Dyn<SPU_Expression> pSpuArraySizeExpression;
     Dyn<SPU_Expression> pSpuInitExpression;
 
-    udmstri             sResultSizeExpression;
-    udmstri             sResultInitExpression;
+    String              sResultSizeExpression;
+    String              sResultInitExpression;
 };
 
 
@@ -123,10 +123,10 @@ inline UINT16
 PE_Variable::Result_Pattern() const
     { return ( sResultSizeExpression.length() > 0 ? 1 : 0 )
              + ( sResultInitExpression.length() > 0 ? 2 : 0 ); }
-inline const udmstri &
+inline const String  &
 PE_Variable::Result_SizeExpression() const
     { return sResultSizeExpression; }
-inline const udmstri &
+inline const String  &
 PE_Variable::Result_InitExpression() const
     { return sResultInitExpression; }
 

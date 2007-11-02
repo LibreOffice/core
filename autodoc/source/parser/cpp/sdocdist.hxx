@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdocdist.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:32:36 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:01:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,33 +62,31 @@ struct ContextForAry::S_DocuDistributor : public ary::info::DocuStore
     void                Reset()                 { pCurRe = 0; pLastStoredDocu = 0; }
 
     void                SetCurrentlyStoredRe(
-                            ary::RepositoryEntity &
+                            ary::cpp::CppEntity &
                                                 io_rRe );
     void                Event_LineBreak();
 
   private:
     // Interface ary::info::DocuStore
-    virtual void        do_Store2CurProject(
-                            DYN Documentation & let_drDocu );
     virtual void        do_Store2CurFile(
-                            DYN Documentation & let_drDocu );
+                            DYN ary::doc::Node& let_drDocu );
     virtual void        do_Store2CurNamespace(
-                            DYN Documentation & let_drDocu );
+                            DYN ary::doc::Node& let_drDocu );
 
     virtual void        do_Store2ConnectedDeclaration(
-                            DYN Documentation & let_drDocu );
+                            DYN ary::doc::Node& let_drDocu );
 
     virtual void        do_Store2Glossary(
-                            DYN Documentation & let_drDocu,
-                            const udmstri &     i_sExplainedTerm );
+                            DYN ary::doc::Node& let_drDocu,
+                            const String  &     i_sExplainedTerm );
     virtual void        do_Store2GlobalTexts(
-                            DYN Documentation & let_drDocu,
+                            DYN ary::doc::Node& let_drDocu,
                             ary::info::GlobalTextId
                                                 i_nId );
     // DATA
-    ary::RepositoryEntity *
+    ary::cpp::CppEntity *
                         pCurRe;
-    Dyn<Documentation>  pLastStoredDocu;
+    Dyn<ary::doc::Node> pLastStoredDocu;
 };
 
 
@@ -101,11 +99,11 @@ struct ContextForAry::S_DocuDistributor : public ary::info::DocuStore
 
 void
 ContextForAry::
-S_DocuDistributor::SetCurrentlyStoredRe( ary::RepositoryEntity & io_rRe )
+S_DocuDistributor::SetCurrentlyStoredRe( ary::cpp::CppEntity & io_rRe )
 {
     pCurRe = &io_rRe;
     if ( pLastStoredDocu )
-        pCurRe->Add_Documentation( *pLastStoredDocu.Release() );
+        pCurRe->Set_Docu( *pLastStoredDocu.Release() );
 }
 
 inline void
@@ -117,7 +115,7 @@ S_DocuDistributor::Event_LineBreak()
 
 void
 ContextForAry::
-S_DocuDistributor::do_Store2CurProject( DYN Documentation & let_drDocu )
+S_DocuDistributor::do_Store2CurFile( DYN ary::doc::Node & let_drDocu )
 {
     // KORR_FUTURE
     delete &let_drDocu;
@@ -125,7 +123,7 @@ S_DocuDistributor::do_Store2CurProject( DYN Documentation & let_drDocu )
 
 void
 ContextForAry::
-S_DocuDistributor::do_Store2CurFile( DYN Documentation &    let_drDocu )
+S_DocuDistributor::do_Store2CurNamespace( DYN ary::doc::Node & let_drDocu )
 {
     // KORR_FUTURE
     delete &let_drDocu;
@@ -133,26 +131,18 @@ S_DocuDistributor::do_Store2CurFile( DYN Documentation &    let_drDocu )
 
 void
 ContextForAry::
-S_DocuDistributor::do_Store2CurNamespace( DYN Documentation &   let_drDocu )
-{
-    // KORR_FUTURE
-    delete &let_drDocu;
-}
-
-void
-ContextForAry::
-S_DocuDistributor::do_Store2ConnectedDeclaration( DYN Documentation & let_drDocu )
+S_DocuDistributor::do_Store2ConnectedDeclaration( DYN ary::doc::Node & let_drDocu )
 {
     if ( pCurRe != 0 )
-        pCurRe->Add_Documentation(let_drDocu);
+        pCurRe->Set_Docu(let_drDocu);
     else
         pLastStoredDocu = &let_drDocu;
 }
 
 void
 ContextForAry::
-S_DocuDistributor::do_Store2Glossary( DYN Documentation &   let_drDocu,
-                                      const udmstri &       // i_sExplainedTerm
+S_DocuDistributor::do_Store2Glossary( DYN ary::doc::Node & let_drDocu,
+                                      const String &           // i_sExplainedTerm
                                       )
 {
     // KORR_FUTURE
@@ -161,9 +151,9 @@ S_DocuDistributor::do_Store2Glossary( DYN Documentation &   let_drDocu,
 
 void
 ContextForAry::
-S_DocuDistributor::do_Store2GlobalTexts( DYN Documentation &    let_drDocu,
-                                      ary::info::GlobalTextId // i_nId
-                                         )
+S_DocuDistributor::do_Store2GlobalTexts( DYN ary::doc::Node &       let_drDocu,
+                                         ary::info::GlobalTextId    // i_nId
+                                       )
 {
     // KORR_FUTURE
     delete &let_drDocu;
@@ -173,7 +163,4 @@ S_DocuDistributor::do_Store2GlobalTexts( DYN Documentation &    let_drDocu,
 
 
 }   // namespace cpp
-
-
 #endif
-
