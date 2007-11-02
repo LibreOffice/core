@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_enum.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:24:17 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:54:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,8 @@ class PE_Enum : public cpp::Cpp_PE
                             const cpp::Token &  i_rTok );
 
     E_KindOfResult      Result_KindOf() const;
-    const udmstri &     Result_LocalName() const;
-    const udmstri &     Result_FirstNameSegment() const;
+    const String  &     Result_LocalName() const;
+    const String  &     Result_FirstNameSegment() const;
 
   private:
     typedef SubPe< PE_Enum, PE_EnumValue >      SP_EnumValue;
@@ -111,7 +111,7 @@ class PE_Enum : public cpp::Cpp_PE
     Dyn<SP_EnumValue>   pSpValue;
     Dyn<SPU_EnumValue>  pSpuValue;
 
-    udmstri             sLocalName;
+    String              sLocalName;
     ary::cpp::Enum *    pCurObject;
 
     E_KindOfResult      eResult_KindOf;
@@ -126,13 +126,13 @@ PE_Enum::Result_KindOf() const
     return eResult_KindOf;
 }
 
-inline const udmstri &
+inline const String  &
 PE_Enum::Result_LocalName() const
 {
     return sLocalName;
 }
 
-inline const udmstri &
+inline const String  &
 PE_Enum::Result_FirstNameSegment() const
 {
     return sLocalName;

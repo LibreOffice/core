@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_defs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:23:42 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:53:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ class PE_Defines : public cpp::Cpp_PE
     Dyn< PeStatusArray<PE_Defines> >
                         pStati;
 
-    udmstri             sName;
+    String              sName;
     StringVector        aParameters;
     StringVector        aDefinition;
     bool                bIsMacro;
@@ -97,10 +97,6 @@ class PE_Defines : public cpp::Cpp_PE
 
 
 
-// IMPLEMENTATION
-
 }   //namespace cpp
-
-
 #endif
 

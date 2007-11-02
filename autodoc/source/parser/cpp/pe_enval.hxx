@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_enval.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:24:57 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:54:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,17 +95,13 @@ class PE_EnumValue : public Cpp_PE
     Dyn<SP_Expression>  pSpExpression;
     Dyn<SPU_Expression> pSpuInitExpression;
 
-    udmstri             sName;
-    udmstri             sInitExpression;
+    String              sName;
+    String              sInitExpression;
 };
 
 
 
-// IMPLEMENTATION
-
 
 }   // namespace cpp
-
-
 #endif
 
