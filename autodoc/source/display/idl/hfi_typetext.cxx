@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_typetext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:00:14 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:38:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,7 @@ HF_IdlTypeText::Produce_byData( const String & i_sFullName ) const
     {
         // SYNTAX_ERR, but rather logical error: Missing module.
         CurOut() << i_sFullName;
-        // KORR
+        // KORR_FUTURE
         // How to put a message about this?
         // errorOut_UnresolvedLink(i_sFullName);
         return;
@@ -167,7 +167,7 @@ HF_IdlTypeText::Produce_byData( const String & i_sFullName ) const
         if (sTypeEnd == 0)
         {   // SYNTAX_ERR
             CurOut() << i_sFullName;
-            // KORR
+            // KORR_FUTURE
             // How to put a message about this?
             // errorOut_UnresolvedLink(i_sFullName);
             return;
