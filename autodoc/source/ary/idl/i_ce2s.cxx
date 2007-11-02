@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_ce2s.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:31:02 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:43:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,9 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
-#include <ary/idl/ihost_ce.hxx>
-#include <ary_i/codeinf2.hxx>
-#include <getncast.hxx>
+#include <cosv/tpl/tpltools.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
+#include <ary/getncast.hxx>
 
 
 namespace ary
@@ -61,7 +60,7 @@ Ce_2s::~Ce_2s()
 }
 
 DYN Ce_2s *
-Ce_2s::Create_( RCid )
+Ce_2s::Create_( ClassId )
 {
     return new Ce_2s;
 }
