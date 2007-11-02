@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:33:22 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:50:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3039,10 +3039,10 @@ void SwUndoCpyTbl::Redo( SwUndoIter& rIter )
 
 /*  */
 
-SwUndoSplitTbl::SwUndoSplitTbl( const SwTableNode& rTblNd, USHORT eMode,
-                                BOOL bNewSize )
+SwUndoSplitTbl::SwUndoSplitTbl( const SwTableNode& rTblNd,
+    SwSaveRowSpan* pRowSp, USHORT eMode, BOOL bNewSize )
     : SwUndo( UNDO_SPLIT_TABLE ),
-    nTblNode( rTblNd.GetIndex() ), nOffset( 0 ), pSavTbl( 0 ),
+    nTblNode( rTblNd.GetIndex() ), nOffset( 0 ), mpSaveRowSpan( pRowSp ), pSavTbl( 0 ),
     pHistory( 0 ), nMode( eMode ), nFmlEnd( 0 ), bCalcNewSize( bNewSize )
 {
     switch( nMode )
@@ -3061,6 +3061,7 @@ SwUndoSplitTbl::~SwUndoSplitTbl()
 {
     delete pSavTbl;
     delete pHistory;
+    delete mpSaveRowSpan;
 }
 
 void SwUndoSplitTbl::Undo( SwUndoIter& rIter )
@@ -3104,6 +3105,9 @@ void SwUndoSplitTbl::Undo( SwUndoIter& rIter )
             SwSelBoxes aSelBoxes;
             SwTableBox* pBox = rTbl.GetTblBox( nTblNode + nOffset + 1 );
             rTbl.SelLineFromBox( pBox, aSelBoxes, TRUE );
+            _FndBox aTmpBox( 0, 0 );
+            aTmpBox.SetTableLines( aSelBoxes, rTbl );
+            aTmpBox.DelFrms( rTbl );
             rTbl.DeleteSel( pDoc, aSelBoxes, 0, 0, FALSE, FALSE );
         }
         break;
@@ -3116,7 +3120,12 @@ void SwUndoSplitTbl::Undo( SwUndoIter& rIter )
         pHistory->TmpRollback( pDoc, 0 );
         pHistory->SetTmpEnd( pHistory->Count() );
     }
-
+    if( mpSaveRowSpan )
+    {
+        pTblNd = rIdx.GetNode().FindTableNode();
+        if( pTblNd )
+            pTblNd->GetTable().RestoreRowSpan( *mpSaveRowSpan );
+    }
     ClearFEShellTabCols();
 }
 
