@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:14:20 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:19:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-#ifdef OS2
-#include <vcl/sysdep.hxx>
-#endif
 
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
