@@ -6,9 +6,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: buildall.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 15:14:02 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:35:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ sub getLibName($)
     {
         return "lib" . $sFile . ".so";
     }
-    if ($OSNAME eq "MSWin32")
+    if ($OSNAME eq "MSWin32" || $OSNAME eq "OS2")
     {
         return $sFile . ".dll";
     }
@@ -322,7 +322,7 @@ sub runASingleTest($$)
 #     }
 #     else
 #     {
-#         if ($OSNAME eq "MSWin32")
+#         if ($OSNAME eq "MSWin32" || $OSNAME eq "OS2")
 #         {
 #             # test
 #             $redirect = ">>$sLogFile 2>>$sLogFile";
