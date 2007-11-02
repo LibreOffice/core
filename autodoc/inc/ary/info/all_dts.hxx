@@ -4,9 +4,9 @@
  *
  *  $RCSfile: all_dts.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:19:53 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:14:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,14 +73,14 @@ class DT_Text : public DocuToken
                             const char *        i_sText )
                                                 :   sText( i_sText ) {}
 
-    const udmstri &     Text() const            { return sText; }
+    const String  &     Text() const            { return sText; }
 
   private:
     virtual void        do_StoreAt(
                             DocuDisplay &       o_rDisplay ) const;
     virtual bool        inq_IsWhite() const;
 
-    udmstri             sText;
+    String              sText;
 };
 
 class DT_MaybeLink : public DocuToken
@@ -94,7 +94,7 @@ class DT_MaybeLink : public DocuToken
                                                     bIsGlobal(i_bIsGlobal),
                                                     bIsFunction(i_bIsFunction) { }
 
-    const udmstri &     Text() const            { return sText; }
+    const String  &     Text() const            { return sText; }
     bool                IsAbsolute() const      { return bIsGlobal; }
     bool                IsFunction() const      { return bIsFunction; }
 
@@ -103,7 +103,7 @@ class DT_MaybeLink : public DocuToken
                             DocuDisplay &       o_rDisplay ) const;
     virtual bool        inq_IsWhite() const;
 
-    udmstri             sText;
+    String              sText;
     bool                bIsGlobal;
     bool                bIsFunction;
 };
@@ -139,14 +139,14 @@ class DT_Xml : public DocuToken
                             const char *        i_sText )
                                                 :   sText( i_sText ) {}
 
-    const udmstri &     Text() const            { return sText; }
+    const String  &     Text() const            { return sText; }
 
   private:
     virtual void        do_StoreAt(
                             DocuDisplay &       o_rDisplay ) const;
     virtual bool        inq_IsWhite() const;
 
-    udmstri             sText;
+    String              sText;
 };
 
 

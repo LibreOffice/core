@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ik_module.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:16:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:13:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ using ifc_ce::DocText;
 
 struct attr : public ifc_ce::attr
 {
-    // KORR
+    // KORR_FUTURE
     //   This has to be changed that way, that the differencing takes place
     //   within hfi_module.cxx and not here.
     //   So the class CePilot is not needed here, etc.
