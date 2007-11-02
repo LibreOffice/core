@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_nnfinder.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:43:57 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:45:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,11 @@
 #ifndef ARY_IDL_NNFINDER_HXX
 #define ARY_IDL_NNFINDER_HXX
 
-
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-    // PARAMETERS
-#include <store/st_access.hxx>
-#include <store/st_root.hxx>
-#include <store/st_unit.hxx>
 #include "is_ce.hxx"
+
+
+
 
 namespace ary
 {
@@ -52,31 +48,33 @@ namespace idl
 {
 
 
-/**
+/** Gives context info for tree search functions.
+
+    @collab ->ary::Search_SubTree<>()
+    @collab ->ary::Search_SubTree_UpTillRoot<>()
 */
 class Find_ModuleNode
 {
   public:
     typedef Ce_id                           id_type;
-    typedef Module                          node_type;
     typedef StringVector::const_iterator    name_iterator;
 
     // LIFECYCLE
                         Find_ModuleNode(
                             const Ce_Storage &  i_rStorage,
-                            StringVector::const_iterator
-                                                it_begin,
-                            StringVector::const_iterator
-                                                it_end,
+                            name_iterator       it_begin,
+                            name_iterator       it_end,
                             const String &      i_sName )
                             :   rStorage(i_rStorage),
                                 itBegin(it_begin),
                                 itEnd(it_end),
                                 sName2Search(i_sName) { if (itBegin != itEnd ? (*itBegin).empty() : false) ++itBegin; }
     // OPERATIONS
-    const node_type *   operator()(
-                            id_type             i_nId ) const
-                            { return store::search( rStorage, i_nId, T2T<Module>()); }
+    const Module *      operator()(
+                            id_type             i_id ) const
+                            { return i_id.IsValid()
+                                        ?   & ary_cast<Module>(rStorage[i_id])
+                                        :   0; }
 
     name_iterator       Begin() const           { return itBegin; }
     name_iterator       End() const             { return itEnd; }
@@ -93,28 +91,27 @@ class Find_ModuleNode
 
 
 
-/** Implementation of a node in a namespace-tree.
-*/
 class Types_forSetCe_Id
 {
   public:
     typedef Ce_id                           element_type;
     typedef Ce_Storage                      find_type;
 
+    //  KORR_FUTURE: Check, if this sorting is right or the ary standard
+    //  sorting should be used.
     struct sort_type
     {
                         sort_type(
                             const find_type &   i_rFinder )
                                                 : rFinder(i_rFinder) {}
-
         bool            operator()(
                             const element_type   &
                                                 i_r1,
                             const element_type   &
                                                 i_r2 ) const
         {
-            return rFinder[i_r1].Entity().LocalName()
-                   < rFinder[i_r2].Entity().LocalName();
+            return rFinder[i_r1].LocalName()
+                   < rFinder[i_r2].LocalName();
         }
 
       private:
@@ -126,6 +123,4 @@ class Types_forSetCe_Id
 
 }   // namespace idl
 }   // namespace ary
-
-
 #endif
