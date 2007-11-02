@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gnujre.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 11:27:46 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:23:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,10 +63,16 @@ char const* const* GnuInfo::getJavaExePaths(int * size)
     return ar;
 }
 
+#if defined(MIPS) && defined(OSL_LITENDIAN)
+#define GCJ_JFW_PLUGIN_ARCH "mipsel"
+#else
+#define GCJ_JFW_PLUGIN_ARCH JFW_PLUGIN_ARCH
+#endif
+
 char const* const* GnuInfo::getRuntimePaths(int * size)
 {
     static char const* ar[]= {
-          "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
+          "/lib/" GCJ_JFW_PLUGIN_ARCH "/client/libjvm.so",
           "/gcj-4.1.1/libjvm.so",
           "/libgcj.so.7",
           "/libgcj.so.6"
