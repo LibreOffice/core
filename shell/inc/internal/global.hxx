@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:13:08 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:09:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,9 @@
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
+#ifndef OS2
 #include <windows.h>
+#endif
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
