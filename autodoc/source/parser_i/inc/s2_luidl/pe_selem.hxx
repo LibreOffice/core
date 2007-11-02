@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_selem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:02:41 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:16:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ class PE_StructElement : public UnoIDL_PE,
                             const RStruct &     i_rCurExc );
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::n22::Repository &  io_rRepository,
+                            ary::Repository &   io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~PE_StructElement();

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: semnode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:04:53 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:18:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,16 +49,13 @@
 
 namespace ary
 {
-class QualifiedName;
+    class QualifiedName;
+    class Repository;
 
-namespace n22
-{
-class Repository;
-}
 namespace idl
 {
-class Gate;
-class Module;
+    class Gate;
+    class Module;
 }   // namespace idl
 }   // namespace ary
 
@@ -86,12 +83,6 @@ class SemanticNode : private TokenProcessing_Types
                                                 o_rResult );
                         ~SemanticNode();
 
-/*
-    udm::IRef< Struct > GetStructRef(
-                            const QuName &      i_rText,
-                            ary::uidl::CeNamespace &
-                                                i_rCurNamespace );
-*/
     void                SetTokenResult(
                             E_TokenDone         i_eDone,
                             E_EnvStackAction    i_eWhat2DoWithEnvStack,

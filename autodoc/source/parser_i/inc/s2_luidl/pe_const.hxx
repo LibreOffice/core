@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_const.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:00:09 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:14:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ class PE_Constant : public UnoIDL_PE,
                         PE_Constant();
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::n22::Repository &
+                            ary::Repository &
                                                 io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
