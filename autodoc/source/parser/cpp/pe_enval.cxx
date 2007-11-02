@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_enval.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:12:29 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:54:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,9 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
-#include <ary/cpp/c_rwgate.hxx>
+#include <cosv/tpl/tpltools.hxx>
+#include <ary/cpp/c_gate.hxx>
+#include <ary/cpp/cp_ce.hxx>
 #include "pe_expr.hxx"
 
 
@@ -109,7 +110,7 @@ PE_EnumValue::TransferData()
     pStati->SetCur(size_of_states);
 
     ary::cpp::EnumValue &
-    rEnVal = Env().AryGate().Store_EnumValue(
+    rEnVal = Env().AryGate().Ces().Store_EnumValue(
                      Env().Context(), sName, sInitExpression );
     Env().Event_Store_EnumValue(rEnVal);
 }

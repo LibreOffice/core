@@ -4,9 +4,9 @@
  *
  *  $RCSfile: icprivow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:11:09 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:51:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,20 +61,13 @@ Owner_Namespace::SetAnotherNamespace( ary::cpp::Namespace & io_rScope )
 }
 
 bool
-Owner_Namespace::HasClass( const udmstri & i_sLocalName )
+Owner_Namespace::HasClass( const String & i_sLocalName )
 {
-    return pScope->Search_LocalClass(i_sLocalName) != 0;
-}
-
-bool
-Owner_Namespace::HasOperation( const udmstri &     i_sLocalName,
-                               OSid                i_nSignature )
-{
-    return pScope->Search_LocalOperation(i_sLocalName, i_nSignature) != 0;
+    return pScope->Search_LocalClass(i_sLocalName).IsValid();
 }
 
 void
-Owner_Namespace::do_Add_Class( const udmstri &     i_sLocalName,
+Owner_Namespace::do_Add_Class( const String  &     i_sLocalName,
                                Cid                 i_nId )
 {
     csv_assert(pScope != 0);
@@ -82,7 +75,7 @@ Owner_Namespace::do_Add_Class( const udmstri &     i_sLocalName,
 }
 
 void
-Owner_Namespace::do_Add_Enum( const udmstri &     i_sLocalName,
+Owner_Namespace::do_Add_Enum( const String  &     i_sLocalName,
                               Cid                 i_nId )
 {
     csv_assert(pScope != 0);
@@ -90,7 +83,7 @@ Owner_Namespace::do_Add_Enum( const udmstri &     i_sLocalName,
 }
 
 void
-Owner_Namespace::do_Add_Typedef( const udmstri &     i_sLocalName,
+Owner_Namespace::do_Add_Typedef( const String  &     i_sLocalName,
                                  Cid                 i_nId )
 {
     csv_assert(pScope != 0);
@@ -98,17 +91,16 @@ Owner_Namespace::do_Add_Typedef( const udmstri &     i_sLocalName,
 }
 
 void
-Owner_Namespace::do_Add_Operation( const udmstri &     i_sLocalName,
-                                   OSid                i_nSignature,
+Owner_Namespace::do_Add_Operation( const String  &     i_sLocalName,
                                    Cid                 i_nId,
                                    bool                )
 {
     csv_assert(pScope != 0);
-    pScope->Add_LocalOperation(i_sLocalName, i_nSignature, i_nId);
+    pScope->Add_LocalOperation(i_sLocalName, i_nId);
 }
 
 void
-Owner_Namespace::do_Add_Variable( const udmstri &     i_sLocalName,
+Owner_Namespace::do_Add_Variable( const String  &     i_sLocalName,
                                   Cid                 i_nId,
                                   bool                i_bIsConst,
                                   bool                )
@@ -122,10 +114,10 @@ Owner_Namespace::do_Add_Variable( const udmstri &     i_sLocalName,
 
 
 Cid
-Owner_Namespace::inq_Id() const
+Owner_Namespace::inq_CeId() const
 {
     csv_assert(pScope != 0);
-    return pScope->Id();
+    return pScope->CeId();
 }
 
 
@@ -143,21 +135,13 @@ Owner_Class::SetAnotherClass( ary::cpp::Class & io_rScope )
 }
 
 bool
-Owner_Class::HasClass( const udmstri & )
+Owner_Class::HasClass( const String  & )
 {
     return false;
 }
-
-bool
-Owner_Class::HasOperation( const udmstri &     ,
-                           OSid                )
-{
-    return false;
-}
-
 
 void
-Owner_Class::do_Add_Class( const udmstri &     i_sLocalName,
+Owner_Class::do_Add_Class( const String  &     i_sLocalName,
                                Cid                 i_nId )
 {
     csv_assert(pScope != 0);
@@ -165,7 +149,7 @@ Owner_Class::do_Add_Class( const udmstri &     i_sLocalName,
 }
 
 void
-Owner_Class::do_Add_Enum( const udmstri &     i_sLocalName,
+Owner_Class::do_Add_Enum( const String  &     i_sLocalName,
                               Cid                 i_nId )
 {
     csv_assert(pScope != 0);
@@ -173,7 +157,7 @@ Owner_Class::do_Add_Enum( const udmstri &     i_sLocalName,
 }
 
 void
-Owner_Class::do_Add_Typedef( const udmstri &     i_sLocalName,
+Owner_Class::do_Add_Typedef( const String  &     i_sLocalName,
                              Cid                 i_nId )
 {
     csv_assert(pScope != 0);
@@ -181,20 +165,19 @@ Owner_Class::do_Add_Typedef( const udmstri &     i_sLocalName,
 }
 
 void
-Owner_Class::do_Add_Operation( const udmstri &     i_sLocalName,
-                               OSid                i_nSignature,
-                               Cid                 i_nId,
-                               bool                i_bIsStatic )
+Owner_Class::do_Add_Operation( const String  &      i_sLocalName,
+                               Cid                  i_nId,
+                               bool                 i_bIsStatic )
 {
     csv_assert(pScope != 0);
     if (i_bIsStatic)
-        pScope->Add_LocalStaticOperation(i_sLocalName, i_nSignature, i_nId);
+        pScope->Add_LocalStaticOperation(i_sLocalName, i_nId);
     else
-        pScope->Add_LocalOperation(i_sLocalName, i_nSignature, i_nId);
+        pScope->Add_LocalOperation(i_sLocalName, i_nId);
 }
 
 void
-Owner_Class::do_Add_Variable( const udmstri &     i_sLocalName,
+Owner_Class::do_Add_Variable( const String  &     i_sLocalName,
                               Cid                 i_nId,
                               bool                ,
                               bool                i_bIsStatic )
@@ -207,14 +190,11 @@ Owner_Class::do_Add_Variable( const udmstri &     i_sLocalName,
 }
 
 Cid
-Owner_Class::inq_Id() const
+Owner_Class::inq_CeId() const
 {
     csv_assert(pScope != 0);
-    return pScope->Id();
+    return pScope->CeId();
 }
-
-
-
 
 
 }   // namespace cpp

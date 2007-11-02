@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_base.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:11:22 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:52:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,15 +38,17 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <cosv/template/tpltools.hxx>
-#include <ary/cpp/c_rwgate.hxx>
-#include <ary/cpp/ca_type.hxx>
+#include <cosv/tpl/tpltools.hxx>
+#include <ary/cpp/c_gate.hxx>
+#include <ary/cpp/c_type.hxx>
 #include "pe_type.hxx"
 
 
 
 
-namespace cpp {
+namespace cpp
+{
+
 
 static const PE_Base::Base aNullBase_;
 
@@ -134,7 +136,7 @@ PE_Base::SpReturn_BaseName()
 
     static StreamStr aBaseName(100);
     aBaseName.seekp(0);
-    pSpuBaseName->Child().Result_Type().Get_Text( aBaseName, Env().AryGate().RoGate() );
+    pSpuBaseName->Child().Result_Type().Get_Text( aBaseName, Env().AryGate() );
 
     Env().Event_Class_FinishedBase(aBaseName.c_str());
 }
