@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usedtype.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:30:16 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:36:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,74 +38,36 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
-#include <ary/ce.hxx>
-#include <ary/cpp/c_etypes.hxx>
-#include <ary/info/codeinfo.hxx>
-#include <cpp/c_gate.hxx>
+#include <cosv/tpl/tpltools.hxx>
+#include <ary/symtreenode.hxx>
+#include <ary/cpp/c_ce.hxx>
+#include <ary/cpp/c_class.hxx>
+#include <ary/cpp/c_namesp.hxx>
+#include <ary/cpp/c_slntry.hxx>
+#include <ary/cpp/c_tydef.hxx>
+#include <ary/cpp/c_traits.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
+#include <ary/cpp/c_gate.hxx>
+#include <ary/cpp/cp_ce.hxx>
+#include <ary/cpp/cp_type.hxx>
+#include <ary/doc/d_oldcppdocu.hxx>
+#include <ary/getncast.hxx>
 #include <instlist.hxx>
-#include "namechai.hxx"
 #include "tplparam.hxx"
 
 
 
-namespace ary
-{
-namespace cpp
-{
-
-typedef std::vector< ary::cpp::E_ConVol >   PtrLevelVector;
-
-struct UsedType::CheshireCat
-{
-    ut::NameChain       aPath;
-    PtrLevelVector      aPtrLevels;
-    ary::cpp::E_ConVol  eConVol_Type;
-    bool                bIsReference;
-    bool                bIsAbsolute;
-    bool                bRefers2BuiltInType;
-    E_TypeSpecialisation
-                        eTypeSpecialisation;
-    Tid                 nId;
-    Rid                 nRelatedCe;
-
-    // Operations
-    uintt               PtrLevel() const        { return uintt(aPtrLevels.size()); }
-
-                        CheshireCat();
-};
-
-
-
-UsedType::
-CheshireCat::CheshireCat()
-    :   // aPath,
-        // aPtrLevels,
-        eConVol_Type(CONVOL_none),
-        bIsReference(false),
-        bIsAbsolute(false),
-        bRefers2BuiltInType(false),
-        eTypeSpecialisation(TYSP_none),
-        nId(0),
-        nRelatedCe(0)
-{
-}
-
-UsedType::UsedType()
-    :   pi(new CheshireCat)
-{
-}
-
-UsedType::~UsedType()
-{
-}
-
 namespace
 {
+
+using namespace ::ary::cpp;
+typedef std::vector< ary::cpp::E_ConVol >   PtrLevelVector;
+
 
 inline bool
 result2bool( intt i_nResult )
     { return i_nResult < 0; }
+
 
 intt                compare_PtrLevelVector(
                         const PtrLevelVector &
@@ -122,7 +84,7 @@ compare_bool(   bool i_b1,
                 bool i_b2 )
     { return i_b1 == i_b2
                     ?   0
-                    :   NOT i_b1
+                    :   i_b1
                             ?   -1
                             :   +1; }
 inline intt
@@ -161,32 +123,74 @@ compare_PtrLevelVector( const PtrLevelVector & i_r1,
     return 0;
 }
 
+
 }   // anonymous namespace
+
+
+
+
+namespace ary
+{
+namespace cpp
+{
+
+typedef symtree::Node<CeNode_Traits>    CeNode;
+typedef ut::NameChain::const_iterator   nc_iter;
+
+Ce_id               CheckForRelatedCe_inNode(
+                        const CeNode &      i_node,
+                        const StringVector& i_qualification,
+                        const String &      i_name );
+
+
+UsedType::UsedType(Ce_id i_scope )
+    :   aPath(),
+        aPtrLevels(),
+        eConVol_Type(CONVOL_none),
+        bIsReference(false),
+        bIsAbsolute(false),
+        bRefers2BuiltInType(false),
+        eTypeSpecialisation(TYSP_none),
+        nRelatedCe(0),
+        nScope(i_scope)
+{
+}
+
+UsedType::~UsedType()
+{
+}
+
 
 bool
 UsedType::operator<( const UsedType & i_rType ) const
 {
-    intt nResult = pi->aPath.Compare( i_rType.pi->aPath );
+    intt nResult = compare_bool( bIsAbsolute, i_rType.bIsAbsolute );
     if ( nResult != 0 )
         return result2bool(nResult);
 
-    nResult = compare_ConVol( pi->eConVol_Type, i_rType.pi->eConVol_Type );
+    nResult = static_cast<intt>(nScope.Value())
+                -
+              static_cast<intt>(i_rType.nScope.Value());
     if ( nResult != 0 )
         return result2bool(nResult);
 
-    nResult = compare_PtrLevelVector( pi->aPtrLevels, i_rType.pi->aPtrLevels );
+    nResult = aPath.Compare( i_rType.aPath );
     if ( nResult != 0 )
         return result2bool(nResult);
 
-    nResult = compare_bool( pi->bIsReference, i_rType.pi->bIsReference );
+    nResult = compare_ConVol( eConVol_Type, i_rType.eConVol_Type );
     if ( nResult != 0 )
         return result2bool(nResult);
 
-    nResult = compare_bool( pi->bIsAbsolute, i_rType.pi->bIsAbsolute );
+    nResult = compare_PtrLevelVector( aPtrLevels, i_rType.aPtrLevels );
     if ( nResult != 0 )
         return result2bool(nResult);
 
-    nResult = compare_Specialisation( pi->eTypeSpecialisation, i_rType.pi->eTypeSpecialisation );
+    nResult = compare_bool( bIsReference, i_rType.bIsReference );
+    if ( nResult != 0 )
+        return result2bool(nResult);
+
+    nResult = compare_Specialisation( eTypeSpecialisation, i_rType.eTypeSpecialisation );
     if ( nResult != 0 )
         return result2bool(nResult);
 
@@ -194,27 +198,21 @@ UsedType::operator<( const UsedType & i_rType ) const
 }
 
 void
-UsedType::Set_Id( Tid i_nId )
-{
-    pi->nId  = i_nId;
-}
-
-void
 UsedType::Set_Absolute()
 {
-    pi->bIsAbsolute = true;
+    bIsAbsolute = true;
 }
 
 void
 UsedType::Add_NameSegment( const char * i_sSeg )
 {
-    pi->aPath.Add_Segment(i_sSeg);
+    aPath.Add_Segment(i_sSeg);
 }
 
 ut::List_TplParameter &
 UsedType::Enter_Template()
 {
-    return pi->aPath.Templatize_LastSegment();
+    return aPath.Templatize_LastSegment();
 }
 
 void
@@ -225,136 +223,170 @@ UsedType::LeaveTemplate()
 void
 UsedType::Set_Unsigned()
 {
-    pi->eTypeSpecialisation = TYSP_unsigned;
+    eTypeSpecialisation = TYSP_unsigned;
 }
 
 void
 UsedType::Set_Signed()
 {
-    pi->eTypeSpecialisation = TYSP_signed;
+    eTypeSpecialisation = TYSP_signed;
 }
 
 void
 UsedType::Set_BuiltIn( const char * i_sType )
 {
-    pi->aPath.Add_Segment(i_sType);
-    pi->bRefers2BuiltInType = true;
+    aPath.Add_Segment(i_sType);
+    bRefers2BuiltInType = true;
 }
 
 void
 UsedType::Set_Const()
 {
-    if (pi->PtrLevel() == 0)
-        pi->eConVol_Type = E_ConVol(pi->eConVol_Type | CONVOL_const);
+    if (PtrLevel() == 0)
+        eConVol_Type = E_ConVol(eConVol_Type | CONVOL_const);
     else
-        pi->aPtrLevels.back() = E_ConVol(pi->aPtrLevels.back() | CONVOL_const);
+        aPtrLevels.back() = E_ConVol(aPtrLevels.back() | CONVOL_const);
 }
 
 void
 UsedType::Set_Volatile()
 {
-    if (pi->PtrLevel() == 0)
-        pi->eConVol_Type = E_ConVol(pi->eConVol_Type | CONVOL_volatile);
+    if (PtrLevel() == 0)
+        eConVol_Type = E_ConVol(eConVol_Type | CONVOL_volatile);
     else
-        pi->aPtrLevels.back() = E_ConVol(pi->aPtrLevels.back() | CONVOL_volatile);
+        aPtrLevels.back() = E_ConVol(aPtrLevels.back() | CONVOL_volatile);
 }
 
 void
 UsedType::Add_PtrLevel()
 {
-    pi->aPtrLevels.push_back(CONVOL_none);
+    aPtrLevels.push_back(CONVOL_none);
 }
 
 void
 UsedType::Set_Reference()
 {
-    pi->bIsReference = true;
+    bIsReference = true;
 }
 
-Rid
-UsedType::Connect2Ce( const Gate & i_rGate )
+inline bool
+IsInternal(const ary::cpp::CodeEntity & i_ce)
 {
-    Rid ret = 0;
-    const InstanceList &
-            rInstances = i_rGate.Search_TypeName( LocalName() );
-    if ( rInstances.empty() )
-        return 0;
+    const ary::doc::OldCppDocu *
+        docu = dynamic_cast< const ary::doc::OldCppDocu* >(i_ce.Docu().Data());
+    if (docu != 0)
+        return docu->IsInternal();
+    return false;
+}
 
-    uintt nMatchCounter = 0;
-    for ( InstanceList::const_iterator it = rInstances.begin();
-          it != rInstances.end() AND nMatchCounter < 2;
-          ++it )
+
+void
+UsedType::Connect2Ce( const CePilot & i_ces)
+{
+    StringVector
+        qualification;
+    String
+        name;
+    Get_NameParts(qualification, name);
+
+    for ( const CeNode * scope_node = CeNode_Traits::NodeOf_(
+                                            i_ces.Find_Ce(nScope));
+          scope_node != 0;
+          scope_node = scope_node->Parent() )
     {
-        if ( DoesMatch_Ce(*it, i_rGate) )
+        nRelatedCe = CheckForRelatedCe_inNode(*scope_node, qualification, name);
+        if ( nRelatedCe.IsValid() )
         {
-            if ( NOT i_rGate.Ref_Ce(*it).Info().IsInternal() )
-            {
-                ret = *it;
-                nMatchCounter++;
-            }
+            if (  IsInternal(i_ces.Find_Ce(nRelatedCe)) )
+                nRelatedCe = Ce_id(0);
+            return;
         }
-    }  // end for
-    if ( nMatchCounter == 1 )
-    {
-         pi->nRelatedCe = ret;
-        return ret;
-    }
-    if ( nMatchCounter > 1 )
-    {
-#if 0 // Only for debugging, yet.
-         Cerr() << "Warning: Type "
-             << LocalName()
-             << " found more than one time."
-             << Endl();
-#endif // 0
-         pi->nRelatedCe = ret;
-        return ret;
-    }
+    }   // end for
+}
 
-    return 0;
+void
+UsedType::Connect2CeOnlyKnownViaBaseClass(const Gate & i_gate)
+{
+    csv_assert(nScope.IsValid());
+    CesResultList
+        instances = i_gate.Ces().Search_TypeName( LocalName() );
+
+    // If there are no matches, or only one match that was already
+    //   accepted, all work is done.
+    if (     nRelatedCe.IsValid()
+         AND instances.size() == 1
+         OR  instances.size() == 0 )
+        return;
+
+    StringVector
+        qualification;
+    String
+        name;
+    Get_NameParts(qualification, name);
+
+    const CodeEntity &
+        scopece = i_gate.Ces().Find_Ce(nScope);
+
+    // Else search for declaration in own class and then in base classes.
+    //   These would be of higher priority than those in parent namespaces.
+    Ce_id
+        foundce = RecursiveSearchCe_InBaseClassesOf(
+                                    scopece, qualification, name, i_gate);
+    if (foundce.IsValid())
+        nRelatedCe = foundce;
+
+    if ( nRelatedCe.IsValid() AND IsInternal(i_gate.Ces().Find_Ce(nRelatedCe)) )
+    {
+        nRelatedCe = Ce_id(0);
+    }
 }
 
 bool
 UsedType::IsBuiltInType() const
 {
-    return pi->bRefers2BuiltInType
-           AND pi->aPtrLevels.size() == 0
-           AND NOT pi->bIsReference
-           AND pi->eConVol_Type == ary::cpp::CONVOL_none;
+    return bRefers2BuiltInType
+           AND aPtrLevels.size() == 0
+           AND NOT bIsReference
+           AND eConVol_Type == ary::cpp::CONVOL_none;
 }
 
-const udmstri &
+const String  &
 UsedType::LocalName() const
 {
-    return pi->aPath.LastSegment();
+    return aPath.LastSegment();
 }
 
 E_TypeSpecialisation
 UsedType::TypeSpecialisation() const
 {
-    return pi->eTypeSpecialisation;
+    return eTypeSpecialisation;
+}
+
+void
+UsedType::do_Accept(csv::ProcessorIfc & io_processor) const
+{
+    csv::CheckedCall(io_processor,*this);
+}
+
+ary::ClassId
+UsedType::get_AryClass() const
+{
+    return class_id;
 }
 
 Rid
 UsedType::inq_RelatedCe() const
 {
-     return pi->nRelatedCe;
-}
-
-
-Tid
-UsedType::inq_Id_Type() const
-{
-    return pi->nId;
+     return nRelatedCe.Value();
 }
 
 bool
 UsedType::inq_IsConst() const
 {
-    if ( is_const(pi->eConVol_Type) )
+    if ( is_const(eConVol_Type) )
         return true;
-    for ( PtrLevelVector::const_iterator it = pi->aPtrLevels.begin();
-          it != pi->aPtrLevels.end();
+    for ( PtrLevelVector::const_iterator it = aPtrLevels.begin();
+          it != aPtrLevels.end();
           ++it )
     {
         if ( is_const(*it) )
@@ -365,22 +397,22 @@ UsedType::inq_IsConst() const
 }
 
 void
-UsedType::inq_Get_Text( StreamStr &          o_rPreName,
-                        StreamStr &          o_rName,
-                        StreamStr &          o_rPostName,
-                        const DisplayGate &  i_rGate ) const
+UsedType::inq_Get_Text( StreamStr &         o_rPreName,
+                        StreamStr &         o_rName,
+                        StreamStr &         o_rPostName,
+                        const Gate &        i_rGate ) const
 {
-    if ( is_const(pi->eConVol_Type) )
+    if ( is_const(eConVol_Type) )
         o_rPreName << "const ";
-    if ( is_volatile(pi->eConVol_Type) )
+    if ( is_volatile(eConVol_Type) )
         o_rPreName << "volatile ";
-    if ( pi->bIsAbsolute )
+    if ( bIsAbsolute )
         o_rPreName << "::";
 
-    pi->aPath.Get_Text( o_rPreName, o_rName, o_rPostName, i_rGate );
+    aPath.Get_Text( o_rPreName, o_rName, o_rPostName, i_rGate );
 
-    for ( PtrLevelVector::const_iterator it = pi->aPtrLevels.begin();
-          it != pi->aPtrLevels.end();
+    for ( PtrLevelVector::const_iterator it = aPtrLevels.begin();
+          it != aPtrLevels.end();
           ++it )
     {
         o_rPostName << " *";
@@ -389,108 +421,107 @@ UsedType::inq_Get_Text( StreamStr &          o_rPreName,
         if ( is_volatile(*it) )
             o_rPostName << " volatile";
     }
-    if ( pi->bIsReference )
+    if ( bIsReference )
         o_rPostName << " &";
 }
 
-
-namespace
+Ce_id
+UsedType::RecursiveSearchCe_InBaseClassesOf( const CodeEntity &   i_mayBeClass,
+                                             const StringVector & i_myQualification,
+                                             const String &       i_myName,
+                                             const Gate &         i_gate  ) const
 {
-
-class NameScope_const_iterator
-{
-  public:
-                        NameScope_const_iterator(
-                            Rid                 i_nId,
-                            const Gate &        i_rGate );
-
-                        operator bool() const   { return pCe != 0; }
-    const udmstri &     operator*() const;
-
-    void                go_up();
-
-  private:
-    const CodeEntity *  pCe;
-    const Gate *        pGate;
-};
+    // Find in this class?
+    const CeNode *
+        basenode = CeNode_Traits::NodeOf_(i_mayBeClass);
+    if (basenode == 0)
+        return Ce_id(0);
+    Ce_id
+        found = CheckForRelatedCe_inNode(*basenode, i_myQualification, i_myName);
+    if (found.IsValid())
+        return found;
 
 
-NameScope_const_iterator::NameScope_const_iterator( Rid          i_nId,
-                                                    const Gate & i_rGate )
-    :   pCe(i_rGate.Find_Ce(i_nId)),
-        pGate(&i_rGate)
-{
+    const Class *
+        cl = ary_cast<Class>(&i_mayBeClass);
+    if (cl == 0)
+        return Ce_id(0);
+
+    for ( List_Bases::const_iterator it = cl->BaseClasses().begin();
+          it != cl->BaseClasses().end();
+          ++it )
+    {
+        csv_assert((*it).nId.IsValid());
+        Ce_id
+            base = i_gate.Types().Find_Type((*it).nId).RelatedCe();
+        while (base.IsValid() AND is_type<Typedef>(i_gate.Ces().Find_Ce(base)) )
+        {
+            base = i_gate.Types().Find_Type(
+                            ary_cast<Typedef>(i_gate.Ces().Find_Ce(base))
+                            .DescribingType() )
+                            .RelatedCe();
+        }
+
+        if (base.IsValid())
+        {
+            const CodeEntity &
+                basece = i_gate.Ces().Find_Ce(base);
+            found = RecursiveSearchCe_InBaseClassesOf(
+                        basece, i_myQualification, i_myName, i_gate);
+            if (found.IsValid())
+                return found;
+        }
+    }   // end for
+
+    return Ce_id(0);
 }
 
-const udmstri &
-NameScope_const_iterator::operator*() const
-{
-     return pCe ? pCe->LocalName()
-               : udmstri::Null_();
-}
 
 void
-NameScope_const_iterator::go_up()
+UsedType::Get_NameParts(    StringVector &      o_qualification,
+                            String &            o_name )
 {
-     if (pCe == 0)
-        return;
-    pCe = pGate->Find_Ce(pCe->Owner());
+    nc_iter nit     = aPath.begin();
+    nc_iter nit_end = aPath.end();
+    csv_assert(nit != nit_end); // Each UsedType has to have a local name.
 
-    if (pCe != 0 ? pCe->Owner() == 0 : false)
-        pCe = 0;    // Global namespace provides no scope name.
+    --nit_end;
+    o_name = (*nit_end).Name();
+    for ( ;
+          nit != nit_end;
+          ++nit )
+    {
+        o_qualification.push_back( (*nit).Name() );
+    }
 }
 
-
-
-}   // anonymous namespace
-
-
-
-bool
-UsedType::DoesMatch_Ce( Rid                 i_nId,
-                        const Gate &        i_rGate ) const
+Ce_id
+CheckForRelatedCe_inNode( const CeNode &        i_node,
+                          const StringVector &  i_qualification,
+                          const String &        i_name )
 {
-    NameScope_const_iterator
-            itScope( i_nId, i_rGate );
-    ut::NameChain::const_iterator
-            itPath = pi->aPath.end();
-    if ( itPath == pi->aPath.begin() )
-        return false;
-    itPath--;
-    if (itPath == pi->aPath.begin())
+    if (i_qualification.size() > 0)
     {
-        if ( NOT pi->bIsAbsolute )
-            return true;
-        itScope.go_up();
-        return NOT itScope;
+        Ce_id
+            ret(0);
+        i_node.SearchBelow( ret,
+                            i_qualification.begin(),
+                            i_qualification.end(),
+                            i_name );
+        return ret;
     }
-
-    for ( itScope.go_up(), --itPath;
-          itScope ;
-          itScope.go_up(), --itPath )
+    else
     {
-        if ( (*itPath).Name() != *itScope )
-            return false;
-        if ( itPath == pi->aPath.begin() )
-        {
-            if ( NOT pi->bIsAbsolute )
-                return true;
-            itScope.go_up();
-            return NOT itScope;
-        }
+        return i_node.Search(i_name);
     }
-    return false;
 }
-
-
-
 
 
 namespace ut
 {
 
 List_TplParameter::List_TplParameter()
-//  :   aTplParameters
+  :   aTplParameters()
 {
 }
 
@@ -500,13 +531,13 @@ List_TplParameter::~List_TplParameter()
 }
 
 void
-List_TplParameter::AddParam_Type( Tid i_nType )
+List_TplParameter::AddParam_Type( Type_id i_nType )
 {
     aTplParameters.push_back( new TplParameter_Type(i_nType) );
 }
 
 void
-List_TplParameter::AddParam_Constant( const udmstri & i_sConst )
+List_TplParameter::AddParam_Constant( const String  & i_sConst )
 {
     aTplParameters.push_back( new TplParameter_Const(i_sConst) );
 }
@@ -525,7 +556,7 @@ List_TplParameter::End() const
 
 void
 List_TplParameter::Get_Text( StreamStr &                    o_rOut,
-                             const ary::cpp::DisplayGate &  i_rGate ) const
+                             const ary::cpp::Gate &  i_rGate ) const
 {
     Vector_TplArgument::const_iterator it    = aTplParameters.begin();
     Vector_TplArgument::const_iterator itEnd = aTplParameters.end();
@@ -575,4 +606,3 @@ List_TplParameter::Compare( const List_TplParameter & i_rOther ) const
 }   // namespace ut
 }   // namespace cpp
 }   // namespace ary
-
