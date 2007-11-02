@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cx_docu2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:24:55 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ Cx_Base::FollowUpContext()
 void
 Cx_Base::Handle_DocuSyntaxError( CharacterSource & io_rText )
 {
-    // KORR
+    // KORR_FUTURE
     // Put this into Error Log File
 
     Cerr() << "Error:  Syntax error in documentation within "
@@ -114,8 +114,8 @@ Cx_EoXmlConst::ReadCharChain( CharacterSource & io_rText )
 void
 Cx_EoXmlLink_BeginTag::ReadCharChain( CharacterSource & io_rText )
 {
-    udmstri sScope;
-    udmstri sDim;
+    String  sScope;
+    String  sDim;
 
     do {
         char cReached = jumpTo(io_rText,'"','>','*');
@@ -176,7 +176,7 @@ Cx_EoXmlLink_EndTag::ReadCharChain( CharacterSource & io_rText )
 void
 Cx_EoXmlFormat_BeginTag::ReadCharChain( CharacterSource & io_rText )
 {
-    udmstri sDim;
+    String  sDim;
 
     char cReached = jumpTo(io_rText,'"','>','*');
     switch (cReached)
