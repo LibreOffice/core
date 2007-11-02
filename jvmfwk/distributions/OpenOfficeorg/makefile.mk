@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:33:47 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:26:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,8 @@ $(BIN)$/javavendors_ooo.xml: javavendors_unx.xml javavendors_wnt.xml javavendors
 .ENDIF
 .ELIF "$(GUI)"=="WNT"
     -$(COPY) javavendors_wnt.xml $(BIN)$/javavendors_ooo.xml	
+.ELIF "$(GUI)"=="OS2"
+    -$(COPY) javavendors_os2.xml $(BIN)$/javavendors_ooo.xml	
 .ELSE
     @echo Unsupported platform.
 .ENDIF
