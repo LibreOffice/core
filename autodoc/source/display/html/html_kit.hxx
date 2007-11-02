@@ -4,9 +4,9 @@
  *
  *  $RCSfile: html_kit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:30:28 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:28:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,23 +36,23 @@
 #ifndef ADC_DISPLAY_HTML_KIT_HXX
 #define ADC_DISPLAY_HTML_KIT_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
+// BASE CLASSES
 #include <udm/xml/xmlitem.hxx>
 #include <udm/html/htmlitem.hxx>
-    // PARAMETERS
-#include <ary/ids.hxx>
+// USED SERVICES
+#include <ary/cpp/c_types4cpp.hxx>
 
 namespace ary
 {
     namespace cpp
     {
         struct S_TplParam;
+        class OperationSignature;
+        class Gate;
     }
 }
+
+
 
 
 namespace adcdisp
@@ -77,7 +77,7 @@ class PageTitle_Left
     void                operator()(
                             XmlElement &        o_rOwner,
                             const char *        i_sTypeTitle,
-                            const udmstri &     i_sLocalName );
+                            const String  &     i_sLocalName );
 };
 
 class PageTitle_Std
@@ -86,7 +86,7 @@ class PageTitle_Std
     void                operator()(
                             XmlElement &        o_rOwner,
                             const char *        i_sTypeTitle,
-                            const udmstri &     i_sLocalName );
+                            const String  &     i_sLocalName );
     XmlElement &        operator()(
                             XmlElement &        o_rOwner );
 };
@@ -97,7 +97,9 @@ class OperationTitle
     void                operator()(
                             XmlElement &        o_rOwner,
                             const char *        i_sItemName,
-                            ary::OSid           i_nSignature );
+                            ary::cpp::Ce_id     i_nId,
+                            const ::ary::cpp::Gate &
+                                                i_gate );
 };
 
 
@@ -215,13 +217,5 @@ class IndexList
 
 
 
-// IMPLEMENTATION
-
-
-
 }   // namespace adcdisp
-
-
 #endif
-
-

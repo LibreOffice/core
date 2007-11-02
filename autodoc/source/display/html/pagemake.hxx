@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagemake.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:33:40 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,11 @@
 
 // USED SERVICES
     // BASE CLASSES
-#include <ary/cpp/cpp_disp.hxx>
+#include <ary/ary_disp.hxx>
+#include <cosv/tpl/processor.hxx>
 #include "hdimpl.hxx"
     // COMPONENTS
     // PARAMETERS
-#include <ary/ids.hxx>
 #include <ary/cpp/c_namesp.hxx>
 
 namespace ary
@@ -56,6 +56,10 @@ namespace ary
         class Enum;
         class Typedef;
     }
+    namespace loc
+    {
+        class File;
+    }
 }
 
 
@@ -63,7 +67,11 @@ class OuputPage_Environment;
 class HtmlDocuFile;
 
 
-class PageDisplay : public ary::cpp::Display,
+
+class PageDisplay : public ary::Display,
+                    public csv::ConstProcessor<ary::cpp::Class>,
+                    public csv::ConstProcessor<ary::cpp::Enum>,
+                    public csv::ConstProcessor<ary::cpp::Typedef>,
                     public HtmlDisplay_Impl
 {
   public:
@@ -80,13 +88,13 @@ class PageDisplay : public ary::cpp::Display,
     void                Create_NamespaceFile();
 
     void                Setup_OperationsFile_for(
-                            const ary::cpp::FileGroup &
+                            const ary::loc::File &
                                                 i_rFile );
     void                Setup_OperationsFile_for(
                             const ary::cpp::Class &
                                                 i_rClass );
     void                Setup_DataFile_for(
-                            const ary::cpp::FileGroup &
+                            const ary::loc::File &
                                                 i_rFile );
     void                Setup_DataFile_for(
                             const ary::cpp::Class &
@@ -94,24 +102,30 @@ class PageDisplay : public ary::cpp::Display,
     /// Used with Setup_OperatonsFile_for().
     void                Create_File();
 
-    // Interface ary::cpp::Display
-    virtual void        Display_Class(
-                            const ary::cpp::Class &
-                                                i_rData );
-    virtual void        Display_Enum(
-                            const ary::cpp::Enum &
-                                                i_rData );
-    virtual void        Display_Typedef(
-                            const ary::cpp::Typedef &
-                                                i_rData );
 
     // Interface for Children of SpecializedPageMaker:
     void                Write_NameChainWithLinks(
-                            const ary::CodeEntity &
+                            const ary::cpp::CodeEntity &
                                                 i_rCe );
+
+    // Necessary, to call Process() on this class.
+    using csv::ConstProcessor<ary::cpp::Class>::Process;
+    using csv::ConstProcessor<ary::cpp::Enum>::Process;
+    using csv::ConstProcessor<ary::cpp::Typedef>::Process;
+
  private:
+    // Interface csv::ConstProcessor<>:
+    virtual void        do_Process(
+                            const ary::cpp::Class &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::cpp::Enum &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::cpp::Typedef &
+                                                i_rData );
     // Interface ary::cpp::Display:
-    virtual const ary::DisplayGate *
+    virtual const ary::cpp::Gate *
                         inq_Get_ReFinder() const;
     // Locals
     HtmlDocuFile &      File()                  { return *pMyFile; }
@@ -154,5 +168,5 @@ class PageDisplay : public ary::cpp::Display,
 
 
 
-#endif
 
+#endif

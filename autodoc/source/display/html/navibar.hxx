@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navibar.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:32:02 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:29:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,22 @@
 #ifndef ADC_DISPLAY_HTML_NAVIBAR_HXX
 #define ADC_DISPLAY_HTML_NAVIBAR_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
-#include <ary/cpp/cpp_disp.hxx>
+// BASE CLASSES
 #include "hdimpl.hxx"
-    // COMPONENTS
-    // PARAMETERS
 
 namespace ary
 {
+namespace cpp
+{
     class CodeEntity;
 }
+namespace loc
+{
+    class File;
+}
+}
+
+
 
 
 /** Creates a HTML navigation bar wth the following parts:
@@ -86,29 +89,14 @@ class NavigationBar
                         NavigationBar(
                             const OuputPage_Environment &
                                                 i_rEnv,
-                            const ary::CodeEntity &
+                            const ary::cpp::CodeEntity &
                                                 i_rCe );
     /** Used for operations and data.
-        If functions or data ar non-members, i_pFile has to be != 0.
     */
                         NavigationBar(
                             const OuputPage_Environment &
                                                 i_rEnv,
-                            E_CeGatheringType   i_eCeGatheringType,
-                            const ary::cpp::FileGroup *
-                                                i_pFile = 0 );
-    /** Used for
-            Project: i_pProj == 0.
-            File:    i_pProj != 0 and i_pFile == 0.
-            Defs:    i_pProj != 0 and i_pFile != 0.
-    */
-                        NavigationBar(
-                            const OuputPage_Environment &
-                                                i_rEnv,
-                            const ary::cpp::ProjectGroup *
-                                                i_pPrj,
-                            const ary::cpp::FileGroup *
-                                                i_pFile = 0 );
+                            E_CeGatheringType   i_eCeGatheringType );
                         ~NavigationBar();
 
     void                MakeSubRow(
@@ -134,5 +122,5 @@ class NavigationBar
 
 
 
-#endif
 
+#endif

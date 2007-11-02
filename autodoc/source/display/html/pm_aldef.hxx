@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pm_aldef.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:34:19 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,26 +36,26 @@
 #ifndef ADC_DISPLAY_HTML_PM_ALDEF_HXX
 #define ADC_DISPLAY_HTML_PM_ALDEF_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include "pm_base.hxx"
-    // COMPONENTS
-    // PARAMETERS
-#include <ary/cpp/crog_def.hxx>
-
+// USED SERVICES
+#include <ary/cpp/c_types4cpp.hxx>
+using ary::cpp::De_id;
 
 namespace ary
 {
     namespace cpp
     {
-        class CppDefinition;
+        class DefineEntity;
     }
 }
 
 class Docu_Display;
 class NavigationBar;
+
+
+
+
 
 class PageMaker_AllDefs : public SpecializedPageMaker
 {
@@ -68,8 +68,8 @@ class PageMaker_AllDefs : public SpecializedPageMaker
     virtual void        MakePage();
 
   private:
-    typedef ary::cpp::RoGate_Defines::List_DefIds   List_Ids;
-    typedef List_Ids::const_iterator                ids_iterator;
+    typedef std::vector<De_id>              List_Ids;
+    typedef List_Ids::const_iterator        ids_iterator;
 
     virtual void        Write_NavBar();
     virtual void        Write_TopArea();
@@ -77,12 +77,12 @@ class PageMaker_AllDefs : public SpecializedPageMaker
     virtual void        Write_DefinesList();
     virtual void        Write_MacrosList();
     void                Write_Define(
-                            const ary::Rid &    i_nId );
+                            De_id               i_nId );
     void                Write_Macro(
-                            const ary::Rid &    i_nId );
+                            De_id               i_nId );
     void                Write_DefsDocu(
                             csi::xml::Element & o_rOut,
-                            const ary::cpp::CppDefinition &
+                            const ary::cpp::DefineEntity &
                                                 i_rTextReplacement );
 
     // DATA
@@ -92,5 +92,5 @@ class PageMaker_AllDefs : public SpecializedPageMaker
 
 
 
-#endif
 
+#endif

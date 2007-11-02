@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hdimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:29:50 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:27:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,20 +36,14 @@
 #ifndef ADC_DISPLAY_HDIMPL_HXX
 #define ADC_DISPLAY_HDIMPL_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <udm/html/htmlitem.hxx>
-    // COMPONENTS
+// USED SERVICES
 #include "easywri.hxx"
-    // PARAMETERS
 #include <cosv/bstream.hxx>
-#include <ary/ids.hxx>
 #include <ary/ary_disp.hxx>
 #include <ary/cpp/c_namesp.hxx>
-#include <ary/ce.hxx>
-#include <ary/info/codeinfo.hxx>
+#include <ary/cpp/c_ce.hxx>
 #include "aryattrs.hxx"     // For compatibility with earlier times, when those funtions were in this header.
 
 
@@ -57,13 +51,14 @@ namespace ary
 {
      namespace cpp
     {
+        class CodeEntity;
         class Class;
          class DisplayGate;
         class Function;
-        class CppDefinition;
+        class DefineEntity;
+        class OperationSignature;
     }
 
-    class CodeEntity;
     class QualifiedName;
 }
 namespace csi
@@ -176,20 +171,22 @@ const char *        Path2Child(
 const char *        Path2ChildNamespace(
                         const char *            i_sLocalName );
 
-const char *        OperationLink(
-                        const udmstri &         i_sOpName,
-                        ary::OSid               i_nSignature,
+String              OperationLink(
+                        const ary::cpp::Gate &  i_gate,
+                        const String  &         i_sOpName,
+                        ary::cpp::Ce_id         i_nOpId,
                         const char *            i_sPrePath = "" );
 const char *        DataLink(
-                        const udmstri &         i_sLocalName,
+                        const String  &         i_sLocalName,
                         const char *            i_sPrePath = ""  );
 
+inline String
+OperationLabel( const String  &                      i_sOpName,
+                ary::cpp::Ce_id                      i_nOpId,
+                const ary::cpp::Gate &               i_gate )
+    { return String(OperationLink(i_gate, i_sOpName, i_nOpId) + 1); }     // Skip '#' in front.
 inline const char *
-OperationLabel( const udmstri &         i_sOpName,
-                ary::OSid               i_nSignature )
-    { return OperationLink(i_sOpName, i_nSignature) + 1; }     // Skip '#' in front.
-inline const char *
-DataLabel( const udmstri &         i_sLocalName )
+DataLabel( const String  &         i_sLocalName )
     { return DataLink(i_sLocalName) + 1; }     // Skip '#' in front.
 
 
@@ -197,22 +194,23 @@ void                Get_LinkedTypeText(
                         csi::xml::Element &     o_rOut,
                         const OuputPage_Environment &
                                                 i_rEnv,
-                        ary::Tid                i_nId,
+                        ary::cpp::Type_id       i_nId,
                         bool                    i_bWithAbsolutifier = true );
 
 
 const char *        Link2Ce(
                         const OuputPage_Environment &
                                                 i_rEnv,
-                        const ary::CodeEntity & i_rCe );
+                        const ary::cpp::CodeEntity &
+                                                i_rCe );
 
 const char *        Link2CppDefinition(
                         const OuputPage_Environment &
                                                 i_rEnv,
-                        const ary::cpp::CppDefinition &
+                        const ary::cpp::DefineEntity &
                                                 i_rDef );
 
-const ary::CodeEntity *
+const ary::cpp::CodeEntity *
                     FindUnambiguousCe(
                         const OuputPage_Environment &
                                                 i_rEnv,
@@ -223,7 +221,7 @@ const ary::CodeEntity *
 void                ShowDocu_On(
                         csi::xml::Element &     o_rOut,
                         Docu_Display &          io_rDisplay,
-                        const ary::RepositoryEntity &
+                        const ary::cpp::CppEntity &
                                                 i_rRE );
 
 void                WriteOut_TokenList(
@@ -232,7 +230,7 @@ void                WriteOut_TokenList(
                         const char *            i_sSeparator );
 
 void                EraseLeadingSpace(
-                        udmstri &               io_rStr );
+                        String  &               io_rStr );
 
 /** @param o_bIsConst
     *o_bIsConst will be set to true, if o_bIsConst != 0 and function is const.
@@ -259,4 +257,3 @@ void                WriteOut_LinkedFunctionText(
 using namespace dshelp;
 
 #endif
-

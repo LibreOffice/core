@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nav_main.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:31:21 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:28:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,37 +36,34 @@
 #ifndef ADC_DISPLAY_HTML_NAV_MAIN_HXX
 #define ADC_DISPLAY_HTML_NAV_MAIN_HXX
 
-
-
 // USED SERVICES
-    // BASE CLASSES
-#include <ary/cpp/cpp_disp.hxx>
-    // COMPONENTS
-    // PARAMETERS
-
 
 namespace ary
 {
-    namespace cpp
-    {
-        class DisplayGate;
-    }
-
+namespace cpp
+{
     class CodeEntity;
+}
+namespace loc
+{
+    class File;
+}
 }
 namespace csi
 {
-    namespace xml
-    {
-        class Element;
-    }
+namespace xml
+{
+    class Element;
+}
 }
 
 class OuputPage_Environment;
 class MainItem;
 
 
-class MainRow : public ary::cpp::Display
+
+
+class MainRow
 {
   public:
                         MainRow(
@@ -80,26 +77,11 @@ class MainRow : public ary::cpp::Display
     void                SetupItems_Help();
 
     void                SetupItems_Ce(
-                            const ary::CodeEntity &
+                            const ary::cpp::CodeEntity &
                                                 i_rCe );
     void                SetupItems_FunctionGroup(); /// For class member methods.
-    void                SetupItems_FunctionGroup(   /// For global functions.
-                            const ary::cpp::FileGroup &
-                                                i_rFile );
     void                SetupItems_DataGroup();     /// For class member data.
-    void                SetupItems_DataGroup(       /// For global data.
-                            const ary::cpp::FileGroup &
-                                                i_rFile );
 
-    void                SetupItems_Project();
-    void                SetupItems_File(
-                            const ary::cpp::ProjectGroup &
-                                                i_rProj );
-    void                SetupItems_DefinitionsGroup(
-                            const ary::cpp::ProjectGroup &
-                                                i_rProj,
-                            const ary::cpp::FileGroup &
-                                                i_rFile );
     void                Write2(
                             csi::xml::Element & o_rOut ) const;
   private:
@@ -123,23 +105,10 @@ class MainRow : public ary::cpp::Display
                             E_Style             i_eNsp,
                             E_Style             i_eClass,
                             E_Style             i_eTree,
-                            const char *        i_sTreeLink,
-                            E_Style             i_eProj,
-                            const ary::cpp::ProjectGroup *
-                                                i_pProj,
-                            E_Style             i_eFile,
-                            const ary::cpp::FileGroup *
-                                                i_pFile );
-    void                Create_ItemList_InDirTree_Prj(
-                            E_Style             i_eProj,
-                            const ary::cpp::ProjectGroup *
-                                                i_pProj,
-                            E_Style             i_eFile,
-                            const ary::cpp::FileGroup *
-                                                i_pFile );
+                            const char *        i_sTreeLink );
     void                Add_Item(
                             E_Style             i_eStyle,
-                            const udmstri &     i_sText,
+                            const String  &     i_sText,
                             const char *        i_sLink,
                             const char *        i_sTip );
     // DATA
@@ -152,5 +121,6 @@ class MainRow : public ary::cpp::Display
 };
 
 
-#endif
 
+
+#endif

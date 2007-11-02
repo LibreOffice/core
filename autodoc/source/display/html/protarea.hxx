@@ -4,9 +4,9 @@
  *
  *  $RCSfile: protarea.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:38:19 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,21 +36,18 @@
 #ifndef ADC_DISPLAY_HTML_PROTAREA_HXX
 #define ADC_DISPLAY_HTML_PROTAREA_HXX
 
-
-
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-    // PARAMETERS
-#include <ary/cpp/c_etypes.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
 
 namespace csi
 {
-    namespace html
-    {
-        class Table;
-    }
+namespace html
+{
+    class Table;
 }
+}
+
+
 
 
 class ProtectionArea
