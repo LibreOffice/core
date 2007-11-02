@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblrwcl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:59:01 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:41:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
 #endif
+#include <vector>
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
@@ -142,8 +143,14 @@ BOOL lcl_Line_CollectBox( const SwTableLine*& rpLine, void* pPara );
 
 BOOL lcl_BoxSetSplitBoxFmts( const SwTableBox*& rpBox, void* pPara );
 
-
-
+// This structure is needed by Undo to restore row span attributes
+// when a table has been splitted into two tables
+struct SwSaveRowSpan
+{
+    USHORT mnSplitLine; // the line number where the table has been splitted
+    std::vector< long > mnRowSpans; // the row span attributes in this line
+    SwSaveRowSpan( SwTableBoxes& rBoxes, USHORT nSplitLn );
+};
 
 struct _SwGCLineBorder
 {
