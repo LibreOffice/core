@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cre_link.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:25:23 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:24:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,19 +39,44 @@
 
 // USED SERVICES
     // BASE CLASSES
-#include <ary/cpp/cpp_disp.hxx>
+#include <cosv/tpl/processor.hxx>
     // COMPONENTS
     // PARAMETERS
 
 namespace ary
 {
+namespace cpp
+{
      class CodeEntity;
+    class Namespace;
+    class Class;
+    class Enum;
+    class Typedef;
+    class Function;
+    class Variable;
+    class EnumValue;
+    class Define;
+    class Macro;
+}
 }
 
 
 class OuputPage_Environment;
 
-class LinkCreator : public ary::cpp::Display
+
+
+/** Displays links to ->{ary::cpp::CodeEntity CodeEntites}.
+*/
+class LinkCreator : public csv::ProcessorIfc,
+                    public csv::ConstProcessor<ary::cpp::Namespace>,
+                    public csv::ConstProcessor<ary::cpp::Class>,
+                    public csv::ConstProcessor<ary::cpp::Enum>,
+                    public csv::ConstProcessor<ary::cpp::Typedef>,
+                    public csv::ConstProcessor<ary::cpp::Function>,
+                    public csv::ConstProcessor<ary::cpp::Variable>,
+                    public csv::ConstProcessor<ary::cpp::EnumValue>,
+                    public csv::ConstProcessor<ary::cpp::Define>,
+                    public csv::ConstProcessor<ary::cpp::Macro>
 {
   public:
                         LinkCreator(
@@ -63,41 +88,38 @@ class LinkCreator : public ary::cpp::Display
     void                SetEnv(
                             const OuputPage_Environment &
                                                 i_rEnv );
-
-    virtual void        Display_Namespace(
-                            const ary::cpp::Namespace &
-                                                i_rData );
-    virtual void        Display_Class(
-                            const ary::cpp::Class &
-                                                i_rData );
-    virtual void        Display_Enum(
-                            const ary::cpp::Enum &
-                                                i_rData );
-    virtual void        Display_Typedef(
-                            const ary::cpp::Typedef &
-                                                i_rData );
-    virtual void        Display_Function(
-                            const ary::cpp::Function &
-                                                i_rData );
-    virtual void        Display_Variable(
-                            const ary::cpp::Variable &
-                                                i_rData );
-    virtual void        Display_EnumValue(
-                            const ary::cpp::EnumValue &
-                                                i_rData );
-
-    virtual void        Display_Define(
-                            const ary::cpp::Define &
-                                                i_rData );
-    virtual void        Display_Macro(
-                            const ary::cpp::Macro &
-                                                i_rData );
-
   private:
     void                Create_PrePath(
-                            const ary::CodeEntity &
+                            const ary::cpp::CodeEntity &
                                                 i_rData );
-
+    // Interface csv::ConstProcessor<>
+    virtual void        do_Process(
+                            const ary::cpp::Namespace &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::cpp::Class &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::cpp::Enum &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::cpp::Typedef &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::cpp::Function &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::cpp::Variable &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::cpp::EnumValue &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::cpp::Define &
+                                                i_rData );
+    virtual void        do_Process(
+                            const ary::cpp::Macro &
+                                                i_rData );
     // DATA
     char *              pOut;
     uintt               nOutMaxSize;
@@ -106,8 +128,9 @@ class LinkCreator : public ary::cpp::Display
 };
 
 
-// IMPLEMENTATION
 
+
+// IMPLEMENTATION
 inline void
 LinkCreator::SetEnv( const OuputPage_Environment & i_rEnv )
     { pEnv = &i_rEnv; }
@@ -116,4 +139,3 @@ LinkCreator::SetEnv( const OuputPage_Environment & i_rEnv )
 
 
 #endif
-

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hd_chlst.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:28:31 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:26:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,15 @@
 #ifndef ADC_DISPLAY_HTML_HD_CHLST_HXX
 #define ADC_DISPLAY_HTML_HD_CHLST_HXX
 
-
+// BASE CLASSES
+#include <ary/ary_disp.hxx>
+#include <cosv/tpl/processor.hxx>
 
 // USED SERVICES
-    // BASE CLASSES
-#include <ary/cpp/cpp_disp.hxx>
-#include <ary/cpp/c_etypes.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
 #include "hdimpl.hxx"
-    // COMPONENTS
-    // PARAMETERS
+
+
 
 namespace ary
 {
@@ -67,7 +67,14 @@ namespace ary
 class Docu_Display;
 class ProtectionArea;
 
-class ChildList_Display : public ary::cpp::Display,
+class ChildList_Display : public ary::Display,
+                          public csv::ConstProcessor<ary::cpp::Namespace>,
+                          public csv::ConstProcessor<ary::cpp::Class>,
+                          public csv::ConstProcessor<ary::cpp::Enum>,
+                          public csv::ConstProcessor<ary::cpp::Typedef>,
+                          public csv::ConstProcessor<ary::cpp::Function>,
+                          public csv::ConstProcessor<ary::cpp::Variable>,
+                          public csv::ConstProcessor<ary::cpp::EnumValue>,
                           private HtmlDisplay_Impl
 {
   public:
@@ -112,15 +119,6 @@ class ChildList_Display : public ary::cpp::Display,
                             const char *        i_sListTitle,
                             ary::cpp::E_ClassKey
                                                 i_eFilter );
-#if 0
-    void                Run_GlobalClasses(
-                            Area_Result &       o_rResult,
-                            ary::SlotAccessId   i_nSlot,
-                            const char *        i_sListLabel,
-                            const char *        i_sListTitle_classes,
-                            const char *        i_sListTitle_structs,
-                            const char *        i_sListTitle_unions );
-#endif
     void                Run_Members(
                             Area_Result &       o_rResult_public,
                             Area_Result &       o_rResult_protected,
@@ -141,58 +139,45 @@ class ChildList_Display : public ary::cpp::Display,
                             const char *        i_sListTitle,
                             ary::cpp::E_ClassKey
                                                 i_eFilter );
-#if 0
-    void                Run_MemberClasses(
-                            Area_Result &       o_rResult_public,
-                            Area_Result &       o_rResult_protected,
-                            Area_Result &       o_rResult_private,
-                            ary::SlotAccessId   i_nSlot,
-                            const char *        i_sListLabel_public,
-                            const char *        i_sListLabel_protected,
-                            const char *        i_sListLabel_private,
-                            const char *        i_sListTitle_classes,
-                            const char *        i_sListTitle_structs,
-                            const char *        i_sListTitle_unions );
-#endif
-
-    virtual void        Display_Namespace(
+  private:
+    // Interface csv::ConstProcessor<>:
+    virtual void        do_Process(
                             const ary::cpp::Namespace &
                                                 i_rData );
-    /** i_rData is showed only, if it passes two filters:
+    /** i_rData is shown only, if it passes two filters:
         it must have the right protection, checked with pFilter,
         and the right class key (class,struct,union), checked with
         pClassFilter. A not exsting filter allows i_rData to be
         displayed.
     */
-    virtual void        Display_Class(
+    virtual void        do_Process(
                             const ary::cpp::Class &
                                                 i_rData );
-    virtual void        Display_Enum(
+    virtual void        do_Process(
                             const ary::cpp::Enum &
                                                 i_rData );
-    virtual void        Display_Typedef(
+    virtual void        do_Process(
                             const ary::cpp::Typedef &
                                                 i_rData );
-    virtual void        Display_Function(
+    virtual void        do_Process(
                             const ary::cpp::Function &
                                                 i_rData );
-    virtual void        Display_Variable(
+    virtual void        do_Process(
                             const ary::cpp::Variable &
                                                 i_rData );
-    virtual void        Display_EnumValue(
+    virtual void        do_Process(
                             const ary::cpp::EnumValue &
                                                 i_rData );
   private:
     // Interface ary::Display:
     virtual void        do_StartSlot();
     virtual void        do_FinishSlot();
-    virtual const ary::DisplayGate *
+    virtual const ary::cpp::Gate *
                         inq_Get_ReFinder() const;
-
     // Locals
     struct S_AreaCo;
     void                Write_ListItem(
-                            const udmstri &     i_sLeftText,
+                            const String &      i_sLeftText,
                             const char *        i_sLink,
                             const ary::info::DocuText &
                                                 i_rRightText,
@@ -225,5 +210,5 @@ class ChildList_Display : public ary::cpp::Display,
 
 
 
-#endif
 
+#endif

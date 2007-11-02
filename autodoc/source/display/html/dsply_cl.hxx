@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsply_cl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:26:03 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:25:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,32 +36,29 @@
 #ifndef ADC_DISPLAY_HTML_HD_PAGE_HXX
 #define ADC_DISPLAY_HTML_HD_PAGE_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <ary/ary_disp.hxx>
-#include <ary/cpp/cpp_disp.hxx>
-    // COMPONENTS
-    // PARAMETERS
-#include <ary/idlists.hxx>
-
-
+#include <cosv/tpl/processor.hxx>
+// USED SERVICES
+#include <ary/types.hxx>
 
 class OuputPage_Environment;
 
 namespace ary
 {
-    namespace cpp
-    {
-        class Class;
-    }
+namespace cpp
+{
+    class Class;
 }
-
+}
 
 class PageDisplay;
 
-class ClassDisplayer : public ary::cpp::Display
+
+
+
+class ClassDisplayer : public ary::Display,
+                       public csv::ConstProcessor<ary::cpp::Class>
 {
   public:
                         ClassDisplayer(            // TODO
@@ -69,12 +66,13 @@ class ClassDisplayer : public ary::cpp::Display
                                                 io_rEnv );
     virtual             ~ClassDisplayer();
 
-    virtual void        Display_Class(
-                            const ary::cpp::Class &
-                                                i_rData );
  private:
-    // Interface ary::cpp::Display:
-    virtual const ary::DisplayGate *
+    // Interface csv::ConstProcessor<>:
+    virtual void        do_Process(
+                            const ary::cpp::Class &
+                                                i_data );
+    // Interface ary::Display:
+    virtual const ary::cpp::Gate *
                         inq_Get_ReFinder() const;
 
     // Locals
@@ -93,5 +91,5 @@ class ClassDisplayer : public ary::cpp::Display
 
 
 
-#endif
 
+#endif

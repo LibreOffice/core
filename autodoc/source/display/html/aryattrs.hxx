@@ -4,9 +4,9 @@
  *
  *  $RCSfile: aryattrs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:24:13 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:23:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,65 +36,65 @@
 #ifndef ADC_DISPLAY_ARYATTRS_HXX
 #define ADC_DISPLAY_ARYATTRS_HXX
 
-
-
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-    // PARAMETERS
-#include <ary/ids.hxx>
-#include <ary/cpp/c_etypes.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
+#include <ary/doc/d_docu.hxx>
+#include <ary/doc/d_oldcppdocu.hxx>
 
 namespace ary
 {
      namespace cpp
     {
+        class CodeEntity;
         class Class;
         class DisplayGate;
         class Function;
         class Namespace;
     }
-    class CodeEntity;
 }
 
+
+
+
 const char *        Get_ClassTypeKey(
-                        const ary::cpp::Class &
-                                            i_rClass );
+                        const ary::cpp::Class & i_rClass );
 const char *        Get_TypeKey(
-                        const ary::CodeEntity &
-                                            i_rCe );
+                        const ary::cpp::CodeEntity &
+                                                i_rCe );
 bool                Ce_IsInternal(
-                        const ary::CodeEntity &
-                                            i_rCe );
+                        const ary::cpp::CodeEntity &
+                                                i_rCe );
 
 const char *        Namespace_DisplayName(
                         const ary::cpp::Namespace &
-                                            i_rNsp );
+                                                i_rNsp );
 
 const char *        TypeText(
-                        ary::Tid                i_nId,
-                        const ary::cpp::DisplayGate &
-                                                i_rAryGate );
+                        ary::cpp::Type_id       i_nId,
+                        const ary::cpp::Gate &  i_rAryGate );
 
 const char *        SyntaxText_PreName(
                         const ary::cpp::Function &
                                                 i_rFunction,
-                        const ary::cpp::DisplayGate &
-                                                i_rAryGate );
+                        const ary::cpp::Gate &  i_rAryGate );
 const char *        SyntaxText_PostName(
                         const ary::cpp::Function &
                                                 i_rFunction,
-                        const ary::cpp::DisplayGate &
-                                                i_rAryGate );
+                        const ary::cpp::Gate &  i_rAryGate );
 
 bool                Get_TypeText(
                         const char * &          o_rPreName,
                         const char * &          o_rName,
                         const char * &          o_rPostName,
-                        ary::Tid                i_nTypeid,
-                        const ary::cpp::DisplayGate &
-                                                i_rAryGate );
+                        ary::cpp::Type_id       i_nTypeid,
+                        const ary::cpp::Gate &  i_rAryGate );
 
+
+inline const ary::doc::OldCppDocu *
+Get_CppDocu(const ary::doc::Documentation & i_doc)
+{
+    return dynamic_cast< const ary::doc::OldCppDocu* >(i_doc.Data());
+}
 
 
 class FunctionParam_Iterator
@@ -109,19 +109,18 @@ class FunctionParam_Iterator
 
     void            Assign(
                         const ary::cpp::Function &
-                                                i_rFunction,
-                        const ary::cpp::DisplayGate &
-                                                i_rAryGate );
+                                                i_rFunction );
 
-    ary::Tid        CurType() const;
-    const udmstri & CurName() const;
+    ary::cpp::Type_id
+                    CurType() const;
+    const String  & CurName() const;
 
     bool            IsFunctionConst() const;
     bool            IsFunctionVolatile() const;
 
   private:
-    typedef std::vector<ary::Tid>::const_iterator        Type_Iterator;
-    typedef StringVector::const_iterator                 Name_Iterator;
+    typedef std::vector<ary::cpp::Type_id>::const_iterator  Type_Iterator;
+    typedef StringVector::const_iterator                    Name_Iterator;
 
     bool                IsValid() const;
 
@@ -137,6 +136,10 @@ class FunctionParam_Iterator
     ary::cpp::E_ConVol  eConVol;
 };
 
+
+
+
+// IMPLEMENTATION
 inline
 FunctionParam_Iterator::operator bool() const
     { return IsValid(); }
@@ -149,12 +152,12 @@ FunctionParam_Iterator::IsValid() const
     return itTypes != itTypes_end;
 }
 
-inline ary::Tid
+inline ary::cpp::Type_id
 FunctionParam_Iterator::CurType() const
-    { return IsValid() ? *itTypes : 0; }
-inline const udmstri &
+    { return IsValid() ? *itTypes : ary::cpp::Type_id(0); }
+inline const String  &
 FunctionParam_Iterator::CurName() const
-    { return IsValid() ? *itNames_andMore : udmstri::Null_(); }
+    { return IsValid() ? *itNames_andMore : String::Null_(); }
 inline bool
 FunctionParam_Iterator::IsFunctionConst() const
     { return (eConVol & ary::cpp::CONVOL_const) != 0; }
@@ -163,6 +166,6 @@ FunctionParam_Iterator::IsFunctionVolatile() const
     { return (eConVol & ary::cpp::CONVOL_volatile) != 0; }
 
 
+
+
 #endif
-
-

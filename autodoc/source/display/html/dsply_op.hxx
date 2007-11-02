@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsply_op.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:27:16 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:26:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,11 @@
 #ifndef ADC_DISPLAY_HTML_DSPLY_OP_HXX
 #define ADC_DISPLAY_HTML_DSPLY_OP_HXX
 
-
-
+// BASE CLASSES
+#include <ary/ary_disp.hxx>
+#include <cosv/tpl/processor.hxx>
 // USED SERVICES
-    // BASE CLASSES
-#include <ary/cpp/cpp_disp.hxx>
-    // COMPONENTS
-    // PARAMETERS
-
+#include <ary/cpp/c_ce.hxx>
 
 namespace ary
 {
@@ -60,13 +57,15 @@ namespace csi
     }
 }
 
-
 class OuputPage_Environment;
 class PageDisplay;
 class Docu_Display;
 
 
-class OperationsDisplay : public ary::cpp::Display
+
+
+class OperationsDisplay : public ary::Display,
+                          public csv::ConstProcessor<ary::cpp::Function>
 {
   public:
                         OperationsDisplay(
@@ -74,23 +73,22 @@ class OperationsDisplay : public ary::cpp::Display
                                                 io_rInfo );
     virtual             ~OperationsDisplay();
 
-
-    virtual void        Display_Function(
-                            const ary::cpp::Function &
-                                                i_rData );
-
     void                PrepareForGlobals();
     void                PrepareForStdMembers();
     void                PrepareForStaticMembers();
     void                Create_Files();
 
  private:
-    // Interface ary::cpp::Display:
-    virtual const ary::DisplayGate *
+    // Interface csv::ConstProcessor<>:
+    virtual void        do_Process(
+                            const ary::cpp::Function &
+                                                i_rData );
+    // Interface ary::Display:
+    virtual const ary::cpp::Gate *
                         inq_Get_ReFinder() const;
 
     // Locals
-    typedef ary::Lid                                    SourceFileId;
+    typedef ary::cpp::Lid                               SourceFileId;
     typedef std::map< SourceFileId, DYN PageDisplay* >  Map_FileId2PagePtr;
 
     PageDisplay &       FindPage_for(
@@ -111,5 +109,5 @@ class OperationsDisplay : public ary::cpp::Display
 
 
 
-#endif
 
+#endif
