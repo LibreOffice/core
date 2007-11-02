@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 10:08:12 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:48:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,14 +39,15 @@
 #include <svpm.h>
 
 #include <tools/string.hxx>
-#include <salsys.hxx>
+#include <salsys.h>
 #include <salframe.h>
 #include <salinst.h>
 #include <tools/debug.hxx>
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #ifndef _SV_SALGTYPE_HXX
-#include <salgtype.hxx>
+//#include <salgtype.hxx>
 #endif
 
 class Os2SalSystem : public SalSystem
@@ -58,6 +59,12 @@ public:
     virtual unsigned int GetDisplayScreenCount();
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
     //virtual bool GetSalSystemDisplayInfo( DisplayInfo& rInfo );
+
+    virtual bool IsMultiDisplay();
+    virtual unsigned int GetDefaultDisplayNumber();
+    virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
+    virtual rtl::OUString GetScreenName( unsigned int nScreen );
+
     virtual int ShowNativeMessageBox( const String& rTitle,
                                       const String& rMessage,
                                       int nButtonCombination,
@@ -154,4 +161,28 @@ int Os2SalSystem::ShowNativeMessageBox(const String& rTitle, const String& rMess
         (PSZ)rMessage.GetBuffer(),
         (PSZ)rTitle.GetBuffer(),
         0, nFlags);
+}
+
+
+unsigned int Os2SalSystem::GetDefaultDisplayNumber()
+{
+    return 0;
+}
+
+bool Os2SalSystem::IsMultiDisplay()
+{
+    return false;
+}
+
+Rectangle Os2SalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
+{
+    return GetDisplayScreenPosSizePixel( nScreen );
+}
+
+rtl::OUString Os2SalSystem::GetScreenName( unsigned int nScreen )
+{
+   rtl::OUStringBuffer aBuf( 32 );
+   aBuf.appendAscii( "VirtualScreen " );
+   aBuf.append( sal_Int32(nScreen) );
+   return aBuf.makeStringAndClear();
 }
