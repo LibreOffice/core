@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Os2Clipboard.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 09:39:17 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:15:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,7 @@ public:
 private:
     HAB hAB;
     HWND    hObjWnd;
+    ULONG   hText, hBitmap; // handles to previous clipboard data
 
     ::osl::Mutex m_aMutex;
     ::rtl::OUString m_aName;
