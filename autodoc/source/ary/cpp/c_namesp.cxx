@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_namesp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:26:05 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:26:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,11 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <cosv/template/tpltools.hxx>
-#include "rcids.hxx"
-#include <ary/cpp/cpp_disp.hxx>
+#include <algorithm>
+#include <cosv/tpl/tpltools.hxx>
+#include <ary/cpp/c_funct.hxx>
+#include <ary/cpp/c_gate.hxx>
+#include <ary/getncast.hxx>
 #include <slots.hxx>
 #include "c_slots.hxx"
 
@@ -50,10 +52,11 @@ namespace ary
 namespace cpp
 {
 
-
+typedef std::multimap<String, Ce_id>::const_iterator      operations_citer;
 
 Namespace::Namespace()
-    :   // aEssentials,
+    :   aEssentials(),
+        aAssignedNode(),
         // aLocalNamespaces,
         // aLocalClasses,
         // aLocalEnums,
@@ -64,29 +67,15 @@ Namespace::Namespace()
         pParent(0),
         nDepth(0)
 {
+    aAssignedNode.Assign_Entity(*this);
 }
 
-Namespace::Namespace( Rid i_nId )
-    :   aEssentials( i_nId, udmstri::Null_(), 0, 0 ),
-        // aLocalNamespaces,
-        // aLocalClasses,
-        // aLocalEnums,
-        // aLocalTypedefs,
-        // aLocalOperations,
-        // aLocalVariables,
-        // aLocalConstants,
-        pParent(0),
-        nDepth(0)
-{
-}
-
-Namespace::Namespace( Cid                 i_nId,
-                      const udmstri &     i_sLocalName,
+Namespace::Namespace( const String  &     i_sLocalName,
                       Namespace &         i_rParent )
-    :   aEssentials( i_nId,
-                     i_sLocalName,
-                     i_rParent.Id(),
-                     0 ),
+    :   aEssentials( i_sLocalName,
+                     i_rParent.CeId(),
+                     Lid(0) ),
+        aAssignedNode(),
         // aLocalNamespaces,
         // aLocalClasses,
         // aLocalEnums,
@@ -97,6 +86,7 @@ Namespace::Namespace( Cid                 i_nId,
         pParent(&i_rParent),
         nDepth(i_rParent.Depth()+1)
 {
+    aAssignedNode.Assign_Entity(*this);
 }
 
 Namespace::~Namespace()
@@ -110,44 +100,43 @@ Namespace::Add_LocalNamespace( DYN Namespace & io_rLocalNamespace )
 }
 
 void
-Namespace::Add_LocalClass( const udmstri &     i_sLocalName,
+Namespace::Add_LocalClass( const String  &     i_sLocalName,
                            Cid                 i_nId )
 {
     aLocalClasses[i_sLocalName] = i_nId;
 }
 
 void
-Namespace::Add_LocalEnum( const udmstri &     i_sLocalName,
+Namespace::Add_LocalEnum( const String  &     i_sLocalName,
                           Cid                 i_nId )
 {
     aLocalEnums[i_sLocalName] = i_nId;
 }
 
 void
-Namespace::Add_LocalTypedef( const udmstri &     i_sLocalName,
+Namespace::Add_LocalTypedef( const String  &     i_sLocalName,
                              Cid                 i_nId )
 {
     aLocalTypedefs[i_sLocalName] = i_nId;
 }
 
 void
-Namespace::Add_LocalOperation( const udmstri &     i_sLocalName,
-                               OSid                i_nOS,
+Namespace::Add_LocalOperation( const String  &     i_sLocalName,
                                Cid                 i_nId )
 {
-    aLocalOperations.insert( S_LocalOperation(i_sLocalName, i_nOS, i_nId) );
+    aLocalOperations.insert( Map_Operations::value_type(i_sLocalName, i_nId) );
 }
 
 
 void
-Namespace::Add_LocalVariable( const udmstri &     i_sLocalName,
+Namespace::Add_LocalVariable( const String  &     i_sLocalName,
                               Cid                 i_nId )
 {
     aLocalVariables[i_sLocalName] = i_nId;
 }
 
 void
-Namespace::Add_LocalConstant( const udmstri &     i_sLocalName,
+Namespace::Add_LocalConstant( const String  &     i_sLocalName,
                               Cid                 i_nId )
 {
     aLocalConstants[i_sLocalName] = i_nId;
@@ -165,10 +154,35 @@ Namespace::Parent() const
     return pParent;
 }
 
-Namespace *
-Namespace::Search_LocalNamespace( const udmstri & i_sLocalName ) const
+Ce_id
+Namespace::Search_Child(const String & i_key) const
 {
-    return csv::value_from_map(aLocalNamespaces, i_sLocalName);
+    Namespace *
+        ret_nsp = Search_LocalNamespace(i_key);
+    if (ret_nsp != 0)
+        return ret_nsp->CeId();
+
+    Ce_id
+        ret = Search_LocalClass(i_key);
+    if (ret.IsValid())
+        return ret;
+
+    ret = csv::value_from_map(aLocalEnums, i_key, Ce_id(0));
+    if (ret.IsValid())
+        return ret;
+    ret = csv::value_from_map(aLocalTypedefs, i_key, Ce_id(0));
+    if (ret.IsValid())
+        return ret;
+    ret = csv::value_from_map(aLocalVariables, i_key, Ce_id(0));
+    if (ret.IsValid())
+        return ret;
+    return csv::value_from_map(aLocalConstants, i_key, Ce_id(0));
+}
+
+Namespace *
+Namespace::Search_LocalNamespace( const String  & i_sLocalName ) const
+{
+    return csv::value_from_map(aLocalNamespaces, i_sLocalName, (Namespace*)(0));
 }
 
 uintt
@@ -183,28 +197,35 @@ Namespace::Get_SubNamespaces( std::vector< const Namespace* > & o_rResultList ) 
     return o_rResultList.size();
 }
 
-Rid
-Namespace::Search_LocalClass( const udmstri & i_sName ) const
+Ce_id
+Namespace::Search_LocalClass( const String  & i_sName ) const
 {
-    return csv::value_from_map(aLocalClasses, i_sName);
+    return csv::value_from_map(aLocalClasses, i_sName, Ce_id(0));
 }
 
-Rid
-Namespace::Search_LocalOperation( const String &      i_sName,
-                                  OSid                i_nSignature ) const
+void
+Namespace::Search_LocalOperations( std::vector<Ce_id> & o_result,
+                                   const String &       i_sName ) const
 {
-    return aLocalOperations.find(
-            S_LocalOperation(i_sName, i_nSignature, 0)) != aLocalOperations.end();
+    operations_citer
+        itLower = aLocalOperations.lower_bound(i_sName);
+    if (itLower == aLocalOperations.end())
+        return;
+    if ( (*itLower).first != i_sName )
+        return;
+
+    operations_citer
+        itEnd = aLocalOperations.end();
+    for ( operations_citer it = itLower;
+          it != aLocalOperations.end() ? (*itLower).first == i_sName : false;
+          ++it )
+    {
+        o_result.push_back((*it).second);
+    }
 }
 
 
-Cid
-Namespace::inq_Id() const
-{
-    return aEssentials.Id();
-}
-
-const udmstri &
+const String  &
 Namespace::inq_LocalName() const
 {
     return aEssentials.LocalName();
@@ -219,45 +240,28 @@ Namespace::inq_Owner() const
 Lid
 Namespace::inq_Location() const
 {
-    return 0;
+    return Lid(0);
 }
 
 void
-Namespace::do_StoreAt( ary::Display & o_rOut ) const
+Namespace::do_Accept(csv::ProcessorIfc & io_processor) const
 {
-    ary::cpp::Display *  pD = dynamic_cast< ary::cpp::Display* >(&o_rOut);
-    if (pD != 0)
-    {
-        pD->Display_Namespace(*this);
-    }
+    csv::CheckedCall(io_processor,*this);
 }
 
-RCid
-Namespace::inq_RC() const
+ClassId
+Namespace::get_AryClass() const
 {
-    return RC_();
-}
-
-
-const ary::Documentation &
-Namespace::inq_Info() const
-{
-    return aEssentials.Info();
-}
-
-void
-Namespace::do_Add_Documentation( DYN ary::Documentation & let_drInfo )
-{
-    aEssentials.SetInfo(let_drInfo);
+    return class_id;
 }
 
 Gid
 Namespace::inq_Id_Group() const
 {
-    return static_cast<Gid>(aEssentials.Id());
+    return static_cast<Gid>(Id());
 }
 
-const RepositoryEntity &
+const ary::cpp::CppEntity &
 Namespace::inq_RE_Group() const
 {
     return *this;
@@ -285,7 +289,7 @@ Namespace::inq_Create_Slot( SlotAccessId i_nSlot ) const
         case SLOT_Classes:          return new Slot_MapLocalCe(aLocalClasses);
         case SLOT_Enums:            return new Slot_MapLocalCe(aLocalEnums);
         case SLOT_Typedefs:         return new Slot_MapLocalCe(aLocalTypedefs);
-        case SLOT_Operations:       return new Slot_OperationSet(aLocalOperations);
+        case SLOT_Operations:       return new Slot_MapOperations(aLocalOperations);
         case SLOT_Variables:        return new Slot_MapLocalCe(aLocalVariables);
         case SLOT_Constants:        return new Slot_MapLocalCe(aLocalConstants);
         default:
@@ -296,47 +300,3 @@ Namespace::inq_Create_Slot( SlotAccessId i_nSlot ) const
 
 }   // namespace cpp
 }   // namespace ary
-
-
-
-#if 0
-/*
-uintt
-Namespace::Get_LocalNamespaces( ary::List_Cid& o_rResultList ) const
-{
-    for ( Map_NamespacePtr::const_iterator it = aLocalNamespaces.begin();
-          it != aLocalNamespaces.end();
-          ++it )
-    {
-        o_rResultList.push_back((*it).second->Id());
-    }
-    return o_rResultList.size();
-}
-
-uintt
-Namespace::Get_LocalClasses( ary::List_Cid& o_rResultList ) const
-{
-    for ( Map_LocalCe::const_iterator it = aLocalClasses.begin();
-          it != aLocalClasses.end();
-          ++it )
-    {
-        o_rResultList.push_back((*it).second);
-    }
-    return o_rResultList.size();
-}
-
-uintt
-Namespace::Get_LocalFunctions( ary::List_Cid & o_rResultList ) const
-{
-    for ( Set_LocalOperation::const_iterator it = aLocalOperations.begin();
-          it != aLocalOperations.end();
-          ++it )
-    {
-        o_rResultList.push_back((*it).nId);
-    }
-    return o_rResultList.size();
-}
-*/
-#endif // 0
-
-
