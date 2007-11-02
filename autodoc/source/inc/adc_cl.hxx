@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adc_cl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:08:20 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:45:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,11 @@
 #include <cosv/comdline.hxx>
     // COMPONENTS
     // PARAMETERS
+
+namespace ary
+{
+    class Repository;
+}
 
 namespace autodoc
 {
@@ -86,8 +91,11 @@ class CommandLine : public csv::CommandLine_Ifc
     const String &      ExternRoot() const      { return sExternRoot; }
     const String &      ExternNamespace() const { return sExternNamespace; }
 
+    bool                CppUsed() const         { return bCpp; }
+    bool                IdlUsed() const         { return bIdl; }
+
     // ACCESS
-    static const CommandLine &
+    static CommandLine &
                         Get_();
     void                Set_ExternRoot(
                             const String &      i_s )
@@ -95,6 +103,11 @@ class CommandLine : public csv::CommandLine_Ifc
     void                Set_ExternNamespace(
                             const String &      i_s )
                                                 { sExternNamespace = i_s; }
+    ary::Repository &   TheRepository() const   { csv_assert(pReposy != 0);
+                                                  return *pReposy; }
+    void                Set_CppUsed()           { bCpp = true; }
+    void                Set_IdlUsed()           { bIdl = true; }
+
   private:
     // Interface cosv::CommandLine_Ifc:
     virtual void        do_Init(
@@ -143,13 +156,19 @@ class CommandLine : public csv::CommandLine_Ifc
 
     CommandList         aCommands;
     bool                bInitOk;
-    static CommandLine *
-                        pTheInstance_;
     command::CreateHtml *
                         pCommand_CreateHtml;
 
     String              sExternRoot;
     String              sExternNamespace;
+
+    mutable Dyn<ary::Repository>
+                        pReposy;
+    bool                bCpp;
+    bool                bIdl;
+
+    static CommandLine *
+                        pTheInstance_;
 };
 
 
