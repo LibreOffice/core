@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tk_docw.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:37:20 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:03:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ class Tok_DocWord : public Token
 
   private:
     // DATA
-    udmstri             sText;
+    String              sText;
 };
 
 class Tok_Whitespace : public Token
