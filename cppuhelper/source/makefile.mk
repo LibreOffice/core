@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-26 11:27:31 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:15:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -179,6 +179,8 @@ DEF1NAME=$(SHL1TARGET)
 SHL1VERSIONMAP=msvc_win32_intel.map
 .ELIF "$(COMNAME)"=="sunpro5"
 SHL1VERSIONMAP=cc5_solaris_sparc.map
+.ELIF "$(GUI)$(COMNAME)"=="OS2gcc3"
+SHL1VERSIONMAP=gcc3os2.map
 .ELIF "$(COMNAME)"=="gcc3"
 SHL1VERSIONMAP=gcc3.map
 .ENDIF
