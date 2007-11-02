@@ -1,3 +1,3 @@
-..\%__SRC%\bin\sax.uno.dll %_DEST%\bin%_EXT%\sax.uno.dll
+..\%__SRC%\bin\sax*.dll %_DEST%\bin%_EXT%\sax*.dll
 ..\%__SRC%\lib\sax.uno.so %_DEST%\lib%_EXT%\sax.uno.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
