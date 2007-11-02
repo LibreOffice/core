@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cx_c_pp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:09:52 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:49:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,7 @@ void
 Context_Preprocessor::ReadDefine( CharacterSource & io_rText )
 {
     jumpOverWhite( io_rText );
+    io_rText.CutToken();
 
     char cNext = '\0';
     for ( cNext = io_rText.CurChar();
