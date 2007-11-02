@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsply_da.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:51:13 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,12 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
-#include <ary/cpp/c_disply.hxx>
-#include <ary/cpp/crog_grp.hxx>
+#include <cosv/tpl/tpltools.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_vari.hxx>
+#include <ary/doc/d_docu.hxx>
+#include <ary/loc/loc_file.hxx>
+#include <ary/loc/locp_le.hxx>
 #include <udm/html/htmlitem.hxx>
 #include "hd_docu.hxx"
 #include "hdimpl.hxx"
@@ -55,8 +57,8 @@ using namespace csi;
 
 
 DataDisplay::DataDisplay( OuputPage_Environment & io_rEnv )
-    :   // aMap_GlobalDataDisplay,
-        // pClassMembersDisplay,
+    :   aMap_GlobalDataDisplay(),
+        pClassMembersDisplay(0),
         pEnv( &io_rEnv ),
         pDocuShow( new Docu_Display(io_rEnv) )
 {
@@ -65,18 +67,6 @@ DataDisplay::DataDisplay( OuputPage_Environment & io_rEnv )
 DataDisplay::~DataDisplay()
 {
     csv::erase_map_of_heap_ptrs( aMap_GlobalDataDisplay );
-}
-
-void
-DataDisplay::Display_Variable( const ary::cpp::Variable & i_rData )
-{
-    if ( Ce_IsInternal(i_rData) )
-        return;
-
-    PageDisplay & rPage = FindPage_for( i_rData );
-
-    csi::xml::Element & rOut = rPage.CurOut();
-    Display_SglDatum( rOut, i_rData );
 }
 
 void
@@ -131,7 +121,19 @@ DataDisplay::Create_Files()
     }
 }
 
-const ary::DisplayGate *
+void
+DataDisplay::do_Process( const ary::cpp::Variable & i_rData )
+{
+    if ( Ce_IsInternal(i_rData) )
+        return;
+
+    PageDisplay & rPage = FindPage_for( i_rData );
+
+    csi::xml::Element & rOut = rPage.CurOut();
+    Display_SglDatum( rOut, i_rData );
+}
+
+const ary::cpp::Gate *
 DataDisplay::inq_Get_ReFinder() const
 {
     return & pEnv->Gate();
@@ -146,14 +148,13 @@ DataDisplay::FindPage_for( const ary::cpp::Variable & i_rData )
     SourceFileId
             nSourceFile = i_rData.Location();
     PageDisplay *
-            pFound = csv::value_from_map( aMap_GlobalDataDisplay, nSourceFile );
+            pFound = csv::value_from_map( aMap_GlobalDataDisplay, nSourceFile, (PageDisplay*)0 );
     if ( pFound == 0 )
     {
          pFound = new PageDisplay( *pEnv );
-        const ary::cpp::FileGroup *
-                pFgr = pEnv->Gate().RoGroups().Search_FileGroup( nSourceFile );
-        csv_assert( pFgr != 0 );
-        pFound->Setup_DataFile_for( *pFgr );
+        const ary::loc::File &
+                rFile = pEnv->Gate().Locations().Find_File( nSourceFile );
+        pFound->Setup_DataFile_for(rFile);
         aMap_GlobalDataDisplay[nSourceFile] = pFound;
     }
 
@@ -198,11 +199,9 @@ DataDisplay::Display_SglDatum( csi::xml::Element &        rOut,
 
     aDocu.AddEntry_NoTerm();
 
-    pDocuShow->Assign_Out( aDocu.Def() );
-    i_rData.Info().StoreAt( *pDocuShow );
+    pDocuShow->Assign_Out(aDocu.Def());
+    pDocuShow->Process(i_rData.Docu());
     pDocuShow->Unassign_Out();
 
     rOut << new html::HorizontalLine;
 }
-
-

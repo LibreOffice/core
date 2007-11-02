@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsply_op.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:51:27 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:25:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,10 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
-#include <ary/cpp/c_disply.hxx>
-#include <ary/cpp/crog_grp.hxx>
+#include <cosv/tpl/tpltools.hxx>
 #include <ary/cpp/c_funct.hxx>
+#include <ary/cpp/c_gate.hxx>
+#include <ary/loc/locp_le.hxx>
 #include <udm/html/htmlitem.hxx>
 #include "hd_docu.hxx"
 #include "hdimpl.hxx"
@@ -49,10 +49,9 @@
 #include "opageenv.hxx"
 #include "pagemake.hxx"
 
-
-
 using namespace csi;
 using namespace adcdisp;
+
 
 
 
@@ -67,18 +66,6 @@ OperationsDisplay::OperationsDisplay( OuputPage_Environment & io_rEnv )
 OperationsDisplay::~OperationsDisplay()
 {
     csv::erase_map_of_heap_ptrs( aMap_GlobalFunctionsDisplay );
-}
-
-void
-OperationsDisplay::Display_Function( const ary::cpp::Function & i_rData )
-{
-    if ( Ce_IsInternal(i_rData) )
-        return;
-
-    PageDisplay & rPage = FindPage_for( i_rData );
-
-    csi::xml::Element & rOut = rPage.CurOut();
-    Display_SglOperation( rOut, i_rData );
 }
 
 void
@@ -123,7 +110,19 @@ OperationsDisplay::Create_Files()
     }
 }
 
-const ary::DisplayGate *
+void
+OperationsDisplay::do_Process( const ary::cpp::Function & i_rData )
+{
+    if ( Ce_IsInternal(i_rData) )
+        return;
+
+    PageDisplay & rPage = FindPage_for( i_rData );
+
+    csi::xml::Element & rOut = rPage.CurOut();
+    Display_SglOperation( rOut, i_rData );
+}
+
+const ary::cpp::Gate *
 OperationsDisplay::inq_Get_ReFinder() const
 {
     return & pEnv->Gate();
@@ -138,14 +137,13 @@ OperationsDisplay::FindPage_for( const ary::cpp::Function & i_rData )
     SourceFileId
             nSourceFile = i_rData.Location();
     PageDisplay *
-            pFound = csv::value_from_map( aMap_GlobalFunctionsDisplay, nSourceFile );
+            pFound = csv::value_from_map( aMap_GlobalFunctionsDisplay, nSourceFile, (PageDisplay*)0 );
     if ( pFound == 0 )
     {
          pFound = new PageDisplay( *pEnv );
-        const ary::cpp::FileGroup *
-                pFgr = pEnv->Gate().RoGroups().Search_FileGroup( nSourceFile );
-        csv_assert( pFgr != 0 );
-        pFound->Setup_OperationsFile_for( *pFgr );
+        const ary::loc::File &
+                rFile = pEnv->Gate().Locations().Find_File( nSourceFile );
+        pFound->Setup_OperationsFile_for(rFile);
         aMap_GlobalFunctionsDisplay[nSourceFile] = pFound;
     }
 
@@ -159,8 +157,12 @@ OperationsDisplay::Display_SglOperation( csi::xml::Element &        rOut,
     adcdisp::ExplanationList aDocu(rOut, true);
     aDocu.AddEntry( 0 );
 
+
     adcdisp::OperationTitle fTitle;
-    fTitle( aDocu.Term(), i_rData.LocalName(), i_rData.Signature() );
+    fTitle( aDocu.Term(),
+            i_rData.LocalName(),
+            i_rData.CeId(),
+            pEnv->Gate() );
 
     // Syntax
     adcdisp::ExplanationList aSyntaxHeader(aDocu.Def());
@@ -214,11 +216,9 @@ OperationsDisplay::Display_SglOperation( csi::xml::Element &        rOut,
 
     // Docu
     aDocu.AddEntry_NoTerm();
-    pDocuShow->Assign_Out( aDocu.Def() );
-    i_rData.Info().StoreAt( *pDocuShow );
+    pDocuShow->Assign_Out(aDocu.Def());
+    pDocuShow->Process(i_rData.Docu());
     pDocuShow->Unassign_Out();
 
     rOut << new html::HorizontalLine;
 }
-
-

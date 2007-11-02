@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsply_cl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:50:59 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:24:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <ary/cpp/c_disply.hxx>
 #include <ary/cpp/c_class.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include "dsply_da.hxx"
 #include "dsply_op.hxx"
 #include "hdimpl.hxx"
@@ -56,20 +56,6 @@ ClassDisplayer::ClassDisplayer( OuputPage_Environment & io_rEnv )
 
 ClassDisplayer::~ClassDisplayer()
 {
-}
-
-void
-ClassDisplayer::Display_Class( const ary::cpp::Class & i_rData )
-{
-    if ( Ce_IsInternal(i_rData) )
-        return;
-
-    PageDisplay aPageMaker( Env() );
-    aPageMaker.Display_Class(i_rData);
-
-    Env().MoveDir_Down2( i_rData );
-    DisplayFiles_InClass( i_rData, aPageMaker );
-    Env().MoveDir_Up();
 }
 
 void
@@ -109,10 +95,22 @@ ClassDisplayer::DisplayFiles_InClass( const ary::cpp::Class & i_rData,
     aDataDisplayer.Create_Files();
 }
 
-const ary::DisplayGate *
+void
+ClassDisplayer::do_Process( const ary::cpp::Class & i_rData )
+{
+    if ( Ce_IsInternal(i_rData) )
+        return;
+
+    PageDisplay aPageMaker( Env() );
+    aPageMaker.Process(i_rData);
+
+    Env().MoveDir_Down2( i_rData );
+    DisplayFiles_InClass( i_rData, aPageMaker );
+    Env().MoveDir_Up();
+}
+
+const ary::cpp::Gate *
 ClassDisplayer::inq_Get_ReFinder() const
 {
     return & pEnv->Gate();
 }
-
-
