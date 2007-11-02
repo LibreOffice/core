@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 09:51:24 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,12 @@ typedef struct _osl_TThreadImpl
 
 #define THREADIMPL_FLAGS_TERMINATE    0x0001
 #define THREADIMPL_FLAGS_SLEEP        0x0002
+
+
+// static mutex to control access to private members of oslMutexImpl
+static HMTX MutexLock = NULL;
+
+/*****************************************************************************/
 
 HAB osl_getPMinternal_HAB(oslThread hThread)
 {
@@ -160,7 +166,7 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
 
     if ( nFlags == sal_True )
     {
-        DosEnterCritSec();
+        DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
     }
 
     pThreadImpl->m_ThreadId = (TID) _beginthread( oslWorkerWrapperFunction,    /* worker-function */
@@ -171,7 +177,7 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
     {
         if( pThreadImpl->m_ThreadId != -1 )
             DosSuspendThread( pThreadImpl->m_ThreadId );
-        DosExitCritSec();
+        DosReleaseMutexSem( MutexLock);
     }
 #if OSL_DEBUG_LEVEL>0
 printf("oslCreateThread pThreadImpl %x, pThreadImpl->m_ThreadId %d\n", pThreadImpl, pThreadImpl->m_ThreadId);
@@ -478,110 +484,6 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
 }
 
 /*****************************************************************************/
-/* osl_sleepThread */
-/*****************************************************************************/
-#if 0 // YD
-oslThreadSleep SAL_CALL osl_sleepThread(oslThread Thread, const TimeValue* pDelay)
-{
-    TID tidCurrentThread;
-    APIRET rc;
-    ULONG ulPostCount;
-    int   millisecs;
-
-    osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
-
-    OSL_ASSERT(pDelay);
-
-    /* invalid arguments?*/
-    if(pThreadImpl==0 || pThreadImpl->m_ThreadId==-1)
-        return osl_Thread_SleepError;
-
-    if (pThreadImpl->m_Flags & THREADIMPL_FLAGS_SLEEP)
-        return osl_Thread_SleepActive;
-
-    DosEnterCritSec();
-
-    if (pThreadImpl->m_hEvent == 0)
-        rc = DosCreateEventSem( NULL,       /* unnamed semaphore */
-                                &pThreadImpl->m_hEvent,  /* pointer to variable */
-                                                   /* for the sem-handle */
-                                DC_SEM_SHARED,  /* shared semaphore */
-                                FALSE );         /* initial state is posted */
-    else
-        DosResetEventSem(pThreadImpl->m_hEvent, &ulPostCount);
-
-    /* get thread ID */
-    {
-        PTIB pptib = NULL;
-        PPIB pppib = NULL;
-
-        DosGetInfoBlocks( &pptib, &pppib );
-        tidCurrentThread = pptib->tib_ptib2->tib2_ultid;
-    }
-
-    millisecs = pDelay->Seconds * 1000 + pDelay->Nanosec / 1000000;
-
-    if (pThreadImpl->m_ThreadId == tidCurrentThread)
-    {
-        pThreadImpl->m_Timeout = 0;
-        pThreadImpl->m_Flags |=  THREADIMPL_FLAGS_SLEEP;
-
-        DosExitCritSec();
-
-        rc = DosWaitEventSem(pThreadImpl->m_hEvent, millisecs);
-
-        DosEnterCritSec();
-
-        pThreadImpl->m_Flags &=  ~THREADIMPL_FLAGS_SLEEP;
-
-        DosExitCritSec();
-
-        return (rc == ERROR_TIMEOUT) ? osl_Thread_SleepNormal :
-                                       osl_Thread_SleepCancel;
-    }
-    else
-    {
-        pThreadImpl->m_Timeout = millisecs;
-        pThreadImpl->m_Flags |=  THREADIMPL_FLAGS_SLEEP;
-
-        DosExitCritSec();
-
-        return osl_Thread_SleepPending;
-    }
-}
-
-/*****************************************************************************/
-/* osl_awakeThread */
-/*****************************************************************************/
-sal_Bool SAL_CALL osl_awakeThread(oslThread Thread)
-{
-    osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
-
-    /* invalid arguments?*/
-    if (pThreadImpl==0 || pThreadImpl->m_ThreadId==-1)
-    {
-        /* assume thread is not running */
-        return sal_False;
-    }
-
-    DosEnterCritSec();
-
-    if (pThreadImpl->m_Flags & THREADIMPL_FLAGS_SLEEP)
-    {
-        DosPostEventSem(pThreadImpl->m_hEvent);
-
-        DosExitCritSec();
-        return sal_True;
-    }
-    else
-    {
-        DosExitCritSec();
-        return sal_True;
-    }
-}
-#endif // 0 YD
-
-/*****************************************************************************/
 /* osl_waitThread */
 /*****************************************************************************/
 void SAL_CALL osl_waitThread(const TimeValue* pDelay)
@@ -609,9 +511,9 @@ void SAL_CALL osl_terminateThread(oslThread Thread)
         return;
     }
 
-    DosEnterCritSec();
+    DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
     pThreadImpl->m_Flags |= THREADIMPL_FLAGS_TERMINATE;
-    DosExitCritSec();
+    DosReleaseMutexSem( MutexLock);
 }
 
 
@@ -637,13 +539,13 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread)
 
         DosWaitEventSem(pThreadImpl->m_hEvent, pThreadImpl->m_Timeout);
 
-        DosEnterCritSec();
+        DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
 
         pThreadImpl->m_Timeout = 0;
 
         pThreadImpl->m_Flags &= ~THREADIMPL_FLAGS_SLEEP;
 
-        DosExitCritSec();
+        DosReleaseMutexSem( MutexLock);
     }
 
     return ((pThreadImpl->m_Flags & THREADIMPL_FLAGS_TERMINATE) == 0);
@@ -659,7 +561,6 @@ void SAL_CALL osl_yieldThread()
 
 typedef struct _TLS
 {
-    //ULONG                         dwIndex;
     PULONG                          pulPtr;
     oslThreadKeyCallbackFunction    pfnCallback;
     struct _TLS                     *pNext, *pPrev;
@@ -671,7 +572,7 @@ static void AddKeyToList( PTLS pTls )
 {
     if ( pTls )
     {
-        DosEnterCritSec();
+        DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
 
         pTls->pNext = g_pThreadKeyList;
         pTls->pPrev = 0;
@@ -681,7 +582,7 @@ static void AddKeyToList( PTLS pTls )
 
         g_pThreadKeyList = pTls;
 
-        DosExitCritSec();
+        DosReleaseMutexSem( MutexLock);
     }
 }
 
@@ -689,7 +590,7 @@ static void RemoveKeyFromList( PTLS pTls )
 {
     if ( pTls )
     {
-        DosEnterCritSec();
+        DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
         if ( pTls->pPrev )
             pTls->pPrev->pNext = pTls->pNext;
         else
@@ -700,7 +601,7 @@ static void RemoveKeyFromList( PTLS pTls )
 
         if ( pTls->pNext )
             pTls->pNext->pPrev = pTls->pPrev;
-        DosExitCritSec();
+        DosReleaseMutexSem( MutexLock);
     }
 }
 
@@ -708,7 +609,7 @@ void SAL_CALL _osl_callThreadKeyCallbackOnThreadDetach(void)
 {
     PTLS    pTls;
 
-    DosEnterCritSec();
+    DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
     pTls = g_pThreadKeyList;
     while ( pTls )
     {
@@ -722,7 +623,7 @@ void SAL_CALL _osl_callThreadKeyCallbackOnThreadDetach(void)
 
         pTls = pTls->pNext;
     }
-    DosExitCritSec();
+    DosReleaseMutexSem( MutexLock);
 }
 
 /*****************************************************************************/
