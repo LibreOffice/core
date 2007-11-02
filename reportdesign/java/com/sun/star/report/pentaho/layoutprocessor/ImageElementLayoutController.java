@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageElementLayoutController.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:05 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 11:24:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ public class ImageElementLayoutController
       final int rowSpan = TextUtilities.parseInt
           ((String) tableCell.getAttribute(OfficeNamespaces.TABLE_NS, "number-rows-spanned"), 1);
       final int colSpan = TextUtilities.parseInt
-          ((String) tableCell.getAttribute(OfficeNamespaces.TABLE_NS, "number-cols-spanned"), 1);
+          ((String) tableCell.getAttribute(OfficeNamespaces.TABLE_NS, "number-columns-spanned"), 1);
       if (rowSpan < 1 || colSpan < 1)
       {
         Log.warn("Rowspan or colspan for image-size calculation was invalid.");
@@ -158,7 +158,7 @@ public class ImageElementLayoutController
       // we are now making the assumption, that the row is a section, that contains the table-cell.
       // This breaks the ability to return nodes or to construct reports on the fly, but the OO-report format
       // is weird anyway and wont support such advanced techniques for the next few centuries ..
-      final int columnPos = findNodeInSection(tableRow, tableCell);
+      final int columnPos = findNodeInSection(tableRow, tableCell,"covered-table-cell");
       if (columnPos == -1)
       {
         Log.warn("Table-Cell is not a direct child of the table-row. Unable to calculate the image-size.");
@@ -212,7 +212,7 @@ public class ImageElementLayoutController
       }
 
       // finally search the styles for the row now.
-      final int rowPos = findNodeInSection(table, tableRow);
+      final int rowPos = findNodeInSection(table, tableRow,null);
       if (rowPos == -1)
       {
         Log.warn("Table-Cell is not a direct child of the table-row. Unable to calculate the image-size.");
@@ -249,7 +249,8 @@ public class ImageElementLayoutController
   }
 
   private int findNodeInSection(final Section tableRow,
-                                final Element tableCell)
+                                final Element tableCell,
+                                final String secondType)
   {
     int retval = 0;
     final Node[] nodes = tableRow.getNodeArray();
@@ -264,7 +265,8 @@ public class ImageElementLayoutController
       }
       final Element child = (Element) node;
       if (ObjectUtilities.equal(child.getNamespace(), namespace) == false ||
-          ObjectUtilities.equal(child.getType(), type) == false)
+          (ObjectUtilities.equal(child.getType(), type) == false
+              && (secondType == null || ObjectUtilities.equal(child.getType(), secondType) == false)) )
       {
         continue;
       }

@@ -22,11 +22,11 @@ table|table-cell {
   display: table-cell;
 }
 
-table|table-cell[number-cols-spanned],
-table|table-cell[number-cols-spanned],
-table|table-columns[number-cols-spanned],
-table|table-column[number-cols-spanned] {
-  -x-liblayout-colspan: attr("table|number-cols-spanned");
+table|table-cell[number-columns-spanned],
+table|table-cell[number-columns-spanned],
+table|table-columns[number-columns-spanned],
+table|table-column[number-columns-spanned] {
+  -x-liblayout-colspan: attr("table|number-columns-spanned");
 }
 
 table|table-cell[number-rows-spanned],
