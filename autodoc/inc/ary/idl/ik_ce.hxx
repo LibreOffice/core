@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ik_ce.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:48:55 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:13:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #ifndef ARY_IDL_IK_CE_HXX
 #define ARY_IDL_IK_CE_HXX
+//  KORR_DEPRECATED_3.0
 
 
 
@@ -42,7 +43,7 @@
     // BASE CLASSES
     // COMPONENTS
     // PARAMETERS
-#include <ary/idl/i_language.hxx>
+#include <ary/idl/i_types4idl.hxx>
 #include <ary/stdconstiter.hxx>
 
 namespace ary
