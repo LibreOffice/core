@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pm_base.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:56:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ class SpecializedPageMaker
                             PageDisplay &       io_rPage );
 
     OuputPage_Environment &
-                        Env()                   { return *pEnv; }
+                        Env() const             { return *pEnv; }
     csi::xml::Element & CurOut();
     PageDisplay &       Page()                  { return *pPage; }
 
