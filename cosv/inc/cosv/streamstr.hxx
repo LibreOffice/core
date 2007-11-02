@@ -4,9 +4,9 @@
  *
  *  $RCSfile: streamstr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:57:51 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:39:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,29 +36,25 @@
 #ifndef CSV_STREAMSTR_HXX
 #define CSV_STREAMSTR_HXX
 
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <cosv/bstream.hxx>
-    // COMPONENTS
+// USED SERVICES
 #include <cosv/str_types.hxx>
-    // PARAMETERS
 #include <string.h>
+
 
 
 
 namespace csv
 {
+    class String;
 
-class String;
 
 void c_str();   // Dummy needed for StreamStr::operator<<(StreamStr::F_CSTR);
 
 
-
 /** A string buffer class for all kinds of string manipulation.
 */
-
 class StreamStr : public bostream
 {
    public:
@@ -103,6 +99,8 @@ class StreamStr : public bostream
                             const char *        str1,   // [!= 0]
                             const char *        str2,   // [!= 0]
                             ...                 );      // Has to end with NIL .
+                        StreamStr(
+                            csv::bstream &      i_source );
     /// Copies also insert_mode and current position.
                         StreamStr(
                             const self &        i_rOther );
@@ -165,6 +163,8 @@ class StreamStr : public bostream
                             size_type           i_nMinimumCapacity );
 
     void                clear();
+    void                swap(
+                            StreamStr &         io_swap );
 
     /** Sets start point for the next operator<<() call.
         if the intended position is not reachable, nothing happens.
@@ -229,6 +229,13 @@ class StreamStr : public bostream
     void                strip_back_whitespace();
     void                strip_frontback_whitespace();
 
+    /** @precond i_begin is valid
+        @precond i_end is valid
+        @precond i_end >= i_begin
+    */
+    void                remove(
+                            iterator            i_begin,
+                            iterator            i_end );
     void                replace(
                             position_type       i_nStart,
                             size_type           i_nSize,
@@ -315,6 +322,19 @@ class StreamStrLock
     StreamStr *         pStr;
 };
 
+/** Splits a string into tokens by whitespace.
+
+    The tokens are added to the end of o_list.
+*/
+void                Split(
+                        std::vector<String> &
+                                            o_list,
+                        const char *        i_text );
+inline void         Join(
+                        StreamStr &         o_text,
+                        std::vector<String> &
+                                            i_list,
+                        const char *        i_sLink = " ");
 
 // IMPLEMENTATION
 
@@ -364,11 +384,16 @@ inline StreamStr::iterator
 StreamStr::end()
     { return pEnd; }
 
+inline void
+Join( StreamStr &           o_text,
+      std::vector<String> & i_list,
+      const char *          i_sLink )
+{
+    o_text.operator_join(i_list.begin(),i_list.end(),i_sLink);
+}
+
+
+
 
 }   // namespace csv
-
-
-
-
 #endif
-
