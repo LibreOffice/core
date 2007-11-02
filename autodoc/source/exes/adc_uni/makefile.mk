@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:16:56 $
+#   last change: $Author: hr $ $Date: 2007-11-02 16:44:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,13 +67,13 @@ LIB1TARGET=$(LB)$/atdoc.lib
 LIB1FILES= \
             $(LB)$/$(TARGET).lib $(LB)$/autodoc_tools.lib \
             $(LB)$/ary_kernel.lib $(LB)$/ary_cpp.lib $(LB)$/ary_idl.lib  \
-            $(LB)$/ary_info.lib $(LB)$/ary_loc.lib $(LB)$/ary_store.lib \
+            $(LB)$/ary_info.lib $(LB)$/ary_loc.lib \
             $(LB)$/parser_kernel.lib $(LB)$/parser_tokens.lib $(LB)$/parser_semantic.lib \
             $(LB)$/parser_cpp.lib $(LB)$/parser_adoc.lib \
             $(LB)$/display_kernel.lib $(LB)$/display_html.lib $(LB)$/display_idl.lib \
             $(LB)$/display_toolkit.lib $(LB)$/parser2_tokens.lib  \
             $(LB)$/parser2_s2_luidl.lib $(LB)$/parser2_s2_dsapi.lib \
-            $(LB)$/ary2_cinfo.lib
+            $(LB)$/ary2_cinfo.lib $(LB)$/ary_doc.lib
 
 
 
@@ -97,13 +97,13 @@ DEPOBJFILES += $(APP1OBJS)
 
 APP1DEPN=   $(LB)$/$(TARGET).lib $(LB)$/autodoc_tools.lib \
             $(LB)$/ary_kernel.lib $(LB)$/ary_cpp.lib $(LB)$/ary_idl.lib  \
-            $(LB)$/ary_info.lib $(LB)$/ary_loc.lib $(LB)$/ary_store.lib \
+            $(LB)$/ary_info.lib $(LB)$/ary_loc.lib \
             $(LB)$/parser_kernel.lib $(LB)$/parser_tokens.lib $(LB)$/parser_semantic.lib \
             $(LB)$/parser_cpp.lib $(LB)$/parser_adoc.lib \
             $(LB)$/display_kernel.lib $(LB)$/display_html.lib $(LB)$/display_idl.lib \
             $(LB)$/display_toolkit.lib $(LB)$/parser2_tokens.lib  \
             $(LB)$/parser2_s2_luidl.lib $(LB)$/parser2_s2_dsapi.lib \
-            $(LB)$/ary2_cinfo.lib
+            $(LB)$/ary2_cinfo.lib $(LB)$/ary_doc.lib
 
 
 .INCLUDE :  target.mk
