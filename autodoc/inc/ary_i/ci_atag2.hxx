@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ci_atag2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:24:20 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:20:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 
 namespace ary
 {
-namespace info
+namespace inf
 {
 
 
@@ -71,7 +71,7 @@ class AtTag2
                         AtTag2(
                             const char *        i_sTitle)
                                                 :   sTitle(i_sTitle) {}
-    udmstri             sTitle;
+    String              sTitle;
     DocuTex2            aText;
 };
 
@@ -79,7 +79,7 @@ class AtTag2
 
 // IMPLEMENTATION
 
-}   // namespace info
+}   // namespace inf
 }   // namespace ary
 
 
