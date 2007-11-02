@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:55:52 $
+#   last change: $Author: hr $ $Date: 2007-11-02 13:16:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ USE_LDUMP2=TRUE
 
 
 # ------------------------------------------------------------------
-CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
+CDEFS += -DDLL_VERSION=$(EMQ)"$(UPD)$(DLLPOSTFIX)$(EMQ)"
 
 CXXFILES= \
                testregcpp.cxx	\
