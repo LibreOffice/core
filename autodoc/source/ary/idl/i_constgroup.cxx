@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_constgroup.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:31:50 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:43:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/idl/ihost_ce.hxx>
+#include <cosv/tpl/processor.hxx>
 #include <sci_impl.hxx>
 
 
@@ -62,13 +62,13 @@ ConstantsGroup::~ConstantsGroup()
 }
 
 void
-ConstantsGroup::do_Visit_CeHost( CeHost & o_rHost ) const
+ConstantsGroup::do_Accept( csv::ProcessorIfc & io_processor ) const
 {
-    o_rHost.Do_ConstantsGroup(*this);
+    csv::CheckedCall(io_processor, *this);
 }
 
-RCid
-ConstantsGroup::inq_ClassId() const
+ClassId
+ConstantsGroup::get_AryClass() const
 {
     return class_id;
 }
@@ -104,7 +104,7 @@ namespace ifc_constgroup
 inline const ConstantsGroup &
 constgroup_cast( const CodeEntity & i_ce )
 {
-    csv_assert( i_ce.ClassId() == ConstantsGroup::class_id );
+    csv_assert( i_ce.AryClass() == ConstantsGroup::class_id );
     return static_cast< const ConstantsGroup& >(i_ce);
 }
 

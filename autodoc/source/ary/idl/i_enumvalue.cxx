@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_enumvalue.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:32:20 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:44:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/idl/ihost_ce.hxx>
+#include <cosv/tpl/processor.hxx>
 #include <ary/idl/ik_enumvalue.hxx>
 
 
@@ -63,13 +63,13 @@ EnumValue::~EnumValue()
 }
 
 void
-EnumValue::do_Visit_CeHost( CeHost & o_rHost ) const
+EnumValue::do_Accept( csv::ProcessorIfc & io_processor ) const
 {
-    o_rHost.Do_EnumValue(*this);
+    csv::CheckedCall(io_processor, *this);
 }
 
-RCid
-EnumValue::inq_ClassId() const
+ClassId
+EnumValue::get_AryClass() const
 {
     return class_id;
 }
@@ -106,7 +106,7 @@ namespace ifc_enumvalue
 inline const EnumValue &
 enumvalue_cast( const CodeEntity &  i_ce )
 {
-    csv_assert( i_ce.ClassId() == EnumValue::class_id );
+    csv_assert( i_ce.AryClass() == EnumValue::class_id );
     return static_cast< const EnumValue& >(i_ce);
 }
 

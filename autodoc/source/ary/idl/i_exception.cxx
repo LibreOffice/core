@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_exception.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:32:34 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:44:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,11 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/idl/ihost_ce.hxx>
+#include <cosv/tpl/processor.hxx>
 #include <sci_impl.hxx>
-#include "ipi_2s.hxx"
+#include "i2s_calculator.hxx"
+
+
 
 namespace ary
 {
@@ -63,15 +65,13 @@ Exception::~Exception()
 }
 
 void
-Exception::do_Visit_CeHost( CeHost & o_rHost ) const
+Exception::do_Accept( csv::ProcessorIfc & io_processor ) const
 {
-    SCI_Vector<Ce_id>
-        itElements(aElements);
-    o_rHost.Do_Exception(*this);
+    csv::CheckedCall(io_processor, *this);
 }
 
-RCid
-Exception::inq_ClassId() const
+ClassId
+Exception::get_AryClass() const
 {
     return class_id;
 }
@@ -107,7 +107,7 @@ namespace ifc_exception
 inline const Exception &
 exception_cast( const CodeEntity &  i_ce )
 {
-    csv_assert( i_ce.ClassId() == Exception::class_id );
+    csv_assert( i_ce.AryClass() == Exception::class_id );
     return static_cast< const Exception& >(i_ce);
 }
 

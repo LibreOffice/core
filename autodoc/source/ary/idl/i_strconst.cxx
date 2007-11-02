@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_strconst.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:35:31 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:48:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #include <precomp.h>
-
+#include "i_strconst.hxx"
 
 // NOT FULLY DECLARED SERVICES
 
@@ -75,7 +75,3 @@ SequenceEnd()
 }   // namespace strconst
 }   // namespace idl
 }   // namespace ary
-
-
-
-

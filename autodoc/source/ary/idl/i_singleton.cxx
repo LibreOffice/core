@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_singleton.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:34:49 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:47:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/idl/ihost_ce.hxx>
+#include <cosv/tpl/processor.hxx>
 #include <ary/idl/ik_singleton.hxx>
 #include <sci_impl.hxx>
 
@@ -61,13 +61,13 @@ Singleton::~Singleton()
 }
 
 void
-Singleton::do_Visit_CeHost( CeHost & o_rHost ) const
+Singleton::do_Accept( csv::ProcessorIfc & io_processor ) const
 {
-    o_rHost.Do_Singleton(*this);
+    csv::CheckedCall(io_processor, *this);
 }
 
-RCid
-Singleton::inq_ClassId() const
+ClassId
+Singleton::get_AryClass() const
 {
     return class_id;
 }
@@ -103,7 +103,7 @@ namespace ifc_singleton
 inline const Singleton &
 singleton_cast( const CodeEntity &  i_ce )
 {
-    csv_assert( i_ce.ClassId() == Singleton::class_id );
+    csv_assert( i_ce.AryClass() == Singleton::class_id );
     return static_cast< const Singleton& >(i_ce);
 }
 
@@ -118,4 +118,3 @@ attr::AssociatedService( const CodeEntity & i_ce )
 
 }   //  namespace   idl
 }   //  namespace   ary
-

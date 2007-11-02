@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_structelem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:36:01 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/idl/ihost_ce.hxx>
+#include <cosv/tpl/processor.hxx>
 #include <sci_impl.hxx>
 
 
@@ -65,13 +65,13 @@ StructElement::~StructElement()
 }
 
 void
-StructElement::do_Visit_CeHost( CeHost & o_rHost ) const
+StructElement::do_Accept( csv::ProcessorIfc & io_processor ) const
 {
-    o_rHost.Do_StructElement(*this);
+    csv::CheckedCall(io_processor, *this);
 }
 
-RCid
-StructElement::inq_ClassId() const
+ClassId
+StructElement::get_AryClass() const
 {
     return class_id;
 }
@@ -107,7 +107,7 @@ namespace ifc_structelement
 inline const StructElement &
 selem_cast( const CodeEntity &  i_ce )
 {
-    csv_assert( i_ce.ClassId() == StructElement::class_id );
+    csv_assert( i_ce.AryClass() == StructElement::class_id );
     return static_cast< const StructElement& >(i_ce);
 }
 
