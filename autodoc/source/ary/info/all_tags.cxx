@@ -4,9 +4,9 @@
  *
  *  $RCSfile: all_tags.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:40:26 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ StdTag::Add_SpecialMeaningToken( const char *   ,
 {
     // Does nothing
 
-    // KORR
+    // KORR_FUTURE
     //   Should be a logical exception:
     // csv_assert(false);
     return false;
@@ -318,7 +318,7 @@ ParameterTag::Add_SpecialMeaningToken( const char *     i_sText,
         uintt nLen = strlen(i_sText);
         if (*i_sText == '[' AND i_sText[nLen-1] == ']')
         {
-            sValidRange = udmstri(i_sText+1, nLen-2);
+            sValidRange = String(i_sText+1, nLen-2);
             return true;
         }
     }
