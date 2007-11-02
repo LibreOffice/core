@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 09:51:51 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
  *   - check size/use of oslFileHandle
  ***********************************************************************/
 
+#define INCL_DOSDEVIOCTL                        // OS2 device definitions
 
 #ifndef __OSL_SYSTEM_H__
 #include "system.h"
@@ -98,8 +99,6 @@
 #ifndef _WCHAR_H_
 #include <wchar.h>
 #endif
-
-#include "lvm/lvm_intr.h"
 
 #if OSL_DEBUG_LEVEL > 1
     extern void debug_ustring(rtl_uString*);
@@ -1292,12 +1291,142 @@ oslFileError osl_removeFile( rtl_uString* ustrFileURL )
 /*  osl_getVolumeInformation */
 /****************************************************************************/
 
+#define TXFSDC_BLOCKR         0x00              // block device removable
+#define TXFSDC_GETBPB         0x00              // get device bpb info
+#define TXFSBPB_REMOVABLE     0x08              // BPB attribute for removable
+
+typedef struct drivecmd
+{
+   BYTE                cmd;                     // 0=unlock 1=lock 2=eject
+   BYTE                drv;                     // 0=A, 1=B 2=C ...
+} DRIVECMD;                                     // end of struct "drivecmd"
+
+#pragma pack(push, 1)                           // byte packing
+typedef struct txfs_ebpb                        // ext. boot parameter block
+{                                               // at offset 0x0b in bootsector
+   USHORT              SectSize;                // 0B bytes per sector
+   BYTE                ClustSize;               // 0D sectors per cluster
+   USHORT              FatOffset;               // 0E sectors to 1st FAT
+   BYTE                NrOfFats;                // 10 nr of FATS     (FAT only)
+   USHORT              RootEntries;             // 11 Max entries \ (FAT only)
+   USHORT              Sectors;                 // 13 nr of sectors if <  64K
+   BYTE                MediaType;               // 15 mediatype (F8 for HD)
+   USHORT              FatSectors;              // 16 sectors/FAT (FAT only)
+   USHORT              LogGeoSect;              // 18 sectors/Track
+   USHORT              LogGeoHead;              // 1a nr of heads
+   ULONG               HiddenSectors;           // 1c sector-offset from MBR/EBR
+   ULONG               BigSectors;              // 20 nr of sectors if >= 64K
+} TXFS_EBPB;                                    // last byte is at offset 0x23
+
+typedef struct drivebpb
+{
+   TXFS_EBPB           ebpb;                    // extended BPB
+   BYTE                reserved[6];
+   USHORT              cyls;
+   BYTE                type;
+   USHORT              attributes;              // device attributes
+   BYTE                fill[6];                 // documented for IOCtl
+} DRIVEBPB;                                     // end of struct "drivebpb"
+#pragma pack(pop)
+
+/*****************************************************************************/
+// Determine attached fstype, e.g. HPFS for specified drive
+/*****************************************************************************/
+BOOL TxFsType                                   // RET   FS type resolved
+(
+   char               *drive,                   // IN    Drive specification
+   char               *fstype,                  // OUT   Attached FS type
+   char               *details                  // OUT   details (UNC) or NULL
+)
+{
+   BOOL                rc = FALSE;
+   FSQBUFFER2         *fsinfo;                     // Attached FS info
+   ULONG               fsdlen = 2048;              // Fs info data length
+
+   strcpy(fstype, "none");
+   if (details)
+   {
+      strcpy(details, "");
+   }
+   if ((fsinfo = (FSQBUFFER2*)calloc(1, fsdlen)) != NULL)
+   {
+      if (DosQFSAttach((PCSZ)drive, 0, 1, fsinfo, &fsdlen) == NO_ERROR)
+      {
+         strcpy(fstype, (char*) fsinfo->szName + fsinfo->cbName +1);
+         if (details && (fsinfo->cbFSAData != 0))
+         {
+            strcpy( details, (char*) fsinfo->szName + fsinfo->cbName +
+                                              fsinfo->cbFSDName +2);
+         }
+         rc = TRUE;
+      }
+      free(fsinfo);
+   }
+   return (rc);
+}                                               // end 'TxFsType'
+/*---------------------------------------------------------------------------*/
+
+
+/*****************************************************************************/
+// Determine if a driveletter represents a removable medium/device
+/*****************************************************************************/
+BOOL TxFsIsRemovable                            // RET   drive is removable
+(
+   char               *drive                    // IN    Driveletter to test
+)
+{
+   BOOL                rc = FALSE;
+   DRIVECMD            IOCtl;
+   DRIVEBPB            RemAt;
+   ULONG               DataLen;
+   ULONG               ParmLen;
+   BYTE                NoRem;
+
+   DosError( FERR_DISABLEHARDERR);              // avoid 'not ready' popups
+
+   ParmLen   = sizeof(IOCtl);
+   IOCtl.cmd = TXFSDC_BLOCKR;
+   IOCtl.drv = toupper(drive[0]) - 'A';
+   DataLen   = sizeof(NoRem);
+
+   if (DosDevIOCtl((HFILE) -1, IOCTL_DISK,
+                               DSK_BLOCKREMOVABLE,
+                               &IOCtl, ParmLen, &ParmLen,
+                               &NoRem, DataLen, &DataLen) == NO_ERROR)
+   {
+      if (NoRem)                                // non-removable sofar, check
+      {                                         // BPB as well (USB devices)
+         ParmLen   = sizeof(IOCtl);
+         IOCtl.cmd = TXFSDC_GETBPB;
+         IOCtl.drv = toupper(drive[0]) - 'A';
+         DataLen   = sizeof(RemAt);
+
+         if (DosDevIOCtl((HFILE) -1, IOCTL_DISK,
+                                     DSK_GETDEVICEPARAMS,
+                                     &IOCtl, ParmLen, &ParmLen,
+                                     &RemAt, DataLen, &DataLen) == NO_ERROR)
+
+         {
+            if (RemAt.attributes & TXFSBPB_REMOVABLE)
+            {
+               rc = TRUE;                       // removable, probably USB
+            }
+         }
+      }
+      else
+      {
+         rc = TRUE;                             // removable block device
+      }
+   }
+   DosError( FERR_ENABLEHARDERR);               // enable criterror handler
+   return (rc);
+}                                               // end 'TxFsIsRemovable'
+/*---------------------------------------------------------------------------*/
+
 static oslFileError get_drive_type(const char* path, oslVolumeInfo* pInfo)
 {
     char        Drive_Letter = toupper( *path);
-    CARDINAL32  Error_Code = 1;
-    Volume_Control_Array vca;
-    Volume_Information_Record volinfo;
+    char        fstype[ 64];
 
     pInfo->uValidFields |= osl_VolumeInfo_Mask_Attributes;
 
@@ -1311,67 +1440,28 @@ static oslFileError get_drive_type(const char* path, oslVolumeInfo* pInfo)
         return osl_File_E_None;
     }
 
-    // Open the LVM engine
-    Open_LVM_Engine( TRUE, &Error_Code );
-    if ( Error_Code != LVM_ENGINE_NO_ERROR ) {
-        // lvm engine cannot be opened, probably another instance using it
-        // since drive is existing, map to fixed disk
+    if (TxFsIsRemovable( (char*)path))
+        pInfo->uAttributes |= osl_Volume_Attribute_Removeable;
+
+    if (TxFsType( (char*)path, fstype, NULL) == FALSE) {
+        // query failed, assume fixed disk
         pInfo->uAttributes |= osl_Volume_Attribute_FixedDisk;
         return osl_File_E_None;
     }
 
-    // Get the array of volume handles
-    vca = Get_Volume_Control_Data( &Error_Code );
-    if ( Error_Code != LVM_ENGINE_NO_ERROR ) {
-        Close_LVM_Engine();
-        // lvm engine cannot be opened, probably another instance using it
-        // since drive is existing, map to fixed disk
+    //- Note, connected Win-NT drives use the REAL FS-name like NTFS!
+    if ((strncasecmp( fstype, "LAN", 3) == 0)           //- OS/2 LAN drives
+        || (strncasecmp( fstype, "REMOTE", 5) == 0)  )  //- NT disconnected
+        pInfo->uAttributes |= osl_Volume_Attribute_Remote;
+    else if (strncasecmp( fstype, "RAMFS", 5) == 0)
+        pInfo->uAttributes |= osl_Volume_Attribute_RAMDisk;
+    else if ((strncasecmp( fstype, "CD",  2) == 0)      // OS2:CDFS, DOS/WIN:CDROM
+        || (strncasecmp( fstype, "UDF", 3) == 0)   )    // OS2:UDF DVD's
+        pInfo->uAttributes |= osl_Volume_Attribute_CompactDisc | osl_Volume_Attribute_Removeable;
+    else
         pInfo->uAttributes |= osl_Volume_Attribute_FixedDisk;
-        return osl_File_E_None;
-    }
 
-    // get the volume information for each one
-    for ( int index = 0; index < vca.Count; index++ ) {
-        volinfo = Get_Volume_Information( vca.Volume_Control_Data[ index ].Volume_Handle,
-                                          &Error_Code);
-        // check if it is requested drive
-        if (Drive_Letter == volinfo.Current_Drive_Letter) {
-            // identify ram disk from file system name
-            if (!strcmp( volinfo.File_System_Name, "RAMFS"))
-                pInfo->uAttributes |= osl_Volume_Attribute_RAMDisk;
-            else
-                switch( vca.Volume_Control_Data[ index ].Device_Type ) {
-                case LVM_HARD_DRIVE:
-                    pInfo->uAttributes |= osl_Volume_Attribute_FixedDisk;
-                    break;
-                case LVM_PRM:
-                    pInfo->uAttributes |= osl_Volume_Attribute_Removeable;
-                    break;
-                case NON_LVM_CDROM:
-                    pInfo->uAttributes |= osl_Volume_Attribute_CompactDisc | osl_Volume_Attribute_Removeable;
-                    break;
-                case NETWORK_DRIVE:
-                    pInfo->uAttributes |= osl_Volume_Attribute_Remote;
-                    break;
-                default:
-                    // map unknown devices to fixed disks
-                    pInfo->uAttributes |= osl_Volume_Attribute_FixedDisk;
-                    break;
-                }
-            Free_Engine_Memory( vca.Volume_Control_Data );
-            Close_LVM_Engine();
-            return osl_File_E_None;
-        }
-    }
-
-    // no lvm info found
-    Free_Engine_Memory( vca.Volume_Control_Data );
-    Close_LVM_Engine();
-
-    // volume not found, remove flags
-    pInfo->uValidFields &= ~osl_VolumeInfo_Mask_Attributes;
-    pInfo->uAttributes = 0;
-    return osl_File_E_NOENT;
+    return osl_File_E_None;
 }
 
 //#############################################
