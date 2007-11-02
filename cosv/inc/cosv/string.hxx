@@ -4,9 +4,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:58:09 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:40:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,21 +36,19 @@
 #ifndef COSV_STRING_HXX
 #define COSV_STRING_HXX
 
-
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
 #include <cosv/stringdata.hxx>
 #include <cosv/str_types.hxx>
-    // PARAMETERS
 #include <string.h>
 #include <cosv/csv_ostream.hxx>
 #include <vector>
 
 
 
+
 namespace csv
 {
+
 
 /** The Simple String:
         It is used to just hold short to middle long texts as
@@ -183,7 +181,9 @@ class String
                             position_type       i_nStartPosition = 0,
                             size_type           i_nLength = str::maxsize ) const;
 
-//***********   Not yet implemented    *********************//
+    /** @param i_strToSearch [i_strToSearch != 0]
+        i_strToSearch == "" will return npos.
+    */
     position_type       find(
                             const char *        i_strToSearch,
                             position_type       i_nSearchStartPosition = 0 ) const;
@@ -191,6 +191,7 @@ class String
                             char                i_charToSearch,
                             position_type       i_nSearchStartPosition = 0 ) const;
 
+//***********   Not yet implemented    *********************//
     position_type       rfind(
                             const char *        i_strToSearch,
                             position_type       i_nSearchStartPosition = str::npos ) const;
@@ -221,7 +222,7 @@ class String
     {
                             S_Data();
         /// @precond i_nValidLength <= strlen(i_sData) or i_nValidLength == str::maxsize.
-                            S_Data(
+        explicit            S_Data(
                                 const char *        i_sData,
                                 size_type           i_nValidLength = str::maxsize );
                             ~S_Data();
@@ -272,12 +273,12 @@ int                 compare(
                         const String &          i_s1,
                         csv::str::position      i_nStartPosition1,
                         const char *            i_s2,
-                        csv::str::size          i_nLength = csv::str::maxsize );
+                        csv::str::size          i_nLength );
 int                 compare(
                         const char *            i_s1,
                         const String &          i_s2,
                         csv::str::position      i_nStartPosition2,
-                        csv::str::size          i_nLength = csv::str::maxsize );
+                        csv::str::size          i_nLength );
 inline int          compare(
                         const char *            i_s1,
                         const char *            i_s2,
@@ -305,20 +306,23 @@ int                 compare(
                         const String &          i_s1,
                         csv::str::position      i_nStartPosition1,
                         const char *            i_s2,
-                        csv::str::size          i_nLength2 = csv::str::maxsize );
+                        csv::str::size          i_nLength2 );
 int                 compare(
                         const CharOrder_Table & i_rOrder,
                         const char *            i_s1,
                         const String &          i_s2,
                         csv::str::position      i_nStartPosition2,
-                        csv::str::size          i_nLength = csv::str::maxsize );
+                        csv::str::size          i_nLength );
 int                 compare(
                         const CharOrder_Table & i_rOrder,
                         const char *            i_s1,
                         const char *            i_s2,
                         csv::str::size          i_nLength );
 
+
 }   // namespace csv
+
+
 
 
 //******************    global comparation operators   *********************//
@@ -370,11 +374,12 @@ operator<<( csv::ostream &        o_rOut,
             const csv::String &   i_rSrc );
 
 
+
+
 // IMPLEMENTATION
-
-
 namespace csv
 {
+
 
 inline const StringData<char> &
 String::Str() const
@@ -564,16 +569,19 @@ operator<<( csv::ostream &        o_rOut,
     { o_rOut << i_rSrc.c_str(); return o_rOut; }
 
 
-//******************    typedefs   *********************//
 
+
+
+//******************    typedefs   *********************//
 
 namespace csv
 {
+
 typedef std::vector<String>   StringVector;
+
 }
 
 
 
+
 #endif
-
-
