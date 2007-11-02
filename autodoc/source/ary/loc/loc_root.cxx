@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loc_root.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:46:02 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:16:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,15 +46,46 @@ namespace loc
 {
 
 
-LocationRoot::LocationRoot( Lid                     i_nId,
-                            const csv::ploc::Path & i_rRootDirectoryPath )
-    :   Directory(i_nId),
-        aRootDirectoryPath(i_rRootDirectoryPath)
+Root::Root(const csv::ploc::Path & i_path)
+    :   aPath(i_path),
+        sPathAsString(),
+        aMyDirectory(0)
 {
+    StreamLock
+        path_string(700);
+    path_string() << i_path;
+    sPathAsString = path_string().c_str();
+}
+
+Root::~Root()
+{
+}
+
+void
+Root::do_Accept(csv::ProcessorIfc & io_processor) const
+{
+    csv::CheckedCall(io_processor,*this);
+}
+
+ClassId
+Root::get_AryClass() const
+{
+    return class_id;
+}
+
+const String &
+Root::inq_LocalName() const
+{
+    return sPathAsString;
+}
+
+Le_id
+Root::inq_ParentDirectory() const
+{
+    return Le_id::Null_();
 }
 
 
 
 } // namespace loc
 } // namespace ary
-

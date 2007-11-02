@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loc_file.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:45:48 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:16:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,19 +46,29 @@ namespace ary
 namespace loc
 {
 
-
-SourceCodeFile::SourceCodeFile( Lid                 i_nId,
-                                Lid                 i_nRoot,
-                                Lid                 i_nDirectory,
-                                const udmstri &     i_sName )
-    :   nId(i_nId),
-        nRoot(i_nRoot),
-        nDirectory(i_nDirectory),
-        sName(i_sName)
+File::File( const String  &     i_sLocalName,
+            Le_id               i_nParentDirectory )
+    :   FileBase(i_sLocalName, i_nParentDirectory)
 {
 }
+
+File::~File()
+{
+}
+
+void
+File::do_Accept(csv::ProcessorIfc & io_processor) const
+{
+    csv::CheckedCall(io_processor, *this);
+}
+
+ClassId
+File::get_AryClass() const
+{
+    return class_id;
+}
+
 
 
 } // namespace loc
 } // namespace ary
-
