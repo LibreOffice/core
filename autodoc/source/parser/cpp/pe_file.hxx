@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_file.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:04:14 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:55:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
     // BASE CLASSES
 #include "cpp_pe.hxx"
     // COMPONENTS
-#include <ary/ids.hxx>
 #include <semantic/callf.hxx>
 #include <semantic/sub_peu.hxx>
     // PARAMETERS
@@ -85,7 +84,7 @@ class PE_File : public Cpp_PE
                             const cpp::Token &  i_rTok );
     virtual Cpp_PE *    Handle_ChildFailure();
 
-    ary::cpp::RwGate &  AryGate() const;
+    ary::cpp::Gate &    AryGate() const;
 
   private:
     typedef SubPe< PE_File, PE_Namespace>   SP_Namespace;
