@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_dealer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:08:58 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:47:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,11 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/cpp/c_rwgate.hxx>
-#include <ary/cpp/crwg_grp.hxx>
-#include <ary/cpp/cg_proj.hxx>
-#include <ary/loc/l_rwgate.hxx>
+#include <ary/cpp/c_gate.hxx>
+#include <ary/loc/locp_le.hxx>
 #include <ary/loc/loc_root.hxx>
 #include <ary/loc/loc_file.hxx>
-#include <ary/docu.hxx>
+//#include <ary/docu.hxx>
 #include <adoc/a_rdocu.hxx>
 #include "all_toks.hxx"
 #include "c_rcode.hxx"
@@ -52,17 +50,10 @@
 
 namespace ary
 {
-    namespace cpp
-    {
-        class ProjectGroup;
-    }
-
-    namespace loc
-    {
-        class LocationRoot;
-    }
-
-    class Documentation;
+namespace loc
+{
+    class Root;
+}
 }
 
 
@@ -71,10 +62,10 @@ namespace ary
 namespace cpp
 {
 
-Distributor::Distributor( ary::cpp::RwGate & io_rAryGate )
-    :   // aCppPreProcessor,
+Distributor::Distributor( ary::cpp::Gate & io_rAryGate )
+    :   aCppPreProcessor(),
         aCodeExplorer(io_rAryGate),
-        // aDocuExplorer,
+        aDocuExplorer(),
         pGate(&io_rAryGate),
         pFileEventHandler(0),
         pDocuDistributor(0)
@@ -95,33 +86,23 @@ Distributor::~Distributor()
 }
 
 void
-Distributor::StartNewProject( const udmstri &           i_sProjectName,
-                              const csv::ploc::Path &   i_rProjectRootDirectory )
+Distributor::StartNewFile( const csv::ploc::Path & i_file )
 {
-    ary::loc::LocationRoot & rRoot
-            = pGate->Locations().CheckIn_Root( i_rProjectRootDirectory );
-    ary::cpp::ProjectGroup & rProject
-            = pGate->Groups().CheckIn_ProjectGroup( i_sProjectName, rRoot.Id() );
-    pFileEventHandler->SetCurProject(rProject);
-}
-
-
-
-void
-Distributor::StartNewFile( const udmstri &                      i_sFileName,
-                           const csv::ploc::DirectoryChain &    i_rFileSubPath )
-{
-    ary::loc::SourceCodeFile & rFile
-            = pGate->Locations().CheckIn_File(
-                                        i_sFileName,
-                                        i_rFileSubPath,
-                                        pFileEventHandler->CurProject().RootDir() );
-    ary::cpp::FileGroup & rCurFile
-            = pGate->Groups().CheckIn_FileGroup(
-                                    rFile.Id(),
-                                    pFileEventHandler->CurProject().Id_Group(),
-                                    i_sFileName );
-    pFileEventHandler->SetCurFile(rCurFile, i_sFileName);
+    const csv::ploc::Root &
+        root_dir = i_file.RootDir();
+    StreamLock
+        sl(700);
+    root_dir.Get(sl());
+    csv::ploc::Path
+        root_path( sl().c_str(), true );
+    ary::loc::Le_id
+        root_id = pGate->Locations().CheckIn_Root(root_path).LeId();
+    ary::loc::File &
+        rFile = pGate->Locations().CheckIn_File(
+                                        i_file.File(),
+                                        i_file.DirChain(),
+                                        root_id  );
+    pFileEventHandler->SetCurFile(rFile);
 
     aCodeExplorer.StartNewFile();
 

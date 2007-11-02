@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precomp.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:44:27 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:45:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,17 +32,13 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef __ADC_PRECOMP_H_06071998__
-#define __ADC_PRECOMP_H_06071998__
+#ifndef ADC_PRECOMP_H_06071998
+#define ADC_PRECOMP_H_06071998
 
 
 // For en/disabling csv_assertions:
 #ifndef DEBUG
 #define CSV_NO_ASSERTIONS
-#endif
-
-#ifdef _MSC_VER
-#pragma warning( disable : 4786 )
 #endif
 
 #include <cosv/csv_precomp.h>
@@ -57,33 +53,15 @@
 using csv::String;
 using csv::StringVector;
 using csv::StreamStr;
-using csv::ios;
-using csv::ostream;
 using csv::c_str;
 typedef csv::StreamStrLock  StreamLock;
 
 
 
-// As long, as appearances of udmstri are not changed yet:
-typedef String udmstri;
-
-
-/** @attention
-    Has to be changed to returning csv::Cout(),if
-        1)  iostreams are not used ( #ifdef CSV_NO_IOSTREAM )
-        2)  used for an GUI-application.
-*/
-inline ostream &
+inline std::ostream &
 Cout() { return std::cout; }
-
-/** @attention
-    Has to be changed to returning csv::Cerr(),if
-        1)  iostreams are not used ( #ifdef CSV_NO_IOSTREAM )
-        2)  used for an GUI-application.
-*/
-inline ostream &
+inline std::ostream &
 Cerr() { return std::cerr; }
-
 
 inline csv::F_FLUSHING_FUNC
 Endl()  { return csv::Endl; }
@@ -91,6 +69,6 @@ inline csv::F_FLUSHING_FUNC
 Flush() { return csv::Flush; }
 
 
+
+
 #endif
-
-
