@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mutex.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 09:48:14 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:31:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,21 +33,16 @@
  *
  ************************************************************************/
 
+#include <sys/fmutex.h>
+
 #include "system.h"
 
 #include <osl/mutex.h>
 #include <osl/diagnose.h>
 
 /*
-#include <windows.h>
-#include <winbase.h>
-#include <malloc.h>
-*/
-
-/*
     Implementation notes:
-    The void* hidden by oslMutex points to a WIN32
-    CRITICAL_SECTION structure.
+    The void* hidden by oslMutex points to an OS/2 mutex semaphore.
 */
 typedef struct _oslMutexImpl {
     HMTX                m_Mutex;
@@ -55,6 +50,9 @@ typedef struct _oslMutexImpl {
     ULONG               m_Owner;
     ULONG               m_Requests;
 } oslMutexImpl;
+
+// static mutex to control access to private members of oslMutexImpl
+static HMTX MutexLock = 0;
 
 /*****************************************************************************/
 /* osl_createMutex */
@@ -70,15 +68,15 @@ oslMutex SAL_CALL osl_createMutex()
 
     /* create semaphore */
     rc = DosCreateMutexSem( NULL, &pMutexImpl->m_Mutex, 0, FALSE );
-//printf( "osl_createMutex pid %d(0x%04x), tid %d\n", getpid(), getpid(), _gettid());
-//printf( "&pMutexImpl->m_Mutex %08x\n", &pMutexImpl->m_Mutex);
-//printf( "pMutexImpl->m_Mutex %d\n", pMutexImpl->m_Mutex);
-//printf( "DosCreateMutexSem rc=%d\n", rc);
-    if( rc != NO_ERROR )
+    if( rc != 0 )
     {
         free(pMutexImpl);
         return NULL;
     }
+
+    // create static mutex for private members
+    if (MutexLock == 0)
+        DosCreateMutexSem( NULL, &MutexLock, 0, FALSE );
 
     return (oslMutex)pMutexImpl;
 }
@@ -91,8 +89,6 @@ void SAL_CALL osl_destroyMutex(oslMutex Mutex)
     oslMutexImpl *pMutexImpl = (oslMutexImpl *)Mutex;
     if (pMutexImpl)
     {
-//printf( "osl_destroyMutex pid %d(0x%04x), tid %d\n", getpid(), getpid(), _gettid());
-//printf( "pMutexImpl->m_Mutex %d\n", pMutexImpl->m_Mutex);
         DosCloseMutexSem( pMutexImpl->m_Mutex);
         free(pMutexImpl);
     }
@@ -104,25 +100,22 @@ void SAL_CALL osl_destroyMutex(oslMutex Mutex)
 sal_Bool SAL_CALL osl_acquireMutex(oslMutex Mutex)
 {
     oslMutexImpl *pMutexImpl = (oslMutexImpl *)Mutex;
-    APIRET rc;
+    APIRET rc = 0;
     OSL_ASSERT(Mutex);
 
-//printf( "osl_acquireMutex pid %d(0x%04x), tid %d\n", getpid(), getpid(), _gettid());
-//printf( "pMutexImpl->m_Mutex %d\n", pMutexImpl->m_Mutex);
-
-    DosEnterCritSec();
+    DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
     pMutexImpl->m_Requests++;
-    DosExitCritSec();
+    DosReleaseMutexSem( MutexLock);
 
     rc = DosRequestMutexSem( pMutexImpl->m_Mutex, SEM_INDEFINITE_WAIT );
 
-    DosEnterCritSec();
+    DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
     pMutexImpl->m_Requests--;
     if (pMutexImpl->m_Locks++ == 0)
         pMutexImpl->m_Owner = _gettid();
-    DosExitCritSec();
+    DosReleaseMutexSem( MutexLock);
 
-    return( rc == NO_ERROR );
+    return( rc == 0 );
 }
 
 /*****************************************************************************/
@@ -132,16 +125,15 @@ sal_Bool SAL_CALL osl_tryToAcquireMutex(oslMutex Mutex)
 {
     sal_Bool     ret = sal_False;
     oslMutexImpl *pMutexImpl = (oslMutexImpl *)Mutex;
-
     OSL_ASSERT(Mutex);
 
-    DosEnterCritSec();
+    DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
 
     if ( ((pMutexImpl->m_Requests == 0) && (pMutexImpl->m_Locks == 0)) ||
          (pMutexImpl->m_Owner == _gettid()) )
         ret = osl_acquireMutex(Mutex);
 
-    DosExitCritSec();
+    DosReleaseMutexSem( MutexLock);
 
     return ret;
 }
@@ -153,19 +145,18 @@ sal_Bool SAL_CALL osl_releaseMutex(oslMutex Mutex)
 {
     oslMutexImpl *pMutexImpl = (oslMutexImpl *)Mutex;
     APIRET rc;
-
     OSL_ASSERT(Mutex);
 
-    DosEnterCritSec();
+    DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
 
     if (--(pMutexImpl->m_Locks) == 0)
         pMutexImpl->m_Owner = 0;
 
-    DosExitCritSec();
+    DosReleaseMutexSem( MutexLock);
 
     rc = DosReleaseMutexSem( pMutexImpl->m_Mutex);
 
-    return( rc == NO_ERROR );
+    return sal_True;
 }
 
 
