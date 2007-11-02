@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comdep.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:10:23 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:01:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,8 @@
 #include "unx.hxx"
 #elif defined WNT
 #include "wntmsc.hxx"
+#elif defined OS2
+#include "os2.hxx"
 #endif
 
 //--------------------------------------------------------------------
@@ -98,7 +100,7 @@ struct DirReader_Impl
 
                     // nur den String der Memer-Var nehmen!
 
-#ifdef UNX  //for further exlpanation see DirReader_Impl::Read() in unx.cxx
+#if defined(UNX) || defined(OS2) //for further exlpanation see DirReader_Impl::Read() in unx.cxx
                     pDosDir = NULL;
 #else
                     aBypass = ByteString(aPath, osl_getThreadTextEncoding());
@@ -150,7 +152,7 @@ struct FileCopier_Impl
 
 //--------------------------------------------------------------------
 
-#if defined WNT
+#if defined WNT || defined OS2
 BOOL IsRedirectable_Impl( const ByteString &rPath );
 #else
 #define IsRedirectable_Impl( rPath )    TRUE
