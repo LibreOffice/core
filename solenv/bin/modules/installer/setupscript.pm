@@ -4,9 +4,9 @@
 #
 #   $RCSfile: setupscript.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 15:26:56 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:55:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -434,6 +434,22 @@ sub add_installationobject_to_variables
 
             $allvariables->{$key} = $value; # overwrite existing values from zip.lst
         }
+    }
+}
+
+#####################################################################################
+# Adding all variables, that must be defined, but are not defined until now.
+# List of this varibles: @installer::globals::forced_properties
+#####################################################################################
+
+sub add_forced_properties
+{
+    my ($allvariables) = @_;
+
+    my $property;
+    foreach $property ( @installer::globals::forced_properties )
+    {
+        if ( ! exists($allvariables->{$property}) ) { $allvariables->{$property} = ""; }
     }
 }
 
