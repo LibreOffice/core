@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagemake.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:53:46 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:30:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,13 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <ary/cpp/c_disply.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_namesp.hxx>
 #include <ary/cpp/c_class.hxx>
 #include <ary/cpp/c_enum.hxx>
 #include <ary/cpp/c_tydef.hxx>
-#include <ary/cpp/cg_file.hxx>
+#include <ary/cpp/cp_ce.hxx>
+#include <ary/loc/loc_file.hxx>
 #include <display/corframe.hxx>
 #include "hd_chlst.hxx"
 #include "hd_docu.hxx"
@@ -142,7 +143,7 @@ PageDisplay::Create_NamespaceFile()
     csv_assert( Env().CurNamespace() != 0 );
     Env().SetFile_CurNamespace();
     File().SetLocation( Env().CurPath(), Env().Depth() );
-    if ( Env().CurNamespace()->Owner() != 0 )
+    if (Env().CurNamespace()->Owner().IsValid())
     {
         StreamLock sNsp(100);
         SetupFileOnCurEnv( sNsp() << C_sHFTypeTitle_Namespace
@@ -161,7 +162,7 @@ PageDisplay::Create_NamespaceFile()
 }
 
 void
-PageDisplay::Setup_OperationsFile_for( const ary::cpp::FileGroup & i_rFile )
+PageDisplay::Setup_OperationsFile_for( const ary::loc::File & i_rFile )
 {
     csv_assert( Env().CurNamespace() != 0 );
     Env().SetFile_Operations(&i_rFile);
@@ -171,18 +172,17 @@ PageDisplay::Setup_OperationsFile_for( const ary::cpp::FileGroup & i_rFile )
     SetupFileOnCurEnv( sOpFile() << "Global Functions in Namespace "
                                  << Env().CurNamespace()->LocalName()
                                  << " in Sourcefile "
-                                 << i_rFile.FileName()
+                                 << i_rFile.LocalName()
                                  << c_str );
     NavigationBar
             aNavi( Env(),
-                   NavigationBar::CEGT_operations,
-                   &i_rFile );
+                   NavigationBar::CEGT_operations );
     aNavi.Write( CurOut() );
     CurOut() << new HorizontalLine;
 
     adcdisp::PageTitle_Std fTitle;
     csi::xml::Element & rTitle = fTitle( CurOut() );
-    if ( Env().CurNamespace()->Owner() != 0 )
+    if (Env().CurNamespace()->Owner().IsValid())
     {
          rTitle << "Global Functions in Namespace "
                << Env().CurNamespace()->LocalName();
@@ -194,7 +194,7 @@ PageDisplay::Setup_OperationsFile_for( const ary::cpp::FileGroup & i_rFile )
 
     rTitle << new html::LineBreak
            << "in Sourcefile "
-           << i_rFile.FileName();
+           << i_rFile.LocalName();
     CurOut() << new HorizontalLine;
 }
 
@@ -211,8 +211,7 @@ PageDisplay::Setup_OperationsFile_for( const ary::cpp::Class & i_rClass )
                                  << c_str );
     NavigationBar
             aNavi( Env(),
-                   NavigationBar::CEGT_operations,
-                   0 );
+                   NavigationBar::CEGT_operations );
     aNavi.Write( CurOut() );
     CurOut() << new HorizontalLine;
 
@@ -223,7 +222,7 @@ PageDisplay::Setup_OperationsFile_for( const ary::cpp::Class & i_rClass )
 }
 
 void
-PageDisplay::Setup_DataFile_for( const ary::cpp::FileGroup & i_rFile )
+PageDisplay::Setup_DataFile_for( const ary::loc::File & i_rFile )
 {
     csv_assert( Env().CurNamespace() != 0 );
     Env().SetFile_Data(&i_rFile);
@@ -233,18 +232,17 @@ PageDisplay::Setup_DataFile_for( const ary::cpp::FileGroup & i_rFile )
     SetupFileOnCurEnv( sDataFile() << "Global Data in Namespace "
                                    << Env().CurNamespace()->LocalName()
                                    << " in Sourcefile "
-                                   << i_rFile.FileName()
+                                   << i_rFile.LocalName()
                                    << c_str );
     NavigationBar
             aNavi( Env(),
-                   NavigationBar::CEGT_data,
-                   &i_rFile );
+                   NavigationBar::CEGT_data );
     aNavi.Write( CurOut() );
     CurOut() << new HorizontalLine;
 
     adcdisp::PageTitle_Std fTitle;
     csi::xml::Element & rTitle = fTitle( CurOut() );
-    if ( Env().CurNamespace()->Owner() != 0 )
+    if ( Env().CurNamespace()->Owner().IsValid() )
     {
          rTitle << "Global Data in Namespace "
                << Env().CurNamespace()->LocalName();
@@ -257,7 +255,7 @@ PageDisplay::Setup_DataFile_for( const ary::cpp::FileGroup & i_rFile )
     rTitle
         << new html::LineBreak
         << "in Sourcefile "
-        << i_rFile.FileName();;
+        << i_rFile.LocalName();
     CurOut() << new HorizontalLine;
 }
 
@@ -275,8 +273,7 @@ PageDisplay::Setup_DataFile_for( const ary::cpp::Class & i_rClass )
 
     NavigationBar
             aNavi( Env(),
-                   NavigationBar::CEGT_data,
-                   0 );
+                   NavigationBar::CEGT_data );
     aNavi.Write( CurOut() );
     CurOut() << new HorizontalLine;
 
@@ -294,7 +291,7 @@ PageDisplay::Create_File()
 }
 
 void
-PageDisplay::Display_Class( const ary::cpp::Class & i_rData )
+PageDisplay::do_Process(const ary::cpp::Class & i_rData)
 {
     Env().SetFile_Class(i_rData);
     File().SetLocation( Env().CurPath(), Env().Depth() );
@@ -317,7 +314,7 @@ PageDisplay::Display_Class( const ary::cpp::Class & i_rData )
 }
 
 void
-PageDisplay::Display_Enum( const ary::cpp::Enum & i_rData )
+PageDisplay::do_Process(const ary::cpp::Enum & i_rData)
 {
     if ( Ce_IsInternal(i_rData) )
         return;
@@ -339,7 +336,7 @@ PageDisplay::Display_Enum( const ary::cpp::Enum & i_rData )
 }
 
 void
-PageDisplay::Display_Typedef( const ary::cpp::Typedef & i_rData )
+PageDisplay::do_Process(const ary::cpp::Typedef & i_rData)
 {
     if ( Ce_IsInternal(i_rData) )
         return;
@@ -361,7 +358,7 @@ PageDisplay::Display_Typedef( const ary::cpp::Typedef & i_rData )
 }
 
 void
-PageDisplay::Write_NameChainWithLinks( const ary::CodeEntity & i_rCe )
+PageDisplay::Write_NameChainWithLinks( const ary::cpp::CodeEntity & i_rCe )
 {
     if ( Env().CurNamespace()->Id() != i_rCe.Id() )
     {
@@ -378,7 +375,7 @@ PageDisplay::Write_NameChainWithLinks( const ary::CodeEntity & i_rCe )
     }
 }
 
-const ary::DisplayGate *
+const ary::cpp::Gate *
 PageDisplay::inq_Get_ReFinder() const
 {
      return &Env().Gate();
@@ -391,7 +388,7 @@ PageDisplay::RecursiveWrite_NamespaceLink( const ary::cpp::Namespace * i_pNamesp
     {
         return;
     }
-    else if ( i_pNamespace->Owner() == 0 )
+    else if (NOT i_pNamespace->Owner().IsValid())
     {   // Global namespace:
         StreamLock sNspDir(50);
         CurOut()
@@ -440,7 +437,7 @@ PageDisplay::RecursiveWrite_ClassLink( const ary::cpp::Class * i_pClass,
     {
          RecursiveWrite_ClassLink(
             dynamic_cast< const ary::cpp::Class* >(
-                Env().Gate().Find_Ce(i_pClass->Owner())),
+                Env().Gate().Ces().Search_Ce(i_pClass->Owner())),
             i_nLevelDistance + 1 );
     }
 
@@ -492,7 +489,7 @@ PageDisplay::Write_DocuArea_Enum( const ary::cpp::Enum & i_rData )
     Docu_Display aDocuShow( Env() );
 
     aDocuShow.Assign_Out(CurOut());
-    i_rData.Info().StoreAt( aDocuShow );
+    aDocuShow.Process(i_rData.Docu());
     aDocuShow.Unassign_Out();
 
     CurOut() << new HorizontalLine;
@@ -543,9 +540,10 @@ PageDisplay::Write_DocuArea_Typedef( const ary::cpp::Typedef & i_rData )
     aDef.AddEntry("Definition:");
     xml::Element & rDef = aDef.Def();
 
-    ary::Tid nDefiningType = i_rData.DescribingType();
+    ary::cpp::Type_id
+        nDefiningType = i_rData.DescribingType();
 
-    const ary::CodeEntity *
+    const ary::cpp::CodeEntity *
         pRelatedCe = Env().Gate().Search_RelatedCe(nDefiningType);
     if ( pRelatedCe != 0 )
     {
@@ -559,7 +557,7 @@ PageDisplay::Write_DocuArea_Typedef( const ary::cpp::Typedef & i_rData )
     Docu_Display aDocuShow( Env() );
 
     aDocuShow.Assign_Out(CurOut());
-    i_rData.Info().StoreAt( aDocuShow );
+    aDocuShow.Process(i_rData.Docu());
     aDocuShow.Unassign_Out();
 
     CurOut() << new HorizontalLine;
