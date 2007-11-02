@@ -4,9 +4,9 @@
  *
  *  $RCSfile: icprivow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:21:31 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:51:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,8 @@ namespace cpp
 
 
 
-using ary::Cid;
-using ary::OSid;
+typedef ary::cpp::Ce_id     Cid;
+
 
 class Owner_Namespace : public ary::cpp::InputContext::Owner
 {
@@ -60,32 +60,27 @@ class Owner_Namespace : public ary::cpp::InputContext::Owner
                             ary::cpp::Namespace &
                                                 io_rScope );
     virtual bool        HasClass(
-                                const udmstri &     i_sLocalName );
-    virtual bool        HasOperation(
-                                const udmstri &     i_sLocalName,
-                                OSid                i_nSignature );
-
+                                const String  &     i_sLocalName );
   private:
     virtual void        do_Add_Class(
-                            const udmstri &     i_sLocalName,
+                            const String  &     i_sLocalName,
                             Cid                 i_nId );
     virtual void        do_Add_Enum(
-                            const udmstri &     i_sLocalName,
+                            const String  &     i_sLocalName,
                             Cid                 i_nId );
     virtual void        do_Add_Typedef(
-                            const udmstri &     i_sLocalName,
+                            const String  &     i_sLocalName,
                             Cid                 i_nId );
     virtual void        do_Add_Operation(
-                                const udmstri &     i_sLocalName,
-                                OSid                i_nSignature,
+                                const String  &     i_sLocalName,
                                 Cid                 i_nId,
-                                bool                i_bIsStatic );
+                                bool                 );
     virtual void        do_Add_Variable(
-                                const udmstri &     i_sLocalName,
+                                const String  &     i_sLocalName,
                                 Cid                 i_nId,
                                 bool                i_bIsConst,
                                 bool                i_bIsStatic );
-    virtual Cid         inq_Id() const;
+    virtual Cid         inq_CeId() const;
 
     // DATA
     ary::cpp::Namespace *
@@ -103,34 +98,27 @@ class Owner_Class : public ary::cpp::InputContext::Owner
         Will work nerver!
     */
     virtual bool        HasClass(
-                                const udmstri &     i_sLocalName );
-    /** @attention Only a dummy for use at ary::cpp::Gate!
-        Will work nerver!
-    */
-    virtual bool        HasOperation(
-                                const udmstri &     i_sLocalName,
-                                OSid                i_nSignature );
+                                const String  &     i_sLocalName );
   private:
     virtual void        do_Add_Class(
-                            const udmstri &     i_sLocalName,
+                            const String  &     i_sLocalName,
                             Cid                 i_nId );
     virtual void        do_Add_Enum(
-                            const udmstri &     i_sLocalName,
+                            const String  &     i_sLocalName,
                             Cid                 i_nId );
     virtual void        do_Add_Typedef(
-                            const udmstri &     i_sLocalName,
+                            const String  &     i_sLocalName,
                             Cid                 i_nId );
     virtual void        do_Add_Operation(
-                                const udmstri &     i_sLocalName,
-                                OSid                i_nSignature,
+                                const String  &     i_sLocalName,
                                 Cid                 i_nId,
-                                bool                i_bIsStatic );
+                                bool                i_bIsStaticMember );
     virtual void        do_Add_Variable(
-                                const udmstri &     i_sLocalName,
+                                const String  &     i_sLocalName,
                                 Cid                 i_nId,
                                 bool                i_bIsConst,
                                 bool                i_bIsStatic );
-    virtual Cid         inq_Id() const;
+    virtual Cid         inq_CeId() const;
 
     // DATA
     ary::cpp::Class *   pScope;
@@ -138,8 +126,6 @@ class Owner_Class : public ary::cpp::InputContext::Owner
 
 
 
+
 }   // namespace cpp
-
-
 #endif
-
