@@ -4,9 +4,9 @@
  *
  *  $RCSfile: all_toks.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:14:20 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:47:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ class Tok_Identifier : public cpp::Token
     virtual const char *
                         Text() const;
   private:
-    udmstri             sText;
+    String              sText;
 };
 const INT16 Tid_Identifier = 1;
 
@@ -77,7 +77,7 @@ class Tok_Operator : public cpp::Token
     virtual const char *
                         Text() const;
   private:
-    udmstri             sText;
+    String              sText;
 };
 const INT16 Tid_Operator = 2;
 
@@ -149,7 +149,7 @@ class Tok_##name : public cpp::Token \
     virtual const char * \
                         Text() const; \
   private: \
-    udmstri             sText; \
+    String              sText; \
 }; \
 const INT16 Tid_##name = tid
 
