@@ -4,9 +4,9 @@
  *
  *  $RCSfile: it_xnameroom.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:39:57 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:58:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,8 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
+#include <cosv/tpl/processor.hxx>
+#include <cosv/tpl/tpltools.hxx>
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/ip_type.hxx>
 #include "i_strconst.hxx"
@@ -49,6 +50,7 @@ namespace ary
 {
 namespace idl
 {
+
 
 ExplicitNameRoom::ExplicitNameRoom()
     :   aImpl()
@@ -65,25 +67,24 @@ ExplicitNameRoom::~ExplicitNameRoom()
 {
 }
 
-void
-ExplicitNameRoom::do_Visit( Host &
-                                    ) const
-{
-    // yet unused.
-}
-
-RCid
-ExplicitNameRoom::inq_ClassId() const
+ClassId
+ExplicitNameRoom::get_AryClass() const
 {
     return class_id;
 }
 
 void
+ExplicitNameRoom::do_Accept( csv::ProcessorIfc & io_processor ) const
+{
+    csv::CheckedCall(io_processor, *this);
+}
+
+void
 ExplicitNameRoom::inq_Get_Text( StringVector &      o_module,
-                                String &            ,
-                                Ce_id &             ,
-                                int &               ,
-                                const Gate &        ) const
+                                String &            ,           // o_name
+                                Ce_id &             ,           // o_nRelatedCe
+                                int &               ,           // o_nSequemceCount
+                                const Gate &        ) const     // i_rGate
 {
     StringVector::const_iterator it = NameChain_Begin();
     if ( it != NameChain_End()

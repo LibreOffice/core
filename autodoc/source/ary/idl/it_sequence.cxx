@@ -4,9 +4,9 @@
  *
  *  $RCSfile: it_sequence.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:39:22 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:57:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <cosv/tpl/processor.hxx>
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/ip_type.hxx>
 #include "i_strconst.hxx"
@@ -59,16 +60,16 @@ Sequence::~Sequence()
 {
 }
 
-void
-Sequence::do_Visit( Host & ) const
-{
-    // yet unused.
-}
-
-RCid
-Sequence::inq_ClassId() const
+ClassId
+Sequence::get_AryClass() const
 {
     return class_id;
+}
+
+void
+Sequence::do_Accept( csv::ProcessorIfc & io_processor ) const
+{
+    csv::CheckedCall(io_processor, *this);
 }
 
 void
@@ -92,4 +93,3 @@ Sequence::inq_Get_Text( StringVector &      o_module,
 
 }   // namespace idl
 }   // namespace ary
-
