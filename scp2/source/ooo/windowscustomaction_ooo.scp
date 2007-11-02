@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowscustomaction_ooo.scp,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 18:20:34 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:58:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,7 +307,7 @@ WindowsCustomAction gid_Customaction_Patch_Deregister_Extensions
 	Source = "patchmsi.dll";
 	Target = "DeregisterExtensions";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Installed", "InstallInitialize");
+	Assignment1 = ("InstallExecuteSequence", "", "InstallInitialize");
 End
 
 WindowsCustomAction gid_Customaction_Patch_SetNewFeatureState
