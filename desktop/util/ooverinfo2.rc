@@ -1,0 +1,124 @@
+/*************************************************************************
+#
+#   $RCSfile: ooverinfo2.rc,v $
+#
+#   $Revision: 1.2 $
+#
+#   last change: $Author: hr $ $Date: 2007-11-02 12:39:37 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+#
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#
+#*************************************************************************/
+
+#define VERSION			1
+#define SUBVERSION		9
+//#define VERVARIANT		0
+// .0 + VER_CONCEPT
+// .100 + VER_ALPHA
+// .200 + VER_BETA
+// .300 + VER_GAMMA
+// .500 + VER_FINAL
+//#define VER_CONCEPT		0
+//#define VER_BETA		6
+#define VER_FINAL		0
+
+#define VER_DAY			1
+#define VER_MONTH		1
+#define VER_YEAR		2005
+
+// -----------------------------------------------------------------------
+
+// -----------------------------------------------------------------------
+// 				language/character set specification table
+// -----------------------------------------------------------------------
+
+
+ICON 2 "icons/ooo-writer-doc.ico"
+ICON 3 "icons/ooo-writer-tem.ico"
+ICON 4 "icons/ooo-calc-doc.ico"
+ICON 5  "icons/ooo-calc-tem.ico"
+ICON 6 "icons/ooo-draw-doc.ico"
+ICON 7 "icons/ooo-draw-tem.ico"
+ICON 8 "icons/ooo-impress-doc.ico"
+ICON 9 "icons/ooo-impress-tem.ico"
+ICON 10 "icons/ooo-impress-doc.ico"
+ICON 11 "icons/ooo-master-doc.ico"
+ICON 12 "icons/ooo-web-doc.ico"
+ICON 13 "icons/ooo-chart-doc.ico"
+ICON 14 "icons/ooo-base-doc.ico"
+ICON 15 "icons/ooo-math-doc.ico"
+ICON 16 "icons/ooo-empty-tem.ico"
+ICON 17 "icons/ooo-macro-doc.ico"
+ICON 18 "icons/ooo-configuration.ico"
+ICON 19 "icons/ooo-open.ico"
+ICON 20 "icons/ooo-image-doc.ico"
+ICON 21 "icons/ooo-writer-app.ico"
+ICON 22 "icons/ooo-calc-app.ico"
+ICON 23 "icons/ooo-draw-app.ico"
+ICON 24 "icons/ooo-impress-app.ico"
+ICON 25 "icons/ooo-math-app.ico"
+ICON 26 "icons/ooo-base-app.ico"
+ICON 27 "icons/ooo-empty-doc.ico"
+ICON 28 "icons/ooo11-writer-doc.ico"
+ICON 29 "icons/ooo11-writer-tem.ico"
+ICON 30 "icons/ooo11-calc-doc.ico"
+ICON 31 "icons/ooo11-calc-tem.ico"
+ICON 32 "icons/ooo11-draw-doc.ico"
+ICON 33 "icons/ooo11-draw-tem.ico"
+ICON 34 "icons/ooo11-impress-doc.ico"
+ICON 35 "icons/ooo11-impress-tem.ico"
+ICON 36 "icons/ooo11-master-doc.ico"
+ICON 37 "icons/ooo11-chart-doc.ico"
+ICON 38 "icons/ooo11-base-doc.ico"
+ICON 39 "icons/ooo11-math-doc.ico"
+
