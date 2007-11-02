@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 15:45:44 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:20:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,11 @@ SRC1FILES=          \
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES= $(SRS)$/$(TARGET).srs
 
+.IF "$(GUI)" == "OS2"
+SHL1TARGET= txcnvdlg
+.ELSE
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
+.ENDIF
 SHL1VERSIONMAP= export.map
 
 SHL1STDLIBS= \
