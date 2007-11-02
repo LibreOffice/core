@@ -4,9 +4,9 @@
  *
  *  $RCSfile: os2layout.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 10:06:56 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:49:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,9 @@
 #include <saldata.hxx>
 #endif // _SV_SALDATA_HXX
 
-#ifndef _SV_SALLAYOUT_H
-#include <sallayout.h>
-#endif // _SV_SALLAYOUT_H
+#ifndef _SV_SALLAYOUT_HXX
+#include <vcl/sallayout.hxx>
+#endif // _SV_SALLAYOUT_HXX
 
 #ifndef __H_FT2LIB
 #include <wingdi.h>
@@ -62,6 +62,9 @@
 #ifdef GCP_KERN_HACK
     #include <algorithm>
 #endif // GCP_KERN_HACK
+
+// for GetMirroredChar
+#include <vcl/svapp.hxx>
 
 #include <hash_map>
 typedef std::hash_map<int,int> IntMap;
@@ -600,32 +603,32 @@ void Os2SalLayout::DrawText( SalGraphics& rGraphics ) const
     aPt.x = aPos.X();
     aPt.y = static_cast<Os2SalGraphics&>(rGraphics).mnHeight - aPos.Y();
 
-    rc = Ft2CharStringPosAtW( static_cast<Os2SalGraphics&>(rGraphics).mhPS,
-                &aPt, NULL, CHS_VECTOR, mnGlyphCount, (LPWSTR)mpOutGlyphs,
-                (LONG*)mpGlyphAdvances, 0);
-    // Ft2* fails if the selected font doesn't have an Unicode charmap
-    if (rc == GPI_ERROR) {
+    // ft2lib doesn't work with printer hps, so we fallback to codepage printing
+    // until cp1200 support will work.
+    if (static_cast<Os2SalGraphics&>(rGraphics).mbPrinter) {
+        // convert to codepage
         ByteString str( mpOutGlyphs, gsl_getSystemTextEncoding() );
         // gliph size is not recalculated, so it could be wrong!
         rc = Ft2CharStringPosAtA( static_cast<Os2SalGraphics&>(rGraphics).mhPS,
-                    &aPt, NULL, 0, mnGlyphCount, (PSZ)str.GetBuffer(),
+                    &aPt, NULL, CHS_VECTOR, mnGlyphCount, (PSZ)str.GetBuffer(),
                     (LONG*)mpGlyphAdvances, 0);
-    }
-#if 0 // unicode rendering using codepage 1200
-    {
-        ByteString str( mpOutGlyphs, gsl_getSystemTextEncoding() );
-        debug_printf("Os2SalLayout::DrawText HPS %08x\n",static_cast<Os2SalGraphics&>(rGraphics).mhPS);
-        if (str.GetBuffer())
-            debug_printf("Os2SalLayout::DrawText this %08x, '%s'\n",this,str.GetBuffer());
-    }
-
-        rc = GpiSetCp( static_cast<Os2SalGraphics&>(rGraphics).mhPS, 1200);
-        debug_printf("Os2SalLayout::DrawText GpiSetCp '%d'\n", rc);
-        rc = GpiCharStringPosAt( static_cast<Os2SalGraphics&>(rGraphics).mhPS,
-                    &aPt, NULL, 0, mnGlyphCount, (PSZ)mpOutGlyphs,
-                    (LONG*)mpGlyphAdvances);
-        debug_printf("Os2SalLayout::DrawText %d '%s'\n", rc, str.GetBuffer());
+    } else {
+        // try unicode rendering to screen
+        rc = Ft2CharStringPosAtW( static_cast<Os2SalGraphics&>(rGraphics).mhPS,
+                    &aPt, NULL, CHS_VECTOR, mnGlyphCount, (LPWSTR)mpOutGlyphs,
+                    (LONG*)mpGlyphAdvances, 0);
+        if (rc == GPI_ERROR) {
+            // if *W fails, convert to codepage and use *A (fallback to GPI into ft2)
+            ByteString str( mpOutGlyphs, gsl_getSystemTextEncoding() );
+#if OSL_DEBUG_LEVEL>10
+            debug_printf("Os2SalLayout::DrawText HPS %08x PosAtW failed '%s'!\n",static_cast<Os2SalGraphics&>(rGraphics).mhPS,str.GetBuffer());
 #endif
+            // gliph size is not recalculated, so it could be wrong!
+            rc = Ft2CharStringPosAtA( static_cast<Os2SalGraphics&>(rGraphics).mhPS,
+                        &aPt, NULL, CHS_VECTOR, mnGlyphCount, (PSZ)str.GetBuffer(),
+                        (LONG*)mpGlyphAdvances, 0);
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
