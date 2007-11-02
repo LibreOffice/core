@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parseenv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:16:36 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:04:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/info/codeinfo.hxx>
+#include <ary/doc/d_oldcppdocu.hxx>
 #include <x_parse.hxx>
 
 
