@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adc_cl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:04:58 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:42:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <algorithm>
 #include <cosv/x.hxx>
 #include <cosv/file.hxx>
-#include <cosv/template/tpltools.hxx>
+#include <cosv/tpl/tpltools.hxx>
 #include <ary/ary.hxx>
 #include <tools/tkpchars.hxx>
 #include <adc_msg.hxx>
@@ -267,7 +267,10 @@ CommandLine::CommandLine()
         pSinceTransformator(new command::SinceTagTransformationData),
         aCommands(),
         bInitOk(false),
-        pCommand_CreateHtml(0)
+        pCommand_CreateHtml(0),
+        pReposy( & ary::Repository::Create_() ),
+        bCpp(false),
+        bIdl(false)
 {
     csv_assert(pTheInstance_ == 0);
     pTheInstance_ = this;
@@ -286,9 +289,8 @@ CommandLine::Run() const
            << "\n---------------------"
            << "\n" << Endl();
 
-    ary::n22::Repository::Create_();
-
-    bool ok = true;
+    bool
+        ok = true;
     for ( CommandList::const_iterator it = aCommands.begin();
           ok AND it != aCommands.end();
           ++it )
@@ -306,11 +308,10 @@ CommandLine::Run() const
         TheMessages().WriteFile(aDiagnosticMessagesFile.c_str());
     }
 
-    ary::n22::Repository::Destroy_();
     return ok ? 0 : 1;
 }
 
-const CommandLine &
+CommandLine &
 CommandLine::Get_()
 {
     csv_assert(pTheInstance_ != 0);
@@ -356,7 +357,7 @@ CommandLine::do_Init( int                 argc,
     StringVector::const_iterator itEnd = aParameters.end();
     for ( StringVector::const_iterator it = aParameters.begin();
           it != itEnd;
-          )
+        )
     {
         if ( *it == command::C_opt_Verbose )
             do_clVerbose(it,itEnd);
