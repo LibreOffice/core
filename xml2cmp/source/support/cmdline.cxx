@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdline.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:55:55 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:55:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ CommandLine::ParseIndexCommand( int                 argc,
                     argv  );
 
     sIndexFile = sOutputDirectory;
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     sIndexFile+= "\\xmlindex.html";
 #elif defined(UNX)
     sIndexFile+= "/xmlindex.html";
