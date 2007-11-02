@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 13:45:05 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:47:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1831,6 +1831,12 @@ void SwpHints::NoteInHistory( SwTxtAttr *pAttr, const BOOL bNew )
 
 bool SwpHints::MergePortions( SwTxtNode& rNode )
 {
+    if ( !Count() )
+        return false;
+
+    // sort before merging
+    SwpHintsArr::Resort();
+
     bool bRet = false;
     typedef std::multimap< int, SwTxtAttr* > PortionMap;
     PortionMap aPortionMap;
@@ -1897,8 +1903,13 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
             {
                 SwTxtAttr* p2 = (*aIter2).second;
                 nNewPortionEnd = *p2->GetEnd();
+
+                const USHORT nCountBeforeDelete = Count();
                 Delete( p2 );
-                rNode.DestroyAttr( p2 );
+
+                // robust: check if deletion actually took place before destroying attribute:
+                if ( Count() < nCountBeforeDelete )
+                    rNode.DestroyAttr( p2 );
             }
             aPortionMap.erase( aRange2.first, aRange2.second );
             ++j;
