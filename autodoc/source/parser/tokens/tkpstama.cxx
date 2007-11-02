@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tkpstama.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:17:57 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:04:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,8 @@ StateMachine::StateMachine( intt            in_nStatusSize,
         nNrofStati(0),
         nStatiSpace(in_nInitial_StatusListSize)
 {
-    precond(in_nStatusSize > 0);
-    precond(in_nInitial_StatusListSize > 0);
+    csv_assert(in_nStatusSize > 0);
+    csv_assert(in_nInitial_StatusListSize > 0);
 
     memset(pStati, 0, sizeof(StmStatus*) * nStatiSpace);
 }

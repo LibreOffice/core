@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_selem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:21:29 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:08:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <ary/idl/i_struct.hxx>
 #include <ary/idl/i_structelem.hxx>
 #include <ary/idl/ip_ce.hxx>
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 #include <s2_luidl/pe_type2.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_punct.hxx>
@@ -88,7 +88,7 @@ PE_StructElement::PE_StructElement( RStructElement &    o_rResult,
 
 void
 PE_StructElement::EstablishContacts( UnoIDL_PE *                io_pParentPE,
-                                     ary::n22::Repository &     io_rRepository,
+                                     ary::Repository &      io_rRepository,
                                      TokenProcessing_Result &   o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);

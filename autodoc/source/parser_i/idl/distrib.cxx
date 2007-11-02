@@ -4,9 +4,9 @@
  *
  *  $RCSfile: distrib.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:18:51 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:05:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 #include <parser/parserinfo.hxx>
 #include <s2_luidl/tkp_uidl.hxx>
 #include <s2_luidl/parsenv2.hxx>
@@ -57,7 +57,7 @@ namespace csi
 namespace uidl
 {
 
-TokenDistributor::TokenDistributor( ary::n22::Repository & io_rRepository,
+TokenDistributor::TokenDistributor( ary::Repository & io_rRepository,
                                     ParserInfo &           io_rParserInfo )
     :   pTokenSource(0),
         aProcessingData( io_rRepository, aDocumentation, io_rParserInfo ),
@@ -82,7 +82,7 @@ TokenDistributor::TradeToken()
 }
 
 TokenDistributor::ProcessingData::ProcessingData(
-                                        ary::n22::Repository &  io_rRepository,
+                                        ary::Repository &   io_rRepository,
                                         Documentation &         i_rDocuProcessor,
                                         ParserInfo &            io_rParserInfo )
     :   // aEnvironments
