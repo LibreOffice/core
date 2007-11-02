@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hf_linachain.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:02:55 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:41:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,15 +54,15 @@ HF_LinkedNameChain::~HF_LinkedNameChain()
 }
 
 void
-HF_LinkedNameChain::Produce_CompleteChain( output::Position &  i_curPosition,
-                                           F_LinkMaker         i_linkMaker ) const
+HF_LinkedNameChain::Produce_CompleteChain( const output::Position & i_curPosition,
+                                           F_LinkMaker              i_linkMaker ) const
 {
     produce_Level(i_curPosition.RelatedNode(), i_curPosition, i_linkMaker);
 }
 
 void
-HF_LinkedNameChain::Produce_CompleteChain_forModule( output::Position &  i_curPosition,
-                                                     F_LinkMaker         i_linkMaker ) const
+HF_LinkedNameChain::Produce_CompleteChain_forModule( const output::Position &  i_curPosition,
+                                                     F_LinkMaker               i_linkMaker ) const
 {
     if (i_curPosition.Depth() == 0)
         return;
@@ -79,9 +79,9 @@ StreamStr aLinkBuf(200);
 }
 
 void
-HF_LinkedNameChain::produce_Level( output::Node &      i_levelNode,
-                                   output::Position &  i_startPosition,
-                                   F_LinkMaker         i_linkMaker ) const
+HF_LinkedNameChain::produce_Level( output::Node &           i_levelNode,
+                                   const output::Position & i_startPosition,
+                                   F_LinkMaker              i_linkMaker ) const
 {
     if ( i_levelNode.Depth() > 0 )
     {
