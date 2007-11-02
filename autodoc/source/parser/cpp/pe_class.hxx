@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_class.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:23:07 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:53:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,12 +41,11 @@
 // USED SERVICES
     // BASE CLASSES
 #include "cpp_pe.hxx"
-    // COMPONENTS
+    // OTHER
 #include <semantic/callf.hxx>
 #include <semantic/sub_peu.hxx>
-#include <ary/cpp/c_etypes.hxx>
-#include <ary/cpp/c_idlist.hxx>
-    // PARAMETERS
+#include <ary/cpp/c_types4cpp.hxx>
+#include <ary/cpp/c_slntry.hxx>
 #include "all_toks.hxx"
 
 namespace ary
@@ -71,6 +70,7 @@ class PE_Enum;
 class PE_Typedef;
 class PE_VarFunc;
 class PE_Ignore;
+class PE_Defines;
 
 
 class PE_Class : public cpp::Cpp_PE
@@ -105,8 +105,8 @@ class PE_Class : public cpp::Cpp_PE
     virtual Cpp_PE *    Handle_ChildFailure();
 
     E_KindOfResult      Result_KindOf() const;
-    const udmstri &     Result_LocalName() const;
-    const udmstri &     Result_FirstNameSegment() const;
+    const String  &     Result_LocalName() const;
+    const String  &     Result_FirstNameSegment() const;
 
   private:
     typedef SubPe< PE_Class, PE_Base >          SP_Base;
@@ -114,12 +114,14 @@ class PE_Class : public cpp::Cpp_PE
     typedef SubPe< PE_Class, PE_Typedef>        SP_Typedef;
     typedef SubPe< PE_Class, PE_VarFunc>        SP_VarFunc;
     typedef SubPe< PE_Class, PE_Ignore >        SP_Ignore;
+    typedef SubPe< PE_Class, PE_Defines>        SP_Defines;
 
     typedef SubPeUse< PE_Class, PE_Base>        SPU_Base;
 //  typedef SubPeUse< PE_Class, PE_Enum>            SPU_Enum;
     typedef SubPeUse< PE_Class, PE_Typedef>     SPU_Typedef;
     typedef SubPeUse< PE_Class, PE_VarFunc>     SPU_VarFunc;
     typedef SubPeUse< PE_Class, PE_Ignore>      SPU_Ignore;
+    typedef SubPeUse< PE_Class, PE_Defines>     SPU_Defines;
 
     typedef ary::cpp::List_Bases                BaseList;
     typedef ary::cpp::S_Classes_Base            Base;
@@ -157,6 +159,8 @@ class PE_Class : public cpp::Cpp_PE
     void                On_bodyStd_friend( const char * );
     void                On_bodyStd_using( const char * );
     void                On_bodyStd_SwBracket_Right( const char * );
+    void                On_bodyStd_DefineName(const char * );
+    void                On_bodyStd_MacroName(const char * );
 
     void                On_inProtection_Colon( const char * );
 
@@ -172,6 +176,7 @@ class PE_Class : public cpp::Cpp_PE
     Dyn<SP_Typedef>     pSpTypedef;
     Dyn<SP_VarFunc>     pSpVarFunc;
     Dyn<SP_Ignore>      pSpIgnore;
+    Dyn<SP_Defines>     pSpDefs;
 
     Dyn<SPU_Base>       pSpuBase;
 //  Dyn<SPU_Enum>       pSpuEnum;
@@ -181,9 +186,11 @@ class PE_Class : public cpp::Cpp_PE
     Dyn<SPU_Ignore>     pSpuTemplate;
     Dyn<SPU_Ignore>     pSpuUsing;
     Dyn<SPU_Ignore>     pSpuIgnoreFailure;
+    Dyn<SPU_Defines>    pSpuDefs;
 
 
-    udmstri             sLocalName;
+
+    String              sLocalName;
     ary::cpp::E_ClassKey
                         eClassKey;
     ary::cpp::Class *   pCurObject;
@@ -202,13 +209,13 @@ PE_Class::Result_KindOf() const
     return eResult_KindOf;
 }
 
-inline const udmstri &
+inline const String  &
 PE_Class::Result_LocalName() const
 {
     return sLocalName;
 }
 
-inline const udmstri &
+inline const String  &
 PE_Class::Result_FirstNameSegment() const
 {
     return sLocalName;
