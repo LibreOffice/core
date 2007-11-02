@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vendorbase.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-18 16:36:53 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:24:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #include "rtl/ustring.hxx"
 #include "rtl/ref.hxx"
+#include "osl/endian.h"
 #include "salhelper/simplereferenceobject.hxx"
 #include <vector>
 
@@ -55,7 +56,11 @@ namespace jfw_plugin
 #elif defined POWERPC
 #define JFW_PLUGIN_ARCH "ppc"
 #elif defined MIPS
-#define JFW_PLUGIN_ARCH "mips"
+#ifdef OSL_BIGENDIAN
+#  define JFW_PLUGIN_ARCH "mips"
+#else
+#  define JFW_PLUGIN_ARCH "mips32"
+#endif
 #elif defined S390
 #define JFW_PLUGIN_ARCH "s390"
 #elif defined X86_64
