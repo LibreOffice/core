@@ -26,12 +26,13 @@ ar	autodoc\source\ary\inc\cpp			get		-	all	ar_sri_cpp NULL
 ar	autodoc\source\ary\inc\idl			get		-	all	ar_sri_idl NULL
 ar	autodoc\source\ary\inc\loc			get		-	all	ar_sri_loc NULL
 ar	autodoc\source\ary\inc\store		get		-	all	ar_sri_store NULL
+ar	autodoc\source\ary\adoc 			nmake	-	all	ar_sr_adoc NULL
 ar	autodoc\source\ary\cpp	 			nmake	-	all	ar_sr_cpp NULL
+ar	autodoc\source\ary\doc 			    nmake	-	all	ar_sr_doc NULL
 ar	autodoc\source\ary\idl	 			nmake	-	all	ar_sr_idl NULL
 ar	autodoc\source\ary\info	 			nmake	-	all	ar_sr_info NULL
 ar	autodoc\source\ary\kernel			nmake	-	all	ar_sr_kernel NULL
 ar	autodoc\source\ary\loc	 			nmake 	-	all	ar_sr_loc NULL
-ar	autodoc\source\ary\store 			nmake	-	all	ar_sr_store NULL
 ar	autodoc\source\ary_i			    get		-	all	ar_sr_i NULL
 ar	autodoc\source\ary_i\kernel			nmake	-	all	ar_sr_cinfo NULL
 ar	autodoc\source\display				get		-	all	ar_sd NULL
@@ -65,4 +66,4 @@ ar	autodoc\source\parser_i\tokens		nmake	-	all	ar_sp2_tok NULL
 ar	autodoc\source\tools				nmake	-	all	ar_st NULL
 ar	autodoc\source\mkinc				get		-	all	ar_smk NULL
 ar	autodoc\source\exes					get		-	all	ar_se NULL
-ar	autodoc\source\exes\adc_uni			nmake	-	all	ar_se_uni ar_sr_cpp ar_sr_idl ar_sr_info ar_sr_kernel ar_sr_loc ar_sr_store ar_sr_cinfo ar_sd_html ar_sd_kernel ar_sd_idl ar_sp_adoc ar_sp_cpp ar_sp_krnl ar_sp_sem ar_sp_tok ar_sp2_idl ar_sd_tkit ar_sp2_idoc ar_sp2_tok ar_st NULL
+ar	autodoc\source\exes\adc_uni			nmake	-	all	ar_se_uni ar_sr_adoc ar_sr_cpp ar_sr_doc ar_sr_idl ar_sr_info ar_sr_kernel ar_sr_loc ar_sr_cinfo ar_sd_html ar_sd_kernel ar_sd_idl ar_sp_adoc ar_sp_cpp ar_sp_krnl ar_sp_sem ar_sp_tok ar_sp2_idl ar_sd_tkit ar_sp2_idoc ar_sp2_tok ar_st NULL
