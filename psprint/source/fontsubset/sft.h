@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 14:24:50 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:14:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.18 2007-09-20 14:24:50 vg Exp $ */
+/* $Id: sft.h,v 1.19 2007-11-02 12:14:58 hr Exp $ */
 
 /**
 
@@ -134,6 +134,7 @@ extern "C" {
     };
 
 /** Value of the width member of the TTGlobalFontInfo struct */
+#ifndef OS2
     enum WidthClass {
         FWIDTH_ULTRA_CONDENSED = 1,         /**< 50% of normal                      */
         FWIDTH_EXTRA_CONDENSED = 2,         /**< 62.5% of normal                    */
@@ -145,6 +146,7 @@ extern "C" {
         FWIDTH_EXTRA_EXPANDED = 8,          /**< 150% of normal                     */
         FWIDTH_ULTRA_EXPANDED = 9           /**< 200% of normal                     */
     };
+#endif // OS2
 #endif /* FW_THIN */
 
 /** Type of the 'kern' table, stored in _TrueTypeFont::kerntype */
