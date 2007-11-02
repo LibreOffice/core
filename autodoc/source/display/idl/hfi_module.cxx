@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_module.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:57:39 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:36:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,8 @@
 #include <ary/idl/i_ce.hxx>
 #include <ary/idl/i_module.hxx>
 #include <ary/idl/ik_module.hxx>
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
+#include <ary/getncast.hxx>
 #include <toolkit/hf_docentry.hxx>
 #include <toolkit/hf_linachain.hxx>
 #include <toolkit/hf_navi_sub.hxx>
@@ -254,7 +255,7 @@ HF_IdlModule::produce_Link( Xml::Element &      o_row,
                 >> *new Html::TableCell
                     << new Html::ClassAttr(C_sCellStyle_SummaryLeft);
 
-    if (i_ce->ClassId() != ary::idl::Module::class_id)
+    if ( NOT ary::is_type<ary::idl::Module>(*i_ce) )
     {
         HF_IdlTypeText
             aText(Env(), rCell, true);
@@ -286,7 +287,7 @@ HF_IdlModule::produce_LinkDoc( Xml::Element &      o_row,
     const client &
         rCe = *i_ce;
     const ce_info *
-        pShort = rCe.Docu();
+        pShort = Get_IdlDocu(rCe.Docu());
     if ( pShort == 0 )
         return;
 
