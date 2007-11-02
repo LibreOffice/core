@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:37:01 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:39:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -711,7 +711,7 @@ OUString FirstStartWizard::getLicensePath()
 {
     // license file name
     static const char *szLicensePath = "/share/readme";
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
     static const char *szWNTLicenseName = "/license";
     static const char *szWNTLicenseExt = ".txt";
 #else
