@@ -4,9 +4,9 @@
  *
  *  $RCSfile: disdocum.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:23:30 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:21:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ class DT_SinceAtTag;
 
 namespace ary
 {
-namespace info
+namespace inf
 {
 
 
@@ -146,7 +146,7 @@ class DocuText_Display : public DocumentationDisplay
 
 
 
-}   // namespace info
+}   // namespace inf
 }   // namespace ary
 
 
