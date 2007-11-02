@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macro.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:24:35 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:24:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,8 @@ this is inserted for the case that the preprocessor ignores error
 #define THIS_ARCH "MIPS"
 #elif defined X86_64
 #define THIS_ARCH "X86_64"
+#elif defined MIPS
+#define THIS_ARCH "MIPS"
 #endif
 
 #if ! defined THIS_ARCH
