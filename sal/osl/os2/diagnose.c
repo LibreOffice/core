@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 09:50:31 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:30:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,7 @@ static oslDetailedDebugMessageFunc volatile g_pDetailedDebugMessageFunc = 0;
 
 void SAL_CALL osl_breakDebug()
 {
-    int* sigsev = 0;
-    *sigsev = 0;
+    __asm__("int $3\n");
 }
 
 /************************************************************************/
