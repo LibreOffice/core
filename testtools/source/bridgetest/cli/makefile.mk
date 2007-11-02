@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-06 10:57:43 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:23:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,19 @@ WINTARGETS=  \
     $(DESTDIR)$/regcomp.exe.config \
     $(DESTDIR)$/uno.exe.config
 
+.ELIF "$(GUI)"=="OS2"
+MY_DLLPOSTFIX=.dll
+DESTDIR=$(BIN)
+BATCH_SUFFIX=.cmd
+GIVE_EXEC_RIGHTS=@echo
+WINTARGETS=  \
+    $(DESTDIR)$/regcomp.exe \
+    $(DESTDIR)$/uno.exe \
+    $(DESTDIR)$/regcomp.exe.config \
+    $(DESTDIR)$/uno.exe.config
+
 .ELSE
+
 MY_DLLPOSTFIX=.so
 DESTDIR=$(OUT)$/lib
 BATCH_INPROCESS=bridgetest_inprocess
