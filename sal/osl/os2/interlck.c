@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interlck.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 09:49:38 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,8 @@
  *
  ************************************************************************/
 
+#include <386/builtin.h>
+
 #include "system.h"
 
 #include <osl/interlck.h>
@@ -43,13 +45,7 @@
 /*****************************************************************************/
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
-    oslInterlockedCount Count;
-
-    DosEnterCritSec();
-    Count = ++(*pCount);
-    DosExitCritSec();
-
-    return (Count);
+    return __atomic_increment_s32( pCount);
 }
 
 /*****************************************************************************/
@@ -57,13 +53,7 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
 /*****************************************************************************/
 oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
 {
-    oslInterlockedCount Count;
-
-    DosEnterCritSec();
-    Count = --(*pCount);
-    DosExitCritSec();
-
-    return (Count);
+    return __atomic_decrement_s32( pCount);
 }
 
 
