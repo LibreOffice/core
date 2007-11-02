@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 15:11:42 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:31:25 $
 #
 #   Copyright according the GNU Public License.
 #
@@ -55,6 +55,7 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/security.obj \
             $(SLO)$/profile.obj  \
             $(SLO)$/tempfile.obj  \
+        $(SLO)$/printf.obj\
         $(SLO)$/process_impl.obj\
         $(SLO)$/uunxapi.obj\
         $(SLO)$/file.obj     \
@@ -62,7 +63,8 @@ SLOFILES=   $(SLO)$/conditn.obj  \
         $(SLO)$/file_error_transl.obj \
         $(SLO)$/file_path_helper.obj \
         $(SLO)$/debug.obj \
-        $(SLO)$/except.obj 
+        $(SLO)$/except.obj \
+        $(SLO)$/salinit.obj
 
 OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/diagnose.obj \
@@ -89,7 +91,8 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
         $(OBJ)$/file_error_transl.obj \
         $(OBJ)$/file_path_helper.obj \
         $(OBJ)$/debug.obj \
-        $(OBJ)$/except.obj 
+        $(OBJ)$/except.obj \
+        $(SLO)$/salinit.obj
 
 .ENDIF
 
