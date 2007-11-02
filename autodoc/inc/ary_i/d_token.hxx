@@ -4,9 +4,9 @@
  *
  *  $RCSfile: d_token.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:23:15 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:21:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,18 @@
 #ifndef CSI_DSAPI_D_TOKEN_HXX
 #define CSI_DSAPI_D_TOKEN_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <ary_i/ci_text2.hxx>
 #include <ary_i/ci_atag2.hxx>
-    // COMPONENTS
-    // PARAMETERS
-#include <display/uidldisp.hxx>
 
+
+namespace ary
+{
+namespace inf
+{
+    class DocumentationDisplay;
+}
+}
 
 
 
@@ -54,10 +56,10 @@ namespace csi
 namespace dsapi
 {
 
-using ary::info::DocumentationDisplay;
+using ary::inf::DocumentationDisplay;
 
 
-class DT_Dsapi : public ary::info::DocuToken
+class DT_Dsapi : public ary::inf::DocuToken
 {
   public:
     virtual void        DisplayAt(
@@ -132,11 +134,11 @@ class DT_MupType : public DT_MLTag
     virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
-    const udmstri &     Scope() const           { return sScope; }
+    const String  &     Scope() const           { return sScope; }
     bool                IsBegin() const         { return bIsBegin; }
 
   private:
-    udmstri             sScope;
+    String              sScope;
     bool                bIsBegin;
 };
 
@@ -154,11 +156,11 @@ class DT_MupMember : public DT_MLTag
     virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
-    const udmstri &     Scope() const           { return sScope; }
+    const String  &     Scope() const           { return sScope; }
     bool                IsBegin() const         { return bIsBegin; }
 
   private:
-    udmstri             sScope;
+    String              sScope;
     bool                bIsBegin;
 };
 
@@ -176,7 +178,7 @@ class DT_MupConst : public DT_Dsapi
     const char *        GetText() const         { return sConstText; }
 
   private:
-    udmstri             sConstText;             /// Without HTML.
+    String              sConstText;             /// Without HTML.
 };
 
 
@@ -196,7 +198,7 @@ class DT_Style : public DT_MLTag
     bool                IsStartOfNewLine() const
                                                 { return bNewLine; }
   private:
-    udmstri             sText;                  /// With HTML.
+    String              sText;                  /// With HTML.
     E_Kind              eKind;
     bool                bNewLine;
 };
@@ -214,11 +216,11 @@ class DT_EOL : public DT_Dsapi
 };
 
 
-class DT_AtTag : public ary::info::AtTag2
+class DT_AtTag : public ary::inf::AtTag2
 {
   public:
     void                AddToken(
-                            DYN ary::info::DocuToken &
+                            DYN ary::inf::DocuToken &
                                                 let_drToken )
                                                 {   aText.AddToken(let_drToken); }
     void                SetName(
@@ -228,7 +230,7 @@ class DT_AtTag : public ary::info::AtTag2
   protected:
                         DT_AtTag(
                             const char *        i_sTitle )
-                                                :   ary::info::AtTag2(i_sTitle) {}
+                                                :   ary::inf::AtTag2(i_sTitle) {}
 };
 
 class DT_StdAtTag : public DT_AtTag
@@ -250,17 +252,10 @@ class DT_SeeAlsoAtTag : public DT_AtTag
                         DT_SeeAlsoAtTag()       :   DT_AtTag("") {}
     virtual             ~DT_SeeAlsoAtTag();
 
-//  void                SetLinkText(
-//                          const char *        i_sLinkText )
-//                                              { sLinkText = i_sLinkText; }
-
     virtual void        DisplayAt(
                             DocumentationDisplay &
                                                 o_rDisplay ) const;
-    const udmstri &     LinkText() const        { return sTitle; }  // Missbrauch von sTitle
-
-  private:
-//  udmstri             sLinkText;
+    const String  &     LinkText() const        { return sTitle; }  // Missbrauch von sTitle
 };
 
 class DT_ParameterAtTag : public DT_AtTag
