@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javadep.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:59:13 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:41:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,10 +112,10 @@ enum { NGROW_INIT = 10, NGROW = 2 };
 
 static char     *pprogname  = "javadep";
 static char     csep        = ';';
-#if defined (UNX)
+#if defined (UNX) || defined(OS2)
 #define CDECL
 static char     cpathsep    = '/';
-#elif defined (WNT) || defined(OS2)
+#elif defined (WNT)
 static char     cpathsep    = '\\';
 #endif
 static int      bnl         = 0;
@@ -309,7 +309,7 @@ add_to_dependencies(struct growable *pdep,
             }
 
             /* get the canonical path */
-#if defined (UNX)
+#if defined (UNX) || defined(OS2)
             if ( !(realpath(pclass_file, cnp_class_file)
                 && realpath(path, cnp_str) ) ) {
                 err_quit("can't get the canonical path");
