@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_type2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:22:41 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:09:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/i_type.hxx>
 #include <ary/idl/ip_type.hxx>
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 #include <s2_luidl/uidl_tok.hxx>
 #include <s2_luidl/tk_ident.hxx>
 #include <s2_luidl/tk_keyw.hxx>
