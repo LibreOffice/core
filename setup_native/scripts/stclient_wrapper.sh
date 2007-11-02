@@ -4,7 +4,11 @@
 # All rights reserved.
 #
 
-STCLIENT=/usr/bin/stclient
+if [ `uname -s` = "SunOS" ]; then
+  STCLIENT=/usr/bin/stclient
+else
+  STCLIENT=/opt/sun/servicetag/bin/stclient
+fi
 
 TARGET_URN=
 PRODUCT_NAME=
@@ -30,26 +34,21 @@ do
     shift
 done
 
-if [ -x "$STCLIENT" ]; then
-  INSERT="false"
+[ -x "$STCLIENT" ] || exit 1
 
-  TEST=`${STCLIENT} -f -t ${TARGET_URN}`
+TEST=`${STCLIENT} -f -t ${TARGET_URN}` || exit 1
+[ "${TEST}" = "No records found" ] || exit 0
 
-  if [ "${TEST}" = "No records found" ]; then
-      INSERT="true"
-  fi
+uname=`uname -p`
+zone="global"
 
-  if [ "${INSERT}" = "true" ]; then
-    if [ `uname -s` = "SunOS" ]; then
-      uname=`uname -p`
-      zone="global"
-      if [ -x /usr/bin/zonename ]; then
-        zone=`/usr/bin/zonename`
-      fi
-
-      output=`${STCLIENT} -a -p "${PRODUCT_NAME}" -e "${PRODUCT_VERSION}" -t "${TARGET_URN}" -S "${PRODUCT_SOURCE}" -P "${PARENT_PRODUCT_NAME}" -m "Sun Microsystems, Inc." -A ${uname} -z global`
-    fi
+if [ `uname -s` = "SunOS" ]; then
+  if [ -x /usr/bin/zonename ]; then
+    zone=`/usr/bin/zonename`
   fi
 fi
 
+output=`"${STCLIENT}" -a -p "${PRODUCT_NAME}" -e "${PRODUCT_VERSION}" -t "${TARGET_URN}" -S "${PRODUCT_SOURCE}" -P "${PARENT_PRODUCT_NAME}" -m "Sun Microsystems, Inc." -A "${uname}" -z "${zone}"` || exit 1
+
 exit 0
+
