@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outfile.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:33:07 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:30:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,13 @@
 #define ADC_DISPLAY_HTML_OUTFILE_HXX
 
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
 #include <udm/html/htmlitem.hxx>
-    // PARAMETERS
 #include <cosv/ploc.hxx>
 
 
 namespace csv
 {
-class File;
+    class File;
 }
 
 
@@ -58,10 +55,6 @@ class HtmlDocuFile
     // LIFECYCLE
                         HtmlDocuFile();
 
-    /** @param i_depthInOutputTree
-        For files in the output root directory this value must be 0.
-        For each directory level the value increases by 1.
-    */
     void                SetLocation(
                             const csv::ploc::Path &
                                                 i_rFilePath,
@@ -88,17 +81,17 @@ class HtmlDocuFile
                             csv::File &         io_aFile );
 
     // DATA
-    udmstri             sFilePath;
-    udmstri             sTitle;
-    udmstri             sCopyright;
-    uintt               nDepth;
+    String              sFilePath;
+    String              sTitle;
+    String              sLocation;
+    String              sCopyright;
+    uintt               nDepthInOutputTree;
 
     Html::Body          aBodyData;
-    StreamStr           aBuffer;
+    StreamStr           aBuffer;                // Output buffer, should be transfered into csv::File.
 };
 
 
 
+
 #endif
-
-

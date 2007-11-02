@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opageenv.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:32:34 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:29:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,15 +47,16 @@ namespace ary
 {
     namespace cpp
     {
-        class DisplayGate;
-
-        class ProjectGroup;
-        class FileGroup;
+        class Gate;
 
         class Namespace;
         class Class;
         class Enum;
         class Typedef;
+    }
+    namespace loc
+    {
+        class File;
     }
 }
 namespace display
@@ -70,7 +71,7 @@ class OuputPage_Environment
                         OuputPage_Environment(
                             const csv::ploc::Path &
                                                 io_rOutputDir,
-                            const ary::cpp::DisplayGate &
+                            const ary::cpp::Gate &
                                                 i_rGate,
                             const display::CorporateFrame &
                                                 i_rLayout );
@@ -78,15 +79,13 @@ class OuputPage_Environment
 
     // OPERATIONS
     void                MoveDir_2Root();
+    void                MoveDir_2Names();
     void                MoveDir_Down2(             /// Only one level.
                             const ary::cpp::Namespace &
                                                 i_rNsp );
     void                MoveDir_Down2(             /// Only one level.
                             const ary::cpp::Class &
                                                 i_rClass );
-    void                MoveDir_2Project(
-                            const ary::cpp::ProjectGroup &
-                                                i_rProject );
     void                MoveDir_2Index();
     void                MoveDir_Up();
 
@@ -105,20 +104,13 @@ class OuputPage_Environment
                                                 i_rEnum );
     void                SetFile_Typedef(
                             const ary::cpp::Typedef &
-                                                i_rTypedef );
+                                                i_typedef );
     void                SetFile_Operations(
-                            const ary::cpp::FileGroup *
+                            const ary::loc::File *
                                                 i_pFile = 0 );  /// Only needed for global functions.
     void                SetFile_Data(
-                            const ary::cpp::FileGroup *
+                            const ary::loc::File *
                                                 i_pFile = 0 );  /// Only needed for global variables.
-    void                SetFile_CurProject();
-    void                SetFile_File(
-                            const ary::cpp::FileGroup &
-                                                i_rFile );
-    void                SetFile_Defs(
-                            const ary::cpp::FileGroup &
-                                                i_rFile );
     // INQUIRY
     const ary::cpp::Namespace *
                         CurNamespace() const;
@@ -126,11 +118,12 @@ class OuputPage_Environment
                         CurClass() const;
     const csv::ploc::Path &
                         CurPath() const;
-    const ary::cpp::DisplayGate &
+    const ary::cpp::Gate &
                         Gate() const;
     const display::CorporateFrame &
                         Layout() const;
     uintt               Depth() const;
+    const String &      RepositoryTitle() const;
 
   private:
     struct CheshireCat;
@@ -138,6 +131,6 @@ class OuputPage_Environment
 };
 
 
+
+
 #endif
-
-
