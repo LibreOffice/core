@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parsenv2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:19:04 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:05:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,11 +39,14 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <ary/ary.hxx>
+#include <ary/getncast.hxx>
 #include <ary/qualiname.hxx>
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/i_ce.hxx>
+#include <ary/idl/i_enum.hxx>
 #include <ary/idl/i_enumvalue.hxx>
+#include <ary/idl/i_module.hxx>
 #include <ary/idl/ip_ce.hxx>
 #include <parser/parserinfo.hxx>
 #include <adc_msg.hxx>
@@ -65,7 +68,7 @@ UnoIDL_PE::~UnoIDL_PE()
 
 void
 UnoIDL_PE::EstablishContacts( UnoIDL_PE *               io_pParentPE,
-                              ary::n22::Repository &    io_rRepository,
+                              ary::Repository &         io_rRepository,
                               TokenProcessing_Result &  o_rResult )
 {
     pRepository = &io_rRepository;
@@ -124,7 +127,7 @@ UnoIDL_PE::Leave( E_EnvStackAction  i_eWayOfLeaving )
 }
 
 void
-UnoIDL_PE::SetDocu( DYN ary::info::CodeInformation * let_dpDocu )
+UnoIDL_PE::SetDocu( DYN ary::doc::OldIdlDocu * let_dpDocu )
 {
     pDocu = let_dpDocu;
 }
@@ -134,7 +137,7 @@ UnoIDL_PE::SetPublished()
 {
     if (NOT pDocu)
     {
-        pDocu = new ary::info::CodeInformation;
+        pDocu = new ary::doc::OldIdlDocu;
     }
     pDocu->SetPublished();
 }
@@ -144,7 +147,7 @@ UnoIDL_PE::SetOptional()
 {
     if (NOT pDocu)
     {
-        pDocu = new ary::info::CodeInformation;
+        pDocu = new ary::doc::OldIdlDocu;
     }
     pDocu->SetOptional();
 }
@@ -154,13 +157,13 @@ UnoIDL_PE::PassDocuAt( ary::idl::CodeEntity & io_rCe )
 {
     if (pDocu)
     {
-        io_rCe.Set_Docu(pDocu.Release());
+        io_rCe.Set_Docu(*pDocu.Release());
     }
     else if // KORR_FUTURE
             // Re-enable doc-warning for Enum Values, as soon as there is a
             //   @option -no-doc-for-enumvalues.
-            (     io_rCe.ClassId() != ary::idl::Module::class_id
-              AND io_rCe.ClassId() != ary::idl::EnumValue::class_id  )
+            (     NOT ary::is_type<ary::idl::Module>(io_rCe)
+              AND NOT ary::is_type<ary::idl::Enum>(io_rCe)  )
     {
         TheMessages().Out_MissingDoc(
                         io_rCe.LocalName(),
