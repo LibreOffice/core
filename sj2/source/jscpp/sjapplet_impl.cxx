@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:06:56 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:21:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,7 +233,7 @@ EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) th
 {
 jclass jcFrame = pEnv->FindClass("java/awt/Frame");                     testJavaException(pEnv);
 jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "()V");  testJavaException(pEnv);
-joFrame = pEnv->AllocObject(jcFrame);                                   testJavaException(pEnv);
+jobject joFrame = pEnv->AllocObject(jcFrame);                                   testJavaException(pEnv);
 pEnv->CallVoidMethod(joFrame, jmFrame_rinit);                           testJavaException(pEnv);
 
 _joWindow = pEnv->NewGlobalRef(joFrame);
