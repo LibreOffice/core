@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tkpstam2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:28:23 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:19:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,8 @@ StateMachin2::StateMachin2( intt            in_nStatusSize,
         nNrofStati(0),
         nStatiSpace(in_nInitial_StatusListSize)
 {
-    precond(in_nStatusSize > 0);
-    precond(in_nInitial_StatusListSize > 0);
+    csv_assert(in_nStatusSize > 0);
+    csv_assert(in_nInitial_StatusListSize > 0);
 
     memset(pStati, 0, sizeof(StmStatu2*) * nStatiSpace);
 }

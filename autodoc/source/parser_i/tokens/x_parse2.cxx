@@ -4,9 +4,9 @@
  *
  *  $RCSfile: x_parse2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:28:35 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:19:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
         x_UnexpectedEOF
     };
 void
-X_AutodocParser::GetInfo( ostream &         o_rOutputMedium ) const
+X_AutodocParser::GetInfo( std::ostream &        o_rOutputMedium ) const
 {
     switch (eType)
     {
