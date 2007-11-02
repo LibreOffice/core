@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_ce.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:06:16 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:05:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,28 +36,22 @@
 #ifndef ARY_IDL_I_CE_HXX
 #define ARY_IDL_I_CE_HXX
 
-
+// BASE CLASSES
+#include <ary/entity.hxx>
 // USED SERVICES
-    // BASE CLASSES
-#include <ary/re.hxx>
-    // COMPONENTS
+#include <ary/doc/d_docu.hxx>
 #include <ary/idl/i_ce2s.hxx>
-    // PARAMETERS
-#include <ary/idl/i_language.hxx>
+#include <ary/idl/i_types4idl.hxx>
+
+
+
+
 
 
 namespace ary
 {
-
-namespace info
-{
-    class CodeInformation;
-}
-
 namespace idl
 {
-
-class CeHost;
 
 
 /** @resp Base class for all IDL code entities.
@@ -69,7 +63,7 @@ class CeHost;
     This is a storage base class, where more special classes are
     derived from.
 */
-class CodeEntity : public n22::RepositoryEntity
+class CodeEntity : public ary::Entity
 {
   public:
     // LIFECYCLE
@@ -84,7 +78,7 @@ class CodeEntity : public n22::RepositoryEntity
     Ce_id               Owner() const;
     E_SightLevel        SightLevel() const;
 
-    const ary::info::CodeInformation *
+    const ary::doc::Documentation &
                         Docu() const;
     const Ce_2s &       Secondaries() const;
 
@@ -92,32 +86,29 @@ class CodeEntity : public n22::RepositoryEntity
                         Null_();
     // ACCESS
     void                Set_Docu(
-                            DYN ary::info::CodeInformation *
-                                                pass_dpDocu );
+                            DYN ary::doc::Node &
+                                                pass_data );
     Ce_2s &             Secondaries();
 
   protected:
                         CodeEntity();
   private:
-    // Interface RepositoryEntity:
-    virtual void            do_Visit(::ary::Host & o_rHost) const;
-
     // Locals
-    virtual void            do_Visit_CeHost(CeHost & o_rHost) const = 0;
     virtual const String &  inq_LocalName() const = 0;
     virtual Ce_id           inq_NameRoom() const = 0;
     virtual Ce_id           inq_Owner() const = 0;
     virtual E_SightLevel    inq_SightLevel() const = 0;
 
     // DATA
-    Dyn<ary::info::CodeInformation>
-                        pDocu;
+    ary::doc::Documentation
+                        aDocu;
     Dyn<Ce_2s>          p2s;
 };
 
 
-// IMPLEMENTATION
 
+
+// IMPLEMENTATION
 inline const String &
 CodeEntity::LocalName() const
     { return inq_LocalName(); }
@@ -134,13 +125,19 @@ inline E_SightLevel
 CodeEntity::SightLevel() const
     { return inq_SightLevel(); }
 
-inline const ary::info::CodeInformation *
+inline const ary::doc::Documentation &
 CodeEntity::Docu() const
-    { return pDocu ? pDocu.Ptr() : 0; }
+    { return aDocu; }
+
+inline void
+CodeEntity::Set_Docu(DYN ary::doc::Node & pass_data)
+{
+    aDocu.Set_Data(pass_data);
+}
+
+
 
 
 }   // namespace idl
 }   // namespace ary
-
-
 #endif

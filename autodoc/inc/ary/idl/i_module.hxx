@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_module.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:10:01 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:08:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,39 +36,29 @@
 #ifndef ARY_IDL_I_MODULE_HXX
 #define ARY_IDL_I_MODULE_HXX
 
+// BASE CLASSES
+#include <ary/idl/i_ce.hxx>
 
 // USED SERVICES
-    // BASE CLASSES
-#include <ary/idl/i_ce.hxx>
-    // COMPONENTS
-    // PARAMETERS
 #include <ary/stdconstiter.hxx>
+
+
 
 
 namespace ary
 {
-
-template <class> class NameTreeNode;
-
+    template <class> class NameTreeNode;
 
 namespace idl
 {
-
 namespace ifc_module
 {
     struct attr;
 }
+    class Gate;
 
-class Gate;
 
-
-/*  OPEN?
-*/
-
-/** @resp
-    Represents an IDL module.
-
-    @descr
+/** Represents an IDL module.
 
     "Name" in methods means all code entities which belong into
     this namespace (not in a subnamespace of this one), but not
@@ -92,23 +82,21 @@ class Module : public CodeEntity
                             const String &      i_sName,
                             Ce_id               i_nId );
     // INQUIRY
+    /// @return 0 for the global namespace, +1 for each level below the global namespace.
     intt                Depth() const;
-//    void                Get_FullName(
-//                            StringVector &      o_rText,
-//                            Ce_idList *         o_pRelatedCes,
-//                            const Gate &        i_rGate ) const;
-
     Ce_id               Search_Name(
                             const String &      i_sName ) const;
     void                Get_Names(
                             Dyn_StdConstIterator<Ce_id> &
                                                 o_rResult ) const;
   private:
-    // Interface ary::RepositoryEntity
-    virtual RCid        inq_ClassId() const;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface ary::Object:
+    virtual ClassId     get_AryClass() const;
 
     // Interface CodeEntity
-    virtual void            do_Visit_CeHost(CeHost & o_rHost) const;
     virtual const String &  inq_LocalName() const;
     virtual Ce_id           inq_NameRoom() const;
     virtual Ce_id           inq_Owner() const;
@@ -121,17 +109,16 @@ class Module : public CodeEntity
                             pImpl;
 };
 
+
 inline bool
 is_Module( const CodeEntity & i_rCe )
-    { return i_rCe.ClassId() == Module::class_id; }
+{
+    return i_rCe.AryClass() == Module::class_id;
+}
 
 
-// IMPLEMENTATION
 
 
 }   // namespace idl
 }   // namespace ary
-
-
 #endif
-

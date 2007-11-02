@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_enum.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:07:47 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:06:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,34 +36,23 @@
 #ifndef ARY_IDL_I_ENUM_HXX
 #define ARY_IDL_I_ENUM_HXX
 
-
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <ary/idl/i_ce.hxx>
-    // COMPONENTS
-    // PARAMETERS
+
+
 
 
 namespace ary
 {
 namespace idl
 {
-
-
 namespace ifc_enum
 {
     struct attr;
 }
 
 
-
-/*  OPEN?
-*/
-
-/** @resp
-    Represents an IDL enum.
+/** Represents an IDL enum.
 */
 class Enum : public CodeEntity
 {
@@ -78,11 +67,13 @@ class Enum : public CodeEntity
     void                Add_Value(
                             Ce_id               i_nValue );
   private:
-    // Interface ary::RepositoryEntity
-    virtual RCid        inq_ClassId() const;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface ary::Object
+    virtual ClassId     get_AryClass() const;
 
     // Interface CodeEntity
-    virtual void            do_Visit_CeHost(CeHost & o_rHost) const;
     virtual const String &  inq_LocalName() const;
     virtual Ce_id           inq_NameRoom() const;
     virtual Ce_id           inq_Owner() const;
@@ -101,17 +92,17 @@ class Enum : public CodeEntity
 
 
 
+
 // IMPLEMENTATION
-
-
 inline void
 Enum::Add_Value( Ce_id i_nValue )
-    { aValues.push_back(i_nValue); }
+{
+    aValues.push_back(i_nValue);
+}
+
+
 
 
 }   // namespace idl
 }   // namespace ary
-
-
 #endif
-
