@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 10:09:22 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:49:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
-#endif
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
 #endif
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
@@ -147,6 +144,8 @@ Os2SalGraphics::Os2SalGraphics()
 
 Os2SalGraphics::~Os2SalGraphics()
 {
+    Ft2DeleteSetId( mhPS, LCID_BASE);
+
     if ( mpFontMetrics )
         delete mpFontMetrics;
 
@@ -540,7 +539,7 @@ void Os2SalGraphics::drawPolyLine( ULONG nPoints, const SalPoint* pPtAry )
 
 void Os2SalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 {
-    POLYGON aPolygon;
+    PM_POLYGON aPolygon;
 
     // create polygon
     aPolygon.aPointl = new POINTL[ nPoints ];
@@ -611,7 +610,7 @@ void Os2SalGraphics::drawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
 {
     ULONG       i;
     long        nHeight = mnHeight - 1;
-    POLYGON*    aPolygonAry = new POLYGON[ nPoly ];
+    PM_POLYGON* aPolygonAry = new PM_POLYGON[ nPoly ];
 
     for( i = 0; i < nPoly; i++ )
     {
