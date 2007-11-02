@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_attribute.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:30:34 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:42:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,8 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/idl/ihost_ce.hxx>
+#include <cosv/tpl/processor.hxx>
+#include <ary/getncast.hxx>
 #include <sci_impl.hxx>
 
 
@@ -72,13 +73,13 @@ Attribute::~Attribute()
 
 
 void
-Attribute::do_Visit_CeHost( CeHost & o_rHost ) const
+Attribute::do_Accept(csv::ProcessorIfc & io_processor) const
 {
-    o_rHost.Do_Attribute(*this);
+    csv::CheckedCall(io_processor,*this);
 }
 
-RCid
-Attribute::inq_ClassId() const
+ClassId
+Attribute::get_AryClass() const
 {
     return class_id;
 }
@@ -113,7 +114,7 @@ namespace ifc_attribute
 inline const Attribute &
 attribute_cast( const CodeEntity &  i_ce )
 {
-    csv_assert( i_ce.ClassId() == Attribute::class_id );
+    csv_assert( is_type<Attribute>(i_ce) );
     return static_cast< const Attribute& >(i_ce);
 }
 
