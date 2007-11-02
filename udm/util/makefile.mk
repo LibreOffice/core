@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 14:40:54 $
+#   last change: $Author: hr $ $Date: 2007-11-02 17:37:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@ ENABLE_EXCEPTIONS=true
 
 LIB1FILES= 	\
         $(LB)$/csi_html.lib     \
-        $(LB)$/udm_udm.lib		\
         $(LB)$/csi_xml.lib
 
 
@@ -61,5 +60,3 @@ LIB1ARCHIV= 	$(LB)$/lib$(TARGET).a
 
 
 .INCLUDE :  target.mk
-
-
