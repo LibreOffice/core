@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsound.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 10:07:24 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:46:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,13 +47,13 @@
 #endif
 
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
 #ifndef _SV_SALSTYPE_HXX
-#include <salstype.hxx>
+#include <vcl/salstype.hxx>
 #endif
 #ifndef _SV_SALSOUND_HXX
-#include <salsound.hxx>
+#include <vcl/salsound.hxx>
 #endif
 
 // ------------
