@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 14:08:01 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 11:48:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -789,13 +789,13 @@ sal_Int32 ZipFile::readCEN()
             aEntry.nOffset += nLocPos;
             aEntry.nOffset *= -1;
 
-            if ( aEntry.nNameLen > ZIP_MAXNAMELEN )
+            if ( aEntry.nNameLen < 0 || aEntry.nNameLen > ZIP_MAXNAMELEN )
                 throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "name length exceeds ZIP_MAXNAMELEN bytes" ) ), Reference < XInterface > () );
 
-            if ( nCommentLen > ZIP_MAXNAMELEN )
+            if ( nCommentLen < 0 || nCommentLen > ZIP_MAXNAMELEN )
                 throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "comment length exceeds ZIP_MAXNAMELEN bytes" ) ), Reference < XInterface > () );
 
-            if ( aEntry.nExtraLen > ZIP_MAXEXTRA )
+            if ( aEntry.nExtraLen < 0 || aEntry.nExtraLen > ZIP_MAXEXTRA )
                 throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "extra header info exceeds ZIP_MAXEXTRA bytes") ), Reference < XInterface > () );
 
             aEntry.sName = rtl::OUString::intern ( (sal_Char *) aMemGrabber.getCurrentPos(),
