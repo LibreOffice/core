@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dirchain.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:05:30 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,13 @@
 #include <cosv/bstream.hxx>
 
 
+
+
 namespace csv
 {
 namespace ploc
 {
+
 
 DirectoryChain::DirectoryChain()
 {
@@ -65,15 +68,19 @@ DirectoryChain::Set( const char *        i_sSubPath,
                      bool                i_bPathIsAlwaysDir,
                      const char *        i_sDelimiter        )
 {
+    csv_assert(i_sDelimiter != 0);
+    if (i_sSubPath == 0)
+        return;
+
     const char * pRestPath = i_sSubPath;
-    if ( pRestPath != 0 ? *pRestPath == *i_sDelimiter : false )
+    if (*pRestPath == *i_sDelimiter)
         ++pRestPath;
 
     for ( const char * pDirEnd = strchr(pRestPath,*i_sDelimiter);
           pDirEnd != 0;
           pDirEnd = strchr(pRestPath,*i_sDelimiter) )
     {
-        aPath.push_back( String(pRestPath, pDirEnd - pRestPath) );
+        aPath.push_back( String(pRestPath, pDirEnd) );
         pRestPath = pDirEnd + 1;
     }
     if (*pRestPath != 0 AND i_bPathIsAlwaysDir)
@@ -151,8 +158,6 @@ DirectoryChain::Get( bostream &      o_rPath,
 
 
 
+
 } // namespace ploc
 } // namespace csv
-
-
-
