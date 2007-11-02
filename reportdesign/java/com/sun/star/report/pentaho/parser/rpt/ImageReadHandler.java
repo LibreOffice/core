@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageReadHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:09 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 11:24:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,8 @@ public class ImageReadHandler extends ElementReadHandler
     super.startParsing(attrs);
     final String formula = attrs.getValue
         (OfficeNamespaces.OOREPORT_NS, "formula");
+    final String preserveIRI = attrs.getValue
+        (OfficeNamespaces.OOREPORT_NS, "preserve-IRI");
     if (formula != null && formula.length() != 0)
     {
       // now, the evaulated content ends up in the 'content' attribute of the
