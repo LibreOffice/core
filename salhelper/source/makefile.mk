@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:46:10 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:28:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,8 @@ DEF1NAME=	$(SHL1TARGET)
 
 .IF "$(COMNAME)"=="msci"
 SHL1VERSIONMAP=msci.map
+.ELIF "$(GUI)"=="OS2"
+SHL1VERSIONMAP=gcc3os2.map
 .ELIF "$(COMNAME)"=="sunpro5"
 SHL1VERSIONMAP=sols.map
 .ELIF "$(COMNAME)"=="gcc3"
