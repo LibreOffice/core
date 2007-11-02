@@ -4,9 +4,9 @@
  *
  *  $RCSfile: arygroup.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:49:33 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:37:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,23 +35,37 @@
 
 #ifndef ARY_ARYGROUP_HXX
 #define ARY_ARYGROUP_HXX
+//  KORR_DEPRECATED_3.0
 
 
 // USED SERVICES
     // BASE CLASSES
-    // COMPONENTS
-    // PARAMETERS
-#include <ary/ids.hxx>
+    // OTHER
+#include <ary/types.hxx>
+
 
 namespace ary
 {
-    class RepositoryEntity;
-    class Slot;
+namespace cpp
+{
+    class CppEntity;
+}
+
+class Slot;
 
 namespace group
 {
     typedef std::vector< SlotAccessId > SlotList;
 }
+}
+
+
+
+
+namespace ary
+{
+
+
 
 class AryGroup
 {
@@ -61,7 +75,7 @@ class AryGroup
 
     // INQUIRY
     Gid                 Id_Group() const;
-    const RepositoryEntity &
+    const cpp::CppEntity &
                         RE_Group() const;
     const group::SlotList &
                         Slots() const;
@@ -71,7 +85,7 @@ class AryGroup
 
   private:
     virtual Gid         inq_Id_Group() const = 0;
-    virtual const RepositoryEntity &
+    virtual const cpp::CppEntity &
                         inq_RE_Group() const = 0;
     virtual const group::SlotList &
                         inq_Slots() const = 0;
@@ -80,12 +94,12 @@ class AryGroup
 };
 
 
-// IMPLEMENTATION
 
+// IMPLEMENTATION
 inline Gid
 AryGroup::Id_Group() const
     { return inq_Id_Group(); }
-inline const RepositoryEntity &
+inline const cpp::CppEntity &
 AryGroup::RE_Group() const
     { return inq_RE_Group(); }
 inline const group::SlotList &
@@ -98,9 +112,4 @@ AryGroup::Create_Slot( SlotAccessId i_nSlot ) const
 
 
 }   // namespace ary
-
-
 #endif
-
-
-
