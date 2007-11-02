@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:40:24 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:40:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2278,6 +2278,18 @@ BOOL SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )
     if( IsNewModel() )
         lcl_CalcNewWidths( aFndBox.GetLines(), aPara );
     aFndBox.GetLines().ForEach( &lcl_CopyLineToDoc, &aPara );
+    if( rTblNd.GetTable().IsNewModel() )
+    {   // The copied line must not contain any row span attributes > 1
+        SwTableLine* pLine = rTblNd.GetTable().GetTabLines()[0];
+        USHORT nColCount = pLine->GetTabBoxes().Count();
+        ASSERT( nColCount, "Empty Table Line" )
+        for( USHORT nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
+        {
+            SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
+            ASSERT( pBox, "Missing Table Box" );
+            pBox->setRowSpan( 1 );
+        }
+    }
 
     return TRUE;
 }
