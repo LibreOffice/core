@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pipe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 09:48:20 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,35 +153,27 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
 #if OSL_DEBUG_LEVEL>0
             debug_printf("osl_createPipe %s\n", strPipeNameBuffer);
 #endif
-            do
-            {
-                /* free instance should be available first */
-                fPipeAvailable = DosWaitNPipe( (PCSZ)strPipeNameBuffer, -1);
-                /* first try to open system pipe */
-                if ( fPipeAvailable == NO_ERROR )
+            ngLastError = DosOpen( (PCSZ)strPipeNameBuffer,
+                                &(pPipe->hPipe), &ulAction,
+                                0, FILE_NORMAL, FILE_OPEN,
+                                OPEN_ACCESS_READWRITE | OPEN_SHARE_DENYREADWRITE,
+                                (PEAOP2) NULL);
+            // if pipe is busy, wait for it
+            if (ngLastError == ERROR_PIPE_BUSY)
+                do
                 {
-                    ngLastError = DosOpen( (PCSZ)strPipeNameBuffer,
-                                 &(pPipe->hPipe),
-                                 &ulAction,
-                                 0,
-                                 FILE_NORMAL,
-                                 FILE_OPEN,
-                                 OPEN_ACCESS_READWRITE |
-                                 OPEN_SHARE_DENYREADWRITE,
-                                 (PEAOP2) NULL
-                               );
-                    if ( ngLastError == NO_ERROR )
+                    /* free instance should be available first */
+                    fPipeAvailable = DosWaitNPipe( (PCSZ)strPipeNameBuffer, -1);
+                    /* first try to open system pipe */
+                    if ( fPipeAvailable == NO_ERROR )
                     {
                         // We got it !
+                        ngLastError = NO_ERROR;
                         break;
                     }
-                    else
-                    {
-                        // Pipe instance maybe catched by another client -> try again
-                    }
-                }
-                printf("osl_createPipe wait for Pipe available\n");
-            } while ( fPipeAvailable );
+                    // Pipe instance maybe catched by another client -> try again
+                    printf("osl_createPipe wait for Pipe available\n");
+                } while ( fPipeAvailable );
         }
         break;
     case osl_Pipe_CREATE:
