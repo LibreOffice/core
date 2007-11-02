@@ -4,9 +4,9 @@
  *
  *  $RCSfile: it_tplparam.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:53:27 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:58:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,10 @@
 #ifndef ARY_IDL_IT_TPLPARAM_HXX
 #define ARY_IDL_IT_TPLPARAM_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include "it_named.hxx"
-    // COMPONENTS
-    // PARAMETERS
+
+
 
 
 namespace ary
@@ -64,17 +61,15 @@ class TemplateParamType : public Named_Type
                             const char *        i_sName );
     virtual             ~TemplateParamType();
 
-    // INQUIRY
     Ce_id               StructId() const;       /// The struct which declares this type.
-
-    // ACCESS
     void                Set_StructId(
                             Ce_id               i_nStruct );
-
   private:
-    // Interface RepositoryEntity:
-    virtual void        do_Visit( Host & io_rHost ) const;
-    virtual RCid        inq_ClassId() const;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface Object:
+    virtual ClassId     get_AryClass() const;
 
     // Interface Type:
     virtual void        inq_Get_Text(
@@ -87,6 +82,10 @@ class TemplateParamType : public Named_Type
     Ce_id               nStruct;                /// The struct which declares this type.
 };
 
+
+
+
+// IMPLEMENTATION
 inline Ce_id
 TemplateParamType::StructId() const
 {
@@ -100,8 +99,8 @@ TemplateParamType::Set_StructId( Ce_id i_nStruct )
 }
 
 
+
+
 }   // namespace idl
 }   // namespace ary
-
-
 #endif
