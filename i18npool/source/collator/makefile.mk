@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 15:33:25 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:37:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ rules_dependencies:=$(foreach,i,$(tempvar) data$/$i)
 .IF "$(GUI)"=="WNT"
 CFLAGSCXX+=-DLOCAL_RULE_LANGS="\"$(LOCAL_RULE_LANGS)\""
 .ELIF "$(GUI)"=="OS2"
-CFLAGSCXX+=-DLOCAL_RULE_LANGS="$(LOCAL_RULE_LANGS)"
+#CFLAGSCXX+=-DLOCAL_RULE_LANGS="$(LOCAL_RULE_LANGS)"
 .ELSE
 CFLAGSCXX+=-DLOCAL_RULE_LANGS='"$(LOCAL_RULE_LANGS)"'
 .ENDIF
