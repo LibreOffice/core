@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc_deal.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:34:33 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:02:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,19 @@
 #ifndef ADC_DOC_DEAL_HXX
 #define ADC_DOC_DEAL_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <tokens/tokproct.hxx>
-    // COMPONENTS
-    // PARAMETERS
-#include <ary/cpp/c_etypes.hxx>
+// USED SERVICES
+#include <ary/cpp/c_types4cpp.hxx>
 
 namespace ary
 {
-    class Documentation;
+namespace doc
+{
+    class OldCppDocu;
 }
+}
+
 
 
 
@@ -75,24 +75,23 @@ class DocuDealer
         or ary::Glossary.
     */
     void                TakeDocu(
-                            DYN ary::Documentation &
+                            DYN ary::doc::OldCppDocu &
                                                 let_drInfo );
   private:
     virtual void        do_TakeDocu(
-                            DYN ary::Documentation &
+                            DYN ary::doc::OldCppDocu &
                                                 let_drInfo ) = 0;
 };
 
 
 
-// IMPLEMENTATION
 
+// IMPLEMENTATION
 inline void
-DocuDealer::TakeDocu( DYN ary::Documentation & let_drInfo )
+DocuDealer::TakeDocu( DYN ary::doc::OldCppDocu & let_drInfo )
     { do_TakeDocu(let_drInfo); }
 
 
 
 
 #endif
-

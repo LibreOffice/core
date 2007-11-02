@@ -4,9 +4,9 @@
  *
  *  $RCSfile: x_parse.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:34:49 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:02:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,10 @@
 #ifndef ADC_X_PARSE_HXX
 #define ADC_X_PARSE_HXX
 
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <autodoc/x_parsing.hxx>
-    // COMPONENTS
-    // PARAMETERS
+
+
 
 
 class X_Parser : public autodoc::X_Parser_Ifc
@@ -50,21 +49,23 @@ class X_Parser : public autodoc::X_Parser_Ifc
                         X_Parser(
                             E_Event             i_eEvent,
                             const char *        i_sObject,
-                            const udmstri &     i_sCausingFile_FullPath,
+                            const String &      i_sCausingFile_FullPath,
                             uintt               i_nCausingLineNr );
                         ~X_Parser();
     // INQUIRY
     virtual E_Event     GetEvent() const;
     virtual void        GetInfo(
-                            ostream &           o_rOutputMedium ) const;
+                            std::ostream &      o_rOutputMedium ) const;
 
   private:
     E_Event             eEvent;
-    udmstri             sObject;
-    udmstri             sCausingFile_FullPath;
+    String              sObject;
+    String              sCausingFile_FullPath;
     uintt               nCausingLineNr;
 
 };
 
-#endif
 
+
+
+#endif
