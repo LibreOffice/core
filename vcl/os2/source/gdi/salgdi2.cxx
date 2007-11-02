@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 10:04:34 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:50:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #include <salvd.h>
 #endif
 #ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 #endif
 
 #ifndef __H_FT2LIB
@@ -142,9 +142,6 @@ void Os2SalGraphics::copyArea( long nDestX, long nDestY,
     // lower-left corner of source
     thePoints[2].x = nSrcX;
     thePoints[2].y = TY( nSrcY + nSrcHeight - 1);
-
-    GpiBitBlt( mhPS, mhPS, 3, thePoints,
-               ROP_SRCCOPY, BBO_IGNORE );
 
     if ( (nFlags & SAL_COPYAREA_WINDOWINVALIDATE) && mbWindow )
     {
@@ -236,6 +233,7 @@ void Os2SalGraphics::copyArea( long nDestX, long nDestY,
             }
 
             // Bereiche die von anderen Fenstern ueberlagert werden berechnen
+            // Calculate areas that are overlapped by other windows
             HWND hWndParent = WinQueryWindow( mhWnd, QW_PARENT );
             hWnd = WinQueryWindow( HWND_DESKTOP, QW_TOP );
             aVCLSrcRect = Rectangle( aSrcRect.xLeft, aSrcRect.yBottom, aSrcRect.xRight, aSrcRect.yTop );
@@ -285,13 +283,17 @@ void Os2SalGraphics::copyArea( long nDestX, long nDestY,
                     // SolarMutex durch diesen Thread schon gelockt ist
                     SalData*    pSalData = GetSalData();
                     ULONG       nCurThreadId = GetCurrentThreadId();
-                    if ( pSalData->mnAppThreadId != nCurThreadId )
+                    if ( pSalData->mnAppThreadId == nCurThreadId )
                         WinUpdateWindow( mhWnd );
                 }
                 GpiDestroyRegion( mhPS, hInvalidateRgn );
             }
         }
     }
+
+    GpiBitBlt( mhPS, mhPS, 3, thePoints,
+               ROP_SRCCOPY, BBO_IGNORE );
+
 }
 
 // -----------------------------------------------------------------------
@@ -550,6 +552,25 @@ void Os2SalGraphics::drawBitmap( const SalTwoRect* pPosAry,
         ImplReleaseCachedPS( CACHED_HPS_2 );
 */
     }
+}
+
+// -----------------------------------------------------------------------
+
+bool Os2SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
+                      const SalBitmap&  rSrcBitmap,
+                      const SalBitmap&  rAlphaBmp )
+{
+    // TODO(P3) implement alpha blending
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
+bool Os2SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
+                                    long nHeight, sal_uInt8 nTransparency )
+{
+    // TODO(P3) implement alpha blending
+    return false;
 }
 
 // -----------------------------------------------------------------------
