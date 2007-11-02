@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adc_cmds.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:05:27 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:43:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <autodoc/displaying.hxx>
 #include <autodoc/dsp_html_std.hxx>
 #include <display/corframe.hxx>
-#include <display/uidldisp.hxx>
+#include <adc_cl.hxx>
 
 
 namespace autodoc
@@ -123,9 +123,9 @@ CreateHtml::do_Init( opt_iter &          it,
 bool
 CreateHtml::do_Run() const
 {
-    if ( ::ary::n22::Repository::The_().HasIdl() )
+    if ( CommandLine::Get_().IdlUsed() )
         run_Idl();
-    if ( ::ary::n22::Repository::The_().HasCpp() )
+    if ( CommandLine::Get_().CppUsed() )
         run_Cpp();
     return true;
 }
@@ -140,7 +140,7 @@ void
 CreateHtml::run_Idl() const
 {
     const ary::idl::Gate &
-        rGate = ary::n22::Repository::The_().Gate_Idl();
+        rGate = CommandLine::Get_().TheRepository().Gate_Idl();
 
     Cout() << "Creating HTML-output into the directory "
               << sOutputRootDirectory
@@ -152,7 +152,7 @@ CreateHtml::run_Idl() const
     Dyn<autodoc::HtmlDisplay_Idl_Ifc>
         pDisplay( rToolsFactory.Create_HtmlDisplay_Idl() );
 
-    DYN display::CorporateFrame &   // KORR: Remove the need for const_cast in future.
+    DYN display::CorporateFrame &   // KORR_FUTURE: Remove the need for const_cast
         drFrame = const_cast< display::CorporateFrame& >(rToolsFactory.Create_StdFrame());
     if (NOT DevelopersManual_HtmlRoot().empty())
         drFrame.Set_DevelopersGuideHtmlRoot( DevelopersManual_HtmlRoot() );
@@ -165,9 +165,9 @@ CreateHtml::run_Idl() const
 void
 CreateHtml::run_Cpp() const
 {
-    const ary::n22::Repository &
-        rReposy = ary::n22::Repository::The_();
-    const ary::cpp::DisplayGate &
+    const ary::Repository &
+        rReposy = CommandLine::Get_().TheRepository();
+    const ary::cpp::Gate &
         rGate = rReposy.Gate_Cpp();
 
     const DisplayToolsFactory_Ifc &
