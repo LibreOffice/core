@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stmstar2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:27:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:19:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ StmArrayStatu2::StmArrayStatu2( intt            i_nStatusSize,
         nTokenId(UINT16(i_nTokenId)),
         bIsADefault(in_bIsDefault)
 {
-    // KORR: Interface of StmArrayStatu2() has to be changed.
+    // KORR_FUTURE: Interface of StmArrayStatu2() has to be changed.
     csv_assert(i_nTokenId < 64536);
 
     if (in_aArrayModel != 0)
@@ -76,9 +76,9 @@ StmArrayStatu2::SetBranches( intt                in_nStartBranchIx,
                              StmStatu2::Branch * in_aBranchValues,
                              intt                in_nNrofValues )
 {
-    precond(in_nStartBranchIx >= 0);
-    precond(in_aBranchValues != 0);
-    precond( in_nNrofValues > 0
+    csv_assert(in_nStartBranchIx >= 0);
+    csv_assert(in_aBranchValues != 0);
+    csv_assert( in_nNrofValues > 0
              AND in_nStartBranchIx + in_nNrofValues <= nNrOfBranches );
 
     memcpy(&dpBranches[in_nStartBranchIx],in_aBranchValues,in_nNrofValues);
