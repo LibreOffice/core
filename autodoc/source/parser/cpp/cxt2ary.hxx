@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cxt2ary.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:19:55 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:50:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,16 @@
     // COMPONENTS
     // PARAMETERS
 
+namespace ary
+{
+namespace loc
+{
+    class File;
+}
+}
+
+
+
 namespace cpp
 {
 
@@ -54,7 +64,7 @@ namespace cpp
 /** @descr
     This class provides information about the context of an
     CodeEntity, which is going to be stored in the repository.
-    The information is used mainly by class ary::cpp::RwGate.
+    The information is used mainly by class ary::cpp::Gate.
 
     Also it provides information for the parser about actual
     state of several public variables.
@@ -72,7 +82,7 @@ class ContextForAry : public ary::cpp::InputContext,
   public:
     // LIFECYCLE
                         ContextForAry(
-                            ary::cpp::RwGate &  io_rAryGate );
+                            ary::cpp::Gate &  io_rAryGate );
     virtual             ~ContextForAry();
 
     // OPERATIONS
@@ -87,11 +97,8 @@ class ContextForAry : public ary::cpp::InputContext,
 
   private:
     // Interface ary::cpp::InputContext:
-    virtual ary::cpp::ProjectGroup &
-                        inq_CurProjectGroup() const;
-    virtual ary::cpp::FileGroup &
-                        inq_CurFileGroup() const;
-
+    virtual ary::loc::File &
+                        inq_CurFile() const;
     virtual ary::cpp::Namespace &
                         inq_CurNamespace() const;
     virtual ary::cpp::Class *
@@ -130,7 +137,7 @@ class ContextForAry : public ary::cpp::InputContext,
                         do_Get_CurTemplateParameters();
     virtual void        do_Close_OpenTemplate();
     virtual void        do_Event_Class_FinishedBase(
-                            const udmstri &     i_sBaseName );
+                            const String  &     i_sBaseName );
 
     virtual void        do_Event_Store_Typedef(
                             ary::cpp::Typedef & io_rTypedef );
@@ -138,11 +145,11 @@ class ContextForAry : public ary::cpp::InputContext,
                             ary::cpp::EnumValue &
                                                 io_rEnumValue );
     virtual void        do_Event_Store_CppDefinition(
-                            ary::cpp::CppDefinition &
+                            ary::cpp::DefineEntity &
                                                 io_rDefinition );
     virtual void        do_Event_EnterFunction_ParameterList();
     virtual void        do_Event_Function_FinishedParameter(
-                            const udmstri &     i_sParameterName );
+                            const String  &     i_sParameterName );
     virtual void        do_Event_LeaveFunction_ParameterList();
     virtual void        do_Event_EnterFunction_Implementation();
     virtual void        do_Event_LeaveFunction_Implementation();
@@ -153,32 +160,25 @@ class ContextForAry : public ary::cpp::InputContext,
                             ary::cpp::Variable &
                                                 io_rVariable );
     virtual void        do_TakeDocu(
-                            DYN ary::Documentation &
+                            DYN ary::doc::OldCppDocu &
                                                 let_drInfo );
     virtual void        do_StartWaitingFor_Recovery();
-    virtual ary::cpp::RwGate &
+    virtual ary::cpp::Gate &
                         inq_AryGate() const;
     virtual const ary::cpp::InputContext &
                         inq_Context() const;
-    virtual udmstri     inq_CurFileName() const;
+    virtual String      inq_CurFileName() const;
     virtual uintt       inq_LineCount() const;
     virtual bool        inq_IsWaitingFor_Recovery() const;
     virtual bool        inq_IsExternC() const;
 
     // Interface FileScope_EventHandler
-    virtual void        do_SetCurProject(
-                            ary::cpp::ProjectGroup &
-                                                io_rCurProject );
     virtual void        do_SetCurFile(
-                            ary::cpp::FileGroup &
-                                                io_rCurFile,
-                            const udmstri &     i_sFileName );
+                            ary::loc::File &    io_rCurFile );
     virtual void        do_Event_IncrLineCount();
     virtual void        do_Event_SwBracketOpen();
     virtual void        do_Event_SwBracketClose();
     virtual void        do_Event_Semicolon();
-    virtual ary::cpp::ProjectGroup &
-                        inq_CurProject() const;
 
     // Local types
     struct S_FileScopeInfo;
@@ -187,7 +187,7 @@ class ContextForAry : public ary::cpp::InputContext,
     struct S_RecoveryGuard;
 
     // DATA
-    ary::cpp::RwGate *  pGate;
+    ary::cpp::Gate *    pGate;
     TokenProcessing_Result
                         aTokenResult;
     Dyn<S_FileScopeInfo>
@@ -199,8 +199,8 @@ class ContextForAry : public ary::cpp::InputContext,
                         pRecoveryGuard;
 };
 
+
+
+
 }   // namespace cpp
-
-
 #endif
-
