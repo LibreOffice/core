@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utilities.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:12:16 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:10:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,9 @@
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
+#ifndef OS2
 #include <windows.h>
+#endif
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
@@ -91,6 +93,8 @@ bool HasOnlySpaces(const std::wstring& String);
         Windows Locale Identifier corresponding to input LocaleSet.
 */
 
+#ifndef OS2
 LCID LocaleSetToLCID( const LocaleSet_t & Locale );
+#endif
 
 #endif
