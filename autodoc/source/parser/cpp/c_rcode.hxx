@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_rcode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:15:32 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:48:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,48 +36,49 @@
 #ifndef ADC_CPP_C_RCODE_HXX
 #define ADC_CPP_C_RCODE_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <tokens/tokproct.hxx>
-    // COMPONENTS
+// USED SERVICES
 #include <cosv/ploc.hxx>
 #include "cxt2ary.hxx"
-    // PARAMETERS
-#include <ary/ids.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
+#include <ary/loc/loc_types4loc.hxx>
 
 
 
 namespace ary
 {
-    namespace cpp
-    {
-        class RwGate;
-    }
-
-    class Documentation;
+namespace cpp
+{
+    class Gate;
+}
+namespace doc
+{
+    class OldCppDocu;
+}
 }
 
 namespace cpp
 {
-
     class PE_File;
     class Token;
     class Cpp_PE;
+
+
+
 
 class CodeExplorer : private TokenProcessing_Types
 
 {
   public:
                         CodeExplorer(
-                            ary::cpp::RwGate & io_rAryGate );
+                            ary::cpp::Gate &    io_rAryGate );
                         ~CodeExplorer();
 
     void                StartNewFile();
     void                Process_Token(
                             DYN cpp::Token &    let_drToken );
-    ary::Cid            CurFile() const;
+    ary::loc::Le_id     CurFile() const;
 
     // ACCESS
     FileScope_EventHandler &
@@ -100,7 +101,7 @@ class CodeExplorer : private TokenProcessing_Types
     EnvironmentStack    aEnvironments;
     Dyn<PE_File>        pPE_File;
 
-    ary::cpp::RwGate *  pGate;
+    ary::cpp::Gate *    pGate;
     cpp::Token *        dpCurToken;
 };
 
