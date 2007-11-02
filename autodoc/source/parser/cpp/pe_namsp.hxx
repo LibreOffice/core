@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_namsp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:28:01 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:56:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,17 +95,13 @@ class PE_Namespace : public Cpp_PE
     Dyn< PeStatusArray<PE_Namespace> >
                         pStati;
 
-    udmstri             sLocalName;
+    String              sLocalName;
     bool                bPush;
 };
 
 
 
-// IMPLEMENTATION
-
 
 }   // namespace cpp
-
-
 #endif
 
