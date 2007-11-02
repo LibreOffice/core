@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 17:17:06 $
+#   last change: $Author: hr $ $Date: 2007-11-02 16:18:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,16 +54,16 @@ PRJINC=$(PRJ)$/source
 
 
 OBJFILES= \
-    $(OBJ)$/l_gate.obj      \
-    $(OBJ)$/loc_dir.obj     \
-    $(OBJ)$/loc_file.obj    \
-    $(OBJ)$/loc_root.obj    
+    $(OBJ)$/loc_dir.obj         \
+    $(OBJ)$/loc_file.obj        \
+    $(OBJ)$/loc_filebase.obj    \
+    $(OBJ)$/loc_root.obj        \
+    $(OBJ)$/loc_traits.obj      \
+    $(OBJ)$/loca_le.obj         \
+    $(OBJ)$/locs_le.obj
 
 
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-
-
