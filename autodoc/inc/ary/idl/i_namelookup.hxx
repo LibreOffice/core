@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_namelookup.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:10:26 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:09:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,33 +36,26 @@
 #ifndef ARY_IDL_I_NAMELOOKUP_HXX
 #define ARY_IDL_I_NAMELOOKUP_HXX
 
+// BASE CLASSES
+#include <ary/idl/i_types4idl.hxx>
 
 // USED SERVICES
-    // BASE CLASSES
-#include <ary/idl/i_language.hxx>
-    // COMPONENTS
-    // PARAMETERS
 #include <ary/stdconstiter.hxx>
 #include <ary/itrange.hxx>
 #include <vector>
 #include <map>
 
 
+
+
 namespace ary
 {
-
 namespace idl
 {
 
 
-/*  OPEN?
-*/
-
-/** @resp
-    This class finds all occurrences in the current language of a
+/** This class finds all occurrences in the current language of a
     name in the repository.
-
-    @descr
 */
 class NameLookup
 {
@@ -75,13 +68,13 @@ class NameLookup
                                     nOwner(0) {}
                             NameProperties(
                                 Ce_id               i_id,
-                                RCid                i_class,
+                                ClassId             i_class,
                                 Ce_id               i_owner )
                                 :   nId(i_id),
                                     nClass(i_class),
                                     nOwner(i_owner) {}
         Ce_id               nId;
-        RCid                nClass;
+        ClassId             nClass;
         Ce_id               nOwner;
     };
 
@@ -95,14 +88,14 @@ class NameLookup
     void                Add_Name(
                             const String &      i_name,
                             Ce_id               i_id,
-                            RCid                i_class,
+                            ClassId             i_class,
                             Ce_id               i_owner );
     // INQUIRY
     /**
     */
     bool                Has_Name(
                             const String &      i_name,
-                            RCid                i_class,
+                            ClassId             i_class,
                             Ce_id               i_owner ) const;
     void                Get_Names(
                             Dyn_StdConstIterator<Map_Names::value_type> &
@@ -115,12 +108,7 @@ class NameLookup
 
 
 
-// IMPLEMENTATION
-
 
 }   // namespace idl
 }   // namespace ary
-
-
 #endif
-

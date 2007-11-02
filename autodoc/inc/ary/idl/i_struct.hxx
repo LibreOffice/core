@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_struct.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:12:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:11:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,28 +36,23 @@
 #ifndef ARY_IDL_I_STRUCT_HXX
 #define ARY_IDL_I_STRUCT_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <ary/idl/i_ce.hxx>
-    // COMPONENTS
-    // PARAMETERS
+
+
 
 
 namespace ary
 {
 namespace idl
 {
-
 namespace ifc_struct
 {
     struct attr;
 }
 
 
-/** @resp
-    Represents an IDL struct.
+/** Represents an IDL struct.
 */
 class Struct : public CodeEntity
 {
@@ -69,9 +64,8 @@ class Struct : public CodeEntity
                             const String &      i_sName,
                             Ce_id               i_nOwner,
                             Type_id             i_nBase,
-                            const String &      i_sTemplateParameter, // = String::Null_() // First let the compiler find old calls to this function
-                            Type_id             i_nTemplateParameterType
-                                                );
+                            const String &      i_sTemplateParameter,
+                            Type_id             i_nTemplateParameterType );
                         ~Struct();
     // INQUIRY
     Type_id             Base() const;
@@ -82,11 +76,13 @@ class Struct : public CodeEntity
     void                Add_Member(
                             Ce_id               i_nMember );
   private:
-    // Interface ary::RepositoryEntity
-    virtual RCid        inq_ClassId() const;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface ary::Object:
+    virtual ClassId     get_AryClass() const;
 
     // Interface CodeEntity
-    virtual void            do_Visit_CeHost(CeHost & o_rHost) const;
     virtual const String &  inq_LocalName() const;
     virtual Ce_id           inq_NameRoom() const;
     virtual Ce_id           inq_Owner() const;
@@ -108,8 +104,8 @@ class Struct : public CodeEntity
 
 
 
-// IMPLEMENTATION
 
+// IMPLEMENTATION
 inline Type_id
 Struct::Base() const
 {
@@ -135,8 +131,8 @@ Struct::Add_Member( Ce_id i_nMember )
 }
 
 
+
+
 }   // namespace idl
 }   // namespace ary
-
-
 #endif

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_ce2s.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:06:33 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:05:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
     // BASE CLASSES
     // COMPONENTS
     // PARAMETERS
-#include <ary/idl/i_language.hxx>
+#include <ary/idl/i_types4idl.hxx>
 
 
 namespace ary
@@ -61,7 +61,7 @@ class Ce_2s
     virtual             ~Ce_2s();
 
     static DYN Ce_2s *  Create_(
-                            RCid                i_nCeClass );
+                            ClassId             i_nCeClass );
     // OPERATIONS
     void                Add_Link2DescriptionInManual(
                             const String &      i_link,

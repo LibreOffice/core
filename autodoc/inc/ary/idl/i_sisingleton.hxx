@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_sisingleton.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:12:03 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:10:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,27 +36,23 @@
 #ifndef ARY_IDL_I_SISINGLETON_HXX
 #define ARY_IDL_I_SISINGLETON_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <ary/idl/i_ce.hxx>
-    // COMPONENTS
-    // PARAMETERS
+
+
+
 
 namespace ary
 {
 namespace idl
 {
-
 namespace ifc_sglifcsingleton
 {
     struct attr;
 }
 
 
-/** @resp
-    Represents an IDL interface.
+/** Represents an IDL interface.
 */
 class SglIfcSingleton : public CodeEntity
 {
@@ -72,13 +68,14 @@ class SglIfcSingleton : public CodeEntity
     // INQUIRY
     Type_id             BaseInterface() const;
 
-
   private:
-    // Interface ary::RepositoryEntity:
-    virtual RCid        inq_ClassId() const;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface ary::Object:
+    virtual ClassId     get_AryClass() const;
 
     // Interface CodeEntity:
-    virtual void            do_Visit_CeHost(CeHost & o_rHost) const;
     virtual const String &  inq_LocalName() const;
     virtual Ce_id           inq_NameRoom() const;
     virtual Ce_id           inq_Owner() const;
@@ -95,15 +92,17 @@ class SglIfcSingleton : public CodeEntity
 
 
 
-// IMPLEMENTATION
 
+// IMPLEMENTATION
 inline Type_id
 SglIfcSingleton::BaseInterface() const
-    { return nBaseInterface; }
+{
+    return nBaseInterface;
+}
+
+
 
 
 }   // namespace idl
 }   // namespace ary
-
-
 #endif

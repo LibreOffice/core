@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_attribute.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:06:00 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:05:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,26 +36,23 @@
 #ifndef ARY_IDL_I_ATTRIBUTE_HXX
 #define ARY_IDL_I_ATTRIBUTE_HXX
 
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <ary/idl/i_ce.hxx>
-    // COMPONENTS
-    // PARAMETERS
+
+
 
 
 namespace ary
 {
 namespace idl
 {
-
 namespace ifc_attribute
 {
     struct attr;
 }
 
-/*  OPEN?
-*/
+
+
 
 /** @resp
     Represents an IDL property.
@@ -86,11 +83,13 @@ class Attribute : public CodeEntity
     bool                IsBound() const;
 
   private:
-    // Interface ary::RepositoryEntity
-    virtual RCid        inq_ClassId() const;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface ary::Object
+    virtual ClassId     get_AryClass() const;
 
     // Interface CodeEntity
-    virtual void            do_Visit_CeHost(CeHost & o_rHost) const;
     virtual const String &  inq_LocalName() const;
     virtual Ce_id           inq_NameRoom() const;
     virtual Ce_id           inq_Owner() const;
@@ -114,8 +113,8 @@ class Attribute : public CodeEntity
 
 
 
-// IMPLEMENTATION
 
+// IMPLEMENTATION
 inline void
 Attribute::Add_GetException( Type_id i_nException )
     { aGetExceptions.push_back(i_nException); }
@@ -136,8 +135,9 @@ inline bool
 Attribute::IsBound() const
     { return bBound; }
 
+
+
+
 }   // namespace idl
 }   // namespace ary
-
-
 #endif

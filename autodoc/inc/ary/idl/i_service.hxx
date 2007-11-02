@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_service.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:11:17 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:10:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,16 @@
 #ifndef ARY_IDL_I_SERVICE_HXX
 #define ARY_IDL_I_SERVICE_HXX
 
-
+// BASE CLASSES
+#include <ary/idl/i_ce.hxx>
 
 // USED SERVICES
-    // BASE CLASSES
-#include <ary/idl/i_ce.hxx>
-    // COMPONENTS
 #include <ary/idl/i_comrela.hxx>
-    // PARAMETERS
 #include <ary/stdconstiter.hxx>
 #include <ary/idl/ik_service.hxx>
+
+
+
 
 namespace ary
 {
@@ -61,11 +61,7 @@ namespace ifc_service
 }
 
 
-/*  OPEN?
-*/
-
-/** @resp
-    Represents an IDL service.
+/** Represents an IDL service.
 */
 class Service : public CodeEntity
 {
@@ -91,18 +87,20 @@ class Service : public CodeEntity
                             Ce_id               i_nProperty );
     void                AddRef_IncludedService(
                             Type_id             i_nService,
-                            DYN info::CodeInformation *
+                            DYN doc::OldIdlDocu *
                                                 pass_dpDocu );
     void                AddRef_SupportedInterface(
                             Type_id             i_nInterface,
-                            DYN info::CodeInformation *
+                            DYN doc::OldIdlDocu *
                                                 pass_dpDocu );
   private:
-    // Interface ary::RepositoryEntity
-    virtual RCid        inq_ClassId() const;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface ary::Object:
+    virtual ClassId     get_AryClass() const;
 
     // Interface CodeEntity
-    virtual void            do_Visit_CeHost(CeHost & o_rHost) const;
     virtual const String &  inq_LocalName() const;
     virtual Ce_id           inq_NameRoom() const;
     virtual Ce_id           inq_Owner() const;
@@ -124,27 +122,26 @@ class Service : public CodeEntity
 
 
 
+
 // IMPLEMENTATION
-
-
 inline void
 Service::Add_Property( Ce_id i_nProperty )
     { aProperties.push_back(i_nProperty); }
 
 inline void
-Service::AddRef_IncludedService( Type_id                     i_nService,
-                                 DYN info::CodeInformation * pass_dpDocu )
+Service::AddRef_IncludedService( Type_id                    i_nService,
+                                 DYN doc::OldIdlDocu  *     pass_dpDocu )
     { aIncludedServices.push_back( CommentedRelation(i_nService, pass_dpDocu) ); }
 
 inline void
-Service::AddRef_SupportedInterface( Type_id                     i_nInterface,
-                                    DYN info::CodeInformation * pass_dpDocu )
+Service::AddRef_SupportedInterface( Type_id                 i_nInterface,
+                                    DYN doc::OldIdlDocu *   pass_dpDocu )
     { aSupportedInterfaces.push_back( CommentedRelation(i_nInterface, pass_dpDocu) ); }
+
+
 
 
 
 }   // namespace idl
 }   // namespace ary
-
-
 #endif

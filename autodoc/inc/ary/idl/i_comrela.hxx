@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_comrela.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:06:49 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:06:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,21 +36,22 @@
 #ifndef ARY_IDL_I_COMRELA_HXX
 #define ARY_IDL_I_COMRELA_HXX
 
-
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-    // PARAMETERS
-#include <ary/idl/i_language.hxx>
+#include <ary/idl/i_types4idl.hxx>
+
+namespace ary
+{
+namespace doc
+{
+    class OldIdlDocu;
+}
+}
+
+
 
 
 namespace ary
 {
-    namespace info
-    {
-        class CodeInformation;
-    }
-
 namespace idl
 {
 
@@ -65,26 +66,23 @@ class CommentedRelation
 
                         CommentedRelation(
                             Type_id             i_nType,
-                            info::CodeInformation *
-                                                i_pInfo )
+                            doc::OldIdlDocu *   i_pInfo )
                                                 :   nType(i_nType),
                                                     pInfo(i_pInfo)
                                                 {}
     // INQUIRY
     Type_id             Type() const            { return nType; }
-    info::CodeInformation *
-                        Info() const            { return pInfo; }
+    doc::OldIdlDocu *   Info() const            { return pInfo; }
 
   private:
     // DATA
     Type_id             nType;
-    info::CodeInformation *
-                        pInfo;
+    doc::OldIdlDocu *   pInfo;
 };
+
+
 
 
 }   // namespace idl
 }   // namespace ary
-
-
 #endif

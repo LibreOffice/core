@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_siservice.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:11:48 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:10:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,11 @@
 #ifndef ARY_IDL_I_SISERVICE_HXX
 #define ARY_IDL_I_SISERVICE_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <ary/idl/i_ce.hxx>
-    // COMPONENTS
-    // PARAMETERS
+
+
+
 
 namespace ary
 {
@@ -54,8 +52,7 @@ namespace ifc_sglifcservice
 }
 
 
-/** @resp
-    Represents an IDL single interface service.
+/** Represents an IDL single interface service.
 */
 class SglIfcService : public CodeEntity
 {
@@ -76,11 +73,13 @@ class SglIfcService : public CodeEntity
     Type_id             BaseInterface() const   { return nBaseInterface; }
 
   private:
-    // Interface ary::RepositoryEntity:
-    virtual RCid        inq_ClassId() const;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface ary::Object:
+    virtual ClassId     get_AryClass() const;
 
     // Interface CodeEntity:
-    virtual void            do_Visit_CeHost(CeHost & o_rHost) const;
     virtual const String &  inq_LocalName() const;
     virtual Ce_id           inq_NameRoom() const;
     virtual Ce_id           inq_Owner() const;
@@ -100,15 +99,17 @@ class SglIfcService : public CodeEntity
 
 
 
-// IMPLEMENTATION
 
+// IMPLEMENTATION
 inline void
 SglIfcService::Add_Constructor( Ce_id i_nId )
-    { aConstructors.push_back(i_nId); }
+{
+    aConstructors.push_back(i_nId);
+}
+
+
 
 
 }   // namespace idl
 }   // namespace ary
-
-
 #endif

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_interface.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:09:29 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:08:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,14 @@
 #ifndef ARY_IDL_I_INTERFACE_HXX
 #define ARY_IDL_I_INTERFACE_HXX
 
-
+// BASE CLASSES
+#include <ary/idl/i_ce.hxx>
 
 // USED SERVICES
-    // BASE CLASSES
-#include <ary/idl/i_ce.hxx>
-    // COMPONENTS
 #include <ary/idl/i_comrela.hxx>
-    // PARAMETERS
 #include <ary/stdconstiter.hxx>
+
+
 
 
 namespace ary
@@ -55,11 +54,10 @@ namespace ifc_interface
 {
     struct attr;
 }
+    class Interface_2s;
 
-class Interface_2s;
 
-/** @resp
-    Represents an IDL interface.
+/** Represents an IDL interface.
 */
 class Interface : public CodeEntity
 {
@@ -81,15 +79,17 @@ class Interface : public CodeEntity
                             Ce_id               i_nId );
     void                Add_Base(
                             Type_id             i_nInterface,
-                            DYN info::CodeInformation *
+                            DYN doc::OldIdlDocu *
                                                 pass_dpDocu );
 
   private:
-    // Interface ary::RepositoryEntity:
-    virtual RCid        inq_ClassId() const;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface ary::Object:
+    virtual ClassId     get_AryClass() const;
 
     // Interface CodeEntity:
-    virtual void            do_Visit_CeHost(CeHost & o_rHost) const;
     virtual const String &  inq_LocalName() const;
     virtual Ce_id           inq_NameRoom() const;
     virtual Ce_id           inq_Owner() const;
@@ -111,8 +111,8 @@ class Interface : public CodeEntity
 
 
 
-// IMPLEMENTATION
 
+// IMPLEMENTATION
 inline bool
 Interface::HasBase() const
     { return aBases.size() > 0; }
@@ -123,12 +123,13 @@ inline void
 Interface::Add_Attribute( Ce_id i_nId )
     { aAttributes.push_back(i_nId); }
 inline void
-Interface::Add_Base( Type_id                     i_nInterface,
-                     DYN info::CodeInformation * pass_dpDocu )
+Interface::Add_Base( Type_id                i_nInterface,
+                     DYN doc::OldIdlDocu *  pass_dpDocu )
     { aBases.push_back( CommentedRelation(i_nInterface, pass_dpDocu) ); }
+
+
+
 
 }   // namespace idl
 }   // namespace ary
-
-
 #endif
