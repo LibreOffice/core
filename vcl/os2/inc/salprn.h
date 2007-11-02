@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 10:07:50 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:46:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 #define _SV_SALPRN_H
 
 #ifndef _SV_SV_H
-#include <sv.h>
+#include <vcl/sv.h>
 #endif
 
 #ifndef _SV_SALPRN_HXX
-#include <salprn.hxx>
+#include <vcl/salprn.hxx>
 #endif
 
 class SalGraphics;
