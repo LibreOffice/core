@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sunjre.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:46:13 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:27:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ Reference<VendorBase> SunInfo::createInstance()
 char const* const* SunInfo::getJavaExePaths(int * size)
 {
     static char const * ar[] = {
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
         "java.exe",
         "bin/java.exe",
         "jre/bin/java.exe"
@@ -73,7 +73,7 @@ char const* const* SunInfo::getJavaExePaths(int * size)
 char const* const* SunInfo::getRuntimePaths(int * size)
 {
     static char const* ar[]= {
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
         "/bin/client/jvm.dll",
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll"
