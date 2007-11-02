@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_method.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:43:21 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:36:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,8 @@
     // COMPONENTS
     // PARAMETERS
 #include <ary/idl/i_param.hxx>
-#include <ary_i/codeinf2.hxx>
-typedef ary::info::CodeInformation CodeInfo;
+#include <ary/doc/d_oldidldocu.hxx>
+typedef ary::doc::OldIdlDocu CodeInfo;
 #include "hfi_linklist.hxx"
 
 
