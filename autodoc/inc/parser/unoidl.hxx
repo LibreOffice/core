@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoidl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:29:37 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:22:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,10 +48,7 @@
 
 namespace ary
 {
-    namespace n22
-    {
-        class Repository;
-    }
+    class Repository;
 }
 namespace autodoc
 {
@@ -67,7 +64,7 @@ class IdlParser : public ::CodeParser,
 {
   public:
                         IdlParser(
-                            ary::n22::Repository &  io_rRepository );
+                            ary::Repository &       io_rRepository );
 
     virtual void        Run(
                             const autodoc::FileCollector_Ifc &
@@ -75,7 +72,7 @@ class IdlParser : public ::CodeParser,
 
   private:
     // DATA
-    ary::n22::Repository *  pRepository;
+    ary::Repository *   pRepository;
 };
 
 
