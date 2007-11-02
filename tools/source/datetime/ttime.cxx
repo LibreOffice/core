@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ttime.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:14:31 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:00:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,11 @@
 
 #define _TOOLS_TIME_CXX
 
-#if defined WNT
+#if defined( OS2 )
+#define INCL_DOSMISC
+#define INCL_DOSDATETIME
+#include <svpm.h>
+#elif defined( WNT )
 #ifdef _MSC_VER
 #pragma warning (push,1)
 #endif
@@ -103,7 +107,16 @@ static Time Sec100ToTime( sal_Int32 nSec100 )
 
 Time::Time()
 {
-#if defined WNT
+#if defined( OS2 )
+    DATETIME aDateTime;
+    DosGetDateTime( &aDateTime );
+
+    // Zeit zusammenbauen
+    nTime = (((sal_Int32)aDateTime.hours)*1000000) +
+            (((sal_Int32)aDateTime.minutes)*10000) +
+            (((sal_Int32)aDateTime.seconds)*100) +
+            ((sal_Int32)aDateTime.hundredths);
+#elif defined( WNT )
     SYSTEMTIME aDateTime;
     GetLocalTime( &aDateTime );
 
@@ -313,7 +326,23 @@ BOOL Time::IsEqualIgnore100Sec( const Time& rTime ) const
 
 Time Time::GetUTCOffset()
 {
-#if defined WNT
+#if defined( OS2 )
+#undef timezone
+    DATETIME aDateTime;
+    DosGetDateTime( &aDateTime );
+
+    // Zeit zusammenbauen
+    if ( aDateTime.timezone != -1  )
+    {
+        short nTempTime = (short)Abs( aDateTime.timezone );
+        Time aTime( 0, (USHORT)nTempTime );
+        if ( aDateTime.timezone > 0 )
+            aTime = -aTime;
+        return aTime;
+    }
+    else
+        return Time( 0 );
+#elif defined( WNT )
     TIME_ZONE_INFORMATION   aTimeZone;
     aTimeZone.Bias = 0;
     DWORD nTimeZoneRet = GetTimeZoneInformation( &aTimeZone );
@@ -375,6 +404,10 @@ ULONG Time::GetSystemTicks()
 {
 #if defined WNT
     return (ULONG)GetTickCount();
+#elif defined( OS2 )
+    ULONG nClock;
+    DosQuerySysInfo( QSV_MS_COUNT, QSV_MS_COUNT, &nClock, sizeof( nClock ) );
+    return (ULONG)nClock;
 #else
     timeval tv;
     gettimeofday (&tv, 0);
@@ -394,6 +427,10 @@ ULONG Time::GetProcessTicks()
 {
 #if defined WNT
     return (ULONG)GetTickCount();
+#elif defined( OS2 )
+    ULONG nClock;
+    DosQuerySysInfo( QSV_MS_COUNT, QSV_MS_COUNT, &nClock, sizeof( nClock ) );
+    return (ULONG)nClock;
 #else
     static ULONG    nImplTicksPerSecond = 0;
     static double   dImplTicksPerSecond;
