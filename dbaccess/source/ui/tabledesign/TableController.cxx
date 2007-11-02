@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:53:46 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 11:28:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1173,7 +1173,6 @@ void OTableController::alterColumns()
     // contains all columns names which are already handled those which are not in the list will be deleted
     Reference< XDatabaseMetaData> xMetaData = getMetaData( );
 
-
     ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(xMetaData.is() ? (xMetaData->supportsMixedCaseQuotedIdentifiers() ? true : false): sal_True);
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_vRowList.begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_vRowList.end();
@@ -1337,6 +1336,11 @@ void OTableController::alterColumns()
                     OSQLMessageBox aMsg(getView(),sTitle,aMessage,WB_YES_NO|WB_DEF_YES,OSQLMessageBox::Warning);
                     if ( aMsg.Execute() != RET_YES )
                     {
+                        Reference<XPropertySet> xNewColumn(xIdxColumns->getByIndex(nPos),UNO_QUERY_THROW);
+                        ::rtl::OUString sName;
+                        xNewColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
+                        aColumns[sName] = sal_True;
+                        aColumns[pField->GetName()] = sal_True;
                         continue;
                     }
                 }
@@ -1350,7 +1354,7 @@ void OTableController::alterColumns()
     // second drop all columns which could be found by name
     Reference<XNameAccess> xKeyColumns  = getKeyColumns();
     // now we have to look for the columns who could be deleted
-    if(xDrop.is())
+    if ( xDrop.is() )
     {
         Sequence< ::rtl::OUString> aColumnNames = xColumns->getElementNames();
         const ::rtl::OUString* pIter = aColumnNames.getConstArray();
@@ -1402,7 +1406,7 @@ void OTableController::alterColumns()
     {
         OSL_ENSURE(*aIter,"OTableRow is null!");
         OFieldDescription* pField = (*aIter)->GetActFieldDescr();
-        if ( !pField || (*aIter)->IsReadOnly() )
+        if ( !pField || (*aIter)->IsReadOnly() || aColumns.find(pField->GetName()) != aColumns.end() )
             continue;
 
         Reference<XPropertySet> xColumn;
