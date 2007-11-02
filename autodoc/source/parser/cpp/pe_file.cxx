@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_file.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:02:36 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:54:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ PE_File::Handle_ChildFailure()
     return &pSpuIgnoreFailure->Child();
 }
 
-ary::cpp::RwGate &
+ary::cpp::Gate &
 PE_File::AryGate() const
 {
      return const_cast< PE_File& >(*this).access_Env().AryGate();
