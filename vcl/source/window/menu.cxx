@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 16:24:48 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,6 +181,35 @@ DBG_NAME( Menu )
 
 // document closer
 #define IID_DOCUMENTCLOSE 1
+
+#ifdef OS2
+
+#include <xwphook.h>
+
+// return TRUE if hilite should be executed: left mouse button down
+// or xwp mouse hook enabled
+static BOOL ImplHilite( const MouseEvent& rMEvt )
+{
+    static BOOL init = FALSE;
+    static HOOKCONFIG hc;
+
+    // read XWP settings at program startup
+    if (init == FALSE) {
+        BOOL    rc;
+        ULONG   cb = sizeof(HOOKCONFIG);
+        memset(&hc, 0, sizeof(HOOKCONFIG));
+        rc = PrfQueryProfileData( HINI_USER, INIAPP_XWPHOOK, INIKEY_HOOK_CONFIG,
+            &hc, &cb);
+        init = TRUE;
+    }
+    // check mouse left button
+    if (rMEvt.GetButtons() == MOUSE_LEFT)
+        return TRUE;
+    // return xwp flag
+    return hc.fSlidingMenus;
+}
+
+#endif
 
 static BOOL ImplAccelDisabled()
 {
@@ -4273,7 +4302,7 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeaveWindow() )
     {
 #ifdef OS2
-        if ( rMEvt.GetButtons() == MOUSE_LEFT )
+        if ( ImplHilite(rMEvt) )
         {
 #endif
         // #102461# do not remove highlight if a popup menu is open at this position
@@ -4293,7 +4322,7 @@ void MenuFloatingWindow::MouseMove( const MouseEvent& rMEvt )
     }
     else
 #ifdef OS2
-        if ( rMEvt.GetButtons() == MOUSE_LEFT )
+        if ( ImplHilite(rMEvt) )
 #endif
     {
         aSubmenuCloseTimer.Stop();
@@ -5235,7 +5264,7 @@ void MenuBarWindow::MouseMove( const MouseEvent& rMEvt )
     USHORT nEntry = ImplFindEntry( rMEvt.GetPosPixel() );
     if ( ( nEntry != ITEMPOS_INVALID )
 #ifdef OS2
-       && ( rMEvt.GetButtons() == MOUSE_LEFT )
+       && ( ImplHilite(rMEvt) )
 #endif
        && ( nEntry != nHighlightedItem ) )
         ChangeHighlightItem( nEntry, FALSE );
