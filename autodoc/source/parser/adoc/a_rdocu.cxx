@@ -4,9 +4,9 @@
  *
  *  $RCSfile: a_rdocu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:06:52 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:46:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 // NOT FULLY DECLARED SERVICES
 #include <adoc/docu_pe.hxx>
 #include <adoc/adoc_tok.hxx>
-#include <ary/docu.hxx>
+#include <ary/doc/d_oldcppdocu.hxx>
 #include <doc_deal.hxx>
 
 
@@ -76,7 +76,8 @@ DocuExplorer::Process_Token( DYN adoc::Token & let_drToken )
     let_drToken.Trigger(*pPE);
     if ( pPE->IsComplete() )
     {
-        ary::Documentation * pDocu = pPE->ReleaseJustParsedDocu();
+        ary::doc::OldCppDocu *
+            pDocu = pPE->ReleaseJustParsedDocu();
         if ( pDocu != 0 )
         {
             if (bIsPassedFirstDocu)
