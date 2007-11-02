@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swnewtable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:10:50 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:41:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2024,6 +2024,127 @@ void SwTable::CheckRowSpan( SwTableLinePtr &rpLine, bool bUp ) const
                     rpLine = 0;
                 }
             }
+        }
+    }
+}
+
+// This structure corrects the row span attributes for a top line of a table
+// In a top line no negative row span is allowed, so these have to be corrected.
+// If there has been at least one correction, all values are stored
+// and can be used by undo of table split
+SwSaveRowSpan::SwSaveRowSpan( SwTableBoxes& rBoxes, USHORT nSplitLn )
+    : mnSplitLine( nSplitLn )
+{
+    bool bDontSave = true; // nothing changed, nothing to save
+    USHORT nColCount = rBoxes.Count();
+    ASSERT( nColCount, "Empty Table Line" )
+    mnRowSpans.resize( nColCount );
+    for( USHORT nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
+    {
+        SwTableBox* pBox = rBoxes[nCurrCol];
+        ASSERT( pBox, "Missing Table Box" );
+        long nRowSp = pBox->getRowSpan();
+        mnRowSpans[ nCurrCol ] = nRowSp;
+        if( nRowSp < 0 )
+        {
+            bDontSave = false;
+            nRowSp = -nRowSp;
+            pBox->setRowSpan( nRowSp ); // correction needed
+        }
+    }
+    if( bDontSave )
+        mnRowSpans.clear();
+}
+
+// This function is called by undo of table split to restore the old row span
+// values at the split line
+void SwTable::RestoreRowSpan( const SwSaveRowSpan& rSave )
+{
+    if( !IsNewModel() ) // for new model only
+        return;
+    USHORT nLineCount = GetTabLines().Count();
+    ASSERT( rSave.mnSplitLine < nLineCount, "Restore behind last line?" )
+    if( rSave.mnSplitLine < nLineCount )
+    {
+        SwTableLine* pLine = GetTabLines()[rSave.mnSplitLine];
+        USHORT nColCount = pLine->GetTabBoxes().Count();
+        ASSERT( nColCount, "Empty Table Line" )
+        ASSERT( nColCount == rSave.mnRowSpans.size(), "Wrong row span store" )
+        if( nColCount == rSave.mnRowSpans.size() )
+        {
+            for( USHORT nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
+            {
+                SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
+                ASSERT( pBox, "Missing Table Box" );
+                long nRowSp = pBox->getRowSpan();
+                if( nRowSp != rSave.mnRowSpans[ nCurrCol ] )
+                {
+                    ASSERT( -nRowSp == rSave.mnRowSpans[ nCurrCol ], "Pardon me?!" )
+                    ASSERT( rSave.mnRowSpans[ nCurrCol ] < 0, "Pardon me?!" )
+                    pBox->setRowSpan( -nRowSp );
+
+                    USHORT nLine = rSave.mnSplitLine;
+                    if( nLine )
+                    {
+                        long nLeftBorder = lcl_Box2LeftBorder( *pBox );
+                        SwTableBox* pNext;
+                        do
+                        {
+                            pNext = lcl_LeftBorder2Box( nLeftBorder, GetTabLines()[--nLine] );
+                            if( pNext )
+                            {
+                                pBox = pNext;
+                                long nNewSpan = pBox->getRowSpan();
+                                if( pBox->getRowSpan() < 1 )
+                                    nNewSpan -= nRowSp;
+                                else
+                                {
+                                    nNewSpan += nRowSp;
+                                    pNext = 0;
+                                }
+                                pBox->setRowSpan( nNewSpan );
+                            }
+                        } while( nLine && pNext );
+                    }
+                }
+            }
+        }
+    }
+}
+
+SwSaveRowSpan* SwTable::CleanUpTopRowSpan( USHORT nSplitLine )
+{
+    SwSaveRowSpan* pRet = 0;
+    if( !IsNewModel() )
+        return pRet;
+    pRet = new SwSaveRowSpan( GetTabLines()[0]->GetTabBoxes(), nSplitLine );
+    if( pRet->mnRowSpans.size() == 0 )
+    {
+        delete pRet;
+        pRet = 0;
+    }
+    return pRet;
+}
+
+void SwTable::CleanUpBottomRowSpan( USHORT nDelLines )
+{
+    if( !IsNewModel() )
+        return;
+    USHORT nLastLine = GetTabLines().Count()-1;
+    SwTableLine* pLine = GetTabLines()[nLastLine];
+    USHORT nColCount = pLine->GetTabBoxes().Count();
+    ASSERT( nColCount, "Empty Table Line" )
+    for( USHORT nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
+    {
+        SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
+        ASSERT( pBox, "Missing Table Box" );
+        long nRowSp = pBox->getRowSpan();
+        if( nRowSp < 0 )
+            nRowSp = -nRowSp;
+        if( nRowSp > 1 )
+        {
+            lcl_ChangeRowSpan( *this, -static_cast<long>(nDelLines), nLastLine, false );
+            break;
         }
     }
 }
