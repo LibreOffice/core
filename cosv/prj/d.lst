@@ -1,9 +1,8 @@
 mkdir: %_DEST%\inc%_EXT%\cosv
-mkdir: %_DEST%\inc%_EXT%\cosv\template
+mkdir: %_DEST%\inc%_EXT%\cosv\tpl
 
 ..\%__SRC%\lib\cosv.lib %_DEST%\lib%_EXT%\cosv.lib
-..\%__SRC%\lib\libcosv.a %_DEST%\lib%_EXT%\libcosv.a 
+..\%__SRC%\lib\libcosv.a %_DEST%\lib%_EXT%\libcosv.a
 ..\inc\cosv\*.hxx %_DEST%\inc%_EXT%\cosv\*.hxx
 ..\inc\cosv\*.h %_DEST%\inc%_EXT%\cosv\*.h
-..\inc\cosv\template\*.hxx %_DEST%\inc%_EXT%\cosv\template\*.hxx
-
+..\inc\cosv\tpl\*.hxx %_DEST%\inc%_EXT%\cosv\tpl\*.hxx
