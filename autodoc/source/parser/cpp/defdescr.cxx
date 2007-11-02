@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defdescr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:10:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:50:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,71 +37,9 @@
 #include "defdescr.hxx"
 
 
-
 // NOT FULLY DEFINED SERVICES
-#include <ary/cpp/prpr.hxx>
+#include <prprpr.hxx>
 
-
-#if 0 // should be obsolete
-bool                CheckForOperator(
-                        bool &              o_bStringify,
-                        bool &              o_bConcatenate,
-                        const udmstri &     i_sTextItem );
-void                Do_bConcatenate(
-                        csv::StreamStr &    o_rText,
-                        bool &              io_bConcatenate );
-inline void         Do_bStringify_begin(
-                        csv::StreamStr &    o_rText,
-                        bool                i_bStringify );
-inline void         Do_bStringify_end(
-                        csv::StreamStr &    o_rText,
-                        bool &              io_bStringify );
-inline bool         HandleOperatorsBeforeTextItem(  /// @return true, if text item is done here
-                        csv::StreamStr &    o_rText,
-                        bool &              io_bStringify,
-                        bool &              io_bConcatenate,
-                        const udmstri &     i_sTextItem );
-
-inline void
-Do_bStringify_begin( csv::StreamStr & o_rText,
-                     bool             i_bStringify )
-{
-    if ( i_bStringify )
-    {
-        o_rText << "\"";
-    }
-}
-
-inline void
-Do_bStringify_end( csv::StreamStr & o_rText,
-                   bool &           io_bStringify )
-{
-    if ( io_bStringify )
-    {
-        o_rText << "\"";
-        io_bStringify = false;
-    }
-}
-
-
-inline bool
-HandleOperatorsBeforeTextItem( csv::StreamStr &    o_rText,
-                               bool &              io_bStringify,
-                               bool &              io_bConcatenate,
-                               const udmstri &     i_sTextItem )
-{
-    if ( CheckForOperator( io_bStringify,
-                           io_bConcatenate,
-                           i_sTextItem) )
-    {
-        return true;
-    }
-    Do_bConcatenate(o_rText, io_bConcatenate);
-    Do_bStringify_begin(o_rText, io_bStringify);
-
-    return false;
-}
-#endif // 0, obsolete
 
 
 
@@ -111,7 +49,7 @@ namespace cpp
 
 
 
-DefineDescription::DefineDescription( const udmstri &       i_sName,
+DefineDescription::DefineDescription( const String  &       i_sName,
                                       const str_vector &    i_rDefinition )
     :   sName(i_sName),
         // aParams,
@@ -120,7 +58,7 @@ DefineDescription::DefineDescription( const udmstri &       i_sName,
 {
 }
 
-DefineDescription::DefineDescription( const udmstri &       i_sName,
+DefineDescription::DefineDescription( const String  &       i_sName,
                                       const str_vector &    i_rParams,
                                       const str_vector &    i_rDefinition )
     :   sName(i_sName),
@@ -215,6 +153,81 @@ DefineDescription::GetMacroText( csv::StreamStr &               o_rText,
 }   // end namespace cpp
 
 
+
+
+
+bool
+CheckForOperator( bool &              o_bStringify,
+                  bool &              o_bConcatenate,
+                  const String &      i_sTextItem )
+{
+    if ( strcmp(i_sTextItem, "##") == 0 )
+    {
+        o_bConcatenate = true;
+        return true;
+    }
+    else if ( strcmp(i_sTextItem, "#") == 0 )
+    {
+        o_bStringify = true;
+        return true;
+    }
+    return false;
+}
+
+void
+Do_bConcatenate( csv::StreamStr &    o_rText,
+                 bool &              io_bConcatenate )
+{
+    if ( io_bConcatenate )
+    {
+        uintt nPos;
+        for ( nPos = o_rText.tellp() - 1;
+              nPos > 0 ? o_rText.c_str()[nPos] == ' ' : false;
+              --nPos );
+        o_rText.seekp(nPos+1);
+        io_bConcatenate = false;
+    }
+}
+
+void
+Do_bStringify_begin( csv::StreamStr & o_rText,
+                     bool             i_bStringify )
+{
+    if ( i_bStringify )
+    {
+        o_rText << "\"";
+    }
+}
+
+void
+Do_bStringify_end( csv::StreamStr & o_rText,
+                   bool &           io_bStringify )
+{
+    if ( io_bStringify )
+    {
+        o_rText << "\"";
+        io_bStringify = false;
+    }
+}
+
+
+bool
+HandleOperatorsBeforeTextItem( csv::StreamStr &    o_rText,
+                               bool &              io_bStringify,
+                               bool &              io_bConcatenate,
+                               const String  &     i_sTextItem )
+{
+    if ( CheckForOperator( io_bStringify,
+                           io_bConcatenate,
+                           i_sTextItem) )
+    {
+        return true;
+    }
+    Do_bConcatenate(o_rText, io_bConcatenate);
+    Do_bStringify_begin(o_rText, io_bStringify);
+
+    return false;
+}
 
 
 
