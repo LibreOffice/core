@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ploc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:56:21 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:39:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,33 +36,35 @@
 #ifndef CSV_PLOC_HXX
 #define CSV_PLOC_HXX
 
-
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
 #include <cosv/string.hxx>
 #include <cosv/plocroot.hxx>
 #include <cosv/dirchain.hxx>
-#include <cosv/template/dyn.hxx>
-    // PARAMETERS
+#include <cosv/tpl/dyn.hxx>
 #include <cosv/csv_ostream.hxx>
+
+
 
 
 namespace csv
 {
     class bostream;
 
-
 namespace ploc
 {
     class Root;
 
+
+/** Represents a path in the file system.
+
+    The path can be relative or absolute and in Unix- or Windows-syntax.
+*/
 class Path
 {
   public:
 
     // LIFECYCLE
-                        Path(
+    explicit            Path(
                             const char *        i_sPath = ".",                  /// Dirs have to be ended with a '\\ or '/'.
                             bool                i_bPathIsAlwaysDir = false,     /// This overrides a missing Delimiter at the end of the i_sPath, if true.
                             const char *        i_sDelimiter = Delimiter() );
@@ -77,14 +79,14 @@ class Path
                             const char *        i_sPath,
                             bool                i_bPathIsAlwaysDir = false,
                             const char *        i_sDelimiter = Delimiter() );
-    void                SetFile(               // If there is already a file, that is exchanged.
+    void                SetFile(                // If there is already a file, that is exchanged.
                             const String &      i_sName );
     // INQUIRY
     const Root &        RootDir() const         { return *pRoot; }
     const DirectoryChain &
                         DirChain() const        { return aPath; }
     const String  &     File() const            { return sFile; }
-    const char *        FileEnding() const;
+    const char *        FileExtension() const;
     bool                IsValid() const;
     bool                IsDirectory() const     { return sFile.length() == 0; }
     bool                IsFile() const          { return sFile.length() > 0; }
@@ -132,8 +134,4 @@ operator<<( csv::bostream &         o_rOut,
 
 
 
-
 #endif
-
-
-
