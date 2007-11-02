@@ -1,0 +1,73 @@
+UDK_3_0_0 { # should have been UDK_3.0
+    global:
+    GetVersionInfo;
+    _ZN9salhelper18ORealDynamicLoader11newInstanceEPPS0_RKN3rtl8OUStringES6_;
+    _ZN9salhelper18ORealDynamicLoader7acquireEv;
+    _ZN9salhelper18ORealDynamicLoader7releaseEv;
+    _ZN9salhelper18ORealDynamicLoaderC1EPPS0_RKN3rtl8OUStringES6_PvS7_;
+    _ZN9salhelper18ORealDynamicLoaderC2EPPS0_RKN3rtl8OUStringES6_PvS7_;
+    _ZN9salhelper18ORealDynamicLoaderD0Ev;
+    _ZN9salhelper18ORealDynamicLoaderD1Ev;
+    _ZN9salhelper18ORealDynamicLoaderD2Ev;
+    _ZN9salhelper21SimpleReferenceObjectD0Ev;
+    _ZN9salhelper21SimpleReferenceObjectD1Ev;
+    _ZN9salhelper21SimpleReferenceObjectD2Ev;
+    _ZN9salhelper21SimpleReferenceObjectdlEPv;
+
+    # Introducing a question mark at the end because of
+    # marginal type discrepancy there is a difference in the
+    # mangled name between Linux and Mac OS X, see #i69351#
+    _ZN9salhelper21SimpleReferenceObjectnwEj; # salhelper::SimpleReferenceObject::operator new (std::size_t)
+
+    _ZNK9salhelper18ORealDynamicLoader6getApiEv;
+    # _ZTIN9salhelper18ORealDynamicLoaderE;
+    # _ZTSN9salhelper18ORealDynamicLoaderE;
+    _ZTVN9salhelper18ORealDynamicLoaderE;
+    # _ZTIN9salhelper21SimpleReferenceObjectE;
+    # _ZTSN9salhelper21SimpleReferenceObjectE;
+    _ZTVN9salhelper21SimpleReferenceObjectE;
+
+    local:
+        *;
+};
+
+UDK_3.1 {
+    global:
+        _ZN9salhelper21SimpleReferenceObjectdlEPvRKSt9nothrow_t;
+
+    # Introducing a wildcard right in the middle because due to
+    # marginal type discrepancy there is a difference in the
+    # mangled name between Linux and Mac OS X see #i69351#
+    _ZN9salhelper21SimpleReferenceObjectnwEjRKSt9nothrow_t; # salhelper::SimpleReferenceObject::operator new (std::size_t, std::nothrow_t const&)
+
+        _ZN9salhelper9ConditionC1ERN3osl5MutexE;
+        _ZN9salhelper9ConditionC2ERN3osl5MutexE;
+        _ZN9salhelper9ConditionD0Ev;
+        _ZN9salhelper9ConditionD1Ev;
+        _ZN9salhelper9ConditionD2Ev;
+        # _ZTIN9salhelper9ConditionE;
+        # _ZTIS9salhelper9ConditionE;
+
+        _ZN9salhelper17ConditionModifierC1ERNS_9ConditionE;
+        _ZN9salhelper17ConditionModifierC2ERNS_9ConditionE;
+        _ZN9salhelper17ConditionModifierD1Ev;
+        _ZN9salhelper17ConditionModifierD2Ev;
+
+        _ZN9salhelper15ConditionWaiterC1ERNS_9ConditionE;
+        _ZN9salhelper15ConditionWaiterC1ERNS_9ConditionEm;
+        _ZN9salhelper15ConditionWaiterC2ERNS_9ConditionE;
+        _ZN9salhelper15ConditionWaiterC2ERNS_9ConditionEm;
+        _ZN9salhelper15ConditionWaiterD1Ev;
+        _ZN9salhelper15ConditionWaiterD2Ev;
+
+        _ZN9salhelper15ConditionWaiter8timedoutaSERKS1_;
+        _ZN9salhelper15ConditionWaiter8timedoutC1ERKS1_;
+        _ZN9salhelper15ConditionWaiter8timedoutC1Ev;
+        _ZN9salhelper15ConditionWaiter8timedoutC2ERKS1_;
+        _ZN9salhelper15ConditionWaiter8timedoutC2Ev;
+        _ZN9salhelper15ConditionWaiter8timedoutD0Ev;
+        _ZN9salhelper15ConditionWaiter8timedoutD1Ev;
+        _ZN9salhelper15ConditionWaiter8timedoutD2Ev;
+        # _ZTIN9salhelper15ConditionWaiter8timedoutE;
+        # _ZTSN9salhelper15ConditionWaiter8timedoutE;
+} UDK_3_0_0;
