@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_class.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:02:22 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:52:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,14 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <cosv/template/tpltools.hxx>
-#include <ary/cpp/c_rwgate.hxx>
+#include <cosv/tpl/tpltools.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_class.hxx>
 #include <ary/cpp/c_namesp.hxx>
+#include <ary/cpp/cp_ce.hxx>
 #include <all_toks.hxx>
 #include "pe_base.hxx"
+#include "pe_defs.hxx"
 #include "pe_enum.hxx"
 #include "pe_tydef.hxx"
 #include "pe_vafu.hxx"
@@ -78,6 +80,7 @@ PE_Class::PE_Class(Cpp_PE * i_pParent )
     pSpTypedef  = new SP_Typedef(*this);
     pSpVarFunc  = new SP_VarFunc(*this);
     pSpIgnore   = new SP_Ignore(*this);
+    pSpDefs     = new SP_Defines(*this);
 
     pSpuBase    = new SPU_Base(*pSpBase, 0, &PE_Class::SpReturn_Base);
     pSpuTypedef = new SPU_Typedef(*pSpTypedef, 0, 0);
@@ -87,6 +90,7 @@ PE_Class::PE_Class(Cpp_PE * i_pParent )
     pSpuUsing   = new SPU_Ignore(*pSpIgnore, 0, 0);
     pSpuIgnoreFailure
                 = new SPU_Ignore(*pSpIgnore, 0, 0);
+    pSpuDefs    = new SPU_Defines(*pSpDefs, 0, 0);
 }
 
 
@@ -162,9 +166,11 @@ PE_Class::Setup_StatusFunctions()
                                               &PE_Class::On_bodyStd_using,
                                               &PE_Class::On_bodyStd_SwBracket_Right,
                                               &PE_Class::On_bodyStd_VarFunc,
-                                              &PE_Class::On_bodyStd_VarFunc,
-                                              &PE_Class::On_bodyStd_VarFunc,
+                                              &PE_Class::On_bodyStd_DefineName,
+                                              &PE_Class::On_bodyStd_MacroName,
 
+                                              &PE_Class::On_bodyStd_VarFunc,
+                                              &PE_Class::On_bodyStd_VarFunc,
                                               &PE_Class::On_bodyStd_VarFunc, };
 
     static INT16 stateT_bodyStd[] =         { Tid_Identifier,
@@ -195,11 +201,13 @@ PE_Class::Setup_StatusFunctions()
                                               Tid_SwBracket_Right,
                                               Tid_DoubleColon,
                                               Tid_typename,
-                                              Tid_BuiltInType,
+                                              Tid_DefineName,
 
+                                              Tid_MacroName,
+                                              Tid_BuiltInType,
                                               Tid_TypeSpecializer };
 
-    static F_Tok stateF_inProtection[] =    { &PE_Class::On_inProtection_Colon };
+                                              static F_Tok stateF_inProtection[] =  { &PE_Class::On_inProtection_Colon };
     static INT16 stateT_inProtection[] =    { Tid_Colon };
 
     static F_Tok stateF_afterDecl[] =       { &PE_Class::On_afterDecl_Semicolon };
@@ -262,7 +270,7 @@ PE_Class::Init_CurObject()
     // KORR_FUTURE
     //   This will have to be done before parsing base classes, because of
     //   possible inline documentation for base classes.
-    pCurObject = & Env().AryGate().Store_Class( Env().Context(), sLocalName, eClassKey );
+    pCurObject = & Env().AryGate().Ces().Store_Class( Env().Context(), sLocalName, eClassKey );
 
       for ( PE_Base::BaseList::const_iterator it = aBases.begin();
           it !=  aBases.end();
@@ -279,7 +287,7 @@ PE_Class::Init_CurObject()
               it !=  pTplParams->end();
               ++it )
         {
-            pCurObject->Add_TemplateParameterType( *it, 0 );
+            pCurObject->Add_TemplateParameterType( *it, ary::cpp::Type_id(0) );
         }  // end for
     }
 }
@@ -460,6 +468,19 @@ PE_Class::On_bodyStd_SwBracket_Right( const char * )
 
     Env().CloseClass();
 }
+
+void
+PE_Class::On_bodyStd_DefineName(const char * )
+{
+    pSpuDefs->Push(not_done);
+}
+
+void
+PE_Class::On_bodyStd_MacroName(const char * )
+{
+    pSpuDefs->Push(not_done);
+}
+
 
 void
 PE_Class::On_inProtection_Colon( const char * )
