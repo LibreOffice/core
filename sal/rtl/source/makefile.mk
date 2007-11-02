@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:51:02 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:36:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -191,8 +191,10 @@ $(ALWAYSDBGFILES):
     @echo --- ALWAYSDBG ---
     @dmake $(MFLAGS) $(MAKEFILE) debug=true ALWAYSDBG_FLAG=TRUE $(CALLMACROS) $@
     @echo --- ALWAYSDBG OVER ---
+
 .ENDIF
 .ENDIF
+
 
 ALLTAR : $(BOOTSTRAPMK)
 
