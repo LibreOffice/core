@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ip_type.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 17:57:17 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:14:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,25 +36,24 @@
 #ifndef ARY_IDL_IP_TYPE_HXX
 #define ARY_IDL_IP_TYPE_HXX
 
-
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-    // PARAMETERS
-#include <ary/idl/i_language.hxx>
+#include <ary/idl/i_types4idl.hxx>
+
+
 
 
 namespace ary
 {
-
-class QualifiedName;
+    class QualifiedName;
 
 namespace idl
 {
+    class Type;
+    class ExplicitNameRoom;
 
-class Type;
-class ExplicitNameRoom;
 
+/** Access point to all {->Type}s in IDL.
+*/
 class TypePilot
 {
   public:
@@ -62,81 +61,30 @@ class TypePilot
     virtual             ~TypePilot() {}
 
     // OPERATIONS
-    const Type &        CheckIn_Type(
-                            QualifiedName &     i_rFullName,
-                            uintt               i_nSequenceCount,
-                            Ce_id               i_nModuleOfOccurrence,
-                            Type_id             i_nTemplateType );
-    // INQUIRY
-    const Type &        Find_Type(
-                            Type_id             i_nType ) const;
-    String              Search_LocalNameOf(
-                            Type_id             i_nType ) const;
-    Ce_id               Search_CeRelatedTo(
-                            Type_id             i_nType ) const;
-    const ExplicitNameRoom &
-                        Find_XNameRoom(
-                            Type_id             i_nType ) const;
-    bool                IsBuiltInOrRelated(
-                            const Type &        i_rType ) const;
-  private:
-    // Locals
     virtual const Type &
-                        do_CheckIn_Type(
+                        CheckIn_Type(
                             QualifiedName &     i_rFullName,
                             uintt               i_nSequenceCount,
                             Ce_id               i_nModuleOfOccurrence,
                             Type_id             i_nTemplateType ) = 0;
+    // INQUIRY
     virtual const Type &
-                        inq_Find_Type(
+                        Find_Type(
                             Type_id             i_nType ) const = 0;
-    virtual String      inq_Search_LocalNameOf(
+    virtual String      Search_LocalNameOf(
                             Type_id             i_nType ) const = 0;
-    virtual Ce_id       inq_Search_CeRelatedTo(
+    virtual Ce_id       Search_CeRelatedTo(
                             Type_id             i_nType ) const = 0;
     virtual const ExplicitNameRoom &
-                        inq_Find_XNameRoom(
+                        Find_XNameRoom(
                             Type_id             i_nType ) const = 0;
-    virtual bool        inq_IsBuiltInOrRelated(
+    virtual bool        IsBuiltInOrRelated(
                             const Type &        i_rType ) const = 0;
 };
 
 
 
 
-// IMPLEMENTATION
-
-inline const Type &
-TypePilot::CheckIn_Type( QualifiedName &     i_rFullName,
-                         uintt               i_nSequenceCount,
-                         Ce_id               i_nModuleOfOccurrence,
-                         Type_id             i_nTemplateType )
-    { return do_CheckIn_Type(i_rFullName, i_nSequenceCount, i_nModuleOfOccurrence, i_nTemplateType); }
-
-inline const Type &
-TypePilot::Find_Type( Type_id i_nType ) const
-    { return inq_Find_Type(i_nType); }
-
-inline String
-TypePilot::Search_LocalNameOf( Type_id i_nType ) const
-    { return inq_Search_LocalNameOf(i_nType); }
-
-inline Ce_id
-TypePilot::Search_CeRelatedTo( Type_id i_nType ) const
-    { return inq_Search_CeRelatedTo(i_nType); }
-
-inline const ExplicitNameRoom &
-TypePilot::Find_XNameRoom( Type_id i_nType ) const
-    { return inq_Find_XNameRoom(i_nType); }
-
-inline bool
-TypePilot::IsBuiltInOrRelated( const Type & i_rType ) const
-    { return inq_IsBuiltInOrRelated( i_rType ); }
-
-
 }   // namespace idl
 }   // namespace ary
-
-
-
 #endif
