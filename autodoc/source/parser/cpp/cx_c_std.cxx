@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cx_c_std.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:10:15 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:49:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,8 +237,8 @@ Context_CppStd::PerformStatusFunction( uintt                    i_nStatusSignal,
         default:
         {
             char cCC = io_rText.CurChar();
-            udmstri sCurChar( &cCC, 1 );
-            throw X_Parser( X_Parser::x_InvalidChar, sCurChar, udmstri::Null_(), 0 );
+            String  sCurChar( &cCC, 1 );
+            throw X_Parser( X_Parser::x_InvalidChar, sCurChar, String::Null_(), 0 );
         }
     }   // end switch (i_nStatusSignal)
 }
@@ -534,3 +534,4 @@ Context_CppStd::SetupStateMachine()
 
 
 }   // namespace cpp
+

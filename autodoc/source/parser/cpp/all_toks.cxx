@@ -4,9 +4,9 @@
  *
  *  $RCSfile: all_toks.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:08:44 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:47:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ namespace cpp {
 void
 Token::DealOut( ::TokenDealer & o_rDealer )
 {
-    // KORR HACK (casting to derivation cpp::TokenDealer)
+    // KORR_FUTURE HACK (casting to derivation cpp::TokenDealer)
     o_rDealer.AsDistributor()->Deal_CppCode(*this);
 }
 
@@ -152,7 +152,7 @@ Tok_UnblockMacro::Text() const
 void
 Tok_UnblockMacro::DealOut( ::TokenDealer & o_rDealer )
 {
-    // KORR HACK (casting to derivation cpp::TokenDealer)
+    // KORR_FUTURE HACK (casting to derivation cpp::TokenDealer)
     o_rDealer.AsDistributor()->Deal_Cpp_UnblockMacro(*this);
 }
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cx_c_sub.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:10:28 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:49:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ namespace cpp {
 void
 Context_Comment::ReadCharChain( CharacterSource &   io_rText )
 {
-    // KORR
+    // KORR_FUTURE
     //      Counting of lines must be implemented.
     if (bCurrentModeIsMultiline)
     {
@@ -63,7 +63,7 @@ Context_Comment::ReadCharChain( CharacterSource &   io_rText )
             do {
                 cNext = jumpTo( io_rText,'*',char(10) );
                 if (cNext == NULCH)
-                    throw X_Parser( X_Parser::x_UnexpectedEOF, "", udmstri::Null_(), 0 );
+                    throw X_Parser( X_Parser::x_UnexpectedEOF, "", String::Null_(), 0 );
                 else if ( cNext == char(10) )
                 {
                     jumpOverEol(io_rText);
@@ -72,7 +72,7 @@ Context_Comment::ReadCharChain( CharacterSource &   io_rText )
             }   while ( cNext != '*');
             cNext = jumpOver(io_rText,'*');
             if (cNext == NULCH)
-                throw X_Parser( X_Parser::x_UnexpectedEOF, "", udmstri::Null_(), 0 );
+                throw X_Parser( X_Parser::x_UnexpectedEOF, "", String::Null_(), 0 );
         } while (cNext != '/');
         io_rText.MoveOn();
         io_rText.CutToken();
