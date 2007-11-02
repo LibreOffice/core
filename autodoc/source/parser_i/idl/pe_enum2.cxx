@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_enum2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:19:45 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:06:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <ary/idl/i_enumvalue.hxx>
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/ip_ce.hxx>
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 #include <s2_luidl/pe_evalu.hxx>
 #include <s2_luidl/tk_punct.hxx>
 #include <s2_luidl/tk_ident.hxx>
@@ -94,7 +94,7 @@ PE_Enum::PE_Enum()
 
 void
 PE_Enum::EstablishContacts( UnoIDL_PE *                 io_pParentPE,
-                            ary::n22::Repository &      io_rRepository,
+                            ary::Repository &       io_rRepository,
                             TokenProcessing_Result &    o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);

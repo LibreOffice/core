@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_func2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:20:49 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:07:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/ip_ce.hxx>
 #include <ary/idl/ip_type.hxx>
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 #include <s2_luidl/pe_type2.hxx>
 #include <s2_luidl/pe_vari2.hxx>
 #include <s2_luidl/tk_keyw.hxx>
@@ -101,7 +101,7 @@ PE_Function::PE_Function( const RParent &     i_rCurService,
 
 void
 PE_Function::EstablishContacts( UnoIDL_PE *              io_pParentPE,
-                                ary::n22::Repository &       io_rRepository,
+                                ary::Repository &        io_rRepository,
                                 TokenProcessing_Result & o_rResult )
 {
     UnoIDL_PE::EstablishContacts(io_pParentPE,io_rRepository,o_rResult);
