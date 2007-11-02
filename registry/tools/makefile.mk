@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:28:43 $
+#   last change: $Author: hr $ $Date: 2007-11-02 13:16:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ LINKFLAGSRUNPATH = -R\''$$ORIGIN/../lib:$$ORIGIN'\'
 .INCLUDE :  ..$/version.mk
 
 # --- Files --------------------------------------------------------
-CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
+CDEFS += -DDLL_VERSION=$(EMQ)"$(UPD)$(DLLPOSTFIX)$(EMQ)"
 
 APP1TARGET= $(TARGET)
 APP1OBJS=   $(OBJ)$/regmerge.obj 
