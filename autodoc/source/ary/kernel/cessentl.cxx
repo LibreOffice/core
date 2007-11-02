@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cessentl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:42:02 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:11:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,31 +38,29 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <ary/ce.hxx>
-#include <ary/info/codeinfo.hxx>
+#include <ary/cpp/c_ce.hxx>
+#include <ary/doc/d_oldcppdocu.hxx>
 
 
-namespace ary {
+namespace ary
+{
+namespace cpp
+{
 
 
 CeEssentials::CeEssentials()
     :   sLocalName(),
-        nId(0),
         nOwner(0),
-        nLocation(0),
-        pInfo(0)
+        nLocation(0)
 {
 }
 
-CeEssentials::CeEssentials( Cid                 i_nId,
-                            const udmstri &     i_sLocalName,
+CeEssentials::CeEssentials( const String  &     i_sLocalName,
                             Cid                 i_nOwner,
-                            Lid                 i_nLocation )
+                            loc::Le_id          i_nLocation )
     :   sLocalName(i_sLocalName),
-        nId(i_nId),
         nOwner(i_nOwner),
-        nLocation(i_nLocation),
-        pInfo(0)
+        nLocation(i_nLocation)
 {
 }
 
@@ -70,19 +68,27 @@ CeEssentials::~CeEssentials()
 {
 }
 
+
+
+inline bool
+IsInternal(const doc::Documentation & i_doc)
+{
+    const ary::doc::OldCppDocu *
+        docu = dynamic_cast< const ary::doc::OldCppDocu* >(i_doc.Data());
+    if (docu != 0)
+        return docu->IsInternal();
+    return false;
+}
+
+
 bool
 CodeEntity::IsVisible() const
 {
     // KORR_FUTURE:   Improve the whole handling of internal and visibility.
-    return bIsVisible && NOT Info().IsInternal();
+    return bIsVisible && NOT IsInternal(Docu());
 }
 
 
 
-
-
-
+}   // namespace cpp
 }   // namespace ary
-
-
-
