@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ary_disp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:41:35 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:11:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,9 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/re.hxx>
-#include <ary/r_disply.hxx>
+#include <ary/cpp/c_ce.hxx>
+#include <ary/cpp/c_gate.hxx>
+#include <ary/cpp/cp_ce.hxx>
 
 
 
@@ -49,13 +50,15 @@ namespace ary
 void
 Display::DisplaySlot_Rid( ary::Rid i_nId )
 {
-    const DisplayGate * pGate = Get_ReFinder();
+    const cpp::Gate *
+        pGate = Get_ReFinder();
     if (pGate != 0)
     {
-         const RepositoryEntity * pRE = pGate->Find_Re( i_nId );
+         const  ary::cpp::CodeEntity *
+             pRE = pGate->Ces().Search_Ce( cpp::Ce_id(i_nId) );
         if (pRE != 0)
         {
-             pRE->StoreAt( *this );
+             pRE->Accept( *this );
             return;
         }
     }
@@ -65,16 +68,18 @@ Display::DisplaySlot_Rid( ary::Rid i_nId )
 
 
 void
-Display::DisplaySlot_LocalCe( ary::Rid          i_nId,
-                              const udmstri &   i_sName )
+Display::DisplaySlot_LocalCe( ary::cpp::Ce_id   i_nId,
+                              const String  &   i_sName )
 {
-    const DisplayGate * pGate = Get_ReFinder();
+    const cpp::Gate *
+        pGate = Get_ReFinder();
     if (pGate != 0)
     {
-         const RepositoryEntity * pRE = pGate->Find_Re( i_nId );
+         const ary::cpp::CodeEntity *
+             pRE = pGate->Ces().Search_Ce(i_nId);
         if (pRE != 0)
         {
-             pRE->StoreAt( *this );
+             pRE->Accept( *this );
             return;
         }
     }
@@ -102,24 +107,10 @@ Display::do_DisplaySlot_Rid( ary::Rid )
 }
 
 void
-Display::do_DisplaySlot_Lid( ary::Lid )
+Display::do_DisplaySlot_LocalCe( ary::cpp::Ce_id    ,
+                                 const String  &    )
 {
 }
-
-void
-Display::do_DisplaySlot_LocalCe( ary::Rid           ,
-                                 const udmstri &    )
-{
-}
-
-const DisplayGate *
-Display::inq_Get_ReFinder() const
-{
-    return 0;
-}
-
 
 
 }   // namespace ary
-
-
