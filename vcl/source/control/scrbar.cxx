@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 16:33:31 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -346,7 +346,7 @@ void ScrollBar::ImplCalc( BOOL bUpdate )
     Rectangle& maTrackRect = mpData->maTrackRect;  // TODO: remove when maTrackRect is no longer in mpData
     if ( mbCalcSize )
     {
-        const Region aControlRegion( Rectangle( Point(0,0), aSize ) );
+        const Region aControlRegion( Rectangle( (const Point&)Point(0,0), aSize ) );
         Region aBtn1Region, aBtn2Region, aTrackRegion, aBoundingRegion;
 
         if ( GetStyle() & WB_HORZ )
