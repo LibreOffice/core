@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 09:49:51 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:31:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,25 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 }
 
 /*****************************************************************************/
+/* osl_getModuleHandle */
+/*****************************************************************************/
+
+sal_Bool SAL_CALL
+osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
+{
+    HMODULE hmod;
+    APIRET  rc;
+    rc = DosQueryModuleHandle(pModuleName->buffer, &hmod);
+    if( rc == NO_ERROR)
+    {
+        *pResult = (oslModule) hmod;
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
+/*****************************************************************************/
 /* osl_unloadModule */
 /*****************************************************************************/
 void SAL_CALL osl_unloadModule(oslModule Module)
@@ -188,7 +207,42 @@ void SAL_CALL osl_unloadModule(oslModule Module)
 /*****************************************************************************/
 /* osl_getSymbol */
 /*****************************************************************************/
-void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *ustrSymbolName)
+void* SAL_CALL
+osl_getSymbol(oslModule Module, rtl_uString* pSymbolName)
+{
+    return (void *) osl_getFunctionSymbol(Module, pSymbolName);
+}
+
+/*****************************************************************************/
+/* osl_getFunctionSymbol */
+/*****************************************************************************/
+oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString *strSymbolName )
+{
+    rtl_String *symbolName = NULL;
+    oslGenericFunction address;
+
+    OSL_ASSERT(Module);
+    OSL_ASSERT(strSymbolName);
+
+    rtl_uString2String(
+        &symbolName,
+        strSymbolName->buffer,
+        strSymbolName->length,
+        RTL_TEXTENCODING_UTF8,
+        OUSTRING_TO_OSTRING_CVTFLAGS
+    );
+
+    address=osl_getAsciiFunctionSymbol(Module, rtl_string_getStr(symbolName));
+    rtl_string_release(symbolName);
+
+    return address;
+}
+
+/*****************************************************************************/
+/* osl_getAsciiFunctionSymbol */
+/*****************************************************************************/
+oslGenericFunction SAL_CALL
+osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
 {
     PFN  pFunction;
     APIRET rc;
@@ -197,20 +251,10 @@ void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *ustrSymbolName)
     OSL_ENSURE(Module,"osl_getSymbol : module handle is not valid");
     OSL_ENSURE(Module,"osl_getSymbol : ustrSymbolName");
 
-    if ( Module!= 0 && ustrSymbolName != 0 )
+    if ( Module!= 0 && pSymbol != 0 )
     {
-        rtl_String* strSymbolName=0;
-        sal_Char* pszSymbolName=0;
 
-        rtl_uString2String( &strSymbolName,
-                            rtl_uString_getStr(ustrSymbolName),
-                            rtl_uString_getLength(ustrSymbolName),
-                            osl_getThreadTextEncoding(),
-                            OUSTRING_TO_OSTRING_CVTFLAGS );
-
-        pszSymbolName = rtl_string_getStr(strSymbolName);
-
-        rc = DosQueryProcAddr( (HMODULE) Module, 0, (PCSZ)pszSymbolName, &pFunction );
+        rc = DosQueryProcAddr( (HMODULE) Module, 0, (PCSZ)pSymbol, &pFunction );
         if( rc == NO_ERROR )
         {
             pHandle = (void*)pFunction;
@@ -220,30 +264,16 @@ void* SAL_CALL osl_getSymbol(oslModule Module, rtl_uString *ustrSymbolName)
             // YD try again adding the '_' prefix
             char _pszSymbolName[255];
             strcpy( _pszSymbolName, "_");
-            strcat( _pszSymbolName, pszSymbolName);
+            strcat( _pszSymbolName, pSymbol);
             rc = DosQueryProcAddr( (HMODULE) Module, 0, (PCSZ)_pszSymbolName, &pFunction );
             if( rc == NO_ERROR )
                 pHandle = (void*)pFunction;
         }
 
-        if ( strSymbolName != 0 )
-        {
-            rtl_string_release(strSymbolName);
-        }
     }
-
 
     return pHandle;
 }
-
-/*****************************************************************************/
-/* osl_getFunctionSymbol */
-/*****************************************************************************/
-oslGenericFunction SAL_CALL osl_getFunctionSymbol( oslModule Module, rtl_uString *ustrFunctionSymbolName )
-{
-    return ( oslGenericFunction )osl_getSymbol( Module, ustrFunctionSymbolName );
-}
-
 
 /*****************************************************************************/
 /* osl_getModuleURLFromAddress */
