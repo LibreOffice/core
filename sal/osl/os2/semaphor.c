@@ -4,9 +4,9 @@
  *
  *  $RCSfile: semaphor.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 09:49:11 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,12 @@
 
 typedef struct _oslSemaphoreImpl
 {
-    int nCount;
     HEV hevReachedZero;
+    int nCount;
 } oslSemaphoreImpl;
+
+// static mutex to control access to private members of oslMutexImpl
+static HMTX MutexLock = NULL;
 
 /*****************************************************************************/
 /* osl_createSemaphore */
@@ -58,7 +61,6 @@ typedef struct _oslSemaphoreImpl
 - Erzeugen der Semaphore
 - Z„hler auf initialCount setzen
 */
-
 oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount)
 {
     APIRET rc;
@@ -81,6 +83,10 @@ oslSemaphore SAL_CALL osl_createSemaphore(sal_uInt32 initialCount)
     }
 
     pSemaphoreImpl->nCount = initialCount;
+
+    // create static mutex for private members
+    if (MutexLock == NULL)
+        DosCreateMutexSem( NULL, &MutexLock, 0, FALSE );
 
     return (oslSemaphore) pSemaphoreImpl;
 }
@@ -118,22 +124,22 @@ sal_Bool SAL_CALL osl_acquireSemaphore(oslSemaphore Semaphore)
     int nCount;
     OSL_ASSERT(Semaphore != 0);
 
-    DosEnterCritSec();
+    DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
 
     while( pSemaphoreImpl->nCount < 1 )
     {
         sal_uInt32 nPostCount;
 
-        DosExitCritSec();
+        DosReleaseMutexSem( MutexLock);
 
         rc = DosWaitEventSem(pSemaphoreImpl->hevReachedZero, SEM_INDEFINITE_WAIT );
         DosResetEventSem(pSemaphoreImpl->hevReachedZero, &nPostCount);
 
-        DosEnterCritSec();
+        DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
     }
 
     pSemaphoreImpl->nCount--;
-    DosExitCritSec();
+    DosReleaseMutexSem( MutexLock);
 
     return( rc == NO_ERROR );
 }
@@ -152,13 +158,13 @@ sal_Bool SAL_CALL osl_tryToAcquireSemaphore(oslSemaphore Semaphore)
     int nCount;
     OSL_ASSERT(Semaphore != 0);
 
-    DosEnterCritSec();
+    DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
 
     nCount = pSemaphoreImpl->nCount;
     if( pSemaphoreImpl->nCount > 0 )
         pSemaphoreImpl->nCount--;
 
-    DosExitCritSec();
+    DosReleaseMutexSem( MutexLock);
 
     return( nCount > 0 );
 }
@@ -176,12 +182,12 @@ sal_Bool SAL_CALL osl_releaseSemaphore(oslSemaphore Semaphore)
     int nCount;
     OSL_ASSERT(Semaphore != 0);
 
-    DosEnterCritSec();
+    DosRequestMutexSem( MutexLock, SEM_INDEFINITE_WAIT );
 
     nCount = pSemaphoreImpl->nCount;
     pSemaphoreImpl->nCount++;
 
-    DosExitCritSec();
+    DosReleaseMutexSem( MutexLock);
 
     if( nCount == 0 )
         DosPostEventSem(pSemaphoreImpl->hevReachedZero);
