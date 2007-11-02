@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fevnthdl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:20:50 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:51:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,15 +46,10 @@
 
 namespace ary
 {
-    namespace cpp
-    {
-        class ProjectGroup;
-        class FileGroup;
-    }
-    namespace loc
-    {
-        class LocationRoot;
-    }
+namespace loc
+{
+    class File;
+}
 }
 
 
@@ -75,48 +70,28 @@ class FileScope_EventHandler
     virtual             ~FileScope_EventHandler() {}
 
     // OPERATIONS
-    void                SetCurProject(
-                            ary::cpp::ProjectGroup &
-                                                io_rCurProject );
     void                SetCurFile(
-                            ary::cpp::FileGroup &
-                                                io_rCurFile,
-                            const udmstri &     i_sFileName );
+                            ary::loc::File &    io_rCurFile );
     void                Event_IncrLineCount();
     void                Event_SwBracketOpen();
     void                Event_SwBracketClose();
     void                Event_Semicolon();
 
-    // INQUIRY
-    ary::cpp::ProjectGroup &
-                        CurProject() const;
   private:
-    virtual void        do_SetCurProject(
-                            ary::cpp::ProjectGroup &
-                                                io_rCurProject ) = 0;
     virtual void        do_SetCurFile(
-                            ary::cpp::FileGroup &
-                                                io_rCurFile,
-                            const udmstri &     i_sFileName ) = 0;
+                            ary::loc::File &    io_rCurFile ) = 0;
     virtual void        do_Event_IncrLineCount() = 0;
     virtual void        do_Event_SwBracketOpen() = 0;
     virtual void        do_Event_SwBracketClose() = 0;
     virtual void        do_Event_Semicolon() = 0;
-
-    virtual ary::cpp::ProjectGroup &
-                        inq_CurProject() const = 0;
 };
 
 
 // IMPLEMENTATION
 
 inline void
-FileScope_EventHandler::SetCurProject( ary::cpp::ProjectGroup & io_rCurProject )
-    { do_SetCurProject(io_rCurProject); }
-inline void
-FileScope_EventHandler::SetCurFile( ary::cpp::FileGroup & io_rCurFile,
-                                    const udmstri &       i_sFileName )
-    { do_SetCurFile(io_rCurFile,i_sFileName); }
+FileScope_EventHandler::SetCurFile( ary::loc::File & io_rCurFile )
+    { do_SetCurFile(io_rCurFile); }
 inline void
 FileScope_EventHandler::Event_IncrLineCount()
     { do_Event_IncrLineCount(); }
@@ -129,14 +104,10 @@ FileScope_EventHandler::Event_SwBracketClose()
 inline void
 FileScope_EventHandler::Event_Semicolon()
     { do_Event_Semicolon(); }
-inline ary::cpp::ProjectGroup &
-FileScope_EventHandler::CurProject() const
-    { return inq_CurProject(); }
+
 
 
 
 }   // namespace cpp
-
-
 #endif
 

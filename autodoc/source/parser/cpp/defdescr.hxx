@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defdescr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:20:35 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,6 @@
 
 
 
-// USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-    // PARAMETERS
-
 
 namespace cpp
 {
@@ -63,10 +58,10 @@ class DefineDescription
     typedef StringVector str_vector;
 
                         DefineDescription(      /// Used for: #define DEFINE xyz
-                            const udmstri &     i_sName,
+                            const String  &     i_sName,
                             const str_vector &  i_rDefinition );
                         DefineDescription(      /// Used for: #define MACRO(...) abc
-                            const udmstri &     i_sName,
+                            const String  &     i_sName,
                             const str_vector &  i_rParams,
                             const str_vector &  i_rDefinition );
                         ~DefineDescription();
@@ -86,7 +81,7 @@ class DefineDescription
 
   private:
     // DATA
-    udmstri             sName;
+    String              sName;
     str_vector          aParams;
     str_vector          aDefinition;
     E_DefineType        eDefineType;
@@ -94,8 +89,8 @@ class DefineDescription
 
 
 
-// IMPLEMENTATION
 
+// IMPLEMENTATION
 inline uintt
 DefineDescription::ParamCount() const
     { return aParams.size(); }
@@ -104,10 +99,7 @@ DefineDescription::DefineType() const
     { return eDefineType; }
 
 
+
+
 }   // end namespace cpp
-
-
-
 #endif
-
-
