@@ -4,9 +4,9 @@
  *
  *  $RCSfile: html_kit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:52:40 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:27:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ PageTitle_Central::PageTitle_Central( XmlElement & o_rOwner )
 void
 PageTitle_Left::operator()( XmlElement &        o_rOwner,
                             const char *        i_sTypeTitle,
-                            const udmstri &     i_sLocalName )
+                            const String &      i_sLocalName )
 {
     o_rOwner
         >> *new Headline(2)
@@ -73,9 +73,9 @@ PageTitle_Left::operator()( XmlElement &        o_rOwner,
 }
 
 void
-PageTitle_Std::operator()( XmlElement &        o_rOwner,
-                           const char *        i_sTypeTitle,
-                           const udmstri &     i_sLocalName )
+PageTitle_Std::operator()( XmlElement &         o_rOwner,
+                           const char *         i_sTypeTitle,
+                           const String &       i_sLocalName )
 {
     o_rOwner
         >> *new AnElement("div")
@@ -98,15 +98,16 @@ PageTitle_Std::operator()( XmlElement & o_rOwner )
 }
 
 void
-OperationTitle::operator()( XmlElement &        o_rOwner,
-                            const char *        i_sItemName,
-                            ary::OSid           i_nSignature )
+OperationTitle::operator()( XmlElement &                o_owner,
+                            const char *                i_itemName,
+                            ary::cpp::Ce_id             i_id,
+                            const ::ary::cpp::Gate &    i_gate )
 {
-    o_rOwner
-        >> *new Label( OperationLabel(i_sItemName, i_nSignature) )
+    o_owner
+        >> *new Label( OperationLabel(i_itemName, i_id, i_gate) )
             << " ";
-    o_rOwner
-        << i_sItemName;
+    o_owner
+        << i_itemName;
 }
 
 
