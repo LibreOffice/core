@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zipfile.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:36:26 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:11:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,12 @@
 #include <functional>
 
 #include <string.h>
+
+#ifdef OS2
+#include <alloca.h>
+#define _alloca alloca
+#define ERROR_NOT_ENOUGH_MEMORY 8
+#endif
 
 namespace internal
 {
