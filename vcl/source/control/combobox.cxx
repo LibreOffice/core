@@ -4,9 +4,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 16:32:38 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:51:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,7 @@ void ComboBox::ImplCalcEditHeight()
     // FIXME: currently only on aqua; see if we can use this on other platforms
     if( ImplGetSVData()->maNWFData.mbNoFocusRects )
     {
-        Region aCtrlRegion( Rectangle( Point(), Size( 10, 10 ) ) );
+        Region aCtrlRegion( Rectangle( (const Point&)Point(), Size( 10, 10 ) ) );
         Region aBoundRegion, aContentRegion;
         ImplControlValue aControlValue;
         ControlType aType = IsDropDownBox() ? CTRL_COMBOBOX : CTRL_EDITBOX;
