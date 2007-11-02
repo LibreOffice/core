@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zipexcptn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:48:35 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,8 +97,10 @@ Win32Exception::Win32Exception(int Error) :
 */
 Win32Exception::~Win32Exception() throw()
 {
+#ifndef OS2
     if (m_MsgBuff)
         LocalFree(m_MsgBuff);
+#endif
 }
 
 //------------------------------------------
@@ -106,6 +108,9 @@ Win32Exception::~Win32Exception() throw()
 */
 const char* Win32Exception::what() const throw()
 {
+#ifdef OS2
+    return "Win32Exception!";
+#else
     FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_FROM_SYSTEM |
@@ -118,6 +123,7 @@ const char* Win32Exception::what() const throw()
         NULL);
 
     return reinterpret_cast<char*>(m_MsgBuff);
+#endif
 }
 
 //------------------------------------------
