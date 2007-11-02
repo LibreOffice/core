@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_type.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:03:21 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:58:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,14 +39,64 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <ary/cpp/inpcontx.hxx>
-#include <ary/cpp/c_rwgate.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_class.hxx>
+#include <ary/cpp/c_namesp.hxx>
+#include <ary/cpp/cp_type.hxx>
 #include "pe_class.hxx"
 #include "pe_enum.hxx"
 #include <x_parse.hxx>
 
 
-namespace cpp {
+
+class NullType : public ary::cpp::Type
+{
+  private:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    virtual ary::ClassId
+                        get_AryClass() const;
+    virtual bool        inq_IsConst() const;
+    virtual void        inq_Get_Text(
+                            StreamStr &         o_rPreName,
+                            StreamStr &         o_rName,
+                            StreamStr &         o_rPostName,
+                            const ary::cpp::Gate &
+                                                i_rGate ) const;
+};
+
+void
+NullType::do_Accept(csv::ProcessorIfc & ) const
+{
+    // Does nothing.
+}
+
+ary::ClassId
+NullType::get_AryClass() const
+{
+    return 0;
+}
+
+bool
+NullType::inq_IsConst() const
+{
+    return true;
+}
+
+void
+NullType::inq_Get_Text(     StreamStr &         ,
+                            StreamStr &         ,
+                            StreamStr &         ,
+                            const ary::cpp::Gate &  ) const
+{
+    // Does nothing.
+}
+
+
+
+
+namespace cpp
+{
 
 
 inline bool
@@ -185,7 +235,12 @@ PE_Type::InitData()
 {
     pStati->SetCur(start);
 
-    pType = new ary::cpp::UsedType;
+    ary::cpp::Ce_id
+        scope_id = Env().Context().CurClass() != 0
+                    ?   Env().Context().CurClass()->CeId()
+                    :   Env().Context().CurNamespace().CeId();
+
+    pType = new ary::cpp::UsedType(scope_id);
     pCurTemplate_ParameterList = 0;
     sOwningClassName
             =   Env().Context().CurClass() != 0
@@ -203,9 +258,11 @@ PE_Type::TransferData()
     pStati->SetCur(size_of_states);
 
     if ( IsType() )
-        pResult_Type = & Env().AryGate().CheckIn_UsedType( Env().Context(), * pType.Release() );
+        pResult_Type = & Env().AryGate().Types().CheckIn_UsedType(
+                                                        Env().Context(),
+                                                        *pType.Release() );
     else
-        pResult_Type = new ary::cpp::NullType;
+        pResult_Type = new NullType;
 }
 
 void
@@ -218,10 +275,10 @@ void
 PE_Type::SpReturn_Type_TemplateParameter()
 {
     if ( pSpuType_TemplateParameter->Child().Result_KindOf() != is_type )
-        throw X_Parser(X_Parser::x_UnspecifiedSyntaxError, "", udmstri::Null_(), 0);
+        throw X_Parser(X_Parser::x_UnspecifiedSyntaxError, "", String::Null_(), 0);
 
     pCurTemplate_ParameterList->AddParam_Type(
-            pSpuType_TemplateParameter->Child().Result_Type().Id() );
+            pSpuType_TemplateParameter->Child().Result_Type().TypeId() );
 }
 
 void

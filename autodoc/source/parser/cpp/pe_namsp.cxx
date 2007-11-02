@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_namsp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:13:35 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:55:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,16 @@
 // NOT FULLY DECLARED SERVICES
 #include <all_toks.hxx>
 #include <ary/cpp/c_namesp.hxx>
-#include <ary/cpp/c_rwgate.hxx>
+#include <ary/cpp/c_gate.hxx>
+#include <ary/cpp/cp_ce.hxx>
 #include <semantic/callf.hxx>
 #include "x_parse.hxx"
 
 
-namespace cpp {
+
+
+namespace cpp
+{
 
 PE_Namespace::PE_Namespace( Cpp_PE * i_pParent )
     :   Cpp_PE(i_pParent),
@@ -99,8 +103,10 @@ PE_Namespace::TransferData()
 {
     if (bPush)
     {
-        ary::cpp::Namespace & rNew
-                = Env().AryGate().CheckIn_Namespace( Env().Context(), sLocalName );
+        ary::cpp::Namespace &
+            rNew = Env().AryGate().Ces().CheckIn_Namespace(
+                                             Env().Context(),
+                                             sLocalName );
         Env().OpenNamespace(rNew);
     }
 }
@@ -147,7 +153,7 @@ PE_Namespace::On_gotName_SwBracket_Left(const char * )
 void
 PE_Namespace::On_gotName_Assign(const char * )
 {
-    // KORR
+    // KORR_FUTURE
     Hdl_SyntaxError(0);
 }
 
