@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:26:39 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:42:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -957,8 +957,8 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
                     }
                 }
             }
-            if ( !pSwpHints->MergePortions( *this ) )
-                static_cast<SwpHintsArr*>(pSwpHints)->Resort();
+
+            pSwpHints->MergePortions( *this );
         }
         else
         {
