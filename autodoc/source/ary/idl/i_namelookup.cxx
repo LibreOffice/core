@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_namelookup.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:33:34 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:45:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ NameLookup::~NameLookup()
 void
 NameLookup::Add_Name( const String &      i_name,
                       Ce_id               i_id,
-                      RCid                i_class,
+                      ClassId             i_class,
                       Ce_id               i_owner )
 {
     aNames.insert( std::pair< const String, NameProperties>(
@@ -64,15 +64,11 @@ NameLookup::Add_Name( const String &      i_name,
                                    NameProperties( i_id,
                                                    i_class,
                                                    i_owner )));
-//    aNames.insert( std::make_pair( i_name,
-//                                   NameProperties( i_id,
-//                                                   i_class,
-//                                                   i_owner )));
 }
 
 bool
 NameLookup::Has_Name( const String &      i_name,
-                      RCid                i_class,
+                      ClassId             i_class,
                       Ce_id               i_owner ) const
 {
     IteratorRange<Map_Names::const_iterator>

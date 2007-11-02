@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_reposypart.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:34:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,16 +34,15 @@
  ************************************************************************/
 
 #include <precomp.h>
-#include <idl/i_reposypart.hxx>
+#include "i_reposypart.hxx"
 
 
 // NOT FULLY DEFINED SERVICES
-#include <commonpart.hxx>
 #include <ary/idl/i_namelookup.hxx>
-#include "ii_gate.hxx"
-#include "ipi_ce.hxx"
-#include "ipi_type.hxx"
-#include "ipi_2s.hxx"
+#include <idl_internalgate.hxx>
+#include "ia_ce.hxx"
+#include "ia_type.hxx"
+#include "i2s_calculator.hxx"
 #include "is_ce.hxx"
 #include "is_type.hxx"
 
@@ -56,88 +55,73 @@ namespace idl
 {
 
 
-//**************        CheshireCat     *****************//
-
-struct RepositoryPartition::CheshireCat
+DYN InternalGate &
+InternalGate::Create_Partition_(RepositoryCenter & i_center)
 {
-  public:
-    // LIFECYCLE
-                        CheshireCat(
-                            const n22::RepositoryCenter &
-                                                i_rRepository );
-                        ~CheshireCat();
-
-    // DATA
-    Ce_Storage          aCeStorage;
-    Type_Storage        aTypeStorage;
-    NameLookup          aNamesDictionary;
-
-    Dyn<CePilot_Inst>   pCePilot;
-    Dyn<TypePilot_Inst> pTypePilot;
-    Dyn<SecondariesPilot_Inst>
-                        pSecondariesPilot;
-
-    Dyn<Gate_Inst>      pGate;
-
-    const n22::RepositoryCenter *
-                        pCenter;
-};
-
-RepositoryPartition::
-CheshireCat::CheshireCat( const n22::RepositoryCenter & i_rRepository )
-    :   aCeStorage(),
-        aTypeStorage(),
-        aNamesDictionary(),
-        pCePilot(),
-        pTypePilot(),
-        pSecondariesPilot(),
-        pGate(),
-        pCenter(&i_rRepository)
-{
-    pTypePilot = new TypePilot_Inst( aTypeStorage );
-    pCePilot = new CePilot_Inst( aCeStorage, aNamesDictionary, *pTypePilot );
-    pTypePilot->Assign_CePilot(*pCePilot);
-    pSecondariesPilot = new SecondariesPilot_Inst( aCeStorage, aTypeStorage );
-    pGate = new Gate_Inst( *pCePilot, *pTypePilot, *pSecondariesPilot );
-}
-
-RepositoryPartition::
-CheshireCat::~CheshireCat()
-{
+    return *new RepositoryPartition(i_center);
 }
 
 
-//**************        RepositoryPartition      *****************//
 
-RepositoryPartition::RepositoryPartition( const n22::RepositoryCenter & i_rRepository )
-    :   cat(new CheshireCat(i_rRepository))
+RepositoryPartition::RepositoryPartition( RepositoryCenter & i_repository )
+    :   pCenter(&i_repository),
+        pCes(0),
+        pTypes(0),
+        pNamesDictionary(new NameLookup)
 {
+    pTypes = new TypeAdmin;
+    pCes = new CeAdmin(*pNamesDictionary, *pTypes);
 }
 
 RepositoryPartition::~RepositoryPartition()
 {
 }
 
-const Gate &
-RepositoryPartition::TheGate() const
+void
+RepositoryPartition::Calculate_AllSecondaryInformation(
+                            const String &      i_devman_reffilepath )
 {
-    return * cat->pGate;
+    // KORR_FUTURE
+    //  Forward the options from here.
+
+    SecondariesCalculator
+        secalc(*pCes,*pTypes);
+
+    secalc.CheckAllInterfaceBases();
+    secalc.Connect_Types2Ces();
+    secalc.Gather_CrossReferences();
+
+    if ( NOT i_devman_reffilepath.empty() )
+    {
+        secalc.Make_Links2DeveloperManual(i_devman_reffilepath);
+    }
 }
 
-
-Gate &
-RepositoryPartition::TheGate()
+const CePilot &
+RepositoryPartition::Ces() const
 {
-    return * cat->pGate;
+    return *pCes;
 }
 
+const TypePilot &
+RepositoryPartition::Types() const
+{
+    return *pTypes;
+}
 
+CePilot &
+RepositoryPartition::Ces()
+{
+    return *pCes;
+}
 
-
-
+TypePilot &
+RepositoryPartition::Types()
+{
+    return *pTypes;
+}
 
 
 
 }   //  namespace idl
 }   //  namespace ary
-
