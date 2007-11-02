@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_siservice.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:35:03 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:47:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/idl/ihost_ce.hxx>
+#include <cosv/tpl/processor.hxx>
 #include <sci_impl.hxx>
 
 
@@ -63,13 +63,13 @@ SglIfcService::~SglIfcService()
 }
 
 void
-SglIfcService::do_Visit_CeHost( CeHost & o_rHost ) const
+SglIfcService::do_Accept( csv::ProcessorIfc & io_processor ) const
 {
-    o_rHost.Do_SglIfcService(*this);
+    csv::CheckedCall(io_processor, *this);
 }
 
-RCid
-SglIfcService::inq_ClassId() const
+ClassId
+SglIfcService::get_AryClass() const
 {
     return class_id;
 }
@@ -105,7 +105,7 @@ namespace ifc_sglifcservice
 inline const SglIfcService &
 sglifcservice_cast( const CodeEntity &  i_ce )
 {
-    csv_assert( i_ce.ClassId() == SglIfcService::class_id );
+    csv_assert( i_ce.AryClass() == SglIfcService::class_id );
     return static_cast< const SglIfcService& >(i_ce);
 }
 
@@ -127,4 +127,3 @@ attr::Get_Constructors( Dyn_CeIterator &    o_result,
 
 }   //  namespace   idl
 }   //  namespace   ary
-

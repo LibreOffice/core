@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_function.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:32:50 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:44:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/idl/ihost_ce.hxx>
+#include <cosv/tpl/processor.hxx>
 #include <sci_impl.hxx>
 
 
@@ -83,13 +83,13 @@ Function::~Function()
 }
 
 void
-Function::do_Visit_CeHost( CeHost & o_rHost ) const
+Function::do_Accept( csv::ProcessorIfc & io_processor ) const
 {
-    o_rHost.Do_Function( *this );
+    csv::CheckedCall(io_processor, *this);
 }
 
-RCid
-Function::inq_ClassId() const
+ClassId
+Function::get_AryClass() const
 {
     return class_id;
 }
@@ -125,7 +125,7 @@ namespace ifc_function
 inline const Function &
 function_cast( const CodeEntity &  i_ce )
 {
-    csv_assert( i_ce.ClassId() == Function::class_id );
+    csv_assert( i_ce.AryClass() == Function::class_id );
     return static_cast< const Function& >(i_ce);
 }
 

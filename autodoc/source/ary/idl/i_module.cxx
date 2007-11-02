@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_module.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:33:19 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:45:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #include <ary/idl/ik_module.hxx>
 
 // NOT FULLY DECLARED SERVICES
+#include <cosv/tpl/processor.hxx>
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/i_module.hxx>
 #include <ary/idl/i_service.hxx>
@@ -50,7 +51,6 @@
 #include <ary/idl/i_singleton.hxx>
 #include <ary/idl/i_siservice.hxx>
 #include <ary/idl/i_sisingleton.hxx>
-#include <ary/idl/ihost_ce.hxx>
 #include <ary/idl/ip_ce.hxx>
 #include <nametreenode.hxx>
 #include "i_strconst.hxx"
@@ -139,16 +139,13 @@ Module::Depth() const
 }
 
 void
-Module::do_Visit_CeHost( CeHost & o_rHost ) const
+Module::do_Accept( csv::ProcessorIfc & io_processor ) const
 {
-    Dyn_StdConstIterator<Ce_id>
-        pLocalNames;
-    pImpl->Get_Names(pLocalNames);
-    o_rHost.Do_Module(*this);
+    csv::CheckedCall(io_processor, *this);
 }
 
-RCid
-Module::inq_ClassId() const
+ClassId
+Module::get_AryClass() const
 {
     return class_id;
 }
@@ -184,7 +181,7 @@ namespace ifc_module
 inline const Module &
 module_cast( const CodeEntity &  i_ce )
 {
-    csv_assert( i_ce.ClassId() == Module::class_id );
+    csv_assert( i_ce.AryClass() == Module::class_id );
     return static_cast< const Module& >(i_ce);
 }
 
@@ -213,7 +210,7 @@ attr::Get_AllChildrenSeparated( std::vector< const CodeEntity* > & o_nestedModul
           ++it )
     {
         pCe = &i_pilot.Find_Ce( (*it).second );
-        switch (pCe->ClassId())
+        switch (pCe->AryClass())
         {
             case Module::class_id:
                         o_nestedModules.push_back(pCe);

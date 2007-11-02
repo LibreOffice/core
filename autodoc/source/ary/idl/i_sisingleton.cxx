@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_sisingleton.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:35:17 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:47:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 
 
 // NOT FULLY DECLARED SERVICES
+#include <cosv/tpl/processor.hxx>
 #include <ary/idl/ik_sisingleton.hxx>
-#include <ary/idl/ihost_ce.hxx>
 
 
 
@@ -62,13 +62,13 @@ SglIfcSingleton::~SglIfcSingleton()
 }
 
 void
-SglIfcSingleton::do_Visit_CeHost( CeHost & o_rHost ) const
+SglIfcSingleton::do_Accept( csv::ProcessorIfc & io_processor ) const
 {
-    o_rHost.Do_SglIfcSingleton(*this);
+    csv::CheckedCall(io_processor, *this);
 }
 
-RCid
-SglIfcSingleton::inq_ClassId() const
+ClassId
+SglIfcSingleton::get_AryClass() const
 {
     return class_id;
 }
@@ -103,7 +103,7 @@ namespace ifc_sglifcsingleton
 inline const SglIfcSingleton &
 sglifcsingleton_cast( const CodeEntity &  i_ce )
 {
-    csv_assert( i_ce.ClassId() == SglIfcSingleton::class_id );
+    csv_assert( i_ce.AryClass() == SglIfcSingleton::class_id );
     return static_cast< const SglIfcSingleton& >(i_ce);
 }
 
@@ -119,4 +119,3 @@ attr::BaseInterface( const CodeEntity & i_ce )
 
 }   //  namespace   idl
 }   //  namespace   ary
-

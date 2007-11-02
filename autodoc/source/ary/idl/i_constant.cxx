@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_constant.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:31:34 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:43:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/idl/ihost_ce.hxx>
+#include <cosv/tpl/processor.hxx>
 #include <ary/idl/ik_constant.hxx>
 
 
@@ -65,14 +65,14 @@ Constant::~Constant()
 }
 
 void
-Constant::do_Visit_CeHost( CeHost & o_rHost ) const
+Constant::do_Accept( csv::ProcessorIfc & io_processor ) const
 {
-    o_rHost.Do_Constant(*this);
+    csv::CheckedCall(io_processor, *this);
 }
 
 
-RCid
-Constant::inq_ClassId() const
+ClassId
+Constant::get_AryClass() const
 {
     return class_id;
 }
@@ -108,7 +108,7 @@ namespace ifc_constant
 inline const Constant &
 constant_cast( const CodeEntity &  i_ce )
 {
-    csv_assert( i_ce.ClassId() == Constant::class_id );
+    csv_assert( i_ce.AryClass() == Constant::class_id );
     return static_cast< const Constant& >(i_ce);
 }
 

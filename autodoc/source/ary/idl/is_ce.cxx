@@ -4,9 +4,9 @@
  *
  *  $RCSfile: is_ce.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:37:46 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,11 @@
 
 // NOT FULLY DEFINED SERVICES
 
+namespace
+{
+    const uintt
+    C_nReservedElements = ary::idl::predefined::ce_MAX;    // Skipping "0" and the GlobalNamespace
+}
 
 
 namespace ary
@@ -45,42 +50,24 @@ namespace ary
 namespace idl
 {
 
+Ce_Storage *        Ce_Storage::pInstance_ = 0;
 
-namespace
+
+
+
+Ce_Storage::Ce_Storage()
+    :   stg::Storage<CodeEntity>(C_nReservedElements)
 {
-const uintt C_nReservedElements = predefined::ce_MAX;    // Skipping "0" and the GlobalNamespace
-}
-
-
-Ce_Storage::Ce_Storage( uintt  i_nBLOCK_SIZE_LOG_2,
-                        uintt  i_nInitialNrOfBlocks )
-    :   aContainer(i_nBLOCK_SIZE_LOG_2, C_nReservedElements, i_nInitialNrOfBlocks)
-{
+    csv_assert(pInstance_ == 0);
+    pInstance_ = this;
 }
 
 Ce_Storage::~Ce_Storage()
 {
-}
-
-void
-Ce_Storage::EraseAll()
-{
-    aContainer.EraseAll();
-}
-
-void
-Ce_Storage::Save( PersistenceAdmin &  ) const
-{
-    // KORR_FUTURE
-}
-
-void
-Ce_Storage::Load( PersistenceAdmin & )
-{
-    // KORR_FUTURE
+    csv_assert(pInstance_ != 0);
+    pInstance_ = 0;
 }
 
 
 }   // namespace idl
 }   // namespace ary
-

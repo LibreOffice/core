@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_typedef.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:36:20 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:49:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,9 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/idl/ihost_ce.hxx>
+#include <cosv/tpl/processor.hxx>
 #include <sci_impl.hxx>
-#include "ipi_2s.hxx"
+#include "i2s_calculator.hxx"
 
 
 namespace ary
@@ -64,13 +64,13 @@ Typedef::~Typedef()
 }
 
 void
-Typedef::do_Visit_CeHost( CeHost & o_rHost ) const
+Typedef::do_Accept( csv::ProcessorIfc & io_processor ) const
 {
-    o_rHost.Do_Typedef(*this);
+    csv::CheckedCall(io_processor, *this);
 }
 
-RCid
-Typedef::inq_ClassId() const
+ClassId
+Typedef::get_AryClass() const
 {
     return class_id;
 }
@@ -106,7 +106,7 @@ namespace ifc_typedef
 inline const Typedef &
 typedef_cast( const CodeEntity & i_ce )
 {
-    csv_assert( i_ce.ClassId() == Typedef::class_id );
+    csv_assert( i_ce.AryClass() == Typedef::class_id );
     return static_cast< const Typedef& >(i_ce);
 }
 
