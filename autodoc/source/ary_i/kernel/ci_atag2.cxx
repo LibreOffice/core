@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ci_atag2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:48:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:22:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 
 namespace ary
 {
-namespace info
+namespace inf
 {
 
 void    DocuTag_Display::Display_TextToken(
@@ -60,6 +60,6 @@ void    DocuTag_Display::Display_Style(
 void    DocuTag_Display::Display_EOL() {}
 
 
-}   // namespace info
+}   // namespace inf
 }   // namespace ary
 
