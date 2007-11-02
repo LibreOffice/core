@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hi_factory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:57:28 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:39:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,20 +43,20 @@
     // COMPONENTS
     // PARAMETERS
 #include <ary/stdconstiter.hxx>
-#include <ary/idl/i_language.hxx>
+#include <ary/idl/i_types4idl.hxx>
 #include <toolkit/out_position.hxx>
 
 
 namespace ary
 {
-    namespace idl
-    {
-        class Module;
-    }
-    namespace info
-    {
-        class CodeInformation;
-    }
+namespace idl
+{
+    class Module;
+}
+namespace doc
+{
+    class OldIdlDocu;
+}
 }
 
 
@@ -73,7 +73,7 @@ class HtmlFactory_Idl : public HtmlFactory<HtmlEnvironment_Idl>
     typedef ary::idl::CodeEntity                client;
     typedef ary::idl::Ce_id                     ce_id;
     typedef ary::idl::Type_id                   type_id;
-    typedef ary::info::CodeInformation          ce_info;
+    typedef ary::doc::OldIdlDocu                ce_info;
 
     typedef ary::Dyn_StdConstIterator<ce_id>    dyn_ce_list;
     typedef ary::Dyn_StdConstIterator<type_id>  dyn_type_list;
@@ -104,7 +104,7 @@ class HtmlFactory_Idl : public HtmlFactory<HtmlEnvironment_Idl>
                             Xml::Element &      o_row,
                             const client &      i_ce ) const;
 
-    // KORR MI: Does not belong here (implementation inheritance)!
+    // KORR_FUTURE: Does not belong here (implementation inheritance)!
     void                produce_Bases(
                                 Xml::Element &   o_screen,
                                 const client &   i_ce,
