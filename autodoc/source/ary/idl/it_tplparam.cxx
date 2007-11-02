@@ -4,9 +4,9 @@
  *
  *  $RCSfile: it_tplparam.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:39:35 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:57:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <cosv/tpl/processor.hxx>
 #include "i_strconst.hxx"
 
 
@@ -58,24 +59,24 @@ TemplateParamType::~TemplateParamType()
 {
 }
 
-void
-TemplateParamType::do_Visit( Host & ) const
-{
-    // yet unused.
-}
-
-RCid
-TemplateParamType::inq_ClassId() const
+ClassId
+TemplateParamType::get_AryClass() const
 {
     return class_id;
 }
 
 void
-TemplateParamType::inq_Get_Text( StringVector &      ,
+TemplateParamType::do_Accept( csv::ProcessorIfc & io_processor ) const
+{
+    csv::CheckedCall(io_processor, *this);
+}
+
+void
+TemplateParamType::inq_Get_Text( StringVector &      ,          // o_module
                                  String &            o_name,
-                                 Ce_id &             ,
-                                 int &               ,
-                                 const Gate &        ) const
+                                 Ce_id &             ,          // o_nRelatedCe
+                                 int &               ,          // o_nSequenceCount
+                                 const Gate &        ) const    // i_rGate
 {
     o_name = Name();
 }

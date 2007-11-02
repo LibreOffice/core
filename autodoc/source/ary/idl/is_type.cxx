@@ -4,9 +4,9 @@
  *
  *  $RCSfile: is_type.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:38:12 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:54:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,14 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <cosv/tpl/tpltools.hxx>
 
+namespace
+{
+
+const uintt
+    C_nReservedElements = ary::idl::predefined::type_MAX;    // Skipping "0" and the built in types.
+}
 
 
 namespace ary
@@ -46,42 +53,39 @@ namespace ary
 namespace idl
 {
 
-namespace
-{
-const uintt C_nReservedElements = predefined::type_MAX;    // Skipping "0" and the built in types.
-}
+Type_Storage *          Type_Storage::pInstance_ = 0;
 
 
-Type_Storage::Type_Storage( uintt               i_nBLOCK_SIZE_LOG_2,
-                            uintt               i_nInitialNrOfBlocks )
-    :   aContainer(i_nBLOCK_SIZE_LOG_2, C_nReservedElements, i_nInitialNrOfBlocks)
+
+Type_Storage::Type_Storage()
+    :   stg::Storage<Type>(C_nReservedElements),
+        aSequenceIndex()
 {
+    csv_assert(pInstance_ == 0);
+    pInstance_ = this;
 }
 
 Type_Storage::~Type_Storage()
 {
+    csv_assert(pInstance_ != 0);
+    pInstance_ = 0;
 }
 
 void
-Type_Storage::EraseAll()
+Type_Storage::Add_Sequence( Type_id             i_nRelatedType,
+                            Type_id             i_nSequence )
 {
-    aContainer.EraseAll();
+    aSequenceIndex[i_nRelatedType] = i_nSequence;
 }
 
-void
-Type_Storage::Save( PersistenceAdmin & ) const
+Type_id
+Type_Storage::Search_SequenceOf( Type_id i_nRelatedType )
 {
-    // KORR_FUTURE
+    return csv::value_from_map(aSequenceIndex, i_nRelatedType);
 }
 
-void
-Type_Storage::Load( PersistenceAdmin & )
-{
-    // KORR_FUTURE
-}
 
 
 
 }   // namespace idl
 }   // namespace ary
-

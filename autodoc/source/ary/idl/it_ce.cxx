@@ -4,9 +4,9 @@
  *
  *  $RCSfile: it_ce.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:38:55 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:56:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <cosv/tpl/processor.hxx>
 #include <ary/idl/i_ce.hxx>
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/i_module.hxx>
@@ -63,23 +64,23 @@ Ce_Type::~Ce_Type()
 {
 }
 
-void
-Ce_Type::do_Visit( Host & ) const
-{
-    // yet unused.
-}
-
-RCid
-Ce_Type::inq_ClassId() const
+ClassId
+Ce_Type::get_AryClass() const
 {
     return class_id;
+}
+
+void
+Ce_Type::do_Accept( csv::ProcessorIfc & io_processor ) const
+{
+    csv::CheckedCall(io_processor, *this);
 }
 
 void
 Ce_Type::inq_Get_Text( StringVector &      o_module,
                        String &            o_name,
                        Ce_id &             o_nRelatedCe,
-                       int &               ,
+                       int &               ,                // o_nSequenceCount
                        const Gate &        i_rGate ) const
 {
     String sDummyMember;
@@ -98,6 +99,8 @@ Ce_Type::inq_TemplateParameterType() const
 {
     return nTemplateType;
 }
+
+
 
 
 }   // namespace idl
