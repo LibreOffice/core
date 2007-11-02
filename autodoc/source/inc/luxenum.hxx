@@ -4,9 +4,9 @@
  *
  *  $RCSfile: luxenum.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:02:11 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:45:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 namespace lux
 {
 
-typedef std::map< intt, udmstri > EnumValueMap;
+typedef std::map< intt, String  > EnumValueMap;
 
 
 template <class DIFF>
@@ -90,44 +90,22 @@ class Enum // : public Template_Base
                                                 { nValue = i_rEnum.nValue; return *this; }
                         operator DIFF() const   { return DIFF(nValue); }
 
-//  self &              operator++()            { if ( uintt(nValue) < Sequence_().size() - 1) nValue = Sequence_()[nValue+1]; return *this; }
-//  self &              operator--()            { if ( uintt(nValue) > 0) nValue = Sequence_()[nValue-1]; }
-
-
     DIFF                operator()() const      { return nValue; }
-    const udmstri &     Text() const            { return Values_()[nValue]; }
-//  virtual const Agent &
-//                      GetSpecialAgent() const;
+    const String  &     Text() const            { return Values_()[nValue]; }
 
   private:
     static EnumValueMap &
                         Values_();
-//  static std::vector< DIFF > &
-//                      Sequence_();
     bool                CheckIntt(
                             intt                i_nNumber )
                                                 { return Values_().find(i_nNumber) != Values_().end(); }
-
     // DATA
     intt                nValue;
 };
 
 
-// IMPLEMENTATION
 
-/*
-// Dummy - has t be overwritten by specialisation, if used:
-template <class DIFF>
-const Agent &
-Enum<DIFF>::GetSpecialAgent() const
-{
-    csv_assert(false);
-    return *(const udm::Agent*)0;
-}
-*/
 
 }   // namespace lux
-
-
 #endif
 
