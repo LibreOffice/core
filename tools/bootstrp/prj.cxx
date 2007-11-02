@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:12:23 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 
 //#define TEST  1
 
-#if defined WNT
+#if defined(WNT) || defined(OS2)
 #define LIST_DELIMETER ';'
 #define PATH_DELIMETER '\\'
 #elif defined UNX
