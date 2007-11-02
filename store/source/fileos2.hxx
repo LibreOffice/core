@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileos2.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:41:12 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:04:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,7 @@
 
 #define INCL_DOS
 #define INCL_DOSERRORS
-#include <os2def.h>
-#include <bsedos.h>
-#include <bseerr.h>
+#include <os2.h>
 
 typedef HFILE HSTORE;
 
@@ -152,7 +150,7 @@ inline storeError __store_fopen (
 
     // Create file handle.
     APIRET result = ::DosOpen (
-        pszName,
+        (PSZ)pszName,
         &rhFile,
         &nDoneAction,
         0L,
