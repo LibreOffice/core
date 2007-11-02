@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docu_pe.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:07:47 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:47:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <ary/info/codeinfo.hxx>
+#include <ary/doc/d_oldcppdocu.hxx>
 #include <ary/info/ci_attag.hxx>
 #include <ary/info/ci_text.hxx>
 #include <adoc/adoc_tok.hxx>
@@ -46,7 +46,8 @@
 #include <adoc/tk_docw.hxx>
 
 
-namespace adoc {
+namespace adoc
+{
 
 
 inline bool
@@ -59,7 +60,7 @@ Adoc_PE::UsesHtmlInDocuText()
 
 
 Adoc_PE::Adoc_PE()
-    :   // pCurDocu;
+    :   pCurDocu(0),
         pCurAtTag(0),
         nLineCountInDocu(0),
         nCurSpecialMeaningTokens(0),
@@ -329,7 +330,7 @@ Adoc_PE::Hdl_EoDocu( const Tok_EoDocu & )
     bIsComplete = true;
 }
 
-DYN ary::Documentation *
+DYN ary::doc::OldCppDocu *
 Adoc_PE::ReleaseJustParsedDocu()
 {
     pCurAtTag = 0;
@@ -358,11 +359,11 @@ Adoc_PE::InstallAtTag( DYN ary::info::AtTag * let_dpTag,
         eDocuState = ds_std;
 }
 
-ary::info::CodeInfo &
+ary::doc::OldCppDocu &
 Adoc_PE::CurDocu()
 {
     if (NOT pCurDocu)
-        pCurDocu = new ary::info::CodeInfo;
+        pCurDocu = new ary::doc::OldCppDocu;
     return *pCurDocu;
 }
 
