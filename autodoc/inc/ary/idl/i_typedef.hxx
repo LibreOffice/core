@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_typedef.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:13:13 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:12:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,30 +36,23 @@
 #ifndef ARY_IDL_I_TYPEDEF_HXX
 #define ARY_IDL_I_TYPEDEF_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <ary/idl/i_ce.hxx>
-    // COMPONENTS
-    // PARAMETERS
+
+
 
 
 namespace ary
 {
 namespace idl
 {
-
 namespace ifc_typedef
 {
     struct attr;
 }
 
-/*  OPEN?
-*/
 
-/** @resp
-    Represents an IDL typedef.
+/** Represents an IDL typedef.
 */
 class Typedef : public CodeEntity
 {
@@ -76,11 +69,13 @@ class Typedef : public CodeEntity
     Type_id             DefiningType() const    { return nDefiningType; }
 
   private:
-    // Interface ary::RepositoryEntity
-    virtual RCid        inq_ClassId() const;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface ary::Object:
+    virtual ClassId     get_AryClass() const;
 
     // Interface CodeEntity
-    virtual void            do_Visit_CeHost(CeHost & o_rHost) const;
     virtual const String &  inq_LocalName() const;
     virtual Ce_id           inq_NameRoom() const;
     virtual Ce_id           inq_Owner() const;
@@ -97,11 +92,7 @@ class Typedef : public CodeEntity
 
 
 
-// IMPLEMENTATION
-
 
 }   // namespace idl
 }   // namespace ary
-
-
 #endif

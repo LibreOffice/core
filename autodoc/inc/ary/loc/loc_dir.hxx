@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loc_dir.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:23:07 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:17:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,25 @@
  *
  ************************************************************************/
 
-#ifndef ARY_LOC_LOC_DIR_HXX
-#define ARY_LOC_LOC_DIR_HXX
+#ifndef ARY_LOC_DIR_HXX
+#define ARY_LOC_DIR_HXX
+
+// BASE CLASSES
+#include <ary/loc/loc_le.hxx>
 
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-#include <ary/ids.hxx>
-    // PARAMETERS
+#include <ary/loc/loc_traits.hxx>
+#include <ary/symtreenode.hxx>
+
+namespace ary
+{
+namespace loc
+{
+    class File;
+}
+}
+
+
 
 
 namespace ary
@@ -49,82 +60,96 @@ namespace loc
 {
 
 
-class Directory
+/** Represents a directory for source code files.
+*/
+class Directory : public LocationEntity
 {
   public:
-    typedef std::map< udmstri, Lid >   Map_Children;
+    enum E_ClassId { class_id = 7030 };
 
-    // LIFECYCLE
-    virtual             ~Directory() {}
+    typedef ::ary::symtree::Node<LeNode_Traits>    node_t;
 
+    /// Used for root directories.
+    explicit            Directory(
+                            Le_id               i_assignedRoot );
 
-    // OPERATIONS
-    void                Add_ChildDir(
-                            const udmstri &     i_sName,
-                            Lid                 i_nId );
-    void                Add_File(
-                            const udmstri &     i_sName,
-                            Lid                 i_nId );
-    //INQUIRY
-    Lid                 Id() const;
-    const Map_Children &
-                        ChildDirs() const;
-
-    const Map_Children &
-                        Files() const;
-    // ACCESS
-    Map_Children &      ChildDirs();
-    Map_Children &      Files();
-
-  protected:
+    /// Used for subdirectories which have a parent directory.
                         Directory(
-                            Lid                 i_nId );
+                            const String  &     i_localName,
+                            Le_id               i_parentDirectory );
+    virtual             ~Directory();
+
+    void                Add_Dir(
+                            const Directory  &  i_dir );
+    void                Add_File(
+                            const File &        i_file );
+
+    Le_id               Parent() const;
+    Le_id               AssignedRoot() const;
+
+    Le_id               Search_Child(
+                            const String &      i_name ) const;
+    Le_id               Search_Dir(
+                            const String &      i_name ) const;
+    Le_id               Search_File(
+                            const String &      i_name ) const;
+
+    const node_t &      AsNode() const;
+    node_t &            AsNode();
+
   private:
-    Map_Children        aChildDirs;
-    Map_Children        aFiles;
-    Lid                 nId;
+    struct Container;
+
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface ary::Object:
+    virtual ClassId     get_AryClass() const;
+
+    // Interface LocationEntity:
+    virtual const String &
+                        inq_LocalName() const;
+    virtual Le_id       inq_ParentDirectory() const;
+
+    // DATA
+    String              sLocalName;
+    Le_id               nParentDirectory;
+    Le_id               nAssignedRoot;
+    node_t              aAssignedNode;
+    Dyn<Container>      pChildren;
 };
 
-class SubDirectory : public Directory
-{
-  public:
-                        SubDirectory(
-                            Lid                 i_nId,
-                            const udmstri &     i_sName,
-                            Lid                 i_nParentDirectory );
-    //INQUIRY
-    const udmstri &     Name() const;
 
-  private:
-    udmstri             sName;
-    Lid                 nParentDirectory;
-};
 
 
 // IMPLEMENTATION
+inline Le_id
+Directory::Parent() const
+{
+    return nParentDirectory;
+}
 
-inline Lid
-Directory::Id() const
-    { return nId; }
-inline const Directory::Map_Children &
-Directory::ChildDirs() const
-    { return aChildDirs; }
-inline const Directory::Map_Children &
-Directory::Files() const
-    { return aFiles; }
-inline Directory::Map_Children &
-Directory::ChildDirs()
-    { return aChildDirs; }
-inline Directory::Map_Children &
-Directory::Files()
-    { return aFiles; }
-inline const udmstri &
-SubDirectory::Name() const
-    { return sName; }
+inline Le_id
+Directory::AssignedRoot() const
+{
+    return nAssignedRoot;
+}
+
+inline const Directory::node_t &
+Directory::AsNode() const
+{
+    return aAssignedNode;
+}
+
+inline Directory::node_t &
+Directory::AsNode()
+{
+    return aAssignedNode;
+}
+
+
 
 
 } // namespace loc
 } // namespace ary
-
 #endif
-

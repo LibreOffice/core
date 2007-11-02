@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loc_root.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:23:41 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,13 @@
 #ifndef ARY_LOC_PROJECT_HXX
 #define ARY_LOC_PROJECT_HXX
 
+// BASE CLASSES
+#include <ary/loc/loc_le.hxx>
 // USED SERVICES
-    // BASE CLASSES
-#include <ary/loc/loc_dir.hxx>
-    // COMPONENTS
-#include <ary/ids.hxx>
 #include <cosv/ploc.hxx>
-    // PARAMETERS
+#include <ary/loc/loc_dir.hxx>
+
+
 
 
 namespace ary
@@ -51,33 +51,68 @@ namespace loc
 {
 
 
-class LocationRoot : public Directory
+/** Represents a root directory for source files.
+*/
+class Root : public LocationEntity
 {
   public:
-                        LocationRoot(
-                            Lid                 i_nId,
+    enum E_ClassId { class_id = 7000 };
+
+    explicit            Root(
                             const csv::ploc::Path &
                                                 i_rRootDirectoryPath );
+    void                Assign_Directory(
+                            Le_id               i_assignedDirectory );
+    virtual             ~Root();
+
     // INQUIRY
     const csv::ploc::Path &
-                        RootDirectoryPath() const;
+                        Path() const;
+    Le_id               MyDir() const;
 
   private:
-    csv::ploc::Path     aRootDirectoryPath;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface ary::Object:
+    virtual ClassId     get_AryClass() const;
+
+    // Interface LocationEntity:
+    virtual const String &
+                        inq_LocalName() const;
+    virtual Le_id       inq_ParentDirectory() const;
+
+    // DATA
+    csv::ploc::Path     aPath;
+    String              sPathAsString;
+    Le_id               aMyDirectory;
 };
 
 
 
+
 // IMPLEMENTATION
+inline void
+Root::Assign_Directory(Le_id i_assignedDirectory)
+{
+    aMyDirectory = i_assignedDirectory;
+}
 
 inline const csv::ploc::Path &
-LocationRoot::RootDirectoryPath() const
-    { return aRootDirectoryPath; }
+Root::Path() const
+{
+    return aPath;
+}
+
+inline Le_id
+Root::MyDir() const
+{
+    return aMyDirectory;
+}
+
 
 
 
 } // namespace loc
 } // namespace ary
-
 #endif
-

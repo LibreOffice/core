@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loc_file.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:23:23 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:17:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,13 @@
  *
  ************************************************************************/
 
-#ifndef ARY_LOC_LOC_FILE_HXX
-#define ARY_LOC_LOC_FILE_HXX
+#ifndef ARY_LOC_FILE_HXX
+#define ARY_LOC_FILE_HXX
 
-// USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-#include <ary/ids.hxx>
-    // PARAMETERS
+// BASE CLASSES
+#include <ary/loc/loc_filebase.hxx>
+
+
 
 
 namespace ary
@@ -49,41 +48,29 @@ namespace loc
 {
 
 
-class SourceCodeFile
+/** Represents an unspecified source code file.
+*/
+class File : public FileBase
 {
   public:
-                        SourceCodeFile(
-                            Lid                 i_nId,
-                            Lid                 i_nRoot,
-                            Lid                 i_nDirectory,
-                            const udmstri &     i_sName );
-    //INQUIRY
-    Lid                 Id() const;
-    Lid                 Root() const;
-    const udmstri &     Name() const;
+    enum E_ClassId { class_id = 7100 };
+
+                        File(
+                            const String  &     i_sLocalName,
+                            Le_id               i_nParentDirectory );
+    virtual             ~File();
 
   private:
-    Lid                 nId;
-    Lid                 nRoot;
-    Lid                 nDirectory;
-    udmstri             sName;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface ary::Object:
+    virtual ClassId     get_AryClass() const;
 };
 
-// IMPLEMENTATION
 
-inline Lid
-SourceCodeFile::Id() const
-    { return nId; }
-inline Lid
-SourceCodeFile::Root() const
-    { return nRoot; }
-inline const udmstri &
-SourceCodeFile::Name() const
-    { return sName; }
 
 
 } // namespace loc
 } // namespace ary
-
 #endif
-
