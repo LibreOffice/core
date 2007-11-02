@@ -15,6 +15,7 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator\es
 ..\%__SRC%\bin\cui*.dll %_DEST%\bin%_EXT%\cui*.dll
 ..\%__SRC%\bin\svx*.dll %_DEST%\bin%_EXT%\svx*.dll
 ..\%__SRC%\bin\textconversiondlgs*.dll %_DEST%\bin%_EXT%\textconversiondlgs*.dll
+..\%__SRC%\bin\txcnv*.dll %_DEST%\bin%_EXT%\txcnv*.dll
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 
 mkdir: %COMMON_DEST%\pck%_EXT%\starsuite_bitmap
