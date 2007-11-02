@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cx_dsapi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:56:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:12:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
     // BASE CLASSES
 #include <tokens/tkpcont2.hxx>
     // COMPONENTS
-#include <cosv/template/dyn.hxx>
+#include <cosv/tpl/dyn.hxx>
 #include <tokens/tkpstam2.hxx>
     // PARAMETERS
 
@@ -102,7 +102,7 @@ class Context_Docu : public TkpDocuContext,
 
         // Contexts
     TkpContext *        pParentContext;
-    udmstri             sMultiLineEndToken;
+    String              sMultiLineEndToken;
 
     Dyn<Cx_EoHtml>      pCx_EoHtml;
     Dyn<Cx_EoXmlConst>  pCx_EoXmlConst;
