@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ci_text2.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-15 11:10:40 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:20:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 
 namespace ary
 {
-namespace info
+namespace inf
 {
 
 
@@ -92,7 +92,7 @@ class DocuTex2
 
 // IMPLEMENTATION
 
-}   // namespace info
+}   // namespace inf
 }   // namespace ary
 
 
