@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_interface.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:56:57 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:35:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,7 @@ HF_IdlInterface::produce_BaseHierarchy( Xml::Element &      o_screen,
         nCe = Env().Gate().Types().Search_CeRelatedTo((*itTest).Type());
     if (nCe.IsValid())
     {
-        // KORR FUTURE
+        // KORR_FUTURE
         //   Rather check for id(!) of com::sun::star::uno::XInterface.
         if (Env().Gate().Ces().Find_Ce(nCe).LocalName() == "XInterface")
         {
@@ -346,8 +346,8 @@ HF_IdlInterface::produce_BaseHierarchy( Xml::Element &      o_screen,
                 pCe = Env().Linker().Search_CeFromType((*it).Type());
             const ce_info *
                 pShort = pCe != 0
-                            ?   pCe->Docu()
-                            :   0;
+                            ?   Get_IdlDocu(pCe->Docu())
+                            :   (const ce_info *)(0);
             if ( pShort != 0 )
             {
                 aDocuList.Produce_NormalTerm("(referenced interface's summary:)");
@@ -365,7 +365,7 @@ HF_IdlInterface::produce_BaseHierarchy( Xml::Element &      o_screen,
 void
 HF_IdlInterface::Display_BaseNode( const HF_IdlBaseNode & i_rNode ) const
 {
-    // KORR: Check if Env().CurPageCe() is really always the right one
+    // KORR_FUTURE: Check if Env().CurPageCe() is really always the right one
     //  (probably works).
     HF_IdlTypeText
         aDisplay( Env(), CurOut(), true, Env().CurPageCe());

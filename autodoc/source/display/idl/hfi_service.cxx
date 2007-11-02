@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_service.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:58:25 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:37:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 #include <ary/idl/i_ce.hxx>
 #include <ary/idl/ik_property.hxx>
 #include <ary/idl/ik_service.hxx>
-#include <ary_i/codeinf2.hxx>
 #include <toolkit/hf_docentry.hxx>
 #include <toolkit/hf_linachain.hxx>
 #include <toolkit/hf_navi_sub.hxx>
@@ -166,7 +165,7 @@ void
 HF_IdlService::produce_SummaryDeclaration( Xml::Element &      o_row,
                                            const client &      i_property ) const
 {
-    // KORR
+    // KORR_FUTURE
     // Put this in to HF_IdlProperty!
 
     Xml::Element &
@@ -308,8 +307,8 @@ HF_IdlService::produce_LinkDoc( const client &     i_ce,
             pCe = Env().Linker().Search_CeFromType((*i_commentedRef).Type());
         const ce_info *
             pShort = pCe != 0
-                        ?   pCe->Docu()
-                        :   0;
+                        ?   Get_IdlDocu(pCe->Docu())
+                        :   (const ce_info *)(0);
         if ( pShort != 0 )
         {
             aDocList.Produce_NormalTerm("(referenced entity's summary:)");
