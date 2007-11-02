@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navibar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:53:07 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:28:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
+#include <cosv/tpl/tpltools.hxx>
 #include "nav_main.hxx"
 #include "opageenv.hxx"
 
@@ -65,8 +65,8 @@ class SubRowItem
     void                Write2(
                             Element &           o_rOut ) const;
   private:
-    udmstri             sText;
-    udmstri             sLink;
+    String              sText;
+    String              sLink;
     bool                bIsActive;
     bool                bFirstOfRow;
 };
@@ -135,7 +135,7 @@ class SubRow
     typedef std::vector< DYN SubRowItem * >   List_Items;
 
     List_Items          aItemList;
-    udmstri             sTitle;
+    String              sTitle;
 };
 
 SubRow::SubRow( const char * i_sTitle )
@@ -241,57 +241,23 @@ NavigationBar::NavigationBar( const OuputPage_Environment & i_rEnv,
 }
 
 NavigationBar::NavigationBar( const OuputPage_Environment & i_rEnv,
-                              const ary::CodeEntity &       i_rCe  )
+                              const ary::cpp::CodeEntity &  i_rCe  )
     :   pi( new CheshireCat(i_rEnv) )
 {
     pi->aMainRow.SetupItems_Ce( i_rCe );
 }
 
 NavigationBar::NavigationBar( const OuputPage_Environment & i_rEnv,
-                              E_CeGatheringType             i_eCeGatheringType,
-                              const ary::cpp::FileGroup *   i_pFile )
+                              E_CeGatheringType             i_eCeGatheringType )
     :   pi( new CheshireCat(i_rEnv) )
 {
-    if ( i_rEnv.CurClass() != 0 )
+    switch (i_eCeGatheringType)
     {
-        switch (i_eCeGatheringType)
-        {
-             case CEGT_operations:   pi->aMainRow.SetupItems_FunctionGroup();  break;
-            case CEGT_data:         pi->aMainRow.SetupItems_DataGroup();      break;
-            default:
-                                    csv_assert(false);
-        }
+         case CEGT_operations:   pi->aMainRow.SetupItems_FunctionGroup();  break;
+        case CEGT_data:         pi->aMainRow.SetupItems_DataGroup();      break;
+        default:
+                                csv_assert(false);
     }
-    else
-    {
-        csv_assert( i_pFile != 0 );
-        switch (i_eCeGatheringType)
-        {
-             case CEGT_operations:   pi->aMainRow.SetupItems_FunctionGroup(*i_pFile);  break;
-            case CEGT_data:         pi->aMainRow.SetupItems_DataGroup(*i_pFile);      break;
-            default:
-                                    csv_assert(false);
-        }
-    }
-}
-
-NavigationBar::NavigationBar( const OuputPage_Environment &     i_rEnv,
-                              const ary::cpp::ProjectGroup *    i_pPrj,
-                              const ary::cpp::FileGroup *       i_pFile )
-    :   pi( new CheshireCat(i_rEnv) )
-{
-    if ( i_pPrj == 0 )
-    {
-        pi->aMainRow.SetupItems_Project();
-        return;
-    }
-    if ( i_pFile == 0 )
-    {
-        pi->aMainRow.SetupItems_File( *i_pPrj );
-        return;
-    }
-
-    pi->aMainRow.SetupItems_DefinitionsGroup( *i_pPrj, *i_pFile );
 }
 
 NavigationBar::~NavigationBar()
@@ -329,13 +295,12 @@ NavigationBar::Write( Element &  o_rOut,
     const_cast< NavigationBar* >(this)->pSubRowsTable = new Table;
     o_rOut << pSubRowsTable;
     *pSubRowsTable
-        << new AnAttribute("class", "navisub")
+        << new AnAttribute( "class", "navisub" )
         << new AnAttribute( "cellpadding", "0" )
         << new AnAttribute( "cellspacing", "3" );
 
     if (i_bWithSubRows)
     {
-        o_rOut >> *new TableRow >> *new Paragraph << " ";
         Write_SubRows();
     }
 }
@@ -350,8 +315,3 @@ NavigationBar::Write_SubRows() const
          (*it)->Write2( *pSubRowsTable );
     }
 }
-
-
-
-
-
