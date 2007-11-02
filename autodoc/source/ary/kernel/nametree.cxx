@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nametree.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:43:37 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:13:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,59 +45,6 @@ namespace ary
 {
 
 
-/** Lexigraphical sequence is: AaBbCc ... Zz_0123456789.
-*/
-int cCompareValues[128] =
-{
-    0,  0,  0,  0,      0,  0,  0,  0,      0,  0,  0,  0,      0,  0,  0,  0,
-    0,  0,  0,  0,      0,  0,  0,  0,      0,  0,  0,  0,      0,  0,  0,  0,
-    0,  0,  0,  0,      0,  0,  0,  0,      0,  0,  0,  0,      0,  0,  0,  0,
-   54, 55, 56, 57,     58, 59, 60, 61,     62, 63,  0,  0,      0,  0,  0,  0,
-
-    0,  1,  3,  5,      7,  9, 11, 13,     15, 17, 19, 21,     23, 25, 27, 29,
-   31, 33, 35, 37,     39, 41, 43, 45,     47, 49, 51,  0,      0,  0,  0, 53,
-
-    0,  2,  4,  6,      8, 10, 12, 14,     16, 18, 20, 22,     24, 26, 28, 30,
-   32, 34, 36, 38,     40, 42, 44, 46,     48, 50, 52,  0,      0,  0,  0,  0
-};
-
-
-#if 0
-#ifdef WNT
-#define strcmp_nocase   stricmp
-#elif (UNX)
-#define strcmp_nocase   strcasecmp
-#else
-#error  For running Autodoc, 'WNT' or 'UNX' must be defined.
-#endif
-
-bool
-NameTree::
-Less_Name::operator()( const udmstri &     i_r1,
-                       const udmstri &     i_r2 ) const
-{
-    int result = strcmp_nocase(i_r1.c_str(),i_r2.c_str());
-    if (result != 0)
-        return result < 0;
-
-    const unsigned char *
-        p1 = reinterpret_cast< const unsigned char* >( i_r1.c_str() );
-    const unsigned char *
-        p2 = reinterpret_cast< const unsigned char* >( i_r2.c_str() );
-
-    int cp = 0;
-    do {
-        cp = cCompareValues[*p1] - cCompareValues[*p2++];
-        if ( cp < 0 )
-            return true;
-        if ( cp > 0 )
-            return false;
-    } while (*p1++ != 0);
-    return false;
-}
-#endif // 0
-
-
 NameTree::NameTree()
 {
 }
@@ -107,7 +54,7 @@ NameTree::~NameTree()
 }
 
 const InstanceList &
-NameTree::operator[]( const udmstri & i_rName ) const
+NameTree::operator[]( const String  & i_rName ) const
 {
     static InstanceList aNull_;
 
@@ -118,22 +65,20 @@ NameTree::operator[]( const udmstri & i_rName ) const
 }
 
 void
-NameTree::insert( const udmstri &     i_rName,
+NameTree::insert( const String  &     i_rName,
                   ary::Rid            i_nId )
 {
-
-
     aNames[i_rName].push_back(i_nId);
 }
 
 NameTree::const_iterator
-NameTree::find( const udmstri & i_rName )
+NameTree::find( const String  & i_rName )
 {
     return aNames.find( i_rName );
 }
 
 NameTree::const_iterator
-NameTree::lower_bound( const udmstri & i_rName ) const
+NameTree::lower_bound( const String  & i_rName ) const
 {
      return aNames.lower_bound(i_rName);
 }
@@ -163,11 +108,4 @@ NameTree::end()
 }
 
 
-
-
-
-
 }   // namespace ary
-
-
-
