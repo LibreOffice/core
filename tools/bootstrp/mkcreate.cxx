@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mkcreate.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:06:52 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:58:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -395,6 +395,11 @@ ByteString SourceDirectory::GetTarget()
         sWNT += " :";
         BOOL bWNT = FALSE;
 
+        ByteString sOS2( ".IF \"$(GUI)\" == \"OS2\"\n" );
+        sOS2 += sTarget;
+        sOS2 += " :";
+        BOOL bOS2 = FALSE;
+
         for ( ULONG i = 0; i < pDependencies->Count(); i++ ) {
             Dependency *pDependency =
                 ( Dependency * ) pDependencies->GetObject( i );
@@ -411,6 +416,11 @@ ByteString SourceDirectory::GetTarget()
                 sWNT += sDependency;
                 bWNT = TRUE;
             }
+            if ( pDependency->GetOperatingSystem() & OS_OS2 ) {
+                sOS2 += " ";
+                sOS2 += sDependency;
+                bOS2 = TRUE;
+            }
         }
 
         if ( bUNX ) {
@@ -419,6 +429,10 @@ ByteString SourceDirectory::GetTarget()
         }
         if ( bWNT ) {
             sReturn += sWNT;
+            sReturn += "\n.ENDIF\n";
+        }
+        if ( bOS2 ) {
+            sReturn += sOS2;
             sReturn += "\n.ENDIF\n";
         }
     }
@@ -459,6 +473,10 @@ ByteString SourceDirectory::GetSubDirsTarget()
             sWNT += "RC_SUBDIRS = ";
             BOOL bWNT = FALSE;
 
+            ByteString sOS2( ".IF \"$(GUI)\" == \"OS2\"\n" );
+            sOS2 += "RC_SUBDIRS = ";
+            BOOL bOS2 = FALSE;
+
             for ( ULONG i = 0; i < pSubDirectories->Count(); i++ ) {
                 SourceDirectory *pDirectory =
                     ( SourceDirectory * ) pSubDirectories->GetObject( i );
@@ -475,6 +493,11 @@ ByteString SourceDirectory::GetSubDirsTarget()
                     sWNT += sDirectory;
                     bWNT = TRUE;
                 }
+                if ( pDirectory->GetOperatingSystems() & OS_OS2 ) {
+                    sOS2 += " \\\n\t";
+                    sOS2 += sDirectory;
+                    bOS2 = TRUE;
+                }
             }
             if ( bUNX ) {
                 sReturn += sUNX;
@@ -482,6 +505,10 @@ ByteString SourceDirectory::GetSubDirsTarget()
             }
             if ( bWNT ) {
                 sReturn += sWNT;
+                sReturn += "\n.ENDIF\n";
+            }
+            if ( bOS2 ) {
+                sReturn += sOS2;
                 sReturn += "\n.ENDIF\n";
             }
         }
@@ -500,6 +527,8 @@ USHORT SourceDirectory::GetOSType( const ByteString &sDependExt )
         nOSType |= OS_WIN32;
     else if ( sDependExt == "U" )
         nOSType |= OS_UNX;
+    else if ( sDependExt == "P" )
+        nOSType |= OS_OS2;
     return nOSType;
 }
 
@@ -691,9 +720,9 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
         "#\n"
         "#  $RCSfile: mkcreate.cxx,v $\n"
         "#\n"
-        "#  $Revision: 1.16 $\n"
+        "#  $Revision: 1.17 $\n"
         "#\n"
-        "#  last change: $Author: hr $ $Date: 2007-06-27 22:06:52 $\n"
+        "#  last change: $Author: hr $ $Date: 2007-11-02 12:58:58 $\n"
         "#\n"
         "#  The Contents of this file are made available subject to\n"
         "#  the terms of GNU Lesser General Public License Version 2.1.\n"
