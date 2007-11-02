@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 10:04:41 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:44:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,15 +37,15 @@
 #define _SV_SALFRAME_H
 
 #ifndef _SV_SV_H
-#include <sv.h>
+#include <vcl/sv.h>
 #endif
 
 #ifndef _SV_SYSDATA_HXX
-#include <sysdata.hxx>
+#include <vcl/sysdata.hxx>
 #endif
 
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
 
 
@@ -148,7 +148,7 @@ public:
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
     virtual BOOL                GetWindowState( SalFrameState* pState );
-    virtual void                ShowFullScreen( BOOL bFullScreen );
+    virtual void                ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay );
     virtual void                StartPresentation( BOOL bStart );
     virtual void                SetAlwaysOnTop( BOOL bOnTop );
     virtual void                ToTop( USHORT nFlags );
@@ -171,6 +171,10 @@ public:
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetBackgroundBitmap( SalBitmap* );
+    virtual void                ResetClipRegion();
+    virtual void                BeginSetClipRegion( ULONG nRects );
+    virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    virtual void                EndSetClipRegion();
 
 };
 
