@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_tag.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:59:33 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:38:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,14 @@
 #ifndef ADC_DISPLAY_HFI_TAG_HXX
 #define ADC_DISPLAY_HFI_TAG_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include "hi_factory.hxx"
 #include <ary_i/disdocum.hxx>
-    // COMPONENTS
-    // PARAMETERS
-#include <ary/idl/i_language.hxx>
+// USED SERVICES
+#include <ary/idl/i_types4idl.hxx>
 #include <ary_i/ci_atag2.hxx>
 #include <ary_i/ci_text2.hxx>
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 
 #include <toolkit/hf_docentry.hxx>
 
@@ -60,11 +56,13 @@ namespace idl
 }
 
 
-/** This class is an implementation of ary::info::DocuText_Display
+
+
+/** This class is an implementation of ary::inf::DocuText_Display
     and will be used by that interface.
 */
 class HF_IdlDocuTextDisplay : public HtmlFactory_Idl,
-                              public ary::info::DocuText_Display
+                              public ary::inf::DocuText_Display
 {
   public:
                         HF_IdlDocuTextDisplay(
@@ -135,7 +133,7 @@ class HF_IdlShortDocu : public HtmlFactory_Idl
 
 
 class HF_IdlTag : public HtmlFactory_Idl,
-                  public ary::info::DocuTag_Display
+                  public ary::inf::DocuTag_Display
 {
   public:
                         HF_IdlTag(
@@ -147,7 +145,7 @@ class HF_IdlTag : public HtmlFactory_Idl,
     void                Produce_byData(
                             Xml::Element &      o_rTitle,
                             Xml::Element &      o_rText,
-                            const ary::info::AtTag2 &
+                            const ary::inf::AtTag2 &
                                                 i_rTag ) const;
     void                Produce_byData(
                             Xml::Element &      o_rTitle,
@@ -172,7 +170,7 @@ class HF_IdlTag : public HtmlFactory_Idl,
                             Xml::Element &      o_rText ) const;
     void                Leave_TextOut() const;
     void                PutText_Out(
-                            const ary::info::DocuTex2 &
+                            const ary::inf::DocuTex2 &
                                                 i_rText ) const;
     // DATA
     mutable Xml::Element *
@@ -184,9 +182,4 @@ class HF_IdlTag : public HtmlFactory_Idl,
 
 
 
-// IMPLEMENTATION
-
-
 #endif
-
-

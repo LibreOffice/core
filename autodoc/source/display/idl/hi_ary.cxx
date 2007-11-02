@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hi_ary.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:00:44 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:38:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,7 @@ AryAccess::nextName( const char * &      io_TextPtr,
                                 :   pEnd - io_TextPtr;
     o_name.assign(io_TextPtr, nLen);
     io_TextPtr += nLen;
+
     return nLen > 0;
 }
 
@@ -170,7 +171,8 @@ AryAccess::Search_Ce( StringVector &            o_module,
     // Find main CodeEntity:
     if ( sNextName.length() == 0 )
         return true;
-    ary::idl::Ce_id     nCe = pModule->Search_Name(sNextName);
+    const ary::idl::Ce_id
+        nCe = pModule->Search_Name(sNextName);
     if (NOT nCe.IsValid())
         return false;
     o_mainEntity = sNextName;
@@ -181,14 +183,6 @@ AryAccess::Search_Ce( StringVector &            o_module,
     nextName(pNext, o_memberEntity);
     if (strchr(o_memberEntity,':') != 0)
         return false;   // This must not happen in IDL
-
-    int nMemberLen = o_memberEntity.length();
-    if ( nMemberLen > 2
-            ?   *(pNext + nMemberLen - 2) == '('
-            : false )
-    {
-        o_memberEntity.assign(o_memberEntity,nMemberLen-2);
-    }
 
 #if 0
 // The following code avoids false links, but is rather expensive
@@ -286,7 +280,7 @@ void
 AryAccess::Get_IndexData( std::vector<ary::idl::Ce_id> &            o_data,
                           ary::idl::alphabetical_index::E_Letter    i_letter ) const
 {
-    rGate.Secondaries().Get_AlphabeticalIndex(o_data, i_letter);
+    rGate.Ces().Get_AlphabeticalIndex(o_data, i_letter);
 }
 
 
