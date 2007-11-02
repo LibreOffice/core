@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_attri.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:59:55 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:14:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ class PE_Attribute : public UnoIDL_PE,
 
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::n22::Repository &
+                            ary::Repository &
                                                 io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );

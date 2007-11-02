@@ -4,9 +4,9 @@
  *
  *  $RCSfile: distrib.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:59:20 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:13:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,14 +51,12 @@ class ParserInfo;
 
 namespace ary
 {
-    namespace n22
-    {
-        class Repository;
-    }
-    namespace info
-    {
-        class CodeInformation;
-    }   // namespace info
+    class Repository;
+
+namespace doc
+{
+    class OldIdlDocu;
+}   // namespace inf
 }   // namespace ary)
 
 
@@ -90,7 +88,7 @@ class TokenDistributor : private TokenProcessing_Types
 {
   public:
                         TokenDistributor(
-                            ary::n22::Repository &  io_rRepository,
+                            ary::Repository &   io_rRepository,
                             ParserInfo &            io_rParserInfo );
     void                SetTokenProvider(
                             TokenParser_Uidl &  io_rTokenSource );
@@ -114,7 +112,7 @@ class TokenDistributor : private TokenProcessing_Types
     /** Used from PE_File, if there is a docu to get without
         an environment to push (this is the case for modules).
     */
-    DYN ary::info::CodeInformation *
+    DYN ary::doc::OldIdlDocu *
                         ReleaseLastParsedDocu()
                             { return aDocumentation.ReleaseLastParsedDocu(); }
 
@@ -136,7 +134,7 @@ class TokenDistributor : private TokenProcessing_Types
     {
       public:
                             ProcessingData(
-                                ary::n22::Repository &  io_rRepository,
+                                ary::Repository &   io_rRepository,
                                 Documentation &         i_rDocuProcessor,
                                 ParserInfo &            io_rParserInfo );
                             ~ProcessingData();
@@ -180,7 +178,7 @@ class TokenDistributor : private TokenProcessing_Types
                             aCurResult;
         uintt               nTryCount;
         bool                bFinished;
-        ary::n22::Repository &
+        ary::Repository &
                             rRepository;
         ParserInfo &        rParserInfo;
         Documentation *     pDocuProcessor;
@@ -200,14 +198,14 @@ class TokenDistributor : private TokenProcessing_Types
                                 DYN csi::dsapi::Token &
                                                 let_drToken );
         virtual void        Increment_CurLine();
-        DYN ary::info::CodeInformation *
+        DYN ary::doc::OldIdlDocu *
                             ReleaseLastParsedDocu()
                                                 { return pMostRecentDocu.Release(); }
       private:
         Dyn<csi::dsapi::SapiDocu_PE>
                             pDocuParseEnv;
         ParserInfo &        rParserInfo;
-        Dyn<ary::info::CodeInformation>
+        Dyn<ary::doc::OldIdlDocu>
                             pMostRecentDocu;
         bool                bIsPassedFirstDocu;
     };
