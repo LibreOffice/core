@@ -4,9 +4,9 @@
  *
  *  $RCSfile: aryattrs.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:49:59 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:23:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,19 +38,20 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <ary/getncast.hxx>
 #include <ary/cpp/c_class.hxx>
-#include <ary/cpp/c_disply.hxx>
 #include <ary/cpp/c_enum.hxx>
 #include <ary/cpp/c_funct.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_namesp.hxx>
-#include <ary/info/codeinfo.hxx>
+#include <ary/cpp/cp_ce.hxx>
+#include <ary/cpp/cp_type.hxx>
 #include "strconst.hxx"
 
 
 
+
 //********************       HtmlDisplay_Impl        *********************//
-
-
 
 const char *
 Get_ClassTypeKey( const ary::cpp::Class & i_rClass )
@@ -64,15 +65,14 @@ Get_ClassTypeKey( const ary::cpp::Class & i_rClass )
 }
 
 const char *
-Get_TypeKey( const ary::CodeEntity & i_rCe )
+Get_TypeKey( const ary::cpp::CodeEntity & i_rCe )
 {
-    if ( i_rCe.RC() == ary::cpp::Class::RC_() )
+    if ( ary::is_type<ary::cpp::Class>(i_rCe) )
     {
-        csv_assert( dynamic_cast< const ary::cpp::Class* >(&i_rCe) != 0  );
         return Get_ClassTypeKey(
-                    static_cast< const ary::cpp::Class& >(i_rCe) );
+                    ary::ary_cast<ary::cpp::Class>(i_rCe) );
     }
-    if ( i_rCe.RC() == ary::cpp::Enum::RC_() )
+    if ( ary::is_type<ary::cpp::Enum>(i_rCe) )
     {
          return "enum";
     }
@@ -80,7 +80,7 @@ Get_TypeKey( const ary::CodeEntity & i_rCe )
 }
 
 bool
-Ce_IsInternal( const ary::CodeEntity & i_rCe )
+Ce_IsInternal( const ary::cpp::CodeEntity & i_rCe )
 {
     return NOT i_rCe.IsVisible();
 }
@@ -94,19 +94,19 @@ Namespace_DisplayName( const ary::cpp::Namespace & i_rNsp )
 }
 
 const char *
-TypeText( ary::Tid                      i_nId,
-          const ary::cpp::DisplayGate & i_rAryGate )
+TypeText( ary::cpp::Type_id         i_nId,
+          const ary::cpp::Gate &    i_rAryGate )
 {
      static StreamStr sResult(2000);
     sResult.seekp(0);
-    i_rAryGate.Get_TypeText(sResult, i_nId);
+    i_rAryGate.Types().Get_TypeText(sResult, i_nId);
 
     return sResult.c_str();
 }
 
 const char *
 SyntaxText_PreName( const ary::cpp::Function &      i_rFunction,
-                    const ary::cpp::DisplayGate &   i_rAryGate )
+                    const ary::cpp::Gate &   i_rAryGate )
 {
     static StreamStr  sResult( 150 );
     sResult.seekp(0);
@@ -121,7 +121,7 @@ SyntaxText_PreName( const ary::cpp::Function &      i_rFunction,
         sResult << "mutable ";
     if ( i_rFunction.Virtuality() != ary::cpp::VIRTUAL_none )
         sResult << "virtual ";
-    i_rAryGate.Get_TypeText( sResult, i_rFunction.ReturnType() );
+    i_rAryGate.Types().Get_TypeText( sResult, i_rFunction.ReturnType() );
     sResult << " ";
 
     return sResult.c_str();
@@ -129,34 +129,34 @@ SyntaxText_PreName( const ary::cpp::Function &      i_rFunction,
 
 const char *
 SyntaxText_PostName( const ary::cpp::Function &     i_rFunction,
-                     const ary::cpp::DisplayGate &  i_rAryGate )
+                     const ary::cpp::Gate &  i_rAryGate )
 {
     static StreamStr  sResult( 850 );
     sResult.seekp(0);
 
     // parameters and con_vol
-    i_rAryGate.Get_SignatureText( sResult, i_rFunction.Signature(), &i_rFunction.ParamInfos() );
+    i_rAryGate.Ces().Get_SignatureText( sResult, i_rFunction.Signature(), &i_rFunction.ParamInfos() );
 
     // write Exceptions:
-    const std::vector< ary::Tid > *
+    const std::vector< ary::cpp::Type_id > *
             pThrow = i_rFunction.Exceptions();
     if ( pThrow)
     {
 
-        std::vector< ary::Tid >::const_iterator
+        std::vector< ary::cpp::Type_id >::const_iterator
                 it = pThrow->begin();
-        std::vector< ary::Tid >::const_iterator
+        std::vector< ary::cpp::Type_id >::const_iterator
                 it_end = pThrow->end();
 
         if (it != it_end)
         {
             sResult << " throw( ";
-            i_rAryGate.Get_TypeText(sResult, *it);
+            i_rAryGate.Types().Get_TypeText(sResult, *it);
 
             for ( ++it; it != it_end; ++it )
             {
                 sResult << ", ";
-                i_rAryGate.Get_TypeText(sResult, *it);
+                i_rAryGate.Types().Get_TypeText(sResult, *it);
             }
             sResult << " )";
         }
@@ -180,8 +180,8 @@ bool
 Get_TypeText( const char * &                o_rPreName,
               const char * &                o_rName,
               const char * &                o_rPostName,
-              ary::Tid                      i_nTypeid,
-              const ary::cpp::DisplayGate & i_rAryGate )
+              ary::cpp::Type_id             i_nTypeid,
+              const ary::cpp::Gate & i_rAryGate )
 {
     static StreamStr       sResult_PreName(250);
     static StreamStr       sResult_Name(250);
@@ -191,7 +191,7 @@ Get_TypeText( const char * &                o_rPreName,
     sResult_Name.seekp(0);
     sResult_PostName.seekp(0);
 
-    bool    ret = i_rAryGate.Get_TypeText(
+    bool    ret = i_rAryGate.Types().Get_TypeText(
                                 sResult_PreName,
                                 sResult_Name,
                                 sResult_PostName,
@@ -230,8 +230,8 @@ FunctionParam_Iterator::FunctionParam_Iterator()
         // itNames_andMore_end
         eConVol(ary::cpp::CONVOL_none)
 {
-    static std::vector<ary::Tid>    aTypesNull_;
-    static StringVector             aNamesNull_;
+    static std::vector<ary::cpp::Type_id>   aTypesNull_;
+    static StringVector                     aNamesNull_;
 
     itTypes = itTypes_end = aTypesNull_.end();
     itNames_andMore = itNames_andMore_end = aNamesNull_.end();
@@ -253,16 +253,13 @@ FunctionParam_Iterator::operator++()
 }
 
 void
-FunctionParam_Iterator::Assign( const ary::cpp::Function &      i_rFunction,
-                                const ary::cpp::DisplayGate &   i_rAryGate )
+FunctionParam_Iterator::Assign( const ary::cpp::Function &  i_rFunction )
 {
-    const ary::cpp::OperationSignature *
-        pSigna = i_rAryGate.Find_Signature( i_rFunction.Signature() );
-    if (pSigna == 0 )
-        return;
+    const ary::cpp::OperationSignature &
+        rSigna = i_rFunction.Signature();
 
-    const std::vector<ary::Tid> &
-        rTypes = pSigna->Parameters();
+    const std::vector<ary::cpp::Type_id> &
+        rTypes = rSigna.Parameters();
     const StringVector &
         rNames = i_rFunction.ParamInfos();
 
@@ -274,7 +271,5 @@ FunctionParam_Iterator::Assign( const ary::cpp::Function &      i_rFunction,
     itNames_andMore     = rNames.begin();
     itNames_andMore_end = rNames.end();
 
-    eConVol = pSigna->ConVol();
+    eConVol = rSigna.ConVol();
 }
-
-
