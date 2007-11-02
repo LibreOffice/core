@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:14:33 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:40:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,7 @@ class SwTblToTxtSaves;
 class SwRedlineData;
 class SwRedlineSaveData;
 class SwRedline;
+struct SwSaveRowSpan;
 
 namespace utl {
     class TransliterationWrapper;
@@ -1042,12 +1043,13 @@ public:
 class SwUndoSplitTbl : public SwUndo
 {
     ULONG nTblNode, nOffset;
+    SwSaveRowSpan* mpSaveRowSpan; // stores the row span values at the splitting row
     _SaveTable* pSavTbl;
     SwHistory* pHistory;
     USHORT nMode, nFmlEnd;
     BOOL bCalcNewSize;
 public:
-    SwUndoSplitTbl( const SwTableNode& rTblNd, USHORT nMode, BOOL bCalcNewSize );
+    SwUndoSplitTbl( const SwTableNode& rTblNd, SwSaveRowSpan* pRowSp, USHORT nMode, BOOL bCalcNewSize );
     virtual ~SwUndoSplitTbl();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
