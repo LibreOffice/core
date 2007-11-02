@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 14:48:41 $
+#   last change: $Author: hr $ $Date: 2007-11-02 13:17:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ LIBTARGET=NO
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-CDEFS += -DDLL_VERSION=\"$(UPD)$(DLLPOSTFIX)\"
+CDEFS += -DDLL_VERSION=$(EMQ)"$(UPD)$(DLLPOSTFIX)$(EMQ)"
 
 RGTLIB = rgt.lib
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="OS2"
