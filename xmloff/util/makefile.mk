@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-11 13:04:17 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:40:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,10 @@ LIB1FILES=	\
 .IF "$(GUI)"!="UNX"
 LIB4TARGET= $(LB)$/ixo.lib
 LIB4FILES=	$(LB)$/_ixo.lib
+.IF "$(GUI)"!="OS2"
 LIB4OBJFILES=\
     $(OBJ)$/xmlkywd.obj
+.ENDIF
 .ENDIF
 
 SHL1TARGET= xo$(UPD)$(DLLPOSTFIX)
@@ -88,7 +90,7 @@ SHL1STDLIBS= \
         $(SALHELPERLIB)
 
 # SCO: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC"
+.IF "(OS)"=="SCO"
 SHL1STDLIBS+=-licg617mxp
 .ENDIF
 
