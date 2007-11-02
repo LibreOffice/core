@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_osigna.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:26:19 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:26:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-
 #include <precomp.h>
 #include <ary/cpp/c_osigna.hxx>
 
@@ -53,12 +52,11 @@ OperationSignature::OperationSignature()
 {
 }
 
-OperationSignature::OperationSignature( std::vector<Tid> & i_rParameterTypes,
-                                        E_ConVol           i_eConVol )
-    :   // aParameterTypes,
-        eConVol(i_eConVol)
+OperationSignature::OperationSignature( std::vector<Type_id>    i_parameterTypes,
+                                        E_ConVol                i_conVol )
+    :   aParameterTypes(i_parameterTypes),
+        eConVol(i_conVol)
 {
-    std::swap( aParameterTypes, i_rParameterTypes );
 }
 
 int
@@ -90,5 +88,3 @@ OperationSignature::Compare( const OperationSignature & i_rSig ) const
 
 } // namespace cpp
 } // namespace ary
-
-

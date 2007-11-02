@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_macro.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:25:51 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:25:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include "rcids.hxx"
-#include <ary/cpp/cpp_disp.hxx>
-#include <ary/cpp/prpr.hxx>
-
-
+#include <prprpr.hxx>
 
 
 
@@ -52,14 +48,13 @@ namespace cpp
 {
 
 
-Macro::Macro( Did                 i_nId,
-              const udmstri &     i_sName,
-              const str_vector &  i_rParams,
-              const str_vector &  i_rDefinition,
-              Lid                 i_nDeclaringFile )
-    :   CppDefinition(i_nId, i_sName, i_nDeclaringFile),
-        aParams(i_rParams),
-        aDefinition(i_rDefinition)
+Macro::Macro( const String  &       i_name,
+              const StringVector &  i_params,
+              const StringVector &  i_definition,
+              loc::Le_id            i_declaringFile )
+    :   DefineEntity(i_name, i_declaringFile),
+        aParams(i_params),
+        aDefinition(i_definition)
 {
 }
 
@@ -68,22 +63,20 @@ Macro::~Macro()
 }
 
 void
-Macro::do_StoreAt( ary::Display & o_rOut ) const
+Macro::do_Accept(csv::ProcessorIfc & io_processor) const
 {
-    ary::cpp::Display *  pD = dynamic_cast< ary::cpp::Display* >(&o_rOut);
-    if (pD != 0)
-    {
-         pD->Display_Macro(*this);
-    }
+    csv::CheckedCall(io_processor,*this);
 }
 
-RCid
-Macro::inq_RC() const
+ClassId
+Macro::get_AryClass() const
 {
-    return RCID_MACRO;
+    return class_id;
+
+    // return RCID_MACRO;
 }
 
-const CppDefinition::str_vector &
+const StringVector &
 Macro::inq_DefinitionText() const
 {
      return aDefinition;
@@ -100,7 +93,7 @@ Macro::GetText( StreamStr &                     o_rText,
     if ( aDefinition.begin() == aDefinition.end() )
         return;
 
-    for ( str_vector::const_iterator it = aDefinition.begin();
+    for ( StringVector::const_iterator it = aDefinition.begin();
           it != aDefinition.end();
           ++it )
     {
@@ -112,7 +105,7 @@ Macro::GetText( StreamStr &                     o_rText,
             continue;
         }
 
-        for ( str_vector::const_iterator param_it = aParams.begin();
+        for ( StringVector::const_iterator param_it = aParams.begin();
               param_it != aParams.end() AND nActiveParamNr == -1;
               ++param_it )
         {
@@ -136,10 +129,5 @@ Macro::GetText( StreamStr &                     o_rText,
 }
 
 
-
-
 }   // namespace cpp
 }   // namespace ary
-
-
-

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_define.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:24:39 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:24:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include "rcids.hxx"
-#include <ary/cpp/cpp_disp.hxx>
-#include <ary/cpp/prpr.hxx>
+#include <prprpr.hxx>
 
 
 
@@ -51,12 +49,12 @@ namespace cpp
 {
 
 
-Define::Define( Did                 i_nId,
-                const udmstri &     i_sName,
-                const str_vector &  i_rDefinition,
-                Lid                 i_nDeclaringFile )
-    :   CppDefinition(i_nId, i_sName, i_nDeclaringFile),
-        aDefinition(i_rDefinition)
+
+Define::Define( const String  &         i_name,
+                const StringVector &    i_definition,
+                loc::Le_id              i_declaringFile)
+    :   DefineEntity(i_name, i_declaringFile),
+        aDefinition(i_definition)
 {
 }
 
@@ -65,22 +63,18 @@ Define::~Define()
 }
 
 void
-Define::do_StoreAt( ary::Display & o_rOut ) const
+Define::do_Accept(csv::ProcessorIfc & io_processor) const
 {
-    ary::cpp::Display *  pD = dynamic_cast< ary::cpp::Display* >(&o_rOut);
-    if (pD != 0)
-    {
-         pD->Display_Define(*this);
-    }
+    csv::CheckedCall(io_processor, *this);
 }
 
-RCid
-Define::inq_RC() const
+ClassId
+Define::get_AryClass() const
 {
-    return RCID_DEFINE;
+    return class_id;
 }
 
-const CppDefinition::str_vector &
+const StringVector &
 Define::inq_DefinitionText() const
 {
      return aDefinition;
@@ -96,7 +90,7 @@ Define::GetText( StreamStr & o_rText ) const
     bool bSwitch_Stringify = false;
     bool bSwitch_Concatenate = false;
 
-    for ( str_vector::const_iterator it = aDefinition.begin();
+    for ( StringVector::const_iterator it = aDefinition.begin();
           it != aDefinition.end();
           ++it )
     {
@@ -118,9 +112,5 @@ Define::GetText( StreamStr & o_rText ) const
 
 
 
-
 }   // namespace cpp
 }   // namespace ary
-
-
-

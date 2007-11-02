@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_enuval.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:25:08 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:24:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,6 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include "rcids.hxx"
-#include <ary/cpp/cpp_disp.hxx>
-
-
 
 
 namespace ary
@@ -56,14 +52,12 @@ EnumValue::EnumValue()
 {
 }
 
-EnumValue::EnumValue( Cid                 i_nId,
-                      const udmstri &     i_sLocalName,
-                      Cid                 i_nOwner,
-                      udmstri             i_sInitialisation )
-    :   aEssentials( i_nId,
-                     i_sLocalName,
+EnumValue::EnumValue( const String  &     i_sLocalName,
+                      Ce_id               i_nOwner,
+                      String              i_sInitialisation )
+    :   aEssentials( i_sLocalName,
                      i_nOwner,
-                     0 ),
+                     Lid(0) ),
            sInitialisation(i_sInitialisation)
 {
 }
@@ -72,13 +66,7 @@ EnumValue::~EnumValue()
 {
 }
 
-Cid
-EnumValue::inq_Id() const
-{
-    return aEssentials.Id();
-}
-
-const udmstri &
+const String  &
 EnumValue::inq_LocalName() const
 {
     return aEssentials.LocalName();
@@ -97,37 +85,17 @@ EnumValue::inq_Location() const
 }
 
 void
-EnumValue::do_StoreAt( ary::Display & o_rOut ) const
+EnumValue::do_Accept(csv::ProcessorIfc & io_processor) const
 {
-    ary::cpp::Display * pD = dynamic_cast< ary::cpp::Display* >(&o_rOut);
-    if (pD != 0)
-    {
-         pD->Display_EnumValue(*this);
-    }
+    csv::CheckedCall(io_processor,*this);
 }
 
-RCid
-EnumValue::inq_RC() const
+ClassId
+EnumValue::get_AryClass() const
 {
-    return RC_();
-}
-
-
-const ary::Documentation &
-EnumValue::inq_Info() const
-{
-    return aEssentials.Info();
-}
-
-void
-EnumValue::do_Add_Documentation( DYN ary::Documentation & let_drInfo )
-{
-    aEssentials.SetInfo(let_drInfo);
+    return class_id;
 }
 
 
 }   // namespace cpp
 }   // namespace ary
-
-
-

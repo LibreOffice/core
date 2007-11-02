@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_enum.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:24:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:24:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,6 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include "rcids.hxx"
-#include <ary/cpp/cpp_disp.hxx>
 #include <slots.hxx>
 #include "c_slots.hxx"
 
@@ -53,25 +51,22 @@ namespace cpp
 
 
 Enum::Enum()
-    :   // aEssentials,
-        // aValues,
+    :   aEssentials(),
+        aValues(),
         eProtection(PROTECT_global)
 {
 }
 
-Enum::Enum( Cid                 i_nId,
-            const udmstri &     i_sLocalName,
-            Cid                 i_nOwner,
+Enum::Enum( const String  &     i_sLocalName,
+            Ce_id               i_nOwner,
             E_Protection        i_eProtection,
             Lid                 i_nFile )
-    :   aEssentials( i_nId,
-                     i_sLocalName,
+    :   aEssentials( i_sLocalName,
                      i_nOwner,
                      i_nFile ),
-        // aValues
+        aValues(),
         eProtection(i_eProtection)
 {
-
 }
 
 Enum::~Enum()
@@ -79,18 +74,12 @@ Enum::~Enum()
 }
 
 void
-Enum::Add_Value( Cid i_nId )
+Enum::Add_Value( Ce_id i_nId )
 {
-    aValues.push_back( i_nId );
+    aValues.Add( i_nId );
 }
 
-Cid
-Enum::inq_Id() const
-{
-    return aEssentials.Id();
-}
-
-const udmstri &
+const String  &
 Enum::inq_LocalName() const
 {
     return aEssentials.LocalName();
@@ -109,32 +98,15 @@ Enum::inq_Location() const
 }
 
 void
-Enum::do_StoreAt( ary::Display & o_rOut ) const
+Enum::do_Accept(csv::ProcessorIfc & io_processor) const
 {
-    ary::cpp::Display *  pD = dynamic_cast< ary::cpp::Display* >(&o_rOut);
-    if (pD != 0)
-    {
-         pD->Display_Enum(*this);
-    }
+    csv::CheckedCall(io_processor,*this);
 }
 
-RCid
-Enum::inq_RC() const
+ClassId
+Enum::get_AryClass() const
 {
-    return RC_();
-}
-
-
-const ary::Documentation &
-Enum::inq_Info() const
-{
-    return aEssentials.Info();
-}
-
-void
-Enum::do_Add_Documentation( DYN ary::Documentation & let_drInfo )
-{
-    aEssentials.SetInfo(let_drInfo);
+    return class_id;
 }
 
 Gid
@@ -143,7 +115,7 @@ Enum::inq_Id_Group() const
     return static_cast<Gid>(Id());
 }
 
-const RepositoryEntity &
+const ary::cpp::CppEntity &
 Enum::inq_RE_Group() const
 {
     return *this;
@@ -166,7 +138,7 @@ Enum::inq_Create_Slot( SlotAccessId  i_nSlot ) const
 {
     switch ( i_nSlot )
     {
-        case SLOT_Values:               return new Slot_RidList(aValues);
+        case SLOT_Values:               return new Slot_SequentialIds<Ce_id>(aValues);
         default:
                                         return new Slot_Null;
     }   // end switch
@@ -176,6 +148,3 @@ Enum::inq_Create_Slot( SlotAccessId  i_nSlot ) const
 
 }   // namespace cpp
 }   // namespace ary
-
-
-

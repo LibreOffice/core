@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_class.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:24:24 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:23:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,8 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include "rcids.hxx"
-#include <ary/cpp/cpp_disp.hxx>
 #include <slots.hxx>
 #include "c_slots.hxx"
-
 
 
 
@@ -51,36 +48,55 @@ namespace ary
 namespace cpp
 {
 
+
 Class::Class()
-    :   // aEssentials,
-           // aBaseClasses,
-        // aClasses,
-        // aOperations,
-        // aData,
+    :   aEssentials(),
+        aAssignedNode(),
+           aBaseClasses(),
+           aTemplateParameterTypes(),
+        aClasses(),
+        aEnums(),
+        aTypedefs(),
+        aOperations(),
+        aStaticOperations(),
+        aData(),
+        aStaticData(),
+        aFriendClasses(),
+        aFriendOperations(),
+        aKnownDerivatives(),
         eClassKey(CK_class),
         eProtection(PROTECT_global),
         eVirtuality(VIRTUAL_none)
 {
+    aAssignedNode.Assign_Entity(*this);
 }
 
-Class::Class( Cid                 i_nId,
-              const udmstri &     i_sLocalName,
-              Cid                 i_nOwner,
+Class::Class( const String  &     i_sLocalName,
+              Ce_id               i_nOwner,
               E_Protection        i_eProtection,
-              Lid                 i_nFile,
+              loc::Le_id          i_nFile,
               E_ClassKey          i_eClassKey )
-    :   aEssentials( i_nId,
-                     i_sLocalName,
+    :   aEssentials( i_sLocalName,
                      i_nOwner,
                      i_nFile ),
-           // aBaseClasses,
-        // aClasses,
-        // aOperations,
-        // aData,
+        aAssignedNode(),
+           aBaseClasses(),
+           aTemplateParameterTypes(),
+        aClasses(),
+        aEnums(),
+        aTypedefs(),
+        aOperations(),
+        aStaticOperations(),
+        aData(),
+        aStaticData(),
+        aFriendClasses(),
+        aFriendOperations(),
+        aKnownDerivatives(),
         eClassKey(i_eClassKey),
         eProtection(i_eProtection),
         eVirtuality(VIRTUAL_none)
 {
+    aAssignedNode.Assign_Entity(*this);
 }
 
 Class::~Class()
@@ -94,80 +110,110 @@ Class::Add_BaseClass( const S_Classes_Base & i_rBaseClass )
 }
 
 void
-Class::Add_TemplateParameterType( const udmstri &     i_sLocalName,
-                                  Tid                 i_nIdAsType )
+Class::Add_TemplateParameterType( const String  &     i_sLocalName,
+                                  Type_id             i_nIdAsType )
 {
     aTemplateParameterTypes.push_back(
             List_TplParam::value_type(i_sLocalName,i_nIdAsType) );
 }
 
 void
-Class::Add_LocalClass( const udmstri &     i_sLocalName,
+Class::Add_LocalClass( const String  &     i_sLocalName,
                        Cid                 i_nId )
 {
     aClasses.push_back( S_LocalCe(i_sLocalName, i_nId) );
 }
 
 void
-Class::Add_LocalEnum( const udmstri &     i_sLocalName,
+Class::Add_LocalEnum( const String  &     i_sLocalName,
                       Cid                 i_nId )
 {
     aEnums.push_back( S_LocalCe(i_sLocalName, i_nId) );
 }
 
 void
-Class::Add_LocalTypedef( const udmstri &     i_sLocalName,
+Class::Add_LocalTypedef( const String  &     i_sLocalName,
                          Cid                 i_nId )
 {
     aTypedefs.push_back( S_LocalCe(i_sLocalName, i_nId) );
 }
 
 void
-Class::Add_LocalOperation( const udmstri &          i_sLocalName,
-                           OSid                     i_nOS,
+Class::Add_LocalOperation( const String  &          i_sLocalName,
                            Cid                      i_nId )
 {
-    aOperations.push_back( S_LocalOperation(i_sLocalName, i_nOS, i_nId) );
+    aOperations.push_back( S_LocalCe(i_sLocalName, i_nId) );
 }
 
 void
-Class::Add_LocalStaticOperation( const udmstri &     i_sLocalName,
-                                 OSid                i_nOS,
+Class::Add_LocalStaticOperation( const String  &     i_sLocalName,
                                  Cid                 i_nId )
 {
-    aStaticOperations.push_back( S_LocalOperation(i_sLocalName, i_nOS, i_nId) );
+    aStaticOperations.push_back( S_LocalCe(i_sLocalName, i_nId) );
 }
 
 void
-Class::Add_LocalData( const udmstri &     i_sLocalName,
+Class::Add_LocalData( const String  &     i_sLocalName,
                       Cid                 i_nId )
 {
     aData.push_back( S_LocalCe(i_sLocalName, i_nId) );
 }
 
 void
-Class::Add_LocalStaticData( const udmstri &     i_sLocalName,
+Class::Add_LocalStaticData( const String  &     i_sLocalName,
                             Cid                 i_nId )
 {
     aStaticData.push_back( S_LocalCe(i_sLocalName, i_nId) );
 }
 
+
+struct find_name
+{
+                        find_name(
+                            const String &      i_name )
+                            :   sName(i_name) {}
+
+    bool                operator()(
+                            const S_LocalCe &   i_lce ) const
+                            { return i_lce.sLocalName == sName; }
+  private:
+    String              sName;
+};
+
+Ce_id
+Class::Search_Child(const String & i_key) const
+{
+    Ce_id
+        ret = Ce_id(Search_LocalClass(i_key));
+    if (ret.IsValid())
+        return ret;
+
+    CIterator_Locals
+        itret = std::find_if(aEnums.begin(), aEnums.end(), find_name(i_key));
+    if (itret != aEnums.end())
+        return (*itret).nId;
+    itret = std::find_if(aTypedefs.begin(), aTypedefs.end(), find_name(i_key));
+    if (itret != aTypedefs.end())
+        return (*itret).nId;
+    itret = std::find_if(aData.begin(), aData.end(), find_name(i_key));
+    if (itret != aData.end())
+        return (*itret).nId;
+    itret = std::find_if(aStaticData.begin(), aStaticData.end(), find_name(i_key));
+    if (itret != aStaticData.end())
+        return (*itret).nId;
+    return Ce_id(0);
+}
+
 Rid
-Class::Search_LocalClass( const udmstri & i_sName ) const
+Class::Search_LocalClass( const String  & i_sName ) const
 {
      CIterator_Locals itFound = PosOfName(aClasses, i_sName);
     if (itFound != aClasses.end())
-        return (*itFound).nId;
+        return (*itFound).nId.Value();
     return 0;
 }
 
-Cid
-Class::inq_Id() const
-{
-    return aEssentials.Id();
-}
-
-const udmstri &
+const String  &
 Class::inq_LocalName() const
 {
     return aEssentials.LocalName();
@@ -179,48 +225,31 @@ Class::inq_Owner() const
     return aEssentials.Owner();
 }
 
-Lid
+loc::Le_id
 Class::inq_Location() const
 {
     return aEssentials.Location();
 }
 
 void
-Class::do_StoreAt( ary::Display & o_rOut ) const
+Class::do_Accept(csv::ProcessorIfc & io_processor) const
 {
-    ary::cpp::Display *  pD = dynamic_cast< ary::cpp::Display* >(&o_rOut);
-    if (pD != 0)
-    {
-         pD->Display_Class(*this);
-    }
+    csv::CheckedCall(io_processor,*this);
 }
 
-RCid
-Class::inq_RC() const
+ClassId
+Class::get_AryClass() const
 {
-    return RC_();
-}
-
-
-const ary::Documentation &
-Class::inq_Info() const
-{
-    return aEssentials.Info();
-}
-
-void
-Class::do_Add_Documentation( DYN ary::Documentation & let_drInfo )
-{
-    aEssentials.SetInfo(let_drInfo);
+    return class_id;
 }
 
 Gid
 Class::inq_Id_Group() const
 {
-     return static_cast<Gid>(aEssentials.Id());
+     return static_cast<Gid>(Id());
 }
 
-const RepositoryEntity &
+const ary::cpp::CppEntity &
 Class::inq_RE_Group() const
 {
      return *this;
@@ -257,86 +286,20 @@ Class::inq_Create_Slot( SlotAccessId i_nSlot ) const
         case SLOT_NestedClasses:        return new Slot_ListLocalCe(aClasses);
         case SLOT_Enums:                return new Slot_ListLocalCe(aEnums);
         case SLOT_Typedefs:             return new Slot_ListLocalCe(aTypedefs);
-        case SLOT_Operations:           return new Slot_OperationList(aOperations);
-        case SLOT_StaticOperations:     return new Slot_OperationList(aStaticOperations);
+        case SLOT_Operations:           return new Slot_ListLocalCe(aOperations);
+        case SLOT_StaticOperations:     return new Slot_ListLocalCe(aStaticOperations);
         case SLOT_Data:                 return new Slot_ListLocalCe(aData);
         case SLOT_StaticData:           return new Slot_ListLocalCe(aStaticData);
-        case SLOT_FriendClasses:        return new Slot_RidList(aFriendClasses);
-        case SLOT_FriendOperations:     return new Slot_RidList(aFriendOperations);
+        case SLOT_FriendClasses:        return new Slot_SequentialIds<Ce_id>(aFriendClasses);
+        case SLOT_FriendOperations:     return new Slot_SequentialIds<Ce_id>(aFriendOperations);
         default:
                                         return new Slot_Null;
     }   // end switch
 }
 
-
-#if 0
-uintt
-Class::Get_LocalClasses( ary::List_Rid & o_rResultList ) const
-{
-    for ( CIterator_Locals it = aClasses.begin();
-          it != aClasses.end();
-          ++it )
-    {
-        o_rResultList.push_back((*it).nId);
-    }
-    return o_rResultList.size();
-}
-
-uintt
-Class::Get_LocalFunctions( ary::List_Rid & o_rResultList ) const
-{
-    for ( List_LocalOperation::const_iterator its = aStaticOperations.begin();
-          its != aStaticOperations.end();
-          ++its )
-    {
-        o_rResultList.push_back((*its).nId);
-    }
-    for ( List_LocalOperation::const_iterator it = aOperations.begin();
-          it != aOperations.end();
-          ++it )
-    {
-        o_rResultList.push_back((*it).nId);
-    }
-    return o_rResultList.size();
-}
-
-const udmstri &
-Class::LocalNameOfOwner() const
-{
-     return LocalName();
-}
-#endif // 0
-
-#if 0
-Cid
-Class::Find_LocalClass( const udmstri & i_sLocalName ) const
-{
-    CIterator_Locals ret = PosOfName(aClasses, i_sLocalName);
-    if (ret != aTypes.end())
-        return static_cast<Cid>( (*ret).nId );
-    return 0;
-}
-
-Tid
-Class::Find_LocalType( const udmstri & i_sLocalName ) const
-{
-    CIterator_Locals ret = PosOfName(aEnums, i_sLocalName);
-    if (ret != aEnums.end())
-        return (*ret).nId;
-    ret = PosOfName(aTypedefs, i_sLocalName);
-    if (ret != aTypedefs.end())
-        return (*ret).nId;
-    ret = PosOfName(aClasses, i_sLocalName);
-    if (ret != aClasses.end())
-        return (*ret).nId;
-    return 0;
-}
-#endif // 0
-
-
 Class::CIterator_Locals
 Class::PosOfName( const List_LocalCe &  i_rList,
-                  const udmstri &       i_sName ) const
+                  const String  &       i_sName ) const
 {
     for ( CIterator_Locals ret = i_rList.begin();
           ret != i_rList.end();
@@ -350,7 +313,7 @@ Class::PosOfName( const List_LocalCe &  i_rList,
 
 Class::Iterator_Locals
 Class::PosOfName( List_LocalCe &    i_rList,
-                  const udmstri &   i_sName )
+                  const String  &   i_sName )
 {
     for ( Iterator_Locals ret = i_rList.begin();
           ret != i_rList.end();
@@ -365,6 +328,3 @@ Class::PosOfName( List_LocalCe &    i_rList,
 
 }   //  namespace   cpp
 }   //  namespace   ary
-
-
-
