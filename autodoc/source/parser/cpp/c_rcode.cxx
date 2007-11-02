@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_rcode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:09:11 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:48:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,10 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <ary/cpp/c_rwgate.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_namesp.hxx>
 // #include <ary/cpp/c_groups.hxx>
-#include <ary/loc/l_rwgate.hxx>
+#include <ary/loc/locp_le.hxx>
 #include "cpp_pe.hxx"
 #include <adc_cl.hxx>
 #include <x_parse.hxx>
@@ -74,7 +74,7 @@ const uintt C_nNO_TRY = uintt(-1);
 namespace cpp {
 
 
-CodeExplorer::CodeExplorer( ary::cpp::RwGate & io_rAryGate )
+CodeExplorer::CodeExplorer( ary::cpp::Gate & io_rAryGate )
     :   aGlobalParseContext(io_rAryGate),
         // aEnvironments,
         pPE_File(0),
@@ -158,11 +158,11 @@ CodeExplorer::AcknowledgeResult()
     }   // end switch(CurResult().eStackAction)
 }
 
-ary::Cid
+ary::loc::Le_id
 CodeExplorer::CurFile() const
 {
-    // KORR
-    return 0;
+    // KORR_FUTURE
+    return ary::loc::Le_id(0);
 }
 
 const Token &
