@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_tpltp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:14:02 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include <cosv/template/tpltools.hxx>
+#include <cosv/tpl/tpltools.hxx>
 
 
 
@@ -75,8 +75,10 @@ PE_TemplateTop::Setup_StatusFunctions()
     static INT16 stateT_start[] =           { Tid_Less };
 
     static F_Tok stateF_expect_qualifier[]= { &PE_TemplateTop::On_expect_qualifier_ClassOrTypename,
+                                              &PE_TemplateTop::On_expect_qualifier_Greater,
                                               &PE_TemplateTop::On_expect_qualifier_ClassOrTypename };
     static INT16 stateT_expect_qualifier[]= { Tid_class,
+                                              Tid_Greater,
                                               Tid_typename };
 
     static F_Tok stateF_expect_name[] =     { &PE_TemplateTop::On_expect_name_Identifier };
@@ -128,6 +130,12 @@ PE_TemplateTop::On_expect_qualifier_ClassOrTypename( const char *)
 }
 
 void
+PE_TemplateTop::On_expect_qualifier_Greater(const char *)
+{
+    SetTokenResult(done, pop_success);
+}
+
+void
 PE_TemplateTop::On_expect_qualifier_Other( const char *)
 {
     SetTokenResult(done, stay);
@@ -168,6 +176,8 @@ PE_TemplateTop::On_expect_separator_Greater( const char *)
 {
     SetTokenResult(done, pop_success);
 }
+
+
 
 
 }   // namespace cpp
