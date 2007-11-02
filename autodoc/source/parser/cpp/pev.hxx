@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pev.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:31:31 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:59:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,13 +43,13 @@
 #include <tokens/tokproct.hxx>
     // COMPONENTS
     // PARAMETERS
-#include <ary/cpp/c_etypes.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
 
 namespace ary
 {
     namespace cpp
     {
-        class RwGate;
+        class Gate;
         class InputContext;
 
         class Namespace;
@@ -60,7 +60,7 @@ namespace ary
         class Variable;
         class EnumValue;
 
-        class CppDefinition;
+        class DefineEntity;
     }
 
     class Documentation;
@@ -110,7 +110,7 @@ class PeEnvironment : protected TokenProcessing_Types
 
         // Special events
     void                Event_Class_FinishedBase(
-                            const udmstri &     i_sParameterName );
+                            const String  &     i_sParameterName );
 
     void                Event_Store_Typedef(
                             ary::cpp::Typedef & io_rTypedef );
@@ -118,12 +118,12 @@ class PeEnvironment : protected TokenProcessing_Types
                             ary::cpp::EnumValue &
                                                 io_rEnumValue );
     void                Event_Store_CppDefinition(
-                            ary::cpp::CppDefinition &
+                            ary::cpp::DefineEntity  &
                                                 io_rDefinition );
 
     void                Event_EnterFunction_ParameterList();
     void                Event_Function_FinishedParameter(
-                            const udmstri &     i_sParameterName );
+                            const String  &     i_sParameterName );
     void                Event_LeaveFunction_ParameterList();
     void                Event_EnterFunction_Implementation();
     void                Event_LeaveFunction_Implementation();
@@ -138,10 +138,10 @@ class PeEnvironment : protected TokenProcessing_Types
     void                StartWaitingFor_Recovery();
 
     // INQUIRY
-    ary::cpp::RwGate &  AryGate() const;
+    ary::cpp::Gate &  AryGate() const;
     const ary::cpp::InputContext &
                         Context() const;
-    udmstri             CurFileName() const;
+    String              CurFileName() const;
     uintt               LineCount() const;
     bool                IsWaitingFor_Recovery() const;
     bool                IsExternC() const;
@@ -173,7 +173,7 @@ class PeEnvironment : protected TokenProcessing_Types
                         do_Get_CurTemplateParameters() = 0;
     virtual void        do_Close_OpenTemplate() = 0;
     virtual void        do_Event_Class_FinishedBase(
-                            const udmstri &     i_sBaseName ) = 0;
+                            const String  &     i_sBaseName ) = 0;
 
     virtual void        do_Event_Store_Typedef(
                             ary::cpp::Typedef & io_rTypedef ) = 0;
@@ -181,11 +181,11 @@ class PeEnvironment : protected TokenProcessing_Types
                             ary::cpp::EnumValue &
                                                 io_rEnumValue ) = 0;
     virtual void        do_Event_Store_CppDefinition(
-                            ary::cpp::CppDefinition &
+                            ary::cpp::DefineEntity &
                                                 io_rDefinition ) = 0;
     virtual void        do_Event_EnterFunction_ParameterList() = 0;
     virtual void        do_Event_Function_FinishedParameter(
-                            const udmstri &     i_sParameterName ) = 0;
+                            const String  &     i_sParameterName ) = 0;
     virtual void        do_Event_LeaveFunction_ParameterList() = 0;
     virtual void        do_Event_EnterFunction_Implementation() = 0;
     virtual void        do_Event_LeaveFunction_Implementation() = 0;
@@ -196,11 +196,11 @@ class PeEnvironment : protected TokenProcessing_Types
                             ary::cpp::Variable &
                                                 io_rVariable ) = 0;
     virtual void        do_StartWaitingFor_Recovery() = 0;
-    virtual ary::cpp::RwGate &
+    virtual ary::cpp::Gate &
                         inq_AryGate() const = 0;
     virtual const ary::cpp::InputContext &
                         inq_Context() const = 0;
-    virtual udmstri     inq_CurFileName() const = 0;
+    virtual String      inq_CurFileName() const = 0;
     virtual uintt       inq_LineCount() const = 0;
     virtual bool        inq_IsWaitingFor_Recovery() const = 0;
     virtual bool        inq_IsExternC() const = 0;
@@ -249,7 +249,7 @@ inline void
 PeEnvironment::Close_OpenTemplate()
     { do_Close_OpenTemplate(); }
 inline void
-PeEnvironment::Event_Class_FinishedBase( const udmstri &  i_sBaseName )
+PeEnvironment::Event_Class_FinishedBase( const String  &  i_sBaseName )
     { do_Event_Class_FinishedBase(i_sBaseName); }
 inline void
 PeEnvironment::Event_Store_Typedef( ary::cpp::Typedef & io_rTypedef )
@@ -258,13 +258,13 @@ inline void
 PeEnvironment::Event_Store_EnumValue( ary::cpp::EnumValue & io_rEnumValue )
     { do_Event_Store_EnumValue(io_rEnumValue); }
 inline void
-PeEnvironment::Event_Store_CppDefinition( ary::cpp::CppDefinition & io_rDefinition )
+PeEnvironment::Event_Store_CppDefinition( ary::cpp::DefineEntity & io_rDefinition )
     { do_Event_Store_CppDefinition(io_rDefinition); }
 inline void
 PeEnvironment::Event_EnterFunction_ParameterList()
     { do_Event_EnterFunction_ParameterList(); }
 inline void
-PeEnvironment::Event_Function_FinishedParameter( const udmstri & i_sParameterName )
+PeEnvironment::Event_Function_FinishedParameter( const String  & i_sParameterName )
     { do_Event_Function_FinishedParameter(i_sParameterName); }
 inline void
 PeEnvironment::Event_LeaveFunction_ParameterList()
@@ -284,13 +284,13 @@ PeEnvironment::Event_Store_Variable( ary::cpp::Variable & io_rVariable )
 inline void
 PeEnvironment::StartWaitingFor_Recovery()
     { do_StartWaitingFor_Recovery(); }
-inline ary::cpp::RwGate &
+inline ary::cpp::Gate &
 PeEnvironment::AryGate() const
     { return inq_AryGate(); }
 inline const ary::cpp::InputContext &
 PeEnvironment::Context() const
     { return inq_Context(); }
-inline udmstri
+inline String
 PeEnvironment::CurFileName() const
     { return inq_CurFileName(); }
 inline uintt

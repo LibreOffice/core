@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_vafu.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:30:40 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:59:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,25 +37,25 @@
 #ifndef ADC_CPP_PE_VAFU_HXX
 #define ADC_CPP_PE_VAFU_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include "cpp_pe.hxx"
-    // COMPONENTS
+// USED SERVICES
 #include <semantic/callf.hxx>
 #include <semantic/sub_peu.hxx>
-#include <ary/cpp/c_etypes.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
 #include <ary/cpp/c_vfflag.hxx>
-    // PARAMETERS
 
 
-namespace cpp {
+
+namespace cpp
+{
 
 class PE_Type;
 class PE_Variable;
 class PE_Function;
 class PE_Ignore;
+
+
 
 
 class PE_VarFunc : public Cpp_PE
@@ -91,9 +91,9 @@ class PE_VarFunc : public Cpp_PE
     virtual void        Call_Handler(
                             const cpp::Token &  i_rTok );
 
-    const std::vector<ary::Cid> &
+    const std::vector<ary::cpp::Ce_id> &
                         Result_Ids() const;
-    ary::Tid            Result_FrontType() const;
+    ary::cpp::Type_id   Result_FrontType() const;
     const StringVector &
                         Result_Names() const;
     E_ResultType        Result_CeType() const;
@@ -188,13 +188,13 @@ class PE_VarFunc : public Cpp_PE
     intt                nCounter_TemplateBrackets;
     bool                bInDestructor;
 
-    std::vector<ary::Cid>
+    std::vector<ary::cpp::Ce_id>
                         aResultIds;
-    ary::Tid            nResultFrontType;
+    ary::cpp::Type_id   nResultFrontType;
     E_ResultType        eResultType;
 
     // Pre-Results
-    udmstri             sName;
+    String              sName;
 
     bool                bVirtual;
     bool                bStatic;
@@ -210,10 +210,10 @@ class PE_VarFunc : public Cpp_PE
 
 // IMPLEMENTATION
 
-inline const std::vector<ary::Tid> &
+inline const std::vector<ary::cpp::Ce_id> &
 PE_VarFunc::Result_Ids() const
     { return aResultIds; }
-inline ary::Tid
+inline ary::cpp::Type_id
 PE_VarFunc::Result_FrontType() const
     { return nResultFrontType; }
 inline PE_VarFunc::E_ResultType

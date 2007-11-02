@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sownstck.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:33:11 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:01:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
     // BASE CLASSES
 #include "cxt2ary.hxx"
     // COMPONENTS
-#include <ary/cpp/c_etypes.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
 #include <estack.hxx>
     // PARAMETERS
 #include <ary/cpp/c_namesp.hxx>
@@ -172,7 +172,7 @@ void
 ContextForAry::
 S_OwnerStack::Reset()
 {
-    while ( aStack_Namespaces.top()->Owner() != 0 )
+    while ( aStack_Namespaces.top()->Owner().IsValid() )
         aStack_Namespaces.pop();
     while ( NOT aStack_Classes.empty() )
         aStack_Classes.pop();
@@ -285,14 +285,14 @@ S_OwnerStack::CloseBlock()
     {
         // csv_assert( aStack_Classes.size() == 0 );
         if ( aStack_Classes.size() > 0 )
-            throw X_Parser(X_Parser::x_UnspecifiedSyntaxError, "", udmstri::Null_(), 0);
+            throw X_Parser(X_Parser::x_UnspecifiedSyntaxError, "", String::Null_(), 0);
 
         csv_assert( pCurEnum == 0 );
         aStack_Namespaces.pop();
 
         // csv_assert( aStack_Namespaces.size() > 0 );
         if( aStack_Namespaces.size() == 0 )
-            throw X_Parser(X_Parser::x_UnspecifiedSyntaxError, "", udmstri::Null_(), 0);
+            throw X_Parser(X_Parser::x_UnspecifiedSyntaxError, "", String::Null_(), 0);
 
     }
     SetOwner_2CurNamespace();
@@ -304,7 +304,7 @@ S_OwnerStack::CloseClass()
 {
     // csv_assert( aStack_Classes.size() > 0 );
     if ( aStack_Classes.size() == 0 )
-          throw X_Parser(X_Parser::x_UnspecifiedSyntaxError, "", udmstri::Null_(), 0);
+          throw X_Parser(X_Parser::x_UnspecifiedSyntaxError, "", String::Null_(), 0);
 
     aStack_Classes.pop();
     if ( aStack_Classes.size() > 0 )
