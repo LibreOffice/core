@@ -4,6 +4,10 @@ NAMEpurpenv_helper := uno_purpenvhelper$(COMID)
 
 purpenv_helper_LIB := -l$(NAMEpurpenv_helper)
 
+.ELIF "$(GUI)"=="OS2"
+NAMEpurpenv_helper := upeh$(UDK_MAJOR)
+purpenv_helper_LIB := i$(NAMEpurpenv_helper)
+
 .ELSE
 NAMEpurpenv_helper := purpenvhelper$(UDK_MAJOR)$(COMID)
 .IF "$(COM)"=="GCC"
