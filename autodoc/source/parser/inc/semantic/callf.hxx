@@ -4,9 +4,9 @@
  *
  *  $RCSfile: callf.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:38:31 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:03:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,7 @@
 #ifndef ADC_CPP_CALLF_HXX
 #define ADC_CPP_CALLF_HXX
 
-
-
 // USED SERVICES
-    // BASE CLASSES
-#include <cosv/template/inc_stl.hxx>
-    // COMPONENTS
-    // PARAMETERS
-
 
 
 
@@ -183,7 +176,7 @@ PeStatus<PE>::PeStatus( PE &        i_rMyPE,
     aBranches.reserve(i_nSize);
     for ( uintt i = 0; i < i_nSize; ++i )
     {
-        csv_assert(i > 0 ? i_pTokTypeArray[i] > i_pTokTypeArray[i-1] : true);
+//      csv_assert(i > 0 ? i_pTokTypeArray[i] > i_pTokTypeArray[i-1] : true);
         aBranches.push_back( CallFunction<PE>( i_pFuncArray[i], i_pTokTypeArray[i]) );
     }  // end for
 }
