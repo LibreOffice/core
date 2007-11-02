@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_gate.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 17:56:40 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:07:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,93 +36,56 @@
 #ifndef ARY_IDL_I_GATE_HXX
 #define ARY_IDL_I_GATE_HXX
 
-
 // USED SERVICES
-    // BASE CLASSES
-#include <ary/common_gate.hxx>
-    // COMPONENTS
-    // PARAMETERS
+
+namespace autodoc
+{
+    class Options;
+}
+namespace ary
+{
+namespace idl
+{
+    class CePilot;
+    class TypePilot;
+}
+}
+
+
 
 
 namespace ary
 {
-
 namespace idl
 {
 
-class CePilot;
-class TypePilot;
-class SecondariesPilot;
 
-
-/** Main entry to access the C++ parts of the repository.
+/** Main entry to access the IDL parts of the repository.
 */
-class Gate : public ::ary::CommonGate
+class Gate
 {
   public:
     // LIFECYCLE
     virtual             ~Gate() {}
 
     // OPERATIONS
-
+    virtual void        Calculate_AllSecondaryInformation(
+                            const String &      i_devman_reffilepath ) = 0;
+//                            const ::autodoc::Options &
+//                                                i_options ) = 0;
     // INQUIRY
-    const CePilot &     Ces() const;
-    const TypePilot &   Types() const;
-    const SecondariesPilot &
-                        Secondaries() const;
-
+    virtual const CePilot &
+                        Ces() const = 0;
+    virtual const TypePilot &
+                        Types() const = 0;
     // ACCESS
-    CePilot &           Ces();
-    TypePilot &         Types();
-    SecondariesPilot &  Secondaries();
-
-  private:
-    // Locals
-    Gate &              MutableMe() const;
-
-    virtual CePilot &   access_Ces() = 0;
-    virtual TypePilot & access_Types() = 0;
-    virtual SecondariesPilot &
-                        access_Secondaries() = 0;
+    virtual CePilot &   Ces() = 0;
+    virtual TypePilot & Types() = 0;
 };
 
 
 
 
-// IMPLEMENTATION
-
-inline Gate &
-Gate::MutableMe() const
-    { return const_cast< Gate& >(*this); }
-
-inline const CePilot &
-Gate::Ces() const
-    { return MutableMe().access_Ces(); }
-
-inline const TypePilot &
-Gate::Types() const
-    { return MutableMe().access_Types(); }
-
-inline const SecondariesPilot &
-Gate::Secondaries() const
-    { return MutableMe().access_Secondaries(); }
-
-inline CePilot &
-Gate::Ces()
-    { return access_Ces(); }
-
-inline TypePilot &
-Gate::Types()
-    { return access_Types(); }
-
-inline SecondariesPilot &
-Gate::Secondaries()
-    { return access_Secondaries(); }
-
-
 }   // namespace idl
 }   // namespace ary
-
-
 #endif
-
