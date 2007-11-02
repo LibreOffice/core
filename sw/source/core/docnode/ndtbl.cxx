@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 13:44:26 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:41:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3335,11 +3335,12 @@ BOOL SwDoc::SplitTable( const SwPosition& rPos, USHORT eHdlnMode,
 
     if( pNew )
     {
+        SwSaveRowSpan* pSaveRowSp = pNew->GetTable().CleanUpTopRowSpan( rTbl.GetTabLines().Count() );
         SwUndoSplitTbl* pUndo = 0;
         if( DoesUndo() )
         {
             ClearRedo();
-            AppendUndo( pUndo = new SwUndoSplitTbl( *pNew, eHdlnMode, bCalcNewSize ));
+            AppendUndo( pUndo = new SwUndoSplitTbl( *pNew, pSaveRowSp, eHdlnMode, bCalcNewSize ));
             if( aHistory.Count() )
                 pUndo->SaveFormula( aHistory );
         }
@@ -3586,26 +3587,29 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, BOOL bAfter,
         // in der aufrufenden Funktion getriggert.
         // TL_CHART2:
         SwChartDataProvider *pPCD = rTbl.GetFrmFmt()->getIDocumentChartDataProviderAccess()->GetChartDataProvider();
-        for (USHORT k = nLinePos;  k < rTbl.GetTabLines().Count();  ++k)
+        if( pPCD )
         {
-            USHORT nLineIdx = (rTbl.GetTabLines().Count() - 1) - k + nLinePos;
-            USHORT nBoxCnt = rTbl.GetTabLines()[ nLineIdx ]->GetTabBoxes().Count();
-            for (USHORT j = 0;  j < nBoxCnt;  ++j)
+            for (USHORT k = nLinePos;  k < rTbl.GetTabLines().Count();  ++k)
             {
-                USHORT nIdx = nBoxCnt - 1 - j;
-                if (pPCD)
+                USHORT nLineIdx = (rTbl.GetTabLines().Count() - 1) - k + nLinePos;
+                USHORT nBoxCnt = rTbl.GetTabLines()[ nLineIdx ]->GetTabBoxes().Count();
+                for (USHORT j = 0;  j < nBoxCnt;  ++j)
+                {
+                    USHORT nIdx = nBoxCnt - 1 - j;
                     pPCD->DeleteBox( &rTbl, *rTbl.GetTabLines()[ nLineIdx ]->GetTabBoxes()[nIdx] );
+                }
             }
         }
         //
         // ...und loeschen
-        rTbl.GetTabLines().Remove( nLinePos,
-                                    rTbl.GetTabLines().Count() - nLinePos );
+        USHORT nDeleted = rTbl.GetTabLines().Count() - nLinePos;
+        rTbl.GetTabLines().Remove( nLinePos, nDeleted );
 
         // und die betr. Boxen verschieben. Dabei die Formate eindeutig
         // machen und die StartNodes korrigieren
         _SplitTable_Para aPara( pNewTblNd, rTbl );
         rNewTbl.GetTabLines().ForEach( &lcl_SplitTable_CpyLine, &aPara );
+        rTbl.CleanUpBottomRowSpan( nDeleted );
     }
 
     {
