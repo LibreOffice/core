@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cr_metho.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:26:43 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:56:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ Create_AccessMethod( const char *           i_pOutputFileName,
     int    sDescrLen = (int) strlen(sDescrLineChange);
 
     std::ofstream aFile(i_pOutputFileName, std::ios::out
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
                                                | std::ios::binary
 #endif
     );

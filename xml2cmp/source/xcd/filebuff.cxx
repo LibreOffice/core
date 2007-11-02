@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filebuff.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:26:56 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:56:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ LoadXmlFile( Buffer &           o_rBuffer,
     std::ifstream aXmlFile;
 
     aXmlFile.open(i_sXmlFilePath, std::ios::in
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
                                           | std::ios::binary
 #endif // WNT
     );
