@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hd_docu.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:52:09 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:27:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_namesp.hxx>
 #include <ary/cpp/c_class.hxx>
 #include <ary/cpp/c_enum.hxx>
@@ -45,11 +46,12 @@
 #include <ary/cpp/c_funct.hxx>
 #include <ary/cpp/c_vari.hxx>
 #include <ary/cpp/c_enuval.hxx>
-#include <ary/info/codeinfo.hxx>
+#include <ary/doc/d_oldcppdocu.hxx>
 #include <ary/info/all_tags.hxx>
 #include <ary/info/all_dts.hxx>
 #include <adc_cl.hxx>
 #include "html_kit.hxx"
+#include "opageenv.hxx"
 
 
 
@@ -109,53 +111,61 @@ Docu_Display::Unassign_Out()
 }
 
 void
-Docu_Display::Display_Namespace( const ary::cpp::Namespace & i_rData )
+Docu_Display::do_Process( const ary::cpp::Namespace & i_rData )
 {
-    i_rData.Info().StoreAt( *this );
+    Process(i_rData.Docu());
 }
 
 void
-Docu_Display::Display_Class( const ary::cpp::Class & i_rData )
+Docu_Display::do_Process( const ary::cpp::Class & i_rData )
 {
     pCurClassOverwrite = &i_rData;
-    i_rData.Info().StoreAt( *this );
+    Process(i_rData.Docu());
     pCurClassOverwrite = 0;
 }
 
 void
-Docu_Display::Display_Enum( const ary::cpp::Enum & i_rData )
+Docu_Display::do_Process( const ary::cpp::Enum & i_rData )
 {
-    i_rData.Info().StoreAt( *this );
+    Process(i_rData.Docu());
 }
 
 void
-Docu_Display::Display_Typedef( const ary::cpp::Typedef & i_rData )
+Docu_Display::do_Process( const ary::cpp::Typedef & i_rData )
 {
-    i_rData.Info().StoreAt( *this );
+    Process(i_rData.Docu());
 }
 
 void
-Docu_Display::Display_Function( const ary::cpp::Function & i_rData )
+Docu_Display::do_Process( const ary::cpp::Function & i_rData )
 {
-    i_rData.Info().StoreAt( *this );
+    Process(i_rData.Docu());
 }
 
 void
-Docu_Display::Display_Variable( const ary::cpp::Variable & i_rData )
+Docu_Display::do_Process( const ary::cpp::Variable & i_rData )
 {
-    i_rData.Info().StoreAt( *this );
+    Process(i_rData.Docu());
 }
+
 
 
 // --------------       Interface ary::info::DocuDisplay  ------------------ //
 
 
 void
-Docu_Display::Display_CodeInfo( const CodeInfo & i_rData )
+Docu_Display::do_Process(const ary::doc::Documentation & i_rData)
 {
+    if (i_rData.Data() == 0)
+        return;
+
+    const ary::doc::OldCppDocu *
+        docdata = dynamic_cast< const ary::doc::OldCppDocu* >(i_rData.Data());
+    csv_assert(docdata != 0);
+
     Start_DocuBlock();
 
-    if ( i_rData.IsObsolete() )
+    if ( docdata->IsObsolete() )
     {
         CurOut()
             >> *new html::DefListTerm
@@ -164,8 +174,9 @@ Docu_Display::Display_CodeInfo( const CodeInfo & i_rData )
 
     }
 
-    CodeInfo::TagList::const_iterator itEnd = i_rData.Tags().end();
-    for ( CodeInfo::TagList::const_iterator it = i_rData.Tags().begin();
+    ary::doc::OldCppDocu::TagList::const_iterator
+        itEnd = docdata->Tags().end();
+    for ( ary::doc::OldCppDocu::TagList::const_iterator it = docdata->Tags().begin();
           it != itEnd;
           ++it )
     {
@@ -178,7 +189,7 @@ Docu_Display::Display_CodeInfo( const CodeInfo & i_rData )
 void
 Docu_Display::Display_StdTag( const StdTag & i_rData )
 {
-    csv_assert( int(i_rData.Std_Id()) < int(ary::info::C_eAtTag_NrOfClasses) );
+    csv_assert( uintt(i_rData.Std_Id()) < uintt(ary::info::C_eAtTag_NrOfClasses) );
 
     const ary::info::DocuText::TokenList &
         rText = i_rData.CText().Tokens();
@@ -207,7 +218,6 @@ Docu_Display::Display_StdTag( const StdTag & i_rData )
 void
 Docu_Display::Display_BaseTag( const BaseTag & )
 {
-
 }
 
 void
@@ -365,6 +375,11 @@ Docu_Display::Display_DT_Xml( const ary::info::DT_Xml & i_rData )
     CurOut() << new xml::XmlCode( i_rData.Text() );
 }
 
+const ary::cpp::Gate *
+Docu_Display::inq_Get_ReFinder() const
+{
+    return &Env().Gate();
+}
 
 void
 Docu_Display::Start_DocuBlock()
@@ -432,7 +447,7 @@ Docu_Display::Write_Text( const ary::info::DocuText & i_rDocuText )
 }
 
 void
-Docu_Display::Write_TextToken( const udmstri & i_sText )
+Docu_Display::Write_TextToken( const String & i_sText )
 {
      if ( bUseHtmlInDocuTokens )
         CurOut() << new xml::XmlCode(i_sText);
@@ -443,7 +458,7 @@ Docu_Display::Write_TextToken( const udmstri & i_sText )
 void
 Docu_Display::Write_LinkableText( const ary::QualifiedName & i_sQuName )
 {
-    const ary::CodeEntity *
+    const ary::cpp::CodeEntity *
         pCe = FindUnambiguousCe( Env(), i_sQuName, pCurClassOverwrite );
     if ( pCe != 0 )
     {
