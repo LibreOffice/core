@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inimgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:48:19 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:58:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ IniManager::IniManager( ByteString &rDir, ByteString &rLocalDir )
         sLocalPath = rLocalDir;
 
     sGlobalDir = rDir;
-#if !defined( UNX )
+#if !defined( UNX ) && !defined( OS2 )
     mkdir(( char * ) sLocalPath.GetBuffer());
 #else
     mkdir( sLocalPath.GetBuffer() ,00777 );
@@ -71,7 +71,7 @@ IniManager::IniManager( ByteString &rDir )
 {
     sLocalPath = GetLocalIni();
     sGlobalDir = rDir;
-#if !defined( UNX )
+#if !defined( UNX ) && !defined( OS2 )
     mkdir(( char * ) sLocalPath.GetBuffer());
 #else
     mkdir( sLocalPath.GetBuffer() ,00777 );
@@ -85,7 +85,7 @@ IniManager::IniManager()
 {
     sLocalPath = GetLocalIni();
 
-#if !defined( UNX )
+#if !defined( UNX ) && !defined( OS2 )
     mkdir(( char * ) sLocalPath.GetBuffer());
 #else
     mkdir( sLocalPath.GetBuffer(), 00777 );
