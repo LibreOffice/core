@@ -4,9 +4,9 @@
  *
  *  $RCSfile: x_parse.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:16:23 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 
 X_Parser::X_Parser( E_Event             i_eEvent,
                     const char *        i_sObject,
-                    const udmstri &     i_sCausingFile_FullPath,
+                    const String &      i_sCausingFile_FullPath,
                     uintt               i_nCausingLineNr  )
     :   eEvent(i_eEvent),
         sObject(i_sObject),
@@ -62,7 +62,7 @@ X_Parser::GetEvent() const
 }
 
 void
-X_Parser::GetInfo( ostream &      o_rOutputMedium ) const
+X_Parser::GetInfo( std::ostream & o_rOutputMedium ) const
 {
     o_rOutputMedium << "Error in file "
                     << sCausingFile_FullPath
@@ -97,11 +97,10 @@ X_Parser::GetInfo( ostream &      o_rOutputMedium ) const
 }
 
 
-ostream &
-operator<<( ostream &                       o_rOut,
+std::ostream &
+operator<<( std::ostream &                  o_rOut,
             const autodoc::X_Parser_Ifc &   i_rException )
 {
     i_rException.GetInfo(o_rOut);
      return o_rOut;
 }
-
