@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unodevtools.pmk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:47:17 $
+#   last change: $Author: hr $ $Date: 2007-11-02 13:08:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,18 @@ CODEMAKERLIBST=codemaker.lib
 COMMONCPPLIBST=commoncpp.lib
 COMMONJAVALIBST=commonjava.lib
 .ENDIF
+
+.ELIF "$(GUI)"=="OS2"
+UNODEVTOOLSLIBDEPN=unodevtools.lib
+CODEMAKERLIBDEPN=codemaker.lib
+COMMONCPPLIBDEPN=commoncpp.lib
+COMMONJAVALIBDEPN=commonjava.lib
+UNODEVTOOLSLIBST=unodevtools.lib
+CODEMAKERLIBST=codemaker.lib
+COMMONCPPLIBST=commoncpp.lib
+COMMONJAVALIBST=commonjava.lib
 .ELSE
+
 UNODEVTOOLSLIBDEPN=libunodevtools.a
 CODEMAKERLIBDEPN=libcodemaker.a
 COMMONCPPLIBDEPN=libcommoncpp.a
