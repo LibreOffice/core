@@ -180,6 +180,10 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         static void EnableAutostartW32( const rtl::OUString &aShortcutName );
         static rtl::OUString GetAutostartFolderNameW32();
 #endif
+#ifdef OS2
+            static void SetAutostartOs2( bool bActivate );
+            static bool GetAutostartOs2( );
+#endif
 };
 
 extern "C" {
