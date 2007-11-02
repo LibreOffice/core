@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pm_help.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:54:41 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:32:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ using csi::xml::Element;
 
 
 
-const udmstri C_sHelpText(
+const String  C_sHelpText(
 "<div style=\"font-size:10pt;\">\n"
 "<h3 class=\"help\">The Main Navigationbar</h3>\n"
 "<p> On top of every page, there is a main navigationbar on a lightly coloured\n"
