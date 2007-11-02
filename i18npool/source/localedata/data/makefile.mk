@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 15:34:04 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:37:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ debug!=
 .INCLUDE :  settings.mk
 
 # macro to link with localedata_en library
-.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
+.IF "$(GUI)" == "WNT"
 .IF "$(COM)"=="GCC"
 LINK_LOCALEDATA_EN_LIB=-l$(SHL1TARGET)
 LINK_LOCALEDATA_ES_LIB=-l$(SHL2TARGET)
@@ -60,6 +60,9 @@ LINK_LOCALEDATA_ES_LIB=-l$(SHL2TARGET)
 LINK_LOCALEDATA_EN_LIB=$(LB)$/i$(SHL1TARGET).lib
 LINK_LOCALEDATA_ES_LIB=$(LB)$/i$(SHL2TARGET).lib
 .ENDIF
+.ELIF "$(GUI)" == "OS2"
+LINK_LOCALEDATA_EN_LIB=$(LB)$/i$(SHL1TARGET).lib
+LINK_LOCALEDATA_ES_LIB=$(LB)$/i$(SHL2TARGET).lib
 .ELSE
 LINK_LOCALEDATA_EN_LIB=-l$(SHL1TARGET)
 LINK_LOCALEDATA_ES_LIB=-l$(SHL2TARGET)
