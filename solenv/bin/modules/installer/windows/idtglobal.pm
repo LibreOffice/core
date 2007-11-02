@@ -4,9 +4,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 09:55:26 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:56:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1648,7 +1648,7 @@ sub add_childprojects
 
     if ( $allvariables->{'JAVAPRODUCT'} )
     {
-        $line = "InstallJava\t98\tSystemFolder\t[SourceDir]$installer::globals::javafile->{'Subdir'}\\$installer::globals::javafile->{'Name'} \/s \/v\"\/qr REBOOT=Suppress\"\n";
+        $line = "InstallJava\t98\tSystemFolder\t[SourceDir]$installer::globals::javafile->{'Subdir'}\\$installer::globals::javafile->{'Name'} \/qr REBOOT=Suppress SP3=0\n";
         push(@{$customactiontable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $customactiontablename\n";
@@ -1675,7 +1675,7 @@ sub add_childprojects
 
     if ( $allvariables->{'JAVAPRODUCT'} )
     {
-        $line = "MaintenanceJava\t82\t$installer::globals::javafile->{'uniquename'}\t\/s \/v\"\/qr REBOOT=Suppress\"\n";
+        $line = "MaintenanceJava\t82\t$installer::globals::javafile->{'uniquename'}\t\/qr REBOOT=Suppress SP3=0\n";
         push(@{$customactiontable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $customactiontablename\n";
