@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:23:30 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:09:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,9 @@
 #pragma warning (disable : 4786 4503 4917)
 #endif
 
+#ifndef OS2
 #include <tchar.h>
+#endif
 
 #define MODULE_NAME TEXT("shlxthdl.dll")
 #define MODULE_NAME_FILTER TEXT("ooofilt.dll")
