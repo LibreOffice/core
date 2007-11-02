@@ -4,9 +4,9 @@
  *
  *  $RCSfile: semnode.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:23:22 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:10:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <ary/ary.hxx>
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/i_module.hxx>
-#include <ary_i/codeinf2.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 #include <s2_luidl/parsenv2.hxx>
 
 

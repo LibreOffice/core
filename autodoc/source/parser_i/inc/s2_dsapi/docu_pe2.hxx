@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docu_pe2.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:26:32 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:12:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,10 +48,14 @@ class ParserInfo;
 
 namespace ary
 {
-namespace info
+namespace doc
 {
-class CodeInformation;
-class DocuToken;
+    class OldIdlDocu;
+}
+
+namespace inf
+{
+    class DocuToken;
 }   // namespace info
 }   // namespace ary
 
@@ -104,7 +108,7 @@ class SapiDocu_PE : public TokenInterpreter
     virtual void        Process_White();
 
 
-    DYN ary::info::CodeInformation *
+    DYN ary::doc::OldIdlDocu *
                             ReleaseJustParsedDocu();
 
     bool                IsComplete() const;
@@ -119,44 +123,44 @@ class SapiDocu_PE : public TokenInterpreter
         st_complete
     };
 
-    typedef void ( SapiDocu_PE::*F_TokenAdder )( DYN ary::info::DocuToken & let_drNewToken );
+    typedef void ( SapiDocu_PE::*F_TokenAdder )( DYN ary::inf::DocuToken & let_drNewToken );
 
     void                AddDocuToken2Void(
-                            DYN ary::info::DocuToken &
+                            DYN ary::inf::DocuToken &
                                                 let_drNewToken );
     void                AddDocuToken2Short(
-                            DYN ary::info::DocuToken &
+                            DYN ary::inf::DocuToken &
                                                 let_drNewToken );
     void                AddDocuToken2Description(
-                            DYN ary::info::DocuToken &
+                            DYN ary::inf::DocuToken &
                                                 let_drNewToken );
     void                AddDocuToken2Deprecated(
-                            DYN ary::info::DocuToken &
+                            DYN ary::inf::DocuToken &
                                                 let_drNewToken );
     void                AddDocuToken2CurAtTag(
-                            DYN ary::info::DocuToken &
+                            DYN ary::inf::DocuToken &
                                                 let_drNewToken );
     void                SetCurParameterAtTagName(
-                            DYN ary::info::DocuToken &
+                            DYN ary::inf::DocuToken &
                                                 let_drNewToken );
     void                SetCurSeeAlsoAtTagLinkText(
-                            DYN ary::info::DocuToken &
+                            DYN ary::inf::DocuToken &
                                                 let_drNewToken );
     void                SetCurSeeAlsoAtTagLinkText_2(
-                            DYN ary::info::DocuToken &
+                            DYN ary::inf::DocuToken &
                                                 let_drNewToken );
     void                SetCurSeeAlsoAtTagLinkText_3(
-                            DYN ary::info::DocuToken &
+                            DYN ary::inf::DocuToken &
                                                 let_drNewToken );
     void                SetCurSinceAtTagVersion(
-                            DYN ary::info::DocuToken &
+                            DYN ary::inf::DocuToken &
                                                 let_drNewToken );
     void                AddDocuToken2SinceAtTag(
-                            DYN ary::info::DocuToken &
+                            DYN ary::inf::DocuToken &
                                                 let_drNewToken );
 
     // DATA
-    Dyn<ary::info::CodeInformation>
+    Dyn<ary::doc::OldIdlDocu>
                         pDocu;
     E_State             eState;
     ParserInfo *        pPositionInfo;
