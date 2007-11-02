@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tk_xml.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:57:56 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:13:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,8 +105,8 @@ class Tok_XmlLink_BeginTag : public Tok_XmlLink_Tag
     // Spring and Fall
                         Tok_XmlLink_BeginTag(
                             EV_TokenId          i_eTag,
-                            const udmstri &     i_sScope,
-                            const udmstri &     i_sDim )
+                            const String  &     i_sScope,
+                            const String  &     i_sDim )
                                                 :   eTag(i_eTag),
                                                     sScope(i_sScope),
                                                     sDim(i_sDim) {}
@@ -116,14 +116,14 @@ class Tok_XmlLink_BeginTag : public Tok_XmlLink_Tag
     // INQUIRY
     virtual const char* Text() const;
     E_TokenId           Id() const              { return eTag; }
-    const udmstri &     Scope() const           { return sScope; }
-    const udmstri &     Dim() const             { return sDim; }
+    const String  &     Scope() const           { return sScope; }
+    const String  &     Dim() const             { return sDim; }
 
   private:
     // DATA
     EV_TokenId          eTag;
-    udmstri             sScope;
-    udmstri             sDim;
+    String              sScope;
+    String              sDim;
 };
 
 class Tok_XmlLink_EndTag : public Tok_XmlLink_Tag
@@ -165,7 +165,7 @@ class Tok_XmlFormat_BeginTag : public Tok_XmlFormat_Tag
     // Spring and Fall
                         Tok_XmlFormat_BeginTag(
                             EV_TokenId          i_eTag,
-                            const udmstri &     i_sDim )
+                            const String  &     i_sDim )
                                                 :   eTag(i_eTag),
                                                     sDim(i_sDim) {}
     // OPERATIONS
@@ -174,12 +174,12 @@ class Tok_XmlFormat_BeginTag : public Tok_XmlFormat_Tag
     // INQUIRY
     virtual const char* Text() const;
     E_TokenId           Id() const              { return eTag; }
-    const udmstri &     Dim() const             { return sDim; }
+    const String  &     Dim() const             { return sDim; }
 
   private:
     // DATA
     EV_TokenId          eTag;
-    udmstri             sDim;
+    String              sDim;
 };
 
 class Tok_XmlFormat_EndTag : public Tok_XmlFormat_Tag
