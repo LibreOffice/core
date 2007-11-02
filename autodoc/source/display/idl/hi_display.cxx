@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hi_display.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:00:58 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:39:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #include <cosv/file.hxx>
 #include <ary/idl/i_ce.hxx>
 #include <ary/idl/i_module.hxx>
+#include <ary/getncast.hxx>
 #include <toolkit/out_tree.hxx>
 #include <cfrstd.hxx>
 #include "hi_ary.hxx"
@@ -54,13 +55,13 @@ extern const String C_sCssFilename_Idl;
 inline bool
 HtmlDisplay_Idl::IsModule( const ary::idl::CodeEntity & i_ce ) const
 {
-     return i_ce.ClassId() == ary::idl::Module::class_id;
+     return ary::is_type<ary::idl::Module>(i_ce);
 }
 
 inline const ary::idl::Module &
 HtmlDisplay_Idl::Module_Cast( const ary::idl::CodeEntity & i_ce ) const
 {
-     return static_cast< const ary::idl::Module& >(i_ce);
+     return ary::ary_cast<ary::idl::Module>(i_ce);
 }
 
 
@@ -136,9 +137,10 @@ typedef ary::StdConstIterator<ary::idl::Ce_id>      CeIterator;
 void
 HtmlDisplay_Idl::RecursiveDisplay_Module( const ary::idl::Module & i_module )
 {
-    i_module.Visit(*pMainDisplay);
+    i_module.Accept(*pMainDisplay);
 
-    Dyn_CeIterator  aMembers;
+    Dyn_CeIterator
+        aMembers;
     i_module.Get_Names(aMembers);
 
     for ( CeIterator & iter = *aMembers;
@@ -149,7 +151,7 @@ HtmlDisplay_Idl::RecursiveDisplay_Module( const ary::idl::Module & i_module )
             rCe = pCurPageEnv->Data().Find_Ce(*iter);
 
         if ( NOT IsModule(rCe) )
-            rCe.Visit(*pMainDisplay);
+            rCe.Accept(*pMainDisplay);
         else
         {
             pCurPageEnv->Goto_DirectoryLevelDown( rCe.LocalName(), true );
