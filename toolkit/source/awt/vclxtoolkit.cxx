@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 11:51:21 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:14:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1046,8 +1046,10 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                     #elif defined UNX
                                     aParentData.aWindow = nWindowHandle;
                                     aParentData.bXEmbedSupport = bXEmbed;
-                                    #elif defined WNT || defined OS2
+                                    #elif defined WNT
                                     aParentData.hWnd = reinterpret_cast<HWND>(nWindowHandle);
+                                    #elif defined OS2
+                                    aParentData.hWnd = (HWND)nWindowHandle;
                                     #endif
                                     pNewWindow = new WorkWindow( &aParentData );
                                 }
@@ -1257,8 +1259,10 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             #elif defined UNX
             aParentData.aWindow = nWindowHandle;
             aParentData.bXEmbedSupport = bXEmbed;
-            #elif defined WNT || defined OS2
+            #elif defined WNT
             aParentData.hWnd = reinterpret_cast<HWND>(nWindowHandle);
+            #elif defined OS2
+            aParentData.hWnd = (HWND)nWindowHandle;
             #endif
             osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
             try
