@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pm_class.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:54:28 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:31:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,13 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <ary/cpp/c_disply.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_class.hxx>
 #include <ary/cpp/c_tydef.hxx>
-#include <ary/loc/l_rogate.hxx>
+#include <ary/cpp/cp_ce.hxx>
 #include <ary/loc/loc_file.hxx>
+#include <ary/loc/locp_le.hxx>
+#include <ary/getncast.hxx>
 #include "hd_chlst.hxx"
 #include "hd_docu.hxx"
 #include "hdimpl.hxx"
@@ -61,6 +63,9 @@ using csi::html::Link;
 using csi::html::Table;
 using csi::html::TableRow;
 using csi::html::TableCell;
+
+using ary::cpp::CesConstIterator;
+using ary::doc::OldCppDocu;
 
 const char * const C_sTitle_InnerClasses    = "Classes";
 const char * const C_sTitle_InnerStructs    = "Structs";
@@ -150,6 +155,16 @@ PageMaker_Class::Write_NavBar()
     CurOut() << new HorizontalLine;
 }
 
+inline bool
+IsInterface(const ary::doc::Documentation & i_doc)
+{
+    const OldCppDocu *
+        doc = Get_CppDocu(i_doc);
+    return doc != 0
+            ?   doc->IsInterface()
+            :   false;
+}
+
 void
 PageMaker_Class::Write_TopArea()
 {
@@ -175,7 +190,7 @@ PageMaker_Class::Write_TopArea()
     aFlags.SetColumn( 1, "abstract",
                       Me().Virtuality() == ary::cpp::VIRTUAL_abstract );
     aFlags.SetColumn( 2, "interface",
-                      Me().Info().IsInterface()
+                      IsInterface(Me().Docu())
                       OR  Me().Virtuality() == ary::cpp::VIRTUAL_abstract );
     aFlags.SetColumn( 3, "template",
                       Me().TemplateParameters().size() > 0 );
@@ -187,19 +202,17 @@ PageMaker_Class::Write_DocuArea()
     Docu_Display aDocuShow( Env() );
 
     aDocuShow.Assign_Out(CurOut());
-    Me().StoreAt( aDocuShow );
+    Me().Accept( aDocuShow );
     aDocuShow.Unassign_Out();
 
-    ary::loc::SourceCodeFile *
-        pFile = Env().Gate().RoLocations().Find_File( Me().Location() );
-    if (pFile != 0)
-    {
-        adcdisp::ExplanationList
-            aFileText( CurOut() );
-        aFileText.AddEntry("File");
-        aFileText.Def()
-            << pFile->Name();
-    }
+    ary::loc::File &
+        rFile = Env().Gate().Locations().Find_File( Me().Location() );
+
+    adcdisp::ExplanationList
+        aFileText( CurOut() );
+    aFileText.AddEntry("File");
+    aFileText.Def()
+        << rFile.LocalName();
 
     CurOut() << new HorizontalLine;
 }
@@ -309,9 +322,9 @@ PageMaker_Class::Write_ChildList( ary::SlotAccessId   i_nSlot,
     ChildList_Display::Area_Result
             aPrivate_Result( bPrivate_ChildrenExist, o_rPrivate );
 
-    udmstri sLabelPublic = ChildListLabel(i_sLabel, mp_public);
-    udmstri sLabelProtected = ChildListLabel(i_sLabel, mp_protected);
-    udmstri sLabelPrivate = ChildListLabel(i_sLabel, mp_private);
+    String sLabelPublic = ChildListLabel(i_sLabel, mp_public);
+    String sLabelProtected = ChildListLabel(i_sLabel, mp_protected);
+    String sLabelPrivate = ChildListLabel(i_sLabel, mp_private);
 
     pChildDisplay->Run_Members( aPublic_Result,
                                 aProtected_Result,
@@ -356,9 +369,9 @@ PageMaker_Class::Write_ChildList_forClasses( csi::xml::Element &    o_rPublic,
     ChildList_Display::Area_Result
             aPrivate_Result( bPrivate_ChildrenExist, o_rPrivate );
 
-    udmstri sLabelPublic = ChildListLabel(i_sLabel, mp_public);
-    udmstri sLabelProtected = ChildListLabel(i_sLabel, mp_protected);
-    udmstri sLabelPrivate = ChildListLabel(i_sLabel, mp_private);
+    String sLabelPublic = ChildListLabel(i_sLabel, mp_public);
+    String sLabelProtected = ChildListLabel(i_sLabel, mp_protected);
+    String sLabelPrivate = ChildListLabel(i_sLabel, mp_private);
 
     pChildDisplay->Run_MemberClasses( aPublic_Result,
                                       aProtected_Result,
@@ -444,10 +457,11 @@ PageMaker_Class::Create_NaviSubRow( E_MemberProtection i_eMpr )
 void
 PageMaker_Class::Write_DerivedList()
 {
-    adcdisp::ExplanationList aDeriveds( CurOut() );
+    adcdisp::ExplanationList
+        aDeriveds( CurOut() );
     aDeriveds.AddEntry( "Known Derived Classes" );
 
-    if ( Me().KnownDerivatives().size() == 0 )
+    if ( Me().KnownDerivatives().Size() == 0 )
     {
         aDeriveds.Def() << "None.";
         return;
@@ -455,12 +469,14 @@ PageMaker_Class::Write_DerivedList()
 
     typedef ary::List_Rid  RidList;
 
-    for ( RidList::const_iterator it = Me().KnownDerivatives().begin();
-          it != Me().KnownDerivatives().end();
+    CesConstIterator
+        itEnd = Me().KnownDerivatives().End();
+    for ( CesConstIterator it = Me().KnownDerivatives().Begin();
+          it != itEnd;
           ++it )
     {
-        const ary::CodeEntity &
-            rCe = Env().Gate().Ref_Ce(*it);
+        const ary::cpp::CodeEntity &
+            rCe = Env().Gate().Ces().Find_Ce(*it);
 
         aDeriveds.Def()
             >> *new html::Link( Link2Ce(Env(),rCe) )
@@ -483,8 +499,8 @@ class Node
                         Node(
                             const ary::cpp::Class &
                                                 i_rClass,
-                            ary::Tid            i_nClassType,
-                            const ary::cpp::DisplayGate &
+                            ary::cpp::Type_id   i_nClassType,
+                            const ary::cpp::Gate &
                                                 i_rGate,
                             intt                i_nPositionOffset,
                             Node *              io_pDerived = 0,
@@ -517,10 +533,10 @@ class Node
     intt                nCountBases;
     Node *              pDerived;
 
-    udmstri             sName;
+    String              sName;
     const ary::cpp::Class *
                         pClass;
-    ary::Tid            nClassType;
+    ary::cpp::Type_id   nClassType;
     ary::cpp::E_Protection
                         eProtection;
     bool                bVirtual;
@@ -536,9 +552,9 @@ void                WriteNodeHierarchy(
 
 const ary::cpp::Class *
                     HereFind_Class(
-                        const ary::cpp::DisplayGate &
+                        const ary::cpp::Gate &
                                             i_rGate,
-                        ary::Tid            i_nReferingTypeId );
+                        ary::cpp::Type_id   i_nReferingTypeId );
 
 }   // anonymous namespace
 
@@ -555,7 +571,7 @@ PageMaker_Class::Write_BaseHierarchy()
     else
     {
         Dyn< Node >
-            pBaseGraph( new Node(Me(), 0, Env().Gate(), 0) );
+            pBaseGraph( new Node(Me(), ary::cpp::Type_id(0), Env().Gate(), 0) );
         WriteNodeHierarchy( aBases.Def(), Env(), *pBaseGraph );
     }
 }
@@ -635,45 +651,46 @@ WriteNodeHierarchy( csi::xml::Element &             o_rOut,
 }
 
 const ary::cpp::Class *
-HereFind_Class( const ary::cpp::DisplayGate & i_rGate,
-                ary::Tid                      i_nReferingTypeId )
+HereFind_Class( const ary::cpp::Gate & i_rGate,
+                ary::cpp::Type_id      i_nReferingTypeId )
 {
-    const ary::CodeEntity * pCe = i_rGate.Search_RelatedCe( i_nReferingTypeId );
+    const ary::cpp::CodeEntity *
+        pCe = i_rGate.Search_RelatedCe( i_nReferingTypeId );
 
     if ( pCe != 0 )
     {
-        if  (pCe->RC() == ary::cpp::Class::RC_())
+        if  ( ary::is_type<ary::cpp::Class>(*pCe) )
         {
-            return static_cast< const ary::cpp::Class* >(pCe);
+            return ary::ary_cast<ary::cpp::Class>(pCe);
         }
-        else if (pCe->RC() == ary::cpp::Typedef::RC_())
+        else if ( ary::is_type<ary::cpp::Typedef>(*pCe) )
         {
             const ary::cpp::Typedef *
-                pTydef = static_cast< const ary::cpp::Typedef* >(pCe);
+                pTydef = ary::ary_cast<ary::cpp::Typedef>(pCe);
             return  HereFind_Class( i_rGate, pTydef->DescribingType() );
         }
     }
 
-    static const ary::cpp::Class aClassNull_( 0,
-                                              "Base class not found",
-                                              0,
+    static const ary::cpp::Class aClassNull_( "Base class not found",
+                                              ary::cpp::Ce_id(0),
                                               ary::cpp::PROTECT_global,
-                                              0,
+                                              ary::loc::Le_id(0),
                                               ary::cpp::CK_class );
     return &aClassNull_;
 }
 
 
+
 //*********************        Node        ***********************//
 
 Node::Node( const ary::cpp::Class &         i_rClass,
-            ary::Tid                        i_nClassType,
-            const ary::cpp::DisplayGate &   i_rGate,
+            ary::cpp::Type_id               i_nClassType,
+            const ary::cpp::Gate &          i_rGate,
             intt                            i_nPositionOffset,
             Node *                          io_pDerived,
             ary::cpp::E_Protection          i_eProtection,
             bool                            i_bVirtual )
-    :   // aBases,
+    :   aBases(),
         nCountBases(0),
         pDerived(io_pDerived),
         pClass(&i_rClass),
@@ -690,15 +707,6 @@ Node::Node( const ary::cpp::Class &         i_rClass,
     {
         const ary::cpp::Class *
                 pBaseClass = HereFind_Class( i_rGate, (*it).nId );
-
-#if 0 // only for debugging
-        if ( pBaseClass->Id() == 0 )
-        {
-          Cerr() << "\nWarning: A baseclass not found of class "
-                 << i_rClass.LocalName()
-                 << Endl();
-        }
-#endif // 0
 
         Dyn<Node>
             pBase( new Node(*pBaseClass,
