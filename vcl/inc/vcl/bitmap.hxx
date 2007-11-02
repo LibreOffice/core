@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:28:58 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:43:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,7 +257,7 @@ class   SalBitmap;
 
 struct BitmapSystemData
 {
-    #if defined WNT
+    #if defined( WNT ) || defined( OS2 )
     void* pDIB; // device independent byte buffer
     void* pDDB; // if not NULL then this is actually an HBITMAP
     #elif defined( QUARTZ )
