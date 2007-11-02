@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cre_link.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:50:43 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,18 +38,19 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <ary/cpp/c_disply.hxx>
 #include <ary/cpp/c_class.hxx>
 #include <ary/cpp/c_define.hxx>
 #include <ary/cpp/c_enum.hxx>
-#include <ary/cpp/c_tydef.hxx>
+#include <ary/cpp/c_enuval.hxx>
 #include <ary/cpp/c_funct.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_macro.hxx>
 #include <ary/cpp/c_namesp.hxx>
+#include <ary/cpp/c_tydef.hxx>
 #include <ary/cpp/c_vari.hxx>
-#include <ary/cpp/c_enuval.hxx>
-#include <ary/cpp/cg_file.hxx>
-#include <ary/cpp/crog_grp.hxx>
+#include <ary/cpp/cp_ce.hxx>
+#include <ary/loc/loc_file.hxx>
+#include <ary/loc/locp_le.hxx>
 #include "hdimpl.hxx"
 #include "opageenv.hxx"
 #include "strconst.hxx"
@@ -71,35 +72,35 @@ LinkCreator::~LinkCreator()
 }
 
 void
-LinkCreator::Display_Namespace( const ary::cpp::Namespace & i_rData )
+LinkCreator::do_Process( const ary::cpp::Namespace & i_rData )
 {
     Create_PrePath( i_rData );
-    strcat( pOut, "index.html" );   // KORR   // SAFE STRCAT (#100211# - checked)
+    strcat( pOut, "index.html" );   // KORR_FUTURE   // SAFE STRCAT (#100211# - checked)
 }
 
 void
-LinkCreator::Display_Class( const ary::cpp::Class & i_rData )
+LinkCreator::do_Process( const ary::cpp::Class & i_rData )
 {
     Create_PrePath( i_rData );
     strcat( pOut, ClassFileName(i_rData.LocalName().c_str()) ); // SAFE STRCAT (#100211# - checked)
 }
 
 void
-LinkCreator::Display_Enum( const ary::cpp::Enum & i_rData )
+LinkCreator::do_Process( const ary::cpp::Enum & i_rData )
 {
     Create_PrePath( i_rData );
     strcat( pOut, EnumFileName(i_rData.LocalName().c_str()) ); // SAFE STRCAT (#100211# - checked)
 }
 
 void
-LinkCreator::Display_Typedef( const ary::cpp::Typedef & i_rData )
+LinkCreator::do_Process( const ary::cpp::Typedef & i_rData )
 {
     Create_PrePath( i_rData );
     strcat( pOut, TypedefFileName(i_rData.LocalName().c_str()) ); // SAFE STRCAT (#100211# - checked)
 }
 
 void
-LinkCreator::Display_Function( const ary::cpp::Function & i_rData )
+LinkCreator::do_Process( const ary::cpp::Function & i_rData )
 {
     Create_PrePath( i_rData );
 
@@ -109,21 +110,18 @@ LinkCreator::Display_Function( const ary::cpp::Function & i_rData )
     }
     else
     {
-        const ary::cpp::FileGroup *
-            pFile = pEnv->Gate().RoGroups().Search_FileGroup(i_rData.Location());
-        if (  pFile == 0 )
-        {
-             *pOut = NULCH;
-            return;
-        }
-        strcat( pOut, HtmlFileName("o-", pFile->FileName().c_str()) ); // SAFE STRCAT (#100211# - checked)
+        csv_assert(i_rData.Location().IsValid());
+        const ary::loc::File &
+            rFile = pEnv->Gate().Locations().Find_File(i_rData.Location());
+        strcat( pOut, HtmlFileName("o-", rFile.LocalName().c_str()) ); // SAFE STRCAT (#100211# - checked)
     }
 
-    strcat( pOut, OperationLink(i_rData.LocalName(), i_rData.Signature()) ); // SAFE STRCAT (#100211# - checked)
+    csv_assert(pEnv != 0);
+    strcat( pOut, OperationLink(pEnv->Gate(), i_rData.LocalName(), i_rData.CeId()) ); // SAFE STRCAT (#100211# - checked)
 }
 
 void
-LinkCreator::Display_Variable( const ary::cpp::Variable & i_rData )
+LinkCreator::do_Process( const ary::cpp::Variable & i_rData )
 {
     Create_PrePath( i_rData );
 
@@ -133,52 +131,48 @@ LinkCreator::Display_Variable( const ary::cpp::Variable & i_rData )
     }
     else
     {
-        const ary::cpp::FileGroup *
-            pFile = pEnv->Gate().RoGroups().Search_FileGroup(i_rData.Location());
-        if (  pFile == 0 )
-        {
-             *pOut = NULCH;
-            return;
-        }
-        strcat( pOut, HtmlFileName("d-", pFile->FileName().c_str()) );  // SAFE STRCAT (#100211# - checked)
+        csv_assert(i_rData.Location().IsValid());
+        const ary::loc::File &
+            rFile = pEnv->Gate().Locations().Find_File(i_rData.Location());
+        strcat( pOut, HtmlFileName("d-", rFile.LocalName().c_str()) );  // SAFE STRCAT (#100211# - checked)
     }
 
     strcat( pOut, DataLink(i_rData.LocalName()) );  // SAFE STRCAT (#100211# - checked)
 }
 
 void
-LinkCreator::Display_EnumValue( const ary::cpp::EnumValue & i_rData )
+LinkCreator::do_Process( const ary::cpp::EnumValue & i_rData )
 {
-    const ary::CodeEntity *
-        pEnum = pEnv->Gate().Find_Ce(i_rData.Owner());
+    const ary::cpp::CodeEntity *
+        pEnum = pEnv->Gate().Ces().Search_Ce(i_rData.Owner());
     if (pEnum == 0)
         return;
 
-    pEnum->StoreAt(*this);
+    pEnum->Accept(*this);
     strcat(pOut, "#");      // SAFE STRCAT (#100211# - checked)
     strcat(pOut, i_rData.LocalName().c_str());  // SAFE STRCAT (#100211# - checked)
 }
 
 void
-LinkCreator::Display_Define( const ary::cpp::Define & i_rData )
+LinkCreator::do_Process( const ary::cpp::Define & i_rData )
 {
-    // KORR
+    // KORR_FUTURE
     // Only valid from Index:
 
     *pOut = '\0';
     strcat(pOut, "../def-all.html#");               // SAFE STRCAT (#100211# - checked)
-    strcat(pOut, i_rData.DefinedName().c_str());    // SAFE STRCAT (#100211# - checked)
+    strcat(pOut, i_rData.LocalName().c_str());      // SAFE STRCAT (#100211# - checked)
 }
 
 void
-LinkCreator::Display_Macro( const ary::cpp::Macro & i_rData )
+LinkCreator::do_Process( const ary::cpp::Macro & i_rData )
 {
-    // KORR
+    // KORR_FUTURE
     // Only valid from Index:
 
     *pOut = '\0';
     strcat(pOut, "../def-all.html#");               // SAFE STRCAT (#100211# - checked)
-    strcat(pOut, i_rData.DefinedName().c_str());    // SAFE STRCAT (#100211# - checked)
+    strcat(pOut, i_rData.LocalName().c_str());    // SAFE STRCAT (#100211# - checked)
 }
 
 
@@ -189,36 +183,36 @@ class NameScope_const_iterator
 {
   public:
                         NameScope_const_iterator(
-                            ary::Rid            i_nId,
-                            const ary::cpp::DisplayGate &
+                            ary::cpp::Ce_id     i_nId,
+                            const ary::cpp::Gate &
                                                 i_rGate );
 
                         operator bool() const   { return pCe != 0; }
-    const udmstri &     operator*() const;
+    const String  &     operator*() const;
 
     void                go_up();
 
   private:
-    const ary::CodeEntity *
+    const ary::cpp::CodeEntity *
                         pCe;
-    const ary::cpp::DisplayGate *
+    const ary::cpp::Gate *
                         pGate;
 };
 
 
 NameScope_const_iterator::NameScope_const_iterator(
-                                        ary::Rid                        i_nId,
-                                        const ary::cpp::DisplayGate &   i_rGate )
-    :   pCe(i_rGate.Find_Ce(i_nId)),
+                                        ary::cpp::Ce_id         i_nId,
+                                        const ary::cpp::Gate &  i_rGate )
+    :   pCe(i_rGate.Ces().Search_Ce(i_nId)),
         pGate(&i_rGate)
 {
 }
 
-const udmstri &
+const String  &
 NameScope_const_iterator::operator*() const
 {
      return pCe ? pCe->LocalName()
-               : udmstri::Null_();
+               : String::Null_();
 }
 
 void
@@ -226,7 +220,7 @@ NameScope_const_iterator::go_up()
 {
      if (pCe == 0)
         return;
-    pCe = pGate->Find_Ce(pCe->Owner());
+    pCe = pGate->Ces().Search_Ce(pCe->Owner());
 }
 
 
@@ -260,15 +254,15 @@ Recursive_CreatePath( char *                            o_pOut,
 
 
 void
-LinkCreator::Create_PrePath( const ary::CodeEntity & i_rData )
+LinkCreator::Create_PrePath( const ary::cpp::CodeEntity & i_rData )
 {
     *pOut = NULCH;
 
     if ( pEnv->CurNamespace() != 0 )
     {
         if ( pEnv->CurClass()
-                ?   pEnv->CurClass()->Id() == i_rData.Owner()
-                :   pEnv->CurNamespace()->Id() == i_rData.Owner() )
+                ?   pEnv->CurClass()->CeId() == i_rData.Owner()
+                :   pEnv->CurNamespace()->CeId() == i_rData.Owner() )
             return;
 
         strcat( pOut, PathUp(pEnv->Depth() - 1) );      // SAFE STRCAT (#100211# - checked)
@@ -281,5 +275,3 @@ LinkCreator::Create_PrePath( const ary::CodeEntity & i_rData )
     NameScope_const_iterator it( i_rData.Owner(), pEnv->Gate() );
     Recursive_CreatePath( pOut, it );
 }
-
-
