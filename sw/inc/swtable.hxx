@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:07:47 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 14:40:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ class SwPaM;
 class SwTableBox_Impl;
 class SwUndoTblCpyTbl;
 class SwBoxSelection;
+struct SwSaveRowSpan;
 struct Parm;
 
 #ifndef SW_DECL_SWSERVEROBJECT_DEFINED
@@ -210,6 +211,16 @@ public:
     void CreateSelection( const SwNode* pStart, const SwNode* pEnd,
         SwSelBoxes& rBoxes, const SearchType eSearchType, bool bProtect ) const;
     void ExpandSelection( SwSelBoxes& rBoxes ) const;
+    // When a table is splitted into two tables, the row spans which overlaps
+    // the split have to be corrected and stored for undo
+    // SwSavRowSpan is the structure needed by Undo to undo the split operation
+    // CleanUpRowSpan corrects the (top of the) second table and delviers the structure
+    // for Undo
+    SwSaveRowSpan* CleanUpTopRowSpan( USHORT nSplitLine );
+    // RestoreRowSpan is called by Undo to restore the old row span values
+    void RestoreRowSpan( const SwSaveRowSpan& );
+    // CleanUpBottomRowSpan corrects the overhanging row spans at the end of the first table
+    void CleanUpBottomRowSpan( USHORT nDelLines );
 
 
 // The following functions are "pseudo-virtual", i.e. they are different for old and new table model
