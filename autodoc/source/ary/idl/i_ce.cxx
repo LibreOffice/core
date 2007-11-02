@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_ce.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:30:48 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,8 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <ary/idl/ihost_ce.hxx>
-#include <ary_i/codeinf2.hxx>
-#include <getncast.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
+#include <ary/getncast.hxx>
 
 
 namespace ary
@@ -56,7 +55,7 @@ namespace
 
 
 CodeEntity::CodeEntity()
-    :   pDocu(0),
+    :   aDocu(),
         p2s(0)
 {
 }
@@ -78,27 +77,12 @@ CodeEntity::Secondaries()
 {
     if (p2s)
         return *p2s;
-    p2s = Ce_2s::Create_(ClassId());
+    p2s = Ce_2s::Create_(AryClass());
     return *p2s;
 }
 
-void
-CodeEntity::Set_Docu( DYN ary::info::CodeInformation * pass_dpDocu )
-{
-    pDocu = pass_dpDocu;
-}
 
-void
-CodeEntity::do_Visit(::ary::Host & o_rHost) const
-{
-    CeHost *
-        pHost = ptr_cast( &o_rHost, T2T<CeHost>() );
-     if ( pHost != 0 )
-        do_Visit_CeHost(*pHost);
-}
 
 
 }   // namespace idl
 }   // namespace ary
-
-
