@@ -4,9 +4,9 @@
  *
  *  $RCSfile: it_explicit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:54:26 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:57:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,20 +36,16 @@
 #ifndef ARY_IDL_IT_EXPLICIT_HXX
 #define ARY_IDL_IT_EXPLICIT_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include "it_named.hxx"
-    // COMPONENTS
-    // PARAMETERS
+
+
 
 
 namespace ary
 {
 namespace idl
 {
-
 
 
 /** A named @->Type, not yet related to its corresponding
@@ -75,9 +71,11 @@ class ExplicitType : public Named_Type
     Type_id             TemplateType() const    { return nTemplateType; }
 
   private:
-    // Interface RepositoryEntity:
-    virtual void        do_Visit( Host & io_rHost ) const;
-    virtual RCid        inq_ClassId() const;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface CppEntity:
+    virtual ClassId     get_AryClass() const;
 
     // Interface Type:
     virtual void        inq_Get_Text(
@@ -96,8 +94,7 @@ class ExplicitType : public Named_Type
 
 
 
+
 }   // namespace idl
 }   // namespace ary
-
-
 #endif

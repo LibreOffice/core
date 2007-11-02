@@ -4,9 +4,9 @@
  *
  *  $RCSfile: it_xnameroom.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:56:33 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:58:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,11 @@
 #ifndef ARY_IDL_IT_XNAMEROOM_HXX
 #define ARY_IDL_IT_XNAMEROOM_HXX
 
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <ary/idl/i_type.hxx>
 #include <nametreenode.hxx>
-    // COMPONENTS
-    // PARAMETERS
+
+
 
 
 namespace ary
@@ -107,9 +105,11 @@ class ExplicitNameRoom : public Type
                         NameChain_End() const
                             { return aImpl.NameChain_End(); }
   private:
-    // Interface RepositoryEntity:
-    virtual void        do_Visit( Host & io_rHost ) const;
-    virtual RCid        inq_ClassId() const;
+    // Interface csv::ConstProcessorClient:
+    virtual void        do_Accept(
+                            csv::ProcessorIfc & io_processor ) const;
+    // Interface Object:
+    virtual ClassId     get_AryClass() const;
 
     // Interface Type:
     virtual void        inq_Get_Text(
@@ -124,8 +124,8 @@ class ExplicitNameRoom : public Type
 };
 
 
+
+
 }   // namespace idl
 }   // namespace ary
-
-
 #endif
