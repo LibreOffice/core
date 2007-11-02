@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-11-02 13:05:03 $
+dnl * Date: $Date: 2007-11-02 15:23:00 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.226 $ )
+AC_REVISION( $Revision: 1.227 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -5194,6 +5194,9 @@ AC_SUBST(XINERAMA_LINK)
 AC_CHECK_SIZEOF(long)
 SIZEOF_LONG=$ac_cv_sizeof_long
 AC_SUBST(SIZEOF_LONG)
+AC_C_BIGENDIAN
+WORDS_BIGENDIAN=$ac_cv_c_bigendian
+AC_SUBST(WORDS_BIGENDIAN)
 
 dnl ===================================================================
 dnl Test for the presence of Ant and that it works
