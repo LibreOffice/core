@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opageenv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:53:19 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:29:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,21 +39,22 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <cosv/ploc_dir.hxx>
-#include <ary/ce.hxx>
-#include <ary/cpp/c_disply.hxx>
-#include <ary/cpp/cg_file.hxx>
-#include <ary/cpp/c_namesp.hxx>
+#include <ary/cpp/c_ce.hxx>
 #include <ary/cpp/c_class.hxx>
 #include <ary/cpp/c_enum.hxx>
+#include <ary/cpp/c_gate.hxx>
+#include <ary/cpp/c_namesp.hxx>
 #include <ary/cpp/c_tydef.hxx>
+#include <ary/cpp/cp_ce.hxx>
+#include <ary/loc/loc_file.hxx>
 #include <udm/html/htmlitem.hxx>
+#include <estack.hxx>
 #include "hdimpl.hxx"
 #include "strconst.hxx"
-#include <estack.hxx>
 
-const udmstri C_sProjectDir( "prj" );
-const udmstri C_sCppDir( "names" );
-const udmstri C_sIndexDir( "ix" );
+
+const String  C_sCppDir( "names" );
+const String  C_sIndexDir( "ix" );
 
 
 //************************         Implementation          ********************//
@@ -61,11 +62,11 @@ const udmstri C_sIndexDir( "ix" );
 namespace
 {
 
-void    CreateDirectory( const udmstri &            i_sPath );
+void    CreateDirectory( const String  &            i_sPath );
 void    CreateDirectory( const csv::ploc::Path &    i_rPath );
 
 void
-CreateDirectory( const udmstri & i_sPath )
+CreateDirectory( const String  & i_sPath )
 {
     csv::ploc::Directory aDirectory(i_sPath);
     if (NOT aDirectory.Exists())
@@ -97,7 +98,7 @@ struct InNamespaceTree
                         aNamespaces; /// never empty.
     EStack< const ary::cpp::Class * >
                         aClasses;      /// maybe empty.
-    const ary::CodeEntity *
+    const ary::cpp::CodeEntity *
                         pCe;        /// CurFileCe, maybe 0
     E_Type              eType;
 
@@ -155,22 +156,6 @@ InNamespaceTree::GoUp()
     eType = t_unknown;
 }
 
-struct InProjectTree
-{
-    enum E_Type
-    {
-        t_project,
-        t_file,
-        t_defs
-    };
-
-    const ary::cpp::ProjectGroup *
-                        pProject;       /// Always != 0.
-    const ary::cpp::FileGroup *
-                        pFile;          /// Maybe 0.
-    E_Type              eType;
-};
-
 struct InIndex
 {
     char                cLetter;
@@ -191,7 +176,7 @@ struct OuputPage_Environment::CheshireCat
     csv::ploc::Path     aMyPath;
     csv::StreamStr      aFileName;
 
-    const ary::cpp::DisplayGate *
+    const ary::cpp::Gate *
                         pGate;
     const display::CorporateFrame *
                         pLayout;
@@ -199,19 +184,18 @@ struct OuputPage_Environment::CheshireCat
 
     Dyn<InNamespaceTree>
                         pInNamespace;
-    Dyn<InProjectTree>  pInProject;
     Dyn<InIndex>        pInIndex;
 
                         CheshireCat(
                             const csv::ploc::Path &
                                                 io_rOutputDir,
-                            const ary::cpp::DisplayGate &
+                            const ary::cpp::Gate &
                                                 i_rGate,
                             const display::CorporateFrame &
                                                 i_rLayout );
                         ~CheshireCat();
     void                AddQualifiedName2Path(
-                            const ary::CodeEntity &
+                            const ary::cpp::CodeEntity &
                                                 i_rCe,
                             bool                i_bIncludeLocalName );
 
@@ -227,17 +211,16 @@ struct OuputPage_Environment::CheshireCat
 
 OuputPage_Environment::
 CheshireCat::CheshireCat( const csv::ploc::Path &         io_rOutputDir,
-                          const ary::cpp::DisplayGate &   i_rGate,
+                          const ary::cpp::Gate &   i_rGate,
                           const display::CorporateFrame & i_rLayout )
     :   aOutputRoot(io_rOutputDir),
         aMyPath(io_rOutputDir),
         aFileName(500),
         pGate(&i_rGate),
         pLayout(&i_rLayout),
-        nDepth(0)
-        // pInNamespace,
-        // pInProject,
-        // pInIndex
+        nDepth(0),
+        pInNamespace(),
+        pInIndex()
 {
 }
 
@@ -248,18 +231,18 @@ CheshireCat::~CheshireCat()
 
 void
 OuputPage_Environment::
-CheshireCat::AddQualifiedName2Path( const ary::CodeEntity & i_rCe,
+CheshireCat::AddQualifiedName2Path( const ary::cpp::CodeEntity & i_rCe,
                                     bool                    i_bIncludeLocalName )
 {
-    if ( i_rCe.Owner() == 0 )
+    if (NOT i_rCe.Owner().IsValid())
     {
         aMyPath.DirChain().PushBack( C_sCppDir );
         return;
     }
 
-    const ary::CodeEntity * pParent = pGate->Find_Ce( i_rCe.Owner() );
-    csv_assert( pParent != 0 );
-    AddQualifiedName2Path( *pParent, true );
+    const ary::cpp::CodeEntity &
+        rParent = pGate->Ces().Find_Ce( i_rCe.Owner() );
+    AddQualifiedName2Path( rParent, true );
 
     if ( i_bIncludeLocalName )
         aMyPath.DirChain().PushBack( i_rCe.LocalName() );
@@ -270,7 +253,7 @@ CheshireCat::AddQualifiedName2Path( const ary::CodeEntity & i_rCe,
 //************************         OuputPage_Environment          ********************//
 
 OuputPage_Environment::OuputPage_Environment( const csv::ploc::Path &           io_rOutputDir,
-                                              const ary::cpp::DisplayGate &     i_rGate,
+                                              const ary::cpp::Gate &            i_rGate,
                                               const display::CorporateFrame &   i_rLayout )
     :   pi( new CheshireCat(io_rOutputDir, i_rGate, i_rLayout) )
 {
@@ -284,34 +267,35 @@ void
 OuputPage_Environment::MoveDir_2Root()
 {
     pi->NspEnv() = 0;
-    pi->pInProject = 0;
     pi->pInIndex = 0;
     pi->nDepth = 0;
     while ( pi->aMyPath.DirChain().Size() > pi->aOutputRoot.DirChain().Size() )
         pi->aMyPath.DirChain().PopBack();
-    pi->aMyPath.SetFile(udmstri::Null_());
+    pi->aMyPath.SetFile(String ::Null_());
+}
+
+void
+OuputPage_Environment::MoveDir_2Names()
+{
+    pi->NspEnv() = new InNamespaceTree( Gate().Ces().GlobalNamespace() );
+    pi->aMyPath.DirChain().PushBack( C_sCppDir );
+    pi->aMyPath.SetFile(String ::Null_());
+    ++pi->nDepth;
+
+       CreateDirectory( pi->aMyPath );
 }
 
 void
 OuputPage_Environment::MoveDir_Down2( const ary::cpp::Namespace & i_rNsp )
 {
-    if ( pi->NspEnv() )
-    {
-         csv_assert( pi->Namespace()->Id() == i_rNsp.Owner() );
-        pi->NspEnv()->GoDown( i_rNsp );
-        pi->aMyPath.DirChain().PushBack(i_rNsp.LocalName());
-    }
-    else
-    {
-        csv_assert( i_rNsp.Owner() == 0 );
+    csv_assert(i_rNsp.Depth() > 0);
+    csv_assert( pi->NspEnv() );
+    csv_assert( pi->Namespace()->CeId() == i_rNsp.Owner() );
 
-        MoveDir_2Root();
-        pi->NspEnv() = new InNamespaceTree( i_rNsp );
-        pi->aMyPath.DirChain().PushBack( C_sCppDir );
-    }
-
-    pi->aMyPath.SetFile(udmstri::Null_());
+    pi->NspEnv()->GoDown( i_rNsp );
+    pi->aMyPath.DirChain().PushBack(i_rNsp.LocalName());
     ++pi->nDepth;
+    pi->aMyPath.SetFile(String ::Null_());
 
        CreateDirectory( pi->aMyPath );
 }
@@ -322,26 +306,20 @@ OuputPage_Environment::MoveDir_Down2( const ary::cpp::Class & i_rClass )
     csv_assert( pi->NspEnv() );
     if ( i_rClass.Protection() == ary::cpp::PROTECT_global )
     {
-        csv_assert( pi->Namespace()->Id() == i_rClass.Owner() );
+        csv_assert( pi->Namespace()->CeId() == i_rClass.Owner() );
     }
     else
     {
         csv_assert( pi->Class() != 0 );
-        csv_assert( pi->Class()->Id() == i_rClass.Owner() );
+        csv_assert( pi->Class()->CeId() == i_rClass.Owner() );
     }
 
     pi->NspEnv()->GoDown(i_rClass);
     pi->aMyPath.DirChain().PushBack(i_rClass.LocalName());
-    pi->aMyPath.SetFile(udmstri::Null_());
+    pi->aMyPath.SetFile(String ::Null_());
     ++pi->nDepth;
 
        CreateDirectory( pi->aMyPath );
-}
-
-void
-OuputPage_Environment::MoveDir_2Project( const ary::cpp::ProjectGroup & )
-{
-    // KORR_FUTURE
 }
 
 void
@@ -349,8 +327,8 @@ OuputPage_Environment::MoveDir_2Index()
 {
     MoveDir_2Root();
     pi->pInIndex = new InIndex;
-    pi->aMyPath.DirChain().PushBack( udmstri(C_sDIR_Index) );
-    pi->aMyPath.SetFile(udmstri::Null_());
+    pi->aMyPath.DirChain().PushBack( String (C_sDIR_Index) );
+    pi->aMyPath.SetFile(String ::Null_());
     pi->nDepth = 1;
 
        CreateDirectory( pi->aMyPath );
@@ -368,17 +346,9 @@ OuputPage_Environment::MoveDir_Up()
     {
         pi->NspEnv()->GoUp();
         pi->aMyPath.DirChain().PopBack();
-        pi->aMyPath.SetFile(udmstri::Null_());
+        pi->aMyPath.SetFile(String ::Null_());
         --pi->nDepth;
     }
-
-/*  // KORR_FUTURE
-    else if ( pi_>pInProject )
-    {
-
-        --pi->nDepth;
-    }
-*/
 }
 
 void
@@ -464,7 +434,7 @@ OuputPage_Environment::SetFile_Typedef( const ary::cpp::Typedef & i_rTypedef )
 }
 
 void
-OuputPage_Environment::SetFile_Operations( const ary::cpp::FileGroup * i_pFile )
+OuputPage_Environment::SetFile_Operations( const ary::loc::File * i_pFile )
 {
     csv_assert( pi->NspEnv() );
     if ( CurClass() != 0 )
@@ -472,14 +442,14 @@ OuputPage_Environment::SetFile_Operations( const ary::cpp::FileGroup * i_pFile )
     else
     {
         csv_assert( i_pFile != 0 );
-        pi->aMyPath.SetFile( HtmlFileName("o-", i_pFile->FileName()) );
+        pi->aMyPath.SetFile( HtmlFileName("o-", i_pFile->LocalName()) );
     }
     pi->NspEnv()->pCe = 0;
     pi->NspEnv()->eType = InNamespaceTree::t_operations;
 }
 
 void
-OuputPage_Environment::SetFile_Data( const ary::cpp::FileGroup * i_pFile )
+OuputPage_Environment::SetFile_Data( const ary::loc::File * i_pFile )
 {
     csv_assert( pi->NspEnv() );
     if ( CurClass() != 0 )
@@ -487,28 +457,10 @@ OuputPage_Environment::SetFile_Data( const ary::cpp::FileGroup * i_pFile )
     else
     {
         csv_assert( i_pFile != 0 );
-        pi->aMyPath.SetFile( HtmlFileName("d-", i_pFile->FileName()) );
+        pi->aMyPath.SetFile( HtmlFileName("d-", i_pFile->LocalName()) );
     }
     pi->NspEnv()->pCe = 0;
     pi->NspEnv()->eType = InNamespaceTree::t_data;
-}
-
-void
-OuputPage_Environment::SetFile_CurProject()
-{
-    // KORR_FUTURE
-}
-
-void
-OuputPage_Environment::SetFile_File( const ary::cpp::FileGroup & )
-{
-    // KORR_FUTURE
-}
-
-void
-OuputPage_Environment::SetFile_Defs( const ary::cpp::FileGroup & )
-{
-    // KORR_FUTURE
 }
 
 const ary::cpp::Namespace *
@@ -529,7 +481,7 @@ OuputPage_Environment::CurPath() const
     return pi->aMyPath;
 }
 
-const ary::cpp::DisplayGate &
+const ary::cpp::Gate &
 OuputPage_Environment::Gate() const
 {
     return *pi->pGate;
@@ -544,7 +496,11 @@ OuputPage_Environment::Layout() const
 uintt
 OuputPage_Environment::Depth() const
 {
-    return pi->nDepth;
+    return static_cast<uintt>(pi->nDepth);
 }
 
-
+const String &
+OuputPage_Environment::RepositoryTitle() const
+{
+    return Gate().RepositoryTitle();
+}
