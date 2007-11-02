@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chd_udk2.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:00:32 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,38 +36,22 @@
 #ifndef ADC_DISPLAY_HTML_CHD_UDK2_HXX
 #define ADC_DISPLAY_HTML_CHD_UDK2_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <autodoc/dsp_html_std.hxx>
-    // COMPONENTS
+// USED SERVICES
 #include <cosv/ploc.hxx>
-    // PARAMETERS
-#include <ary/idlists.hxx>
-
-namespace csv
-{
-    namespace ploc
-    {
-        class Path;
-    }
-}
 
 namespace ary
 {
-    namespace cpp
-    {
-        class Namespace;
-        class ProjectGroup;
-    }
-
-    class TopProject;
-    class CodeEntity;
+namespace cpp
+{
+    class Namespace;
+    class Gate;
+}
 }
 
-// class PageDisplay;
 class OuputPage_Environment;
+
 
 
 
@@ -80,31 +64,23 @@ class CppHtmlDisplay_Udk2 : public autodoc::HtmlDisplay_UdkStd
     // Interface CppHtmlDisplay_UdkStd:
     virtual void        do_Run(
                             const char *        i_sOutputDirectory,
-                            const ary::cpp::DisplayGate &
+                            const ary::cpp::Gate &
                                                 i_rAryGate,
                             const display::CorporateFrame &
-                                                i_rLayout,
-                            const StringVector *
-                                                i_pProjectList );
+                                                i_rLayout );
 
     // Local
-    typedef std::vector< const ary::cpp::ProjectGroup * >   ProjectList;
-
-
     void                SetRunData(
                             const char *        i_sOutputDirectory,
-                            const ary::cpp::DisplayGate &
+                            const ary::cpp::Gate &
                                                 i_rAryGate,
                             const display::CorporateFrame &
-                                                i_rLayout,
-                            const StringVector *
-                                                i_pProjectList );
+                                                i_rLayout );
 
     void                Create_Css_File();
     void                Create_Overview_File();
     void                Create_Help_File();
     void                Create_AllDefs_File();
-    void                CreateFiles_InSubTree_Projects();
     void                CreateFiles_InSubTree_Namespaces();
     void                CreateFiles_InSubTree_Index();
 
@@ -114,24 +90,14 @@ class CppHtmlDisplay_Udk2 : public autodoc::HtmlDisplay_UdkStd
     void                DisplayFiles_InNamespace(
                             const ary::cpp::Namespace &
                                                 i_rNsp );
-    bool                CheckFilters(
-                            const ary::CodeEntity &
-                                                ) const
-                                                { // KORR_FUTURE Check, if project is included, and maybe other filters.
-                                                  return true; }
-    const ary::cpp::DisplayGate &
+    const ary::cpp::Gate &
                         Gate() const;
     // DATA
     Dyn<OuputPage_Environment>
                         pCurPageEnv;
-    ProjectList         aProjectList;
-    bool                bFilterByProjectList;
 };
 
 
 
-// IMPLEMENTATION
-
 
 #endif
-
