@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlaymanagerbuffered.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:55:05 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:19:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,7 +261,7 @@ namespace sdr
                 if(bDoSaveForVisualControl)
                 {
                     const Bitmap aBitmap(maBufferDevice.GetBitmap(aTopLeft, aSize));
-                    SvFileStream aNew(String(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
+                    SvFileStream aNew((const String&)String(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
                     aNew << aBitmap;
                 }
 #endif
