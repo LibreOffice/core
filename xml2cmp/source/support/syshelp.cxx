@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syshelp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:25:54 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:55:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 
 #ifdef WNT
 #include <io.h>
-#elif defined(UNX)
+#elif defined(UNX) || defined(OS2)
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
@@ -212,7 +212,7 @@ GatherFileNames( List<Simstr> &     o_sFiles,
 
     _findclose(hFile);
     delete [] sFilter;
-#elif defined(UNX)
+#elif defined(UNX) || defined(OS2)
     DIR * pDir = opendir( i_sSrcDirectory );
     dirent * pEntry = 0;
     char * sEnding;
@@ -294,7 +294,7 @@ GatherSubDirectories( List<Simstr> &    o_sSubDirectories,
     _findclose(hFile);
     delete [] sFilter;
 
-#elif defined(UNX)
+#elif defined(UNX) || defined(OS2)
     DIR * pDir = opendir( i_sParentdDirectory );
     dirent * pEntry = 0;
     struct stat     aEntryStatus;
