@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_property.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:02:27 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:16:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ class PE_Property : public UnoIDL_PE,
 
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::n22::Repository &
+                            ary::Repository &
                                                 io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_enum2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:00:25 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:14:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ class PE_Enum : public UnoIDL_PE,
                         PE_Enum();
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
-                            ary::n22::Repository &  io_rRepository,
+                            ary::Repository &   io_rRepository,
                             TokenProcessing_Result &
                                                 o_rResult );
                         ~PE_Enum();
