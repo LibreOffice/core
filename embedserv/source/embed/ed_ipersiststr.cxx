@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 11:08:24 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 11:47:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,23 +239,22 @@ EmbedDocument_Impl::~EmbedDocument_Impl()
 
 uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Impl( uno::Reference< io::XInputStream > xStream, DWORD /*nStreamMode*/, LPCOLESTR pFilePath )
 {
-    uno::Sequence< beans::PropertyValue > aArgs( 4 );
+    uno::Sequence< beans::PropertyValue > aArgs( 3 );
 
-    aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "FilterName" ) );
-    aArgs[0].Value <<= getFilterNameFromGUID_Impl( &m_guid );
-    aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ReadOnly" ) );
-    aArgs[1].Value <<= sal_False; //( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
+    sal_Int32 nInd = 0; // must not be bigger than the preset size
+    aArgs[nInd].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "FilterName" ) );
+    aArgs[nInd++].Value <<= getFilterNameFromGUID_Impl( &m_guid );
 
     if ( xStream.is() )
     {
-        aArgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "InputStream" ) );
-        aArgs[2].Value <<= xStream;
-        aArgs[3].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
-        aArgs[3].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "private:stream" ) );
+        aArgs[nInd].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "InputStream" ) );
+        aArgs[nInd++].Value <<= xStream;
+        aArgs[nInd].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
+        aArgs[nInd++].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "private:stream" ) );
     }
     else
     {
-        aArgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
+        aArgs[nInd].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
 
         rtl::OUString sDocUrl;
         if ( pFilePath )
@@ -274,9 +273,13 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
             }
         }
 
-        aArgs[2].Value <<= sDocUrl;
-        aArgs.realloc( 3 );
+        aArgs[nInd++].Value <<= sDocUrl;
     }
+
+    aArgs.realloc( nInd );
+
+    // aArgs[].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ReadOnly" ) );
+    // aArgs[].Value <<= sal_False; //( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
 
     return aArgs;
 }
