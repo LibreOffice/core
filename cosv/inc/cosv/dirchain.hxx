@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dirchain.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:54:48 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:39:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #include <cosv/csv_ostream.hxx>
 
 #include <cosv/persist.hxx>
-#include <cosv/template/tpltools.hxx>
+#include <cosv/tpl/tpltools.hxx>
 
 
 

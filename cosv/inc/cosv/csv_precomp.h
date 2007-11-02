@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csv_precomp.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:54:14 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:39:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #define __CSV_PRECOMP_H_06071998__
 
 
+
+
 #define CSV_USE_CSV_ASSERTIONS
 #include <cosv/csv_env.hxx>
 
@@ -44,11 +46,9 @@
 #include <cosv/string.hxx>
 #include <cosv/streamstr.hxx>
 #include <cosv/std_outp.hxx>
-#include <cosv/template/dyn.hxx>
-
+#include <cosv/tpl/dyn.hxx>
 
 
 
 
 #endif
-
