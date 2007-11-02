@@ -4,9 +4,9 @@
  *
  *  $RCSfile: start.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 16:34:19 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:08:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ static BOOL CallPrePro( const ByteString& rPrePro,
         printf( "\n" );
     }
 
-#if ((defined PM2 || defined WNT) && (defined TCPP || defined tcpp)) || defined UNX || defined OS2
+#if ((defined OS2 || defined WNT) && (defined TCPP || defined tcpp)) || defined UNX || defined OS2
     nExit = spawnvp( P_WAIT, rPrePro.GetBuffer(), (char* const*)pCmdL->GetBlock() );
 #elif defined CSET
     nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), char **) (const char**)pCmdL->GetBlock() );
@@ -269,7 +269,7 @@ static BOOL CallRsc2( ByteString aRsc2Name,
         fclose( fRspFile );
     };
 
-#if ((defined PM2 || defined WNT) && (defined TCPP || defined tcpp)) || defined UNX || defined OS2
+#if ((defined OS2 || defined WNT) && (defined TCPP || defined tcpp)) || defined UNX || defined OS2
     nExit = spawnvp( P_WAIT, aRsc2Name.GetBuffer(), (char* const*)aNewCmdL.GetBlock() );
 #elif defined CSET
     nExit = spawnvp( P_WAIT, (char*)aRsc2Name.GetBuffer(), (char **)(const char**)aNewCmdL.GetBlock() );
@@ -301,7 +301,7 @@ static BOOL CallRsc2( ByteString aRsc2Name,
 |*    Letzte Aenderung  MM 05.09.91
 |*
 *************************************************************************/
-#if defined UNX || (defined PM2 && (defined CSET || defined GCC )) || defined WTC || defined MTW || defined ICC || defined(__MINGW32__)
+#if defined UNX || (defined OS2 && (defined CSET || defined GCC )) || defined WTC || defined MTW || defined ICC || defined(__MINGW32__)
 int main ( int argc, char ** argv)
 {
 #else
