@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_funct.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:02:50 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:55:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,24 +38,27 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
-#include <ary/cpp/inpcontx.hxx>
-#include <ary/cpp/c_rwgate.hxx>
-#include <ary/cpp/c_disply.hxx>
+#include <cosv/tpl/tpltools.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_funct.hxx>
-#include <ary/cpp/ca_type.hxx>
+#include <ary/cpp/c_type.hxx>
+#include <ary/cpp/cp_ce.hxx>
+#include <ary/cpp/cp_type.hxx>
+#include <ary/cpp/inpcontx.hxx>
 #include "pe_type.hxx"
 #include "pe_param.hxx"
 
 
 
 
-namespace cpp {
+namespace cpp
+{
 
 
 inline void
 PE_Function::PerformFinishingPunctuation()
-{ SetTokenResult(not_done,pop_success);
+{
+    SetTokenResult(not_done,pop_success);
 }
 
 
@@ -95,8 +98,8 @@ PE_Function::~PE_Function()
 }
 
 void
-PE_Function::Init_Std( const udmstri &          i_sName,
-                       ary::Tid                 i_nReturnType,
+PE_Function::Init_Std( const String  &          i_sName,
+                       ary::cpp::Type_id        i_nReturnType,
                        bool                     i_bVirtual,
                        ary::cpp::FunctionFlags  i_aFlags )
 {
@@ -108,7 +111,7 @@ PE_Function::Init_Std( const udmstri &          i_sName,
 }
 
 void
-PE_Function::Init_Ctor( const udmstri &         i_sName,
+PE_Function::Init_Ctor( const String  &         i_sName,
                         ary::cpp::FunctionFlags i_aFlags )
 {
     aName << i_sName;
@@ -119,7 +122,7 @@ PE_Function::Init_Ctor( const udmstri &         i_sName,
 }
 
 void
-PE_Function::Init_Dtor( const udmstri &         i_sName,
+PE_Function::Init_Dtor( const String  &         i_sName,
                         bool                    i_bVirtual,
                         ary::cpp::FunctionFlags i_aFlags )
 {
@@ -142,7 +145,7 @@ PE_Function::Init_CastOperator( bool                    i_bVirtual,
 }
 
 void
-PE_Function::Init_NormalOperator( ary::Tid                  i_nReturnType,
+PE_Function::Init_NormalOperator( ary::cpp::Type_id                  i_nReturnType,
                                   bool                      i_bVirtual,
                                   ary::cpp::FunctionFlags   i_aFlags )
 {
@@ -153,7 +156,7 @@ PE_Function::Init_NormalOperator( ary::Tid                  i_nReturnType,
     pStati->SetCur(afterStdOperator);
 }
 
-ary::Cid
+ary::cpp::Ce_id
 PE_Function::Result_Id() const
 {
     return nResult;
@@ -313,32 +316,36 @@ PE_Function::InitData()
 void
 PE_Function::TransferData()
 {
-    udmstri sName( aName.c_str() );
-    ary::cpp::Function & rFunction =
-            Env().AryGate().Store_Operation(
-                    Env().Context(),
-                    sName,
-                    nReturnType,
-                    aParameters,
-                    eVirtuality,
-                    eConVol,
-                    aFlags,
-                    bThrow,
-                    aExceptions );
-
-    Dyn< StringVector >
-            pTplParams ( Env().Get_CurTemplateParameters() );
-    if ( pTplParams )
+    String  sName( aName.c_str() );
+    ary::cpp::Function *
+        pFunction = Env().AryGate().Ces().Store_Operation(
+                                                Env().Context(),
+                                                sName,
+                                                nReturnType,
+                                                aParameters,
+                                                eVirtuality,
+                                                eConVol,
+                                                aFlags,
+                                                bThrow,
+                                                aExceptions );
+    if (pFunction != 0)
     {
-          for ( StringVector::const_iterator it = pTplParams->begin();
-              it !=  pTplParams->end();
-              ++it )
-        {
-            rFunction.Add_TemplateParameterType( *it, 0 );
-        }  // end for
-    }
+        // KORR_FUTURE: How to handle differing documentation?
 
-    Env().Event_Store_Function(rFunction);
+        Dyn< StringVector >
+                pTplParams ( Env().Get_CurTemplateParameters() );
+        if ( pTplParams )
+        {
+              for ( StringVector::const_iterator it = pTplParams->begin();
+                  it !=  pTplParams->end();
+                  ++it )
+            {
+                pFunction->Add_TemplateParameterType( *it, ary::cpp::Type_id(0) );
+            }  // end for
+        }
+
+        Env().Event_Store_Function(*pFunction);
+    }
 
     pStati->SetCur(size_of_states);
 }
@@ -360,8 +367,8 @@ PE_Function::SpReturn_Parameter()
 {
     pStati->SetCur(expectParameterSeparator);
 
-    ary::Tid nParamType = pSpuParameter->Child().Result_FrontType();
-    if ( nParamType != 0 )      // Check, if there was a parameter, or only the closing ')'.
+    ary::cpp::Type_id nParamType = pSpuParameter->Child().Result_FrontType();
+    if ( nParamType.IsValid() )      // Check, if there was a parameter, or only the closing ')'.
     {
         aParameters.push_back( pSpuParameter->Child().Result_ParamInfo() );
     }
@@ -372,8 +379,9 @@ PE_Function::SpReturn_Exception()
 {
     pStati->SetCur(expectExceptionSeparator);
 
-    ary::Tid nException = pSpuException->Child().Result_Type().Id();
-    if ( nException != 0 AND pSpuException->Child().Result_KindOf() == PE_Type::is_type )
+    ary::cpp::Type_id
+        nException = pSpuException->Child().Result_Type().TypeId();
+    if ( nException.IsValid() AND pSpuException->Child().Result_KindOf() == PE_Type::is_type )
     {
         aExceptions.push_back( nException );
     }
@@ -384,8 +392,8 @@ PE_Function::SpReturn_CastOperatorType()
 {
     pStati->SetCur(afterName);
 
-    Env().AryGate().RoGate().Get_TypeText(
-            aName, pSpuCastOperatorType->Child().Result_Type().Id() );
+    Env().AryGate().Types().Get_TypeText(
+            aName, pSpuCastOperatorType->Child().Result_Type().TypeId() );
 }
 
 void
