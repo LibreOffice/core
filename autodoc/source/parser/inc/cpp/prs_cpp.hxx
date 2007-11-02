@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prs_cpp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:15:51 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:03:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,9 +62,6 @@ class Cpluplus_Parser : public autodoc::CodeParser_Ifc
                                                 i_rDocumentationInterpreter );
 
     virtual void        Run(
-                            const udmstri &     i_sProjectName,
-                            const csv::ploc::Path &
-                                                i_rProjectRootDirectory,
                             const autodoc::FileCollector_Ifc &
                                                 i_rFiles );
   private:
