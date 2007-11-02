@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hi_ary.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:50:40 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:38:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,11 @@
 // USED SERVICES
     // BASE CLASSES
     // COMPONENTS
-#include <ary/idl/i_language.hxx>
+#include <ary/idl/i_types4idl.hxx>
     // PARAMETERS
-#include <ary/idl/ip_2s.hxx>
+#include <ary/idl/i_gate.hxx>
+#include <ary/doc/d_docu.hxx>
+#include <ary/doc/d_oldidldocu.hxx>
 
 
 namespace ary
@@ -59,6 +61,19 @@ namespace output
 {
     class Position;
 }
+
+
+
+
+inline const ary::doc::OldIdlDocu *
+Get_IdlDocu(const ary::doc::Documentation & i_doc)
+{
+    return dynamic_cast< const ary::doc::OldIdlDocu* >(i_doc.Data());
+}
+
+
+
+
 
 /** A helper class to wrap the access to data in the Autodoc Repository.
 */
@@ -124,7 +139,7 @@ class AryAccess
                                                 i_letter ) const;
 
     const ary::idl::CePilot &
-                        Ces() const;            // KORR
+                        Ces() const;
   private:
     const ary::idl::Module *
                         find_SubModule(
