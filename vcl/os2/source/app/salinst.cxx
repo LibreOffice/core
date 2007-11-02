@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 10:09:07 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,9 @@
 #ifndef _SV_SALIDS_HRC
 #include <salids.hrc>
 #endif
+#ifndef _SV_SALATYPE_HXX
+#include <vcl/salatype.hxx>
+#endif
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
 #endif
@@ -79,14 +82,11 @@
 #include <salbmp.h>
 #endif
 #ifndef _SV_SALIMESTATUS_HXX
-#include <salimestatus.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/salimestatus.hxx>
 #endif
 
 #ifndef _SV_TIMER_HXX
-#include <timer.hxx>
+#include <vcl/timer.hxx>
 #endif
 
 // =======================================================================
