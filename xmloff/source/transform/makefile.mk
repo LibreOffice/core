@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-11 13:04:00 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:40:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ SHL1STDLIBS = \
     $(SALHELPERLIB) \
     $(SALLIB) \
     $(TOOLSLIB)
-.IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
+.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
     SHL1STDLIBS += -lxo$(OFFICEUPD)$(DLLPOSTFIX)
 .ELSE
     SHL1STDLIBS += ixo.lib
