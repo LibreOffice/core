@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hd_chlst.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:51:55 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:26:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <ary/ceslot.hxx>
-#include <ary/cpp/c_disply.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_namesp.hxx>
 #include <ary/cpp/c_class.hxx>
 #include <ary/cpp/c_enum.hxx>
@@ -47,9 +47,9 @@
 #include <ary/cpp/c_funct.hxx>
 #include <ary/cpp/c_vari.hxx>
 #include <ary/cpp/c_enuval.hxx>
-#include <ary/cpp/cg_file.hxx>
-#include <ary/cpp/crog_grp.hxx>
-#include <ary/info/codeinfo.hxx>
+#include <ary/loc/loc_file.hxx>
+#include <ary/loc/locp_le.hxx>
+#include <ary/doc/d_oldcppdocu.hxx>
 #include <ary/info/ci_attag.hxx>
 #include <ary/info/ci_text.hxx>
 #include <ary/info/all_dts.hxx>
@@ -99,12 +99,13 @@ struct ChildList_Display::S_AreaCo
 
 
 const ary::info::DocuText &
-ShortDocu( const ary::CodeEntity & i_rCe )
+ShortDocu( const ary::cpp::CodeEntity & i_rCe )
 {
-    static const ary::info::DocuText aNull_;
+    static const ary::info::DocuText
+        aNull_;
 
-    const ary::info::CodeInfo *
-            pInfo = dynamic_cast< const ary::info::CodeInfo* >( &i_rCe.Info() );
+    const ary::doc::OldCppDocu *
+            pInfo = dynamic_cast< const ary::doc::OldCppDocu* >( i_rCe.Docu().Data() );
     if (pInfo == 0)
         return aNull_;
 
@@ -196,34 +197,6 @@ ChildList_Display::Run_GlobalClasses( Area_Result &        o_rResult,
     pSglArea = 0;
 }
 
-#if 0   // old
-void
-ChildList_Display::Run_GlobalClasses( Area_Result &       o_rResult,
-                                      ary::SlotAccessId   i_nSlot,
-                                      const char *        i_sListLabel,
-                                      const char *        i_sListTitle_classes,
-                                      const char *        i_sListTitle_structs,
-                                      const char *        i_sListTitle_unions )
-{
-    ary::Slot_AutoPtr
-            pSlot( ActiveParent().Create_Slot( i_nSlot ) );
-    if ( pSlot->Size() == 0 )
-        return;
-
-    pSglArea = new S_AreaCo( o_rResult,
-                           i_sListLabel,
-                           i_sListTitle_classes,
-                           i_sListTitle_structs,
-                           i_sListTitle_unions );
-
-    pSlot->StoreAt(*this);
-
-    pSglArea->PerformResult();
-    pSglArea = 0;
-}
-
-#endif // 0,  old
-
 void
 ChildList_Display::Run_Members( Area_Result &           o_rResult_public,
                                 Area_Result &           o_rResult_protected,
@@ -299,57 +272,8 @@ ChildList_Display::Run_MemberClasses( Area_Result &         o_rResult_public,
     aMemberAreas[ixPrivate] = 0;
 }
 
-
-#if 0 // old
 void
-ChildList_Display::Run_MemberClasses( Area_Result &       o_rResult_public,
-                                      Area_Result &       o_rResult_protected,
-                                      Area_Result &       o_rResult_private,
-                                      ary::SlotAccessId   i_nSlot,
-                                      const char *        i_sListLabel_public,
-                                      const char *        i_sListLabel_protected,
-                                      const char *        i_sListLabel_private,
-                                      const char *        i_sListTitle_classes,
-                                      const char *        i_sListTitle_structs,
-                                      const char *        i_sListTitle_unions )
-{
-    ary::Slot_AutoPtr
-            pSlot( ActiveParent().Create_Slot(i_nSlot) );
-    if ( pSlot->Size() == 0 )
-        return;
-
-    aMemberAreas[ixPublic] = new S_AreaCo( o_rResult_public,
-                                         i_sListLabel_public,
-                                         i_sListTitle_classes,
-                                         i_sListTitle_structs,
-                                         i_sListTitle_unions );
-    aMemberAreas[ixProtected] = new S_AreaCo( o_rResult_protected,
-                                            i_sListLabel_protected,
-                                         i_sListTitle_classes,
-                                         i_sListTitle_structs,
-                                         i_sListTitle_unions );
-    aMemberAreas[ixPrivate] = new S_AreaCo( o_rResult_private,
-                                          i_sListLabel_private,
-                                         i_sListTitle_classes,
-                                         i_sListTitle_structs,
-                                         i_sListTitle_unions );
-
-    pSlot->StoreAt(*this);
-
-    aMemberAreas[ixPublic]->PerformResult();
-    aMemberAreas[ixProtected]->PerformResult();
-    aMemberAreas[ixPrivate]->PerformResult();
-
-    aMemberAreas[ixPublic] = 0;
-    aMemberAreas[ixProtected] = 0;
-    aMemberAreas[ixPrivate] = 0;
-}
-
-#endif // 0,  old
-
-
-void
-ChildList_Display::Display_Namespace( const ary::cpp::Namespace & i_rData )
+ChildList_Display::do_Process( const ary::cpp::Namespace & i_rData )
 {
     Write_ListItem( i_rData.LocalName(),
                     Path2ChildNamespace(i_rData.LocalName()),
@@ -358,7 +282,7 @@ ChildList_Display::Display_Namespace( const ary::cpp::Namespace & i_rData )
 }
 
 void
-ChildList_Display::Display_Class( const ary::cpp::Class & i_rData )
+ChildList_Display::do_Process( const ary::cpp::Class & i_rData )
 {
     if ( Ce_IsInternal(i_rData) )
         return;
@@ -369,7 +293,7 @@ ChildList_Display::Display_Class( const ary::cpp::Class & i_rData )
             return;
     }
 
-    udmstri sLink;
+    String  sLink;
     if ( i_rData.Protection() == ary::cpp::PROTECT_global )
     {
         sLink = ClassFileName(i_rData.LocalName());
@@ -400,12 +324,12 @@ ChildList_Display::Display_Class( const ary::cpp::Class & i_rData )
 }
 
 void
-ChildList_Display::Display_Enum( const ary::cpp::Enum & i_rData )
+ChildList_Display::do_Process( const ary::cpp::Enum & i_rData )
 {
     if ( Ce_IsInternal(i_rData) )
         return;
 
-    udmstri sLink;
+    String  sLink;
     if ( i_rData.Protection() == ary::cpp::PROTECT_global )
     {
         sLink = EnumFileName(i_rData.LocalName());
@@ -424,12 +348,12 @@ ChildList_Display::Display_Enum( const ary::cpp::Enum & i_rData )
 }
 
 void
-ChildList_Display::Display_Typedef( const ary::cpp::Typedef & i_rData )
+ChildList_Display::do_Process( const ary::cpp::Typedef & i_rData )
 {
     if ( Ce_IsInternal(i_rData) )
         return;
 
-    udmstri sLink;
+    String  sLink;
     if ( i_rData.Protection() == ary::cpp::PROTECT_global )
     {
         sLink = TypedefFileName(i_rData.LocalName());
@@ -448,18 +372,17 @@ ChildList_Display::Display_Typedef( const ary::cpp::Typedef & i_rData )
 }
 
 void
-ChildList_Display::Display_Function( const ary::cpp::Function & i_rData )
+ChildList_Display::do_Process( const ary::cpp::Function & i_rData )
 {
     if ( Ce_IsInternal(i_rData) )
         return;
 
-    udmstri sLinkPrePath;
+    String  sLinkPrePath;
     if ( i_rData.Protection() == ary::cpp::PROTECT_global )
     {
-        const ary::cpp::FileGroup *
-                pFgr = Env().Gate().RoGroups().Search_FileGroup( i_rData.Location() );
-        csv_assert( pFgr != 0 );
-        sLinkPrePath = HtmlFileName( "o-", pFgr->FileName() );
+        const ary::loc::File &
+                rFile = Env().Gate().Locations().Find_File( i_rData.Location() );
+        sLinkPrePath = HtmlFileName( "o-", rFile.LocalName() );
     }
     else
     {
@@ -478,13 +401,16 @@ ChildList_Display::Display_Function( const ary::cpp::Function & i_rData )
         << SyntaxText_PreName( i_rData, Env().Gate() )
         << new html::LineBreak;
     rCell1
-          >> *new html::Link( OperationLink(i_rData.LocalName(),
-                              i_rData.Signature(),
-                              sLinkPrePath) )
-          << i_rData.LocalName();
+        >> *new html::Link( OperationLink(
+                                Env().Gate(),
+                                i_rData.LocalName(),
+                                i_rData.CeId(),
+                                sLinkPrePath) )
+            << i_rData.LocalName();
     rCell1
         << SyntaxText_PostName( i_rData, Env().Gate() );
-    TableCell & rCell2 = dpRow->AddCell();
+    TableCell &
+        rCell2 = dpRow->AddCell();
     rCell2
         << new WidthAttr("50%")
         << " ";
@@ -495,18 +421,17 @@ ChildList_Display::Display_Function( const ary::cpp::Function & i_rData )
 }
 
 void
-ChildList_Display::Display_Variable( const ary::cpp::Variable & i_rData )
+ChildList_Display::do_Process( const ary::cpp::Variable & i_rData )
 {
     if ( Ce_IsInternal(i_rData) )
         return;
 
-    udmstri sLinkPrePath;
+    String  sLinkPrePath;
     if ( i_rData.Protection() == ary::cpp::PROTECT_global )
     {
-        const ary::cpp::FileGroup *
-                pFgr = Env().Gate().RoGroups().Search_FileGroup( i_rData.Location() );
-        csv_assert( pFgr != 0 );
-        sLinkPrePath = HtmlFileName( "d-", pFgr->FileName() );
+        const ary::loc::File &
+            rFile = Env().Gate().Locations().Find_File( i_rData.Location() );
+        sLinkPrePath = HtmlFileName( "d-", rFile.LocalName() );
     }
     else
     {
@@ -537,7 +462,7 @@ ChildList_Display::Display_Variable( const ary::cpp::Variable & i_rData )
 }
 
 void
-ChildList_Display::Display_EnumValue( const ary::cpp::EnumValue & i_rData )
+ChildList_Display::do_Process( const ary::cpp::EnumValue & i_rData )
 {
     if ( Ce_IsInternal(i_rData) )
         return;
@@ -557,7 +482,7 @@ ChildList_Display::Display_EnumValue( const ary::cpp::EnumValue & i_rData )
 
     TableCell & rValueDocu = dpRow->AddCell();
     pShortDocu_Display->Assign_Out( rValueDocu );
-    i_rData.Info().StoreAt( *pShortDocu_Display );
+    i_rData.Docu().Accept( *pShortDocu_Display );
     pShortDocu_Display->Unassign_Out();
 }
 
@@ -571,14 +496,14 @@ ChildList_Display::do_FinishSlot()
 {
 }
 
-const ary::DisplayGate *
+const ary::cpp::Gate *
 ChildList_Display::inq_Get_ReFinder() const
 {
     return & Env().Gate();
 }
 
 void
-ChildList_Display::Write_ListItem( const udmstri &              i_sLeftText,
+ChildList_Display::Write_ListItem( const String &               i_sLeftText,
                                    const char *                 i_sLink,
                                    const ary::info::DocuText &  i_rRightText,
                                    csi::xml::Element &          o_rOut )
@@ -687,6 +612,3 @@ S_AreaCo::PerformResult()
         }
     }
 }
-
-
-

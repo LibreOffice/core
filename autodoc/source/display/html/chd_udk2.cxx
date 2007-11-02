@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chd_udk2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:50:29 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:24:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,15 +38,12 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
-
+#include <cosv/tpl/tpltools.hxx>
 #include <ary/ary_disp.hxx>
-#include <ary/project.hxx>
 #include <ary/ceslot.hxx>
-#include <ary/cpp/c_disply.hxx>
-#include <ary/cpp/crog_grp.hxx>
-#include <ary/cpp/cg_proj.hxx>
+#include <ary/cpp/c_gate.hxx>
 #include <ary/cpp/c_namesp.hxx>
+#include <ary/cpp/cp_ce.hxx>
 
 #include "dsply_cl.hxx"
 #include "dsply_da.hxx"
@@ -57,80 +54,11 @@
 
 
 
-
-
-namespace
-{
-
-
-//********************      S_ProjectListFiller     ********************//
-struct  S_ProjectListFiller : public ary::Display
-{
-  public:
-                        S_ProjectListFiller(
-                            std::vector< const ary::cpp::ProjectGroup * > &
-                                                o_rList,
-                            const ary::cpp::DisplayGate &
-                                                i_rAryGate );
-                        ~S_ProjectListFiller();
-
-    virtual void        DisplaySlot_CppProject(
-                            ary::Gid            i_nId );
-    void                Fill_FromNameList(
-                            const StringVector &
-                                                i_sNameList );
-  private:
-    std::vector< const ary::cpp::ProjectGroup * > *
-                        pList;
-    const ary::cpp::RoGate_Groups *
-                        pGroupGate;
-};
-
-
-S_ProjectListFiller::S_ProjectListFiller(
-                    std::vector< const ary::cpp::ProjectGroup * > & o_rList,
-                    const ary::cpp::DisplayGate &                   i_rAryGate )
-    :   pList(&o_rList),
-        pGroupGate(&i_rAryGate.RoGroups())
-{
-}
-
-S_ProjectListFiller::~S_ProjectListFiller()
-{
-}
-
-void
-S_ProjectListFiller::DisplaySlot_CppProject( ary::Gid i_nId )
-{
-    const ary::cpp::ProjectGroup *
-            p = pGroupGate->Find_ProjectGroup( i_nId );
-    if ( p != 0 )
-        pList->push_back( p );
-}
-
-void
-S_ProjectListFiller::Fill_FromNameList( const StringVector & i_sNameList )
-{
-    for ( StringVector::const_iterator it = i_sNameList.begin();
-          it != i_sNameList.end();
-          ++it )
-    {
-        const ary::cpp::ProjectGroup * p = pGroupGate->Search_ProjectGroup( *it );
-        if ( p != 0 )
-            pList->push_back( p );
-    }    // end for
-}
-
-}   // anonymus namespace
-
-
 //********************      CppHtmlDisplay_Udk2     ********************//
 
 
 CppHtmlDisplay_Udk2::CppHtmlDisplay_Udk2()
-    :   pCurPageEnv(0),
-        // aProjectList,
-        bFilterByProjectList(false)
+    :   pCurPageEnv(0)
 {
 }
 
@@ -140,51 +68,27 @@ CppHtmlDisplay_Udk2::~CppHtmlDisplay_Udk2()
 
 void
 CppHtmlDisplay_Udk2::do_Run( const char *                      i_sOutputDirectory,
-                             const ary::cpp::DisplayGate &     i_rAryGate,
-                             const display::CorporateFrame &   i_rLayout,
-                             const StringVector *    i_pProjectList )
+                             const ary::cpp::Gate &            i_rAryGate,
+                             const display::CorporateFrame &   i_rLayout )
 {
-    SetRunData( i_sOutputDirectory, i_rAryGate, i_rLayout, i_pProjectList );
+    SetRunData( i_sOutputDirectory, i_rAryGate, i_rLayout );
 
     Create_Css_File();
     Create_Overview_File();
     Create_Help_File();
     Create_AllDefs_File();
 
-    CreateFiles_InSubTree_Projects();
     CreateFiles_InSubTree_Namespaces();
     CreateFiles_InSubTree_Index();
 }
 
 void
 CppHtmlDisplay_Udk2::SetRunData( const char *                       i_sOutputDirectory,
-                                 const ary::cpp::DisplayGate &      i_rAryGate,
-                                 const display::CorporateFrame &    i_rLayout,
-                                 const StringVector *     i_pProjectList )
+                                 const ary::cpp::Gate &             i_rAryGate,
+                                 const display::CorporateFrame &    i_rLayout )
 {
     csv::ploc::Path aOutputDir( i_sOutputDirectory, true );
-
     pCurPageEnv = new OuputPage_Environment( aOutputDir, i_rAryGate, i_rLayout );
-
-    csv::erase_container( aProjectList );
-    S_ProjectListFiller aPrjGetter( aProjectList, i_rAryGate );
-
-    if ( i_pProjectList != 0 )
-    {
-        aPrjGetter.Fill_FromNameList( *i_pProjectList );
-
-        bFilterByProjectList = true;
-    }
-    else
-    {
-        const ary::TopProject &
-                rTop            = i_rAryGate.RoGroups().Get_TopProject();
-        ary::Slot_AutoPtr
-                pSlot_Projects( rTop.Create_Slot(ary::TopProject::SLOT_CppLocationBases) );
-        pSlot_Projects->StoreAt( aPrjGetter );
-
-        bFilterByProjectList = false;
-    }
 }
 
 void
@@ -218,18 +122,12 @@ CppHtmlDisplay_Udk2::Create_AllDefs_File()
 }
 
 void
-CppHtmlDisplay_Udk2::CreateFiles_InSubTree_Projects()
-{
-    Cout() << "\nCreate files in subtree projects" << Endl();
-    Cout() << Endl();
-}
-
-void
 CppHtmlDisplay_Udk2::CreateFiles_InSubTree_Namespaces()
 {
     Cout() << "\nCreate files in subtree namespaces" << Endl();
 
-    const ary::cpp::Namespace & rGlobalNsp = Gate().GlobalNamespace();
+    const ary::cpp::Namespace &
+        rGlobalNsp = Gate().Ces().GlobalNamespace();
 
     RecursiveDisplay_Namespace(rGlobalNsp);
     Cout() << Endl();
@@ -248,10 +146,10 @@ CppHtmlDisplay_Udk2::CreateFiles_InSubTree_Index()
 void
 CppHtmlDisplay_Udk2::RecursiveDisplay_Namespace( const ary::cpp::Namespace & i_rNsp )
 {
-    if ( NOT CheckFilters(i_rNsp) )
-        return;
-
-    pCurPageEnv->MoveDir_Down2( i_rNsp );
+    if (i_rNsp.Owner().IsValid())
+        pCurPageEnv->MoveDir_Down2( i_rNsp );
+    else
+        pCurPageEnv->MoveDir_2Names();
     DisplayFiles_InNamespace( i_rNsp );
 
     typedef std::vector< const ary::cpp::Namespace* > NspList;
@@ -304,9 +202,8 @@ CppHtmlDisplay_Udk2::DisplayFiles_InNamespace( const ary::cpp::Namespace & i_rNs
     aDataDisplayer.Create_Files();
 }
 
-const ary::cpp::DisplayGate &
+const ary::cpp::Gate &
 CppHtmlDisplay_Udk2::Gate() const
 {
     return pCurPageEnv->Gate();
 }
-
