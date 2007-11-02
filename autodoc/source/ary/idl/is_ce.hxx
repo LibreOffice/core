@@ -4,9 +4,9 @@
  *
  *  $RCSfile: is_ce.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:51:00 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:53:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,11 @@
 #ifndef ARY_IDL_IS_CE_HXX
 #define ARY_IDL_IS_CE_HXX
 
-
-
+// BASE CLASSES
+#include <store/s_storage.hxx>
 // USED SERVICES
-    // BASE CLASSES
-#include <store/storage.hxx>
-    // COMPONENTS
 #include <ary/idl/i_ce.hxx>
-#include <store/st_root.hxx>
-#include "is_ce_indices.hxx"
-    // PARAMETERS
+
 
 
 
@@ -54,44 +49,20 @@ namespace ary
 namespace idl
 {
 
-class PersistenceAdmin;
 
-
-class Ce_Storage : public ::ary::store22::Storage
+/** The data base for all ->ary::idl::CodeEntity objects.
+*/
+class Ce_Storage : public ::ary::stg::Storage< ::ary::idl::CodeEntity >
 {
   public:
-    typedef CodeEntity                                  element_base_type;
-    typedef ary::store::StorageUnit<element_base_type>  unit;
-    typedef ary::store::Root<unit>                      container;
-    typedef TypedId<element_base_type>                  key;
+                        Ce_Storage();
+    virtual             ~Ce_Storage();
 
-    // LIFECYCLE
-                        Ce_Storage(
-                            uintt               i_nBLOCK_SIZE_LOG_2 = 10,
-                            uintt               i_nInitialNrOfBlocks = 2 );
-                        ~Ce_Storage();
-
-    // OPERATORS
-    const unit &        operator[](
-                            key                 i_nId ) const
-                                                { return aContainer[i_nId]; }
-    unit &              operator[](
-                            key                 i_nId )
-                                                { return aContainer[i_nId]; }
-    // OPERATIONS
-    void                EraseAll();
-    void                Save(
-                            PersistenceAdmin &  io_rSaver ) const;
-    void                Load(
-                            PersistenceAdmin &  io_rLoader );
-    // INQUIRY
-    const container &   Container() const       { return aContainer; }
-    // ACCESS
-    container &         Container()             { return aContainer; }
-
+    static Ce_Storage & Instance_()               { csv_assert(pInstance_ != 0);
+                                                    return *pInstance_; }
   private:
     // DATA
-    container           aContainer;
+    static Ce_Storage * pInstance_;
 };
 
 
@@ -110,9 +81,7 @@ enum E_CodeEntity
 
 
 
+
 }   // namespace idl
 }   // namespace ary
-
 #endif
-
-
