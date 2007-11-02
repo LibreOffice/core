@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 09:51:57 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,10 +42,6 @@
 #include <osl/diagnose.h>
 //#include <osl/socket.h>
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-
 #ifndef _OSL_FILE_PATH_HELPER_H_
 #include "file_path_helper.h"
 #endif
@@ -55,6 +51,10 @@
 //#include "secimpl.h"
 
 #include <ctype.h>
+
+//#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+//#endif
 
 // for exception logging
 #include <stdio.h>
@@ -95,7 +95,6 @@ static sal_Bool            bInitSessionTerm = sal_False;
 static const sal_Char * const SessionTermQueueName = "\\QUEUES\\SESSIONS.QUE";
 static HQUEUE             SessionTermQueue;
 
-
 /******************************************************************************
  *
  *                  Function Declarations
@@ -123,341 +122,11 @@ static sal_Bool InitSessionTerm( void )
     return sal_True;
 }
 
-
-/*----------------------------------------------------------------------------*/
-/* Pipes!                                                                    */
-/*----------------------------------------------------------------------------*/
-
-
-#if 0 // YD
-
-static Pipe* openPipe(sal_uInt32 pid)
-{
-    Pipe*  ppipe = 0;
-    APIRET rc;
-    HPIPE  hPipe;
-    HMTX   hMutex;
-    sal_Char   pipeName[ _MAX_PATH ];
-    sal_Char   semName[ _MAX_PATH ];
-
-    if (pid == 0)
-    {
-        PTIB pptib = NULL;
-        PPIB pppib = NULL;
-
-        /* get process ID */
-        DosGetInfoBlocks( &pptib, &pppib );
-        pid = pppib->pib_ulpid;
-
-        /* build pipe and semaphore names */
-        sprintf( pipeName, PIPENAMEMASK, pid );
-        sprintf( semName,  SEMNAMEMASK,  pid );
-
-        /* open or create semaphore */
-        rc = DosCreateMutexSem( semName, &hMutex, 0, FALSE );
-        if( rc == ERROR_DUPLICATE_NAME )
-            DosOpenMutexSem( semName, &hMutex );
-
-        rc = DosCreateNPipe( pipeName,           /* name of pipe */
-                             &hPipe,
-                             NP_ACCESS_DUPLEX,   /* 2 way pipe */
-                             1,                 /* only 1 instance needed */
-                             sizeof( Message ), /* OutBufferSize */
-                             sizeof( Message ), /* InBufferSize */
-                             0 );                 /* use default timeout */
-        if( rc != NO_ERROR )
-            return NULL;
-
-        /* connect to open pipe */
-        rc = DosConnectNPipe( hPipe );
-        if( rc != NO_ERROR )
-        {
-            DosClose( hPipe );
-            return NULL;
-        }
-
-        /* release mutex and remove handle */
-        DosReleaseMutexSem( hMutex );
-        DosCloseMutexSem( hMutex );
-    }
-    else
-    {
-        ULONG ulAction;
-
-        /* build pipe and semaphore names */
-        sprintf( pipeName, PIPENAMEMASK, pid );
-        sprintf( semName,  SEMNAMEMASK,  pid );
-
-        /* open or create semaphore */
-        rc = DosCreateMutexSem( semName, &hMutex, 1, FALSE );
-        if( rc == ERROR_DUPLICATE_NAME )
-            DosOpenMutexSem( semName, &hMutex );
-
-        /* wait for mutex and remove handle */
-        DosRequestMutexSem( hMutex, SEM_INDEFINITE_WAIT );
-        DosCloseMutexSem( hMutex );
-
-        /* open pipe */
-        rc = DosOpen( pipeName,          /* name of pipe */
-                      &hPipe,
-                      &ulAction,            /* result of DosOpen */
-                      0,                    /* ./. */
-                      FILE_NORMAL,
-                      OPEN_ACTION_OPEN_IF_EXISTS,
-                      OPEN_ACCESS_READWRITE |
-                      OPEN_SHARE_DENYNONE,
-                      NULL );              /* ./. */
-
-        /* set mode of pipe (we need message based data transfer) */
-        DosSetNPHState( hPipe, NP_READMODE_MESSAGE );
-    }
-
-    /* allocate intern pipe structure and store pipe handle */
-    ppipe = malloc(sizeof(Pipe));
-    ppipe->m_hPipe = hPipe;
-
-    return ppipe;
-}
-
-/*----------------------------------------------------------------------------*/
-
-static void closePipe(Pipe* pipe)
-{
-    /* close pipe */
-    if( pipe->m_hPipe != 0 )
-        DosClose( pipe->m_hPipe );
-
-    /* free intern pipe structure */
-    free(pipe);
-}
-
-/*----------------------------------------------------------------------------*/
-
-/* Callback is called when the socket is closed by the owner */
-static void* socketCloseCallback(void* pArg)
-{
-
-    if (pArg != NULL)
-    {
-        oslSocketCallbackArg* callbackArg = (oslSocketCallbackArg*) pArg;
-        Message msg;
-        sal_uInt32  nbytes;
-
-        msg.m_Type  = MSG_REL;
-        msg.m_Data  = osl_Process_TypeNone;
-        msg.m_Flags = 0;
-        msg.m_Value = callbackArg->m_socket;
-        DosWrite( callbackArg->m_pipe->m_hPipe, &msg, sizeof(msg), &nbytes );
-
-        if( (DosRead(callbackArg->m_pipe->m_hPipe, &msg, sizeof(msg), &nbytes ) == NO_ERROR)
-            && (nbytes == sizeof(msg)))
-        {
-            if (msg.m_Type == MSG_END)
-                closePipe(callbackArg->m_pipe);
-        }
-
-        free (callbackArg);
-    }
-
-    return NULL;
-}
-
-/*----------------------------------------------------------------------------*/
-
-static sal_Bool sendIOResources(Pipe* pipe, oslIOResource ioRes[], HANDLE hChild )
-{
-    sal_uInt32         nbytes;
-    Message      msg;
-    oslIOResource*  pIORes = ioRes;
-    SOCKET          socket;
-    APIRET          rc;
-    HEV             hevSocketFreed;
-    sal_Char            szTemp[ 20 ];
-    oslSocketCallbackArg*   callbackArg;
-
-    /* send messages with resources through pipe */
-    while (pIORes->Type != osl_Process_TypeNone)
-    {
-        switch (pIORes->Type)
-        {
-            /* create message from resource */
-            case osl_Process_TypeSocket:
-
-                socket = ((oslSocketImpl *)(pIORes->Descriptor.Socket))->m_Socket;
-
-                ((oslSocketImpl *)(pIORes->Descriptor.Socket))->m_Flags |= OSL_SOCKET_FLAGS_SHARED;
-
-                if (pIORes->Flags & osl_Process_DFWAIT)
-                {
-                    callbackArg = malloc(sizeof(oslSocketCallbackArg));
-
-                    callbackArg->m_socket = socket;
-                    callbackArg->m_pipe = pipe;
-
-                    ((oslSocketImpl *)(pIORes->Descriptor.Socket))->m_CloseCallback = &socketCloseCallback;
-                    ((oslSocketImpl *)(pIORes->Descriptor.Socket))->m_CallbackArg = callbackArg;
-
-                }
-
-                msg.m_Type  = MSG_DATA;
-                msg.m_Data  = osl_Process_TypeSocket;
-                msg.m_Flags = pIORes->Flags;
-                msg.m_Value = socket;
-
-                OSL_TRACE( "sendIOResources (PTSOCKET): %d\n", socket );
-
-                /* send message with socket */
-                if (   (DosWrite( pipe->m_hPipe, &msg, sizeof(msg), &nbytes ) != NO_ERROR)
-                    || (nbytes != sizeof(msg)))
-                    return sal_False;
-
-                break;
-
-            default:
-                OSL_TRACE("Not implemented");
-                OSL_ASSERT(sal_False);
-                break;
-        }
-
-        pIORes++;
-    }
-
-    /* send MSG_END as end marker */
-    msg.m_Type = MSG_END;
-    msg.m_Data = osl_Process_TypeNone;
-    DosWrite( pipe->m_hPipe, &msg, sizeof(msg), &nbytes );
-
-    /* wait for acknoledge from receiver */
-    if( (DosRead(pipe->m_hPipe, &msg, sizeof(msg), &nbytes ) == NO_ERROR)
-        && (nbytes == sizeof(msg))
-        && ((msg.m_Type == MSG_ACK) || (msg.m_Type == MSG_END)))
-    {
-        if (msg.m_Type == MSG_END)
-            closePipe(pipe);
-
-        return sal_True;
-    }
-    else
-    {
-        closePipe(pipe);
-
-        return sal_False;
-    }
-}
-
-/*----------------------------------------------------------------------------*/
-
-oslProcessError SAL_CALL osl_getIOResources(oslIOResource Resources[], sal_uInt32 Max)
-{
-    oslProcessError ret = osl_Process_E_Unknown;
-    int             wait = 0;
-    int  i = 0;
-    Message msg;
-    sal_uInt32   nbytes;
-    Pipe*   pipe;
-    sal_Char    szTemp[ 20 ];
-
-    /* open pipe (build name from own process ID) */
-    pipe = openPipe( 0 );
-
-    /* get messages with resources from pipe */
-    while( i < Max )
-    {
-        /* read until MSG_END received or DosRead failed */
-        if (   (DosRead(pipe->m_hPipe, &msg, sizeof(msg), &nbytes ) != NO_ERROR)
-            || (nbytes < sizeof(msg))
-            || (msg.m_Type == MSG_END))
-            break;
-        else
-        {
-            /* get resource data from message */
-            switch (msg.m_Type)
-            {
-                case MSG_DATA:
-                    switch ( msg.m_Data )
-                    {
-                        case osl_Process_TypeSocket:
-                        {
-                            oslSocketImpl* pSockImpl = __osl_createSocketImpl( (SOCKET)msg.m_Value );
-
-                            OSL_TRACE( "getIOResources (PTSOCKET): %d\n", (SOCKET)msg.m_Value );
-
-                            Resources[i].Type = osl_Process_TypeSocket;
-                            Resources[i].Flags = msg.m_Flags;
-                            Resources[i].Descriptor.Socket = (oslSocket)pSockImpl;
-
-                            if (msg.m_Flags & osl_Process_DFWAIT)
-                                wait++;
-
-                            i++;
-                            break;
-                        }
-
-                        default:
-                           OSL_TRACE("Not implemented");
-                           OSL_ASSERT(sal_False);
-                           break;
-                    }
-            }
-        }
-    }
-
-    Resources[i].Type = osl_Process_TypeNone;
-
-    if (msg.m_Type == MSG_END)
-    {
-        if (wait > 0)
-        {
-            msg.m_Type  = MSG_ACK;
-            msg.m_Data  = osl_Process_TypeNone;
-            msg.m_Flags = 0;
-            DosWrite( pipe->m_hPipe, &msg, sizeof(msg), &nbytes );
-
-            do
-            {
-                if ((! DosRead( pipe->m_hPipe, &msg, sizeof(msg), &nbytes ))
-                    || (nbytes != sizeof(msg))
-                    || (msg.m_Type != MSG_REL))
-                    break;
-
-                for (i = 0; Resources[i].Type != osl_Process_TypeNone; i++)
-                    if (((oslSocketImpl *)Resources[i].Descriptor.Socket)->m_Socket
-                        == (SOCKET)msg.m_Value)
-                    {
-                        OSL_ASSERT(Resources[i].Flags & osl_Process_DFWAIT);
-
-                        Resources[i].Flags &= ~osl_Process_DFWAIT;
-
-                        if (--wait > 0)
-                        {
-                            msg.m_Type  = MSG_ACK;
-                            msg.m_Data  = osl_Process_TypeNone;
-                            msg.m_Flags = 0;
-                            DosWrite( pipe->m_hPipe, &msg, sizeof(msg), &nbytes );
-                        }
-
-                        break;
-                    }
-            }
-            while (wait > 0);
-        }
-
-        msg.m_Type  = MSG_END;
-        msg.m_Data  = osl_Process_TypeNone;
-        msg.m_Flags = 0;
-        DosWrite( pipe->m_hPipe, &msg, sizeof(msg), &nbytes );
-
-        ret = osl_Process_E_None;
-    }
-
-    closePipe(pipe);
-
-    return ret;
-}
-
-#endif // 0 YD
-
-/*----------------------------------------------------------------------------*/
+/******************************************************************************
+ *
+ *                  Functions for starting a process
+ *
+ *****************************************************************************/
 
 /**********************************************
  osl_executeProcess_WithRedirectedIO
@@ -488,10 +157,11 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     char szImagePath[PATH_MAX] = "";
     char szWorkDir[PATH_MAX] = "";
 
+#if 0
     if (Options & osl_Process_SEARCHPATH)
     {
-/* ID FIXME
-        const rtl::OUString PATH (RTL_CONSTASCII_USTRINGPARAM("PATH"));
+        const rtl::OUString PATH1;
+        OUString PATH (RTL_CONSTASCII_USTRINGPARAM("PATH"));
 
         rtl_uString * pSearchPath = 0;
         osl_getEnvironment (PATH.pData, &pSearchPath);
@@ -506,8 +176,8 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
             }
             rtl_uString_release (pSearchPath);
         }
-*/
     }
+#endif
 
     if ( ustrImageName && ustrImageName->length )
     {
@@ -562,6 +232,39 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         pEnvironment[index+1]=0;
     }
 
+    int     rc, pid;
+    int     saveOutput = -1, saveInput = -1, saveError = -1;
+    int     stdOutput[2] = { -1, -1 }, stdInput[2] = { -1, -1 }, stdError[2] = { -1, -1 };
+    FILE    *i, *o, *e;
+
+    if (pInputWrite)
+        pipe( stdInput);
+    if (pOutputRead)
+        pipe( stdOutput);
+    if (pErrorRead)
+        pipe( stdError);
+
+    fcntl( stdInput[0], F_SETFD, FD_CLOEXEC);
+    fcntl( stdInput[1], F_SETFD, FD_CLOEXEC);
+    fcntl( stdOutput[0], F_SETFD, FD_CLOEXEC);
+    fcntl( stdOutput[1], F_SETFD, FD_CLOEXEC);
+    fcntl( stdError[0], F_SETFD, FD_CLOEXEC);
+    fcntl( stdError[1], F_SETFD, FD_CLOEXEC);
+
+    saveInput = dup( STDIN_FILENO);
+    fcntl( saveInput, F_SETFD, FD_CLOEXEC);
+    dup2( stdInput[0], STDIN_FILENO );
+    close( stdInput[0] );
+
+    saveOutput = dup( STDOUT_FILENO);
+    fcntl( saveOutput, F_SETFD, FD_CLOEXEC);
+    dup2( stdOutput[1], STDOUT_FILENO );
+    close( stdOutput[1] );
+
+    saveError = dup( STDERR_FILENO);
+    fcntl( saveError, F_SETFD, FD_CLOEXEC);
+    dup2( stdError[1], STDERR_FILENO );
+    close( stdError[1] );
 
     Error = osl_psz_executeProcess(szImagePath,
                                    pArguments,
@@ -574,6 +277,23 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
                                    pOutputRead,
                                    pErrorRead
                                    );
+
+    if ( pInputWrite )
+        *(pInputWrite) = osl_createFileHandleFromFD( stdInput[1] );
+
+    if ( pOutputRead )
+        *(pOutputRead) = osl_createFileHandleFromFD( stdOutput[0] );
+
+    if ( pErrorRead )
+        *(pErrorRead) = osl_createFileHandleFromFD( stdError[0] );
+
+    // restore handles
+    dup2( saveInput, STDIN_FILENO);
+    close( saveInput);
+    dup2( saveOutput, STDOUT_FILENO);
+    close( saveOutput);
+    dup2( saveError, STDERR_FILENO);
+    close( saveError);
 
     if ( pArguments != 0 )
     {
@@ -633,22 +353,6 @@ oslProcessError SAL_CALL osl_executeProcess(
         NULL
         );
 }
-
-/**********************************************
- osl_executeProcess
-
-oslProcessError SAL_CALL osl_executeProcess(
-                                            rtl_uString *ustrImageName,
-                                            rtl_uString *ustrArguments[],
-                                            sal_uInt32   nArguments,
-                                            oslProcessOption Options,
-                                            oslSecurity Security,
-                                            rtl_uString *ustrWorkDir,
-                                            rtl_uString *ustrEnvironment[],
-                                            sal_uInt32   nEnvironmentVars,
-                                            oslProcess *pProcess
-                                            )
- *********************************************/
 
 /**********************************************
  osl_psz_executeProcess
@@ -834,7 +538,6 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                              (PSZ) args, (PSZ) envs, &resultCode, (PSZ) pszImageName );
         }
 
-
         pidProcess = resultCode.codeTerminate;
 
         /* cleanup */
@@ -995,52 +698,7 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
        pProcImpl->bResultCodeValid = FALSE;
 
     if( Options & osl_Process_WAIT )
-    {
-        /* process in same session ? */
-        if( ulSessID == 0 )
-        {
-            PID pidEnded;
-
-            rc = DosWaitChild( DCWA_PROCESS, DCWW_WAIT, &resultCode,
-                    &pidEnded, pidProcess );
-
-            if( rc == NO_ERROR )
-            {
-                pProcImpl->nResultCode = resultCode.codeResult;
-                pProcImpl->bResultCodeValid = TRUE;
-            }
-        }
-        else
-        {
-            ULONG pcbData, ulElement = 0;
-            REQUESTDATA rdData;
-            BYTE bPriority;
-            struct {
-                USHORT SessionID;
-                USHORT ReturnValue;
-            } *pvBuffer;
-
-            /* search/wait for the correct entry in termination queue */
-            while( ( rc = DosPeekQueue( SessionTermQueue, &rdData, &pcbData,
-                            (PPVOID) &pvBuffer, &ulElement, DCWW_WAIT,
-                            &bPriority, NULLHANDLE )) == NO_ERROR )
-            {
-
-                if( pvBuffer->SessionID == pProcImpl->nSessionID )
-                {
-                    pProcImpl->nResultCode = pvBuffer->ReturnValue;
-                    pProcImpl->bResultCodeValid = TRUE;
-
-                    /* remove item from queue */
-                    rc = DosReadQueue( SessionTermQueue, &rdData, &pcbData,
-                           (PPVOID)&pvBuffer, ulElement, DCWW_WAIT,
-                           &bPriority, NULLHANDLE );
-
-                    break;
-                }
-            } /* while */
-        }
-    } /* if */
+        osl_joinProcess(pProcImpl);
 
     *pProcess = (oslProcess)pProcImpl;
 
@@ -1050,101 +708,6 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
 
         return osl_Process_E_Unknown;
 }
-
-#if 0
-
-    /* send resources to child process through pipe */
-    if (pResources)
-    {
-        Pipe* pipe;
-        pipe = openPipe( pidProcess );
-
-        sendIOResources(pipe, pResources, 0 );
-    }
-
-        /* windows application ? */
-        else if( nAppType & ( FAPPTYP_WINDOWSREAL | FAPPTYP_WINDOWSPROT |
-                          FAPPTYP_WINDOWSPROT31 ) )
-        {
-            /* use pszImageName as first argument */
-            if( args )
-            {
-                sal_Char* cp = malloc( strlen( pszImageName ) + strlen( args ) + 2 );
-                strcpy( cp, pszImageName );
-                strcat( cp, " " );
-                strcat( cp, args );
-                free( args );
-                args = cp;
-            }
-            else
-            {
-                args = strdup( pszImageName );
-            }
-
-            /* inherit options from shell */
-            SData.InheritOpt = SSF_INHERTOPT_SHELL;
-
-            switch (Options & (osl_Process_NORMAL | osl_Process_MINIMIZED |
-                            osl_Process_MAXIMIZED | osl_Process_FULLSCREEN))
-            {
-                case osl_Process_MINIMIZED:
-                    pszImageName = "WINOS2.COM";
-                    SData.SessionType = PROG_31_ENHSEAMLESSCOMMON;
-                    SData.PgmControl |= SSF_CONTROL_MINIMIZE;
-                    break;
-
-                case osl_Process_MAXIMIZED:
-                    pszImageName = "WINOS2.COM";
-                    SData.SessionType = PROG_31_ENHSEAMLESSCOMMON;
-                    SData.PgmControl |= SSF_CONTROL_MAXIMIZE;
-                    break;
-
-                case osl_Process_FULLSCREEN:
-                    pszImageName = "WIN.COM";
-                    SData.SessionType = SSF_TYPE_VDM;
-                    break;
-
-                default:
-                    pszImageName = "WINOS2.COM";
-                    SData.SessionType = PROG_31_ENHSEAMLESSCOMMON;
-            } /* switch */
-
-            /* call win[os2].com */
-            if( osl_searchPath(pszImageName, NULL, '\0', path,
-                               sizeof(path)) == osl_Process_E_None)
-                pszImageName = path;
-
-        }
-
-        /* dos application */
-        else
-        {
-            /* inherit options from shell */
-            SData.InheritOpt = SSF_INHERTOPT_SHELL;
-
-            switch (Options & (osl_Process_NORMAL | osl_Process_MINIMIZED |
-                            osl_Process_MAXIMIZED | osl_Process_FULLSCREEN))
-            {
-                case osl_Process_MINIMIZED:
-                    SData.SessionType = SSF_TYPE_WINDOWEDVDM;
-                    SData.PgmControl |= SSF_CONTROL_MINIMIZE;
-                    break;
-
-                case osl_Process_MAXIMIZED:
-                    SData.SessionType = SSF_TYPE_WINDOWEDVDM;
-                    SData.PgmControl |= SSF_CONTROL_MAXIMIZE;
-                    break;
-
-                case osl_Process_FULLSCREEN:
-                    SData.SessionType = SSF_TYPE_VDM;
-                    break;
-
-                default:
-                    SData.SessionType = SSF_TYPE_WINDOWEDVDM;
-            } /* switch */
-
-        }
-#endif
 
 /*----------------------------------------------------------------------------*/
 
@@ -1258,32 +821,8 @@ oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
 //YD FIXME incomplete!
 oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const TimeValue* pTimeout)
 {
-    oslProcessError osl_error = osl_Process_E_Unknown;
-
-    if (NULL == Process)
-        return osl_Process_E_Unknown;
-
-    return osl_error;
+    return osl_joinProcess( Process);
 }
-
-/*----------------------------------------------------------------------------*/
-#if 0 // YD FIXME
-oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **ppustrFile)
-{
-    PTIB pptib = NULL;
-    PPIB pppib = NULL;
-
-#if 0
-    DosGetInfoBlocks(&pptib, &pppib);
-
-    if( NO_ERROR == DosQueryPathInfo( pppib->pib_pchcmd, FIL_QUERYFULLNAME,
-                *ppustrFile->buffer, rtl_ustr_getLength( ppustrFile) ) )
-        return osl_Process_E_None;
-    else
-#endif
-        return osl_Process_E_Unknown;
-}
-#endif
 
 /*----------------------------------------------------------------------------*/
 
@@ -1377,25 +916,6 @@ oslProcessError SAL_CALL osl_getCommandArgs( sal_Char* pszBuffer, sal_uInt32 Max
 
     return osl_Process_E_None;
 }
-
-/*----------------------------------------------------------------------------*/
-#if 0
-oslProcessError SAL_CALL osl_getEnvironment(rtl_uString* pszName, rtl_uString **ustrValue)
-{
-    //sal_Char* pszEnv;
-
-    /* search for environment string and copy value if found */
-    if (DosScanEnv((sal_Char*)pszName, ustrValue) == NO_ERROR)
-    {
-        //strncpy(pszBuffer, pszEnv, Max);
-        //pszBuffer[Max - 1] = '\0';
-
-        return osl_Process_E_None;
-    }
-
-    return osl_Process_E_NotFound;
-}
-#endif
 
 /*----------------------------------------------------------------------------*/
 
@@ -1499,137 +1019,4 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
     }
 
     return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
-}
-
-/*----------------------------------------------------------------------------*/
-#if 0
-oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sal_Char* pszPath,
-                               sal_Char Separator, sal_Char *pszBuffer, sal_uInt32 Max)
-{
-
-    OSL_ASSERT(pszName != NULL);
-
-    if( (Separator == '\0') || (Separator == ';') )
-    {
-        APIRET rc;
-
-        rc = DosSearchPath( SEARCH_IGNORENETERRS | SEARCH_ENVIRONMENT | SEARCH_CUR_DIRECTORY,
-                            pszPath == NULL ? "PATH" : (sal_Char*) pszPath,
-                            (sal_Char*) pszName,
-                            pszBuffer, Max );
-
-        return( rc == NO_ERROR ? osl_Process_E_None : osl_Process_E_NotFound );
-    }
-    else
-    {
-        sal_Char path[_MAX_PATH];
-        sal_Char buffer[_MAX_ENV];
-        sal_Char* pszEnv;
-
-        if (pszPath == NULL)
-            pszPath = "PATH";
-
-        if (DosScanEnv((sal_Char*)pszPath, &pszEnv) == NO_ERROR)
-        {
-            sal_Char *pstr, *pchr = buffer;
-
-            strncpy(buffer, pszEnv, Max);
-            pszBuffer[Max - 1] = '\0';
-
-            while (*pchr != '\0')
-            {
-                pstr = path;
-
-                while ((*pchr != '\0') && (*pchr != Separator))
-                    *pstr++ = *pchr++;
-
-                if  ((pstr > path) &&
-                     ((*(pstr - 1) != ':') && (*(pstr - 1) != '\\')))
-                    *pstr++ = '\\';
-
-                *pstr = '\0';
-
-                strcat(path, pszName);
-
-                if (access(path, 0) == 0)
-                {
-                    sal_Char* pName;
-
-                    if( (DosQueryPathInfo( path, FIL_QUERYFULLNAME, path, sizeof( path ) ) != NO_ERROR )
-                        || (strlen( path ) >= (size_t)Max) )
-                        return osl_Process_E_Unknown;
-
-                    strcpy(pszBuffer, path);
-
-                    return osl_Process_E_None;
-                }
-
-                if (*pchr == Separator)
-                    pchr++;
-            }
-        }
-
-        return osl_Process_E_NotFound;
-    }
-
-}
-#endif
-
-/*----------------------------------------------------------------------------*/
-
-
-
-
-static CHAR        szOOoExe[CCHMAXPATH];
-
-static FILE* APIENTRY _oslExceptOpenLogFile(VOID)
-{
-   FILE        *file;
-   DATETIME    DT;
-   PPIB        pib;
-   PSZ         slash;
-
-   // get executable fullpath
-   DosGetInfoBlocks(NULL, &pib);
-   DosQueryModuleName(pib->pib_hmte, sizeof(szOOoExe), szOOoExe);
-   // truncate to exe name
-   slash = (PSZ)strrchr( szOOoExe, '.');
-   *slash = '\0';
-   // make log path
-   strcat( szOOoExe, ".log");
-
-   file = fopen( szOOoExe, "a");
-   if (!file) { // e.g. readonly drive
-      // try again, usually C exist and is writable
-      file = fopen( "c:\\OOo.log", "a");
-   }
-   if (file) {
-        DosGetDateTime(&DT);
-        fprintf(file, "\nTrap message -- Date: %04d-%02d-%02d, Time: %02d:%02d:%02d\n",
-            DT.year, DT.month, DT.day,
-            DT.hours, DT.minutes, DT.seconds);
-        fprintf(file, "-------------------------------------------------------\n"
-                      "\nAn internal error occurred (Built " __DATE__ "-" __TIME__ ").\n");
-
-   }
-
-   // ok, return handle
-   return (file);
-}
-
-int SAL_CALL osl_ProcessHook( int (*sal_main)( int, char**), int argc, char ** argv)
-{
-   int rc = -1;
-
-   excRegisterHooks(_oslExceptOpenLogFile, NULL, NULL, FALSE);
-
-   TRY_LOUD(excpt1) {
-
-    osl_setCommandArgs(argc, argv);
-    rc = sal_main(argc, argv);
-
-   } CATCH(excpt1) {
-   } END_CATCH();
-
-   return rc;
 }
