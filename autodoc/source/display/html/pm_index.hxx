@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pm_index.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:36:34 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:32:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,26 +36,47 @@
 #ifndef ADC_DISPLAY_HTML_PM_INDEX_HXX
 #define ADC_DISPLAY_HTML_PM_INDEX_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include "pm_base.hxx"
-#include <ary/cpp/cpp_disp.hxx>
-    // COMPONENTS
-    // PARAMETERS
-
+#include <ary/ary_disp.hxx>
+#include <cosv/tpl/processor.hxx>
+// USED SERVICES
 namespace adcdisp
 {
      class IndexList;
 }
+namespace ary
+{
+    namespace cpp
+    {
+        class Namespace;
+        class Class;
+        class Enum;
+        class Typedef;
+        class Function;
+        class Variable;
+        class EnumValue;
+        class Define;
+        class Macro;
+    }
+}
 
-
-class ChildList_Display;
 class NavigationBar;
 
+
+
+
 class PageMaker_Index : public SpecializedPageMaker,
-                        public ary::cpp::Display      // Must be 'public' because of a Solaris-Compiler-bug with dynamic_cast in hierarchies with private inheritance.
+                        public ary::Display,
+                        public csv::ConstProcessor<ary::cpp::Namespace>,
+                        public csv::ConstProcessor<ary::cpp::Class>,
+                        public csv::ConstProcessor<ary::cpp::Enum>,
+                        public csv::ConstProcessor<ary::cpp::Typedef>,
+                        public csv::ConstProcessor<ary::cpp::Function>,
+                        public csv::ConstProcessor<ary::cpp::Variable>,
+                        public csv::ConstProcessor<ary::cpp::EnumValue>,
+                        public csv::ConstProcessor<ary::cpp::Define>,
+                        public csv::ConstProcessor<ary::cpp::Macro>
 {
   public:
                         PageMaker_Index(
@@ -66,43 +87,45 @@ class PageMaker_Index : public SpecializedPageMaker,
 
     virtual void        MakePage();
 
-    // Interface ary::cpp::Display:
-    virtual void        Display_Namespace(
+  private:
+    // Interface csv::ConstProcessor<>
+    virtual void        do_Process(
                             const ary::cpp::Namespace &
                                                 i_rData );
-    virtual void        Display_Class(
+    virtual void        do_Process(
                             const ary::cpp::Class &
                                                 i_rData );
-    virtual void        Display_Enum(
+    virtual void        do_Process(
                             const ary::cpp::Enum &
                                                 i_rData );
-    virtual void        Display_Typedef(
+    virtual void        do_Process(
                             const ary::cpp::Typedef &
                                                 i_rData );
-    virtual void        Display_Function(
+    virtual void        do_Process(
                             const ary::cpp::Function &
                                                 i_rData );
-    virtual void        Display_Variable(
+    virtual void        do_Process(
                             const ary::cpp::Variable &
                                                 i_rData );
-    virtual void        Display_EnumValue(
+    virtual void        do_Process(
                             const ary::cpp::EnumValue &
                                                 i_rData );
-
-    virtual void        Display_Define(
+    virtual void        do_Process(
                             const ary::cpp::Define &
                                                 i_rData );
-    virtual void        Display_Macro(
+    virtual void        do_Process(
                             const ary::cpp::Macro &
                                                 i_rData );
-
-  private:
+    // Interface ary::cpp::Display:
+    virtual const ary::cpp::Gate *
+                        inq_Get_ReFinder() const;
+    // Locals
     virtual void        Write_NavBar();
     virtual void        Write_TopArea();
     virtual void        Write_CompleteAlphabeticalList();
 
     void                Write_CeIndexEntry(
-                            const ary::CodeEntity &
+                            const ary::cpp::CodeEntity &
                                                 i_rCe,
                             const char *        i_sType,
                             const char *        i_sOwnerType );
@@ -116,5 +139,5 @@ class PageMaker_Index : public SpecializedPageMaker,
 
 
 
-#endif
 
+#endif

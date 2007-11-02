@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strconst.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:38:34 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:34:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #define ADC_DISPLAY_HTML_STRCONST_HXX
 
 
-const char * const C_sDIR_Projects = "prj";
 const char * const C_sDIR_NamespacesCpp = "names";
 const char * const C_sDIR_Index = "index-files";   // Convention recognised by Javadoc
 
