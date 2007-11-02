@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_tag.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:59:20 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:37:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 #include "hi_linkhelper.hxx"
 
 
-using ary::info::DocuTex2;
+using ary::inf::DocuTex2;
 
 
 inline void
@@ -67,7 +67,7 @@ HF_IdlTag::Leave_TextOut() const
 }
 
 inline void
-HF_IdlTag::PutText_Out( const ary::info::DocuTex2 & i_rText ) const
+HF_IdlTag::PutText_Out( const ary::inf::DocuTex2 & i_rText ) const
 {
     i_rText.DisplayAt( const_cast< HF_IdlDocuTextDisplay& >(aTextOut) );
 }
@@ -89,7 +89,7 @@ HF_IdlTag::~HF_IdlTag()
 void
 HF_IdlTag::Produce_byData( Xml::Element &              o_rTitle,
                            Xml::Element &              o_rText,
-                           const ary::info::AtTag2 &   i_rTag ) const
+                           const ary::inf::AtTag2 &   i_rTag ) const
 {
     pTitleOut = &o_rTitle;
     Enter_TextOut(o_rText);
@@ -195,11 +195,13 @@ HF_IdlShortDocu::~HF_IdlShortDocu()
 void
 HF_IdlShortDocu::Produce_byData( const ary::idl::CodeEntity & i_rCe )
 {
-    if (i_rCe.Docu() == 0)
+    const ce_info *
+        pDocu = Get_IdlDocu(i_rCe.Docu());
+    if (pDocu == 0)
         return;
 
     const ce_info &
-        rDocu = *i_rCe.Docu();
+        rDocu = *pDocu;
     if ( rDocu.IsDeprecated() )
     {
         CurOut()
@@ -254,22 +256,10 @@ HF_IdlDocuTextDisplay::Display_TextToken( const csi::dsapi::DT_TextToken & i_rTo
                 TheMessages().Out_TypeVsMemberMisuse(sLinkToken, Env().CurPageCe_AsText(), 0);
             }
 
-//          Would be duplicate, therefore we do nothing:
-//            else
-//            {
-//                Cerr() << "Error in documentation: Too many or too few tokens for a link in <member> or <type>." << Endl();
-//                Cerr() << "  Link won't be created, but all tokens shown plain." << Endl();
-//                Cerr() << "  \"" << sLinkToken << "\"";
-//                if ( pScopeGivingCe != 0 )
-//                    Cerr() << " in " << pScopeGivingCe->LocalName();
-//                Cerr() << Endl();
-//            }
-
             StopLinkGathering();
         }
     }   // endif (bGatherLink)
 
-//DBG    CurOut() << new Xml::XmlCode( i_rToken.GetText() ) << " ";
     CurOut() << new Xml::XmlCode( i_rToken.GetText() );
 }
 
@@ -291,7 +281,6 @@ HF_IdlDocuTextDisplay::Display_MupType( const csi::dsapi::DT_MupType & i_rToken 
         if (bGatherLink)
         {
             CreateTypeLink();
-// DBG      CurOut() << " ";
             StopLinkGathering();
         }
     }
@@ -309,7 +298,6 @@ HF_IdlDocuTextDisplay::Display_MupMember( const csi::dsapi::DT_MupMember & i_rTo
         if (bGatherLink)
         {
             CreateMemberLink();
-// DBG      CurOut() << " ";
             StopLinkGathering();
         }
     }
@@ -321,7 +309,6 @@ HF_IdlDocuTextDisplay::Display_MupConst( const csi::dsapi::DT_MupConst & i_rToke
     CurOut()
         >> *new Html::Bold
            << i_rToken.GetText();
-// DBG      CurOut() << " ";
 }
 
 void
