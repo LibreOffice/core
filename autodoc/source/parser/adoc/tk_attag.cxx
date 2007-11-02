@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tk_attag.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:08:16 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:47:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,8 +80,8 @@ Tok_at_std::Trigger( TokenInterpreter & io_rInterpreter ) const
 const char *
 Tok_at_std::Text() const
 {
-    // KORR
-    return "Ein Tag";
+    // KORR_FUTURE
+    return "A Tag";
 
 //  return eId.Text();
 }
