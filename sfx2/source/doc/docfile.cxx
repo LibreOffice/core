@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.194 $
+ *  $Revision: 1.195 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:07:32 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 11:48:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -545,6 +545,7 @@ Reference < XContent > SfxMedium::GetContent() const
     {
         Reference < ::com::sun::star::ucb::XContent > xContent;
         Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+
         SFX_ITEMSET_ARG( pSet, pItem, SfxUnoAnyItem, SID_CONTENT, sal_False);
         if ( pItem )
             pItem->GetValue() >>= xContent;
@@ -1167,14 +1168,37 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
                         if ( aLogicName.CompareToAscii( "private:stream", 14 ) != COMPARE_EQUAL
                           && GetContent().is() )
                         {
-                            Any aAny = pImp->aContent.getPropertyValue(
-                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly" )) );
+                            // unfortunately the content can not always have the interaction handler
+                            // so in some cases it has to be set for some time
+                            Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+                            Reference < ::com::sun::star::ucb::XCommandEnvironment > xOldEnv;
+                               Reference < ::com::sun::star::task::XInteractionHandler > xInteractionHandler = ((SfxMedium*)this)->GetInteractionHandler();
+                            if ( xInteractionHandler.is() )
+                                xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler,
+                                                      Reference< ::com::sun::star::ucb::XProgressHandler >() );
 
-                            if ( ( aAny >>= bReadOnly ) && bReadOnly )
+                            if ( xEnv.is() )
                             {
-                                GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
-                                SetOpenMode( SFX_STREAM_READONLY, sal_False, sal_True );
+                                xOldEnv = pImp->aContent.getCommandEnvironment();
+                                pImp->aContent.setCommandEnvironment( xEnv );
                             }
+
+                            try
+                            {
+                                Any aAny = pImp->aContent.getPropertyValue(
+                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly" )) );
+
+                                if ( ( aAny >>= bReadOnly ) && bReadOnly )
+                                {
+                                    GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
+                                    SetOpenMode( SFX_STREAM_READONLY, sal_False, sal_True );
+                                }
+                            }
+                            catch( uno::Exception& )
+                            {}
+
+                            if ( xEnv.is() )
+                                pImp->aContent.setCommandEnvironment( xOldEnv );
                         }
 
                         // if the document is opened as readonly the copy should be done according to selected approach
