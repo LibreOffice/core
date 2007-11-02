@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 14:57:07 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:25:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@ LIB1FILES=	$(SLB)$/client.lib \
             $(SLB)$/provider.lib
 
 SHL1TARGET=	$(TARGET)$(UCBHELPER_MAJOR)$(COMID)
+.IF "$(GUI)" == "OS2"
+SHL1TARGET=	ucbh$(UCBHELPER_MAJOR)
+.ENDIF
 SHL1STDLIBS = \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
