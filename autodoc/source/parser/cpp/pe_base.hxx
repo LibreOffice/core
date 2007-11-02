@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_base.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:11:35 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:52:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,18 +37,14 @@
 #ifndef ADC_CPP_PE_BASE_HXX
 #define ADC_CPP_PE_BASE_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include "cpp_pe.hxx"
-    // COMPONENTS
+// USED SERVICES
 #include <semantic/callf.hxx>
 #include <semantic/sub_peu.hxx>
-    // PARAMETERS
-#include <ary/cpp/c_etypes.hxx>
-// #include <ary/cpp/c_class.hxx>
-#include <ary/cpp/c_idlist.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
+#include <ary/cpp/c_slntry.hxx>
+
 
 
 namespace cpp
