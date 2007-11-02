@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docu_pe.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:36:35 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,13 +46,14 @@
 
 namespace ary
 {
-    class Documentation;
-
-    namespace info
-    {
-        class CodeInfo;
-        class AtTag;
-    }
+namespace doc
+{
+    class OldCppDocu;
+}
+namespace info
+{
+    class AtTag;
+}
 }
 
 
@@ -138,7 +139,7 @@ class Adoc_PE : public TokenInterpreter
                             const Tok_EoDocu &  i_rTok );
 
 
-    DYN ary::Documentation *
+    DYN ary::doc::OldCppDocu *
                         ReleaseJustParsedDocu();
 
     bool                IsComplete() const;
@@ -148,7 +149,7 @@ class Adoc_PE : public TokenInterpreter
                             DYN ary::info::AtTag *
                                                 let_dpTag,
                             bool                i_bImplicit = false );  /// True for implicit @short and @descr.
-    ary::info::CodeInfo &
+    ary::doc::OldCppDocu &
                         CurDocu();
     ary::info::AtTag &  CurAtTag();
     bool                UsesHtmlInDocuText();
@@ -172,7 +173,7 @@ class Adoc_PE : public TokenInterpreter
         ds_std
     };
 
-    Dyn<ary::info::CodeInfo>
+    Dyn<ary::doc::OldCppDocu>
                         pCurDocu;
     ary::info::AtTag *  pCurAtTag;
     uintt               nLineCountInDocu;
@@ -193,11 +194,7 @@ Adoc_PE::IsComplete() const
 }
 
 
+
+
 }   // namespace adoc
-
-
-
-
 #endif
-
-
