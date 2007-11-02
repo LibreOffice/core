@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_tydef.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:29:40 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:57:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,20 +36,18 @@
 #ifndef ADC_CPP_PE_TYDEF_HXX
 #define ADC_CPP_PE_TYDEF_HXX
 
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include "cpp_pe.hxx"
-    // COMPONENTS
+// USED SERVICES
 #include <semantic/callf.hxx>
 #include <semantic/sub_peu.hxx>
-    // PARAMETERS
 
 
-namespace cpp {
+namespace cpp
+{
+    class PE_Type;
 
-class PE_Type;
+
 
 
 class PE_Typedef : public cpp::Cpp_PE
@@ -70,7 +68,7 @@ class PE_Typedef : public cpp::Cpp_PE
                             const cpp::Token &  i_rTok );
   private:
     typedef SubPe< PE_Typedef, PE_Type >        SP_Type;
-    typedef SubPeUse< PE_Typedef, PE_Type>  SPU_Type;
+    typedef SubPeUse< PE_Typedef, PE_Type>      SPU_Type;
 
     void                Setup_StatusFunctions();
     virtual void        InitData();
@@ -89,17 +87,12 @@ class PE_Typedef : public cpp::Cpp_PE
     Dyn<SP_Type>        pSpType;
     Dyn<SPU_Type>       pSpuType;
 
-    udmstri             sName;
-    ary::Tid            nType;
+    String              sName;
+    ary::cpp::Type_id   nType;
 };
 
 
 
-// IMPLEMENTATION
-
 
 }   // namespace cpp
-
-
 #endif
-

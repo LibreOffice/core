@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_param.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:28:35 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:56:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,21 +37,22 @@
 #ifndef ADC_CPP_PE_PARAM_HXX
 #define ADC_CPP_PE_PARAM_HXX
 
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include "cpp_pe.hxx"
-    // COMPONENTS
+// USED SERVICES
 #include <semantic/callf.hxx>
 #include <semantic/sub_peu.hxx>
-    // PARAMETERS
 #include <ary/cpp/c_vfflag.hxx>
 
 
-namespace cpp {
 
-class PE_Type;
-class PE_Variable;
+
+namespace cpp
+{
+    class PE_Type;
+    class PE_Variable;
+
+
 
 
 class PE_Parameter : public Cpp_PE
@@ -65,18 +66,17 @@ class PE_Parameter : public Cpp_PE
         finished,
         size_of_states
     };
-    typedef ary::cpp::S_Parameter   S_ParamInfo;
+    typedef ary::cpp::S_Parameter       S_ParamInfo;
 
-                        PE_Parameter(
+    explicit            PE_Parameter(
                             Cpp_PE *            i_pParent );
                         ~PE_Parameter();
 
     virtual void        Call_Handler(
                             const cpp::Token &  i_rTok );
 
-    ary::Tid            Result_FrontType() const;
-    const S_ParamInfo &
-                        Result_ParamInfo() const;
+    ary::cpp::Type_id   Result_FrontType() const;
+    const S_ParamInfo & Result_ParamInfo() const;
 
   private:
     typedef SubPe< PE_Parameter, PE_Type >          SP_Type;
@@ -126,23 +126,22 @@ class PE_Parameter : public Cpp_PE
 
 
 
-// IMPLEMENTATION
 
-inline ary::Tid
+// IMPLEMENTATION
+inline ary::cpp::Type_id
 PE_Parameter::Result_FrontType() const
-    { return aResultParamInfo.nType; }
+{
+    return aResultParamInfo.nType;
+}
+
 inline const PE_Parameter::S_ParamInfo &
 PE_Parameter::Result_ParamInfo() const
-    { return aResultParamInfo; }
+{
+    return aResultParamInfo;
+}
+
 
 
 
 }   // namespace cpp
-
-
-
-
 #endif
-
-
-

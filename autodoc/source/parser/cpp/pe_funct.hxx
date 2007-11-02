@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_funct.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:26:49 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:55:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
     // COMPONENTS
 #include <semantic/callf.hxx>
 #include <semantic/sub_peu.hxx>
-#include <ary/cpp/c_etypes.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
 #include <ary/cpp/c_vfflag.hxx>
     // PARAMETERS
 
@@ -93,17 +93,17 @@ class PE_Function : public Cpp_PE
                         ~PE_Function();
 
     void                Init_Std(
-                            const udmstri &     i_sName,
-                            ary::Tid            i_nReturnType,
+                            const String  &     i_sName,
+                            ary::cpp::Type_id   i_nReturnType,
                             bool                i_bVirtual,
                             ary::cpp::FunctionFlags
                                                 i_aFlags );
     void                Init_Ctor(
-                            const udmstri &     i_sName,
+                            const String  &     i_sName,
                             ary::cpp::FunctionFlags
                                                 i_aFlags );
     void                Init_Dtor(
-                            const udmstri &     i_sName,
+                            const String  &     i_sName,
                             bool                i_bVirtual,
                             ary::cpp::FunctionFlags
                                                 i_aFlags );
@@ -112,12 +112,12 @@ class PE_Function : public Cpp_PE
                             ary::cpp::FunctionFlags
                                                 i_aFlags );
     void                Init_NormalOperator(
-                            ary::Tid            i_nReturnType,
+                            ary::cpp::Type_id   i_nReturnType,
                             bool                i_bVirtual,
                             ary::cpp::FunctionFlags
                                                 i_aFlags );
 
-    ary::Cid            Result_Id() const;
+    ary::cpp::Ce_id     Result_Id() const;
     bool                Result_WithImplementation() const;
 
     virtual void        Call_Handler(
@@ -129,7 +129,7 @@ class PE_Function : public Cpp_PE
     typedef SubPeUse<PE_Function, PE_Parameter>     SPU_Parameter;
 
     typedef std::vector<ary::cpp::S_Parameter>      ParameterList;
-    typedef std::vector<ary::Tid>                   ExceptionTypeList;
+    typedef std::vector<ary::cpp::Type_id>          ExceptionTypeList;
 
     void                Setup_StatusFunctions();
     virtual void        InitData();
@@ -192,7 +192,7 @@ class PE_Function : public Cpp_PE
     Dyn< SPU_Type >     pSpuException;
     Dyn< SPU_Type >     pSpuCastOperatorType;       // in "operator int()" or "operator ThatClass *()"
 
-    ary::Cid            nResult;
+    ary::cpp::Ce_id     nResult;
     bool                bResult_WithImplementation; // Necessary for the parent ParseEnvironment
                                                     //   to know, there is no semicolon or comma following.
         // Pre results
@@ -201,7 +201,7 @@ class PE_Function : public Cpp_PE
     E_ConVol            eConVol;
     ary::cpp::FunctionFlags
                         aFlags;
-    ary::Tid            nReturnType;
+    ary::cpp::Type_id   nReturnType;
     ParameterList       aParameters;
     ExceptionTypeList   aExceptions;
     bool                bThrow;                     // Indicates, if there is a throw - important, if there are 0 exceptions listed.
@@ -210,20 +210,20 @@ class PE_Function : public Cpp_PE
 
 
 
+
 // IMPLEMENTATION
-
-
 inline bool
 PE_Function::Result_WithImplementation() const
     { return bResult_WithImplementation; }
 
 
+
+
 }   // namespace cpp
-
-
-
-
 #endif
+
+
+
 
 
 /*  // Overview of Stati

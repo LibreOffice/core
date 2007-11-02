@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfscope.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:32:55 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:01:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,26 +36,21 @@
 #ifndef ADC_CPP_SFSCOPE_HXX
 #define ADC_CPP_SFSCOPE_HXX
 
-
-
 // USED SERVICES
-    // BASE CLASSES
 #include "cxt2ary.hxx"
-    // COMPONENTS
-    // PARAMETERS
+
+
+
 
 namespace cpp
 {
+
 
 /** Implementation struct for cpp::ContextForAry.
 */
 struct ContextForAry::S_FileScopeInfo
 {
-    udmstri             sCurFileName;
-    ary::cpp::ProjectGroup *
-                        pCurProject;
-    ary::cpp::FileGroup *
-                        pCurFile;
+    ary::loc::File *    pCurFile;
     uintt               nLineCount;
     Dyn<StringVector>   pCurTemplateParameters;
 
@@ -63,19 +58,20 @@ struct ContextForAry::S_FileScopeInfo
 };
 
 
+
+
+// IMPLEMENTATION
 inline
 ContextForAry::
 S_FileScopeInfo::S_FileScopeInfo()
-    :   // sCurFileName,
-        pCurProject(0),
-        pCurFile(0),
-        nLineCount(0)
-        // pCurTemplateParameters
+    :   pCurFile(0),
+        nLineCount(0),
+        pCurTemplateParameters(0)
 {
 }
 
+
+
+
 }   // namespace cpp
-
-
 #endif
-
