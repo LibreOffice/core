@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:03:28 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:18:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2023,20 +2023,20 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         static ::rtl::OUString GetCrashConfigDir()
         {
 
-#ifdef WNT
+#if defined(WNT) || !defined(OS2)
             OUString    ustrValue = OUString::createFromAscii("${$SYSBINDIR/bootstrap.ini:UserInstallation}");
 #else
             OUString    ustrValue = OUString::createFromAscii("$SYSUSERCONFIG");
 #endif
             Bootstrap::expandMacros( ustrValue );
 
-#ifdef WNT
+#if defined(WNT) || !defined(OS2)
             ustrValue += OUString::createFromAscii("/user/crashdata");
 #endif
             return ustrValue;
         }
 
-#ifdef WNT
+#if defined(WNT) || !defined(OS2)
 #define CHKFILE "crashdat.chk"
 #define STKFILE "crashdat.stk"
 #define PRVFILE "crashdat.prv"
