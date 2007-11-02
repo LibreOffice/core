@@ -4,9 +4,9 @@
  *
  *  $RCSfile: x_ary.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:45:05 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:15:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ X_Ary::X_Ary( E_Event i_eEvent )
 }
 
 void
-X_Ary::GetInfo( ostream &      o_rOutputMedium ) const
+X_Ary::GetInfo( std::ostream & o_rOutputMedium ) const
 {
     switch (eEvent)
     {

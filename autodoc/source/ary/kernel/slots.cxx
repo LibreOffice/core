@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slots.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:44:49 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:15:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,37 +113,10 @@ Slot_RidSet::StoreEntries( Display     & o_rDestination ) const
 
 
 
-//***********************       Slot_LidSet     ********************//
-
-Slot_LidSet::Slot_LidSet( const Set_Lid &             i_rData )
-    :   pData(&i_rData)
-{
-}
-
-Slot_LidSet::~Slot_LidSet()
-{
-}
-
-uintt
-Slot_LidSet::Size() const
-{
-     return pData->size();;
-}
-
-void
-Slot_LidSet::StoreEntries( Display     & o_rDestination ) const
-{
-    for ( Set_Lid::const_iterator it = pData->begin();
-          it != pData->end();
-          ++it )
-    {
-        o_rDestination.DisplaySlot_Lid( *it );
-    }
-}
 
 //***********************       Slot_MapLocalCe     ********************//
 
-Slot_MapLocalCe::Slot_MapLocalCe( const Map_LocalCe & i_rData )
+Slot_MapLocalCe::Slot_MapLocalCe( const cpp::Map_LocalCe & i_rData )
     :   pData(&i_rData)
 {
 }
@@ -161,7 +134,7 @@ Slot_MapLocalCe::Size() const
 void
 Slot_MapLocalCe::StoreEntries( Display & o_rDestination ) const
 {
-    for ( Map_LocalCe::const_iterator it = pData->begin();
+    for ( cpp::Map_LocalCe::const_iterator it = pData->begin();
           it != pData->end();
           ++it )
     {
@@ -171,34 +144,33 @@ Slot_MapLocalCe::StoreEntries( Display & o_rDestination ) const
 
 
 
-//***********************       Slot_OperationSet     ********************//
+//***********************       Slot_MapOperations     ********************//
 
-Slot_OperationSet::Slot_OperationSet( const Set_LocalOperation & i_rData )
+Slot_MapOperations::Slot_MapOperations( const std::multimap<String, cpp::Ce_id> & i_rData )
     :   pData(&i_rData)
 {
 }
 
-Slot_OperationSet::~Slot_OperationSet()
+Slot_MapOperations::~Slot_MapOperations()
 {
 }
 
 uintt
-Slot_OperationSet::Size() const
+Slot_MapOperations::Size() const
 {
      return pData->size();;
 }
 
 void
-Slot_OperationSet::StoreEntries( Display     & o_rDestination ) const
+Slot_MapOperations::StoreEntries( Display & o_rDestination ) const
 {
-    for ( Set_LocalOperation::const_iterator it = pData->begin();
+    for ( std::multimap<String, cpp::Ce_id>::const_iterator it = pData->begin();
           it != pData->end();
           ++it )
     {
-        o_rDestination.DisplaySlot_Rid( (*it).nId );
+        o_rDestination.DisplaySlot_LocalCe( (*it).second, (*it).first );
     }
 }
-
 
 
 //***********************       Slot_RidList     ********************//
@@ -233,7 +205,7 @@ Slot_RidList::StoreEntries( Display     & o_rDestination ) const
 
 //***********************       Slot_ListLocalCe      ********************//
 
-Slot_ListLocalCe::Slot_ListLocalCe( const List_LocalCe & i_rData )
+Slot_ListLocalCe::Slot_ListLocalCe( const cpp::List_LocalCe & i_rData )
     :   pData(&i_rData)
 {
 }
@@ -251,7 +223,7 @@ Slot_ListLocalCe::Size() const
 void
 Slot_ListLocalCe::StoreEntries( Display     & o_rDestination ) const
 {
-    for ( List_LocalCe::const_iterator it = pData->begin();
+    for ( cpp::List_LocalCe::const_iterator it = pData->begin();
           it != pData->end();
           ++it )
     {
@@ -260,39 +232,4 @@ Slot_ListLocalCe::StoreEntries( Display     & o_rDestination ) const
 }
 
 
-
-//***********************       Slot_OperationList     ********************//
-
-Slot_OperationList::Slot_OperationList( const List_LocalOperation & i_rData )
-    :   pData(&i_rData)
-{
-}
-
-Slot_OperationList::~Slot_OperationList()
-{
-}
-
-uintt
-Slot_OperationList::Size() const
-{
-     return pData->size();;
-}
-
-void
-Slot_OperationList::StoreEntries( Display     & o_rDestination ) const
-{
-    for ( List_LocalOperation::const_iterator it = pData->begin();
-          it != pData->end();
-          ++it )
-    {
-        o_rDestination.DisplaySlot_Rid( (*it).nId );
-    }
-}
-
-
-
-
 }   // namespace ary
-
-
-

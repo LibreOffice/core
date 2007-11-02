@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namesort.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:43:23 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:13:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #include <precomp.h>
-#include <namesort.hxx>
+#include <ary/namesort.hxx>
 
 
 // NOT FULLY DEFINED SERVICES
@@ -44,11 +44,12 @@
 namespace
 {
 
-int C_cAryNameOrdering1[256] =
+
+int C_cAutodocNameOrdering1[256] =
     {   0,255,255,255, 255,255,255,255,     255,255,255,255, 255,255,255,255, //  0 ..
       255,255,255,255, 255,255,255,255,     255,255,255,255, 255,255,255,255,
       255,255,255,255, 255,255,255,255,     255,255,255,255, 255,255,255,255, // 32 ..
-       71, 72, 73, 74,  75, 76, 77, 78,      79, 80,255,255, 255,255,255,255,
+       70, 71, 72, 73,  74, 75, 76, 77,      78, 79,255,255, 255,255,255,255,
 
       255, 11, 13, 15,  17, 19, 21, 23,      25, 27, 29, 31,  33, 35, 37, 39, // 64 ..
        41, 43, 45, 47,  49, 51, 53, 55,      57, 59, 61,255, 255,255,255, 63,
@@ -66,11 +67,11 @@ int C_cAryNameOrdering1[256] =
       255,255,255,255, 255,255,255,255,     255,255,255,255, 255,255,255,255
     };
 
-int C_cAryNameOrdering2[256] =
+int C_cAutodocNameOrdering2[256] =
     {   0,255,255,255, 255,255,255,255,     255,255,255,255, 255,255,255,255, //  0 ..
       255,255,255,255, 255,255,255,255,     255,255,255,255, 255,255,255,255,
       255,255,255,255, 255,255,255,255,     255,255,255,255, 255,255,255,255, // 32 ..
-       71, 72, 73, 74,  75, 76, 77, 78,      79, 80,255,255, 255,255,255,255,
+       70, 71, 72, 73,  74, 75, 76, 77,      78, 79,255,255, 255,255,255,255,
 
       255, 11, 13, 15,  17, 19, 21, 23,      25, 27, 29, 31,  33, 35, 37, 39, // 64 ..
        41, 43, 45, 47,  49, 51, 53, 55,      57, 59, 61,255, 255,255,255, 63,
@@ -87,26 +88,21 @@ int C_cAryNameOrdering2[256] =
       255,255,255,255, 255,255,255,255,     255,255,255,255, 255,255,255,255,
       255,255,255,255, 255,255,255,255,     255,255,255,255, 255,255,255,255
     };
-}
+
+
+}   // namespace anonymous
 
 
 namespace ary
 {
 
 
+const csv::CharOrder_Table
+LesserName::aOrdering1_(C_cAutodocNameOrdering1);
 
-
-
-CompareCeNames::CompareCeNames()
-    :   aOrdering1(C_cAryNameOrdering1),
-        aOrdering2(C_cAryNameOrdering2)
-{
-}
-
+const csv::CharOrder_Table
+LesserName::aOrdering2_(C_cAutodocNameOrdering2);
 
 
 
 }   // namespace ary
-
-
-
