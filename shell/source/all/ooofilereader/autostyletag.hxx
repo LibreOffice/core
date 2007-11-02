@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autostyletag.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:42:55 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 13:11:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ class CAutoStyleTag : public ITag
         virtual void addCharacters(const std::wstring& characters);
         virtual void addAttributes(const XmlTagAttributes_t& attributes);
         virtual std::wstring getTagContent(){ return EMPTY_STRING; };
-        virtual ::std::wstring const getTagAttribute( ::std::wstring  const & /*attrname*/ ){ return ( ::std::wstring() ); };
+        virtual ::std::wstring const getTagAttribute( ::std::wstring  const & /*attrname*/ ){ return ::std::wstring() ; };
 
         void setStyle( ::std::wstring const & Style );
         void setLocale( LocaleSet_t Locale );

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:44:41 $
+#   last change: $Author: hr $ $Date: 2007-11-02 13:11:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,14 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(GUI)" != "OS2"
 CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501 
 CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
 CDEFS+=-D_WIN32_IE=0x501
+.ENDIF
+.IF "$(GUI)" == "OS2"
+CFLAGS+=-DISOLATION_AWARE_ENABLED -DXML_UNICODE -DXML_UNICODE_WCHAR_T -DUNICODE -D_UNICODE
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
