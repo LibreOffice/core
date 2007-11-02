@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-25 10:09:00 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:46:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,10 @@
 #ifndef _SV_SALSYS_H
 #define _SV_SALSYS_H
 
+#include <vcl/salsys.hxx>
+
 #ifndef _SV_SV_H
-#include <sv.h>
+#include <vcl/sv.h>
 #endif
 
 class SalFrame;
