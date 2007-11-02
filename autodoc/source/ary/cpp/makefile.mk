@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 16:37:08 $
+#   last change: $Author: hr $ $Date: 2007-11-02 15:33:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,31 +53,30 @@ PRJINC=$(PRJ)$/source
 
 
 OBJFILES= \
-    $(OBJ)$/c_class.obj		\
-    $(OBJ)$/c_define.obj	\
-    $(OBJ)$/c_enum.obj		\
-    $(OBJ)$/c_enuval.obj	\
-    $(OBJ)$/c_funct.obj		\
-    $(OBJ)$/c_gate.obj		\
-    $(OBJ)$/c_macro.obj	    \
-    $(OBJ)$/c_namesp.obj	\
-    $(OBJ)$/c_osigna.obj	\
-    $(OBJ)$/c_slots.obj		\
-    $(OBJ)$/c_tydef.obj		\
-    $(OBJ)$/c_vari.obj		\
-    $(OBJ)$/ca_type.obj     \
-    $(OBJ)$/cdf_gate.obj    \
-    $(OBJ)$/cg_file.obj     \
-    $(OBJ)$/cg_gate.obj     \
-    $(OBJ)$/cg_proj.obj     \
-    $(OBJ)$/cpp_defs.obj    \
-    $(OBJ)$/cpp_disp.obj    \
-    $(OBJ)$/namechai.obj	\
-    $(OBJ)$/predecla.obj    \
-    $(OBJ)$/prpr.obj        \
-    $(OBJ)$/tplparam.obj	\
+    $(OBJ)$/c_builtintype.obj   \
+    $(OBJ)$/c_class.obj		    \
+    $(OBJ)$/c_de.obj	        \
+    $(OBJ)$/c_define.obj	    \
+    $(OBJ)$/c_enum.obj		    \
+    $(OBJ)$/c_enuval.obj	    \
+    $(OBJ)$/c_funct.obj		    \
+    $(OBJ)$/c_macro.obj	        \
+    $(OBJ)$/c_namesp.obj	    \
+    $(OBJ)$/c_osigna.obj	    \
+    $(OBJ)$/c_reposypart.obj	\
+    $(OBJ)$/c_slots.obj		    \
+    $(OBJ)$/c_traits.obj        \
+    $(OBJ)$/c_tydef.obj		    \
+    $(OBJ)$/c_vari.obj		    \
+    $(OBJ)$/ca_ce.obj           \
+    $(OBJ)$/ca_def.obj          \
+    $(OBJ)$/ca_type.obj         \
+    $(OBJ)$/cs_ce.obj           \
+    $(OBJ)$/cs_def.obj          \
+    $(OBJ)$/cs_type.obj         \
+    $(OBJ)$/namechain.obj	    \
+    $(OBJ)$/tplparam.obj	    \
     $(OBJ)$/usedtype.obj
-
 
 
 

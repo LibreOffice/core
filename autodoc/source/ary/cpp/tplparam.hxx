@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplparam.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:39:18 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:36:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,9 @@
 #ifndef ARY_CPP_TPLPARAM_HXX
 #define ARY_CPP_TPLPARAM_HXX
 
-
 // USED SERVICES
-    // BASE CLASSES
-    // COMPONENTS
-    // PARAMETERS
-#include <ary/ids.hxx>
+#include <ary/cpp/c_types4cpp.hxx>
+
 
 
 
@@ -50,10 +47,11 @@ namespace ary
 namespace cpp
 {
     class UsedType;
-    class DisplayGate;
+    class Gate;
 
 namespace ut
 {
+
 
 class TemplateParameter
 {
@@ -65,7 +63,7 @@ class TemplateParameter
                                                 i_rOther ) const = 0;
     virtual void        Get_Text(
                             StreamStr &         o_rOut,
-                            const ary::cpp::DisplayGate &
+                            const ary::cpp::Gate &
                                                 i_rGate ) const = 0;
 };
 
@@ -82,7 +80,7 @@ class TplParameter_Type : public TemplateParameter
                                                 i_rOther ) const;
     virtual void        Get_Text(
                             StreamStr &         o_rOut,
-                            const ary::cpp::DisplayGate &
+                            const ary::cpp::Gate &
                                                 i_rGate ) const;
   private:
     Tid                 nType;
@@ -92,7 +90,7 @@ class TplParameter_Const : public TemplateParameter
 {
   public:
                         TplParameter_Const(
-                            const udmstri &     i_sConst );
+                            const String  &     i_sConst );
                         ~TplParameter_Const();
 
     virtual intt        Compare(
@@ -100,17 +98,16 @@ class TplParameter_Const : public TemplateParameter
                                                 i_rOther ) const;
     virtual void        Get_Text(
                             StreamStr &         o_rOut,
-                            const ary::cpp::DisplayGate &
+                            const ary::cpp::Gate &
                                                 i_rGate ) const;
   private:
-    udmstri             sConstant;
+    String              sConstant;
 };
+
+
+
 
 }   // namespace ut
 }   // namespace cpp
 }   // namespace ary
-
-
-
 #endif
-
