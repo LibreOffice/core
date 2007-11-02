@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hdimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:52:25 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:27:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,10 +43,11 @@
 #include <ary/ceslot.hxx>
 #include <ary/qualiname.hxx>
 #include <ary/cpp/c_class.hxx>
-#include <ary/cpp/c_disply.hxx>
+#include <ary/cpp/c_de.hxx>
 #include <ary/cpp/c_enum.hxx>
 #include <ary/cpp/c_funct.hxx>
-#include <ary/cpp/cpp_defs.hxx>
+#include <ary/cpp/c_gate.hxx>
+#include <ary/cpp/cp_ce.hxx>
 #include <udm/html/htmlitem.hxx>
 #include "cre_link.hxx"
 #include "hd_docu.hxx"
@@ -179,39 +180,53 @@ Path2ChildNamespace( const char * i_sLocalName )
     return Path2Child( C_sHFN_Namespace, i_sLocalName );
 }
 
-const char *
-OperationLink( const udmstri &         i_sOpName,
-               ary::OSid               i_nSignature,
-               const char *            i_sPrePath )
+String
+OperationLink( const ary::cpp::Gate &               ,
+               const String  &                      i_sOpName,
+               ary::cpp::Ce_id                      i_nOpId,
+               const char *                         i_sPrePath )
 {
-    // KORR_FUTURE: Make it still safer here:
-    static char sResult[500];
+    StreamLock
+        slResult(3000);
+    StreamStr &
+        sResult = slResult();
 
-    unsigned long nSignature = (unsigned long) i_nSignature;
-    sprintf( sResult, "%s#%s-%lu",      // SAFE SPRINTF (#100211# - checked)
-           i_sPrePath, i_sOpName.c_str(), nSignature );
-    return sResult;
+    sResult
+        << i_sPrePath
+        << "#"
+        << i_sOpName
+        << "-"
+        << i_nOpId.Value();
+
+
+
+    return sResult.c_str();
 }
 
 const char *
-DataLink( const udmstri &         i_sLocalName,
+DataLink( const String  &         i_sLocalName,
           const char *            i_sPrePath )
 {
-    // KORR_FUTURE: Make it still safer here:
-    static char sResult[300];
-    strcpy( sResult, i_sPrePath );      // SAFE STRCPY (#100211# - checked)
-    strcat( sResult, "#" );             // SAFE STRCAT (#100211# - checked)
-    strcat( sResult, i_sLocalName );    // SAFE STRCAT (#100211# - checked)
-    return sResult;
+    StreamLock
+        slResult(3000);
+    StreamStr &
+        sResult = slResult();
+
+    sResult
+        << i_sPrePath
+        << "#"
+        << i_sLocalName;
+
+    return sResult.c_str();
 }
 
 void
 Get_LinkedTypeText( csi::xml::Element &             o_rOut,
                     const OuputPage_Environment &   i_rEnv,
-                    ary::Tid                        i_nId,
+                    ary::cpp::Type_id               i_nId,
                     bool                            i_bWithAbsolutifier )
 {
-    if (i_nId == 0)
+    if (NOT i_nId.IsValid())
         return;
 
      const char * sPreName = "";
@@ -229,11 +244,10 @@ Get_LinkedTypeText( csi::xml::Element &             o_rOut,
     if ( NOT i_bWithAbsolutifier AND strncmp(sPreName,"::",2) == 0 )
         sPreName+=2;
 
-
-    const ary::CodeEntity *
+    const ary::cpp::CodeEntity *
         pCe = i_rEnv.Gate().Search_RelatedCe(i_nId);
 
-    udmstri sLink;
+    String  sLink;
     if ( pCe != 0 )
     {
         sLink = Link2Ce(i_rEnv,*pCe);
@@ -286,7 +300,6 @@ Create_ChildListTable( csi::xml::Element &     o_rParentElement,
                        const char *            i_sLabel )
 {
     Create_ChildListLabel(o_rParentElement, i_sLabel);
-
     csi::html::Table & ret = Create_ChildListTable(i_sTitle);
     o_rParentElement << &ret;
 
@@ -328,10 +341,9 @@ Create_ChildListTable( const char * i_sTitle )
     return *dpTable;
 }
 
-
 const char *
 Link2Ce( const OuputPage_Environment & i_rEnv,
-         const ary::CodeEntity &       i_rCe )
+         const ary::cpp::CodeEntity &  i_rCe )
 {
     const uintt         nMaxSize
                             = 3000;
@@ -340,14 +352,14 @@ Link2Ce( const OuputPage_Environment & i_rEnv,
     sLink[0] = NULCH;
 
     aLinkCreator.SetEnv(i_rEnv);
-    i_rCe.StoreAt(aLinkCreator);
+    i_rCe.Accept(aLinkCreator);
 
     return sLink;
 }
 
 const char *
 Link2CppDefinition( const OuputPage_Environment & i_rEnv,
-                    const ary::cpp::CppDefinition &    i_rDef )
+                    const ary::cpp::DefineEntity &    i_rDef )
 {
     const uintt         nMaxSize
                             = 1000;
@@ -356,12 +368,12 @@ Link2CppDefinition( const OuputPage_Environment & i_rEnv,
     sLink[0] = NULCH;
 
     aLinkCreator.SetEnv(i_rEnv);
-    i_rDef.StoreAt(aLinkCreator);
+    i_rDef.Accept(aLinkCreator);
 
     return sLink;
 }
 
-const ary::CodeEntity *
+const ary::cpp::CodeEntity *
 FindUnambiguousCe( const OuputPage_Environment & i_rEnv,
                    const ary::QualifiedName &    i_rQuName,
                    const ary::cpp::Class *       i_pJustDocumentedClass )
@@ -369,46 +381,47 @@ FindUnambiguousCe( const OuputPage_Environment & i_rEnv,
      if ( i_rEnv.CurNamespace() == 0 )
         return 0;
 
-    const ary::CodeEntity * ret = 0;
+    const ary::cpp::CodeEntity * ret = 0;
 
     if ( NOT i_rQuName.IsQualified() )
     {
         if ( i_pJustDocumentedClass != 0 )
-            ret = i_rEnv.Gate().Search_CeLocal( i_rQuName.LocalName(),
-                                                 i_rQuName.IsFunction(),
-                                                 *i_rEnv.CurNamespace(),
-                                                 i_pJustDocumentedClass );
+            ret = i_rEnv.Gate().Ces().Search_CeLocal( i_rQuName.LocalName(),
+                                                      i_rQuName.IsFunction(),
+                                                      *i_rEnv.CurNamespace(),
+                                                      i_pJustDocumentedClass );
         if (ret != 0)
             return ret;
 
-        ret = i_rEnv.Gate().Search_CeLocal( i_rQuName.LocalName(),
-                                             i_rQuName.IsFunction(),
-                                             *i_rEnv.CurNamespace(),
-                                             i_rEnv.CurClass() );
+        ret = i_rEnv.Gate().Ces().Search_CeLocal( i_rQuName.LocalName(),
+                                                  i_rQuName.IsFunction(),
+                                                  *i_rEnv.CurNamespace(),
+                                                  i_rEnv.CurClass() );
     }
     if (ret != 0)
         return ret;
 
-    return i_rEnv.Gate().Search_CeAbsolute( i_rQuName );
+    return i_rEnv.Gate().Ces().Search_CeAbsolute( *i_rEnv.CurNamespace(),
+                                                  i_rQuName );
 }
 
 void
 ShowDocu_On( csi::xml::Element &            o_rOut,
              Docu_Display &                 io_rDisplay,
-             const ary::RepositoryEntity &  i_rRE )
+             const ary::cpp::CppEntity &    i_rRE )
 {
-    if ( &i_rRE.Info() != &ary::Documentation::Null_() )
+    if (i_rRE.Docu().Data() != 0)
     {
         io_rDisplay.Assign_Out( o_rOut );
-        i_rRE.Info().StoreAt( io_rDisplay );
+        io_rDisplay.Process(i_rRE.Docu());
         io_rDisplay.Unassign_Out();
     }
 }
 
 void
-WriteOut_TokenList( csi::xml::Element &          o_rOut,
-                    const StringVector & i_rTokens,
-                    const char *                 i_sSeparator )
+WriteOut_TokenList( csi::xml::Element &     o_rOut,
+                    const StringVector &    i_rTokens,
+                    const char *            i_sSeparator )
 {
     if ( i_rTokens.size() > 0 )
     {
@@ -427,7 +440,7 @@ WriteOut_TokenList( csi::xml::Element &          o_rOut,
 }
 
 void
-EraseLeadingSpace( udmstri & io_rStr )
+EraseLeadingSpace( String  & io_rStr )
 {
     if ( *io_rStr.c_str() < 33 AND io_rStr.length() > 0 )
     {
@@ -435,7 +448,7 @@ EraseLeadingSpace( udmstri & io_rStr )
         for ( pNew = (const unsigned char * ) io_rStr.c_str();
               *pNew < 33 AND *pNew != 0;
               ++pNew ) {}
-        udmstri sNew( (const char*)pNew );
+        String  sNew( (const char*)pNew );
         io_rStr = sNew;
     }
 }
@@ -475,7 +488,7 @@ WriteOut_LinkedFunctionText( csi::xml::Element &            o_rTitleOut,
 
     // write post-name:
     FunctionParam_Iterator fit;
-    fit.Assign(i_rFunction, i_rEnv.Gate());
+    fit.Assign(i_rFunction);
 
     if (fit)
     {
@@ -511,13 +524,13 @@ WriteOut_LinkedFunctionText( csi::xml::Element &            o_rTitleOut,
     }
 
     // write Exceptions:
-    const std::vector< ary::Tid > *
+    const std::vector< ary::cpp::Type_id > *
             pThrow = i_rFunction.Exceptions();
     if ( pThrow)
     {
-        std::vector< ary::Tid >::const_iterator
+        std::vector< ary::cpp::Type_id >::const_iterator
                 it = pThrow->begin();
-        std::vector< ary::Tid >::const_iterator
+        std::vector< ary::cpp::Type_id >::const_iterator
                 it_end = pThrow->end();
 
         if (it != it_end)
@@ -552,4 +565,3 @@ WriteOut_LinkedFunctionText( csi::xml::Element &            o_rTitleOut,
 
 
 }   // namespace dshelp
-
