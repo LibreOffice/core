@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cx_idlco.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:18:24 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 17:04:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,7 +225,7 @@ Context_UidlCode::PerformStatusFunction( uintt              i_nStatusSignal,
     switch (i_nStatusSignal)
     {
         case nF_fin_Error:
-            // KORR
+            // KORR_FUTURE
             throw X_AutodocParser(X_AutodocParser::x_InvalidChar);
             // no break, because of throw
         case nF_fin_Ignore:
