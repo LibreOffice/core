@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hf_navi_main.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:03:10 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:41:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <cosv/template/tpltools.hxx>
+#include <cosv/tpl/tpltools.hxx>
 
 
 
@@ -73,8 +73,8 @@ class StdItem : public HF_MainItem
     virtual void        do_ProduceItem() const;
 
     // DATA
-    udmstri             sText;
-    udmstri             sLink;
+    String              sText;
+    String              sLink;
 };
 
 class SelfItem : public HF_MainItem
@@ -88,7 +88,7 @@ class SelfItem : public HF_MainItem
     virtual void        do_ProduceItem() const;
 
     // DATA
-    udmstri             sText;
+    String              sText;
 };
 
 class NoneItem : public HF_MainItem
@@ -102,7 +102,7 @@ class NoneItem : public HF_MainItem
     virtual void        do_ProduceItem() const;
 
     // DATA
-    udmstri             sText;
+    String              sText;
 };
 
 }   // anonymous namespace
