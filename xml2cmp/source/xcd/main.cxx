@@ -4,9 +4,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:03:01 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 12:57:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,7 @@ Create_TypeInfo( const char *           o_sOutputFile,
 
 #if 0
     std::ofstream aOut(o_sOutputFile, std::ios::out
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
                                                | std::ios::binary
 #endif
     );
@@ -259,7 +259,7 @@ Put2File_TypeInfo( const char *            i_sOutputFile,
                    ModuleDescription &     i_rData )
 {
     std::ofstream aOut(i_sOutputFile, std::ios::out
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
                                                | std::ios::binary
 #endif
     );
