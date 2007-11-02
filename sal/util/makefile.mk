@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-01 17:15:51 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:36:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,6 @@ SHL1TARGET= $(TARGET)
 SHL1TARGET= uno_$(TARGET)
 .ENDIF
 SHL1IMPLIB= i$(TARGET)
-
 SHL1VERSIONMAP=	$(TARGET).map
 SHL1RPATH=URELIB
 
@@ -134,7 +133,7 @@ SHL1STDLIBS= -lexc
 .ENDIF # UNX
 
 .IF "$(GUI)"=="OS2"
-SHL1STDLIBS=pthread.lib lvm.lib
+SHL1STDLIBS=pthread.lib
 .ENDIF # OS2
 
 # If we compile sal with STLport checking iterators
@@ -262,4 +261,3 @@ $(OUT)$/inc$/udkversion.h:
     echo #endif                               >> $@
 
 .ENDIF
-
