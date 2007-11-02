@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 12:58:37 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 11:28:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,7 @@ void OConnection::close(void) throw( SQLException, RuntimeException )
 sal_Bool OConnection::isClosed(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    return !m_xConnection.is();
+    return !m_xMasterConnection.is();
 }
 
 // XConnection
@@ -190,7 +190,7 @@ Reference< XStatement >  OConnection::createStatement(void) throw( SQLException,
     checkDisposed();
 
     Reference< XStatement > xStatement;
-    Reference< XStatement > xMasterStatement = m_xConnection->createStatement();
+    Reference< XStatement > xMasterStatement = m_xMasterConnection->createStatement();
     if ( xMasterStatement.is() )
     {
         xStatement = new OStatement(this, xMasterStatement);
@@ -206,7 +206,7 @@ Reference< XPreparedStatement >  OConnection::prepareStatement(const rtl::OUStri
 
     // TODO convert the SQL to SQL the driver understands
     Reference< XPreparedStatement > xStatement;
-    Reference< XPreparedStatement > xMasterStatement = m_xConnection->prepareStatement(sql);
+    Reference< XPreparedStatement > xMasterStatement = m_xMasterConnection->prepareStatement(sql);
     if ( xMasterStatement.is() )
     {
         xStatement = new OPreparedStatement(this, xMasterStatement);
@@ -222,7 +222,7 @@ Reference< XPreparedStatement >  OConnection::prepareCall(const rtl::OUString& s
     checkDisposed();
 
     Reference< XPreparedStatement > xStatement;
-    Reference< XPreparedStatement > xMasterStatement = m_xConnection->prepareCall(sql);
+    Reference< XPreparedStatement > xMasterStatement = m_xMasterConnection->prepareCall(sql);
     if ( xMasterStatement.is() )
     {
         xStatement = new OCallableStatement(this, xMasterStatement);
@@ -236,7 +236,7 @@ rtl::OUString OConnection::nativeSQL(const rtl::OUString& sql) throw( SQLExcepti
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    return m_xConnection->nativeSQL(sql);
+    return m_xMasterConnection->nativeSQL(sql);
 }
 
 //------------------------------------------------------------------------------
@@ -244,7 +244,7 @@ void OConnection::setAutoCommit(sal_Bool autoCommit) throw( SQLException, Runtim
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    m_xConnection->setAutoCommit(autoCommit);
+    m_xMasterConnection->setAutoCommit(autoCommit);
 }
 
 //------------------------------------------------------------------------------
@@ -252,7 +252,7 @@ sal_Bool OConnection::getAutoCommit(void) throw( SQLException, RuntimeException 
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    return m_xConnection->getAutoCommit();
+    return m_xMasterConnection->getAutoCommit();
 }
 
 //------------------------------------------------------------------------------
@@ -260,7 +260,7 @@ void OConnection::commit(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    m_xConnection->commit();
+    m_xMasterConnection->commit();
 }
 
 //------------------------------------------------------------------------------
@@ -268,7 +268,7 @@ void OConnection::rollback(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    m_xConnection->rollback();
+    m_xMasterConnection->rollback();
 }
 
 //------------------------------------------------------------------------------
@@ -276,7 +276,7 @@ Reference< XDatabaseMetaData >  OConnection::getMetaData(void) throw( SQLExcepti
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    return m_xConnection->getMetaData();
+    return m_xMasterConnection->getMetaData();
 }
 
 //------------------------------------------------------------------------------
@@ -284,7 +284,7 @@ void OConnection::setReadOnly(sal_Bool readOnly) throw( SQLException, RuntimeExc
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    m_xConnection->setReadOnly(readOnly);
+    m_xMasterConnection->setReadOnly(readOnly);
 }
 
 //------------------------------------------------------------------------------
@@ -292,7 +292,7 @@ sal_Bool OConnection::isReadOnly(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    return m_xConnection->isReadOnly();
+    return m_xMasterConnection->isReadOnly();
 }
 
 //------------------------------------------------------------------------------
@@ -300,7 +300,7 @@ void OConnection::setCatalog(const rtl::OUString& catalog) throw( SQLException, 
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    m_xConnection->setCatalog(catalog);
+    m_xMasterConnection->setCatalog(catalog);
 }
 
 //------------------------------------------------------------------------------
@@ -308,7 +308,7 @@ rtl::OUString OConnection::getCatalog(void) throw( SQLException, RuntimeExceptio
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    return m_xConnection->getCatalog();
+    return m_xMasterConnection->getCatalog();
 }
 
 //------------------------------------------------------------------------------
@@ -316,7 +316,7 @@ void OConnection::setTransactionIsolation(sal_Int32 level) throw( SQLException, 
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    m_xConnection->setTransactionIsolation(level);
+    m_xMasterConnection->setTransactionIsolation(level);
 }
 
 //------------------------------------------------------------------------------
@@ -324,7 +324,7 @@ sal_Int32 OConnection::getTransactionIsolation(void) throw( SQLException, Runtim
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    return m_xConnection->getTransactionIsolation();
+    return m_xMasterConnection->getTransactionIsolation();
 }
 
 //------------------------------------------------------------------------------
@@ -332,7 +332,7 @@ Reference< XNameAccess >  OConnection::getTypeMap(void) throw( SQLException, Run
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    return m_xConnection->getTypeMap();
+    return m_xMasterConnection->getTypeMap();
 }
 
 //------------------------------------------------------------------------------
@@ -340,7 +340,7 @@ void OConnection::setTypeMap(const Reference< XNameAccess > & typeMap) throw( SQ
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    m_xConnection->setTypeMap(typeMap);
+    m_xMasterConnection->setTypeMap(typeMap);
 }
 //==========================================================================
 //= OConnection
