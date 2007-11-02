@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reposy.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:00:12 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:02:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,132 +36,64 @@
 #ifndef ARY_REPOSY_HXX
 #define ARY_REPOSY_HXX
 
-//  VERSION:            Autodoc 2.2
-
-
-// USED SERVICES
-    // BASE CLASSES
+// BASE CLASSES
 #include <ary/ary.hxx>
-    // COMPONENTS
+// USED SERVICES
 #include <cosv/ploc_dir.hxx>
-    // PARAMETERS
+
+namespace ary
+{
+namespace cpp
+{
+    class InternalGate;
+}
+namespace idl
+{
+    class InternalGate;
+}
+}   // namespace ary
+
 
 
 
 namespace ary
 {
 
-namespace cpp
-{
-class RepositoryPartition;
-}
-
-namespace idl
-{
-class RepositoryPartition;
-}
-
-namespace phyloc
-{
-class RepositoryLocation;
-}
-
-namespace action
-{
-class Statistic;
-}
-
-
-namespace n22
-{
 
 /** Implements ::ary::Repository.
 
     @see Repository
 */
 
-class RepositoryCenter : public ::ary::n22::Repository
+class RepositoryCenter : public ::ary::Repository
 {
   public:
     //  LIFECYCLE
                         RepositoryCenter();
     virtual             ~RepositoryCenter();
 
-    //  OPERATIONS
-    void                RunCommand_ProduceAllSecondaries();
-    void                RunCommand_Statistic(
-                            action::Statistic &     io_rCommand );
+    // INHERITED
+        // Interface Repository:
+    virtual const cpp::Gate &   Gate_Cpp() const;
+    virtual const idl::Gate &   Gate_Idl() const;
+    virtual const String &      Title() const;
+    virtual cpp::Gate &         Gate_Cpp();
+    virtual idl::Gate &         Gate_Idl();
+    virtual void                Set_Title(const String & i_sName );
+
   private:
-    // Interface Repository:
-    virtual void                do_Perform( ::ary::Command & io_rCommand);
-    virtual const String &      inq_Name() const;
-    virtual bool                inq_HasIdl() const;
-    virtual bool                inq_HasCpp() const;
-    virtual const idl::Gate &   inq_Gate_Idl() const;
-    virtual const ::ary::cpp::DisplayGate &
-                                inq_Gate_Cpp() const;
-    virtual idl::Gate &         access_Gate_Idl();
-    virtual ::ary::cpp::RwGate& access_Gate_Cpp();
-    virtual void                do_Set_Name(const String & i_sName);
-
-    // Local
-
     // DATA
     String              sDisplayedName;     /// Name to be displayed for human users.
     csv::ploc::Directory
                         aLocation;
-    Dyn< idl::RepositoryPartition >
-                        pIdlPartition;
-
-#if 0   // Version 2.2
-    Dyn<cpp::RepositoryPartition>
+    Dyn<cpp::InternalGate>
                         pCppPartition;
-#endif  // Version 2.2
+    Dyn<idl::InternalGate>
+                        pIdlPartition;
 };
 
 
-}   // namespace n22
-
-
-
-
-
-
-
-
-
-/** @task
-*/
-
-class RepositoryCenter : public Repository
-{
-  public:
-    //  LIFECYCLE
-                        RepositoryCenter(
-                            DYN IdGenerator &   let_drIds );
-    virtual             ~RepositoryCenter();
-
-    bool                HasCpp() const;
-    void                Set_Name(
-                            const String &      i_name );
-
-  private:
-    // Interface Repository:
-    virtual const cpp::DisplayGate &
-                        inq_DisplayGate_Cpp() const;
-    virtual const udmstri &
-                        inq_Name() const;
-    virtual cpp::RwGate &
-                        access_RwGate_Cpp();
-    struct CheshireCat;
-
-    // DATA
-    Dyn<CheshireCat>    pi;
-};
 
 
 }   // namespace ary
-
 #endif
-
-
