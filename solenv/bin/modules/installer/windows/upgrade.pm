@@ -4,9 +4,9 @@
 #
 #   $RCSfile: upgrade.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-02 12:23:52 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:56:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,14 @@ sub create_upgrade_table
         if ( $allvariableshashref->{'BETAUPGRADECODE'} )
         {
             $newline = $allvariableshashref->{'BETAUPGRADECODE'} . "\t" . "1.0" . "\t" . "\t" . "\t" . "1" . "\t" . "\t" . "BETAPRODUCTS" . "\n";
+            push(@upgradetable, $newline);
+        }
+
+        # also searching for the stub
+
+        if ( $allvariableshashref->{'STUBUPGRADECODE'} )
+        {
+            $newline = $allvariableshashref->{'STUBUPGRADECODE'} . "\t" . "1.0" . "\t" . "\t" . "\t" . "1" . "\t" . "\t" . "STUBPRODUCTS" . "\n";
             push(@upgradetable, $newline);
         }
     }
