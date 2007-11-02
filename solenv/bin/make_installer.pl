@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.94 $
+#   $Revision: 1.95 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:37:37 $
+#   last change: $Author: hr $ $Date: 2007-11-02 12:55:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -369,6 +369,10 @@ if ( $installer::globals::globallogging ) { installer::files::save_file($logging
 
 installer::setupscript::add_installationobject_to_variables($allvariableshashref, $allscriptvariablesref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables4.log", $allvariableshashref); }
+
+# Adding also all variables, that must be included into the $allvariableshashref.
+installer::setupscript::add_forced_properties($allvariableshashref);
+if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables5.log", $allvariableshashref); }
 
 installer::logger::log_hashref($allvariableshashref);
 
