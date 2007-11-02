@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cx_a_sub.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:07:33 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 16:46:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ Cx_CheckStar::ReadCharChain( CharacterSource & io_rText )
     {
         char cNext = jumpOver(io_rText,'*');
         if ( NULCH == cNext )
-            throw X_Parser(X_Parser::x_UnexpectedEOF, "", udmstri::Null_(), 0);
+            throw X_Parser(X_Parser::x_UnexpectedEOF, "", String::Null_(), 0);
         if (cNext == '/')
         {
             io_rText.MoveOn();
@@ -185,144 +185,6 @@ Cx_AtTagCompletion::FollowUpContext()
 
 
 
-/*
-bool
-Cx_Base::PassNewToken()
-{
-    if (pNewToken)
-    {
-        rReceiver.Receive(*pNewToken.Release());
-        return true;
-    }
-    return false;
-}
-
-TkpContext &
-Cx_Base::FollowUpContext()
-{
-    csv_assert(pFollowUpContext != 0);
-    return *pFollowUpContext;
-}
-
-
-void
-Cx_EoHtml::ReadCharChain( CharacterSource & io_rText )
-{
-    if ( NULCH == jumpTo(io_rText,'>') )
-        throw X_AutodocParser(X_AutodocParser::x_UnexpectedEOF);
-    io_rText.MoveOn();
-    SetToken(new Tok_HtmlTag(io_rText.CutToken(),bToken_IsStartOfParagraph));
-}
-
-void
-Cx_EoXmlConst::ReadCharChain( CharacterSource & io_rText )
-{
-    if ( NULCH == jumpTo(io_rText,'>') )
-        throw X_AutodocParser(X_AutodocParser::x_UnexpectedEOF);
-    io_rText.MoveOn();
-    io_rText.CutToken();
-    SetToken(new Tok_XmlConst(eTokenId));
-}
-
-void
-Cx_EoXmlLink_BeginTag::ReadCharChain( CharacterSource & io_rText )
-{
-    udmstri sScope;
-
-    switch ( jumpTo(io_rText,'"','>') )
-    {
-        case '"':
-            io_rText.MoveOn();
-            io_rText.CutToken();
-            if ( NULCH == jumpTo(io_rText,'"') )
-                throw X_AutodocParser(X_AutodocParser::x_UnexpectedEOF);
-            sScope = io_rText.CutToken();
-            if ( NULCH == jumpTo(io_rText,'>') )
-                throw X_AutodocParser(X_AutodocParser::x_UnexpectedEOF);
-            break;
-        case '>':
-            break;
-        default:
-            throw X_AutodocParser(X_AutodocParser::x_UnexpectedEOF);
-    }
-    io_rText.MoveOn();
-    io_rText.CutToken();
-    SetToken(new Tok_XmlLink_BeginTag(eTokenId,sScope));
-}
-
-void
-Cx_EoXmlLink_EndTag::ReadCharChain( CharacterSource & io_rText )
-{
-    if ( NULCH == jumpTo(io_rText,'>') )
-        throw X_AutodocParser(X_AutodocParser::x_UnexpectedEOF);
-    io_rText.MoveOn();
-    io_rText.CutToken();
-    SetToken(new Tok_XmlLink_EndTag(eTokenId));
-}
-
-void
-Cx_EoXmlFormat_BeginTag::ReadCharChain( CharacterSource & io_rText )
-{
-    if ( NULCH == jumpTo(io_rText,'>') )
-        throw X_AutodocParser(X_AutodocParser::x_UnexpectedEOF);
-    io_rText.MoveOn();
-    io_rText.CutToken();
-    SetToken(new Tok_XmlFormat_BeginTag(eTokenId));
-}
-
-void
-Cx_EoXmlFormat_EndTag::ReadCharChain( CharacterSource & io_rText )
-{
-    if ( NULCH == jumpTo(io_rText,'>') )
-        throw X_AutodocParser(X_AutodocParser::x_UnexpectedEOF);
-    io_rText.MoveOn();
-    io_rText.CutToken();
-    SetToken(new Tok_XmlFormat_EndTag(eTokenId));
-}
-
-void
-Cx_CheckStar::ReadCharChain( CharacterSource & io_rText )
-{
-    bEndTokenFound = false;
-    if (bIsEnd)
-    {
-        char cNext = jumpOver(io_rText,'*');
-        if ( NULCH == cNext )
-            throw X_AutodocParser(X_AutodocParser::x_UnexpectedEOF);
-        if (cNext == '/')
-        {
-            io_rText.MoveOn();
-            SetToken(new Tok_DocuEnd);
-            bEndTokenFound = true;
-        }
-        else
-        {
-            SetToken( new Tok_Word(io_rText.CutToken()) );
-        }
-    }
-    else
-    {
-        jumpToWhite(io_rText);
-        SetToken( new Tok_Word(io_rText.CutToken()) );
-    }
-}
-
-TkpContext &
-Cx_CheckStar::FollowUpContext()
-{
-    if (bEndTokenFound)
-        return *pEnd_FollowUpContext;
-    else
-        return Cx_Base::FollowUpContext();
-}
-*/
 
 }   // namespace adoc
-
-
-
-
-
-
-
 
