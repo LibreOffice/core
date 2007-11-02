@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlExport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:21:30 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 11:25:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,6 +206,7 @@ private:
     sal_Bool                                        m_bAllreadyFilled;
 
     void                    exportReport(const Reference<XReportDefinition>& _xReportDefinition); /// <element name="office:report">
+    void                    exportReportAttributes(const Reference<XReportDefinition>& _xReport);
     void                    exportFunctions(const Reference<XIndexAccess>& _xFunctions); /// <ref name="rpt-function"/>
     void                    exportFunction(const Reference< XFunction>& _xFunction);
     void                    exportMasterDetailFields(const Reference<XReportDefinition>& _xReportDefinition);
