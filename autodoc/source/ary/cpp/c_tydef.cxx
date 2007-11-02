@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_tydef.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:26:50 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:28:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,6 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include "rcids.hxx"
-#include <ary/cpp/cpp_disp.hxx>
 #include <slots.hxx>
 #include "c_slots.hxx"
 
@@ -59,14 +57,12 @@ Typedef::Typedef()
 {
 }
 
-Typedef::Typedef( Cid                 i_nId,
-                  const udmstri &     i_sLocalName,
+Typedef::Typedef( const String  &     i_sLocalName,
                   Cid                 i_nOwner,
                   E_Protection        i_eProtection,
                   Lid                 i_nFile,
                   Tid                 i_nDescribingType )
-    :   aEssentials( i_nId,
-                     i_sLocalName,
+    :   aEssentials( i_sLocalName,
                      i_nOwner,
                      i_nFile ),
         nDescribingType(i_nDescribingType),
@@ -79,13 +75,7 @@ Typedef::~Typedef()
 
 }
 
-Cid
-Typedef::inq_Id() const
-{
-    return aEssentials.Id();
-}
-
-const udmstri &
+const String  &
 Typedef::inq_LocalName() const
 {
     return aEssentials.LocalName();
@@ -104,38 +94,17 @@ Typedef::inq_Location() const
 }
 
 void
-Typedef::do_StoreAt( ary::Display & o_rOut ) const
+Typedef::do_Accept(csv::ProcessorIfc & io_processor) const
 {
-    ary::cpp::Display *  pD = dynamic_cast< ary::cpp::Display* >(&o_rOut);
-    if (pD != 0)
-    {
-         pD->Display_Typedef(*this);
-    }
+    csv::CheckedCall(io_processor,*this);
 }
 
-RCid
-Typedef::inq_RC() const
+ClassId
+Typedef::get_AryClass() const
 {
-    return RC_();
+    return class_id;
 }
-
-
-const ary::Documentation &
-Typedef::inq_Info() const
-{
-    return aEssentials.Info();
-}
-
-void
-Typedef::do_Add_Documentation( DYN ary::Documentation & let_drInfo )
-{
-    aEssentials.SetInfo(let_drInfo);
-}
-
 
 
 }   // namespace cpp
 }   // namespace ary
-
-
-

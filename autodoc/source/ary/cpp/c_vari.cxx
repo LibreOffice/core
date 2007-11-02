@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_vari.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:27:05 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 
 // NOT FULLY DECLARED SERVICES
-#include "rcids.hxx"
-#include <ary/cpp/cpp_disp.hxx>
-
 
 
 
@@ -58,17 +55,15 @@ Variable::Variable()
 {
 }
 
-Variable::Variable( Cid                 i_nId,
-                    const udmstri &     i_sLocalName,
+Variable::Variable( const String  &     i_sLocalName,
                     Cid                 i_nOwner,
                     E_Protection        i_eProtection,
                     Lid                 i_nFile,
                     Tid                 i_nType,
                     VariableFlags       i_aFlags,
-                    const udmstri &     i_sArraySize,
-                    const udmstri &     i_sInitValue )
-    :   aEssentials( i_nId,
-                     i_sLocalName,
+                    const String  &     i_sArraySize,
+                    const String  &     i_sInitValue )
+    :   aEssentials( i_sLocalName,
                      i_nOwner,
                      i_nFile ),
            nType(i_nType),
@@ -83,13 +78,7 @@ Variable::~Variable()
 {
 }
 
-Cid
-Variable::inq_Id() const
-{
-    return aEssentials.Id();
-}
-
-const udmstri &
+const String  &
 Variable::inq_LocalName() const
 {
     return aEssentials.LocalName();
@@ -108,38 +97,17 @@ Variable::inq_Location() const
 }
 
 void
-Variable::do_StoreAt( ary::Display & o_rOut ) const
+Variable::do_Accept(csv::ProcessorIfc & io_processor) const
 {
-    ary::cpp::Display *  pD = dynamic_cast< ary::cpp::Display* >(&o_rOut);
-    if (pD != 0)
-    {
-         pD->Display_Variable(*this);
-    }
+    csv::CheckedCall(io_processor,*this);
 }
 
-RCid
-Variable::inq_RC() const
+ClassId
+Variable::get_AryClass() const
 {
-    return RC_();
+    return class_id;
 }
-
-
-const ary::Documentation &
-Variable::inq_Info() const
-{
-    return aEssentials.Info();
-}
-
-void
-Variable::do_Add_Documentation( DYN ary::Documentation & let_drInfo )
-{
-    aEssentials.SetInfo(let_drInfo);
-}
-
 
 
 }   // namespace cpp
 }   // namespace ary
-
-
-

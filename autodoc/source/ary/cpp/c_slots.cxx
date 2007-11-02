@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_slots.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 13:26:33 $
+ *  last change: $Author: hr $ $Date: 2007-11-02 15:27:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,8 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <ary/cpp/cpp_disp.hxx>
+#include <ary/ary_disp.hxx>
+#include <ary/cpp/c_namesp.hxx>
 
 
 
@@ -70,16 +71,11 @@ Slot_SubNamespaces::Size() const
 void
 Slot_SubNamespaces::StoreEntries( ary::Display &  o_rDestination ) const
 {
-    ary::cpp::Display * pDisp
-            = dynamic_cast< ary::cpp::Display* >( &o_rDestination );
-    if ( pDisp == 0 )
-        return;
-
     for ( Map_NamespacePtr::const_iterator it = pData->begin();
           it != pData->end();
           ++it )
     {
-        pDisp->Display_Namespace( *(*it).second );
+        (*(*it).second).Accept(o_rDestination);
     }
 }
 
@@ -104,16 +100,11 @@ Slot_BaseClass::Size() const
 void
 Slot_BaseClass::StoreEntries( ary::Display &  o_rDestination ) const
 {
-    ary::cpp::Display * pDisp
-            = dynamic_cast< ary::cpp::Display* >( &o_rDestination );
-    if ( pDisp == 0 )
-        return;
-
     for ( List_Bases::const_iterator it = pData->begin();
           it != pData->end();
           ++it )
     {
-        pDisp->DisplaySlot_BaseClass( *it );
+        csv::CheckedCall(o_rDestination, *it);
     }
 }
 
@@ -121,5 +112,3 @@ Slot_BaseClass::StoreEntries( ary::Display &  o_rDestination ) const
 
 }   // namespace cpp
 }   // namespace ary
-
-
