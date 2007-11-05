@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:23:01 $
+#   last change: $Author: rt $ $Date: 2007-11-05 09:53:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,12 +49,12 @@ DLLPRE = # no leading "lib" on .so files
 BATCH_SUFFIX=.bat
 GIVE_EXEC_RIGHTS=@echo
 MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(SOLARBINDIR))))
-MY_LOCAL_CLASSDIR=$(subst,\,/ file:///$(PWD)$/$(CLASSDIR))
+MY_LOCAL_CLASSDIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(PWD)$/$(CLASSDIR))))
 .ELIF "$(GUI)"=="OS2"
 BATCH_SUFFIX=.cmd
 GIVE_EXEC_RIGHTS=@echo
 MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(SOLARBINDIR))))
-MY_LOCAL_CLASSDIR=$(subst,\,/ file:///$(PWD)$/$(CLASSDIR))
+MY_LOCAL_CLASSDIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(PWD)$/$(CLASSDIR))))
 .ELSE
 BATCH_INPROCESS=bridgetest_inprocess
 GIVE_EXEC_RIGHTS=chmod +x 
