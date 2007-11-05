@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableConnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:29:30 $
+ *  last change: $Author: rt $ $Date: 2007-11-05 08:54:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ using namespace dbaui;
 //========================================================================
 // class OQueryTableConnection
 //========================================================================
-DBG_NAME(OQueryTableConnection);
+DBG_NAME(OQueryTableConnection)
 
 //------------------------------------------------------------------------
 OQueryTableConnection::OQueryTableConnection(OQueryTableView* pContainer, const TTableConnectionData::value_type& pTabConnData)

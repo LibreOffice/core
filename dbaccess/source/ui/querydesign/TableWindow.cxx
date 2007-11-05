@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:33:32 $
+ *  last change: $Author: rt $ $Date: 2007-11-05 09:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ using namespace ::com::sun::star::accessibility;
 //========================================================================
 // class OTableWindow
 //========================================================================
-DBG_NAME(OTableWindow);
+DBG_NAME(OTableWindow)
 //------------------------------------------------------------------------------
 OTableWindow::OTableWindow( Window* pParent, const TTableWindowData::value_type& pTabWinData )
           :Window( pParent, WB_3DLOOK|WB_MOVEABLE )
