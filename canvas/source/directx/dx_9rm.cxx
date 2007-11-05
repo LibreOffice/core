@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dx_9rm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:51:04 $
+ *  last change: $Author: hr $ $Date: 2007-11-05 16:15:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -410,8 +410,8 @@ namespace dxcanvas
 
             D3DLOCKED_RECT aLockedRect;
             RECT rect;
-            rect.left = std::max(0,rDestPos.getX());
-            rect.top =  std::max(0,rDestPos.getY());
+            rect.left = std::max(sal_Int32(0),rDestPos.getX());
+            rect.top =  std::max(sal_Int32(0),rDestPos.getY());
             // to avoid interpolation artifacts from other textures,
             // the surface manager allocates one pixel gap between
             // them. Clear that to transparent.
