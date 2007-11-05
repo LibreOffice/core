@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:37:50 $
+ *  last change: $Author: hr $ $Date: 2007-11-05 12:37:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ using namespace ::com::sun::star::accessibility;
 //==================================================================
 // class ORelationTableView
 //==================================================================
-DBG_NAME(ORelationTableView);
+DBG_NAME(ORelationTableView)
 //------------------------------------------------------------------------
 ORelationTableView::ORelationTableView( Window* pParent, ORelationDesignView* pView )
     : OJoinTableView( pParent, pView )
