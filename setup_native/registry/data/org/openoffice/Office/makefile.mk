@@ -50,6 +50,9 @@ PROCESSORDIR=$(SOLARBINDIR)
 .IF "$(OS)"!="MACOSX"
 XCUFILES= \
     Jobs.xcu
+.ELSE
+dummy:
+    @echo "Nothing to build"
 .ENDIF
 
 MODULEFILES=
