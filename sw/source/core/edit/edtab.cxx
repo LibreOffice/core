@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 13:44:39 $
+ *  last change: $Author: hr $ $Date: 2007-11-05 13:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -498,7 +498,7 @@ BOOL SwEditShell::CanMergeTable( BOOL bWithPrev, BOOL* pChkNxtPrv ) const
     const SwTableNode* pTblNd = pCrsr->GetNode()->FindTableNode();
     if( pTblNd && !pTblNd->GetTable().ISA( SwDDETable ))
     {
-        bool bNew = pTblNd->GetTable().IsNewModel();
+        BOOL bNew = pTblNd->GetTable().IsNewModel();
         const SwNodes& rNds = GetDoc()->GetNodes();
         if( pChkNxtPrv )
         {
