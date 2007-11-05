@@ -4,9 +4,9 @@
  *
  *  $RCSfile: advancedsettings.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:09:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-05 11:56:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,6 +195,16 @@
 
 //-------------------------------------------------------------------------
 
+#define WORKAROUND                                                                  \
+        StringList [ en-US ] =                                                      \
+        {                                                                           \
+            < "Default" ; Default ; > ;                                             \
+            < "SQL" ; Default ; > ;                                                 \
+            < "Mixed" ; Default ; > ;                                               \
+            < "MS Access" ; Default ; > ;                                           \
+        };                                                                          \
+
+
 #define AUTO_BOOLEANCOMPARISON(AUTO_Y)                                              \
     FixedText FT_BOOLEANCOMPARISON                                                  \
     {                                                                               \
@@ -211,13 +221,7 @@
         DropDown = TRUE;                                                            \
         Border = TRUE;                                                              \
         HelpId = HID_DSADMIN_BOOLEANCOMPARISON;                                     \
-        StringList [ en-US ] =                                                      \
-        {                                                                           \
-            < "Default" ; Default ; > ;                                             \
-            < "SQL" ; Default ; > ;                                                 \
-            < "Mixed" ; Default ; > ;                                               \
-            < "MS Access" ; Default ; > ;                                           \
-        };                                                                          \
+        WORKAROUND                                                                  \
     };                                                                              \
 
 //-------------------------------------------------------------------------
