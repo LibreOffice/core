@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guw.cc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-21 09:17:24 $
+ *  last change: $Author: rt $ $Date: 2007-11-05 08:16:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ const string ignorepara[] = { "echo /TEST",
                                 " -def: delayload: -implib: -map: -out:",
                               "rc -D",
                               "regcomp -env: vnd.sun.star.expand:"
-                                " vnd.openoffice.pymodule:",
+                                " vnd.openoffice.pymodule: file:",
                               "regmerge /UCR",
                               "rsc -DOOO_" };
 
