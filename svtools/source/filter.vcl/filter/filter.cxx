@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:02:39 $
+ *  last change: $Author: hr $ $Date: 2007-11-05 13:32:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1656,7 +1656,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
 
         if( nBufSize )
         {
-            BYTE*   pBuf;
+            BYTE*   pBuf=0;
             try
             {
                 pBuf = new BYTE[ nBufSize ];
