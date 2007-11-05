@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 11:51:29 $
+ *  last change: $Author: rt $ $Date: 2007-11-05 07:44:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -480,11 +480,11 @@ void lcl_GetCellPosition( const String &rCellName,
             if (aColTxt.Len() && aRowTxt.Len())
             {
                 sal_Int32 nColIdx = 0;
-                sal_Int32 nLen = aColTxt.Len();
-                for (xub_StrLen i = 0;  i < nLen;  ++i)
+                sal_Int32 nLength = aColTxt.Len();
+                for (xub_StrLen i = 0;  i < nLength;  ++i)
                 {
                     nColIdx = 52 * nColIdx;
-                    if (i < nLen - 1)
+                    if (i < nLength - 1)
                         ++nColIdx;
                     sal_Unicode cChar = aColTxt.GetBuffer()[i];
                     if ('A' <= cChar && cChar <= 'Z')

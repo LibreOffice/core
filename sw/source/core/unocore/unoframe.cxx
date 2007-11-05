@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 11:50:20 $
+ *  last change: $Author: rt $ $Date: 2007-11-05 07:39:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1035,9 +1035,9 @@ SwXFrame::SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet, const SfxItemPropertyMap*
     aLstnrCntnr( (container::XNamed*)this),
     aPropSet(pMap),
     _pMap(pMap),
+    mpDoc( 0 ),
     eType(eSet),
     pProps(0),
-    mpDoc( 0 ),
     bIsDescriptor(sal_False),
     m_pCopySource(0)
 {

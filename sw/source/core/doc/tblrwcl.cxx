@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 14:40:52 $
+ *  last change: $Author: rt $ $Date: 2007-11-05 07:46:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2285,9 +2285,9 @@ BOOL SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )
         ASSERT( nColCount, "Empty Table Line" )
         for( USHORT nCurrCol = 0; nCurrCol < nColCount; ++nCurrCol )
         {
-            SwTableBox* pBox = pLine->GetTabBoxes()[nCurrCol];
-            ASSERT( pBox, "Missing Table Box" );
-            pBox->setRowSpan( 1 );
+            SwTableBox* pTableBox = pLine->GetTabBoxes()[nCurrCol];
+            ASSERT( pTableBox, "Missing Table Box" );
+            pTableBox->setRowSpan( 1 );
         }
     }
 
