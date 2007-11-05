@@ -4,9 +4,9 @@
  *
  *  $RCSfile: s_iterator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 16:08:13 $
+ *  last change: $Author: hr $ $Date: 2007-11-05 15:46:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ class const_iterator : public std::forward_iterator<const ENTITY, ptrdiff_t>
                             impl_type           i_impl)
                             :   itImpl(i_impl)  {}
                         const_iterator(         // implicit conversions allowed
-                            iterator<ENTITY>    i_it )
+                            ::ary::stg::iterator<ENTITY>    i_it )
                             :   itImpl(i_it.ImplIterator()) {}
                         ~const_iterator()       {}
 
