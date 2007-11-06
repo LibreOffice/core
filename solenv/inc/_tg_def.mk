@@ -51,7 +51,7 @@ RMHACK1:=$(RM)
 DEF1UNIQE:=$(mktmp $(GUI))
 
 # %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE1:=$(shell echo %_disk)
+BUILD_DRIVE1:=$(shell @echo %_disk)
 #BUILD_DRIVE1:=O
 
 .IF "$(BUILD_DRIVE1)"=="O"
@@ -279,7 +279,7 @@ RMHACK2:=$(RM)
 DEF2UNIQE:=$(mktmp $(GUI))
 
 # %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE2:=$(shell echo %_disk)
+BUILD_DRIVE2:=$(shell @echo %_disk)
 #BUILD_DRIVE2:=O
 
 .IF "$(BUILD_DRIVE2)"=="O"
@@ -507,7 +507,7 @@ RMHACK3:=$(RM)
 DEF3UNIQE:=$(mktmp $(GUI))
 
 # %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE3:=$(shell echo %_disk)
+BUILD_DRIVE3:=$(shell @echo %_disk)
 #BUILD_DRIVE3:=O
 
 .IF "$(BUILD_DRIVE3)"=="O"
@@ -735,7 +735,7 @@ RMHACK4:=$(RM)
 DEF4UNIQE:=$(mktmp $(GUI))
 
 # %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE4:=$(shell echo %_disk)
+BUILD_DRIVE4:=$(shell @echo %_disk)
 #BUILD_DRIVE4:=O
 
 .IF "$(BUILD_DRIVE4)"=="O"
@@ -963,7 +963,7 @@ RMHACK5:=$(RM)
 DEF5UNIQE:=$(mktmp $(GUI))
 
 # %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE5:=$(shell echo %_disk)
+BUILD_DRIVE5:=$(shell @echo %_disk)
 #BUILD_DRIVE5:=O
 
 .IF "$(BUILD_DRIVE5)"=="O"
@@ -1191,7 +1191,7 @@ RMHACK6:=$(RM)
 DEF6UNIQE:=$(mktmp $(GUI))
 
 # %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE6:=$(shell echo %_disk)
+BUILD_DRIVE6:=$(shell @echo %_disk)
 #BUILD_DRIVE6:=O
 
 .IF "$(BUILD_DRIVE6)"=="O"
@@ -1419,7 +1419,7 @@ RMHACK7:=$(RM)
 DEF7UNIQE:=$(mktmp $(GUI))
 
 # %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE7:=$(shell echo %_disk)
+BUILD_DRIVE7:=$(shell @echo %_disk)
 #BUILD_DRIVE7:=O
 
 .IF "$(BUILD_DRIVE7)"=="O"
@@ -1647,7 +1647,7 @@ RMHACK8:=$(RM)
 DEF8UNIQE:=$(mktmp $(GUI))
 
 # %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE8:=$(shell echo %_disk)
+BUILD_DRIVE8:=$(shell @echo %_disk)
 #BUILD_DRIVE8:=O
 
 .IF "$(BUILD_DRIVE8)"=="O"
@@ -1875,7 +1875,7 @@ RMHACK9:=$(RM)
 DEF9UNIQE:=$(mktmp $(GUI))
 
 # %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE9:=$(shell echo %_disk)
+BUILD_DRIVE9:=$(shell @echo %_disk)
 #BUILD_DRIVE9:=O
 
 .IF "$(BUILD_DRIVE9)"=="O"
@@ -2103,7 +2103,7 @@ RMHACK10:=$(RM)
 DEF10UNIQE:=$(mktmp $(GUI))
 
 # %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE10:=$(shell echo %_disk)
+BUILD_DRIVE10:=$(shell @echo %_disk)
 #BUILD_DRIVE10:=O
 
 .IF "$(BUILD_DRIVE10)"=="O"
