@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:25:25 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:50:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 # grab all .txt files under data directory, which are breakiterator rule files.
-MY_BRK_TXTFILES:=$(shell ls data/*.txt)
+MY_BRK_TXTFILES:=$(shell @ls data/*.txt)
 
 # insert "OpenOffice" as icu package name in front of the  name of each rule file for searching on application provided data
 MY_BRK_BRKFILES:=$(subst,data/,$(MISC)$/ $(MY_BRK_TXTFILES:s/.txt/.brk/))
