@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:25:12 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:48:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ USE_JAVAVER:=TRUE
 .INCLUDE :	$(PRJ)$/util$/target.pmk
 
 JARFILES = java_uno.jar sandbox.jar jurt.jar unoil.jar ridl.jar juh.jar
-JAVAFILES := $(shell ls *.java)
+JAVAFILES := $(shell @ls *.java)
 JAVACLASSFILES= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 # --- Targets ------------------------------------------------------
