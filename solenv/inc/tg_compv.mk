@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_compv.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:53:27 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:45:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,11 +69,11 @@ CFLAGSNUMVERSION_CMD= -version |& cut -d" " -f4-
 
 # that's the version known by the specific
 # compiler
-CCVER:=$(shell -$(CXX) $(CFLAGSVERSION_CMD))
+CCVER:=$(shell @-$(CXX) $(CFLAGSVERSION_CMD))
 
 # and a computed integer for comparing
 # each point seperated token blown up to 4 digits
-CCNUMVER:=$(shell -$(CXX) $(CFLAGSNUMVERSION_CMD))
+CCNUMVER:=$(shell @-$(CXX) $(CFLAGSNUMVERSION_CMD))
 
 .IF "$(COM)"=="MSC"
 .IF "$(CCNUMVER)">="001200000000"
