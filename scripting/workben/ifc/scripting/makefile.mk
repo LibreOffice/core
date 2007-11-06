@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:44:04 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:37:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ TARGET  = testcase
 .INCLUDE: settings.mk
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar $(CLASSPATH)$
-JAVAFILES       = $(foreach,j,$(shell ls | grep java) $j)
+JAVAFILES       = $(foreach,j,$(shell @ls | grep java) $j)
 
 # --- Targets ------------------------------------------------------
 
