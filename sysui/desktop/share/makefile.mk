@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2007-08-30 13:16:06 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:57:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN)
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH) --ext "desktop" --key "GenericName" $(ULFDIR)$/launcher_genericname.ulf
 
 .IF "$(WITH_LIBSN)"=="YES"
-    @noop x$(foreach,i,$(LAUNCHERLIST) $(shell echo "StartupNotify=true" >> $(@:db).$(INPATH)/$i.desktop))x
+    @noop x$(foreach,i,$(LAUNCHERLIST) $(shell @echo "StartupNotify=true" >> $(@:db).$(INPATH)/$i.desktop))x
 .ENDIF
     @$(MV) -f $(@:db).$(INPATH)/* $(@:d)
     @rmdir $(@:db).$(INPATH)
