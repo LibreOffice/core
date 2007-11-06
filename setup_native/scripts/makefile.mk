@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:51:41 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:40:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ $(BIN)$/install: install_$(OS:l).sh
 
 $(FAKEDB) : fake-db.spec 
     $(MKDIRHIER) $(FAKEDBROOT)
-    $(RPM) --define "_builddir $(shell cd $(FAKEDBROOT) && pwd)" --define "_rpmdir $(BIN)" -bb $<
+    $(RPM) --define "_builddir $(shell @cd $(FAKEDBROOT) && pwd)" --define "_rpmdir $(BIN)" -bb $<
 
 $(BIN)$/install: $(FAKEDB)
 
