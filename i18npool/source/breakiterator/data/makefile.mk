@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:25:37 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:50:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,5 +88,5 @@ $(MISC)$/dict_%.cxx : %.dic
     $(BIN)$/gendict $< $@
 
 # ugly - is this dependency really required here?
-$(foreach,i,$(shell $(FIND) . -name "*.dic") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/gendict$(EXECPOST)
+$(foreach,i,$(shell @$(FIND) . -name "*.dic") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/gendict$(EXECPOST)
 
