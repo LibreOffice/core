@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-11-02 15:23:00 $
+dnl * Date: $Date: 2007-11-06 14:53:15 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.227 $ )
+AC_REVISION( $Revision: 1.228 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2274,9 +2274,13 @@ if test "$SOLAR_JAVA" != ""; then
         AC_MSG_RESULT([checked (gcj)]) 
         _gij_version=`$JAVAINTERPRETER --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
         _gij_longver=`echo $_gij_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-        if test -z "$JAVA_HOME"; then
-            JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$WITH_JAVA,,p"`
+
+        if test "$_gij_longver" -lt "40200" -a "$_gij_longver" -ge "40100"; then
+            if $JAVAINTERPRETER --version | $EGREP "Red Hat" 2>&1 >/dev/null; then
+                _gij_longver="40200"
+            fi
         fi
+
       elif test `$JAVAINTERPRETER -version 2>&1 | awk '{ print }' | grep -c "BEA"` -gt 0; then
         JDK=bea
 
@@ -2436,6 +2440,48 @@ if test "$SOLAR_JAVA" != ""; then
 fi
 
 if test "$SOLAR_JAVA" != ""; then
+    dnl first check if we have been asked to autodetect JAVA_HOME with a recent gij
+    if test "$JDK" == "gcj" -a -z "$JAVA_HOME"; then
+      if test "x$with_jdk_home" = "x" -a "$_gij_longver" -ge "40200"; then
+        cat > findhome.java <<_ACEOF
+[import java.io.File;
+
+class findhome
+{
+    public static void main(String args[])
+    {
+        String jrelocation = System.getProperty("java.home");
+        File jre = new File(jrelocation);
+        System.out.println(jre.getParent());
+    }
+}]
+_ACEOF
+        AC_MSG_CHECKING([if javac works])
+        javac_cmd="$JAVACOMPILER findhome.java 1>&2"
+        AC_TRY_EVAL(javac_cmd)
+        if test $? = 0 && test -f ./findhome.class ; then
+          AC_MSG_RESULT([javac works])
+        else
+          echo "configure: javac test failed" >&5
+          cat findhome.java >&5
+          AC_MSG_ERROR([javac does not work - java projects will not build!])
+        fi
+
+        AC_MSG_CHECKING([if gij knows its java.home])
+        JAVA_HOME=`$JAVAINTERPRETER findhome`
+        if test $? = 0 && test "$JAVA_HOME" != "" ; then
+          AC_MSG_RESULT([$JAVA_HOME])
+        else
+          echo "configure: java test failed" >&5
+          cat findhome.java >&5
+          AC_MSG_ERROR([gij does not know its java.home - use --with-jdk-home])
+        fi
+      else
+        JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$WITH_JAVA,,p"`
+      fi
+    fi
+
+    dnl second sanity check JAVA_HOME if possible
     if test "$JDK" != "gcj" -o "$_gij_longver" -ge "40200"; then
       # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
       if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
