@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 14:08:54 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:57:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ $(MISC)/$(TARGET)/usr/share/applications/ :
 # FIXME: removal of *-extension.* only to create identical packages to OOF680
 %/usr/share/applications : 
     @$(MKDIRHIER) $@
-    /bin/sh -c "cd $(COMMONMISC)$/$(*:b:s/-/ /:1); DESTDIR=$(shell cd $*; pwd) GNOMEDIR="" ICON_PREFIX=$(ICONPREFIX.$(*:b:s/-/ /:1)) KDEMAINDIR=/opt/kde .$/create_tree.sh"
+    /bin/sh -c "cd $(COMMONMISC)$/$(*:b:s/-/ /:1); DESTDIR=$(shell @cd $*; pwd) GNOMEDIR="" ICON_PREFIX=$(ICONPREFIX.$(*:b:s/-/ /:1)) KDEMAINDIR=/opt/kde .$/create_tree.sh"
     $(RM) $*$/opt$/kde$/share$/icons$/*$/*$/*$/*-extension.png	
     $(RM) $*$/opt$/kde$/share$/mimelnk$/application$/*-extension.desktop 
     $(RM) $*$/usr$/share$/applications$/*.desktop
@@ -79,7 +79,7 @@ $(MISC)/$(TARGET)/usr/share/applications/ :
     @echo "( cd etc ; ln -snf /opt/$(UNIXFILENAME.$(*:b:s/-/ /:1):s/-//) $(UNIXFILENAME.$(*:b:s/-/ /:1)) )" >> $@
     @echo "( cd usr/bin ; rm -rf soffice )" >> $@
     @echo "( cd usr/bin ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1))/program/soffice soffice )" >> $@
-    @echo $(foreach,i,$(shell sed  's/extension.desktop//' $(COMMONMISC)$/$(*:b:s/-/ /:1)/launcherlist) "\n( cd usr/share/applications ; rm -rf $(UNIXFILENAME.$(*:b:s/-/ /:1))-$i )\n( cd usr/share/applications ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1))/share/xdg/$i $(UNIXFILENAME.$(*:b:s/-/ /:1))-$i )") >> $@
+    @echo $(foreach,i,$(shell @sed  's/extension.desktop//' $(COMMONMISC)$/$(*:b:s/-/ /:1)/launcherlist) "\n( cd usr/share/applications ; rm -rf $(UNIXFILENAME.$(*:b:s/-/ /:1))-$i )\n( cd usr/share/applications ; ln -sf /etc/$(UNIXFILENAME.$(*:b:s/-/ /:1))/share/xdg/$i $(UNIXFILENAME.$(*:b:s/-/ /:1))-$i )") >> $@
     @cat $< >> $@
 
 %$/install$/slack-desc : slack-desc
