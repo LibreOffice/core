@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-24 13:19:08 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:41:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ RESLIB2SRSFILES=$(RES2FILELIST)
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar ConnectivityTools.jar
-JAVAFILES       = $(shell $(FIND) .$/*.java)
+JAVAFILES       = $(shell @$(FIND) .$/*.java)
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 #----- make a jar from compiled files ------------------------------
