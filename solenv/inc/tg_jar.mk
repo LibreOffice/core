@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_jar.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:00:02 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:46:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ $(JARTARGETN) .PHONY :
 .ELSE			# "$(NOJARDEP)"!="" || "$(NEW_JAR_PACK)"!=""
 .DIRCACHE = no
 $(JARTARGETN) :
-#$(JARTARGETN) .SETDIR=$(CLASSDIR) .SEQUENTIAL : $(JARTARGETDEP) $(shell -cat -s $(MISC)$/$(JARTARGETN).dep )
+#$(JARTARGETN) .SETDIR=$(CLASSDIR) .SEQUENTIAL : $(JARTARGETDEP) $(shell @-cat -s $(MISC)$/$(JARTARGETN).dep )
 .ENDIF			# "$(NOJARDEP)"!="" || "$(NEW_JAR_PACK)"!=""
 .IF "$(OS)$(CPU)"=="SOLARISS"
     @-find . -type d -user $(USER) ! -perm -5 -print | xargs test "$$1" != "" && chmod +r $$1 
