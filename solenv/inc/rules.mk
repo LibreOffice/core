@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.90 $
+#   $Revision: 1.91 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-21 09:17:06 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:44:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ $(OBJ)$/%.obj : %.cpp
 .IF "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
     $(ADJUSTVISIBILITY) -p $(@:s/.obj/.o/)
 .ENDIF          # "$(OS)"=="SOLARIS" && "$(product)"=="full" && "$(debug)"==""    
-     $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
+    $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ELSE
     @@-$(RM) $@
     @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp )
@@ -433,8 +433,8 @@ $(MISC)$/%.dpslo :
 # slower but with correct output
     @@$(RM) $@
     @$(TOUCH) $@
-    @$(foreach,i,$(all_local_slo) $(shell $(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
-    @$(foreach,i,$(all_misc_slo) $(shell $(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
+    @$(foreach,i,$(all_local_slo) $(shell @$(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
+    @$(foreach,i,$(all_misc_slo) $(shell @$(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
 # for both
     $(TYPE) $(mktmp $(foreach,i,$(all_local_slo:b:+".obj") $(@:^"\n") : $(SLO)$/$i) $(foreach,i,$(all_misc_slo:b:+".obj") $(@:^"\n") : $(SLO)$/$i)) >> $@
 
@@ -444,8 +444,8 @@ $(MISC)$/%.dpobj :
 # slower but with correct output
     @@$(RM) $@
     @$(TOUCH) $@
-    @$(foreach,i,$(all_local_obj) $(shell $(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
-    @$(foreach,i,$(all_misc_obj) $(shell $(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
+    @$(foreach,i,$(all_local_obj) $(shell @$(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
+    @$(foreach,i,$(all_misc_obj) $(shell @$(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
 # for both
     $(TYPE) $(mktmp $(foreach,i,$(all_local_obj:b:+".obj") $(@:^"\n") : $(OBJ)$/$i) $(foreach,i,$(all_misc_obj:b:+".obj") $(@:^"\n") : $(OBJ)$/$i)) >> $@
 
@@ -645,10 +645,10 @@ $(MISC)$/%.dpj :
 .ENDIF
 .ELSE 			# "$(ndep)"==""
 .IF "$(GUI)"=="UNX"
-    @echo $(shell $(STARDEP) @$(mktmp -o $@ -i $(CLASSDIR) $(foreach,i,$(JAVADEPINCLUDES:s/:/ /) -i $i) $(JAVACLASSFILES)))
+    @echo $(shell @$(STARDEP) @$(mktmp -o $@ -i $(CLASSDIR) $(foreach,i,$(JAVADEPINCLUDES:s/:/ /) -i $i) $(JAVACLASSFILES)))
 .ELSE
     @echo javadeps
-    @echo $(shell $(STARDEP) @$(mktmp -o $@ -i $(CLASSDIR) $(foreach,i,$(JAVADEPINCLUDES:s/;/ /) -i $i) $(JAVACLASSFILES)))
+    @echo $(shell @$(STARDEP) @$(mktmp -o $@ -i $(CLASSDIR) $(foreach,i,$(JAVADEPINCLUDES:s/;/ /) -i $i) $(JAVACLASSFILES)))
 .ENDIF
 .ENDIF			# "$(nodep)"==""
 
