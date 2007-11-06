@@ -4,9 +4,9 @@
 #
 #   $RCSfile: productversion.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 13:55:42 $
+#   last change: $Author: rt $ $Date: 2007-11-06 14:11:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ PKGDIR=$(BIN)
 PRODUCTLIST = openoffice.org broffice.org
 
 # default values to minimize maintainance effort 
-PRODUCTVERSION = 2.3
+PRODUCTVERSION = 2.4
 PKGVERSION = $(PRODUCTVERSION)
 # gnome-vfs treats everything behind the last '.' as an icon extension, 
 # even though the "icon_filename" in '.keys' is specified as filename 
