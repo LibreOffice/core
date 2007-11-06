@@ -4,9 +4,9 @@
 #
 #   $RCSfile: productversion.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 14:11:15 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:57:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@ PKGREV          = $(BUILD)
 PKGREV          = $(LAST_MINOR:s/m//:s/s/./)
 .ENDIF
 
-ABSLOCALOUT:=$(shell cd $(PRJ) && pwd)$/$(ROUT)
+ABSLOCALOUT:=$(shell @cd $(PRJ) && pwd)$/$(ROUT)
 
 # create desktop-integration subfolder on linux
 .IF "$(OS)"=="LINUX"
