@@ -326,6 +326,7 @@ function getZipHome()
 
 function getCppHome()
 {
+    var sVC8="";
     var sSuggestedHome = WshSysEnv("OO_SDK_CPP_HOME");
 //    var sVC8="";
     if (sSuggestedHome.length == 0)
