@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: obo $ $Date: 2007-08-24 11:44:59 $
+#   last change: $Author: rt $ $Date: 2007-11-06 14:19:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,76 @@ sub create_directory
             # was not created in this process. There is only an important error, if the directory does not
             # exist now.
 
+            $infoline = "\nDid not succeed in creating directory: \"$directory\". Further attempts will follow.\n";
+            push(@installer::globals::logfileinfo, $infoline);
+
             if (!(-d $directory))
             {
-                installer::exiter::exit_program("ERROR: Could not create directory: $directory", "create_directory");
+                # Problem with parallel packaging? -> Try a little harder, before exiting.
+                # Did someone else remove the parent directory in the meantime?
+                my $parentdir = $directory;
+                installer::pathanalyzer::get_path_from_fullqualifiedname(\$parentdir);
+                if (!(-d $parentdir))
+                {
+                    $returnvalue = mkdir($parentdir, 0775);
+
+                    if ($returnvalue)
+                    {
+                        $infoline = "\nAttention: Successfully created parent directory (should already be created before): $parentdir\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+
+                        if ($installer::globals::isunix)
+                        {
+                            my $localcall = "chmod 775 $parentdir \>\/dev\/null 2\>\&1";
+                            system($localcall);
+                        }
+                    }
+                    else
+                    {
+                        $infoline = "\Error: \"$directory\" could not be created. Even the parent directory \"$parentdir\" does not exist and could not be created.\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+                        if ( -d $parentdir )
+                        {
+                            $infoline = "\nAttention: Finally the parent directory \"$parentdir\" exists, but I could not create it.\n";
+                            push(@installer::globals::logfileinfo, $infoline);
+                        }
+                        else
+                        {
+                            # Now it is time to exit, even the parent could not be created.
+                            installer::exiter::exit_program("ERROR: Could not create parent directory \"$parentdir\"", "create_directory");
+                        }
+                    }
+                }
+
+                # At this point we have to assume, that the parent directory exist.
+                # Trying once more to create the desired directory
+
+                $returnvalue = mkdir($directory, 0775);
+
+                if ($returnvalue)
+                {
+                    $infoline = "\nAttention: Created directory \"$directory\" in the second try.\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+
+                    if ($installer::globals::isunix)
+                    {
+                        my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
+                        system($localcall);
+                    }
+                }
+                else
+                {
+                    if ( -d $directory )
+                    {
+                        $infoline = "\nAttention: Finally the directory \"$directory\" exists, but I could not create it.\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+                    }
+                    else
+                    {
+                        # It is time to exit, even the second try failed.
+                        installer::exiter::exit_program("ERROR: Failed to create the directory: $directory", "create_directory");
+                    }
+                }
             }
             else
             {
@@ -126,9 +193,76 @@ sub create_directory_with_privileges
             # was not created in this process. There is only an important error, if the directory does not
             # exist now.
 
+            $infoline = "\nDid not succeed in creating directory: \"$directory\". Further attempts will follow.\n";
+            push(@installer::globals::logfileinfo, $infoline);
+
             if (!(-d $directory))
             {
-                installer::exiter::exit_program("ERROR: Could not create directory: $directory", "create_directory");
+                # Problem with parallel packaging? -> Try a little harder, before exiting.
+                # Did someone else remove the parent directory in the meantime?
+                my $parentdir = $directory;
+                installer::pathanalyzer::get_path_from_fullqualifiedname(\$parentdir);
+                if (!(-d $parentdir))
+                {
+                    $returnvalue = mkdir($directory, $localprivileges);
+
+                    if ($returnvalue)
+                    {
+                        $infoline = "\nAttention: Successfully created parent directory (should already be created before): $parentdir\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+
+                        if ($installer::globals::isunix)
+                        {
+                            my $localcall = "chmod $privileges $parentdir \>\/dev\/null 2\>\&1";
+                            system($localcall);
+                        }
+                    }
+                    else
+                    {
+                        $infoline = "\Error: \"$directory\" could not be created. Even the parent directory \"$parentdir\" does not exist and could not be created.\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+                        if ( -d $parentdir )
+                        {
+                            $infoline = "\nAttention: Finally the parent directory \"$parentdir\" exists, but I could not create it.\n";
+                            push(@installer::globals::logfileinfo, $infoline);
+                        }
+                        else
+                        {
+                            # Now it is time to exit, even the parent could not be created.
+                            installer::exiter::exit_program("ERROR: Could not create parent directory \"$parentdir\"", "create_directory");
+                        }
+                    }
+                }
+
+                # At this point we have to assume, that the parent directory exist.
+                # Trying once more to create the desired directory
+
+                $returnvalue = mkdir($directory, $localprivileges);
+
+                if ($returnvalue)
+                {
+                    $infoline = "\nAttention: Created directory \"$directory\" in the second try.\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+
+                    if ($installer::globals::isunix)
+                    {
+                        my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
+                        system($localcall);
+                    }
+                }
+                else
+                {
+                    if ( -d $directory )
+                    {
+                        $infoline = "\nAttention: Finally the directory \"$directory\" exists, but I could not create it.\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+                    }
+                    else
+                    {
+                        # It is time to exit, even the second try failed.
+                        installer::exiter::exit_program("ERROR: Failed to create the directory: $directory", "create_directory");
+                    }
+                }
             }
             else
             {
