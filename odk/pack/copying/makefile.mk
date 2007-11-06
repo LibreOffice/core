@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.84 $
+#   $Revision: 1.85 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:27:38 $
+#   last change: $Author: rt $ $Date: 2007-11-06 16:00:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@ TARGET=copying
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 #----------------------------------------------------------------
 
-IDLLIST:={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f | sed -e '/star.portal/d' -e'/star.webservices/d'))}
+IDLLIST:={$(subst,/,$/ $(shell @$(FIND) $(IDLOUT) -type f | sed -e '/star.portal/d' -e'/star.webservices/d'))}
 DESTIDLLIST={$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLLIST))}
 
 DESTINCLUDELIST={$(subst,$(SOLARINCDIR),$(DESTDIRINC) $(INCLUDELIST))}
