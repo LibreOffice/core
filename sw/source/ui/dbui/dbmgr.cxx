@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:31:02 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:25:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
 #endif
 #ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
@@ -2966,10 +2969,67 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
         if(xResSet.is())
             aDescriptor[daCursor] <<= xResSet;
 
-        SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, rSh.GetView().GetViewFrame()->GetObjectShell()));
-        SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), rSh, aDescriptor );
-        aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
-        MergeNew(aMergeDesc);
+        SfxObjectShellRef xDocShell = rSh.GetView().GetViewFrame()->GetObjectShell();
+        SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, xDocShell));
+        {
+            //copy rSh to aTempFile
+            ::rtl::OUString sTempURL;
+            const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
+                        String::CreateFromAscii( FILTER_XML ),
+                        SwDocShell::Factory().GetFilterContainer() );
+            try
+            {
+
+                uno::Sequence< beans::PropertyValue > aValues(1);
+                beans::PropertyValue* pValues = aValues.getArray();
+                pValues[0].Name = C2U("FilterName");
+                pValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
+                uno::Reference< frame::XStorable > xStore( xDocShell->GetModel(), uno::UNO_QUERY);
+                sTempURL = URIHelper::SmartRel2Abs( INetURLObject(), utl::TempFile::CreateTempName() );
+                xStore->storeToURL( sTempURL, aValues );
+            }
+            catch( const uno::Exception& rEx )
+            {
+                (void) rEx;
+            }
+            if( xDocShell->GetError() )
+            {
+                // error message ??
+                ErrorHandler::HandleError( xDocShell->GetError() );
+            }
+            else
+            {
+                SfxObjectShellRef xWorkDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
+                SfxMedium* pWorkMed = new SfxMedium( sTempURL, STREAM_STD_READ, TRUE );
+                pWorkMed->SetFilter( pSfxFlt );
+                if( xWorkDocSh->DoLoad(pWorkMed) )
+                {
+                    SfxViewFrame *pFrame = SfxViewFrame::CreateViewFrame( *xWorkDocSh, 0, TRUE );
+                    SwView *pView = (SwView*) pFrame->GetViewShell();
+                    pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
+
+                    SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), pView->GetWrtShell(), aDescriptor );
+                    aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
+                    MergeNew(aMergeDesc);
+                    //close the temporary file
+                    uno::Reference< util::XCloseable > xClose( xWorkDocSh->GetModel(), uno::UNO_QUERY );
+                    if (xClose.is())
+                    {
+                        try
+                        {
+                            //! 'sal_True' -> transfer ownership to vetoing object if vetoed!
+                            //! I.e. now that object is responsible for closing the model and doc shell.
+                            xClose->close( sal_True );
+                        }
+                        catch ( const uno::Exception& )
+                        {
+                        }
+                    }
+                }
+            }
+            //remove the temporary file
+            SWUnoHelper::UCB_DeleteFile( sTempURL );
+        }
         SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, rSh.GetView().GetViewFrame()->GetObjectShell()));
 
         // reset the cursor inside
