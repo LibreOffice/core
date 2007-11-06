@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:14:15 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:26:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -623,14 +623,6 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
         pClpDocFac = new SwDocFac;
         SwDoc* pTmpDoc = pClpDocFac->GetDoc();
 
-        const SfxDocumentInfo * pInfo = pWrtShell->GetInfo();
-        if (pInfo)
-        {
-            DBG_ASSERT( pTmpDoc->GetDocShell(), "No DocShell?" );
-            if ( pTmpDoc->GetDocShell() )
-                pTmpDoc->GetDocShell()->GetDocInfo() = *pInfo;
-        }
-
         pTmpDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
@@ -1038,14 +1030,6 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
             pWrtShell->CreateCrsr();
 
         SwDoc* pTmpDoc = pClpDocFac->GetDoc();
-
-        const SfxDocumentInfo * pInfo = pWrtShell->GetInfo();
-        if (pInfo)
-        {
-            DBG_ASSERT( pTmpDoc->GetDocShell(), "No DocShell?" );
-            if ( pTmpDoc->GetDocShell() )
-                pTmpDoc->GetDocShell()->GetDocInfo() = *pInfo;
-        }
 
         pTmpDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
