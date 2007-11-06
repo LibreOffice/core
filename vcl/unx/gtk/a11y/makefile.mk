@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2006-05-09 17:42:47 $
+#   last change: $Author: rt $ $Date: 2007-11-06 16:01:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ PKGCONFIG_MODULES=gtk+-2.0
 
 CFLAGS+=-DVERSION=\"$(UPD)$(LAST_MINOR)\"
 
-ATKVERSION:=$(shell $(PKGCONFIG) --modversion atk | $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk)
+ATKVERSION:=$(shell @$(PKGCONFIG) --modversion atk | $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk)
 
 .IF "$(ATKVERSION)" >= "000100070000"
 CFLAGS+=-DHAS_ATKRECTANGLE
