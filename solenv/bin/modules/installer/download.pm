@@ -4,9 +4,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: vg $ $Date: 2007-08-28 09:27:12 $
+#   last change: $Author: rt $ $Date: 2007-11-06 14:19:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -797,9 +797,13 @@ sub put_windows_productversion_into_template
 
 sub put_windows_productpath_into_template
 {
-    my ($templatefile, $variableshashref) = @_;
+    my ($templatefile, $variableshashref, $languagestringref) = @_;
 
     my $productpath = $variableshashref->{'PROPERTYTABLEPRODUCTNAME'};
+
+    my $locallangs = $$languagestringref;
+    $locallangs =~ s/_/ /g;
+    if ( ! $installer::globals::languagepack ) { $productpath = $productpath . " (" . $locallangs . ")"; }
 
     replace_one_variable($templatefile, "PRODUCTPATHPLACEHOLDER", $productpath);
 }
@@ -1552,7 +1556,7 @@ sub create_download_sets
         put_website_into_template($templatefile);
         put_javafilename_into_template($templatefile, $allvariableshashref);
         put_windows_productversion_into_template($templatefile, $allvariableshashref);
-        put_windows_productpath_into_template($templatefile, $allvariableshashref);
+        put_windows_productpath_into_template($templatefile, $allvariableshashref, $languagestringref);
         put_outputfilename_into_template($templatefile, $downloadname);
         put_filelist_into_template($templatefile, $installationdir);
         put_language_list_into_template($templatefile, $languagesarrayref);
