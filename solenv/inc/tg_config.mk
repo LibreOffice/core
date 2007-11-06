@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_config.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:14:29 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:45:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,10 @@ PACKAGEDIR*:=$(subst,.,$/ $(PACKAGE))
 XSLTPACKAGEDIR*:=$(subst,.,/ $(PACKAGE))
 XCSROOTURL!:=$(ABSXCSROOT)
 .IF $(GUI)==WNT
-XCSROOTURL!:=$(shell +$(WRAPCMD) echo $(XCSROOTURL))
+XCSROOTURL!:=$(shell @+$(WRAPCMD) echo $(XCSROOTURL))
 XCSROOTURL!:=file:///$(subst,\,/ $(XCSROOTURL))
 .ENDIF
-SYSXSLDIR*:=$(shell +$(WRAPCMD) echo $(XSLDIR)$/)
+SYSXSLDIR*:=$(shell @+$(WRAPCMD) echo $(XSLDIR)$/)
 
 #
 # --- XCS ---
