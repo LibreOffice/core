@@ -4,9 +4,9 @@
 #
 #   $RCSfile: pkg_config.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:36:07 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:44:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,6 @@ PKGCONFIG_PREFIX=--define-variable=prefix=$(PKGCONFIG_ROOT)
 PKGCONFIG=pkg-config
 .ENDIF          # "$(OS)"=="SOLARIS"
 
-PKGCONFIG_CFLAGS:=$(shell $(PKGCONFIG) $(PKGCONFIG_PREFIX) --cflags $(PKGCONFIG_MODULES))
-PKGCONFIG_LIBS:=$(shell $(PKGCONFIG) $(PKGCONFIG_PREFIX) --libs $(PKGCONFIG_MODULES))
+PKGCONFIG_CFLAGS:=$(shell @$(PKGCONFIG) $(PKGCONFIG_PREFIX) --cflags $(PKGCONFIG_MODULES))
+PKGCONFIG_LIBS:=$(shell @$(PKGCONFIG) $(PKGCONFIG_PREFIX) --libs $(PKGCONFIG_MODULES))
 CFLAGS+=$(PKGCONFIG_CFLAGS)
