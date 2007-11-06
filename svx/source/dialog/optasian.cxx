@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optasian.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-05 17:43:41 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:30:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -499,4 +499,12 @@ IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, Edit*, pEdit)
     pImpl->aConfig.SetStartEndChars( aLocale, bEnable ? &sStart : 0, bEnable ? &sEnd : 0);
     return 0;
 }
+/*-- 07.09.2007 12:05:09---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+USHORT* SvxAsianLayoutPage::GetRanges()
+{
+    //no items are used
+    static USHORT pAsianLayoutRanges[] = { 0 };
+    return pAsianLayoutRanges;
+}
