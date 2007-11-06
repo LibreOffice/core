@@ -4,9 +4,9 @@
 #
 #   $RCSfile: simplepackage.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-12 11:16:19 $
+#   last change: $Author: rt $ $Date: 2007-11-06 14:19:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -318,13 +318,18 @@ sub create_simple_package
 
         installer::systemactions::copy_one_file($source, $destination);
 
-        if ( ! $installer::globals::iswindowsbuild )
+        if (( ! $installer::globals::iswindowsbuild ) ||
+            (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" )))
         {
             my $unixrights = "";
             if ( $onefile->{'UnixRights'} )
             {
                 $unixrights = $onefile->{'UnixRights'};
-                my $localcall = "chmod $unixrights $destination \>\/dev\/null 2\>\&1";
+
+                # special unix rights "555" on cygwin
+                if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" ) && ( $unixrights =~ /444/ )) { $unixrights = "555"; }
+
+                my $localcall = "$installer::globals::wrapcmd chmod $unixrights $destination \>\/dev\/null 2\>\&1";
                 system($localcall);
             }
         }
