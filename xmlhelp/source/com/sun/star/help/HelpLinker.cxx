@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpLinker.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 15:56:00 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 14:53:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1744,14 +1744,12 @@ private:
                 index = _base;
                 shift = 0;
             }
-            HCDBG(fprintf(stderr, "_data len is %lu\n", _data->size()));
 
             _decmp.initReading(_data, index);
             _nc = _decmp.ascendingDecode(_kTable[_group*2], shift, _concepts);
             HCDBG(std::cerr << "nc b set to " << _nc << std::endl);
             if (_group < _limit)
             {
-                HCDBG(fprintf(stderr, "maxconcept size is %lu group is %d\n", _maxConcepts.size(), _group));
                 HCDBG(fprintf(stderr, "microindex concept index %d set to %d\n", _nc, _maxConcepts[_group]));
                 _concepts[_nc++] = _maxConcepts[_group];
             }
@@ -2057,11 +2055,8 @@ public:
         if (firstTime && concepts[start] >= _limit)
             flush();
         concepts[n] = _limit; // sentinel
-        HCDBG(fprintf(stderr, "size is %lu, n index is %d, and limit is %d, start is %d\n",
-            concepts.size(), n, _limit, start));
         while (concepts[start] < _limit)
         {
-            HCDBG(fprintf(stderr, "array size is %lu, %d %d\n", _arrays.size(), concepts[start], _minConcept));
             _arrays[concepts[start++] - _minConcept].push_back(documentNumber);
         }
         return start;
@@ -2978,7 +2973,6 @@ void ContextTables::setMicroindex(int docNo)
         {
             int offset = _offsets[docNo];
             int k0 = _contextData[offset] & 0xFF;
-            HCDBG(fprintf(stderr, "_contextData len is %lu\n", _contextData.size()));
             ByteArrayDecompressor compr(&_contextData, offset + 1);
             _kTable.clear();
             compr.decode(k0, _kTable);
