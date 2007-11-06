@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-11 14:31:18 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:58:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ $(SCRIPTS) : $$(@:f)
 
 $(RPMTARFILES) : $(PKGDIR)
     $(MKDIRHIER) $(@:d)
-    tar -C $(PKGDIR:d:d) -cf - $(PKGDIR:f)$/{$(shell cd $(PKGDIR); ls $(@:b:b:s/-/ /:1)*)} | gzip > $@
+    tar -C $(PKGDIR:d:d) -cf - $(PKGDIR:f)$/{$(shell @cd $(PKGDIR); ls $(@:b:b:s/-/ /:1)*)} | gzip > $@
 
 .ENDIF # "$(TARFILE)" != ""
 
@@ -125,6 +125,6 @@ $(RPMTARFILES) : $(PKGDIR)
 
 $(DEBTARFILES) : $(PKGDIR)
     $(MKDIRHIER) $(@:d)
-    tar -C $(PKGDIR:d:d) -cf - $(PKGDIR:f)$/{$(shell cd $(PKGDIR); ls $(@:b:b:s/-/ /:1)*.deb)} | gzip > $@
+    tar -C $(PKGDIR:d:d) -cf - $(PKGDIR:f)$/{$(shell @cd $(PKGDIR); ls $(@:b:b:s/-/ /:1)*.deb)} | gzip > $@
     
 .ENDIF
