@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-11 13:13:05 $
+#   last change: $Author: rt $ $Date: 2007-11-06 16:04:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ SHL1STDLIBS+=\
 .ENDIF # WNT
 
 
-SHL1DEPN += $(shell $(FIND) $(SLO) -type f -name "*.OBJ" -print)
+SHL1DEPN += $(shell @$(FIND) $(SLO) -type f -name "*.OBJ" -print)
 
 SHL1LIBS=   $(LIB1TARGET)
 
