@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-27 12:50:45 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:38:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ ENABLE_EXCEPTIONS := TRUE
 
 .IF "$(GUI)" == "WNT"
 FILEURLPREFIX = file:///
-MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(SOLARBINDIR))))
+MY_URE_INTERNAL_JAVA_DIR=$(strip $(subst,\,/ file:///$(shell @$(WRAPCMD) echo $(SOLARBINDIR))))
 .ELSE
 FILEURLPREFIX = file://
 MY_URE_INTERNAL_JAVA_DIR=file://$(SOLARBINDIR)
