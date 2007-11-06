@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 11:37:09 $
+#   last change: $Author: rt $ $Date: 2007-11-06 16:04:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -180,11 +180,11 @@ CXX:=cl.exe
 MOZTOOLSUNPACK:=$(MISC)$/build$/moztoolsunpack
 MOZTOOLSINST:=$(MISC)$/build$/moztoolsinst
 .IF "$(USE_SHELL)"!="4nt"
-MOZ_TOOLS_DOS:=$(shell cygpath -ad "$(MISC)")\build\moztoolsinst
+MOZ_TOOLS_DOS:=$(shell @cygpath -ad "$(MISC)")\build\moztoolsinst
 .IF "$(COM)"=="GCC"
-PATH!:=$(PATH):$(shell cygpath $(MOZ_TOOLS_DOS))/bin:$(shell cygpath $(MOZ_TOOLS_DOS))/vc71/bin
+PATH!:=$(PATH):$(shell @cygpath $(MOZ_TOOLS_DOS))/bin:$(shell @cygpath $(MOZ_TOOLS_DOS))/vc71/bin
 .ELSE
-PATH!:=$(shell cygpath $(MOZ_TOOLS_DOS))/vc71/bin:$(shell cygpath $(MOZ_TOOLS_DOS))/bin:$(PATH)
+PATH!:=$(shell @cygpath $(MOZ_TOOLS_DOS))/vc71/bin:$(shell @cygpath $(MOZ_TOOLS_DOS))/bin:$(PATH)
 .ENDIF
 .IF "$(USE_SHELL)"=="tcsh"
 SET_MOZ_TOOLS_INSTALL_BAT:=setenv MOZ_TOOLS "$(MOZ_TOOLS_DOS)"
@@ -195,7 +195,7 @@ SET_MOZ_TOOLS_INSTALL_BAT:=MOZ_TOOLS="$(MOZ_TOOLS_DOS)"; export MOZ_TOOLS
 .ENDIF
 .ELSE # "$(USE_SHELL)"!="4nt"
 # MOZ_TOOLS must contain an absolute path
-MOZ_TOOLS_DOS:=$(shell echo %@SFN[$(MISC)])\build\moztoolsinst
+MOZ_TOOLS_DOS:=$(shell @echo %@SFN[$(MISC)])\build\moztoolsinst
 PATH!:=$(MOZ_TOOLS_DOS)\vc71\bin;$(MOZ_TOOLS_DOS)\bin;$(PATH)
 SET_MOZ_TOOLS_INSTALL_BAT:=set MOZ_TOOLS=$(MOZ_TOOLS_DOS)
 .ENDIF # "$(USE_SHELL)"!="4nt"
