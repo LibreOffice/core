@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:10:43 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 15:07:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -157,6 +157,11 @@ public class Helper
         }
 
         return aResult;
+    }
+
+    public XComponentContext getComponentContext(){
+        return maContext;
+
     }
 
     // __________ private members and methods __________
