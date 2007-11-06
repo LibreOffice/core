@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:54:21 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:03:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,11 +83,7 @@ DEF2NAME    := $(SHL2TARGET)
 .IF "$(GUI)$(COM)"=="WNTGCC" || "$(GUI)"=="OS2"
 SHL2VERSIONMAP:=uno_purpenvhelper$(COMID).map
 .ELSE
-.IF "$(CPUNAME)" == "X86_64"
-SHL2VERSIONMAP:=$(SHL2TARGET).$(CPUNAME).map
-.ELSE
 SHL2VERSIONMAP:=$(SHL2TARGET).map
-.ENDIF          # "$(CPUNAME)" == "X86_64"
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 SHL2DEF     := $(MISC)$/$(SHL2TARGET).def
 SHL2IMPLIB  := i$(SHL2TARGET)
