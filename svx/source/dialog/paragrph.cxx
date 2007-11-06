@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:32:41 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:30:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2344,9 +2344,7 @@ USHORT*     SvxAsianTabPage::GetRanges()
 {
     static USHORT pRanges[] =
     {
-        SID_ATTR_PARA_SCRIPTSPACE,
-        SID_ATTR_PARA_HANGPUNCTUATION,
-        SID_ATTR_PARA_FORBIDDEN_RULES,
+        SID_ATTR_PARA_SCRIPTSPACE, SID_ATTR_PARA_FORBIDDEN_RULES,
         0
     };
     return pRanges;
