@@ -102,6 +102,7 @@ tt    1251  1092   # Tatar
 uk    1251  1058   # Ukrainian
 ur    1256  1056   # Urdu
 ur-IN    0  2080
+uz       0  1091   # Uzbek (Latin)
 ve       0  1075   # Venda
 vi    1258  1066   # Vietnamese
 xh       0  1076   # Xhosa
