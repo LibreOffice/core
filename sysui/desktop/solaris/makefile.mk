@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:01:23 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:58:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ TARGET=solaris
 
 PKGFILES = $(BIN)$/pkg$/{$(PRODUCTLIST)}-desktop-integration.tar.gz
    
-PKGDATESTRING = $(shell date -u +%Y.%m.%d)
+PKGDATESTRING = $(shell @date -u +%Y.%m.%d)
 PKGARCH=sparc,i386
 
 FASPAC=`test -f $(SOLARBINDIR)/faspac-so.sh && echo "/sbin/sh" || echo "echo"`
