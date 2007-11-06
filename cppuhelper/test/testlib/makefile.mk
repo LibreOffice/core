@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:21:27 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:38:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-PERLINST1:=$(shell +$(PERL) -V:installarchlib)
+PERLINST1:=$(shell @+$(PERL) -V:installarchlib)
 PERLINST2:=$(subst,installarchlib=, $(PERLINST1))
 PERLINST3:=$(PERLINST2:s/'//)
 PERLINST :=$(PERLINST3:s/;//)
