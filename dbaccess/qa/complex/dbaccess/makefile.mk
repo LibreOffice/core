@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-26 14:38:23 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:40:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ PACKAGE = complex$/dbaccess
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar ConnectivityTools.jar
-JAVAFILES       := $(shell $(FIND) ./*.java)
+JAVAFILES       := $(shell @$(FIND) ./*.java)
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 #----- make a jar from compiled files ------------------------------
