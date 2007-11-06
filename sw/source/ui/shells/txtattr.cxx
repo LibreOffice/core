@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:31:22 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:27:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -530,6 +530,28 @@ SET_LINESPACE:
                 aSet.Put( aAdjust );
                 aAdjust.SetWhich(SID_ATTR_PARA_ADJUST);
                 GetView().GetViewFrame()->GetBindings().SetState( aAdjust );
+                // Toggle numbering alignment
+                const SwNumRule* pCurRule = GetShell().GetCurNumRule();
+                if( pCurRule )
+                {
+                    SvxNumRule aRule = pCurRule->MakeSvxNumRule();
+
+                    for(USHORT i = 0; i < aRule.GetLevelCount(); i++)
+                    {
+                        SvxNumberFormat aFmt(aRule.GetLevel(i));
+                        if(SVX_ADJUST_LEFT == aFmt.GetNumAdjust())
+                            aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
+
+                        else if(SVX_ADJUST_RIGHT == aFmt.GetNumAdjust())
+                            aFmt.SetNumAdjust( SVX_ADJUST_LEFT );
+
+                        aRule.SetLevel(i, aFmt, aRule.Get(i) != 0);
+                    }
+                    SwNumRule aSetRule( pCurRule->GetName());
+                    aSetRule.SetSvxRule( aRule, GetShell().GetDoc());
+                    aSetRule.SetAutoRule( TRUE );
+                    GetShell().SetCurNumRule( aSetRule );
+                }
             }
         }
         break;
