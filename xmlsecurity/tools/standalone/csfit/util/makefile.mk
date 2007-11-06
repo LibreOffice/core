@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-27 12:53:55 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:48:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -136,9 +136,9 @@ REGCOMP_ENV=\
 .IF "$(USE_SHELL)" != "4nt"
 DOLLAR_SIGN=\$$
 REGCOMP_ENV=\
-    setenv CLASSPATH "$(strip $(subst,\,/ $(shell guw.pl echo $(REGCOMP_CLASSPATH))))" && \
+    setenv CLASSPATH "$(strip $(subst,\,/ $(shell @guw.pl echo $(REGCOMP_CLASSPATH))))" && \
     setenv PATH "$(PATH):$(JREPATH)"
-MY_JAVA_COMPPATH=$(strip $(subst,\,/ file:///$(shell guw.pl echo $(SOLARBINDIR))))
+MY_JAVA_COMPPATH=$(strip $(subst,\,/ file:///$(shell @guw.pl echo $(SOLARBINDIR))))
 .ELSE # "$(USE_SHELL)" != "4nt"
 DOLLAR_SIGN=$$
 REGCOMP_ENV=\
