@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoTreeRenderer.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 13:57:52 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 15:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -66,55 +66,56 @@ public class UnoTreeRenderer extends DefaultTreeCellRenderer{
     /** Creates a new instance of UnoTreeRenderer */
     public UnoTreeRenderer(){
         super();
-        final ClassLoader loader = this.getClass().getClassLoader();
-        m_oMethodIcon = new ImageIcon(loader.getResource("images/methods_16.png"));
-        m_oPropertyIcon = new ImageIcon(loader.getResource("images/properties_16.png"));
-        m_oPropertyValueIcon = new ImageIcon(loader.getResource("images/properties_16.png"));
-        m_oContainerIcon = new ImageIcon(loader.getResource("images/containers_16.png"));
-        m_oServiceIcon = new ImageIcon(loader.getResource("images/services_16.png"));
-        m_oInterfaceIcon = new ImageIcon(loader.getResource("images/interfaces_16.png"));
-        m_oContentIcon = new ImageIcon(loader.getResource("images/content_16.png"));
+        try {
+
+            final ClassLoader loader = ClassLoader.getSystemClassLoader();
+            m_oMethodIcon = new ImageIcon(loader.getResource("images/methods_16.png"));
+            m_oPropertyIcon = new ImageIcon("images/properties_16.png");
+            m_oPropertyValueIcon = new ImageIcon("images/properties_16.png");
+            m_oContainerIcon = new ImageIcon("images/containers_16.png");
+            m_oServiceIcon = new ImageIcon("images/services_16.png");
+            m_oInterfaceIcon = new ImageIcon("images/interfaces_16.png");
+            m_oContentIcon = new ImageIcon("images/content_16.png");
+        } catch (RuntimeException e) {
+            System.out.println("Sorry, could not locate resourecs, treecell icons will not be displayed.");
+        }
     }
 
 
     public synchronized Component getTreeCellRendererComponent(JTree tree,Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus){
-        bSelected = sel;
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-        Component rc = super.getTreeCellRendererComponent( tree, value, sel,expanded, leaf, row,hasFocus);
-        String  sLabelText = (String)node.getUserObject();
-        if (sLabelText != null){
-            if (sLabelText.equals(XUnoFacetteNode.SCONTAINERDESCRIPTION)){
-                setIcon(m_oContainerIcon);
-            }
-            else if (sLabelText.equals(XUnoFacetteNode.SCONTENTDESCRIPTION)){
-                setIcon(m_oContentIcon);
-            }
-            else if (sLabelText.equals(XUnoFacetteNode.SINTERFACEDESCRIPTION)){
-                setIcon(m_oInterfaceIcon);
-            }
-            else if (sLabelText.equals(XUnoFacetteNode.SMETHODDESCRIPTION)){
-                setIcon(m_oMethodIcon);
-            }
-            else if (sLabelText.equals(XUnoFacetteNode.SPROPERTYDESCRIPTION)){
-                setIcon(m_oPropertyIcon);
-            }
-            else if (sLabelText.startsWith(XUnoFacetteNode.SPROPERTYINFODESCRIPTION)){
-                setIcon(m_oPropertyIcon);
-            }
-            else if (sLabelText.equals(XUnoFacetteNode.SPROPERTYVALUEDESCRIPTION)){
-                setIcon(m_oPropertyValueIcon);
-            }
-            else if (sLabelText.equals(XUnoFacetteNode.SSERVICEDESCRIPTION)){
-                setIcon(m_oServiceIcon);
-            }
-            else{
-                setText(sLabelText);
+        try{
+            bSelected = sel;
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+            Component rc = super.getTreeCellRendererComponent( tree, value, sel,expanded, leaf, row,hasFocus);
+            String  sLabelText = (String)node.getUserObject();
+            if (sLabelText != null){
+                if (sLabelText.equals(XUnoFacetteNode.SCONTAINERDESCRIPTION)){
+//                setIcon(m_oContainerIcon);
+                } else if (sLabelText.equals(XUnoFacetteNode.SCONTENTDESCRIPTION)){
+//                setIcon(m_oContentIcon);
+                } else if (sLabelText.equals(XUnoFacetteNode.SINTERFACEDESCRIPTION)){
+//                setIcon(m_oInterfaceIcon);
+                } else if (sLabelText.equals(XUnoFacetteNode.SMETHODDESCRIPTION)){
+//                setIcon(m_oMethodIcon);
+                } else if (sLabelText.equals(XUnoFacetteNode.SPROPERTYDESCRIPTION)){
+//                setIcon(m_oPropertyIcon);
+                } else if (sLabelText.startsWith(XUnoFacetteNode.SPROPERTYINFODESCRIPTION)){
+//                setIcon(m_oPropertyIcon);
+                } else if (sLabelText.equals(XUnoFacetteNode.SPROPERTYVALUEDESCRIPTION)){
+//                setIcon(m_oPropertyValueIcon);
+                } else if (sLabelText.equals(XUnoFacetteNode.SSERVICEDESCRIPTION)){
+//                setIcon(m_oServiceIcon);
+                } else{
+                    setText(sLabelText);
+                    rc.validate();
+                }
+                setSize(getPreferredSize()); //fm.stringWidth(sLabelText), (int) getSize().getHeight());
                 rc.validate();
-            }
-            setSize(getPreferredSize()); //fm.stringWidth(sLabelText), (int) getSize().getHeight());
-            rc.validate();
 //            nWidth = (int) rc.getPreferredSize().getWidth();
-            doLayout();
+                doLayout();
+            }
+        } catch (RuntimeException e) {
+            System.out.println("Sorry, icon for treecell could not be displayed.");
         }
         return this;
     }
@@ -122,15 +123,15 @@ public class UnoTreeRenderer extends DefaultTreeCellRenderer{
 
 
     public void paintComponent(Graphics g) {
-         FontMetrics fm = getFontMetrics(getFont());
-         int x, y;
-         y = fm.getAscent() + 2;
-         if(getIcon() == null) {
+        FontMetrics fm = getFontMetrics(getFont());
+        int x, y;
+        y = fm.getAscent() + 2;
+        if(getIcon() == null) {
             x = 0;
-         } else {
+        } else {
             x = getIcon().getIconWidth() + getIconTextGap();
-         }
-         g.setColor(getForeground());
+        }
+        g.setColor(getForeground());
 //         g.fillRect(x,y,x + fm.stringWidth(getText()),y);
 //        System.out.println("Text: " + getText());
         super.paintComponent(g);
