@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setupstrings.ulf,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:03:52 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 14:16:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,10 +124,10 @@ en-US = "Browse..."
 en-US = "Create New Directory"
 
 [STRING_CHOOSEDIRECTORY5_QUESTION_MESSAGE]
-en-US = "The directory "${DIR}" does not exist.\nDo you want to create it now?"
+en-US = "The directory '${DIR}' does not exist.\nDo you want to create it now?"
 
 [STRING_CHOOSEDIRECTORY5_QUESTION_MESSAGE2]
-en-US = "The directory "${DIR}" does not exist.\nDo you want to create it now or choose another directory?"
+en-US = "The directory '${DIR}' does not exist.\nDo you want to create it now or choose another directory?"
 
 [STRING_CHOOSEDIRECTORY6]
 en-US = "Select root directory"
