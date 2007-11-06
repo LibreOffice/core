@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:12:48 $
+#   last change: $Author: rt $ $Date: 2007-11-06 16:11:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,9 @@ JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar
 # Do not use $/ with the $(FIND) command as for W32-4nt this leads to a backslash
 # in a posix command. In this special case use / instead of $/
 .IF "$(GUI)"=="OS2"
-JAVAFILES       := $(shell ls ./*.java)
+JAVAFILES       := $(shell @ls ./*.java)
 .ELSE
-JAVAFILES       := $(shell $(FIND) ./*.java)
+JAVAFILES       := $(shell @$(FIND) ./*.java)
 .ENDIF
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
