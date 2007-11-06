@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:44:08 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:24:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1548,7 +1548,7 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
         bBreak = !IsFastFullLine( *pAktTxtNd ) ||
                     IsBlanksInString( *pAktTxtNd ) ||
                     IsSentenceAtEnd( *pAktTxtNd );
-
+    sal_Bool bRTL = pEditShell->IsInRightToLeftText();
 //  SetColl( RES_POOLCOLL_NUM_LEVEL1 + ( nLvl * 4 ) );
     DeleteAktPara( TRUE, TRUE );
 
@@ -1613,6 +1613,8 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                         aFmt.SetAbsLSpace( nAbsPos );
                         if( !aFmt.GetCharFmt() )
                             aFmt.SetCharFmt( pCFmt );
+                        if( bRTL )
+                            aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
 
                         aRule.Set( n, aFmt );
 
@@ -1674,6 +1676,8 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                     if( aNumTypes.Len() )
                         aFmt.SetNumberingType(aNumTypes.GetChar( 0 ) - '0');
 
+                    if( bRTL )
+                        aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
                     aRule.Set( nLvl, aFmt );
                 }
                 else
@@ -1698,6 +1702,8 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
 
                         if( !aFmt.GetCharFmt() )
                             aFmt.SetCharFmt( pCFmt );
+                        if( bRTL )
+                            aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
 
                         aRule.Set( n, aFmt );
                     }
