@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2007-08-02 14:28:35 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:42:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,17 +45,17 @@ nodep=true
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar jcommon-1.0.10.jar libxml-0.9.5.jar jfreereport-0.9.0-05.jar libloader-0.3.4.jar sac.jar liblayout-0.2.6.jar jcommon-serializer-0.1.0.jar libfonts-0.2.6.jar libformula-0.1.8.jar
-JAVAFILES       := $(shell $(FIND) . -name "*.java")
+JAVAFILES       := $(shell @$(FIND) . -name "*.java")
 # JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:s/.java/.class/))
 
 #----- copy .properties and .css files -----------------------------------------
 # external find gives / for 4nt too...
-# PROPERTYFILES := $(subst,/,$/ $(subst,./,$(CLASSDIR)$/$(PACKAGE)$/ $(shell $(FIND) . -name "*.properties")))
+# PROPERTYFILES := $(subst,/,$/ $(subst,./,$(CLASSDIR)$/$(PACKAGE)$/ $(shell @$(FIND) . -name "*.properties")))
 PROPERTYFILES := $(CLASSDIR)$/$(PACKAGE)$/configuration.properties \
                  $(CLASSDIR)$/$(PACKAGE)$/module.properties \
                  $(CLASSDIR)$/$(PACKAGE)$/parser$/selectors.properties
                  
-# CSSFILES := $(subst,./,$(CLASSDIR)$/$(PACKAGE)$/ $(shell $(FIND) . -name "*.css"))
+# CSSFILES := $(subst,./,$(CLASSDIR)$/$(PACKAGE)$/ $(shell @$(FIND) . -name "*.css"))
 CSSFILES := $(CLASSDIR)$/$(PACKAGE)$/oasis-datastyle.css\
             $(CLASSDIR)$/$(PACKAGE)$/oasis-draw.css\
             $(CLASSDIR)$/$(PACKAGE)$/oasis-form.css\
