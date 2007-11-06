@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_langpack.ulf,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 10:08:55 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 14:20:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -668,3 +668,9 @@ en-US = "Tigrinya"
 
 [STR_DESC_MODULE_LANGPACK_TI_ER]
 en-US = "Installs Tigrinya support in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_UZ]
+en-US = "Uzbek"
+
+[STR_DESC_MODULE_LANGPACK_UZ]
+en-US = "Installs Uzbek support in %PRODUCTNAME %PRODUCTVERSION"
