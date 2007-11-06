@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:26:14 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:51:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ SHL1VERSIONMAP=$(SHL1TARGET).map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
-DATA_TXTFILES:=$(shell ls ./*.txt)
+DATA_TXTFILES:=$(shell @ls ./*.txt)
 SHL1OBJS=$(subst,./,$(SLO)$/ $(DATA_TXTFILES:s/.txt/.obj/))
 
 LIB1TARGET=	$(SLB)$/$(SHL1TARGET).lib
@@ -71,5 +71,5 @@ $(MISC)$/%.cxx : %.txt
     $(BIN)$/genindex_data $< $@ $*
 
 # ugly - is this dependency really required here?
-$(foreach,i,$(shell $(FIND) . -name "*.txt") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/genindex_data
+$(foreach,i,$(shell @$(FIND) . -name "*.txt") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/genindex_data
 
