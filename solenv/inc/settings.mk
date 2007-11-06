@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.220 $
+#   $Revision: 1.221 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:39:26 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:44:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1247,47 +1247,47 @@ TRUSTED_MANIFEST_LOCATION*=$(SOLARENV)$/inc
 
 .IF "$(COMP1TYPELIST)"!=""
 .INCLUDE .IGNORE : $(MISC)$/$(COMP1TYPELIST).mk
-$(COMP1TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP1TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+$(COMP1TYPELIST)_XML2CMPTYPES:=$(shell @xml2cmp -types stdout $(MISC)$/$(COMP1TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP2TYPELIST)"!=""
 .INCLUDE .IGNORE : $(MISC)$/$(COMP2TYPELIST).mk
-$(COMP2TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP2TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+$(COMP2TYPELIST)_XML2CMPTYPES:=$(shell @xml2cmp -types stdout $(MISC)$/$(COMP2TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP3TYPELIST)"!=""
 .INCLUDE .IGNORE : $(MISC)$/$(COMP3TYPELIST).mk
-$(COMP3TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP3TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+$(COMP3TYPELIST)_XML2CMPTYPES:=$(shell @xml2cmp -types stdout $(MISC)$/$(COMP3TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP4TYPELIST)"!=""
 .INCLUDE .IGNORE : $(MISC)$/$(COMP4TYPELIST).mk
-$(COMP4TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP4TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+$(COMP4TYPELIST)_XML2CMPTYPES:=$(shell @xml2cmp -types stdout $(MISC)$/$(COMP4TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP5TYPELIST)"!=""
 .INCLUDE .IGNORE : $(MISC)$/$(COMP5TYPELIST).mk
-$(COMP5TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP5TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+$(COMP5TYPELIST)_XML2CMPTYPES:=$(shell @xml2cmp -types stdout $(MISC)$/$(COMP5TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP6TYPELIST)"!=""
 .INCLUDE .IGNORE : $(MISC)$/$(COMP6TYPELIST).mk
-$(COMP6TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP6TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+$(COMP6TYPELIST)_XML2CMPTYPES:=$(shell @xml2cmp -types stdout $(MISC)$/$(COMP6TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP7TYPELIST)"!=""
 .INCLUDE .IGNORE : $(MISC)$/$(COMP7TYPELIST).mk
-$(COMP7TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP7TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+$(COMP7TYPELIST)_XML2CMPTYPES:=$(shell @xml2cmp -types stdout $(MISC)$/$(COMP7TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP8TYPELIST)"!=""
 .INCLUDE .IGNORE : $(MISC)$/$(COMP8TYPELIST).mk
-$(COMP8TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP8TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+$(COMP8TYPELIST)_XML2CMPTYPES:=$(shell @xml2cmp -types stdout $(MISC)$/$(COMP8TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 .IF "$(COMP9TYPELIST)"!=""
 .INCLUDE .IGNORE : $(MISC)$/$(COMP9TYPELIST).mk
-$(COMP9TYPELIST)_XML2CMPTYPES:=$(shell xml2cmp -types stdout $(MISC)$/$(COMP9TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
+$(COMP9TYPELIST)_XML2CMPTYPES:=$(shell @xml2cmp -types stdout $(MISC)$/$(COMP9TYPELIST)$($(WINVERSIONNAMES)_MAJOR).xml)
 .ENDIF
 
 # some place to define these jars for SO environment
