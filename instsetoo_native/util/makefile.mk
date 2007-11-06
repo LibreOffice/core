@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 14:18:12 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:39:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ GEN_HID2=TRUE
 .IF "$(USE_SHELL)"=="4nt"
 PYTHONPATH:=$(PWD)$/$(BIN);$(SOLARLIBDIR);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
 .ELSE			# "$(USE_SHELL)"=="4nt"
-PYTHONPATH:=$(shell $(WRAPCMD) echo $(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload)
+PYTHONPATH:=$(shell @$(WRAPCMD) echo $(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ELSE			# "$(GUI)"=="WNT"
 PYTHONPATH:=$(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload
@@ -243,7 +243,7 @@ openoffice_% :
     ln -s /Applications $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b))$/staging$/
     cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b)) && hdiutil makehybrid -hfs -hfs-openfolder staging staging \
     -hfs-volume-name OpenOffice.org -ov -o tmp && hdiutil convert -ov -format UDZO tmp.dmg \
-    -o $(subst,$(@:s/_/ /:1),OpenOffice.org-$(shell sed -n '/^OpenOffice$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b)) && $(RM:s/+//) tmp.dmg
+    -o $(subst,$(@:s/_/ /:1),OpenOffice.org-$(shell @sed -n '/^OpenOffice$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b)) && $(RM:s/+//) tmp.dmg
 
 .ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
 
@@ -295,7 +295,7 @@ sdkoo_% :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_SDK -u $(OUT) -buildid $(BUILD) -destdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_SDK$/install$/ $(@:b))_inprogress$/ -simple 'SDK/OpenOffice.org SDK'
     $(RM) $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_SDK$/install$/ $(@:b))$/gid_*
     rmdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_SDK$/install$/ $(@:b))$/SDK/OpenOffice.org
-    cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_SDK$/install$/ $(@:b)) && hdiutil create -srcfolder 'SDK' -volname 'OpenOffice.org SDK' -ov -o $(subst,$(@:s/_/ /:1),OpenOffice.org-SDK-$(shell sed -n '/^OpenOffice_SDK$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b))
+    cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_SDK$/install$/ $(@:b)) && hdiutil create -srcfolder 'SDK' -volname 'OpenOffice.org SDK' -ov -o $(subst,$(@:s/_/ /:1),OpenOffice.org-SDK-$(shell @sed -n '/^OpenOffice_SDK$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b))
 .ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
 
 .IF "$(PKGFORMAT)"!=""
@@ -342,7 +342,7 @@ broffice_% :
     +ln -s /Applications $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b))$/staging$/
     +cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b)) && hdiutil makehybrid -hfs -hfs-openfolder staging staging \
     -hfs-volume-name BrOffice.org -ov -o tmp && hdiutil convert -ov -format UDZO tmp.dmg \
-    -o $(subst,$(@:s/_/ /:1),BrOffice.org-$(shell sed -n '/^BrOffice$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b)) && $(RM) tmp.dmg
+    -o $(subst,$(@:s/_/ /:1),BrOffice.org-$(shell @sed -n '/^BrOffice$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b)) && $(RM) tmp.dmg
 
 .ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
 
@@ -383,7 +383,7 @@ sdkbro_% :
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice_SDK -u $(OUT) -buildid $(BUILD) -destdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice_SDK$/install$/ $(@:b))_inprogress$/ -simple 'SDK/BrOffice.org SDK'
     +$(RM) $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice_SDK$/install$/ $(@:b))$/gid_*
     +rmdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice_SDK$/install$/ $(@:b))$/SDK/BrOffice.org
-    +cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice_SDK$/install$/ $(@:b)) && hdiutil create -srcfolder 'SDK' -volname 'BrOffice.org SDK' -ov -o $(subst,$(@:s/_/ /:1),BrOffice.org-SDK-$(shell sed -n '/^BrOffice_SDK$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b))
+    +cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice_SDK$/install$/ $(@:b)) && hdiutil create -srcfolder 'SDK' -volname 'BrOffice.org SDK' -ov -o $(subst,$(@:s/_/ /:1),BrOffice.org-SDK-$(shell @sed -n '/^BrOffice_SDK$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b))
 .ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
 
 .IF "$(PKGFORMAT)"!=""
@@ -403,7 +403,7 @@ ooowoure_% :
     +ln -s /Applications $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_woURE$/install$/ $(@:b))$/staging$/
     +cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_woURE$/install$/ $(@:b)) && hdiutil makehybrid -hfs -hfs-openfolder staging staging \
     -hfs-volume-name OpenOffice.org -ov -o tmp && hdiutil convert -ov -format UDZO tmp.dmg \
-    -o $(subst,$(@:s/_/ /:1),OpenOffice.org-$(shell sed -n '/^OpenOffice_woURE$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b)) && $(RM) tmp.dmg
+    -o $(subst,$(@:s/_/ /:1),OpenOffice.org-$(shell @sed -n '/^OpenOffice_woURE$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b)) && $(RM) tmp.dmg
 .ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
 
 .ELSE			# "$(alllangiso)"!=""
