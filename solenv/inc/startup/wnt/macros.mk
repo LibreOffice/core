@@ -30,7 +30,7 @@ SHELL *:= $(COMSPEC)
    __.DIVSEP-sh-no  *:= \\
    DIRSEPSTR        := \\
 # See iz61212 for the reason why PWD is overwritten
-   PWD:=$(shell echo %_cwd)
+   PWD:=$(shell @echo %_cwd)
 .EXPORT : PWD
    
 .ELSE	# Non 4nt case
@@ -61,7 +61,7 @@ SHELL *:= $(COMSPEC)
 
 .IF $(USE_SHELL) == 4nt
 
-my4ver:=$(shell echo %_4ver)
+my4ver:=$(shell @echo %_4ver)
 
 .IF "$(my4ver:s/.//:s/,//)" >= "400"
 .ELSE			# "$(my4ver:s/.//:s/,//)" >= "400"
