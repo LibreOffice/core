@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:14:22 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:39:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ TARGET  = TestShl2Runner
 # Tip:
 # why 'grep java$$' the $$ is for a real $ and this is for regexp and stays for line end,
 # so we prevent us for compiling *.java~
-JAVAFILES       = $(foreach,j,$(shell ls | grep java$$) $j)
+JAVAFILES       = $(foreach,j,$(shell @ls | grep java$$) $j)
 
 # --- Targets ------------------------------------------------------
 
