@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:53:25 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:28:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1078,7 +1078,12 @@ void SwWrtShell::InsertFootnote(const String &rStr, BOOL bEndNote, BOOL bEdit )
     if( _CanInsert() )
     {
         if(HasSelection())
-            DelRight();
+        {
+            //collapse cursor to the end
+            if(!IsCrsrPtAtEnd())
+                SwapPam();
+            ClearMark();
+        }
 
         SwFmtFtn aFootNote( bEndNote );
         if(rStr.Len())
