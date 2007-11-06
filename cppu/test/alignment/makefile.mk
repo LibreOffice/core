@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:20:45 $
+#   last change: $Author: rt $ $Date: 2007-11-06 16:02:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ ALL: ALLDEP
 
 $(MISC)$/pass2.cxx: $(APP1TARGETN)
     regmerge $(UNOUCRRDB) / $(merge_rdb)
-    cppumaker @$(mktmp $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) $(foreach,c,$(shell $(APP1TARGETN) -env:UNO_TYPES={$(subst,\,\\ $(UNOUCRRDB))} $(subst,\,\\ $(MISC)$/pass2.cxx) dump_types) -T$c) $(UNOUCRRDB))
+    cppumaker @$(mktmp $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) $(foreach,c,$(shell @$(APP1TARGETN) -env:UNO_TYPES={$(subst,\,\\ $(UNOUCRRDB))} $(subst,\,\\ $(MISC)$/pass2.cxx) dump_types) -T$c) $(UNOUCRRDB))
 
 execute_pass2: $(APP2TARGETN)
     $(APP2TARGETN)
