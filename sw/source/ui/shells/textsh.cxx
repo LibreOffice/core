@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:30:42 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:26:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -923,6 +923,13 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     }
 }
 
+bool lcl_IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
+{
+    rWrtSh.SwapPam();
+    bool bRet = pSect == rWrtSh.GetCurrSection();
+    rWrtSh.SwapPam();
+    return bRet;
+}
 
 
 void SwTextShell::StateInsert( SfxItemSet &rSet )
@@ -1058,6 +1065,28 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             case FN_INSERT_HRULER :
                 if(rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel() )
                     rSet.DisableItem(nWhich);
+            break;
+            case FN_FORMAT_COLUMN :
+            {
+                //#i80458# column dialog cannot work if the selection contains different page styles and different sections
+                bool bDisable = true;
+                if( rSh.GetFlyFrmFmt() || rSh.GetSelectedPageDescs() )
+                    bDisable = false;
+                if( bDisable )
+                {
+                    const SwSection* pCurrSection = rSh.GetCurrSection();
+                    USHORT nFullSectCnt = rSh.GetFullSelectedSectionCount();
+                    if( pCurrSection && ( !rSh.HasSelection() || 0 != nFullSectCnt ))
+                        bDisable = false;
+                    else if(
+                        rSh.HasSelection() && rSh.IsInsRegionAvailable() &&
+                            ( !pCurrSection || ( 1 != nFullSectCnt &&
+                                lcl_IsMarkInSameSection( rSh, pCurrSection ) )))
+                        bDisable = false;
+                }
+                if(bDisable)
+                    rSet.DisableItem(nWhich);
+            }
             break;
         }
         nWhich = aIter.NextWhich();
