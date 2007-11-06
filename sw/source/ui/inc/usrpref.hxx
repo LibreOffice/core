@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrpref.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:13:49 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:26:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,12 +147,6 @@ class SwMasterUsrPref : public SwViewOption
     friend class SwCursorConfig;
     friend class SwWebColorConfig;
 
-    SwContentViewConfig aContentConfig;
-    SwLayoutViewConfig  aLayoutConfig;
-    SwGridConfig        aGridConfig;
-    SwCursorConfig      aCursorConfig;
-    SwWebColorConfig*   pWebColorConfig;
-
     SwFldUpdateFlags eFldUpdateFlags;    //udpate of fields and charts
     sal_Int32   nLinkUpdateMode;
     FieldUnit   eUserMetric;
@@ -161,8 +155,13 @@ class SwMasterUsrPref : public SwViewOption
     FieldUnit   eVScrollMetric;
     sal_Bool    bIsVScrollMetricSet;
 
-
     sal_Int32   nDefTab;            //default tab stop distance
+
+    SwContentViewConfig aContentConfig;
+    SwLayoutViewConfig  aLayoutConfig;
+    SwGridConfig        aGridConfig;
+    SwCursorConfig      aCursorConfig;
+    SwWebColorConfig*   pWebColorConfig;
 
 public:
     SwMasterUsrPref(BOOL bWeb);
