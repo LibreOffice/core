@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optasian.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:24:34 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:30:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,7 @@ public:
     virtual ~SvxAsianLayoutPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static UINT16*      GetRanges();
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
