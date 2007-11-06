@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.201 $
+#   $Revision: 1.202 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-18 08:01:14 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:45:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -198,9 +198,9 @@ DEPIDLFILES:=$(IDLFILES)
 .ENDIF			# "$(EXTERNIDLFILES)"!=""
 .ELSE			# "$(LOCALIDLFILES)$(EXTERNIDLFILES)"!=""
 .IF "$(GUI)"=="WNT"
-DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell $(FIND) . -name $i) $i $(shell ($(FIND) $(IDLDIRS) -name $(i:f)) | $(SED) s/\//\\/g )))
+DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell @$(FIND) . -name $i) $i $(shell @($(FIND) $(IDLDIRS) -name $(i:f)) | $(SED) s/\//\\/g )))
 .ELSE			# "$(GUI)"=="WNT"
-DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell $(FIND) . -name $i -print) $i $(shell $(FIND) $(IDLDIRS) -name $(i:f) -print )  ))
+DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell @$(FIND) . -name $i -print) $i $(shell @$(FIND) $(IDLDIRS) -name $(i:f) -print )  ))
 .ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(LOCALIDLFILES)$(EXTERNIDLFILES)"!=""
 .ENDIF			# "$(IDLFILES)"!=""
