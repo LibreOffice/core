@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:37:29 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:50:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-tempvar:=$(shell cd data && ls *.txt)
+tempvar:=$(shell @cd data && ls *.txt)
 LOCAL_RULE_LANGS:=$(uniq $(foreach,i,$(tempvar) $(i:s/-/_/:s/_/ /:1)))
 rules_dependencies:=$(foreach,i,$(tempvar) data$/$i)
 
