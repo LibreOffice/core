@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:23:27 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:43:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ PYTHON=$(WRAPCMD) python
 
 .IF "$(GUI)"!="WNT" && "$(GUI)"!="OS2"
 TEST_ENV=\
-    setenv FOO file://$(shell pwd)$/$(DLLDEST) && \
+    setenv FOO file://$(shell @pwd)$/$(DLLDEST) && \
         setenv UNO_TYPES pyuno_regcomp.rdb && setenv UNO_SERVICES pyuno_regcomp.rdb
 .ELSE # "$(GUI)" != "WNT"
 # aaaaaa, how to get the current working directory on windows ???
@@ -70,11 +70,11 @@ TEST_ENV=\
 ##PYTHON=guw.pl -env $(SOLARVER)/$(UPD)/$(INPATH)/bin/python.exe
 ##REGCOMP=guw.pl -env `which regcomp.exe`
 
-CWD_TMP=$(strip $(shell $(WRAPCMD) echo `pwd`))
+CWD_TMP=$(strip $(shell @$(WRAPCMD) echo `pwd`))
 TEST_ENV=setenv FOO file:///$(strip $(subst,\,/ $(CWD_TMP)/$(DLLDEST))) && \
         setenv UNO_TYPES pyuno_regcomp.rdb && setenv UNO_SERVICES pyuno_regcomp.rdb
 .ELSE
-CWD_TMP=$(strip $(shell echo import os;print os.getcwd() | $(PYTHON)))
+CWD_TMP=$(strip $(shell @echo import os;print os.getcwd() | $(PYTHON)))
 TEST_ENV=set FOO=file:///$(strip $(subst,\,/ $(CWD_TMP)$/$(DLLDEST))) && \
         set UNO_TYPES=pyuno_regcomp.rdb && set UNO_SERVICES=pyuno_regcomp.rdb
 .ENDIF "$(USE_SHELL)" == "tcsh"
