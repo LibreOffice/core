@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 13:56:46 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:29:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,7 @@
 #include "connect.hxx" //add for SvxConnectionDialog
 #include "dbregister.hxx" // add for DatabaseRegistrationDialog
 #include "cuioptgenrl.hxx"  //add for SvxGeneralTabPage
+#include <optasian.hxx>
 #include "insdlg.hxx"
 #include "pastedlg.hxx"
 #include "linkdlg.hxx"
@@ -2297,7 +2298,8 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( USHORT nId )
             return SvxNumberFormatTabPage::GetRanges;
         case RID_SVXPAGE_PAGE :
             return SvxPageDescPage::GetRanges;
-
+        case RID_SVXPAGE_ASIAN_LAYOUT:
+            return SvxAsianLayoutPage::GetRanges;
         default:
             break;
     }
