@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 14:08:41 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:57:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ ALLTAR : $(DEBFILES)
 %/DEBIAN/control : $$(@:f)
     @$(MKDIRHIER) $(@:d) $*$/etc $*$/usr/share/applnk/Office $*$/usr/lib/menu
     ln -sf /opt/$(UNIXFILENAME.$(*:f:s/-/ /:1)) $*$/etc$/
-    /bin/sh -c -x "cd $(COMMONMISC)$/$(*:f:s/-/ /:1) && DESTDIR=$(shell cd $*; pwd) ICON_PREFIX=$(ICONPREFIX) KDEMAINDIR=/usr GNOMEDIR=/usr create_tree.sh"
+    /bin/sh -c -x "cd $(COMMONMISC)$/$(*:f:s/-/ /:1) && DESTDIR=$(shell @cd $*; pwd) ICON_PREFIX=$(ICONPREFIX) KDEMAINDIR=/usr GNOMEDIR=/usr create_tree.sh"
         @cat openoffice.org-debian-menus | sed -e 's/%PRODUCTNAME/$(PRODUCTNAME.$(*:f:s/-/ /:1)) $(PRODUCTVERSION.$(*:f:s/-/ /:1))/' -e 's/%PREFIX/$(UNIXFILENAME.$(*:f:s/-/ /:1))/' -e 's/%ICONPREFIX/$(ICONPREFIX.$(*:f:s/-/ /:1))/' > $*$/usr/lib/menu/$(*:f:s/_/ /:1)
     echo "Package: $(*:f:s/_/ /:1)" > $@
     cat $(@:f) | tr -d "\015" | sed "s/%productname/$(PRODUCTNAME.$(*:f:s/-/ /:1))/" >> $@
