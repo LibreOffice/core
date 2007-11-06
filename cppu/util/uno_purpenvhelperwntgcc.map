@@ -1,0 +1,8 @@
+UDK_3_0_0 {
+    global:
+        _ZN4cppu6helper7purpenv13createMappingEPP12_uno_MappingP16_uno_EnvironmentS6_PFvbPvS7_P33_typelib_TypeDescriptionReferenceP24_typelib_MethodParameterlPK24_typelib_TypeDescriptionS7_PS7_PP8_uno_AnyES7_;
+        _ZN4cppu6helper7purpenv29Environment_initWithEnterableEP16_uno_EnvironmentPNS_9EnterableE;
+
+    local:
+        *;
+};
