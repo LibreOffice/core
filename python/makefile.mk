@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 12:12:12 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:58:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ ADDITIONAL_FILES+=Lib/plat-cygwin Python/fileblocks.c
 
 .IF "$(GUI)"=="UNX"
 BUILD_DIR=
-MYCWD=$(shell pwd)/$(INPATH)/misc/build
+MYCWD=$(shell @pwd)/$(INPATH)/misc/build
 
 .IF "$(SYSBASE)"!=""
 python_CFLAGS+=-I$(SYSBASE)$/usr$/include
@@ -130,7 +130,7 @@ BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) ; $(GNUMAKE) install ; c
 # ----------------------------------
 .IF "$(COM)"=="GCC"
 BUILD_DIR=
-MYCWD=$(shell pwd)/$(INPATH)/misc/build
+MYCWD=$(shell @pwd)/$(INPATH)/misc/build
 CC:=$(CC:s/guw.exe //)
 CXX:=$(CXX:s/guw.exe //)
 LDFLAGS:=-mno-cygwin
