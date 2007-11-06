@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.78 $
+#   $Revision: 1.79 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-01 17:11:27 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:46:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,9 @@
 # setup INCLUDE variable for use by VC++
 .IF "$(GUI)$(COM)"=="WNTMSC"
 .IF "$(EXT_USE_STLPORT)"==""
-INCLUDE!:=$(shell $(4nt_force_shell)$(WRAPCMD) echo $(subst,$/stl, $(SOLARINC)))
+INCLUDE!:=$(shell @$(4nt_force_shell)$(WRAPCMD) echo $(subst,$/stl, $(SOLARINC)))
 .ELSE
-INCLUDE!:=$(shell $(4nt_force_shell)$(WRAPCMD) echo $(SOLARINC))
+INCLUDE!:=$(shell @$(4nt_force_shell)$(WRAPCMD) echo $(SOLARINC))
 .ENDIF			# "$(EXT_USE_STLPORT)"==""
 INCLUDE!:=$(INCLUDE:s/ -I/;/)
 .EXPORT : INCLUDE
@@ -167,7 +167,7 @@ $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpa
     -rm -rf $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)_removeme
     @-$(MKDIR) $(PACKAGE_DIR:d)
     @-$(MKDIR) $(PACKAGE_DIR)
-    cd $(PACKAGE_DIR) && ( $(shell $(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
+    cd $(PACKAGE_DIR) && ( $(shell @$(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @echo make writeable...
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     @cd $(PACKAGE_DIR) && chmod -R +rw $(TARFILE_ROOTDIR) && $(TOUCH) $(UNTAR_FLAG_FILE)
@@ -277,7 +277,7 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .IF "$(OUTDIR2INC)"!=""
 .IF "$(USE_SHELL)"=="4nt"
     @-$(MKDIR) $(foreach,i,$(OUTDIR2INC) $(INCCOM)$/$(i:b))
-    @echo copied $(foreach,i,$(OUTDIR2INC) $(shell $(COPY) $(COPYRECURSE) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i$/* $(INCCOM)$/$(i:b) >& $(NULLDEV) && echo $i))
+    @echo copied $(foreach,i,$(OUTDIR2INC) $(shell @$(COPY) $(COPYRECURSE) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i$/* $(INCCOM)$/$(i:b) >& $(NULLDEV) && echo $i))
 .ELSE			# "$(USE_SHELL)"=="4nt"
     $(COPY) $(COPYRECURSE) $(foreach,i,$(OUTDIR2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
@@ -293,7 +293,7 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 $(MISC)$/$(TARFILE_ROOTDIR) : $(MISC)$/$(TARFILE_NAME).unpack
     @-mv $(MISC)$/$(TARFILE_ROOTDIR) $(MISC)$/$(TARFILE_ROOTDIR).old
     @-rm -rf $(MISC)$/$(TARFILE_ROOTDIR).old
-    cd $(MISC) && $(subst,$(BACK_PATH),..$/..$/ $(shell $(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack))
+    cd $(MISC) && $(subst,$(BACK_PATH),..$/..$/ $(shell @$(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack))
 .IF "$(GUI)"=="UNX"	
     $(TOUCH) $@
 .ENDIF			# "$(GUI)"=="UNX"	
