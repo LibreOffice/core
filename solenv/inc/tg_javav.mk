@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_javav.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:58:32 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:46:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,11 +47,11 @@ JFLAGSNUMVERSION_CMD=-version $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)$/bi
 
 # that's the version known by the specific
 # java version
-JAVAVER:=$(shell -$(JAVA_HOME)$/bin$/java $(JFLAGSVERSION_CMD))
+JAVAVER:=$(shell @-$(JAVA_HOME)$/bin$/java $(JFLAGSVERSION_CMD))
 
 # and a computed integer for comparing
 # each point seperated token blown up to 4 digits
-JAVANUMVER:=$(shell -$(JAVA_HOME)$/bin$/java $(JFLAGSNUMVERSION_CMD))
+JAVANUMVER:=$(shell @-$(JAVA_HOME)$/bin$/java $(JFLAGSNUMVERSION_CMD))
 
 .ELSE          # "$(SOLAR_JAVA)"!=""
 JAVAVER=0.0.0
