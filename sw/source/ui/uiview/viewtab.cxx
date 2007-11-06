@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:39:26 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:27:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -440,9 +440,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             aLR.SetLeft((USHORT)aLongLR.GetLeft());
             aLR.SetRight((USHORT)aLongLR.GetRight());
 
-            if ( nFrmType & FRMTYPE_HEADER )
+            if ( nFrmType & FRMTYPE_HEADER && pHeaderFmt )
                 pHeaderFmt->SetAttr( aLR );
-            else
+            else if( nFrmType & FRMTYPE_FOOTER && pFooterFmt )
                 pFooterFmt->SetAttr( aLR );
         }
         else if( nFrmType == FRMTYPE_DRAWOBJ)
@@ -587,15 +587,18 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     aUL.SetLower( (USHORT)aLongULSpace.GetLower() );
                 aDesc.GetMaster().SetAttr( aUL );
 
-                SwFmtFrmSize aSz( bHead ? pHeaderFmt->GetFrmSize() :
-                                          pFooterFmt->GetFrmSize() );
-                aSz.SetHeightSizeType( ATT_FIX_SIZE );
-                aSz.SetHeight(nPageHeight - aLongULSpace.GetLower() -
-                                            aLongULSpace.GetUpper() );
-                if ( bHead )
-                    pHeaderFmt->SetAttr( aSz );
-                else
-                    pFooterFmt->SetAttr( aSz );
+                if( bHead && pHeaderFmt || !bHead && pFooterFmt )
+                {
+                    SwFmtFrmSize aSz( bHead ? pHeaderFmt->GetFrmSize() :
+                                              pFooterFmt->GetFrmSize() );
+                    aSz.SetHeightSizeType( ATT_FIX_SIZE );
+                    aSz.SetHeight(nPageHeight - aLongULSpace.GetLower() -
+                                                aLongULSpace.GetUpper() );
+                    if ( bHead )
+                        pHeaderFmt->SetAttr( aSz );
+                    else
+                        pFooterFmt->SetAttr( aSz );
+                }
             }
             else
             {
@@ -1026,12 +1029,15 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 SwFrmFmt *pFmt = (SwFrmFmt*) (nFrmType & FRMTYPE_HEADER ?
                                 rDesc.GetMaster().GetHeader().GetHeaderFmt() :
                                 rDesc.GetMaster().GetFooter().GetFooterFmt());
-                SwRect aRect( rSh.GetAnyCurRect( RECT_HEADERFOOTER, pPt));
-                aRect.Pos() -= rSh.GetAnyCurRect( RECT_PAGE, pPt ).Pos();
-                const SvxLRSpaceItem& aLR = pFmt->GetLRSpace();
-                aLongLR.SetLeft ( (long)aLR.GetLeft() + (long)aRect.Left() );
-                aLongLR.SetRight( (nPageWidth -
-                                    (long)aRect.Right() + (long)aLR.GetRight()));
+                if( pFmt )// #i80890# if rDesc is not the one belonging to the current page is might crash
+                {
+                    SwRect aRect( rSh.GetAnyCurRect( RECT_HEADERFOOTER, pPt));
+                    aRect.Pos() -= rSh.GetAnyCurRect( RECT_PAGE, pPt ).Pos();
+                    const SvxLRSpaceItem& aLR = pFmt->GetLRSpace();
+                    aLongLR.SetLeft ( (long)aLR.GetLeft() + (long)aRect.Left() );
+                    aLongLR.SetRight( (nPageWidth -
+                                        (long)aRect.Right() + (long)aLR.GetRight()));
+                }
             }
             else
             {
@@ -1270,13 +1276,15 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         rMaster.GetHeader();
                         const SwFmtHeader& rHeaderFmt = rMaster.GetHeader();
                         SwFrmFmt *pHeaderFmt = (SwFrmFmt*)rHeaderFmt.GetHeaderFmt();
-                        pBox = & (const SvxBoxItem&)pHeaderFmt->GetBox();
+                        if( pHeaderFmt )// #i80890# if rDesc is not the one belonging to the current page is might crash
+                            pBox = & (const SvxBoxItem&)pHeaderFmt->GetBox();
                     }
                     else if(nFrmType & FRMTYPE_FOOTER )
                     {
                         const SwFmtFooter& rFooterFmt = rMaster.GetFooter();
                         SwFrmFmt *pFooterFmt = (SwFrmFmt*)rFooterFmt.GetFooterFmt();
-                        pBox = & (const SvxBoxItem&)pFooterFmt->GetBox();
+                        if( pFooterFmt )// #i80890# if rDesc is not the one belonging to the current page is might crash
+                            pBox = & (const SvxBoxItem&)pFooterFmt->GetBox();
                     }
                     if(pBox)
                     {
