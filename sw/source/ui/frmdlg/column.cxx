@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:51:19 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:26:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,6 +259,9 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
 
     aApplyToLB.SetSelectHdl(LINK(this, SwColumnDlg, ObjectHdl));
     aOK.SetClickHdl(LINK(this, SwColumnDlg, OkHdl));
+    //#i80458# if no columns can be set then disable OK
+    if( !aApplyToLB.GetEntryCount() )
+        aOK.Enable( sal_False );
 }
 
 /*--------------------------------------------------------------------
@@ -311,7 +314,8 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
     {
         case LISTBOX_SELECTION  :
             pSet = pSelectionSet;
-            pSet->Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth, nWidth));
+            if( pSelectionSet )
+                pSet->Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth, nWidth));
         break;
         case LISTBOX_SECTION    :
         case LISTBOX_SECTIONS   :
@@ -333,7 +337,8 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
     pTabPage->SetInSection(bIsSection);
     pTabPage->SetFrmMode(TRUE);
     pTabPage->SetPageWidth(nWidth);
-    pTabPage->Reset(*pSet);
+    if( pSet )
+        pTabPage->Reset(*pSet);
     return 0;
 }
 /* -----------------26.05.99 12:32-------------------
