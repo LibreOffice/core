@@ -2,7 +2,7 @@
 # This file have to updated/extended for other platforms.
 
 # test for the platform
-PLATFORM := $(shell $(PRJ)/config.guess | cut -d"-" -f3,4)
+PLATFORM := $(shell @$(PRJ)/config.guess | cut -d"-" -f3,4)
 
 # config.guess is missing for windows. We rely on getting "" in this case.
 ifeq "$(PLATFORM)" ""
@@ -128,7 +128,7 @@ endif
 ifneq (,$(findstring solaris,$(PLATFORM)))
 # Settings for Solaris using Sun Workshop compiler
 
-PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
+PROCTYPE := $(shell @$(PRJ)/config.guess | cut -d"-" -f1)
 
 ifeq "$(PROCTYPE)" "sparc"
 PLATFORM=solsparc
@@ -222,7 +222,7 @@ endif
 ifeq "$(PLATFORM)" "linux-gnu"
 # Settings for Linux using gcc compiler
 
-PROCTYPE := $(shell $(PRJ)/config.guess | cut -d "-" -f1)
+PROCTYPE := $(shell @$(PRJ)/config.guess | cut -d "-" -f1)
 
 # Default is linux on a intel machine    
 PLATFORM=linux
@@ -262,7 +262,7 @@ SHAREDLIB_EXT=so
 SHAREDLIB_PRE=lib
 SHAREDLIB_OUT=$(OUT_LIB)
 
-GCC_VERSION=$(shell $(CC) -dumpversion)
+GCC_VERSION=$(shell @$(CC) -dumpversion)
 
 COMID=gcc3
 CPPU_ENV=gcc3
@@ -360,7 +360,7 @@ SHAREDLIB_EXT=dylib
 SHAREDLIB_PRE=lib
 SHAREDLIB_OUT=$(OUT_LIB)
 
-GCC_VERSION=$(shell $(CC) -dumpversion)
+GCC_VERSION=$(shell @$(CC) -dumpversion)
 
 COMID=gcc3
 CPPU_ENV=gcc3
@@ -430,7 +430,7 @@ endif
 ifneq (,$(findstring freebsd,$(PLATFORM)))
 # Settings for FreeBSD using gcc compiler
 
-PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
+PROCTYPE := $(shell @$(PRJ)/config.guess | cut -d"-" -f1)
 
 # Default is freebsd on a intel machine    
 PLATFORM=freebsd
@@ -451,9 +451,9 @@ SHAREDLIB_EXT=so
 SHAREDLIB_PRE=lib
 SHAREDLIB_OUT=$(OUT_LIB)
 
-GCC_VERSION=$(shell $(CC) -dumpversion)
+GCC_VERSION=$(shell @$(CC) -dumpversion)
 
-ifeq "$(shell echo $(GCC_VERSION) | cut -c 1)" "3"
+ifeq "$(shell @echo $(GCC_VERSION) | cut -c 1)" "3"
 COMID=gcc3
 CPPU_ENV=gcc3
 else
