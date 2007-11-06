@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwingTreeControlProvider.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 09:21:02 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 15:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -55,6 +55,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
@@ -140,6 +141,7 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
 
     private void insertBottomPanel(JSplitPane _jSplitPane){ //JPanel _jPnlCenter){
         jtxtGeneratedSourceCode.setTabSize(4);
+        jtxtGeneratedSourceCode.getAccessibleContext().setAccessibleName("generated SourceCode");
         JScrollPane jScrollPane = new JScrollPane(jtxtGeneratedSourceCode);
         jScrollPane.setPreferredSize(new Dimension(nDIALOGWIDTH,205));
         jtxtGeneratedSourceCode.setEditable(false);
@@ -205,9 +207,20 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
             jTree.setSelectionModel(tsm);
             jTree.setVisible(false);
             jPnlCenter.setLayout(new java.awt.BorderLayout(10, 10));
+            jPnlCenter.getAccessibleContext().setAccessibleName("inspection tab view");
             insertTopPanel(jPnlCenter);
             jScrollPane1.setViewportView(jTree);
             jScrollPane1.setPreferredSize(new java.awt.Dimension(600, 600));
+            jScrollPane1.getAccessibleContext().setAccessibleName("API view scroll pane");
+
+            JScrollBar jHScrollBar = jScrollPane1.createHorizontalScrollBar();
+            jHScrollBar.getAccessibleContext().setAccessibleName("API view horizontal scroll bar");
+            jScrollPane1.setHorizontalScrollBar(jHScrollBar);
+
+            JScrollBar jVScrollBar = jScrollPane1.createVerticalScrollBar();
+            jVScrollBar.getAccessibleContext().setAccessibleName("API view vertical scroll bar");
+            jScrollPane1.setVerticalScrollBar(jVScrollBar);
+
             JSplitPane jSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
             jSplitPane.setTopComponent(jScrollPane1);
             jPnlCenter.add(jSplitPane, java.awt.BorderLayout.CENTER);
