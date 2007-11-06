@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:35:57 $
+#   last change: $Author: rt $ $Date: 2007-11-06 16:03:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ ALL: ALLDEP
 .INCLUDE :	target.mk
 
 
-NEWCLASS:=$(foreach,i,$(JARFILES) $(null,$(shell $(FIND) $(JARDIR) -name $i) $(SOLARBINDIR)$/$i $(shell $(FIND) $(JARDIR) -name $i)))
+NEWCLASS:=$(foreach,i,$(JARFILES) $(null,$(shell @$(FIND) $(JARDIR) -name $i) $(SOLARBINDIR)$/$i $(shell @$(FIND) $(JARDIR) -name $i)))
 
 .IF "$(GUI)"=="UNX"
 MYCLASSPATH=$(CLASSPATH):$(NEWCLASS:s/ /:/)
