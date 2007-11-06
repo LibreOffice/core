@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:32:57 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:25:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,15 +468,14 @@ const uno::Sequence< ::rtl::OUString >&    SwSelectAddressBlockDialog::GetAddres
         uno::Sequence< ::rtl::OUString >aTemp = m_aAddressBlocks;
         ::rtl::OUString* pTemp = aTemp.getArray();
         pTemp[0] = m_aAddressBlocks[nSelect];
-        sal_uInt32 nIndex = 1;
+        sal_uInt32 nIndex = 0;
         const sal_uInt32 nNumBlocks = m_aAddressBlocks.getLength();
         for(sal_uInt32 nAddress = 1; nAddress < nNumBlocks; ++nAddress)
         {
             if(nIndex == nSelect)
-            {
                 ++nIndex;
-                pTemp[nAddress] = m_aAddressBlocks[nIndex];
-            }
+            pTemp[nAddress] = m_aAddressBlocks[nIndex];
+            nIndex++;
         }
         m_aAddressBlocks = aTemp;
     }
@@ -495,6 +494,7 @@ void SwSelectAddressBlockDialog::SetSettings(
     }
     else
         m_aNeverRB.Check();
+    m_aDeletePB.Enable(m_aAddressBlocks.getLength() > 1);
 }
 /*-- 10.05.2004 11:17:06---------------------------------------------------
 
@@ -562,6 +562,7 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, PushButton*, pButton
             m_aAddressBlocks[nSelect] = sNew;
             m_aPreview.SelectAddress(nSelect);
         }
+        m_aDeletePB.Enable( m_aAddressBlocks.getLength() > 1);
     }
     delete pDlg;
     return 0;
