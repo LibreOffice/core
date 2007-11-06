@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.159 $
+#   $Revision: 1.160 $
 #
-#   last change: $Author: vg $ $Date: 2007-11-05 17:24:41 $
+#   last change: $Author: vg $ $Date: 2007-11-06 12:30:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.159 $ ';
+    $id_str = ' $Revision: 1.160 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1124,14 +1124,19 @@ sub GetDirectoryList {
 sub print_error {
     my $message = shift;
     my $force = shift;
-    rmtree(CorrectPath($tmp_dir), 0, 1) if ($tmp_dir);
+#    rmtree(CorrectPath($tmp_dir), 0, 1) if ($tmp_dir);
     $modules_number -= scalar keys %global_deps_hash;
     $modules_number -= 1;
     print STDERR "\nERROR: $message\n";
     $ENV{mk_tmp} = '';
     close CMD_FILE if ($cmd_file);
     unlink ($cmd_file);
-    do_exit(1) if (!$child);
+    if (!$child) {
+        $ENV{mk_tmp} = '';
+        close CMD_FILE if ($cmd_file);
+        unlink ($cmd_file);
+        do_exit(1);
+    };
     do_exit(1) if (defined $force);
 };
 
@@ -1977,10 +1982,11 @@ sub is_output_tree {
 sub get_tmp_dir {
     my $tmp_dir;
     if( defined($ENV{TMP}) ) {
-        print_error("the \$TMP directory $ENV{TMP} does not exist! Please, create it first") if (!-d $ENV{TMP});
+        print_error("the \$TMP directory $ENV{TMP} does not exist! Please, create it first.") if (!-d $ENV{TMP});
        $tmp_dir = $ENV{TMP} . '/';
     } else {
-       $tmp_dir = '/tmp/';
+        print_error("the \$TMP environment variable is not defined! Please, define it...");
+#       $tmp_dir = '/tmp/';
     }
     $tmp_dir .= $$ while (-d $tmp_dir);
     $tmp_dir = CorrectPath($tmp_dir);
