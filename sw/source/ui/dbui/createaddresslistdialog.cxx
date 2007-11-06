@@ -4,9 +4,9 @@
  *
  *  $RCSfile: createaddresslistdialog.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:13:44 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:25:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -608,6 +608,7 @@ IMPL_LINK(SwCreateAddressListDialog, FindHdl_Impl, PushButton*, EMPTYARG)
                     aHeaderIter != m_pCSVData->aDBColumnHeaders.end();
                     ++aHeaderIter)
             rColumnBox.InsertEntry(*aHeaderIter);
+        rColumnBox.SelectEntryPos( 0 );
     }
     else
         m_pFindDlg->Show(!m_pFindDlg->IsVisible());
@@ -793,7 +794,7 @@ void SwCreateAddressListDialog::Find(const String& rSearch, sal_Int32 nColumn)
             {
                 for( nElement = 0; nElement < aData.size(); ++nElement)
                 {
-                    bFound = aData[nElement].toAsciiLowerCase().indexOf(sSearch);
+                    bFound = -1 != aData[nElement].toAsciiLowerCase().indexOf(sSearch);
                     if(bFound)
                     {
                         nColumn = nElement;
@@ -805,11 +806,13 @@ void SwCreateAddressListDialog::Find(const String& rSearch, sal_Int32 nColumn)
                 break;
         }
         nStart = 0;
-        nEnd = nCurrent;
+        nEnd = nCurrent + 1;
     }
     if(bFound)
     {
         m_pAddressControl->SetCurrentDataSet(nPos);
+        m_aSetNoNF.SetValue( nPos + 1 );
+        UpdateButtons();
         m_pAddressControl->SetCursorTo(nElement);
     }
 }
@@ -852,7 +855,8 @@ IMPL_LINK(SwFindEntryDialog, FindHdl_Impl, PushButton*, EMPTYARG)
     sal_Int32 nColumn = -1;
     if(m_aFindOnlyCB.IsChecked())
         nColumn = m_aFindOnlyLB.GetSelectEntryPos();
-    m_pParent->Find(m_aFindED.GetText(), nColumn);
+    if(nColumn != LISTBOX_ENTRY_NOTFOUND)
+        m_pParent->Find(m_aFindED.GetText(), nColumn);
     return 0;
 }
 /*-- 21.04.2004 13:37:46---------------------------------------------------
