@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:29:27 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:25:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,16 +79,16 @@ void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
 }
 
 SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
-    aContentConfig(bWeb, *this),
-    aLayoutConfig(bWeb, *this),
-    aGridConfig(bWeb, *this),
-    aCursorConfig(*this),
-    pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : 0),
     eFldUpdateFlags(AUTOUPD_OFF),
     nLinkUpdateMode(0),
     bIsHScrollMetricSet(sal_False),
     bIsVScrollMetricSet(sal_False),
-    nDefTab( MM50 * 4 )
+    nDefTab( MM50 * 4 ),
+    aContentConfig(bWeb, *this),
+    aLayoutConfig(bWeb, *this),
+    aGridConfig(bWeb, *this),
+    aCursorConfig(*this),
+    pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : 0)
 {
     MeasurementSystem eSystem = GetAppLocaleData().getMeasurementSystemEnum();
     eUserMetric = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
