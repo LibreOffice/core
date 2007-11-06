@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdet2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:41:27 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 16:27:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,20 +102,8 @@ ULONG SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilt
         String aPrefFlt = (*ppFilter)->GetUserData();
 
         // detection for TextFilter needs an additional checking
-        BOOL bTxtFilter = aPrefFlt.EqualsAscii( FILTER_TEXT, 0, 4 );
         BOOL bDetected = SwIoSystem::IsFileFilter( rMedium, aPrefFlt );
-        if (!bTxtFilter && bDetected )
-            return nRet;
-        else if (bTxtFilter)
-        {
-            // #50498#: SWDOS uses "txt" extension - so a file detected as "Text" could
-            // also be an SWDOS file
-            if (SwIoSystem::IsFileFilter( rMedium, C2S("SW6"), ppFilter))
-                return nRet;
-        }
-        else if ( !bDetected )
-            // mba: don't guess filters, only verify it
-            return ERRCODE_ABORT;
+        return bDetected ? nRet : ERRCODE_ABORT;
     }
 
     // mba: without preselection there is no PrefFlt
