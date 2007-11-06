@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_langpack.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 10:08:41 $
+ *  last change: $Author: rt $ $Date: 2007-11-06 14:20:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4766,6 +4766,51 @@ Module gid_Module_Langpack_Fonts_ti_ER
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ti_ER";
     Description = "gid_Module_Langpack_Fonts_ti_ER";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Uzbek (uz)
+
+Module gid_Module_Root_uz
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "10500";
+    MOD_NAME_DESC(MODULE_LANGPACK_UZ);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_uz
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_uz;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_uz";
+    Description = "gid_Module_Langpack_Resource_uz";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_uz
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_uz;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_uz";
+    Description = "gid_Module_Langpack_Help_uz";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_uz
+	LanguagePackageInfo = "packinfo_office_lang.txt";
+    ParentID = gid_Module_Root_uz;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_uz";
+    Description = "gid_Module_Langpack_Fonts_uz";
     Styles = (HIDDEN_ROOT);
 End
 #endif
