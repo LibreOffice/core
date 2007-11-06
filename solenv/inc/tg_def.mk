@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 13:40:10 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:45:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ RMHACK$(TNR):=$(RM)
 DEF$(TNR)UNIQE:=$(mktmp $(GUI))
 
 # %_disk is a 4nt special; don't exppect it to work in any other shell
-BUILD_DRIVE$(TNR):=$(shell echo %_disk)
+BUILD_DRIVE$(TNR):=$(shell @echo %_disk)
 #BUILD_DRIVE$(TNR):=O
 
 .IF "$(BUILD_DRIVE$(TNR))"=="O"
