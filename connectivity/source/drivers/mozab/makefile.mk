@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:00:03 $
+#   last change: $Author: rt $ $Date: 2007-11-06 15:37:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,11 +51,11 @@ MOZ_INC=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
 
 .IF "$(OS)"=="WNT" 
 .IF "$(USE_SHELL)"=="4nt"
-MOZ_EMBED_LIB := $(shell +-dir /ba:f $(MOZ_LIB)$/embed_base_s.lib 2>NUL )
-MOZ_REG_LIB	  := $(shell +-dir /ba:f $(MOZ_LIB)$/mozreg_s.lib 2>NUL )
+MOZ_EMBED_LIB := $(shell @+-dir /ba:f $(MOZ_LIB)$/embed_base_s.lib 2>NUL )
+MOZ_REG_LIB	  := $(shell @+-dir /ba:f $(MOZ_LIB)$/mozreg_s.lib 2>NUL )
 .ELSE	#"$(USE_SHELL)"=="4nt"
-MOZ_EMBED_LIB := $(shell -test -f $(MOZ_LIB)$/embed_base_s.lib && echo $(MOZ_LIB)$/embed_base_s.lib )
-MOZ_REG_LIB	  := $(shell -test -f $(MOZ_LIB)$/mozreg_s.lib && echo $(MOZ_LIB)$/mozreg_s.lib )
+MOZ_EMBED_LIB := $(shell @-test -f $(MOZ_LIB)$/embed_base_s.lib && echo $(MOZ_LIB)$/embed_base_s.lib )
+MOZ_REG_LIB	  := $(shell @-test -f $(MOZ_LIB)$/mozreg_s.lib && echo $(MOZ_LIB)$/mozreg_s.lib )
 .ENDIF
 
 .IF X"$(MOZ_EMBED_LIB)"=="X"
