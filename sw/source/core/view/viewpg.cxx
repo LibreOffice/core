@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:42:55 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 12:19:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,7 +291,10 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
                 break;
 
             // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
-            if( aMulti.IsSelected( nPageNo ) && bPrintEmptyPages || !pStPage->IsEmptyPage() )
+            // --> OD 2007-10-22 #i79738# - correct condition:
+            // always consider, if page is selected for print.
+            if( aMulti.IsSelected( nPageNo ) &&
+                ( bPrintEmptyPages || !pStPage->IsEmptyPage() ) )
             // <--
             {
                 if( rOptions.bPrintReverse )
