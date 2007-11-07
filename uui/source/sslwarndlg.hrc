@@ -1,0 +1,67 @@
+/*************************************************************************
+*
+*  OpenOffice.org - a multi-platform office productivity suite
+*
+*  $RCSfile: sslwarndlg.hrc,v $
+*
+*  $Revision: 1.2 $
+*
+*  last change: $Author: rt $ $Date: 2007-11-07 10:11:00 $
+*
+*  The Contents of this file are made available subject to
+*  the terms of GNU Lesser General Public License Version 2.1.
+*
+*
+*    GNU Lesser General Public License Version 2.1
+*    =============================================
+*    Copyright 2005 by Sun Microsystems, Inc.
+*    901 San Antonio Road, Palo Alto, CA 94303, USA
+*
+*    This library is free software; you can redistribute it and/or
+*    modify it under the terms of the GNU Lesser General Public
+*    License version 2.1, as published by the Free Software Foundation.
+*
+*    This library is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*    Lesser General Public License for more details.
+*
+*    You should have received a copy of the GNU Lesser General Public
+*    License along with this library; if not, write to the Free Software
+*    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+*    MA  02111-1307  USA
+*
+************************************************************************/
+
+#ifndef UUI_SSLWARN_HRC
+#define UUI_SSLWARN_HRC
+
+#include <svtools/controldims.hrc>
+
+// local identifiers
+#define FT_LABEL_1              1
+#define PB_OK                   4
+#define PB_VIEW__CERTIFICATE    5
+#define PB_CANCEL               6
+#define IMG_WARN                7
+#define FL_LINE                 9
+
+// Dims
+
+#define DLG_WIDTH              210
+#define DLG_HEIGHT             125
+
+#define DLG_WARMIMG_HEIGHT      20
+#define DLG_WARMIMG_WIDTH       20
+
+#define DLG_TEXT_1_HEIGHT       90
+
+#define DLG_TEXT_START_X       RSC_SP_DLG_INNERBORDER_LEFT + DLG_WARMIMG_WIDTH + RSC_SP_CTRL_X
+
+#define DLG_CTLBTN_START_Y     DLG_HEIGHT - RSC_SP_CTRL_X - RSC_CD_PUSHBUTTON_HEIGHT
+
+#define DLG_CTLBTN_CANCEL_PUSHBUTTON_WIDTH RSC_CD_PUSHBUTTON_WIDTH + 5
+#define DLG_CTLBTN_CANCEL_START_X  DLG_WIDTH - 15 - DLG_CTLBTN_CANCEL_PUSHBUTTON_WIDTH
+#define DLG_CTLBTN_OK_START_X      DLG_CTLBTN_CANCEL_START_X - RSC_CD_PUSHBUTTON_WIDTH - RSC_SP_CTRL_GROUP_X
+#define DLG_CTLBTN_CERT_START_X    DLG_TEXT_START_X
+#endif //UUI_SSLWARN_HRC
