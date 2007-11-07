@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdeinetlayer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:38:20 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:13:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ void SAL_CALL KDEInetLayer::readData( const uno::Reference<backend::XLayerHandle
         ) ), static_cast < backend::XLayer * > (this) );
     }
 
-    uno::Sequence<backend::PropertyInfo> aPropInfoList(6);
+    uno::Sequence<backend::PropertyInfo> aPropInfoList(8);
     sal_Int32 nProperties = 0;
 
     switch ( KProtocolManager::proxyType() )
@@ -97,7 +97,8 @@ void SAL_CALL KDEInetLayer::readData( const uno::Reference<backend::XLayerHandle
             setProxy(aPropInfoList, nProperties, 1,
                      KProtocolManager::noProxyFor(),
                      KProtocolManager::proxyFor( "HTTP" ),
-                     KProtocolManager::proxyFor( "FTP" ) );
+                     KProtocolManager::proxyFor( "FTP" ),
+                     KProtocolManager::proxyFor( "HTTPS" ));
             break;
         case KProtocolManager::PACProxy:    // A proxy configuration URL has been given
         case KProtocolManager::WPADProxy:   // A proxy should be automatically discovered
@@ -108,7 +109,8 @@ void SAL_CALL KDEInetLayer::readData( const uno::Reference<backend::XLayerHandle
             setProxy(aPropInfoList, nProperties, 1,
                      KProtocolManager::noProxyFor(),
                      KProtocolManager::proxyForURL( "http://www.openoffice.org" ),
-                     KProtocolManager::proxyForURL( "ftp://ftp.openoffice.org" ) );
+                     KProtocolManager::proxyForURL( "ftp://ftp.openoffice.org" ),
+                     KProtocolManager::proxyForURL( "https://www.openoffice.org" ));
             break;
         default:                            // No proxy is used
             setProxy(aPropInfoList, nProperties, 0);
@@ -129,7 +131,7 @@ rtl::OUString SAL_CALL KDEInetLayer::getTimestamp(void)
     // Return the value as timestamp to avoid regenerating the binary cache
     // on each office launch.
 
-    QString aProxyType, aNoProxyFor, aHTTPProxy, aFTPProxy;
+    QString aProxyType, aNoProxyFor, aHTTPProxy, aHTTPSProxy, aFTPProxy;
 
     switch ( KProtocolManager::proxyType() )
     {
@@ -137,6 +139,7 @@ rtl::OUString SAL_CALL KDEInetLayer::getTimestamp(void)
             aProxyType = '1';
             aNoProxyFor = KProtocolManager::noProxyFor();
             aHTTPProxy = KProtocolManager::proxyFor( "HTTP" );
+            aHTTPProxy = KProtocolManager::proxyFor( "HTTPS" );
             aFTPProxy = KProtocolManager::proxyFor( "FTP" );
             break;
         case KProtocolManager::PACProxy:
@@ -145,6 +148,7 @@ rtl::OUString SAL_CALL KDEInetLayer::getTimestamp(void)
             aProxyType = '1';
             aNoProxyFor = KProtocolManager::noProxyFor();
             aHTTPProxy = KProtocolManager::proxyForURL( "http://www.openoffice.org" );
+            aHTTPSProxy = KProtocolManager::proxyForURL( "https://www.openoffice.org" );
             aFTPProxy = KProtocolManager::proxyForURL( "ftp://ftp.openoffice.org" );
             break;
         default:
@@ -160,6 +164,8 @@ rtl::OUString SAL_CALL KDEInetLayer::getTimestamp(void)
     sTimeStamp += sep;
     sTimeStamp += (const sal_Unicode *) aHTTPProxy.ucs2();
     sTimeStamp += sep;
+    sTimeStamp += (const sal_Unicode *) aHTTPSProxy.ucs2();
+    sTimeStamp += sep;
     sTimeStamp += (const sal_Unicode *) aFTPProxy.ucs2();
 
     return sTimeStamp;
@@ -169,7 +175,7 @@ rtl::OUString SAL_CALL KDEInetLayer::getTimestamp(void)
 
 void SAL_CALL KDEInetLayer::setProxy
     (uno::Sequence<backend::PropertyInfo> &aPropInfoList, sal_Int32 &nProperties,
-     int nProxyType, const QString &aNoProxy, const QString &aHTTPProxy, const QString &aFTPProxy) const
+     int nProxyType, const QString &aNoProxy, const QString &aHTTPProxy, const QString &aFTPProxy, const QString &aHTTPSProxy ) const
 {
     aPropInfoList[nProperties].Name = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings/ooInetProxyType") );
@@ -211,6 +217,27 @@ void SAL_CALL KDEInetLayer::setProxy
 
         aPropInfoList[nProperties].Name = rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings/ooInetHTTPProxyPort") );
+        aPropInfoList[nProperties].Type = rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM( "int" ) );
+        aPropInfoList[nProperties].Protected = sal_False;
+        aPropInfoList[nProperties++].Value = uno::makeAny( nPort );
+    }
+
+    if ( !aHTTPSProxy.isEmpty() )
+    {
+        KURL aProxy(aHTTPSProxy);
+        ::rtl::OUString sProxy = (const sal_Unicode *) aProxy.host().ucs2();
+        sal_Int32 nPort = aProxy.port();
+
+        aPropInfoList[nProperties].Name = rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings/ooInetHTTPSProxyName") );
+        aPropInfoList[nProperties].Type = rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM( "string" ) );
+        aPropInfoList[nProperties].Protected = sal_False;
+        aPropInfoList[nProperties++].Value = uno::makeAny( sProxy );
+
+        aPropInfoList[nProperties].Name = rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings/ooInetHTTPSProxyPort") );
         aPropInfoList[nProperties].Type = rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM( "int" ) );
         aPropInfoList[nProperties].Protected = sal_False;
