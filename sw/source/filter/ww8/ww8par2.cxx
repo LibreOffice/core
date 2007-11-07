@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:04:52 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 12:20:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2588,6 +2588,11 @@ void WW8TabDesc::UseSwTable()
     pTblNd  = (SwTableNode*)(*pTabLines)[0]->GetTabBoxes()[0]->
         GetSttNd()->FindTableNode();
     ASSERT( pTblNd, "wo ist mein TabellenNode" );
+
+    // --> mloiseleur 2007-10-10 #i69519# Restrict rows to repeat to a decent value
+    if ( nRowsToRepeat == static_cast<USHORT>(nRows) )
+        nRowsToRepeat = 1;
+    // <--
 
     pTblNd->GetTable().SetRowsToRepeat( nRowsToRepeat );
     // ggfs. Zusatz-Zellen einfuegen u.dgl.
