@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVSessionFactory.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:04:55 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:03:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,8 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
                 const uno::Reference< lang::XMultiServiceFactory > & rxSMgr )
     throw( DAVException )
 {
+    m_xMSF = rxSMgr;
+
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_xProxyDecider.get() )
