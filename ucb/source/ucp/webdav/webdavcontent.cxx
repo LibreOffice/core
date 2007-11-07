@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:14:36 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:04:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1985,7 +1985,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             NeonUri sourceURI( xOldId->getContentIdentifier() );
             NeonUri targetURI( xNewId->getContentIdentifier() );
-            targetURI.SetScheme( rtl::OUString::createFromAscii( "http" ) );
+            targetURI.SetScheme( sourceURI.GetScheme() );
 
             xResAccess->MOVE(
                 sourceURI.GetPath(), targetURI.GetURI(), sal_False, xEnv );
