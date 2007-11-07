@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:15:21 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 
 
 #include <documentdigitalsignatures.hxx>
+#include <certificatecontainer.hxx>
 
 using namespace ::com::sun::star;
 
@@ -62,17 +63,33 @@ sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistr
     {
         try
         {
-            sal_Int32 nPos = 0;
-            uno::Reference< registry::XRegistryKey > xNewKey(
-                reinterpret_cast< registry::XRegistryKey* >( pRegistryKey )->createKey( DocumentDigitalSignatures::GetImplementationName() ) );
-            xNewKey = xNewKey->createKey( rtl::OUString::createFromAscii( "/UNO/SERVICES" ) );
+                    sal_Int32 nPos = 0;
+                    // SERVICE DocumentDigitalSignatures
+                    nPos = 0;
+                    uno::Reference< registry::XRegistryKey > xNewKey(
+                    reinterpret_cast< registry::XRegistryKey* >( pRegistryKey )->createKey( DocumentDigitalSignatures::GetImplementationName() ) );
 
-            const uno::Sequence< rtl::OUString >& rSNL = DocumentDigitalSignatures::GetSupportedServiceNames();
-            const rtl::OUString* pArray = rSNL.getConstArray();
-            for ( nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
+                    xNewKey = xNewKey->createKey( rtl::OUString::createFromAscii( "/UNO/SERVICES" ) );
 
-            return sal_True;
+                    const uno::Sequence< rtl::OUString >& rSNL = DocumentDigitalSignatures::GetSupportedServiceNames();
+                    const rtl::OUString* pArray = rSNL.getConstArray();
+                    for ( nPos = rSNL.getLength(); nPos--; )
+                        xNewKey->createKey( pArray[nPos] );
+
+                    // SERVICE CertificateContainer
+                    nPos = 0;
+                    uno::Reference< registry::XRegistryKey > xNewKeyCertificateContainer(
+                    reinterpret_cast< registry::XRegistryKey* >( pRegistryKey )->createKey( CertificateContainer::impl_getStaticImplementationName() ) );
+                    xNewKeyCertificateContainer = xNewKeyCertificateContainer->createKey( rtl::OUString::createFromAscii( "/UNO/SERVICES" ) );
+
+                    const uno::Sequence< rtl::OUString >& rSNLCertificateContainer = CertificateContainer::impl_getStaticSupportedServiceNames();
+                    const rtl::OUString* pArrayCertificateContainer = rSNLCertificateContainer.getConstArray();
+                    for ( nPos = rSNLCertificateContainer.getLength(); nPos--; )
+                        xNewKeyCertificateContainer->createKey( pArrayCertificateContainer[nPos] );
+
+                    //-----------------------------
+
+                    return sal_True;
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -87,10 +104,12 @@ void* SAL_CALL component_getFactory( const sal_Char * pImplName, void * pService
     void* pRet = NULL;
 
     //Decryptor
-    rtl::OUString implName = rtl::OUString::createFromAscii( pImplName );
+        rtl::OUString implName = rtl::OUString::createFromAscii( pImplName );
+
+        // DocumentDigitalSignatures
     if ( pServiceManager && implName.equals( DocumentDigitalSignatures::GetImplementationName() ) )
     {
-        uno::Reference< lang::XSingleServiceFactory > xFactory( cppu::createSingleFactory(
+            uno::Reference< lang::XSingleServiceFactory > xFactory( cppu::createSingleFactory(
             reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
             rtl::OUString::createFromAscii( pImplName ),
             DocumentDigitalSignatures_CreateInstance, DocumentDigitalSignatures::GetSupportedServiceNames() ) );
@@ -101,6 +120,23 @@ void* SAL_CALL component_getFactory( const sal_Char * pImplName, void * pService
             pRet = xFactory.get();
         }
     }
+
+        // CertificateContainer
+        if ( pServiceManager && implName.equals( CertificateContainer::impl_getStaticImplementationName() ))
+    {
+            uno::Reference< lang::XSingleServiceFactory > xFactoryCertificateContainer( cppu::createOneInstanceFactory(
+                reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                rtl::OUString::createFromAscii( pImplName ),
+                CertificateContainer::impl_createInstance,
+                CertificateContainer::impl_getStaticSupportedServiceNames() ) );
+
+            if (xFactoryCertificateContainer.is())
+            {
+        xFactoryCertificateContainer->acquire();
+        pRet = xFactoryCertificateContainer.get();
+            }
+    }
+
     return pRet;
 }
 
