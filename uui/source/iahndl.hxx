@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:29:36 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:09:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,23 @@
 #include "fltdlg.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_SECURITY_XCERTIFICATE_HPP_
+#include <com/sun/star/security/XCertificate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_CRYPTO_XXSECURITYENVIRONMENT_HPP_
+#include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
+#endif
+
 class Window;
 class LoginErrorInfo;
 struct CntHTTPCookieRequest;
+
+#define DESCRIPTION_1 1
+#define DESCRIPTION_2 2
+#define TITLE 3
+
+namespace cssu = com::sun::star::uno;
+namespace dcss = ::com::sun::star;
 
 namespace com { namespace sun { namespace star {
     namespace document {
@@ -96,6 +110,7 @@ namespace com { namespace sun { namespace star {
         class AuthenticationRequest;
         class HandleCookiesRequest;
         class NameClashResolveRequest;
+        class CertificateValidationRequest;
     }
     namespace uno {
         class RuntimeException;
@@ -147,6 +162,9 @@ private:
                 rRequest)
         throw (com::sun::star::uno::RuntimeException);
 
+
+    sal_Bool
+    isDomainMatch( rtl::OUString hostName, rtl::OUString certHostName);
     static long
     handlerequest(void* pHandleData, void* pInteractionHandler);
 
@@ -196,6 +214,17 @@ private:
                              rtl::OUString             & rFilter )
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
+    sal_Bool executeUnknownAuthDialog( const cssu::Reference< dcss::security::XCertificate >& rXCert )
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    sal_Bool executeSSLWarnDialog( const cssu::Reference< dcss::security::XCertificate >& rXCert,
+                                   sal_Int32 const & failures,
+                                   const rtl::OUString & hostName)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    rtl::OUString
+    getLocalizedDatTimeStr( ::com::sun::star::util::DateTime aDateTime );
+
     USHORT
     executeErrorDialog(com::sun::star::task::InteractionClassification
                    eClassification,
@@ -213,6 +242,15 @@ private:
     void
     handleAuthenticationRequest(
         com::sun::star::ucb::AuthenticationRequest const & rRequest,
+        com::sun::star::uno::Sequence<
+        com::sun::star::uno::Reference<
+            com::sun::star::task::XInteractionContinuation > > const &
+    rContinuations)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
+    handleCertificateValidationRequest(
+        com::sun::star::ucb::CertificateValidationRequest const & rRequest,
         com::sun::star::uno::Sequence<
         com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionContinuation > > const &
