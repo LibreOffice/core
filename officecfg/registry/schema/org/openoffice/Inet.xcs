@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Inet.xcs,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:08:30 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 09:54:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,6 +277,38 @@
 				<info>
 					<author>KSO</author>
 					<desc>Specifies the port of the HTTP proxy server.</desc>
+				</info>
+				<constraints>
+					<minInclusive oor:value="0">
+						<info>
+							<desc>Specifies the minimum allowed port number.</desc>
+						</info>
+					</minInclusive>
+					<maxInclusive oor:value="65535">
+						<info>
+							<desc>Specifies the maximum allowed port number.</desc>
+						</info>
+					</maxInclusive>
+				</constraints>
+			</prop>
+			<prop oor:name="ooInetHTTPSProxyName" oor:type="xs:string">
+				<!-- OldPath: Inet/HTTPSProxyName -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- UIHints: Tools  Options  Internet  Proxy -->
+				<info>
+					<author>TKR</author>
+					<desc>Specifies the name of the HTTPS proxy server.</desc>
+				</info>
+				<value/>
+				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+			</prop>
+			<prop oor:name="ooInetHTTPSProxyPort" oor:type="xs:int">
+				<!-- OldPath: Inet/HTTPSProxyPort -->
+				<!-- OldLocation: soffice.ini -->
+				<!-- UIHints: Tools  Options  Internet  Proxy -->
+				<info>
+					<author>TKR</author>
+					<desc>Specifies the port of the HTTPS proxy server.</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="0">
