@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:03:42 $
+#   last change: $Author: rt $ $Date: 2007-11-07 10:06:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ SLOFILES = \
     $(SLO)$/certificateextension_xmlsecimpl.obj \
     $(SLO)$/xmlstreamio.obj \
     $(SLO)$/errorcallback.obj \
-    $(SLO)$/xsec_xmlsec.obj
+    $(SLO)$/xsec_xmlsec.obj 
     
 # --- Targets ------------------------------------------------------
 
