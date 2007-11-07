@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:31:26 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 12:17:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,95 +388,148 @@ BOOL SwCrsrShell::SelTblBox()
     return TRUE;
 }
 
-
-// suche die naechste nicht geschuetzte Zelle innerhalb der Tabelle
-// Parameter:
-//      rIdx    - steht auf dem TabellenNode
-//      SwDoc   -
+// return the next non-protected cell inside a table
+//      rIdx    - is on a table node
 //  return:
-//      0   - Idx steht auf/in einer nicht geschuetzten Zelle
-//      !0  - Node hinter der Tabelle
-
-
-SwNode* lcl_FindNextCell( SwNodeIndex& rIdx, BOOL bInReadOnly )
+//      true  - Idx points to content in a suitable cell
+//      false - could not find a suitable cell
+bool lcl_FindNextCell( SwNodeIndex& rIdx, BOOL bInReadOnly )
 {
     // ueberpruefe geschuetzte Zellen
-    SwCntntFrm* pFrm;
-    SwNodeIndex aTmp( rIdx, 2 );        // TableNode + StartNode
+    SwNodeIndex aTmp( rIdx, 2 );            // TableNode + StartNode
+
+    // the resulting cell should be in that table:
+    const SwTableNode* pTblNd = rIdx.GetNode().GetTableNode();
+
+    if ( !pTblNd )
+    {
+        ASSERT( false, "lcl_FindNextCell not celled with table start node!" )
+        return false;
+    }
+
+    const SwNode* pTableEndNode = pTblNd->EndOfSectionNode();
+
     SwNodes& rNds = aTmp.GetNode().GetNodes();
     SwCntntNode* pCNd = aTmp.GetNode().GetCntntNode();
+
+    // no content node => go to next content node
     if( !pCNd )
         pCNd = rNds.GoNext( &aTmp );
 
-    if( 0 == ( pFrm = pCNd->GetFrm()) ||
-        (!bInReadOnly && pFrm->IsProtected() ))
+    // robust
+    if ( !pCNd )
+        return false;
+
+    SwCntntFrm* pFrm = pCNd->GetFrm();
+
+    if ( 0 == pFrm || pCNd->FindTableNode() != pTblNd ||
+        (!bInReadOnly && pFrm->IsProtected() ) )
     {
+        // we are not located inside a 'valid' cell. We have to continue searching...
+
+        // skip behind current section. This might be the end of the table cell
+        // or behind a inner section or or or...
         aTmp.Assign( *pCNd->EndOfSectionNode(), 1 );
-        SwNode* pNd;
+
+        // loop to find a suitable cell...
         for( ;; )
         {
-            if( !( pNd = &aTmp.GetNode())->IsStartNode() )
-                return pNd;
-            aTmp++;
-            if( 0 == (pCNd = aTmp.GetNode().GetCntntNode()) )
+            SwNode* pNd = &aTmp.GetNode();
+
+            // we break this loop if we reached the end of the table.
+            // to make this code even more robust, we also break if we are
+            // already behind the table end node:
+            if( pNd == pTableEndNode || /*robust: */ pNd->GetIndex() > pTableEndNode->GetIndex() )
+                return false;
+
+            // ok, get the next content node:
+            pCNd = aTmp.GetNode().GetCntntNode();
+            if( 0 == pCNd )
                 pCNd = rNds.GoNext( &aTmp );
 
-            if( 0 != ( pFrm = pCNd->GetFrm()) &&
-                (bInReadOnly || !pFrm->IsProtected() ))
+            // robust:
+            if ( !pCNd )
+                return false;
+
+            // check if we have found a suitable table cell:
+            pFrm = pCNd->GetFrm();
+
+            if ( 0 != pFrm && pCNd->FindTableNode() == pTblNd &&
+                (bInReadOnly || !pFrm->IsProtected() ) )
             {
-                rIdx = *pNd;
-                return 0;       // Ok, nicht geschuetzt
+                // finally, we have found a suitable table cell => set index and return
+                rIdx = *pCNd;
+                return true;
             }
+
+            // continue behind the current section:
             aTmp.Assign( *pCNd->EndOfSectionNode(), +1 );
         }
     }
-    return 0;
+
+    rIdx = *pCNd;
+    return true;
 }
 
-// suche die vorherige nicht geschuetzte Zelle innerhalb der Tabelle
-// Parameter:
-//      rIdx    - steht auf dem EndNode der Tabelle
-//      SwDoc   -
-//  return:
-//      0   - Idx steht auf/in einer nicht geschuetzten Zelle
-//      !0  - Node hinter der Tabelle
-
-
-SwNode* lcl_FindPrevCell( SwNodeIndex& rIdx, BOOL bInReadOnly  )
+// comments see lcl_FindNextCell
+bool lcl_FindPrevCell( SwNodeIndex& rIdx, BOOL bInReadOnly  )
 {
-    // ueberpruefe geschuetzte Zellen
-    SwCntntFrm* pFrm;
     SwNodeIndex aTmp( rIdx, -2 );       // TableNode + EndNode
+
+    const SwNode* pTableEndNode = &rIdx.GetNode();
+    const SwTableNode* pTblNd = pTableEndNode->StartOfSectionNode()->GetTableNode();
+
+    if ( !pTblNd )
+    {
+        ASSERT( false, "lcl_FindPrevCell not celled with table start node!" )
+        return false;
+    }
+
     SwNodes& rNds = aTmp.GetNode().GetNodes();
     SwCntntNode* pCNd = aTmp.GetNode().GetCntntNode();
+
     if( !pCNd )
         pCNd = rNds.GoPrevious( &aTmp );
 
-    if( 0 == ( pFrm = pCNd->GetFrm()) ||
+    if ( !pCNd )
+        return false;
+
+    SwCntntFrm* pFrm = pCNd->GetFrm();
+
+    if( 0 == pFrm || pCNd->FindTableNode() != pTblNd ||
         (!bInReadOnly && pFrm->IsProtected() ))
     {
+        // skip before current section
         aTmp.Assign( *pCNd->StartOfSectionNode(), -1 );
-        SwNode* pNd;
         for( ;; )
         {
-            if( !( pNd = &aTmp.GetNode())->IsEndNode() )
-                return pNd;
-            aTmp--;
-            if( 0 == (pCNd = aTmp.GetNode().GetCntntNode()) )
+            SwNode* pNd = &aTmp.GetNode();
+
+            if( pNd == pTblNd || pNd->GetIndex() < pTblNd->GetIndex() )
+                return false;
+
+            pCNd = aTmp.GetNode().GetCntntNode();
+            if( 0 == pCNd )
                 pCNd = rNds.GoPrevious( &aTmp );
 
-            if( 0 != ( pFrm = pCNd->GetFrm()) &&
-                (bInReadOnly || !pFrm->IsProtected() ))
+            if ( !pCNd )
+                return false;
+
+            pFrm = pCNd->GetFrm();
+
+            if( 0 != pFrm && pCNd->FindTableNode() == pTblNd &&
+                (bInReadOnly || !pFrm->IsProtected() ) )
             {
-                rIdx = *pNd;
-                return 0;       // Ok, nicht geschuetzt
+                rIdx = *pCNd;
+                return true;      // Ok, nicht geschuetzt
             }
             aTmp.Assign( *pCNd->StartOfSectionNode(), - 1 );
         }
     }
-    return 0;
-}
 
+    rIdx = *pCNd;
+    return true;
+}
 
 
 BOOL GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
@@ -510,7 +563,7 @@ BOOL GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
             if( fnPosTbl == fnMoveForward )         // an Anfang ?
             {
                 aIdx = *aIdx.GetNode().StartOfSectionNode();
-                if( lcl_FindNextCell( aIdx, bInReadOnly ))
+                if( !lcl_FindNextCell( aIdx, bInReadOnly ))
                 {
                     // Tabelle ueberspringen
                     aIdx.Assign( *pTblNd, -1 );
@@ -520,15 +573,22 @@ BOOL GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
             else
             {
                 // ueberpruefe geschuetzte Zellen
-                if( lcl_FindNextCell( aIdx, bInReadOnly ))
+                if( !lcl_FindNextCell( aIdx, bInReadOnly ))
                 {
                     // Tabelle ueberspringen
                     aIdx.Assign( *pTblNd, -1 );
                     continue;
                 }
             }
-            rCurCrsr.GetPoint()->nNode = aIdx;
-            rCurCrsr.Move( fnPosTbl, fnGoCntnt );
+
+            SwTxtNode* pTxtNode = aIdx.GetNode().GetTxtNode();
+            if ( pTxtNode )
+            {
+                rCurCrsr.GetPoint()->nNode = *pTxtNode;
+                rCurCrsr.GetPoint()->nContent.Assign( pTxtNode, fnPosTbl == fnMoveBackward ?
+                                                      pTxtNode->Len() :
+                                                      0 );
+            }
             return TRUE;
         }
     } while( pTblNd );
@@ -542,6 +602,7 @@ BOOL GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
 {
     SwNodeIndex aIdx( rCurCrsr.GetPoint()->nNode );
     SwTableNode* pTblNd = aIdx.GetNode().FindTableNode();
+
     if( pTblNd )
         aIdx.Assign( *pTblNd->EndOfSectionNode(), 1 );
 
@@ -554,7 +615,7 @@ BOOL GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
         {
             if( fnPosTbl == fnMoveForward )         // an Anfang ?
             {
-                if( lcl_FindNextCell( aIdx, bInReadOnly ))
+                if( !lcl_FindNextCell( aIdx, bInReadOnly ))
                 {
                     // Tabelle ueberspringen
                     aIdx.Assign( *pTblNd->EndOfSectionNode(), + 1 );
@@ -565,15 +626,22 @@ BOOL GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
             {
                 aIdx = *aIdx.GetNode().EndOfSectionNode();
                 // ueberpruefe geschuetzte Zellen
-                if( lcl_FindNextCell( aIdx, bInReadOnly ))
+                if( !lcl_FindNextCell( aIdx, bInReadOnly ))
                 {
                     // Tabelle ueberspringen
                     aIdx.Assign( *pTblNd->EndOfSectionNode(), + 1 );
                     continue;
                 }
             }
-            rCurCrsr.GetPoint()->nNode = aIdx;
-            rCurCrsr.Move( fnPosTbl, fnGoCntnt );
+
+            SwTxtNode* pTxtNode = aIdx.GetNode().GetTxtNode();
+            if ( pTxtNode )
+            {
+                rCurCrsr.GetPoint()->nNode = *pTxtNode;
+                rCurCrsr.GetPoint()->nContent.Assign( pTxtNode, fnPosTbl == fnMoveBackward ?
+                                                      pTxtNode->Len() :
+                                                      0 );
+            }
             return TRUE;
         }
     } while( pTblNd );
@@ -589,21 +657,30 @@ BOOL GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
     if( !pTblNd )
         return FALSE;
 
+    SwTxtNode* pTxtNode = 0;
     if( fnPosTbl == fnMoveBackward )    // ans Ende der Tabelle
     {
         SwNodeIndex aIdx( *pTblNd->EndOfSectionNode() );
-        if( lcl_FindPrevCell( aIdx, bInReadOnly ))
+        if( !lcl_FindPrevCell( aIdx, bInReadOnly ))
             return FALSE;
-        rCurCrsr.GetPoint()->nNode = aIdx;
+        pTxtNode = aIdx.GetNode().GetTxtNode();
     }
     else
     {
         SwNodeIndex aIdx( *pTblNd );
-        if( lcl_FindNextCell( aIdx, bInReadOnly ))
+        if( !lcl_FindNextCell( aIdx, bInReadOnly ))
             return FALSE;
-        rCurCrsr.GetPoint()->nNode = aIdx;
+        pTxtNode = aIdx.GetNode().GetTxtNode();
     }
-    rCurCrsr.Move( fnPosTbl, fnGoCntnt );
+
+    if ( pTxtNode )
+    {
+        rCurCrsr.GetPoint()->nNode = *pTxtNode;
+        rCurCrsr.GetPoint()->nContent.Assign( pTxtNode, fnPosTbl == fnMoveBackward ?
+                                                        pTxtNode->Len() :
+                                                        0 );
+    }
+
     return TRUE;
 }
 
