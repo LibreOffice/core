@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Configuration.xcu,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:07:17 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 09:54:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,17 @@
               </prop>
               <prop oor:name="URLTemplate">
                 <value>vnd.sun.star.zip</value>
+              </prop>
+              <prop oor:name="Arguments">
+                <value/>
+              </prop>
+            </node>
+               <node oor:name="Provider12" oor:op="replace">
+              <prop oor:name="ServiceName">
+                <value>com.sun.star.ucb.WebDAVContentProvider</value>
+              </prop>
+              <prop oor:name="URLTemplate">
+                <value>https</value>
               </prop>
               <prop oor:name="Arguments">
                 <value/>
