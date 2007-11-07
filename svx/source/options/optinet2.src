@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:39:04 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:01:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,95 +140,122 @@ TabPage RID_SVXPAGE_INET_PROXY
         Size = MAP_APPFONT ( ED_PORT_WIDTH , 12 ) ;
         Border = TRUE ;
     };
-    FixedText FT_FTP_PROXY
+
+    FixedText FT_HTTPS_PROXY
     {
         Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 45 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ en-US ] = "~FTP proxy" ;
+        Text [ en-US ] = "HTTP~S proxy" ;
     };
-    Edit ED_FTP_PROXY
+    Edit ED_HTTPS_PROXY
     {
         Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 43 ) ;
         Size = MAP_APPFONT ( 123 , 12 ) ;
         Border = TRUE ;
     };
-    FixedText FT_FTP_PORT
+    FixedText FT_HTTPS_PORT
     {
         Pos = MAP_APPFONT ( 190 , GB_TYPES_TOP + 45 ) ;
         Size = MAP_APPFONT ( FT_PORT_WIDTH , 8 ) ;
         Right = TRUE;
         Text [ en-US ] = "P~ort" ;
     };
-    Edit ED_FTP_PORT
+    Edit ED_HTTPS_PORT
     {
         Pos = MAP_APPFONT ( ED_PORT_COL , GB_TYPES_TOP + 43 ) ;
         Size = MAP_APPFONT ( ED_PORT_WIDTH , 12 ) ;
         Border = TRUE ;
     };
-    FixedText FT_SOCKS_PROXY
+
+    FixedText FT_FTP_PROXY
     {
         Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 61 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ en-US ] = "~SOCKS proxy" ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "~FTP proxy" ;
     };
-    Edit ED_SOCKS_PROXY
+    Edit ED_FTP_PROXY
     {
         Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 59 ) ;
         Size = MAP_APPFONT ( 123 , 12 ) ;
         Border = TRUE ;
     };
-    FixedText FT_SOCKS_PORT
+    FixedText FT_FTP_PORT
     {
         Pos = MAP_APPFONT ( 190 , GB_TYPES_TOP + 61 ) ;
+        Size = MAP_APPFONT ( FT_PORT_WIDTH , 8 ) ;
+        Right = TRUE;
+        Text [ en-US ] = "P~ort" ;
+    };
+    Edit ED_FTP_PORT
+    {
+        Pos = MAP_APPFONT ( ED_PORT_COL , GB_TYPES_TOP + 59 ) ;
+        Size = MAP_APPFONT ( ED_PORT_WIDTH , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_SOCKS_PROXY
+    {
+        Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 77 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text [ en-US ] = "~SOCKS proxy" ;
+    };
+    Edit ED_SOCKS_PROXY
+    {
+        Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 75 ) ;
+        Size = MAP_APPFONT ( 123 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_SOCKS_PORT
+    {
+        Pos = MAP_APPFONT ( 190 , GB_TYPES_TOP + 77 ) ;
         Size = MAP_APPFONT ( FT_PORT_WIDTH , 8 ) ;
         Right = TRUE;
         Text [ en-US ] = "Po~rt" ;
     };
     Edit ED_SOCKS_PORT
     {
-        Pos = MAP_APPFONT ( ED_PORT_COL , GB_TYPES_TOP + 59 ) ;
+        Pos = MAP_APPFONT ( ED_PORT_COL , GB_TYPES_TOP + 75 ) ;
         Size = MAP_APPFONT ( ED_PORT_WIDTH , 12 ) ;
         Border = TRUE ;
     };
     FixedText FT_NOPROXYFOR
     {
-        Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 77 ) ;
+        Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 93 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text [ en-US ] = "~No proxy for:" ;
     };
     Edit ED_NOPROXYFOR
     {
-        Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 75 ) ;
+        Pos = MAP_APPFONT ( 65 , GB_TYPES_TOP + 91 ) ;
         Size = MAP_APPFONT ( 123 , 12 ) ;
         Border = TRUE ;
     };
     FixedText ED_NOPROXYDESC
     {
-        Pos = MAP_APPFONT ( 190 , GB_TYPES_TOP + 77 ) ;
+        Pos = MAP_APPFONT ( 190 , GB_TYPES_TOP + 93 ) ;
         Size = MAP_APPFONT ( 56 , 8 ) ;
         Text [ en-US ] = "Separator ;" ;
     };
     FixedLine GB_DNS
     {
-        Pos = MAP_APPFONT( 6, 94 );
+        Pos = MAP_APPFONT( 6, 100 );
         Size = MAP_APPFONT( 248, 8 );
         Text [ en-US ] = "DNS server" ;
     };
     RadioButton RB_DNS_AUTO
     {
-        Pos = MAP_APPFONT( 12, 105 );
+        Pos = MAP_APPFONT( 12, 111 );
         Size = MAP_APPFONT( 236, 10 );
         Text [ en-US ] = "~Automatic" ;
     };
     RadioButton RB_DNS_MANUAL
     {
-        Pos = MAP_APPFONT( 12, 118 );
+        Pos = MAP_APPFONT( 12, 124 );
         Size = MAP_APPFONT( 75, 10 );
         Text [ en-US ] = "~Manual" ;
     };
     PatternField ED_DNS
     {
-        Pos = MAP_APPFONT( 90, 116 );
+        Pos = MAP_APPFONT( 90, 126 );
         Size = MAP_APPFONT( 66, 12 );
         Border = TRUE ;
         LiteralMask = "   .   .   .   " ;
