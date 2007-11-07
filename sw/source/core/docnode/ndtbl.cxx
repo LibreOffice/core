@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 14:41:12 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 12:17:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2547,15 +2547,13 @@ void SwTableNode::MakeFrms( SwNodeIndex* pIdxBehind )
     if( !pNd )
         return ;
 
-    // liegt der gefundene ContentNode vor oder hinter der Tabelle ?
-    BOOL bBehind = EndOfSectionIndex() < pIdxBehind->GetIndex();
-
     SwFrm *pFrm( 0L );
+    SwLayoutFrm *pUpper( 0L );
     SwNode2Layout aNode2Layout( *pNd, GetIndex() );
-    while( 0 != (pFrm = aNode2Layout.NextFrm()) )
+    while( 0 != (pUpper = aNode2Layout.UpperFrm( pFrm, *this )) )
     {
         SwTabFrm* pNew = MakeFrm();
-        pNew->Paste( pFrm->GetUpper(),  bBehind ? pFrm : pFrm->GetNext() );
+        pNew->Paste( pUpper, pFrm );
         // --> OD 2005-12-01 #i27138#
         // notify accessibility paragraphs objects about changed
         // CONTENT_FLOWS_FROM/_TO relation.
