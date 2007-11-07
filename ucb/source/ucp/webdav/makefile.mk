@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 13:08:52 $
+#   last change: $Author: rt $ $Date: 2007-11-07 10:24:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -127,18 +127,25 @@ SHL1STDLIBS=\
         $(NEON3RDLIB)           \
         $(LIBXML2LIB)
 
+
+
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= $(WSOCK32LIB)
-.ENDIF # WNT
 .IF "$(WINDOWS_VISTA_PSDK)" != ""
-SHL1STDLIBS+= ws2_32.lib
+SHL1STDLIBS+= $(WS2_32LIB)
 .ENDIF
+SHL1STDLIBS+= $(OPENSSLLIB)
+.ELSE # WNT
 .IF "$(OS)"=="SOLARIS"
-SHL1STDLIBS+= -lnsl -lsocket
+SHL1STDLIBS+= -lnsl -lsocket -ldl
 .ENDIF # SOLARIS
 .IF "$(OS)"=="OS2"
 SHL1STDLIBS+= pthread.lib libz.lib
-.ENDIF # SOLARIS
+.ENDIF # OS2
+SHL1STDLIBS+= $(OPENSSLLIBST)
+.ENDIF # WNT
+
+
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=$(LIB1TARGET)
