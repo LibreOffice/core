@@ -1,0 +1,143 @@
+/*************************************************************************
+*
+*  OpenOffice.org - a multi-platform office productivity suite
+*
+*  $RCSfile: unknownauthdlg.src,v $
+*
+*  $Revision: 1.2 $
+*
+*  last change: $Author: rt $ $Date: 2007-11-07 10:12:28 $
+*
+*  The Contents of this file are made available subject to
+*  the terms of GNU Lesser General Public License Version 2.1.
+*
+*
+*    GNU Lesser General Public License Version 2.1
+*    =============================================
+*    Copyright 2005 by Sun Microsystems, Inc.
+*    901 San Antonio Road, Palo Alto, CA 94303, USA
+*
+*    This library is free software; you can redistribute it and/or
+*    modify it under the terms of the GNU Lesser General Public
+*    License version 2.1, as published by the Free Software Foundation.
+*
+*    This library is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*    Lesser General Public License for more details.
+*
+*    You should have received a copy of the GNU Lesser General Public
+*    License along with this library; if not, write to the Free Software
+*    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+*    MA  02111-1307  USA
+*
+************************************************************************/
+#define __RSC
+
+#ifndef UUI_IDS_HRC
+#include <ids.hrc>
+#endif
+#ifndef UUI_UNKNOWNAUTH_HRC
+#include <unknownauthdlg.hrc>
+#endif
+
+ModalDialog DLG_UUI_UNKNOWNAUTH
+{
+    HelpId = HID_DLG_UNKNOWNAUTH_UUI;
+    Border = TRUE ;
+    Moveable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT( 136, 79 );
+    Size = MAP_APPFONT(  DLG_WIDTH,  DLG_HEIGHT );
+
+    Text [ en-US ] = "Website Certified by an Unknown Authority";
+
+
+    FixedImage IMG_WARN
+    {
+        Pos = MAP_APPFONT( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP );
+        Size = MAP_APPFONT( DLG_WARMIMG_WIDTH , DLG_WARMIMG_HEIGHT );
+
+        Fixed = Image
+        {
+            /* ImageBitmap = Bitmap { File = "certificate_40x56.png"; }; */
+            MaskColor = Color{Red=0xffff;Green=0x0000;Blue=0xffff;};
+        };
+
+    };
+
+
+    PushButton PB_VIEW__CERTIFICATE
+    {
+        Pos = MAP_APPFONT( DLG_TEXT_START_X, RSC_SP_DLG_INNERBORDER_TOP + DLG_TEXT_1_HEIGHT + RSC_SP_CTRL_GROUP_Y );
+        Size = MAP_APPFONT( 70, RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ en-US ] = "Examine Certificate...";
+
+    };
+
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT( DLG_CTLBTN_HELP_START_X, DLG_CTLBTN_START_Y  );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ en-US ] = "Help";
+
+    };
+
+    PushButton PB_OK
+    {
+        Pos = MAP_APPFONT( DLG_CTLBTN_OK_START_X, DLG_CTLBTN_START_Y );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ en-US ] = "OK";
+
+    };
+
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT( DLG_CTLBTN_CANCEL_START_X, DLG_CTLBTN_START_Y );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+
+    };
+
+    RadioButton RB_ACCEPT_1
+    {
+        Pos = MAP_APPFONT( DLG_TEXT_START_X, DLG_RADIOBTN_START_Y );
+        Size = MAP_APPFONT( 182, RSC_CD_RADIOBUTTON_HEIGHT );
+
+        Text [ en-US ] = "Accept this certificate temporarily for this session";
+
+        Check = TRUE;
+    };
+
+    RadioButton RB_DONTACCEPT_2
+    {
+        Pos = MAP_APPFONT( DLG_TEXT_START_X, DLG_RADIOBTN_START_Y + RSC_CD_RADIOBUTTON_HEIGHT  );
+        Size = MAP_APPFONT( 182, RSC_CD_RADIOBUTTON_HEIGHT );
+
+        Text [ en-US ] = "Do not accept this certificate and do not connect to this Web site";
+
+    };
+
+    FixedText FT_LABEL_1
+    {
+        Pos = MAP_APPFONT( DLG_TEXT_START_X, RSC_SP_DLG_INNERBORDER_TOP );
+        Size = MAP_APPFONT( 190, DLG_TEXT_1_HEIGHT );
+
+        Text [ en-US ] = "No Text";
+
+        Border = FALSE;
+        WordBreak = TRUE;
+
+    };
+
+    FixedLine FL_LINE
+    {
+        Pos = MAP_APPFONT( 0, DLG_CTLBTN_START_Y - RSC_SP_FLGR_INNERBORDER_TOP -  RSC_CD_FIXEDLINE_HEIGHT );
+        Size = MAP_APPFONT( DLG_WIDTH , RSC_CD_FIXEDLINE_HEIGHT );
+    };
+
+};
+

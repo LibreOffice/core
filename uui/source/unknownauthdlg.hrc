@@ -1,0 +1,72 @@
+/*************************************************************************
+*
+*  OpenOffice.org - a multi-platform office productivity suite
+*
+*  $RCSfile: unknownauthdlg.hrc,v $
+*
+*  $Revision: 1.2 $
+*
+*  last change: $Author: rt $ $Date: 2007-11-07 10:12:00 $
+*
+*  The Contents of this file are made available subject to
+*  the terms of GNU Lesser General Public License Version 2.1.
+*
+*
+*    GNU Lesser General Public License Version 2.1
+*    =============================================
+*    Copyright 2005 by Sun Microsystems, Inc.
+*    901 San Antonio Road, Palo Alto, CA 94303, USA
+*
+*    This library is free software; you can redistribute it and/or
+*    modify it under the terms of the GNU Lesser General Public
+*    License version 2.1, as published by the Free Software Foundation.
+*
+*    This library is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*    Lesser General Public License for more details.
+*
+*    You should have received a copy of the GNU Lesser General Public
+*    License along with this library; if not, write to the Free Software
+*    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+*    MA  02111-1307  USA
+*
+************************************************************************/
+#ifndef UUI_UNKNOWNAUTH_HRC
+#define UUI_UNKNOWNAUTH_HRC
+
+#include <svtools/controldims.hrc>
+
+// local identifiers
+#define RB_ACCEPT_1             1
+#define PB_OK                   2
+#define PB_VIEW__CERTIFICATE    3
+#define PB_CANCEL               4
+#define FT_LABEL_1              5
+#define RB_DONTACCEPT_2         6
+#define IMG_WARN                7
+#define PB_HELP                 8
+#define FL_LINE                10
+
+// Dims
+
+#define DLG_WIDTH              230
+#define DLG_HEIGHT             140
+
+#define DLG_WARMIMG_HEIGHT      20
+#define DLG_WARMIMG_WIDTH       20
+
+#define DLG_TEXT_1_HEIGHT       50
+
+#define DLG_TEXT_START_X       RSC_SP_DLG_INNERBORDER_LEFT + DLG_WARMIMG_WIDTH + RSC_SP_CTRL_X
+
+#define DLG_RADIOBTN_START_Y   RSC_SP_DLG_INNERBORDER_TOP + DLG_TEXT_1_HEIGHT + RSC_SP_CTRL_Y + RSC_CD_PUSHBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y
+
+#define DLG_CTLBTN_START_Y     DLG_HEIGHT - RSC_SP_CTRL_X - RSC_CD_PUSHBUTTON_HEIGHT
+
+
+#define DLG_CTLBTN_OK_START_X      DLG_CTLBTN_CANCEL_START_X - RSC_CD_PUSHBUTTON_WIDTH - RSC_SP_CTRL_GROUP_X
+#define DLG_CTLBTN_CANCEL_START_X  DLG_CTLBTN_HELP_START_X - RSC_CD_PUSHBUTTON_WIDTH - RSC_SP_CTRL_GROUP_X
+#define DLG_CTLBTN_HELP_START_X    DLG_WIDTH - RSC_SP_DLG_INNERBORDER_RIGHT - RSC_CD_PUSHBUTTON_WIDTH
+
+#endif //UUI_UNKNOWNAUTH_HRC
