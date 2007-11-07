@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:27:29 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:07:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,8 @@
 #include "secder.h"
 #include "secerr.h"
 #include "limits.h"
+#include "certt.h"
+#include "prerror.h"
 
 #include <xmlsec/xmlsec.h>
 #include <xmlsec/keysmngr.h>
@@ -749,7 +751,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromAs
 }
 
 sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& aCert ) throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException ) {
-    sal_Int32 validity;
+    sal_Int32 validity = 0;
     const X509Certificate_NssImpl* xcert ;
     const CERTCertificate* cert ;
 
@@ -757,6 +759,9 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
     if( !xCertTunnel.is() ) {
         throw RuntimeException() ;
     }
+
+
+
 
     xcert = reinterpret_cast<X509Certificate_NssImpl*>(
        sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ))) ;
@@ -766,24 +771,46 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
 
     cert = xcert->getNssCert() ;
     if( cert != NULL )
-    {
+        {
         int64 timeboundary ;
         SECStatus status ;
 
         //Get the system clock time
         timeboundary = PR_Now() ;
         SECCertificateUsage usage = 0;
+
+        // create log
+
+    CERTVerifyLog realLog;
+        CERTVerifyLog *log;
+
+    log = &realLog;
+
+
+    log->count = 0;
+    log->head = NULL;
+    log->tail = NULL;
+        log->arena = PORT_NewArena( DER_DEFAULT_CHUNKSIZE );
+
+        //CERTVerifyLog *log;
+        //PRArenaPool *arena;
+
+        //arena = PORT_NewArena( DER_DEFAULT_CHUNKSIZE );
+        //log = PORT_ArenaZNew( arena, CERTVerifyLog );
+        //log->arena = arena;
+        validity = 0;
+
         if( m_pHandler != NULL )
         {
             status = CERT_VerifyCertificate(
-                m_pHandler, ( CERTCertificate* )cert, PR_TRUE,
-                (SECCertificateUsage)0, timeboundary , NULL, NULL, &usage);
+                m_pHandler, ( CERTCertificate* )cert, PR_FALSE,
+                (SECCertificateUsage)0, timeboundary , NULL, log, &usage);
         }
         else
         {
             status = CERT_VerifyCertificate(
                 CERT_GetDefaultCertDB(), ( CERTCertificate* )cert,
-                PR_TRUE, (SECCertificateUsage)0, timeboundary , NULL, NULL, &usage);
+                PR_TRUE, (SECCertificateUsage)0, timeboundary ,NULL, log, &usage);
         }
 
         if( status == SECSuccess )
@@ -795,18 +822,62 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
             //The expression  if ( flags & CERTDB_TRUSTED ) fails. This occurred with openssl
             //generated certificates, when the trust settings of the root certificate had only the
             //item "This certificate can identify web sites" checked.
+
+
+            // (TKR) use for backward compatibility (digital signatures)
             if (usage & certificateUsageEmailSigner
                 || usage & certificateUsageEmailRecipient
                 || usage & certificateUsageSSLCA
-                /*|| usage & certificateUsageSSLClient*/)
+                || usage & certificateUsageSSLServer
+                || usage & certificateUsageSSLClient
+                || usage & certificateUsageUserCertImport
+                || usage & certificateUsageVerifyCA
+                || usage & certificateUsageStatusResponder
+                || usage & certificateUsageAnyCA )
                 validity = csss::CertificateValidity::VALID;
             else
                 validity = csss::CertificateValidity::INVALID;
-        }
-        else
+
+            //---
+        } else
         {
-            validity = csss::CertificateValidity::INVALID;
         }
+
+            // always check what kind of error occured, even SECStatus says Success
+            CERTVerifyLogNode *logNode = 0;
+
+            logNode = log->head;
+            while ( logNode != NULL )
+            {
+                sal_Int32 errorCode = 0;
+                errorCode = logNode->error;
+
+                switch ( errorCode )
+                {
+                    case ( SEC_ERROR_REVOKED_CERTIFICATE ):
+                        validity |= csss::CertificateValidity::REVOKED;
+                    break;
+                    case ( SEC_ERROR_EXPIRED_CERTIFICATE ):
+                        validity |= csss::CertificateValidity::TIME_INVALID;
+                    break;
+                    case ( SEC_ERROR_CERT_USAGES_INVALID):
+                        validity |= csss::CertificateValidity::INVALID;
+                    break;
+                    case ( SEC_ERROR_UNTRUSTED_ISSUER ):
+                    case ( SEC_ERROR_UNTRUSTED_CERT ):
+                        validity |= csss::CertificateValidity::UNTRUSTED;
+                    break;
+                    default:
+                        validity |= 0;
+                    break;
+                }
+
+
+                logNode = logNode->next;
+
+            }
+
+
     }
     else
     {
