@@ -4,9 +4,9 @@
  *
  *  $RCSfile: handleinteractionrequest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:54:39 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:08:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,9 @@
 #ifndef _UCBHELPER_SIMPLEINTERACTIONREQUEST_HXX
 #include "ucbhelper/simpleinteractionrequest.hxx"
 #endif
-
+#ifndef _UCBHELPER_SIMPLECERTIFICATEVALIDATIONREQUEST_HXX
+#include "ucbhelper/simplecertificatevalidationrequest.hxx"
+#endif
 #ifndef INCLUDED_UTILITY
 #include <utility>
 #define INCLUDED_UTILITY
@@ -169,3 +171,32 @@ handleInteractionRequest(
 }
 
 }
+
+namespace ucbhelper {
+
+sal_Int32
+handleInteractionRequest(
+    rtl::Reference< ucbhelper::SimpleCertificateValidationRequest > const & rRequest,
+    uno::Reference< ucb::XCommandEnvironment > const & rEnvironment,
+    bool bThrowOnAbort)
+    SAL_THROW((uno::Exception))
+{
+    handle(rRequest.get(), rEnvironment);
+    sal_Int32 nResponse = rRequest->getResponse();
+    switch (nResponse)
+    {
+    case ucbhelper::CONTINUATION_UNKNOWN:
+        cppu::throwException(rRequest->getRequest());
+        break;
+
+    case ucbhelper::CONTINUATION_ABORT:
+        if (bThrowOnAbort)
+            throw ucb::CommandFailedException(
+                      rtl::OUString(), 0, rRequest->getRequest());
+        break;
+    }
+    return nResponse;
+}
+
+}
+
