@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 16:01:29 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:10:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,6 +350,42 @@ Resource RID_UUI_ERRHDL
     {
         Text [ en-US ] = "The form contains invalid data. Do you still want to continue?";
     };
+
+    STRING (ERRCODE_UUI_UNKNOWNAUTH_UNTRUSTED)
+    {
+        Text [ en-US ] = "Unable to verify the identity of $(ARG1) site.\n\nBefore accepting this certificate, you should examine this site's certificate carefully. Are you willing to accept this certificate for the purpose of identifying the Web site $(ARG1)?";
+    };
+
+    STRING (ERRCODE_UUI_SSLWARN_EXPIRED_1)
+    {
+        Text [ en-US ] = "$(ARG1) is a site that uses a security certificate to encrypt data during transmission, but its certificate expired on $(ARG2).\n\nYou should check to make sure that your computer's time is correct.";
+    };
+
+    STRING (ERRCODE_UUI_SSLWARN_DOMAINMISMATCH_1)
+    {
+        Text [ en-US ] = "You have attempted to establish a connection with $(ARG1). However, the security certificate presented belongs to $(ARG2). It is possible, though unlikely, that someone may be trying to intercept your communication with this web site.\n\nIf you suspect the certificate shown does not belong to $(ARG1), please cancel the connection and notify the site administrator.\n\nWould you like to continue anyway?";
+    };
+
+    STRING (ERRCODE_UUI_SSLWARN_INVALID_1)
+    {
+        Text [ en-US ] = "The certificate could not be validated. You should examine this site's certificate carefully.\n\nIf you suspect the certificate shown, please cancel the connection and notify the site administrator.";
+    };
+    STRING (TITLE_UUI_SSLWARN_DOMAINMISMATCH)
+    {
+        Text [ en-US ] = "Security Warning: Domain Name Mismatch";
+    };
+
+    STRING (TITLE_UUI_SSLWARN_EXPIRED)
+    {
+        Text [ en-US ] = "Security Warning: Server Certificate Expired";
+    };
+
+    STRING (TITLE_UUI_SSLWARN_INVALID)
+    {
+        Text [ en-US ] = "Security Warning: Server Certificate Invalid";
+    };
+
+
 };
 
 
