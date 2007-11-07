@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 16:00:34 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:32:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,9 @@
 
 #include <hash_map>
 #include <string.h>
-
+#ifndef _RTL_STRING_H_
+#include <rtl/string.h>
+#endif
 #ifndef NE_SOCKET_H
 #include <ne_socket.h>
 #endif
@@ -50,6 +52,10 @@
 #endif
 #ifndef NE_LOCKS_H
 #include <ne_locks.h>
+#endif
+
+#ifndef NE_SSL_H
+#include <ne_ssl.h>
 #endif
 
 #ifndef __XML_PARSER_H__
@@ -84,12 +90,47 @@
 #ifndef _LINKSEQUENCE_HXX_
 #include "LinkSequence.hxx"
 #endif
+
+#include <com/sun/star/xml/crypto/XSEInitializer.hpp>
+
 #ifndef _UCBDEADPROPERTYVALUE_HXX_
 #include "UCBDeadPropertyValue.hxx"
 #endif
+#ifndef _COM_SUN_STAR_XML_CRYPTO_XSECURITYENVIRONMENT_HPP_
+#include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SECURITY_XCERTIFICATE_HPP_
+#include <com/sun/star/security/XCertificate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SECURITY_CERTIFICATEVALIDITY_HPP_
+#include <com/sun/star/security/CertificateValidity.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_SECURITY_CERTIFICATECONTAINERSTATUS_HPP_
+#include <com/sun/star/security/CertificateContainerStatus.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_SECURITY_CERTIFICATECONTAINER_HPP_
+#include <com/sun/star/security/CertificateContainer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_SECURITY_XCERTIFICATECONTAINER_HPP_
+#include <com/sun/star/security/XCertificateContainer.hpp>
+#endif
+
+
+#ifndef _SIMPLECERTIFICATIONVALIDATIONREQUEST_HXX_
+#include "ucbhelper/simplecertificatevalidationrequest.hxx"
+#endif
+
+#include <cppuhelper/bootstrap.hxx>
+
 
 using namespace com::sun::star;
 using namespace webdav_ucp;
+using namespace com::sun::star::security;
+
+#define SEINITIALIZER_COMPONENT "com.sun.star.xml.crypto.SEInitializer"
 
 #ifndef EOL
 #    define EOL "\r\n"
@@ -364,6 +405,136 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
 }
 
 // -------------------------------------------------------------------
+
+namespace {
+    // -------------------------------------------------------------------
+    // Helper function
+    ::rtl::OUString GetHostnamePart( const ::rtl::OUString& _rRawString )
+    {
+            ::rtl::OUString sPart;
+            ::rtl::OUString sPartId = ::rtl::OUString::createFromAscii( "CN=" );
+            sal_Int32 nContStart = _rRawString.indexOf( sPartId );
+            if ( nContStart != -1 )
+            {
+                nContStart = nContStart + sPartId.getLength();
+                sal_Int32 nContEnd = _rRawString.indexOf( sal_Unicode( ',' ), nContStart );
+                sPart = _rRawString.copy( nContStart, nContEnd - nContStart );
+            }
+            return sPart;
+    }
+}
+// -------------------------------------------------------------------
+extern "C" int NeonSession_CertificationNotify( void *userdata,
+                                                int failures,
+                                                const ne_ssl_certificate *cert )
+{
+    NeonSession * pSession = static_cast< NeonSession * >( userdata );
+    uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecurityEnv;
+     uno::Reference< ::com::sun::star::security::XCertificateContainer > xCertificateContainer;
+
+
+    xCertificateContainer = uno::Reference< ::com::sun::star::security::XCertificateContainer >(
+                    pSession->getMSF().get()->createInstance( rtl::OUString::createFromAscii( "com.sun.star.security.CertificateContainer" )), uno::UNO_QUERY );
+
+    char * dn;
+
+    failures = 0;
+
+    dn = ne_ssl_readable_dname( ne_ssl_cert_subject( cert ) );
+
+    rtl::OUString cert_subject( dn, strlen( dn ), RTL_TEXTENCODING_UTF8, 0 );
+
+    free( dn );
+
+    CertificateContainerStatus certificateContainer;
+    certificateContainer = xCertificateContainer.get()->hasCertificate( pSession->getHostName(), cert_subject );
+
+    if( certificateContainer != CertificateContainerStatus_NOCERT )
+    {
+            if( certificateContainer == CertificateContainerStatus_TRUSTED )
+                return 0;
+            else
+                return 1;
+    }
+
+    rtl::OUString sSEInitializer;
+    ::com::sun::star::uno::Reference< com::sun::star::xml::crypto::XSEInitializer > mxSEInitializer;
+    ::com::sun::star::uno::Reference< com::sun::star::xml::crypto::XXMLSecurityContext > mxSecurityContext;
+
+    sSEInitializer = rtl::OUString::createFromAscii( SEINITIALIZER_COMPONENT );
+    mxSEInitializer = uno::Reference< com::sun::star::xml::crypto::XSEInitializer > (
+            pSession->getMSF().get()->createInstance( sSEInitializer ), uno::UNO_QUERY );
+
+    if ( mxSEInitializer.is() )
+        mxSecurityContext = mxSEInitializer->createSecurityContext( rtl::OUString::createFromAscii( "" ) );
+
+    xSecurityEnv = mxSecurityContext->getSecurityEnvironment();
+
+
+    char * rawCert;
+
+    rawCert = ne_ssl_cert_export( cert );
+
+    ::rtl::OString sRawCert( rawCert );
+
+    uno::Reference< com::sun::star::security::XCertificate> xCert = xSecurityEnv->createCertificateFromAscii( ::rtl::OStringToOUString( sRawCert, RTL_TEXTENCODING_ASCII_US ) );
+
+    sal_Int64 certValidity = xSecurityEnv->verifyCertificate( xCert );
+
+
+    if ( pSession->isDomainMatch( GetHostnamePart( xCert.get()->getSubjectName())) )
+    {
+        //if host name matched with  certificate then look if the certificate was ok
+        if( certValidity == ::security::CertificateValidity::VALID )
+            return 0;
+    }
+
+    const uno::Reference< ucb::XCommandEnvironment > xEnv =
+            pSession->getRequestEnvironment().m_xEnv.get();
+
+    if ( xEnv.is() )
+    {
+        failures = static_cast<int>(certValidity);
+
+        uno::Reference< task::XInteractionHandler > xIH
+            = xEnv->getInteractionHandler();
+        if ( xIH.is() )
+        {
+            rtl::Reference< ucbhelper::SimpleCertificateValidationRequest > xRequest
+                = new ucbhelper::SimpleCertificateValidationRequest((sal_Int32)failures, xCert, pSession->getHostName() );
+            xIH->handle( xRequest.get() );
+
+            rtl::Reference< ucbhelper::InteractionContinuation > xSelection
+                = xRequest->getSelection();
+
+            if ( xSelection.is() )
+            {
+                    uno::Reference< task::XInteractionApprove > xApprove(
+                    xSelection.get(), uno::UNO_QUERY );
+        if ( xApprove.is() )
+                {
+                    xCertificateContainer->addCertificate(pSession->getHostName(), cert_subject,  sal_True );
+                    return 0;
+                } else {
+                    // Dont trust Cert
+                    xCertificateContainer->addCertificate(pSession->getHostName(), cert_subject, sal_False );
+                    return 1;
+                }
+
+            }
+        } else
+        {
+            // Dont trust Cert
+            xCertificateContainer->addCertificate(pSession->getHostName(), cert_subject, sal_False );
+            return 1;
+        }
+
+
+    }
+
+    return 1;
+}
+// -------------------------------------------------------------------
 extern "C" void NeonSession_PreSendRequest( ne_request * req,
                                             void * userdata,
                                             ne_buffer * headers )
@@ -551,6 +722,18 @@ void NeonSession::Init()
             throw DAVException( DAVException::DAV_SESSION_CREATE,
                                 NeonUri::makeConnectionEndPointString(
                                     m_aHostName, m_nPort ) );
+
+        if (m_aScheme.equalsIgnoreAsciiCase( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                             "https" ) ) ) )
+        {
+
+            // Get all trusted certificates from key store
+
+
+
+            // Set a failure callback for certificate check
+            ne_ssl_set_verify( m_pHttpSession, NeonSession_CertificationNotify, this);
+    }
 
         // Add hooks (i.e. for adding additional headers to the request)
 
@@ -1663,6 +1846,57 @@ bool NeonSession::getDataFromInputStream(
         }
     }
     return false;
+}
+// -------------------------------------------------------------------
+//static
+
+NeonSession::Map NeonSession::certMap;
+
+bool NeonSession::isCertificate( const ::rtl::OUString & url, const ::rtl::OUString & certificate_name )
+{
+    Map::iterator p = NeonSession::certMap.find(url);
+
+    bool ret = false;
+
+    while( p != NeonSession::certMap.end() )
+    {
+        ret = (*p).second.equals(certificate_name);
+        if( ret )
+            break;
+        p++;
+    }
+
+    return ret;
+}
+
+// -------------------------------------------------------------------
+//static
+void NeonSession::rememberCertificate( const ::rtl::OUString & url, const ::rtl::OUString & certificate_name )
+{
+    NeonSession::certMap.insert( Map::value_type( url, certificate_name ) );
+}
+
+// ---------------------------------------------------------------------
+sal_Bool
+NeonSession::isDomainMatch( rtl::OUString certHostName)
+{
+    rtl::OUString hostName = getHostName();
+
+    if (hostName.equalsIgnoreAsciiCase( certHostName ))
+        return sal_True;
+
+
+
+    if ( 0 == certHostName.indexOf( rtl::OUString::createFromAscii( "*" ) ) && hostName.getLength() >= certHostName.getLength()  )
+    {
+        rtl::OUString cmpStr = certHostName.copy( 1 );
+
+        if ( hostName.matchIgnoreAsciiCase( cmpStr, hostName.getLength( ) -  cmpStr.getLength()) )
+            return sal_True;
+
+    }
+
+    return sal_False;
 }
 
 
