@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macbelayer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:29:44 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:14:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ typedef struct
 
 typedef enum {
     sHTTP,
+    sHTTPS,
     sFTP
 } ServiceType;
 
@@ -88,9 +89,28 @@ Boolean GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *
     if (!proxyDict)
         return false;
 
+    CFStringRef proxiesEnable;
+    CFStringRef proxiesProxy;
+    CFStringRef proxiesPort;
+
+    switch ( sType )
+    {
+        case sHTTP : proxiesEnable =  kSCPropNetProxiesHTTPEnable;
+                     proxiesProxy = kSCPropNetProxiesHTTPProxy;
+                     proxiesPort = kSCPropNetProxiesHTTPPort;
+            break;
+        case sHTTPS: proxiesEnable = kSCPropNetProxiesHTTPSEnable;
+                     proxiesProxy = kSCPropNetProxiesHTTPSProxy;
+                     proxiesPort = kSCPropNetProxiesHTTPSPort;
+            break;
+        default: proxiesEnable = kSCPropNetProxiesFTPEnable;
+                 proxiesProxy = kSCPropNetProxiesFTPProxy;
+                 proxiesPort = kSCPropNetProxiesFTPPort;
+            break;
+    }
     // Proxy enabled?
-    enableNum = (CFNumberRef) CFDictionaryGetValue(proxyDict,
-                                                   (sType == sHTTP) ? kSCPropNetProxiesHTTPEnable : kSCPropNetProxiesFTPEnable);
+    enableNum = (CFNumberRef) CFDictionaryGetValue( proxyDict,
+                                                   proxiesEnable );
 
     result = (enableNum != NULL) && (CFGetTypeID(enableNum) == CFNumberGetTypeID());
 
@@ -100,8 +120,8 @@ Boolean GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *
     // Proxy enabled -> get hostname
     if (result)
     {
-        hostStr = (CFStringRef) CFDictionaryGetValue(proxyDict,
-                                                     (sType == sHTTP) ? kSCPropNetProxiesHTTPProxy : kSCPropNetProxiesFTPProxy);
+        hostStr = (CFStringRef) CFDictionaryGetValue( proxyDict,
+                                                     proxiesProxy );
 
         result = (hostStr != NULL) && (CFGetTypeID(hostStr) == CFStringGetTypeID());
     }
@@ -112,8 +132,8 @@ Boolean GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *
     // Get proxy port
     if (result)
     {
-        portNum = (CFNumberRef) CFDictionaryGetValue(proxyDict,
-                                                     (sType == sHTTP) ? kSCPropNetProxiesHTTPPort : kSCPropNetProxiesFTPPort);
+        portNum = (CFNumberRef) CFDictionaryGetValue( proxyDict,
+                                                     proxiesPort );
 
         result = (portNum != NULL) && (CFGetTypeID(portNum) == CFNumberGetTypeID());
     }
@@ -241,6 +261,7 @@ void SAL_CALL MacOSXLayer::readData(
         }
 
         ProxyEntry aHttpProxy;
+        ProxyEntry aHttpsProxy;
         ProxyEntry aFtpProxy;
 
         char host[MAXHOSTNAMELEN];
@@ -253,6 +274,14 @@ void SAL_CALL MacOSXLayer::readData(
         {
             aHttpProxy.Server = rtl::OUString::createFromAscii( host );
             aHttpProxy.Port = port;
+        }
+
+        retVal = GetProxySetting(sHTTPS, host, 100, &port);
+
+        if (retVal)
+        {
+            aHttpsProxy.Server = rtl::OUString::createFromAscii( host );
+            aHttpsProxy.Port = port;
         }
 
         retVal = GetProxySetting(sFTP, host, 100, &port);
@@ -283,6 +312,28 @@ void SAL_CALL MacOSXLayer::readData(
                 RTL_CONSTASCII_USTRINGPARAM( "int" ) );
             aPropInfoList[nProperties].Protected = sal_False;
             aPropInfoList[nProperties++].Value = uno::makeAny( aHttpProxy.Port );
+        }
+
+        // https proxy name
+        if( aHttpsProxy.Server.getLength() > 0 )
+        {
+            aPropInfoList[nProperties].Name = rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings/ooInetHTTPSProxyName") );
+            aPropInfoList[nProperties].Type = rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM( "string" ) );
+            aPropInfoList[nProperties].Protected = sal_False;
+            aPropInfoList[nProperties++].Value = uno::makeAny( aHttpsProxy.Server );
+        }
+
+        // https proxy port
+        if( aHttpsProxy.Port > 0 )
+        {
+            aPropInfoList[nProperties].Name = rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings/ooInetHTTPSProxyPort") );
+            aPropInfoList[nProperties].Type = rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM( "int" ) );
+            aPropInfoList[nProperties].Protected = sal_False;
+            aPropInfoList[nProperties++].Value = uno::makeAny( aHttpsProxy.Port );
         }
 
         // ftp proxy name
