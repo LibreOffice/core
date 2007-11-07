@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:08:07 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 12:20:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -682,6 +682,19 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         if (nsRedlineType_t::REDLINE_DELETE == pRedlineInfo->eType)
         {
             pDoc->Delete(aPaM);
+            // And what about the "deleted nodes"?
+            // They have to be deleted as well (#i80689)!
+            if( bIgnoreRedlines && pRedlineInfo->pContentIndex != NULL )
+            {
+                SwNodeIndex aIdx( *pRedlineInfo->pContentIndex );
+                const SwNode* pEnd = aIdx.GetNode().EndOfSectionNode();
+                if( pEnd )
+                {
+                    SwNodeIndex aEnd( *pEnd, 1 );
+                    SwPaM aDel( aIdx, aEnd );
+                    pDoc->Delete(aDel);
+                }
+            }
         }
     }
     else
