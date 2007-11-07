@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 14:54:52 $
+#   last change: $Author: rt $ $Date: 2007-11-07 10:08:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,8 @@ SLOFILES=\
         $(SLO)$/simplenameclashresolverequest.obj \
         $(SLO)$/simpleioerrorrequest.obj        \
         $(SLO)$/cancelcommandexecution.obj \
-        $(SLO)$/handleinteractionrequest.obj
+        $(SLO)$/handleinteractionrequest.obj \
+        $(SLO)$/simplecertificatevalidationrequest.obj
 
 .ENDIF
 
