@@ -75,7 +75,7 @@ private :
     void SAL_CALL setProxy
         (uno::Sequence<backend::PropertyInfo> &aPropInfoList, sal_Int32 &nProperties,
          int nProxyType, const QString &aNoProxyfor = QString(),
-         const QString &aHTTPProxy = QString(), const QString &aFTPProxy = QString()) const;
+         const QString &aHTTPProxy = QString(), const QString &aFTPProxy = QString(), const QString &aHTTPSProxy = QString()) const;
   } ;
 
 #endif // KDEINETLAYER
