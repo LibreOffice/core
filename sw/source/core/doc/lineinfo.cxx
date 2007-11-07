@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lineinfo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:38:29 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 12:17:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,9 @@ void SwDoc::SetLineNumberInfo( const SwLineNumberInfo &rNew )
           rNew.IsRestartEachPage() != pLineNumberInfo->IsRestartEachPage()) )
     {
         GetRootFrm()->StartAllAction();
-        GetRootFrm()->InvalidateAllCntnt( INV_LINENUM );
+        // FME 2007-08-14 #i80120# Invalidate size, because ChgThisLines()
+        // is only (onny may only be) called by the formatting routines
+        GetRootFrm()->InvalidateAllCntnt( INV_LINENUM | INV_SIZE );
         GetRootFrm()->EndAllAction();
     }
     *pLineNumberInfo = rNew;
