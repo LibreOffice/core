@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:11:33 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:02:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,7 +188,7 @@ void DAVResourceAccess::OPTIONS(
                                  DAVRequestEnvironment(
                                      getRequestURI(),
                                      new DAVAuthListener_Impl( xEnv ),
-                                     aHeaders) );
+                                     aHeaders, xEnv) );
         }
         catch ( DAVException & e )
         {
@@ -230,7 +230,7 @@ void DAVResourceAccess::PROPFIND(
                                   DAVRequestEnvironment(
                                       getRequestURI(),
                                       new DAVAuthListener_Impl( xEnv ),
-                                      aHeaders ) );
+                                      aHeaders, xEnv ) );
         }
         catch ( DAVException & e )
         {
@@ -270,7 +270,7 @@ void DAVResourceAccess::PROPFIND(
                                   DAVRequestEnvironment(
                                       getRequestURI(),
                                       new DAVAuthListener_Impl( xEnv ),
-                                      aHeaders ) ) ;
+                                      aHeaders, xEnv ) ) ;
         }
         catch ( DAVException & e )
         {
@@ -308,7 +308,7 @@ void DAVResourceAccess::PROPPATCH(
                                    DAVRequestEnvironment(
                                        getRequestURI(),
                                        new DAVAuthListener_Impl( xEnv ),
-                                       aHeaders ) );
+                                       aHeaders, xEnv ) );
         }
         catch ( DAVException & e )
         {
@@ -347,7 +347,7 @@ void DAVResourceAccess::HEAD(
                               DAVRequestEnvironment(
                                   getRequestURI(),
                                   new DAVAuthListener_Impl( xEnv ),
-                                  aHeaders ) );
+                                  aHeaders, xEnv ) );
         }
         catch ( DAVException & e )
         {
@@ -383,7 +383,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
                                        DAVRequestEnvironment(
                                            getRequestURI(),
                                            new DAVAuthListener_Impl( xEnv ),
-                                           aHeaders ) );
+                                           aHeaders, xEnv ) );
         }
         catch ( DAVException & e )
         {
@@ -422,7 +422,7 @@ void DAVResourceAccess::GET(
                              DAVRequestEnvironment(
                                  getRequestURI(),
                                  new DAVAuthListener_Impl( xEnv ),
-                                 aHeaders ) );
+                                 aHeaders, xEnv ) );
         }
         catch ( DAVException & e )
         {
@@ -462,7 +462,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
                                        DAVRequestEnvironment(
                                            getRequestURI(),
                                            new DAVAuthListener_Impl( xEnv ),
-                                           aHeaders ) );
+                                           aHeaders, xEnv ) );
         }
         catch ( DAVException & e )
         {
@@ -505,7 +505,7 @@ void DAVResourceAccess::GET(
                              DAVRequestEnvironment(
                                  getRequestURI(),
                                  new DAVAuthListener_Impl( xEnv ),
-                                 aHeaders ) );
+                                 aHeaders, xEnv ) );
         }
         catch ( DAVException & e )
         {
@@ -578,7 +578,7 @@ void DAVResourceAccess::PUT(
                              DAVRequestEnvironment(
                                  getRequestURI(),
                                  new DAVAuthListener_Impl( xEnv ),
-                                 aHeaders ) );
+                                 aHeaders, xEnv ) );
         }
         catch ( DAVException & e )
         {
@@ -630,7 +630,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
                                         DAVRequestEnvironment(
                                             getRequestURI(),
                                             new DAVAuthListener_Impl( xEnv ),
-                                            aHeaders ) );
+                                            aHeaders, xEnv ) );
         }
         catch ( DAVException & e )
         {
@@ -692,7 +692,7 @@ void DAVResourceAccess::POST(
                               DAVRequestEnvironment(
                                   getRequestURI(),
                                   new DAVAuthListener_Impl( xEnv ),
-                                  aHeaders ) );
+                                  aHeaders, xEnv ) );
         }
         catch ( DAVException & e )
         {
@@ -734,7 +734,7 @@ void DAVResourceAccess::MKCOL(
                                DAVRequestEnvironment(
                                    getRequestURI(),
                                    new DAVAuthListener_Impl( xEnv ),
-                                   aHeaders ) );
+                                   aHeaders, xEnv ) );
         }
         catch ( DAVException & e )
         {
@@ -773,7 +773,7 @@ void DAVResourceAccess::COPY(
                               DAVRequestEnvironment(
                                   getRequestURI(),
                                   new DAVAuthListener_Impl( xEnv ),
-                                  aHeaders ),
+                                  aHeaders, xEnv ),
                               bOverwrite );
         }
         catch ( DAVException & e )
@@ -813,7 +813,7 @@ void DAVResourceAccess::MOVE(
                               DAVRequestEnvironment(
                                   getRequestURI(),
                                   new DAVAuthListener_Impl( xEnv ),
-                                  aHeaders ),
+                                  aHeaders, xEnv ),
                               bOverwrite );
         }
         catch ( DAVException & e )
@@ -850,7 +850,7 @@ void DAVResourceAccess::DESTROY(
                                  DAVRequestEnvironment(
                                      getRequestURI(),
                                      new DAVAuthListener_Impl( xEnv ),
-                                     aHeaders ) );
+                                     aHeaders, xEnv ) );
         }
         catch ( DAVException & e )
         {
