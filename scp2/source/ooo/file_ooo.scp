@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.221 $
+ *  $Revision: 1.222 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:58:09 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:16:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1456,7 +1456,7 @@ End
 
 File gid_File_Oo_Inet_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice;
     Name = "/registry/schema/org/openoffice/Inet.xcs";
 End
@@ -2279,7 +2279,7 @@ End
 
 File gid_File_Oo_Ucb_Configuration_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Ucb;
     Name = "/registry/data/org/openoffice/ucb/Configuration.xcu";
 End
