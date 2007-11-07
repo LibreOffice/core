@@ -1,0 +1,114 @@
+/*************************************************************************
+*
+*  OpenOffice.org - a multi-platform office productivity suite
+*
+*  $RCSfile: sslwarndlg.src,v $
+*
+*  $Revision: 1.2 $
+*
+*  last change: $Author: rt $ $Date: 2007-11-07 10:11:34 $
+*
+*  The Contents of this file are made available subject to
+*  the terms of GNU Lesser General Public License Version 2.1.
+*
+*
+*    GNU Lesser General Public License Version 2.1
+*    =============================================
+*    Copyright 2005 by Sun Microsystems, Inc.
+*    901 San Antonio Road, Palo Alto, CA 94303, USA
+*
+*    This library is free software; you can redistribute it and/or
+*    modify it under the terms of the GNU Lesser General Public
+*    License version 2.1, as published by the Free Software Foundation.
+*
+*    This library is distributed in the hope that it will be useful,
+*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*    Lesser General Public License for more details.
+*
+*    You should have received a copy of the GNU Lesser General Public
+*    License along with this library; if not, write to the Free Software
+*    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+*    MA  02111-1307  USA
+*
+************************************************************************/
+#define __RSC
+
+
+#ifndef UUI_IDS_HRC
+#include <ids.hrc>
+#endif
+#ifndef UUI_SSLWARN_HRC
+#include <sslwarndlg.hrc>
+#endif
+
+ModalDialog DLG_UUI_SSLWARN
+{
+    HelpId = HID_DLG_SSLWARN_UUI;
+    Border = TRUE ;
+    Moveable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT( 221, 158 );
+    Size = MAP_APPFONT( DLG_WIDTH, DLG_HEIGHT );
+
+    Text [ en-US ] = "Security Warning: ";
+
+    FixedText FT_LABEL_1
+    {
+        Pos = MAP_APPFONT( DLG_TEXT_START_X, RSC_SP_DLG_INNERBORDER_TOP );
+        Size = MAP_APPFONT( 165, DLG_TEXT_1_HEIGHT );
+
+        Text [ en-US ] = "No Text";
+
+        Border = FALSE;
+        WordBreak = TRUE;
+    };
+
+    PushButton PB_VIEW__CERTIFICATE
+    {
+        Pos = MAP_APPFONT( DLG_CTLBTN_CERT_START_X, DLG_CTLBTN_START_Y );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ en-US ] = "View Certificate";
+
+    };
+
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT( DLG_CTLBTN_CANCEL_START_X, DLG_CTLBTN_START_Y );
+        Size = MAP_APPFONT( DLG_CTLBTN_CANCEL_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ en-US ] = "Cancel Connection";
+
+    };
+
+    PushButton PB_OK
+    {
+        Pos = MAP_APPFONT( DLG_CTLBTN_OK_START_X, DLG_CTLBTN_START_Y );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+
+        Text [ en-US ] = "Continue";
+
+    };
+
+    FixedImage IMG_WARN
+    {
+        Pos = MAP_APPFONT( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP );
+        Size = MAP_APPFONT( DLG_WARMIMG_WIDTH , DLG_WARMIMG_HEIGHT );
+
+        Fixed = Image
+        {
+            /* ImageBitmap = Bitmap { File = "certificate_40x56.png"; }; */
+            MaskColor = Color{Red=0xffff;Green=0x0000;Blue=0xffff;};
+        };
+
+    };
+
+    FixedLine FL_LINE
+    {
+        Pos = MAP_APPFONT( 0, DLG_CTLBTN_START_Y - RSC_SP_FLGR_INNERBORDER_TOP -  RSC_CD_FIXEDLINE_HEIGHT );
+        Size = MAP_APPFONT( DLG_WIDTH,  RSC_CD_FIXEDLINE_HEIGHT );
+    };
+};
+
