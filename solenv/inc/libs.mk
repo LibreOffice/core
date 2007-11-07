@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.119 $
+#   $Revision: 1.120 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-23 14:40:38 $
+#   last change: $Author: rt $ $Date: 2007-11-07 10:05:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.119 $$"
+LIBSMKREV!:="$$Revision: 1.120 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -83,6 +83,8 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 .INCLUDE .IGNORE : ucbhelper$/version.mk
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COMID)
+OPENSSLLIB=-lssl -lcrypto
+OPENSSLLIBST=$(STATIC) -lssl -lcrypto $(DYNAMIC)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 REGLIB=-lreg$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
@@ -345,6 +347,11 @@ LDAPBERLIB=ldapber.lib
 CPPULIB=icppu.lib
 CPPUHELPERLIB=icppuhelper.lib
 UCBHELPERLIB=iucbhelper.lib
+.IF "$(USE_SHELL)" == "4nt"
+OPENSSLLIB=ssleay32.lib libeay32.lib
+.ELSE
+OPENSSLLIB=libssl.lib libcrypto.lib
+.ENDIF
 ODBCLIB=iodbc.lib
 ODBCBASELIB=iodbcbase.lib
 DBFILELIB=ifile$(OFFICEUPD).lib
