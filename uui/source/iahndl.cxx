@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:29:22 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:09:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@
 #include "com/sun/star/task/XInteractionRetry.hpp"
 #include "com/sun/star/task/XPasswordContainer.hpp"
 #include "com/sun/star/ucb/AuthenticationRequest.hpp"
+#include "com/sun/star/ucb/CertificateValidationRequest.hpp"
 #include "com/sun/star/ucb/HandleCookiesRequest.hpp"
 #include "com/sun/star/ucb/InteractiveAppException.hpp"
 #include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
@@ -96,6 +97,10 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/xforms/InvalidDataOnSubmitException.hpp"
 
+#ifndef _COM_SUN_STAR_SECURITY_CERTIFICATEVALIDITY_HPP_
+#include <com/sun/star/security/CertificateValidity.hpp>
+#endif
+
 #include "vos/mutex.hxx"
 #include "tools/rcid.h"
 #include "vcl/svapp.hxx"
@@ -114,8 +119,19 @@
 #include "logindlg.hxx"
 #include "passcrtdlg.hxx"
 #include "passworddlg.hxx"
+#include "unknownauthdlg.hxx"
+#include "sslwarndlg.hxx"
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
 using namespace com::sun;
+
+namespace csss = ::com::sun::star::security;
+
 
 namespace {
 
@@ -241,6 +257,44 @@ getContinuations(
         }
     }
 }
+
+::rtl::OUString replaceMessageWithArguments(
+    ::rtl::OUString aMessage,
+    std::vector< rtl::OUString > const & rArguments )
+{
+    for (sal_Int32 i = 0;;)
+    {
+        i = aMessage.
+        indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(ARG")), i);
+        if (i == -1)
+            break;
+        if (aMessage.getLength() - i >= RTL_CONSTASCII_LENGTH("$(ARGx)")
+            && aMessage.getStr()[i + RTL_CONSTASCII_LENGTH("$(ARGx")] == ')')
+        {
+            sal_Unicode c
+                = aMessage.getStr()[i + RTL_CONSTASCII_LENGTH("$(ARG")];
+            if (c >= '1' && c <= '2')
+            {
+                std::vector< rtl::OUString >::size_type nIndex
+                    = static_cast< std::vector< rtl::OUString >::size_type >(
+            c - '1');
+                if (nIndex < rArguments.size())
+                {
+                    aMessage
+                        = aMessage.replaceAt(i,
+                                             RTL_CONSTASCII_LENGTH("$(ARGx)"),
+                                             rArguments[nIndex]);
+                    i += rArguments[nIndex].getLength();
+                    continue;
+                }
+            }
+        }
+        ++i;
+    }
+
+    return aMessage;
+}
+
 
 bool
 getStringRequestArgument(star::uno::Sequence< star::uno::Any > const &
@@ -1025,6 +1079,14 @@ void UUIInteractionHelper::handleDialogRequests(
         return;
     }
 
+    star::ucb::CertificateValidationRequest aCertificateValidationRequest;
+    if (aAnyRequest >>= aCertificateValidationRequest)
+    {
+        handleCertificateValidationRequest(aCertificateValidationRequest,
+                                    rRequest->getContinuations());
+        return;
+    }
+
 // @@@ Todo #i29340#: activate!
 //    star::ucb::NameClashResolveRequest aNameClashResolveRequest;
 //    if (aAnyRequest >>= aNameClashResolveRequest)
@@ -1216,6 +1278,170 @@ UUIInteractionHelper::initPasswordContainer(
         {}
     OSL_ENSURE(pContainer->is(), "unexpected situation");
     return pContainer->is();
+}
+
+
+String GetContentPart( const String& _rRawString )
+{
+        // search over some parts to find a string
+        //static char* aIDs[] = { "CN", "OU", "O", "E", NULL };
+        static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", NULL };// By CP
+        String sPart;
+        int i = 0;
+        while ( aIDs[i] )
+        {
+            String sPartId = String::CreateFromAscii( aIDs[i++] );
+            xub_StrLen nContStart = _rRawString.Search( sPartId );
+            if ( nContStart != STRING_NOTFOUND )
+            {
+                nContStart = nContStart + sPartId.Len();
+                //++nContStart;                   // now it's start of content, directly after Id // delete By CP
+                xub_StrLen nContEnd = _rRawString.Search( sal_Unicode( ',' ), nContStart );
+                sPart = String( _rRawString, nContStart, nContEnd - nContStart );
+                break;
+            }
+        }
+
+        return sPart;
+}
+
+
+sal_Bool UUIInteractionHelper::executeUnknownAuthDialog( const cssu::Reference< dcss::security::XCertificate >& rXCert)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    try
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+
+        std::auto_ptr< ResMgr >
+            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        std::auto_ptr< UnknownAuthDialog >
+            xDialog(new UnknownAuthDialog( getParentProperty(),
+                                           rXCert,
+                                           m_xServiceFactory,
+                                           xManager.get()));
+
+        // Get correct ressource string
+        rtl::OUString aMessage;
+
+        std::vector< rtl::OUString > aArguments;
+        aArguments.push_back( GetContentPart( rXCert.get()->getSubjectName()) );
+        //aArguments.push_back( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")) );
+
+        if (xManager.get())
+        {
+            ResId aResId(RID_UUI_ERRHDL, *xManager.get());
+            if (ErrorResource(aResId).getString(ERRCODE_UUI_UNKNOWNAUTH_UNTRUSTED, &aMessage))
+            {
+                aMessage = replaceMessageWithArguments( aMessage, aArguments );
+                xDialog->setDescriptionText( aMessage );
+            }
+        }
+
+        return static_cast<sal_Bool> (xDialog->Execute());
+    }
+    catch (std::bad_alloc const &)
+    {
+        throw star::uno::RuntimeException(
+                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+                  star::uno::Reference< star::uno::XInterface >());
+    }
+}
+
+rtl::OUString
+UUIInteractionHelper::getLocalizedDatTimeStr( ::com::sun::star::util::DateTime aDateTime )
+{
+
+
+    rtl::OUString aDateTimeStr;
+    Date  aDate;
+    Time  aTime;
+
+    aDate = Date( aDateTime.Day, aDateTime.Month, aDateTime.Year );
+    aTime = Time( aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds );
+
+    LanguageType eUILang = Application::GetSettings().GetUILanguage();
+    SvNumberFormatter *pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessServiceFactory(), eUILang );
+    String      aTmpStr;
+    Color*      pColor = NULL;
+    Date*       pNullDate = pNumberFormatter->GetNullDate();
+    sal_uInt32  nFormat = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_DATE, eUILang );
+
+    pNumberFormatter->GetOutputString( aDate - *pNullDate, nFormat, aTmpStr, &pColor );
+    aDateTimeStr = aTmpStr + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+
+    nFormat = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eUILang );
+    pNumberFormatter->GetOutputString( aTime.GetTimeInDays(), nFormat, aTmpStr, &pColor );
+    aDateTimeStr += aTmpStr;
+
+    return aDateTimeStr;
+}
+
+sal_Bool UUIInteractionHelper::executeSSLWarnDialog( const cssu::Reference< dcss::security::XCertificate >& rXCert,
+                                                     sal_Int32 const & failure,
+                                                     const rtl::OUString & hostName )
+    SAL_THROW((star::uno::RuntimeException))
+{
+    try
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+
+        std::auto_ptr< ResMgr >
+            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        std::auto_ptr< SSLWarnDialog >
+            xDialog(new SSLWarnDialog( getParentProperty(),
+                                           rXCert,
+                                           m_xServiceFactory,
+                                           xManager.get()));
+
+        // Get correct ressource string
+        rtl::OUString aMessage_1;
+        std::vector< rtl::OUString > aArguments_1;
+
+        switch( failure )
+        {
+            case SSLWARN_TYPE_DOMAINMISMATCH:
+                aArguments_1.push_back( hostName );
+                aArguments_1.push_back( GetContentPart( rXCert.get()->getSubjectName()) );
+                aArguments_1.push_back( hostName );
+                break;
+            case SSLWARN_TYPE_EXPIRED:
+                aArguments_1.push_back( GetContentPart( rXCert.get()->getSubjectName()) );
+                aArguments_1.push_back( getLocalizedDatTimeStr( rXCert.get()->getNotValidAfter() ) );
+                aArguments_1.push_back( getLocalizedDatTimeStr( rXCert.get()->getNotValidAfter() ) );
+                break;
+            case SSLWARN_TYPE_INVALID:
+                break;
+        }
+
+
+
+        //aArguments.push_back( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")) );
+
+        if (xManager.get())
+        {
+            ResId aResId(RID_UUI_ERRHDL, *xManager.get());
+            if (ErrorResource(aResId).getString( ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + DESCRIPTION_1, &aMessage_1))
+            {
+                aMessage_1 = replaceMessageWithArguments( aMessage_1, aArguments_1 );
+                xDialog->setDescription1Text( aMessage_1 );
+            }
+
+            rtl::OUString aTitle;
+            ErrorResource(aResId).getString( ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + TITLE, &aTitle);
+            xDialog->SetText( aTitle );
+        }
+
+
+
+        return static_cast<sal_Bool> (xDialog->Execute());
+    }
+    catch (std::bad_alloc const &)
+    {
+        throw star::uno::RuntimeException(
+                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+                  star::uno::Reference< star::uno::XInterface >());
+    }
 }
 
 void UUIInteractionHelper::executeLoginDialog(LoginErrorInfo & rInfo,
@@ -1830,6 +2056,115 @@ UUIInteractionHelper::handleAuthenticationRequest(
             xAbort->select();
         break;
     }
+}
+
+sal_Bool
+UUIInteractionHelper::isDomainMatch( rtl::OUString hostName, rtl::OUString certHostName)
+{
+    if (hostName.equalsIgnoreAsciiCase( certHostName ))
+        return sal_True;
+
+
+
+    if ( 0 == certHostName.indexOf( rtl::OUString::createFromAscii( "*" ) ) && hostName.getLength() >= certHostName.getLength()  )
+    {
+        rtl::OUString cmpStr = certHostName.copy( 1 );
+
+        if ( hostName.matchIgnoreAsciiCase( cmpStr, hostName.getLength( ) -  cmpStr.getLength()) )
+            return sal_True;
+
+    }
+
+    return sal_False;
+}
+
+
+void
+UUIInteractionHelper::handleCertificateValidationRequest(
+    star::ucb::CertificateValidationRequest const & rRequest,
+    star::uno::Sequence< star::uno::Reference<
+                             star::task::XInteractionContinuation > > const &
+    rContinuations)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionHandler > xIH = getInteractionHandler();
+
+    star::uno::Reference< star::task::XInteractionApprove > xApprove;
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+
+    getContinuations(
+        rContinuations, &xApprove, 0, 0, &xAbort, 0, 0, 0, 0);
+
+    sal_Int32 failures = rRequest.CertificateValidity;
+
+    sal_Bool trustCert = sal_True;
+
+
+    if ( ((failures & csss::CertificateValidity::UNTRUSTED) == csss::CertificateValidity::UNTRUSTED ) ||
+         ((failures & csss::CertificateValidity::ISSUER_UNTRUSTED) == csss::CertificateValidity::ISSUER_UNTRUSTED) ||
+         ((failures & csss::CertificateValidity::ROOT_UNTRUSTED) == csss::CertificateValidity::ROOT_UNTRUSTED) )
+    {
+        if ( executeUnknownAuthDialog( rRequest.Certificate ) )
+            trustCert = sal_True;
+        else
+            trustCert = sal_False;
+    }
+
+    if ( (!isDomainMatch( rRequest.HostName, GetContentPart( rRequest.Certificate.get()->getSubjectName()) )) &&
+          trustCert  )
+    {
+        if ( executeSSLWarnDialog( rRequest.Certificate, SSLWARN_TYPE_DOMAINMISMATCH, rRequest.HostName ) )
+            trustCert = sal_True;
+        else
+            trustCert = sal_False;
+    }
+
+    if ( (((failures & csss::CertificateValidity::TIME_INVALID) == csss::CertificateValidity::TIME_INVALID) ||
+         ((failures & csss::CertificateValidity::NOT_TIME_NESTED) == csss::CertificateValidity::NOT_TIME_NESTED)) &&
+           trustCert )
+    {
+        if ( executeSSLWarnDialog( rRequest.Certificate, SSLWARN_TYPE_EXPIRED, rRequest.HostName ) )
+            trustCert = sal_True;
+        else
+            trustCert = sal_False;
+    }
+
+    if ( (((failures & csss::CertificateValidity::REVOKED) == csss::CertificateValidity::REVOKED) ||
+         ((failures & csss::CertificateValidity::SIGNATURE_INVALID) == csss::CertificateValidity::SIGNATURE_INVALID) ||
+         ((failures & csss::CertificateValidity::EXTENSION_INVALID) == csss::CertificateValidity::EXTENSION_INVALID) ||
+         ((failures & csss::CertificateValidity::INVALID) == csss::CertificateValidity::INVALID)) &&
+           trustCert )
+    {
+        if ( executeSSLWarnDialog( rRequest.Certificate, SSLWARN_TYPE_INVALID, rRequest.HostName ) )
+            trustCert = sal_True;
+        else
+            trustCert = sal_False;
+    }
+
+    if ( trustCert )
+    {
+        if (xApprove.is())
+        xApprove->select();
+    } else
+    {
+        if (xAbort.is())
+        xAbort->select();
+    }
+
+    /*
+
+    switch (executeMessageBox( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dialog1")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dummy dialog")), WB_YES_NO | WB_DEF_YES ))
+    {
+    case ERRCODE_BUTTON_YES:
+        if (xApprove.is())
+            xApprove->select();
+        break;
+    default:
+        if (xAbort.is())
+            xAbort->select();
+        break;
+    }
+    */
 }
 
 namespace {
@@ -2559,43 +2894,6 @@ UUIInteractionHelper::handleFilterOptionsRequest(
     }
 
     xAbort->select();
-}
-
-::rtl::OUString replaceMessageWithArguments(
-    ::rtl::OUString aMessage,
-    std::vector< rtl::OUString > const & rArguments )
-{
-    for (sal_Int32 i = 0;;)
-    {
-        i = aMessage.
-        indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(ARG")), i);
-        if (i == -1)
-            break;
-        if (aMessage.getLength() - i >= RTL_CONSTASCII_LENGTH("$(ARGx)")
-            && aMessage.getStr()[i + RTL_CONSTASCII_LENGTH("$(ARGx")] == ')')
-        {
-            sal_Unicode c
-                = aMessage.getStr()[i + RTL_CONSTASCII_LENGTH("$(ARG")];
-            if (c >= '1' && c <= '2')
-            {
-                std::vector< rtl::OUString >::size_type nIndex
-                    = static_cast< std::vector< rtl::OUString >::size_type >(
-            c - '1');
-                if (nIndex < rArguments.size())
-                {
-                    aMessage
-                        = aMessage.replaceAt(i,
-                                             RTL_CONSTASCII_LENGTH("$(ARGx)"),
-                                             rArguments[nIndex]);
-                    i += rArguments[nIndex].getLength();
-                    continue;
-                }
-            }
-        }
-        ++i;
-    }
-
-    return aMessage;
 }
 
 void
