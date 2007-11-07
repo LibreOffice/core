@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-13 15:15:02 $
+#   last change: $Author: rt $ $Date: 2007-11-07 09:58:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -265,7 +265,8 @@ IDLFILES=\
      XSimpleFileAccess3.idl\
      XSortedDynamicResultSetFactory.idl\
     XSourceInitialization.idl\
-    XWebDAVCommandEnvironment.idl
+    XWebDAVCommandEnvironment.idl \
+    CertificateValidationRequest.idl
 
 # ------------------------------------------------------------------
 
