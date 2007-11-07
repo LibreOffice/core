@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:42:17 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 12:18:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -622,9 +622,9 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     else
                     {
                         // StartNode holen
-                        SwStartNode* pSttNode = aIdx.GetNode().GetStartNode();
-                        if( !pSttNode )
-                            pSttNode = aIdx.GetNode().pStartOfSection;
+                        // Even aIdx points to a startnode, we need the startnode
+                        // of the environment of aIdx (#i80941)
+                        SwStartNode* pSttNode = aIdx.GetNode().pStartOfSection;
 
                         // Hole alle Boxen mit Inhalt. Deren Indizies auf die
                         // StartNodes muessen umgemeldet werden !!
