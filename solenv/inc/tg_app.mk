@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:39:38 $
+#   last change: $Author: rt $ $Date: 2007-11-07 16:09:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @echo $(STDSLO) $(APP$(TNR)OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
     @echo $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `macosx-dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR))` \
+    `macosx-dylib-link-list $(PRJNAME) $(SOLARLIBDIR) $(PRJ)$/$(INPATH)$/lib $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR))` \
     $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @cat $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @+source $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
