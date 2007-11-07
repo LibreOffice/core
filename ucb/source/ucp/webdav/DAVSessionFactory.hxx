@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVSessionFactory.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:49:24 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:03:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@
 #include "DAVException.hxx"
 #endif
 
+using namespace com::sun::star;
+
 namespace com { namespace sun { namespace star { namespace lang {
     class XMultiServiceFactory;
 } } } }
@@ -81,12 +83,16 @@ public:
                                ::com::sun::star::lang::XMultiServiceFactory >&
                                 rxSMgr )
             throw( DAVException );
+
+    ::uno::Reference< ::lang::XMultiServiceFactory > getServiceFactory() {  return m_xMSF; }
 private:
     typedef std::map< rtl::OUString, DAVSession * > Map;
 
     Map m_aMap;
     osl::Mutex m_aMutex;
     std::auto_ptr< ucbhelper::InternetProxyDecider > m_xProxyDecider;
+
+    ::uno::Reference< ::lang::XMultiServiceFactory > m_xMSF;
 
     void releaseElement( DAVSession * pElement ) SAL_THROW(());
 
