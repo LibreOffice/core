@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:20:46 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 12:18:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2519,10 +2519,6 @@ void SwTxtFrm::ChgThisLines()
 void SwTxtFrm::RecalcAllLines()
 {
     ValidateLineNum();
-
-    // --> FME 2005-05-17 #i49177# Recalc ThisLines
-    ChgThisLines();
-    // <--
 
     const SwAttrSet *pAttrSet = GetAttrSet();
 
