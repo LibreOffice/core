@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.262 $
+ *  $Revision: 1.263 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-25 16:05:14 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:15:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2629,3 +2629,22 @@ File gid_File_Lib_Onlinecheck
     Name = "onlinecheck.dll";
 End
 #endif
+
+File gid_File_Lib_Openssl
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Program;
+  #ifdef WNT  
+    Name = "ssleay32.dll";
+  #endif
+End
+
+File gid_File_Lib_Crypto
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Program;
+    
+	#ifdef WNT
+	  Name = "libeay32.dll";
+	#endif
+End
