@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclhelperbufferdevice.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:16 $
+ *  last change: $Author: aw $ $Date: 2007-11-07 14:27:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,9 @@ namespace drawinglayer
             aNewMapMode.SetOrigin(Point(-aLogicTopLeft.X(), -aLogicTopLeft.Y()));
 
             maContent.SetMapMode(aNewMapMode);
+
+            // copy AA flag for new target
+            maContent.SetAntialiasing(mrOutDev.GetAntialiasing());
         }
     }
 
@@ -132,6 +135,8 @@ namespace drawinglayer
             mpMask = new VirtualDevice(mrOutDev, 1);
             mpMask->SetOutputSizePixel(maDestPixel.GetSize(), true);
             mpMask->SetMapMode(maContent.GetMapMode());
+
+            // do NOT copy AA flag for mask!
         }
 
         return *mpMask;
@@ -144,6 +149,8 @@ namespace drawinglayer
             mpAlpha = new VirtualDevice();
             mpAlpha->SetOutputSizePixel(maDestPixel.GetSize(), true);
             mpAlpha->SetMapMode(maContent.GetMapMode());
+
+            // do NOT copy AA flag for alpha!
         }
 
         return *mpAlpha;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrattribute.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:30:35 $
+ *  last change: $Author: aw $ $Date: 2007-11-07 14:27:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ namespace drawinglayer
         class SdrLineAttribute
         {
             // line definitions
-            basegfx::tools::B2DLineJoin             meJoin;             // B2DLINEJOIN_* defines
+            basegfx::B2DLineJoin                    meJoin;             // B2DLINEJOIN_* defines
             double                                  mfWidth;            // 1/100th mm, 0.0==hair
             double                                  mfTransparence;     // [0.0 .. 1.0], 0.0==no transp.
             basegfx::BColor                         maColor;            // color of line
@@ -78,7 +78,7 @@ namespace drawinglayer
 
         public:
             SdrLineAttribute(
-                basegfx::tools::B2DLineJoin eJoin, double fWidth, double fTransparence, const basegfx::BColor& rColor,
+                basegfx::B2DLineJoin eJoin, double fWidth, double fTransparence, const basegfx::BColor& rColor,
                 const ::std::vector< double >& rDotDashArray, double fFullDotDashLen);
             ~SdrLineAttribute();
 
@@ -90,7 +90,7 @@ namespace drawinglayer
             bool isDashed() const { return (0L != maDotDashArray.size()); }
 
             // data access
-            basegfx::tools::B2DLineJoin getJoin() const { return meJoin; }
+            basegfx::B2DLineJoin getJoin() const { return meJoin; }
             double getWidth() const { return mfWidth; }
             double getTransparence() const { return mfTransparence; }
             const basegfx::BColor& getColor() const { return maColor; }

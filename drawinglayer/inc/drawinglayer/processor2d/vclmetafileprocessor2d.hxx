@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-02 16:54:53 $
+ *  last change: $Author: aw $ $Date: 2007-11-07 14:27:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,9 @@ class SvtGraphicStroke;
 
 namespace drawinglayer { namespace attribute {
     class FillGradientAttribute;
+    class LineAttribute;
     class StrokeAttribute;
-    class StrokeArrowAttribute;
+    class LineStartEndAttribute;
 }}
 
 namespace basegfx {
@@ -91,9 +92,10 @@ namespace drawinglayer
             SvtGraphicStroke* impTryToCreateSvtGraphicStroke(
                 const basegfx::B2DPolygon& rB2DPolygon,
                 const basegfx::BColor* pColor,
+                const attribute::LineAttribute* pLineAttribute,
                 const attribute::StrokeAttribute* pStrokeAttribute,
-                const attribute::StrokeArrowAttribute* pStart,
-                const attribute::StrokeArrowAttribute* pEnd);
+                const attribute::LineStartEndAttribute* pStart,
+                const attribute::LineStartEndAttribute* pEnd);
             void impStartSvtGraphicStroke(SvtGraphicStroke* pSvtGraphicStroke);
             void impEndSvtGraphicStroke(SvtGraphicStroke* pSvtGraphicStroke);
 

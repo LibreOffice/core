@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-15 16:11:08 $
+ *  last change: $Author: aw $ $Date: 2007-11-07 14:27:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,9 +340,10 @@ namespace drawinglayer
         SvtGraphicStroke* VclMetafileProcessor2D::impTryToCreateSvtGraphicStroke(
             const basegfx::B2DPolygon& rB2DPolygon,
             const basegfx::BColor* pColor,
+            const attribute::LineAttribute* pLineAttribute,
             const attribute::StrokeAttribute* pStrokeAttribute,
-            const attribute::StrokeArrowAttribute* pStart,
-            const attribute::StrokeArrowAttribute* pEnd)
+            const attribute::LineStartEndAttribute* pStart,
+            const attribute::LineStartEndAttribute* pEnd)
         {
             SvtGraphicStroke* pRetval = 0;
 
@@ -356,9 +357,9 @@ namespace drawinglayer
                 {
                     aStrokeColor = *pColor;
                 }
-                else if(pStrokeAttribute)
+                else if(pLineAttribute)
                 {
-                    aStrokeColor = maBColorModifierStack.getModifiedColor(pStrokeAttribute->getColor());
+                    aStrokeColor = maBColorModifierStack.getModifiedColor(pLineAttribute->getColor());
                 }
 
                 // copied from ImpDrawLineGeometry. Ckecked.
@@ -388,42 +389,45 @@ namespace drawinglayer
                 double fMiterLength(0.0);
                 SvtGraphicStroke::DashArray aDashArray;
 
-                if(pStrokeAttribute)
+                if(pLineAttribute)
                 {
                     // pre-fill fLineWidth
-                    fLineWidth = pStrokeAttribute->getWidth();
+                    fLineWidth = pLineAttribute->getWidth();
 
                     // pre-fill fMiterLength
                     fMiterLength = fLineWidth;
 
                     // get Join
-                    switch(pStrokeAttribute->getLineJoin())
+                    switch(pLineAttribute->getLineJoin())
                     {
-                        default : // basegfx::tools::B2DLINEJOIN_NONE :
+                        default : // basegfx::B2DLINEJOIN_NONE :
                         {
                             eJoin = SvtGraphicStroke::joinNone;
                             break;
                         }
-                        case basegfx::tools::B2DLINEJOIN_BEVEL :
+                        case basegfx::B2DLINEJOIN_BEVEL :
                         {
                             eJoin = SvtGraphicStroke::joinBevel;
                             break;
                         }
-                        case basegfx::tools::B2DLINEJOIN_MIDDLE :
-                        case basegfx::tools::B2DLINEJOIN_MITER :
+                        case basegfx::B2DLINEJOIN_MIDDLE :
+                        case basegfx::B2DLINEJOIN_MITER :
                         {
                             eJoin = SvtGraphicStroke::joinMiter;
                             // ATM 15 degrees is assumed
                             fMiterLength /= rtl::math::sin(M_PI * (15.0 / 360.0));
                             break;
                         }
-                        case basegfx::tools::B2DLINEJOIN_ROUND :
+                        case basegfx::B2DLINEJOIN_ROUND :
                         {
                             eJoin = SvtGraphicStroke::joinRound;
                             break;
                         }
                     }
+                }
 
+                if(pStrokeAttribute)
+                {
                     // copy dash array
                     aDashArray = pStrokeAttribute->getDotDashArray();
                 }
@@ -1040,7 +1044,7 @@ namespace drawinglayer
                     // also support SvtGraphicStroke MetaCommentAction
                     const primitive2d::PolygonHairlinePrimitive2D& rHairlinePrimitive = static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate);
                     const basegfx::BColor aLineColor(maBColorModifierStack.getModifiedColor(rHairlinePrimitive.getBColor()));
-                    SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(rHairlinePrimitive.getB2DPolygon(), &aLineColor, 0, 0, 0);
+                    SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(rHairlinePrimitive.getB2DPolygon(), &aLineColor, 0, 0, 0, 0);
 
                     impStartSvtGraphicStroke(pSvtGraphicStroke);
                     RenderPolygonHairlinePrimitive2D(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate));
@@ -1051,7 +1055,8 @@ namespace drawinglayer
                 {
                     // support SvtGraphicStroke MetaCommentAction
                     const primitive2d::PolygonStrokePrimitive2D& rStrokePrimitive = static_cast< const primitive2d::PolygonStrokePrimitive2D& >(rCandidate);
-                    SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(rStrokePrimitive.getB2DPolygon(), 0, &rStrokePrimitive.getStrokeAttribute(), 0, 0);
+                    SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(rStrokePrimitive.getB2DPolygon(), 0, &rStrokePrimitive.getLineAttribute(),
+                        &rStrokePrimitive.getStrokeAttribute(), 0, 0);
 
                     impStartSvtGraphicStroke(pSvtGraphicStroke);
                     process(rCandidate.get2DDecomposition(getViewInformation2D()));
@@ -1062,8 +1067,8 @@ namespace drawinglayer
                 {
                     // support SvtGraphicStroke MetaCommentAction
                     const primitive2d::PolygonStrokeArrowPrimitive2D& rStrokeArrowPrimitive = static_cast< const primitive2d::PolygonStrokeArrowPrimitive2D& >(rCandidate);
-                    SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(rStrokeArrowPrimitive.getB2DPolygon(), 0, &rStrokeArrowPrimitive.getStrokeAttribute(),
-                        &rStrokeArrowPrimitive.getStart(), &rStrokeArrowPrimitive.getEnd());
+                    SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(rStrokeArrowPrimitive.getB2DPolygon(), 0, &rStrokeArrowPrimitive.getLineAttribute(),
+                        &rStrokeArrowPrimitive.getStrokeAttribute(), &rStrokeArrowPrimitive.getStart(), &rStrokeArrowPrimitive.getEnd());
 
                     impStartSvtGraphicStroke(pSvtGraphicStroke);
                     process(rCandidate.get2DDecomposition(getViewInformation2D()));

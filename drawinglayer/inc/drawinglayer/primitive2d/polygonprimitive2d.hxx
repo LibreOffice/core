@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive2d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-26 11:36:28 $
+ *  last change: $Author: aw $ $Date: 2007-11-07 14:27:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,16 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINEATTRIBUTE_HXX
+#include <drawinglayer/attribute/lineattribute.hxx>
+#endif
+
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #endif
 
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEARROWATTRIBUTE_HXX
-#include <drawinglayer/attribute/strokearrowattribute.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINESTARTENDATTRIBUTE_HXX
+#include <drawinglayer/attribute/linestartendattribute.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -135,6 +139,7 @@ namespace drawinglayer
         {
         private:
             basegfx::B2DPolygon                     maPolygon;
+            attribute::LineAttribute                maLineAttribute;
             attribute::StrokeAttribute              maStrokeAttribute;
 
         protected:
@@ -144,10 +149,16 @@ namespace drawinglayer
         public:
             PolygonStrokePrimitive2D(
                 const basegfx::B2DPolygon& rPolygon,
+                const attribute::LineAttribute& rLineAttribute,
                 const attribute::StrokeAttribute& rStrokeAttribute);
+
+            PolygonStrokePrimitive2D(
+                const basegfx::B2DPolygon& rPolygon,
+                const attribute::LineAttribute& rLineAttribute);
 
             // get data
             basegfx::B2DPolygon getB2DPolygon() const { return maPolygon; }
+            const attribute::LineAttribute& getLineAttribute() const { return maLineAttribute; }
             const attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
 
             // compare operator
@@ -169,11 +180,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class PolygonWavePrimitive2D : public BasePrimitive2D
+        class PolygonWavePrimitive2D : public PolygonStrokePrimitive2D
         {
         private:
-            basegfx::B2DPolygon                     maPolygon;
-            attribute::StrokeAttribute              maStrokeAttribute;
             double                                  mfWaveWidth;
             double                                  mfWaveHeight;
 
@@ -184,13 +193,18 @@ namespace drawinglayer
         public:
             PolygonWavePrimitive2D(
                 const basegfx::B2DPolygon& rPolygon,
+                const attribute::LineAttribute& rLineAttribute,
                 const attribute::StrokeAttribute& rStrokeAttribute,
                 double fWaveWidth,
                 double fWaveHeight);
 
+            PolygonWavePrimitive2D(
+                const basegfx::B2DPolygon& rPolygon,
+                const attribute::LineAttribute& rLineAttribute,
+                double fWaveWidth,
+                double fWaveHeight);
+
             // get data
-            basegfx::B2DPolygon getB2DPolygon() const { return maPolygon; }
-            const attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
             double getWaveWidth() const { return mfWaveWidth; }
             double getWaveHeight() const { return mfWaveHeight; }
 
@@ -216,8 +230,8 @@ namespace drawinglayer
         class PolygonStrokeArrowPrimitive2D : public PolygonStrokePrimitive2D
         {
         private:
-            attribute::StrokeArrowAttribute             maStart;
-            attribute::StrokeArrowAttribute             maEnd;
+            attribute::LineStartEndAttribute                maStart;
+            attribute::LineStartEndAttribute                maEnd;
 
         protected:
             // local decomposition.
@@ -226,13 +240,20 @@ namespace drawinglayer
         public:
             PolygonStrokeArrowPrimitive2D(
                 const basegfx::B2DPolygon& rPolygon,
+                const attribute::LineAttribute& rLineAttribute,
                 const attribute::StrokeAttribute& rStrokeAttribute,
-                const attribute::StrokeArrowAttribute& rStart,
-                const attribute::StrokeArrowAttribute& rEnd);
+                const attribute::LineStartEndAttribute& rStart,
+                const attribute::LineStartEndAttribute& rEnd);
+
+            PolygonStrokeArrowPrimitive2D(
+                const basegfx::B2DPolygon& rPolygon,
+                const attribute::LineAttribute& rLineAttribute,
+                const attribute::LineStartEndAttribute& rStart,
+                const attribute::LineStartEndAttribute& rEnd);
 
             // get data
-            const attribute::StrokeArrowAttribute& getStart() const { return maStart; }
-            const attribute::StrokeArrowAttribute& getEnd() const { return maEnd; }
+            const attribute::LineStartEndAttribute& getStart() const { return maStart; }
+            const attribute::LineStartEndAttribute& getEnd() const { return maEnd; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

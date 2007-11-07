@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdecoratedprimitive2d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-02 16:55:00 $
+ *  last change: $Author: aw $ $Date: 2007-11-07 14:27:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,6 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #endif
 
-#include <numeric>
-
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
@@ -149,13 +147,13 @@ namespace drawinglayer
                     bool bDoubleLine(false);
                     bool bWaveLine(false);
                     bool bBoldLine(false);
-                    const int* pDashDotArray(0);
-                    basegfx::tools::B2DLineJoin eLineJoin(basegfx::tools::B2DLINEJOIN_NONE);
+                    const int* pDotDashArray(0);
+                    basegfx::B2DLineJoin eLineJoin(basegfx::B2DLINEJOIN_NONE);
                     double fUnderlineOffset(aTextLayouter.getUnderlineOffset());
                     double fUnderlineHeight(aTextLayouter.getUnderlineHeight());
 
                     static const int aDottedArray[]     = { 1, 1, 0};               // DOTTED LINE
-                    static const int aDashDotArray[]    = { 1, 1, 4, 1, 0};         // DASHDOT
+                    static const int aDotDashArray[]    = { 1, 1, 4, 1, 0};         // DASHDOT
                     static const int aDashDotDotArray[] = { 1, 1, 1, 1, 4, 1, 0};   // DASHDOTDOT
                     static const int aDashedArray[]     = { 5, 2, 0};               // DASHED LINE
                     static const int aLongDashArray[]   = { 7, 2, 0};               // LONGDASH
@@ -173,27 +171,27 @@ namespace drawinglayer
                         }
                         case FONT_UNDERLINE_DOTTED:
                         {
-                            pDashDotArray = aDottedArray;
+                            pDotDashArray = aDottedArray;
                             break;
                         }
                         case FONT_UNDERLINE_DASH:
                         {
-                            pDashDotArray = aDashedArray;
+                            pDotDashArray = aDashedArray;
                             break;
                         }
                         case FONT_UNDERLINE_LONGDASH:
                         {
-                            pDashDotArray = aLongDashArray;
+                            pDotDashArray = aLongDashArray;
                             break;
                         }
                         case FONT_UNDERLINE_DASHDOT:
                         {
-                            pDashDotArray = aDashDotArray;
+                            pDotDashArray = aDotDashArray;
                             break;
                         }
                         case FONT_UNDERLINE_DASHDOTDOT:
                         {
-                            pDashDotArray = aDashDotDotArray;
+                            pDotDashArray = aDashDotDotArray;
                             break;
                         }
                         case FONT_UNDERLINE_SMALLWAVE:
@@ -220,31 +218,31 @@ namespace drawinglayer
                         case FONT_UNDERLINE_BOLDDOTTED:
                         {
                             bBoldLine = true;
-                            pDashDotArray = aDottedArray;
+                            pDotDashArray = aDottedArray;
                             break;
                         }
                         case FONT_UNDERLINE_BOLDDASH:
                         {
                             bBoldLine = true;
-                            pDashDotArray = aDashedArray;
+                            pDotDashArray = aDashedArray;
                             break;
                         }
                         case FONT_UNDERLINE_BOLDLONGDASH:
                         {
                             bBoldLine = true;
-                            pDashDotArray = aLongDashArray;
+                            pDotDashArray = aLongDashArray;
                             break;
                         }
                         case FONT_UNDERLINE_BOLDDASHDOT:
                         {
                             bBoldLine = true;
-                            pDashDotArray = aDashDotArray;
+                            pDotDashArray = aDotDashArray;
                             break;
                         }
                         case FONT_UNDERLINE_BOLDDASHDOTDOT:
                         {
                             bBoldLine = true;
-                            pDashDotArray = aDashDotDotArray;
+                            pDotDashArray = aDashDotDotArray;
                             break;
                         }
                         case FONT_UNDERLINE_BOLDWAVE:
@@ -268,30 +266,24 @@ namespace drawinglayer
 
                     if(bWaveLine)
                     {
-                        eLineJoin = basegfx::tools::B2DLINEJOIN_ROUND;
+                        eLineJoin = basegfx::B2DLINEJOIN_ROUND;
                         fUnderlineHeight *= 0.5;
                     }
 
-                    // prepare StrokeAttributes
-                    attribute::StrokeAttribute aStrokeAttribute(getTextlineColor(), fUnderlineHeight, eLineJoin);
+                    // prepare Line and Stroke Attributes
+                    const attribute::LineAttribute aLineAttribute(getTextlineColor(), fUnderlineHeight, eLineJoin);
+                    attribute::StrokeAttribute aStrokeAttribute;
 
-                    if(pDashDotArray)
+                    if(pDotDashArray)
                     {
                         ::std::vector< double > aDoubleArray;
 
-                        for(const int* p = pDashDotArray; *p; ++p)
+                        for(const int* p = pDotDashArray; *p; ++p)
                         {
                             aDoubleArray.push_back((double)(*p) * fUnderlineHeight);
                         }
 
-                        const double fFullDashDotLen(::std::accumulate(aDoubleArray.begin(), aDoubleArray.end(), 0.0));
-
-                        aStrokeAttribute = attribute::StrokeAttribute(
-                            aStrokeAttribute.getColor(),
-                            aStrokeAttribute.getWidth(),
-                            aStrokeAttribute.getLineJoin(),
-                            aDoubleArray,
-                            fFullDashDotLen);
+                        aStrokeAttribute = attribute::StrokeAttribute(aDoubleArray);
                     }
 
                     // create base polygon and new primitive
@@ -316,11 +308,11 @@ namespace drawinglayer
                             fWaveWidth *= 2.0;
                         }
 
-                        aNewPrimitive = Primitive2DReference(new PolygonWavePrimitive2D(aUnderline, aStrokeAttribute, fWaveWidth, 0.5 * fWaveWidth));
+                        aNewPrimitive = Primitive2DReference(new PolygonWavePrimitive2D(aUnderline, aLineAttribute, aStrokeAttribute, fWaveWidth, 0.5 * fWaveWidth));
                     }
                     else
                     {
-                        aNewPrimitive = Primitive2DReference(new PolygonStrokePrimitive2D(aUnderline, aStrokeAttribute));
+                        aNewPrimitive = Primitive2DReference(new PolygonStrokePrimitive2D(aUnderline, aLineAttribute, aStrokeAttribute));
                     }
 
                     // add primitive
@@ -422,8 +414,8 @@ namespace drawinglayer
                         aStrikeoutLine.append(basegfx::B2DPoint(fTextWidth, -fStrikeoutOffset));
                         aStrikeoutLine.transform(aUnscaledTransform);
 
-                        const attribute::StrokeAttribute aStrokeAttribute(getFontColor(), fStrikeoutHeight, basegfx::tools::B2DLINEJOIN_NONE);
-                        Primitive2DReference aNewPrimitive(new PolygonStrokePrimitive2D(aStrikeoutLine, aStrokeAttribute));
+                        const attribute::LineAttribute aLineAttribute(getFontColor(), fStrikeoutHeight, basegfx::B2DLINEJOIN_NONE);
+                        Primitive2DReference aNewPrimitive(new PolygonStrokePrimitive2D(aStrikeoutLine, aLineAttribute));
 
                         // add primitive
                         rTarget.push_back(aNewPrimitive);

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygontubeprimitive3d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:06 $
+ *  last change: $Author: aw $ $Date: 2007-11-07 14:27:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ namespace drawinglayer
             double                                      mfRadius;
             double                                      mfDegreeStepWidth;
             double                                      mfMiterMinimumAngle;
-            basegfx::tools::B2DLineJoin                 maLineJoin;
+            basegfx::B2DLineJoin                        maLineJoin;
 
         protected:
             // local decomposition.
@@ -70,7 +70,7 @@ namespace drawinglayer
             PolygonTubePrimitive3D(
                 const basegfx::B3DPolygon& rPolygon,
                 const basegfx::BColor& rBColor,
-                double fRadius, basegfx::tools::B2DLineJoin aLineJoin,
+                double fRadius, basegfx::B2DLineJoin aLineJoin,
                 double fDegreeStepWidth = 10.0 * F_PI180,
                 double fMiterMinimumAngle = 15.0 * F_PI180);
 
@@ -78,7 +78,7 @@ namespace drawinglayer
             double getRadius() const { return mfRadius; }
             double getDegreeStepWidth() const { return mfDegreeStepWidth; }
             double getMiterMinimumAngle() const { return mfMiterMinimumAngle; }
-            basegfx::tools::B2DLineJoin getLineJoin() const { return maLineJoin; }
+            basegfx::B2DLineJoin getLineJoin() const { return maLineJoin; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;

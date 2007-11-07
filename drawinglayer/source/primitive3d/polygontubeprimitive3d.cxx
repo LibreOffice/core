@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygontubeprimitive3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:56 $
+ *  last change: $Author: aw $ $Date: 2007-11-07 14:27:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,7 +194,7 @@ namespace drawinglayer
                 double fAngle,
                 double /*fDegreeStepWidth*/,
                 double fMiterMinimumAngle,
-                basegfx::tools::B2DLineJoin aLineJoin)
+                basegfx::B2DLineJoin aLineJoin)
             {
                 // nSegments is for whole circle, adapt to half circle
                 const sal_uInt32 nVerSeg(nSegments >> 1L);
@@ -202,7 +202,7 @@ namespace drawinglayer
 
                 if(nVerSeg)
                 {
-                    if(basegfx::tools::B2DLINEJOIN_ROUND == aLineJoin)
+                    if(basegfx::B2DLINEJOIN_ROUND == aLineJoin)
                     {
                         // calculate new horizontal segments
                         const sal_uInt32 nHorSeg((sal_uInt32)((fAngle / F_2PI) * (double)nSegments));
@@ -223,29 +223,29 @@ namespace drawinglayer
                         else
                         {
                             // fallback to bevel when there is not at least one segment hor and ver
-                            aLineJoin = basegfx::tools::B2DLINEJOIN_BEVEL;
+                            aLineJoin = basegfx::B2DLINEJOIN_BEVEL;
                         }
                     }
 
-                    if(basegfx::tools::B2DLINEJOIN_MIDDLE == aLineJoin
-                        || basegfx::tools::B2DLINEJOIN_BEVEL == aLineJoin
-                        || basegfx::tools::B2DLINEJOIN_MITER == aLineJoin)
+                    if(basegfx::B2DLINEJOIN_MIDDLE == aLineJoin
+                        || basegfx::B2DLINEJOIN_BEVEL == aLineJoin
+                        || basegfx::B2DLINEJOIN_MITER == aLineJoin)
                     {
-                        if(basegfx::tools::B2DLINEJOIN_MITER == aLineJoin)
+                        if(basegfx::B2DLINEJOIN_MITER == aLineJoin)
                         {
                             const double fMiterAngle(fAngle/2.0);
 
                             if(fMiterAngle < fMiterMinimumAngle)
                             {
                                 // fallback to bevel when miter's angle is too small
-                                aLineJoin = basegfx::tools::B2DLINEJOIN_BEVEL;
+                                aLineJoin = basegfx::B2DLINEJOIN_BEVEL;
                             }
                         }
 
                         const double fInc(F_PI / (double)nVerSeg);
                         const double fSin(sin(-fAngle));
                         const double fCos(cos(-fAngle));
-                        const bool bMiter(basegfx::tools::B2DLINEJOIN_MITER == aLineJoin);
+                        const bool bMiter(basegfx::B2DLINEJOIN_MITER == aLineJoin);
                         const double fMiterSin(bMiter ? sin(-(fAngle/2.0)) : 0.0);
                         const double fMiterCos(bMiter ? cos(-(fAngle/2.0)) : 0.0);
                         double fPos(-F_PI2);
@@ -449,7 +449,7 @@ namespace drawinglayer
                     const attribute::MaterialAttribute3D aMaterial(getBColor());
                     static sal_uInt32 nSegments(8L); // default for 3d line segments, for more quality just raise this value (in even steps)
                     const bool bClosed(getB3DPolygon().isClosed());
-                    const bool bNoLineJoin(basegfx::tools::B2DLINEJOIN_NONE == getLineJoin());
+                    const bool bNoLineJoin(basegfx::B2DLINEJOIN_NONE == getLineJoin());
                     const sal_uInt32 nLoopCount(bClosed ? nPointCount : nPointCount - 1L);
                     basegfx::B3DPoint aLast(getB3DPolygon().getB3DPoint(nPointCount - 1L));
                     basegfx::B3DPoint aCurr(getB3DPolygon().getB3DPoint(0L));
@@ -557,7 +557,7 @@ namespace drawinglayer
         PolygonTubePrimitive3D::PolygonTubePrimitive3D(
             const basegfx::B3DPolygon& rPolygon,
             const basegfx::BColor& rBColor,
-            double fRadius, basegfx::tools::B2DLineJoin aLineJoin,
+            double fRadius, basegfx::B2DLineJoin aLineJoin,
             double fDegreeStepWidth,
             double fMiterMinimumAngle)
         :   PolygonHairlinePrimitive3D(rPolygon, rBColor),

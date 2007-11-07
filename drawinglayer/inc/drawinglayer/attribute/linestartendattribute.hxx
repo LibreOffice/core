@@ -2,9 +2,9 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: strokeattribute.hxx,v $
+ *  $RCSfile: linestartendattribute.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: aw $ $Date: 2007-11-07 14:27:16 $
  *
@@ -33,18 +33,16 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
-#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINESTARTENDATTRIBUTE_HXX
+#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINESTARTENDATTRIBUTE_HXX
 
-#ifndef _BGFX_POLYGON_B2DLINEGEOMETRY_HXX
-#include <basegfx/polygon/b2dlinegeometry.hxx>
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
 
-#ifndef _BGFX_COLOR_BCOLOR_HXX
-#include <basegfx/color/bcolor.hxx>
+#ifndef _BGFX_NUMERIC_FTOOLS_HXX
+#include <basegfx/numeric/ftools.hxx>
 #endif
-
-#include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -55,59 +53,45 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class StrokeAttribute
+        class LineStartEndAttribute
         {
         private:
-            ::std::vector< double >                     maDotDashArray;         // array of double which defines the dot-dash pattern
-            double                                      mfFullDotDashLen;       // sum of maDotDashArray (for convenience)
+            double                                  mfWidth;                // absolute line StartEndGeometry base width
+            basegfx::B2DPolyPolygon                 maPolyPolygon;          // the StartEndGeometry PolyPolygon
+
+            // bitfield
+            unsigned                                mbCentered : 1;         // use centered to ineStart/End point?
 
         public:
-            StrokeAttribute(
-                const ::std::vector< double >& rDotDashArray,
-                double fFullDotDashLen = 0.0)
-            :   maDotDashArray(rDotDashArray),
-                mfFullDotDashLen(fFullDotDashLen)
-            {
-            }
-
-            StrokeAttribute()
-            :   maDotDashArray(),
-                mfFullDotDashLen(0.0)
-            {
-            }
-
-            StrokeAttribute(const StrokeAttribute& rCandidate)
-            {
-                *this = rCandidate;
-            }
-
-            StrokeAttribute& operator=(const StrokeAttribute& rCandidate)
-            {
-                maDotDashArray = rCandidate.maDotDashArray;
-                mfFullDotDashLen = rCandidate.mfFullDotDashLen;
-                return *this;
-            }
-
-            ~StrokeAttribute()
+            LineStartEndAttribute(
+                double fWidth,
+                const basegfx::B2DPolyPolygon& rPolyPolygon,
+                bool bCentered)
+            :   mfWidth(fWidth),
+                maPolyPolygon(rPolyPolygon),
+                mbCentered(bCentered)
             {
             }
 
             // compare operator
-            bool operator==(const StrokeAttribute& rCandidate) const
+            bool operator==(const LineStartEndAttribute& rCandidate) const
             {
-                return (mfFullDotDashLen == rCandidate.mfFullDotDashLen
-                    && maDotDashArray == rCandidate.maDotDashArray);
+                return (basegfx::fTools::equal(mfWidth, rCandidate.mfWidth)
+                    && maPolyPolygon == rCandidate.maPolyPolygon
+                    && mbCentered == rCandidate.mbCentered);
             }
 
             // data access
-            const ::std::vector< double >& getDotDashArray() const { return maDotDashArray; }
-            double getFullDotDashLen() const;
+            double getWidth() const { return mfWidth; }
+            const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
+            bool isCentered() const { return mbCentered; }
+            bool isActive() const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
+#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINESTARTENDATTRIBUTE_HXX
 
 // eof

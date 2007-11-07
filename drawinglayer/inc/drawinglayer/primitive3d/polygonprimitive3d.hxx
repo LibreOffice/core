@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive3d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:06 $
+ *  last change: $Author: aw $ $Date: 2007-11-07 14:27:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,10 @@
 
 #ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
 #include <basegfx/polygon/b3dpolygon.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINEATTRIBUTE_HXX
+#include <drawinglayer/attribute/lineattribute.hxx>
 #endif
 
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
@@ -95,6 +99,7 @@ namespace drawinglayer
         {
         private:
             basegfx::B3DPolygon                     maPolygon;
+            attribute::LineAttribute                maLineAttribute;
             attribute::StrokeAttribute              maStrokeAttribute;
 
         protected:
@@ -104,10 +109,16 @@ namespace drawinglayer
         public:
             PolygonStrokePrimitive3D(
                 const basegfx::B3DPolygon& rPolygon,
+                const attribute::LineAttribute& rLineAttribute,
                 const attribute::StrokeAttribute& rStrokeAttribute);
+
+            PolygonStrokePrimitive3D(
+                const basegfx::B3DPolygon& rPolygon,
+                const attribute::LineAttribute& rLineAttribute);
 
             // get data
             basegfx::B3DPolygon getB3DPolygon() const { return maPolygon; }
+            const attribute::LineAttribute& getLineAttribute() const { return maLineAttribute; }
             const attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
 
             // compare operator

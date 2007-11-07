@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive2d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-26 11:36:36 $
+ *  last change: $Author: aw $ $Date: 2007-11-07 14:27:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,35 +111,20 @@ namespace drawinglayer
         {
             if(getDashLength() > 0.0)
             {
-                ::std::vector< double > aDashA;
-                ::std::vector< double > aDashB;
+                // apply dashing; get line and gap snippets
+                ::std::vector< double > aDash;
+                basegfx::B2DPolyPolygon aDashedPolyPolyA;
+                basegfx::B2DPolyPolygon aDashedPolyPolyB;
 
-                aDashA.push_back(getDashLength());
-                aDashA.push_back(getDashLength());
-
-                aDashB.push_back(0.0);
-                aDashB.push_back(getDashLength());
-                aDashB.push_back(getDashLength());
-                aDashB.push_back(0.0);
-
-                const basegfx::B2DPolyPolygon aDashedPolyPolyA(basegfx::tools::applyLineDashing(getB2DPolygon(), aDashA, 2.0 * getDashLength()));
-                const basegfx::B2DPolyPolygon aDashedPolyPolyB(basegfx::tools::applyLineDashing(getB2DPolygon(), aDashB, 2.0 * getDashLength()));
+                aDash.push_back(getDashLength());
+                aDash.push_back(getDashLength());
+                basegfx::tools::applyLineDashing(getB2DPolygon(), aDash, &aDashedPolyPolyA, &aDashedPolyPolyB, 2.0 * getDashLength());
 
                 // prepare return value
-                Primitive2DSequence aRetval(aDashedPolyPolyA.count() + aDashedPolyPolyB.count());
-                sal_uInt32 a(0L), b(0L);
+                Primitive2DSequence aRetval(2);
 
-                for(; a < aDashedPolyPolyA.count(); a++)
-                {
-                    const Primitive2DReference xRef(new PolygonHairlinePrimitive2D(aDashedPolyPolyA.getB2DPolygon(a), getRGBColorA()));
-                    aRetval[a] = xRef;
-                }
-
-                for(; b < aDashedPolyPolyB.count(); b++)
-                {
-                    const Primitive2DReference xRef(new PolygonHairlinePrimitive2D(aDashedPolyPolyB.getB2DPolygon(b), getRGBColorB()));
-                    aRetval[a + b] = xRef;
-                }
+                aRetval[0] = Primitive2DReference(new PolyPolygonHairlinePrimitive2D(aDashedPolyPolyA, getRGBColorA()));
+                aRetval[1] = Primitive2DReference(new PolyPolygonHairlinePrimitive2D(aDashedPolyPolyB, getRGBColorB()));
 
                 return aRetval;
             }
@@ -209,27 +194,30 @@ namespace drawinglayer
                 else
                 {
                     // apply LineStyle
-                    const basegfx::B2DPolygon aHairLinePolygon(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolygon()));
-                    aHairLinePolyPolygon = basegfx::tools::applyLineDashing(aHairLinePolygon, getStrokeAttribute().getDotDashArray(), getStrokeAttribute().getFullDotDashLen());
-
-                    // merge LineStyle polygons to bigger parts
-                    aHairLinePolyPolygon = basegfx::tools::mergeDashedLines(aHairLinePolyPolygon);
+                    basegfx::tools::applyLineDashing(getB2DPolygon(), getStrokeAttribute().getDotDashArray(), &aHairLinePolyPolygon, 0, getStrokeAttribute().getFullDotDashLen());
                 }
 
-                if(getStrokeAttribute().getWidth())
+                const sal_uInt32 nCount(aHairLinePolyPolygon.count());
+
+                if(getLineAttribute().getWidth())
                 {
+                    static bool bTestNewMethod(true);
+
                     // create fat line data
-                    aHairLinePolyPolygon = basegfx::tools::adaptiveSubdivideByAngle(aHairLinePolyPolygon);
-                    const double fHalfLineWidth(getStrokeAttribute().getWidth() / 2.0);
-                    const double fDegreeStepWidth(10.0 * F_PI180);
+                    if(!bTestNewMethod)
+                    {
+                        aHairLinePolyPolygon = basegfx::tools::adaptiveSubdivideByAngle(aHairLinePolyPolygon);
+                    }
+
+                    const double fHalfLineWidth(getLineAttribute().getWidth() / 2.0);
                     const double fMiterMinimumAngle(15.0 * F_PI180);
-                    const basegfx::tools::B2DLineJoin aLineJoin(getStrokeAttribute().getLineJoin());
+                    const basegfx::B2DLineJoin aLineJoin(getLineAttribute().getLineJoin());
                     basegfx::B2DPolyPolygon aAreaPolyPolygon;
 
-                    for(sal_uInt32 a(0L); a < aHairLinePolyPolygon.count(); a++)
+                    for(sal_uInt32 a(0L); a < nCount; a++)
                     {
                         const basegfx::B2DPolyPolygon aNewPolyPolygon(basegfx::tools::createAreaGeometryForPolygon(
-                            aHairLinePolyPolygon.getB2DPolygon(a), fHalfLineWidth, aLineJoin, fDegreeStepWidth, fMiterMinimumAngle));
+                            aHairLinePolyPolygon.getB2DPolygon(a), fHalfLineWidth, aLineJoin, fMiterMinimumAngle));
                         aAreaPolyPolygon.append(aNewPolyPolygon);
                     }
 
@@ -239,11 +227,14 @@ namespace drawinglayer
                     // create primitive
                     for(sal_uInt32 b(0L); b < aAreaPolyPolygon.count(); b++)
                     {
-                        // put into single polyPolygon primitives to make clear thta this is NOT meant
-                        // to be painted XORed as fill rule. Alternatively, a melting process may be used
-                        // here one day.
+                        // put into single polyPolygon primitives to make clear that this is NOT meant
+                        // to be painted as a single PolyPolygon (XORed as fill rule). Alternatively, a
+                        // melting process may be used here one day.
                         const basegfx::B2DPolyPolygon aNewPolyPolygon(aAreaPolyPolygon.getB2DPolygon(b));
-                        const Primitive2DReference xRef(new PolyPolygonColorPrimitive2D(aNewPolyPolygon, getStrokeAttribute().getColor()));
+                        const basegfx::BColor aColor(bTestNewMethod
+                            ? basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)
+                            : getLineAttribute().getColor());
+                        const Primitive2DReference xRef(new PolyPolygonColorPrimitive2D(aNewPolyPolygon, aColor));
                         aRetval[b] = xRef;
                     }
 
@@ -252,17 +243,8 @@ namespace drawinglayer
                 else
                 {
                     // prepare return value
-                    Primitive2DSequence aRetval(aHairLinePolyPolygon.count());
-
-                    // create hair line data for all sub polygons
-                    for(sal_uInt32 a(0L); a < aHairLinePolyPolygon.count(); a++)
-                    {
-                        const basegfx::B2DPolygon aCandidate = aHairLinePolyPolygon.getB2DPolygon(a);
-                        const Primitive2DReference xRef(new PolygonHairlinePrimitive2D(aCandidate, getStrokeAttribute().getColor()));
-                        aRetval[a] = xRef;
-                    }
-
-                    return aRetval;
+                    const Primitive2DReference xRef(new PolyPolygonHairlinePrimitive2D(aHairLinePolyPolygon, getLineAttribute().getColor()));
+                    return Primitive2DSequence(&xRef, 1);
                 }
             }
             else
@@ -273,10 +255,22 @@ namespace drawinglayer
 
         PolygonStrokePrimitive2D::PolygonStrokePrimitive2D(
             const basegfx::B2DPolygon& rPolygon,
+            const attribute::LineAttribute& rLineAttribute,
             const attribute::StrokeAttribute& rStrokeAttribute)
         :   BasePrimitive2D(),
             maPolygon(rPolygon),
+            maLineAttribute(rLineAttribute),
             maStrokeAttribute(rStrokeAttribute)
+        {
+        }
+
+        PolygonStrokePrimitive2D::PolygonStrokePrimitive2D(
+            const basegfx::B2DPolygon& rPolygon,
+            const attribute::LineAttribute& rLineAttribute)
+        :   BasePrimitive2D(),
+            maPolygon(rPolygon),
+            maLineAttribute(rLineAttribute),
+            maStrokeAttribute()
         {
         }
 
@@ -287,6 +281,7 @@ namespace drawinglayer
                 const PolygonStrokePrimitive2D& rCompare = (PolygonStrokePrimitive2D&)rPrimitive;
 
                 return (getB2DPolygon() == rCompare.getB2DPolygon()
+                    && getLineAttribute() == rCompare.getLineAttribute()
                     && getStrokeAttribute() == rCompare.getStrokeAttribute());
             }
 
@@ -299,9 +294,9 @@ namespace drawinglayer
             basegfx::B2DRange aRetval(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolygon())));
 
             // if width, grow by line width
-            if(getStrokeAttribute().getWidth())
+            if(getLineAttribute().getWidth())
             {
-                aRetval.grow(getStrokeAttribute().getWidth() / 2.0);
+                aRetval.grow(getLineAttribute().getWidth() / 2.0);
             }
 
             return aRetval;
@@ -332,13 +327,13 @@ namespace drawinglayer
                 {
                     // create waveline curve
                     const basegfx::B2DPolygon aWaveline(basegfx::tools::createWaveline(getB2DPolygon(), getWaveWidth(), getWaveHeight()));
-                    const Primitive2DReference xRef(new PolygonStrokePrimitive2D(aWaveline, getStrokeAttribute()));
+                    const Primitive2DReference xRef(new PolygonStrokePrimitive2D(aWaveline, getLineAttribute(), getStrokeAttribute()));
                     aRetval = Primitive2DSequence(&xRef, 1);
                 }
                 else
                 {
                     // flat waveline, decompose to simple line primitive
-                    const Primitive2DReference xRef(new PolygonStrokePrimitive2D(getB2DPolygon(), getStrokeAttribute()));
+                    const Primitive2DReference xRef(new PolygonStrokePrimitive2D(getB2DPolygon(), getLineAttribute(), getStrokeAttribute()));
                     aRetval = Primitive2DSequence(&xRef, 1);
                 }
             }
@@ -348,12 +343,31 @@ namespace drawinglayer
 
         PolygonWavePrimitive2D::PolygonWavePrimitive2D(
             const basegfx::B2DPolygon& rPolygon,
+            const attribute::LineAttribute& rLineAttribute,
             const attribute::StrokeAttribute& rStrokeAttribute,
             double fWaveWidth,
             double fWaveHeight)
-        :   BasePrimitive2D(),
-            maPolygon(rPolygon),
-            maStrokeAttribute(rStrokeAttribute),
+        :   PolygonStrokePrimitive2D(rPolygon, rLineAttribute, rStrokeAttribute),
+            mfWaveWidth(fWaveWidth),
+            mfWaveHeight(fWaveHeight)
+        {
+            if(mfWaveWidth < 0.0)
+            {
+                mfWaveWidth = 0.0;
+            }
+
+            if(mfWaveHeight < 0.0)
+            {
+                mfWaveHeight = 0.0;
+            }
+        }
+
+        PolygonWavePrimitive2D::PolygonWavePrimitive2D(
+            const basegfx::B2DPolygon& rPolygon,
+            const attribute::LineAttribute& rLineAttribute,
+            double fWaveWidth,
+            double fWaveHeight)
+        :   PolygonStrokePrimitive2D(rPolygon, rLineAttribute),
             mfWaveWidth(fWaveWidth),
             mfWaveHeight(fWaveHeight)
         {
@@ -370,23 +384,21 @@ namespace drawinglayer
 
         bool PolygonWavePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(PolygonStrokePrimitive2D::operator==(rPrimitive))
             {
                 const PolygonWavePrimitive2D& rCompare = (PolygonWavePrimitive2D&)rPrimitive;
 
-                return (getB2DPolygon() == rCompare.getB2DPolygon()
-                    && getStrokeAttribute() == rCompare.getStrokeAttribute()
-                    && getWaveWidth() == rCompare.getWaveWidth()
+                return (getWaveWidth() == rCompare.getWaveWidth()
                     && getWaveHeight() == rCompare.getWaveHeight());
             }
 
             return false;
         }
 
-        basegfx::B2DRange PolygonWavePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        basegfx::B2DRange PolygonWavePrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            // get range of it (subdivided)
-            basegfx::B2DRange aRetval(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolygon())));
+            // get range of parent
+            basegfx::B2DRange aRetval(PolygonStrokePrimitive2D::getB2DRange(rViewInformation));
 
             // if WaveHeight, grow by it
             if(!basegfx::fTools::equalZero(getWaveHeight()))
@@ -395,9 +407,9 @@ namespace drawinglayer
             }
 
             // if line width, grow by it
-            if(!basegfx::fTools::equalZero(getStrokeAttribute().getWidth()))
+            if(!basegfx::fTools::equalZero(getLineAttribute().getWidth()))
             {
-                aRetval.grow(getStrokeAttribute().getWidth());
+                aRetval.grow(getLineAttribute().getWidth());
             }
 
             return aRetval;
@@ -462,18 +474,18 @@ namespace drawinglayer
             sal_uInt32 nInd(0L);
 
             // add shaft
-            const Primitive2DReference xRefShaft(new PolygonStrokePrimitive2D(aLocalPolygon, getStrokeAttribute()));
+            const Primitive2DReference xRefShaft(new PolygonStrokePrimitive2D(aLocalPolygon, getLineAttribute(), getStrokeAttribute()));
             aRetval[nInd++] = xRefShaft;
 
             if(aArrowA.count())
             {
-                const Primitive2DReference xRefA(new PolyPolygonColorPrimitive2D(aArrowA, getStrokeAttribute().getColor()));
+                const Primitive2DReference xRefA(new PolyPolygonColorPrimitive2D(aArrowA, getLineAttribute().getColor()));
                 aRetval[nInd++] = xRefA;
             }
 
             if(aArrowB.count())
             {
-                const Primitive2DReference xRefB(new PolyPolygonColorPrimitive2D(aArrowB, getStrokeAttribute().getColor()));
+                const Primitive2DReference xRefB(new PolyPolygonColorPrimitive2D(aArrowB, getLineAttribute().getColor()));
                 aRetval[nInd++] = xRefB;
             }
 
@@ -482,10 +494,22 @@ namespace drawinglayer
 
         PolygonStrokeArrowPrimitive2D::PolygonStrokeArrowPrimitive2D(
             const basegfx::B2DPolygon& rPolygon,
+            const attribute::LineAttribute& rLineAttribute,
             const attribute::StrokeAttribute& rStrokeAttribute,
-            const attribute::StrokeArrowAttribute& rStart,
-            const attribute::StrokeArrowAttribute& rEnd)
-        :   PolygonStrokePrimitive2D(rPolygon, rStrokeAttribute),
+            const attribute::LineStartEndAttribute& rStart,
+            const attribute::LineStartEndAttribute& rEnd)
+        :   PolygonStrokePrimitive2D(rPolygon, rLineAttribute, rStrokeAttribute),
+            maStart(rStart),
+            maEnd(rEnd)
+        {
+        }
+
+        PolygonStrokeArrowPrimitive2D::PolygonStrokeArrowPrimitive2D(
+            const basegfx::B2DPolygon& rPolygon,
+            const attribute::LineAttribute& rLineAttribute,
+            const attribute::LineStartEndAttribute& rStart,
+            const attribute::LineStartEndAttribute& rEnd)
+        :   PolygonStrokePrimitive2D(rPolygon, rLineAttribute),
             maStart(rStart),
             maEnd(rEnd)
         {

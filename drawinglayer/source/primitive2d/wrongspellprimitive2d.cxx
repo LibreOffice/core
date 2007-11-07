@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrongspellprimitive2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2007-09-26 11:36:36 $
+ *  last change: $Author: aw $ $Date: 2007-11-07 14:27:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,11 +93,11 @@ namespace drawinglayer
             aPolygon.append(getTransformation() * aStart);
             aPolygon.append(getTransformation() * aStop);
 
-            // prepare stroke attribute
-            const attribute::StrokeAttribute aStrokeAttribute(getColor(), 0.0);
+            // prepare line attribute
+            const attribute::LineAttribute aLineAttribute(getColor());
 
             // create the waveline primitive
-            Primitive2DReference xPrimitive(new PolygonWavePrimitive2D(aPolygon, aStrokeAttribute, fWaveWidth, 0.5 * fWaveWidth));
+            Primitive2DReference xPrimitive(new PolygonWavePrimitive2D(aPolygon, aLineAttribute, fWaveWidth, 0.5 * fWaveWidth));
             Primitive2DSequence xRetval(&xPrimitive, 1);
 
             return xRetval;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:56 $
+ *  last change: $Author: aw $ $Date: 2007-11-07 14:27:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,30 +112,31 @@ namespace drawinglayer
 
             if(getB3DPolygon().count())
             {
-                basegfx::B3DPolyPolygon aHairLinePolyPolygon(getB3DPolygon());
+                basegfx::B3DPolyPolygon aHairLinePolyPolygon;
 
-                if(0.0 != getStrokeAttribute().getFullDotDashLen())
+                if(0.0 == getStrokeAttribute().getFullDotDashLen())
+                {
+                    aHairLinePolyPolygon = basegfx::B3DPolyPolygon(getB3DPolygon());
+                }
+                else
                 {
                     // apply LineStyle
-                    aHairLinePolyPolygon = basegfx::tools::applyLineDashing(aHairLinePolyPolygon, getStrokeAttribute().getDotDashArray(), getStrokeAttribute().getFullDotDashLen());
-
-                    // merge LineStyle polygons to bigger parts
-                    aHairLinePolyPolygon = basegfx::tools::mergeDashedLines(aHairLinePolyPolygon);
+                    basegfx::tools::applyLineDashing(getB3DPolygon(), getStrokeAttribute().getDotDashArray(), &aHairLinePolyPolygon, 0, getStrokeAttribute().getFullDotDashLen());
                 }
 
                 // prepare result
                 aRetval.realloc(aHairLinePolyPolygon.count());
 
-                if(getStrokeAttribute().getWidth())
+                if(getLineAttribute().getWidth())
                 {
                     // create fat line data
-                    const double fRadius(getStrokeAttribute().getWidth() / 2.0);
-                    const basegfx::tools::B2DLineJoin aLineJoin(getStrokeAttribute().getLineJoin());
+                    const double fRadius(getLineAttribute().getWidth() / 2.0);
+                    const basegfx::B2DLineJoin aLineJoin(getLineAttribute().getLineJoin());
 
                     for(sal_uInt32 a(0L); a < aHairLinePolyPolygon.count(); a++)
                     {
                         // create tube primitives
-                        const Primitive3DReference xRef(new PolygonTubePrimitive3D(aHairLinePolyPolygon.getB3DPolygon(a), getStrokeAttribute().getColor(), fRadius, aLineJoin));
+                        const Primitive3DReference xRef(new PolygonTubePrimitive3D(aHairLinePolyPolygon.getB3DPolygon(a), getLineAttribute().getColor(), fRadius, aLineJoin));
                         aRetval[a] = xRef;
                     }
                 }
@@ -145,7 +146,7 @@ namespace drawinglayer
                     for(sal_uInt32 a(0L); a < aHairLinePolyPolygon.count(); a++)
                     {
                         const basegfx::B3DPolygon aCandidate = aHairLinePolyPolygon.getB3DPolygon(a);
-                        const Primitive3DReference xRef(new PolygonHairlinePrimitive3D(aCandidate, getStrokeAttribute().getColor()));
+                        const Primitive3DReference xRef(new PolygonHairlinePrimitive3D(aCandidate, getLineAttribute().getColor()));
                         aRetval[a] = xRef;
                     }
                 }
@@ -156,10 +157,22 @@ namespace drawinglayer
 
         PolygonStrokePrimitive3D::PolygonStrokePrimitive3D(
             const basegfx::B3DPolygon& rPolygon,
+            const attribute::LineAttribute& rLineAttribute,
             const attribute::StrokeAttribute& rStrokeAttribute)
         :   BasePrimitive3D(),
             maPolygon(rPolygon),
+            maLineAttribute(rLineAttribute),
             maStrokeAttribute(rStrokeAttribute)
+        {
+        }
+
+        PolygonStrokePrimitive3D::PolygonStrokePrimitive3D(
+            const basegfx::B3DPolygon& rPolygon,
+            const attribute::LineAttribute& rLineAttribute)
+        :   BasePrimitive3D(),
+            maPolygon(rPolygon),
+            maLineAttribute(rLineAttribute),
+            maStrokeAttribute()
         {
         }
 
@@ -170,6 +183,7 @@ namespace drawinglayer
                 const PolygonStrokePrimitive3D& rCompare = (PolygonStrokePrimitive3D&)rPrimitive;
 
                 return (getB3DPolygon() == rCompare.getB3DPolygon()
+                    && getLineAttribute() == rCompare.getLineAttribute()
                     && getStrokeAttribute() == rCompare.getStrokeAttribute());
             }
 

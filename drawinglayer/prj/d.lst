@@ -89,8 +89,9 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\attribute
 ..\inc\drawinglayer\attribute\sdrattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrattribute.hxx
 ..\inc\drawinglayer\attribute\sdrattribute3d.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrattribute3d.hxx
 ..\inc\drawinglayer\attribute\sdrfillbitmapattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrfillbitmapattribute.hxx
-..\inc\drawinglayer\attribute\strokearrowattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\strokearrowattribute.hxx
 ..\inc\drawinglayer\attribute\strokeattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\strokeattribute.hxx
+..\inc\drawinglayer\attribute\lineattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\lineattribute.hxx
+..\inc\drawinglayer\attribute\linestartendattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\linestartendattribute.hxx
 
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\texture
 ..\inc\drawinglayer\texture\texture.hxx %_DEST%\inc%_EXT%\drawinglayer\texture\texture.hxx

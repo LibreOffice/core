@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: aw $ $Date: 2006-12-13 16:57:08 $
+#   last change: $Author: aw $ $Date: 2007-11-07 14:27:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,10 @@ SLOFILES= \
         $(SLO)$/sdrallattribute3d.obj		\
         $(SLO)$/sdrattribute.obj			\
         $(SLO)$/sdrattribute3d.obj			\
-        $(SLO)$/sdrfillbitmapattribute.obj
+        $(SLO)$/sdrfillbitmapattribute.obj	\
+        $(SLO)$/lineattribute.obj			\
+        $(SLO)$/linestartendattribute.obj	\
+        $(SLO)$/strokeattribute.obj
 
 # --- Targets ----------------------------------
 

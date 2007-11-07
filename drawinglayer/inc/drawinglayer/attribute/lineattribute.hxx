@@ -2,9 +2,9 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: strokeattribute.hxx,v $
+ *  $RCSfile: lineattribute.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: aw $ $Date: 2007-11-07 14:27:16 $
  *
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
-#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINEATTRIBUTE_HXX
+#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINEATTRIBUTE_HXX
 
 #ifndef _BGFX_POLYGON_B2DLINEGEOMETRY_HXX
 #include <basegfx/polygon/b2dlinegeometry.hxx>
@@ -55,59 +55,59 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class StrokeAttribute
+        class LineAttribute
         {
         private:
-            ::std::vector< double >                     maDotDashArray;         // array of double which defines the dot-dash pattern
-            double                                      mfFullDotDashLen;       // sum of maDotDashArray (for convenience)
+            basegfx::BColor                             maColor;                // color
+            double                                      mfWidth;                // absolute line width
+            basegfx::B2DLineJoin                        meLineJoin;             // type of LineJoin
 
         public:
-            StrokeAttribute(
-                const ::std::vector< double >& rDotDashArray,
-                double fFullDotDashLen = 0.0)
-            :   maDotDashArray(rDotDashArray),
-                mfFullDotDashLen(fFullDotDashLen)
+            LineAttribute(
+                const basegfx::BColor& rColor,
+                double fWidth = 0.0,
+                basegfx::B2DLineJoin aB2DLineJoin = basegfx::B2DLINEJOIN_ROUND)
+            :   maColor(rColor),
+                mfWidth(fWidth),
+                meLineJoin(aB2DLineJoin)
             {
             }
 
-            StrokeAttribute()
-            :   maDotDashArray(),
-                mfFullDotDashLen(0.0)
-            {
-            }
-
-            StrokeAttribute(const StrokeAttribute& rCandidate)
+            LineAttribute(const LineAttribute& rCandidate)
             {
                 *this = rCandidate;
             }
 
-            StrokeAttribute& operator=(const StrokeAttribute& rCandidate)
+            LineAttribute& operator=(const LineAttribute& rCandidate)
             {
-                maDotDashArray = rCandidate.maDotDashArray;
-                mfFullDotDashLen = rCandidate.mfFullDotDashLen;
+                maColor = rCandidate.maColor;
+                mfWidth = rCandidate.mfWidth;
+                meLineJoin = rCandidate.meLineJoin;
                 return *this;
             }
 
-            ~StrokeAttribute()
+            ~LineAttribute()
             {
             }
 
             // compare operator
-            bool operator==(const StrokeAttribute& rCandidate) const
+            bool operator==(const LineAttribute& rCandidate) const
             {
-                return (mfFullDotDashLen == rCandidate.mfFullDotDashLen
-                    && maDotDashArray == rCandidate.maDotDashArray);
+                return (maColor == rCandidate.maColor
+                    && mfWidth == rCandidate.mfWidth
+                    && meLineJoin == rCandidate.meLineJoin);
             }
 
             // data access
-            const ::std::vector< double >& getDotDashArray() const { return maDotDashArray; }
-            double getFullDotDashLen() const;
+            const basegfx::BColor& getColor() const { return maColor; }
+            double getWidth() const { return mfWidth; }
+            basegfx::B2DLineJoin getLineJoin() const { return meLineJoin; }
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
+#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_LINEATTRIBUTE_HXX
 
 // eof
