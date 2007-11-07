@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:02:34 $
+#   last change: $Author: rt $ $Date: 2007-11-07 10:06:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@ SRC1FILES = \
 SLOFILES=   \
             $(SLO)$/documentdigitalsignatures.obj   \
             $(SLO)$/registerservices.obj   \
+            $(SLO)$/certificatecontainer.obj
 
 # --- Targets ------------------------------------------------------
 
