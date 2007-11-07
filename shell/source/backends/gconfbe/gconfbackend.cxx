@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconfbackend.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 07:46:40 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:13:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,6 +216,26 @@ static const ConfigurationValue InetConfigurationValuesList[] =
         SETTING_PROXY_HTTP_PORT,
         "/system/http_proxy/port",
         "org.openoffice.Inet/Settings/ooInetHTTPProxyPort",
+        "int",
+        sal_False,
+        sal_False,
+        SETTING_PROXY_MODE
+    },
+
+     {
+        SETTING_PROXY_HTTPS_HOST,
+        "/system/proxy/secure_host",
+        "org.openoffice.Inet/Settings/ooInetHTTPSProxyName",
+        "string",
+        sal_False,
+        sal_False,
+        SETTING_PROXY_MODE
+    },
+
+    {
+        SETTING_PROXY_HTTPS_PORT,
+        "/system/proxy/secure_port",
+        "org.openoffice.Inet/Settings/ooInetHTTPSProxyPort",
         "int",
         sal_False,
         sal_False,
