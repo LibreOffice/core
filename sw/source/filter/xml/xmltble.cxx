@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:13:39 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 12:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1042,7 +1042,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             const SwTableBox *pBox = rBoxes[nBox];
 
             // NEW TABLES
-            const sal_uInt16 nRowSpan = static_cast< sal_uInt16 >(pBox->getRowSpan());
+            const long nRowSpan = pBox->getRowSpan();
             if( nRowSpan < 1 )
             {
                 SvXMLElementExport aElem2( *this, XML_NAMESPACE_TABLE,
@@ -1067,7 +1067,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             sal_uInt16 nColSpan = nCol - nOldCol + 1U;
 
             if ( nRowSpan >= 1 )
-                ExportTableBox( *pBox, nColSpan, nRowSpan, rTblInfo );
+                ExportTableBox( *pBox, nColSpan, static_cast< sal_uInt16 >(nRowSpan), rTblInfo );
 
             for( sal_uInt16 i=nOldCol; i<nCol; i++ )
             {
