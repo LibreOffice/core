@@ -4,9 +4,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:42:28 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 12:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -726,6 +726,8 @@ void SwSectionFmt::DelFrms()
     {
         SwClientIter aIter( *this );
         SwClient *pLast = aIter.GoStart();
+        // --> OD 2007-08-14 #147431#
+        // First delete the <SwSectionFrm> of the <SwSectionFmt> instance
         while ( pLast )
         {
             if ( pLast->IsA( TYPE(SwFrm) ) )
@@ -736,11 +738,20 @@ void SwSectionFmt::DelFrms()
             }
             else
             {
-                if ( pLast->IsA( TYPE(SwSectionFmt) ) )
-                    ((SwSectionFmt*)pLast)->DelFrms();
                 pLast = aIter++;
             }
         }
+        // Then delete frames of the nested <SwSectionFmt> instances
+        pLast = aIter.GoStart();
+        while ( pLast )
+        {
+            if ( pLast->IsA( TYPE(SwSectionFmt) ) )
+            {
+                ((SwSectionFmt*)pLast)->DelFrms();
+            }
+            pLast = aIter++;
+        }
+        // <--
         ULONG nEnde = pSectNd->EndOfSectionIndex();
         ULONG nStart = pSectNd->GetIndex()+1;
         lcl_DeleteFtn( pSectNd, nStart, nEnde );
