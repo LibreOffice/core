@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:30:29 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 12:19:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,7 +252,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
 
     // verschiebe jetzt noch den PaM !!!
     // der SPoint steht am Anfang der SSelection
-    if( pEnd == rPam.GetPoint() && pSttTxtNd )
+    if( pEnd == rPam.GetPoint() && ( !bFullPara || pSttTxtNd || pEndTxtNd ) )
         rPam.Exchange();
 
     if( !pSttTxtNd && !pEndTxtNd )
