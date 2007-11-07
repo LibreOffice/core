@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVRequestEnvironment.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:03:47 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:02:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,13 +57,16 @@ struct DAVRequestEnvironment
 //    rtl::Reference< DAVStatusListener >   m_xStatusListener;
 //    rtl::Reference< DAVProgressListener > m_xStatusListener;
     DAVRequestHeaders                     m_aRequestHeaders;
+    uno::Reference< ucb::XCommandEnvironment > m_xEnv;
 
-    DAVRequestEnvironment( const rtl::OUString & rRequestURI,
+DAVRequestEnvironment( const rtl::OUString & rRequestURI,
                            const rtl::Reference< DAVAuthListener > & xListener,
-                           const DAVRequestHeaders & rRequestHeaders )
+                           const DAVRequestHeaders & rRequestHeaders,
+                           const uno::Reference< ucb::XCommandEnvironment > & xEnv)
     : m_aRequestURI( rRequestURI ),
       m_xAuthListener( xListener ),
-      m_aRequestHeaders( rRequestHeaders ) {}
+      m_aRequestHeaders( rRequestHeaders ),
+      m_xEnv( xEnv ){}
 
     DAVRequestEnvironment() {}
 };
