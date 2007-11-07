@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:55:27 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:01:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,12 @@ private:
     FixedText       aHttpPortFT;
     SvxNoSpaceEdit  aHttpPortED;
 
+    FixedText       aHttpsProxyFT;
+    SvxNoSpaceEdit  aHttpsProxyED;
+    FixedText       aHttpsPortFT;
+    SvxNoSpaceEdit  aHttpsPortED;
+
+
     FixedText       aFtpProxyFT;
     SvxNoSpaceEdit  aFtpProxyED;
     FixedText       aFtpPortFT;
@@ -141,6 +147,8 @@ private:
     const rtl::OUString aProxyModePN;
     const rtl::OUString aHttpProxyPN;
     const rtl::OUString aHttpPortPN;
+    const rtl::OUString aHttpsProxyPN;
+    const rtl::OUString aHttpsPortPN;
     const rtl::OUString aFtpProxyPN;
     const rtl::OUString aFtpPortPN;
     const rtl::OUString aNoProxyDescPN;
