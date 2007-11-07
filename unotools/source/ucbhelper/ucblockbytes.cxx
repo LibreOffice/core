@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:32:55 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:12:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1024,13 +1024,14 @@ static sal_Bool UCBOpenContentSync(
 
     // now determine wether we use a timeout or not;
     if( ! aScheme.equalsIgnoreAsciiCaseAscii("http")                &&
+        ! aScheme.equalsIgnoreAsciiCaseAscii("https")                &&
         ! aScheme.equalsIgnoreAsciiCaseAscii("vnd.sun.star.webdav") &&
         ! aScheme.equalsIgnoreAsciiCaseAscii("ftp"))
         return _UCBOpenContentSync(
             xLockBytes,xContent,rArg,xSink,xInteract,xProgress,xHandler);
 
-    if (aScheme.compareToAscii(
-            "http") != COMPARE_EQUAL )
+    if ( (aScheme.compareToAscii( "http" ) != COMPARE_EQUAL) ||
+         (aScheme.compareToAscii( "https" ) != COMPARE_EQUAL) )
         xLockBytes->SetStreamValid_Impl();
 
     Reference< XPropertiesChangeListener > xListener;
