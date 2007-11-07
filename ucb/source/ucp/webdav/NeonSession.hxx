@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:13:43 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,11 @@
 #ifndef _NEONTYPES_HXX_
 #include "NeonTypes.hxx"
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+using namespace com::sun::star;
 
 namespace ucbhelper { class ProxyDecider; }
 
@@ -232,7 +237,15 @@ class NeonSession : public DAVSession
         // helpers
         const rtl::OUString & getHostName() const { return m_aHostName; }
 
+        const ::uno::Reference< ::lang::XMultiServiceFactory > getMSF() { return m_xFactory->getServiceFactory(); }
+
+
+        static bool isCertificate( const ::rtl::OUString & url, const ::rtl::OUString & certificate_name );
+        static void rememberCertificate( const ::rtl::OUString & url, const ::rtl::OUString & certificate_name );
+
         const void * getRequestData() const { return m_pRequestData; }
+
+        sal_Bool isDomainMatch( rtl::OUString certHostName );
 
     private:
         // Initialise "Neon sockets"
@@ -278,6 +291,9 @@ class NeonSession : public DAVSession
                                 com::sun::star::io::XInputStream > & xStream,
                             com::sun::star::uno::Sequence< sal_Int8 > & rData,
                             bool bAppendTrailingZeroByte );
+
+        typedef std::map< ::rtl::OUString, ::rtl::OUString > Map;
+        static Map certMap;
 };
 
 } // namespace_ucp
