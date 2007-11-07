@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-05 17:44:08 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:01:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,6 +358,11 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aHttpPortFT       (this, SVX_RES( FT_HTTP_PORT      )),
     aHttpPortED       (this, SVX_RES( ED_HTTP_PORT      ), TRUE),
 
+    aHttpsProxyFT      (this, SVX_RES( FT_HTTPS_PROXY     )),
+    aHttpsProxyED      (this, SVX_RES( ED_HTTPS_PROXY     )),
+    aHttpsPortFT       (this, SVX_RES( FT_HTTPS_PORT      )),
+    aHttpsPortED       (this, SVX_RES( ED_HTTPS_PORT      ), TRUE),
+
     aFtpProxyFT       (this, SVX_RES( FT_FTP_PROXY      )),
     aFtpProxyED       (this, SVX_RES( ED_FTP_PROXY      )),
     aFtpPortFT        (this, SVX_RES( FT_FTP_PORT       )),
@@ -370,6 +375,8 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aProxyModePN(RTL_CONSTASCII_USTRINGPARAM("ooInetProxyType")),
     aHttpProxyPN(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyName")),
     aHttpPortPN(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyPort")),
+    aHttpsProxyPN(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPSProxyName")),
+    aHttpsPortPN(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPSProxyPort")),
     aFtpProxyPN(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyName")),
     aFtpPortPN(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyPort")),
     aNoProxyDescPN(RTL_CONSTASCII_USTRINGPARAM("ooInetNoProxy"))
@@ -377,9 +384,11 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
     FreeResource();
 
     aHttpPortED.SetMaxTextLen(5);
+    aHttpsPortED.SetMaxTextLen(5);
     aFtpPortED.SetMaxTextLen(5);
     Link aLink = LINK( this, SvxProxyTabPage, LoseFocusHdl_Impl );
     aHttpPortED.SetLoseFocusHdl( aLink );
+    aHttpsPortED.SetLoseFocusHdl( aLink );
     aFtpPortED.SetLoseFocusHdl( aLink );
 
     aProxyModeLB.SetSelectHdl(LINK( this, SvxProxyTabPage, ProxyHdl_Impl ));
@@ -461,6 +470,16 @@ void SvxProxyTabPage::ReadConfigData_Impl()
             aHttpPortED.SetText( String::CreateFromInt32( nIntValue ));
         }
 
+        if( xNameAccess->getByName(aHttpsProxyPN) >>= aStringValue )
+        {
+            aHttpsProxyED.SetText( aStringValue );
+        }
+
+        if( xNameAccess->getByName(aHttpsPortPN) >>= nIntValue )
+        {
+            aHttpsPortED.SetText( String::CreateFromInt32( nIntValue ));
+        }
+
         if( xNameAccess->getByName(aFtpProxyPN) >>= aStringValue )
         {
             aFtpProxyED.SetText( aStringValue );
@@ -514,6 +533,16 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
             aHttpPortED.SetText( String::CreateFromInt32( nIntValue ));
         }
 
+        if( xPropertyState->getPropertyDefault(aHttpsProxyPN) >>= aStringValue )
+        {
+            aHttpsProxyED.SetText( aStringValue );
+        }
+
+        if( xPropertyState->getPropertyDefault(aHttpsPortPN) >>= nIntValue )
+        {
+            aHttpsPortED.SetText( String::CreateFromInt32( nIntValue ));
+        }
+
         if( xPropertyState->getPropertyDefault(aFtpProxyPN) >>= aStringValue )
         {
             aFtpProxyED.SetText( aStringValue );
@@ -557,6 +586,8 @@ void SvxProxyTabPage::RestoreConfigDefaults_Impl()
         xPropertyState->setPropertyToDefault(aProxyModePN);
         xPropertyState->setPropertyToDefault(aHttpProxyPN);
         xPropertyState->setPropertyToDefault(aHttpPortPN);
+        xPropertyState->setPropertyToDefault(aHttpsProxyPN);
+        xPropertyState->setPropertyToDefault(aHttpsPortPN);
         xPropertyState->setPropertyToDefault(aFtpProxyPN);
         xPropertyState->setPropertyToDefault(aFtpPortPN);
         xPropertyState->setPropertyToDefault(aNoProxyDescPN);
@@ -591,6 +622,8 @@ void SvxProxyTabPage::Reset(const SfxItemSet&)
     aProxyModeLB.SaveValue();
     aHttpProxyED.SaveValue();
     aHttpPortED.SaveValue();
+    aHttpsProxyED.SaveValue();
+    aHttpsPortED.SaveValue();
     aFtpProxyED.SaveValue();
     aFtpPortED.SaveValue();
     aNoProxyForED.SaveValue();
@@ -634,6 +667,20 @@ BOOL SvxProxyTabPage::FillItemSet(SfxItemSet& )
         {
             xPropertySet->setPropertyValue( aHttpPortPN,
                 makeAny(aHttpPortED.GetText().ToInt32()));
+            bModified = TRUE;
+        }
+
+        if(aHttpsProxyED.GetSavedValue() != aHttpsProxyED.GetText())
+        {
+            xPropertySet->setPropertyValue( aHttpsProxyPN,
+                makeAny(rtl::OUString(aHttpsProxyED.GetText())));
+            bModified = TRUE;
+        }
+
+        if ( aHttpsPortED.GetSavedValue() != aHttpsPortED.GetText() )
+        {
+            xPropertySet->setPropertyValue( aHttpsPortPN,
+                makeAny(aHttpsPortED.GetText().ToInt32()));
             bModified = TRUE;
         }
 
@@ -692,6 +739,9 @@ void SvxProxyTabPage::ArrangeControls_Impl()
     long nTemp = aHttpProxyFT.GetCtrlTextWidth( aHttpProxyFT.GetText() );
     if ( nTemp > nWidth )
         nWidth = nTemp;
+    nTemp = aHttpsProxyFT.GetCtrlTextWidth( aHttpsProxyFT.GetText() );
+    if ( nTemp > nWidth )
+        nWidth = nTemp;
     nTemp = aFtpProxyFT.GetCtrlTextWidth( aFtpProxyFT.GetText() );
     if ( nTemp > nWidth )
         nWidth = nTemp;
@@ -708,6 +758,7 @@ void SvxProxyTabPage::ArrangeControls_Impl()
 
         aProxyModeFT.SetSizePixel( aNewSize );
         aHttpProxyFT.SetSizePixel( aNewSize );
+        aHttpsProxyFT.SetSizePixel( aNewSize );
         aFtpProxyFT.SetSizePixel( aNewSize );
         aNoProxyForFT.SetSizePixel( aNewSize );
 
@@ -722,6 +773,8 @@ void SvxProxyTabPage::ArrangeControls_Impl()
 
         aNewPos.Y() = aHttpProxyED.GetPosPixel().Y();
         aHttpProxyED.SetPosSizePixel( aNewPos, aNewSize );
+        aNewPos.Y() = aHttpsProxyED.GetPosPixel().Y();
+        aHttpsProxyED.SetPosSizePixel( aNewPos, aNewSize );
         aNewPos.Y() = aFtpProxyED.GetPosPixel().Y();
         aFtpProxyED.SetPosSizePixel( aNewPos, aNewSize );
         aNewPos.Y() = aNoProxyForED.GetPosPixel().Y();
@@ -739,6 +792,11 @@ void SvxProxyTabPage::EnableControls_Impl(BOOL bEnable)
     aHttpProxyED.Enable(bEnable);
     aHttpPortFT.Enable(bEnable);
     aHttpPortED.Enable(bEnable);
+
+    aHttpsProxyFT.Enable(bEnable);
+    aHttpsProxyED.Enable(bEnable);
+    aHttpsPortFT.Enable(bEnable);
+    aHttpsPortED.Enable(bEnable);
 
     aFtpProxyFT.Enable(bEnable);
     aFtpProxyED.Enable(bEnable);
