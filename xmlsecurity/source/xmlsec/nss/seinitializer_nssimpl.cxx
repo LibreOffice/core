@@ -4,9 +4,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:27:46 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:07:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,9 @@
 #include "cryptohi.h"
 #include "certdb.h"
 #include "nss.h"
+#include "prerror.h"
+
+
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
@@ -100,9 +103,15 @@ bool nsscrypto_initialize( const char* token ) {
     if( !initialized ) {
         PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
 
-        if( NSS_Init( token ) != SECSuccess )
-            return false ;
+                if( NSS_InitReadWrite( token ) != SECSuccess )
+                {
+                    char * error = NULL;
 
+                    PR_GetErrorText(error);
+
+                    printf("%s",error);
+                    return false ;
+                }
         initialized = 1 ;
     }
 
