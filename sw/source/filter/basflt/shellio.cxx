@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:44:59 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 12:19:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -997,9 +997,14 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         }
     }
 
+    BOOL bLockedView(FALSE);
     SwEditShell* pESh = pOutDoc->GetEditShell();
     if( pESh )
+    {
+        bLockedView = pESh->IsViewLocked();
+        pESh->LockView( TRUE );    //lock visible section
         pESh->StartAllAction();
+    }
 
     BOOL bWasPurgeOle = pOutDoc->get(IDocumentSettingAccess::PURGE_OLE);
     pOutDoc->set(IDocumentSettingAccess::PURGE_OLE, false);
@@ -1015,8 +1020,12 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         nError = rxWriter->Write( *pPam, xStg, pRealFileName );
 
     pOutDoc->set(IDocumentSettingAccess::PURGE_OLE, bWasPurgeOle );
+
     if( pESh )
+    {
         pESh->EndAllAction();
+        pESh->LockView( bLockedView );
+    }
 
     // Falls nur zum Schreiben eine Selektion aufgespannt wurde, vor der
     // Rueckkehr den alten Crsr wieder herstellen.
