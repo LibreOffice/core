@@ -4,9 +4,9 @@
  *
  *  $RCSfile: handleinteractionrequest.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:28:27 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:07:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@ namespace ucbhelper {
     class InteractionSupplyAuthentication;
     class SimpleAuthenticationRequest;
     class SimpleInteractionRequest;
+    class SimpleCertificateValidationRequest;
 }
 
 /** Pass a <type scope="ucbhelper">SimpleInteractionRequest</type> to an
@@ -174,4 +175,56 @@ handleInteractionRequest(
 
 }
 
+/** Pass a <type scope="ucbhelper">SimpleCertificateValidationRequest</type> to an
+    <type scope="com::sun::star::task">XInteractionHandler</type>, and handle
+    (by throwing the request as an exception) those cases where an interaction
+    handler is either not available or does not handle the request.
+
+    @param rRequest
+    a <type scope="ucbhelper">SimpleCertificateValidationRequest</type>.  Must not be
+    <NULL/>.
+
+    @param rEnvironment
+    At the moment, only the
+    <type scope="com::sun::star::task">XInteractionHandler</type> part is
+    used.  May be <NULL/>.
+
+    @param bThrowOnAbort
+    determines what is done if the interaction handler selects a
+    <const scope="ucbhelper">CONTINUATION_ABORT</const> continuation:  If
+    <TRUE/>, an appropriate
+    <type scope="com::sun::star::ucb">CommandFailedException</type> is thrown.
+    If <FALSE/>, <const scope="ucbhelper">CONTINUATION_ABORT</const> is passed
+    to the caller of this function.
+
+   @returns
+    the constant (defined in ucbhelper/simpelinteractionrequest.hxx) that
+    corresponds to the continuation selected by the interaction handler.
+    The constant <const scope="ucbhelper">CONTINUATION_UNKNOWN</const> will
+    never be returned.
+
+    @throws
+    <ul>
+    <li>the exception specified by the request, if an interaction handler is
+    either not available or does not handle the request;</li>
+    <li>a <type scope="com::sun::star::ucb">CommandFailedException</type> if
+    the interaction handler selects a
+    <const scope="ucbhelper">CONTINUATION_ABORT</const> continuation and
+    <code>bThrowOnAbort</code> is <TRUE/>;</li>
+    <li>a <type scope="com::sun::star::uno">RuntimeException</type> if such an
+    exception is thrown by code called from within this function.</li>
+    </ul>
+ */
+namespace ucbhelper {
+
+sal_Int32
+handleInteractionRequest(
+    rtl::Reference< ucbhelper::SimpleCertificateValidationRequest > const & rRequest,
+    com::sun::star::uno::Reference<
+            com::sun::star::ucb::XCommandEnvironment > const &
+        rEnvironment,
+    bool bThrowOnAbort = true)
+    SAL_THROW((com::sun::star::uno::Exception));
+
+}
 #endif // INCLUDED_UCBHELPER_HANDLEINTERACTIONREQUEST_HXX
