@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wininetlayer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 07:47:28 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:14:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ void SAL_CALL WinInetLayer::readData(
         rtl::OUString aProxyBypassList = rtl::OUString::createFromAscii( lpi->lpszProxyBypass );
 
         // override default for ProxyType, which is "0" meaning "No proxies".
-        uno::Sequence<backend::PropertyInfo> aPropInfoList(6);
+        uno::Sequence<backend::PropertyInfo> aPropInfoList(8);
         sal_Int32 nProperties = 1;
 
         aPropInfoList[0].Name = rtl::OUString(
@@ -233,22 +233,28 @@ void SAL_CALL WinInetLayer::readData(
             ProxyEntry aTypeIndepProxy = FindProxyEntry( aProxyList, rtl::OUString());
             ProxyEntry aHttpProxy = FindProxyEntry( aProxyList, rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM( "http" ) ) );
+            ProxyEntry aHttpsProxy  = FindProxyEntry( aProxyList, rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM( "https" ) ) );
+
             ProxyEntry aFtpProxy  = FindProxyEntry( aProxyList, rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM( "ftp" ) ) );
 
             if( aTypeIndepProxy.Server.getLength() )
             {
                 aHttpProxy.Server = aTypeIndepProxy.Server;
+                aHttpsProxy.Server  = aTypeIndepProxy.Server;
                 aFtpProxy.Server  = aTypeIndepProxy.Server;
 
                 if( aTypeIndepProxy.Port.getLength() )
                 {
                     aHttpProxy.Port = aTypeIndepProxy.Port;
+                    aHttpsProxy.Port  = aTypeIndepProxy.Port;
                     aFtpProxy.Port  = aTypeIndepProxy.Port;
                 }
                 else
                 {
                     aFtpProxy.Port  = aHttpProxy.Port;
+                    aHttpsProxy.Port  = aHttpProxy.Port;
                 }
             }
 
@@ -272,6 +278,28 @@ void SAL_CALL WinInetLayer::readData(
                     RTL_CONSTASCII_USTRINGPARAM( "int" ) );
                 aPropInfoList[nProperties].Protected = sal_False;
                 aPropInfoList[nProperties++].Value = uno::makeAny( aHttpProxy.Port.toInt32() );
+            }
+
+            // https proxy name
+            if( aHttpsProxy.Server.getLength() > 0 )
+            {
+                aPropInfoList[nProperties].Name = rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings/ooInetHTTPSProxyName") );
+                aPropInfoList[nProperties].Type = rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "string" ) );
+                aPropInfoList[nProperties].Protected = sal_False;
+                aPropInfoList[nProperties++].Value = uno::makeAny( aHttpsProxy.Server );
+            }
+
+            // https proxy port
+            if( aHttpsProxy.Port.getLength() > 0 )
+            {
+                aPropInfoList[nProperties].Name = rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings/ooInetHTTPSProxyPort") );
+                aPropInfoList[nProperties].Type = rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "int" ) );
+                aPropInfoList[nProperties].Protected = sal_False;
+                aPropInfoList[nProperties++].Value = uno::makeAny( aHttpsProxy.Port.toInt32() );
             }
 
             // ftp proxy name
