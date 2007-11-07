@@ -31,6 +31,7 @@ mkdir: %_DEST%\inc%_EXT%\ucbhelper
 ..\inc\ucbhelper\simpleinteractionrequest.hxx %_DEST%\inc%_EXT%\ucbhelper\simpleinteractionrequest.hxx
 ..\inc\ucbhelper\simpleauthenticationrequest.hxx %_DEST%\inc%_EXT%\ucbhelper\simpleauthenticationrequest.hxx
 ..\inc\ucbhelper\simplenameclashresolverequest.hxx %_DEST%\inc%_EXT%\ucbhelper\simplenameclashresolverequest.hxx
+..\inc\ucbhelper\simplecertificatevalidationrequest.hxx %_DEST%\inc%_EXT%\ucbhelper\simplecertificatevalidationrequest.hxx
 ..\inc\ucbhelper\simpleioerrorrequest.hxx %_DEST%\inc%_EXT%\ucbhelper\simpleioerrorrequest.hxx
 ..\inc\ucbhelper\cancelcommandexecution.hxx %_DEST%\inc%_EXT%\ucbhelper\cancelcommandexecution.hxx
 ..\inc\ucbhelper\handleinteractionrequest.hxx %_DEST%\inc%_EXT%\ucbhelper\handleinteractionrequest.hxx
