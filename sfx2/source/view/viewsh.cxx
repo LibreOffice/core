@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:33:53 $
+ *  last change: $Author: rt $ $Date: 2007-11-07 10:44:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,71 @@ DBG_NAME(SfxViewShell)
 
 #define SfxViewShell
 #include "sfxslots.hxx"
+
+//=========================================================================
+
+static ::rtl::OUString RetrieveLabelFromCommand(
+    const ::rtl::OUString& rCommandURL,
+    const css::uno::Reference< css::frame::XFrame >& rFrame )
+{
+    static css::uno::WeakReference< frame::XModuleManager > s_xModuleManager;
+    static css::uno::WeakReference< container::XNameAccess > s_xNameAccess;
+
+    ::rtl::OUString aLabel;
+    css::uno::Reference< css::frame::XModuleManager > xModuleManager( s_xModuleManager );
+    css::uno::Reference< css::container::XNameAccess > xNameAccess( s_xNameAccess );
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR(
+        ::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW);
+
+    try
+    {
+        if ( !xModuleManager.is() )
+        {
+            xModuleManager = css::uno::Reference< css::frame::XModuleManager >(
+                xSMGR->createInstance(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ))),
+                    css::uno::UNO_QUERY_THROW );
+            s_xModuleManager = xModuleManager;
+        }
+
+        ::rtl::OUString aModuleIdentifier = xModuleManager->identify( rFrame );
+
+        if ( !xNameAccess.is() )
+        {
+            xNameAccess = css::uno::Reference< css::container::XNameAccess >(
+                xSMGR->createInstance(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.UICommandDescription" ))),
+                    css::uno::UNO_QUERY_THROW );
+            s_xNameAccess = xNameAccess;
+        }
+
+        css::uno::Any a = xNameAccess->getByName( aModuleIdentifier );
+        css::uno::Reference< css::container::XNameAccess > xUICommands;
+        a >>= xUICommands;
+
+        rtl::OUString aStr;
+        css::uno::Sequence< css::beans::PropertyValue > aPropSeq;
+
+        a = xUICommands->getByName( rCommandURL );
+        if ( a >>= aPropSeq )
+        {
+            for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+            {
+                if ( aPropSeq[i].Name.equalsAscii( "Label" ))
+                {
+                    aPropSeq[i].Value >>= aStr;
+                    break;
+                }
+            }
+            aLabel = aStr;
+        }
+    }
+    catch ( css::uno::Exception& )
+    {
+    }
+
+    return aLabel;
+}
 
 //=========================================================================
 
@@ -611,6 +676,29 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                 if ( bEnabled )
                 {
                     SfxPrinter *pPrinter = GetPrinter(FALSE);
+
+                    if ( SID_PRINTDOCDIRECT == nSID )
+                    {
+                        rtl::OUString aPrinterName;
+                        if ( pPrinter != NULL )
+                            aPrinterName = pPrinter->GetName();
+                        else
+                            aPrinterName = Printer::GetDefaultPrinterName();
+                        if ( aPrinterName.getLength() > 0 )
+                        {
+                            uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame()->GetFrameInterface() );
+
+                            ::rtl::OUStringBuffer aBuffer( 60 );
+                            aBuffer.append( RetrieveLabelFromCommand(
+                                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:PrintDefault" )),
+                                                xFrame ));
+                            aBuffer.appendAscii( " (" );
+                            aBuffer.append( aPrinterName );
+                            aBuffer.appendAscii( ")" );
+
+                            rSet.Put( SfxStringItem( SID_PRINTDOCDIRECT, aBuffer.makeStringAndClear() ) );
+                        }
+                    }
                     bEnabled = !pPrinter || !pPrinter->IsPrinting();
                 }
                 if ( !bEnabled )
