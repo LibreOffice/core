@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:14:18 $
+#   last change: $Author: rt $ $Date: 2007-11-07 09:58:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,10 @@ IDLFILES=\
     CertificateValidity.idl             \
     XCertificateExtension.idl           \
     XDocumentDigitalSignatures.idl	\
-    KeyUsage.idl
+    KeyUsage.idl			\
+    XCertificateContainer.idl		\
+    CertificateContainer.idl \
+    CertificateContainerStatus.idl
 
 # ------------------------------------------------------------------
 
