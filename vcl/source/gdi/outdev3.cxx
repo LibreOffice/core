@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.232 $
+ *  $Revision: 1.233 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:20:11 $
+ *  last change: $Author: rt $ $Date: 2007-11-08 15:44:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3042,7 +3042,9 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
             "sunbatang", "sundotum", "baekmukdotum", "gulim", "batang", "dotum", "",
             "hgmincholightj", "msunglightsc", "msunglighttc", "hymyeongjolightk", "",
             "tahoma", "timesnewroman", "lucidatypewriter", "lucidasans", "nimbussansl", "",
-            "shree", "mangal", "raavi", "shruti", "tunga", "latha", "",
+            "shree", "mangal", "",
+            "raavi", "shruti", "tunga", "",
+            "latha", "gautami", "kartika", "vrinda", "",
             "shayyalmt", "naskmt", "",
             "david", "nachlieli", "lucidagrande", "",
             "norasi", "angsanaupc", "",
@@ -3078,6 +3080,7 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
                 continue;
 
             // keep the best font of the glyph fallback sub-list
+            // TODO: check overlap with other glyph fallback fonts
             if( nBestQuality < pFallbackFont->GetMinQuality() )
             {
                 nBestQuality = pFallbackFont->GetMinQuality();
