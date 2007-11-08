@@ -14,10 +14,11 @@ BrOffice_wJRE                                                                   
 OpenOffice_Dev  unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro                              en-US   openofficedev
 BrOffice_Dev                                                                                      pt-BR   brofficedev
 OpenOffice_Dev_Archive   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro                     en-US   openofficedevarchive
-OpenOffice_SDK  unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro,unxlngi6,unxsols4,wntmsci10  en-US  sdkoo
-BrOffice_SDK                                                                                      pt-BR  sdkbro
-URE             unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro,unxlngi6,unxsols4,wntmsci10  en-US  ure
-OpenOfficeLanguagepack   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro   de|es|fr|it|nl|sv|zh-CN|zh-TW|ko|ja|ru|pl|hu|tr|ar   ooolanguagepack
+OpenOffice_SDK  unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro,unxlngi6,unxsols4,wntmsci10  en-US   sdkoo
+BrOffice_SDK                                                                                      pt-BR   sdkbro
+URE             unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro,unxlngi6,unxsols4,wntmsci10  en-US   ure
+OpenOfficeLanguagepack   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro                     de      ooolanguagepack
+OpenOfficeDevLanguagepack   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro   de|es|fr|it|nl|sv|zh-CN|zh-TW|ko|ja|ru|pl|hu|tr|ar   ooodevlanguagepack
 BrOfficeLanguagepack     unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro                     pt-BR   broolanguagepack
 OpenOfficeLanguagepack   unxlngi6,unxsols4,wntmsci10                                              de      ooolanguagepack
 
