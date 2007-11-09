@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSourceSetting.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:42:55 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:14:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,10 +76,8 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
                 ,const ::rtl::OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
-                ,OXMLDataSource& _rParent
                 ,OXMLDataSourceSetting* _pContainer) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
-    ,m_rParent(_rParent)
     ,m_pContainer(_pContainer)
     ,m_bIsList(sal_False)
 {
@@ -152,11 +150,11 @@ SvXMLImportContext* OXMLDataSourceSetting::CreateChildContext(
     {
         case XML_TOK_DATA_SOURCE_SETTING:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLDataSourceSetting( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_rParent);
+            pContext = new OXMLDataSourceSetting( GetOwnImport(), nPrefix, rLocalName,xAttrList);
             break;
         case XML_TOK_DATA_SOURCE_SETTING_VALUE:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLDataSourceSetting( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_rParent,this );
+            pContext = new OXMLDataSourceSetting( GetOwnImport(), nPrefix, rLocalName,xAttrList,this );
             break;
     }
 
@@ -178,7 +176,7 @@ void OXMLDataSourceSetting::EndElement()
         if ( !m_bIsList && ( m_aPropType.getTypeClass() == TypeClass_STRING ) && !m_aSetting.Value.hasValue() )
             m_aSetting.Value <<= ::rtl::OUString();
 
-        m_rParent.addInfo(m_aSetting);
+        GetOwnImport().addInfo(m_aSetting);
     }
 }
 // -----------------------------------------------------------------------------

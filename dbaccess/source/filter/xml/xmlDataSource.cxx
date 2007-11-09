@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSource.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:42:29 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:14:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,8 @@
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
 #endif
-
+#include "xmlConnectionData.hxx"
+#include "xmlJavaClassPath.hxx"
 namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
@@ -86,8 +87,9 @@ DBG_NAME(OXMLDataSource)
 
 OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 sal_uInt16 nPrfx, const ::rtl::OUString& _sLocalName,
-                const Reference< XAttributeList > & _xAttrList ) :
+                const Reference< XAttributeList > & _xAttrList,bool _bAsDataSource ) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
+    ,m_bAsDataSource(_bAsDataSource)
 {
     DBG_CTOR(OXMLDataSource,NULL);
 
@@ -98,8 +100,12 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
     Reference<XPropertySet> xDataSource = rImport.getDataSource();
 
     PropertyValue aProperty;
+    bool bParameter_name_substitution = false;
+    bool bFoundTableNameLengthLimited = false;
+    bool bFoundAppendTableAliasName = false;
+    bool bFoundSuppressVersionColumns = false;
 
-    sal_Int16 nLength = (xDataSource.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
+    const sal_Int16 nLength = (xDataSource.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
     static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
@@ -127,6 +133,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 try
                 {
                     xDataSource->setPropertyValue(PROPERTY_SUPPRESSVERSIONCL,makeAny(sValue == s_sTRUE ? sal_True : sal_False));
+                    bFoundSuppressVersionColumns = true;
                 }
                 catch(Exception)
                 {
@@ -150,6 +157,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
             case XML_TOK_IS_TABLE_NAME_LENGTH_LIMITED:
                 aProperty.Name = INFO_ALLOWLONGTABLENAMES;
                 aProperty.Value <<= (sValue == s_sTRUE ? sal_True : sal_False);
+                bFoundTableNameLengthLimited = true;
                 break;
             case XML_TOK_SYSTEM_DRIVER_SETTINGS:
                 aProperty.Name = INFO_ADDITIONALOPTIONS;
@@ -161,10 +169,12 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
             case XML_TOK_APPEND_TABLE_ALIAS_NAME:
                 aProperty.Name = INFO_APPEND_TABLE_ALIAS;
                 aProperty.Value <<= (sValue == s_sTRUE ? sal_True : sal_False);
+                bFoundAppendTableAliasName = true;
                 break;
             case XML_TOK_PARAMETER_NAME_SUBSTITUTION:
                 aProperty.Name = INFO_PARAMETERNAMESUBST;
                 aProperty.Value <<= (sValue == s_sTRUE ? sal_True : sal_False);
+                bParameter_name_substitution = true;
                 break;
             case XML_TOK_IGNORE_DRIVER_PRIVILEGES:
                 aProperty.Name = INFO_IGNOREDRIVER_PRIV;
@@ -197,7 +207,39 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
         {
             if ( !aProperty.Value.hasValue() )
                 aProperty.Value <<= sValue;
-            addInfo(aProperty);
+            rImport.addInfo(aProperty);
+        }
+    }
+    if ( rImport.isNewFormat() )
+    {
+        if ( !bFoundTableNameLengthLimited )
+        {
+            aProperty.Name = INFO_ALLOWLONGTABLENAMES;
+            aProperty.Value <<= sal_True;
+            rImport.addInfo(aProperty);
+        }
+        if ( !bParameter_name_substitution )
+        {
+            aProperty.Name = INFO_PARAMETERNAMESUBST;
+            aProperty.Value <<= sal_True;
+            rImport.addInfo(aProperty);
+        }
+        if ( !bFoundAppendTableAliasName )
+        {
+            aProperty.Name = INFO_APPEND_TABLE_ALIAS;
+            aProperty.Value <<= sal_True;
+            rImport.addInfo(aProperty);
+        }
+        if ( !bFoundSuppressVersionColumns )
+        {
+            try
+            {
+                xDataSource->setPropertyValue(PROPERTY_SUPPRESSVERSIONCL,makeAny(sal_True));
+            }
+            catch(Exception)
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
     }
 }
@@ -233,12 +275,29 @@ SvXMLImportContext* OXMLDataSource::CreateChildContext(
         case XML_TOK_AUTO_INCREMENT:
         case XML_TOK_DELIMITER:
         case XML_TOK_FONT_CHARSET:
+        case XML_TOK_CHARACTER_SET:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLDataSourceInfo( GetOwnImport(), nPrefix, rLocalName,xAttrList,*this );
+            pContext = new OXMLDataSourceInfo( GetOwnImport(), nPrefix, rLocalName,xAttrList);
             break;
         case XML_TOK_DATA_SOURCE_SETTINGS:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLDataSourceSettings( GetOwnImport(), nPrefix, rLocalName, *this );
+            pContext = new OXMLDataSourceSettings( GetOwnImport(), nPrefix, rLocalName);
+            break;
+        case XML_TOK_CONNECTION_DATA:
+            GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            pContext = new OXMLConnectionData( GetOwnImport(), nPrefix, rLocalName);
+            break;
+        case XML_TOK_DRIVER_SETTINGS:
+            GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            pContext = new OXMLDataSource( GetOwnImport(), nPrefix, rLocalName, xAttrList,false);
+            break;
+        case XML_TOK_JAVA_CLASSPATH:
+            GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            pContext = new OXMLJavaClassPath( GetOwnImport(), nPrefix, rLocalName,xAttrList );
+            break;
+        case XML_TOK_APPLICATION_CONNECTION_SETTINGS:
+            GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            pContext = new OXMLDataSource( GetOwnImport(), nPrefix, rLocalName, xAttrList,false);
             break;
     }
 
@@ -253,21 +312,6 @@ ODBFilter& OXMLDataSource::GetOwnImport()
     return static_cast<ODBFilter&>(GetImport());
 }
 // -----------------------------------------------------------------------------
-void OXMLDataSource::EndElement()
-{
-    Reference<XPropertySet> xDataSource(GetOwnImport().getDataSource());
-    if ( !m_aInfoSequence.empty() && xDataSource.is() )
-    {
-        try
-        {
-            xDataSource->setPropertyValue(PROPERTY_INFO,makeAny(Sequence<PropertyValue>(&(*m_aInfoSequence.begin()),m_aInfoSequence.size())));
-        }
-        catch(Exception)
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-    }
-}
 
 //----------------------------------------------------------------------------
 } // namespace dbaxml
