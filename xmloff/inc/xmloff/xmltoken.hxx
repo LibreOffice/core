@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:32:01 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:10:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2958,6 +2958,25 @@ namespace xmloff { namespace token {
         XML_LABEL_SEPARATOR,
         XML_DEPENDENCY,
         XML_NAV_ORDER,
+        // db odf 12
+        XML_TABLE_REPRESENTATIONS,
+        XML_TABLE_REPRESENTATION,
+        XML_SCHEMA_DEFINITION,
+        XML_CONNECTION_DATA,
+        XML_DATABASE_DESCRIPTION,
+        XML_COMPOUND_DATABASE,
+        XML_FILE_BASED_DATABASE,
+        XML_SERVER_DATABASE,
+        XML_MEDIA_TYPE,
+        XML_HOSTNAME,
+        XML_PORT,
+        XML_LOCAL_SOCKET,
+        XML_USE_SYSTEM_USER,
+        XML_DRIVER_SETTINGS,
+        XML_JAVA_CLASSPATH,
+        XML_CHARACTER_SET,
+        XML_APPLICATION_CONNECTION_SETTINGS,
+        XML_TABLE_INCLUDE_FILTER,
         XML_TOKEN_END
     };
 
