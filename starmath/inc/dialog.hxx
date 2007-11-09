@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:53:46 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:52:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,24 +103,6 @@
 
 const XubString GetFontStyleName(const Font &rFont);
 void            SetFontStyle(const XubString &rStyleName, Font &rFont);
-
-/**************************************************************************/
-
-class SmAboutDialog : public ModalDialog
-{
-    FixedText   aFixedText1;
-    FixedText   aFixedText2;
-    FixedText   aFixedText3;
-    FixedText   aFixedText4;
-    FixedText   aFixedText5;
-    FixedText   aFixedText6;
-    FixedText   aReleaseText;
-    FixedBitmap aFixedBitmap1;
-    OKButton    aOKButton1;
-
-public:
-    SmAboutDialog(Window *pParent, BOOL bFreeRes = TRUE);
-};
 
 /**************************************************************************/
 
