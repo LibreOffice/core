@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 15:20:02 $
+#   last change: $Author: rt $ $Date: 2007-11-09 11:40:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1339,6 +1339,28 @@ sub make_prototypefile_relocatable
 }
 
 #########################################################################
+# Replacing the variables in the Solaris patch shell scripts.
+# Taking care, that multiple slashes are not always removed.
+#########################################################################
+
+sub replace_variables_in_shellscripts_for_patch
+{
+    my ($scriptfile, $scriptfilename, $oldstring, $newstring) = @_;
+
+    for ( my $i = 0; $i <= $#{$scriptfile}; $i++ )
+    {
+        if ( ${$scriptfile}[$i] =~ /\Q$oldstring\E/ )
+        {
+            my $oldline = ${$scriptfile}[$i];
+            if (( $oldstring eq "PRODUCTDIRECTORYNAME" ) && ( $newstring eq "" )) { $oldstring = $oldstring . "/"; }
+            ${$scriptfile}[$i] =~ s/\Q$oldstring\E/$newstring/g;
+            my $infoline = "Info: Substituting in $scriptfilename $oldstring by $newstring\n";
+            push(@installer::globals::logfileinfo, $infoline);
+        }
+    }
+}
+
+#########################################################################
 # Replacing the variables in the shell scripts or in the epm list file
 # Linux: spec file
 # Solaris: preinstall, postinstall, preremove, postremove
@@ -1603,9 +1625,9 @@ sub add_scripts_into_prototypefile
 
             # Replacing variables
             my $oldstring = "\$\{OXTFILENAME\}";
-            replace_variables_in_shellscripts($scriptfile, $destpath, $oldstring, $extensionname);
+            replace_variables_in_shellscripts_for_patch($scriptfile, $destpath, $oldstring, $extensionname);
             $oldstring = "PRODUCTDIRECTORYNAME";
-            replace_variables_in_shellscripts($scriptfile, $destpath, $oldstring, $staticpath);
+            replace_variables_in_shellscripts_for_patch($scriptfile, $destpath, $oldstring, $staticpath);
 
             # Saving file
             installer::files::save_file($destpath, $scriptfile);
