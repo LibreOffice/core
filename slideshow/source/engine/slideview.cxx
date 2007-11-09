@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:46:46 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:16:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,14 +233,17 @@ void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
 #if defined(VERBOSE) && defined(DBG_UTIL)
     ::cppcanvas::CanvasSharedPtr pCliplessCanvas( pCanvas->clone() );
     pCliplessCanvas->setClip();
-    ::cppcanvas::PolyPolygonSharedPtr pPolyPoly2(
-        ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( pCliplessCanvas,
-                                                                      pCanvas->getClip() ) );
 
-    if( pPolyPoly2 )
+    if( pCanvas->getClip() )
     {
-        pPolyPoly2->setRGBALineColor( 0x008000FFU );
-        pPolyPoly2->draw();
+        ::cppcanvas::PolyPolygonSharedPtr pPolyPoly2(
+            ::cppcanvas::BaseGfxFactory::getInstance().createPolyPolygon( pCliplessCanvas,
+                                                                          *(pCanvas->getClip()) ));
+        if( pPolyPoly2 )
+        {
+            pPolyPoly2->setRGBALineColor( 0x008000FFU );
+            pPolyPoly2->draw();
+        }
     }
 #endif
 }
