@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:29:59 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:20:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@ public:
     SalFrame*       mpParent;
     XLIB_Window     maPrimary;
     XLIB_Window     maSecondary;
+    Colormap        maColormap;
     SalClipRegion   maClipRegion;
     BOOL            mbVisible;
 
