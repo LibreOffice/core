@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simpleguesser.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-06-22 08:32:43 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:53:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <vector>
 #include <guess.hxx>
 
-#define MAX_STRING_LENGTH_TO_ANALYSE 100
+#define MAX_STRING_LENGTH_TO_ANALYSE 200
 
 using namespace std;
 
