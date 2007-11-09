@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_spritecanvas.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 10:14:15 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 11:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,15 +93,16 @@ namespace cairocanvas
         sal_Bool bIsFullscreen( sal_False );
         aArguments[3] >>= bIsFullscreen;
 
-        // TODO(Q2): This now works for Solaris, but still warns for gcc
-        Window* pOutputWindow = (Window*) *reinterpret_cast<const sal_Int64*>(aArguments[0].getValue());
+        sal_Int64 nWindowPtr = 0;
+    aArguments[0] >>= nWindowPtr;
+    Window* pOutputWindow = reinterpret_cast<Window*>(nWindowPtr);
+
+        CHECK_AND_THROW( pOutputWindow != NULL,
+                         "SpriteCanvas::SpriteCanvas: invalid Window pointer" );
 
         Size aPixelSize( pOutputWindow->GetOutputSizePixel() );
         const ::basegfx::B2ISize aSize( aPixelSize.Width(),
                                         aPixelSize.Height() );
-
-        CHECK_AND_THROW( pOutputWindow != NULL,
-                         "SpriteCanvas::initialize: invalid Window pointer" );
 
         // setup helper
         maDeviceHelper.init( *pOutputWindow,

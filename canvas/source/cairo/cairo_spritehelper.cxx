@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_spritehelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:21:52 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 11:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ namespace cairocanvas
     const ::basegfx::B2DHomMatrix aTransform( getTransformation() );
 
     if( isActive() && !::basegfx::fTools::equalZero( fAlpha ) ) {
-        OSL_TRACE ("CanvasCustomSprite::redraw called\n");
+        OSL_TRACE ("CanvasCustomSprite::redraw called");
         if( pCairo ) {
         basegfx::B2DVector aSize = getSizePixel();
         cairo_save( pCairo );
@@ -165,7 +165,7 @@ namespace cairocanvas
             doPolyPolygonImplementation( aClipPoly, Clip, pCairo );
         }
 
-        OSL_TRACE ("aSize %f x %f\n", aSize.getX(), aSize.getY() );
+        OSL_TRACE ("aSize %f x %f position: %f,%f", aSize.getX(), aSize.getY(), fX, fY );
         cairo_rectangle( pCairo, 0, 0, floor( aSize.getX() ), floor( aSize.getY() ) );
         cairo_clip( pCairo );
         cairo_set_matrix( pCairo, &aOrigMatrix );
