@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:39:47 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:13:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,10 +110,16 @@ namespace cairocanvas
         }
     }
 
-    void CanvasHelper::init( const ::basegfx::B2ISize& /*rSize*/,
+    void CanvasHelper::init( const ::basegfx::B2ISize& rSize,
                              SpriteCanvas&             rDevice )
     {
+        maSize = rSize;
         mpDevice = &rDevice;
+    }
+
+    void CanvasHelper::setSize( const ::basegfx::B2ISize& rSize )
+    {
+        maSize = rSize;
     }
 
     void CanvasHelper::setSurface( Surface* pSurface, bool bHasAlpha, SurfaceProvider* pSurfaceProvider )
@@ -251,8 +257,7 @@ namespace cairocanvas
             cairo_set_operator( mpCairo, CAIRO_OPERATOR_SOURCE );
             cairo_set_source_rgba( mpCairo, 0, 0, 0, 0 );
 
-            const ::basegfx::B2ISize& rSize( mpDevice->getSizePixel() );
-            cairo_rectangle( mpCairo, 0, 0, rSize.getX(), rSize.getY() );
+            cairo_rectangle( mpCairo, 0, 0, maSize.getX(), maSize.getY() );
             cairo_fill( mpCairo );
 
             cairo_restore( mpCairo );
@@ -1216,11 +1221,9 @@ namespace cairocanvas
                 geometry::IntegerSize2D aBitmapSize = rSize;
 
         if( mpCairo ) {
-            const ::basegfx::B2ISize& aSize = mpDevice->getSizePixel();
-
             cairo_save( mpCairo );
 
-            cairo_rectangle( mpCairo, 0, 0, aSize.getX(), aSize.getY() );
+            cairo_rectangle( mpCairo, 0, 0, maSize.getX(), maSize.getY() );
             cairo_clip( mpCairo );
 
             useStates( viewState, renderState, true );
@@ -1278,8 +1281,8 @@ namespace cairocanvas
 
                 // in case the bitmap doesn't have alpha and covers whole area
                 // we try to change surface to plain rgb
-                OSL_TRACE ("chance to change surface to rgb, %f, %f, %f x %f (%d x %d)", x, y, width, height, aSize.getX(), aSize.getY() );
-                if( x <= 0 && y <= 0 && x + width >= aSize.getX() && y + height >= aSize.getY() )
+                OSL_TRACE ("chance to change surface to rgb, %f, %f, %f x %f (%d x %d)", x, y, width, height, maSize.getX(), maSize.getY() );
+                if( x <= 0 && y <= 0 && x + width >= maSize.getX() && y + height >= maSize.getY() )
                 {
                     OSL_TRACE ("trying to change surface to rgb");
                     if( mpSurfaceProvider ) {
@@ -1377,7 +1380,7 @@ namespace cairocanvas
         if( !mpDevice )
             geometry::IntegerSize2D(1, 1); // we're disposed
 
-        return ::basegfx::unotools::integerSize2DFromB2ISize( mpDevice->getSizePixel() );
+        return ::basegfx::unotools::integerSize2DFromB2ISize( maSize );
     }
 
     uno::Reference< rendering::XBitmap > CanvasHelper::getScaledBitmap( const geometry::RealSize2D& newSize,
@@ -1402,10 +1405,42 @@ namespace cairocanvas
         return uno::Reference< rendering::XBitmap >();
     }
 
-    uno::Sequence< sal_Int8 > CanvasHelper::getData( rendering::IntegerBitmapLayout&     /*bitmapLayout*/,
-                                                     const geometry::IntegerRectangle2D& /*rect*/ )
+    uno::Sequence< sal_Int8 > CanvasHelper::getData( rendering::IntegerBitmapLayout&     aLayout,
+                                                     const geometry::IntegerRectangle2D& rect )
     {
-        // TODO
+        if( mpCairo ) {
+            const sal_Int32 nWidth( rect.X2 - rect.X1 );
+            const sal_Int32 nHeight( rect.Y2 - rect.Y1 );
+            uno::Sequence< sal_Int8 > aRes( 4*nWidth*nHeight );
+            sal_Int8* pData = aRes.getArray();
+            ::cairo::cairo_surface_t* pImageSurface = cairo_image_surface_create_for_data( (unsigned char *) pData,
+                                                                                            CAIRO_FORMAT_ARGB32,
+                                                                                            nWidth, nHeight, 4*nWidth );
+            ::cairo::cairo_t* pCairo = cairo_create( pImageSurface );
+            cairo_set_source_surface( pCairo, mpSurface->mpSurface, -rect.X1, -rect.Y1);
+            cairo_paint( pCairo );
+            cairo_destroy( pCairo );
+            cairo_surface_destroy( pImageSurface );
+
+            aLayout.ScanLines = nHeight;
+            aLayout.ScanLineBytes = nWidth*4;
+            aLayout.ScanLineStride = aLayout.ScanLineBytes;
+            aLayout.PlaneStride = 0;
+            aLayout.ColorSpace.set( mpDevice );
+            aLayout.NumComponents = 4;
+            aLayout.ComponentMasks.realloc(4);
+            aLayout.ComponentMasks[0] = 0x00FF0000;
+            aLayout.ComponentMasks[1] = 0x0000FF00;
+            aLayout.ComponentMasks[2] = 0x000000FF;
+            aLayout.ComponentMasks[3] = 0xFF000000;
+            aLayout.Palette.clear();
+            aLayout.Endianness = rendering::Endianness::LITTLE;
+            aLayout.Format = rendering::IntegerBitmapFormat::CHUNKY_32BIT;
+            aLayout.IsMsbFirst = sal_False;
+
+            return aRes;
+        }
+
         return uno::Sequence< sal_Int8 >();
     }
 
@@ -1440,8 +1475,8 @@ namespace cairocanvas
 
         const geometry::IntegerSize2D& rBmpSize( getSize() );
 
-        aLayout.ScanLines = rBmpSize.Width;
-        aLayout.ScanLineBytes = rBmpSize.Height * 4;
+        aLayout.ScanLines = rBmpSize.Height;
+        aLayout.ScanLineBytes = rBmpSize.Width * 4;
         aLayout.ScanLineStride = aLayout.ScanLineBytes;
         aLayout.PlaneStride = 0;
         aLayout.ColorSpace.set( mpDevice );
@@ -1475,11 +1510,9 @@ namespace cairocanvas
         OSL_TRACE("CanvasHelper::repaint");
 
         if( mpCairo ) {
-            const ::basegfx::B2ISize& aSize = mpDevice->getSizePixel();
-
             cairo_save( mpCairo );
 
-            cairo_rectangle( mpCairo, 0, 0, aSize.getX(), aSize.getY() );
+            cairo_rectangle( mpCairo, 0, 0, maSize.getX(), maSize.getY() );
             cairo_clip( mpCairo );
 
             useStates( viewState, renderState, true );
