@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:34:55 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:10:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2959,6 +2959,26 @@ namespace xmloff { namespace token {
         TOKEN( "dependency",             XML_DEPENDENCY ),
 
         TOKEN( "nav-order",             XML_NAV_ORDER ),
+
+        // db odf 12
+        TOKEN( "table-representations", XML_TABLE_REPRESENTATIONS ),
+        TOKEN( "table-representation",  XML_TABLE_REPRESENTATION ),
+        TOKEN( "schema-definition",     XML_SCHEMA_DEFINITION ),
+        TOKEN( "connection-data",       XML_CONNECTION_DATA ),
+        TOKEN( "database-description",  XML_DATABASE_DESCRIPTION ),
+        TOKEN( "compound-database",     XML_COMPOUND_DATABASE ),
+        TOKEN( "file-based-database",   XML_FILE_BASED_DATABASE ),
+        TOKEN( "server-database",       XML_SERVER_DATABASE ),
+        TOKEN( "media-type",            XML_MEDIA_TYPE ),
+        TOKEN( "hostname",              XML_HOSTNAME ),
+        TOKEN( "port",                  XML_PORT ),
+        TOKEN( "local-socket",          XML_LOCAL_SOCKET ),
+        TOKEN( "use-system-user",       XML_USE_SYSTEM_USER ),
+        TOKEN( "driver-settings",       XML_DRIVER_SETTINGS ),
+        TOKEN( "java-classpath",        XML_JAVA_CLASSPATH ),
+        TOKEN( "character-set",         XML_CHARACTER_SET ),
+        TOKEN( "application-connection-settings",         XML_APPLICATION_CONNECTION_SETTINGS ),
+        TOKEN( "table-include-filter",         XML_TABLE_INCLUDE_FILTER ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
