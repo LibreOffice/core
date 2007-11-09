@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:41:50 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:12:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,7 +254,7 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
         if ( xProp.is() )
         {
             ::rtl::OUString sMediaType;
-            xProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ) >>= sMediaType;
+            xProp->getPropertyValue( INFO_MEDIATYPE ) >>= sMediaType;
             if ( sMediaType.equalsAscii(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII) )
                 return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBase"));
             ::comphelper::disposeComponent(xProp);
