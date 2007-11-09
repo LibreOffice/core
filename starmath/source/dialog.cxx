@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:53:58 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,32 +226,6 @@ void SetFontStyle(const XubString &rStyleName, Font &rFont)
 
 
 /**************************************************************************/
-
-SmAboutDialog::SmAboutDialog(Window *pParent, BOOL bFreeRes) :
-    ModalDialog  (pParent, SmResId(RID_DEFAULTABOUT)),
-    aFixedText1  (this, SmResId(1)),
-    aFixedText2  (this, SmResId(2)),
-    aFixedText3  (this, SmResId(3)),
-    aFixedText4  (this, SmResId(4)),
-    aFixedText5  (this, SmResId(5)),
-    aFixedText6  (this, SmResId(6)),
-    aReleaseText (this, SmResId(7)),
-    aFixedBitmap1(this, SmResId(1)),
-    aOKButton1   (this, SmResId(1))
-{
-    if (bFreeRes)
-        FreeResource();
-
-#ifndef PRODUCT
-    aReleaseText.Show();
-#else
-    aReleaseText.Hide();
-#endif
-
-}
-
-/**************************************************************************/
-
 
 IMPL_LINK_INLINE_START( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, EMPTYARG/*pButton*/ )
 {
@@ -1471,8 +1445,9 @@ void SmSymbolDialog::FillSymbolSets(BOOL bDeleteText)
 }
 
 
-IMPL_LINK( SmSymbolDialog, SymbolSetChangeHdl, ListBox *, EMPTYARG /*pListBox*/ )
+IMPL_LINK( SmSymbolDialog, SymbolSetChangeHdl, ListBox *, EMPTYARG pListBox )
 {
+    (void) pListBox;
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(pListBox == &aSymbolSets, "Sm : falsches Argument");
 #endif
@@ -1482,8 +1457,9 @@ IMPL_LINK( SmSymbolDialog, SymbolSetChangeHdl, ListBox *, EMPTYARG /*pListBox*/ 
 }
 
 
-IMPL_LINK( SmSymbolDialog, SymbolChangeHdl, SmShowSymbolSet *, EMPTYARG /*pShowSymbolSet*/ )
+IMPL_LINK( SmSymbolDialog, SymbolChangeHdl, SmShowSymbolSet *, EMPTYARG pShowSymbolSet )
 {
+    (void) pShowSymbolSet;
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(pShowSymbolSet == &aSymbolSetDisplay, "Sm : falsches Argument");
 #endif
@@ -1492,8 +1468,9 @@ IMPL_LINK( SmSymbolDialog, SymbolChangeHdl, SmShowSymbolSet *, EMPTYARG /*pShowS
     return 0;
 }
 
-IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, EMPTYARG /*pButton*/ )
+IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, EMPTYARG pButton )
 {
+    (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(pButton == &aEditBtn, "Sm : falsches Argument");
 #endif
@@ -1532,8 +1509,9 @@ IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, EMPTYARG /*pButton*/ )
 }
 
 
-IMPL_LINK( SmSymbolDialog, SymbolDblClickHdl, SmShowSymbolSet *, EMPTYARG /*pShowSymbolSet*/ )
+IMPL_LINK( SmSymbolDialog, SymbolDblClickHdl, SmShowSymbolSet *, EMPTYARG pShowSymbolSet )
 {
+    (void) pShowSymbolSet;
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(pShowSymbolSet == &aSymbolSetDisplay, "Sm : falsches Argument");
 #endif
@@ -1544,8 +1522,9 @@ IMPL_LINK( SmSymbolDialog, SymbolDblClickHdl, SmShowSymbolSet *, EMPTYARG /*pSho
 }
 
 
-IMPL_LINK( SmSymbolDialog, GetClickHdl, Button *, EMPTYARG /*pButton*/ )
+IMPL_LINK( SmSymbolDialog, GetClickHdl, Button *, EMPTYARG pButton )
 {
+    (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(pButton == &aGetBtn, "Sm : falscher Button");
 #endif
@@ -1565,8 +1544,9 @@ IMPL_LINK( SmSymbolDialog, GetClickHdl, Button *, EMPTYARG /*pButton*/ )
 }
 
 
-IMPL_LINK_INLINE_START( SmSymbolDialog, CloseClickHdl, Button *, EMPTYARG /*pButton*/ )
+IMPL_LINK_INLINE_START( SmSymbolDialog, CloseClickHdl, Button *, EMPTYARG pButton )
 {
+    (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(pButton == &aCloseBtn, "Sm : falscher Button");
 #endif
@@ -1850,8 +1830,9 @@ SmSym * SmSymDefineDialog::GetSymbol(const ComboBox &rComboBox)
 }
 
 
-IMPL_LINK( SmSymDefineDialog, OldSymbolChangeHdl, ComboBox *, EMPTYARG /*pComboBox*/ )
+IMPL_LINK( SmSymDefineDialog, OldSymbolChangeHdl, ComboBox *, EMPTYARG pComboBox )
 {
+    (void) pComboBox;
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(pComboBox == &aOldSymbols, "Sm : falsches Argument");
 #endif
@@ -1860,8 +1841,9 @@ IMPL_LINK( SmSymDefineDialog, OldSymbolChangeHdl, ComboBox *, EMPTYARG /*pComboB
 }
 
 
-IMPL_LINK( SmSymDefineDialog, OldSymbolSetChangeHdl, ComboBox *, EMPTYARG /*pComboBox*/ )
+IMPL_LINK( SmSymDefineDialog, OldSymbolSetChangeHdl, ComboBox *, EMPTYARG pComboBox )
 {
+    (void) pComboBox;
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(pComboBox == &aOldSymbolSets, "Sm : falsches Argument");
 #endif
@@ -1903,8 +1885,9 @@ IMPL_LINK( SmSymDefineDialog, ModifyHdl, ComboBox *, pComboBox )
 }
 
 
-IMPL_LINK( SmSymDefineDialog, FontChangeHdl, ListBox *, EMPTYARG /*pListBox*/ )
+IMPL_LINK( SmSymDefineDialog, FontChangeHdl, ListBox *, EMPTYARG pListBox )
 {
+    (void) pListBox;
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(pListBox == &aFonts, "Sm : falsches Argument");
 #endif
@@ -1914,8 +1897,9 @@ IMPL_LINK( SmSymDefineDialog, FontChangeHdl, ListBox *, EMPTYARG /*pListBox*/ )
 }
 
 
-IMPL_LINK( SmSymDefineDialog, SubsetChangeHdl, ListBox *, EMPTYARG /*pListBox*/ )
+IMPL_LINK( SmSymDefineDialog, SubsetChangeHdl, ListBox *, EMPTYARG pListBox )
 {
+    (void) pListBox;
     USHORT nPos = aFontsSubsetLB.GetSelectEntryPos();
     if (LISTBOX_ENTRY_NOTFOUND != nPos)
     {
@@ -1929,8 +1913,9 @@ IMPL_LINK( SmSymDefineDialog, SubsetChangeHdl, ListBox *, EMPTYARG /*pListBox*/ 
 }
 
 
-IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox *, EMPTYARG /*pComboBox*/ )
+IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox *, EMPTYARG pComboBox )
 {
+    (void) pComboBox;
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(pComboBox == &aStyles, "Sm : falsches Argument");
 #endif
@@ -1963,8 +1948,9 @@ IMPL_LINK( SmSymDefineDialog, CharHighlightHdl, Control *, EMPTYARG )
 }
 
 
-IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, EMPTYARG /*pButton*/ )
+IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, EMPTYARG pButton )
 {
+    (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(pButton == &aAddBtn, "Sm : falsches Argument");
     DBG_ASSERT(aAddBtn.IsEnabled(), "Sm : Voraussetzungen erfuellt ??");
@@ -2005,8 +1991,9 @@ IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, EMPTYARG /*pButton*/ )
 }
 
 
-IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, EMPTYARG /*pButton*/ )
+IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, EMPTYARG pButton )
 {
+    (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(pButton == &aChangeBtn, "Sm : falsches Argument");
     DBG_ASSERT(aChangeBtn.IsEnabled(), "Sm : Voraussetzungen erfuellt ??");
@@ -2074,8 +2061,9 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, EMPTYARG /*pButton*/ )
 }
 
 
-IMPL_LINK( SmSymDefineDialog, DeleteClickHdl, Button *, EMPTYARG /*pButton*/ )
+IMPL_LINK( SmSymDefineDialog, DeleteClickHdl, Button *, EMPTYARG pButton )
 {
+    (void) pButton;
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(pButton == &aDeleteBtn, "Sm : falsches Argument");
     DBG_ASSERT(aDeleteBtn.IsEnabled(), "Sm : Voraussetzungen erfuellt ??");
