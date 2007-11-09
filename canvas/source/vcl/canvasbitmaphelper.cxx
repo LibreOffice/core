@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasbitmaphelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:25:12 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:14:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,13 +137,31 @@ namespace vclcanvas
             new CanvasBitmap( aRes, mpDevice ) );
     }
 
-    uno::Sequence< sal_Int8 > CanvasBitmapHelper::getData( rendering::IntegerBitmapLayout&      ,
+    uno::Sequence< sal_Int8 > CanvasBitmapHelper::getData( rendering::IntegerBitmapLayout&      aLayout,
                                                            const geometry::IntegerRectangle2D&  rect )
     {
         RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::getData()" );
 
         if( !mpBackBuffer )
             return uno::Sequence< sal_Int8 >(); // we're disposed
+
+        const sal_Int32 nWidth( rect.X2 - rect.X1 );
+        const sal_Int32 nHeight( rect.Y2 - rect.Y1 );
+        aLayout.ScanLines = nHeight;
+        aLayout.ScanLineBytes = nWidth*4;
+        aLayout.ScanLineStride = aLayout.ScanLineBytes;
+        aLayout.PlaneStride = 0;
+        aLayout.ColorSpace.set( mpDevice );
+        aLayout.NumComponents = 4;
+        aLayout.ComponentMasks.realloc(4);
+        aLayout.ComponentMasks[0] = 0x00FF0000;
+        aLayout.ComponentMasks[1] = 0x0000FF00;
+        aLayout.ComponentMasks[2] = 0x000000FF;
+        aLayout.ComponentMasks[3] = 0xFF000000;
+        aLayout.Palette.clear();
+        aLayout.Endianness = rendering::Endianness::LITTLE;
+        aLayout.Format = rendering::IntegerBitmapFormat::CHUNKY_32BIT;
+        aLayout.IsMsbFirst = sal_False;
 
         Bitmap aBitmap( mpBackBuffer->getBitmapReference().GetBitmap() );
         Bitmap aAlpha( mpBackBuffer->getBitmapReference().GetAlpha().GetBitmap() );
