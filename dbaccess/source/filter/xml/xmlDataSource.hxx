@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSource.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:02:31 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:14:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,31 +48,20 @@ namespace dbaxml
     class ODBFilter;
     class OXMLDataSource : public SvXMLImportContext
     {
-        typedef ::std::vector< ::com::sun::star::beans::PropertyValue> TInfoSequence;
-        TInfoSequence m_aInfoSequence;
+        bool        m_bAsDataSource;
 
         ODBFilter& GetOwnImport();
     public:
 
         OXMLDataSource( ODBFilter& rImport, sal_uInt16 nPrfx,
                     const ::rtl::OUString& rLName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+                    bool _bAsDataSource = true);
         virtual ~OXMLDataSource();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const ::rtl::OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
-
-        virtual void EndElement();
-
-        /** add a Info to the sequence which will be appened to the data source
-            @param  _rInfo
-                The property to append.
-        */
-        inline void addInfo(const ::com::sun::star::beans::PropertyValue& _rInfo)
-        {
-            m_aInfoSequence.push_back(_rInfo);
-        }
     };
 // -----------------------------------------------------------------------------
 } // namespace dbaxml

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSourceInfo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:03:08 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:14:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,17 +42,14 @@
 namespace dbaxml
 {
     class ODBFilter;
-    class OXMLDataSource;
     class OXMLDataSourceInfo : public SvXMLImportContext
     {
-        OXMLDataSource& m_rParent;
         ODBFilter& GetOwnImport();
     public:
 
         OXMLDataSourceInfo( ODBFilter& rImport, sal_uInt16 nPrfx,
                     const ::rtl::OUString& rLName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
-                    ,OXMLDataSource& _rParent);
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList);
         virtual ~OXMLDataSourceInfo();
     };
 // -----------------------------------------------------------------------------
