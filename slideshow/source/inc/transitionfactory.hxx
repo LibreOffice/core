@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transitionfactory.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 15:17:38 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:19:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #define INCLUDED_SLIDESHOW_TRANSITIONFACTORY_HXX
 
 #include <com/sun/star/animations/XTransitionFilter.hpp>
+#include <com/sun/star/presentation/XTransitionFactory.hpp>
 
 #include "animatableshape.hxx"
 #include "rgbcolor.hxx"
@@ -116,16 +117,19 @@ namespace slideshow
                 transition effect
              */
             static NumberAnimationSharedPtr createSlideTransition(
-                const SlideSharedPtr&       rLeavingSlide,
-                const SlideSharedPtr&       rEnteringSlide,
-                const UnoViewContainer&     rViewContainer,
-                ScreenUpdater&              rScreenUpdater,
-                EventMultiplexer&           rEventMultiplexer,
-                sal_Int16                   nTransitionType,
-                sal_Int16                   nTransitionSubType,
-                bool                        bTransitionDirection,
-                const RGBColor&             rTransitionFadeColor,
-                const SoundPlayerSharedPtr& rSoundPlayer );
+                const SlideSharedPtr&                          rLeavingSlide,
+                const SlideSharedPtr&                          rEnteringSlide,
+                const UnoViewContainer&                        rViewContainer,
+                ScreenUpdater&                                 rScreenUpdater,
+                EventMultiplexer&                              rEventMultiplexer,
+                const com::sun::star::uno::Reference<
+                      com::sun::star::presentation::XTransitionFactory>&
+                                                               xOptionalFactory,
+                sal_Int16                                      nTransitionType,
+                sal_Int16                                      nTransitionSubType,
+                bool                                           bTransitionDirection,
+                const RGBColor&                                rTransitionFadeColor,
+                const SoundPlayerSharedPtr&                    rSoundPlayer );
 
         private:
             static const TransitionInfo* getTransitionInfo(
