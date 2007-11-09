@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-23 14:38:09 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:12:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -463,7 +463,7 @@ namespace dbaccess
 
             ::rtl::OUString aMediaType;
             try {
-                Any aAny = xPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
+                Any aAny = xPropSet->getPropertyValue( INFO_MEDIATYPE );
                 aAny >>= aMediaType;
             }
             catch ( Exception& )
