@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-01 18:00:52 $
+#   last change: $Author: obo $ $Date: 2007-11-09 10:41:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -116,12 +116,13 @@ DEF1EXPORTFILE=exports.dxp
 SHL1STDLIBS += gdi32.lib
 SHL1STDLIBS += ddraw.lib
 SHL1STDLIBS += gdiplus.lib
-.IF "$(CCNUMVER)" <= "001399999999"
+
+.IF "$(USE_DIRECTX5)"!=""
 SHL1STDLIBS += d3dx.lib
-.ELSE
-SHL1STDLIBS += d3dx10.lib    # net 2005
-SHL1STDLIBS += dxguid.lib    # net 2005
-.ENDIF
+.ELSE # "$(USE_DIRECTX5)
+SHL1STDLIBS += d3dx9.lib     # directx 9
+SHL1STDLIBS += dxguid.lib    # directx 9
+.ENDIF # "$(USE_DIRECTX5)
 
 .IF "$(dx_debug_images)"!="" || "$(DX_DEBUG_IMAGES)"!=""
 SHL1STDLIBS += imdebug.lib
