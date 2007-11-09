@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_spritecanvashelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:21:20 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 11:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,14 +169,14 @@ namespace cairocanvas
     }
 
     uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromAnimation(
-        const uno::Reference< rendering::XAnimation >& animation )
+        const uno::Reference< rendering::XAnimation >& /*animation*/ )
     {
         return uno::Reference< rendering::XAnimatedSprite >();
     }
 
     uno::Reference< rendering::XAnimatedSprite > SpriteCanvasHelper::createSpriteFromBitmaps(
-        const uno::Sequence< uno::Reference< rendering::XBitmap > >& animationBitmaps,
-        sal_Int8                                                     interpolationMode )
+        const uno::Sequence< uno::Reference< rendering::XBitmap > >& /*animationBitmaps*/,
+        sal_Int8                                                     /*interpolationMode*/ )
     {
         return uno::Reference< rendering::XAnimatedSprite >();
     }
@@ -191,12 +191,12 @@ namespace cairocanvas
                                     mpDevice ) );
     }
 
-    uno::Reference< rendering::XSprite > SpriteCanvasHelper::createClonedSprite( const uno::Reference< rendering::XSprite >& original )
+    uno::Reference< rendering::XSprite > SpriteCanvasHelper::createClonedSprite( const uno::Reference< rendering::XSprite >& /*original*/ )
     {
         return uno::Reference< rendering::XSprite >();
     }
 
-    sal_Bool SpriteCanvasHelper::updateScreen( const ::basegfx::B2IRange& rCurrArea,
+    sal_Bool SpriteCanvasHelper::updateScreen( const ::basegfx::B2IRange& /*rCurrArea*/,
                                                sal_Bool                   bUpdateAll,
                                                bool&                      io_bSurfaceDirty )
     {
