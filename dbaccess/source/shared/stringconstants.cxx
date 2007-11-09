@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:03:00 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:19:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,6 +266,7 @@ IMPLEMENT_CONSTASCII_USTRING(INFO_USECATALOG,"UseCatalog");
 IMPLEMENT_CONSTASCII_USTRING(INFO_CONN_LDAP_BASEDN,"BaseDN");
 IMPLEMENT_CONSTASCII_USTRING(INFO_CONN_LDAP_ROWCOUNT,"MaxRowCount");
 IMPLEMENT_CONSTASCII_USTRING(INFO_PREVIEW,"Preview");
+IMPLEMENT_CONSTASCII_USTRING(INFO_MEDIATYPE,"MediaType");
 
 // other
 IMPLEMENT_CONSTASCII_USTRING(INFO_POOLURL,"PoolURL");
