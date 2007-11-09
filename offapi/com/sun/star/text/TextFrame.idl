@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextFrame.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:29:09 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:58:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,9 +114,19 @@ published service TextFrame
     [property] boolean FrameIsAutomaticHeight;
     //-------------------------------------------------------------------------
     /** determines the interpretation of the height and relative
-        height properties.@see SizeType
+        height properties.
+
+            @see SizeType
      */
     [property] short SizeType;
+    //-------------------------------------------------------------------------
+    /** determines the interpretation of the width and relative
+        width properties.
+
+        @see    SizeType
+        @since  OOo 2.4
+     */
+    [optional, property] short WidthType;
     //-----------------------------------------------------------------------------
     /** contains the writing direction, as represented by the
         <type scope="com::sun::star::text">WritingMode2</type> constants
