@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlEnums.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:05:59 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:16:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,8 @@ namespace dbaxml
         XML_TOK_FORMS,
         XML_TOK_REPORTS,
         XML_TOK_QUERIES,
-        XML_TOK_TABLES
+        XML_TOK_TABLES,
+        XML_TOK_SCHEMA_DEFINITION
     };
     enum XMLDataSource
     {
@@ -79,12 +80,33 @@ namespace dbaxml
         XML_TOK_DELIMITER,
         XML_TOK_DATA_SOURCE_SETTINGS,
         XML_TOK_FONT_CHARSET,
-        XML_TOK_ENCODING
+        XML_TOK_ENCODING,
+        XML_TOK_DATABASE_DESCRIPTION,
+        XML_TOK_COMPOUND_DATABASE,
+        XML_TOK_DB_HREF,
+        XML_TOK_MEDIA_TYPE,
+        XML_TOK_DB_TYPE,
+        XML_TOK_HOSTNAME,
+        XML_TOK_PORT,
+        XML_TOK_LOCAL_SOCKET,
+        XML_TOK_DATABASE_NAME,
+        XML_TOK_CONNECTION_DATA,
+        XML_TOK_DRIVER_SETTINGS,
+        XML_TOK_JAVA_CLASSPATH,
+        XML_TOK_CHARACTER_SET,
+        XML_TOK_APPLICATION_CONNECTION_SETTINGS
+    };
+    enum XMLDatabaseDescription
+    {
+        XML_TOK_FILE_BASED_DATABASE,
+        XML_TOK_SERVER_DATABASE
     };
     enum XMLLogin
     {
         XML_TOK_USER_NAME,
-        XML_TOK_IS_PASSWORD_REQUIRED
+        XML_TOK_IS_PASSWORD_REQUIRED,
+        XML_TOK_USE_SYSTEM_USER,
+        XML_TOK_LOGIN_TIMEOUT
     };
     enum XMLDataSourceInfo
     {
@@ -147,7 +169,8 @@ namespace dbaxml
         XML_TOK_COLUMN_HELP_MESSAGE,
         XML_TOK_COLUMN_VISIBILITY,
         XML_TOK_COLUMN_DEFAULT_VALUE,
-        XML_TOK_COLUMN_TYPE_NAME
+        XML_TOK_COLUMN_TYPE_NAME,
+        XML_TOK_COLUMN_VISIBLE
     };
 // -----------------------------------------------------------------------------
 } // namespace dbaxml
