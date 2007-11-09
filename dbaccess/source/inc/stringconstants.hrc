@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:02:45 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:19:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -410,6 +410,7 @@ DECLARE_CONSTASCII_USTRING(INFO_USECATALOG);
 DECLARE_CONSTASCII_USTRING(INFO_CONN_LDAP_BASEDN);
 DECLARE_CONSTASCII_USTRING(INFO_CONN_LDAP_ROWCOUNT);
 DECLARE_CONSTASCII_USTRING(INFO_PREVIEW);
+DECLARE_CONSTASCII_USTRING(INFO_MEDIATYPE);
 
 // other
 DECLARE_CONSTASCII_USTRING(INFO_POOLURL);
