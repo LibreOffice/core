@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-05 17:40:47 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:16:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,9 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/exc_hlp.hxx>
 
+#include <comphelper/anytostring.hxx>
 #include <comphelper/make_shared_from_uno.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/optional.hxx>
@@ -346,6 +348,8 @@ private:
     SoundPlayerSharedPtr                    mpCurrentSlideTransitionSound;
 
     uno::Reference<uno::XComponentContext>  mxComponentContext;
+    uno::Reference<
+        presentation::XTransitionFactory>   mxOptionalTransitionFactory;
 
     /// the previously running slide
     SlideSharedPtr                          mpPreviousSlide;
@@ -447,6 +451,7 @@ SlideShowImpl::SlideShowImpl(
       mpWaitSymbol(),
       mpCurrentSlideTransitionSound(),
       mxComponentContext( xContext ),
+      mxOptionalTransitionFactory(),
       mpCurrentSlide(),
       mpPrefetchSlide(),
       mxPrefetchSlide(),
@@ -464,6 +469,19 @@ SlideShowImpl::SlideShowImpl(
 {
     // keep care not constructing any UNO references to this inside ctor,
     // shift that code to create()!
+
+    uno::Reference<lang::XMultiComponentFactory> xFactory(
+        mxComponentContext->getServiceManager() );
+
+    if( xFactory.is() )
+    {
+        // #i82460# try to retrieve special transition factory
+        mxOptionalTransitionFactory.set(
+            xFactory->createInstanceWithContext(
+                ::rtl::OUString::createFromAscii( "com.sun.star.presentation.TransitionFactory" ),
+                mxComponentContext ),
+            uno::UNO_QUERY );
+    }
 
     mpListener.reset( new SeparateListenerImpl(
                           *this,
@@ -655,6 +673,7 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
             maViewContainer,
             maScreenUpdater,
             maEventMultiplexer,
+            mxOptionalTransitionFactory,
             nTransitionType,
             nTransitionSubType,
             bTransitionDirection,
