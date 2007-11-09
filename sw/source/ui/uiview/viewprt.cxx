@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:38:42 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 11:31:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,7 +306,9 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
         // Drucker starten
         PreparePrint( pDlg );
         SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
-        SwPrtOptions aOpts( pObjShell->GetTitle(0) );
+        //#i82625# GetTitle( 0 ) doesn't work for 'embedded' documents like forms or reports
+        String sDocumentTitle( pObjShell->GetTitle(SFX_TITLE_APINAME));
+        SwPrtOptions aOpts( sDocumentTitle );
         BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
         nMergeType = pMgr->GetMergeType();
         if( nMergeType == DBMGR_MERGE_MAILMERGE ||
