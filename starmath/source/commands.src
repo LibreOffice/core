@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commands.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:15:19 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ String RID_XTIMESY          { Text = "<?> times <?> " ; };
 String RID_XSYMTIMESY       { Text = "<?> * <?> " ; };
 String RID_XSYMDIVIDEY      { Text = "<?> / <?> " ; };
 String RID_XDIVY            { Text = "<?> div <?> " ; };
-String RID_XOVERY           { Text = "<?> over <?> " ; };
+String RID_XOVERY           { Text = "{<?>} over {<?>} " ; };
 String RID_XODIVIDEY        { Text = "<?> odivide <?> " ; };
 String RID_XODOTY           { Text = "<?> odot <?> " ; };
 String RID_XOMINUSY         { Text = "<?> ominus <?> " ; };
@@ -98,7 +98,7 @@ String RID_XNSUBSETEQY      { Text = "<?> nsubseteq <?> " ; };
 String RID_XNSUPSETY        { Text = "<?> nsupset <?> " ; };
 String RID_XNSUPSETEQY      { Text = "<?> nsupseteq <?> " ; };
 String RID_ABSX             { Text = "abs{<?>} " ; };
-String RID_FACTX            { Text = "fact <?> " ; };
+String RID_FACTX            { Text = "fact {<?>} " ; };
 String RID_SQRTX            { Text = "sqrt{<?>} " ; };
 String RID_NROOTXY          { Text = "nroot{<?>}{<?>} " ; };
 String RID_EX               { Text = "func e^{<?>} " ; };
@@ -150,15 +150,15 @@ String RID_GRAVEX           { Text = "grave <?> " ; };
 String RID_HATX             { Text = "hat <?> " ; };
 String RID_TILDEX           { Text = "tilde <?> " ; };
 String RID_VECX             { Text = "vec <?> " ; };
-String RID_UNDERLINEX       { Text = "underline <?> " ; };
-String RID_OVERLINEX        { Text = "overline <?> " ; };
-String RID_OVERSTRIKEX      { Text = "overstrike <?> " ; };
-String RID_PHANTOMX         { Text = "phantom <?> " ; };
+String RID_UNDERLINEX       { Text = "underline {<?>} " ; };
+String RID_OVERLINEX        { Text = "overline {<?>} " ; };
+String RID_OVERSTRIKEX      { Text = "overstrike {<?>} " ; };
+String RID_PHANTOMX         { Text = "phantom {<?>} " ; };
 String RID_BOLDX            { Text = "bold <?> " ; };
 String RID_ITALX            { Text = "ital <?> " ; };
-String RID_SIZEXY           { Text = "size <?> <?> " ; };
-String RID_FONTXY           { Text = "font <?> <?> " ; };
-String RID_COLORX           { Text = "color <?> <?> " ; };
+String RID_SIZEXY           { Text = "size <?> {<?>} " ; };
+String RID_FONTXY           { Text = "font <?> {<?>} " ; };
+String RID_COLORX           { Text = "color <?> {<?>} " ; };
 String RID_LRGROUPX         { Text = "{<?>} " ; };
 String RID_LRPARENTX        { Text = "(<?>) " ; };
 String RID_LRBRACKETX       { Text = "[<?>] " ; };
@@ -180,8 +180,8 @@ String RID_SLRFLOORX        { Text = "left lfloor <?> right rfloor " ; };
 String RID_SLRLINEX         { Text = "left lline <?> right rline " ; };
 String RID_SLRDLINEX        { Text = "left ldline <?> right rdline " ; };
 String RID_SLMRANGLEXY      { Text = "left langle <?> mline <?> right rangle " ; };
-String RID_XOVERBRACEY      { Text = "<?> overbrace <?> " ; };
-String RID_XUNDERBRACEY     { Text = "<?> underbrace <?> " ; };
+String RID_XOVERBRACEY      { Text = "{<?>} overbrace {<?>} " ; };
+String RID_XUNDERBRACEY     { Text = "{<?>} underbrace {<?>} " ; };
 String RID_RSUBX            { Text = "<?>_{<?>}" ; };
 String RID_RSUPX            { Text = "<?>^{<?>}" ; };
 String RID_LSUBX            { Text = "<?> lsub{<?>} " ; };
@@ -211,7 +211,7 @@ String RID_DOTSDOWN         { Text = "dotsdown " ; };
 String RID_DOTSLOW          { Text = "dotslow " ; };
 String RID_DOTSVERT         { Text = "dotsvert " ; };
 String RID_XCIRCY           { Text = "<?> circ <?> " ; };
-String RID_XWIDESLASHY      { Text = "<?> wideslash <?> " ; };
+String RID_XWIDESLASHY      { Text = "{<?>} wideslash {<?>} " ; };
 String RID_XWIDEBSLASHY     { Text = "<?> widebslash <?> " ; };
 String RID_XDIVIDESY        { Text = "<?> divides <?> " ; };
 String RID_XNDIVIDESY       { Text = "<?> ndivides <?> " ; };
@@ -223,9 +223,9 @@ String RID_SETZ             { Text = "setZ " ; };
 String RID_SETQ             { Text = "setQ " ; };
 String RID_SETR             { Text = "setR " ; };
 String RID_SETC             { Text = "setC " ; };
-String RID_WIDEHATX         { Text = "widehat <?> " ; };
-String RID_WIDETILDEX       { Text = "widetilde <?> " ; };
-String RID_WIDEVECX         { Text = "widevec <?> " ; };
+String RID_WIDEHATX         { Text = "widehat {<?>} " ; };
+String RID_WIDETILDEX       { Text = "widetilde {<?>} " ; };
+String RID_WIDEVECX         { Text = "widevec {<?>} " ; };
 String RID_HBAR             { Text = "hbar " ; };
 String RID_LAMBDABAR        { Text = "lambdabar " ; };
 String RID_LEFTARROW        { Text = "leftarrow " ; };
