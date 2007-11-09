@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSourceSetting.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:03:39 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:15:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,6 @@ namespace dbaxml
     {
         ::com::sun::star::beans::PropertyValue m_aSetting;
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> m_aInfoSequence;
-        OXMLDataSource& m_rParent;
         OXMLDataSourceSetting* m_pContainer;
         ::com::sun::star::uno::Type m_aPropType;            // the type of the property the instance imports currently
         sal_Bool m_bIsList;
@@ -65,7 +64,6 @@ namespace dbaxml
         OXMLDataSourceSetting( ODBFilter& rImport, sal_uInt16 nPrfx,
                     const ::rtl::OUString& rLName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
-                    ,OXMLDataSource& _rParent
                     ,OXMLDataSourceSetting* _pContainer = NULL);
         virtual ~OXMLDataSourceSetting();
 
