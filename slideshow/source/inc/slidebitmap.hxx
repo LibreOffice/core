@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidebitmap.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 15:15:33 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:19:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,8 +80,12 @@ namespace slideshow
 
             bool                draw( const ::cppcanvas::CanvasSharedPtr& rCanvas ) const;
             ::basegfx::B2ISize  getSize() const;
+            ::basegfx::B2DPoint getOutputPos() const{return maOutputPos;}
             void                move( const ::basegfx::B2DPoint& rNewPos );
             void                clip( const ::basegfx::B2DPolyPolygon& rClipPoly );
+
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::rendering::XBitmap >    getXBitmap();
 
         private:
             ::basegfx::B2DPoint                                     maOutputPos;
