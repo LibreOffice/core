@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spelldta.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:25:30 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:55:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,13 +160,13 @@ void SearchSimilarText( const OUString &rText, INT16 nLanguage,
     {
         Reference< XDictionary1 > xDic( pDic[i], UNO_QUERY );
 
-        /*DictionaryType  eType = xDic->getDictionaryType();*/
         INT16           nLang = xDic->getLanguage();
 
         if ( xDic.is() && xDic->isActive()
             && (nLang == nLanguage  ||  nLang == LANGUAGE_NONE) )
         {
 #if OSL_DEBUG_LEVEL > 1
+            DictionaryType  eType = xDic->getDictionaryType();
             DBG_ASSERT( eType != DictionaryType_MIXED,
                     "unexpected dictionary type" );
 #endif
