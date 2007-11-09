@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSourceInfo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:42:43 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:14:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,10 +76,8 @@ DBG_NAME(OXMLDataSourceInfo)
 OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
                 ,const ::rtl::OUString& _sLocalName
-                ,const Reference< XAttributeList > & _xAttrList
-                ,OXMLDataSource& _rParent) :
+                ,const Reference< XAttributeList > & _xAttrList) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
-    ,m_rParent(_rParent)
 {
     DBG_CTOR(OXMLDataSourceInfo,NULL);
 
@@ -89,7 +87,9 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
 
     PropertyValue aProperty;
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    sal_Bool bAutoEnabled = sal_False;
+    bool bAutoEnabled = false;
+    bool bFoundField = false,bFoundThousand = false, bFoundCharset = false;
+    ::std::vector< sal_uInt16 > aTokens;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
         ::rtl::OUString sLocalName;
@@ -99,43 +99,69 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
 
         aProperty.Name = ::rtl::OUString();
 
-        switch( rTokenMap.Get( nPrefix, sLocalName ) )
+        sal_uInt16 nToken = rTokenMap.Get( nPrefix, sLocalName );
+        aTokens.push_back(nToken);
+        switch( nToken )
         {
             case XML_TOK_ADDITIONAL_COLUMN_STATEMENT:
                 aProperty.Name = PROPERTY_AUTOINCREMENTCREATION;
-                bAutoEnabled = sal_True;
+                bAutoEnabled = true;
                 break;
             case XML_TOK_ROW_RETRIEVING_STATEMENT:
                 aProperty.Name = INFO_AUTORETRIEVEVALUE;
-                bAutoEnabled = sal_True;
+                bAutoEnabled = true;
                 break;
             case XML_TOK_STRING:
                 aProperty.Name = INFO_TEXTDELIMITER;
                 break;
             case XML_TOK_FIELD:
                 aProperty.Name = INFO_FIELDDELIMITER;
+                bFoundField = true;
                 break;
             case XML_TOK_DECIMAL:
                 aProperty.Name = INFO_DECIMALDELIMITER;
                 break;
             case XML_TOK_THOUSAND:
                 aProperty.Name = INFO_THOUSANDSDELIMITER;
+                bFoundThousand = true;
                 break;
             case XML_TOK_ENCODING:
                 aProperty.Name = INFO_CHARSET;
+                bFoundCharset = true;
                 break;
         }
         if ( aProperty.Name.getLength() )
         {
             aProperty.Value <<= sValue;
-            m_rParent.addInfo(aProperty);
+            rImport.addInfo(aProperty);
         }
     }
     if ( bAutoEnabled )
     {
         aProperty.Name = INFO_AUTORETRIEVEENABLED;
         aProperty.Value <<= sal_True;
-        m_rParent.addInfo(aProperty);
+        rImport.addInfo(aProperty);
+    }
+    if ( rImport.isNewFormat() )
+    {
+        if ( !bFoundField )
+        {
+            aProperty.Name = INFO_FIELDDELIMITER;
+            aProperty.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
+            rImport.addInfo(aProperty);
+        }
+        if ( !bFoundThousand )
+        {
+            aProperty.Name = INFO_THOUSANDSDELIMITER;
+            aProperty.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+            rImport.addInfo(aProperty);
+        }
+        if ( !bFoundCharset )
+        {
+            aProperty.Name = INFO_CHARSET;
+            aProperty.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("utf8"));
+            rImport.addInfo(aProperty);
+        }
     }
 }
 // -----------------------------------------------------------------------------

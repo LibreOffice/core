@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlLogin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:44:15 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:17:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,12 +62,13 @@
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
 #endif
-
+#include <com/sun/star/sdbc/XDataSource.hpp>
 #include <vector>
 
 namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::xml::sax;
 DBG_NAME(OXMLLogin)
 
@@ -84,8 +85,9 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
 
     Reference<XPropertySet> xDataSource(rImport.getDataSource());
 
-    sal_Int16 nLength = (xDataSource.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
+    const sal_Int16 nLength = (xDataSource.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
     static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
+    bool bUserFound = false;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
         ::rtl::OUString sLocalName;
@@ -98,10 +100,48 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
                 case XML_TOK_USER_NAME:
-                    xDataSource->setPropertyValue(PROPERTY_USER,makeAny(sValue));
+                    if ( !bUserFound )
+                    {
+                        bUserFound = true;
+                        try
+                        {
+                            xDataSource->setPropertyValue(PROPERTY_USER,makeAny(sValue));
+                        }
+                        catch(Exception)
+                        {
+                            DBG_UNHANDLED_EXCEPTION();
+                        }
+                    }
                     break;
                 case XML_TOK_IS_PASSWORD_REQUIRED:
-                    xDataSource->setPropertyValue(PROPERTY_ISPASSWORDREQUIRED,makeAny((sValue == s_sTRUE ? sal_True : sal_False)));
+                    try
+                    {
+                        xDataSource->setPropertyValue(PROPERTY_ISPASSWORDREQUIRED,makeAny((sValue == s_sTRUE ? sal_True : sal_False)));
+                    }
+                    catch(Exception)
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
+                    }
+                    break;
+                case XML_TOK_USE_SYSTEM_USER:
+                    if ( !bUserFound )
+                    {
+                        bUserFound = true;
+                        PropertyValue aProperty;
+                        aProperty.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSystemUser"));
+                        aProperty.Value <<= (sValue == s_sTRUE ? sal_True : sal_False);
+                        rImport.addInfo(aProperty);
+                    }
+                    break;
+                case XML_TOK_LOGIN_TIMEOUT:
+                    try
+                    {
+                        Reference< XDataSource>(xDataSource,UNO_QUERY_THROW)->setLoginTimeout(sValue.toInt32());
+                    }
+                    catch(Exception)
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
+                    }
                     break;
             }
         }

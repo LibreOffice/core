@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDatabase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:43:21 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:15:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,7 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
             }
             break;
         case XML_TOK_TABLES:
+        case XML_TOK_SCHEMA_DEFINITION:
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 Reference<XTablesSupplier> xSup(GetOwnImport().getDataSource(),UNO_QUERY);
@@ -157,6 +158,11 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
 ODBFilter& OXMLDatabase::GetOwnImport()
 {
     return static_cast<ODBFilter&>(GetImport());
+}
+// -----------------------------------------------------------------------------
+void OXMLDatabase::EndElement()
+{
+    GetOwnImport().setPropertyInfo();
 }
 
 //----------------------------------------------------------------------------

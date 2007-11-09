@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlColumn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:42:03 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:12:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,9 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
             case XML_TOK_COLUMN_DEFAULT_VALUE:
                 if ( sValue.getLength() && sType.getLength() )
                     SvXMLUnitConverter::convertAny(m_aDefaultValue,sType,sValue);
+                break;
+            case XML_TOK_COLUMN_VISIBLE:
+                m_bHidden = sValue.equalsAscii("false");
                 break;
         }
     }

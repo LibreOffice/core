@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSourceSettings.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:43:08 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:15:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,10 +76,8 @@ DBG_NAME(OXMLDataSourceSettings)
 
 OXMLDataSourceSettings::OXMLDataSourceSettings( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
-                ,OXMLDataSource& _rParent) :
+                ,const ::rtl::OUString& _sLocalName) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
-    ,m_rParent(_rParent)
 {
     DBG_CTOR(OXMLDataSourceSettings,NULL);
 
@@ -104,7 +102,7 @@ SvXMLImportContext* OXMLDataSourceSettings::CreateChildContext(
     {
         case XML_TOK_DATA_SOURCE_SETTING:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-            pContext = new OXMLDataSourceSetting( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_rParent );
+            pContext = new OXMLDataSourceSetting( GetOwnImport(), nPrefix, rLocalName,xAttrList);
             break;
     }
 
