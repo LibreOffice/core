@@ -4,9 +4,9 @@
  *
  *  $RCSfile: demoshow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 15:21:06 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:19:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -568,13 +568,13 @@ void DemoApp::Main()
     uno::Sequence< uno::Any > aArgs( 2 );
     aArgs[ 0 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
     aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
-    ::ucb::ContentBroker::initialize( xFactory, aArgs );
+    ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 
     DemoWindow pWindow;
     pWindow.Execute();
 
     // clean up UCB
-    ::ucb::ContentBroker::deinitialize();
+    ::ucbhelper::ContentBroker::deinitialize();
 }
 }
 
