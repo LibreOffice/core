@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidetransitionfactory.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 15:00:21 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:18:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include <canvas/debug.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/tools/canvastools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
@@ -47,8 +48,11 @@
 #include <comphelper/optional.hxx>
 #include <comphelper/make_shared_from_uno.hxx>
 
+#include <com/sun/star/rendering/XIntegerBitmap.hpp>
+#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "slidechangebase.hxx"
 #include "transitionfactory.hxx"
@@ -58,6 +62,8 @@
 #include "clippingfunctor.hxx"
 #include "combtransition.hxx"
 #include "tools.hxx"
+
+#include <boost/bind.hpp>
 
 
 /***************************************************
@@ -101,6 +107,70 @@ void fillPage( const ::cppcanvas::CanvasSharedPtr& rDestinationCanvas,
                   aOutputPosPixel.getY() + rPageSizePixel.getY() ),
               rFillColor.getIntegerColor() );
 }
+
+class PluginSlideChange: public SlideChangeBase
+{
+public:
+    /** Create a new SlideChanger, for the given leaving and
+        entering slide bitmaps, which uses super secret OpenGL
+        stuff.
+    */
+    PluginSlideChange( sal_Int16                                nTransitionType,
+                       sal_Int16                                nTransitionSubType,
+                       boost::optional<SlideSharedPtr> const&   leavingSlide_,
+                       const SlideSharedPtr&                    pEnteringSlide,
+                       const UnoViewContainer&                  rViewContainer,
+                       ScreenUpdater&                           rScreenUpdater,
+                       const uno::Reference<
+                             presentation::XTransitionFactory>& xFactory,
+                       const SoundPlayerSharedPtr&              pSoundPlayer,
+                       EventMultiplexer&                        rEventMultiplexer) :
+        SlideChangeBase( leavingSlide_,
+                         pEnteringSlide,
+                         pSoundPlayer,
+                         rViewContainer,
+                         rScreenUpdater,
+                         rEventMultiplexer ),
+        maTransitions()
+    {
+        // create one transition per view
+        UnoViewVector::const_iterator aCurrView (rViewContainer.begin());
+        const UnoViewVector::const_iterator aEnd(rViewContainer.end());
+        while( aCurrView != aEnd )
+        {
+            const ::basegfx::B2DHomMatrix aViewTransform(
+                (*aCurrView)->getCanvas()->getTransformation() );
+            const ::basegfx::B2DPoint aOffsetPixel(
+                aViewTransform * ::basegfx::B2DPoint() );
+
+            maTransitions.push_back(
+                xFactory->createTransition(
+                    nTransitionType,
+                    nTransitionSubType,
+                    (*aCurrView)->getUnoView(),
+                    getLeavingBitmap(ViewEntry(*aCurrView))->getXBitmap(),
+                    getEnteringBitmap(ViewEntry(*aCurrView))->getXBitmap(),
+                    basegfx::unotools::point2DFromB2DPoint(aOffsetPixel) ) );
+
+            ENSURE_AND_THROW(maTransitions.back().is(),
+                             "Failed to create plugin transition");
+            ++aCurrView;
+        }
+    }
+
+    virtual bool operator()( double t )
+    {
+        std::for_each(maTransitions.begin(),
+                      maTransitions.end(),
+                      boost::bind( &presentation::XTransition::update,
+                                   _1, t) );
+        return true;
+    }
+
+private:
+    // One transition object per view
+    std::vector< uno::Reference<presentation::XTransition> > maTransitions;
+};
 
 
 class ClippedSlideChange : public SlideChangeBase
@@ -610,20 +680,46 @@ NumberAnimationSharedPtr createSlideWipeTransition(
     }
 }
 
+NumberAnimationSharedPtr createPluginTransition(
+    sal_Int16                                nTransitionType,
+    sal_Int16                                nTransitionSubType,
+    boost::optional<SlideSharedPtr> const&   pLeavingSlide,
+    const SlideSharedPtr&                    pEnteringSlide,
+    const UnoViewContainer&                  rViewContainer,
+    ScreenUpdater&                           rScreenUpdater,
+    const uno::Reference<
+          presentation::XTransitionFactory>& xFactory,
+    const SoundPlayerSharedPtr&              pSoundPlayer,
+    EventMultiplexer&                        rEventMultiplexer)
+{
+    return NumberAnimationSharedPtr(
+        new PluginSlideChange(
+            nTransitionType,
+            nTransitionSubType,
+            pLeavingSlide,
+            pEnteringSlide,
+            rViewContainer,
+            rScreenUpdater,
+            xFactory,
+            pSoundPlayer,
+            rEventMultiplexer ));
+}
+
 } // anon namespace
 
 
 NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
-    const SlideSharedPtr&       pLeavingSlide,
-    const SlideSharedPtr&       pEnteringSlide,
-    const UnoViewContainer&     rViewContainer,
-    ScreenUpdater&              rScreenUpdater,
-    EventMultiplexer&           rEventMultiplexer,
-    sal_Int16                   nTransitionType,
-    sal_Int16                   nTransitionSubType,
-    bool                        bTransitionDirection,
-    const RGBColor&             rTransitionFadeColor,
-    const SoundPlayerSharedPtr& pSoundPlayer            )
+    const SlideSharedPtr&                                   pLeavingSlide,
+    const SlideSharedPtr&                                   pEnteringSlide,
+    const UnoViewContainer&                                 rViewContainer,
+    ScreenUpdater&                                          rScreenUpdater,
+    EventMultiplexer&                                       rEventMultiplexer,
+    const uno::Reference<presentation::XTransitionFactory>& xOptionalFactory,
+    sal_Int16                                               nTransitionType,
+    sal_Int16                                               nTransitionSubType,
+    bool                                                    bTransitionDirection,
+    const RGBColor&                                         rTransitionFadeColor,
+    const SoundPlayerSharedPtr&                             pSoundPlayer            )
 {
     // xxx todo: change to TransitionType::NONE, TransitionSubType::NONE:
     if (nTransitionType == 0 && nTransitionSubType == 0) {
@@ -639,6 +735,23 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
     ENSURE_AND_THROW(
         pEnteringSlide,
         "TransitionFactory::createSlideTransition(): Invalid entering slide" );
+
+    if( xOptionalFactory.is() &&
+        xOptionalFactory->hasTransition(nTransitionType, nTransitionSubType) )
+    {
+        // #i82460# - optional plugin factory claims this transition. delegate.
+        return NumberAnimationSharedPtr(
+            createPluginTransition(
+                nTransitionType,
+                nTransitionSubType,
+                comphelper::make_optional(pLeavingSlide),
+                pEnteringSlide,
+                rViewContainer,
+                rScreenUpdater,
+                xOptionalFactory,
+                pSoundPlayer,
+                rEventMultiplexer ));
+    }
 
     const TransitionInfo* pTransitionInfo(
         getTransitionInfo( nTransitionType, nTransitionSubType ) );
@@ -714,6 +827,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                             rViewContainer,
                             rScreenUpdater,
                             rEventMultiplexer,
+                            xOptionalFactory,
                             pRandomTransitionInfo->mnTransitionType,
                             pRandomTransitionInfo->mnTransitionSubType,
                             bTransitionDirection,
