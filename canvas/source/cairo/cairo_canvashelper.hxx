@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:20:45 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:14:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ namespace cairocanvas
         void init( const ::basegfx::B2ISize& rSizePixel,
                    SpriteCanvas&             rDevice );
 
+        void setSize( const ::basegfx::B2ISize& rSize );
     void setSurface( ::cairo::Surface* pSurface, bool bHasAlpha, SurfaceProvider* pSurfaceProvider = NULL );
 
         // CanvasHelper functionality
@@ -323,6 +324,7 @@ namespace cairocanvas
         ::cairo::Cairo* mpCairo;
         ::cairo::Surface* mpSurface;
         SurfaceProvider* mpSurfaceProvider;
+        ::basegfx::B2ISize maSize;
     };
 
     void doPolyPolygonImplementation( ::basegfx::B2DPolyPolygon aPolyPolygon,
