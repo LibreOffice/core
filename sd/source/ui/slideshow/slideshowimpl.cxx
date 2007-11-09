@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:27:06 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 11:35:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -562,8 +562,9 @@ SlideshowImpl::SlideshowImpl(
     msOnClick( RTL_CONSTASCII_USTRINGPARAM("OnClick") ),
     msBookmark( RTL_CONSTASCII_USTRINGPARAM("Bookmark") ),
     msVerb( RTL_CONSTASCII_USTRINGPARAM("Verb") ),
-    mnEndShowEvent(0),
-    mnContextMenuEvent(0)
+    mnEndShowEvent(0)
+,   mnContextMenuEvent(0)
+,   mnUpdateEvent(0)
 {
     if( mpViewShell )
         mpOldActiveWindow = mpViewShell->GetActiveWindow();
@@ -1037,6 +1038,12 @@ void SlideshowImpl::stopShow()
         return;
 
     maUpdateTimer.Stop();
+
+    if( mnUpdateEvent )
+    {
+        Application::RemoveUserEvent( mnUpdateEvent );
+        mnUpdateEvent = 0;
+    }
 
     removeShapeEvents();
 
@@ -1971,13 +1978,10 @@ IMPL_LINK( SlideshowImpl, ReadyForNextInputHdl, Timer*, EMPTYARG )
 */
 IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
 {
+    mnUpdateEvent = 0;
+
     // doing some nMagic
     const rtl::Reference<SlideshowImpl> this_(this);
-
-    // prevent recursive calls
-    if(mnEntryCounter)
-        return 0;
-    mnEntryCounter++;
 
     try
     {
@@ -1992,34 +1996,27 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
 
         Reference< XSlideShow > xShow( mxShow );
 
-        double fUpdate = -1.0;
-        while(mxShow.is() && ( fUpdate < 0.25 ))
-        {
-             if( !xShow->update(fUpdate) )
-             {
-                 fUpdate = -1.0;
-                 break;
-             }
+        double fUpdate = 0.0;
+        if( !xShow->update(fUpdate) )
+             fUpdate = -1.0;
 
-             // if UI input pending: quit busy loop (and setup timer
-             // below)
-             if( Application::AnyInput(INPUT_MOUSE|INPUT_KEYBOARD|INPUT_PAINT) )
-                 break;
-
-             // #i60699# yield thread for a short time - otherwise,
-             // rendering taking place in other processes might not
-             // get CPU (e.g. X11).
-             TimeValue aTimeout={0,1000};
-             osl_waitThread(&aTimeout);
-        }
         if( mxShow.is() && ( fUpdate >= 0.0 ) )
         {
-            const float MAX_UPDATE = 60.0; // do not wait longer than 60 seconds for next refresh
-            if( fUpdate > MAX_UPDATE )
-                fUpdate = MAX_UPDATE;
-            maUpdateTimer.SetTimeout(
-                ::std::max( 1UL, static_cast<ULONG>(fUpdate * 1000.0) ) );
-            maUpdateTimer.Start();
+            if( fUpdate < 0.5 )
+            {
+                Application::Reschedule(TRUE);
+                if( mxShow.is() )
+                    mnUpdateEvent = Application::PostUserEvent(LINK(this,SlideshowImpl, updateHdl ));
+            }
+            else
+            {
+                const float MAX_UPDATE = 60.0; // do not wait longer than 60 seconds for next refresh
+                if( fUpdate > MAX_UPDATE )
+                    fUpdate = MAX_UPDATE;
+                maUpdateTimer.SetTimeout(
+                    ::std::max( 1UL, static_cast<ULONG>(fUpdate * 1000.0) ) );
+                maUpdateTimer.Start();
+            }
         }
     }
     catch( Exception& e )
@@ -2032,11 +2029,6 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
                  comphelper::anyToString( cppu::getCaughtException() ),
                  RTL_TEXTENCODING_UTF8 )).getStr() );
     }
-
-    --mnEntryCounter;
-
-    Application::Reschedule(true);
-
     return 0;
 }
 
