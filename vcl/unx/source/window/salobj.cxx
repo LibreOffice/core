@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:08:34 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:20:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,14 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
                  static_cast<unsigned int> (aVisID) );
         #endif
         pSalDisp->GetXLib()->PushXErrorLevel( true );
+
+        // create colormap for visual - there might not be one
+        pObject->maColormap = aAttribs.colormap = XCreateColormap(
+            pDisp,
+            pSalDisp->GetRootWindow( nScreen ),
+            pVisual,
+            AllocNone );
+
         pObject->maSecondary =
             XCreateWindow( pDisp,
                            pSalDisp->GetRootWindow( nScreen ),
@@ -161,7 +169,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
                            1, 1, 0,
                            nDepth, InputOutput,
                            pVisual,
-                           CWEventMask, &aAttribs );
+                           CWEventMask|CWColormap, &aAttribs );
         XSync( pDisp, False );
         BOOL bWasXError = pSalDisp->GetXLib()->HasXErrorOccured();
         pSalDisp->GetXLib()->PopXErrorLevel();
@@ -275,6 +283,7 @@ X11SalObject::X11SalObject()
     maSystemChildData.pShellWidget  = NULL;
     maPrimary                       = 0;
     maSecondary                     = 0;
+    maColormap                      = 0;
 
     std::list< SalObject* >& rObjects = GetX11SalData()->GetDisplay()->getSalObjects();
     rObjects.push_back( this );
@@ -291,6 +300,8 @@ X11SalObject::~X11SalObject()
         XDestroyWindow( (Display*)maSystemChildData.pDisplay, maSecondary );
     if ( maPrimary )
         XDestroyWindow( (Display*)maSystemChildData.pDisplay, maPrimary );
+    if ( maColormap )
+        XFreeColormap((Display*)maSystemChildData.pDisplay, maColormap);
     XSync( (Display*)maSystemChildData.pDisplay, False );
     pSalDisp->GetXLib()->PopXErrorLevel();
 }
