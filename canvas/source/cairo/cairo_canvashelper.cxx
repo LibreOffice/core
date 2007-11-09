@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 10:13:47 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 11:31:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,6 +249,8 @@ namespace cairocanvas
 
     void CanvasHelper::clear()
     {
+        OSL_TRACE ("clear whole area: %d x %d\n", maSize.getX(), maSize.getY() );
+
         if( mpCairo )
         {
             cairo_save( mpCairo );
@@ -359,7 +361,7 @@ namespace cairocanvas
             {
         sal_Int64 nPtr = xTunnel->getSomething( vcl::unotools::getTunnelIdentifier( vcl::unotools::Id_BitmapEx ) );
         if( nPtr )
-            return BitmapEx( *(BitmapEx*)nPtr );
+            return BitmapEx( *reinterpret_cast<BitmapEx*>(reinterpret_cast<void*>(nPtr)) );
         }
 
     // TODO(F1): extract pixel from XBitmap interface
@@ -1004,9 +1006,8 @@ namespace cairocanvas
 
     cairo_set_matrix( pCairo, &aOrigMatrix );
 
-// fixme, spec says even clipping polypolygon with zero polygons means NULL clip, but it breaks animations with sprites
-//  if( aPolyPolygon.count() == 0 && aOperation == Clip )
-//      clipNULL( pCairo );
+    if( aPolyPolygon.count() == 0 && aOperation == Clip )
+         clipNULL( pCairo );
     }
 
     void CanvasHelper::doPolyPolygonPath( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
