@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvashelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:41:48 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:14:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -901,7 +901,7 @@ namespace vclcanvas
             new CanvasBitmap( aBitmap, mpDevice ) );
     }
 
-    uno::Sequence< sal_Int8 > CanvasHelper::getData( rendering::IntegerBitmapLayout&        ,
+    uno::Sequence< sal_Int8 > CanvasHelper::getData( rendering::IntegerBitmapLayout&        aLayout,
                                                      const geometry::IntegerRectangle2D&    rect )
     {
         if( !mpOutDev.get() )
@@ -913,14 +913,30 @@ namespace vclcanvas
         Bitmap aBitmap( mpOutDev->getOutDev().GetBitmap(aRect.TopLeft(),
                                                         aRect.GetSize()) );
 
+        const sal_Int32 nWidth( rect.X2 - rect.X1 );
+        const sal_Int32 nHeight( rect.Y2 - rect.Y1 );
+        aLayout.ScanLines = nHeight;
+        aLayout.ScanLineBytes = nWidth*4;
+        aLayout.ScanLineStride = aLayout.ScanLineBytes;
+        aLayout.PlaneStride = 0;
+        aLayout.ColorSpace.set( mpDevice );
+        aLayout.NumComponents = 4;
+        aLayout.ComponentMasks.realloc(4);
+        aLayout.ComponentMasks[0] = 0x00FF0000;
+        aLayout.ComponentMasks[1] = 0x0000FF00;
+        aLayout.ComponentMasks[2] = 0x000000FF;
+        aLayout.ComponentMasks[3] = 0xFF000000;
+        aLayout.Palette.clear();
+        aLayout.Endianness = rendering::Endianness::LITTLE;
+        aLayout.Format = rendering::IntegerBitmapFormat::CHUNKY_32BIT;
+        aLayout.IsMsbFirst = sal_False;
+
         ScopedBitmapReadAccess pReadAccess( aBitmap.AcquireReadAccess(),
                                             aBitmap );
 
         if( pReadAccess.get() != NULL )
         {
             // TODO(F1): Support more formats.
-            const sal_Int32 nWidth( rect.X2 - rect.X1 );
-            const sal_Int32 nHeight( rect.Y2 - rect.Y1 );
 
             // for the time being, always return as BGRA
             uno::Sequence< sal_Int8 > aRes( 4*nWidth*nHeight );
