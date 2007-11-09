@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlTableFilterList.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:45:08 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:18:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,8 @@ SvXMLImportContext* OXMLTableFilterList::CreateChildContext(
             pContext = new OXMLTableFilterPattern( GetImport(), nPrefix, rLocalName,sal_True,*this);
         else if ( IsXMLToken( rLocalName, XML_TABLE_TYPE ) )
             pContext = new OXMLTableFilterPattern( GetImport(), nPrefix, rLocalName,sal_False,*this);
+        else if ( IsXMLToken( rLocalName, XML_TABLE_INCLUDE_FILTER ) )
+            pContext = new OXMLTableFilterList( GetImport(), nPrefix, rLocalName );
     }
 
     if( !pContext )
