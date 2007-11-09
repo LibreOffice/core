@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:45:49 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:19:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,15 +115,17 @@ class ODBFilter : public SvXMLImport
 {
 public:
     DECLARE_STL_USTRINGACCESS_MAP(Sequence<PropertyValue>,TPropertyNameMap);
-
+    typedef ::std::vector< ::com::sun::star::beans::PropertyValue> TInfoSequence;
 private:
     TPropertyNameMap                                m_aQuerySettings;
     TPropertyNameMap                                m_aTablesSettings;
+    TInfoSequence                                   m_aInfoSequence;
     Reference< XComponent >                         m_xSrcDoc;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDocElemTokenMap;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDatabaseElemTokenMap;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDataSourceElemTokenMap;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pLoginElemTokenMap;
+    mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDatabaseDescriptionElemTokenMap;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDataSourceInfoElemTokenMap;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDocumentsElemTokenMap;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pComponentElemTokenMap;
@@ -134,6 +136,7 @@ private:
     mutable UniReference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
     Reference<XPropertySet>                         m_xDataSource;
     sal_Int32                                       m_nPreviewMode;
+    bool                                            m_bNewFormat;
 
     sal_Bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
 
@@ -179,6 +182,7 @@ public:
     const SvXMLTokenMap& GetDatabaseElemTokenMap() const;
     const SvXMLTokenMap& GetDataSourceElemTokenMap() const;
     const SvXMLTokenMap& GetLoginElemTokenMap() const;
+    const SvXMLTokenMap& GetDatabaseDescriptionElemTokenMap() const;
     const SvXMLTokenMap& GetDataSourceInfoElemTokenMap() const;
     const SvXMLTokenMap& GetDocumentsElemTokenMap() const;
     const SvXMLTokenMap& GetComponentElemTokenMap() const;
@@ -187,6 +191,21 @@ public:
 
     UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const;
     UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const;
+
+    /** add a Info to the sequence which will be appened to the data source
+        @param  _rInfo The property to append.
+    */
+    inline void addInfo(const ::com::sun::star::beans::PropertyValue& _rInfo)
+    {
+        m_aInfoSequence.push_back(_rInfo);
+    }
+
+    void setPropertyInfo();
+
+    const ::std::map< sal_uInt16,com::sun::star::beans::Property>& GetDataSourceInfoDefaulValueMap() const;
+
+    inline bool isNewFormat() const { return m_bNewFormat; }
+    inline void setNewFormat(bool _bNewFormat) { m_bNewFormat = _bNewFormat; }
 };
 
 // -----------------------------------------------------------------------------
