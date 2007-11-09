@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SystemManager.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:03:13 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 11:35:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -459,32 +459,22 @@ public class SystemManager {
             int max = returnVector.size();
             if ( max > 0 ) {
                 String returnLine = (String) returnVector.get(max-1);
+
+                // The fourth value is the available disc space (if the first value is a path)
+                // Otherwise it can also be the third value, if the first is not a path.
+                // If the first value is not a path, the string starts with white spaces.
+
+                int position = 3;
+                if ( returnLine.startsWith(" ")) {
+                    position = 2;
+                }
+
                 returnLine = returnLine.trim();
                 String[] returnArray = returnLine.split("\\s+");
 
                 if ( returnArray.length > 3 ) {
+                    String sizeString = returnArray[position];
 
-                    // The fourth value is the available disc space (if the first value is a path)
-                    // Otherwise it can also be the third value, if the first is not a path
-                    String path = returnArray[0];
-
-                    // First value is a path like "/pathA/pathB"
-                    // Also possible is a content "server:/pathA/pathB"
-                    int pos = path.lastIndexOf(":");
-                    if ( pos > -1 ) {
-                        try {
-                            path = path.substring(pos+1, path.length());
-                        } catch (IndexOutOfBoundsException ex) {
-                            System.err.println("Error: Could not evaluate path from " + path);
-                        }
-                    }
-
-                    String sizeString;
-                    if ( path.startsWith("/")) {
-                        sizeString = returnArray[3];
-                    } else {
-                        sizeString = returnArray[2];
-                    }
                     // Converting from String to int
                     size = Integer.parseInt(sizeString);
                 }
