@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:16:22 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 11:36:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -406,6 +406,8 @@ private:
 
     ULONG   mnEndShowEvent;
     ULONG   mnContextMenuEvent;
+
+    sal_Int32 mnUpdateEvent;
 };
 
 class SlideShowImplGuard
