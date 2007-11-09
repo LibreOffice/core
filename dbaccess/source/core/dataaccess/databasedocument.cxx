@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:39:51 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:11:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -891,11 +891,10 @@ sal_Bool ODatabaseDocument::WriteThroughComponent(
         xSeek->seek(0);
     }
 
-    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
     ::rtl::OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
     Any aAny;
     aAny <<= aMime;
-    xStreamProp->setPropertyValue( aPropName, aAny );
+    xStreamProp->setPropertyValue( INFO_MEDIATYPE, aAny );
 
     if( bPlainStream )
     {
@@ -995,10 +994,9 @@ void ODatabaseDocument::writeStorage(const ::rtl::OUString& _rURL
     Reference<XPropertySet> xProp(_xStorageToSaveTo,UNO_QUERY);
     if ( xProp.is() )
     {
-        static const ::rtl::OUString sPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
         Any aAny;
         aAny <<= MIMETYPE_OASIS_OPENDOCUMENT_DATABASE;
-        xProp->setPropertyValue( sPropName, aAny );
+        xProp->setPropertyValue( INFO_MEDIATYPE, aAny );
     }
 
     Reference<XComponent> xCom(static_cast<OWeakObject*>(this),UNO_QUERY);
@@ -1058,15 +1056,14 @@ Reference< ::com::sun::star::ui::XUIConfigurationManager > SAL_CALL ODatabaseDoc
             xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, ElementModes::READWRITE );
             if ( xConfigStorage.is() )
             {
-                rtl::OUString aMediaTypeProp( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ));
                 rtl::OUString aUIConfigMediaType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.ui.configuration" ));
                 rtl::OUString aMediaType;
                 Reference< XPropertySet > xPropSet( xConfigStorage, UNO_QUERY );
-                Any a = xPropSet->getPropertyValue( aMediaTypeProp );
+                Any a = xPropSet->getPropertyValue( INFO_MEDIATYPE );
                 if ( !( a >>= aMediaType ) || ( aMediaType.getLength() == 0 ))
                 {
                     a <<= aUIConfigMediaType;
-                    xPropSet->setPropertyValue( aMediaTypeProp, a );
+                    xPropSet->setPropertyValue( INFO_MEDIATYPE, a );
                 }
             }
             else
