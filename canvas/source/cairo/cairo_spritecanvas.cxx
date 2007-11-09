@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_spritecanvas.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:21:38 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:14:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,7 +221,7 @@ namespace cairocanvas
         return maDeviceHelper.getSizePixel();
     }
 
-    void SpriteCanvas::setSizePixel( const ::basegfx::B2ISize& /*rSize*/ )
+    void SpriteCanvas::setSizePixel( const ::basegfx::B2ISize& rSize )
     {
         if( mpBackgroundSurface )
         {
@@ -235,6 +235,7 @@ namespace cairocanvas
         }
         mpBackgroundCairo = mpBackgroundSurface->getCairo();
 
+        maCanvasHelper.setSize( rSize );
         maCanvasHelper.setSurface( mpBackgroundSurface, false );
     }
 
