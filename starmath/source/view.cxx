@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:23:40 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:53:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,7 +289,7 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
             // set selection to the beginning of the token
             ESelection  aSel (aToken.nRow - 1, aToken.nCol - 1);
 
-            if (rMEvt.GetClicks() != 1)
+            if (rMEvt.GetClicks() != 1 || aToken.eType == TPLACE)
                 aSel.nEndPos = aSel.nEndPos + sal::static_int_cast< USHORT >(aToken.aText.Len());
 
             pEdit->SetSelection(aSel);
