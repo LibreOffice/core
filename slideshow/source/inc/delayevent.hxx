@@ -4,9 +4,9 @@
  *
  *  $RCSfile: delayevent.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 15:04:35 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:19:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ public:
 #if defined(VERBOSE) && defined(DBG_UTIL)
     Delay( const boost::function0<void>& func,
            double nTimeout,
-           char const* const origin ) : Event(origin),
+           char const* const  ) :
 #else
     Delay( const boost::function0<void>& func,
            double nTimeout ) :
