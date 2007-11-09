@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationnodefactory.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:47:27 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:18:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -618,8 +618,8 @@ AnimationNodeSharedPtr AnimationNodeFactory::createAnimationNode(
 void AnimationNodeFactory::showTree( AnimationNodeSharedPtr& pRootNode )
 {
     if( pRootNode )
-        DEBUG_NODES_SHOWTREE( dynamic_cast<BaseContainerNode*>(
-                                  pRootNode));
+        DEBUG_NODES_SHOWTREE( boost::dynamic_pointer_cast<BaseContainerNode>(
+                                  pRootNode).get() );
 }
 #endif
 
