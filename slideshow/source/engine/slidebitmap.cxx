@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidebitmap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:40:28 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:16:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,12 @@ namespace slideshow
         void SlideBitmap::clip( const ::basegfx::B2DPolyPolygon& rClipPoly )
         {
             maClipPoly = rClipPoly;
+        }
+
+        ::com::sun::star::uno::Reference<
+                ::com::sun::star::rendering::XBitmap >    SlideBitmap::getXBitmap()
+        {
+        return mxBitmap;
         }
 
     }
