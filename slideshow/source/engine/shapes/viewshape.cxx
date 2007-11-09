@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshape.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:55:49 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 10:18:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/PanoseLetterForm.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
+
+#include <cppuhelper/exc_hlp.hxx>
+#include <comphelper/anytostring.hxx>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>
