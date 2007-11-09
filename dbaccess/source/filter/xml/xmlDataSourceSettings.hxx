@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSourceSettings.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:50:21 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:15:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,16 +42,12 @@
 namespace dbaxml
 {
     class ODBFilter;
-    class OXMLDataSource;
     class OXMLDataSourceSettings : public SvXMLImportContext
     {
-        OXMLDataSource& m_rParent;
         ODBFilter& GetOwnImport();
     public:
 
-        OXMLDataSourceSettings( ODBFilter& rImport, sal_uInt16 nPrfx,
-                    const ::rtl::OUString& rLName
-                    ,OXMLDataSource& _rParent);
+        OXMLDataSourceSettings( ODBFilter& rImport, sal_uInt16 nPrfx,const ::rtl::OUString& rLName);
         virtual ~OXMLDataSourceSettings();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,

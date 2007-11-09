@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDatabase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:50:45 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 08:16:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,8 @@ namespace dbaxml
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                     const ::rtl::OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
+        virtual void EndElement();
     };
 // -----------------------------------------------------------------------------
 } // namespace dbaxml
