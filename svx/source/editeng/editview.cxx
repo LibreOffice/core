@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:57:00 $
+ *  last change: $Author: rt $ $Date: 2007-11-09 11:02:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,98 +100,6 @@ using namespace com::sun::star::linguistic2;
 
 DBG_NAME( EditView )
 
-// temporary work-around for not yet implemented language fall-back
-// from SW olmenu.cxx imported
-static LanguageType lcl_GuessLocale2Lang( const lang::Locale &rLocale )
-{
-    struct Loc2Lang
-    {
-        const char *    pLang;
-        const char *    pCountry;
-        LanguageType    nLang;
-    };
-    static const Loc2Lang aLoc2Lang[] =
-    {
-        {"af", "",      LANGUAGE_AFRIKAANS},
-        {"sq", "",      LANGUAGE_ALBANIAN},
-        {"am", "",      LANGUAGE_AMHARIC_ETHIOPIA},
-        {"ar", "",      LANGUAGE_ARABIC_EGYPT},
-        {"eu", "",      LANGUAGE_BASQUE},
-        {"be", "",      LANGUAGE_BELARUSIAN},
-        {"bs", "",      LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA},
-        {"br", "",      LANGUAGE_BRETON_FRANCE},
-        {"ca", "",      LANGUAGE_CATALAN},
-        {"zh", "CN",    LANGUAGE_CHINESE_SIMPLIFIED},
-        {"zh", "TW",    LANGUAGE_CHINESE_TRADITIONAL},
-        {"hr", "",      LANGUAGE_CROATIAN},
-        {"cs", "",      LANGUAGE_CZECH},
-        {"da", "",      LANGUAGE_DANISH},
-        {"nl", "",      LANGUAGE_DUTCH},
-        {"en", "",      LANGUAGE_ENGLISH_US},
-        {"eo", "",      LANGUAGE_USER_ESPERANTO},
-        {"et", "",      LANGUAGE_ESTONIAN},
-        {"fi", "",      LANGUAGE_FINNISH},
-        {"fr", "",      LANGUAGE_FRENCH},
-        {"fy", "",      LANGUAGE_FRISIAN_NETHERLANDS},
-        {"ka", "",      LANGUAGE_GEORGIAN},
-        {"de", "",      LANGUAGE_GERMAN},
-        {"el", "",      LANGUAGE_GREEK},
-        {"he", "",      LANGUAGE_HEBREW},
-        {"hi", "",      LANGUAGE_HINDI},
-        {"hu", "",      LANGUAGE_HUNGARIAN},
-        {"is", "",      LANGUAGE_ICELANDIC},
-        {"id", "",      LANGUAGE_INDONESIAN},
-        {"ga", "",      LANGUAGE_GAELIC_IRELAND},
-        {"it", "",      LANGUAGE_ITALIAN},
-        {"ja", "",      LANGUAGE_JAPANESE},
-        {"ko", "",      LANGUAGE_KOREAN},
-        {"la", "",      LANGUAGE_LATIN},
-        {"lv", "",      LANGUAGE_LATVIAN},
-        {"lt", "",      LANGUAGE_LITHUANIAN},
-        {"ms", "",      LANGUAGE_MALAY_MALAYSIA},
-        {"gv", "",        LANGUAGE_NONE},
-        {"mr", "",      LANGUAGE_MARATHI},
-        {"ne", "",      LANGUAGE_NEPALI},
-        {"nb", "",      LANGUAGE_NORWEGIAN_BOKMAL},
-        {"fa", "",      LANGUAGE_FARSI},
-        {"pl", "",      LANGUAGE_POLISH},
-        {"pt", "PT",    LANGUAGE_PORTUGUESE},
-        {"ro", "",      LANGUAGE_ROMANIAN},
-        {"rm", "",      LANGUAGE_RHAETO_ROMAN},
-        {"ru", "",      LANGUAGE_RUSSIAN},
-        {"sa", "",      LANGUAGE_SANSKRIT},
-        {"sco","",        LANGUAGE_NONE},
-        {"gd", "",      LANGUAGE_GAELIC_SCOTLAND},
-        {"sh", "YU",    LANGUAGE_SERBIAN_LATIN},
-        {"sk", "SK",    LANGUAGE_SLOVAK},
-        {"sl", "",      LANGUAGE_SLOVENIAN},
-        {"es", "",      LANGUAGE_SPANISH},
-        {"sw", "",      LANGUAGE_SWAHILI},
-        {"sv", "",      LANGUAGE_SWEDISH},
-        {"tl", "",        LANGUAGE_NONE},
-        {"ta", "",      LANGUAGE_TAMIL},
-        {"th", "",      LANGUAGE_THAI},
-        {"tr", "",      LANGUAGE_TURKISH},
-        {"uk", "",      LANGUAGE_UKRAINIAN},
-        {"vi", "",      LANGUAGE_VIETNAMESE},
-        {"cy", "",      LANGUAGE_WELSH}
-    };
-
-    LanguageType nRes = LANGUAGE_DONTKNOW;
-    const sal_Int16 nNum = sizeof(aLoc2Lang) / sizeof(aLoc2Lang[0]);
-    for (sal_Int16 i = 0;  i < nNum;  ++i)
-    {
-        if (rLocale.Language.equalsAscii( aLoc2Lang[i].pLang ) &&
-            rLocale.Country .equalsAscii( aLoc2Lang[i].pCountry ))
-        {
-            nRes = aLoc2Lang[i].nLang;
-            break;
-        }
-    }
-    return nRes;
-}
-
-
 // From SW => Create common method
 LanguageType lcl_CheckLanguage(
     const OUString &rText,
@@ -210,18 +118,16 @@ LanguageType lcl_CheckLanguage(
         // get language as from "Tools/Options - Language Settings - Languages: Locale setting"
         LanguageType nTmpLang = Application::GetSettings().GetLanguage();
 
-        nLang = lcl_GuessLocale2Lang( aLocale );
-
         // if the result from language guessing does not provide a 'Country' part
         // try to get it by looking up the locale setting of the office.
-//        if (aLocale.Country.getLength() == 0)
-//        {
-//            lang::Locale aTmpLocale = SvxCreateLocale( nTmpLang );
-//            if (aTmpLocale.Language == aLocale.Language)
-//                nLang = nTmpLang;
-//        }
-//        if (nLang == LANGUAGE_NONE) // language not found by looking up the sytem language...
-//            nLang = MsLangId::convertLocaleToLanguage( aLocale );
+        if (aLocale.Country.getLength() == 0)
+        {
+            lang::Locale aTmpLocale = SvxCreateLocale( nTmpLang );
+            if (aTmpLocale.Language == aLocale.Language)
+                nLang = nTmpLang;
+        }
+        if (nLang == LANGUAGE_NONE) // language not found by looking up the sytem language...
+            nLang = MsLangId::convertLocaleToLanguageWithFallback( aLocale );
         if (nLang == LANGUAGE_SYSTEM)
             nLang = nTmpLang;
         if (nLang == LANGUAGE_DONTKNOW)
