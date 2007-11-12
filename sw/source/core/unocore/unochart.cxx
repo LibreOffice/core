@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unochart.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 10:56:37 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:26:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -653,7 +653,7 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
             chart::ChartDataRowSource eSource;
             if (!(pArg[i].Value >>= eSource))
             {
-                sal_Int32 nTmp;
+                sal_Int32 nTmp = 0;
                 if (!(pArg[i].Value >>= nTmp))
                     throw lang::IllegalArgumentException();
                 eSource = static_cast< chart::ChartDataRowSource >( nTmp );
