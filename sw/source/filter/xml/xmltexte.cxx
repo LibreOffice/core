@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:14:22 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:29:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -392,7 +392,7 @@ void lcl_addFrameProperties(
     aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameName") );
     aAny >>= aName;
 
-    sal_Bool bIsAutoScroll, bIsScrollingMode;
+    sal_Bool bIsAutoScroll = sal_False, bIsScrollingMode;
     aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll") );
     aAny >>= bIsAutoScroll;
     if ( !bIsAutoScroll )
@@ -401,7 +401,7 @@ void lcl_addFrameProperties(
         aAny >>= bIsScrollingMode;
     }
 
-    sal_Bool bIsBorderSet, bIsAutoBorder;
+    sal_Bool bIsBorderSet, bIsAutoBorder = sal_False;
     aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder") );
     aAny >>= bIsAutoBorder;
     if ( !bIsAutoBorder )
