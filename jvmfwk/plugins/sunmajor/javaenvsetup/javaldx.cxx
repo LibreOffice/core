@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaldx.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:45:14 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 15:31:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,15 +129,17 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     rtl::OUString sVendor1(RTL_CONSTASCII_USTRINGPARAM("Sun Microsystems Inc."));
     rtl::OUString sVendor2(RTL_CONSTASCII_USTRINGPARAM("IBM Corporation"));
     rtl::OUString sVendor3(RTL_CONSTASCII_USTRINGPARAM("Blackdown Java-Linux Team"));
-    rtl::OUString sVendor4(RTL_CONSTASCII_USTRINGPARAM("Apple Computer, Inc."));
-    rtl::OUString sVendor5(RTL_CONSTASCII_USTRINGPARAM("BEA Systems, Inc."));
-    rtl::OUString sVendor6(RTL_CONSTASCII_USTRINGPARAM("Free Software Foundation, Inc."));
+    rtl::OUString sVendor4(RTL_CONSTASCII_USTRINGPARAM("Apple Inc."));
+    rtl::OUString sVendor5(RTL_CONSTASCII_USTRINGPARAM("Apple Computer, Inc."));
+    rtl::OUString sVendor6(RTL_CONSTASCII_USTRINGPARAM("BEA Systems, Inc."));
+    rtl::OUString sVendor7(RTL_CONSTASCII_USTRINGPARAM("Free Software Foundation, Inc."));
     if ( ! (sVendor1.equals(pInfo->sVendor) == sal_True
             || sVendor2.equals(pInfo->sVendor) == sal_True
             || sVendor3.equals(pInfo->sVendor) == sal_True
             || sVendor4.equals(pInfo->sVendor) == sal_True
             || sVendor5.equals(pInfo->sVendor) == sal_True
-        || sVendor6.equals(pInfo->sVendor) == sal_True))
+            || sVendor6.equals(pInfo->sVendor) == sal_True
+        || sVendor7.equals(pInfo->sVendor) == sal_True))
         return 0;
 
     rtl::OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
