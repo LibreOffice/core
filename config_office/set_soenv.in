@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.160 $
-# Date:        $Date: 2007-11-02 15:23:26 $
+# Version:     $Revision: 1.161 $
+# Date:        $Date: 2007-11-12 08:36:01 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -83,7 +83,8 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $SHELL,
      $LD_LIBRARY_PATH, $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $PERL, 
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME, 
-     $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
+     $USE_DIRCETX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TEMP,
+     $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB,
 	 $PROEXT,
      $SYSTEM_PYTHON, $PYTHONPATH, $PYTHONHOME, $SYSTEM_MOZILLA, $EPM_FLAGS);
@@ -617,6 +618,7 @@ elsif ( $platform =~ m/cygwin/ )
       $CSC_PATH       = PosixFormat('@CSC_PATH@');
       $PSDK_HOME      = PosixFormat('@PSDK_HOME@');
       $DIRECTXSDK_LIB = PosixFormat('@DIRECTXSDK_LIB@');
+      $USE_DIRECTX5   = "";
       $FRAME_HOME     = PosixFormat('@FRAME_HOME@');
       $USE_NEW_SDK    = "TRUE";
       $CPUNAME        = "INTEL";
@@ -1134,6 +1136,13 @@ if ($platform =~ m/cygwin|os2/)
                         $ps.'$COMPATH'.$LIB;
       if ( '@ENABLE_DIRECTX@' ne "" ) {
           $ILIB   .= $ps.$DIRECTXSDK_LIB;
+          if ( '@COMEX@' eq "10" ) {
+              # .NET2003 provides and compiles against DirectX 5 libraries and is
+              # hereby still Win9x compatible.
+              $ILIB .= $ps.'$COMPATH'.$ds.'PlatformSDK'.$LIB;
+              $USE_DIRECTX5 = "YES";
+          }
+
       }
    }
    elsif ( $COM eq "GCC" )
@@ -1452,6 +1461,11 @@ elsif ($platform =~ m/cygwin/)
                          $I.'$COMPATH'.$ds."include";
       if ( '@ENABLE_DIRECTX@' ne "" ) {
           $SOLARINC   .= $I.PosixFormat('@DIRECTXSDK_HOME@').$INCLUDE;
+          if ( '@COMEX@' eq "10" ) {
+              # .NET2003 provides and compiles against DirectX 5 libraries and is
+              # hereby still Win9x compatible.
+              $SOLARINC .= $I.'$COMPATH'.$ds.'PlatformSDK'.$ds."include";
+          }
       }
    }
    elsif ( $COM eq "GCC" )
@@ -1754,6 +1768,7 @@ if ( $platform =~ m/cygwin/ )
 {  ToFile( "CYGWIN_PATH",       $CYGWIN_PATH,       "e" );
    ToFile( "PSDK_HOME",         $PSDK_HOME,         "e" );
    ToFile( "DIRECTXSDK_LIB",    $DIRECTXSDK_LIB,    "e" );
+   ToFile( "USE_DIRECTX5",      $USE_DIRECTX5,      "e" );
    ToFile( "ATL_LIB",           $ATL_LIB,         "e" );
    if ( $MINGW ne "yes" )
    {  ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
