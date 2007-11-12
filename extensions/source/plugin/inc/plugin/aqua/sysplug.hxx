@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sysplug.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:51:32 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 15:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,13 @@
 #include <list>
 #include <map>
 #include <algorithm>
-
+#include <premac.h>
+#include <Carbon/Carbon.h>
+#include <Security/cssmconfig.h>
+#include <postmac.h>
+#undef uint32
 #include <npsdk/npapi.h>
+
 #define GENERATINGCFM 0
 #include <npsdk/npupp.h>
 
@@ -50,6 +55,7 @@
 //#include <vcl/threadex.hxx>
 //#include <plugin/plcom.hxx>
 #include <vcl/sysdata.hxx>
+
 
 //==================================================================================================
 class MacPluginComm : public PluginComm
@@ -70,7 +76,7 @@ public:
     virtual NPError NPP_Destroy( NPP instance, NPSavedData** save );
     virtual NPError NPP_DestroyStream( NPP instance, NPStream* stream,
                                        NPError reason );
-    virtual jref NPP_GetJavaClass();
+    virtual void* NPP_GetJavaClass();
     virtual NPError NPP_Initialize();
     virtual NPError NPP_New( NPMIMEType pluginType, NPP instance,
                              uint16 mode, int16 argc,
