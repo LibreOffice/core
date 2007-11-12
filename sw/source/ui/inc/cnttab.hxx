@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cnttab.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:11:32 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:31:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,9 @@ struct CurTOXType
        }
     USHORT GetFlatIndex() const;
 
+    CurTOXType () : eType (TOX_INDEX), nIndex (0) {};
+
+    CurTOXType (TOXTypes t, USHORT i) : eType (t), nIndex (i) {};
 };
 
 class SwOLENames : public Resource
