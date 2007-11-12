@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vendorlist.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:47:17 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 15:31:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ BEGIN_VENDOR_MAP()
     VENDOR_MAP_ENTRY("Sun Microsystems Inc.", SunInfo)
     VENDOR_MAP_ENTRY("IBM Corporation", OtherInfo)
     VENDOR_MAP_ENTRY("Blackdown Java-Linux Team", OtherInfo)
+    VENDOR_MAP_ENTRY("Apple Inc.", OtherInfo)
     VENDOR_MAP_ENTRY("Apple Computer, Inc.", OtherInfo)
     VENDOR_MAP_ENTRY("BEA Systems, Inc.", OtherInfo)
     VENDOR_MAP_ENTRY("Free Software Foundation, Inc.", GnuInfo)
