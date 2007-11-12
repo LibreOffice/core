@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-06 16:25:11 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:30:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,8 @@ void SwContentViewConfig::Load()
                     case 15: rParent.SetShowHiddenChar(bSet); break;// "NonprintingCharacter/HiddenCharacter",
                     case 16:
                     {
-                        sal_Int32 nSet; pValues[nProp] >>= nSet;
+                        sal_Int32 nSet = 0;
+                        pValues[nProp] >>= nSet;
                         rParent.SetUpdateLinkMode(nSet, TRUE);
                     }
                     break;// "Update/Link",
@@ -381,39 +382,45 @@ void SwLayoutViewConfig::Load()
                     case  8:
                     {
                         rParent.bIsHScrollMetricSet = sal_True;
-                        sal_Int32 nUnit; pValues[nProp] >>= nUnit;
+                        sal_Int32 nUnit = 0;
+                        pValues[nProp] >>= nUnit;
                         rParent.eHScrollMetric = ((FieldUnit)nUnit);  // "Window/HorizontalRulerUnit"
                     }
                     break;
                     case  9:
                     {
                         rParent.bIsVScrollMetricSet = sal_True;
-                        sal_Int32 nUnit; pValues[nProp] >>= nUnit;
+                        sal_Int32 nUnit = 0;
+                        pValues[nProp] >>= nUnit;
                         rParent.eVScrollMetric = ((FieldUnit)nUnit); // "Window/VerticalRulerUnit"
                     }
                     break;
                     case 10: rParent.SetSmoothScroll(bSet); break;// "Window/SmoothScroll",
                     case 11:
                     {
-                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                        sal_Int32 nVal = 0;
+                        pValues[nProp] >>= nVal;
                         rParent.SetZoom( static_cast< USHORT >(nVal) );
                     }
                     break;// "Zoom/Value",
                     case 12:
                     {
-                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                        sal_Int32 nVal = 0;
+                        pValues[nProp] >>= nVal;
                         rParent.SetZoomType( static_cast< SvxZoomType >(nVal) );
                     }
                     break;// "Zoom/Type",
                     case 13:
                     {
-                        sal_Int32 nUnit; pValues[nProp] >>= nUnit;
+                        sal_Int32 nUnit = 0;
+                        pValues[nProp] >>= nUnit;
                         rParent.SetMetric((FieldUnit)nUnit, TRUE);
                     }
                     break;// "Other/MeasureUnit",
                     case 14:
                     {
-                        sal_Int32 nTab; pValues[nProp] >>= nTab;
+                        sal_Int32 nTab = 0;
+                        pValues[nProp] >>= nTab;
                         rParent.SetDefTab(MM100_TO_TWIP(nTab), TRUE);
                     }
                     break;// "Other/TabStop",
@@ -667,7 +674,8 @@ void SwWebColorConfig::Load()
                 switch(nProp)
                 {
                     case  0:
-                        sal_Int32 nSet; pValues[nProp] >>= nSet; rParent.SetRetoucheColor(nSet);
+                        sal_Int32 nSet = 0;
+                        pValues[nProp] >>= nSet; rParent.SetRetoucheColor(nSet);
                     break;// "Color",
                 }
             }
