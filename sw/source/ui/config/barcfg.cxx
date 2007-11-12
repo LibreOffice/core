@@ -4,9 +4,9 @@
  *
  *  $RCSfile: barcfg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:21:00 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:29:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ SwToolbarConfigItem::SwToolbarConfigItem( BOOL bWeb ) :
         {
             if(pValues[nProp].hasValue())
             {
-                sal_Int32 nVal;
+                sal_Int32 nVal = 0;
                 pValues[nProp] >>= nVal;
                 aTbxIdArray[nProp] = nVal;
             }
