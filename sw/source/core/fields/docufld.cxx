@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:48:37 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:23:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,7 +383,7 @@ BOOL SwPageNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 BOOL SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     BOOL bRet = TRUE;
-    sal_Int16 nSet;
+    sal_Int16 nSet = 0;
     switch( nWhichId )
     {
     case FIELD_PROP_FORMAT:
@@ -677,7 +677,7 @@ BOOL SwFileNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             //JP 24.10.2001: int32 because in UnoField.cxx a putvalue is
             //              called with a int32 value! But normally we need
             //              here only a int16
-            sal_Int32 nType;
+            sal_Int32 nType = 0;
             rAny >>= nType;
             BOOL bFixed = IsFixed();
             switch( nType )
@@ -834,7 +834,7 @@ BOOL SwTemplNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             //JP 24.10.2001: int32 because in UnoField.cxx a putvalue is
             //              called with a int32 value! But normally we need
             //              here only a int16
-            sal_Int32 nType;
+            sal_Int32 nType = 0;
             rAny >>= nType;
             switch( nType )
             {
@@ -974,7 +974,7 @@ BOOL SwDocStatField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     {
     case FIELD_PROP_USHORT2:
         {
-            sal_Int16 nSet;
+            sal_Int16 nSet = 0;
             rAny >>= nSet;
             if(nSet <= SVX_NUM_CHARS_LOWER_LETTER_N &&
                 nSet != SVX_NUM_CHAR_SPECIAL &&
@@ -1274,7 +1274,7 @@ BOOL SwDocInfoField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
  ---------------------------------------------------------------------------*/
 BOOL SwDocInfoField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = 0;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
@@ -2030,7 +2030,7 @@ BOOL SwExtUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 
     case FIELD_PROP_USHORT1:
         {
-            sal_Int16 nTmp;
+            sal_Int16 nTmp = 0;
             rAny >>= nTmp;
             nType = nTmp;
         }
@@ -2407,7 +2407,7 @@ BOOL SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     {
         case FIELD_PROP_USHORT1:
         {
-            sal_Int16 nSet;
+            sal_Int16 nSet = 0;
             rAny >>= nSet;
             if(nSet <= SVX_NUM_PAGEDESC )
                 SetFormat(nSet);
@@ -2561,7 +2561,7 @@ BOOL SwJumpEditField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             //JP 24.10.2001: int32 because in UnoField.cxx a putvalue is
             //              called with a int32 value! But normally we need
             //              here only a int16
-            sal_Int32 nSet;
+            sal_Int32 nSet = 0;
             rAny >>= nSet;
             switch( nSet )
             {
