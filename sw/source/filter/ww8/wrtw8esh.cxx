@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:01:25 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:29:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -522,7 +522,7 @@ void SwWW8Writer::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
     };
     pDataStrm->Write( aComboData2, sizeof(aComboData2) );
 
-    sal_Int16 nTemp;
+    sal_Int16 nTemp = 0;
     xPropSet->getPropertyValue(C2U("DefaultState")) >>= nTemp;
     sal_uInt32 nIsDefaultChecked(nTemp);
 
