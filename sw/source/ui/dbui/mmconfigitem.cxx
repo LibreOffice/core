@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmconfigitem.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:33:23 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:31:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,7 +340,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
                 case 25 :pValues[nProp] >>= aDBData.sCommand;              break;
                 case 26 :
                 {
-                    short nTemp;
+                    short nTemp = 0;
                     if(pValues[nProp] >>= nTemp)
                         aDBData.nCommandType = nTemp;
                 }
@@ -1189,7 +1189,7 @@ bool SwMailMergeConfigItem::IsRecordExcluded(sal_Int32 nRecord)
     bool bRet = false;
     if(nRecord > 0 && nRecord < m_aSelection.getLength())
     {
-        sal_Int32 nTemp;
+        sal_Int32 nTemp = 0;
         m_aSelection[nRecord - 1] >>= nTemp;
         bRet = nTemp < 1;
     }
