@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:22:40 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,7 +427,7 @@ void SwRevisionConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                sal_Int32 nVal;
+                sal_Int32 nVal = 0;
                 pValues[nProp] >>= nVal;
                 switch(nProp)
                 {
@@ -717,7 +717,8 @@ void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp, sal_I
         break;//Category
         case 2:
         {
-            sal_Int32 nTemp;  pValues[nProp] >>= nTemp;
+            sal_Int32 nTemp = 0;
+            pValues[nProp] >>= nTemp;
             rOpt.SetNumType(sal::static_int_cast< sal_uInt16, sal_Int32>(nTemp));
         }
         break;//Numbering",
@@ -736,13 +737,15 @@ void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp, sal_I
         break;//Delimiter",
         case 5:
         {
-            sal_Int32 nTemp;  pValues[nProp] >>= nTemp;
+            sal_Int32 nTemp = 0;
+            pValues[nProp] >>= nTemp;
             rOpt.SetLevel(sal::static_int_cast< sal_uInt16, sal_Int32>(nTemp));
         }
         break;//Level",
         case 6:
         {
-            sal_Int32 nTemp;  pValues[nProp] >>= nTemp;
+            sal_Int32 nTemp = 0;
+            pValues[nProp] >>= nTemp;
             rOpt.SetPos(sal::static_int_cast< sal_uInt16, sal_Int32>(nTemp));
         }
         break;//Position",
@@ -982,7 +985,7 @@ void SwTableConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                sal_Int32 nTemp;
+                sal_Int32 nTemp = 0;
                 switch(nProp)
                 {
                     case 0 : pValues[nProp] >>= nTemp; nTblHMove = (USHORT)MM100_TO_TWIP(nTemp); break;  //"Shift/Row",
