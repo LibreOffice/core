@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chpfld.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:48:02 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,17 +263,19 @@ BOOL SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_BYTE1:
-        sal_Int8 nTmp;
+    {
+        sal_Int8 nTmp = 0;
         rAny >>= nTmp;
         if(nTmp >= 0 && nTmp < MAXLEVEL)
             nLevel = nTmp;
         else
             bRet = FALSE;
         break;
+    }
 
     case FIELD_PROP_USHORT1:
         {
-            sal_Int16 nVal;
+            sal_Int16 nVal = 0;
             rAny >>= nVal;
             switch( nVal )
             {
