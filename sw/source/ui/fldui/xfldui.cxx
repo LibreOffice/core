@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfldui.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:50:14 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:31:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,7 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
             Reference <XPropertySet> xCol;
             aCol >>= xCol;
             Any aType = xCol->getPropertyValue( UniString::CreateFromAscii("Type"));
-            sal_Int32 eDataType;
+            sal_Int32 eDataType = 0;
             aType >>= eDataType;
             switch(eDataType)
             {
