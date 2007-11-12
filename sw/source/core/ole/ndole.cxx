@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:08:33 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:25:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1004,7 +1004,7 @@ void SwOLELRUCache::Load()
     DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" )
     if( aValues.getLength() == aNames.getLength() && pValues->hasValue() )
     {
-        sal_Int32 nVal;
+        sal_Int32 nVal = 0;
         *pValues >>= nVal;
         //if( 20 > nVal )
         //    nVal = 20;
