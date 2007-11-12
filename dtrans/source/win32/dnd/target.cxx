@@ -4,9 +4,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:59:02 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 15:14:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,16 +141,31 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
     // an OLE thread. That is to say, if DropTarget::initialize was called from an
     // MTA thread then we create an OLE thread in which the window is registered.
     // The thread will stay alive until aver RevokeDragDrop has been called.
-    HRESULT hr= OleInitialize( NULL);
 
-    // Current thread is MTA
-    if( hr == RPC_E_CHANGED_MODE )
+    // Additionally even if RegisterDragDrop is called from an STA thread we have
+    // to ensure that it is called from the same thread that created the Window
+    // otherwise meesages sent during DND won't reach the windows message queue.
+    // Calling AttachThreadInput first would resolve this problem but would block
+    // the message queue of the calling thread. So if the current thread
+    // (even if it's an STA thread) and the thread that created the window are not
+    // identical we need to create a new thread as we do when the calling thread is
+    // an MTA thread.
+
+    if( aArguments.getLength() > 0)
     {
-        OSL_ENSURE( ! m_threadIdTarget,"initialize was called twice");
-        if( aArguments.getLength() > 0)
+        // Get the window handle from aArgument. It is needed for RegisterDragDrop.
+        m_hWnd= *(HWND*)aArguments[0].getValue();
+        OSL_ASSERT( IsWindow( m_hWnd) );
+
+        // Obtain the id of the thread that created the window
+        m_threadIdWindow= GetWindowThreadProcessId( m_hWnd, NULL);
+
+        HRESULT hr= OleInitialize( NULL);
+
+        // Current thread is MTA or Current thread and Window thread are not identical
+        if( hr == RPC_E_CHANGED_MODE || GetCurrentThreadId() != m_threadIdWindow  )
         {
-            m_hWnd= *(HWND*)aArguments[0].getValue();
-            OSL_ASSERT( IsWindow( m_hWnd) );
+            OSL_ENSURE( ! m_threadIdTarget,"initialize was called twice");
             // create the IDropTargetImplementation
             m_pDropTarget= new IDropTargetImpl( *static_cast<DropTarget*>( this) );
             m_pDropTarget->AddRef();
@@ -168,25 +183,19 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
             CloseHandle( m_evtThreadReady);
             PostThreadMessage( m_threadIdTarget, WM_REGISTERDRAGDROP, (WPARAM)static_cast<DropTarget*>(this), 0);
         }
-
-    }
-    else if( hr == S_OK || hr == S_FALSE)
-    {
-        // current thread is STA
-        // If OleInitialize has been called by the caller then we must not call
-        // OleUninitialize
-        if( hr == S_OK)
+        else if( hr == S_OK || hr == S_FALSE)
         {
-            // caller did not call OleInitialize, so we call OleUninitialize
-            // remember the thread that will call OleUninitialize
-            m_oleThreadId= CoGetCurrentProcess(); // get a unique thread id
-        }
+            // current thread is STA
+            // If OleInitialize has been called by the caller then we must not call
+            // OleUninitialize
+            if( hr == S_OK)
+            {
+                // caller did not call OleInitialize, so we call OleUninitialize
+                // remember the thread that will call OleUninitialize
+                m_oleThreadId= CoGetCurrentProcess(); // get a unique thread id
+            }
 
-        // Get the window handle from aArgument. It is needed for RegisterDragDrop.
-        if( aArguments.getLength() > 0)
-        {
-            m_hWnd= *(HWND*)aArguments[0].getValue();
-            OSL_ASSERT( IsWindow( m_hWnd) );
+            // Get the window handle from aArgument. It is needed for RegisterDragDrop.
             // create the IDropTargetImplementation
             m_pDropTarget= new IDropTargetImpl( *static_cast<DropTarget*>( this) );
             m_pDropTarget->AddRef();
@@ -202,9 +211,10 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
                 }
             }
         }
+        else
+            throw Exception();
+
     }
-    else
-        throw Exception();
 }
 
 // This function is called as extra thread from DragSource::startDrag.
