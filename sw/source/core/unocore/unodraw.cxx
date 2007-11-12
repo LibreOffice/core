@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:35:41 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:26:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1226,7 +1226,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                 // --> OD 2004-08-06 #i28749#
                 else if ( FN_SHAPE_POSITION_LAYOUT_DIR == pMap->nWID )
                 {
-                    sal_Int16 nPositionLayoutDir;
+                    sal_Int16 nPositionLayoutDir = 0;
                     aValue >>= nPositionLayoutDir;
                     pFmt->SetPositionLayoutDir( nPositionLayoutDir );
                 }
@@ -1240,7 +1240,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                         SdrMarkList aList;
                         SdrMark aMark(pObj);
                         aList.InsertEntry(aMark);
-                        sal_Int32 nAnchor;
+                        sal_Int32 nAnchor = 0;
                         cppu::enum2int( nAnchor, aValue );
                         pDoc->ChgAnchor( aList, (RndStdIds)nAnchor,
                                                 sal_False, sal_True );
@@ -1309,7 +1309,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
                     // --> OD 2004-08-06 #i28749#
                     case FN_SHAPE_POSITION_LAYOUT_DIR :
                     {
-                        sal_Int16 nPositionLayoutDir;
+                        sal_Int16 nPositionLayoutDir = 0;
                         aValue >>= nPositionLayoutDir;
                         pImpl->SetPositionLayoutDir( nPositionLayoutDir );
                     }
@@ -2524,7 +2524,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
         // determine current x-postion
         rtl::OUString aHoriPosPropStr( RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition") );
         uno::Any aHoriPos( getPropertyValue( aHoriPosPropStr ) );
-        sal_Int32 dCurrX;
+        sal_Int32 dCurrX = 0;
         aHoriPos >>= dCurrX;
         // change x-position attribute, if needed
         if ( dCurrX != _aPosition.X )
@@ -2552,7 +2552,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
         // determine current y-postion
         rtl::OUString aVertPosPropStr( RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition") );
         uno::Any aVertPos( getPropertyValue( aVertPosPropStr ) );
-        sal_Int32 dCurrY;
+        sal_Int32 dCurrY = 0;
         aVertPos >>= dCurrY;
         // change y-position attribute, if needed
         if ( dCurrY != _aPosition.Y )
