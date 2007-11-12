@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:48:13 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:23:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -509,7 +509,7 @@ BOOL SwDBField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     case FIELD_PROP_BOOL2:
     {
         USHORT nSubTyp = GetSubType();
-        sal_Bool bVisible;
+        sal_Bool bVisible = sal_False;
         if(!(rAny >>= bVisible))
             return FALSE;
         if(bVisible)
@@ -538,7 +538,7 @@ BOOL SwDBField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     break;
     case FIELD_PROP_FORMAT:
         {
-            sal_Int32 nTemp;
+            sal_Int32 nTemp = 0;
             rAny >>= nTemp;
             SetFormat(nTemp);
         }
@@ -649,7 +649,7 @@ BOOL SwDBNameInfField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     case FIELD_PROP_BOOL2:
     {
         USHORT nSubTyp = GetSubType();
-        sal_Bool bVisible;
+        sal_Bool bVisible = sal_False;
         if(!(rAny >>= bVisible))
             return FALSE;
         if(bVisible)
@@ -916,7 +916,7 @@ BOOL    SwDBNumSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
     case FIELD_PROP_FORMAT:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             rAny >>= nVal;
             aPar2 = String::CreateFromInt32(nVal);
         }
@@ -1093,7 +1093,7 @@ BOOL SwDBSetNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     {
     case FIELD_PROP_USHORT1:
         {
-            sal_Int16 nSet;
+            sal_Int16 nSet = 0;
             rAny >>= nSet;
             if(nSet < (INT16) SVX_NUMBER_NONE )
                 SetFormat(nSet);
