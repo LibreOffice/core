@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:39:53 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:32:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,7 +340,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             break;
         case HANDLE_LINK_UPDATE_MODE:
         {
-            sal_Int16 nMode;
+            sal_Int16 nMode = 0;
             rValue >>= nMode;
             switch (nMode)
             {
@@ -379,14 +379,14 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_ADD_PARA_TABLE_SPACING:
         {
-            sal_Bool bParaSpace;
+            sal_Bool bParaSpace = sal_False;
             rValue >>= bParaSpace;
             mpDoc->set(IDocumentSettingAccess::PARA_SPACE_MAX, bParaSpace );
         }
         break;
         case HANDLE_ADD_PARA_TABLE_SPACING_AT_START:
         {
-            sal_Bool bParaSpacePage;
+            sal_Bool bParaSpacePage = sal_False;
             rValue >>= bParaSpacePage;
             mpDoc->set(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES, bParaSpacePage );
         }
@@ -467,7 +467,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_CHARACTER_COMPRESSION_TYPE:
         {
-            sal_Int16 nMode;
+            sal_Int16 nMode = 0;
             rValue >>= nMode;
             switch (nMode)
             {
@@ -525,7 +525,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_PRINTER_INDEPENDENT_LAYOUT:
         {
-            sal_Int16 nTmp;
+            sal_Int16 nTmp = 0;
             rValue >>= nTmp;
 
             bool bUseVirDev = true;
@@ -542,7 +542,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_IS_LABEL_DOC :
         {
-            sal_Bool bSet;
+            sal_Bool bSet = sal_False;
             if(!(rValue >>= bSet))
                 throw IllegalArgumentException();
             mpDoc->set(IDocumentSettingAccess::LABEL_DOCUMENT, bSet);
@@ -573,7 +573,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_ALLOW_PRINTJOB_CANCEL:
         {
-            sal_Bool bState;
+            sal_Bool bState = sal_False;
             if (!(rValue >>= bState))
                 throw IllegalArgumentException();
             mpDocSh->Stamp_SetPrintCancelState(bState);
