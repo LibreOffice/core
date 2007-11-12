@@ -4,9 +4,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ihi $ $Date: 2007-10-18 10:47:45 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:22:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1244,7 +1244,7 @@ namespace numfunc
                         case 1:
                         case 2:
                         {
-                            sal_uInt8 nTmp;
+                            sal_uInt8 nTmp = 0;
                             pValues[nProp] >>= nTmp;
                             if ( nProp == 1 )
                                 meFontWeight = static_cast<FontWeight>(nTmp);
@@ -1263,7 +1263,7 @@ namespace numfunc
                         case 11:
                         case 12:
                         {
-                            sal_Unicode cChar;
+                            sal_Unicode cChar = sal_Unicode();
                             pValues[nProp] >>= cChar;
                             mnLevelChars[nProp-3] = cChar;
                         }
