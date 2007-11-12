@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:17:04 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1217,7 +1217,7 @@ long lcl_TOXTypesToUserData(CurTOXType eType)
 //-----------------------------------------------------------------
 void SwTOXSelectTabPage::SelectType(TOXTypes eSet)
 {
-    CurTOXType eCurType = {eSet, 0};
+    CurTOXType eCurType (eSet, 0);
 
     long nData = lcl_TOXTypesToUserData(eCurType);
     aTypeLB.SelectEntryPos(aTypeLB.GetEntryPos((void*)nData));
@@ -1233,7 +1233,7 @@ void SwTOXSelectTabPage::SelectType(TOXTypes eSet)
 CurTOXType lcl_UserData2TOXTypes(sal_uInt16 nData)
 {
     CurTOXType eRet;
-    eRet.nIndex = 0;
+
     switch(nData&0xff)
     {
         case TO_INDEX       : eRet.eType = TOX_INDEX;       break;
