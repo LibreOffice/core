@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:09:57 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:29:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -702,7 +702,7 @@ void SwXMLExport::_ExportContent()
         Any aAny = xPropSet->getPropertyValue( sTwoDigitYear );
         aAny <<= (sal_Int16)1930;
 
-        sal_Int16 nYear;
+        sal_Int16 nYear = 0;
         aAny >>= nYear;
         if (nYear != 1930 )
         {
