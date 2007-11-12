@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:37:21 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:27:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,7 @@ String lcl_AnyToString(uno::Any rVal) throw(lang::IllegalArgumentException)
 //-----------------------------------------------------------------------------
 sal_Int16 lcl_AnyToInt16(uno::Any rVal) throw(lang::IllegalArgumentException)
 {
-    sal_Int16 nRet;
+    sal_Int16 nRet = 0;
     if(!(rVal >>= nRet))
         throw lang::IllegalArgumentException();
     return nRet;
@@ -151,7 +151,7 @@ sal_Int16 lcl_AnyToInt16(uno::Any rVal) throw(lang::IllegalArgumentException)
 //-----------------------------------------------------------------------------
 sal_Bool lcl_AnyToBool(uno::Any rVal) throw(lang::IllegalArgumentException)
 {
-    sal_Bool bRet;
+    sal_Bool bRet = sal_False;
     if(!(rVal >>= bRet))
         throw lang::IllegalArgumentException();
     return bRet;
@@ -2489,7 +2489,7 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
             }
             else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TabStopPosition"  )))
             {
-                sal_Int32 nPosition;
+                sal_Int32 nPosition = 0;
                 if(pProperties[j].Value.getValueType() != ::getCppuType((sal_Int32*)0))
                     throw lang::IllegalArgumentException();
                 pProperties[j].Value >>= nPosition;
@@ -2535,7 +2535,8 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
             }
             else if( pProperties[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("BibliographyDataField")))
             {
-                sal_Int16 nType; pProperties[j].Value >>= nType;
+                sal_Int16 nType = 0;
+                pProperties[j].Value >>= nType;
                 if(nType < 0 || nType > text::BibliographyDataField::ISBN)
                 {
                     lang::IllegalArgumentException aExcept;
