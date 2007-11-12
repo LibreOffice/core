@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiitems.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:49:33 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:33:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ BOOL SwPageFtnInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
  ---------------------------------------------------------------------------*/
 BOOL SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
 {
-    sal_Int32 nSet32;
+    sal_Int32 nSet32 = 0;
     sal_Bool bRet = sal_True;
     switch(nMemberId  & ~CONVERT_TWIPS)
     {
@@ -193,7 +193,8 @@ BOOL SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
         break;
         case MID_LINE_WEIGHT       :
         {
-            sal_Int16 nSet; rVal >>= nSet;
+            sal_Int16 nSet = 0;
+            rVal >>= nSet;
             if(nSet >= 0)
                 aFtnInfo.SetLineWidth(MM100_TO_TWIP(nSet));
             else
@@ -202,7 +203,8 @@ BOOL SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
         break;
         case MID_LINE_RELWIDTH     :
         {
-            sal_Int8 nSet; rVal >>= nSet;
+            sal_Int8 nSet = 0;
+            rVal >>= nSet;
             if(nSet < 0)
                 bRet = sal_False;
             else
@@ -211,7 +213,8 @@ BOOL SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
         break;
         case MID_LINE_ADJUST       :
         {
-            sal_Int16 nSet; rVal >>= nSet;
+            sal_Int16 nSet = 0;
+            rVal >>= nSet;
             if(nSet >= 0 && nSet < 3) //text::HorizontalAdjust
                 aFtnInfo.SetAdj((SwFtnAdj)nSet);
             else
