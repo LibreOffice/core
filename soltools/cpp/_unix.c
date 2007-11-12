@@ -12,7 +12,7 @@
 
 #include "cpp.h"
 
-extern int getopt(int, char *const *, const char *);
+extern int stgetopt(int, char *const *, const char *);
 extern char *optarg, rcsid[];
 extern int optind;
 
@@ -36,7 +36,7 @@ void
     Tokenrow tr;
 
     setup_kwtab();
-    while ((c = getopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
+    while ((c = stgetopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
         switch (c)
         {
             case 'N':
