@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:40:48 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1985,7 +1985,7 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
         break;
         case FN_UNO_DEFAULT_OUTLINE_LEVEL:
         {
-            sal_Int8 nLevel;
+            sal_Int8 nLevel = 0;
             if( rValue >>= nLevel )
                 rBase.pNewBase->GetCollection()->SetOutlineLevel( nLevel );
             else
@@ -2116,7 +2116,7 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
         {
             if(!rBase.pNewBase->IsUserDefined())
                 throw lang::IllegalArgumentException();
-            short nSet;
+            short nSet = 0;
             rValue >>= nSet;
 
             sal_uInt16 nId;
@@ -2374,7 +2374,7 @@ uno::Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
             {
                 SfxItemSet& rSet = rBase.GetItemSet();
                 aRet = rPropSet.getPropertyValue(*pMap, rSet);
-                sal_Int8 nBin;
+                sal_Int8 nBin = 0;
                 aRet >>= nBin;
                 if ( nBin == -1 )
                     aRet <<= OUString ( RTL_CONSTASCII_USTRINGPARAM ( "[From printer settings]" ) );
