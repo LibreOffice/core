@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtwrapinfluenceonobjpos.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:10:25 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:22:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ BOOL SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, BYTE nMemberId )
     {
         case MID_WRAP_INFLUENCE:
         {
-            sal_Int16 nNewWrapInfluence;
+            sal_Int16 nNewWrapInfluence = 0;
             rVal >>= nNewWrapInfluence;
             // --> OD 2004-10-18 #i35017# - constant names have changed and
             // <ITERATIVE> has been added
