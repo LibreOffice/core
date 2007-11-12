@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:49:02 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:23:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -389,7 +389,7 @@ BOOL SwField::PutValue( const uno::Any& rVal, USHORT nWhichId )
     {
         case FIELD_PROP_BOOL4:
         {
-            BOOL bFixed;
+            BOOL bFixed = FALSE;
             if(rVal >>= bFixed)
                 bIsAutomaticLanguage = !bFixed;
         }
