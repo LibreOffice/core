@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxcss1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:51:06 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:28:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3225,7 +3225,7 @@ struct CSS1PropEntry
 };
 
 #define CSS1_PROP_ENTRY(p) \
-    {   sCSS1_P_##p, ParseCSS1_##p }
+    {   { sCSS1_P_##p }, ParseCSS1_##p }
 
 
 // die Tabelle mit den Zuordnungen
