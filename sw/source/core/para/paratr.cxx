@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paratr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:08:46 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:26:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@ sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case MID_DROPCAP_LINES :
         {
-            sal_Int8 nTemp;
+            sal_Int8 nTemp = 0;
             rVal >>= nTemp;
             if(nTemp >=1 && nTemp < 0x7f)
                 nLines = (BYTE)nTemp;
@@ -244,7 +244,7 @@ sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_DROPCAP_COUNT :
         {
-            sal_Int16 nTemp;
+            sal_Int16 nTemp = 0;
             rVal >>= nTemp;
             if(nTemp >=1 && nTemp < 0x7f)
                 nChars = (BYTE)nTemp;
@@ -252,7 +252,7 @@ sal_Bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_DROPCAP_DISTANCE :
         {
-            sal_Int16 nVal;
+            sal_Int16 nVal = 0;
             if ( rVal >>= nVal )
                 nDistance = (sal_Int16) MM100_TO_TWIP((sal_Int32)nVal);
             else
