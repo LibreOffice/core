@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:01:00 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:25:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -312,7 +312,7 @@ sal_Int16 lcl_RelToINT(sal_Int16 eRelation)
 sal_Int16 lcl_IntToRelation(const uno::Any& rVal)
 {
     sal_Int16 eRet = text::RelOrientation::FRAME;
-    sal_Int16 nVal;
+    sal_Int16 nVal = 0;
     rVal >>= nVal;
     switch(nVal)
     {
@@ -538,7 +538,7 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_FRMSIZE_REL_HEIGHT:
         {
-            sal_Int16 nSet;
+            sal_Int16 nSet = 0;
             rVal >>= nSet;
             if(nSet >= 0 && nSet <= 0xfe)
                 SetHeightPercent((BYTE)nSet);
@@ -548,7 +548,7 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_FRMSIZE_REL_WIDTH:
         {
-            sal_Int16 nSet;
+            sal_Int16 nSet = 0;
             rVal >>= nSet;
             if(nSet >= 0 && nSet <= 0xfe)
                 SetWidthPercent((BYTE)nSet);
@@ -576,7 +576,7 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_FRMSIZE_WIDTH :
         {
-            sal_Int32 nWd;
+            sal_Int32 nWd = 0;
             if(rVal >>= nWd)
             {
                 if(bConvert)
@@ -591,7 +591,7 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_FRMSIZE_HEIGHT:
         {
-            sal_Int32 nHg;
+            sal_Int32 nHg = 0;
             if(rVal >>= nHg)
             {
                 if(bConvert)
@@ -606,7 +606,7 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_FRMSIZE_SIZE_TYPE:
         {
-            sal_Int16 nType;
+            sal_Int16 nType = 0;
             if((rVal >>= nType) && nType >= 0 && nType <= ATT_MIN_SIZE )
             {
                 SetHeightSizeType((SwFrmSize)nType);
@@ -623,7 +623,7 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_FRMSIZE_WIDTH_TYPE:
         {
-            sal_Int16 nType;
+            sal_Int16 nType = 0;
             if((rVal >>= nType) && nType >= 0 && nType <= ATT_MIN_SIZE )
             {
                 SetWidthSizeType((SwFrmSize)nType);
@@ -894,7 +894,7 @@ BOOL SwFmtPageDesc::PutValue( const uno::Any& rVal, BYTE nMemberId )
     {
         case MID_PAGEDESC_PAGENUMOFFSET:
         {
-            sal_Int16 nOffset;
+            sal_Int16 nOffset = 0;
             if(rVal >>= nOffset)
                 SetNumOffset( nOffset );
             else
@@ -1420,7 +1420,7 @@ BOOL SwFmtVertOrient::PutValue( const uno::Any& rVal, BYTE nMemberId )
     {
         case MID_VERTORIENT_ORIENT:
         {
-            sal_uInt16 nVal;
+            sal_uInt16 nVal = 0;
             rVal >>= nVal;
             switch( nVal )
             {
@@ -1444,7 +1444,7 @@ BOOL SwFmtVertOrient::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_VERTORIENT_POSITION:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             rVal >>= nVal;
             if(bConvert)
                 nVal = MM100_TO_TWIP(nVal);
@@ -1542,7 +1542,7 @@ BOOL SwFmtHoriOrient::PutValue( const uno::Any& rVal, BYTE nMemberId )
     {
         case MID_HORIORIENT_ORIENT:
         {
-            sal_Int16 nVal;
+            sal_Int16 nVal = 0;
             rVal >>= nVal;
             switch( nVal )
             {
@@ -1566,7 +1566,7 @@ BOOL SwFmtHoriOrient::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_HORIORIENT_POSITION:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             if(!(rVal >>= nVal))
                 bRet = sal_False;
             if(bConvert)
@@ -1756,7 +1756,7 @@ BOOL SwFmtAnchor::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_ANCHOR_PAGENUM:
         {
-            sal_Int16 nVal;
+            sal_Int16 nVal = 0;
             if((rVal >>= nVal) && nVal > 0)
             {
                 SetPageNum( nVal );
@@ -2067,7 +2067,7 @@ BOOL SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_NUM_START_AT:
         {
-            sal_Int16 nVal;
+            sal_Int16 nVal = 0;
             rVal >>= nVal;
             if(nVal >= 0)
                 nOffset = nVal;
@@ -2086,7 +2086,7 @@ BOOL SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_NUM_TYPE    :
         {
-            sal_Int16 nVal;
+            sal_Int16 nVal = 0;
             rVal >>= nVal;
             if(nVal >= 0 &&
                 (nVal <= SVX_NUM_ARABIC ||
@@ -2263,7 +2263,7 @@ BOOL SwFmtLineNumber::PutValue( const uno::Any& rVal, BYTE nMemberId )
             break;
         case MID_LINENUMBER_STARTVALUE:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             if(rVal >>= nVal)
                 SetStartValue( nVal );
             else
@@ -2389,7 +2389,7 @@ BOOL SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     {
         case MID_GRID_COLOR:
         {
-            sal_Int32 nTmp;
+            sal_Int32 nTmp = 0;
             bRet = (rVal >>= nTmp);
             if( bRet )
                 SetColor( Color(nTmp) );
@@ -2397,7 +2397,7 @@ BOOL SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_GRID_LINES:
         {
-            sal_Int16 nTmp;
+            sal_Int16 nTmp = 0;
             bRet = (rVal >>= nTmp);
             if( bRet && (nTmp >= 0) )
                 SetLines( (sal_uInt16)nTmp );
@@ -2419,7 +2419,7 @@ BOOL SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             DBG_ASSERT( (nMemberId & CONVERT_TWIPS) != 0,
                         "This value needs TWIPS-MM100 conversion" );
-            sal_Int32 nTmp;
+            sal_Int32 nTmp = 0;
             bRet = (rVal >>= nTmp);
             nTmp = MM100_TO_TWIP( nTmp );
             if( bRet && (nTmp >= 0) && ( nTmp <= USHRT_MAX) )
@@ -2432,7 +2432,8 @@ BOOL SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         }
         break;
         case MID_GRID_TYPE:
-            sal_Int16 nTmp;
+        {
+            sal_Int16 nTmp = 0;
             bRet = (rVal >>= nTmp);
             if( bRet )
             {
@@ -2453,6 +2454,8 @@ BOOL SwTextGridItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 }
             }
             break;
+        }
+
         default:
             DBG_ERROR("Unknown SwTextGridItem member");
             bRet = FALSE;
