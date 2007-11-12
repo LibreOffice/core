@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:37:51 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -723,7 +723,7 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
 
                 if( FN_UNO_NUM_LEVEL == pMap->nWID  &&  pRule != NULL )
                 {
-                    sal_Int16 nLevel;
+                    sal_Int16 nLevel = 0;
                     aValue >>= nLevel;
 
                     pTxtNd->SetLevel(nLevel);
@@ -740,7 +740,7 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
             break;
             case FN_NUMBER_NEWSTART :
             {
-                sal_Bool bVal;
+                sal_Bool bVal = sal_False;
                 if (aValue >>= bVal)
                     rPam.GetDoc()->SetNumRuleStart(*rPam.GetPoint(), bVal);
                 else
