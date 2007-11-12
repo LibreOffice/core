@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffld.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:50:11 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:24:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -613,7 +613,7 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     {
     case FIELD_PROP_USHORT1:
         {
-            sal_Int16 nPart;
+            sal_Int16 nPart = 0;
             rAny >>= nPart;
             switch(nPart)
             {
@@ -632,7 +632,7 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
     case FIELD_PROP_USHORT2:
         {
-            sal_Int16 nSource;
+            sal_Int16 nSource = 0;
             rAny >>= nSource;
             switch(nSource)
             {
@@ -664,7 +664,7 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
     case FIELD_PROP_SHORT1:
         {
-            sal_Int16 nSetSeq;
+            sal_Int16 nSetSeq = 0;
             rAny >>= nSetSeq;
             if(nSetSeq >= 0)
                 nSeqNo = nSetSeq;
