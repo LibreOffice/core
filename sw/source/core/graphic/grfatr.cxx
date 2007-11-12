@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfatr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:52:26 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:25:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,7 +254,7 @@ BOOL SwRotationGrf::PutValue( const uno::Any& rVal, BYTE )
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
-    sal_Int16 nValue;
+    sal_Int16 nValue = 0;
     if (rVal >>= nValue)
     {
         // UINT16 argument needed
@@ -354,7 +354,7 @@ BOOL SwTransparencyGrf::PutValue( const uno::Any& rVal,
 {
     //temporary conversion until this is a SfxInt16Item!
     DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!")
-    sal_Int16 nVal;
+    sal_Int16 nVal = 0;
     if(!(rVal >>= nVal) || nVal < -100 || nVal > 100)
         return FALSE;
     if(nVal < 0)
