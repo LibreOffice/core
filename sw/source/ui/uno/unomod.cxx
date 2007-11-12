@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:43:15 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:33:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -470,7 +470,7 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
         break;
         case HANDLE_PRINTSET_ANNOTATION_MODE:
         {
-            sal_Int16 nVal;
+            sal_Int16 nVal = 0;
             rValue >>= nVal;
             if(nVal <= text::NotePrintMode_PAGE_END)
                 mpPrtOpt->SetPrintPostIts(nVal);
@@ -708,7 +708,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : mpViewOption->SetSnap(bVal); break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :
         {
-            sal_Int32 nTmp;
+            sal_Int32 nTmp = 0;
             if(!(rValue >>= nTmp)  ||  nTmp < 10)
                 throw IllegalArgumentException();
             Size aSize( mpViewOption->GetSnapSize() );
@@ -718,7 +718,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_Y   :
         {
-            sal_Int32 nTmp;
+            sal_Int32 nTmp = 0;
             if(!(rValue >>= nTmp)  ||  nTmp < 10)
                 throw IllegalArgumentException();
             Size aSize( mpViewOption->GetSnapSize() );
@@ -728,7 +728,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         break;
         case  HANDLE_VIEWSET_RASTER_SUBDIVISION_X  :
         {
-            sal_Int32 nTmp;
+            sal_Int32 nTmp = 0;
             if(!(rValue >>= nTmp)  ||  !(0 <= nTmp  &&  nTmp < 100))
                 throw IllegalArgumentException();
             mpViewOption->SetDivisionX( (short) nTmp );
@@ -736,7 +736,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         break;
         case  HANDLE_VIEWSET_RASTER_SUBDIVISION_Y  :
         {
-            sal_Int32 nTmp;
+            sal_Int32 nTmp = 0;
             if(!(rValue >>= nTmp)  ||  !(0 <= nTmp  &&  nTmp < 100))
                 throw IllegalArgumentException();
             mpViewOption->SetDivisionY( (short) nTmp );
@@ -744,7 +744,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         break;
         case  HANDLE_VIEWSET_ZOOM                   :
         {
-            sal_Int16 nZoom;
+            sal_Int16 nZoom = 0;
             if(!(rValue >>= nZoom) || nZoom > 1000 || nZoom < 5)
                 throw lang::IllegalArgumentException();
             mpViewOption->SetZoom((sal_uInt16)nZoom);
@@ -753,7 +753,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         break;
         case HANDLE_VIEWSET_ZOOM_TYPE:
         {
-            sal_Int16 nZoom;
+            sal_Int16 nZoom = 0;
             if(!(rValue >>= nZoom))
                 throw IllegalArgumentException();
             SvxZoomType eZoom = (SvxZoomType)USHRT_MAX;
