@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddat.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:49:13 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:24:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,7 @@ BOOL SwDateTimeField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
 --------------------------------------------------*/
 BOOL SwDateTimeField::PutValue( const uno::Any& rVal, USHORT nWhichId )
 {
-    sal_Int32 nTmp;
+    sal_Int32 nTmp = 0;
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
