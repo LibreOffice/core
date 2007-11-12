@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swuiidxmrk.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:17:57 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:32:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1615,7 +1615,7 @@ IMPL_LINK(SwAuthMarkDlg, ChangeSourceHdl, RadioButton*, pButton)
                     for(sal_uInt16 i = 0; i < aSeq.getLength(); i++)
                     {
                         String sTitle = pArr[i].Name;
-                        sal_Int16 nField;
+                        sal_Int16 nField = 0;
                         pArr[i].Value >>= nField;
                         if(nField >= 0 && nField < AUTH_FIELD_END)
                             m_sColumnTitles[nField] = sTitle;
