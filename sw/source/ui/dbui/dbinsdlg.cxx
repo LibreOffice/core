@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:30:48 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:30:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,7 +456,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
             Reference <XPropertySet> xCol;
             aCol >>= xCol;
             Any aType = xCol->getPropertyValue(C2S("Type"));
-            sal_Int32 eDataType;
+            sal_Int32 eDataType = 0;
             aType >>= eDataType;
             switch(eDataType)
             {
@@ -479,7 +479,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                     Any aFormat = xCol->getPropertyValue(C2U("FormatKey"));
                     if(aFormat.hasValue())
                     {
-                        sal_Int32 nFmt;
+                        sal_Int32 nFmt = 0;
                         aFormat >>= nFmt;
                         if(xNumberFormats.is())
                         {
@@ -1261,7 +1261,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             {
                 if(pSelection)
                 {
-                    sal_Int32 nPos; pSelection[i] >>= nPos;
+                    sal_Int32 nPos = 0;
+                    pSelection[i] >>= nPos;
                     bBreak = !xResultSet->absolute(nPos);
                 }
                 else if(!i)
@@ -1457,7 +1458,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 {
                     if(pSelection)
                     {
-                        sal_Int32 nPos; pSelection[i] >>= nPos;
+                        sal_Int32 nPos = 0;
+                        pSelection[i] >>= nPos;
                         bBreak = !xResultSet->absolute(nPos);
                     }
                     else if(!i)
@@ -1506,7 +1508,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             if( DBL_MAX != nValue )
                             {
                                 Any aType = xColumnProps->getPropertyValue(C2U("Type"));
-                                sal_Int32 eDataType;
+                                sal_Int32 eDataType = 0;
                                 aType >>= eDataType;
                                 if( DataType::DATE == eDataType  || DataType::TIME == eDataType  ||
                                     DataType::TIMESTAMP  == eDataType)
@@ -1954,7 +1956,7 @@ void SwInsertDBColAutoPilot::Load()
                 }
                 if(!bFound)
                     continue;
-                sal_Int16 nIndex;
+                sal_Int16 nIndex = 0;
                 pSubProps[1] >>= nIndex;
                 SwInsDBColumnPtr pInsDBColumn = new SwInsDBColumn(sColumn, nIndex);
                 if(pSubProps[2].hasValue())
