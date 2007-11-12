@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:10:28 $
+#   last change: $Author: rt $ $Date: 2007-11-12 15:31:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ $(INCCOM)$/stlport$/hash_map : systemstl/hash_map
 .EXPORT : CC CXX
 .IF "$(COMID)"=="gcc3"
     TARFILE_NAME=STLport-4.5
-       .IF "$(OS)$(BUILD_OS_MAJOR)$(BUILD_OS_MINOR)"=="MACOSX103" || "$(OS)$(BUILD_OS_MAJOR)$(BUILD_OS_MINOR)"=="MACOSX104"
+       .IF "$(OS)"=="MACOSX" && "$(BUILD_OS_MINOR)">"2"
                PATCH_FILE_NAME=STLport-4.5-macxp-panther.patch
        .ELSE
                PATCH_FILE_NAME=STLport-4.5.patch
