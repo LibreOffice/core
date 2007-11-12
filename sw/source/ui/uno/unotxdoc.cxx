@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:43:41 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:33:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1322,7 +1322,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             // CopyCount-Property
             else if ( rProp.Name == sCopyCount )
             {
-                sal_Int32 nCopies;
+                sal_Int32 nCopies = 0;
                 aValue >>= nCopies;
                 aReq.AppendItem(SfxInt16Item( SID_PRINT_COPIES, (sal_Int16)nCopies ) );
             }
@@ -2105,7 +2105,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         {
             sal_Int16 eRedMode = pDocShell->GetDoc()->GetRedlineMode();
             eRedMode = eRedMode & (~nsRedlineMode_t::REDLINE_SHOW_MASK);
-            sal_Int16 nSet;
+            sal_Int16 nSet = 0;
             aValue >>= nSet;
             switch(nSet)
             {
@@ -2122,7 +2122,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         break;
         case WID_DOC_TWO_DIGIT_YEAR:
         {
-            sal_Int16 nYear;
+            sal_Int16 nYear = 0;
             aValue >>= nYear;
             SfxRequest aRequest ( SID_ATTR_YEAR2000, SFX_CALLMODE_SLOT, pDocShell->GetDoc()->GetAttrPool());
             aRequest.AppendItem(SfxUInt16Item( SID_ATTR_YEAR2000, static_cast < sal_uInt16 > ( nYear ) ) );
@@ -2177,7 +2177,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         case WID_DOC_LOCK_UPDATES :
         {
             SwDoc* pDoc = pDocShell->GetDoc();
-            bool bBool;
+            bool bBool (false);
             if( aValue >>= bBool )
               pDoc->SetInReading( bBool );
         }
