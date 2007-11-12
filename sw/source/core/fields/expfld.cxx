@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:48:51 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:23:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ sal_Int16 lcl_SubTypeToAPI(USHORT nSubType)
 //-----------------------------------------------------------------------------
 sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
 {
-        sal_Int16 nVal;
+        sal_Int16 nVal = 0;
         rAny >>= nVal;
         sal_Int32 nSet = 0;
         switch(nVal)
@@ -520,7 +520,7 @@ BOOL SwGetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 --------------------------------------------------*/
 BOOL SwGetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    sal_Int32 nTmp;
+    sal_Int32 nTmp = 0;
     String sTmp;
     switch( nWhichId )
     {
@@ -759,7 +759,7 @@ BOOL SwSetExpFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
     case FIELD_PROP_SHORT1:
         {
-            sal_Int8 nLvl;
+            sal_Int8 nLvl = 0;
             rAny >>= nLvl;
             if(nLvl < 0 || nLvl >= MAXLEVEL)
                 SetOutlineLvl(UCHAR_MAX);
@@ -1304,8 +1304,8 @@ BOOL SwSetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 --------------------------------------------------*/
 BOOL SwSetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
-    sal_Int32 nTmp32;
-    sal_Int16 nTmp16;
+    sal_Int32 nTmp32 = 0;
+    sal_Int16 nTmp16 = 0;
     String sTmp;
     switch( nWhichId )
     {
