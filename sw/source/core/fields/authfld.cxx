@@ -4,9 +4,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:47:39 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:22:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -829,7 +829,7 @@ BOOL    SwAuthorityField::PutValue( const Any& rAny, USHORT /*nWhichId*/ )
             OUString sContent;
             if(AUTH_FIELD_AUTHORITY_TYPE == nFound)
             {
-                sal_Int16 nVal;
+                sal_Int16 nVal = 0;
                 pParam[i].Value >>= nVal;
                 sContent = OUString::valueOf((sal_Int32)nVal);
             }
