@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 12:21:22 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:29:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -938,7 +938,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                                                         UNO_QUERY);
                 if (xCellPropertySet.is())
                 {
-                    sal_Int32 nNumberFormat;
+                    sal_Int32 nNumberFormat = 0;
                     Any aAny = xCellPropertySet->getPropertyValue(sNumberFormat);
                     aAny >>= nNumberFormat;
 
