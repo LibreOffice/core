@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:43:56 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:33:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -983,7 +983,7 @@ void SAL_CALL SwXTextView::setRubyList(
             else if(pProperties[nProp].Name.equalsAsciiL(
                                     SW_PROP_NAME(UNO_NAME_RUBY_ADJUST)))
             {
-                sal_Int16 nTmp;
+                sal_Int16 nTmp = 0;
                 if((pProperties[nProp].Value >>= nTmp))
                     pEntry->GetRubyAttr().SetAdjustment(nTmp);
             }
@@ -1113,7 +1113,7 @@ void SAL_CALL SwXTextView::setPropertyValue(
             case WID_IS_CONSTANT_SPELLCHECK :
             case WID_IS_HIDE_SPELL_MARKS :
             {
-                sal_Bool bVal;
+                sal_Bool bVal = sal_False;
                 const SwViewOption *pOpt = pView->GetWrtShell().GetViewOptions();
                 if (!pOpt || !(rValue >>= bVal))
                     throw RuntimeException();
