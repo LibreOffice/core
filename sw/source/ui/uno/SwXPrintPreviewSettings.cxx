@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXPrintPreviewSettings.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:40:36 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ void SwXPrintPreviewSettings::_setSingleValue( const comphelper::PropertyInfo & 
     {
         case HANDLE_PRINTSET_PREVIEW_LEFT_MARGIN:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             rValue >>= nVal;
             nVal = MM100_TO_TWIP( nVal );
             if ( nVal != static_cast < sal_Int32 > (mpPreViewData->GetLeftSpace() ) )
@@ -174,7 +174,7 @@ void SwXPrintPreviewSettings::_setSingleValue( const comphelper::PropertyInfo & 
         break;
         case HANDLE_PRINTSET_PREVIEW_RIGHT_MARGIN:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             rValue >>= nVal;
             nVal = MM100_TO_TWIP( nVal );
             if ( nVal != static_cast < sal_Int32 > (mpPreViewData->GetRightSpace() ) )
@@ -186,7 +186,7 @@ void SwXPrintPreviewSettings::_setSingleValue( const comphelper::PropertyInfo & 
         break;
         case HANDLE_PRINTSET_PREVIEW_TOP_MARGIN:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             rValue >>= nVal;
             nVal = MM100_TO_TWIP( nVal );
             if ( nVal != static_cast < sal_Int32 > ( mpPreViewData->GetTopSpace() ) )
@@ -198,7 +198,7 @@ void SwXPrintPreviewSettings::_setSingleValue( const comphelper::PropertyInfo & 
         break;
         case HANDLE_PRINTSET_PREVIEW_BOTTOM_MARGIN:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             rValue >>= nVal;
             nVal = MM100_TO_TWIP( nVal );
             if ( nVal != static_cast < sal_Int32 > ( mpPreViewData->GetBottomSpace() ) )
@@ -210,7 +210,7 @@ void SwXPrintPreviewSettings::_setSingleValue( const comphelper::PropertyInfo & 
         break;
         case HANDLE_PRINTSET_PREVIEW_HORIZONTAL_SPACING:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             rValue >>= nVal;
             nVal = MM100_TO_TWIP( nVal );
             if ( nVal != static_cast < sal_Int32 > ( mpPreViewData->GetHorzSpace() ) )
@@ -222,7 +222,7 @@ void SwXPrintPreviewSettings::_setSingleValue( const comphelper::PropertyInfo & 
         break;
         case HANDLE_PRINTSET_PREVIEW_VERTICAL_SPACING:
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             rValue >>= nVal;
             nVal = MM100_TO_TWIP( nVal );
             if ( nVal != static_cast < sal_Int32 > ( mpPreViewData->GetVertSpace() ) )
@@ -234,7 +234,7 @@ void SwXPrintPreviewSettings::_setSingleValue( const comphelper::PropertyInfo & 
         break;
         case HANDLE_PRINTSET_PREVIEW_NUM_ROWS:
         {
-            sal_Int8 nVal;
+            sal_Int8 nVal = 0;
             rValue >>= nVal;
             if ( nVal != mpPreViewData->GetRow() )
             {
@@ -245,7 +245,7 @@ void SwXPrintPreviewSettings::_setSingleValue( const comphelper::PropertyInfo & 
         break;
         case HANDLE_PRINTSET_PREVIEW_NUM_COLUMNS:
         {
-            sal_Int8 nVal;
+            sal_Int8 nVal = 0;
             rValue >>= nVal;
             if ( nVal != mpPreViewData->GetCol() )
             {
