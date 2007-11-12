@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unix.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:11:46 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 15:29:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 
 #include "cpp.h"
 
-extern int getopt(int, char *const *, const char *);
+extern int cppgetopt(int, char *const *, const char *);
 extern char *optarg, rcsid[];
 extern int optind;
 
@@ -70,7 +70,7 @@ void
     Tokenrow tr;
 
     setup_kwtab();
-    while ((c = getopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
+    while ((c = cppgetopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
         switch (c)
         {
             case 'N':
