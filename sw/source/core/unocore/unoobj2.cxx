@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:38:04 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:27:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -582,7 +582,7 @@ sal_Bool SwXTextCursor::convertSortProperties(
         }
         else if(COMPARE_EQUAL == rPropName.compareToAscii("Delimiter"))
         {
-            sal_Unicode uChar;
+            sal_Unicode uChar = sal_Unicode();
             if( aValue >>= uChar )
                 rSortOpt.cDeli = uChar;
             else
