@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrfld.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:50:45 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:25:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,7 @@ sal_Bool SwUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
     case FIELD_PROP_FORMAT:
         {
-            sal_Int32 nTmp;
+            sal_Int32 nTmp = 0;
             rAny >>= nTmp;
             SetFormat(nTmp);
         }
@@ -369,7 +369,7 @@ BOOL SwUserFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
     {
     case FIELD_PROP_DOUBLE:
         {
-            double fVal;
+            double fVal = 0;
             rAny >>= fVal;
             nValue = fVal;
 
