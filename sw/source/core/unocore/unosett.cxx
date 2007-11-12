@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:40:12 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:27:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -455,7 +455,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                 break;
                 case  WID_NUMBERING_TYPE :
                 {
-                    INT16 nTmp;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     if(nTmp >= 0 &&
                         (nTmp <= SVX_NUM_ARABIC ||
@@ -467,14 +467,14 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                 break;
                 case  WID_START_AT:
                 {
-                    INT16 nTmp;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     aFtnInfo.nFtnOffset = nTmp;
                 }
                 break;
                 case  WID_FOOTNOTE_COUNTING  :
                 {
-                    INT16 nTmp;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     switch(nTmp)
                     {
@@ -793,14 +793,14 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
                 break;
                 case  WID_NUMBERING_TYPE :
                 {
-                    INT16 nTmp;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     aEndInfo.aFmt.SetNumberingType(nTmp);
                 }
                 break;
                 case  WID_START_AT:
                 {
-                    INT16 nTmp;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     aEndInfo.nFtnOffset = nTmp;
                 }
@@ -1051,7 +1051,7 @@ void SwXLineNumberingProperties::setPropertyValue(
                 case WID_NUMBERING_TYPE  :
                 {
                     SvxNumberType aNumType(aInfo.GetNumType());
-                    INT16 nTmp;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     aNumType.SetNumberingType(nTmp);
                     aInfo.SetNumType(aNumType);
@@ -1059,7 +1059,7 @@ void SwXLineNumberingProperties::setPropertyValue(
                 break;
                 case WID_NUMBER_POSITION :
                 {
-                    INT16 nTmp;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     switch(nTmp)
                     {
@@ -1080,7 +1080,7 @@ void SwXLineNumberingProperties::setPropertyValue(
                 break;
                 case WID_DISTANCE        :
                 {
-                    INT32 nVal;
+                    INT32 nVal = 0;
                     aValue >>= nVal;
                     INT32 nTmp = MM100_TO_TWIP(nVal);
                     if (nTmp > USHRT_MAX)
@@ -1090,7 +1090,7 @@ void SwXLineNumberingProperties::setPropertyValue(
                 break;
                 case WID_INTERVAL   :
                 {
-                    INT16 nTmp;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     aInfo.SetCountBy(nTmp);
                 }
@@ -1104,7 +1104,7 @@ void SwXLineNumberingProperties::setPropertyValue(
                 break;
                 case WID_SEPARATOR_INTERVAL:
                 {
-                    INT16 nTmp;
+                    INT16 nTmp = 0;
                     aValue >>= nTmp;
                     aInfo.SetDividerCountBy(nTmp);
                 }
@@ -1826,7 +1826,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
             {
                 case 0: //"Adjust"
                 {
-                    sal_Int16 nValue;
+                    sal_Int16 nValue = 0;
                     pData->aVal >>= nValue;
                     if(nValue > 0 &&
                         nValue <= text::HoriOrientation::LEFT &&
@@ -1840,7 +1840,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 1: //"ParentNumbering",
                 {
-                    sal_Int16 nSet;
+                    sal_Int16 nSet = 0;
                     pData->aVal >>= nSet;
                     if(nSet >= 0 && MAXLEVEL >= nSet)
                         aFmt.SetIncludeUpperLevels( static_cast< BYTE >(nSet) );
@@ -1914,14 +1914,14 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 5: //"StartWith",
                 {
-                    INT16 nVal;
+                    INT16 nVal = 0;
                     pData->aVal >>= nVal;
                     aFmt.SetStart(nVal);
                 }
                 break;
                 case 6: //UNO_NAME_LEFT_MARGIN,
                 {
-                    sal_Int32 nValue;
+                    sal_Int32 nValue = 0;
                     pData->aVal >>= nValue;
                     // #i23727# nValue can be negative
                     aFmt.SetAbsLSpace((sal_uInt16) MM100_TO_TWIP(nValue));
@@ -1929,7 +1929,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 7: //UNO_NAME_SYMBOL_TEXT_DISTANCE,
                 {
-                    sal_Int32 nValue;
+                    sal_Int32 nValue = 0;
                     pData->aVal >>= nValue;
                     if(nValue >= 0)
                         aFmt.SetCharTextDistance((sal_uInt16) MM100_TO_TWIP(nValue));
@@ -1939,7 +1939,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 8: //UNO_NAME_FIRST_LINE_OFFSET,
                 {
-                    sal_Int32 nValue;
+                    sal_Int32 nValue = 0;
                     pData->aVal >>= nValue;
                     // #i23727# nValue can be positive
                     nValue = MM100_TO_TWIP(nValue);
@@ -1948,7 +1948,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 9: //"NumberingType"
                 {
-                    sal_Int16 nSet;
+                    sal_Int16 nSet = 0;
                     pData->aVal >>= nSet;
                     if(nSet >= 0)
                         aFmt.SetNumberingType(nSet);
@@ -1958,7 +1958,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 10: //"BulletId",
                 {
-                    sal_Int16 nSet;
+                    sal_Int16 nSet = 0;
                     pData->aVal >>= nSet;
                     if(nSet < 0xff)
                         aFmt.SetBulletChar(nSet);
@@ -2555,7 +2555,8 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
     {
         case WID_TXTCOL_LINE_WIDTH:
         {
-            sal_Int32 nTmp; aValue >>= nTmp;
+            sal_Int32 nTmp = 0;
+            aValue >>= nTmp;
             if(nTmp < 0)
                 throw IllegalArgumentException();
             nSepLineWidth = MM100_TO_TWIP(nTmp);
@@ -2566,7 +2567,8 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
         break;
         case WID_TXTCOL_LINE_REL_HGT:
         {
-            sal_Int8 nTmp; aValue >>= nTmp;
+            sal_Int8 nTmp = 0;
+            aValue >>= nTmp;
             if(nTmp < 0)
                 throw IllegalArgumentException();
             nSepLineHeightRelative = nTmp;
@@ -2577,7 +2579,7 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
             style::VerticalAlignment eAlign;
             if(!(aValue >>= eAlign) )
             {
-                sal_Int8 nTmp;
+                sal_Int8 nTmp = 0;
                 if (! ( aValue >>= nTmp ) )
                     throw IllegalArgumentException();
                 else
@@ -2592,7 +2594,7 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
         break;
         case WID_TXTCOL_AUTO_DISTANCE:
         {
-            sal_Int32 nTmp;
+            sal_Int32 nTmp = 0;
             aValue >>= nTmp;
             if(nTmp < 0 || nTmp >= nReference)
                 throw IllegalArgumentException();
