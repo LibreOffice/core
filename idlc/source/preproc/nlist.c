@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nlist.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:51:46 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 15:29:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include <string.h>
 #include "cpp.h"
 
-extern int getopt(int, char *const *, const char *);
+extern int cppgetopt(int, char *const *, const char *);
 extern char *optarg;
 extern int optind;
 extern int Cplusplus;
