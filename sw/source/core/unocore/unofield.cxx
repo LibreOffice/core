@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:36:28 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:27:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2125,7 +2125,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         case FIELD_PROP_USHORT1:
         case FIELD_PROP_USHORT2:
             {
-                 sal_Int16 nVal;
+                 sal_Int16 nVal = 0;
                 rValue >>= nVal;
                 if( FIELD_PROP_USHORT1 == pMap->nWID)
                     m_pProps->nUSHORT1 = nVal;
