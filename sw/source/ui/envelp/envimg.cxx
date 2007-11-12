@@ -4,9 +4,9 @@
  *
  *  $RCSfile: envimg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:42:03 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:31:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,7 +270,7 @@ SwEnvCfgItem::SwEnvCfgItem() :
                     break;
                     case  9:
                     {
-                        sal_Int32 nTemp;
+                        sal_Int32 nTemp = 0;
                         pValues[nProp] >>= nTemp; aEnvItem.eAlign = (SwEnvAlign)nTemp; break;// "Print/Alignment",
                     }
                     case 10: aEnvItem.bPrintFromAbove = *(sal_Bool*)pValues[nProp].getValue(); break;// "Print/FromAbove",
@@ -396,7 +396,7 @@ BOOL SwEnvItem::PutValue(const Any& rVal, BYTE nMemberId)
         case MID_ENV_HEIGHT : bRet = (rVal >>= lHeight); break;
         case MID_ENV_ALIGN :
         {
-            sal_Int16 nTemp;
+            sal_Int16 nTemp = 0;
             bRet = (rVal >>= nTemp);
             if (bRet)
                 eAlign = SwEnvAlign(nTemp);
