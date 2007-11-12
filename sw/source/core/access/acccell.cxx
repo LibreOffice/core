@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccell.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:18:40 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:21:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,7 +394,7 @@ sal_Bool SwAccessibleCell::setCurrentValue( const uno::Any& aNumber )
     vos::OGuard aGuard(Application::GetSolarMutex());
     CHECK_FOR_DEFUNC( XAccessibleValue );
 
-    double fValue;
+    double fValue = 0;
     sal_Bool bValid = (aNumber >>= fValue);
     if( bValid )
     {
