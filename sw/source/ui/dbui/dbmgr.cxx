@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-06 16:25:40 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:30:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,7 +348,7 @@ bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<XResultS
     {
         try
         {
-            sal_Bool bFinal;
+            sal_Bool bFinal = sal_False;
             Any aFinal = xPrSet->getPropertyValue(C2U("IsRowCountFinal"));
             aFinal >>= bFinal;
             if(!bFinal)
@@ -657,7 +657,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
             {
                 if( pPrintOptions[nOption].Name.equalsAscii( "CopyCount" ))
                 {
-                    sal_Int16 nCopies;
+                    sal_Int16 nCopies = 0;
                     if((pPrintOptions[nOption].Value >>= nCopies) && nCopies > 0)
                         aPrintArgs.Put( SfxInt16Item( SID_PRINT_COPIES, nCopies ));
                 }
@@ -669,7 +669,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
                 }
                 else if( pPrintOptions[nOption].Name.equalsAscii( "Collate" ))
                 {
-                    sal_Bool bCollate;
+                    sal_Bool bCollate = sal_False;
                     if( pPrintOptions[nOption].Value >>= bCollate )
                         aPrintArgs.Put( SfxBoolItem( SID_PRINT_COLLATE, bCollate ));
                 }
@@ -681,7 +681,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
                 }
                 else if( pPrintOptions[nOption].Name.equalsAscii( "Wait" ))
                 {
-                    sal_Bool bWait;
+                    sal_Bool bWait = sal_False;
                     if( pPrintOptions[nOption].Value >>= bWait )
                         aPrintArgs.Put( SfxBoolItem( SID_ASYNCHRON, !bWait ));
                 }
@@ -1992,7 +1992,7 @@ ULONG SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
             Any aFormatKey = xColumn->getPropertyValue(C2U("FormatKey"));
             if(aFormatKey.hasValue())
             {
-                sal_Int32 nFmt;
+                sal_Int32 nFmt = 0;
                 aFormatKey >>= nFmt;
                 if(xNumberFormats.is())
                 {
@@ -2164,7 +2164,7 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
         return sRet;
 
     Any aType = xColumnProps->getPropertyValue(C2U("Type"));
-    sal_Int32 eDataType;
+    sal_Int32 eDataType = 0;
     aType >>= eDataType;
     switch(eDataType)
     {
@@ -2313,7 +2313,7 @@ BOOL SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTableNam
         sal_Bool bFound = sal_False;
         for(sal_Int32 nPos = 0; !bFound && nPos < pFound->aSelection.getLength(); nPos++)
         {
-            sal_Int32 nSelection;
+            sal_Int32 nSelection = 0;
             pSelection[nPos] >>= nSelection;
             if(nSelection == static_cast<sal_Int32>(nAbsRecordId))
                 bFound = sal_True;
