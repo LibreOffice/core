@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-05 07:44:12 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:28:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,7 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap, cons
         case  FN_TABLE_WIDTH:
         case  FN_TABLE_RELATIVE_WIDTH:
         {
-            sal_Int32 nWidth;
+            sal_Int32 nWidth = 0;
             SwFmtFrmSize aSz( pFmt->GetFrmSize() );
             if(FN_TABLE_WIDTH == pMap->nWID)
             {
@@ -305,7 +305,7 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap, cons
             }
             else if(FN_TABLE_RELATIVE_WIDTH == pMap->nWID)
             {
-                sal_Int16 nSet;
+                sal_Int16 nSet = 0;
                 aValue >>= nSet;
                 if(nSet && nSet <=100)
                     aSz.SetWidthPercent( (BYTE)nSet );
@@ -1533,7 +1533,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName,
                     }
                     else
                     {
-                        sal_Int32 nHeight;
+                        sal_Int32 nHeight = 0;
                         aValue >>= nHeight;
                          Size aSz(aFrmSize.GetSize());
                         aSz.Height() = MM100_TO_TWIP(nHeight);
@@ -2284,7 +2284,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
                 uno::Any* pPgNo;
                 if(GetProperty(UNO_NAME_PAGE_NUMBER_OFFSET, pPgNo ))
                 {
-                    INT16 nTmp;
+                    INT16 nTmp = 0;
                     (*pPgNo) >>= nTmp;
                     aDesc.SetNumOffset( nTmp );
                 }
@@ -3003,7 +3003,7 @@ void SAL_CALL SwXTextTable::setDataArray(
                         lcl_setString( *pXCell, *(rtl::OUString *) rAny.getValue() );
                     else
                     {
-                        double d;
+                        double d = 0;
                         // #i20067# don't throw exception just do nothing if
                         // there is no value set
                         if( (rAny >>= d) )
@@ -4722,7 +4722,7 @@ void SAL_CALL SwXCellRange::setDataArray(
                         lcl_setString( *pXCell, *(rtl::OUString *) rAny.getValue() );
                     else
                     {
-                        double d;
+                        double d = 0;
                         // #i20067# don't throw exception just do nothing if
                         // there is no value set
                         if( (rAny >>= d) )
