@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:58:09 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:28:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2070,8 +2070,8 @@ void Ww1HeaderFooter::Start(Ww1Shell& rOut, Ww1Manager& rMan)
             break;
             case OddHeadL:
             {
-                ULONG begin;
-                ULONG end;
+                ULONG begin = 0;
+                ULONG end = 0;
                 if (FillOddHeadL(begin, end))
                 {
                     Ww1HddText* pText = new Ww1HddText(rMan.GetFib());
@@ -2091,8 +2091,8 @@ void Ww1HeaderFooter::Start(Ww1Shell& rOut, Ww1Manager& rMan)
             break;
             case OddFootL:
             {
-                ULONG begin;
-                ULONG end;
+                ULONG begin = 0;
+                ULONG end = 0;
                 if (FillOddFootL(begin, end))
                 {
                     Ww1HddText* pText = new Ww1HddText(rMan.GetFib());
