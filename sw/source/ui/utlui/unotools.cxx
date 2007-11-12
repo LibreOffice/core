@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:50:04 $
+ *  last change: $Author: rt $ $Date: 2007-11-12 16:33:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -491,7 +491,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
         uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();
 
         uno::Any aZoom = xViewProps->getPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)));
-        sal_Int16 nZoom;
+        sal_Int16 nZoom = 0;
         aZoom >>= nZoom;
 
         for(sal_uInt16 i = 0; i < 5; i++ )
