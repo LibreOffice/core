@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxbool.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:28:05 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 15:21:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ using namespace rtl;
 enum SbxBOOL ImpGetBool( const SbxValues* p )
 {
     enum SbxBOOL nRes;
-    switch( p->eType )
+    switch( +p->eType )
     {
         case SbxNULL:
             SbxBase::SetError( SbxERR_CONVERSION );
@@ -175,7 +175,7 @@ void ImpPutBool( SbxValues* p, INT16 n )
 {
     if( n )
         n = SbxTRUE;
-    switch( p->eType )
+    switch( +p->eType )
     {
         case SbxCHAR:
             p->nChar = (xub_Unicode) n; break;
