@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:15:52 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:32:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,13 @@ static sal_Unicode table_CyrillicLowerLetter_ru[] = {
     0x0438, 0x043A, 0x043B, 0x043C, 0x043D, 0x043E, 0x043F, 0x0440,
     0x0441, 0x0442, 0x0443, 0x0444, 0x0445, 0x0446, 0x0447, 0x0448,
     0x0449, 0x044B, 0x044D, 0x044E, 0x044F
+};
+
+static sal_Unicode table_Alphabet_fa[] = {
+    0x0622, 0x0628, 0x067E, 0x062A, 0x062B, 0x062C, 0x0686, 0x062D,
+    0x062E, 0x062F, 0x0630, 0x0631, 0x0632, 0x0698, 0x0633, 0x0634,
+    0x0635, 0x0636, 0x0637, 0x0638, 0x0639, 0x0640, 0x0641, 0x0642,
+    0x06A9, 0x06AF, 0x0644, 0x0645, 0x0646, 0x0648, 0x0647, 0x06CC
 };
 
 static sal_Unicode upperLetter[] = {
@@ -616,6 +623,9 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                       sizeof(table_CyrillicLowerLetter_ru[0]), number-1,
                       result); // 1=>a, 2=>b, ..., 27=>z, 28=>aa, 29=>bb, ...
               break;
+          case CHARS_PERSIAN:
+              lcl_formatChars(table_Alphabet_fa, sizeof(table_Alphabet_fa) / sizeof(sal_Unicode), number - 1, result);
+              break;
 
           default:
                assert(0);
@@ -698,6 +708,7 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_RU,   S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_A S_CYR_B ", ... (ru)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_N_RU, C_CYR_A ", " C_CYR_B ", .., " C_CYR_A S_CYR_A ", " C_CYR_B S_CYR_B ", ... (ru)", LANG_ALL},
         {style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_N_RU, S_CYR_A ", " S_CYR_B ", .., " S_CYR_A S_CYR_A ", " S_CYR_B S_CYR_B ", ... (ru)", LANG_ALL},
+        {style::NumberingType::CHARS_PERSIAN,   NULL, LANG_CTL},
 };
 static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);
 /* -----------------------------21.02.01 15:57--------------------------------
