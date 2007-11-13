@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:03:51 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 15:29:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1703,7 +1703,7 @@ INT32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     etwas 0.75 pt und unsere 0.05 pt Haarlinie. ) Die Haarlinie setzen wir nur
     bei Winword-Staerken bis zu maximal 0.5 pt ein.
     */
-    switch( eLineStyle )
+    switch( +eLineStyle )
     {
     // zuerst die Einzel-Linien
     case mso_lineSimple:
