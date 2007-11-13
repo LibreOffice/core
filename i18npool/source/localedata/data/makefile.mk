@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:37:47 $
+#   last change: $Author: rt $ $Date: 2007-11-13 14:35:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -155,6 +155,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_ha_GH.cxx  \
     $(MISC)$/localedata_he_IL.cxx  \
     $(MISC)$/localedata_hi_IN.cxx  \
+    $(MISC)$/localedata_hil_PH.cxx  \
     $(MISC)$/localedata_hr_HR.cxx  \
     $(MISC)$/localedata_hu_HU.cxx  \
     $(MISC)$/localedata_hy_AM.cxx  \
@@ -202,9 +203,14 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_ru_RU.cxx  \
     $(MISC)$/localedata_rw_RW.cxx  \
     $(MISC)$/localedata_sg_CF.cxx  \
+    $(MISC)$/localedata_sh_ME.cxx  \
+    $(MISC)$/localedata_sh_RS.cxx  \
     $(MISC)$/localedata_sh_YU.cxx  \
     $(MISC)$/localedata_sk_SK.cxx  \
     $(MISC)$/localedata_sl_SI.cxx  \
+    $(MISC)$/localedata_so_SO.cxx  \
+    $(MISC)$/localedata_sr_ME.cxx  \
+    $(MISC)$/localedata_sr_RS.cxx  \
     $(MISC)$/localedata_sr_YU.cxx  \
     $(MISC)$/localedata_ss_ZA.cxx  \
     $(MISC)$/localedata_st_ZA.cxx  \
@@ -366,9 +372,13 @@ SHL3OBJS=	\
     $(SLO)$/localedata_pt_PT.obj	\
     $(SLO)$/localedata_ru_RU.obj	\
     $(SLO)$/localedata_ro_RO.obj	\
+    $(SLO)$/localedata_sh_ME.obj	\
+    $(SLO)$/localedata_sh_RS.obj	\
     $(SLO)$/localedata_sh_YU.obj	\
     $(SLO)$/localedata_sk_SK.obj	\
     $(SLO)$/localedata_sl_SI.obj	\
+    $(SLO)$/localedata_sr_ME.obj	\
+    $(SLO)$/localedata_sr_RS.obj	\
     $(SLO)$/localedata_sr_YU.obj	\
     $(SLO)$/localedata_sv_FI.obj	\
     $(SLO)$/localedata_sv_SE.obj	\
@@ -413,6 +423,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_ha_GH.obj \
     $(SLO)$/localedata_he_IL.obj \
     $(SLO)$/localedata_hi_IN.obj \
+    $(SLO)$/localedata_hil_PH.obj \
     $(SLO)$/localedata_hu_HU.obj \
     $(SLO)$/localedata_hy_AM.obj \
     $(SLO)$/localedata_ia.obj    \
@@ -438,6 +449,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_pa_IN.obj \
     $(SLO)$/localedata_rw_RW.obj \
     $(SLO)$/localedata_sg_CF.obj \
+    $(SLO)$/localedata_so_SO.obj \
     $(SLO)$/localedata_ss_ZA.obj \
     $(SLO)$/localedata_st_ZA.obj \
     $(SLO)$/localedata_sw_TZ.obj \
