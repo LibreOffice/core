@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:25:11 $
+#   last change: $Author: rt $ $Date: 2007-11-13 14:15:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
 #*************************************************************************
 
 PRJ=..
-PRJNAME=bmpmaker
+PRJNAME=svtools
 TARGET=bmp
 LIBTARGET=NO
 
