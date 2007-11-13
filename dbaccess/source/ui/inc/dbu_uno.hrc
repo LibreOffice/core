@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_uno.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:51:04 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:09:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,13 +39,21 @@
 #include "dbu_resource.hrc"
 #endif
 
-#define STR_REMEMBERPASSWORD_PERSISTENT     RID_STR_UNO_START
+#define STR_REMEMBERPASSWORD_PERSISTENT         ( RID_STR_UNO_START +  0 )
+#define STR_CTW_NO_VIEWS_SUPPORT                ( RID_STR_UNO_START +  1 )
+#define STR_CTW_NO_PRIMARY_KEY_SUPPORT          ( RID_STR_UNO_START +  2 )
+#define STR_CTW_INVALID_DATA_ACCESS_DESCRIPTOR  ( RID_STR_UNO_START +  3 )
+#define STR_CTW_ONLY_TABLES_AND_QUERIES_SUPPORT ( RID_STR_UNO_START +  4 )
+#define STR_CTW_COPY_SOURCE_NEEDS_BOOKMARKS     ( RID_STR_UNO_START +  5 )
+#define STR_CTW_UNSUPPORTED_COLUMN_TYPE         ( RID_STR_UNO_START +  6 )
+#define STR_CTW_ILLEGAL_PARAMETER_COUNT         ( RID_STR_UNO_START +  7 )
+#define STR_CTW_ERROR_DURING_INITIALIZATION     ( RID_STR_UNO_START +  8 )
 
+// please adjust when inserting new strings:
+#define RID_STR_UNO_LAST_USED                   STR_CTW_ERROR_DURING_INITIALIZATION
 
-// please adjust checking before insert new strings
-
-#if STR_REMEMBERPASSWORD_PERSISTENT > RID_STR_UNO_END
-#error Resource-Id Ueberlauf in #file, #line
+#if RID_STR_UNO_LAST_USED >= RID_STR_UNO_END
+#error too many resources in uno ....
 #endif
 
 #endif // _DBU_UNO_HRC_
