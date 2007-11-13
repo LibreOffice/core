@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="yes" version="1.2">
+  <LC_INFO>
+    <Language>
+      <LangID>sr</LangID>
+      <DefaultName>Serbian Cyrillic</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>ME</CountryID>
+      <DefaultName>Montenegro</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="sr_RS"/>
+  <LC_FORMAT ref="sr_RS" replaceTo="[$€-CC1A]"/>
+  <LC_COLLATION ref="sr_RS"/>
+  <LC_SEARCH ref="sr_RS"/>
+  <LC_INDEX ref="sr_RS"/>
+  <LC_CALENDAR ref="sr_RS"/>
+  <LC_CURRENCY>
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>EUR</CurrencyID>
+      <CurrencySymbol>€</CurrencySymbol>
+      <BankSymbol>EUR</BankSymbol>
+      <CurrencyName>Euro</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false">
+      <CurrencyID>DEM</CurrencyID>
+      <CurrencySymbol>DM</CurrencySymbol>
+      <BankSymbol>DEM</BankSymbol>
+      <CurrencyName>Deutsche Mark</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+  </LC_CURRENCY>
+  <LC_TRANSLITERATION ref="sr_RS"/>
+  <LC_MISC ref="sr_RS"/>
+  <LC_NumberingLevel ref="sr_RS"/>
+  <LC_OutLineNumberingLevel ref="sr_RS"/>
+</Locale>
+
