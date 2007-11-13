@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XmlIndex.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:57:10 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:19:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,7 +338,7 @@ XmlIndex::~XmlIndex()
 
 void XmlIndex::reset()
 {
-    maxDocNumberInCache_ = ( allInCache_ ? ( microIndexOffsets_.size() - 1 ) : sal_Int32( -1 ) );
+    maxDocNumberInCache_ = allInCache_ ? static_cast<sal_Int32>(microIndexOffsets_.size()) - 1 : -1;
 }
 
 
