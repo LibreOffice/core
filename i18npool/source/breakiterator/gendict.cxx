@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gendict.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:33:51 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:32:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     count = 1;
     fprintf(cfp, "0x%x, ", 0); // insert one slat for skipping 0 in index2 array.
     for (i = 0; i < lenArrayCount; i++) {
-        fprintf(cfp, "0x%lx, ", lenArray[i]);
+        fprintf(cfp, "0x%lx, ", static_cast<long unsigned int>(lenArray[i]));
         if (count == 0xf) {
         count = 0;
         fprintf(cfp, "\n\t");
