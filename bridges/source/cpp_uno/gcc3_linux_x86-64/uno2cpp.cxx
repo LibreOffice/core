@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:57:33 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:18:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,13 +73,13 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     // Let's figure out what is really going on here
     {
         fprintf( stderr, "= callVirtualMethod() =\nGPR's (%d): ", nGPR );
-        for ( int i = 0; i < nGPR; ++i )
+        for ( unsigned int i = 0; i < nGPR; ++i )
             fprintf( stderr, "0x%lx, ", pGPR[i] );
         fprintf( stderr, "\nFPR's (%d): ", nFPR );
-        for ( int i = 0; i < nFPR; ++i )
+        for ( unsigned int i = 0; i < nFPR; ++i )
             fprintf( stderr, "%f, ", pFPR[i] );
         fprintf( stderr, "\nStack (%d): ", nStack );
-        for ( int i = 0; i < nStack; ++i )
+        for ( unsigned int i = 0; i < nStack; ++i )
             fprintf( stderr, "0x%lx, ", pStack[i] );
         fprintf( stderr, "\n" );
     }
@@ -328,6 +328,8 @@ static void cpp_call(
             case typelib_TypeClass_DOUBLE:
                 INSERT_FLOAT_DOUBLE( pCppArgs[nPos], nFPR, pFPR, pStack );
                 break;
+            default:
+                break;
             }
 
             // no longer needed
@@ -440,16 +442,19 @@ void unoInterfaceProxyDispatch(
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
         = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy * >(pUnoI);
+#if OSL_DEBUG_LEVEL > 0
     typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
+#endif
 
     switch (pMemberDescr->eTypeClass)
     {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
     {
+#if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
         OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
-
+#endif
         VtableSlot aVtableSlot(
                 getVtableSlot(
                     reinterpret_cast<
@@ -494,10 +499,11 @@ void unoInterfaceProxyDispatch(
     }
     case typelib_TypeClass_INTERFACE_METHOD:
     {
+#if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
         OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
-
+#endif
         VtableSlot aVtableSlot(
                 getVtableSlot(
                     reinterpret_cast<
