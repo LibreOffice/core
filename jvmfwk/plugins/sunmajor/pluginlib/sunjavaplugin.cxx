@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 07:57:06 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:20:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -450,7 +450,9 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     JavaVM ** ppVm,
     JNIEnv ** ppEnv)
 {
-    osl::MutexGuard guard(PluginMutex::get());
+    // unless guard is volatile the following warning occurs on gcc:
+    // warning: variable 't' might be clobbered by `longjmp' or `vfork'
+    volatile osl::MutexGuard guard(PluginMutex::get());
     // unless errcode is volatile the following warning occurs on gcc:
     // warning: variable 'errcode' might be clobbered by `longjmp' or `vfork'
     volatile javaPluginError errcode = JFW_PLUGIN_E_NONE;
