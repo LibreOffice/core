@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:21:23 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:08:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,13 +78,13 @@
 #define RID_STR_REL_END                 RID_STR_REL_START       + 10    // 330 - 349
 
 #define RID_STR_UNO_START               RID_STR_REL_END
-#define RID_STR_UNO_END                 RID_STR_UNO_START       +  5    // 350 - 354
+#define RID_STR_UNO_END                 RID_STR_UNO_START       + 20    // 350 - 369
 
 #define RID_STR_GEN_START               RID_STR_UNO_END
-#define RID_STR_GEN_END                 RID_STR_GEN_START       + 55    // 355 - 409
+#define RID_STR_GEN_END                 RID_STR_GEN_START       + 55    // 370 - 424
 
 #define RID_STR_APP_START               RID_STR_GEN_END
-#define RID_STR_APP_END                 RID_STR_APP_START       + 40    //   409 - 449
+#define RID_STR_APP_END                 RID_STR_APP_START       + 40    //   425 - 464
 
 
 #if RID_STR_GEN_END > RID_DBACCESS_END
