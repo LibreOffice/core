@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 16:31:22 $
+#   last change: $Author: rt $ $Date: 2007-11-13 14:16:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..$/..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=svdde
 
 # --- Settings -----------------------------------------------------
