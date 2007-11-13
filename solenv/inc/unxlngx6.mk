@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngx6.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:41:38 $
+#   last change: $Author: rt $ $Date: 2007-11-13 14:17:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -129,10 +129,25 @@ CFLAGSOPT=   							# no optimizing for non products
 CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
-# Enable all warnings
-CFLAGSWALL=-Wall
-# Set default warn level
-CFLAGSDFLTWARN=
+
+# -Wshadow does not work for C with nested uses of pthread_cleanup_push:
+CFLAGSWARNCC=-Wall -Wextra -Wendif-labels
+CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wshadow -Wno-ctor-dtor-privacy \
+    -Wno-non-virtual-dtor
+CFLAGSWALLCC=$(CFLAGSWARNCC)
+CFLAGSWALLCXX=$(CFLAGSWARNCXX)
+CFLAGSWERRCC=-Werror
+
+# Once all modules on this platform compile without warnings, set
+# COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
+# settings.mk):
+
+MODULES_WITH_WARNINGS := \
+    extensions \
+    soldep \
+    slideshow \
+    svtools \
+    svx
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
@@ -182,11 +197,11 @@ STDOBJCUI=
 STDSLOCUI=
 
 # libraries for linking applications
-STDLIBGUIMT=-lX11 -ldl -lpthread -lm
-STDLIBCUIMT=-ldl -lpthread -lm
+STDLIBGUIMT+=-lX11 -ldl -lpthread -lm
+STDLIBCUIMT+=-ldl -lpthread -lm
 # libraries for linking shared libraries
-STDSHLGUIMT=-lX11 -lXext -ldl -lpthread -lm
-STDSHLCUIMT=-ldl -lpthread -lm
+STDSHLGUIMT+=-lX11 -lXext -ldl -lpthread -lm
+STDSHLCUIMT+=-ldl -lpthread -lm
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
@@ -221,4 +236,5 @@ RCSETVERSION=
 DLLPOSTFIX=lx
 DLLPRE=lib
 DLLPOST=.so
+PCHPOST=.gch
 
