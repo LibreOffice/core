@@ -7,9 +7,9 @@ if 0;
 #
 #   $RCSfile: langid.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-03 14:04:31 $
+#   last change: $Author: rt $ $Date: 2007-11-13 14:33:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -353,16 +353,23 @@ sub main()
             '^\s*case\s*.*' . $grepdef . '.*\s*:', $modifier,
             "$SRC_ROOT", "i18npool", "source/isolang/mslangid.cxx");
 
+        # With CWS 'langstatusbar' the language listbox resource file gets a new location.
+        my $module = "svx";
+        my $name = "source/dialog/langtab.src";
+        if (!(-e "$SRC_ROOT/$module/$name")) {
+            $module = "svtools";
+            $name = "source/misc/langtab.src";
+        }
         #         < "Afrikaans" ; LANGUAGE_AFRIKAANS ; > ;
         # lookup define
         @resultlist = grepFile(
             '^\s*<\s*\".*\"\s*;\s*.*' . $grepdef . '.*\s*;\s*>\s*;', $modifier,
-            "$SRC_ROOT", "svx", "source/dialog/langtab.src");
+            "$SRC_ROOT", $module, $name);
         # lookup string
         if (!@resultlist) {
             grepFile(
                 '^\s*<\s*\".*' . $grepdef . '.*\"\s*;\s*.*\s*;\s*>\s*;', $modifier,
-                "$SRC_ROOT", "svx", "source/dialog/langtab.src"); }
+                "$SRC_ROOT", $module, $name); }
 
         for $lcid (@lcidlist)
         {
