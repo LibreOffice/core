@@ -214,12 +214,12 @@
         <Day>
           <DayID>wed</DayID>
           <DefaultAbbrvName>Չրք</DefaultAbbrvName>
-          <DefaultFullName>չորեքշաբթ</DefaultFullName>
+          <DefaultFullName>չորեքշաբթի</DefaultFullName>
         </Day>
         <Day>
           <DayID>thu</DayID>
           <DefaultAbbrvName>Հնգ</DefaultAbbrvName>
-          <DefaultFullName>հինգշաբթիի</DefaultFullName>
+          <DefaultFullName>հինգշաբթի</DefaultFullName>
         </Day>
         <Day>
           <DayID>fri</DayID>
