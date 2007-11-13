@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numberchar.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:47:47 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ static sal_Unicode DecimalChar[] = {
     0x9EDE, // Korean Upper
     0xC810, // Korean Hangul
     0x066B, // Arabic Indic
-    0x0000, // Est. Arabic Indic
+    0x066B, // Est. Arabic Indic
     0x0000, // Indic (Devanagari)
     0x0000, // Thai
     0x0000, // Oriya
@@ -151,7 +151,7 @@ static sal_Unicode MinusChar[] = {
     0x5069, // Korean Upper
     0xFF0D, // Korean Hangul ???
     0x0000, // Arabic Indic
-    0x0000, // Est. Arabic Indic
+    0x2212, // Est. Arabic Indic
     0x0000, // Indic
     0x0000, // Thai
     0x0000, // Oriya
@@ -185,7 +185,7 @@ static sal_uInt16 SeparatorChar[] = {
     0x3001, // Korean Upper
     0x3001, // Korean Hangul
     0x0000, // Arabic Indic
-    0x0000, // Est. Arabic Indic
+    0x066C, // Est. Arabic Indic
     0x0000, // Indic
     0x0000, // Thai
     0x0000, // Oriya
