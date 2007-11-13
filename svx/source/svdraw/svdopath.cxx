@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:29:27 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 15:32:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 
 #ifdef _MSC_VER
 #pragma optimize ("",off)
+#pragma warning(disable: 4748) // "... because optimizations are disabled ..."
 #endif
 
 #include <svx/xlnwtit.hxx>
