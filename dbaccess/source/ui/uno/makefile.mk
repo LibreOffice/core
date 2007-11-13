@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 08:45:25 $
+#   last change: $Author: rt $ $Date: 2007-11-13 14:09:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 SRS1NAME=$(TARGET)
 SRC1FILES =	\
-        dbinteraction.src
+        dbinteraction.src \
+        copytablewizard.src
 
 # ... object files ............................
 
