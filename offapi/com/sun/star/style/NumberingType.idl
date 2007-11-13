@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NumberingType.idl,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:02:32 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:30:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,6 +394,13 @@ published constants NumberingType
         CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A CYRILLIC SMALL LETTER A , ...
       */
     const short CHARS_CYRILLIC_LOWER_LETTER_N_RU = 45;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Persian alphabet letters (aa, be, pe, te, ...)
+
+        @since OOo 2.4
+     */
+    const short CHARS_PERSIAN = 46;
 };
 
 //=============================================================================
