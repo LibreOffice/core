@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textedit.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:16:40 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 15:20:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,7 +314,7 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
         SbTextType eCol = r.eType;
         Color aColor;
         ULONG nLine = nLineOff+r.nLine-1; // -1, weil Basic bei 1 beginnt
-        switch ( eCol )
+        switch ( +eCol )
         {
             case SB_KEYWORD:
                 aColor = Color( COL_BLUE );
