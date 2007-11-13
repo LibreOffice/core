@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxint.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:30:50 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 15:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ INT16 ImpGetInteger( const SbxValues* p )
     SbxValues aTmp;
     INT16 nRes;
 start:
-    switch( p->eType )
+    switch( +p->eType )
     {
         case SbxNULL:
             SbxBase::SetError( SbxERR_CONVERSION );
@@ -241,7 +241,7 @@ void ImpPutInteger( SbxValues* p, INT16 n )
 {
     SbxValues aTmp;
 start:
-    switch( p->eType )
+    switch( +p->eType )
     {
         // hier muss getestet werden
         case SbxCHAR:
@@ -411,7 +411,7 @@ sal_Int64 ImpGetInt64( const SbxValues* p )
     SbxValues aTmp;
     sal_Int64 nRes;
 start:
-    switch( p->eType )
+    switch( +p->eType )
     {
         case SbxNULL:
             SbxBase::SetError( SbxERR_CONVERSION );
@@ -544,7 +544,7 @@ void ImpPutInt64( SbxValues* p, sal_Int64 n )
     SbxValues aTmp;
 
 start:
-    switch( p->eType )
+    switch( +p->eType )
     {
         // Check neccessary
         case SbxCHAR:
@@ -701,7 +701,7 @@ sal_uInt64 ImpGetUInt64( const SbxValues* p )
     SbxValues aTmp;
     sal_uInt64 nRes;
 start:
-    switch( p->eType )
+    switch( +p->eType )
     {
         case SbxNULL:
             SbxBase::SetError( SbxERR_CONVERSION );
@@ -849,7 +849,7 @@ void ImpPutUInt64( SbxValues* p, sal_uInt64 n )
     SbxValues aTmp;
 
 start:
-    switch( p->eType )
+    switch( +p->eType )
     {
         // Check neccessary
         case SbxCHAR:
