@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:50:25 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:18:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,8 @@ static typelib_TypeClass cpp2uno_call(
     void ** gpreg, void ** fpreg, void ** ovrflw,
     sal_uInt64 * pRegisterReturn /* space for register return */ )
 {
-    int nr_gpr = 0; //number of gpr registers used
-    int nr_fpr = 0; //number of fpr regsiters used
+    unsigned int nr_gpr = 0; //number of gpr registers used
+    unsigned int nr_fpr = 0; //number of fpr registers used
 
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
@@ -492,7 +492,7 @@ void ** bridges::cpp_uno::shared::VtableFactory::initializeBlock( void * block )
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     void ** slots, unsigned char * code,
     typelib_InterfaceTypeDescription const * type, sal_Int32 nFunctionOffset,
-    sal_Int32 functionCount, sal_Int32 nVtableOffset )
+    sal_Int32 /* functionCount */, sal_Int32 nVtableOffset )
 {
     for ( sal_Int32 nPos = 0; nPos < type->nMembers; ++nPos )
     {
