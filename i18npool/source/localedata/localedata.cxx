@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-23 09:09:12 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:33:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,11 @@ static const struct {
     { "ro_RO",  lcl_DATA_EURO },
     { "cy_GB",  lcl_DATA_EURO },
     { "bg_BG",  lcl_DATA_EURO },
+    { "sh_ME",  lcl_DATA_EURO },
+    { "sh_RS",  lcl_DATA_EURO },
     { "sh_YU",  lcl_DATA_EURO },
+    { "sr_ME",  lcl_DATA_EURO },
+    { "sr_RS",  lcl_DATA_EURO },
     { "sr_YU",  lcl_DATA_EURO },
     { "hr_HR",  lcl_DATA_EURO },
     { "bs_BA",  lcl_DATA_EURO },
@@ -245,6 +249,8 @@ static const struct {
     { "uz_UZ",  lcl_DATA_OTHERS },
     { "ln_CD",  lcl_DATA_OTHERS },
     { "hy_AM",  lcl_DATA_OTHERS },
+    { "hil_PH", lcl_DATA_OTHERS },
+    { "so_SO",  lcl_DATA_OTHERS },
 };
 
 static const sal_Unicode under = sal_Unicode('_');
