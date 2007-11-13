@@ -4,9 +4,9 @@
  *
  *  $RCSfile: isolang.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 07:09:24 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:33:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,12 +235,18 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_CROATIAN_BOSNIA_HERZEGOVINA, "hr", "BA" },
     { LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA,        "bs", "BA" },
 //  { LANGUAGE_BOSNIAN_CYRILLIC_BOSNIA_AND_HERZEGOVINA, "bs", "BA" },   // script codes not supported yet
-    { LANGUAGE_SERBIAN_LATIN,               "sh", "YU" },   // Serbian Latin in Serbia and Montenegro (former Yugoslavia); kludge, needed to be sr_Latn_CS instead, script codes not supported yet
-    { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA, "sh", "BA" },
-    { LANGUAGE_SERBIAN_CYRILLIC,            "sr", "YU" },   // Serbian Cyrillic in Serbia and Montenegro (former Yugoslavia); kludge, needed to be sr_CS instead, sr_CS not supported by ICU 2.6 (3.4 does)
-    { LANGUAGE_SERBIAN_CYRILLIC,            "sr", "CS" },   // alias to be able to integrate localizations, rsc needs it
+    { LANGUAGE_USER_SERBIAN_CYRILLIC_SERBIA,        "sr", "RS" },   // Serbian Cyrillic in Serbia
+    { LANGUAGE_SERBIAN_CYRILLIC,                    "sr", "YU" },   // legacy Serbian Cyrillic in Serbia and Montenegro (former Yugoslavia); kludge, needed to be sr_CS instead, sr_CS not supported by ICU 2.6 (3.4 does)
+    { LANGUAGE_SERBIAN_CYRILLIC,                    "sr", "CS" },   // alias to be able to integrate localizations, rsc needs it
+    { LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO,    "sr", "ME" },
     { LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA, "sr", "BA" },
-    { LANGUAGE_SERBIAN,                     "sr", ""   },   // SERBIAN is only LID, MS-LCID not defined (was dupe of CROATIAN)
+    { LANGUAGE_SERBIAN,                             "sr", ""   },   // SERBIAN is only LID, MS-LCID not defined (was dupe of CROATIAN)
+    { LANGUAGE_USER_SERBIAN_LATIN_SERBIA,           "sh", "RS" },   // Serbian Latin in Serbia; kludge, needed to be sr_Latn_RS instead, script codes not supported yet
+    { LANGUAGE_SERBIAN_LATIN,                       "sh", "YU" },   // legacy Serbian Latin in Serbia and Montenegro (former Yugoslavia); kludge, needed to be sr_Latn_CS instead, script codes not supported yet
+    { LANGUAGE_SERBIAN_LATIN,                       "sh", "CS" },   // Serbian Latin in Serbia and Montenegro; kludge, needed to be sr_Latn_CS instead, script codes not supported yet
+    { LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO,       "sh", "ME" },   // Serbian Latin in Montenegro; kludge, needed to be sr_Latn_ME instead, script codes not supported yet
+    { LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA,    "sh", "BA" },
+    { LANGUAGE_SERBIAN_LATIN_NEUTRAL,               "sh", ""   },   // kludge, needed to be sr_Latn instead, script codes not supported yet
     { LANGUAGE_ARMENIAN,                    "hy", "AM" },
     { LANGUAGE_AZERI,                       "az", ""   },
     { LANGUAGE_AZERI_LATIN,                 "az", "AZ" },
@@ -421,6 +427,13 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_SANGO,                  "sg", "CF" },
     { LANGUAGE_USER_GANDA,                  "lg", "UG" },
     { LANGUAGE_USER_LINGALA_DRCONGO,        "ln", "CD" },
+    { LANGUAGE_USER_LOW_GERMAN,            "nds", "DE" },
+    { LANGUAGE_USER_HILIGAYNON,            "hil", "PH" },
+    { LANGUAGE_USER_NYANJA,                 "ny", "MW" },
+    { LANGUAGE_USER_KASHUBIAN,             "csb", "PL" },
+    { LANGUAGE_USER_SPANISH_CUBA,           "es", "CU" },
+    { LANGUAGE_USER_QUECHUA_NORTH_BOLIVIA, "qul", "BO" },
+    { LANGUAGE_USER_QUECHUA_SOUTH_BOLIVIA, "quh", "BO" },
     { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
