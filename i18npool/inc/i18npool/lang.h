@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lang.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:02:28 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:32:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@
    recent MSDEV version and the following web pages.
 
 
-   The complete list, not necessarily supported by Windows:
+   The once complete list, not necessarily supported by Windows:
    List of Locale ID (LCID) Values as Assigned by Microsoft
    http://www.microsoft.com/globaldev/reference/lcid-all.mspx
 
@@ -69,23 +69,14 @@
 
    And of course 2 lists aren't enough, so Windows Vista needs an extra one.
    Which at least seems to include values of other versions of Windows.
-   http://msdn.microsoft.com/library/en-us/intl/nls_238z.asp
+   Language Identifier Constants and Strings
+   http://msdn2.microsoft.com/en-us/library/ms776294.aspx
 
+   Lists for 2003, XP and Vista, overview with URLs pointing to regional settings:
+   NLS information page
+   http://www.microsoft.com/globaldev/nlsweb/default.mspx
 
-   nls information page
-   http://www.microsoft.com/globaldev/nlsweb/
-
-   IDs used in specific Windows versions up to and including Windows XP:
-   Table of Language Identifiers
-   http://msdn.microsoft.com/library/en-us/intl/nls_238z.asp
-
-   Primary Language Identifiers (International Features: Platform SDK)
-   http://msdn.microsoft.com/library/en-us/intl/nls_61df.asp
-
-   SubLanguage Identifiers (International Features: Platform SDK)
-   http://msdn.microsoft.com/library/en-us/intl/nls_19ir.asp
-
-   WD2000: Supported Language ID Reference Numbers (LCID)
+   List of supported locale identifiers in Word
    http://support.microsoft.com/default.aspx?scid=KB;en-us;q221435
  */
 
@@ -321,10 +312,11 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_SEPEDI                     0x046C
 #define LANGUAGE_NORTHERNSOTHO              LANGUAGE_SEPEDI /* just an alias for the already existing localization */
 #define LANGUAGE_SERBIAN                    0x001A  /* primary only, not a locale! */
-#define LANGUAGE_SERBIAN_CYRILLIC           0x0C1A
+#define LANGUAGE_SERBIAN_CYRILLIC           0x0C1A  /* MS lists this as Serbian (Cyrillic, Serbia) 'sr-Cyrl-SP', but they use 'SP' since at least Windows2003 where it was Serbia and Montenegro! */
 #define LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA    0x1C1A
-#define LANGUAGE_SERBIAN_LATIN              0x081A
+#define LANGUAGE_SERBIAN_LATIN              0x081A  /* MS lists this as Serbian (Latin, Serbia) 'sr-Latn-SP', but they use 'SP' since at least Windows2003 where it was Serbia and Montenegro! */
 #define LANGUAGE_SERBIAN_LATIN_BOSNIA_HERZEGOVINA       0x181A
+#define LANGUAGE_SERBIAN_LATIN_NEUTRAL      0x7C1A  /* MS lists this as 'sr' only. What a mess. */
 #define LANGUAGE_SESOTHO                    0x0430  /* also called Sutu now by MS */
 #define LANGUAGE_SINDHI                     0x0459
 #define LANGUAGE_SINDHI_PAKISTAN            0x0859
@@ -483,5 +475,17 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_LINGALA_DRCONGO       0x0639
 #define LANGUAGE_USER_SANGO                 0x063A
 #define LANGUAGE_USER_GANDA                 0x063B
+#define LANGUAGE_USER_LOW_GERMAN            0x063C
+#define LANGUAGE_USER_HILIGAYNON            0x063D
+#define LANGUAGE_USER_NYANJA                0x063E
+#define LANGUAGE_USER_KASHUBIAN             0x063F
+#define LANGUAGE_USER_SPANISH_CUBA          0x800A  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_SPANISH)) */
+#define LANGUAGE_USER_TETUN                 0x0640
+#define LANGUAGE_USER_QUECHUA_NORTH_BOLIVIA 0x0641
+#define LANGUAGE_USER_QUECHUA_SOUTH_BOLIVIA 0x0642
+#define LANGUAGE_USER_SERBIAN_CYRILLIC_SERBIA       0x8C1A  /* makeLangID( 0x20+0x03, getPrimaryLanguage( LANGUAGE_SERBIAN_CYRILLIC)) */
+#define LANGUAGE_USER_SERBIAN_LATIN_SERBIA          0x881A  /* makeLangID( 0x20+0x02, getPrimaryLanguage( LANGUAGE_SERBIAN_LATIN)) */
+#define LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO   0xCC1A  /* makeLangID( 0x20+0x13, getPrimaryLanguage( LANGUAGE_SERBIAN_CYRILLIC)) */
+#define LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO      0xC81A  /* makeLangID( 0x20+0x12, getPrimaryLanguage( LANGUAGE_SERBIAN_LATIN)) */
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
