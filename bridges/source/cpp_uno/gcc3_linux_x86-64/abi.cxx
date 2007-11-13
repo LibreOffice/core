@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:50:11 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:17:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,6 +357,8 @@ void x86_64::fill_struct( typelib_TypeDescriptionReference *pTypeRef, void * con
             case X86_64_SSESF_CLASS:
             case X86_64_SSEDF_CLASS:
                 *pStructAlign++ = *reinterpret_cast<sal_uInt64 *>( *pSSE++ );
+                break;
+            default:
                 break;
         }
 }
