@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxdate.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:29:19 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 15:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@
 double ImpGetDate( const SbxValues* p )
 {
     double nRes;
-    switch( p->eType )
+    switch( +p->eType )
     {
         case SbxNULL:
             SbxBase::SetError( SbxERR_CONVERSION );
@@ -221,7 +221,7 @@ void ImpPutDate( SbxValues* p, double n )
     SbxValues aTmp;
 
 start:
-    switch( p->eType )
+    switch( +p->eType )
     {
         case SbxDATE:
         case SbxDOUBLE:
