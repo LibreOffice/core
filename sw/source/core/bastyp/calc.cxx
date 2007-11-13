@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:22:30 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 15:29:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -523,7 +523,7 @@ String SwCalc::GetStrResult( double nValue, BOOL )
             case CALC_SYNTAX    :   return RESOURCE->aCalc_Syntax;
             case CALC_ZERODIV   :   return RESOURCE->aCalc_ZeroDiv;
             case CALC_BRACK     :   return RESOURCE->aCalc_Brack;
-            case CALC_POW       :   return RESOURCE->aCalc_Pow;
+            case CALC_POWERR    :   return RESOURCE->aCalc_Pow;
             case CALC_VARNFND   :   return RESOURCE->aCalc_VarNFnd;
             case CALC_OVERFLOW  :   return RESOURCE->aCalc_Overflow;
             case CALC_WRONGTIME :   return RESOURCE->aCalc_WrongTime;
