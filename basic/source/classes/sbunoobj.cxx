@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 09:59:12 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 15:21:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1628,7 +1628,7 @@ String Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
 String Dbg_SbxDataType2String( SbxDataType eType )
 {
     String aRet( RTL_CONSTASCII_USTRINGPARAM("Unknown Sbx-Type!") );
-    switch( eType )
+    switch( +eType )
     {
         case SbxEMPTY:      aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxEMPTY") ); break;
         case SbxNULL:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxNULL") ); break;
