@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-23 14:43:07 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 15:26:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@
 
 #ifdef _MSC_VER
 #pragma optimize("",off)
-#pragma optimize("q",off) // p-code off
 #endif
 
 // INCLUDE ---------------------------------------------------------------
