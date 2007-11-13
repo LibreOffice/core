@@ -1,0 +1,76 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: copytablewizard.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:09:20 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "dbu_uno.hrc"
+
+String STR_CTW_NO_VIEWS_SUPPORT
+{
+    Text [ en-US ] = "The destination database does not support views.";
+};
+
+String STR_CTW_NO_PRIMARY_KEY_SUPPORT
+{
+    Text [ en-US ] = "The destination database does not support primary keys.";
+};
+
+String STR_CTW_INVALID_DATA_ACCESS_DESCRIPTOR
+{
+    Text [ en-US ] = "no data access descriptor found, or no data access descriptor able to provide all necessary information";
+};
+
+String STR_CTW_ONLY_TABLES_AND_QUERIES_SUPPORT
+{
+    Text [ en-US ] = "Only tables and queries are supported at the moment.";
+};
+
+String STR_CTW_COPY_SOURCE_NEEDS_BOOKMARKS
+{
+    Text [ en-US ] = "The copy source's result set must support bookmarks.";
+};
+
+String STR_CTW_UNSUPPORTED_COLUMN_TYPE
+{
+    Text [ en-US ] = "Unsupported source column type ($type$) at column position $pos$.";
+};
+
+String STR_CTW_ILLEGAL_PARAMETER_COUNT
+{
+    Text [ en-US ] = "Illegal number of initialization parameters.";
+};
+
+String STR_CTW_ERROR_DURING_INITIALIZATION
+{
+    Text [ en-US ] = "An error occured during initialization.";
+};
