@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 10:09:25 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:19:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2740,7 +2740,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
     ErrCode  nError   = (ErrCode)nErrorCode;
     sal_Bool bWarning = !ERRCODE_TOERROR(nError);
 
-    if ( (ErrCode)nErrorCode == ERRCODE_SFX_BROKENSIGNATURE )
+    if ( nError == ERRCODE_SFX_BROKENSIGNATURE )
     {
         // the broken signature warning needs a special title
         String aErrorString;
