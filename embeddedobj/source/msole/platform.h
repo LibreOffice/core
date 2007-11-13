@@ -4,9 +4,9 @@
  *
  *  $RCSfile: platform.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:44:08 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 15:20:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
-#pragma warning(disable: 4548 4917)
+#pragma warning(disable: 4548 4555 4917)
 #endif
 #include "windows.h"
 #ifdef __MINGW32__
