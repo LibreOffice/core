@@ -4,9 +4,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:50:39 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,8 +171,8 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         else
         {
             // try to lookup the symbol in the generated rtti map
-            t_rtti_map::const_iterator iFind( m_generatedRttis.find( unoName ) );
-            if (iFind == m_generatedRttis.end())
+            t_rtti_map::const_iterator iFind2( m_generatedRttis.find( unoName ) );
+            if (iFind2 == m_generatedRttis.end())
             {
                 // we must generate it !
                 // symbol and rtti-name is nearly identical,
@@ -201,7 +201,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
             }
             else // taking already generated rtti
             {
-                rtti = iFind->second;
+                rtti = iFind2->second;
             }
         }
     }
