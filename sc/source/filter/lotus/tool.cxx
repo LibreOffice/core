@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tool.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:54:21 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 15:26:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -415,11 +415,11 @@ SfxUInt32Item* FormCache::NewAttr( BYTE nFormat, BYTE nSt )
             break;
         default:
             //fStandard;nL;
-            nIndex = pFormTable->GetStandardFormat(
+            nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
-            pFormTable->GenerateFormat( aFormString, nIndex,
+            pFormTable->GenerateFormat( aFormString, nIndex1,
                 eLanguage, FALSE, FALSE, nL, 1 );
-            nIndex = 0;
+            nIndex1 = 0;
             break;
     }
 
