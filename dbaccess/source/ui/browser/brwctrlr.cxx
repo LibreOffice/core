@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 14:01:29 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 15:33:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1902,7 +1902,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 break;
 
             ::rtl::OUString sOldSort = m_xParser->getOrder();
-            sal_Bool bParserSuccess;
+            sal_Bool bParserSuccess = sal_False;
             HANDLE_SQL_ERRORS(
                 m_xParser->setOrder(::rtl::OUString()); m_xParser->appendOrderByColumn(xField, bSortUp),
                 bParserSuccess,
@@ -1953,7 +1953,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 DO_SAFE( (bHaving ? m_xParser->setHavingClause(::rtl::OUString()) : m_xParser->setFilter(::rtl::OUString())), "SbaXDataBrowserController::Execute : caught an exception while resetting the new filter !" );
             }
 
-            sal_Bool bParserSuccess;
+            sal_Bool bParserSuccess = sal_False;
 
 
             if ( bHaving )
