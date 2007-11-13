@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fla.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:36:17 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 15:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,7 @@ sal_Int32 Evaluator::evalFunc(const sal_Unicode*op, sal_Int32 opLen, sal_Int32 a
     else if (opLen==8 && op[0]=='t' && op[1]=='w' && op[2]=='i' && op[3]=='p' && op[4]=='s' && op[5]=='2' && op[6]=='c' && op[7]=='m' && args==1)
     {
         double v=rtl_ustr_toDouble(argv[0]);
-        return rtl_ustr_valueOfDouble(result, (v/567.0L));
+        return rtl_ustr_valueOfDouble(result, (v/567.0));
     }
     else if (opLen==6 && op[0]=='s' && op[1]=='w' && op[2]=='i' && op[3]=='t' && op[4]=='c' && op[5]=='h' && args>2)
     {
