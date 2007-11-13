@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dhommatrix.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:21:53 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:17:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,8 +236,8 @@ namespace basegfx
     {
         if(!fTools::equalZero(fRadiant))
         {
-            double fSin;
-            double fCos;
+            double fSin(0.0);
+            double fCos(0.0);
 
             // is the rotation angle an approximate multiple of pi/2?
             // If yes, force fSin/fCos to -1/0/1, to maintain
