@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci11.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:42:39 $
+#   last change: $Author: rt $ $Date: 2007-11-13 15:19:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -170,6 +170,7 @@ CFLAGSOUTOBJ=-Fo
 # - "warning C4191: unsafe conversion from function type to function type",
 # - "warning C4217: member template functions cannot be used for copy-assignment
 #   or copy-construction",
+# - "warning C4250: 'class1' : inherits 'class2::member' via dominance",
 # - "warning C4355: 'this' used in base member initializer list",
 # - "warning C4511: copy constructor could not be generated",
 # - "warning C4512: assignment operator could not be generated",
@@ -193,10 +194,10 @@ CFLAGSOUTOBJ=-Fo
 #   '()' to '(void)'".
 # - "warning C4365: conversion from ... to ... signed/unsigned mismatch"
 
-CFLAGSWARNCXX=-Wall -wd4061 -wd4127 -wd4191 -wd4217 -wd4251 -wd4275 -wd4290 \
-    -wd4294 -wd4355 -wd4511 -wd4512 -wd4514 -wd4611 -wd4625 -wd4626 -wd4640 \
-    -wd4675 -wd4710 -wd4711 -wd4786 -wd4800 -wd4820 -wd4503 -wd4619 -wd4365 \
-    -wd4668 -wd4738 -wd4826 -wd4350 -wd4505 -wd4692 -wd4189 -wd4005
+CFLAGSWARNCXX=-Wall -wd4061 -wd4127 -wd4191 -wd4217 -wd4250 -wd4251 -wd4275 \
+    -wd4290 -wd4294 -wd4355 -wd4511 -wd4512 -wd4514 -wd4611 -wd4625 -wd4626 \
+    -wd4640 -wd4675 -wd4710 -wd4711 -wd4786 -wd4800 -wd4820 -wd4503 -wd4619 \
+    -wd4365 -wd4668 -wd4738 -wd4826 -wd4350 -wd4505 -wd4692 -wd4189 -wd4005
 CFLAGSWARNCC=$(CFLAGSWARNCXX) -wd4255
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
@@ -206,71 +207,12 @@ CFLAGSWERRCC=-WX
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
-    automation \
-    avmedia \
-    b_server \
-    basctl \
-    basebmp \
-    basic \
-    binfilter \
-    canvas \
-    chart2 \
-    connectivity \
-    cppcanvas \
-    customres \
-    databaseext \
-    dbaccess \
-    desktop \
-    devtools \
-    dxcanvas \
-    embeddedobj \
     extensions \
-    extras_full \
-    filter \
-    finalize \
-    forms \
     fpicker \
-    framework \
-    glcanvas \
-    goodies \
-    helpcontent2 \
-    instset_native \
-    instsetoo_native \
-    lingu \
     lingucomponent \
-    linguistic \
-    macromigration \
-    migrationanalysis \
-    officecfg \
-    postprocess \
-    r_tools \
-    sc \
-    sch \
-    scripting \
-    sd \
-    setupso_native \
-    sfx2 \
-    sj2 \
-    slideshow \
-    smoketest_native \
-    smoketestoo_native \
-    so3 \
     soldep \
-    starmath \
-    svtools \
-    svx \
     sw \
-    tab \
-    toolkit \
-    top \
-    uui \
-    vcl \
-    wizards \
-    writerperfect \
-    xmlhelp \
-    xmloff \
-    xmlsecurity
-
+    svx
 
 CDEFS+=-DSTLPORT_VERSION=400 -DWINVER=0x400 -D_WIN32_IE=0x400
 CDEFS+=-D_MT
