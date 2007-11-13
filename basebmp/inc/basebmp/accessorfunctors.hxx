@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessorfunctors.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-21 20:57:05 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 15:13:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ template< typename Functor > struct BinaryFunctorSplittingWrapper :
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 // making all members public, if no member template friends
 private:
-    template<class A> friend class BinaryFunctorSplittingWrapper;
+    template<class A> friend struct BinaryFunctorSplittingWrapper;
 #endif
     Functor maFunctor;
 
