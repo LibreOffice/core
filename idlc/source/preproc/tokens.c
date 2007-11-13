@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokens.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:51:59 $
+ *  last change: $Author: rt $ $Date: 2007-11-13 14:20:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,7 +398,7 @@ void
     if (str)
         fprintf(stderr, "%s ", str);
     if (tp < trp->bp || tp > trp->lp)
-        fprintf(stderr, "(tp offset %d) ", tp - trp->bp);
+        fprintf(stderr, "(tp offset %ld) ", (long)(tp - trp->bp));
     for (tp = trp->bp; tp < trp->lp && tp < trp->bp + 32; tp++)
     {
         if (tp->type != NL)
