@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: tkr $ $Date: 2007-10-24 15:07:49 $
+#   last change: $Author: rt $ $Date: 2007-11-14 08:23:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ PATCH_FILE_NAME=opensslsol.patch
 OUT2BIN = cygcrypto-0.9.8.dll
 OUT2BIN += cygssl-0.9.8.dll
 # 4NT
-.IF "$(USE_SHELL)== "4nt"
+.IF "$(USE_SHELL)"== "4nt"
 PATCH_FILE_NAME=openssl.patch
 CONFIGURE_DIR=. 
 CONFIGURE_ACTION=$(PERL) configure
