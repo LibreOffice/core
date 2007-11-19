@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-26 08:49:17 $
+#   last change: $Author: ihi $ $Date: 2007-11-19 13:01:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ SHL1VERSIONMAP=exports.map
 SHL1STDLIBS=                     \
     $(CPPUHELPERLIB)         \
     $(CPPULIB)               \
+    $(COMPHELPERLIB)         \
     $(SALLIB)                \
     $(EXPATASCII3RDLIB)      \
     $(UCBHELPERLIB)          \
