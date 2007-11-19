@@ -1,0 +1,50 @@
+#*************************************************************************
+#
+#   OpenOffice.org - a multi-platform office productivity suite
+#
+#   $RCSfile: helplinker.pmk,v $
+#
+#   $Revision: 1.2 $
+#
+#   last change: $Author: ihi $ $Date: 2007-11-19 13:00:09 $
+#
+#   The Contents of this file are made available subject to
+#   the terms of GNU Lesser General Public License Version 2.1.
+#
+#
+#     GNU Lesser General Public License Version 2.1
+#     =============================================
+#     Copyright 2005 by Sun Microsystems, Inc.
+#     901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#     This library is free software; you can redistribute it and/or
+#     modify it under the terms of the GNU Lesser General Public
+#     License version 2.1, as published by the Free Software Foundation.
+#
+#     This library is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#     Lesser General Public License for more details.
+#
+#     You should have received a copy of the GNU Lesser General Public
+#     License along with this library; if not, write to the Free Software
+#     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#     MA  02111-1307  USA
+#
+#*************************************************************************
+
+# define HELPLINKER_DLLIMPLEMENTATION (see @ inc/xmlhelp/helplinkerdllapi.h)
+CDEFS += -DHELPLINKER_DLLIMPLEMENTATION
+
+# set default symbol visibility / scope to hidden
+.IF "$(COMNAME)" == "gcc3"
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+ CFLAGS += -fvisibility=hidden
+.ENDIF # HAVE_GCC_VISIBILITY_FEATURE
+.ENDIF # gcc3
+
+.IF "$(COMNAME)" == "sunpro5"
+.IF "$(CCNUMVER)" >= "00050005"
+ CFLAGS += -xldscope=hidden
+.ENDIF # 5.5
+.ENDIF # sunpro5
