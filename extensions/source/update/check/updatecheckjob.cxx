@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckjob.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:37:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:48:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include "updatecheck.hxx"
 #include "updatecheckconfig.hxx"
 #include "updatehdl.hxx"
+#include "updateprotocol.hxx"
 
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
@@ -85,6 +86,8 @@ public:
 
 private:
     uno::Reference<uno::XComponentContext> m_xContext;
+
+    void handleExtensionUpdates( const uno::Sequence< beans::NamedValue > &rListProp );
 };
 
 //------------------------------------------------------------------------------
@@ -125,6 +128,24 @@ uno::Any
 UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
     throw (lang::IllegalArgumentException, uno::Exception)
 {
+    for ( sal_Int32 n=namedValues.getLength(); n-- > 0; )
+    {
+        if ( namedValues[ n ].Name.equalsAscii( "DynamicData" ) )
+        {
+            uno::Sequence<beans::NamedValue> aListProp;
+            if ( namedValues[n].Value >>= aListProp )
+            {
+                for ( sal_Int32 i=aListProp.getLength(); i-- > 0; )
+                {
+                    if ( aListProp[ i ].Name.equalsAscii( "updateList" ) )
+                    {
+                        handleExtensionUpdates( aListProp );
+                        return uno::Any();
+                    }
+                }
+            }
+        }
+    }
     uno::Sequence<beans::NamedValue> aConfig =
         getValue< uno::Sequence<beans::NamedValue> > (namedValues, "JobConfig");
 
@@ -146,6 +167,44 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
     }
 
     return uno::Any();
+}
+
+//------------------------------------------------------------------------------
+void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedValue > &rListProp )
+{
+    try {
+        uno::Sequence< uno::Sequence< rtl::OUString > > aList =
+            getValue< uno::Sequence< uno::Sequence< rtl::OUString > > > ( rListProp, "updateList" );
+        bool bPrepareOnly = getValue< bool > ( rListProp, "prepareOnly" );
+
+        // we will first store any new found updates and then check, if there are any
+        // pending updates.
+        storeExtensionUpdateInfos( m_xContext, aList );
+
+        if ( bPrepareOnly )
+            return;
+
+        bool bHasUpdates = checkForPendingUpdates( m_xContext );
+
+        rtl::Reference<UpdateCheck> aController( UpdateCheck::get() );
+        if ( ! aController.is() )
+            return;
+
+        aController->setHasExtensionUpdates( bHasUpdates );
+
+        if ( ! aController->hasOfficeUpdate() )
+        {
+            if ( bHasUpdates )
+                aController->setUIState( UPDATESTATE_EXT_UPD_AVAIL, true );
+            else
+                aController->setUIState( UPDATESTATE_NO_UPDATE_AVAIL, true );
+        }
+    }
+    catch( const uno::Exception& e )
+    {
+         OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
+            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+    }
 }
 
 //------------------------------------------------------------------------------
