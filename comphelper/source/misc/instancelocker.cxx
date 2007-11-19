@@ -4,9 +4,9 @@
  *
  *  $RCSfile: instancelocker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:11:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 17:27:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,6 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
                     uno::Reference< uno::XInterface >(),
                     0 );
 
-        uno::Any aAny = aArguments[2];
         if ( nLen == 3 && !( aArguments[2] >>= xApproval ) )
             throw lang::IllegalArgumentException(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("If the third argument is provided, it must be XActionsApproval implementation!" ) ),
