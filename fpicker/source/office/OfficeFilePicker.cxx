@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFilePicker.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 16:28:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:23:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,6 +230,7 @@ void SvtFilePicker::prepareExecute()
                 aPath.insertName( m_aDefaultName );
                 getDialog()->SetHasFilename( true );
             }
+            String sPath = aPath.GetMainURL( INetURLObject::NO_DECODE );
             getDialog()->SetPath( aPath.GetMainURL( INetURLObject::NO_DECODE ) );
         }
         else if ( m_aDefaultName.getLength() > 0 )
