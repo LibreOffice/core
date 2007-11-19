@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:28:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 13:00:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
 #include <com/sun/star/container/XNameReplace.hpp>
 #endif
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace com::sun::star;
 using namespace chelp;
@@ -379,6 +381,16 @@ void ContentProvider::init()
     subst( aPath );
     aImagesZipPaths[ 1 ] = aPath;
 
+    uno::Reference< uno::XComponentContext > xContext;
+    uno::Reference< beans::XPropertySet > xProps( m_xSMgr, uno::UNO_QUERY );
+    OSL_ASSERT( xProps.is() );
+    if (xProps.is())
+    {
+        xProps->getPropertyValue(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xContext;
+        OSL_ASSERT( xContext.is() );
+    }
+
     sal_Bool showBasic = getBooleanKey(xHierAccess,"Help/ShowBasic");
     m_pDatabases = new Databases( showBasic,
                                   instPath,
@@ -389,7 +401,7 @@ void ContentProvider::init()
                                   vendorversion,
                                   vendorshort,
                                   stylesheet,
-                                  m_xSMgr );
+                                  xContext );
 }
 
 uno::Reference< lang::XMultiServiceFactory >
