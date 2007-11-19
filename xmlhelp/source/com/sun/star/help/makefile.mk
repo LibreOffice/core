@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-26 12:38:50 $
+#   last change: $Author: ihi $ $Date: 2007-11-19 13:00:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,14 @@
 PRJ		= ..$/..$/..$/..$/..
 PRJNAME = xmlhelp
 TARGET  = HelpLinker
+LIBBASENAME = helplinker
 TARGETTYPE=CUI
-LIBTARGET=no
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
-
+.INCLUDE : helplinker.pmk
+ 
 .IF "$(SYSTEM_LIBXSLT)" == "YES"
 CFLAGS+= $(LIBXSLT_CFLAGS)
 .ELSE
@@ -57,10 +58,15 @@ CFLAGS+=-DSYSTEM_DB -I$(DB_INCLUDES)
 OBJFILES=\
         $(OBJ)$/HelpLinker.obj \
         $(OBJ)$/HelpCompiler.obj
+SLOFILES=\
+        $(SLO)$/HelpLinker.obj \
+        $(SLO)$/HelpCompiler.obj
 
 EXCEPTIONSFILES=\
         $(OBJ)$/HelpLinker.obj \
-        $(OBJ)$/HelpCompiler.obj
+        $(OBJ)$/HelpCompiler.obj \
+        $(SLO)$/HelpLinker.obj \
+        $(SLO)$/HelpCompiler.obj
 
 
 APP1TARGET= $(TARGET)
@@ -69,6 +75,16 @@ APP1OBJS=\
       $(OBJ)$/HelpCompiler.obj
 
 APP1STDLIBS+=$(SALLIB) $(BERKELEYLIB) $(ICUUCLIB) $(XSLTLIB)
+
+SHL1TARGET	=$(LIBBASENAME)$(UPD)$(DLLPOSTFIX)
+SHL1LIBS=	$(SLB)$/$(TARGET).lib
+SHL1IMPLIB	=i$(LIBBASENAME)
+SHL1DEF		=$(MISC)$/$(SHL1TARGET).def
+SHL1STDLIBS =$(SALLIB) $(BERKELEYLIB) $(ICUUCLIB) $(XSLTLIB)
+SHL1USE_EXPORTS	=ordinal
+
+DEF1NAME	=$(SHL1TARGET) 
+DEFLIB1NAME	=$(TARGET)
 
 # --- Targets ------------------------------------------------------
 
