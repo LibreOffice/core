@@ -4,9 +4,9 @@
  *
  *  $RCSfile: license_dialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:24:22 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:53:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,6 @@ protected:
 struct LicenseDialogImpl : public ModalDialog
 {
     cssu::Reference<cssu::XComponentContext> m_xComponentContext;
-    ::rtl::OUString m_sTitle;
     //virtual BOOL Close();
     //virtual void Resize();
     //DECL_LINK( headbar_dragEnd, HeaderBar * );
@@ -239,7 +238,6 @@ LicenseDialogImpl::LicenseDialogImpl(
     const ::rtl::OUString & sLicenseText):
         ModalDialog(pParent, DpGuiResId(RID_DLG_LICENSE))
         ,m_xComponentContext(xContext)
-        ,m_sTitle(String(DpGuiResId(RID_STR_LICENSE_TITLE)))
         ,m_ftHead(this, DpGuiResId(FT_LICENSE_HEADER))
         ,m_ftBody1(this, DpGuiResId(FT_LICENSE_BODY_1))
         ,m_ftBody1Txt(this, DpGuiResId(FT_LICENSE_BODY_1_TXT))
