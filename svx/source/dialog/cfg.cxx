@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:17:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 17:20:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,11 @@
 #ifndef _SV_SCRBAR_HXX
 #include <vcl/scrbar.hxx>
 #endif
+//added for issue73355
+//#ifndef _SV_SVDATA_HXX
+//#include <vcl/svdata.hxx>
+//#endif
+//issue73355 ends
 
 #include <sfx2/app.hxx>
 #include <sfx2/sfxdlg.hxx>
@@ -148,6 +153,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
 #endif
 
 #define PRTSTR(x) rtl::OUStringToOString(x, RTL_TEXTENCODING_ASCII_US).pData->buffer
@@ -1702,7 +1710,7 @@ void SvxDescriptionEdit::SetNewText( const String& _rText )
 SvxConfigPage::SvxConfigPage(
     Window *pParent, const SfxItemSet& rSet )
     :
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_MENUS), rSet ),
+    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_MENUS ), rSet ),
     bInitialised( FALSE ),
     pCurrentSaveInData( 0 ),
     aTopLevelSeparator( this, SVX_RES( GRP_MENUS ) ),
@@ -2934,7 +2942,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     {
         // Generate custom name for new menu
         String prefix =
-            String( SVX_RES ( RID_SVXSTR_NEW_MENU ) );
+            String( SVX_RES( RID_SVXSTR_NEW_MENU ) );
 
         OUString newname = generateCustomName( prefix, entries );
         OUString newurl = generateCustomMenuURL( pEntries );
@@ -3413,10 +3421,10 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
     aTopLevelSeparator.SetText(
         SVX_RES ( RID_SVXSTR_PRODUCTNAME_TOOLBARS ) );
 
-    aTopLevelLabel.SetText( SVX_RES ( RID_SVXSTR_TOOLBAR ) );
-    aModifyTopLevelButton.SetText( SVX_RES ( RID_SVXSTR_TOOLBAR ) );
-    aContentsSeparator.SetText( SVX_RES ( RID_SVXSTR_TOOLBAR_CONTENT ) );
-    aContentsLabel.SetText( SVX_RES ( RID_SVXSTR_COMMANDS ) );
+    aTopLevelLabel.SetText( SVX_RES( RID_SVXSTR_TOOLBAR ) );
+    aModifyTopLevelButton.SetText( SVX_RES( RID_SVXSTR_TOOLBAR ) );
+    aContentsSeparator.SetText( SVX_RES( RID_SVXSTR_TOOLBAR_CONTENT ) );
+    aContentsLabel.SetText( SVX_RES( RID_SVXSTR_COMMANDS ) );
 
     aTopLevelListBox.SetSelectHdl(
         LINK( this, SvxToolbarConfigPage, SelectToolbar ) );
@@ -5420,6 +5428,8 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     aBtnCancel           ( this, SVX_RES( BTN_CANCEL ) ),
     aBtnHelp             ( this, SVX_RES( BTN_HELP ) ),
     aBtnImport           ( this, SVX_RES( BTN_IMPORT ) ),
+    aBtnDelete           ( this, SVX_RES( BTN_DELETE ) ),
+    aFlSeparator         ( this, SVX_RES( FL_SEPARATOR ) ),
     m_xImageManager      ( rXImageManager ),
     m_xParentImageManager( rXParentImageManager )
 {
@@ -5457,7 +5467,91 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         aBtnImport.Enable( FALSE );
     }
 
+    uno::Reference< beans::XPropertySet > xPropSet(
+        xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.util.PathSettings" ) ),
+        uno::UNO_QUERY );
+
+    uno::Any aAny = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfig" ) ) );
+
+    ::rtl::OUString aDirectory;
+
+    aAny >>= aDirectory;
+
+    sal_Int32 aCount = aDirectory.getLength();
+
+    if ( aCount > 0 )
+    {
+        sal_Unicode aChar = aDirectory[ aCount-1 ];
+        if ( aChar != '/')
+        {
+            aDirectory += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+        }
+    }
+    else
+    {
+        aBtnImport.Enable( FALSE );
+    }
+
+    aDirectory += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "soffice.cfg/import" ) );
+
+    uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
+        xServiceManager->createInstance(
+        ::rtl::OUString::createFromAscii( "com.sun.star.embed.FileSystemStorageFactory" )),
+        uno::UNO_QUERY );
+
+    uno::Sequence< uno::Any > aArgs( 2 );
+    aArgs[ 0 ] <<= aDirectory;
+    aArgs[ 1 ] <<= com::sun::star::embed::ElementModes::READWRITE;
+
+    uno::Reference< com::sun::star::embed::XStorage > xStorage(
+        xStorageFactory->createInstanceWithArguments( aArgs ), uno::UNO_QUERY );
+
+    uno::Sequence< uno::Any > aProp( 2 );
+    beans::PropertyValue aPropValue;
+
+    aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfigStorage" ) );
+    aPropValue.Value <<= xStorage;
+    aProp[ 0 ] <<= aPropValue;
+
+    aPropValue.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenMode" ) );
+    aPropValue.Value <<= com::sun::star::embed::ElementModes::READWRITE;
+    aProp[ 1 ] <<= aPropValue;
+
+    m_xImportedImageManager = uno::Reference< com::sun::star::ui::XImageManager >(
+        xServiceManager->createInstanceWithArguments(
+        ::rtl::OUString::createFromAscii( "com.sun.star.ui.ImageManager" ), aProp ),
+        uno::UNO_QUERY );
+
+    ImageInfo mImageInfo;
     uno::Sequence< OUString > names;
+    if ( m_xImportedImageManager.is() )
+    {
+        names = m_xImportedImageManager->getAllImageNames( GetImageType() );
+        for ( sal_Int32 n = 0; n < names.getLength(); n++ )
+            mImageInfo.insert( ImageInfo::value_type( names[n], false ));
+    }
+    USHORT nId = 1;
+    ImageInfo::const_iterator pConstIter = mImageInfo.begin();
+    uno::Sequence< OUString > name( 1 );
+    while ( pConstIter != mImageInfo.end() )
+    {
+        name[ 0 ] = pConstIter->first;
+        uno::Sequence< uno::Reference< graphic::XGraphic> > graphics = m_xImportedImageManager->getImages( GetImageType(), name );
+        if ( graphics.getLength() > 0 )
+        {
+            Image img = Image( graphics[ 0 ] );
+            aTbSymbol.InsertItem( nId, img, pConstIter->first );
+
+            graphics[ 0 ]->acquire();
+
+            aTbSymbol.SetItemData(
+                nId, static_cast< void * > ( graphics[ 0 ].get() ) );
+
+            ++nId;
+        }
+        ++pConstIter;
+    }
+
     ImageInfo                 aImageInfo;
 
     if ( m_xParentImageManager.is() )
@@ -5478,9 +5572,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     }
 
     // large growth factor, expecting many entries
-    USHORT nId = 1;
-    uno::Sequence< OUString > name( 1 );
-    ImageInfo::const_iterator pConstIter = aImageInfo.begin();
+    pConstIter = aImageInfo.begin();
     while ( pConstIter != aImageInfo.end() )
     {
         name[ 0 ] = pConstIter->first;
@@ -5499,15 +5591,12 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
             // added to the list
         }
 
-        uno::Reference< graphic::XGraphic > xGraph;
         if ( graphics.getLength() > 0 )
-            xGraph = graphics[ 0 ];
-        if( xGraph.is() )
         {
-            Image img = Image( xGraph );
+            Image img = Image( graphics[ 0 ] );
             aTbSymbol.InsertItem( nId, img, pConstIter->first );
 
-            xGraph->acquire();
+            graphics[ 0 ]->acquire();
 
             aTbSymbol.SetItemData(
                 nId, static_cast< void * > ( graphics[ 0 ].get() ) );
@@ -5518,8 +5607,10 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         ++pConstIter;
     }
 
+    aBtnDelete.Enable( FALSE );
     aTbSymbol.SetSelectHdl( LINK(this, SvxIconSelectorDialog, SelectHdl) );
     aBtnImport.SetClickHdl( LINK(this, SvxIconSelectorDialog, ImportHdl) );
+    aBtnDelete.SetClickHdl( LINK(this, SvxIconSelectorDialog, DeleteHdl) );
 }
 
 SvxIconSelectorDialog::~SvxIconSelectorDialog()
@@ -5578,6 +5669,16 @@ IMPL_LINK( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox )
     USHORT nId = aTbSymbol.GetCurItemId();
     aTbSymbol.CheckItem( nId );
 
+    ::rtl::OUString aSelImageText = aTbSymbol.GetItemText( nId );
+    if ( m_xImportedImageManager->hasImage( GetImageType(), aSelImageText ) )
+    {
+        aBtnDelete.Enable( TRUE );
+    }
+    else
+    {
+        aBtnDelete.Enable( FALSE );
+    }
+
     return 0;
 }
 
@@ -5611,29 +5712,179 @@ IMPL_LINK( SvxIconSelectorDialog, ImportHdl, PushButton *, pButton )
     return 0;
 }
 
+IMPL_LINK( SvxIconSelectorDialog, DeleteHdl, PushButton *, pButton )
+{
+    (void)pButton;
+
+    OUString message = String( SVX_RES( RID_SVXSTR_DELETE_ICON_CONFIRM ) );
+    bool ret = WarningBox( this, WinBits(WB_OK_CANCEL), message ).Execute();
+
+    if ( ret == RET_OK )
+    {
+        USHORT nCount = aTbSymbol.GetItemCount();
+
+        for (USHORT n = 0; n < nCount; n++ )
+        {
+            USHORT nId = aTbSymbol.GetItemId( n );
+
+            if ( aTbSymbol.IsItemChecked( nId ) )
+            {
+                ::rtl::OUString aSelImageText = aTbSymbol.GetItemText( nId );
+                uno::Sequence< OUString > URLs(1);
+                URLs[0] = aSelImageText;
+                aTbSymbol.RemoveItem( aTbSymbol.GetItemPos( nId ) );
+                m_xImportedImageManager->removeImages( GetImageType(), URLs );
+                uno::Reference< css::ui::XUIConfigurationPersistence >
+                    xConfigPersistence( m_xImportedImageManager, uno::UNO_QUERY );
+                if ( xConfigPersistence.is() && xConfigPersistence->isModified() )
+                {
+                    xConfigPersistence->store();
+                }
+                break;
+            }
+        }
+    }
+    return 0;
+}
+
+bool SvxIconSelectorDialog::ReplaceGraphicItem(
+    const ::rtl::OUString& aURL )
+{
+    uno::Sequence< OUString > URLs(1);
+    uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
+    uno::Reference< css::ui::XUIConfigurationPersistence >
+        xConfigPer( m_xImportedImageManager, uno::UNO_QUERY );
+
+    uno::Reference< graphic::XGraphic > xGraphic;
+    uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
+    aMediaProps[0].Name = ::rtl::OUString::createFromAscii("URL");
+    aMediaProps[0].Value <<= aURL;
+
+    try
+    {
+        xGraphic = m_xGraphProvider->queryGraphic( aMediaProps );
+    }
+    catch ( uno::Exception& )
+    {
+        return false;
+    }
+
+    bool   bResult( false );
+    USHORT nCount = aTbSymbol.GetItemCount();
+    for (USHORT n = 0; n < nCount; n++ )
+    {
+        USHORT nId = aTbSymbol.GetItemId( n );
+
+        if ( OUString( aTbSymbol.GetItemText( nId ) ) == aURL )
+        {
+            try
+            {
+                // replace/insert image with provided URL
+                URLs[0] = aURL;
+                aImportGraph[ 0 ] = xGraphic;
+                m_xImportedImageManager->replaceImages( GetImageType(), URLs, aImportGraph );
+                xConfigPer->store();
+
+                aTbSymbol.RemoveItem( aTbSymbol.GetItemPos( nId ) );
+                aMediaProps[0].Value <<= aURL;
+                aTbSymbol.InsertItem( nId, Image( xGraphic ), aURL, 0, 0 );
+
+                bResult = true;
+                break;
+            }
+            catch ( ::com::sun::star::uno::Exception& )
+            {
+                break;
+            }
+        }
+    }
+
+    return bResult;
+}
+
 void SvxIconSelectorDialog::ImportGraphics(
     const uno::Sequence< OUString >& rPaths )
 {
     uno::Sequence< OUString > rejected( rPaths.getLength() );
     sal_Int32 rejectedCount = 0;
 
+    USHORT ret = 0;
+    sal_Int32 aIndex;
+    OUString aIconName;
+    uno::Sequence< OUString > URLs(1);
+    uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
+    uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
+    aMediaProps[0].Name = ::rtl::OUString::createFromAscii("URL");
+    uno::Reference< css::ui::XUIConfigurationPersistence >
+        xConfigPer( m_xImportedImageManager, uno::UNO_QUERY );
+
     if ( rPaths.getLength() == 1 )
     {
-        if ( ImportGraphic( rPaths[0] ) == FALSE )
+        if ( m_xImportedImageManager->hasImage( GetImageType(), rPaths[0] ) )
         {
-            rejected[0] = rPaths[0];
-            rejectedCount = 1;
+            aIndex = rPaths[0].lastIndexOf( '/' );
+            aIconName = rPaths[0].copy( aIndex+1 );
+            ret = SvxIconReplacementDialog( this, aIconName ).ShowDialog();
+            if ( ret == 2 )
+            {
+                ReplaceGraphicItem( rPaths[0] );
+            }
+        }
+        else
+        {
+            if ( ImportGraphic( rPaths[0] ) == FALSE )
+            {
+                rejected[0] = rPaths[0];
+                rejectedCount = 1;
+            }
         }
     }
     else
     {
+        ::rtl::OUString aSourcePath( rPaths[0] );
+        if ( rPaths[0].lastIndexOf( '/' ) != rPaths[0].getLength() -1 )
+            aSourcePath = rPaths[0] + ::rtl::OUString::createFromAscii( "/" );
+
         for ( sal_Int32 i = 1; i < rPaths.getLength(); i++ )
         {
-            bool result = ImportGraphic( rPaths[0] + OUString::createFromAscii("/") + rPaths[i] );
-            if ( result == FALSE )
+            ::rtl::OUString aPath = aSourcePath + rPaths[i];
+            if ( m_xImportedImageManager->hasImage( GetImageType(), aPath ) )
             {
-                rejected[ rejectedCount ] = rPaths[i];
-                rejectedCount++;
+                aIndex = rPaths[i].lastIndexOf( '/' );
+                aIconName = rPaths[i].copy( aIndex+1 );
+                ret = SvxIconReplacementDialog( this, aIconName, TRUE ).ShowDialog();
+                if ( ret == 2 )
+                {
+                    ReplaceGraphicItem( aPath );
+                }
+                else if ( ret == 5 )
+                {
+                    for ( sal_Int32 k = i; k < rPaths.getLength(); k++ )
+                    {
+                        aPath = aSourcePath + rPaths[k];
+                        bool bHasReplaced = ReplaceGraphicItem( aPath );
+
+                        if ( !bHasReplaced )
+                        {
+                            bool result = ImportGraphic( aPath );
+                            if ( result == FALSE )
+                            {
+                                rejected[ rejectedCount ] = rPaths[i];
+                                rejectedCount++;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+            else
+            {
+                bool result = ImportGraphic( aSourcePath + rPaths[i] );
+                if ( result == FALSE )
+                {
+                    rejected[ rejectedCount ] = rPaths[i];
+                    rejectedCount++;
+                }
             }
         }
     }
@@ -5664,7 +5915,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 {
     bool result = FALSE;
 
-    USHORT nId = aTbSymbol.GetItemId(aTbSymbol.GetItemCount() -1);
+    USHORT nId = aTbSymbol.GetItemCount();
     nId++;
 
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
@@ -5694,12 +5945,26 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 
                 if ( !!aImage )
                 {
-                    aTbSymbol.InsertItem( nId, aImage, aURL );
+                    aTbSymbol.InsertItem( nId, aImage, aURL, 0, 0 );
 
                     xGraphic->acquire();
 
                     aTbSymbol.SetItemData(
                         nId, static_cast< void * > ( xGraphic.get() ) );
+
+                    uno::Sequence< OUString > aImportURL( 1 );
+                    aImportURL[ 0 ] = aURL;
+                    uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
+                    aImportGraph[ 0 ] = xGraphic;
+                    m_xImportedImageManager->insertImages( GetImageType(), aImportURL, aImportGraph );
+
+                    uno::Reference< css::ui::XUIConfigurationPersistence >
+                    xConfigPersistence( m_xImportedImageManager, uno::UNO_QUERY );
+
+                    if ( xConfigPersistence.is() && xConfigPersistence->isModified() )
+                    {
+                        xConfigPersistence->store();
+                    }
 
                     result = TRUE;
                 }
@@ -5719,4 +5984,53 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
         OSL_TRACE("Caught exception importing XGraphic: %s", PRTSTR(e.Message));
     }
     return result;
+}
+
+/*******************************************************************************
+*
+* The SvxIconReplacementDialog class
+*
+*******************************************************************************/
+SvxIconReplacementDialog :: SvxIconReplacementDialog(
+    Window *pWindow, const rtl::OUString& aMessage, bool /*bYestoAll*/ )
+    :
+MessBox( pWindow, WB_DEF_YES, String( SVX_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ) ),  String( SVX_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) ) )
+
+{
+    SetImage( WarningBox::GetStandardImage() );
+    SetMessText( ReplaceIconName( aMessage ) );
+    RemoveButton( 1 );
+    AddButton( BUTTON_YES, 2, 0 );
+    AddButton( String( SVX_RES( RID_SVXSTR_YESTOALL ) ), 5, 0 );
+    AddButton( BUTTON_NO, 3, 0 );
+    AddButton( BUTTON_CANCEL, 4, 0 );
+}
+
+SvxIconReplacementDialog :: SvxIconReplacementDialog(
+    Window *pWindow, const rtl::OUString& aMessage )
+    :
+MessBox( pWindow, WB_YES_NO_CANCEL, String( SVX_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ) ),  String( SVX_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) ) )
+{
+    SetImage( WarningBox::GetStandardImage() );
+    SetMessText( ReplaceIconName( aMessage ));
+}
+
+rtl::OUString SvxIconReplacementDialog :: ReplaceIconName( const OUString& rMessage )
+{
+    rtl::OUString name;
+    rtl::OUString message = String( SVX_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) );
+    rtl::OUString placeholder = OUString::createFromAscii( "%ICONNAME" );
+    sal_Int32 pos = message.indexOf( placeholder );
+    if ( pos != -1 )
+    {
+        name = message.replaceAt(
+            pos, placeholder.getLength(), rMessage );
+    }
+    return name;
+}
+
+USHORT SvxIconReplacementDialog :: ShowDialog()
+{
+    this->Execute();
+    return ( this->GetCurButtonId() );
 }
