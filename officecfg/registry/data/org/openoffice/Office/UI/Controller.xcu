@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Controller.xcu,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 06:50:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 17:11:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,10 +286,10 @@
           <value>.uno:FontHeight</value>
         </prop>
         <prop oor:name="Module">
-          <value>com.sun.star.report.ReportDefinition</value>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.report.ReportToolboxController</value>
+          <value>com.sun.star.svx.FontHeightToolBoxController</value>
         </prop>
       </node>
       <node oor:name="c14" oor:op="replace">
