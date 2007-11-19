@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.263 $
+ *  $Revision: 1.264 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 10:15:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 13:06:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1049,6 +1049,8 @@ File gid_File_Lib_Go
 End
 
 SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Hatchwindowfactory, hatchwindowfactory.uno )
+
+STD_LIB_FILE_PATCH( gid_File_Lib_Helplinker, helplinker)
 
 File gid_File_Lib_I18npool
     TXT_FILE_BODY;
