@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:24:53 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 17:13:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ void SdDLL::RegisterControllers()
 
     SvxStyleToolBoxControl::RegisterControl(0, pMod);
     SvxFontNameToolBoxControl::RegisterControl(0, pMod);
-    SvxFontHeightToolBoxControl::RegisterControl(0, pMod);
+//  SvxFontHeightToolBoxControl::RegisterControl(0, pMod);
     SvxFontColorToolBoxControl::RegisterControl(0, pMod);
 
     SvxGrafFilterToolBoxControl::RegisterControl( SID_GRFFILTER, pMod );
