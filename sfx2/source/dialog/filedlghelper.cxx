@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:06:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:31:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HDL_
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER2_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XASYNCHRONOUSEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
@@ -1464,6 +1467,115 @@ void FileDialogHelper_Impl::implStartExecute()
 }
 
 // ------------------------------------------------------------------------
+String FileDialogHelper_Impl::implEnsureURLExtension(const String& sURL      ,
+                                                     const String& sExtension)
+{
+    // This feature must be active for file save/export only !
+    if (
+        (! mbIsSaveDlg) &&
+        (! mbExport   )
+        )
+        return sURL;
+
+    // no extension available (because "ALL *.*" was selected) ?
+    // Nod idea what else should happen here .-)
+    if (sExtension.Len() < 1)
+        return sURL;
+
+    // Some FilePicker implementations already add the right extension ...
+    // or might be the user used the right one already ...
+    // Dont create duplicate extension.
+    INetURLObject aURL(sURL);
+    if (aURL.getExtension().equals(sExtension))
+        return sURL;
+
+    // Ignore any other extension set by the user.
+    // Make sure suitable extension is used always.
+    // e.g. "test.bla.odt" for "ODT"
+    ::rtl::OUStringBuffer sNewURL(256);
+    sNewURL.append     (sURL      );
+    sNewURL.appendAscii("."       );
+    sNewURL.append     (sExtension);
+    return sNewURL.makeStringAndClear();
+}
+
+// ------------------------------------------------------------------------
+void lcl_saveLastURLs(SvStringsDtor*&                                    rpURLList ,
+                      ::comphelper::SequenceAsVector< ::rtl::OUString >& lLastURLs )
+{
+    lLastURLs.clear();
+    USHORT c = rpURLList->Count();
+    USHORT i = 0;
+    for (i=0; i<c; ++i)
+        lLastURLs.push_back(*(rpURLList->GetObject(i)));
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper_Impl::implGetAndCacheFiles(const uno::Reference< XInterface >& xPicker  ,
+                                                       SvStringsDtor*&               rpURLList,
+                                                 const SfxFilter*                    pFilter  )
+{
+    rpURLList = NULL;
+
+    String sExtension;
+    if (pFilter)
+    {
+        sExtension = pFilter->GetDefaultExtension ();
+        sExtension.EraseAllChars( '*' );
+        sExtension.EraseAllChars( '.' );
+    }
+
+    // a) the new way (optional!)
+    uno::Reference< XFilePicker2 > xPickNew(xPicker, UNO_QUERY);
+    if (xPickNew.is())
+    {
+                             rpURLList = new SvStringsDtor;
+        Sequence< OUString > lFiles    = xPickNew->getSelectedFiles();
+        ::sal_Int32          nFiles    = lFiles.getLength();
+        for (::sal_Int32 i = 0; i < nFiles; i++)
+        {
+            String* pURL = new String(implEnsureURLExtension(lFiles[i], sExtension));
+            rpURLList->Insert( pURL, rpURLList->Count() );
+        }
+    }
+
+    // b) the olde way ... non optional.
+    else
+    {
+        uno::Reference< XFilePicker > xPickOld(xPicker, UNO_QUERY_THROW);
+        Sequence< OUString > lFiles = xPickOld->getFiles();
+        ::sal_Int32          nFiles = lFiles.getLength();
+        if ( nFiles == 1 )
+        {
+                    rpURLList = new SvStringsDtor;
+            String* pURL      = new String(implEnsureURLExtension(lFiles[0], sExtension));
+            rpURLList->Insert( pURL, 0 );
+        }
+        else
+        if ( nFiles > 1 )
+        {
+            rpURLList = new SvStringsDtor;
+
+            INetURLObject aPath( lFiles[0] );
+            aPath.setFinalSlash();
+
+            for (::sal_Int32 i = 1; i < nFiles; i++)
+            {
+                if (i == 1)
+                    aPath.Append( lFiles[i] );
+                else
+                    aPath.setName( lFiles[i] );
+
+                String* pURL = new String(implEnsureURLExtension(aPath.GetMainURL( INetURLObject::NO_DECODE ), sExtension) );
+                rpURLList->Insert( pURL, rpURLList->Count() );
+            }
+        }
+    }
+
+    lcl_saveLastURLs(rpURLList, mlLastURLs);
+}
+
+// ------------------------------------------------------------------------
 ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                                         SfxItemSet *&   rpSet,
                                         String&         rFilter )
@@ -1592,40 +1704,12 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         getRealFilter( rFilter );
 
         // fill the rpURLList
-        Sequence < OUString > aPathSeq = mxFileDlg->getFiles();
-
-        if ( aPathSeq.getLength() )
-        {
-            rpURLList = new SvStringsDtor;
-
-            if ( aPathSeq.getLength() == 1 )
-            {
-                OUString aFileURL( aPathSeq[0] );
-
-                String* pURL = new String( aFileURL );
-                rpURLList->Insert( pURL, 0 );
-            }
-            else
-            {
-                INetURLObject aPath( aPathSeq[0] );
-                aPath.setFinalSlash();
-
-                for ( USHORT i = 1; i < aPathSeq.getLength(); ++i )
-                {
-                    if ( i == 1 )
-                        aPath.Append( aPathSeq[i] );
-                    else
-                        aPath.setName( aPathSeq[i] );
-
-                    String* pURL = new String( aPath.GetMainURL( INetURLObject::NO_DECODE ) );
-                    rpURLList->Insert( pURL, rpURLList->Count() );
-                }
-            }
-            SaveLastUsedFilter();
-            return ERRCODE_NONE;
-        }
-        else
+        implGetAndCacheFiles(mxFileDlg, rpURLList, getCurentSfxFilter());
+        if ( rpURLList == NULL )
             return ERRCODE_ABORT;
+
+        SaveLastUsedFilter();
+        return ERRCODE_NONE;
     }
     else
         return ERRCODE_ABORT;
@@ -2456,6 +2540,9 @@ String FileDialogHelper::GetPath() const
 {
     OUString aPath;
 
+    if ( mpImp->mlLastURLs.size() > 0)
+        return mpImp->mlLastURLs[0];
+
     if ( mpImp->mxFileDlg.is() )
     {
         Sequence < OUString > aPathSeq = mpImp->mxFileDlg->getFiles();
@@ -2472,6 +2559,9 @@ String FileDialogHelper::GetPath() const
 // ------------------------------------------------------------------------
 Sequence < OUString > FileDialogHelper::GetMPath() const
 {
+    if ( mpImp->mlLastURLs.size() > 0)
+        return mpImp->mlLastURLs.getAsConstList();
+
     if ( mpImp->mxFileDlg.is() )
         return mpImp->mxFileDlg->getFiles();
     else
