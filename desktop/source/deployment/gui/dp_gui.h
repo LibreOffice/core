@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 11:51:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ namespace svt {
 
 namespace dp_gui {
 
+class UpdateDialog;
 enum PackageState { REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE };
 
 PackageState getPackageState(
@@ -256,7 +257,7 @@ struct DialogImpl :
 
     void errbox( ::rtl::OUString const & msg );
 
-    void checkUpdates(bool selected);
+    void checkUpdates( bool selected, bool showUpdateOnly = false, bool parentVisible = true );
 
     bool supportsOptions( ::rtl::OUString const & sExtensionId);
 
@@ -273,6 +274,7 @@ struct DialogImpl :
     const ::com::sun::star::uno::Sequence< ::rtl::OUString > m_arExtensions;
     oslThread m_installThread;
     bool m_bAutoInstallFinished;
+    UpdateDialog* m_pUpdateDialog;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xComponentContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManagerFactory> m_xPkgMgrFac;
