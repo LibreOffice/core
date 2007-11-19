@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:34:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 17:19:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1368,9 +1368,13 @@
 #define RID_SVXSTR_OUTLINENUM_DESCRIPTION_7                 (RID_SVXSTR_OUTLINENUM_DESCRIPTIONS + 7)
 
 #define RID_SVXSTR_DIAGRAM_ROW                              (RID_SVX_START + 1162)
+#define RID_SVXSTR_DELETE_ICON_CONFIRM                      (RID_SVX_START + 1163) //added for issue73355
+#define RID_SVXSTR_REPLACE_ICON_WARNING                     (RID_SVX_START + 1164) //added for issue73355
+#define RID_SVXSTR_REPLACE_ICON_CONFIRM                     (RID_SVX_START + 1165) //added for issue73355
+#define RID_SVXSTR_YESTOALL                                 (RID_SVX_START + 1166) //added for issue73355
 
 // pb: next free string resource id
-#define RID_SVXSTR_NEXTFREE                 (RID_SVX_START + 1163)
+#define RID_SVXSTR_NEXTFREE                 (RID_SVX_START + 1167)
 
 
 // ----------------------------------------------------------------------------
