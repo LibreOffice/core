@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:53:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:52:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ DialogImpl::DialogImpl(
       m_arExtensions(arExtensions),
       m_installThread(0),
       m_bAutoInstallFinished(false),
+      m_pUpdateDialog(NULL),
       m_xComponentContext( xContext ),
       m_xPkgMgrFac( deployment::thePackageManagerFactory::get(xContext) ),
       m_strAddPackages( getResourceString(RID_STR_ADD_PACKAGES) ),
@@ -1007,6 +1008,10 @@ void DialogImpl::clickRemove( USHORT )
             break;
         }
     }
+
+    // Check, if there are still updates to be notified via menu bar icon
+    css::uno::Sequence< css::uno::Sequence< rtl::OUString > > aItemList;
+    UpdateDialog::createNotifyJob( false, aItemList );
 }
 
 //______________________________________________________________________________
@@ -1270,21 +1275,38 @@ void DialogImpl::errbox( OUString const & msg )
 }
 
 //______________________________________________________________________________
-void DialogImpl::checkUpdates(bool selected)
+void DialogImpl::checkUpdates( bool selected, bool showUpdateOnly, bool parentVisible )
 {
-    std::vector<UpdateData> data;
-    if (UpdateDialog(
-            m_xComponentContext, this,
-            (selected
-             ? new SelectedPackageIterator(*m_treelb.get())
-             : rtl::Reference<SelectedPackageIterator>()),
-            (selected
-             ? Sequence<Reference<deployment::XPackageManager> >()
-             : m_packageManagers),
-            &data).Execute() == RET_OK
-        && !data.empty())
+    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
+    if ( m_pUpdateDialog != NULL )
     {
-        UpdateInstallDialog(this, data, m_xComponentContext).Execute();
+        m_pUpdateDialog->ToTop();
+    }
+    else
+    {
+        std::vector<UpdateData> data;
+        Window * pParent = this;
+
+        if ( showUpdateOnly && !parentVisible )
+            pParent = GetParent();
+
+        m_pUpdateDialog = new UpdateDialog( m_xComponentContext, pParent,
+                                            ( selected ? new SelectedPackageIterator(*m_treelb.get())
+                                                       : rtl::Reference<SelectedPackageIterator>()),
+                                            ( selected ? Sequence<Reference<deployment::XPackageManager> >()
+                                                       : m_packageManagers ),
+                                            &data );
+        if ( ( m_pUpdateDialog->Execute() == RET_OK ) && !data.empty() )
+        {
+            m_pUpdateDialog->notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
+            UpdateInstallDialog( pParent, data, m_xComponentContext ).Execute();
+            m_pUpdateDialog->notifyMenubar( false, true ); // Check, if there are still pending updates to be notified via menu bar icon
+        }
+        else
+            m_pUpdateDialog->notifyMenubar( false, false ); // Check, if there are pending updates to be notified via menu bar icon
+
+        delete m_pUpdateDialog;
+        m_pUpdateDialog = NULL;
     }
 }
 
