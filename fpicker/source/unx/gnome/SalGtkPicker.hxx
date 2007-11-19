@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkPicker.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-08-07 13:59:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:25:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,10 @@
 
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER2_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
