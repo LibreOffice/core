@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatehdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 15:57:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:49:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,8 @@ UpdateHandler::UpdateHandler( const uno::Reference< uno::XComponentContext > & r
     mbDownloadBtnHasDots( false ),
     mbVisible( false ),
     mbStringsLoaded( false ),
-    mbMinimized( false )
+    mbMinimized( false ),
+    mbListenerAdded(false)
 {
 }
 
@@ -215,7 +216,11 @@ void UpdateHandler::setVisible( bool bVisible )
         if ( xTopWindow.is() )
         {
             xTopWindow->toFront();
-            xTopWindow->addTopWindowListener( this );
+            if ( !mbListenerAdded )
+            {
+                xTopWindow->addTopWindowListener( this );
+                mbListenerAdded = true;
+            }
         }
     }
     else if ( mxUpdDlg.is() )
@@ -552,6 +557,7 @@ void UpdateHandler::updateState( UpdateState eState )
             focusControl( DOWNLOAD_BUTTON );
             break;
         case UPDATESTATE_NO_UPDATE_AVAIL:
+        case UPDATESTATE_EXT_UPD_AVAIL:     // will only be set, when there are no office updates avail
             showControls( 0 );
             enableControls( 1 << CLOSE_BUTTON );
             setControlProperty( TEXT_STATUS, UNISTRING("Text"), uno::Any( substVariables(msNoUpdFound) ) );
@@ -1017,7 +1023,7 @@ void UpdateHandler::createDialog()
         xPropSet->setPropertyValue( UNISTRING("PositionY"), uno::Any(sal_Int32( 100 )) );
         xPropSet->setPropertyValue( UNISTRING("Width"), uno::Any(sal_Int32( DIALOG_WIDTH )) );
         xPropSet->setPropertyValue( UNISTRING("Height"), uno::Any(sal_Int32( DIALOG_HEIGHT )) );
-        xPropSet->setPropertyValue( UNISTRING("HelpURL"), uno::Any( UNISTRING( "HID:" ) + rtl::OUString::valueOf( (sal_Int32) HID_CHECK_FOR_UPD_PAUSE ) ) );
+        xPropSet->setPropertyValue( UNISTRING("HelpURL"), uno::Any( UNISTRING( "HID:" ) + rtl::OUString::valueOf( (sal_Int32) HID_CHECK_FOR_UPD_DLG ) ) );
     }
     {   // Label (fixed text) <status>
         uno::Sequence< beans::NamedValue > aProps(1);
