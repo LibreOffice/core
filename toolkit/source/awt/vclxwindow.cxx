@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 13:54:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 12:57:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1661,6 +1661,10 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                         String aID = aHelpURL.Copy( aPattern.Len() );
                         pWindow->SetHelpId( aID.ToInt32() );
                     }
+                    else
+                    {
+                        pWindow->SetSmartHelpId( SmartId( aHelpURL ) );
+                    }
                 }
             }
             break;
@@ -2037,10 +2041,19 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_HELPURL:
             {
-                ::rtl::OUStringBuffer aURL;
-                aURL.appendAscii( "HID:" );
-                aURL.append( (sal_Int32) GetWindow()->GetHelpId() );
-                aProp <<= aURL.makeStringAndClear();
+                SmartId aSmartId = GetWindow()->GetSmartHelpId();
+                if( aSmartId.HasString() )
+                {
+                    String aStrHelpId = aSmartId.GetStr();
+                    aProp <<= ::rtl::OUString( aStrHelpId );
+                }
+                else
+                {
+                    ::rtl::OUStringBuffer aURL;
+                    aURL.appendAscii( "HID:" );
+                    aURL.append( (sal_Int32) GetWindow()->GetHelpId() );
+                    aProp <<= aURL.makeStringAndClear();
+                }
             }
             break;
             case BASEPROPERTY_FONTDESCRIPTOR:
