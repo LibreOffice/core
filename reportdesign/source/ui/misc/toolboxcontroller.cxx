@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-23 14:38:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 17:23:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,13 +241,6 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:StarShapes")),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_STAR,m_nToolBoxId,*pToolBox));
         }
-        else if ( m_aCommandURL.equalsAscii(".uno:FontHeight") )
-        {
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FontHeight")),sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CharFontName")),sal_True));
-            m_pToolbarController = TToolbarHelper::createFromQuery(new SvxFontHeightToolBoxControl(m_nSlotId = SID_ATTR_CHAR_FONTHEIGHT,m_nToolBoxId,*pToolBox));
-            addStatusListener( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName" )));
-        }
         else if ( m_aCommandURL.equalsAscii(".uno:CharFontName") )
         {
             m_aStates.insert(TCommandState::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CharFontName")),sal_True));
@@ -333,18 +326,6 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
                             static_cast<SvxColorToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SFX_ITEM_SET : SFX_ITEM_DISABLED,&aColorItem);
                     }
                     break;
-                case SID_ATTR_CHAR_FONTHEIGHT:
-                    {
-                        /*::std::auto_ptr<SfxPoolItem> pState;
-                        if ( Event.FeatureURL.Complete == m_aCommandURL )
-                            pState.reset(new SvxFontHeightItem());
-                        else
-                            pState.reset(new SvxFontItem());
-                        pState->PutValue(Event.State);*/
-                        //static_cast<SvxFontHeightToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SFX_ITEM_AVAILABLE : SFX_ITEM_DISABLED,pState.get());
-                        static_cast<SvxFontHeightToolBoxControl*>(m_pToolbarController.get())->statusChanged(Event);
-                    }
-                    break;
                 case SID_ATTR_CHAR_FONT:
                     {
                         SvxFontItem aItem(ITEMID_FONT);
@@ -415,9 +396,6 @@ throw (uno::RuntimeException)
     {
         switch(m_nSlotId)
         {
-            case SID_ATTR_CHAR_FONTHEIGHT:
-                xWindow = VCLUnoHelper::GetInterface(static_cast<SvxFontHeightToolBoxControl*>(m_pToolbarController.get())->CreateItemWindow(VCLUnoHelper::GetWindow(_xParent)));
-                break;
             case SID_ATTR_CHAR_FONT:
                 xWindow = VCLUnoHelper::GetInterface(static_cast<SvxFontNameToolBoxControl*>(m_pToolbarController.get())->CreateItemWindow(VCLUnoHelper::GetWindow(_xParent)));
                 break;
