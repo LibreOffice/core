@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.264 $
+ *  $Revision: 1.265 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 16:25:02 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 13:06:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4948,18 +4948,30 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
     }
     else
     {
-        ULONG nStartHelpId = GetHelpId();
+        SmartId aSmartId = GetSmartHelpId();
 
-        if ( !nStartHelpId && ImplGetParent() )
+        ULONG nNumHelpId = 0;
+        String aStrHelpId;
+        if( aSmartId.HasString() )
+            aStrHelpId = aSmartId.GetStr();
+        if( aSmartId.HasNumeric() )
+            nNumHelpId = aSmartId.GetNum();
+
+        if ( !nNumHelpId && aStrHelpId.Len() == 0 && ImplGetParent() )
             ImplGetParent()->RequestHelp( rHEvt );
         else
         {
-            if ( !nStartHelpId )
-                nStartHelpId = OOO_HELP_INDEX;
+            if ( !nNumHelpId && aStrHelpId.Len() == 0 )
+                nNumHelpId = OOO_HELP_INDEX;
 
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
-                pHelp->Start( nStartHelpId, this );
+            {
+                if( aStrHelpId.Len() > 0 )
+                    pHelp->Start( aStrHelpId, this );
+                else
+                    pHelp->Start( nNumHelpId, this );
+            }
         }
     }
 }
