@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPackageInformationProvider.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 06:17:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:47:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,23 @@ interface XPackageInformationProvider
                package, an emty string will be returned.
     */
     string getPackageLocation( [in] string extensionId );
+
+    /** check if there are updates available for an extention.
+
+        @param extensionId
+               the unique identifier of an extension. When the extensionId is empty,
+               the service looks checks all installed extensions for a newer version,
+               otherwise the service looks for updates for an installed package with
+               the given id.
+       If the service finds an update for an extension, a sequence containing the name
+            and the version will be returned for each extension which has an update.
+       If the service can not find a matching package, an empty sequence is returned.
+    */
+    sequence< sequence< string > > isUpdateAvailable( [in] string extensionId );
+
+    /** returns a list of all installed extention with their version.
+    */
+    sequence< sequence< string > > getExtensionList();
 };
 
 }; }; }; };
