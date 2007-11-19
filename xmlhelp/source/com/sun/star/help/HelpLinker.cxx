@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpLinker.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-06 14:53:49 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 12:59:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ public:
     std::fstream* getOutputStream(const std::string &name);
     std::vector<unsigned char> readByteArray(const std::string &fileName);
     void clear();
-    std::fstream *getRAF(const std::string &name, bool update);
+    std::fstream *getRAF(const std::string &name, bool update) throw( HelpProcessingException );
     void createIfNeeded() {}
 };
 
@@ -178,6 +178,7 @@ std::vector<unsigned char> IndexAccessor::readByteArray(const std::string &fileN
 }
 
 std::fstream* IndexAccessor::getRAF(const std::string &name, bool update)
+    throw( HelpProcessingException )
 {
     std::fstream *_file = new std::fstream;
     fs::path fullname = indexFile(name);
@@ -194,7 +195,11 @@ std::fstream* IndexAccessor::getRAF(const std::string &name, bool update)
             _file->open(fullname.native_file_string().c_str(), std::ios::in | std::ios::out | std::ios::trunc | std::ios::binary);
         }
         if (!_file->is_open())
-            std::cerr << "Cannot open " << name << std::endl;
+        {
+            std::stringstream aStrStream;
+            aStrStream << "Cannot open " << name << std::endl;
+            throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
+        }
     }
     return _file;
 }
@@ -550,7 +555,7 @@ public:
     int nextEntry(int entry) const { return entry + entryLength(entry); }
     void restoreKeyInBuffer(int entry, std::vector<unsigned char> &buffer);
     std::string restoreKey(int entry, std::vector<unsigned char> &buffer);
-    std::string findID(int id);
+    std::string findID(int id) throw( HelpProcessingException );
     void setBlockNumbers(std::vector<int> &blocks) const;
     void listBlock();
     void doMap(BtreeDict &owner, const EntryProcessor &processor);
@@ -581,7 +586,7 @@ private:
     std::vector<BlockDescriptor> _blockTab;
 public:
     BlockManager(const BlockManagerParameters *params,
-        bool update, BlockFactory *bfactory);
+        bool update, BlockFactory *bfactory) throw( HelpProcessingException );
     ~BlockManager();
     Block& accessBlock(int blockNumber);
     void setModified(int blNum);
@@ -589,7 +594,7 @@ public:
     Block& getNewBlock();
     void processBlocks(BlockProcessor &processor);
     void mapBlock(Block* block);
-    void addDescriptor(Block* block);
+    void addDescriptor(Block* block) throw( HelpProcessingException );
 private:
     void writeBlock(const Block &bl);
 };
@@ -629,7 +634,7 @@ private:
     IntegerArray withPrefix(const std::string &prefix);
 public:
     DictBlock& accessBlock(int index);
-    DictBlock& child(const DictBlock &bl, int index);
+    DictBlock& child(const DictBlock &bl, int index) throw( HelpProcessingException );
 private:
     std::string findID(int blNum, int id);
     int find(const DictBlock &bl, std::vector<unsigned char> &key, int index);
@@ -729,12 +734,13 @@ DictBlock& BtreeDict::accessBlock(int index)
     return (DictBlock&)blockManager->accessBlock(index);
 }
 
-DictBlock& BtreeDict::child(const DictBlock &bl, int index)
+DictBlock& BtreeDict::child(const DictBlock &bl, int index) throw( HelpProcessingException )
 {
     if (bl._isLeaf)
     {
-        std::cerr << "leaf's can't have children, screwed!" << std::endl;
-        exit(-1);
+        std::stringstream aStrStream;
+        aStrStream << "leaf's can't have children, screwed!" << std::endl;
+        throw HelpProcessingException( HELPPROCESSING_INTERNAL_ERROR, aStrStream.str() );
     }
     return accessBlock(bl.getChildIdx(index));
 }
@@ -816,7 +822,7 @@ public:
 };
 
 BlockManager::BlockManager(const BlockManagerParameters *params,
-    bool update, BlockFactory *bfactory)
+    bool update, BlockFactory *bfactory) throw( HelpProcessingException )
     : _blockFactory(bfactory)
 {
     _update = update;
@@ -837,7 +843,11 @@ BlockManager::BlockManager(const BlockManagerParameters *params,
                 std::ios::in | std::ios::out | std::ios::trunc | std::ios::binary);
         }
         if (!_file.is_open())
-            std::cerr << "Cannot open " << params->getFile().native_file_string();
+        {
+            std::stringstream aStrStream;
+            aStrStream << "Cannot open " << params->getFile().native_file_string() << std::endl;
+            throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
+        }
     }
 
     _file.seekg(0, std::ios::end);
@@ -913,15 +923,16 @@ void BlockManager::mapBlock(Block* block)
     addDescriptor(block);
 }
 
-void BlockManager::addDescriptor(Block *block)
+void BlockManager::addDescriptor(Block *block) throw( HelpProcessingException )
 {
     BlockDescriptor desc(block);
     _blockTab.push_back(desc);
     HCDBG(std::cerr << "numbers are " << block->_number << " " << (_blockTab.size()-1) << std::endl);
     if (block->_number != _blockTab.size() - 1)
     {
-        std::cerr << "totally screwed" << std::endl;
-        exit(-1);
+        std::stringstream aStrStream;
+        aStrStream << "totally screwed" << std::endl;
+        throw HelpProcessingException( HELPPROCESSING_INTERNAL_ERROR, aStrStream.str() );
     }
     HCDBG(std::cerr << "addDescriptor blocks are now " << _blockTab.size() << std::endl);
 }
@@ -979,7 +990,7 @@ std::string DictBlock::restoreKey(int entry, std::vector<unsigned char> &buffer)
     return std::string((const char*)(&buffer[0]), 0, where);
 }
 
-std::string DictBlock::findID(int id)
+std::string DictBlock::findID(int id) throw( HelpProcessingException )
 {
     std::vector<unsigned char> buffer(BtreeDict::MaxKeyLength);
     int freeSpace = free();
@@ -990,8 +1001,9 @@ std::string DictBlock::findID(int id)
         else
             restoreKeyInBuffer(ent, buffer);
     }
-    std::cerr << "ID not found in block" << std::endl;
-    exit(-1);
+    std::stringstream aStrStream;
+    aStrStream << "ID not found in block" << std::endl;
+    throw HelpProcessingException( HELPPROCESSING_INTERNAL_ERROR, aStrStream.str() );
 }
 
 void DictBlock::setBlockNumbers(std::vector<int> &blocks) const
@@ -1161,9 +1173,10 @@ protected:
     bool update;
 public:
     FullBtreeDict(BtreeDictParameters &params, bool update);
-    void store(const std::string &bla, int id);
+    void store(const std::string &bla, int id) throw( HelpProcessingException );
     boost::shared_ptr<Entry> insert(FullDictBlock &bl, boost::shared_ptr<Entry> ent);
-    boost::shared_ptr<Entry> insertHere(FullDictBlock &bl, boost::shared_ptr<Entry> ent);
+    boost::shared_ptr<Entry> insertHere(FullDictBlock &bl, boost::shared_ptr<Entry> ent)
+         throw( HelpProcessingException );
     FullDictBlock& getNewBlock();
     void setModified(Block &bl);
     void close(int freeID);
@@ -1440,6 +1453,7 @@ FullDictBlock& FullBtreeDict::getNewBlock()
 }
 
 boost::shared_ptr<Entry> FullBtreeDict::insertHere(FullDictBlock &bl, boost::shared_ptr<Entry> ent)
+    throw( HelpProcessingException )
 {
     setModified(bl);                // to be modified in any case
     if (bl.insert(ent))
@@ -1451,8 +1465,9 @@ boost::shared_ptr<Entry> FullBtreeDict::insertHere(FullDictBlock &bl, boost::sha
         nbl.setBlockNumbers(blocks);
         if ((middle->smallerThan(*ent) ? nbl : bl).insert(ent) == false)
         {
-            std::cerr << "entry didn't fit into a freshly split block" << std::endl;
-            exit(-1);
+            std::stringstream aStrStream;
+            aStrStream << "entry didn't fit into a freshly split block" << std::endl;
+            throw HelpProcessingException( HELPPROCESSING_INTERNAL_ERROR, aStrStream.str() );
         }
         return middle;
     }
@@ -1531,14 +1546,15 @@ boost::shared_ptr<Entry> FullBtreeDict::insert(FullDictBlock &bl, boost::shared_
     return ent;
 }
 
-void FullBtreeDict::store(const std::string &key, int id)
+void FullBtreeDict::store(const std::string &key, int id) throw( HelpProcessingException )
 {
     HCDBG(std::cerr << "so storing " << key << " id " << id << std::endl);
 
     if (key.size() >= 250)
     {
-        std::cerr << "token " << key << " too long" << std::endl;
-        exit(-1);
+        std::stringstream aStrStream;
+        aStrStream << "token " << key << " too long" << std::endl;
+        throw HelpProcessingException( HELPPROCESSING_INTERNAL_ERROR, aStrStream.str() );
     }
     boost::shared_ptr<Entry> aTemp(new Entry(key, id));
     FullDictBlock &rBlock = (FullDictBlock&)accessBlock(root);
@@ -1698,6 +1714,8 @@ protected:
     }
 };
 
+bool isExtensionMode( void );
+
 class IndexInverter;
 
 class MicroIndex
@@ -1794,7 +1812,8 @@ private:
                 break;
             case 1:         // single group, extents
             case 3:         // multi group, extents
-                std::cerr << "extents not yet implemented" << std::endl;
+                if( !isExtensionMode() )
+                    std::cerr << "extents not yet implemented" << std::endl;
                 break;
         }
     }
@@ -3503,7 +3522,7 @@ private:
 
     void startElement(xmlNodePtr node);
     void attribute(const char *name, const char *value);
-    void characters(const xmlChar *str);
+    void characters(const xmlChar *str) throw( HelpProcessingException );
     void endElement(xmlNodePtr node);
 
     void indexText(const xmlChar *str);
@@ -3701,7 +3720,7 @@ void IndexAdapter::attribute(const char *name, const char *value)
         _currentNode = (xmlNodePtr)(strtol(value, NULL, 10));
     else if (strcmp(name, _tokenizer_Name) == 0)
     {
-        if (strcmp(value, "com.sun.xmlsearch.util.SimpleTokenizer") != 0)
+        if (strcmp(value, "com.sun.xmlsearch.util.SimpleTokenizer") != 0 && !isExtensionMode() )
             std::cerr << "changing tokenizers not implemented in C++ version of HelpLinker"
             << " because no other tokenizers were referenced in the helpcontent2 source"
             << std::endl;
@@ -3710,7 +3729,8 @@ void IndexAdapter::attribute(const char *name, const char *value)
     {
         //namespace prefix ?
         std::string attrVal = std::string("index:") + value;
-        std::cout << "attrVal = " << attrVal << std::endl;
+        if( !isExtensionMode() )
+            std::cout << "attrVal = " << attrVal << std::endl;
         _attributeStack[_attrSP] = std::string(name) + '<' + value + '<' + attrVal;
         storeLocation("+<" + _attributeStack[_attrSP]);
     }
@@ -3755,10 +3775,14 @@ void IndexAdapter::indexText(const xmlChar *text)
     _firstWord = -1;
 }
 
-void IndexAdapter::characters(const xmlChar *str)
+void IndexAdapter::characters(const xmlChar *str) throw( HelpProcessingException )
 {
     if (!str)
-        std::cerr << "rats, no characters!" << std::endl;
+    {
+        std::stringstream aStrStream;
+        aStrStream << "no characters!" << std::endl;
+        throw HelpProcessingException( HELPPROCESSING_INTERNAL_ERROR, aStrStream.str() );
+    }
 
     HCDBG(std::cerr << "IndexAdapter::characters of " << str << std::endl);
     HCDBG(std::cerr << _sp << " : " <<  _indexOnOffStack[_sp] << std::endl);
@@ -3863,8 +3887,8 @@ public:
     void initXmlProcessor(const std::string &transform);
     void indexDocument(xmlDocPtr document, const std::string &docURL, const std::string &title);
     int intern(const std::string &name);
-    void openDocument(const std::string &name);
-    void closeDocument(const std::string &name);
+    void openDocument(const std::string &name) throw( HelpProcessingException );
+    void closeDocument(const std::string &name) throw( HelpProcessingException );
     void close();
 };
 
@@ -3920,12 +3944,13 @@ int XmlIndexBuilder::intern(const std::string &name)
     return _indexAdapter.intern(name);
 }
 
-void XmlIndexBuilder::openDocument(const std::string &name)
+void XmlIndexBuilder::openDocument(const std::string &name) throw( HelpProcessingException )
 {
     if (_currentDocID != 0)
     {
-        std::cerr << "document already open" << std::endl;
-        exit(-1);
+        std::stringstream aStrStream;
+        aStrStream << "document already open" << std::endl;
+        throw HelpProcessingException( HELPPROCESSING_INTERNAL_ERROR, aStrStream.str() );
     }
     _currentDocID = intern( PrefixTranslator::translatePrefix(name) );
     reset(); // reset context gathering state
@@ -4489,12 +4514,13 @@ void XmlIndex::compress(int docID, int titleID,
     _contextsOffsets.push_back(currentEnd);
 }
 
-void XmlIndexBuilder::closeDocument(const std::string &title)
+void XmlIndexBuilder::closeDocument(const std::string &title) throw( HelpProcessingException )
 {
     if (_currentDocID == 0)
     {
-        std::cerr << "no document open" << std::endl;
-        exit(-1);
+        std::stringstream aStrStream;
+        aStrStream << "no document open" << std::endl;
+        throw HelpProcessingException( HELPPROCESSING_INTERNAL_ERROR, aStrStream.str() );
     }
     else if (!_indexAdapter._locations.empty())
     {
@@ -4632,7 +4658,10 @@ void XmlIndexBuilder::clearIndex()
 class HelpLinker
 {
 public:
-    static void main(std::vector<std::string> &args);
+    static void main(std::vector<std::string> &args, std::string* pExtensionPath = NULL )
+        throw( HelpProcessingException );
+    static bool isExtensionMode( void )
+        {return bExtensionMode; }
 private:
     HelpLinker() : init(true), xmlIndexBuilder(NULL) {}
     ~HelpLinker() { delete xmlIndexBuilder; }
@@ -4647,6 +4676,8 @@ private:
     static std::string module;
     static std::string lang;
     static std::string hid;
+    static std::string extensionPath;
+    static bool bExtensionMode;
     fs::path indexDirName;
     Stringtable hidlistTranslation;
     fs::path indexDirParentName;
@@ -4659,7 +4690,7 @@ private:
     {
         xmlIndexBuilder->close();
     }
-    void link();
+    void link() throw( HelpProcessingException );
     void addBookmark( DB* dbBase, std::string thishid,
         const std::string& fileB, const std::string& anchorB,
         const std::string& jarfileB, const std::string& titleB );
@@ -4676,6 +4707,11 @@ private:
     private HelpURLStreamHandlerFactory urlHandler = null;
 #endif
 };
+
+bool isExtensionMode( void )
+{
+    return HelpLinker::isExtensionMode();
+}
 
 namespace URLEncoder
 {
@@ -4865,6 +4901,7 @@ extern "C" void function_orig_pointer(xmlXPathParserContextPtr ctxt, int nargs)
 {
     if (nargs > 1)
     {
+        // TODO: Change when used for extensions, no exception possible here
         std::cerr << "function_orig_pointer, too many args" << std::endl;
         exit(-1);
     }
@@ -4879,6 +4916,7 @@ extern "C" void function_orig_pointer(xmlXPathParserContextPtr ctxt, int nargs)
 
         if ((nodelist == NULL) || (nodelist->nodeNr <= 0))
         {
+            // TODO: Change when used for extensions, no exception possible here
             std::cerr << "function_orig_pointer, bad nodeset" << std::endl;
             exit(-1);
         }
@@ -4896,6 +4934,7 @@ extern "C" void function_orig_pointer(xmlXPathParserContextPtr ctxt, int nargs)
 
     if (cur == NULL)
     {
+        // TODO: Change when used for extensions, no exception possible here
         std::cerr << "function_orig_pointer, bad node" << std::endl;
         exit(-1);
     }
@@ -4909,6 +4948,7 @@ extern "C" void* cmc_module_init(xsltTransformContextPtr ctxt, const xmlChar* ur
 {
     if (xsltRegisterExtFunction(ctxt, (const xmlChar*)"orig-pointer", uri, function_orig_pointer))
     {
+        // TODO: Change when used for extensions, no exception possible here
         std::cerr << "failure to register function_orig_pointer" << std::endl;
         exit(-1);
     }
@@ -4922,10 +4962,19 @@ extern "C" void cmc_module_term(xsltTransformContextPtr, const xmlChar*, void*)
 /**
 *
 */
-void HelpLinker::link()
+void HelpLinker::link() throw( HelpProcessingException )
 {
-    indexDirParentName = gettmppath();
-    fs::create_directory(indexDirParentName);
+    bool bIndexForExtension = false;        // TODO
+
+    if( bExtensionMode )
+    {
+        indexDirParentName = sourceRoot;
+    }
+    else
+    {
+        indexDirParentName = gettmppath();
+        fs::create_directory(indexDirParentName);
+    }
 
 #ifdef CMC_DEBUG
     std::cerr << "will not delete tmpdir of " << indexDirParentName.native_file_string().c_str() << std::endl;
@@ -4935,9 +4984,13 @@ void HelpLinker::link()
     std::transform (mod.begin(), mod.end(), mod.begin(), tolower);
 
     // Determine the outputstream
-    fs::path outputTmpFile(outputFile);
-    outputTmpFile.append(".tmp");
-    jarOutputStream.setname(outputTmpFile);
+    fs::path outputTmpFile;
+    if( !bExtensionMode )
+    {
+        outputTmpFile = outputFile;
+        outputTmpFile.append(".tmp");
+        jarOutputStream.setname(outputTmpFile);
+    }
 
     // do the work here
     // continue with introduction of the overall process thing into the
@@ -4966,6 +5019,10 @@ void HelpLinker::link()
 
     HelpKeyword helpKeyword;
 
+    // catch HelpProcessingException to avoid locking data bases
+    try
+    {
+
     std::ifstream fileReader(hid.c_str());
     while (fileReader)
     {
@@ -4980,11 +5037,14 @@ void HelpLinker::link()
     }
 
     // lastly, initialize the indexBuilder
-    if (!helpFiles.empty())
+    if ( (!bExtensionMode || bIndexForExtension) && !helpFiles.empty())
         initXMLIndexBuilder();
 
-    std::cout << "Making " << outputFile.native_file_string() <<
-        " from " << helpFiles.size() << " input files" << std::endl;
+    if( !bExtensionMode )
+    {
+        std::cout << "Making " << outputFile.native_file_string() <<
+            " from " << helpFiles.size() << " input files" << std::endl;
+    }
 
     // here we start our loop over the hzip files.
     HashSet::iterator end = helpFiles.end();
@@ -4997,7 +5057,7 @@ void HelpLinker::link()
         StreamTable streamTable;
         const std::string &xhpFileName = *iter;
 
-        if (xhpFileName.rfind(".xhp") != xhpFileName.length()-4)
+        if (!bExtensionMode && xhpFileName.rfind(".xhp") != xhpFileName.length()-4)
         {
             // only work on .xhp - files
             std::cerr <<
@@ -5009,28 +5069,36 @@ void HelpLinker::link()
         }
 
         fs::path langsourceRoot(sourceRoot);
-        langsourceRoot.append('/' + lang + '/');
-        fs::path xhpFile(xhpFileName, fs::native);
-        HelpCompiler hc(
-                    streamTable,
-                    xhpFile,
-                    langsourceRoot,
-                    embeddStylesheet,
-                    module,
-                    lang);
+        fs::path xhpFile;
+        if( bExtensionMode )
+        {
+            // langsourceRoot == sourceRoot for extensions
+            std::string xhpFileNameComplete( extensionPath );
+            xhpFileNameComplete.append( '/' + xhpFileName );
+            xhpFile = fs::path( xhpFileNameComplete );
+        }
+        else
+        {
+            langsourceRoot.append('/' + lang + '/');
+            xhpFile = fs::path(xhpFileName, fs::native);
+        }
+        HelpCompiler hc( streamTable, xhpFile, langsourceRoot,
+            embeddStylesheet, module, lang, bExtensionMode );
 
         HCDBG(std::cerr << "before compile of " << xhpFileName << std::endl);
         bool success = hc.compile();
         HCDBG(std::cerr << "after compile of " << xhpFileName << std::endl);
-        if (!success)
+
+        if (!success && !bExtensionMode)
         {
-            std::cerr <<
+            std::stringstream aStrStream;
+            aStrStream <<
                 "\nERROR: compiling help particle '"
                     << xhpFileName
                     << "' for language '"
                     << lang
                     << "' failed!";
-            exit(1);
+            throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
         }
 
         const std::string documentBaseId = streamTable.document_id;
@@ -5058,7 +5126,7 @@ void HelpLinker::link()
         // add once this as its own id.
         addBookmark(dbBase, documentPath, fileB, std::string(), jarfileB, titleB);
 
-        if (init)
+        if ( (!bExtensionMode || bIndexForExtension) && init)
         {
             std::ifstream indexXSLFile(indexStylesheet.native_file_string().c_str());
             std::ostringstream baos;
@@ -5075,8 +5143,9 @@ void HelpLinker::link()
 
             if (xsltRegisterExtModule((const xmlChar*)"http://www.cunninghack.org", cmc_module_init, cmc_module_term))
             {
-                std::cerr << "fatal error on registering xslt module" << std::endl;
-                exit(-1);
+                std::stringstream aStrStream;
+                aStrStream << "fatal error on registering xslt module" << std::endl;
+                throw HelpProcessingException( HELPPROCESSING_INTERNAL_ERROR, aStrStream.str() );
             }
 
             createFileFromBytes("index.xsl", xsl);
@@ -5173,71 +5242,90 @@ void HelpLinker::link()
             }
         }
 
-        // now the indexing
-        xmlDocPtr document = streamTable.appl_doc;
-        if (!document)
-            document = streamTable.default_doc;
-        if (document)
+        if( !bExtensionMode || bIndexForExtension )
         {
-            std::string temp = module;
-            std::transform (temp.begin(), temp.end(), temp.begin(), tolower);
-            xmlIndexBuilder->indexDocument(document,
-                    std::string("vnd.sun.star.help://")
-                            + temp
-                            + "/"
-                            + URLEncoder::encode(documentPath),
-                            "");
+            // now the indexing
+            xmlDocPtr document = streamTable.appl_doc;
+            if (!document)
+                document = streamTable.default_doc;
+            if (document)
+            {
+                std::string temp = module;
+                std::transform (temp.begin(), temp.end(), temp.begin(), tolower);
+                xmlIndexBuilder->indexDocument(document,
+                        std::string("vnd.sun.star.help://")
+                                + temp
+                                + "/"
+                                + URLEncoder::encode(documentPath),
+                                "");
+            }
         }
     } // while loop over hzip files ending
 
-    std::cout << std::endl;
+    if( !bExtensionMode )
+        std::cout << std::endl;
+
+    }   // try
+    catch( HelpProcessingException& )
+    {
+        // catch HelpProcessingException to avoid locking data bases
+        helpText->close(helpText, 0);
+        dbBase->close(dbBase, 0);
+        keyWord->close(keyWord, 0);
+        throw;
+    }
 
     helpText->close(helpText, 0);
     dbBase->close(dbBase, 0);
     helpKeyword.dump(keyWord);
     keyWord->close(keyWord, 0);
 
-    if (!helpFiles.empty())
+    if (!bExtensionMode && !helpFiles.empty())
     {
         closeXMLIndexBuilder();
         HCDBG(std::cerr << "dir is " << indexDirName.native_directory_string() << std::endl);
         jarOutputStream.addTree(indexDirName.native_file_string(), mod + ".idx");
     }
 
-    jarOutputStream.addFile(helpTextFileName.native_file_string(), mod + ".ht");
-    jarOutputStream.addFile(dbBaseFileName.native_file_string(), mod + ".db");
-    jarOutputStream.addFile(keyWordFileName.native_file_string(), mod + ".key");
-
-    /////////////////////////////////////////////////////////////////////////
-    // last, all files which should be copied into the jarFile
-    /////////////////////////////////////////////////////////////////////////
-
-    Stringtable::iterator aEnd = additionalFiles.end();
-    for (Stringtable::iterator enumer = additionalFiles.begin(); enumer != aEnd;
-        ++enumer)
+    if( !bExtensionMode )
     {
-        const std::string &additionalFileKey = enumer->first;
-        const std::string &additionalFileName = enumer->second;
-        jarOutputStream.addFile(additionalFileName, additionalFileKey);
-    }
+        jarOutputStream.addFile(helpTextFileName.native_file_string(), mod + ".ht");
+        jarOutputStream.addFile(dbBaseFileName.native_file_string(), mod + ".db");
+        jarOutputStream.addFile(keyWordFileName.native_file_string(), mod + ".key");
 
-    jarOutputStream.dontCompress(mod + ".jar");
-    jarOutputStream.commit();
+        /////////////////////////////////////////////////////////////////////////
+        // last, all files which should be copied into the jar file
+        /////////////////////////////////////////////////////////////////////////
 
-    HCDBG(std::cerr << "like to rename " << outputTmpFile.native_file_string() << " as " <<
-        outputFile.native_file_string() << std::endl);
-    fs::rename(outputTmpFile, outputFile);
-    if (!fs::exists(outputFile))
-    {
-        std::cerr << "can't rename file '" << outputTmpFile.native_file_string() << "'" << std::endl;
-        exit(1);
+        Stringtable::iterator aEnd = additionalFiles.end();
+        for (Stringtable::iterator enumer = additionalFiles.begin(); enumer != aEnd;
+            ++enumer)
+        {
+            const std::string &additionalFileKey = enumer->first;
+            const std::string &additionalFileName = enumer->second;
+            jarOutputStream.addFile(additionalFileName, additionalFileKey);
+        }
+
+        jarOutputStream.dontCompress(mod + ".jar");
+        jarOutputStream.commit();
+
+        HCDBG(std::cerr << "like to rename " << outputTmpFile.native_file_string() << " as " <<
+            outputFile.native_file_string() << std::endl);
+        fs::rename(outputTmpFile, outputFile);
+        if (!fs::exists(outputFile))
+        {
+            std::stringstream aStrStream;
+            aStrStream << "can't rename file '" << outputTmpFile.native_file_string() << "'" << std::endl;
+            throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
+        }
     }
 
     /////////////////////////////////////////////////////////////////////////
     /// remove temprary directory for index creation
     /////////////////////////////////////////////////////////////////////////
 #ifndef CMC_DEBUG
-    fs::remove_all( indexDirParentName );
+    if( !bExtensionMode )
+        fs::remove_all( indexDirParentName );
 #endif
 }
 
@@ -5252,9 +5340,22 @@ fs::path HelpLinker::outputFile;
 std::string HelpLinker::module;
 std::string HelpLinker::lang;
 std::string HelpLinker::hid;
+std::string HelpLinker::extensionPath;
+bool HelpLinker::bExtensionMode;
 
-void HelpLinker::main(std::vector<std::string> &args)
+int GnTmpFileCounter = 0;
+
+void HelpLinker::main(std::vector<std::string> &args, std::string* pExtensionPath)
+    throw( HelpProcessingException )
 {
+    bExtensionMode = false;
+    if( pExtensionPath && pExtensionPath->length() > 0 )
+    {
+        helpFiles.clear();
+        bExtensionMode = true;
+        extensionPath = *pExtensionPath;
+        sourceRoot = fs::path(extensionPath);
+    }
     if (args.size() > 0 && args[0][0] == '@')
     {
         std::vector<std::string> stringList;
@@ -5281,19 +5382,22 @@ void HelpLinker::main(std::vector<std::string> &args)
             ++i;
             if (i >= args.size())
             {
-                std::cerr << "sourceroot missing" << std::endl;
-                exit(1);
+                std::stringstream aStrStream;
+                aStrStream << "sourceroot missing" << std::endl;
+                throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
             }
 
-            sourceRoot = fs::path(args[i], fs::native);
+            if( !bExtensionMode )
+                sourceRoot = fs::path(args[i], fs::native);
         }
         else if (args[i].compare("-sty") == 0)
         {
             ++i;
             if (i >= args.size())
             {
-                std::cerr << "embeddingStylesheet missing" << std::endl;
-                exit(1);
+                std::stringstream aStrStream;
+                aStrStream << "embeddingStylesheet missing" << std::endl;
+                throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
             }
 
             embeddStylesheet = fs::path(args[i], fs::native);
@@ -5303,8 +5407,9 @@ void HelpLinker::main(std::vector<std::string> &args)
             ++i;
             if (i >= args.size())
             {
-                std::cerr << "indexstylesheet missing" << std::endl;
-                exit(1);
+                std::stringstream aStrStream;
+                aStrStream << "indexstylesheet missing" << std::endl;
+                throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
             }
 
             indexStylesheet = fs::path(args[i], fs::native);
@@ -5314,8 +5419,9 @@ void HelpLinker::main(std::vector<std::string> &args)
             ++i;
             if (i >= args.size())
             {
-                std::cerr << "outputfilename missing" << std::endl;
-                exit(1);
+                std::stringstream aStrStream;
+                aStrStream << "outputfilename missing" << std::endl;
+                throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
             }
 
             outputFile = fs::path(args[i], fs::native);
@@ -5325,8 +5431,9 @@ void HelpLinker::main(std::vector<std::string> &args)
             ++i;
             if (i >= args.size())
             {
-                std::cerr << "module name missing" << std::endl;
-                exit(1);
+                std::stringstream aStrStream;
+                aStrStream << "module name missing" << std::endl;
+                throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
             }
 
             module = args[i];
@@ -5336,8 +5443,9 @@ void HelpLinker::main(std::vector<std::string> &args)
             ++i;
             if (i >= args.size())
             {
-                std::cerr << "language name missing" << std::endl;
-                exit(1);
+                std::stringstream aStrStream;
+                aStrStream << "language name missing" << std::endl;
+                throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
             }
 
             lang = args[i];
@@ -5347,8 +5455,9 @@ void HelpLinker::main(std::vector<std::string> &args)
             ++i;
             if (i >= args.size())
             {
-                std::cerr << "hid list missing" << std::endl;
-                exit(1);
+                std::stringstream aStrStream;
+                aStrStream << "hid list missing" << std::endl;
+                throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
             }
 
             hid = args[i];
@@ -5359,16 +5468,18 @@ void HelpLinker::main(std::vector<std::string> &args)
             ++i;
             if (i >= args.size())
             {
-                std::cerr << "pathname missing" << std::endl;
-                exit(1);
+                std::stringstream aStrStream;
+                aStrStream << "pathname missing" << std::endl;
+                throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
             }
 
             addFileUnderPath = args[i];
             ++i;
             if (i >= args.size())
             {
-                std::cerr << "pathname missing" << std::endl;
-                exit(1);
+                std::stringstream aStrStream;
+                aStrStream << "pathname missing" << std::endl;
+                throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
             }
             addFile = args[i];
             if (!addFileUnderPath.empty() && !addFile.empty())
@@ -5379,40 +5490,47 @@ void HelpLinker::main(std::vector<std::string> &args)
         ++i;
     }
 
-    if (indexStylesheet.empty())
+    if (!bExtensionMode && indexStylesheet.empty())
     {
-        std::cerr << "no index file given" << std::endl;
-        exit(1);
+        std::stringstream aStrStream;
+        aStrStream << "no index file given" << std::endl;
+        throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
-    if (embeddStylesheet.empty())
+    if (!bExtensionMode && embeddStylesheet.empty())
     {
-        std::cerr << "no embedding resolving file given" << std::endl;
-        exit(1);
+        std::stringstream aStrStream;
+        aStrStream << "no embedding resolving file given" << std::endl;
+        throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
     if (sourceRoot.empty())
     {
-        std::cerr << "no sourceroot given" << std::endl;
-        exit(1);
+        std::stringstream aStrStream;
+        aStrStream << "no sourceroot given" << std::endl;
+        throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
-    if (outputFile.empty())
+    if (!bExtensionMode && outputFile.empty())
     {
-        std::cerr << "no output file given" << std::endl;
-        exit(1);
+        std::stringstream aStrStream;
+        aStrStream << "no output file given" << std::endl;
+        throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
     if (module.empty())
     {
-        std::cerr << "module missing" << std::endl;
-        exit(1);
+        std::stringstream aStrStream;
+        aStrStream << "module missing" << std::endl;
+        throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
-    if (lang.empty())
+    if (!bExtensionMode && lang.empty())
     {
-        std::cerr << "language missing" << std::endl;
-        exit(1);
+        std::stringstream aStrStream;
+        aStrStream << "language missing" << std::endl;
+        throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
-    if (hid.empty())
+    if (!bExtensionMode && hid.empty())
     {
-        std::cerr << "hid list missing" << std::endl;
-        exit(1);
+        std::stringstream aStrStream;
+        aStrStream << "hid list missing" << std::endl;
+        throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
 
     HelpLinker().link();
@@ -5424,11 +5542,123 @@ int main(int argc, char**argv)
     std::vector<std::string> args;
     for (int i = 1; i < argc; ++i)
         args.push_back(std::string(argv[i]));
-    HelpLinker::main(args);
+    try
+    {
+        HelpLinker::main(args);
+    }
+    catch( const HelpProcessingException& e )
+    {
+        std::cerr << e.m_aErrorMsg;
+        exit(1);
+    }
     sal_uInt32 endtime = osl_getGlobalTimer();
     std::cout << "time taken was " << (endtime-starttime)/1000.0 << " seconds" << std::endl;
     return 0;
 }
+
+// Variable to set an exception in "C" StructuredXMLErrorFunction
+static const HelpProcessingException* GpXMLParsingException = NULL;
+
+extern "C" void StructuredXMLErrorFunction(void *userData, xmlErrorPtr error)
+{
+    (void)userData;
+    (void)error;
+
+    std::string aErrorMsg = error->message;
+    std::string aXMLParsingFile;
+    if( error->file != NULL )
+        aXMLParsingFile = error->file;
+    int nXMLParsingLine = error->line;
+    HelpProcessingException* pException = new HelpProcessingException( aErrorMsg, aXMLParsingFile, nXMLParsingLine );
+    GpXMLParsingException = pException;
+
+    // Reset error handler
+    xmlSetStructuredErrorFunc( NULL, NULL );
+}
+
+HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpProcessingException& e )
+{
+    m_eErrorClass = e.m_eErrorClass;
+    rtl::OString tmpErrorMsg( e.m_aErrorMsg.c_str() );
+    m_aErrorMsg = rtl::OStringToOUString( tmpErrorMsg, osl_getThreadTextEncoding() );
+    rtl::OString tmpXMLParsingFile( e.m_aXMLParsingFile.c_str() );
+    m_aXMLParsingFile = rtl::OStringToOUString( tmpXMLParsingFile, osl_getThreadTextEncoding() );
+    m_nXMLParsingLine = e.m_nXMLParsingLine;
+    return *this;
+}
+
+// Returns true in case of success, false in case of error
+HELPLINKER_DLLPUBLIC bool compileExtensionHelp
+(
+    const rtl::OUString& aExtensionName,
+    const rtl::OUString& aExtensionLanguageRoot,
+    sal_Int32 nXhpFileCount, const rtl::OUString* pXhpFiles,
+    HelpProcessingErrorInfo& o_rHelpProcessingErrorInfo
+)
+{
+    bool bSuccess = true;
+
+    sal_uInt32 starttime = osl_getGlobalTimer();
+
+    sal_Int32 argc = nXhpFileCount + 3;
+    const char** argv = new const char*[argc];
+    argv[0] = "";
+    argv[1] = "-mod";
+    rtl::OString aOExtensionName = rtl::OUStringToOString( aExtensionName, osl_getThreadTextEncoding() );
+    argv[2] = aOExtensionName.getStr();
+
+    for( sal_Int32 iXhp = 0 ; iXhp < nXhpFileCount ; ++iXhp )
+    {
+        rtl::OUString aXhpFile = pXhpFiles[iXhp];
+
+        rtl::OString aOXhpFile = rtl::OUStringToOString( aXhpFile, osl_getThreadTextEncoding() );
+        char* pArgStr = new char[aOXhpFile.getLength() + 1];
+        strcpy( pArgStr, aOXhpFile.getStr() );
+        argv[iXhp + 3] = pArgStr;
+    }
+
+    std::vector<std::string> args;
+    for( sal_Int32 i = 1; i < argc; ++i )
+        args.push_back(std::string( argv[i]) );
+
+    for( sal_Int32 iXhp = 0 ; iXhp < nXhpFileCount ; ++iXhp )
+        delete argv[iXhp + 3];
+    delete[] argv;
+
+    rtl::OString aOExtensionLanguageRoot = rtl::OUStringToOString( aExtensionLanguageRoot, osl_getThreadTextEncoding() );
+    const char* pExtensionPath = aOExtensionLanguageRoot.getStr();
+    std::string aStdStrExtensionPath = pExtensionPath;
+
+    // Set error handler
+    xmlSetStructuredErrorFunc( NULL, (xmlStructuredErrorFunc)StructuredXMLErrorFunction );
+    try
+    {
+        HelpLinker::main(args,&aStdStrExtensionPath);
+    }
+    catch( const HelpProcessingException& e )
+    {
+        if( GpXMLParsingException != NULL )
+        {
+            o_rHelpProcessingErrorInfo = *GpXMLParsingException;
+            delete GpXMLParsingException;
+            GpXMLParsingException = NULL;
+        }
+        else
+        {
+            o_rHelpProcessingErrorInfo = e;
+        }
+        bSuccess = false;
+    }
+    // Reset error handler
+    xmlSetStructuredErrorFunc( NULL, NULL );
+
+    sal_uInt32 endtime = osl_getGlobalTimer();
+    double dTimeInSeconds = (endtime-starttime) / 1000.0;
+    (void)dTimeInSeconds;
+
+    return bSuccess;
+}
+
 
 // vnd.sun.star.help://swriter/52821?Language=en-US&System=UNIX
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
