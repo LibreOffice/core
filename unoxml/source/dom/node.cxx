@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-01 15:39:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:44:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -902,7 +902,7 @@ namespace DOM
 
         // --- XEventTarget
     void SAL_CALL CNode::addEventListener(const OUString& eventType,
-        const Reference< XEventListener >& listener,
+        const Reference< com::sun::star::xml::dom::events::XEventListener >& listener,
         sal_Bool useCapture)
         throw (RuntimeException)
     {
@@ -910,7 +910,7 @@ namespace DOM
     }
 
     void SAL_CALL CNode::removeEventListener(const OUString& eventType,
-        const Reference< XEventListener >& listener,
+        const Reference< com::sun::star::xml::dom::events::XEventListener >& listener,
         sal_Bool useCapture)
         throw (RuntimeException)
     {
