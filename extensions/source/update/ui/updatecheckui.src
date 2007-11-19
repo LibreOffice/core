@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckui.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 11:50:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,15 +57,3 @@
         ImageBitmap = Bitmap{ file = "onlineupdate_26_h.png"; };
         STD_MASK_COLOR
     };
-
-String RID_UPDATE_DEFAULT_TITLE
-{
-    Text [ en-US ] = "%PRODUCTNAME update available";
-};
-
-String RID_UPDATE_DEFAULT_TEXT
-{
-    Text [ en-US ] = "Click here to go to the web site, where you can download the new update.";
-};
-
-
