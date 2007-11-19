@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.120 $
+#   $Revision: 1.121 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-07 10:05:13 $
+#   last change: $Author: ihi $ $Date: 2007-11-19 12:57:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.120 $$"
+LIBSMKREV!:="$$Revision: 1.121 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -260,6 +260,7 @@ ISWLIB=-lsw$(OFFICEUPD)$(DLLPOSTFIX)
 ISCLIB=-lsc$(OFFICEUPD)$(DLLPOSTFIX)
 ISDLIB=-lsd$(OFFICEUPD)$(DLLPOSTFIX)
 PKGCHKLIB=-lpkgchk$(OFFICEUPD)$(DLLPOSTFIX)
+HELPLINKERLIB=-lhelplinker$(OFFICEUPD)$(DLLPOSTFIX)
 SYSSHELLLIB=-lsysshell
 .IF "$(GUI)$(COM)"=="WNTGCC"
 JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
@@ -448,6 +449,7 @@ SVXLLIB=svxl.lib
 FREETYPELIB=freetype.lib
 FREETYPELIBST=freetype.lib
 PKGCHKLIB=ipkgchk.lib
+HELPLINKERLIB=ihelplinker.lib
 SYSSHELLLIB=sysshell.lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
