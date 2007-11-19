@@ -16,7 +16,6 @@
 #include <libxml/tree.h>
 
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::dom::events;
 
