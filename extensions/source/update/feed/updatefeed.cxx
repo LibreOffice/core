@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatefeed.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 15:58:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:50:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,9 +380,6 @@ public:
         rtl::OUString const & extensionId
     ) throw (uno::Exception, uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL hasPredeterminedUpdateURL()
-        throw (uno::RuntimeException);
-
     virtual void SAL_CALL cancel()
         throw (uno::RuntimeException);
 
@@ -455,8 +452,6 @@ private:
     osl::Condition m_bCancelled;
 
     sal_Int32 m_nCommandId;
-
-    rtl::OUString m_aUpdateURL;
 };
 
 //------------------------------------------------------------------------------
@@ -575,7 +570,6 @@ UpdateInformationProvider::UpdateInformationProvider(
         }
 
         rtl::Bootstrap aVersionFile(aPath);
-        aVersionFile.getFrom(UNISTRING("UpdateURL"), m_aUpdateURL, rtl::OUString());
 
         rtl::OUString aUserAgent;
         aVersionFile.getFrom(UNISTRING("UpdateUserAgent"), aUserAgent, rtl::OUString());
@@ -847,14 +841,6 @@ UpdateInformationProvider::getUpdateInformationEnumeration(
     rtl::OUString const & extensionId
 ) throw (uno::Exception, uno::RuntimeException)
 {
-    // if repository list is empty, try at default update URL
-    if( repositories.getLength() == 0 )
-    {
-        uno::Sequence< rtl::OUString > aDefaultRepository(1);
-        aDefaultRepository[0] = m_aUpdateURL;
-        return getUpdateInformationEnumeration(aDefaultRepository, extensionId);
-    }
-
     OSL_ASSERT(m_xDocumentBuilder.is());
 
     // reset cancelled flag
@@ -952,14 +938,6 @@ UpdateInformationProvider::getUpdateInformation(
     }
 
     return aRet;
-}
-
-//------------------------------------------------------------------------------
-
-sal_Bool SAL_CALL
-UpdateInformationProvider::hasPredeterminedUpdateURL() throw (uno::RuntimeException)
-{
-    return (m_aUpdateURL.getLength() > 0) ? sal_True : sal_False;
 }
 
 //------------------------------------------------------------------------------
