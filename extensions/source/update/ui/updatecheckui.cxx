@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckui.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 15:58:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:50:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,8 +93,6 @@
 #define PROPERTY_IMAGE          RTL_CONSTASCII_STRINGPARAM("BubbleImageURL")
 #define PROPERTY_SHOW_BUBBLE    RTL_CONSTASCII_STRINGPARAM("BubbleVisible")
 #define PROPERTY_CLICK_HDL      RTL_CONSTASCII_STRINGPARAM("MenuClickHDL")
-#define PROPERTY_DEFAULT_TITLE  RTL_CONSTASCII_STRINGPARAM("DefaultHeading")
-#define PROPERTY_DEFAULT_TEXT   RTL_CONSTASCII_STRINGPARAM("DefaultText")
 #define PROPERTY_SHOW_MENUICON  RTL_CONSTASCII_STRINGPARAM("MenuIconVisible")
 
 #define START_TIMER 1
@@ -160,9 +158,6 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper3
 {
     uno::Reference< uno::XComponentContext > m_xContext;
     uno::Reference< task::XJob > mrJob;
-    osl::Mutex          maMutex;
-    rtl::OUString       maDefaultTitle;
-    rtl::OUString       maDefaultText;
     rtl::OUString       maBubbleTitle;
     rtl::OUString       maBubbleText;
     rtl::OUString       maBubbleImageURL;
@@ -253,8 +248,6 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
     mpUpdResMgr = ResMgr::CreateResMgr( "updchk" MAKE_NUMSTR(SUPD) );
     mpSfxResMgr = ResMgr::CreateResMgr( "sfx" MAKE_NUMSTR(SUPD) );
 
-    maDefaultTitle = String( ResId( RID_UPDATE_DEFAULT_TITLE, *mpUpdResMgr ) );
-    maDefaultText = String( ResId( RID_UPDATE_DEFAULT_TEXT, *mpUpdResMgr ) );
     maBubbleImage = GetBubbleImage( maBubbleImageURL );
 
     maWaitTimer.SetTimeout( 400 );
@@ -284,14 +277,12 @@ UpdateCheckUI::~UpdateCheckUI()
 uno::Reference<document::XEventBroadcaster>
 UpdateCheckUI::getGlobalEventBroadcaster() const throw (uno::RuntimeException)
 {
-    uno::Reference<uno::XComponentContext> xContext(m_xContext);
-
-    if( !xContext.is() )
+    if( !m_xContext.is() )
         throw uno::RuntimeException(
             UNISTRING( "UpdateCheckUI: empty component context" ),
                 uno::Reference< uno::XInterface >() );
 
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
+    uno::Reference< lang::XMultiComponentFactory > xServiceManager(m_xContext->getServiceManager());
 
     if( !xServiceManager.is() )
         throw uno::RuntimeException(
@@ -301,7 +292,7 @@ UpdateCheckUI::getGlobalEventBroadcaster() const throw (uno::RuntimeException)
     return uno::Reference<document::XEventBroadcaster> (
         xServiceManager->createInstanceWithContext(
             UNISTRING( "com.sun.star.frame.GlobalEventBroadcaster" ),
-            xContext),
+            m_xContext),
         uno::UNO_QUERY_THROW);
 }
 
@@ -470,7 +461,7 @@ void UpdateCheckUI::setPropertyValue(const rtl::OUString& rPropertyName,
     throw( beans::UnknownPropertyException, beans::PropertyVetoException,
            lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    osl::MutexGuard aGuard( maMutex );
+    vos::OGuard aGuard( Application::GetSolarMutex() );
 
     rtl::OUString aString;
 
@@ -534,6 +525,8 @@ void UpdateCheckUI::setPropertyValue(const rtl::OUString& rPropertyName,
 uno::Any UpdateCheckUI::getPropertyValue(const rtl::OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+
     uno::Any aRet;
 
     if( rPropertyName.compareToAscii( PROPERTY_TITLE ) == 0 )
@@ -546,10 +539,6 @@ uno::Any UpdateCheckUI::getPropertyValue(const rtl::OUString& rPropertyName)
         aRet = uno::makeAny( maBubbleImageURL );
     else if( rPropertyName.compareToAscii( PROPERTY_CLICK_HDL ) == 0 )
         aRet = uno::makeAny( mrJob );
-    else if( rPropertyName.compareToAscii( PROPERTY_DEFAULT_TITLE ) == 0 )
-        aRet = uno::makeAny( maDefaultTitle );
-    else if( rPropertyName.compareToAscii( PROPERTY_DEFAULT_TEXT ) == 0 )
-        aRet = uno::makeAny( maDefaultText );
     else if( rPropertyName.compareToAscii( PROPERTY_SHOW_MENUICON ) == 0 )
         aRet = uno::makeAny( mbShowMenuIcon );
     else
@@ -653,14 +642,14 @@ void UpdateCheckUI::RemoveBubbleWindow( bool bRemoveIcon )
 // -----------------------------------------------------------------------
 IMPL_LINK( UpdateCheckUI, ClickHdl, USHORT*, EMPTYARG )
 {
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+
     maWaitTimer.Stop();
     if ( mpBubbleWin )
         mpBubbleWin->Show( FALSE );
 
     if ( mrJob.is() )
     {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
-
         try {
             uno::Sequence<beans::NamedValue> aEmpty;
             mrJob->execute( aEmpty );
@@ -687,7 +676,7 @@ IMPL_LINK( UpdateCheckUI, HighlightHdl, MenuBar::MenuBarButtonCallbackArg*, pDat
 // -----------------------------------------------------------------------
 IMPL_LINK( UpdateCheckUI, WaitTimeOutHdl, Timer*, EMPTYARG )
 {
-    osl::MutexGuard aGuard( maMutex );
+    vos::OGuard aGuard( Application::GetSolarMutex() );
 
     mpBubbleWin = GetBubbleWindow();
 
@@ -738,13 +727,13 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
 
     if ( VCLEVENT_OBJECT_DYING == nEventID )
     {
-        osl::MutexGuard aGuard( maMutex );
+        vos::OGuard aGuard( Application::GetSolarMutex() );
         if ( mpIconSysWin == pEvent->GetWindow() )
             RemoveBubbleWindow( true );
     }
     else if ( VCLEVENT_WINDOW_MENUBARADDED == nEventID )
     {
-        osl::MutexGuard aGuard( maMutex );
+        vos::OGuard aGuard( Application::GetSolarMutex() );
         Window *pWindow = pEvent->GetWindow();
         if ( pWindow )
         {
@@ -758,7 +747,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
     else if ( ( nEventID == VCLEVENT_WINDOW_MOVE ) ||
               ( nEventID == VCLEVENT_WINDOW_RESIZE ) )
     {
-        osl::MutexGuard aGuard( maMutex );
+        vos::OGuard aGuard( Application::GetSolarMutex() );
         if ( ( mpIconSysWin == pEvent->GetWindow() ) &&
              ( mpBubbleWin != NULL ) && ( mpIconMBar != NULL ) )
         {
