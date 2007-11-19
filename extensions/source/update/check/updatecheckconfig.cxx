@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckconfig.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:38:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:48:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@ namespace uno = com::sun::star::uno ;
 #define DOWNLOAD_PAUSED         "DownloadPaused"
 #define DOWNLOAD_DESTINATION    "DownloadDestination"
 #define RELEASE_NOTE            "ReleaseNote"
+#define EXTENSION_PREFIX        "Extension_"
 
 static const sal_Char * const aUpdateEntryProperties[] = {
     UPDATE_VERSION,
@@ -669,6 +670,80 @@ UpdateCheckConfig::getPendingChanges(  ) throw (uno::RuntimeException)
 }
 
 //------------------------------------------------------------------------------
+void UpdateCheckConfig::storeExtensionVersion( const rtl::OUString& rExtensionName,
+                                               const rtl::OUString& rVersion )
+{
+    const rtl::OUString aExtName = UNISTRING( EXTENSION_PREFIX ) + rExtensionName;
+    const uno::Any aValue = uno::makeAny( rVersion );
+
+    if( m_xContainer->hasByName( aExtName ) )
+        m_xContainer->replaceByName( aExtName, aValue );
+    else
+        m_xContainer->insertByName( aExtName, aValue );
+
+    commitChanges();
+}
+
+//------------------------------------------------------------------------------
+bool UpdateCheckConfig::checkExtensionVersion( const rtl::OUString& rExtensionName,
+                                               const rtl::OUString& rVersion )
+{
+    const rtl::OUString aExtName = UNISTRING( EXTENSION_PREFIX ) + rExtensionName;
+
+    if( m_xContainer->hasByName( aExtName ) )
+    {
+        uno::Any aValue = m_xContainer->getByName( aExtName );
+        rtl::OUString aStoredVersion;
+        aValue >>= aStoredVersion;
+
+        if ( isVersionGreater( rVersion, aStoredVersion ) )
+            return true;
+        else
+        {
+            m_xContainer->removeByName( aExtName );
+            commitChanges();
+        }
+    }
+    return false;
+}
+
+//------------------------------------------------------------------------------
+rtl::OUString UpdateCheckConfig::getSubVersion( const rtl::OUString& rVersion,
+                                                sal_Int32 *nIndex )
+{
+    while ( *nIndex < rVersion.getLength() && rVersion[*nIndex] == '0')
+    {
+        ++*nIndex;
+    }
+
+    return rVersion.getToken( 0, '.', *nIndex );
+}
+
+//------------------------------------------------------------------------------
+// checks if the second version string is greater than the first one
+
+bool UpdateCheckConfig::isVersionGreater( const rtl::OUString& rVersion1,
+                                          const rtl::OUString& rVersion2 )
+{
+    for ( sal_Int32 i1 = 0, i2 = 0; i1 >= 0 || i2 >= 0; )
+    {
+        ::rtl::OUString sSub1( getSubVersion( rVersion1, &i1 ) );
+        ::rtl::OUString sSub2( getSubVersion( rVersion2, &i2 ) );
+
+        if ( sSub1.getLength() < sSub2.getLength() ) {
+            return true;
+        } else if ( sSub1.getLength() > sSub2.getLength() ) {
+            return false;
+        } else if ( sSub1 < sSub2 ) {
+            return true;
+        } else if ( sSub1 > sSub2 ) {
+            return false;
+        }
+    }
+    return false;
+}
+
+//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
@@ -700,4 +775,5 @@ UpdateCheckConfig::getSupportedServiceNames()  throw (uno::RuntimeException)
 {
     return getServiceNames();
 }
+
 
