@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:38:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 17:16:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,8 +271,11 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
             {
                 // SearchItem aus Request besorgen
                 ASSERT(pArgs, "Args fehlen");
-                delete pSrchItem;
-                pSrchItem = (SvxSearchItem*) pArgs->Get(SID_SEARCH_ITEM).Clone();
+                if ( pArgs )
+                {
+                    delete pSrchItem;
+                    pSrchItem = (SvxSearchItem*) pArgs->Get(SID_SEARCH_ITEM).Clone();
+                }
             }
 
             switch (pSrchItem->GetCommand())
