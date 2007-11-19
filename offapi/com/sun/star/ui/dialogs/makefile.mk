@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:18:37 $
+#   last change: $Author: ihi $ $Date: 2007-11-19 16:29:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ IDLFILES=\
     ListboxControlActions.idl\
     TemplateDescription.idl\
     XFilePicker.idl\
+    XFilePicker2.idl\
     XFilePickerControlAccess.idl	\
     XFilePickerListener.idl\
     XFilePickerNotifier.idl\
