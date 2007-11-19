@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:33:40 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:52:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,6 @@
 
 #define PB_LICENSE_DOWN                         50
 #define ML_LICENSE                              51
-#define RID_STR_LICENSE_TITLE                   52
 #define BTN_LICENSE_DECLINE                     53
 #define FT_LICENSE_HEADER                       54
 #define FT_LICENSE_BODY_1                       55
@@ -96,7 +95,6 @@
 #define RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION 16
 #define RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED 17
 #define RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL 18
-#define RID_DLG_UPDATE_INSTALL_NOTEMP 19
 
 
 #define RID_DLG_DEPENDENCIES (RID_DEPLOYMENT_GUI_START + 1)
