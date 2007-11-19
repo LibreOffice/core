@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 11:53:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 17:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,3 +102,6 @@
 #define BTN_CANCEL (104 + CFG_OFFSET)
 #define BTN_HELP (105 + CFG_OFFSET)
 #define FT_NAME (106 + CFG_OFFSET)
+
+#define FL_SEPARATOR (108 + CFG_OFFSET)
+#define BTN_DELETE (109 + CFG_OFFSET)
