@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:09:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 17:23:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -744,7 +744,13 @@ void ImageList::ReplaceImage( const ::rtl::OUString& rImageName, const Image& rI
     const USHORT nId = ImplGetImageId( rImageName );
 
     if( nId )
-        ReplaceImage( nId, rImage );
+    {
+        RemoveImage( nId );
+
+        if( !mpImplData )
+            ImplInit( 0, rImage.GetSizePixel() );
+        mpImplData->AddImage( rImageName, nId, rImage.GetBitmapEx());
+    }
 }
 
 // -----------------------------------------------------------------------
