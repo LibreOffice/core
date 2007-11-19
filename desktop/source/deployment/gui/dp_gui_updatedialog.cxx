@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:54:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:52:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #include <utility>
 #include <vector>
 
+
 #include "boost/optional.hpp"
 #include "com/sun/star/awt/Rectangle.hpp"
 #include "com/sun/star/awt/WindowAttribute.hpp"
@@ -54,15 +55,22 @@
 #include "com/sun/star/awt/XToolkit.hpp"
 #include "com/sun/star/awt/XWindow.hpp"
 #include "com/sun/star/awt/XWindowPeer.hpp"
+#include "com/sun/star/beans/NamedValue.hpp"
 #include "com/sun/star/beans/Optional.hpp"
+#include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/deployment/DeploymentException.hpp"
 #include "com/sun/star/deployment/UpdateInformationProvider.hpp"
 #include "com/sun/star/deployment/XPackage.hpp"
 #include "com/sun/star/deployment/XPackageManager.hpp"
 #include "com/sun/star/deployment/XUpdateInformationProvider.hpp"
+#include "com/sun/star/frame/XDesktop.hpp"
+#include "com/sun/star/frame/XDispatch.hpp"
+#include "com/sun/star/frame/XDispatchProvider.hpp"
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/task/XAbortChannel.hpp"
+#include "com/sun/star/task/XJob.hpp"
 #include "com/sun/star/ucb/CommandAbortedException.hpp"
 #include "com/sun/star/ucb/CommandFailedException.hpp"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
@@ -72,6 +80,8 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
+#include "com/sun/star/util/URL.hpp"
+#include "com/sun/star/util/XURLTransformer.hpp"
 #include "com/sun/star/xml/dom/XElement.hpp"
 #include "com/sun/star/xml/dom/XNode.hpp"
 #include "com/sun/star/xml/xpath/XXPathAPI.hpp"
@@ -99,6 +109,8 @@
 #include "vcl/msgbox.hxx"
 #include "vcl/svapp.hxx"
 #include "vos/mutex.hxx"
+
+#include "comphelper/processfactory.hxx"
 
 #include "dp_dependencies.hxx"
 #include "dp_descriptioninfoset.hxx"
@@ -824,6 +836,107 @@ void UpdateDialog::enableOk() {
         m_ok.Enable(m_updates.GetCheckedEntryCount() != 0);
     }
 }
+
+// *********************************************************************************
+void UpdateDialog::createNotifyJob( bool bPrepareOnly,
+    css::uno::Sequence< css::uno::Sequence< rtl::OUString > > &rItemList )
+{
+    if ( !dp_misc::office_is_running() )
+        return;
+
+    // notify update check job
+    try
+    {
+        css::uno::Reference< css::lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+        css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
+            xFactory->createInstance( OUSTR( "com.sun.star.configuration.ConfigurationProvider" )),
+            css::uno::UNO_QUERY_THROW);
+
+        css::beans::PropertyValue aProperty;
+        aProperty.Name  = OUSTR( "nodepath" );
+        aProperty.Value = css::uno::makeAny( OUSTR("org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob") );
+
+        css::uno::Sequence< css::uno::Any > aArgumentList( 1 );
+        aArgumentList[0] = css::uno::makeAny( aProperty );
+
+        css::uno::Reference< css::container::XNameAccess > xNameAccess(
+            xConfigProvider->createInstanceWithArguments(
+                OUSTR("com.sun.star.configuration.ConfigurationAccess"), aArgumentList ),
+            css::uno::UNO_QUERY_THROW );
+
+        css::util::URL aURL;
+        xNameAccess->getByName(OUSTR("URL")) >>= aURL.Complete;
+
+        css::uno::Reference < css::util::XURLTransformer > xTransformer( xFactory->createInstance( OUSTR( "com.sun.star.util.URLTransformer" ) ),
+            css::uno::UNO_QUERY_THROW );
+
+        xTransformer->parseStrict(aURL);
+
+        css::uno::Reference < css::frame::XDesktop > xDesktop( xFactory->createInstance( OUSTR( "com.sun.star.frame.Desktop" ) ),
+            css::uno::UNO_QUERY_THROW );
+        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( xDesktop->getCurrentFrame(),
+            css::uno::UNO_QUERY_THROW );
+        css::uno::Reference< css::frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch(aURL, rtl::OUString(), 0);
+
+        if( xDispatch.is() )
+        {
+            css::uno::Sequence< css::beans::PropertyValue > aPropList(2);
+            aProperty.Name  = OUSTR( "updateList" );
+            aProperty.Value = css::uno::makeAny( rItemList );
+            aPropList[0] = aProperty;
+            aProperty.Name  = OUSTR( "prepareOnly" );
+            aProperty.Value = css::uno::makeAny( bPrepareOnly );
+            aPropList[1] = aProperty;
+
+            xDispatch->dispatch(aURL, aPropList );
+        }
+    }
+    catch( const css::uno::Exception& e )
+    {
+         OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
+            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+    }
+}
+
+// *********************************************************************************
+void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
+{
+    if ( !dp_misc::office_is_running() )
+        return;
+
+    css::uno::Sequence< css::uno::Sequence< rtl::OUString > > aItemList;
+    sal_Int32 nCount = 0;
+
+    if ( ! bRecheckOnly )
+    {
+        for ( sal_Int16 i = 0; i < m_updates.getItemCount(); ++i )
+        {
+            css::uno::Sequence< rtl::OUString > aItem(2);
+
+            UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >(m_updates.GetEntryData(i));
+
+            if ( p->kind == ENABLED_UPDATE )
+            {
+                dp_gui::UpdateData aUpdData = m_enabledUpdates[ p->index.enabledUpdate ];
+                aItem[0] = dp_misc::getIdentifier( aUpdData.aInstalledPackage );
+
+                dp_misc::DescriptionInfoset aInfoset( m_context, aUpdData.aUpdateInfo );
+                aItem[1] = aInfoset.getVersion();
+            }
+            else if ( p->kind == DISABLED_UPDATE )
+                continue;
+            else
+                continue;
+
+            aItemList.realloc( nCount + 1 );
+            aItemList[ nCount ] = aItem;
+            nCount += 1;
+        }
+    }
+    createNotifyJob( bPrepareOnly, aItemList );
+}
+
+// *********************************************************************************
 
 IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG) {
     rtl::OUStringBuffer b;
