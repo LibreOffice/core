@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:17:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 17:20:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,7 @@
 #include <sfx2/minarray.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <vector>
+#include <vcl/msgbox.hxx>
 
 #include "selector.hxx"
 
@@ -809,6 +810,8 @@ private:
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
     PushButton      aBtnImport;
+    PushButton      aBtnDelete;
+    FixedLine       aFlSeparator;
 
     sal_Int32       m_nExpectedSize;
 
@@ -819,9 +822,14 @@ private:
         ::com::sun::star::ui::XImageManager > m_xParentImageManager;
 
     ::com::sun::star::uno::Reference<
+        ::com::sun::star::ui::XImageManager > m_xImportedImageManager;
+
+    ::com::sun::star::uno::Reference<
         ::com::sun::star::graphic::XGraphicProvider > m_xGraphProvider;
 
-    bool ImportGraphic( const rtl::OUString& aURL );
+    bool ReplaceGraphicItem( const ::rtl::OUString& aURL );
+
+    bool ImportGraphic( const ::rtl::OUString& aURL );
 
     void ImportGraphics(
         const com::sun::star::uno::Sequence< rtl::OUString >& aURLs );
@@ -834,7 +842,7 @@ public:
             ::com::sun::star::ui::XImageManager >& rXImageManager,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::ui::XImageManager >& rXParentImageManager
-        );
+            );
 
     ~SvxIconSelectorDialog();
 
@@ -843,6 +851,22 @@ public:
 
     DECL_LINK( SelectHdl, ToolBox * );
     DECL_LINK( ImportHdl, PushButton * );
+    DECL_LINK( DeleteHdl, PushButton * );
 };
 
+class SvxIconReplacementDialog : public MessBox
+{
+public:
+    SvxIconReplacementDialog(
+        Window *pWindow,
+        const rtl::OUString& aMessage,
+        bool aYestoAll);
+
+    SvxIconReplacementDialog(
+        Window *pWindow,
+        const rtl::OUString& aMessage );
+
+    rtl::OUString ReplaceIconName( const rtl::OUString& );
+    USHORT ShowDialog();
+};
 #endif // _SVXCFG_HXX
