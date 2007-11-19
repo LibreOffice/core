@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 10:16:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 13:04:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -829,13 +829,10 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
     INetProtocol nProtocol = aParser.GetProtocol();
     if ( nProtocol != INET_PROT_VND_SUN_STAR_HELP )
     {
-        if ( nProtocol == INET_PROT_UNO )
+        if ( rURL.Len() > 0 )
             aHelpURL = CreateHelpURL_Impl( rURL, GetHelpModuleName_Impl( ) );
         else
-        {
             aHelpURL  = CreateHelpURL_Impl( 0, GetHelpModuleName_Impl( ) );
-            sKeyword = ::rtl::OUString( rURL );
-        }
     }
 
     Reference < XFrame > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
