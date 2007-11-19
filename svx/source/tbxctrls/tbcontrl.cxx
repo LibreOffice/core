@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-05 17:47:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 17:21:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,17 +145,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxitems.hrc>
 #include "helpid.hrc"
-
-
-
-
-
-
-
-
-
-
-
 #include "htmlmode.hxx"
 #include <svx/xtable.hxx>
 #include "fontitem.hxx"
@@ -202,7 +191,6 @@ using namespace ::com::sun::star::lang;
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxStyleToolBoxControl, SfxTemplateItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFontNameToolBoxControl, SvxFontItem );
-SFX_IMPL_TOOLBOX_CONTROL( SvxFontHeightToolBoxControl, SvxFontHeightItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFontColorToolBoxControl, SvxColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFontColorExtToolBoxControl, SvxColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxColorToolBoxControl, SvxColorItem );
@@ -302,43 +290,6 @@ public:
     virtual long    Notify( NotifyEvent& rNEvt );
     virtual Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
     inline void     SetOwnFontList(::std::auto_ptr<FontList> _aOwnFontList) { m_aOwnFontList = _aOwnFontList; }
-};
-
-//========================================================================
-// class SvxFontSizeBox_Impl --------------------------------------------------
-//========================================================================
-
-class SvxFontHeightToolBoxControl;
-
-class SvxFontSizeBox_Impl : public FontSizeBox
-{
-    using Window::Update;
-private:
-    SvxFontHeightToolBoxControl*    pCtrl;
-    String                          aCurText;
-    Size                            aLogicalSize;
-    BOOL                            bRelease;
-    Reference< XDispatchProvider >  m_xDispatchProvider;
-    Reference< XFrame >             m_xFrame;
-
-//  SfxBindings&                    rBindings;
-
-    void                ReleaseFocus_Impl();
-
-protected:
-    virtual void        Select();
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-
-public:
-                        SvxFontSizeBox_Impl( Window* pParent,
-                                             const Reference< XDispatchProvider >& rDispatchProvider,
-                                             const Reference< XFrame >& _xFrame,
-                                             SvxFontHeightToolBoxControl& rCtrl );
-
-    void                statusChanged_Impl( long nHeight, SfxItemState eState );
-    void                Update( const SvxFontItem* pFontItem );
-
-    virtual long        Notify( NotifyEvent& rNEvt );
 };
 
 //========================================================================
@@ -841,9 +792,8 @@ long SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
 
     return nHandled ? nHandled : FontNameBox::Notify( rNEvt );
 }
-/* -----------------------------08.03.2002 13:23------------------------------
 
- ---------------------------------------------------------------------------*/
+// ---------------------------------------------------------------------------
 void SvxFontNameBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -918,9 +868,9 @@ void SvxFontNameBox_Impl::Select()
             aFontItem.QueryValue( a );
             aArgs[0].Value  = a;
 
-            /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
-                This instance may be deleted in the meantime (i.e. when a dialog is opened
-                while in Dispatch()), accessing members will crash in this case. */
+            //  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
+            //  This instance may be deleted in the meantime (i.e. when a dialog is opened
+            //  while in Dispatch()), accessing members will crash in this case.
             ReleaseFocus_Impl();
 
             SfxToolBoxControl::Dispatch( m_xDispatchProvider,
@@ -930,174 +880,6 @@ void SvxFontNameBox_Impl::Select()
         else
             ReleaseFocus_Impl();
     }
-}
-
-//========================================================================
-// class SvxFontSizeBox_Impl --------------------------------------------------
-//========================================================================
-
-SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
-    Window*                               pParent,
-    const Reference< XDispatchProvider >& rDispatchProvider,
-    const Reference< XFrame >&            _xFrame,
-    SvxFontHeightToolBoxControl&          rCtrl ) :
-
-    FontSizeBox( pParent, WinBits( WB_DROPDOWN ) ),
-
-    pCtrl               ( &rCtrl ),
-    aLogicalSize        ( 30,100 ),
-    bRelease            ( TRUE ),
-    m_xDispatchProvider ( rDispatchProvider ),
-    m_xFrame(_xFrame)
-{
-    SetSizePixel(LogicToPixel( aLogicalSize, MAP_APPFONT ));
-    SetValue( 0 );
-    SetText( String() );
-}
-
-// -----------------------------------------------------------------------
-
-void SvxFontSizeBox_Impl::ReleaseFocus_Impl()
-{
-    if ( !bRelease )
-    {
-        bRelease = TRUE;
-        return;
-    }
-    if ( m_xFrame.is() && m_xFrame->getContainerWindow().is() )
-        m_xFrame->getContainerWindow()->setFocus();
-}
-
-// -----------------------------------------------------------------------
-
-void SvxFontSizeBox_Impl::Select()
-{
-    FontSizeBox::Select();
-
-    if ( !IsTravelSelect() )
-    {
-        sal_Int64 nSelVal = GetValue();
-        float fSelVal = float( nSelVal ) / 10; //LogicToLogic( nSelVal, MAP_POINT, MAP_100TH_MM )) / 10;
-        Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name   = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FontHeight.Height" ));
-        aArgs[0].Value  = makeAny( fSelVal );
-
-        /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
-            This instance may be deleted in the meantime (i.e. when a dialog is opened
-            while in Dispatch()), accessing members will crash in this case. */
-        ReleaseFocus_Impl();
-
-        SfxToolBoxControl::Dispatch( m_xDispatchProvider,
-                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontHeight" )),
-                                     aArgs );
-    }
-}
-// -----------------------------------------------------------------------
-
-void SvxFontSizeBox_Impl::statusChanged_Impl( long nPoint, SfxItemState eState )
-{
-    if ( SFX_ITEM_AVAILABLE == eState )
-    {
-        // Metric Umrechnen
-        long nVal = nPoint;
-
-        // ge"andert => neuen Wert setzen
-        if ( GetValue() != nVal )
-            SetValue( nVal );
-    }
-    else
-    {
-        // Wert in der Anzeige l"oschen
-        SetValue( -1L );
-        SetText( String() );
-    }
-    SaveValue();
-}
-
-// -----------------------------------------------------------------------
-
-void SvxFontSizeBox_Impl::Update( const SvxFontItem* pFontItem )
-{
-    // Fontliste vom Document abholen
-    const SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    const SvxFontListItem* pFontListItem = (const SvxFontListItem*)
-        ( pDocSh ? pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ) : NULL );
-
-    // Sizes-Liste auff"ullen
-    sal_Int64 nOldVal = GetValue(); // alten Wert merken
-    const FontList* _pFontList = pFontListItem ? pFontListItem->GetFontList() : NULL;
-    ::std::auto_ptr<FontList> aHold;
-    if ( !_pFontList )
-    {
-        aHold.reset(new FontList( this ));
-        _pFontList = aHold.get();
-    }
-    if ( _pFontList && pFontItem )
-    {
-        FontInfo _aFontInfo( _pFontList->Get( pFontItem->GetFamilyName(), pFontItem->GetStyleName() ) );
-        Fill( &_aFontInfo, _pFontList );
-    }
-    else
-    {
-        Fill( NULL, _pFontList );
-    }
-    SetValue( nOldVal ); // alten Wert wiederherstellen
-    aCurText = GetText(); // zum R"ucksetzen bei ESC merken
-}
-
-// -----------------------------------------------------------------------
-
-long SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
-{
-    long nHandled = 0;
-
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
-    {
-        USHORT nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
-
-        switch ( nCode )
-        {
-            case KEY_RETURN:
-            case KEY_TAB:
-            {
-                if ( KEY_TAB == nCode )
-                    bRelease = FALSE;
-                else
-                    nHandled = 1;
-                Select();
-                break;
-            }
-
-            case KEY_ESCAPE:
-                SetText( aCurText );
-                ReleaseFocus_Impl();
-                nHandled = 1;
-                break;
-        }
-    }
-    else if(EVENT_LOSEFOCUS == rNEvt.GetType())
-    {
-        Window* pFocusWin = Application::GetFocusWindow();
-        if(!HasFocus() && GetSubEdit() != pFocusWin)
-            SetText(GetSavedValue());
-    }
-
-    return nHandled ? nHandled : FontSizeBox::Notify( rNEvt );
-}
-/* -----------------------------08.03.2002 13:24------------------------------
-
- ---------------------------------------------------------------------------*/
-void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-    {
-        SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
-        Size aDropSize( aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT);
-        SetDropDownSizePixel(LogicToPixel(aDropSize, MAP_APPFONT));
-    }
-
-    FontSizeBox::DataChanged( rDCEvt );
 }
 
 //========================================================================
@@ -1153,9 +935,6 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         SfxQueryStatus aQueryStatus( aDisp,
                                      SID_ATTR_AUTO_COLOR_INVALID,
                                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AutoColorInvalid" )));
-/* CD!!!
-        SfxItemState eState = rBindings.QueryState(SID_ATTR_AUTO_COLOR_INVALID, pDummy);
-*/
         SfxItemState eState = aQueryStatus.QueryState( pDummy );
         if( (SFX_ITEM_DEFAULT > eState) || ( SID_EXTRUSION_3D_COLOR == theSlotId ) )
         {
@@ -1201,8 +980,6 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
 
     SetText( rWndTitle );
     aColorSet.Show();
-//    aColorSet.GrabFocus();
-//  StartListening( rBindings );
 
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ColorTableState" )));
     if ( bKillTable )
@@ -1549,10 +1326,6 @@ IMPL_LINK( SvxFrameWindow_Impl, SelectHdl, void *, EMPTYARG )
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
                                  OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SetBorderStyle" )),
                                  aArgs );
-/*
-    GetBindings().GetDispatcher()->Execute(
-        SID_ATTR_BORDER, SFX_CALLMODE_RECORD, &aBorderOuter, &aBorderInner, 0L );
-*/
     return 0;
 }
 
@@ -1904,7 +1677,6 @@ IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
                                  OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineStyle" )),
                                  aArgs );
-//    GetBindings().GetDispatcher()->Execute( SID_FRAME_LINESTYLE, SFX_CALLMODE_RECORD, &aLineItem, 0L );
     return 0;
 }
 
@@ -2149,39 +1921,11 @@ SvxStyleToolBoxControl::SvxStyleToolBoxControl(
         m_xBoundItems[i] = Reference< XComponent >();
         pFamilyState[i]  = NULL;
     }
-
-/*  SfxObjectShell*     pDocShell = SfxObjectShell::Current();
-    if( pDocShell )
-    {
-        const char* pName = pDocShell->GetFactory().GetShortName();
-        pImpl->bSpecModeWriter = strcmp( pName, "swriter" ) == 0;
-        if( !pImpl->bSpecModeWriter )
-            pImpl->bSpecModeCalc = strcmp( pName, "scalc" ) == 0;
-    }*/
 }
 
 // -----------------------------------------------------------------------
 SvxStyleToolBoxControl::~SvxStyleToolBoxControl()
 {
-    for( USHORT i=0; i<MAX_FAMILIES; i++ )
-    {
-        if ( m_xBoundItems[i].is() )
-        {
-            try
-            {
-                m_xBoundItems[i]->dispose();
-            }
-            catch ( Exception& )
-            {
-            }
-
-            m_xBoundItems[i].clear();
-            pBoundItems[i] = 0;
-        }
-        DELETEZ( pFamilyState[i] );
-    }
-    pStyleSheetPool = NULL;
-    DELETEZ( pImpl );
 }
 
 // -----------------------------------------------------------------------
@@ -2206,6 +1950,33 @@ throw ( Exception, RuntimeException)
             pFamilyState[i]  = NULL;
         }
     }
+}
+
+// XComponent
+void SAL_CALL SvxStyleToolBoxControl::dispose()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    SfxToolBoxControl::dispose();
+
+    for( USHORT i=0; i<MAX_FAMILIES; i++ )
+    {
+        if ( m_xBoundItems[i].is() )
+        {
+            try
+            {
+                m_xBoundItems[i]->dispose();
+            }
+            catch ( Exception& )
+            {
+            }
+
+            m_xBoundItems[i].clear();
+            pBoundItems[i] = 0;
+        }
+        DELETEZ( pFamilyState[i] );
+    }
+    pStyleSheetPool = NULL;
+    DELETEZ( pImpl );
 }
 
 // -----------------------------------------------------------------------
@@ -2598,109 +2369,6 @@ Window* SvxFontNameToolBoxControl::CreateItemWindow( Window *pParent )
 }
 
 //========================================================================
-// class SvxFontHeightToolBoxControl -------------------------------------
-//========================================================================
-
-SvxFontHeightToolBoxControl::SvxFontHeightToolBoxControl(
-    USHORT nSlotId,
-    USHORT nId,
-    ToolBox& rTbx ) :
-    SfxToolBoxControl( nSlotId, nId , rTbx ),
-
-    pBox                ( NULL ),
-    pFontItem           ( NULL )
-
-{
-    addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName" )));
-}
-
-// -----------------------------------------------------------------------
-SvxFontHeightToolBoxControl::~SvxFontHeightToolBoxControl()
-{
-    delete pFontItem;
-}
-
-void SAL_CALL SvxFontHeightToolBoxControl::statusChanged( const FeatureStateEvent& rEvent )
-throw ( RuntimeException )
-{
-    if ( rEvent.FeatureURL.Path.equalsAscii( "FontHeight" ))
-    {
-        SfxItemState eState = SFX_ITEM_DISABLED;
-        SfxPoolItem* pItem = NULL;
-        if ( rEvent.IsEnabled )
-        {
-            eState = SFX_ITEM_AVAILABLE;
-            Type pType =    rEvent.State.getValueType();
-
-            if ( pType == ::getVoidCppuType() )
-            {
-                pItem = new SfxVoidItem( SID_ATTR_CHAR_FONTHEIGHT );
-                eState = SFX_ITEM_UNKNOWN;
-            }
-            else if ( pType == ::getCppuType((const status::ItemStatus*)0) )
-            {
-                status::ItemStatus aItemStatus;
-                rEvent.State >>= aItemStatus;
-                eState = aItemStatus.State;
-                pItem = new SfxVoidItem( SID_ATTR_CHAR_FONTHEIGHT );
-            }
-            else
-            {
-                status::FontHeight aFontHeight;
-                if ( rEvent.State >>= aFontHeight )
-                {
-                    pBox->statusChanged_Impl( long( 10. * aFontHeight.Height ), eState );
-                    pItem = new SfxVoidItem( SID_ATTR_CHAR_FONTHEIGHT );
-                }
-            }
-        }
-
-        StateChanged( SID_ATTR_CHAR_FONTHEIGHT, eState, pItem );
-        delete pItem;
-    }
-    else
-        SfxToolBoxControl::statusChanged( rEvent );
-}
-
-// -----------------------------------------------------------------------
-
-void SvxFontHeightToolBoxControl::StateChanged(
-
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
-
-{
-    // FontHeight?
-    if ( SID_ATTR_CHAR_FONTHEIGHT == nSID )
-    {
-        if ( eState != SFX_ITEM_AVAILABLE && pBox )
-            pBox->statusChanged_Impl( 0, eState );
-        SfxToolBoxControl::StateChanged( nSID, eState, pState );
-    }
-    else
-    {
-        // FontItem (Name) nur zur sp"aterne Verwendung merken
-        delete pFontItem;
-        pFontItem = (eState == SFX_ITEM_AVAILABLE) ? (SvxFontItem*)pState->Clone() : NULL;
-
-        if ( pBox )
-            pBox->Update( pFontItem );
-    }
-}
-
-
-
-// -----------------------------------------------------------------------
-
-Window* SvxFontHeightToolBoxControl::CreateItemWindow( Window *pParent )
-{
-    pBox = new SvxFontSizeBox_Impl( pParent,
-                                    Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
-                                    m_xFrame,
-                                    *this );
-    return pBox;
-}
-
-//========================================================================
 // class SvxFontColorToolBoxControl --------------------------------------
 //========================================================================
 
@@ -2935,11 +2603,6 @@ void SvxFontColorExtToolBoxControl::StateChanged(
 
 void SvxFontColorExtToolBoxControl::Select( BOOL )
 {
-/*
-    USHORT nId = ( SID_ATTR_CHAR_COLOR2 == GetSlotId() ) ? SID_ATTR_CHAR_COLOR_EXT
-                                                         : SID_ATTR_CHAR_COLOR_BACKGROUND_EXT;
-    SfxBoolItem aItem( nId, GetToolBox().IsItemChecked( GetId() ) );
-*/
     OUString aCommand;
     OUString aParamName;
     if ( SID_ATTR_CHAR_COLOR2 == GetSlotId() )
@@ -2957,9 +2620,6 @@ void SvxFontColorExtToolBoxControl::Select( BOOL )
     aArgs[0].Name  = aParamName;
     aArgs[0].Value = makeAny( GetToolBox().IsItemChecked( GetId() ));
     Dispatch( aCommand, aArgs );
-/*
-    GetBindings().GetDispatcher()->Execute( nId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
-*/
 }
 
 //========================================================================
