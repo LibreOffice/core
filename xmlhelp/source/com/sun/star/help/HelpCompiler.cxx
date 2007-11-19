@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpCompiler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:37:53 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 12:59:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,10 @@
 
 HelpCompiler::HelpCompiler(StreamTable &in_streamTable, const fs::path &in_inputFile,
     const fs::path &in_src, const fs::path &in_resEmbStylesheet,
-    const std::string &in_module, const std::string &in_lang)
+    const std::string &in_module, const std::string &in_lang, bool in_bExtensionMode)
     : streamTable(in_streamTable), inputFile(in_inputFile),
-    src(in_src), module(in_module), lang(in_lang), resEmbStylesheet(in_resEmbStylesheet)
+    src(in_src), module(in_module), lang(in_lang), resEmbStylesheet(in_resEmbStylesheet),
+    bExtensionMode( in_bExtensionMode )
 {
     xmlKeepBlanksDefaultValue = 0;
 }
@@ -55,25 +56,34 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
 {
     static const char *params[4 + 1];
     static xsltStylesheetPtr cur = NULL;
-    if (!cur)
+
+    xmlDocPtr res;
+    if( bExtensionMode )
     {
-        static std::string fsroot('\'' + src.toUTF8() + '\'');
-        static std::string esclang('\'' + lang + '\'');
-
-        xmlSubstituteEntitiesDefault(1);
-        xmlLoadExtDtdDefaultValue = 1;
-        cur = xsltParseStylesheetFile((const xmlChar *)resEmbStylesheet.native_file_string().c_str());
-
-        int nbparams = 0;
-        params[nbparams++] = "Language";
-        params[nbparams++] = esclang.c_str();
-        params[nbparams++] = "fsroot";
-        params[nbparams++] = fsroot.c_str();
-        params[nbparams] = NULL;
+        res = xmlParseFile(filePath.native_file_string().c_str());
     }
-    xmlDocPtr doc = xmlParseFile(filePath.native_file_string().c_str());
-    xmlDocPtr res = xsltApplyStylesheet(cur, doc, params);
-    xmlFreeDoc(doc);
+    else
+    {
+        if (!cur)
+        {
+            static std::string fsroot('\'' + src.toUTF8() + '\'');
+            static std::string esclang('\'' + lang + '\'');
+
+            xmlSubstituteEntitiesDefault(1);
+            xmlLoadExtDtdDefaultValue = 1;
+            cur = xsltParseStylesheetFile((const xmlChar *)resEmbStylesheet.native_file_string().c_str());
+
+            int nbparams = 0;
+            params[nbparams++] = "Language";
+            params[nbparams++] = esclang.c_str();
+            params[nbparams++] = "fsroot";
+            params[nbparams++] = fsroot.c_str();
+            params[nbparams] = NULL;
+        }
+        xmlDocPtr doc = xmlParseFile(filePath.native_file_string().c_str());
+        res = xsltApplyStylesheet(cur, doc, params);
+        xmlFreeDoc(doc);
+    }
     return res;
 }
 
@@ -375,7 +385,7 @@ void myparser::traverse( xmlNodePtr parentNode )
     }
 }
 
-bool HelpCompiler::compile()
+bool HelpCompiler::compile( void ) throw( HelpProcessingException )
 {
     // we now have the jaroutputstream, which will contain the document.
     // now determine the document as a dom tree in variable docResolved
@@ -386,8 +396,9 @@ bool HelpCompiler::compile()
     // resolve the dom
     if (!docResolvedOrg)
     {
-        std::cerr << "ERROR: file not existing: " << src.native_file_string().c_str() << std::endl;
-        exit(1);
+        std::stringstream aStrStream;
+        aStrStream << "ERROR: file not existing: " << inputFile.native_file_string().c_str() << std::endl;
+        throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
 
     // now find all applications for which one has to compile
@@ -442,8 +453,10 @@ bool HelpCompiler::compile()
         }
         else
         {
-            std::cerr << "unexpected case situation" << std::endl;
-            exit(-1);
+            std::stringstream aStrStream;
+            aStrStream << "ERROR: Found unexpected module name \"" << modulename
+                       << "\" in file" << src.native_file_string().c_str() << std::endl;
+            throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
         }
 
     } // end iteration over all applications
@@ -452,7 +465,7 @@ bool HelpCompiler::compile()
     streamTable.document_path = fileName;
     streamTable.document_title = title;
     std::string actMod = module;
-    if (!fileName.empty())
+    if ( !bExtensionMode && !fileName.empty())
     {
         if (fileName.find("/text/") == 0)
         {
