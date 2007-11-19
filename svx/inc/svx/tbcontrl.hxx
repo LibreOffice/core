@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:31:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 17:19:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,6 +179,8 @@
 #include "svx/svxdllapi.h"
 #endif
 
+#include <com/sun/star/awt/FontDescriptor.hpp>
+
 // wichtig im mit HeDaBu erzeugtem tbxctrls.hxx!!!
 class SvxLineItem;
 class SvxBoxInfoItem;
@@ -218,6 +220,9 @@ protected:
 
     // XUpdatable
     virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
+
+    // XComponent
+    virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
 
 private:
 
@@ -266,15 +271,15 @@ public:
 // class SvxFontHeightToolBoxControl -------------------------------------
 //========================================================================
 
-
+/*
 class SvxFontSizeItem;
 class SvxFontItem;
 class SvxFontSizeBox_Impl;
 
 class SVX_DLLPUBLIC SvxFontHeightToolBoxControl : public SfxToolBoxControl
 {
-    SvxFontSizeBox_Impl* pBox;               // ItemWindow f"ur quick-access
-    SvxFontItem*        pFontItem;          // Kopie des aktuellen FontItems
+    SvxFontSizeBox_Impl* pBox;                          // ItemWindow f"ur quick-access
+    ::com::sun::star::awt::FontDescriptor aCurrentFont; // Kopie des aktuellen Fonts
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -286,19 +291,9 @@ public:
     virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState,
-                                       const SfxPoolItem* pState );
     virtual Window*     CreateItemWindow( Window *pParent );
-
-//#if 0 // _SOLAR__PRIVATE
-    const SvxFontItem*  GetFontItem_Impl()
-                        {
-                            updateStatus( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharFontName" )));
-                            return pFontItem;
-                        }
-//#endif
 };
-
+*/
 
 
 //========================================================================
