@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:44:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:42:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,9 @@
 #define _DOCUMENT_HXX
 
 #include <list>
+#include <set>
 #include <sal/types.h>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
@@ -48,32 +48,42 @@
 #include <com/sun/star/xml/dom/XDOMImplementation.hpp>
 #include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/io/XActiveDataControl.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/io/XStreamListener.hpp>
 
 #include "node.hxx"
 
 #include <libxml/tree.h>
 
 using namespace rtl;
+using namespace std;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
+using namespace com::sun::star::io;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::dom::events;
 
 namespace DOM
 {
 
-    typedef std::list< Reference< XNode >* > nodereflist_t;
 
-    class CDocument : public cppu::ImplInheritanceHelper2< CNode, XDocument, XDocumentEvent >
+
+    class CDocument : public cppu::ImplInheritanceHelper4<
+        CNode, XDocument, XDocumentEvent, XActiveDataControl, XActiveDataSource >
     {
         friend class CNode;
+        typedef std::list< Reference< XNode >* > nodereflist_t;
+        typedef set< Reference< XStreamListener > > listenerlist_t;
     private:
 
         nodereflist_t m_aNodeRefList;
 
         xmlDocPtr m_aDocPtr;
-        Reference< XDocumentType > m_rDocType;
-        Reference< XElement > m_rDocElement;
+
+        // datacontrol/source state
+        listenerlist_t m_streamListeners;
+        Reference< XOutputStream > m_rOutputStream;
 
     protected:
         CDocument(xmlDocPtr aDocPtr);
@@ -193,136 +203,147 @@ namespace DOM
         virtual Reference< XNode > SAL_CALL importNode(const Reference< XNode >& importedNode, sal_Bool deep)
             throw (DOMException);
 
+        // XDocumentEvent
+        virtual Reference< XEvent > SAL_CALL createEvent(const OUString& eventType) throw (RuntimeException);
+
+        // XActiveDataControl,
+        // see http://api.openoffice.org/docs/common/ref/com/sun/star/io/XActiveDataControl.html
+        virtual void SAL_CALL addListener(const Reference< XStreamListener >& aListener )  throw (RuntimeException);
+        virtual void SAL_CALL removeListener(const Reference< XStreamListener >& aListener ) throw (RuntimeException);
+        virtual void SAL_CALL start() throw (RuntimeException);
+        virtual void SAL_CALL terminate() throw (RuntimeException);
+
+        // XActiveDataSource
+        // see http://api.openoffice.org/docs/common/ref/com/sun/star/io/XActiveDataSource.html
+        virtual void SAL_CALL setOutputStream(  const Reference< XOutputStream >& aStream ) throw (RuntimeException);
+        virtual Reference< XOutputStream > SAL_CALL getOutputStream() throw (RuntimeException);
+
         // ---- resolve uno inheritance problems...
         // overrides for XNode base
         virtual OUString SAL_CALL getNodeName()
             throw (RuntimeException);
         virtual OUString SAL_CALL getNodeValue()
             throw (RuntimeException);
-    // --- delegation for XNde base.
-    virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
-        throw (DOMException)
-    {
-        return CNode::appendChild(newChild);
-    }
-    virtual Reference< XNode > SAL_CALL cloneNode(sal_Bool deep)
-        throw (RuntimeException)
-    {
-        return CNode::cloneNode(deep);
-    }
-    virtual Reference< XNamedNodeMap > SAL_CALL getAttributes()
-        throw (RuntimeException)
-    {
-        return CNode::getAttributes();
-    }
-    virtual Reference< XNodeList > SAL_CALL getChildNodes()
-        throw (RuntimeException)
-    {
-        return CNode::getChildNodes();
-    }
-    virtual Reference< XNode > SAL_CALL getFirstChild()
-        throw (RuntimeException)
-    {
-        return CNode::getFirstChild();
-    }
-    virtual Reference< XNode > SAL_CALL getLastChild()
-        throw (RuntimeException)
-    {
-        return CNode::getLastChild();
-    }
-    virtual OUString SAL_CALL getLocalName()
-        throw (RuntimeException)
-    {
-        return CNode::getLocalName();
-    }
-    virtual OUString SAL_CALL getNamespaceURI()
-        throw (RuntimeException)
-    {
-        return CNode::getNamespaceURI();
-    }
-    virtual Reference< XNode > SAL_CALL getNextSibling()
-        throw (RuntimeException)
-    {
-        return CNode::getNextSibling();
-    }
-    virtual NodeType SAL_CALL getNodeType()
-        throw (RuntimeException)
-    {
-        return CNode::getNodeType();
-    }
-    virtual Reference< XDocument > SAL_CALL getOwnerDocument()
-        throw (RuntimeException)
-    {
-        return CNode::getOwnerDocument();
-    }
-    virtual Reference< XNode > SAL_CALL getParentNode()
-        throw (RuntimeException)
-    {
-        return CNode::getParentNode();
-    }
-    virtual OUString SAL_CALL getPrefix()
-        throw (RuntimeException)
-    {
-       return CNode::getPrefix();
-    }
-    virtual Reference< XNode > SAL_CALL getPreviousSibling()
-        throw (RuntimeException)
-    {
-        return CNode::getPreviousSibling();
-    }
-    virtual sal_Bool SAL_CALL hasAttributes()
-        throw (RuntimeException)
-    {
-        return CNode::hasAttributes();
-    }
-    virtual sal_Bool SAL_CALL hasChildNodes()
-        throw (RuntimeException)
-    {
-        return CNode::hasChildNodes();
-    }
-    virtual Reference< XNode > SAL_CALL insertBefore(
-            const Reference< XNode >& newChild, const Reference< XNode >& refChild)
-        throw (DOMException)
-    {
-        return CNode::insertBefore(newChild, refChild);
-    }
-    virtual sal_Bool SAL_CALL isSupported(const OUString& feature, const OUString& ver)
-        throw (RuntimeException)
-    {
-        return CNode::isSupported(feature, ver);
-    }
-    virtual void SAL_CALL normalize()
-        throw (RuntimeException)
-    {
-        CNode::normalize();
-    }
-    virtual Reference< XNode > SAL_CALL removeChild(const Reference< XNode >& oldChild)
-        throw (DOMException)
-    {
-        return CNode::removeChild(oldChild);
-    }
-    virtual Reference< XNode > SAL_CALL replaceChild(
-            const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
-        throw (DOMException)
-    {
-        return CNode::replaceChild(newChild, oldChild);
-    }
-    virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
-        throw (DOMException)
-    {
-        return CNode::setNodeValue(nodeValue);
-    }
-    virtual void SAL_CALL setPrefix(const OUString& prefix)
-        throw (DOMException)
-    {
-        return CNode::setPrefix(prefix);
-    }
-
-    // XDocumentEvent
-    virtual Reference< XEvent > SAL_CALL createEvent(const OUString& eventType) throw (RuntimeException);
+        // --- delegation for XNode base.
+        virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
+            throw (DOMException)
+        {
+            return CNode::appendChild(newChild);
+        }
+        virtual Reference< XNode > SAL_CALL cloneNode(sal_Bool deep)
+            throw (RuntimeException)
+        {
+            return CNode::cloneNode(deep);
+        }
+        virtual Reference< XNamedNodeMap > SAL_CALL getAttributes()
+            throw (RuntimeException)
+        {
+            return CNode::getAttributes();
+        }
+        virtual Reference< XNodeList > SAL_CALL getChildNodes()
+            throw (RuntimeException)
+        {
+            return CNode::getChildNodes();
+        }
+        virtual Reference< XNode > SAL_CALL getFirstChild()
+            throw (RuntimeException)
+        {
+            return CNode::getFirstChild();
+        }
+        virtual Reference< XNode > SAL_CALL getLastChild()
+            throw (RuntimeException)
+        {
+            return CNode::getLastChild();
+        }
+        virtual OUString SAL_CALL getLocalName()
+            throw (RuntimeException)
+        {
+            return CNode::getLocalName();
+        }
+        virtual OUString SAL_CALL getNamespaceURI()
+            throw (RuntimeException)
+        {
+            return CNode::getNamespaceURI();
+        }
+        virtual Reference< XNode > SAL_CALL getNextSibling()
+            throw (RuntimeException)
+        {
+            return CNode::getNextSibling();
+        }
+        virtual NodeType SAL_CALL getNodeType()
+            throw (RuntimeException)
+        {
+            return CNode::getNodeType();
+        }
+        virtual Reference< XDocument > SAL_CALL getOwnerDocument()
+            throw (RuntimeException)
+        {
+            return CNode::getOwnerDocument();
+        }
+        virtual Reference< XNode > SAL_CALL getParentNode()
+            throw (RuntimeException)
+        {
+            return CNode::getParentNode();
+        }
+        virtual OUString SAL_CALL getPrefix()
+            throw (RuntimeException)
+        {
+           return CNode::getPrefix();
+        }
+        virtual Reference< XNode > SAL_CALL getPreviousSibling()
+            throw (RuntimeException)
+        {
+            return CNode::getPreviousSibling();
+        }
+        virtual sal_Bool SAL_CALL hasAttributes()
+            throw (RuntimeException)
+        {
+            return CNode::hasAttributes();
+        }
+        virtual sal_Bool SAL_CALL hasChildNodes()
+            throw (RuntimeException)
+        {
+            return CNode::hasChildNodes();
+        }
+        virtual Reference< XNode > SAL_CALL insertBefore(
+                const Reference< XNode >& newChild, const Reference< XNode >& refChild)
+            throw (DOMException)
+        {
+            return CNode::insertBefore(newChild, refChild);
+        }
+        virtual sal_Bool SAL_CALL isSupported(const OUString& feature, const OUString& ver)
+            throw (RuntimeException)
+        {
+            return CNode::isSupported(feature, ver);
+        }
+        virtual void SAL_CALL normalize()
+            throw (RuntimeException)
+        {
+            CNode::normalize();
+        }
+        virtual Reference< XNode > SAL_CALL removeChild(const Reference< XNode >& oldChild)
+            throw (DOMException)
+        {
+            return CNode::removeChild(oldChild);
+        }
+        virtual Reference< XNode > SAL_CALL replaceChild(
+                const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
+            throw (DOMException)
+        {
+            return CNode::replaceChild(newChild, oldChild);
+        }
+        virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
+            throw (DOMException)
+        {
+            return CNode::setNodeValue(nodeValue);
+        }
+        virtual void SAL_CALL setPrefix(const OUString& prefix)
+            throw (DOMException)
+        {
+            return CNode::setPrefix(prefix);
+        }
 
     };
-
 }
 
 #endif
