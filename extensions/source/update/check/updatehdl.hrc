@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatehdl.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:38:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:49:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@
  #define RID_UPDATE_BUBBLE_DOWNLOAD_PAUSED  RID_UPDATE_BUBBLE_TEXT_START + 4
  #define RID_UPDATE_BUBBLE_ERROR_DOWNLOADING    RID_UPDATE_BUBBLE_TEXT_START + 5
  #define RID_UPDATE_BUBBLE_DOWNLOAD_AVAIL   RID_UPDATE_BUBBLE_TEXT_START + 6
+ #define RID_UPDATE_BUBBLE_EXT_UPD_AVAIL    RID_UPDATE_BUBBLE_TEXT_START + 7
 
  #define RID_UPDATE_BUBBLE_T_TEXT_START         RID_UPDATE_HDL_START + 50
  #define RID_UPDATE_BUBBLE_T_UPDATE_AVAIL       RID_UPDATE_BUBBLE_T_TEXT_START + 0
@@ -83,4 +84,5 @@
  #define RID_UPDATE_BUBBLE_T_DOWNLOAD_PAUSED    RID_UPDATE_BUBBLE_T_TEXT_START + 4
  #define RID_UPDATE_BUBBLE_T_ERROR_DOWNLOADING  RID_UPDATE_BUBBLE_T_TEXT_START + 5
  #define RID_UPDATE_BUBBLE_T_DOWNLOAD_AVAIL     RID_UPDATE_BUBBLE_T_TEXT_START + 6
+ #define RID_UPDATE_BUBBLE_T_EXT_UPD_AVAIL      RID_UPDATE_BUBBLE_T_TEXT_START + 7
 
