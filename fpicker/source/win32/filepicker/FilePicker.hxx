@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilePicker.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:18:49 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:26:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,8 @@
 //_______________________________________________________________________________________________________________________
 
 
-#ifndef _CPPUHELPER_COMPBASE9_HXX_
-#include <cppuhelper/compbase9.hxx>
+#ifndef _CPPUHELPER_COMPBASE10_HXX_
+#include <cppuhelper/compbase10.hxx>
 #endif
 
 #ifndef _OSL_MUTEX_HXX_
@@ -55,6 +55,10 @@
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER2_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERNOTIFIER_HPP_
@@ -114,12 +118,13 @@ protected:
 
 class CFilePicker :
     public CFilePickerDummy,
-    public cppu::WeakComponentImplHelper9<
+    public cppu::WeakComponentImplHelper10<
         ::com::sun::star::ui::dialogs::XFilterManager,
         ::com::sun::star::ui::dialogs::XFilterGroupManager,
         ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
         ::com::sun::star::ui::dialogs::XFilePickerNotifier,
         ::com::sun::star::ui::dialogs::XFilePreview,
+        ::com::sun::star::ui::dialogs::XFilePicker2,
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::util::XCancellable,
         ::com::sun::star::lang::XEventListener,
@@ -167,6 +172,12 @@ public:
 
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getFiles(  )
         throw( ::com::sun::star::uno::RuntimeException );
+
+    //------------------------------------------------------------------------------------
+    // XFilePicker2 functions
+    //------------------------------------------------------------------------------------
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSelectedFiles(  )
+        throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------------------------------------------
     // XFilterManager functions
