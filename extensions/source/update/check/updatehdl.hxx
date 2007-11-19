@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatehdl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 15:57:48 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:49:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,7 @@ enum UpdateState {
     UPDATESTATE_DOWNLOAD_PAUSED,
     UPDATESTATE_ERROR_DOWNLOADING,
     UPDATESTATE_DOWNLOAD_AVAIL,
+    UPDATESTATE_EXT_UPD_AVAIL,
     UPDATESTATES_COUNT
 };
 
@@ -138,6 +139,7 @@ private:
     bool                    mbVisible;
     bool                    mbStringsLoaded;
     bool                    mbMinimized;
+    bool                    mbListenerAdded;
 
     osl::Mutex              maMutex;
 
