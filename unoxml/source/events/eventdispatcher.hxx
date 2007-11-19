@@ -17,7 +17,7 @@ namespace DOM { namespace events
 {
 
 typedef std::vector< xmlNodePtr > NodeVector;
-typedef std::multimap< xmlNodePtr, Reference< XEventListener> > ListenerMap;
+typedef std::multimap< xmlNodePtr, Reference< com::sun::star::xml::dom::events::XEventListener> > ListenerMap;
 typedef std::map<OUString, ListenerMap*> TypeListenerMap;
 typedef std::vector<ListenerMap::value_type> ListenerPairVector;
 
@@ -33,13 +33,13 @@ public:
     static void addListener(
         xmlNodePtr pNode,
         OUString aType,
-        const Reference<XEventListener>& aListener,
+        const Reference<com::sun::star::xml::dom::events::XEventListener>& aListener,
         sal_Bool bCapture);
 
     static void removeListener(
         xmlNodePtr pNode,
         OUString aType,
-        const Reference<XEventListener>& aListener,
+        const Reference<com::sun::star::xml::dom::events::XEventListener>& aListener,
         sal_Bool bCapture);
 
     static void callListeners(
