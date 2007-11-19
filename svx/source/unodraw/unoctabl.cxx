@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoctabl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:23:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 17:22:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 #include "unoshcol.hxx"
 #include "recoveryui.hxx"
 #include "xmlgrhlp.hxx"
+#include "tbunocontroller.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -314,6 +315,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
 #ifndef SVX_LIGHT
             writeInfo( pKey, svx::GraphicExporter_getImplementationName(), svx::GraphicExporter_getSupportedServiceNames() );
 #endif
+            writeInfo( pKey, svx::FontHeightToolBoxControl::getImplementationName_Static(), svx::FontHeightToolBoxControl::getSupportedServiceNames_Static() );
             writeInfo( pKey, ::unogallery::GalleryThemeProvider_getImplementationName(),::unogallery::GalleryThemeProvider_getSupportedServiceNames() );
             writeInfo( pKey, ::svx::SvXMLGraphicImportHelper_getImplementationName(),::svx::SvXMLGraphicImportHelper_getSupportedServiceNames() );
             writeInfo( pKey, ::svx::SvXMLGraphicExportHelper_getImplementationName(),::svx::SvXMLGraphicExportHelper_getSupportedServiceNames() );
@@ -372,6 +374,13 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
                 svx::GraphicExporter_getSupportedServiceNames() );
         }
 #endif
+        else if ( svx::FontHeightToolBoxControl::getImplementationName_Static().equalsAscii( pImplName ) )
+        {
+            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                svx::FontHeightToolBoxControl::getImplementationName_Static(),
+                svx::FontHeightToolBoxControl_createInstance,
+                svx::FontHeightToolBoxControl::getSupportedServiceNames_Static() );
+        }
         else if( ::unogallery::GalleryThemeProvider_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
