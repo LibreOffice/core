@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxids.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:19:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 17:19:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 // ID-Bereiche --------------------------------------------------------------
 
 // Slot-Id's
-#define SID_SVX_FIRSTFREE                   1063
+#define SID_SVX_FIRSTFREE                   1064
 #define SID_SVX_END                         (SID_LIB_START + 1199)
 
 // --------------------------------------------------------------------------
@@ -1306,6 +1306,7 @@
 #define SID_OPEN_SMARTTAGMENU                           ( SID_SVX_START + 1061 )
 #define SID_OPEN_SMARTTAGOPTIONS                        ( SID_SVX_START + 1062 )
 #define SID_INSERT_TREECONTROL                          ( SID_SVX_START + 1063 )
+#define SID_FONTNAMELIST                                ( SID_SVX_START + 1064 )
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs
