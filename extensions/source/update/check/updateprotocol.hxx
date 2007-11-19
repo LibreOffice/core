@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updateprotocol.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:39:13 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:50:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,3 +55,18 @@ bool checkForUpdates(
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& rxInteractionHandler,
     const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XUpdateInformationProvider >& rxProvider
 );
+
+// Returns 'true' if there are updates for any extension
+bool checkForExtensionUpdates(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
+);
+
+bool checkForPendingUpdates(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
+);
+
+bool storeExtensionUpdateInfos(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< rtl::OUString > > &rUpdateInfos
+);
+
