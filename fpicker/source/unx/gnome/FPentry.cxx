@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FPentry.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:51:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:24:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::cppu;
 using ::com::sun::star::ui::dialogs::XFilePicker;
+using ::com::sun::star::ui::dialogs::XFilePicker2;
 using ::com::sun::star::ui::dialogs::XFolderPicker;
 
 //------------------------------------------------
@@ -93,7 +94,7 @@ static Reference< XInterface > SAL_CALL createFileInstance(
     const Reference< XMultiServiceFactory >& rServiceManager )
 {
     return Reference< XInterface >(
-        static_cast< XFilePicker* >(
+        static_cast< XFilePicker2* >(
             new SalGtkFilePicker( rServiceManager ) ) );
 }
 
