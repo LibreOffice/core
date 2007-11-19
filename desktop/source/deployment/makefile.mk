@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 15:36:20 $
+#   last change: $Author: ihi $ $Date: 2007-11-19 13:08:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,8 @@ SHL1LIBS = \
     $(SLB)$/deployment_registry_configuration.lib \
     $(SLB)$/deployment_registry_package.lib \
     $(SLB)$/deployment_registry_script.lib \
-    $(SLB)$/deployment_registry_sfwk.lib
+    $(SLB)$/deployment_registry_sfwk.lib \
+    $(SLB)$/deployment_registry_help.lib
 
 SHL1OBJS = \
     $(SLO)$/dp_log.obj \
@@ -84,7 +85,8 @@ SHL1STDLIBS = \
         $(TOOLSLIB) \
         $(XMLSCRIPTLIB) \
         $(SVLLIB) \
-        $(DEPLOYMENTMISCLIB)
+        $(DEPLOYMENTMISCLIB) \
+    $(HELPLINKERLIB)
 
 SHL1DEPN =
 SHL1IMPLIB = i$(TARGET)
@@ -102,6 +104,7 @@ RESLIB1SRSFILES = \
         $(SRS)$/deployment_registry_script.srs \
         $(SRS)$/deployment_registry_sfwk.srs \
         $(SRS)$/deployment_registry_package.srs \
+        $(SRS)$/deployment_registry_help.srs \
         $(SRS)$/deployment_registry.srs \
         $(SRS)$/deployment_manager.srs \
         $(SRS)$/deployment_misc.srs \
