@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpCompiler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:49:05 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 12:59:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,8 @@
 #include <osl/process.h>
 #include <osl/file.hxx>
 
+#include <xmlhelp/compilehelp.hxx>
+
 #define EMULATEORIGINAL 1
 
 #ifdef CMCDEBUG
@@ -92,7 +94,12 @@ namespace fs
             rtl::OUString ustrSystemPath(rtl::OStringToOUString(tmp, osl_getThreadTextEncoding()));
             osl::File::getFileURLFromSystemPath(ustrSystemPath, data);
             osl::File::getAbsoluteFileURL(sWorkingDir, data, data);
-            }
+        }
+        path(const std::string &FileURL)
+        {
+            rtl::OString tmp(FileURL.c_str());
+            data = rtl::OStringToOUString(tmp, osl_getThreadTextEncoding());
+        }
         std::string native_file_string() const
         {
             ::rtl::OUString ustrSystemPath;
@@ -261,6 +268,25 @@ public:
     }
 };
 
+struct HelpProcessingException
+{
+    HelpProcessingErrorClass        m_eErrorClass;
+    std::string                     m_aErrorMsg;
+    std::string                     m_aXMLParsingFile;
+    int                             m_nXMLParsingLine;
+
+    HelpProcessingException( HelpProcessingErrorClass eErrorClass, const std::string& aErrorMsg )
+        : m_eErrorClass( eErrorClass )
+        , m_aErrorMsg( aErrorMsg )
+    {}
+    HelpProcessingException( const std::string& aErrorMsg, const std::string& aXMLParsingFile, int nXMLParsingLine )
+        : m_eErrorClass( HELPPROCESSING_XMLPARSING_ERROR )
+        , m_aErrorMsg( aErrorMsg )
+        , m_aXMLParsingFile( aXMLParsingFile )
+        , m_nXMLParsingLine( nXMLParsingLine )
+    {}
+};
+
 class HelpCompiler
 {
 public:
@@ -269,8 +295,9 @@ public:
                 const fs::path &in_src,
                 const fs::path &in_resEmbStylesheet,
                 const std::string &in_module,
-                const std::string &in_lang);
-    bool compile(void);
+                const std::string &in_lang,
+                bool in_bExtensionMode);
+    bool compile( void ) throw (HelpProcessingException);
     void addEntryToJarFile(const std::string &prefix,
         const std::string &entryName, const std::string &bytesToAdd);
     void addEntryToJarFile(const std::string &prefix,
@@ -287,6 +314,7 @@ private:
     const fs::path inputFile, src;
     const std::string module, lang;
     const fs::path resEmbStylesheet;
+    bool bExtensionMode;
 };
 
 #endif
