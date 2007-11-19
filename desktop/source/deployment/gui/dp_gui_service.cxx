@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 13:49:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:52:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,6 +155,7 @@ class ServiceImpl
     boost::optional<OUString> /* const */ m_view;
     boost::optional<Sequence<OUString> > m_extensions;
     OUString m_initialTitle;
+    bool m_bShowUpdateOnly;
 
 public:
     ServiceImpl( Sequence<Any> const & args,
@@ -175,7 +176,8 @@ public:
 //______________________________________________________________________________
 ServiceImpl::ServiceImpl( Sequence<Any> const& args,
                           Reference<XComponentContext> const& xComponentContext)
-    : m_xComponentContext(xComponentContext)
+    : m_xComponentContext(xComponentContext),
+      m_bShowUpdateOnly( false )
 {
     try {
         comphelper::unwrapArgs( args, m_parent, m_view );
@@ -214,6 +216,7 @@ void ServiceImpl::startExecuteModal(
     Reference< ui::dialogs::XDialogClosedListener > const & xListener )
     throw (RuntimeException)
 {
+    bool bCloseDialog = true;  // only used if m_bShowUpdateOnly is true
     ::std::auto_ptr<Application> app;
     if (! dp_gui::DialogImpl::s_dialog.is())
     {
@@ -253,11 +256,19 @@ void ServiceImpl::startExecuteModal(
     }
     else
     {
-        //Currently we do not support the case that if the Extension Manager is
-        //open in an office an unopkg can be executed. This should be fixed in the future.
-        ResId warnId(WARNINGBOX_CONCURRENTINSTANCE,*DeploymentGuiResMgr::get() );
-        WarningBox warn(NULL, warnId);
-        warn.Execute();
+        // When m_bShowUpdateOnly is set, we are inside the office and the user clicked
+        // the update notification icon in the menu bar. We must not close the extensions
+        // dialog after displaying the update dialog when it has been visible before
+        if ( m_bShowUpdateOnly )
+            bCloseDialog = false;
+        else
+        {
+            //Currently we do not support the case that if the Extension Manager is
+            //open in an office an unopkg can be executed. This should be fixed in the future.
+            ResId warnId(WARNINGBOX_CONCURRENTINSTANCE,*DeploymentGuiResMgr::get() );
+            WarningBox warn(NULL, warnId);
+            warn.Execute();
+        }
     }
 
     {
@@ -272,8 +283,19 @@ void ServiceImpl::startExecuteModal(
             dialog->SetText( m_initialTitle );
             m_initialTitle = OUString();
         }
-        dialog->Show();
-        dialog->ToTop( TOTOP_RESTOREWHENMIN );
+        if ( m_bShowUpdateOnly )
+        {
+            dialog->checkUpdates( false, true, !bCloseDialog );
+            if ( bCloseDialog )
+                dialog->Close();
+            else
+                dialog->ToTop( TOTOP_RESTOREWHENMIN );
+        }
+        else
+        {
+            dialog->Show();
+            dialog->ToTop( TOTOP_RESTOREWHENMIN );
+        }
     }
 
     if (app.get() != 0) {
@@ -290,8 +312,13 @@ void ServiceImpl::startExecuteModal(
 
 // XJobExecutor
 //______________________________________________________________________________
-void ServiceImpl::trigger( OUString const & ) throw (RuntimeException)
+void ServiceImpl::trigger( OUString const &rEvent ) throw (RuntimeException)
 {
+    if ( rEvent == OUSTR("SHOW_UPDATE_DIALOG") )
+        m_bShowUpdateOnly = true;
+    else
+        m_bShowUpdateOnly = false;
+
     startExecuteModal( Reference< ui::dialogs::XDialogClosedListener >() );
 }
 
