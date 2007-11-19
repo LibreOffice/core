@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_backend.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:41:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 13:08:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,3 +127,13 @@ Image RID_IMG_JAVA_TYPELIB_HC
     MASKCOLOR
 };
 
+Image RID_IMG_HELP
+{
+    ImageBitmap = Bitmap { File = "commandimagelist/sc_helperdialog.bmp"; };
+    MASKCOLOR
+};
+Image RID_IMG_HELP_HC
+{
+    ImageBitmap = Bitmap { File = "commandimagelist/sch_helperdialog.bmp"; };
+    MASKCOLOR
+};
